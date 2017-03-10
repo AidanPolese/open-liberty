@@ -1,0 +1,40 @@
+-nouses=true
+-failok=true
+-donotcopy=(bvt.*|test.*|logs|workarea|.classCache|.pid)
+
+Bundle-SymbolicName: com.ibm.ws.liberty.profile
+Bundle-Name: IBM WebSphere Application Server V8.5 Liberty Profile ${license.name}
+Bundle-Description: IBM WebSphere Application Server V8.5 Liberty Profile ${license.name} self-extracting archive
+
+Bundle-Vendor: IBM
+Bundle-Copyright: The Program materials contained in this file are IBM copyright materials. \
+ WLP Copyright International Business Machines Corp. 1999, ${copyrightBuildYear} \
+ All Rights Reserved * Licensed Materials - Property of IBM \
+ US Government Users Restricted Rights - Use, duplication or \
+ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+
+
+## The above headers make bnd happy. The following directive removes them from the final jar's manifest.
+-removeheaders=\
+TODAY, DSTAMP, TSTAMP, \
+Include-Resource, Export-Package, Private-Package, Ignore-Package, \
+Bundle-SymbolicName, Bundle-Name, Bundle-Description, Bundle-ManifestVersion, Bundle-Version
+
+Main-Class: wlp.lib.extract.SelfExtract
+Private-Package: wlp.*
+
+## Use variables available when bnd is called.
+Include-Resource: \
+  ${install.name}/lib/versions/WebSphereApplicationServer.properties=${install.name}/lib/versions/WebSphereApplicationServer.properties, \
+  ${install.name}/lafiles=editions/${edition}/${archive}/lafiles/,\
+  ${install.name}/lib/versions/tags/=editions/${edition}/tags/sw/,\
+  ${install.name}/lib/versions/tags/=editions/${edition}/tags/85tags/,\
+  ${install.name}/lib/versions/tags/=build/fxtag
+  
+Applies-To: ${license.applies.to}
+
+Archive-Content-Type=license
+
+Map-Based-Self-Extractor: wlp.lib.extract.MapBasedSelfExtractor
+Archive-Root: wlp/
+

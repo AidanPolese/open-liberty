@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.2
+
+Bundle-Name: WebSphere Dynamic Routing API
+Bundle-Description: WebSphere Dynamic Routing API, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.api.dynamicRouting
+
+Import-Package: com.ibm.websphere.dynamic.routing
+
+Export-Package: com.ibm.websphere.dynamic.routing
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.dynamicRouting/pom.xml=com.ibm.websphere.appserver.api.dynamicRouting.pom}
+
+publish.wlp.jar.suffix: dev/api/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.dynamic.routing

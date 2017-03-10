@@ -1,0 +1,7 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="com.ibm.json4j">
+  <originbase release="WAS80" fe="SERV1" level="m1116.12" components="WAS.prereq.jaxrs"/>
+
+  <notes>
+  </notes>
+</releaseInfo>

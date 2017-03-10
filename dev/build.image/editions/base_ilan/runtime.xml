@@ -1,0 +1,6 @@
+<!--  This is the 'freemium' packaging of Liberty. 
+It is identical to the base offering, but will have a different set of T&Cs. 
+The wlp-extended archive can be installed on top of this one.-->
+<server>
+  <include location="${editions.core}/runtime.xml"/>
+</server>

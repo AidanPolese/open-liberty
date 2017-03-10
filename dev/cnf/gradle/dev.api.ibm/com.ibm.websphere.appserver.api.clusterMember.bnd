@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.0
+
+Bundle-Name: WebSphere Static Cluster Member API
+Bundle-Description: WebSphere Static Cluster Member API, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.api.clusterMember
+
+Import-Package: com.ibm.websphere.cluster.member
+
+Export-Package: com.ibm.websphere.cluster.member
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.clusterMember/pom.xml=com.ibm.websphere.appserver.api.clusterMember.pom}
+
+publish.wlp.jar.suffix: dev/api/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.cluster.member;version=latest

@@ -1,0 +1,32 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Localization: fragment
+Fragment-Host: com.ibm.ws.logging
+
+Bundle-Name: WebSphere HPEL Logging
+Bundle-SymbolicName: com.ibm.ws.logging.hpel; singleton:=true
+Bundle-Description: ${Bundle-Name}; version=${bVersion}
+
+Export-Package: \
+  com.ibm.websphere.logging.hpel.reader.*;provide:=true, \
+  com.ibm.websphere.logging.hpel.writer.*;provide:=true, \
+  com.ibm.ws.logging.hpel.config.*
+
+Private-Package: \
+  com.ibm.ejs.ras.hpel.*, \
+  !com.ibm.ws.logging.hpel.osgi.*, \
+  com.ibm.ws.logging.hpel.*, \
+  com.ibm.ws.logging.object.hpel.*, \
+  com.ibm.ws.logging.internal.hpel.*
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.cm.1.5.0;version=latest,\
+	com.ibm.ws.logging;version=latest,\
+	com.ibm.ws.kernel.boot.logging;version=latest,\
+	com.ibm.ws.kernel.boot.cmdline;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

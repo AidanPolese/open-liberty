@@ -1,0 +1,19 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: LTPA Key Crypto Utilities
+Bundle-SymbolicName: com.ibm.ws.crypto.ltpakeyutil
+Bundle-Description: LTPA Key Crypto Utilities; version=${bVersion}
+
+Export-Package: \
+  com.ibm.ws.crypto.ltpakeyutil;provide:=true
+
+Private-Package: \
+  com.ibm.ws.common.internal.encoder
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.common.encoder;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

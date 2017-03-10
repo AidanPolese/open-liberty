@@ -1,0 +1,21 @@
+<project name="org.eclipse.osgi" default="build">
+  <import file="../ant_build/public_imports/rejar_imports.xml"/>
+    
+  <patternset id="publish.bundles">
+    <include name="**/*org.eclipse.osgi*"/>
+  </patternset>
+  
+  <target name="package">
+    <!-- Don't munge the symbolic name for the eclipse core bundle to avoid breaking all the Eclipse bundles that uses
+    Require-Bundle and depends on the Eclipse SPI we export. The version we pass through is ignored. -->
+    <rejar version="3.11.3" 
+           src.jar="lib/org.eclipse.osgi_*.jar" 
+           original.jar.name="org.eclipse.osgi"
+           original.jar.version="3.11.3"
+           skip.ibmise.name="true"
+           singleton="true"
+           no.import.package="true"
+           useGlobalMicro="false"/>
+  </target>
+  
+</project>

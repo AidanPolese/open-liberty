@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <!-- 
+   https://osgi.org/hudson/job/build.cmpn/793/artifact/org.osgi.service.http/generated/org.osgi.service.http-1.2.1.jar
+    -->
+   
+  <project project="OSGi framework and compendium" 
+            projectURL="https://www.osgi.org/" 
+            version="6.0" revision="" 
+            license-type="ASL2" 
+            contact="schnabel@us.ibm.com" 
+            encryption="no">
+      <download location="https://osgi.org/hudson/job/build.cmpn/793/artifact/">
+         <file basename="org.osgi.service.http-1.2.1.jar"               checksum="02a4baaea09af8d7e9add4998c30c10d"/>
+      </download>
+   </project>
+
+   <notes>
+   </notes>
+   
+   <clearencehistory>
+   </clearencehistory>
+</ossc>

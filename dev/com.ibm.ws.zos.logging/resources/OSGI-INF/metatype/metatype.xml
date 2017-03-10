@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed Materials - Property of IBM
+
+  "Restricted Materials of IBM"
+
+  Copyright IBM Corp. 2011 All Rights Reserved.
+
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+-->
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0"
+                   xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
+                   localization="OSGI-INF/l10n/metatype">
+
+    <OCD id="com.ibm.ws.zos.logging.config" name="%zos.logging.config" description="%zos.logging.config.desc" ibm:alias="zosLogging">
+        <AD id="enableLogToMVS" name="%enableLogToMVS" description="%enableLogToMVS.desc" required="false" type="Boolean" default="false" />
+                    
+        <AD id="wtoMessage" name="%wtoMessage" description="%wtoMessage.desc" required="false" type="String" default="" />
+
+        <AD id="hardCopyMessage" name="%hardCopyMessage" description="%hardCopyMessage.desc" required="false" type="String" default="" />        
+        
+    </OCD>
+
+    <Designate pid="com.ibm.ws.zos.logging.config">
+        <Object ocdref="com.ibm.ws.zos.logging.config" />
+    </Designate>
+
+</metatype:MetaData>

@@ -1,0 +1,124 @@
+*                                                                              
+* IBM Confidential                                                             
+*                                                                              
+* OCO Source Materials                                                         
+*                                                                              
+* Copyright IBM Corp. 2014                                                     
+*                                                                              
+* The source code for this program is not published or otherwise               
+* divested of its trade secrets, irrespective of what has been                 
+* deposited with the U.S. Copyright Office.                                    
+*                                                                              
+BBOAXVEC  DSECT                                                                
+AVECEYE         DS  CL8       Eye Catcher 'BBOAXVEC'                           
+AVECDATE        DS  CL8       Date                                             
+AVECTIME        DS  CL8       Time                                             
+AVECVER         DS  H         Version                                          
+AVECSLOT        DS H          Stub vector slot level                           
+AVECFLAGS       DS F          Flags                                            
+AVECSREG        DS AD         Pointer to bboasreg                              
+AVECCREG        DS AD         Pointer to client register mc routine            
+AVECSURG        DS AD         Pointer to bboasurg                              
+AVECCURG        DS AD         Pointer to client urg mc routine                 
+AVECSINV        DS AD         Pointer to bboasinv                              
+AVECCINV        DS AD         Pointer to client invoke mc routine              
+AVECSSRV        DS AD         Pointer to bboassrv                              
+AVECCSRV        DS AD         Pointer to client host srv mc routine            
+AVECSSRP        DS AD         Pointer to bboassrp                              
+AVECCSRP        DS AD         Pointer to client send rsp mc routine            
+AVECSCNR        DS AD         Pointer to bboascnr                              
+AVECCCNR        DS AD         Pointer to client conn rel mc routine            
+AVECSCNG        DS AD         Pointer to bboascng                              
+AVECCCNG        DS AD         Pointer to client conn get mc routine            
+AVECSSRQ        DS AD         Pointer to bboassrq                              
+AVECCSRQ        DS AD         Pointer to client send req mc routine            
+AVECSGET        DS AD         Pointer to bboasget                              
+AVECCGET        DS AD         Pointer to client get data mc routine            
+AVECSRCL        DS AD         Pointer to bboasrcl                              
+AVECCRCL        DS AD         Pointer to client rcv rsp len mc routine         
+AVECSRCA        DS AD         Pointer to bboasrca                              
+AVECCRCA        DS AD         Pointer to client rcv req any mc routine         
+AVECSRCS        DS AD         Pointer to bboasrcs                              
+AVECCRCS        DS AD         Pointer to client rcv req specific mc            
+AVECSSRX        DS AD         Pointer to bboassrx                              
+AVECCSRX        DS AD         Pointer to client send exc rsp mc routin         
+AVECSGTX        DS AD         Pointer to bboasgtx                              
+AVECCGTX        DS AD         Pointer to client get context mc routine         
+AVECSINF        DS AD         Pointer to bboasinf                              
+AVECCINF        DS AD         Pointer to client get info mc routine            
+                                                                               
+* This is the level of BBOAVEC where BBOA1INF is available.                    
+AVEC_INF_LVL EQU 130                                                           
+                                                                               
+BBOAXVEC_TWAS DSECT                                                            
+AVECTWAS_EYE  DS  CL8                     +000  Eye Catcher 'BBOAXVEC'         
+AVECTWAS_DATE DS  CL10                    +008  Date                           
+AVECTWAS_TIME DS  CL6                     +012  Time                           
+AVECTWAS_VER  DS  H                       +018  Version                        
+AVECTWAS_SLOT  DS H                       +01A  Stub vector slot level         
+AVECTWAS_FLAGS DS 0F                      +01C  Flags                          
+AVECTWAS_FLG1  DS XL1                     +01C   flag 1                        
+AVECTWAS_FLG2  DS XL1                     +01D   flag 2                        
+AVECTWAS_FLG3  DS XL1                     +01E   flag 3                        
+AVECTWAS_FLG4  DS XL1                     +01F   flag 4                        
+AVECTWAS_CONG@ DS A                       +020  Pointer BBOACNG                
+AVECTWAS_GCONG@ DS A                      +024  Pointer BBGACNG                
+AVECTWAS_CONR@ DS A                       +028  Pointer BBOACNR                
+AVECTWAS_GCONR@ DS A                      +02C  Pointer BBGACNR                
+AVECTWAS_INVK@ DS A                       +030  Pointer BBOAINV                
+AVECTWAS_GINVK@ DS A                      +034  Pointer BBGAINV                
+AVECTWAS_HOST@ DS A                       +038  Pointer BBOASRV                
+AVECTWAS_GHOST@ DS A                      +03C  Pointer BBGASRV                
+AVECTWAS_SNRQ@ DS A                       +040  Pointer BBOASRQ                
+AVECTWAS_GSNRQ@ DS A                      +044  Pointer BBGASRQ                
+AVECTWAS_SNRP@ DS A                       +048  Pointer BBOASRP                
+AVECTWAS_GSNRP@ DS A                      +04C  Pointer BBGASRP                
+AVECTWAS_RRQA@ DS A                       +050  Pointer BBOARCA                
+AVECTWAS_GRRQA@ DS A                      +054  Pointer BBGARCA                
+AVECTWAS_RRQS@ DS A                       +058  Pointer BBOARCS                
+AVECTWAS_GRRQS@ DS A                      +05C  Pointer BBGARCS                
+AVECTWAS_RCRL@ DS A                       +060  Pointer BBOARCL                
+AVECTWAS_GRCRL@ DS A                      +064  Pointer BBGARCL                
+AVECTWAS_GETD@ DS A                       +068  Pointer BBOAGET                
+AVECTWAS_GGETD@ DS A                      +06C  Pointer BBGAGET                
+AVECTWAS_UREG@ DS A                       +070  Pointer BBOAURG                
+AVECTWAS_GUREG@ DS A                      +074  Pointer BBGAURG                
+AVECTWAS_API@ DS A                        +078  Pointer BBOAAPI                
+AVECTWAS_INFO@ DS A                       +07C  Pointer BBOAINF                
+AVECTWAS_GINFO@ DS A                      +080  Pointer BBGAINF                
+AVECTWAS_GTX@ DS A                        +084  Pointer BBOAGTX                
+AVECTWAS_GGTX@ DS A                       +088  Pointer BBGAGTX                
+AVECTWAS_SNRX@ DS A                       +08C  Pointer BBOASRX                
+AVECTWAS_GSNRX@ DS A                      +090  Pointer BBGASRX                
+AVECTWAS_REG@ DS A                        +094  Pointer BBOAREG                
+AVECTWAS_GREG@ DS A                       +098  Pointer BBGAREG                
+AVECTWAS_SINV@ DS A                       +09C  Pointer BBOASINV               
+AVECTWAS_SGINV@ DS A                      +0A0  Pointer BBGASINV               
+AVECTWAS_SCNG@ DS A                       +0A4  Pointer BBOASCNG               
+AVECTWAS_SGCNG@ DS A                      +0A8  Pointer BBGASCNG               
+AVECTWAS_SCNR@ DS A                       +0AC  Pointer BBOASCNG               
+AVECTWAS_SGCNR@ DS A                      +0B0  Pointer BBGASCNG               
+AVECTWAS_SGET@ DS A                       +0B4  Pointer BBOASGET               
+AVECTWAS_SGGET@ DS A                      +0B8  Pointer BBGASGET               
+AVECTWAS_SGTX@ DS A                       +0BC  Pointer BBOASGTX               
+AVECTWAS_SGGTX@ DS A                      +0C0  Pointer BBGASGTX               
+AVECTWAS_SINF@ DS A                       +0C4  Pointer BBOASINF               
+AVECTWAS_SGINF@ DS A                      +0C8  Pointer BBGASINF               
+AVECTWAS_SRCA@ DS A                       +0CC  Pointer BBOASRCA               
+AVECTWAS_SGRCA@ DS A                      +0D0  Pointer BBGASRCA               
+AVECTWAS_SRCL@ DS A                       +0D4  Pointer BBOASRCL               
+AVECTWAS_SGRCL@ DS A                      +0D8  Pointer BBGASRCL               
+AVECTWAS_SRCS@ DS A                       +0DC  Pointer BBOASRCS               
+AVECTWAS_SGRCS@ DS A                      +0E0  Pointer BBGASRCS               
+AVECTWAS_SSRP@ DS A                       +0E4  Pointer BBOASSRP               
+AVECTWAS_SGSRP@ DS A                      +0E8  Pointer BBGASSRP               
+AVECTWAS_SSRQ@ DS A                       +0EC  Pointer BBOASSRQ               
+AVECTWAS_SGSRQ@ DS A                      +0F0  Pointer BBGASSRQ               
+AVECTWAS_SSRV@ DS A                       +0F4  Pointer BBOASSRV               
+AVECTWAS_SGSRV@ DS A                      +0F8  Pointer BBGASSRV               
+AVECTWAS_SSRX@ DS A                       +0FC  Pointer BBOASSRX               
+AVECTWAS_SGSRX@ DS A                      +100  Pointer BBGASSRX               
+AVECTWAS_SURG@ DS A                       +104  Pointer BBOASURG               
+AVECTWAS_SGURG@ DS A                      +108  Pointer BBGASURG               
+AVECTWAS_SREG@ DS A                       +10C  Pointer BBOASREG               
+AVECTWAS_SGREG@ DS A                      +110  Pointer BBGASREG               

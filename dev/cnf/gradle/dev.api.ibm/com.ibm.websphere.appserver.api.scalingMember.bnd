@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.0
+
+Bundle-Name: WebSphere Scaling Member API
+Bundle-Description: WebSphere Scaling Member API, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.api.scalingMember
+
+Import-Package: com.ibm.websphere.scaling.member
+
+Export-Package: com.ibm.websphere.scaling.member
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.scalingMember/pom.xml=com.ibm.websphere.appserver.api.scalingMember.pom}
+
+publish.wlp.jar.suffix: dev/api/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.scaling.member

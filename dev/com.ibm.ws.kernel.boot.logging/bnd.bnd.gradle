@@ -1,0 +1,12 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Export-Package: com.ibm.ws.kernel.boot.logging
+
+instrument.disabled: true
+
+publish.wlp.jar.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

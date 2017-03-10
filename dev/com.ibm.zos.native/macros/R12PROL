@@ -1,0 +1,38 @@
+*
+* IBM Confidential
+*
+* OCO Source Materials
+*
+* Copyright IBM Corp. 2011
+*
+* The source code for this program is not published or otherwise
+* divested of its trade secrets, irrespective of what has been
+* deposited with the U.S. Copyright Office.
+*
+         MACRO
+&NAME    R12PROL
+         GBLA  &CCN_DSASZ              DSA size of the function
+         GBLB  &CCN_SASIG              True to gen savearea signature
+         GBLB  &CCN_NAB_STORED         False to gen NAB in DSA
+         GBLB  &CCN_NAB                True if need to set NAB
+         GBLC  &CCN_NAB_OFFSET         Offset to NAB pointer in DSA
+*        TODO: Verify that we're in AMODE 64, etc
+         STMG  14,11,8(13)
+         LGR   15,13
+         LG    13,136(,13)
+         STG   15,128(,13)
+*        Generate F4SA tag
+         LLILH 11,X'C6F4'
+         OILL  11,X'E2C1'
+         ST    11,4(,13)
+&CCN_SASIG SETB 0
+*        Fill in NAB
+         AIF   (NOT &CCN_NAB).NONAB
+         LGHI  11,&CCN_DSASZ.
+         ALGR  11,13
+         STG   11,&CCN_NAB_OFFSET.(,13)
+&CCN_NAB_STORED SETB 1
+.NONAB   ANOP
+*        Note: the place where we would store R12 in F4SA is available
+*              for something else.
+         MEND

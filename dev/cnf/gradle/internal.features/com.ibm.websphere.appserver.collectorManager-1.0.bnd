@@ -1,0 +1,10 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.collectorManager-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.httptransport-1.0;version=latest, \
+	com.ibm.ws.collector.manager;version=latest

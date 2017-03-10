@@ -1,0 +1,18 @@
+<project name="org.eclipse.osgi" default="buildApiSpi">
+  <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+       Top level builds use this task explicity.  Changing the
+       default will create an incompatibility between a default
+       project build and a top level build. -->
+       
+  <!-- no IBM API for this feature -->
+  <property name="noibmapi" value="true" />
+  <!-- Third-Party-SPI required properties. -->
+  <property name="thirdpartyspibndfile" value="${basedir}/bnd.bnd"/>
+  <!-- Turn off the BND generation step: A predefined BND is available. -->
+  <property name="thirdpartyspibndfile.predefined" value="true"/>
+  <property name="spi.thirdparty.bundleName" value="Eclipse equinox third-Party SPI"/>
+  <property name="spi.thirdparty.symbolic.suffix" value="equinox"/>
+
+  <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+  
+</project>

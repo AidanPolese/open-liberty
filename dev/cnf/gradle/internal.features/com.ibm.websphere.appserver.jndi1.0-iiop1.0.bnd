@@ -1,0 +1,10 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.jndi1.0-iiop1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.appLifecycle-1.0;version=latest, \
+	com.ibm.ws.jndi.iiop;version=latest

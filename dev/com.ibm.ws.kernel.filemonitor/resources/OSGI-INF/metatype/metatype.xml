@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed Materials - Property of IBM
+
+  "Restricted Materials of IBM"
+
+  Copyright IBM Corp. 2011 All Rights Reserved.
+
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+-->
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0" 
+                   xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
+                   localization="OSGI-INF/l10n/metatype">
+
+    <OCD name="internal" description="%filemonitor.desc" id="com.ibm.ws.kernel.filemonitor" ibm:alias="fileMonitor">
+        <AD name="%trace.name" description="%trace.desc"
+            id="detailedTraceEnabled" required="false" type="Boolean" default="false" />
+    </OCD>
+
+    <Designate pid="com.ibm.ws.kernel.filemonitor">
+        <Object ocdref="com.ibm.ws.kernel.filemonitor" />
+    </Designate>
+  
+</metatype:MetaData>

@@ -1,0 +1,14 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.safAuthorization-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+    com.ibm.websphere.appserver.builtinAuthentication-1.0;version=latest, \
+    com.ibm.ws.security.credentials;version=latest, \
+    com.ibm.ws.security.authorization.saf;version=latest, \
+    com.ibm.ws.security.authorization;version=latest, \
+    com.ibm.ws.security.credentials.saf;version=latest, \
+    com.ibm.websphere.appserver.api.security.authorization.saf;version=latest

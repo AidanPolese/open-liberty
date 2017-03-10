@@ -1,0 +1,114 @@
+*
+* IBM Confidential
+*
+* OCO Source Materials
+*
+* Copyright IBM Corp. 2014
+*
+* The source code for this program is not published or otherwise
+* divested of its trade secrets, irrespective of what has been
+* deposited with the U.S. Copyright Office.
+*
+         MACRO
+&NAME    BBOA1XXX &SVC=,&LIBERTY=,&TWAS=
+BBOA1&SVC CSECT
+BBOA1&SVC AMODE ANY
+BBOA1&SVC RMODE ANY
+         J     Around
+         DC    CL8'BBOA1&SVC'            Module name
+         DC    CL8' *OLA3* '            Stub marker - OLA3
+         DC    CL10'&SYSDATE '          Asm date
+         DC    CL6'&SYSTIME'            Asm time
+*
+Around   DS    0H
+         L     R15,X'10'                Load CVT
+         USING CVT,R15
+         L     R15,CVTECVT              Load ECVT
+         DROP  R15
+         USING ECVT,R15
+         ICM   R15,B'1111',ECVTBCBA     Load master/global BGVT
+         DROP  R15
+         JZ    NOBCBA
+         USING BGVT,R15
+*        we used storage obtain for bboamcst, so its address is 4bytes
+         ICM   R15,B'1111',BBODBGVT_BBOAMCST_PTR Load clientstubtabl
+         DROP  R15
+         JZ    NOMCST
+         USING BBOAMCST,R15
+* ---------------------------------------------------------------------
+* The AMCST has multiple slots.  The 1st slot is used by tWAS, the 2nd
+* is used by Liberty.  Try the Liberty slot first.  If it is not
+* filled in, try the tWAS slot.  Store the AMCST in the save area so
+* that the tWAS path can use it.
+* ---------------------------------------------------------------------
+         ST    R15,12(R13)                Store AMCST for later
+         ICM   R15,B'1111',AMCST_SLOTS+4  Get 2nd slot
+         DROP  R15
+         JZ    NOLIBERT
+         USING BBOAMCSS,R15
+*        we used storage obtain for bboamcss, so its address is 4bytes
+         L     R15,AMCSS_VECTOR_PTR     Load client vector table
+         DROP  R15
+         USING BBOAXVEC,R15
+         AIF   ('&SVC' NE 'INF').NOTINF
+         ST    R15,16(R13)              Store Vector for later
+         LH    R15,AVECSLOT             Get slot level
+         DROP  R15
+         CHI   R15,AVEC_INF_LVL         See if INFO is supported
+         JL    NOLIBERT                 Vector level too low
+         L     R15,16(R13)              Replace vector address
+         USING BBOAXVEC,R15
+.NOTINF  ANOP
+*        Function address is 8bytes
+*        4 bytes of 0's followed by actual address(right half)
+         LG     R15,&LIBERTY            Load liberty service
+         DROP  R15
+         BR    R15                      Call liberty service
+*
+NOLIBERT L     R15,12(R13)              Get saved AMCST address
+         USING BBOAMCST,R15
+         ICM   R15,B'1111',AMCST_SLOTS  Get 1st slot
+         JZ    NOMCSS
+         USING BBOAMCSS,R15
+         L     R15,AMCSS_VECTOR_PTR     Load tWAS client vector table
+         DROP  R15
+         USING BBOAXVEC_TWAS,R15
+         L     R15,&TWAS                Load tWAS service
+         DROP  R15
+         BR    R15                      Call tWAS service
+*
+NOBCBA   LA    R0,BBOAAPI_RSN_NO_BCBA
+         J     SETRSN
+*
+NOMCST   LA    R0,BBOAAPI_RSN_NO_AMCST
+         J     SETRSN
+*
+NOMCSS   LA    R0,BBOAAPI_RSN_NO_AMCSS
+         J     SETRSN
+*
+SETRSN   DS    0H
+         L     R15,BBOA1&SVC._RSN-BBOA1&SVC._PLIST(,R1)
+         ST    R0,0(,R15)
+         LA    R0,BBOAAPI_RC_SEVERE12   Set RC12-Severe error
+         L     R15,BBOA1&SVC._RC-BBOA1&SVC._PLIST(,R1)
+         ST    R0,0(,R15)
+         BR    R14                      Return to caller
+*
+R0       EQU   0
+R1       EQU   1
+R13      EQU   13
+R14      EQU   14
+R15      EQU   15
+         LTORG
+*
+*        use COPY to inline include the BBOAXVEC DSECT
+         COPY BBOAXVEC
+         CVT   DSECT=YES
+         IHAECVT DSECT=YES
+         BBODBGVT DSECT=YES
+         BBOAMCST
+         BBOAXPRM
+
+         END   BBOA1&SVC
+
+         MEND

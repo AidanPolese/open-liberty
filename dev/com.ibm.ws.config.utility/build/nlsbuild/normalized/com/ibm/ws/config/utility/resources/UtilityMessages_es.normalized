@@ -1,0 +1,87 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.config.utility/resources/com/ibm/ws/config/utility/resources/UtilityMessages.nlsprops
+#ISMESSAGEFILE FALSE
+#NLS_ENCODING=UNICODE
+#NLS_MESSAGEFORMAT_VAR
+
+
+# Generic messages
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+error=Error: {0}
+error.inputConsoleNotAvailable=La consola de entrada no est\u00e1 disponible.
+error.missingIO=Error; falta el dispositivo E/S: {0}.
+faiedToListAllSnippets=No se ha podido listar todos los fragmentos de c\u00f3digo de configuraci\u00f3n.
+getListOfAllSnippets=\n\
+Recuperando una lista de todos los fragmentos de c\u00f3digo de configuraci\u00f3n.
+findSnippet=\n\
+Recuperando los fragmentos de c\u00f3digo relativos a "{0}".
+snippetNotFound=\n\
+No se ha encontrado ning\u00fan fragmento de c\u00f3digo relativo a "{0}".
+
+
+# Generic messages for task argument validation
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+insufficientArgs=Argumentos insuficientes.
+invalidArg=Argumento no v\u00e1lido {0}.
+missingArg=Falta el argumento {0}.
+missingValue=Falta el valor del argumento {0}.
+missingConfigSnippetName=No se ha especificado el fragmento de c\u00f3digo de configuraci\u00f3n de destino.
+
+# Messages for HelpTask
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+usage=Uso: {0} action | {0} action configSnippet [opciones]
+task.unknown=Acci\u00f3n desconocida: {0}
+
+# Messages for --info option
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+info.allVariables=\n\
+Todas las variables del fragmento de c\u00f3digo:
+info.invalidUsage=No v\u00e1lido - Uso de info. Uso: configUtility configSnippet --info 
+
+# Messages for reading in a password
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+password.enterText=Especifique la contrase\u00f1a {0}:
+password.reenterText=Vuelva a especificar la contrase\u00f1a {0}:
+password.readError=Error al leer la contrase\u00f1a.
+password.entriesDidNotMatch=Las contrase\u00f1as no han coincidido.
+
+# Messages for FileUtility
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+fileUtility.emptyPath=Especifique una v\u00eda de acceso de archivo local.
+fileUtility.fileNotFound=Archivo no encontrado.
+fileUtility.failedToRead=No se ha podido leer el archivo local.
+
+# Messages for downloading a file from repository
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+download.failedRepoAccess=No se ha podido acceder al repositorio.
+download.ioError=La descarga del fragmento de c\u00f3digo ha fallado.
+download.invalidSnippet=No se ha podido cargar el fragmento de c\u00f3digo.
+
+# Messages for variable check
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+variable.empty=El fragmento de c\u00f3digo de configuraci\u00f3n no contiene variables.
+
+# Messages for registering a host to the collective
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+encoding.aesRequiresKey=La codificaci\u00f3n aes requiere una clave. \
+Especifique una utilizando --key.
+
+encoding.xorDoesNotSupportKey=La codificaci\u00f3n xor no admite una clave. \
+No especifique --key.
+
+encoding.unsupportedEncoding=Valor de codificaci\u00f3n no soportado {0}.
+
+# Messages for creation of a config snippet
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+generate.configureSecurity=Aseg\u00farese de que la seguridad administrativa est\u00e9 configurada para el servidor.
+
+generate.download=\n\
+Descargando el fragmento de c\u00f3digo de configuraci\u00f3n solicitado...
+
+generate.abort=\n\
+Deteniendo la creaci\u00f3n del fragmento de c\u00f3digo de configuraci\u00f3n.

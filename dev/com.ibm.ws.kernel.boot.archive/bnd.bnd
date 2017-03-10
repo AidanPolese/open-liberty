@@ -1,0 +1,27 @@
+-include= ~../cnf/resources/bnd/bundle.props
+-nouses=true
+bVersion=1.0
+
+Bundle-Name: WebSphere Liberty kernel bootstrap archive
+Bundle-SymbolicName: com.ibm.ws.kernel.boot.archive; singleton:=true
+Bundle-Description: WebSphere Liberty kernel launcher archive support, version ${bVersion}
+
+Export-Package: com.ibm.ws.kernel.boot.archive.internal.*
+
+Private-Package: \
+ org.apache.commons.compress.archivers, \
+ org.apache.commons.compress.archivers.zip, \
+ org.apache.commons.compress.compressors, \
+ org.apache.commons.compress.compressors.lzw, \
+ org.apache.commons.compress.utils
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/org.apache.commons.compress-1.10.jar;version=file, \
+	com.ibm.ws.logging;version=latest, \
+	com.ibm.ws.kernel.boot.common;version=latest, \
+	com.ibm.ws.kernel.boot;version=latest, \
+	com.ibm.ws.kernel.boot.java7;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

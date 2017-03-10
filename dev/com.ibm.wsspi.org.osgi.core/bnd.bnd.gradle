@@ -1,0 +1,10 @@
+-include= jar:${fileuri;../com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+
+-includeresource: \
+   @../com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar!/!OSGI-OPT/src/*
+
+publish.wlp.jar.suffix: dev/spi/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	../com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar;version=file

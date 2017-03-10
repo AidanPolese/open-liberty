@@ -1,0 +1,26 @@
+<project name="com.ibm.ws.kernel.feature.featureManager" default="build">
+
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+  <property name="publish.tools" value="featureManager=ws-featureManager.jar"/>
+  <target name="publishExtra" if="publish.image.dir">
+    <echo>Publish ${lib.dir}/ws-featurelist.jar to ${publish.image.dir}/${image.write.bin.tools.dir}</echo>        
+    <mkdir dir="${publish.image.dir}/${image.write.bin.tools.dir}"/>
+    <copy todir="${publish.image.dir}/${image.write.bin.tools.dir}" file="${lib.dir}/ws-featureManager.jar" overwrite="true"/>
+  </target>
+  
+  <target name="post-compile" depends="compile.post-compile">
+    <!-- make sure folder exists or bnd will complain -->
+    <mkdir dir="${classes.dir}_compat" />
+    <mkdir dir="${classes.dir}"/>
+    <mkdir dir="${lib.dir}"/>
+    
+    <bnd eclipse="false"
+     failok="false"
+     exceptions="true"
+     classpath="${classes.dir}"
+     output="${lib.dir}/ws-featureManager.jar"
+     files="bnd.bnd.gradle" />
+  </target>
+  
+</project>

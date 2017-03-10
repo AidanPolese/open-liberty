@@ -1,0 +1,10 @@
+-include= jar:${fileuri;lib/org.osgi.service.http-1.2.1.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+
+-includeresource: \
+   @lib/org.osgi.service.http-1.2.1.jar!/!OSGI-OPT/src/*
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/org.osgi.service.http-1.2.1.jar;version=file

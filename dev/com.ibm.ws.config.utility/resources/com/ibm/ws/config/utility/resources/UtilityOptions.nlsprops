@@ -1,0 +1,56 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.config.utility/resources/com/ibm/ws/config/utility/resources/UtilityOptions.nlsprops
+#ISMESSAGEFILE FALSE
+#NLS_ENCODING=UNICODE
+#NLS_MESSAGEFORMAT_VAR
+
+# -------- OPTIONS ----------------------------------------------------#
+# List of descriptive text for options. Use "\n\" for line continuations.
+# The code provides no whitespace: begin keys with "\ \ \ \ " for leading
+# whitespace, and begin descripions with \t 
+#------------------------------\n at 72 chars -------------------------\n\#
+#------------------------------\n at 72 chars Leading "\ \ \ \ "-------\n\#
+#------------------------------\n at 72 chars Leading "\t"-------------\n\#
+config.options=\n\
+Action:\n\
+find \n\
+\tFind a configuration snippet in the repository. \n\n\
+install \n\
+\tDownload the configuration snippet from the repository or use a local \n\
+\tconfiguration snippet for variable substitution. \n\n\
+Options:\n\
+--info \n\
+\tList all variable options in the configuration snippet. Return an\n\
+\tempty list if the configuration snippet has no variables\n\
+\tfor substitution.\n\n\
+--V[variable]=value \n\
+\tYou can replace configuration snippet variables found by \n\
+\tthe --info option with your input values. Variables are\n\
+\tidentified by this utility using --V[variable]. \n\n\
+--createConfigFile=path \n\
+\tOptional. The code snippet is written to the file specified\n\
+\tinstead of to the console screen. Add the provided code snippet\n\
+\tto the server.xml configuration to include the specified file. \n\n\
+--encoding=[xor|aes] \n\
+\tOptional. Specify the keystore password encoding. Supported\n\
+\tencodings are xor and aes. The default encoding is xor. \n\
+\tUse securityUtility encode --listCustom command to see if any\n\
+\tadditional custom encryptions are supported.\n\n\
+--key=key \n\
+\tOptional. Specify a key to be used when encoding using AES. This\n\
+\tstring is hashed to produce an encryption key which is\n\
+\tused to encrypt and decrypt the password. Optionally, provide the key\n\
+\tto the server by defining the variable wlp.password.encryption.key\n\
+\twhose value is the key. If this option is not provided, a default\n\
+\tkey is used. \n\n\
+--useLocalFile=file \n\
+\tUse a configuration snippet from local file system. You \n\
+\tmust specify the file path. This option replaces specifying \n\
+\ta configuration snippet name.\n\
+\te.g. configUtility --useLocalFile=file [options]
+

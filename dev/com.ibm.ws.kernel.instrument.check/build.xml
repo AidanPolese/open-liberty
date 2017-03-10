@@ -1,0 +1,45 @@
+<project name="com.ibm.ws.kernel.instrument.check" default="build">
+
+    <!-- ensure executable jars can run on older JREs, back to 1.4 -->
+    <property name="build.with.java.level" value="1.4"/>
+    <property name="javac.boot.classpath" value="1.6"/>
+  
+	<!-- Disable trace/ffdc injection as it is hard-coded in this project -->
+	<property name="no.trace.instrumentation" value="true" />
+	 
+    <import file="../ant_build/public_imports/standard_imports.xml"/>
+    <import file="../ant_build/public_imports/internal_imports/wlpbnd.xml"/>
+
+	<!-- This pattern set needs to be defined after standart_imports to override the default -->
+	<patternset id="publish.bundles">
+		<include name="${output.jar}" />
+		<include name="bootstrap-agent.jar" />
+	</patternset>
+
+	<target name="package" depends="package.package">
+		<jar destfile="${lib.dir}/bootstrap-agent.jar">
+			<fileset dir="../com.ibm.ws.kernel.instrument.agent/build/classes" includes="com/ibm/ws/kernel/instrument/BootstrapAgent*"/>
+			<fileset dir="${classes.dir}" includes="com/ibm/ws/kernel/instrument/EnvCheck*"/>
+			<manifest>
+				<!-- Temporarily disallow class redefinition (incremental publishing) 
+				     until the server can handle updates to annotations -->
+				<attribute name="Can-Redefine-Classes" value="false" />
+				
+				<attribute name="Can-Retransform-Classes" value="true" />
+				<attribute name="Main-Class" value="com.ibm.ws.kernel.instrument.EnvCheck"/>
+				<attribute name="Premain-Class" value="com.ibm.ws.kernel.instrument.EnvCheck"/>
+                                <attribute name="Agent-Class" value="com.ibm.ws.kernel.instrument.EnvCheck"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="publishExtra" if="publish.image.dir">
+		<echo>Publishing ws-javaagent.jar to ${publish.image.dir}/${image.write.bin.tools.dir}</echo>
+		<copy tofile="${publish.image.dir}/${image.write.bin.tools.dir}/ws-javaagent.jar" file="${lib.dir}/bootstrap-agent.jar"/>
+	</target>
+
+	<target name="publish.instrumentation" depends="package" description="Manual target: copy jar to ant_build/lib">
+		<echo>${lib.dir}</echo>
+		<copy todir="../ant_build/lib" file="${lib.dir}/bootstrap-agent.jar" />
+	</target>
+</project>

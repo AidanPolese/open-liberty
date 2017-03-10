@@ -1,0 +1,14 @@
+This document contains information required by the Release Services team to
+prepare a 'Certificate of Originality' document for this project.
+
+Source code origin:
+Alpine
+
+Alpine contributors:
+Ki Park
+Alex Mulholland
+Erin Schnabel
+Jeffrey Lee
+Ajay Apte
+
+

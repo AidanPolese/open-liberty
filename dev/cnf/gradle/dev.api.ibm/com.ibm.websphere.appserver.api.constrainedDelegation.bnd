@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.0
+
+Bundle-Name: WebSphere Security Constrained Delegation (S4U2self and S4U2proxy)
+Bundle-Description: WebSphere Security Constrained Delegation (S4U2self and S4U2proxy), version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.api.constrainedDelegation
+
+Import-Package: com.ibm.websphere.security.s4u2proxy
+
+Export-Package: com.ibm.websphere.security.s4u2proxy
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.constrainedDelegation/pom.xml=com.ibm.websphere.appserver.api.constrainedDelegation.pom}
+
+publish.wlp.jar.suffix: dev/api/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.security.kerberos.java8

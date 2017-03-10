@@ -1,0 +1,3 @@
+<validator-exclude>
+    <root validatorKey="missing.attribute"/>
+</validator-exclude>

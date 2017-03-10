@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.0
+
+Bundle-Name: WebSphere EJB Container API
+Bundle-Description: WebSphere EJB Container API, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.api.ejbcontainer
+
+Import-Package: com.ibm.websphere.ejbcontainer.mbean
+
+Export-Package: com.ibm.websphere.ejbcontainer.mbean
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.ejbcontainer/pom.xml=com.ibm.websphere.appserver.api.ejbcontainer.pom}
+
+publish.wlp.jar.suffix: dev/api/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.ejbcontainer

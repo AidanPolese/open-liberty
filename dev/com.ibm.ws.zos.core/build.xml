@@ -1,0 +1,5 @@
+<project name="com.ibm.ws.zos.core" default="build">
+	<!-- property name="skip.findbugs" value="true"/ -->
+	<property name="skip.formatting" value="true"/>
+    <import file="../ant_build/public_imports/standard_imports.xml"/>
+</project>

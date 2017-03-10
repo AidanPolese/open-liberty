@@ -1,0 +1,11 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.zosConnectServiceRestClient-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.jaxrsClient-2.0;version=latest,\
+	com.ibm.ws.zos.connect.service.client.rest;version=latest,\
+	com.ibm.websphere.javaee.jaxrs.2.0;version=latest

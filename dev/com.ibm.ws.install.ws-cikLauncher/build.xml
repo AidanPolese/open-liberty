@@ -1,0 +1,15 @@
+<project name="com.ibm.ws.install.ws-cikLauncher" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  <!-- Disable trace/ffdc injection as this code is used outside of Liberty -->
+  <property name="no.trace.instrumentation" value="true"/>
+	
+  <target name="post-compile" depends="compile.post-compile">
+    <mkdir dir="${build.dir}/cik.launcher" />
+    <bnd eclipse="false"
+	     failok="false"
+	     exceptions="true"
+	     classpath="${classes.dir}"
+	     output="${build.dir}/cik.launcher/ws-cikLauncher.jar"
+	     files="bnd.bnd.gradle" />
+  </target>  
+</project>

@@ -1,0 +1,34 @@
+Bnd-LastModified: 1486383784390
+Created-By: 1.8.0_121 (Oracle Corporation)
+IBM-API-Package: javax.media.mscontrol; type=spec,
+ javax.media.mscontrol.join; type=spec,
+ javax.media.mscontrol.mediagroup; type=spec,
+ javax.media.mscontrol.mediagroup.http; type=spec,
+ javax.media.mscontrol.mediagroup.rtsp; type=spec,
+ javax.media.mscontrol.mediagroup.signals; type=spec,
+ javax.media.mscontrol.mixer; type=spec,
+ javax.media.mscontrol.networkconnection; type=spec,
+ javax.media.mscontrol.resource; type=spec,
+ javax.media.mscontrol.resource.common; type=spec,
+ javax.media.mscontrol.resource.enums; type=spec,
+ javax.media.mscontrol.resource.video; type=spec,
+ javax.media.mscontrol.spi; type=spec,
+ javax.media.mscontrol.vxml; type=spec
+IBM-AppliesTo: com.ibm.websphere.appserver; productEdition="@PRODUCT_EDITION@"; productVersion="@PRODUCT_VERSION@"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: com.ibm.websphere.appserver
+IBM-ShortName: mediaServerControl-1.0
+Subsystem-Content: com.ibm.websphere.javaee.mscontrol.1.0; location:="dev/api/spec/,lib/"; version="[1.0.0,1.0.200)",
+ com.ibm.ws.mscontrol; version="[1.0.0,1.0.200)"
+Subsystem-Description: %description
+Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
+Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.mediaServerControl-1.0
+Subsystem-ManifestVersion: 1
+Subsystem-Name: Media Server Control
+Subsystem-SymbolicName: com.ibm.websphere.appserver.mediaServerControl-1.0; visibility:=public; singleton:=false
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-3.3.0.201609221906

@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.1
+
+Bundle-Name: WebSphere Web Cache API
+Bundle-Description: WebSphere Web Cache API, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.api.webCache
+
+Import-Package: com.ibm.websphere.command,com.ibm.websphere.command.web,com.ibm.websphere.servlet.cache
+
+Export-Package: com.ibm.websphere.command,com.ibm.websphere.command.web,com.ibm.websphere.servlet.cache
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.webCache/pom.xml=com.ibm.websphere.appserver.api.webCache.pom}
+
+publish.wlp.jar.suffix: dev/api/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.dynacache.web

@@ -1,0 +1,21 @@
+<!-- Additions to this file require additions to either the ndControllerBundle or the
+     ndMemberBundle files in the collectives component: 
+     /com.ibm.websphere.appserver.ndControllerBundle/com.ibm.websphere.appserver.ndControllerBundle.feature
+     /com.ibm.websphere.appserver.ndMemberBundle/com.ibm.websphere.appserver.ndMemberBundle.feature
+     
+     Depending on the feature, it is either intended for an ND member or an ND controller.
+     Update the appropriate bundle feature file.
+     
+     If either of those files are not changed, the release build WILL fail.
+      -->
+<server description="These features go in the repository and apply to ND, zOS and DEVELOPERS">
+  <include location="${editions.base}/repo.xml"/>
+  
+  <featureManager>
+    <feature>scalingMember-1.0</feature>
+    <feature>scalingController-1.0</feature>
+    <feature>dynamicRouting-1.0</feature>
+    <feature>healthManager-1.0</feature>
+    <feature>healthAnalyzer-1.0</feature>
+  </featureManager>
+</server>

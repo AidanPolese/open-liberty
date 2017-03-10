@@ -1,0 +1,89 @@
+# Configure Repositories
+
+# disable central for now until we have a local server we can point to
+#-plugin.1.Central: \
+#	aQute.bnd.deployer.repository.wrapper.Plugin; \
+#		location = "${build}/cache/wrapper"; \
+#		reindex = true, \
+#	aQute.bnd.jpm.Repository; \
+#		includeStaged = true; \
+#		name = Central; \
+#		location = ~/.bnd/shacache; \
+#		index = ${build}/central.json
+
+-plugin.1.MavenLocal: \
+	aQute.bnd.deployer.repository.LocalIndexedRepo; \
+		name = MavenLocal; \
+		pretty = true; \
+		local = ${build}/maven-local
+
+-plugin.2.Local: \
+	aQute.bnd.deployer.repository.LocalIndexedRepo; \
+		name = Local; \
+		pretty = true; \
+		local = ${build}/local
+
+-plugin.3.Templates: \
+	aQute.bnd.deployer.repository.LocalIndexedRepo; \
+		name = Templates; \
+		pretty = true; \
+		local = ${build}/templates
+
+-plugin.4.Release: \
+	aQute.bnd.deployer.repository.LocalIndexedRepo; \
+		name = Release; \
+		pretty = true; \
+		local = ${build}/release
+
+javac.source: 1.6
+javac.target: 1.6
+javac.debug: true
+javac.encoding: UTF-8
+-sources: false
+
+-pedantic: true
+-fixupmessages.missingexport: "Used bundle version * for exported package";is:=error
+
+-releaserepo: Release
+-baselinerepo: Release
+
+# JUnit
+junit: org.apache.servicemix.bundles.junit; version=4.12
+-pluginpath: \
+    ${workspace}/cnf/lib/wlp-bndPlugins.jar,\
+    ${workspace}/cnf/lib/org.apache.aries.util-1.2.0.jar
+
+instrument.disabled: false
+instrument.classesIncludes: **/*.class
+instrument.classesExcludes: 
+instrument.ffdc: true
+instrument.taskInjection: false
+
+javac.bootclasspath.java6: \
+    ${workspace}/prereq.java.1.6/lib/rt.jar;version=file;boot=true
+
+javac.bootclasspath.java7: \
+    ${workspace}/prereq.java.1.7/lib/ibmcertpathfw.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.7/lib/ibmjcefw.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.7/lib/ibmorbapi.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.7/lib/ibmpkcs.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.7/lib/jlm.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.7/lib/math.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.7/lib/rt.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.7/lib/vm.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.7/lib/xml.jar;version=file;boot=true
+
+javac.bootclasspath.java8: \
+    ${workspace}/prereq.java.1.8/lib/ibmcertpathfw.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/ibmjcefw.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/ibmjgssfw.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/ibmjgssprovider.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/ibmjssefw.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/ibmorbapi.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/ibmpkcs.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/jlm.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/math.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/rt.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/vm.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/xml.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/xmldsigfw.jar;version=file;boot=true

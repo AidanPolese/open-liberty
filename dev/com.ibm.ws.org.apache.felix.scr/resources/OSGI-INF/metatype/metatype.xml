@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed Materials - Property of IBM
+
+  "Restricted Materials of IBM"
+
+  Copyright IBM Corp. 2012 All Rights Reserved.
+
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+-->
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0"  
+                   xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0">
+
+ <Designate pid="org.apache.felix.scr.ScrService">
+  <Object ocdref="org.apache.felix.scr.ScrService" />
+ </Designate>
+
+ <OCD id="org.apache.felix.scr.ScrService" name="internal" description="internal use only">
+  <AD id="ds.info.service" type="String"  default="true" ibm:final="true" name="internal" description="internal use only"/>
+  <AD id="ds.global.extender" type="String"  default="true" ibm:final="true" name="internal" description="internal use only"/>
+  <AD id="ds.loglevel" type="String"  default="Warnings" ibm:variable="ds.loglevel" name="internal" description="internal use only"/>
+  <AD id="ds.lock.timeout.milliseconds" type="Long"  default="5000" ibm:variable="ds.lock.timeout.milliseconds" name="internal" description="internal use only"/>
+  <AD id="ds.stop.timeout.milliseconds" type="Long"  default="60000" ibm:variable="ds.stop.timeout.milliseconds" name="internal" description="internal use only"/>
+ </OCD>
+
+</metatype:MetaData>

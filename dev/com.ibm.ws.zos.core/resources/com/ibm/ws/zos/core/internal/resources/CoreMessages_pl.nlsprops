@@ -1,0 +1,142 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+# # {0} description of each insert field
+# MSG_DESCRIPTIVE_NAME_CWSJX0000=CWSJX0000I: This is a message with inserts {0}
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.explanation=Explanation text for the message
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.useraction=User action text for the message
+#
+#CMVCPATHNAME com.ibm.ws.zos.core/resources/com/ibm/ws/zos/core/internal/resources/CoreMessages.nlsprops
+#COMPONENTPREFIX CWWKB
+#COMPONENTNAMEFOR CWWKB zOS Core
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+# NLS_MESSAGEFORMAT_VAR
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+#
+# -------------------------------------------------------------------------------------------------
+#0001-0050: Command processing (com.ibm.ws.zos.command.processing/resources/com.ibm.ws.zos.command.processing.internal.resources/CommandProcessingMessages.nlsprops)
+#0051-0100: Native code (com.ibm.zos.native/resources/com/ibm/ws/zos/native/native_messages.nlsprops)
+#0101-0150: core (here)
+# -------------------------------------------------------------------------------------------------
+
+#{0} is an integer reason code.
+ANGEL_NOT_AVAILABLE=CWWKB0101I: Proces Angel jest niedost\u0119pny.  \u017badna autoryzowana us\u0142uga nie zostanie za\u0142adowana.  Kod przyczyny: {0}.
+ANGEL_NOT_AVAILABLE.explanation=Nie istnieje \u017caden proces Angel lub proces Angel istnieje, ale serwer nie mo\u017ce nawi\u0105za\u0107 z nim po\u0142\u0105czenia z powodu b\u0142\u0119du.
+ANGEL_NOT_AVAILABLE.useraction=Je\u015bli serwer nie wymaga autoryzowanych us\u0142ug, nie jest wymagana \u017cadna czynno\u015b\u0107. Je\u015bli serwer wymaga autoryzowanych us\u0142ug, uruchom proces Angel w systemie, aby serwer m\u00f3g\u0142 za\u0142adowa\u0107 sw\u00f3j autoryzowany kod i udost\u0119pni\u0107 autoryzowane us\u0142ugi.   Je\u015bli problem b\u0119dzie si\u0119 powtarza\u0142, zapoznaj si\u0119 z informacjami na temat okre\u015blania problemu na stronie WWW wsparcia dla serwera WebSphere Application Server: http://www.ibm.com/software/webservers/appserv/was/support.
+
+SERVER_NOT_AUTHORIZED_TO_CONNECT_TO_ANGEL=CWWKB0102I: Ten serwer nie ma autoryzacji, aby nawi\u0105zywa\u0107 po\u0142\u0105czenie z procesem Angel.  \u017badna autoryzowana us\u0142uga nie zostanie za\u0142adowana.
+SERVER_NOT_AUTHORIZED_TO_CONNECT_TO_ANGEL.explanation=Identyfikator u\u017cytkownika, kt\u00f3ry uruchomi\u0142 serwer, nie ma dost\u0119pu do profilu BBG.ANGEL klasy serwera SAF. W celu nawi\u0105zania po\u0142\u0105czenia z procesem Angel wymagane jest prawo do odczytu dla profilu.
+SERVER_NOT_AUTHORIZED_TO_CONNECT_TO_ANGEL.useraction=Je\u015bli serwer nie wymaga \u017cadnych autoryzowanych us\u0142ug, nie jest wymagana \u017cadna czynno\u015b\u0107. Je\u015bli serwer wymaga autoryzowanych us\u0142ug, nadaj identyfikatorowi u\u017cytkownika, kt\u00f3ry uruchamia serwer, prawo do odczytu dla profilu BBG.ANGEL klasy serwera SAF. 
+
+#{0} is the name of a service group (a text string between 1-8 characters)
+AUTHORIZED_SERVICE_AVAILABLE=CWWKB0103I: Grupa autoryzowanych us\u0142ug {0} jest dost\u0119pna.
+AUTHORIZED_SERVICE_AVAILABLE.explanation=Grupa autoryzowanych us\u0142ug wymieniona w komunikacie zosta\u0142a pomy\u015blnie za\u0142adowana.
+AUTHORIZED_SERVICE_AVAILABLE.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is the name of a service group (a text string between 1-8 characters)
+AUTHORIZED_SERVICE_NOT_AVAILABLE=CWWKB0104I: Grupa autoryzowanych us\u0142ug {0} jest niedost\u0119pna.
+AUTHORIZED_SERVICE_NOT_AVAILABLE.explanation=Identyfikator u\u017cytkownika, kt\u00f3ry uruchomi\u0142 serwer, nie ma dost\u0119pu do odpowiedniego profilu w klasie serwera SAF.  Nazwa profilu to BBG.BBGZSAFM.<nazwa>, gdzie <nazwa> oznacza nazw\u0119 grupy us\u0142ug w komunikacie.
+AUTHORIZED_SERVICE_NOT_AVAILABLE.useraction=Je\u015bli ta grupa autoryzowanych us\u0142ug nie jest wymagana przez serwer, nie jest wymagana \u017cadna czynno\u015b\u0107. Je\u015bli serwer wymaga us\u0142ug udost\u0119pnianych przez grup\u0119 autoryzowanych us\u0142ug, nadaj identyfikatorowi u\u017cytkownika, kt\u00f3ry uruchamia serwer, prawo do odczytu dla odpowiednich profili w klasie serwera SAF.
+
+#{0} is the name of the unauthorized function module
+#{1} is the return value from BPX4LOD
+#{2} is the return code from BPX4LOD
+#{3} is the reason code from BPX4LOD
+UNABLE_TO_LOAD_UNAUTHORIZED_BPX4LOD=CWWKB0105E: Nie mo\u017cna za\u0142adowa\u0107 biblioteki kodu rodzimego systemu z/OS {0}.  Dzia\u0142anie us\u0142ugi BPX4LOD nie powiod\u0142o si\u0119. Warto\u015b\u0107 zwracana = {1}, kod powrotu = {2}, kod przyczyny = {3}.
+UNABLE_TO_LOAD_UNAUTHORIZED_BPX4LOD.explanation=Nie mo\u017cna za\u0142adowa\u0107 cz\u0119\u015bci rodzimych bibliotek systemu z/OS dla serwera aplikacji.  Dzia\u0142anie us\u0142ugi BPX4LOD systemu Unix nie powiod\u0142o si\u0119 podczas pr\u00f3by za\u0142adowania biblioteki wskazanej w komunikacie.  Warto\u015b\u0107 zwracana, kod powrotu i kod przyczyny zwr\u00f3cone przez us\u0142ug\u0119 BPX4LOD zosta\u0142y r\u00f3wnie\u017c wskazane w komunikacie.  Kod powrotu i przyczyny s\u0105 wy\u015bwietlane jako liczby ca\u0142kowite w notacji szesnastkowej.
+UNABLE_TO_LOAD_UNAUTHORIZED_BPX4LOD.useraction=Potwierd\u017a wykonanie wszystkich krok\u00f3w instalacji podczas instalowania serwera aplikacji w tym systemie.  Warto\u015b\u0107 zwracan\u0105, kod powrotu i kod przyczyny mo\u017cna znale\u017a\u0107 w publikacji z/OS UNIX System Services Messages and Codes (Komunikaty i kody us\u0142ug systemu z/OS UNIX) - numer publikacji SA22-7807-xx.  Je\u015bli problem nie ust\u0105pi, skontaktuj si\u0119 z nast\u0119pnym poziomem wsparcia.
+
+#{0} is the name of the library
+LIBRARY_DOES_NOT_EXIST=CWWKB0106E: Rodzima biblioteka systemu z/OS {0} nie istnieje w systemie plik\u00f3w.
+LIBRARY_DOES_NOT_EXIST.explanation=Nie znaleziono biblioteki kodu rodzimego systemu z/OS w systemie plik\u00f3w.  Nazwa biblioteki zosta\u0142a wskazana w komunikacie.
+LIBRARY_DOES_NOT_EXIST.useraction=Potwierd\u017a wykonanie wszystkich krok\u00f3w instalacji podczas instalowania serwera aplikacji w tym systemie.  Je\u015bli problem nie ust\u0105pi, skontaktuj si\u0119 z nast\u0119pnym poziomem wsparcia.
+
+#{0} is the product owner
+#{1} is the product name
+#{2} is the product version
+PRODUCT_REGISTRATION_FAILED_BAD_PARM=CWWKB0107E: Nie powiod\u0142a si\u0119 rejestracja produktu {1} w wersji {2} nale\u017c\u0105cego do {0} w systemie z/OS z powodu problem\u00f3w podczas translacji wymaganych \u0142a\u0144cuch\u00f3w na kod EBCDIC.
+PRODUCT_REGISTRATION_FAILED_BAD_PARM.explanation=Nie mo\u017cna przeprowadzi\u0107 translacji jednego z \u0142a\u0144cuch\u00f3w identyfikacji produktu na kod EBCDIC w celu przekazania do us\u0142ugi IFAUSAGE.
+PRODUCT_REGISTRATION_FAILED_BAD_PARM.useraction=Skontaktuj si\u0119 z w\u0142a\u015bcicielem produktu, aby uzyska\u0107 poprawione \u0142a\u0144cuchy s\u0142u\u017c\u0105ce do identyfikacji.
+
+#{0} is the product owner
+#{1} is the product name
+#{2} is the product version
+PRODUCT_REGISTRATION_SUCCESSFUL=CWWKB0108I: Pomy\u015blnie zarejestrowano produkt {1} w wersji {2} nale\u017c\u0105cy do {0} w systemie z/OS.
+PRODUCT_REGISTRATION_SUCCESSFUL.explanation=Wymieniony produkt zosta\u0142 zarejestrowany w systemie z/OS za pomoc\u0105 us\u0142ugi IFAUSAGE.
+PRODUCT_REGISTRATION_SUCCESSFUL.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is the product owner
+#{1} is the product name
+#{2} is the product version
+#{3} is the return code
+PRODUCT_REGISTRATION_UNSUCCESSFUL=CWWKB0109E: Nie powiod\u0142a si\u0119 rejestracja produktu {1} w wersji {2} nale\u017c\u0105cego do {0} w systemie z/OS. Kod powrotu = {3}.
+PRODUCT_REGISTRATION_UNSUCCESSFUL.explanation=Nie powiod\u0142o si\u0119 zarejestrowanie wymienionego produktu w systemie z/OS za pomoc\u0105 us\u0142ugi IFAUSAGE.  Kody powrotu wi\u0119ksze od zera pochodz\u0105 z us\u0142ugi IFAUSAGE.  Ujemne kody powrot\u00f3w oznaczaj\u0105 problem wewn\u0119trzny podczas przetwarzania \u017c\u0105dania rejestracji.   
+PRODUCT_REGISTRATION_UNSUCCESSFUL.useraction=Kod powrotu wynosz\u0105cy osiem (8) mo\u017ce oznacza\u0107, \u017ce serwer podj\u0105\u0142 pr\u00f3b\u0119 zarejestrowania zbyt wielu produkt\u00f3w jednocze\u015bnie.  
+
+#No fill-ins
+SERVER_SAFM_NOT_APF_AUTHORIZED=CWWKB0110I: Modu\u0142 bbgzsafm nie jest autoryzowany przez program APF. Nie b\u0119d\u0105 dost\u0119pne \u017cadne autoryzowane us\u0142ugi.
+SERVER_SAFM_NOT_APF_AUTHORIZED.explanation=Modu\u0142 bbgzsafm nie jest autoryzowany przez program APF. Modu\u0142 bbgzsafm musi by\u0107 autoryzowany przez program APF, aby mo\u017cliwy by\u0142 dost\u0119p do autoryzowanych us\u0142ug.
+SERVER_SAFM_NOT_APF_AUTHORIZED.useraction=Je\u015bli serwer nie wymaga \u017cadnych autoryzowanych us\u0142ug, nie jest wymagana \u017cadna czynno\u015b\u0107. Je\u015bli serwer wymaga autoryzowanych us\u0142ug, program APF przeprowadzi autoryzacj\u0119 modu\u0142u bbgzsafm. Zapoznaj si\u0119 z informacjami dotycz\u0105cymi komendy extattr zawartymi w publikacji z/OS UNIX System Services Command Reference (Informacje o komendach us\u0142ug systemu z/OS UNIX) o numerze SA22-7802-xx.
+
+#{0} is the product owner
+#{1} is the product name
+#{2} is the product version
+PRODUCT_DEREGISTRATION_SUCCESSFUL=CWWKB0111I: Pomy\u015blnie usuni\u0119to z rejestru produkt {1} w wersji {2} nale\u017c\u0105cy do {0} w systemie z/OS.
+PRODUCT_DEREGISTRATION_SUCCESSFUL.explanation=Wymieniony produkt zosta\u0142 usuni\u0119ty z rejestru systemu z/OS za pomoc\u0105 us\u0142ugi IFAUSAGE.
+PRODUCT_DEREGISTRATION_SUCCESSFUL.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} successful product registration count
+PRODUCT_REGISTRATION_SUMMARY_AUTHORIZED=CWWKB0112I: Liczba pomy\u015blnie zarejestrowanych produkt\u00f3w w systemie z/OS: {0}. Serwer podejmie pr\u00f3b\u0119 usuni\u0119cia tych produkt\u00f3w z rejestru systemu z/OS podczas zamykania serwera.
+PRODUCT_REGISTRATION_SUMMARY_AUTHORIZED.explanation=Podczas zamykania serwer podejmie pr\u00f3b\u0119 jawnego usuni\u0119cia z rejestru wszystkich produkt\u00f3w, kt\u00f3re zosta\u0142y pomy\u015blnie zarejestrowane w systemie z/OS. Produkty zosta\u0142y usuni\u0119te z rejestru za pomoc\u0105 us\u0142ugi IFAUSAGE systemu z/OS.
+PRODUCT_REGISTRATION_SUMMARY_AUTHORIZED.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} successful product registration count
+PRODUCT_REGISTRATION_SUMMARY_NOT_AUTHORIZED=CWWKB0113I: Liczba pomy\u015blnie zarejestrowanych produkt\u00f3w w systemie z/OS: {0}. Te produkty zostan\u0105 usuni\u0119te z rejestru systemu z/OS po przerwaniu przestrzeni adresowej.
+PRODUCT_REGISTRATION_SUMMARY_NOT_AUTHORIZED.explanation=Wszystkie pomy\u015blnie zarejestrowane produkty zostan\u0105 usuni\u0119te z rejestru systemu z/OS po przerwaniu przestrzeni adresowej. Je\u015bli potrzebne jest jawne usuni\u0119cie z rejestru produktu podczas zamykania serwera, utw\u00f3rz i w\u0142\u0105cz profil serwera na potrzeby dost\u0119pu do autoryzowanych us\u0142ug w grupie PRODMGR, a nast\u0119pnie uruchom proces Angel. Proces Angel musi zosta\u0107 uruchomiony przed uruchomieniem serwera.
+PRODUCT_REGISTRATION_SUMMARY_NOT_AUTHORIZED.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is the product owner
+#{1} is the product name
+#{2} is the product version
+#{3} is the return code
+PRODUCT_DEREGISTRATION_UNSUCCESSFUL=CWWKB0114E: Usuni\u0119cie z rejestru systemu z/OS produktu {1} w wersji {2} nale\u017c\u0105cego do {0} nie powiod\u0142o si\u0119. Kod powrotu = {3}.
+PRODUCT_DEREGISTRATION_UNSUCCESSFUL.explanation=Nie powiod\u0142o si\u0119 usuni\u0119cie wymienionego produktu z rejestru systemu z/OS za pomoc\u0105 us\u0142ugi IFAUSAGE.  Kody powrotu wi\u0119ksze od zera pochodz\u0105 z us\u0142ugi IFAUSAGE.  Ujemne kody powrot\u00f3w oznaczaj\u0105 problem wewn\u0119trzny podczas przetwarzania \u017c\u0105dania usuwania z rejestru.
+PRODUCT_DEREGISTRATION_UNSUCCESSFUL.useraction=Kod powrotu wynosz\u0105cy osiem (8) oznacza, \u017ce produkt nie zosta\u0142 nigdy wcze\u015bniej zarejestrowany.
+
+SERVER_SAFM_NOT_SAF_AUTHORIZED=CWWKB0115I: Ten serwer nie ma autoryzacji do za\u0142adowania modu\u0142u bbgzsafm. \u017badna autoryzowana us\u0142uga nie zostanie za\u0142adowana.
+SERVER_SAFM_NOT_SAF_AUTHORIZED.explanation=Identyfikator u\u017cytkownika, kt\u00f3ry uruchomi\u0142 serwer, nie ma dost\u0119pu do profilu BBG.AUTHMOD.BBGZSAFM klasy serwera SAF. W celu nawi\u0105zania po\u0142\u0105czenia z procesem Angel i za\u0142adowania autoryzowanych us\u0142ug wymagane jest prawo do odczytu dla profilu.
+SERVER_SAFM_NOT_SAF_AUTHORIZED.useraction=Je\u015bli serwer nie wymaga \u017cadnych autoryzowanych us\u0142ug, nie jest wymagana \u017cadna czynno\u015b\u0107.  Je\u015bli serwer wymaga autoryzowanych us\u0142ug, nadaj identyfikatorowi u\u017cytkownika, kt\u00f3ry uruchamia serwer, prawo do odczytu dla profilu BBG.AUTHMOD.BBGZSAFM klasy serwera SAF. 
+
+NOT_REGISTERED_WITH_REQUIRED_ANGEL=CWWKB0116I: Ten serwer nie zosta\u0142 zarejestrowany w procesie angel, mimo \u017ce jego konfiguracja wymaga rejestracji w procesie angel. Zostanie podj\u0119ta pr\u00f3ba zatrzymania tego serwera.
+NOT_REGISTERED_WITH_REQUIRED_ANGEL.explanation=Serwer zosta\u0142 skonfigurowany w taki spos\u00f3b, \u017ce jego uruchomienie zostanie przerwane, je\u015bli nie zosta\u0142 zarejestrowany w procesie angel. Serwer nie zosta\u0142 zarejestrowany w procesie angel i zostanie zatrzymany.
+NOT_REGISTERED_WITH_REQUIRED_ANGEL.useraction=Sprawd\u017a, czy proces angel zosta\u0142 uruchomiony i czy serwer mo\u017ce si\u0119 z nim po\u0142\u0105czy\u0107 i w nim zarejestrowa\u0107. Alternatywnie zmie\u0144 konfiguracj\u0119 w taki spos\u00f3b, aby zezwoli\u0107 serwerowi na uruchamianie bez rejestracji w procesie angel.
+
+#{0} is the name of the angel process.  1-54 characters.
+#{1} is an integer reason code.
+ANGEL_NOT_AVAILABLE_NAME=CWWKB0117W: Proces Angel {0} jest niedost\u0119pny. \u017badna autoryzowana us\u0142uga nie zostanie za\u0142adowana. Kod przyczyny: {1}.
+ANGEL_NOT_AVAILABLE_NAME.explanation=Nie istnieje \u017caden proces Angel o nazwie widocznej w komunikacie albo istnieje taki proces, ale serwer nie m\u00f3g\u0142 nawi\u0105za\u0107 z nim po\u0142\u0105czenia z powodu b\u0142\u0119du.
+ANGEL_NOT_AVAILABLE_NAME.useraction=Je\u015bli serwer wymaga autoryzowanych us\u0142ug, uruchom proces Angel w systemie, aby serwer m\u00f3g\u0142 za\u0142adowa\u0107 sw\u00f3j autoryzowany kod i udost\u0119pni\u0107 autoryzowane us\u0142ugi. Je\u015bli problem b\u0119dzie si\u0119 powtarza\u0142, zapoznaj si\u0119 z informacjami na temat okre\u015blania problemu na nast\u0119puj\u0105cej stronie WWW wsparcia dla serwera WebSphere Application Server: http://www.ibm.com/software/webservers/appserv/was/support. Je\u015bli serwer nie wymaga \u017cadnych autoryzowanych us\u0142ug, nie jest wymagana \u017cadna czynno\u015b\u0107. Aby zapobiec wy\u015bwietlaniu tego komunikatu, usu\u0144 w\u0142a\u015bciwo\u015b\u0107 com.ibm.ws.zos.core.angelName z pliku bootstrap.properties.
+
+#{0} is the name of the angel process. 1-54 characters.
+SERVER_NOT_AUTHORIZED_TO_CONNECT_TO_ANGEL_NAME=CWWKB0118W: Ten serwer nie ma autoryzacji, aby nawi\u0105zywa\u0107 po\u0142\u0105czenie z procesem Angel {0}. \u017badna autoryzowana us\u0142uga nie zostanie za\u0142adowana.
+SERVER_NOT_AUTHORIZED_TO_CONNECT_TO_ANGEL_NAME.explanation=Identyfikator u\u017cytkownika, kt\u00f3ry uruchomi\u0142 serwer, nie ma dost\u0119pu do narz\u0119dzia System Authorization Facility (SAF) dla procesu Angel o nazwie podanej w komunikacie. W celu nawi\u0105zania po\u0142\u0105czenia z danym procesem Angel wymagane jest prawo do odczytu dla profilu.
+SERVER_NOT_AUTHORIZED_TO_CONNECT_TO_ANGEL_NAME.useraction=Je\u015bli serwer wymaga autoryzowanych us\u0142ug, nale\u017cy zapozna\u0107 si\u0119 z dokumentacj\u0105 na temat konfigurowania procesu Angel o okre\u015blonej nazwie. Je\u015bli serwer nie wymaga \u017cadnych autoryzowanych us\u0142ug, nie jest wymagana \u017cadna czynno\u015b\u0107. Aby zapobiec wy\u015bwietlaniu tego komunikatu, usu\u0144 w\u0142a\u015bciwo\u015b\u0107 com.ibm.ws.zos.core.angelName z pliku bootstrap.properties.
+
+ANGEL_NAME_TOO_LONG=CWWKB0119E: Nazwa procesu Angel okre\u015blona w pliku bootstrap.properties ma wi\u0119cej ni\u017c 54 znaki d\u0142ugo\u015bci.
+ANGEL_NAME_TOO_LONG.explanation=W\u0142a\u015bciwo\u015b\u0107 com.ibm.ws.zos.core.angelName okre\u015bla nazw\u0119 procesu Angel, z kt\u00f3rym serwer ma nawi\u0105za\u0107 po\u0142\u0105czenie. W\u0142a\u015bciwo\u015b\u0107 jest okre\u015blona w pliku bootstrap.properties i nie mo\u017ce mie\u0107 wi\u0119cej ni\u017c 54 znaki d\u0142ugo\u015bci.  
+ANGEL_NAME_TOO_LONG.useraction=Ten serwer nie nawi\u0105\u017ce po\u0142\u0105czenia z procesem Angel. W celu nawi\u0105zania po\u0142\u0105czenia z procesem Angel okre\u015bl warto\u015b\u0107 w\u0142a\u015bciwo\u015bci com.ibm.ws.zos.core.angelName o d\u0142ugo\u015bci nieprzekraczaj\u0105cej 54 znak\u00f3w i zrestartuj serwer.
+
+#{0} is an unsupported character
+#{1} is a number between 1 and 54
+ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0120E: Nazwa procesu Angel okre\u015blona w pliku bootstrap.properties zawiera nieobs\u0142ugiwany znak {0} na pozycji {1}.
+ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=W\u0142a\u015bciwo\u015b\u0107 com.ibm.ws.zos.core.angelName okre\u015bla nazw\u0119 procesu Angel, z kt\u00f3rym serwer ma nawi\u0105za\u0107 po\u0142\u0105czenie. W\u0142a\u015bciwo\u015b\u0107 jest okre\u015blona w pliku boostrap.properties i mo\u017ce zawiera\u0107 tylko znaki z nast\u0119puj\u0105cego zestawu: A-Z 0-9! # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
+ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=Ten serwer nie nawi\u0105\u017ce po\u0142\u0105czenia z procesem Angel. W celu nawi\u0105zania po\u0142\u0105czenia z procesem Angel okre\u015bl warto\u015b\u0107 w\u0142a\u015bciwo\u015bci com.ibm.ws.zos.core.angelName za pomoc\u0105 znak\u00f3w z obs\u0142ugiwanego zestawu i zrestartuj serwer.

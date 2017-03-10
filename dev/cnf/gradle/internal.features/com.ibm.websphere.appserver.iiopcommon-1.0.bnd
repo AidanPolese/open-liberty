@@ -1,0 +1,17 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.iiopcommon-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.channelfw-1.0;version=latest, \
+	com.ibm.ws.org.apache.yoko.corba.spec.1.5;version=latest, \
+	com.ibm.ws.org.apache.yoko.osgi.1.5;version=latest, \
+	com.ibm.ws.org.apache.servicemix.bundles.bcel.5.2;version=latest, \
+	com.ibm.ws.org.apache.yoko.rmi.impl.1.5;version=latest, \
+	com.ibm.ws.org.apache.yoko.core.1.5;version=latest, \
+	com.ibm.ws.org.apache.yoko.util.1.5;version=latest, \
+	com.ibm.ws.transport.iiop;version=latest, \
+	com.ibm.ws.org.apache.yoko.rmi.spec.1.5;version=latest

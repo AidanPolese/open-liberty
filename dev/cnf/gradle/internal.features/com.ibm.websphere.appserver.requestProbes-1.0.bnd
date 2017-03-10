@@ -1,0 +1,8 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.requestProbes-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: com.ibm.ws.request.probes;version=latest

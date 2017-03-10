@@ -1,0 +1,438 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#
+# NOTE: !!! THIS FILE MUST BE KEPT IN SYNC WITH native_messages.props  !!! 
+#
+# --------------------------------------------------------------------------------------------------
+#
+# # {0} description of each insert field
+# MSG_DESCRIPTIVE_NAME_CWSJX0000=CWSJX0000I: This is a message with inserts {0}
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.explanation=Explanation text for the message
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.useraction=User action text for the message
+#
+#CMVCPATHNAME com.ibm.zos.native/resources/com.ibm.ws.zos/native_messages.nlsprops
+#COMPONENTPREFIX CWWKB
+#COMPONENTNAMEFOR CWWKB zOS Native Messages
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+# NLS_MESSAGEFORMAT_VAR
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+#
+# -------------------------------------------------------------------------------------------------
+#0051-0100: native code only messages
+#0201-0250: native code non-console messages
+# -------------------------------------------------------------------------------------------------
+
+STOP_COMMAND_ACTIVE_SERVERS=CWWKB0051E: AZ AKT\u00cdV KISZOLG\u00c1L\u00d3K VISSZAUTAS\u00cdTOTT\u00c1K AZ ANGEL LE\u00c1LL\u00cdT\u00c1S\u00c1T
+STOP_COMMAND_ACTIVE_SERVERS.explanation=Az angel folyamat nem \u00e1ll\u00edthat\u00f3 le, mert jelenleg kiszolg\u00e1l\u00f3k csatlakoznak hozz\u00e1.
+STOP_COMMAND_ACTIVE_SERVERS.useraction=A CWWKB0052I \u00fczenetben megtal\u00e1lhat\u00f3 az ASID minden olyan kiszolg\u00e1l\u00f3hoz, amely jelenleg akt\u00edv.  \u00c1ll\u00edtsa le az akt\u00edv kiszolg\u00e1l\u00f3kat, majd pr\u00f3b\u00e1lja meg ism\u00e9t le\u00e1ll\u00edtani az angel folyamatot.
+
+#{0} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{1} is a z/OS jobname
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL=CWWKB0052I: AKT\u00cdV KISZOLG\u00c1L\u00d3 ASID: {0}, FELADATN\u00c9V: {1}
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL.explanation=Ez a kiszolg\u00e1l\u00f3 jelenleg csatlakozik az angel folyamathoz.
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL.useraction=Nincs teend\u0151.
+
+#{0} is a version string
+MODIFY_DISPLAY_ANGEL_VERSION=CWWKB0053I: ANGEL V\u00c1LTOZAT: {0} 
+MODIFY_DISPLAY_ANGEL_VERSION.explanation=Az angel folyamatok dinamikusan cser\u00e9lhet\u0151 modulj\u00e1nak v\u00e1ltozata jelenik meg, v\u00e1laszul egy MODIFY PROCESS,VERSION parancs kiad\u00e1s\u00e1ra.
+MODIFY_DISPLAY_ANGEL_VERSION.useraction=Semmilyen m\u0171veletre nincs sz\u00fcks\u00e9g.
+
+#{0} is the unrecognized command entered on the console
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED=CWWKB0054E: ISMERETLEN PARANCS: {0}
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED.explanation=Az angel \u00e1ltal feldolgoz\u00e1s alatt \u00e1ll\u00f3 modify parancs fel nem ismert kulcsszavakat tartalmaz.
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED.useraction=Adja ki \u00fajra a parancsot a helyes szintaxissal.
+
+ANGEL_PROCESS_STARTING=CWWKB0055I: A WEBSPHERE FOR Z/OS ANGEL FOLYAMAT ELINDUL
+ANGEL_PROCESS_STARTING.explanation=Az angel folyamat elindul.
+ANGEL_PROCESS_STARTING.useraction=Nincs teend\u0151.
+
+ANGEL_PROCESS_INITIALIZATION_COMPLETE=CWWKB0056I: AZ ANGEL FOLYAMAT INICIALIZ\u00c1L\u00c1SA K\u00c9SZ
+ANGEL_PROCESS_INITIALIZATION_COMPLETE.explanation=Az angel folyamat inicializ\u00e1l\u00e1sa befejez\u0151d\u00f6tt.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE.useraction=Nincs teend\u0151.
+
+ANGEL_PROCESS_END_NORMAL=CWWKB0057I: A WEBSPHERE FOR Z/OS ANGEL FOLYAMAT NORM\u00c1LISAN FEJEZ\u0150D\u00d6TT BE
+ANGEL_PROCESS_END_NORMAL.explanation=Egy angel folyamat befejez\u0151dik.
+ANGEL_PROCESS_END_NORMAL.useraction=Nincs teend\u0151.
+
+#{0} is the hexidecimal return code from the angel main routine
+ANGEL_PROCESS_END_ABNORMAL=CWWKB0058E: A WEBSPHERE FOR Z/OS ANGEL FOLYAMAT RENDELLENESEN FEJEZ\u0150D\u00d6TT BE, OK={0}
+ANGEL_PROCESS_END_ABNORMAL.explanation=Egy angel folyamat rendellenesen fejez\u0151d\u00f6tt be.
+ANGEL_PROCESS_END_ABNORMAL.useraction=Az \u00fczenet sz\u00f6vege tartalmaz egy okk\u00f3dot, ami le\u00edrja a konkr\u00e9t probl\u00e9m\u00e1t.  Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#{0} is the unrecognized value
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV=CWWKB0059E: FEL NEM ISMERT IND\u00cdT\u00c1SI PARAM\u00c9TER: {0}
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV.explanation=Az angel start parancsnak egy ismeretlen param\u00e9ter lett \u00e1tadva.  Az ismeretlen param\u00e9ter ki van \u00edrva az \u00fczenetben.
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV.useraction=Tekintse meg a term\u00e9kdokument\u00e1ci\u00f3ban a start parancs t\u00e1mogatott param\u00e9tereit.
+
+#{0} is the unrecognized value
+#{1} is the recognized key
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV=CWWKB0060E: ISMERETLEN {0} START PARAM\u00c9TER \u00c9RT\u00c9K A(Z) {1} KULCSHOZ
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV.explanation=Egy felismert kulcs lett \u00e1tadva az angel start parancsnak, de a param\u00e9ter \u00e9rt\u00e9ke nem ismerhet\u0151 fel.  A kulcs \u00e9s az \u00e9rt\u00e9k szerepel az \u00fczenetben. 
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV.useraction=Tekintse meg a term\u00e9kdokument\u00e1ci\u00f3ban a start parancs t\u00e1mogatott param\u00e9ter kulcsait \u00e9s \u00e9rt\u00e9keit.
+
+#{0} is the continuation instance
+#{1} is the message id for first multiline WTO of the sequence
+UTILITIES_WTO_CMDRESPONSE_CONTINUE=CWWKB0061I: A(Z) {0} FOLYTAT\u00c1SA A(Z) {1} \u00dcZENETAZONOS\u00cdT\u00d3 ESET\u00c9BEN
+UTILITIES_WTO_CMDRESPONSE_CONTINUE.explanation=Egy parancskezel\u0151t\u0151l \u00e9rkezett parancs v\u00e1lasz \u00fczenetet vagy az oper\u00e1tornak vagy nyomtatott napl\u00f3nak \u00edrt \u00fczenetet t\u00f6bb t\u00f6bbsoros WTO-nak kell kiadnia. Ez az \u00fczenet folytat\u00e1sa.  A kapcsol\u00f3d\u00f3 CWWKB0061I \u00fczenetek csoportos\u00edt\u00e1s\u00e1hoz haszn\u00e1lja az \u00fczenetazonos\u00edt\u00f3t.
+UTILITIES_WTO_CMDRESPONSE_CONTINUE.useraction=Nincs teend\u0151.
+
+DUPLICATE_ANGEL_PROCESS=CWWKB0062E: EGY WEBSPHERE FOR Z/OS ANGEL FOLYAMAT M\u00c1R ELINDULT
+DUPLICATE_ANGEL_PROCESS.explanation=A rendszeren m\u00e1r fut egy angel folyamat.  Az akt\u00edv angel folyamat ASID \u00e9s JOBNAME eleme nyomtat\u00e1sra ker\u00fcl a CWWKB0063I \u00fczenetbe.  A m\u00e1sodik angel folyamat le\u00e1ll.
+DUPLICATE_ANGEL_PROCESS.useraction=Nincs teend\u0151.
+
+#{0} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{1} is a z/OS jobname
+DUPLICATE_ANGEL_PROCESS_DETAIL=CWWKB0063I: AKT\u00cdV ANGEL ASID {0} JOBNAME {1}
+DUPLICATE_ANGEL_PROCESS_DETAIL.explanation=Ez az angel folyamat akt\u00edv.
+DUPLICATE_ANGEL_PROCESS_DETAIL.useraction=Nincs teend\u0151.
+
+#{0} is the text string "RELOAD" which should not be translated because it is provided as input on the MVS console.
+ANGEL_RELOAD_HELP_TEXT=CWWKB0064I: {0} - AZ ANGEL BET\u00d6LT\u00c9SI MODULOK \u00daJRABET\u00d6LT\u00c9S\u00c9T OKOZZA
+ANGEL_RELOAD_HELP_TEXT.explanation=Ez az \u00fczenet a MODIFY BBGZANGL,HELP parancsra adott v\u00e1laszk\u00e9nt ker\u00fcl nyomtat\u00e1sra.  Az \u00daJRABET\u00d6LT\u00c9S be\u00e1ll\u00edt\u00e1s az angel folyamat bet\u00f6lt\u00e9si moduljainak a f\u00e1jlrendszerb\u0151l t\u00f6rt\u00e9n\u0151 \u00fajrabet\u00f6lt\u00e9s\u00e9t okozza.  \u00dajrabet\u00f6lt\u00e9sre lehet sz\u00fcks\u00e9g a PTF telep\u00edt\u00e9s\u00e9t k\u00f6vet\u0151en, ha az angel folyamat nem ker\u00fcl \u00fajraind\u00edt\u00e1sra.
+ANGEL_RELOAD_HELP_TEXT.useraction=Nincs teend\u0151.
+
+#{0} is the text string "VERSION" which should not be translated because it is provided as input on the MVS console.
+ANGEL_VERSION_HELP_TEXT=CWWKB0065I: {0} - MEGJELEN\u00cdTI AZ ANGEL BET\u00d6LT\u00c9SI MODUL VERZI\u00d3SZ\u00c1M\u00c1T
+ANGEL_VERSION_HELP_TEXT.explanation=Ez az \u00fczenet a MODIFY BBGZANGL,HELP parancsra adott v\u00e1laszk\u00e9nt ker\u00fcl nyomtat\u00e1sra.  A VERZI\u00d3SZ\u00c1M be\u00e1ll\u00edt\u00e1s megjelen\u00edti az angel folyamat dinamikusan helyettes\u00edthet\u0151 bet\u00f6lt\u00e9si modulj\u00e1nak verzi\u00f3sz\u00e1m\u00e1t.  Az IBM szerviz \u00e9s term\u00e9kt\u00e1mogat\u00e1s k\u00e9rheti ezeket az inform\u00e1ci\u00f3kat.
+ANGEL_VERSION_HELP_TEXT.useraction=Nincs teend\u0151.
+
+#{0} is the text string "TRACE=Y/N" which should not be translated because it is provided as input on the MVS console.
+ANGEL_TRACE_HELP_TEXT=CWWKB0066I: {0} - AZ ANGEL FOLYAMAT NYOMK\u00d6VET\u00c9S\u00c9T SZAB\u00c1LYOZZA
+ANGEL_TRACE_HELP_TEXT.explanation=Ez az \u00fczenet a MODIFY BBGZANGL,HELP parancsra adott v\u00e1laszk\u00e9nt ker\u00fcl nyomtat\u00e1sra.  A NYOMK\u00d6VET\u00c9S be\u00e1ll\u00edt\u00e1s szab\u00e1lyozza az angel folyamat nyomk\u00f6vet\u00e9si \u00fczeneteit.  A TRACE=Y m\u00f3dos\u00edt\u00e1s a SYSOUT DD diagnosztikai nyomk\u00f6vet\u00e9seit jelen\u00edti meg.  A TRACE=N m\u00f3dos\u00edt\u00e1s letiltja a diagnosztikai nyomk\u00f6vet\u00e9seket.  Az IBM szerviz \u00e9s term\u00e9kt\u00e1mogat\u00e1s k\u00e9rheti ezeket az inform\u00e1ci\u00f3kat.
+ANGEL_TRACE_HELP_TEXT.useraction=Nincs teend\u0151.
+
+MODIFY_DISPLAY_ACTIVE_SERVERS=CWWKB0067I: AZ AKT\u00cdV KISZOLG\u00c1L\u00d3K ANGEL MEGJELEN\u00cdT\u00c9SE
+MODIFY_DISPLAY_ACTIVE_SERVERS.explanation=Ez az \u00fczenet a MODIFY BBGZANGL,SERVERS parancsra adott v\u00e1laszk\u00e9nt ker\u00fcl nyomtat\u00e1sra.  Ezt az \u00fczenetet a CWWKB0052I \u00fczenet egy-egy p\u00e9ld\u00e1nya k\u00f6veti az angel folyamathoz csatlakoz\u00f3 minden egyes kiszolg\u00e1l\u00f3hoz.
+MODIFY_DISPLAY_ACTIVE_SERVERS.useraction=Nincs teend\u0151.
+
+#{0} is the text string "SERVERS" which should not be translated because it is provided as input on the MVS console.
+ANGEL_SERVERS_HELP_TEXT=CWWKB0068I: {0} - MEGJELEN\u00cdTI AZ AKT\u00cdV KISZOLG\u00c1L\u00d3KAT
+ANGEL_SERVERS_HELP_TEXT.explanation=Ez az \u00fczenet a MODIFY BBGZANGL,HELP parancsra adott v\u00e1laszk\u00e9nt ker\u00fcl nyomtat\u00e1sra.  A SERVERS param\u00e9ter megjelen\u00edti az akt\u00edv kiszolg\u00e1l\u00f3kat.
+ANGEL_SERVERS_HELP_TEXT.useraction=Nincs teend\u0151.
+
+#{0} is the name of the angel process.  1-54 characters.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME=CWWKB0069I: A(Z) {0} ANGEL FOLYAMAT INICIALIZ\u00c1L\u00c1SA BEFEJEZ\u0150D\u00d6TT.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME.explanation=Az angel folyamat inicializ\u00e1l\u00e1sa befejez\u0151d\u00f6tt. Az angel neve megjelenik az \u00fczenetben.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME.useraction=Nincs teend\u0151.
+
+ANGEL_NAME_TOO_LONG=CWWKB0070E: A NAME PARAM\u00c9TERHEZ MEGADOTT \u00c9RT\u00c9K T\u00d6BB, MINT 54 KARAKTERB\u0150L \u00c1LL.
+ANGEL_NAME_TOO_LONG.explanation=A NAME param\u00e9ter adja meg az angel folyamat nev\u00e9t. A param\u00e9ter a BBGZANGL PROC elemhez van megadva \u00e9s legfeljebb 54 karakter hossz\u00fa lehet.  
+ANGEL_NAME_TOO_LONG.useraction=Adjon meg egy legfeljebb 54 karakterb\u0151l \u00e1ll\u00f3 \u00e9rt\u00e9ket a NAME param\u00e9terhez, majd ind\u00edtsa el ism\u00e9t az angel folyamatot a BBGZANGL PROC haszn\u00e1lat\u00e1val.
+
+#{0} is an unsupported character
+#{1} is a number between 1 and 54
+ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0071E: A NAME PARAM\u00c9TERHEZ MEGADOTT \u00c9RT\u00c9K A NEM T\u00c1MOGATOTT {0} KARAKTERT TARTALMAZZA A(Z) {1} POZ\u00cdCI\u00d3BAN.
+ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=A NAME param\u00e9ter adja meg az angel folyamat nev\u00e9t. A param\u00e9ter a BBGZANGL PROC elemhez van megadva \u00e9s csak a k\u00f6vetkez\u0151 karakterk\u00e9szlet karaktereit tartalmazhatja: # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
+ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=Adjon meg egy \u00e9rt\u00e9ket a t\u00e1mogatott karakterk\u00e9szlet haszn\u00e1lat\u00e1val a NAME param\u00e9terhez, majd ind\u00edtsa el ism\u00e9t az angel folyamatot a BBGZANGL PROC haszn\u00e1lat\u00e1val.
+
+#{0} is the name of the angel process. 1-54 characters.
+STOP_COMMAND_ACTIVE_SERVERS_NAME=CWWKB0072E: AZ AKT\u00cdV KISZOLG\u00c1L\u00d3K VISSZAUTAS\u00cdTOTT\u00c1K A(Z) {0} ANGEL FOLYAMAT LE\u00c1LL\u00cdT\u00c1S\u00c1T.
+STOP_COMMAND_ACTIVE_SERVERS_NAME.explanation=Az angel folyamat nem \u00e1ll\u00edthat\u00f3 le, mert jelenleg kiszolg\u00e1l\u00f3k csatlakoznak hozz\u00e1. Az angel neve megjelenik az \u00fczenetben.
+STOP_COMMAND_ACTIVE_SERVERS_NAME.useraction=A CWWKB0052I \u00fczenetben megtal\u00e1lhat\u00f3 az ASID minden olyan kiszolg\u00e1l\u00f3hoz, amely jelenleg akt\u00edv \u00e9s a megnevezett angel folyamathoz van t\u00e1rs\u00edtva.  \u00c1ll\u00edtsa le az akt\u00edv kiszolg\u00e1l\u00f3kat, majd \u00e1ll\u00edtsa le az \u00fczenetben megnevezett angel folyamatot.
+
+#{0} is the name of the angel process. 1-54 characters.
+ANGEL_PROCESS_END_NORMAL_NAME=CWWKB0073I: A(Z) {0} ANGEL FOLYAMAT NORM\u00c1L M\u00d3DON \u00c9RT V\u00c9GET.
+ANGEL_PROCESS_END_NORMAL_NAME.explanation=Egy angel folyamat befejez\u0151dik. Az angel neve megjelenik az \u00fczenetben.
+ANGEL_PROCESS_END_NORMAL_NAME.useraction=Nincs teend\u0151.
+
+#{0} is the name of the angel process. 1-54 characters.
+#{1} is the hexidecimal return code from the angel main routine
+ANGEL_PROCESS_END_ABNORMAL_NAME=CWWKB0074E: A(Z) {0} ANGEL FOLYAMAT RENDELLENESEN \u00c9RT V\u00c9GET, OK={1}
+ANGEL_PROCESS_END_ABNORMAL_NAME.explanation=Egy angel folyamat rendellenesen fejez\u0151d\u00f6tt be. Az angel neve megjelenik az \u00fczenetben.
+ANGEL_PROCESS_END_ABNORMAL_NAME.useraction=Az \u00fczenet sz\u00f6vege tartalmaz egy okk\u00f3dot, ami le\u00edrja a konkr\u00e9t hib\u00e1t, valamint tartalmazza a befejez\u0151d\u00f6tt angel folyamat nev\u00e9t. Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#{0} is the name of the angel process. 1-54 characters.
+DUPLICATE_ANGEL_PROCESS_NAME=CWWKB0075E: EZ AZ ANGEL FOLYAMAT LE FOG \u00c1LLNI, MERT EGY {0} NEV\u0170 ANGEL FOLYAMAT M\u00c1R EL VAN IND\u00cdTVA. NINCS TEEND\u0150.
+DUPLICATE_ANGEL_PROCESS_NAME.explanation=Az \u00fczenetben l\u00e1that\u00f3 nev\u0171 angel folyamat m\u00e1r fut a rendszeren. Az akt\u00edv angel folyamat ASID \u00e9s JOBNAME eleme nyomtat\u00e1sra ker\u00fcl a CWWKB0063I \u00fczenetbe. A m\u00e1sodik angel folyamat le\u00e1ll.
+DUPLICATE_ANGEL_PROCESS_NAME.useraction=Nincs teend\u0151, mert az angel folyamat m\u00e1sodp\u00e9ld\u00e1nya le fog \u00e1llni. Az \u00fczenet megjelen\u00e9s\u00e9t \u00fagy ker\u00fclheti el, ha nem ind\u00edt olyan nev\u0171 angel folyamatot, ami m\u00e1r fut.
+
+MODIFY_DISPLAY_ACTIVE_ANGELS=CWWKB0076I: Az akt\u00edv angel folyamatok list\u00e1ja k\u00f6vetkezik.
+MODIFY_DISPLAY_ACTIVE_ANGELS.explanation=Ez az \u00fczenet a MODIFY BBGZANGL,ANGELS parancsra adott v\u00e1laszk\u00e9nt ker\u00fcl nyomtat\u00e1sra. Ezt az \u00fczenetet a CWWKB0077I \u00fczenet egy p\u00e9ld\u00e1nya \u00e9s a CWWKB0078I \u00fczenet egy p\u00e9ld\u00e1nya k\u00f6veti minden olyan angel folyamat eset\u00e9ben, amely akt\u00edv a rendszeren.
+MODIFY_DISPLAY_ACTIVE_ANGELS.useraction=Nincs teend\u0151.
+
+#{0} is a z/OS jobname
+#{1} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{2} is a version string
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS=CWWKB0077I: AKKT\u00cdV ANGEL (JOBNAME: {0}, ASID: {1} VERZI\u00d3: {2})
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS.explanation=Az \u00fczenet sz\u00f6vege egy akt\u00edv angel folyamat r\u00e9szleteit adja meg. Ezt az \u00fczenetet a CWWKB0076I \u00fczenet el\u0151zi meg \u00e9s a CWWKB0078I \u00fczenet k\u00f6vetkezik ut\u00e1na.
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS.useraction=Nincs teend\u0151.
+
+#{0} is the name of an angel process. 1-54 characters
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME=CWWKB0078I: AKT\u00cdV ANGEL NEVE: {0}
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME.explanation=Az \u00fczenet sz\u00f6vege egy akt\u00edv angel folyamat nev\u00e9t adja meg. Ezt az \u00fczenetet a CWWKB0076I \u00fczenet \u00e9s a CWWKB0077I \u00fczenet el\u0151zi meg.
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME.useraction=Nincs teend\u0151.
+
+# -------------------------------------------------------------------------------------------------
+#0201-0250: native code non-console messages
+#
+#{0} is the Library name
+#{1} is the reason code
+SERVER_JNI_01=CWWKB0201E: A(z) {0} megnyit\u00e1sa nem siker\u00fclt: {1}
+SERVER_JNI_01.explanation=A megadott k\u00f6nyvt\u00e1r megnyit\u00e1sa nem siker\u00fclt.
+SERVER_JNI_01.useraction==Az \u00fczenet sz\u00f6vege tartalmaz egy okk\u00f3dot, ami le\u00edrja a konkr\u00e9t probl\u00e9m\u00e1t.  Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_02=CWWKB0202E: A met\u00f3dus regisztr\u00e1ci\u00f3 funkci\u00f3 a(z) {0} le\u00edr\u00f3ban a k\u00f6vetkez\u0151t adta vissza: {1}
+SERVER_JNI_02.explanation=A met\u00f3dus regisztr\u00e1ci\u00f3 funkci\u00f3 meghib\u00e1sodott.
+SERVER_JNI_02.useraction==Az \u00fczenet sz\u00f6vege tartalmaz egy okk\u00f3dot, ami le\u00edrja a konkr\u00e9t probl\u00e9m\u00e1t.  Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_03=CWWKB0203E: A RegisterNatives feladat a(z) {0} le\u00edr\u00f3 eset\u00e9ben meghi\u00fasult a k\u00f6vetkez\u0151 \u00fczenettel: {1}
+SERVER_JNI_03.explanation=Egy eredeti met\u00f3dus regisztr\u00e1ci\u00f3ja meghi\u00fasult.
+SERVER_JNI_03.useraction==Az \u00fczenet sz\u00f6vege tartalmaz egy okk\u00f3dot, ami le\u00edrja a konkr\u00e9t probl\u00e9m\u00e1t.  Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_04=CWWKB0204E: A met\u00f3dus regisztr\u00e1ci\u00f3j\u00e1t visszavon\u00f3 funkci\u00f3 a(z) {0} le\u00edr\u00f3ban a k\u00f6vetkez\u0151t adta vissza: {1}
+SERVER_JNI_04.explanation=Egy eredeti met\u00f3dus regisztr\u00e1ci\u00f3j\u00e1nak visszavon\u00e1sa meghi\u00fasult.
+SERVER_JNI_04.useraction==Az \u00fczenet sz\u00f6vege tartalmaz egy okk\u00f3dot, ami le\u00edrja a konkr\u00e9t probl\u00e9m\u00e1t.  Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+#{0} is the library name
+#{1} is the reason code
+SERVER_JNI_05=CWWKB0205W: A(z) {0} bez\u00e1r\u00e1sa nem siker\u00fclt: {1}
+SERVER_JNI_05.explanation=A megadott dinamikus csatol\u00e1s\u00fa f\u00fcggv\u00e9nyt\u00e1r bez\u00e1r\u00e1sa nem siker\u00fclt.
+SERVER_JNI_05.useraction==Az \u00fczenet sz\u00f6vege tartalmaz egy okk\u00f3dot, ami le\u00edrja a konkr\u00e9t probl\u00e9m\u00e1t.  Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_01=CWWKB0206E: A WLP_INSTALL_DIR v\u00e1ltoz\u00f3 \u00e9rt\u00e9ke nem \u00e1llap\u00edthat\u00f3 meg
+SERVER_LAUNCHER_01.explanation=A WLP_INSTALL_DIR v\u00e1ltoz\u00f3 \u00e9rt\u00e9ke nem \u00e1llap\u00edthat\u00f3 meg.
+SERVER_LAUNCHER_01.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_02=CWWKB0207E: Az NLS \u00fatvonalat nem siker\u00fclt el\u0151re betoldani az NLSPATH v\u00e1ltoz\u00f3 \u00e9rt\u00e9k\u00e9be
+SERVER_LAUNCHER_02.explanation=Az NLS \u00fatvonalat nem siker\u00fclt el\u0151re betoldani az NLSPATH v\u00e1ltoz\u00f3 \u00e9rt\u00e9k\u00e9be.
+SERVER_LAUNCHER_02.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_03=CWWKB0208E: A WLP_USER_DIR v\u00e1ltoz\u00f3 \u00e9rt\u00e9ke nem \u00e1llap\u00edthat\u00f3 meg
+SERVER_LAUNCHER_03.explanation=A WLP_USER_DIR v\u00e1ltoz\u00f3 \u00e9rt\u00e9ke nem \u00e1llap\u00edthat\u00f3 meg.
+SERVER_LAUNCHER_03.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_04=CWWKB0209E: A SERVER_CONFIG_DIR v\u00e1ltoz\u00f3 \u00e9rt\u00e9ke nem \u00e1llap\u00edthat\u00f3 meg
+SERVER_LAUNCHER_04.explanation=A SERVER_CONFIG_DIR v\u00e1ltoz\u00f3 \u00e9rt\u00e9ke nem \u00e1llap\u00edthat\u00f3 meg.
+SERVER_LAUNCHER_04.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_05=CWWKB0210E: A JAVA_HOME v\u00e1ltoz\u00f3 felold\u00e1sa nem siker\u00fclt
+SERVER_LAUNCHER_05.explanation=A JAVA_HOME v\u00e1ltoz\u00f3 felold\u00e1sa nem siker\u00fclt.
+SERVER_LAUNCHER_05.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_06=CWWKB0211E: A JVM k\u00f6nyvt\u00e1r\u00fatvonalat nem siker\u00fclt el\u0151re betoldani a LIBPATH v\u00e1ltoz\u00f3 \u00e9rt\u00e9k\u00e9be
+SERVER_LAUNCHER_06.explanation=A JVM k\u00f6nyvt\u00e1r\u00fatvonalat nem siker\u00fclt el\u0151re betoldani a LIBPATH v\u00e1ltoz\u00f3 \u00e9rt\u00e9k\u00e9be.
+SERVER_LAUNCHER_06.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_07=CWWKB0212E: A WebSphere k\u00f6nyvt\u00e1r\u00fatvonalat nem siker\u00fclt el\u0151re betoldani a LIBPATH v\u00e1ltoz\u00f3 \u00e9rt\u00e9k\u00e9be
+SERVER_LAUNCHER_07.explanation=A WebSphere k\u00f6nyvt\u00e1r\u00fatvonalat nem siker\u00fclt el\u0151re betoldani a LIBPATH v\u00e1ltoz\u00f3 \u00e9rt\u00e9k\u00e9be.
+SERVER_LAUNCHER_07.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_08=CWWKB0213E: A kimeneti k\u00f6nyvt\u00e1r nem \u00e1llap\u00edthat\u00f3 meg
+SERVER_LAUNCHER_08.explanation=A kimeneti k\u00f6nyvt\u00e1r nem \u00e1llap\u00edthat\u00f3 meg.
+SERVER_LAUNCHER_08.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_09=CWWKB0214E: Nem siker\u00fclt megv\u00e1ltoztatni a munkak\u00f6nyvt\u00e1rat a k\u00f6vetkez\u0151re: {0}
+SERVER_LAUNCHER_09.explanation=Nem siker\u00fclt megv\u00e1ltoztatni a munkak\u00f6nyvt\u00e1rat.
+SERVER_LAUNCHER_09.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_10=CWWKB0215E: A(z) {0} megnyit\u00e1sa nem siker\u00fclt: {1}
+SERVER_LAUNCHER_10.explanation=Egy f\u00e1jl megnyit\u00e1sa nem siker\u00fclt. 
+SERVER_LAUNCHER_10.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_11=CWWKB0216E: Nem siker\u00fclt a JNI_CreateJavaVM v\u00e1ltoz\u00f3 felold\u00e1sa: {0}
+SERVER_LAUNCHER_11.explanation=A JNI_CreateJavaVM v\u00e1ltoz\u00f3 felold\u00e1sa nem siker\u00fclt.
+SERVER_LAUNCHER_11.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_12=CWWKB0217E: A JavaVM v\u00e1ltoz\u00f3 l\u00e9trehoz\u00e1sa nem siker\u00fclt: {0}
+SERVER_LAUNCHER_12.explanation=A JavaVM v\u00e1ltoz\u00f3 l\u00e9trehoz\u00e1sa nem siker\u00fclt.
+SERVER_LAUNCHER_12.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_13=CWWKB0218E: A f\u0151 oszt\u00e1ly elind\u00edt\u00e1sa nem siker\u00fclt
+SERVER_LAUNCHER_13.explanation=A f\u0151 oszt\u00e1ly elind\u00edt\u00e1sa nem siker\u00fclt.
+SERVER_LAUNCHER_13.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_14=CWWKB0219E: A felhaszn\u00e1l\u00f3i k\u00f6nyvt\u00e1r \u00fatvonal\u00e1t nem siker\u00fclt kibontani a DD utas\u00edt\u00e1sb\u00f3l
+SERVER_LAUNCHER_14.explanation=A felhaszn\u00e1l\u00f3i k\u00f6nyvt\u00e1r \u00fatvonal\u00e1t nem siker\u00fclt kibontani a DD utas\u00edt\u00e1sb\u00f3l.
+SERVER_LAUNCHER_14.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_15=CWWKB0220E: A felhaszn\u00e1l\u00f3i k\u00f6nyvt\u00e1r val\u00f3s \u00fatvonal\u00e1t nem siker\u00fclt feloldani a JCL feladatb\u00f3l
+SERVER_LAUNCHER_15.explanation=A felhaszn\u00e1l\u00f3i k\u00f6nyvt\u00e1r val\u00f3s \u00fatvonal\u00e1t nem siker\u00fclt feloldani a JCL feladatb\u00f3l.
+SERVER_LAUNCHER_15.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_16=CWWKB0221E: A felhaszn\u00e1l\u00f3i k\u00f6nyvt\u00e1r val\u00f3s \u00fatvonal\u00e1t a k\u00f6rnyezetb\u0151l siker\u00fclt feloldani
+SERVER_LAUNCHER_16.explanation=A felhaszn\u00e1l\u00f3i k\u00f6nyvt\u00e1r val\u00f3s \u00fatvonal\u00e1t a k\u00f6rnyezetb\u0151l siker\u00fclt feloldani.
+SERVER_LAUNCHER_16.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_17=CWWKB0222E: A(z) {0} kiszolg\u00e1l\u00f3konfigur\u00e1ci\u00f3 k\u00f6nyvt\u00e1r nem l\u00e9tezik
+SERVER_LAUNCHER_17.explanation=A kiszolg\u00e1l\u00f3konfigur\u00e1ci\u00f3 k\u00f6nyvt\u00e1r nem l\u00e9tezik
+SERVER_LAUNCHER_17.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_18=CWWKB0223E: A kiszolg\u00e1l\u00f3konfigur\u00e1ci\u00f3 k\u00f6nyvt\u00e1ron a stat() parancsot nem lehet haszn\u00e1lni
+SERVER_LAUNCHER_18.explanation=A kiszolg\u00e1l\u00f3konfigur\u00e1ci\u00f3 k\u00f6nyvt\u00e1ron a stat() parancsot nem lehet haszn\u00e1lni.
+SERVER_LAUNCHER_18.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_19=CWWKB0224E: A(z) {0} kiszolg\u00e1l\u00f3konfigur\u00e1ci\u00f3 nem l\u00e9tezik
+SERVER_LAUNCHER_19.explanation=A kiszolg\u00e1l\u00f3konfigur\u00e1ci\u00f3 nem l\u00e9tezik
+SERVER_LAUNCHER_19.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_20=CWWKB0225E: A stat parancs haszn\u00e1lata meghi\u00fasult 
+SERVER_LAUNCHER_20.explanation=A stat parancs haszn\u00e1lata meghi\u00fasult.
+SERVER_LAUNCHER_20.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_21=CWWKB0226E: A kimeneti k\u00f6nyvt\u00e1r nem tal\u00e1lhat\u00f3 vagy nem hozhat\u00f3 l\u00e9tre 
+SERVER_LAUNCHER_21.explanation=A kimeneti k\u00f6nyvt\u00e1r felold\u00e1sa vagy l\u00e9trehoz\u00e1sa nem siker\u00fclt.
+SERVER_LAUNCHER_21.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_22=CWWKB0227E: A kiszolg\u00e1l\u00f3 kimeneti k\u00f6nyvt\u00e1ra nem tal\u00e1lhat\u00f3 vagy nem hozhat\u00f3 l\u00e9tre a WLP_OUTPUT_DIR k\u00f6nyvt\u00e1rban 
+SERVER_LAUNCHER_22.explanation=A kiszolg\u00e1l\u00f3 kimeneti k\u00f6nyvt\u00e1r\u00e1nak felold\u00e1sa vagy l\u00e9trehoz\u00e1sa nem siker\u00fclt a WLP_OUTPUT_DIR k\u00f6nyvt\u00e1rban.
+SERVER_LAUNCHER_22.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_23=CWWKB0228E: A rendszer hib\u00e1t jelzett, mik\u00f6zben a(z) {0} f\u00e1jlb\u00f3l olvasott: {1} 
+SERVER_LAUNCHER_23.explanation=A rendszer hib\u00e1t jelzett, mik\u00f6zben a jelzett f\u00e1jlb\u00f3l olvasott.
+SERVER_LAUNCHER_23.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_24=CWWKB0229E: Nem siker\u00fclt a k\u00f6rnyezet f\u00e1jl helyzet\u00e9nek beszerz\u00e9se 
+SERVER_LAUNCHER_24.explanation=Nem siker\u00fclt a k\u00f6rnyezet f\u00e1jl helyzet\u00e9nek beszerz\u00e9se.
+SERVER_LAUNCHER_24.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_25=CWWKB0230E: Nem siker\u00fclt a k\u00f6rnyezet f\u00e1jl helyzet\u00e9nek vissza\u00e1ll\u00edt\u00e1sa 
+SERVER_LAUNCHER_25.explanation=Nem siker\u00fclt a k\u00f6rnyezet f\u00e1jl helyzet\u00e9nek vissza\u00e1ll\u00edt\u00e1sa.
+SERVER_LAUNCHER_25.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_26=CWWKB0231E: Nem siker\u00fclt a k\u00f6rnyezet be\u00e1ll\u00edt\u00e1sa a k\u00f6vetkez\u0151b\u0151l: {0} 
+SERVER_LAUNCHER_26.explanation=Nem siker\u00fclt a k\u00f6rnyezet be\u00e1ll\u00edt\u00e1sa a jelzett tulajdons\u00e1gb\u00f3l.
+SERVER_LAUNCHER_26.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_27=CWWKB0232E: Sikertelen fgetpos utas\u00edt\u00e1s 
+SERVER_LAUNCHER_27.explanation=Sikertelen fgetpos utas\u00edt\u00e1s.
+SERVER_LAUNCHER_27.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_28=CWWKB0233E: Sikertelen fsetpos utas\u00edt\u00e1s 
+SERVER_LAUNCHER_28.explanation=Sikertelen fsetpos utas\u00edt\u00e1s.
+SERVER_LAUNCHER_28.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_29=CWWKB0234E: A(z) {0} JAVA_HOME hely nem l\u00e9tezik 
+SERVER_LAUNCHER_29.explanation=A jelzett JAVA_HOME hely nem l\u00e9tezik.
+SERVER_LAUNCHER_29.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_30=CWWKB0235E: A rendszer hib\u00e1t jelzett, mik\u00f6zben a(z) {0} f\u00e1jlb\u00f3l Java param\u00e9tereket olvasott be: {1} 
+SERVER_LAUNCHER_30.explanation=A rendszer hib\u00e1t jelzett, mik\u00f6zben a jelzett f\u00e1jlb\u00f3l Java param\u00e9tereket olvasott be.
+SERVER_LAUNCHER_30.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_31=CWWKB0236E: Nem siker\u00fclt alap\u00e9rtelmezett IBM Java param\u00e9tereket be\u00e1ll\u00edtani 
+SERVER_LAUNCHER_31.explanation=Nem siker\u00fclt alap\u00e9rtelmezett IBM Java param\u00e9tereket be\u00e1ll\u00edtani.
+SERVER_LAUNCHER_31.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_32=CWWKB0237E: A f\u0151 oszt\u00e1ly bet\u00f6lt\u00e9se nem siker\u00fclt 
+SERVER_LAUNCHER_32.explanation=A f\u0151 oszt\u00e1ly bet\u00f6lt\u00e9se nem siker\u00fclt.
+SERVER_LAUNCHER_32.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_33=CWWKB0238E: A f\u0151 met\u00f3dus nem tal\u00e1lhat\u00f3 
+SERVER_LAUNCHER_33.explanation=A f\u0151 met\u00f3dus nem tal\u00e1lhat\u00f3.
+SERVER_LAUNCHER_33.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_34=CWWKB0239E: A java.lang.String oszt\u00e1ly bet\u00f6lt\u00e9se nem siker\u00fclt 
+SERVER_LAUNCHER_34.explanation=A java.lang.String oszt\u00e1ly bet\u00f6lt\u00e9se nem siker\u00fclt.
+SERVER_LAUNCHER_34.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_35=CWWKB0240E: A f\u0151 met\u00f3dus param\u00e9terlist\u00e1j\u00e1nak l\u00e9trehoz\u00e1sa nem siker\u00fclt 
+SERVER_LAUNCHER_35.explanation=A f\u0151 met\u00f3dus param\u00e9terlist\u00e1j\u00e1nak l\u00e9trehoz\u00e1sa nem siker\u00fclt.
+SERVER_LAUNCHER_35.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_36=CWWKB0241E: Nem siker\u00fclt be\u00e1ll\u00edtani a _BPXK_WLM_PROPAGATE=NO \u00e9rt\u00e9ket 
+SERVER_LAUNCHER_36.explanation=Nem siker\u00fclt be\u00e1ll\u00edtani a _BPXK_WLM_PROPAGATE=NO \u00e9rt\u00e9ket.
+SERVER_LAUNCHER_36.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_37=CWWKB0242E: Nem siker\u00fclt be\u00e1ll\u00edtani a JAVA_THREAD_MODEL=HEAVY \u00e9rt\u00e9ket 
+SERVER_LAUNCHER_37.explanation=Nem siker\u00fclt be\u00e1ll\u00edtani a JAVA_THREAD_MODEL=HEAVY \u00e9rt\u00e9ket.
+SERVER_LAUNCHER_37.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_38=CWWKB0243E: Nem siker\u00fclt be\u00e1ll\u00edtani a JAVA_PROPAGATE=NO \u00e9rt\u00e9ket 
+SERVER_LAUNCHER_38.explanation=Nem siker\u00fclt be\u00e1ll\u00edtani a JAVA_PROPAGATE=NO \u00e9rt\u00e9ket.
+SERVER_LAUNCHER_38.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_39=CWWKB0244E: Nem siker\u00fclt alap\u00e9rtelmezett \u00e9rt\u00e9ket be\u00e1ll\u00edtani az _EDC_PTHREAD_YIELD v\u00e1ltoz\u00f3 sz\u00e1m\u00e1ra 
+SERVER_LAUNCHER_39.explanation=Nem siker\u00fclt alap\u00e9rtelmezett \u00e9rt\u00e9ket be\u00e1ll\u00edtani az _EDC_PTHREAD_YIELD v\u00e1ltoz\u00f3 sz\u00e1m\u00e1ra.
+SERVER_LAUNCHER_39.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_40=CWWKB0245E: A munkak\u00f6nyvt\u00e1r be\u00e1ll\u00edt\u00e1sa nem siker\u00fclt 
+SERVER_LAUNCHER_40.explanation=A munkak\u00f6nyvt\u00e1r be\u00e1ll\u00edt\u00e1sa nem siker\u00fclt.
+SERVER_LAUNCHER_40.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_41=CWWKB0246W: Haszn\u00e1lat: bbgzsrv [liberty argumentumok] serverName 
+SERVER_LAUNCHER_41.explanation=Haszn\u00e1lat: bbgzsrv [liberty argumentumok] serverName.
+SERVER_LAUNCHER_41.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_42=CWWKB0247E: Az stdout utas\u00edt\u00e1s nem ir\u00e1ny\u00edthat\u00f3 \u00e1t a LOG_DIR k\u00f6nyvt\u00e1rba
+SERVER_LAUNCHER_42.explanation=Az stdout utas\u00edt\u00e1s nem ir\u00e1ny\u00edthat\u00f3 \u00e1t a LOG_DIR k\u00f6nyvt\u00e1rba.
+SERVER_LAUNCHER_42.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_43=CWWKB0248E: Az stderr utas\u00edt\u00e1s nem ir\u00e1ny\u00edthat\u00f3 \u00e1t a LOG_DIR k\u00f6nyvt\u00e1rba
+SERVER_LAUNCHER_43.explanation=Az stderr utas\u00edt\u00e1s nem ir\u00e1ny\u00edthat\u00f3 \u00e1t a LOG_DIR k\u00f6nyvt\u00e1rba.
+SERVER_LAUNCHER_43.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_44=CWWKB0249E: Nem siker\u00fclt be\u00e1ll\u00edtani a kiszolg\u00e1l\u00f3 PID k\u00f6nyvt\u00e1r\u00e1t vagy PID f\u00e1jlj\u00e1t
+SERVER_LAUNCHER_44.explanation=Nem siker\u00fclt be\u00e1ll\u00edtani a kiszolg\u00e1l\u00f3 PID k\u00f6nyvt\u00e1r\u00e1t vagy PID f\u00e1jlj\u00e1t.
+SERVER_LAUNCHER_44.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+#
+SERVER_LAUNCHER_45=CWWKB0250E: A JVM_ARGS v\u00e1ltoz\u00f3 feldolgoz\u00e1sakor a rendszer egy v\u00e1ratlan EOF jelz\u00e9ssel tal\u00e1lkozott a feldolgoz\u00e1s k\u00f6zben `"'
+SERVER_LAUNCHER_45.explanation=A JVM_ARGS v\u00e1ltoz\u00f3 feldolgoz\u00e1sakor a rendszer egy v\u00e1ratlan EOF jelz\u00e9ssel tal\u00e1lkozott a feldolgoz\u00e1s k\u00f6zben `"'
+SERVER_LAUNCHER_45.useraction=Tov\u00e1bbi inform\u00e1ci\u00f3k\u00e9rt tekintse meg a feladatnapl\u00f3ban vagy a rendszernapl\u00f3ban l\u00e9v\u0151 kor\u00e1bbi \u00fczeneteket.
+
+# NO MESSAGE LEFT IN THIS BLOCK 0201-0250: native code non-console messages 
+# -------------------------------------------------------------------------------------------------

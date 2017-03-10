@@ -1,0 +1,438 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#
+# NOTE: !!! THIS FILE MUST BE KEPT IN SYNC WITH native_messages.props  !!! 
+#
+# --------------------------------------------------------------------------------------------------
+#
+# # {0} description of each insert field
+# MSG_DESCRIPTIVE_NAME_CWSJX0000=CWSJX0000I: This is a message with inserts {0}
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.explanation=Explanation text for the message
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.useraction=User action text for the message
+#
+#CMVCPATHNAME com.ibm.zos.native/resources/com.ibm.ws.zos/native_messages.nlsprops
+#COMPONENTPREFIX CWWKB
+#COMPONENTNAMEFOR CWWKB zOS Native Messages
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+# NLS_MESSAGEFORMAT_VAR
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+#
+# -------------------------------------------------------------------------------------------------
+#0051-0100: native code only messages
+#0201-0250: native code non-console messages
+# -------------------------------------------------------------------------------------------------
+
+STOP_COMMAND_ACTIVE_SERVERS=CWWKB0051E: ANGEL STOP REJECTED BY ACTIVE SERVERS
+STOP_COMMAND_ACTIVE_SERVERS.explanation=The angel cannot be stopped because there are currently servers connected to it.
+STOP_COMMAND_ACTIVE_SERVERS.useraction=Message CWWKB0052I will contain the ASID for each server that is currently active.  Stop the active servers and then try stopping the angel again.
+
+#{0} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{1} is a z/OS jobname
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL=CWWKB0052I: ACTIVE SERVER ASID {0} JOBNAME {1}
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL.explanation=This server is currently connected to the angel process.
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL.useraction=No action is necessary.
+
+#{0} is a version string
+MODIFY_DISPLAY_ANGEL_VERSION=CWWKB0053I: ANGEL VERSION {0} 
+MODIFY_DISPLAY_ANGEL_VERSION.explanation=The version of the angel processes dynamic replaceable module is displayed, in response to a MODIFY PROCESS,VERSION command.
+MODIFY_DISPLAY_ANGEL_VERSION.useraction=No action is necessary.
+
+#{0} is the unrecognized command entered on the console
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED=CWWKB0054E: UNRECOGNIZED COMMAND {0}
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED.explanation=The modify command being processed by the angel contains unrecognized keywords.
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED.useraction=Re-issue the command with the correct syntax.
+
+ANGEL_PROCESS_STARTING=CWWKB0055I: WEBSPHERE FOR Z/OS ANGEL PROCESS IS STARTING
+ANGEL_PROCESS_STARTING.explanation=An angel process is starting.
+ANGEL_PROCESS_STARTING.useraction=No action is necessary.
+
+ANGEL_PROCESS_INITIALIZATION_COMPLETE=CWWKB0056I: INITIALIZATION COMPLETE FOR ANGEL
+ANGEL_PROCESS_INITIALIZATION_COMPLETE.explanation=An angel process has completed initialization.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE.useraction=No action is necessary.
+
+ANGEL_PROCESS_END_NORMAL=CWWKB0057I: WEBSPHERE FOR Z/OS ANGEL PROCESS ENDED NORMALLY
+ANGEL_PROCESS_END_NORMAL.explanation=An angel process is ending.
+ANGEL_PROCESS_END_NORMAL.useraction=No action is necessary.
+
+#{0} is the hexidecimal return code from the angel main routine
+ANGEL_PROCESS_END_ABNORMAL=CWWKB0058E: WEBSPHERE FOR Z/OS ANGEL PROCESS ENDED ABNORMALLY, REASON={0}
+ANGEL_PROCESS_END_ABNORMAL.explanation=An angel process has ended abnormally.
+ANGEL_PROCESS_END_ABNORMAL.useraction=The message text includes a reason code which describes the specific error.  See previous messages in the job log or system log for more information.
+
+#{0} is the unrecognized value
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV=CWWKB0059E: UNRECOGNIZED START PARAMETER {0}
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV.explanation=An unrecognized parameter was passed on the angel start command.  The unrecognized parameter is printed in the message.
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV.useraction=Refer to the product documentation for the supported start command parameters.
+
+#{0} is the unrecognized value
+#{1} is the recognized key
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV=CWWKB0060E: UNRECOGNIZED START PARAMETER VALUE {0} FOR KEY {1}
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV.explanation=A recognized parameter key was passed on the angel start command, but its value was unrecognized.  The key and the value are printed in the message. 
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV.useraction=Refer to the product documentation for the supported start command parameter keys, and supported values.
+
+#{0} is the continuation instance
+#{1} is the message id for first multiline WTO of the sequence
+UTILITIES_WTO_CMDRESPONSE_CONTINUE=CWWKB0061I: CONTINUATION {0} FOR MESSAGE IDENTIFIER {1}
+UTILITIES_WTO_CMDRESPONSE_CONTINUE.explanation=A command response message from a command handler or a message being written to the operator or hard copy log needs to be issued by multiple multiline WTOs. This is a continuation of the message.  Use the message identifier to group related CWWKB0061I messages.
+UTILITIES_WTO_CMDRESPONSE_CONTINUE.useraction=No action is necessary.
+
+DUPLICATE_ANGEL_PROCESS=CWWKB0062E: A WEBSPHERE FOR Z/OS ANGEL PROCESS IS ALREADY STARTED
+DUPLICATE_ANGEL_PROCESS.explanation=An angel process is already running on this system.  The ASID and JOBNAME of the active angel process are printed in message CWWKB0063I.  The second angel process will stop.
+DUPLICATE_ANGEL_PROCESS.useraction=No action is necessary.
+
+#{0} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{1} is a z/OS jobname
+DUPLICATE_ANGEL_PROCESS_DETAIL=CWWKB0063I: ACTIVE ANGEL ASID {0} JOBNAME {1}
+DUPLICATE_ANGEL_PROCESS_DETAIL.explanation=This angel process is active.
+DUPLICATE_ANGEL_PROCESS_DETAIL.useraction=No action is necessary.
+
+#{0} is the text string "RELOAD" which should not be translated because it is provided as input on the MVS console.
+ANGEL_RELOAD_HELP_TEXT=CWWKB0064I: {0} - CAUSES ANGEL LOAD MODULES TO BE RELOADED
+ANGEL_RELOAD_HELP_TEXT.explanation=This message is printed in response to a MODIFY BBGZANGL,HELP command.  The RELOAD option causes the load modules for the angel process to be reloaded from the file system.  A reload may be required after a PTF is installed if the angel process is not restarted.
+ANGEL_RELOAD_HELP_TEXT.useraction=No action is necessary.
+
+#{0} is the text string "VERSION" which should not be translated because it is provided as input on the MVS console.
+ANGEL_VERSION_HELP_TEXT=CWWKB0065I: {0} - DISPLAYS THE ANGEL LOAD MODULE VERSION
+ANGEL_VERSION_HELP_TEXT.explanation=This message is printed in response to a MODIFY BBGZANGL,HELP command.  The VERSION option displays the version of the angel process dynamically replaceable load module.  This information may be requested by IBM service and support.
+ANGEL_VERSION_HELP_TEXT.useraction=No action is necessary.
+
+#{0} is the text string "TRACE=Y/N" which should not be translated because it is provided as input on the MVS console.
+ANGEL_TRACE_HELP_TEXT=CWWKB0066I: {0} - CONTROLS TRACING FOR THE ANGEL PROCESS
+ANGEL_TRACE_HELP_TEXT.explanation=This message is printed in response to a MODIFY BBGZANGL,HELP command.  The TRACE option controls trace messages in the angel process.  Modifying TRACE=Y displays diagnostic traces to the SYSOUT DD.  Modifying TRACE=N disables the diagnostic traces.  This information may be requested by IBM service and support.
+ANGEL_TRACE_HELP_TEXT.useraction=No action is necessary.
+
+MODIFY_DISPLAY_ACTIVE_SERVERS=CWWKB0067I: ANGEL DISPLAY OF ACTIVE SERVERS
+MODIFY_DISPLAY_ACTIVE_SERVERS.explanation=This message is printed in response to a MODIFY BBGZANGL,SERVERS command.  This message will be followed by one instance of message CWWKB0052I for each server which is connected to the angel process.
+MODIFY_DISPLAY_ACTIVE_SERVERS.useraction=No action is necessary.
+
+#{0} is the text string "SERVERS" which should not be translated because it is provided as input on the MVS console.
+ANGEL_SERVERS_HELP_TEXT=CWWKB0068I: {0} - DISPLAYS THE ACTIVE SERVERS
+ANGEL_SERVERS_HELP_TEXT.explanation=This message is printed in response to a MODIFY BBGZANGL,HELP command.  The SERVERS option displays active servers.
+ANGEL_SERVERS_HELP_TEXT.useraction=No action is necessary.
+
+#{0} is the name of the angel process.  1-54 characters.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME=CWWKB0069I: INITIALIZATION IS COMPLETE FOR THE {0} ANGEL PROCESS.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME.explanation=An angel process has completed initialization. The angel name is displayed in the message.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME.useraction=No action is required.
+
+ANGEL_NAME_TOO_LONG=CWWKB0070E: THE VALUE SPECIFIED FOR THE NAME PARAMETER IS GREATER THAN 54 CHARACTERS.
+ANGEL_NAME_TOO_LONG.explanation=The NAME parameter specifies the name of the angel process. The parameter is specified on the BBGZANGL PROC and must be 54 characters or less.  
+ANGEL_NAME_TOO_LONG.useraction=Specify a value of 54 characters or less for the NAME parameter, and start the angel process using the BBGZANGL PROC again.
+
+#{0} is an unsupported character
+#{1} is a number between 1 and 54
+ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0071E: THE VALUE SPECIFIED FOR THE NAME PARAMETER CONTAINS THE UNSUPPORTED CHARACTER {0} AT POSITION {1}.
+ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=The NAME parameter specifies the name of the angel process. The parameter is specified on the BBGZANGL PROC and can only contain characters from the following character set:  A-Z 0-9 ! # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
+ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=Specify a value using the supported character set for the NAME parameter, and start the angel process using the BBGZANGL PROC again.
+
+#{0} is the name of the angel process. 1-54 characters.
+STOP_COMMAND_ACTIVE_SERVERS_NAME=CWWKB0072E: ACTIVE SERVERS REJECTED THE STOPPING OF THE {0} ANGEL PROCESS.
+STOP_COMMAND_ACTIVE_SERVERS_NAME.explanation=An angel process cannot be stopped because servers are currently connected to it. The angel name is displayed in the message.
+STOP_COMMAND_ACTIVE_SERVERS_NAME.useraction=Message CWWKB0052I contains the ASID for each server that is currently active and associated with the named angel. Stop the active servers and then stop the angel named in the message.
+
+#{0} is the name of the angel process. 1-54 characters.
+ANGEL_PROCESS_END_NORMAL_NAME=CWWKB0073I: THE {0} ANGEL PROCESS ENDED NORMALLY.
+ANGEL_PROCESS_END_NORMAL_NAME.explanation=An angel process is ending. The angel name is displayed in the message.
+ANGEL_PROCESS_END_NORMAL_NAME.useraction=No action is required.
+
+#{0} is the name of the angel process. 1-54 characters.
+#{1} is the hexidecimal return code from the angel main routine
+ANGEL_PROCESS_END_ABNORMAL_NAME=CWWKB0074E: THE {0} ANGEL PROCESS ENDED ABNORMALLY, REASON={1}
+ANGEL_PROCESS_END_ABNORMAL_NAME.explanation=An angel process ended abnormally. The angel name is displayed in the message.
+ANGEL_PROCESS_END_ABNORMAL_NAME.useraction=The message text includes a reason code that describes the specific error, and the name of the angel process that ended. See previous messages in the job log or system log for more information.
+
+#{0} is the name of the angel process. 1-54 characters.
+DUPLICATE_ANGEL_PROCESS_NAME=CWWKB0075E: THIS ANGEL PROCESS WILL STOP BECAUSE AN ANGEL PROCESS NAMED {0} IS ALREADY STARTED. NO ACTION IS REQUIRED.
+DUPLICATE_ANGEL_PROCESS_NAME.explanation=An angel process with the name displayed in the message is already running on this system. The ASID and JOBNAME of the active angel process are printed in the CWWKB0063I message. The second angel process will stop.
+DUPLICATE_ANGEL_PROCESS_NAME.useraction=No action is required because the duplicate angel process will stop. To prevent this message, do not start a named angel process when an angel process with the same name is already running.
+
+MODIFY_DISPLAY_ACTIVE_ANGELS=CWWKB0076I: A list of active angels follows.
+MODIFY_DISPLAY_ACTIVE_ANGELS.explanation=This message is printed in response to a MODIFY BBGZANGL,ANGELS command. This message is followed by one instance of the CWWKB0077I message and one instance of the CWWKB0078I message for each angel process that is active on the system.
+MODIFY_DISPLAY_ACTIVE_ANGELS.useraction=No action is required.
+
+#{0} is a z/OS jobname
+#{1} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{2} is a version string
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS=CWWKB0077I: ACTIVE ANGEL JOBNAME {0} ASID {1} VERSION {2}
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS.explanation=The message text specifies the details of an active angel process. This message is preceded by the CWWKB0076I message and precedes the CWWKB0078I message.
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS.useraction=No action is required.
+
+#{0} is the name of an angel process. 1-54 characters
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME=CWWKB0078I: ACTIVE ANGEL NAME {0}
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME.explanation=The message text specifies the name of an active angel process. This message is preceded by the CWWKB0076I message and the CWWKB0077I message.
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME.useraction=No action is required.
+
+# -------------------------------------------------------------------------------------------------
+#0201-0250: native code non-console messages
+#
+#{0} is the Library name
+#{1} is the reason code
+SERVER_JNI_01=CWWKB0201E: Failed to open {0} : {1}
+SERVER_JNI_01.explanation=Failure to open the specified library.
+SERVER_JNI_01.useraction==The message text includes a reason code which describes the specific error.  See previous messages in the job log or system log for more information.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_02=CWWKB0202E: Method registration function in descriptor {0} returned {1}
+SERVER_JNI_02.explanation=Method registration function failed.
+SERVER_JNI_02.useraction==The message text includes a reason code which describes the specific error.  See previous messages in the job log or system log for more information.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_03=CWWKB0203E: RegisterNatives for descriptor {0} failed with {1}
+SERVER_JNI_03.explanation=The registration of a native method failed.
+SERVER_JNI_03.useraction==The message text includes a reason code which describes the specific error.  See previous messages in the job log or system log for more information.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_04=CWWKB0204E: Method de-registration function in descriptor {0} returned {1}
+SERVER_JNI_04.explanation=The de-registration of a native method failed.
+SERVER_JNI_04.useraction==The message text includes a reason code which describes the specific error.  See previous messages in the job log or system log for more information.
+
+#
+#{0} is the library name
+#{1} is the reason code
+SERVER_JNI_05=CWWKB0205W: Failed to close {0} : {1}
+SERVER_JNI_05.explanation=The specified dynamic link library failed to close.
+SERVER_JNI_05.useraction==The message text includes a reason code which describes the specific error.  See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_01=CWWKB0206E: Unable to determine WLP_INSTALL_DIR
+SERVER_LAUNCHER_01.explanation=Unable to determine WLP_INSTALL_DIR.
+SERVER_LAUNCHER_01.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_02=CWWKB0207E: Failed to prepend NLS path to NLSPATH
+SERVER_LAUNCHER_02.explanation=Failed to prepend NLS path to NLSPATH.
+SERVER_LAUNCHER_02.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_03=CWWKB0208E: Unable to determine WLP_USER_DIR
+SERVER_LAUNCHER_03.explanation=Unable to determine WLP_USER_DIR.
+SERVER_LAUNCHER_03.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_04=CWWKB0209E: Unable to determine SERVER_CONFIG_DIR
+SERVER_LAUNCHER_04.explanation=Unable to determine SERVER_CONFIG_DIR.
+SERVER_LAUNCHER_04.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_05=CWWKB0210E: Failed to resolve JAVA_HOME
+SERVER_LAUNCHER_05.explanation=Failed to resolve JAVA_HOME.
+SERVER_LAUNCHER_05.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_06=CWWKB0211E: Failed to prepend JVM library path to LIBPATH
+SERVER_LAUNCHER_06.explanation=Failed to prepend JVM library path to LIBPATH.
+SERVER_LAUNCHER_06.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_07=CWWKB0212E: Failed to prepend WebSphere library path to LIBPATH
+SERVER_LAUNCHER_07.explanation=Failed to prepend WebSphere library path to LIBPATH.
+SERVER_LAUNCHER_07.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_08=CWWKB0213E: Unable to determine output directory
+SERVER_LAUNCHER_08.explanation=Unable to determine output directory.
+SERVER_LAUNCHER_08.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_09=CWWKB0214E: Failed to change working directory to {0}
+SERVER_LAUNCHER_09.explanation=Failed to change working directory.
+SERVER_LAUNCHER_09.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_10=CWWKB0215E: Failed to open {0} : {1}
+SERVER_LAUNCHER_10.explanation=Failed to open a file. 
+SERVER_LAUNCHER_10.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_11=CWWKB0216E: Failed to resolve JNI_CreateJavaVM: {0}
+SERVER_LAUNCHER_11.explanation=Failed to resolve JNI_CreateJavaVM.
+SERVER_LAUNCHER_11.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_12=CWWKB0217E: Failed to create JavaVM: {0}
+SERVER_LAUNCHER_12.explanation=Failed to create JavaVM.
+SERVER_LAUNCHER_12.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_13=CWWKB0218E: Failed to invoke main class
+SERVER_LAUNCHER_13.explanation=Failed to invoke main class.
+SERVER_LAUNCHER_13.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_14=CWWKB0219E: Path to user directory could not be extracted from the DD
+SERVER_LAUNCHER_14.explanation=Path to user directory could not be extracted from the DD.
+SERVER_LAUNCHER_14.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_15=CWWKB0220E: Real path of user directory could not be resolved from JCL
+SERVER_LAUNCHER_15.explanation=Real path of user directory could not be resolved from JCL.
+SERVER_LAUNCHER_15.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_16=CWWKB0221E: Real path of user directory could be resolved from environment
+SERVER_LAUNCHER_16.explanation=Real path of user directory could be resolved from environment.
+SERVER_LAUNCHER_16.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_17=CWWKB0222E: Server configuration directory {0} does not exist
+SERVER_LAUNCHER_17.explanation=Server configuration directory does not exist.
+SERVER_LAUNCHER_17.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_18=CWWKB0223E: Unable to stat() the server configuration directory
+SERVER_LAUNCHER_18.explanation=Unable to stat() the server configuration directory.
+SERVER_LAUNCHER_18.useraction=See previous messages in the job log or system log for more information.
+
+#
+SERVER_LAUNCHER_19=CWWKB0224E: Server configuration {0} does not exist
+SERVER_LAUNCHER_19.explanation=Server configuration does not exist.
+SERVER_LAUNCHER_19.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_20=CWWKB0225E: Failed to stat 
+SERVER_LAUNCHER_20.explanation=Failed to stat .
+SERVER_LAUNCHER_20.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_21=CWWKB0226E: Output directory could not be found or created 
+SERVER_LAUNCHER_21.explanation=The output directory could not be resolved or created.
+SERVER_LAUNCHER_21.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_22=CWWKB0227E: Server output directory could not be found or created under WLP_OUTPUT_DIR 
+SERVER_LAUNCHER_22.explanation=The server output directory could not be resolved or created under WLP_OUTPUT_DIR.
+SERVER_LAUNCHER_22.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_23=CWWKB0228E: Error reading from {0} : {1} 
+SERVER_LAUNCHER_23.explanation=Error reading from the indicated file.
+SERVER_LAUNCHER_23.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_24=CWWKB0229E: Unable to get environment file position 
+SERVER_LAUNCHER_24.explanation=Unable to get environment file position.
+SERVER_LAUNCHER_24.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_25=CWWKB0230E: Unable to restore environment file position 
+SERVER_LAUNCHER_25.explanation=Unable to restore environment file position.
+SERVER_LAUNCHER_25.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_26=CWWKB0231E: Failed to set environment from {0} 
+SERVER_LAUNCHER_26.explanation=Failed to set environment from indicated property.
+SERVER_LAUNCHER_26.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_27=CWWKB0232E: Unsuccessful fgetpos 
+SERVER_LAUNCHER_27.explanation=Unsuccessful fgetpos.
+SERVER_LAUNCHER_27.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_28=CWWKB0233E: Unsuccessful fsetpos 
+SERVER_LAUNCHER_28.explanation=Unsuccessful fsetpos.
+SERVER_LAUNCHER_28.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_29=CWWKB0234E: JAVA_HOME location {0} does not exist 
+SERVER_LAUNCHER_29.explanation=The JAVA_HOME location indicated does not exist.
+SERVER_LAUNCHER_29.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_30=CWWKB0235E: Error reading java options from {0} : {1} 
+SERVER_LAUNCHER_30.explanation=Error reading java options from indicated file.
+SERVER_LAUNCHER_30.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_31=CWWKB0236E: Unable to set default IBM Java options 
+SERVER_LAUNCHER_31.explanation=Unable to set default IBM Java options.
+SERVER_LAUNCHER_31.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_32=CWWKB0237E: Failed to load main class 
+SERVER_LAUNCHER_32.explanation=Failed to load main class.
+SERVER_LAUNCHER_32.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_33=CWWKB0238E: Failed to locate main method 
+SERVER_LAUNCHER_33.explanation=Failed to locate main method.
+SERVER_LAUNCHER_33.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_34=CWWKB0239E: Failed to load java.lang.String class 
+SERVER_LAUNCHER_34.explanation=Failed to load java.lang.String class.
+SERVER_LAUNCHER_34.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_35=CWWKB0240E: Failed to create main method's parameter list 
+SERVER_LAUNCHER_35.explanation=Failed to create main method's parameter list.
+SERVER_LAUNCHER_35.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_36=CWWKB0241E: Unable to set _BPXK_WLM_PROPAGATE=NO 
+SERVER_LAUNCHER_36.explanation=Unable to set _BPXK_WLM_PROPAGATE=NO.
+SERVER_LAUNCHER_36.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_37=CWWKB0242E: Unable to set JAVA_THREAD_MODEL=HEAVY 
+SERVER_LAUNCHER_37.explanation=Unable to set JAVA_THREAD_MODEL=HEAVY.
+SERVER_LAUNCHER_37.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_38=CWWKB0243E: Unable to set JAVA_PROPAGATE=NO 
+SERVER_LAUNCHER_38.explanation=Unable to set JAVA_PROPAGATE=NO.
+SERVER_LAUNCHER_38.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_39=CWWKB0244E: Unable to set default value for _EDC_PTHREAD_YIELD 
+SERVER_LAUNCHER_39.explanation=Unable to set default value for _EDC_PTHREAD_YIELD.
+SERVER_LAUNCHER_39.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_40=CWWKB0245E: Unable to set working directory 
+SERVER_LAUNCHER_40.explanation=Unable to set working directory.
+SERVER_LAUNCHER_40.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_41=CWWKB0246W: Usage: bbgzsrv [liberty arguments] serverName 
+SERVER_LAUNCHER_41.explanation=Usage: bbgzsrv [liberty arguments] serverName.
+SERVER_LAUNCHER_41.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_42=CWWKB0247E: Unable to redirect stdout to LOG_DIR
+SERVER_LAUNCHER_42.explanation=Unable to redirect stdout to LOG_DIR
+SERVER_LAUNCHER_42.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_43=CWWKB0248E: Unable to redirect stderr to LOG_DIR
+SERVER_LAUNCHER_43.explanation=Unable to redirect stderr to LOG_DIR
+SERVER_LAUNCHER_43.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_44=CWWKB0249E: Failed to set the server PID directory or PID file
+SERVER_LAUNCHER_44.explanation=Failed to set the server PID directory or PID file
+SERVER_LAUNCHER_44.useraction=See previous messages in the job log or system log for more information
+
+#
+SERVER_LAUNCHER_45=CWWKB0250E: When processing JVM_ARGS an unexpected EOF was encountered while processing `"'
+SERVER_LAUNCHER_45.explanation=When processing JVM_ARGS an unexpected EOF was encountered while processing `"'
+SERVER_LAUNCHER_45.useraction=See previous messages in the job log or system log for more information
+
+# NO MESSAGE LEFT IN THIS BLOCK 0201-0250: native code non-console messages 
+# -------------------------------------------------------------------------------------------------

@@ -1,0 +1,11 @@
+-include= jar:${fileuri;lib/org.apache.felix.gogo.shell-0.12.0.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+
+-includeresource: \
+   gosh_profile=resources/gosh_profile, \
+   @lib/org.apache.felix.gogo.shell-0.12.0.jar!/!gosh_profile
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/org.apache.felix.gogo.shell-0.12.0.jar;version=file

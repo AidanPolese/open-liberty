@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.4
+
+Bundle-Name: WebSphere OAuth 2.0 web single sign-on  SPI
+Bundle-Description: WebSphere OAuth 2.0 web single sign-on  SPI, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.spi.oauth
+
+Import-Package: com.ibm.wsspi.security.oauth20,com.ibm.wsspi.security.openidconnect,*
+
+Export-Package: com.ibm.wsspi.security.oauth20,com.ibm.wsspi.security.openidconnect
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.spi/com.ibm.websphere.appserver.spi.oauth/pom.xml=com.ibm.websphere.appserver.spi.oauth.pom}
+
+publish.wlp.jar.suffix: dev/spi/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.security.oauth;version=latest

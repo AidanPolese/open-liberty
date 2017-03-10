@@ -1,0 +1,14 @@
+-include= ~../cnf/resources/bnd/bundle.props, 
+bVersion=1.0
+
+Bundle-Name: WAS ConfigAdmin Service Extension
+Bundle-Description: WAS Config Admin Service Extension version ${bVersion}
+Fragment-Host: com.ibm.ws.config
+Bundle-SymbolicName: com.ibm.ws.config.ext; singleton:=true
+
+Export-Package: com.ibm.ws.config.ext*
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.spi.logging;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

@@ -1,0 +1,87 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.config.utility/resources/com/ibm/ws/config/utility/resources/UtilityMessages.nlsprops
+#ISMESSAGEFILE FALSE
+#NLS_ENCODING=UNICODE
+#NLS_MESSAGEFORMAT_VAR
+
+
+# Generic messages
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+error=Eroare: {0}
+error.inputConsoleNotAvailable=Consola de intrare nu este disponibil\u0103.
+error.missingIO=Eroare, dispozitiv I/E lips\u0103: {0}.
+faiedToListAllSnippets=A e\u015fuat listarea tuturor fragmentelor de configura\u0163ie.
+getListOfAllSnippets=\n\
+Extragerea unei liste cu toate snippet-urile de configra\u0163ie.
+findSnippet=\n\
+Extragere snippet-uri asociate cu "{0}".
+snippetNotFound=\n\
+Nu s-au g\u0103sit snippet-uri asociate cu "{0}".
+
+
+# Generic messages for task argument validation
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+insufficientArgs=Argumente insuficiente.
+invalidArg=Argument invalid {0}.
+missingArg=Argument lips\u0103 {0}.
+missingValue=Valoare lips\u0103 pentru argumentul {0}.
+missingConfigSnippetName=Nu a fost specificat fragmentul de configura\u0163ie \u0163int\u0103.
+
+# Messages for HelpTask
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+usage=Utilizare: ac\u0163iune {0} | ac\u0163iune {0} configSnippet [op\u0163iuni]
+task.unknown=Ac\u0163iune necunoscut\u0103: {0}
+
+# Messages for --info option
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+info.allVariables=\n\
+Toate variabilele din fragment:
+info.invalidUsage=Invalid --utilizare informa\u0163ii. Utilizare: configUtility configSnippet --info 
+
+# Messages for reading in a password
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+password.enterText=Introduce\u0163i parola {0}:
+password.reenterText=Reintroduce\u0163i parola {0}:
+password.readError=Eroare citire parol\u0103.
+password.entriesDidNotMatch=Parolele nu s-au potrivit.
+
+# Messages for FileUtility
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+fileUtility.emptyPath=Specifica\u0163i o cale local\u0103 de fi\u015fier.
+fileUtility.fileNotFound=Fi\u015fierul nu a fost g\u0103sit.
+fileUtility.failedToRead=A e\u015fuat citirea fi\u015fierului local.
+
+# Messages for downloading a file from repository
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+download.failedRepoAccess=A e\u015fuat accesarea magaziei.
+download.ioError=A e\u015fuat desc\u0103rcarea fragmentului.
+download.invalidSnippet=A e\u015fuat \u00eenc\u0103rcarea fragmentului.
+
+# Messages for variable check
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+variable.empty=Fragmentul de configura\u0163ie nu con\u0163ine nicio variabil\u0103.
+
+# Messages for registering a host to the collective
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+encoding.aesRequiresKey=Cifrarea aes necesit\u0103 o cheie. \
+V\u0103 rug\u0103m specifica\u0163i una folosind --key.
+
+encoding.xorDoesNotSupportKey=Cifrarea xor nu suport\u0103 o cheie. \
+V\u0103 rug\u0103m s\u0103 nu specifica\u0163i --key.
+
+encoding.unsupportedEncoding=Valoare de cifrare nesuportat\u0103 {0}.
+
+# Messages for creation of a config snippet
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+generate.configureSecurity=V\u0103 rug\u0103m s\u0103 v\u0103 asigura\u0163i c\u0103 securitatea administrativ\u0103 este configurat\u0103 pentru server.
+
+generate.download=\n\
+Desc\u0103rcarea fragmentului cerut de configura\u0163ie...
+
+generate.abort=\n\
+Oprirea cre\u0103rii fragmentului de configura\u0163ie.

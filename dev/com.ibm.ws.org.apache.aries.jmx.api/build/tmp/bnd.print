@@ -1,0 +1,21 @@
+Ant-Version                              Apache Ant 1.9.6                        
+Bnd-LastModified                         1485246887490                           
+Build-Jdk                                1.6.0                                   
+Built-By                                 root                                    
+Bundle-Description                       This bundle contains the JMX 1.1.0 API  
+Bundle-DocURL                            http://www.apache.org                   
+Bundle-License                           http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-ManifestVersion                   2                                       
+Bundle-Name                              Apache Aries JMX API                    
+Bundle-SymbolicName                      org.apache.aries.jmx.api                
+Bundle-Vendor                            The Apache Software Foundation          
+Bundle-Version                           1.1.6.ibm-s20170124-0721                
+Created-By                               Apache Maven Bundle Plugin              
+Export-Package                           org.osgi.jmx;version="1.1.0";uses:="javax.management.openmbean",org.osgi.jmx.framework;version="1.7.0";uses:="org.osgi.jmx,javax.management.openmbean",org.osgi.jmx.framework.wiring;version="1.1";uses:="org.osgi.jmx,javax.management.openmbean",org.osgi.jmx.service.cm;version="1.3.0";uses:="javax.management.openmbean",org.osgi.jmx.service.permissionadmin;version="1.2.0";uses:="org.osgi.jmx",org.osgi.jmx.service.provisioning;version="1.2.0";uses:="javax.management.openmbean",org.osgi.jmx.service.useradmin;version="1.1.0";uses:="org.osgi.jmx,javax.management.openmbean"
+Implementation-Title                     Apache Aries                            
+Implementation-Version                   1.1.6-ibm-s20170124-0721                
+Import-Package                           javax.management,javax.management.openmbean
+Manifest-Version                         1.0                                     
+Require-Capability                       osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.6))"
+Tool                                     Bnd-2.3.0.201405100607                  
+

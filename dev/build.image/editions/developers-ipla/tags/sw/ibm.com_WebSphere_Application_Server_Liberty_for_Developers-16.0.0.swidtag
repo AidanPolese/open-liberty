@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SoftwareIdentity name="WebSphere Application Server Liberty for Developers" tagId="ibm.com-e0ebc48e003b47dc829bcdc8efed4fb0-16.0.0" version="16.0.0" versionScheme="multipartnumeric" xmlns="http://standards.iso.org/iso/19770/-2/2015/schema.xsd" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://standards.iso.org/iso/19770/-2/2015-current/schema.xsd schema.xsd">
+    <Meta persistentId="e0ebc48e003b47dc829bcdc8efed4fb0"/>
+    <Meta taxonomyCode="SSAVZF"/>
+    <Meta taggingProcess="4-1-20160303"/>
+    <Entity name="IBM" regid="ibm.com" role="licensor tagCreator softwareCreator"/>
+</SoftwareIdentity>

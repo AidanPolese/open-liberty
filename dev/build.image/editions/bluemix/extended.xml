@@ -1,0 +1,88 @@
+<server>
+
+  <!-- Extended + Operations features -->
+  <featureManager>
+  	<feature>couchdb-1.0</feature>
+  	<feature>cloudant-1.0</feature>
+    <feature>mongodb-2.0</feature>
+    <feature>sipServlet-1.1</feature>
+    <feature>rtcomm-1.0</feature>
+    <feature>rtcommGateway-1.0</feature>
+    <feature>sipServlet-1.1</feature>
+    <feature>ldapRegistry-3.0</feature>
+    <feature>sessionDatabase-1.0</feature>
+    <feature>requestTiming-1.0</feature>
+    <feature>timedOperations-1.0</feature>
+    <feature>webCache-1.0</feature>
+    <feature>osgiConsole-1.0</feature>
+    <feature>wsSecurity-1.1</feature>
+    <feature>samlWeb-2.0</feature>
+    <feature>bells-1.0</feature>
+    <feature>eventLogging-1.0</feature>
+    <feature>mediaServerControl-1.0</feature>    
+    <feature>wsSecuritySaml-1.1</feature>
+    <feature>spnego-1.0</feature>
+    <feature>federatedRegistry-1.0</feature>
+    <feature>scim-1.0</feature>
+    <feature>apiDiscovery-1.0</feature>
+    <feature>wsAtomicTransaction-1.2</feature>
+    <feature>logstashCollector-1.0</feature>
+    <feature>passwordUtilities-1.0</feature>
+  </featureManager>
+
+  <!-- OSGi features -->
+  <featureManager>
+    <feature>blueprint-1.0</feature>
+    <feature>osgiAppIntegration-1.0</feature>
+    <feature>osgi.jpa-1.0</feature>
+    <feature>wab-1.0</feature>
+  </featureManager>
+
+  <!-- webProfile-6.0 features -->
+  <featureManager>
+    <feature>cdi-1.0</feature>
+    <feature>ejbLite-3.1</feature>
+    <feature>jaxrs-1.1</feature>
+    <feature>jdbc-4.0</feature>
+    <feature>jpa-2.0</feature>
+    <feature>jsf-2.0</feature>
+    <feature>jsp-2.2</feature>
+    <feature>managedBeans-1.0</feature>
+    <feature>servlet-3.0</feature>
+    <feature>webProfile-6.0</feature>
+  </featureManager>
+
+  <!-- javaee-6.0 features -->
+  <featureManager>
+    <feature>jaxb-2.2</feature>
+    <feature>jaxws-2.2</feature>
+    <feature>jca-1.6</feature>
+    <feature>jms-1.1</feature>
+    <feature>jmsMdb-3.1</feature>
+    <feature>mdb-3.1</feature>
+    <feature>wasJmsClient-1.1</feature>
+    <feature>wasJmsServer-1.0</feature>
+    <feature>wasJmsSecurity-1.0</feature>
+    <feature>wmqJmsClient-1.1</feature>
+  </featureManager>
+
+  <!-- javaee-7.0 features -->
+  <featureManager>
+    <feature>batch-1.0</feature>
+    <feature>batchManagement-1.0</feature>
+    <feature>concurrent-1.0</feature>
+    <feature>ejb-3.2</feature>
+    <feature>jacc-1.5</feature>
+    <feature>jaspic-1.1</feature>
+    <feature>javaee-7.0</feature>
+    <feature>javaMail-1.5</feature>
+    <feature>jca-1.7</feature>
+    <feature>jcaInboundSecurity-1.0</feature>
+    <feature>jms-2.0</feature>
+    <feature>jmsMdb-3.2</feature>
+    <feature>mdb-3.2</feature>
+    <feature>wasJmsClient-2.0</feature>
+    <feature>wmqJmsClient-2.0</feature>
+  </featureManager>
+
+</server>

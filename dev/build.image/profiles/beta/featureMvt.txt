@@ -1,0 +1,6 @@
+com.ibm.websphere.appserver.webProfile-7.0
+com.ibm.websphere.appserver.adminCenter-1.0
+com.ibm.websphere.appserver.localConnector-1.0
+com.ibm.websphere.appserver.restConnector-2.0
+com.ibm.websphere.appserver.ssl-1.0
+com.ibm.websphere.appserver.transportSecurity-1.0

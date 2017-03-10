@@ -1,0 +1,43 @@
+-include= ~../cnf/resources/bnd/bundle.props, 
+bVersion=1.0
+
+Bundle-Name: WebSphere Logging OSGi adapter
+Bundle-Description: WebSphere Logging OSGi adapter, version ${bVersion}
+Bundle-SymbolicName: com.ibm.ws.logging.osgi; singleton:=true
+Bundle-Activator: com.ibm.ws.logging.internal.osgi.Activator
+
+Private-Package: \
+    com.ibm.ws.ras.instrument.*,\
+    com.ibm.ws.logging.internal.osgi.*
+ 
+Import-Package: \
+    org.objectweb.asm.*, \
+    org.apache.tools.*;resolution:=optional, \
+    !com.ibm.wsspi.logprovider.*, \
+    !*.internal.*, \
+    *
+   
+Export-Package: \
+    com.ibm.ws.logging.osgi;provide:=true
+
+-includeresource: \
+    OSGI-INF=resources/OSGI-INF
+
+Service-Component= \
+  com.ibm.ws.logging.internal.ffdcjanitor; \
+    scheduler=java.util.concurrent.ScheduledExecutorService; \
+    implementation:=com.ibm.ws.logging.internal.osgi.FFDCJanitor
+   
+IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.cm.1.5.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.event.1.3.1;version=latest,\
+	com.ibm.wsspi.org.osgi.service.log.1.3.0;version=latest,\
+	com.ibm.ws.logging;version=latest,\
+	com.ibm.ws.ras.instrument;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

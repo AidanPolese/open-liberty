@@ -1,0 +1,33 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Configuration Utility
+Bundle-SymbolicName: com.ibm.ws.config.utility
+Bundle-Description: Configuration Utility; version=${bVersion}
+
+Import-Package: \
+  com.ibm.wsspi.kernel.service.utils
+
+Main-Class: com.ibm.ws.config.utility.ConfigUtility
+
+Private-Package: \
+  com.ibm.ws.config.utility.*
+
+-includeresource: \
+  OSGI-OPT/websphere/lib/ws-configUtility.jar=${repo;com.ibm.ws.config.utility.configUtility}
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.crypto.passwordutil;version=latest,\
+	com.ibm.ws.install;version=latest,\
+	com.ibm.ws.repository;version=latest,\
+	com.ibm.ws.repository.liberty;version=latest,\
+	com.ibm.ws.config.utility.configUtility;version=latest,\
+	com.ibm.websphere.appserver.api.kernel.service;version=latest,\
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.ws.org.apache.commons.io.1.4;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

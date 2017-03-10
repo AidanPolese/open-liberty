@@ -1,0 +1,13 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.restConnectorjaxrs-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.jaxrs-1.1;version=latest, \
+	com.ibm.websphere.appserver.jta-1.1;version=latest, \
+	com.ibm.websphere.appserver.javax.servlet-3.0;version=latest, \
+	com.ibm.websphere.appserver.javax.annotation-1.1;version=latest, \
+	com.ibm.websphere.appserver.servlet-3.0;version=latest

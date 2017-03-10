@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Commons Daemon" 
+            projectURL="http://commons.apache.org" 
+            version="1.0.15" revision="" 
+            license-type="Apachev2" 
+            contact="wigger@us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/projects/w/was.dev_tools/prereqs/prereq.commons.daemon/1.0.15/20160930/">
+         <file basename="commons-daemon-1.0.15-bin-windows-signed.jar" checksum="bdb305fdc25fb88bc7ad6af8add9d142"/>
+      </download>
+   </project>
+      
+   <notes>
+   The download location is the location where it is downloaded from for the WAS build process
+   the file commons-daemon-1.0.15-bin-windows-signed.jar is actually the file commons-daemon-1.0.15-bin-windows-signed.zip downloaded
+   from the Apache Commons Daemon site.  It was renamed from zip to jar so that the tooling would do the checksum check.  The tooling
+   should be updated to handle zips are well as exe for checksum testing. 
+   </notes>
+   
+   
+</ossc>

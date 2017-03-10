@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.1
+
+Bundle-Name: WebSphere Monitor API
+Bundle-Description: WebSphere Monitor API, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.api.monitor
+
+Import-Package: com.ibm.websphere.monitor.jmx
+
+Export-Package: com.ibm.websphere.monitor.jmx
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.monitor/pom.xml=com.ibm.websphere.appserver.api.monitor.pom}
+
+publish.wlp.jar.suffix: dev/api/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.monitor

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+ 
+   <project project="Eclipse Equinox OSGi" 
+            projectURL="http://ies.ottawa.ibm.com/iss/ies/downloads/index.php" 
+            version="3.11.3" revision="M20170126-1300" 
+            license-type="EPL" 
+            contact="tjwatson@us.ibm.com" 
+            encryption="no">
+      <download location="Not available.">
+         <file basename="org.eclipse.osgi_3.11.3.v20170118-1931.jar" checksum="d38238e48a71be02ba101bc7612ce7ce"/>
+         <file basename="org.eclipse.osgi.source_3.11.3.v20170118-1931.jar" checksum="a0986cba43c5bffa919b8569b0be5f05"/>
+      </download>
+   </project>
+
+   <notes>
+   These equinox binaries are from the current stream for the ongoing 4.6.2 Equinox (Neon.2) release.
+   The 4.6.2 Equinox release is not yet available from the IBM Eclipse SDK (IES) download site.
+   A separate OSSC approval needs to be done on these binaries until the 4.6.2 Equinox (Neon.2)
+   release is made available from the IBM Eclipse SDK (IES) download site and is on the
+   All Usage Approved (AUA) list.
+   </notes>
+         
+   <clearencehistory/>
+
+</ossc>

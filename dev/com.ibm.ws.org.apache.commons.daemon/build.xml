@@ -1,0 +1,6 @@
+<project name="com.ibm.ws.org.apache.commons.daemon" default="build">
+	
+  <property name="bundle.version" value="1.0"/>
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+ 	
+</project>

@@ -1,0 +1,16 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Certificate Utilities
+Bundle-SymbolicName: com.ibm.ws.crypto.certificateutil
+Bundle-Description: Certificate Utilities; version=${bVersion}
+
+Export-Package: \
+  com.ibm.ws.crypto.certificateutil;provide:=true, \
+  com.ibm.ws.crypto.certificateutil.keytool;provide:=true
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

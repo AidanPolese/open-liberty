@@ -1,0 +1,921 @@
+*                                                                       00001000
+* %DCL BBODBGVT_INCLUDED CHAR EXT;                                      00002000
+* %DEACTIVATE BBODBGVT_INCLUDED;                                        00003000
+* %IF BBODBGVT_INCLUDED = '' %THEN                                      00004000
+* %DO;                                                                  00005000
+*%/* Start of PL/X PreProlog Code */;                                   00006000
+*%IF define_bgvt = "" %THEN %DO;  /*@211335A*/                          00007000
+*%define_bgvt = "DEFINED";        /*@211335A*/                          00008000
+*/*@211335D*/                                                           00009000
+*%/* End of PL/X PreProlog Code */;                                     00010000
+*/* Macro made bi-lingual on 10294. CBGEN compile date 09235         */ 00011000
+*% /*                                                                   00012000
+         MACRO                                                          00013000
+         BBODBGVT &DSECT=YES,&LIST=YES,&TITLE=YES,&BGVT=YES             00014000
+         GBLC  &BBODBGVT_INCLUDED                                       00015000
+         GBLC  &ZCBPRINT                                                00016000
+&BBODBGVT_INCLUDED SETC 'YES'                                           00017000
+         AIF   ('&LIST' EQ 'NONE').P0                                   00018000
+         AIF   ('&TITLE' EQ 'NO').P5                                    00019000
+ TITLE   'BBODBGVT  - Boss Global Vector Table                   '      00020000
+.P5      ANOP                                                           00021000
+**/ BBODBGVT_1:;                                                        00022000
+*/* START OF SPECIFICATIONS ******************************************  00023000
+* **PROPRIETARY STATEMENT*********************************************  00024000
+* **01* PROPRIETARY STATEMENT:                                       *  00025000
+* *                                                                  *  00026000
+* ********************************************************************  00027000
+* IBM Confidential                                                      00028000
+* OCO Source Materials                                                  00029000
+* 5655-N02 (C) Copyright IBM Corp. 2000, 2008                           00030000
+* The source code for this program is not published or otherwise        00031000
+* divested of its trade secrets, irrespective of what has been          00032000
+* deposited with the U.S. Copyright Office.                             00033000
+* Status = H28W700                                                      00034000
+* ********************************************************************  00035000
+* *                                                                  *  00036000
+* *                                                                  *  00037000
+* **END-OF-PROPRIETART-STATEMENT**************************************  00038000
+* *                                                                  *  00039000
+* *01*  Descriptive Name: Boss Global Vector Table                   *  00040000
+* *02*   Acronym: BBODBGVT                                           *  00041000
+* *                                                                  *  00042000
+* *01*  Macro Name: BBODBGVT                                         *  00043000
+* *                                                                  *  00044000
+* *01*  DSECT Name: BGVT                                             *  00045000
+* *                                                                  *  00046000
+* *01*  Component: Component Broker (SCBBO)                          *  00047000
+* *                                                                  *  00048000
+* *01*  Function:                                                    *  00049000
+* *      Global archor block for Boss functions                      *  00050000
+* *                                                                  *  00051000
+* * NOTE: This macro has a corresponding C/C++ version (bbodbgvt.h)  *  00052000
+* *       which must be kept in sync with this plx version.          *  00053000
+* *       ALSO: there is an IPCS model for this control block.       *  00054000
+* *       The IPCS Model (bborbgvt.asm) must also be kept in sync.   *  00055000
+* *                                                                  *  00056000
+* *01*  Eye-Catcher: BBODBGVT                                        *  00057000
+* *02*   Offset: 0                                                   *  00058000
+* *02*   Length: 8                                                   *  00059000
+* *                                                                  *  00060000
+* *01*  Language: PL/X                                               *  00061000
+* *                                                                  *  00062000
+* *01*  Storage Attributes:                                          *  00063000
+* *02*   Allocation Method: STORAGE macro                            *  00064000
+* *02*   Main Storage:                                               *  00065000
+* *02*   Virtual Storage:                                            *  00066000
+* *02*   Auxiliary Storage:                                          *  00067000
+* *02*   Subpool: 241                                                *  00068000
+* *02*   Key: 2                                                      *  00069000
+* *02*   Data Space: N/A                                             *  00070000
+* *02*   Residency: any                                              *  00071000
+* *02*   Frequency: one per system                                   *  00072000
+* *02*   Size:                                                       *  00073000
+* *02*   Created by: BBODMN                                          *  00074000
+* *02*   Deleted by: none                                            *  00075000
+* *02*   Pointed to by: bacb_bgvt_ptr in control and server region   *  00076000
+* *                     or name token.                               *  00077000
+* *                     Client can use name token if he knows what   *  00078000
+* *                     daemon group he is talking to.               *  00079000
+* *02*   Serialization: See comments on individual lines             *  00080000
+* *                                                                  *  00081000
+* *01*  EXTERNAL CLASSIFICATION: None                                *  00082000
+* *01*  END OF EXTERNAL CLASSIFICATION:                              *  00083000
+* *                                                                  *  00084000
+* *01*  Distribution Library: ???????                                *  00085000
+* *                                                                  *  00086000
+* *01* METHOD OF ACCESS:                                             *  00087000
+* *                                                                  *  00088000
+* *02* ASM: None                                                     *  00089000
+* *                                                                  *  00090000
+* *02* PL/X:                                                         *  00091000
+* *                                                                  *  00092000
+* *     %INCLUDE SYSLIB(BBODBGVT)                                    *  00093000
+* *                                                                  *  00094000
+* *01* CHANGE ACTIVITY:                                              *  00095000
+* *    $01=          H28K510  970722  PD0AL: Initial Daemon support  *  00096000
+* *    $L2= 160      H28K510  970915  PD0HR: Indirect IOR changes    *  00097000
+* *    $L3= 0000217  H28K510  970929  PDG1: Add daemon ASCB address  *  00098000
+* *    $L4= 0000215  H28K510  971014  PDG1: Add FRR address          *  00099000
+* *    $L5= 0000294  H28K510  971118  PDG1: Add ARR address          *  00100000
+* *    $L6= 0000583  H28K510  980114  PD2L: Add ARM address          *  00101000
+* *    $L7= 0000302  H28K510  980120  PDG1: Add CTrace fields        *  00102000
+* *    $L8= 745      H28K510  980216  PDAL: Add Resmgr support       *  00103000
+* *    $L9= 1136     H28K510  980414  PDLS: diamond problem          *  00104000
+* *    $LA= 875      H28K510  980421  PDG1: OTS/RRS PC support       *  00105000
+* *    $LB= 1242     H28K510  980511  PDLS: stop support             *  00106000
+* *    $LC=1313, H28K510, 980507, PDG1: More OTS PC support          *  00107000
+* *    $LD=1771, H28K510, 980807, PDGM: Add ORB_Request ID, and State*  00108000
+* *                                     Flag Cell Pool Info          *  00109000
+* *    $LE=1630.SHIP.2, H28K510, 980807, PDGM: Add Naming IOR,       *  00110000
+* *                                     Interface Repository IOR     *  00111000
+* *    $P1=3636, H28K510, 981120, PDDH: Sysplex toleration           *  00112000
+* *    $P2=4265, H28K510, 990120, PDKF: Add Sys Mgmt Server SMO IOR  *  00113000
+* *    $P3=3186, H28K510, 990503, PDTL: Add daemon and resolve IP    *  00114000
+* *                                      names from env variables    *  00115000
+* *    $P4=4481, H28K510, 990517, PDKF: Increase size of daemon IP nm*  00116000
+* *    $P5=5974, H28K510, 991115, PDDE: Increase resolve_ipname size *  00117000
+* *                                     Local comm resmgr support    *  00118000
+* *    $P6=6857, H28K510, 991208, PDLS: add srb parameter list cpool *  00119000
+* *    $P7=6647, H28K510, 991208, PDTL: Add daemon_stopping          *  00120000
+* *    $P8=3890, H28K510, 20000410, PDDE: add srbf dyn area cpool    *  00121000
+* *    $P9=MD08009, H28K510, 20000622, PDML: add SMS asid field and  *  00122000
+* *                                    SMS terminated by daemon field*  00123000
+* *    $LF=MD08892, CB R4.0, 20000621, PDOP: add pl/x trace routine  *  00124000
+* *    $PA=MD09081, H28K510, 20000828, PDLS: add field for stoken of *  00125000
+* *                                     systems management control   *  00126000
+* *                                     region                       *  00127000
+* *    $PB=MD09145, CB R4.0, 20000915, PDML: change current version  *  00128000
+* *                                     and added new reserve field  *  00129000
+* *                                     for 4.0 and up.              *  00130000
+* *    $LG=MD12244  H28W401  20011026, PDLS: PB state reporting for  *  00131000
+* *                                          enclaves                *  00132000
+* *    $WS14564   , H28W500, 20020911, PDMS: Server instance data    *  00133000
+* *                                          cpool                   *  00134000
+* *    $WS14419.01  H28W500  20021008, PDLS: multi node support      *  00135000
+* *    $WS14419.02  H28W500  20021021,  RX:  add daemon group name   *  00136000
+* *    $WS14419     H28W500  20021106, PDLS: multi node supprt       *  00137000
+* *    $WS14419   , H28W500, 20021030, PDLS: multi node support      *  00138000
+* *    $PQ62702   , H28W401, 20020617, PDGM: Add SRB Parmlist version*  00139000
+* *    $WS14334.05b, H28W500, 20021111, PDHR: Save SAF REALM         *  00140000
+* *    $WS14419     H28W500  20021211, PDLS: multi node supprt       *  00141000
+* *    $MD15365   , H28W401, 20030123, PDLS: 5.0 toleration support  *  00142000
+* *                                                                  *  00143000
+* *    $MD14685   , H28W500, 20030122, PDGM: Add bboushqd func addr  *  00144000
+* *    $PQ72135   , H28W500, 20030409, PDGM: Moved bbocwsmp &        *  00145000
+* *                                          bbocwbal to common      *  00146000
+* *    $211335      H28W510  20040622  PJD:  move IPCS formatting       00147000
+* *                                    code to corresponding MAC file   00148000
+* *    $LI4175.2-1  H28W700  20050726  PDls: 64 bit                  *  00149000
+* *    $LI4175.2-2  H28W700  20050912  PDlS: 64 bit                  *  00150000
+* *    $L413463     H28W700  20070328  PDRX: multi-cell mode         *  00151000
+* *    $LI44639     H28W700  20070330  PDMI: performance blocks      *  00152000
+* *    $LI4310      H28W700  20070928  PDLS: DCS  XCF support        *  00153000
+* *    $LI4689-1.1  H28W700  20070830  PDLS: load modules in hfs     *  00154000
+* *    $489686      H28W700  20071217  PDLS: do not require NOSWAP   *  00155000
+* *                                          in ppt                  *  00156000
+* *    $LI4798I7-07 H28W700  20090223  PDFG: new connector shmem     *  00157000
+* *    $PK77358     H28W700  20090105  PDLS: add CSVDYLPA delete token  00158000
+* *    $645942      H28W700  20100408  PDFG: IMS OTMA name table     *  00159000
+* *    $PM22959     H28W610  20101019  PDLS: add                     *
+* *                               BBODBGVT_TS70_CsvdylpaDeleteToken  *
+* *                               BBODBGVT_FRCA_CsvdylpaDeleteToken  *
+* *    $TODO0162  , H28W800, 20101206, PDGM: Expand the SID          *
+* *    $F003703     H28W800  20101019  PDFG: Hang BBOACALL off BGVT  *  00160000
+* * END OF SPECIFICATIONS *******************************************/  00161000
+*% /*                                                                   00162000
+.P0      ANOP                                                           00163000
+         AIF   ('&ZCBPRINT' EQ 'NO').P1                                 00164000
+         AIF   ('&LIST' EQ 'YES').P2                                    00165000
+.P1      ANOP                                                           00166000
+         PUSH  PRINT                                                    00167000
+         PRINT OFF                                                      00168000
+.P2      ANOP                                                           00169000
+         AIF   ('&BGVT' EQ 'NO').L0002                                  00170000
+         AIF   ('&DSECT' EQ 'YES').L0003                                00171000
+         AIF   ('&BGVT' NE 'YES').L0002                                 00172000
+.L0003   ANOP                                                           00173000
+*                                                                       00174000
+*                                                                       00175000
+*   Start of PL/X Source                                                00176000
+*                                                                       00177000
+*                                                                       00178000
+         AIF   ('&DSECT' EQ 'YES').L0004                                00179000
+BGVT     DS    0D                                                       00180000
+         AGO   .L0005                                                   00181000
+.L0004   ANOP                                                           00182000
+BGVT     DSECT                                                          00183000
+.L0005   ANOP                                                           00184000
+BBODBGVT_EYECATCHER DS CL8 Dataarea's eyecatcher                        00185000
+BBODBGVT_VERSION DS F    Dataarea's version                             00186000
+BBODBGVT_PCTABLE DS A    Pointer to the system                          00187000
+*                                                                       00188000
+*      ***************************************************************  00189000
+*      *                                                             *  00190000
+*      * PC Table                                                    *  00191000
+*      *                                                             *  00192000
+*      ***************************************************************  00193000
+*                                                                       00194000
+*                                                                       00195000
+BBODBGVT_ASR DS 0CL8     Pointer to the ASR                             00196000
+*                                                                       00197000
+*      ***************************************************************  00198000
+*      *                                                             *  00199000
+*      * Serialization for this field is via CDS                     *  00200000
+*      *                                                             *  00201000
+*      ***************************************************************  00202000
+*                                                                       00203000
+*                                                                       00204000
+SEQUENCE_NUMBER DS F                                                    00205000
+ASR_POINTER DS A                                                        00206000
+BBODBGVT_OLD_ASR DS A                                                   00207000
+*                                                                       00208000
+*      ***************************************************************  00209000
+*      *                                                             *  00210000
+*      * Queue of old ASR entries that are waiting for a time out so *  00211000
+*      * that they can be deleted. Serialization: CS                 *  00212000
+*      *                                                             *  00213000
+*      ***************************************************************  00214000
+*                                                                       00215000
+*                                                                       00216000
+BBODBGVT_BMDT DS A       Pointer to Boss Daemon                         00217000
+*                                                                       00218000
+*      ***************************************************************  00219000
+*      *                                                             *  00220000
+*      * module table                                                *  00221000
+*      *                                                             *  00222000
+*      ***************************************************************  00223000
+*                                                                       00224000
+*                                                                       00225000
+BBODBGVT_ESTAE_EXTENSION DS A Pointer to                                00226000
+*                                                                       00227000
+*      ***************************************************************  00228000
+*      *                                                             *  00229000
+*      * glue routine that branches to LE Estae Exit Extension       *  00230000
+*      * Routine                                                     *  00231000
+*      *                                                             *  00232000
+*      ***************************************************************  00233000
+*                                                                       00234000
+*                                                                       00235000
+BBODBGVT_DAEMON_IOR DS A Pointer to Daemon IOR                          00236000
+*                                                                       00237000
+*      ***************************************************************  00238000
+*      *                                                             *  00239000
+*      *                                                                00240000
+*      *                                                             *  00241000
+*      ***************************************************************  00242000
+*                                                                       00243000
+*                                                                       00244000
+BBODBGVT_DAEMON_ASCB DS A Pointer to Daemon ASCB                        00245000
+*                                                                       00246000
+*      ***************************************************************  00247000
+*      *                                                             *  00248000
+*      *                                                                00249000
+*      *                                                             *  00250000
+*      ***************************************************************  00251000
+*                                                                       00252000
+*                                                                       00253000
+BBODBGVT_FRR DS A        Pointer to general FRR                         00254000
+*                                                                       00255000
+*      ***************************************************************  00256000
+*      *                                                             *  00257000
+*      * routine                                                        00258000
+*      *                                                             *  00259000
+*      ***************************************************************  00260000
+*                                                                       00261000
+*                                                                       00262000
+BBODBGVT_ADMP DS A       Pointer to general ARR                         00263000
+*                                                                       00264000
+*      ***************************************************************  00265000
+*      *                                                             *  00266000
+*      * routine                                                        00267000
+*      *                                                             *  00268000
+*      ***************************************************************  00269000
+*                                                                       00270000
+*                                                                       00271000
+BBODBGVT_FLAGS DS 0CL4   Flags                                          00272000
+BBODBGVT_FLAGS1 DS 0CL1  Flags 1                                        00273000
+BBODBGVT_CTRACE_DEFINE_DONE EQU X'80' Ctrace define done for top level  00274000
+BBODBGVT_NO_PBS EQU X'20' no PB reporting                               00275000
+BBODBGVT_MODULES_LOADED_TO_COMMON EQU X'10'                             00276000
+BBODBGVT_GLUE_RTN_TO_ESTAE EQU X'08' if on BBODBGVT_ESTAE_EXTENSION    *00277000
+                         points to a glue routine                       00278000
+BBODBGVT_PCRT_LOADED_COMMON EQU X'04' if on directed load was used to  *00279000
+                         put pcrt in common                             00280000
+BBODBGVT_MULTI_CELL_MODE EQU X'02'                                      00281000
+BBODBGVT_PCRT_KEY0 EQU X'01' daemon loaded bbodpcrt is in key 0        *00282000
+                         storage                                        00283000
+         ORG   BBODBGVT_FLAGS1+1                                        00284000
+BBODBGVT_FLAGS2 DS 0CL1  Flags 2                                        00285000
+BBODBGVT_PREV_PCRT_KEY0 EQU X'80' previous daemon loaded bbodpcrt is   *00286000
+                         in key 0 storage                               00287000
+BBOODBGVT_NOSWAP_IN_PPT EQU X'40' BPXBATA2 PPT entry has noswap         00288000
+         ORG   BBODBGVT_FLAGS+4                                         00289000
+BBODBGVT_BBORTSRB DS A   Pointer to TRACE SRB ROUTINE                   00290000
+BBODBGVT_BBORLCRM DS A   Ptr to local communication resmgr              00291000
+BBODBGVT_DAEMON_RESMGR_TOKEN DS F Daemon                                00292000
+*                                                                       00293000
+*      ***************************************************************  00294000
+*      *                                                             *  00295000
+*      * Resource Manager Token                                      *  00296000
+*      *                                                             *  00297000
+*      ***************************************************************  00298000
+*                                                                       00299000
+*                                                                       00300000
+BBODBGVT_DAEMON_RESMGR_PARM DS CL8 Parameters                           00301000
+*                                                                       00302000
+*      ***************************************************************  00303000
+*      *                                                             *  00304000
+*      * passed to the daemon resource manager                       *  00305000
+*      *                                                             *  00306000
+*      ***************************************************************  00307000
+*                                                                       00308000
+*                                                                       00309000
+BBODBGVT_DAEMON_STATUS DS 0CL4                                          00310000
+*                                                                       00311000
+*      ***************************************************************  00312000
+*      *                                                             *  00313000
+*      * Current status of the Daemon                                *  00314000
+*      *                                                             *  00315000
+*      ***************************************************************  00316000
+*                                                                       00317000
+*                                                                       00318000
+DAEMON_ACTIVE EQU X'80'  The Daemon is active                           00319000
+DAEMON_STARTING EQU X'40' The Daemon is starting                        00320000
+DAEMON_FAILED EQU X'20'  The Daemon has failed                          00321000
+DAEMON_STOPPED EQU X'10' The Daemon has stopped                         00322000
+DAEMON_DATA_SHARING EQU X'08' data sharing flag                         00323000
+DAEMON_STOPPING EQU X'04' Daemon is stopping                            00324000
+         ORG   BBODBGVT_DAEMON_STATUS+4                                 00325000
+BBODBGVT_BBORRMGR DS A   Pointer to res manager                         00326000
+BBODBGVT_DAEMON_IOR_ASCII DS A Pointer to daemon ascii IOR              00327000
+         DS    A                                                        00328000
+BBODBGVT_BBOOSCHD DS A   Ptr to SCHED frontend rtn                      00329000
+BBODBGVT_BBOTETCN DS A   OTS rtn to perform ETCON                       00330000
+BBODBGVT_BBOTETDS DS A   OTS rtn to perform ETDIS                       00331000
+BBODBGVT_BBOOSRQA DS A   SRB to queue SR ACRW                           00332000
+BBODBGVT_BBOTETRM DS A   OTS RMTR routine                               00333000
+BBODBGVT_ORBR_ID DS F    ORB_Request ID                                 00334000
+BBODBGVT_ORBR_SF_CP_INFO DS A ORB_Request State Flag Cell Pool Info    *00335000
+                         Ptr                                            00336000
+BBODBGVT_NAMING_IOR DS A Naming IOR (Binary)                            00337000
+BBODBGVT_IR_IOR DS A     Interface Repository IOR (Binary)              00338000
+BBODBGVT_SM_SMO_IOR DS A Sys Mgmt Server's SMO IOR (Binary)             00339000
+BBODBGVT_DAEMON_IPNAME DS CL256 daemon ip name from env variables       00340000
+BBODBGVT_RESOLVE_IPNAME DS CL256 resolve ip name from env variables     00341000
+BBODBGVT_SRB_PARM_CPOOL DS F srb parameter list cpool id                00342000
+BBODBGVT_SRBF_DYNA_CPOOL DS F srbf dyn area cpool id                    00343000
+         DS    BL2                                                      00344000
+         DS    CL8                                                      00345000
+BBODBGVT_SRB_PARM_CPOOL_VER DS H SRB Parmlist cpool version             00346000
+BBODBGVT_BBOAOCNP DS AD  OTMA ID Table                                  00347000
+BBODBGVT_BBOAMCST_CDS_AREA DS 0CL8 OLA client code only in master BGVT  00348000
+BBODBGVT_BBOAMCST_COUNT DS F                                            00349000
+BBODBGVT_BBOAMCST_PTR DS A                                              00350000
+BBODBGVT_RSVD DS CL92    Reserved space for service update for 3.02    *00351000
+                         only (on quad word boundary 0x2A0)             00352000
+BBODBGVT_PCRT_CSVDYLPADELETETOKEN DS CL8 token needed when taking pcrt *00353000
+                         out of lpa                                     00354000
+BBODBGVT_STATE_CHANGE_MAP DS A LI44639                                  00355000
+BBODBGVT_PCRT_LENGTH DS F length of pcrt                                00356000
+BBODBGVT_PREV_PCRT_LENGTH DS F length of previous pcrt                  00357000
+BBODBGVT_PREV_PCRT DS A  previous pcrt                                  00358000
+BBODBGVT_PCQ_PTR DS A    PCQ pointer                                    00359000
+BBODBGVT_PCQE_CPOOL_VERSION DS F PCQE cpool version                     00360000
+BBODBGVT_PCQE_CPOOL DS F PCQE cpool id                                  00361000
+BBODBGVT_PRE_V61_BBORLEXT_PTR DS A address of BBORLEXT used for        *00362000
+                         versions earlier than V61                      00363000
+BBODBGVT_PCRT DS A       daemon PC routine table                        00364000
+BBODBGVT_BBOCWSMP DS A   Ptr to WLM Sampling Exit                       00365000
+BBODBGVT_BBOCWBAL DS A   Ptr to WLM reBalancing Exit                    00366000
+BBODBGVT_BBORTRCD DS A   Ptr to PL/X trace routine                      00367000
+BBODBGVT_SID_CPOOL DS F  SID cpool ID                                   00368000
+BBODBGVT_SID_CPOOL_VERSION DS F SID version num                         00369000
+BBODBGVT_DAEMON_GROUP_NAME DS CL8 Identify daemon group. Null term if  *00370000
+                         less than 8 chars.                             00371000
+BBODBGVT_COMMON_BMDT_PTR DS A                                           00372000
+BBODBGVT_OLD_BMDT_PTR DS A                                              00373000
+BBODBGVT_DAEMON_ROUTING DS F smart routing: 0=wlm, 1=none, 2=daemon     00374000
+BBODBGVT_BBORLEXT_PTR DS A estae extension                              00375000
+BBODBGVT_SRB_PARM_CPOOL2 DS F srb parameter list cpool id               00376000
+BBODBGVT_SECURITY_REALM_NAME DS A Pointer to SAF Realm                  00377000
+BBODBGVT_BBODASRS DS A   ASR services routie                            00378000
+BBODBGVT_BBOUSHQD DS A   BBUSHQE.bboushqeDestroy rtn (bboushqd.plx)     00379000
+BBODBGVT_XCF_STATUS_FIELD_CPOOL DS F DCS XCF status field cpool         00380000
+BBODBGVT_BBOASHR DS AD   Shared memory area for new connectors          00381000
+BBODBGVT_EXTENSION DS A  not set yet. this is to be used to point to   *00382000
+                         an extension if we ever need more room in the *00383000
+                         bgvt that hangs off the ecvt. since multiple  *00384000
+                         5.0 nodes and 401 will be sharing the bgvt    *00385000
+                         there is no easy safe way to delete the bgvt  *00386000
+                         hung off the ecvt. Note in 4.01 and 5.0 LE    *00387000
+                         uses the BBODBGVT_ESTAE_EXTENSION field of    *00388000
+                         the bgvt pointed to by the ecvt.               00389000
+BBODBGVT_CUR_VER EQU 2   Current Version                                00390000
+BBODBGVT_EYECATCHER_VALUE_0TO3 EQU C'BBOD' This is the first 4-byte    *00391000
+                         segment of an 8-byte constant. eyecatcher     *00392000
+                         value                                          00393000
+BBODBGVT_EYECATCHER_VALUE_4TO7 EQU C'BGVT' This is the second 4-byte   *00394000
+                         segment of an 8-byte constant. eyecatcher     *00395000
+                         value                                          00396000
+BBODBGVT_BASE_DAEMON_GROUP_NAME_0TO3 EQU C'BBOO' This is the first     *00397000
+                         4-byte segment of an 8-byte constant.          00398000
+BBODBGVT_BASE_DAEMON_GROUP_NAME_4TO7 EQU C'DGN.' This is the second    *00399000
+                         4-byte segment of an 8-byte constant.          00400000
+BGVT_LEN EQU   *-BGVT                                                   00401000
+.L0002   ANOP                                                           00402000
+         AIF   ('&ZCBPRINT' EQ 'NO').P3                                 00403000
+         AIF   ('&LIST' EQ 'YES').P4                                    00404000
+.P3      ANOP                                                           00405000
+         POP   PRINT                                                    00406000
+.P4      ANOP                                                           00407000
+.P_EXIT  ANOP                                                           00408000
+         MEND                                                           00409000
+**/ BBODBGVT_2:;                                                        00410000
+* %BBODBGVT_INCLUDED = 'YES';                                           00411000
+* %DCL ZCBPRINT CHAR EXT;                                               00412000
+* %DEACTIVATE ZCBPRINT;                                                 00413000
+* %DCL BBODBGVT_LIST CHAR EXT;                                          00414000
+* %DEACTIVATE BBODBGVT_LIST;                                            00415000
+* %IF BBODBGVT_LIST ^= 'NO' &                                           00416000
+*    ZCBPRINT ^= 'NO' %THEN                                             00417000
+*   %GOTO BBODBGVT_3;                                                   00418000
+*   @LIST PUSH NOECHO;                                                  00419000
+*   @LIST NOASSEMBLE NOECHO;                                            00420000
+*   @LIST OFF C NOECHO;                                                 00421000
+* %BBODBGVT_3:;                                                         00422000
+*/* Start of PL/X Source                                             */ 00423000
+*                                                                       00424000
+*/*@211335D*/                                                           00425000
+*/* Start of PL/X Source */                                             00426000
+*                                                                       00427000
+*  DECLARE                                                              00428000
+*     1    BGVT BASED(*) BDY(DWORD),                                    00429000
+*      2    BBODBGVT_EYECATCHER CHAR(8), /* Dataarea's eyecatcher*/     00430000
+*      2    BBODBGVT_VERSION FIXED(31), /* Dataarea's version    */     00431000
+*      2    BBODBGVT_PCTABLE Pointer(31), /* Pointer to the system*/    00432000
+*                                 /* PC Table                    */     00433000
+*      2    BBODBGVT_ASR,            /* Pointer to the ASR       */     00434000
+*                                 /*  Serialization for this field*/    00435000
+*                                 /*  is via CDS                 */     00436000
+*        3   Sequence_number Fixed(32),                                 00437000
+*        3   ASR_Pointer Pointer(31),                                   00438000
+*      2    BBODBGVT_OLD_ASR Pointer(31),                               00439000
+*                                 /* Queue of old ASR entries that*/    00440000
+*                                 /*  are waiting for a time out  */    00441000
+*                                 /*  so that they can be deleted.*/    00442000
+*                                 /* Serialization: CS            */    00443000
+*      2    BBODBGVT_BMDT Pointer(31), /* Pointer to Boss Daemon  */    00444000
+*                                 /* module table                 */    00445000
+*      2    BBODBGVT_ESTAE_EXTENSION Pointer(31), /* Pointer to   */    00446000
+*                                 /* glue routine that branches to*/    00447000
+*                                 /*LE Estae Exit Extension Routine*/   00448000
+*      2    BBODBGVT_DAEMON_IOR Pointer(31), /*Pointer to Daemon IOR*/  00449000
+*                                 /*                     @L2A*/         00450000
+*      2    BBODBGVT_DAEMON_ASCB Ptr(31), /*Pointer to Daemon ASCB*/    00451000
+*                                 /*                          @L3A*/    00452000
+*      2    BBODBGVT_FRR  Ptr(31), /* Pointer to general FRR      */    00453000
+*                                 /* routine                  @L4A*/    00454000
+*      2    BBODBGVT_ADMP Ptr(31), /* Pointer to general ARR      */    00455000
+*                                 /* routine                  @L5A*/    00456000
+*      2    BBODBGVT_FLAGS CHAR(4), /* Flags                  @L7A*/    00457000
+*      3    BBODBGVT_FLAGS1 CHAR(1), /* Flags 1       @LI4689-1.1A*/    00458000
+*       5    BBODBGVT_CTRACE_DEFINE_DONE BIT(1), /* Ctrace define       00459000
+*                                    done for top level       @L7A*/    00460000
+*       5    *               BIT(1), /*                  @WS14419C*/    00461000
+*       5    BBODBGVT_NO_PBS BIT(1), /* no PB reporting       @LGA*/    00462000
+*       5    BBODBGVT_MODULES_LOADED_TO_COMMON BIT(1), /*@WS14419A*/    00463000
+*       5    BBODBGVT_GLUE_RTN_TO_ESTAE BIT(1), /* if on                00464000
+*                                    BBODBGVT_ESTAE_EXTENSION points    00465000
+*                                    to a glue routine   @MD15365A*/    00466000
+*       5    BBODBGVT_PCRT_LOADED_COMMON BIT(1), /* if on directed      00467000
+*                                    load was used to put pcrt in       00468000
+*                                    common             @LI4175.2A*/    00469000
+*       5    BBODBGVT_MULTI_CELL_MODE BIT(1),          /*@L413463A*/    00470000
+*       5    BBODBGVT_PCRT_KEY0       BIT(1), /* daemon loaded          00471000
+*                                    bbodpcrt is in key 0               00472000
+*                                    storage          @LI4689-1.1A*/    00473000
+*      3    BBODBGVT_FLAGS2 CHAR(1), /* Flags 2       @LI4689-1.1A*/    00474000
+*       5    BBODBGVT_PREV_PCRT_KEY0  BIT(1), /* previous daemon        00475000
+*                                    loaded bbodpcrt is in key 0        00476000
+*                                    storage          @LI4689-1.1A*/    00477000
+*       5    bboodbgvt_noswap_in_ppt Bit(1), /*  BPXBATA2 PPT entry     00478000
+*                                     has noswap          @489686A*/    00479000
+*      2    BBODBGVT_BBORTSRB Ptr(31), /* Pointer to TRACE SRB          00480000
+*                                      ROUTINE                @L7A*/    00481000
+*      2    BBODBGVT_BBORLCRM Pointer(31), /* Ptr to local              00482000
+*                                        communication resmgr @P5A*/    00483000
+*      2    BBODBGVT_DAEMON_RESMGR_TOKEN Fixed(32), /* Daemon     */    00484000
+*                                 /* Resource Manager Token       */    00485000
+*      2    BBODBGVT_DAEMON_RESMGR_PARM Char(8), /* Parameters    */    00486000
+*                                 /* passed to the daemon resource*/    00487000
+*                                 /* manager                      */    00488000
+*      2    BBODBGVT_DAEMON_STATUS char(4),                             00489000
+*                                 /* Current status of the Daemon */    00490000
+*        3   Daemon_Active Bit(1), /* The Daemon is active        */    00491000
+*        3   Daemon_Starting Bit(1), /* The Daemon is starting    */    00492000
+*        3   Daemon_Failed Bit(1), /* The Daemon has failed       */    00493000
+*        3   Daemon_Stopped Bit(1), /* The Daemon has stopped     */    00494000
+*        3   Daemon_Data_Sharing Bit(1), /* data sharing flag @P1A*/    00495000
+*        3   Daemon_Stopping BIT(1),     /* Daemon is stopping@P7A*/    00496000
+*      2 BBODBGVT_BBORRMGR Pointer(31), /* Pointer to res manager */    00497000
+*      2 BBODBGVT_DAEMON_IOR_ASCII Pointer(31), /* Pointer to daemon    00498000
+*                                      ascii IOR              @L9A*/    00499000
+*      2 BBODBGVT_SID_CPOOL_V2 fixed(32), /*SID cpool ID @WS14564C*/
+*      2 BBODBGVT_BBOOSCHD ptr(31), /*Ptr to SCHED frontend rtn @LAA*/  00501000
+*      2 BBODBGVT_BBOTETCN ptr(31), /*OTS rtn to perform ETCON  @LAA*/  00502000
+*      2 BBODBGVT_BBOTETDS ptr(31), /*OTS rtn to perform ETDIS  @LAA*/  00503000
+*      2 BBODBGVT_BBOOSRQA ptr(31), /*SRB to queue SR ACRW    @LBA*/    00504000
+*      2 BBODBGVT_BBOTETRM ptr(31), /*OTS RMTR routine        @LCA*/    00505000
+*      2 BBODBGVT_ORBR_ID  Fixed(32), /*ORB_Request ID        @LDA*/    00506000
+*      2 BBODBGVT_ORBR_SF_CP_INFO ptr(31), /* ORB_Request State         00507000
+*                                      Flag Cell Pool Info Ptr@LDA*/    00508000
+*      2 BBODBGVT_NAMING_IOR ptr(31), /* Naming IOR (Binary)  @LEA*/    00509000
+*      2 BBODBGVT_IR_IOR ptr(31),   /* Interface Repository IOR         00510000
+*                                      (Binary)               @LEA*/    00511000
+*      2 BBODBGVT_SM_SMO_IOR ptr(31), /* Sys Mgmt Server's SMO IOR      00512000
+*                                      (Binary)               @P2A*/    00513000
+*      2 BBODBGVT_DAEMON_IPNAME CHAR(256), /*daemon ip name from env    00514000
+*                                              variables      @P4C*/    00515000
+*      2 BBODBGVT_RESOLVE_IPNAME CHAR(256), /* resolve ip name from     00516000
+*                                             env variables   @P5C*/    00517000
+*      2 BBODBGVT_SRB_PARM_CPOOL fixed(32), /* srb parameter list       00518000
+*                                      cpool id               @P6A*/    00519000
+*      2 BBODBGVT_SRBF_DYNA_CPOOL fixed(32), /* srbf dyn area           00520000
+*                                      cpool id               @P8A*/    00521000
+*      2 *                 bit(16),    /*                @WS14419C*/    00522000
+*      2 *                       CHAR(8), /*             @WS14419C*/    00523000
+*      2 BBODBGVT_SRB_PARM_CPOOL_VER Fixed(16), /* SRB Parmlist         00524000
+*                                      cpool version     @PQ62702A*/    00525000
+*      2 BBODBGVT_BBOAOCNP Pointer(64),/* OTMA ID Table   @645942A*/    00526000
+*      2 BBODBGVT_BBOAMCST_CDS_AREA,   /* OLA client code@F003703A*/    00527000
+*                                      /* only in master BGVT     */    00528000
+*        3 BBODBGVT_BBOAMCST_COUNT Fixed(32),         /* @F003703A*/    00529000
+*        3 BBODBGVT_BBOAMCST_PTR   Pointer(31),       /* @F003703A*/    00530000
+*      2 BBODBGVT_RSVD CHAR(76),   /* Reserved space for service        00531000
+*                                      update for 3.02 only             00532000
+*                           (on quad word boundary 0x2A0)@F003703C*/    00533000
+*      2 BBODBGVT_FRCA_CsvdylpaDeleteToken Char(8), /* token
+*                                      needed when taking FRCA
+*                                      out of lpa        @PM22959A*/
+*      2 BBODBGVT_TS70_CsvdylpaDeleteToken Char(8), /* token
+*                                      needed when taking TS70
+*                                      out of lpa        @PM22959A*/
+*      2 BBODBGVT_PCRT_CsvdylpaDeleteToken Char(8), /* token            00534000
+*                                      needed when taking pcrt          00535000
+*                                      out of lpa        @PK77358A*/    00536000
+*      2 BBODBGVT_STATE_CHANGE_MAP Ptr(31), /* LI44639 */               00537000
+*      2 BBODBGVT_PCRT_LENGTH Fixed(32), /* length of pcrt              00538000
+*                                                       @LI4175.2A*/    00539000
+*      2 BBODBGVT_PREV_PCRT_LENGTH Fixed(32), /* length                 00540000
+*                                       of previous pcrt@LI4175.2A*/    00541000
+*      2 BBODBGVT_PREV_PCRT Ptr(31), /* previous pcrt   @LI4175.2A*/    00542000
+*      2 BBODBGVT_PCQ_PTR  Ptr(31),   /* PCQ pointer    @LI4175.2A*/    00543000
+*      2 BBODBGVT_PCQE_CPOOL_VERSION Fixed(32), /* PCQE cpool           00544000
+*                                      version          @LI4175.2A*/    00545000
+*      2 BBODBGVT_PCQE_CPOOL Fixed(32), /* PCQE cpool id@LI4175.2A*/    00546000
+*      2 BBODBGVT_PRE_V61_BBORLEXT_PTR Ptr(31), /* address of           00547000
+*                                      BBORLEXT used for versions       00548000
+*                                      earlier than V61 @LI4175.2A*/    00549000
+*      2 BBODBGVT_PCRT Ptr(31),     /* daemon PC routine table          00550000
+*                                                       @LI4175.2A*/    00551000
+*      2 BBODBGVT_BBOCWSMP Ptr(31), /* Ptr to WLM Sampling Exit         00552000
+*                                                        @PQ72135A*/    00553000
+*      2 BBODBGVT_BBOCWBAL Ptr(31), /* Ptr to WLM reBalancing Exit      00554000
+*                                                        @PQ72135A*/    00555000
+*      2 BBODBGVT_BBORTRCD ptr(31), /*Ptr to PL/X trace routine @LFA*/  00556000
+*      2 BBODBGVT_SID_CPOOL fixed(32), /*SID cpool ID -- exists to
+*                                      be compatible with pre-V8 GA
+*                                      level code       @TODO0162C*/
+*      2 BBODBGVT_SID_CPOOL_VERSION fixed(32), /*BBODBGVT_SID_CPOOL_V2
+*                                      Cpool version    @TODO0162C*/
+*      2 BBODBGVT_DAEMON_GROUP_NAME CHAR(8), /* Identify daemon group.  00559000
+*                       Null term if less than 8 chars. @WS14419A */    00560000
+*      2 BBODBGVT_COMMON_BMDT_PTR Ptr(31), /*            @WS14419A*/    00561000
+*      2 BBODBGVT_OLD_BMDT_PTR Ptr(31), /*               @WS14419A*/    00562000
+*      2 BBODBGVT_DAEMON_ROUTING fixed(32), /* smart routing:           00563000
+*                               0=wlm, 1=none, 2=daemon @WS14419A */    00564000
+*      2 BBODBGVT_BBORLEXT_PTR Ptr(31), /*estae extension @WS14419A*/   00565000
+*      2 BBODBGVT_SRB_PARM_CPOOL2 fixed(32), /* srb parameter list      00566000
+*                                      cpool id          @MD15365A*/    00567000
+*                                                                       00568000
+*      2 BBODBGVT_SECURITY_REALM_NAME ptr(31), /* Pointer to SAF        00569000
+*                                      Realm             @WS14334A*/    00570000
+*      2 BBODBGVT_BBODASRS Ptr(31), /* ASR services routie @WS14419A*/  00571000
+*      2 BBODBGVT_BBOUSHQD Ptr(31), /* BBUSHQE.bboushqeDestroy rtn      00572000
+*                                      (bboushqd.plx)      @MD14685A*/  00573000
+*      2 BBODBGVT_xcf_status_field_cpool Fixed(32), /* DCS XCF status   00574000
+*                                      field cpool        @LI4310A*/    00575000
+*      2 BBODBGVT_BBOASHR Ptr(64) Bdy(DWORD), /* Shared memory area     00576000
+*                                     for new connectors  @LI4798I7A*/  00577000
+*      2 BBODBGVT_extension Ptr(31);/* not set yet. this is to be used  00578000
+*                                      to point to an extension if we   00579000
+*                                      ever need more room in the bgvt  00580000
+*                                      that hangs off the ecvt.  since  00581000
+*                                      multiple 5.0 nodes and 401 will  00582000
+*                                      be sharing the bgvt there is no  00583000
+*                                      easy safe way to delete the      00584000
+*                                      bgvt hung off the ecvt. Note in  00585000
+*                                      4.01 and 5.0 LE uses the         00586000
+*                                      BBODBGVT_ESTAE_EXTENSION field   00587000
+*                                      of the bgvt pointed to by the    00588000
+*                                      ecvt.             @MD15365A*/    00589000
+*   DCL                                                                 00590000
+*     BBODBGVT_CUR_VER FIXED(31) CONSTANT(2); /*Current Version @PBC*/  00591000
+*   DCL                                                                 00592000
+*     BBODBGVT_EYECATCHER_VALUE CHAR(8) /* eyecatcher value       */    00593000
+*         CONSTANT('BBODBGVT');                                         00594000
+*   Dcl                                                                 00595000
+*     BBODBGVT_base_daemon_group_name Char(8) Constant('BBOODGN.');/*   00596000
+*                                                        @WS14419A*/    00597000
+*/* End of PL/X Source                                            */    00598000
+*                                                                       00599000
+*/*Start @211335A*/                                                     00600000
+*%IF IPCSFRMT='IPCSFRMT' %THEN %DO;                                     00601000
+*                                                                       00602000
+*?BLSQMDEF(BBODBGVT,EXTERNAL) CBLEN(length(BGVT)) PREFIX(0)             00603000
+*               OFFSETS(PRINT) HEADER('BBODBGVT');                      00604000
+*                                                                       00605000
+*?BLSQMFLD NAME(BGVTID)   DTYPE(EBCDIC)                                 00606000
+*               OFF(Offset(BBODBGVT_EYECATCHER))                        00607000
+*               LEN(Length(BBODBGVT_EYECATCHER));                       00608000
+*?BLSQMFLD NAME(VERSION)    DTYPE(HEX)                                  00609000
+*               OFF(Offset(BBODBGVT_VERSION))                           00610000
+*               LEN(Length(BBODBGVT_VERSION));                          00611000
+*?BLSQMFLD NAME(PCTABLE)    DTYPE(HEX)                                  00612000
+*               OFF(Offset(BBODBGVT_PCTABLE))                           00613000
+*               LEN(Length(BBODBGVT_PCTABLE));                          00614000
+*?BLSQMFLD NAME(SeqNum)    DTYPE(HEX)                                   00615000
+*               OFF(Offset(SEQUENCE_NUMBER))                            00616000
+*               LEN(Length(SEQUENCE_NUMBER));                           00617000
+*?BLSQMFLD NAME(AsrPtr)    DTYPE(HEX)                                   00618000
+*               OFF(Offset(ASR_POINTER))                                00619000
+*               LEN(Length(ASR_POINTER));                               00620000
+*?BLSQMFLD NAME(OLDASR)    DTYPE(HEX)                                   00621000
+*               OFF(Offset(BBODBGVT_OLD_ASR))                           00622000
+*               LEN(Length(BBODBGVT_OLD_ASR));                          00623000
+*?BLSQMFLD NAME(BMDT)    DTYPE(HEX)                                     00624000
+*               OFF(Offset(BBODBGVT_BMDT))                              00625000
+*               LEN(Length(BBODBGVT_BMDT));                             00626000
+*?BLSQMFLD NAME(ESTAEEXT)    DTYPE(HEX)                                 00627000
+*               OFF(Offset(BBODBGVT_ESTAE_EXTENSION))                   00628000
+*               LEN(Length(BBODBGVT_ESTAE_EXTENSION));                  00629000
+*?BLSQMFLD SHDR(DAEMON) NEWLINE;                                        00630000
+*?BLSQMFLD NAME(IOR)    DTYPE(HEX)                                      00631000
+*               OFF(Offset(BBODBGVT_DAEMON_IOR))                        00632000
+*               LEN(Length(BBODBGVT_DAEMON_IOR));                       00633000
+*?BLSQMFLD NAME(ASCB)    DTYPE(HEX)                                     00634000
+*               OFF(Offset(BBODBGVT_DAEMON_ASCB))                       00635000
+*               LEN(Length(BBODBGVT_DAEMON_ASCB));                      00636000
+*?BLSQMFLD NAME(FRR) NEWLINE   DTYPE(HEX)                               00637000
+*               OFF(Offset(BBODBGVT_FRR))                               00638000
+*               LEN(Length(BBODBGVT_FRR));                              00639000
+*?BLSQMFLD NAME(ADMP)    DTYPE(HEX)                                     00640000
+*               OFF(Offset(BBODBGVT_ADMP))                              00641000
+*               LEN(Length(BBODBGVT_ADMP));                             00642000
+*?BLSQMFLD NAME(FLAGS)    DTYPE(HEX)                                    00643000
+*               OFF(Offset(BBODBGVT_FLAGS))                             00644000
+*               LEN(Length(BBODBGVT_FLAGS)) NEWLINE;                    00645000
+*?BLSQMFLD NAME(BGVTFLG) VIEW('0200'X) DECODE                           00646000
+*               OFF(Offset(BBODBGVT_FLAGS))                             00647000
+*               LEN(Length(BBODBGVT_FLAGS));                            00648000
+*?BLSQMFLD NAME(BGVTFL2) VIEW('0200'X) DECODE                           00649000
+*               OFF(Offset(BBODBGVT_FLAGS2))                            00650000
+*               LEN(Length(BBODBGVT_FLAGS2));                           00651000
+*?BLSQMFLD NAME(BBORTSRB)    DTYPE(HEX)                                 00652000
+*               OFF(Offset(BBODBGVT_BBORTSRB))                          00653000
+*               LEN(Length(BBODBGVT_BBORTSRB)) NEWLINE;                 00654000
+*?BLSQMFLD NAME(BBORLCRM)    DTYPE(HEX)                                 00655000
+*               OFF(Offset(BBODBGVT_BBORLCRM))                          00656000
+*               LEN(Length(BBODBGVT_BBORLCRM));                         00657000
+*?BLSQMFLD SHDR(RESMGR) NEWLINE;                                        00658000
+*?BLSQMFLD NAME(TOKEN)    DTYPE(HEX)                                    00659000
+*               OFF(Offset(BBODBGVT_DAEMON_RESMGR_TOKEN))               00660000
+*               LEN(Length(BBODBGVT_DAEMON_RESMGR_TOKEN));              00661000
+*?BLSQMFLD SHDR(BLNKLINE) NEWLINE;                                      00662000
+*?BLSQMFLD NAME(PARM)    DTYPE(EBCDIC)                                  00663000
+*               OFF(Offset(BBODBGVT_DAEMON_RESMGR_PARM))                00664000
+*               LEN(Length(BBODBGVT_DAEMON_RESMGR_PARM));               00665000
+*?BLSQMFLD NAME(STATUS) DTYPE(HEX)                                      00666000
+*               OFF(Offset(BBODBGVT_DAEMON_STATUS))                     00667000
+*               LEN(Length(BBODBGVT_DAEMON_STATUS)) NEWLINE;            00668000
+*?BLSQMFLD NAME(DMNFLAG) VIEW('0200'X) DECODE                           00669000
+*               OFF(Offset(BBODBGVT_DAEMON_STATUS))                     00670000
+*               LEN(Length(BBODBGVT_DAEMON_STATUS));                    00671000
+*?BLSQMFLD NAME(BBORRMGR) NEWLINE  DTYPE(HEX)                           00672000
+*               OFF(Offset(BBODBGVT_BBORRMGR))                          00673000
+*               LEN(Length(BBODBGVT_BBORRMGR));                         00674000
+*?BLSQMFLD NAME(IORASCII)    DTYPE(HEX)                                 00675000
+*               OFF(Offset(BBODBGVT_DAEMON_IOR_ASCII))                  00676000
+*               LEN(Length(BBODBGVT_DAEMON_IOR_ASCII));                 00677000
+*?BLSQMFLD NAME(SIDCPID2)    DTYPE(HEX)                 /* @TODO0162A*/
+*               OFF(Offset(BBODBGVT_SID_CPOOL_V2))
+*               LEN(Length(BBODBGVT_SID_CPOOL_V2));
+*?BLSQMFLD NAME(SchedPtr)    DTYPE(HEX)                                 00678000
+*               OFF(Offset(BBODBGVT_BBOOSCHD))                          00679000
+*               LEN(Length(BBODBGVT_BBOOSCHD));                         00680000
+*?BLSQMFLD NAME(OtsEtcon)    DTYPE(HEX)                                 00681000
+*               OFF(Offset(BBODBGVT_BBOTETCN))                          00682000
+*               LEN(Length(BBODBGVT_BBOTETCN));                         00683000
+*?BLSQMFLD NAME(OtsEtdis)    DTYPE(HEX)                                 00684000
+*               OFF(Offset(BBODBGVT_BBOTETDS))                          00685000
+*               LEN(Length(BBODBGVT_BBOTETDS));                         00686000
+*?BLSQMFLD NAME(SrAcrw)    DTYPE(HEX)                                   00687000
+*               OFF(Offset(BBODBGVT_BBOOSRQA))                          00688000
+*               LEN(Length(BBODBGVT_BBOOSRQA));                         00689000
+*?BLSQMFLD NAME(OtsRmtr)    DTYPE(HEX)                                  00690000
+*               OFF(Offset(BBODBGVT_BBOTETRM))                          00691000
+*               LEN(Length(BBODBGVT_BBOTETRM));                         00692000
+*?BLSQMFLD NAME(ORBRID)    DTYPE(HEX)                                   00693000
+*               OFF(Offset(BBODBGVT_ORBR_ID))                           00694000
+*               LEN(Length(BBODBGVT_ORBR_ID));                          00695000
+*?BLSQMFLD NAME(ORBRSFCP)    DTYPE(HEX)
+*               OFF(Offset(BBODBGVT_ORBR_SF_CP_INFO))                   00698000
+*               LEN(Length(BBODBGVT_ORBR_SF_CP_INFO));                  00699000
+*?BLSQMFLD NAME(NAMNGIOR)    DTYPE(HEX)                                 00700000
+*               OFF(Offset(BBODBGVT_NAMING_IOR))                        00701000
+*               LEN(Length(BBODBGVT_NAMING_IOR));                       00702000
+*?BLSQMFLD NAME(IRIORPTR)    DTYPE(HEX)                                 00703000
+*               OFF(Offset(BBODBGVT_IR_IOR))                            00704000
+*               LEN(Length(BBODBGVT_IR_IOR));                           00705000
+*?BLSQMFLD NAME(SMSMO)    DTYPE(HEX)                                    00706000
+*               OFF(Offset(BBODBGVT_SM_SMO_IOR))                        00707000
+*               LEN(Length(BBODBGVT_SM_SMO_IOR));                       00708000
+*?BLSQMFLD NAME(DIPNAME)  DTYPE(EBCDIC)                                 00709000
+*               OFF(Offset(BBODBGVT_DAEMON_IPNAME))                     00710000
+*               LEN(Length(BBODBGVT_DAEMON_IPNAME)) NEWLINE;            00711000
+*?BLSQMFLD NAME(RIPNAME) DTYPE(EBCDIC)                                  00712000
+*               OFF(Offset(BBODBGVT_RESOLVE_IPNAME))                    00713000
+*               LEN(Length(BBODBGVT_RESOLVE_IPNAME)) NEWLINE;           00714000
+*?BLSQMFLD NAME(PARMPOOL)    DTYPE(HEX)                                 00715000
+*               OFF(Offset(BBODBGVT_SRB_PARM_CPOOL))                    00716000
+*               LEN(Length(BBODBGVT_SRB_PARM_CPOOL)) NEWLINE;           00717000
+*?BLSQMFLD NAME(DYNAPOOL)    DTYPE(HEX)                                 00718000
+*               OFF(Offset(BBODBGVT_SRBF_DYNA_CPOOL))                   00719000
+*               LEN(Length(BBODBGVT_SRBF_DYNA_CPOOL));                  00720000
+*?BLSQMFLD NAME(SRBCPVER)    DTYPE(HEX)                                 00721000
+*               OFF(Offset(BBODBGVT_SRB_PARM_CPOOL_VER))                00722000
+*               LEN(Length(BBODBGVT_SRB_PARM_CPOOL_VER));               00723000
+*?BLSQMFLD NAME(BBOAOCNP)    DTYPE(HEX)                                 00724000
+*               OFF(Offset(BBODBGVT_BBOAOCNP))                          00725000
+*               LEN(Length(BBODBGVT_BBOAOCNP));           /* @645942A*/ 00726000
+*?BLSQMFLD NAME(RSVD)    DTYPE(EBCDIC)                                  00727000
+*               OFF(Offset(BBODBGVT_RSVD))                              00728000
+*               LEN(Length(BBODBGVT_RSVD));                             00729000
+*?BLSQMFLD NAME(FRCAdtkn)    DTYPE(HEX)
+*               OFF(Offset(BBODBGVT_FRCA_CsvdylpaDeleteToken))
+*       LEN(Length(BBODBGVT_FRCA_CsvdylpaDeleteToken));  /* @PM22959A*/
+*?BLSQMFLD NAME(ts70dtkn)    DTYPE(HEX)
+*               OFF(Offset(BBODBGVT_TS70_CsvdylpaDeleteToken))
+*       LEN(Length(BBODBGVT_TS70_CsvdylpaDeleteToken));  /* @PM22959A*/
+ ?BLSQMFLD NAME(lpadeltk)    DTYPE(HEX)
+*               OFF(Offset(BBODBGVT_PCRT_CsvdylpaDeleteToken))          00731000
+*       LEN(Length(BBODBGVT_PCRT_CsvdylpaDeleteToken));  /* @PK77358A*/ 00732000
+*?BLSQMFLD NAME(STATEMAP)    DTYPE(HEX)                                 00733000
+*               OFF(Offset(BBODBGVT_STATE_CHANGE_MAP))                  00734000
+*               LEN(Length(BBODBGVT_STATE_CHANGE_MAP));  /* @PK77358A*/ 00735000
+*?BLSQMFLD NAME(lengpcrt)    DTYPE(HEX)                                 00736000
+*               OFF(Offset(BBODBGVT_PCRT_LENGTH))                       00737000
+*               LEN(Length(BBODBGVT_PCRT_LENGTH)); /* @LI4175.2A*/      00738000
+*?BLSQMFLD NAME(plenpcrt)    DTYPE(HEX)                                 00739000
+*               OFF(Offset(BBODBGVT_PREV_PCRT_LENGTH))                  00740000
+*               LEN(Length(BBODBGVT_PREV_PCRT_LENGTH)); /* @LI4175.2A*/ 00741000
+*?BLSQMFLD NAME(prevpcrt)    DTYPE(HEX)                                 00742000
+*               OFF(Offset(BBODBGVT_PREV_PCRT))                         00743000
+*               LEN(Length(BBODBGVT_PREV_PCRT));        /* @LI4175.2A*/ 00744000
+*?BLSQMFLD NAME(PCQPTR  )    DTYPE(HEX)                                 00745000
+*               OFF(Offset(BBODBGVT_PCQ_PTR))                           00746000
+*               LEN(Length(BBODBGVT_PCQ_PTR));          /* @LI4175.2A*/ 00747000
+*?BLSQMFLD NAME(PCQECPLV)    DTYPE(HEX)                                 00748000
+*               OFF(Offset(BBODBGVT_PCQE_CPOOL_VERSION))                00749000
+*               LEN(Length(BBODBGVT_PCQE_CPOOL_VERSION));/*@LI4175.2A*/ 00750000
+*?BLSQMFLD NAME(PCQECPOL)    DTYPE(HEX)                                 00751000
+*               OFF(Offset(BBODBGVT_PCQE_CPOOL))                        00752000
+*               LEN(Length(BBODBGVT_PCQE_CPOOL));       /* @LI4175.2A*/ 00753000
+*?BLSQMFLD NAME(PRE7LEXT)    DTYPE(HEX)                                 00754000
+*               OFF(Offset(BBODBGVT_PRE_V61_BBORLEXT_PTR))              00755000
+*               LEN(Length(BBODBGVT_PRE_V61_BBORLEXT_PTR)); /*          00756000
+*                                                          @LI4175.2A*/ 00757000
+*?BLSQMFLD NAME(BBODPCRT)    DTYPE(HEX)                                 00758000
+*               OFF(Offset(BBODBGVT_PCRT))                              00759000
+*               LEN(Length(BBODBGVT_PCRT));             /* @LI4175.2A*/ 00760000
+*?BLSQMFLD NAME(BBOCWSMP)    DTYPE(HEX)                                 00761000
+*               OFF(Offset(BBODBGVT_BBOCWSMP))                          00762000
+*               LEN(Length(BBODBGVT_BBOCWSMP));                         00763000
+*?BLSQMFLD NAME(BBOCWBAL)    DTYPE(HEX)                                 00764000
+*               OFF(Offset(BBODBGVT_BBOCWBAL))                          00765000
+*               LEN(Length(BBODBGVT_BBOCWBAL));                         00766000
+*?BLSQMFLD NAME(BBORTRCD)    DTYPE(HEX)                                 00767000
+*               OFF(Offset(BBODBGVT_BBORTRCD))                          00768000
+*               LEN(Length(BBODBGVT_BBORTRCD));                         00769000
+*?BLSQMFLD NAME(SIDCPOOL)    DTYPE(HEX)                                 00770000
+*               OFF(Offset(BBODBGVT_SID_CPOOL))                         00771000
+*               LEN(Length(BBODBGVT_SID_CPOOL));                        00772000
+*?BLSQMFLD NAME(SIDCPVER)    DTYPE(HEX)                 /* @TODO0162C*/
+*              OFF(Offset(BBODBGVT_SID_CPOOL_VERSION))
+*              LEN(Length(BBODBGVT_SID_CPOOL_VERSION));
+*?BLSQMFLD NAME(DMNGRPNM)    DTYPE(EBCDIC)                              00776000
+*               OFF(Offset(BBODBGVT_DAEMON_GROUP_NAME))                 00777000
+*               LEN(Length(BBODBGVT_DAEMON_GROUP_NAME)) NEWLINE;        00778000
+*?BLSQMFLD NAME(COMMBMDT)    DTYPE(HEX)                                 00779000
+*               OFF(Offset(BBODBGVT_COMMON_BMDT_PTR))                   00780000
+*               LEN(Length(BBODBGVT_COMMON_BMDT_PTR));                  00781000
+*?BLSQMFLD NAME(OLDBMDT)    DTYPE(HEX)                                  00782000
+*               OFF(Offset(BBODBGVT_OLD_BMDT_PTR))                      00783000
+*               LEN(Length(BBODBGVT_OLD_BMDT_PTR));                     00784000
+*?BLSQMFLD NAME(ROUTING)    DTYPE(HEX)                                  00785000
+*               OFF(Offset(BBODBGVT_DAEMON_ROUTING))                    00786000
+*               LEN(Length(BBODBGVT_DAEMON_ROUTING));                   00787000
+*?BLSQMFLD NAME(BBORLEXT)    DTYPE(HEX)                                 00788000
+*               OFF(Offset(BBODBGVT_BBORLEXT_PTR))                      00789000
+*               LEN(Length(BBODBGVT_BBORLEXT_PTR));                     00790000
+*?BLSQMFLD NAME(PRMPOOL2)    DTYPE(HEX)                                 00791000
+*               OFF(Offset(BBODBGVT_SRB_PARM_CPOOL2))                   00792000
+*               LEN(Length(BBODBGVT_SRB_PARM_CPOOL2));                  00793000
+*?BLSQMFLD NAME(SAFREALM)    DTYPE(HEX)                                 00794000
+*               OFF(Offset(BBODBGVT_SECURITY_REALM_NAME))               00795000
+*               LEN(Length(BBODBGVT_SECURITY_REALM_NAME));              00796000
+*?BLSQMFLD NAME(BBODASRS)    DTYPE(HEX)                                 00797000
+*               OFF(Offset(BBODBGVT_BBODASRS))                          00798000
+*               LEN(Length(BBODBGVT_BBODASRS));                         00799000
+*?BLSQMFLD NAME(USHQDPTR)    DTYPE(HEX)                                 00800000
+*               OFF(Offset(BBODBGVT_BBOUSHQD))                          00801000
+*               LEN(Length(BBODBGVT_BBOUSHQD));                         00802000
+*?BLSQMFLD NAME(XCFCPOOL)    DTYPE(HEX)                                 00803000
+*               OFF(Offset(BBODBGVT_xcf_status_field_cpool))            00804000
+*               LEN(Length(BBODBGVT_xcf_status_field_cpool));           00805000
+*?BLSQMFLD NAME(BBOASHR)    DTYPE(HEX)                                  00806000
+*               OFF(Offset(BBODBGVT_BBOASHR))                           00807000
+*               LEN(Offset(BBODBGVT_BBOASHR));                          00808000
+*?BLSQMFLD NAME(EXTENSIO)    DTYPE(HEX)                                 00809000
+*               OFF(Offset(BBODBGVT_EXTENSION))                         00810000
+*               LEN(Length(BBODBGVT_EXTENSION));                        00811000
+*?BLSQMDEF(END);                                                        00812000
+*                                                                       00813000
+*?BLSQSHDR('DAEMON: ') MF(LIST,DAEMON,COMPLETE);                        00814000
+*?BLSQSHDR('DAEMON RESMGR ') MF(LIST,RESMGR,COMPLETE);                  00815000
+*?BLSQSHDR(' ') MF(LIST,BLNKLINE,COMPLETE);                             00816000
+*                                                                       00817000
+*?BLSQMDEF(BGVTFLG) CBLEN(Length(BBODBGVT_FLAGS))                       00818000
+*           OFFSETS(NOPRINT) PREFIX(8) LBLSPC(2);                       00819000
+* ?BLSQMFLD SHDR(FLG1TITL);                                             00820000
+* ?BLSQMFLD SHDR(BIT100) VIEW('8008'X) NEWLINE;                         00821000
+* ?BLSQMFLD SHDR(BIT101) VIEW('4008'X) NEWLINE;                         00822000
+* ?BLSQMFLD SHDR(BIT102) VIEW('2008'X) NEWLINE;                         00823000
+* ?BLSQMFLD SHDR(BIT103) VIEW('1008'X) NEWLINE;                         00824000
+* ?BLSQMFLD SHDR(BIT104) VIEW('0808'X) NEWLINE;                         00825000
+* ?BLSQMFLD SHDR(BIT105) VIEW('0408'X) NEWLINE; /* @LI4175.2A*/         00826000
+* ?BLSQMFLD SHDR(BIT106) VIEW('0208'X) NEWLINE; /*  @L413463A*/         00827000
+* ?BLSQMFLD SHDR(BIT107) VIEW('0108'X) NEWLINE; /*@LI4689-1.1A*/        00828000
+*?BLSQMDEF(END);                                                        00829000
+*                                                                       00830000
+*?BLSQSHDR('BBODBGVT_FLAGS: ') MF(LIST,FLG1TITL,COMPLETE);              00831000
+*?BLSQSHDR('                 Ctrace define done ')                      00832000
+*          MF(LIST,BIT100,COMPLETE);                                    00833000
+*?BLSQSHDR('                                    ')                      00834000
+*          MF(LIST,BIT101,COMPLETE);                                    00835000
+*?BLSQSHDR('                 no PB reporting ')                         00836000
+*          MF(LIST,BIT102,COMPLETE);                                    00837000
+*?BLSQSHDR('                 modules loaded to common ')                00838000
+*          MF(LIST,BIT103,COMPLETE);                                    00839000
+*?BLSQSHDR('                 estae glue routine set ')                  00840000
+*          MF(LIST,BIT104,COMPLETE);                                    00841000
+*?BLSQSHDR('                 pcrt loaded to common  ')                  00842000
+*          MF(LIST,BIT105,COMPLETE);                                    00843000
+*?BLSQSHDR('                 multi-cell mode ')                         00844000
+*          MF(LIST,BIT106,COMPLETE);              /*@L413463A*/         00845000
+*?BLSQSHDR('                 pcrt key 0      ')                         00846000
+*          MF(LIST,BIT107,COMPLETE);            /*@LI4689-1.1A*/        00847000
+*                                                                       00848000
+*?BLSQMDEF(BGVTFL2) CBLEN(Length(BBODBGVT_FLAGS2))                      00849000
+*           OFFSETS(NOPRINT) PREFIX(8) LBLSPC(2); /*@LI4689-1.1A*/      00850000
+* ?BLSQMFLD SHDR(FLG2TITL);                       /*@LI4689-1.1A*/      00851000
+* ?BLSQMFLD SHDR(BIT200) VIEW('8008'X) NEWLINE;   /*@LI4689-1.1A*/      00852000
+* ?BLSQMFLD SHDR(BIT201) VIEW('4008'X) NEWLINE;   /*    @489686A*/      00853000
+*?BLSQMDEF(END);                                  /*@LI4689-1.1A*/      00854000
+*?BLSQSHDR('BBODBGVT_FLAGS2 ') MF(LIST,FLG2TITL,COMPLETE); /*           00855000
+*                                                   @LI4689-1.1A*/      00856000
+*?BLSQSHDR('                 prev pcrt key 0    ')                      00857000
+*          MF(LIST,BIT200,COMPLETE);              /*@LI4689-1.1A*/      00858000
+*?BLSQSHDR('                 noswap in ppt      ')                      00859000
+*          MF(LIST,BIT201,COMPLETE);              /*    @489686A*/      00860000
+*?BLSQSHDR('                 masters connected  ')                      00861000
+*          MF(LIST,BIT202,COMPLETE);              /*  @LI4798I7A*/      00862000
+*                                                                       00863000
+*?BLSQMDEF(DMNFLAG) CBLEN(Length(BBODBGVT_DAEMON_STATUS))               00864000
+*           OFFSETS(NOPRINT) PREFIX(8) LBLSPC(2);                       00865000
+* ?BLSQMFLD SHDR(FLAGTITL) VIEW('0200'X);                               00866000
+* ?BLSQMFLD SHDR(BIT000) VIEW('8008'X) NEWLINE;                         00867000
+* ?BLSQMFLD SHDR(BIT001) VIEW('4008'X) NEWLINE;                         00868000
+* ?BLSQMFLD SHDR(BIT002) VIEW('2008'X) NEWLINE;                         00869000
+* ?BLSQMFLD SHDR(BIT003) VIEW('1008'X) NEWLINE;                         00870000
+* ?BLSQMFLD SHDR(BIT004) VIEW('0808'X) NEWLINE;                         00871000
+* ?BLSQMFLD SHDR(BIT005) VIEW('0408'X) NEWLINE;                         00872000
+*?BLSQMDEF(END);                                                        00873000
+*                                                                       00874000
+*?BLSQSHDR('BBODBGVT_DAEMON_STATUS Flags: ')                            00875000
+*          MF(LIST,FLAGTITL,COMPLETE);                                  00876000
+*?BLSQSHDR('                 Daemon is active ')                        00877000
+*          MF(LIST,BIT000,COMPLETE);                                    00878000
+*?BLSQSHDR('                 Daemon is starting ')                      00879000
+*          MF(LIST,BIT001,COMPLETE);                                    00880000
+*?BLSQSHDR('                 Daemon has failed ')                       00881000
+*          MF(LIST,BIT002,COMPLETE);                                    00882000
+*?BLSQSHDR('                 Daemon hs stopped ')                       00883000
+*          MF(LIST,BIT003,COMPLETE);                                    00884000
+*?BLSQSHDR('                 Data sharing flag ')                       00885000
+*          MF(LIST,BIT004,COMPLETE);                                    00886000
+*?BLSQSHDR('                 Daemon stopping ')                         00887000
+*          MF(LIST,BIT005,COMPLETE);                                    00888000
+*                                                                       00889000
+*/*@211335D*/                                                           00890000
+*%END;                                                                  00891000
+*%END;                                                                  00892000
+*/*End @211335A*/                                                       00893000
+*/* End of PL/X Source                                               */ 00894000
+* %IF BBODBGVT_LIST ^= 'NO' &                                           00895000
+*    ZCBPRINT ^= 'NO' %THEN                                             00896000
+*   %GOTO BBODBGVT_4;                                                   00897000
+*   @LIST POP NOECHO;                                                   00898000
+* %BBODBGVT_4:;                                                         00899000
+* %END;                                                                 00900000

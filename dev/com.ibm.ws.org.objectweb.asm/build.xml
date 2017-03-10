@@ -1,0 +1,8 @@
+<project name="com.ibm.ws.org.objectweb.asm" default="build">
+  <import file="../ant_build/public_imports/rejar_imports.xml" />
+
+  <target name="package">
+    <rejar version="1.0" original.jar.name="org.objectweb.asm" original.jar.version="5.0" src.jar="lib/asm-all-5.0.3.jar" />
+  </target>
+
+</project>

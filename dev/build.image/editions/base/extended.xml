@@ -1,0 +1,13 @@
+<server>
+  <featureManager>
+    <feature>jaxb-2.2</feature>
+    <feature>jaxws-2.2</feature>
+    <feature>wasJmsClient-1.1</feature>
+    <feature>wasJmsSecurity-1.0</feature>
+    <feature>wasJmsServer-1.0</feature>
+    <feature>wmqJmsClient-1.1</feature>
+    <feature>mongodb-2.0</feature>
+    <feature>jmsMdb-3.1</feature>
+    <feature>wsSecurity-1.1</feature>
+  </featureManager>
+</server>

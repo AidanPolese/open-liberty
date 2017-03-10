@@ -1,0 +1,19 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="org.eclipse.osgi-3.7.0">
+  <originbase release="WAS85" fe="SERV1" level="" components="prereq.osgi.fw.cds"/>
+
+  <notes>
+<![CDATA[
+    IBM code to enable 'class data sharing' in Equinox.
+    https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.dev_tools/prereqs/prereq.osgi.fw.cds/2.1.0/20100913/download.zip
+    
+    Normally we can get this from WAS from the above location, but the 2.2.0 jar is not available in WAS yet. It has been
+    downloaded from     
+    http://ies.ottawa.ibm.com/iss/ies/downloads/buildpage.php?build=I-I20120314-201203141630&os=win32,win32,x86
+    JXE shared classes Runtime/com.ibm.cds_2.2.0.zip
+    
+    The COO that needs to be quoted for using the 2.2.0 CDS jar is "IBM Eclipse SDK 3.4.1 /JXE 2.0.6 GA" COO# CA720080178
+    
+]]>
+  </notes>
+</releaseInfo>

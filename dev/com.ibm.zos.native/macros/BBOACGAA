@@ -1,0 +1,32 @@
+*                                                                              
+* IBM Confidential                                                             
+*                                                                              
+* OCO Source Materials                                                         
+*                                                                              
+* Copyright IBM Corp. 2014                                                     
+*                                                                              
+* The source code for this program is not published or otherwise               
+* divested of its trade secrets, irrespective of what has been                 
+* deposited with the U.S. Copyright Office.
+*                                    
+* -------------------------------------------------------------------
+         MACRO
+         BBOACGAA  ,
+*
+* The following control block (BBOACGAA) is used in
+* bboatrue.cicsasm.
+*
+* Note: keep the assembler and plx mapping in sync
+*
+* We get a 4096 byte area for this - so we can grow this if needed.
+*
+BBOACGAA DSECT                       Global Work Area for BBOATRUE
+BBOACGAA_EYE     DS CL8         0x00 Eyecatcher BBOACGAA
+BBOACGAA_VER     DS H           0x08 Version
+BBOACGAA_SIZ     DS H           0x0A Size
+BBOACGAA_FLAGS   DS F           0x0C Flags
+BBOACGAA_PCNUM_TWAS DS F        0x10 PC # to use for calling tWAS PC1
+BBOACGAA_TRACELVL DS F          0x14 Trace level to send to PC routine
+BBOACGAA_TRACELVLX DS F         0x18 Trace on|off 0|1 for BBOATRUE
+BBOACGAA_CTL_TRAN DS CL4        0x1C Name of BBOACNTL transaction
+          MEND                  0x20 Length of CGAA

@@ -1,0 +1,41 @@
+Bnd-LastModified: 1486383761449
+Created-By: 1.8.0_121 (Oracle Corporation)
+IBM-API-Package: com.ibm.websphere.collective.controller; type=ibm-api,
+ com.ibm.websphere.collective.repository; type=ibm-api
+IBM-AppliesTo: com.ibm.websphere.appserver; productEdition="@PRODUCT_EDITION_RESTRICTED@"; productVersion="@PRODUCT_VERSION@"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: com.ibm.websphere.appserver
+IBM-ShortName: collectiveController-1.0
+Subsystem-Content: com.ibm.websphere.appserver.api.collectiveController_1.5-javadoc.zip; type=file; location:="dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.collectiveController_1.5-javadoc.zip",
+ com.ibm.websphere.appserver.jta-1.1; ibm.tolerates:="1.2"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.javax.servlet-3.0; ibm.tolerates:="3.1"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.frappe-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.collectiveMember-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.restConnector-1.0; ibm.tolerates:="2.0"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.restHandler-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.servlet-3.0; ibm.tolerates:="3.1"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.api.collectiveController; location:="dev/api/ibm/,lib/"; type=jar; version="[1.5.0,1.5.200)",
+ com.ibm.ws.collective.security; version="[1.0.0,1.0.200)",
+ com.ibm.ws.http.plugin.merge; version="[1.0.0,1.0.200)",
+ com.ibm.ws.org.apache.commons.io.1.4; version="[1.0.0,1.0.200)",
+ com.ibm.crypto.ibmkeycert; version="[1.0.0,1.0.200)",
+ com.ibm.ws.prereq.rxa.2.3; version="[1.0.0,1.0.200)",
+ com.ibm.ws.collective.defaultPreTransferAction; version="[1.0.0,1.0.200)",
+ com.ibm.ws.collective.controller; version="[1.0.0,1.0.200)",
+ com.ibm.ws.collective.plugins; version="[1.0.0,1.0.200)",
+ com.ibm.ws.collective.defaultPostTransferAction; version="[1.0.0,1.0.200)",
+ com.ibm.ws.collective.repository; version="[1.0.0,1.0.200)",
+ com.ibm.ws.collective.routing.controller; version="[1.0.0,1.0.200)",
+ com.ibm.ws.collective.rest; version="[1.0.0,1.0.200)"
+Subsystem-Description: %description
+Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-@FEATURE_TERMS_RESTRICTED_V1@
+Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.collectiveController-1.0
+Subsystem-ManifestVersion: 1
+Subsystem-Name: Collective Controller
+Subsystem-SymbolicName: com.ibm.websphere.appserver.collectiveController-1.0; visibility:=public; singleton:=false
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-3.3.0.201609221906

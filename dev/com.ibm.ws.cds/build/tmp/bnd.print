@@ -1,0 +1,11 @@
+Ant-Version                              Apache Ant 1.9.6                        
+Bundle-Localization                      plugin                                  
+Bundle-ManifestVersion                   2                                       
+Bundle-Name                              IBM Shared Classes Support              
+Bundle-SymbolicName                      com.ibm.cds                             
+Bundle-Vendor                            IBM                                     
+Bundle-Version                           3.0.1.201410101357                      
+Created-By                               1.8.0_121-b13 (Oracle Corporation)      
+Fragment-Host                            org.eclipse.osgi;bundle-version="3.10.0"
+Manifest-Version                         1.0                                     
+

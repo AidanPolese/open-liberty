@@ -1,0 +1,27 @@
+Bnd-LastModified: 1486383806135
+Created-By: 1.8.0_121 (Oracle Corporation)
+IBM-AppliesTo: com.ibm.websphere.appserver; productEdition="@PRODUCT_EDITION@"; productVersion="@PRODUCT_VERSION@"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: com.ibm.websphere.appserver
+IBM-SPI-Package: com.ibm.wsspi.webservices.wsat
+IBM-ShortName: wsAtomicTransaction-1.2
+Subsystem-Content: com.ibm.websphere.appserver.spi.wsat_1.0-javadoc.zip; type=file; location:="dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.wsat_1.0-javadoc.zip",
+ com.ibm.websphere.appserver.wab-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.servlet-3.0; ibm.tolerates:="3.1"; type="osgi.subsystem.feature",
+ com.ibm.wsspi.appserver.webBundleSecurity-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.transaction-1.2; ibm.tolerates:="1.1"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jaxws-2.2; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.spi.wsat; location:="dev/spi/ibm/,lib/"; type=jar; version="[1.0.0,1.0.200)",
+ com.ibm.ws.wsat.common; version="[1.0.0,1.0.200)"
+Subsystem-Description: %description
+Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
+Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.wsAtomicTransaction-1.2
+Subsystem-ManifestVersion: 1
+Subsystem-Name: WS-AT Service
+Subsystem-SymbolicName: com.ibm.websphere.appserver.wsAtomicTransaction-1.2; visibility:=public; singleton:=false
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-3.3.0.201609221906

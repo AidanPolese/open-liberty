@@ -1,0 +1,18 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.frappe-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.ssl-1.0;version=latest, \
+	com.ibm.ws.frappe.plugins;version=latest, \
+	com.ibm.ws.frappe.utils;version=latest, \
+	com.ibm.crypto.ibmkeycert;version=latest, \
+	com.ibm.ws.frappe.paxos;version=latest, \
+	com.ibm.ws.frappe.registry;version=latest, \
+	com.ibm.ws.frappe.membership;version=latest, \
+	com.ibm.ws.frappe.serviceregistry;version=latest, \
+	com.ibm.ws.frappe.singleton.elector;version=latest, \
+	com.ibm.ws.frappe.singleton;version=latest

@@ -1,0 +1,9 @@
+Export-Package: com.ibm.ws.common.internal.encoder
+
+instrument.disabled: true
+
+publish.wlp.jar.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

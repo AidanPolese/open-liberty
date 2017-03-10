@@ -1,0 +1,13 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.batchManagement1.0-jms2.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.internal.jms-2.0;version=latest, \
+	com.ibm.websphere.appserver.mdb-3.2;version=latest, \
+	com.ibm.websphere.appserver.transaction-1.2;version=latest, \
+	com.ibm.websphere.appserver.jca-1.7;version=latest, \
+	com.ibm.ws.jbatch.jms;version=latest

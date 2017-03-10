@@ -1,0 +1,23 @@
+<project name="wlp.lib.extract" default="build">
+  <!-- Exclude from global bundle micro-version processing -->	
+  <property name="use.global.micro" value="false"/>	
+
+  <!-- ensure executable jars can run on older JREs, back to 1.4 -->
+  <property name="build.with.java.level" value="1.4"/>
+  <property name="javac.boot.classpath" value="1.6"/>
+
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+  <property name="no.trace.instrumentation" value="true" />
+  
+  <target name="publish" depends="publish.publish">
+    <uploadFile 
+      group="Tools Bundles" 
+      label="Self Extracting Jar Tools" 
+      file="wlp.lib.extract_1.0.jar" 
+      file.dir="${basedir}/build/lib" />
+  </target>
+  
+  <!-- Override to keep the jar from being copied to build.image/wlp/lib  -->
+  <target name="publishBundles"/>
+</project>

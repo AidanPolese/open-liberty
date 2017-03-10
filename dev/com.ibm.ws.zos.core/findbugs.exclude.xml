@@ -1,0 +1,115 @@
+<FindBugsFilter>
+  <!-- Begin Global Findbugs Excludes do not edit by hand - edit globally-->
+  <Match>
+    <Bug pattern="BC_IMPOSSIBLE_INSTANCEOF,BC_VACUOUS_INSTANCEOF,BSHIFT_WRONG_ADD_PRIORITY,CO_COMPARETO_INCORRECT_FLOATING,DE_MIGHT_IGNORE,DLS_DEAD_LOCAL_STORE,DM_BOXED_PRIMITIVE_FOR_PARSING,DM_BOXED_PRIMITIVE_TOSTRING,DM_NUMBER_CTOR,DMI_HARDCODED_ABSOLUTE_FILENAME,EQ_DOESNT_OVERRIDE_EQUALS,INT_BAD_COMPARISON_WITH_NONNEGATIVE_VALUE,IT_NO_SUCH_ELEMENT,ME_ENUM_FIELD_SETTER,ME_MUTABLE_ENUM_FIELD,MS_CANNOT_BE_FINAL,MS_MUTABLE_ARRAY,MS_MUTABLE_COLLECTION,MS_MUTABLE_COLLECTION_PKGPROTECT,MS_PKGPROTECT,NP_LOAD_OF_KNOWN_NULL_VALUE,NP_NULL_ON_SOME_PATH,NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE,NP_NULL_PARAM_DEREF,OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE,RANGE_ARRAY_INDEX,RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE,RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE,RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE,RpC_REPEATED_CONDITIONAL_TEST,RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT,SA_FIELD_SELF_ASSIGNMENT,SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING,STCAL_STATIC_SIMPLE_DATE_FORMAT_INSTANCE,UC_USELESS_CONDITION,UC_USELESS_CONDITION_TYPE,UC_USELESS_OBJECT,UC_USELESS_VOID_METHOD,WMI_WRONG_MAP_ITERATOR"/>
+  </Match>
+  <!-- End Global Findbugs Excludes do not edit by hand - edit globally-->
+    <!-- See http://findbugs.sourceforge.net/manual/filter.html for details of the syntax of this file -->
+
+    <!-- match generated nls classes: return mutable type -->
+    <Match> 
+        <Class name="~.*\.resources\..*" />
+        <Method name="getContents"/>
+        <Bug code="EI" />
+    </Match>
+    
+    <Match>
+        <Class name="~.*NativeServiceTracker" />
+        <Bug code="IS" />
+    </Match>
+
+    <!-- This method wants a literal "\n", not a platform-specific newline. -->
+    <Match>
+      <Class name="com.ibm.ws.zos.core.utils.internal.DoubleGutterImpl" />
+      <Method name="asDoubleGutter" />
+      <Bug pattern="VA_FORMAT_STRING_USES_NEWLINE" />
+    </Match>
+
+    <Match> 
+      <Class name="com.ibm.ws.zos.logging.internal.NativeTraceHandler" />
+      <Method name="startTraceHandlerThread"/>
+      <Bug pattern="THREAD_START_CALLED" />
+    </Match>
+    
+    <Match> 
+      <Class name="com.ibm.ws.zos.logging.internal.NativeTraceHandler" />
+      <Method name="logTrace"/>
+      <Or>
+      <Bug pattern="TR_MISSING_EXIT_TRACE" />
+      <Bug pattern="TR_INCORRECTLY_GUARDED" />      
+      </Or>
+    </Match>
+    
+    <Match> 
+      <Class name="com.ibm.ws.zos.logging.internal.NativeTraceHandler" />
+      <Method name="initializeTraceDefinitions"/>
+      <Or>
+      <Bug pattern="TR_WRONG_CLASS_NAME" />
+      <Bug pattern="TR_BAD_RESOURCE_BUNDLE" />
+      </Or>      
+    </Match>
+    
+    <Match>
+      <Class name="com.ibm.ws.zos.core.utils.internal.NativeUtilsImpl" />
+      <Local name="uee"/>
+      <Bug pattern="DLS_DEAD_LOCAL_STORE" />
+    </Match>
+    
+    <Match> 
+      <Class name="com.ibm.ws.zos.registration.internal.Product" />
+      <Local name="uee"/>     
+      <Bug pattern="DLS_DEAD_LOCAL_STORE" />
+    </Match>
+    
+    <Match> 
+      <Class name="com.ibm.ws.zos.registration.internal.ProductManager" />
+      <Local name="ioe"/>     
+      <Bug pattern="DLS_DEAD_LOCAL_STORE" />
+    </Match>
+     
+    <Match> 
+      <Class name="com.ibm.ws.zos.registration.internal.ProductManager$2" />
+      <Local name="fnfe"/>     
+      <Bug pattern="DLS_DEAD_LOCAL_STORE" />
+    </Match>
+    
+    
+    <!-- Platform encoding reasonable here -->
+    <Match>
+      <Class name="com.ibm.ws.zos.core.diagnostics.NativeIntrospection"/>
+      <Method name="introspect"/>
+      <Bug pattern="DM_DEFAULT_ENCODING"/>
+    </Match>
+    
+    <!-- While a true positive, this does no harm in this case -->
+    <Match>
+      <Class name="com.ibm.ws.zos.jni.NativeMethodUtils"/>
+      <Method name="convertToEBCDICNoTrace"/>
+      <Bug pattern="AT_OPERATION_SEQUENCE_ON_CONCURRENT_ABSTRACTION"/>
+    </Match>
+    
+    <!-- False positives - the detector needs fixing, but I need to get the plugin working again on X Open -->
+    <Match>
+      <Class name="com.ibm.ws.zos.logging.internal.NativeTraceHandler"/>
+      <Bug pattern="TR_BAD_RESOURCE_BUNDLE"/>
+    </Match>
+    
+    <Match> 
+      <Class name="com.ibm.ws.zos.registration.internal.ProductManager" />
+      <Local name="ise"/>     
+      <Bug pattern="DLS_DEAD_LOCAL_STORE" />
+    </Match>
+
+    <Match> 
+      <Class name="com.ibm.ws.zos.registration.internal.ProductManager" />
+      <Method name="isServerAuthorizedToDeregister"/>
+      <Local name="nativeServices"/>     
+      <Bug pattern="DLS_DEAD_LOCAL_STORE" />
+    </Match>
+    
+    <Match> 
+      <Class name="com.ibm.ws.zos.core.internal.HardFailureNativeCleanup" />
+      <Method name="startCleanupThread"/>
+      <Bug pattern="THREAD_START_CALLED" />
+    </Match>
+</FindBugsFilter>

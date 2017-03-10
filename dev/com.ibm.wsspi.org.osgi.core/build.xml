@@ -1,0 +1,13 @@
+<project name="com.ibm.wsspi.org.osgi.core" default="build">
+
+  <import file="../ant_build/public_imports/rejar_imports.xml"/>
+
+  <target name="publishBundles"/>
+
+  <target name="package">
+  
+    <rejar base.name="com.ibm.wsspi" version="1.0" src.jar="../com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar" output.dir="${dev.dir}/spi/spec" />
+
+  </target>
+
+</project>

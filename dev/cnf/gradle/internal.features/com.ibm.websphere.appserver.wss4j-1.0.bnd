@@ -1,0 +1,10 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.wss4j-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.ws.org.apache.santuario.xmlsec.1.5.2;version=latest, \
+	com.ibm.ws.org.apache.ws.security.wss4j.1.6.7;version=latest

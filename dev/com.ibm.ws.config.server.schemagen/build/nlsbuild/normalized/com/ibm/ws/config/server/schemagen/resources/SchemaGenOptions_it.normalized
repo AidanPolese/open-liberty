@@ -1,0 +1,28 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2010.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.config.server.schemagen/resources/com/ibm/ws/config/server/schemagen/resources/SchemaGenOptions.nlsprops
+#ISMESSAGEFILE FALSE
+#NLS_ENCODING=UNICODE
+# NLS_MESSAGEFORMAT_VAR
+
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+briefUsage=Utilizzo: java [opzioni JVM] -jar {0} [opzioni]  
+
+use.options=Opzioni:
+# -------- OPTIONS ----------------------------------------------------#
+# List of descriptive text for options. Use "\n\" for line continuations.
+# The code provides no whitespace: begin keys with "\ \ \ \ " for leading
+# whitespace, and begin descriptions with \t 
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+option-key.schemaversion=--schemaversion
+option-desc.schemaversion=La versione XSD da utilizzare per la generazione dello schema
+option-key.outputversion=--outputversion
+option-desc.outputversion=La versione di output dello schema generato 
+option-key.encoding=--encoding
+option-desc.encoding=La codifica di caratteri da utilizzare per l'output
+option-key.locale=--locale
+option-desc.locale=La Locale da utilizzare per l'output

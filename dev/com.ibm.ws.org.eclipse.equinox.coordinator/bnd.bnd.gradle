@@ -1,0 +1,8 @@
+-include= jar:${fileuri;lib/org.eclipse.equinox.coordinator_1.3.200.v20160325-1323.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+
+-includeresource: \
+    @lib/org.eclipse.equinox.coordinator_1.3.200.v20160325-1323.jar
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/org.eclipse.equinox.coordinator_1.3.200.v20160325-1323.jar;version=file

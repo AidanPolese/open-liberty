@@ -1,0 +1,11 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.ssoCommon-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.saml20;version=latest, \
+	com.ibm.websphere.appserver.api.saml20;version=latest, \
+	com.ibm.ws.security.sso.common;version=latest

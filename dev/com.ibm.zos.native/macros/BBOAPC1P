@@ -1,0 +1,40 @@
+*                                                                              
+* IBM Confidential                                                             
+*                                                                              
+* OCO Source Materials                                                         
+*                                                                              
+* Copyright IBM Corp. 2012                                                     
+*                                                                              
+* The source code for this program is not published or otherwise               
+* divested of its trade secrets, irrespective of what has been                 
+* deposited with the U.S. Copyright Office.                                    
+*                                                                              
+* ===================================================================== =======
+* Note / TODO: Figure out why EDCDSECT requires this input macro to be         
+*              padded out to 79 columns.  If less/more, it complains           
+*              that the first line is not a comment or macro statement,        
+*              and the rest fails to parse.  Looking at the output             
+*              shows it's ignoring newlines and just smashes all the           
+*              lines together, breaking at 80 columns.                         
+* ===================================================================== =======
+         MACRO                                                                 
+         BBOAPC1P  ,                                                           
+*                                                                              
+* This control block contains parameters passed from CICS to the WOLA          
+* client metal C stubs.                                                        
+*                                                                              
+BBOAPC1P DSECT                       PC1 Parms                                 
+BBOAPC1P_RT      DS H           0x00 Request Type                              
+BBOAPC1P_FLG     DS H           0x02 Request/Response flags                    
+BBOAPC1P_RB      DS F           0x04 Request Buffer @                          
+BBOAPC1P_UOW     DS CL8         0x08 CICS UOW ID                               
+BBOAPC1P_PBT     DS F           0x10 WLM PB Token                              
+BBOAPC1P_ACEE    DS F           0x14 ACEE@ CICS appl.                          
+BBOAPC1P_GAA_PCNUM@ DS A        0x18 Addr of BBOACGAA_PCNUM                    
+BBOAPC1P_TAA_PCNUM@ DS A        0x1C Addr of BBOACTAA_PCNUM                    
+BBOAPC1P_TRACELVL  DS F         0x20 ATracing level {0,1,2}                    
+BBOAPC1P_TX_OUTBOUND_MASK EQU   B'1000000000000000'                            
+BBOAPC1P_TX_SET_SCHED_MASK EQU  B'0100000000000000'                            
+BBOAPC1P_TX_DIS_SYNC_MASK EQU   B'0010000000000000'                            
+BBOAPC1P_TX_ALLOW_SYNC_MASK EQU B'0001000000000000'                            
+          MEND                  0x24 Length of bboapc1p                        

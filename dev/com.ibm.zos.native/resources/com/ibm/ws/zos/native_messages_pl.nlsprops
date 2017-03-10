@@ -1,0 +1,438 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#
+# NOTE: !!! THIS FILE MUST BE KEPT IN SYNC WITH native_messages.props  !!! 
+#
+# --------------------------------------------------------------------------------------------------
+#
+# # {0} description of each insert field
+# MSG_DESCRIPTIVE_NAME_CWSJX0000=CWSJX0000I: This is a message with inserts {0}
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.explanation=Explanation text for the message
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.useraction=User action text for the message
+#
+#CMVCPATHNAME com.ibm.zos.native/resources/com.ibm.ws.zos/native_messages.nlsprops
+#COMPONENTPREFIX CWWKB
+#COMPONENTNAMEFOR CWWKB zOS Native Messages
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+# NLS_MESSAGEFORMAT_VAR
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+#
+# -------------------------------------------------------------------------------------------------
+#0051-0100: native code only messages
+#0201-0250: native code non-console messages
+# -------------------------------------------------------------------------------------------------
+
+STOP_COMMAND_ACTIVE_SERVERS=CWWKB0051E: ZATRZYMANIE PROCESU ANGEL ZOSTA\u0141O ODRZUCONE PRZEZ AKTYWNE SERWERY
+STOP_COMMAND_ACTIVE_SERVERS.explanation=Nie mo\u017cna zatrzyma\u0107 procesu Angel, poniewa\u017c w tej chwili s\u0105 serwery, kt\u00f3re s\u0105 z nim po\u0142\u0105czone.
+STOP_COMMAND_ACTIVE_SERVERS.useraction=Komunikat CWWKB0052I b\u0119dzie zawiera\u0107 identyfikator ASID dla ka\u017cdego serwera, kt\u00f3ry jest aktualnie aktywny.  Zatrzymaj aktywne serwery, a nast\u0119pnie spr\u00f3buj ponownie zatrzyma\u0107 proces Angel.
+
+#{0} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{1} is a z/OS jobname
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL=CWWKB0052I: NAZWA ZADANIA {1} IDENTYFIKATORA {0} AKTYWNEGO SERWERA
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL.explanation=Ten serwer jest w tej chwili po\u0142\u0105czony z procesem Angel.
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is a version string
+MODIFY_DISPLAY_ANGEL_VERSION=CWWKB0053I: WERSJA PROCESU ANGEL {0} 
+MODIFY_DISPLAY_ANGEL_VERSION.explanation=W odpowiedzi na komend\u0119 MODIFY PROCESS,VERSION wy\u015bwietlana jest wersja mo\u017cliwego do zast\u0105pienia dynamicznego modu\u0142u proces\u00f3w Angel.
+MODIFY_DISPLAY_ANGEL_VERSION.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is the unrecognized command entered on the console
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED=CWWKB0054E: NIEROZPOZNANA KOMENDA {0}
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED.explanation=Komenda modyfikowania przetwarzana przez proces Angel zawiera nierozpoznane s\u0142owa kluczowe.
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED.useraction=Wprowad\u017a ponownie komend\u0119 z poprawn\u0105 sk\u0142adni\u0105.
+
+ANGEL_PROCESS_STARTING=CWWKB0055I: PROCES ANGEL PRODUKTU WEBSPHERE FOR Z/OS JEST URUCHAMIANY
+ANGEL_PROCESS_STARTING.explanation=Proces Angel jest uruchamiany.
+ANGEL_PROCESS_STARTING.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+ANGEL_PROCESS_INITIALIZATION_COMPLETE=CWWKB0056I: INICJOWANIE PROCESU ANGEL ZOSTA\u0141O ZAKO\u0143CZONE
+ANGEL_PROCESS_INITIALIZATION_COMPLETE.explanation=Proces Angel zako\u0144czy\u0142 inicjowanie.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+ANGEL_PROCESS_END_NORMAL=CWWKB0057I: PROCES ANGEL PRODUKTU WEBSPHERE FOR Z/OS ZOSTA\u0141 ZAKO\u0143CZONY POPRAWNIE
+ANGEL_PROCESS_END_NORMAL.explanation=Proces Angel zostanie zako\u0144czony.
+ANGEL_PROCESS_END_NORMAL.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is the hexidecimal return code from the angel main routine
+ANGEL_PROCESS_END_ABNORMAL=CWWKB0058E: PROCES ANGEL PRODUKTU WEBSPHERE FOR Z/OS ZOSTA\u0141 NIEPOPRAWNIE ZAKO\u0143CZONY, PRZYCZYNA={0}
+ANGEL_PROCESS_END_ABNORMAL.explanation=Proces Angel zosta\u0142 niepoprawnie zako\u0144czony.
+ANGEL_PROCESS_END_ABNORMAL.useraction=Tekst komunikatu zawiera kod przyczyny opisuj\u0105cy konkretny b\u0142\u0105d.  Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#{0} is the unrecognized value
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV=CWWKB0059E: NIEROZPOZNANY PARAMETR URUCHAMIANIA {0}
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV.explanation=Przekazano nierozpoznany parametr w komendzie uruchamiania procesu Angel.  Nierozpoznany parametr jest wy\u015bwietlany w komunikacie.
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV.useraction=Wi\u0119cej informacji na temat obs\u0142ugiwanych parametr\u00f3w komendy uruchamiania zawiera dokumentacja produktu.
+
+#{0} is the unrecognized value
+#{1} is the recognized key
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV=CWWKB0060E: NIEROZPOZNANA WARTO\u015a\u0106 PARAMETRU URUCHAMIANIA {0} DLA KLUCZA {1}
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV.explanation=Przekazano rozpoznany klucz parametru w komendzie uruchamiania procesu Angel, ale jego warto\u015b\u0107 jest nierozpoznana.  Klucz i warto\u015b\u0107 zosta\u0142y wy\u015bwietlone w komunikacie. 
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV.useraction=Wi\u0119cej informacji na temat obs\u0142ugiwanych kluczy parametr\u00f3w komendy uruchamiania i ich obs\u0142ugiwanych warto\u015bci zawiera dokumentacja produktu.
+
+#{0} is the continuation instance
+#{1} is the message id for first multiline WTO of the sequence
+UTILITIES_WTO_CMDRESPONSE_CONTINUE=CWWKB0061I: INSTANCJA KONTYNUACJI {0} DLA IDENTYFIKATORA KOMUNIKATU {1}
+UTILITIES_WTO_CMDRESPONSE_CONTINUE.explanation=Komunikat odpowiedzi komendy z procedury obs\u0142ugi komend albo komunikat zapisywany dla operatora lub w dzienniku wydruk\u00f3w musi zosta\u0107 wys\u0142any przez wiele wielowierszowych komend WTO. To jest kontynuacja komunikatu.  U\u017cyj identyfikatora komunikatu, aby pogrupowa\u0107 pokrewne komunikaty CWWKB0061I.
+UTILITIES_WTO_CMDRESPONSE_CONTINUE.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+DUPLICATE_ANGEL_PROCESS=CWWKB0062E: PROCES ANGEL PRODUKTU WEBSPHERE FOR Z/OS JEST JU\u017b URUCHOMIONY
+DUPLICATE_ANGEL_PROCESS.explanation=Proces Angel jest ju\u017c uruchomiony w tym systemie.  Parametry ASID i JOBNAME aktywnego procesu Angel s\u0105 wy\u015bwietlane w komunikacie CWWKB0063I.  Drugi proces Angel zostanie zatrzymany.
+DUPLICATE_ANGEL_PROCESS.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{1} is a z/OS jobname
+DUPLICATE_ANGEL_PROCESS_DETAIL=CWWKB0063I: AKTYWNY PROCES ANGEL MA PARAMETRY ASID {0} I JOBNAME {1}
+DUPLICATE_ANGEL_PROCESS_DETAIL.explanation=Ten proces Angel jest aktywny.
+DUPLICATE_ANGEL_PROCESS_DETAIL.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is the text string "RELOAD" which should not be translated because it is provided as input on the MVS console.
+ANGEL_RELOAD_HELP_TEXT=CWWKB0064I: {0} - POWODUJE PRZE\u0141ADOWANIE MODU\u0141\u00d3W \u0141ADUJ\u0104CYCH PROCESU ANGEL
+ANGEL_RELOAD_HELP_TEXT.explanation=Ten komunikat jest wy\u015bwietlany w odpowiedzi na komend\u0119 MODIFY BBGZANGL,HELP.  Opcja RELOAD powoduje prze\u0142adowanie modu\u0142\u00f3w \u0142aduj\u0105cych dla procesu Angel w systemie plik\u00f3w.  Prze\u0142adowanie mo\u017ce by\u0107 wymagane po zainstalowaniu poprawki PTF, je\u015bli proces Angel nie zosta\u0142 zrestartowany.
+ANGEL_RELOAD_HELP_TEXT.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is the text string "VERSION" which should not be translated because it is provided as input on the MVS console.
+ANGEL_VERSION_HELP_TEXT=CWWKB0065I: {0} - WY\u015aWIETLA WERSJ\u0118 MODU\u0141U \u0141ADUJ\u0104CEGO PROCESU ANGEL
+ANGEL_VERSION_HELP_TEXT.explanation=Ten komunikat jest wy\u015bwietlany w odpowiedzi na komend\u0119 MODIFY BBGZANGL,HELP.  Opcja VERSION s\u0142u\u017cy do wy\u015bwietlania wersji zast\u0119powalnego dynamicznie modu\u0142u \u0142aduj\u0105cego procesu Angel.  Serwis i dzia\u0142 wsparcia IBM mo\u017ce poprosi\u0107 o podanie tych informacji.
+ANGEL_VERSION_HELP_TEXT.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is the text string "TRACE=Y/N" which should not be translated because it is provided as input on the MVS console.
+ANGEL_TRACE_HELP_TEXT=CWWKB0066I: {0} - STERUJE \u015aLEDZENIEM NA POTRZEBY PROCESU ANGEL
+ANGEL_TRACE_HELP_TEXT.explanation=Ten komunikat jest wy\u015bwietlany w odpowiedzi na komend\u0119 MODIFY BBGZANGL,HELP.  Opcja TRACE s\u0142u\u017cy do sterowania komunikatami \u015bledzenia w procesie Angel.  Podanie warto\u015bci TRACE=Y powoduje wy\u015bwietlenie danych \u015bledzenia diagnostycznego w strumieniu SYSOUT DD.  Podanie warto\u015bci TRACE=N powoduje wy\u0142\u0105czenie \u015bledzenia diagnostycznego.  Serwis i dzia\u0142 wsparcia IBM mo\u017ce poprosi\u0107 o podanie tych informacji.
+ANGEL_TRACE_HELP_TEXT.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+MODIFY_DISPLAY_ACTIVE_SERVERS=CWWKB0067I: WY\u015aWIETLANIE AKTYWNYCH SERWER\u00d3W PRZEZ PROCES ANGEL
+MODIFY_DISPLAY_ACTIVE_SERVERS.explanation=Ten komunikat jest wy\u015bwietlany w odpowiedzi na komend\u0119 MODIFY BBGZANGL,SERVERS.  Po komunikacie zostanie zwr\u00f3cona jedna instancja komunikatu CWWKB0052I dla ka\u017cdego serwera po\u0142\u0105czonego z procesem angel.
+MODIFY_DISPLAY_ACTIVE_SERVERS.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is the text string "SERVERS" which should not be translated because it is provided as input on the MVS console.
+ANGEL_SERVERS_HELP_TEXT=CWWKB0068I: {0} - WY\u015aWIETLA AKTYWNE SERWERY
+ANGEL_SERVERS_HELP_TEXT.explanation=Ten komunikat jest wy\u015bwietlany w odpowiedzi na komend\u0119 MODIFY BBGZANGL,HELP.  Opcja SERVERS powoduje wy\u015bwietlenie aktywnych serwer\u00f3w.
+ANGEL_SERVERS_HELP_TEXT.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is the name of the angel process.  1-54 characters.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME=CWWKB0069I: ZAKO\u0143CZONO INICJOWANIE PROCESU ANGEL {0}.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME.explanation=Proces Angel zako\u0144czy\u0142 inicjowanie. Nazwa procesu angel jest wy\u015bwietlana w komunikacie.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+ANGEL_NAME_TOO_LONG=CWWKB0070E: PODANA WARTO\u015a\u0106 PARAMETRU NAME PRZEKRACZA 54 ZNAKI D\u0141UGO\u015aCI.
+ANGEL_NAME_TOO_LONG.explanation=Parametr NAME okre\u015bla nazw\u0119 procesu Angel. Parametr jest okre\u015blony w procedurze BBGZANGL i nie mo\u017ce mie\u0107 wi\u0119cej ni\u017c 54 znaki d\u0142ugo\u015bci.
+ANGEL_NAME_TOO_LONG.useraction=Okre\u015bl warto\u015b\u0107 parametru NAME o d\u0142ugo\u015bci nieprzekraczaj\u0105cej 54 znak\u00f3w, a nast\u0119pnie ponownie uruchom proces Angel przy u\u017cyciu procedury BBGZANGL.
+
+#{0} is an unsupported character
+#{1} is a number between 1 and 54
+ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0071E: PODANA WARTO\u015a\u0106 PARAMETRU NAME ZAWIERA NIEOBS\u0141UGIWANY ZNAK {0} NA POZYCJI {1}.
+ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=Parametr NAME okre\u015bla nazw\u0119 procesu Angel. Parametr jest okre\u015blony w procedurze BBGZANGL i mo\u017ce zawiera\u0107 tylko znaki z nast\u0119puj\u0105cego zestawu: A-Z 0-9! # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
+ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=Okre\u015bl warto\u015b\u0107 parametru NAME za pomoc\u0105 znak\u00f3w z obs\u0142ugiwanego zestawu, a nast\u0119pnie ponownie uruchom proces Angel przy u\u017cyciu procedury BBGZANGL.
+
+#{0} is the name of the angel process. 1-54 characters.
+STOP_COMMAND_ACTIVE_SERVERS_NAME=CWWKB0072E: AKTYWNE SERWERY ODRZUCI\u0141Y ZATRZYMANIE PROCESU ANGEL {0}.
+STOP_COMMAND_ACTIVE_SERVERS_NAME.explanation=Nie mo\u017cna zatrzyma\u0107 procesu Angel, poniewa\u017c w tej chwili s\u0105 z nim po\u0142\u0105czone serwery. Nazwa procesu angel jest wy\u015bwietlana w komunikacie.
+STOP_COMMAND_ACTIVE_SERVERS_NAME.useraction=Komunikat CWWKB0052I zawiera identyfikator ASID dla ka\u017cdego serwera, kt\u00f3ry jest aktualnie aktywny i powi\u0105zany z procesem Angel o okre\u015blonej nazwie. Zatrzymaj aktywne serwery, a nast\u0119pnie zatrzymaj proces Angel o nazwie wskazanej w komunikacie.
+
+#{0} is the name of the angel process. 1-54 characters.
+ANGEL_PROCESS_END_NORMAL_NAME=CWWKB0073I: PROCES ANGEL {0} ZOSTA\u0141 POPRAWNIE ZAKO\u0143CZONY.
+ANGEL_PROCESS_END_NORMAL_NAME.explanation=Proces Angel zostanie zako\u0144czony. Nazwa procesu angel jest wy\u015bwietlana w komunikacie.
+ANGEL_PROCESS_END_NORMAL_NAME.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is the name of the angel process. 1-54 characters.
+#{1} is the hexidecimal return code from the angel main routine
+ANGEL_PROCESS_END_ABNORMAL_NAME=CWWKB0074E: PROCES ANGEL {0} ZOSTA\u0141 NIEPOPRAWNIE ZAKO\u0143CZONY, PRZYCZYNA={1}
+ANGEL_PROCESS_END_ABNORMAL_NAME.explanation=Proces Angel zosta\u0142 niepoprawnie zako\u0144czony. Nazwa procesu angel jest wy\u015bwietlana w komunikacie.
+ANGEL_PROCESS_END_ABNORMAL_NAME.useraction=Tekst komunikatu zawiera kod przyczyny opisuj\u0105cy konkretny b\u0142\u0105d oraz nazw\u0119 procesu Angel, kt\u00f3ry zosta\u0142 zako\u0144czony. Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#{0} is the name of the angel process. 1-54 characters.
+DUPLICATE_ANGEL_PROCESS_NAME=CWWKB0075E: TEN PROCES ANGEL ZOSTANIE ZATRZYMANY, PONIEWA\u017b INNY PROCES ANGEL O NAZWIE {0} ZOSTA\u0141 JU\u017b URUCHOMIONY. NIE JEST WYMAGANA \u017bADNA CZYNNO\u015a\u0106.
+DUPLICATE_ANGEL_PROCESS_NAME.explanation=Proces Angel o nazwie widocznej w komunikacie zosta\u0142 ju\u017c uruchomiony w tym systemie. Parametry ASID i JOBNAME aktywnego procesu Angel s\u0105 wy\u015bwietlane w komunikacie CWWKB0063I. Drugi proces Angel zostanie zatrzymany.
+DUPLICATE_ANGEL_PROCESS_NAME.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107, poniewa\u017c zduplikowany proces Angel zostanie zatrzymany. Aby zapobiec wy\u015bwietlaniu tego komunikatu, nie nale\u017cy uruchamia\u0107 procesu Angel o okre\u015blonej nazwie, gdy proces Angel o takiej samej nazwie jest ju\u017c uruchomiony.
+
+MODIFY_DISPLAY_ACTIVE_ANGELS=CWWKB0076I: Poni\u017cej znajduje si\u0119 lista aktywnych proces\u00f3w Angel.
+MODIFY_DISPLAY_ACTIVE_ANGELS.explanation=Ten komunikat jest wy\u015bwietlany w odpowiedzi na komend\u0119 MODIFY BBGZANGL,ANGELS. Po tym komunikacie nast\u0119puje jedna instancja komunikatu CWWKB0077I i jedna instancja komunikatu CWWKB0078I dla ka\u017cdego procesu Angel, kt\u00f3ry jest aktywny w systemie.
+MODIFY_DISPLAY_ACTIVE_ANGELS.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is a z/OS jobname
+#{1} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{2} is a version string
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS=CWWKB0077I: AKTYWNY PROCES ANGEL MA PARAMETRY JOBNAME {0} ASID {1} I VERSION {2}
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS.explanation=Tekst komunikatu okre\u015bla szczeg\u00f3\u0142y aktywnego procesu Angel. Ten komunikat jest poprzedzony komunikatem CWWKB0076I i znajduje si\u0119 przed komunikatem CWWKB0078I.
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+#{0} is the name of an angel process. 1-54 characters
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME=CWWKB0078I: AKTYWNY PROCES ANGEL O NAZWIE {0}
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME.explanation=Tekst komunikatu okre\u015bla nazw\u0119 aktywnego procesu Angel. Ten komunikat jest poprzedzony komunikatami CWWKB0076I i CWWKB0077I.
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+# -------------------------------------------------------------------------------------------------
+#0201-0250: native code non-console messages
+#
+#{0} is the Library name
+#{1} is the reason code
+SERVER_JNI_01=CWWKB0201E: Niepowodzenie otwarcia biblioteki {0}: {1}
+SERVER_JNI_01.explanation=Niepowodzenie otwarcia okre\u015blonej biblioteki.
+SERVER_JNI_01.useraction=Tekst komunikatu zawiera kod przyczyny opisuj\u0105cy konkretny b\u0142\u0105d.  Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_02=CWWKB0202E: Funkcja rejestracji metody w deskryptorze {0} zwr\u00f3ci\u0142a kod przyczyny {1}
+SERVER_JNI_02.explanation=Funkcja rejestracji metody zako\u0144czy\u0142a si\u0119 niepowodzeniem.
+SERVER_JNI_02.useraction=Tekst komunikatu zawiera kod przyczyny opisuj\u0105cy konkretny b\u0142\u0105d.  Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_03=CWWKB0203E: Funkcja RegisterNatives zwi\u0105zana z deskryptorem {0} zako\u0144czy\u0142a si\u0119 niepowodzeniem z kodem przyczyny {1}
+SERVER_JNI_03.explanation=Nie powiod\u0142a si\u0119 rejestracja metody w\u0142asnej.
+SERVER_JNI_03.useraction=Tekst komunikatu zawiera kod przyczyny opisuj\u0105cy konkretny b\u0142\u0105d.  Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_04=CWWKB0204E: Funkcja wyrejestrowania metody w deskryptorze {0} zwr\u00f3ci\u0142a kod przyczyny {1}
+SERVER_JNI_04.explanation=Nie powiod\u0142o si\u0119 wyrejestrowanie metody w\u0142asnej.
+SERVER_JNI_04.useraction=Tekst komunikatu zawiera kod przyczyny opisuj\u0105cy konkretny b\u0142\u0105d.  Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+#{0} is the library name
+#{1} is the reason code
+SERVER_JNI_05=CWWKB0205W: Niepowodzenie zamkni\u0119cia biblioteki {0}: {1}
+SERVER_JNI_05.explanation=Nie powiod\u0142o si\u0119 zamkni\u0119cie podanej biblioteki do\u0142\u0105czanej dynamicznie.
+SERVER_JNI_05.useraction=Tekst komunikatu zawiera kod przyczyny opisuj\u0105cy konkretny b\u0142\u0105d.  Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_01=CWWKB0206E: Nie mo\u017cna okre\u015bli\u0107 warto\u015bci WLP_INSTALL_DIR
+SERVER_LAUNCHER_01.explanation=Nie mo\u017cna okre\u015bli\u0107 warto\u015bci WLP_INSTALL_DIR.
+SERVER_LAUNCHER_01.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_02=CWWKB0207E: Nie mo\u017cna dopisa\u0107 \u015bcie\u017cki NLS na pocz\u0105tku zmiennej NLSPATH
+SERVER_LAUNCHER_02.explanation=Nie mo\u017cna dopisa\u0107 \u015bcie\u017cki NLS na pocz\u0105tku zmiennej NLSPATH.
+SERVER_LAUNCHER_02.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_03=CWWKB0208E: Nie mo\u017cna okre\u015bli\u0107 warto\u015bci WLP_USER_DIR
+SERVER_LAUNCHER_03.explanation=Nie mo\u017cna okre\u015bli\u0107 warto\u015bci WLP_USER_DIR.
+SERVER_LAUNCHER_03.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_04=CWWKB0209E: Nie mo\u017cna okre\u015bli\u0107 warto\u015bci SERVER_CONFIG_DIR
+SERVER_LAUNCHER_04.explanation=Nie mo\u017cna okre\u015bli\u0107 warto\u015bci SERVER_CONFIG_DIR.
+SERVER_LAUNCHER_04.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_05=CWWKB0210E: Nie powiod\u0142o si\u0119 rozstrzygni\u0119cie zmiennej JAVA_HOME
+SERVER_LAUNCHER_05.explanation=Nie powiod\u0142o si\u0119 rozstrzygni\u0119cie zmiennej JAVA_HOME.
+SERVER_LAUNCHER_05.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_06=CWWKB0211E: Nie powiod\u0142o si\u0119 dopisanie \u015bcie\u017cki do biblioteki JVM na pocz\u0105tku zmiennej LIBPATH
+SERVER_LAUNCHER_06.explanation=Nie powiod\u0142o si\u0119 dopisanie \u015bcie\u017cki do biblioteki JVM na pocz\u0105tku zmiennej LIBPATH.
+SERVER_LAUNCHER_06.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_07=CWWKB0212E: Nie powiod\u0142o si\u0119 dopisanie \u015bcie\u017cki do biblioteki WebSphere na pocz\u0105tku zmiennej LIBPATH
+SERVER_LAUNCHER_07.explanation=Nie powiod\u0142o si\u0119 dopisanie \u015bcie\u017cki do biblioteki WebSphere na pocz\u0105tku zmiennej LIBPATH.
+SERVER_LAUNCHER_07.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_08=CWWKB0213E: Nie mo\u017cna okre\u015bli\u0107 katalogu wyj\u015bciowego
+SERVER_LAUNCHER_08.explanation=Nie mo\u017cna okre\u015bli\u0107 katalogu wyj\u015bciowego.
+SERVER_LAUNCHER_08.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_09=CWWKB0214E: Nie powiod\u0142a si\u0119 zmiana katalogu roboczego na {0}
+SERVER_LAUNCHER_09.explanation=Nie powiod\u0142a si\u0119 zmiana katalogu roboczego.
+SERVER_LAUNCHER_09.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_10=CWWKB0215E: Niepowodzenie otwarcia pliku {0}: {1}
+SERVER_LAUNCHER_10.explanation=Nie powiod\u0142o si\u0119 otwarcie pliku. 
+SERVER_LAUNCHER_10.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_11=CWWKB0216E: Nie powiod\u0142o si\u0119 rozstrzygni\u0119cie warto\u015bci JNI_CreateJavaVM: {0}
+SERVER_LAUNCHER_11.explanation=Nie powiod\u0142o si\u0119 rozstrzygni\u0119cie warto\u015bci JNI_CreateJavaVM.
+SERVER_LAUNCHER_11.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_12=CWWKB0217E: Nie powiod\u0142o si\u0119 utworzenie wirtualnej maszyny j\u0119zyka Java: {0}
+SERVER_LAUNCHER_12.explanation=Nie powiod\u0142o si\u0119 utworzenie wirtualnej maszyny j\u0119zyka Java.
+SERVER_LAUNCHER_12.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_13=CWWKB0218E: Nie powiod\u0142o si\u0119 wywo\u0142anie klasy g\u0142\u00f3wnej
+SERVER_LAUNCHER_13.explanation=Nie powiod\u0142o si\u0119 wywo\u0142anie klasy g\u0142\u00f3wnej.
+SERVER_LAUNCHER_13.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_14=CWWKB0219E: Nie mo\u017cna wyodr\u0119bni\u0107 \u015bcie\u017cki do katalogu u\u017cytkownika z instrukcji DD
+SERVER_LAUNCHER_14.explanation=Nie mo\u017cna wyodr\u0119bni\u0107 \u015bcie\u017cki do katalogu u\u017cytkownika z instrukcji DD.
+SERVER_LAUNCHER_14.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_15=CWWKB0220E: Nie mo\u017cna rozstrzygn\u0105\u0107 rzeczywistej \u015bcie\u017cki do katalogu u\u017cytkownika z kodu JCL
+SERVER_LAUNCHER_15.explanation=Nie mo\u017cna rozstrzygn\u0105\u0107 rzeczywistej \u015bcie\u017cki do katalogu u\u017cytkownika z kodu JCL.
+SERVER_LAUNCHER_15.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_16=CWWKB0221E: Rzeczywist\u0105 \u015bcie\u017ck\u0119 do katalogu u\u017cytkownika mo\u017cna rozstrzygn\u0105\u0107 ze \u015brodowiska
+SERVER_LAUNCHER_16.explanation=Rzeczywist\u0105 \u015bcie\u017ck\u0119 do katalogu u\u017cytkownika mo\u017cna rozstrzygn\u0105\u0107 ze \u015brodowiska.
+SERVER_LAUNCHER_16.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_17=CWWKB0222E: Katalog konfiguracji serwera {0} nie istnieje
+SERVER_LAUNCHER_17.explanation=Katalog konfiguracji serwera nie istnieje.
+SERVER_LAUNCHER_17.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_18=CWWKB0223E: Nie mo\u017cna wykona\u0107 metody stat() na katalogu konfiguracji serwera
+SERVER_LAUNCHER_18.explanation=Nie mo\u017cna wykona\u0107 metody stat() na katalogu konfiguracji serwera.
+SERVER_LAUNCHER_18.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_19=CWWKB0224E: Konfiguracja serwera {0} nie istnieje
+SERVER_LAUNCHER_19.explanation=Konfiguracja serwera nie istnieje.
+SERVER_LAUNCHER_19.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_20=CWWKB0225E: Nie powiod\u0142o si\u0119 utworzenie statystyki 
+SERVER_LAUNCHER_20.explanation=Nie powiod\u0142o si\u0119 utworzenie statystyki.
+SERVER_LAUNCHER_20.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_21=CWWKB0226E: Nie mo\u017cna znale\u017a\u0107 lub utworzy\u0107 katalogu wyj\u015bciowego 
+SERVER_LAUNCHER_21.explanation=Nie mo\u017cna rozstrzygn\u0105\u0107 lub utworzy\u0107 katalogu wyj\u015bciowego.
+SERVER_LAUNCHER_21.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_22=CWWKB0227E: Nie mo\u017cna znale\u017a\u0107 lub utworzy\u0107 katalogu wyj\u015bciowego serwera w katalogu okre\u015blonym zmienn\u0105 WLP_OUTPUT_DIR 
+SERVER_LAUNCHER_22.explanation=Nie mo\u017cna rozstrzygn\u0105\u0107 lub utworzy\u0107 katalogu wyj\u015bciowego serwera w katalogu okre\u015blonym zmienn\u0105 WLP_OUTPUT_DIR.
+SERVER_LAUNCHER_22.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_23=CWWKB0228E: B\u0142\u0105d odczytu pliku {0}: {1} 
+SERVER_LAUNCHER_23.explanation=B\u0142\u0105d odczytu wskazanego pliku.
+SERVER_LAUNCHER_23.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_24=CWWKB0229E: Nie mo\u017cna uzyska\u0107 pozycji pliku \u015brodowiska 
+SERVER_LAUNCHER_24.explanation=Nie mo\u017cna uzyska\u0107 pozycji pliku \u015brodowiska.
+SERVER_LAUNCHER_24.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_25=CWWKB0230E: Nie mo\u017cna przywr\u00f3ci\u0107 pozycji pliku \u015brodowiska 
+SERVER_LAUNCHER_25.explanation=Nie mo\u017cna przywr\u00f3ci\u0107 pozycji pliku \u015brodowiska.
+SERVER_LAUNCHER_25.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_26=CWWKB0231E: Nie powiod\u0142o si\u0119 ustawienie \u015brodowiska na podstawie w\u0142a\u015bciwo\u015bci {0} 
+SERVER_LAUNCHER_26.explanation=Nie powiod\u0142o si\u0119 ustawienie \u015brodowiska na podstawie wskazanej w\u0142a\u015bciwo\u015bci.
+SERVER_LAUNCHER_26.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_27=CWWKB0232E: Niepowodzenie funkcji fgetpos 
+SERVER_LAUNCHER_27.explanation=Niepowodzenie funkcji fgetpos.
+SERVER_LAUNCHER_27.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_28=CWWKB0233E: Niepowodzenie funkcji fsetpos 
+SERVER_LAUNCHER_28.explanation=Niepowodzenie funkcji fsetpos.
+SERVER_LAUNCHER_28.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_29=CWWKB0234E: Po\u0142o\u017cenie JAVA_HOME {0} nie istnieje 
+SERVER_LAUNCHER_29.explanation=Wskazane po\u0142o\u017cenie JAVA_HOME nie istnieje.
+SERVER_LAUNCHER_29.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_30=CWWKB0235E: B\u0142\u0105d odczytu opcji j\u0119zyka Java z pliku {0}: {1} 
+SERVER_LAUNCHER_30.explanation=B\u0142\u0105d odczytu opcji j\u0119zyka Java ze wskazanego pliku.
+SERVER_LAUNCHER_30.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_31=CWWKB0236E: Nie mo\u017cna ustawi\u0107 domy\u015blnych opcji j\u0119zyka IBM Java 
+SERVER_LAUNCHER_31.explanation=Nie mo\u017cna ustawi\u0107 domy\u015blnych opcji j\u0119zyka IBM Java.
+SERVER_LAUNCHER_31.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_32=CWWKB0237E: Nie powiod\u0142o si\u0119 za\u0142adowanie klasy g\u0142\u00f3wnej 
+SERVER_LAUNCHER_32.explanation=Nie powiod\u0142o si\u0119 za\u0142adowanie klasy g\u0142\u00f3wnej.
+SERVER_LAUNCHER_32.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_33=CWWKB0238E: Nie powiod\u0142o si\u0119 znalezienie metody main 
+SERVER_LAUNCHER_33.explanation=Nie powiod\u0142o si\u0119 znalezienie metody main.
+SERVER_LAUNCHER_33.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_34=CWWKB0239E: Nie powiod\u0142o si\u0119 za\u0142adowanie klasy java.lang.String 
+SERVER_LAUNCHER_34.explanation=Nie powiod\u0142o si\u0119 za\u0142adowanie klasy java.lang.String.
+SERVER_LAUNCHER_34.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_35=CWWKB0240E: Nie powiod\u0142o si\u0119 utworzenie listy parametr\u00f3w metody main 
+SERVER_LAUNCHER_35.explanation=Nie powiod\u0142o si\u0119 utworzenie listy parametr\u00f3w metody main.
+SERVER_LAUNCHER_35.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_36=CWWKB0241E: Nie mo\u017cna ustawi\u0107 parametru _BPXK_WLM_PROPAGATE=NO 
+SERVER_LAUNCHER_36.explanation=Nie mo\u017cna ustawi\u0107 parametru _BPXK_WLM_PROPAGATE=NO.
+SERVER_LAUNCHER_36.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_37=CWWKB0242E: Nie mo\u017cna ustawi\u0107 parametru JAVA_THREAD_MODEL=HEAVY 
+SERVER_LAUNCHER_37.explanation=Nie mo\u017cna ustawi\u0107 parametru JAVA_THREAD_MODEL=HEAVY.
+SERVER_LAUNCHER_37.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_38=CWWKB0243E: Nie mo\u017cna ustawi\u0107 parametru JAVA_PROPAGATE=NO 
+SERVER_LAUNCHER_38.explanation=Nie mo\u017cna ustawi\u0107 parametru JAVA_PROPAGATE=NO.
+SERVER_LAUNCHER_38.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_39=CWWKB0244E: Nie mo\u017cna ustawi\u0107 warto\u015bci domy\u015blnej parametru _EDC_PTHREAD_YIELD 
+SERVER_LAUNCHER_39.explanation=Nie mo\u017cna ustawi\u0107 warto\u015bci domy\u015blnej parametru _EDC_PTHREAD_YIELD.
+SERVER_LAUNCHER_39.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_40=CWWKB0245E: Nie mo\u017cna ustawi\u0107 katalogu roboczego 
+SERVER_LAUNCHER_40.explanation=Nie mo\u017cna ustawi\u0107 katalogu roboczego.
+SERVER_LAUNCHER_40.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_41=CWWKB0246W: Sk\u0142adnia: bbgzsrv [argumenty liberty] nazwa_serwera 
+SERVER_LAUNCHER_41.explanation=Sk\u0142adnia: bbgzsrv [argumenty liberty] nazwa_serwera.
+SERVER_LAUNCHER_41.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_42=CWWKB0247E: Nie mo\u017cna przekierowa\u0107 wyj\u015bcia standardowego do katalogu LOG_DIR
+SERVER_LAUNCHER_42.explanation=Nie mo\u017cna przekierowa\u0107 wyj\u015bcia standardowego do katalogu LOG_DIR
+SERVER_LAUNCHER_42.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_43=CWWKB0248E: Nie mo\u017cna przekierowa\u0107 standardowego wyj\u015bcia b\u0142\u0119d\u00f3w do katalogu LOG_DIR
+SERVER_LAUNCHER_43.explanation=Nie mo\u017cna przekierowa\u0107 standardowego wyj\u015bcia b\u0142\u0119d\u00f3w do katalogu LOG_DIR
+SERVER_LAUNCHER_43.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_44=CWWKB0249E: Nie powiod\u0142o si\u0119 ustawienie katalogu PID lub pliku PID serwera
+SERVER_LAUNCHER_44.explanation=Nie powiod\u0142o si\u0119 ustawienie katalogu PID lub pliku PID serwera
+SERVER_LAUNCHER_44.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+#
+SERVER_LAUNCHER_45=CWWKB0250E: Podczas przetwarzania argument\u00f3w JVM_ARGS napotkano nieoczekiwany koniec pliku w trakcie przetwarzania znaku `"'
+SERVER_LAUNCHER_45.explanation=Podczas przetwarzania argument\u00f3w JVM_ARGS napotkano nieoczekiwany koniec pliku w trakcie przetwarzania znaku `"'
+SERVER_LAUNCHER_45.useraction=Wi\u0119cej informacji zawieraj\u0105 komunikaty w dzienniku zadania lub dzienniku systemowym.
+
+# NO MESSAGE LEFT IN THIS BLOCK 0201-0250: native code non-console messages 
+# -------------------------------------------------------------------------------------------------

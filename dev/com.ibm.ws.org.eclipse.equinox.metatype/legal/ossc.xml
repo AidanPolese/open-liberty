@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Eclipse Equinox metatype" 
+            projectURL="http://www.eclipse.org/projects/project_summary.php?projectid=rt.equinox" 
+            version="1.4.200" revision="M20161005-1200" 
+            license-type="EPL" 
+            contact="tjwatson@us.ibm.com" 
+            encryption="no">
+      <download location="Not available">
+         <file basename="org.eclipse.equinox.metatype_1.4.200.v20160324-1850.jar" checksum="54cec74d18988ab688cf7ee59ca00a3d"/>
+         <file basename="org.eclipse.equinox.metatype.source_1.4.200.v20160324-1850.jar" checksum="973223b1e6c6cddecbd35f34beed79ed"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+
+   <notes>
+   These equinox binaries are from the current stream for the ongoing 4.6.2 Equinox (Neon.2) release.
+   The 4.6.2 Equinox release is not yet available from the IBM Eclipse SDK (IES) download site.
+   A separate OSSC approval needs to be done on these binaries until the 4.6.2 Equinox (Neon.2)
+   release is made available from the IBM Eclipse SDK (IES) download site and is on the
+   All Usage Approved (AUA) list.
+   </notes>
+</ossc>

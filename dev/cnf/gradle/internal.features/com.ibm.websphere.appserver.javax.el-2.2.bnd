@@ -1,0 +1,8 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.javax.el-2.2
+
+publish.feature.resources: *.mf
+
+-buildpath: com.ibm.websphere.javaee.el.2.2;version=latest

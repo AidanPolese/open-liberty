@@ -1,0 +1,16 @@
+<project name="com.ibm.ws.org.eclipse.equinox.region" default="build">
+  <import file="../ant_build/public_imports/rejar_imports.xml"/>
+    
+  <patternset id="publish.bundles">
+  	<include name="**/*org.eclipse.equinox*"/>
+  </patternset>
+  
+  <target name="package">
+    <rejar version="1.0"
+           original.jar.version="1.3.2"
+           original.jar.name="org.eclipse.equinox.region"
+           src.jar="lib/org.eclipse.equinox.region_*.jar"
+           no.import.package="true"/>
+  </target>
+  
+</project>

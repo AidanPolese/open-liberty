@@ -1,0 +1,90 @@
+
+execute_unittest:
+     [echo] ---------- Starting com.ibm.ws.kernel.boot_test unit tests ----------
+     [echo] Started at: Time stamp: Wed Mar 8 2017 at 05:18:00
+     [echo] Timeout: 900000
+     [echo] Coverage JVM args: 
+     [echo] Component supplied JVM args: 
+      [jar] Building jar: /Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot_test/build/unittest/manifestclasspath.jar
+     [echo] The junit.jar.classpath value is: classes/ ../../unittest/src/ ../classes/ ../../src ../../../com.ibm.ws.kernel.boot/build/classes/ ../../../com.ibm.ws.kernel.boot/resources/ ../../../com.ibm.websphere.org.osgi.core/lib/ ../../../com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar ../../../com.ibm.websphere.org.osgi.service.component/lib/org.osgi.service.component-1.3.0.jar ../../../com.ibm.wsspi.org.osgi.service.component.annotations/lib/org.osgi.service.component.annotations-1.3.0.jar ../../../com.ibm.ws.logging/build/classes/ ../../../com.ibm.ws.logging/src/ ../../../com.ibm.ws.org.osgi.annotation.versioning/lib/org.osgi.annotation.versioning-1.0.0.jar ../../../com.ibm.websphere.org.osgi.service.cm/lib/org.osgi.service.cm-1.5.0.jar ../../../com.ibm.wsspi.org.osgi.service.event/lib/org.osgi.service.event-1.3.1.jar ../../../com.ibm.wsspi.org.osgi.service.log/lib/org.osgi.service.log-1.3.0.jar ../../../com.ibm.ws.org.objectweb.asm/lib/asm-all-5.0.3.jar ../../../com.ibm.ws.logging.core/build/classes/ ../../../com.ibm.ws.logging.core/src/ ../../../com.ibm.ws.kernel.boot.logging/build/classes/ ../../../com.ibm.ws.kernel.boot.logging/src/ ../../../com.ibm.ws.kernel.security.thread/build/classes/ ../../../com.ibm.ws.kernel.security.thread/src/ ../../../com.ibm.ws.ras.instrument/build/classes/ ../../../com.ibm.ws.ras.instrument/src/ ../../../../../../../../usr/local/Cellar/ant/1.9.6/libexec/lib/ant.jar ../../../com.ibm.ws.org.apache.commons.compress/lib/org.apache.commons.compress-1.10.jar ../../../com.ibm.ws.kernel.boot.common/build/classes/ ../../../com.ibm.ws.kernel.boot.common/src/ ../../../com.ibm.ws.kernel.boot.cmdline/build/classes/ ../../../com.ibm.ws.kernel.boot.cmdline/src/ ../../../com.ibm.ws.kernel.boot.core/build/classes/ ../../../com.ibm.ws.kernel.boot.core/src/ ../../../com.ibm.ws.kernel.boot.nested/build/classes/ ../../../com.ibm.ws.kernel.boot.nested/src/ ../../fat/src/ ../../resources/ ../../test-applications/shutdownfat/src/ ../../test-applications/checkJvmAppClasspath/src/ ../../../build.sharedResources/lib/hamcrest-all.jar ../../../ant_build/lib/jmock.jar ../../../ant_build/lib/jmock-junit4.jar ../../../ant_build/lib/junit.jar ../../../ant_build/lib/ws-junit.jar ../../../com.ibm.websphere.javaee.servlet.3.0/lib/com.ibm.ws.javax.servlet_3.0.jar ../../../com.ibm.json4j/lib/com.ibm.ws.prereq.json4j.jar ../../../com.ibm.ws.cds/lib/com.ibm.cds_3.0.1.201410101357.jar ../../../com.ibm.ws.common.encoder/build/classes/ ../../../com.ibm.ws.common.encoder/src/ ../../../com.ibm.ws.config/build/classes/ ../../../com.ibm.ws.config/src/ ../../../com.ibm.ws.config/resources/ ../../../com.ibm.ws.config.ext/build/classes/ ../../../com.ibm.ws.config.ext/src/ ../../../com.ibm.wsspi.org.osgi.service.metatype/lib/org.osgi.service.metatype-1.3.0.jar ../../../com.ibm.ws.org.eclipse.equinox.metatype/lib/org.eclipse.equinox.metatype_1.4.200.v20160324-1850.jar ../../../com.ibm.ws.kernel.service/build/classes/ ../../../com.ibm.ws.kernel.service/src/ ../../../com.ibm.ws.kernel.service/resources/ ../../../com.ibm.ws.kernel.filemonitor/build/classes/ ../../../com.ibm.ws.kernel.filemonitor/src/ ../../../com.ibm.ws.kernel.filemonitor/resources/ ../../../com.ibm.ws.threading/build/classes/ ../../../com.ibm.ws.threading/src/ ../../../com.ibm.ws.threading/resources/ ../../../com.ibm.ws.runtime.update/build/classes/ ../../../com.ibm.ws.runtime.update/src/ ../../../com.ibm.ws.runtime.update/resources/ ../../../org.eclipse.osgi/lib/org.eclipse.osgi_3.11.3.v20170118-1931.jar ../../../com.ibm.ws.config.schemagen/build/classes/ ../../../com.ibm.ws.config.schemagen/src/ ../../../com.ibm.ws.kernel.service.location/build/classes/ ../../../com.ibm.ws.kernel.service.location/src/ ../../../com.ibm.ws.org.apache.aries.util/build/classes/ ../../../com.ibm.ws.org.apache.aries.util/src/ ../../../com.ibm.ws.org.apache.aries.util/lib/org.apache.aries.util-1.1.2-ibm-s20170124-0721.jar ../../../com.ibm.ws.org.eclipse.equinox.region/lib/org.eclipse.equinox.region_1.3.2.v20170118-1930.jar ../../../com.ibm.ws.kernel.feature.cmdline/build/classes/ ../../../com.ibm.ws.kernel.feature.cmdline/src/ ../../../com.ibm.ws.kernel.feature.core/build/classes/ ../../../com.ibm.ws.kernel.feature.core/src/ ../../../com.ibm.wsspi.org.osgi.namespace.service/lib/org.osgi.namespace.service-1.0.0.jar ../../../wlp.lib.extract/build/classes/ ../../../wlp.lib.extract/src/ ../../../wlp.lib.extract/resources/ ../../../prereq.java.tools/lib/tools.jar ../../../com.ibm.ws.kernel.cmdline/build/classes/ ../../../com.ibm.ws.kernel.cmdline/resources/ ../../../com.ibm.ws.config.server.schemagen/build/classes/ ../../../com.ibm.ws.config.server.schemagen/src/ ../../../com.ibm.ws.config.server.schemagen/resources/ ../../../com.ibm.ws.config.utility/build/classes/ ../../../com.ibm.ws.config.utility/src/ ../../../com.ibm.ws.config.utility/resources/ ../../../com.ibm.ws.org.glassfish.json/lib/ ../../../com.ibm.ws.org.glassfish.json/lib/javax.json-1.0.4.jar ../../../com.ibm.ws.repository/lib/client-lib.jar ../../../com.ibm.ws.repository.liberty/build/classes/ ../../../com.ibm.ws.repository.liberty/src/ ../../../com.ibm.ws.org.apache.commons.io.1.4/lib/org.apache.commons.io-1.4.jar ../../../com.ibm.ws.crypto.passwordutil/build/classes/ ../../../com.ibm.ws.crypto.passwordutil/src/ ../../../com.ibm.ws.install/build/classes/ ../../../com.ibm.ws.install/src/ ../../../com.ibm.ws.install/resources/ ../../../com.ibm.ws.product.utility/build/classes/ ../../../com.ibm.ws.product.utility/src/ ../../../com.ibm.ws.product.utility/resources/ ../../../com.ibm.ws.repository.resolver/build/classes/ ../../../com.ibm.ws.repository.resolver/src/ ../../../com.ibm.wsspi.org.osgi.service.subsystem/lib/org.osgi.service.subsystem-1.1.0.jar ../../../com.ibm.ws.crypto.certificateutil/build/classes/ ../../../com.ibm.ws.crypto.certificateutil/src/ ../../../com.ibm.ws.crypto.ltpakeyutil/build/classes/ ../../../com.ibm.ws.crypto.ltpakeyutil/src/ ../../../com.ibm.ws.diagnostics/build/classes/ ../../../com.ibm.ws.diagnostics/src/ ../../../com.ibm.websphere.org.osgi.service.blueprint/lib/org.osgi.service.blueprint-1.0.2.jar ../../../com.ibm.ws.org.apache.felix.scr/lib/org.apache.felix.scr-2.0.8.jar ../../../com.ibm.ws.org.apache.felix.scr/build/classes/ ../../../com.ibm.ws.org.apache.felix.scr/resources/ ../../../com.ibm.ws.event/build/classes/ ../../../com.ibm.ws.event/src/ ../../../com.ibm.ws.install.utility/build/classes/ ../../../com.ibm.ws.install.utility/src/ ../../../com.ibm.ws.install.utility/resources/ ../../../com.ibm.ws.install.utility.installUtility/build/classes/ ../../../com.ibm.ws.install.utility.installUtility/src/ ../../../com.ibm.ws.install.utility.installUtility/resources/ ../../../com.ibm.ws.jmx/build/classes/ ../../../com.ibm.ws.jmx/src/ ../../../com.ibm.ws.org.apache.aries.jmx.api/lib/org.apache.aries.jmx.api-1.1.6-ibm-s20170124-0721.jar ../../../com.ibm.ws.kernel.boot.java7/build/classes/ ../../../com.ibm.ws.kernel.boot.java7/src/ ../../../com.ibm.ws.kernel.equinox.module/build/classes/ ../../../com.ibm.ws.kernel.equinox.module/src/ ../../../com.ibm.ws.kernel.equinox.module/resources/ ../../../com.ibm.ws.kernel.instrument.agent/build/classes/ ../../../com.ibm.ws.kernel.instrument.agent/src/ ../../../com.ibm.ws.kernel.instrument.check/build/classes/ ../../../com.ibm.ws.kernel.instrument.check/src/ ../../../com.ibm.ws.kernel.metatype.helper/build/classes/ ../../../com.ibm.ws.kernel.metatype.helper/src/ ../../../com.ibm.ws.kernel.metatype.helper/resources/ ../../../com.ibm.ws.logging.hpel/build/classes/ ../../../com.ibm.ws.logging.hpel/src/ ../../../com.ibm.ws.logging.hpel/resources/ ../../../com.ibm.ws.logging.hpel.osgi/build/classes/ ../../../com.ibm.ws.logging.hpel.osgi/src/ ../../../com.ibm.ws.logging.osgi/build/classes/ ../../../com.ibm.ws.logging.osgi/src/ ../../../com.ibm.ws.org.apache.aries.jmx.core.whiteboard/lib/org.apache.aries.jmx.core.whiteboard-1.1.6-ibm-s20170124-0721.jar ../../../com.ibm.ws.org.apache.felix.gogo.command/lib/org.apache.felix.gogo.command-0.16.0.jar ../../../com.ibm.ws.org.apache.felix.gogo.runtime/lib/org.apache.felix.gogo.runtime-0.16.2.jar ../../../com.ibm.ws.org.apache.felix.gogo.shell/lib/org.apache.felix.gogo.shell-0.12.0.jar ../../../com.ibm.ws.org.eclipse.equinox.console/build/classes/ ../../../com.ibm.ws.org.eclipse.equinox.console/src/ ../../../com.ibm.ws.org.eclipse.equinox.console/lib/org.eclipse.equinox.console_1.1.200.v20150929-1405.jar ../../../com.ibm.ws.org.eclipse.equinox.coordinator/lib/org.eclipse.equinox.coordinator_1.3.200.v20160325-1323.jar ../../../com.ibm.ws.security.utility/build/classes/ ../../../com.ibm.ws.security.utility/src/ ../../../com.ibm.ws.security.utility/resources/ ../../../com.ibm.ws.zos.command.processing/build/classes/ ../../../com.ibm.ws.zos.command.processing/src/ ../../../com.ibm.ws.zos.command.processing/resources/ ../../../com.ibm.ws.zos.core/build/classes/ ../../../com.ibm.ws.zos.core/src/ ../../../com.ibm.ws.zos.core/resources/ ../../../com.ibm.ws.zos.diagnostics/build/classes/ ../../../com.ibm.ws.zos.diagnostics/src/ ../../../com.ibm.ws.zos.diagnostics/resources/ ../../../com.ibm.ws.zos.logging/build/classes/ ../../../com.ibm.ws.zos.logging/src/ ../../../com.ibm.ws.zos.logging/resources/ ../../../com.ibm.wsspi.org.osgi.service.coordinator/lib/org.osgi.service.coordinator-1.0.2.jar ../../../com.ibm.wsspi.org.osgi.service.metatype.annotations/lib/org.osgi.service.metatype.annotations-1.3.0.jar ../../../com.ibm.websphere.org.osgi.service.http/lib/org.osgi.service.http-1.2.1.jar ../../../com.ibm.websphere.org.osgi.service.http.whiteboard/lib/org.osgi.service.http.whiteboard-1.0.0.jar ../../../com.ibm.ws.org.apache.aries.application.api/lib/org.apache.aries.application.api-1.0.1-ibm-s20170124-0721.jar ../../../com.ibm.ws.org.apache.aries.application.utils/lib/org.apache.aries.application.utils-1.0.1-ibm-s20170124-0721.jar ../../../fattest.simplicity/build/classes/ ../../../fattest.simplicity/src/ ../../../fattest.simplicity/lib/public.api.jar ../../../fattest.simplicity/lib/jlanclient.jar ../../../fattest.simplicity/lib/remoteaccess.jar ../../../fattest.simplicity/lib/ssh.jar ../../../fattest.simplicity/lib/provider.api.jar ../../../fattest.simplicity/lib/com.ibm.componenttest.common.jar ../../../fattest.simplicity/lib/com.ibm.ws.topology.helper.jar ../../../fattest.simplicity/autoFVT-defaults/lib/fat.util.jar ../../../fattest.simplicity/lib/shrinkwrap-api-1.2.3.jar ../../../fattest.simplicity/lib/shrinkwrap-impl-base-1.2.3.jar ../../../fattest.simplicity/lib/shrinkwrap-spi-1.2.3.jar ../../../com.ibm.ws.jmx.connector.client.rest/build/classes/ ../../../com.ibm.ws.jmx.connector.client.rest/src/ ../../../com.ibm.ws.jmx.connector.client.rest/resources/ ../../../fattest.simplicity/lib/jtidy-r938.jar ../../../com.ibm.ws.org.apache.commons.logging/build/classes/ ../../../com.ibm.ws.org.apache.commons.logging/src/ ../../../com.ibm.ws.org.apache.commons.logging/resources/ ../../../fattest.simplicity/lib/commons-httpclient-3.1.jar ../../../fattest.simplicity/jdbc/derby/derby.jar ../../../fattest.simplicity/jdbc/derby/derbynet.jar ../../../fattest.simplicity/lib/httpunit.jar ../../../com.ibm.ws.channelfw/build/classes/ ../../../com.ibm.ws.channelfw/src/ ../../../com.ibm.ws.channelfw/resources/ ../../../com.ibm.ws.timer/build/classes/ ../../../com.ibm.ws.timer/src/ ../../../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar ../../../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar ../../../build.sharedResources/lib/jmock/legacy/objenesis.jar ../../../com.ibm.websphere.javaee.ejb.3.2/build/classes/ ../../../com.ibm.websphere.javaee.ejb.3.2/src/ ../../../com.ibm.websphere.javaee.ejb.3.2/lib/javax.ejb-api-3.2.jar ../../../../../../../../usr/local/Cellar/ant/1.9.6/libexec/lib/ant-junit.jar ../../../../../../../../usr/local/Cellar/ant/1.9.6/libexec/lib/ant-junit4.jar
+    [junit] Testsuite: com.ibm.ws.kernel.boot.BootstrapConfigTest
+    [junit] Tests run: 31, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 160.532 sec
+    [junit] 
+    [junit] Testsuite: com.ibm.ws.kernel.boot.LaunchArgumentsTest
+    [junit] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 75.091 sec
+    [junit] 
+    [junit] Testsuite: com.ibm.ws.kernel.boot.LauncherTest
+    [junit] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 30.082 sec
+    [junit] 
+    [junit] Testsuite: com.ibm.ws.kernel.boot.internal.BootstrapManifestTest
+    [junit] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 50.076 sec
+    [junit] 
+    [junit] Testsuite: com.ibm.ws.kernel.boot.internal.FileUtilsTest
+    [junit] Tests run: 4, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 25.047 sec
+    [junit] 
+    [junit] ------------- Standard Output ---------------
+    [junit] SharedOutputManager captured the following: 
+    [junit] -- System.out -------------------------------------------------
+    [junit] -- System.err -------------------------------------------------
+    [junit] -- Messages -------------------------------------------------
+    [junit] -- Trace -------------------------------------------------
+    [junit] ------------- ---------------- ---------------
+    [junit] Testcase: testNormalizePathDrive(com.ibm.ws.kernel.boot.internal.FileUtilsTest):SKIPPED: got: <false>, expected: is <true>
+    [junit] Testsuite: com.ibm.ws.kernel.boot.internal.FrameworkManagerTest
+    [junit] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 30.11 sec
+    [junit] 
+    [junit] Testsuite: com.ibm.ws.kernel.boot.internal.KernelResolverTest
+    [junit] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 45.104 sec
+    [junit] 
+    [junit] Testsuite: com.ibm.ws.kernel.boot.internal.ServerLockTest
+    [junit] Tests run: 4, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 10.028 sec
+    [junit] 
+    [junit] ------------- Standard Output ---------------
+    [junit] SharedOutputManager captured the following: 
+    [junit] -- System.out -------------------------------------------------
+    [junit] -- System.err -------------------------------------------------
+    [junit] -- Messages -------------------------------------------------
+    [junit] -- Trace -------------------------------------------------
+    [junit] ------------- ---------------- ---------------
+    [junit] Testcase: testCheckServerLockPermissions(com.ibm.ws.kernel.boot.internal.ServerLockTest):SKIPPED: got: <false>, expected: is <true>
+    [junit] Testsuite: com.ibm.ws.kernel.boot.internal.ServerRunningTest
+    [junit] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.017 sec
+    [junit] 
+    [junit] Testsuite: com.ibm.ws.kernel.boot.internal.commands.DumpProcessorTest
+    [junit] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 10.17 sec
+    [junit] 
+    [junit] Testcase: testUnableToFindJavaDumps(com.ibm.ws.kernel.boot.internal.commands.DumpProcessorTest):	Caused an ERROR
+    [junit] tried to access class com.ibm.ws.kernel.boot.archive.internal.UnixModeHelperImpl from class com.ibm.ws.kernel.boot.archive.internal.ZipArchive
+    [junit] java.lang.IllegalAccessError: tried to access class com.ibm.ws.kernel.boot.archive.internal.UnixModeHelperImpl from class com.ibm.ws.kernel.boot.archive.internal.ZipArchive
+    [junit] 	at com.ibm.ws.kernel.boot.archive.internal.ZipArchive.<clinit>(ZipArchive.java:39)
+    [junit] 	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+    [junit] 	at com.ibm.ws.kernel.boot.archive.ArchiveFactory.create(ArchiveFactory.java:76)
+    [junit] 	at com.ibm.ws.kernel.boot.internal.commands.DumpProcessor.execute(DumpProcessor.java:57)
+    [junit] 	at com.ibm.ws.kernel.boot.internal.commands.DumpProcessorTest.testUnableToFindJavaDumps(DumpProcessorTest.java:93)
+    [junit] 
+    [junit] 
+
+BUILD FAILED
+
+/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/ant_build/public_imports/internal_imports/unittest.xml:160: Tests failed
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTask.actOnTestResult(JUnitTask.java:2160)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTask.execute(JUnitTask.java:1103)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTask.oneJunitThread(JUnitTask.java:923)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTask.runTestsInThreads(JUnitTask.java:936)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTask.execute(JUnitTask.java:845)
+	at org.apache.tools.ant.UnknownElement.execute(UnknownElement.java:293)
+	at sun.reflect.GeneratedMethodAccessor4.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.tools.ant.dispatch.DispatchUtils.execute(DispatchUtils.java:106)
+	at org.apache.tools.ant.Task.perform(Task.java:348)
+	at org.apache.tools.ant.Target.execute(Target.java:435)
+	at org.apache.tools.ant.Target.performTasks(Target.java:456)
+	at org.apache.tools.ant.Project.executeSortedTargets(Project.java:1405)
+	at org.apache.tools.ant.Project.executeTarget(Project.java:1376)
+	at org.apache.tools.ant.helper.DefaultExecutor.executeTargets(DefaultExecutor.java:41)
+	at org.apache.tools.ant.Project.executeTargets(Project.java:1260)
+	at org.apache.tools.ant.Main.runBuild(Main.java:853)
+	at org.apache.tools.ant.Main.startAnt(Main.java:235)
+	at org.apache.tools.ant.launch.Launcher.run(Launcher.java:285)
+	at org.apache.tools.ant.launch.Launcher.main(Launcher.java:112)

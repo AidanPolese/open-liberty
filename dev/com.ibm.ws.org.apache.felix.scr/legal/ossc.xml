@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Felix SCR" 
+            projectURL="http://felix.apache.org/" 
+            version="2.0.8" 
+            revision="1779163" 
+            license-type="Apachev2" 
+            contact="tjwatson@us.ibm.com" 
+            encryption="no">
+         <download location="https://svn.apache.org/repos/asf/felix/releases/org.apache.felix.scr-2.0.8">
+         <file basename="org.apache.felix.scr-2.0.8.jar" checksum="41a6adce12e9f7d4377b1028599e8723"/>
+         <file basename="org.apache.felix.scr-2.0.8-sources.jar" checksum="10466733c8bdf62d8d020240d137441c"/>
+         <file basename="org.apache.felix.utils-1.8.6-sources.jar" checksum="12df6eea018980ed3ff0b612c335b15c"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+
+   <notes>
+   scr 2.0.6 (r1755022) is an official apache release.
+   
+<![CDATA[
+]]>
+   </notes>
+</ossc>

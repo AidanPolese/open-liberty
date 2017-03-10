@@ -1,0 +1,3 @@
+<server>
+  <include location="${editions.base}/extended.xml"/>
+</server>

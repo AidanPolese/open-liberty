@@ -1,0 +1,10 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.collective.rest.notify-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.ws.org.joda.time.1.6.2;version=latest, \
+	com.ibm.ws.collective.rest.notify;version=latest

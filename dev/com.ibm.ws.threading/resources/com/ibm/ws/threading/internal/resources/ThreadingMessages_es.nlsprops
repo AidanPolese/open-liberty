@@ -1,0 +1,32 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+# # {0} description of each insert field
+# MSG_DESCRIPTIVE_NAME=CWWKExxxxI: This is a message with inserts {0}
+# MSG_DESCRIPTIVE_NAME.explanation=Explanation text for the message
+# MSG_DESCRIPTIVE_NAME.useraction=User action text for the message
+#
+#CMVCPATHNAME com.ibm.ws.threading/resources/com/ibm/ws/threading/internal/resources/ThreadingMessages.nlsprops
+#COMPONENTPREFIX CWWKE
+#COMPONENTNAMEFOR CWWKE WebSphere kernel bootstrap, command line, and location service
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+# NLS_MESSAGEFORMAT_VAR
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+# -------------------------------------------------------------------------------------------------
+# 1200 - 1299 com.ibm.ws.threading.internal.resources.ThreadingMessages
+# -------------------------------------------------------------------------------------------------
+
+# {0} size of the pool when a deadlock was first detected
+# {1} current size of the pool
+unbreakableExecutorHang=CWWKE1200W:  Parece que todas las hebras del ejecutor predeterminado de Liberty est\u00e1n colgadas. Liberty ha aumentado autom\u00e1ticamente el n\u00famero de hebras de {0} a {1}. No obstante, parece que todas las hebras siguen estando colgadas.
+unbreakableExecutorHang.explanation=Se ha producido un error que ha provocado el cuelgue de un ejecutor y el tiempo de ejecuci\u00f3n de Liberty ha a\u00f1adido un n\u00famero significativo de hebras en un intento de finalizar la condici\u00f3n de cuelgue.  No obstante, el ejecutor continua sin dar respuesta. 
+unbreakableExecutorHang.useraction=Determine si hay alg\u00fan cuello de botella, como una tabla de base de datos bloqueada, que impida la resoluci\u00f3n de las hebras en el servidor. Si no hay ning\u00fan cuello de botella y el servidor requiere l\u00edcitamente de m\u00e1s hebras, ajuste el atributo coreThreads del elemento de configuraci\u00f3n del ejecutor.

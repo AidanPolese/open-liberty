@@ -1,0 +1,188 @@
+*ASM CICS(NOPROLOG NOEPILOG SYSEIB)
+*/*START OF SPECIFICATIONS ********************************************
+*
+* DESCRIPTIVE-NAME: WAS z/OS Adapters CICS TRUE Context Management
+*
+* CSECT NAME: BBOACONT
+*
+* COMPONENT:  boss_adaptor
+*
+* EYE-CATCHER: none
+*
+* PROPRIETARY STATEMENT=
+* IBM Confidential
+* OCO Source Materials
+* 5655-I35 (C) Copyright IBM Corp. 2014
+* The source code for this program is not published or otherwise
+* divested of its trade secrets, irrespective of what has been
+* deposited with the U.S. Copyright Office.
+* Status = H28W700
+*
+*
+* FUNCTION:  Performs CICS TRUE context management (TS 4.2+)
+*
+* METHOD-OF-ACCESS:
+*
+* SIZE:
+*
+* SERIALIZATION: None
+*
+* DEPENDENCIES: None
+*
+* EXTERNAL CLASSIFICATION: NONE
+* END OF EXTERNAL CLASSIFICATION:
+*
+* CHANGE-ACTIVITY:
+*
+*   Flag Reason      Release  YYYYMMDD Origin  Description
+*   $PI24444         H28W800  20140820  PDFG   Support CICS TS5.2
+*
+*END OF SPECIFICATIONS ***********************************************/
+*
+         TITLE 'BBOACONT - WAS Adapters context management'
+         DFHREGS ,
+BBOACONT AMODE 31
+BBOACONT RMODE ANY
+         DFHUEXIT TYPE=XPIENV
+BBOACONT CSECT
+*----------------------------------------------------------------------
+* On entry, R7  -> Pointer to DFHUECON
+*           R13 -> 72 byte register save area (RSA) with NAB set
+*           R14 -> Return-to address
+*           R15 -> Entry point
+*----------------------------------------------------------------------
+         J     Around
+         DC    CL8'BBOACONT'            Module name
+         DC    CL8' *OLA3* '            Stub marker - OLA3
+         DC    CL10'&SYSDATE '          Asm date
+         DC    CL6'&SYSTIME'            Asm time
+Around   DS    0H
+         STM   R14,R12,12(R13)  SAVE REGISTERS
+         LR    R12,R15          SET BASE REGISTER
+         USING BBOACONT,R12
+         LR    R15,R13
+         L     R13,76(R15)      Get our save area from NAB
+         ST    R15,4(,R13)      Save caller's R13 in Bkchain
+         USING DYNAREA,R13
+* Start logic
+         USING DFHUECON,R7      Address context management parms
+         EXEC  CICS ADDRESS EIB(DFHEIBR)                   
+         USING DFHEIBLK,DFHEIBR Use R11 to address EIB 
+         L     R8,UECON_FLAGS               Get addr of flag byte
+         TM    0(R8),UECON_ADAPTER_DATA_ON  Will data be accepted?
+         BZ    DONE                         ..No, just exit then
+*
+*---------------------------------------------------------------------
+* Get to EXEC CICS START TRANS(BBO#) FROM data
+*---------------------------------------------------------------------
+         L     R6,UECON_EXEC_PLIST_PTR      Get to EC START plist
+         USING IC_ADDR_LIST,R6
+*
+         L     R9,IC_ADDR3                  Get addr EC START tx id
+         MVC   LINKTXID(4),0(R9)            Copy tranid
+         BBOATRC TXT=CURRTXID,VSTR=LINKTXID,VL=4,T=TRACE_5
+*
+         L     R9,IC_ADDR4                  Get addr EC START parms
+         ST    R9,STRPARM@
+         BBOATRC TXT=STRPARMS,VHEX=STRPARM@,T=TRACE_5
+         L     R9,IC_ADDR5                  Get addr EC START plen
+         L     R9,0(R9)
+         ST    R9,STRPARML
+         BBOATRC TXT=STRLGTH,VHEX=STRPARML,T=TRACE_5
+         DROP  R6
+         L     R6,STRPARM@
+* Copy over Correlator ID
+         MVC   DATA64(64),ACLNK_CORR_ID-ACLNKEYE(R6)
+         BBOATRC TXT=CORRDATA,VSTR=DATA64_1,VL=8,T=TRACE_5
+         L     R8,UECON_ADAPTER_ID_PTR      Obtain address of ID
+         MVI   0(R8),C' '
+         MVC   1(63,R8),0(R8)               Prefill with blanks
+         MVC   0(64,R8),DATA64              Set ID
+* Copy over Correlator Data 1
+         MVC   DATA64(64),ACLNK_CORR_DATA1-ACLNKEYE(R6)
+         BBOATRC TXT=CORRDATA,VSTR=DATA64_1,VL=8,T=TRACE_5
+         L     R8,UECON_ADAPTER_DATA1_PTR   Obtain address of DATA1
+         MVI   0(R8),C' '
+         MVC   1(63,R8),0(R8)               Prefill with blanks
+         MVC   0(64,R8),DATA64              Set DATA1
+* Copy over Correlator Data 2
+         MVC   DATA64(64),ACLNK_CORR_DATA2-ACLNKEYE(R6)
+         BBOATRC TXT=CORRDATA,VSTR=DATA64_1,VL=8,T=TRACE_5
+         L     R8,UECON_ADAPTER_DATA2_PTR   Obtain address of DATA2
+         MVI   0(R8),C' '
+         MVC   1(63,R8),0(R8)               Prefill with blanks
+         MVC   0(64,R8),DATA64              Set DATA2
+* Copy over Correlator Data 3
+         MVC   DATA64(64),ACLNK_CORR_DATA3-ACLNKEYE(R6)
+         BBOATRC TXT=CORRDATA,VSTR=DATA64_1,VL=8,T=TRACE_5
+         L     R8,UECON_ADAPTER_DATA3_PTR   Obtain address of DATA3
+         MVI   0(R8),C' '
+         MVC   1(63,R8),0(R8)               Prefill with blanks
+         MVC   0(64,R8),DATA64              Set DATA3
+         BBOATRC TXT=RETDATA,T=TRACE_5
+DONE     DS    0H
+         L     R13,4(,R13)      Load caller's RSA
+         L     R14,12(R13)      Restore caller's R14
+         LM    R0,R12,20(R13)   RESTORE CALLERS R0-R12
+         BSM   0,R14            RETURN TO CALLER
+*
+WRITE_CICS_TRC DS 0H                                         
+         MVC   DBGMSG+0(4),EIBTRNID                          
+         MVI   DBGMSG+4,C' '                                 
+         UNPK  DBGMSG+5(8),EIBTASKN(4)                       
+         OI    DBGMSG+12,X'F0'                               
+         MVI   DBGMSG+13,C' '                                
+         MVC   DBGMSG+14(60),TRCEDATM                        
+         EXEC  CICS WRITEQ TD QUEUE('BBOQ')                            X
+               FROM(DBGMSG) LENGTH(DBGMSGL) NOHANDLE
+         BR    R8                                            
+         DROP  DFHEIBR
+*
+         LTORG
+         COPY  BBOATRC2
+*
+CURRTXID DC    CL60'BBOATR52: EC START TRANID             ---->>       X
+                       '
+STRPARMS DC    CL60'BBOATR52: EC START PARMS address      ---->>       X
+                       '
+STRLGTH  DC    CL60'BBOATR52: EC START PARMS length       ---->>       X
+                       '
+CORRDATA DC    CL60'BBOATR52: Correlator data (8bytes)    ---->>       X
+                       '
+RETDATA  DC    CL60'BBOATR52: Returning to CICS OLA Context data       X
+                       '
+DBGMSGL  DC    H'80'
+*
+         DFHUEXIT TYPE=RM
+
+*
+* Dynamic area mapping
+DYNAREA  DSECT
+         DS    CL72             RSA for caller
+STRPARM@ DS A                   EC Start parm@ 
+STRPARML DS F                   EC Start parmlen
+LINKTXID DS CL4              EC START tranid 
+DATA64   DS 0CL64            Correlation data
+DATA64_1 DS CL8              Correlation data
+DATA64_2 DS CL56             Correlation data
+TRACE_5  DS CL5
+         DS 0F
+         COPY  BBOATRC1
+DBGMSG   DS CL80        
+         DS 0D
+*
+* RSA for CICS commands
+         DFHEISTG DSECT=NO 
+*
+* WOLA link task parms
+         BBOACLNK
+*
+* DFHICUED mapping - map EXEC CICS START parms
+         COPY DFHICUED 
+*
+* EIB mapping           
+         COPY DFHEIBLK  
+*
+DFHEIBR  EQU 11
+*
+         END  BBOACONT

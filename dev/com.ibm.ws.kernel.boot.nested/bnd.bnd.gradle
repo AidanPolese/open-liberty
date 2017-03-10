@@ -1,0 +1,21 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Export-Package: \
+	com.ibm.ws.kernel.launch.service,\
+	com.ibm.ws.kernel,\
+	com.ibm.ws.kernel.launch.internal
+
+instrument.ffdc: true
+instrument.taskInjection: true
+instrument.classesIncludes: com/ibm/ws/kernel/launch/internal/*.class
+
+publish.wlp.jar.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.kernel.boot.core;version=latest,\
+	com.ibm.ws.logging.core;version=latest,\
+	com.ibm.ws.kernel.security.thread;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

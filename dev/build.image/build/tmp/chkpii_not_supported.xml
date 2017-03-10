@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<testsuites xmlns="http://www.w3.org/1999/xhtml" errors="0" failures="1" name="" tests="1" time="00:00:00">
+<testsuite errors="0" failures="1" name="chkpii not supported" tests="1" time="">
+<testcase classname="chkpii not supported" name="chkpii not supported">
+<failure message="chkpii is not supported on this build engine"><![CDATA[This build should run chkpii, but the engine does not support it.  Please report this error to liberty-infrastructure@mailman.hursley.ibm.com.]]></failure>
+</testcase>
+</testsuite>
+</testsuites>

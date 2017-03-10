@@ -1,0 +1,75 @@
+*
+* IBM Confidential
+*
+* OCO Source Materials
+*
+* Copyright IBM Corp. 2012
+*
+* The source code for this program is not published or otherwise
+* divested of its trade secrets, irrespective of what has been
+* deposited with the U.S. Copyright Office.
+*
+         MACRO
+&NAME    CPCEPIL
+         GBLC  &CCN_LITN
+         GBLC  &CCN_CSECT
+         GBLB  &BBGZ_CPCEPIL_DSECT
+* --------------------------------------------------------------------
+* Back up the dynamic area 16 bytes to see where the entry linkage
+* got the dynamic area from.
+* --------------------------------------------------------------------
+         LGR  2,15   Save return code in R2
+         AGHI 13,-16 Subtract back to the dynamic area details
+         LGR  0,13 Use R0 to calculate the address to free
+         NILH 0,X'FFF0' And off to a megabyte boundary
+         NILL 0,X'0000' And off to a megabyte boundary
+         LGHI 15,CPCPROL_DYNAREA_FROM_POOL Load the pool constant
+         CG   15,0(13) See if we got the dynamic area from a pool
+         BRNE FREEDYNIARV64&SYSNDX No, free using IARV64
+* --------------------------------------------------------------------
+* Free the cell to a cell pool.  Cell address is already in R0.
+* --------------------------------------------------------------------
+         LG   1,8(13) Move cell pool anchor address to R1 for free
+         CALL CSRC4RFR
+         LGR  15,2    Restore return code
+         PR           Return to caller.
+FREEDYNIARV64&SYSNDX DS 0H
+* --------------------------------------------------------------------
+* Free the dynamic area using IARV64.
+* --------------------------------------------------------------------
+         LGR  12,0  Move address to free into R12
+         LARL 4,&CCN_LITN  Address constants
+         USING &CCN_LITN,4         
+         STORAGE OBTAIN,LENGTH=CPCEPIL_TEMP_STORAGE_LEN,BNDRY=DBLWD,   X
+               SP=CPCEPIL_TEMP_STORAGE_SUBPOOL,                        X
+               KEY=CPCEPIL_TEMP_STORAGE_KEY
+         LGR  6,1              Save storage
+         USING CPCEPIL_IARV64,6
+         STG  12,CPCEPIL_IARV64_ORIGIN Store address to free
+         IARV64 REQUEST=DETACH,MATCH=SINGLE,                           X
+               MEMOBJSTART=CPCEPIL_IARV64_ORIGIN,                      X
+               USERTKN=NO_USERTKN,COND=NO,PLISTVER=0,                  X
+               MF=(E,CPCEPIL_IARV64_PLIST,COMPLETE)
+         DROP 6
+         STORAGE RELEASE,LENGTH=CPCEPIL_TEMP_STORAGE_LEN,ADDR=(6),     X
+               SP=CPCEPIL_TEMP_STORAGE_SUBPOOL,                        X
+               KEY=CPCEPIL_TEMP_STORAGE_KEY
+         DROP 4
+         LGR  15,2    Restore return code
+         PR           Return to caller.
+* --------------------------------------------------------------------
+* Define the DSECTs we're going to use if this is the first time the
+* macro is being invoked.
+* --------------------------------------------------------------------
+         AIF (&BBGZ_CPCEPIL_DSECT).NODSECT
+&BBGZ_CPCEPIL_DSECT SETB 1
+CPCEPIL_IARV64         DSECT    Mapping of the parms to IARV64
+CPCEPIL_IARV64_ORIGIN  DS FD    Returned storage start address
+CPCEPIL_IARV64_PLIST   DS CL88  Parameter list for execute form v0
+                       DS CL160 Available
+CPCEPIL_TEMP_STORAGE_LEN EQU 192     Length of temporary storage
+CPCEPIL_TEMP_STORAGE_SUBPOOL EQU 229 Subpool of temporary storage
+CPCEPIL_TEMP_STORAGE_KEY EQU 2       Key of temporary storage
+&CCN_CSECT CSECT
+.NODSECT ANOP
+         MEND

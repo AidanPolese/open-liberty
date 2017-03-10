@@ -1,0 +1,39 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+# This really is a singleton bundle
+Bundle-Name: z/OS Native Logging
+Bundle-SymbolicName: com.ibm.ws.zos.logging
+Bundle-Description: z/OS specific code in support of tracing and logging from native; version=${bVersion}
+
+Bundle-Activator: com.ibm.ws.zos.logging.internal.ZosLoggingBundleActivator
+
+WS-TraceGroup: zCore
+
+#Export-Package: com.ibm.ws.zos.logging.console;provide:=true
+Export-Package: com.ibm.ws.zos.logging;provide:=true
+
+Private-Package: com.ibm.ws.zos.logging.console, \
+  com.ibm.ws.zos.logging.internal
+
+-includeresource: \
+ META-INF/MessageRouter.properties=resources/MessageRouter.properties, \
+ OSGI-INF=resources/OSGI-INF
+
+    
+-dsannotations: \
+  com.ibm.ws.zos.logging.internal.LoggingHardcopyLogHandler, \
+  com.ibm.ws.zos.logging.console.LoggingCommandHandler, \
+  com.ibm.ws.zos.logging.ZosLoggingConfiguration
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.kernel.boot.core;version=latest,\
+	com.ibm.ws.zos.command.processing;version=latest,\
+	com.ibm.ws.zos.core;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.cm.1.5.0;version=latest,\
+	com.ibm.ws.logging.osgi;version=latest,\
+	com.ibm.ws.logging.core;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

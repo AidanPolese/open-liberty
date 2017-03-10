@@ -1,0 +1,24 @@
+<!-- READ THIS BEFORE EDITING
+
+    This file dictates which features go out in the Liberty beta.
+    The beta release always contains the same baseline of features (see server.xml).
+
+    Each feature that is in beta is to be listed in this file and in the template server.xml.
+-->
+<server>
+  <!-- List of all beta features.
+       Remember to add each feature to the template server.xml! -->
+  <featureManager>
+    <!-- The following features are new and in beta! -->
+	<feature>audit-1.0</feature>
+	<feature>bluemixLogCollector-1.1</feature>
+	<feature>logstashCollector-1.1</feature>
+	<feature>jpaContainer-2.1</feature>
+	<feature>microProfileConfig-0.1</feature>
+    <feature>microProfileFaultTolerance-0.1</feature>
+
+	<!--  The following features are already available and have beta enhancements to them -->
+	<feature>batchManagement-1.0</feature>
+	<feature>bluemixUtility-1.0</feature>
+  </featureManager>
+</server>

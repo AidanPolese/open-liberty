@@ -1,0 +1,159 @@
+*/****START OF SPECIFICATIONS*****************************************/
+*/*                                                                  */
+*/*01* Macro Name: BBOATRC                                           */
+*/*                                                                  */
+*/*01* Descriptive Name: BOSS Optimized local adapters trace         */
+*/*                                                                  */
+*/*02*  Acronym: BBOATRC                                             */
+*/*                                                                  */
+*/*01* PROPRIETARY STATEMENT=                                        */
+*/*                                                                  */
+*/*********************************************************************
+** IBM Confidential
+** OCO Source Materials
+** 5655-N02 Copyright IBM Corp. 2000, 2008
+** The source code for this program is not published or otherwise
+** divested of its trade secrets, irrespective of what has been
+** deposited with the U.S. Copyright Office.
+** Status = H28W700
+**********************************************************************/
+*/*                                                                  */
+*/*                                                                  */
+*/*                                                                  */
+*/*01* COMPONENT: boss_adapters - optimized local adapters           */
+*/*                                                                  */
+*/*01* DSECT Names:                                                  */
+*/*                                                                  */
+*/*01* Eye-Catcher: none                                             */
+*/*02*  Offset:                                                      */
+*/*02*  Length:                                                      */
+*/*                                                                  */
+*/*01* Storage Attributes:                                           */
+*/*02*  Subpool:                                                     */
+*/*02*  Key:                                                         */
+*/*02*  Residency: Any                                               */
+*/*02*  Main Storage: YES                                            */
+*/*02*  Auxiliary Storage: n/a                                       */
+*/*02*  Virtual Storage: n/a                                         */
+*/*                                                                  */
+*/*01* Size: See assembler listing.                                  */
+*/*                                                                  */
+*/*01* Created by: OLA API and supporting functions                  */
+*/*                                                                  */
+*/*01* Pointed to by:                                                */
+*/*                                                                  */
+*/*01* Serialization: PLO                                            */
+*/*                                                                  */
+*/*01* Function: Structures for connector tracing of assembler       */
+*/*              routines.                                           */
+*/*                                                                  */
+*/*01* Method of Access:                                             */
+*/*                                                                  */
+*/*02*  ASM: COPY BBOATRC                                            */
+*/*                                                                  */
+*/*01* Notes:                                                        */
+*/*                                                                  */
+*/*02*  Dependencies: None                                           */
+*/*                                                                  */
+*/*01* Distribution Library:                                         */
+*/*                                                                  */
+*/* EXTERNAL CLASSIFICATION: NONE                                    */
+*/* END OF EXTERNAL CLASSIFICATION                                   */
+*/*                                                                  */
+*/*                                                                  */
+*/*01* Change Activity:                                              */
+*/*                                                                  */
+*/* Flag Reason  Release  YYYYMMDD  Origin  Description              */
+*/* -----------  -------  --------  ------  ------------------------ */
+*/*              H28W700, 20080510,  JTM    Created for high speed   */
+*/*                                         connectors LI4798/4799.  */
+*/* $576822      H28W700, 20090223,  JTM    Improve trace under CICS */
+*/* $710321      H28W800, 20110710,  JTM    Allow use in non-CICS    */
+*/* $PM74658     H28W700, 20121009,  PDFG   Allow use with base reg  */
+*/*                                                                  */
+*/****END OF SPECIFICATIONS*******************************************/
+* ----------------------------------------------------------------- *
+*                                                                   *
+* Trace Macro, BBOATRC.                                             *
+*                                                                   *
+* ----------------------------------------------------------------- *
+         MACRO
+&NAME    BBOATRC &TXT=,&VSTR=,&VHEX=,&VINT=,&RG1=R10,&RG2=,&VL=4,&T=,  X
+               &CICS=Y
+         LCLC  &L1
+&L1      SETC  'TRC'.'&SYSNDX'
+         AIF   ('&T' EQ '').MSGON
+         CLC   &T,=CL5'TRACE'
+         JNE   &L1
+.MSGON   ANOP
+         MVC   TRCEDATA(TRCEWTOL),TRCEWTO
+         MVC   TRCEDATM(60),TRCECLR
+         LA    &RG1,TRCEDATA
+         MVC   TRCEDATM(49),&TXT
+         AIF   ('&VSTR' EQ '' AND '&VINT' EQ ''                        X
+               AND '&VHEX' EQ '' ).DOTRCE
+         AIF   ('&VINT' NE '').DOINT
+         AIF   ('&VHEX' NE '').DOHEX
+         MVC   TRCEDATM+49(&VL),&VSTR
+         AGO   .DOTRCE
+.DOINT   ANOP
+         SR    &RG2,&RG2
+         AIF   ('&VL' EQ '1').DOINT1
+         AIF   ('&VL' EQ '2').DOINT2
+         AIF   ('&VL' EQ '3').DOINT3
+         AGO   .DOINT4
+.DOINT1  ANOP
+         ICM   &RG2,B'0001',&VINT
+         AGO   .DOCVD
+.DOINT2  ANOP
+         ICM   &RG2,B'0011',&VINT
+         AGO   .DOCVD
+.DOINT3  ANOP
+         ICM   &RG2,B'0111',&VINT
+         AGO   .DOCVD
+.DOINT4  L     &RG2,&VINT
+.DOCVD   CVD   &RG2,TRCEDWRD
+         UNPK  TRCEDISP+0(4),TRCEDWRD+4(4)
+         OI    TRCEDISP+3,X'F0'
+         MVC   TRCEDATM+49(4),TRCEDISP
+         AGO   .DOTRCE
+.DOHEX   ANOP
+         MVC   TRCECHR5(5),=XL5'F0F0F0F0'
+         MVC   TRCECHR9(9),=XL9'F0F0F0F0F0F0F0F0'
+         AIF   ('&VL' EQ '1').DOHEX1
+         AIF   ('&VL' EQ '2').DOHEX2
+         AIF   ('&VL' EQ '3').DOHEX3
+         AGO   .DOHEX4
+.DOHEX1  ANOP
+         MVC   TRCECHR5+3(1),&VHEX
+         UNPK  TRCECHR9(9),TRCECHR5+3
+.DOHEX2  ANOP
+         MVC   TRCECHR5+2(2),&VHEX
+         UNPK  TRCECHR9(9),TRCECHR5+2
+         AGO   .DOCNVT
+.DOHEX3  ANOP
+         MVC   TRCECHR5+1(3),&VHEX
+         UNPK  TRCECHR9(9),TRCECHR5+1
+         AGO   .DOCNVT
+.DOHEX4  MVC   TRCECHR5+0(4),&VHEX
+         UNPK  TRCECHR9(9),TRCECHR5(5)
+.DOCNVT  TR    TRCECHR9(8),TRCEHTBL
+         MVI   TRCEDISP,C' '
+         MVC   TRCEDISP+1(7),TRCEDISP
+         MVC   TRCEDISP(8),TRCECHR9
+         MVC   TRCEDATM+49(8),TRCEDISP
+.DOTRCE  ANOP
+         AIF   ('&CICS' EQ 'Y').DOCICS
+         WTO   MF=(E,(&RG1)),ROUTCDE=11,MCSFLAG=HRDCPY
+         AGO   .MACEXIT
+.DOCICS  ANOP
+         ST    R8,TRCESAVER8
+         ST    DFHEIBR,TRCESAVER9
+         LARL  R8,WRITE_CICS_TRC
+         BASR  R8,R8
+         L     DFHEIBR,TRCESAVER9
+         L     R8,TRCESAVER8
+.MACEXIT ANOP
+&L1      DS    0H
+         MEND
+

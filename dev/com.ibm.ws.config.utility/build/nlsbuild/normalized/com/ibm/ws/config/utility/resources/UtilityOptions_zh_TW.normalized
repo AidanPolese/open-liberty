@@ -1,0 +1,63 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.config.utility/resources/com/ibm/ws/config/utility/resources/UtilityOptions.nlsprops
+#ISMESSAGEFILE FALSE
+#NLS_ENCODING=UNICODE
+#NLS_MESSAGEFORMAT_VAR
+
+# -------- OPTIONS ----------------------------------------------------#
+# List of descriptive text for options. Use "\n\" for line continuations.
+# The code provides no whitespace: begin keys with "\ \ \ \ " for leading
+# whitespace, and begin descripions with \t 
+#------------------------------\n at 72 chars -------------------------\n\#
+#------------------------------\n at 72 chars Leading "\ \ \ \ "-------\n\#
+#------------------------------\n at 72 chars Leading "\t"-------------\n\#
+config.options=\n\
+\u52d5\u4f5c\uff1a\n\
+find \n\
+\t\u5728\u5132\u5b58\u5eab\u4e2d\u5c0b\u627e\u914d\u7f6e Snippet\u3002\n\
+\n\
+install \n\
+\t\u5f9e\u5132\u5b58\u5eab\u4e0b\u8f09\u914d\u7f6e Snippet\uff0c\u6216\u4f7f\u7528\u672c\u7aef \n\
+\t\u914d\u7f6e Snippet \u9032\u884c\u8b8a\u6578\u66ff\u4ee3\u3002\n\
+\n\
+\u9078\u9805\uff1a\n\
+--info \n\
+\t\u5217\u51fa\u914d\u7f6e Snippet \u4e2d\u7684\u6240\u6709\u8b8a\u6578\u9078\u9805\u3002\u5982\u679c\n\
+\t\u914d\u7f6e Snippet \u6c92\u6709\u66ff\u63db\u7528\u7684\u8b8a\u6578\uff0c\u6703\u50b3\u56de\n\
+\t\u7a7a\u6e05\u55ae\u3002\n\
+\n\
+--V[variable]=value \n\
+\t\u53ef\u4ee5\u4f7f\u7528\u60a8\u7684\u8f38\u5165\u503c\uff0c\u4f86\u53d6\u4ee3\n\
+\t--info \u9078\u9805\u6240\u627e\u5230\u7684\u914d\u7f6e Snippet \u8b8a\u6578\u3002\u9019\u500b\u516c\u7528\u7a0b\u5f0f\n\
+\t\u4f7f\u7528 --V[variable] \u4f86\u8b58\u5225\u8b8a\u6578\u3002\n\
+\n\
+--createConfigFile=path \n\
+\t\u9078\u7528\u3002\u7a0b\u5f0f\u78bc Snippet \u6703\u5beb\u5165\u81f3\u6307\u5b9a\u6a94\u6848\uff0c\n\
+\t\u800c\u4e0d\u662f\u5beb\u5165\u81f3\u4e3b\u63a7\u53f0\u756b\u9762\u3002\u8acb\u5c07\u6240\u63d0\u4f9b\u7a0b\u5f0f\u78bc Snippet\n\
+\t\u65b0\u589e\u81f3 server.xml \u914d\u7f6e\uff0c\u4ee5\u5305\u62ec\u6307\u5b9a\u7684\u6a94\u6848\u3002\n\
+\n\
+--encoding=[xor|aes] \n\
+\t\u9078\u7528\u3002\u6307\u5b9a\u91d1\u9470\u5132\u5b58\u5eab\u5bc6\u78bc\u7de8\u78bc\u3002\u652f\u63f4\u7684\n\
+\t\u7de8\u78bc\u662f xor \u548c aes\u3002\u9810\u8a2d\u7de8\u78bc\u70ba xor\u3002\n\
+\t\u4f7f\u7528 securityUtility encode --listCustom \u6307\u4ee4\uff0c\n\
+\t\u4ee5\u67e5\u770b\u662f\u5426\u652f\u63f4\u5176\u4ed6\u4efb\u4f55\u81ea\u8a02\u52a0\u5bc6\u3002\n\
+\n\
+--key=key \n\
+\t\u9078\u7528\u3002\u6307\u5b9a\u4f7f\u7528 AES \u7de8\u78bc\u6642\u8981\u4f7f\u7528\u7684\u91d1\u9470\u3002\u9019\u500b\n\
+\t\u5b57\u4e32\u6703\u7d93\u904e\u96dc\u6e4a\u7522\u751f\u4e00\u500b\u52a0\u5bc6\u91d1\u9470\uff0c\u4ee5\u4fbf\n\
+\t\u7528\u4f86\u52a0\u5bc6\u548c\u89e3\u5bc6\u5bc6\u78bc\u3002\u60a8\u53ef\u4ee5\u9078\u64c7\u6027\u5730\u5b9a\u7fa9\n\
+\twlp.password.encryption.key \u8b8a\u6578\uff08\u5176\u503c\u70ba\u91d1\u9470\uff09\uff0c\n\
+\t\u4f86\u63d0\u4f9b\u91d1\u9470\u7d66\u4f3a\u670d\u5668\u3002\u5982\u679c\u6c92\u6709\u63d0\u4f9b\u9019\u500b\u9078\u9805\uff0c\n\
+\t\u6703\u4f7f\u7528\u9810\u8a2d\u91d1\u9470\u3002\n\
+\n\
+--useLocalFile=file \n\
+\t\u4f7f\u7528\u672c\u7aef\u6a94\u6848\u7cfb\u7d71\u4e2d\u7684\u914d\u7f6e Snippet\u3002\n\
+\t\u5fc5\u9808\u6307\u5b9a\u6a94\u6848\u8def\u5f91\u3002\u9019\u500b\u9078\u9805\u6703\u53d6\u4ee3\u6307\u5b9a\n\
+\t\u914d\u7f6e Snippet \u540d\u7a31\u3002\n\
+\t\u4f8b\u5982\uff1aconfigUtility --useLocalFile=file [\u9078\u9805]
+

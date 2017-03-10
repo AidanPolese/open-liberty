@@ -1,0 +1,61 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.config.utility/resources/com/ibm/ws/config/utility/resources/UtilityOptions.nlsprops
+#ISMESSAGEFILE FALSE
+#NLS_ENCODING=UNICODE
+#NLS_MESSAGEFORMAT_VAR
+
+# -------- OPTIONS ----------------------------------------------------#
+# List of descriptive text for options. Use "\n\" for line continuations.
+# The code provides no whitespace: begin keys with "\ \ \ \ " for leading
+# whitespace, and begin descripions with \t 
+#------------------------------\n at 72 chars -------------------------\n\#
+#------------------------------\n at 72 chars Leading "\ \ \ \ "-------\n\#
+#------------------------------\n at 72 chars Leading "\t"-------------\n\#
+config.options=\n\
+A\u00e7\u00e3o:\n\
+find \n\
+\tLocalize um fragmento de configura\u00e7\u00e3o no reposit\u00f3rio. \n\
+\n\
+install \n\
+\tFa\u00e7a o download do fragmento de configura\u00e7\u00e3o a partir do reposit\u00f3rio ou use um fragmento \n\
+\tde configura\u00e7\u00e3o local para a substitui\u00e7\u00e3o de vari\u00e1vel. \n\
+\n\
+Op\u00e7\u00f5es:\n\
+--info \n\
+\tListar todas as op\u00e7\u00f5es de vari\u00e1veis no fragmento da configura\u00e7\u00e3o. Retornar uma\n\
+\tlista vazia se o fragmento da configura\u00e7\u00e3o n\u00e3o tiver vari\u00e1veis\n\
+\tpara substitui\u00e7\u00e3o.\n\
+\n\
+--V[variable]=value \n\
+\t\u00c9 poss\u00edvel substituir vari\u00e1veis de fragmento de configura\u00e7\u00e3o localizadas \n\
+\tpela op\u00e7\u00e3o --info por valores de entrada. As vari\u00e1veis s\u00e3o\n\
+\tidentificadas por esse utilit\u00e1rio usando --V[variable]. \n\
+\n\
+--createConfigFile=path \n\
+\tOpcional. O fragmento do c\u00f3digo \u00e9 gravado no arquivo especificado\n\
+\tem vez de na tela do console. Inclua o fragmento do c\u00f3digo fornecido\n\
+\tna configura\u00e7\u00e3o server.xml para incluir o arquivo especificado. \n\
+\n\
+--encoding=[xor|aes] \n\
+\tOpcional. Especifique a codifica\u00e7\u00e3o de senha do keystore. \tencodings xor suportados s\u00e3o \n e aes. A codifica\u00e7\u00e3o padr\u00e3o \u00e9 xor. \n\
+\tUse o comando securityUtility encode --listCustom para verificar se algumas criptografias\n \tcustomizadas adicionais s\u00e3o suportadas.\n\
+\n\
+--key=key \n\
+\tOpcional. Especifique uma chave a ser utilizada quando a codifica\u00e7\u00e3o utilizando AES. Essa\n\
+\tsequ\u00eancia executou hash para produzir uma chave de criptografia que \u00e9 usada\n\
+\tpara criptografar e decriptografar a senha. Opcionalmente, forne\u00e7a a chave\n\
+\tpara o servidor definindo a vari\u00e1vel wlp.password.encryption.key\n\
+\tcujo valor \u00e9 a chave. Se essa op\u00e7\u00e3o n\u00e3o for fornecida, uma chave\n\
+\tpadr\u00e3o ser\u00e1 usada. \n\
+\n\
+--useLocalFile=file \n\
+\tUse um fragmento de configura\u00e7\u00e3o a partir do sistema de arquivo local. Deve-se \n\
+\tespecificar o caminho do arquivo. Essa op\u00e7\u00e3o substitui a especifica\u00e7\u00e3o \n\
+\tde um nome do fragmento da configura\u00e7\u00e3o.\n\
+\tpor exemplo, configUtility --useLocalFile=file [options]
+

@@ -1,0 +1,6 @@
+<server>
+	<logging>
+		<binaryLog />
+		<binaryTrace />
+	</logging>
+</server>

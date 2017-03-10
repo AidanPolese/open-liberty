@@ -1,0 +1,9 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.beanValidationCDI-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.ws.beanvalidation.v11.cdi;version=latest

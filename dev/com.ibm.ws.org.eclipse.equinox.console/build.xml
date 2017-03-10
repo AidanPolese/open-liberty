@@ -1,0 +1,19 @@
+<project name="com.ibm.ws.org.eclipse.equinox.console" default="build">
+
+  <import file="../ant_build/public_imports/rejar_imports.xml"/>
+
+  <!-- Don't run findbugs on source here, since it would only be patches where we want to keep changes to a minimum -->
+  <property name="skip.findbugs" value="true"/>
+  <!-- Don't inject trace and ffdc or our patched classes can't load with their original package imports, which is bad -->
+  <property name="no.trace.instrumentation" value="true" />
+
+  <target name="package">
+    <!-- Do pick up our patches in the eclipse console bundle (the default) -->
+	<rejar version="1.0" src.jar="lib/org.eclipse.equinox.console_*.jar"
+        original.jar.name="org.eclipse.equinox.console"
+        original.jar.version="1.1.200"
+		no.require.bundle="true"/>
+
+  </target>
+  
+</project>

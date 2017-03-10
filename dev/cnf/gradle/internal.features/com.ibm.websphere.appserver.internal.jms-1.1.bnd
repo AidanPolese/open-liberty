@@ -1,0 +1,13 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.internal.jms-1.1
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.javax.connector.internal-1.6;version=latest, \
+	com.ibm.websphere.appserver.javaeePlatform-6.0;version=latest, \
+	com.ibm.websphere.appserver.internal.jca-1.6;version=latest, \
+	com.ibm.ws.messaging.jmsspec.common;version=latest, \
+	com.ibm.websphere.javaee.jms.1.1;version=latest

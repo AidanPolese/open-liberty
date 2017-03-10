@@ -1,0 +1,438 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#
+# NOTE: !!! THIS FILE MUST BE KEPT IN SYNC WITH native_messages.props  !!! 
+#
+# --------------------------------------------------------------------------------------------------
+#
+# # {0} description of each insert field
+# MSG_DESCRIPTIVE_NAME_CWSJX0000=CWSJX0000I: This is a message with inserts {0}
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.explanation=Explanation text for the message
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.useraction=User action text for the message
+#
+#CMVCPATHNAME com.ibm.zos.native/resources/com.ibm.ws.zos/native_messages.nlsprops
+#COMPONENTPREFIX CWWKB
+#COMPONENTNAMEFOR CWWKB zOS Native Messages
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+# NLS_MESSAGEFORMAT_VAR
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+#
+# -------------------------------------------------------------------------------------------------
+#0051-0100: native code only messages
+#0201-0250: native code non-console messages
+# -------------------------------------------------------------------------------------------------
+
+STOP_COMMAND_ACTIVE_SERVERS=CWWKB0051E: ARRESTO ANGEL RIFIUTATO DAI SERVER ATTIVI
+STOP_COMMAND_ACTIVE_SERVERS.explanation=Impossibile arrestare il processo angel poich\u00e9 attualmente a esso sono connessi dei server.
+STOP_COMMAND_ACTIVE_SERVERS.useraction=Il messaggio CWWKB0052I contiene l'ASID per ciascun server attualmente attivo.  Arrestare i server attivi e ripetere l'operazione di arresto del processo angel.
+
+#{0} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{1} is a z/OS jobname
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL=CWWKB0052I: ASID SERVER ATTIVO {0} NOME LAVORO {1}
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL.explanation=Questo server \u00e8 attualmente connesso al processo angel.
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL.useraction=Non \u00e8 necessaria alcuna azione.
+
+#{0} is a version string
+MODIFY_DISPLAY_ANGEL_VERSION=CWWKB0053I: VERSIONE ANGEL {0} 
+MODIFY_DISPLAY_ANGEL_VERSION.explanation=Viene visualizzato il modulo sostituibile dinamicamente dei processi angel, in risposta a un comando MODIFY PROCESS,VERSION.
+MODIFY_DISPLAY_ANGEL_VERSION.useraction=Non \u00e8 necessaria alcuna azione.
+
+#{0} is the unrecognized command entered on the console
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED=CWWKB0054E: COMANDO NON RICONOSCIUTO {0}
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED.explanation=Il comando di modifica in fase di elaborazione da parte del processo angel contiene parole chiave non riconosciute.
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED.useraction=Immettere nuovamente il comando con la sintassi corretta.
+
+ANGEL_PROCESS_STARTING=CWWKB0055I: PROCESSO ANGEL WEBSPHERE PER Z/OS IN FASE DI AVVIO
+ANGEL_PROCESS_STARTING.explanation=Un processo angel \u00e8 in fase di avvio.
+ANGEL_PROCESS_STARTING.useraction=Non \u00e8 necessaria alcuna azione.
+
+ANGEL_PROCESS_INITIALIZATION_COMPLETE=CWWKB0056I: INIZIALIZZAZIONE COMPLETA PER ANGEL
+ANGEL_PROCESS_INITIALIZATION_COMPLETE.explanation=Un processo angel ha completato l'inizializzazione.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE.useraction=Non \u00e8 necessaria alcuna azione.
+
+ANGEL_PROCESS_END_NORMAL=CWWKB0057I: PROCESSO ANGEL WEBSPHERE PER Z/OS TERMINATO REGOLARMENTE
+ANGEL_PROCESS_END_NORMAL.explanation=Un processo angel sta terminando.
+ANGEL_PROCESS_END_NORMAL.useraction=Non \u00e8 necessaria alcuna azione.
+
+#{0} is the hexidecimal return code from the angel main routine
+ANGEL_PROCESS_END_ABNORMAL=CWWKB0058E: PROCESSO ANGEL WEBSPHERE PER Z/OS TERMINATO IN MODO ANOMALO, CAUSA={0}
+ANGEL_PROCESS_END_ABNORMAL.explanation=Un processo angel \u00e8 terminato in modo anomalo.
+ANGEL_PROCESS_END_ABNORMAL.useraction=Il testo del messaggio include un codice causa che descrive l'errore specifico.  Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#{0} is the unrecognized value
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV=CWWKB0059E: PARAMETRO DI AVVIO NON RICONOSCIUTO {0}
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV.explanation=Inviato un parametro non riconosciuto sul comando di avvio del processo angel.  Il parametro non riconosciuto \u00e8 indicato nel messaggio.
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV.useraction=Fare riferimento alla documentazione del prodotto per conoscere i parametri del comando di avvio supportati.
+
+#{0} is the unrecognized value
+#{1} is the recognized key
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV=CWWKB0060E: VALORE PARAMETRO DI AVVIO NON RICONOSCIUTO {0} PER CHIAVE {1}
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV.explanation=Inviata chiave parametro riconosciuta sul comando di avvio del processo angel, ma non \u00e8 stato riconosciuto il relativo valore.  Chiave e valore sono indicati nel messaggio. 
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV.useraction=Fare riferimento alla documentazione del prodotto per conoscere le chiavi parametro del comando di avvio supportate e i valori supportati.
+
+#{0} is the continuation instance
+#{1} is the message id for first multiline WTO of the sequence
+UTILITIES_WTO_CMDRESPONSE_CONTINUE=CWWKB0061I: CONTINUAZIONE {0} PER IDENTIFICATIVO MESSAGGIO {1}
+UTILITIES_WTO_CMDRESPONSE_CONTINUE.explanation=Un messaggio di risposta al comando da un gestore comandi o un messaggio che viene scritto a un operatore o un log in formato stampa deve essere emesso tramite pi\u00f9 WTO multilinea. Questa \u00e8 una continuazione del messaggio.  Utilizzare l'identificativo del messaggio per raggruppare i messaggi CWWKB0061I correlati.
+UTILITIES_WTO_CMDRESPONSE_CONTINUE.useraction=Non \u00e8 necessaria alcuna azione.
+
+DUPLICATE_ANGEL_PROCESS=CWWKB0062E: UN PROCESSO ANGEL WEBSPHERE PER Z/OS GIA' AVVIATO
+DUPLICATE_ANGEL_PROCESS.explanation=Un processo angel \u00e8 gi\u00e0 in esecuzione su questo sistema.  L'ASID e il nome lavoro del processo angel attivo sono indicati nel messaggio CWWKB0063I.  Il secondo processo angel verr\u00e0 arrestato.
+DUPLICATE_ANGEL_PROCESS.useraction=Non \u00e8 necessaria alcuna azione.
+
+#{0} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{1} is a z/OS jobname
+DUPLICATE_ANGEL_PROCESS_DETAIL=CWWKB0063I: ASID ANGEL ATTIVO {0} NOME LAVORO {1}
+DUPLICATE_ANGEL_PROCESS_DETAIL.explanation=Questo processo angel \u00e8 attivo.
+DUPLICATE_ANGEL_PROCESS_DETAIL.useraction=Non \u00e8 necessaria alcuna azione.
+
+#{0} is the text string "RELOAD" which should not be translated because it is provided as input on the MVS console.
+ANGEL_RELOAD_HELP_TEXT=CWWKB0064I: {0} - PROVOCA IL RICARICAMENTO DEI MODULI DI CARICAMENTO ANGEL
+ANGEL_RELOAD_HELP_TEXT.explanation=Questo messaggio viene emesso in risposta a un comando MODIFY BBGZANGL,HELP.  L'opzione RELOAD provoca il ricaricamento dal file system dei moduli di caricamento per il processo angel.  Un ricaricamento pu\u00f2 essere necessario dopo l'installazione di una PTF se il processo angel non viene riavviato.
+ANGEL_RELOAD_HELP_TEXT.useraction=Non \u00e8 necessaria alcuna azione.
+
+#{0} is the text string "VERSION" which should not be translated because it is provided as input on the MVS console.
+ANGEL_VERSION_HELP_TEXT=CWWKB0065I: {0} - VISUALIZZA LA VERSIONE DEL MODULO DI CARICAMENTO ANGEL
+ANGEL_VERSION_HELP_TEXT.explanation=Questo messaggio viene emesso in risposta a un comando MODIFY BBGZANGL,HELP.  L'opzione VERSION visualizza la versione del modulo di caricamento sostituibile dinamicamente del processo angel.  Queste informazioni potrebbero essere richieste dall'assistenza IBM.
+ANGEL_VERSION_HELP_TEXT.useraction=Non \u00e8 necessaria alcuna azione.
+
+#{0} is the text string "TRACE=Y/N" which should not be translated because it is provided as input on the MVS console.
+ANGEL_TRACE_HELP_TEXT=CWWKB0066I: {0} - CONTROLLA LA TRACCIA PER IL PROCESSO ANGEL
+ANGEL_TRACE_HELP_TEXT.explanation=Questo messaggio viene emesso in risposta a un comando MODIFY BBGZANGL,HELP.  L'opzione TRACE controlla i messaggi di traccia nel processo angel.  L'impostazione TRACE=Y visualizza le tracce diagnostiche nel SYSOUT DD.  L'impostazione TRACE=N disabilita le tracce diagnostiche.  Queste informazioni potrebbero essere richieste dall'assistenza IBM.
+ANGEL_TRACE_HELP_TEXT.useraction=Non \u00e8 necessaria alcuna azione.
+
+MODIFY_DISPLAY_ACTIVE_SERVERS=CWWKB0067I: VISUALIZZAZIONE ANGEL DEI SERVER ATTIVI
+MODIFY_DISPLAY_ACTIVE_SERVERS.explanation=Questo messaggio viene emesso in risposta a un comando MODIFY BBGZANGL,SERVERS.  Questo messaggio \u00e8 seguito da una istanza del messaggio CWWKB0052I per ciascun server connesso al processo angel.
+MODIFY_DISPLAY_ACTIVE_SERVERS.useraction=Non \u00e8 necessaria alcuna azione.
+
+#{0} is the text string "SERVERS" which should not be translated because it is provided as input on the MVS console.
+ANGEL_SERVERS_HELP_TEXT=CWWKB0068I: {0} - VISUALIZZA I SERVER ATTIVI
+ANGEL_SERVERS_HELP_TEXT.explanation=Questo messaggio viene emesso in risposta a un comando MODIFY BBGZANGL,HELP.  L'opzione SERVERS visualizza i server attivi.
+ANGEL_SERVERS_HELP_TEXT.useraction=Non \u00e8 necessaria alcuna azione.
+
+#{0} is the name of the angel process.  1-54 characters.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME=CWWKB0069I: INIZIALIZZAZIONE COMPLETATA PER IL PROCESSO ANGEL {0}.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME.explanation=Un processo angel ha completato l'inizializzazione. Il nome angel \u00e8 visualizzato nel messaggio.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME.useraction=Non \u00e8 richiesta alcuna azione.
+
+ANGEL_NAME_TOO_LONG=CWWKB0070E: IL VALORE SPECIFICATO PER IL PARAMETRO NAME E' PIU' LUNGO DI 54 CARATTERI.
+ANGEL_NAME_TOO_LONG.explanation=Il parametro NAME specifica il nome del processo angel. Il parametro \u00e8 specificato su BBGZANGL PROC e deve essere lungo al massimo 54 caratteri.  
+ANGEL_NAME_TOO_LONG.useraction=Specificare un valore lungo massimo 54 caratteri per il parametro NAME e riavviare il processo angel utilizzando BBGZANGL PROC.
+
+#{0} is an unsupported character
+#{1} is a number between 1 and 54
+ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0071E: IL VALORE SPECIFICATO PER IL PARAMETRO NAME CONTIENE IL CARATTERE NON SUPPORTATO {0} ALLA POSIZIONE {1}.
+ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=Il parametro NAME specifica il nome del processo angel. Il parametro \u00e8 specificato su BBGZANGL PROC e pu\u00f2 contenere solo i seguenti caratteri: A-Z 0-9 ! # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
+ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=Specificare un valore utilizzando la serie di caratteri supportata per il parametro NAME e riavviare il processo  angel utilizzando BBGZANGL PROC.
+
+#{0} is the name of the angel process. 1-54 characters.
+STOP_COMMAND_ACTIVE_SERVERS_NAME=CWWKB0072E: I SERVER ATTIVI HANNO RIFIUTATO L''ARRESTO DEL PROCESSO ANGEL {0}.
+STOP_COMMAND_ACTIVE_SERVERS_NAME.explanation=Non \u00e8 stato possibile arrestare un processo angel perch\u00e9 ad esso sono attualmente  collegati dei server. Il nome angel \u00e8 visualizzato nel messaggio.
+STOP_COMMAND_ACTIVE_SERVERS_NAME.useraction=Il messaggio CWWKB0052I contiene il codice ASID per ciascun server attualmente attivo e associato all'angel indicato. Arrestare i server attivi quindi arrestare il processo angel indicato nel messaggio.
+
+#{0} is the name of the angel process. 1-54 characters.
+ANGEL_PROCESS_END_NORMAL_NAME=CWWKB0073I: IL PROCESSO ANGEL {0} E'' TERMINATO NORMALMENTE.
+ANGEL_PROCESS_END_NORMAL_NAME.explanation=Un processo angel sta terminando. Il nome angel \u00e8 visualizzato nel messaggio.
+ANGEL_PROCESS_END_NORMAL_NAME.useraction=Non \u00e8 richiesta alcuna azione.
+
+#{0} is the name of the angel process. 1-54 characters.
+#{1} is the hexidecimal return code from the angel main routine
+ANGEL_PROCESS_END_ABNORMAL_NAME=CWWKB0074E: IL PROCESSO ANGEL {0} E'' TERMINATO IN MODO ANOMALO, CAUSA={1}
+ANGEL_PROCESS_END_ABNORMAL_NAME.explanation=Un processo angel \u00e8 terminato in modo anomalo. Il nome angel \u00e8 visualizzato nel messaggio.
+ANGEL_PROCESS_END_ABNORMAL_NAME.useraction=Il testo del messaggio include un codice di errore che descrive l'errore specifico e il nome del processo angel terminato. Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#{0} is the name of the angel process. 1-54 characters.
+DUPLICATE_ANGEL_PROCESS_NAME=CWWKB0075E: QUESTO PROCESSO ANGEL VIENE ARRESTATO PERCHE'' UN PROCESSO ANGEL DENOMINATO {0} E'' GIA'' AVVIATO. STARTED. NESSUNA AZIONE RICHIESTA.
+DUPLICATE_ANGEL_PROCESS_NAME.explanation=Un processo angel con il nome visualizzato nel messaggio \u00e8 gi\u00e0 in esecuzione su questo sistema.   ASID e NOME LAVORO del processo angel attivo sono stampati nel messaggio CWWKB0063I.  Il secondo processo angel verr\u00e0 arrestato.
+DUPLICATE_ANGEL_PROCESS_NAME.useraction=Nessuna azione richiesta perch\u00e9 il processo angel duplicato verr\u00e0 arrestato. Per non ricevere questo messaggio, non avviare un processo angel se ne \u00e8 gi\u00e0 in esecuzione uno con lo stesso nome.
+
+MODIFY_DISPLAY_ACTIVE_ANGELS=CWWKB0076I: Segue un elenco di processi angel attivi.
+MODIFY_DISPLAY_ACTIVE_ANGELS.explanation=Questo messaggio viene stampato in risposta a un comando MODIFY BBGZANGL,ANGELS.  Questo messaggio \u00e8 seguito da una istanza del messaggio CWWKB0077I e una istanza del messaggio CWWKB0078I per ogni processo angel attivo sul sistema.
+MODIFY_DISPLAY_ACTIVE_ANGELS.useraction=Non \u00e8 richiesta alcuna azione.
+
+#{0} is a z/OS jobname
+#{1} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{2} is a version string
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS=CWWKB0077I: NOME LAVORO ANGEL ATTIVO {0} ASID {1} VERSIONE {2}
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS.explanation=Il testo del messaggio specifica i dettagli del processo angel attivo. Questo messaggio \u00e8 preceduto dal messaggio CWWKB0076I e precede il messaggio CWWKB0078I.
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS.useraction=Non \u00e8 richiesta alcuna azione.
+
+#{0} is the name of an angel process. 1-54 characters
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME=CWWKB0078I: NOME ANGEL ATTIVO {0}
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME.explanation=Il testo del messaggio specifica il nome del processo angel attivo. Questo messaggio \u00e8 preceduto dal messaggio CWWKB0076I e CWWKB0077I.
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME.useraction=Non \u00e8 richiesta alcuna azione.
+
+# -------------------------------------------------------------------------------------------------
+#0201-0250: native code non-console messages
+#
+#{0} is the Library name
+#{1} is the reason code
+SERVER_JNI_01=CWWKB0201E: Apertura di {0} non riuscita: {1}
+SERVER_JNI_01.explanation=Errore durante l'apertura della libreria specificata.
+SERVER_JNI_01.useraction=Il testo del messaggio include un codice causa che descrive l'errore specifico.  Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_02=CWWKB0202E: La funzione di registrazione del metodo nel descrittore {0} ha restituito {1}
+SERVER_JNI_02.explanation=La funzione di registrazione del metodo ha avuto esito negativo.
+SERVER_JNI_02.useraction=Il testo del messaggio include un codice causa che descrive l'errore specifico.  Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_03=CWWKB0203E: RegisterNatives per il descrittore {0} non riuscito con {1}
+SERVER_JNI_03.explanation=La registrazione di un metodo nativo ha avuto esito negativo.
+SERVER_JNI_03.useraction=Il testo del messaggio include un codice causa che descrive l'errore specifico.  Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_04=CWWKB0204E: La funzione di deregistrazione del metodo nel descrittore {0} ha restituito {1}
+SERVER_JNI_04.explanation=La deregistrazione di un metodo nativo ha avuto esito negativo.
+SERVER_JNI_04.useraction=Il testo del messaggio include un codice causa che descrive l'errore specifico.  Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+#{0} is the library name
+#{1} is the reason code
+SERVER_JNI_05=CWWKB0205W: Chiusura di {0} non riuscita: {1}
+SERVER_JNI_05.explanation=La chiusura della libreria di link dinamici specificata ha avuto esito negativo.
+SERVER_JNI_05.useraction=Il testo del messaggio include un codice causa che descrive l'errore specifico.  Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_01=CWWKB0206E: Impossibile determinare WLP_INSTALL_DIR
+SERVER_LAUNCHER_01.explanation=Impossibile determinare WLP_INSTALL_DIR.
+SERVER_LAUNCHER_01.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_02=CWWKB0207E: Impossibile anteporre il percorso NLS a NLSPATH
+SERVER_LAUNCHER_02.explanation=Impossibile anteporre il percorso NLS a NLSPATH.
+SERVER_LAUNCHER_02.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_03=CWWKB0208E: Impossibile determinare WLP_USER_DIR
+SERVER_LAUNCHER_03.explanation=Impossibile determinare WLP_USER_DIR.
+SERVER_LAUNCHER_03.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_04=CWWKB0209E: Impossibile determinare SERVER_CONFIG_DIR
+SERVER_LAUNCHER_04.explanation=Impossibile determinare SERVER_CONFIG_DIR.
+SERVER_LAUNCHER_04.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_05=CWWKB0210E: Impossibile risolvere JAVA_HOME
+SERVER_LAUNCHER_05.explanation=Impossibile risolvere JAVA_HOME.
+SERVER_LAUNCHER_05.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_06=CWWKB0211E: Impossibile anteporre il percorso libreria JVM a LIBPATH
+SERVER_LAUNCHER_06.explanation=Impossibile anteporre il percorso libreria JVM a LIBPATH.
+SERVER_LAUNCHER_06.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_07=CWWKB0212E: Impossibile anteporre il percorso libreria WebSphere a LIBPATH
+SERVER_LAUNCHER_07.explanation=Impossibile anteporre il percorso libreria WebSphere a LIBPATH.
+SERVER_LAUNCHER_07.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_08=CWWKB0213E: Impossibile determinare la directory di output
+SERVER_LAUNCHER_08.explanation=Impossibile determinare la directory di output.
+SERVER_LAUNCHER_08.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_09=CWWKB0214E: Modifica della directory di lavoro in {0} non riuscita
+SERVER_LAUNCHER_09.explanation=Modifica della directory di lavoro non riuscita
+SERVER_LAUNCHER_09.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_10=CWWKB0215E: Apertura di {0} non riuscita: {1}
+SERVER_LAUNCHER_10.explanation=Errore durante l'apertura del file. 
+SERVER_LAUNCHER_10.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_11=CWWKB0216E: Impossibile risolvere JNI_CreateJavaVM: {0}
+SERVER_LAUNCHER_11.explanation=Impossibile risolvere JNI_CreateJavaVM.
+SERVER_LAUNCHER_11.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_12=CWWKB0217E: Impossibile creare JavaVM: {0}
+SERVER_LAUNCHER_12.explanation=Impossibile creare JavaVM.
+SERVER_LAUNCHER_12.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_13=CWWKB0218E: Impossibile richiamare la classe principale
+SERVER_LAUNCHER_13.explanation=Impossibile richiamare la classe principale.
+SERVER_LAUNCHER_13.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_14=CWWKB0219E: Impossibile estrarre dal DD il percorso alla directory utente
+SERVER_LAUNCHER_14.explanation=Impossibile estrarre dal DD il percorso alla directory utente.
+SERVER_LAUNCHER_14.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_15=CWWKB0220E: Il percorso reale alla directory utente non pu\u00f2 essere risolto da JCL
+SERVER_LAUNCHER_15.explanation=Il percorso reale alla directory utente non pu\u00f2 essere risolto da JCL.
+SERVER_LAUNCHER_15.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_16=CWWKB0221E: Il percorso reale alla directory utente pu\u00f2 essere risolto dall'ambiente
+SERVER_LAUNCHER_16.explanation=Il percorso reale alla directory utente pu\u00f2 essere risolto dall'ambiente.
+SERVER_LAUNCHER_16.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_17=CWWKB0222E: La directory di configurazione del server {0} non esiste
+SERVER_LAUNCHER_17.explanation=La directory di configurazione del server non esiste.
+SERVER_LAUNCHER_17.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_18=CWWKB0223E: Impossibile eseguire stat() per la directory di configurazione del server
+SERVER_LAUNCHER_18.explanation=Impossibile eseguire stat() per la directory di configurazione del server.
+SERVER_LAUNCHER_18.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_19=CWWKB0224E: La configurazione del server {0} non esiste
+SERVER_LAUNCHER_19.explanation=La configurazione del server non esiste.
+SERVER_LAUNCHER_19.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_20=CWWKB0225E: stat non riuscito 
+SERVER_LAUNCHER_20.explanation=stat non riuscito.
+SERVER_LAUNCHER_20.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_21=CWWKB0226E: Directory di output non trovata o creata 
+SERVER_LAUNCHER_21.explanation=Non \u00e8 stato possibile risolvere o creare la directory di output.
+SERVER_LAUNCHER_21.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_22=CWWKB0227E: Directory di output del server non trovata o creata in WLP_OUTPUT_DIR 
+SERVER_LAUNCHER_22.explanation=Non \u00e8 stato possibile risolvere o creare la directory di output del server in WLP_OUTPUT_DIR.
+SERVER_LAUNCHER_22.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_23=CWWKB0228E: Errore durante la lettura da {0} : {1} 
+SERVER_LAUNCHER_23.explanation=Errore durante la lettura dal file indicato.
+SERVER_LAUNCHER_23.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_24=CWWKB0229E: Impossibile ottenere la posizione del file di ambiente 
+SERVER_LAUNCHER_24.explanation=Impossibile ottenere la posizione del file di ambiente.
+SERVER_LAUNCHER_24.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_25=CWWKB0230E: Impossibile ripristinare la posizione del file di ambiente 
+SERVER_LAUNCHER_25.explanation=Impossibile ripristinare la posizione del file di ambiente.
+SERVER_LAUNCHER_25.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_26=CWWKB0231E: Impossibile impostare l''ambiente da {0} 
+SERVER_LAUNCHER_26.explanation=Impossibile impostare l'ambiente dalla propriet\u00e0\u00a0 indicata.
+SERVER_LAUNCHER_26.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_27=CWWKB0232E: fgetpos non riuscito 
+SERVER_LAUNCHER_27.explanation=fgetpos non riuscito.
+SERVER_LAUNCHER_27.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_28=CWWKB0233E: fsetpos non riuscito 
+SERVER_LAUNCHER_28.explanation=fsetpos non riuscito.
+SERVER_LAUNCHER_28.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_29=CWWKB0234E: L''ubicazione JAVA_HOME {0} non esiste 
+SERVER_LAUNCHER_29.explanation=L'ubicazione JAVA_HOME indicata non esiste.
+SERVER_LAUNCHER_29.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_30=CWWKB0235E: Errore durante la lettura delle opzioni java da {0} : {1} 
+SERVER_LAUNCHER_30.explanation=Errore durante la lettura delle opzioni java dal file indicato.
+SERVER_LAUNCHER_30.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_31=CWWKB0236E: Impossibile impostare le opzioni IBM Java predefinite 
+SERVER_LAUNCHER_31.explanation=Impossibile impostare le opzioni IBM Java predefinite.
+SERVER_LAUNCHER_31.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_32=CWWKB0237E: Impossibile caricare la classe principale 
+SERVER_LAUNCHER_32.explanation=Impossibile caricare la classe principale.
+SERVER_LAUNCHER_32.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_33=CWWKB0238E: Impossibile individuare il metodo principale 
+SERVER_LAUNCHER_33.explanation=Impossibile individuare il metodo principale.
+SERVER_LAUNCHER_33.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_34=CWWKB0239E: Impossibile caricare la classe java.lang.String 
+SERVER_LAUNCHER_34.explanation=Impossibile caricare la classe java.lang.String.
+SERVER_LAUNCHER_34.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_35=CWWKB0240E: Impossibile creare l'elenco di parametri del metodo principale 
+SERVER_LAUNCHER_35.explanation=Impossibile creare l'elenco di parametri del metodo principale.
+SERVER_LAUNCHER_35.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_36=CWWKB0241E: Impossibile impostare _BPXK_WLM_PROPAGATE=NO 
+SERVER_LAUNCHER_36.explanation=Impossibile impostare _BPXK_WLM_PROPAGATE=NO.
+SERVER_LAUNCHER_36.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_37=CWWKB0242E: Impossibile impostare JAVA_THREAD_MODEL=HEAVY 
+SERVER_LAUNCHER_37.explanation=Impossibile impostare JAVA_THREAD_MODEL=HEAVY.
+SERVER_LAUNCHER_37.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_38=CWWKB0243E: Impossibile impostare JAVA_PROPAGATE=NO 
+SERVER_LAUNCHER_38.explanation=Impossibile impostare JAVA_PROPAGATE=NO.
+SERVER_LAUNCHER_38.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_39=CWWKB0244E: Impossibile impostare il valore per _EDC_PTHREAD_YIELD 
+SERVER_LAUNCHER_39.explanation=Impossibile impostare il valore per _EDC_PTHREAD_YIELD.
+SERVER_LAUNCHER_39.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_40=CWWKB0245E: Impossibile impostare la directory di lavoro 
+SERVER_LAUNCHER_40.explanation=Impossibile impostare la directory di lavoro.
+SERVER_LAUNCHER_40.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_41=CWWKB0246W: Uso: bbgzsrv [argomenti liberty] nomeServer 
+SERVER_LAUNCHER_41.explanation=Uso: bbgzsrv [argomenti liberty] nomeServer.
+SERVER_LAUNCHER_41.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_42=CWWKB0247E: Impossibile reindirizzare stdout a LOG_DIR
+SERVER_LAUNCHER_42.explanation=Impossibile reindirizzare stdout a LOG_DIR
+SERVER_LAUNCHER_42.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_43=CWWKB0248E: Impossibile reindirizzare stderr a LOG_DIR
+SERVER_LAUNCHER_43.explanation=Impossibile reindirizzare stderr a LOG_DIR
+SERVER_LAUNCHER_43.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_44=CWWKB0249E: Impossibile impostare la directory PID del server o il file PID
+SERVER_LAUNCHER_44.explanation=Impossibile impostare la directory PID del server o il file PID
+SERVER_LAUNCHER_44.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+#
+SERVER_LAUNCHER_45=CWWKB0250E: Durante l'elaborazione di JVM_ARGS si \u00e8 verificato una EOF imprevista nell'elaborazione `"'
+SERVER_LAUNCHER_45.explanation=Durante l'elaborazione di JVM_ARGS si \u00e8 verificato una EOF imprevista nell'elaborazione `"'
+SERVER_LAUNCHER_45.useraction=Consultare i messaggi precedenti nel log lavori o nel log di sistema per ulteriori informazioni.
+
+# NO MESSAGE LEFT IN THIS BLOCK 0201-0250: native code non-console messages 
+# -------------------------------------------------------------------------------------------------

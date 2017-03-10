@@ -1,0 +1,4 @@
+<project name="com.ibm.ws.logging.core" default="build">
+	<property name="no.trace.instrumentation" value="true"/>
+	<import file="../ant_build/public_imports/standard_imports.xml"/>
+</project>

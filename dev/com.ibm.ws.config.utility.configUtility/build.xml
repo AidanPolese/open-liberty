@@ -1,0 +1,21 @@
+<project name="com.ibm.ws.config.utility.configUtility" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+	
+  <!-- Disable trace/ffdc injection as this is not a runtime project -->
+  <property name="no.trace.instrumentation" value="true"/>
+
+  <property name="publish.tools" value="configUtility=ws-configUtility.jar"/>
+
+  <target name="post-compile">
+    <!-- make sure folder exists or bnd will complain -->
+    <mkdir dir="${classes.dir}"/>
+    <mkdir dir="${lib.dir}" />
+
+    <bnd eclipse="false"
+	     failok="false"
+         exceptions="true"
+         classpath="${classes.dir}"
+         output="${lib.dir}/ws-configUtility.jar"
+         files="bnd.bnd.gradle"/>
+  </target>
+</project>

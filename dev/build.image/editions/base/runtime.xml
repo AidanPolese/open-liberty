@@ -1,0 +1,3 @@
+<server>
+  <include location="${editions.core}/runtime.xml"/>
+</server>

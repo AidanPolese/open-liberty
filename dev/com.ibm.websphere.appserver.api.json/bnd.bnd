@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.0
+
+Bundle-Name: WebSphere JSON API
+Bundle-Description: WebSphere JSON API, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.api.json
+
+Export-Package: com.ibm.json.java,com.ibm.json.xml
+
+Import-Package: com.ibm.json.java,com.ibm.json.xml
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.json/pom.xml=com.ibm.websphere.appserver.api.json.pom}
+
+publish.wlp.jar.suffix: dev/api/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.json4j;version=latest

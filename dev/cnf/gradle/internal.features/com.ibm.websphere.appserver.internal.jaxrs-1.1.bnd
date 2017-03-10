@@ -1,0 +1,25 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.internal.jaxrs-1.1
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.jta-1.1;version=latest, \
+	com.ibm.websphere.appserver.javax.servlet-3.0;version=latest, \
+	com.ibm.websphere.appserver.jaxrsApiStub-1.1;version=latest, \
+	com.ibm.websphere.appserver.globalhandler-1.0;version=latest, \
+	com.ibm.websphere.appserver.javax.annotation-1.1;version=latest, \
+	com.ibm.websphere.appserver.httpcommons-1.0;version=latest, \
+	com.ibm.websphere.appserver.servlet-3.0;version=latest, \
+	com.ibm.websphere.appserver.json-1.0;version=latest, \
+	com.ibm.websphere.appserver.javaeeCompatible-6.0;version=latest, \
+	com.ibm.websphere.appserver.internal.slf4j-1.7.7;version=latest, \
+	com.ibm.websphere.appserver.thirdparty.jaxrs;version=latest, \
+	com.ibm.ws.org.apache.commons.lang.2.4;version=latest, \
+	com.ibm.ws.jaxrs;version=latest, \
+	com.ibm.ws.org.apache.commons.codec.1.4;version=latest, \
+	com.ibm.ws.org.apache.commons.logging.1.0.3;version=latest, \
+	com.ibm.websphere.javaee.jaxrs.1.1;version=latest, \
+	com.ibm.websphere.appserver.api.jaxrs;version=latest

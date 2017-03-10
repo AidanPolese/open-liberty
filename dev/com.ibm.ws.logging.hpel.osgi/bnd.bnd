@@ -1,0 +1,24 @@
+-include= ~../cnf/resources/bnd/bundle.props, 
+bVersion=1.0
+
+Bundle-Name: WebSphere HPEL Logging OSGi adapter
+Bundle-SymbolicName: com.ibm.ws.logging.hpel.osgi; singleton:=true
+Bundle-Description: ${Bundle-Name}; version=${bVersion}
+Bundle-Activator: com.ibm.ws.logging.internal.osgi.hpel.Activator
+
+Private-Package: \
+ com.ibm.ws.logging.internal.osgi.hpel.*
+
+-includeresource: \
+   OSGI-INF=resources/OSGI-INF
+   
+IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.cm.1.5.0;version=latest,\
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.ws.logging.hpel;version=latest

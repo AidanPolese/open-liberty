@@ -1,0 +1,14 @@
+<project name="com.ibm.ws.org.apache.aries.util" default="build">
+   <import file="../ant_build/public_imports/rejar_imports.xml"/>
+    <!-- don't instrument the RecursiveBundleTracker class -->
+    <!-- FFDC not required for this library -->
+    <property name="instrument.ffdc" value="false" />
+    <!-- Trace instrumentation not required this library -->
+    <property name="no.trace.instrumentation" value="true" />
+
+    <property name="bundle.version" value="1.0"/>
+
+      <patternset id="publish.specs">
+      </patternset>
+
+</project>

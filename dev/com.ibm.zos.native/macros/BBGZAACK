@@ -1,0 +1,59 @@
+***********************************************************************
+*                                                                     *
+*   Macro name: BBGZAACK                                              *
+*   Component:   WAS z/OS                                             *
+*                                                                     *
+*   Descriptive name:                                                 *
+*                                                                     *
+*     Angel Active Check API Assembler Macro                          *
+*                                                                     *
+*   Proprietary statement:                                            *
+*                                                                     *
+*     Licensed Material - Property of IBM                             *
+*                                                                     *
+*     5655-N02 Copyright IBM Corp. 2016                               *
+*     All Rights Reserved.                                            *
+*     U.S. Government users - RESTRICTED RIGHTS - Use, Duplication,   *
+*     or Disclosure restricted by GSA-ADP schedule contract with      *
+*     IBM Corp.                                                       *
+*                                                                     *
+*     Status = H28W800                                                *
+*                                                                     *
+***********************************************************************
+*
+         MACRO
+&NAME    BBGZAACK &ANAME=
+*
+         AIF ('&ANAME' EQ '').NOANAME
+         LLGT  15,X'10'                Load CVT
+         LLGT  15,X'8C'(15)            Load ECVT
+         LLGT  15,X'234'(15)           Load BGVT
+         LTR   15,15                   Check that we
+*                                      got an address
+         JZ    EXITNOBGVT&SYSNDX       No BGVT
+         LLGT  15,X'2AC'(15)           Load bbgzachk
+         LTR   15,15                   Check that we
+*                                      got an address
+         JZ    EXITNOAACK&SYSNDX       No bbgzachk
+         LG    15,X'10'(15)            Load angel_check
+         AIF   ('&ANAME' EQ '').NONAME Leave R1 blank
+*                                      in the absense
+*                                      of a name
+         LA    1,&ANAME                Load name pointer
+*                                      into register 1
+*
+.NONAME  DS    0H
+         BASR  14,15                   Call angel_check
+         J     DONE&SYSNDX
+EXITNOBGVT&SYSNDX DS  0H
+         LHI   15,X'2'                 Return code 2
+         J     DONE&SYSNDX
+EXITNOAACK&SYSNDX DS  0H
+         LHI   15,X'3'                 Return code 3
+*
+DONE&SYSNDX DS 0H
+         AGO .ENDING
+.NOANAME ANOP
+         MNOTE 8,'ANAME IS REQUIRED'
+.ENDING  ANOP
+         MEND

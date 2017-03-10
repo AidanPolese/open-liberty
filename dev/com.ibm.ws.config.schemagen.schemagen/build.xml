@@ -1,0 +1,25 @@
+<project name="com.ibm.ws.config.schemagen.schemagen" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  
+  <target name="publishExtra" if="publish.image.dir">
+    <echo message="Copying schemagen jar to the image" />
+    <copy tofile="${publish.image.dir}/${image.write.bin.tools.dir}/ws-schemagen.jar" overwrite="yes">
+      <fileset file="${lib.dir}/ws-schemagen.jar" />
+    </copy>
+  </target>
+
+  <target name="post-compile">
+   
+    <!-- make sure folder exists or bnd will complain -->
+    <mkdir dir="${classes.dir}"/>
+    <mkdir dir="${lib.dir}" />
+   
+   <bnd eclipse="false"
+     failok="false"
+     exceptions="true"
+     classpath="${classes.dir}"
+     output="${lib.dir}/ws-schemagen.jar"
+     files="bnd.bnd.gradle" />
+
+  </target>
+</project>

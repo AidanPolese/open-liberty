@@ -1,0 +1,8 @@
+com.ibm.websphere.appserver.batchSMFLogging-1.0
+com.ibm.websphere.appserver.zosConnect-1.0
+com.ibm.websphere.appserver.zosConnect-1.2
+com.ibm.websphere.appserver.zosLocalAdapters-1.0
+com.ibm.websphere.appserver.zosRequestLogging-1.0
+com.ibm.websphere.appserver.zosSecurity-1.0
+com.ibm.websphere.appserver.zosTransaction-1.0
+com.ibm.websphere.appserver.zosWlm-1.0

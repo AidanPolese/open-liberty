@@ -1,0 +1,87 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.config.utility/resources/com/ibm/ws/config/utility/resources/UtilityMessages.nlsprops
+#ISMESSAGEFILE FALSE
+#NLS_ENCODING=UNICODE
+#NLS_MESSAGEFORMAT_VAR
+
+
+# Generic messages
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+error=Hiba: {0}
+error.inputConsoleNotAvailable=A beviteli konzol nem \u00e9rhet\u0151 el.
+error.missingIO=Hiba, hi\u00e1nyz\u00f3 I/O eszk\u00f6z: {0}.
+faiedToListAllSnippets=Nem siker\u00fclt felsorolni az \u00f6sszes konfigur\u00e1ci\u00f3s k\u00f3dr\u00e9szletet.
+getListOfAllSnippets=\n\
+Az \u00f6sszes konfigur\u00e1ci\u00f3s k\u00f3dr\u00e9szlet list\u00e1j\u00e1nak lek\u00e9r\u00e9se.
+findSnippet=\n\
+A k\u00f6vetkez\u0151h\u00f6z kapcsol\u00f3d\u00f3 k\u00f3dr\u00e9szletek lek\u00e9r\u00e9se: "{0}".
+snippetNotFound=\n\
+Nem tal\u00e1lhat\u00f3 a k\u00f6vetkez\u0151h\u00f6z kapcsol\u00f3d\u00f3 k\u00f3dr\u00e9szlet: "{0}".
+
+
+# Generic messages for task argument validation
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+insufficientArgs=Nem elegend\u0151 param\u00e9ter.
+invalidArg=\u00c9rv\u00e9nytelen param\u00e9ter: {0}.
+missingArg=Hi\u00e1nyz\u00f3 param\u00e9ter: {0}.
+missingValue=Hi\u00e1nyz\u00f3 \u00e9rt\u00e9k a(z) {0} param\u00e9ter eset\u00e9ben.
+missingConfigSnippetName=A c\u00e9l konfigur\u00e1ci\u00f3s k\u00f3dr\u00e9szlet nem lett megadva.
+
+# Messages for HelpTask
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+usage=Haszn\u00e1lat: {0} m\u0171velet | {0} m\u0171velet configSnippet [param\u00e9terek]
+task.unknown=Ismeretlen m\u0171velet: {0}
+
+# Messages for --info option
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+info.allVariables=\n\
+A k\u00f3dr\u00e9szletben l\u00e9v\u0151 \u00f6sszes v\u00e1ltoz\u00f3:
+info.invalidUsage=Az --info param\u00e9ter haszn\u00e1lata \u00e9rv\u00e9nytelen. Haszn\u00e1lat: configUtility configSnippet --info 
+
+# Messages for reading in a password
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+password.enterText=Adja meg a jelsz\u00f3t {0}:
+password.reenterText=Adja meg \u00fajra a jelsz\u00f3t {0}:
+password.readError=Hiba a jelsz\u00f3 olvas\u00e1sakor.
+password.entriesDidNotMatch=A jelszavak nem egyeznek.
+
+# Messages for FileUtility
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+fileUtility.emptyPath=Adjon meg egy helyi f\u00e1jl\u00fatvonalat.
+fileUtility.fileNotFound=A f\u00e1jl nem tal\u00e1lhat\u00f3.
+fileUtility.failedToRead=A helyi f\u00e1jl nem olvashat\u00f3 be.
+
+# Messages for downloading a file from repository
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+download.failedRepoAccess=A lerakat nem \u00e9rhet\u0151 el.
+download.ioError=A k\u00f3dr\u00e9szlet let\u00f6lt\u00e9se meghi\u00fasult.
+download.invalidSnippet=A k\u00f3dr\u00e9szlet bet\u00f6lt\u00e9se meghi\u00fasult.
+
+# Messages for variable check
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+variable.empty=A konfigur\u00e1ci\u00f3s k\u00f3dr\u00e9szlet nem tartalmaz v\u00e1ltoz\u00f3kat.
+
+# Messages for registering a host to the collective
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+encoding.aesRequiresKey=Az aes k\u00f3dol\u00e1shoz kulcs sz\u00fcks\u00e9ges. \
+Adjon meg egyet a --key param\u00e9terrel.
+
+encoding.xorDoesNotSupportKey=Az xor k\u00f3dol\u00e1s nem t\u00e1mogatja a kulcsot. \
+Ne adjon meg --key param\u00e9tert.
+
+encoding.unsupportedEncoding=Nem t\u00e1mogatott k\u00f3dol\u00e1si \u00e9rt\u00e9k: {0}.
+
+# Messages for creation of a config snippet
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+generate.configureSecurity=Gy\u0151z\u0151dj\u00f6n meg r\u00f3la, hogy az adminisztr\u00e1ci\u00f3s biztons\u00e1g konfigur\u00e1lva van a kiszolg\u00e1l\u00f3hoz.
+
+generate.download=\n\
+A k\u00e9rt konfigur\u00e1ci\u00f3s k\u00f3dr\u00e9szlet let\u00f6lt\u00e9se...
+
+generate.abort=\n\
+Konfigur\u00e1ci\u00f3s k\u00f3dr\u00e9szlet l\u00e9trehoz\u00e1s\u00e1nak le\u00e1ll\u00edt\u00e1sa.

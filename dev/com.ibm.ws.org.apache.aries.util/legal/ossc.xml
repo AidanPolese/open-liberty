@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Aries" 
+            projectURL="http://aries.apache.org" 
+            version="" revision="1780033" 
+            license-type="Apachev2" 
+            contact="not@uk.ibm.com" 
+            encryption="no">
+      <download location="https://hurgsa.ibm.com/projects/o/orca.build/ws/apache.aries/0.4/s20170124-0721/apache-aries-ibm-s20170124-0721.zip">
+         <file basename="org.apache.aries.util-1.1.2-ibm-s20170124-0721.jar"     checksum="d1c1629d3497129120a22eb562e53385"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+   
+   <notes>
+   The source code in this project is from the Apache Aries repository https://svn.apache.org/repos/asf/aries/java6support,
+   checked out revision 1780033.
+   </notes>
+</ossc>

@@ -1,0 +1,13 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.zosConnectCore-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+    com.ibm.websphere.appserver.servlet-3.0;version=latest, \
+    com.ibm.wsspi.appserver.webBundleSecurity-1.0;version=latest, \
+    com.ibm.websphere.appserver.json-1.0;version=latest, \
+    com.ibm.wsspi.appserver.webBundle-1.0;version=latest, \
+    com.ibm.ws.zos.connect;version=latest

@@ -1,0 +1,4 @@
+<server>
+  <include location="${editions.core}/runtime.xml"/>
+  <include location="${editions.core}/repo.xml"/>
+</server>

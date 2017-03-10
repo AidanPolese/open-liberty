@@ -1,0 +1,26 @@
+-include= ~../cnf/resources/bnd/bundle.props, 
+bVersion=1.0
+
+Export-Package: \
+	com.ibm.ejs.ras,\
+	com.ibm.websphere.logging,\
+	com.ibm.websphere.logging.hpel,\
+	com.ibm.websphere.ras,\
+	com.ibm.websphere.ras.annotation,\
+	com.ibm.ws.ffdc,\
+	com.ibm.ws.ffdc.annotation,\
+	com.ibm.ws.kernel.provisioning.packages,\
+	com.ibm.ws.logging,\
+	com.ibm.ws.logging.internal,\
+	com.ibm.wsspi.logging,\
+	com.ibm.wsspi.logprovider
+
+instrument.disabled: true
+
+publish.wlp.jar.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.kernel.boot.logging;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

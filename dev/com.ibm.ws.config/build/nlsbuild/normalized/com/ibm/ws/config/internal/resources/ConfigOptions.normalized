@@ -1,0 +1,35 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2010.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.kernel.feature/resources/com/ibm/ws/kernel/feature/internal/resources/FeatureToolOptions.nlsprops
+#ISMESSAGEFILE FALSE
+#NLS_ENCODING=UNICODE
+# NLS_MESSAGEFORMAT_VAR
+
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+briefUsage=\
+Usage: java [JVM options] -jar {0} [options] outputFile  
+
+use.options=Options:
+# -------- OPTIONS ----------------------------------------------------#
+# List of descriptive text for options. Use "\n\" for line continuations.
+# The code provides no whitespace: begin keys with "\ \ \ \ " for leading
+# whitespace, and begin descriptions with \t 
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+option-key.ignorePids=--ignorePidsFile
+option-desc.ignorePids=A file name containing a list of pids to ignore
+option-key.encoding=--encoding
+option-desc.encoding=The character encoding to use for the output
+option-key.locale=--locale
+option-desc.locale=The locale to use for the output
+option-key.compactoutput=--compactOutput
+option-desc.compactoutput=The output schema will not contain indenting spaces, new line feeds, or XML comments
+option-key.productExtension=--productExtension
+option-desc.productExtension=\
+The product extension name to be processed.                            \n\
+If the product extension is installed in the default user location,    \n\
+use the keyword: usr.                                                  \n\
+If this option is not specified, the action is taken on Liberty core.

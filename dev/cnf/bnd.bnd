@@ -1,0 +1,4 @@
+-nobundles=true
+
+-buildpath: \
+	${javac.bootclasspath.java6}

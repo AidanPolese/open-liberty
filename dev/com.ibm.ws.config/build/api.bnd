@@ -1,0 +1,8 @@
+Export-Package: com.ibm.websphere.config.mbeans
+Bundle-SymbolicName: com.ibm.websphere.appserver.api.config
+-include= ~../../cnf/resources/bnd/bundle.props, -tmp/.copyright.properties
+bVersion: 1.2
+Include-Resource: META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.config/pom.xml=dev/api/ibm/com.ibm.websphere.appserver.api.config_1.2.17.pom
+Bundle-Name: WebSphere Configuration API
+Bundle-Description: WebSphere Configuration API, version 1.2
+Import-Package: com.ibm.websphere.config.mbeans

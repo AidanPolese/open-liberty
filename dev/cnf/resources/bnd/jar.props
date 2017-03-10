@@ -1,0 +1,37 @@
+
+-include= -liberty-release.props
+
+# No ~ on the generated.build.id include.. we want the included file to replace
+# the value in this one but we do need a leading - as the file may not be there.
+# Similarly, the copyright.properties file might not exist
+-include= -../ant_build/generated.build.id
+
+# Remove OSGi and bnd headers when building a plain non-OSGi JAR.
+-removeheaders = \
+  Bundle-ManifestVersion, Bundle-Name, Bundle-SymbolicName, Bundle-Version, \
+  Private-Package, Import-Package, Include-Resource, \
+  Bnd-LastModified, Tool, \
+  TODAY, DSTAMP, TSTAMP
+
+
+# Set some common manifest headers we want to set in client JARs
+# (similar to cnf/resources/bnd/bundle.props)
+
+Client-Vendor: IBM
+
+Client-Copyright: The Program materials contained in this file are IBM copyright materials. \
+WLP Copyright International Business Machines Corp. 1999, ${copyrightBuildYear} \
+All Rights Reserved * Licensed Materials - Property of IBM \
+US Government Users Restricted Rights - Use, duplication or \
+disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+
+# Default bFullVersion is major.minor.release-micro, but this can be overridden
+# in specific bnd files if required
+bFullVersion=${version;==;${bVersion}}.${liberty.bundle.micro.version}
+
+# This sets the version to the major.minor.micro of the provided bundle version,
+# and uses the RTC buildLabel for the qualifier. The "generated.build.id" file
+# (included above) will predefine the Build-Identifier header.
+Client-Version: ${bFullVersion}.${buildLabel}
+
+Build-Identifier: SNAPSHOT-${now}

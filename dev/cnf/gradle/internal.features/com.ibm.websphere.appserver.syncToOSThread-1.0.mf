@@ -1,0 +1,24 @@
+Bnd-LastModified: 1486383849447
+Created-By: 1.8.0_121 (Oracle Corporation)
+IBM-AppliesTo: com.ibm.websphere.appserver;productEdition=@PRODUCT_EDITION_ZOS@;productVersion="@PRODUCT_VERSION@"
+IBM-Feature-Version: 2
+IBM-Install-Policy: when-satisfied
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: com.ibm.websphere.appserver
+IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.zosSecurity-1.0))"
+Subsystem-Content: com.ibm.websphere.appserver.transaction-1.1; ibm.tolerates:="1.2"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.javaeedd-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jcaSecurity-1.0; type="osgi.subsystem.feature",
+ com.ibm.ws.security.thread.zos; version="[1.0.0,1.0.200)",
+ com.ibm.ws.security.credentials.saf; version="[1.0.0,1.0.200)",
+ com.ibm.ws.webcontainer; version="[1.1.0,1.1.200)"
+Subsystem-Description: %description
+Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
+Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.syncToOSThread-1.0
+Subsystem-ManifestVersion: 1
+Subsystem-SymbolicName: com.ibm.websphere.appserver.syncToOSThread-1.0; visibility:=protected; singleton:=false
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-3.3.0.201609221906

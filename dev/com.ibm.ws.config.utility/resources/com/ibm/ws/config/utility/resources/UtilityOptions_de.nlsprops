@@ -1,0 +1,63 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.config.utility/resources/com/ibm/ws/config/utility/resources/UtilityOptions.nlsprops
+#ISMESSAGEFILE FALSE
+#NLS_ENCODING=UNICODE
+#NLS_MESSAGEFORMAT_VAR
+
+# -------- OPTIONS ----------------------------------------------------#
+# List of descriptive text for options. Use "\n\" for line continuations.
+# The code provides no whitespace: begin keys with "\ \ \ \ " for leading
+# whitespace, and begin descripions with \t 
+#------------------------------\n at 72 chars -------------------------\n\#
+#------------------------------\n at 72 chars Leading "\ \ \ \ "-------\n\#
+#------------------------------\n at 72 chars Leading "\t"-------------\n\#
+config.options=\n\
+Aktion:\n\
+find \n\
+\tSucht ein Konfigurationssnippet im Repository. \n\
+\n\
+install \n\
+\tL\u00e4dt das Konfigurationssnippet aus dem Repository herunter oder verwendet \n\
+\tein lokales Konfigurationssnippet f\u00fcr die Variablensubstitution. \n\
+\n\
+Optionen:\n\
+--info \n\
+\tListet alle variablen Optionen im Konfigurationssnippet auf. Gibt \n\
+\teine leere Liste zur\u00fcck, wenn das Konfigurationssnippet keine \n\
+\tVariablen f\u00fcr die Substitution enth\u00e4lt.\n\
+\n\
+--V[Variable]=Wert \n\
+\tSie k\u00f6nnen von der OPtion --info mit Ihren Eingabewerten\n\
+\tgefundenen Konfigurationssnippetvariablen ersetzen. Variablen\n\
+\twerden von diesem Dienstprogramm mit --V[Variable] identifiziert. \n\
+\n\
+--createConfigFile=Pfad \n\
+\tOptional. Das Code-Snippet wird in die angegebene Datei und nicht in die \n\
+\tKonsolenanzeige geschrieben. F\u00fcgen Sie das angegebene Code-Snippet der \n\
+\tKonfigurationsdatei server.xml hinzu, um die angegebene Datei einzuschlie\u00dfen.\n\
+\n\
+--encoding=[xor|aes] \n\
+\tOptional. Geben Sie die Codierung f\u00fcr das Keystore-Kennwort an. Die unterst\u00fctzten\n\
+\tCodierungen sind xor und aes. Die Standardcodierung ist xor. \n\
+\tVerwenden Sie den Befehl securityUtility encode --listCustom, um festzustellen,\n\
+\tob zus\u00e4tzliche angepasste Verschl\u00fcsselungen unterst\u00fctzt werden.\n\
+\n\
+--key=Schl\u00fcssel \n\
+\tOptional. Gibt den bei der Codierung mit AES zu verwendenden Schl\u00fcssel an. Diese\n\
+\tZeichenfolge wird hashverschl\u00fcsselt, um einen Chiffrierschl\u00fcssel zu erzeugen, der zur\n\
+\tVerschl\u00fcsselung und Entschl\u00fcsselung des Kennworts verwendet wird. Stellen Sie dem \n\
+\tServer optional den Schl\u00fcssel bereit, indem Sie die Variable wlp.password.encryption.key \n\
+\tdefinieren, deren Wert der Schl\u00fcssel ist. Wenn Sie diese Option nicht angeben, wird ein\n\
+\tStandardschl\u00fcssel verwendet.\n\
+\n\
+--useLocalFile=Datei \n\
+\tVerwenden Sie ein Konfigurationssnippet aus dem lokalen Dateisystem. Sie m\u00fcssen\n\
+\tden Dateipfad angeben. Diese Option ersetzt die Angabe des Namens\n\
+\teines Konfigurationssnippets,\n\
+\tz. B. configUtility --useLocalFile=Datei [Optionen]
+

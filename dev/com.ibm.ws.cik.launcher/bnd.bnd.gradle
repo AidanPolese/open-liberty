@@ -1,0 +1,17 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: WebSphere common install kernel launcher
+Bundle-SymbolicName: com.ibm.ws.cik.launcher
+Bundle-Description: WebSphere common install kernel launcher, version ${bVersion}
+
+Private-Package: \
+	com.ibm.ws.cik.launcher.*
+
+instrument.disabled: true
+
+publish.wlp.jar.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.install;version=latest

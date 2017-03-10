@@ -1,0 +1,433 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#
+# NOTE: !!! THIS FILE MUST BE KEPT IN SYNC WITH native_messages.props  !!! 
+#
+# --------------------------------------------------------------------------------------------------
+#
+# # {0} description of each insert field
+# MSG_DESCRIPTIVE_NAME_CWSJX0000=CWSJX0000I: This is a message with inserts {0}
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.explanation=Explanation text for the message
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.useraction=User action text for the message
+#
+#CMVCPATHNAME com.ibm.zos.native/resources/com.ibm.ws.zos/native_messages.nlsprops
+#COMPONENTPREFIX CWWKB
+#COMPONENTNAMEFOR CWWKB zOS Native Messages
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+# NLS_MESSAGEFORMAT_VAR
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+#
+# -------------------------------------------------------------------------------------------------
+#0051-0100: native code only messages
+#0201-0250: native code non-console messages
+# -------------------------------------------------------------------------------------------------
+
+STOP_COMMAND_ACTIVE_SERVERS=CWWKB0051E: ANGEL STOP REJECTED BY ACTIVE SERVERS
+STOP_COMMAND_ACTIVE_SERVERS.explanation=\u7121\u6cd5\u505c\u6b62 angel\uff0c\u56e0\u70ba\u76ee\u524d\u6709\u4f3a\u670d\u5668\u8207\u5176\u9023\u63a5\u3002
+STOP_COMMAND_ACTIVE_SERVERS.useraction=\u8a0a\u606f CWWKB0052I \u5c07\u5305\u542b\u76ee\u524d\u4f5c\u7528\u4e2d\u7684\u6bcf\u4e00\u90e8\u4f3a\u670d\u5668\u7684 ASID\u3002\u8acb\u505c\u6b62\u4f5c\u7528\u4e2d\u4f3a\u670d\u5668\uff0c\u7136\u5f8c\u91cd\u65b0\u5617\u8a66\u505c\u6b62 angel\u3002
+
+#{0} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{1} is a z/OS jobname
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL=CWWKB0052I: ACTIVE SERVER ASID {0} JOBNAME {1}
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL.explanation=\u6b64\u4f3a\u670d\u5668\u76ee\u524d\u9023\u63a5\u81f3 angel \u7a0b\u5e8f\u3002
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+#{0} is a version string
+MODIFY_DISPLAY_ANGEL_VERSION=CWWKB0053I: ANGEL VERSION {0} 
+MODIFY_DISPLAY_ANGEL_VERSION.explanation=\u986f\u793a angel \u7a0b\u5e8f\u52d5\u614b\u53ef\u66f4\u63db\u6a21\u7d44\u7684\u7248\u672c\uff0c\u4ee5\u56de\u61c9 MODIFY PROCESS,VERSION \u6307\u4ee4\u3002
+MODIFY_DISPLAY_ANGEL_VERSION.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+#{0} is the unrecognized command entered on the console
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED=CWWKB0054E: UNRECOGNIZED COMMAND {0}
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED.explanation=angel \u8655\u7406\u7684\u4fee\u6539\u6307\u4ee4\u5305\u542b\u7121\u6cd5\u8fa8\u8b58\u7684\u95dc\u9375\u5b57\u3002
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED.useraction=\u8acb\u4f7f\u7528\u6b63\u78ba\u7684\u8a9e\u6cd5\u4f86\u91cd\u65b0\u767c\u51fa\u6307\u4ee4\u3002
+
+ANGEL_PROCESS_STARTING=CWWKB0055I: WEBSPHERE FOR Z/OS ANGEL PROCESS IS STARTING
+ANGEL_PROCESS_STARTING.explanation=angel \u7a0b\u5e8f\u555f\u52d5\u4e2d\u3002
+ANGEL_PROCESS_STARTING.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+ANGEL_PROCESS_INITIALIZATION_COMPLETE=CWWKB0056I: INITIALIZATION COMPLETE FOR ANGEL
+ANGEL_PROCESS_INITIALIZATION_COMPLETE.explanation=angel \u7a0b\u5e8f\u5df2\u5b8c\u6210\u8d77\u59cb\u8a2d\u5b9a\u3002
+ANGEL_PROCESS_INITIALIZATION_COMPLETE.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+ANGEL_PROCESS_END_NORMAL=CWWKB0057I: WEBSPHERE FOR Z/OS ANGEL PROCESS ENDED NORMALLY
+ANGEL_PROCESS_END_NORMAL.explanation=angel \u7a0b\u5e8f\u7d50\u675f\u4e2d\u3002
+ANGEL_PROCESS_END_NORMAL.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+#{0} is the hexidecimal return code from the angel main routine
+ANGEL_PROCESS_END_ABNORMAL=CWWKB0058E: WEBSPHERE FOR Z/OS ANGEL PROCESS ENDED ABNORMALLY, REASON={0}
+ANGEL_PROCESS_END_ABNORMAL.explanation=angel \u7a0b\u5e8f\u7570\u5e38\u7d50\u675f\u3002
+ANGEL_PROCESS_END_ABNORMAL.useraction=\u8a0a\u606f\u6587\u5b57\u5305\u542b\u7528\u65bc\u8aaa\u660e\u7279\u5b9a\u7684\u932f\u8aa4\u7684\u539f\u56e0\u78bc\u3002\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#{0} is the unrecognized value
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV=CWWKB0059E: UNRECOGNIZED START PARAMETER {0}
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV.explanation=\u5728 angel \u555f\u52d5\u6307\u4ee4\u4e2d\u50b3\u905e\u4e86\u7121\u6cd5\u8fa8\u8b58\u7684\u53c3\u6578\u3002\u8a0a\u606f\u4e2d\u6703\u5217\u5370\u7121\u6cd5\u8fa8\u8b58\u7684\u53c3\u6578\u3002
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV.useraction=\u8acb\u53c3\u95b1\u7522\u54c1\u8aaa\u660e\u6587\u4ef6\uff0c\u4ee5\u53d6\u5f97\u652f\u63f4\u7684\u555f\u52d5\u6307\u4ee4\u53c3\u6578\u3002
+
+#{0} is the unrecognized value
+#{1} is the recognized key
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV=CWWKB0060E: UNRECOGNIZED START PARAMETER VALUE {0} FOR KEY {1}
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV.explanation=\u5728 angel \u555f\u52d5\u6307\u4ee4\u4e2d\u50b3\u905e\u4e86\u5df2\u8fa8\u8b58\u7684\u53c3\u6578\u7d22\u5f15\u9375\uff0c\u4f46\u5176\u503c\u7121\u6cd5\u8fa8\u8b58\u3002\u8a0a\u606f\u4e2d\u6703\u5217\u5370\u7d22\u5f15\u9375\u548c\u503c\u3002
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV.useraction=\u8acb\u53c3\u95b1\u7522\u54c1\u8aaa\u660e\u6587\u4ef6\uff0c\u4ee5\u53d6\u5f97\u652f\u63f4\u7684\u555f\u52d5\u6307\u4ee4\u53c3\u6578\u7d22\u5f15\u9375\u548c\u652f\u63f4\u7684\u503c\u3002
+
+#{0} is the continuation instance
+#{1} is the message id for first multiline WTO of the sequence
+UTILITIES_WTO_CMDRESPONSE_CONTINUE=CWWKB0061I: CONTINUATION {0} FOR MESSAGE IDENTIFIER {1}
+UTILITIES_WTO_CMDRESPONSE_CONTINUE.explanation=\u4f86\u81ea\u6307\u4ee4\u8655\u7406\u7a0b\u5f0f\u7684\u6307\u4ee4\u56de\u61c9\u8a0a\u606f\u6216\u662f\u5beb\u5165\u64cd\u4f5c\u54e1\u6216\u786c\u672c\u65e5\u8a8c\u7684\u8a0a\u606f\u9700\u8981\u7531\u591a\u500b\u591a\u884c WTO \u767c\u51fa\u3002\u9019\u662f\u8a0a\u606f\u7684\u5ef6\u7e8c\u3002\u8acb\u4f7f\u7528\u8a0a\u606f ID \u4f86\u5206\u7d44\u76f8\u95dc\u7684 CWWKB0061I \u8a0a\u606f\u3002
+UTILITIES_WTO_CMDRESPONSE_CONTINUE.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+DUPLICATE_ANGEL_PROCESS=CWWKB0062E: A WEBSPHERE FOR Z/OS ANGEL PROCESS IS ALREADY STARTED
+DUPLICATE_ANGEL_PROCESS.explanation=angel \u7a0b\u5e8f\u5df2\u7d93\u5728\u6b64\u7cfb\u7d71\u4e0a\u57f7\u884c\u3002\u4f5c\u7528\u4e2d angel \u7a0b\u5e8f\u7684 ASID \u548c JOBNAME \u6703\u5217\u5370\u65bc\u8a0a\u606f CWWKB0063I \u4e2d\u3002\u7b2c\u4e8c\u500b angel \u7a0b\u5e8f\u5c07\u505c\u6b62\u3002
+DUPLICATE_ANGEL_PROCESS.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+#{0} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{1} is a z/OS jobname
+DUPLICATE_ANGEL_PROCESS_DETAIL=CWWKB0063I: ACTIVE ANGEL ASID {0} JOBNAME {1}
+DUPLICATE_ANGEL_PROCESS_DETAIL.explanation=\u6b64 angel \u7a0b\u5e8f\u5728\u4f5c\u7528\u4e2d\u3002
+DUPLICATE_ANGEL_PROCESS_DETAIL.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+#{0} is the text string "RELOAD" which should not be translated because it is provided as input on the MVS console.
+ANGEL_RELOAD_HELP_TEXT=CWWKB0064I: {0} - CAUSES ANGEL LOAD MODULES TO BE RELOADED
+ANGEL_RELOAD_HELP_TEXT.explanation=\u6b64\u8a0a\u606f\u662f\u70ba\u56de\u61c9 MODIFY BBGZANGL,HELP \u6307\u4ee4\u800c\u5217\u5370\u3002RELOAD \u9078\u9805\u6703\u5c0e\u81f4\u5f9e\u6a94\u6848\u7cfb\u7d71\u91cd\u65b0\u8f09\u5165 angel \u7a0b\u5e8f\u7684\u8f09\u5165\u6a21\u7d44\u3002\u5982\u679c angel \u7a0b\u5e8f\u672a\u91cd\u65b0\u555f\u52d5\uff0c\u5247\u5728\u5b89\u88dd PTF \u4e4b\u5f8c\u53ef\u80fd\u9700\u8981\u91cd\u65b0\u8f09\u5165\u3002
+ANGEL_RELOAD_HELP_TEXT.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+#{0} is the text string "VERSION" which should not be translated because it is provided as input on the MVS console.
+ANGEL_VERSION_HELP_TEXT=CWWKB0065I: {0} - DISPLAYS THE ANGEL LOAD MODULE VERSION
+ANGEL_VERSION_HELP_TEXT.explanation=\u6b64\u8a0a\u606f\u662f\u70ba\u56de\u61c9 MODIFY BBGZANGL,HELP \u6307\u4ee4\u800c\u5217\u5370\u3002VERSION \u9078\u9805\u986f\u793a angel \u7a0b\u5e8f\u7684\u53ef\u52d5\u614b\u66f4\u63db\u8f09\u5165\u6a21\u7d44\u7248\u672c\u3002IBM \u670d\u52d9\u4e2d\u5fc3\u548c\u652f\u63f4\u4e2d\u5fc3\u53ef\u80fd\u6703\u8981\u6c42\u9019\u5247\u8cc7\u8a0a\u3002
+ANGEL_VERSION_HELP_TEXT.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+#{0} is the text string "TRACE=Y/N" which should not be translated because it is provided as input on the MVS console.
+ANGEL_TRACE_HELP_TEXT=CWWKB0066I: {0} - CONTROLS TRACING FOR THE ANGEL PROCESS
+ANGEL_TRACE_HELP_TEXT.explanation=\u6b64\u8a0a\u606f\u662f\u70ba\u56de\u61c9 MODIFY BBGZANGL,HELP \u6307\u4ee4\u800c\u5217\u5370\u3002TRACE \u9078\u9805\u63a7\u5236 angel \u7a0b\u5e8f\u4e2d\u7684\u8ffd\u8e64\u8a0a\u606f\u3002\u4fee\u6539 TRACE=Y \u6703\u5c07\u8a3a\u65b7\u8ffd\u8e64\u8cc7\u6599\u986f\u793a\u5230 SYSOUT DD\u3002\u4fee\u6539 TRACE=N \u6703\u505c\u7528\u8a3a\u65b7\u8ffd\u8e64\u8cc7\u6599\u3002IBM \u670d\u52d9\u4e2d\u5fc3\u548c\u652f\u63f4\u4e2d\u5fc3\u53ef\u80fd\u6703\u8981\u6c42\u9019\u5247\u8cc7\u8a0a\u3002
+ANGEL_TRACE_HELP_TEXT.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+MODIFY_DISPLAY_ACTIVE_SERVERS=CWWKB0067I: ANGEL DISPLAY OF ACTIVE SERVERS
+MODIFY_DISPLAY_ACTIVE_SERVERS.explanation=\u6b64\u8a0a\u606f\u662f\u70ba\u56de\u61c9 MODIFY BBGZANGL,SERVERS \u6307\u4ee4\u800c\u5217\u5370\u3002\u9019\u5247\u8a0a\u606f\u5f8c\u9762\u5c07\u63a5\u8457\u91dd\u5c0d\u6bcf\u4e00\u90e8\u9023\u63a5\u81f3 angel \u7a0b\u5e8f\u4e4b\u4f3a\u670d\u5668\u7684\u4e00\u500b\u8a0a\u606f CWWKB0052I \u5be6\u4f8b\u3002
+MODIFY_DISPLAY_ACTIVE_SERVERS.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+#{0} is the text string "SERVERS" which should not be translated because it is provided as input on the MVS console.
+ANGEL_SERVERS_HELP_TEXT=CWWKB0068I: {0} - DISPLAYS THE ACTIVE SERVERS
+ANGEL_SERVERS_HELP_TEXT.explanation=\u6b64\u8a0a\u606f\u662f\u70ba\u56de\u61c9 MODIFY BBGZANGL,HELP \u6307\u4ee4\u800c\u5217\u5370\u3002SERVERS \u9078\u9805\u986f\u793a\u4f5c\u7528\u4e2d\u7684\u4f3a\u670d\u5668\u3002
+ANGEL_SERVERS_HELP_TEXT.useraction=\u4e0d\u9700\u4efb\u4f55\u52d5\u4f5c\u3002
+
+#{0} is the name of the angel process.  1-54 characters.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME=CWWKB0069I: {0} Angel Process \u5df2\u5b8c\u6210\u8d77\u59cb\u8a2d\u5b9a\u3002
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME.explanation=Angel Process \u5df2\u5b8c\u6210\u8d77\u59cb\u8a2d\u5b9a\u3002\u8a0a\u606f\u4e2d\u6703\u986f\u793a Angel \u540d\u7a31\u3002
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME.useraction=\u4e0d\u9700\u63a1\u53d6\u4efb\u4f55\u52d5\u4f5c\u3002
+ANGEL_NAME_TOO_LONG=CWWKB0070E: \u6307\u5b9a\u7d66 NAME \u53c3\u6578\u7684\u503c\u8d85\u904e 54 \u500b\u5b57\u5143\u3002
+ANGEL_NAME_TOO_LONG.explanation=NAME \u53c3\u6578\u7528\u4f86\u6307\u5b9a Angel Process \u7684\u540d\u7a31\u3002\u6b64\u53c3\u6578\u6307\u5b9a\u65bc BBGZANGL PROC \u4e2d\uff0c\u4e14\u5fc5\u9808\u4e0d\u8d85\u904e 54 \u500b\u5b57\u5143\u3002
+ANGEL_NAME_TOO_LONG.useraction=\u8acb\u70ba NAME \u53c3\u6578\u6307\u5b9a\u4e00\u500b\u4e0d\u8d85\u904e 54 \u500b\u5b57\u5143\u7684\u503c\uff0c\u4e26\u4f7f\u7528 BBGZANGL PROC \u518d\u6b21\u555f\u52d5 Angel Process\u3002
+
+#{0} is an unsupported character
+#{1} is a number between 1 and 54
+ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0071E: \u6307\u5b9a\u7d66 NAME \u53c3\u6578\u7684\u503c\u542b\u6709\u4e0d\u652f\u63f4\u7684\u5b57\u5143 {0}\uff0c\u8a72\u5b57\u5143\u4f4d\u65bc {1}\u3002
+ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=NAME \u53c3\u6578\u7528\u4f86\u6307\u5b9a Angel Process \u7684\u540d\u7a31\u3002\u6b64\u53c3\u6578\u6307\u5b9a\u5728 BBGZANGL PROC \u4e2d\uff0c\u53ea\u80fd\u5305\u542b\u4e0b\u5217\u5b57\u96c6\u4e2d\u7684\u5b57\u5143\uff1aA-Z 0-9 ! # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
+ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=\u8acb\u70ba NAME \u53c3\u6578\u6307\u5b9a\u4e00\u500b\u4f7f\u7528\u652f\u63f4\u5b57\u96c6\u7684\u503c\uff0c\u4e26\u4f7f\u7528 BBGZANGL PROC \u518d\u6b21\u555f\u52d5 Angel Process\u3002
+
+#{0} is the name of the angel process. 1-54 characters.
+STOP_COMMAND_ACTIVE_SERVERS_NAME=CWWKB0072E: \u4f5c\u7528\u4e2d\u7684\u4f3a\u670d\u5668\u62d2\u7d55\u505c\u6b62 {0} Angel Process\u3002
+STOP_COMMAND_ACTIVE_SERVERS_NAME.explanation=Angel Process \u7121\u6cd5\u505c\u6b62\uff0c\u56e0\u70ba\u4f3a\u670d\u5668\u76ee\u524d\u5df2\u9023\u7dda\u5b83\u3002\u8a0a\u606f\u4e2d\u6703\u986f\u793a Angel \u540d\u7a31\u3002
+STOP_COMMAND_ACTIVE_SERVERS_NAME.useraction=\u8a0a\u606f CWWKB0052I \u542b\u6709\u76ee\u524d\u8655\u65bc\u4f5c\u7528\u4e2d\u4e26\u8207\u6307\u540d Angel \u76f8\u95dc\u806f\u4e4b\u6bcf\u4e00\u90e8\u4f3a\u670d\u5668\u7684 ASID\u3002\u8acb\u505c\u6b62\u4f5c\u7528\u4e2d\u7684\u4f3a\u670d\u5668\uff0c\u518d\u505c\u6b62\u8a0a\u606f\u4e2d\u6307\u540d\u7684 Angel\u3002
+
+#{0} is the name of the angel process. 1-54 characters.
+ANGEL_PROCESS_END_NORMAL_NAME=CWWKB0073I: {0} Angel Process \u5df2\u6b63\u5e38\u7d50\u675f\u3002
+ANGEL_PROCESS_END_NORMAL_NAME.explanation=angel \u7a0b\u5e8f\u7d50\u675f\u4e2d\u3002\u8a0a\u606f\u4e2d\u6703\u986f\u793a Angel \u540d\u7a31\u3002
+ANGEL_PROCESS_END_NORMAL_NAME.useraction=\u4e0d\u9700\u63a1\u53d6\u4efb\u4f55\u52d5\u4f5c\u3002
+#{0} is the name of the angel process. 1-54 characters.
+#{1} is the hexidecimal return code from the angel main routine
+ANGEL_PROCESS_END_ABNORMAL_NAME=CWWKB0074E: {0} Angel Process \u7570\u5e38\u7d50\u675f\uff0c\u539f\u56e0={1}
+ANGEL_PROCESS_END_ABNORMAL_NAME.explanation=Angel Process \u7570\u5e38\u7d50\u675f\u3002\u8a0a\u606f\u4e2d\u6703\u986f\u793a Angel \u540d\u7a31\u3002
+ANGEL_PROCESS_END_ABNORMAL_NAME.useraction=\u8a0a\u606f\u6587\u5b57\u542b\u6709\u539f\u56e0\u78bc\uff0c\u5176\u4e2d\u8aaa\u660e\u7279\u5b9a\u7684\u932f\u8aa4\uff0c\u4ee5\u53ca\u5df2\u7d50\u675f\u4e4b Angel Process \u7684\u540d\u7a31\u3002\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#{0} is the name of the angel process. 1-54 characters.
+DUPLICATE_ANGEL_PROCESS_NAME=CWWKB0075E: \u6b64 Angel Process \u5c07\u505c\u6b62\uff0c\u56e0\u70ba\u540d\u70ba {0} \u7684 Angel Process \u5df2\u555f\u52d5\u3002\u4e0d\u9700\u57f7\u884c\u4efb\u4f55\u52d5\u4f5c\u3002
+DUPLICATE_ANGEL_PROCESS_NAME.explanation=\u4f7f\u7528\u8a0a\u606f\u6240\u793a\u540d\u7a31\u7684 Angel Process \u5df2\u5728\u9019\u500b\u7cfb\u7d71\u4e0a\u57f7\u884c\u3002\u4f5c\u7528\u4e2d angel \u7a0b\u5e8f\u7684 ASID \u548c JOBNAME \u6703\u5217\u5370\u65bc CWWKB0063I \u8a0a\u606f\u4e2d\u3002\u7b2c\u4e8c\u500b angel \u7a0b\u5e8f\u5c07\u505c\u6b62\u3002
+DUPLICATE_ANGEL_PROCESS_NAME.useraction=\u4e0d\u9700\u57f7\u884c\u4efb\u4f55\u52d5\u4f5c\uff0c\u56e0\u70ba\u91cd\u8907\u7684 Angel Process \u5c07\u505c\u6b62\u3002\u82e5\u8981\u963b\u6b62\u51fa\u73fe\u6b64\u8a0a\u606f\uff0c\u7576\u6307\u540d\u7684 Angel Process \u5df2\u5728\u57f7\u884c\u6642\uff0c\u8acb\u52ff\u555f\u52d5\u540c\u540d\u7684 Angel Process\u3002
+
+MODIFY_DISPLAY_ACTIVE_ANGELS=CWWKB0076I: \u4f5c\u7528\u4e2d\u7684 Angel \u6e05\u55ae\u5982\u4e0b\u3002
+MODIFY_DISPLAY_ACTIVE_ANGELS.explanation=\u6b64\u8a0a\u606f\u662f\u70ba\u56de\u61c9 MODIFY BBGZANGL,ANGELS \u6307\u4ee4\u800c\u5217\u5370\u3002\u5c0d\u65bc\u7cfb\u7d71\u4e0a\u6bcf\u4e00\u9805\u4f5c\u7528\u4e2d\u7684 Angel Process\uff0c\u6b64\u8a0a\u606f\u4e4b\u5f8c\u6703\u8ddf\u8457\u4e00\u500b CWWKB0077I \u8a0a\u606f\u5be6\u4f8b\u4ee5\u53ca\u4e00\u500b CWWKB0078I \u8a0a\u606f\u5be6\u4f8b\u3002
+MODIFY_DISPLAY_ACTIVE_ANGELS.useraction=\u4e0d\u9700\u63a1\u53d6\u4efb\u4f55\u52d5\u4f5c\u3002
+#{0} is a z/OS jobname
+#{1} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{2} is a version string
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS=CWWKB0077I: \u4f5c\u7528\u4e2d\u7684 Angel \u5de5\u4f5c\u540d\u7a31 {0}\uff0cASID {1}\uff0c\u7248\u672c {2}
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS.explanation=\u8a0a\u606f\u6587\u5b57\u6307\u5b9a\u4f5c\u7528\u4e2d Angel Process \u7684\u8a73\u7d30\u8cc7\u6599\u3002\u6b64\u8a0a\u606f\u4e4b\u524d\u662f CWWKB0076I \u8a0a\u606f\uff0c\u4e4b\u5f8c\u662f CWWKB0078I \u8a0a\u606f\u3002
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS.useraction=\u4e0d\u9700\u63a1\u53d6\u4efb\u4f55\u52d5\u4f5c\u3002
+#{0} is the name of an angel process. 1-54 characters
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME=CWWKB0078I: \u4f5c\u7528\u4e2d\u7684 Angel \u540d\u7a31 {0}
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME.explanation=\u8a0a\u606f\u6587\u5b57\u6307\u5b9a\u4f5c\u7528\u4e2d Angel Process \u7684\u540d\u7a31\u3002\u6b64\u8a0a\u606f\u4e4b\u524d\u662f CWWKB0076I \u8a0a\u606f\u548c CWWKB0077I \u8a0a\u606f\u3002
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME.useraction=\u4e0d\u9700\u63a1\u53d6\u4efb\u4f55\u52d5\u4f5c\u3002
+# -------------------------------------------------------------------------------------------------
+#0201-0250: native code non-console messages
+#
+#{0} is the Library name
+#{1} is the reason code
+SERVER_JNI_01=CWWKB0201E: \u7121\u6cd5\u958b\u555f {0}\uff1a{1}
+SERVER_JNI_01.explanation=\u7121\u6cd5\u958b\u555f\u6307\u5b9a\u7684\u7a0b\u5f0f\u5eab\u3002
+SERVER_JNI_01.useraction==\u8a0a\u606f\u6587\u5b57\u5305\u542b\u7528\u65bc\u8aaa\u660e\u7279\u5b9a\u932f\u8aa4\u7684\u539f\u56e0\u78bc\u3002\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_02=CWWKB0202E: \u63cf\u8ff0\u5b50 {0} \u4e2d\u7684\u65b9\u6cd5\u767b\u9304\u51fd\u6578\u50b3\u56de {1}
+SERVER_JNI_02.explanation=\u65b9\u6cd5\u767b\u9304\u51fd\u6578\u5931\u6557\u3002
+SERVER_JNI_02.useraction==\u8a0a\u606f\u6587\u5b57\u5305\u542b\u7528\u65bc\u8aaa\u660e\u7279\u5b9a\u932f\u8aa4\u7684\u539f\u56e0\u78bc\u3002\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_03=CWWKB0203E: \u56e0 {1}\uff0c\u63cf\u8ff0\u5b50 {0} \u7684 RegisterNatives \u5931\u6557
+SERVER_JNI_03.explanation=\u539f\u751f\u65b9\u6cd5\u767b\u9304\u5931\u6557\u3002
+SERVER_JNI_03.useraction==\u8a0a\u606f\u6587\u5b57\u5305\u542b\u7528\u65bc\u8aaa\u660e\u7279\u5b9a\u932f\u8aa4\u7684\u539f\u56e0\u78bc\u3002\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_04=CWWKB0204E: \u63cf\u8ff0\u5b50 {0} \u4e2d\u7684\u65b9\u6cd5\u53d6\u6d88\u767b\u9304\u51fd\u6578\u50b3\u56de {1}
+SERVER_JNI_04.explanation=\u539f\u751f\u65b9\u6cd5\u53d6\u6d88\u767b\u9304\u5931\u6557\u3002
+SERVER_JNI_04.useraction==\u8a0a\u606f\u6587\u5b57\u5305\u542b\u7528\u65bc\u8aaa\u660e\u7279\u5b9a\u932f\u8aa4\u7684\u539f\u56e0\u78bc\u3002\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+#{0} is the library name
+#{1} is the reason code
+SERVER_JNI_05=CWWKB0205W: \u7121\u6cd5\u95dc\u9589 {0}\uff1a{1}
+SERVER_JNI_05.explanation=\u6307\u5b9a\u7684\u52d5\u614b\u93c8\u7d50\u7a0b\u5f0f\u5eab\u7121\u6cd5\u95dc\u9589\u3002
+SERVER_JNI_05.useraction==\u8a0a\u606f\u6587\u5b57\u5305\u542b\u7528\u65bc\u8aaa\u660e\u7279\u5b9a\u932f\u8aa4\u7684\u539f\u56e0\u78bc\u3002\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_01=CWWKB0206E: \u7121\u6cd5\u5224\u65b7 WLP_INSTALL_DIR
+SERVER_LAUNCHER_01.explanation=\u7121\u6cd5\u5224\u65b7 WLP_INSTALL_DIR\u3002
+SERVER_LAUNCHER_01.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_02=CWWKB0207E: \u7121\u6cd5\u5c07 NLS \u8def\u5f91\u9644\u52a0\u5230 NLSPATH \u7684\u524d\u9762
+SERVER_LAUNCHER_02.explanation=\u7121\u6cd5\u5c07 NLS \u8def\u5f91\u9644\u52a0\u5230 NLSPATH \u7684\u524d\u9762\u3002
+SERVER_LAUNCHER_02.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_03=CWWKB0208E: \u7121\u6cd5\u5224\u65b7 WLP_USER_DIR
+SERVER_LAUNCHER_03.explanation=\u7121\u6cd5\u5224\u65b7 WLP_USER_DIR\u3002
+SERVER_LAUNCHER_03.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_04=CWWKB0209E: \u7121\u6cd5\u5224\u65b7 SERVER_CONFIG_DIR
+SERVER_LAUNCHER_04.explanation=\u7121\u6cd5\u5224\u65b7 SERVER_CONFIG_DIR\u3002
+SERVER_LAUNCHER_04.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_05=CWWKB0210E: \u7121\u6cd5\u89e3\u6790 JAVA_HOME
+SERVER_LAUNCHER_05.explanation=\u7121\u6cd5\u89e3\u6790 JAVA_HOME\u3002
+SERVER_LAUNCHER_05.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_06=CWWKB0211E: \u7121\u6cd5\u5c07 JVM \u7a0b\u5f0f\u5eab\u8def\u5f91\u9644\u52a0\u5230 LIBPATH \u7684\u524d\u9762
+SERVER_LAUNCHER_06.explanation=\u7121\u6cd5\u5c07 JVM \u7a0b\u5f0f\u5eab\u8def\u5f91\u9644\u52a0\u5230 LIBPATH \u7684\u524d\u9762\u3002
+SERVER_LAUNCHER_06.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_07=CWWKB0212E: \u7121\u6cd5\u5c07 WebSphere \u7a0b\u5f0f\u5eab\u8def\u5f91\u9644\u52a0\u5230 LIBPATH \u7684\u524d\u9762
+SERVER_LAUNCHER_07.explanation=\u7121\u6cd5\u5c07 WebSphere \u7a0b\u5f0f\u5eab\u8def\u5f91\u9644\u52a0\u5230 LIBPATH \u7684\u524d\u9762\u3002
+SERVER_LAUNCHER_07.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_08=CWWKB0213E: \u7121\u6cd5\u5224\u65b7\u8f38\u51fa\u76ee\u9304
+SERVER_LAUNCHER_08.explanation=\u7121\u6cd5\u5224\u65b7\u8f38\u51fa\u76ee\u9304\u3002
+SERVER_LAUNCHER_08.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_09=CWWKB0214E: \u7121\u6cd5\u5c07\u5de5\u4f5c\u76ee\u9304\u5207\u63db\u81f3 {0}
+SERVER_LAUNCHER_09.explanation=\u7121\u6cd5\u5207\u63db\u5de5\u4f5c\u76ee\u9304\u3002
+SERVER_LAUNCHER_09.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_10=CWWKB0215E: \u7121\u6cd5\u958b\u555f {0}\uff1a{1}
+SERVER_LAUNCHER_10.explanation=\u7121\u6cd5\u958b\u555f\u6a94\u6848\u3002
+SERVER_LAUNCHER_10.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_11=CWWKB0216E: \u7121\u6cd5\u89e3\u6790 JNI_CreateJavaVM\uff1a{0}
+SERVER_LAUNCHER_11.explanation=\u7121\u6cd5\u89e3\u6790 JNI_CreateJavaVM\u3002
+SERVER_LAUNCHER_11.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_12=CWWKB0217E: \u7121\u6cd5\u5efa\u7acb JavaVM\uff1a{0}
+SERVER_LAUNCHER_12.explanation=\u7121\u6cd5\u5efa\u7acb JavaVM\u3002
+SERVER_LAUNCHER_12.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_13=CWWKB0218E: \u7121\u6cd5\u547c\u53eb main \u985e\u5225
+SERVER_LAUNCHER_13.explanation=\u7121\u6cd5\u547c\u53eb main \u985e\u5225\u3002
+SERVER_LAUNCHER_13.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_14=CWWKB0219E: \u7121\u6cd5\u5f9e DD \u64f7\u53d6\u4f7f\u7528\u8005\u76ee\u9304\u7684\u8def\u5f91
+SERVER_LAUNCHER_14.explanation=\u7121\u6cd5\u5f9e DD \u64f7\u53d6\u4f7f\u7528\u8005\u76ee\u9304\u7684\u8def\u5f91\u3002
+SERVER_LAUNCHER_14.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_15=CWWKB0220E: \u7121\u6cd5\u5f9e JCL \u89e3\u6790\u4f7f\u7528\u8005\u76ee\u9304\u7684\u5be6\u969b\u8def\u5f91
+SERVER_LAUNCHER_15.explanation=\u7121\u6cd5\u5f9e JCL \u89e3\u6790\u4f7f\u7528\u8005\u76ee\u9304\u7684\u5be6\u969b\u8def\u5f91\u3002
+SERVER_LAUNCHER_15.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_16=CWWKB0221E: \u7121\u6cd5\u5f9e\u74b0\u5883\u89e3\u6790\u4f7f\u7528\u8005\u76ee\u9304\u7684\u5be6\u969b\u8def\u5f91
+SERVER_LAUNCHER_16.explanation=\u7121\u6cd5\u5f9e\u74b0\u5883\u89e3\u6790\u4f7f\u7528\u8005\u76ee\u9304\u7684\u5be6\u969b\u8def\u5f91\u3002
+SERVER_LAUNCHER_16.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_17=CWWKB0222E: \u4f3a\u670d\u5668\u914d\u7f6e\u76ee\u9304 {0} \u4e0d\u5b58\u5728
+SERVER_LAUNCHER_17.explanation=\u4f3a\u670d\u5668\u914d\u7f6e\u76ee\u9304\u4e0d\u5b58\u5728\u3002
+SERVER_LAUNCHER_17.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_18=CWWKB0223E: \u7121\u6cd5\u5c0d\u4f3a\u670d\u5668\u914d\u7f6e\u76ee\u9304\u57f7\u884c stat()
+SERVER_LAUNCHER_18.explanation=\u7121\u6cd5\u5c0d\u4f3a\u670d\u5668\u914d\u7f6e\u76ee\u9304\u57f7\u884c stat()\u3002
+SERVER_LAUNCHER_18.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f\u3002
+
+#
+SERVER_LAUNCHER_19=CWWKB0224E: \u4f3a\u670d\u5668\u914d\u7f6e {0} \u4e0d\u5b58\u5728
+SERVER_LAUNCHER_19.explanation=\u4f3a\u670d\u5668\u914d\u7f6e\u4e0d\u5b58\u5728\u3002
+SERVER_LAUNCHER_19.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_20=CWWKB0225E: \u7121\u6cd5 stat 
+SERVER_LAUNCHER_20.explanation=\u7121\u6cd5 stat\u3002
+SERVER_LAUNCHER_20.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_21=CWWKB0226E: \u627e\u4e0d\u5230\u6216\u7121\u6cd5\u5efa\u7acb\u8f38\u51fa\u76ee\u9304
+SERVER_LAUNCHER_21.explanation=\u7121\u6cd5\u89e3\u6790\u6216\u5efa\u7acb\u8f38\u51fa\u76ee\u9304\u3002
+SERVER_LAUNCHER_21.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_22=CWWKB0227E: \u627e\u4e0d\u5230\u4f3a\u670d\u5668\u8f38\u51fa\u76ee\u9304\uff0c\u6216\u8a72\u76ee\u9304\u7121\u6cd5\u5efa\u7acb\u5728 WLP_OUTPUT_DIR \u4e4b\u4e0b
+SERVER_LAUNCHER_22.explanation=\u4f3a\u670d\u5668\u8f38\u51fa\u76ee\u9304\u7121\u6cd5\u89e3\u6790\u6216\u5efa\u7acb\u5728 WLP_OUTPUT_DIR \u4e4b\u4e0b\u3002
+SERVER_LAUNCHER_22.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_23=CWWKB0228E: \u5f9e {0} \u8b80\u53d6\u6642\u767c\u751f\u932f\u8aa4\uff1a{1} 
+SERVER_LAUNCHER_23.explanation=\u5f9e\u6307\u51fa\u7684\u6a94\u6848\u8b80\u53d6\u6642\u767c\u751f\u932f\u8aa4\u3002
+SERVER_LAUNCHER_23.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_24=CWWKB0229E: \u7121\u6cd5\u53d6\u5f97\u74b0\u5883\u6a94\u6848\u4f4d\u7f6e
+SERVER_LAUNCHER_24.explanation=\u7121\u6cd5\u53d6\u5f97\u74b0\u5883\u6a94\u6848\u4f4d\u7f6e\u3002
+SERVER_LAUNCHER_24.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_25=CWWKB0230E: \u7121\u6cd5\u9084\u539f\u74b0\u5883\u6a94\u6848\u4f4d\u7f6e
+SERVER_LAUNCHER_25.explanation=\u7121\u6cd5\u9084\u539f\u74b0\u5883\u6a94\u6848\u4f4d\u7f6e\u3002
+SERVER_LAUNCHER_25.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_26=CWWKB0231E: \u7121\u6cd5\u5f9e {0} \u8a2d\u5b9a\u74b0\u5883
+SERVER_LAUNCHER_26.explanation=\u7121\u6cd5\u5f9e\u6307\u51fa\u7684\u5167\u5bb9\u8a2d\u5b9a\u74b0\u5883\u3002
+SERVER_LAUNCHER_26.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_27=CWWKB0232E: \u672a\u9806\u5229\u5b8c\u6210 fgetpos 
+SERVER_LAUNCHER_27.explanation=\u672a\u9806\u5229\u5b8c\u6210 fgetpos\u3002
+SERVER_LAUNCHER_27.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_28=CWWKB0233E: \u672a\u9806\u5229\u5b8c\u6210 fsetpos 
+SERVER_LAUNCHER_28.explanation=\u672a\u9806\u5229\u5b8c\u6210 fsetpos\u3002
+SERVER_LAUNCHER_28.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_29=CWWKB0234E: JAVA_HOME \u4f4d\u7f6e {0} \u4e0d\u5b58\u5728
+SERVER_LAUNCHER_29.explanation=\u6307\u51fa\u7684 JAVA_HOME \u4f4d\u7f6e\u4e0d\u5b58\u5728\u3002
+SERVER_LAUNCHER_29.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_30=CWWKB0235E: \u5f9e {0} \u8b80\u53d6 java \u9078\u9805\u6642\u767c\u751f\u932f\u8aa4\uff1a{1} 
+SERVER_LAUNCHER_30.explanation=\u5f9e\u6307\u51fa\u7684\u6a94\u6848\u8b80\u53d6 java \u9078\u9805\u6642\u767c\u751f\u932f\u8aa4\u3002
+SERVER_LAUNCHER_30.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_31=CWWKB0236E: \u7121\u6cd5\u8a2d\u5b9a\u9810\u8a2d IBM Java \u9078\u9805
+SERVER_LAUNCHER_31.explanation=\u7121\u6cd5\u8a2d\u5b9a\u9810\u8a2d IBM Java \u9078\u9805\u3002
+SERVER_LAUNCHER_31.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_32=CWWKB0237E: \u7121\u6cd5\u8f09\u5165 main \u985e\u5225
+SERVER_LAUNCHER_32.explanation=\u7121\u6cd5\u8f09\u5165 main \u985e\u5225\u3002
+SERVER_LAUNCHER_32.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_33=CWWKB0238E: \u627e\u4e0d\u5230 main \u65b9\u6cd5
+SERVER_LAUNCHER_33.explanation=\u627e\u4e0d\u5230 main \u65b9\u6cd5\u3002
+SERVER_LAUNCHER_33.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_34=CWWKB0239E: \u7121\u6cd5\u8f09\u5165 java.lang.String \u985e\u5225
+SERVER_LAUNCHER_34.explanation=\u7121\u6cd5\u8f09\u5165 java.lang.String \u985e\u5225\u3002
+SERVER_LAUNCHER_34.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_35=CWWKB0240E: \u7121\u6cd5\u5efa\u7acb main \u65b9\u6cd5\u7684\u53c3\u6578\u6e05\u55ae
+SERVER_LAUNCHER_35.explanation=\u7121\u6cd5\u5efa\u7acb main \u65b9\u6cd5\u7684\u53c3\u6578\u6e05\u55ae\u3002
+SERVER_LAUNCHER_35.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_36=CWWKB0241E: \u7121\u6cd5\u8a2d\u5b9a _BPXK_WLM_PROPAGATE=NO 
+SERVER_LAUNCHER_36.explanation=\u7121\u6cd5\u8a2d\u5b9a _BPXK_WLM_PROPAGATE=NO\u3002
+SERVER_LAUNCHER_36.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_37=CWWKB0242E: \u7121\u6cd5\u8a2d\u5b9a JAVA_THREAD_MODEL=HEAVY 
+SERVER_LAUNCHER_37.explanation=\u7121\u6cd5\u8a2d\u5b9a JAVA_THREAD_MODEL=HEAVY\u3002
+SERVER_LAUNCHER_37.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_38=CWWKB0243E: \u7121\u6cd5\u8a2d\u5b9a JAVA_PROPAGATE=NO 
+SERVER_LAUNCHER_38.explanation=\u7121\u6cd5\u8a2d\u5b9a JAVA_PROPAGATE=NO\u3002
+SERVER_LAUNCHER_38.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_39=CWWKB0244E: \u7121\u6cd5\u8a2d\u5b9a _EDC_PTHREAD_YIELD \u7684\u9810\u8a2d\u503c
+SERVER_LAUNCHER_39.explanation=\u7121\u6cd5\u8a2d\u5b9a _EDC_PTHREAD_YIELD \u7684\u9810\u8a2d\u503c\u3002
+SERVER_LAUNCHER_39.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_40=CWWKB0245E: \u7121\u6cd5\u8a2d\u5b9a\u5de5\u4f5c\u76ee\u9304
+SERVER_LAUNCHER_40.explanation=\u7121\u6cd5\u8a2d\u5b9a\u5de5\u4f5c\u76ee\u9304\u3002
+SERVER_LAUNCHER_40.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_41=CWWKB0246W: \u7528\u6cd5\uff1abbgzsrv [liberty arguments] serverName 
+SERVER_LAUNCHER_41.explanation=\u7528\u6cd5\uff1abbgzsrv [liberty arguments] serverName\u3002
+SERVER_LAUNCHER_41.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_42=CWWKB0247E: \u7121\u6cd5\u5c07 stdout \u91cd\u65b0\u5c0e\u5411\u81f3 LOG_DIR
+SERVER_LAUNCHER_42.explanation=\u7121\u6cd5\u5c07 stdout \u91cd\u65b0\u5c0e\u5411\u81f3 LOG_DIR
+SERVER_LAUNCHER_42.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_43=CWWKB0248E: \u7121\u6cd5\u5c07 stderr \u91cd\u65b0\u5c0e\u5411\u81f3 LOG_DIR
+SERVER_LAUNCHER_43.explanation=\u7121\u6cd5\u5c07 stderr \u91cd\u65b0\u5c0e\u5411\u81f3 LOG_DIR
+SERVER_LAUNCHER_43.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_44=CWWKB0249E: \u7121\u6cd5\u8a2d\u5b9a\u4f3a\u670d\u5668 PID \u76ee\u9304\u6216 PID \u6a94\u6848
+SERVER_LAUNCHER_44.explanation=\u7121\u6cd5\u8a2d\u5b9a\u4f3a\u670d\u5668 PID \u76ee\u9304\u6216 PID \u6a94\u6848
+SERVER_LAUNCHER_44.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+#
+SERVER_LAUNCHER_45=CWWKB0250E: \u8655\u7406 JVM_ARGS \u6642\uff0c\u5728\u8655\u7406 `"' \u671f\u9593\u9047\u5230\u975e\u9810\u671f\u7684 EOF
+SERVER_LAUNCHER_45.explanation=\u8655\u7406 JVM_ARGS \u6642\uff0c\u5728\u8655\u7406 `"' \u671f\u9593\u9047\u5230\u975e\u9810\u671f\u7684 EOF
+SERVER_LAUNCHER_45.useraction=\u5982\u9700\u76f8\u95dc\u8cc7\u8a0a\uff0c\u8acb\u53c3\u95b1\u5de5\u4f5c\u65e5\u8a8c\u6216\u7cfb\u7d71\u65e5\u8a8c\u4e2d\u5148\u524d\u7684\u8a0a\u606f
+
+# NO MESSAGE LEFT IN THIS BLOCK 0201-0250: native code non-console messages 
+# -------------------------------------------------------------------------------------------------

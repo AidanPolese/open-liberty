@@ -1,0 +1,162 @@
+*
+* IBM Confidential
+*
+* OCO Source Materials
+*
+* Copyright IBM Corp. 2014
+*
+* The source code for this program is not published or otherwise
+* divested of its trade secrets, irrespective of what has been
+* deposited with the U.S. Copyright Office.
+*-----------------------------------------------------------
+* CAUTION !!! CAUTION !!! CAUTION !!! CAUTION !!! CAUTION !!!
+*-----------------------------------------------------------
+*  ANY CHANGES TO THIS PART need to have the Client Vector
+*  Slot level in bboacall incremented. If this is not done,
+*  the code in server_wola_services.mc that loads BBOACALL
+*  will NOT reload this module if there is already a BBOACALL
+*  at an older level loaded.
+*  While testing changes to modules in BBOACALL, you can
+*  set this value to 9999 and server_wola_services.mc will
+*  always replace an old BBOACALL with this one.
+*  We started with level 101 for WAS 9 where this code
+*  is introduced.
+*-----------------------------------------------------------
+* CAUTION !!! CAUTION !!! CAUTION !!! CAUTION !!! CAUTION !!!
+*-----------------------------------------------------------
+*
+* This routine will check to see if the caller is running
+* under IMS, and if so, will call the IMS routine DFSESPRO.
+* 
+* 
+*
+         MACRO
+*        SVC = BBOAS??? as in BBOASREG
+*        ERLY  = Target branch if in IMS Preinit. 
+*        for bboa1reg = NotIMS for everything else IMSEarly
+         BBOAIMS &SVC=,&ERLY=IMSEarly       
+*
+* Check for under IMS
+*
+         LM    R14,R12,12(R13)          Restore caller's Regs  
+         USING BBOAS&SVC.,R15                                    
+FindIMS  DS    0H
+         USING PSA,0
+         L     R4,PSAAOLD          Get address of current ASCB
+         USING ASCB,R4
+         L     R4,ASCBASXB         Get address of ASXB
+         DROP  R4
+         USING ASXB,R4
+         L     R4,ASXBFTCB         Get address of first TCB
+         SR    R6,R6               Initialize flag register
+*
+         DROP  R4
+         USING TCB,R4
+LATTCB   DS    0H                  Look At This TCB
+         ICM   R9,15,TCBLLS        This TCB have LLEs?
+         BZ    LANTCB              No, check next TCB
+*
+         USING LLE,R9
+LATLLE   DS    0H                  Look At This LLE
+         ICM   R8,15,LLECDPT       CDEs exist?
+         BZ    LANLLE              Strange, go look at next LLE
+*
+         USING CDENTRY,R8
+         CLC   CDNAME(8),=C'DFSSRB  ' Check for IMS dependent
+         BNE   LANPRPX             Branch if no match
+         L     R1,CDENTPT          R1-->DFSSRB
+         XR    R2,R2               Clear for validation
+         IVSK  R2,R1               R2=SPK OF DFSSRB
+         CLM   R2,B'0001',IMSKey   Key 7 storage?
+         BE    IMSDEP              Branch if we found it
+LANPRPX  DS    0H
+         CLC   CDNAME(8),=C'DFSPRPX0' Check for IMS PARMBLK
+         BNE   LANLLE              Branch if no match
+         LA    R6,1                Flag the find
+
+*
+LANLLE   DS    0H                  Look At Next LLE
+         ICM   R9,15,LLECHN        Another LLE exist?
+         BNZ   LATLLE              Yes, check the CDE
+*
+LANTCB   DS    0H                  Look At Next TCB
+         ICM   R4,15,TCBTCB        Another TCB exist?
+         BNZ   LATTCB              Yes, go look at this TCB
+         CL    R6,=A(1)            R6 say we found DFSPRPX0?
+         BNE   NotIMS              BRANCH, not IMS
+*
+*   IMS Batch Region
+*
+IMSBATCH DS    0H
+         B     NotIMS              @PI45852C
+*
+*   IMS Dependent region (BMP, MPP, IFP....)
+*
+IMSDEP   DS    0H
+*
+IMSEnv   DS    0H
+         LM    R14,R12,12(R13)          Restore caller's Regs
+         USING BBOAS&SVC.,R15
+         L     R4,16               A(CVT)
+         L     R4,0(,R4)           A(NEW/OLD)
+         L     R4,4(,R4)           A(CURRENT TCB)
+         L     R4,112(,R4)         A(1ST SAVE AREA)=TCBFSA
+         L     R4,24(,R4)          Reg15 has DFSECP address
+         LTR   R4,R4               Is DFSECP set?
+         BZ    &ERLY               ... No, error or Pre-init.
+*
+         USING DFSECP,R4           Map DFSECP
+*
+         LA    R0,IMSLIT           Get LIT address
+         ST    R0,ECDLIPL+0          ... and save it in ECDIPL+0
+         ST    R1,ECLIPARM         Store caller R1 in FSA
+         LA    R0,BBOAS&SVC.@        Get addr of this stub entry
+         ST    R0,ECDLIPL+4        ... and save it in ECDIPL+4
+         LA    R0,ECDLIPL          Addr of ESS directed parmlist
+         ST    R0,ECLIPRX0         Save R1 for DFSESPR0
+         MVI   ECLILAN,ECLIASM     Set language indicator
+         LR    R1,R4               DFSECP address
+         L     R4,ECESPRHT         Resource routing table (DFSRRT)
+         LTR   R4,R4               Is ECESPHRT set?
+         BZ    &ERLY               ... No, error or pre-init.
+         L     R4,RRTESPR-DFSRRT(,R4) DFSESPR0 PRH address
+         LTR   R4,R4               Is DFSESPR0 set?
+         BZ    &ERLY               ... No, error or Pre-init.
+*
+* For the call to DFSESPR0, we need R1 to point at A(DFSECP) and R15
+* to be the EPA for DFSESPR0. The rest of the registers go back to
+* their values on entry to this stub.
+*
+         LR    R15,R4
+         DROP  R15                 Released code reg
+         L     R14,12(R13)         Restore caller's R14
+         LM    R2,R12,28(R13)      Restore caller's Regs R2-R12
+*
+         BR    R15                 Process appl call to DFSESPR0
+         DS    H '0'               Force S0C1 just in case
+*
+* DFSESPR0 CALL does not return here.
+*
+         DROP  R4
+*
+* IMS does not support DL/I calls during the pre-init exit.  If
+* we detect we are in the pre-init exit, or some other case where
+* the IMS control blocks which we expect are not present, we'll
+* exit here with a return/reason code.
+*
+IMSEarly DS    0H
+         L     R1,24(13)                Restore R1 from save area
+         USING BBOA1&SVC._PLIST,R1
+         L     R15,BBOA1&SVC._RC
+         LA    R0,BBOAAPI_RC_ERROR8     Stash RC in R0
+         ST    R0,0(,R15)               Set RC
+         L     R15,BBOA1&SVC._RSN
+         LA    R0,BBOAAPI_RSN_IMS_PREINIT
+         ST    R0,0(,R15)               Set RSN
+         L     R14,12(R13)              Restore caller R14
+         LM    R2,R12,28(R13)           Restore caller R2-R12
+         BR    14                       Return to caller
+         DROP  R1
+*
+NotIMS   DS    0H
+         MEND

@@ -1,0 +1,13 @@
+# A subset of properties to use for wrapping existing OSGi bundles 
+-removeheaders = Include-Resource, Ignore-Package, TODAY, DSTAMP, TSTAMP
+Bundle-Distributor: IBM
+#tell bnd to use our de-signing plugin
+-plugin: com.ibm.ws.build.bnd.plugins.DeSigningProcessor
+Import-Package:                           javax.security.auth.x500;resolution:=optional
+
+Bundle-SymbolicName=com.ibm.websphere.org.osgi.core.6.0.0
+          
+bVersion=1.0
+bFullVersion=1.0.17
+Bundle-Version=${version;===;${bFullVersion}}.201703081257
+      

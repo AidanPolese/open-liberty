@@ -1,0 +1,38 @@
+Bnd-LastModified: 1486383788667
+Created-By: 1.8.0_121 (Oracle Corporation)
+IBM-API-Service: org.apache.aries.blueprint.NamespaceHandler; osgi.service.blueprint.namespace="http://aries.apache.org/xmlns/jpa/v1.0.0",
+ org.apache.aries.blueprint.NamespaceHandler; osgi.service.blueprint.namespace="http://aries.apache.org/xmlns/jpa/v1.1.0"
+IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-Feature-Version: 2
+IBM-Install-Policy: when-satisfied
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: com.ibm.websphere.appserver
+IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.blueprint-1.0))",
+ osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.jpa-2.0))"
+IBM-ShortName: osgi.jpa-1.0
+Subsystem-Content: com.ibm.websphere.appserver.jndi-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.transaction-1.1; ibm.tolerates:="1.2"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jpa-2.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.beanValidation-1.0; ibm.tolerates:="1.1"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.servlet-3.0; ibm.tolerates:="3.1"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jdbc-4.0; ibm.tolerates:="4.1"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.blueprint-1.0; type="osgi.subsystem.feature",
+ com.ibm.ws.org.apache.aries.jpa.api.1.0.3; version="[1.1.0,1.1.200)",
+ com.ibm.ws.org.apache.aries.jpa.blueprint.aries.1.0.5; version="[1.1.0,1.1.200)",
+ com.ibm.ws.eba.jpa.wab.integration; version="[1.0.0,1.0.200)",
+ com.ibm.ws.eba.jpa.container.annotations; version="[1.0.0,1.0.200)",
+ com.ibm.ws.org.apache.aries.jpa.container.context.1.0.5; version="[1.1.0,1.1.200)",
+ com.ibm.ws.org.apache.aries.jndi.url.1.1.1; version="[1.1.0,1.1.200)",
+ com.ibm.ws.org.apache.aries.jpa.container.1.0.4; start-phase:=CONTAINER_EARLY; version="[1.1.0,1.1.200)",
+ com.ibm.ws.eba.jpa.lookup; version="[1.0.0,1.0.200)"
+Subsystem-Description: %description
+Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
+Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.osgi.jpa-1.0
+Subsystem-ManifestVersion: 1
+Subsystem-Name: OSGi Java Persistence API
+Subsystem-SymbolicName: com.ibm.websphere.appserver.osgi.jpa-1.0; visibility:=public; singleton:=false; superseded=true; superseded-by="blueprint-1.0,jpa-2.0"
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-3.3.0.201609221906

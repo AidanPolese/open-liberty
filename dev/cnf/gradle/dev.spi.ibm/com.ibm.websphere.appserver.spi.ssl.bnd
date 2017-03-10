@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.1
+
+Bundle-Name: WebSphere SSL SPI
+Bundle-Description: WebSphere SSL SPI, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.spi.ssl
+
+Import-Package: com.ibm.wsspi.ssl
+
+Export-Package: com.ibm.wsspi.ssl
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.spi/com.ibm.websphere.appserver.spi.ssl/pom.xml=com.ibm.websphere.appserver.spi.ssl.pom}
+
+publish.wlp.jar.suffix: dev/spi/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.ssl

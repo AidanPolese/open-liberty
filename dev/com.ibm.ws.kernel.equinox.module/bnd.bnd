@@ -1,0 +1,27 @@
+# For information on bnd syntax, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Equinox Module Adaptor
+Bundle-SymbolicName: com.ibm.ws.kernel.equinox.module
+Bundle-Description: Equinox Module Adaptor for loading bundles out of a Container
+
+WS-TraceGroup: kernelEquinoxModule
+
+Export-Package: com.ibm.wsspi.kernel.equinox.module
+Private-Package: com.ibm.ws.kernel.equinox.module.internal
+
+#Fragment-Host: org.eclipse.osgi; bundle-version="[3.10.0, 3.12.0)"
+Fragment-Host: org.eclipse.osgi
+Import-Package: !*
+
+-includeresource: \
+    hookconfigurators.properties=resources/hookconfigurators.properties
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.logging.core;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	org.eclipse.osgi;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

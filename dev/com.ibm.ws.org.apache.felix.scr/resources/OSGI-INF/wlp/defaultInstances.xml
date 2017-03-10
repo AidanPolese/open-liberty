@@ -1,0 +1,5 @@
+<server>
+
+	<org.apache.felix.scr.ScrService ds.info.service="true" />	
+
+</server>

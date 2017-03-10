@@ -1,0 +1,28 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2010.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.config.server.schemagen/resources/com/ibm/ws/config/server/schemagen/resources/SchemaGenOptions.nlsprops
+#ISMESSAGEFILE FALSE
+#NLS_ENCODING=UNICODE
+# NLS_MESSAGEFORMAT_VAR
+
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+briefUsage=Haszn\u00e1lat: java [JVM param\u00e9terek] -jar {0} [param\u00e9terek]  
+
+use.options=Param\u00e9terek:
+# -------- OPTIONS ----------------------------------------------------#
+# List of descriptive text for options. Use "\n\" for line continuations.
+# The code provides no whitespace: begin keys with "\ \ \ \ " for leading
+# whitespace, and begin descriptions with \t 
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+option-key.schemaversion=--schemaversion
+option-desc.schemaversion=A s\u00e9ma el\u0151\u00e1ll\u00edt\u00e1s\u00e1hoz haszn\u00e1land\u00f3 XSD v\u00e1ltozat
+option-key.outputversion=--outputversion
+option-desc.outputversion=Az el\u0151\u00e1ll\u00edtott s\u00e9ma kimeneti v\u00e1ltozata 
+option-key.encoding=--encoding
+option-desc.encoding=A kimenethez haszn\u00e1land\u00f3 karakterk\u00f3dol\u00e1s
+option-key.locale=--locale
+option-desc.locale=A kimenethez haszn\u00e1land\u00f3 ter\u00fcleti be\u00e1ll\u00edt\u00e1s

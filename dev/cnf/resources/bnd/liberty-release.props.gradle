@@ -1,0 +1,23 @@
+copyrightBuildYear=2017
+libertyRelease=17.0.0.1
+libertyBetaVersion=
+libertyBundleMicroVersion=16
+buildLabel=${tstamp}
+buildID=${libertyRelease}-${buildLabel}
+productEdition=BASE_ILAN
+productLicenseType=ILAN
+productID=com.ibm.websphere.appserver
+
+libertyWelcomePageProductName=WebSphere Application Server Beta
+libertyInfocenterLink=http://www14.software.ibm.com/webapp/wsbroker/redirect?version=cord&product=was-nd-mp&topic=cwlp_about
+libertyLatestVersionUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/wlp_beta_latestversion.js
+libertyWelcomePageCssEnhancementsUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/adminCenter-welcome.css
+libertyWelcomePageProductVersion=2017.2.0.0
+libertyWelcomePageJsEnhancementsUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/adminCenter-welcome.js
+
+libertyWelcomePageProductName=WebSphere Application Server V${libertyRelease}
+libertyInfocenterLink=http://www14.software.ibm.com/webapp/wsbroker/redirect?version=phil&product=was-nd-mp&topic=cwlp_about
+libertyLatestVersionUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/wlp_ga_latestversion.js
+libertyWelcomePageCssEnhancementsUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/adminCenter-welcome.css
+libertyWelcomePageProductVersion=${libertyRelease}
+libertyWelcomePageJsEnhancementsUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/adminCenter-welcome.js

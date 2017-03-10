@@ -1,0 +1,111 @@
+*
+* IBM Confidential
+*
+* OCO Source Materials
+*
+* Copyright IBM Corp. 2014
+*
+* The source code for this program is not published or otherwise
+* divested of its trade secrets, irrespective of what has been
+* deposited with the U.S. Copyright Office.
+*
+         MACRO
+&NAME    STMRMEPL
+         GBLC &CCN_CSECT
+         GBLC &CCN_LITN
+         GBLB &BBGZ_STMRMEPL_DSECT
+*
+* This PROLOG/EPILOG is for STIMERM exit functions that are in an
+* AMODE64 object deck.
+*
+         LGR   3,13             Put dynamic area in R3
+         AGHI  3,-104           Subtract our fake parameter list
+         USING STMRMEPL_PARMS64,3
+* If we switched to base space mode, switch back to subspace.      
+* This is mostly the same as switching to the base space, except   
+* that access register 2 gets a 1 in it this time, which means     
+* switch back to the most-recently accessed subspace.              
+         LHI   6,1    
+         L     5,STMRMEPL_PARMS64_SUBSPACE  get subspace flag
+         CLR   5,6
+         JNE   SKIPSUBSPACEEPL&SYSNDX branch when subspace not active
+         STAM  2,2,STMRMEPL_PARMS64_AR2 save access register 2
+* set access register 2
+         LHI   5,1         
+         ST    5,STMRMEPL_PARMS64_AR2_NEW
+         LAM   2,2,STMRMEPL_PARMS64_AR2_NEW
+* get address for BSG
+         BASR  5,0  
+         USING *,5   
+         LG    2,SUBSPACEADDREPL&SYSNDX
+         DROP  5
+         BSG   0,2
+SUBSPACEADDREPL&SYSNDX DC AD(SUBSPACEEPL&SYSNDX)    
+SUBSPACEEPL&SYSNDX DS 0H    
+         LAM   2,2,STMRMEPL_PARMS64_AR2 restore access register 2
+SKIPSUBSPACEEPL&SYSNDX DS 0H
+         LMG   4,12,STMRMEPL_PARMS64_R4TO12 Restore R4-R12
+         DROP  3
+         NILH  3,X'FFFE'        Subtract 64K prefix
+         LG    13,128(,13)      Restore register save area
+*
+* Get some temp storage to put our parm list to IARV64
+*
+         LARL  15,&CCN_LITN  Address literals area off R15
+         USING &CCN_LITN,15
+         STORAGE OBTAIN,LENGTH=STMRMEPL_TEMP_STORAGE_LEN,              X
+               SP=STMRMEPL_TEMP_STORAGE_SUBPOOL,                       X
+               KEY=STMRMEPL_TEMP_STORAGE_KEY
+         DROP  15
+         LGR   2,1 Move temporary storage to R2
+         USING STMRMEPL_TEMP_STG,2
+*
+* Free the dynamic area
+*
+         STG   3,STMRMEPL_TEMP_STG_IARV64_ORIGIN Store address to free
+         IARV64 REQUEST=DETACH,MATCH=SINGLE,                           X
+               MEMOBJSTART=STMRMEPL_TEMP_STG_IARV64_ORIGIN,            X
+               USERTKN=NO_USERTKN,COND=NO,PLISTVER=0,                  X
+               MF=(E,STMRMEPL_TEMP_STG_IARV64_PLIST,COMPLETE)
+*
+* Free the temporary storage
+*
+         LARL  15,&CCN_LITN  Address literals area off R15
+         USING &CCN_LITN,15
+         STORAGE RELEASE,LENGTH=STMRMEPL_TEMP_STORAGE_LEN,ADDR=(2),    X
+               SP=STMRMEPL_TEMP_STORAGE_SUBPOOL,                       X
+               KEY=STMRMEPL_TEMP_STORAGE_KEY
+         DROP  2
+         DROP  15         
+*
+* Restore the registers and return (note there is no return code).
+*
+         LMG   14,3,16(13)      Restore regs 14 thru 3
+         BR    14               Return to caller
+*
+* Define the DSECTs we're going to use if this is the first time the
+* macro is being invoked.
+*
+         AIF (&BBGZ_STMRMEPL_DSECT).NODSECT
+&BBGZ_STMRMEPL_DSECT SETB 1
+STMRMEPL_TEMP_STG       DSECT    Mapping of temporary storage
+STMRMEPL_TEMP_STG_IARV64_ORIGIN DS FD IARV64 returned storage addr
+STMRMEPL_TEMP_STG_IARV64_PLIST  DS CL88 Parameter list v0     
+STMRMEPL_TEMP_STG_AVAILABLE     DS CL160 Available for use
+*
+STMRMEPL_TEMP_STORAGE_LEN EQU 256     Length of temporary storage
+STMRMEPL_TEMP_STORAGE_SUBPOOL EQU 229 Subpool of temporary storage
+STMRMEPL_TEMP_STORAGE_KEY EQU 2       Key of temporary storage
+*
+STMRMEPL_PARMS64        DSECT    Mapping of 64 bit parameters
+STMRMEPL_PARMS64_R4TO12 DS CL72  Save registers 4-12
+STMRMEPL_PARMS64_ID     DS AD    Pointer to STIMER ID
+STMRMEPL_PARMS64_USERP  DS AD    User area address
+STMRMEPL_PARMS64_SUBSPACE  DS F  Subspace mode
+STMRMEPL_PARMS64_AR2       DS F  access register 2
+STMRMEPL_PARMS64_AR2_NEW   DS F  new access register 2
+STMRMEPL_PARMS64_ALIGN     DS CL4 alignment to quad word
+*
+&CCN_CSECT CSECT
+.NODSECT ANOP
+         MEND

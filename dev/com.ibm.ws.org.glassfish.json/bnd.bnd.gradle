@@ -1,0 +1,8 @@
+-include= jar:${fileuri;lib/javax.json-1.0.4.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+
+-includeresource: \
+   @lib/javax.json-1.0.4.jar!/org/glassfish/json/*
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/javax.json-1.0.4.jar;version=file

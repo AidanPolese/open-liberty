@@ -1,0 +1,5 @@
+<server>
+  <include location="${editions.nd}/all.xml"/>
+  <include location="${editions.zos}/runtime.xml"/>
+  <include location="${editions.zos}/repo.xml"/>
+</server>

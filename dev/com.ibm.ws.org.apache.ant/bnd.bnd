@@ -1,0 +1,13 @@
+-include= jar:${fileuri;lib/org.apache.ant-1.8.4.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+
+Export-Package: org.apache.tools.ant
+
+-includeresource: \
+	@lib/org.apache.ant-1.8.4.jar!/!META-INF/MANIFEST.MF
+
+publish.wlp.jar.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/org.apache.ant-1.8.4.jar;version=file, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

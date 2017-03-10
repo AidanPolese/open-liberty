@@ -1,0 +1,5 @@
+<server>
+  <include location="${editions.developers-ipla}/runtime.xml"/>
+  <include location="${editions.nd}/repo.xml"/>
+  <include location="${editions.developers}/extended.xml"/>
+</server>

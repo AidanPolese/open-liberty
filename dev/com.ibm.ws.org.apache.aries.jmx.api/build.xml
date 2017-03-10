@@ -1,0 +1,7 @@
+<project name="com.ibm.ws.org.apache.aries.jmx.api" default="build">
+    <import file="../ant_build/public_imports/rejar_imports.xml"/>
+  
+    <target name="package">
+        <rejar version="1.0" src.jar="lib/org.apache.aries.jmx.api-1.*.jar"/>
+    </target>
+</project>

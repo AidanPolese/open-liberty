@@ -1,0 +1,4 @@
+<project name="com.ibm.ws.kernel.boot.archive" default="build">
+    <property name="no.trace.instrumentation" value="true"/>
+    <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+</project>

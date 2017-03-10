@@ -1,0 +1,11 @@
+<server description="These features go in the repository and apply to all editions">
+  <include location="${editions.nd}/repo.xml"/>
+
+  <featureManager>
+    <feature>zosRequestLogging-1.0</feature>
+    <feature>zosLocalAdapters-1.0</feature>
+    <feature>zosConnect-1.0</feature>
+    <feature>zosConnect-1.2</feature>
+    <feature>batchSMFLogging-1.0</feature>
+  </featureManager>
+</server>

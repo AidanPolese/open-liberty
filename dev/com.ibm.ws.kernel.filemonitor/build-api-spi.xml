@@ -1,0 +1,19 @@
+<project name="com.ibm.ws.kernel.filemonitor-api" default="buildApiSpi">
+  <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+       Top level builds use this task explicity.  Changing the
+       default will create an incompatibility between a default
+       project build and a top level build. -->
+       
+  <!-- Turn off the usual IBM-API processing. -->
+  <property name="noibmapi" value="true"/>
+  
+  <!-- IBM-SPI required properties. -->
+  <property name="spibndfile" value="${basedir}/build/spi.bnd"/>  
+  <property name="spi.ibm.bundleName" value="WebSphere File Monitor SPI"/> 
+  <property name="spi.ibm.symbolic.suffix" value="kernel.filemonitor"/>
+  <!-- Accept the default 'spi.ibm.version' of '1.0'. -->  
+  <property name="feature.file" value="${basedir}/externals.mf"/>
+
+  <import file="../ant_build/public_imports/apibnd_imports.xml"/>  
+  
+ </project>

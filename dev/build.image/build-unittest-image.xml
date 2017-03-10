@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="build.unittest.image" default="clean">
+  <property name="upload.group" value="Test Images" />
+
+  <import file="../ant_build/public_imports/image_imports.xml" />
+
+  <property name="image.output.dir" value="output" />
+  <property name="file.to.upload"
+            value="autoUT.zip" />
+  <property name="file.label"
+            value="Liberty image for asynchronous unit test execution" />
+
+  <target name="clean" description="clean up">
+    <delete dir="${image.output.dir}" />
+    <delete dir="build" />
+  </target>
+
+  <target name="createImage" depends="buildImage, upload" />
+
+
+  <target name="buildImage">
+
+    <!-- Create the build directory structure used to create image -->
+    <mkdir dir="${image.output.dir}" />
+    <var name="liberty.image.folder.name" unset="true" />
+    <basename file="${liberty.image.dir}"
+              property="liberty.image.folder.name" />
+
+    <!-- Zip up the image, including the build folder of any folder which includes a build-unittest.xml -->
+    <zip destfile="${image.output.dir}/autoUT.zip">
+      <fileset dir="${basedir}/..">
+        <include name="*/build/**" />
+        <include name="*/publish/**" />
+        <include name="*/resources/**" />
+        <include name="*/test data/**" />
+        <!-- Some projects mix ut and bvt but we don't want bvt -->
+        <exclude name="*/build/bvt/**" />
+        <!-- Only include things whose root folder includes a build-unittest.xml -->
+        <not>
+          <present targetdir="${basedir}/.." present="srconly">
+            <mapper type="regexp"
+                    from="^([^/]*)/(build|publish|resources|test data|test)/?.*"
+                    to="\1/build-unittest.xml" />
+          </present>
+        </not>
+      </fileset>
+      <!-- Don't forget classpath files -->
+      <fileset dir="${basedir}/..">
+        <include name="*/.classpath" />
+        <!-- Only include things whose root folder includes a build-unittest.xml -->
+        <not>
+          <present targetdir="${basedir}/.." present="srconly">
+            <mapper type="regexp"
+                    from="^(.*)/.classpath"
+                    to="\1/build-unittest.xml" />
+          </present>
+        </not>
+      </fileset>
+
+      <!-- These files we can pick up without checking what else is in the directory, because they have unittest in the name. 
+      They need to go in their own fileset or it breaks the mapping of the earlier fileset -->
+      <fileset dir="${basedir}/.." casesensitive="false">
+        <include name="*/unittest/test*/**" />
+        <include name="*/unittest/files/**" />
+        <include name="*/unittest/**/*properties" />
+        <include name="*/unittest/**/*mf" />
+        <include name="*/build-unittest.xml" />
+        <include name="*/*-unittest.xml" />
+        <include name="*/unittest*.xml" />
+        <!-- Include non-class resources from the src dir -->
+        <include name="*/unittest/src/**/*.properties"/>
+        <include name="*/unittest/src/**/*.xsd"/>
+        <include name="*/unittest/src/**/*.xml"/>
+        <include name="*/unittest/src/**/*.dtd"/>
+        <include name="*/unittest/src/**/*.csv"/>
+        <include name="*/unittest/src/**/*.txt"/>
+      </fileset>
+      
+      <!-- Special case some of the classloading tests, and IWD tests, which have a 'partner' directory -->
+      <fileset dir="${basedir}/..">
+        <!-- classloading special case -->
+        <include name="*_other/build/**" />
+        <include name="*_other/resources/**" />
+        <include name="*_other/A/**" />
+        <include name="*_other/B/**" />
+        <!-- iwd special case -->
+        <include name="iwd_dependencies/**" />
+        <!-- wlp.lib.extract samples special case -->
+        <include name="wlp.lib.extract_test/samples/**" />
+      </fileset>
+
+    </zip>
+  </target>
+        	
+</project>

@@ -1,0 +1,10 @@
+<project name="com.ibm.zos.native" default="build">
+
+  <property name="skip.formatting" value="true"/>
+  
+  <property name="additional.src.dirs" value="${basedir}/dsects, ${basedir}/include, ${basedir}/install, ${basedir}/macros, ${basedir}/procs"/>
+  <property name="additional.src.files" value="*.mc, *.c"/>
+  
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  
+</project>

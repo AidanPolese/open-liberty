@@ -1,0 +1,4 @@
+com.ibm.websphere.crypto
+com.ibm.wsspi.kernel.service.location
+com.ibm.wsspi.kernel.service.utils
+com.ibm.wsspi.security.crypto

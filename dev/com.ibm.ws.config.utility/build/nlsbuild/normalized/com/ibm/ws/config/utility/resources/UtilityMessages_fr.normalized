@@ -1,0 +1,87 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.config.utility/resources/com/ibm/ws/config/utility/resources/UtilityMessages.nlsprops
+#ISMESSAGEFILE FALSE
+#NLS_ENCODING=UNICODE
+#NLS_MESSAGEFORMAT_VAR
+
+
+# Generic messages
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+error=Erreur : {0}
+error.inputConsoleNotAvailable=La console d'entr\u00e9e n'est pas disponible.
+error.missingIO=Erreur, p\u00e9riph\u00e9rique d''entr\u00e9e-sortie manquant : {0}.
+faiedToListAllSnippets=Echec d'affichage de tous les fragments de configuration.
+getListOfAllSnippets=\n\
+Extraction d'une liste de tous les fragments de configuration.
+findSnippet=\n\
+Extraction des fragments relatifs \u00e0 "{0}".
+snippetNotFound=\n\
+Aucun fragment relatif \u00e0 "{0}" n''a \u00e9t\u00e9 d\u00e9tect\u00e9.
+
+
+# Generic messages for task argument validation
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+insufficientArgs=Arguments insuffisants.
+invalidArg=Argument {0} non valide.
+missingArg=Argument {0} manquant.
+missingValue=Valeur manquante pour l''argument {0}.
+missingConfigSnippetName=Le fragment de configuration cible n'a pas \u00e9t\u00e9 sp\u00e9cifi\u00e9.
+
+# Messages for HelpTask
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+usage=Syntaxe : {0} action | {0} action configSnippet [options]
+task.unknown=Action inconnue : {0}
+
+# Messages for --info option
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+info.allVariables=\n\
+Toutes les variables du fragment :
+info.invalidUsage=Invalid --info usage. Syntaxe : configUtility configSnippet --info 
+
+# Messages for reading in a password
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+password.enterText=Entrez le mot de passe {0} :
+password.reenterText=Entrez \u00e0 nouveau le mot de passe {0} :
+password.readError=Erreur lors de la lecture du mot de passe.
+password.entriesDidNotMatch=Les mots de passe ne concordent pas.
+
+# Messages for FileUtility
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+fileUtility.emptyPath=Indiquez un chemin de fichier local.
+fileUtility.fileNotFound=Fichier introuvable.
+fileUtility.failedToRead=Echec de lecture du fichier local.
+
+# Messages for downloading a file from repository
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+download.failedRepoAccess=Echec de l'acc\u00e8s au r\u00e9f\u00e9rentiel.
+download.ioError=Le t\u00e9l\u00e9chargement du fragment a \u00e9chou\u00e9.
+download.invalidSnippet=Echec du chargement du fragment.
+
+# Messages for variable check
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+variable.empty=Le fragment de configuration ne contient pas de variables.
+
+# Messages for registering a host to the collective
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+encoding.aesRequiresKey=Le codage aes requiert une cl\u00e9. \
+Indiquez une cl\u00e9 \u00e0 l'aide de l'option --key.
+
+encoding.xorDoesNotSupportKey=Aucune cl\u00e9 n'est prise en charge par le codage xor. \
+N'indiquez pas l'option --key.
+
+encoding.unsupportedEncoding=Valeur de codage non prise en charge {0}.
+
+# Messages for creation of a config snippet
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+generate.configureSecurity=Assurez-vous que la s\u00e9curit\u00e9 administrative est configur\u00e9e pour le serveur.
+
+generate.download=\n\
+T\u00e9l\u00e9chargement du fragment de configuration demand\u00e9...
+
+generate.abort=\n\
+Arr\u00eat de la cr\u00e9ation du fragment de configuration.

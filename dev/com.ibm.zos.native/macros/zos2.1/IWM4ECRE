@@ -1,0 +1,2756 @@
+*/**** START OF SPECIFICATIONS ****************************************
+*                                                                     *
+*                                                                     *
+*01* MACRO NAME:  IWM4ECRE                              -04/28/14-<2> *
+*                                                                     *
+*                                                                     *
+*01* DESCRIPTIVE NAME:  Create Enclave                                *
+*                                                                     *
+*01* PROPRIETARY STATEMENT:                                           *
+*                                                                     *
+*     LICENSED MATERIALS - PROPERTY OF IBM                            *
+*     5650-ZOS COPYRIGHT IBM CORP. 2004, 2013                         *
+*                                                                     *
+* STATUS= HBB7790                                                     *
+*                                                                     *
+****** END OF SPECIFICATIONS *****************************************/
+*/* Temporarly ship this z/OS macro so personal builds will not fail. *
+*   160702 is open to get the build system to z/OS 2.1. When that     *
+*   work is done, we can get rid of this macro.                      */
+         MACRO
+&XLABEL  IWM4ECRE &TYPE=,&CLSFY=,&SERVCLS=,&INSERVCLS=,&ARRIVALTIME=,  *
+               &FUNCTION_NAME=,&EXSTARTDEFER=,&ESTRT=,&WORKREQ_HDL=,   *
+               &MONTKN=,&MONTKN64=,&ACCESS=,&ETOKEN=,&IMPORTANCE=,     *
+               &RETCODE=,&RSNCODE=,&PLISTVER=,&MF=
+.*
+*                     MACDATE -04/28/14-<2>
+.*
+.*******************************************************************
+.***AB.02  GLOBAL VARIABLES TO CONTROL PRINT AND CODE GENERATION
+.*******************************************************************
+                     GBLC  &ZPRINT     YES=PRINT NO=NO PRINT
+                     GBLC  &ZTEST      YES=TEST NO=NO TEST
+                     GBLC  &ZSYSTEM    PCCODE10, MVS, SAK, VM, XAX
+.*
+                     GBLC  &ZIWM4ECRE  YES=MACRO USED AT LEAST ONCE
+.*******************************************************************
+.***AB.03  COMMONLY USED LOCAL MACRO VARIABLES
+.*******************************************************************
+                     LCLC  &ZMS        ERROR MESSAGE WORK AREA
+                     LCLC  &ZCNDX      SYSNDX CHARACTERS
+                     LCLC  &ZCLNG      USED WHEN LENGTH IS NEEDED
+                     LCLC  &ZCGPR      USED WHEN VALUE IS IN A GPR
+                     LCLC  &ZCVAL      USED TO CONTAIN FIXED VALUE
+                     LCLA  &ZAWRK      USED AS A WORK AREA
+                     LCLA  &ZASIZ      USED FOR SIZE OF VALUE
+                     LCLA  &ZN         NUMERIC WORK VARIABLE
+                     LCLC  &ZC         CHARACTER WORK VARIABLE
+                     LCLC  &ZTLC       CHARACTER TOO LONG VARIABLE
+                     LCLA  &ZTLA       VALUE TOO LONG VARIABLE
+                     LCLC  &ZMAC_G     "G" or null
+&ZMAC_G              SETC  ''
+                     LCLC  &ZMAC_LR
+&ZMAC_LR             SETC  'LR'
+                     LCLC  &ZMAC_L
+&ZMAC_L              SETC  'L'
+                     LCLC  &ZMAC_ST
+&ZMAC_ST             SETC  'ST'
+                     LCLC  &ZMAC_LLGT
+&ZMAC_LLGT           SETC  'L'
+                     LCLC  &ZMAC_LGR
+&ZMAC_LGR            SETC  'LR'
+                     LCLC  &ZMAC_LG
+&ZMAC_LG             SETC  'L'
+                     LCLC  &ZMAC_STG
+&ZMAC_STG            SETC  'ST'
+                     LCLA  &ZMACRET    MACRO RETURN CODE
+&ZMACRET             SETA  0           ASSUME NO ERRORS
+.*
+                     LCLC  &ZCSYSLIST(255)      NONXKEY, POS ARRAY
+                     LCLA  &ZASYSLNDX  WORK INDEX FOR ZCSYSLIST()
+                     LCLA  &ZPLLEN     PARAMETER LIST LENGTH
+                     LCLC  &ZENDBASEPL          End of base PL
+                     LCLA  &ZPLWORKA   PARAMETER LIST LENGTH
+.*******************************************************************
+.***AB.04  MACRO VARIABLES FOR RANGES AND SETS OF ARGUMENTS
+.*******************************************************************
+                     LCLA  &ZI         INDEX FOR ARRAY
+                     LCLA  &ZJ         INDEX FOR PARMS
+                     LCLA  &ZK         INDEX FOR PARSE
+                     LCLA  &ZLO        LOW RANGE VALUE
+                     LCLA  &ZHI        HIGH RANGE VALUE
+                     LCLC  &ZW         WORK AREA FOR PARM
+.********************************************************************
+.***AB.05  INVOKE MVS MACROS TO CONTROL CODE GENERATION
+.********************************************************************
+                     GBLC  &SYSSPLV    SP LEVEL 1,2,3 -SPLEVEL
+                     GBLC  &SYSASCE    SYSTEM STATE P ANY AR-SYSSTATE
+                     GBLA  &SYSALVL    SYSSTATE ARCHLVL
+                     GBLC  &SYSAM64    SYSSTATE AMODE64
+.*
+                     AIF   (K'&SYSASCE GT 0).ZSYS4  SYS STATE DEFINED
+                     AIF   (K'&SYSSPLV GT 0).ZSYS2  SP LEVEL DEFINED
+                     SPLEVEL  TEST
+.ZSYS2               ANOP  ,
+                     AIF   ('&SYSSPLV' EQ '1').ZSYS3  PRE SP 3.1
+                     AIF   ('&SYSSPLV' EQ '2').ZSYS3  PRE SP 3.1
+                     SYSSTATE TEST
+                     AGO   .ZSYS4
+.ZSYS3               ANOP  ,
+&SYSASCE             SETC  'P'         ASSUME SYSSTATE PRIMARY
+.ZSYS4               ANOP  ,
+                     AIF   ('&SYSAM64' NE 'YES').ZSYSN64
+&ZMAC_LLGT           SETC 'LLGT'
+&ZMAC_LGR            SETC 'LGR'
+&ZMAC_LG             SETC 'LG'
+&ZMAC_STG            SETC 'STG'
+.ZSYSN64             ANOP  ,
+&ZMAC_G              SETC 'G'
+&ZMAC_LR             SETC 'LGR'
+&ZMAC_L              SETC 'LG'
+&ZMAC_ST             SETC 'STG'
+.*******************************************************************
+.***AB.07  DEFINE ALL MACRO VARIABLES
+.*******************************************************************
+                     LCLC  &XTYPE      ++ VALUE
+                     LCLC  &XCLSFY     ++ NAME
+                     LCLC  &XSERVCLS   ++ NAME
+                     LCLC  &XINSERVCLS          ++ NAME
+                     LCLC  &XARRIVALTIME        ++ NAME
+                     LCLC  &XFUNCTION_NAME      ++ NAME
+                     LCLC  &XEXSTARTDEFER       ++ VALUE
+                     LCLC  &XESTRT     ++ VALUE
+                     LCLC  &XWORKREQ_HDL        ++ NAME
+                     LCLC  &XUSEDMONTKNKEY      ++ NAME
+                     LCLC  &XMONTKN    ++ NAME
+                     LCLC  &XMONTKN64  ++ NAME
+                     LCLC  &XACCESS    ++ VALUE
+                     LCLC  &XETOKEN    ++ NAME
+                     LCLC  &XIMPORTANCE         ++ NAME
+                     LCLC  &XRETCODE   ++ NAME
+                     LCLC  &XRSNCODE   ++ NAME
+                     LCLA  &XPLISTVER  ++ VALUE
+                     LCLC  &XMF        ++ VALUE
+                     LCLC  &XMFCTRL    ++ NAME
+                     LCLC  &XMFATTR    ++ VALUE
+                     LCLC  &XMFSCK     ++ VALUE
+.*******************************************************************
+.***AB.13  DEFINE MACRO VARIABLES FOR INPUT/OUTPUT PROCESSING
+.*******************************************************************
+                     LCLC  &ZXTYPE     ++ INPUT VALUE
+                     LCLC  &ZXCLSFY    ++ INPUT NAME
+                     LCLC  &ZXSERVCLS  ++ OUTPUT NAME
+                     LCLC  &ZXINSERVCLS         ++ INPUT NAME
+                     LCLC  &ZXARRIVALTIME       ++ INPUT NAME
+                     LCLC  &ZXFUNCTION_NAME     ++ INPUT NAME
+                     LCLC  &ZXEXSTARTDEFER      ++ INPUT VALUE
+                     LCLC  &ZXESTRT    ++ INPUT VALUE
+                     LCLC  &ZXWORKREQ_HDL       ++ OUTPUT NAME
+                     LCLC  &ZXUSEDMONTKNKEY     ++ INPUT NAME
+                     LCLC  &ZXMONTKN   ++ INPUT NAME
+                     LCLC  &ZXMONTKN64          ++ INPUT NAME
+                     LCLC  &ZXACCESS   ++ INPUT VALUE
+                     LCLC  &ZXETOKEN   ++ OUTPUT NAME
+                     LCLC  &ZXIMPORTANCE        ++ OUTPUT NAME
+                     LCLC  &ZXRETCODE  ++ OUTPUT NAME
+                     LCLC  &ZXRSNCODE  ++ OUTPUT NAME
+                     LCLC  &ZXPLISTVER          ++ INPUT VALUE
+                     LCLC  &ZXMF       ++ INPUT VALUE
+                     LCLC  &ZXMFCTRL   ++ INPUT NAME
+                     LCLC  &ZXMFATTR   ++ INPUT VALUE
+                     LCLC  &ZXMFSCK    ++ INPUT VALUE
+.********************************************************************
+.***AC.PLV01  PROCESS PLISTVER                                      *
+.********************************************************************
+&XPLISTVER      SETA  0
+                AIF   (K'&PLISTVER(1) LE 0).ZPLV0
+                AIF   ('&PLISTVER(1)' NE 'MAX').ZPLV0
+&XPLISTVER      SETA  2
+.ZPLV0          ANOP  ,
+.*
+                AIF   ('&SERVCLS' EQ '').ZPLV1E
+                AIF   (&XPLISTVER GE 2).ZPLV1E
+&XPLISTVER      SETA  2
+.ZPLV1E         ANOP  ,
+.*
+                AIF   ('&INSERVCLS' EQ '').ZPLV2E
+                AIF   (&XPLISTVER GE 2).ZPLV2E
+&XPLISTVER      SETA  2
+.ZPLV2E         ANOP  ,
+.*
+                AIF   ('&MONTKN64' EQ '').ZPLV3E
+                AIF   (&XPLISTVER GE 2).ZPLV3E
+&XPLISTVER      SETA  2
+.ZPLV3E         ANOP  ,
+.*
+                AIF   ('&IMPORTANCE' EQ '').ZPLV4E
+                AIF   (&XPLISTVER GE 1).ZPLV4E
+&XPLISTVER      SETA  1
+.ZPLV4E         ANOP  ,
+.*
+                AIF   (K'&PLISTVER(1) LE 0).ZPVCKE
+                AIF   ('&PLISTVER(1)' EQ 'IMPLIED_VERSION').ZPVCKE
+                AIF   ('&PLISTVER(1)' EQ 'MAX').ZPVCKE
+.*-------------------------------------------------------------------
+                AIF   (N'&PLISTVER LE 1).ZPVCK3  CK NUM
+&ZMS            SETC  '"PLISTVER='
+&ZMS            SETC  '&ZMS.&PLISTVER"'
+&ZMS            SETC  '&ZMS "PLISTVER"'
+                MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET        SETA  8      SET MACRO ERROR RETURN CODE
+                AGO   .ZPVCK2
+.ZPVCK3         ANOP  ,
+.*-------------------------------------------------------------------
+                AIF   ('&PLISTVER'(1,1) NE '(').ZPVCK2
+&ZMS            SETC  '"PLISTVER='
+&ZMS            SETC  '&ZMS.&PLISTVER"'
+&ZMS            SETC  '&ZMS CONTAINS GPR NOTATION WHICH IS NOT'
+                MNOTE 8,' &ZMS ALLOWED FOR ARGUMENT 1.'
+&ZMACRET        SETA  8      SET MACRO ERROR RETURN CODE
+                AGO   .ZPVCKE
+.ZPVCK2         ANOP  ,
+.*-------------------------------------------------------------------
+&ZCVAL          SETC  '&PLISTVER(1)'
+                AIF   ('&ZCVAL'(1,1) EQ '(').ZPVCKE  IN GPR
+                AIF   (T'&ZCVAL NE 'N').ZPVCK6  NUMERIC ERR
+&ZN             SETA   &PLISTVER(1)        CONVERT TO ARITHMETIC
+                AIF   (&ZN LT 0).ZPVCK6    TOO LOW
+                AIF   (&ZN LE 2).ZPVCK4A   NOT HIGH
+.ZPVCK6         ANOP  ,
+&ZMS            SETC  '"PLISTVER='
+&ZMS            SETC  '&ZMS.&PLISTVER"'
+&ZMS            SETC  '&ZMS THE RANGE IS "0-2"'
+                MNOTE 8,' &ZMS FOR ARGUMENT 1.'
+&ZMACRET        SETA  8      SET MACRO ERROR RETURN CODE
+&XPLISTVER      SETA  2
+                AGO   .ZPVCKE
+.*-------------------------------------------------------------------
+.ZPVCK4A        ANOP  ,
+                AIF   (&ZN GE &XPLISTVER).ZPVCK4
+&ZMS            SETC  'PLISTVER='
+&ZMS            SETC  '&ZMS.&PLISTVER(1)'
+&ZMS            SETC  '&ZMS., BUT PLISTVER OF'
+&ZMS            SETC  '&ZMS &XPLISTVER'
+                MNOTE 8,' &ZMS IS REQUIRED.'
+&ZMACRET        SETA  8      SET MACRO ERROR RETURN CODE
+                AGO   .ZPVCK5
+.ZPVCK4         ANOP  ,
+&XPLISTVER      SETA  &PLISTVER(1)
+.ZPVCK5         ANOP  ,
+.ZPVCKE         ANOP  ,
+.********************************************************************
+.***AG.MF01 PROCESS MF MACRO FORMS
+.********************************************************************
+                     ACTR  10000
+.*------------------------------------------------------------------
+.***AG.KKCTL01 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+&XMF                 SETC  ''          INITIALIZE XVARIABLE
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG64                ANOP  ,
+&ZTLC                SETC 'S'
+                     AIF   ('&MF(1)' NE '&ZTLC').ZG65
+&XMF                 SETC  'S'         SET KEYWORD
+                     AIF   (N'&MF LE 1).ZG64A   CK NUM
+&ZMS                 SETC  '"MF='
+&ZMS                 SETC  '&ZMS.&MF"'
+&ZMS                 SETC  '&ZMS "MF"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG64A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG65                ANOP  ,
+&ZTLC                SETC 'L'
+                     AIF   ('&MF(1)' NE '&ZTLC').ZG72
+&XMF                 SETC  'L'         SET KEYWORD
+                     AIF   (N'&MF LE 3).ZG65A   CK NUM
+&ZMS                 SETC  '"MF='
+&ZMS                 SETC  '&ZMS.&MF"'
+&ZMS                 SETC  '&ZMS "MF"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 3 ARGUMENTS.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG65A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KKCTL08 -MF(L) SPECIAL CHECK
+                     AIF   (N'&SYSLIST NE 0).ZG65B  POSITIONALS?
+                     AIF   ('&TYPE' NE '').ZG65B  KEYS?
+                     AIF   ('&CLSFY' NE '').ZG65B  KEYS?
+                     AIF   ('&SERVCLS' NE '').ZG65B  KEYS?
+                     AIF   ('&INSERVCLS' NE '').ZG65B  KEYS?
+                     AIF   ('&ARRIVALTIME' NE '').ZG65B  KEYS?
+                     AIF   ('&FUNCTION_NAME' NE '').ZG65B  KEYS?
+                     AIF   ('&EXSTARTDEFER' NE '').ZG65B  KEYS?
+                     AIF   ('&ESTRT' NE '').ZG65B  KEYS?
+                     AIF   ('&WORKREQ_HDL' NE '').ZG65B  KEYS?
+                     AIF   ('&MONTKN' NE '').ZG65B  KEYS?
+                     AIF   ('&MONTKN64' NE '').ZG65B  KEYS?
+                     AIF   ('&ACCESS' NE '').ZG65B  KEYS?
+                     AIF   ('&ETOKEN' NE '').ZG65B  KEYS?
+                     AIF   ('&IMPORTANCE' NE '').ZG65B  KEYS?
+                     AIF   ('&RETCODE' NE '').ZG65B  KEYS?
+                     AIF   ('&RSNCODE' NE '').ZG65B  KEYS?
+                     AGO    .ZG65C     INVOCATION OKAY
+.ZG65B               ANOP  ,
+&ZMS                 SETC  'THE "L" FORM OF "MF"'
+&ZMS                 SETC  '&ZMS CAN ONLY HAVE'
+&ZMS                 SETC  '&ZMS THE "PLISTVER" KEY'
+                     MNOTE 8,' &ZMS SPECIFIED ON THE INVOCATION.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG65C               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR06 NAME, OPT RQD INPUT, POS(2) -XVARIABLE
+&ZXMFCTRL            SETC  'INPUT'     SET IN/OUTPUT
+&XMFCTRL             SETC  '&MF(2,1)'  SET XVARIABLE
+                     AIF   (N'&MF(2) GT 1).ZG67B  MULTI
+&XMFCTRL             SETC  '&MF(2)'    SET XVARIABLE
+.ZG67B               AIF   (K'&MF(2) GT 0).ZG67C
+&ZXMFCTRL            SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'WHEN "L" IS SPECIFIED'
+&ZMS                 SETC  '&ZMS FOR THE "MF" KEY, POSITIONAL'
+                     MNOTE 8,' &ZMS ARG 2 IS REQUIRED.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG67C               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK01 NAME, OPT RQD INPUT, POS(2) -GPR NOT ALLOWED
+                     AIF   (K'&ZXMFCTRL LE 0).ZG67P  NOT I/O
+                     AIF   ('&XMFCTRL'(1,1) NE '(').ZG67P
+&ZXMFCTRL            SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  '"MF='
+&ZMS                 SETC  '&ZMS.&MF"'
+&ZMS                 SETC  '&ZMS CONTAINS GPR NOTATION WHICH IS NOT'
+                     MNOTE 8,' &ZMS ALLOWED FOR ARGUMENT 2.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG67P               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR13 VALUE, OPT INPUT, POS(3) -XVARIABLE
+&ZXMFATTR            SETC  'INPUT'     SET IN/OUTPUT
+&XMFATTR             SETC  '0D'
+                     AIF   (K'&MF(3) LE 0).ZG70B  PARM
+&XMFATTR             SETC  '&MF(3,1)'  SET XVARIABLE
+                     AIF   (N'&MF(3) GT 1).ZG70B  MULTI
+&XMFATTR             SETC  '&MF(3)'    SET XVARIABLE
+.ZG70B               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK01 VALUE, OPT INPUT, POS(3) -GPR NOT ALLOWED
+                     AIF   (K'&ZXMFATTR LE 0).ZG70P  NOT I/O
+                     AIF   ('&XMFATTR'(1,1) NE '(').ZG70P
+&ZXMFATTR            SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  '"MF='
+&ZMS                 SETC  '&ZMS.&MF"'
+&ZMS                 SETC  '&ZMS CONTAINS GPR NOTATION WHICH IS NOT'
+                     MNOTE 8,' &ZMS ALLOWED FOR ARGUMENT 3.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG70P               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK03 VALUE, OPT INPUT, POS(3) -CHARACTER LENGTH
+                     AIF   (K'&ZXMFATTR LE 0).ZG70S  NOT I/O
+                     AIF   (K'&XMFATTR LE 60).ZG70S  LNG OK
+&ZXMFATTR            SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  '"MF='
+&ZMS                 SETC  '&ZMS.&MF"'
+&ZMS                 SETC  '&ZMS ARGUMENT 3 EXCEEDS THE MAXIMUM'
+                     MNOTE 8,' &ZMS LENGTH OF 60 CHARACTERS.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG70S               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG72                ANOP  ,
+&ZTLC                SETC 'E'
+                     AIF   ('&MF(1)' NE '&ZTLC').ZG80
+&XMF                 SETC  'E'         SET KEYWORD
+                     AIF   (N'&MF LE 3).ZG72A   CK NUM
+&ZMS                 SETC  '"MF='
+&ZMS                 SETC  '&ZMS.&MF"'
+&ZMS                 SETC  '&ZMS "MF"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 3 ARGUMENTS.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG72A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR06 NAME, OPT RQD INPUT, POS(2) -XVARIABLE
+&ZXMFCTRL            SETC  'INPUT'     SET IN/OUTPUT
+&XMFCTRL             SETC  '&MF(2,1)'  SET XVARIABLE
+                     AIF   (N'&MF(2) GT 1).ZG74B  MULTI
+&XMFCTRL             SETC  '&MF(2)'    SET XVARIABLE
+.ZG74B               AIF   (K'&MF(2) GT 0).ZG74C
+&ZXMFCTRL            SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'WHEN "E" IS SPECIFIED'
+&ZMS                 SETC  '&ZMS FOR THE "MF" KEY, POSITIONAL'
+                     MNOTE 8,' &ZMS ARG 2 IS REQUIRED.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG74C               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, OPT RQD INPUT, POS(2) -GPR OUT OF RANGE
+                     AIF   (K'&ZXMFCTRL LE 0).ZG74R  NOT I/O
+                     AIF   ('&XMFCTRL'(1,1) NE '(').ZG74R
+&ZCGPR               SETC  '&XMFCTRL'(2,K'&XMFCTRL-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG74P
+                     AIF   (K'&ZCGPR GT 2).ZG74Q
+                     AIF   ('&ZCGPR' EQ '0').ZG74Q
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG74Q  INVALID REG NAME
+.ZG74P               ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG74R  NON NUMERIC
+                     AIF   ('&ZCGPR' LT '1').ZG74Q
+                     AIF   ('&ZCGPR' LE '12').ZG74R
+.ZG74Q               ANOP  ,
+&ZMS                 SETC  '"MF='
+&ZMS                 SETC  '&ZMS.&MF"'
+&ZMS                 SETC  '&ZMS ARGUMENT 2 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (1)-(12).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG74R               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KKWRD02 VALUE, OPT INPUT, ME KEYWORD -SINGLE KEYWORD
+&XMFSCK              SETC  ''          INITIALIZE XVARIABLE
+.ZG78A   AIF   ('&MF(3)' NE 'COMPLETE').ZG79A
+&XMFSCK              SETC  'COMPLETE'  SET KEYWORD
+.*-------------------------------------------------------------------
+.***AG.KKWRD03 VALUE, OPT INPUT, ME KEYWORD -SINGLE KEYWORD
+.ZG79A               AIF   (K'&XMFSCK GT 0).ZG79C  KEYWORD
+                     AIF   (K'&MF(3) LE 0).ZG79B
+&ZMS                 SETC  '"MF='
+&ZMS                 SETC  '&ZMS.&MF"'
+&ZMS                 SETC  '&ZMS ARGUMENT 3 IS AN UNKNOWN KEYWORD. '
+&ZMS                 SETC  '&ZMS VALID KEYWORD CHOICE(S) ARE:'
+&ZMS                 SETC  '&ZMS "COMPLETE".'
+                     MNOTE 8,' &ZMS '
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG79B               ANOP  ,
+&XMFSCK              SETC  'COMPLETE'  SET DEFAULT KEYWORD
+.ZG79C               ANOP  ,
+&ZXMFSCK             SETC  'INPUT'     SET IN/OUTPUT
+.*------------------------------------------------------------------
+.***AG.KKCTL04 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG80                ANOP  ,
+&ZXMF                SETC  'INPUT'     SET IN/OUTPUT
+                     AIF   (K'&XMF GT 0).ZG80E  VALID ARG
+                     AIF   (T'&MF EQ 'O').ZG80D  OMITTED
+&ZASYSLNDX           SETA  0
+.ZG80A               ANOP  ,           POSITIONAL MACRO KEY
+&ZASYSLNDX           SETA  &ZASYSLNDX+1
+                     AIF   (&ZASYSLNDX GT N'&SYSLIST).ZG80C
+&ZTLC                SETC 'MF'
+                     AIF   ('&SYSLIST(&ZASYSLNDX)' NE '&ZTLC').ZG80A
+.ZG80B               ANOP  ,
+&ZXMF                SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'THE "MF" KEY'
+&ZMS                 SETC  '&ZMS MUST CONTAIN ONE'
+                     MNOTE 8,' &ZMS (OR MORE) ARGUMENT(S).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+                     AGO   .ZG80E
+.ZG80C               ANOP  ,
+&ZXMF                SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  '"MF='
+&ZMS                 SETC  '&ZMS.&MF"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 IS AN UNKNOWN KEYWORD. '
+&ZMS                 SETC  '&ZMS VALID KEYWORD CHOICE(S) ARE:'
+&ZMS                 SETC  '&ZMS "S",'
+&ZMS                 SETC  '&ZMS "L",'
+&ZMS                 SETC  '&ZMS OR "E".'
+                     MNOTE 8,' &ZMS '
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+                     AGO   .ZG80E
+.ZG80D               ANOP  ,
+&XMF                 SETC  'S'         SET DEFAULT KEYWORD
+&XMFSCK              SETC  'COMPLETE'  COMPLETE CHECKING
+.ZG80E               ANOP  ,
+.********************************************************************
+.***AG.MF02  FULL MACRO SYNTAX CHECKING
+.********************************************************************
+                     ACTR  10000
+.*-------------------------------------------------------------------
+.***AG.MF03 MF=(SLE)
+                     AIF   ('&XMF' EQ 'L').ZGMFX
+.*------------------------------------------------------------------
+.***AG.KKCTL01 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+&XTYPE               SETC  ''          INITIALIZE XVARIABLE
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG3                 ANOP  ,
+                     AIF   (K'&TYPE(1) LE 0).ZG3A
+&ZTLC                SETC 'INDEPENDENT'
+                     AIF   ('&TYPE(1)' NE '&ZTLC').ZG34
+&XTYPE               SETC  'INDEPENDENT'        SET KEYWORD
+                     AIF   (N'&TYPE LE 1).ZG3A  CK NUM
+&ZMS                 SETC  '"TYPE='
+&ZMS                 SETC  '&ZMS.&TYPE"'
+&ZMS                 SETC  '&ZMS "TYPE"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG3A                ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL03 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+&ZCVAL               SETC ''           CLEAR ERROR KEY ACCUMULATOR
+.ZG3A0               AIF   (K'&MONTKN LE 0).ZG3A1  OK
+&ZCVAL               SETC '&ZCVAL MONTKN'       INCORRECT KEY USED
+.ZG3A1               AIF   (K'&MONTKN64 LE 0).ZG3A2  OK
+&ZCVAL               SETC '&ZCVAL MONTKN64'     INCORRECT KEY USED
+.ZG3A2               AIF   (K'&ACCESS LE 0).ZG3A3  OK
+&ZCVAL               SETC '&ZCVAL ACCESS'       INCORRECT KEY USED
+.ZG3A3               AIF   (K'&ZCVAL LE 0).ZG3A4  OK
+&ZCVAL               SETC '&ZCVAL'(2,K'&ZCVAL-1)
+&ZMS                 SETC  '"TYPE'
+&ZMS                 SETC  '&ZMS.=&TYPE"'
+&ZMS                 SETC  '&ZMS DOES NOT ALLOW THE USE OF THE'
+                     MNOTE 8,' &ZMS FOLLOWING KEY(S) "&ZCVAL".'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG3A4               ANOP  ,
+.*----------------------------------------------------------------***
+.***AG.KXVAR05 NAME, OPT RQD INPUT, KEYS -XVARIABLE KEY
+                     AIF   (N'&CLSFY LE 1).ZG5A  CK NUM
+&ZMS                 SETC  '"CLSFY='
+&ZMS                 SETC  '&ZMS.&CLSFY"'
+&ZMS                 SETC  '&ZMS "CLSFY"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG5A                ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR06 NAME, OPT RQD INPUT, KEYS -XVARIABLE
+&ZXCLSFY             SETC  'INPUT'     SET IN/OUTPUT
+&XCLSFY              SETC  '&CLSFY(1)'          SET XVARIABLE
+                     AIF   (N'&CLSFY GT 1).ZG5B  MULTI
+&XCLSFY              SETC  '&CLSFY'    SET XVARIABLE
+.ZG5B                AIF   (K'&CLSFY(1) GT 0).ZG5C
+&ZXCLSFY             SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'WHEN "INDEPENDENT" IS SPECIFIED'
+&ZMS                 SETC  '&ZMS , "CLSFY" KEY AND ITS'
+                     MNOTE 8,' &ZMS ARGUMENT ARE REQUIRED.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG5C                ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, OPT RQD INPUT, KEYS -GPR OUT OF RANGE
+                     AIF   (K'&ZXCLSFY LE 0).ZG5R  NOT I/O
+                     AIF   ('&XCLSFY'(1,1) NE '(').ZG5R
+&ZCGPR               SETC  '&XCLSFY'(2,K'&XCLSFY-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG5P
+                     AIF   (K'&ZCGPR GT 2).ZG5Q
+                     AIF   ('&ZCGPR' EQ '0').ZG5Q
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG5Q  INVALID REG NAME
+.ZG5P                ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG5R  NON NUMERIC
+                     AIF   ('&ZCGPR' LT '2').ZG5Q
+                     AIF   ('&ZCGPR' LE '12').ZG5R
+.ZG5Q                ANOP  ,
+&ZMS                 SETC  '"CLSFY='
+&ZMS                 SETC  '&ZMS.&CLSFY"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (2)-(12).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG5R                ANOP  ,
+.*----------------------------------------------------------------***
+.***AG.KXVAR05 NAME, OPT OUTPUT, KEYS -XVARIABLE KEY
+                     AIF   (N'&SERVCLS LE 1).ZG8A  CK NUM
+&ZMS                 SETC  '"SERVCLS='
+&ZMS                 SETC  '&ZMS.&SERVCLS"'
+&ZMS                 SETC  '&ZMS "SERVCLS"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG8A                ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR14 NAME, OPT OUTPUT, KEYS -XVARIABLE
+                     AIF   (K'&SERVCLS(1) LE 0).ZG8C  NO PARM
+&ZXSERVCLS           SETC  'OUTPUT'    SET OUTPUT
+&XSERVCLS            SETC  '&SERVCLS(1)'        SET XVARIABLE
+                     AIF   (N'&SERVCLS GT 1).ZG8C
+&XSERVCLS            SETC  '&SERVCLS'  SET XVARIABLE
+.ZG8C                ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, OPT OUTPUT, KEYS -GPR OUT OF RANGE
+                     AIF   (K'&ZXSERVCLS LE 0).ZG8R  NOT I/O
+                     AIF   ('&XSERVCLS'(1,1) NE '(').ZG8R
+&ZCGPR               SETC  '&XSERVCLS'(2,K'&XSERVCLS-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG8P
+                     AIF   (K'&ZCGPR GT 2).ZG8Q
+                     AIF   ('&ZCGPR' EQ '0').ZG8Q
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG8Q  INVALID REG NAME
+.ZG8P                ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG8R  NON NUMERIC
+                     AIF   ('&ZCGPR' LT '2').ZG8Q
+                     AIF   ('&ZCGPR' LE '12').ZG8R
+.ZG8Q                ANOP  ,
+&ZMS                 SETC  '"SERVCLS='
+&ZMS                 SETC  '&ZMS.&SERVCLS"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (2)-(12).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG8R                ANOP  ,
+.*----------------------------------------------------------------***
+.***AG.KXVAR05 NAME, OPT INPUT, KEYS -XVARIABLE KEY
+                     AIF   (N'&INSERVCLS LE 1).ZG11A  CK NUM
+&ZMS                 SETC  '"INSERVCLS='
+&ZMS                 SETC  '&ZMS.&INSERVCLS"'
+&ZMS                 SETC  '&ZMS "INSERVCLS"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG11A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR13 NAME, OPT INPUT, KEYS -XVARIABLE
+&ZXINSERVCLS         SETC  'INPUT'     SET IN/OUTPUT
+&XINSERVCLS          SETC  '0'
+                     AIF   (K'&INSERVCLS(1) LE 0).ZG11B  PARM
+&XINSERVCLS          SETC  '&INSERVCLS(1)'      SET XVARIABLE
+                     AIF   (N'&INSERVCLS GT 1).ZG11B  MULTI
+&XINSERVCLS          SETC  '&INSERVCLS'         SET XVARIABLE
+.ZG11B               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, OPT INPUT, KEYS -GPR OUT OF RANGE
+                     AIF   (K'&ZXINSERVCLS LE 0).ZG11R  NOT I/O
+                     AIF   ('&XINSERVCLS'(1,1) NE '(').ZG11R
+&ZCGPR               SETC  '&XINSERVCLS'(2,K'&XINSERVCLS-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG11P
+                     AIF   (K'&ZCGPR GT 2).ZG11Q
+                     AIF   ('&ZCGPR' EQ '0').ZG11Q
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG11Q  INVALID REG NAME
+.ZG11P               ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG11R  NON NUMERIC
+                     AIF   ('&ZCGPR' LT '2').ZG11Q
+                     AIF   ('&ZCGPR' LE '12').ZG11R
+.ZG11Q               ANOP  ,
+&ZMS                 SETC  '"INSERVCLS='
+&ZMS                 SETC  '&ZMS.&INSERVCLS"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (2)-(12).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG11R               ANOP  ,
+.*----------------------------------------------------------------***
+.***AG.KXVAR05 NAME, OPT RQD INPUT, KEYS -XVARIABLE KEY
+                     AIF   (N'&ARRIVALTIME LE 1).ZG14A  CK NUM
+&ZMS                 SETC  '"ARRIVALTIME='
+&ZMS                 SETC  '&ZMS.&ARRIVALTIME"'
+&ZMS                 SETC  '&ZMS "ARRIVALTIME"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG14A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR06 NAME, OPT RQD INPUT, KEYS -XVARIABLE
+&ZXARRIVALTIME       SETC  'INPUT'     SET IN/OUTPUT
+&XARRIVALTIME        SETC  '&ARRIVALTIME(1)'    SET XVARIABLE
+                     AIF   (N'&ARRIVALTIME GT 1).ZG14B  MULTI
+&XARRIVALTIME        SETC  '&ARRIVALTIME'       SET XVARIABLE
+.ZG14B               AIF   (K'&ARRIVALTIME(1) GT 0).ZG14C
+&ZXARRIVALTIME       SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'WHEN "INDEPENDENT" IS SPECIFIED'
+&ZMS                 SETC  '&ZMS , "ARRIVALTIME" KEY AND ITS'
+                     MNOTE 8,' &ZMS ARGUMENT ARE REQUIRED.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG14C               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, OPT RQD INPUT, KEYS -GPR OUT OF RANGE
+                     AIF   (K'&ZXARRIVALTIME LE 0).ZG14R  NOT I/O
+                     AIF   ('&XARRIVALTIME'(1,1) NE '(').ZG14R
+&ZCGPR               SETC  '&XARRIVALTIME'(2,K'&XARRIVALTIME-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG14P
+                     AIF   (K'&ZCGPR GT 2).ZG14Q
+                     AIF   ('&ZCGPR' EQ '0').ZG14Q
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG14Q  INVALID REG NAME
+.ZG14P               ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG14R  NON NUMERIC
+                     AIF   ('&ZCGPR' LT '2').ZG14Q
+                     AIF   ('&ZCGPR' LE '12').ZG14R
+.ZG14Q               ANOP  ,
+&ZMS                 SETC  '"ARRIVALTIME='
+&ZMS                 SETC  '&ZMS.&ARRIVALTIME"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (2)-(12).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG14R               ANOP  ,
+.*----------------------------------------------------------------***
+.***AG.KXVAR05 NAME, OPT RQD INPUT, KEYS -XVARIABLE KEY
+                     AIF   (N'&FUNCTION_NAME LE 1).ZG17A  CK NUM
+&ZMS                 SETC  '"FUNCTION_NAME='
+&ZMS                 SETC  '&ZMS.&FUNCTION_NAME"'
+&ZMS                 SETC  '&ZMS "FUNCTION_NAME"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG17A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR06 NAME, OPT RQD INPUT, KEYS -XVARIABLE
+&ZXFUNCTION_NAME     SETC  'INPUT'     SET IN/OUTPUT
+&XFUNCTION_NAME      SETC  '&FUNCTION_NAME(1)'  SET XVARIABLE
+                     AIF   (N'&FUNCTION_NAME GT 1).ZG17B  MULTI
+&XFUNCTION_NAME      SETC  '&FUNCTION_NAME'     SET XVARIABLE
+.ZG17B               AIF   (K'&FUNCTION_NAME(1) GT 0).ZG17C
+&ZXFUNCTION_NAME     SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'WHEN "INDEPENDENT" IS SPECIFIED'
+&ZMS                 SETC  '&ZMS , "FUNCTION_NAME" KEY AND ITS'
+                     MNOTE 8,' &ZMS ARGUMENT ARE REQUIRED.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG17C               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, OPT RQD INPUT, KEYS -GPR OUT OF RANGE
+                     AIF   (K'&ZXFUNCTION_NAME LE 0).ZG17R  NOT I/O
+                     AIF   ('&XFUNCTION_NAME'(1,1) NE '(').ZG17R
+&ZCGPR               SETC  '&XFUNCTION_NAME'(2,K'&XFUNCTION_NAME-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG17P
+                     AIF   (K'&ZCGPR GT 2).ZG17Q
+                     AIF   ('&ZCGPR' EQ '0').ZG17Q
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG17Q  INVALID REG NAME
+.ZG17P               ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG17R  NON NUMERIC
+                     AIF   ('&ZCGPR' LT '2').ZG17Q
+                     AIF   ('&ZCGPR' LE '12').ZG17R
+.ZG17Q               ANOP  ,
+&ZMS                 SETC  '"FUNCTION_NAME='
+&ZMS                 SETC  '&ZMS.&FUNCTION_NAME"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (2)-(12).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG17R               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL01 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+&XEXSTARTDEFER       SETC  ''          INITIALIZE XVARIABLE
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG21                ANOP  ,
+                     AIF   (K'&EXSTARTDEFER(1) LE 0).ZG21A
+&ZTLC                SETC 'NO'
+                     AIF   ('&EXSTARTDEFER(1)' NE '&ZTLC').ZG22
+&XEXSTARTDEFER       SETC  'NO'        SET KEYWORD
+                     AIF   (N'&EXSTARTDEFER LE 1).ZG21A  CK NUM
+&ZMS                 SETC  '"EXSTARTDEFER='
+&ZMS                 SETC  '&ZMS.&EXSTARTDEFER"'
+&ZMS                 SETC  '&ZMS "EXSTARTDEFER"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG21A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG22                ANOP  ,
+&ZTLC                SETC 'YES'
+                     AIF   ('&EXSTARTDEFER(1)' NE '&ZTLC').ZG23
+&XEXSTARTDEFER       SETC  'YES'       SET KEYWORD
+                     AIF   (N'&EXSTARTDEFER LE 1).ZG22A  CK NUM
+&ZMS                 SETC  '"EXSTARTDEFER='
+&ZMS                 SETC  '&ZMS.&EXSTARTDEFER"'
+&ZMS                 SETC  '&ZMS "EXSTARTDEFER"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG22A               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL04 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG23                ANOP  ,
+&ZXEXSTARTDEFER      SETC  'INPUT'     SET IN/OUTPUT
+                     AIF   (K'&XEXSTARTDEFER GT 0).ZG23E  VALID ARG
+                     AIF   (T'&EXSTARTDEFER EQ 'O').ZG23D  OMITTED
+&ZASYSLNDX           SETA  0
+.ZG23A               ANOP  ,           POSITIONAL MACRO KEY
+&ZASYSLNDX           SETA  &ZASYSLNDX+1
+                     AIF   (&ZASYSLNDX GT N'&SYSLIST).ZG23C
+&ZTLC                SETC 'EXSTARTDEFER'
+                     AIF   ('&SYSLIST(&ZASYSLNDX)' NE '&ZTLC').ZG23A
+.ZG23B               ANOP  ,
+&ZXEXSTARTDEFER      SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'THE "EXSTARTDEFER" KEY'
+&ZMS                 SETC  '&ZMS MUST CONTAIN ONE'
+                     MNOTE 8,' &ZMS (OR MORE) ARGUMENT(S).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+                     AGO   .ZG23E
+.ZG23C               ANOP  ,
+&ZXEXSTARTDEFER      SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  '"EXSTARTDEFER='
+&ZMS                 SETC  '&ZMS.&EXSTARTDEFER"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 IS AN UNKNOWN KEYWORD. '
+&ZMS                 SETC  '&ZMS VALID KEYWORD CHOICE(S) ARE:'
+&ZMS                 SETC  '&ZMS "NO"'
+&ZMS                 SETC  '&ZMS OR "YES".'
+                     MNOTE 8,' &ZMS '
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+                     AGO   .ZG23E
+.ZG23D               ANOP  ,
+&XEXSTARTDEFER       SETC  'NO'        SET DEFAULT KEYWORD
+.ZG23E               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL01 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+&XESTRT              SETC  ''          INITIALIZE XVARIABLE
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG26                ANOP  ,
+                     AIF   (K'&ESTRT(1) LE 0).ZG26A
+&ZTLC                SETC 'IMPLIED'
+                     AIF   ('&ESTRT(1)' NE '&ZTLC').ZG30
+&XESTRT              SETC  'IMPLIED'   SET KEYWORD
+                     AIF   (N'&ESTRT LE 1).ZG26A  CK NUM
+&ZMS                 SETC  '"ESTRT='
+&ZMS                 SETC  '&ZMS.&ESTRT"'
+&ZMS                 SETC  '&ZMS "ESTRT"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG26A               ANOP  ,
+.*----------------------------------------------------------------***
+.***AG.KXVAR05 NAME, OPT OUTPUT, KEYS -XVARIABLE KEY
+                     AIF   (N'&WORKREQ_HDL LE 1).ZG28A  CK NUM
+&ZMS                 SETC  '"WORKREQ_HDL='
+&ZMS                 SETC  '&ZMS.&WORKREQ_HDL"'
+&ZMS                 SETC  '&ZMS "WORKREQ_HDL"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG28A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR14 NAME, OPT OUTPUT, KEYS -XVARIABLE
+                     AIF   (K'&WORKREQ_HDL(1) LE 0).ZG28C  NO PARM
+&ZXWORKREQ_HDL       SETC  'OUTPUT'    SET OUTPUT
+&XWORKREQ_HDL        SETC  '&WORKREQ_HDL(1)'    SET XVARIABLE
+                     AIF   (N'&WORKREQ_HDL GT 1).ZG28C
+&XWORKREQ_HDL        SETC  '&WORKREQ_HDL'       SET XVARIABLE
+.ZG28C               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, OPT OUTPUT, KEYS -GPR OUT OF RANGE
+                     AIF   (K'&ZXWORKREQ_HDL LE 0).ZG28R  NOT I/O
+                     AIF   ('&XWORKREQ_HDL'(1,1) NE '(').ZG28R
+&ZCGPR               SETC  '&XWORKREQ_HDL'(2,K'&XWORKREQ_HDL-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG28P
+                     AIF   (K'&ZCGPR GT 2).ZG28Q
+                     AIF   ('&ZCGPR' EQ '0').ZG28Q
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG28Q  INVALID REG NAME
+.ZG28P               ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG28R  NON NUMERIC
+                     AIF   ('&ZCGPR' LT '2').ZG28Q
+                     AIF   ('&ZCGPR' LE '12').ZG28R
+.ZG28Q               ANOP  ,
+&ZMS                 SETC  '"WORKREQ_HDL='
+&ZMS                 SETC  '&ZMS.&WORKREQ_HDL"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (2)-(12).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG28R               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG30                ANOP  ,
+&ZTLC                SETC 'EXPLICIT'
+                     AIF   ('&ESTRT(1)' NE '&ZTLC').ZG31
+&XESTRT              SETC  'EXPLICIT'  SET KEYWORD
+                     AIF   (N'&ESTRT LE 1).ZG30A  CK NUM
+&ZMS                 SETC  '"ESTRT='
+&ZMS                 SETC  '&ZMS.&ESTRT"'
+&ZMS                 SETC  '&ZMS "ESTRT"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG30A               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL03 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+&ZCVAL               SETC ''           CLEAR ERROR KEY ACCUMULATOR
+.ZG30A0              AIF   (K'&WORKREQ_HDL LE 0).ZG30A1  OK
+&ZCVAL               SETC '&ZCVAL WORKREQ_HDL'  INCORRECT KEY USED
+.ZG30A1              AIF   (K'&ZCVAL LE 0).ZG30A2  OK
+&ZCVAL               SETC '&ZCVAL'(2,K'&ZCVAL-1)
+&ZMS                 SETC  '"ESTRT'
+&ZMS                 SETC  '&ZMS.=&ESTRT"'
+&ZMS                 SETC  '&ZMS DOES NOT ALLOW THE USE OF THE'
+                     MNOTE 8,' &ZMS FOLLOWING KEY(S) "&ZCVAL".'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG30A2              ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG31                ANOP  ,
+&ZTLC                SETC 'EXPLICIT_SINGLE'
+                     AIF   ('&ESTRT(1)' NE '&ZTLC').ZG32
+&XESTRT              SETC  'EXPLICIT_SINGLE'    SET KEYWORD
+                     AIF   (N'&ESTRT LE 1).ZG31A  CK NUM
+&ZMS                 SETC  '"ESTRT='
+&ZMS                 SETC  '&ZMS.&ESTRT"'
+&ZMS                 SETC  '&ZMS "ESTRT"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG31A               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL03 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+&ZCVAL               SETC ''           CLEAR ERROR KEY ACCUMULATOR
+.ZG31A0              AIF   (K'&WORKREQ_HDL LE 0).ZG31A1  OK
+&ZCVAL               SETC '&ZCVAL WORKREQ_HDL'  INCORRECT KEY USED
+.ZG31A1              AIF   (K'&ZCVAL LE 0).ZG31A2  OK
+&ZCVAL               SETC '&ZCVAL'(2,K'&ZCVAL-1)
+&ZMS                 SETC  '"ESTRT'
+&ZMS                 SETC  '&ZMS.=&ESTRT"'
+&ZMS                 SETC  '&ZMS DOES NOT ALLOW THE USE OF THE'
+                     MNOTE 8,' &ZMS FOLLOWING KEY(S) "&ZCVAL".'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG31A2              ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG32                ANOP  ,
+&ZTLC                SETC 'NEVER'
+                     AIF   ('&ESTRT(1)' NE '&ZTLC').ZG33
+&XESTRT              SETC  'NEVER'     SET KEYWORD
+                     AIF   (N'&ESTRT LE 1).ZG32A  CK NUM
+&ZMS                 SETC  '"ESTRT='
+&ZMS                 SETC  '&ZMS.&ESTRT"'
+&ZMS                 SETC  '&ZMS "ESTRT"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG32A               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL03 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+&ZCVAL               SETC ''           CLEAR ERROR KEY ACCUMULATOR
+.ZG32A0              AIF   (K'&WORKREQ_HDL LE 0).ZG32A1  OK
+&ZCVAL               SETC '&ZCVAL WORKREQ_HDL'  INCORRECT KEY USED
+.ZG32A1              AIF   (K'&ZCVAL LE 0).ZG32A2  OK
+&ZCVAL               SETC '&ZCVAL'(2,K'&ZCVAL-1)
+&ZMS                 SETC  '"ESTRT'
+&ZMS                 SETC  '&ZMS.=&ESTRT"'
+&ZMS                 SETC  '&ZMS DOES NOT ALLOW THE USE OF THE'
+                     MNOTE 8,' &ZMS FOLLOWING KEY(S) "&ZCVAL".'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG32A2              ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL04 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG33                ANOP  ,
+&ZXESTRT             SETC  'INPUT'     SET IN/OUTPUT
+                     AIF   (K'&XESTRT GT 0).ZG33E  VALID ARG
+                     AIF   (T'&ESTRT EQ 'O').ZG33D  OMITTED
+&ZASYSLNDX           SETA  0
+.ZG33A               ANOP  ,           POSITIONAL MACRO KEY
+&ZASYSLNDX           SETA  &ZASYSLNDX+1
+                     AIF   (&ZASYSLNDX GT N'&SYSLIST).ZG33C
+&ZTLC                SETC 'ESTRT'
+                     AIF   ('&SYSLIST(&ZASYSLNDX)' NE '&ZTLC').ZG33A
+.ZG33B               ANOP  ,
+&ZXESTRT             SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'THE "ESTRT" KEY'
+&ZMS                 SETC  '&ZMS MUST CONTAIN ONE'
+                     MNOTE 8,' &ZMS (OR MORE) ARGUMENT(S).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+                     AGO   .ZG33E
+.ZG33C               ANOP  ,
+&ZXESTRT             SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  '"ESTRT='
+&ZMS                 SETC  '&ZMS.&ESTRT"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 IS AN UNKNOWN KEYWORD. '
+&ZMS                 SETC  '&ZMS VALID KEYWORD CHOICE(S) ARE:'
+&ZMS                 SETC  '&ZMS "IMPLIED",'
+&ZMS                 SETC  '&ZMS "EXPLICIT",'
+&ZMS                 SETC  '&ZMS "EXPLICIT_SINGLE",'
+&ZMS                 SETC  '&ZMS OR "NEVER".'
+                     MNOTE 8,' &ZMS '
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+                     AGO   .ZG33E
+.ZG33D               ANOP  ,
+&XESTRT              SETC  'IMPLIED'   SET DEFAULT KEYWORD
+.ZG33E               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG34                ANOP  ,
+&ZTLC                SETC 'DEPENDENT'
+                     AIF   ('&TYPE(1)' NE '&ZTLC').ZG35
+&XTYPE               SETC  'DEPENDENT'          SET KEYWORD
+                     AIF   (N'&TYPE LE 1).ZG34A  CK NUM
+&ZMS                 SETC  '"TYPE='
+&ZMS                 SETC  '&ZMS.&TYPE"'
+&ZMS                 SETC  '&ZMS "TYPE"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG34A               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL03 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+&ZCVAL               SETC ''           CLEAR ERROR KEY ACCUMULATOR
+.ZG34A0              AIF   (K'&CLSFY LE 0).ZG34A1  OK
+&ZCVAL               SETC '&ZCVAL CLSFY'        INCORRECT KEY USED
+.ZG34A1              AIF   (K'&SERVCLS LE 0).ZG34A2  OK
+&ZCVAL               SETC '&ZCVAL SERVCLS'      INCORRECT KEY USED
+.ZG34A2              AIF   (K'&INSERVCLS LE 0).ZG34A3  OK
+&ZCVAL               SETC '&ZCVAL INSERVCLS'    INCORRECT KEY USED
+.ZG34A3              AIF   (K'&ARRIVALTIME LE 0).ZG34A4  OK
+&ZCVAL               SETC '&ZCVAL ARRIVALTIME'  INCORRECT KEY USED
+.ZG34A4              AIF   (K'&FUNCTION_NAME LE 0).ZG34A5  OK
+&ZCVAL               SETC '&ZCVAL FUNCTION_NAME'  INCORRECT KEY USED
+.ZG34A5              AIF   (K'&EXSTARTDEFER LE 0).ZG34A6  OK
+&ZCVAL               SETC '&ZCVAL EXSTARTDEFER'  INCORRECT KEY USED
+.ZG34A6              AIF   (K'&ESTRT LE 0).ZG34A7  OK
+&ZCVAL               SETC '&ZCVAL ESTRT'        INCORRECT KEY USED
+.ZG34A7              AIF   (K'&WORKREQ_HDL LE 0).ZG34A8  OK
+&ZCVAL               SETC '&ZCVAL WORKREQ_HDL'  INCORRECT KEY USED
+.ZG34A8              AIF   (K'&MONTKN LE 0).ZG34A9  OK
+&ZCVAL               SETC '&ZCVAL MONTKN'       INCORRECT KEY USED
+.ZG34A9              AIF   (K'&MONTKN64 LE 0).ZG34A10  OK
+&ZCVAL               SETC '&ZCVAL MONTKN64'     INCORRECT KEY USED
+.ZG34A10             AIF   (K'&ACCESS LE 0).ZG34A11  OK
+&ZCVAL               SETC '&ZCVAL ACCESS'       INCORRECT KEY USED
+.ZG34A11             AIF   (K'&ZCVAL LE 0).ZG34A12  OK
+&ZCVAL               SETC '&ZCVAL'(2,K'&ZCVAL-1)
+&ZMS                 SETC  '"TYPE'
+&ZMS                 SETC  '&ZMS.=&TYPE"'
+&ZMS                 SETC  '&ZMS DOES NOT ALLOW THE USE OF THE'
+                     MNOTE 8,' &ZMS FOLLOWING KEY(S) "&ZCVAL".'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG34A12             ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG35                ANOP  ,
+&ZTLC                SETC 'WORKDEPENDENT'
+                     AIF   ('&TYPE(1)' NE '&ZTLC').ZG36
+&XTYPE               SETC  'WORKDEPENDENT'      SET KEYWORD
+                     AIF   (N'&TYPE LE 1).ZG35A  CK NUM
+&ZMS                 SETC  '"TYPE='
+&ZMS                 SETC  '&ZMS.&TYPE"'
+&ZMS                 SETC  '&ZMS "TYPE"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG35A               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL03 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+&ZCVAL               SETC ''           CLEAR ERROR KEY ACCUMULATOR
+.ZG35A0              AIF   (K'&CLSFY LE 0).ZG35A1  OK
+&ZCVAL               SETC '&ZCVAL CLSFY'        INCORRECT KEY USED
+.ZG35A1              AIF   (K'&SERVCLS LE 0).ZG35A2  OK
+&ZCVAL               SETC '&ZCVAL SERVCLS'      INCORRECT KEY USED
+.ZG35A2              AIF   (K'&INSERVCLS LE 0).ZG35A3  OK
+&ZCVAL               SETC '&ZCVAL INSERVCLS'    INCORRECT KEY USED
+.ZG35A3              AIF   (K'&ARRIVALTIME LE 0).ZG35A4  OK
+&ZCVAL               SETC '&ZCVAL ARRIVALTIME'  INCORRECT KEY USED
+.ZG35A4              AIF   (K'&FUNCTION_NAME LE 0).ZG35A5  OK
+&ZCVAL               SETC '&ZCVAL FUNCTION_NAME'  INCORRECT KEY USED
+.ZG35A5              AIF   (K'&EXSTARTDEFER LE 0).ZG35A6  OK
+&ZCVAL               SETC '&ZCVAL EXSTARTDEFER'  INCORRECT KEY USED
+.ZG35A6              AIF   (K'&ESTRT LE 0).ZG35A7  OK
+&ZCVAL               SETC '&ZCVAL ESTRT'        INCORRECT KEY USED
+.ZG35A7              AIF   (K'&WORKREQ_HDL LE 0).ZG35A8  OK
+&ZCVAL               SETC '&ZCVAL WORKREQ_HDL'  INCORRECT KEY USED
+.ZG35A8              AIF   (K'&MONTKN LE 0).ZG35A9  OK
+&ZCVAL               SETC '&ZCVAL MONTKN'       INCORRECT KEY USED
+.ZG35A9              AIF   (K'&MONTKN64 LE 0).ZG35A10  OK
+&ZCVAL               SETC '&ZCVAL MONTKN64'     INCORRECT KEY USED
+.ZG35A10             AIF   (K'&ACCESS LE 0).ZG35A11  OK
+&ZCVAL               SETC '&ZCVAL ACCESS'       INCORRECT KEY USED
+.ZG35A11             AIF   (K'&ZCVAL LE 0).ZG35A12  OK
+&ZCVAL               SETC '&ZCVAL'(2,K'&ZCVAL-1)
+&ZMS                 SETC  '"TYPE'
+&ZMS                 SETC  '&ZMS.=&TYPE"'
+&ZMS                 SETC  '&ZMS DOES NOT ALLOW THE USE OF THE'
+                     MNOTE 8,' &ZMS FOLLOWING KEY(S) "&ZCVAL".'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG35A12             ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG36                ANOP  ,
+&ZTLC                SETC 'MONENV'
+                     AIF   ('&TYPE(1)' NE '&ZTLC').ZG46
+&XTYPE               SETC  'MONENV'    SET KEYWORD
+                     AIF   (N'&TYPE LE 1).ZG36A  CK NUM
+&ZMS                 SETC  '"TYPE='
+&ZMS                 SETC  '&ZMS.&TYPE"'
+&ZMS                 SETC  '&ZMS "TYPE"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG36A               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL03 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+&ZCVAL               SETC ''           CLEAR ERROR KEY ACCUMULATOR
+.ZG36A0              AIF   (K'&CLSFY LE 0).ZG36A1  OK
+&ZCVAL               SETC '&ZCVAL CLSFY'        INCORRECT KEY USED
+.ZG36A1              AIF   (K'&SERVCLS LE 0).ZG36A2  OK
+&ZCVAL               SETC '&ZCVAL SERVCLS'      INCORRECT KEY USED
+.ZG36A2              AIF   (K'&INSERVCLS LE 0).ZG36A3  OK
+&ZCVAL               SETC '&ZCVAL INSERVCLS'    INCORRECT KEY USED
+.ZG36A3              AIF   (K'&ARRIVALTIME LE 0).ZG36A4  OK
+&ZCVAL               SETC '&ZCVAL ARRIVALTIME'  INCORRECT KEY USED
+.ZG36A4              AIF   (K'&FUNCTION_NAME LE 0).ZG36A5  OK
+&ZCVAL               SETC '&ZCVAL FUNCTION_NAME'  INCORRECT KEY USED
+.ZG36A5              AIF   (K'&EXSTARTDEFER LE 0).ZG36A6  OK
+&ZCVAL               SETC '&ZCVAL EXSTARTDEFER'  INCORRECT KEY USED
+.ZG36A6              AIF   (K'&ESTRT LE 0).ZG36A7  OK
+&ZCVAL               SETC '&ZCVAL ESTRT'        INCORRECT KEY USED
+.ZG36A7              AIF   (K'&WORKREQ_HDL LE 0).ZG36A8  OK
+&ZCVAL               SETC '&ZCVAL WORKREQ_HDL'  INCORRECT KEY USED
+.ZG36A8              AIF   (K'&ZCVAL LE 0).ZG36A9  OK
+&ZCVAL               SETC '&ZCVAL'(2,K'&ZCVAL-1)
+&ZMS                 SETC  '"TYPE'
+&ZMS                 SETC  '&ZMS.=&TYPE"'
+&ZMS                 SETC  '&ZMS DOES NOT ALLOW THE USE OF THE'
+                     MNOTE 8,' &ZMS FOLLOWING KEY(S) "&ZCVAL".'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG36A9              ANOP  ,
+.*----------------------------------------------------------------***
+.***AG.KMEKY01 NAME, OPT RQD INPUT, ME KEYS -XVARIABLE
+&XUSEDMONTKNKEY      SETC  ''          INITIALIZE XVARIABLE
+                     AIF   (K'&MONTKN LE 0).ZG38C
+&ZXUSEDMONTKNKEY     SETC  'INPUT'     SET IN/OUTPUT
+&XUSEDMONTKNKEY      SETC  'MONTKN'    SET XVARIABLE
+&ZXMONTKN            SETC  'INPUT'     SET IN/OUTPUT
+&XMONTKN             SETC  '&MONTKN(1)'         SET XVARIABLE PARM
+                     AIF   (N'&MONTKN GT 1).ZG38A
+&XMONTKN             SETC  '&MONTKN'   SET XVARIABLE PARM
+.ZG38A               AIF   (N'&MONTKN LE 1).ZG38B  CK NUM
+&ZMS                 SETC  '"MONTKN='
+&ZMS                 SETC  '&ZMS.&MONTKN"'
+&ZMS                 SETC  '&ZMS "MONTKN"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG38B               AIF   (K'&XMONTKN GT 0).ZG38C  ONE PARM
+&ZXUSEDMONTKNKEY     SETC  ''          RESET IN/OUTPUT
+&ZXMONTKN            SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'WHEN "MONENV" IS SPECIFIED'
+&ZMS                 SETC  '&ZMS , "MONTKN" KEY AND ITS'
+                     MNOTE 8,' &ZMS ARGUMENT ARE REQUIRED.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG38C               ANOP  ,
+.*----------------------------------------------------------------***
+.***AG.KMEKY02 NAME, OPT RQD INPUT, ME KEYS -XVARIABLE
+                     AIF   (K'&MONTKN64 LE 0).ZG39D  NO ME KEY
+                     AIF   (N'&MONTKN64 LE 1).ZG39A  CK NUM
+&ZMS                 SETC  '"MONTKN64='
+&ZMS                 SETC  '&ZMS.&MONTKN64"'
+&ZMS                 SETC  '&ZMS "MONTKN64"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG39A               AIF   (K'&XUSEDMONTKNKEY LE 0).ZG39B
+&ZMS                 SETC  '"MONTKN64'
+&ZMS                 SETC  '&ZMS.=&MONTKN64"'
+&ZMS                 SETC  '&ZMS IS MUTUALLY EXCLUSIVE WITH THE'
+&ZMS                 SETC  '&ZMS "&XUSEDMONTKNKEY"'
+                     MNOTE 8,' &ZMS KEY.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+                     AGO   .ZG39D
+.*
+.ZG39B               ANOP  ,
+&ZXUSEDMONTKNKEY     SETC  'INPUT'     SET IN/OUTPUT
+&XUSEDMONTKNKEY      SETC  'MONTKN64'  SET XVARIABLE
+&ZXMONTKN64          SETC  'INPUT'     SET IN/OUTPUT
+&XMONTKN64           SETC  '&MONTKN64(1)'       SET XVARIABLE PARM
+                     AIF   (N'&MONTKN64 GT 1).ZG39C
+&XMONTKN64           SETC  '&MONTKN64'          SET XVARIABLE PARM
+.ZG39C               AIF   (K'&XMONTKN64 GT 0).ZG39D  ONE PARM
+&ZXUSEDMONTKNKEY     SETC  ''          RESET IN/OUTPUT
+&ZXMONTKN64          SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'WHEN "MONENV" IS SPECIFIED'
+&ZMS                 SETC  '&ZMS , "MONTKN64" KEY AND ITS'
+                     MNOTE 8,' &ZMS ARGUMENT ARE REQUIRED.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG39D               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KME4Y09 NAME, OPT RQD INPUT, ME KEYS -CHECK IF KEY ENTERED
+                     AIF   (K'&XUSEDMONTKNKEY GT 0).ZG40B
+&ZXUSEDMONTKNKEY     SETC  ''          RESET IN/OUTPUT
+&ZXMONTKN            SETC  ''          RESET IN/OUTPUT
+&XUSEDMONTKNKEY      SETC  ''          ENSURE NULL
+&XMONTKN             SETC  ''          ENSURE NULL
+&ZMS                 SETC  'ONE OF THE FOLLOWING'
+&ZMS                 SETC  '&ZMS MUTUALLY EXCLUSIVE KEY(S) IS'
+&ZMS                 SETC  '&ZMS REQUIRED:'
+&ZMS                 SETC  '&ZMS "MONTKN"'      VALID ME KEY
+&ZMS                 SETC  '&ZMS OR "MONTKN64".'  VALID ME KEY
+                     MNOTE 8,' &ZMS '
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG40B               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KMEKY13 NAME, OPT RQD INPUT, ME KEYS -PROCESS DEPENDENCIES
+.ZG38ZY  AIF    ('&XUSEDMONTKNKEY' NE 'MONTKN').ZG39ZY
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, OPT RQD INPUT, ME KEYS -GPR OUT OF RANGE
+                     AIF   (K'&ZXMONTKN LE 0).ZG38R  NOT I/O
+                     AIF   ('&XMONTKN'(1,1) NE '(').ZG38R
+&ZCGPR               SETC  '&XMONTKN'(2,K'&XMONTKN-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG38P
+                     AIF   (K'&ZCGPR GT 2).ZG38Q
+                     AIF   ('&ZCGPR' EQ '0').ZG38Q
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG38Q  INVALID REG NAME
+.ZG38P               ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG38R  NON NUMERIC
+                     AIF   ('&ZCGPR' LT '2').ZG38Q
+                     AIF   ('&ZCGPR' LE '12').ZG38R
+.ZG38Q               ANOP  ,
+&ZMS                 SETC  '"MONTKN='
+&ZMS                 SETC  '&ZMS.&MONTKN"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (2)-(12).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG38R               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KMEKY13 NAME, OPT RQD INPUT, ME KEYS -PROCESS DEPENDENCIES
+.ZG39ZY  AIF    ('&XUSEDMONTKNKEY' NE 'MONTKN64').ZG40ZY
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, OPT RQD INPUT, ME KEYS -GPR OUT OF RANGE
+                     AIF   (K'&ZXMONTKN64 LE 0).ZG39R  NOT I/O
+                     AIF   ('&XMONTKN64'(1,1) NE '(').ZG39R
+&ZCGPR               SETC  '&XMONTKN64'(2,K'&XMONTKN64-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG39P
+                     AIF   (K'&ZCGPR GT 2).ZG39Q
+                     AIF   ('&ZCGPR' EQ '0').ZG39Q
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG39Q  INVALID REG NAME
+.ZG39P               ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG39R  NON NUMERIC
+                     AIF   ('&ZCGPR' LT '2').ZG39Q
+                     AIF   ('&ZCGPR' LE '12').ZG39R
+.ZG39Q               ANOP  ,
+&ZMS                 SETC  '"MONTKN64='
+&ZMS                 SETC  '&ZMS.&MONTKN64"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (2)-(12).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG39R               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KMEKY15 NAME, OPT RQD INPUT, ME KEYS -END
+.ZG40ZY              ANOP ,            END MUTUALLY EXCLUSIVE KEYS
+.*------------------------------------------------------------------
+.***AG.KKCTL01 VALUE, OPT RQD INPUT, ME KYWRDCTL -KEYWORD CONTROL
+&XACCESS             SETC  ''          INITIALIZE XVARIABLE
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT RQD INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG43                ANOP  ,
+                     AIF   (K'&ACCESS(1) LE 0).ZG43A
+&ZTLC                SETC 'PRIMARY'
+                     AIF   ('&ACCESS(1)' NE '&ZTLC').ZG44
+&XACCESS             SETC  'PRIMARY'   SET KEYWORD
+                     AIF   (N'&ACCESS LE 1).ZG43A  CK NUM
+&ZMS                 SETC  '"ACCESS='
+&ZMS                 SETC  '&ZMS.&ACCESS"'
+&ZMS                 SETC  '&ZMS "ACCESS"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG43A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KKCTL02 VALUE, OPT RQD INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG44                ANOP  ,
+&ZTLC                SETC 'HOME'
+                     AIF   ('&ACCESS(1)' NE '&ZTLC').ZG45
+&XACCESS             SETC  'HOME'      SET KEYWORD
+                     AIF   (N'&ACCESS LE 1).ZG44A  CK NUM
+&ZMS                 SETC  '"ACCESS='
+&ZMS                 SETC  '&ZMS.&ACCESS"'
+&ZMS                 SETC  '&ZMS "ACCESS"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG44A               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL04 VALUE, OPT RQD INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG45                ANOP  ,
+&ZXACCESS            SETC  'INPUT'     SET IN/OUTPUT
+                     AIF   (K'&XACCESS GT 0).ZG45E  VALID ARG
+                     AIF   (T'&ACCESS EQ 'O').ZG45D  OMITTED
+&ZASYSLNDX           SETA  0
+.ZG45A               ANOP  ,           POSITIONAL MACRO KEY
+&ZASYSLNDX           SETA  &ZASYSLNDX+1
+                     AIF   (&ZASYSLNDX GT N'&SYSLIST).ZG45C
+&ZTLC                SETC 'ACCESS'
+                     AIF   ('&SYSLIST(&ZASYSLNDX)' NE '&ZTLC').ZG45A
+.ZG45B               ANOP  ,
+&ZXACCESS            SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'THE "ACCESS" KEY'
+&ZMS                 SETC  '&ZMS MUST CONTAIN ONE'
+                     MNOTE 8,' &ZMS (OR MORE) ARGUMENT(S).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+                     AGO   .ZG45E
+.ZG45C               ANOP  ,
+&ZXACCESS            SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  '"ACCESS='
+&ZMS                 SETC  '&ZMS.&ACCESS"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 IS AN UNKNOWN KEYWORD. '
+&ZMS                 SETC  '&ZMS VALID KEYWORD CHOICE(S) ARE:'
+&ZMS                 SETC  '&ZMS "PRIMARY"'
+&ZMS                 SETC  '&ZMS OR "HOME".'
+                     MNOTE 8,' &ZMS '
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+                     AGO   .ZG45E
+.ZG45D               ANOP  ,
+&XACCESS             SETC  'PRIMARY'   SET DEFAULT KEYWORD
+.ZG45E               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL05 VALUE, OPT RQD INPUT, ME KYWRDCTL -KEYWORD CONTROL
+                     AIF   (K'&ACCESS(1) GT 0).ZG45F  PARM
+&XACCESS             SETC  ''          ENSURE NULL KEYWORD
+&ZXACCESS            SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'WHEN "MONENV" IS SPECIFIED, THE'
+&ZMS                 SETC  '&ZMS "ACCESS" KEY AND ITS'
+&ZMS                 SETC  '&ZMS ARGUMENT ARE REQUIRED.'
+&ZMS                 SETC  '&ZMS VALID KEYWORD CHOICE(S) ARE:'
+&ZMS                 SETC  '&ZMS "PRIMARY"'
+&ZMS                 SETC  '&ZMS OR "HOME".'
+                     MNOTE 8,' &ZMS '
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG45F               ANOP  ,
+.*------------------------------------------------------------------
+.***AG.KKCTL04 VALUE, OPT INPUT, ME KYWRDCTL -KEYWORD CONTROL
+.ZG46                ANOP  ,
+&ZXTYPE              SETC  'INPUT'     SET IN/OUTPUT
+                     AIF   (K'&XTYPE GT 0).ZG46E  VALID ARG
+                     AIF   (T'&TYPE EQ 'O').ZG46D  OMITTED
+&ZASYSLNDX           SETA  0
+.ZG46A               ANOP  ,           POSITIONAL MACRO KEY
+&ZASYSLNDX           SETA  &ZASYSLNDX+1
+                     AIF   (&ZASYSLNDX GT N'&SYSLIST).ZG46C
+&ZTLC                SETC 'TYPE'
+                     AIF   ('&SYSLIST(&ZASYSLNDX)' NE '&ZTLC').ZG46A
+.ZG46B               ANOP  ,
+&ZXTYPE              SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  'THE "TYPE" KEY'
+&ZMS                 SETC  '&ZMS MUST CONTAIN ONE'
+                     MNOTE 8,' &ZMS (OR MORE) ARGUMENT(S).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+                     AGO   .ZG46E
+.ZG46C               ANOP  ,
+&ZXTYPE              SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  '"TYPE='
+&ZMS                 SETC  '&ZMS.&TYPE"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 IS AN UNKNOWN KEYWORD. '
+&ZMS                 SETC  '&ZMS VALID KEYWORD CHOICE(S) ARE:'
+&ZMS                 SETC  '&ZMS "INDEPENDENT",'
+&ZMS                 SETC  '&ZMS "DEPENDENT",'
+&ZMS                 SETC  '&ZMS "WORKDEPENDENT",'
+&ZMS                 SETC  '&ZMS OR "MONENV".'
+                     MNOTE 8,' &ZMS '
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+                     AGO   .ZG46E
+.ZG46D               ANOP  ,
+&XTYPE               SETC  'INDEPENDENT'        SET DEFAULT KEYWORD
+.ZG46E               ANOP  ,
+.*----------------------------------------------------------------***
+.***AG.KXVAR05 NAME, RQD OUTPUT, KEYS -XVARIABLE KEY
+                     AIF   (N'&ETOKEN LE 1).ZG48A  CK NUM
+&ZMS                 SETC  '"ETOKEN='
+&ZMS                 SETC  '&ZMS.&ETOKEN"'
+&ZMS                 SETC  '&ZMS "ETOKEN"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG48A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR06 NAME, RQD OUTPUT, KEYS -XVARIABLE
+&ZXETOKEN            SETC  'OUTPUT'    SET IN/OUTPUT
+&XETOKEN             SETC  '&ETOKEN(1)'         SET XVARIABLE
+                     AIF   (N'&ETOKEN GT 1).ZG48B  MULTI
+&XETOKEN             SETC  '&ETOKEN'   SET XVARIABLE
+.ZG48B               AIF   (K'&ETOKEN(1) GT 0).ZG48C
+&ZXETOKEN            SETC  ''          RESET IN/OUTPUT
+&ZMS                 SETC  ' '
+&ZMS                 SETC  '&ZMS "ETOKEN" KEY AND ITS'
+                     MNOTE 8,' &ZMS ARGUMENT ARE REQUIRED.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG48C               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, RQD OUTPUT, KEYS -GPR OUT OF RANGE
+                     AIF   (K'&ZXETOKEN LE 0).ZG48R  NOT I/O
+                     AIF   ('&XETOKEN'(1,1) NE '(').ZG48R
+&ZCGPR               SETC  '&XETOKEN'(2,K'&XETOKEN-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG48P
+                     AIF   (K'&ZCGPR GT 2).ZG48Q
+                     AIF   ('&ZCGPR' EQ '0').ZG48Q
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG48Q  INVALID REG NAME
+.ZG48P               ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG48R  NON NUMERIC
+                     AIF   ('&ZCGPR' LT '2').ZG48Q
+                     AIF   ('&ZCGPR' LE '12').ZG48R
+.ZG48Q               ANOP  ,
+&ZMS                 SETC  '"ETOKEN='
+&ZMS                 SETC  '&ZMS.&ETOKEN"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (2)-(12).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG48R               ANOP  ,
+.*----------------------------------------------------------------***
+.***AG.KXVAR05 NAME, OPT OUTPUT, KEYS -XVARIABLE KEY
+                     AIF   (N'&IMPORTANCE LE 1).ZG51A  CK NUM
+&ZMS                 SETC  '"IMPORTANCE='
+&ZMS                 SETC  '&ZMS.&IMPORTANCE"'
+&ZMS                 SETC  '&ZMS "IMPORTANCE"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG51A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR14 NAME, OPT OUTPUT, KEYS -XVARIABLE
+                     AIF   (K'&IMPORTANCE(1) LE 0).ZG51C  NO PARM
+&ZXIMPORTANCE        SETC  'OUTPUT'    SET OUTPUT
+&XIMPORTANCE         SETC  '&IMPORTANCE(1)'     SET XVARIABLE
+                     AIF   (N'&IMPORTANCE GT 1).ZG51C
+&XIMPORTANCE         SETC  '&IMPORTANCE'        SET XVARIABLE
+.ZG51C               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, OPT OUTPUT, KEYS -GPR OUT OF RANGE
+                     AIF   (K'&ZXIMPORTANCE LE 0).ZG51R  NOT I/O
+                     AIF   ('&XIMPORTANCE'(1,1) NE '(').ZG51R
+&ZCGPR               SETC  '&XIMPORTANCE'(2,K'&XIMPORTANCE-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG51P
+                     AIF   (K'&ZCGPR GT 2).ZG51Q
+                     AIF   ('&ZCGPR' EQ '0').ZG51Q
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG51Q  INVALID REG NAME
+.ZG51P               ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG51R  NON NUMERIC
+                     AIF   ('&ZCGPR' LT '2').ZG51Q
+                     AIF   ('&ZCGPR' LE '12').ZG51R
+.ZG51Q               ANOP  ,
+&ZMS                 SETC  '"IMPORTANCE='
+&ZMS                 SETC  '&ZMS.&IMPORTANCE"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (2)-(12).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG51R               ANOP  ,
+.*----------------------------------------------------------------***
+.***AG.KXVAR05 NAME, OPT OUTPUT, KEYS -XVARIABLE KEY
+                     AIF   (N'&RETCODE LE 1).ZG54A  CK NUM
+&ZMS                 SETC  '"RETCODE='
+&ZMS                 SETC  '&ZMS.&RETCODE"'
+&ZMS                 SETC  '&ZMS "RETCODE"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG54A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR14 NAME, OPT OUTPUT, KEYS -XVARIABLE
+                     AIF   (K'&RETCODE(1) LE 0).ZG54C  NO PARM
+&ZXRETCODE           SETC  'OUTPUT'    SET OUTPUT
+&XRETCODE            SETC  '&RETCODE(1)'        SET XVARIABLE
+                     AIF   (N'&RETCODE GT 1).ZG54C
+&XRETCODE            SETC  '&RETCODE'  SET XVARIABLE
+.ZG54C               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, OPT OUTPUT, KEYS -GPR OUT OF RANGE
+                     AIF   (K'&ZXRETCODE LE 0).ZG54R  NOT I/O
+                     AIF   ('&XRETCODE'(1,1) NE '(').ZG54R
+&ZCGPR               SETC  '&XRETCODE'(2,K'&XRETCODE-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG54P
+                     AIF   (K'&ZCGPR GT 2).ZG54Q
+                     AIF   ('&ZCGPR' EQ '0').ZG54Q
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG54Q  INVALID REG NAME
+.ZG54P               ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG54R  NON NUMERIC
+                     AIF   ('&ZCGPR' EQ '15').ZG54R
+                     AIF   ('&ZCGPR' LT '2').ZG54Q
+                     AIF   ('&ZCGPR' LE '12').ZG54R
+.ZG54Q               ANOP  ,
+&ZMS                 SETC  '"RETCODE='
+&ZMS                 SETC  '&ZMS.&RETCODE"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (2)-(12) OR (15).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG54R               ANOP  ,
+.*----------------------------------------------------------------***
+.***AG.KXVAR05 NAME, OPT OUTPUT, KEYS -XVARIABLE KEY
+                     AIF   (N'&RSNCODE LE 1).ZG57A  CK NUM
+&ZMS                 SETC  '"RSNCODE='
+&ZMS                 SETC  '&ZMS.&RSNCODE"'
+&ZMS                 SETC  '&ZMS "RSNCODE"'
+                     MNOTE 8,' &ZMS CAN HAVE ONLY 1 ARGUMENT.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG57A               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KXVAR14 NAME, OPT OUTPUT, KEYS -XVARIABLE
+                     AIF   (K'&RSNCODE(1) LE 0).ZG57C  NO PARM
+&ZXRSNCODE           SETC  'OUTPUT'    SET OUTPUT
+&XRSNCODE            SETC  '&RSNCODE(1)'        SET XVARIABLE
+                     AIF   (N'&RSNCODE GT 1).ZG57C
+&XRSNCODE            SETC  '&RSNCODE'  SET XVARIABLE
+.ZG57C               ANOP  ,
+.*-------------------------------------------------------------------
+.***AG.KCK02 NAME, OPT OUTPUT, KEYS -GPR OUT OF RANGE
+                     AIF   (K'&ZXRSNCODE LE 0).ZG57R  NOT I/O
+                     AIF   ('&XRSNCODE'(1,1) NE '(').ZG57R
+&ZCGPR               SETC  '&XRSNCODE'(2,K'&XRSNCODE-2)
+                     AIF   ('&ZCGPR'(1,1) NE '0').ZG57P
+                     AIF   (K'&ZCGPR GT 2).ZG57Q
+                     AIF   ('&ZCGPR' EQ '0').ZG57R
+&ZCGPR               SETC  '&ZCGPR'(2,1)
+                     AIF   (T'&ZCGPR NE 'N').ZG57Q  INVALID REG NAME
+.ZG57P               ANOP  ,
+                     AIF   (T'&ZCGPR NE 'N').ZG57R  NON NUMERIC
+                     AIF   ('&ZCGPR' EQ '0').ZG57R
+                     AIF   ('&ZCGPR' LT '2').ZG57Q
+                     AIF   ('&ZCGPR' LE '12').ZG57R
+.ZG57Q               ANOP  ,
+&ZMS                 SETC  '"RSNCODE='
+&ZMS                 SETC  '&ZMS.&RSNCODE"'
+&ZMS                 SETC  '&ZMS ARGUMENT 1 MUST SPECIFY A REGISTER'
+                     MNOTE 8,' &ZMS IN THE RANGE (0) OR (2)-(12).'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZG57R               ANOP  ,
+.******************************************************************
+.***AH.P00 CHECK STANDALONE POSITIONAL VARIABLES
+.******************************************************************
+                     ACTR  10000
+.*----------------------------------------------------------------***
+.***AH.P02 EXTRA POSITIONALS
+                     AIF   (N'&SYSLIST LE 0).ZGLISTX  NO EXTRAS
+                     AIF   (N'&SYSLIST NE 2).ZGLISTX1  NOT NULL
+                     AIF   ('&SYSLIST(1)' NE '').ZGLISTX1  NOT NULL
+                     AIF   ('&SYSLIST(2)' EQ '').ZGLISTX  NOT NULL
+.ZGLISTX1            ANOP  ,
+&ZCVAL               SETC  ''          ERROR FIELD
+&ZAWRK               SETA  0           POSITIONAL NUMBER
+.ZGLIST2             ANOP  ,
+&ZAWRK               SETA  &ZAWRK+1    NEXT POSITIONAL
+                     AIF   (&ZAWRK GT N'&SYSLIST).ZGLIST3  DONE
+&ZCVAL               SETC '&ZCVAL,&SYSLIST(&ZAWRK)'  EXTRA
+                     AGO   .ZGLIST2
+.*
+.ZGLIST3             ANOP  ,
+&ZCVAL               SETC '&ZCVAL'(2,K'&ZCVAL-1)  STRIP COMMA
+&ZMS                 SETC  'POSITIONAL ARGUMENT(S),'
+&ZMS                 SETC  '&ZMS "&ZCVAL"'
+&ZMS                 SETC  '&ZMS CANNOT BE USED.'
+&ZMS                 SETC  '&ZMS NO POSITIONAL ARGUMENTS'
+                     MNOTE 8,' &ZMS ARE ALLOWED.'
+&ZMACRET             SETA  8           SET MACRO ERROR RETURN CODE
+.ZGLISTX             ANOP  ,
+&ZASYSLNDX           SETA  0
+.*-------------------------------------------------------------------
+.***AG.MF04 MF=(SLE)
+.ZGMFX               ANOP  ,           END OF FULL SYNTAX CHECK
+.*******************************************************************
+.***AE.ZMR01 NO CODE GENERATED IF ERRORS DETECTED
+.*******************************************************************
+                     AIF   (&ZMACRET NE 0).ZLX2  ERROR DETECTED
+.*******************************************************************
+.***AE.01  START OF IWM4ECRE MACRO CODE
+.*******************************************************************
+                     LCLC  &M0M0001                 NAME
+&M0M0001             SETC  '&XLABEL'                SET NAME
+                     AIF   (K'&XLABEL NE 0).XLAB2
+&M0M0001             SETC  'M00M&SYSNDX'            DEFAULT NAME
+.*
+.XLAB2               ANOP  ,
+                     AIF   ('&XMF' EQ 'L').XLAB3
+&M0M0001 DS    0H                             IWM4ECRE-2
+.XLAB3               ANOP  ,
+.*******************************************************************
+.***AE.PR01 PRINT CONTROLS, DEFAULT IS YES
+.*******************************************************************
+              PUSH  PRINT
+                     AIF   ('&ZPRINT' NE 'NO').ZPRINTX  TURN PRINT ON
+                     PRINT OFF         ++ PR01
+                     AGO   .ZPRNTXX
+.ZPRINTX             PRINT ON
+.ZPRNTXX             ANOP  ,
+.*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+.*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+.********************************************************************
+.***AL.L01 INTERNAL ARRAY TO PRODUCE FORMATTED CODE
+.********************************************************************
+                      LCLA  &ZOPN          LIST INSTRUCTION INDEX
+                      LCLA  &ZOPN1         INVOCATION INDEX
+                      LCLC  &ZOPL(4095)    LABEL
+                      LCLC  &ZOPO(4095)    OPERATION
+                      LCLC  &ZOPV(4095)    VALUE
+                      LCLC  &ZOPD(4095)    DESCRIPTION
+.*
+&ZOPN                 SETA  0              INITIAL INST INDEX VALUE
+.******************************************************************
+.***AL.L10 IWM4ECRE FMT=LIST MF=S|L PARAMETERS
+.******************************************************************
+                      AIF   ('&XMF' EQ 'L').ZLMFSL2
+                      AIF   ('&XMF' NE 'S').ZLMFSLX
+&XMFCTRL              SETC  '#Z'.'&SYSNDX'.'A'
+&XMFATTR              SETC  '0D'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'CNOP'
+&ZOPV(&ZOPN)          SETC  '4,8'
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'BRAS'
+&ZOPV(&ZOPN)          SETC  '1,&XMFCTRL.S'
+&ZOPD(&ZOPN)          SETC  '++ IWM4ECRE ARG PARMS'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'SPACE'
+&ZOPV(&ZOPN)          SETC  '1'
+&ZOPD(&ZOPN)          SETC  ' '
+.*
+.ZLMFSL2              ANOP  ,
+.*-------------------------------------------------------------------
+.***AM.L00  IWM4ECRE FMT=LIST name
+                      AIF   ('&XMF' NE 'L').ZLMFSL2M
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&M0M0001'
+&ZOPO(&ZOPN)          SETC 'EQU'
+&ZOPV(&ZOPN)          SETC '&XMFCTRL'
+&ZOPD(&ZOPN)          SETC '++ IWM4ECRE NAME'
+.ZLMFSL2M             ANOP  ,
+.*-------------------------------------------------------------------
+.***AM.L01  IWM4ECRE FMT=LIST PARAMETERS
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC '&XMFATTR'
+&ZOPD(&ZOPN)          SETC '++ IWM4ECRE PARM LIST'
+.*-------------------------------------------------------------------
+.***AM.L02 XVERSION XL1
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XVERSION'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'XL1'
+&ZOPD(&ZOPN)          SETC '++ INPUT XVERSION'
+.*-------------------------------------------------------------------
+.***AM.L03 XOPTIONS BL.8
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XOPTIONS'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'BL.8'
+&ZOPD(&ZOPN)          SETC '++ FIELD_LABEL'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._KEYUSED_MONTKN64'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''00010000'''
+&ZOPD(&ZOPN)          SETC  '++ KEYUSED.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).MONTKN64'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._KEYUSED_INSERVCLS'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''00001000'''
+&ZOPD(&ZOPN)          SETC  '++ KEYUSED.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).INSERVCLS'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._KEYUSED_SERVCLS'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''00000100'''
+&ZOPD(&ZOPN)          SETC  '++ KEYUSED.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).SERVCLS'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._KEYUSED_IMPORTANCE'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''00000010'''
+&ZOPD(&ZOPN)          SETC  '++ KEYUSED.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).IMPORTANCE'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._IWM4ECRE'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''00000001'''
+&ZOPD(&ZOPN)          SETC  '++ MACUSED.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).IWM4ECRE'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*-------------------------------------------------------------------
+.***AM.L09  XPLISTLEN XL2
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XPLISTLEN'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'XL2'
+&ZOPD(&ZOPN)          SETC '++ INPUT '
+.*-------------------------------------------------------------------
+.***AM.L09  XRSV0004 CL4
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XRSV0004'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'CL4'
+&ZOPD(&ZOPN)          SETC '++ RESERVED '
+.*-------------------------------------------------------------------
+.***AM.L09  XRSV0008 CL4
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XRSV0008'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'CL4'
+&ZOPD(&ZOPN)          SETC '++ RESERVED '
+.*-------------------------------------------------------------------
+.***AM.L09  XRSV000C CL4
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XRSV000C'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'CL4'
+&ZOPD(&ZOPN)          SETC '++ RESERVED '
+.*-------------------------------------------------------------------
+.***AM.L09  XARRIVALTIME BL.64
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XARRIVALTIME'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'BL.64'
+&ZOPD(&ZOPN)          SETC '++ &ZXARRIVALTIME '
+.*-------------------------------------------------------------------
+.***AM.L09  XRSV0018 CL8
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XRSV0018'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'CL8'
+&ZOPD(&ZOPN)          SETC '++ RESERVED '
+.*-------------------------------------------------------------------
+.***AM.L09  XFUNCTION_NAME CL8
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XFUNCTION_NAME'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'CL8'
+&ZOPD(&ZOPN)          SETC '++ &ZXFUNCTION_NAME '
+.*-------------------------------------------------------------------
+.***AM.L09  XETOKEN CL8
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XETOKEN'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'CL8'
+&ZOPD(&ZOPN)          SETC '++ &ZXETOKEN '
+.*-------------------------------------------------------------------
+.***AM.L09  XRSV0030 CL4
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XRSV0030'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'CL4'
+&ZOPD(&ZOPN)          SETC '++ RESERVED '
+.*-------------------------------------------------------------------
+.***AM.L03 XTYPE_OPTIONS BL.8
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XTYPE_OPTIONS'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'BL.8'
+&ZOPD(&ZOPN)          SETC '++ FIELD_LABEL'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._XTYPE_INDEPENDENT'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''10000000'''
+&ZOPD(&ZOPN)          SETC  '++ XTYPE.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).INDEPENDENT'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._XTYPE_DEPENDENT'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''01000000'''
+&ZOPD(&ZOPN)          SETC  '++ XTYPE.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).DEPENDENT'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._XTYPE_MONENV'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''00100000'''
+&ZOPD(&ZOPN)          SETC  '++ XTYPE.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).MONENV'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._XACCESS_PRIMARY'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''00010000'''
+&ZOPD(&ZOPN)          SETC  '++ XACCESS.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).PRIMARY'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._XACCESS_HOME'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''00001000'''
+&ZOPD(&ZOPN)          SETC  '++ XACCESS.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).HOME'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._XTYPE_WORKDEPENDENT'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''00000100'''
+&ZOPD(&ZOPN)          SETC  '++ XTYPE.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).WORKDEPENDENT'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*-------------------------------------------------------------------
+.***AM.L09  XRSV0035 CL3
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XRSV0035'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'CL3'
+&ZOPD(&ZOPN)          SETC '++ RESERVED '
+.*-------------------------------------------------------------------
+.***AM.L09  XMONTKN BL.32
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XMONTKN'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'BL.32'
+&ZOPD(&ZOPN)          SETC '++ &ZXMONTKN '
+.*-------------------------------------------------------------------
+.***AM.L03 X_OPTIONS BL.8
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._X_OPTIONS'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'BL.8'
+&ZOPD(&ZOPN)          SETC '++ FIELD_LABEL'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._XEXSTARTDEFER_YES'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''10000000'''
+&ZOPD(&ZOPN)          SETC  '++ XEXSTARTDEFER.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).YES'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._XESTRT_EXPLICIT'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''01000000'''
+&ZOPD(&ZOPN)          SETC  '++ XESTRT.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).EXPLICIT'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._XESTRT_EXPLICIT_SINGLE'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''00100000'''
+&ZOPD(&ZOPN)          SETC  '++ XESTRT.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).EXPLICIT_SINGLE'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL._XESTRT_NEVER'
+&ZOPO(&ZOPN)          SETC  'EQU'
+&ZOPV(&ZOPN)          SETC  'B''00010000'''
+&ZOPD(&ZOPN)          SETC  '++ XESTRT.'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN).NEVER'
+&ZOPD(&ZOPN)          SETC  '&ZOPD(&ZOPN) KEYWORD'
+.*-------------------------------------------------------------------
+.***AM.L09  XRSV003D CL3
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XRSV003D'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'CL3'
+&ZOPD(&ZOPN)          SETC '++ RESERVED '
+.*-------------------------------------------------------------------
+.***AM.L09  XRSV0040 CL8
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XRSV0040'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'CL8'
+&ZOPD(&ZOPN)          SETC '++ RESERVED '
+.*-------------------------------------------------------------------
+.***AM.L09 ADDR64 XCLSFY AD
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XCLSFY_ADDR64'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'AD'
+&ZOPD(&ZOPN)          SETC '++ &ZXCLSFY ADDR64'
+.*-------------------------------------------------------------------
+.***AM.L09 ADDR64 XWORKREQ_HDL AD
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XWORKREQ_HDL_ADDR64'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'AD'
+&ZOPD(&ZOPN)          SETC '++ &ZXWORKREQ_HDL ADDR64'
+.*-------------------------------------------------------------------
+.***AM.MLM2 SAVED LOCATION COUNTER
+                      AIF  (&XPLISTVER GE 2).ZL34LA
+                      AIF  ('&ZENDBASEPL' NE '').ZL34LA
+&ZENDBASEPL           SETC 'YES'
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._PL_END'
+&ZOPO(&ZOPN)          SETC 'EQU'
+&ZOPV(&ZOPN)          SETC '*'
+&ZOPD(&ZOPN)          SETC '++ END OF BASE PLIST'
+.ZL34LA               ANOP  ,
+.*-------------------------------------------------------------------
+.***AM.LVER1
+                      AIF  (&XPLISTVER LT 2).ZL34L
+.*-------------------------------------------------------------------
+.*-------------------------------------------------------------------
+.***AM.L09  XSERVCLS F
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XSERVCLS'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'F'
+&ZOPD(&ZOPN)          SETC '++ &ZXSERVCLS '
+.*-------------------------------------------------------------------
+.***AM.LVER2
+.ZL34L                ANOP  ,
+.*-------------------------------------------------------------------
+.*-------------------------------------------------------------------
+.***AM.LVER1
+                      AIF  (&XPLISTVER LT 2).ZL35L
+.*-------------------------------------------------------------------
+.*-------------------------------------------------------------------
+.***AM.L09  XINSERVCLS F
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XINSERVCLS'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'F'
+&ZOPD(&ZOPN)          SETC '++ &ZXINSERVCLS '
+.*-------------------------------------------------------------------
+.***AM.LVER2
+.ZL35L                ANOP  ,
+.*-------------------------------------------------------------------
+.*-------------------------------------------------------------------
+.***AM.LVER1
+                      AIF  (&XPLISTVER LT 2).ZL36L
+.*-------------------------------------------------------------------
+.*-------------------------------------------------------------------
+.***AM.L09  XMONTKN64 BL.64
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XMONTKN64'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'BL.64'
+&ZOPD(&ZOPN)          SETC '++ &ZXMONTKN64 '
+.*-------------------------------------------------------------------
+.***AM.LVER2
+.ZL36L                ANOP  ,
+.*-------------------------------------------------------------------
+.*-------------------------------------------------------------------
+.***AM.MLM2 SAVED LOCATION COUNTER
+                      AIF  (&XPLISTVER GE 1).ZL37LA
+                      AIF  ('&ZENDBASEPL' NE '').ZL37LA
+&ZENDBASEPL           SETC 'YES'
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._PL_END'
+&ZOPO(&ZOPN)          SETC 'EQU'
+&ZOPV(&ZOPN)          SETC '*'
+&ZOPD(&ZOPN)          SETC '++ END OF BASE PLIST'
+.ZL37LA               ANOP  ,
+.*-------------------------------------------------------------------
+.***AM.LVER1
+                      AIF  (&XPLISTVER LT 1).ZL37L
+.*-------------------------------------------------------------------
+.*-------------------------------------------------------------------
+.***AM.MLM1 SAVED LOCATION COUNTER
+                      AIF  ('&ZENDBASEPL' NE '').ZL37LB
+&ZENDBASEPL           SETC 'YES'
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._PL_END'
+&ZOPO(&ZOPN)          SETC 'EQU'
+&ZOPV(&ZOPN)          SETC '*'
+&ZOPD(&ZOPN)          SETC '++ END OF BASE PLIST'
+.ZL37LB               ANOP  ,
+.*-------------------------------------------------------------------
+.***AM.PJR1 DEFINED ON XRSV0030
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC ' '
+&ZOPO(&ZOPN)          SETC 'ORG'
+&ZOPV(&ZOPN)          SETC '&XMFCTRL.+48'
+&ZOPD(&ZOPN)          SETC ' '
+.*-------------------------------------------------------------------
+.***AM.LVER2
+.ZL37L                ANOP  ,
+.*-------------------------------------------------------------------
+.*-------------------------------------------------------------------
+.***AM.LVER1
+                      AIF  (&XPLISTVER LT 1).ZL38L
+.*-------------------------------------------------------------------
+.*-------------------------------------------------------------------
+.***AM.L09  XIMPORTANCE XL2
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XIMPORTANCE'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'XL2'
+&ZOPD(&ZOPN)          SETC '++ &ZXIMPORTANCE '
+.*-------------------------------------------------------------------
+.***AM.LVER2
+.ZL38L                ANOP  ,
+.*-------------------------------------------------------------------
+.*-------------------------------------------------------------------
+.***AM.LVER1
+                      AIF  (&XPLISTVER LT 1).ZL39L
+.*-------------------------------------------------------------------
+.*-------------------------------------------------------------------
+.***AM.L09  XRSV0032 CL2
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL._XRSV0032'
+&ZOPO(&ZOPN)          SETC 'DS'
+&ZOPV(&ZOPN)          SETC 'CL2'
+&ZOPD(&ZOPN)          SETC '++ RESERVED '
+.*-------------------------------------------------------------------
+.***AM.LVER2
+.ZL39L                ANOP  ,
+.*-------------------------------------------------------------------
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC ' '
+&ZOPO(&ZOPN)          SETC 'ORG'
+&ZOPV(&ZOPN)          SETC '&XMFCTRL._PL_END'
+&ZOPD(&ZOPN)          SETC 'RESET LOCATION COUNTER'
+.*-------------------------------------------------------------------
+.***AM.L10 END OF IWM4ECRE LIST PARAMETERS
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC '&XMFCTRL.L'
+&ZOPO(&ZOPN)          SETC 'EQU'
+&ZOPV(&ZOPN)          SETC '*-&XMFCTRL'
+&ZOPD(&ZOPN)          SETC '++ LENGTH OF PLIST'
+.*
+&ZOPN                 SETA &ZOPN+1
+&ZOPL(&ZOPN)          SETC ' '
+&ZOPO(&ZOPN)          SETC 'SPACE'
+&ZOPV(&ZOPN)          SETC '1'
+&ZOPD(&ZOPN)          SETC ' '
+.*-------------------------------------------------------------------
+.***AL.L12 IWM4ECRE FMT=LIST MF=S|L PARAMETERS
+                      AIF   ('&XMF' EQ 'L').ZMFLX  DONE IF MF=L
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  '&XMFCTRL.S'
+&ZOPO(&ZOPN)          SETC  'DC'
+&ZOPV(&ZOPN)          SETC  '0H''0'''
+&ZOPD(&ZOPN)          SETC  '++ IWM4ECRE ARG PARMS'
+.*
+.ZLMFSLX              ANOP  ,
+.*-------------------------------------------------------------------
+.***AL.L13 SET ZPLLEN TO ITS APPROPRIATE VALUE
+&ZPLLEN               SETA 88
+.*
+                      AIF  (&XPLISTVER LT 2).ZLLEN2Z
+&ZPLLEN               SETA 104
+.ZLLEN2Z              ANOP  ,
+.*
+.******************************************************************
+.***AI.L01 IWM4ECRE FMT=LIST FILL IN PARAMETER AREA
+.******************************************************************
+                      ACTR  10000
+&ZCVAL                SETC  'LA'           ASSUME XA MODE
+                      AIF   ('&SYSASCE' EQ 'P').ZIMFXA  SYSSTATE PRI
+&ZCVAL                SETC  'LAE'          XAX MODE
+.ZIMFXA               ANOP ,
+.*
+                      AIF   ('&XMFCTRL'(1,1) NE '(').ZIMFN2  NOT GPR
+&ZCGPR                SETC  '&XMFCTRL'(2,K'&XMFCTRL-2)  GET GPR
+                      AIF   ('&ZCGPR' EQ 'GPR1').ZIMFNX
+                      AIF   ('&ZCGPR' EQ 'GPR01').ZIMFNX
+                      AIF   ('&ZCGPR' EQ 'REG1').ZIMFNX
+                      AIF   ('&ZCGPR' EQ 'REG01').ZIMFNX
+                      AIF   ('&ZCGPR' EQ 'R1').ZIMFNX
+                      AIF   ('&ZCGPR' EQ '1').ZIMFNX
+                      AIF   ('&ZCGPR' EQ '01').ZIMFNX
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  '&ZCVAL'
+&ZOPV(&ZOPN)          SETC  '1,0(,&ZCGPR)'
+&ZOPD(&ZOPN)          SETC  '++ LOCATE ARG PARMS'
+                      AGO   .ZIMFNX
+.*
+.ZIMFN2               ANOP ,
+                      AIF   ('&XMF' NE 'S').ZIMFNX1
+                      AIF   ('&ZCVAL' NE 'LAE').ZIMFNX
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'LAE'
+&ZOPV(&ZOPN)          SETC  '1,0(1,0)'
+&ZOPD(&ZOPN)          SETC  '++ LOCATE ARG PARMS'
+                      AGO   .ZIMFNX
+.ZIMFNX1              ANOP ,
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  '&ZCVAL'
+&ZOPV(&ZOPN)          SETC  '1,&XMFCTRL'
+&ZOPD(&ZOPN)          SETC  '++ LOCATE ARG PARMS'
+.ZIMFNX               ANOP ,
+.********************************************************************
+.***AI.L02 IWM4ECRE FMT=LIST INITIALIZE PARAMETER AREA
+.********************************************************************
+.***AI.L03 MF=(SLE)
+                      AIF   ('&XMF' EQ 'L').ZIMFLX
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'XC'
+&ZOPV(&ZOPN)          SETC  '0(&ZPLLEN,1),0(1)'
+&ZOPD(&ZOPN)          SETC  '++ INITIALIZE'
+.ZIMFLX               ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L04A XVERSION XL1
+                      AIF   (&XPLISTVER EQ 0).ZIMFVW
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVI'
+&ZOPV(&ZOPN)          SETC  '0(1),&XPLISTVER'
+&ZOPD(&ZOPN)          SETC  '++ INPUT XVERSION XL1'
+.ZIMFVW               ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L05 XOPTIONS BL1
+&ZW                   SETC  ''
+&ZCLNG                SETC  ''             RESET BIT ON FLAG
+.*-------------------------------------------------------------------
+.***AI.L08 XOPTIONS "MONTKN64"
+.***      BL1'XXX1XXXX'
+         AIF   ('&MONTKN64' EQ '').ZI3A
+&ZW                   SETC  '&ZW.0001'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI3C
+.*
+.ZI3A                 ANOP  ,
+&ZW                   SETC  '&ZW.0000'
+.ZI3C                 ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L08 XOPTIONS "INSERVCLS"
+.***      BL1'XXXX1XXX'
+         AIF   ('&INSERVCLS' EQ '').ZI4A
+&ZW                   SETC  '&ZW.1'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI4C
+.*
+.ZI4A                 ANOP  ,
+&ZW                   SETC  '&ZW.0'
+.ZI4C                 ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L08 XOPTIONS "SERVCLS"
+.***      BL1'XXXXX1XX'
+         AIF   ('&SERVCLS' EQ '').ZI5A
+&ZW                   SETC  '&ZW.1'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI5C
+.*
+.ZI5A                 ANOP  ,
+&ZW                   SETC  '&ZW.0'
+.ZI5C                 ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L08 XOPTIONS "IMPORTANCE"
+.***      BL1'XXXXXX1X'
+         AIF   ('&IMPORTANCE' EQ '').ZI6A
+         AIF   ('&IMPORTANCE' EQ '').ZI6A
+&ZW                   SETC  '&ZW.1'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI6C
+.*
+.ZI6A                 ANOP  ,
+&ZW                   SETC  '&ZW.0'
+.ZI6C                 ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L08 XOPTIONS "IWM4ECRE"
+.***      BL1'XXXXXXX1'
+&ZW                   SETC  '&ZW.1'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+.*-------------------------------------------------------------------
+.***AI.L11 XOPTIONS BL1
+                      AIF   ('&ZCLNG' NE 'YES').ZI7E  ALL ZERO BITS
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'OI'
+&ZOPV(&ZOPN)          SETC  '1(1),B''&ZW'''
+&ZOPD(&ZOPN)          SETC  '++ 80 BL1'
+.ZI7E                 ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L04 XPLISTLEN XL2
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVC'
+&ZOPV(&ZOPN)          SETC  '2(2,1),=AL2(&ZPLLEN)'
+&ZOPD(&ZOPN)          SETC  '++ INPUT XPLISTLEN XL2'
+.*-------------------------------------------------------------------
+.***AI.L25  XARRIVALTIME XL8
+                      AIF   ('&ZXARRIVALTIME' EQ '').ZI12E
+                      AIF   ('&ZXARRIVALTIME' EQ 'OUTPUT').ZI12E
+&ZCGPR                SETC  '&XARRIVALTIME'
+.*
+                      AIF   ('&XARRIVALTIME'(1,1) NE '(').ZI12B
+&ZCGPR   SETC  '0('.'&XARRIVALTIME'(2,K'&XARRIVALTIME-2).')'
+                      AGO   .ZI12D
+.ZI12B                ANOP  ,
+.*
+&ZC                   SETC  '&XARRIVALTIME'(1,1)
+                      AIF   (T'&ZC NE 'N').ZI12D
+&ZC                   SETC  '&XARRIVALTIME'
+                      AIF   ('&ZC'(K'&ZC,1) EQ ')').ZI12D
+&ZCGPR                SETC  '=BL8''&XARRIVALTIME'''
+.*
+.ZI12D                ANOP  ,
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVC'
+&ZOPV(&ZOPN)          SETC  '16(8,1),&ZCGPR'
+&ZOPD(&ZOPN)          SETC  '++ &ZXARRIVALTIME XARRIVALTIME'
+.*
+.ZI12E                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L25  XFUNCTION_NAME CL8
+                      AIF   ('&ZXFUNCTION_NAME' EQ '').ZI14E
+                      AIF   ('&ZXFUNCTION_NAME' EQ 'OUTPUT').ZI14E
+&ZCGPR                SETC  '&XFUNCTION_NAME'
+.*
+                      AIF   ('&XFUNCTION_NAME'(1,1) NE '(').ZI14B
+&ZCGPR   SETC  '0('.'&XFUNCTION_NAME'(2,K'&XFUNCTION_NAME-2).')'
+.ZI14B                ANOP  ,
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVC'
+&ZOPV(&ZOPN)          SETC  '32(8,1),&ZCGPR'
+&ZOPD(&ZOPN)          SETC  '++ &ZXFUNCTION_NAME XFUNCTION_NAME'
+.*
+.ZI14E                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L05 XTYPE_OPTIONS BL1
+&ZW                   SETC  ''
+&ZCLNG                SETC  ''             RESET BIT ON FLAG
+.*-------------------------------------------------------------------
+.***AI.L08 XTYPE_OPTIONS "INDEPENDENT"
+.***      BL1'1XXXXXXX'
+         AIF   ('&XTYPE' NE 'INDEPENDENT').ZI18A
+&ZW                   SETC  '&ZW.1'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI18C
+.*
+.ZI18A                ANOP  ,
+&ZW                   SETC  '&ZW.0'
+.ZI18C                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L08 XTYPE_OPTIONS "DEPENDENT"
+.***      BL1'X1XXXXXX'
+         AIF   ('&XTYPE' NE 'DEPENDENT').ZI19A
+&ZW                   SETC  '&ZW.1'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI19C
+.*
+.ZI19A                ANOP  ,
+&ZW                   SETC  '&ZW.0'
+.ZI19C                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L08 XTYPE_OPTIONS "MONENV"
+.***      BL1'XX1XXXXX'
+         AIF   ('&XTYPE' NE 'MONENV').ZI20A
+&ZW                   SETC  '&ZW.1'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI20C
+.*
+.ZI20A                ANOP  ,
+&ZW                   SETC  '&ZW.0'
+.ZI20C                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L08 XTYPE_OPTIONS "PRIMARY"
+.***      BL1'XXX1XXXX'
+         AIF   ('&XACCESS' NE 'PRIMARY').ZI21A
+&ZW                   SETC  '&ZW.1'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI21C
+.*
+.ZI21A                ANOP  ,
+&ZW                   SETC  '&ZW.0'
+.ZI21C                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L08 XTYPE_OPTIONS "HOME"
+.***      BL1'XXXX1XXX'
+         AIF   ('&XACCESS' NE 'HOME').ZI22A
+&ZW                   SETC  '&ZW.1'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI22C
+.*
+.ZI22A                ANOP  ,
+&ZW                   SETC  '&ZW.0'
+.ZI22C                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L08 XTYPE_OPTIONS "WORKDEPENDENT"
+.***      BL1'XXXXX1XX'
+         AIF   ('&XTYPE' NE 'WORKDEPENDENT').ZI23A
+&ZW                   SETC  '&ZW.100'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI23C
+.*
+.ZI23A                ANOP  ,
+&ZW                   SETC  '&ZW.000'
+.ZI23C                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L11 XTYPE_OPTIONS BL1
+                      AIF   ('&ZCLNG' NE 'YES').ZI23E  ALL ZERO BITS
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'OI'
+&ZOPV(&ZOPN)          SETC  '52(1),B''&ZW'''
+&ZOPD(&ZOPN)          SETC  '++ INPUT BL1'
+.ZI23E                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L25  XMONTKN XL4
+                      AIF   ('&ZXMONTKN' EQ '').ZI25E
+                      AIF   ('&ZXMONTKN' EQ 'OUTPUT').ZI25E
+&ZCGPR                SETC  '&XMONTKN'
+.*
+                      AIF   ('&XMONTKN'(1,1) NE '(').ZI25B
+&ZCGPR   SETC  '0('.'&XMONTKN'(2,K'&XMONTKN-2).')'
+                      AGO   .ZI25D
+.ZI25B                ANOP  ,
+.*
+&ZC                   SETC  '&XMONTKN'(1,1)
+                      AIF   (T'&ZC NE 'N').ZI25D
+&ZC                   SETC  '&XMONTKN'
+                      AIF   ('&ZC'(K'&ZC,1) EQ ')').ZI25D
+&ZCGPR                SETC  '=BL4''&XMONTKN'''
+.*
+.ZI25D                ANOP  ,
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVC'
+&ZOPV(&ZOPN)          SETC  '56(4,1),&ZCGPR'
+&ZOPD(&ZOPN)          SETC  '++ &ZXMONTKN XMONTKN'
+.*
+.ZI25E                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L05 X_OPTIONS BL1
+&ZW                   SETC  ''
+&ZCLNG                SETC  ''             RESET BIT ON FLAG
+.*-------------------------------------------------------------------
+.***AI.L08 X_OPTIONS "YES"
+.***      BL1'1XXXXXXX'
+         AIF   ('&XEXSTARTDEFER' NE 'YES').ZI27A
+&ZW                   SETC  '&ZW.1'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI27C
+.*
+.ZI27A                ANOP  ,
+&ZW                   SETC  '&ZW.0'
+.ZI27C                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L08 X_OPTIONS "EXPLICIT"
+.***      BL1'X1XXXXXX'
+         AIF   ('&XESTRT' NE 'EXPLICIT').ZI28A
+&ZW                   SETC  '&ZW.1'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI28C
+.*
+.ZI28A                ANOP  ,
+&ZW                   SETC  '&ZW.0'
+.ZI28C                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L08 X_OPTIONS "EXPLICIT_SINGLE"
+.***      BL1'XX1XXXXX'
+         AIF   ('&XESTRT' NE 'EXPLICIT_SINGLE').ZI29A
+&ZW                   SETC  '&ZW.1'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI29C
+.*
+.ZI29A                ANOP  ,
+&ZW                   SETC  '&ZW.0'
+.ZI29C                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L08 X_OPTIONS "NEVER"
+.***      BL1'XXX1XXXX'
+         AIF   ('&XESTRT' NE 'NEVER').ZI30A
+&ZW                   SETC  '&ZW.10000'
+&ZCLNG                SETC  'YES'          SET BIT ON FLAG
+                      AGO   .ZI30C
+.*
+.ZI30A                ANOP  ,
+&ZW                   SETC  '&ZW.00000'
+.ZI30C                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L11 X_OPTIONS BL1
+                      AIF   ('&ZCLNG' NE 'YES').ZI30E  ALL ZERO BITS
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'OI'
+&ZOPV(&ZOPN)          SETC  '60(1),B''&ZW'''
+&ZOPD(&ZOPN)          SETC  '++ INPUT BL1'
+.ZI30E                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L19 ADDR64 XCLSFY AD
+                      AIF   ('&ZXCLSFY' EQ '').ZI33H
+&ZCLNG                SETC  '&XCLSFY'
+&ZCGPR                SETC  '14'
+         AIF   ('&XCLSFY'(1,1) EQ '(').ZI33F  IN GPR
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'LA'
+&ZOPV(&ZOPN)          SETC  '&ZCGPR,&ZCLNG'
+&ZOPD(&ZOPN)          SETC  '++ &ZXCLSFY XCLSFY'
+.*
+                      AGO   .ZI33G
+.*
+.ZI33F                ANOP  ,
+&ZCGPR   SETC  '&XCLSFY'(2,K'&XCLSFY-2)
+.*
+.ZI33G                ANOP  ,
+                      AIF   ('&SYSAM64' EQ 'YES').ZI33H1A
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'ST'
+&ZOPV(&ZOPN)          SETC  '&ZCGPR,4+72(,1)'
+&ZOPD(&ZOPN)          SETC  '++ &ZXCLSFY XCLSFY'
+.*
+                      AGO   .ZI33H
+.ZI33H1A              ANOP  ,
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'STG'
+&ZOPV(&ZOPN)          SETC  '&ZCGPR,72(,1)'
+&ZOPD(&ZOPN)          SETC  '++ &ZXCLSFY XCLSFY'
+.*
+.ZI33H                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.L19 ADDR64 XWORKREQ_HDL AD
+                      AIF   ('&ZXWORKREQ_HDL' EQ '').ZI34H
+&ZCLNG                SETC  '&XWORKREQ_HDL'
+&ZCGPR                SETC  '14'
+         AIF   ('&XWORKREQ_HDL'(1,1) EQ '(').ZI34F  IN GPR
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'LA'
+&ZOPV(&ZOPN)          SETC  '&ZCGPR,&ZCLNG'
+&ZOPD(&ZOPN)          SETC  '++ &ZXWORKREQ_HDL XWORKREQ_HDL'
+.*
+                      AGO   .ZI34G
+.*
+.ZI34F                ANOP  ,
+&ZCGPR   SETC  '&XWORKREQ_HDL'(2,K'&XWORKREQ_HDL-2)
+.*
+.ZI34G                ANOP  ,
+                      AIF   ('&SYSAM64' EQ 'YES').ZI34H1A
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'ST'
+&ZOPV(&ZOPN)          SETC  '&ZCGPR,4+80(,1)'
+&ZOPD(&ZOPN)          SETC  '++ &ZXWORKREQ_HDL XWORKREQ_HDL'
+.*
+                      AGO   .ZI34H
+.ZI34H1A              ANOP  ,
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'STG'
+&ZOPV(&ZOPN)          SETC  '&ZCGPR,80(,1)'
+&ZOPD(&ZOPN)          SETC  '++ &ZXWORKREQ_HDL XWORKREQ_HDL'
+.*
+.ZI34H                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.LVER01
+                      AIF  (&XPLISTVER LT 2).ZI36Z
+.*-------------------------------------------------------------------
+.***AI.L25  XINSERVCLS F
+                      AIF   ('&ZXINSERVCLS' EQ '').ZI36E
+                      AIF   ('&ZXINSERVCLS' EQ 'OUTPUT').ZI36E
+&ZCGPR                SETC  '&XINSERVCLS'
+         AIF   ('&XINSERVCLS' EQ '0').ZI36E
+         AIF   ('&XINSERVCLS' EQ '0').ZI36E
+.*
+                      AIF   ('&XINSERVCLS'(1,1) NE '(').ZI36B
+&ZCGPR   SETC  '0('.'&XINSERVCLS'(2,K'&XINSERVCLS-2).')'
+                      AGO   .ZI36D
+.ZI36B                ANOP  ,
+.*
+&ZC                   SETC  '&XINSERVCLS'(1,1)
+                      AIF   (T'&ZC NE 'N').ZI36D
+&ZC                   SETC  '&XINSERVCLS'
+                      AIF   ('&ZC'(K'&ZC,1) EQ ')').ZI36D
+&ZCGPR                SETC  '=AL4(&XINSERVCLS)'
+.*
+.ZI36D                ANOP  ,
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVC'
+&ZOPV(&ZOPN)          SETC  '92(4,1),&ZCGPR'
+&ZOPD(&ZOPN)          SETC  '++ &ZXINSERVCLS XINSERVCLS'
+.*
+.ZI36E                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.LVER02
+.ZI36Z                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.LVER01
+                      AIF  (&XPLISTVER LT 2).ZI37Z
+.*-------------------------------------------------------------------
+.***AI.L25  XMONTKN64 XL8
+                      AIF   ('&ZXMONTKN64' EQ '').ZI37E
+                      AIF   ('&ZXMONTKN64' EQ 'OUTPUT').ZI37E
+&ZCGPR                SETC  '&XMONTKN64'
+.*
+                      AIF   ('&XMONTKN64'(1,1) NE '(').ZI37B
+&ZCGPR   SETC  '0('.'&XMONTKN64'(2,K'&XMONTKN64-2).')'
+                      AGO   .ZI37D
+.ZI37B                ANOP  ,
+.*
+&ZC                   SETC  '&XMONTKN64'(1,1)
+                      AIF   (T'&ZC NE 'N').ZI37D
+&ZC                   SETC  '&XMONTKN64'
+                      AIF   ('&ZC'(K'&ZC,1) EQ ')').ZI37D
+&ZCGPR                SETC  '=BL8''&XMONTKN64'''
+.*
+.ZI37D                ANOP  ,
+.*
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVC'
+&ZOPV(&ZOPN)          SETC  '96(8,1),&ZCGPR'
+&ZOPD(&ZOPN)          SETC  '++ &ZXMONTKN64 XMONTKN64'
+.*
+.ZI37E                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.LVER02
+.ZI37Z                ANOP  ,
+.*-------------------------------------------------------------------
+.***AI.LVER01
+                      AIF  (&XPLISTVER LT 1).ZI40Z
+.*-------------------------------------------------------------------
+.***AI.LVER02
+.ZI40Z                ANOP  ,
+.*-------------------------------------------------------------------
+&ZOPN1                SETA &ZOPN
+.*******************************************************************
+.***  PROCESS IWM4ECRE OUTPUT PARAMETERS
+.*******************************************************************
+                      ACTR  10000
+.*------------------------------------------------------------------
+.***AO.L02 XETOKEN CL8
+         AIF   ('&ZXETOKEN' EQ 'OUTPUT').ZO15A  OUTPUT
+         AIF   ('&ZXETOKEN' NE 'INOUT').ZO15C  INOUT
+.ZO15A    AIF   ('&XETOKEN'(1,1) NE '(').ZO15B  ADDR IN GPR
+&ZCGPR   SETC  '&XETOKEN'(2,K'&XETOKEN-2)
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVC'
+&ZOPV(&ZOPN)          SETC  '0(8,&ZCGPR),40(1)'
+&ZOPD(&ZOPN)          SETC  '++ XETOKEN CL8'
+                      AGO   .ZO15C
+.*
+.ZO15B                ANOP  ,
+&ZAWRK   SETA  K'&XETOKEN
+         AIF   ('&XETOKEN'(&ZAWRK,1) NE ')').ZO15G
+&ZN      SETA  2
+.ZO15H    ANOP
+         AIF   (&ZN GE &ZAWRK).ZO15G
+         AIF   ('&XETOKEN'(&ZN,1) NE '(').ZO15I
+&ZC      SETC  '&XETOKEN'(1,&ZN).'8'.','
+&ZC      SETC  '&ZC'.'&XETOKEN'(&ZN+1,&ZAWRK-&ZN).',40(1)'
+         AGO   .ZO15J
+.ZO15I    ANOP
+&ZN      SETA  &ZN+1
+         AGO   .ZO15H
+.ZO15G    ANOP
+&ZC      SETC  '&XETOKEN.(8),40(1)'
+.ZO15J    ANOP
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVC'
+&ZOPV(&ZOPN)          SETC  '&ZC'
+&ZOPD(&ZOPN)          SETC  '++ XETOKEN CL8'
+.ZO15C                ANOP  ,
+.*------------------------------------------------------------------
+.***AO.LVER01
+                      AIF  (&XPLISTVER LT 2).ZO35Z  PLVER
+.*------------------------------------------------------------------
+.***AO.L02 XSERVCLS F
+         AIF   ('&ZXSERVCLS' EQ 'OUTPUT').ZO35A  OUTPUT
+         AIF   ('&ZXSERVCLS' NE 'INOUT').ZO35C  INOUT
+.ZO35A    AIF   ('&XSERVCLS'(1,1) NE '(').ZO35B  ADDR IN GPR
+&ZCGPR   SETC  '&XSERVCLS'(2,K'&XSERVCLS-2)
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVC'
+&ZOPV(&ZOPN)          SETC  '0(4,&ZCGPR),88(1)'
+&ZOPD(&ZOPN)          SETC  '++ XSERVCLS F'
+                      AGO   .ZO35C
+.*
+.ZO35B                ANOP  ,
+&ZAWRK   SETA  K'&XSERVCLS
+         AIF   ('&XSERVCLS'(&ZAWRK,1) NE ')').ZO35G
+&ZN      SETA  2
+.ZO35H    ANOP
+         AIF   (&ZN GE &ZAWRK).ZO35G
+         AIF   ('&XSERVCLS'(&ZN,1) NE '(').ZO35I
+&ZC      SETC  '&XSERVCLS'(1,&ZN).'4'.','
+&ZC      SETC  '&ZC'.'&XSERVCLS'(&ZN+1,&ZAWRK-&ZN).',88(1)'
+         AGO   .ZO35J
+.ZO35I    ANOP
+&ZN      SETA  &ZN+1
+         AGO   .ZO35H
+.ZO35G    ANOP
+&ZC      SETC  '&XSERVCLS.(4),88(1)'
+.ZO35J    ANOP
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVC'
+&ZOPV(&ZOPN)          SETC  '&ZC'
+&ZOPD(&ZOPN)          SETC  '++ XSERVCLS F'
+.ZO35C                ANOP  ,
+.*------------------------------------------------------------------
+.***AO.LVER02
+.ZO35Z                ANOP  ,
+.*------------------------------------------------------------------
+.***AO.LVER01
+                      AIF  (&XPLISTVER LT 1).ZO39Z  PLVER
+.*------------------------------------------------------------------
+.***AO.L02 XIMPORTANCE FL2
+         AIF   ('&ZXIMPORTANCE' EQ 'OUTPUT').ZO39A  OUTPUT
+         AIF   ('&ZXIMPORTANCE' NE 'INOUT').ZO39C  INOUT
+.ZO39A    AIF   ('&XIMPORTANCE'(1,1) NE '(').ZO39B  ADDR IN GPR
+&ZCGPR   SETC  '&XIMPORTANCE'(2,K'&XIMPORTANCE-2)
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVC'
+&ZOPV(&ZOPN)          SETC  '0(2,&ZCGPR),48(1)'
+&ZOPD(&ZOPN)          SETC  '++ XIMPORTANCE FL2'
+                      AGO   .ZO39C
+.*
+.ZO39B                ANOP  ,
+&ZAWRK   SETA  K'&XIMPORTANCE
+         AIF   ('&XIMPORTANCE'(&ZAWRK,1) NE ')').ZO39G
+&ZN      SETA  2
+.ZO39H    ANOP
+         AIF   (&ZN GE &ZAWRK).ZO39G
+         AIF   ('&XIMPORTANCE'(&ZN,1) NE '(').ZO39I
+&ZC      SETC  '&XIMPORTANCE'(1,&ZN).'2'.','
+&ZC      SETC  '&ZC'.'&XIMPORTANCE'(&ZN+1,&ZAWRK-&ZN).',48(1)'
+         AGO   .ZO39J
+.ZO39I    ANOP
+&ZN      SETA  &ZN+1
+         AGO   .ZO39H
+.ZO39G    ANOP
+&ZC      SETC  '&XIMPORTANCE.(2),48(1)'
+.ZO39J    ANOP
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'MVC'
+&ZOPV(&ZOPN)          SETC  '&ZC'
+&ZOPD(&ZOPN)          SETC  '++ XIMPORTANCE FL2'
+.ZO39C                ANOP  ,
+.*------------------------------------------------------------------
+.***AO.LVER02
+.ZO39Z                ANOP  ,
+.*******************************************************************
+.***AO.X02  RETURN CODE PROCESSING
+.*******************************************************************
+                      AIF   (N'&RETCODE LE 0).ZMRETX
+                      AIF   ('&XRETCODE'(1,1) EQ '(').ZMRET2
+                      AIF   ('&XRETCODE' EQ 'GPR15').ZMRETX
+                      AIF   ('&XRETCODE' EQ 'REG15').ZMRETX
+                      AIF   ('&XRETCODE' EQ 'R15').ZMRETX
+                      AIF   ('&XRETCODE' EQ '15').ZMRETX
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'ST'
+&ZOPV(&ZOPN)          SETC  '15,&XRETCODE'
+&ZOPD(&ZOPN)          SETC  '++ SET RETURN CODE'
+                      AGO   .ZMRETX
+.*
+.ZMRET2               ANOP  ,
+&ZCGPR                SETC  '&XRETCODE'(2,K'&XRETCODE-2)
+                      AIF   ('&ZCGPR' EQ 'GPR15').ZMRETX
+                      AIF   ('&ZCGPR' EQ 'REG15').ZMRETX
+                      AIF   ('&ZCGPR' EQ 'R15').ZMRETX
+                      AIF   ('&ZCGPR' EQ '15').ZMRETX
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  '&ZMAC_LR'
+&ZOPV(&ZOPN)          SETC  '&ZCGPR,15'
+&ZOPD(&ZOPN)          SETC  '++ SET RETURN CODE'
+.ZMRETX               ANOP  ,
+.*******************************************************************
+.***AO.X03  REASON CODE PROCESSING
+.*******************************************************************
+                      AIF   (N'&RSNCODE LE 0).ZMRSNX
+                      AIF   ('&XRSNCODE'(1,1) EQ '(').ZMRSN2
+                      AIF   ('&XRSNCODE' EQ 'GPR0').ZMRSNX
+                      AIF   ('&XRSNCODE' EQ 'GPR00').ZMRSNX
+                      AIF   ('&XRSNCODE' EQ 'REG0').ZMRSNX
+                      AIF   ('&XRSNCODE' EQ 'REG00').ZMRSNX
+                      AIF   ('&XRSNCODE' EQ 'R0').ZMRSNX
+                      AIF   ('&XRSNCODE' EQ '0').ZMRSNX
+                      AIF   ('&XRSNCODE' EQ '00').ZMRSNX
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  'ST'
+&ZOPV(&ZOPN)          SETC  '0,&XRSNCODE'
+&ZOPD(&ZOPN)          SETC  '++ SET REASON CODE'
+                      AGO   .ZMRSNX
+.*
+.ZMRSN2               ANOP  ,
+&ZCGPR                SETC  '&XRSNCODE'(2,K'&XRSNCODE-2)
+                      AIF   ('&ZCGPR' EQ 'GPR0').ZMRSNX
+                      AIF   ('&ZCGPR' EQ 'GPR00').ZMRSNX
+                      AIF   ('&ZCGPR' EQ 'REG0').ZMRSNX
+                      AIF   ('&ZCGPR' EQ 'REG00').ZMRSNX
+                      AIF   ('&ZCGPR' EQ 'R0').ZMRSNX
+                      AIF   ('&ZCGPR' EQ '0').ZMRSNX
+                      AIF   ('&ZCGPR' EQ '00').ZMRSNX
+&ZOPN                 SETA  &ZOPN+1
+&ZOPL(&ZOPN)          SETC  ' '
+&ZOPO(&ZOPN)          SETC  '&ZMAC_LR'
+&ZOPV(&ZOPN)          SETC  '&ZCGPR,0'
+&ZOPD(&ZOPN)          SETC  '++ SET REASON CODE'
+.ZMRSNX               ANOP  ,
+.*******************************************************************
+.***AO.X04  LABEL FOR MF=L PROCESSING
+.*******************************************************************
+.ZMFLX                ANOP  ,              MF=L PROCESSING
+.*******************************************************************
+.***AO.X05  FORMAT GENERATED INSTRUCTIONS
+.*******************************************************************
+                      ACTR  10000
+.*
+                      LCLA  &ZLC           COLUMN POSITION
+                      LCLA  &ZOPX          LIST TABLE INDEX
+                      LCLC  &ZLL           LABEL
+                      LCLC  &ZLOP          OPERATION
+                      LCLC  &ZLV           VALUE
+                      LCLC  &ZLD           DESCRIPTION
+.*
+&ZOPX                 SETA  1
+.ZL2                  AIF   (&ZOPX GT &ZOPN1).ZLX  B IF DONE
+&ZLL                  SETC  '&ZOPL(&ZOPX)'
+&ZLOP                 SETC  '&ZOPO(&ZOPX)'
+&ZLV                  SETC  '&ZOPV(&ZOPX)'
+&ZLD                  SETC  '&ZOPD(&ZOPX)'
+                      AIF   (K'&ZLD LE 0).ZL5
+&ZLC                  SETA  35             COMMENT COLUMN
+                      AIF   ('&ZLD'(1,1) NE '*').ZL3
+&ZLC                  SETA  33             COMMMENT COLUMN
+.ZL3                  AIF   (K'&ZLV GE &ZLC-16-1).ZL4
+&ZLV                  SETC  '&ZLV'.' '
+                      AGO   .ZL3
+.*
+.ZL4                  ANOP  ,
+&ZLV                  SETC  '&ZLV'.' '
+.ZL5                  ANOP  ,
+&ZLV                  SETC  '&ZLV'.'&ZLD'
+.*
+&ZLL     &ZLOP &ZLV
+.*
+&ZOPX                 SETA  &ZOPX+1        NEXT STRUCTURE
+                      AGO   .ZL2           CONTINUE LOOPING
+.*
+.ZLX                  ANOP  ,
+                      AIF   ('&XMF' EQ 'L').ZLINKX  MF=L
+.*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+         LLGT  14,16(0,0)              GET CVT ADDRESS            @L3C
+         TM    CVTOSLV3-CVT(14),CVTH7709  test for HBB7709 presence
+         JNZ   VEROK&SYSNDX               running on HBB7709       @L3C
+         LA    0,IWMRSNCODEBADVERSION     HBB7709 is required
+         LA    15,IWMRETCODEINVOCERROR    set return code
+         J     END&SYSNDX                 skip service invocation  @L3C
+VEROK&SYSNDX DS    0H                     version check successful
+         L     14,772(14,0)            GET SFT ADDRESS
+         L     14,380(14,0)            GET LX FOR SERVICE ROUTINE
+         LA    15,24                   GET EX FOR SERVICE ROUTINE
+         OR    14,15                   GET PC NUMBER
+         AIF   ('&XESTRT' NE 'EXPLICIT_SINGLE').NOEXSIN            @P3A
+         OI    60(1),X'60'             BOTH SINGLE AND EXPL.       @P3A
+.NOEXSIN ANOP  ,                                                   @P3A
+         PC    0(14)
+END&SYSNDX DS    0H                    END LABEL
+.*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+.ZLINKX               ANOP  ,
+.*******************************************************************
+.***AP.X01  FORMAT GENERATED CODE
+.ZL21                 AIF   (&ZOPX GT &ZOPN).ZLX1  B IF DONE
+&ZLL                  SETC  '&ZOPL(&ZOPX)'
+&ZLOP                 SETC  '&ZOPO(&ZOPX)'
+&ZLV                  SETC  '&ZOPV(&ZOPX)'
+&ZLD                  SETC  '&ZOPD(&ZOPX)'
+                      AIF   (K'&ZLD LE 0).ZL51
+&ZLC                  SETA  35             COMMENT COLUMN
+                      AIF   ('&ZLD'(1,1) NE '*').ZL31
+&ZLC                  SETA  33             COMMENT COLUMN
+.ZL31                 AIF   (K'&ZLV GE &ZLC-16-1).ZL41
+&ZLV                  SETC  '&ZLV'.' '
+                      AGO   .ZL31
+.*
+.ZL41                 ANOP  ,
+&ZLV                  SETC  '&ZLV'.' '
+.ZL51                 ANOP  ,
+&ZLV                  SETC  '&ZLV'.'&ZLD'
+.*
+&ZLL     &ZLOP &ZLV
+.*
+&ZOPX                 SETA  &ZOPX+1        NEXT STRUCTURE
+                      AGO   .ZL21          CONTINUE LOOPING
+.*
+.ZLX1                 ANOP  ,
+.*******************************************************************
+.***AP.X02  END OF IWM4ECRE MACRO
+&ZIWM4ECRE            SETC  'YES'          SET IWM4ECRE USED
+         POP   PRINT
+*                                            IWM4ECRE-2
+         SPACE 1
+.ZLX2                 ANOP  ,
+         MEND
+**********************************************************************/
+*/*PB.OC01 INVOKE MACRO---------------------------------------------*/
+*%IWM4ECRE: MACRO KEYS(TYPE,CLSFY,SERVCLS,INSERVCLS,ARRIVALTIME,
+*                 FUNCTION_NAME,EXSTARTDEFER,ESTRT,WORKREQ_HDL,MONTKN,
+*                 MONTKN64,ACCESS,ETOKEN,IMPORTANCE,RETCODE,RSNCODE,
+*                 PLISTVER,MF);
+*  ANS('?'||MACLABEL||' '||'IWM4ECRP '||MACLIST||
+*         ' '||MACKEYS||';') COL(MACLMAR);
+*%END IWM4ECRE;

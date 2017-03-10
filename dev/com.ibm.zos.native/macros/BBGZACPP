@@ -1,0 +1,53 @@
+*                                                                              
+* IBM Confidential                                                             
+*                                                                              
+* OCO Source Materials                                                         
+*                                                                              
+* Copyright IBM Corp. 2012                                                     
+*                                                                              
+* The source code for this program is not published or otherwise               
+* divested of its trade secrets, irrespective of what has been                 
+* deposited with the U.S. Copyright Office.                                    
+*                                                                              
+* ===================================================================== =======
+* Note / TODO: Figure out why EDCDSECT requires this input macro to be         
+*              padded out to 79 columns.  If less/more, it complains           
+*              that the first line is not a comment or macro statement,        
+*              and the rest fails to parse.  Looking at the output             
+*              shows it's ignoring newlines and just smashes all the           
+*              lines together, breaking at 80 columns.                         
+* ===================================================================== =======
+         MACRO                                                                 
+&NAME    BBGZACPP                                                              
+         GBLB  &BBGZACPP_DEFINE                                                
+         GBLC  &BBGZACPP_NAM                                                   
+         GBLC  &CCN_CSECT                                                      
+         AIF (&BBGZACPP_DEFINE).NODSECT                                        
+&BBGZACPP_DEFINE SETB 1                                                        
+* --------------------------------------------------------------------- -------
+* Mapping of the temporary dynamic area used to validate the bind              
+* token.  This includes a temporary ARR parameter area, which is used          
+* during the entry linkage in case the ARR gets control and needs to           
+* free the temporary dynamic area.                                             
+*                                                                              
+* The eye catcher for this is referenced in angel_client_pc_recovery.h         
+* --------------------------------------------------------------------- -------
+CPCPROL_TEMPDYN        DSECT    Mapping of temporary dynamic area              
+CPCPROL_TEMPDYN_EYE    DS CL8   Eye catcher 'BBGZACPP'                         
+CPCPROL_TEMPDYN_INUSE  DS CL24  Part of control block that is "in use"         
+                       ORG CPCPROL_TEMPDYN_INUSE                               
+CPCPROL_TEMPDYN_VER    DS CL1   Version of control block                       
+CPCPROL_TEMPDYN_POOL   DS CL1   Storage came from SGOO cell pool               
+CPCPROL_TEMPDYN_KEY    DS CL1   Key of storage obtained from STORAGE           
+CPCPROL_TEMPDYN_SP     DS CL1   Subpool of storage obtained from STORA         
+CPCPROL_TEMPDYN_LEN    DS F     Length of storage obatined from STORAG         
+CPCPROL_TEMPDYN_BNDTOK DS CL16  Copy of client bind token in key 2             
+CPCPROL_TEMPDYN_SGOO   DS AD    Pointer to SGOO where cell came from           
+CPCPROL_TEMPDYN_PL     DS CL152 Area for parameter list.                       
+*                                                                              
+* Eye catcher string                                                           
+*                                                                              
+&BBGZACPP_NAM SETC 'BBGZACPP'                                                  
+&CCN_CSECT CSECT                                                               
+.NODSECT ANOP                                                                  
+         MEND                                                                  

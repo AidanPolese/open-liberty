@@ -1,0 +1,153 @@
+*
+* IBM Confidential
+*
+* OCO Source Materials
+*
+* Copyright IBM Corp. 2011
+*
+* The source code for this program is not published or otherwise
+* divested of its trade secrets, irrespective of what has been
+* deposited with the U.S. Copyright Office.
+*
+         MACRO
+&NAME    RETRPROL &ENVIRON=
+         GBLC  &CCN_CSECT
+         GBLC  &CCN_LITN
+         GBLB  &BBGZ_RETRPROL_DSECT
+*
+* This PROLOG/EPILOG is for ESTAEX recovery functions that are in an
+* AMODE64 object deck.  The authorized assembler services guide says
+* that if we called ESTAEX in 64 bit mode, we'll get control in 64
+* bit mode, but the authorized assembler services reference says
+* that ESTAEX recovery routines always get control in 31 bit mode.
+* It appears that we get control in 64 bit mode (on z/OS 1.10) so
+* we'll go with that for now.
+*
+* Check to see if there is an SDWA.  If there is no SDWA, we return.
+*
+         LHI   15,12         Load NOSDWA value into R15
+         CR    15,0          No SDWA?
+         BRNE  RETRPROL_GOODSDWA_&SYSNDX Branch if have an SDWA
+         LGHI  15,0          No SDWA, set RC=0 to percolate
+         BR    14            Return
+*
+* If we got an SDWA, save the registers into the provided 144 byte
+* save area in R13, and get some more dynamic area for this routine.
+* Storage obtain some temp storage that we can use to make a parameter
+* list to call IARV64.
+*
+RETRPROL_GOODSDWA_&SYSNDX DS 0H
+         STMG  14,12,8(13) Store registers in save area
+         LARL  15,&CCN_LITN  Address literals area off R15
+         USING &CCN_LITN,15
+         STORAGE OBTAIN,LENGTH=RETRPROL_TEMP_STORAGE_LEN,              X
+               SP=RETRPROL_TEMP_STORAGE_SUBPOOL,CALLRKY=YES
+         DROP  15
+         LGR   2,1 Move temporary storage to register 2
+         USING RETRPROL_TEMP_STG,2
+*
+* Work around an RSM bug by getting our TTOKEN and passing it to IARV64
+* (APAR number OA37025).
+*
+         USING PSA,0
+         LLGT  15,PSATOLD
+         DROP  0
+         USING TCB,15
+         LLGT  15,TCBSTCB  Load STCB from PSA
+         DROP  15
+         USING STCB,15
+         MVC   RETRPROL_TEMP_STG_IARV64_TTOKEN,STCBTTKN
+         DROP  15
+*
+* Now call IARV64 to get our dynamic area.
+*         
+         LGHI  15,RETRPROL_DYN_AREA_SEGMENTS Get two segment = 2MB
+         STG   15,RETRPROL_TEMP_STG_IARV64_SEGCT Store segment count
+         LGHI  15,RETRPROL_DYN_AREA_GUARD_SEGMENTS One page guard = 1MB
+         ST    15,RETRPROL_TEMP_STG_IARV64_GUARD Store guard count
+         IARV64 REQUEST=GETSTOR,COND=NO,                               X
+               SEGMENTS=RETRPROL_TEMP_STG_IARV64_SEGCT,                X
+               FPROT=NO,SVCDUMPRGN=YES,                                X
+               GUARDSIZE=RETRPROL_TEMP_STG_IARV64_GUARD,               X
+               GUARDLOC=HIGH,USERTKN=NO_USERTKN,                       X
+               TTOKEN=RETRPROL_TEMP_STG_IARV64_TTOKEN,                 X
+               ORIGIN=RETRPROL_TEMP_STG_IARV64_ORIGIN,PLISTVER=0,      X
+               MF=(E,RETRPROL_TEMP_STG_IARV64_PLIST,COMPLETE)
+         LG    3,RETRPROL_TEMP_STG_IARV64_ORIGIN Load task data address
+*
+* Free the temporary storage.
+*
+         LARL  15,&CCN_LITN  Address literals area off R15
+         USING &CCN_LITN,15
+         STORAGE RELEASE,LENGTH=RETRPROL_TEMP_STORAGE_LEN,ADDR=(2),    X
+               SP=RETRPROL_TEMP_STORAGE_SUBPOOL,CALLRKY=YES
+         DROP  2
+         DROP  15         
+*
+* Clear the first 64 K of storage for the prefix area, and initialize
+* the header.
+*
+         AIF ('&ENVIRON' EQ 'ANGEL').ANGELENVIRON
+         AIF ('&ENVIRON' NE 'SERVER').INVALIDENVIRON
+         BBGZSTDI STDREG=3,NOTRACING=YES
+         AGO .TDIINITIALIZED
+.ANGELENVIRON ANOP
+         BBGZATDI ATDREG=3
+.TDIINITIALIZED ANOP
+*
+* Advance past the 64 K prefix area
+*        
+         OILH  3,1           Advance 64K
+*
+* We need to fix up the parameter list.  R1 points to the SDWA, but
+* the C code will expect R1 to point to a parameter list, of which the
+* first slot is a pointer to the SDWA.  We'll use the first bit of
+* dynamic area for this.  While we're in here, we'll also move R2
+* into the parameter list, which is the address of the user parms
+* supplied on the ESTAEX macro.
+*
+         USING RETRPROL_PARMS64,3
+         LMG   1,2,32(13) Restore input parms
+         STG   1,RETRPROL_PARMS64_SDWA Store the addr of SDWA
+         STG   2,RETRPROL_PARMS64_USERP Store the addr of user parms
+         LA    1,RETRPROL_PARMS64 R1 now points to the parameter list
+         AGHI  3,16          Advance dynamic area past parm list
+
+         DROP  3
+*
+* Store the rest of the registers
+*
+         STG   13,128(3)   Backchain
+         LGR   13,3        Put stack where expected to be
+*
+* Define the DSECTs we're going to use if this is the first time the
+* macro is being invoked.
+*
+         AIF (&BBGZ_RETRPROL_DSECT).NODSECT
+&BBGZ_RETRPROL_DSECT SETB 1
+RETRPROL_TEMP_STG       DSECT    Mapping of temporary storage
+RETRPROL_TEMP_STG_IARV64_SEGCT  DS FD IARV64 segment count
+RETRPROL_TEMP_STG_IARV64_ORIGIN DS FD IARV64 returned storage addr
+RETRPROL_TEMP_STG_IARV64_GUARD  DS F  IARV64 Guard area
+RETRPROL_TEMP_STG_AVAILABLE     DS F  available
+RETRPROL_TEMP_STG_IARV64_TTOKEN DS CL16 TTOKEN
+RETRPROL_TEMP_STG_IARV64_PLIST  DS CL88 Parameter list v0
+RETRPROL_TEMP_STG_AVAILABLE2    DS CL128 Available for use
+*
+RETRPROL_DYN_AREA_SEGMENTS EQU 2
+RETRPROL_DYN_AREA_GUARD_SEGMENTS EQU 1
+*
+RETRPROL_PARMS64        DSECT    Mapping of 64 bit parameters
+RETRPROL_PARMS64_SDWA   DS AD    SDWA Address
+RETRPROL_PARMS64_USERP  DS AD    User area address
+*
+RETRPROL_TEMP_STORAGE_LEN EQU 256     Length of temporary storage
+RETRPROL_TEMP_STORAGE_SUBPOOL EQU 131 Subpool of temporary storage
+*
+&CCN_CSECT CSECT
+.NODSECT ANOP
+         AGO .ENDING
+.INVALIDENVIRON ANOP
+         MNOTE 8,'ENVIRON MUST BE SERVER OR ANGEL'
+.ENDING ANOP
+         MEND

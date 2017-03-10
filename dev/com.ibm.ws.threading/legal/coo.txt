@@ -1,0 +1,23 @@
+This file contains information about the origin of the source code in this project.  Please
+indicate under 'Origin' where the original drop of source code came from; for example,
+a port of WAS code would be 'other IBM dev', and the detail should provide enough information
+to track down the COO for that code (eg WAS 7.0 SERV1, j2c.impl).  For 3rd party code the
+exact origin of the source is needed (eg link, version etc).
+
+If any alpine development is done (on ported or brand new code) list all the developers who
+have worked on the code and their contribution (%) to the total code in the project.
+
+Origin:
+alpine dev 
+
+Alpine developers:
+
+Matthew Sykes
+Erin Schnabel
+Alan Little
+Seth Peterson
+Sterling Bates
+Michael Fraenkel
+Jeffrey Lee
+Davanum Srinivas
+Eric Van Norman

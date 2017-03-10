@@ -1,0 +1,16 @@
+<project name="com.ibm.ws.config" default="buildApiSpi">
+  <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+       Top level builds use this task explicity.  Changing the
+       default will create an incompatibility between a default
+       project build and a top level build. -->
+
+  <property name="feature.file" value="${basedir}/externals.mf"/>
+	
+  <!-- IBM-API required properties. -->        
+  <property name="bundleName" value="WebSphere Configuration API"/>
+  <property name="api.ibm.symbolic.suffix" value="config"/>
+  <property name="api.ibm.version" value="1.2"/>    
+    
+  <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+  
+</project>

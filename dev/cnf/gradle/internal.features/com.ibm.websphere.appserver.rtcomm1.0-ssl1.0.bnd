@@ -1,0 +1,9 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.rtcomm1.0-ssl1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.ws.rtcomm.connector.ssl;version=latest

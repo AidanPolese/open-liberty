@@ -1,0 +1,6 @@
+<server description="These features are available from the Liberty repository but not part of the product itself">
+  <featureManager>
+    <feature>osgiAppConsole-1.0</feature>
+    <feature>webCacheMonitor-1.0</feature>
+  </featureManager>
+</server>

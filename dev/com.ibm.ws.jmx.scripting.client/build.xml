@@ -1,0 +1,11 @@
+<project name="com.ibm.ws.jmx.scripting.client" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+  <property name="publish.clients.jython" value="${liberty.lib.dir}/../clients/jython" />
+  <target name="publishToImage"  depends="publish.publishToImage">
+    <mkdir dir="${publish.clients.jython}"/>
+    <copy file="./publish/clients/jython/README" tofile="${publish.clients.jython}/README" overwrite="true" verbose="true"/>    
+  	<copy file="./publish/clients/jython/restConnector.py" tofile="${publish.clients.jython}/restConnector.py" overwrite="true" verbose="true"/>
+  </target>
+
+</project>

@@ -1,0 +1,34 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.jaxwsClient-2.2
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-transports-http-2.6.2-ibm-s20160819-0403.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-core-2.6.2-ibm-s20160819-0403.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-bindings-soap-2.6.2-ibm-s20160819-0403.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-bindings-xml-2.6.2-ibm-s20160819-0403.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-databinding-jaxb-2.6.2-ibm-s20160819-0403.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-management-2.6.2-ibm-s20160819-0403.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-ws-addr-2.6.2-ibm-s20160819-0403.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-frontend-simple-2.6.2-ibm-s20160819-0403.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-frontend-jaxws-2.6.2-ibm-s20160819-0403.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-ws-policy-2.6.2-ibm-s20160819-0403.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-api-2.6.2-ibm-s20160819-0403.jar;version=file,\
+	com.ibm.websphere.appserver.injection-1.0;version=latest, \
+	com.ibm.websphere.appserver.containerServices-1.0;version=latest, \
+	com.ibm.websphere.appserver.classloading-1.0;version=latest, \
+	com.ibm.websphere.appserver.javax.mail-1.5;version=latest, \
+	com.ibm.websphere.appserver.jaxb-2.2;version=latest, \
+	com.ibm.ws.org.apache.xml.resolver.1.2;version=latest, \
+	com.ibm.ws.org.apache.neethi.3.0.2;version=latest, \
+	com.ibm.ws.javaee.ddmodel.wsbnd;version=latest, \
+	com.ibm.websphere.javaee.jaxws.2.2;version=latest, \
+	com.ibm.websphere.prereq.wsdl4j.api;version=latest, \
+	com.ibm.ws.jaxws.clientcontainer;version=latest, \
+	com.ibm.websphere.javaee.wsdl4j.1.2;version=latest, \
+	com.ibm.ws.prereq.wsdl4j.1.6.2;version=latest, \
+	com.ibm.ws.org.apache.ws.xmlschema.core.2.0.3;version=latest, \
+	com.ibm.ws.jaxws.tools.2.2.10;version=latest

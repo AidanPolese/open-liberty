@@ -1,0 +1,32 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+# # {0} description of each insert field
+# MSG_DESCRIPTIVE_NAME=CWWKExxxxI: This is a message with inserts {0}
+# MSG_DESCRIPTIVE_NAME.explanation=Explanation text for the message
+# MSG_DESCRIPTIVE_NAME.useraction=User action text for the message
+#
+#CMVCPATHNAME com.ibm.ws.threading/resources/com/ibm/ws/threading/internal/resources/ThreadingMessages.nlsprops
+#COMPONENTPREFIX CWWKE
+#COMPONENTNAMEFOR CWWKE WebSphere kernel bootstrap, command line, and location service
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+# NLS_MESSAGEFORMAT_VAR
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+# -------------------------------------------------------------------------------------------------
+# 1200 - 1299 com.ibm.ws.threading.internal.resources.ThreadingMessages
+# -------------------------------------------------------------------------------------------------
+
+# {0} size of the pool when a deadlock was first detected
+# {1} current size of the pool
+unbreakableExecutorHang=CWWKE1200W:  Zd\u00e1 se, \u017ee v\u0161echny podprocesy ve v\u00fdchoz\u00edm prov\u00e1d\u011bc\u00edm modulu Liberty p\u0159estaly reagovat. Prost\u0159ed\u00ed Liberty automaticky zv\u00fd\u0161ilo po\u010det podproces\u016f z {0} na {1}. I nad\u00e1le se v\u0161ak zd\u00e1, \u017ee v\u0161echny podprocesy p\u0159estaly reagovat.
+unbreakableExecutorHang.explanation=Do\u0161lo k chyb\u011b, kter\u00e1 zp\u016fsobila, \u017ee prov\u00e1d\u011bc\u00ed modul p\u0159estal reagovat, a b\u011bhov\u00e9 prost\u0159ed\u00ed Liberty p\u0159idalo zna\u010dn\u00fd po\u010det podproces\u016f, aby tento stav vy\u0159e\u0161ilo. Prov\u00e1d\u011bc\u00ed modul v\u0161ak st\u00e1le neodpov\u00edd\u00e1. 
+unbreakableExecutorHang.useraction=Zjist\u011bte, zda neexistuje n\u011bjak\u00e9 kritick\u00e9 m\u00edsto, jako nap\u0159. zam\u010den\u00e1 datab\u00e1zov\u00e1 tabulka, kter\u00e9 by mohlo br\u00e1nit vy\u0159e\u0161en\u00ed podproces\u016f na serveru. Pokud \u017e\u00e1dn\u00e9 kritick\u00e9 m\u00edsto neexistuje a server skute\u010dn\u011b pot\u0159ebuje dal\u0161\u00ed podprocesy, upravte atribut coreThreads p\u0159\u00edslu\u0161n\u00e9ho prvku konfigurace prov\u00e1d\u011bc\u00edho modulu.

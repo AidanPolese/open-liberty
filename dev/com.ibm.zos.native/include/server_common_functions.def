@@ -1,0 +1,99 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * Copyright IBM Corp. 2012
+ *
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ */
+/*-------------------------------------------------------------------*/
+/* This is a sample function definition file for the server          */
+/* common function module (BBGZSCFM).  Adding functions to           */
+/* the list will cause entries to be put into the BBGZSCFM as well   */
+/* as generate stubs to these functions which can be used in the     */
+/* client.  There should be one definition file per component area   */
+/* in Lexington.                                                     */
+/*                                                                   */
+/* COMMON_DEF(name, auth_string, impl, arg_type)                     */
+/*                                                                   */
+/* where:                                                            */
+/*   arg_type = The type of struct that you are passing to the       */
+/*              function as an argument.  You are only allowed to    */
+/*              pass one argument and it must be a struct.  If your  */
+/*              function requires return parameters, you must pass   */
+/*              them by reference in the struct.                     */
+/*   impl = The name of the function implementation.  Your           */
+/*          implementation must reside in the BBGZSCFM load module.  */
+/*          Its prototype should take whatever you specified as      */
+/*          args for arguments, and have no return type (void).      */
+/*   name = The eight character name for the function, which is      */
+/*          displayed in the eye catcher in the BBGZSCFM.            */
+/*   auth_string = The eight character string which is used to build */
+/*                 the string used to determine whether the server   */
+/*                 process is allowed to call this routine.          */
+/*                                                                   */
+/* Example: COMMON_DEF("test_fcn", "todo_saf", server_sample_print, struct foo) */
+/*   This defines a function named server_sample_print, which takes  */
+/*   a struct of type foo as an argument.  Somewhere in the BBGZSCFM */
+/*   load module there must be a routine defined as                  */
+/*   "void server_sample_print(struct foo*)".  The entry in the      */
+/*   BBGZSCFM header will use the string "test_fcn" to define the    */
+/*   function, and the string "todo_saf" will be used to build the   */
+/*   string which the angel will use to determine if the server can  */
+/*   invoke this routine.  A new function, defined as                */
+/*   "int server_sample_print_stub(struct foo*)", will be defined    */
+/*   and can be called by the client to invoke server_sample_print().*/
+/*                                                                   */
+/* The stub routine returns an int, which represents the return code */
+/* from the COMMON INVOKE PC.  The caller should check this return   */
+/* code for 0 before trusting the routine ran to completion.  The    */
+/* actual function implementation must not define a return type      */
+/* (void).                                                           */
+/*                                                                   */
+/* The client can call the routine by including the file             */
+/* "include/server_common_function_module_stub.h" and calling        */
+/* the function name directly, like so:                              */
+/*   TODO: Sample here...                                            */
+/*                                                                   */
+/* Note: If you add a new definition file for a new functional area  */
+/* (component), you must include it in the following places:         */
+/*   server_common_function_module.mc                                */
+/*   server_common_function_module_stub.mc                           */
+/*   include/server_common_function_module.h                         */
+/*   include/server_common_function_module_stub.h                    */
+/*-------------------------------------------------------------------*/
+#ifdef COMMON_DEF_INCLUDES
+// Includes that define structs, etc, used by COMMON_DEF below
+#include "server_wola_client.h"
+#else
+#ifndef COMMON_DEF
+#define COMMON_DEF(svc_name, auth_name, impl_name, arg_type)
+#define _CLEAR_COMMON_DEF
+#endif
+// WOLA functions
+COMMON_DEF(WOLA_REGISTER_FUNCTION_STRING, "WOLA", wolaRegister, WOLARegisterParms_t)
+COMMON_DEF(WOLA_UNREGISTER_FUNCTION_STRING, "WOLA", wolaUnregister, WOLAUnregisterParms_t)
+COMMON_DEF(WOLA_CONNGET_FUNCTION_STRING, "WOLA", wolaConnectionGet, WOLAConnectionGetParms_t)
+COMMON_DEF(WOLA_CONNREL_FUNCTION_STRING, "WOLA", wolaConnectionRelease, WOLAConnectionReleaseParms_t)
+COMMON_DEF(WOLA_SENDREQ_FUNCTION_STRING, "WOLA", wolaSendRequest, WOLASendRequestParms_t)
+COMMON_DEF(WOLA_SENDRESP_FUNCTION_STRING, "WOLA", wolaSendResponse, WOLASendResponseParms_t)
+COMMON_DEF(WOLA_SENDEXC_FUNCTION_STRING, "WOLA", wolaSendResponseException, WOLASendResponseExceptionParms_t)
+COMMON_DEF(WOLA_RECEIVEANY_FUNCTION_STRING, "WOLA", wolaReceiveRequestAny, WOLAReceiveRequestAnyParms_t)
+COMMON_DEF(WOLA_RECEIVESPC_FUNCTION_STRING, "WOLA", wolaReceiveRequestSpecific, WOLAReceiveRequestSpecificParms_t)
+COMMON_DEF(WOLA_RECEIVELEN_FUNCTION_STRING, "WOLA", wolaReceiveResponseLength, WOLAReceiveResponseLengthParms_t)
+COMMON_DEF(WOLA_GETDATA_FUNCTION_STRING, "WOLA", wolaGetData, WOLAGetDataParms_t)
+COMMON_DEF(WOLA_INVOKE_FUNCTION_STRING, "WOLA", wolaInvoke, WOLAInvokeParms_t)
+COMMON_DEF(WOLA_HOST_FUNCTION_STRING, "WOLA", wolaHostService, WOLAHostServiceParms_t)
+COMMON_DEF(WOLA_GETCTX_FUNCTION_STRING, "WOLA", wolaGetContext, WOLAGetContextParms_t)
+COMMON_DEF(WOLA_REBIND_FUNCTION_STRING, "WOLA", wolaClientRebind, WOLARebindParms_t)
+
+#ifdef _CLEAR_COMMON_DEF
+#undef COMMON_DEF
+#undef _CLEAR_COMMON_DEF
+#endif
+#endif
+
+/* vim: set filetype=c : */

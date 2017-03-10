@@ -1,0 +1,212 @@
+*
+* IBM Confidential
+*
+* OCO Source Materials
+*
+* Copyright IBM Corp. 2014
+*
+* The source code for this program is not published or otherwise
+* divested of its trade secrets, irrespective of what has been
+* deposited with the U.S. Copyright Office.
+*
+         MACRO
+&NAME    STMRMPRL &ENVIRON=,&CLIENT=
+         GBLC  &CCN_CSECT
+         GBLC  &CCN_LITN
+         GBLB  &BBGZ_STMRMPRL_DSECT
+*
+* This PROLOG/EPILOG is for STIMERM exit functions that are in an
+* AMODE64 object deck.
+*
+* We were passed a 72 byte save area in R13.  We are in 64 bit mode so
+* we can't save all of our registers there.  Just save what we can fit
+* (R14-R3)
+*
+         STMG  14,3,16(13) Store registers in save area
+         LARL  15,&CCN_LITN  Address literals area off R15
+         USING &CCN_LITN,15
+         STORAGE OBTAIN,LENGTH=STMRMPRL_TEMP_STORAGE_LEN,              X
+               SP=STMRMPRL_TEMP_STORAGE_SUBPOOL,                       X
+               KEY=STMRMPRL_TEMP_STORAGE_KEY
+         DROP  15
+* See if we were called in subspace mode.  This is fun.            
+* We check for subspace mode because this module runs on an IRB    
+* when our STIMER pops, and that IRB could be running in CICS.  If 
+* running in CICS, we might be in subspace mode if transaction     
+* isolation is enabled.                                            
+* First, we are going to save the key we are running in so that we 
+* can switch to key zero and back again later on.                  
+* Next we load control register 2 into storage.  Control register  
+* 2 has a pointer to the DUCT in it.  The DUCT contains a bit that 
+* tells us that we are running in a subspace.  We have to "Fix up" 
+* the address with zeros because POPS doesn't say what those bits  
+* contain, only that they should be zero.                          
+* Next we load the part of the DUCT that has the subspace mode bit 
+* in it.  The DUCT address is a real storage address, so we have   
+* to use LURA (and be in key 0) to load it.                        
+         IPK
+         LR    15,2 save current key
+         USING STMRMPRL_TEMP_STG,1
+*        initialize subspace flag to 0
+         LHI   2,0
+         ST    2,STMRMPRL_TEMP_STG_SUBSPACE
+         STCTG 2,2,STMRMPRL_TEMP_STG_CONTROL_REG2        
+         NI    STMRMPRL_TEMP_STG_CONTROL_REG2,B'00000000'
+         NI    STMRMPRL_TEMP_STG_CONTROL_REG2+1,B'00000000'
+         NI    STMRMPRL_TEMP_STG_CONTROL_REG2+2,B'00000000'
+         NI    STMRMPRL_TEMP_STG_CONTROL_REG2+3,B'00000000'
+         NI    STMRMPRL_TEMP_STG_CONTROL_REG2+4,B'01111111'
+         NI    STMRMPRL_TEMP_STG_CONTROL_REG2+7,B'11000000'
+         LGHI  2,4 
+         ALG   2,STMRMPRL_TEMP_STG_CONTROL_REG2 
+         SPKA  0 
+         LURA  3,2   
+         SPKA  0(15)   restore key
+* Now, if we are in a subspace, we need to switch back to the base
+* space.  This is also fun.
+* First, we save access register 2, so we can restore it later.
+* The base space is specified by putting a zero in an access
+* register, and we picked 2 arbitrarily.
+* Next we switch to the base space by issuing the BSG instruction.
+* Yes, the only way to switch is via a branch.  We load the
+* address of SUBSPACE&SYSNDX as the branch-to address,
+* since we didn't really want to branch at all.
+* Finally, we restore access register 2.
+*
+* check flag to see if subspace is active
+         NILH  3,32767            
+         LTGR  3,3
+         JZ    SKIPSUBSPACE&SYSNDX branch when subspace not active
+* subspace active
+         STAM  2,2,STMRMPRL_TEMP_STG_AR2 save access register 2
+* set subspace active flag. epilog needs to know
+         LHI   3,1 
+         ST    3,STMRMPRL_TEMP_STG_SUBSPACE
+* set ar2 
+         LHI   3,0            
+         ST    3,STMRMPRL_TEMP_STG_AR2_NEW  
+         LAM   2,2,STMRMPRL_TEMP_STG_AR2_NEW  
+* get address for BSG
+         BASR  14,0  
+         USING *,14   
+         LG    2,SUBSPACEADDR&SYSNDX
+         DROP  14
+         BSG   0,2    
+SUBSPACEADDR&SYSNDX DC AD(SUBSPACE&SYSNDX)    
+SUBSPACE&SYSNDX DS 0H    
+         LAM   2,2,STMRMPRL_TEMP_STG_AR2 restore access register 2
+SKIPSUBSPACE&SYSNDX DS 0H           
+         LGR   2,1 Move temporary storage to register 2
+         DROP  1     
+         USING STMRMPRL_TEMP_STG,2
+*
+* Now call IARV64 to get our dynamic area.
+*         
+         LGHI  15,STMRMPRL_DYN_AREA_SEGMENTS Get two segment = 2MB
+         STG   15,STMRMPRL_TEMP_STG_IARV64_SEGCT Store segment count
+         LGHI  15,STMRMPRL_DYN_AREA_GUARD_SEGMENTS One page guard = 1MB
+         ST    15,STMRMPRL_TEMP_STG_IARV64_GUARD Store guard count
+         IARV64 REQUEST=GETSTOR,COND=NO,                               X
+               SEGMENTS=STMRMPRL_TEMP_STG_IARV64_SEGCT,                X
+               FPROT=NO,SVCDUMPRGN=YES,                                X
+               GUARDSIZE=STMRMPRL_TEMP_STG_IARV64_GUARD,               X
+               GUARDLOC=HIGH,USERTKN=NO_USERTKN,                       X
+               ORIGIN=STMRMPRL_TEMP_STG_IARV64_ORIGIN,PLISTVER=0,      X
+               MF=(E,STMRMPRL_TEMP_STG_IARV64_PLIST,COMPLETE)
+         LG    3,STMRMPRL_TEMP_STG_IARV64_ORIGIN Load task data address
+*
+* Clear the first 64 K of storage for the prefix area, and initialize
+* the header.
+*
+         AIF ('&ENVIRON' EQ 'ANGEL').ANGELENVIRON
+         AIF ('&ENVIRON' NE 'SERVER').INVALIDENVIRON
+         BBGZSTDI STDREG=3,NOTRACING=&CLIENT
+         AGO .TDIINITIALIZED
+.ANGELENVIRON ANOP
+         BBGZATDI ATDREG=3
+.TDIINITIALIZED ANOP
+*
+* Advance past the 64 K prefix area
+*        
+         OILH  3,1           Advance 64K
+*
+* Save the rest of the registers (R4-12)
+*
+         USING STMRMPRL_PARMS64,3
+         STMG  4,12,STMRMPRL_PARMS64_R4TO12
+         L     15,STMRMPRL_TEMP_STG_SUBSPACE
+         ST    15,STMRMPRL_PARMS64_SUBSPACE save flag for epilog
+*
+* Free the temporary storage.
+*
+         LARL  15,&CCN_LITN  Address literals area off R15
+         USING &CCN_LITN,15
+         STORAGE RELEASE,LENGTH=STMRMPRL_TEMP_STORAGE_LEN,ADDR=(2),    X
+               SP=STMRMPRL_TEMP_STORAGE_SUBPOOL,                       X
+               KEY=STMRMPRL_TEMP_STORAGE_KEY
+         DROP  2
+         DROP  15         
+*
+* We need to fix up the parameter list.  R1 on entry points to an
+* eight byte area, the first word is the STIMERM ID and the second
+* is the user supplied word.  We'll need to change that so R1 points
+* to a parameter list.  
+*
+         LG    1,40(13) Restore input parm
+         USING STMRMPRL_STIMERM_AREA,1
+         LA    2,STMRMPRL_STIMERM_ID
+         STG   2,STMRMPRL_PARMS64_ID
+         L     2,STMRMPRL_STIMERM_PARM
+         STG   2,STMRMPRL_PARMS64_USERP
+         DROP  1
+         LA    1,STMRMPRL_PARMS64_ID R1 now points to the parm list
+         DROP  3
+         AGHI  3,104  Advance dynamic area past used storage
+*
+         STG   13,128(3)   Backchain
+         LGR   13,3        Put stack where expected to be
+*
+* Define the DSECTs we're going to use if this is the first time the
+* macro is being invoked.
+*
+         AIF (&BBGZ_STMRMPRL_DSECT).NODSECT
+&BBGZ_STMRMPRL_DSECT SETB 1
+STMRMPRL_TEMP_STG       DSECT    Mapping of temporary storage
+STMRMPRL_TEMP_STG_IARV64_SEGCT  DS FD IARV64 segment count
+STMRMPRL_TEMP_STG_IARV64_ORIGIN DS FD IARV64 returned storage addr
+STMRMPRL_TEMP_STG_IARV64_GUARD  DS F  IARV64 Guard area
+STMRMPRL_TEMP_STG_AVAILABLE     DS F  available
+STMRMPRL_TEMP_STG_IARV64_PLIST  DS CL88 Parameter list v0
+STMRMPRL_TEMP_STG_CONTROL_REG2  DS BL8 control register 2
+STMRMPRL_TEMP_STG_AR2           DS F access register 2
+STMRMPRL_TEMP_STG_AR2_NEW       DS F new access register 2
+STMRMPRL_TEMP_STG_SUBSPACE      DS F subspace mode
+STMRMPRL_TEMP_STG_AVAILABLE2    DS CL124 Available for use
+*
+STMRMPRL_DYN_AREA_SEGMENTS EQU 2
+STMRMPRL_DYN_AREA_GUARD_SEGMENTS EQU 1
+*
+STMRMPRL_PARMS64        DSECT    Mapping of 64 bit parameters
+STMRMPRL_PARMS64_R4TO12 DS CL72  Save registers 4-12
+STMRMPRL_PARMS64_ID     DS AD    Pointer to STIMER ID
+STMRMPRL_PARMS64_USERP  DS AD    User area address
+STMRMPRL_PARMS64_SUBSPACE  DS F  Subspace mode 
+STMRMPRL_PARMS64_AR2       DS F  access register 2
+STMRMPRL_PARMS64_AR2_NEW   DS F  new access register 2
+STMRMPRL_PARMS64_ALIGN     DS CL4 alignment to quad word
+*
+STMRMPRL_TEMP_STORAGE_LEN EQU 256     Length of temporary storage
+STMRMPRL_TEMP_STORAGE_SUBPOOL EQU 229 Subpool of temporary storage
+STMRMPRL_TEMP_STORAGE_KEY EQU 2       Key of temporary storage
+*
+STMRMPRL_STIMERM_AREA   DSECT    Mapping of STIMERM exit parm area
+STMRMPRL_STIMERM_ID     DS F     ID of STIMERM
+STMRMPRL_STIMERM_PARM   DS A     User supplied word
+*
+&CCN_CSECT CSECT
+.NODSECT ANOP
+         AGO .ENDING
+.INVALIDENVIRON ANOP
+         MNOTE 8,'ENVIRON MUST BE SERVER OR ANGEL'
+.ENDING ANOP
+         MEND

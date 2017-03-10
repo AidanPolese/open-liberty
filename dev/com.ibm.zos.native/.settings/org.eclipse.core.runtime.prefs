@@ -1,0 +1,5 @@
+#Wed Aug 17 23:24:47 EDT 2011
+content-types/enabled=true
+content-types/org.eclipse.cdt.core.cHeader/file-extensions=def
+content-types/org.eclipse.cdt.core.cSource/file-extensions=mc
+eclipse.preferences.version=1

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <!-- 
+   https://osgi.org/hudson/job/build.cmpn/793/artifact/org.osgi.service.blueprint/generated/org.osgi.service.blueprint-1.0.2.jar
+    -->
+   
+  <project project="OSGi framework and compendium" 
+            projectURL="https://www.osgi.org/" 
+            version="6.0" revision="" 
+            license-type="ASL2" 
+            contact="schnabel@us.ibm.com" 
+            encryption="no">
+      <download location="https://osgi.org/hudson/job/build.cmpn/793/artifact/">
+         <file basename="org.osgi.service.blueprint-1.0.2.jar" checksum="91092f66e13eae534311ec5dafe33255"/>
+      </download>
+   </project>
+
+   <notes>
+   </notes>
+   
+   <clearencehistory>
+   </clearencehistory>
+</ossc>

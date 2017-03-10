@@ -1,0 +1,23 @@
+Bnd-LastModified: 1486383775249
+Created-By: 1.8.0_121 (Oracle Corporation)
+IBM-API-Package: javax.jms; version="1.1"; type="spec"
+IBM-App-ForceRestart: uninstall
+IBM-AppliesTo: com.ibm.websphere.appserver; productEdition="@PRODUCT_EDITION@"; productVersion="@PRODUCT_VERSION@"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: com.ibm.websphere.appserver
+IBM-ShortName: jms-1.1
+Subsystem-Content: com.ibm.websphere.appserver.internal.jms-1.1; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jca-1.6; type="osgi.subsystem.feature",
+ com.ibm.ws.jms.feature; version="[1.0.0,1.0.200)"
+Subsystem-Description: %description
+Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
+Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.jms-1.1
+Subsystem-ManifestVersion: 1
+Subsystem-Name: Java Message Service 1.1
+Subsystem-SymbolicName: com.ibm.websphere.appserver.jms-1.1; visibility:=public; singleton:=true
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-3.3.0.201609221906

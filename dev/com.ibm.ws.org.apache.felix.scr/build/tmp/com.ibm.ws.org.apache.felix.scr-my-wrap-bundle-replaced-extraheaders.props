@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.9.6
+Created-By: 1.8.0_121-b13 (Oracle Corporation)
+IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml
+
+# A subset of properties to use for wrapping existing OSGi bundles 
+-removeheaders = Include-Resource, Ignore-Package, TODAY, DSTAMP, TSTAMP
+Bundle-Distributor: IBM
+#tell bnd to use our de-signing plugin
+-plugin: com.ibm.ws.build.bnd.plugins.DeSigningProcessor
+Import-Package:                           org.osgi.service.cm;version="[1.5,2)";resolution:=optional,org.osgi.service.log;version="[1.3,2)";resolution:=optional,org.osgi.service.metatype;version="[1.1,2)";resolution:=optional,org.osgi.service.packageadmin;version="[1.2,2)";resolution:=optional,org.apache.felix.service.command;resolution:=optional;version="[0.6,1)";status=provisional,org.apache.felix.shell;resolution:=optional;version="[1.0,1.1)",org.apache.felix.scr.component;version="[1.1,1.2)",org.apache.felix.scr.info;version="[1.0,1.1)",org.osgi.dto;version="[1.0,2)",org.osgi.framework;version="[1.8,2)",org.osgi.framework.dto;version="[1.8,2)",org.osgi.framework.wiring;version="[1.2,2)",org.osgi.service.component;version="[1.3,1.4)",org.osgi.service.component.runtime;version="[1.3,1.4)",org.osgi.service.component.runtime.dto;version="[1.3,1.4)",org.osgi.util.promise;version="[1.0,2)",org.osgi.util.tracker;version="[1.5,2)",org.osgi.util.function;version="[1.0,2)"
+
+Bundle-SymbolicName=com.ibm.ws.org.apache.felix.scr.2.0.8
+          
+bVersion=1.0
+bFullVersion=1.0.17
+Bundle-Version=${version;===;${bFullVersion}}.201703081257
+      

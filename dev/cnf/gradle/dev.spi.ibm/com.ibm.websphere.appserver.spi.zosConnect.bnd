@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.0
+
+Bundle-Name: WebSphere z/OS Connect SPI
+Bundle-Description: WebSphere z/OS Connect SPI, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.spi.zosConnect
+
+Import-Package: com.ibm.wsspi.zos.connect
+
+Export-Package: com.ibm.wsspi.zos.connect
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.spi/com.ibm.websphere.appserver.spi.zosConnect/pom.xml=com.ibm.websphere.appserver.spi.zosConnect.pom}
+
+publish.wlp.jar.suffix: dev/spi/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.zos.connect

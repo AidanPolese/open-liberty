@@ -1,0 +1,7 @@
+<project name="global_coverage" default="global-coverage">
+  <import file="../ant_build/public_imports/unittest_imports.xml"/>
+
+  <target name="global-coverage" depends="generateGlobalJaCoCoReport"
+          description="generate a full-build test coverage report" />
+
+</project>

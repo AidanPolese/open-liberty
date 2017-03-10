@@ -1,0 +1,21 @@
+# This was created based on instructions here:
+# https://help.github.com/articles/dealing-with-line-endings/
+#
+# Need to undo additions to the WS-CD-OPEN/.gitattributes
+* text -eol
+
+# The z/OS sandbox builds do not work well on non-windows platforms
+# when windows style line endings (CRLF) are committed to Git.  The
+# non-Windows FTP programs will not change CRLF to LF when an
+# ascii file is sent to the z/OS host.
+* text=auto
+
+# Binaries imported from tWAS
+*.o.twas binary
+
+# See bldtools/bin/README.txt for explanation for these next five.
+bldtools/bin/do-remote-build.sh text eol=lf
+bldtools/bin/do-ezwas-install.sh text eol=lf
+bldtools/bin/do-ezwas-test-run.sh text eol=lf
+bldtools/bin/sync-tree.sh text eol=lf
+bldtools/bin/ezwas-ftp.sh text eol=crlf

@@ -1,0 +1,32 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+# # {0} description of each insert field
+# MSG_DESCRIPTIVE_NAME=CWWKExxxxI: This is a message with inserts {0}
+# MSG_DESCRIPTIVE_NAME.explanation=Explanation text for the message
+# MSG_DESCRIPTIVE_NAME.useraction=User action text for the message
+#
+#CMVCPATHNAME com.ibm.ws.threading/resources/com/ibm/ws/threading/internal/resources/ThreadingMessages.nlsprops
+#COMPONENTPREFIX CWWKE
+#COMPONENTNAMEFOR CWWKE WebSphere kernel bootstrap, command line, and location service
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+# NLS_MESSAGEFORMAT_VAR
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+# -------------------------------------------------------------------------------------------------
+# 1200 - 1299 com.ibm.ws.threading.internal.resources.ThreadingMessages
+# -------------------------------------------------------------------------------------------------
+
+# {0} size of the pool when a deadlock was first detected
+# {1} current size of the pool
+unbreakableExecutorHang=CWWKE1200W:  Todos os encadeamentos no executor padr\u00e3o do Liberty aparecem para serem interrompidos. O Liberty aumenta o n\u00famero de encadeamentos automaticamente de {0} para {1}. No entanto, todos os encadeamentos ainda aparecem para serem interrompidos.
+unbreakableExecutorHang.explanation=Ocorreu um erro que fez com que um executor fosse interrompido e o tempo de execu\u00e7\u00e3o do Liberty incluiu um n\u00famero significativo de encadeamentos em uma tentativa de terminar a condi\u00e7\u00e3o de interrup\u00e7\u00e3o. No entanto, o executor permanece em um estado sem resposta. 
+unbreakableExecutorHang.useraction=Determine se h\u00e1 um gargalo, como uma tabela de banco de dados bloqueada, que pode impedir os encadeamentos de serem resolvidos no servidor. Se n\u00e3o existir nenhum gargalo e o servidor requerer legitimamente encadeamentos adicionais, ajuste o atributo coreThreads do elemento de configura\u00e7\u00e3o do executor.

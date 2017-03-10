@@ -1,0 +1,25 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Product Utilities
+Bundle-SymbolicName: com.ibm.ws.product.utility
+Bundle-Description: Product Utilities; version=${bVersion}
+
+Export-Package: \
+  com.ibm.ws.product.utility.*
+
+-includeresource: \
+    OSGI-OPT/websphere/lib/ws-productutil.jar=${repo;com.ibm.ws.product.utility.productutil}
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.kernel.boot.core;version=latest,\
+	com.ibm.ws.kernel.cmdline;version=latest,\
+	com.ibm.ws.kernel.feature;version=latest,\
+	com.ibm.ws.product.utility.productutil;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.ws.org.apache.aries.util.1.1.2;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

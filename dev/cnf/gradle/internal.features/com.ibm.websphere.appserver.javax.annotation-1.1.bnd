@@ -1,0 +1,9 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.javax.annotation-1.1
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.javaee.annotation.1.1;version=latest

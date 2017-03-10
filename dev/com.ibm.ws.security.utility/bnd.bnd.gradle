@@ -1,0 +1,25 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Security Utilities
+Bundle-SymbolicName: com.ibm.ws.security.utility
+Bundle-Description: Security Utilities; version=${bVersion}
+
+Main-Class: com.ibm.ws.security.utility.SecurityUtility
+
+Private-Package: \
+  com.ibm.ws.security.utility.*
+  
+-includeresource: \
+    OSGI-OPT/websphere/lib/ws-securityutil.jar=${repo;com.ibm.ws.security.utility.securityutil}
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.json4j;version=latest,\
+	com.ibm.ws.crypto.certificateutil;version=latest,\
+	com.ibm.ws.crypto.ltpakeyutil;version=latest,\
+	com.ibm.ws.crypto.passwordutil;version=latest,\
+	com.ibm.ws.security.utility.securityutil;version=latest,\
+	com.ibm.ws.org.apache.commons.io.1.4;version=latest

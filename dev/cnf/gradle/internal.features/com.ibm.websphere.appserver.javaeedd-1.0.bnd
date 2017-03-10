@@ -1,0 +1,15 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.javaeedd-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.artifact-1.0;version=latest, \
+	com.ibm.ws.javaee.ddmodel;version=latest, \
+	com.ibm.ws.javaee.dd;version=latest, \
+	com.ibm.ws.javaee.version;version=latest, \
+	com.ibm.ws.javaee.dd.common;version=latest, \
+	com.ibm.ws.javaee.dd.ejb;version=latest, \
+	com.ibm.websphere.appserver.spi.javaeedd;version=latest

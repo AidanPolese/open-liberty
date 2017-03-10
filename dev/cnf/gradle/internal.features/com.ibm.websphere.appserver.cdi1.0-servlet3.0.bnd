@@ -1,0 +1,11 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.cdi1.0-servlet3.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.javax.jsp-2.2;version=latest, \
+	com.ibm.ws.openwebbeans.web.1.1.6;version=latest, \
+	com.ibm.ws.openwebbeans.ee.common.1.1.6;version=latest

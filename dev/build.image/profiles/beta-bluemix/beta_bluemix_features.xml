@@ -1,0 +1,10 @@
+<!-- READ THIS BEFORE EDITING
+    
+    This file dictates which features go out in the Liberty for Bluemix beta.
+    The beta release always contains the same baseline of features (see server.xml).
+-->
+<server>
+  <!-- List of all Bluemix beta features. -->
+  <featureManager>
+  </featureManager>
+</server>

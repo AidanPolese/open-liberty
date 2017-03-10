@@ -1,0 +1,21 @@
+0
+1
+Program Name: IBM WebSphere Application Server - Express V8.5.5.9
+Program Number: 5724-I63
+IBM WebSphere Application Server - Express V8.5.5.9
+5724-I63
+L/N:  L-SWIS-A6CLJS
+D/N:  L-SWIS-A6CLJS
+P/N:  L-SWIS-A6CLJS
+1
+3
+NOTICES AND INFORMATION
+
+IBM WebSphere Application Server - Express V8.5.5.9
+4
+Licensed Materials - Property of IBM 
+5724-I63, 5724-J08, 5724-H88, 5724-H89, 5725-L29, 5655-W65, 5655-WAS, 5722-E22, 5733-WE3
+COPYRIGHT International Business Machines Corp. 1999, 2016 All Rights Reserved
+US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+1
+Version 8.5

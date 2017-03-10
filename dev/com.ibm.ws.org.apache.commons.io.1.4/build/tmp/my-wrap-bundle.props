@@ -1,0 +1,12 @@
+# A subset of properties to use for wrapping existing OSGi bundles 
+-removeheaders = Include-Resource, Ignore-Package, TODAY, DSTAMP, TSTAMP
+Bundle-Distributor: IBM
+#tell bnd to use our de-signing plugin
+-plugin: com.ibm.ws.build.bnd.plugins.DeSigningProcessor
+
+Bundle-SymbolicName=com.ibm.ws.org.apache.commons.io.1.4
+          
+bVersion=1.0
+bFullVersion=1.0.17
+Bundle-Version=${version;===;${bFullVersion}}.201703081257
+      

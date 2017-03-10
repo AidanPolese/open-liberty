@@ -1,0 +1,7 @@
+<Product InventoryTagVersion="1.0">
+    <ProductName>WebSphere Application Server Liberty Core</ProductName>
+    <ProductVersion>8.5.5</ProductVersion>
+    <SWGFMIDX>HWASLC855</SWGFMIDX>
+    <OCCode>SSD28V</OCCode>
+    <ProductReleaseID>db7ed77ea3dc4371ace864a77701741e</ProductReleaseID>
+</Product>

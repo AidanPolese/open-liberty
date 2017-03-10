@@ -1,0 +1,438 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#
+# NOTE: !!! THIS FILE MUST BE KEPT IN SYNC WITH native_messages.props  !!! 
+#
+# --------------------------------------------------------------------------------------------------
+#
+# # {0} description of each insert field
+# MSG_DESCRIPTIVE_NAME_CWSJX0000=CWSJX0000I: This is a message with inserts {0}
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.explanation=Explanation text for the message
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.useraction=User action text for the message
+#
+#CMVCPATHNAME com.ibm.zos.native/resources/com.ibm.ws.zos/native_messages.nlsprops
+#COMPONENTPREFIX CWWKB
+#COMPONENTNAMEFOR CWWKB zOS Native Messages
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+# NLS_MESSAGEFORMAT_VAR
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+#
+# -------------------------------------------------------------------------------------------------
+#0051-0100: native code only messages
+#0201-0250: native code non-console messages
+# -------------------------------------------------------------------------------------------------
+
+STOP_COMMAND_ACTIVE_SERVERS=CWWKB0051E: ZASTAVEN\u00cd PROCESU TYPU ANGELODM\u00cdTNUTO AKTIVN\u00cdMI SERVERY
+STOP_COMMAND_ACTIVE_SERVERS.explanation=Proces typu angel nelze zastavit, proto\u017ee jsou k n\u011bmu aktu\u00e1ln\u011b p\u0159ipojeny servery.
+STOP_COMMAND_ACTIVE_SERVERS.useraction=Zpr\u00e1va CWWKB0052I bude obsahovat ASID pro v\u0161echny aktu\u00e1ln\u011b aktivn\u00ed servery. Zastavte aktivn\u00ed servery a pot\u00e9 zkuste znovu zastavit proces typu angel.
+
+#{0} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{1} is a z/OS jobname
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL=CWWKB0052I: ASID AKTIVN\u00cdHO SERVERU {0} N\u00c1ZEV \u00daLOHY {1}
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL.explanation=Tento server je aktu\u00e1ln\u011b p\u0159ipojen k procesu typu angel.
+STOP_COMMAND_ACTIVE_SERVERS_DETAIL.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+#{0} is a version string
+MODIFY_DISPLAY_ANGEL_VERSION=CWWKB0053I: VERZE PROCESU TYPU ANGEL{0} 
+MODIFY_DISPLAY_ANGEL_VERSION.explanation=Zobraz\u00ed se verze dynamick\u00e9ho vym\u011bniteln\u00e9ho modulu proces\u016f typu angel jako odpov\u011b\u010f na p\u0159\u00edkaz MODIFY PROCESS,VERSION.
+MODIFY_DISPLAY_ANGEL_VERSION.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+#{0} is the unrecognized command entered on the console
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED=CWWKB0054E: NEZN\u00c1M\u00dd P\u0158\u00cdKAZ {0}
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED.explanation=P\u0159\u00edkaz modify zpracov\u00e1van\u00fd procesem typu angel obsahuje nezn\u00e1m\u00e1 kl\u00ed\u010dov\u00e1 slova.
+MODIFY_DISPLAY_ANGEL_UNRECOGNIZED.useraction=Zadejte p\u0159\u00edkaz znovu se spr\u00e1vnou syntax\u00ed.
+
+ANGEL_PROCESS_STARTING=CWWKB0055I: PROB\u00cdH\u00c1 SPOU\u0160T\u011aN\u00cd PROCESU TYPU ANGELPRODUKTU WEBSPHERE FOR Z/OS
+ANGEL_PROCESS_STARTING.explanation=Prob\u00edh\u00e1 spou\u0161t\u011bn\u00ed procesu typu angel.
+ANGEL_PROCESS_STARTING.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+ANGEL_PROCESS_INITIALIZATION_COMPLETE=CWWKB0056I: BYLA DOKON\u010cENA INICIALIZACE PRO PROCES TYPU ANGEL
+ANGEL_PROCESS_INITIALIZATION_COMPLETE.explanation=Proces typu angel dokon\u010dil inicializaci.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+ANGEL_PROCESS_END_NORMAL=CWWKB0057I: PROCES TYPU ANGEL PRODUKTU WEBSPHERE FOR Z/OS BYL UKON\u010cEN
+ANGEL_PROCESS_END_NORMAL.explanation=Prob\u00edh\u00e1 ukon\u010den\u00ed procesu typu angel.
+ANGEL_PROCESS_END_NORMAL.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+#{0} is the hexidecimal return code from the angel main routine
+ANGEL_PROCESS_END_ABNORMAL=CWWKB0058E: PROCES TYPU ANGEL PRODUKTU WEBSPHERE FOR Z/OS BYL UKON\u010cEN NESTANDARDN\u00cdM ZP\u016eSOBEM, P\u0158\u00cd\u010cINA: {0}.
+ANGEL_PROCESS_END_ABNORMAL.explanation=Proces typu angel byl ukon\u010den nestandardn\u00edm zp\u016fsobem.
+ANGEL_PROCESS_END_ABNORMAL.useraction=Text zpr\u00e1vy obsahuje k\u00f3d p\u0159\u00ed\u010diny, kter\u00fd popisuje specifickou chybu. Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#{0} is the unrecognized value
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV=CWWKB0059E: NEZN\u00c1M\u00dd PARAMETR SPU\u0160T\u011aN\u00cd {0}
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV.explanation=Ve spou\u0161t\u011bc\u00edm p\u0159\u00edkazu procesu typu angel byl p\u0159ed\u00e1n nezn\u00e1m\u00fd parametr. Tento nezn\u00e1m\u00fd parametr je uveden ve zpr\u00e1v\u011b.
+ANGEL_PROCESS_UNRECOGNIZED_VALUE_ARGV.useraction=Podporovan\u00e9 parametry spou\u0161t\u011bc\u00edho p\u0159\u00edkazu naleznete v dokumentaci produktu.
+
+#{0} is the unrecognized value
+#{1} is the recognized key
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV=CWWKB0060E: NEZN\u00c1M\u00c1 HODNOTA PARAMETRU SPU\u0160T\u011aN\u00cd {0} PRO KL\u00cd\u010c {1}
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV.explanation=Ve spou\u0161t\u011bc\u00edm p\u0159\u00edkazu procesu typu angel byl p\u0159ed\u00e1n rozpoznan\u00fd kl\u00ed\u010d parametru, av\u0161ak jeho hodnota nebyla rozpozn\u00e1na. Kl\u00ed\u010d i hodnota jsou uvedeny ve zpr\u00e1v\u011b. 
+ANGEL_PROCESS_UNRECOGNIZED_KEY_VALUE_ARGV.useraction=Podporovan\u00e9 kl\u00ed\u010de parametr\u016f spou\u0161t\u011bc\u00edho p\u0159\u00edkazu a podporovan\u00e9 hodnoty naleznete v dokumentaci produktu.
+
+#{0} is the continuation instance
+#{1} is the message id for first multiline WTO of the sequence
+UTILITIES_WTO_CMDRESPONSE_CONTINUE=CWWKB0061I: POKRA\u010cOV\u00c1N\u00cd {0} ZPR\u00c1VY S IDENTIFIK\u00c1TOREM {1}.
+UTILITIES_WTO_CMDRESPONSE_CONTINUE.explanation=Zpr\u00e1va odpov\u011bdi p\u0159\u00edkazu z obslu\u017en\u00e9 rutiny p\u0159\u00edkaz\u016f nebo zpr\u00e1va zapsan\u00e1 do protokolu oper\u00e1tora nebo hard copy mus\u00ed b\u00fdt vyd\u00e1ny pomoc\u00ed n\u011bkolika v\u00edce\u0159\u00e1dkov\u00fdch WTO. Toto je pokra\u010dov\u00e1n\u00ed zpr\u00e1vy. Souvisej\u00edc\u00ed zpr\u00e1vy CWWKB0061I seskupte pomoc\u00ed identifik\u00e1toru zpr\u00e1v. >=
+UTILITIES_WTO_CMDRESPONSE_CONTINUE.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+DUPLICATE_ANGEL_PROCESS=CWWKB0062E: PROCES TYPU ANGEL PRODUKTU WEBSPHERE FOR Z/OS JE JI\u017d SPU\u0160T\u011aN.
+DUPLICATE_ANGEL_PROCESS.explanation=Proces typu angel je na tomto syst\u00e9mu ji\u017e spu\u0161t\u011bn. ASID a JOBNAME aktivn\u00edho procesu typu angel jsou uvedeny ve zpr\u00e1v\u011b CWWKB0063I. Druh\u00fd proces typu angel bude zastaven.
+DUPLICATE_ANGEL_PROCESS.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+#{0} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{1} is a z/OS jobname
+DUPLICATE_ANGEL_PROCESS_DETAIL=CWWKB0063I: ASID {0} A JOBNAME {1} AKTIVN\u00cdHO PROCESU ANGEL.
+DUPLICATE_ANGEL_PROCESS_DETAIL.explanation=Tento proces typu angel je aktivn\u00ed.
+DUPLICATE_ANGEL_PROCESS_DETAIL.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+#{0} is the text string "RELOAD" which should not be translated because it is provided as input on the MVS console.
+ANGEL_RELOAD_HELP_TEXT=CWWKB0064I: {0} - P\u0158\u00cd\u010cINA OP\u011aTOVN\u00c9HO NA\u010cTEN\u00cd ZAV\u00c1D\u011aC\u00cdCH MODUL\u016e PROCESU ANGEL.
+ANGEL_RELOAD_HELP_TEXT.explanation=Tato zpr\u00e1va je vyd\u00e1v\u00e1na jako odezva na p\u0159\u00edkaz MODIFY BBGZANGL,HELP. Volba RELOAD zp\u016fsobuje op\u011btovn\u00e9 na\u010dten\u00ed zav\u00e1d\u011bc\u00edch modul\u016f procesu typu angel ze syst\u00e9mu soubor\u016f. Op\u011btovn\u00e9 na\u010dten\u00ed m\u016f\u017ee b\u00fdt vy\u017eadov\u00e1no po nainstalov\u00e1n\u00ed do\u010dasn\u00e9 opravy programu (PTF) v p\u0159\u00edpad\u011b, \u017ee proces typu angel nebyl restartov\u00e1n.
+ANGEL_RELOAD_HELP_TEXT.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+#{0} is the text string "VERSION" which should not be translated because it is provided as input on the MVS console.
+ANGEL_VERSION_HELP_TEXT=CWWKB0065I: {0} - ZOBRAZ\u00cd VERZI ZAV\u00c1D\u011aC\u00cdHO MODULU PROCESU ANGEL.
+ANGEL_VERSION_HELP_TEXT.explanation=Tato zpr\u00e1va je vyd\u00e1v\u00e1na jako odezva na p\u0159\u00edkaz MODIFY BBGZANGL,HELP. Volba VERSION zobraz\u00ed verzi dynamicky vym\u011bniteln\u00e9ho zav\u00e1d\u011bc\u00edho modulu procesu typu angel. Tuto informaci mohou po\u017eadovat slu\u017eby a podpora IBM.
+ANGEL_VERSION_HELP_TEXT.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+#{0} is the text string "TRACE=Y/N" which should not be translated because it is provided as input on the MVS console.
+ANGEL_TRACE_HELP_TEXT=CWWKB0066I: {0} - \u0158\u00cdD\u00cd TRASOV\u00c1N\u00cd PRO PROCES TYPU ANGEL.
+ANGEL_TRACE_HELP_TEXT.explanation=Tato zpr\u00e1va je vyd\u00e1v\u00e1na jako odezva na p\u0159\u00edkaz MODIFY BBGZANGL,HELP. Volba TRACE \u0159\u00edd\u00ed zpr\u00e1vy trasov\u00e1n\u00ed v procesu typu angel. Zm\u011bna volby na TRACE=Y zobraz\u00ed diagnostick\u00e9 trasov\u00e1n\u00ed do SYSOUT DD. Zm\u011bna volby na TRACE=N zak\u00e1\u017ee diagnostick\u00e9 trasov\u00e1n\u00ed. Tuto informaci mohou po\u017eadovat slu\u017eby a podpora IBM.
+ANGEL_TRACE_HELP_TEXT.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+MODIFY_DISPLAY_ACTIVE_SERVERS=CWWKB0067I: ZOBRAZEN\u00cd AKTIVN\u00cdCH SERVER\u016e TYPU ANGEL
+MODIFY_DISPLAY_ACTIVE_SERVERS.explanation=Tato zpr\u00e1va je vyd\u00e1v\u00e1na jako odezva na p\u0159\u00edkaz MODIFY BBGZANGL,SERVERS. Za touto zpr\u00e1vou n\u00e1sleduje jedna instance zpr\u00e1vy CWWKB0052I pro ka\u017ed\u00fd server p\u0159ipojen\u00fd k procesu typu angel.
+MODIFY_DISPLAY_ACTIVE_SERVERS.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+#{0} is the text string "SERVERS" which should not be translated because it is provided as input on the MVS console.
+ANGEL_SERVERS_HELP_TEXT=CWWKB0068I: {0} - ZOBRAZ\u00cd AKTIVN\u00cd SERVERY
+ANGEL_SERVERS_HELP_TEXT.explanation=Tato zpr\u00e1va je vyd\u00e1v\u00e1na jako odezva na p\u0159\u00edkaz MODIFY BBGZANGL,HELP. Volba SERVERS zobraz\u00ed aktivn\u00ed servery.
+ANGEL_SERVERS_HELP_TEXT.useraction=Nen\u00ed pot\u0159ebn\u00e1 \u017e\u00e1dn\u00e1 akce.
+
+#{0} is the name of the angel process.  1-54 characters.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME=CWWKB0069I: INICIALIZACE JE DOKON\u010cENA PRO PROCES {0} TYPU ANGEL.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME.explanation=Proces typu angel dokon\u010dil inicializaci. N\u00e1zev procesu typu angel se zobrazuje ve zpr\u00e1v\u011b.
+ANGEL_PROCESS_INITIALIZATION_COMPLETE_NAME.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
+
+ANGEL_NAME_TOO_LONG=CWWKB0070E: HODNOTA ZADAN\u00c1 PRO PARAMETR N\u00c1ZVU JE DEL\u0160\u00cd NE\u017d 54 ZNAK\u016e.
+ANGEL_NAME_TOO_LONG.explanation=Parametr NAME ur\u010duje n\u00e1zev procesu typu angel. Tento parametr se ur\u010duje na BBGZANGL PROC a mus\u00ed m\u00edt d\u00e9lku 54 nebo m\u00e9n\u011b znak\u016f. 
+ANGEL_NAME_TOO_LONG.useraction=Zadejte hodnotu parametru NAME o d\u00e9lce 54 nebo m\u00e9n\u011b znak\u016f a znovu spus\u0165te proces typu angel pomoc\u00ed BBGZANGL PROC.
+
+#{0} is an unsupported character
+#{1} is a number between 1 and 54
+ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0071E: HODNOTA ZADAN\u00c1 PRO PARAMETR NAME OBSAHUJE NEPODPOROVAN\u00dd ZNAK {0} NA POZICI {1}.
+ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=Parametr NAME ur\u010duje n\u00e1zev procesu typu angel. Tento parametr se ur\u010duje na BBGZANGL PROC a m\u016f\u017ee obsahovat pouze znaky z n\u00e1sleduj\u00edc\u00ed znakov\u00e9 sady:  A-Z 0-9 ! # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
+ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=Zadejte hodnotu parametru NAME s pou\u017eit\u00edm podporovan\u00e9 znakov\u00e9 sady a znovu spus\u0165te proces typu angel pomoc\u00ed BBGZANGL PROC.
+
+#{0} is the name of the angel process. 1-54 characters.
+STOP_COMMAND_ACTIVE_SERVERS_NAME=CWWKB0072E: AKTIVN\u00cd SERVERY ODM\u00cdTLY ZASTAVEN\u00cd PROCESU TYPU ANGEL {0}.
+STOP_COMMAND_ACTIVE_SERVERS_NAME.explanation=Proces typu angel nelze zastavit, proto\u017ee jsou k n\u011bmu aktu\u00e1ln\u011b p\u0159ipojen\u00e9 servery. N\u00e1zev procesu typu angel se zobrazuje ve zpr\u00e1v\u011b.
+STOP_COMMAND_ACTIVE_SERVERS_NAME.useraction=Zpr\u00e1va CWWKB0052I obsahuje ASID jednotliv\u00fdch server\u016f, kter\u00e9 jsou aktu\u00e1ln\u011b aktivn\u00ed a p\u0159idru\u017eeny k uveden\u00e9mu procesu typu angel. Zastavte aktivn\u00ed servery a pot\u00e9 zastavte proces typu angel uveden\u00fd ve zpr\u00e1v\u011b.
+
+#{0} is the name of the angel process. 1-54 characters.
+ANGEL_PROCESS_END_NORMAL_NAME=CWWKB0073I: PROCES TYPU ANGEL {0} BYL UKON\u010cEN STANDARDN\u00cdM ZP\u016eSOBEM.
+ANGEL_PROCESS_END_NORMAL_NAME.explanation=Prob\u00edh\u00e1 ukon\u010den\u00ed procesu typu angel. N\u00e1zev procesu typu angel se zobrazuje ve zpr\u00e1v\u011b.
+ANGEL_PROCESS_END_NORMAL_NAME.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
+
+#{0} is the name of the angel process. 1-54 characters.
+#{1} is the hexidecimal return code from the angel main routine
+ANGEL_PROCESS_END_ABNORMAL_NAME=CWWKB0074E: PROCES TYPU ANGEL {0} BYL UKON\u010cEN NESTANDARDN\u00cdM ZP\u016eSOBEM, P\u0158\u00cd\u010cINA={1}
+ANGEL_PROCESS_END_ABNORMAL_NAME.explanation=Proces typu angel byl ukon\u010den nestandardn\u00edm zp\u016fsobem. N\u00e1zev procesu typu angel se zobrazuje ve zpr\u00e1v\u011b.
+ANGEL_PROCESS_END_ABNORMAL_NAME.useraction=Text zpr\u00e1vy obsahuje k\u00f3d p\u0159\u00ed\u010diny, kter\u00fd popisuje specifickou chybu, a n\u00e1zev ukon\u010den\u00e9ho procesu typu angel. Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#{0} is the name of the angel process. 1-54 characters.
+DUPLICATE_ANGEL_PROCESS_NAME=CWWKB0075E: TENTO PROCES TYPU ANGEL BUDE ZASTAVEN, PROTO\u017dE PROCES TYPU ANGEL S N\u00c1ZVEM {0} JE JI\u017d SPU\u0160T\u011aN. NEN\u00cd POT\u0158EBA \u017d\u00c1DN\u00c1 AKCE.
+DUPLICATE_ANGEL_PROCESS_NAME.explanation=Na tomto syst\u00e9mu je ji\u017e spu\u0161t\u011bn proces typu angel s n\u00e1zvem uveden\u00fdm ve zpr\u00e1v\u011b. ASID a JOBNAME aktivn\u00edho procesu typu angel jsou uvedeny ve zpr\u00e1v\u011b CWWKB0063I. Druh\u00fd proces typu angel bude zastaven.
+DUPLICATE_ANGEL_PROCESS_NAME.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce, proto\u017ee duplicitn\u00ed proces typu angel bude zastaven. Chcete-li zabr\u00e1nit zobrazen\u00ed t\u00e9to zpr\u00e1vy, nespou\u0161t\u011bjte uveden\u00fd proces typu angel, kdy\u017e je ji\u017e spu\u0161t\u011bn\u00fd proces typu angel se stejn\u00fdm n\u00e1zvem.
+
+MODIFY_DISPLAY_ACTIVE_ANGELS=CWWKB0076I: N\u00e1sleduje seznam aktivn\u00edch proces\u016f typu angel.
+MODIFY_DISPLAY_ACTIVE_ANGELS.explanation=Tato zpr\u00e1va je vyd\u00e1v\u00e1na jako odezva na p\u0159\u00edkaz MODIFY BBGZANGL,ANGELS. Za touto zpr\u00e1vou n\u00e1sleduje jedna instance zpr\u00e1vy CWWKB0077I a jedna instance zpr\u00e1vy CWWKB0078I pro ka\u017ed\u00fd proces typu angel aktivn\u00ed na dan\u00e9m syst\u00e9mu.
+MODIFY_DISPLAY_ACTIVE_ANGELS.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
+
+#{0} is a z/OS jobname
+#{1} is an ASID (a hexidecimal identifier between 1 and 4 characters)
+#{2} is a version string
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS=CWWKB0077I: AKTIVN\u00cd PROCES TYPU ANGEL N\u00c1ZEV \u00daLOHY {0} ASID {1} VERZE {2}
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS.explanation=Text zpr\u00e1vy uv\u00e1d\u00ed podrobnosti o aktivn\u00edm procesu typu angel. T\u00e9to zpr\u00e1v\u011b p\u0159edch\u00e1z\u00ed zpr\u00e1va CWWKB0076I a tato zpr\u00e1va p\u0159edch\u00e1z\u00ed zpr\u00e1v\u011b CWWKB0078I.
+MODIFY_DISPLAY_ACTIVE_ANGEL_DETAILS.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
+
+#{0} is the name of an angel process. 1-54 characters
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME=CWWKB0078I: N\u00c1ZEV AKTIVN\u00cdHO PROCESU TYPU ANGEL {0}
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME.explanation=Text zpr\u00e1vy uv\u00e1d\u00ed n\u00e1zev aktivn\u00edho procesu typu angel. T\u00e9to zpr\u00e1v\u011b p\u0159edch\u00e1z\u00ed zpr\u00e1va CWWKB0076I a zpr\u00e1va CWWKB0077I.
+MODIFY_DISPLAY_ACTIVE_ANGEL_NAME.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
+
+# -------------------------------------------------------------------------------------------------
+#0201-0250: native code non-console messages
+#
+#{0} is the Library name
+#{1} is the reason code
+SERVER_JNI_01=CWWKB0201E: Nezda\u0159ilo se otev\u0159\u00edt {0} : {1}
+SERVER_JNI_01.explanation=Nezda\u0159ilo se otev\u0159\u00edt uvedenou knihovnu.
+SERVER_JNI_01.useraction=Text zpr\u00e1vy obsahuje k\u00f3d p\u0159\u00ed\u010diny, kter\u00fd popisuje specifickou chybu. Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_02=CWWKB0202E: Funkce registrace metody v deskriptoru {0} vr\u00e1tila {1}
+SERVER_JNI_02.explanation=Funkce registrace metody se nezda\u0159ila.
+SERVER_JNI_02.useraction=Text zpr\u00e1vy obsahuje k\u00f3d p\u0159\u00ed\u010diny, kter\u00fd popisuje specifickou chybu. Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_03=CWWKB0203E: Funkce RegisterNatives pro deskriptor {0} se nezda\u0159ila s {1}
+SERVER_JNI_03.explanation=Registrace nativn\u00ed metody se nezda\u0159ila.
+SERVER_JNI_03.useraction=Text zpr\u00e1vy obsahuje k\u00f3d p\u0159\u00ed\u010diny, kter\u00fd popisuje specifickou chybu. Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+#{0} is the descriptor name
+#{1} is the reason code
+SERVER_JNI_04=CWWKB0204E: Funkce zru\u0161en\u00ed registrace metody v deskriptoru {0} vr\u00e1tila {1}
+SERVER_JNI_04.explanation=Zru\u0161en\u00ed registrace nativn\u00ed metody se nezda\u0159ila.
+SERVER_JNI_04.useraction=Text zpr\u00e1vy obsahuje k\u00f3d p\u0159\u00ed\u010diny, kter\u00fd popisuje specifickou chybu. Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+#{0} is the library name
+#{1} is the reason code
+SERVER_JNI_05=CWWKB0205W: Nezda\u0159ilo se zav\u0159\u00edt {0} : {1}
+SERVER_JNI_05.explanation=Uvedenou knihovnu DLL se nezda\u0159ilo zav\u0159\u00edt.
+SERVER_JNI_05.useraction=Text zpr\u00e1vy obsahuje k\u00f3d p\u0159\u00ed\u010diny, kter\u00fd popisuje specifickou chybu. Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_01=CWWKB0206E: Nelze ur\u010dit WLP_INSTALL_DIR
+SERVER_LAUNCHER_01.explanation=Nelze ur\u010dit WLP_INSTALL_DIR.
+SERVER_LAUNCHER_01.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_02=CWWKB0207E: Nezda\u0159ilo se p\u0159ipojit cestu NLS p\u0159ed NLSPATH
+SERVER_LAUNCHER_02.explanation=Nezda\u0159ilo se p\u0159ipojit cestu NLS p\u0159ed NLSPATH.
+SERVER_LAUNCHER_02.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_03=CWWKB0208E: Nelze ur\u010dit WLP_USER_DIR
+SERVER_LAUNCHER_03.explanation=Nelze ur\u010dit WLP_USER_DIR.
+SERVER_LAUNCHER_03.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_04=CWWKB0209E: Nelze ur\u010dit SERVER_CONFIG_DIR
+SERVER_LAUNCHER_04.explanation=Nelze ur\u010dit SERVER_CONFIG_DIR.
+SERVER_LAUNCHER_04.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_05=CWWKB0210E: Nezda\u0159ilo se vy\u0159e\u0161it JAVA_HOME
+SERVER_LAUNCHER_05.explanation=Nezda\u0159ilo se vy\u0159e\u0161it JAVA_HOME.
+SERVER_LAUNCHER_05.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_06=CWWKB0211E: Nezda\u0159ilo se p\u0159ipojit cestu ke knihovn\u011b JVM p\u0159ed LIBPATH
+SERVER_LAUNCHER_06.explanation=Nezda\u0159ilo se p\u0159ipojit cestu ke knihovn\u011b JVM p\u0159ed LIBPATH.
+SERVER_LAUNCHER_06.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_07=CWWKB0212E: Nezda\u0159ilo se p\u0159ipojit cestu ke knihovn\u011b WebSphere p\u0159ed LIBPATH
+SERVER_LAUNCHER_07.explanation=Nezda\u0159ilo se p\u0159ipojit cestu ke knihovn\u011b WebSphere p\u0159ed LIBPATH.
+SERVER_LAUNCHER_07.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_08=CWWKB0213E: Nelze ur\u010dit v\u00fdstupn\u00ed adres\u00e1\u0159
+SERVER_LAUNCHER_08.explanation=Nelze ur\u010dit v\u00fdstupn\u00ed adres\u00e1\u0159.
+SERVER_LAUNCHER_08.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_09=CWWKB0214E: Nezda\u0159ilo se zm\u011bnit pracovn\u00ed adres\u00e1\u0159 na {0}
+SERVER_LAUNCHER_09.explanation=Nezda\u0159ilo se zm\u011bnit pracovn\u00ed adres\u00e1\u0159.
+SERVER_LAUNCHER_09.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_10=CWWKB0215E: Nezda\u0159ilo se otev\u0159\u00edt {0} : {1}
+SERVER_LAUNCHER_10.explanation=Nezda\u0159ilo se otev\u0159\u00edt soubor. 
+SERVER_LAUNCHER_10.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_11=CWWKB0216E: Nezda\u0159ilo se vy\u0159e\u0161it JNI_CreateJavaVM: {0}
+SERVER_LAUNCHER_11.explanation=Nezda\u0159ilo se vy\u0159e\u0161it JNI_CreateJavaVM.
+SERVER_LAUNCHER_11.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_12=CWWKB0217E: Nezda\u0159ilo se vytvo\u0159it JavaVM: {0}
+SERVER_LAUNCHER_12.explanation=Nezda\u0159ilo se vytvo\u0159it JavaVM.
+SERVER_LAUNCHER_12.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_13=CWWKB0218E: Nezda\u0159ilo se vyvolat hlavn\u00ed t\u0159\u00eddu
+SERVER_LAUNCHER_13.explanation=Nezda\u0159ilo se vyvolat hlavn\u00ed t\u0159\u00eddu.
+SERVER_LAUNCHER_13.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_14=CWWKB0219E: Cestu k u\u017eivatelsk\u00e9mu adres\u00e1\u0159i nelze extrahovat z DD
+SERVER_LAUNCHER_14.explanation=Cestu k u\u017eivatelsk\u00e9mu adres\u00e1\u0159i nelze extrahovat z DD.
+SERVER_LAUNCHER_14.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_15=CWWKB0220E: Skute\u010dnou cestu k u\u017eivatelsk\u00e9mu adres\u00e1\u0159i nelze vy\u0159e\u0161it z JCL
+SERVER_LAUNCHER_15.explanation=Skute\u010dnou cestu k u\u017eivatelsk\u00e9mu adres\u00e1\u0159i nelze vy\u0159e\u0161it z JCL.
+SERVER_LAUNCHER_15.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_16=CWWKB0221E: Skute\u010dnou cestu k u\u017eivatelsk\u00e9mu adres\u00e1\u0159i nelze vy\u0159e\u0161it z prost\u0159ed\u00ed
+SERVER_LAUNCHER_16.explanation=Skute\u010dnou cestu k u\u017eivatelsk\u00e9mu adres\u00e1\u0159i nelze vy\u0159e\u0161it z prost\u0159ed\u00ed.
+SERVER_LAUNCHER_16.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_17=CWWKB0222E: Konfigura\u010dn\u00ed adres\u00e1\u0159 serveru {0} neexistuje
+SERVER_LAUNCHER_17.explanation=Konfigura\u010dn\u00ed adres\u00e1\u0159 serveru neexistuje.
+SERVER_LAUNCHER_17.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_18=CWWKB0223E: Nelze pou\u017e\u00edt funkci stat() pro konfigura\u010dn\u00ed adres\u00e1\u0159 serveru
+SERVER_LAUNCHER_18.explanation=Nelze pou\u017e\u00edt funkci stat() pro konfigura\u010dn\u00ed adres\u00e1\u0159 serveru.
+SERVER_LAUNCHER_18.useraction=Dal\u0161\u00ed informace naleznete v p\u0159edchoz\u00edch zpr\u00e1v\u00e1ch v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_19=CWWKB0224E: Konfigurace serveru {0} neexistuje
+SERVER_LAUNCHER_19.explanation=Konfigurace serveru neexistuje.
+SERVER_LAUNCHER_19.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_20=CWWKB0225E: Nezda\u0159ilo se prov\u00e9st funkci stat 
+SERVER_LAUNCHER_20.explanation=Nezda\u0159ilo se prov\u00e9st funkci stat.
+SERVER_LAUNCHER_20.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_21=CWWKB0226E: V\u00fdstupn\u00ed adres\u00e1\u0159 nebyl nalezen nebo vytvo\u0159en 
+SERVER_LAUNCHER_21.explanation=V\u00fdstupn\u00ed adres\u00e1\u0159 nebyl vy\u0159e\u0161en nebo vytvo\u0159en.
+SERVER_LAUNCHER_21.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_22=CWWKB0227E: V\u00fdstupn\u00ed adres\u00e1\u0159 serveru nebyl nalezen nebo vytvo\u0159en v WLP_OUTPUT_DIR 
+SERVER_LAUNCHER_22.explanation=V\u00fdstupn\u00ed adres\u00e1\u0159 serveru nebyl vy\u0159e\u0161en nebo vytvo\u0159en v WLP_OUTPUT_DIR.
+SERVER_LAUNCHER_22.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_23=CWWKB0228E: Chyba p\u0159i \u010dten\u00ed z {0} : {1} 
+SERVER_LAUNCHER_23.explanation=Chyba p\u0159i \u010dten\u00ed z uveden\u00e9ho souboru.
+SERVER_LAUNCHER_23.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_24=CWWKB0229E: Nelze z\u00edskat pozici souboru prost\u0159ed\u00ed 
+SERVER_LAUNCHER_24.explanation=Nelze z\u00edskat pozici souboru prost\u0159ed\u00ed.
+SERVER_LAUNCHER_24.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_25=CWWKB0230E: Nelze obnovit pozici souboru prost\u0159ed\u00ed 
+SERVER_LAUNCHER_25.explanation=Nelze obnovit pozici souboru prost\u0159ed\u00ed.
+SERVER_LAUNCHER_25.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_26=CWWKB0231E: Nezda\u0159ilo se nastavit prom\u011bnn\u00e9 z {0} 
+SERVER_LAUNCHER_26.explanation=Nezda\u0159ilo se nastavit prom\u011bnn\u00e9 z uveden\u00e9 vlastnosti.
+SERVER_LAUNCHER_26.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_27=CWWKB0232E: Ne\u00fasp\u011b\u0161n\u00e1 metoda fgetpos 
+SERVER_LAUNCHER_27.explanation=Ne\u00fasp\u011b\u0161n\u00e1 metoda fgetpos.
+SERVER_LAUNCHER_27.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_28=CWWKB0233E: Ne\u00fasp\u011b\u0161n\u00e1 metoda fsetpos 
+SERVER_LAUNCHER_28.explanation=Ne\u00fasp\u011b\u0161n\u00e1 metoda fsetpos.
+SERVER_LAUNCHER_28.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_29=CWWKB0234E: Um\u00edst\u011bn\u00ed JAVA_HOME {0} neexistuje 
+SERVER_LAUNCHER_29.explanation=Uveden\u00e9 um\u00edst\u011bn\u00ed JAVA_HOME neexistuje.
+SERVER_LAUNCHER_29.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_30=CWWKB0235E: Chyba p\u0159i \u010dten\u00ed voleb Java z {0} : {1} 
+SERVER_LAUNCHER_30.explanation=Chyba p\u0159i \u010dten\u00ed voleb Java z uveden\u00e9ho souboru.
+SERVER_LAUNCHER_30.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_31=CWWKB0236E: Nelze nastavit v\u00fdchoz\u00ed volby IBM Java 
+SERVER_LAUNCHER_31.explanation=Nelze nastavit v\u00fdchoz\u00ed volby IBM Java.
+SERVER_LAUNCHER_31.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_32=CWWKB0237E: Nezda\u0159ilo se na\u010d\u00edst hlavn\u00ed t\u0159\u00eddu 
+SERVER_LAUNCHER_32.explanation=Nezda\u0159ilo se na\u010d\u00edst hlavn\u00ed t\u0159\u00eddu.
+SERVER_LAUNCHER_32.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_33=CWWKB0238E: Nezda\u0159ilo se vyhledat hlavn\u00ed metodu 
+SERVER_LAUNCHER_33.explanation=Nezda\u0159ilo se vyhledat hlavn\u00ed metodu.
+SERVER_LAUNCHER_33.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_34=CWWKB0239E: Nezda\u0159ilo se na\u010d\u00edst t\u0159\u00eddu load java.lang.String 
+SERVER_LAUNCHER_34.explanation=Nezda\u0159ilo se na\u010d\u00edst t\u0159\u00eddu load java.lang.String.
+SERVER_LAUNCHER_34.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_35=CWWKB0240E: Nezda\u0159ilo se vytvo\u0159it seznam parametr\u016f hlavn\u00ed metody 
+SERVER_LAUNCHER_35.explanation=Nezda\u0159ilo se vytvo\u0159it seznam parametr\u016f hlavn\u00ed metody.
+SERVER_LAUNCHER_35.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_36=CWWKB0241E: Nelze nastavit _BPXK_WLM_PROPAGATE=NO 
+SERVER_LAUNCHER_36.explanation=Nelze nastavit _BPXK_WLM_PROPAGATE=NO.
+SERVER_LAUNCHER_36.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_37=CWWKB0242E: Nelze nastavit JAVA_THREAD_MODEL=HEAVY 
+SERVER_LAUNCHER_37.explanation=Nelze nastavit JAVA_THREAD_MODEL=HEAVY.
+SERVER_LAUNCHER_37.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_38=CWWKB0243E: Nelze nastavit JAVA_PROPAGATE=NO 
+SERVER_LAUNCHER_38.explanation=Nelze nastavit JAVA_PROPAGATE=NO.
+SERVER_LAUNCHER_38.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_39=CWWKB0244E: Nelze nastavit v\u00fdchoz\u00ed hodnotu pro _EDC_PTHREAD_YIELD 
+SERVER_LAUNCHER_39.explanation=Nelze nastavit v\u00fdchoz\u00ed hodnotu pro _EDC_PTHREAD_YIELD.
+SERVER_LAUNCHER_39.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_40=CWWKB0245E: Nelze nastavit pracovn\u00ed adres\u00e1\u0159 
+SERVER_LAUNCHER_40.explanation=Nelze nastavit pracovn\u00ed adres\u00e1\u0159.
+SERVER_LAUNCHER_40.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_41=CWWKB0246W: Pou\u017eit\u00ed: bbgzsrv [argumenty liberty] serverName 
+SERVER_LAUNCHER_41.explanation=Pou\u017eit\u00ed: bbgzsrv [argumenty liberty] serverName.
+SERVER_LAUNCHER_41.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_42=CWWKB0247E: Nelze p\u0159esm\u011brovat standardn\u00ed v\u00fdstup do LOG_DIR
+SERVER_LAUNCHER_42.explanation=Nelze p\u0159esm\u011brovat standardn\u00ed v\u00fdstup do LOG_DIR
+SERVER_LAUNCHER_42.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_43=CWWKB0248E: Nelze p\u0159esm\u011brovat standardn\u00ed chybov\u00fd v\u00fdstup do LOG_DIR
+SERVER_LAUNCHER_43.explanation=Nelze p\u0159esm\u011brovat standardn\u00ed chybov\u00fd v\u00fdstup do LOG_DIR
+SERVER_LAUNCHER_43.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_44=CWWKB0249E: Nelze nastavit adres\u00e1\u0159 PID serveru nebo soubor PID
+SERVER_LAUNCHER_44.explanation=Nezda\u0159ilo se nastavit adres\u00e1\u0159 PID serveru nebo soubor PID
+SERVER_LAUNCHER_44.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+#
+SERVER_LAUNCHER_45=CWWKB0250E: P\u0159i zpracov\u00e1n\u00ed JVM_ARGS byl zji\u0161t\u011bn p\u0159i zpracov\u00e1n\u00ed `"' zji\u0161t\u011bn ne\u010dekan\u00fd konec souboru EOF
+SERVER_LAUNCHER_45.explanation=P\u0159i zpracov\u00e1n\u00ed JVM_ARGS byl zji\u0161t\u011bn p\u0159i zpracov\u00e1n\u00ed `"' zji\u0161t\u011bn ne\u010dekan\u00fd konec souboru EOF
+SERVER_LAUNCHER_45.useraction=Dal\u0161\u00ed informace viz p\u0159edchoz\u00ed zpr\u00e1vy v protokolu \u00faloh nebo v syst\u00e9mov\u00e9m protokolu.
+
+# NO MESSAGE LEFT IN THIS BLOCK 0201-0250: native code non-console messages 
+# -------------------------------------------------------------------------------------------------

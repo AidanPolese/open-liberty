@@ -1,0 +1,29 @@
+Bnd-LastModified: 1486383790549
+Created-By: 1.8.0_121 (Oracle Corporation)
+IBM-API-Package: org.osgi.service.jndi; type="spec:osgi",
+ org.apache.aries.proxy; type=internal,
+ org.apache.aries.proxy.weaving; type=internal
+IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-Feature-Version: 2
+IBM-Install-Policy: when-satisfied
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: com.ibm.websphere.appserver
+IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.osgiBundle-1.0))",
+ osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.jndi-1.0))"
+Subsystem-Content: com.ibm.websphere.appserver.osgiBundle-1.0; type="osgi.subsystem.feature",
+ com.ibm.ws.eba.proxy.control; start-phase:=SERVICE; version="[1.0.0,1.0.200)",
+ com.ibm.ws.org.apache.aries.proxy.1.0.2; start-phase:=CONTAINER_EARLY; version="[1.1.0,1.1.200)",
+ com.ibm.ws.eba.app.runtime.services; start-phase:=SERVICE; version="[1.0.0,1.0.200)",
+ com.ibm.websphere.appserver.thirdparty.eba.jndi; location:="dev/api/third-party/,lib/"; type=jar; version="[1.0.0,1.0.200)",
+ com.ibm.ws.org.apache.aries.jndi.url.1.1.1; version="[1.1.0,1.1.200)"
+Subsystem-Description: %description
+Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
+Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.osgiJndi-1.0
+Subsystem-ManifestVersion: 1
+Subsystem-Name: OSGi Application feature for Java Naming and Directory Interface
+Subsystem-SymbolicName: com.ibm.websphere.appserver.osgiJndi-1.0; visibility:=private; singleton:=false
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-3.3.0.201609221906

@@ -1,0 +1,10 @@
+<project name="com.ibm.ws.ras.instrument" default="build">
+    <property name="no.trace.instrumentation" value="true"/>
+    <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+    <target name="compile" depends="compile.compile">
+	<copy todir="${classes.dir}" overwrite="true">
+	    <fileset dir="${src.dir}" includes="**/*.properties" />
+	</copy>
+    </target>
+</project>

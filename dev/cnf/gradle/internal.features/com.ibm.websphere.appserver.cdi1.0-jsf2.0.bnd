@@ -1,0 +1,9 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.cdi1.0-jsf2.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.ws.openwebbeans.jsf.1.1.6;version=latest

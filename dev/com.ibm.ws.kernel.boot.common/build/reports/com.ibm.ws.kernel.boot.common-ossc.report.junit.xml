@@ -1,0 +1,9 @@
+<testsuites errors="0" failures="1" name="OSSC Checker for com.ibm.ws.kernel.boot.common" tests="1">
+          <testsuite errors="0" failures="1" name="OSSCChecker for com.ibm.ws.kernel.boot.common" tests="1">
+    <testcase classname="OSSCChecker" name="OSSCCheck-Missing-OSSC">
+      <failure message="No ossc.xml found in the legal folder of com.ibm.ws.kernel.boot.common">No ossc.xml found in the legal folder of com.ibm.ws.kernel.boot.common</failure>
+    </testcase>
+  </testsuite>
+            
+</testsuites>
+        

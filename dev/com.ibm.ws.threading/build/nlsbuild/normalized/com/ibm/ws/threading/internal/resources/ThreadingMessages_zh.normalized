@@ -1,0 +1,33 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+# # {0} description of each insert field
+# MSG_DESCRIPTIVE_NAME=CWWKExxxxI: This is a message with inserts {0}
+# MSG_DESCRIPTIVE_NAME.explanation=Explanation text for the message
+# MSG_DESCRIPTIVE_NAME.useraction=User action text for the message
+#
+#CMVCPATHNAME com.ibm.ws.threading/resources/com/ibm/ws/threading/internal/resources/ThreadingMessages.nlsprops
+#COMPONENTPREFIX CWWKE
+#COMPONENTNAMEFOR CWWKE WebSphere kernel bootstrap, command line, and location service
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+# NLS_MESSAGEFORMAT_VAR
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+# -------------------------------------------------------------------------------------------------
+# 1200 - 1299 com.ibm.ws.threading.internal.resources.ThreadingMessages
+# -------------------------------------------------------------------------------------------------
+
+# {0} size of the pool when a deadlock was first detected
+# {1} current size of the pool
+unbreakableExecutorHang=CWWKE1200W: Liberty \u7f3a\u7701\u6267\u884c\u7a0b\u5e8f\u4e2d\u7684\u6240\u6709\u7ebf\u7a0b\u53ef\u80fd\u90fd\u88ab\u6302\u8d77\u3002Liberty \u5df2\u81ea\u52a8\u5c06\u7ebf\u7a0b\u6570\u4ece {0} \u589e\u52a0\u5230 {1}\u3002\u4f46\u662f\uff0c\u6240\u6709\u7ebf\u7a0b\u4ecd\u53ef\u80fd\u90fd\u88ab\u6302\u8d77\u3002
+unbreakableExecutorHang.explanation=\u53d1\u751f\u4e86\u5bfc\u81f4\u6267\u884c\u7a0b\u5e8f\u6302\u8d77\u7684\u9519\u8bef\uff0c\u5e76\u4e14 Liberty \u8fd0\u884c\u65f6\u5728\u5c1d\u8bd5\u7ed3\u675f\u6302\u8d77\u60c5\u51b5\u65f6\u6dfb\u52a0\u4e86\u76f8\u5f53\u591a\u7684\u7ebf\u7a0b\u3002\u4f46\u662f\uff0c\u8be5\u6267\u884c\u7a0b\u5e8f\u4ecd\u5904\u4e8e\u65e0\u54cd\u5e94\u72b6\u6001\u3002
+
+unbreakableExecutorHang.useraction=\u8bf7\u786e\u5b9a\u662f\u5426\u5b58\u5728\u53ef\u80fd\u963b\u6b62\u5728\u670d\u52a1\u5668\u4e2d\u89e3\u6790\u7ebf\u7a0b\u7684\u74f6\u9888\uff0c\u4f8b\u5982\uff0c\u9501\u5b9a\u7684\u6570\u636e\u5e93\u8868\u3002\u5982\u679c\u8fd9\u6837\u7684\u74f6\u9888\u4e0d\u5b58\u5728\u5e76\u4e14\u670d\u52a1\u5668\u6709\u7406\u7531\u9700\u8981\u989d\u5916\u7684\u7ebf\u7a0b\uff0c\u8bf7\u8c03\u6574\u6267\u884c\u7a0b\u5e8f\u914d\u7f6e\u5143\u7d20\u7684 coreThreads \u5c5e\u6027\u3002

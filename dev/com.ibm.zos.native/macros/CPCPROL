@@ -1,0 +1,399 @@
+*
+* IBM Confidential
+*
+* OCO Source Materials
+*
+* Copyright IBM Corp. 2012
+*
+* The source code for this program is not published or otherwise
+* divested of its trade secrets, irrespective of what has been
+* deposited with the U.S. Copyright Office.
+*
+         MACRO
+&NAME    CPCPROL &BINDTOK=,&DYNAREA=
+         GBLC  &CCN_LITN
+         GBLC  &CCN_CSECT
+         GBLB  &BBGZ_CPCPROL_DSECT
+         GBLC  &BBGZACPP_NAM                                                   
+         BBGZACPP
+*
+* On entry, register 4 points to an 8 byte area which is the latent
+* parm area.  The first word points to the BBGZPLPA control block
+* which contains a pointer to the SGOO for the angel we are either
+* binding to or bound to.  The latent parm area was set up by the
+* ETDEF macro in angel_pc_initialization.mc.
+*
+         XGR   12,12 Clear our 'scratch pad'
+         LMH   12,12,0(4) Load first word of latent parm area into
+*                         the high half of the scratch pad.
+         LARL  8,&CCN_LITN Address the literal area
+         USING &CCN_LITN,8
+         LGR   4,1  Move input parms out of R1
+         LTGR  5,0  Move number of parms out of R0
+* --------------------------------------------------------------------
+* Make sure the caller passed a reasonable number of parameters.
+* --------------------------------------------------------------------
+         BRL   INVPARM&SYSNDX Branch to ABEND if parm count < 0
+         CGHI  5,9 See if parm count is <= 8
+         BRL   GOODPARM&SYSNDX Skip ABEND if parm count 0<=x<=8
+INVPARM&SYSNDX DS 0H
+         ABEND ABEND_TYPE_SERVER,REASON=KRSN_CPCPROL_INV_PARM_COUNT,   X
+               DUMP,STEP,SYSTEM
+GOODPARM&SYSNDX DS 0H
+         AIF ('&BINDTOK' NE 'YES').NOVALIDATEBINDTOK
+* --------------------------------------------------------------------
+* Put a constant 0x0000000000000008 in the portion of the linkage
+* stack entry used by the ARR.  This signals the ARR that we died in
+* the code that looks for the SGOO, in the event we're not connected
+* to the shared memory, and will give the caller a return code that
+* indicates invalid use.
+* 
+* The constant '8' is referenced in angel_fixed_shim_pc.mc.
+* --------------------------------------------------------------------
+         LHI   6,0
+         LHI   7,8
+         MSTA  6
+* --------------------------------------------------------------------
+* Get a cell from the SGOO temporary dynamic area cell pool, so that
+* we can call cell pool validation services.  We must be connected to
+* the SGOO shared memory for this to work (caller's responsibility).
+* --------------------------------------------------------------------
+         SRLG  15,12,32      Get latent parm out of scratch pad
+         LG    10,16(15)     Load SGOO address
+         LTGR  10,10  Is SGOO set?
+         BRNZ  GOODSGOO&SYSNDX  Yes, SGOO is good.
+         LGHI  15,CPCPROL_RETURN_CODE_NOSGOO
+         PR
+GOODSGOO&SYSNDX DS 0H
+         LG    15,152(10) Load address of temp dynamic area cell pool
+         LTGR  15,15  Is cell pool set?
+         BRNZ  GOODPOOL&SYSNDX Yes, pool is good.
+         LGHI  15,CPCPROL_RETURN_CODE_NOPOOL
+         PR
+GOODPOOL&SYSNDX DS 0H
+         LG    11,8(15) Load cell pool anchor address into R11
+         LGR   1,11 Move to R1 for cell pool get call.
+         CALL CSRC4RGT Try to get a cell from the cell pool.
+         LTR   15,15 Is return code good?
+         BRZ   GOODCELL&SYSNDX Yes, got a cell, in R1.
+         LGHI  14,8  Load 'no more cells' return code.
+         CR    15,14 See if we got the 'no more cells' return code.
+         BRZ   NOMORECELLS1&SYSNDX
+         LGHI  15,CPCPROL_RETURN_CODE_CPERROR
+         PR
+* --------------------------------------------------------------------
+* There were no cells left in the temporary dynamic area, so we'll use
+* storage obtain to get our temporary area.  Later we'll mark the
+* angel task data so that the cell pool can expand.
+* --------------------------------------------------------------------
+NOMORECELLS1&SYSNDX DS 0H
+         OILL  12,CPCPROL_SCRATCH_MASK_MORECELL_SGOO Remember to expand
+         STORAGE OBTAIN,LENGTH=CPCPROL_TEMP_STORAGE_LEN,BNDRY=DBLWD,   X
+               SP=CPCPROL_TEMP_STORAGE_SUBPOOL,                        X
+               KEY=CPCPROL_TEMP_STORAGE_KEY
+GOODCELL&SYSNDX DS 0H
+* --------------------------------------------------------------------
+* Set our temporary dynamic area into the linkage stack entry so the
+* ARR can find it if it gets control, and free the cell back to the
+* SGOO pool.
+* --------------------------------------------------------------------
+         LGR  13,1  Move temp dyn area into R13
+         USING CPCPROL_TEMPDYN,13
+         MVC  CPCPROL_TEMPDYN_EYE,=CL8'&BBGZACPP_NAM'
+         XC   CPCPROL_TEMPDYN_INUSE,CPCPROL_TEMPDYN_INUSE
+         MVI  CPCPROL_TEMPDYN_KEY,CPCPROL_TEMP_STORAGE_KEY
+         MVI  CPCPROL_TEMPDYN_SP,CPCPROL_TEMP_STORAGE_SUBPOOL
+         LHI  6,CPCPROL_TEMP_STORAGE_LEN
+         ST   6,CPCPROL_TEMPDYN_LEN
+         STG  10,CPCPROL_TEMPDYN_SGOO
+         STC  12,CPCPROL_TEMPDYN_POOL Store where we got cell from
+         NI   CPCPROL_TEMPDYN_POOL,CPCPROL_SCRATCH_MASK_MORECELL_SGOO
+         XI   CPCPROL_TEMPDYN_POOL,CPCPROL_SCRATCH_MASK_MORECELL_SGOO
+         LGR  6,13    Prepare for MSTA - high half of R13
+         SRLG 6,6,32  Shift high half into low half
+         LR   7,13    Prepare for MSTA - low half of R13
+         MSTA 6
+* --------------------------------------------------------------------
+* Validate that the bind data pointed to by the bind token came from
+* the bind data cell pool in the SGOO.  We need to copy the bind
+* token using MVCSK.
+* --------------------------------------------------------------------
+         LA   7,CPCPROL_TEMPDYN_PL
+         USING CPCPROL_CSRC4QCL,7
+         XC   CPCPROL_CSRC4QCL_ALET,CPCPROL_CSRC4QCL_ALET
+         LA   15,CPCPROL_CSRC4QCL_ALET
+         STG  15,CPCPROL_CSRC4QCL_PL+0
+         LG   15,128(10) Load bind data cell pool address
+         MVC  CPCPROL_CSRC4QCL_ANC,8(15) Move anchor address to PL
+         LA   15,CPCPROL_CSRC4QCL_ANC
+         STG  15,CPCPROL_CSRC4QCL_PL+8
+         LGHI 0,7  Length of bind token address minus 1
+         LGHI 1,4   Code 4 extracts PSW from linkage stack
+         ESTA 14,1   Extract PSW into R14 + R15
+         SRLG 1,14,48 Shift key into bits 56-60 of R1
+         MVCSK CPCPROL_CSRC4QCL_CEL,0(4) Move bind token addr
+         LGHI 0,15 Length of bind token minus 1
+         LG   15,CPCPROL_CSRC4QCL_CEL Load bind token address to R15
+         MVCSK CPCPROL_TEMPDYN_BNDTOK,0(15) Move token to key 2
+         LMG  9,10,CPCPROL_TEMPDYN_BNDTOK Load bind token into regs
+* Note: R10 does not point to SGOO anymore
+         LG   3,16(9) Load bind data address into R3
+         STG  3,CPCPROL_CSRC4QCL_CEL Move bind data address to PL
+         LA   15,CPCPROL_CSRC4QCL_CEL
+         STG  15,CPCPROL_CSRC4QCL_PL+16
+         LA   15,CPCPROL_CSRC4QCL_AVL
+         STG  15,CPCPROL_CSRC4QCL_PL+24
+         LA   15,CPCPROL_CSRC4QCL_EXT
+         STG  15,CPCPROL_CSRC4QCL_PL+32
+         LA   15,CPCPROL_CSRC4QCL_RC
+         STG  15,CPCPROL_CSRC4QCL_PL+40
+         LGR  1,7 Restore parameter list
+         CALL CSRC4QCL
+         LTR  15,15 See if cell pool return code was good.
+         BRZ  CHECKBINDALLOCATED&SYSNDX Check cell allocated next.
+         OILL 12,CPCPROL_SCRATCH_MASK_INVTOK Bad return code
+         BRU  CLEANUPFROMCHECK&SYSNDX Clean up.
+CHECKBINDALLOCATED&SYSNDX DS 0H
+         TM   CPCPROL_CSRC4QCL_AVL+7,1 See if cell is allocated
+         BRO  CHECKTOKEN&SYSNDX Yes, check token next.
+         OILL 12,CPCPROL_SCRATCH_MASK_INVTOK Bad token
+         BRU  CLEANUPFROMCHECK&SYSNDX Clean up.
+CHECKTOKEN&SYSNDX DS 0H
+* --------------------------------------------------------------------
+* Validate that the bind token came from the cell pool for the bind.
+* --------------------------------------------------------------------
+         STG  9,CPCPROL_CSRC4QCL_CEL Store bind token cell address
+         LG   15,16(3) Load bind token cell pool address.
+         MVC  CPCPROL_CSRC4QCL_ANC,8(15) Move anchor address to PL
+         LGR  1,7  Re-load parm list into R1
+         CALL CSRC4QCL
+         LTR  15,15 See if cell pool return code was good.
+         BRZ  CHECKTOKENALLOCATED&SYSNDX Check token allocated next.
+         OILL 12,CPCPROL_SCRATCH_MASK_INVTOK Bad return code
+         BRU  CLEANUPFROMCHECK&SYSNDX Clean up.
+CHECKTOKENALLOCATED&SYSNDX DS 0H
+         TM   CPCPROL_CSRC4QCL_AVL+7,1 See if cell is allocated
+         BRO  CLEANUPFROMCHECK&SYSNDX Yes, good token.
+         OILL 12,CPCPROL_SCRATCH_MASK_INVTOK Bad token
+         DROP 7
+         DROP 13
+CLEANUPFROMCHECK&SYSNDX DS 0H
+* --------------------------------------------------------------------
+* Clear the modifiable area of the linkage stack entry because we're
+* about to free the temporary dynamic area set there.  From this point
+* on, an ABEND will result in the task dying (as it should).
+* --------------------------------------------------------------------
+         LHI  6,0
+         LHI  7,0
+         MSTA 6
+* --------------------------------------------------------------------
+* Return the temporary dynamic area to the place where it came from.
+* --------------------------------------------------------------------
+         TMLL 12,CPCPROL_SCRATCH_MASK_MORECELL_SGOO
+         BRZ  FREETEMPDYNSGOO&SYSNDX
+         LGR   1,13 Move storage to free into R1
+         STORAGE RELEASE,LENGTH=CPCPROL_TEMP_STORAGE_LEN,ADDR=(1),     X
+               SP=CPCPROL_TEMP_STORAGE_SUBPOOL,                        X
+               KEY=CPCPROL_TEMP_STORAGE_KEY
+         BRU   CHECKBADTOKEN&SYSNDX
+FREETEMPDYNSGOO&SYSNDX DS 0H
+         LGR   1,11 Move cell pool anchor to R1 for cell pool free call
+         LGR   0,13 Move cell address to R0 for the cell pool free call
+         CALL CSRC4RFR
+         LTR   15,15 How'd we do?
+         BRZ   CHECKBADTOKEN&SYSNDX We did OK.
+         ABEND ABEND_TYPE_SERVER,REASON=KRSN_CPCPROL_DYNFREE1,         X
+               DUMP,STEP,SYSTEM
+CHECKBADTOKEN&SYSNDX DS 0H
+* --------------------------------------------------------------------
+* If the bind token was bad, return to the caller.
+* --------------------------------------------------------------------
+         TMLL  12,CPCPROL_SCRATCH_MASK_INVTOK
+         BRZ   GETREALDYNAREA&SYSNDX
+         LGHI  15,CPCPROL_RETURN_CODE_INVTOK
+         PR
+GETREALDYNAREA&SYSNDX DS 0H
+         AGO .GETREALDYNAREA
+.NOVALIDATEBINDTOK ANOP
+* --------------------------------------------------------------------
+* We can only get dynamic area from the cell pool if the first parm is
+* the bind token.
+* --------------------------------------------------------------------
+         AIF ('&DYNAREA' EQ 'BINDTOK').INCOMPAT_DYNAREA
+.GETREALDYNAREA ANOP
+* --------------------------------------------------------------------
+* Figure out where we're going to get our dynamic area from.
+* --------------------------------------------------------------------
+         AIF ('&DYNAREA' NE 'BINDTOK').DYNAREAIARV64
+         LG   15,40(3) Load client process data address
+         LG   15,72(15) Load cell pool for dyn area
+         LG   11,8(15) Load anchor for dyn area pool
+         LGR  1,11 Move anchor into R1 for call
+         CALL CSRC4RGT
+         LGR  13,1 Move cell into R13
+         LTR  15,15 Did we get a cell?
+         BRZ  GOTDYNAREA&SYSNDX
+         LGHI 14,8 Load the return code for 'out of cells'
+         CR   15,14 See if we got the 'no more cells' return code.
+         BRZ   NOMORECELLS2&SYSNDX
+         LGHI  15,CPCPROL_RETURN_CODE_CPERROR2
+         PR
+NOMORECELLS2&SYSNDX DS 0H
+         OILL  12,CPCPROL_SCRATCH_MASK_MORECELL_DYN Get more cells
+* --------------------------------------------------------------------
+* Obtain some storage so that we can build a parameter list to IARV64.
+* --------------------------------------------------------------------
+.DYNAREAIARV64 ANOP
+         STORAGE OBTAIN,LENGTH=CPCPROL_TEMP_STORAGE_LEN,BNDRY=DBLWD,   X
+               SP=CPCPROL_TEMP_STORAGE_SUBPOOL,                        X
+               KEY=CPCPROL_TEMP_STORAGE_KEY
+         LGR   6,1  Move temporary storage addr out of R1
+         USING CPCPROL_IARV64,6 Map the IARV64 parameter list to temp
+         LGHI  15,CPCPROL_IARV64_DYN_AREA_SEGMENTS
+         STG   15,CPCPROL_IARV64_SEGCT Store segment count
+         LGHI  15,CPCPROL_IARV64_DYN_AREA_GUARD_SEGMENTS
+         ST    15,CPCPROL_IARV64_GUARDSZ
+         LGHI  15,CPCPROL_IARV64_DYN_AREA_STORAGE_KEY
+         STC   15,CPCPROL_IARV64_KEY Store key
+         IARV64 REQUEST=GETSTOR,COND=NO,SEGMENTS=CPCPROL_IARV64_SEGCT, X
+               KEY=CPCPROL_IARV64_KEY,FPROT=NO,SVCDUMPRGN=YES,         X
+               CONTROL=AUTH,GUARDSIZE=CPCPROL_IARV64_GUARDSZ,          X
+               GUARDLOC=HIGH,USERTKN=NO_USERTKN,                       X
+               ORIGIN=CPCPROL_IARV64_ORIGIN,                           X
+               PLISTVER=0,MF=(E,CPCPROL_IARV64_PLIST,COMPLETE)
+         LG    13,CPCPROL_IARV64_ORIGIN Put storage where expected
+         DROP  6
+         STORAGE RELEASE,LENGTH=CPCPROL_TEMP_STORAGE_LEN,ADDR=(6),     X
+               SP=CPCPROL_TEMP_STORAGE_SUBPOOL,                        X
+               KEY=CPCPROL_TEMP_STORAGE_KEY
+* --------------------------------------------------------------------
+* Initialize the 64 K prefix area.  Update it if we need to enlarge
+* any of the cell pools once we're into the metal C code.
+* --------------------------------------------------------------------
+GOTDYNAREA&SYSNDX DS 0H
+         BBGZATDI ATDREG=13
+         USING BBGZATDI_BBGZATD,13
+         TMLL 12,CPCPROL_SCRATCH_MASK_MORECELL_SGOO
+         BRZ  CHECKTOKPOOLFULL&SYSNDX
+         MVI  BBGZATDI_SHRDYNGETFAIL,1
+CHECKTOKPOOLFULL&SYSNDX DS 0H
+         TMLL 12,CPCPROL_SCRATCH_MASK_MORECELL_DYN
+         BRZ  DONECHECKPOOLFULL&SYSNDX
+         MVI  BBGZATDI_BINDTOKDYNGETFAIL,1
+DONECHECKPOOLFULL&SYSNDX DS 0H
+         AIF ('&BINDTOK' NE 'YES').NOSAVEBINDDATA
+         STG  3,BBGZATDI_VALIDCLIENTBINDDATA Save validated bind data
+.NOSAVEBINDDATA ANOP
+         DROP 13
+* --------------------------------------------------------------------
+* Advance past the prefix area and copy the caller's parameters into
+* our key 2 storage.  Start with the PC latent parm.  Next, if we 
+* validated the bind token, it's in R9+R10, and we should copy it 
+* from there to avoid a TOCTOU exploitation.  We're going to reserve
+* the first 16 bytes off R13 for the bind token, even if we don't
+* use it.
+* --------------------------------------------------------------------
+         OILH  13,1     Advance 64K
+         LA    3,16(13) This is where we'll start the parm list 
+         XC    0(4,3),0(3)    Clear high half of 1st parm
+         STMH  12,12,4(3)     Store latent parm in low half
+         AIF ('&BINDTOK' NE 'YES').NOMOVEBINDTOK
+         STMG  9,10,0(13) Move bind token to rsvd key 2 storage
+         AGHI  5,-1 Reduce parm count by 1
+         AGHI  4,8  Advance parm pointer by 8 bytes
+         STG   13,8(3)  Store address of bind token as 2nd parm
+         AGHI  3,8  Advance past the bind token in parm list
+.NOMOVEBINDTOK ANOP
+         SLAG  5,5,3(0) Multiply parm count by 8 (shift 3)
+         LTGR  0,5   Move length to R0 for MVCSK
+         BZ    ADVANCE&SYSNDX Don't move if no parms
+         AGHI  0,-1  Subtract 1 for MVCSK length
+         LGHI  1,4   Code 4 extracts PSW from linkage stack
+         ESTA  6,1   Extract PSW into R6 + R7
+         SRLG  1,6,48 Shift key into bits 56-60 of R1
+         MVCSK 8(3),0(4) Move key 8 parm list into R3
+ADVANCE&SYSNDX DS 0H
+         AIF ('&BINDTOK' NE 'YES').NOADJUSTPARMLIST
+         AGHI  3,-8  Restore start of parm list in key 2
+         AGHI  5,8   Restore size of parm list
+.NOADJUSTPARMLIST ANOP
+         LGR   1,3   Restore input parms in key 2, done w/R3
+         LGR   13,1  Get ready to move dyn area past parm list
+         AGR   13,5  Advance R13 for dynamic area
+         AGHI  13,8  Move forward past latent parm
+* --------------------------------------------------------------------
+* Remember how we got the dynamic area so that we can free it the
+* appropriate way in the epilog.
+* --------------------------------------------------------------------
+         AIF ('&DYNAREA' NE 'BINDTOK').NOCHECKDYNAREAFROMPOOL
+         TMLL 12,CPCPROL_SCRATCH_MASK_MORECELL_DYN
+         BRZ  SAVEBINDTOKPOOL&SYSNDX
+.NOCHECKDYNAREAFROMPOOL ANOP
+         LGHI 15,CPCPROL_DYNAREA_FROM_IARV64 Got dyn area from IARV64
+         STG  15,0(13)
+         XC   8(8,13),8(13) No cell pool address to store
+         BRU  STOREDYNAREAINFO&SYSNDX
+SAVEBINDTOKPOOL&SYSNDX DS 0H
+         LGHI 15,CPCPROL_DYNAREA_FROM_POOL Got dyn area from cell pool
+         STG  15,0(13) 
+         STG  11,8(13) Remember the cell pool anchor address
+STOREDYNAREAINFO&SYSNDX DS 0H
+         AGHI 13,16 Advance past dynamic area info
+         AGO .ENDING
+.INCOMPAT_DYNAREA ANOP
+         MNOTE 8,'DYNAREA SETTING IS INCOMPATIBLE WITH OTHER SETTINGS'
+         AGO .ENDING
+.ENDING  ANOP
+         DROP  8  Literal area         
+* --------------------------------------------------------------------
+* Define the DSECTs we're going to use if this is the first time the
+* macro is being invoked.
+* --------------------------------------------------------------------
+         AIF (&BBGZ_CPCPROL_DSECT).NODSECT
+&BBGZ_CPCPROL_DSECT SETB 1
+CPCPROL_IARV64         DSECT    Mapping of the parms to IARV64
+CPCPROL_IARV64_SEGCT   DS FD    Number of segments requested
+                       ORG CPCPROL_IARV64_SEGCT
+CPCPROL_IARV64_ORIGIN  DS FD    Returned storage start address
+CPCPROL_IARV64_GUARDSZ DS F     Number of guard segments requested
+CPCPROL_IARV64_KEY     DS CL1   Storage key requested
+                       DS CL3   Available
+CPCPROL_IARV64_PLIST   DS CL88  Parameter list for execute form v0
+                       DS CL88  Available
+*
+CPCPROL_CSRC4QCL       DSECT    Mapping of the query cell service
+CPCPROL_CSRC4QCL_PL    DS CL48  Parameter list area
+CPCPROL_CSRC4QCL_ALET  DS F     ALET of parameters
+CPCPROL_CSRC4QCL_EXT   DS F     Extent number
+CPCPROL_CSRC4QCL_ANC   DS AD    Anchor address
+CPCPROL_CSRC4QCL_CEL   DS AD    Cell address
+CPCPROL_CSRC4QCL_AVL   DS FD    Cell available
+CPCPROL_CSRC4QCL_RC    DS F     Return code
+*
+CPCPROL_IARV64_DYN_AREA_SEGMENTS EQU 2        Request 2 segments
+CPCPROL_IARV64_DYN_AREA_GUARD_SEGMENTS EQU 1  One segment is guard
+CPCPROL_IARV64_DYN_AREA_STORAGE_KEY EQU X'20' Storage in key 2
+CPCPROL_TEMP_STORAGE_LEN EQU 192     Length of temporary storage
+CPCPROL_TEMP_STORAGE_SUBPOOL EQU 229 Subpool of temporary storage
+CPCPROL_TEMP_STORAGE_KEY EQU 2       Key of temporary storage
+*
+CPCPROL_DYNAREA_FROM_POOL EQU 1 Got dynamic area from cell pool
+CPCPROL_DYNAREA_FROM_IARV64 EQU 2 Got dynamic area from IARV64
+*
+CPCPROL_RETURN_CODE_NOBGVT EQU 256 The BGVT was not found.
+CPCPROL_RETURN_CODE_NOCGOO EQU 257 The CGOO was not found.
+CPCPROL_RETURN_CODE_NOSGOO EQU 258 The SGOO was not found.
+CPCPROL_RETURN_CODE_NOPOOL EQU 259 The temp dyn area pool not found
+CPCPROL_RETURN_CODE_CPERROR EQU 260 Error in temp dyn area pool
+CPCPROL_RETURN_CODE_INVTOK EQU 261 Bind token is invalid.
+CPCPROL_RETURN_CODE_CPERROR2 EQU 262 Error in real dyn area pool
+*
+CPCPROL_SCRATCH_MASK_MORECELL_SGOO EQU 1
+CPCPROL_SCRATCH_MASK_INVTOK EQU 2
+CPCPROL_SCRATCH_MASK_MORECELL_DYN EQU 4
+*
+         RASABEND
+*
+&CCN_CSECT CSECT
+.NODSECT ANOP
+         MEND

@@ -1,0 +1,10 @@
+-include= jar:${fileuri;lib/org.osgi.service.component.annotations-1.3.0.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+
+-includeresource: \
+   @lib/org.osgi.service.component.annotations-1.3.0.jar!/!OSGI-OPT/src/*
+
+publish.wlp.jar.suffix: dev/spi/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/org.osgi.service.component.annotations-1.3.0.jar;version=file

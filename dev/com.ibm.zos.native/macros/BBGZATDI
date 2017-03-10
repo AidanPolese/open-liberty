@@ -1,0 +1,79 @@
+*
+* IBM Confidential
+*
+* OCO Source Materials
+*
+* Copyright IBM Corp. 2011
+*
+* The source code for this program is not published or otherwise
+* divested of its trade secrets, irrespective of what has been
+* deposited with the U.S. Copyright Office.
+*
+         MACRO
+&NAME    BBGZATDI &ATDREG=
+         GBLC  &CCN_CSECT
+         GBLB  &BBGZ_BBGZATDI_DSECT
+*
+* Initialize the angel_thread_data control block.
+*
+* ATDREG is the register which contains the address of the storage to
+* initialize as the angel_thread_data.  Can be any register 2 - 14.
+*
+* Clobbers registers 14, 15, 0 and 1.  Note that ATDREG can be 14 but
+* this macro will not restore 14 before returning.
+*
+         AIF ('&ATDREG' EQ '').NOATDREG
+         USING BBGZATDI_BBGZATD,&ATDREG
+         XGR   15,15       Clear register 15
+         OIHH  15,X'C2C2'  Eye catcher BB
+         OIHL  15,X'C7E9'  Eye catcher GZ
+         OILH  15,X'C1E3'  Eye catcher AT
+         OILL  15,X'C46D'  Eye catcher D_
+         STG   15,BBGZATDI_BBGZATD_EYE Store eye catcher
+         XC    BBGZATDI_BBGZATD_VER(4),BBGZATDI_BBGZATD_VER Version 0
+         LA    15,BBGZATDI_TRC_NULL Load default trace level addr
+         STG   15,BBGZATDI_TRC_LEVEL_P Store default trace level
+         XC    BBGZATDI_TRC_NULL(4),BBGZATDI_TRC_NULL Clear flags
+         LHI   15,-1       Load non-zero into R15
+         ST    15,BBGZATDI_DYNAMIC_AREA_IN_USE Indicate in-use
+*
+* Clear the rest of the stack prefix area:
+*
+         LGR   14,&ATDREG  Load the address of storage to clear
+         LGHI  15,1        Load 1 into length field
+         SLLG  15,15,16(0) Shift 16 bits = 64K
+         ST    15,BBGZATDI_BBGZATD_LEN Set length into header
+         AGHI  14,32       Advance past header
+         AGHI  15,-32      Subtract header length
+         XGR   1,1         Clear register 1, for clear on move long
+         MVCL  14,0
+         DROP  &ATDREG
+*
+* DSECTS used by this macro
+*
+         AIF (&BBGZ_BBGZATDI_DSECT).NODSECT
+&BBGZ_BBGZATDI_DSECT SETB 1
+BBGZATDI_BBGZATD     DSECT
+BBGZATDI_BBGZATD_EYE         DS CL8  0x000
+BBGZATDI_BBGZATD_VER         DS F    0x008
+BBGZATDI_BBGZATD_LEN         DS F    0x00C
+BBGZATDI_TRC_LEVEL_P         DS AD   0x010
+BBGZATDI_TRC_NULL            DS CL1  0x018
+BBGZATDI_INVOKING            DS CL1  0x019
+BBGZATDI_IPTINCHAIN          DS CL1  0x01A
+BBGZATDI_SHRDYNGETFAIL       DS CL1  0x01B
+BBGZATDI_DYNAMIC_AREA_IN_USE DS F    0x01C
+BBGZATDI_HEAPS               DS CL96 0x020
+BBGZATDI_INVOKE_FLAGS        DS F    0x080
+BBGZATDI_BINDTOKDYNGETFAIL   DS CL1  0x084
+BBGZATDI_AVAILABLE           DS CL3  0x085
+BBGZATDI_PROCESS_DATA_PTR    DS AD   0x088
+BBGZATDI_VALIDCLIENTBINDDATA DS AD   0x090
+*
+&CCN_CSECT CSECT
+.NODSECT ANOP
+         AGO .ENDING
+.NOATDREG ANOP
+         MNOTE 8,'ATDREG MUST BE SET TO A REGISTER 2 - 14'
+.ENDING  ANOP
+         MEND

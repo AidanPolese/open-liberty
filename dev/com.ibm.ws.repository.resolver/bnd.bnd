@@ -1,0 +1,29 @@
+# For information on bnd syntax, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Repository Resolver
+Bundle-SymbolicName: com.ibm.ws.repository.resolver
+Bundle-Description: Project for resolving resources from the massive repository
+
+WS-TraceGroup: repo.repository.resolver
+
+Export-Package: com.ibm.ws.repository.resolver
+
+Private-Package: com.ibm.ws.repository.resolver.internal*
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.kernel.boot.core;version=latest,\
+	com.ibm.ws.kernel.feature;version=latest,\
+	com.ibm.ws.product.utility;version=latest,\
+	com.ibm.ws.repository;version=latest,\
+	wlp.lib.extract;version=latest,\
+	org.eclipse.osgi;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.subsystem.1.1.0;version=latest,\
+	com.ibm.ws.org.apache.aries.util.1.1.2;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

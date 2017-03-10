@@ -1,0 +1,8 @@
+Export-Package: com.ibm.wsspi.threading
+Bundle-SymbolicName: com.ibm.websphere.appserver.spi.threading
+-include= ~../../cnf/resources/bnd/bundle.props
+bVersion: 1.1
+Include-Resource: META-INF/maven/com.ibm.websphere.appserver.spi/com.ibm.websphere.appserver.spi.threading/pom.xml=dev/spi/ibm/com.ibm.websphere.appserver.spi.threading_1.1.17.pom
+Bundle-Name: WebSphere Threading SPI
+Bundle-Description: WebSphere Threading SPI, version 1.1
+Import-Package: com.ibm.wsspi.threading

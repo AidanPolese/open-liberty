@@ -1,0 +1,23 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.jsonp.1.0
+
+Require-Capability: osgi.ee; filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+
+#Doesn't get automatically imported since it's referenced by Class.forName()
+Import-Package: \
+   org.glassfish.json
+
+Export-Package: \
+   javax.json;thread-context=true, \
+   javax.json.spi, \
+   javax.json.stream
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	../com.ibm.ws.org.glassfish.json/lib/javax.json-1.0.4.jar;version=file

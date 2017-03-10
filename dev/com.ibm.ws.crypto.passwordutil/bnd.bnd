@@ -1,0 +1,39 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Password Utilities
+Bundle-SymbolicName: com.ibm.ws.crypto.passwordutil
+Bundle-Description: Password Utilities; version=${bVersion}
+
+Export-Package: \
+  com.ibm.websphere.crypto;provide:=true, \
+  com.ibm.wsspi.security.crypto;provide:=true, \
+  com.ibm.ws.crypto.util;provide:=true
+
+Private-Package: \
+  com.ibm.ws.common.internal.encoder, \
+  com.ibm.ws.crypto.util.custom, \
+  com.ibm.ws.crypto.util.internal.resources
+
+-dsannotations: \
+  com.ibm.ws.crypto.util.PasswordCipherUtil
+
+Service-Component: \
+  keyResolver; \
+    implementation:=com.ibm.ws.crypto.util.VariableResolver; \
+    immediate:=true; \
+    variableRegistry=com.ibm.wsspi.kernel.service.location.VariableRegistry; \
+    dynamic:='variableRegistry'; \
+    properties:='service.vendor=IBM'
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.ws.common.encoder;version=latest,\
+	com.ibm.ws.kernel.service;version=latest,\
+	com.ibm.ws.kernel.boot;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

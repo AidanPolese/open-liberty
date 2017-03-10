@@ -1,0 +1,12 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.wsATWebService-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.servlet-3.0;version=latest, \
+	com.ibm.wsspi.appserver.webBundleSecurity-1.0;version=latest, \
+	com.ibm.ws.wsat.webservice;version=latest, \
+	com.ibm.ws.wsat.webclient;version=latest

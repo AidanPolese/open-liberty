@@ -1,0 +1,20 @@
+# For information on bnd syntax, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Repository 
+Bundle-SymbolicName: com.ibm.ws.repository.liberty
+Bundle-Description: Liberty specific code for the repository
+
+WS-TraceGroup: repository
+
+Export-Package: com.ibm.ws.repository.connections.liberty
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.kernel.boot.core;version=latest,\
+	com.ibm.ws.repository;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

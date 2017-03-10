@@ -1,0 +1,13 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="com.ibm.os400.native">
+  <originbase release="WASX" fe="NATV" level="ss1537.02" components="WAS.os400.native"/>
+
+  <notes>
+<![CDATA[
+    lib/native os400 native parts:
+    IBM i native objects from following build:
+    https://ausgsa.ibm.com/projects/w/was.build/botp/WASX.NATV/test/ss1537.02/nt/zipper/prebuild.zip
+    CMVC defect: RTC178257. 
+]]>
+  </notes>
+</releaseInfo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="OSGi framework and compendium" 
+            projectURL="https://www.osgi.org/" 
+            version="6.0" revision="" 
+            license-type="ASL2" 
+            contact="schnabel@us.ibm.com" 
+            encryption="no">
+      <download location="https://osgi.org/hudson/job/build.core/470/artifact/osgi.core/generated/osgi.core.jar">
+         <file basename="org.osgi.core-6.0.0.jar"               checksum="cae291c61fe8b7a4476d713550c7ff49"/>
+      </download>
+   </project>
+
+   <notes>
+   </notes>
+   
+   <clearencehistory>
+   </clearencehistory>
+</ossc>

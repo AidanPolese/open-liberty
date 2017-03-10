@@ -1,0 +1,102 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * Copyright IBM Corp. 2011
+ *
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ */
+package com.ibm.ws.kernel.boot.cmdline;
+
+import java.util.ResourceBundle;
+
+import com.ibm.ws.kernel.boot.Launcher;
+
+/**
+ * Check's the version of the Java running before starting the server or running commands,
+ * if Java 5 (or below) is being used a translated error message is thrown.
+ */
+public class EnvCheck {
+
+    private static final int CLASS_MAJOR_VERSION_JAVA6 = 50;
+
+    // See Launcher.ReturnCode.
+    private static final int ERROR_BAD_JAVA_VERSION = 30;
+
+    // See Launcher.ReturnCode.
+    private static final int ERROR_BAD_JAVA_BITMODE = 31;
+
+    /**
+     * @param args - will just get passed onto Launcher if version check is successful
+     */
+    public static void main(String[] args) {
+        EnvCheck.main(args, null);
+    }
+
+    protected static void main(String[] args, Launcher launcher) {
+        // gij (GNU libgcj) is installed as "java" on some Linux machines.
+        // This interpreter really only supports Java 5, but unhelpfully fails
+        // to throw UnsupportedClassVersionError for Java 6 classes.
+        if (getClassMajorVersion() < CLASS_MAJOR_VERSION_JAVA6) {
+            badVersion();
+        }
+
+        // On z/OS only 64-bit Java is supported
+        String osName = System.getProperty("os.name");
+        if (osName.equals("z/OS")) {
+            String bitmode = System.getProperty("com.ibm.vm.bitmode");
+            if (bitmode.equals("32"))
+                badBitMode();
+        }
+
+        try {
+
+            if (launcher == null) {
+                launcher = new Launcher();
+            }
+            System.exit(launcher.createPlatform(args));
+
+            // if we actually get back here, make sure we do exit with a return code
+            // and not just a cessation of output. The tools look for a return code value.
+            System.exit(0);
+        } catch (UnsupportedClassVersionError versionError) {
+            badVersion();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(ERROR_BAD_JAVA_VERSION);
+        }
+    }
+
+    private static void badVersion() {
+        System.out.println(ResourceBundle.getBundle("com.ibm.ws.kernel.boot.resources.LauncherMessages").getString("error.badVersion"));
+        System.exit(ERROR_BAD_JAVA_VERSION);
+    }
+
+    private static void badBitMode() {
+        System.out.println(ResourceBundle.getBundle("com.ibm.ws.kernel.boot.resources.LauncherMessages").getString("error.badBitmode"));
+        System.exit(ERROR_BAD_JAVA_BITMODE);
+    }
+
+    private static int getClassMajorVersion() {
+        String classVersion = System.getProperty("java.class.version");
+        if (classVersion == null) {
+            // JVM didn't supply the system property.  Let's hope it throws
+            // UnsupportedClassVersionError if necessary.
+            return CLASS_MAJOR_VERSION_JAVA6;
+        }
+
+        int index = classVersion.indexOf('.');
+        String majorVersion = index == -1 ? classVersion : classVersion.substring(0, index);
+
+        try {
+            return Integer.parseInt(majorVersion);
+        } catch (NumberFormatException ex) {
+            // We couldn't parse the version string.  Let's hope the JVM throws
+            // UnsupportedClassVersionError if necessary.
+            return CLASS_MAJOR_VERSION_JAVA6;
+        }
+    }
+}

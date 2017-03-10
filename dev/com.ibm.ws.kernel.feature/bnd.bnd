@@ -1,0 +1,37 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: WebSphere kernel feature manager
+Bundle-SymbolicName: com.ibm.ws.kernel.feature; singleton:=true
+Bundle-Description: WebSphere kernel feature manager, version ${bVersion}
+
+Export-Package: \
+ com.ibm.ws.kernel.feature;provide:=true, \
+ com.ibm.ws.kernel.feature.provisioning, \
+ com.ibm.wsspi.kernel.feature;provide:=true
+
+Import-Package: \
+ !com.sun.tools.attach,${defaultPackageImport} 
+
+# NOTE: ODDNESS. we're including wlp.lib.extract as a package. The contents of 
+# that package are provided by wlp.lib.extract project! Dependency-wise, it's better to 
+# leave the classes in the wlp.lib.extract project.
+Private-Package: \
+ com.ibm.ws.kernel.feature.*, \
+ wlp.lib.extract, \
+ wlp.lib.extract.platform
+
+-includeresource: \
+ OSGI-INF/permissions.perm=resources/permissions.perm, \
+ OSGI-INF/metatype=resources/OSGI-INF/metatype, \
+ OSGI-INF/l10n=resources/OSGI-INF/l10n
+
+-dsannotations: com.ibm.ws.kernel.feature.internal.FeatureManager
+
+instrument.classesExcludes: com/ibm/ws/kernel/feature/internal/resources/*.class
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.kernel.feature.cmdline;version=latest,\
+	com.ibm.ws.kernel.feature.core;version=latest,\
+	wlp.lib.extract;version=latest

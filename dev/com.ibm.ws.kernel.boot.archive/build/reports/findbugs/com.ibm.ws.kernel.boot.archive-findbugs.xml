@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BugCollection version="3.1.0-dev-20160619-68c6293" sequence="0" timestamp="1489009562979" analysisTimestamp="1489009562991" release="">
+  <Project projectName="com.ibm.ws.kernel.boot.archive">
+    <Jar>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.archive/build/classes</Jar>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.archive/build/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.archive/src</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.org.osgi.annotation.versioning/lib/org.osgi.annotation.versioning-1.0.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.logging/build/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.logging/src</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.websphere.org.osgi.core/lib</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.websphere.org.osgi.service.cm/lib/org.osgi.service.cm-1.5.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.wsspi.org.osgi.service.event/lib/org.osgi.service.event-1.3.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.wsspi.org.osgi.service.log/lib/org.osgi.service.log-1.3.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.org.objectweb.asm/lib/asm-all-5.0.3.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.logging.core/build/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.logging.core/src</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.logging/build/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.logging/src</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.security.thread/build/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.security.thread/src</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.ras.instrument/build/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.ras.instrument/src</AuxClasspathEntry>
+    <AuxClasspathEntry>/usr/local/Cellar/ant/1.9.6/libexec/lib/ant.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.common/build/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.common/src</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot/build/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot/resources</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.websphere.org.osgi.service.component/lib/org.osgi.service.component-1.3.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.wsspi.org.osgi.service.component.annotations/lib/org.osgi.service.component.annotations-1.3.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.org.apache.commons.compress/lib/org.apache.commons.compress-1.10.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.cmdline/build/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.cmdline/src</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.core/build/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.core/src</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.nested/build/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.nested/src</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.archive/lib/org.apache.commons.compress-1.10.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.java7/build/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.java7/src</AuxClasspathEntry>
+    <SrcDir>/Users/erfritz/Documents/WS-CD-Open-INTEGRATION2/dev/com.ibm.ws.kernel.boot.archive/src</SrcDir>
+  </Project>
+  <Errors errors="0" missingClasses="0"></Errors>
+  <FindBugsSummary timestamp="Wed, 8 Mar 2017 16:46:02 -0500" total_classes="4" referenced_classes="51" total_bugs="0" total_size="165" num_packages="1" java_version="1.8.0_121" vm_version="25.121-b13" cpu_seconds="9.06" clock_seconds="2.17" peak_mbytes="153.74" alloc_mbytes="455.50" gc_seconds="0.02">
+    <FileStats path="com/ibm/ws/kernel/boot/archive/internal/AbstractArchive.java" bugCount="0" size="21"/>
+    <FileStats path="com/ibm/ws/kernel/boot/archive/internal/PaxArchive.java" bugCount="0" size="86"/>
+    <FileStats path="com/ibm/ws/kernel/boot/archive/internal/ZipArchive.java" bugCount="0" size="57"/>
+    <FileStats path="com/ibm/ws/kernel/boot/archive/internal/package-info.java" bugCount="0" size="1"/>
+    <PackageStats package="com.ibm.ws.kernel.boot.archive.internal" total_bugs="0" total_types="4" total_size="165">
+      <ClassStats class="com.ibm.ws.kernel.boot.archive.internal.AbstractArchive" sourceFile="AbstractArchive.java" interface="false" size="21" bugs="0"/>
+      <ClassStats class="com.ibm.ws.kernel.boot.archive.internal.PaxArchive" sourceFile="PaxArchive.java" interface="false" size="86" bugs="0"/>
+      <ClassStats class="com.ibm.ws.kernel.boot.archive.internal.ZipArchive" sourceFile="ZipArchive.java" interface="false" size="57" bugs="0"/>
+      <ClassStats class="com.ibm.ws.kernel.boot.archive.internal.package-info" sourceFile="package-info.java" interface="true" size="1" bugs="0"/>
+    </PackageStats>
+    <FindBugsProfile>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="831" invocations="540" avgMicrosecondsPerInvocation="1539" maxMicrosecondsPerInvocation="15904" standardDeviationMircosecondsPerInvocation="1046"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="178" invocations="537" avgMicrosecondsPerInvocation="332" maxMicrosecondsPerInvocation="11647" standardDeviationMircosecondsPerInvocation="810"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="73" invocations="51" avgMicrosecondsPerInvocation="1444" maxMicrosecondsPerInvocation="12418" standardDeviationMircosecondsPerInvocation="2488"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="60" invocations="51" avgMicrosecondsPerInvocation="1177" maxMicrosecondsPerInvocation="8147" standardDeviationMircosecondsPerInvocation="1815"/>
+      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="53" invocations="214" avgMicrosecondsPerInvocation="247" maxMicrosecondsPerInvocation="3178" standardDeviationMircosecondsPerInvocation="341"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="40" invocations="20" avgMicrosecondsPerInvocation="2042" maxMicrosecondsPerInvocation="8121" standardDeviationMircosecondsPerInvocation="2162"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.ValueNumberDataflowFactory" totalMilliseconds="40" invocations="20" avgMicrosecondsPerInvocation="2025" maxMicrosecondsPerInvocation="7421" standardDeviationMircosecondsPerInvocation="2172"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory" totalMilliseconds="34" invocations="16" avgMicrosecondsPerInvocation="2181" maxMicrosecondsPerInvocation="17639" standardDeviationMircosecondsPerInvocation="4282"/>
+      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="34" invocations="502" avgMicrosecondsPerInvocation="69" maxMicrosecondsPerInvocation="6734" standardDeviationMircosecondsPerInvocation="313"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.UnconditionalValueDerefDataflowFactory" totalMilliseconds="29" invocations="16" avgMicrosecondsPerInvocation="1858" maxMicrosecondsPerInvocation="9897" standardDeviationMircosecondsPerInvocation="2701"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory" totalMilliseconds="28" invocations="16" avgMicrosecondsPerInvocation="1775" maxMicrosecondsPerInvocation="23491" standardDeviationMircosecondsPerInvocation="5613"/>
+    </FindBugsProfile>
+  </FindBugsSummary>
+  <ClassFeatures></ClassFeatures>
+  <History></History>
+</BugCollection>

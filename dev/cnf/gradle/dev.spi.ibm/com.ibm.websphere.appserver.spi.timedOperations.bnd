@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.0
+
+Bundle-Name: WebSphere Timed Operations SPI
+Bundle-Description: WebSphere Timed Operations SPI, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.spi.timedOperations
+
+Import-Package: com.ibm.wsspi.timedoperations
+
+Export-Package: com.ibm.wsspi.timedoperations
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.spi/com.ibm.websphere.appserver.spi.timedOperations/pom.xml=com.ibm.websphere.appserver.spi.timedOperations.pom}
+
+publish.wlp.jar.suffix: dev/spi/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.timedoperations

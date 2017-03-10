@@ -1,0 +1,16 @@
+<?xml charset="UTF-8" version="1.0"?>
+<ossc project="Apache Aries" 
+      projectURL="http://aries.apache.org" 
+      version="" revision="1311281" 
+      license-type="Apachev2" 
+      contact="not@uk.ibm.com" 
+      encryption="no"
+      downloadLocation="https://hurgsa.ibm.com/projects/o/orca.prereqs/prereq.apache-aries/service/V1.2/s20120709-0826/apache-aries-ibm-s20120709-0826.zip">
+   
+   <clearencehistory/>
+   
+   <notes>
+   During our build we are patching the org.apache.aries.util.tracker.RecursiveBundleTracker class in the org.apache.aries.util-1.0.1.jar bundle.
+   This ossc file should be merged back into the ossc.xml if and when we reconsume all Apache Aries components at the same level.
+   </notes>
+</ossc>

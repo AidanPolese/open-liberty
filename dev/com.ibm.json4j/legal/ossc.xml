@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="JSON4J"
+            projectURL=""
+            version="1.0" revision=""
+            license-type="IBM"
+            contact="mnesbitt@us.ibm.com"
+            encryption="no">
+      <download location="https://jazz220.hursley.ibm.com:9443/jazz/web/projects/JSON4J">
+         <file basename="com.ibm.ws.prereq.json4j.jar" checksum="e226f414e7607ec659cc6e8996138477"/>
+      </download>
+   </project>
+   <notes>
+    JSON4J is IBM code and the source was retrieved from an IBM jazz repository at
+    https://jazz220.hursley.ibm.com:9443/jazz/web/projects/JSON4J. In order to get
+    access to the jazz repository, a request can be made through
+    http://was.pok.ibm.com/xwiki/bin/view/RTC/SourceCodeAccess.
+   </notes>
+   <clearencehistory/>
+</ossc>
