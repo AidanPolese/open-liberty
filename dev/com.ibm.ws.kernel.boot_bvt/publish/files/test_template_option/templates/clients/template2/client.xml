@@ -1,0 +1,7 @@
+<client>
+	<include location="../fatTestPorts.xml"/>
+    <featureManager>
+        <feature>javaeeClient-7.0</feature>
+    </featureManager>
+
+</client>

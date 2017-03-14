@@ -1,0 +1,43 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: HTTPService
+Bundle-SymbolicName: com.ibm.ws.httpservice
+Bundle-Description: Provides an implementation of the OSGi HttpService interfaces (based on apache felix httpservice)
+
+WS-TraceGroup: HttpService
+
+Import-Package: \
+  javax.servlet;version=!,\
+  javax.servlet.descriptor;version=!,\
+  javax.servlet.http;version=!,\
+  javax.servlet.resources;version=!,\
+  org.osgi.service.http,\
+   !*.internal.*, *
+   
+Private-Package: org.apache.felix.http.*, com.ibm.ws.httpsvc.*
+
+Export-Package: \
+  org.osgi.service.http;provide:=true, \
+  org.apache.felix.http.api, 
+
+##
+## The HttpServiceContainer is immediate to prevent it from recycling as 
+## applications using it are added and removed.
+##
+
+Service-Component: com.ibm.ws.httpservice; \
+      implementation:=com.ibm.ws.httpsvc.internal.HttpServiceContainer; \
+	  provide:='com.ibm.ws.httpsvc.internal.HttpServiceContainer'; \
+      virtualHost='com.ibm.wsspi.http.VirtualHost(&(enabled=true)(id=default_host))';\
+      logService=org.osgi.service.log.LogService; \
+      modified:='modified'; \
+      dynamic:='logService';\
+      immediate:=true;\
+      properties:="service.vendor=IBM", \
+    OSGIHttpService; \
+      implementation:=com.ibm.ws.httpsvc.internal.RegisteredHttpServiceImpl; \
+      provide:='org.osgi.service.http.HttpService'; \
+      httpContainer=com.ibm.ws.httpsvc.internal.HttpServiceContainer; \
+      servicefactory:=true; \
+      properties:="service.vendor=IBM"

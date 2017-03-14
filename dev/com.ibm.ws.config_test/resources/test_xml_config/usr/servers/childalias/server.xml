@@ -1,0 +1,28 @@
+<server description="new server">
+
+	<testCAParent1 testAttribute1="hello">
+		<testCAChild testAttribute1="goodbye" />
+	</testCAParent1>
+
+	<testCAParent2 testAttribute1="hola">
+		<testCAChild color="orange" />
+	</testCAParent2>
+	
+	<testCAParent3 testAttribute3="hallo">
+		<testCAChild testAttribute3="auf wiedersehen"/>
+	</testCAParent3>
+	
+	<testCAParent4 testAttribute1="bonjour">
+		<testCAChild country="canada"/>
+	</testCAParent4>
+	
+	<testCAParent5 testAttribute5="buona sera">
+		<testCAChild testAttribute5="Not Default"/>
+	</testCAParent5>
+	
+	<testCAParent6 testAttribute6="ni hao">
+		<testCAChild testAttribute6="Not Default"/>
+	</testCAParent6>
+	
+
+</server>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="test-bundles/test.feature.provisioner/src"/>
+	<classpathentry kind="src" path="test-bundles/test.feature.api/src"/>
+	<classpathentry kind="src" path="test-applications/test.feature.api.client/src"/>
+	<classpathentry kind="src" output="build/bvt-bundle/classes" path="bvt-bundle/src"/>
+	<classpathentry kind="src" output="build/bvt/classes" path="bvt/src"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.eclipse.osgi"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.feature.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.logging.core">
+		<accessrules>
+			<accessrule kind="nonaccessible" pattern="**/internal/**"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.service"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.service.location"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.runtime.update"/>
+	<classpathentry kind="lib" path="/build.sharedResources/lib/hamcrest-all.jar"/>
+	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock-junit4.jar"/>
+	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock.jar"/>
+	<classpathentry kind="lib" path="/build.sharedResources/lib/ws-junit/ws-junit.jar"/>
+	<classpathentry kind="lib" path="/build.sharedResources/lib/junit/old/junit.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.websphere.javaee.servlet.3.0"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.boot"/>
+	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar"/>
+	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.service.component/lib/org.osgi.service.component-1.3.0.jar"/>
+	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.service.http/lib/org.osgi.service.http-1.2.1.jar"/>
+	<classpathentry kind="lib" path="/com.ibm.wsspi.org.osgi.service.component.annotations/lib/org.osgi.service.component.annotations-1.3.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/wlp.lib.extract"/>
+</classpath>

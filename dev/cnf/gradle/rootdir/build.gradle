@@ -265,5 +265,6 @@ private boolean parseBoolean(String value) {
 }
 
 task wrapper(type: Wrapper) {
+  gradleVersion = '3.4.1'
   jarFile = rootProject.file('.gradle-wrapper/gradle-wrapper.jar')
 }

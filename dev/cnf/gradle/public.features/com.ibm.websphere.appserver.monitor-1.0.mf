@@ -6,7 +6,7 @@ IBM-API-Package: com.ibm.websphere.monitor.jmx; type=ibm-api,
  com.ibm.websphere.pmi.client; type=internal,
  com.ibm.websphere.pmi.server; type=internal,
  com.ibm.websphere.pmi.stat; type=internal
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

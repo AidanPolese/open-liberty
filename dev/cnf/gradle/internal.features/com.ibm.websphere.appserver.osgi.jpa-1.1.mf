@@ -2,16 +2,15 @@ Bnd-LastModified: 1486383816613
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Service: org.apache.aries.blueprint.NamespaceHandler; osgi.service.blueprint.namespace="http://aries.apache.org/xmlns/jpa/v1.0.0",
  org.apache.aries.blueprint.NamespaceHandler; osgi.service.blueprint.namespace="http://aries.apache.org/xmlns/jpa/v1.1.0"
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-Install-Policy: when-satisfied
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
 IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.blueprint-1.0))",
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.jpa-2.1))"
+ osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.jpaContainer-2.1))"
 Subsystem-Content: com.ibm.websphere.appserver.jndi-1.0; type="osgi.subsystem.feature",
- com.ibm.websphere.appserver.jpa-2.1; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.internal.slf4j-1.7.7; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.jdbc-4.1; ibm.tolerates:="4.0"; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.transaction-1.2; type="osgi.subsystem.feature",

@@ -1,7 +1,7 @@
 Bnd-LastModified: 1486383795751
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: com.ibm.websphere.scaling.member; type="ibm-api"
-IBM-AppliesTo: com.ibm.websphere.appserver; productEdition="@PRODUCT_EDITION_RESTRICTED@"; productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductEditionRestricted}${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
@@ -20,7 +20,7 @@ Subsystem-Content: com.ibm.websphere.appserver.api.scalingMember_1.0-javadoc.zip
  com.ibm.ws.scaling.common; version="[1.0.0,1.0.200)",
  com.ibm.websphere.collective.singleton; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description
-Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-@FEATURE_TERMS_RESTRICTED_V1@
+Subsystem-License: ${mfFeatureTermsRestricted}
 Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.scalingMember-1.0
 Subsystem-ManifestVersion: 1
 Subsystem-Name: Scaling Member

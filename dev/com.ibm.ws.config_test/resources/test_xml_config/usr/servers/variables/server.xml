@@ -1,0 +1,22 @@
+<server>
+
+    <version version="${minVersion}" minVersion="${maxVersion}" maxVersion="${myMaxVersion}" />
+
+    <variable name="myMaxVersion" value="99${lastDigit}"/>
+    <variable name="lastDigit" value="9"/>
+    
+    <serverInfo minVersion="1.0" maxVersion="${minVersion}.9" versionFile="${shared.resource.dir}/version.info" single="${array}">
+
+        <supportedVersions>${minVersion}</supportedVersions>
+        <supportedVersions>${maxVersion}</supportedVersions>
+        <supportedVersions>${minVersion} - ${maxVersion}</supportedVersions>
+        <supportedVersions>${jdkVersion}</supportedVersions>
+        <supportedVersions>${myMaxVersion}</supportedVersions>
+
+        <array>v1</array>
+        <array>v2</array>
+        <array>v3,v4</array>
+        <array>v\5</array>
+    </serverInfo>
+
+</server>

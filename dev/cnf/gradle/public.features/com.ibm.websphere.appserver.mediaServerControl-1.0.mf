@@ -14,7 +14,7 @@ IBM-API-Package: javax.media.mscontrol; type=spec,
  javax.media.mscontrol.resource.video; type=spec,
  javax.media.mscontrol.spi; type=spec,
  javax.media.mscontrol.vxml; type=spec
-IBM-AppliesTo: com.ibm.websphere.appserver; productEdition="@PRODUCT_EDITION@"; productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductEdition}${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

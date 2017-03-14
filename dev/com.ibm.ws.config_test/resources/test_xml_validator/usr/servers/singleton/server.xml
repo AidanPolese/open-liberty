@@ -1,0 +1,18 @@
+<server>
+
+    <include location="${shared.config.dir}/baseConfig.xml" />
+
+    <HTTP logFile="${shared.config.dir}/access.txt" logging.enabled="true" clientAuth="true" requireClientAuth="yes">
+        <port>7777</port>
+
+        <ciphers merge-op="set">rsa</ciphers>
+
+        <sslVersion>sslv2</sslVersion>
+        <sslVersion>sslv3</sslVersion>
+        <sslVersion>tls</sslVersion>
+
+        <auth merge-op="append">openid</auth>
+
+    </HTTP>
+
+</server>

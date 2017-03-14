@@ -1,0 +1,9 @@
+<server>
+
+    <include location="${shared.config.dir}/baseConfig.xml" />
+
+    <TP id="webPool" maxThreads="10" idle="8000" />
+
+    <threadpool id="connectorPool" maxThreads="20" minThreads="5" />
+  
+</server>

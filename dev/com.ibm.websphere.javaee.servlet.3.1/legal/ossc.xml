@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Oracle RI" 
+            projectURL="https://maven.java.net" 
+            version="3.1" revision="" 
+            license-type="CDDL" 
+            contact="mmulholl@us.ibm.com"
+            encryption="no">
+      <download loadLocation="https://maven.java.net/content/repositories/releases/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar">
+         <file basename="javax.servlet-api-3.1.0.jar" checksum="79de69e9f5ed8c7fcb8342585732bbf7"/>
+         <file basename="com.ibm.ws.javaee.servlet.3.1.jar" checksum="a00a2e2e571a119e7d3464b63760ec86"/>
+         <file basename="com.ibm.ws.javax.servlet.resources_3.1.jar" checksum="766b22c72c21dcaa7e4bec08688722ff"/>
+      </download>
+   </project>
+   
+   <notes>
+       com.ibm.ws.javax.servlet.resources_3.1.jar was created from the javax.servlet.resources directory contents of the
+       Liberty com.ibm.ws.javax.servlet_3.0 jar.
+       Also the MANIFEST file of the downloaded javax.servlet-api-3.1.jar was modified to also export version 2.7.
+   </notes>
+   
+   <clearencehistory>
+   </clearencehistory>
+</ossc>

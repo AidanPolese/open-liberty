@@ -1,14 +1,14 @@
 Bnd-LastModified: 1486383790879
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Service: javax.persistence.EntityManagerFactory
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-Install-Policy: when-satisfied
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
 IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.osgiBundle-1.0))",
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(|(osgi.identity=com.ibm.websphere.appserver.jpa-2.0)(osgi.identity=com.ibm.websphere.appserver.jpa-2.1)))"
+ osgi.identity; filter:="(&(type=osgi.subsystem.feature)(|(osgi.identity=com.ibm.websphere.appserver.jpa-2.0)(osgi.identity=com.ibm.websphere.appserver.jpaContainer-2.1)))"
 Subsystem-Content: com.ibm.websphere.appserver.osgiBundle-1.0; type="osgi.subsystem.feature",
  com.ibm.ws.eba.jpa.container.annotations; version="[1.0.0,1.0.200)",
  com.ibm.ws.org.apache.aries.jndi.url.1.1.1; version="[1.1.0,1.1.200)",

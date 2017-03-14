@@ -15,7 +15,7 @@ IBM-API-Package: javax.mail; type=spec,
  com.sun.mail.util; type=third-party,
  com.sun.mail.util.logging; type=third-party,
  com.sun.mail.handlers; type=third-party
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

@@ -4,7 +4,7 @@ IBM-API-Package: io.swagger.annotations; type=third-party,
  io.swagger.annotations; type=internal
 IBM-App-ForceRestart: uninstall,
  install
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
@@ -15,7 +15,7 @@ Subsystem-Content: com.ibm.websphere.appserver.restHandler-1.0; type="osgi.subsy
  com.ibm.websphere.appserver.internal.slf4j-1.7.7; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.thirdparty.swagger.annotations; location:="dev/api/third-party/,lib/"; version="[1.0.0,1.0.200)",
  com.ibm.ws.com.fasterxml.jackson.2.4.5; version="[1.0.0,1.0.200)",
- com.ibm.ws.org.apache.commons.lang3.3.0.1; location:="lib/"; version="[1.0.0,1.0.200)",
+ com.ibm.ws.org.apache.commons.lang3.3.5; location:="lib/"; version="[1.0.0,1.0.200)",
  com.ibm.ws.io.swagger.parser; version="[1.0.0,1.0.200)",
  com.ibm.ws.json2yaml; version="[1.0.0,1.0.200)",
  com.ibm.ws.io.swagger.core; version="[1.0.0,1.0.200)",

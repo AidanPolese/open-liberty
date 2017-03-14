@@ -1,0 +1,8 @@
+<server>
+    <foo3 bar="test3"/>
+
+    <!-- invalid import -->
+    <include location="bad-import.xml"/>
+    
+    <foo4 bar="test4"/>
+</server>

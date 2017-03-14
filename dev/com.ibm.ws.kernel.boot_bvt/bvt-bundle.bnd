@@ -1,0 +1,15 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Kernel Boot Test
+Bundle-SymbolicName: com.ibm.ws.kernel.boot.bvt
+Bundle-Description: Test bundle for the com.ibm.ws.kernel.boot
+
+Private-Package: test.kernel.boot.*
+
+Service-Component: \
+   test.kernel.boot; \
+      implementation:=test.kernel.boot.KernelBootTestRunner; \
+      http=org.osgi.service.http.HttpService; \
+      chfwBundle=com.ibm.websphere.channelfw.osgi.CHFWBundle;\
+      properties:="service.vendor=IBM"

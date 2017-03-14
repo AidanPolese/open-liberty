@@ -12,8 +12,8 @@ import java.util.List;
  *
  * Copyright IBM Corp. 2011
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 
@@ -40,6 +40,7 @@ public interface DefaultSSLCertificateCreator {
     static final int DEFAULT_SIZE = 2048;
     static final String KEYALG = KEYALG_RSA_TYPE;
     static final String SIGALG = "SHA256withRSA";
+    static final String DEFAULT_KEYSTORE_TYPE = "JKS";
 
     /**
      * These constants are not intended to be specified by the caller,
@@ -51,41 +52,41 @@ public interface DefaultSSLCertificateCreator {
      * Valid keys sizes for a RSA key
      */
     public static final List<Integer> VALID_RSA_KEYSIZE = Arrays.asList(new Integer[] {
-                                                                                       512,
-                                                                                       1024,
-                                                                                       2048,
-                                                                                       4096,
-                                                                                       8192,
+                                                                                        512,
+                                                                                        1024,
+                                                                                        2048,
+                                                                                        4096,
+                                                                                        8192,
     });
 
     /*
      * Valid keys sizes for a EC key
      */
     public static final List<Integer> VALID_EC_KEYSIZE = Arrays.asList(new Integer[] {
-                                                                                      192,
-                                                                                      224,
-                                                                                      256,
-                                                                                      384,
-                                                                                      521,
+                                                                                       192,
+                                                                                       224,
+                                                                                       256,
+                                                                                       384,
+                                                                                       521,
     });
 
     /*
      * Valid signature algorithms
      */
     public static final List<String> VALID_SIG_ALG = Arrays.asList(new String[] {
-                                                                                 "SHA1withRSA",
-                                                                                 "SHA256withRSA",
-                                                                                 "SHA1withECDSA",
-                                                                                 "SHA256withECDSA",
-                                                                                 "SHA384withRSA",
-                                                                                 "SHA512withRSA",
-                                                                                 "SHA384withECDSA",
-                                                                                 "SHA512withECDSA"
+                                                                                  "SHA1withRSA",
+                                                                                  "SHA256withRSA",
+                                                                                  "SHA1withECDSA",
+                                                                                  "SHA256withECDSA",
+                                                                                  "SHA384withRSA",
+                                                                                  "SHA512withRSA",
+                                                                                  "SHA384withECDSA",
+                                                                                  "SHA512withECDSA"
     });
 
     /**
      * Creates a default SSL certificate.
-     * 
+     *
      * @param filePath The valid, complete path on the file system of the keystore to create. e.g. /tmp/key.jks
      * @param password Minimum 6 characters
      * @param validity Minimum 365 days (?)
@@ -95,7 +96,6 @@ public interface DefaultSSLCertificateCreator {
      * @throws CertificateException if the certificate could not be created
      * @throws IllegalArgumentException if an argument violates the minimum required value or if the value is otherwise considered invalid
      */
-    File createDefaultSSLCertificate(String filePath, String password, int validity, String subjectDN, int keySize, String sigAlg)
-                    throws CertificateException;
+    File createDefaultSSLCertificate(String filePath, String password, int validity, String subjectDN, int keySize, String sigAlg) throws CertificateException;
 
 }

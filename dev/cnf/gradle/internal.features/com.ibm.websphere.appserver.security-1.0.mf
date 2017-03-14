@@ -5,7 +5,7 @@ IBM-API-Package: com.ibm.wsspi.security.tai; type=ibm-api,
  com.ibm.wsspi.security.auth.callback; type=ibm-api,
  com.ibm.wsspi.security.common.auth.module; type=ibm-api,
  com.ibm.websphere.security.auth.callback; type=ibm-api
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

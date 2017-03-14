@@ -89,4 +89,5 @@ instrument.disabled: true
 	com.ibm.ws.kernel.boot.nested;version=latest,\
 	com.ibm.ws.kernel.security.thread;version=latest,\
 	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
-	com.ibm.ws.logging.core;version=latest
+	com.ibm.ws.logging.core;version=latest,\
+    com.ibm.ws.ras.instrument;version=latest

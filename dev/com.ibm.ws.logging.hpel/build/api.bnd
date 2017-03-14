@@ -1,8 +1,0 @@
-Export-Package: com.ibm.websphere.logging.hpel.reader,com.ibm.websphere.logging.hpel.reader.filters,com.ibm.websphere.logging.hpel.writer
-Bundle-SymbolicName: com.ibm.websphere.appserver.api.hpel
--include= ~../../cnf/resources/bnd/bundle.props, -tmp/.copyright.properties
-bVersion: 2.0
-Include-Resource: META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.hpel/pom.xml=dev/api/ibm/com.ibm.websphere.appserver.api.hpel_2.0.17.pom
-Bundle-Name: WebSphere Binary Logging (HPEL) API
-Bundle-Description: WebSphere Binary Logging (HPEL) API, version 2.0
-Import-Package: com.ibm.websphere.logging.hpel.reader,com.ibm.websphere.logging.hpel.reader.filters,com.ibm.websphere.logging.hpel.writer

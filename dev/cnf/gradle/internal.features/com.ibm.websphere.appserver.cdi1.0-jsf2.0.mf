@@ -1,6 +1,6 @@
 Bnd-LastModified: 1486383819481
 Created-By: 1.8.0_121 (Oracle Corporation)
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-Install-Policy: when-satisfied
 IBM-InstallTo: core

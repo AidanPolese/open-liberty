@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.kernel.service_bvt" default="bvt">
+
+  <property name="profile" value="com.ibm.ws.kernel.service_bvt" />
+  <property name="test.url" value="/config/include" />
+  <property name="skip.validate.project" value="true" />
+    
+  <import file="../ant_build/public_imports/standard_imports.xml" />
+  <import file="../ant_build/public_imports/bvt_imports.xml" />
+
+  <target name="prestart-server">    
+    <delete dir="${bvt.prop.server.root}/bundles" includeemptydirs="yes" failonerror="false" />
+    <mkdir dir="${bvt.prop.server.root}/bundles" />
+
+    <copy todir="${bvt.prop.server.root}/bundles">
+      <fileset dir="${lib.dir}" includes="*.jar" />
+    </copy>
+        
+    <delete dir="${bvt.prop.server.root}/workarea" includeemptydirs="yes" failonerror="false" />
+    <copy overwrite="true" tofile="${bvt.prop.server.root}/server.xml" file="publish/servers/${profile}/server.xml" />
+  </target>
+  
+</project>

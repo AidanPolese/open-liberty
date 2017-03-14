@@ -1,0 +1,5 @@
+<server>
+
+    <include optional="true" location="${shared.config.dir}/bvtTestPorts.xml"/>
+    
+</server>

@@ -1,0 +1,6 @@
+*.log.*
+dist
+test data
+/coverage.ec
+/lib
+/reports

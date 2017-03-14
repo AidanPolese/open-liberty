@@ -4,7 +4,7 @@ IBM-API-Package: org.osgi.service.http; type="spec:osgi",
  org.osgi.service.http.context; type="spec:osgi",
  org.osgi.service.http.whiteboard; type="spec:osgi"
 IBM-API-Service: org.osgi.service.http.HttpService
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

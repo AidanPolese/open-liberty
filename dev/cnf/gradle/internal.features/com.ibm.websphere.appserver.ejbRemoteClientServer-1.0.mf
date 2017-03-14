@@ -1,7 +1,7 @@
 Bnd-LastModified: 1486383826375
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: com.ibm.ws.clientcontainer.remote.common;type="internal"
-IBM-AppliesTo: com.ibm.websphere.appserver; productEdition="@PRODUCT_EDITION@"; productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductEdition}${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-Install-Policy: when-satisfied
 IBM-InstallTo: core

@@ -1,0 +1,9 @@
+-include= ~../cnf/resources/bnd/bundle.props, 
+bVersion=1.0
+
+Bundle-Name: WAS RAS TEST
+Fragment-Host: com.ibm.ws.ras
+Bundle-SymbolicName: com.ibm.ws.ras.test; singleton:=true
+Bundle-Description: WAS RAS TEST, version ${bVersion}
+
+Include-Resource: bin/

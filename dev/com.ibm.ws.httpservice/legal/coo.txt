@@ -1,0 +1,21 @@
+This document contains information required by the Release Services team to
+prepare a 'Certificate of Originality' document for this project.
+
+
+
+Source code origin:
+Alpine/Liberty 15%
+Apache Felix Karaf File installer 85%
+
+Apache Felix implementation of the core service was obtained from:
+http://svn.apache.org/repos/asf/felix/releases/org.apache.felix.http-2.2.0
+
+
+Alpine contributors:
+
+Erin Schnabel
+Jeffrey Lee
+Alex Mulholland
+Michael Fraenkel
+Davanum Srinivas
+John Y Chang

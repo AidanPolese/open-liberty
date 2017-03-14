@@ -1,6 +1,6 @@
 Bnd-LastModified: 1486383843481
 Created-By: 1.8.0_121 (Oracle Corporation)
-IBM-AppliesTo: com.ibm.websphere.appserver; productEdition="@PRODUCT_EDITION_RESTRICTED@"; productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductEditionRestricted}${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-Install-Policy: when-satisfied
 IBM-InstallTo: core
@@ -11,7 +11,7 @@ IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature
  osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.collectiveController-1.0))"
 Subsystem-Content: com.ibm.ws.rest.api.discovery.collective.subscription; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description
-Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-@FEATURE_TERMS_RESTRICTED_V1@
+Subsystem-License: ${mfFeatureTermsRestricted}
 Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.rest.api.discovery.collective.subscription-1.0
 Subsystem-ManifestVersion: 1
 Subsystem-SymbolicName: com.ibm.websphere.appserver.rest.api.discovery.collective.subscription-1.0; visibility:=private; singleton:=false

@@ -13,7 +13,6 @@
 	<feature>audit-1.0</feature>
 	<feature>bluemixLogCollector-1.1</feature>
 	<feature>logstashCollector-1.1</feature>
-	<feature>jpaContainer-2.1</feature>
 	<feature>microProfileConfig-0.1</feature>
     <feature>microProfileFaultTolerance-0.1</feature>
 

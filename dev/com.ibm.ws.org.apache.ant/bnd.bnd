@@ -1,6 +1,6 @@
 -include= jar:${fileuri;lib/org.apache.ant-1.8.4.jar}!/META-INF/MANIFEST.MF,bnd.overrides
 
-Export-Package: org.apache.tools.ant
+Export-Package: org.apache.tools.ant;version="1.0.16"
 
 -includeresource: \
 	@lib/org.apache.ant-1.8.4.jar!/!META-INF/MANIFEST.MF

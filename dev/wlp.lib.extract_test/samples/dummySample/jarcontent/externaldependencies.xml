@@ -1,0 +1,3 @@
+<externalDependencies description="Dummy Sample Test Dependencies">
+    <dependency url="@@@DUMMYDEPURL@@@" targetpath="@@@DUMMYDEPTARGETFILE@@@" />
+</externalDependencies>

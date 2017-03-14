@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.runtime.update_bvt" default="bvt">
+  <property name="skip.validate.project" value="true" />
+
+  <property name="profile" value="com.ibm.ws.runtime.update.bvt" />
+  
+  <!-- Wait for web application to become available. -->
+  <property name="test.console" value="CWWKT0016I" />
+
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  <import file="../ant_build/public_imports/bvt_imports.xml"/>
+
+  <target name="prestart-server">
+    <!-- If the project builds a bundle, it is easiest to use fileinstall to
+         install/start the test bundle at runtime. this target makes sure the
+         bundles directory gets cleaned up to ensure correct behavior (i.e. no 
+         leftovers from a previous run... ) --> 
+    <delete dir="${bvt.prop.server.root}/bundles" includeemptydirs="yes" failonerror="false" />
+    <mkdir dir="${bvt.prop.server.root}/bundles" />
+
+    <copy todir="${bvt.prop.server.root}/bundles">
+      <fileset dir="${lib.dir}" includes="*.jar"/>
+    </copy>
+    
+     	
+  
+  </target>
+
+</project>

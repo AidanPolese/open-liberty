@@ -1,8 +1,0 @@
-Export-Package: com.ibm.wsspi.config
-Bundle-SymbolicName: com.ibm.websphere.appserver.spi.kernel.metatype
--include= ~../../cnf/resources/bnd/bundle.props
-bVersion: 1.0
-Include-Resource: META-INF/maven/com.ibm.websphere.appserver.spi/com.ibm.websphere.appserver.spi.kernel.metatype/pom.xml=dev/spi/ibm/com.ibm.websphere.appserver.spi.kernel.metatype_1.0.17.pom
-Bundle-Name: WebSphere Metatype Helper SPI
-Bundle-Description: WebSphere Metatype Helper SPI, version 1.0
-Import-Package: com.ibm.wsspi.config

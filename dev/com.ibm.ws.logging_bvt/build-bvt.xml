@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.logging_bvt" default="bvt">
+
+  <property name="profile" value="com.ibm.ws.logging.bvt" />
+  <property name="skip.validate.project" value="true" />
+  <path id="osgi.test.bundles">
+    <fileset file="${basedir}/bvt-bundle/lib/org.osgi.test.cases.log-5.0.0.jar"/>
+  </path>
+  
+  <import file="../ant_build/public_imports/standard_imports.xml" />
+  <import file="../ant_build/public_imports/bvt_imports.xml" />
+
+  <target name="prepare-test-client" depends="prepare-osgi-test-client"/>
+
+</project>

@@ -1,11 +1,10 @@
 Bnd-LastModified: 1486383766382
 Created-By: 1.8.0_121 (Oracle Corporation)
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
-IBM-SPI-Package: com.ibm.wsspi.event.logging
 IBM-ShortName: eventLogging-1.0
 Subsystem-Content: com.ibm.websphere.appserver.requestProbeJDBC-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.requestProbeServlet-1.0; type="osgi.subsystem.feature",

@@ -8,23 +8,39 @@ DirectoryScanner.removeDefaultExclude("**/.gitignore")
 DirectoryScanner.removeDefaultExclude("**/.gitattributes")
 
 task transform {
-	File sourceRootDir = new File('.')
+    File sourceRootDir = new File('.')
     sourceRootDir = file(sourceRootDir.absolutePath)
     while (!sourceRootDir.name.equals('dev')) {
-		sourceRootDir = file(sourceRootDir.getParent())
+        sourceRootDir = file(sourceRootDir.getParent())
     }
     println "sourceRootDir " + sourceRootDir
     if (!project.hasProperty('transformRootDir')) {
-        throw new GradleException("You must define transformRootDir to use this gradle task, e.g.\n\t./gradlew -Dorg.gradle.project.transformRootDir=/tmp/ws-cd-open-gradle -b transform.to.gradle transform")
+        throw new GradleException("You must define transformRootDir to use this gradle task, e.g.\n\t./gradlew -PtransformRootDir=/tmp/ws-cd-open-gradle -b transform.to.gradle transform")
     }
+    String savedTransformRootDir = "${transformRootDir}"
     File transformRootDir = new File("${transformRootDir}", 'dev')
     transformRootDir = file(transformRootDir.absolutePath)
     println "transformRootDir " + transformRootDir
     if (transformRootDir.exists()) {
         throw new GradleException("Just to be safe, " + transformRootDir + " should not exist before this task is executed")
     }
-    transformRootDir.mkdirs()
+    File transformKernelRootDir = null
+    if (project.hasProperty('kernelSuffix')) {
+        transformKernelRootDir = new File("${savedTransformRootDir}${kernelSuffix}", 'dev')
+        println "transformKernelRootDir " + transformKernelRootDir
+        if (transformKernelRootDir.exists()) {
+            throw new GradleException("Just to be safe, " + transformKernelRootDir + " should not exist before this task is executed")
+        }
+    }
     doLast {
+        Properties props = new Properties()
+        file('transform.properties').withReader {
+            props.load(it)
+        }
+        transformRootDir.mkdirs()
+        if (transformKernelRootDir != null) {
+            transformKernelRootDir.mkdirs()
+        }
         FileTree tree = fileTree(sourceRootDir).include('*/build.gradle')
         tree.visit { element ->
             File buildGradle = new File("$element.relativePath")
@@ -46,7 +62,74 @@ task transform {
                         fileName.replace('.gradle', '')
                     }
                 }
+                if (transformKernelRootDir != null && props.getProperty(projectName) != null) {
+                    String projectType = props.getProperty(projectName)
+                    if (projectType.equals('Kernel') || projectType.equals('KernelPrereq') || projectType.equals('KernelTest')) {
+		                copy {
+		                    from sourceRootDir
+		                    into transformKernelRootDir
+		                    include projectName + "/**"
+		                    exclude 'cnf/gradle/transform/.gradle/**'
+		                }
+		                copy {
+		                    from sourceRootDir
+		                    into transformKernelRootDir
+		                    include projectName + "/.classpath.gradle"
+		                    include projectName + "/bnd.bnd.gradle"
+		                    rename { String fileName ->
+		                        fileName.replace('.gradle', '')
+		                    }
+		                }
+                    } else /*if (projectType.equals('KernelTestPrereq')*/ {
+		                copy {
+		                    from sourceRootDir
+		                    into transformKernelRootDir
+		                    include projectName + "/**"
+		                    exclude projectName + "/.classpath.gradle"
+		                    exclude projectName + "/bnd.bnd"
+		                    exclude projectName + "/bnd.bnd.gradle"
+		                    exclude projectName + "/bnd.overrides"
+		                    exclude projectName + "/build.gradle"
+		                    exclude projectName + "/build.nogradle"
+		                    exclude projectName + "/build-api-spi.xml"
+		                    exclude projectName + "/build.xml"
+		                }
+                    }
+                }
             }
+        }
+        if (transformKernelRootDir != null) {
+	        tree = fileTree(sourceRootDir).include('*/build.nogradle')
+	        tree.visit {element ->
+	            File buildGradle = new File("$element.relativePath")
+	            if (buildGradle.name.equals('build.nogradle')) {
+	                String projectName = buildGradle.getParent()
+	                if (props.getProperty(projectName) != null) {
+                        String projectType = props.getProperty(projectName)
+                        if (projectType.equals('Kernel') || projectType.equals('KernelPrereq') || projectType.equals('KernelTest')) {
+			                File dest = new File(transformRootDir, projectName)
+			                if (dest.exists()) {
+			                    println "Skipping gradle and non-gradle project " + projectName
+			                    copy {
+			                        from sourceRootDir
+			                        into transformKernelRootDir
+			                        include projectName + "/.classpath"
+			                        rename { String fileName ->
+			                            fileName.replace('.classpath', '.classpath.ant')
+			                        }
+			                    }
+			                } else {
+			                    println "Transforming non-gradle project " + projectName
+			                    copy {
+			                        from sourceRootDir
+			                        into transformKernelRootDir
+			                        include projectName + "/**"
+			                    }
+			                }
+			            }
+			        }
+	            }
+	        }
         }
         File templateDir = new File(sourceRootDir, 'cnf/gradle/internal.features')
         tree = fileTree(sourceRootDir).include('com.ibm.websphere.features.internal.*/*.feature')
@@ -91,6 +174,28 @@ task transform {
                     into resourcesDir
                     include mfFileName
                 }
+                if (transformKernelRootDir != null && props.getProperty(featureName) != null) {
+                    String projectType = props.getProperty(featureName)
+                    if (projectType.equals('Kernel') || projectType.equals('KernelPrereq') || projectType.equals('KernelTest')) {
+		                File newKernelDir = new File(transformKernelRootDir, featureName)
+		                println "Creating Kernel internal feature project " + featureName
+		                newKernelDir.mkdirs()
+		                copy {
+		                    from newDir
+		                    into newKernelDir
+		                    include featureName + "/**"
+		                }
+                    } else {
+		                File newKernelDir = new File(transformKernelRootDir, featureName)
+		                println "Creating KernelTest internal feature project " + featureName
+		                newKernelDir.mkdirs()
+		                copy {
+		                    from newDir
+		                    into newKernelDir
+		                    include featureName + "/**"
+		                }
+                    }
+                }
             }
         }
 
@@ -110,6 +215,26 @@ task transform {
                         into resourcesDir
                         include manifestFile.name
                     }
+	                if (transformKernelRootDir != null && props.getProperty(featureName) != null) {
+	                    String projectType = props.getProperty(featureName)
+	                    if (projectType.equals('Kernel') || projectType.equals('KernelPrereq') || projectType.equals('KernelTest')) {
+			                File newKernelDir = new File(transformKernelRootDir, featureName + '/resources')
+			                newKernelDir.mkdirs()
+			                copy {
+			                    from manifestDir
+			                    into newKernelDir
+			                    include manifestFile.name
+			                }
+	                    } else {
+			                File newKernelDir = new File(transformKernelRootDir, featureName + '/resources')
+			                newKernelDir.mkdirs()
+			                copy {
+			                    from manifestDir
+			                    into newKernelDir
+			                    include manifestFile.name
+			                }
+	                    }
+	                }
                 }
             }
         }
@@ -144,6 +269,56 @@ task transform {
                     include bndFileName
                     rename { String fileName ->
                         fileName.replace(bndFileName, 'bnd.bnd')
+                    }
+                }
+                if (transformKernelRootDir != null && props.getProperty(newFolderName) != null) {
+                    String projectType = props.getProperty(newFolderName)
+                    if (projectType.equals('Kernel') || projectType.equals('KernelPrereq') || projectType.equals('KernelTest')) {
+		                File newKernelDir = new File(transformKernelRootDir, newFolderName)
+		                newKernelDir.mkdirs()
+                        println "Creating Kernel API project " + newFolderName
+		                copy {
+		                    from templateDir
+		                    into newKernelDir
+		                    include '*.template'
+		                    rename { String fileName ->
+		                        fileName.replace('.template', '')
+		                    }
+		                    filter(ReplaceTokens,
+		                        tokens: [PROJECT_NAME: newFolderName])
+		                }
+		                copy {
+		                    from templateDir
+		                    into newKernelDir
+		                    include pomFileName
+		                    include bndFileName
+		                    rename { String fileName ->
+		                        fileName.replace(bndFileName, 'bnd.bnd')
+		                    }
+		                }
+                    } else {
+		                File newKernelDir = new File(transformKernelRootDir, newFolderName)
+		                newKernelDir.mkdirs()
+                        println "Creating KernelTest API project " + newFolderName
+		                copy {
+		                    from templateDir
+		                    into newKernelDir
+		                    include '*.template'
+		                    rename { String fileName ->
+		                        fileName.replace('.template', '')
+		                    }
+		                    filter(ReplaceTokens,
+		                        tokens: [PROJECT_NAME: newFolderName])
+		                }
+		                copy {
+		                    from templateDir
+		                    into newKernelDir
+		                    include pomFileName
+		                    include bndFileName
+		                    rename { String fileName ->
+		                        fileName.replace(bndFileName, 'bnd.bnd')
+		                    }
+		                }
                     }
                 }
             }
@@ -181,6 +356,56 @@ task transform {
                         fileName.replace(bndFileName, 'bnd.bnd')
                     }
                 }
+                if (transformKernelRootDir != null && props.getProperty(newFolderName) != null) {
+                    String projectType = props.getProperty(newFolderName)
+                    if (projectType.equals('Kernel') || projectType.equals('KernelPrereq') || projectType.equals('KernelTest')) {
+		                File newKernelDir = new File(transformKernelRootDir, newFolderName)
+		                newKernelDir.mkdirs()
+                        println "Creating Kernel SPI project " + newFolderName
+		                copy {
+		                    from templateDir
+		                    into newKernelDir
+		                    include '*.template'
+		                    rename { String fileName ->
+		                        fileName.replace('.template', '')
+		                    }
+		                    filter(ReplaceTokens,
+		                        tokens: [PROJECT_NAME: newFolderName])
+		                }
+		                copy {
+		                    from templateDir
+		                    into newKernelDir
+		                    include pomFileName
+		                    include bndFileName
+		                    rename { String fileName ->
+		                        fileName.replace(bndFileName, 'bnd.bnd')
+		                    }
+		                }
+                    } else {
+		                File newKernelDir = new File(transformKernelRootDir, newFolderName)
+		                newKernelDir.mkdirs()
+                        println "Creating KernelTest SPI project " + newFolderName
+		                copy {
+		                    from templateDir
+		                    into newKernelDir
+		                    include '*.template'
+		                    rename { String fileName ->
+		                        fileName.replace('.template', '')
+		                    }
+		                    filter(ReplaceTokens,
+		                        tokens: [PROJECT_NAME: newFolderName])
+		                }
+		                copy {
+		                    from templateDir
+		                    into newKernelDir
+		                    include pomFileName
+		                    include bndFileName
+		                    rename { String fileName ->
+		                        fileName.replace(bndFileName, 'bnd.bnd')
+		                    }
+		                }
+                    }
+                }
             }
         }
 
@@ -206,10 +431,39 @@ task transform {
             include 'wlp-generateChecksums.jar'
             include 'wlp-metatypeValidator.jar'
         }
+        if (transformKernelRootDir != null) {
+	        copy {
+	            from new File(sourceRootDir, 'ant_build/lib')
+	            into new File(transformKernelRootDir, 'cnf/lib')
+	            include 'asm-all-5.0.3.jar'
+	            include 'commons-lang-2.4.jar'
+	            include 'commons-math-2.2.jar'
+	            include 'ecj-4.3.1.jar'
+	            include 'infra.buildtasks-core_4.0.jar'
+	            include 'jackson-annotations-2.2.3.jar'
+	            include 'jackson-core-2.2.3.jar'
+	            include 'jackson-databind-2.2.3.jar'
+	            include 'jsoup-1.7.2.jar'
+	            include 'mantis-collections.jar'
+	            include 'mantis-nls-standalone.jar'
+	            include 'org.apache.aries.util-1.2.0.jar'
+	            include 'osgi.core.jar'
+	            include 'ras-instrumentation.jar'
+	            include 'wlp-bndPlugins.jar'
+	            include 'wlp-generateChecksums.jar'
+	            include 'wlp-metatypeValidator.jar'
+	        }
+        }
 
         copy {
             from new File(sourceRootDir, 'cnf/release.gradle')
             into new File(transformRootDir, 'cnf/release')
+        }
+        if (transformKernelRootDir != null) {
+	        copy {
+	            from new File(sourceRootDir, 'cnf/release.gradle')
+	            into new File(transformKernelRootDir, 'cnf/release')
+	        }
         }
 
         copy {
@@ -220,11 +474,28 @@ task transform {
                 fileName.replace('.gradle', '')
             }
         }
+        if (transformKernelRootDir != null) {
+	        copy {
+	            from new File(sourceRootDir, 'cnf/resources/bnd')
+	            into new File(transformKernelRootDir, 'cnf/resources/bnd')
+	            include '*.gradle'
+	            rename { String fileName ->
+	                fileName.replace('.gradle', '')
+	            }
+	        }
+        }
 
         copy {
             from new File(sourceRootDir, 'cnf/gradle/transform')
             into transformRootDir
             include '.gradle-wrapper/**'
+        }
+        if (transformKernelRootDir != null) {
+	        copy {
+	            from new File(sourceRootDir, 'cnf/gradle/transform')
+	            into transformKernelRootDir
+	            include '.gradle-wrapper/**'
+	        }
         }
 
         copy {
@@ -234,10 +505,25 @@ task transform {
             include 'gradlew.bat'
             fileMode 0755
         }
+        if (transformKernelRootDir != null) {
+	        copy {
+	            from new File(sourceRootDir, 'cnf/gradle/transform')
+	            into transformKernelRootDir
+	            include 'gradlew'
+	            include 'gradlew.bat'
+	            fileMode 0755
+	        }
+        }
 
         copy {
             from new File(sourceRootDir, 'cnf/gradle/rootdir')
             into transformRootDir
+        }
+        if (transformKernelRootDir != null) {
+	        copy {
+	            from new File(sourceRootDir, 'cnf/gradle/rootdir')
+	            into transformKernelRootDir
+	        }
         }
     }
 }

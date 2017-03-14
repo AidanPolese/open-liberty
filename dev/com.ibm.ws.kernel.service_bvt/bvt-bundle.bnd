@@ -1,0 +1,13 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Kernel Service Test
+Bundle-SymbolicName: test.kernel.service.server
+Bundle-Description: Test bundle for kernel services
+
+Service-Component: test.kernel.service.server.ServletActivator; \
+      implementation:=test.kernel.service.server.ServletActivator; \
+      http=org.osgi.service.http.HttpService; \
+      properties:="service.vendor=IBM"
+
+Private-Package: test.kernel.service.server

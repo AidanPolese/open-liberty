@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="unittest/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.config"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.config.schemagen"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.org.eclipse.equinox.metatype"/>
+	<classpathentry kind="lib" path="/org.eclipse.osgi/lib/org.eclipse.osgi_3.11.3.v20170118-1931.jar"/>
+	<classpathentry kind="lib" path="/build.sharedResources/lib/junit/old/junit.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.boot.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.cmdline"/>
+	<classpathentry kind="output" path="build/unittest/classes"/>
+</classpath>

@@ -3,7 +3,7 @@ Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: javax.json; type=spec,
  javax.json.stream; type=spec,
  javax.json.spi; type=spec
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

@@ -1,0 +1,15 @@
+<server>
+
+    <httpConnector logFile="${shared.config.dir}/access.log" requireClientAuth="no">
+        <port>8080</port>
+        <port>9999</port>
+
+        <ciphers>rsa</ciphers>
+        <ciphers>dsa</ciphers>
+    </httpConnector>
+
+    <threadpool id="webPool" daemon="true" idle="5000" />
+
+    <threadpool id="ejbPool" timeout="1000" />
+
+</server>

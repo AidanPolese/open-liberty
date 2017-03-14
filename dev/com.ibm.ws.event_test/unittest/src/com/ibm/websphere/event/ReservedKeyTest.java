@@ -1,0 +1,60 @@
+package com.ibm.websphere.event;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class ReservedKeyTest {
+
+    @Test(expected = NullPointerException.class)
+    public void testReservedKeyNullName() {
+        new ReservedKey(null);
+    }
+
+    @Test
+    public void testHashCode() {
+        ReservedKey test = new ReservedKey("test");
+        assertEquals(test.hashCode(), test.getSlot());
+
+        ReservedKey test1 = new ReservedKey("test");
+        assertEquals(test.hashCode(), test1.hashCode());
+
+        ReservedKey test2 = new ReservedKey("test2");
+        assertFalse(test1.hashCode() == test2.hashCode());
+        assertEquals(test2.hashCode(), test2.getSlot());
+    }
+
+    @Test
+    public void testGetName() {
+        ReservedKey test = new ReservedKey("test");
+        ReservedKey test1 = new ReservedKey("test");
+        ReservedKey test2 = new ReservedKey("test2");
+
+        assertEquals("test", test.getName());
+        assertEquals("test", test1.getName());
+        assertEquals("test2", test2.getName());
+    }
+
+    @Test
+    public void testEquals() {
+        ReservedKey test = new ReservedKey("test");
+        ReservedKey test1 = new ReservedKey("test");
+        ReservedKey test2 = new ReservedKey("test2");
+        ReservedKey test3 = new ReservedKey("test2");
+
+        assertNotSame(test, test1);
+        assertEquals(test, test1);
+
+        assertNotSame(test, test1);
+        assertFalse(test1.equals(test2));
+        assertEquals(test2, test3);
+    }
+
+    @Test
+    public void testToString() {
+        ReservedKey test = new ReservedKey("test");
+        assertNotNull(test.toString());
+        assertTrue(test.toString().contains("test"));
+        assertTrue(test.toString().contains("@" + test.getSlot()));
+    }
+}

@@ -42,7 +42,7 @@ IBM-API-Service: org.apache.aries.blueprint.NamespaceHandler; osgi.service.bluep
  org.osgi.service.condpermadmin.ConditionalPermissionAdmin,
  org.osgi.service.jndi.JNDIContextManager,
  org.osgi.service.jndi.JNDIProviderAdmin
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

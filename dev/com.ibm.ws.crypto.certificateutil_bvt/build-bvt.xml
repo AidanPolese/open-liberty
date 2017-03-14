@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.crypto.certificateutil_bvt" default="bvt">
+  <property name="skip.validate.project" value="true" />
+
+  <property name="profile" value="com.ibm.ws.crypto.certificateutil_bvt" />
+  <!-- Override the server related actions as we do not have a server -->
+  <target name="copy-existing-ffdc" />
+  <target name="start-run-stop" depends="run-test-client" />  
+  <target name="check-new-ffdc" />
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  <import file="../ant_build/public_imports/bvt_imports.xml"/>
+
+</project>

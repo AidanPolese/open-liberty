@@ -4,7 +4,7 @@ IBM-API-Package: javax.security.auth.message; type=spec,
  javax.security.auth.message.callback; type=spec,
  javax.security.auth.message.config; type=spec,
  javax.security.auth.message.module; type=spec
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

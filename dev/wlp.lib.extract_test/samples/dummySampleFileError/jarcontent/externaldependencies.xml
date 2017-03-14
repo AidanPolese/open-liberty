@@ -1,0 +1,4 @@
+<externalDependencies description="Dummy Sample Test Dependencies">
+    <dependency url="@@@DUMMYDEPURL@@@" targetpath="@@@DUMMYDEPTARGETFILE@@@" />
+    <dependency url="http://localhost:0/" targetpath="test.jar" />
+</externalDependencies>

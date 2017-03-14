@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archive>
+	<archive targetInArchive="WEB-INF/lib/TestUtil.jar">
+		<dir sourceOnDisk="..\..\..\..\..\looseConfig\testUtil\classes"
+			targetInArchive="/" />
+	</archive>
+	<archive targetInArchive="WEB-INF/lib/Utils.jar">
+        <dir sourceOnDisk="..\..\..\..\..\looseConfig\utils\classes"
+            targetInArchive="/" />
+    </archive>
+	<dir sourceOnDisk="..\..\..\..\..\looseConfig\testWeb0\WebContent"
+		targetInArchive="/" />
+	<dir sourceOnDisk="..\..\..\..\..\looseConfig\testWeb0\classes"
+		targetInArchive="/WEB-INF/classes" />
+</archive>

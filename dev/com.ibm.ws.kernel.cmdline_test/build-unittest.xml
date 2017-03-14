@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.kernel.cmdline_test" default="unittest">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  <import file="../ant_build/public_imports/unittest_imports.xml"/>
+  
+  <!-- Override coverage properties, the source/classes for this project live(s) in kernel.boot -->
+  <property name="project.under.test" value="com.ibm.ws.kernel.cmdline" />
+  <path id="project.under.test.source">
+    <dirset dir="..">
+      <include name="../com.ibm.ws.kernel.boot/src" />
+    </dirset>
+  </path>
+  <path id="project.under.test.classes">
+    <pathelement location="../com.ibm.ws.kernel.boot/build/classes_compat" />
+  </path>
+  
+</project>

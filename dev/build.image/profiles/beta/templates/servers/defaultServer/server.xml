@@ -13,7 +13,6 @@
         <feature>audit-1.0</feature>
         <feature>bluemixLogCollector-1.1</feature>
         <feature>logstashCollector-1.1</feature>
-        <feature>jpaContainer-2.1</feature> <!-- Overidden by jpa-2.1, which is included in webProfile-7.0 -->
         <feature>microProfileConfig-0.1</feature>
         <feature>microProfileFaultTolerance-0.1</feature>
 
@@ -77,23 +76,5 @@
         <source>garbageCollection</source>
     </logstashCollector>
     -->
-    
-    <!-- This is sample configuration for the jpaContainer-2.1 feature -->
-    <!-- The jpaContainer-2.1 feature will be overridden by jpa-2.1 (which is included in webProfile-7.0) -->
-    <!-- to observe the behavior of jpaContainer-2.1, the jpa-2.1 and/or webProfile-7.0 must be turned off -->
-    <!-- 
-    <library id="eclipselink">
-        <fileset dir="${server.config.dir}/eclipselink" includes="*.jar"/>
-    </library>
-    
-    <application location="myApp.war">
-        <classloader commonLibraryRef="eclipselink"/>
-    </application>
-    
-    <featureManager>
-        <feature>bells-1.0</feature>
-    </featureManager>
-    <bell libraryRef="eclipselink"/>
-     -->
 
 </server>

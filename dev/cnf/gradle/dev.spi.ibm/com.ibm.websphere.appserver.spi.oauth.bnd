@@ -15,4 +15,4 @@ publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \
-	com.ibm.ws.security.oauth;version=latest
+	com.ibm.ws.security.oauth.2.0;version=latest

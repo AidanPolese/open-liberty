@@ -1,0 +1,8 @@
+<server>
+    <foo1 bar="test1"/>
+
+    <!-- valid import -->
+    <include location="good-import.xml"/>
+    
+    <foo2 bar="test2"/>
+</server>

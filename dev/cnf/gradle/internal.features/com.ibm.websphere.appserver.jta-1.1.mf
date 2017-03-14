@@ -2,7 +2,7 @@ Bnd-LastModified: 1486383824253
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: javax.transaction; type=spec,
  javax.transaction.xa; type=spec
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

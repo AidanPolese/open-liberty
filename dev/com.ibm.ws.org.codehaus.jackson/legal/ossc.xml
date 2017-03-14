@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Jackson JSON Processor" 
+            projectURL="http://jackson.codehaus.org/" 
+            version="4.0.1" revision="" 
+            license-type="Apachev2" 
+            contact="wraschke@us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.dev_tools/prereqs/prereq.jackson/1.6.2/20101201/download.zip">
+         <file basename="jackson-core-asl-1.6.2.jar"   checksum="e6596202efd7a2884291b796d2746ec2"/>
+         <file basename="jackson-jaxrs-1.6.2.jar"      checksum="1531b0557f4f35492e7e66ecbd2807a2"/>
+         <file basename="jackson-mapper-asl-1.6.2.jar" checksum="77d464d841135b2492b816aa503ef1f8"/>
+         <file basename="jackson-xc-1.6.2.jar"         checksum="f4b5bf0f5325eeee450511ff085c7ca8"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+</ossc>

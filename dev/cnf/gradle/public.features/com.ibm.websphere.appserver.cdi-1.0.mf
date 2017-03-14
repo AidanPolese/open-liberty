@@ -15,7 +15,7 @@ IBM-API-Package: javax.decorator; type=spec,
  org.apache.webbeans.intercept; type=internal
 IBM-App-ForceRestart: install,
  uninstall
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

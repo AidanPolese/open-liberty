@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Unknown" 
+            projectURL="Unknown" 
+            version="2.1" revision="" 
+            license-type="Apachev2" 
+            contact="not@us.ibm.com" 
+            encryption="no">
+      <download loadLocation="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.dev_tools/prereqs/prereq.servlet/3.0/20100714/download.zip">
+         <file basename="com.ibm.ws.javax.servlet_3.0.jar" checksum="5c65cd52939c5245a00c00eb6a2005d2"/>
+      </download>
+   </project>
+   
+   <notes>
+   The download location is the location where it is downloaded from for the WAS build process
+   </notes>
+   
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and has been cleared previously by WAS v8
+   </clearencehistory>
+</ossc>

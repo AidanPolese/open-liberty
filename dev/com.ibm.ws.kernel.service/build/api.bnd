@@ -1,8 +1,0 @@
-Export-Package: com.ibm.websphere.kernel.server
-Bundle-SymbolicName: com.ibm.websphere.appserver.api.kernel.service
--include= ~../../cnf/resources/bnd/bundle.props, -tmp/.copyright.properties
-bVersion: 1.0
-Include-Resource: META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.kernel.service/pom.xml=dev/api/ibm/com.ibm.websphere.appserver.api.kernel.service_1.0.17.pom
-Bundle-Name: WebSphere Kernel Services API
-Bundle-Description: WebSphere Kernel Services API, version 1.0
-Import-Package: com.ibm.websphere.kernel.server

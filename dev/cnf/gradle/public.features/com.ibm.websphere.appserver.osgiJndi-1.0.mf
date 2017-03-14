@@ -3,7 +3,7 @@ Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: org.osgi.service.jndi; type="spec:osgi",
  org.apache.aries.proxy; type=internal,
  org.apache.aries.proxy.weaving; type=internal
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-Install-Policy: when-satisfied
 IBM-InstallTo: core

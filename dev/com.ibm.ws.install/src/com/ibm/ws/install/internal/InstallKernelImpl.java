@@ -93,9 +93,9 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
     }
 
     public Collection<String> install(String assetType, Collection<String> ids, String toExtension,
-            boolean acceptLicense, ExistsAction existsAction, String userId, String password) throws InstallException {
+                                      boolean acceptLicense, ExistsAction existsAction, String userId, String password) throws InstallException {
         this.director.fireProgressEvent(InstallProgressEvent.BEGIN, 0,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_INSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_INSTALL"));
         Collection<String> installed;
         try {
             this.director.refresh();
@@ -104,8 +104,7 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
             } else if (assetType.equalsIgnoreCase(IFIX)) {
                 this.director.installFixes(ids, userId, password);
             } else {
-                InstallException e = new InstallException(
-                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("ERROR_UNSUPPORTED_ASSETTYPE", assetType));
+                InstallException e = new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("ERROR_UNSUPPORTED_ASSETTYPE", assetType));
                 this.director.log(Level.SEVERE, e.getMessage());
                 this.director.log(Level.FINEST, null, e);
                 throw e;
@@ -124,19 +123,19 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
         }
 
         this.director.fireProgressEvent(InstallProgressEvent.COMPLETE, 100,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_INSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_INSTALL"));
         return installed;
     }
 
     @Override
     public Collection<String> installFeature(String featureId, String toExtension, boolean acceptLicense,
-            ExistsAction existsAction) throws InstallException {
+                                             ExistsAction existsAction) throws InstallException {
         return installFeature(featureId, toExtension, acceptLicense, existsAction, null, null);
     }
 
     @Override
     public Collection<String> installFeature(String featureId, String toExtension, boolean acceptLicense,
-            ExistsAction existsAction, String userId, String password) throws InstallException {
+                                             ExistsAction existsAction, String userId, String password) throws InstallException {
         ArrayList<String> featureIds = new ArrayList<String>(1);
         if (featureId != null)
             featureIds.add(featureId);
@@ -145,16 +144,16 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
 
     @Override
     public Collection<String> installFeature(Collection<String> featureIds, String toExtension, boolean acceptLicense,
-            ExistsAction existsAction) throws InstallException {
+                                             ExistsAction existsAction) throws InstallException {
         return installFeature(featureIds, toExtension, acceptLicense, existsAction, null, null);
     }
 
     public Collection<String> installLocalFeature(String esaLocation, String toExtension, boolean acceptLicense,
-            ExistsAction existsAction) throws InstallException {
+                                                  ExistsAction existsAction) throws InstallException {
         this.director.log(Level.FINE,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("LOG_INSTALL_FEATURES", esaLocation));
+                          Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("LOG_INSTALL_FEATURES", esaLocation));
         this.director.fireProgressEvent(InstallProgressEvent.BEGIN, 0,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_INSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_INSTALL"));
         Collection<String> installed;
         try {
             this.director.refresh();
@@ -168,17 +167,17 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
             this.director.cleanUp();
         }
         this.director.fireProgressEvent(InstallProgressEvent.COMPLETE, 100,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_INSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_INSTALL"));
         return installed;
     }
 
     @Override
     public Collection<String> installFeature(Collection<String> featureIds, File fromDir, String toExtension,
-            boolean acceptLicense, ExistsAction existsAction, boolean offlineOnly) throws InstallException {
+                                             boolean acceptLicense, ExistsAction existsAction, boolean offlineOnly) throws InstallException {
         this.director.log(Level.FINE,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("LOG_INSTALL_FEATURES", featureIds));
+                          Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("LOG_INSTALL_FEATURES", featureIds));
         this.director.fireProgressEvent(InstallProgressEvent.BEGIN, 0,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_INSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_INSTALL"));
         Collection<String> installed;
         try {
             this.director.refresh();
@@ -192,24 +191,23 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
             this.director.cleanUp();
         }
         this.director.fireProgressEvent(InstallProgressEvent.COMPLETE, 100,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_INSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_INSTALL"));
         return installed;
     }
 
     @Override
     public Collection<String> installFeature(Collection<String> featureIds, String toExtension, boolean acceptLicense,
-            ExistsAction existsAction, String userId, String password) throws InstallException {
+                                             ExistsAction existsAction, String userId, String password) throws InstallException {
         this.director.log(Level.FINE,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("LOG_INSTALL_FEATURES", featureIds));
+                          Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("LOG_INSTALL_FEATURES", featureIds));
         return install(FEATURE, featureIds, toExtension, acceptLicense, existsAction, userId, password);
     }
 
     @Override
-    public ServerPackageAsset deployServerPackage(File archiveFile, String toExtension, boolean downloadDependencies)
-            throws InstallException {
+    public ServerPackageAsset deployServerPackage(File archiveFile, String toExtension, boolean downloadDependencies) throws InstallException {
         this.director.log(Level.INFO, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("LOG_DEPLOY_FILE", archiveFile));
         this.director.fireProgressEvent(InstallProgressEvent.BEGIN, 0,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_DEPLOY"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_DEPLOY"));
         ServerPackageAsset spa = null;
         try {
             this.director.refresh();
@@ -220,8 +218,8 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
             for (ServerAsset server : spa.getServers()) {
                 if (InstallUtils.serverExists(server.getServerName())) {
                     throw new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage(
-                            "ERROR_SERVER_PACKAGE_SERVER_ALREADY_INSTALLED", archiveFile.getAbsolutePath(),
-                            server.getServerName()), InstallException.ALREADY_EXISTS);
+                                                                                              "ERROR_SERVER_PACKAGE_SERVER_ALREADY_INSTALLED", archiveFile.getAbsolutePath(),
+                                                                                              server.getServerName()), InstallException.ALREADY_EXISTS);
                 }
 
             }
@@ -233,15 +231,14 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
             this.director.cleanUp();
         }
         this.director.fireProgressEvent(InstallProgressEvent.COMPLETE, 100,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_DEPLOY"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_DEPLOY"));
         return spa;
     }
 
     @Override
-    public Collection<String> getServerFeaturesToInstall(Set<ServerAsset> servers, boolean offlineOnly)
-            throws InstallException, IOException {
+    public Collection<String> getServerFeaturesToInstall(Set<ServerAsset> servers, boolean offlineOnly) throws InstallException, IOException {
         this.director.fireProgressEvent(InstallProgressEvent.RESOLVE, 0,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_CHECKING_MISSING_SERVER_FEATURES"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_CHECKING_MISSING_SERVER_FEATURES"));
         return this.director.getServerFeaturesToInstall(servers, offlineOnly);
     }
 
@@ -260,7 +257,7 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
 
     private void uninstall(String assetType, Collection<String> ids, boolean force) throws InstallException {
         this.director.fireProgressEvent(InstallProgressEvent.BEGIN, 0,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_UNINSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_UNINSTALL"));
 
         try {
             this.director.refresh();
@@ -280,7 +277,7 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
             this.director.cleanUp();
         }
         this.director.fireProgressEvent(InstallProgressEvent.COMPLETE, 100,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_UNINSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_UNINSTALL"));
     }
 
     @Override
@@ -314,18 +311,16 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
         return this.director.getFeatureLicense(esaLocation, locale);
     }
 
-    public Set<InstallLicense> getServerPackageFeatureLicense(File archive, boolean offlineOnly, Locale locale)
-            throws InstallException {
+    public Set<InstallLicense> getServerPackageFeatureLicense(File archive, boolean offlineOnly, Locale locale) throws InstallException {
         return this.director.getServerPackageFeatureLicense(archive, offlineOnly, locale);
     }
 
-    public Set<InstallLicense> getServerFeatureLicense(File archive, boolean offlineOnly, Locale locale)
-            throws InstallException, IOException {
+    public Set<InstallLicense> getServerFeatureLicense(File archive, boolean offlineOnly, Locale locale) throws InstallException, IOException {
         return this.director.getServerFeatureLicense(archive, offlineOnly, locale);
     }
 
     public Set<InstallLicense> getFeatureLicense(Collection<String> featureIds, File fromDir, String toExtension,
-            boolean offlineOnly, Locale locale) throws InstallException {
+                                                 boolean offlineOnly, Locale locale) throws InstallException {
         return this.director.getFeatureLicense(featureIds, fromDir, toExtension, offlineOnly, locale);
     }
 
@@ -335,8 +330,7 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
     }
 
     @Override
-    public Set<InstallLicense> getFeatureLicense(String featureId, Locale locale, String userId, String password)
-            throws InstallException {
+    public Set<InstallLicense> getFeatureLicense(String featureId, Locale locale, String userId, String password) throws InstallException {
         ArrayList<String> featureIds = new ArrayList<String>(1);
         if (featureId != null)
             featureIds.add(featureId);
@@ -350,7 +344,7 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
 
     @Override
     public Set<InstallLicense> getFeatureLicense(Collection<String> featureIds, Locale locale, String userId,
-            String password) throws InstallException {
+                                                 String password) throws InstallException {
         return this.director.getFeatureLicense(featureIds, locale, userId, password);
     }
 
@@ -372,8 +366,7 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
         this.director.enableConsoleLog(level, verbose);
     }
 
-    public Map<ResourceType, List<RepositoryResource>> queryAssets(String searchStr, AssetType type)
-            throws InstallException {
+    public Map<ResourceType, List<RepositoryResource>> queryAssets(String searchStr, AssetType type) throws InstallException {
         return this.director.queryAssets(searchStr, type);
     }
 
@@ -382,40 +375,40 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
     }
 
     public Collection<String> downloadFeatureFeatureManager(Set<String> featureIdSet, File toDir,
-            DownloadOption downloadOption, ExistsAction action, String user, String password) throws InstallException {
+                                                            DownloadOption downloadOption, ExistsAction action, String user, String password) throws InstallException {
         this.director.fireProgressEvent(InstallProgressEvent.BEGIN, 0,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_INSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_INSTALL"));
         Collection<String> installed;
         try {
             this.director.refresh();
             installed = this.director.downloadFeatureFeatureManager(featureIdSet, toDir, downloadOption, action, user,
-                    password);
+                                                                    password);
         } catch (InstallException e) {
             throw e;
         } finally {
             this.director.cleanUp();
         }
         this.director.fireProgressEvent(InstallProgressEvent.COMPLETE, 100,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_DOWNLOAD"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_DOWNLOAD"));
         return installed;
     }
 
     public Map<String, Collection<String>> downloadAssetsInstallUtility(Set<String> assetIdSet, File toDir,
-            DownloadOption downloadOption, String user, String password, boolean isOverride) throws InstallException {
+                                                                        DownloadOption downloadOption, String user, String password, boolean isOverride) throws InstallException {
         this.director.fireProgressEvent(InstallProgressEvent.BEGIN, 0,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_DOWNLOAD"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_DOWNLOAD"));
         Map<String, Collection<String>> installed;
         try {
             this.director.refresh();
             installed = this.director.downloadAssetsInstallUtility(assetIdSet, toDir, downloadOption, user, password,
-                    isOverride);
+                                                                   isOverride);
         } catch (InstallException e) {
             throw e;
         } finally {
             this.director.cleanUp();
         }
         this.director.fireProgressEvent(InstallProgressEvent.COMPLETE, 100,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_DOWNLOAD"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_DOWNLOAD"));
         return installed;
     }
 
@@ -435,9 +428,9 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
     }
 
     public void uninstallFeaturesByProductId(String productId, Collection<File> toBeDeleted,
-            boolean exceptPlatfromFeatuers) throws InstallException {
+                                             boolean exceptPlatfromFeatuers) throws InstallException {
         this.director.fireProgressEvent(InstallProgressEvent.BEGIN, 0,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_UNINSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_UNINSTALL"));
         try {
             this.director.refresh();
             this.director.uninstallFeaturesByProductId(productId, exceptPlatfromFeatuers);
@@ -448,7 +441,7 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
             this.director.cleanUp();
         }
         this.director.fireProgressEvent(InstallProgressEvent.COMPLETE, 100,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_UNINSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_UNINSTALL"));
     }
 
     @Override
@@ -464,8 +457,7 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
     }
 
     @Override
-    public void uninstallFeaturePrereqChecking(String featureId, boolean allowUserFeatureUninstall, boolean force)
-            throws InstallException {
+    public void uninstallFeaturePrereqChecking(String featureId, boolean allowUserFeatureUninstall, boolean force) throws InstallException {
         Collection<String> featureIds = new ArrayList<String>();
         featureIds.add(featureId);
         this.director.uninstallFeaturesPrereqChecking(featureIds, allowUserFeatureUninstall, force);
@@ -483,23 +475,23 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
 
     @Override
     public Map<String, Collection<String>> installAsset(Collection<String> assetIds, RepositoryConnectionList loginInfo,
-            String proxyHost, String proxyPort, String proxyUser, String proxyPwd) throws InstallException {
+                                                        String proxyHost, String proxyPort, String proxyUser, String proxyPwd) throws InstallException {
         return installAsset(assetIds, null, loginInfo, proxyHost, proxyPort, proxyUser, proxyPwd);
     }
 
     @Override
     public Map<String, Collection<String>> installAsset(Collection<String> assetIds, File fromDir,
-            RepositoryConnectionList loginInfo, String proxyHost, String proxyPort, String proxyUser, String proxyPwd)
-            throws InstallException {
+                                                        RepositoryConnectionList loginInfo, String proxyHost, String proxyPort, String proxyUser,
+                                                        String proxyPwd) throws InstallException {
         return installAsset(assetIds, fromDir, loginInfo, proxyHost, proxyPort, proxyUser, proxyPwd, false);
     }
 
     @Override
     public Map<String, Collection<String>> installAsset(Collection<String> assetIds, File fromDir,
-            RepositoryConnectionList loginInfo, String proxyHost, String proxyPort, String proxyUser, String proxyPwd,
-            boolean downloadDependencies) throws InstallException {
+                                                        RepositoryConnectionList loginInfo, String proxyHost, String proxyPort, String proxyUser, String proxyPwd,
+                                                        boolean downloadDependencies) throws InstallException {
         this.director.fireProgressEvent(InstallProgressEvent.BEGIN, 0,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_INSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_STARTING_INSTALL"));
         Map<String, Collection<String>> installed;
         try {
             this.director.refresh();
@@ -526,7 +518,7 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
         }
 
         this.director.fireProgressEvent(InstallProgressEvent.COMPLETE, 100,
-                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_INSTALL"));
+                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("STATE_COMPLETED_INSTALL"));
         return installed;
     }
 
@@ -584,14 +576,13 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
 
     @Override
     public Map<String, Collection<String>> install(String toExtension, boolean rollbackAll,
-            boolean downloadDependencies) throws InstallException {
+                                                   boolean downloadDependencies) throws InstallException {
         Map<String, Collection<String>> installed;
         try {
             this.director.downloadAssets(toExtension);
             this.director.log(Level.FINEST,
-                    InstallConstants.IGNORE_FILE_PROPERTY + InstallConstants.IGNORE_FILE_OPTION);
-            if (InstallConstants.IGNORE_FILE_OPTION != null
-                    && new Boolean(InstallConstants.IGNORE_FILE_OPTION).booleanValue()) {
+                              InstallConstants.IGNORE_FILE_PROPERTY + InstallConstants.IGNORE_FILE_OPTION);
+            if (Boolean.valueOf(InstallConstants.IGNORE_FILE_OPTION)) {
                 this.director.install(ExistsAction.ignore, rollbackAll, downloadDependencies);
             } else {
                 this.director.install(ExistsAction.replace, rollbackAll, downloadDependencies);
@@ -628,7 +619,7 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
 
     @Override
     public boolean resolveExistingAssetsFromDirectoryRepo(Collection<String> featureNames, File repoDir,
-            boolean isOverwrite) throws InstallException {
+                                                          boolean isOverwrite) throws InstallException {
         return this.director.resolveExistingAssetsFromDirectoryRepo(featureNames, repoDir, isOverwrite);
     }
 

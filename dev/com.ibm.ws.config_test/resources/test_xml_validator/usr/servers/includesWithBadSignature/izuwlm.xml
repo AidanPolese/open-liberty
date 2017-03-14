@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><server description="izuis">
+
+      <application id="zwlm" location="${zosmf.app.dir}/izuwlm.app" name="zwlm" type="ear">
+       <classloader commonLibraryRef="zosmfSharedLibrary"/>
+      </application>
+
+</server>

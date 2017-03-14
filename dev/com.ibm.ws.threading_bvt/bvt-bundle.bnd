@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Threading Test
+Bundle-SymbolicName: com.ibm.ws.threading.bvt
+Bundle-Description: Test bundle for the com.ibm.ws.threading
+
+Private-Package: com.ibm.ws.threading.bvt.*
+
+Service-Component: \
+   com.ibm.ws.threading.bvt.bvt.runner; \
+      implementation:=com.ibm.ws.threading.bvt.ThreadingTestRunner; \
+      immediate:=true; \
+      http=org.osgi.service.http.HttpService; \
+      scheduledExecutorService=java.util.concurrent.ScheduledExecutorService; \
+      nondeferrableScheduledExecutorService='java.util.concurrent.ScheduledExecutorService(deferrable=false)'; \
+      deferrableScheduledExecutorService='java.util.concurrent.ScheduledExecutorService(deferrable=true)'; \
+      properties:="service.vendor=IBM"

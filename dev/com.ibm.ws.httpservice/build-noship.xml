@@ -1,0 +1,7 @@
+<project name="com.ibm.ws.httpservice" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+  <!-- story 38063 -->
+  <property name="findbugs.known.failing.project" value="true"/>
+
+</project>

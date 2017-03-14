@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.crypto.passwordutil_test" default="unittest">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  <import file="../ant_build/public_imports/unittest_imports.xml"/>
+
+  <property name="ext.jar.input.dir" value="${basedir}/unittest/test_data/tool_classpath_files"/>
+  <property name="ext.jar.output.dir" value="${build.dir}/unittest/test_data/tool"/>
+  <property name="resource.input.dir" value="${basedir}/unittest/test_data/resource_files"/>
+  <property name="resource.output.dir" value="${build.dir}/unittest/test_data/resource_files"/>
+  <property name="custom.input.dir" value="${basedir}/unittest/test_data/custom_encryption"/>
+  <property name="custom.output.dir" value="${build.dir}/unittest/test_data/custom_encryption"/>
+  <property name="custom.extension.dir" value="bin/tools/extensions/ws-customPasswordEncryption"/>
+  <property name="simple.custom.input.dir" value="${basedir}/unittest/test_data/simple_custom_encryption"/>
+  <property name="simple.custom.output.dir" value="${build.dir}/unittest/test_data/simple_custom_encryption"/>
+
+  <target name="unittestPackage">
+    <!-- create tool classpath jars -->
+    <mkdir dir="${ext.jar.output.dir}" />
+    <jar destfile="${ext.jar.output.dir}/no_extension.jar" 
+            manifest="${ext.jar.input.dir}/no_extension/META-INF/MANIFEST.MF" />
+    <jar destfile="${ext.jar.output.dir}/one_extension.jar" 
+            manifest="${ext.jar.input.dir}/one_extension/META-INF/MANIFEST.MF" />
+    <jar destfile="${ext.jar.output.dir}/multiple_extensions.jar" 
+            manifest="${ext.jar.input.dir}/multiple_extensions/META-INF/MANIFEST.MF" />
+    <jar destfile="${ext.jar.output.dir}/no_matching_extension.jar" 
+            manifest="${ext.jar.input.dir}/no_matching_extension/META-INF/MANIFEST.MF" />
+    <!-- copy resource files -->
+    <copy todir="${resource.output.dir}">
+      <fileset dir="${resource.input.dir}"/>
+    </copy>
+    <!-- create the test data for CustmManifest -->
+    <mkdir dir="${custom.output.dir}/${custom.extension.dir}" />
+    <mkdir dir="${custom.output.dir}/${custom.extension.dir}/empty" />
+    <jar destfile="${custom.output.dir}/${custom.extension.dir}/valid.jar" 
+            manifest="${custom.input.dir}/${custom.extension.dir}/valid/META-INF/MANIFEST.MF" />
+    <jar destfile="${custom.output.dir}/${custom.extension.dir}/noBundle.jar" 
+            manifest="${custom.input.dir}/${custom.extension.dir}/noBundle/META-INF/MANIFEST.MF" />
+    <jar destfile="${custom.output.dir}/${custom.extension.dir}/noImplClass.jar" 
+            manifest="${custom.input.dir}/${custom.extension.dir}/noImplClass/META-INF/MANIFEST.MF" />
+    <jar destfile="${custom.output.dir}/${custom.extension.dir}/noFeature.jar" 
+            manifest="${custom.input.dir}/${custom.extension.dir}/noFeature/META-INF/MANIFEST.MF" />
+    <jar destfile="${custom.output.dir}/${custom.extension.dir}/noDescription.jar" 
+            manifest="${custom.input.dir}/${custom.extension.dir}/noDescription/META-INF/MANIFEST.MF" />
+    <mkdir dir="${simple.custom.output.dir}/${custom.extension.dir}" />
+    <jar destfile="${simple.custom.output.dir}/${custom.extension.dir}/simpleCustomEncryption.jar" 
+            manifest="${simple.custom.input.dir}/${custom.extension.dir}/simpleCustomEncryption/META-INF/MANIFEST.MF" />
+    <copy todir="${custom.output.dir}/usr">
+      <fileset dir="${custom.input.dir}/usr"/>
+    </copy>
+    <copy todir="${simple.custom.output.dir}/usr">
+      <fileset dir="${simple.custom.input.dir}/usr"/>
+    </copy>
+    <jar destfile="${simple.custom.output.dir}/bin/tools/ws-securityutil.jar" 
+            manifest="${ext.jar.input.dir}/one_extension/META-INF/MANIFEST.MF" />
+
+  </target>
+
+</project>

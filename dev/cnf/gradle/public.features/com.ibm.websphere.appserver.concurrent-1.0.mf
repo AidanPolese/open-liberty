@@ -4,7 +4,7 @@ IBM-API-Package: javax.enterprise.concurrent; type="spec"
 IBM-API-Service: javax.enterprise.concurrent.ContextService; id=DefaultContextService,
  javax.enterprise.concurrent.ManagedExecutorService; id=DefaultManagedExecutorService,
  javax.enterprise.concurrent.ManagedScheduledExecutorService; id=DefaultManagedScheduledExecutorService
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

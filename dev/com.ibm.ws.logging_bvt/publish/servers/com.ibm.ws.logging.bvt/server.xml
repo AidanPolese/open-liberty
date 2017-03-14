@@ -1,0 +1,8 @@
+<server>
+
+    <!-- For compliance, test, all log entries must be published, regardless of level/component enablement -->
+    <logging publishOsgiEvents="ALL" traceFileName="loggingTrace.log" traceFormat="BASIC" />
+    
+    <include optional="true" location="${shared.config.dir}/bvtTestPorts.xml"/>
+    
+</server>

@@ -1,0 +1,9 @@
+-nouses=true
+bVersion=1.0
+-output ${bnd.target}/${Bundle-SymbolicName}_${bVersion}.jar
+
+Bundle-Name: WebSphere kernel bootstrap launcher
+Bundle-SymbolicName: launch
+Bundle-Version: ${bVersion}
+WebSphere-DefaultKernel: test-kernel-1.0
+WebSphere-DefaultLogProvider: test-logging-1.0

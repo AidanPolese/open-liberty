@@ -1,0 +1,15 @@
+<server>
+
+	<include optional="true" location="${shared.config.dir}/bvtTestPorts.xml"/>
+        
+    <featureManager>
+        <feature>httpservice-2.2</feature>
+    </featureManager>
+    
+    <logging
+    traceSpecification="*=info=enabled:com.ibm.ws.webcontainer*=all:com.ibm.wsspi.webcontainer*=all"
+    maxFileSize="40"
+    maxFiles="40"
+    traceFormat="BASIC"/> 
+    
+</server>

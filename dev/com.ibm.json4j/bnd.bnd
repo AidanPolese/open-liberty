@@ -7,17 +7,13 @@ Export-Package: \
    com.ibm.json, \
    com.ibm.json.java, \
    com.ibm.json.xml
-   
-Include-Resource: \
-   @lib/com.ibm.ws.prereq.json4j.jar
-   
-Copyright: Licensed Materials - Property of IBM 5724-J08, 5724-I63, 57\
-24-H88, 5724-H89, 5655-W65, 5733-W70 Copyright IBM Corp. 1998, 2011 A\
-ll Rights Reserved. US Government Users Restricted Rights - Use, dupl\
-ication or disclosure restricted by GSA ADP Schedule Contract with IB\
-M Corp.
+
+Private-Package: \
+   com.ibm.json.java.internal, \
+   com.ibm.json.xml.internal
+
+instrument.disabled: true
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \
-	lib/com.ibm.ws.prereq.json4j.jar;version=file, \
 	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

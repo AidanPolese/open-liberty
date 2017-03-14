@@ -1,7 +1,7 @@
 copyrightBuildYear=2017
-libertyRelease=17.0.0.1
-libertyBetaVersion=
-libertyBundleMicroVersion=16
+libertyRelease=17.0.0.2
+libertyBetaVersion=2017.3.0.0
+libertyBundleMicroVersion=17
 buildLabel=${tstamp}
 buildID=${libertyRelease}-${buildLabel}
 productEdition=BASE_ILAN
@@ -12,8 +12,17 @@ libertyWelcomePageProductName=WebSphere Application Server Beta
 libertyInfocenterLink=http://www14.software.ibm.com/webapp/wsbroker/redirect?version=cord&product=was-nd-mp&topic=cwlp_about
 libertyLatestVersionUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/wlp_beta_latestversion.js
 libertyWelcomePageCssEnhancementsUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/adminCenter-welcome.css
-libertyWelcomePageProductVersion=2017.2.0.0
+libertyWelcomePageProductVersion=${libertyBetaVersion}
 libertyWelcomePageJsEnhancementsUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/adminCenter-welcome.js
+
+mfProductEdition=
+mfProductEditionRestricted=
+mfProductEditionZOs=
+mfProductEditionLibertyCore=
+mfProductVersion=version="${libertyBetaVersion}"
+mfLicenseInfoSpecial=
+mfFeatureTermsRestricted=http://www.ibm.com/licenses/wlp-featureterms-v1
+mfFeatureTermsSpecial=http://www.ibm.com/licenses/wlp-featureterms-v1
 
 libertyWelcomePageProductName=WebSphere Application Server V${libertyRelease}
 libertyInfocenterLink=http://www14.software.ibm.com/webapp/wsbroker/redirect?version=phil&product=was-nd-mp&topic=cwlp_about
@@ -21,3 +30,12 @@ libertyLatestVersionUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/web
 libertyWelcomePageCssEnhancementsUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/adminCenter-welcome.css
 libertyWelcomePageProductVersion=${libertyRelease}
 libertyWelcomePageJsEnhancementsUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/adminCenter-welcome.js
+
+mfProductEdition= productEdition="@PRODUCT_EDITION@"
+mfProductEditionRestricted= productEdition="@PRODUCT_EDITION_RESTRICTED@"
+mfProductEditionZOs=productEdition="@PRODUCT_EDITION_ZOS@"
+mfProductEditionLibertyCore= productEdition="@PRODUCT_EDITION_LIBERTY_CORE@"
+mfProductVersion=version="${libertyRelease}"
+mfLicenseInfoSpecial=@IBM_LI_SPECIAL@
+mfFeatureTermsRestricted=http://www.ibm.com/licenses/wlp-featureterms-@FEATURE_TERMS_RESTRICTED_V1@
+mfFeatureTermsRestricted=http://www.ibm.com/licenses/@FEATURE_TERMS_SPECIAL@

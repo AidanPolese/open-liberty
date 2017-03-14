@@ -11,7 +11,7 @@ IBM-API-Package: javax.transaction; type=spec,
 IBM-API-Service: com.ibm.wsspi.uow.UOWManager,
  javax.transaction.TransactionSynchronizationRegistry,
  javax.transaction.UserTransaction
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

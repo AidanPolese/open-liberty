@@ -1,0 +1,7 @@
+<server>
+    <include optional="true" location="${shared.config.dir}/bvtTestPorts.xml"/>
+    <featureManager>
+        <feature>httpservice-2.2</feature>
+        <feature>servlet-3.0</feature>  
+    </featureManager>
+</server>

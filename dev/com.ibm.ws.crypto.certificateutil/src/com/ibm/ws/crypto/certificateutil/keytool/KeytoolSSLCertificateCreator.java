@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2012
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.crypto.certificateutil.keytool;
@@ -27,14 +27,13 @@ public class KeytoolSSLCertificateCreator implements DefaultSSLCertificateCreato
 
     /** {@inheritDoc} */
     @Override
-    public File createDefaultSSLCertificate(String filePath, String password, int validity, String subjectDN, int keySize, String sigAlg)
-                    throws CertificateException {
+    public File createDefaultSSLCertificate(String filePath, String password, int validity, String subjectDN, int keySize, String sigAlg) throws CertificateException {
 
         validateParameters(filePath, password, validity, subjectDN, keySize, sigAlg);
 
         String keyType = getKeyFromSigAlg(sigAlg);
 
-        KeytoolCommand keytoolCmd = new KeytoolCommand(filePath, password, validity, subjectDN, keySize, keyType, sigAlg);
+        KeytoolCommand keytoolCmd = new KeytoolCommand(filePath, password, validity, subjectDN, keySize, keyType, sigAlg, DEFAULT_KEYSTORE_TYPE);
         keytoolCmd.executeCommand();
         File f = new File(filePath);
         if (f.exists()) {
@@ -46,7 +45,7 @@ public class KeytoolSSLCertificateCreator implements DefaultSSLCertificateCreato
 
     /**
      * Validate the parameters.
-     * 
+     *
      * @param filePath
      * @param password
      * @param validity
@@ -77,8 +76,7 @@ public class KeytoolSSLCertificateCreator implements DefaultSSLCertificateCreato
             if (!validKeySizes.contains(keySize)) {
                 throw new IllegalArgumentException("The key sizes for an RSA key include " + VALID_RSA_KEYSIZE);
             }
-        } else
-        {
+        } else {
             List<Integer> validKeySizes = VALID_EC_KEYSIZE;
             if (!validKeySizes.contains(keySize)) {
                 throw new IllegalArgumentException("The key sizes for an EC key include " + VALID_EC_KEYSIZE);
@@ -91,7 +89,7 @@ public class KeytoolSSLCertificateCreator implements DefaultSSLCertificateCreato
     /**
      * The specified filePath must either exist, or in the case the file
      * should be created, its parent directory.
-     * 
+     *
      * @param loc
      * @return
      */
@@ -101,7 +99,7 @@ public class KeytoolSSLCertificateCreator implements DefaultSSLCertificateCreato
         }
 
         // Check if the filename exists as a File -- use an absolute file to ensure we have
-        // a parent: even if that parent is ${user.dir} ... 
+        // a parent: even if that parent is ${user.dir} ...
         File loc = new File(filePath).getAbsoluteFile();
 
         return (loc.exists() || loc.getParentFile().exists());

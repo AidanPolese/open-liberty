@@ -16,7 +16,7 @@ IBM-API-Package: org.osgi.framework; type="spec:osgi",
  org.osgi.service.startlevel; type="spec:osgi",
  org.osgi.service.url; type="spec:osgi",
  org.osgi.util.tracker; type="spec:osgi"
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

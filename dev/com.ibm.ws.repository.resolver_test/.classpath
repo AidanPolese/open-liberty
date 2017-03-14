@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="build/unittest/classes" path="unittest/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/build.sharedResources/lib/hamcrest-all.jar"/>
+	<classpathentry kind="lib" path="/build.sharedResources/lib/junit/old/junit.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.repository.resolver"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.product.utility"/>
+	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar"/>
+	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.service.component/lib/org.osgi.service.component-1.3.0.jar"/>
+	<classpathentry kind="lib" path="/com.ibm.wsspi.org.osgi.service.component.annotations/lib/org.osgi.service.component.annotations-1.3.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.org.osgi.service.resolver"/>
+	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.boot.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.feature.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.repository.liberty"/>
+	<classpathentry kind="lib" path="/com.ibm.ws.repository/lib/client-lib.jar"/>
+	<classpathentry kind="lib" path="/com.ibm.ws.org.apache.aries.util/lib/org.apache.aries.util-1.1.2-ibm-s20170124-0721.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

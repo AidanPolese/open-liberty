@@ -1,0 +1,75 @@
+package com.ibm.websphere.ras;
+
+import static org.junit.Assert.assertEquals;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import test.LoggingTestUtils;
+import test.TestConstants;
+import test.common.SharedOutputManager;
+
+import com.ibm.websphere.ras.annotation.TraceOptions;
+
+/**
+ * Test TraceComponent registration methods using annotations to specify group
+ * only - ensure group takes precedence over groups
+ */
+@TraceOptions(messageBundle = "com.ibm.testBundle")
+public class TrRegisterBundleTest1 {
+    static {
+        LoggingTestUtils.ensureLogManager();
+    }
+    // static Class<?> myClass = TrRegisterGroupsTest.class;
+
+    static final String myName = TrRegisterBundleTest1.class.getName();
+
+    static SharedOutputManager outputMgr;
+
+    static final Object[] objs = new Object[] { "p1", "p2", "p3", "p4" };
+
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        // make stdout/stderr "quiet"-- no output will show up for test
+        // unless one of the copy methods or documentThrowable is called
+        outputMgr = SharedOutputManager.getInstance();
+        outputMgr.logTo(TestConstants.BUILD_TMP);
+        outputMgr.captureStreams();
+    }
+
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+        SharedTr.clearComponents();
+
+        // Make stdout and stderr "normal"
+        outputMgr.restoreStreams();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        outputMgr.resetStreams();
+    }
+
+    @Test
+    public void testRegisterClass() {
+        Class<?> myClass = this.getClass();
+        TraceOptions options = myClass.getAnnotation(TraceOptions.class);
+        System.out.println("options are: " + options);
+
+        final String m = "testRegisterClass";
+        try {
+            TraceComponent tc = Tr.register(myClass);
+            assertEquals(tc.getTraceClass(), myClass);
+
+            String str[] = tc.introspectSelf(); // returns name, group, and
+            // bundle
+            assertEquals(str[0], "name = " + myName);
+            assertEquals(str[1], "groups = []");
+            assertEquals(str[2], "bundle = com.ibm.testBundle");
+        } catch (Throwable t) {
+            outputMgr.failWithThrowable(m, t);
+        }
+    }
+}

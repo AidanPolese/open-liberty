@@ -1,6 +1,6 @@
 Bnd-LastModified: 1486383755748
 Created-By: 1.8.0_121 (Oracle Corporation)
-IBM-AppliesTo: com.ibm.websphere.appserver; productEdition="@PRODUCT_EDITION@"; productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductEdition}${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
@@ -38,6 +38,7 @@ Subsystem-Content: com.ibm.websphere.appserver.adminCenter-1.0; type="osgi.subsy
  com.ibm.websphere.appserver.jndi-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.jpa-2.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.jpa-2.1; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jpaContainer-2.1; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.jsf-2.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.jsf-2.2; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.json-1.0; type="osgi.subsystem.feature",
@@ -58,6 +59,7 @@ Subsystem-Content: com.ibm.websphere.appserver.adminCenter-1.0; type="osgi.subsy
  com.ibm.websphere.appserver.osgi.jpa-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.osgiBundle-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.osgiConsole-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.productInsights-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.requestTiming-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.restConnector-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.restConnector-2.0; type="osgi.subsystem.feature",
@@ -70,6 +72,7 @@ Subsystem-Content: com.ibm.websphere.appserver.adminCenter-1.0; type="osgi.subsy
  com.ibm.websphere.appserver.spnego-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.ssl-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.timedOperations-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.transportSecurity-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.wab-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.webCache-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.webProfile-6.0; type="osgi.subsystem.feature",

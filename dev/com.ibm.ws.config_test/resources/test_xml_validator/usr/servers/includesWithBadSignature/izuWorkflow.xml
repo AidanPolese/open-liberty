@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><server description="izuWorkflow">
+
+      <library id="zosmfWorkflowSharedLibrary">
+         <fileset dir="${zosmf.lib.dir}" includes="commons-collections-3.2.1.jar"/>
+         <fileset dir="${zosmf.lib.dir}" includes="commons-lang-2.4.jar"/>
+         <fileset dir="${zosmf.lib.dir}" includes="velocity-1.6.2.jar"/>
+      </library>
+      
+      <application id="workflow" location="${zosmf.app.dir}/izuWorkflow.app" name="workflow" type="ear">
+       <classloader commonLibraryRef="zosmfSharedLibrary" privateLibraryRef="zosmfWorkflowSharedLibrary"/>
+      </application>
+
+</server>

@@ -1,5 +1,5 @@
 -include= ~../cnf/resources/bnd/bundle.props
-bVersion: 1.1
+bVersion: 1.2
 
 Bundle-Name: WebSphere SSL SPI
 Bundle-Description: WebSphere SSL SPI, version ${bVersion}

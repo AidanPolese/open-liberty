@@ -1,0 +1,12 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: BVT bundle for RuntimeUpdateNotificationMBeanImpl
+Bundle-SymbolicName: RuntimeUpdateNotificationMBeanImplBVTBundle
+Bundle-Description: Test bundle for RuntimeUpdateNotificationMBeanImpl
+
+Private-Package: \
+  com.ibm.ws.runtime.update.bvt.bundle
+
+-dsannotations: \
+  com.ibm.ws.runtime.update.bvt.bundle.ServletActivator

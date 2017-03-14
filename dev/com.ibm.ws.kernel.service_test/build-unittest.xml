@@ -1,0 +1,15 @@
+<project name="com.ibm.ws.kernel.service_test" default="unittest">
+
+  <import file="../ant_build/public_imports/standard_imports.xml" />
+  <import file="../ant_build/public_imports/unittest_imports.xml" />
+
+  <property name="extra.vmargs" value="-Dexception.log.enabled=false -javaagent:../build.sharedResources/lib/jmockit/1.25/jmockit.jar" />
+
+  <target name="clean" depends="clean.clean" description="clean up unit test build">
+    <delete dir="${liberty.dir}/usr/servers/com.ibm.ws.kernel.service_test" includeemptydirs="yes" failonerror="false" />
+    <delete failonerror="false">
+      <fileset dir="unittest/test data" excludes="**/configuration/*,**/platform/*,**/features/*" />
+      <fileset dir="." includes="*.log.*" />
+    </delete>
+  </target>
+</project>

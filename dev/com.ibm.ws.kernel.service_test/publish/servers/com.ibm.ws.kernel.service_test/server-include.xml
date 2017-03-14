@@ -1,0 +1,9 @@
+<server>
+
+   <include optional="true" location="${shared.config.dir}/bvtTestPorts.xml"/>
+   <include location="http://localhost:${bvt.prop.HTTP_default}/config/include"/>
+    
+      <featureManager>
+            <feature>httpservice-2.2</feature>        
+    </featureManager>
+</server>

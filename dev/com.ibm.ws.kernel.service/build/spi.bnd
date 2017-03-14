@@ -1,8 +1,0 @@
-Export-Package: com.ibm.websphere.crypto,com.ibm.wsspi.kernel.service.location,com.ibm.wsspi.kernel.service.utils,com.ibm.wsspi.security.crypto
-Bundle-SymbolicName: com.ibm.websphere.appserver.spi.kernel.service
--include= ~../../cnf/resources/bnd/bundle.props
-bVersion: 1.5
-Include-Resource: META-INF/maven/com.ibm.websphere.appserver.spi/com.ibm.websphere.appserver.spi.kernel.service/pom.xml=dev/spi/ibm/com.ibm.websphere.appserver.spi.kernel.service_1.5.17.pom
-Bundle-Name: WebSphere Kernel Services SPI
-Bundle-Description: WebSphere Kernel Services SPI, version 1.5
-Import-Package: com.ibm.websphere.crypto,com.ibm.wsspi.kernel.service.location,com.ibm.wsspi.kernel.service.utils,com.ibm.wsspi.security.crypto

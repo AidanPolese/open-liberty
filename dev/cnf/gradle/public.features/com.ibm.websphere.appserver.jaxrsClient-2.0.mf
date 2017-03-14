@@ -2,7 +2,7 @@ Bnd-LastModified: 1486383772490
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-App-ForceRestart: uninstall,
  install
-IBM-AppliesTo: com.ibm.websphere.appserver;productVersion="@PRODUCT_VERSION@"
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA

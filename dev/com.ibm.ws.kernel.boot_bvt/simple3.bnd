@@ -1,0 +1,13 @@
+-nouses=true
+-resourceonly=true
+bVersion=3.0
+-output ${bnd.target}/${Bundle-SymbolicName}_${bVersion}.jar
+
+Bundle-Name: simple bundle
+Bundle-SymbolicName: simple
+Bundle-Version: ${bVersion}
+Bundle-Description: simple, version ${bVersion}
+WebSphere-DefaultKernel: test-kernel-2.0
+
+## It is important that the pacakges.list file does not actually exist in the generated bundle..
+# because this is testing missing system packages so we don't include them here!
