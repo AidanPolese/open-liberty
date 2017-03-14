@@ -20,6 +20,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.service"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.service.location"/>
 	<classpathentry kind="lib" path="/com.ibm.ws.org.eclipse.equinox.metatype/lib/org.eclipse.equinox.metatype_1.4.200.v20160324-1850.jar"/>
-	<classpathentry kind="var" path="ant.home"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
