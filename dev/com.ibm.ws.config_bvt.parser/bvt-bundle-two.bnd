@@ -1,0 +1,17 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion = 1.0
+
+Bundle-Name: Config Bundle Two
+Bundle-SymbolicName: two.test.server.config
+Bundle-Description: Separate Config Bundle, version ${bVersion}
+
+
+Private-Package: test.server.*
+
+Import-Package: \
+    !*.internal.*, *
+
+Include-Resource: \
+	OSGI-INF/metatype/metatype.xml=bvt-bundle/resources/metatype-nested-two.xml, \
+	OSGI-INF/metatype/metatype-extensions-two.xml=bvt-bundle/resources/metatype-extensions-two.xml, \
+    @junit.jar

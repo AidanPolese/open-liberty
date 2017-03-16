@@ -1,0 +1,9 @@
+<project name="com.ibm.ws.org.apache.ant" default="build">
+
+  <import file="../ant_build/public_imports/rejar_imports.xml"/>
+
+  <target name="publishBundles"/>
+
+  <target name="package"/>
+
+</project>

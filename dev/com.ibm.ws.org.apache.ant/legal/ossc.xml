@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Ant" 
+            projectURL="http://ant.apache.org" 
+            version="1.9.6" revision="" 
+            license-type="Apachev2" 
+            contact="gmarcy@us.ibm.com" 
+            encryption="no">
+      <download location="http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.6-bin.zip">
+         <file basename="ant-1.9.6.jar" checksum="03fe9e7bbb3a9d62bb33c55ba6820f21"/>
+         <file basename="ant-commons-net-1.9.6.jar" checksum="02b9e4a9ad0c90bbdb33b91a00ec19ce"/>
+         <file basename="ant-junit-1.9.6.jar" checksum="084e750fb2a0f0e819baa5a9cc94553d"/>
+         <file basename="ant-launcher-1.9.6.jar" checksum="3c4bbfc6cd0393d2680bc5cb45428ec1"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+</ossc>

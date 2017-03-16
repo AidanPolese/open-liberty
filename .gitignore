@@ -4,6 +4,9 @@
 # Ignore bin folders at the root of each project
 /*/*/bin/
 
+# Ignore generated folders at the root of each project
+/*/*/generated/
+
 # Ignore all autoFVT folders at the root of each project
 /*/*/autoFVT/
 
