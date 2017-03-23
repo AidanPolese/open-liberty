@@ -4,7 +4,7 @@
 OpenLiberty is a highly composable, fast to start, dynamic application server runtime environment. **More of a description goes here**.
 
 * [Quick Start](https://github.ibm.com/was-liberty/open-liberty#quick-start)
-* Learn concepts and commands
+* [Learn concepts and commands](https://github.ibm.com/was-liberty/open-liberty#learn-concepts-and-commands)
 * [License](https://github.ibm.com/was-liberty/open-liberty#license)
 * [Issues](https://github.ibm.com/was-liberty/open-liberty#issues)
 * [Git Large File Storage](https://github.ibm.com/was-liberty/open-liberty#git-large-file-storage)
@@ -15,8 +15,12 @@ OpenLiberty is a highly composable, fast to start, dynamic application server ru
 
     ```git clone git@github.ibm.com:open-liberty/WS-CD-Open.git```
 
-3. Run a gradle build
+    ```cd WS-CD-Open```
+
+3. Run a [gradle build](https://github.ibm.com/was-liberty/open-liberty/wiki/Gradle-Build-Setup)
 4. Run gradle command to execute automated tests.
+
+## Learn concepts and commands
 
 ## License
 Copyright XXXX-2017 IBM Corporation
@@ -25,7 +29,7 @@ Licenses under the **link to license goes here**.
 
 ## Issues
 
-Report bugs, ask questions and request features here on GitHub.
+Report [issues](https://github.ibm.com/was-liberty/open-liberty/issues) on GitHub.
 
 You can also join our [slack channel](https://ibm-cloud.slack.com/messages/was-open-liberty/) and chat with other developers.  
 
