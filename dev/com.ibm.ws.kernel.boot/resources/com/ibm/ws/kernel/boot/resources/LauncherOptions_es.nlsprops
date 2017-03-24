@@ -95,6 +95,14 @@ action-desc.unregisterWinService=\tAnular registro del servidor especificado com
 action-key.help=\ \ \ \ --help
 action-desc.help=\tImprimir informaci\u00f3n de ayuda.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.pause=\ \ \ \ --pause
+action-desc.pause=\tPoner en pausa todos los componentes del servidor que se pueden poner en pausa. Se puede \n \t poner en pausa un subconjunto de los componentes especific\u00e1ndolos en la opci\u00f3n \n\
+\t--target.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.resume=\ \ \ \ --resume
+action-desc.resume=\tReanudar todos los componentes puestos en pausa en el servidor. Se puede especificar la   \n\
+\topci\u00f3n --target para reanudar componentes concretos puestos en pausa.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.clean=\ \ \ \ --clean
 option-desc.clean=\tLimpiar toda la informaci\u00f3n almacenada en memoria cach\u00e9 relacionada con esta instancia de servidor.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
@@ -118,6 +126,10 @@ option-desc.include=\tLista de valores delimitados por comas. Los valores v\u00e
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.template=\ \ \ \ --template="nombrePlantilla"
 option-desc.template=\tEspecifique el nombre de la plantilla que debe utilizarse al crear un servidor. 
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+option-key.target=\ \ \ \ --target=value,value
+option-desc.target=\tEspecifica una lista delimitada por comas de componentes que se pueden poner en pausa o \n\
+\treanudar.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.os=\ \ \ \ --os=valor,valor,...
 option-desc.os=\tEspecifica los sistemas operativos a los que debe dar soporte el servidor.\n\

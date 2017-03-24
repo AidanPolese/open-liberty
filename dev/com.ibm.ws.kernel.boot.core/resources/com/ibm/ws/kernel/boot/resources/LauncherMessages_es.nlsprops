@@ -578,17 +578,74 @@ complete el mandato de paquete.  Si falta este directorio, podr\u00eda indicar q
 error.package.missingLibExtractDir.useraction=Vuelva a instalar WebSphere Liberty Profile y aseg\u00farese de que el directorio lib/extract exista en el \
 directorio WLP_HOME.
 
-info.serverPause.request.received=CWWKE0923I: Se ha recibido una solicitud para poner en pausa el servidor para solicitudes entrantes de un protocolo concreto. Par\u00e1metros: {0}.
-info.serverPause.request.received.explanation=Un usuario ha emitido una solicitud para poner en pausa el servidor para un protocolo concreto. En el punto en el cual se ha emitido este mensaje, todav\u00eda no se ha producido la pausa real del servidor. Es posible, por ejemplo, solicitar una pausa del servidor para solicitudes HTTP, de forma que pueda depurar un problema. Una vez que se ha depurado el problema, puede emitir una solicitud para reanudar el servidor para solicitudes HTTP.
-info.serverPause.request.received.useraction=No se requiere ninguna acci\u00f3n.
+info.server.pause.all.request.received=CWWKE0923I: Se ha recibido una solicitud para pausar todos los componentes con posibilidad de pausa en el servidor.
+info.server.pause.all.request.received.explanation=Un usuario ha emitido una solicitud para pausar todos los componentes con posibilidad de pausa en el servidor. El servidor intentar\u00e1 pausar estos componentes. 
+info.server.pause.all.request.received.useraction=No se requiere ninguna acci\u00f3n.
 
-info.serverResume.request.received=CWWKE0924I: Se ha recibido una solicitud para reanudar el servidor para solicitudes entrantes de un protocolo concreto. Par\u00e1metros: {0}.
-info.serverResume.request.received.explanation=Un usuario ha emitido una solicitud para reanudar el servidor que se ha puesto en pausa previamente para un protocolo determinado. En el punto en el cual se ha emitido este mensaje, todav\u00eda no se ha producido la reanudaci\u00f3n real del servidor. Es posible, por ejemplo, solicitar una pausa del servidor para solicitudes HTTP, de forma que pueda depurar un problema. Una vez que se ha depurado el problema, puede emitir una solicitud para reanudar el servidor para solicitudes HTTP.
-info.serverResume.request.received.useraction=No se requiere ninguna acci\u00f3n.
+info.server.pause.request.received=CWWKE0924I: Se ha recibido una solicitud para pausar los siguientes componentes en el servidor: {0}
+info.server.pause.request.received.explanation=Un usuario ha emitido una solicitud para pausar componentes espec\u00edficos en el servidor. El servidor intentar\u00e1 pausar estos componentes. 
+info.server.pause.request.received.useraction=No se requiere ninguna acci\u00f3n.
 
-info.listeners.controller.missing=CWWKE0925W: Se ha recibido una solicitud del servidor {0}, pero no se ha podido procesar. Raz\u00f3n: {1}.
-info.listeners.controller.missing.explanation=Un usuario ha emitido una solicitud para poner en pausa o reanudar el servidor para un protocolo concreto. Sin embargo, la solicitud no se ha podido procesar. El servidor puede no haberse completado para inicializarse. El destino para poner en pausa o reanudarse es posible que ya no est\u00e9 configurado. Es posible que una solicitud anterior para poner en pausa o reanudar todav\u00eda no haya completado su proceso.
-info.listeners.controller.missing.useraction=Permitir al servidor finalizar la inicializaci\u00f3n y, despu\u00e9s, volver a intentar la solicitud. Verifique que el destino de la solicitud sigue siendo v\u00e1lido y sigue activo dentro del servidor. Permita que la solicitud emitida previamente se complete antes de emitir otra solicitud.
+info.server.resume.all.request.received=CWWKE0925I: Se ha recibido una solicitud para reanudar todos los componentes pausados en el servidor.
+info.server.resume.all.request.received.explanation=Un usuario ha emitido una solicitud para reanudar todos los componentes pausados en el servidor. El servidor intentar\u00e1 reanudar estos componentes.
+info.server.resume.all.request.received.useraction=No se requiere ninguna acci\u00f3n.
+
+info.server.resume.request.received=CWWKE0926I: Se ha recibido una solicitud para reanudar los componentes siguientes en el servidor: {0}
+info.server.resume.request.received.explanation=Un usuario ha emitido una solicitud para reanudar componentes espec\u00edficos en el servidor. El servidor intentar\u00e1 reanudar estos componentes si est\u00e1n pausados.
+info.server.resume.request.received.useraction=No se requiere ninguna acci\u00f3n.
+
+error.pause.request.failed=CWWKE0927E: Se ha recibido una solicitud de pausa, pero la infraestructura para poner en pausa componentes no est\u00e1 disponible. La solicitud no se puede procesar. 
+error.pause.request.failed.explanation=Un usuario ha emitido una solicitud de pausa. Sin embargo, la solicitud no se ha podido procesar. Es posible que el servidor a\u00fan se est\u00e9 inicializando o cerrando.
+error.pause.request.failed.useraction=Compruebe que el servidor est\u00e9 completamente inicializado y que no est\u00e9 en proceso de cerrarse.
+
+error.resume.request.failed=CWWKE0928E: Se ha recibido una solicitud de reanudaci\u00f3n, pero la infraestructura para poner en pausa componentes no est\u00e1 disponible. La solicitud no se puede procesar. 
+error.resume.request.failed.explanation=Un usuario ha emitido una solicitud de reanudaci\u00f3n, pero la solicitud no se ha podido procesar. Es posible que el servidor a\u00fan se est\u00e9 inicializando o cerrando.
+error.resume.request.failed.useraction=Compruebe que el servidor est\u00e9 completamente inicializado y que no est\u00e9 en proceso de cerrarse.
+
+error.server.pause.failed=CWWKE0929E: Se ha completado una solicitud de pausa, pero los componentes siguientes no se han podido poner en pausa: {0}
+error.server.pause.failed.explanation=El servidor ha procesado una solicitud de pausa, pero algunos componentes con posibilidad de pausa no se han podido poner en pausa. Todos los dem\u00e1s componentes con posibilidad de pausa se han puesto correctamente en pausa.
+error.server.pause.failed.useraction=Compruebe si en los registros de servidor hay errores adicionales de los componentes que han fallado.
+
+error.server.resume.failed=CWWKE0930E: Se ha completado una solicitud de reanudaci\u00f3n, pero los componentes siguientes no se han podido reanudar: {0}
+error.server.resume.failed.explanation=El servidor ha procesado una solicitud de reanudaci\u00f3n, pero algunos componentes en pausa no se han podido reanudar. Todos los dem\u00e1s componentes en pausa se han reanudado correctamente.
+error.server.resume.failed.useraction=Compruebe si en los registros de servidor hay errores adicionales de los componentes que han fallado.
+
+warning.server.pause.invalid.targets=CWWKE0931W: Se ha recibido una solicitud para pausar componentes espec\u00edficos, pero la lista de componentes en la opci\u00f3n de destino est\u00e1 vac\u00eda. No se ha realizado ninguna acci\u00f3n.
+warning.server.pause.invalid.targets.explanation=Un usuario ha emitido una solicitud de pausa con una lista de destinos vac\u00eda en la opci\u00f3n de destino. La solicitud se ha completado pero no se ha realizado ninguna acci\u00f3n.
+warning.server.pause.invalid.targets.useraction=Especifique en la opci\u00f3n de destino una lista de componentes para poner en pausa. Para pausar todos los componentes con capacidad de pausa en el servidor, emita una solicitud de pausa sin la opci\u00f3n de destino.
+
+warning.server.resume.invalid.targets=CWWKE0932W: Se ha recibido una solicitud para reanudar componentes espec\u00edficos, pero la lista de componentes en la opci\u00f3n de destino estaba vac\u00eda. No se ha realizado ninguna acci\u00f3n.
+warning.server.resume.invalid.targets.explanation=Un usuario ha emitido una solicitud de reanudaci\u00f3n con una lista de destinos vac\u00eda en la opci\u00f3n de destino. La solicitud se ha completado pero no se ha realizado ninguna acci\u00f3n.
+warning.server.resume.invalid.targets.useraction=Especifique en la opci\u00f3n de destino una lista de componentes para reanudar. Para reanudar todos los componentes en pausa en el servidor, emita una solicitud de reanudaci\u00f3n sin la opci\u00f3n de destino.
+
+warning.server.pause.no.targets=CWWKE0933W: Se ha recibido una solicitud de pausa, pero no se han encontrado componentes con posibilidad de pausa en el servidor. No se ha realizado ninguna acci\u00f3n.
+warning.server.pause.no.targets.explanation=El servidor ha procesado una solicitud de pausa, pero no se han encontrado componentes con posibilidad de pausa en el servidor. No se ha realizado ninguna acci\u00f3n.
+warning.server.pause.no.targets.useraction=Compruebe que haya disponibles componentes con posibilidad de pausa en el servidor.
+
+warning.server.resume.no.targets=CWWKE0934W: Se ha recibido una solicitud de reanudaci\u00f3n, pero no se han encontrado componentes con posibilidad de pausa en el servidor. No se ha realizado ninguna acci\u00f3n.
+warning.server.resume.no.targets.explanation=El servidor ha procesado una solicitud de reanudaci\u00f3n, pero no se han encontrado componentes con posibilidad de pausa. No se ha realizado ninguna acci\u00f3n.
+warning.server.resume.no.targets.useraction=Compruebe que haya disponibles componentes con posibilidad de pausa en el servidor.
+
+warning.server.pause.missing.targets=CWWKE0935W: Se ha recibido una solicitud de pausa, pero no se han podido encontrar los componentes siguientes: {0}
+warning.server.pause.missing.targets.explanation=El servidor ha procesado una solicitud de pausa, pero no se han podido encontrar algunos componentes espec\u00edficos. La solicitud se ha procesado para todos los dem\u00e1s componentes especificados.
+warning.server.pause.missing.targets.useraction=Compruebe que los nombres de los componentes especificados sean correctos y que los componentes est\u00e9n registrados en el servidor y tengan posibilidad de pausa.
+
+warning.server.resume.missing.targets=CWWKE0936W: Se ha recibido una solicitud de reanudaci\u00f3n, pero no se han encontrado los componentes siguientes: {0}
+warning.server.resume.missing.targets.explanation=El servidor ha procesado una solicitud de reanudaci\u00f3n, pero no se han encontrado algunos componentes espec\u00edficos. La solicitud se ha procesado para todos los dem\u00e1s componentes especificados.
+warning.server.resume.missing.targets.useraction=Compruebe que los nombres de los componentes especificados sean correctos y que los componentes est\u00e9n registrados en el servidor y tengan posibilidad de pausa.
+
+warning.server.status.missing.targets=CWWKE0937W: Se ha recibido una solicitud de estado, pero no se han encontrado los componentes siguientes: {0}
+warning.server.status.missing.targets.explanation=El servidor ha procesado una solicitud de estado, pero no se han encontrado algunos componentes espec\u00edficos. La solicitud se ha procesado para todos los dem\u00e1s componentes especificados.
+warning.server.status.missing.targets.useraction=Compruebe que los nombres de los componentes especificados sean correctos y que los componentes est\u00e9n registrados en el servidor y tengan posibilidad de pausa.
+
+info.server.pause.request.completed=CWWKE0938I: Se ha completado una solicitud de pausa.
+info.server.pause.request.completed.explanation=Se ha completado una solicitud de pausa.
+info.server.pause.request.completed.useraction=No se requiere ninguna acci\u00f3n.
+
+info.server.resume.request.completed=CWWKE0939I: Se ha completado una solicitud de reanudaci\u00f3n.
+info.server.resume.request.completed.explanation=Se ha completado una solicitud de reanudaci\u00f3n.
+info.server.resume.request.completed.useraction=No se requiere ninguna acci\u00f3n.
+
 
 info.serverStarting=Se est\u00e1 iniciando el servidor {0}.
 info.serverStarted=Servidor {0} iniciado.

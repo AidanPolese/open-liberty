@@ -583,17 +583,74 @@ error.package.missingLibExtractDir.explanation=Adres\u00e1\u0159 lib/extract obs
 znamenat, \u017ee byla instalace profilu WebSphere Liberty ne\u00fapln\u00e1 nebo byl tento adres\u00e1\u0159 odstran\u011bn.
 error.package.missingLibExtractDir.useraction=Znovu nainstalujte profil WebSphere Liberty a ujist\u011bte se, \u017ee v adres\u00e1\u0159i WLP_HOME existuje adres\u00e1\u0159 lib/extract.
 
-info.serverPause.request.received=CWWKE0923I: Byl p\u0159ijat po\u017eadavek na pozastaven\u00ed serveru pro p\u0159\u00edchoz\u00ed po\u017eadavky ur\u010dit\u00e9ho protokolu. Parametry: {0}.
-info.serverPause.request.received.explanation=U\u017eivatel vydal po\u017eadavek na pozastaven\u00ed serveru pro ur\u010dit\u00fd protokol. V okam\u017eiku, kdy byla tato zpr\u00e1va vyd\u00e1na, dosud nedo\u0161lo ke skute\u010dn\u00e9mu pozastaven\u00ed serveru. M\u016f\u017eete nap\u0159\u00edklad po\u017e\u00e1dat o pozastaven\u00ed serveru pro po\u017eadavky HTTP, abyste mohli vyladit ur\u010dit\u00fd probl\u00e9m. Po vylad\u011bn\u00ed probl\u00e9mu m\u016f\u017eete vydat po\u017eadavek na obnoven\u00ed zpracov\u00e1n\u00ed po\u017eadavk\u016f HTTP serverem.
-info.serverPause.request.received.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
+info.server.pause.all.request.received=CWWKE0923I: Byl p\u0159ijat po\u017eadavek k pozastaven\u00ed v\u0161ech komponent na serveru, kter\u00e9 lze pozastavit.
+info.server.pause.all.request.received.explanation=U\u017eivatel vydal po\u017eadavek k pozastaven\u00ed v\u0161ech komponent na serveru, kter\u00e9 lze pozastavit. Server se pokus\u00ed pozastavit tyto komponenty. 
+info.server.pause.all.request.received.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
 
-info.serverResume.request.received=CWWKE0924I: Byl p\u0159ijat po\u017eadavek na obnoven\u00ed zpracov\u00e1n\u00ed p\u0159\u00edchoz\u00edch po\u017eadavk\u016f ur\u010dit\u00e9ho protokolu serverem. Parametry: {0}.
-info.serverResume.request.received.explanation=U\u017eivatel vydal po\u017eadavek na obnoven\u00ed zpracov\u00e1n\u00ed serveru, kter\u00e9 bylo pro ur\u010dit\u00fd protokol d\u0159\u00edve pozastaveno. V okam\u017eiku, kdy byla tato zpr\u00e1va vyd\u00e1na, dosud nedo\u0161lo ke skute\u010dn\u00e9mu obnoven\u00ed zpracov\u00e1n\u00ed serveru. M\u016f\u017eete nap\u0159\u00edklad po\u017e\u00e1dat o pozastaven\u00ed serveru pro po\u017eadavky HTTP, abyste mohli vyladit ur\u010dit\u00fd probl\u00e9m. Po vylad\u011bn\u00ed probl\u00e9mu m\u016f\u017eete vydat po\u017eadavek na obnoven\u00ed zpracov\u00e1n\u00ed po\u017eadavk\u016f HTTP serverem.
-info.serverResume.request.received.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
+info.server.pause.request.received=CWWKE0924I: Byl p\u0159ijat po\u017eadavek k pozastaven\u00ed n\u00e1sleduj\u00edc\u00edch komponent na serveru: {0}
+info.server.pause.request.received.explanation=U\u017eivatel vydal po\u017eadavek k pozastaven\u00ed specifick\u00fdch komponent na serveru. Server se pokus\u00ed pozastavit tyto komponenty. 
+info.server.pause.request.received.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
 
-info.listeners.controller.missing=CWWKE0925W: Byl p\u0159ijat po\u017eadavek serveru {0}, ale nebylo mo\u017en\u00e9 ho zpracovat. P\u0159\u00ed\u010dina: {1}.
-info.listeners.controller.missing.explanation=U\u017eivatel vydal po\u017eadavek na pozastaven\u00ed nebo obnoven\u00ed zpracov\u00e1n\u00ed ur\u010dit\u00e9ho protokolu na serveru. Tento po\u017eadavek v\u0161ak nelze zpracovat. Server dosud pravd\u011bpodobn\u011b nedokon\u010dil inicializaci. C\u00edl pozastaven\u00ed nebo obnoven\u00ed nelze ji\u017e nakonfigurovat. P\u0159edchoz\u00ed po\u017eadavek na pozastaven\u00ed nebo obnoven\u00ed nebyl pravd\u011bpodobn\u011b dosud dokon\u010den.
-info.listeners.controller.missing.useraction=Umo\u017en\u011bte serveru dokon\u010dit inicializaci a pak po\u017eadavek zopakujte. Ov\u011b\u0159te, \u017ee je c\u00edl po\u017eadavku na serveru st\u00e1le platn\u00fd a aktivn\u00ed. Umo\u017en\u011bte d\u0159\u00edve vydan\u00e9mu po\u017eadavku, aby se dokon\u010dil, a teprve pak vydejte dal\u0161\u00ed po\u017eadavek.
+info.server.resume.all.request.received=CWWKE0925I: Byl p\u0159ijat po\u017eadavek k obnoven\u00ed v\u0161ech pozastaven\u00fdch komponent na serveru.
+info.server.resume.all.request.received.explanation=U\u017eivatel vydal po\u017eadavek k obnoven\u00ed v\u0161ech pozastaven\u00fdch komponent na serveru. Server se pokus\u00ed obnovit tyto komponenty.
+info.server.resume.all.request.received.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
+
+info.server.resume.request.received=CWWKE0926I: Byl p\u0159ijat po\u017eadavek k obnov\u011b n\u00e1sleduj\u00edc\u00edch komponent na serveru: {0}
+info.server.resume.request.received.explanation=U\u017eivatel vydal po\u017eadavek k obnov\u011b specifick\u00fdch komponent na serveru. Server se pokus\u00ed obnovit tyto komponenty, pokud jsou pozastaveny.
+info.server.resume.request.received.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
+
+error.pause.request.failed=CWWKE0927E: Byl p\u0159ijat po\u017eadavek na pozastaven\u00ed, ale infrastruktura pro pozastaven\u00ed komponent nen\u00ed dostupn\u00e1. Po\u017eadavek nelze zpracovat. 
+error.pause.request.failed.explanation=U\u017eivatel vydal po\u017eadavek na pozastaven\u00ed. Tento po\u017eadavek v\u0161ak nelze zpracovat. Server m\u016f\u017ee b\u00fdt st\u00e1le inicializov\u00e1n nebo vypnut.
+error.pause.request.failed.useraction=Ov\u011b\u0159te, \u017ee server je pln\u011b inicializov\u00e1n a nen\u00ed v procesu vypnut\u00ed.
+
+error.resume.request.failed=CWWKE0928E: Byl p\u0159ijat po\u017eadavek na obnoven\u00ed, ale infrastruktura pro pozastaven\u00ed komponent nen\u00ed dostupn\u00e1. Po\u017eadavek nelze zpracovat. 
+error.resume.request.failed.explanation=U\u017eivatel vydal po\u017eadavek na obnoven\u00ed, ale po\u017eadavek nelze zpracovat. Server m\u016f\u017ee b\u00fdt st\u00e1le inicializov\u00e1n nebo vypnut.
+error.resume.request.failed.useraction=Ov\u011b\u0159te, \u017ee server je pln\u011b inicializov\u00e1n a nen\u00ed v procesu vypnut\u00ed.
+
+error.server.pause.failed=CWWKE0929E: Po\u017eadavek na pozastaven\u00ed byl dokon\u010den, ale n\u00e1sleduj\u00edc\u00ed komponenty se nezda\u0159ilo pozastavit: {0}
+error.server.pause.failed.explanation=Server zpracoval po\u017eadavek na pozastaven\u00ed, ale n\u011bkter\u00e9 komponenty, kter\u00e9 lze pozastavit, se nezda\u0159ilo pozastavit. V\u0161echny ostatn\u00ed komponenty, kter\u00e9 lze pozastavit, byly \u00fasp\u011b\u0161n\u011b pozastaveny.
+error.server.pause.failed.useraction=Dal\u0161\u00ed chyby z nezda\u0159en\u00fdch komponent viz protokoly serveru.
+
+error.server.resume.failed=CWWKE0930E: Po\u017eadavek na obnoven\u00ed byl dokon\u010den, ale n\u00e1sleduj\u00edc\u00ed komponenty se nezda\u0159ilo obnovit: {0}
+error.server.resume.failed.explanation=Server zpracoval po\u017eadavek na obnoven\u00ed, ale n\u011bkter\u00e9 pozastaven\u00e9 komponenty se nezda\u0159ilo obnovit. V\u0161echny ostatn\u00ed pozastaven\u00e9 komponenty byly \u00fasp\u011b\u0161n\u011b obnoveny.
+error.server.resume.failed.useraction=Dal\u0161\u00ed chyby z nezda\u0159en\u00fdch komponent viz protokoly serveru.
+
+warning.server.pause.invalid.targets=CWWKE0931W: Byl p\u0159ijat po\u017eadavek na pozastaven\u00ed specifick\u00fdch komponent, ale seznam komponent v c\u00edlov\u00e9 volb\u011b byl pr\u00e1zdn\u00fd. Neprovedla se \u017e\u00e1dn\u00e1 akce.
+warning.server.pause.invalid.targets.explanation=U\u017eivatel vydal po\u017eadavek na pozastaven\u00ed s pr\u00e1zdn\u00fdm c\u00edlov\u00fdm seznamem v c\u00edlov\u00e9 volb\u011b. Po\u017eadavek byl dokon\u010den, ale neprovedla se \u017e\u00e1dn\u00e1 akce.
+warning.server.pause.invalid.targets.useraction=Ur\u010dete v c\u00edlov\u00e9 volb\u011b seznam komponent, kter\u00e9 se maj\u00ed pozastavit. Chcete-li pozastavit v\u0161echny komponenty na serveru, kter\u00e9 lze pozastavit, zadejte po\u017eadavek na pozastaven\u00ed bez c\u00edlov\u00e9 volby.
+
+warning.server.resume.invalid.targets=CWWKE0932W: Byl p\u0159ijat po\u017eadavek na obnoven\u00ed specifick\u00fdch komponent, ale seznam komponent v c\u00edlov\u00e9 volb\u011b byl pr\u00e1zdn\u00fd. Neprovedla se \u017e\u00e1dn\u00e1 akce.
+warning.server.resume.invalid.targets.explanation=U\u017eivatel vydal po\u017eadavek na obnoven\u00ed s pr\u00e1zdn\u00fdm c\u00edlov\u00fdm seznamem v c\u00edlov\u00e9 volb\u011b. Po\u017eadavek byl dokon\u010den, ale neprovedla se \u017e\u00e1dn\u00e1 akce.
+warning.server.resume.invalid.targets.useraction=Ur\u010dete v c\u00edlov\u00e9 volb\u011b seznam komponent, kter\u00e9 se maj\u00ed obnovit. Chcete-li obnovit v\u0161echny pozastaven\u00e9 komponenty na serveru, zadejte po\u017eadavek na obnoven\u00ed bez c\u00edlov\u00e9 volby.
+
+warning.server.pause.no.targets=CWWKE0933W: Byl p\u0159ijat po\u017eadavek na pozastaven\u00ed, ale na serveru nebyly nalezeny \u017e\u00e1dn\u00e9 komponenty, kter\u00e9 lze pozastavit. Neprovedla se \u017e\u00e1dn\u00e1 akce.
+warning.server.pause.no.targets.explanation=Server zpracoval po\u017eadavek na pozastaven\u00ed, ale na serveru nebyly nalezeny \u017e\u00e1dn\u00e9 komponenty, kter\u00e9 lze pozastavit. Neprovedla se \u017e\u00e1dn\u00e1 akce.
+warning.server.pause.no.targets.useraction=Ov\u011b\u0159te, \u017ee na serveru jsou dostupn\u00e9 komponenty, kter\u00e9 lze pozastavit.
+
+warning.server.resume.no.targets=CWWKE0934W: Byl p\u0159ijat po\u017eadavek na obnoven\u00ed, ale na serveru nebyly nalezeny \u017e\u00e1dn\u00e9 komponenty, kter\u00e9 lze pozastavit. Neprovedla se \u017e\u00e1dn\u00e1 akce.
+warning.server.resume.no.targets.explanation=Server zpracoval po\u017eadavek na obnoven\u00ed, ale nebyly nalezeny \u017e\u00e1dn\u00e9 komponenty, kter\u00e9 lze pozastavit. Neprovedla se \u017e\u00e1dn\u00e1 akce.
+warning.server.resume.no.targets.useraction=Ov\u011b\u0159te, \u017ee na serveru jsou dostupn\u00e9 komponenty, kter\u00e9 lze pozastavit.
+
+warning.server.pause.missing.targets=CWWKE0935W: Byl p\u0159ijat po\u017eadavek na pozastaven\u00ed, ale n\u00e1sleduj\u00edc\u00ed komponenty nelze nal\u00e9zt: {0}
+warning.server.pause.missing.targets.explanation=Server zpracoval po\u017eadavek na pozastaven\u00ed, ale n\u011bkter\u00e9 specifick\u00e9 komponenty nelze nal\u00e9zt. Po\u017eadavek byl zpracov\u00e1n pro v\u0161echny dal\u0161\u00ed ur\u010den\u00e9 komponenty.
+warning.server.pause.missing.targets.useraction=Ov\u011b\u0159te, \u017ee ur\u010den\u00e9 n\u00e1zvy komponent jsou spr\u00e1vn\u00e9 a \u017ee komponenty jsou zaregistrov\u00e1ny na serveru a lze je pozastavit.
+
+warning.server.resume.missing.targets=CWWKE0936W: Byl p\u0159ijat po\u017eadavek na obnoven\u00ed, ale n\u00e1sleduj\u00edc\u00ed komponenty nebyly nalezeny: {0}
+warning.server.resume.missing.targets.explanation=Server zpracoval po\u017eadavek na obnoven\u00ed, ale n\u011bkter\u00e9 specifick\u00e9 komponenty nebyly nalezeny. Po\u017eadavek byl zpracov\u00e1n pro v\u0161echny dal\u0161\u00ed ur\u010den\u00e9 komponenty.
+warning.server.resume.missing.targets.useraction=Ov\u011b\u0159te, \u017ee ur\u010den\u00e9 n\u00e1zvy komponent jsou spr\u00e1vn\u00e9 a \u017ee komponenty jsou zaregistrov\u00e1ny na serveru a lze je pozastavit.
+
+warning.server.status.missing.targets=CWWKE0937W: Byl p\u0159ijat po\u017eadavek na stav, ale n\u00e1sleduj\u00edc\u00ed komponenty nebyly nalezeny: {0}
+warning.server.status.missing.targets.explanation=Server zpracoval po\u017eadavek na stav, ale n\u011bkter\u00e9 specifick\u00e9 komponenty nebyly nalezeny. Po\u017eadavek byl zpracov\u00e1n pro v\u0161echny dal\u0161\u00ed ur\u010den\u00e9 komponenty.
+warning.server.status.missing.targets.useraction=Ov\u011b\u0159te, \u017ee ur\u010den\u00e9 n\u00e1zvy komponent jsou spr\u00e1vn\u00e9 a \u017ee komponenty jsou zaregistrov\u00e1ny na serveru a lze je pozastavit.
+
+info.server.pause.request.completed=CWWKE0938I: Po\u017eadavek na pozastaven\u00ed byl dokon\u010den.
+info.server.pause.request.completed.explanation=Po\u017eadavek na pozastaven\u00ed byl dokon\u010den.
+info.server.pause.request.completed.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
+
+info.server.resume.request.completed=CWWKE0939I: Po\u017eadavek na obnoven\u00ed byl dokon\u010den.
+info.server.resume.request.completed.explanation=Po\u017eadavek na obnoven\u00ed byl dokon\u010den.
+info.server.resume.request.completed.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
+
 
 info.serverStarting=Spou\u0161t\u011bn\u00ed serveru {0}.
 info.serverStarted=Server {0} byl spu\u0161t\u011bn.

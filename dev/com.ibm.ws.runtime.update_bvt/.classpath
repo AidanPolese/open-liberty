@@ -4,10 +4,14 @@
 	<classpathentry kind="src" output="build/bvt/classes" path="bvt/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/hamcrest-all.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock-junit4.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/junit/old/junit.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/ws-junit/ws-junit.jar"/>
+	<classpathentry kind="lib" path="/ant_build/lib/jmock-junit4.jar"/>
+	<classpathentry kind="lib" path="/ant_build/lib/jmock.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jmock.org/javadoc/jmock-2.6.0/doc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/ant_build/lib/junit.jar"/>
+	<classpathentry kind="lib" path="/ant_build/lib/ws-junit.jar" sourcepath="/ant_junit"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/httpclient/4.1.2/httpclient-4.1.2.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/httpclient/4.1.2/httpcore-4.1.2.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/httpclient/4.1.2/commons-logging-1.1.1.jar"/>
@@ -15,12 +19,6 @@
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/jmock-legacy.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/cglib-nodep.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/objenesis.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.runtime.update"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.threading"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.websphere.javaee.servlet.3.0"/>
-	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar"/>
-	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.service.component/lib/org.osgi.service.component-1.3.0.jar"/>
-	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.service.http/lib/org.osgi.service.http-1.2.1.jar"/>
-	<classpathentry kind="lib" path="/com.ibm.wsspi.org.osgi.service.component.annotations/lib/org.osgi.service.component.annotations-1.3.0.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.logging.core"/>
+	<classpathentry kind="src" path="/prereq.published"/>
 </classpath>

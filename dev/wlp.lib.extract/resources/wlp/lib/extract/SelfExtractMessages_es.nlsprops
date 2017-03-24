@@ -258,3 +258,9 @@ ERROR_UNABLE_TO_LOCATE_COMMAND_EXE=No se ha podido ubicar el ejecutable {0} desp
 
 # java -jar messages 
 UNABLE_TO_FIND_PID=No se ha podido obtener el ID de proceso del proceso java -jar. No se puede suprimir el directorio de extracci\u00f3n temporal {1} hasta que no finalice manualmente el proceso java -jar.
+
+UNABLE_TO_ATTACH_AGENT=No se ha podido conectar el agente Java de Liberty. Este servidor ejecutar\u00e1, pero no podr\u00e1 realizar funciones que requieran el agente Java como, por ejemplo, supervisi\u00f3n o rastreo. Excepci\u00f3n: {0}
+
+UNABLE_TO_FIND_TOOLS_JAR=No se ha podido conectar el agente Java de Liberty porque este servidor usa un JRE en lugar de un SDK Java. Este servidor ejecutar\u00e1, pero no podr\u00e1 realizar funciones que requieran el agente Java como, por ejemplo, supervisi\u00f3n o rastreo.
+
+UNABLE_TO_FIND_JAVA_AGENT=No se ha podido localizar el agente Java de Liberty. Este servidor ejecutar\u00e1, pero no podr\u00e1 realizar funciones que requieran el agente Java como, por ejemplo, supervisi\u00f3n o rastreo.

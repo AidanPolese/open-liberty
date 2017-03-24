@@ -822,17 +822,73 @@ error.package.missingLibExtractDir.useraction=Reinstaluj \
 profil Liberty serwera WebSphere i upewnij si\u0119, \u017ce w katalogu WLP_HOME \
 znajduje si\u0119 katalog lib/extract.
 
-info.serverPause.request.received=CWWKE0923I: Odebrano \u017c\u0105danie wstrzymania serwera dla \u017c\u0105da\u0144 przychodz\u0105cych o okre\u015blonym protokole. Parametry: {0}.
-info.serverPause.request.received.explanation=U\u017cytkownik zg\u0142osi\u0142 \u017c\u0105danie wstrzymania serwera dla okre\u015blonego protoko\u0142u. W momencie wys\u0142ania tego komunikatu nie nast\u0105pi\u0142o jeszcze rzeczywiste wstrzymanie serwera. Mo\u017cna na przyk\u0142ad za\u017c\u0105da\u0107 wstrzymania serwera dla \u017c\u0105da\u0144 HTTP, aby umo\u017cliwi\u0107 debugowanie problemu. Po zdebugowaniu problemu mo\u017cna wys\u0142a\u0107 \u017c\u0105danie wznowienia serwera dla \u017c\u0105da\u0144 HTTP.
-info.serverPause.request.received.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+info.server.pause.all.request.received=CWWKE0923I: Odebrano \u017c\u0105danie wstrzymania wszystkich mo\u017cliwych do wstrzymania komponent\u00f3w na serwerze.
+info.server.pause.all.request.received.explanation=U\u017cytkownik wys\u0142a\u0142 \u017c\u0105danie wstrzymania wszystkich mo\u017cliwych do wstrzymania komponent\u00f3w na serwerze. Serwer podejmie pr\u00f3b\u0119 wstrzymania tych komponent\u00f3w. 
+info.server.pause.all.request.received.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
 
-info.serverResume.request.received=CWWKE0924I: Odebrano \u017c\u0105danie wznowienia serwera dla \u017c\u0105da\u0144 przychodz\u0105cych o okre\u015blonym protokole. Parametry: {0}.
-info.serverResume.request.received.explanation=U\u017cytkownik zg\u0142osi\u0142 \u017c\u0105danie wznowienia wstrzymanego wcze\u015bniej serwera dla okre\u015blonego protoko\u0142u. W momencie wys\u0142ania tego komunikatu nie nast\u0105pi\u0142o jeszcze rzeczywiste wznowienie serwera. Mo\u017cna na przyk\u0142ad za\u017c\u0105da\u0107 wstrzymania serwera dla \u017c\u0105da\u0144 HTTP, aby umo\u017cliwi\u0107 debugowanie problemu. Po zdebugowaniu problemu mo\u017cna wys\u0142a\u0107 \u017c\u0105danie wznowienia serwera dla \u017c\u0105da\u0144 HTTP.
-info.serverResume.request.received.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+info.server.pause.request.received=CWWKE0924I: Odebrano \u017c\u0105danie wstrzymania nast\u0119puj\u0105cych komponent\u00f3w na serwerze: {0}.
+info.server.pause.request.received.explanation=U\u017cytkownik wys\u0142a\u0142 \u017c\u0105danie wstrzymania okre\u015blonych komponent\u00f3w na serwerze. Serwer podejmie pr\u00f3b\u0119 wstrzymania tych komponent\u00f3w. 
+info.server.pause.request.received.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
 
-info.listeners.controller.missing=CWWKE0925W: Odebrano \u017c\u0105danie serwera {0}, ale nie mo\u017cna go przetworzy\u0107. Przyczyna: {1}.
-info.listeners.controller.missing.explanation=U\u017cytkownik zg\u0142osi\u0142 \u017c\u0105danie wstrzymania albo wznowienia serwera dla okre\u015blonego protoko\u0142u. Jednak \u017c\u0105dania nie mo\u017cna by\u0142o przetworzy\u0107. By\u0107 mo\u017ce serwer nie zako\u0144czy\u0142 inicjowania. Nie mo\u017cna skonfigurowa\u0107 elementu docelowego wstrzymania lub wznowienia. By\u0107 mo\u017ce konieczne jest zako\u0144czenie przetwarzania poprzedniego \u017c\u0105dania wstrzymania lub wznowienia.
-info.listeners.controller.missing.useraction=Pozw\u00f3l na zako\u0144czenie inicjowania serwera, a nast\u0119pnie pon\u00f3w \u017c\u0105danie. Upewnij si\u0119, \u017ce element docelowy \u017c\u0105dania jest wci\u0105\u017c poprawny i aktywny w obr\u0119bie serwera. Przed wys\u0142aniem kolejnego \u017c\u0105dania zaczekaj na zako\u0144czenie poprzedniego.
+info.server.resume.all.request.received=CWWKE0925I: Odebrano \u017c\u0105danie wznowienia wszystkich wstrzymanych komponent\u00f3w na serwerze.
+info.server.resume.all.request.received.explanation=U\u017cytkownik wys\u0142a\u0142 \u017c\u0105danie wznowienia wszystkich wstrzymanych komponent\u00f3w na serwerze. Serwer podejmie pr\u00f3b\u0119 wznowienia tych komponent\u00f3w.
+info.server.resume.all.request.received.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+info.server.resume.request.received=CWWKE0926I: Odebrano \u017c\u0105danie wznowienia nast\u0119puj\u0105cych komponent\u00f3w na serwerze: {0}.
+info.server.resume.request.received.explanation=U\u017cytkownik wys\u0142a\u0142 \u017c\u0105danie wznowienia okre\u015blonych komponent\u00f3w na serwerze. Serwer podejmie pr\u00f3b\u0119 wznowienia tych komponent\u00f3w, je\u015bli zosta\u0142y wstrzymane.
+info.server.resume.request.received.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+error.pause.request.failed=CWWKE0927E: Odebrano \u017c\u0105danie wstrzymania, ale infrastruktura wstrzymywania komponent\u00f3w nie jest dost\u0119pna. Nie mo\u017cna przetworzy\u0107 \u017c\u0105dania. 
+error.pause.request.failed.explanation=U\u017cytkownik wys\u0142a\u0142 \u017c\u0105danie wstrzymania. Jednak \u017c\u0105dania nie mo\u017cna by\u0142o przetworzy\u0107. Serwer mo\u017ce by\u0107 nadal inicjowany lub zamykany.
+error.pause.request.failed.useraction=Sprawd\u017a, czy serwer zosta\u0142 w pe\u0142ni zainicjowany i czy nie jest w\u0142a\u015bnie zamykany.
+
+error.resume.request.failed=CWWKE0928E: Odebrano \u017c\u0105danie wznowienia, ale infrastruktura wstrzymywania komponent\u00f3w nie jest dost\u0119pna. Nie mo\u017cna przetworzy\u0107 \u017c\u0105dania. 
+error.resume.request.failed.explanation=U\u017cytkownik wys\u0142a\u0142 \u017c\u0105danie wznowienia, ale \u017c\u0105dania nie mo\u017cna by\u0142o przetworzy\u0107. Serwer mo\u017ce by\u0107 nadal inicjowany lub zamykany.
+error.resume.request.failed.useraction=Sprawd\u017a, czy serwer zosta\u0142 w pe\u0142ni zainicjowany i czy nie jest w\u0142a\u015bnie zamykany.
+
+error.server.pause.failed=CWWKE0929E: \u017b\u0105danie wstrzymania zosta\u0142o wykonane, ale wstrzymanie nast\u0119puj\u0105cych komponent\u00f3w nie powiod\u0142o si\u0119: {0}
+error.server.pause.failed.explanation=Serwer przetworzy\u0142 \u017c\u0105danie wstrzymania, ale wstrzymanie niekt\u00f3rych mo\u017cliwych do wstrzymania komponent\u00f3w nie powiod\u0142o si\u0119. Wszystkie pozosta\u0142e mo\u017cliwe do wstrzymania komponenty zosta\u0142y pomy\u015blnie wstrzymane.
+error.server.pause.failed.useraction=Sprawd\u017a, czy w dziennikach serwera nie ma dodatkowych b\u0142\u0119d\u00f3w dla komponent\u00f3w, kt\u00f3rych dotyczy\u0142o niepowodzenie.
+
+error.server.resume.failed=CWWKE0930E: \u017b\u0105danie wznowienia zosta\u0142o wykonane, ale wznowienie nast\u0119puj\u0105cych komponent\u00f3w nie powiod\u0142o si\u0119: {0}
+error.server.resume.failed.explanation=Serwer przetworzy\u0142 \u017c\u0105danie wznowienia, ale wznowienie niekt\u00f3rych wstrzymanych komponent\u00f3w nie powiod\u0142o si\u0119. Wszystkie pozosta\u0142e wstrzymane komponenty zosta\u0142y pomy\u015blnie wznowione.
+error.server.resume.failed.useraction=Sprawd\u017a, czy w dziennikach serwera nie ma dodatkowych b\u0142\u0119d\u00f3w dla komponent\u00f3w, kt\u00f3rych dotyczy\u0142o niepowodzenie.
+
+warning.server.pause.invalid.targets=CWWKE0931W: Odebrano \u017c\u0105danie wstrzymania okre\u015blonych komponent\u00f3w, ale lista komponent\u00f3w w opcji docelowej by\u0142a pusta. Nie podj\u0119to \u017cadnego dzia\u0142ania.
+warning.server.pause.invalid.targets.explanation=U\u017cytkownik wys\u0142a\u0142 \u017c\u0105danie wstrzymania z pust\u0105 list\u0105 docelow\u0105 w opcji docelowej. \u017b\u0105danie zosta\u0142o wykonane, ale nie zosta\u0142o podj\u0119te \u017cadne dzia\u0142anie.
+warning.server.pause.invalid.targets.useraction=W opcji docelowej podaj list\u0119 komponent\u00f3w do wstrzymania. Aby wstrzyma\u0107 wszystkie mo\u017cliwe do wstrzymania komponenty na serwerze, wy\u015blij \u017c\u0105danie wstrzymania bez opcji docelowej.
+
+warning.server.resume.invalid.targets=CWWKE0932W: Odebrano \u017c\u0105danie wznowienia okre\u015blonych komponent\u00f3w, ale lista komponent\u00f3w w opcji docelowej by\u0142a pusta. Nie podj\u0119to \u017cadnego dzia\u0142ania.
+warning.server.resume.invalid.targets.explanation=U\u017cytkownik wys\u0142a\u0142 \u017c\u0105danie wznowienia z pust\u0105 list\u0105 docelow\u0105 w opcji docelowej. \u017b\u0105danie zosta\u0142o wykonane, ale nie zosta\u0142o podj\u0119te \u017cadne dzia\u0142anie.
+warning.server.resume.invalid.targets.useraction=W opcji docelowej podaj list\u0119 komponent\u00f3w do wznowienia. Aby wznowi\u0107 wszystkie wstrzymane komponenty na serwerze, wy\u015blij \u017c\u0105danie wstrzymania bez opcji docelowej.
+
+warning.server.pause.no.targets=CWWKE0933W: Odebrano \u017c\u0105danie wstrzymania, ale na serwerze nie znaleziono komponent\u00f3w mo\u017cliwych do wstrzymania. Nie podj\u0119to \u017cadnego dzia\u0142ania.
+warning.server.pause.no.targets.explanation=Serwer przetworzy\u0142 \u017c\u0105danie wstrzymania, ale na serwerze nie znaleziono komponent\u00f3w mo\u017cliwych do wstrzymania. Nie podj\u0119to \u017cadnego dzia\u0142ania.
+warning.server.pause.no.targets.useraction=Sprawd\u017a, czy na serwerze s\u0105 dost\u0119pne komponenty mo\u017cliwe do wstrzymania.
+
+warning.server.resume.no.targets=CWWKE0934W: Odebrano \u017c\u0105danie wznowienia, ale na serwerze nie znaleziono komponent\u00f3w mo\u017cliwych do wstrzymania. Nie podj\u0119to \u017cadnego dzia\u0142ania.
+warning.server.resume.no.targets.explanation=Serwer przetworzy\u0142 \u017c\u0105danie wznowienia, ale nie znaleziono komponent\u00f3w mo\u017cliwych do wstrzymania. Nie podj\u0119to \u017cadnego dzia\u0142ania.
+warning.server.resume.no.targets.useraction=Sprawd\u017a, czy na serwerze s\u0105 dost\u0119pne komponenty mo\u017cliwe do wstrzymania.
+
+warning.server.pause.missing.targets=CWWKE0935W: Odebrano \u017c\u0105danie wstrzymania, ale nie mo\u017cna by\u0142o znale\u017a\u0107 nast\u0119puj\u0105cych komponent\u00f3w: {0}.
+warning.server.pause.missing.targets.explanation=Serwer przetworzy\u0142 \u017c\u0105danie wstrzymania, ale nie mo\u017cna by\u0142o znale\u017a\u0107 niekt\u00f3rych komponent\u00f3w. \u017b\u0105danie zosta\u0142o pomy\u015blnie przetworzone dla wszystkich innych podanych komponent\u00f3w.
+warning.server.pause.missing.targets.useraction=Sprawd\u017a, czy nazwy podanych komponent\u00f3w s\u0105 poprawne oraz czy te komponenty zosta\u0142y zarejestrowane na serwerze i czy mo\u017cna je wstrzymywa\u0107.
+
+warning.server.resume.missing.targets=CWWKE0936W: Odebrano \u017c\u0105danie wznowienia, ale nie mo\u017cna by\u0142o znale\u017a\u0107 nast\u0119puj\u0105cych komponent\u00f3w: {0}.
+warning.server.resume.missing.targets.explanation=Serwer przetworzy\u0142 \u017c\u0105danie wznowienia, ale nie znaleziono niekt\u00f3rych komponent\u00f3w. \u017b\u0105danie zosta\u0142o pomy\u015blnie przetworzone dla wszystkich innych podanych komponent\u00f3w.
+warning.server.resume.missing.targets.useraction=Sprawd\u017a, czy nazwy podanych komponent\u00f3w s\u0105 poprawne oraz czy te komponenty zosta\u0142y zarejestrowane na serwerze i czy mo\u017cna je wstrzymywa\u0107.
+
+warning.server.status.missing.targets=CWWKE0937W: Odebrano \u017c\u0105danie statusu, ale nie mo\u017cna by\u0142o znale\u017a\u0107 nast\u0119puj\u0105cych komponent\u00f3w: {0}.
+warning.server.status.missing.targets.explanation=Serwer przetworzy\u0142 \u017c\u0105danie statusu, ale nie znaleziono niekt\u00f3rych komponent\u00f3w. \u017b\u0105danie zosta\u0142o pomy\u015blnie przetworzone dla wszystkich innych podanych komponent\u00f3w.
+warning.server.status.missing.targets.useraction=Sprawd\u017a, czy nazwy podanych komponent\u00f3w s\u0105 poprawne oraz czy te komponenty zosta\u0142y zarejestrowane na serwerze i czy mo\u017cna je wstrzymywa\u0107.
+
+info.server.pause.request.completed=CWWKE0938I: \u017b\u0105danie wstrzymania zosta\u0142o wykonane.
+info.server.pause.request.completed.explanation=\u017b\u0105danie wstrzymania zosta\u0142o wykonane.
+info.server.pause.request.completed.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
+
+info.server.resume.request.completed=CWWKE0939I: \u017b\u0105danie wznowienia zosta\u0142o wykonane.
+info.server.resume.request.completed.explanation=\u017b\u0105danie wznowienia zosta\u0142o wykonane.
+info.server.resume.request.completed.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
 
 info.serverStarting=Uruchamianie serwera {0}.
 info.serverStarted=Serwer {0} zosta\u0142 uruchomiony.

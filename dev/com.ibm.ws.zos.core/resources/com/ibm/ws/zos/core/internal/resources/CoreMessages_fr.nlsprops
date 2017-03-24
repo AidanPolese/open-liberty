@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2011.
+# (C) COPYRIGHT International Business Machines Corp. 2011, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -140,3 +140,8 @@ ANGEL_NAME_TOO_LONG.useraction=Ce serveur ne se connectera pas \u00e0 un process
 ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0120E: Le nom d''ange sp\u00e9cifi\u00e9 dans bootstrap.properties contient le caract\u00e8re non pris en charge {0} \u00e0 la position {1}.
 ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=La propri\u00e9t\u00e9 com.ibm.ws.zos.core.angelName indique le nom du processus ange auquel doit se connecter ce serveur. La propri\u00e9t\u00e9 est sp\u00e9cifi\u00e9e dans boostrap.properties, et elle peut uniquement contenir des caract\u00e8res du jeu de caract\u00e8res suivant :  A-Z 0-9 ! # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
 ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=Ce serveur ne se connectera pas \u00e0 un processus ange. Pour vous connecter \u00e0 un processus ange, indiquez une valeur qui utilise le jeu de caract\u00e8res pris en charge pour la propri\u00e9t\u00e9 com.ibm.ws.zos.core.angelName, puis red\u00e9marrez le serveur.
+
+#{0} is the server's UMASK value.
+SERVER_CURRENT_UMASK=CWWKB0121I: La valeur UMASK du processus serveur est r\u00e9gl\u00e9e \u00e0 {0}.
+SERVER_CURRENT_UMASK.explanation=Valeur UMASK du processus serveur. Par d\u00e9faut, la valeur UMASK est h\u00e9rit\u00e9e du processus qui a d\u00e9marr\u00e9 le serveur Liberty, mais elle est ensuite modifi\u00e9e pour interdire aux autres utilisateurs (OTHER) tout acc\u00e8s en lecture, \u00e9criture ou ex\u00e9cution. La mise \u00e0 true de la variable d'environnement WLP_SKIP_UMASK emp\u00eache le serveur de modifier le UMASK de cette mani\u00e8re. Lorsqu'un processus serveur Liberty est d\u00e9marr\u00e9 au moyen d'une proc\u00e9dure z/OS, vous pouvez personnaliser le UMASK qu'il utilise en d\u00e9finissant de mani\u00e8re appropri\u00e9e les variables d'environnement WLP_SKIP_UMASK et _BPX_BATCH_UMASK. La variable WLP_SKIP_UMASK peut \u00eatre sp\u00e9cifi\u00e9e soit dans le fichier server.env, soit (si le serveur est d\u00e9marr\u00e9 par une proc\u00e9dure z/OS) au moyen de l'entr\u00e9e DD STDENDV. En revanche, la variable _BPX_BATCH_UMASK ne peut pas \u00eatre sp\u00e9cifi\u00e9e dans le fichier server.env. Elle ne peut \u00eatre sp\u00e9cifi\u00e9e qu'au moyen de l'entr\u00e9e DD STDENV dans la proc\u00e9dure z/OS.
+SERVER_CURRENT_UMASK.useraction=Aucune action n'est requise.

@@ -576,17 +576,74 @@ error.package.missingLibExtractDir=CWWKE0922E: Impossibile completare il comando
 error.package.missingLibExtractDir.explanation=La directory lib/extract contiene classi di autoestrazione e metadati necessarie per il completamento del comando package.  Se tale directory manca, potrebbe indicare che l'installazione di WebSphere Liberty Profile era incompleta o che la directory \u00e8 stata eliminata.
 error.package.missingLibExtractDir.useraction=Reinstallare WebSphere Liberty Profile e accertarsi che la directory lib/extract esista sotto la directory WLP_HOME.
 
-info.serverPause.request.received=CWWKE0923I: \u00c8 stata ricevuta una richiesta di sospendere il server per le richieste in entrata di un protocollo particolare. Parametri: {0}.
-info.serverPause.request.received.explanation=Un utente ha emesso una richiesta di sospendere il server per un particolare protocollo. Quando questo messaggio \u00e8 stato emesso, la sospensione effettiva del server non si \u00e8 ancora verificata. \u00c8 possibile, ad esempio, richiedere una sospensione del server per le richieste HTTP in modo da poter eseguire il debug un problema. Dopo aver risolto il problema, \u00e8 possibile emettere una richiesta per riattivare il server per le richieste HTTP.
-info.serverPause.request.received.useraction=Non \u00e8 richiesta alcuna azione.
+info.server.pause.all.request.received=CWWKE0923I: \u00c8 stata ricevuta una richiesta di sospendere tutti i componenti sospendibili nel server.
+info.server.pause.all.request.received.explanation=\u00c8 stata emessa una richiesta di sospendere tutti i componenti sospendibili nel server. Il server tenter\u00e0 di sospendere questi componenti. 
+info.server.pause.all.request.received.useraction=Non \u00e8 richiesta alcuna azione.
 
-info.serverResume.request.received=CWWKE0924I: \u00c8 stata ricevuta una richiesta di riattivare il server per le richieste in entrata di un protocollo particolare. Parametri: {0}.
-info.serverResume.request.received.explanation=Un utente ha emesso una richiesta di riattivare il server precedentemente sospeso per un particolare protocollo. Quando questo messaggio \u00e8 stato emesso, la riattivazione effettiva del server non si \u00e8 ancora verificata. \u00c8 possibile, ad esempio, richiedere una sospensione del server per le richieste HTTP in modo da poter eseguire il debug un problema. Dopo aver risolto il problema, \u00e8 possibile emettere una richiesta per riattivare il server per le richieste HTTP.
-info.serverResume.request.received.useraction=Non \u00e8 richiesta alcuna azione.
+info.server.pause.request.received=CWWKE0924I: \u00c8 stata ricevuta una richiesta di sospendere i seguenti componenti nel server: {0}
+info.server.pause.request.received.explanation=\u00c8 stata emessa una richiesta di sospendere componenti specifici nel server. Il server tenter\u00e0 di sospendere questi componenti. 
+info.server.pause.request.received.useraction=Non \u00e8 richiesta alcuna azione.
 
-info.listeners.controller.missing=CWWKE0925W: \u00c8 stata ricevuta una richiesta del server {0}, ma non \u00e8 stato possibile elaborarla. Causa: {1}.
-info.listeners.controller.missing.explanation=Un utente ha emesso una richiesta di sospendere o riattivare il server per un particolare protocollo. Tuttavia, la richiesta non pu\u00f2 essere elaborata. Il server potrebbe non aver completato l'inizializzazione. La destinazione della sospensione o della riattivazione potrebbe non essere pi\u00f9 configurata. Una precedente richiesta di sospensione o riattivazione potrebbe dover essere ancora completata.
-info.listeners.controller.missing.useraction=Consentire al server di terminare l'inizializzazione e ripetere la richiesta. Verificare che la destinazione della richiesta sia ancora valida e attiva nel server. Consentire il completamento della richiesta precedentemente emessa prima di emettere un'altra richiesta.
+info.server.resume.all.request.received=CWWKE0925I: \u00c8 stata ricevuta una richiesta di riattivare tutti i componenti sospesi nel server.
+info.server.resume.all.request.received.explanation=\u00c8 stata emessa una richiesta di riattivare tutti i componenti sospesi nel server. Il server tenter\u00e0 di riattivare questi componenti.
+info.server.resume.all.request.received.useraction=Non \u00e8 richiesta alcuna azione.
+
+info.server.resume.request.received=CWWKE0926I: \u00c8 stata ricevuta una richiesta di riattivare i seguenti componenti nel server: {0}
+info.server.resume.request.received.explanation=\u00c8 stata emessa una richiesta di riattivare componenti specifici nel server. Il server tenter\u00e0 di riattivare questi componenti se sospesi.
+info.server.resume.request.received.useraction=Non \u00e8 richiesta alcuna azione.
+
+error.pause.request.failed=CWWKE0927E: \u00c8 stata ricevuta una richiesta di sospensione, ma l'infrastruttura per sospendere i componenti non \u00e8 disponibile. Impossibile elaborare la richiesta. 
+error.pause.request.failed.explanation=Un utente ha emesso una richiesta di sospensione. Tuttavia, la richiesta non pu\u00f2 essere elaborata. Il server potrebbe stare ancora inizializzando o si sta arrestando.
+error.pause.request.failed.useraction=Verificare che il server abbia completato l'inizializzazione e non sia in fase di arresto.
+
+error.resume.request.failed=CWWKE0928E: \u00c8 stata ricevuta una richiesta di riattivazione, ma l'infrastruttura per sospendere i componenti non \u00e8 disponibile. Impossibile elaborare la richiesta. 
+error.resume.request.failed.explanation=Un utente ha emesso una richiesta di attivazione, ma la richiesta non pu\u00f2 essere elaborata. Il server potrebbe stare ancora inizializzando o si sta arrestando.
+error.resume.request.failed.useraction=Verificare che il server abbia completato l'inizializzazione e non sia in fase di arresto.
+
+error.server.pause.failed=CWWKE0929E: Una richiesta di sospensione \u00e8 stata completata, ma la sospensione non \u00e8 riuscita per i seguenti componenti: {0}
+error.server.pause.failed.explanation=Il server ha elaborato una richiesta di sospensione, ma la sospensione non \u00e8 riuscita per alcuni componenti sospendibili. La sospensione per tutti gli altri componenti sospendibili \u00e8 riuscita.
+error.server.pause.failed.useraction=Consultare i log del server per ulteriori errori dai componenti con esito negativo.
+
+error.server.resume.failed=CWWKE0930E: Una richiesta di riattivazione \u00e8 stata completata, ma la riattivazione non \u00e8 riuscita per i seguenti componenti: {0}
+error.server.resume.failed.explanation=Il server ha elaborato una richiesta di riattivazione, ma la riattivazione non \u00e8 riuscita per alcuni componenti sospesi. La riattivazione per tutti gli altri componenti sospesi \u00e8 riuscita.
+error.server.resume.failed.useraction=Consultare i log del server per ulteriori errori dai componenti con esito negativo.
+
+warning.server.pause.invalid.targets=CWWKE0931W: \u00c8 stata ricevuta una richiesta di sospendere componenti specifici, ma l'elenco di componenti sull'opzione di destinazione \u00e8 vuoto. Non \u00e8 stata intrapresa alcuna azione.
+warning.server.pause.invalid.targets.explanation=Un utente ha emesso una richiesta di sospensione con un elenco di destinazione vuoto sull'opzione di destinazione. La richiesta \u00e8 stata completata, ma non \u00e8 stata intrapresa alcuna azione.
+warning.server.pause.invalid.targets.useraction=Specificare nell'opzione di destinazione un elenco di componenti da sospendere. Per sospendere tutti i componenti sospendibili nel server, emettere una richiesta di sospensione senza l'opzione di destinazione.
+
+warning.server.resume.invalid.targets=CWWKE0932W: \u00c8 stata ricevuta una richiesta di riattivare componenti specifici, ma l'elenco di componenti sull'opzione di destinazione \u00e8 vuoto. Non \u00e8 stata intrapresa alcuna azione.
+warning.server.resume.invalid.targets.explanation=Un utente ha emesso una richiesta di riattivazione con un elenco di destinazione vuoto sull'opzione di destinazione. La richiesta \u00e8 stata completata, ma non \u00e8 stata intrapresa alcuna azione.
+warning.server.resume.invalid.targets.useraction=Specificare nell'opzione di destinazione un elenco di componenti da riattivare. Per riattivare tutti i componenti sospesi nel server, emettere una richiesta di riattivazione senza l'opzione di destinazione.
+
+warning.server.pause.no.targets=CWWKE0933W: \u00c8 stata ricevuta una richiesta di sospensione, ma non sono stati trovati componenti sospendibili nel server. Non \u00e8 stata intrapresa alcuna azione.
+warning.server.pause.no.targets.explanation=Il server ha elaborato una richiesta di sospensione, ma non sono stati trovati componenti sospendibili nel server. Non \u00e8 stata intrapresa alcuna azione.
+warning.server.pause.no.targets.useraction=Verificare che siano disponibili nel server componenti sospendibili.
+
+warning.server.resume.no.targets=CWWKE0934W: \u00c8 stata ricevuta una richiesta di riattivazione, ma non sono stati trovati componenti sospendibili nel server. Non \u00e8 stata intrapresa alcuna azione.
+warning.server.resume.no.targets.explanation=Il server ha elaborato una richiesta di riattivazione, ma non sono stati trovati componenti sospendibili. Non \u00e8 stata intrapresa alcuna azione.
+warning.server.resume.no.targets.useraction=Verificare che siano disponibili nel server componenti sospendibili.
+
+warning.server.pause.missing.targets=CWWKE0935W: \u00c8 stata ricevuta una richiesta di sospensione, ma non sono stati trovati i seguenti componenti: {0}
+warning.server.pause.missing.targets.explanation=Il server ha elaborato una richiesta di sospensione, ma alcuni componenti specifici non sono stati trovati. La richiesta \u00e8 stata elaborata per tutti i componenti specificati.
+warning.server.pause.missing.targets.useraction=Verificare che i nomi componente specificati siano corretti e che i componenti siano registrati nel server e siano sospendibili.
+
+warning.server.resume.missing.targets=CWWKE0936W: \u00c8 stata ricevuta una richiesta di riattivazione, ma non sono stati trovati i seguenti componenti: {0}
+warning.server.resume.missing.targets.explanation=Il server ha elaborato una richiesta di riattivazione, ma alcuni componenti specifici non sono stati trovati. La richiesta \u00e8 stata elaborata per tutti i componenti specificati.
+warning.server.resume.missing.targets.useraction=Verificare che i nomi componente specificati siano corretti e che i componenti siano registrati nel server e siano sospendibili.
+
+warning.server.status.missing.targets=CWWKE0937W: \u00c8 stata ricevuta una richiesta di stato, ma non sono stati trovati i seguenti componenti: {0}
+warning.server.status.missing.targets.explanation=Il server ha elaborato una richiesta di stato, ma alcuni componenti specifici non sono stati trovati. La richiesta \u00e8 stata elaborata per tutti i componenti specificati.
+warning.server.status.missing.targets.useraction=Verificare che i nomi componente specificati siano corretti e che i componenti siano registrati nel server e siano sospendibili.
+
+info.server.pause.request.completed=CWWKE0938I: Una richiesta di sospensione \u00e8 stata completata.
+info.server.pause.request.completed.explanation=Una richiesta di sospensione \u00e8 stata completata.
+info.server.pause.request.completed.useraction=Non \u00e8 richiesta alcuna azione.
+
+info.server.resume.request.completed=CWWKE0939I: Una richiesta di riattivazione \u00e8 stata completata.
+info.server.resume.request.completed.explanation=Una richiesta di riattivazione \u00e8 stata completata.
+info.server.resume.request.completed.useraction=Non \u00e8 richiesta alcuna azione.
+
 
 info.serverStarting=Avvio del server {0} in corso.
 info.serverStarted=Server {0} avviato.

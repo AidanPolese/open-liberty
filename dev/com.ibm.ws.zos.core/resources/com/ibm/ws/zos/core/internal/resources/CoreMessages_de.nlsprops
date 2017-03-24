@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2011.
+# (C) COPYRIGHT International Business Machines Corp. 2011, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -140,3 +140,8 @@ ANGEL_NAME_TOO_LONG.useraction=Dieser Server stellt keine Verbindung zu einem An
 ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0120E: Der in der Datei bootstrap.properties angegebene Angel-Name enth\u00e4lt das nicht unterst\u00fctzte Zeichen {0} an Position {1}.
 ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=Die Eigenschaft com.ibm.ws.zos.core.angelName gibt den Namen des Angel-Prozesses an, zu dem dieser Server eine Verbindung herstellen soll. Die Eigenschaft wird in der Datei bootstrap.properties angegeben und darf nur Zeichen aus dem folgenden Zeichensatz enthalten: A-Z 0-9 ! # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
 ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=Dieser Server stellt keine Verbindung zu einem Angel-Prozess her. Zum Herstellen einer Verbindung zu einem Angel-Prozess geben Sie einen Wert mit Zeichen aus dem unterst\u00fctzten Zeichensatz f\u00fcr die Eigenschaft com.ibm.ws.zos.core.angelName an und starten Sie dann den Server erneut.
+
+#{0} is the server's UMASK value.
+SERVER_CURRENT_UMASK=CWWKB0121I: Die UMASK-Einstellung f\u00fcr den Serverprozess ist auf den Wert {0} gesetzt.
+SERVER_CURRENT_UMASK.explanation=Der UMASK-Wert des Serverprozesses. Standardm\u00e4\u00dfig wird der UMASK-Wert von dem Prozess \u00fcbernommen, der den Liberty- Server gestartet hat, und wird dann ge\u00e4ndert, um Lese-, Schreib- oder Ausf\u00fchrungszugriff f\u00fcr andere Benutzer zu unterbinden. Wenn Sie die Umgebungsvariable WLP_SKIP_UMASK auf true setzen, kann der Server den UMASK-Wert nicht auf diese Weise \u00e4ndern. Wenn ein Liberty-Server mit einer z/OS-Prozedur gestartet wird, k\u00f6nnen Sie den vom Serverprozess verwendeten UMASK-Wert durch die Definition der Umgebungsvariablen WLP_SKIP_UMASK und _BPX_BATCH_UMASK anpassen. Die Umgebungsvariable WLP_SKIP_UMASK kann in der Datei server.env oder, falls der Server mit einer z/OS-Prozedur gestartet wird, mit dem STDENDV DD-Eintrag angegeben werden. Die Umgebungsvariable _BPX_BATCH_UMASK hingegen kann nicht in der Datei server.env angegeben werden. Sie darf nur mit dem STDENV DD-Eintrag in der z/OS-Prozedur angegeben werden.
+SERVER_CURRENT_UMASK.useraction=Es ist keine Aktion erforderlich.

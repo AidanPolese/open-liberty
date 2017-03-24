@@ -577,17 +577,74 @@ error.package.missingLibExtractDir=CWWKE0922E: A csomagparancs nem hajthat\u00f3
 error.package.missingLibExtractDir.explanation=A lib/extract k\u00f6nyvt\u00e1r tartalmazza a csomagparancs v\u00e9grehajt\u00e1s\u00e1hoz sz\u00fcks\u00e9ges metaadatokat \u00e9s \u00f6nkicsomagol\u00f3 oszt\u00e1lyokat.  Ha hi\u00e1nyzik ez a k\u00f6nyvt\u00e1r, az annak a jele lehet, hogy a WebSphere Liberty Profile k\u00f6rnyezet telep\u00edt\u00e9se befejezetlen, vagy a k\u00f6nyvt\u00e1rat t\u00f6r\u00f6lt\u00e9k.
 error.package.missingLibExtractDir.useraction=Telep\u00edtse \u00fajra a WebSphere Liberty Profile k\u00f6rnyezetet, \u00e9s gy\u0151z\u0151dj\u00f6n meg r\u00f3la, hogy a lib/extract k\u00f6nyvt\u00e1r l\u00e9tezik a WLP_HOME k\u00f6nyvt\u00e1rban.
 
-info.serverPause.request.received=CWWKE0923I: Olyan k\u00e9r\u00e9s \u00e9rkezett, hogy a kiszolg\u00e1l\u00f3t egy bizonyos protokoll bej\u00f6v\u0151 k\u00e9r\u00e9sei eset\u00e9n sz\u00fcneteltetni kell. Param\u00e9terek: {0}.
-info.serverPause.request.received.explanation=Egy felhaszn\u00e1l\u00f3 olyan k\u00e9r\u00e9st adott ki, hogy a kiszolg\u00e1l\u00f3t egy bizonyos protokoll eset\u00e9n sz\u00fcneteltetni kell. Az \u00fczenet kiad\u00e1sakor a kiszolg\u00e1l\u00f3 t\u00e9nyleges sz\u00fcneteltet\u00e9s\u00e9re m\u00e9g nem ker\u00fclt sor.. K\u00e9rheti p\u00e9ld\u00e1ul a kiszolg\u00e1l\u00f3 sz\u00fcneteltet\u00e9s\u00e9t a HTTP k\u00e9r\u00e9sek eset\u00e9ben, hogy egy probl\u00e9ma felder\u00edt\u00e9se \u00e9rdek\u00e9ben hibakeres\u00e9st v\u00e9gezhessen. A hibakeres\u00e9s v\u00e9gezt\u00e9vel kiadhat egy olyan k\u00e9r\u00e9st, amelynek hat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3 folytatja a HTTP k\u00e9r\u00e9sek feldolgoz\u00e1s\u00e1t.
-info.serverPause.request.received.useraction=Nincs teend\u0151.
+info.server.pause.all.request.received=CWWKE0923I: K\u00e9r\u00e9s \u00e9rkezett az \u00f6sszes sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151 v\u00e1rakoztat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n.
+info.server.pause.all.request.received.explanation=Egy felhaszn\u00e1l\u00f3 k\u00e9r\u00e9st adott ki az \u00f6sszes sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151 v\u00e1rakoztat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n. A kiszolg\u00e1l\u00f3 meg fogja k\u00eds\u00e9relni az \u00f6sszetev\u0151k sz\u00fcneteltet\u00e9s\u00e9t. 
+info.server.pause.all.request.received.useraction=Nincs teend\u0151.
 
-info.serverResume.request.received=CWWKE0924I: Olyan k\u00e9r\u00e9s \u00e9rkezett, hogy a kiszolg\u00e1l\u00f3n egy bizonyos protokoll bej\u00f6v\u0151 k\u00e9r\u00e9seinek feldolgoz\u00e1s\u00e1t folytatni kell. Param\u00e9terek: {0}.
-info.serverResume.request.received.explanation=Egy felhaszn\u00e1l\u00f3 olyan k\u00e9r\u00e9st adott ki, hogy a kiszolg\u00e1l\u00f3n egy kor\u00e1bban sz\u00fcneteltetett protokoll feldolgoz\u00e1s\u00e1t folytatni kell. Az \u00fczenet kiad\u00e1sakor a kiszolg\u00e1l\u00f3n a feldolgoz\u00e1s t\u00e9nyleges folytat\u00e1s\u00e1ra m\u00e9g nem ker\u00fclt sor. K\u00e9rheti p\u00e9ld\u00e1ul a kiszolg\u00e1l\u00f3 sz\u00fcneteltet\u00e9s\u00e9t a HTTP k\u00e9r\u00e9sek eset\u00e9ben, hogy egy probl\u00e9ma felder\u00edt\u00e9se \u00e9rdek\u00e9ben hibakeres\u00e9st v\u00e9gezhessen. A hibakeres\u00e9s v\u00e9gezt\u00e9vel kiadhat egy olyan k\u00e9r\u00e9st, amelynek hat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3 folytatja a HTTP k\u00e9r\u00e9sek feldolgoz\u00e1s\u00e1t.
-info.serverResume.request.received.useraction=Nincs teend\u0151.
+info.server.pause.request.received=CWWKE0924I: K\u00e9r\u00e9s \u00e9rkezett a k\u00f6vetkez\u0151 \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n: {0}
+info.server.pause.request.received.explanation=Egy felhaszn\u00e1l\u00f3 k\u00e9r\u00e9st adott ki egyes \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n. A kiszolg\u00e1l\u00f3 meg fogja k\u00eds\u00e9relni az \u00f6sszetev\u0151k sz\u00fcneteltet\u00e9s\u00e9t. 
+info.server.pause.request.received.useraction=Nincs teend\u0151.
 
-info.listeners.controller.missing=CWWKE0925W: {0} kiszolg\u00e1l\u00f3k\u00e9r\u00e9s \u00e9rkezett, de nem lehetett feldolgozni. Ok: {1}.
-info.listeners.controller.missing.explanation=Egy felhaszn\u00e1l\u00f3 olyan k\u00e9r\u00e9st adott ki, hogy a kiszolg\u00e1l\u00f3n egy bizonyos protokoll feldolgoz\u00e1s\u00e1t sz\u00fcneteltetni vagy folytatni kell. A k\u00e9r\u00e9st azonban nem lehetett feldolgozni. Lehet, hogy a kiszolg\u00e1l\u00f3 inicializ\u00e1l\u00e1sa nem fejez\u0151d\u00f6tt be. A sz\u00fcneteltet\u00e9s vagy folytat\u00e1s c\u00e9lj\u00e1t m\u00e1r nem lehet be\u00e1ll\u00edtani. Lehet, hogy egy kor\u00e1bbi sz\u00fcneteltet\u00e9si vagy folytat\u00e1si k\u00e9r\u00e9s feldolgoz\u00e1s\u00e1nak m\u00e9g be kell fejez\u0151dnie.
-info.listeners.controller.missing.useraction=Tegye lehet\u0151v\u00e9 a kiszolg\u00e1l\u00f3 sz\u00e1m\u00e1ra az inicializ\u00e1l\u00e1s befejez\u00e9s\u00e9t, majd pr\u00f3b\u00e1lkozzon \u00fajra a k\u00e9r\u00e9ssel. Ellen\u0151rizze, hogy a k\u00e9r\u00e9s c\u00e9lja m\u00e9g mindig \u00e9rv\u00e9nyes \u00e9s akt\u00edv a kiszolg\u00e1l\u00f3n bel\u00fcl. Tegye lehet\u0151v\u00e9 a kor\u00e1bban kiadott k\u00e9r\u00e9s befejez\u00e9s\u00e9t, miel\u0151tt m\u00e1sik k\u00e9r\u00e9st adna ki.
+info.server.resume.all.request.received=CWWKE0925I: K\u00e9r\u00e9s \u00e9rkezett az \u00f6sszes v\u00e1rakoztatott \u00f6sszetev\u0151 folytat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n.
+info.server.resume.all.request.received.explanation=Egy felhaszn\u00e1l\u00f3 k\u00e9r\u00e9st adott ki az \u00f6sszes v\u00e1rakoztatott \u00f6sszetev\u0151 folytat\u00e1s\u00e1sra a kiszolg\u00e1l\u00f3n. A kiszolg\u00e1l\u00f3 meg fogja k\u00eds\u00e9relni az \u00f6sszetev\u0151k folytat\u00e1s\u00e1t.
+info.server.resume.all.request.received.useraction=Nincs teend\u0151.
+
+info.server.resume.request.received=CWWKE0926I: K\u00e9r\u00e9s \u00e9rkezett a k\u00f6vetkez\u0151 \u00f6sszetev\u0151k folytat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n: {0}
+info.server.resume.request.received.explanation=Egy felhaszn\u00e1l\u00f3 k\u00e9r\u00e9st adott ki egyes \u00f6sszetev\u0151k folytat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n. A kiszolg\u00e1l\u00f3 meg fogja k\u00eds\u00e9relni az \u00f6sszetev\u0151k folytat\u00e1s\u00e1t, amennyiben v\u00e1rakoznak.
+info.server.resume.request.received.useraction=Nincs teend\u0151.
+
+error.pause.request.failed=CWWKE0927E: V\u00e1rakoztat\u00e1si k\u00e9r\u00e9s \u00e9rkezett, de az \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1s\u00e1t lehet\u0151v\u00e9 tev\u0151 infrastrukt\u00fara nem \u00e1ll rendelkez\u00e9sre. A k\u00e9r\u00e9s nem feldolgozhat\u00f3. 
+error.pause.request.failed.explanation=Egy felhaszn\u00e1l\u00f3 sz\u00fcneteltet\u00e9si k\u00e9r\u00e9st adott ki. A k\u00e9r\u00e9st azonban nem lehetett feldolgozni. Lehet, hogy a kiszolg\u00e1l\u00f3 m\u00e9g inicializ\u00e1l vagy \u00e9ppen le\u00e1ll.
+error.pause.request.failed.useraction=Ellen\u0151rizze, hogy a kiszolg\u00e1l\u00f3 teljesen inicializ\u00e1lt \u00e1llapotban van-e, illetve nincs-e le\u00e1ll\u00e1s folyamatban.
+
+error.resume.request.failed=CWWKE0928E: Folytat\u00e1si k\u00e9r\u00e9s \u00e9rkezett, de az \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1s\u00e1t lehet\u0151v\u00e9 tev\u0151 infrastrukt\u00fara nem \u00e1ll rendelkez\u00e9sre. A k\u00e9r\u00e9s nem feldolgozhat\u00f3. 
+error.resume.request.failed.explanation=Egy felhaszn\u00e1l\u00f3 folytat\u00e1si k\u00e9r\u00e9st adott ki, a k\u00e9r\u00e9st azonban nem lehetett feldolgozni. Lehet, hogy a kiszolg\u00e1l\u00f3 m\u00e9g inicializ\u00e1l vagy \u00e9ppen le\u00e1ll.
+error.resume.request.failed.useraction=Ellen\u0151rizze, hogy a kiszolg\u00e1l\u00f3 teljesen inicializ\u00e1lt \u00e1llapotban van-e, illetve nincs-e le\u00e1ll\u00e1s folyamatban.
+
+error.server.pause.failed=CWWKE0929E: Egy v\u00e1rakoztat\u00e1si k\u00e9r\u00e9s v\u00e9grehajt\u00e1sra ker\u00fclt, de a k\u00f6vetkez\u0151 \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1sa nem siker\u00fclt: {0}
+error.server.pause.failed.explanation=A kiszolg\u00e1l\u00f3 feldolgozott egy v\u00e1rakoztat\u00e1si k\u00e9r\u00e9st, de n\u00e9h\u00e1ny sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151 v\u00e1rakoztat\u00e1sa nem siker\u00fclt. Minden egy\u00e9b sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151 v\u00e1rakoztat\u00e1sa sikeresen megt\u00f6rt\u00e9nt.
+error.server.pause.failed.useraction=A sikertelen \u00f6sszetev\u0151k egy\u00e9b hib\u00e1i\u00e9rt ellen\u0151rizze a kiszolg\u00e1l\u00f3napl\u00f3kat.
+
+error.server.resume.failed=CWWKE0930E: Egy folytat\u00e1si k\u00e9r\u00e9s v\u00e9grehajt\u00e1sra ker\u00fclt, de a k\u00f6vetkez\u0151 \u00f6sszetev\u0151k folytat\u00e1sa nem siker\u00fclt: {0}
+error.server.resume.failed.explanation=A kiszolg\u00e1l\u00f3 feldolgozott egy folytat\u00e1si k\u00e9r\u00e9st, de n\u00e9h\u00e1ny v\u00e1rakoztatott \u00f6sszetev\u0151 folytat\u00e1sa nem siker\u00fclt. Minden egy\u00e9b sz\u00fcneteltetett \u00f6sszetev\u0151 folytat\u00e1sa sikeresen megt\u00f6rt\u00e9nt.
+error.server.resume.failed.useraction=A sikertelen \u00f6sszetev\u0151k egy\u00e9b hib\u00e1i\u00e9rt ellen\u0151rizze a kiszolg\u00e1l\u00f3napl\u00f3kat.
+
+warning.server.pause.invalid.targets=CWWKE0931W: K\u00e9r\u00e9s \u00e9rkezett egyes \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1s\u00e1ra, de a c\u00e9lbe\u00e1ll\u00edt\u00e1sban \u00fcres az \u00f6sszetev\u0151lista. Nem t\u00f6rt\u00e9nt m\u0171velet.
+warning.server.pause.invalid.targets.explanation=Egy felhaszn\u00e1l\u00f3 sz\u00fcneteltet\u00e9si k\u00e9r\u00e9st adott ki \u00fcres c\u00e9llist\u00e1val a c\u00e9lbe\u00e1ll\u00edt\u00e1sban. A k\u00e9r\u00e9s v\u00e9grehajt\u00e1sa megt\u00f6rt\u00e9nt, de nem t\u00f6rt\u00e9nt m\u0171velet.
+warning.server.pause.invalid.targets.useraction=A c\u00e9lbe\u00e1ll\u00edt\u00e1sban adja meg a v\u00e1rakoztatand\u00f3 \u00f6sszetev\u0151k list\u00e1j\u00e1t. Az \u00f6sszes sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151 v\u00e1rakoztat\u00e1s\u00e1hoz a kiszolg\u00e1l\u00f3n adjon ki c\u00e9lbe\u00e1ll\u00edt\u00e1s n\u00e9lk\u00fcli v\u00e1rakoztat\u00e1si k\u00e9r\u00e9st.
+
+warning.server.resume.invalid.targets=CWWKE0932W: K\u00e9r\u00e9s \u00e9rkezett egyes \u00f6sszetev\u0151k folytat\u00e1s\u00e1ra, de a c\u00e9lbe\u00e1ll\u00edt\u00e1sban \u00fcres az \u00f6sszetev\u0151lista. Nem t\u00f6rt\u00e9nt m\u0171velet.
+warning.server.resume.invalid.targets.explanation=Egy felhaszn\u00e1l\u00f3 folytat\u00e1si k\u00e9r\u00e9st adott ki \u00fcres c\u00e9llist\u00e1val a c\u00e9lbe\u00e1ll\u00edt\u00e1sban. A k\u00e9r\u00e9s v\u00e9grehajt\u00e1sa megt\u00f6rt\u00e9nt, de nem t\u00f6rt\u00e9nt m\u0171velet.
+warning.server.resume.invalid.targets.useraction=A c\u00e9lbe\u00e1ll\u00edt\u00e1sban adja meg a folytatni k\u00edv\u00e1nt \u00f6sszetev\u0151k list\u00e1j\u00e1t. Az \u00f6sszes v\u00e1rakoztatott \u00f6sszetev\u0151 folytat\u00e1s\u00e1shoz a kiszolg\u00e1l\u00f3n adjon ki c\u00e9lbe\u00e1ll\u00edt\u00e1s n\u00e9lk\u00fcli folytat\u00e1si k\u00e9r\u00e9st.
+
+warning.server.pause.no.targets=CWWKE0933W: V\u00e1rakoztat\u00e1si k\u00e9r\u00e9s \u00e9rkezett, de a kiszolg\u00e1l\u00f3n nem tal\u00e1lhat\u00f3 sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151. Nem t\u00f6rt\u00e9nt m\u0171velet.
+warning.server.pause.no.targets.explanation=A kiszolg\u00e1l\u00f3 feldolgozott egy v\u00e1rakoztat\u00e1si k\u00e9r\u00e9st, de a kiszolg\u00e1l\u00f3n nem tal\u00e1lhat\u00f3 sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151. Nem t\u00f6rt\u00e9nt m\u0171velet.
+warning.server.pause.no.targets.useraction=Ellen\u0151rizze, hogy vannak-e sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151k a kiszolg\u00e1l\u00f3n.
+
+warning.server.resume.no.targets=CWWKE0934W: Folytat\u00e1si k\u00e9r\u00e9s \u00e9rkezett, de a kiszolg\u00e1l\u00f3n nem tal\u00e1lhat\u00f3 sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151. Nem t\u00f6rt\u00e9nt m\u0171velet.
+warning.server.resume.no.targets.explanation=A kiszolg\u00e1l\u00f3 feldolgozott egy folytat\u00e1si k\u00e9r\u00e9st, de nem tal\u00e1lhat\u00f3 sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151. Nem t\u00f6rt\u00e9nt m\u0171velet.
+warning.server.resume.no.targets.useraction=Ellen\u0151rizze, hogy vannak-e sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151k a kiszolg\u00e1l\u00f3n.
+
+warning.server.pause.missing.targets=CWWKE0935W: V\u00e1rakoztat\u00e1si k\u00e9r\u00e9s \u00e9rkezett, de a k\u00f6vetkez\u0151 \u00f6sszetev\u0151k nem tal\u00e1lhat\u00f3k: {0}
+warning.server.pause.missing.targets.explanation=A kiszolg\u00e1l\u00f3 feldolgozott egy v\u00e1rakoztat\u00e1si k\u00e9r\u00e9st, de egyes \u00f6sszetev\u0151k nem tal\u00e1lhat\u00f3k. A k\u00e9r\u00e9s az \u00f6sszes t\u00f6bbi megadott \u00f6sszetev\u0151 eset\u00e9ben feldolgoz\u00e1sra ker\u00fclt.
+warning.server.pause.missing.targets.useraction=Ellen\u0151rizze, hogy a megadott \u00f6sszetev\u0151nevek helyesek-e, az \u00f6sszetev\u0151k regisztr\u00e1lva vannak a kiszolg\u00e1l\u00f3n, \u00e9s sz\u00fcneteltethet\u0151ek.
+
+warning.server.resume.missing.targets=CWWKE0936W: Folytat\u00e1si k\u00e9r\u00e9s \u00e9rkezett, de a k\u00f6vetkez\u0151 \u00f6sszetev\u0151k nem tal\u00e1lhat\u00f3k: {0}
+warning.server.resume.missing.targets.explanation=A kiszolg\u00e1l\u00f3 feldolgozott egy folytat\u00e1si k\u00e9r\u00e9st, de egyes \u00f6sszetev\u0151k nem tal\u00e1lhat\u00f3k. A k\u00e9r\u00e9s az \u00f6sszes t\u00f6bbi megadott \u00f6sszetev\u0151 eset\u00e9ben feldolgoz\u00e1sra ker\u00fclt.
+warning.server.resume.missing.targets.useraction=Ellen\u0151rizze, hogy a megadott \u00f6sszetev\u0151nevek helyesek-e, az \u00f6sszetev\u0151k regisztr\u00e1lva vannak a kiszolg\u00e1l\u00f3n, \u00e9s sz\u00fcneteltethet\u0151ek.
+
+warning.server.status.missing.targets=CWWKE0937W: \u00c1llapotk\u00e9r\u00e9s \u00e9rkezett, de a k\u00f6vetkez\u0151 \u00f6sszetev\u0151k nem tal\u00e1lhat\u00f3k: {0}
+warning.server.status.missing.targets.explanation=A kiszolg\u00e1l\u00f3 feldolgozott egy \u00e1llapotk\u00e9r\u00e9st, de egyes \u00f6sszetev\u0151k nem tal\u00e1lhat\u00f3k. A k\u00e9r\u00e9s az \u00f6sszes t\u00f6bbi megadott \u00f6sszetev\u0151 eset\u00e9ben feldolgoz\u00e1sra ker\u00fclt.
+warning.server.status.missing.targets.useraction=Ellen\u0151rizze, hogy a megadott \u00f6sszetev\u0151nevek helyesek-e, az \u00f6sszetev\u0151k regisztr\u00e1lva vannak a kiszolg\u00e1l\u00f3n, \u00e9s sz\u00fcneteltethet\u0151ek.
+
+info.server.pause.request.completed=CWWKE0938I: Egy v\u00e1rakoztat\u00e1si k\u00e9r\u00e9s v\u00e9grehajt\u00e1sra ker\u00fclt.
+info.server.pause.request.completed.explanation=Egy v\u00e1rakoztat\u00e1si k\u00e9r\u00e9s v\u00e9grehajt\u00e1sra ker\u00fclt.
+info.server.pause.request.completed.useraction=Nincs teend\u0151.
+
+info.server.resume.request.completed=CWWKE0939I: Egy folytat\u00e1si k\u00e9r\u00e9s v\u00e9grehajt\u00e1sra ker\u00fclt.
+info.server.resume.request.completed.explanation=Egy folytat\u00e1si k\u00e9r\u00e9s v\u00e9grehajt\u00e1sra ker\u00fclt.
+info.server.resume.request.completed.useraction=Nincs teend\u0151.
+
 
 info.serverStarting=A(z) {0} kiszolg\u00e1l\u00f3 ind\u00edt\u00e1sa.
 info.serverStarted=A(z) {0} kiszolg\u00e1l\u00f3 elindult.

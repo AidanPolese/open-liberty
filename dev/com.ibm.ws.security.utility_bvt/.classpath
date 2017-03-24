@@ -7,9 +7,7 @@
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock-junit4.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.security.utility"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.logging"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.crypto.certificateutil"/>
+	<classpathentry kind="src" path="/prereq.published"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/cglib-nodep.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/jmock-legacy.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/objenesis.jar"/>

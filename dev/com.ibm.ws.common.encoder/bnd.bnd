@@ -1,3 +1,6 @@
+-include= ~../cnf/resources/bnd/bundle.props,
+bVersion=1.0
+
 Export-Package: com.ibm.ws.common.internal.encoder
 
 instrument.disabled: true

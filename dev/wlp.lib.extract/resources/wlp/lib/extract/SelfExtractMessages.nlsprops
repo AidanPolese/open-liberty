@@ -272,11 +272,18 @@ UNABLE_TO_FIND_TOOLS_JAR=The Liberty Java agent could not be attached because th
 
 UNABLE_TO_FIND_JAVA_AGENT=The Liberty Java agent could not be located. This server will run, but it cannot perform functions that require the Java agent, such as monitoring or tracing.
 
-
 # messages for LicenseSelfEctractor
 LICENSE_invalidInstall=The {0} directory is not a valid Liberty installation. Specify the root directory of the Liberty installation that you want to upgrade.
 LICENSE_invalidVersion=The license cannot be upgraded because the specified product installation is at version {0}, but the license can only be upgraded from version {1}.
 LICENSE_invalidEdition=The license cannot be upgraded because the specified product installation is the {0} edition, but the license can only upgrade the following editions: {1}
 LICENSE_invalidLicense=The license cannot be upgraded because the specified product installation has a {0} license, but the license can upgrade only products with a {1} license.
 LICENSE_invalidInstallType=The license cannot be upgraded because the specified product installation was installed using IBM Installation Manager. Use IBM Installation Manager to upgrade your installation.
+
+# new messages for license upgrade and downgrade
+LICENSE_replace_invalidVersion=The license cannot be replaced because the specified product installation is at version {0}, but the license can only be replaced from version {1}.
+LICENSE_replace_invalidInstallType=The license cannot be modified because the specified product installation was installed using IBM Installation Manager. Use IBM Installation Manager to modify your installation.
+
+LICENSE_replace_invalidEditonFeatures=The following features are no longer applicable to {0} and must be removed before replacing the license: {1}
+LICENSE_replace_uninstallFeatures_manually=Use the following command to uninstall these features before replacing the license for {0}: {1}
+
 

@@ -1080,6 +1080,10 @@ public class InstallUtils {
             return "Network Deployment";
         else if (editionCodeUpperCase.equals("ZOS"))
             return "z/OS";
+        else if (editionCodeUpperCase.equals("LIBERTY"))
+            return "";
+        else if (editionCodeUpperCase.startsWith("LIBERTY "))
+            return editionCode.substring("LIBERTY ".length());
         else {
             return editionCode;
         }

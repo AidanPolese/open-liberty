@@ -97,6 +97,14 @@ action-desc.unregisterWinService=\tAnnullare la registrazione del server specifi
 action-key.help=\ \ \ \ --help
 action-desc.help=\tStampa le informazioni della guida.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.pause=\ \ \ \ --pause
+action-desc.pause=\tMette in pausa tutti i componenti nel server che possono essere sospesi. \u00c8 possibile   \n\
+\tmettere in pausa una sottoserie di componenti specificando i componenti sull'opzione \n \t--target.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.resume=\ \ \ \ --resume
+action-desc.resume=\tRiattiva tutti i componenti messi in pausa nel server. \u00c8 possibile specificare l'opzione \n\
+\t--target per riattivare i componenti in pausa specifici.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.clean=\ \ \ \ --clean
 option-desc.clean=\tElimina tutte le informazioni memorizzate nella cache relative a questa istanza del server.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
@@ -120,6 +128,10 @@ option-desc.include=\tUn elenco di valori delimitati da virgole. I valori validi
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.template=\ \ \ \ --template="templateName"
 option-desc.template=\tSpecifica il nome del modello da utilizzare quando si crea un nuovo server. 
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+option-key.target=\ \ \ \ --target=valore,valore
+option-desc.target=\tSpecifica un elenco di componenti, separati da virgole, che \u00e8 possibile sospendere o \n\
+\triattivare.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.os=\ \ \ \ --os=value,value,...
 option-desc.os=\tSpecifica i sistemi operativi che si desidera che il server in package\n\

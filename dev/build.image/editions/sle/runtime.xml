@@ -128,5 +128,8 @@
     <!-- Liberty 17001 / SLE 9007 additions -->
     <feature>transportSecurity-1.0</feature>
     <feature>productInsights-1.0</feature>
+
+    <!-- Liberty 17002 / SLE 9008 additions -->
+    <feature>jpaContainer-2.1</feature>
   </featureManager>
 </server>

@@ -86,6 +86,17 @@ action-desc.javadump=\tErstellt einen Speicherauszug der Diagnoseinformationen a
 action-key.help=\ \ \ \ --help
 action-desc.help=\tGibt die Hilfeinformationen aus.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.pause=\ \ \ \ --pause
+action-desc.pause=\tAlle Komponenten im Server anhalten, die angehalten werden k\u00f6nnen. \n\
+\tSie k\u00f6nnen einen Teil der Komponenten anhalten, indem Sie die\n\
+\tgew\u00fcnschten Komponenten mit der Option --target angeben.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.resume=\ \ \ \ --resume
+action-desc.resume=\tAusf\u00fchrung aller angehaltenen Komponenten im Server \n\
+\tfortsetzen. Mit der Option --target k\u00f6nnen Sie bestimmte \n\
+\tangehaltene Komponenten angeben, deren Ausf\u00fchrung\n\
+\tfortgesetzt werden soll.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.clean=\ \ \ \ --clean
 option-desc.clean=\tAlle zwischengespeicherten Informationen bereinigen, \n\
 \tdie sich auf diese Serverinstanz beziehen.
@@ -110,6 +121,10 @@ option-desc.archive=\tGeben Sie das durch das Paket oder Speicherauszugsaktion z
 option-key.include=\ \ \ \ --include=Wert,Wert,...
 option-desc.include=\tEine durch Kommas begrenzte Liste mit Werten. Die g\u00fcltigen Werte variieren je\n\
 \tnach Aktion.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+option-key.target=\ \ \ \ --target=Wert,Wert
+option-desc.target=\tGibt eine durch Kommas begrenzte Liste mit Komponenten\n\
+\tan, die Sie anhalten oder fortsetzen k\u00f6nnen.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.template=\ \ \ \ --template="Schablonenname"
 option-desc.template=\tGibt den Namen der Schablone an, die beim Erstellen eines neuen Servers verwendet werden soll.

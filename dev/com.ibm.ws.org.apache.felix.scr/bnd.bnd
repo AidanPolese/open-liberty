@@ -2,7 +2,7 @@
 
 -includeresource: \
    OSGI-INF=resources/OSGI-INF, \
-   @lib/org.apache.felix.scr-2.0.8.jar
+   @lib/org.apache.felix.scr-2.0.8.jar!/!META-INF/maven/*
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \

@@ -86,6 +86,15 @@ action-desc.javadump=\t\u5f9e\u4f3a\u670d\u5668 JVM \u50be\u51fa\u8a3a\u65b7\u8c
 action-key.help=\ \ \ \ --help
 action-desc.help=\t\u5217\u5370\u8aaa\u660e\u8cc7\u8a0a\u3002
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.pause=\ \ \ \ --pause
+action-desc.pause=\t\u66ab\u505c\u4f3a\u670d\u5668\u4e2d\u6240\u6709\u53ef\u66ab\u505c\u7684\u5143\u4ef6\u3002\u60a8\u53ef\u4ee5\n\
+\t\u5728 --target \u9078\u9805\u4e2d\u6307\u5b9a\u5143\u4ef6\uff0c\n\
+\t\u4f86\u66ab\u505c\u4e00\u90e8\u5206\u7684\u5143\u4ef6\u3002
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.resume=\ \ \ \ --resume
+action-desc.resume=\t\u56de\u5fa9\u4f3a\u670d\u5668\u4e2d\u6240\u6709\u66ab\u505c\u7684\u5143\u4ef6\u3002\u60a8\u53ef\u4ee5\u6307\u5b9a\n\
+\t--target \u9078\u9805\uff0c\u4f86\u56de\u5fa9\u7279\u5b9a\u7684\u66ab\u505c\u5143\u4ef6\u3002
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.clean=\ \ \ \ --clean
 option-desc.clean=\t\u6e05\u9664\u8207\u6b64\u4f3a\u670d\u5668\u5be6\u4f8b\u76f8\u95dc\u7684\u6240\u6709\u5feb\u53d6\u8cc7\u8a0a\u3002
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
@@ -107,6 +116,10 @@ option-desc.archive=\t\u6307\u5b9a\u8981\u7531\u5305\u88dd\u6216\u50be\u51fa\u52
 option-key.include=\ \ \ \ --include=value,value,...
 option-desc.include=\t\u4ee5\u9017\u9ede\u5340\u9694\u7684\u503c\u6e05\u55ae\u3002\u6709\u6548\u503c\u96a8\n\
 \t\u52d5\u4f5c\u800c\u7570\u3002
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+option-key.target=\ \ \ \ --target=value,value
+option-desc.target=\t\u6307\u5b9a\u60a8\u53ef\u4ee5\u66ab\u505c\u6216\u56de\u5fa9\u7684\u5143\u4ef6\u6e05\u55ae\n\
+\t\uff08\u4ee5\u9017\u9ede\u5340\u9694\uff09\u3002
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.template=\ \ \ \ --template="templateName"
 option-desc.template=\t\u6307\u5b9a\u5efa\u7acb\u65b0\u4f3a\u670d\u5668\u6642\u8981\u4f7f\u7528\u7684\u7bc4\u672c\u540d\u7a31\u3002

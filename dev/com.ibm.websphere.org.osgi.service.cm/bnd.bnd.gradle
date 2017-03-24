@@ -1,7 +1,7 @@
 -include= jar:${fileuri;lib/org.osgi.service.cm-1.5.0.jar}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -includeresource: \
-   @lib/org.osgi.service.cm-1.5.0.jar!/!OSGI-OPT/src/*
+   @lib/org.osgi.service.cm-1.5.0.jar!/!(OSGI-OPT/src|META-INF/maven)/*
 
 publish.wlp.jar.suffix: dev/api/spec
 

@@ -15,6 +15,7 @@
         <feature>logstashCollector-1.1</feature>
         <feature>microProfileConfig-0.1</feature>
         <feature>microProfileFaultTolerance-0.1</feature>
+        <feature>validator-1.0</feature>
 
         <!--  The following features are already available and have beta enhancements to them -->
         <feature>batchManagement-1.0</feature>
@@ -76,5 +77,30 @@
         <source>garbageCollection</source>
     </logstashCollector>
     -->
+    
+    <!-- This is sample configuration for the validator-1.0 feature.
+    
+         The validator-1.0 feature can currently be used to test a <dataSource> configuration
+         element to determine if a successful connection can be made to the backend database.
+         To test a data source connection using API Discovery, go to the following URL and
+         expand the "Validator REST APIs" section in the API Discovery web interface:      
+           https://localhost:9443/ibm/api/explorer/
+    -->
+    <!-- 
+    <featureManager>
+      <feature>jdbc-4.1</feature>
+    </featureManager>
+    <keyStore id="defaultKeyStore" password="changeit"/>
+    <quickStartSecurity userName="admin" userPassword="admin"/>
+    
+    <library id="jdbcLib">
+      <fileset dir="${server.config.dir}/jdbc" includes="*.jar"/>
+    </library>
+    
+    <dataSource id="DefaultDataSource">
+      <jdbcDriver libraryRef="jdbcLib"/>
+   	  <properties.derby.embedded databaseName="memory:defaultdb" createDatabase="create"/>
+  	</dataSource>
+  	-->
 
 </server>

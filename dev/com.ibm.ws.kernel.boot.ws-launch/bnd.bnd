@@ -1,8 +1,11 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
 Class-Path: ../bin/tools/ws-server.jar
 Main-Class: com.ibm.ws.kernel.boot.cmdline.EnvCheck
 Bundle-SymbolicName: com.ibm.ws.kernel.boot.ws-launch
 -outputmask: ws-launch.jar
--removeheaders= Bnd-LastModified, Bundle-Name, Bundle-Description, Bundle-ManifestVersion, Bundle-Version, Tool
+-removeheaders= Bnd-LastModified, Bundle-Name, Bundle-Description, Bundle-ManifestVersion, Tool
 
 publish.wlp.jar.include: ws-launch.jar
 publish.wlp.jar.rename: false

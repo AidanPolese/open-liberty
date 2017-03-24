@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry exported="true" kind="lib" path="lib/com.ibm.ws.javax.servlet_3.0.jar"/>
-	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar"/>
-	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.service.component/lib/org.osgi.service.component-1.3.0.jar"/>
-	<classpathentry kind="lib" path="/com.ibm.wsspi.org.osgi.service.component.annotations/lib/org.osgi.service.component.annotations-1.3.0.jar"/>
+	<classpathentry kind="src" path="/prereq.published"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

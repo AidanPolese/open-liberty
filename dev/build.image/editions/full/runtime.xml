@@ -28,6 +28,5 @@
     <feature>requestInterrupt-1.0</feature>
     <feature>socialLogin-1.0</feature>
     <feature>servlet-4.0</feature>
-    <feature>validator-1.0</feature>
   </featureManager>
 </server>

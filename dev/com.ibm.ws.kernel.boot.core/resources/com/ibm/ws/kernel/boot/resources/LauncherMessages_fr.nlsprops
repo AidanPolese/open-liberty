@@ -578,17 +578,74 @@ error.package.missingLibExtractDir=CWWKE0922E: La commande package ne peut pas s
 error.package.missingLibExtractDir.explanation=Le r\u00e9pertoire lib/extract contient les m\u00e9tadonn\u00e9es et les classes d'auto-extraction requises pour que la commande package puisse s'ex\u00e9cuter.  Si ce r\u00e9pertoire est manquant, cela peut indiquer que l'installation de WebSphere Liberty Profile \u00e9tait incompl\u00e8te ou que le r\u00e9pertoire a \u00e9t\u00e9 supprim\u00e9.
 error.package.missingLibExtractDir.useraction=R\u00e9installez WebSphere Liberty Profile et assurez-vous que le r\u00e9pertoire lib/extract existe sous le r\u00e9pertoire WLP_HOME.
 
-info.serverPause.request.received=CWWKE0923I: Une demande de mise en pause du serveur pour les demandes entrantes d''un protocole sp\u00e9cifique a \u00e9t\u00e9 re\u00e7ue. Param\u00e8tres : {0}.
-info.serverPause.request.received.explanation=Un utilisateur a \u00e9mis une demande de mise en pause du serveur pour un protocole sp\u00e9cifique. Au moment de l'\u00e9mission de ce message, la mise en pause effective du serveur n'avait pas encore \u00e9t\u00e9 r\u00e9alis\u00e9e. Vous pourriez, par exemple, r\u00e9clamer une pause du serveur pour les demandes HTTP afin de d\u00e9boguer un probl\u00e8me. Une fois le probl\u00e8me r\u00e9solu, vous pouvez \u00e9mettre une demande de r\u00e9tablissement du serveur pour les demandes HTTP.
-info.serverPause.request.received.useraction=Aucune action n'est requise.
+info.server.pause.all.request.received=CWWKE0923I: Une demande a \u00e9t\u00e9 re\u00e7ue pour mise en pause de tous les composants pouvant l'\u00eatre sur le serveur.
+info.server.pause.all.request.received.explanation=Un utilisateur a \u00e9mis une demande de mise en pause de tous les composants pouvant l'\u00eatre. Le serveur va tenter de mettre en pause ces composants. 
+info.server.pause.all.request.received.useraction=Aucune action n'est requise.
 
-info.serverResume.request.received=CWWKE0924I: Une demande de reprise du serveur pour les demandes entrantes sous un protocole sp\u00e9cifique a \u00e9t\u00e9 re\u00e7ue. Param\u00e8tres : {0}.
-info.serverResume.request.received.explanation=Un utilisateur a \u00e9mis une demande de reprise du serveur qui avait \u00e9t\u00e9 mis en pause auparavant pour un protocole sp\u00e9cifique. Au moment de l'\u00e9mission de ce message, la reprise effective du serveur n'avait pas encore \u00e9t\u00e9 r\u00e9alis\u00e9e. Vous pourriez, par exemple, r\u00e9clamer une pause du serveur pour les demandes HTTP afin de d\u00e9boguer un probl\u00e8me. Une fois le probl\u00e8me r\u00e9solu, vous pouvez \u00e9mettre une demande de r\u00e9tablissement du serveur pour les demandes HTTP.
-info.serverResume.request.received.useraction=Aucune action n'est requise.
+info.server.pause.request.received=CWWKE0924I: Une demande a \u00e9t\u00e9 re\u00e7ue pour mise en pause des composants suivants sur le serveur : {0}
+info.server.pause.request.received.explanation=Un utilisateur a \u00e9mis une demande de mise en pause de composants sp\u00e9cifiques sur le serveur. Le serveur va tenter de mettre en pause ces composants 
+info.server.pause.request.received.useraction=Aucune action n'est requise.
 
-info.listeners.controller.missing=CWWKE0925W: Une demande au serveur {0} a \u00e9t\u00e9 re\u00e7ue, mais n''a pas pu \u00eatre trait\u00e9e. Motif : {1}.
-info.listeners.controller.missing.explanation=Un utilisateur a \u00e9mis une demande de mise en pause ou de reprise du serveur pour un protocole sp\u00e9cifique. Toutefois, la demande n'a pas pu \u00eatre trait\u00e9e. Il se peut que l'initialisation du serveur ne soit pas termin\u00e9e. Il se peut que la cible de la mise en pause ou de la reprise ne soit plus configur\u00e9e. Il se peut qu'une demande ant\u00e9rieure de mise en pause ou de reprise soit encore en cours de traitement.
-info.listeners.controller.missing.useraction=Permettez au serveur d'achever son initialisation, puis relancez la demande. V\u00e9rifiez que la cible de la demande est toujours valide et active dans le serveur. Attendez que s'ach\u00e8ve la demande ant\u00e9rieure avant d'en lancer une autre.
+info.server.resume.all.request.received=CWWKE0925I: Une demande a \u00e9t\u00e9 re\u00e7ue pour reprise de l'op\u00e9ration de tous les composants mis en pause sur le serveur.
+info.server.resume.all.request.received.explanation=Un utilisateur a \u00e9mise une demande de reprise de l'op\u00e9ration de tous les composants mis en pause sur le serveur. Le serveur va tenter de reprendre l'op\u00e9ration de ces composants.
+info.server.resume.all.request.received.useraction=Aucune action n'est requise.
+
+info.server.resume.request.received=CWWKE0926I: Une demande a \u00e9t\u00e9 re\u00e7ue pour reprise de l''op\u00e9ration des composants suivants sur le serveur : {0}
+info.server.resume.request.received.explanation=Un utilisateur a \u00e9mis une demande de reprise d'op\u00e9ration de composants sp\u00e9cifiques sur le serveur. Le serveur va tenter de reprendre l'op\u00e9ration de ces composants s'ils \u00e9taient en pause.
+info.server.resume.request.received.useraction=Aucune action n'est requise.
+
+error.pause.request.failed=CWWKE0927E: Une demande de mise en pause a \u00e9t\u00e9 re\u00e7ue, mais l'infrastructure de mise en pause de composants n'est pas disponible. Impossible de traiter la demande. 
+error.pause.request.failed.explanation=Un utilisateur a \u00e9mis une demande de mise en pause. Toutefois, la demande n'a pas pu \u00eatre trait\u00e9e. Il se peut que le serveur soit encore en cours d'initialisation ou d'arr\u00eat.
+error.pause.request.failed.useraction=V\u00e9rifiez que l'initialisation du serveur est termin\u00e9e et qu'il n'est pas en cours d'arr\u00eat.
+
+error.resume.request.failed=CWWKE0928E: Une demande de reprise d'op\u00e9ration a \u00e9t\u00e9 re\u00e7ue, mais l'infrastructure de mise en pause de composants n'est pas disponible. Impossible de traiter la demande. 
+error.resume.request.failed.explanation=Un utilisateur a \u00e9mis une demande de reprise d'op\u00e9ration, mais cette demande n'a pas pu \u00eatre trait\u00e9e. Il se peut que le serveur soit encore en cours d'initialisation ou d'arr\u00eat.
+error.resume.request.failed.useraction=V\u00e9rifiez que l'initialisation du serveur est termin\u00e9e et qu'il n'est pas en cours d'arr\u00eat.
+
+error.server.pause.failed=CWWKE0929E: Une demande de mise en pause a \u00e9t\u00e9 ex\u00e9cut\u00e9e, mais les composants suivants n''ont pas pu \u00eatre mis en pause : {0}
+error.server.pause.failed.explanation=Le serveur a trait\u00e9 une demande de mise en pause, mais l'op\u00e9ration a \u00e9chou\u00e9 sur certains composants pouvant \u00eatre mis en pause. L'op\u00e9ration a abouti sur tous les autres composants pouvant \u00eatre mis en pause.
+error.server.pause.failed.useraction=Consultez les journaux du serveur pour plus d'informations sur les erreurs affectant les composants o\u00f9 l'op\u00e9ration a \u00e9chou\u00e9.
+
+error.server.resume.failed=CWWKE0930E: Une demande de reprise d''op\u00e9ration a \u00e9t\u00e9 ex\u00e9cut\u00e9e, mais la reprise de l''op\u00e9ration des composants suivants a \u00e9chou\u00e9 : {0}
+error.server.resume.failed.explanation=Le serveur a trait\u00e9 une demande de reprise d'op\u00e9ration, mais l'op\u00e9ration a \u00e9chou\u00e9 sur certains composants mis en pause. L'op\u00e9ration a abouti sur tous les autres composants en pause.
+error.server.resume.failed.useraction=Consultez les journaux du serveur pour plus d'informations sur les erreurs affectant les composants o\u00f9 l'op\u00e9ration a \u00e9chou\u00e9.
+
+warning.server.pause.invalid.targets=CWWKE0931W: Une demande de mise en pause de composants sp\u00e9cifiques a \u00e9t\u00e9 re\u00e7ue, mais la liste de composants sur l'option de cible est vide. Aucune action n'a \u00e9t\u00e9 engag\u00e9e.
+warning.server.pause.invalid.targets.explanation=Un utilisateur a \u00e9mis une demande de mise en pause en indiquant une liste vide sur l'option de cible. La demande a \u00e9t\u00e9 ex\u00e9cut\u00e9e, mais aucune action n'a \u00e9t\u00e9 engag\u00e9e.
+warning.server.pause.invalid.targets.useraction=Sp\u00e9cifiez dans l'option de cible une liste de composants \u00e0 mettre en pause. Pour mettre en pause tous les composants pouvant l'\u00eatre sur le serveur, lancez une demande de mise en pause en omettant l'option de cible.
+
+warning.server.resume.invalid.targets=CWWKE0932W: Une demande de reprise d'op\u00e9ration de composants sp\u00e9cifiques a \u00e9t\u00e9 re\u00e7ue, mais la liste de composants dans l'option de cible \u00e9tait vide. Aucune action n'a \u00e9t\u00e9 engag\u00e9e.
+warning.server.resume.invalid.targets.explanation=Un utilisateur a \u00e9mis une demande de reprise d'op\u00e9ration en indiquant une liste vide sur l'option de cible. La demande a \u00e9t\u00e9 ex\u00e9cut\u00e9e, mais aucune action n'a \u00e9t\u00e9 engag\u00e9e.
+warning.server.resume.invalid.targets.useraction=Sp\u00e9cifiez dans l'option de cible une liste de composants dont reprendre l'op\u00e9ration. Pour reprendre l'op\u00e9ration de tous les composants en pause sur le serveur, lancez une commande de reprise d'op\u00e9ration en omettant l'option de cible.
+
+warning.server.pause.no.targets=CWWKE0933W: Une demande de mise en pause a \u00e9t\u00e9 re\u00e7ue, mais aucun composant pouvant \u00eatre mis en pause n'a \u00e9t\u00e9 identifi\u00e9 sur le serveur. Aucune action n'a \u00e9t\u00e9 engag\u00e9e.
+warning.server.pause.no.targets.explanation=Le serveur a trait\u00e9 une demande de mise en pause, mais aucun composant pouvant \u00eatre mis en pause n'a \u00e9t\u00e9 identifi\u00e9 sur le serveur. Aucune action n'a \u00e9t\u00e9 engag\u00e9e.
+warning.server.pause.no.targets.useraction=V\u00e9rifiez que des composants pouvant \u00eatre mis en pause sont disponibles sur le serveur.
+
+warning.server.resume.no.targets=CWWKE0934W: Une demande de reprise d'op\u00e9ration a \u00e9t\u00e9 re\u00e7ue, mais aucun composant pouvant \u00eatre mis en pause n'a \u00e9t\u00e9 identifi\u00e9 sur le serveur. Aucune action n'a \u00e9t\u00e9 engag\u00e9e.
+warning.server.resume.no.targets.explanation=Le serveur a trait\u00e9 une demande de reprise d'op\u00e9ration, mais aucun composant pouvant \u00eatre mis en pause n'a \u00e9t\u00e9 identifi\u00e9. Aucune action n'a \u00e9t\u00e9 engag\u00e9e.
+warning.server.resume.no.targets.useraction=V\u00e9rifiez que des composants pouvant \u00eatre mis en pause sont disponibles sur le serveur.
+
+warning.server.pause.missing.targets=CWWKE0935W: Une demande de mise en pause a \u00e9t\u00e9 re\u00e7ue, mais les composants suivants sont introuvables : {0}
+warning.server.pause.missing.targets.explanation=Le serveur a trait\u00e9 une demande de mise en pause, mais certains composants sp\u00e9cifiques sont introuvables. La demande a \u00e9t\u00e9 trait\u00e9e pour tous les autres composants sp\u00e9cifi\u00e9s.
+warning.server.pause.missing.targets.useraction=V\u00e9rifiez que les noms des composants sp\u00e9cifi\u00e9s sont corrects, qu'ils sont enregistr\u00e9s sur le serveur et peuvent \u00eatre mis en pause.
+
+warning.server.resume.missing.targets=CWWKE0936W: Une demande de reprise d''op\u00e9ration a \u00e9t\u00e9 re\u00e7ue, mais les composants suivants sont introuvables : {0}
+warning.server.resume.missing.targets.explanation=Le serveur a trait\u00e9 une demande de reprise d'op\u00e9ration, mais certains composants sp\u00e9cifiques sont introuvables. La demande a \u00e9t\u00e9 trait\u00e9e pour tous les autres composants sp\u00e9cifi\u00e9s.
+warning.server.resume.missing.targets.useraction=V\u00e9rifiez que les noms des composants sp\u00e9cifi\u00e9s sont corrects, qu'ils sont enregistr\u00e9s sur le serveur et peuvent \u00eatre mis en pause.
+
+warning.server.status.missing.targets=CWWKE0937W: Une demande d''identification de statut a \u00e9t\u00e9 re\u00e7ue, mais les composants suivants sont introuvables : {0}
+warning.server.status.missing.targets.explanation=Le serveur a trait\u00e9 une demande d'identification de statut, mais certains composants sp\u00e9cifiques sont introuvables. La demande a \u00e9t\u00e9 trait\u00e9e pour tous les autres composants sp\u00e9cifi\u00e9s.
+warning.server.status.missing.targets.useraction=V\u00e9rifiez que les noms des composants sp\u00e9cifi\u00e9s sont corrects, qu'ils sont enregistr\u00e9s sur le serveur et peuvent \u00eatre mis en pause.
+
+info.server.pause.request.completed=CWWKE0938I: Une demande de mise en pause a \u00e9t\u00e9 ex\u00e9cut\u00e9e.
+info.server.pause.request.completed.explanation=Une demande de mise en pause a \u00e9t\u00e9 ex\u00e9cut\u00e9e.
+info.server.pause.request.completed.useraction=Aucune action n'est requise.
+
+info.server.resume.request.completed=CWWKE0939I: Une demande de reprise d'op\u00e9ration a abouti.
+info.server.resume.request.completed.explanation=Une demande de reprise d'op\u00e9ration a abouti.
+info.server.resume.request.completed.useraction=Aucune action n'est requise.
+
 
 info.serverStarting=D\u00e9marrage du serveur {0}.
 info.serverStarted=Le serveur {0} a d\u00e9marr\u00e9.

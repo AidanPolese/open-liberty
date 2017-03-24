@@ -252,3 +252,8 @@ ERROR_UNABLE_TO_LOCATE_COMMAND_EXE=Nu se poate localiza executabilul {0} dup\u01
 
 # java -jar messages 
 UNABLE_TO_FIND_PID=A e\u015fuat ob\u0163inerea ID-ului de Proces din procesul java -jar. Nu se poate \u015fterge directorul de extragere temporar {1} p\u00e2n\u0103 c\u00e2nd termina\u0163i manual procesul java -jar.
+
+UNABLE_TO_ATTACH_AGENT=Agentul Liberty Java nu a putut fi ata\u015fat. Acest server va rula dar nu poate realiza func\u0163ii care necesit\u0103 agentul Java, precum monitorizarea sau urm\u0103rirea. Excep\u0163ie: {0}
+
+UNABLE_TO_FIND_TOOLS_JAR=Agentul Liberty Java nu a putut fi ata\u015fat deoarece acest server utilizeaz\u0103 un JRE mai degrab\u0103 dec\u00e2t un Java SDK. Acest server va rula dar nu poate realiza func\u0163ii care necesit\u0103 agentul Java, precum monitorizarea sau urm\u0103rirea. 
+UNABLE_TO_FIND_JAVA_AGENT=Agentul Liberty Java nu a putut fi localizat. Acest server va rula dar nu poate realiza func\u0163ii care necesit\u0103 agentul Java, precum monitorizarea sau urm\u0103rirea. 

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="build/bvt/classes" path="bvt/src"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.logging"/>
-	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar"/>
-	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.service.component/lib/org.osgi.service.component-1.3.0.jar"/>
-	<classpathentry kind="lib" path="/com.ibm.wsspi.org.osgi.service.component.annotations/lib/org.osgi.service.component.annotations-1.3.0.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/ws-junit/ws-junit.jar"/>
+	<classpathentry kind="src" path="bvt/src"/>
+	<classpathentry kind="src" path="/prereq.published"/>
+	<classpathentry kind="lib" path="/ant_build/lib/ws-junit.jar" sourcepath="/ant_junit"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/hamcrest-all.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/junit/old/junit.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock-junit4.jar"/>
+	<classpathentry kind="lib" path="/ant_build/lib/junit.jar"/>
+	<classpathentry kind="lib" path="/ant_build/lib/jmock.jar"/>
+	<classpathentry kind="lib" path="/ant_build/lib/jmock-junit4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/cglib-nodep.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/jmock-legacy.jar"/>

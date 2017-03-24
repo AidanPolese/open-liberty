@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2011.
+# (C) COPYRIGHT International Business Machines Corp. 2011, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -140,3 +140,8 @@ ANGEL_NAME_TOO_LONG.useraction=Tento server se nep\u0159ipoj\u00ed k procesu typ
 ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0120E: N\u00e1zev procesu typu angel uveden\u00fd v souboru bootstrap.properties obsahuje nepodporovan\u00fd znak {0} na pozici {1}.
 ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=Vlastnost com.ibm.ws.zos.core.angelName ur\u010duje n\u00e1zev procesu typu angel, ke kter\u00e9mu by se m\u011bl tento server p\u0159ipojit. Tato vlastnost se ur\u010duje v souboru boostrap.properties a m\u016f\u017ee obsahovat pouze znaky z n\u00e1sleduj\u00edc\u00ed znakov\u00e9 sady:  A-Z 0-9 ! # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
 ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=Tento server se nep\u0159ipoj\u00ed k procesu typu angel. Chcete-li se p\u0159ipojit k procesu typu angel, zadejte hodnotu vlastnosti com.ibm.ws.zos.core.angelName s pou\u017eit\u00edm podporovan\u00e9 znakov\u00e9 sady a restartujte server.
+
+#{0} is the server's UMASK value.
+SERVER_CURRENT_UMASK=CWWKB0121I: Hodnota UMASK procesu serveru je nastavena na {0}.
+SERVER_CURRENT_UMASK.explanation=Hodnota UMASK procesu serveru. Standardn\u011b se hodnota UMASK d\u011bd\u00ed z procesu, kter\u00fd spustil tento server Liberty, ale pak se d\u00e1le upravuje, aby se znemo\u017enil p\u0159\u00edstup pro \u010dten\u00ed, z\u00e1pis \u010di prov\u00e1d\u011bn\u00ed u\u017eivatel\u016fm typu OTHER. Nastaven\u00ed prom\u011bnn\u00e9 prost\u0159ed\u00ed WLP_SKIP_UMASK na hodnotu true zabr\u00e1n\u00ed serveru v t\u011bchto \u00faprav\u00e1ch hodnoty UMASK. Kdy\u017e je spu\u0161t\u011bn server Liberty pomoc\u00ed procedury z/OS, m\u016f\u017eete hodnotu UMASK vyu\u017e\u00edvanou procesem serveru upravit definov\u00e1n\u00edm prom\u011bnn\u00fdch prost\u0159ed\u00ed WLP_SKIP_UMASK a _BPX_BATCH_UMASK. Prom\u011bnnou WLP_SKIP_UMASK je mo\u017en\u00e9 ur\u010dit bu\u010f v souboru server.env, nebo pokud je server spu\u0161t\u011bn pomoc\u00ed procedury z/OS, pomoc\u00ed polo\u017eky STDENDV DD. Oproti tomu prom\u011bnnou _BPX_BATCH_UMASK v souboru server.env ur\u010dit nelze. Tu lze zadat pouze pomoc\u00ed polo\u017eky STDENV DD v procedu\u0159e z/OS.
+SERVER_CURRENT_UMASK.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.

@@ -252,3 +252,8 @@ ERROR_UNABLE_TO_LOCATE_COMMAND_EXE=Impossibile individuare l''eseguibile {0} dop
 
 # java -jar messages 
 UNABLE_TO_FIND_PID=Impossibile ottenere l''ID del processo java -jar. Impossibile eliminare la directory di estrazione temporanea {1} finch\u00e9 non si termina manualmente il processo java -jar.
+
+UNABLE_TO_ATTACH_AGENT=Impossibile collegare l''agent Liberty Java. Questo server funzioner\u00e0, ma non potr\u00e0 eseguire funzioni che richiedono l''agent Java, come monitoraggio e traccia. Eccezione: {0}
+
+UNABLE_TO_FIND_TOOLS_JAR=Impossibile collegare l''agent Liberty Java perch\u00e9 questo server utilizza un JRE piuttosto che un Java SDK. Questo server funzioner\u00e0, ma non potr\u00e0 eseguire funzioni che richiedono l''agent Java, come monitoraggio e traccia. 
+UNABLE_TO_FIND_JAVA_AGENT=Impossibile individuare l''agent Liberty Java. Questo server funzioner\u00e0, ma non potr\u00e0 eseguire funzioni che richiedono l''agent Java, come monitoraggio e traccia. 

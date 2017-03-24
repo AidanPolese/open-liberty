@@ -846,23 +846,16 @@ ${liberty.service.version}
           <createJsonMacro assetFile="${esa}" assetType="FEATURE" outputDir="${dhe.repo.archive.dir}" />
         </foreach>
 
-
-        <!-- Create ESAs for all features that can be used on Bluemix (including beta features). For Bluemix we don't have an embedder zip so we need to extract
-                     the content from the install jars -->
-        <delete dir="${build.dir}/tmp/bluemix" />
-        <mkdir dir="${build.dir}/tmp/bluemix" />
-        <unzip dest="${build.dir}/tmp/bluemix" src="${liberty.image.output.upload.dir}/${install.name}-bluemix-runtime-${liberty.bluemix.version}.jar" />
-        <unzip dest="${build.dir}/tmp/bluemix" src="${liberty.image.output.upload.dir}/${install.name}-bluemix-extended-${liberty.bluemix.version}.jar" />
-        <unzip dest="${build.dir}/tmp/bluemix" src="${liberty.image.output.upload.dir}/${install.name}-bluemix-beta-${liberty.bluemix.version}.jar" />
-        <createEsas dest.dir="${dhe.repo.beta.archive.dir}/${liberty.beta.version}" wlp.build.dir="${build.dir}/tmp/bluemix/wlp" edition.version="${liberty.beta.version}" download.dir="beta/${liberty.beta.version}" />
-
-        <!-- Now create all ESAs included in the liberty beta, but not included in bluemix -->
-        <!-- Set the editions parameter so that these can only be installed in a beta runtime -->
+        <!-- Now create all ESAs included in the liberty betas (edition=EARLY_ACCESS)
+             Only need to unzip beta-bluemix and beta-zos because regular beta zip is a strict
+             subset of beta-zos, and beta-bluemix may have features which beta-zos does not have-->
         <delete dir="${build.dir}/tmp/beta" />
         <mkdir dir="${build.dir}/tmp/beta" />
-        <!-- This unzip step runs after the beta-zos.zip has been moved to ${file.local.dir} -->
+        <unzip dest="${build.dir}/tmp/beta" src="${liberty.image.output.upload.dir}/${install.name}-beta-bluemix-${liberty.beta.version}.zip" />
+        <!-- This unzip step runs after the beta-zos.zip has been moved from
+             ${liberty.image.output.upload.dir} to ${file.local.dir} -->
         <unzip dest="${build.dir}/tmp/beta" src="${file.local.dir}/${install.name}-beta-zos-${liberty.beta.version}.zip" />
-        <createEsas dest.dir="${dhe.repo.beta.archive.dir}/${liberty.beta.version}" wlp.build.dir="${build.dir}/tmp/beta/wlp" wlp.exclude.dir="${build.dir}/tmp/bluemix/wlp" edition.version="${liberty.beta.version}" download.dir="beta/${liberty.beta.version}" editions="EARLY_ACCESS" />
+        <createEsas dest.dir="${dhe.repo.beta.archive.dir}/${liberty.beta.version}" wlp.build.dir="${build.dir}/tmp/beta/wlp" edition.version="${liberty.beta.version}" download.dir="beta/${liberty.beta.version}" editions="EARLY_ACCESS" />
 
         <!-- create the beta JSON -->
         <fileset id="betaEsas" dir="${dhe.repo.beta.archive.dir}/${liberty.beta.version}" includes="*.esa" />

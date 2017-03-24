@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2011.
+# (C) COPYRIGHT International Business Machines Corp. 2011, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -140,3 +140,8 @@ ANGEL_NAME_TOO_LONG.useraction=Questo server non si connetter\u00e0 a un process
 ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0120E: Il nome angel specificato in bootstrap.properties contiene il carattere non supportato {0} alla posizione {1}.
 ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=La propriet\u00e0\u00a0com.ibm.ws.zos.core.angelName specifica il nome del processo angel a cui deve connettersi questo server. La propriet\u00e0\u00a0\u00e8 specificata in boostrap.properties e pu\u00f2 contenere solo i seguenti caratteri: A-Z 0-9 ! # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
 ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=Questo server non si connetter\u00e0 a un processo angel. Per la connessione a un processo angel, specificare un valore utilizzando la serie di caratteri supportata per la propriet\u00e0\u00a0com.ibm.ws.zos.core.angelName e riavviare il server.
+
+#{0} is the server's UMASK value.
+SERVER_CURRENT_UMASK=CWWKB0121I: Il valore UMASK del processo server \u00e8 impostato su {0}.
+SERVER_CURRENT_UMASK.explanation=Il valore UMASK del processo server. Per impostazione predefinita il valore UMASK viene ereditato dal processo che ha avviato il Liberty Server, ma viene successivamente modificato per non consentire l'accesso in lettura o scrittura ad altri utenti. Impostando la variabile di ambiente WLP_SKIP_UMASK su true si impedisce che il server modifichi l'UMASK in questo modo. Quando un Liberty Server viene avviato utilizzando una procedura z/OS, \u00e8 possibile personalizzare l'UMASK utilizzato dal processo server definendo le variabili di ambiente WLP_SKIP_UMASK e _BPX_BATCH_UMASK. WLP_SKIP_UMASK pu\u00f2 essere definita nel file server.env o, se il server viene avviato utilizzando una procedura z/OS, pu\u00f2 essere specificata utilizzando STDENDV DD. Al contrario, _BPX_BATCH_UMASK non pu\u00f2 essere specificata nel file server.env. Deve essere specificata solo utilizzando STDENV DD nella procedura z/OS.
+SERVER_CURRENT_UMASK.useraction=Non \u00e8 richiesta alcuna azione.

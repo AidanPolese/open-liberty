@@ -292,3 +292,9 @@ ERROR_UNABLE_TO_LOCATE_COMMAND_EXE=Impossible de localiser l''ex\u00e9cutable {0
 # java -jar messages 
 UNABLE_TO_FIND_PID=L''ID de processus du processus -jar Java n''a pas pu \u00eatre obtenu. Impossible de supprimer le r\u00e9pertoire d''extraction \
 temporaire {1} tant que vous n''avez pas arr\u00eat\u00e9 manuellement le processus -jar Java.
+
+UNABLE_TO_ATTACH_AGENT=L''agent Liberty Java n''a pas pu \u00eatre li\u00e9. Ce serveur fonctionnera, mais il ne pourra pas assurer les fonctions n\u00e9cessitant l''agent Java, telles que la surveillance ou le tra\u00e7age. Exception : {0}
+
+UNABLE_TO_FIND_TOOLS_JAR=L''agent Liberty Java n''a pas pu \u00eatre li\u00e9 car ce serveur utilise un JRE plut\u00f4t qu''un SDK Java. Ce serveur fonctionnera, mais il ne pourra pas prendre en charge les fonctions n\u00e9cessitant l''agent Java, telles que la surveillance ou le tra\u00e7age.
+
+UNABLE_TO_FIND_JAVA_AGENT=L''agent Liberty Java n''a pas pu \u00eatre localis\u00e9. Ce serveur fonctionnera, mais il ne pourra pas prendre en charge les fonctions n\u00e9cessitant l''agent Java, telles que la surveillance ou le tra\u00e7age.

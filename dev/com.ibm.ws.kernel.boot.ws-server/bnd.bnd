@@ -1,10 +1,11 @@
--include= ~../cnf/resources/bnd/liberty-release.props
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
 
 Class-Path: ../../lib/com.ibm.ws.kernel.boot_1.0.${libertyBundleMicroVersion}.jar
 Main-Class: com.ibm.ws.kernel.boot.cmdline.EnvCheck
 Bundle-SymbolicName: com.ibm.ws.kernel.boot.ws-server
 -outputmask: ws-server.jar
--removeheaders= Bnd-LastModified, Bundle-Name, Bundle-Description, Bundle-ManifestVersion, Bundle-Version, Tool
+-removeheaders= Bnd-LastModified, Bundle-Name, Bundle-Description, Bundle-ManifestVersion, Tool
 
 -fixupmessages.empty: The JAR is empty
 

@@ -145,6 +145,109 @@ subprojects {
     dependsOn publishLibNative
   }
 
+  task generateToolBinScripts {
+    enabled !bnd('publish.tool.jar', '').empty
+    doLast {
+      if (!bnd('publish.tool.script', '').empty) {
+        copy {
+          from "${rootDir}/cnf/resources/bin"
+          into "${rootDir}/build.image.kernel.bin/generated/content/bin"
+          rename 'tool(.*)', bnd('publish.tool.script') + '$1'
+          filter(org.apache.tools.ant.filters.ReplaceTokens,
+                 tokens: [TOOL_JAR: 'tools/' + bnd('publish.tool.jar'), TOOL_SCRIPT: bnd('publish.tool.script'),
+                          TOOL_SCRIPT_DIR_LENGTH: '5', TOOL_SCRIPT_RELATIVE: ''])
+        }
+      }
+    }
+  }
+
+  task generateFeatureResources {
+    enabled !bnd('publish.feature.resources', '').empty
+    inputs.files(fileTree( dir: "${projectDir}/resources", include: bnd('publish.feature.resources', '') )).skipWhenEmpty()
+    outputs.dir "${rootDir}/build.image.kernel.bin/generated/content/features"
+    doLast {
+      copy {
+        from "${projectDir}/resources"
+        into "${rootDir}/build.image.kernel.bin/generated/content/features"
+        include bnd('publish.feature.resources')
+      }
+    }
+  }
+
+  task generatePlatformManifests {
+    inputs.files(fileTree( dir: "${projectDir}/publish/platform" )).skipWhenEmpty()
+    outputs.dir "${rootDir}/build.image.kernel.bin/generated/content/platform"
+    doLast {
+      copy {
+        from "${projectDir}/publish/platform"
+        into "${rootDir}/build.image.kernel.bin/generated/content/platform"
+        exclude '*.mf'
+      }
+      copy {
+        from "${projectDir}/publish/platform"
+        into "${rootDir}/build.image.kernel.bin/generated/content/platform"
+        include '*.mf'
+        filter(org.apache.tools.ant.filters.ConcatFilter,
+          append: file( "${rootDir}/cnf/resources/IBM-ProductID.txt" ))
+      }
+    }
+  }
+
+  task generateTemplates {
+    inputs.files(fileTree( dir: "${projectDir}/publish/templates")).skipWhenEmpty()
+    outputs.dir "${rootDir}/build.image.kernel.bin/generated/content/templates"
+    doLast {
+      copy {
+        from "${projectDir}/publish/templates"
+        into "${rootDir}/build.image.kernel.bin/generated/content/templates"
+      }
+    }
+  }
+
+  task generateBinScripts {
+    inputs.files(fileTree( dir: "${projectDir}/publish/bin")).skipWhenEmpty()
+    outputs.dir "${rootDir}/build.image.kernel.bin/generated/content/bin"
+    doLast {
+      copy {
+        from "${projectDir}/publish/bin"
+        into "${rootDir}/build.image.kernel.bin/generated/content/bin"
+        fileMode 0755
+      }
+    }
+  }
+
+  task generateClientScripts {
+    inputs.files(fileTree( dir: "${projectDir}/publish/clients")).skipWhenEmpty()
+    outputs.dir "${rootDir}/build.image.kernel.bin/generated/content/clients"
+    doLast {
+      copy {
+        from "${projectDir}/publish/clients"
+        into "${rootDir}/build.image.kernel.bin/generated/content/clients"
+      }
+    }
+  }
+
+  task generateLibNative {
+    inputs.files(fileTree( dir: "${projectDir}/lib/native")).skipWhenEmpty()
+    outputs.dir "${rootDir}/build.image.kernel.bin/generated/content/native"
+    doLast {
+      copy {
+        from "${projectDir}/lib/native"
+        into "${rootDir}/build.image.kernel.bin/generated/content/native"
+      }
+    }
+  }
+
+  jar {
+    dependsOn generateToolBinScripts
+    dependsOn generateFeatureResources
+    dependsOn generatePlatformManifests
+    dependsOn generateTemplates
+    dependsOn generateBinScripts
+    dependsOn generateClientScripts
+    dependsOn generateLibNative
+  }
+
   compileJava {
     if (!parseBoolean(bnd('instrument.disabled', 'false'))) {
       def instrument = fileTree( dir: compileJava.destinationDir, include: bnd('instrument.classesIncludes'), exclude: bnd('instrument.classesExcludes') )
