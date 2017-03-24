@@ -253,3 +253,9 @@ ERROR_UNABLE_TO_LOCATE_COMMAND_EXE=Die ausf\u00fchrbare Datei {0} wurde nicht an
 
 # java -jar messages 
 UNABLE_TO_FIND_PID=Die Prozess-ID des Java-Prozesses -jar konnte nicht abgerufen werden. Das tempor\u00e4re Extraktionsverzeichnis {1} kann erst gel\u00f6scht werden, wenn Sie den Java-Prozess -jar manuell beenden.
+
+UNABLE_TO_ATTACH_AGENT=Der Liberty-Java-Agent konnte nicht zugeordnet werden. Der Server wird zwar ausgef\u00fchrt, kann aber keine Funktionen ausf\u00fchren, die den Java-Agenten erfordern, wie z. B. \u00dcberwachung und Traceerstellung. Ausnahme: {0}
+
+UNABLE_TO_FIND_TOOLS_JAR=Der Liberty-Java-Agent konnte nicht zugeordnet werden, weil dieser Server eine JRE und kein Java SDK verwendet. Der Server wird zwar ausgef\u00fchrt, kann aber keine Funktionen ausf\u00fchren, die den Java-Agenten erfordern, wie z. B. \u00dcberwachung und Traceerstellung.
+
+UNABLE_TO_FIND_JAVA_AGENT=Der Liberty-Java-Agent konnte nicht geladen werden. Der Server wird zwar ausgef\u00fchrt, kann aber keine Funktionen ausf\u00fchren, die den Java-Agenten erfordern, wie z. B. \u00dcberwachung und Traceerstellung.

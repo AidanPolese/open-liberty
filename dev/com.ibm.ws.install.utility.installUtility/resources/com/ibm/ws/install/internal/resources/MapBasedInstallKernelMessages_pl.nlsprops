@@ -28,4 +28,4 @@ MAPBASED_ERROR_KERNEL_NOT_INIT.useraction=Informacje dotycz\u0105ce okre\u015bla
 
 MAPBASED_ERROR_KERNEL_INIT_FAILED=CWWKF1654E: Instalator nie zosta\u0142 zainicjowany, poniewa\u017c wyst\u0105pi\u0142 nast\u0119puj\u0105cy b\u0142\u0105d: {0}
 MAPBASED_ERROR_KERNEL_INIT_FAILED.explanation=Instalator nie zosta\u0142 zainicjowany, poniewa\u017c wyst\u0105pi\u0142 b\u0142\u0105d wewn\u0119trzny.
-MAPBASED_ERROR_KERNEL_INIT_FAILED.useraction= Informacje dotycz\u0105ce okre\u015blania problemu mo\u017cna znale\u017a\u0107 na stronie WWW wsparcia dla serwera WebSphere Application Server: http://www.ibm.com/software/webservers/appserv/was/support.
+MAPBASED_ERROR_KERNEL_INIT_FAILED.useraction=Informacje dotycz\u0105ce okre\u015blania problemu mo\u017cna znale\u017a\u0107 na stronie WWW wsparcia dla serwera WebSphere Application Server: http://www.ibm.com/software/webservers/appserv/was/support.

@@ -10,7 +10,6 @@
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/cglib-nodep.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/jmock-legacy.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/objenesis.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.crypto.certificateutil"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.logging"/>
+	<classpathentry kind="src" path="/prereq.published"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

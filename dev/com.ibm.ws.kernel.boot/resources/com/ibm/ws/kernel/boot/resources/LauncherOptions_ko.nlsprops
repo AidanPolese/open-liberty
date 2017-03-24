@@ -99,6 +99,15 @@ action-desc.unregisterWinService=\tWindows \uc11c\ube44\uc2a4 \ud504\ub85c\uadf8
 action-key.help=\ \ \ \ --help
 action-desc.help=\t\ub3c4\uc6c0\ub9d0 \uc815\ubcf4\ub97c \uc778\uc1c4\ud569\ub2c8\ub2e4.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.pause=\ \ \ \ --pause
+action-desc.pause=\t\uc77c\uc2dc\uc815\uc9c0\ud560 \uc218 \uc788\ub294 \uc11c\ubc84\uc758 \ubaa8\ub4e0 \ucef4\ud3ec\ub10c\ud2b8\ub97c \uc77c\uc2dc\uc815\uc9c0\ud569\ub2c8\ub2e4. --target\  \n\
+\t\uc635\uc158\uc5d0 \ucef4\ud3ec\ub10c\ud2b8\ub97c \uc9c0\uc815\ud558\uc5ec \ucef4\ud3ec\ub10c\ud2b8 \uc11c\ube0c\uc138\ud2b8\ub97c \n\
+\t\uc77c\uc2dc\uc815\uc9c0\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.resume=\ \ \ \ --resume
+action-desc.resume=\t\uc11c\ubc84\uc5d0\uc11c \uc77c\uc2dc\uc815\uc9c0\ub41c \ubaa8\ub4e0 \ucef4\ud3ec\ub10c\ud2b8\ub97c \uc7ac\uac1c\ud569\ub2c8\ub2e4. \uc77c\uc2dc\uc815\uc9c0\ub41c \ud2b9\uc815     \n\
+\t\ucef4\ud3ec\ub10c\ud2b8\ub97c \uc7ac\uac1c\ud558\ub294 --target \uc635\uc158\uc744 \uc9c0\uc815\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.clean=\ \ \ \ --clean
 option-desc.clean=\t\uc774 \uc11c\ubc84 \uc778\uc2a4\ud134\uc2a4\uc640 \uad00\ub828\ub41c \ubaa8\ub4e0 \uce90\uc2dc \uc815\ubcf4\ub97c \uc815\ub9ac\ud569\ub2c8\ub2e4.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
@@ -123,6 +132,10 @@ option-desc.include=\t\uc27c\ud45c\ub85c \uad6c\ubd84\ub41c \uac12 \ubaa9\ub85d\
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.template=\ \ \ \ --template="templateName"
 option-desc.template=\t\uc0c8 \uc11c\ubc84\ub97c \uc791\uc131\ud560 \ub54c \uc0ac\uc6a9\ud560 \ud15c\ud50c\ub9ac\ud2b8\uc758 \uc774\ub984\uc744 \uc9c0\uc815\ud569\ub2c8\ub2e4.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+option-key.target=\ \ \ \ --target=value,value
+option-desc.target=\t\uc77c\uc2dc\uc815\uc9c0 \ub610\ub294 \uc7ac\uac1c\ud560 \uc218 \uc788\ub294 \ucef4\ud3ec\ub10c\ud2b8\uc758 \uc27c\ud45c\ub85c \uad6c\ubd84\ub41c \ubaa9\ub85d\uc744 \n\
+\t\uc9c0\uc815\ud569\ub2c8\ub2e4.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.os=\ \ \ \ --os=value,value,...
 option-desc.os=\tv\ud328\ud0a4\uc9c0\ub41c \uc11c\ubc84\uc5d0\uc11c \uc9c0\uc6d0\ud560 \uc6b4\uc601 \uccb4\uc81c\ub97c\n\

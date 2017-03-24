@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2011.
+# (C) COPYRIGHT International Business Machines Corp. 2011, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -140,3 +140,8 @@ ANGEL_NAME_TOO_LONG.useraction=Acest server se va conecta la un proces angel. Pe
 ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0120E: Numele angel name specificat \u00een bootstrap.properties con\u0163ine caracterul nesuportat {0} la pozi\u0163ia {1}.
 ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=Proprietatea com.ibm.ws.zos.core.angelName specific\u0103 numele procesului angel la care ar trebui s\u0103 se conecteze acest server. Proprietatea este specificat\u0103 \u00een boostrap.properties \u015fi poate con\u0163ine doar caractere din setul de caractere: A-Z 0-9 ! # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
 ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=Acest server se va conecta la un proces angel. Pentru a se conecta la un proces angel, specifica\u0163i o valoare pentru proprietatea com.ibm.ws.zos.core.angelName \u015fi reporni\u0163i serverul.
+
+#{0} is the server's UMASK value.
+SERVER_CURRENT_UMASK=CWWKB0121I: Valoarea UMASK a procesului de server este setat\u0103 la {0}.
+SERVER_CURRENT_UMASK.explanation=Valoarea UMASK a procesului de server. Implicit, valoarea UMASK este mo\u015ftenit\u0103 de la procesul care a pornit serverul Liberty, dar este modificat \u00een continuare pentru a nu permite acces de citire, scriere sau executare ALTOR utilizatori. Setarea variabile de mediu WLP_SKIP_UMASKla true \u00eempiedic\u0103 serverul s\u0103 modifice UMASK \u00een acest fel. C\u00e2nd un server Liberty este pornit utiliz\u00e2nd o procedur\u0103 z/OS, pute\u0163i personaliza UMASK utilizat de procesul de server prin definirea variabilelor de mediu WLP_SKIP_UMASK \u015fi _BPX_BATCH_UMASK. WLP_SKIP_UMASK poate fi specificat fie \u00een fi\u015fierul server.env fie, dac\u0103 serverul este pornit utiliz\u00e2nd o procedur\u0103 z/OS, poate fi specificat utiliz\u00e2nd intrarea STDENDV. Prin contrast, _BPX_BATCH_UMASK nu poate fi specificat \u00een fi\u015fierul server.env. Trebuie s\u0103 fie specificat numai utiliz\u00e2nd intrarea STDENV DD \u00een procedura z/OS.
+SERVER_CURRENT_UMASK.useraction=Nicio ac\u0163iune nu este necesar\u0103.

@@ -669,17 +669,81 @@ error.package.missingLibExtractDir.explanation=O diret\u00f3rio lib/extract cont
 pacote.  Se esse diret\u00f3rio estiver ausente, isso poder\u00e1 indicar que a instala\u00e7\u00e3o do Perfil do WebSphere Liberty estava incompleta ou que o diret\u00f3rio foi exclu\u00eddo.
 error.package.missingLibExtractDir.useraction=Reinstale o Perfil do WebSphere Liberty e certifique-se de que o diret\u00f3rio lib/extract exista no diret\u00f3rio WLP_HOME.
 
-info.serverPause.request.received=CWWKE0923I: Foi recebida uma solicita\u00e7\u00e3o para pausar o servidor para solicita\u00e7\u00f5es recebidas de um protocolo espec\u00edfico. Par\u00e2metros: {0}.
-info.serverPause.request.received.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o para pausar o servidor para um protocolo espec\u00edfico. No ponto em que essa mensagem foi emitida, a pausa real do servidor ainda n\u00e3o tinha ocorrido. \u00c9 poss\u00edvel, por exemplo, solicitar uma pausa do servidor para solicita\u00e7\u00f5es de HTTP para que voc\u00ea possa depurar um problema. Ap\u00f3s a depura\u00e7\u00e3o do problema, ser\u00e1 poss\u00edvel emitir uma solicita\u00e7\u00e3o para continuar o servidor para solicita\u00e7\u00f5es de HTTP.
-info.serverPause.request.received.useraction=Nenhuma a\u00e7\u00e3o \u00e9 necess\u00e1ria.
+info.server.pause.all.request.received=CWWKE0923I: Uma solicita\u00e7\u00e3o foi recebida para pausar todos os componentes com capacidade de pausa no servidor.
+info.server.pause.all.request.received.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o para pausar todos os componentes com capacidade de pausa no servidor. O servidor tentar\u00e1 pausar esses componentes. 
+info.server.pause.all.request.received.useraction=Nenhuma a\u00e7\u00e3o \u00e9 necess\u00e1ria.
 
-info.serverResume.request.received=CWWKE0924I: Foi recebida uma solicita\u00e7\u00e3o para continuar o servidor para solicita\u00e7\u00f5es recebidas de um protocolo espec\u00edfico. Par\u00e2metros: {0}.
-info.serverResume.request.received.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o para continuar o servidor que tinha sido pausado anteriormente para um protocolo espec\u00edfico. No ponto em que essa mensagem foi emitida, a continua\u00e7\u00e3o real do servidor ainda n\u00e3o tinha ocorrido. \u00c9 poss\u00edvel, por exemplo, solicitar uma pausa do servidor para solicita\u00e7\u00f5es de HTTP para que voc\u00ea possa depurar um problema. Ap\u00f3s a depura\u00e7\u00e3o do problema, ser\u00e1 poss\u00edvel emitir uma solicita\u00e7\u00e3o para continuar o servidor para solicita\u00e7\u00f5es de HTTP.
-info.serverResume.request.received.useraction=Nenhuma a\u00e7\u00e3o \u00e9 necess\u00e1ria.
+info.server.pause.request.received=CWWKE0924I: Uma solicita\u00e7\u00e3o foi recebida para pausar os componentes a seguir no servidor: {0}
+info.server.pause.request.received.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o para pausar componentes espec\u00edficos no servidor. O servidor tentar\u00e1 pausar esses componentes. 
+info.server.pause.request.received.useraction=Nenhuma a\u00e7\u00e3o \u00e9 necess\u00e1ria.
 
-info.listeners.controller.missing=CWWKE0925W: Foi recebida uma solicita\u00e7\u00e3o do servidor {0}, mas n\u00e3o p\u00f4de ser processada. Motivo: {1}.
-info.listeners.controller.missing.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o para pausar ou continuar o servidor para um protocolo espec\u00edfico. No entanto, a solicita\u00e7\u00e3o n\u00e3o p\u00f4de ser processada. Talvez a inicializa\u00e7\u00e3o do servidor n\u00e3o tenha sido conclu\u00edda. O destino da pausa ou da continua\u00e7\u00e3o n\u00e3o pode mais ser configurado. Uma solicita\u00e7\u00e3o anterior de pausa ou continua\u00e7\u00e3o pode ter ainda que concluir seu processamento.
-info.listeners.controller.missing.useraction=Permita que o servidor conclua a inicializa\u00e7\u00e3o e, em seguida, tente a solicita\u00e7\u00e3o novamente. Verifique se o destino da solicita\u00e7\u00e3o ainda est\u00e1 v\u00e1lido e ativo no servidor. Permita que a solicita\u00e7\u00e3o emitida anteriormente seja conclu\u00edda antes de emitir outra solicita\u00e7\u00e3o.
+info.server.resume.all.request.received=CWWKE0925I: Uma solicita\u00e7\u00e3o foi recebida para continuar todos os componentes pausados no servidor.
+info.server.resume.all.request.received.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o para continuar todos os componentes pausados no servidor. O servidor tentar\u00e1 continuar esses componentes.
+info.server.resume.all.request.received.useraction=Nenhuma a\u00e7\u00e3o \u00e9 necess\u00e1ria.
+
+info.server.resume.request.received=CWWKE0926I: Uma solicita\u00e7\u00e3o foi recebida para continuar os componentes a seguir no servidor: {0}
+info.server.resume.request.received.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o para continuar componentes espec\u00edficos no servidor. O servidor tentar\u00e1 continuar esses componentes se estiverem pausados.
+info.server.resume.request.received.useraction=Nenhuma a\u00e7\u00e3o \u00e9 necess\u00e1ria.
+
+error.pause.request.failed=CWWKE0927E: Uma solicita\u00e7\u00e3o de pausa foi recebida, mas a infraestrutura para pausar componentes n\u00e3o est\u00e1 dispon\u00edvel. A solicita\u00e7\u00e3o n\u00e3o pode ser processada. 
+error.pause.request.failed.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o de pausa. No entanto, a solicita\u00e7\u00e3o n\u00e3o p\u00f4de ser processada. O servidor ainda pode estar sendo inicializado ou encerrado.
+error.pause.request.failed.useraction=Verifique se o servidor foi totalmente inicializado e se n\u00e3o est\u00e1 no processo de encerramento.
+
+error.resume.request.failed=CWWKE0928E: Uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o foi recebida, mas a infraestrutura para pausar componentes n\u00e3o est\u00e1 dispon\u00edvel. A solicita\u00e7\u00e3o n\u00e3o pode ser processada. 
+error.resume.request.failed.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o, mas a solicita\u00e7\u00e3o n\u00e3o p\u00f4de ser processada. O servidor ainda pode estar sendo inicializado ou encerrado.
+error.resume.request.failed.useraction=Verifique se o servidor est\u00e1 totalmente inicializado e se n\u00e3o est\u00e1 no processo de encerramento.
+
+error.server.pause.failed=CWWKE0929E: Uma solicita\u00e7\u00e3o de pausa foi conclu\u00edda, mas os componentes a seguir falharam ao pausar: {0}
+error.server.pause.failed.explanation=O servidor processou uma solicita\u00e7\u00e3o de pausa, mas alguns componentes com capacidade de pausa falharam ao pausar. Todos os outros componentes com capacidade de pausa foram pausados com sucesso.
+error.server.pause.failed.useraction=Verifique os logs do servidor para obter os erros adicionais dos componentes que falharam.
+
+error.server.resume.failed=CWWKE0930E: Uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o foi conclu\u00edda, mas os componentes a seguir falharam ao serem continuados: {0}
+error.server.resume.failed.explanation=O servidor processou uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o, mas alguns componentes pausados falharam ao serem continuados. Todos os outros componentes pausados foram continuados com sucesso.
+error.server.resume.failed.useraction=Verifique os logs do servidor para obter os erros adicionais dos componentes que falharam.
+
+warning.server.pause.invalid.targets=CWWKE0931W: Uma solicita\u00e7\u00e3o foi recebida para pausar componentes espec\u00edficos, mas a lista de componentes na op\u00e7\u00e3o de destino estava vazia. Nenhuma \
+a\u00e7\u00e3o foi tomada.
+warning.server.pause.invalid.targets.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o de pausa com uma lista de metas vazia na op\u00e7\u00e3o de destino. A solicita\u00e7\u00e3o foi conclu\u00edda, mas nenhuma a\u00e7\u00e3o foi tomada.
+warning.server.pause.invalid.targets.useraction=Especifique na op\u00e7\u00e3o de destino uma lista de componentes para pausar. Para pausar todos os componentes com capacidade de pausa no servidor, emita uma solicita\u00e7\u00e3o de pausa sem a op\u00e7\u00e3o de destino.
+
+warning.server.resume.invalid.targets=CWWKE0932W: Uma solicita\u00e7\u00e3o foi recebida para continuar componentes espec\u00edficos, mas a lista de componentes na op\u00e7\u00e3o de destino estava vazia. Nenhuma \
+a\u00e7\u00e3o foi tomada.
+warning.server.resume.invalid.targets.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o com uma lista de metas vazia na op\u00e7\u00e3o de destino. A solicita\u00e7\u00e3o foi conclu\u00edda, mas nenhuma a\u00e7\u00e3o foi tomada.
+warning.server.resume.invalid.targets.useraction=Especifique na op\u00e7\u00e3o de destino uma lista de componentes para continuar. Para \
+continuar todos os componentes pausados no servidor, emita uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o sem a op\u00e7\u00e3o de destino.
+
+warning.server.pause.no.targets=CWWKE0933W: Uma solicita\u00e7\u00e3o de pausa foi recebida, mas nenhum componente com capacidade de pausa foi localizado no servidor. Nenhuma \
+a\u00e7\u00e3o foi tomada.
+warning.server.pause.no.targets.explanation=O servidor processou uma solicita\u00e7\u00e3o de pausa, mas nenhum componente com capacidade de pausa foi localizado no servidor. Nenhuma \
+a\u00e7\u00e3o foi tomada.
+warning.server.pause.no.targets.useraction=Verifique se os componentes com capacidade de pausa est\u00e3o dispon\u00edveis no servidor.
+
+warning.server.resume.no.targets=CWWKE0934W: Uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o foi recebida, mas nenhum componente com capacidade de pausa foi localizado no servidor. Nenhuma \
+a\u00e7\u00e3o foi tomada.
+warning.server.resume.no.targets.explanation=O servidor processou uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o, mas nenhum componente com capacidade de pausa foi localizado. Nenhuma \
+a\u00e7\u00e3o foi tomada.
+warning.server.resume.no.targets.useraction=Verifique se os componentes com capacidade de pausa est\u00e3o dispon\u00edveis no servidor.
+
+warning.server.pause.missing.targets=CWWKE0935W: Uma solicita\u00e7\u00e3o de pausa foi recebida, mas os componentes a seguir n\u00e3o puderam ser localizados: {0}
+warning.server.pause.missing.targets.explanation=O servidor processou uma solicita\u00e7\u00e3o de pausa, mas alguns componentes espec\u00edficos n\u00e3o puderam ser localizados. A solicita\u00e7\u00e3o foi processada para todos os outros componentes especificados.
+warning.server.pause.missing.targets.useraction=Verifique se os nomes de componentes especificados est\u00e3o corretos e se os componentes est\u00e3o registrados no servidor e com capacidade de pausa.
+
+warning.server.resume.missing.targets=CWWKE0936W: Uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o foi recebida, mas os componentes a seguir n\u00e3o foram localizados: {0}
+warning.server.resume.missing.targets.explanation=O servidor processou uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o, mas alguns componentes espec\u00edficos n\u00e3o foram localizados. A solicita\u00e7\u00e3o foi processada para todos os outros componentes especificados.
+warning.server.resume.missing.targets.useraction=Verifique se os nomes de componentes especificados est\u00e3o corretos e se os componentes est\u00e3o registrados no servidor e com capacidade de pausa.
+
+warning.server.status.missing.targets=CWWKE0937W: Uma solicita\u00e7\u00e3o de status foi recebida, mas os componentes a seguir n\u00e3o foram localizados: {0}
+warning.server.status.missing.targets.explanation=O servidor processou uma solicita\u00e7\u00e3o de status, mas alguns componentes espec\u00edficos n\u00e3o foram localizados. A solicita\u00e7\u00e3o foi processada para todos os outros componentes especificados.
+warning.server.status.missing.targets.useraction=Verifique se os nomes de componentes especificados est\u00e3o corretos e se os componentes est\u00e3o registrados no servidor e com capacidade de pausa.
+
+info.server.pause.request.completed=CWWKE0938I: Uma solicita\u00e7\u00e3o de pausa foi conclu\u00edda.
+info.server.pause.request.completed.explanation=Uma solicita\u00e7\u00e3o de pausa foi conclu\u00edda.
+info.server.pause.request.completed.useraction=Nenhuma a\u00e7\u00e3o \u00e9 necess\u00e1ria.
+
+info.server.resume.request.completed=CWWKE0939I: Uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o conclu\u00edda.
+info.server.resume.request.completed.explanation=Uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o conclu\u00edda.
+info.server.resume.request.completed.useraction=Nenhuma a\u00e7\u00e3o \u00e9 necess\u00e1ria.
+
 
 info.serverStarting=Iniciando servidor {0}.
 info.serverStarted=Servidor {0} iniciado.

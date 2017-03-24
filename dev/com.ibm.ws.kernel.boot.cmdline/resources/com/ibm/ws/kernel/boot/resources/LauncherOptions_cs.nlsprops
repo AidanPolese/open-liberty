@@ -83,6 +83,15 @@ action-desc.javadump=\tVypsat diagnostick\u00e9 informace z prost\u0159ed\u00ed 
 action-key.help=\ \ \ \ --help
 action-desc.help=\tVytisknout informace n\u00e1pov\u011bdy.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.pause=\ \ \ \ --pause
+action-desc.pause=\tPozastavit v\u0161echny komponenty serveru, kter\u00e9 pozastavit lze. Je mo\u017en\u00e9 \n\
+\tpozastavit jen \u010d\u00e1st komponent, pokud tyto komponenty ur\u010d\u00edte v r\u00e1mci \n\
+\tvolby --target.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.resume=\ \ \ \ --resume
+action-desc.resume=\tObnovit b\u011bh v\u0161ech pozastaven\u00fdch komponent serveru. S pomoc\u00ed volby \n\
+\t--target je mo\u017en\u00e9 obnovit pouze b\u011bh konkr\u00e9tn\u00edch pozastaven\u00fdch komponent.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.clean=\ \ \ \ --clean
 option-desc.clean=\tVy\u010dist\u00ed ve\u0161ker\u00e9 informace ulo\u017een\u00e9 v mezipam\u011bti vztahuj\u00edc\u00ed se k t\u00e9to instanci serveru.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
@@ -103,6 +112,10 @@ option-desc.archive=\tUr\u010dete c\u00edl archivu, kter\u00fd m\u00e1 vytvo\u01
 option-key.include=\ \ \ \ --include=hodnota,hodnota,...
 option-desc.include=\tSeznam hodnot odd\u011blen\u00fdch \u010d\u00e1rkami. Platn\u00e9 hodnoty se r\u016fzn\u00ed v z\u00e1vislosti na\n\
 \tp\u0159\u00edslu\u0161n\u00e9 akci.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+option-key.target=\ \ \ \ --target=hodnota,hodnota
+option-desc.target=\tUv\u00e1d\u00ed \u010d\u00e1rkami odd\u011blen\u00fd seznam komponent, kter\u00e9 je mo\u017en\u00e9 pozastavit nebo \n\
+\tobnovit jejich b\u011bh.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.template=\ \ \ \ --template="n\u00e1zev_\u0161ablony"
 option-desc.template=\tUr\u010dete n\u00e1zev \u0161ablony, je\u017e m\u00e1 b\u00fdt pou\u017eita k vytvo\u0159en\u00ed nov\u00e9ho serveru. 

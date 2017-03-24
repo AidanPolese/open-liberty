@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2011.
+# (C) COPYRIGHT International Business Machines Corp. 2011, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -140,3 +140,8 @@ ANGEL_NAME_TOO_LONG.useraction=Ten serwer nie nawi\u0105\u017ce po\u0142\u0105cz
 ANGEL_NAME_UNSUPPORTED_CHARACTER=CWWKB0120E: Nazwa procesu Angel okre\u015blona w pliku bootstrap.properties zawiera nieobs\u0142ugiwany znak {0} na pozycji {1}.
 ANGEL_NAME_UNSUPPORTED_CHARACTER.explanation=W\u0142a\u015bciwo\u015b\u0107 com.ibm.ws.zos.core.angelName okre\u015bla nazw\u0119 procesu Angel, z kt\u00f3rym serwer ma nawi\u0105za\u0107 po\u0142\u0105czenie. W\u0142a\u015bciwo\u015b\u0107 jest okre\u015blona w pliku boostrap.properties i mo\u017ce zawiera\u0107 tylko znaki z nast\u0119puj\u0105cego zestawu: A-Z 0-9! # $ + - / : < > = ? @ [ ] ^ _ ` { } | ~
 ANGEL_NAME_UNSUPPORTED_CHARACTER.useraction=Ten serwer nie nawi\u0105\u017ce po\u0142\u0105czenia z procesem Angel. W celu nawi\u0105zania po\u0142\u0105czenia z procesem Angel okre\u015bl warto\u015b\u0107 w\u0142a\u015bciwo\u015bci com.ibm.ws.zos.core.angelName za pomoc\u0105 znak\u00f3w z obs\u0142ugiwanego zestawu i zrestartuj serwer.
+
+#{0} is the server's UMASK value.
+SERVER_CURRENT_UMASK=CWWKB0121I: Warto\u015b\u0107 komendy UMASK procesu serwera jest ustawiona na {0}.
+SERVER_CURRENT_UMASK.explanation=Warto\u015b\u0107 komendy UMASK procesu serwera. Domy\u015blnie warto\u015b\u0107 komendy UMASK jest dziedziczona z procesu uruchamiaj\u0105cego serwer Liberty, ale jest ona potem dalej modyfikowana w celu zablokowania dost\u0119pu do odczytu, zapisu lub wykonania dla u\u017cytkownik\u00f3w klasy OTHER. Ustawienie zmiennej \u015brodowiskowej WLP_SKIP_UMASK na warto\u015b\u0107 true uniemo\u017cliwia serwerowi wprowadzenie w ten spos\u00f3b modyfikacji komendy UMASK. Je\u015bli serwer Liberty zosta\u0142 uruchomiony przy u\u017cyciu procedury systemu z/OS, mo\u017cna dostosowa\u0107 komend\u0119 UMASK u\u017cywan\u0105 przez proces serwera przez zdefiniowanie zmiennych \u015brodowiskowych WLP_SKIP_UMASK i _BPX_BATCH_UMASK. Zmienn\u0105 \u015brodowiskow\u0105 WLP_SKIP_UMASK mo\u017cna poda\u0107 w pliku server.env lub, je\u015bli serwer zosta\u0142 uruchomiony przy u\u017cyciu procedury systemu z/OS, okre\u015bli\u0107 j\u0105 za pomoc\u0105 punktu wej\u015bcia STDENDV DD. Natomiast zmiennej \u015brodowiskowej _BPX_BATCH_UMASK nie mo\u017cna okre\u015bli\u0107 w pliku server.env. Nale\u017cy j\u0105 poda\u0107 za pomoc\u0105 punktu wej\u015bcia STDENV DD w procedurze z/OS.
+SERVER_CURRENT_UMASK.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.

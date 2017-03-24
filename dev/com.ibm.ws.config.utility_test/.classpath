@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" output="build/unittest/classes" path="unittest/src"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.logging"/>
-	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar"/>
-	<classpathentry kind="lib" path="/com.ibm.websphere.org.osgi.service.component/lib/org.osgi.service.component-1.3.0.jar"/>
-	<classpathentry kind="lib" path="/com.ibm.wsspi.org.osgi.service.component.annotations/lib/org.osgi.service.component.annotations-1.3.0.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.service"/>
+	<classpathentry kind="src" path="/prereq.published"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/junit/old/junit.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/ws-junit/ws-junit.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/hamcrest-all.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock-junit4.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.config.utility"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.crypto.passwordutil"/>
-	<classpathentry kind="lib" path="/com.ibm.ws.repository/lib/client-lib.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.repository.liberty"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.org.apache.commons.io.1.4"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/jmock-legacy.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/cglib-nodep.jar"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/objenesis.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.config_test"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.install"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -578,15 +578,68 @@ error.package.missingLibExtractDir=CWWKE0922E: Der Paketbefehl kann nicht ausgef
 error.package.missingLibExtractDir.explanation=Das Verzeichnis lib/extract enth\u00e4lt Metadaten und selbst extrahierende Klassen, die f\u00fcr die Ausf\u00fchrung des Paketbefehls erforderlich sind. Wenn dieses Verzeichnis fehlt, k\u00f6nnte dies ein Hinweis darauf sein, dass die Installation von WebSphere Liberty Profile unvollst\u00e4ndig ist oder dass das Verzeichnis gel\u00f6scht wurde.
 error.package.missingLibExtractDir.useraction=Installieren Sie WebSphere Liberty Profile erneut und stellen Sie sicher, dass das Verzeichnis lib/extract im Verzeichnis WLP_HOME vorhanden ist.
 
-info.serverPause.request.received=CWWKE0923I: Eine Anforderung, den Server bei eingehenden Anforderungen eines bestimmten Protokolls anzuhalten, wurde empfangen. Parameter: {0}.
-info.serverPause.request.received.explanation=Ein Benutzer hat eine Anforderung zum Anhalten des Servers aufgrund eines bestimmten Protokolls abgesetzt. Zu dem Zeitpunkt, als diese Nachricht abgesetzt wurde, war die Aktion, den Server anzuhalten, noch nicht eingetreten. Sie k\u00f6nnen beispielsweise eine Anforderung zum Anhalten des Servers f\u00fcr HTTP-Anforderungen anfordern, um ein Problem zu debuggen. Nachdem das Problem behoben ist, k\u00f6nnen Sie eine Anforderung zur Wiederaufnahme des Servers f\u00fcr HTTP-Anforderungen absetzen.
-info.serverPause.request.received.useraction=Es ist keine Aktion erforderlich. 
-info.serverResume.request.received=CWWKE0924I: Eine Anforderung, den Server bei eingehenden Anforderungen eines bestimmten Protokolls wiederaufzunehmen, wurde empfangen. Parameter: {0}.
-info.serverResume.request.received.explanation=Ein Benutzer hat eine Anforderung zur Wiederaufnahme des Servers abgesetzt, der zuvor aufgrund eines bestimmten Protokolls angehalten wurde. Zu dem Zeitpunkt, als diese Nachricht abgesetzt wurde, war die Aktion, den Server wiederaufzunehmen, noch nicht eingetreten. Sie k\u00f6nnen beispielsweise eine Anforderung zum Anhalten des Servers f\u00fcr HTTP-Anforderungen anfordern, um ein Problem zu debuggen. Nachdem das Problem behoben ist, k\u00f6nnen Sie eine Anforderung zur Wiederaufnahme des Servers f\u00fcr HTTP-Anforderungen absetzen.
-info.serverResume.request.received.useraction=Es ist keine Aktion erforderlich. 
-info.listeners.controller.missing=CWWKE0925W: Eine Serveranforderung vom Typ {0} wurde empfangen, konnte jedoch nicht verarbeitet werden. Ursache: {1}.
-info.listeners.controller.missing.explanation=Ein Benutzer hat eine Anforderung zum Anhalten oder zur Wiederaufnahme des Servers aufgrund eines bestimmten Protokolls abgesetzt. Die Anforderung konnte jedoch nicht verarbeitet werden. M\u00f6glicherweise ist die Initialisierung des Servers noch nicht abgeschlossen. Das Ziel f\u00fcr die Pause oder Wiederaufnahme ist m\u00f6glicherweise nicht mehr konfiguriert. Eine vorherige Anforderung zum Anhalten oder zur Wiederaufnahme muss m\u00f6glicherweise erst noch verarbeitet werden.
-info.listeners.controller.missing.useraction=Warten Sie, bis der Server die Initialisierung abgeschlossen hat, und wiederholen Sie anschlie\u00dfend die Anforderung. \u00dcberpr\u00fcfen Sie, dass das Ziel der Anforderung innerhalb des Servers noch g\u00fcltig und aktiv ist. Warten Sie, bis die zuvor abgesetzte Anforderung abgeschlossen ist, bevor Sie eine weitere Anforderung absetzen.
+info.server.pause.all.request.received=CWWKE0923I: Es wurde eine Anforderung empfangen, alle anhaltbaren Komponenten im Server anzuhalten.
+info.server.pause.all.request.received.explanation=Ein Benutzer hat eine Anforderung zum Anhalten aller anhaltbaren Komponenten im Server abgesetzt. Der Server wird versuchen, diese Komponenten anzuhalten. 
+info.server.pause.all.request.received.useraction=Es ist keine Aktion erforderlich. 
+info.server.pause.request.received=CWWKE0924I: Es wurde eine Anforderung empfangen, die folgenden Komponenten im Server anzuhalten: {0}
+info.server.pause.request.received.explanation=Ein Benutzer hat eine Anforderung abgesetzt, bestimmte Komponenten im Server anzuhalten. Der Server wird versuchen, diese Komponenten anzuhalten. 
+info.server.pause.request.received.useraction=Es ist keine Aktion erforderlich. 
+info.server.resume.all.request.received=CWWKE0925I: Es wurde eine Anforderung empfangen, alle angehaltenen Komponenten im Server wiederaufzunehmen.
+info.server.resume.all.request.received.explanation=Ein Benutzer hat eine Anforderung zur Wiederaufnahme aller angehaltenen Komponenten im Server abgesetzt. Der Server wird versuchen, diese Komponenten wiederaufzunehmen.
+info.server.resume.all.request.received.useraction=Es ist keine Aktion erforderlich. 
+info.server.resume.request.received=CWWKE0926I: Es wurde eine Anforderung empfangen, die folgenden Komponenten im Server wiederaufzunehmen: {0}
+info.server.resume.request.received.explanation=Ein Benutzer hat eine Anforderung abgesetzt, bestimmte Komponenten im Server wiederaufzunehmen. Der Server wird versuchen, diese Komponenten wiederaufzunehmen, sofern sie angehalten wurden.
+info.server.resume.request.received.useraction=Es ist keine Aktion erforderlich. 
+error.pause.request.failed=CWWKE0927E: Es wurde eine Anforderung zum Anhalten empfangen, die Infrastruktur zum Anhalten von Komponenten ist jedoch nicht verf\u00fcgbar. Die Anforderung kann nicht verarbeitet werden. 
+error.pause.request.failed.explanation=Ein Benutzer hat eine Anforderung zum Anhalten abgesetzt. Die Anforderung konnte jedoch nicht verarbeitet werden. Der Server hat m\u00f6glicherweise die Initialisierung noch nicht abgeschlossen oder wird heruntergefahren.
+error.pause.request.failed.useraction=\u00dcberpr\u00fcfen Sie, dass die Initialisierung des Servers vollst\u00e4ndig abgeschlossen ist und das System nicht gerade heruntergefahren wird.
+
+error.resume.request.failed=CWWKE0928E: Es wurde eine Anforderung zur Wiederaufnahme empfangen, die Infrastruktur zum Anhalten von Komponenten ist jedoch nicht verf\u00fcgbar. Die Anforderung kann nicht verarbeitet werden. 
+error.resume.request.failed.explanation=Ein Benutzer hat eine Wiederaufnahmeanforderung abgesetzt, die Anforderung konnte jedoch nicht verarbeitet werden. Der Server hat m\u00f6glicherweise die Initialisierung noch nicht abgeschlossen oder wird heruntergefahren.
+error.resume.request.failed.useraction=\u00dcberpr\u00fcfen Sie, dass die Initialisierung des Servers vollst\u00e4ndig abgeschlossen ist und das System nicht gerade heruntergefahren wird.
+
+error.server.pause.failed=CWWKE0929E: Eine Anforderung zum Anhalten wurde ausgef\u00fchrt, die folgenden Komponenten konnten jedoch nicht angehalten werden: {0}
+error.server.pause.failed.explanation=Der Server hat eine Anforderung zum Anhalten verarbeitet, aber einige Komponenten konnten nicht angehalten werden. Alle anderen anhaltbaren Komponenten wurden erfolgreich angehalten.
+error.server.pause.failed.useraction=Suchen Sie in den Serverprotokollen nach weiteren Fehlern zu den fehlgeschlagenen Komponenten.
+
+error.server.resume.failed=CWWKE0930E: Eine Wiederaufnahmeanforderung wurde ausgef\u00fchrt, die folgenden Komponenten konnten jedoch nicht wiederaufgenommen werden: {0}
+error.server.resume.failed.explanation=Der Server hat eine Wiederaufnahmeanforderung verarbeitet, aber einige angehaltene Komponenten konnten nicht wiederaufgenommen werden. Alle anderen angehaltenen Komponenten wurden erfolgreich wiederaufgenommen.
+error.server.resume.failed.useraction=Suchen Sie in den Serverprotokollen nach weiteren Fehlern zu den fehlgeschlagenen Komponenten.
+
+warning.server.pause.invalid.targets=CWWKE0931W: Es wurde eine Anforderung zum Anhalten bestimmter Komponenten empfangen, die Komponentenliste f\u00fcr die Zieloption war jedoch leer. Es wurde keine Aktion ausgef\u00fchrt.
+warning.server.pause.invalid.targets.explanation=Ein Benutzer hat eine Anforderung zum Anhalten mit einer leeren Zielliste f\u00fcr die Zieloption abgesetzt. Die Anforderung wurde zwar ausgef\u00fchrt, es wurde jedoch keine Aktion ausgef\u00fchrt.
+warning.server.pause.invalid.targets.useraction=Geben Sie f\u00fcr die Zieloption eine Liste mit anzuhaltenden Komponente an. Wenn Sie alle im Server anhaltbaren Komponenten anhalten m\u00f6chten, setzen Sie eine Anforderung zum Anhalten ohne Angabe der Zieloption ab.
+
+warning.server.resume.invalid.targets=CWWKE0932W: Es wurde eine Anforderung zur Wiederaufnahme bestimmter Komponenten empfangen, die Komponentenliste f\u00fcr die Zieloption war jedoch leer. Es wurde keine Aktion ausgef\u00fchrt.
+warning.server.resume.invalid.targets.explanation=Ein Benutzer hat eine Anforderung zur Wiederaufnahme mit einer leeren Zielliste f\u00fcr die Zieloption abgesetzt. Die Anforderung wurde zwar ausgef\u00fchrt, es wurde jedoch keine Aktion ausgef\u00fchrt.
+warning.server.resume.invalid.targets.useraction=Geben Sie f\u00fcr die Zieloption eine Liste mit wiederaufzunehmenden Komponente an. Wenn Sie alle im Server angehaltenen Komponenten wiederaufnehmen m\u00f6chten, setzen Sie eine Wiederaufnahmeanforderung ohne Angabe der Zieloption ab.
+
+warning.server.pause.no.targets=CWWKE0933W: Es wurde eine Anforderung zum Anhalten empfangen, es wurden jedoch im Server keine anhaltbaren Komponenten gefunden. Es wurde keine Aktion ausgef\u00fchrt.
+warning.server.pause.no.targets.explanation=Der Server hat eine Anforderung zum Anhalten verarbeitet, es wurden jedoch im Server keine anhaltbaren Komponenten gefunden. Es wurde keine Aktion ausgef\u00fchrt.
+warning.server.pause.no.targets.useraction=\u00dcberpr\u00fcfen Sie, dass anhaltbare Komponenten im Server vorhanden sind.
+
+warning.server.resume.no.targets=CWWKE0934W: Es wurde eine Wiederaufnahmeanforderung empfangen, es wurden jedoch im Server keine anhaltbaren Komponenten gefunden. Es wurde keine Aktion ausgef\u00fchrt.
+warning.server.resume.no.targets.explanation=Der Server hat eine Wiederaufnahmeanforderung verarbeitet, es wurden jedoch keine anhaltbaren Komponenten gefunden. Es wurde keine Aktion ausgef\u00fchrt.
+warning.server.resume.no.targets.useraction=\u00dcberpr\u00fcfen Sie, dass anhaltbare Komponenten im Server vorhanden sind.
+
+warning.server.pause.missing.targets=CWWKE0935W: Es wurde eine Anforderung zum Anhalten empfangen, die folgenden Komponenten wurden jedoch nicht gefunden: {0}
+warning.server.pause.missing.targets.explanation=Der Server hat eine Anforderung zum Anhalten verarbeitet, einige bestimmte Komponenten wurden jedoch nicht gefunden. Die Anforderung wurde f\u00fcr alle anderen angegebenen Komponenten verarbeitet.
+warning.server.pause.missing.targets.useraction=\u00dcberpr\u00fcfen Sie, dass die angegebenen Komponentennamen richtig und die Komponenten im Server registriert und anhaltbar sind.
+
+warning.server.resume.missing.targets=CWWKE0936W: Es wurde eine Wiederaufnahmeanforderung empfangen, die folgenden Komponenten wurden jedoch nicht gefunden: {0}
+warning.server.resume.missing.targets.explanation=Der Server hat eine Wiederaufnahmeanforderung verarbeitet, einige bestimmte Komponenten wurden jedoch nicht gefunden. Die Anforderung wurde f\u00fcr alle anderen angegebenen Komponenten verarbeitet.
+warning.server.resume.missing.targets.useraction=\u00dcberpr\u00fcfen Sie, dass die angegebenen Komponentennamen richtig und die Komponenten im Server registriert und anhaltbar sind.
+
+warning.server.status.missing.targets=CWWKE0937W: Es wurde eine Statusanforderung empfangen, die folgenden Komponenten wurden jedoch nicht gefunden: {0}
+warning.server.status.missing.targets.explanation=Der Server hat eine Statusanforderung verarbeitet, einige bestimmte Komponenten wurden jedoch nicht gefunden. Die Anforderung wurde f\u00fcr alle anderen angegebenen Komponenten verarbeitet.
+warning.server.status.missing.targets.useraction=\u00dcberpr\u00fcfen Sie, dass die angegebenen Komponentennamen richtig und die Komponenten im Server registriert und anhaltbar sind.
+
+info.server.pause.request.completed=CWWKE0938I: Eine Anforderung zum Anhalten wurde ausgef\u00fchrt.
+info.server.pause.request.completed.explanation=Eine Anforderung zum Anhalten wurde ausgef\u00fchrt.
+info.server.pause.request.completed.useraction=Es ist keine Aktion erforderlich. 
+info.server.resume.request.completed=CWWKE0939I: Eine Wiederaufnahmeanforderung wurde ausgef\u00fchrt.
+info.server.resume.request.completed.explanation=Eine Wiederaufnahmeanforderung wurde ausgef\u00fchrt.
+info.server.resume.request.completed.useraction=Es ist keine Aktion erforderlich. 
 
 info.serverStarting=Server {0} wird gestartet.
 info.serverStarted=Der Server {0} wurde gestartet.

@@ -576,17 +576,73 @@ error.package.missingLibExtractDir=CWWKE0922E: Comanda de pachet nu se poate fin
 error.package.missingLibExtractDir.explanation=Directorul lib/extract con\u0163ine metadate \u015fi clasele de auto-extrac\u0163ie pentru finalizarea comenzii package. Dac\u0103 acest director lipse\u015fte, aceasta poate ar\u0103ta c\u0103 instalarea WebSphere Liberty Profile nu a fost complet\u0103 sau c\u0103 directorul a fost \u015fters.
 error.package.missingLibExtractDir.useraction=Reinstala\u0163i WebSphere Liberty Profile \u015fi asigura\u0163i-v\u0103 c\u0103 exist\u0103 directorul lib/extract sub directorul WLP_HOME.
 
-info.serverPause.request.received=CWWKE0923I: A fost primit\u0103 o cerere de a face o pauz\u0103 pentru server pentru cererile de intrare ale unui anumit protocol. Parametri: {0}.
-info.serverPause.request.received.explanation=Un utilizator a lansat o cerere de a face o pauz\u0103 pentru server pentru un anumit protocol. La punctul la care a fost lansat acest mesaj, nu a ap\u0103rut \u00eenc\u0103 pauza real\u0103 a serverului. Pute\u0163i, de exemplu, cere o pauz\u0103 pentru server pentru cererile HTTP astfel \u00eenc\u00e2t s\u0103 pute\u0163i depana o problem\u0103. Dup\u0103 ce este depanat\u0103 o problem\u0103, pute\u0163i lansa o cerere pentru ca serverul s\u0103 reia cererile HTTP.
-info.serverPause.request.received.useraction=Nu este necesar\u0103 nici o ac\u0163iune.
+info.server.pause.all.request.received=CWWKE0923I: A fost primit\u0103 o cerere de a trece \u00een pauz\u0103 toate componentele capabile de pauz\u0103 din server.
+info.server.pause.all.request.received.explanation=Un utilizator a lansat o cerere de a trece \u00een pauz\u0103 toate componentele din server. Serverul va \u00eencerca s\u0103 treac\u0103 \u00een pauz\u0103 aceste componente. 
+info.server.pause.all.request.received.useraction=Nu este necesar\u0103 nici o ac\u0163iune.
 
-info.serverResume.request.received=CWWKE0924I: A fost primit\u0103 o cerere pentru ca serverul s\u0103 reia cererile de intrare ale unui anumit protocol. Parametri: {0}.
-info.serverResume.request.received.explanation=Un utilizator a lansat o cerere pentru ca serverul care a fost anterior \u00een pauz\u0103 s\u0103-\u015fi reia activitatea pentru un anumit protocol. La punctul la care a fost lansat acest mesaj, nu a ap\u0103rut \u00eenc\u0103 reluarea real\u0103 a activit\u0103\u0163ii serverului. Pute\u0163i, de exemplu, cere o pauz\u0103 pentru server pentru cererile HTTP astfel \u00eenc\u00e2t s\u0103 pute\u0163i depana o problem\u0103. Dup\u0103 ce este depanat\u0103 problema, pute\u0163i lansa o cerere pentru ca serverul s\u0103 reia cererile HTTP.
-info.serverResume.request.received.useraction=Nu este necesar\u0103 nici o ac\u0163iune.
+info.server.pause.request.received=CWWKE0924I: A fost primit\u0103 o cerere de a trece \u00een pauz\u0103 urm\u0103toarele componente din server: {0}
+info.server.pause.request.received.explanation=Un utilizator a lansat o cerere de a trece \u00een pauz\u0103 anumite componente din server. Serverul va \u00eencerca s\u0103 treac\u0103 \u00een pauz\u0103 aceste componente. 
+info.server.pause.request.received.useraction=Nu este necesar\u0103 nici o ac\u0163iune.
 
-info.listeners.controller.missing=CWWKE0925W: A fost primit\u0103 o cerere de server {0} dar nu a putut fi procesat\u0103. Motiv: {1}.
-info.listeners.controller.missing.explanation=Un utilizator a lansat o cerere fie pentru ca serverul s\u0103 fac\u0103 o pauz\u0103 fie ca serverul s\u0103 reia un anumit protocol. Totu\u015fi, cererea nu a putut fi procesat\u0103. E posibil ca serverul s\u0103 nu fi terminat ini\u0163ializarea.  E posibil ca pauza sau reluarea s\u0103 nu mai fie configurate.  E posibil s\u0103 nu se termine procesarea unei cereri anterioare de pauz\u0103 sau reluare.
-info.listeners.controller.missing.useraction=Permite\u0163i serverului s\u0103 termine ini\u0163ializarea \u015fi apoi re\u00eencerca\u0163i cererea.  Verifica\u0163i c\u0103 destina\u0163ia cererii este \u00eenc\u0103 valid\u0103 \u015fi activ\u0103 \u00een server.  Permite\u0163i cererii lansate anterior s\u0103 se finalizeze \u00eenainte de a lansa alt\u0103 cerere.
+info.server.resume.all.request.received=CWWKE0925I: A fost primit\u0103 o cerere de a relua toate componentele trecute \u00een pauz\u0103 din server.
+info.server.resume.all.request.received.explanation=Un utilizator a lansat o cerere de a relua toate componentele trecute \u00een pauz\u0103 din server. Serverul va \u00eencerca s\u0103 reia aceste componente.
+info.server.resume.all.request.received.useraction=Nu este necesar\u0103 nici o ac\u0163iune.
+
+info.server.resume.request.received=CWWKE0926I: A fost primit\u0103 o cerere de a relua urm\u0103toarele componente din server: {0}
+info.server.resume.request.received.explanation=Un utilizator a lansat o cerere de a relua anumite componente din server. Serverul va \u00eencerca s\u0103 reia aceste componente dac\u0103 au fost trecute \u00een pauz\u0103.
+info.server.resume.request.received.useraction=Nu este necesar\u0103 nici o ac\u0163iune.
+
+error.pause.request.failed=CWWKE0927E: A fost primit\u0103 o cerere de trecere \u00een pauz\u0103, dar infrastructura pentru trecerea \u00een pauz\u0103 a componentelor nu este disponibil\u0103. Cererea nu a putut fi procesat\u0103. 
+error.pause.request.failed.explanation=Un utilizator a lansat o cerere de trecere \u00een pauz\u0103. Totu\u015fi, cererea nu a putut fi procesat\u0103. Serverul s-ar putea s\u0103 se ini\u0163ializeze \u00eenc\u0103 sau s\u0103 fie \u00een curs de oprire.
+error.pause.request.failed.useraction=Verifica\u0163i c\u0103 serverul s-a ini\u0163ializat complet \u015fi c\u0103 nu este \u00een procesul de oprire.
+
+error.resume.request.failed=CWWKE0928E: A fost primit\u0103 o cerere de reluare, dar infrastructura pentru trecerea \u00een pauz\u0103 a componentelor nu este disponibil\u0103. Cererea nu a putut fi procesat\u0103. 
+error.resume.request.failed.explanation=Un utilizator a lansat o cerere de reluare, dar cererea nu poate fi procesat\u0103. Serverul s-ar putea s\u0103 se ini\u0163ializeze \u00eenc\u0103 sau s\u0103 fie \u00een curs de oprire.
+error.resume.request.failed.useraction=Verifica\u0163i c\u0103 serverul este ini\u0163ializat complet \u015fi c\u0103 nu este \u00een procesul de oprire.
+
+error.server.pause.failed=CWWKE0929E: O cerere de trecere \u00een pauz\u0103 s-a finalizat, dar urm\u0103toarele componente nu au putut fi trecute \u00een pauz\u0103: {0}
+error.server.pause.failed.explanation=Serverul a procesat cererea, dar unele componente capabile de pauz\u0103 au e\u015fuat s\u0103 treac\u0103 \u00een pauz\u0103. Toate celelalte componentele capabile de pauz\u0103 au reu\u015fit.
+error.server.pause.failed.useraction=Verifica\u0163i istoricele de server pentru erori suplimentare de la componentele care au e\u015fuat.
+
+error.server.resume.failed=CWWKE0930E: O cerere de reluare s-a finalizat, dar urm\u0103toarele componente nu s-au putut relua: {0}
+error.server.resume.failed.explanation=Serverul a procesat o cerere de reluare, dar unele componente au e\u015fuat reluarea. Toate celelalte componentele \u00een pauz\u0103 au reu\u015fit.
+error.server.resume.failed.useraction=Verifica\u0163i istoricele de server pentru erori suplimentare de la componentele care au e\u015fuat.
+
+warning.server.pause.invalid.targets=CWWKE0931W: A fost primit\u0103 o cerere de trecere \u00een pauz\u0103 anumite componente, dar lista de componente pe op\u0163iunea pentru \u0163int\u0103 a fost goal\u0103. Nu a fost realizat\u0103 nicio ac\u0163iune.
+warning.server.pause.invalid.targets.explanation=Un utilizator a lansat o cerere de trecere \u00een pauz\u0103 cu o list\u0103 de \u0163inte goal\u0103 pe op\u0163iunea pentru \u0163int\u0103 (target). Cererea s-a finalizat, dar nu a fost realizat\u0103 nicio ac\u0163iune.
+warning.server.pause.invalid.targets.useraction=Specifica\u0163i \u00een op\u0163iunea pentru \u0163int\u0103 o list\u0103 de componente care s\u0103 fie trecute \u00een pauz\u0103. Pentru a trece \u00een pauz\u0103 toate componentele capabile de pauz\u0103 din server, lansa\u0163i o cerere de trecere \u00een pauz\u0103 f\u0103r\u0103 op\u0163iunea pentru \u0163int\u0103.
+
+warning.server.resume.invalid.targets=CWWKE0932W: A fost primit\u0103 o cerere de reluare anumite componente, dar lista de componente pe op\u0163iunea pentru \u0163int\u0103 a fost goal\u0103. Nu a fost realizat\u0103 nicio ac\u0163iune.
+warning.server.resume.invalid.targets.explanation=Un utilizator a lansat o reluare cu o list\u0103 de \u0163inte goal\u0103 pe op\u0163iunea pentru \u0163int\u0103 (target). Cererea s-a finalizat, dar nu a fost realizat\u0103 nicio ac\u0163iune.
+warning.server.resume.invalid.targets.useraction=Specifica\u0163i \u00een op\u0163iunea pentru \u0163int\u0103 o list\u0103 de componente care s\u0103 fie reluate. Pentru a relua toate componentele capabile de pauz\u0103 din server, lansa\u0163i o cerere de reluare f\u0103r\u0103 op\u0163iunea pentru \u0163int\u0103.
+
+warning.server.pause.no.targets=CWWKE0933W: A fost primit\u0103 o cerere de trecere \u00een pauz\u0103, dar nu a fost g\u0103sit\u0103 pe server nicio component\u0103 capabil\u0103 de pauz\u0103. Nu a fost realizat\u0103 nicio ac\u0163iune.
+warning.server.pause.no.targets.explanation=Serverul a procesat cererea de trecere \u00een pauz\u0103, dar nu a fost g\u0103sit\u0103 pe server nicio component\u0103 capabil\u0103 de pauz\u0103. Nu a fost realizat\u0103 nicio ac\u0163iune.
+warning.server.pause.no.targets.useraction=Verifica\u0163i c\u0103 sunt disponibile pe server componente capabile de pauz\u0103.
+
+warning.server.resume.no.targets=CWWKE0934W: A fost primit\u0103 o cerere de reluare, dar nu a fost g\u0103sit\u0103 pe server nicio component\u0103 capabil\u0103 de pauz\u0103. Nu a fost realizat\u0103 nicio ac\u0163iune.
+warning.server.resume.no.targets.explanation=Serverul a procesat cererea de reluare, dar nu a fost g\u0103sit\u0103 pe server nicio component\u0103 capabil\u0103 de pauz\u0103. Nu a fost realizat\u0103 nicio ac\u0163iune.
+warning.server.resume.no.targets.useraction=Verifica\u0163i c\u0103 sunt disponibile pe server componente capabile de pauz\u0103.
+
+warning.server.pause.missing.targets=CWWKE0935W: A fost primit\u0103 o cerere de trecere \u00een pauz\u0103, dar urm\u0103toarele componente nu au fost g\u0103site: {0}
+warning.server.pause.missing.targets.explanation=Serverul a procesat cererea de trecere \u00een pauz\u0103, dar anumite componente nu au fost g\u0103site. Cererea a fost procesat\u0103 pentru toate celelalte componente specificate.
+warning.server.pause.missing.targets.useraction=Verifica\u0163i c\u0103 numele componentelor specificate sunt corecte \u015fi c\u0103 acele componente sunt \u00eenregistrate pe server \u015fi sunt capabile de pauz\u0103.
+
+warning.server.resume.missing.targets=CWWKE0936W: A fost primit\u0103 o cerere de reluare, dar urm\u0103toarele componente nu au fost g\u0103site: {0}
+warning.server.resume.missing.targets.explanation=Serverul a procesat cererea de reluare, dar anumite componente nu au fost g\u0103site. Cererea a fost procesat\u0103 pentru toate celelalte componente specificate.
+warning.server.resume.missing.targets.useraction=Verifica\u0163i c\u0103 numele componentelor specificate sunt corecte \u015fi c\u0103 acele componente sunt \u00eenregistrate pe server \u015fi sunt capabile de pauz\u0103.
+
+warning.server.status.missing.targets=CWWKE0937W: A fost primit\u0103 o cerere de stare, dar urm\u0103toarele componente nu au fost g\u0103site: {0}
+warning.server.status.missing.targets.explanation=Serverul a procesat cererea de stare, dar anumite componente nu au fost g\u0103site. Cererea a fost procesat\u0103 pentru toate celelalte componente specificate.
+warning.server.status.missing.targets.useraction=Verifica\u0163i c\u0103 numele componentelor specificate sunt corecte \u015fi c\u0103 acele componente sunt \u00eenregistrate pe server \u015fi sunt capabile de pauz\u0103.
+
+info.server.pause.request.completed=CWWKE0938I: O cerere de trecere \u00een pauz\u0103 s-a finalizat.
+info.server.pause.request.completed.explanation=O cerere de trecere \u00een pauz\u0103 s-a finalizat.
+info.server.pause.request.completed.useraction=Nu este necesar\u0103 nici o ac\u0163iune.
+
+info.server.resume.request.completed=CWWKE0939I: O cerere de reluare s-a finalizat.
+info.server.resume.request.completed.explanation=O cerere de reluare s-a finalizat.
+info.server.resume.request.completed.useraction=Nu este necesar\u0103 nici o ac\u0163iune.
 
 info.serverStarting=Se porne\u015fte serverul {0}.
 info.serverStarted=Serverul {0} a pornit.

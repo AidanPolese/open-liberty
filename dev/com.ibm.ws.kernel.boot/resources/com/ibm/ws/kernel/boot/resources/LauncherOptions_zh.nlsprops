@@ -97,6 +97,14 @@ action-desc.unregisterWinService=\t\u6ce8\u9500\u6307\u5b9a\u4e3a Windows \u670d
 action-key.help=\ \ \ \ --help
 action-desc.help=\t\u663e\u793a\u5e2e\u52a9\u4fe1\u606f\u3002
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.pause=\ \ \ \ --pause
+action-desc.pause=\t\u6682\u505c\u670d\u52a1\u5668\u4e2d\u53ef\u6682\u505c\u7684\u6240\u6709\u7ec4\u4ef6\u3002\n\
+\t\u53ef\u901a\u8fc7\u5728 --target \u9009\u9879\u4e0a\u6307\u5b9a\u7ec4\u4ef6\u6765\u6682\u505c\u4e00\u90e8\u5206\u7ec4\u4ef6\u3002
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.resume=\ \ \ \ --resume
+action-desc.resume=\t\u6062\u590d\u670d\u52a1\u5668\u4e2d\u7684\u6240\u6709\u5df2\u6682\u505c\u7ec4\u4ef6\u3002\u53ef\u6307\u5b9a\n\
+\t--target \u9009\u9879\u4ee5\u6062\u590d\u7279\u5b9a\u5df2\u6682\u505c\u7ec4\u4ef6\u3002
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.clean=\ \ \ \ --clean
 option-desc.clean=\t\u6e05\u9664\u4e0e\u6b64\u670d\u52a1\u5668\u5b9e\u4f8b\u76f8\u5173\u7684\u6240\u6709\u9ad8\u901f\u7f13\u5b58\u4fe1\u606f\u3002
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
@@ -122,6 +130,9 @@ option-desc.include=\t\u9017\u53f7\u5206\u9694\u7684\u503c\u5217\u8868\u3002\u67
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.template=\ \ \ \ --template="templateName"
 option-desc.template=\t\u6307\u5b9a\u521b\u5efa\u65b0\u670d\u52a1\u5668\u65f6\u8981\u4f7f\u7528\u7684\u6a21\u677f\u7684\u540d\u79f0\u3002
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+option-key.target=\ \ \ \ --target=value,value
+option-desc.target=\t\u6307\u5b9a\u53ef\u6682\u505c\u6216\u6062\u590d\u7684\u7ec4\u4ef6\u7684\u9017\u53f7\u5206\u9694\u5217\u8868\u3002
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.os=\ \ \ \ --os=value,value,...
 option-desc.os=\t\u6307\u5b9a\u5e0c\u671b\u6253\u5305\u670d\u52a1\u5668\u652f\u6301\u7684\n\

@@ -7,7 +7,7 @@
 
     <import file="../ant_build/public_imports/standard_imports.xml" />
     <import file="../ant_build/public_imports/unittest_imports.xml" />
-    
+
     <target name="buildSampleJar">
         <!-- Could have a more generic name for this target... -->
         <property name="outputJarName" value="${sampleFolder}.jar" />
@@ -29,12 +29,36 @@
                 </replace>
             </then>
         </iff>
-        <jar destfile="build/${sampleFolder}/output/${outputJarName}" manifest="${manifestFile}">
-            <fileset dir="../wlp.lib.extract/build/classes" />
-            <fileset dir="build/${sampleFolder}/jarcontent" />
-        </jar>
+
+        <available file="../wlp.lib.extract/build/classes" property="extract.src.exists" />
+        <iff>
+            <istrue value="${extract.src.exists}"/>
+            <then>
+              <!-- use src project to get classes -->
+              <jar destfile="build/${sampleFolder}/output/${outputJarName}" manifest="${manifestFile}">
+                  <fileset dir="../wlp.lib.extract/build/classes" />
+                  <fileset dir="build/${sampleFolder}/jarcontent" />
+              </jar>
+            </then>
+            <else>
+              <!-- use ivy resolved jar for classes -->
+              <path id="wlp.lib.extract.path">
+                <fileset dir="../prereq.published/lib">
+                  <include name="wlp.lib.extract-*.jar"/>
+                  <exclude name="*-javadoc.jar" />
+                  <exclude name="*-sources.jar" />
+                </fileset>
+              </path>
+              <property name="wlp.lib.extract.jar" refid="wlp.lib.extract.path"/>
+
+              <jar destfile="build/${sampleFolder}/output/${outputJarName}" manifest="${manifestFile}">
+                  <zipfileset src="${wlp.lib.extract.jar}" includes="**/*.class"/>
+                  <fileset dir="build/${sampleFolder}/jarcontent" />
+              </jar>
+            </else>
+        </iff>
     </target>
-    
+
 
     <target name="buildExtraInstallableJars">
         <condition property="fileUrlPrefix" value="file:///" else="file://">
@@ -89,6 +113,6 @@
              <param name="manifestFile" value="samples/dummyInstallerWithFeature/META-INF/MANIFEST.MF" />
         </antcall>
     </target>
-    
+
     <target name="unittestPackage" depends="buildExtraInstallableJars" />
 </project>

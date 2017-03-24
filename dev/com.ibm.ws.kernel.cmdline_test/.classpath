@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" output="build/unittest/classes" path="unittest/src"/>
+	<classpathentry kind="src" path="/prereq.published"/>
 	<classpathentry kind="lib" path="/build.sharedResources/lib/junit/old/junit.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.cmdline"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.kernel.boot.core"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

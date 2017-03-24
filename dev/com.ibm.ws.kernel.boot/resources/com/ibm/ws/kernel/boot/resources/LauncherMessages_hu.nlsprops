@@ -578,34 +578,26 @@ error.package.missingLibExtractDir.useraction=Telep\u00edtse \u00fajra a WebSphe
 
 
 info.server.pause.all.request.received=CWWKE0923I: K\u00e9r\u00e9s \u00e9rkezett az \u00f6sszes sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151 v\u00e1rakoztat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n.
-info.server.pause.all.request.received.explanation=Egy felhaszn\u00e1l\u00f3 k\u00e9r\u00e9st adott ki az \u00f6sszes sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151 v\u00e1rakoztat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n. \
-A kiszolg\u00e1l\u00f3 meg fogja k\u00eds\u00e9relni az \u00f6sszetev\u0151k sz\u00fcneteltet\u00e9s\u00e9t.
-
+info.server.pause.all.request.received.explanation=Egy felhaszn\u00e1l\u00f3 k\u00e9r\u00e9st adott ki az \u00f6sszes sz\u00fcneteltethet\u0151 \u00f6sszetev\u0151 v\u00e1rakoztat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n. A kiszolg\u00e1l\u00f3 meg fogja k\u00eds\u00e9relni az \u00f6sszetev\u0151k sz\u00fcneteltet\u00e9s\u00e9t. 
 info.server.pause.all.request.received.useraction=Nincs teend\u0151.
 
 info.server.pause.request.received=CWWKE0924I: K\u00e9r\u00e9s \u00e9rkezett a k\u00f6vetkez\u0151 \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n: {0}
-info.server.pause.request.received.explanation=Egy felhaszn\u00e1l\u00f3 k\u00e9r\u00e9st adott ki egyes \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n. \
-A kiszolg\u00e1l\u00f3 meg fogja k\u00eds\u00e9relni az \u00f6sszetev\u0151k sz\u00fcneteltet\u00e9s\u00e9t.
-
+info.server.pause.request.received.explanation=Egy felhaszn\u00e1l\u00f3 k\u00e9r\u00e9st adott ki egyes \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n. A kiszolg\u00e1l\u00f3 meg fogja k\u00eds\u00e9relni az \u00f6sszetev\u0151k sz\u00fcneteltet\u00e9s\u00e9t. 
 info.server.pause.request.received.useraction=Nincs teend\u0151.
 
 info.server.resume.all.request.received=CWWKE0925I: K\u00e9r\u00e9s \u00e9rkezett az \u00f6sszes v\u00e1rakoztatott \u00f6sszetev\u0151 folytat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n.
-info.server.resume.all.request.received.explanation=Egy felhaszn\u00e1l\u00f3 k\u00e9r\u00e9st adott ki az \u00f6sszes v\u00e1rakoztatott \u00f6sszetev\u0151 folytat\u00e1s\u00e1sra a kiszolg\u00e1l\u00f3n. \
-A kiszolg\u00e1l\u00f3 meg fogja k\u00eds\u00e9relni az \u00f6sszetev\u0151k folytat\u00e1s\u00e1t.
+info.server.resume.all.request.received.explanation=Egy felhaszn\u00e1l\u00f3 k\u00e9r\u00e9st adott ki az \u00f6sszes v\u00e1rakoztatott \u00f6sszetev\u0151 folytat\u00e1s\u00e1sra a kiszolg\u00e1l\u00f3n. A kiszolg\u00e1l\u00f3 meg fogja k\u00eds\u00e9relni az \u00f6sszetev\u0151k folytat\u00e1s\u00e1t.
 info.server.resume.all.request.received.useraction=Nincs teend\u0151.
 
 info.server.resume.request.received=CWWKE0926I: K\u00e9r\u00e9s \u00e9rkezett a k\u00f6vetkez\u0151 \u00f6sszetev\u0151k folytat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n: {0}
-info.server.resume.request.received.explanation=Egy felhaszn\u00e1l\u00f3 k\u00e9r\u00e9st adott ki egyes \u00f6sszetev\u0151k folytat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n. \
-A kiszolg\u00e1l\u00f3 meg fogja k\u00eds\u00e9relni az \u00f6sszetev\u0151k folytat\u00e1s\u00e1t, amennyiben v\u00e1rakoznak.
+info.server.resume.request.received.explanation=Egy felhaszn\u00e1l\u00f3 k\u00e9r\u00e9st adott ki egyes \u00f6sszetev\u0151k folytat\u00e1s\u00e1ra a kiszolg\u00e1l\u00f3n. A kiszolg\u00e1l\u00f3 meg fogja k\u00eds\u00e9relni az \u00f6sszetev\u0151k folytat\u00e1s\u00e1t, amennyiben v\u00e1rakoznak.
 info.server.resume.request.received.useraction=Nincs teend\u0151.
 
-error.pause.request.failed=CWWKE0927E: V\u00e1rakoztat\u00e1si k\u00e9r\u00e9s \u00e9rkezett, de az \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1s\u00e1t lehet\u0151v\u00e9 tev\u0151 infrastrukt\u00fara nem \u00e1ll rendelkez\u00e9sre. A k\u00e9r\u00e9s nem feldolgozhat\u00f3.
-
+error.pause.request.failed=CWWKE0927E: V\u00e1rakoztat\u00e1si k\u00e9r\u00e9s \u00e9rkezett, de az \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1s\u00e1t lehet\u0151v\u00e9 tev\u0151 infrastrukt\u00fara nem \u00e1ll rendelkez\u00e9sre. A k\u00e9r\u00e9s nem feldolgozhat\u00f3. 
 error.pause.request.failed.explanation=Egy felhaszn\u00e1l\u00f3 sz\u00fcneteltet\u00e9si k\u00e9r\u00e9st adott ki. A k\u00e9r\u00e9st azonban nem lehetett feldolgozni. Lehet, hogy a kiszolg\u00e1l\u00f3 m\u00e9g inicializ\u00e1l vagy \u00e9ppen le\u00e1ll.
 error.pause.request.failed.useraction=Ellen\u0151rizze, hogy a kiszolg\u00e1l\u00f3 teljesen inicializ\u00e1lt \u00e1llapotban van-e, illetve nincs-e le\u00e1ll\u00e1s folyamatban.
 
-error.resume.request.failed=CWWKE0928E: Folytat\u00e1si k\u00e9r\u00e9s \u00e9rkezett, de az \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1s\u00e1t lehet\u0151v\u00e9 tev\u0151 infrastrukt\u00fara nem \u00e1ll rendelkez\u00e9sre. A k\u00e9r\u00e9s nem feldolgozhat\u00f3.
-
+error.resume.request.failed=CWWKE0928E: Folytat\u00e1si k\u00e9r\u00e9s \u00e9rkezett, de az \u00f6sszetev\u0151k v\u00e1rakoztat\u00e1s\u00e1t lehet\u0151v\u00e9 tev\u0151 infrastrukt\u00fara nem \u00e1ll rendelkez\u00e9sre. A k\u00e9r\u00e9s nem feldolgozhat\u00f3. 
 error.resume.request.failed.explanation=Egy felhaszn\u00e1l\u00f3 folytat\u00e1si k\u00e9r\u00e9st adott ki, a k\u00e9r\u00e9st azonban nem lehetett feldolgozni. Lehet, hogy a kiszolg\u00e1l\u00f3 m\u00e9g inicializ\u00e1l vagy \u00e9ppen le\u00e1ll.
 error.resume.request.failed.useraction=Ellen\u0151rizze, hogy a kiszolg\u00e1l\u00f3 teljesen inicializ\u00e1lt \u00e1llapotban van-e, illetve nincs-e le\u00e1ll\u00e1s folyamatban.
 

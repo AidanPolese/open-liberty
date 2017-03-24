@@ -97,6 +97,15 @@ action-desc.unregisterWinService=\tSz\u00fcntesse meg a Windows szolg\u00e1ltat\
 action-key.help=\ \ \ \ --help
 action-desc.help=\tS\u00fag\u00f3 inform\u00e1ci\u00f3k nyomtat\u00e1sa.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.pause=\ \ \ \ --v\u00e1rakoz\u00e1s
+action-desc.pause=\tMinden v\u00e1rakoztathat\u00f3 \u00f6sszetev\u0151 v\u00e1rakoztat\u00e1sa a kiszolg\u00e1l\u00f3n.  \n\
+\t\u00d6sszetev\u0151k egy csoportj\u00e1t is v\u00e1rakoztathatja az \u00f6sszetev\u0151k megad\u00e1s\u00e1val a \n\
+\t--c\u00e9lbe\u00e1ll\u00edt\u00e1sban.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+action-key.resume=\ \ \ \ --folytat\u00e1s
+action-desc.resume=\tMinden v\u00e1rakoztatott \u00f6sszetev\u0151 folytat\u00e1sa a kiszolg\u00e1l\u00f3n. A \n\
+\t--c\u00e9lbe\u00e1ll\u00edt\u00e1s megad\u00e1s\u00e1val konkr\u00e9t v\u00e1rakoztatott \u00f6sszetev\u0151k folytat\u00e1s\u00e1t is meghat\u00e1rozhatja.
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.clean=\ \ \ \ --clean
 option-desc.clean=\tT\u00f6rli a kiszolg\u00e1l\u00f3p\u00e9ld\u00e1ny \u00f6sszes gyors\u00edt\u00f3t\u00e1razott inform\u00e1ci\u00f3it.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
@@ -120,6 +129,10 @@ option-desc.include=\t\u00c9rt\u00e9kek vessz\u0151vel elv\u00e1lasztott list\u0
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.template=\ \ \ \ --template="sablonN\u00e9v"
 option-desc.template=\tAdja meg a sablon nev\u00e9t az \u00faj kiszolg\u00e1l\u00f3 l\u00e9trehoz\u00e1s\u00e1hoz. 
+#------------------------------\n at 72 chars -- leading tab-----------\n\#
+option-key.target=\ \ \ \ --c\u00e9l=\u00e9rt\u00e9k,\u00e9rt\u00e9k
+option-desc.target=\tA v\u00e1rakoztathat\u00f3 vagy folytathat\u00f3 \u00f6sszetev\u0151k vessz\u0151vel\n\
+\telv\u00e1lasztott list\u00e1j\u00e1t hat\u00e1rozza meg.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#
 option-key.os=\ \ \ \ --os=\u00e9rt\u00e9k,\u00e9rt\u00e9k,...
 option-desc.os=\t Megadja az oper\u00e1ci\u00f3s rendszereket, amelyeket a csomagolt kiszolg\u00e1l\u00f3\n\

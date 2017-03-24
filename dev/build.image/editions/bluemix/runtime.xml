@@ -1,4 +1,13 @@
 <server>
+
+  <!-- Bluemix specific features -->
+  <featureManager>
+    <feature>appstate-1.0</feature>
+    <feature>appstate-2.0</feature>
+    <feature>cloudAutowiring-1.0</feature>
+    <feature>logAnalysis-1.0</feature>
+  </featureManager>
+
   <!-- webProfile-7.0 features -->
   <featureManager>
     <feature>appSecurity-1.0</feature>
@@ -25,11 +34,7 @@
   <!-- common Bluemix features -->
   <featureManager>
     <feature>jaxrsClient-2.0</feature>
-    <feature>appstate-1.0</feature>
-    <feature>appstate-2.0</feature>
-    <feature>cloudAutowiring-1.0</feature>
     <feature>json-1.0</feature>
-    <feature>logAnalysis-1.0</feature>
     <feature>localConnector-1.0</feature>
     <feature>monitor-1.0</feature>
     <feature>oauth-2.0</feature>

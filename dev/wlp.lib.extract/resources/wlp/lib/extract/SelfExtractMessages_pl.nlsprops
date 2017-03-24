@@ -295,3 +295,8 @@ ERROR_UNABLE_TO_LOCATE_COMMAND_EXE=Nie mo\u017cna znale\u017a\u0107 pliku wykony
 UNABLE_TO_FIND_PID=Nie powiod\u0142o si\u0119 uzyskanie \
 identyfikatora procesu java -jar. Nie mo\u017cna usun\u0105\u0107 tymczasowego katalogu \
 rozpakowanych plik\u00f3w {1} do czasu r\u0119cznego zako\u0144czenia procesu java -jar.
+
+UNABLE_TO_ATTACH_AGENT=Nie mo\u017cna przy\u0142\u0105czy\u0107 agenta Java serwera Liberty. Ten serwer b\u0119dzie dzia\u0142a\u0107, ale nie b\u0119dzie m\u00f3g\u0142 wykonywa\u0107 funkcji wymagaj\u0105cych agenta Java, na przyk\u0142ad monitorowania lub \u015bledzenia. Wyj\u0105tek: {0}
+
+UNABLE_TO_FIND_TOOLS_JAR=Nie mo\u017cna przy\u0142\u0105czy\u0107 agenta Java serwera Liberty, poniewa\u017c ten serwer u\u017cywa \u015brodowiska JRE, a nie JAVA SDK. Ten serwer b\u0119dzie dzia\u0142a\u0107, ale nie b\u0119dzie m\u00f3g\u0142 wykonywa\u0107 funkcji wymagaj\u0105cych agenta Java, na przyk\u0142ad monitorowania lub \u015bledzenia. 
+UNABLE_TO_FIND_JAVA_AGENT=Nie mo\u017cna znale\u017a\u0107 agenta Java serwera Liberty. Ten serwer b\u0119dzie dzia\u0142a\u0107, ale nie b\u0119dzie m\u00f3g\u0142 wykonywa\u0107 funkcji wymagaj\u0105cych agenta Java, na przyk\u0142ad monitorowania lub \u015bledzenia. 

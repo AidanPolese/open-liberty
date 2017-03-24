@@ -2,7 +2,7 @@
 -include= jar:${fileuri;lib/org.apache.aries.jmx.api-1.1.6-ibm-s20170124-0721.jar}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -includeresource: \
-    @lib/org.apache.aries.jmx.api-1.1.6-ibm-s20170124-0721.jar
+    @lib/org.apache.aries.jmx.api-1.1.6-ibm-s20170124-0721.jar!/!META-INF/maven/*
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \
