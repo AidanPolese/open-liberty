@@ -1,0 +1,6 @@
+<server description="Bare Server Config for testing Product Samples">
+
+    <include location="../fatTestPorts.xml"/>
+    <include location="sample.xml"/>
+    
+</server>

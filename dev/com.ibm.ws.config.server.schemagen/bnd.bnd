@@ -9,6 +9,8 @@ Main-Class: com.ibm.ws.config.server.schemagen.ServerSchemaGenCommand
 
 WS-TraceGroup: config
 
+Import-Package: !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
+
 Private-Package: \
   com.ibm.ws.config.server.schemagen.*
 

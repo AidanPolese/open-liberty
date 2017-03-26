@@ -1,6 +1,7 @@
 Bnd-LastModified: 1489177718859
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: com.ibm.websphere.microprofile.faulttolerance; version="1.0",
+ com.ibm.websphere.microprofile.faulttolerance.spi; version="1.0",
  org.eclipse.microprofile.faulttolerance; version="1.0",
  org.eclipse.microprofile.faulttolerance.spi; version="1.0"
 IBM-App-ForceRestart: install,
@@ -11,9 +12,9 @@ IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
 IBM-ShortName: microProfileFaultTolerance-0.1
-Subsystem-Content: com.ibm.websphere.microprofile.faulttolerance; version="[1.0.0,1.0.200)",
- com.ibm.ws.net.jodah.failsafe.1.0.1; version="[1.0.0,1.0.200)",
- com.ibm.websphere.microprofile.faulttolerance.failsafe.impl; version="[1.0.0,1.0.200)"
+Subsystem-Content: com.ibm.websphere.appserver.org.eclipse.microProfileFaultTolerance-0.1; type="osgi.subsystem.feature",
+ com.ibm.ws.net.jodah.failsafe.1.0.1; apiJar=false; location:="lib/"; version="[1.0.0,1.0.200)",
+ com.ibm.ws.microprofile.faulttolerance.failsafe.impl; apiJar=false; location:="lib/"; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description
 Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
 Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.microProfileFaultTolerance-0.1

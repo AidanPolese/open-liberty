@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.org.codehaus.jackson" default="build" xmlns:nls="antlib:mantis-nls">
+  <import file="../ant_build/public_imports/prereq_imports.xml" />
+</project>

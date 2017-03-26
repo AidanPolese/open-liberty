@@ -1,0 +1,32 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2017.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+# # {0} description of each insert field
+# MSG_DESCRIPTIVE_NAME_CWSJX0000=CWSJX0000I: This is a message with inserts {0}
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.explanation=Explanation text for the message
+# MSG_DESCRIPTIVE_NAME_CWSJX0000.useraction=User action text for the message
+#
+#CMVCPATHNAME com.ibm.ws.zos.channel.console/resources/com.ibm.ws.zos.channel.console.internal.resources/ZConsoleChannelMessages.nlsprops
+#COMPONENTPREFIX CWWKE
+#COMPONENTNAMEFOR CWWKE zOS Pause and Resume Console Command
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+# NLS_MESSAGEFORMAT_VAR 
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+#
+# -------------------------------------------------------------------------------------------------
+#0651-0700: zOS Console Channel
+# -------------------------------------------------------------------------------------------------
+
+#{0} is the command type.
+ERROR.PAUSEABLE.COMPONENT.NOTAVAILABLE=CWWKE0651E: A server {0} command was received, but the infrastructure for pausing components is not available. The request cannot be processed. 
+ERROR.PAUSEABLE.COMPONENT.NOTAVAILABLE.explanation=A user issued a command that is processed by the infrastructure for pausing components. However, the command could not be processed. The server might be initializing or shutting down. 
+ERROR.PAUSEABLE.COMPONENT.NOTAVAILABLE.useraction=Verify that the server has fully initialized and is not in the process of shutting down.

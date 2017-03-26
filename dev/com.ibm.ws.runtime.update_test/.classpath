@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="build/unittest/classes" path="unittest/src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/hamcrest-all.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock-junit4.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/old/jmock.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jmock.org/javadoc/jmock-2.6.0/doc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/junit/old/junit.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/ws-junit/ws-junit.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/httpclient/4.1.2/httpclient-4.1.2.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/httpclient/4.1.2/httpcore-4.1.2.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/httpclient/4.1.2/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/httpclient/4.1.2/commons-codec-1.4.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/jmock-legacy.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/cglib-nodep.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/legacy/objenesis.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.websphere.javaee.servlet.3.0"/>
-	<classpathentry kind="src" path="/prereq.published"/>
+	<classpathentry kind="src" path="unittest/src"/>
+	<classpathentry kind="con" path="aQute.bnd.classpath.container"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

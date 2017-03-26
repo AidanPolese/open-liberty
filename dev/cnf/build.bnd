@@ -2,7 +2,7 @@
 -include ${workspace}/gradle.properties
 
 # Artifactory repository credentials
--connection-settings: ${.}/settings.txt
+-connection-settings: ${.}/settings.xml
 
 # Logging for repository connection when debugging
 #-connection-log: ${.}/connectionlog.txt
@@ -18,24 +18,36 @@
 #		location = ~/.bnd/shacache; \
 #		index = ${build}/central.json
 
--plugin.2.Templates: \
+-plugin.1.MavenLocal: \
+	aQute.bnd.deployer.repository.LocalIndexedRepo; \
+		name = MavenLocal; \
+		pretty = true; \
+		local = ${build}/maven-local
+
+-plugin.2.Local: \
+	aQute.bnd.deployer.repository.LocalIndexedRepo; \
+		name = Local; \
+		pretty = true; \
+		local = ${build}/local
+
+-plugin.3.Templates: \
 	aQute.bnd.deployer.repository.LocalIndexedRepo; \
 		name = Templates; \
 		pretty = true; \
 		local = ${build}/templates
 
--plugin.3.Local = \
-	 aQute.bnd.repository.maven.provider.MavenBndRepository; \
-		index = ~/.m2/was-liberty/local.maven; \
-		local = ~/.m2/was-liberty; \
-		name = "Local";
+-plugin.4.Release: \
+	aQute.bnd.deployer.repository.LocalIndexedRepo; \
+		name = Release; \
+		pretty = true; \
+		local = ${build}/release
 
--plugin.4.Release = \
+-plugin.5.Artifactory = \
 	aQute.bnd.repository.maven.provider.MavenBndRepository; \
 		releaseUrl=${artifactoryReleaseUrl} ; \
 		snapshotUrl=${artifactorySnapshotUrl} ; \
 		index=${build}/release.maven; \
-		name = "Release";
+		name = "Artifactory";
 
 # Don't upload sources or javadoc unless bundle overrides
 -maven-release: remote, sources;path=NONE, javadoc;path=NONE
@@ -49,10 +61,8 @@ javac.encoding: UTF-8
 -pedantic: true
 -fixupmessages.missingexport: "Used bundle version * for exported package";is:=error
 
-# Uncomment this line for releases
-#-snapshot:
--buildrepo: Local
 -releaserepo: Release
+-baselinerepo: Release
 
 # This is the version of JUnit that will be used at build time and run time
 junit: org.apache.servicemix.bundles.junit;version="[4.11,5)"
@@ -67,7 +77,7 @@ mockito: org.mockito.mockito-core;version="[1.9,2)",\
 
 instrument.disabled: false
 instrument.classesIncludes: **/*.class
-instrument.classesExcludes:
+instrument.classesExcludes: 
 instrument.ffdc: true
 instrument.taskInjection: false
 

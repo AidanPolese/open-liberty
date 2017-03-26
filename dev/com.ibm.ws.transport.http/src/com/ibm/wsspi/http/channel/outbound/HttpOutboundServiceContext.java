@@ -8,9 +8,9 @@ package com.ibm.wsspi.http.channel.outbound;
 
 import java.io.IOException;
 
-import com.ibm.ws.http.channel.internal.outbound.HttpOutboundLink;
 import com.ibm.wsspi.bytebuffer.WsByteBuffer;
 import com.ibm.wsspi.channelfw.InterChannelCallback;
+import com.ibm.wsspi.channelfw.OutboundConnectionLink;
 import com.ibm.wsspi.channelfw.VirtualConnection;
 import com.ibm.wsspi.genericbnf.exception.IllegalRequestObjectException;
 import com.ibm.wsspi.genericbnf.exception.MessageSentException;
@@ -586,7 +586,7 @@ public interface HttpOutboundServiceContext extends HttpServiceContext {
      */
     VirtualConnection getRawResponseBodyBuffers(InterChannelCallback cb, boolean bForce) throws BodyCompleteException;
 
-    HttpOutboundLink getLink();
+    OutboundConnectionLink getLink();
 
     TCPConnectionContext getTSC();
 

@@ -1,0 +1,22 @@
+-include= ~../cnf/resources/bnd/liberty-release.props
+bVersion=1.0
+
+-nobundles=true
+
+src: \
+	unittest/src
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	com.ibm.ws.kernel.boot.core;version=latest, \
+	com.ibm.ws.kernel.feature.cmdline;version=latest, \
+	com.ibm.ws.kernel.feature.core;version=latest, \
+	com.ibm.ws.product.utility;version=latest, \
+	com.ibm.ws.repository;version=latest, \
+	wlp.lib.extract;version=latest, \
+	com.ibm.ws.install;version=latest

@@ -1,0 +1,63 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: FAT infrastructure
+Bundle-SymbolicName: fattest.simplicity
+Bundle-Description: FAT infrastructure; version=${bVersion}
+
+Export-Package: \
+	com.ibm.websphere.simplicity;version=1.0.16,\
+	com.ibm.websphere.simplicity.application;version=1.0.16,\
+	com.ibm.websphere.simplicity.application.loose;version=1.0.16,\
+	com.ibm.websphere.simplicity.application.tasks;version=1.0.16,\
+	com.ibm.websphere.simplicity.cloudfoundry;version=1.0.16,\
+	com.ibm.websphere.simplicity.cloudfoundry.util;version=1.0.16,\
+	com.ibm.websphere.simplicity.config;version=1.0.16,\
+	com.ibm.websphere.simplicity.config.context;version=1.0.16,\
+	com.ibm.websphere.simplicity.config.dsprops;version=1.0.16,\
+	com.ibm.websphere.simplicity.config.dsprops.testrules;version=1.0.16,\
+	com.ibm.websphere.simplicity.product;version=1.0.16,\
+	com.ibm.websphere.simplicity.wsadmin;version=1.0.16,\
+	com.ibm.websphere.soe_reporting;version=1.0.16,\
+	com.ibm.ws.fat.jcdi.util.html;version=1.0.16,\
+	com.ibm.ws.fat.util;version=1.0.16,\
+	com.ibm.ws.fat.util.browser;version=1.0.16,\
+	com.ibm.ws.fat.util.jmx;version=1.0.16,\
+	com.ibm.ws.fat.util.jmx.mbeans;version=1.0.16,\
+	componenttest.annotation;version=1.0.16,\
+	componenttest.aries;version=1.0.16,\
+	componenttest.common.apiservices;version=1.0.16,\
+	componenttest.common.apiservices.cmdline;version=1.0.16,\
+	componenttest.custom.junit.runner;version=1.0.16,\
+	componenttest.exception;version=1.0.16,\
+	componenttest.logging.ffdc;version=1.0.16,\
+	componenttest.rules;version=1.0.16,\
+	componenttest.topology.database;version=1.0.16,\
+	componenttest.topology.impl;version=1.0.16,\
+	componenttest.topology.ldap;version=1.0.16,\
+	componenttest.topology.utils;version=1.0.16,\
+	componenttest.vulnerability;version=1.0.16
+
+-buildpath: \
+    ../build.sharedResources/lib/junit/old/junit.jar;version=file,\
+    lib/com.ibm.componenttest.common.jar;version=file,\
+    lib/com.ibm.ws.topology.helper.jar;version=file,\
+    lib/commons-httpclient-3.1.jar;version=file,\
+    lib/httpunit.jar;version=file,\
+    lib/jlanclient.jar;version=file,\
+    lib/jtidy-r938.jar;version=file,\
+    lib/provider.api.jar;version=file,\
+    lib/public.api.jar;version=file,\
+    lib/remoteaccess.jar;version=file,\
+    lib/shrinkwrap-api-1.2.3.jar;version=file,\
+    lib/shrinkwrap-impl-base-1.2.3.jar;version=file,\
+    lib/shrinkwrap-spi-1.2.3.jar;version=file,\
+    lib/ssh.jar;version=file,\
+    autoFVT-defaults/lib/fat.util.jar;version=file,\
+    jdbc/derby/derbynet.jar;version=file,\
+    ../build.sharedResources/lib/jmock/old/jmock.jar;version=file,\
+    ../build.sharedResources/lib/hamcrest-all.jar;version=file,\
+    ../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file,\
+    com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+    com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+    com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest

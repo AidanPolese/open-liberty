@@ -82,9 +82,9 @@
         <include name="fattest.simplicity/autoFVT-defaults/${fat.bootstrap.name}"/>
         <include name="test_build/**"/>
         <!-- We'll need the test features which, handily, are in the wlp folder -->
-        <include name="build.image/wlp/lib/com.ibm.ws.timedexit*.jar"/>
+        <include name="build.image/wlp/lib/com.ibm.ws.timedexit_*.jar"/>
         <include name="build.image/wlp/lib/features/com.ibm.websphere.appserver.timedexit-1.0.mf"/>
-        <include name="build.image/wlp/lib/com.ibm.ws.componenttest*.jar"/>
+        <include name="build.image/wlp/lib/com.ibm.ws.componenttest_*.jar"/>
         <include name="build.image/wlp/lib/features/com.ibm.websphere.appserver.componenttest-1.0.mf"/>
         <!-- Also include default/shared keys files -->
         <include name="build.sharedResources/usrShared"/>
