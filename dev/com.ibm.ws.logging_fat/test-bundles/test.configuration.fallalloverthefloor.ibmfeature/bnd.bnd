@@ -1,0 +1,19 @@
+# Simulate a failure in Liberty code by having a user feature which looks like IBM code
+Bundle-Vendor: IBM
+bVersion=1.0.0
+Bundle-Version: 1.0.0
+Bundle-Name: Exception throwing feature
+Bundle-Description: This feature throws an exception
+Bundle-SymbolicName: test.configuration.fallalloverthefloor.ibmfeature; singleton:=true
+
+Private-Package: \
+  com.ibm.ws.logging.fat.fallalloverthefloor.ibmfeature
+
+Include-Resource: \
+  OSGI-INF=resources/OSGI-INF
+
+Service-Component: \
+  com.ibm.ws.logging.fat.brokenfeature; \
+    implementation:=com.ibm.ws.logging.fat.fallalloverthefloor.ibmfeature.BrokenFeature; \
+    configurationAdmin=org.osgi.service.cm.ConfigurationAdmin; \
+    properties:="service.vendor=IBM,com.ibm.ws.wim.repository.type=File"

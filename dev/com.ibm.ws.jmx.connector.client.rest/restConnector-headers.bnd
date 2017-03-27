@@ -1,0 +1,9 @@
+Private-Package: \
+  com.ibm.json.*, \
+  com.ibm.websphere.jmx.connector.rest, \
+  com.ibm.ws.jmx.connector.client.rest.*, \
+  com.ibm.ws.jmx.connector.converter, \
+  com.ibm.ws.jmx.connector.datatypes
+
+Include-Resource: \
+  META-INF=resources/META-INF

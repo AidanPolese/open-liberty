@@ -1,0 +1,11 @@
+<server description="new server">
+
+	<include location="common.xml" />
+
+	<topLevelElement id="a">
+		<child.a />
+	</topLevelElement>
+	
+	<include location="fourLevelB2.xml" />
+
+</server>

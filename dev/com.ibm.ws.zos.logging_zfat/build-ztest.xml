@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.zos.logging_zfat" default="zostestenvBuildandrunFast" basedir=".">
+	<import file="../ant_build/public_imports/fat_imports.xml" />
+
+	<property name="publish.server.name" value="defaultServer" />
+	<property name="publish.server.root" value="${basedir}/publish/servers/${publish.server.name}" />
+   
+	<target name="addAutoInstallApplications">
+	    <mkdir dir="${publish.server.root}/dropins" />
+	    <copy todir="${publish.server.root}/dropins">
+	        <fileset dir="../com.ibm.ws.security.registry_test.servlet/build/test-application" includes="*.war"/>
+	    </copy>
+	</target>
+
+</project>

@@ -7,6 +7,8 @@ Bundle-SymbolicName: com.ibm.ws.config.schemagen
 
 WS-TraceGroup: config
 
+Import-Package: !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
+
 Private-Package: com.ibm.ws.config.schemagen.internal
 
 -dsannotations:

@@ -1,0 +1,12 @@
+<server description="Z/OS command handler spi test">
+
+    <include location="../fatTestPorts.xml"/>
+   <logging traceSpecification="*=info:logservice=all:org.apache.aries.jndi.*=all"/>
+
+
+ 	<featureManager>
+	    <feature>timedexit-1.0</feature>
+		<feature>usr:userProdtest-1.0</feature>
+	</featureManager>
+	
+</server>

@@ -1,0 +1,11 @@
+<server>
+
+	<include location="../fatTestPorts.xml"/>
+	
+    <featureManager>
+        <feature>webProfile-6.0</feature>
+    </featureManager>
+
+    <logging traceSpecification="*=info:logservice=event"/>
+
+</server>

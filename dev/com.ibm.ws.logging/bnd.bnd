@@ -27,6 +27,8 @@ Export-Package: \
  com.ibm.ws.logging.internal, \
  com.ibm.wsspi.logging;provide:=true
 
+Import-Package: !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
+
 -includeresource: \
  META-INF/logging/liberty.ras.rawtracelist.properties=resources/liberty.ras.rawtracelist.properties
 

@@ -1,0 +1,5 @@
+<server>
+
+	<defaultInstanceMissing id="one" someProperty="from default instances"/>
+	<defaultInstanceMissing id="two" someProperty="from default instances"/>
+</server>

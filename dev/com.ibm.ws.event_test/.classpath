@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="build/unittest/classes" path="unittest/src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.httpservice"/>
-	<classpathentry kind="src" path="/prereq.published"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/hamcrest-all.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/junit/old/junit.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/ws-junit/ws-junit.jar"/>
-	<classpathentry kind="lib" path="lib/org.osgi.test.cases.event-5.0.0.jar" sourcepath="lib/org.osgi.test.cases.event-5.0.0.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/2.6.0/jmock-2.6.0.jar"/>
-	<classpathentry kind="lib" path="/build.sharedResources/lib/jmock/2.6.0/jmock-junit4-2.6.0.jar"/>
-	<classpathentry kind="output" path="build/classes"/>
+	<classpathentry kind="src" path="unittest/src"/>
+	<classpathentry kind="con" path="aQute.bnd.classpath.container"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

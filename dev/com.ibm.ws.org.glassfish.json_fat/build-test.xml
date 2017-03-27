@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.org.glassfish.json_fat" default="buildandrun" basedir=".">
+  <import file="../ant_build/public_imports/fat_imports.xml" />
+  <property name="fat.image.type" value="use-full-image"/>
+  <property name="unittest.endorsed" value="${classes.dir}/../../../com.ibm.websphere.javaee.annotation.1.1/lib/"/>
+              
+  <target name="addRequiredFiles">
+    <!-- expose project dependencies to runtime JRE by storing them in autoFVT.zip (build/lib copied automatically) -->
+        <dirset id="server.dirs" dir="publish/servers" erroronmissingdir="false">
+            <include name="*"/>
+        </dirset>
+        <foreach param="server.dir" in="server.dirs">   
+            <local name="include.junit"/>
+        	<local name="include.JSONPProviderLib"/>
+        	
+            <property file="${server.dir}/build.properties" />
+                
+            <!-- check in server's build.properties if it is a sample, and should not include the junit.jar -->
+            <iff>
+                <or>
+                    <not><isset property="include.junit" /></not>
+                    <istrue value="${include.junit}" />
+                </or>
+                <then>
+                    <mkdir dir="${server.dir}/lib"/>
+                    <mkdir dir="${server.dir}/lib/global"/>
+                    <copy file="../ant_build/lib/junit.jar" todir="${server.dir}/lib/global"/>
+                </then>
+            </iff>
+            	
+           	<!-- Check server's build.properties. If include.JSONPProviderLib is true, then copy the custom provider into the server. -->
+            <iff>
+                <istrue value="${include.JSONPProviderLib}" />
+                <then>
+                    <mkdir dir="${server.dir}/JSONPProviderLib"/>
+                	<copy file="${basedir}/build/fat-applications/customLibJSONPProvider.jar" toDir="${server.dir}/JSONPProviderLib"/>
+                </then>
+            </iff>
+        </foreach>
+  </target>
+</project>

@@ -1,0 +1,50 @@
+
+Downloading the requested config snippet...
+
+Modifiying the config snippet... 
+
+<server description="EJB application security sample configuration">
+    <!-- The'appSecurity-2.0' feature provides only certain aspects of security based explicitly on the presence of
+	 other features. In this configuration, it provides security for EJB applications because the ejbLite-3.1
+	 feature is present. The features can be configured as per the samples included below. -->
+    <featureManager>
+        <feature>appSecurity-2.0</feature>
+        <feature>ejbLite-3.1</feature>
+    </featureManager>
+
+    <!-- See the basicRegistry.xml and ldapRegistry.xml samples for details on configuring a user registry. -->
+    <!-- See the SSL configuration sample, sslConfig.xml, for details on configuring SSL. -->
+
+    <!-- Simple basicRegistry configuration in use by the application binding below. -->
+    <basicRegistry id="basic" realm="sampleRealm">
+        <user name="user1" password="user1pwd" />
+        <user name="user3" password="user3pwd" />
+        <group name="group2">
+            <member name="user1" />
+            <member name="user3" />
+        </group>
+    </basicRegistry>
+
+    <!-- Sample definition of an application with authorization bindings.
+         The authorization bindings map roles defined in the deployment
+         descriptor to users and groups in the registry. The application
+         binding can also be established in the ibm-application-bnd.xml
+         or the ibm-application-bnd.xmi which can be packaged within an
+         EAR file.
+         
+         NOTE: the value of the access-id is optional. Setting the access-id
+               value is only necessary when the realm of the user ID needs
+               to be restricted. This is not normally necessary. -->
+
+   <application type="ear" id="SecureEJBSample" name="SecureEJBSample" location="${server.config.dir}/apps/SecureEJBSample.ear">
+		<application-bnd>
+			<security-role name="ejbRole">
+				<user name="user1" />
+			</security-role>		
+		</application-bnd>
+	</application>
+
+</server>
+
+
+Please ensure administrative security is configured for the server.

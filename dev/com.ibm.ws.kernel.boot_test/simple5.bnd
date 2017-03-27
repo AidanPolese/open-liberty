@@ -1,0 +1,13 @@
+-nouses=true
+-resourceonly=true
+bVersion=5.0
+-output ${bnd.target}/${Bundle-SymbolicName}_${bVersion}.jar
+
+Bundle-Name: simple bundle
+Bundle-SymbolicName: simple
+Bundle-Version: ${bVersion}
+Bundle-Description: simple, version ${bVersion}
+
+#Include dummy resources for system-packages
+Include-Resource: \
+ OSGI-OPT/websphere=resources

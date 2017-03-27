@@ -1,0 +1,15 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+src: \
+	fat/src
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/httpunit/1.7/lib/httpunit.jar;version=file, \
+	fattest.simplicity;version=latest, \
+	../fattest.simplicity/lib/public.api.jar;version=file, \
+	lib/fat.harness.jar;version=file, \
+	lib/phased.junit.jar;version=file, \
+	com.ibm.ws.logging.hpel;version=latest

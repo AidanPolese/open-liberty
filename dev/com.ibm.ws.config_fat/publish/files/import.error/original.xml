@@ -1,0 +1,21 @@
+<server>
+
+    <include location="../fatTestPorts.xml"/>
+    
+    <!-- Throw the bad include at the top to test that the rest of the file
+         continues to get parsed... -->
+    <include location="./common/not-common.xml"/>
+    
+    <featureManager>
+        <feature>servlet-3.0</feature>
+        <feature>localConnector-1.0</feature>
+        <feature>configfatlibertyinternals-1.0</feature>
+    </featureManager>
+    
+    <com.ibm.ws.config updateTrigger="mbean" />
+    
+    <application id="restart" name="restart" type="war" location="restart.war"/>
+    
+    <include location="./common/common.xml"/>
+
+</server>

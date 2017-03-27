@@ -1,0 +1,10 @@
+<server>
+    <include location="../fatTestPorts.xml"/>
+    
+    <featureManager>
+        <feature>servlet-3.0</feature>
+        <feature>jsonp-1.0</feature>
+        <feature>usr:customJsonpProvider-1.0</feature>
+    </featureManager>
+
+</server>

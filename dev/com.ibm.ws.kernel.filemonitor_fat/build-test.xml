@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FAT tests to ensure complete platform coverage of our filemonitor tests -->
+<project name="com.ibm.ws.kernel.filemonitor_fat"
+         default="buildandrun"
+         basedir=".">
+
+  <import file="../ant_build/public_imports/fat_imports.xml" />
+
+  <target name="addRequiredLibraries">
+    <copy todir="${required.lib.dir}" flatten="true">
+      <fileset dir="${basedir}/../build.image/wlp">
+        <include name="clients/restConnector.jar"/>
+        <include name="dev/api/ibm/com.ibm.websphere.appserver.api.basics*jar"/>
+      </fileset>
+    </copy>
+  </target>
+
+</project>

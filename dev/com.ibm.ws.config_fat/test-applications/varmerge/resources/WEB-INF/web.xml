@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
+
+    <servlet>
+        <servlet-name>VarMergeTestServlet</servlet-name>
+        <servlet-class>test.config.merged.VarMergeTestServlet</servlet-class>
+        <load-on-startup></load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>VarMergeTestServlet</servlet-name>
+        <url-pattern>/varMergeTest</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>DelayedVariableTestServlet</servlet-name>
+        <servlet-class>test.config.merged.DelayedVariableTestServlet</servlet-class>
+        <load-on-startup></load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DelayedVariableTestServlet</servlet-name>
+        <url-pattern>/delayedVarTests</url-pattern>
+    </servlet-mapping>
+    
+</web-app>

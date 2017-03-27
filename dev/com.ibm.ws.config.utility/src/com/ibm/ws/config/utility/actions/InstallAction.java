@@ -472,6 +472,10 @@ public class InstallAction implements ConfigUtilityAction {
         if (split.length == 1) {
             return null;
         } else if (split.length == 2) {
+            // Handle case where value ends with equals
+            if (arg.endsWith("=")) {
+                return split[1] + "=";
+            }
             return split[1];
         } else {
             // Handle DN case with multiple =s
@@ -482,6 +486,10 @@ public class InstallAction implements ConfigUtilityAction {
                     value.append("=");
                 }
             }
+            // Handle case where value ends with equals
+            if (arg.endsWith("="))
+                value.append("=");
+
             return value.toString();
         }
     }

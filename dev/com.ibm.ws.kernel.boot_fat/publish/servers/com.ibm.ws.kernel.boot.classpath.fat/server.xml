@@ -1,0 +1,9 @@
+<server>
+  <include location="../fatTestPorts.xml"/>
+  
+  <featureManager>
+    <feature>ejbLite-3.2</feature>
+  </featureManager>
+  
+  <ejbApplication id="checkJvmAppClasspath" location="checkJvmAppClasspath.jar" name="checkJvmAppClasspath" />
+</server>

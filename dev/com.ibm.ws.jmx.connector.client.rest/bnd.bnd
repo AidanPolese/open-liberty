@@ -1,0 +1,35 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: JMX Connector Client
+Bundle-SymbolicName: com.ibm.ws.jmx.connector.client.rest
+Bundle-Description: JMX Connector Client and common converter code; version=${bVersion}
+
+Private-Package: \
+  com.ibm.ws.jmx.connector.client.rest.internal.*
+  
+Export-Package: \
+  com.ibm.websphere.jmx.connector.rest, \
+  com.ibm.ws.jmx.connector.client.rest;thread-context=true, \
+  com.ibm.ws.jmx.connector.converter, \
+  com.ibm.ws.jmx.connector.datatypes
+
+Import-Package: \
+  javax.management.*, \
+  com.ibm.json.java.*, \
+  com.ibm.ws.ffdc.*, \
+  com.ibm.websphere.ras.*, \
+  com.ibm.ws.ssl.protocol, \
+  javax.net.ssl
+  
+Include-Resource: \
+  META-INF=resources/META-INF
+  
+-dsannotations: com.ibm.ws.jmx.connector.client.rest.internal.Activator
+
+instrument.disabled: true
+
+-buildpath: \
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0,\
+	com.ibm.websphere.appserver.api.json, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

@@ -8,8 +8,7 @@ Bundle-Description: LTPA Key Crypto Utilities; version=${bVersion}
 Export-Package: \
   com.ibm.ws.crypto.ltpakeyutil;provide:=true
 
-Private-Package: \
-  com.ibm.ws.common.internal.encoder
+Import-Package: com.ibm.ws.common.internal.encoder, !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
 
 instrument.disabled: true
 

@@ -1,0 +1,5 @@
+<server description="All common 'required' configuration elements for test servers">
+    <featureManager>
+      <feature>timedexit-1.0</feature>
+    </featureManager>
+</server>

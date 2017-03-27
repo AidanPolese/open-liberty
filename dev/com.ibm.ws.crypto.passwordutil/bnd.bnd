@@ -10,8 +10,9 @@ Export-Package: \
   com.ibm.wsspi.security.crypto;provide:=true, \
   com.ibm.ws.crypto.util;provide:=true
 
+Import-Package: com.ibm.ws.common.internal.encoder, !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
+
 Private-Package: \
-  com.ibm.ws.common.internal.encoder, \
   com.ibm.ws.crypto.util.custom, \
   com.ibm.ws.crypto.util.internal.resources
 

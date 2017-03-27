@@ -8,6 +8,8 @@ Bundle-Description: WebSphere Liberty Install Kernel, version ${bVersion}
 Export-Package: \
 	com.ibm.ws.install;provide:=true
 
+Import-Package: !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
+
 Private-Package: \
 	com.ibm.ws.install.*
 

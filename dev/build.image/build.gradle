@@ -2,6 +2,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 task copyPropertiesToBuildImage (type:Copy) {
+    dependsOn jar
     from "${projectDir}/publish/gradle"
     into "${projectDir}/wlp/lib/versions"
     include '*.properties'
@@ -10,6 +11,7 @@ task copyPropertiesToBuildImage (type:Copy) {
 }
 
 task copyReadmeToBuildImage (type:Copy) {
+    dependsOn jar
     from "${projectDir}/publish/gradle"
     into "${rootDir}/build.image/wlp"
     include 'README.TXT'
@@ -17,7 +19,15 @@ task copyReadmeToBuildImage (type:Copy) {
            tokens: [BUILD_ID: bnd.buildID, LIBERTY_VERSION: bnd.libertyRelease])
 }
 
+task copyCopyrightToBuildImage (type:Copy) {
+    dependsOn jar
+    from "${projectDir}"
+    into "${rootDir}/build.image/wlp"
+    include 'Copyright.txt'
+}
+
 task copyGeneratedToBuildImageBinTools (type:Copy) {
+    dependsOn jar
     from "${projectDir}/wlp/lib"
     into "${projectDir}/wlp/bin/tools"
     include 'bootstrap-agent.jar'
@@ -25,19 +35,17 @@ task copyGeneratedToBuildImageBinTools (type:Copy) {
 }
 
 task copyGeneratedToCnfLib (type:Copy) {
+    dependsOn jar
     from "${projectDir}/wlp/dev/api/spec/"
     into "${rootDir}/${bnd_cnf}/lib"
     include 'com.ibm.ws.org.osgi.core.6.0.0_*.jar'
     rename '.*.jar', 'osgi.core.jar'
 }
 
-assemble.dependsOn copyGeneratedToCnfLib
-copyGeneratedToCnfLib.dependsOn jar
-
-assemble.dependsOn copyGeneratedToBuildImageBinTools
-copyGeneratedToBuildImageBinTools.dependsOn jar
-
-assemble.dependsOn copyPropertiesToBuildImage
-assemble.dependsOn copyReadmeToBuildImage
-copyPropertiesToBuildImage.dependsOn jar
-copyReadmeToBuildImage.dependsOn jar
+assemble {
+    dependsOn copyPropertiesToBuildImage
+    dependsOn copyReadmeToBuildImage
+    dependsOn copyCopyrightToBuildImage
+    dependsOn copyGeneratedToBuildImageBinTools
+    dependsOn copyGeneratedToCnfLib
+}

@@ -1,0 +1,9 @@
+<server>
+
+	<topLevelElement id="a">
+		<child.a attrA2="a2" />
+	</topLevelElement>
+
+
+	<include location="fourLevelC2.xml" onConflict="IGNORE"/>
+</server>

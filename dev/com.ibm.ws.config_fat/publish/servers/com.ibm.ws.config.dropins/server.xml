@@ -1,0 +1,22 @@
+<server description="config dropins test server">
+
+	<include location="../fatTestPorts.xml" />
+
+	<!-- Enable features -->
+	<featureManager>
+		<feature>jsp-2.2</feature>
+		<feature>osgiconsole-1.0</feature>
+		<feature>httpservice-2.2</feature>
+		<feature>jdbc-4.0</feature>
+		
+		<!-- Include configfatlibertyinternals to get internal packages -->
+		<feature>configfatlibertyinternals-1.0</feature>
+	</featureManager>
+
+	
+	<application id="configdropins" name="configdropins" type="war"
+		location="configdropins.war" />
+
+	<library id="testLibrary" description="Library from server.xml"/>
+	
+</server>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="fattest.simplicity" default="localbuild" basedir=".">
+	
+  <!-- Ensure we do NOT try to use global bundle micro version for test assets --> 
+  <property name="use.global.micro" value="false"/> 
+  <property name="skip.findbugs" value="true"/>
+  <!-- The source for this project lives in src, not fat/src -->
+  <property name="src.dir" location="${basedir}/src" />
+
+  <import file="../test_build/build-common.xml" />
+
+  <target name="localbuild" depends="build" />
+  
+  <target name="post-compile">
+    <mkdir dir="${fat.bootstrap.path}" />
+    <copy todir="${fat.bootstrap.path}">
+      <fileset dir="${basedir}/../test_prereqs/defaults" />
+    </copy>
+
+    <jar destfile="${lib.dir}/componenttest.encoder.jar" basedir="${basedir}/../com.ibm.ws.common.encoder/build/classes"/>
+  </target>
+    
+  <target name="clean">
+      <delete dir="${build.dir}" />
+      <delete dir="${basedir}/autoFVT" />
+      <delete file="${basedir}/autoFVT-defaults/simplicity.properties" />
+      <delete file="${basedir}/autoFVT-defaults/local.properties" />
+  </target>
+  
+   <!-- This isn't a bundle so needs slightly different packaging (no bnd, no manifest) -->
+   <!-- This section changed so as not to unzip class files from the autoFVT/lib dir.  
+        This was leading to errors when re-running a component buildandrun -->
+   <target name="package" depends="compile, test.build.common.package">
+     <echo message="packaging extras in ${lib.dir}/${ant.project.name}.jar from ${classes.dir}" />
+     <jar destfile="${lib.dir}/${ant.project.name}.jar" update="true">
+       <fileset dir="${src.dir}" includes="**/*.properties" />
+     </jar>
+   </target>
+</project>

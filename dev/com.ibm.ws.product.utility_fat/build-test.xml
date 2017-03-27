@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.product.utility_fat" default="buildandrun" basedir=".">
+	<import file="../ant_build/public_imports/fat_imports.xml" />	
+	
+	<target name="addRequiredFiles">
+		<copy todir="../build.image/wlp/lafiles" >  
+			  <fileset dir="resources/lafiles" includes="**"/>  
+		</copy>
+	</target>
+	
+	<target name="addAutoInstallApplications" description="Automatically Install applications on LibertyServer instance creation"/>
+	
+</project>

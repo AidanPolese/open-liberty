@@ -11,7 +11,7 @@ Export-Package: \
  com.ibm.wsspi.kernel.feature;provide:=true
 
 Import-Package: \
- !com.sun.tools.attach,${defaultPackageImport} 
+ !com.sun.tools.attach, !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
 
 # NOTE: ODDNESS. we're including wlp.lib.extract as a package. The contents of 
 # that package are provided by wlp.lib.extract project! Dependency-wise, it's better to 

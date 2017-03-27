@@ -1,0 +1,9 @@
+-nouses=true
+-resourceonly=true
+bVersion=0.3
+
+Bundle-Name: simple bundle
+Bundle-SymbolicName: simple
+Bundle-Version: ${bVersion}
+Bundle-Description: simple, version ${bVersion}
+

@@ -1,0 +1,11 @@
+<project name="com.ibm.ws.org.osgi.service.resolver" default="build">
+
+  <import file="../ant_build/public_imports/rejar_imports.xml"/>
+
+  <target name="publishBundles"/>
+
+  <target name="package">
+  
+  </target>
+
+</project>

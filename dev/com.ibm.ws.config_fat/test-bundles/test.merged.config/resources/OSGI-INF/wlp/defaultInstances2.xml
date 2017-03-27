@@ -1,0 +1,8 @@
+<server>
+
+	<defaultInstance id="one"/>
+	
+	<topLevelElement id="common">
+		<child.a id="commonChild"/>
+	</topLevelElement>
+</server>

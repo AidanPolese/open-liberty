@@ -1,0 +1,7 @@
+<server>
+    
+    <include location="${shared.config.dir}/com.ibm.ws.kernel.metatype.helperServer.xml"/>
+    
+    <fileset id="testFileset" dir="${shared.resource.dir}/fileset_test_bundles" includes="test1.jar, test2.jar,test3.jar" scanInterval="1s"/>
+    
+</server>

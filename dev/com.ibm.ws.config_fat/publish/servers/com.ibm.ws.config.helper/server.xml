@@ -1,0 +1,25 @@
+<server description="new server">
+
+	<include location="../fatTestPorts.xml" />
+
+	<!-- Enable features -->
+	<featureManager>
+		<feature>jsp-2.2</feature>
+		<feature>osgiconsole-1.0</feature>
+		<feature>httpservice-2.2</feature>
+		
+		<!-- Include mergedConfigTest feature to get metatype -->
+		<feature>mergedConfigTest-1.0</feature>
+		
+		<!-- Include configfatlibertyinternals to get internal packages -->
+		<feature>configfatlibertyinternals-1.0</feature>
+	</featureManager>
+
+	<topLevelElement id="top" food="scone"/>
+	
+	<nmrParent.ONE id="one"/>
+	
+	<application id="confighelper" name="confighelper" type="war"
+		location="confighelper.war" />
+
+</server>

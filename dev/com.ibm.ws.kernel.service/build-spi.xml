@@ -30,7 +30,7 @@
                    org.osgi.util.tracker"/>
 
   <path id="bnd.jars">
-    <fileset dir="../com.ibm.ws.crypto.passwordutil/build/lib/" includes="*.jar"/>
+    <fileset dir="../build.image/wlp/lib" includes="com.ibm.ws.crypto.passwordutil_*.jar"/>
   </path>
 
   <property name="additional.javadoc.src.dirs"

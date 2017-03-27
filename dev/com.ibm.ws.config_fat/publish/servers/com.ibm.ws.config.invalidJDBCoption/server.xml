@@ -1,0 +1,22 @@
+<server name="d91632">
+
+    <include location="../fatTestPorts.xml"/>
+
+    <featureManager>
+        <feature>jdbc-4.0</feature>
+    </featureManager>
+
+    <!-- should result in:
+         CWWKG0032W: Unexpected value specified for property [createDatabase], value = [whatever]. Expected value(s) are: [create][false].
+    -->
+    <dataSource id="jdbc/derby" jndiName="jdbc/derby"> 
+        <properties.derby.embedded
+        databaseName="abc"
+        createDatabase="whatever"
+        user="dbuser1"
+        password="{xor}Oz0vKDtu"
+        />  <!-- password="dbpwd1" -->
+    </dataSource>
+
+    <!-- logging traceSpecification="*=info:config=all" / --> 
+</server>

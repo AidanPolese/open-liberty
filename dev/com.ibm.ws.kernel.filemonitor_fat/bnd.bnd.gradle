@@ -1,0 +1,16 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+src: \
+	fat/src
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	fattest.simplicity;version=latest, \
+	com.ibm.ws.jmx.connector.client.rest;version=latest, \
+	com.ibm.ws.kernel.filemonitor;version=latest

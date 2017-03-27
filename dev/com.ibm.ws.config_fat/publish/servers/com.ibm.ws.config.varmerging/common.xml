@@ -1,0 +1,19 @@
+<server description="new server">
+
+	<include location="../fatTestPorts.xml" />
+
+	<!-- Enable features -->
+	<featureManager>
+		<feature>jsp-2.2</feature>
+		<feature>osgiconsole-1.0</feature>
+		<feature>httpservice-2.2</feature>		
+		<feature>configfatlibertyinternals-1.0</feature>
+	</featureManager>
+
+
+	<topLevelElement id="common"/>
+	
+	<application id="varmergedconfig" name="varmergedconfig" type="war"
+		location="varmerge.war" />
+
+</server>

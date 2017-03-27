@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archive>
+    <archive targetInArchive="TestWeb1.war">
+        <dir sourceOnDisk="${shared.resource.dir}\looseConfig\testWeb1\WebContent" targetInArchive="/"/>
+        <dir sourceOnDisk="${shared.resource.dir}\looseConfig\testWeb1\classes" targetInArchive="/WEB-INF/classes"/>
+    </archive>
+    <archive targetInArchive="lib/Utils.jar">
+        <dir sourceOnDisk="${shared.resource.dir}\looseConfig\utils\classes" targetInArchive="/"/>
+    </archive>
+    <archive targetInArchive="TestWeb0.war">
+        <archive targetInArchive="WEB-INF/lib/TestUtil.jar">
+            <dir sourceOnDisk="${shared.resource.dir}\looseConfig\testUtil\classes" targetInArchive="/"/>
+        </archive>
+        <dir sourceOnDisk="${shared.resource.dir}\looseConfig\testWeb0\WebContent" targetInArchive="/"/>
+        <dir sourceOnDisk="${shared.resource.dir}\looseConfig\testWeb0\classes" targetInArchive="/WEB-INF/classes"/>
+    </archive>
+    <dir sourceOnDisk="${shared.resource.dir}\looseConfig\earContent" targetInArchive="/"/>
+</archive>

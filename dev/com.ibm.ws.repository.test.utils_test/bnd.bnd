@@ -1,0 +1,12 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+src: \
+	fat/src
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	fattest.simplicity;version=latest, \
+	com.ibm.ws.repository;version=latest, \
+	com.ibm.ws.repository.test.utils;version=latest

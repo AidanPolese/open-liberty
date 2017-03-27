@@ -1,0 +1,19 @@
+<server>
+
+	<topLevelElement id="a">
+		<child.a attrA1="fourLevelB" />
+	</topLevelElement>
+
+	<topLevelElement id="b">
+		<child.b attrB1="fourLevelB" />
+		<child.b attrB2="fourLevelB" />
+	</topLevelElement>
+
+	<topLevelElement id="c" />
+
+	<top.d attrD1="fourLevelB" />
+	<top.d attrD1="fourLevelB" />
+
+
+	<include location="fourLevelC.xml" onConflict="REPLACE"/>
+</server>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.repository.test.utils_test" default="buildandrun"
+  basedir=".">
+  <import file="../ant_build/public_imports/repo_fat_imports.xml" />
+
+</project>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.zos.command.processing_zfat" default="zostestenvBuildandrunFast" basedir=".">
+	
+	<import file="../ant_build/public_imports/fat_imports.xml" />
+	
+ 	<property name="fat.server.dir" location="${basedir}/publish/servers/COM.IBM.WS.ZOS.COMMAND.PROCESSING"/>
+	<property name="shared.resource.dir" value="${liberty.dir}/usr/shared/resources" />		
+	
+		<patternset id="validate.server.xmls">
+	    <!-- <security> is internal. -->
+	    <exclude name="**/servers/com.ibm.ws.zos.command.feature/server.xml"/>
+	  </patternset>
+	  
+	<target name="addAutoInstallApplications" description="Automatically Install applications on LibertyServer instance creation">
+
+	    <!-- copy the bundles for the config extensions test to the autoFVT files locations -->
+        <mkdir dir="${basedir}/publish/files/bundles"/>
+        <move todir="${basedir}/publish/files/bundles">
+            <fileset dir="${basedir}/publish/bundles" includes="*.jar"/>
+        </move>
+	</target>		
+</project>

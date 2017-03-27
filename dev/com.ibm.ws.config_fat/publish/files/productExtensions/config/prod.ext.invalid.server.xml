@@ -1,0 +1,22 @@
+<server>
+
+    <include location="../fatTestPorts.xml"/>
+
+    <!-- Enable features -->
+    <featureManager>
+        <feature>osgiconsole-1.0</feature>
+        <feature>jsp-2.2</feature>
+        <feature>testproduct:prodtest1-1.0</feature>
+    </featureManager>
+
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="${bvt.prop.HTTP_default}"
+                  httpsPort="${bvt.prop.HTTP_default.secure}">
+        <tcpOptions soReuseAddr="true" />
+    </httpEndpoint>
+
+	<!-- Invalid alias config. It needs productName_ prefix -->
+    <prodtest1Config attribute1="999999" attribute2="HELLOWORLD" />
+
+</server>

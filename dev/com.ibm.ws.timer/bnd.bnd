@@ -1,0 +1,19 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: WAS Timers
+Bundle-Description: WAS Timers, version ${bVersion}
+Bundle-SymbolicName: com.ibm.ws.timer; singleton:=true
+
+WS-TraceGroup: timer
+
+Export-Package: com.ibm.wsspi.timer;provide:=true
+
+Private-Package: com.ibm.ws.timer.internal
+
+-dsannotations: com.ibm.ws.timer.internal.QuickApproxTimeImpl
+
+-buildpath: \
+	com.ibm.ws.logging.core,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

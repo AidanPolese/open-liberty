@@ -1,0 +1,9 @@
+<server description="new server">
+
+	<include location="common.xml" />
+
+	<variable name="var1" value="fromServerXml"/>
+	
+	<include onConflict="ignore" location="conflict.xml" />
+
+</server>

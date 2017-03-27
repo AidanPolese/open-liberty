@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.kernel.boot_fat" default="buildandrun" basedir=".">
+	<mkdir dir="test-applications/shutdownfat/resources/META-INF" />
+	<mkdir dir="test-applications/shutdownfat/resources/WEB-INF" />
+  <import file="../ant_build/public_imports/fat_imports.xml" />
+
+  <!-- Run against full image - ensure that ejbLite-3.2 feature is available -->
+  <property name="fat.image.type" value="use-full-image"/>
+	
+  <!-- Ensure we start the -javaagent for embedded tracing enablement over in fattest.simplicity/launch.xml. -->
+  <!-- The trace log can be found in <build.image>/wlp/NonDefaultUsr server. -->
+  <property name="embedded.trace" value="true"/> 
+
+  <target name="addAutoInstallApplications">
+    <copy file="${basedir}/publish/files/shutdownfat.zip" tofile="${basedir}/publish/servers/com.ibm.ws.kernel.boot.commandport.disabled.fat/dropins/shutdownfat.war"/>
+    <move file="${basedir}/publish/files/shutdownfat.zip" tofile="${basedir}/publish/servers/com.ibm.ws.kernel.shutdown.fat/dropins/shutdownfat.war"/>
+
+    <move file="${basedir}/publish/files/checkJvmAppClasspath.zip" tofile="${basedir}/publish/servers/com.ibm.ws.kernel.boot.classpath.fat/apps/checkJvmAppClasspath.jar"/>
+  </target>
+</project>
