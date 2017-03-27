@@ -1,0 +1,16 @@
+<server description="new server">
+
+    <include location="../fatTestPorts.xml"/>
+
+	<!-- Enable features -->
+	<featureManager>
+		<feature>jsp-2.2</feature>
+		<feature>jdbc-4.0</feature>
+	</featureManager>
+
+
+	
+<dataSource id="ds1" jndiName ="jdbc/foo" />
+<dataSource id="ds2" jndiName="jdbc/foo" />
+
+</server>

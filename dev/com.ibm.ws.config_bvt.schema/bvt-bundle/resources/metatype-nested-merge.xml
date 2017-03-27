@@ -1,0 +1,41 @@
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0" 
+                   xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0" 
+                   xmlns:ibmui="http://www.ibm.com/xmlns/appservers/osgi/metatype/ui/v1.0.0"
+                   localization="OSGI-INF/l10n/metatype">
+
+ <Designate factoryPid="test.nestedmerge.parent.ONE"> 
+  <Object ocdref="test.nestedmerge.parent.ONE" />
+ </Designate>
+
+ <OCD id="test.nestedmerge.parent.ONE" ibm:alias="nmrParent.ONE" ibm:supportExtensions="true" name="parent" description="parent">
+ 	 <AD id="child" type="String" cardinality="0" ibm:type="pid" ibm:reference="test.nestedmerge.child" name="child" description="child"/>
+ </OCD>
+
+
+<Designate factoryPid="test.nestedmerge.parent.MULTIPLE"> 
+  <Object ocdref="test.nestedmerge.parent.MULTIPLE" />
+ </Designate>
+
+ <OCD id="test.nestedmerge.parent.MULTIPLE" ibm:alias="nmrParent.MULTIPLE" ibm:supportExtensions="true" name="parent" description="parent">
+ 	 <AD id="child" type="String" cardinality="10" ibm:type="pid" ibm:reference="test.nestedmerge.child" name="child" description="child"/> 	 
+ </OCD>
+ 
+ 
+ <Designate factoryPid="test.nestedmerge.child"> 
+ 	 <Object ocdref="test.nestedmerge.child"/>
+ </Designate>
+
+ <OCD id="test.nestedmerge.child" ibm:alias="nmrChild" name="child" description="a child">
+ 	 <AD id="someAttr" type="String" default="value" name="someAttr" description="someAttr"/>
+ </OCD>
+
+ <Designate factoryPid="test.nestedmerge.child.default"> 
+ 	 <Object ocdref="test.nestedmerge.child.default"/>
+ </Designate>
+
+ <OCD id="test.nestedmerge.child.default" ibm:extendsAlias="!defaultChild" name="child" description="a child" 
+ 	ibm:extends="test.nestedmerge.child">
+ 	 <AD id="id" type="String" default="childId" name="id" ibm:final="true" description="defaulted id attribute"/>
+ </OCD>
+ 
+ </metatype:MetaData>

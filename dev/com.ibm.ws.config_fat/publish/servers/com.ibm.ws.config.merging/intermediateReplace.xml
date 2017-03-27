@@ -1,0 +1,18 @@
+<server>
+
+	<topLevelElement id="a">
+		<child.a attrA1="intermediate" />
+	</topLevelElement>
+
+	<topLevelElement id="b">
+		<child.b attrB1="intermediate" />
+		<child.b attrB2="intermediate" />
+	</topLevelElement>
+
+	<topLevelElement id="c" />
+
+	<top.d attrD1="intermediate" />
+	<top.d attrD1="intermediate" />
+
+	<include location="conflict.xml" onConflict="REPLACE"/>
+</server>

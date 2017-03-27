@@ -1,0 +1,15 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: WebSphere File Services APIs
+Bundle-SymbolicName: com.ibm.websphere.filetransfer
+Bundle-Description: APIs for WebSphere File Services; version=${bVersion}
+Bundle-ActivationPolicy: lazy
+
+Export-Package: com.ibm.websphere.filetransfer
+
+instrument.disabled: true
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

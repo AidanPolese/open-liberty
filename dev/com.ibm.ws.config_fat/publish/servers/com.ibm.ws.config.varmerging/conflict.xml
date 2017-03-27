@@ -1,0 +1,5 @@
+<server>
+
+	<variable name="var1" value="fromInclude"/>
+
+</server>

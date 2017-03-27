@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
+
+    <servlet>
+        <servlet-name>ChildAliasTestServlet</servlet-name>
+        <servlet-class>test.server.config.childalias.ChildAliasTestServlet</servlet-class>
+        <load-on-startup></load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ChildAliasTestServlet</servlet-name>
+        <url-pattern>/child-alias-test</url-pattern>
+    </servlet-mapping>
+    
+</web-app>

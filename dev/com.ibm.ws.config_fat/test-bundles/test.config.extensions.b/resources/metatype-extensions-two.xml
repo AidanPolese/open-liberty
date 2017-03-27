@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData
+    xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0"
+    xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0">
+   
+    <!--  default config types -->
+        
+    <OCD name="test.config.extensions.different.bundle" id="test.config.extensions.different.bundle" ibm:extends="test.config.extensions.super" ibm:alias="testExtensionDifferentBundle">
+        <AD id="testFinalAttrSub" name="internal" description="internal" type="String" default="testFinalType" ibm:final="true"/>
+        <AD id="testAttr1Rename" name="Attribute 1" description="Renamed attribute 1" type="String" ibm:rename="testAttribute1" />
+    </OCD>
+    
+    <Designate factoryPid="test.config.extensions.different.bundle">
+        <Object ocdref="test.config.extensions.different.bundle" />
+    </Designate>
+     
+</metatype:MetaData>

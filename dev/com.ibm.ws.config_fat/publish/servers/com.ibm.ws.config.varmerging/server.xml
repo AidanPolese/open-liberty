@@ -1,0 +1,4 @@
+<server description="new server">
+	<include location="common.xml"/>
+	
+</server>

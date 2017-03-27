@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
+
+    <servlet>
+        <servlet-name>MergedConfigTestServlet</servlet-name>
+        <servlet-class>test.config.merged.MergedConfigTestServlet</servlet-class>
+        <load-on-startup></load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>MergedConfigTestServlet</servlet-name>
+        <url-pattern>/mergedConfigTest</url-pattern>
+    </servlet-mapping>
+    
+</web-app>

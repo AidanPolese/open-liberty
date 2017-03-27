@@ -1,0 +1,22 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion = 1.0
+
+Bundle-Name: Schema Generator Servlet
+Bundle-SymbolicName: test.server.schema
+Bundle-Description: Schema Generator Servlet Bundle, version ${bVersion}
+
+Service-Component: test.server.schema.servlet; \
+      implementation:=test.server.schema.SchemaGeneratorActivator; \
+      http=org.osgi.service.http.HttpService; \
+      schemaGenerator=com.ibm.websphere.metatype.SchemaGenerator; \
+      locationService=com.ibm.wsspi.kernel.service.location.WsLocationAdmin; \
+      immediate:=true; \
+      properties:="service.vendor=IBM"  
+
+Private-Package: test.server.*
+
+Import-Package: \
+    !*.internal.*, *
+
+Include-Resource: \
+    @junit.jar

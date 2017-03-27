@@ -1,0 +1,11 @@
+<server>
+
+    <include location="common/common.xml"/>
+
+    <person firstName="Joe" lastName="Doe"/>
+            
+    <threadPool id="web" maxThreads="50" minThreads="10"/>
+    
+    <quickStartSecurity userName="test" userPassword="tEst" />
+    
+</server>

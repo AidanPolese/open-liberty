@@ -1,0 +1,7 @@
+<server>
+	
+    <defaultFactory id="two" port="9999">
+        <hostname>localhost</hostname>
+    </defaultFactory>
+ 
+</server>

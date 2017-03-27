@@ -1,0 +1,18 @@
+# Don't include the IBM properties, this is intended to be a user feature
+bVersion=1.0.0
+Bundle-Version: 1.0.0
+Bundle-Name: Exception throwing feature
+Bundle-Description: This feature throws an exception
+Bundle-SymbolicName: test.configuration.fallalloverthefloor.userfeature; singleton:=true
+
+Private-Package: \
+  com.ibm.ws.logging.fat.fallalloverthefloor.userfeature
+
+Include-Resource: \
+  OSGI-INF=resources/OSGI-INF
+
+Service-Component: \
+  com.ibm.ws.logging.fat.brokenfeature; \
+    implementation:=com.ibm.ws.logging.fat.fallalloverthefloor.userfeature.BrokenFeature; \
+    configurationAdmin=org.osgi.service.cm.ConfigurationAdmin; \
+    properties:="service.vendor=IBM,com.ibm.ws.wim.repository.type=File"

@@ -1,0 +1,13 @@
+-nouses=true
+-resourceonly=true
+bVersion=4.0
+-output ${bnd.target}/${Bundle-SymbolicName}_${bVersion}.jar
+
+Bundle-Name: simple bundle
+Bundle-SymbolicName: simple
+Bundle-Version: ${bVersion}
+Bundle-Description: simple, version ${bVersion}
+WebSphere-DefaultKernel: test-kernel-2.0
+
+#mock up a 1.6.0 package list from the package.list with a bad property
+Include-Resource: OSGI-OPT/websphere/system-packages_1.6.0.properties=resources/packages.list

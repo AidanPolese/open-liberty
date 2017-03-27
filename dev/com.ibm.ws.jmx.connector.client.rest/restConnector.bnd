@@ -1,0 +1,8 @@
+-include = \
+  ~../cnf/resources/bnd/jar.props, \
+  restConnector-headers.bnd
+
+bVersion=1.0
+
+Client-Name: REST Connector Client JAR
+Client-Description: REST Connector Client JAR; version=${bVersion}

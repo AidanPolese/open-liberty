@@ -1,0 +1,12 @@
+<server>
+
+    <include location="../fatTestPorts.xml"/>
+
+    <featureManager>
+        <feature>jsp-2.2</feature>
+        <feature>productA:prodtest-1.0</feature>
+    </featureManager>
+
+    <logging traceSpecification="*=info=enabled:logservice=event=enabled"/>
+
+</server>

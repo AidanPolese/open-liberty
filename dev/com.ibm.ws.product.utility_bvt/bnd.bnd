@@ -13,4 +13,4 @@ src: \
 	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
 	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
 	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
-	com.ibm.ws.threading;version=latest
+	com.ibm.ws.product.utility;version=latest

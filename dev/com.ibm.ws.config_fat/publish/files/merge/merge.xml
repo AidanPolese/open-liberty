@@ -1,0 +1,11 @@
+<server description="new server">
+
+	<include location="common.xml" />
+
+	<topLevelElement id="a">
+		<child.a attrA2="a2" />
+	</topLevelElement>
+	
+	<include onConflict="merge" location="conflict.xml" />
+
+</server>

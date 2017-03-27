@@ -1,0 +1,4 @@
+<server>
+	<include location="../fatTestPorts.xml"/>
+    <config monitorInterval="1s" />
+</server>

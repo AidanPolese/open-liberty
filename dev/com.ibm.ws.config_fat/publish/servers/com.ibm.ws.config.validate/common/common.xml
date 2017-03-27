@@ -1,0 +1,7 @@
+<server> 
+ 
+    <person firstName="John" lastName="Doe"/>
+           
+    <threadPool id="ejb" maxThreads="10" minThreads="1" />
+    
+</server>

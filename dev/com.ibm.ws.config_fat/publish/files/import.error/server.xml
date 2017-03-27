@@ -1,0 +1,23 @@
+<server>
+
+    <include location="../fatTestPorts.xml"/>
+    
+    <featureManager>
+        <feature>servlet-3.0</feature>
+        <feature>localConnector-1.0</feature>
+        <feature>configfatlibertyinternals-1.0</feature>
+    </featureManager>
+    
+    <com.ibm.ws.config updateTrigger="mbean" />
+    
+    <application id="restart" name="restart" type="war" location="restart.war"/>
+    
+    <include location="./common/common.xml"/>
+    
+    <singleton-one value="abc" />
+    <singleton-two value="def" />
+    
+    <factory id="1" name="one" />
+    <factory id="2" name="two" />
+
+</server>

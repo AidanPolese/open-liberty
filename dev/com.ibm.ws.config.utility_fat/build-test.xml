@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.config.utility_fat" default="buildandrun" basedir=".">
+	<import file="../ant_build/public_imports/fat_imports.xml" />
+	
+	<target name="addRequiredLibraries">
+			<copy todir="${required.lib.dir}">
+				<fileset dir="${basedir}/../build.image/wlp/lib/" includes="com.ibm.ws.repository.liberty_1.0.${micro.version}.jar"/>
+				<fileset dir="${basedir}/../build.image/wlp/lib/" includes="com.ibm.ws.repository_1.0.${micro.version}.jar"/>
+				<fileset dir="${basedir}/../build.image/wlp/lib/" includes="com.ibm.ws.org.glassfish.json.1.0_1.0.${micro.version}.jar"/>
+				<fileset dir="${basedir}/../build.image/wlp/dev/api/spec/" includes="com.ibm.websphere.javaee.jsonp.1.0_1.0.${micro.version}.jar"/>
+			</copy>
+	</target>
+</project>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry exported="true" kind="lib" path="lib/jackson-core-asl-1.6.2.jar" sourcepath="lib/jackson-core-asl-1.6.2-src.zip"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson-jaxrs-1.6.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson-mapper-asl-1.6.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson-xc-1.6.2.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="output" path="build/classes"/>
-</classpath>

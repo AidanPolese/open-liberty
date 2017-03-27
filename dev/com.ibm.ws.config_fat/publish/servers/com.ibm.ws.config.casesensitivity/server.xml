@@ -1,0 +1,6 @@
+<server>
+
+    <include location="../fatTestPorts.xml"/>
+    
+    <threadPool id="web" maxThreads="50" MAXthreads="10"/>
+</server>

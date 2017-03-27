@@ -1,0 +1,8 @@
+<server>
+    <!-- This is used as the server.xml included in the test sample jars -->
+    <featureManager>
+        <feature>servlet-3.0</feature>
+    </featureManager>
+
+    <include location="../fatTestPorts.xml"/>
+</server>

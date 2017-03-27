@@ -1,0 +1,20 @@
+<server description="new server">
+	<include location="../fatTestPorts.xml" />
+
+	<!-- Enable features -->
+	<featureManager>
+		<feature>jsp-2.2</feature>
+		<feature>osgiconsole-1.0</feature>		
+		<feature>configfatlibertyinternals-1.0</feature>
+		<feature>delayedVariable-1.0</feature>
+	</featureManager>
+
+	<application id="varmergedconfig" name="varmergedconfig"
+		type="war" location="varmerge.war" />
+
+	<variable name="variableDelayTest" value="evaluated" />
+
+	<delayedVar delayedVariable="${variableDelayTest}"
+		immediateVar="${variableDelayTest}" immediateVarTwo="${variableDelayTest}" />
+
+</server>

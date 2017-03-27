@@ -1,0 +1,15 @@
+<server>
+
+    <include optional="true" location="${shared.config.dir}/bvtTestPorts.xml"/> 
+    
+    <featureManager>
+        <feature>httpservice-2.2</feature>
+        <feature>testschema-1.0</feature> 
+        <feature>restConnector-1.0</feature>
+    </featureManager>
+    
+    <quickStartSecurity userName="theUser" userPassword="thePassword"/>
+    
+    <keyStore id="defaultKeyStore" password="Liberty"/>
+ 
+</server>

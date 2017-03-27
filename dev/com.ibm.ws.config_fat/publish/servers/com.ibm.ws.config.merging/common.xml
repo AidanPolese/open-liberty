@@ -1,0 +1,22 @@
+<server description="new server">
+
+	<include location="../fatTestPorts.xml" />
+
+	<!-- Enable features -->
+	<featureManager>
+		<feature>jsp-2.2</feature>
+		<feature>osgiconsole-1.0</feature>
+		<feature>httpservice-2.2</feature>
+		<feature>mergedConfigTest-1.0</feature>
+		<feature>configfatlibertyinternals-1.0</feature>
+	</featureManager>
+
+
+	<defaultInstanceMissing id="one"/>
+	
+	<topLevelElement id="common"/>
+	
+	<application id="mergedconfig" name="mergedconfig" type="war"
+		location="mergedconfig.war" />
+
+</server>

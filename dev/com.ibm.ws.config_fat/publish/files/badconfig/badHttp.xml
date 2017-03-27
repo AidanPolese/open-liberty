@@ -1,0 +1,18 @@
+<server description="new server">
+
+	<!-- Enable features -->
+	<featureManager>
+		<feature>servlet-3.0</feature>
+		<feature>osgiconsole-1.0</feature>
+		<feature>timedexit-1.0</feature>
+	</featureManager>
+
+
+	<httpEndpoint id="defaultHttpEndpoint" host="*"
+		httpPort="${missingbvt.prop.HTTP_default}" httpsPort="${bvt.prop.HTTPS_default">
+		<tcpOptions soReuseAddr="true" />
+	</httpEndpoint>
+
+
+
+</server>

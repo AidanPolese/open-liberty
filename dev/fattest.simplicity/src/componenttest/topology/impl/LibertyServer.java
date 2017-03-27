@@ -72,6 +72,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 import org.junit.Assert;
 
+import com.ibm.websphere.jmx.connector.rest.ConnectorSettings;
 import com.ibm.websphere.simplicity.LocalFile;
 import com.ibm.websphere.simplicity.Machine;
 import com.ibm.websphere.simplicity.OperatingSystem;
@@ -86,6 +87,7 @@ import com.ibm.websphere.simplicity.exception.ApplicationNotInstalledException;
 import com.ibm.websphere.simplicity.log.Log;
 import com.ibm.websphere.soe_reporting.SOEHttpPostUtil;
 import com.ibm.ws.fat.util.ACEScanner;
+import com.ibm.ws.jmx.connector.client.rest.ClientProvider;
 
 import componenttest.common.apiservices.Bootstrap;
 import componenttest.common.apiservices.LocalMachine;
@@ -101,13 +103,6 @@ public class LibertyServer implements LogMonitorClient {
     protected static final Class<?> c = LibertyServer.class;
     protected static final String CLASS_NAME = c.getName();
     protected static Logger LOG = Logger.getLogger(CLASS_NAME); // why don't we always use the Logger directly?
-
-    protected static final String CLIENT_DOMAIN = "com.ibm.ws.jmx.connector.client";
-    protected static final String REST_CLIENT_DOMAIN = "com.ibm.ws.jmx.connector.client.rest";
-    protected static final String CUSTOM_SSLSOCKETFACTORY = CLIENT_DOMAIN + ".CUSTOM_SSLSOCKETFACTORY";
-    protected static final String DISABLE_HOSTNAME_VERIFICATION = CLIENT_DOMAIN + ".disableURLHostnameVerification";
-    protected static final String READ_TIMEOUT = REST_CLIENT_DOMAIN + ".readTimeout";
-
     /** How frequently we poll the logs when waiting for something to happen */
     protected static final int WAIT_INCREMENT = 300;
 
@@ -5983,8 +5978,8 @@ public class LibertyServer implements LogMonitorClient {
         Map<String, Object> environment = new HashMap<String, Object>();
         environment.put("jmx.remote.protocol.provider.pkgs", "com.ibm.ws.jmx.connector.client");
         environment.put(JMXConnector.CREDENTIALS, new String[] { userName, password });
-        environment.put(DISABLE_HOSTNAME_VERIFICATION, true);
-        environment.put(READ_TIMEOUT, 2 * 60 * 1000);
+        environment.put(ClientProvider.DISABLE_HOSTNAME_VERIFICATION, true);
+        environment.put(ClientProvider.READ_TIMEOUT, 2 * 60 * 1000);
 
         KeyStore keyStore = KeyStore.getInstance("JKS");
         FileInputStream is = new FileInputStream(getServerRoot() + "/resources/security/key.jks");
@@ -5994,7 +5989,7 @@ public class LibertyServer implements LogMonitorClient {
         trustManagerFactory.init(keyStore);
         SSLContext sslContext = SSLContext.getInstance("TLS");
         sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
-        environment.put(CUSTOM_SSLSOCKETFACTORY, sslContext.getSocketFactory());
+        environment.put(ConnectorSettings.CUSTOM_SSLSOCKETFACTORY, sslContext.getSocketFactory());
 
         JMXServiceURL url = new JMXServiceURL("REST", getHostname(), getHttpDefaultSecurePort(), "/IBMJMXConnectorREST");
 

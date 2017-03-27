@@ -1,0 +1,14 @@
+<server>
+
+    <include location="../fatTestPorts.xml"/>
+    
+    <featureManager>
+        <feature>configExtensionsTest-1.0</feature>
+        <feature>configExtensionsTestB-1.0</feature>
+    </featureManager>
+
+    <test.config.extensions.different.bundle
+	id="test.config.extensions.different.bundle.config"
+	testAttr1Rename="value1"  testAttribute2="1" testAttribute4="value4"/>
+
+</server>

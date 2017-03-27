@@ -1,0 +1,19 @@
+-include= ~../../../cnf/resources/bnd/bundle.props
+bVersion=1.0.0
+
+# For more information, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+Bundle-Name: Test bundle providing a quiesce listener 
+Bundle-SymbolicName: test.server.quiesce
+Bundle-Description: Test bundle providing a server quiesce listener; version=${bVersion}
+
+# hide the implementation packages
+Private-Package: \
+  test.server.quiesce
+  
+-dsannotations: \
+  test.server.quiesce.TestQuiesceListener
+
+# test bundle build scripts copy things in the resources directory to the classpath.. 
+Include-Resource: \
+ OSGI-INF=resources/OSGI-INF

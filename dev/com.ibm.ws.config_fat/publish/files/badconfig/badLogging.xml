@@ -1,0 +1,13 @@
+<server description="new server">
+
+    <include location="../fatTestPorts.xml"/>
+
+	<!-- Enable features -->
+	<featureManager>
+		<feature>servlet-3.0</feature>
+		<feature>osgiconsole-1.0</feature>
+	</featureManager>
+
+	<logging maxFiles="-1"/>
+
+</server>

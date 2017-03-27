@@ -1,0 +1,14 @@
+Bundle-Vendor: IBM
+bVersion=1.0.0
+Bundle-Version: 1.0.0
+Bundle-Name: Feature which uses the file monitor SPI
+Bundle-SymbolicName: com.ibm.ws.kernel.filemonitor.monitor.test.bundle
+
+Private-Package: \
+  com.ibm.ws.kernel.filemonitor.monitor.test
+
+Service-Component: \
+  com.ibm.ws.kernel.filemonitor.test.bundle.monitor; \
+    implementation:=com.ibm.ws.kernel.filemonitor.monitor.test.FileMonitorRegistrationHandler; \
+    immediate:=true
+    

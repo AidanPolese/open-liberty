@@ -1,0 +1,7 @@
+<server>
+
+    <include location="shared.xml"/>
+    
+    <include location="${relativeLocation}"/>
+    
+</server>

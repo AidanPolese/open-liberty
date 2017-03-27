@@ -1,0 +1,24 @@
+<server name="d97360">
+
+    <include location="../fatTestPorts.xml"/>
+
+    <!-- This protocol (bogus) is unrecognized and will result in a MalformedURLException.  If this were not an
+         optional include, then the server would fail to start.  However, because it is optional, the server will
+         print a warning message and continue to start up. -->
+    <include optional="true" location="bogus:/home/andymc/playground/wlp-pers-2013-08-05/wlp/usr/servers/d97360/logging.xml" />
+
+    <featureManager>
+        <feature>jdbc-4.0</feature>
+    </featureManager>
+
+
+    <dataSource id="jdbc/derby" jndiName="jdbc/derby"> 
+        <properties.derby.embedded
+        databaseName="abc"
+        createDatabase="true"
+        user="dbuser1"
+        password="{xor}Oz0vKDtu"
+        />  <!-- password="dbpwd1" -->
+    </dataSource>
+
+</server>

@@ -1,0 +1,17 @@
+<server>
+
+	<topLevelElement id="a">
+		<child.a attrA1="a1" />
+	</topLevelElement>
+
+	<topLevelElement id="b">
+		<child.b attrB1="b1" />
+		<child.b attrB2="b2" />
+	</topLevelElement>
+
+	<topLevelElement id="c" />
+
+	<top.d attrD1="d1" />
+	<top.d attrD1="d1copy" />
+
+</server>

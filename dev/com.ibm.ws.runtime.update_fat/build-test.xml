@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.runtime.update_fat" default="buildandrun" basedir=".">
+	<import file="../ant_build/public_imports/fat_imports.xml" />
+	
+	<target name="addAutoInstallApplications" description="Automatically Install applications on LibertyServer instance creation">
+		<mkdir dir="${basedir}/publish/servers/com.ibm.ws.runtime.update.fat/dropins"/>
+		<move file="${basedir}/publish/files/mbean.zip" tofile="${basedir}/publish/servers/com.ibm.ws.runtime.update.fat/dropins/mbean.war"/>
+	</target>
+</project>

@@ -1,0 +1,9 @@
+<server>
+
+    <!-- Enable features -->
+    <featureManager>
+        <feature>osgiconsole-1.0</feature>
+        <feature>jsp-2.2</feature>
+    </featureManager>
+
+</server>

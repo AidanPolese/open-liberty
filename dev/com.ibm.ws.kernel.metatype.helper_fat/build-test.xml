@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.kernel.metatype.helper_fat" default="buildandrun" basedir=".">
+	
+	<import file="../ant_build/public_imports/fat_imports.xml" />
+	
+    <target name="addAutoInstallApplications" description="Automatically Install applications on LibertyServer instance creation">
+        <!-- make a copy of the default monitored_fileset/server.xml to start with -->
+        <copy file="${basedir}/publish/files/monitored_fileset/server.xml" tofile="${basedir}/publish/servers/com.ibm.ws.kernel.metatype.helperServer/server.xml"/>
+        <!-- copy the application to the right place -->
+        <mkdir dir="${basedir}/publish/servers/com.ibm.ws.kernel.metatype.helperServer/dropins"/>
+        <move file="${basedir}/publish/files/fileset.zip" tofile="${basedir}/publish/servers/com.ibm.ws.kernel.metatype.helperServer/dropins/fileset.war"/>
+    </target>
+</project>

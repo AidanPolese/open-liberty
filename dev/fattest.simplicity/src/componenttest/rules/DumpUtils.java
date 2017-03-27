@@ -5,8 +5,8 @@
  *
  * WLP Copyright IBM Corp. 2015
  *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
  * U.S. Copyright Office.
  */
 package componenttest.rules;
@@ -44,18 +44,13 @@ import javax.net.ssl.X509TrustManager;
 import org.junit.runner.Description;
 
 import com.ibm.websphere.simplicity.log.Log;
-
+import com.ibm.ws.jmx.connector.client.rest.ClientProvider;
 import componenttest.topology.impl.LibertyServer;
 
 /**
  *
  */
 public class DumpUtils {
-
-    private static final String CLIENT_DOMAIN = "com.ibm.ws.jmx.connector.client";
-    private static final String REST_CLIENT_DOMAIN = "com.ibm.ws.jmx.connector.client.rest";
-    private static final String DISABLE_HOSTNAME_VERIFICATION = CLIENT_DOMAIN + ".disableURLHostnameVerification";
-    private static final String READ_TIMEOUT = REST_CLIENT_DOMAIN + ".readTimeout";
 
     private static final String CollectiveRepositoryMBean_OBJECT_NAME = "WebSphere:feature=collectiveController,type=CollectiveRepository,name=CollectiveRepository";
     private static final String COLLECTIVE_DUMP_URL = "/ibm/api/collective/v1/dump";
@@ -111,7 +106,7 @@ public class DumpUtils {
 
     /**
      * Creates the File object, and any necessary parent directories.
-     *
+     * 
      * @param filename The file name
      * @return The created File object
      */
@@ -152,7 +147,7 @@ public class DumpUtils {
 
     /**
      * Tries to close the Closeable.
-     *
+     * 
      * @param c The Closeable, may be {@code null}.
      */
     private void close(Closeable c) {
@@ -237,8 +232,8 @@ public class DumpUtils {
         Map<String, Object> environment = new HashMap<String, Object>();
         environment.put("jmx.remote.protocol.provider.pkgs", "com.ibm.ws.jmx.connector.client");
         environment.put(JMXConnector.CREDENTIALS, new String[] { adminUser, adminPassword });
-        environment.put(DISABLE_HOSTNAME_VERIFICATION, true);
-        environment.put(READ_TIMEOUT, 2 * 60 * 1000);
+        environment.put(ClientProvider.DISABLE_HOSTNAME_VERIFICATION, true);
+        environment.put(ClientProvider.READ_TIMEOUT, 2 * 60 * 1000);
         JMXServiceURL url = new JMXServiceURL("REST", "localhost", server.getHttpDefaultSecurePort(), "/IBMJMXConnectorREST");
         return JMXConnectorFactory.connect(url, environment);
     }

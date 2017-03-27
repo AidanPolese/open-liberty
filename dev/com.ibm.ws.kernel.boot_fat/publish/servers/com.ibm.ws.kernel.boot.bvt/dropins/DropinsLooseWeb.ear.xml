@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archive>
+	<dir sourceOnDisk="${shared.resource.dir}\looseConfig\testWeb1\WebContent"
+		targetInArchive="/" />
+	<dir sourceOnDisk="${shared.resource.dir}\looseConfig\testWeb1\classes"
+		targetInArchive="/WEB-INF/classes" />
+</archive>

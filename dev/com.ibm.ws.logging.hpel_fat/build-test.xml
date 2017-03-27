@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.logging.hpel_fat" default="buildandrun" basedir=".">
+	<import file="../ant_build/public_imports/fat_imports.xml" />
+	
+	<target name="addRequiredLibraries" description="Add libraries required by the tests">
+		<copy todir="${required.lib.dir}">
+			<fileset dir="${basedir}/lib" includes="*.jar" />
+			<!--fileset dir="../com.ibm.ws.logging.hpel/lib" includes="*.jar" /-->
+			<fileset dir="../com.ibm.ws.logging.hpel/build/lib" includes="com.ibm.ws.logging.hpel_*.jar"/>
+			<fileset dir="${shared.httpunit.dir}" includes="httpunit.jar" />
+			<fileset dir="${shared.httpunit.jars}" includes="*.jar" />
+		</copy> 
+	</target>
+	
+	<target name="addAutoInstallApplications" description="Automatically Install applications on LibertyServer instance creation">
+		<mkdir dir="${basedir}/publish/servers/HpelServer/dropins"/>
+		<move file="${basedir}/publish/files/HpelFat.zip" tofile="${basedir}/publish/servers/HpelServer/dropins/HpelFat.war"/>
+		<move file="${basedir}/publish/files/LogFat.zip" tofile="${basedir}/publish/servers/HpelServer/dropins/LogFat.war"/>
+	</target>
+</project>

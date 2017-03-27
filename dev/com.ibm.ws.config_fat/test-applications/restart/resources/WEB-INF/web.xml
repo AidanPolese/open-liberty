@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
+
+    <servlet>
+        <servlet-name>ConfigRestartTestServlet</servlet-name>
+        <servlet-class>test.server.config.restart.ConfigRestartTestServlet</servlet-class>
+        <load-on-startup></load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ConfigRestartTestServlet</servlet-name>
+        <url-pattern>/restart</url-pattern>
+    </servlet-mapping>
+    
+</web-app>

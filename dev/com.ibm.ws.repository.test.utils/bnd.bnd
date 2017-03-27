@@ -1,0 +1,13 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/mongo-client/mongo-java-driver-2.14.2.jar;version=file, \
+	fattest.simplicity;version=latest, \
+	com.ibm.json4j;version=latest, \
+	com.ibm.websphere.javaee.jsonp.1.0;version=latest, \
+	com.ibm.ws.org.codehaus.jackson.1.6.2;version=latest, \
+	com.ibm.ws.repository;version=latest
