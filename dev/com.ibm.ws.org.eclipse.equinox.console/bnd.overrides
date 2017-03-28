@@ -3,16 +3,22 @@ bVersion=1.0
 
 Bundle-SymbolicName: com.ibm.ws.org.eclipse.equinox.console.1.1.200
 
-Export-Package:
+Export-Package: \
+   org.eclipse.equinox.console.common; version=1.0.16, \
+   org.eclipse.equinox.console.common.terminal; version=1.0.16, \
+   org.eclipse.equinox.console.completion.common; version=1.0.16
 
 Private-Package: \
    org.eclipse.equinox.console.command.adapter, \
    org.eclipse.equinox.console.commands, \
+   org.eclipse.equinox.console.common, \
+   org.eclipse.equinox.console.common.terminal, \
    org.eclipse.equinox.console.completion, \
+   org.eclipse.equinox.console.completion.common, \
    org.eclipse.equinox.console.telnet
 
 -includeresource: \
    @lib/org.eclipse.equinox.console_1.1.200.v20150929-1405.jar!/about.html, \
    @lib/org.eclipse.equinox.console_1.1.200.v20150929-1405.jar!/plugin.properties
 
--removeheaders = Export-Package, Require-Bundle
+-removeheaders = Require-Bundle
