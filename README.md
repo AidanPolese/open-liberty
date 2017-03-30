@@ -23,7 +23,7 @@ OpenLiberty is a highly composable, fast to start, dynamic application server ru
 ## Learn concepts and commands
 
 ## License
-Copyright XXXX-2017 IBM Corporation
+Apache XXXX
 
 Licenses under the **link to license goes here**.
 
