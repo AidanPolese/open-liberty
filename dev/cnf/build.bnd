@@ -81,6 +81,8 @@ instrument.classesExcludes:
 instrument.ffdc: true
 instrument.taskInjection: false
 
+-buildpath.instrument: ${if;${instrument.disabled};;com.ibm.ws.ras.instrument\\;version=latest}
+
 javac.bootclasspath.java6: \
     ${workspace}/prereq.java.1.6/lib/rt.jar;version=file;boot=true
 

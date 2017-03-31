@@ -2,3 +2,5 @@
 bVersion=1.0
 
 -nobundles=true
+
+instrument.disabled: true

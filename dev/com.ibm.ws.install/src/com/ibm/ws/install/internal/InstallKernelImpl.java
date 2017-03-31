@@ -581,7 +581,8 @@ public class InstallKernelImpl implements InstallKernel, InstallKernelInteractiv
         try {
             this.director.downloadAssets(toExtension);
             this.director.log(Level.FINEST,
-                              InstallConstants.IGNORE_FILE_PROPERTY + InstallConstants.IGNORE_FILE_OPTION);
+                              "install(String toExtension, boolean rollbackAll,boolean downloadDependencies) - " + InstallConstants.IGNORE_FILE_PROPERTY
+                                            + ":" + InstallConstants.IGNORE_FILE_OPTION);
             if (Boolean.valueOf(InstallConstants.IGNORE_FILE_OPTION)) {
                 this.director.install(ExistsAction.ignore, rollbackAll, downloadDependencies);
             } else {

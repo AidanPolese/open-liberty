@@ -25,4 +25,6 @@ Private-Package: com.ibm.ws.repository.resources.internal, \
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \
-	lib/client-lib.jar;version=file
+	lib/client-lib.jar;version=file, \
+	com.ibm.websphere.javaee.jsonp.1.0;version=latest, \
+	com.ibm.ws.org.apache.aries.util.1.1.2;version=latest

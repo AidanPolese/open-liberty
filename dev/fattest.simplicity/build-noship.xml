@@ -17,7 +17,7 @@
       <fileset dir="${basedir}/../test_prereqs/defaults" />
     </copy>
 
-    <jar destfile="${lib.dir}/componenttest.encoder.jar" basedir="${basedir}/../com.ibm.ws.common.encoder/build/classes"/>
+    <jar destfile="${lib.dir}/fattest.encoder.jar" basedir="${basedir}/../com.ibm.ws.common.encoder/build/classes"/>
   </target>
     
   <target name="clean">
@@ -34,6 +34,7 @@
      <echo message="packaging extras in ${lib.dir}/${ant.project.name}.jar from ${classes.dir}" />
      <jar destfile="${lib.dir}/${ant.project.name}.jar" update="true">
        <fileset dir="${src.dir}" includes="**/*.properties" />
+       <zipfileset src="../build.image/wlp/lib/com.ibm.ws.componenttest_1.0.jar" includes="componenttest/**" />
      </jar>
    </target>
 </project>

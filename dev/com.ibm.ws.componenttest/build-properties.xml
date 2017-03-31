@@ -12,7 +12,8 @@
   <import file="../ant_build/public_imports/internal_imports/standard_properties.xml" />
 
   <property name="common.dir" location="../test_build" />
-  <property name="external.lib.dir" value="${basedir}/../fattest.simplicity/build/lib" />
+  <property name="componenttest.lib.dir" value="${basedir}/../com.ibm.ws.componenttest/build/lib" />
+  <property name="fattest.lib.dir" value="${basedir}/../fattest.simplicity/build/lib" />
   <!-- integration test properties -->
 
   <property name="buckets.dir" value="${basedir}/autoFVT" />

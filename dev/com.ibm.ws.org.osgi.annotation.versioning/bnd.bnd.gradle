@@ -3,6 +3,8 @@
 -includeresource: \
    @lib/org.osgi.annotation.versioning-1.0.0.jar!/!(OSGI-OPT/src|META-INF/maven)/*
 
+instrument.disabled: true
+
 publish.wlp.jar.disabled: true
 
 -buildpath: \

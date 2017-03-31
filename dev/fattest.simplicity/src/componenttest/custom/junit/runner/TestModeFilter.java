@@ -17,6 +17,7 @@ import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
 
 import com.ibm.websphere.simplicity.log.Log;
+
 import componenttest.custom.junit.runner.Mode.TestMode;
 
 /**
@@ -40,7 +41,6 @@ public class TestModeFilter extends Filter {
     /** {@inheritDoc} */
     @Override
     public String describe() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -74,9 +74,6 @@ public class TestModeFilter extends Filter {
             testMode = mode.value();
         }
 
-        //don't filter out the synthetic method based on the test mode
-        boolean isPassThroughMethod = (FeatureDoesNotStartOnLowJavaVersionsTestStub.SYNTHETIC_METHOD_NAME.equals(desc.getMethodName()));
-
         //compare the current run level of the framework to the
         //test annotated run level
         //exclude the test if the current run mode is lower than the test's
@@ -85,7 +82,7 @@ public class TestModeFilter extends Filter {
         // full                | lite                  | full > lite | > 0 | true, full should run lite tests
         // lite                | lite | lite = lite | 0 | true, lite should run lite tests
         // rapid               | lite | rapid < lite | < 0 | false, rapid should not run lite tests
-        if (FRAMEWORK_TEST_MODE.compareTo(testMode) < 0 && !isPassThroughMethod) {
+        if (FRAMEWORK_TEST_MODE.compareTo(testMode) < 0) {
             Log.debug(getClass(), "Removing test " + desc.getMethodName() + " with mode " + testMode + " from list to run, because not valid for current mode "
                                   + FRAMEWORK_TEST_MODE);
             return false;

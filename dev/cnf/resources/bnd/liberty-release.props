@@ -1,41 +1,15 @@
-copyrightBuildYear=2017
-libertyRelease=17.0.0.2
-libertyBetaVersion=2017.3.0.0
+
+releaseTypeGA=false
+libertyGAVersion=17.0.0.2
+libertyBetaVersion=2017.4.0.0
+libertyRelease=${if;${releaseTypeGA};${libertyGAVersion};${libertyBetaVersion}}
+
+-include= ${if;${releaseTypeGA};liberty-GA-release.props;liberty-Beta-release.props}
+
 libertyBundleMicroVersion=17
+copyrightBuildYear=2017
 buildLabel=${tstamp}
 buildID=${libertyRelease}-${buildLabel}
 productEdition=BASE_ILAN
 productLicenseType=ILAN
 productID=com.ibm.websphere.appserver
-
-libertyWelcomePageProductName=WebSphere Application Server Beta
-libertyInfocenterLink=http://www14.software.ibm.com/webapp/wsbroker/redirect?version=cord&product=was-nd-mp&topic=cwlp_about
-libertyLatestVersionUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/wlp_beta_latestversion.js
-libertyWelcomePageCssEnhancementsUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/adminCenter-welcome.css
-libertyWelcomePageProductVersion=${libertyBetaVersion}
-libertyWelcomePageJsEnhancementsUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/adminCenter-welcome.js
-
-mfProductEdition=
-mfProductEditionRestricted=
-mfProductEditionZOs=
-mfProductEditionLibertyCore=
-mfProductVersion=version="${libertyBetaVersion}"
-mfLicenseInfoSpecial=
-mfFeatureTermsRestricted=http://www.ibm.com/licenses/wlp-featureterms-v1
-mfFeatureTermsSpecial=http://www.ibm.com/licenses/wlp-featureterms-v1
-
-libertyWelcomePageProductName=WebSphere Application Server V${libertyRelease}
-libertyInfocenterLink=http://www14.software.ibm.com/webapp/wsbroker/redirect?version=phil&product=was-nd-mp&topic=cwlp_about
-libertyLatestVersionUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/wlp_ga_latestversion.js
-libertyWelcomePageCssEnhancementsUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/adminCenter-welcome.css
-libertyWelcomePageProductVersion=${libertyRelease}
-libertyWelcomePageJsEnhancementsUrl=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/adminCenter-welcome.js
-
-mfProductEdition= productEdition="@PRODUCT_EDITION@"
-mfProductEditionRestricted= productEdition="@PRODUCT_EDITION_RESTRICTED@"
-mfProductEditionZOs=productEdition="@PRODUCT_EDITION_ZOS@"
-mfProductEditionLibertyCore= productEdition="@PRODUCT_EDITION_LIBERTY_CORE@"
-mfProductVersion=version="${libertyRelease}"
-mfLicenseInfoSpecial=@IBM_LI_SPECIAL@
-mfFeatureTermsRestricted=http://www.ibm.com/licenses/wlp-featureterms-@FEATURE_TERMS_RESTRICTED_V1@
-mfFeatureTermsRestricted=http://www.ibm.com/licenses/@FEATURE_TERMS_SPECIAL@

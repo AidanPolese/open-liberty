@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2012, 2013
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package test.server.config;
@@ -129,7 +129,7 @@ public class ConfigExtensionsTest {
     public void testExtendsNonFactory() throws Exception {
         String id = "CWWKG0061E";
         assertNotNull("The error message " + id + " for trying to use ibm:extends on a non-factory PID was not found",
-                      extensionsServer.waitForStringInLog(id + ".*test\\.config\\.extensions\\.sub\\.non\\.factorypid.*test\\.config\\.extensions\\.sub"));
+                      extensionsServer.waitForStringInLog(id + "(?=.*test\\.config\\.extensions\\.sub\\.non\\.factorypid)(?=.*test\\.config\\.extensions\\.sub)"));
     }
 
     /**
@@ -140,7 +140,8 @@ public class ConfigExtensionsTest {
     public void testExtendsNonFactorySuper() {
         String id = "CWWKG0062E";
         assertNotNull("The error message " + id + " for trying to use ibm:extends with a non-factory super was not found",
-                      extensionsServer.waitForStringInLog(id + ".*test\\.config\\.extensions\\.parent\\.non\\.factorypid.*test\\.config\\.extensions\\.extends\\.non\\.factorypid"));
+                      extensionsServer.waitForStringInLog(id
+                                                          + "(?=.*test\\.config\\.extensions\\.parent\\.non\\.factorypid)(?=.*test\\.config\\.extensions\\.extends\\.non\\.factorypid)"));
     }
 
     /**
@@ -150,7 +151,8 @@ public class ConfigExtensionsTest {
     public void testInvalidSuper() {
         String id = "CWWKG0059E";
         assertNotNull("The error message " + id + " for invalid super was not found",
-                      extensionsServer.waitForStringInLog(id + ".*test\\.config\\.extensions\\.sub\\.error\\.no\\.parent\\.pid.*test\\.config\\.extensions\\.invalid\\.parent"));
+                      extensionsServer.waitForStringInLog(id
+                                                          + "(?=.*test\\.config\\.extensions\\.sub\\.error\\.no\\.parent\\.pid)(?=.*test\\.config\\.extensions\\.invalid\\.parent)"));
     }
 
     /**
@@ -162,7 +164,7 @@ public class ConfigExtensionsTest {
         assertNotNull(
                       "The error message " + id + " for invalid rename was not found",
                       extensionsServer.waitForStringInLog(id
-                                                          + ".*testInvalidAttribute.*testInvalidAttrRename.*test\\.config\\.extensions\\.sub\\.error\\.no\\.parent\\.override\\.attr"));
+                                                          + "(?=.*testInvalidAttribute)(?=.*testInvalidAttrRename)(?=.*test\\.config\\.extensions\\.sub\\.error\\.no\\.parent\\.override\\.attr)"));
     }
 
     @Test
@@ -170,44 +172,38 @@ public class ConfigExtensionsTest {
         String id = "CWWKG0058E";
         //[ERROR   ] CWWKG0058E: test.config.extensions.extends.attr.required is missing required attribute testAttr4
         assertNotNull("The error message " + id + " for a missing required attribute defined on a sub type was not found",
-                      extensionsServer.waitForStringInLog(id + ".*" +
-                                                          "test\\.config\\.extensions\\.extends\\.attr\\.required" +
-                                                          ".*" +
-                                                          "testAttr4"));
+                      extensionsServer.waitForStringInLog(id + "(?=.*test\\.config\\.extensions\\.extends\\.attr\\.required)" + "(?=.*testAttr4)"));
 
         assertNotNull("The error message " + id + " for a missing required attribute defined on a super type was not found",
-                      extensionsServer.waitForStringInLog(id + ".*" +
-                                                          "test\\.config\\.extensions\\.extends\\.attr\\.required\\.parent" +
-                                                          ".*" +
-                                                          "testAttribute2"));
+                      extensionsServer.waitForStringInLog(id + "(?=.*test\\.config\\.extensions\\.extends\\.attr\\.required\\.parent)" + "(?=.*testAttribute2)"));
     }
 
     @Test
     public void testAttemptToOverrideFinalMeta() {
         String id = "CWWKG0060E";
         assertNotNull("The error message " + id + " for attempting to re-assign a final value was not found",
-                      extensionsServer.waitForStringInLog(id + ".*" + "testOverrideFinal" + ".*" + "test.config.extensions.override.final" + ".*" + "test.config.extensions.super"));
+                      extensionsServer.waitForStringInLog(id + "(?=.*testOverrideFinal)" + "(?=.*test.config.extensions.override.final)" + "(?=.*test.config.extensions.super)"));
     }
 
     /**
      * This tests the scenario where ibm:extends is used on an OCD when the super type does not exist.
      * A feature is then installed that provides the super.
      * After the feature is installed it should be possible to use the sub type.
-     * 
+     *
      * This test requires a different server configuration, so it must restore
      * the original that other tests rely upon.
      */
     @Test
     public void testLateArrivingSecondBundleSuper() throws Exception {
         try {
-            //stop the server, collecting logs from any previous tests 
+            //stop the server, collecting logs from any previous tests
             //and switch to the alternate serverB1.xml config
             extensionsServer.stopServer(true);
             extensionsServer.setServerConfigurationFile("extensions/serverB1.xml");
             extensionsServer.startServer();
             String id = "CWWKG0059E";
             assertNotNull("The error message " + id + " for invalid super was not found",
-                          extensionsServer.waitForStringInLog(id + ".*test\\.config\\.extensions\\.different\\.bundle.*test\\.config\\.extensions\\.super"));
+                          extensionsServer.waitForStringInLog(id + "(?=.*test\\.config\\.extensions\\.different\\.bundle)(?=.*test\\.config\\.extensions\\.super)"));
             //now switch on the bundle providing the super (and our test system wab)
             //by setting the serverB2.xml config
             extensionsServer.setMarkToEndOfLog();
@@ -233,7 +229,7 @@ public class ConfigExtensionsTest {
     /**
      * This test requires a different server configuration, so it must restore
      * the original that other tests rely upon.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -292,7 +288,7 @@ public class ConfigExtensionsTest {
         String id = "CWWKG0058E";
         assertNotNull(
                       "The error message " + id + " for internal required attribute was not found",
-                      extensionsServer.waitForStringInLog(id + ".*internalsub2.*internalAttr1"));
+                      extensionsServer.waitForStringInLog(id + "(?=.*internalsub2)(?=.*internalAttr1)"));
     }
 
 }

@@ -5,6 +5,8 @@ Export-Package: org.apache.tools.ant;version="1.9.6"
 -includeresource: \
 	@lib/ant-1.9.6.jar!/!META-INF/MANIFEST.MF
 
+instrument.disabled: true
+
 publish.wlp.jar.disabled: true
 
 -buildpath: \

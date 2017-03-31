@@ -20,7 +20,7 @@ subprojects {
         from "${buildDir}"
         into "${rootDir}/build.image/wlp/" + bnd('publish.wlp.jar.suffix', 'lib')
         include bnd('publish.wlp.jar.include', '*.jar')
-	if (parseBoolean(bnd('publish.wlp.jar.rename', 'true'))) {
+        if (parseBoolean(bnd('publish.wlp.jar.rename', 'true'))) {
           rename '(.*).jar', '$1' + "_${bnd.bFullVersion}.jar"
         }
       }
@@ -60,7 +60,14 @@ subprojects {
       copy {
         from "${projectDir}/resources"
         into "${rootDir}/build.image/wlp/lib/features"
-	include bnd('publish.feature.resources')
+        include bnd('publish.feature.resources')
+        exclude '*.mf'
+      }
+      copy {
+        from "${projectDir}/resources"
+        into "${rootDir}/build.image/wlp/lib/features"
+        include '*.mf'
+        expand(mfProductEdition: bnd('mfProductEdition'), mfProductVersion: bnd('mfProductVersion'))
       }
     }
   }
@@ -112,6 +119,7 @@ subprojects {
 
   task publishClientScripts {
     dependsOn jar
+    enabled !parseBoolean(bnd('publish.wlp.clients.disabled', 'false'))
     inputs.files(fileTree( dir: "${projectDir}/publish/clients")).skipWhenEmpty()
     outputs.dir "${rootDir}/build.image/wlp/clients"
     doLast {
@@ -267,6 +275,7 @@ subprojects {
   }
 
   task globalize {
+    enabled !parseBoolean(bnd('globalize.disabled', 'false'))
       ext.destinationDir = new File(buildDir, "src/${name}/java")
       inputs.files(fileTree(dir: "${projectDir}/resources", include: '**/*.nlsprops')).skipWhenEmpty()
       outputs.dir destinationDir

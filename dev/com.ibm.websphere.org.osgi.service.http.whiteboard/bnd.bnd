@@ -5,6 +5,8 @@
 
 publish.wlp.jar.suffix: dev/api/spec
 
+instrument.disabled: true
+
 -buildpath: \
 	${javac.bootclasspath.java6}, \
 	lib/org.osgi.service.http.whiteboard-1.0.0.jar;version=file

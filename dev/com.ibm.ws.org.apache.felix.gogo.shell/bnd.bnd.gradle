@@ -1,8 +1,8 @@
 -include= jar:${fileuri;lib/org.apache.felix.gogo.shell-0.12.0.jar}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -includeresource: \
-   gosh_profile=resources/gosh_profile, \
-   @lib/org.apache.felix.gogo.shell-0.12.0.jar!/!META-INF/maven/*
+   @lib/org.apache.felix.gogo.shell-0.12.0.jar!/!META-INF/maven/*, \
+   gosh_profile=resources/gosh_profile
 
 instrument.disabled: true
 

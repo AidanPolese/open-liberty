@@ -5,8 +5,8 @@
  *
  * WLP Copyright IBM Corp. 2013
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package test.server.config;
@@ -58,7 +58,7 @@ public class BadConfigTests {
             server.setMarkToEndOfLog();
             server.setServerConfigurationFile("badconfig/badLogging.xml");
 
-            assertNotNull("There should be a warning during server start", server.waitForStringInLogUsingMark("CWWKG0083W.*maxFiles.*-1.*2.*"));
+            assertNotNull("There should be a warning during server start", server.waitForStringInLogUsingMark("CWWKG0083W(?=.*maxFiles)(?=.*-1)(?=.*2)"));
             assertNotNull("The config should be updated", server.waitForStringInLogUsingMark("CWWKG0017I.*"));
 
         } finally {

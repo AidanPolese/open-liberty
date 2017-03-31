@@ -6,6 +6,8 @@ bVersion=1.0
 src: \
 	bvt/src
 
+publish.wlp.clients.disabled: true
+
 -buildpath: \
 	${javac.bootclasspath.java6}, \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \

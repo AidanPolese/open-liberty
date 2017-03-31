@@ -552,8 +552,8 @@ class SchemaWriter {
                 // If we have a final attr, we don't add it to the list of attrs to write out, and we should also
                 // remove it from the existing list if it was defined in a super type.
                 if (extendedAttr.isFinal()) {
-                    if (currentAttributes.containsKey(attrId))
-                        currentAttributes.remove(attrId);
+                    currentAttributes.remove(attrId);
+                    alternateAttributes.remove(attrId);
 
                 } else if ((rename = extendedAttr.getRename()) != null) {
                     // If  we have a rename, then we should take the existing attr, and replace any values that are defined in

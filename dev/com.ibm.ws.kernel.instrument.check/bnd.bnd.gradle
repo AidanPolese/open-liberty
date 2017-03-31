@@ -1,5 +1,8 @@
--include= ~../cnf/resources/bnd/bundle.props,
+-include= ~../cnf/resources/bnd/bundle.props
 bVersion=1.0
+
+javac.source: 1.4
+javac.target: 1.4
 
 Export-Package: com.ibm.ws.kernel.instrument;-split-package:=merge-last
 Can-Redefine-Classes: false
@@ -8,9 +11,6 @@ Main-Class: com.ibm.ws.kernel.instrument.EnvCheck
 Premain-Class: com.ibm.ws.kernel.instrument.EnvCheck
 Agent-Class: com.ibm.ws.kernel.instrument.EnvCheck
 -outputmask: bootstrap-agent.jar
-
-javac.source: 1.4
-javac.target: 1.4
 
 instrument.disabled: true
 
