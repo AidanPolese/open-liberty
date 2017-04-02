@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383784030
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: com.ibm.ws.ejbcontainer.mdb; type="internal"
 IBM-App-ForceRestart: install,

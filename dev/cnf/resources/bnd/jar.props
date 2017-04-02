@@ -11,7 +11,7 @@
   Bundle-ManifestVersion, Bundle-Name, Bundle-SymbolicName, Bundle-Version, \
   Private-Package, Import-Package, Include-Resource, \
   Bnd-LastModified, Tool, \
-  TODAY, DSTAMP, TSTAMP
+  TODAY, DSTAMP, TSTAMP, Bnd-LastModified
 
 
 # Set some common manifest headers we want to set in client JARs

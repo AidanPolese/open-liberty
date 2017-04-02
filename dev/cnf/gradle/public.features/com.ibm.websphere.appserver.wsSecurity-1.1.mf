@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383806636
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: org.apache.ws.security; type=third-party,
  org.apache.ws.security.action; type=third-party,
@@ -36,7 +35,7 @@ Subsystem-Content: com.ibm.websphere.appserver.jta-1.1; ibm.tolerates:="1.2"; ap
  com.ibm.ws.org.opensaml.opensaml.2.5.3; version="[1.0.0,1.0.200)",
  com.ibm.ws.prereq.wsdl4j.1.6.2; version="[1.0.0,1.0.200)",
  com.ibm.ws.net.sf.ehcache.core.2.5.2; version="[1.0.0,1.0.200)",
- com.ibm.ws.org.apache.cxf-rt-ws-mex.2.6.2; version="[1.0.0,1.0.200)",
+ com.ibm.ws.org.apache.cxf.ws.mex.2.6.2; version="[1.0.0,1.0.200)",
  com.ibm.ws.wssecurity; version="[1.0.0,1.0.200)",
  com.ibm.ws.org.apache.cxf.ws.security.2.6.2; version="[1.0.0,1.0.200)",
  com.ibm.ws.org.opensaml.openws.1.4.4; version="[1.0.0,1.0.200)",

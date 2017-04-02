@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383831963
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-App-ForceRestart: uninstall
 IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}

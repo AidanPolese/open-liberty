@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383846148
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: javax.ws.rs; type=spec,
  javax.ws.rs.container; type=spec,

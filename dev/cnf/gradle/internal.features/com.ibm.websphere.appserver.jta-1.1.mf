@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383824253
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: javax.transaction; type=spec,
  javax.transaction.xa; type=spec

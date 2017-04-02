@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383797372
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: javax.servlet.annotation; type=spec,
  javax.servlet.descriptor; type=spec,
@@ -38,7 +37,7 @@ IBM-SPI-Package: com.ibm.wsspi.webcontainer,
 IBM-ShortName: servlet-3.1
 Subsystem-Category: JavaEE7Application
 Subsystem-Content: ws-webserverPluginutil.jar; type=file; location:="bin/tools/ws-webserverPluginutil.jar"; version="[1.0.0,1.0.200)",
- pluginUtility; type=file; location:="bin/pluginUtility",
+ pluginUtility; ibm.executable:=true; ibm.file.encoding:=ebcdic; type=file; location:="bin/pluginUtility",
  pluginUtility.bat; type=file; location:="bin/pluginUtility.bat",
  ibm-common-bnd_1_2.xsd; type=file; location:="dev/api/ibm/schema/ibm-common-bnd_1_2.xsd",
  com.ibm.websphere.appserver.spi.servlet_2.0-javadoc.zip; type=file; location:="dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.servlet_2.0-javadoc.zip",

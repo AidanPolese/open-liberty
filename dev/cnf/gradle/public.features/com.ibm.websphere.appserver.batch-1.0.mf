@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383756246
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: javax.batch.api; type=spec,
  javax.batch.api.chunk; type=spec,

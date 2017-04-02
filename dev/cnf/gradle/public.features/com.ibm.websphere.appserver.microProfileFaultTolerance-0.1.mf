@@ -1,4 +1,3 @@
-Bnd-LastModified: 1489177718859
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: com.ibm.websphere.microprofile.faulttolerance; version="1.0",
  com.ibm.websphere.microprofile.faulttolerance.spi; version="1.0",
