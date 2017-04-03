@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383768328
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: javax.security.jacc; type=spec,
  com.ibm.wsspi.security.authorization.jacc; type=ibm-api
@@ -18,7 +17,8 @@ Subsystem-Content: com.ibm.websphere.appserver.api.jacc_1.0-javadoc.zip; type=fi
  com.ibm.websphere.appserver.containerServices-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.api.jacc; location:="dev/api/ibm/,lib/"; type=jar; version="[1.0.0,1.0.200)",
  com.ibm.websphere.javaee.jacc.1.5; location:="dev/api/spec/,lib/"; version="[1.0.0,1.0.200)",
- com.ibm.ws.security.authorization.jacc; version="[1.0.0,1.0.200)"
+ com.ibm.ws.security.authorization.jacc; version="[1.0.0,1.0.200)",
+ com.ibm.ws.security.audit.utils; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description
 Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
 Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.jacc-1.5

@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383816613
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Service: org.apache.aries.blueprint.NamespaceHandler; osgi.service.blueprint.namespace="http://aries.apache.org/xmlns/jpa/v1.0.0",
  org.apache.aries.blueprint.NamespaceHandler; osgi.service.blueprint.namespace="http://aries.apache.org/xmlns/jpa/v1.1.0"

@@ -145,9 +145,9 @@ public class ServerConfigTest {
         server.startServer();
 
         try {
-            assertStringsPresentInLog(server, new String[] { ".*CWWKG0011W.*person.*", ".*firstName.*Jane.*" });
-            assertStringsPresentInLog(server, new String[] { ".*CWWKG0011W.*ejb.*threadPool.*", ".*minThreads.*5.*" });
-            assertStringsPresentInLog(server, new String[] { ".*CWWKG0011W.*quickStartSecurity.*" });
+            assertStringsPresentInLog(server, new String[] { "CWWKG0011W.*person", "firstName.*Jane" });
+            assertStringsPresentInLog(server, new String[] { "CWWKG0011W(?=.*ejb)(?=.*threadPool)", "minThreads.*5" });
+            assertStringsPresentInLog(server, new String[] { "CWWKG0011W.*quickStartSecurity" });
         } finally {
             server.stopServer();
         }

@@ -20,7 +20,7 @@ restricted by GSA ADP Schedule Contract with IBM Corp.
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.ibm.websphere.appserver.spi</groupId>
   <artifactId>com.ibm.websphere.appserver.spi.zosCommandProcessing</artifactId>
-  <version>1.0.16</version>
+  <version>${bFullVersion}</version>
   <name>WebSphere ZOS Command Processing SPI</name>
   <description>WebSphere ZOS Command Processing SPI, version 1.0</description>
 </project>

@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383766859
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2

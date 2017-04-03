@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383810459
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: com.ibm.websphere.dynamic.routing; type="ibm-api"
 IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductEditionRestricted}${mfProductVersion}
@@ -8,7 +7,7 @@ IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
 IBM-ShortName: dynamicRouting-1.0
 Subsystem-Content: ws-dynamicRoutingutil.jar; type=file; location:="bin/tools/ws-dynamicRoutingutil.jar"; version="[1.0.0,1.0.200)",
- dynamicRouting; type=file; location:="bin/dynamicRouting",
+ dynamicRouting; ibm.executable:=true; ibm.file.encoding:=ebcdic; type=file; location:="bin/dynamicRouting",
  dynamicRouting.bat; type=file; location:="bin/dynamicRouting.bat",
  com.ibm.websphere.appserver.api.dynamicRouting_1.2-javadoc.zip; type=file; location:="dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.dynamicRouting_1.2-javadoc.zip",
  com.ibm.websphere.appserver.jta-1.1; ibm.tolerates:="1.2"; type="osgi.subsystem.feature",

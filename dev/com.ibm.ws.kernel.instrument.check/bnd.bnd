@@ -1,7 +1,10 @@
--include= ~../cnf/resources/bnd/bundle.props,
+-include= ~../cnf/resources/bnd/liberty-release.props
 bVersion=1.0
 
-Export-Package: com.ibm.ws.kernel.instrument;-split-package:=merge-last
+javac.source: 1.4
+javac.target: 1.4
+
+Private-Package: com.ibm.ws.kernel.instrument;-split-package:=merge-last
 Can-Redefine-Classes: false
 Can-Retransform-Classes: true
 Main-Class: com.ibm.ws.kernel.instrument.EnvCheck
@@ -9,13 +12,12 @@ Premain-Class: com.ibm.ws.kernel.instrument.EnvCheck
 Agent-Class: com.ibm.ws.kernel.instrument.EnvCheck
 -outputmask: bootstrap-agent.jar
 
-javac.source: 1.4
-javac.target: 1.4
-
 instrument.disabled: true
 
 publish.wlp.jar.include: bootstrap-agent.jar
 publish.wlp.jar.rename: false
+
+-removeheaders=Bnd-LastModified, Bundle-ManifestVersion, Bundle-Name, Bundle-Version, Private-Package, Require-Capability, Tool
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \

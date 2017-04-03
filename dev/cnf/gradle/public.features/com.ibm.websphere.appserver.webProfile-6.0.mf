@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383803498
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-App-ForceRestart: install,
  uninstall

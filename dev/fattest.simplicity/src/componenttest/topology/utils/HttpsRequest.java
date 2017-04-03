@@ -1,13 +1,17 @@
 package componenttest.topology.utils;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonStructure;
 import javax.net.ssl.HttpsURLConnection;
 
 import componenttest.topology.impl.LibertyServer;
@@ -76,9 +80,16 @@ public class HttpsRequest {
     }
 
     /**
-     * Make an HTTPS request and receive the response as a JSON object.
+     * Make an HTTPS request and receive the response as the specified type.
+     * The following types are valid parameters:
+     * <ul>
+     * <li>java.lang.String</li>
+     * <li>javax.json.JsonArray</li>
+     * <li>javax.json.JsonObject</li>
+     * <li>javax.json.JsonStructure</li>
+     * </ul>
      */
-    public String run() throws Exception {
+    public <T> T run(Class<T> type) throws Exception {
         System.out.println(reqMethod + ' ' + url);
 
         HttpsURLConnection con = (HttpsURLConnection) new URL(url).openConnection();
@@ -87,9 +98,13 @@ public class HttpsRequest {
             con.setDoOutput(true);
             con.setRequestMethod(reqMethod);
 
+            if (type.getPackage().equals("javax.json"))
+                con.setRequestProperty("Content-Type", "application/json");
+            else
+                con.setRequestProperty("Content-Type", "text/html");
+
             if (json != null) {
                 con.setRequestProperty("Accept", "application/json");
-                con.setRequestProperty("Content-Type", "application/json");
                 OutputStream out = con.getOutputStream();
                 out.write(json.getBytes("UTF-8"));
                 out.close();
@@ -107,12 +122,22 @@ public class HttpsRequest {
                 throw new Exception("Unexpected response (See HTTP_* constant values on HttpURLConnection): " + responseCode);
 
             if (responseCode / 100 == 2) { // response codes in the 200s mean success
-                StringBuilder response = new StringBuilder();
-                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-                while (in.ready())
-                    response.append(in.readLine()).append('\n');
-                in.close();
-                return response.toString();
+                if (JsonArray.class.equals(type))
+                    return type.cast(Json.createReader(con.getInputStream()).readArray());
+                else if (JsonObject.class.equals(type))
+                    return type.cast(Json.createReader(con.getInputStream()).readObject());
+                else if (JsonStructure.class.equals(type))
+                    return type.cast(Json.createReader(con.getInputStream()).read());
+                else if (String.class.equals(type)) {
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    InputStream in = con.getInputStream();
+                    int numBytesRead;
+                    for (byte[] b = new byte[8192]; (numBytesRead = in.read(b)) != -1;)
+                        out.write(b, 0, numBytesRead);
+                    in.close();
+                    return type.cast(out.toString("UTF-8"));
+                } else
+                    throw new IllegalArgumentException(type.getName());
             } else
                 return null;
         } finally {

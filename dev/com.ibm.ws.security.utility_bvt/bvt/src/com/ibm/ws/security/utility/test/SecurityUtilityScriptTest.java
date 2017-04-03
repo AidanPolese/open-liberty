@@ -112,11 +112,10 @@ public class SecurityUtilityScriptTest {
     @Test
     public void testEncode() throws Exception {
         final String textToEncode = "textToEncode";
-        final String encodedText = "{xor}KzonKwswGjE8MDs6";
+        final String encodedText = "\\{xor\\}KzonKwswGjE8MDs6";
 
         List<String> argOutput = execute(null, Arrays.asList("encode", textToEncode));
-        assertEquals("encode arg should produce one line of output. Output was: " + argOutput, 1, argOutput.size());
-        assertEquals("encode arg result. Output was: " + argOutput, encodedText, argOutput.get(0));
+        assertTrue("encode arg result. Output was: " + argOutput, findMatchingLine(argOutput, encodedText));
 
         // for some reason, the following two testcases might return more than one line due to some interferance with another output,
         // therefore, instead of checking the number of lines, check whether the one of the output lines starts with {aes}.

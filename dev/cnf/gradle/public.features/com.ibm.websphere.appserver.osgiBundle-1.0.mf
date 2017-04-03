@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383789749
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: org.osgi.service.cm
 IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}

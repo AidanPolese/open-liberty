@@ -2,4 +2,6 @@
 
 -nobundles=true
 
+instrument.disabled: true
+
 -dependson: com.ibm.ws.kernel.instrument.check

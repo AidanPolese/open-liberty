@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383758964
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
@@ -7,7 +6,7 @@ IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
 IBM-ShortName: bluemixUtility-1.0
 Subsystem-Content: ws-bluemixUtility.jar; type=file; location:="bin/tools/ws-bluemixUtility.jar"; version="[1.0.0,1.0.200)",
- bluemixUtility; type=file; location:="bin/bluemixUtility",
+ bluemixUtility; ibm.executable:=true; ibm.file.encoding:=ebcdic; type=file; location:="bin/bluemixUtility",
  bluemixUtility.bat; type=file; location:="bin/bluemixUtility.bat",
  com.ibm.ws.bluemix.utility; type=jar; version="[1.0.0,1.0.200)",
  com.ibm.websphere.javaee.jsonp.1.0; location:="dev/api/spec/,lib/"; type=jar; version="[1.0.0,1.0.200)",

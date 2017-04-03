@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383770250
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: javax.mail; type=spec,
  javax.mail.internet; type=spec,

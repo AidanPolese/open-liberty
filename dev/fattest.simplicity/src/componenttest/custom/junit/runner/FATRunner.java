@@ -121,19 +121,10 @@ public class FATRunner extends BlockJUnit4ClassRunner {
             //filter any tests, using our list of filters
             filter(new CompoundFilter(testFiltersToApply));
 
-            try {
-                // Now try again filtering out the tests which can't run on this version of Java
-                // Check to see if this sets a minimum java level that might need independent validation
-                //filter any tests, using our list of filters
-                filter(JAVA_LEVEL_FILTER);
-
-            } catch (NoTestsRemainException e) {
-                //swallow this exception which Should Never Happen (the synthetic test would always pass through)
-                //log a warning so we know something went Wrong
-                Log.finer(this.getClass(), "filter", "All tests were filtered out because of a java-level mismatch for class " + getTestClass().getName()
-                                                     + ", and the synthetic test did not get added as it has previously been run in this suite");
-                hasTestsToRun = false;
-            }
+            // Now try again filtering out the tests which can't run on this version of Java
+            // Check to see if this sets a minimum java level that might need independent validation
+            // filter any tests, using our list of filters
+            filter(JAVA_LEVEL_FILTER);
         } catch (NoTestsRemainException e) {
             //swallow this exception, because we might have Test classes that contain only tests that run in a mode we aren't currently in
             //log a warning so we know
@@ -150,28 +141,25 @@ public class FATRunner extends BlockJUnit4ClassRunner {
     @Override
     public List<FrameworkMethod> getChildren() {
         List<FrameworkMethod> unfilteredChildren = super.getChildren();
+        unfilteredChildren.addAll(TestServletProcessor.getServletTests(getTestClass()));
+
         // It seems we only go through this method once but let's be defensive and check if we already stuffed in the synthetic method
         if (syntheticTest == null || !unfilteredChildren.contains(syntheticTest)) {
             // Stuff a synthetic test into the list. If it's not needed the filter will remove it again.
-            syntheticTest = JAVA_LEVEL_FILTER.createSyntheticTest(getTestClassNameForAssociatedServers());
+            syntheticTest = JAVA_LEVEL_FILTER.createSyntheticTest();
             unfilteredChildren.add(syntheticTest);
         }
-        unfilteredChildren.addAll(TestServletProcessor.getServletTests(getTestClass()));
         return unfilteredChildren;
     }
 
     @Override
     public void run(RunNotifier notifier) {
-        if (JavaLevelFilter.shouldRunTest(this.getDescription()) == false) {
-            LibertyServer.setValidateApps(false);
-        }
-        injectLibertyServers();
-        try {
-            if (hasTestsToRun) {
-                super.run(notifier);
-            }
-        } finally {
-            LibertyServer.setValidateApps(true);
+        if (!JavaLevelFilter.hasRealTests())
+            hasTestsToRun = false;
+
+        if (hasTestsToRun) {
+            injectLibertyServers();
+            super.run(notifier);
         }
     }
 
@@ -183,6 +171,10 @@ public class FATRunner extends BlockJUnit4ClassRunner {
      */
     @Override
     public Statement methodBlock(final FrameworkMethod method) {
+        if (!JavaLevelFilter.hasRealTests()) {
+            return JavaLevelFilter.emptyStatement();
+        }
+
         final Statement superStatement = super.methodBlock(method);
 
         Statement statement = new Statement() {
@@ -304,6 +296,9 @@ public class FATRunner extends BlockJUnit4ClassRunner {
      */
     @Override
     public Statement classBlock(RunNotifier notifier) {
+        if (!JavaLevelFilter.hasRealTests()) {
+            return JavaLevelFilter.emptyStatement();
+        }
 
         final Statement superStatement = super.classBlock(notifier);
 

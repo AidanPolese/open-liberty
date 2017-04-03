@@ -19,6 +19,8 @@ Private-Package: \
 -dsannotations: \
   com.ibm.ws.zos.channel.console.PauseResumeCommandHandler
 
+instrument.classesExcludes: com/ibm/ws/zos/channel/console/internal/resources/*.class
+
 -buildpath: \
 	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest, \
 	com.ibm.websphere.appserver.spi.logging;version=latest, \

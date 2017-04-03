@@ -1,14 +1,3 @@
-/*
- * IBM Confidential
- *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2013
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- */
 package componenttest.annotation;
 
 import java.lang.annotation.ElementType;
@@ -20,7 +9,7 @@ import java.lang.annotation.Target;
  * Annotation for expressing tests should only run when the java level is above the given level.
  * The argument is a double, such as 1.6 or 1.7.
  * Example
- * 
+ *
  * @MinimumJavaLevel(javaLevel=1.7)
  */
 @Target({ ElementType.METHOD, ElementType.TYPE })
@@ -30,9 +19,9 @@ public @interface MinimumJavaLevel {
     double javaLevel();
 
     /**
-     * Whether or not a synthetic test should be created and ran to ensure that
-     * the server does not start when the java level is too low.
+     * Deprecated: The synthetic test is no longer necessary.
      */
-    boolean runSyntheticTest() default true;
+    @Deprecated
+    boolean runSyntheticTest() default false;
 
 }

@@ -24,7 +24,7 @@ Build-Identifier: SNAPSHOT-${now}
 Bundle-Version: ${bFullVersion}.${buildLabel}-SNAPSHOT
 
 -donotcopy      = (CVS|.svn|.+.bak|nlsbuild|~.+|.+~|.jazzignore)
--removeheaders  = Include-Resource, Ignore-Package, TODAY, DSTAMP, TSTAMP
+-removeheaders  = Include-Resource, Ignore-Package, TODAY, DSTAMP, TSTAMP, Bnd-LastModified
 -provider-policy :    ${range;[==,=+)}
 -consumer-policy :    ${range;[==,+)}
 

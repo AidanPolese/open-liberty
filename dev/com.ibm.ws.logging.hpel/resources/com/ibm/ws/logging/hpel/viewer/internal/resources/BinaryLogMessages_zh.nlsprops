@@ -39,7 +39,7 @@ BL_MINDATE_AFTER_MAXDATE=--minDate \u6307\u5b9a\u7684\u65e5\u671f\u5728 --maxDat
 BL_MINLEVEL_GREATER_THAN_MAXLEVEL=--minLevel \u6307\u5b9a\u7684\u7ea7\u522b\u9ad8\u4e8e --maxLevel \u6307\u5b9a\u7684\u7ea7\u522b\u3002
 
 # do not translate "binaryLog help"
-BL_USE_HELP=\u6709\u5173\u7528\u6cd5\u4fe1\u606f\uff0c\u8bf7\u4f7f\u7528 binaryLog \u5e2e\u52a9\u3002
+BL_USE_HELP=\u6709\u5173\u7528\u6cd5\u4fe1\u606f\uff0c\u8bf7\u4f7f\u7528 binaryLog help\u3002
 
 BL_REPOSITORY_DIRECTORY=\u6b63\u5c06 {0} \u7528\u4f5c\u5b58\u50a8\u5e93\u76ee\u5f55\u3002
 BL_TARGET_DIRECTORY=\u6b63\u5c06 {0} \u7528\u4f5c\u76ee\u6807\u76ee\u5f55\u3002

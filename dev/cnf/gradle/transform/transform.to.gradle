@@ -7,6 +7,9 @@ import org.apache.tools.ant.DirectoryScanner
 DirectoryScanner.removeDefaultExclude("**/.gitignore")
 DirectoryScanner.removeDefaultExclude("**/.gitattributes")
 
+Set<String> kernelProjectTypeSet = ['Kernel', 'KernelPrereq', 'KernelTest' ]
+Set<String> laosProjectTypeSet = ['LAOS', 'Kernel', 'KernelPrereq', 'KernelTest' ]
+
 task transform {
     File sourceRootDir = new File('.')
     sourceRootDir = file(sourceRootDir.absolutePath)
@@ -32,6 +35,14 @@ task transform {
             throw new GradleException("Just to be safe, " + transformKernelRootDir + " should not exist before this task is executed")
         }
     }
+    File transformLAOSRootDir = null
+    if (project.hasProperty('LAOSSuffix')) {
+        transformLAOSRootDir = new File("${savedTransformRootDir}${LAOSSuffix}", 'dev')
+        println "transformLAOSRootDir " + transformLAOSRootDir
+        if (transformLAOSRootDir.exists()) {
+            throw new GradleException("Just to be safe, " + transformLAOSRootDir + " should not exist before this task is executed")
+        }
+    }
     doLast {
         Properties props = new Properties()
         file('transform.properties').withReader {
@@ -41,489 +52,251 @@ task transform {
         if (transformKernelRootDir != null) {
             transformKernelRootDir.mkdirs()
         }
+        if (transformLAOSRootDir != null) {
+            transformLAOSRootDir.mkdirs()
+        }
+
         FileTree tree = fileTree(sourceRootDir).include('*/build.gradle')
         tree.visit { element ->
             File buildGradle = new File("$element.relativePath")
             if (buildGradle.name.equals('build.gradle')) {
                 String projectName = buildGradle.getParent()
-                println "Transforming project " + projectName
-                copy {
-                    from sourceRootDir
-                    into transformRootDir
-                    include projectName + "/**"
-                    exclude 'cnf/gradle/transform/.gradle/**'
+                transformProject(projectName, sourceRootDir, transformRootDir)
+                String projectType = props.getProperty(projectName)
+                if (transformKernelRootDir != null && projectType != null && kernelProjectTypeSet.contains(projectType)) {
+                    transformProject(projectName, sourceRootDir, transformKernelRootDir)
                 }
-                copy {
-                    from sourceRootDir
-                    into transformRootDir
-                    include projectName + "/.classpath.gradle"
-                    include projectName + "/bnd.bnd.gradle"
-                    rename { String fileName ->
-                        fileName.replace('.gradle', '')
-                    }
-                }
-                if (transformKernelRootDir != null && props.getProperty(projectName) != null) {
-                    String projectType = props.getProperty(projectName)
-                    if (projectType.equals('Kernel') || projectType.equals('KernelPrereq') || projectType.equals('KernelTest')) {
-		                copy {
-		                    from sourceRootDir
-		                    into transformKernelRootDir
-		                    include projectName + "/**"
-		                    exclude 'cnf/gradle/transform/.gradle/**'
-		                }
-		                copy {
-		                    from sourceRootDir
-		                    into transformKernelRootDir
-		                    include projectName + "/.classpath.gradle"
-		                    include projectName + "/bnd.bnd.gradle"
-		                    rename { String fileName ->
-		                        fileName.replace('.gradle', '')
-		                    }
-		                }
-                    } else /*if (projectType.equals('KernelTestPrereq')*/ {
-		                copy {
-		                    from sourceRootDir
-		                    into transformKernelRootDir
-		                    include projectName + "/**"
-		                    exclude projectName + "/.classpath.gradle"
-		                    exclude projectName + "/bnd.bnd"
-		                    exclude projectName + "/bnd.bnd.gradle"
-		                    exclude projectName + "/bnd.overrides"
-		                    exclude projectName + "/build.gradle"
-		                    exclude projectName + "/build.nogradle"
-		                    exclude projectName + "/build-api-spi.xml"
-		                    exclude projectName + "/build.xml"
-		                }
-                    }
+                if (transformLAOSRootDir != null && projectType != null && laosProjectTypeSet.contains(projectType)) {
+                    transformProject(projectName, sourceRootDir, transformLAOSRootDir)
                 }
             }
         }
+
+        transformProjects(sourceRootDir, transformRootDir, null, null)
+        transformCnf(sourceRootDir, transformRootDir)
         if (transformKernelRootDir != null) {
-	        tree = fileTree(sourceRootDir).include('*/build.nogradle')
-	        tree.visit {element ->
-	            File buildGradle = new File("$element.relativePath")
-	            if (buildGradle.name.equals('build.nogradle')) {
-	                String projectName = buildGradle.getParent()
-	                if (props.getProperty(projectName) != null) {
-                        String projectType = props.getProperty(projectName)
-                        if (projectType.equals('Kernel') || projectType.equals('KernelPrereq') || projectType.equals('KernelTest')) {
-			                File dest = new File(transformRootDir, projectName)
-			                if (dest.exists()) {
-			                    println "Skipping gradle and non-gradle project " + projectName
-			                    copy {
-			                        from sourceRootDir
-			                        into transformKernelRootDir
-			                        include projectName + "/.classpath"
-			                        rename { String fileName ->
-			                            fileName.replace('.classpath', '.classpath.ant')
-			                        }
-			                    }
-			                } else {
-			                    println "Transforming non-gradle project " + projectName
-			                    copy {
-			                        from sourceRootDir
-			                        into transformKernelRootDir
-			                        include projectName + "/**"
-			                    }
-			                }
-			            }
-			        }
-	            }
-	        }
+            transformProjects(sourceRootDir, transformKernelRootDir, props, kernelProjectTypeSet)
+            transformCnf(sourceRootDir, transformKernelRootDir)
         }
-        File templateDir = new File(sourceRootDir, 'cnf/gradle/internal.features')
-        tree = fileTree(sourceRootDir).include('com.ibm.websphere.features.internal.*/*.feature')
-        tree.visit {element ->
-            File featureFile = new File("$element.relativePath")
-            if (featureFile.name.endsWith('.feature')) {
-                String parentFolder = featureFile.getParent()
-                String featureName = featureFile.name.replace('.feature', '')
-                String featureFileName = featureFile.name
-                String bndFileName = featureFile.name.replace('.feature', '.bnd')
-                String mfFileName = featureFile.name.replace('.feature', '.mf')
-                File newDir = new File(transformRootDir, featureName)
-                File resourcesDir = new File(newDir, 'resources')
-                println "Creating internal feature project " + featureName
-                newDir.deleteDir()
+        if (transformLAOSRootDir != null) {
+            transformProjects(sourceRootDir, transformLAOSRootDir, props, laosProjectTypeSet)
+            transformCnf(sourceRootDir, transformLAOSRootDir)
+        }
+    }
+}
+
+void transformProject(String projectName, File sourceRootDir, File targetRootDir) {
+    println "Transforming project " + projectName
+    copy {
+        from sourceRootDir
+        into targetRootDir
+        include projectName + "/**"
+        exclude 'cnf/gradle/transform/.gradle/**'
+    }
+    copy {
+        from sourceRootDir
+        into targetRootDir
+        include projectName + "/.classpath.gradle"
+        include projectName + "/bnd.bnd.gradle"
+        rename { String fileName ->
+            fileName.replace('.gradle', '')
+        }
+    }
+}
+
+void transformProjects(File sourceRootDir, File targetRootDir, Properties props, Set<String> projectTypeSet) {
+    File templateDir = new File(sourceRootDir, 'cnf/gradle/internal.features')
+    FileTree tree = fileTree(sourceRootDir).include('com.ibm.websphere.features.internal.*/*.feature')
+    tree.visit {element ->
+        File featureFile = new File("$element.relativePath")
+        if (featureFile.name.endsWith('.feature')) {
+            String featureName = featureFile.name.replace('.feature', '')
+            if (props == null || projectTypeSet.contains(props.getProperty(featureName))) {
+            String parentFolder = featureFile.getParent()
+            String featureFileName = featureFile.name
+            String bndFileName = featureFile.name.replace('.feature', '.bnd')
+            String mfFileName = featureFile.name.replace('.feature', '.mf')
+            File newDir = new File(targetRootDir, featureName)
+            File resourcesDir = new File(newDir, 'resources')
+            println "Creating internal feature project " + featureName
+            newDir.deleteDir()
+            resourcesDir.mkdirs()
+            copy {
+                from templateDir
+                into newDir
+                include '*.template'
+                rename { String fileName ->
+                    fileName.replace('.template', '')
+                }
+                filter(ReplaceTokens,
+                    tokens: [PROJECT_NAME: featureName])
+            }
+            copy {
+                from new File(sourceRootDir, parentFolder)
+                into newDir
+                include featureFileName
+            }
+            copy {
+                from templateDir
+                into newDir
+                include bndFileName
+                rename { String fileName ->
+                    fileName.replace(bndFileName, 'bnd.bnd')
+                }
+            }
+            copy {
+                from templateDir
+                into resourcesDir
+                include mfFileName
+            }
+            }
+        }
+    }
+
+    File manifestDir = new File(sourceRootDir, 'cnf/gradle/public.features')
+    tree = fileTree(sourceRootDir).include('cnf/gradle/public.features/*.mf')
+    tree.visit {element ->
+        File manifestFile = new File("$element.relativePath")
+        if (manifestFile.name.endsWith('.mf')) {
+            String featureName = manifestFile.name.replace('.mf', '')
+            if (props == null || projectTypeSet.contains(props.getProperty(featureName))) {
+            File featureDir = new File(targetRootDir, featureName)
+            if (featureDir.exists()) {
+                File resourcesDir = new File(featureDir, 'resources')
                 resourcesDir.mkdirs()
+                println "Updating public feature project " + featureName
                 copy {
-                    from templateDir
-                    into newDir
-                    include '*.template'
-                    rename { String fileName ->
-                        fileName.replace('.template', '')
-                    }
-                    filter(ReplaceTokens,
-                        tokens: [PROJECT_NAME: featureName])
-                }
-                copy {
-                    from new File(sourceRootDir, parentFolder)
-                    into newDir
-                    include featureFileName
-                }
-                copy {
-                    from templateDir
-                    into newDir
-                    include bndFileName
-                    rename { String fileName ->
-                        fileName.replace(bndFileName, 'bnd.bnd')
-                    }
-                }
-                copy {
-                    from templateDir
+                    from manifestDir
                     into resourcesDir
-                    include mfFileName
-                }
-                if (transformKernelRootDir != null && props.getProperty(featureName) != null) {
-                    String projectType = props.getProperty(featureName)
-                    if (projectType.equals('Kernel') || projectType.equals('KernelPrereq') || projectType.equals('KernelTest')) {
-		                File newKernelDir = new File(transformKernelRootDir, featureName)
-		                println "Creating Kernel internal feature project " + featureName
-		                newKernelDir.mkdirs()
-		                copy {
-		                    from newDir
-		                    into newKernelDir
-		                    include featureName + "/**"
-		                }
-                    } else {
-		                File newKernelDir = new File(transformKernelRootDir, featureName)
-		                println "Creating KernelTest internal feature project " + featureName
-		                newKernelDir.mkdirs()
-		                copy {
-		                    from newDir
-		                    into newKernelDir
-		                    include featureName + "/**"
-		                }
-                    }
+                    include manifestFile.name
                 }
             }
-        }
-
-        File manifestDir = new File(sourceRootDir, 'cnf/gradle/public.features')
-        tree = fileTree(sourceRootDir).include('cnf/gradle/public.features/*.mf')
-        tree.visit {element ->
-            File manifestFile = new File("$element.relativePath")
-            if (manifestFile.name.endsWith('.mf')) {
-                String featureName = manifestFile.name.replace('.mf', '')
-                File featureDir = new File(transformRootDir, featureName)
-                if (featureDir.exists()) {
-                    File resourcesDir = new File(featureDir, 'resources')
-                    resourcesDir.mkdirs()
-                    println "Updating public feature project " + featureName
-                    copy {
-                        from manifestDir
-                        into resourcesDir
-                        include manifestFile.name
-                    }
-	                if (transformKernelRootDir != null && props.getProperty(featureName) != null) {
-	                    String projectType = props.getProperty(featureName)
-	                    if (projectType.equals('Kernel') || projectType.equals('KernelPrereq') || projectType.equals('KernelTest')) {
-			                File newKernelDir = new File(transformKernelRootDir, featureName + '/resources')
-			                newKernelDir.mkdirs()
-			                copy {
-			                    from manifestDir
-			                    into newKernelDir
-			                    include manifestFile.name
-			                }
-	                    } else {
-			                File newKernelDir = new File(transformKernelRootDir, featureName + '/resources')
-			                newKernelDir.mkdirs()
-			                copy {
-			                    from manifestDir
-			                    into newKernelDir
-			                    include manifestFile.name
-			                }
-	                    }
-	                }
-                }
             }
         }
+    }
 
-        templateDir = new File(sourceRootDir, 'cnf/gradle/dev.api.ibm')
-        tree = fileTree(sourceRootDir).include('cnf/gradle/dev.api.ibm/com.ibm.websphere.appserver.api.*.bnd')
-        tree.visit {element ->
-            File bndFile = new File("$element.relativePath")
-            if (bndFile.name.endsWith('.bnd')) {
-                String parentFolder = bndFile.getParent()
-                String newFolderName = bndFile.name.replace('.bnd', '')
-                String bndFileName = bndFile.name
-                String pomFileName = bndFile.name.replace('.bnd', '.pom')
-                File newDir = new File(transformRootDir, newFolderName)
-                newDir.deleteDir()
-                newDir.mkdirs()
-                println "Creating API project " + newFolderName
-                copy {
-                    from templateDir
-                    into newDir
-                    include '*.template'
-                    rename { String fileName ->
-                        fileName.replace('.template', '')
-                    }
-                    filter(ReplaceTokens,
-                        tokens: [PROJECT_NAME: newFolderName])
+    templateDir = new File(sourceRootDir, 'cnf/gradle/dev.api.ibm')
+    tree = fileTree(sourceRootDir).include('cnf/gradle/dev.api.ibm/com.ibm.websphere.appserver.api.*.bnd')
+    tree.visit {element ->
+        File bndFile = new File("$element.relativePath")
+        if (bndFile.name.endsWith('.bnd')) {
+            String newFolderName = bndFile.name.replace('.bnd', '')
+            if (props == null || projectTypeSet.contains(props.getProperty(newFolderName))) {
+            String bndFileName = bndFile.name
+            String pomFileName = bndFile.name.replace('.bnd', '.pom')
+            File newDir = new File(targetRootDir, newFolderName)
+            newDir.deleteDir()
+            newDir.mkdirs()
+            println "Creating API project " + newFolderName
+            copy {
+                from templateDir
+                into newDir
+                include '*.template'
+                rename { String fileName ->
+                    fileName.replace('.template', '')
                 }
-                copy {
-                    from templateDir
-                    into newDir
-                    include pomFileName
-                    include bndFileName
-                    rename { String fileName ->
-                        fileName.replace(bndFileName, 'bnd.bnd')
-                    }
-                }
-                if (transformKernelRootDir != null && props.getProperty(newFolderName) != null) {
-                    String projectType = props.getProperty(newFolderName)
-                    if (projectType.equals('Kernel') || projectType.equals('KernelPrereq') || projectType.equals('KernelTest')) {
-		                File newKernelDir = new File(transformKernelRootDir, newFolderName)
-		                newKernelDir.mkdirs()
-                        println "Creating Kernel API project " + newFolderName
-		                copy {
-		                    from templateDir
-		                    into newKernelDir
-		                    include '*.template'
-		                    rename { String fileName ->
-		                        fileName.replace('.template', '')
-		                    }
-		                    filter(ReplaceTokens,
-		                        tokens: [PROJECT_NAME: newFolderName])
-		                }
-		                copy {
-		                    from templateDir
-		                    into newKernelDir
-		                    include pomFileName
-		                    include bndFileName
-		                    rename { String fileName ->
-		                        fileName.replace(bndFileName, 'bnd.bnd')
-		                    }
-		                }
-                    } else {
-		                File newKernelDir = new File(transformKernelRootDir, newFolderName)
-		                newKernelDir.mkdirs()
-                        println "Creating KernelTest API project " + newFolderName
-		                copy {
-		                    from templateDir
-		                    into newKernelDir
-		                    include '*.template'
-		                    rename { String fileName ->
-		                        fileName.replace('.template', '')
-		                    }
-		                    filter(ReplaceTokens,
-		                        tokens: [PROJECT_NAME: newFolderName])
-		                }
-		                copy {
-		                    from templateDir
-		                    into newKernelDir
-		                    include pomFileName
-		                    include bndFileName
-		                    rename { String fileName ->
-		                        fileName.replace(bndFileName, 'bnd.bnd')
-		                    }
-		                }
-                    }
+                filter(ReplaceTokens,
+                    tokens: [PROJECT_NAME: newFolderName])
+            }
+            copy {
+                from templateDir
+                into newDir
+                include pomFileName
+                include bndFileName
+                rename { String fileName ->
+                    fileName.replace(bndFileName, 'bnd.bnd')
                 }
             }
-        }
-
-        templateDir = new File(sourceRootDir, 'cnf/gradle/dev.spi.ibm')
-        tree = fileTree(sourceRootDir).include('cnf/gradle/dev.spi.ibm/com.ibm.websphere.appserver.spi.*.bnd')
-        tree.visit {element ->
-            File bndFile = new File("$element.relativePath")
-            if (bndFile.name.endsWith('.bnd')) {
-                String parentFolder = bndFile.getParent()
-                String newFolderName = bndFile.name.replace('.bnd', '')
-                String bndFileName = bndFile.name
-                String pomFileName = bndFile.name.replace('.bnd', '.pom')
-                File newDir = new File(transformRootDir, newFolderName)
-                newDir.deleteDir()
-                newDir.mkdirs()
-                println "Creating SPI project " + newFolderName
-                copy {
-                    from templateDir
-                    into newDir
-                    include '*.template'
-                    rename { String fileName ->
-                        fileName.replace('.template', '')
-                    }
-                    filter(ReplaceTokens,
-                        tokens: [PROJECT_NAME: newFolderName])
-                }
-                copy {
-                    from templateDir
-                    into newDir
-                    include pomFileName
-                    include bndFileName
-                    rename { String fileName ->
-                        fileName.replace(bndFileName, 'bnd.bnd')
-                    }
-                }
-                if (transformKernelRootDir != null && props.getProperty(newFolderName) != null) {
-                    String projectType = props.getProperty(newFolderName)
-                    if (projectType.equals('Kernel') || projectType.equals('KernelPrereq') || projectType.equals('KernelTest')) {
-		                File newKernelDir = new File(transformKernelRootDir, newFolderName)
-		                newKernelDir.mkdirs()
-                        println "Creating Kernel SPI project " + newFolderName
-		                copy {
-		                    from templateDir
-		                    into newKernelDir
-		                    include '*.template'
-		                    rename { String fileName ->
-		                        fileName.replace('.template', '')
-		                    }
-		                    filter(ReplaceTokens,
-		                        tokens: [PROJECT_NAME: newFolderName])
-		                }
-		                copy {
-		                    from templateDir
-		                    into newKernelDir
-		                    include pomFileName
-		                    include bndFileName
-		                    rename { String fileName ->
-		                        fileName.replace(bndFileName, 'bnd.bnd')
-		                    }
-		                }
-                    } else {
-		                File newKernelDir = new File(transformKernelRootDir, newFolderName)
-		                newKernelDir.mkdirs()
-                        println "Creating KernelTest SPI project " + newFolderName
-		                copy {
-		                    from templateDir
-		                    into newKernelDir
-		                    include '*.template'
-		                    rename { String fileName ->
-		                        fileName.replace('.template', '')
-		                    }
-		                    filter(ReplaceTokens,
-		                        tokens: [PROJECT_NAME: newFolderName])
-		                }
-		                copy {
-		                    from templateDir
-		                    into newKernelDir
-		                    include pomFileName
-		                    include bndFileName
-		                    rename { String fileName ->
-		                        fileName.replace(bndFileName, 'bnd.bnd')
-		                    }
-		                }
-                    }
-                }
             }
         }
+    }
 
-        println "Transforming cnf project"
-        copy {
-            from new File(sourceRootDir, 'ant_build/lib')
-            into new File(transformRootDir, 'cnf/lib')
-            include 'asm-all-5.0.3.jar'
-            include 'commons-lang-2.4.jar'
-            include 'commons-math-2.2.jar'
-            include 'ecj-4.3.1.jar'
-            include 'infra.buildtasks-core_4.0.jar'
-            include 'jackson-annotations-2.2.3.jar'
-            include 'jackson-core-2.2.3.jar'
-            include 'jackson-databind-2.2.3.jar'
-            include 'jsoup-1.7.2.jar'
-            include 'mantis-collections.jar'
-            include 'mantis-nls-standalone.jar'
-            include 'org.apache.aries.util-1.2.0.jar'
-            include 'osgi.core.jar'
-            include 'ras-instrumentation.jar'
-            include 'wlp-bndPlugins.jar'
-            include 'wlp-generateChecksums.jar'
-            include 'wlp-metatypeValidator.jar'
-        }
-        if (transformKernelRootDir != null) {
-	        copy {
-	            from new File(sourceRootDir, 'ant_build/lib')
-	            into new File(transformKernelRootDir, 'cnf/lib')
-	            include 'asm-all-5.0.3.jar'
-	            include 'commons-lang-2.4.jar'
-	            include 'commons-math-2.2.jar'
-	            include 'ecj-4.3.1.jar'
-	            include 'infra.buildtasks-core_4.0.jar'
-	            include 'jackson-annotations-2.2.3.jar'
-	            include 'jackson-core-2.2.3.jar'
-	            include 'jackson-databind-2.2.3.jar'
-	            include 'jsoup-1.7.2.jar'
-	            include 'mantis-collections.jar'
-	            include 'mantis-nls-standalone.jar'
-	            include 'org.apache.aries.util-1.2.0.jar'
-	            include 'osgi.core.jar'
-	            include 'ras-instrumentation.jar'
-	            include 'wlp-bndPlugins.jar'
-	            include 'wlp-generateChecksums.jar'
-	            include 'wlp-metatypeValidator.jar'
-	        }
-        }
-
-        copy {
-            from new File(sourceRootDir, 'cnf/release.gradle')
-            into new File(transformRootDir, 'cnf/release')
-        }
-        if (transformKernelRootDir != null) {
-	        copy {
-	            from new File(sourceRootDir, 'cnf/release.gradle')
-	            into new File(transformKernelRootDir, 'cnf/release')
-	        }
-        }
-
-        copy {
-            from new File(sourceRootDir, 'cnf/resources/bnd')
-            into new File(transformRootDir, 'cnf/resources/bnd')
-            include '*.gradle'
-            rename { String fileName ->
-                fileName.replace('.gradle', '')
+    templateDir = new File(sourceRootDir, 'cnf/gradle/dev.spi.ibm')
+    tree = fileTree(sourceRootDir).include('cnf/gradle/dev.spi.ibm/com.ibm.websphere.appserver.spi.*.bnd')
+    tree.visit {element ->
+        File bndFile = new File("$element.relativePath")
+        if (bndFile.name.endsWith('.bnd')) {
+            String newFolderName = bndFile.name.replace('.bnd', '')
+            if (props == null || projectTypeSet.contains(props.getProperty(newFolderName))) {
+            String bndFileName = bndFile.name
+            String pomFileName = bndFile.name.replace('.bnd', '.pom')
+            File newDir = new File(targetRootDir, newFolderName)
+            newDir.deleteDir()
+            newDir.mkdirs()
+            println "Creating SPI project " + newFolderName
+            copy {
+                from templateDir
+                into newDir
+                include '*.template'
+                rename { String fileName ->
+                    fileName.replace('.template', '')
+                }
+                filter(ReplaceTokens,
+                    tokens: [PROJECT_NAME: newFolderName])
+            }
+            copy {
+                from templateDir
+                into newDir
+                include pomFileName
+                include bndFileName
+                rename { String fileName ->
+                    fileName.replace(bndFileName, 'bnd.bnd')
+                }
+            }
             }
         }
-        if (transformKernelRootDir != null) {
-	        copy {
-	            from new File(sourceRootDir, 'cnf/resources/bnd')
-	            into new File(transformKernelRootDir, 'cnf/resources/bnd')
-	            include '*.gradle'
-	            rename { String fileName ->
-	                fileName.replace('.gradle', '')
-	            }
-	        }
-        }
+    }
+}
 
-        copy {
-            from new File(sourceRootDir, 'cnf/gradle/transform')
-            into transformRootDir
-            include '.gradle-wrapper/**'
+void transformCnf(File sourceRootDir, File targetRootDir) {
+    println "Transforming cnf project"
+    copy {
+        from new File(sourceRootDir, 'ant_build/lib')
+        into new File(targetRootDir, 'cnf/lib')
+        include 'asm-all-5.0.3.jar'
+        include 'commons-lang-2.4.jar'
+        include 'commons-math-2.2.jar'
+        include 'ecj-4.3.1.jar'
+        include 'infra.buildtasks-core_4.0.jar'
+        include 'jackson-annotations-2.2.3.jar'
+        include 'jackson-core-2.2.3.jar'
+        include 'jackson-databind-2.2.3.jar'
+        include 'jsoup-1.7.2.jar'
+        include 'mantis-collections.jar'
+        include 'mantis-nls-standalone.jar'
+        include 'org.apache.aries.util-1.2.0.jar'
+        include 'osgi.core.jar'
+        include 'ras-instrumentation.jar'
+        include 'wlp-bndPlugins.jar'
+        include 'wlp-generateChecksums.jar'
+        include 'wlp-metatypeValidator.jar'
+    }
+    copy {
+        from new File(sourceRootDir, 'cnf/release.gradle')
+        into new File(targetRootDir, 'cnf/release')
+    }
+    copy {
+        from new File(sourceRootDir, 'cnf/resources/bnd')
+        into new File(targetRootDir, 'cnf/resources/bnd')
+        include '*.gradle'
+        rename { String fileName ->
+            fileName.replace('.gradle', '')
         }
-        if (transformKernelRootDir != null) {
-	        copy {
-	            from new File(sourceRootDir, 'cnf/gradle/transform')
-	            into transformKernelRootDir
-	            include '.gradle-wrapper/**'
-	        }
-        }
-
-        copy {
-            from new File(sourceRootDir, 'cnf/gradle/transform')
-            into transformRootDir
-            include 'gradlew'
-            include 'gradlew.bat'
-            fileMode 0755
-        }
-        if (transformKernelRootDir != null) {
-	        copy {
-	            from new File(sourceRootDir, 'cnf/gradle/transform')
-	            into transformKernelRootDir
-	            include 'gradlew'
-	            include 'gradlew.bat'
-	            fileMode 0755
-	        }
-        }
-
-        copy {
-            from new File(sourceRootDir, 'cnf/gradle/rootdir')
-            into transformRootDir
-        }
-        if (transformKernelRootDir != null) {
-	        copy {
-	            from new File(sourceRootDir, 'cnf/gradle/rootdir')
-	            into transformKernelRootDir
-	        }
-        }
+    }
+    copy {
+        from new File(sourceRootDir, 'cnf/gradle/transform')
+        into targetRootDir
+        include '.gradle-wrapper/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'cnf/gradle/transform')
+        into targetRootDir
+        include 'gradlew'
+        include 'gradlew.bat'
+        fileMode 0755
+    }
+    copy {
+        from new File(sourceRootDir, 'cnf/gradle/rootdir')
+        into targetRootDir
     }
 }

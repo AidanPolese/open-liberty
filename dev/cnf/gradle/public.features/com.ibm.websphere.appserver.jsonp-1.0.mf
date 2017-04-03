@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383779739
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: javax.json; type=spec,
  javax.json.stream; type=spec,

@@ -16,10 +16,11 @@ Private-Package: com.ibm.ws.kernel.boot.cmdline;-split-package:=merge-last, \
  com.ibm.ws.kernel.boot.resources.*
 
 -includeresource: \
- @${repo;com.ibm.websphere.osgi.core.6.0.0}!/org/osgi/framework/Version* 
+ @${repo;com.ibm.websphere.org.osgi.core.6.0.0}!/org/osgi/framework/Version*.class
 
 instrument.disabled: true
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest, \
 	com.ibm.ws.kernel.boot;version=latest

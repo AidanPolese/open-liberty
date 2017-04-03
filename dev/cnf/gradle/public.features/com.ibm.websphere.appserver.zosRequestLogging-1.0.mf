@@ -1,4 +1,3 @@
-Bnd-LastModified: 1486383808928
 Created-By: 1.8.0_121 (Oracle Corporation)
 IBM-API-Package: com.ibm.websphere.zos.request.logging;type="ibm-api"
 IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductEditionZOs}${mfProductVersion}

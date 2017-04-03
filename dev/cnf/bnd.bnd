@@ -1,4 +1,6 @@
 -nobundles=true
 
+instrument.disabled: true
+
 -buildpath: \
 	${javac.bootclasspath.java6}
