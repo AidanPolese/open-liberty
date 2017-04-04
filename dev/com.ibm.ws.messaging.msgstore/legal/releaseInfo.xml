@@ -1,0 +1,9 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="com.ibm.ws.messaging.msgstore">
+  <originbase release="WASX" fe="OMGR" level="ff1227.01" components="ObjectManager"/>
+
+  <notes>
+<![CDATA[
+]]>
+  </notes>
+</releaseInfo>

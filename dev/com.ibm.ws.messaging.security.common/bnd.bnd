@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Messaging Security Common
+Bundle-SymbolicName: com.ibm.ws.messaging.security.common
+Bundle-Description: Messaging Security Common; version=${bVersion}
+
+Export-Package: com.ibm.ws.messaging.security,\
+ com.ibm.ws.messaging.security.beans,\
+ com.ibm.ws.messaging.security.authentication,\
+ com.ibm.ws.messaging.security.authorization
+
+instrument.disabled: true
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.ws.messaging.utils;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

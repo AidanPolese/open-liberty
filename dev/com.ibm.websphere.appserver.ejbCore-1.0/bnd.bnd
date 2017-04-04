@@ -1,0 +1,13 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.ejbCore-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.appmanager-1.0;version=latest, \
+	com.ibm.websphere.appserver.javaeePlatform-6.0;version=latest, \
+	com.ibm.websphere.appserver.managedBeansCore-1.0;version=latest, \
+	com.ibm.ws.app.manager.war;version=latest, \
+	com.ibm.ws.app.manager.ejb;version=latest

@@ -1,0 +1,35 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Messaging Security 
+Bundle-SymbolicName: com.ibm.ws.messaging.security
+Bundle-Description: Messaging Security; version=${bVersion}
+
+
+Include-Resource:\
+OSGI-INF/metatype=resources/OSGI-INF/metatype,\
+OSGI-INF/l10n=resources/OSGI-INF/l10n
+
+Private-Package:\
+ com.ibm.ws.messaging.security.internal,\
+ com.ibm.ws.messaging.security.authentication.internal,\
+ com.ibm.ws.messaging.security.authorization.internal,\
+ com.ibm.ws.messaging.security.authentication.actions,\
+ com.ibm.ws.messaging.security.utility
+
+-dsannotations: com.ibm.ws.messaging.security.internal.MessagingSecurityServiceImpl
+
+instrument.disabled: true
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.websphere.security;version=latest,\
+	com.ibm.ws.security;version=latest,\
+	com.ibm.ws.security.authentication;version=latest,\
+	com.ibm.ws.messaging.utils;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.cm.1.5.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.ws.messaging.security.common;version=latest,\
+	com.ibm.ws.security.registry;version=latest

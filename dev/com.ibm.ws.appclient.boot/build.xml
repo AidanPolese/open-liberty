@@ -1,0 +1,28 @@
+<project name="com.ibm.ws.appclient.boot" default="build">
+  <!-- EnvCheck requires that the compiled NLS files use 1.4. -->
+  <property name="nls.build.with.java.level" value="1.4"/>
+
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+  <target name="publishExtra" if="publish.image.dir">
+    <echo>Publishing ws-client.jar to ${publish.image.dir}/${image.write.bin.tools.dir}</echo>
+    <copy todir="${publish.image.dir}/${image.write.bin.tools.dir}" file="${lib.dir}/ws-client.jar" />
+  </target>
+
+  <target name="post-compile">
+    <fileset id="kernel.boot.fileset" dir="../build.image/wlp/lib">
+        <include name="com.ibm.ws.kernel.boot_*.jar" />
+    </fileset>
+
+    <basename property="kernel.boot.jar" file="${toString:kernel.boot.fileset}" />
+
+    <!-- bin/tools/ws-client.jar -->
+    <jar jarfile="${lib.dir}/ws-client.jar">
+      <manifest>
+        <attribute name="Main-Class" value="com.ibm.ws.appclient.boot.cmdline.ClientEnvCheck"/>
+        <attribute name="Class-Path" value="../../lib/${output.jar} ../../lib/${kernel.boot.jar}"/>
+      </manifest>
+    </jar>
+  </target>
+
+</project>

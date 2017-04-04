@@ -1,0 +1,18 @@
+<project name="com.ibm.ws.dynacache-api" default="buildApiSpi">
+    <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+       Top level builds use this task explicitly.  Changing the
+       default will create an incompatibility between a default
+       project build and a top level build. -->
+
+    <!-- IBM-API required properties. -->
+    <property name="bundleName" value="WebSphere Distributed Map API" />
+    <property name="api.ibm.symbolic.suffix" value="distributedMap" />
+    <property name="api.ibm.version" value="2.0" />
+    <property name="feature.project" value="com.ibm.websphere.appserver.distributedMap-1.0" />
+
+    <property name="api.ibm.packages.exceptions" value="com.ibm.ws.cache.spi,com.ibm.wsspi.cache" />
+
+    <import file="../ant_build/public_imports/apibnd_imports.xml" />
+
+</project>
+

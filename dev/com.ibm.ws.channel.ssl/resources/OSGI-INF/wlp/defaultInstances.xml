@@ -1,0 +1,7 @@
+<server>
+
+	<sslOptions id="defaultSSLOptions" service.ranking="-1" />
+	
+	<variable name="defaultSSLVar" value="defaultSSLOptions"/>
+
+</server>

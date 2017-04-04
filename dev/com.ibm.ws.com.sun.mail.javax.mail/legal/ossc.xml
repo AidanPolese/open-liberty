@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Oracle RI" 
+            projectURL="http://mvnrepository.com" 
+            version="1.0" revision="" 
+            license-type="CDDL" 
+            contact="tjjohnso@us.ibm.com" 
+            encryption="no">
+            
+      <!-- this is copied from wlp/lib after we generate it using bnd from the original -->      
+	  <download location="http://central.maven.org/maven2/com/sun/mail/javax.mail/1.5.0/javax.mail-1.5.0.jar">
+         <file basename="javax.mail-1.5.0.jar"  checksum="dabf8c0f32c7f6eb5c87aebd53e07fce"/>
+         <file basename="com.ibm.ws.javax.mail-1.5.jar"  checksum="2a6e0027d4a026c174f92f0eb79f27ab"/>
+      </download>
+   </project>
+   
+   <clearencehistory>
+   </clearencehistory>
+</ossc>

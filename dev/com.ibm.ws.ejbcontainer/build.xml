@@ -1,0 +1,12 @@
+<project name="com.ibm.ws.ejbcontainer" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+  <target name="post-compile">
+    <instrument.trace ffdc="true">
+      <fileset dir="${classes.dir}">
+        <!-- This package is for Liberty.  Anything else is a manually-traced source overlay. --> 
+        <include name="com/ibm/ws/ejbcontainer/osgi/**/*.class" />
+      </fileset>
+    </instrument.trace>
+  </target>
+</project>

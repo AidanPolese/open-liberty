@@ -1,0 +1,18 @@
+<project name="com.ibm.websphere.javaee.management.j2ee.1.1" default="build">
+	
+	<property name="spec.name" value="management.j2ee"/>
+	<property name="spec.marketing.version" value="1.1"/>
+    <property name="spec.javadoc.name" value="javax.management.j2ee-api-1.1-javadoc.jar"/>
+	<property name="bundle.version" value="1.0"/>
+	
+	<import file="../ant_build/public_imports/spec_imports.xml"/>
+		
+	<target name="package" depends="spec.package"/>
+    <target name="publishToImage" depends="spec.publishToImage" />
+
+	<target name="post-compile">
+  		<rmic classname="javax.management.j2ee.Management" base="${classes.dir}" classpathref="project.class.path" iiop="true"/>
+  		<rmic classname="javax.management.j2ee.ManagementHome" base="${classes.dir}" classpathref="project.class.path" iiop="true"/>
+    </target>	
+    
+</project>

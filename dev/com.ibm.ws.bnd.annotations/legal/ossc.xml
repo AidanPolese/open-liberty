@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="bnd annotations" 
+            projectURL="http://bnd.bndtools.org" 
+            version="3.3.0" revision="REL" 
+            license-type="ASL2" 
+            contact="gmarcy@us.ibm.com" 
+            encryption="no">
+      <download location="https://mvnrepository.com/artifact/biz.aQute.bnd/biz.aQute.bnd.annotation/3.3.0/">
+         <file basename="biz.aQute.bnd.annotation-3.3.0.jar"  checksum="1bb8811c2c07131ed9616579c4d45ee6"/>
+      </download>
+   </project>
+
+   <notes>
+   This file is not used at runtime.  It is used only to compile an annotation that is also not used at runtime.
+   </notes>
+   
+   <clearencehistory>
+   </clearencehistory>
+</ossc>

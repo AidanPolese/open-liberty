@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Geronimo OSGi Registry" 
+            projectURL="http://geronimo.apache.org" 
+            version="1.1" revision="GA" 
+            license-type="Apachev2" 
+            contact="wanglsh@cn.ibm.com" 
+            encryption="no">
+      <download location="http://repo1.maven.org/maven2/org/apache/geronimo/specs/geronimo-osgi-registry/1.1/">
+         <file basename="geronimo-osgi-registry-1.1.jar" checksum="e1117746e66174099e270ff4f7149a57"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+
+   <notes/>
+</ossc>

@@ -1,0 +1,20 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Export-Package: com.ibm.ws.jpa.*
+
+publish.wlp.jar.disabled: true
+
+instrument.disabled: true
+
+-buildpath: \
+	com.ibm.websphere.javaee.persistence.2.0;version=latest,\
+	com.ibm.ws.logging.core,\
+	com.ibm.ws.container.service;version=latest,\
+	com.ibm.ws.injection;version=latest,\
+	com.ibm.ws.javaee.dd.common;version=latest,\
+	com.ibm.tx.jta;version=latest,\
+	com.ibm.ws.tx.embeddable;version=latest,\
+	com.ibm.websphere.javaee.transaction.1.1;version=latest,\
+	com.ibm.tx.ltc;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed Materials - Property of IBM
+
+  "Restricted Materials of IBM"
+
+  Copyright IBM Corp. 2015 All Rights Reserved.
+
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+-->
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0" 
+                   xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
+                   xmlns:ibmui="http://www.ibm.com/xmlns/appservers/osgi/metatype/ui/v1.0.0"
+                   localization="OSGI-INF/l10n/metatype">
+  
+    <OCD name="%cdi12" 
+         description="%cdi12.desc" 
+         id="com.ibm.ws.cdi12.cdiContainer" 
+         ibm:alias="cdi12"
+         ibmui:localization="OSGI-INF/l10n/metatype">
+                              
+        <!--  enableImplicitBeanArchives means that the CDI runtime will scan bean-definition annotations for the archives that do not contain beans.xml -->
+        <AD id="enableImplicitBeanArchives"
+                              name="%cdi12.enableImplicitBeanArchives.name"
+                              description="%cdi12.enableImplicitBeanArchives.desc"
+                              required="false" type="Boolean" default="true" />
+
+    </OCD>
+  
+    <Designate pid="com.ibm.ws.cdi12.cdiContainer">
+        <Object ocdref="com.ibm.ws.cdi12.cdiContainer"/>
+    </Designate>
+    
+</metatype:MetaData>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed Materials - Property of IBM
+
+  "Restricted Materials of IBM"
+
+  Copyright IBM Corp. 2011 All Rights Reserved.
+
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+-->
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0" 
+                   xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
+                   xmlns:ibmui="http://www.ibm.com/xmlns/appservers/osgi/metatype/ui/v1.0.0"
+                   localization="OSGI-INF/l10n/metatype">
+    <OCD id="com.ibm.ws.security.authentication.internal.jaas.jaasLoginModuleConfig.options.metatype" name="%loginModule.options" description="%loginModule.options.desc" ibmui:extraProperties="true" ibmui:localization="OSGI-INF/l10n/metatype">
+         <AD id="internal.attribute" required="false" type="String" name="internal" description="internal use only" />
+    </OCD>
+
+    <Designate factoryPid="com.ibm.ws.security.authentication.internal.jaas.jaasLoginModuleConfig.options">
+        <Object ocdref="com.ibm.ws.security.authentication.internal.jaas.jaasLoginModuleConfig.options.metatype" />
+    </Designate>
+
+</metatype:MetaData>

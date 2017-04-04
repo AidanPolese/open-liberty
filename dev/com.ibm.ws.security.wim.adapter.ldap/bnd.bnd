@@ -1,0 +1,41 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Ldap adapter
+Bundle-Description: Ldap adapter, version ${bVersion}
+Bundle-SymbolicName: com.ibm.ws.security.wim.adapter.ldap
+
+Export-Package: \
+  com.ibm.ws.security.wim.adapter.ldap;provide:=true
+
+Private-Package: \
+  com.ibm.ws.config.xml.internal.nester, \
+  com.ibm.ws.security.wim.adapter.ldap.change, \
+  com.ibm.ws.security.wim.xpath.ldap.util, \
+  com.ibm.ws.security.wim.adapter.ldap.resources
+
+Import-Package: \
+  com.ibm.websphere.security.auth, \
+  com.ibm.ws.ssl.protocol, \
+  !*.internal.*, *
+
+Include-Resource: \
+  OSGI-INF=resources/OSGI-INF
+
+-dsannotations: com.ibm.ws.security.wim.adapter.ldap.LdapAdapter
+
+instrument.classesExcludes: com/ibm/ws/security/wim/adapter/ldap/resources/*.class
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.websphere.security;version=latest,\
+	com.ibm.websphere.security.wim.base;version=latest,\
+	com.ibm.ws.ssl;version=latest,\
+	com.ibm.ws.security.wim.core;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.ws.bnd.annotations;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.metatype.annotations.1.3.0;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

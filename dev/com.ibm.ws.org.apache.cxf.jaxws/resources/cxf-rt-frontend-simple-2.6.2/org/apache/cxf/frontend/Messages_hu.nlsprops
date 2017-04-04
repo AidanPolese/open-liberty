@@ -1,0 +1,32 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-simple-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+COULD.NOT.RESOLVE.BINDING=A(z) {0} egyik k\u00f6t\u00e9se nem oldhat\u00f3 fel
+COULD_NOT_PROVIDE_WSDL = Kiv\u00e9tel t\u00f6rt\u00e9nt a(z) {0} feldolgoz\u00e1s\u00e1nak k\u00eds\u00e9rlete sor\u00e1n
+WSDL_NOT_FOUND = A(z) {0} wdsl f\u00e1jl nem tal\u00e1lhat\u00f3
+SCHEMA_NOT_FOUND = A(z) {0} xsd f\u00e1jl nem tal\u00e1lhat\u00f3

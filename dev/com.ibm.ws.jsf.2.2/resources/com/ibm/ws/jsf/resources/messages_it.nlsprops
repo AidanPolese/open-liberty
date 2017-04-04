@@ -1,0 +1,95 @@
+#CMVCPATHNAME ws/code/jsf/src/com/ibm/ws/jsf/resources/messages.nlsprops
+#COMPONENTPREFIX JSFG
+#COMPONENTNAMEFOR JSFG jsf
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#NLS_MESSAGEFORMAT_VAR
+# -------------------------------------------------------------------------------------------------
+
+jsf.error.internal.dtd.not.found=JSFG0001E: Impossibile localizzare DTD interno: {0}
+jsf.error.internal.dtd.not.found.explanation=Impossibile individuare il DTD che \u00e8 richiesto per convalidare i file faces-config.xml.
+jsf.error.internal.dtd.not.found.useraction=\u00c8 possibile che il file ws-jsf.jar sia danneggiato.
+
+jsf.error.unable.find.write.method=JSFG0002E: Impossibile trovare il metodo di scrittura {0} per la classe bean di tipo {1}
+jsf.error.unable.find.write.method.explanation=La classe bean non contiene un metodo di scrittura utilizzabile (set).
+jsf.error.unable.find.write.method.useraction=Aggiungere un metodo di scrittura (set) alla classe bean.
+
+jsf.error.unable.invoke.write.method=JSFG0003E: Impossibile richiamare il metodo di scrittura {0} per la classe bean di tipo {1}
+jsf.error.unable.invoke.write.method.explanation=Non \u00e8 stato possibile eseguire correttamente il metodo di scrittura (set) del bean.
+jsf.error.unable.invoke.write.method.useraction=Controllare i file di log per le tracce di stack e altre informazioni.
+
+jsf.error.unable.access.write.method=JSFG0004E: Impossibile accedere al metodo di scrittura {0} per la classe bean di tipo {1}
+jsf.error.unable.access.write.method.explanation=Non \u00e8 stato possibile accedere correttamente al metodo di scrittura (set) del bean.
+jsf.error.unable.access.write.method.useraction=Controllare che il metodo fornito sia stato definito pubblicamente.
+
+jsf.error.bean.or.property.is.null=JSFG0006E: Impossibile impostare la propriet\u00e0 perch\u00e9 il bean e/o la propriet\u00e0\u00a0sono null. bean: {0} propriet\u00e0: {1}
+jsf.error.bean.or.property.is.null.explanation=L'istanza o la propriet\u00e0 del bean fornito \u00e8 null.
+jsf.error.bean.or.property.is.null.useraction=Controllare il codice dell'applicazione per verificare che siano impostate correttamente.
+
+jsf.error.unable.find.property.descriptor=JSFG0007E: Impossibile trovare il descrittore della propriet\u00e0 {0} per la classe bean di tipo {1}
+jsf.error.unable.find.property.descriptor.explanation=Impossibile richiamare il descrittore della propriet\u00e0 per il bean.
+jsf.error.unable.find.property.descriptor.useraction=Assicurarsi di aver definito correttamente il bean.
+
+jsf.error.unable.invoke.read.method=JSFG0008E: Impossibile richiamare il metodo di lettura {0} per la classe bean di tipo {1}
+jsf.error.unable.invoke.read.method.explanation=Non \u00e8 stato possibile eseguire correttamente il metodo di lettura (get) del bean.
+jsf.error.unable.invoke.read.method.useraction=Controllare i file di log per le tracce di stack e altre informazioni.
+
+jsf.error.unable.access.read.method=JSFG0009E: Impossibile accedere al metodo di lettura {0} per la classe bean di tipo {1}
+jsf.error.unable.access.read.method.explanation=Non \u00e8 stato possibile accedere correttamente al metodo di lettura (get) del bean.
+jsf.error.unable.access.read.method.useraction=Controllare che il metodo fornito sia stato definito pubblicamente.
+
+jsf.error.unable.create.property.descriptor=JSFG0010E: Impossibile creare il descrittore della propriet\u00e0 {0} per la classe bean di tipo {1}
+jsf.error.unable.create.property.descriptor.explanation=Impossibile analizzare correttamente il bean fornito.
+jsf.error.unable.create.property.descriptor.useraction=Controllare tutti i nomi metodo bean per verificare che siano conformi alle specifiche JavaBeans.
+
+jsf.error.unable.locate.property.bean.value=JSFG0011E: Impossibile impostare la propriet\u00e0 {0} per la classe bean di tipo {1} (Valore)
+jsf.error.unable.locate.property.bean.value.explanation=Il bean non ha potuto impostare il valore della propriet\u00e0 specificata.
+jsf.error.unable.locate.property.bean.value.useraction=Controllare tutti i nomi ed i tipi di propriet\u00e0 bean per verificare che siano stati specificati correttamente e che siano conformi alle specifiche JavaBeans.
+
+jsf.error.unable.locate.property.bean.array.list=JSFG0012E: Impossibile impostare la propriet\u00e0 {0} della classe bean di tipo {1} (Matrice o elenco)
+jsf.error.unable.locate.property.bean.array.list.explanation=Il bean non ha potuto impostare Array o Elenco della propriet\u00e0 specificata.
+jsf.error.unable.locate.property.bean.array.list.useraction=Controllare tutti i nomi ed i tipi di propriet\u00e0 bean per verificare che siano stati specificati correttamente e che siano conformi alle specifiche JavaBeans.
+
+jsf.error.unable.locate.property.bean.map=JSFG0013E: Impossibile impostare la propriet\u00e0 {0} della classe bean di tipo {1} (Associazione)
+jsf.error.unable.locate.property.bean.map.explanation=Il bean non ha potuto impostare l'associazione della propriet\u00e0 specificata.
+jsf.error.unable.locate.property.bean.map.useraction=Controllare tutti i nomi ed i tipi di propriet\u00e0 bean per verificare che siano stati specificati correttamente e che siano conformi alle specifiche JavaBeans.
+
+jsf.error.unable.init.config=JSFG0014E: Impossibile inizializzare la configurazione
+jsf.error.unable.init.config.explanation=Impossibile analizzare correttamente la configurazione delle faces.
+jsf.error.unable.init.config.useraction=\u00c8 possibile che il file ws-jsf.jar sia danneggiato.
+
+jsf.error.unable.locate.app=JSFG0015E: Impossibile trovare l''applicazione {0}
+jsf.error.unable.locate.app.explanation=Impossibile trovare l'oggetto di distribuzione che corrisponde alla destinazione dell'applicazione.
+jsf.error.unable.locate.app.useraction=Verificare la destinazione dell'applicazione e ripetere l'operazione.
+
+jsf.error.unable.locate.cell=JSFG0016E: Impossibile trovare la cella
+jsf.error.unable.locate.cell.explanation=Impossibile trovare l'oggetto cella.
+jsf.error.unable.locate.cell.useraction=La configurazione potrebbe essere danneggiata.
+
+jsf.error.invalid.impl.name=JSFG0017E: Nome implementazione non valido
+jsf.error.invalid.impl.name.explanation=Il nome dell'implementazione inoltrato non \u00e8 valido.
+jsf.error.invalid.impl.name.useraction=Scegliere SunRI1.2 o MyFaces1.2.
+
+jsf.error.unable.open.archive=JSFG0018E: Impossibile aprire l''archivio {0}
+jsf.error.unable.open.archive.explanation=Impossibile aprire l'archivio con il nome indicato.
+jsf.error.unable.open.archive.useraction=Esaminare l'eccezione per determinare il problema con l'archivio.
+
+jsf.warn.myfaces.listener.for.ri.app=JSFG0851W: Sun RI 1.2 JSF Implementation rilevato per l''applicazione web {0} ma \u00e8 anche registrato un MyFaces StartupServletContextListener.
+jsf.warn.myfaces.listener.for.ri.app.explanation=\u00c8 stato trovato un listener che non corrisponde all'implementazione JSF che \u00e8 in uso.
+jsf.warn.myfaces.listener.for.ri.app.useraction=Rimuovere StartupServletContextListener o utilizzare l'implementazione JSF corrispondente.
+
+jsf.warn.ri.impl.not.initialized=JSFG0852W: Sun RI 1.2 JSF Implementation rilevata, ma impossibile inizializzarla.  JSF potrebbe non essere stato inizializzato correttamente per l''applicazione web {0}.
+jsf.warn.ri.impl.not.initialized.explanation=L'implementazione JSF potrebbe non essere stata inizializzata correttamente.
+jsf.warn.ri.impl.not.initialized.useraction=Esaminare i file di log per determinare la causa dell'errore.
+
+jsf.warn.ri.listener.for.myfaces.app=JSFG0853W: L''implementazione JSF MyFaces \u00e8 selezionata per {0} ma \u00e8 registrato anche un Sun RI ConfigureListener.
+jsf.warn.ri.listener.for.myfaces.app.explanation=\u00c8 stato trovato un SunRI ConfigureListener che non corrisponde all'implementazione JSF in uso.
+jsf.warn.ri.listener.for.myfaces.app.useraction=Rimuovere ConfigureListener o utilizzare l'implementazione JSF corrispondente.
+
+jsf.warn.myfaces.not.initialized=JSFG0854W: WebSphere MyFaces JSF Implementation rilevata, ma impossibile inizializzarla per webapp {0}.
+jsf.warn.myfaces.not.initialized.explanation=L'implementazione JSF potrebbe non essere stata inizializzata correttamente.
+jsf.warn.myfaces.not.initialized.useraction=Esaminare i file di log per determinare la causa dell'errore.
+
+jsf.warn.exception.during.listener=JSFG0855W: Eccezione rilevata durante il tentativo di registrare il listener del ciclo di vita JSF {0}.  JSF potrebbe non essere stato inizializzato correttamente per l''applicazione web {1}.
+jsf.warn.exception.during.listener.explanation=Si \u00e8 verificata un'eccezione durante la registrazione del listener.
+jsf.warn.exception.during.listener.useraction=Esaminare i file di log per determinare la causa dell'eccezione.

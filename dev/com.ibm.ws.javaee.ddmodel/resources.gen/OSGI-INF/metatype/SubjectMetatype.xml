@@ -1,0 +1,16 @@
+<!-- NOTE: This is a generated file. Do not edit it directly. -->
+
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0"
+xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
+localization="OSGI-INF/l10n/metatype">
+
+<OCD id="com.ibm.ws.javaee.dd.appbnd.Subject" name="%subjectmetatype.name" description="%subjectmetatype.desc">
+    <AD id="name" description="%SubjectMetatype.name.desc" name="%SubjectMetatype.name.name" type="String" required="false" cardinality="0"/>
+    <AD id="access-id" description="%SubjectMetatype.access-id.desc" name="%SubjectMetatype.access-id.name" type="String" required="false" cardinality="0"/>
+</OCD>
+
+<Designate factoryPid="com.ibm.ws.javaee.dd.appbnd.Subject">
+     <Object ocdref="com.ibm.ws.javaee.dd.appbnd.Subject"/>
+</Designate>
+
+</metatype:MetaData>

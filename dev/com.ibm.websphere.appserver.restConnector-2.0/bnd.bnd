@@ -1,0 +1,21 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.restConnector-2.0
+
+publish.feature.resources: **
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.restHandler-1.0;version=latest, \
+	com.ibm.websphere.appserver.servlet-3.0;version=latest, \
+	com.ibm.websphere.collective.plugins;version=latest, \
+	com.ibm.ws.filetransfer.routing.archiveExpander;version=latest, \
+	com.ibm.ws.jmx.connector.server.rest;version=latest, \
+	com.ibm.ws.jmx.connector.client.rest;version=latest, \
+	com.ibm.ws.filetransfer;version=latest, \
+	com.ibm.websphere.filetransfer;version=latest, \
+	com.ibm.ws.jmx.request;version=latest, \
+	com.ibm.json4j;version=latest, \
+	com.ibm.websphere.appserver.spi.restHandler;version=latest, \
+	com.ibm.websphere.appserver.api.restConnector;version=latest

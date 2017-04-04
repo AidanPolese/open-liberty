@@ -1,0 +1,27 @@
+<project name="com.ibm.ws.rest.handler-spi" default="buildApiSpi"> 
+  <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+	   Top level builds use this task explicity.  Changing the
+	   default will create an incompatibility between a default
+	   project build and a top level build. -->
+	
+  <!-- Disable IBM-API processing; rest handler defines an SPI and not an API. -->       
+  <property name="noibmapi" value="true" />
+  
+  <!-- Enable IBM-SPI processing. -->     	   
+  <property name="spi.ibm.bundleName" value="WebSphere REST Handler SPI"/>
+  <property name="spi.ibm.symbolic.suffix" value="restHandler"/>
+  <property name="spi.ibm.version" value="1.5" />
+  <property name="feature.name" value="com.ibm.websphere.appserver.restHandler-1.0"/>
+  <property name="spibndfile" value="${basedir}/build/spi.bnd" /> 
+
+  <path id="bnd.jars"> 
+    <fileset dir="../com.ibm.websphere.rest.handler/build/lib/" includes="*.jar"/> 
+    <fileset dir="../com.ibm.websphere.collective.plugins/build/lib/" includes="*.jar"/> 
+  	<fileset dir="../com.ibm.websphere.rest.api.discovery/build/lib/" includes="*.jar"/>
+  </path>
+  <property name="additional.javadoc.src.dirs" value="${basedir}/../com.ibm.websphere.rest.handler/src/${path.separator}${basedir}/../com.ibm.websphere.collective.plugins/src/${path.separator}${basedir}/../com.ibm.websphere.rest.api.discovery/src/"/>
+    
+  <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+
+</project>
+

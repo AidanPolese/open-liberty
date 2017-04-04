@@ -1,0 +1,21 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Security Authentication
+Bundle-SymbolicName: com.ibm.ws.security.authentication
+Bundle-Description: Security Authentication, version=${bVersion}
+Bundle-ActivationPolicy: lazy
+
+WS-TraceGroup: \
+  Authentication
+
+Export-Package: \
+  com.ibm.ws.security.authentication, \
+  com.ibm.ws.security.authentication.cache, \
+  com.ibm.ws.security.authentication.collective, \
+  com.ibm.ws.security.delegation, \
+  com.ibm.ws.security.util
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

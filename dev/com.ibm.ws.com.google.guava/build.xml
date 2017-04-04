@@ -1,0 +1,8 @@
+<project name="com.ibm.ws.com.google.guava" default="build">
+    <import file="../ant_build/public_imports/standard_imports.xml"/>
+    <import file="../ant_build/public_imports/rejar_imports.xml"/>
+    
+    <target name="package"> 
+        <bndPackage version="1.0" original.jar.name="com.google.guava" original.jar.version="14.0.1" bnd.classpath="lib/guava-14.0.1.jar" bnd.file="bnd.bnd"  />
+    </target>
+</project>

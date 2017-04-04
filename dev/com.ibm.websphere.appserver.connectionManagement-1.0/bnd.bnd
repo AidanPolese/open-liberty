@@ -1,0 +1,13 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.connectionManagement-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.transaction-1.1;version=latest, \
+	com.ibm.websphere.appserver.containerServices-1.0;version=latest, \
+	com.ibm.websphere.appserver.jcaSecurity-1.0;version=latest, \
+	com.ibm.ws.jca.cm;version=latest, \
+	com.ibm.ws.tx.zos;version=latest

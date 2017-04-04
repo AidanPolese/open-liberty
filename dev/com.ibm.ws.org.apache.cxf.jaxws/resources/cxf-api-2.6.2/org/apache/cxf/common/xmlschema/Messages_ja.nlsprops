@@ -1,0 +1,38 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+MULTIPLE_ANY= {0} \u306b\u8907\u6570\u306e xs:any \u69cb\u6210\u304c\u3042\u308a\u307e\u3059\u3002
+ELEMENT_MISSING_TYPE= \u30eb\u30fc\u30c8\u30fb\u30a8\u30ec\u30e1\u30f3\u30c8 {0} \u306f\u3001{2} \u3067\u672a\u5b9a\u7fa9\u306e\u30bf\u30a4\u30d7 {1} \u3092\u53c2\u7167\u3057\u3066\u3044\u307e\u3059\u3002
+UNSUPPORTED_TYPE_CONSTRUCT= \u30b9\u30ad\u30fc\u30de\u69cb\u6210 {0} \u306f\u30b5\u30dd\u30fc\u30c8\u3055\u308c\u3066\u3044\u307e\u305b\u3093\u3002
+ELEMENT_DANGLING_REFERENCE= \u30a8\u30ec\u30e1\u30f3\u30c8 {0} \u306f\u3001\u672a\u5b9a\u7fa9\u306e\u30a8\u30ec\u30e1\u30f3\u30c8 {1} \u3092\u53c2\u7167\u3057\u3066\u3044\u307e\u3059\u3002
+NON_SEQUENCE_PARTICLE=\u5236\u9650: \u30bf\u30a4\u30d7 {0} \u306f\u3001\u30b7\u30fc\u30b1\u30f3\u30b9\u3068\u3057\u3066\u5b9a\u7fa9\u3055\u308c\u3066\u3044\u307e\u305b\u3093\u3002 {1}
+NON_ELEMENT_CHILD=\u5236\u9650: {1} \u306e\u975e\u30a8\u30ec\u30e1\u30f3\u30c8\u306e\u30b7\u30fc\u30b1\u30f3\u30b9\u30fb\u30e1\u30f3\u30d0\u30fc {0} \u3067\u3059\u3002 {2}
+ABSTRACT_ELEMENT=\u5236\u9650: {1} \u306e\u62bd\u8c61\u30a8\u30ec\u30e1\u30f3\u30c8 {0} \u3067\u3059\u3002 {2}
+ELEMENT_HAS_NO_TYPE=\u30a8\u30ec\u30e1\u30f3\u30c8 {0} \u306b\u306f\u30b9\u30ad\u30fc\u30de\u306e\u4e2d\u306b\u30bf\u30a4\u30d7\u304c\u3042\u308a\u307e\u305b\u3093\u3002 {1}
+ELEMENT_TYPE_MISSING=\u30a8\u30ec\u30e1\u30f3\u30c8 {0} \u306f\u3001\u5b9a\u7fa9\u3055\u308c\u3066\u3044\u306a\u3044\u30bf\u30a4\u30d7 {1} \u3092\u53c2\u7167\u3057\u3066\u3044\u307e\u3059\u3002
+ELEMENT_SCHEMA_MISSING=\u30a8\u30ec\u30e1\u30f3\u30c8 {0} \u306f\u6b20\u843d\u3057\u305f\u30b9\u30ad\u30fc\u30de\u306e\u4e2d\u306b\u542b\u307e\u308c\u3066\u3044\u307e\u3059\u3002

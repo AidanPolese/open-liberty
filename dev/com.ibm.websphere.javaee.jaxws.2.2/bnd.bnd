@@ -1,0 +1,17 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.jaxws.2.2; singleton:=true
+
+Export-Package: javax.xml.ws.*; version="2.2"
+
+Import-Package: javax.xml.bind.*; version="[2.2,3)", \
+  *
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/jaxws-api.jar;version=file

@@ -1,0 +1,20 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2010, 2014.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security.java2sec/resources/com/ibm/ws/security/java2sec/resources/Java2SecurityUtilMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Java 2 Security
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+INCORRECT_PERMISSION_CONFIGURATION=CWWKS1800W: The java permission configuration in {2} is incorrect. An attempt to create permission {0} resulted in an exception due to {1}.
+INCORRECT_PERMISSION_CONFIGURATION.explanation=One or more parameters provided in the permission configuration is incorrect and the permission has been discarded. Please analyze the exception mentioned in the message to determine which parameter was the reason for the failure.
+INCORRECT_PERMISSION_CONFIGURATION.useraction=Ensure that the various parameters provided as part of the permission configuration are correct.
+PERMISSION_CLASSNOTFOUND=CWWKS1801W: The Java permission configuration in {2} is incorrect. An attempt to create permission {0} resulted in an exception due to {1}. This might occur if the application contains a custom permission class. In which case, the permission class is found in later processing and you can ignore this error.
+PERMISSION_CLASSNOTFOUND.explanation= A permission class failed to load. If this is a custom permission class packaged in the application, it will be found in later processing and this error can be ignored.
+PERMISSION_CLASSNOTFOUND.useraction= Ensure that the permission class is a custom class and is stored in application binaries. Otherwise, this error needs further investigation.

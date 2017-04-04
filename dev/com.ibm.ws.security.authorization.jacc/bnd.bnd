@@ -1,0 +1,40 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: WAS Security JACC 1.5 Service
+Bundle-SymbolicName: com.ibm.ws.security.authorization.jacc
+Bundle-Description: WAS Security JACC Service, version=${bVersion}
+Bundle-ActivationPolicy: lazy
+
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+
+WS-TraceGroup: Authorization
+
+Export-Package: \
+ com.ibm.wsspi.security.authorization.jacc, \
+ com.ibm.ws.security.authorization.jacc.ejb, \
+ com.ibm.ws.security.authorization.jacc.web, \
+ com.ibm.ws.security.authorization.jacc.common, \
+ com.ibm.ws.security.authorization.jacc;provide:=true
+
+Private-Package: com.ibm.ws.security.authorization.jacc.internal.*
+
+-dsannotations: \
+  com.ibm.ws.security.authorization.jacc.internal.JaccServiceImpl, \
+  com.ibm.ws.security.authorization.jacc.common.PolicyConfigurationManager
+
+instrument.classesExcludes: com/ibm/ws/security/authorization/jacc/internal/resources/*.class
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.websphere.javaee.jacc.1.5;version=latest,\
+	com.ibm.ws.container.service;version=latest,\
+	com.ibm.ws.security.authorization;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest, \
+	com.ibm.websphere.security;version=latest, \
+	com.ibm.ws.security;version=latest, \
+	com.ibm.ws.security.audit.utils;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

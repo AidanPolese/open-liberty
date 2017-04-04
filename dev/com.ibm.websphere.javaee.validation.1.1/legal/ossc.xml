@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Geronimo" 
+            projectURL="https://geronimo.apache.org/" 
+            version="1.0" revision="" 
+            license-type="Apachev2" 
+            contact="???@us.ibm.com" 
+            encryption="no">
+      <download location="http://repository.apache.org/content/groups/snapshots/org/apache/geronimo/specs/geronimo-validation_1.1_spec/1.0-SNAPSHOT/geronimo-validation_1.1_spec-1.0-20131115.081150-2.jar">
+         <file basename="geronimo-validation_1.1_spec-1.0-20131115.081150-2.jar" checksum="ffdaf823fb17024564ec927728c1891a"/>
+      </download>
+      <download location="https://ebitzone.hursley.ibm.com:8443/jim/download?file=FR85059">
+         <file basename="validation-api-1.1.0.Final-javadoc.jar" checksum="3e2d1dcbc9429ac911aa4ab287900fad"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+</ossc>

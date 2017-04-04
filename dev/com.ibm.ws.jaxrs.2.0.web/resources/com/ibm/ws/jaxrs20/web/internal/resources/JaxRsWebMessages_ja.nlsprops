@@ -1,0 +1,38 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+#
+# ORIGINS: 27         (used for IBM originated files)
+#
+# Caution: because some text editors automatically convert
+# consecutive runs of spaces to tabs, use the Java "\ " escape
+# sequence to represent each space in a run of multiple spaces.
+#
+# translator:
+# Translate words on the right hand side of the = sign.
+# Do not translate {0}, {1}, %1, %2 etc.
+# Do NOT translate any words when they START with: '-
+# Do NOT translate any words when they START with: @
+# Preserve all spaces after a backslash (\) even at the end of a line.
+#
+# NLS_MESSAGEFORMAT_ALL
+#
+#CMVCPATHNAME com.ibm.ws.jaxws.web/resources/com/ibm/ws/jaxws/internal/resources/JaxWsWebMessages.nlsprops
+#ISMESSAGEFILE TRUE
+#COMPONENTPREFIX CWWKW
+#COMPONENTNAMEFOR CWWKW WebSphere JAXWS Web Code
+#RANGE 0400 - 0499
+#
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+
+# -------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
+#{0} is the servlet name
+error.urlPattern=CWWKW0400E: \u30b5\u30fc\u30d6\u30ec\u30c3\u30c8 {0} \u306e\u30b5\u30fc\u30d6\u30ec\u30c3\u30c8\u30fb\u30de\u30c3\u30d4\u30f3\u30b0\u306e URL \u30d1\u30bf\u30fc\u30f3\u306b\u3001\u30a2\u30b9\u30bf\u30ea\u30b9\u30af (*) \u3092\u542b\u3081\u308b\u3053\u3068\u306f\u3067\u304d\u307e\u305b\u3093\u3002
+error.urlPattern.explanation=\u30b5\u30fc\u30d6\u30ec\u30c3\u30c8\u30fb\u30de\u30c3\u30d4\u30f3\u30b0\u306e URL \u30d1\u30bf\u30fc\u30f3\u306f\u3001\u5b8c\u5168\u4e00\u81f4\u7a81\u304d\u5408\u308f\u305b\u30d1\u30bf\u30fc\u30f3\u3067\u3042\u308b\u5fc5\u8981\u304c\u3042\u308a\u3001\u30a2\u30b9\u30bf\u30ea\u30b9\u30af\u3092\u542b\u3081\u308b\u3053\u3068\u306f\u3067\u304d\u307e\u305b\u3093\u3002
+error.urlPattern.useraction=\u30b5\u30fc\u30d6\u30ec\u30c3\u30c8\u30fb\u30de\u30c3\u30d4\u30f3\u30b0\u306e URL \u30d1\u30bf\u30fc\u30f3\u3092\u5b8c\u5168\u4e00\u81f4\u7a81\u304d\u5408\u308f\u305b\u30d1\u30bf\u30fc\u30f3\u306b\u3057\u3066\u304f\u3060\u3055\u3044\u3002
+

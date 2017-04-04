@@ -1,0 +1,85 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * WLP Copyright IBM Corp. 2015
+ *
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
+ * U.S. Copyright Office.
+ */
+package com.ibm.ws.jpa.container.v21;
+
+import java.util.List;
+
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaUpdate;
+
+import com.ibm.ws.Transaction.UOWCoordinator;
+import com.ibm.ws.jpa.management.JPAExEmInvocation;
+
+public class JPAExEmInvocationV21 extends JPAExEmInvocation {
+    public JPAExEmInvocationV21(UOWCoordinator uowCoord, EntityManager em, boolean txIsUnsynchronized) {
+        super(uowCoord, em, null, txIsUnsynchronized);
+    }
+
+    @Override
+    public <T> EntityGraph<T> createEntityGraph(Class<T> arg0) {
+        return ivEm.createEntityGraph(arg0);
+    }
+
+    @Override
+    public EntityGraph<?> createEntityGraph(String arg0) {
+        return ivEm.createEntityGraph(arg0);
+    }
+
+    @Override
+    public StoredProcedureQuery createNamedStoredProcedureQuery(String arg0) {
+        return ivEm.createNamedStoredProcedureQuery(arg0);
+    }
+
+    @Override
+    public Query createQuery(@SuppressWarnings("rawtypes") CriteriaUpdate arg0) {
+        return ivEm.createQuery(arg0);
+    }
+
+    @Override
+    public Query createQuery(@SuppressWarnings("rawtypes") CriteriaDelete arg0) {
+        return ivEm.createQuery(arg0);
+    }
+
+    @Override
+    public StoredProcedureQuery createStoredProcedureQuery(String arg0) {
+        return ivEm.createStoredProcedureQuery(arg0);
+    }
+
+    @Override
+    public StoredProcedureQuery createStoredProcedureQuery(String arg0, @SuppressWarnings("rawtypes") Class... arg1) {
+        return ivEm.createStoredProcedureQuery(arg0, arg1);
+    }
+
+    @Override
+    public StoredProcedureQuery createStoredProcedureQuery(String arg0, String... arg1) {
+        return ivEm.createStoredProcedureQuery(arg0, arg1);
+    }
+
+    @Override
+    public EntityGraph<?> getEntityGraph(String arg0) {
+        return ivEm.getEntityGraph(arg0);
+    }
+
+    @Override
+    public <T> List<EntityGraph<? super T>> getEntityGraphs(Class<T> arg0) {
+        return ivEm.getEntityGraphs(arg0);
+    }
+
+    @Override
+    public boolean isJoinedToTransaction() {
+        return ivEm.isJoinedToTransaction();
+    }
+}

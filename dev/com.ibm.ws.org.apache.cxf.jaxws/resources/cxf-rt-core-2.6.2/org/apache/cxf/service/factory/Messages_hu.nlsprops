@@ -1,0 +1,47 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-core-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+NO_METHOD_FOR_OP=Nem tal\u00e1lhat\u00f3 met\u00f3dus a WSDL m\u0171velethez: {0}.
+INVALID_SCHEMA_URL=A s\u00e9ma nem t\u00f6lthet\u0151 be: {0}
+ERROR_READING_SCHEMA=Hiba t\u00f6rt\u00e9nt a s\u00e9ma olvas\u00e1sa sor\u00e1n: {0}.
+COULD_NOT_FIND_PORTTYPE = A(z) {0} nev\u0171 portType nem tal\u00e1lhat\u00f3
+USING_PROXY_FOR_SERVICE = A(z) {0} szolg\u00e1ltat\u00e1soszt\u00e1ly egy java.lang.reflect.Proxy p\u00e9ld\u00e1ny.  \
+Ez nem m\u0171k\u00f6dik megfelel\u0151en, mert a val\u00f3s p\u00e9ld\u00e1nyokon az annot\u00e1ci\u00f3k nem \u00e9rhet\u0151k el.  \
+Javasolt a ServiceClass fel\u00fclb\u00edr\u00e1lata spring vagy egy\u00e9b konfigur\u00e1ci\u00f3val. \
+(serviceClass/implementorClass attrib\u00fatumok a v\u00e9gpont/kiszolg\u00e1l\u00f3 spring konfigur\u00e1ci\u00f3s bejegyz\u00e9sben)
+REFERENCE_TO_UNDEFINED_TYPE = A(z) {0} s\u00e9maelem nem defini\u00e1lt {1} t\u00edpusra hivatkozik a(z) {2} szolg\u00e1ltat\u00e1s eset\u00e9n.
+UNMAPPABLE_PORT_TYPE= A(z) {0} szolg\u00e1ltat\u00e1soszt\u00e1ly {1} met\u00f3dus\u00e1nak {2} r\u00e9sze nem k\u00e9pezhet\u0151 le s\u00e9m\u00e1ra. \
+Keresse a JAX-WS-specifikus t\u00edpus JAX-WS szolg\u00e1ltat\u00e1sgy\u00e1r komponens n\u00e9lk\u00fcli haszn\u00e1lat\u00e1t.
+INTRACTABLE_PART= A(z) {1} \u00fczenet {0} \u00fczenetr\u00e9sze nem dolgozhat\u00f3 fel. \
+Ezt a JAX-WS-specifikus t\u00edpusok JAX-WS szolg\u00e1ltat\u00e1sgy\u00e1r komponens n\u00e9lk\u00fcli haszn\u00e1lata okozhatja.
+JAXWS_ANNOTATION_FOUND=A Simple frontend haszn\u00e1lata sor\u00e1n a rendszer JAX-WS annot\u00e1ci\u00f3t \u00e9szlelt a k\u00f6vetkez\u0151n: {0}.  Az optim\u00e1lis eredm\u00e9ny  \u00e9rdek\u00e9ben haszn\u00e1lja a JAX-WS frontendet.
+XSD_VALIDATION_ERROR= Hiba a k\u00f6vetkez\u0151 szolg\u00e1ltat\u00e1shoz tartoz\u00f3 W3C XML s\u00e9m\u00e1ban: {0}
+COULD_NOT_UNWRAP=A(z) {0} m\u0171velet nem alak\u00edthat\u00f3 vissza, hogy megfeleljen a(z) "{1}" met\u00f3dusnak
+NO_WSDL_PROVIDED=WSDL sz\u00fcks\u00e9ges a(z) {0} oszt\u00e1lyb\u00f3l l\u00e9trehozott szolg\u00e1ltat\u00e1sokhoz, de nincs megadva WSDL hely. 
+NO_FAULT_PART = Nem tal\u00e1lhat\u00f3 hibar\u00e9sz a k\u00f6vetkez\u0151h\u00f6z {0}. A hiba\u00fczenetnek egyetlen r\u00e9szb\u0151l kell \u00e1llnia.
+INVALID_BARE_METHOD= A(z) {0} met\u00f3dus BARE met\u00f3dusk\u00e9nt van be\u00e1ll\u00edtva, de egyn\u00e9l t\u00f6bb, helytelen @Webparam annot\u00e1ci\u00f3val rendelkez\u0151 param\u00e9ter vagy @WebParam annot\u00e1ci\u00f3 n\u00e9lk\u00fcli param\u00e9ter van jelen.

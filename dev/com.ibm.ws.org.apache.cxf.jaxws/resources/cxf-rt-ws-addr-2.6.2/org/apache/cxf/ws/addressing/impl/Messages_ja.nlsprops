@@ -1,0 +1,39 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-ws-addr-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+MAPS_RETRIEVAL_FAILURE_MSG = WS-Addressing - \u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u304b\u3089\u30e1\u30c3\u30bb\u30fc\u30b8\u30fb\u30a2\u30c9\u30ec\u30c3\u30b7\u30f3\u30b0\u30fb\u30d7\u30ed\u30d1\u30c6\u30a3\u30fc\u3092\u53d6\u5f97\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002
+ACTION_NOT_SUPPORTED_MSG = \u30a2\u30af\u30b7\u30e7\u30f3 {0} \u306f\u30b5\u30dd\u30fc\u30c8\u3055\u308c\u3066\u3044\u307e\u305b\u3093
+DESTINATION_UNREACHABLE_MSG = \u5b9b\u5148 {0} \u306b\u5230\u9054\u3067\u304d\u307e\u305b\u3093
+ENDPOINT_UNAVAILABLE_MSG = \u30a8\u30f3\u30c9\u30dd\u30a4\u30f3\u30c8 {0} \u306f\u4f7f\u7528\u4e0d\u53ef\u3067\u3059
+INVALID_MAP_MSG = \u30e1\u30c3\u30bb\u30fc\u30b8\u30fb\u30a2\u30c9\u30ec\u30c3\u30b7\u30f3\u30b0\u30fb\u30d7\u30ed\u30d1\u30c6\u30a3\u30fc {0} \u304c\u7121\u52b9\u3067\u3059
+MAP_REQUIRED_MSG = \u30e1\u30c3\u30bb\u30fc\u30b8\u30fb\u30a2\u30c9\u30ec\u30c3\u30b7\u30f3\u30b0\u30fb\u30d7\u30ed\u30d1\u30c6\u30a3\u30fc {0} \u304c\u5fc5\u8981\u3067\u3059
+DUPLICATE_MESSAGE_ID_MSG = \u30e1\u30c3\u30bb\u30fc\u30b8 ID {0} \u304c\u91cd\u8907\u3057\u3066\u3044\u307e\u3059
+INVALID_ADDRESSING_PROPERTY_MESSAGE = \u30e1\u30c3\u30bb\u30fc\u30b8\u30fb\u30a2\u30c9\u30ec\u30c3\u30b7\u30f3\u30b0\u30fb\u30d7\u30ed\u30d1\u30c6\u30a3\u30fc\u3092\u8868\u3059\u30d8\u30c3\u30c0\u30fc\u304c\u7121\u52b9\u3067\u3001\u30e1\u30c3\u30bb\u30fc\u30b8\u3092\u51e6\u7406\u3067\u304d\u307e\u305b\u3093
+MISSING_ACTION_MESSAGE = \u30e1\u30c3\u30bb\u30fc\u30b8\u30fb\u30a2\u30c9\u30ec\u30c3\u30b7\u30f3\u30b0\u30fb\u30d7\u30ed\u30d1\u30c6\u30a3\u30fc\u3092\u8868\u3059\u5fc5\u8981\u306a\u30d8\u30c3\u30c0\u30fc\u304c\u3042\u308a\u307e\u305b\u3093
+UNSUPPORTED_REPLY_TO_VALUE = ReplyTo \u30d7\u30ed\u30d1\u30c6\u30a3\u30fc {0} \u306e\u5024\u306f\u3001\u8981\u6c42\u5fdc\u7b54 MEP \u3067\u30b5\u30dd\u30fc\u30c8\u3055\u308c\u3066\u3044\u307e\u305b\u3093
+REPLYTO_NOT_SUPPORTED_MSG = ReplyTo {0} \u306f\u3001\u8981\u6c42/\u5fdc\u7b54 MEP \u3067\u30b5\u30dd\u30fc\u30c8\u3055\u308c\u3066\u3044\u307e\u305b\u3093

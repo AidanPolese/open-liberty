@@ -1,0 +1,15 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Security Audit Utilities
+Bundle-SymbolicName: com.ibm.ws.security.audit.utils
+Bundle-Description: Security Audit: Security Audit Utils; version=${bVersion}
+WS-TraceGroup: audit
+
+Export-Package: \
+   com.ibm.ws.security.audit.*
+
+-buildpath: \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest,\
+	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
+	com.ibm.websphere.appserver.spi.logging;version=latest

@@ -1,0 +1,23 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2016.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security/resources/com/ibm/ws/security/sso/common/internal/resources/SAMLPropagationMessages.nlsprops
+#COMPONENTPREFIX CWWKS CWTAI
+#COMPONENTNAMEFOR WebSphere Application Server Security SAML PROPAGATION
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKS5251 - CWWKS5299
+
+no_saml_found_in_subject=CWWKS5251W: W podmiocie brak wymaganego znacznika SAML.
+no_saml_found_in_subject.explanation=Wyst\u0105pi\u0142 wyj\u0105tek podczas wyodr\u0119bniania znacznika SAML z podmiotu lub w bie\u017c\u0105cym podmiocie nie znaleziono elementu SAML.
+no_saml_found_in_subject.useraction=Je\u015bli tworzysz podmiot \u201euruchom jako\u201d, dodaj znacznik SAML do podmiotu. W przeciwnym razie zadbaj o to, aby konfiguracja serwera obs\u0142ugiwa\u0142a dodawanie znacznika SAML do podmiotu \u2013 w tym celu zaznacz atrybut includeTokenInSubject w konfiguracji SAML.
+
+failed_to_extract_saml_token_from_subject=CWWKS5252W: Wyst\u0105pi\u0142 wyj\u0105tek podczas pr\u00f3by wyodr\u0119bnienia znacznika SAML z podmiotu. Wyj\u0105tek: [{0}]
+failed_to_extract_saml_token_from_subject.explanation=Wyst\u0105pi\u0142 wyj\u0105tek podczas wyodr\u0119bniania znacznika SAML z podmiotu.
+failed_to_extract_saml_token_from_subject.useraction=Sprawd\u017a dzienniki serwera, aby uzyska\u0107 wi\u0119cej informacji na temat b\u0142\u0119du.

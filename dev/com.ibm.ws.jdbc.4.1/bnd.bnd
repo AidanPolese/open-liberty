@@ -1,0 +1,28 @@
+# For information on bnd syntax, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Database Connectivity
+Bundle-SymbolicName: com.ibm.ws.jdbc.4.1
+Bundle-Description: Database connectivity infrastructure, version ${bVersion}
+
+WS-TraceGroup: RRA
+
+Require-Capability: osgi.ee; filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+
+Private-Package: \
+  com.ibm.ws.jdbc.osgi.v41
+  
+# Register a marker service to enable 4.1 incompatibilities.
+Service-Component: \
+  com.ibm.ws.jdbc.v41; \
+    implementation:=com.ibm.ws.jdbc.osgi.v41.JDBCRuntimeVersion41; \
+    provide:=com.ibm.ws.jdbc.osgi.JDBCRuntimeVersion; \
+    properties:="version=4.1,service.ranking:Integer=41"
+
+-buildpath: \
+	${javac.bootclasspath.java7}, \
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.ws.jdbc;version=latest,\
+	com.ibm.websphere.appserver.spi.logging

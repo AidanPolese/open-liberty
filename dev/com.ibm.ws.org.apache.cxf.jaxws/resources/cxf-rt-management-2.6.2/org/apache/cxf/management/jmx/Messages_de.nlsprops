@@ -1,0 +1,38 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-management-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+REGISTER_FAILURE_MSG = Die Registrierung des MBean-Objekts {0} beim MBeanServer ist fehlgeschlagen: {1}
+UNREGISTER_FAILURE_MSG = Das Aufheben der Registrierung des MBean-Objekts {0} beim MBeanServer ist fehlgeschlagen: {1}
+INSTANTIANTE_FAILURE_MSG = Die Instanziierung der Modell-MBean im MBeanServer ist fehlgeschlagen: {0}
+MBEAN_FAILURE_MSG = MBean-Option fehlgeschlagen: {0}
+SET_MANAGED_RESOURCE_FAILURE_MSG = Das Definieren der verwalteten Ressource f\u00fcr ModelMBean ist fehlgeschlagen: {0}
+START_CONNECTOR_FAILURE_MSG = JMX-Connector-Server konnte nicht gestartet werden: {0}
+STOP_CONNECTOR_FAILURE_MSG = JMX-Connector-Server konnte nicht beendet werden: {0}
+GET_MANAGED_INFORMATION_FAILURE_MSG = Die verwalteten Informationen f\u00fcr die Instrumentierung {0} konnten nicht abgerufen werden.
+CREATE_REGISTRY_FAULT_MSG = Ausnahme beim Starten der RMI-Registry f\u00fcr JMX: {0}
+OBJECT_NAME_FALUE_MSG = Das Abrufen der ObjectName-Datei {0} ist fehlgeschlagen: {1}

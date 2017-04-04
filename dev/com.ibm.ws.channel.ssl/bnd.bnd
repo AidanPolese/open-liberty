@@ -1,0 +1,50 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: SSL Channel
+Bundle-SymbolicName: com.ibm.ws.channel.ssl
+Bundle-Description: Provides the SSL channel that allows channel chains to \
+handle data encryption and decryption, version ${bVersion}
+
+WS-TraceGroup: SSLChannel
+
+IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml
+
+Private-Package: com.ibm.ws.channel.ssl.internal.*
+
+Include-Resource: \
+    OSGI-INF=resources/OSGI-INF
+
+Service-Component: \
+   com.ibm.ws.sslchannel.provider; \
+        implementation:=com.ibm.ws.channel.ssl.internal.SSLChannelProvider; \
+        provide:='com.ibm.websphere.channelfw.osgi.ChannelFactoryProvider,org.osgi.service.cm.ManagedServiceFactory'; \
+        chfwBundle=com.ibm.websphere.channelfw.osgi.CHFWBundle; \
+        sslSupport=com.ibm.wsspi.ssl.SSLSupport; \
+        sslConfig=com.ibm.wsspi.ssl.SSLConfiguration; \
+        eventService=com.ibm.websphere.event.EventEngine; \
+        approxTime=com.ibm.wsspi.timer.ApproximateTime; \
+        configuration-policy:=ignore;\
+        optional:='sslConfig';\
+        multiple:='sslConfig';\
+        dynamic:='sslConfig,approxTime'; \
+        properties:='service.vendor=IBM,type:String=SSLChannel,service.pid=com.ibm.ws.sslchannel.options',\
+    com.ibm.ws.sslchannel.SSLEventHandler; \
+        implementation:=com.ibm.ws.channel.ssl.internal.SSLEventHandler; \
+        provide:=com.ibm.websphere.event.EventHandler; \
+        properties:="event.topics=com/ibm/ws/channel/ssl/QUEUED_WORK,service.vendor=IBM"
+
+instrument.disabled: true
+
+-buildpath: \
+	com.ibm.ws.channelfw;version=latest,\
+	com.ibm.websphere.appserver.api.ssl;version=latest,\
+	com.ibm.websphere.appserver.spi.ssl;version=latest,\
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.cm.1.5.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
+	com.ibm.ws.timer;version=latest,\
+	com.ibm.ws.event;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

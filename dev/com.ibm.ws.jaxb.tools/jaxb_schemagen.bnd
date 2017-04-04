@@ -1,0 +1,13 @@
+-include= ~../cnf/resources/bnd/cmdline-subdir.props
+bVersion=1.0
+
+
+Bundle-Name: IBM JAXB SchemaGen Tool
+
+Require-Compiler: true
+
+Require-Bundle: com.ibm.ws.jaxb.tools.2.2.10; version="[1,1.0.100)", \
+ com.ibm.websphere.javaee.jaxb.2.2; version="[1,1.0.100)"; location="dev/api/spec/", \
+ com.ibm.ws.logging; version="[1,1.0.100)"
+ 
+Command-Class: com.ibm.ws.jaxb.tools.SchemaGen

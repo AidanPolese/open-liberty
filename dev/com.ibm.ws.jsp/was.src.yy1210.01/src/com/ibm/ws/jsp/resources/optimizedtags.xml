@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<optimized-tags xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.ibm.com/xml/ns/OptimizedTags.xsd">
+	<optimized-tag>
+		<taglib-uri>http://websphere.ibm.com/tags/tsx</taglib-uri>
+		<tlib-version>1.2</tlib-version>
+		<short-name>repeat</short-name>
+		<class-name>com.ibm.ws.jsp.translator.optimizedtag.impl.TsxRepeatOptimizedTag</class-name>
+	</optimized-tag>                
+</optimized-tags>

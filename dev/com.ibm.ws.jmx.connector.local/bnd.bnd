@@ -1,0 +1,26 @@
+# For information on bnd syntax, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: JMX Local Connector
+Bundle-SymbolicName: com.ibm.ws.jmx.connector.local
+Bundle-Description: Project for the JMX Local Connector; version=${bVersion}
+
+WS-TraceGroup: com.ibm.ws.jmx.connector.local
+
+Private-Package: com.ibm.ws.jmx.connector.local
+
+Service-Component: \
+  com.ibm.ws.jmx.localConnectorActivator;\
+    implementation:=com.ibm.ws.jmx.connector.local.LocalConnectorActivator;\
+    locationService=com.ibm.wsspi.kernel.service.location.WsLocationAdmin; \
+    dynamic:="locationService";\
+    configuration-policy:=ignore;\
+    immediate:=true;\
+    properties:="service.vendor=IBM"
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.kernel.service,\
+	com.ibm.websphere.appserver.spi.logging,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0

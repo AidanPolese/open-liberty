@@ -1,0 +1,29 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Managed Object
+Bundle-SymbolicName: com.ibm.ws.managedobject
+Bundle-Description: Managed Object Service; version=${bVersion}
+
+WS-TraceGroup: managedobject
+
+Private-Package: com.ibm.ws.managedobject.internal.*
+
+Export-Package:\
+  com.ibm.ws.managedobject; provide:=true;thread-context=true
+
+-dsannotations: com.ibm.ws.managedobject.internal.ManagedObjectServiceImpl,\
+        com.ibm.ws.managedobject.internal.DefaultManagedObjectServiceImpl
+
+Service-Component:\
+  com.ibm.ws.managedobject.deserialization;\
+    implementation:=com.ibm.ws.serialization.DeserializationClassProvider;\
+    provide:=com.ibm.ws.serialization.DeserializationClassProvider;\
+    properties:="service.vendor=IBM,classes=com.ibm.ws.managedobject.internal.ManagedObjectImpl"
+
+-buildpath: \
+	com.ibm.ws.container.service;version=latest,\
+	com.ibm.ws.injection.core;version=latest,\
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

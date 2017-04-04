@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Unknown"
+            projectURL="Unknown"
+            version="1.0" revision=""
+            license-type="???"
+            contact="???us.ibm.com"
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.dev_tools/prereqs/prereq.jim.persistence/2.1/1.0/javax.persistence-api-2.1.jar">
+         <file basename="javax.persistence_2.1.jar" checksum="b5d37284212127fb1a985ebd37c444f1"/>
+      </download>
+      <download location="https://ebitzone.hursley.ibm.com:8443/jim/download?file=FR61944">
+         <file basename="JPAjavadocs.zip" checksum="0a4d102088387a8431b5d531da27c20c"/>
+      </download>
+   </project>
+
+   <notes>
+<![CDATA[
+changed the name of javax.j2ee.persistence.jar to javax.persistence_2.1.jar
+]]>
+   </notes>
+
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v9.0 and has been cleared previously by WAS.
+   The Javadoc was downloaded from JIM.
+   </clearencehistory>
+</ossc>

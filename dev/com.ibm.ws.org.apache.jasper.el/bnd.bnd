@@ -1,0 +1,35 @@
+# For information on bnd syntax, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=3.0
+
+javac.source: 1.7
+javac.target: 1.7
+
+Bundle-Name: WAS EL 3.0
+Bundle-SymbolicName: com.ibm.ws.org.apache.jasper.el.3.0
+Bundle-Description: WAS EL 3.0, Version=${bVersion}
+
+Export-Package: org.apache.el;thread-context=true, \
+   org.apache.el.lang;thread-context=true, \
+   org.apache.el.parser, \
+   org.apache.el.util, \
+   org.apache.el.stream, \
+
+Private-Package: org.apache.el.*
+
+Import-Package: \
+    javax.el; version=3.0.0, \
+    *
+
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+
+instrument.ffdc: false
+
+instrument.classesExcludes: org/apache/el/Message*.class
+
+-buildpath: \
+	${javac.bootclasspath.java7}, \
+	com.ibm.websphere.javaee.el.3.0;version=latest,\
+	com.ibm.websphere.appserver.spi.logging;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

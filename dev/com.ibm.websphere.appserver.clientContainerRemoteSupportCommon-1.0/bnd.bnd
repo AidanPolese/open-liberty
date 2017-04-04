@@ -1,0 +1,11 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.clientContainerRemoteSupportCommon-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.containerServices-1.0;version=latest, \
+	com.ibm.websphere.appserver.iiopclient-1.0;version=latest, \
+	com.ibm.ws.clientcontainer.remote.common;version=latest

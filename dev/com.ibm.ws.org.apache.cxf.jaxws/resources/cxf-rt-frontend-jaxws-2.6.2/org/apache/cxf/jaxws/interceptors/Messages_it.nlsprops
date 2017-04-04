@@ -1,0 +1,38 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+INVOCATION_TARGET_EXC = Impossibile richiamare il metodo getFaultInfo.
+NO_GETFAULTINFO_METHOD = Gli errori JAX-WS devono avere un metodo getFaultInfo.
+COULD_NOT_INVOKE = Impossibile richiamare il metodo getFaultInfo all'eccezione.
+DISPATCH_OBJECT_CANNOT_BE_NULL = Oggetto null passato al marshalling dell'oggetto invio
+EXCEPTION_WRITING_OBJECT = Si \u00e8 verificata un'eccezione durante l'esecuzione del marshalling dell'oggetto invio al flusso
+ATTACHMENT_NOT_SUPPORTED = Gli allegati di tipo {0} non sono supportati.
+DISPATCH_OBJECT_NOT_SUPPORTED_SOAPBINDING = {0} non \u00e8 valido in modalit\u00e0 {1} con il bind SOAP/HTTP.
+DISPATCH_OBJECT_NOT_SUPPORTED_XMLBINDING = {0} non \u00e8 valido in modalit\u00e0 {1} con il bind XML/HTTP.
+EXCEPTION_WHILE_WRITING_FAULT = Si \u00e8 verificata un'eccezione durante la scrittura dell'errore.
+CANNOT_SET_HOLDER_OBJECTS = L'elenco di contenuti del messaggio in entrata e del messaggio in uscita \u00e8 identico, CXF non pu\u00f2 impostare l'oggetto contenitore nell'elenco di contenuti del messaggio in uscita.

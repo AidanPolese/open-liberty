@@ -1,0 +1,29 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: com.ibm.ws.jaxrs.2.0.tools
+Bundle-Description: IBM JAXRS Tools, version ${bVersion}
+Bundle-SymbolicName: com.ibm.ws.jaxrs.2.0.tools
+
+WS-TraceGroup: JAXRS
+
+# jaxrs-2.0 is part of EE7 and therefore requires java 1.7
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))" 
+
+Export-Package: com.ibm.ws.jaxrs20.tools;version="1.0"
+
+Private-Package: \
+   com.ibm.ws.jaxrs20.tools.* \
+
+Include-Resource:\
+ org/apache/cxf/tools/wadlto/jaxrs/jaxrs-toolspec.xml=src/org/apache/cxf/tools/wadlto/jaxrs/jaxrs-toolspec.xml
+
+instrument.disabled: true
+
+-buildpath: \
+    ../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.1.8.jar;version=file,\
+    ../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-common-3.1.8.jar;version=file,\
+    ../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-wadlto-jaxrs-3.1.8.jar;version=file,\
+    com.ibm.ws.jaxrs.2.0.common;version=latest,\
+    com.ibm.ws.kernel.boot.core,\
+    com.ibm.websphere.org.osgi.core.6.0.0

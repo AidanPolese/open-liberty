@@ -1,0 +1,26 @@
+-include= ~../cnf/resources/bnd/bundle.props
+-nouses=true
+bVersion=1.0
+
+javac.source: 1.4
+javac.target: 1.4
+
+Bundle-Name: WebSphere Liberty app client bootstrap
+Bundle-SymbolicName: com.ibm.ws.appclient.boot; singleton:=true
+Bundle-Description: WebSphere Liberty app client launcher, version ${bVersion}
+
+Main-Class: com.ibm.ws.appclient.boot.cmdline.ClientEnvCheck
+
+Require-Bundle: com.ibm.ws.kernel.boot
+
+Private-Package: \
+ com.ibm.ws.appclient.boot.*
+
+Include-Resource: \
+ OSGI-OPT=resources/OSGI-OPT
+
+instrument.disabled: true
+
+-buildpath: \
+	com.ibm.ws.appclient.boot.cmdline;version=latest, \
+	com.ibm.ws.appclient.boot.core;version=latest

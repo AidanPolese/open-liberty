@@ -1,0 +1,49 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-core-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+WSDL_SCHEMA_GENERATION_FAILURE_MSG = WSDL- und/oder Schemadateien konnten nicht generiert werden.
+WSDL_UNREADABLE_MSG = Die generierte WSDL konnte nicht gelesen werden.
+WSDL_GENERATION_TMP_DIR_MSG = Das tempor\u00e4re Verzeichnis f\u00fcr die Generierung der WSDL konnte nicht erstellt werden.
+WSDL_GENERATION_FAILURE_MSG = Die WSDL konnte nicht generiert werden.
+WSDL_GENERATION_BAD_RESULT_MSG = Der Generator ist mit dem Exitwert {0} zur\u00fcckgekehrt.
+EXTENSION_ADD_FAILED_MSG = Das Hinzuf\u00fcgen des Erweiterungselements ist fehlgeschlagen.
+SERVICE_CREATION_MSG = Das Erstellen des Service ist fehlgeschlagen.
+NO_SUCH_SERVICE_EXC = Die Definition f\u00fcr den Service {0} wurde nicht gefunden.
+NO_SUCH_ENDPOINT_EXC = Die Definition f\u00fcr den Port {0} wurden nicht gefunden.
+FAIL_TO_CREATE_WSDL_DEFINITION = Fehler beim Erstellen der WSDL-Definition aus {0}.\r\nUrsache: {1} 
+MISSING_DESTINATION_FACTORY = Die Zielfactory wurde nicht gefunden. \u00dcberpr\u00fcfen Sie den Port //wsdl:port[@name=''{0}'']
+MISSING_SERVICE= Es ist keine Definition f\u00fcr den Service {0} in der WSDL enthalten.
+WSDL4J_BAD_ELEMENT_PART= Der Teil {0} ist als Element {1} definiert, das nicht im Schema enthalten ist.
+PART_NO_NAME_NO_TYPE= Der Teil {0} ist ohne Element und ohne Typ definiert.
+NO_MESSAGE=Es wurde keine Nachricht des Typs {0} f\u00fcr die Operation {1} und die Eingabe {2} gefunden. \u00dcberpr\u00fcfen Sie die WSDL auf Fehler.
+BINDING_MISSING_TYPE=Es wurde kein portType f\u00fcr die Bindung {0} gefunden. \u00dcberpr\u00fcfen Sie die WSDL auf Fehler.
+WRAPPED_RULE_1 = Das Unwrapping der Operation {0} ist nicht m\u00f6glich. Die Eingabe- und Ausgabenachrichten (sofern vorhanden) d\u00fcrfen nur einen einzigen Teil enthalten.
+WRAPPED_RULE_2 = Das Unwrapping der Operation {0} ist nicht m\u00f6glich. Die Eingabenachricht muss auf eine globale Elementdeklaration verweisen, die denselben lokalen Namen wie die Operation hat.
+WRAPPED_RULE_3 = Das Unwrapping der Operation {0} ist nicht m\u00f6glich. Die Ausgabenachricht muss auf eine globale Elementdeklaration verweisen.
+WRAPPED_RULE_4 = Das Unwrapping der Operation {0} ist nicht m\u00f6glich. Die wsdl:part/@element-Referenz muss mit xs:complexType/xs:sequence \u00fcbereinstimmen.
+WRAPPED_RULE_5 = Das Unwrapping der Operation {0} ist nicht m\u00f6glich. wsdl:part/@element darf nur xs:sequences des Typs xs:element[@name and not(@nillable)] enthalten.

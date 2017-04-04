@@ -1,0 +1,41 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+RESOURCE_RESOLVE_FAILED=Fehler beim Aufl\u00f6sen der Ressource {0}
+FAILED_TO_INJECT_FIELD=Der Zugriff auf das Feld ist nicht zul\u00e4ssig.
+INJECTION_SETTER_NOT_VISIBLE=Der Setter {0} ist nicht sichtbar.
+INJECTION_SETTER_RAISED_EXCEPTION=Beim Aufruf des Setters {0} wurde eine Ausnahme ausgel\u00f6st.
+PRIVATE_FIELD_INJECTION_NYI=Die Ressourceninjektion f\u00fcr private Felder ist noch nicht implementiert: {0}
+INJECTION_COMPLETE_NOT_VISIBLE=Die mit @PostConstruct annotierte Methode ist nicht sichtbar: {0}
+INJECTION_COMPLETE_THREW_EXCEPTION=Die mit @PostConstruct annotierte Methode l\u00f6st beim Aufruf eine Ausnahme aus.
+PRE_DESTROY_NOT_VISIBLE=Die mit @PreDestroy annotierte Methode ist nicht sichtbar: {0}
+PRE_DESTROY_THREW_EXCEPTION=Die mit @PreDestroy annotierte Methode l\u00f6st beim Aufruf eine Ausnahme aus.
+SETTER_INJECTION_WITH_INCORRECT_TYPE=Der Setter f\u00fcr die Ressource wurde zwar gefunden, hat aber die falsche Signatur: {0}
+RESOURCE_NAME_NOT_SPECIFIED=Die Ressourcenannotation in {0} muss einen Ressourcennamen angeben.
+NO_SETTER_OR_FIELD_FOR_RESOURCE=Es gibt eine Ressourcenannotation in {0}, aber es wurde kein Feld und kein Setter gefunden.
+INJECTION_SETTER_METHOD_NOT_FOUND = Die Setter-Methode f\u00fcr die Injektion wurde nicht gefunden: {0}

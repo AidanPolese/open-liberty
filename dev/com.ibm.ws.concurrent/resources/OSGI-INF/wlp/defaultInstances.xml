@@ -1,0 +1,14 @@
+<server>
+
+  <contextService id="DefaultContextService" javaCompDefaultName="DefaultContextService" service.ranking="100">
+    <classloaderContext/>
+    <jeeMetadataContext/>
+  </contextService>
+
+  <managedExecutorService id="DefaultManagedExecutorService" javaCompDefaultName="DefaultManagedExecutorService" service.ranking="-100"/>
+
+  <managedScheduledExecutorService id="DefaultManagedScheduledExecutorService" javaCompDefaultName="DefaultManagedScheduledExecutorService" service.ranking="-200"/>
+
+  <managedThreadFactory id="DefaultManagedThreadFactory" javaCompDefaultName="DefaultManagedThreadFactory" service.ranking="-100"/>
+
+</server>

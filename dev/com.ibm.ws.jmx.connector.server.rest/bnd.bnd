@@ -1,0 +1,94 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.1
+
+Bundle-Name: JMX Connector Server
+Bundle-SymbolicName: com.ibm.ws.jmx.connector.server.rest
+Bundle-Description: Project for JMX Connector; version=${bVersion}
+
+Web-ContextPath: /IBMJMXConnectorREST
+
+IBM-Authorization-Roles: com.ibm.ws.management
+IBM-Web-Extension-Processing-Disabled: true
+
+WS-TraceGroup: jmx.rest.server.connector
+
+Private-Package: \
+  com.ibm.ws.jmx.connector.server.rest, \
+  com.ibm.ws.jmx.connector.server.rest.handlers, \
+  com.ibm.ws.jmx.connector.server.rest.helpers, \
+  com.ibm.ws.jmx.connector.server.rest.providers, \
+  com.ibm.ws.jmx.connector.server.rest.notification, \
+  com.ibm.ws.jmx.connector.server.internal.resources.*
+
+Import-Package: \
+  *
+
+Export-Package: \
+  com.ibm.ws.jmx.connector.server.rest.plugin, \
+  com.ibm.ws.jmx.connector.server.rest.handlers, \
+  com.ibm.ws.jmx.connector.server.rest.helpers
+
+
+Include-Resource: \
+    Docs=resources/Docs, \
+    WEB-INF=resources/WEB-INF
+
+Service-Component: \
+   com.ibm.ws.jmx.connector.server.rest.JSONSerializationHelper; \
+      implementation:=com.ibm.ws.jmx.connector.server.rest.JSONSerializationHelper; \
+      serializationService=com.ibm.ws.serialization.SerializationService; \
+      immediate:=true; \
+      properties:="service.vendor=IBM"
+
+-dsannotations: \
+  com.ibm.ws.jmx.connector.server.rest.RESTAppListener, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.AttributeHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.FileCollectionHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.FileHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.FileStatusHostStatusHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.FileStatusTaskPropertyHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.FileStatusTaskStatusHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.FileTransferHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.FileTransferRouterHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.JMXHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.MBeanAttributeRouterHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.MBeanHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.MBeanOperationHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.MBeanQueryHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.MBeanRouterHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.NotificationClientHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.NotificationHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.NotificationInboxHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.NotificationListenerHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.NotificationRegistrationsHandler, \
+  com.ibm.ws.jmx.connector.server.rest.handlers.NotificationServerRegistrationsHandler, \
+  com.ibm.ws.jmx.connector.server.rest.helpers.MBeanRoutedNotificationHelper, \
+  com.ibm.ws.jmx.connector.server.rest.helpers.MBeanRouterHelper, \
+  com.ibm.ws.jmx.connector.server.rest.helpers.FileTransferHelper, \
+  com.ibm.ws.jmx.connector.server.rest.helpers.MultipleRoutingHelper
+
+instrument.classesExcludes: com/ibm/ws/jmx/connector/server/internal/resources/*.class
+
+-buildpath: \
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.websphere.appserver.spi.kernel.service,\
+	com.ibm.ws.serialization;version=latest,\
+	com.ibm.ws.jmx.connector.client.rest;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0,\
+	com.ibm.websphere.appserver.api.json,\
+	com.ibm.ws.logging.core,\
+	com.ibm.websphere.javaee.jaxrs.1.1;version=latest,\
+	com.ibm.websphere.appserver.spi.httptransport;version=latest,\
+	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
+	com.ibm.websphere.collective;version=latest,\
+	com.ibm.websphere.collective.plugins;version=latest,\
+	com.ibm.websphere.appserver.spi.ssl;version=latest,\
+	com.ibm.websphere.filetransfer;version=latest,\
+	com.ibm.ws.filetransfer;version=latest,\
+	com.ibm.wsspi.org.osgi.service.event.1.3.1,\
+	com.ibm.ws.jmx.request;version=latest,\
+	com.ibm.websphere.rest.handler;version=latest,\
+	com.ibm.ws.rest.handler;version=latest,\
+	com.ibm.websphere.jsonsupport;version=latest,\
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

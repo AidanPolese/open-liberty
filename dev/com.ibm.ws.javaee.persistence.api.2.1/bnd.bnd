@@ -1,0 +1,12 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.ws.javaee.persistence.api.2.1
+Require-Bundle: com.ibm.ws.javaee.persistence.2.1
+-exportcontents: \
+ javax.persistence; \
+ javax.persistence.criteria; \
+ javax.persistence.metamodel; \
+ javax.persistence.spi; \
+   jpa="2.1"; version="2.1.0"
+

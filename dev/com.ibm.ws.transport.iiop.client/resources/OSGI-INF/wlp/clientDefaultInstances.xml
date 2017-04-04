@@ -1,0 +1,5 @@
+<server>
+<!--  nameService attribute is not present, why not? -->
+  <orb id="defaultOrb"  nameService="corbaloc:iiop:localhost:2809/NameService"/>
+
+</server>

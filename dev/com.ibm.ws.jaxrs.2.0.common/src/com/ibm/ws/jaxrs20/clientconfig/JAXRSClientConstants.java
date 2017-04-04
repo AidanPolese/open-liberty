@@ -1,0 +1,35 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * WLP Copyright IBM Corp. 2017
+ *
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ */
+package com.ibm.ws.jaxrs20.clientconfig;
+
+/**
+ *
+ */
+public class JAXRSClientConstants {
+
+    public final static String TR_GROUP = "com.ibm.ws.jaxrs20.client";
+    public final static String TR_RESOURCE_BUNDLE = "com.ibm.ws.jaxrs20.client.internal.resources.JAXRSClientMessages";
+    public final static String SSL_REFKEY = "com.ibm.ws.jaxrs.client.ssl.config";
+    public final static String CONNECTION_TIMEOUT = "com.ibm.ws.jaxrs.client.connection.timeout";
+    public final static String RECEIVE_TIMEOUT = "com.ibm.ws.jaxrs.client.receive.timeout";
+    public final static long TIMEOUT_DEFAULT = 30000;
+    public final static String PROXY_HOST = "com.ibm.ws.jaxrs.client.proxy.host";
+    public final static String PROXY_PORT = "com.ibm.ws.jaxrs.client.proxy.port";
+    public final static String PROXY_TYPE = "com.ibm.ws.jaxrs.client.proxy.type";
+    public final static int PROXY_PORT_DEFAULT = 80;
+    public final static String LTPA_HANDLER = "com.ibm.ws.jaxrs.client.ltpa.handler";
+    public static final String OAUTH_HANDLER = "com.ibm.ws.jaxrs.client.oauth.sendToken";
+    public static final String JWT_HANDLER = "com.ibm.ws.jaxrs.client.oidc.sendJwtToken";
+    public static final String DISABLE_CN_CHECK = "com.ibm.ws.jaxrs.client.disableCNCheck";
+    public final static String SAML_HANDLER = "com.ibm.ws.jaxrs.client.saml.sendToken";
+
+}

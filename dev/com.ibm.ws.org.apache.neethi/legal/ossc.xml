@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Neethi" 
+            projectURL="http://ws.apache.org/neethi" 
+            version="3.0.2" revision="GA" 
+            license-type="Apachev2" 
+            contact="hanhongf@cn.ibm.com" 
+            encryption="no">
+      <download location="http://www.fayea.com/apache-mirror//ws/neethi/3.0.2/neethi-3.0.2-bin.zip">
+         <file basename="org.apache.neethi-3.0.2.jar" checksum="51aed43fd54c1fcc86d531fd93250bc4"/>
+      </download>
+   </project>
+   
+   <clearancehistory> v3.0.2 - AWSOM: SWG104720120918 Approval_date: 10/10/2012 Review_level: 1 </clearancehistory>
+
+   <notes/>
+</ossc>

@@ -1,0 +1,3 @@
+<server>
+	<com.ibm.ws.transport.iiop.spi.SubsystemFactory type="SSL"/>
+</server>

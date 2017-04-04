@@ -1,0 +1,88 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-transports-http-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SSL_CONTEXT_INIT_FAILURE = Problema al inicializar ssl para la solicitud saliente; la excepci\u00f3n notificada desde el proveedor de seguridad es: {0}
+UNKNOWN_SSL_CLIENT_POLICY_DATA = Propiedad SSLClientPolicy desconocida: {0}
+UNKNOWN_SSL_SERVER_POLICY_DATA = Propiedad SSLServerPolicy desconocida: {0}
+UNSUPPORTED_SSL_CLIENT_POLICY_DATA = Propiedad SSLClientPolicy no soportada: {0}
+UNSUPPORTED_SSL_SERVER_POLICY_DATA = Propiedad SSLServerPolicy no soportada: {0}
+KEY_STORE_NOT_SET = La ubicaci\u00f3n del almac\u00e9n de claves no se ha establecido mediante un par\u00e1metro del sistema o mediante la configuraci\u00f3n, por lo que se utilizar\u00e1 el valor por omisi\u00f3n {0}.
+KEY_STORE_SET = La ubicaci\u00f3n del almac\u00e9n de claves se ha establecido en {0}.
+KEY_STORE_SYSTEM_PROPERTY_SET = La ubicaci\u00f3n del almac\u00e9n de claves se ha establecido mediante una propiedad del sistema en {0}.
+KEY_STORE_TYPE_NOT_SET = El tipo de almac\u00e9n de claves no se ha establecido en la configuraci\u00f3n, por lo que se utilizar\u00e1 el valor por omisi\u00f3n {0}.
+KEY_STORE_TYPE_SYSTEM_SET = El tipo de almac\u00e9n de claves se ha establecido mediante una propiedad del sistema en {0}.
+KEY_STORE_TYPE_SET = El tipo de almac\u00e9n de claves se ha establecido en la configuraci\u00f3n en {0}.
+KEY_STORE_PROVIDER_NOT_SET = El proveedor del almac\u00e9n de claves no se ha establecido en la configuraci\u00f3n, por lo que se utilizar\u00e1 el valor por omisi\u00f3n {0}.
+KEY_STORE_PROVIDER_SYSTEM_SET = El proveedor del almac\u00e9n de claves se ha establecido mediante una propiedad del sistema en {0}.
+KEY_STORE_PROVIDER_SET = El proveedor del almac\u00e9n de claves se ha establecido en la configuraci\u00f3n en {0}.
+LOADED_KEYSTORE = El almac\u00e9n de claves, {0}, se ha cargado satisfactoriamente.
+FAILED_TO_LOAD_KEYSTORE = La carga del almac\u00e9n de claves {0} ha fallado con el siguiente problema: {1}.
+FAILED_TO_LOAD_KEYSTORE_NULL_PASSWORD = La carga del almac\u00e9n de claves {0} ha fallado porque no se ha establecido la contrase\u00f1a.
+TRUST_STORE_NOT_SET = La ubicaci\u00f3n del almac\u00e9n de confianza no se ha establecido mediante un par\u00e1metro del sistema o mediante la configuraci\u00f3n, por lo que se utilizar\u00e1 el valor por omisi\u00f3n {0}.
+TRUST_STORE_SET = La ubicaci\u00f3n de almac\u00e9n de confianza se ha establecido en la configuraci\u00f3n en {0}.
+TRUST_STORE_SYSTEM_PROPERTY_SET = La ubicaci\u00f3n del almac\u00e9n de confianza se ha establecido mediante una propiedad del sistema en {0}.
+TRUST_STORE_TYPE_NOT_SET = El tipo de almac\u00e9n de confianza no se ha establecido en la configuraci\u00f3n, por lo que se utilizar\u00e1 el valor por omisi\u00f3n {0}.
+TRUST_STORE_TYPE_SET = El tipo de almac\u00e9n de confianza se ha establecido en la configuraci\u00f3n en {0}.
+TRUST_STORE_TYPE_SYSTEM_SET = El tipo de almac\u00e9n de confianza se ha establecido mediante una propiedad del sistema en {0}.
+FAILED_TO_LOAD_TRUST_STORE = La carga del almac\u00e9n de confianza {0} ha fallado con el siguiente problema: {1}.
+LOADED_TRUST_STORE = El almac\u00e9n de confianza, {0}, se ha cargado satisfactoriamente.
+KEY_STORE_PASSWORD_NOT_SET = La contrase\u00f1a del almac\u00e9n de claves no se ha establecido mediante una propiedad del sistema o mediante la configuraci\u00f3n; la lectura de los datos del almac\u00e9n de claves fallar\u00e1.
+KEY_STORE_PASSWORD_SET = Se ha detectado que la contrase\u00f1a del almac\u00e9n de claves se ha establecido en la configuraci\u00f3n y se utilizar\u00e1.
+KEY_STORE_PASSWORD_SYSTEM_PROPERTY_SET = Se ha detectado que la contrase\u00f1a del almac\u00e9n de claves se ha establecido como una propiedad del sistema y se utilizar\u00e1.
+KEY_PASSWORD_NOT_SET = La contrase\u00f1a de la clave no se ha establecido mediante una propiedad del sistema o mediante la configuraci\u00f3n; la lectura de los datos del almac\u00e9n de claves fallar\u00e1.
+KEY_PASSWORD_SET = Se ha detectado que la contrase\u00f1a de la clave se ha establecido en la configuraci\u00f3n y se utilizar\u00e1.
+KEY_PASSWORD_SYSTEM_PROPERTY_SET = Se ha detectado que la contrase\u00f1a de la clave se ha establecido como una propiedad del sistema y se utilizar\u00e1.
+SECURE_SOCKET_PROTOCOL_NOT_SET = El protocolo de socket seguro no se ha establecido, por lo que se utiliza el valor por omisi\u00f3n TLSv1.
+SECURE_SOCKET_PROTOCOL_SET = El protocolo de socket seguro se ha establecido en {0}.
+REQUIRE_CLIENT_AUTHENTICATION_NOT_SET = Se necesita autenticaci\u00f3n de cliente no se ha establecido de forma expl\u00edcita en la configuraci\u00f3n, por lo que se utiliza el valor por omisi\u00f3n false.
+REQUIRE_CLIENT_AUTHENTICATION_SET = Se necesita autenticaci\u00f3n de cliente se ha establecido en {0}.
+WANT_CLIENT_AUTHENTICATION_NOT_SET = Se desea autenticaci\u00f3n de cliente no se ha establecido de forma expl\u00edcita en la configuraci\u00f3n, por lo que se utiliza el valor por omisi\u00f3n false.
+WANT_CLIENT_AUTHENTICATION_SET = Se desea autenticaci\u00f3n de cliente se ha establecido en {0}.
+KEY_PASSWORD_NOT_SAME_KEYSTORE_PASSWORD = El valor especificado para la contrase\u00f1a de almac\u00e9n de claves es distinto de la contrase\u00f1a de clave. Actualmente, las limitaciones de JSSE requieren que deben ser iguales. S\u00f3lo se utilizar\u00e1 el valor de contrase\u00f1a de almac\u00e9n de claves.
+CIPHERSUITES_SET = Las suites de cifrado se han establecido en {0}.
+
+CIPHERSUITES_NOT_SET = Las suites de cifrado no se han configurado; se vuelve a los filtros de suite de cifrado.
+CIPHERSUITE_FILTERS_NOT_SET = Los filtros de suite de cifrado no se han configurado; se vuelve a los filtros por omisi\u00f3n.
+CIPHERSUITE_FILTER = Filtro de suite de cifrado: 
+CIPHERSUITE_INCLUDED = La suite de cifrado {0} est\u00e1 incluida por el filtro.
+CIPHERSUITE_EXCLUDED = La suite de cifrado {0} est\u00e1 excluida por el filtro.
+CIPHERSUITE_INCLUDE_FILTER = Filtro de inclusi\u00f3n de suite de cifrado: {0}
+CIPHERSUITE_EXCLUDE_FILTER = Filtro de exclusi\u00f3n de suite de cifrado: {0}
+CIPHERSUITES_FILTERED = Las suites de cifrado habilitadas se han filtrado a {0}.
+CIPHERSUITES_EXCLUDED = Las suites de cifrado excluidas se han filtrado a {0}.
+
+SUCCESS_INVOKING_SECURITY_CONFIGURER = El m\u00e9todo de configuraci\u00f3n del configurador de seguridad personalizado {0} se ha invocado satisfactoriamente.
+ERROR_INVOKING_SECURITY_CONFIGURER = Error al invocar el configurador de seguridad personalizado {0}; la excepci\u00f3n notificada es {1}.
+KEY_STORE_ALGORITHM_NOT_SET = El algoritmo de f\u00e1brica del gestor de claves del almac\u00e9n de claves no se ha establecido en la configuraci\u00f3n, por lo que se utilizar\u00e1 el valor por omisi\u00f3n de {0}.
+KEY_STORE_ALGORITHM_SET = El algoritmo de f\u00e1brica del gestor de claves del almac\u00e9n de claves se ha establecido en la configuraci\u00f3n en {0}.
+TRUST_STORE_ALGORITHM_NOT_SET = El algoritmo de f\u00e1brica del gestor de claves del almac\u00e9n de confianza no se ha establecido en la configuraci\u00f3n, por lo que se utilizar\u00e1 el valor por omisi\u00f3n de {0}.
+TRUST_STORE_ALGORITHM_SET = El algoritmo de f\u00e1brica del gestor de claves del almac\u00e9n de confianza se ha establecido en la configuraci\u00f3n en {0}.
+COULD_NOT_CREATE_OUTBOUND_REQUEST_SOCKET = No se ha podido crear una conexi\u00f3n con el host {0} y el puerto {1}; el error notificado es {2}.
+
+PROBLEM_CREATING_OUTBOUND_REQUEST_SOCKET = No se ha podido crear una conexi\u00f3n con el host {0} y el puerto {1}.
+UNOFFICIAL_SECURITY_CONFIGURER = El uso del configurador de seguridad est\u00e1 soportado para la versi\u00f3n 1.0 de Celtix, pero la API est\u00e1 sujeta a cambios en las versiones posteriores.

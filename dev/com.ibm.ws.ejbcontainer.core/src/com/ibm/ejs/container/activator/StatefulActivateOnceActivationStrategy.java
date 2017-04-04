@@ -1,0 +1,106 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * Copyright IBM Corp. 1998, 2012
+ *
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
+ * U.S. Copyright Office.
+ */
+package com.ibm.ejs.container.activator;
+
+import com.ibm.ejs.container.BeanO;
+import com.ibm.ejs.container.ContainerTx;
+import com.ibm.ejs.container.StatefulBeanO;
+import com.ibm.ejs.ras.Tr;
+import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.csi.PassivationPolicy;
+
+public class StatefulActivateOnceActivationStrategy
+                extends StatefulSessionActivationStrategy
+{
+    public StatefulActivateOnceActivationStrategy(Activator activator,
+                                                  PassivationPolicy policy)
+    {
+        super(activator, policy);
+    }
+
+    @Override
+    void atCommit(ContainerTx tx, BeanO bean)
+    {
+        final boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
+        if (isTraceOn && tc.isEntryEnabled())
+            Tr.entry(tc, "atCommit: " + bean, tx);
+
+        StatefulBeanO sfbean = (StatefulBeanO) bean;
+        Object lock = sfbean.ivCacheLock;
+
+        synchronized (lock)
+        {
+            // Drop transaction pin, and remove the bean if needed.
+            if (!sfbean.isRemoved()) { // d173022.12
+                cache.unpinElement(sfbean.ivCacheElement);
+            } else {
+                cache.removeElement(sfbean.ivCacheElement, true);
+                sfbean.destroy();
+                sfbean.ivCacheKey = null; // d199233
+                reaper.remove(sfbean.getId());
+            }
+            sfbean.setCurrentTx(null); //PQ99986
+
+            // The bean is no longer in a transaction, so notify all other
+            // threads waiting.                          F743-22462 d648183 d650932
+            sfbean.unlock(lock);
+        }
+
+        if (isTraceOn && tc.isEntryEnabled())
+            Tr.exit(tc, "atCommit: " + bean);
+    }
+
+    @Override
+    void atRollback(ContainerTx tx, BeanO bean)
+    {
+        final boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
+        if (isTraceOn && tc.isEntryEnabled())
+            Tr.entry(tc, "atRollback: " + bean, tx);
+
+        // Rollback of a Stateful Session bean needs to be pretty much the
+        // same as commit.  There is no way to undo a remove(), so even though
+        // the tran is rolling back, the bean still needs to be removed from
+        // the EJB Cache, just like in commit. The same is also true if the
+        // bean's beforeCompletion throws an exception and the bean is
+        // discarded (isRemoved returns true for this as well).
+        // Net is - never leave a DESTROYED bean in the EJB Cache.         d160910
+
+        StatefulBeanO sfbean = (StatefulBeanO) bean;
+        Object lock = sfbean.ivCacheLock;
+
+        synchronized (lock)
+        {
+            // Drop transaction pin, and remove the bean if needed.
+            if (!sfbean.isRemoved()) { // d173022.12
+                cache.unpinElement(sfbean.ivCacheElement);
+            } else {
+                cache.removeElement(sfbean.ivCacheElement, true);
+                sfbean.destroy();
+                sfbean.ivCacheKey = null; // d199233
+                reaper.remove(sfbean.getId());
+            }
+            sfbean.setCurrentTx(null); //PQ99986
+
+            // The bean is no longer in a transaction, so notify all other
+            // threads waiting.                          F743-22462 d648183 d650932
+            sfbean.unlock(lock);
+        }
+
+        if (isTraceOn && tc.isEntryEnabled())
+            Tr.exit(tc, "atRollback: " + bean);
+    }
+
+    //d121558
+    private static final TraceComponent tc =
+                    Tr.register(StatefulActivateOnceActivationStrategy.class,
+                                "EJBContainer", "com.ibm.ejs.container.container");
+}

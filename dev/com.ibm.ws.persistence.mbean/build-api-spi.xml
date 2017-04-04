@@ -1,0 +1,15 @@
+<project name="com.ibm.ws.persistence-api" default="buildApiSpi"> 
+  <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+       Top level builds use this task explicity.  Changing the
+       default will create an incompatibility between a default
+       project build and a top level build. -->
+       
+  <!-- IBM-API required properties. -->
+  <property name="bundleName" value="WebSphere Persistence Service API" />
+  <property name="api.ibm.symbolic.suffix" value="persistence" />
+  <!-- Accept the default 'api.ibm.version' of '1.0'. -->  
+  <property name="feature.name" value="com.ibm.ws.persistence-1.0"/>
+
+  <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+
+</project>

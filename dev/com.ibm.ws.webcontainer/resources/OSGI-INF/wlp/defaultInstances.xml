@@ -1,0 +1,10 @@
+<server>
+
+  <webContainer/>
+
+<!--  apparently the link extension factory is never used??? -->
+  <!--com.ibm.wsspi.webcontainer.extension.ExtensionFactory type="Link"/-->
+
+  <!--com.ibm.wsspi.webcontainer.extension.ExtensionFactory type="ExtHandshakeVHost"/-->
+
+</server>

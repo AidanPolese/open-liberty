@@ -1,0 +1,85 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-transports-http-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SSL_CONTEXT_INIT_FAILURE = Probl\u00e9m p\u0159i inicializaci SSL pro odchoz\u00ed po\u017eadavek, v\u00fdjimka ohl\u00e1\u0161en\u00e1 poskytovatelem zabezpe\u010den\u00ed je: {0}
+UNKNOWN_SSL_CLIENT_POLICY_DATA = Nezn\u00e1m\u00e1 vlastnost SSLClientPolicy: {0}
+UNKNOWN_SSL_SERVER_POLICY_DATA = Nezn\u00e1m\u00e1 vlastnost SSLServerPolicy: {0}
+UNSUPPORTED_SSL_CLIENT_POLICY_DATA = Nepodporovan\u00e1 vlastnost SSLClientPolicy: {0}
+UNSUPPORTED_SSL_SERVER_POLICY_DATA = Nepodporovan\u00e1 vlastnost SSLServerPolicy: {0}
+KEY_STORE_NOT_SET = Um\u00edst\u011bn\u00ed \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f nen\u00ed nastaveno prost\u0159ednictv\u00edm parametru syst\u00e9mu ani prost\u0159ednictv\u00edm konfigurace, tak\u017ee se pou\u017eije v\u00fdchoz\u00ed hodnota {0}.
+KEY_STORE_SET = Um\u00edst\u011bn\u00ed \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f je nastaveno na hodnotu {0}.
+KEY_STORE_SYSTEM_PROPERTY_SET = Um\u00edst\u011bn\u00ed \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f je nastaveno prost\u0159ednictv\u00edm syst\u00e9mov\u00e9 vlastnosti na hodnotu {0}.
+KEY_STORE_TYPE_NOT_SET = V konfiguraci nen\u00ed nastaven typ \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f, tak\u017ee se pou\u017eije v\u00fdchoz\u00ed hodnota {0}.
+KEY_STORE_TYPE_SYSTEM_SET = Typ \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f je nastaven prost\u0159ednictv\u00edm syst\u00e9mov\u00e9 vlastnosti na hodnotu {0}.
+KEY_STORE_TYPE_SET = Typ \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f je v konfiguraci nastaven na hodnotu {0}.
+KEY_STORE_PROVIDER_NOT_SET = V konfiguraci nen\u00ed nastaven poskytovatel \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f, tak\u017ee se pou\u017eije v\u00fdchoz\u00ed hodnota {0}.
+KEY_STORE_PROVIDER_SYSTEM_SET = Poskytovatel \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f je nastaven prost\u0159ednictv\u00edm syst\u00e9mov\u00e9 vlastnosti na hodnotu {0}.
+KEY_STORE_PROVIDER_SET = Poskytovatel \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f je v konfiguraci nastaven na hodnotu {0}.
+LOADED_KEYSTORE = Bylo \u00fasp\u011b\u0161n\u011b na\u010dteno \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f {0}.
+FAILED_TO_LOAD_KEYSTORE = Na\u010d\u00edt\u00e1n\u00ed \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f {0} se nezda\u0159ilo, do\u0161lo k tomuto probl\u00e9mu: {1}.
+FAILED_TO_LOAD_KEYSTORE_NULL_PASSWORD = Na\u010d\u00edt\u00e1n\u00ed \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f {0} se nezda\u0159ilo, proto\u017ee nen\u00ed nastaveno heslo.
+TRUST_STORE_NOT_SET = Um\u00edst\u011bn\u00ed \u00falo\u017ei\u0161t\u011b \u00fadaj\u016f o d\u016fv\u011bryhodnosti nen\u00ed nastaveno prost\u0159ednictv\u00edm parametru syst\u00e9mu ani prost\u0159ednictv\u00edm konfigurace, tak\u017ee se pou\u017eije v\u00fdchoz\u00ed hodnota {0}.
+TRUST_STORE_SET = Um\u00edst\u011bn\u00ed \u00falo\u017ei\u0161t\u011b \u00fadaj\u016f o d\u016fv\u011bryhodnosti je v konfiguraci nastaveno na hodnotu {0}.
+TRUST_STORE_SYSTEM_PROPERTY_SET = Um\u00edst\u011bn\u00ed \u00falo\u017ei\u0161t\u011b \u00fadaj\u016f o d\u016fv\u011bryhodnosti je nastaveno prost\u0159ednictv\u00edm syst\u00e9mov\u00e9 vlastnosti na hodnotu {0}.
+TRUST_STORE_TYPE_NOT_SET = V konfiguraci nen\u00ed nastaven typ \u00falo\u017ei\u0161t\u011b \u00fadaj\u016f o d\u016fv\u011bryhodnosti, tak\u017ee se pou\u017eije v\u00fdchoz\u00ed hodnota {0}.
+TRUST_STORE_TYPE_SET = Typ \u00falo\u017ei\u0161t\u011b \u00fadaj\u016f o d\u016fv\u011bryhodnosti je v konfiguraci nastaven na hodnotu {0}.
+TRUST_STORE_TYPE_SYSTEM_SET = Typ \u00falo\u017ei\u0161t\u011b \u00fadaj\u016f o d\u016fv\u011bryhodnosti je nastaven prost\u0159ednictv\u00edm syst\u00e9mov\u00e9 vlastnosti na hodnotu {0}.
+FAILED_TO_LOAD_TRUST_STORE = Na\u010d\u00edt\u00e1n\u00ed \u00falo\u017ei\u0161t\u011b \u00fadaj\u016f o d\u016fv\u011bryhodnosti {0} se nezda\u0159ilo, do\u0161lo k tomuto probl\u00e9mu: {1}.
+LOADED_TRUST_STORE = Bylo \u00fasp\u011b\u0161n\u011b na\u010dteno \u00falo\u017ei\u0161t\u011b \u00fadaj\u016f o d\u016fv\u011bryhodnosti {0}.
+KEY_STORE_PASSWORD_NOT_SET = Heslo k \u00falo\u017ei\u0161ti kl\u00ed\u010d\u016f nen\u00ed nastaveno prost\u0159ednictv\u00edm syst\u00e9mov\u00e9 vlastnosti ani prost\u0159ednictv\u00edm konfigurace, na\u010d\u00edt\u00e1n\u00ed dat z \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f se nezda\u0159\u00ed.
+KEY_STORE_PASSWORD_SET = Bude pou\u017eito heslo k \u00falo\u017ei\u0161ti kl\u00ed\u010d\u016f nastaven\u00e9 v konfiguraci.
+KEY_STORE_PASSWORD_SYSTEM_PROPERTY_SET = Bude pou\u017eito heslo k \u00falo\u017ei\u0161ti kl\u00ed\u010d\u016f nastaven\u00e9 jako syst\u00e9mov\u00e1 vlastnost.
+KEY_PASSWORD_NOT_SET = Heslo ke kl\u00ed\u010di nen\u00ed nastaveno prost\u0159ednictv\u00edm syst\u00e9mov\u00e9 vlastnosti ani prost\u0159ednictv\u00edm konfigurace, na\u010d\u00edt\u00e1n\u00ed dat z \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f se nezda\u0159\u00ed.
+KEY_PASSWORD_SET = Bude pou\u017eito heslo ke kl\u00ed\u010di nastaven\u00e9 v konfiguraci.
+KEY_PASSWORD_SYSTEM_PROPERTY_SET = Bude pou\u017eito heslo ke kl\u00ed\u010di nastaven\u00e9 jako syst\u00e9mov\u00e1 vlastnost.
+SECURE_SOCKET_PROTOCOL_NOT_SET = Nen\u00ed nastaven protokol SSL, tak\u017ee se pou\u017eije v\u00fdchoz\u00ed hodnota TLSv1.
+SECURE_SOCKET_PROTOCOL_SET = Protokol SSL je nastaven na hodnotu {0}.
+REQUIRE_CLIENT_AUTHENTICATION_NOT_SET = V konfiguraci nen\u00ed v\u00fdslovn\u011b nastaveno vy\u017eadov\u00e1n\u00ed ov\u011b\u0159en\u00ed klienta, tak\u017ee se pou\u017eije v\u00fdchoz\u00ed hodnota false.
+REQUIRE_CLIENT_AUTHENTICATION_SET = Vy\u017eadov\u00e1n\u00ed ov\u011b\u0159en\u00ed klienta je nastaveno na hodnotu {0}.
+WANT_CLIENT_AUTHENTICATION_NOT_SET = V konfiguraci nen\u00ed v\u00fdslovn\u011b nastaven po\u017eadavek na ov\u011b\u0159en\u00ed klienta, tak\u017ee se pou\u017eije v\u00fdchoz\u00ed hodnota false.
+WANT_CLIENT_AUTHENTICATION_SET = Po\u017eadavek na ov\u011b\u0159en\u00ed klienta je nastaven na hodnotu {0}.
+KEY_PASSWORD_NOT_SAME_KEYSTORE_PASSWORD = Zadan\u00e1 hodnota hesla k \u00falo\u017ei\u0161ti kl\u00ed\u010d\u016f a hesla ke kl\u00ed\u010di se li\u0161\u00ed. Omezen\u00ed JSSE aktu\u00e1ln\u011b vy\u017eaduje, aby byla ob\u011b tato hesla stejn\u00e1. Pou\u017eije se pouze hodnota hesla k \u00falo\u017ei\u0161ti kl\u00ed\u010d\u016f.
+CIPHERSUITES_SET = \u0160ifrovac\u00ed sady jsou nastaveny na hodnotu {0}. 
+CIPHERSUITES_NOT_SET = \u0160ifrovac\u00ed sady nejsou nakonfigurov\u00e1ny, p\u0159ech\u00e1z\u00ed se zp\u011bt k filtr\u016fm \u0161ifrovac\u00edch sad.
+CIPHERSUITE_FILTERS_NOT_SET = Filtry \u0161ifrovac\u00edch sad nejsou nakonfigurov\u00e1ny, p\u0159ech\u00e1z\u00ed se zp\u011bt k v\u00fdchoz\u00edm filtr\u016fm.
+CIPHERSUITE_FILTER = Filtr \u0161ifrovac\u00ed sady: 
+CIPHERSUITE_INCLUDED = Filtr zahrnuje \u0161ifrovac\u00ed sadu {0}.
+CIPHERSUITE_EXCLUDED = Filtr vylu\u010duje \u0161ifrovac\u00ed sadu {0}.
+CIPHERSUITE_INCLUDE_FILTER = Zahrnovac\u00ed filtr \u0161ifrovac\u00ed sady: {0}
+CIPHERSUITE_EXCLUDE_FILTER = Vylu\u010dovac\u00ed filtr \u0161ifrovac\u00ed sady: {0}
+CIPHERSUITES_FILTERED = Povolen\u00e9 \u0161ifrovac\u00ed sady jsou pomoc\u00ed filtr\u016f omezeny na {0}.
+CIPHERSUITES_EXCLUDED = Vylou\u010den\u00e9 \u0161ifrovac\u00ed sady jsou pomoc\u00ed filtr\u016f omezeny na {0}. 
+SUCCESS_INVOKING_SECURITY_CONFIGURER = Byla \u00fasp\u011b\u0161n\u011b zavol\u00e1na metoda konfigurace vlastn\u00edho konfigur\u00e1toru zabezpe\u010den\u00ed {0}.
+ERROR_INVOKING_SECURITY_CONFIGURER = Do\u0161lo k selh\u00e1n\u00ed p\u0159i vol\u00e1n\u00ed vlastn\u00edho konfigur\u00e1toru zabezpe\u010den\u00ed {0}, byla ohl\u00e1\u0161ena v\u00fdjimka {1}.
+KEY_STORE_ALGORITHM_NOT_SET = V konfiguraci nen\u00ed nastaven algoritmus tov\u00e1rny spr\u00e1vce kl\u00ed\u010d\u016f \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f, tak\u017ee se pou\u017eije v\u00fdchoz\u00ed hodnota {0}.
+KEY_STORE_ALGORITHM_SET = Algoritmus tov\u00e1rny spr\u00e1vce kl\u00ed\u010d\u016f \u00falo\u017ei\u0161t\u011b kl\u00ed\u010d\u016f je v konfiguraci nastaven na hodnotu {0}.
+TRUST_STORE_ALGORITHM_NOT_SET = V konfiguraci nen\u00ed nastaven algoritmus tov\u00e1rny spr\u00e1vce kl\u00ed\u010d\u016f \u00falo\u017ei\u0161t\u011b \u00fadaj\u016f o d\u016fv\u011bryhodnosti, tak\u017ee se pou\u017eije v\u00fdchoz\u00ed hodnota {0}.
+TRUST_STORE_ALGORITHM_SET = Algoritmus tov\u00e1rny spr\u00e1vce kl\u00ed\u010d\u016f \u00falo\u017ei\u0161t\u011b \u00fadaj\u016f o d\u016fv\u011bryhodnosti je v konfiguraci nastaven na hodnotu {0}.
+COULD_NOT_CREATE_OUTBOUND_REQUEST_SOCKET = Nezda\u0159ilo se vytvo\u0159it p\u0159ipojen\u00ed k hostiteli {0} a portu {1}, byla ohl\u00e1\u0161ena chyba {2}. 
+PROBLEM_CREATING_OUTBOUND_REQUEST_SOCKET = Nezda\u0159ilo se vytvo\u0159it p\u0159ipojen\u00ed k hostiteli {0} a portu {1}.
+UNOFFICIAL_SECURITY_CONFIGURER = Ve verzi Celtix 1.0 je podporov\u00e1no pou\u017eit\u00ed konfigur\u00e1toru zabezpe\u010den\u00ed, rozhran\u00ed API se v\u0161ak m\u016f\u017ee v pozd\u011bj\u0161\u00edch verz\u00edch zm\u011bnit.

@@ -1,0 +1,12 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: JDT Compiler
+Bundle-SymbolicName: com.ibm.ws.org.eclipse.jdt.core.3.10.2.v20160712-0000
+Bundle-Description: JDT Compiler, version 4.4.1
+
+Import-Package: !*
+   
+Export-Package: org.eclipse.jdt.*;version=3.10.2;usage=JSP
+
+-buildpath: lib/ecj-4.4.2.jar;version=file

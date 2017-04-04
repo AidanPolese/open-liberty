@@ -1,0 +1,12 @@
+<project name="joda-time.buildjar" default="buildjar">
+     <import file="../../../ant_build/public_imports/standard_imports.xml"/>
+ 
+     <target name="buildjar">
+         <mkdir dir="${basedir}/../../build/lib"/>
+         <jar destfile="${basedir}/../../build/lib/com.ibm.ws.joda-time.joda-time-1.6.2.jar">
+             <fileset dir="${basedir}/classes"/>
+             <fileset dir="${basedir}/resources"/>
+             <fileset dir="${basedir}/to-be-used"/>
+         </jar>
+     </target>
+</project>

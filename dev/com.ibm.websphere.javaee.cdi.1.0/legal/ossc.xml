@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Unknown" 
+            projectURL="Unknown" 
+            version="1.0" revision="" 
+            license-type="Apachev2" 
+            contact="bergmark@us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/projects/w/was.dev_tools/prereqs/prereq.jcdi/1.0/10262011/download.zip">
+         <file basename="javax.j2ee.jcdi.jar " checksum="d9ba0440779722abe618856c095da6de"/>
+      </download>
+   </project>
+   
+   <notes>
+   The download location is the location where it is downloaded from for the WAS build process
+   </notes>
+   
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and v8.5 and has been cleared previously by WAS
+   </clearencehistory>
+</ossc>

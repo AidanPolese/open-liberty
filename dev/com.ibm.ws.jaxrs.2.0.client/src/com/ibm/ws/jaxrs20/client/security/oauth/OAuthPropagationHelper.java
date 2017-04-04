@@ -1,0 +1,138 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * Copyright IBM Corp. 2013
+ *
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
+ * U.S. Copyright Office.
+ */
+/**
+ * @version 1.0.0
+ */
+package com.ibm.ws.jaxrs20.client.security.oauth;
+
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.Map;
+import java.util.Set;
+
+import javax.security.auth.Subject;
+
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.websphere.security.WSSecurityException;
+import com.ibm.websphere.security.auth.WSSubject;
+import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.jaxrs20.client.JAXRSClientConstants;
+
+public class OAuthPropagationHelper {
+    private static final TraceComponent tc = Tr.register(OAuthPropagationHelper.class, JAXRSClientConstants.TR_GROUP, JAXRSClientConstants.TR_RESOURCE_BUNDLE);
+
+    /**
+     * Get the type of access token which the runAsSubject authenticated
+     * 
+     * @return the Type of Token, such as: Bearer
+     */
+    public static String getAccessTokenType() {
+        return getSubjectAttributeString("token_type", true);
+    }
+
+    public static String getAccessToken() {
+        return getSubjectAttributeString("access_token", true);
+    }
+
+    public static String getJwtToken() {
+        return getSubjectAttributeString("id_token", true);
+    }
+
+    public static String getScopes() {
+        return getSubjectAttributeString("scope", true);
+    }
+
+    static Subject getRunAsSubject() {
+        try {
+            return WSSubject.getRunAsSubject();
+        } catch (WSSecurityException e) {
+            if (tc.isDebugEnabled()) {
+                Tr.debug(tc, "Exception while getting runAsSubject:", e.getCause());
+            }
+            // OIDC_FAILED_RUN_AS_SUBJCET=CWWKS1772W: An exception occurred while attempting to get RunAsSubject. The exception was: [{0}]
+            Tr.warning(tc, "failed_run_as_subject", e.getLocalizedMessage());
+        }
+        return null;
+    }
+
+    /**
+     * @param string
+     * @return
+     */
+    static String getSubjectAttributeString(String attribKey, boolean bindWithAccessToken) {
+        Subject runAsSubject = getRunAsSubject();
+        if (runAsSubject != null) {
+            return getSubjectAttributeObject(runAsSubject, attribKey, bindWithAccessToken);
+        }
+        return null;
+    }
+
+    /**
+     * @param runAsSubject
+     * @param attribKey
+     * @return object
+     */
+    @FFDCIgnore({ PrivilegedActionException.class })
+    static String getSubjectAttributeObject(Subject subject, String attribKey, boolean bindWithAccessToken) {
+        try {
+            Set<Object> publicCredentials = subject.getPublicCredentials();
+            String result = getCredentialAttribute(publicCredentials, attribKey, bindWithAccessToken, "publicCredentials");
+            if (result == null || result.isEmpty()) {
+                Set<Object> privateCredentials = subject.getPrivateCredentials();
+                result = getCredentialAttribute(privateCredentials, attribKey, bindWithAccessToken, "privateCredentials");
+            }
+            return result;
+        } catch (PrivilegedActionException e) {
+            // TODO do we need an error handling in here?
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Did not find a value for the attribute (" + attribKey + ")");
+            }
+        }
+        return null;
+    }
+
+    static String getCredentialAttribute(final Set<Object> credentials, final String attribKey, final boolean bindWithAccessToken, final String msg) throws PrivilegedActionException {
+        // Since this is only for jaxrs client internal usage, it's OK to override java2 security
+        Object obj = AccessController.doPrivileged(
+                        new PrivilegedExceptionAction<Object>() {
+                            @Override
+                            public Object run() throws Exception
+                            {
+                                int iCnt = 0;
+                                for (Object credentialObj : credentials) {
+                                    iCnt++;
+                                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                                        Tr.debug(tc, msg + "(" + iCnt + ") class:" + credentialObj.getClass().getName());
+                                    }
+                                    if (credentialObj instanceof Map) {
+                                        if (bindWithAccessToken) {
+                                            Object accessToken = ((Map<?, ?>) credentialObj).get("access_token");
+                                            if (accessToken == null)
+                                                continue; // on credentialObj
+                                        }
+                                        Object value = ((Map<?, ?>) credentialObj).get(attribKey);
+                                        if (value != null)
+                                            return value;
+                                    }
+                                }
+                                return null;
+                            }
+                        });
+        if (obj != null)
+            return obj.toString();
+        else
+            return null;
+    }
+
+}

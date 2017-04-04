@@ -1,0 +1,8 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="javax.j2ee.interceptor-1.1">
+  <originbase release="WASX" fe="SERV1" level="gg1228.01" components="j2ee.interceptor.bundle"/>
+
+  <notes>
+    Copy of j2ee.interceptor.bundle/build/javax.j2ee.interceptor.jar.
+  </notes>
+</releaseInfo>

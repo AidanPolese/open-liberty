@@ -1,0 +1,8 @@
+<project name="com.ibm.ws.org.jboss.jdeparser" default="build">
+    <import file="../ant_build/public_imports/standard_imports.xml"/>
+    <import file="../ant_build/public_imports/rejar_imports.xml"/>
+    
+    <target name="package"> 
+        <bndPackage version="1.0" original.jar.name="org.jboss.jdeparser" original.jar.version="1.0.0" bnd.classpath="lib/jdeparser-1.0.0.Final.jar" bnd.file="bnd.bnd"  />    	
+    </target>
+</project>

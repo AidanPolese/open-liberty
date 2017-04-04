@@ -1,0 +1,41 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+RESOURCE_RESOLVE_FAILED=no se ha podido resolver el recurso {0}
+FAILED_TO_INJECT_FIELD=no est\u00e1 permitido el acceso a campo
+INJECTION_SETTER_NOT_VISIBLE=el m\u00e9todo de establecimiento {0} no est\u00e1 visible
+INJECTION_SETTER_RAISED_EXCEPTION=se ha generado una excepci\u00f3n al invocar el m\u00e9todo de establecimiento {0}
+PRIVATE_FIELD_INJECTION_NYI=la inyecci\u00f3n de recursos para los campos privados no se ha implementado todav\u00eda: {0}
+INJECTION_COMPLETE_NOT_VISIBLE=el m\u00e9todo anotado por @PostConstruct no est\u00e1 visible: {0}
+INJECTION_COMPLETE_THREW_EXCEPTION=el m\u00e9todo anotado por @PostConstruct genera una excepci\u00f3n cuando se invoca
+PRE_DESTROY_NOT_VISIBLE=El m\u00e9todo anotado por @PreDestroy no est\u00e1 visible: {0}
+PRE_DESTROY_THREW_EXCEPTION=El m\u00e9todo anotado por @PreDestroy genera una excepci\u00f3n cuando se invoca
+SETTER_INJECTION_WITH_INCORRECT_TYPE=Se ha encontrado un m\u00e9todo de establecimiento para el recurso, pero con la firma incorrecta: {0}
+RESOURCE_NAME_NOT_SPECIFIED=La anotaci\u00f3n de recurso en {0} debe especificar el nombre de recurso
+NO_SETTER_OR_FIELD_FOR_RESOURCE=Se ha encontrado la anotaci\u00f3n de recurso en {0}, pero no se ha encontrado ning\u00fan campo o m\u00e9todo de establecimiento.
+INJECTION_SETTER_METHOD_NOT_FOUND = No se puede encontrar el m\u00e9todo de establecimiento de inyecci\u00f3n: {0}

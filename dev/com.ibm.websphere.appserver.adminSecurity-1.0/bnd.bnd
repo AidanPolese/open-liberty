@@ -1,0 +1,15 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.adminSecurity-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.security-1.0;version=latest,\
+	com.ibm.websphere.appserver.distributedMap-1.0;version=latest,\
+	com.ibm.websphere.appserver.servlet-3.0;version=latest,\
+	com.ibm.websphere.security;version=latest,\
+	com.ibm.ws.webcontainer.security;version=latest,\
+	com.ibm.ws.webcontainer.security.admin;version=latest,\
+	com.ibm.ws.security.authentication.tai;version=latest

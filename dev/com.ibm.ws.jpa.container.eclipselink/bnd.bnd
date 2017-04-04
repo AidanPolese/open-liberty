@@ -1,0 +1,23 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: EclipseLink JPA Container
+Bundle-SymbolicName: com.ibm.ws.jpa.container.eclipselink
+Bundle-Description: Container-managed EclipseLink JPA support, version ${bVersion}
+
+WS-TraceGroup: JPA
+
+-dsannotations: com.ibm.ws.jpa.container.eclipselink.EclipseLinkJPAProvider
+
+Export-Package: com.ibm.ws.jpa.container.eclipselink, \
+ com.ibm.ws.jpa.container.eclipselink.logging
+
+-buildpath: \
+	com.ibm.ws.jpa.container.core;version=latest,\
+	com.ibm.ws.container.service;version=latest,\
+	com.ibm.ws.ras.instrument;version=latest,\
+	com.ibm.websphere.javaee.persistence.2.1;version=latest,\
+	com.ibm.websphere.appserver.thirdparty.eclipselink;version=latest,\
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

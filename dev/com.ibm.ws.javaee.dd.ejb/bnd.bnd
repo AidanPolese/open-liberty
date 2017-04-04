@@ -1,0 +1,22 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.1
+
+Bundle-Name: JavaEE Deployment Descriptor API service for EJB
+Bundle-SymbolicName: com.ibm.ws.javaee.dd.ejb
+Bundle-Description: JavaEE Deployment Descriptor API service for EJB, version ${bVersion}
+
+# For each exported package, create (in that package) a package-info.java
+# file, and place an @version javadoc tag in package-level javadoc. 
+# Append ";provide:=true" if this bundle also provides an implementation
+# for the exported API.
+
+Export-Package: \
+    com.ibm.ws.javaee.dd.ejb, \
+    com.ibm.ws.javaee.dd.ejbbnd, \
+    com.ibm.ws.javaee.dd.ejbext
+
+-buildpath: \
+	com.ibm.ws.javaee.dd;version=latest,\
+	com.ibm.ws.javaee.dd.common;version=latest,\
+	com.ibm.ws.javaee.ddmetadata.annotation;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

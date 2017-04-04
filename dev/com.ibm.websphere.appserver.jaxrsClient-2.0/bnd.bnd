@@ -1,0 +1,12 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.jaxrsClient-2.0
+
+publish.feature.resources: **
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.jaxrs.common-2.0;version=latest, \
+	com.ibm.websphere.appserver.javaeeCompatible-7.0;version=latest, \
+	com.ibm.ws.jaxrs.2.0.client;version=latest

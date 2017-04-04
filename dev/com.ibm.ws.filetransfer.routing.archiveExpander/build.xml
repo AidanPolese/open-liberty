@@ -1,0 +1,7 @@
+<project name="com.ibm.ws.filetransfer.routing.archiveExpander" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+	
+	<!-- Disable trace/ffdc injection as we do not want dependencies on these components in the client -->
+	<property name="no.trace.instrumentation" value="true"/>
+	
+</project>

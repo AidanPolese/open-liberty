@@ -1,0 +1,33 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.validation.1.1; singleton:=true
+
+Require-Capability: osgi.ee; filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+
+Export-Package: \
+	javax.validation,\
+	javax.validation.bootstrap,\
+	javax.validation.constraints,\
+	javax.validation.constraintvalidation,\
+	javax.validation.executable,\
+	javax.validation.groups,\
+	javax.validation.metadata,\
+	javax.validation.spi
+
+Import-Package: !org.apache.geronimo.osgi.registry.api, \
+  !org.osgi.framework, \
+  !org.osgi.util.tracker
+
+Private-Package: org.apache.geronimo.osgi.locator
+
+Include-Resource: \
+  @lib/geronimo-validation_1.1_spec-1.0-20131115.081150-2.jar!/META-INF/NOTICE
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/geronimo-validation_1.1_spec-1.0-20131115.081150-2.jar;version=file

@@ -1,0 +1,48 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Request Probes
+Bundle-SymbolicName: com.ibm.ws.request.probes
+Bundle-Description: RequestProbes: Request Probes; version=${bVersion}
+
+WS-TraceGroup: requestProbe
+
+Export-Package: com.ibm.wsspi.request.probe.bci, \
+ com.ibm.wsspi.probeExtension, \
+ com.ibm.wsspi.requestContext, \
+ com.ibm.ws.request.probe
+   
+Private-Package: com.ibm.ws.request.probe.bci.internal, \
+ com.ibm.ws.request.probe.internal.resources
+
+
+Service-Component:\
+    com.ibm.ws.request.probe.bci.internal.RequestProbeBCIManagerImpl; \
+        implementation:="com.ibm.ws.request.probe.bci.internal.RequestProbeBCIManagerImpl"; \
+        instrumentation=java.lang.instrument.Instrumentation~; \
+        requestProbeMetaDataProvider=com.ibm.wsspi.request.probe.bci.RequestProbeTransformDescriptor; \
+        multiple:='requestProbeMetaDataProvider'; \
+        dynamic:='requestProbeMetaDataProvider';\
+        properties:="service.vendor=IBM", \
+    com.ibm.ws.request.probe.RequestProbeService; \
+        implementation:=com.ibm.ws.request.probe.RequestProbeService; \
+        provide:=com.ibm.ws.request.probe.RequestProbeService; \
+        requestProbe=com.ibm.wsspi.probeExtension.ProbeExtension; \
+        multiple:='requestProbe'; \
+        dynamic:='requestProbe';\
+        modified:='modified'; \
+        properties:="service.vendor=IBM"; \
+        immediate:='true', \
+     com.ibm.ws.request.probe.RequestProbeIntrospector; \
+        provide:=com.ibm.wsspi.logging.IntrospectableService; \
+        implementation:=com.ibm.ws.request.probe.RequestProbeIntrospector; \
+        properties:="service.vendor=IBM", \
+
+instrument.disabled: true
+
+-buildpath: \
+	com.ibm.ws.logging.core;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.ws.org.objectweb.asm.5.0;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

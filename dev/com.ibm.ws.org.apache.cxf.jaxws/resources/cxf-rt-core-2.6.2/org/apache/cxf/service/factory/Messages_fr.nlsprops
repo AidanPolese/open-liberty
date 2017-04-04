@@ -1,0 +1,47 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-core-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+NO_METHOD_FOR_OP=Aucune m\u00e9thode n''a \u00e9t\u00e9 trouv\u00e9e pour l''op\u00e9ration WSDL {0}.
+INVALID_SCHEMA_URL=Impossible de charger le sch\u00e9ma {0}
+ERROR_READING_SCHEMA=Erreur lors de la lecture du sch\u00e9ma {0}.
+COULD_NOT_FIND_PORTTYPE = Type de port nomm\u00e9 {0} introuvable.
+USING_PROXY_FOR_SERVICE = La classe de service {0} est une instance java.lang.reflect.Proxy.  \
+Il semble que cela ne fonctionne pas correctement car aucune annotation n''est disponible sur l''instance r\u00e9elle.  \
+Nous sugg\u00e9rons de remplacer la classe de service \u00e0 l''aide de la configuration Spring ou d''une autre configuration. \
+(Attributs serviceClass/implementorClass dans l''entr\u00e9e de configuration Spring du noeud final/serveur.)
+REFERENCE_TO_UNDEFINED_TYPE = L''\u00e9l\u00e9ment de sch\u00e9ma {0} fait r\u00e9f\u00e9rence au type non d\u00e9fini {1} pour le service {2}.
+UNMAPPABLE_PORT_TYPE= La classe de service {0}, m\u00e9thode {1}, partie {2} ne peut pas \u00eatre mapp\u00e9e au sch\u00e9ma. \
+V\u00e9rifiez s''il est possible d''utiliser un type sp\u00e9cifique \u00e0 JAX-WS sans le bean de fabrique de service JAX-WS.
+INTRACTABLE_PART= La partie {0} du message {1} ne peut pas \u00eatre trait\u00e9e. \
+Cela peut \u00eatre d\u00fb \u00e0 l''utilisation de types sp\u00e9cifiques \u00e0 JAX-WS sans le bean de fabrique de service JAX-WS.
+JAXWS_ANNOTATION_FOUND=Une annotation JAX-WS a \u00e9t\u00e9 trouv\u00e9e sur {0} alors que l''avant-guichet simple est utilis\u00e9.  Pour optimiser vos r\u00e9sultats, utilisez l''avant-guichet JAX-WS.
+XSD_VALIDATION_ERROR= Erreur dans le sch\u00e9ma W3C XML associ\u00e9 au service : {0}
+COULD_NOT_UNWRAP=Impossible de d\u00e9sencapsuler l''op\u00e9ration {0} pour qu''elle corresponde \u00e0 la m\u00e9thode "{1}"
+NO_WSDL_PROVIDED=WSDL est requis pour les services cr\u00e9\u00e9s \u00e0 partir de la classe {0}, or, aucun emplacement WSDL n''a \u00e9t\u00e9 sp\u00e9cifi\u00e9. 
+NO_FAULT_PART = Impossible de trouver une partie erreur pour {0}. Le message d''erreur doit comporter une seule partie.
+INVALID_BARE_METHOD= La m\u00e9thode {0} est configur\u00e9e comme BARE, or, plus d''un param\u00e8tre comporte une annotation @Webparam incorrecte ou ne contient pas cette annotation.

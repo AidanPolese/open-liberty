@@ -1,0 +1,40 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+BUILDER_CLASS_NOT_FOUND_MSG = Classe {0} do construtor de WS-Addressing n\u00e3o localizada 
+BUILDER_INSTANTIATION_FAILED_MSG = Construtor {0} de WS-Addressing n\u00e3o p\u00f4de ser instanciado:
+MAPS_RETRIEVAL_FAILURE_MSG = WS-Addressing - falha em recuperar Propriedades de Endere\u00e7amento de Mensagens do contexto
+ACTION_NOT_SUPPORTED_MSG = A\u00e7\u00e3o {0} n\u00e3o suportada
+DESTINATION_UNREACHABLE_MSG = Destino {0} n\u00e3o ating\u00edvel
+ENDPOINT_UNAVAILABLE_MSG = Terminal {0} indispon\u00edvel
+INVALID_MAP_MSG = Propriedade de Endere\u00e7amento de Mensagens {0} Inv\u00e1lida
+MAP_REQUIRED_MSG = Propriedade de Endere\u00e7amento de Mensagens {0} Necess\u00e1ria
+DUPLICATE_MESSAGE_ID_MSG = ID de Mensagem {0} Duplicado
+INVALID_ADDRESSING_PROPERTY_MESSAGE = Um cabe\u00e7alho que representa uma Propriedade de Endere\u00e7amento de Mensagens n\u00e3o \u00e9 v\u00e1lido e a mensagem n\u00e3o pode ser processada
+MISSING_ACTION_MESSAGE = Um cabe\u00e7alho requerido que representa uma Propriedade de Endere\u00e7amento de Mensagens n\u00e3o est\u00e1 presente
+REPLYTO_NOT_SUPPORTED_MSG = ReplyTo {0} n\u00e3o \u00e9 suportado para MEP de solicita\u00e7\u00e3o/resposta

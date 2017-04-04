@@ -1,0 +1,23 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2016.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security/resources/com/ibm/ws/security/sso/common/internal/resources/SAMLPropagationMessages.nlsprops
+#COMPONENTPREFIX CWWKS CWTAI
+#COMPONENTNAMEFOR WebSphere Application Server Security SAML PROPAGATION
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKS5251 - CWWKS5299
+
+no_saml_found_in_subject=CWWKS5251W: Das erforderliche SAML-Token fehlt im Subjekt.
+no_saml_found_in_subject.explanation=Beim Extrahieren des SAML-Tokens aus dem Subjekt ist ein Fehler aufgetreten oder es wurde kein SAML-Element im aktuellen Subjekt gefunden.
+no_saml_found_in_subject.useraction=Wenn Sie das RunAs-Subjekt erstellen, m\u00fcssen Sie sicherstellen, dass dem Subjekt das SAML-Token hinzugef\u00fcgt wird. Stellen Sie alternativ sicher, dass Ihre Serverkonfiguration das Hinzuf\u00fcgen des SAML-Tokens zum Subjekt unterst\u00fctzt, indem Sie das Attribut includeTokenInSubject in Ihrer SAML-Konfiguration \u00fcberpr\u00fcfen.
+
+failed_to_extract_saml_token_from_subject=CWWKS5252W: Beim Versuch, das SAML-Token aus dem Subjekt zu extrahieren, ist eine Ausnahme eingetreten. Ausnahme: [{0}]
+failed_to_extract_saml_token_from_subject.explanation=Beim Extrahieren des SAML-Tokens aus dem Subjekt ist eine Ausnahme eingetreten.
+failed_to_extract_saml_token_from_subject.useraction=Suchen Sie in den Serverprotokollen nach weiteren Informationen zu dem Fehler.

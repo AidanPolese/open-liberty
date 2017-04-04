@@ -1,0 +1,7 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="org.apache.xmlresolver-1.2">
+  <originbase release="WASX" fe="WSSEC" level="uu1231.01" components="prereq.axis2repo"/>
+  <notes>
+    Copy of repository/xml-resolver/xml-resolver/1.2/xml-resolver-1.2.jar
+  </notes>
+</releaseInfo>

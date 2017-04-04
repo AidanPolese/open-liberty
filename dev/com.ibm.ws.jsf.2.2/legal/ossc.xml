@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Myfaces" 
+            projectURL="http://myfaces.apache.org/" 
+            version="2.2.8" revision="" 
+            license-type="Apachev2" 
+            contact="pnicoluc@us.ibm.com" 
+            encryption="no">
+    </project>
+   
+   <clearencehistory/>
+   
+    <download location="http://mvnrepository.com/artifact/com.google.inject/guice/1.0">
+         <file basename="guice-1.0.jar" checksum="2a0f7c8ff8d3340106cea04f9e30e6c1"/>
+   </download>
+   
+   <notes>
+        The source was taken from http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-core-assembly-2.2.8-src.zip
+        The guice-1.0.jar is downloaded as part of the following: http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-core-assembly-2.2.8-bin.zip  
+            however it is taken from the listed mvn repository by the myfaces build.
+   </notes>   
+</ossc>

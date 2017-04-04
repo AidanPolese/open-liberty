@@ -1,0 +1,38 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-management-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+REGISTER_FAILURE_MSG = Registrazione dell''oggetto MBean {0} su MBeanServer non riuscita: {1}
+UNREGISTER_FAILURE_MSG = Annullamento della registrazione dell''oggetto MBean {0} su MBeanServer non riuscita: {1}
+INSTANTIANTE_FAILURE_MSG = Creazione di un''istanza di Model MBean in MBeanServer non riuscita: {0}
+MBEAN_FAILURE_MSG = Opzione MBean non riuscita: {0}
+SET_MANAGED_RESOURCE_FAILURE_MSG = Impostazione della risorsa gestita ModelMBean non riuscita: {0}
+START_CONNECTOR_FAILURE_MSG = Impossibile avviare il server del connettore JMX: {0}
+STOP_CONNECTOR_FAILURE_MSG = Impossibile arrestare il server del connettore JMX: {0}
+GET_MANAGED_INFORMATION_FAILURE_MSG = Impossibile ottenere le informazioni gestite sulla strumentazione {0} 
+CREATE_REGISTRY_FAULT_MSG = Eccezione durante l''avvio del registro RMI per JMX: {0}
+OBJECT_NAME_FALUE_MSG = Acquisizione del file ObjectName {0} non riuscita: {1}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Aries" 
+            projectURL="http://aries.apache.org" 
+            version="" revision="1780033" 
+            license-type="Apachev2" 
+            contact="not@uk.ibm.com" 
+            encryption="no">
+      <download location="https://hurgsa.ibm.com/projects/o/orca.build/ws/apache.aries/0.4/s20170124-0721/apache-aries-ibm-s20170124-0721.zip">
+         <file basename="org.apache.aries.jndi.core-1.0.3-ibm-s20170124-0721.jar" checksum="ae4f868cb6e19c977e0d31b8a73745d7"/>
+      </download>
+   </project>
+
+   <clearencehistory/>
+   
+   <notes>
+   The source code in this project is from the Apache Aries repository https://svn.apache.org/repos/asf/aries/branches/java6support,
+   checked out revision 1780033.
+   
+   During our build we are patching the org.apache.aries.jndi.startup.Activator class in the org.apache.aries.jndi.core-1.0.1.jar bundle.
+   This ossc file should be merged back into the ossc.xml if and when we reconsume all Apache Aries components at the same level.
+   </notes>
+</ossc>

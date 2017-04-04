@@ -1,0 +1,35 @@
+# IBM Confidential
+#
+# OCO Source Materials
+#
+# Copyright IBM Corp. 2011
+#
+# The source code for this program is not published or otherwise divested 
+# of its trade secrets, irrespective of what has been deposited with the 
+# U.S. Copyright Office.
+#
+#CMVCPATHNAME com.ibm.ws.artifact.api.zip/resources/com/ibm/ws/artifact/api/zip/internal/resources/ZipArtifactMessages.nlsprops
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#
+#COMPONENTPREFIX CWWKM
+#COMPONENTNAMEFOR CWWKM Module API
+#
+# NLS_MESSAGEFORMAT_VAR
+#
+#   Strings in this file which contain replacement variables are processed by the MessageFormat 
+#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
+#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
+#   (single quote must be coded as one single quote '). 
+
+bad.zip.data=CWWKM0101E: The system could not process archive data for {0}.
+bad.zip.data.explanation=An exception occurred while processing the compressed data for the archive. 
+bad.zip.data.useraction=Check that the file is a valid archive.
+
+remove.cache.data=CWWKM0102W: The system has cleaned invalid cache data from location {0}
+remove.cache.data.explanation=The application structure appears to have changed, requiring deletion of cache data based on the previous structure.
+remove.cache.data.useraction=If your application has changed structure, this is expected.
+
+extract.cache.fail=CWWKM0103E: The system could not extract a nested archive to a cache location due to {0}
+extract.cache.fail.explanation=An error occurred during creation of cache data for the application, preventing the application from being processed correctly. 
+extract.cache.fail.useraction=Check the reported cause.

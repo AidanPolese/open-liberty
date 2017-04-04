@@ -1,0 +1,10 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="javax.el-2.2">
+  <originbase release="WASX fe="SERV1" level="uu1209.05" components="prereq.elapi"/>
+
+  <notes>
+<![CDATA[
+changed the name of javax.j2ee.el.jar to javax.el_2.2.jar
+]]>
+  </notes>
+</releaseInfo>

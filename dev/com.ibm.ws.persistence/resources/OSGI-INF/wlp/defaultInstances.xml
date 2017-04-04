@@ -1,0 +1,3 @@
+<server>
+  <databaseStore id="defaultDatabaseStore" dataSourceRef="DefaultDataSource" service.ranking="100"/>
+</server>

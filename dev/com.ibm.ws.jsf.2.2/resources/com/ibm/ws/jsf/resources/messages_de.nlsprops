@@ -1,0 +1,95 @@
+#CMVCPATHNAME ws/code/jsf/src/com/ibm/ws/jsf/resources/messages.nlsprops
+#COMPONENTPREFIX JSFG
+#COMPONENTNAMEFOR JSFG jsf
+#ISMESSAGEFILE TRUE
+#NLS_ENCODING=UNICODE
+#NLS_MESSAGEFORMAT_VAR
+# -------------------------------------------------------------------------------------------------
+
+jsf.error.internal.dtd.not.found=JSFG0001E: Interne DTD nicht gefunden: {0}
+jsf.error.internal.dtd.not.found.explanation=Die zum Validieren der Dateien faces-config.xml erforderliche DTD wurde nicht gefunden.
+jsf.error.internal.dtd.not.found.useraction=M\u00f6glicherweise ist die Datei ws-jsf.jar besch\u00e4digt.
+
+jsf.error.unable.find.write.method=JSFG0002E: Die Schreibmethode {0} f\u00fcr Bean-Klasse des Typs {1} wurde nicht gefunden.
+jsf.error.unable.find.write.method.explanation=Die Beanklasse enth\u00e4lt keine verwendbare Schreibmethode (Set).
+jsf.error.unable.find.write.method.useraction=F\u00fcgen Sie der Beanklasse eine Schreibmethode (Set) hinzu.
+
+jsf.error.unable.invoke.write.method=JSFG0003E: Die Schreibmethode {0} f\u00fcr Bean-Klasse des Typs {1} konnte nicht aufgerufen werden.
+jsf.error.unable.invoke.write.method.explanation=Die Schreibmethode (Set) der Bean konnte nicht erfolgreich ausgef\u00fchrt werden.
+jsf.error.unable.invoke.write.method.useraction=Suchen Sie in den Protokolldateien nach Stack-Traces und weiteren Informationen.
+
+jsf.error.unable.access.write.method=JSFG0004E: Der Zugriff auf die Schreibmethode {0} f\u00fcr Bean-Klasse des Typs {1} nicht m\u00f6glich.
+jsf.error.unable.access.write.method.explanation=Es konnte nicht erfolgreich auf die Schreibmethode (Set) der Bean zugegriffen werden.
+jsf.error.unable.access.write.method.useraction=Vergewissern Sie sich, dass die angegebene Methode \u00f6ffentlich definiert ist.
+
+jsf.error.bean.or.property.is.null=JSFG0006E: Die Eigenschaft kann nicht definiert werden, weil die Bean und/oder die Eigenschaft null ist. Bean: {0} Eigenschaft: {1}
+jsf.error.bean.or.property.is.null.explanation=Die angegebene Beaninstanz bzw. Eigenschaft ist null.
+jsf.error.bean.or.property.is.null.useraction=\u00dcberpr\u00fcfen Sie Ihren Anwendungscode, um sicherzustellen, dass Beaninstanz und Eigenschaft ordnungsgem\u00e4\u00df konfiguriert sind.
+
+jsf.error.unable.find.property.descriptor=JSFG0007E: Der Eigenschaftsdeskriptor {0} f\u00fcr Bean-Klasse des Typs {1} wurde nicht gefunden.
+jsf.error.unable.find.property.descriptor.explanation=Der Eigenschaftsdeskriptor f\u00fcr die Bean kann nicht abgerufen werden.
+jsf.error.unable.find.property.descriptor.useraction=Stellen Sie sicher, dass die Bean ordnungsgem\u00e4\u00df definiert ist.
+
+jsf.error.unable.invoke.read.method=JSFG0008E: Die Lesemethode {0} f\u00fcr Bean-Klasse des Typs {1} kann nicht aufgerufen werden.
+jsf.error.unable.invoke.read.method.explanation=Die Lesemethode (Get) der Bean konnte nicht erfolgreich ausgef\u00fchrt werden.
+jsf.error.unable.invoke.read.method.useraction=Suchen Sie in den Protokolldateien nach Stack-Traces und weiteren Informationen.
+
+jsf.error.unable.access.read.method=JSFG0009E: Der Zugriff auf die Lesemethode {0} f\u00fcr Bean-Klasse des Typs {1} nicht m\u00f6glich.
+jsf.error.unable.access.read.method.explanation=Es konnte nicht erfolgreich auf die Lesemethode (Get) der Bean zugegriffen werden.
+jsf.error.unable.access.read.method.useraction=Vergewissern Sie sich, dass die angegebene Methode \u00f6ffentlich definiert ist.
+
+jsf.error.unable.create.property.descriptor=JSFG0010E: Der Eigenschaftsdeskriptor {0} f\u00fcr Bean-Klasse des Typs {1} kann nicht erstellt werden.
+jsf.error.unable.create.property.descriptor.explanation=Die Selbst\u00fcberwachung f\u00fcr die angegebene Bean kann nicht ordnungsgem\u00e4\u00df ausgef\u00fchrt werden.
+jsf.error.unable.create.property.descriptor.useraction=\u00dcberpr\u00fcfen Sie alle Bean-Methodennamen, um sicherzustellen, dass diese der JavaBeans-Spezifikation entsprechen.
+
+jsf.error.unable.locate.property.bean.value=JSFG0011E: Die Eigenschaft {0} kann nicht f\u00fcr die Bean-Klasse des Typs {1} (Wert) gesetzt werden.
+jsf.error.unable.locate.property.bean.value.explanation=Die Bean konnte den Wert f\u00fcr die angegebene Eigenschaft nicht definieren.
+jsf.error.unable.locate.property.bean.value.useraction=Stellen Sie sicher, dass die Namen und Typen aller Bean-Eigenschaften korrekt angegeben sind und der JavaBeans-Spezifikation entsprechen.
+
+jsf.error.unable.locate.property.bean.array.list=JSFG0012E: Die Eigenschaft {0} kann nicht f\u00fcr die Bean-Klasse des Typs {1} (Array oder Liste) gesetzt werden.
+jsf.error.unable.locate.property.bean.array.list.explanation=Die Bean konnte den Array oder die Liste f\u00fcr die angegebene Eigenschaft nicht setzen.
+jsf.error.unable.locate.property.bean.array.list.useraction=Stellen Sie sicher, dass die Namen und Typen aller Bean-Eigenschaften korrekt angegeben sind und der JavaBeans-Spezifikation entsprechen.
+
+jsf.error.unable.locate.property.bean.map=JSFG0013E: Die Eigenschaft {0} kann nicht f\u00fcr die Bean-Klasse des Typs {1} (Map) gesetzt werden.
+jsf.error.unable.locate.property.bean.map.explanation=Die Bean konnte die Map f\u00fcr die angegebene Eigenschaft nicht definieren.
+jsf.error.unable.locate.property.bean.map.useraction=Stellen Sie sicher, dass die Namen und Typen aller Bean-Eigenschaften korrekt angegeben sind und der JavaBeans-Spezifikation entsprechen.
+
+jsf.error.unable.init.config=JSFG0014E: Die Konfiguration kann nicht initialisiert werden.
+jsf.error.unable.init.config.explanation=Die faces-Konfiguration konnte nicht ordnungsgem\u00e4\u00df geparst werden.
+jsf.error.unable.init.config.useraction=M\u00f6glicherweise ist die Datei ws-jsf.jar besch\u00e4digt.
+
+jsf.error.unable.locate.app=JSFG0015E: Die Anwendung {0} wurde nicht gefunden.
+jsf.error.unable.locate.app.explanation=Das Implementierungsobjekt f\u00fcr das Anwendungsziel wurde nicht gefunden.
+jsf.error.unable.locate.app.useraction=\u00dcberpr\u00fcfen Sie das Anwendungsziel und wiederholen Sie dann die Operation.
+
+jsf.error.unable.locate.cell=JSFG0016E: Die Zelle wurde nicht gefunden.
+jsf.error.unable.locate.cell.explanation=Das Zellenobjekt wurde nicht gefunden.
+jsf.error.unable.locate.cell.useraction=M\u00f6glicherweise ist die Konfiguration besch\u00e4digt.
+
+jsf.error.invalid.impl.name=JSFG0017E: Ung\u00fcltiger Implementierungsname
+jsf.error.invalid.impl.name.explanation=Der \u00fcbergebene Implementierungsname ist nicht g\u00fcltig.
+jsf.error.invalid.impl.name.useraction=W\u00e4hlen Sie SunRI1.2 oder MyFaces1.2 aus.
+
+jsf.error.unable.open.archive=JSFG0018E: Archiv {0} kann nicht ge\u00f6ffnet werden
+jsf.error.unable.open.archive.explanation=Das Archiv mit dem angegebenen Namen konnte nicht ge\u00f6ffnet werden.
+jsf.error.unable.open.archive.useraction=Bestimmen Sie anhand der Ausnahme, welches Problem mit dem Archiv vorliegt.
+
+jsf.warn.myfaces.listener.for.ri.app=JSFG0851W: F\u00fcr die Webanwendung {0} wurde die Sun RI 1.2-JSF-Implementierung erkannt, aber es ist auch ein MyFaces-Listener StartupServletContextListener registriert.
+jsf.warn.myfaces.listener.for.ri.app.explanation=Es wurde ein Listener gefunden, der nicht mit der verwendeten JSF-Implementierung \u00fcbereinstimmt.
+jsf.warn.myfaces.listener.for.ri.app.useraction=Entfernen Sie den StartupServletContextListener oder verwenden Sie die richtige JSF-Implementierung.
+
+jsf.warn.ri.impl.not.initialized=JSFG0852W: Die Sun RI 1.2-JSF-Implementierung wurde erkannt, konnte aber nicht initialisiert werden. M\u00f6glicherweise wurde JSF nicht ordnungsgem\u00e4\u00df f\u00fcr die Webanwendung {0} initialisiert.
+jsf.warn.ri.impl.not.initialized.explanation=Die JSF-Implementierung wurde m\u00f6glicherweise nicht ordnungsgem\u00e4\u00df initialisiert.
+jsf.warn.ri.impl.not.initialized.useraction=Untersuchen Sie die Protokolldateien, um die Fehlerursache zu bestimmen.
+
+jsf.warn.ri.listener.for.myfaces.app=JSFG0853W: F\u00fcr {0} ist die MyFaces-JSF-Implementierung ausgew\u00e4hlt, aber es ist auch ein Sun RI-Listener ConfigureListener registriert.
+jsf.warn.ri.listener.for.myfaces.app.explanation=Es wurde ein SunRI-Listener ConfigureListener gefunden, der nicht mit der verwendeten JSF-Implementierung \u00fcbereinstimmt.
+jsf.warn.ri.listener.for.myfaces.app.useraction=Entfernen Sie den ConfigureListener oder verwenden Sie die richtige JSF-Implementierung.
+
+jsf.warn.myfaces.not.initialized=JSFG0854W: Die WebSphere MyFaces-JSF-Implementierung wurde erkannt, konnte aber f\u00fcr die Webanwendung {0} nicht initialisiert werden.
+jsf.warn.myfaces.not.initialized.explanation=Die JSF-Implementierung wurde m\u00f6glicherweise nicht ordnungsgem\u00e4\u00df initialisiert.
+jsf.warn.myfaces.not.initialized.useraction=Untersuchen Sie die Protokolldateien, um die Fehlerursache zu bestimmen.
+
+jsf.warn.exception.during.listener=JSFG0855W: Beim Versuch, den JSF-Lifecycle-Listener {0} zu registrieren, wurde eine Ausnahme abgefangen. M\u00f6glicherweise wurde JSF nicht ordnungsgem\u00e4\u00df f\u00fcr die Webanwendung {1} initialisiert.
+jsf.warn.exception.during.listener.explanation=Beim Registrieren des Listeners ist eine Ausnahme eingetreten.
+jsf.warn.exception.during.listener.useraction=Untersuchen Sie die Protokolldateien, um die Ausnahmeursache zu bestimmen.

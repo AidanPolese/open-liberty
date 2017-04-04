@@ -1,0 +1,22 @@
+<client>
+
+    <jaasLoginModule id="proxy" className="com.ibm.ws.security.jaas.common.modules.WSLoginModuleProxy" controlFlag="REQUIRED" libraryRef="jaasSharedLib">
+        <options delegate="com.ibm.ws.security.client.jaas.modules.WSClientLoginModuleImpl" />
+    </jaasLoginModule>
+    
+	<jaasLoginContextEntry id="ClientContainer" name="ClientContainer" loginModuleRef="proxy" />
+    <jaasLoginContextEntry id="WSLogin" name="WSLogin" loginModuleRef="proxy" />
+       
+    <library id="jaasSharedLib" apiTypeVisibility="spec, ibm-api, api">
+        <fileset dir="${client.config.dir}/lib/global/" includes="*" />
+    </library>
+
+	<!-- default location for all custom JAAS login modules specifies in the JAAS configuration file (jaas.conf) -->
+    <library id="jaasDefaultSharedLib" apiTypeVisibility="spec, ibm-api, api">
+        <fileset dir="${client.config.dir}/resources/security/jaas/" includes="*" />
+        <fileset dir="${shared.config.dir}/resources/security/jaas/" includes="*" />
+        <fileset dir="${client.config.dir}/resources/security/jaas/" />
+        <fileset dir="${shared.config.dir}/resources/security/jaas/" />
+    </library>
+    
+</client>

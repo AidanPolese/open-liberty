@@ -1,0 +1,7 @@
+<project name="com.ibm.ws.org.apache.commons.fileupload" default="build">
+	<property name="no.trace.instrumentation" value="true" />
+    <import file="../ant_build/public_imports/rejar_imports.xml"/>
+
+    <property name="bundle.version" value="1.0"/>
+
+</project>

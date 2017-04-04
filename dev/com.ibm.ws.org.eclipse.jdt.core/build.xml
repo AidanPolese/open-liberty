@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.org.eclipse.jdt.core" default="build">
+  <property name="original.jar.name" value="org.eclipse.jdt.core"/>
+  <property name="original.jar.version" value="3.10.2.v20160712-0000"/>
+	
+  <import file="../ant_build/public_imports/rejar_imports.xml"/>
+	
+  <target name="package"> 
+      <bndPackage version="1.0" bnd.file="bnd.bnd" />
+  </target>
+
+</project>

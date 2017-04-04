@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Oracle RI" 
+            projectURL="https://maven.java.net"
+            version="1.0" revision="" 
+            license-type="CDDL" 
+            contact="wigger@us.ibm.com" 
+            encryption="no">
+      <download loadLocation="https://maven.java.net/content/repositories/releases/javax/websocket/javax.websocket-api/1.0/javax.websocket-api-1.0.jar">
+         <file basename="javax.websocket-api-1.0.jar" checksum="510563ac69503be2d6cbb6d492a8027b"/>
+      </download> 
+
+   </project>
+   
+   <clearencehistory/>
+   
+   <notes/>
+   
+</ossc>

@@ -1,0 +1,7 @@
+<project name="com.ibm.ws.classloading" default="build">
+
+    <import file="../ant_build/public_imports/standard_imports.xml" />
+
+    <!--property name="no.trace.instrumentation" value="true"/-->
+
+</project>

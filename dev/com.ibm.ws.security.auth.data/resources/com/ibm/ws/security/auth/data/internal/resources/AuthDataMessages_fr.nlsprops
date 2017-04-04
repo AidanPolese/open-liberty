@@ -1,0 +1,24 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security.auth.data/resources/com/ibm/ws/security/auth/data/internal/resources/AuthDataMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Application Server Security Authentication Data
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKS1350 - CWWKS1399
+# Do not translate DefaultPrincipalMapping, JAAS, HashMap, and WSMappingCallbackHandler.
+MISSING_MAP_IN_CALLBACK_WSMAPPINGCALLBAKHANDLER=CWWKS1350E: La connexion par programmation JAAS DefaultPrincipalMapping ne peut pas \u00eatre effectu\u00e9e car WSMappingCallbackHandler a \u00e9t\u00e9 cr\u00e9\u00e9 sans l'objet HashMap de propri\u00e9t\u00e9s de mappage.
+MISSING_MAP_IN_CALLBACK_WSMAPPINGCALLBAKHANDLER.explanation=L'objet WSMappingCallbackHandler utilis\u00e9 pour r\u00e9aliser la connexion par programmation JAAS DefaultPrincipalMapping ne contenait pas de param\u00e8tre java.util.Map.
+MISSING_MAP_IN_CALLBACK_WSMAPPINGCALLBAKHANDLER.useraction=V\u00e9rifiez que l'application effectuant la connexion par programmation JAAS DefaultPrincipalMapping cr\u00e9e l'objet WSMappingCallbackHandler avec une instance java.util.Map.
+
+# Do not translate DefaultPrincipalMapping, JAAS, HashMap, WSMappingCallbackHandler, and com.ibm.wsspi.security.auth.callback.Constants.MAPPING_ALIAS.
+MISSING_MAPPING_ALIAS_IN_CALLBACK_WSMAPPINGCALLBAKHANDLER=CWWKS1351E: La connexion par programmation JAAS DefaultPrincipalMapping ne peut pas \u00eatre effectu\u00e9e car l'entr\u00e9e com.ibm.wsspi.security.auth.callback.Constants.MAPPING_ALIAS est introuvable dans l'objet HashMap de propri\u00e9t\u00e9s de mappage.
+MISSING_MAPPING_ALIAS_IN_CALLBACK_WSMAPPINGCALLBAKHANDLER.explanation=Le param\u00e8tre java.util.Map de l'objet WSMappingCallbackHandler utilis\u00e9 pour r\u00e9aliser la connexion par programmation JAAS DefaultPrincipalMapping ne contenait pas de valeur pour l'entr\u00e9e com.ibm.wsspi.security.auth.callback.Constants.MAPPING_ALIAS.
+MISSING_MAPPING_ALIAS_IN_CALLBACK_WSMAPPINGCALLBAKHANDLER.useraction=V\u00e9rifiez que l'application effectuant la connexion par programmation JAAS DefaultPrincipalMapping JAAS cr\u00e9e l'objet WSMappingCallbackHandler avec une instance java.util.Map avec une valeur pour l'entr\u00e9e com.ibm.wsspi.security.auth.callback.Constants.MAPPING_ALIAS.

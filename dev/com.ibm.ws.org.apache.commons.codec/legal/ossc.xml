@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Commons Codec" 
+            projectURL="http://commons.apache.org/codec/" 
+            version="1.4" revision="" 
+            license-type="Apachev2" 
+            contact="wraschke@us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/projects/w/was.dev_tools/prereqs/prereq.jaxrs/1.1/WASX_JAXRS.2014/download.zip">
+         <file basename="com.ibm.ws.prereq.commons-codec.jar" checksum="82b899580da472be37055da949b731fa"/>
+      </download>
+   </project>
+
+   <clearencehistory/>
+</ossc>

@@ -1,0 +1,15 @@
+-include= ~../cnf/resources/bnd/bundle.props
+-nouses=true
+bVersion=1.0
+
+Bundle-Name: WebSphere OSGi Web Application Integration for EBAs
+Bundle-SymbolicName: com.ibm.ws.eba.wab.integrator
+Bundle-Description: WebSphere OSGi Web Application Integration for EBAs, version ${bVersion}
+
+Export-Package: com.ibm.ws.eba.wab.integrator;provide:=false
+
+-buildpath: \
+	com.ibm.ws.container.service;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.appserver.spi.logging, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

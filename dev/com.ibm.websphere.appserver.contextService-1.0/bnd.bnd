@@ -1,0 +1,11 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.contextService-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.appLifecycle-1.0;version=latest, \
+	com.ibm.ws.resource;version=latest, \
+	com.ibm.ws.context;version=latest

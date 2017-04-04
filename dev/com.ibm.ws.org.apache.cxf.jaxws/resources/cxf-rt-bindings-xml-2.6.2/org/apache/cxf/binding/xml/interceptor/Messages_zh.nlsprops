@@ -1,0 +1,39 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-bindings-xml-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+STREAM_CREATE_EXC = \u672a\u80fd\u521b\u5efa XMLStreamReader\u3002
+STAX_READ_EXC = \u672a\u80fd\u4ece XMLStreamReader \u8bfb\u53d6\u6570\u636e\u3002
+STAX_WRITE_EXC = \u672a\u80fd\u4ece XMLStreamReader \u5199\u5165\u6570\u636e\u3002
+NO_OPERATION_ELEMENT=\u5fc5\u987b\u6709\u64cd\u4f5c\u5143\u7d20\u3002
+NO_OPERATION=\u6ca1\u6709\u8fd9\u7c7b\u64cd\u4f5c\uff1a{0}
+NO_DATAREADER=\u670d\u52a1 {0} \u6ca1\u6709\u53ef\u7528 DataReader
+NO_DATAWRITER=\u670d\u52a1 {0} \u6ca1\u6709\u53ef\u7528 DataWriter
+UNKNOWN_EXCEPTION=\u672a\u80fd\u8bc6\u522b\u5f02\u5e38\u7c7b\u578b\uff1a{0}
+COULD_NOT_UNRWAP=\u672a\u80fd\u6253\u5f00\u6d88\u606f\u90e8\u5206\u3002
+REQ_NOT_UNDERSTOOD=\u672a\u80fd\u8bfb\u53d6\u8bf7\u6c42\u3002\u64cd\u4f5c {0} \u672a\u77e5\u3002
+ILLEGAL_XMLFAULT_FORMAT=XML \u6545\u969c\u6d88\u606f\u683c\u5f0f\u975e\u6cd5\u3002

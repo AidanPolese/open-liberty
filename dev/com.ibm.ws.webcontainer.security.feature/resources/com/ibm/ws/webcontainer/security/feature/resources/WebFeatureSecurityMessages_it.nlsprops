@@ -1,0 +1,24 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2013.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.webcontainer.security.feature/resources/com/ibm/ws/webcontainer/security/feature/resources/WebFeatureSecurityMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Application Server Feature Web Security Collaborator
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKS9200 - CWWKS9249
+
+FEATURE_ROLE_CONFIG_PROCESSED=CWWKS9120I: L''id="{0}" della mappa di ruoli della funzione \u00e8 stato elaborato correttamente.
+FEATURE_ROLE_CONFIG_PROCESSED.explanation=L'associazione dei ruoli di autorizzazione \u00e8 stata elaborata correttamente.
+FEATURE_ROLE_CONFIG_PROCESSED.useraction=Non sono richieste azioni.
+AUTHZ_ROLE_ID_IS_NULL=CWWKS9121E: L'attributo id manca nell'elemento <authorization-roles>.
+AUTHZ_ROLE_ID_IS_NULL.explanation=L'attributo id \u00e8 necessario per elaborare l'elemento <authorization-roles>.
+AUTHZ_ROLE_ID_IS_NULL.useraction=Definire il valore appropriato per l'attributo id dell'elemento <authorization-roles>.
+
+

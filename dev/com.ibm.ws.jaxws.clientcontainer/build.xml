@@ -1,0 +1,4 @@
+<project name="com.ibm.ws.jaxws.clientcontainer" default="build">
+	<property name="component.endorsed" value="${basedir}/../com.ibm.websphere.javaee.jaxb.2.2/lib/${path.separator}${basedir}/../com.ibm.websphere.javaee.jaxws.2.2/lib/"/>
+	<import file="../ant_build/public_imports/standard_imports.xml"/>   
+</project>

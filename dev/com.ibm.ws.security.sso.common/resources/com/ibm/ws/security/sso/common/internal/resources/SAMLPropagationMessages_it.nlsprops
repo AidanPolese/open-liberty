@@ -1,0 +1,23 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2016.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security/resources/com/ibm/ws/security/sso/common/internal/resources/SAMLPropagationMessages.nlsprops
+#COMPONENTPREFIX CWWKS CWTAI
+#COMPONENTNAMEFOR WebSphere Application Server Security SAML PROPAGATION
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKS5251 - CWWKS5299
+
+no_saml_found_in_subject=CWWKS5251W: Il token SAML richiesto manca dal soggetto.
+no_saml_found_in_subject.explanation=Si \u00e8 verificato un errore durante l'estrazione del token SAML dal soggetto o non \u00e8 stato trovato un elemento SAML nel soggetto corrente.
+no_saml_found_in_subject.useraction=Se l'utente ha creato il soggetto Esegui come, verificare che il token SAML sia aggiunto al soggetto. In caso contrario verificare che la configurazione del server supporti l'aggiunta del token SAML al soggetto controllando l'attributo includeTokenInSubject nella configurazione SAML.
+
+failed_to_extract_saml_token_from_subject=CWWKS5252W: Si \u00e8 verificata una eccezione nel tentativo di estrarre il token SAML dal soggetto. L''eccezione era: [{0}]
+failed_to_extract_saml_token_from_subject.explanation=Si \u00e8 verificata un'eccezione durante l'estrazione del token SAML dal soggetto.
+failed_to_extract_saml_token_from_subject.useraction=Verificare i log del server per ulteriori informazioni sull'errore.

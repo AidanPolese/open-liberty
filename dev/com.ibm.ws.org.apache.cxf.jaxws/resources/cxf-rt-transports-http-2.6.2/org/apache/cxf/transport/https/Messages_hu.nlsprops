@@ -1,0 +1,85 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-transports-http-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SSL_CONTEXT_INIT_FAILURE = Probl\u00e9ma a kimen\u0151 k\u00e9r\u00e9s ssl inicializ\u00e1l\u00e1sa sor\u00e1n, a biztons\u00e1gi szolg\u00e1ltat\u00f3 \u00e1ltal jelentett kiv\u00e9tel : {0}
+UNKNOWN_SSL_CLIENT_POLICY_DATA = Ismeretlen SSLClientPolicy tulajdons\u00e1g : {0}
+UNKNOWN_SSL_SERVER_POLICY_DATA = Ismeretlen SSLServerPolicy tulajdons\u00e1g : {0}
+UNSUPPORTED_SSL_CLIENT_POLICY_DATA = Nem t\u00e1mogatott SSLClientPolicy tulajdons\u00e1g : {0}
+UNSUPPORTED_SSL_SERVER_POLICY_DATA = Nem t\u00e1mogatott SSLServerPolicy tulajdons\u00e1g : {0}
+KEY_STORE_NOT_SET = A kulcst\u00e1rol\u00f3 helye nem lett be\u00e1ll\u00edtva rendszerparam\u00e9terrel vagy konfigur\u00e1ci\u00f3n kereszt\u00fcl, \u00edgy a(z) {0} alap\u00e9rtelmezett \u00e9rt\u00e9k ker\u00fcl felhaszn\u00e1l\u00e1sra.
+KEY_STORE_SET = A kulcst\u00e1rol\u00f3 hely\u00e9nek be\u00e1ll\u00edt\u00e1sa: {0}.
+KEY_STORE_SYSTEM_PROPERTY_SET = A kulcst\u00e1rol\u00f3 hely\u00e9nek be\u00e1ll\u00edt\u00e1sa rendszertulajdons\u00e1gon kereszt\u00fcl: {0}.
+KEY_STORE_TYPE_NOT_SET = A kulcst\u00e1rol\u00f3 t\u00edpusa nem lett be\u00e1ll\u00edtva a konfigur\u00e1ci\u00f3ban, ez\u00e9rt az alap\u00e9rtelmezett {0} \u00e9rt\u00e9k ker\u00fcl felhaszn\u00e1l\u00e1sra.
+KEY_STORE_TYPE_SYSTEM_SET = A kulcst\u00e1rol\u00f3 t\u00edpus\u00e1nak be\u00e1ll\u00edt\u00e1sa rendszertulajdons\u00e1gon kereszt\u00fcl: {0}.
+KEY_STORE_TYPE_SET = A kulcst\u00e1rol\u00f3 t\u00edpusa a konfigur\u00e1ci\u00f3n kereszt\u00fcl a k\u00f6vetkez\u0151k\u00e9pp lett be\u00e1ll\u00edtva: {0}.
+KEY_STORE_PROVIDER_NOT_SET = A kulcst\u00e1rol\u00f3 szolg\u00e1ltat\u00f3 nem lett be\u00e1ll\u00edtva a konfigur\u00e1ci\u00f3ban, ez\u00e9rt az alap\u00e9rtelmezett {0} \u00e9rt\u00e9k ker\u00fcl felhaszn\u00e1l\u00e1sra.
+KEY_STORE_PROVIDER_SYSTEM_SET = A kulcst\u00e1rol\u00f3 szolg\u00e1ltat\u00f3 be\u00e1ll\u00edt\u00e1sa rendszertulajdons\u00e1gon kereszt\u00fcl: {0}.
+KEY_STORE_PROVIDER_SET = A kulcst\u00e1rol\u00f3 szolg\u00e1ltat\u00f3 a konfigur\u00e1ci\u00f3n kereszt\u00fcl a k\u00f6vetkez\u0151k\u00e9pp lett be\u00e1ll\u00edtva: {0}.
+LOADED_KEYSTORE = Sikeresen bet\u00f6ltve a kulcst\u00e1rol\u00f3: {0}.
+FAILED_TO_LOAD_KEYSTORE = A(z) {0} kulcst\u00e1rol\u00f3 bet\u00f6lt\u00e9se a k\u00f6vetkez\u0151 probl\u00e9m\u00e1val meghi\u00fasult: {1}.
+FAILED_TO_LOAD_KEYSTORE_NULL_PASSWORD = A(z) {0} kulcst\u00e1rol\u00f3 bet\u00f6lt\u00e9se meghi\u00fasult, mert a jelsz\u00f3 nincs be\u00e1ll\u00edtva.
+TRUST_STORE_NOT_SET = A tan\u00fas\u00edtv\u00e1nyt\u00e1rol\u00f3 helye nem lett be\u00e1ll\u00edtva rendszerparam\u00e9terrel vagy konfigur\u00e1ci\u00f3n kereszt\u00fcl, \u00edgy a(z) {0} alap\u00e9rtelmezett \u00e9rt\u00e9k ker\u00fcl felhaszn\u00e1l\u00e1sra.
+TRUST_STORE_SET = A tan\u00fas\u00edtv\u00e1nyt\u00e1rol\u00f3 helye a konfigur\u00e1ci\u00f3n kereszt\u00fcl a k\u00f6vetkez\u0151k\u00e9pp lett be\u00e1ll\u00edtva: {0}.
+TRUST_STORE_SYSTEM_PROPERTY_SET = A tan\u00fas\u00edtv\u00e1nyt\u00e1rol\u00f3 hely\u00e9nek be\u00e1ll\u00edt\u00e1sa rendszertulajdons\u00e1gon kereszt\u00fcl: {0}.
+TRUST_STORE_TYPE_NOT_SET = A tan\u00fas\u00edtv\u00e1nyt\u00e1rol\u00f3 t\u00edpusa nem lett be\u00e1ll\u00edtva a konfigur\u00e1ci\u00f3ban, ez\u00e9rt az alap\u00e9rtelmezett {0} \u00e9rt\u00e9k ker\u00fcl felhaszn\u00e1l\u00e1sra.
+TRUST_STORE_TYPE_SET = A tan\u00fas\u00edtv\u00e1nyt\u00e1rol\u00f3 t\u00edpusa a konfigur\u00e1ci\u00f3n kereszt\u00fcl a k\u00f6vetkez\u0151k\u00e9pp lett be\u00e1ll\u00edtva: {0}.
+TRUST_STORE_TYPE_SYSTEM_SET = A tan\u00fas\u00edtv\u00e1nyt\u00e1rol\u00f3 t\u00edpus\u00e1nak be\u00e1ll\u00edt\u00e1sa rendszertulajdons\u00e1gon kereszt\u00fcl: {0}.
+FAILED_TO_LOAD_TRUST_STORE = A(z) {0} tan\u00fas\u00edtv\u00e1nyt\u00e1rol\u00f3 bet\u00f6lt\u00e9se a k\u00f6vetkez\u0151 probl\u00e9m\u00e1val meghi\u00fasult: {1}.
+LOADED_TRUST_STORE = Sikeresen bet\u00f6ltve a tan\u00fas\u00edtv\u00e1nyt\u00e1rol\u00f3: {0}.
+KEY_STORE_PASSWORD_NOT_SET = A kulcst\u00e1rol\u00f3 jelszava nem lett be\u00e1ll\u00edtva rendszertulajdons\u00e1ggal vagy konfigur\u00e1ci\u00f3n kereszt\u00fcl, az adatok kulcst\u00e1rol\u00f3b\u00f3l t\u00f6rt\u00e9n\u0151 olvas\u00e1sa meg fog hi\u00fasulni.
+KEY_STORE_PASSWORD_SET = A kulcst\u00e1rol\u00f3 jelszav\u00e1t a rendszer a konfigur\u00e1ci\u00f3ban megtal\u00e1lta, \u00e9s azt fogja felhaszn\u00e1lni.
+KEY_STORE_PASSWORD_SYSTEM_PROPERTY_SET = A kulcst\u00e1rol\u00f3 jelszav\u00e1t a rendszer a rendszertulajdons\u00e1gk\u00e9nt megtal\u00e1lta, \u00e9s azt fogja felhaszn\u00e1lni.
+KEY_PASSWORD_NOT_SET = A kulcs jelsz\u00f3 nem lett be\u00e1ll\u00edtva rendszertulajdons\u00e1ggal vagy konfigur\u00e1ci\u00f3n kereszt\u00fcl, az adatok kulcst\u00e1rol\u00f3b\u00f3l t\u00f6rt\u00e9n\u0151 olvas\u00e1sa meg fog hi\u00fasulni.
+KEY_PASSWORD_SET = A kulcs jelsz\u00f3t a rendszer a konfigur\u00e1ci\u00f3ban megtal\u00e1lta, \u00e9s azt fogja felhaszn\u00e1lni.
+KEY_PASSWORD_SYSTEM_PROPERTY_SET = A kulcs jelsz\u00f3t a rendszer a rendszertulajdons\u00e1gk\u00e9nt megtal\u00e1lta, \u00e9s azt fogja felhaszn\u00e1lni.
+SECURE_SOCKET_PROTOCOL_NOT_SET = A v\u00e9dett socket protokoll nincs be\u00e1ll\u00edtva, \u00edgy a rendszer az alap\u00e9rtelmezett TLSv1 \u00e9rt\u00e9ket haszn\u00e1lja.
+SECURE_SOCKET_PROTOCOL_SET = A v\u00e9dett socket protokoll be\u00e1ll\u00edt\u00e1sa: {0}.
+REQUIRE_CLIENT_AUTHENTICATION_NOT_SET = Az \u00fcgyf\u00e9lhiteles\u00edt\u00e9s nem lett kifejezetten megadva a konfigur\u00e1ci\u00f3ban, ez\u00e9rt az alap\u00e9rtelmez\u00e9s: false.
+REQUIRE_CLIENT_AUTHENTICATION_SET = Az \u00fcgyf\u00e9lhiteles\u00edt\u00e9s be\u00e1ll\u00edt\u00e1sa: {0}.
+WANT_CLIENT_AUTHENTICATION_NOT_SET = Az \u00fcgyf\u00e9lhiteles\u00edt\u00e9s k\u00e9r\u00e9se nem lett kifejezetten megadva a konfigur\u00e1ci\u00f3ban, ez\u00e9rt az alap\u00e9rtelmez\u00e9s: false.
+WANT_CLIENT_AUTHENTICATION_SET = Az \u00fcgyf\u00e9lhiteles\u00edt\u00e9s k\u00e9r\u00e9s be\u00e1ll\u00edt\u00e1sa: {0}.
+KEY_PASSWORD_NOT_SAME_KEYSTORE_PASSWORD = A kulcst\u00e1rol\u00f3 jelsz\u00f3 megadott \u00e9rt\u00e9ke elt\u00e9r a kulcs jelsz\u00f3t\u00f3l. Az aktu\u00e1lis JSSE korl\u00e1toz\u00e1sok azt ig\u00e9nylik, hogy ezeknek meg kell egyezni\u00fck. Csak a kulcst\u00e1rol\u00f3 jelszav\u00e1nak \u00e9rt\u00e9ke ker\u00fcl felhaszn\u00e1l\u00e1sra.
+CIPHERSUITES_SET = A rejtjelk\u00e9szlet be\u00e1ll\u00edt\u00e1sa: {0}.  
+CIPHERSUITES_NOT_SET = A rejtjelk\u00e9szlet nem lett be\u00e1ll\u00edtva, a rendszer a rejtjelk\u00e9szlet sz\u0171r\u0151k szintj\u00e9re t\u00e9r vissza.
+CIPHERSUITE_FILTERS_NOT_SET = A rejtjelk\u00e9szlet sz\u0171r\u0151k nem lettek be\u00e1ll\u00edtva, a rendszer az alap\u00e9rtelmezett sz\u0171r\u0151k szintj\u00e9re t\u00e9r vissza.
+CIPHERSUITE_FILTER = Rejtjelk\u00e9szlet sz\u0171r\u0151: 
+CIPHERSUITE_INCLUDED = A(z) {0} rejtjelk\u00e9szletet a sz\u0171r\u0151 tartalmazza.
+CIPHERSUITE_EXCLUDED = A(z) {0} rejtjelk\u00e9szletet a sz\u0171r\u0151 kiz\u00e1rja.
+CIPHERSUITE_INCLUDE_FILTER = Rejtjelk\u00e9szlet tartalmaz\u00f3 sz\u0171r\u0151: {0}
+CIPHERSUITE_EXCLUDE_FILTER = Rejtjelk\u00e9szletet kiz\u00e1r\u00f3 sz\u0171r\u0151: {0}
+CIPHERSUITES_FILTERED = Az enged\u00e9lyezett rejtjelk\u00e9szleteket a sz\u0171r\u0151k a k\u00f6vetkez\u0151re korl\u00e1tozz\u00e1k {0}.
+CIPHERSUITES_EXCLUDED = A kiz\u00e1rt rejtjelk\u00e9szleteket a sz\u0171r\u0151k a k\u00f6vetkez\u0151re korl\u00e1tozz\u00e1k {0}.  
+SUCCESS_INVOKING_SECURITY_CONFIGURER = A(z) {0} egy\u00e9ni biztons\u00e1gi be\u00e1ll\u00edt\u00f3 konfigur\u00e1l\u00f3 met\u00f3dusa megh\u00edv\u00e1sa sikeres.
+ERROR_INVOKING_SECURITY_CONFIGURER = A(z) {0} egy\u00e9ni biztons\u00e1gi be\u00e1ll\u00edt\u00f3 megh\u00edv\u00e1sa meghi\u00fasult, a jelentett kiv\u00e9tel: {1}.
+KEY_STORE_ALGORITHM_NOT_SET = A kulcst\u00e1rol\u00f3 kulcskezel\u0151 gy\u00e1r algoritmusa nem lett be\u00e1ll\u00edtva a konfigur\u00e1ci\u00f3ban, ez\u00e9rt az alap\u00e9rtelmezett {0} \u00e9rt\u00e9k ker\u00fcl felhaszn\u00e1l\u00e1sra.
+KEY_STORE_ALGORITHM_SET = A kulcst\u00e1rol\u00f3 kulcskezel\u0151 gy\u00e1r algoritmusa a konfigur\u00e1ci\u00f3ban a k\u00f6vetkez\u0151k\u00e9pp lett be\u00e1ll\u00edtva: {0}.
+TRUST_STORE_ALGORITHM_NOT_SET = A tan\u00fas\u00edtv\u00e1nyt\u00e1rol\u00f3 kulcskezel\u0151 gy\u00e1r algoritmusa nem lett be\u00e1ll\u00edtva a konfigur\u00e1ci\u00f3ban, ez\u00e9rt az alap\u00e9rtelmezett {0} \u00e9rt\u00e9k ker\u00fcl felhaszn\u00e1l\u00e1sra.
+TRUST_STORE_ALGORITHM_SET = A tan\u00fas\u00edtv\u00e1nyt\u00e1rol\u00f3 kulcskezel\u0151 gy\u00e1r algoritmusa a konfigur\u00e1ci\u00f3ban a k\u00f6vetkez\u0151k\u00e9pp lett be\u00e1ll\u00edtva: {0}.
+COULD_NOT_CREATE_OUTBOUND_REQUEST_SOCKET = A(z) {0} hoszthoz \u00e9s {1} porthoz kapcsolat l\u00e9trehoz\u00e1sa meghi\u00fasult, a jelentett hiba: {2}. 
+PROBLEM_CREATING_OUTBOUND_REQUEST_SOCKET = A(z) {0} hoszthoz \u00e9s {1} porthoz kapcsolat l\u00e9trehoz\u00e1sa meghi\u00fasult.
+UNOFFICIAL_SECURITY_CONFIGURER = A biztons\u00e1gi be\u00e1ll\u00edt\u00f3 t\u00e1mogatott a Celtix 1.0 v\u00e1ltozat\u00e1hoz, de az API az \u00fajabb v\u00e1ltozatokban m\u00f3dos\u00edt\u00e1sra ker\u00fcl.

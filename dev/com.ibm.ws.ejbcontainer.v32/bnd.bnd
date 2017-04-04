@@ -1,0 +1,26 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: EJB 3.2 Runtime
+Bundle-SymbolicName: com.ibm.ws.ejbcontainer.v32
+Bundle-Description: EJB 3.2 Runtime; version=${bVersion}
+
+WS-TraceGroup: EJBContainer
+
+Private-Package: com.ibm.ws.ejbcontainer.v32
+
+-dsannotations-inherit: true
+-dsannotations: \
+  com.ibm.ws.ejbcontainer.v32.EJBRuntimeVersionV32
+  
+# Register a marker service to enable 3.2 incompatibilities.
+Service-Component: \
+  com.ibm.ws.ejbcontainer.v32.dd; \
+    implementation:=com.ibm.ws.javaee.ddmodel.ejb.EJBJarDDParserVersion; \
+    provide:=com.ibm.ws.javaee.ddmodel.ejb.EJBJarDDParserVersion; \
+    properties:="version:Integer=32"
+
+-buildpath: \
+	com.ibm.websphere.javaee.interceptor.1.2;version=latest,\
+	com.ibm.ws.ejbcontainer;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0

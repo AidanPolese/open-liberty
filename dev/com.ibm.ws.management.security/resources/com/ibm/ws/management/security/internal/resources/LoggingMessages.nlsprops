@@ -1,0 +1,23 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.management.security/resources/com/ibm/ws/management/security/internal/resources/LoggingMessages.nlsprops
+#COMPONENTPREFIX CWWKX
+#COMPONENTNAMEFOR WebSphere Management Security Service
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKX0000-CWWKX0099	
+
+MANAGEMENT_SECURITY_AUTHZ_FAILED=CWWKX0001A: Authorization failed for user {0} while invoking management operation {1}. The user is not granted access to any of the required roles: {2}.
+MANAGEMENT_SECURITY_AUTHZ_FAILED.explanation=The specified user does not have the appropriate authorization to access the specified management operation.
+MANAGEMENT_SECURITY_AUTHZ_FAILED.useraction=No action is required.
+
+ROLE_ENTRY_DUPLICATE=CWWKX0002E: A duplicate entry in the {0} role binding was detected. The duplicate {1} entry is {2}.
+ROLE_ENTRY_DUPLICATE.explanation=The specified entry is already defined for the specified role binding. Duplicate entries are not supported.
+ROLE_ENTRY_DUPLICATE.useraction=Remove the duplicate entry.

@@ -1,0 +1,47 @@
+/*
+* IBM Confidential
+*
+* OCO Source Materials
+*
+* Copyright IBM Corp. 2017
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+*/
+package com.ibm.ws.security.audit.context;
+
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * <p>This interface encapsulates the artifacts pertaining to an auditable transaction.</p>
+ *
+ * <p>Implementations of this interface are not guaranteed to be thread safe</p>
+ *
+ * @ibm-spi
+ */
+public class AuditThreadContext {
+
+    private HttpServletRequest auditReq;
+    private ArrayList<String> delegatedUsers;
+
+    public void setHttpServletRequest(HttpServletRequest req) {
+        auditReq = req;
+    }
+
+    public HttpServletRequest getHttpServletRequest() {
+        return auditReq;
+    }
+
+    public void setDelegatedUsers(ArrayList<String> delUsers) {
+        if (delUsers != null) {
+            delegatedUsers = new ArrayList<String>(delUsers);
+        }
+    }
+
+    public ArrayList<String> getDelegatedUsers() {
+        return delegatedUsers;
+    }
+}

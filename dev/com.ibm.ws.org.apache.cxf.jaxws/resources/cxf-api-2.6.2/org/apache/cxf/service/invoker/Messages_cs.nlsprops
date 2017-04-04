@@ -1,0 +1,37 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SVC_CLASS_IS_INTERFACE=Nelze vytvo\u0159it instanci t\u0159\u00eddy slu\u017eeb {0}, proto\u017ee se jedn\u00e1 o rozhran\u00ed.
+SVC_CLASS_IS_ABSTRACT=Nelze vytvo\u0159it instanci t\u0159\u00eddy slu\u017eeb {0}, proto\u017ee je abstraktn\u00ed.
+COULD_NOT_INSTANTIATE=Nelze vytvo\u0159it instanci objektu slu\u017eeb.
+ILLEGAL_ACCESS=Nelze p\u0159istupovat k objektu slu\u017eeb.
+CREATE_SERVICE_OBJECT_EXC=Nelze vytvo\u0159it instanci objektu slu\u017eeb.
+EXCEPTION_INVOKING_OBJECT={0} b\u011bhem vol\u00e1n\u00ed {1} s parametry {2}.
+SUSPENDED_INVOCATION_EXCEPTION=Vyvol\u00e1n\u00ed metody {1} na objektu {0} s parametry {2} bylo pozastaveno.
+INVOKING_METHOD=Prob\u00edh\u00e1 vyvol\u00e1n\u00ed metody {1} na objektu {0} s parametry {2}.
+MISSING_BINDING_OPERATION= Vyvol\u00e1n\u00ed bez operace vazby.

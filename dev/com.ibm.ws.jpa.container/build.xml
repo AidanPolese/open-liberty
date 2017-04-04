@@ -1,0 +1,12 @@
+<project name="com.ibm.ws.jpa.container" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+  <target name="post-compile">
+    <instrument.trace ffdc="true">
+      <fileset dir="${classes.dir}">
+        <include name="com/ibm/ws/jpa/container/osgi/**/*.class"/>
+      	<exclude name="com/ibm/ws/jpa/container/osgi/internal/url/FilterZipFileInputStream*.class"/> 
+      </fileset>
+    </instrument.trace>
+  </target>
+</project>

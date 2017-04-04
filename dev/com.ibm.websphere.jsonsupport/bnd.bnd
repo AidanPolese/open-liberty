@@ -1,0 +1,24 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: JSON Support
+Bundle-SymbolicName: com.ibm.websphere.jsonsupport
+Bundle-Description: JSON Support: provides POJO to JSON conversion; version=${bVersion}
+
+WS-TraceGroup: JSONSupport
+
+Private-Package: com.ibm.ws.jsonsupport.internal
+Export-Package: \
+	com.ibm.websphere.jsonsupport
+Include-Resource: \
+    @lib/jackson-core-asl-1.6.2.jar, \
+    @lib/jackson-mapper-asl-1.6.2.jar
+
+instrument.disabled: true
+
+-buildpath: \
+	lib/jackson-core-asl-1.6.2.jar;version=file,\
+	lib/jackson-mapper-asl-1.6.2.jar;version=file,\
+	com.ibm.websphere.javaee.jsonp.1.0;version=latest,\
+	com.ibm.ws.logging.core;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

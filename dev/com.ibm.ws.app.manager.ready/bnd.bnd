@@ -1,0 +1,16 @@
+-include= ~../cnf/resources/bnd/bundle.props
+-nouses=true
+bVersion=1.0
+
+Bundle-Name: WebSphere Application Manager Ready
+Bundle-SymbolicName: com.ibm.ws.app.manager.ready
+Bundle-Description: WebSphere Application Manager Ready, version ${bVersion}
+Bundle-Activator: com.ibm.ws.app.manager.ready.AppManagerActivator
+
+Export-Package: com.ibm.ws.app.manager.ready
+
+-buildpath: \
+	com.ibm.ws.app.manager;version=latest,\
+	com.ibm.ws.logging.core;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

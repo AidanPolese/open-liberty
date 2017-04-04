@@ -1,0 +1,52 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+STREAM_CREATE_EXC = Nem hozhat\u00f3 l\u00e9tre XMLStreamReader (a bemenet {0} k\u00f3dol\u00e1s\u00fa).
+INVALID_HTML_RESPONSETYPE = A v\u00e1lasz nem v\u00e1rt text/html tartalomt\u00edpus.  A HTML adatfolyam bej\u00f6v\u0151 r\u00e9sze: {0}
+STAX_READ_EXC = XMLStreamReader nem olvashat\u00f3.
+STAX_WRITE_EXC = XMLStreamWriter nem \u00edrhat\u00f3.
+NO_OPERATION_ELEMENT=L\u00e9teznie kell m\u0171veleti elemnek.
+NO_OPERATION=Nincs ilyen m\u0171velet: {0}
+NO_OPERATION_PATH=Nincs ilyen m\u0171velet: {0} (HTTP GET PATH_INFO: {1})
+NO_DATAREADER=Nincs el\u00e9rhet\u0151 DataReader a szolg\u00e1ltat\u00e1shoz: {0}
+NO_DATAWRITER=Nincs el\u00e9rhet\u0151 DataWriter a szolg\u00e1ltat\u00e1shoz: {0}
+COULD_NOT_UNRWAP=\u00dczenetr\u00e9szek t\u00f6rdel\u00e9se nem vonhat\u00f3 vissza.
+COULD_NOT_SEND=Az \u00fczenet nem k\u00fcldhet\u0151 el.
+NO_PART_FOUND=A(z) {0} \u00fczenetr\u00e9sz nem ismerhet\u0151 fel.  (WSDL szolg\u00e1ltat\u00e1sban l\u00e9tezik?)
+ORDERED_PARAM_REQUIRED=A param\u00e9tert a k\u00f6vetkez\u0151 sorrendben kell rendezni: {0}
+WRITE_ATTACHMENTS=Mell\u00e9kletek nem \u00edrhat\u00f3k.
+INVOKE_FAULT_INFO=A getFaultInfo met\u00f3dus nem h\u00edvhat\u00f3 meg.
+NO_FAULT_INFO_METHOD=Az egy\u00e9ni hib\u00e1k a getFaultInfo met\u00f3dust ig\u00e9nylik.
+NO_ACCCESS_FAULT_INFO=A getFaultInfo met\u00f3dus nem \u00e9rhet\u0151 el.
+COULD_NOT_CREATE_ANNOTATION_OBJECT=Nem hozhat\u00f3 l\u00e9tre feljegyz\u00e9s objektum: {0}
+COULD_NOT_FIND_SEICLASS=Az oszt\u00e1ly nem tal\u00e1lhat\u00f3: {0}
+EXCEPTION_WHILE_WRITING_FAULT = Kiv\u00e9tel t\u00f6rt\u00e9nt a hiba \u00edr\u00e1sakor.
+EXCEPTION_WHILE_CREATING_EXCEPTION = Kiv\u00e9tel t\u00f6rt\u00e9nt a kiv\u00e9tel l\u00e9trehoz\u00e1sakor: {0}
+UNEXPECTED_WRAPPER_ELEMENT = Nem v\u00e1rt {0} \u00e1talak\u00edt\u00f3.   Az elv\u00e1rt: {1}.
+UNEXPECTED_ELEMENT = Nem v\u00e1rt {0} elem.   Az elv\u00e1rt: {1}.
+ 

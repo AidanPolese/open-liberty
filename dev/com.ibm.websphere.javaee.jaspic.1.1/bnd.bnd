@@ -1,0 +1,19 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.jaspic.1.1; singleton:=true
+
+Export-Package: \
+	javax.security.auth.message,\
+	javax.security.auth.message.callback,\
+	javax.security.auth.message.config,\
+	javax.security.auth.message.module
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/javax.security.auth.message-api-1.1.jar;version=file, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

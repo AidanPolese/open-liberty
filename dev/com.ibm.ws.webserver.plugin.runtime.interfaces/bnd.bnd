@@ -1,0 +1,13 @@
+# For information on bnd syntax, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Plugin Runtime Interfaces
+Bundle-SymbolicName: com.ibm.ws.webserver.plugin.runtime.interfaces
+Bundle-Description: Bundle for runtime interfaces supporting automatic plugin-cfg.xml generation; version=${bVersion}
+
+Export-Package: com.ibm.ws.webserver.plugin.runtime.interfaces
+
+-buildpath: \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

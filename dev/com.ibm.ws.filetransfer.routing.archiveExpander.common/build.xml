@@ -1,0 +1,5 @@
+<project name="com.ibm.ws.filetransfer.routing.archiveExpander_common" default="build">
+    <property name="symbolic.suffix" value="archiveExpander_common" />
+    <property name="no.trace.instrumentation" value="true"/>
+    <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+</project>

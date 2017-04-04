@@ -1,0 +1,85 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-transports-http-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SSL_CONTEXT_INIT_FAILURE = Problema durante l''inizializzazione di ssl per la richiesta in uscita, l''eccezione riportata dal provider della sicurezza \u00e8: {0}
+UNKNOWN_SSL_CLIENT_POLICY_DATA = Propriet\u00e0 SSLClientPolicy sconosciuta: {0}
+UNKNOWN_SSL_SERVER_POLICY_DATA = Propriet\u00e0 SSLServerPolicy sconosciuta: {0}
+UNSUPPORTED_SSL_CLIENT_POLICY_DATA = Propriet\u00e0 SSLClientPolicy non supportata: {0}
+UNSUPPORTED_SSL_SERVER_POLICY_DATA = Propriet\u00e0 SSLServerPolicy non supportata: {0}
+KEY_STORE_NOT_SET = L''ubicazione del keystore non \u00e8 stata impostata mediante un parametro di sistema o nella configurazione, quindi verr\u00e0 utilizzato il valore predefinito {0}.
+KEY_STORE_SET = L''ubicazione del keystore \u00e8 impostata su {0}.
+KEY_STORE_SYSTEM_PROPERTY_SET = L''ubicazione del keystore \u00e8 impostata mediante una propriet\u00e0 di sistema su {0}.
+KEY_STORE_TYPE_NOT_SET = Il tipo di keystore non \u00e8 stato impostato nella configurazione, quindi verr\u00e0 utilizzato il valore predefinito {0}.
+KEY_STORE_TYPE_SYSTEM_SET = Il tipo di keystore \u00e8 impostato mediante una propriet\u00e0 di sistema su {0}.
+KEY_STORE_TYPE_SET = Il tipo di keystore \u00e8 stato impostato nella configurazione su {0}.
+KEY_STORE_PROVIDER_NOT_SET = Il provider del keystore non \u00e8 stato impostato nella configurazione, quindi verr\u00e0 utilizzato il valore predefinito {0}.
+KEY_STORE_PROVIDER_SYSTEM_SET = Il provider del keystore \u00e8 impostato mediante una propriet\u00e0 di sistema su {0}.
+KEY_STORE_PROVIDER_SET = Il provider del keystore \u00e8 stato impostato nella configurazione su {0}.
+LOADED_KEYSTORE = Keystore caricato correttamente, {0}.
+FAILED_TO_LOAD_KEYSTORE = Caricamento del keystore {0} non riuscito con il seguente problema: {1}.
+FAILED_TO_LOAD_KEYSTORE_NULL_PASSWORD = Caricamento del keystore {0} non riuscito perch\u00e9 la password non \u00e8 impostata.
+TRUST_STORE_NOT_SET = L''ubicazione del truststore non \u00e8 stata impostata mediante un parametro di sistema o nella configurazione, quindi verr\u00e0 utilizzato il valore predefinito {0}.
+TRUST_STORE_SET = L''ubicazione del truststore \u00e8 stata impostata nella configurazione su {0}.
+TRUST_STORE_SYSTEM_PROPERTY_SET = L''ubicazione del truststore \u00e8 stata impostata mediante una propriet\u00e0 di sistema su {0}.
+TRUST_STORE_TYPE_NOT_SET = Il tipo di truststore non \u00e8 stato impostato nella configurazione, quindi verr\u00e0 utilizzato il valore predefinito {0}.
+TRUST_STORE_TYPE_SET = Il tipo di truststore \u00e8 stato impostato nella configurazione su {0}.
+TRUST_STORE_TYPE_SYSTEM_SET = Il tipo di truststore \u00e8 stata impostato mediante una propriet\u00e0 di sistema su {0}.
+FAILED_TO_LOAD_TRUST_STORE = Caricamento del truststore {0} non riuscito con il seguente problema: {1}.
+LOADED_TRUST_STORE = Truststore caricato correttamente, {0}.
+KEY_STORE_PASSWORD_NOT_SET = La password del keystore non \u00e8 stata impostata mediante una propriet\u00e0 di sistema o nella configurazione, la lettura dei dati dal keystore avr\u00e0 esito negativo.
+KEY_STORE_PASSWORD_SET = \u00c8 stato rilevato che la password del keystore \u00e8 impostata nella configurazione e verr\u00e0 utilizzata.
+KEY_STORE_PASSWORD_SYSTEM_PROPERTY_SET = \u00c8 stato rilevato che la password del keystore \u00e8 impostata come una propriet\u00e0 di sistema e verr\u00e0 utilizzata.
+KEY_PASSWORD_NOT_SET = La password della chiave non \u00e8 stata impostata mediante una propriet\u00e0 di sistema o nella configurazione, la lettura dei dati dal keystore avr\u00e0 esito negativo.
+KEY_PASSWORD_SET = \u00c8 stato rilevato che la password della chiave \u00e8 impostata nella configurazione e verr\u00e0 utilizzata.
+KEY_PASSWORD_SYSTEM_PROPERTY_SET = \u00c8 stato rilevato che la password della chiave \u00e8 impostata come una propriet\u00e0 di sistema e verr\u00e0 utilizzata.
+SECURE_SOCKET_PROTOCOL_NOT_SET = Il protocollo socket sicuro non \u00e8 impostato, quindi viene utilizzato il valore predefinito TLSv1.
+SECURE_SOCKET_PROTOCOL_SET = Il protocollo socket sicuro \u00e8 stato impostato su {0}.
+REQUIRE_CLIENT_AUTHENTICATION_NOT_SET = La richiesta dell'autenticazione del client non \u00e8 stata impostata in modo esplicito nella configurazione, quindi viene utilizzato il valore predefinito false.
+REQUIRE_CLIENT_AUTHENTICATION_SET = La richiesta dell''autenticazione del client \u00e8 impostata su {0}.
+WANT_CLIENT_AUTHENTICATION_NOT_SET = La necessit\u00e0 dell'autenticazione del client non \u00e8 stata impostata in modo esplicito nella configurazione, quindi viene utilizzato il valore predefinito false.
+WANT_CLIENT_AUTHENTICATION_SET = La necessit\u00e0 dell''autenticazione del client \u00e8 impostata su {0}.
+KEY_PASSWORD_NOT_SAME_KEYSTORE_PASSWORD = Il valore specificato per la password del keystore \u00e8 diverso dal valore della password della chiave. Attualmente, le limitazioni in JSSE richiedono che esse siano identiche. Verr\u00e0 utilizzato solo il valore della password del keystore.
+CIPHERSUITES_SET = Le suite di cifratura sono state impostate su {0}.  
+CIPHERSUITES_NOT_SET = Le suite di cifratura non sono state configurate, vengono utilizzati i filtri della suite di cifratura.
+CIPHERSUITE_FILTERS_NOT_SET = I filtri della suite di cifratura non sono stati configurati, vengono utilizzati i filtri predefiniti.
+CIPHERSUITE_FILTER = Filtro della suite di cifratura: 
+CIPHERSUITE_INCLUDED = La suite di cifratura {0} \u00e8 inclusa dal filtro.
+CIPHERSUITE_EXCLUDED = La suite di cifratura {0} \u00e8 esclusa dal filtro.
+CIPHERSUITE_INCLUDE_FILTER = Filtro di inclusione della suite di cifratura: {0}
+CIPHERSUITE_EXCLUDE_FILTER = Filtro di esclusione della suite di cifratura: {0}
+CIPHERSUITES_FILTERED = Le suite di cifratura abilitate sono state filtrate su {0}.
+CIPHERSUITES_EXCLUDED = Le suite di cifratura escluse sono state filtrate su {0}.  
+SUCCESS_INVOKING_SECURITY_CONFIGURER = Il metodo di configurazione del programma di configurazione della sicurezza personalizzato {0} \u00e8 stato richiamato correttamente.
+ERROR_INVOKING_SECURITY_CONFIGURER = Errore richiamo sul programma di configurazione della sicurezza personalizzato {0}, l''eccezione riportata \u00e8 {1}.
+KEY_STORE_ALGORITHM_NOT_SET = L''algoritmo del factory del gestore chiavi del keystore non \u00e8 stato impostato nella configurazione, quindi verr\u00e0 utilizzato il valore predefinito {0}.
+KEY_STORE_ALGORITHM_SET = L''algoritmo del factory del gestore chiavi del keystore \u00e8 stato impostato nella configurazione su {0}.
+TRUST_STORE_ALGORITHM_NOT_SET = L''algoritmo del factory del gestore chiavi del truststore non \u00e8 stato impostato nella configurazione, quindi verr\u00e0 utilizzato il valore predefinito {0}.
+TRUST_STORE_ALGORITHM_SET = L''algoritmo del factory del gestore chiavi del truststore \u00e8 stato impostato nella configurazione su {0}.
+COULD_NOT_CREATE_OUTBOUND_REQUEST_SOCKET = Impossibile creare una connessione all''host {0} e alla porta {1}, l''errore riportato \u00e8 {2}. 
+PROBLEM_CREATING_OUTBOUND_REQUEST_SOCKET = Impossibile creare una connessione all''host {0} e alla porta {1}.
+UNOFFICIAL_SECURITY_CONFIGURER = L'utilizzo del programma di configurazione della sicurezza \u00e8 supportato per la versione 1.0 di Celtix, ma l'API sar\u00e0 modificata nelle versioni successive.

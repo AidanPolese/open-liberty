@@ -1,0 +1,5 @@
+<server>
+
+  <com.ibm.wsspi.webcontainer.extension.ExtensionFactory type="JaxRS-2"/>
+
+</server>

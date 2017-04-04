@@ -1,0 +1,41 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+RESOURCE_RESOLVE_FAILED=falha em resolver recurso {0}
+FAILED_TO_INJECT_FIELD=acesso ao campo n\u00e3o \u00e9 permitido
+INJECTION_SETTER_NOT_VISIBLE=configurador {0} n\u00e3o est\u00e1 vis\u00edvel
+INJECTION_SETTER_RAISED_EXCEPTION=exce\u00e7\u00e3o levantada ao chamar configurador {0}
+PRIVATE_FIELD_INJECTION_NYI=inje\u00e7\u00e3o de recurso para campos privados ainda n\u00e3o est\u00e1 implementada: {0}
+INJECTION_COMPLETE_NOT_VISIBLE=m\u00e9todo anotado por @PostConstruct n\u00e3o est\u00e1 vis\u00edvel: {0}
+INJECTION_COMPLETE_THREW_EXCEPTION=m\u00e9todo anotado por @PostConstruct lan\u00e7a exce\u00e7\u00e3o quando chamado
+PRE_DESTROY_NOT_VISIBLE=M\u00e9todo anotado por @PreDestroy n\u00e3o est\u00e1 vis\u00edvel: {0}
+PRE_DESTROY_THREW_EXCEPTION=M\u00e9todo anotado por @PreDestroy lan\u00e7a exce\u00e7\u00e3o quando chamado
+SETTER_INJECTION_WITH_INCORRECT_TYPE=configurador para recurso localizado, mas com assinatura errada: {0}
+RESOURCE_NAME_NOT_SPECIFIED=Anota\u00e7\u00e3o de recurso em {0} deve especificar nome do recurso
+NO_SETTER_OR_FIELD_FOR_RESOURCE=Anota\u00e7\u00e3o de recurso em {0}, mas nenhum campo ou configurador localizado.
+INJECTION_SETTER_METHOD_NOT_FOUND = N\u00e3o \u00e9 poss\u00edvel localizar o m\u00e9todo setter de inje\u00e7\u00e3o: {0}

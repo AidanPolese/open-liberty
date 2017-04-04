@@ -1,0 +1,11 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.javaeePlatform-6.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.ws.javaee.version;version=latest, \
+	com.ibm.ws.app.manager.module;version=latest, \
+	com.ibm.ws.security.java2sec;version=latest

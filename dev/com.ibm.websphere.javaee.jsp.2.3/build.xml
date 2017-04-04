@@ -1,0 +1,10 @@
+<project name="com.ibm.websphere.javaee.jsp.2.3" default="build">
+    <property name="spec.name" value="jsp"/>
+    <property name="spec.marketing.version" value="2.3"/>
+    <property name="spec.javadoc.name" value="javax.servlet.jsp-api-2.3.0-javadoc.jar"/>
+
+    <import file="../ant_build/public_imports/spec_imports.xml"/>
+ 
+    <target name="package" depends="spec.package"/>
+    <target name="publishToImage" depends="spec.publishToImage" />    
+</project>

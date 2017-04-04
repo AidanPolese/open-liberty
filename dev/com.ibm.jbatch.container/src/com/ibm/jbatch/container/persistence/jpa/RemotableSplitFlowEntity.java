@@ -1,0 +1,82 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * Copyright IBM Corp. 2015
+ *
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
+ * U.S. Copyright Office.
+ */
+package com.ibm.jbatch.container.persistence.jpa;
+
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.ManyToOne;
+
+/**
+ * @author skurz
+ *
+ */
+//@Entity - comment out so there's no confusion..we don't want this in the DB for 2Q15
+@IdClass(RemotableSplitFlowKey.class)
+public class RemotableSplitFlowEntity extends JobThreadExecutionBase {
+
+	@Id
+	private String flowName;
+	
+	@Id @ManyToOne
+	private JobExecutionEntity jobExec;
+	
+	private int internalStatus;
+
+	public RemotableSplitFlowEntity() {}
+
+	/**
+	 * @return the flowName
+	 */
+	public String getFlowName() {
+		return flowName;
+	}
+
+	/**
+	 * @param flowName the flowName to set
+	 */
+	public void setFlowName(String flowName) {
+		this.flowName = flowName;
+	}
+
+	/**
+	 * @return the jobExecution
+	 */
+	public JobExecutionEntity getJobExecution() {
+		return jobExec;
+	}
+
+	/**
+	 * @param jobExecution the jobExecution to set
+	 */
+	public void setJobExecution(JobExecutionEntity jobExec) {
+		this.jobExec = jobExec;
+	}
+	
+	public int getInternalStatus() {
+		return internalStatus;
+	}
+
+	public void setInternalStatus(int internalStatus) {
+		this.internalStatus = internalStatus;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder();
+		buf.append(super.toString() + System.getProperty("line.separator"));
+		buf.append("For RemotableSplitFlowExecutionEntity:");
+		buf.append(" flowName = " + flowName);
+		buf.append(", internal status = " + internalStatus);
+		return buf.toString();
+	}
+
+}

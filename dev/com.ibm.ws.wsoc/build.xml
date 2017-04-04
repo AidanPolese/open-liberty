@@ -1,0 +1,14 @@
+<project name="com.ibm.ws.wsoc" default="build">
+  <property name="build.with.java.level" value="1.7"/>
+  <import file="../ant_build/public_imports/standard_imports.xml" />
+
+  <target name="post-compile">
+    <property name="instrument.ffdc" value="true" />
+    <instrument.trace ffdc="${instrument.ffdc}">
+      <fileset dir="${classes.dir}">
+        <include name="**/*.class" />
+        <exclude name="**/com.ibm.ws.wsoc.Utils.class" />
+      </fileset>
+    </instrument.trace>
+  </target>
+</project>

@@ -1,0 +1,13 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Version property holders
+Bundle-SymbolicName: com.ibm.ws.javaee.version
+Bundle-Description: This bundle provides holders for version levels, version ${bVersion}
+
+Export-Package: \
+    com.ibm.ws.javaee.version
+
+-buildpath: \
+	com.ibm.websphere.org.osgi.core.6.0.0, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

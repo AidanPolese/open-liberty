@@ -1,0 +1,12 @@
+Build: d1410.01
+
+Components (files -deleted and !modified):
+  SERV1/ws/code/ejbportable/src
+    -com/ibm/ejs/container/NotImplementedException.java
+    -com/ibm/ejs/persistence/FinderCollection.java
+    -com/ibm/ejs/persistence/FinderEnumeration.java
+    -com/ibm/ejs/persistence/FinderEnumerator.java
+    !com/ibm/ws/ejb/portable/EJSORBHelper.java (renamed to HandleHelper.java)
+    !com/ibm/ws/ejb/portable/HandleImpl.java
+    !com/ibm/ws/ejb/portable/HomeHandleImpl.java
+    -com/ibm/ws/ejb/portable/LegacyHandleDelegateImpl.java

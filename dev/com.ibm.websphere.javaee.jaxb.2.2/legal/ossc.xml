@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Geronimo Specs" 
+            projectURL="http://geronimo.apache.org" 
+            version="1.0.1" revision="GA" 
+            license-type="apacheV2" 
+            contact="wanglsh@cn.ibm.com" 
+            encryption="no">
+      <download location="http://repo1.maven.org/maven2/org/apache/geronimo/specs/geronimo-jaxb_2.2_spec/1.0.1/">
+         <file basename="geronimo-jaxb_2.2_spec-1.0.1.jar" checksum="f90d54095f4a93257b7ac9bec194cd5a"/>
+      </download>
+      <download location="">
+         <file basename="jaxb-api.jar" checksum="320a705c4c99aa02389b9ea2245ed05a"/>
+      </download>
+   </project>
+   
+   <notes>
+geronimo-jaxb_2.2_spec-1.0.1.jar renamed to com.ibm.ws.javax.jaxb_2.2.jar
+   </notes>
+
+</ossc>

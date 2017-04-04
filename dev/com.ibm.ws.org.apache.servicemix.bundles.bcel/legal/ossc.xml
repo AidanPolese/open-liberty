@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Servicemix wrapping of apache bcel"
+            projectURL="http://commons.apache.org"
+            version="5.2_3" revision=""
+            license-type="Apachev2"
+            contact="djencks@us.ibm.com"
+            encryption="no">
+      <download location="from apache">
+         <file basename="org.apache.servicemix.bundles.bcel-5.2_3.jar" checksum="57e986c9b0aaa7de1e4b7142a1c5a219"/>
+      </download>
+   </project>
+
+    <clearencehistory/>
+</ossc>

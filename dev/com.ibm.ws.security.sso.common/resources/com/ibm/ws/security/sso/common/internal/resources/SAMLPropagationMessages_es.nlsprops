@@ -1,0 +1,23 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2016.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security/resources/com/ibm/ws/security/sso/common/internal/resources/SAMLPropagationMessages.nlsprops
+#COMPONENTPREFIX CWWKS CWTAI
+#COMPONENTNAMEFOR WebSphere Application Server Security SAML PROPAGATION
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKS5251 - CWWKS5299
+
+no_saml_found_in_subject=CWWKS5251W: Falta la se\u00f1al de SAML requerida en el sujeto.
+no_saml_found_in_subject.explanation=Se ha producido un error al extraer la se\u00f1al de SAML del sujeto o no se ha encontrado un elemento SAML en el sujeto actual.
+no_saml_found_in_subject.useraction=Si crea el sujeto Ejecutar como, aseg\u00farese de que la se\u00f1al de SAML se a\u00f1ade al sujeto. De lo contrario, aseg\u00farese de que la configuraci\u00f3n del servidor permita a\u00f1adir la se\u00f1al de SAML al sujeto, comprobando el atributo includeTokenInSubject en la configuraci\u00f3n de SAML.
+
+failed_to_extract_saml_token_from_subject=CWWKS5252W: Se ha producido una excepci\u00f3n al intentar extraer la se\u00f1al SAML del sujeto. La excepci\u00f3n era: [{0}]
+failed_to_extract_saml_token_from_subject.explanation=Se ha producido una excepci\u00f3n al extraer la se\u00f1al SAML del sujeto.
+failed_to_extract_saml_token_from_subject.useraction=Compruebe los registros de servidor para obtener m\u00e1s informaci\u00f3n sobre el error.

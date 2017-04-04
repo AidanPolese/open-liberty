@@ -1,0 +1,52 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+STREAM_CREATE_EXC = XMLStreamReader\ub97c \uc791\uc131\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4(\uc785\ub825\uc740 \uc778\ucf54\ub529 {0}\uc784).
+INVALID_HTML_RESPONSETYPE = \uc751\ub2f5\uc740 \uc608\uc0c1\uce58 \ubabb\ud55c text/html ContentType\uc785\ub2c8\ub2e4. HTML \uc2a4\ud2b8\ub9bc\uc758 \uc218\uc2e0 \ubd80\ubd84: {0}
+STAX_READ_EXC = XMLStreamReader\uc5d0\uc11c \uc77d\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+STAX_WRITE_EXC = XMLStreamWriter\uc5d0 \uc4f8 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+NO_OPERATION_ELEMENT=\uc870\uc791 \uc694\uc18c\uac00 \uc788\uc5b4\uc57c \ud569\ub2c8\ub2e4.
+NO_OPERATION=\ud574\ub2f9 \uc870\uc791\uc774 \uc5c6\uc74c: {0}
+NO_OPERATION_PATH=\ud574\ub2f9 \uc870\uc791\uc774 \uc5c6\uc74c: {0}(HTTP GET PATH_INFO: {1})
+NO_DATAREADER=\uc11c\ube44\uc2a4\uc5d0 \ub300\ud574 \uc0ac\uc6a9 \uac00\ub2a5\ud55c DataReader\uac00 \uc5c6\uc2b5\ub2c8\ub2e4. {0}
+NO_DATAWRITER=\uc11c\ube44\uc2a4\uc5d0 \ub300\ud574 \uc0ac\uc6a9 \uac00\ub2a5\ud55c DataWriter\uac00 \uc5c6\uc2b5\ub2c8\ub2e4. {0}
+COULD_NOT_UNRWAP=\uba54\uc2dc\uc9c0 \ud30c\ud2b8\ub97c \ub7a9\ud551 \ud574\uc81c\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+COULD_NOT_SEND=\uba54\uc2dc\uc9c0\ub97c \ubcf4\ub0bc \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+NO_PART_FOUND=\uba54\uc2dc\uc9c0 \ud30c\ud2b8 {0}\uc774(\uac00) \uc778\uc2dd\ub418\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4. (\uc11c\ube44\uc2a4 WSDL\uc5d0 \uc788\uc2b5\ub2c8\uae4c?)
+ORDERED_PARAM_REQUIRED=\ub9e4\uac1c\ubcc0\uc218\uac00 \ub2e4\uc74c \uc21c\uc11c\ub85c \uc815\ub82c\ub418\uc5b4\uc57c \ud569\ub2c8\ub2e4. {0}
+WRITE_ATTACHMENTS=\ucca8\ubd80 \ud30c\uc77c\uc744 \uc4f8 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+INVOKE_FAULT_INFO=getFaultInfo \uba54\uc18c\ub4dc\ub97c \ud638\ucd9c\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+NO_FAULT_INFO_METHOD=\uc0ac\uc6a9\uc790 \uc815\uc758 \uacb0\ud568\uc5d0 getFaultInfo \uba54\uc18c\ub4dc\uac00 \ud544\uc694\ud569\ub2c8\ub2e4.
+NO_ACCCESS_FAULT_INFO=getFaultInfo \uba54\uc18c\ub4dc\uc5d0 \uc561\uc138\uc2a4\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+COULD_NOT_CREATE_ANNOTATION_OBJECT=\uc5b4\ub178\ud14c\uc774\uc158 \uc624\ube0c\uc81d\ud2b8\ub97c \uc791\uc131\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4. {0}
+COULD_NOT_FIND_SEICLASS=\ud074\ub798\uc2a4\ub97c \ucc3e\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4. {0}
+EXCEPTION_WHILE_WRITING_FAULT = \uacb0\ud568\uc744 \uc4f0\ub294 \uc911\uc5d0 \uc608\uc678\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4.
+EXCEPTION_WHILE_CREATING_EXCEPTION = \uc608\uc678\ub97c \uc791\uc131\ud558\ub294 \uc911\uc5d0 \uc608\uc678\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4. {0}
+UNEXPECTED_WRAPPER_ELEMENT = \uc608\uc0c1\uce58 \ubabb\ud55c \ub7a9\ud37c \uc694\uc18c {0}\uc744(\ub97c) \ucc3e\uc558\uc2b5\ub2c8\ub2e4. \uc608\uc0c1\uce58 \ubabb\ud55c {1}\uc785\ub2c8\ub2e4.
+UNEXPECTED_ELEMENT = \uc608\uc0c1\uce58 \ubabb\ud55c \uc694\uc18c {0}\uc744(\ub97c) \ucc3e\uc558\uc2b5\ub2c8\ub2e4. \uc608\uc0c1\uce58 \ubabb\ud55c {1}\uc785\ub2c8\ub2e4.
+ 

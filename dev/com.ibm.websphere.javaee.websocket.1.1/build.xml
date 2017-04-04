@@ -1,0 +1,10 @@
+<project name="com.ibm.websphere.javaee.websocket.1.1" default="build">
+    <property name="spec.name" value="websocket"/>
+    <property name="spec.marketing.version" value="1.1"/>
+    <property name="spec.javadoc.name" value="javax.websocket-api-1.1-javadoc.jar"/>
+
+    <import file="../ant_build/public_imports/spec_imports.xml"/>
+ 
+    <target name="package" depends="spec.package"/>
+    <target name="publishToImage" depends="spec.publishToImage" />    
+</project>

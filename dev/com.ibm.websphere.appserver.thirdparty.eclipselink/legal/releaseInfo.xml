@@ -1,0 +1,6 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="com.ibm.ws.jpa">
+  <notes>
+    EclipseLink binaries are obtained from GSA.
+  </notes>
+</releaseInfo>

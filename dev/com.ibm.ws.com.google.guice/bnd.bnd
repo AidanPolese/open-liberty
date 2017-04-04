@@ -1,0 +1,4 @@
+# ${repo;com.google.inject}
+-include= jar:${fileuri;lib/guice-2.0.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+
+-buildpath: lib/guice-2.0.jar;version=file

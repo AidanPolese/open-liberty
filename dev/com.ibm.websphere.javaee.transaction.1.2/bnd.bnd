@@ -1,0 +1,20 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.transaction.1.2; singleton:=true
+
+Export-Package: \
+	javax.transaction,\
+	javax.transaction.xa
+
+# this pulls in the partial javax.transaction and javax.transaction.xa packages from the jre
+# and lets us export them.
+Require-Bundle: system.bundle
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/javax.transaction-api-1.2.jar;version=file

@@ -1,0 +1,32 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: HTTP File Transfer
+Bundle-SymbolicName: com.ibm.ws.filetransfer
+Bundle-Description: Implementation of the HTTP File Transfer and Service MBean; version=${bVersion}
+
+Export-Package:\
+  com.ibm.ws.filetransfer.util
+
+Private-Package: \
+  com.ibm.ws.filetransfer.internal.*
+
+Include-Resource: \
+  OSGI-INF=resources/OSGI-INF
+
+-dsannotations: \
+  com.ibm.ws.filetransfer.internal.mbean.FileService, \
+  com.ibm.ws.filetransfer.internal.mbean.FileTransfer
+
+instrument.classesExcludes: com/ibm/ws/filetransfer/internal/resources/*.class
+
+-buildpath: \
+	com.ibm.websphere.filetransfer;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0,\
+	com.ibm.wsspi.org.osgi.service.event.1.3.1,\
+	com.ibm.ws.logging.core,\
+	com.ibm.websphere.appserver.spi.kernel.service,\
+	com.ibm.ws.filetransfer.routing.archiveExpander;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

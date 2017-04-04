@@ -1,0 +1,38 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+INVOCATION_TARGET_EXC = N\u00e3o foi poss\u00edvel chamar o m\u00e9todo getFaultInfo.
+NO_GETFAULTINFO_METHOD = Falhas de JAX-WS precisam ter um m\u00e9todo getFaultInfo.
+COULD_NOT_INVOKE = N\u00e3o foi poss\u00edvel chamar o m\u00e9todo getFaultInfo na Exce\u00e7\u00e3o.
+DISPATCH_OBJECT_CANNOT_BE_NULL = Objeto nulo passado para serializa\u00e7\u00e3o de Despacho
+EXCEPTION_WRITING_OBJECT = Ocorreu uma exce\u00e7\u00e3o ao serializar o objeto de Despacho para o fluxo
+ATTACHMENT_NOT_SUPPORTED = Anexos do tipo {0} n\u00e3o s\u00e3o suportados.
+DISPATCH_OBJECT_NOT_SUPPORTED_SOAPBINDING = {0} n\u00e3o \u00e9 v\u00e1lido no modo {1} com liga\u00e7\u00e3o SOAP/HTTP.
+DISPATCH_OBJECT_NOT_SUPPORTED_XMLBINDING = {0} n\u00e3o \u00e9 v\u00e1lido no modo {1} com liga\u00e7\u00e3o XML/HTTP.
+EXCEPTION_WHILE_WRITING_FAULT = Ocorreu exce\u00e7\u00e3o ao gravar falha.
+CANNOT_SET_HOLDER_OBJECTS = A lista de conte\u00fados de mensagens da mensagem de entrada e da mensagem de sa\u00edda \u00e9 igual, CXF n\u00e3o pode configurar o objeto portador na lista de conte\u00fados de mensagens da mensagem de sa\u00edda.

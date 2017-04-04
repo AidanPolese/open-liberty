@@ -1,0 +1,38 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=${bundle.version}
+
+Bundle-Name: Apache CXF Runtime SOAP Binding
+Bundle-Description: Apache CXF Runtime SOAP Binding, version ${original.jar.version}
+Bundle-SymbolicName: ${symbolic.name}
+
+Export-Package: \
+  org.apache.cxf.*;version=2.6.2
+
+Import-Package: \
+ javax.xml.bind.*;version="[2.2,3)", \
+ org.apache.mina.*;resolution:=optional, \
+ javax.xml.soap;resolution:=optional, \
+ javax.activation;resolution:=optional, \
+ !org.springframework.*;resolution:=optional;version="[2.5,4)", \
+ !org.apache.aries.*;version="[0.3,2)", \
+ !org.osgi.service.blueprint.*, \
+ com.ibm.websphere.ras, \
+ com.ibm.websphere.ras.annotation, \
+ com.ibm.ws.ffdc, \
+ org.apache.cxf.*;version="[2.6.2,2.6.3)", \
+ *
+ 
+Include-Resource:\
+ @build/tmp/lib/cxf-rt-bindings-soap-2.6.2.jar!/META-INF/cxf/**, \
+ @build/tmp/lib/cxf-rt-bindings-soap-2.6.2.jar!/META-INF/spring.handlers, \
+ @build/tmp/lib/cxf-rt-bindings-soap-2.6.2.jar!/META-INF/spring.schemas, \
+ @build/tmp/lib/cxf-rt-bindings-soap-2.6.2.jar!/META-INF/wsdl.plugin.xml, \
+ @build/tmp/lib/cxf-rt-bindings-soap-2.6.2.jar!/schemas/**, \
+ @build/tmp/lib/cxf-rt-bindings-soap-2.6.2.jar!/META-INF/DEPENDENCIES, \
+ @build/tmp/lib/cxf-rt-bindings-soap-2.6.2.jar!/META-INF/LICENSE, \
+ @build/tmp/lib/cxf-rt-bindings-soap-2.6.2.jar!/META-INF/NOTICE, \
+ build/tmp/bnd/cxf-rt-bindings-soap-2.6.2
+ 
+# Remove the resources (blueprint/metadata configuration files) in the OSGI-INF directory
+# As we have no plan to support that, will add these things back with NLS support in the future 
+#  @lib/cxf-rt-bindings-soap-2.6.2.jar!/OSGI-INF/blueprint/**, \

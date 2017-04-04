@@ -1,0 +1,2 @@
+The XSD files are shipped and hence are either Licensed materials of IBM or
+SUN copyright and used under the CDDL license

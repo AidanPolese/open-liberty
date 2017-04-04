@@ -1,0 +1,20 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.annotation.1.1; singleton:=true
+
+Export-Package: \
+	javax.annotation,\
+	javax.annotation.security,\
+	javax.annotation.sql
+
+Include-Resource: \
+  @lib/javax.j2ee.annotation_1.1.jar!/META-INF/NOTICE
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/javax.j2ee.annotation_1.1.jar;version=file

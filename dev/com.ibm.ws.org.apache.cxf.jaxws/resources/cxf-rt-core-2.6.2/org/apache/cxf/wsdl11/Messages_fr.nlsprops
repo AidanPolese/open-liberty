@@ -1,0 +1,49 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-core-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+WSDL_SCHEMA_GENERATION_FAILURE_MSG = Il n'est pas possible de g\u00e9n\u00e9rer de fichiers WSDL et/ou de sch\u00e9ma.
+WSDL_UNREADABLE_MSG = Impossible de lire l'\u00e9l\u00e9ment wsdl g\u00e9n\u00e9r\u00e9.
+WSDL_GENERATION_TMP_DIR_MSG = Impossible de cr\u00e9er le r\u00e9pertoire tmp dans lequel g\u00e9n\u00e9rer l'\u00e9l\u00e9ment WSDL.
+WSDL_GENERATION_FAILURE_MSG = Impossible de g\u00e9n\u00e9rer l'\u00e9l\u00e9ment WSDL.
+WSDL_GENERATION_BAD_RESULT_MSG = G\u00e9n\u00e9rateur renvoy\u00e9 avec la valeur de sortie {0}.
+EXTENSION_ADD_FAILED_MSG = Echec de l'ajout de l'\u00e9l\u00e9ment d'extension.
+SERVICE_CREATION_MSG = Echec de la cr\u00e9ation du service.
+NO_SUCH_SERVICE_EXC = Impossible de trouver la d\u00e9finition pour le service {0}.
+NO_SUCH_ENDPOINT_EXC = Impossible de trouver la d\u00e9finition pour le port {0}.
+FAIL_TO_CREATE_WSDL_DEFINITION = Echec de la cr\u00e9ation de la d\u00e9finition WSDL \u00e0 partir de : {0}\r\nProvoqu\u00e9 par : {1} 
+MISSING_DESTINATION_FACTORY = Impossible de trouver la fabrique cible, v\u00e9rifiez le port //wsdl:port[@name=''{0}'']
+MISSING_SERVICE= Aucune d\u00e9finition du service {0} dans l''\u00e9l\u00e9ment WSDL.
+WSDL4J_BAD_ELEMENT_PART= Composant {0} d\u00e9fini en tant qu''\u00e9l\u00e9ment {1} qui ne se trouve pas dans le sch\u00e9ma.
+PART_NO_NAME_NO_TYPE= Composant {0} d\u00e9fini sans \u00e9l\u00e9ment et sans type.
+NO_MESSAGE=Aucun message {0} n''a \u00e9t\u00e9 trouv\u00e9 pour l''op\u00e9ration {1} et l''entr\u00e9e nomm\u00e9e {2}.  V\u00e9rifiez dans le document wsdl s''il existe des erreurs.
+BINDING_MISSING_TYPE=Impossible de trouver l''\u00e9l\u00e9ment portType pour la liaison {0}. V\u00e9rifiez dans le document wsdl s''il existe des erreurs.
+WRAPPED_RULE_1 = Il n''est pas possible de d\u00e9sencapsuler l''op\u00e9ration {0}, les messages d''entr\u00e9e et de sortie (s''ils existent) doivent contenir un seul composant.
+WRAPPED_RULE_2 = Il n''est pas possible de d\u00e9sencapsuler l''op\u00e9ration {0}, le message d''entr\u00e9e doit r\u00e9f\u00e9rencer la d\u00e9claration d''\u00e9l\u00e9ment globale avec le m\u00eame nom local que l''op\u00e9ration
+WRAPPED_RULE_3 = Il n''est pas possible de d\u00e9sencapsuler l''op\u00e9ration {0}, le message de sortie doit r\u00e9f\u00e9rencer la d\u00e9claration d''\u00e9l\u00e9ment globale
+WRAPPED_RULE_4 = Il n''est pas possible de d\u00e9sencapsuler l''op\u00e9ration {0}, sa r\u00e9f\u00e9rence wsdl:part/@element doit correspondre \u00e0 xs:complexType/xs:sequence
+WRAPPED_RULE_5 = Il n''est pas possible de d\u00e9sencapsuler l''op\u00e9ration {0}, son \u00e9l\u00e9ment wsdl:part/@element peut contenir uniquement des \u00e9l\u00e9ments xs:sequences de xs:element[@name and not(@nillable)]

@@ -1,0 +1,23 @@
+
+compileJava {
+    doLast {
+        ant.taskdef(name: 'instrumentForTrace', classname: 'com.ibm.ws.ras.instrument.internal.buildtasks.InstrumentForTrace') {
+            classpath {
+                fileset(dir: "${rootDir}/cnf/lib", includes: "ras-instrumentation.jar")
+            }
+        }
+        println 'Running manual instrumentation for webcontainer'
+        ant.instrumentForTrace( ffdc: true, taskInjection: false ) {
+            fileset(dir: compileJava.destinationDir) {
+                include(name: '**/*.class')
+                exclude(name: '**/com/ibm/ws/webcontainer/**')
+                exclude(name: '**/com/ibm/wsspi/webcontainer/**')
+                include(name: '**/com/ibm/ws/webcontainer/osgi/**/*.class')
+                include(name: '**/com/ibm/wsspi/webcontainer/osgi/**/*.class')
+                exclude(name: '**/com/ibm/ws/webcontainer/osgi/response/WCOutputStream.class')
+                exclude(name: '**/com/ibm/ws/webcontainer/osgi/request/IRequestImpl.class')
+                exclude(name: '**/com/ibm/ws/webcontainer/osgi/webapp/WebApp.class')
+            }
+        }
+    }
+}

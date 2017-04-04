@@ -1,0 +1,26 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.2
+-nouses=true
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.jsp.tld.2.2
+
+Export-Package: \
+    org.apache.taglibs.standard.tag.common.core;version="1.0.0", \
+    org.apache.taglibs.standard.tag.common.xml;version="1.0.0", \
+    org.apache.taglibs.standard.tag.el.core;version="1.0.0", \
+    org.apache.taglibs.standard.tag.el.fmt;version="1.0.0", \
+    org.apache.taglibs.standard.tag.el.sql;version="1.0.0", \
+    org.apache.taglibs.standard.tag.el.xml;version="1.0.0", \
+    org.apache.taglibs.standard.tag.rt.core;version="1.0.0", \
+    org.apache.taglibs.standard.tag.rt.fmt;version="1.0.0", \
+    org.apache.taglibs.standard.tag.rt.sql;version="1.0.0", \
+    org.apache.taglibs.standard.tag.rt.xml;version="1.0.0"
+
+-includeresource: @lib/standard.jar
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}

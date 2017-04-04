@@ -1,0 +1,17 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.1
+
+Bundle-SymbolicName: com.ibm.ws.jaxrpc.stub; singleton:=true
+Bundle-Description: JAX-RPC Stub; version=${bVersion}
+
+Import-Package: !*
+
+Export-Package: javax.xml.rpc.handler;version="1.1.16"
+
+Copyright: Licensed Materials - Property of IBM 5724-J08, 5724-I63, 57\
+24-H88, 5724-H89, 5655-W65, 5733-W70 Copyright IBM Corp. 1998, 2012 A\
+ll Rights Reserved. US Government Users Restricted Rights - Use, dupl\
+ication or disclosure restricted by GSA ADP Schedule Contract with IB\
+M Corp.
+
+-buildpath: lib/javax.j2ee.jaxrpc.jar;version=file

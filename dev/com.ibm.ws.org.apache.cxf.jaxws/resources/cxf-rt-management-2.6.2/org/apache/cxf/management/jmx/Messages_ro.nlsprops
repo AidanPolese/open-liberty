@@ -1,0 +1,38 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-management-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+REGISTER_FAILURE_MSG = \u00cenregistrarea obiectului MBean {0} \u00een MBeanServer a e\u015fuat: {1}
+UNREGISTER_FAILURE_MSG = \u015etergerea obiectului MBean {0} din MBeanServer a e\u015fuat: {1}
+INSTANTIANTE_FAILURE_MSG = Ini\u0163ializarea modelului MBean \u00een MBeanServer a e\u015fuat : {0}
+MBEAN_FAILURE_MSG = Op\u0163iunea MBean a e\u015fuat : {0}
+SET_MANAGED_RESOURCE_FAILURE_MSG = ModelMBean setarea resursei gestionate a e\u015fuat : {0}
+START_CONNECTOR_FAILURE_MSG = Serverul conector JMX nu a putut fi pornit : {0}
+STOP_CONNECTOR_FAILURE_MSG = Serverul conector JMX nu a putut fi oprit : {0}
+GET_MANAGED_INFORMATION_FAILURE_MSG = Informa\u0163iile gestionate {0} pentru instrumentele nu au putut fi ob\u0163inute 
+CREATE_REGISTRY_FAULT_MSG = Excep\u0163ie la pornirea registrului RMI pentru JMX : {0}
+OBJECT_NAME_FALUE_MSG = Ob\u0163inerea fi\u015fierului ObjectName {0} a e\u015fuat: {1}

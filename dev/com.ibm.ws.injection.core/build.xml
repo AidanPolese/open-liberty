@@ -1,0 +1,8 @@
+<project name="com.ibm.ws.injection.core" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+  <property name="component.endorsed" value="${basedir}/../com.ibm.websphere.javaee.annotation.1.1/lib/"/>
+
+  <!-- This project is manually traced. -->
+  <target name="post-compile"/>
+</project>

@@ -1,0 +1,8 @@
+<project name="com.ibm.ws.org.apache.geronimo.osgi.registry" default="build">
+  <import file="../ant_build/public_imports/rejar_imports.xml" />
+
+    <target name="package">
+        <rejar version="1.0" original.jar.name="org.apache.geronimo.osgi.registry" original.jar.version="1.1" src.jar="lib/geronimo-osgi-registry-1.1.jar"/>
+    </target>
+
+</project>

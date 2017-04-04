@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Commons Weaver" 
+            projectURL="http://commons.apache.org/proper/commons-weaver/" 
+            version="1.1" revision="" 
+            license-type="Apachev2" 
+            contact="nmittles@us.ibm.com" 
+            encryption="no">
+      <download location="http://archive.apache.org/dist/commons/weaver/binaries/commons-weaver-1.1-bin.zip">
+         <file basename="commons-weaver-privilizer-1.1.jar" checksum="4bc9b6a13706e5415ebea6a2d2b91279"/>
+         <file basename="commons-weaver-processor-1.1.jar" checksum="68f4dda73b3baf4424e75f7accc5b3e3"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+</ossc>

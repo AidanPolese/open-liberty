@@ -1,0 +1,31 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.websphere.collective/resources/com/ibm/wsspi/collective/internal/resources/CollectiveSPIMessages.nlsprops
+#COMPONENTPREFIX CWWKX
+#COMPONENTNAMEFOR WebSphere Collective SPI
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKX8000 - CWWKX8049
+
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE=CWWKX8000E: Si \u00e8 verificato un errore di configurazione. Non \u00e8 disponibile alcuna implementazione RepositoryClient. Specificare una funzione quale, ad esempio, collectiveMember-1.0 o collectiveController-1.0, e definire qualsiasi configurazione richiesta per risolvere questo problema. 
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.explanation=Le funzioni di Collective forniscono l'implementazione per RepositoryClient e non \u00e8 stato possibile trovare tale implementazione.
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.useraction=Specificare una funzione di Collective quale, ad esempio, collectiveMember-1.0 o collectiveController-1.0, e definire qualsiasi configurazione per risolvere questo problema.
+
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES=CWWKX8001E: Si \u00e8 verificato un errore di configurazione. Sono disponibili pi\u00f9 implementazioni RepositoryClientDelegate. L''implementazione corrente viene fornita dal bundle {0}. Rimuovere tutte le funzioni personalizzate o di terze parti, incluso quindi il bundle {1}. 
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.explanation=RepositoryConnectionFactory richiede una specifica implementazione RepositoryClientDelegate e un'ulteriore implementazione \u00e8 stata registrata come servizio OSGi. \u00c8 consentita solo una implementazione.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.useraction=Rimuovere tutte le funzioni personalizzate o di terze parti, incluso il bundle specificato.
+
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE=CWWKX8002E: Si \u00e8 verificato un errore di configurazione. Non \u00e8 disponibile alcuna implementazione RepositoryMember. Specificare una funzione quale, ad esempio, collectiveMember-1.0 o collectiveController-1.0, e definire qualsiasi configurazione richiesta per risolvere questo problema. 
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.explanation=Le funzioni di Collective forniscono l'implementazione per RepositoryMember e non \u00e8 stato possibile trovare tale implementazione.
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.useraction=Specificare una funzione di Collective quale, ad esempio, collectiveMember-1.0 o collectiveController-1.0, e definire qualsiasi configurazione per risolvere questo problema.
+
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES=CWWKX8003E: Si \u00e8 verificato un errore di configurazione. Sono disponibili pi\u00f9 implementazioni RepositoryMemberDelegate. L''implementazione corrente viene fornita dal bundle {0}. Rimuovere tutte le funzioni personalizzate o di terze parti, incluso quindi il bundle {1}.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.explanation=RepositoryConnectionFactory richiede una specifica implementazione RepositoryMemberDelegate e un'ulteriore implementazione \u00e8 stata registrata come servizio OSGi. \u00c8 consentita solo una implementazione.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.useraction=Rimuovere tutte le funzioni personalizzate o di terze parti, incluso il bundle specificato.

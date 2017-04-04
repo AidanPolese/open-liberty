@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache XMLSchema" 
+            projectURL="http://ws.apache.org/commons/xmlschema20/xmlschema-core" 
+            version="2.0.3" revision="GA" 
+            license-type="Apachev2" 
+            contact="hanhongf@cn.ibm.com" 
+            encryption="no">
+      <download location="http://mirror.bjtu.edu.cn/apache/ws/xmlschema/2.0.3/xmlschema-core-2.0.3-bin.zip">
+         <file basename="org.apache.ws.xmlschema.core-2.0.3.jar" checksum="f1191e9de2af79ada8726d2246fe2f87"/>
+      </download>
+   </project>
+         
+   <clearencehistory/>
+
+   <notes/>
+</ossc>

@@ -1,0 +1,6 @@
+-include= jar:${fileuri;lib/commons-lang3-3.5.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+
+-includeresource: \
+   @lib/commons-lang3-3.5.jar!/!META-INF/maven/*
+
+-buildpath: lib/commons-lang3-3.5.jar;version=file

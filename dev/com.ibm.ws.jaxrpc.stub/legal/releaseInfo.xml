@@ -1,0 +1,8 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="javax.j2ee.jaxrpc-1.1">
+  <originbase release="WASX" fe="SERV1" level="gg1228.01" components="WAS.prereq.jaxrpc"/>
+
+  <notes>
+    Copied from prereq.jaxrpc/build/javax.j2ee.jaxrpc.jar
+  </notes>
+</releaseInfo>

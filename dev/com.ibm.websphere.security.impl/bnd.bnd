@@ -1,0 +1,43 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: WAS Security Public API Implementations
+Bundle-SymbolicName: com.ibm.websphere.security.impl; singleton:=true
+Bundle-Description: WAS Security Public API Implementations, version ${bVersion}
+
+WS-TraceGroup: \
+  security
+    
+Private-Package: \
+  com.ibm.ws.security.intfc.internal
+
+Service-Component: \
+  subjectManagerService; \
+    implementation:=com.ibm.ws.security.intfc.internal.SubjectManagerServiceImpl; \
+    provide:=com.ibm.ws.security.intfc.SubjectManagerService; \
+    immediate:=true; \
+    configuration-policy:=ignore; \
+    activate:=activate; \
+    deactivate:=deactivate; \
+    properties:='service.vendor=IBM', \
+  wsSecurityService; \
+    implementation:=com.ibm.ws.security.intfc.internal.WSSecurityServiceImpl; \
+    provide:=com.ibm.ws.security.intfc.WSSecurityService; \
+    immediate:=true; \
+    configuration-policy:=ignore; \
+    activate:=activate; \
+    deactivate:=deactivate; \
+    securityService=com.ibm.ws.security.SecurityService; \
+    dynamic:='securityService'; \
+    optional:='securityService'; \
+    properties:='service.vendor=IBM'
+
+-buildpath: \
+	com.ibm.websphere.security;version=latest,\
+	com.ibm.ws.security;version=latest,\
+	com.ibm.ws.security.registry;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
+	com.ibm.ws.logging.core;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

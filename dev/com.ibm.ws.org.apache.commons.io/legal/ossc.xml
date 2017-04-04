@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Commons IO" 
+            projectURL="http://commons.apache.org" 
+            version="2.4" revision="" 
+            license-type="Apachev2" 
+            contact="rvennam@us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/projects/w/was.dev_tools/prereqs/prereq.commons.io/1.4/20091130/">
+         <file basename="org.apache.commons.io-2.4.jar" checksum="7f97854dc04c119d461fed14f5d8bb96"/>
+      </download>
+   </project>
+      
+   <notes>
+   The download location is the location where it is downloaded from for the WAS build process
+   </notes>
+   
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and has been cleared previously by WAS v8
+   </clearencehistory>
+
+</ossc>

@@ -1,0 +1,17 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.jaxrs.1.1; singleton:=true
+
+Export-Package: \
+	javax.ws.rs; version=1.1.0,\
+	javax.ws.rs.core; version=1.1.0,\
+	javax.ws.rs.ext; version=1.1.0
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/javax.j2ee.jaxrs_1.1.jar;version=file

@@ -1,0 +1,16 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Collective Plugins SPI
+Bundle-SymbolicName: com.ibm.websphere.collective.plugins
+Bundle-Description: SPI for collective plugins; version=${bVersion}
+
+Export-Package: com.ibm.wsspi.collective.plugins, \
+  com.ibm.wsspi.collective.plugins.helpers, \
+  com.ibm.ws.collective.plugins
+
+-buildpath: \
+	com.ibm.websphere.appserver.api.ssl;version=latest,\
+	com.ibm.websphere.appserver.spi.ssl;version=latest,\
+	com.ibm.websphere.appserver.spi.logging, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

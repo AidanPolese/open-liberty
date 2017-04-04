@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache geronimo" 
+      projectURL="http://geronimo.apache.org/" 
+      version="2.2" revision="" 
+      license-type="Apachev2" 
+      contact="not@us.ibm.com" 
+      encryption="no">
+   
+      <download location="http://www.apache.org/dyn/closer.cgi/geronimo/2.2/geronimo-jetty7-minimal-2.2-bin.zip">
+         <file basename="geronimo-jta_1.1_spec-1.1.1.jar" checksum="4aa8d50456bcec0bf6f032ceb182ad64"/>
+         <notes>
+         The geronimo jar was extracted from the zip listed at the download location
+         </notes>
+      </download>
+   </project>
+      
+     <project project="Unknown" 
+            projectURL="Unknown" 
+            version="1.0" revision="" 
+            license-type="Apachev2" 
+            contact="???@us.ibm.com" 
+            encryption="no">
+   
+      <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.build/botp/WAS80.SERV1/test/m1116.12.linux/linux/zipper/fe.zip">
+         <file basename="com.ibm.ws.javax.transaction_1.1.jar" checksum="7e6006e5500d49ed9d5f447c616b163c"/>
+         <notes>
+         rename javax.j2ee.jta.jar to com.ibm.ws.javax.transaction_1.1.jar
+         add Require-Bundle: system.bundle to MANIFEST.MF
+         </notes>
+      </download>
+   </project>
+  
+     
+   
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and v8.5 and has been cleared previously by WAS
+   </clearencehistory>
+</ossc>

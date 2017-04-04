@@ -1,0 +1,27 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2012.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security.quickstart/resources/com/ibm/ws/security/quickstart/internal/resources/LoggingMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Quick Start Security Service
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKS0900 - CWWKS0999
+
+QUICK_START_SECURITY_MISSING_ATTIRBUTES=CWWKS0900E: Nell''elemento <quickStartSecurity> mancano attributi richiesti: {0}. Definire gli attributi mancanti.
+QUICK_START_SECURITY_MISSING_ATTIRBUTES.explanation=Nell'elemento <quickStartSecurity> mancano gli attributi richiesti.
+QUICK_START_SECURITY_MISSING_ATTIRBUTES.useraction=Definire gli attributi richiesti.
+
+QUICK_START_SECURITY_WITH_ANOTHER_REGISTRY=CWWKS0901E: La configurazione <quickStartSecurity> verr\u00e0 ignorata poich\u00e9 \u00e8 configurato un altro registro utenti.
+QUICK_START_SECURITY_WITH_ANOTHER_REGISTRY.explanation=La configurazione <quickStartSecurity> viene utilizzata solo quando non vengono specificate altre configurazioni di registro utenti.
+QUICK_START_SECURITY_WITH_ANOTHER_REGISTRY.useraction=Utilizzare una sola configurazione di registro utenti.
+
+QUICK_START_SECURITY_WITH_OTHER_MANAGEMENT_AUTHORIZATION=CWWKS0902E: La configurazione <quickStartSecurity> verr\u00e0 ignorata poich\u00e9 i bind di autorizzazione della sicurezza di gestione sono definiti esplicitamente.
+QUICK_START_SECURITY_WITH_OTHER_MANAGEMENT_AUTHORIZATION.explanation=La configurazione <quickStartSecurity> viene utilizzata solo quando non vengono definiti bind di autorizzazione della sicurezza di gestione espliciti.
+QUICK_START_SECURITY_WITH_OTHER_MANAGEMENT_AUTHORIZATION.useraction=Utilizzare <quickStartSecurity> e rimuovere i bind di autorizzazione della sicurezza di gestione espliciti o configurare un registro utenti differente.

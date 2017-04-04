@@ -1,0 +1,101 @@
+-include= ~../cnf/resources/bnd/bundle.props
+-nouses=true
+bVersion=1.0
+bSymbolicName=com.ibm.ws.wsoc
+
+javac.source: 1.7
+javac.target: 1.7
+
+Bundle-Name: WebSocket
+Bundle-SymbolicName:com.ibm.ws.wsoc; singleton:=true
+Bundle-Description: WebSocket, version ${bVersion}
+
+app-resources= \
+  META-INF/services/javax.websocket.server.ServerEndpointConfig$Configurator | \
+  META-INF/services/javax.websocket.ContainerProvider
+  
+Export-Package:  com.ibm.ws.wsoc.external,\
+                 com.ibm.ws.wsoc.outbound, \
+                 com.ibm.ws.wsoc.injection, \
+                 com.ibm.ws.wsoc,\
+                 com.ibm.websphere.wsoc, \
+                 com.ibm.ws.wsoc.configurator.*;thread-context=true
+
+Import-Package: com.ibm.ws.common.internal.encoder, !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
+   
+Private-Package: \
+  com.ibm.ws.wsoc, \
+  com.ibm.ws.wsoc.impl, \
+  com.ibm.ws.wsoc.util, \
+  com.ibm.ws.wsoc.internal.resources  
+    
+Service-Component: \
+  com.ibm.ws.wsock.initializer; \
+     implementation:=com.ibm.ws.wsoc.WebSocketServletContainerInitializer; \
+     provide:=javax.servlet.ServletContainerInitializer; \
+     immediate:=true; \
+     properties:="service.vendor=IBM,service.ranking:Integer=150", \
+  com.ibm.ws.wsoc.manager;\
+    implementation:=com.ibm.ws.wsoc.ServiceManager; \
+    chfwBundle=com.ibm.websphere.channelfw.osgi.CHFWBundle; \
+    configuration-policy:=ignore;\
+    immediate:=true;\
+    scheduledExecutorService=java.util.concurrent.ScheduledExecutorService('service.vendor=IBM'); \
+    executorService=java.util.concurrent.ExecutorService('service.vendor=IBM'); \
+    injectionEngine=com.ibm.wsspi.injectionengine.InjectionEngine; \
+    injectionService=com.ibm.ws.wsoc.injection.InjectionService; \
+    injectionService12=com.ibm.ws.wsoc.injection.InjectionService12; \
+    optional:='injectionEngine,injectionService,injectionService12'; \
+    dynamic:='injectionEngine,injectionService,injectionService12'; \
+    properties:="service.vendor=IBM", \
+   com.ibm.ws.wsoc.version;\
+    implementation:=com.ibm.ws.wsoc.WebSocketVersionServiceManager; \
+    configuration-policy:=ignore;\
+    immediate:=true;\
+    websocketFactoryService=com.ibm.ws.wsoc.external.WebSocketFactory('service.vendor=IBM'); \
+    dynamic:='websocketFactoryService'; \
+    optional:='websocketFactoryService'; \
+    properties:="service.vendor=IBM", \
+  com.ibm.ws.wsoc.outbound.wsocOutbound;\
+     implementation:=com.ibm.ws.wsoc.outbound.WsocOutboundChain;\
+     chfwBundle=com.ibm.websphere.channelfw.osgi.CHFWBundle; \
+     tcpOptions=com.ibm.wsspi.channelfw.ChannelConfiguration;\
+     httpOptions=com.ibm.wsspi.channelfw.ChannelConfiguration;\
+     sslOptions=com.ibm.wsspi.channelfw.ChannelConfiguration;\
+     configuration-policy:=require;\
+     dynamic:='tcpOptions,httpOptions,sslOptions';\
+     modified:='modified'; \
+     optional:='sslOptions,sslSupport';\
+     greedy:='tcpOptions,httpOptions,sslOptions'; \
+     properties:='service.vendor=IBM', \
+  ${bSymbolicName}_${bVersion}.ResourceProvider; \
+  implementation:=com.ibm.wsspi.classloading.ResourceProvider; \
+  provide:=com.ibm.wsspi.classloading.ResourceProvider; \
+  configuration-policy:=ignore; \
+  properties:= "resources=${app-resources}"
+    
+Include-Resource: \
+  OSGI-INF=resources/OSGI-INF, \
+  META-INF=resources/META-INF
+  
+Require-Capability: osgi.ee; filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+
+instrument.classesExcludes: com/ibm/ws/wsoc/internal/resources/*.class
+
+-buildpath: \
+	${javac.bootclasspath.java7}, \
+	com.ibm.websphere.javaee.websocket.1.0;version=latest,\
+	com.ibm.websphere.appserver.spi.logging,\
+	com.ibm.ws.channelfw;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service,\
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.ws.common.encoder,\
+	com.ibm.ws.container.service;version=latest,\
+	com.ibm.ws.injection.core;version=latest,\
+	com.ibm.ws.transport.http;version=latest,\
+	com.ibm.ws.webcontainer.servlet.3.1;version=latest,\
+	com.ibm.ws.webcontainer;version=latest,\
+	com.ibm.websphere.javaee.servlet.3.1;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: bnd meta-annoations
+Bundle-SymbolicName: com.ibm.ws.bnd.annotations
+Bundle-Description: bnd meta annotations for metatype and ds
+
+Export-Package: com.ibm.ws.bnd.metatype.annotation, \
+  org.apache.felix.scr.ext.annotation
+
+Private-Package: com.ibm.ws.bnd.metatype.annotation, \
+  org.apache.felix.scr.ext.annotation
+
+publish.wlp.jar.disabled: true
+
+-buildpath: \
+	lib/biz.aQute.bnd.annotation-3.3.0.jar;version=file, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

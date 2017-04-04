@@ -1,0 +1,8 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="javax.j2ee.ejb-3.1">
+  <originbase release="WASX" fe="SERV1" level="xx1209.07" components="WAS.prereq.ejb"/>
+
+  <notes>
+    Copy of j2ee.ejb.bundle/build/javax.j2ee.ejb.jar.
+  </notes>
+</releaseInfo>

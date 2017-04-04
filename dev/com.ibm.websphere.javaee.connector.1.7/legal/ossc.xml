@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+  <project project="Oracle RI"
+      projectURL="https://maven.java.net"
+      version="1.7" revision=""
+      license-type="CDDL"
+      contact="frowe@us.ibm.com"
+      encryption="no">
+    <download location="https://maven.java.net/content/repositories/releases/javax/resource/javax.resource-api/1.7/javax.resource-api-1.7.jar">
+      <file basename="javax.resource-api-1.7.jar" checksum="51129256d155d7352fc1f066d2cbc6dc"/>
+    </download>
+   </project>
+   
+  <project project="JIM"
+      projectURL="http://w3.hursley.ibm.com/java/jim"
+      version="1.7" revision=""
+      license-type="TLDA"
+      contact="frowe@us.ibm.com"
+      encryption="no">
+    <download location="https://ebitzone.hursley.ibm.com:8443/jim/download?file=FR33448">
+      <file basename="connector-1_7-javadoc-final.zip" checksum="c720a9107d4e46736fc5883a55445200"/>
+    </download>
+   </project>
+   
+   <notes>
+   </notes>
+   
+   <clearencehistory>
+   </clearencehistory>
+</ossc>

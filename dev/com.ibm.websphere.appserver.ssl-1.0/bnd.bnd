@@ -1,0 +1,16 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.ssl-1.0
+
+publish.feature.resources: **
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.channelfw-1.0;version=latest,\
+	com.ibm.ws.ssl;version=latest,\
+	com.ibm.ws.channel.ssl;version=latest,\
+	com.ibm.websphere.security;version=latest,\
+	com.ibm.ws.crypto.certificateutil;version=latest,\
+	com.ibm.websphere.appserver.spi.ssl;version=latest,\
+	com.ibm.websphere.appserver.api.ssl;version=latest

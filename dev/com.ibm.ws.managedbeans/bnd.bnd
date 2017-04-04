@@ -1,0 +1,24 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: ManagedBeans
+Bundle-SymbolicName: com.ibm.ws.managedbeans
+Bundle-Description: ManagedBeans Support; version=${bVersion}
+
+WS-TraceGroup: EJBContainer
+
+Import-Package: \
+  *
+
+Private-Package: \
+  com.ibm.ws.managedbeans.*
+
+Service-Component: \
+  com.ibm.ws.managedbeans.runtime;\
+    implementation:=com.ibm.ws.managedbeans.osgi.internal.MBRuntimeImpl;\
+    provide:='com.ibm.ws.ejbcontainer.osgi.ManagedBeanRuntime';\
+    properties:="service.vendor=IBM"
+
+-buildpath: \
+	com.ibm.wsspi.org.osgi.service.component.1.3.0,\
+	com.ibm.ws.ejbcontainer;version=latest

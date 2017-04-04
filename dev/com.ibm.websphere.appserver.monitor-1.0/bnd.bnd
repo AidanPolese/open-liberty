@@ -1,0 +1,12 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.monitor-1.0
+
+publish.feature.resources: **
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.containerServices-1.0;version=latest, \
+	com.ibm.ws.monitor;version=latest, \
+	com.ibm.websphere.appserver.api.monitor;version=latest

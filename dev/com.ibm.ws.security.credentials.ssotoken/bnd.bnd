@@ -1,0 +1,33 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: SSOTokenCredential
+Bundle-SymbolicName: com.ibm.ws.security.credentials.ssotoken
+Bundle-Description: SSO Token Credential, version=${bVersion}
+Bundle-ActivationPolicy: lazy
+
+WS-TraceGroup: \
+  Credentials
+
+Private-Package: \
+  com.ibm.ws.security.credentials.ssotoken.internal.*
+
+Service-Component: \
+  SSOTokenCredentialProvider; \
+    activate:=activate; \
+    deactivate:=deactivate; \
+    configuration-policy:=ignore; \
+    implementation:='com.ibm.ws.security.credentials.ssotoken.internal.SSOTokenCredentialProvider'; \
+    provide:='com.ibm.ws.security.credentials.CredentialProvider'; \
+    tokenManager=com.ibm.ws.security.token.TokenManager; \
+    credentialsService=com.ibm.ws.security.credentials.CredentialsService; \
+    properties:='service.vendor=IBM,type=SSOTokenCredential'
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.kernel.service,\
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.websphere.security;version=latest,\
+	com.ibm.ws.security.credentials;version=latest,\
+	com.ibm.ws.security.token;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

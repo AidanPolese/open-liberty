@@ -1,0 +1,38 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+NO_INPUT_STREAM_EXC = \u6ca1\u6709\u53ef\u7528\u7684\u8f93\u5165\u6d41\u3002
+NO_OUTPUT_STREAM_EXC = \u6ca1\u6709\u53ef\u7528\u7684\u8f93\u51fa\u6d41\u3002
+ANNOTATION_WITHOUT_URL_EXC = @HandlerChain \u6ce8\u91ca\u7f3a\u5c11\u201cfile\u201d\u6210\u5458 - \u503c
+HANDLER_CFG_FILE_NOT_FOUND_EXC = \u627e\u4e0d\u5230 @HandlerChain \u6ce8\u91ca\u6307\u5b9a\u7684\u5904\u7406\u7a0b\u5e8f\u914d\u7f6e\u6587\u4ef6 {0}
+HANDLER_INSTANTIATION_EXC = \u672a\u80fd\u5b9e\u4f8b\u5316\u5904\u7406\u7a0b\u5e8f
+CHAIN_NOT_SPECIFIED_EXC = \u672a\u6307\u5b9a\u94fe
+SEI_LOAD_FAILURE_EXC = \u672a\u80fd\u88c5\u5165\u670d\u52a1\u7aef\u70b9\u63a5\u53e3\u3002
+NOT_A_QNAME_PATTER = \u6a21\u5f0f {0} \u5728 XML {1} \u4e2d\u5e76\u975e qname \u6a21\u5f0f
+NOT_VALID_ELEMENT_IN_HANDLER = \u5728\u5904\u7406\u7a0b\u5e8f\u94fe\u4e2d\u4e0d\u5141\u8bb8\u4f7f\u7528\u5143\u7d20 {0}
+NOT_VALID_ROOT_ELEMENT = {0} {1} \u5143\u7d20 {2} \u5728\u6587\u4ef6 {3} \u4e2d\u662f\u65e0\u6548\u6839\u5143\u7d20

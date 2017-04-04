@@ -1,0 +1,6 @@
+<server>
+
+  <contextService id="defaultEJBPersistentTimerContextService"/>
+  <persistentExecutor id="defaultEJBPersistentTimerExecutor" enableTaskExecution="true" initialPollDelay="-1" retryInterval="300s" retryLimit="-1" contextServiceRef="defaultEJBPersistentTimerContextService"/>
+
+</server>

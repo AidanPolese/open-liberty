@@ -1,0 +1,37 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-core-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+USER_CFG_FILE_NOT_FOUND_MSG = \u30af\u30e9\u30b9\u30d1\u30b9\u306b\u69cb\u6210\u30d5\u30a1\u30a4\u30eb {0} \u3092\u898b\u3064\u3051\u308b\u3053\u3068\u304c\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002
+USER_CFG_FILE_IN_USE= \u69cb\u6210\u30d5\u30a1\u30a4\u30eb {0} \u304c\u30ed\u30fc\u30c9\u3055\u308c\u307e\u3057\u305f\u3002
+USER_CFG_FILE_URL_ERROR_MSG = \u69cb\u6210\u30d5\u30a1\u30a4\u30eb URL {0} \u306f\u8aa4\u3063\u305f\u5f62\u5f0f\u306e URL \u3067\u3059\u3002
+USER_CFG_FILE_URL_NOT_FOUND_MSG = {0} \u306e URL \u306b\u69cb\u6210\u30d5\u30a1\u30a4\u30eb\u3092\u898b\u3064\u3051\u308b\u3053\u3068\u304c\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002
+APP_CONTEXT_CREATION_FAILED_MSG = \u30a2\u30d7\u30ea\u30b1\u30fc\u30b7\u30e7\u30f3\u30fb\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u306e\u4f5c\u6210\u306b\u5931\u6557\u3057\u307e\u3057\u305f\u3002
+INITIAL_APP_CONTEXT_CREATION_FAILED_MSG = \u30a2\u30d7\u30ea\u30b1\u30fc\u30b7\u30e7\u30f3\u30fb\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u4f5c\u6210\u306e\u521d\u56de\u306e\u8a66\u884c\u306f\u4e0d\u6210\u529f\u3067\u3057\u305f\u3002
+USER_CFG_FILE_NOT_LOADED=\u69cb\u6210 {0} \u306e\u30ed\u30fc\u30c9\u306b\u5931\u6557\u3057\u307e\u3057\u305f
+DEPRECATED_IMPORT=META-INF/cxf/{0} \u306e\u30a4\u30f3\u30dd\u30fc\u30c8\u306f\u63a8\u5968\u3055\u308c\u3066\u3044\u307e\u305b\u3093\u3002\u307e\u305f\u3001\u3053\u308c\u306f\u4e0d\u5fc5\u8981\u3067\u3059\u3002
+DEPRECATED_OBJECT_RETRIEVAL=Spring \u304b\u3089\u306e\u30aa\u30d6\u30b8\u30a7\u30af\u30c8 {0} \u306b\u4f9d\u5b58\u3059\u308b\u3053\u3068\u306f\u63a8\u5968\u3055\u308c\u3066\u3044\u307e\u305b\u3093\u3002  

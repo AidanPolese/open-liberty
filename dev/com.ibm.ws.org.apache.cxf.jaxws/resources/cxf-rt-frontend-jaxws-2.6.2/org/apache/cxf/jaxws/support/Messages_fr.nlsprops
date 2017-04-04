@@ -1,0 +1,47 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SEI_LOAD_FAILURE_EXC = Echec du chargement de l'interface de noeud final de service.
+INVALID_PROVIDER_EXC = {0} n''est pas un fournisseur JAXWS valide.
+SEI_LOAD_FAILURE_MSG = Impossible de charger l'interface SEI Webservice
+SEI_WITHOUT_WEBSERVICE_ANNOTATION_EXC = L'interface de noeud final de service n'a pas d'annotation @WebService.
+ILLEGAL_ATTRIBUTE_IN_SEI_ANNOTATION_EXC = Les attributs portName, serviceName et endpointInterface ne sont pas admis dans l'annotation @WebService d'une interface SEI.
+MALFORMED_URL_IN_WEBSERVICE_ANNOTATION_EXC = URL syntaxiquement incorrecte dans l'\u00e9l\u00e9ment wsdlLocation de l'attribut d'annotation @WebService.
+LOAD_WSDL_EXC = Impossible de charger le document WSDL \u00e0 partir de l''URL {0}.
+COULD_NOT_FIND_ENDPOINT = Impossible de trouver le noeud final nomm\u00e9 {0}.  Les valeurs possibles sont {1}.
+SOAPBinding_MESSAGE_RPC= Annotation JAX-WS SOAPBinding avec style d''appel RPC trouv\u00e9e sur la m\u00e9thode {0}. Ce cas de figure n''est pas pris en charge.
+INVALID_REQUEST_WRAPPER = La classe @RequestWrapper {0} est identique au param\u00e8tre effectif {1}.  Dans ce cas, un \u00e9chec peut survenir. 
+INVALID_RESPONSE_WRAPPER = La classe @ResponseWrapper {0} est identique \u00e0 la classe de retour effective {1}.  Dans ce cas, un \u00e9chec peut survenir. 
+SERVICECLASS_MUST_BE_SET = serviceClass doit \u00eatre d\u00e9fini en tant que classe ou interface de service valide
+XMLSEEALSO_NULL_CLASS = Une classe r\u00e9pertori\u00e9e dans l'annotation XmlSeeAlso de la classe de serveur %s est introuvable sur le chemin d'acc\u00e8s aux classes. Index : %d de la liste des classes XmlSeeAlso.
+WEBMETHOD_EXCLUDE_NOT_ALLOWED = L''\u00e9l\u00e9ment @javax.jws.WebMethod(exclude=true) ne peut pas \u00eatre utilis\u00e9 sur une interface de noeud final de service. M\u00e9thode : {0}
+WEBSERVICE_ANNOTATIONS_IS_LOADED_BY_OTHER_CLASSLOADER = L''annotation {0} a d\u00e9j\u00e0 \u00e9t\u00e9 charg\u00e9e par un autre chargeur de classe. V\u00e9rifiez s''il existe plusieurs versions du fichier JAR d''annotation de service Web dans votre chemin d''acc\u00e8s aux classes.
+UNKONWN_REQUIRED_WSDL_BINDING = Extension de liaison WSDL inconnue avec attribut required=true d\u00e9tect\u00e9e alors que l'\u00e9l\u00e9ment RespectBindingFeature est activ\u00e9
+
+
+

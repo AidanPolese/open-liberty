@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed Materials - Property of IBM
+
+  "Restricted Materials of IBM"
+
+  Copyright IBM Corp. 2012 All Rights Reserved.
+
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+-->
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0" 
+                   xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
+                   localization="OSGI-INF/l10n/metatype">
+
+    <OCD id="com.ibm.ws.security.jca.internal.authdata.config" name="%authdata.config" description="%authdata.config.desc"
+         ibm:alias="authData">
+        <AD id="user" name="%userName" description="%userName.desc"
+            required="true" type="String" />
+        <AD id="password" name="%userPassword" description="%userPassword.desc"
+            required="true" type="String" ibm:type="password" />	 	    	
+    </OCD>
+
+    <Designate factoryPid="com.ibm.ws.security.jca.internal.authdata.config">
+        <Object ocdref="com.ibm.ws.security.jca.internal.authdata.config" />
+    </Designate>
+
+</metatype:MetaData>

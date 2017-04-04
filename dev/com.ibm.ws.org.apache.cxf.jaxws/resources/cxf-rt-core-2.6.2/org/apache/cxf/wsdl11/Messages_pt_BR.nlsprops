@@ -1,0 +1,49 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-core-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+WSDL_SCHEMA_GENERATION_FAILURE_MSG = Arquivos wsdl e/ou de esquema n\u00e3o puderam ser gerados.
+WSDL_UNREADABLE_MSG = N\u00e3o foi poss\u00edvel ler wsdl gerado.
+WSDL_GENERATION_TMP_DIR_MSG = N\u00e3o foi poss\u00edvel criar o diret\u00f3rio tmp no qual gerar WSDL.
+WSDL_GENERATION_FAILURE_MSG = N\u00e3o foi poss\u00edvel gerar WSDL.
+WSDL_GENERATION_BAD_RESULT_MSG = Gerado retornado com valor de sa\u00edda {0}.
+EXTENSION_ADD_FAILED_MSG = Falha em incluir o elemento de extens\u00e3o.
+SERVICE_CREATION_MSG = Falha em criar servi\u00e7o.
+NO_SUCH_SERVICE_EXC = N\u00e3o foi poss\u00edvel localizar defini\u00e7\u00e3o para o servi\u00e7o {0}.
+NO_SUCH_ENDPOINT_EXC = N\u00e3o foi poss\u00edvel localizar defini\u00e7\u00e3o para a porta {0}.
+FAIL_TO_CREATE_WSDL_DEFINITION = Falha em criar defini\u00e7\u00e3o wsdl a partir de: {0}\r\nCausada por: {1} 
+MISSING_DESTINATION_FACTORY = N\u00e3o \u00e9 poss\u00edvel localizar o factory de destino, verifique a porta //wsdl:port[@name=''{0}'']
+MISSING_SERVICE= Nenhuma defini\u00e7\u00e3o de servi\u00e7o {0} no WSDL.
+WSDL4J_BAD_ELEMENT_PART= Parte {0} definida como elemento {1} que n\u00e3o est\u00e1 no esquema.
+PART_NO_NAME_NO_TYPE= Parte {0} definida sem nenhum elemento e nenhum tipo.
+NO_MESSAGE=Nenhuma mensagem {0} foi localizada para a opera\u00e7\u00e3o {1} e a entrada denominada {2}.  Verifique o wsdl para erros.
+BINDING_MISSING_TYPE=N\u00e3o foi poss\u00edvel localizar portType para liga\u00e7\u00e3o de {0}. Verifique se h\u00e1 erros no wsdl.
+WRAPPED_RULE_1 = A opera\u00e7\u00e3o {0} n\u00e3o pode ser desencapada, as mensagens de entrada e sa\u00edda (se presentes) devem conter somente uma \u00fanica parte
+WRAPPED_RULE_2 = A opera\u00e7\u00e3o {0} n\u00e3o pode ser desencapada, a mensagem de entrada deve fazer refer\u00eancia \u00e0 declara\u00e7\u00e3o de elemento global com o mesmo nome local que a opera\u00e7\u00e3o.
+WRAPPED_RULE_3 = A opera\u00e7\u00e3o {0} n\u00e3o pode ser desencapada, a mensagem de sa\u00edda deve fazer refer\u00eancia \u00e0 declara\u00e7\u00e3o de elemento global.
+WRAPPED_RULE_4 = A opera\u00e7\u00e3o {0} n\u00e3o pode ser desencapada, sua refer\u00eancia wsdl:part/@element deve corresponder a xs:complexType/xs:sequence
+WRAPPED_RULE_5 = A opera\u00e7\u00e3o {0} n\u00e3o pode ser desencapada, seu wsdl:part/@element pode conter somente xs:sequences de xs:element[@name and not(@nillable)]

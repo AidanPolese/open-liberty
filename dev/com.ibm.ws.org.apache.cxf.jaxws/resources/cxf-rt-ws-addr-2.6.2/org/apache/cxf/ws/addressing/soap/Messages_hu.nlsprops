@@ -1,0 +1,36 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-ws-addr-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SOAP_HEADER_ENCODE_FAILURE_MSG = WS-Addressing - az \u00fczenetc\u00edmz\u00e9si tulajdons\u00e1gok k\u00f3dol\u00e1sa SOAP fejl\u00e9ck\u00e9nt meghi\u00fasult:
+SOAP_HEADER_DECODE_FAILURE_MSG = WS-Addressing - az \u00fczenetc\u00edmz\u00e9si tulajdons\u00e1gok dek\u00f3dol\u00e1sa SOAP fejl\u00e9cb\u0151l meghi\u00fasult:
+UNSUPPORTED_VERSION_MSG = Nem t\u00e1mogatott WS-Addressing v\u00e1ltozat: {0}
+IGNORE_NON_ELEMENT_REF_PARAM_MSG = A(z) {0} referenciaparam\u00e9ter mell\u0151z\u00e9se, mert az nem JAXBElement
+CORRELATION_FAILURE_MSG = \u00dczenet viszony\u00edt\u00e1sa meghi\u00fasult, ind\u00edt\u00e1s megszak\u00edt\u00e1sa.
+RESPONSE_NOT_USING_WSADDRESSING = A v\u00e1lasz\u00fczenet nme tartalmaz WS-Addressing tulajdons\u00e1gokat.  Nem viszony\u00edtott v\u00e1lasz.
+INVALID_CARDINALITY_MESSAGE = T\u00f6bbsz\u00f6r szerepl\u0151 WS-Addressing fejl\u00e9c: {0}
+INVALID_ADDRESSING_PROPERTY_MESSAGE = Az \u00dczenetc\u00edmz\u00e9si tulajdons\u00e1got k\u00e9pvisel\u0151 fejl\u00e9c \u00e9rv\u00e9nytelen, \u00e9s az \u00fczenet nem dolgozhat\u00f3 fel

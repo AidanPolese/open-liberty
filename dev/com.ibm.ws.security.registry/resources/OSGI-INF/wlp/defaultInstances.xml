@@ -1,0 +1,5 @@
+<server>
+
+    <com.ibm.ws.security.registry.internal.UserRegistryRefConfig/>
+
+</server>

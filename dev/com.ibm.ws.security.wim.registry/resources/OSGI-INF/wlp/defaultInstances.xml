@@ -1,0 +1,5 @@
+<server>
+
+    <com.ibm.ws.security.wim.registry.WIMUserRegistry/>
+
+</server>

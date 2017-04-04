@@ -1,0 +1,47 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+
+
+UNSUPPORTED_API_EXC = El m\u00e9todo {0} no est\u00e1 soportado todav\u00eda.
+PORT_NAME_NULL_EXC = El nombre de puerto no puede ser nulo.
+NO_BINDING_OPERATION_INFO = No se ha podido encontrar la informaci\u00f3n de la operaci\u00f3n wsdl:enlace para el m\u00e9todo web {0}.
+COULD_NOT_DETERMINE_PORT = No se puede determinar el nombre del puerto.
+INVALID_PORT = No se ha encontrado el puerto {0}.
+FAILED_TO_PUBLISH_ENDPOINT_EXC = No se ha podido publicar el punto final.
+FAILED_TO_INITIALIZE_JAXBCONTEXT = No se ha podido inicializar el contexto de JAXB para los tipos utilizados por {0}.
+ASYNC_HANDLER_TIMEDOUT_EXC = AsynHandler no se ha completado a tiempo.
+
+SEI_METHOD_NOT_FOUND = La clase de servicio {1} no implementa el m\u00e9todo {0}.
+SEI_NO_WEBSERVICE_ANNOTATION = La clase de interfaz de punto final de servicio {0} no tiene una anotaci\u00f3n javax.jws.WebService.
+COULD_NOT_LOAD_CLASS = No se puede cargar la clase {0}. 
+ENDPOINT_NOT_PUBLISHED = El punto final no se ha publicado todav\u00eda.
+
+ENDPOINTREFERENCE_TYPE_NOT_SUPPORTED = El tipo de clase {0} no es una subclase de EndpointReference o la implementaci\u00f3n de punto final no da soporte a EndpointReferences de este tipo.
+GET_ENDPOINTREFERENCE_UNSUPPORTED_BINDING = getEndpointReference no da soporte al enlace HTTP.
+
+DISPATCH_OBJECT_NOT_SUPPORTED = {0} no es v\u00e1lido en la modalidad {1} con el enlace {2}. 

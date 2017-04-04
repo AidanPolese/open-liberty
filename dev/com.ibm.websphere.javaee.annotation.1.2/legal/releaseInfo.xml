@@ -1,0 +1,7 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="javax.annotation-1.2">
+  <originbase release="WASX" fe="SERV1" level="ff1136.05" components="j2ee.annotation.bundle"/>
+
+  <notes>
+  </notes>
+</releaseInfo>

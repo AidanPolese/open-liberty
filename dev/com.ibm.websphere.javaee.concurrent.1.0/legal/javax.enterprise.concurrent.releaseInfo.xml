@@ -1,0 +1,7 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="javax.enterprise.concurrent-1.0">
+  <originbase release="WASX" fe="SERV1" level="none" components="WAS.prereq.concurrent"/>
+
+  <notes>
+  </notes>
+</releaseInfo>

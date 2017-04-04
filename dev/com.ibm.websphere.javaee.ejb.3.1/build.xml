@@ -1,0 +1,9 @@
+<project name="com.ibm.websphere.javaee.ejb.3.1" default="build">
+    <property name="spec.name" value="ejb"/>
+    <property name="spec.marketing.version" value="3.1"/>
+
+    <import file="../ant_build/public_imports/spec_imports.xml"/>
+ 
+    <target name="package" depends="spec.package"/>
+    <target name="publishToImage" depends="spec.publishToImage" />    
+</project>

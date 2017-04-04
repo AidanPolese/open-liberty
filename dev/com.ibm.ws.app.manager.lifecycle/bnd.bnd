@@ -1,0 +1,14 @@
+-include= ~../cnf/resources/bnd/bundle.props
+-nouses=true
+bVersion=1.0
+
+Bundle-Name: WebSphere Application Manager Lifecycle
+Bundle-SymbolicName: com.ibm.ws.app.manager.lifecycle
+Bundle-Description: WebSphere Application Manager Lifecycle, version ${bVersion}
+
+Private-Package: com.ibm.ws.app.manager.lifecycle.internal
+
+Export-Package: com.ibm.wsspi.application.lifecycle
+
+-buildpath: \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

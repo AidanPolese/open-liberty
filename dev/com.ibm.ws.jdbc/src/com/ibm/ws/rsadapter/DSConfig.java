@@ -1,0 +1,532 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * Copyright IBM Corp. 2011, 2016
+ *
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
+ * U.S. Copyright Office.
+ */
+package com.ibm.ws.rsadapter;
+
+import java.sql.SQLException; 
+import java.sql.SQLNonTransientException;
+import java.util.Arrays; 
+import java.util.Collections;
+import java.util.List; 
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger; 
+
+import javax.sql.CommonDataSource;
+
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.ffdc.FFDCSelfIntrospectable; 
+import com.ibm.ws.jca.cm.ConnectorService;
+import com.ibm.ws.jdbc.internal.DataSourceDef;
+import com.ibm.ws.jdbc.internal.PropertyService;
+import com.ibm.ws.kernel.service.util.PrivHelper;
+import com.ibm.ws.rsadapter.spi.WSManagedConnectionFactoryImpl;
+import com.ibm.wsspi.kernel.service.utils.MetatypeUtils;
+import com.ibm.wsspi.resource.ResourceFactory;
+
+/**
+ * Represents the data source configuration.
+ */
+public class DSConfig implements FFDCSelfIntrospectable {
+    private static final TraceComponent tc = Tr.register(DSConfig.class, AdapterUtil.TRACE_GROUP, AdapterUtil.NLS_FILE);
+
+    // WebSphere data source property names and values
+    public static final String
+                    BEGIN_TRAN_FOR_SCROLLING_APIS = "beginTranForResultSetScrollingAPIs",
+                    BEGIN_TRAN_FOR_VENDOR_APIS = "beginTranForVendorAPIs",
+                    COMMIT_OR_ROLLBACK_ON_CLEANUP = "commitOrRollbackOnCleanup",
+                    CONNECTION_MANAGER_REF = "connectionManagerRef",
+                    CONNECTION_SHARING = "connectionSharing",
+                    CONTAINER_AUTH_DATA_REF = "containerAuthDataRef",
+                    ENABLE_CONNECTION_CASTING = "enableConnectionCasting",
+                    ENABLE_MULTITHREADED_ACCESS_DETECTION = "enableMultithreadedAccessDetection", // currently disabled in liberty profile
+                    JDBC_DRIVER_REF = "jdbcDriverRef",
+                    ON_CONNECT = "onConnect",
+                    QUERY_TIMEOUT = "queryTimeout",
+                    RECOVERY_AUTH_DATA_REF = "recoveryAuthDataRef",
+                    RESULTSET_UNUSABLE_WHEN_NO_MORE_RESULTS= "resultSetUnusableWhenNoMoreResults",
+                    STATEMENT_CACHE_SIZE = "statementCacheSize",
+                    SUPPLEMENTAL_JDBC_TRACE = "supplementalJDBCTrace",
+                    SYNC_QUERY_TIMEOUT_WITH_TRAN_TIMEOUT = "syncQueryTimeoutWithTransactionTimeout",
+                    TYPE = "type",
+                    VALIDATION_TIMEOUT = "validationTimeout";
+
+    /**
+     * List of dataSource properties.
+     */
+    public static final List<String> DATA_SOURCE_PROPS =
+                    Collections.unmodifiableList(Arrays.asList(
+                                                               BEGIN_TRAN_FOR_SCROLLING_APIS,
+                                                               BEGIN_TRAN_FOR_VENDOR_APIS,
+                                                               COMMIT_OR_ROLLBACK_ON_CLEANUP,
+                                                               CONNECTION_MANAGER_REF,
+                                                               CONNECTION_SHARING,
+                                                               CONTAINER_AUTH_DATA_REF,
+                                                               DataSourceDef.isolationLevel.name(),
+                                                               ENABLE_CONNECTION_CASTING,
+                                                               JDBC_DRIVER_REF,
+                                                               ON_CONNECT,
+                                                               QUERY_TIMEOUT,
+                                                               RECOVERY_AUTH_DATA_REF,
+                                                               STATEMENT_CACHE_SIZE,
+                                                               SUPPLEMENTAL_JDBC_TRACE,
+                                                               SYNC_QUERY_TIMEOUT_WITH_TRAN_TIMEOUT,
+                                                               DataSourceDef.transactional.name(),
+                                                               TYPE,
+                                                               VALIDATION_TIMEOUT
+                                                               ));
+
+    /**
+     * Count of initialized instances of this class. For the lightweight server only.
+     * 
+     */
+    private static final AtomicInteger NUM_INITIALIZED = new AtomicInteger();
+
+    // Data source implementation class names
+    public static final String
+                    ORACLE_UCP_DATASOURCE_CP_IMPL = "oracle.ucp.jdbc.PoolDataSourceImpl",
+                    ORACLE_UCP_DATASOURCE_XA_IMPL = "oracle.ucp.jdbc.PoolXADataSourceImpl";
+
+    /**
+     * Determines whether or not to enlist in a transaction for methods that scroll a result set.
+     */
+    public final boolean beginTranForResultSetScrollingAPIs;
+
+    /**
+     * Determines whether or not to enlist in a transaction when methods are invoked via the
+     * wrapper pattern.
+     */
+    public final boolean beginTranForVendorAPIs;
+
+    /**
+     * Class loader of the data source class.
+     */
+    public final ClassLoader classloader;
+
+    /**
+     * COMMIT_OR_ROLLBACK_ON_CLEANUP indicates whether we will rollback or commit on cleanup.
+     * 
+     * If the DB supports UOW detection this property will only be applied when we are in a DB UOW.
+     * Otherwise we will always apply this property.
+     * 
+     * If this property is not specified, any detected implicit transactions will be rolled back. Any
+     * undetected implicit transactions must be dealt with by the application.
+     */
+    public final CommitOrRollbackOnCleanup commitOrRollbackOnCleanup;
+
+    /**
+     * Internal identifier for this configuration, which is used to match connection requests.
+     */
+    private final int configID;
+
+    /**
+     * Determines how connections are matched for sharing.
+     */
+    public final ConnectionSharing connectionSharing;
+
+    /**
+     * Component with access to various core services needed for JDBC/connection management
+     */
+    public final ConnectorService connectorSvc;
+
+    /**
+     * Indicates to automatically create a dynamic proxy for interfaces implemented by the connection. 
+     */
+    public final boolean enableConnectionCasting;
+
+    /**
+     * Indicates whether or not to detect multithreaded access.
+     */
+    public final boolean enableMultithreadedAccessDetection;
+
+    /**
+     * Indicates if WAS connection pooling is enabled.
+     */
+    public final boolean enableWASConnectionPooling;
+
+    /**
+     * Iterator over data source properties. For use by constructor only.
+     */
+    private NavigableMap<String, Object> entries;
+
+    /**
+     * A data source property name/value pair. For use by constructor only.
+     */
+    private Map.Entry<String, Object> entry;
+
+    /**
+     * config.displayId of the data source.
+     */
+    public final String id;
+
+    /**
+     * Default isolation level for new connections.
+     */
+    public final int isolationLevel;
+
+    /**
+     * Indicates if the data source class is oracle.ucp.jdbc.PoolDataSourceImpl or oracle.ucp.jdbc.PoolXADataSourceImpl
+     */
+    public final boolean isUCP; 
+
+    /**
+     * JNDI name.
+     */
+    public final String jndiName;
+
+    /**
+     * Managed connection factory with this configuration.
+     */
+    private WSManagedConnectionFactoryImpl mcf;
+
+    /**
+     * List of SQL commands to execute once per newly established connection. Can be null if none are configured.
+     */
+    public final String[] onConnect;
+
+    /**
+     * Sets a default query timeout, which is the number of seconds (0 means infinite)
+     * which a SQL statement may execute before timing out. This default value is overridden
+     * during a JTA transaction if custom property syncQueryTimeoutWithTransactionTimeout is
+     * enabled. Default value is null (no default query timeout).
+     */
+    public final Integer queryTimeout;
+
+    /**
+     * Maximum cached statements per connection.
+     */
+    public final int statementCacheSize;
+
+    /**
+     * Whether or not supplemental JDBC tracing should be enabled
+     */
+    public final Boolean supplementalJDBCTrace;
+
+    /**
+     * Use the time remaining (if any) in a JTA transaction as the default query timeout
+     * for SQL statements. Default value is false.
+     */
+    public final boolean syncQueryTimeoutWithTransactionTimeout;
+    
+    /**
+     * Close the ResultSet wrapper if the jdbc driver (db2 jcc) implicitly closes the ResultSet
+     * Default value is false.
+     */
+    public final boolean resultSetUnusableWhenNoMoreResults;
+
+    /**
+     * Determines whether or not to participate in JTA transactions.
+     */
+    public final boolean transactional;
+
+    /**
+     * Used for timing out connection from the pool which are being validated.
+     */
+    public final int validationTimeout;
+    
+    /**
+     * The type of data source (interface class).
+     */
+    public final Class<? extends CommonDataSource> type;
+
+    /**
+     * JDBC driver vendor data source properties.
+     */
+    public final Properties vendorProps;
+
+    /**
+     * Constructor for modified configuration.
+     * 
+     * @param source configuration to copy from.
+     * @param wProps WebSphere data source properties
+     * @throws Exception if an error occurs.
+     */
+    public DSConfig(DSConfig source, NavigableMap<String, Object> wProps) throws Exception {
+        this(source.configID, source.id, source.jndiName, source.type, wProps, source.vendorProps,
+             source.mcf.getDataSourceClass(), source.connectorSvc, source.mcf);
+    }
+
+    /**
+     * Constructor for new configuration.
+     * 
+     * @param configID unique number identifying this configuration, null to generate one.
+     * @param id the id of the data source.
+     * @param jndi the JNDI name of the data source.
+     * @param ifc the type of data source.
+     * @param wProps WebSphere data source properties
+     * @param vProps JDBC driver vendor data source properties
+     * @param dsImplClass JDBC driver vendor class that provides the data source implementation
+     * @param connectorSvc connector service instance
+     * @param mcf managed connection factory
+     * @throws Exception if an error occurs
+     */
+    public DSConfig(Integer configID, String id, String jndi, Class<? extends CommonDataSource> ifc,
+                    NavigableMap<String, Object> wProps, Properties vProps,
+                    Class<?> dsImplClass, ConnectorService connectorSvc,
+                    WSManagedConnectionFactoryImpl mcf) throws Exception {
+        final boolean trace = TraceComponent.isAnyTracingEnabled();
+        if (trace && tc.isEntryEnabled())
+            Tr.entry(tc, getClass().getSimpleName(), new Object[] { jndi, wProps });
+
+        classloader = PrivHelper.getClassLoader(dsImplClass);
+        this.configID = configID == null ? NUM_INITIALIZED.incrementAndGet() : configID;
+        this.connectorSvc = connectorSvc;
+        this.id = id;
+        jndiName = jndi;
+        this.mcf = mcf;
+        type = ifc;
+        vendorProps = vProps;
+
+        String dsImplClassName = dsImplClass.getName();
+        isUCP = ORACLE_UCP_DATASOURCE_CP_IMPL.equals(dsImplClassName)
+                        || ORACLE_UCP_DATASOURCE_XA_IMPL.equals(dsImplClassName);
+        enableWASConnectionPooling = !isUCP;
+        if (!enableWASConnectionPooling)
+            Tr.info(tc, "WAS_CONNECTION_POOLING_DISABLED_INFO");
+
+        entries = wProps;
+        entry = entries.pollFirstEntry();
+
+        beginTranForResultSetScrollingAPIs = remove(BEGIN_TRAN_FOR_SCROLLING_APIS, true);
+        beginTranForVendorAPIs = remove(BEGIN_TRAN_FOR_VENDOR_APIS, true);
+        CommitOrRollbackOnCleanup commitOrRollback = remove(COMMIT_OR_ROLLBACK_ON_CLEANUP, null, CommitOrRollbackOnCleanup.class);
+        connectionSharing = remove(CONNECTION_SHARING, ConnectionSharing.MatchOriginalRequest, ConnectionSharing.class);
+        enableConnectionCasting = remove(ENABLE_CONNECTION_CASTING, false);
+        enableMultithreadedAccessDetection = false;
+        isolationLevel = remove(DataSourceDef.isolationLevel.name(), -1, -1, null, -1, 0, 1, 2, 4, 8, 16, 4096);
+        onConnect = remove(ON_CONNECT, (String[]) null);
+        queryTimeout = remove(QUERY_TIMEOUT, (Integer) null, 0, TimeUnit.SECONDS);
+        resultSetUnusableWhenNoMoreResults = remove(RESULTSET_UNUSABLE_WHEN_NO_MORE_RESULTS,false);
+        statementCacheSize = remove(STATEMENT_CACHE_SIZE, enableWASConnectionPooling ? 10 : 0, 0, null);
+        supplementalJDBCTrace = remove(SUPPLEMENTAL_JDBC_TRACE, (Boolean) null);
+        syncQueryTimeoutWithTransactionTimeout = remove(SYNC_QUERY_TIMEOUT_WITH_TRAN_TIMEOUT, false);
+        transactional = remove(DataSourceDef.transactional.name(), true);
+        validationTimeout = remove(VALIDATION_TIMEOUT, -1, 0, TimeUnit.SECONDS);
+
+        commitOrRollbackOnCleanup = commitOrRollback == null
+                        ? (transactional ? null : CommitOrRollbackOnCleanup.rollback)
+                                        : commitOrRollback;
+
+        if (trace && tc.isDebugEnabled() && entry != null)
+            Tr.debug(this, tc, "unknown attributes: " + entries);
+        // TODO: when we have a stricter variant of onError, apply it to unrecognized attributes
+        //while (entry != null) {
+        //    SQLException ex = AdapterUtil.ignoreWarnOrFail(tc, null, SQLException.class, "PROP_NOT_FOUND", jndiName == null ? id : jndiName, entry.getKey());
+        //    if (ex != null)
+        //        throw ex;
+        //    entry = entries.pollFirstEntry();
+        //}
+        entries = null;
+
+        if (trace && tc.isEntryEnabled())
+            Tr.exit(tc, getClass().getSimpleName(), this);
+    }
+
+    /**
+     * Returns an identifier for this configuration, which can be used to match connection requests.
+     * This value is only non-zero in the lightweight server.
+     * 
+     * @return an identifier for this configuration.
+     */
+    public final int getConfigID() {
+        return configID;
+    }
+
+    /**
+     * Returns the managed connection factory.
+     * 
+     * @return the managed connection factory.
+     */
+    public final WSManagedConnectionFactoryImpl getManagedConnectionFactory() {
+        return mcf;
+    }
+
+    /**
+     * Returns information to log on first failure.
+     * 
+     * @return information to log on first failure.
+     */
+    @Override
+    public String[] introspectSelf() {
+        @SuppressWarnings("unchecked")
+        List<?> nameValuePairs = Arrays.asList(
+                                               BEGIN_TRAN_FOR_SCROLLING_APIS, beginTranForResultSetScrollingAPIs,
+                                               BEGIN_TRAN_FOR_VENDOR_APIS, beginTranForVendorAPIs,
+                                               COMMIT_OR_ROLLBACK_ON_CLEANUP, commitOrRollbackOnCleanup,
+                                               CONNECTION_SHARING, connectionSharing,
+                                               DataSourceDef.isolationLevel.name(), isolationLevel,
+                                               ResourceFactory.JNDI_NAME, jndiName,
+                                               ENABLE_CONNECTION_CASTING, enableConnectionCasting,
+                                               QUERY_TIMEOUT, queryTimeout,
+                                               RESULTSET_UNUSABLE_WHEN_NO_MORE_RESULTS, resultSetUnusableWhenNoMoreResults,
+                                               STATEMENT_CACHE_SIZE, statementCacheSize,
+                                               SUPPLEMENTAL_JDBC_TRACE, supplementalJDBCTrace,
+                                               SYNC_QUERY_TIMEOUT_WITH_TRAN_TIMEOUT, syncQueryTimeoutWithTransactionTimeout,
+                                               DataSourceDef.transactional.name(), transactional
+                                               );
+        List<?> valuesOnly = Arrays.asList(
+                                           classloader,
+                                           enableWASConnectionPooling,
+                                           isUCP,
+                                           type
+                                           );
+        return new String[] {
+                             toString(),
+                             nameValuePairs.toString(),
+                             valuesOnly.toString(),
+                             PropertyService.hidePasswords(vendorProps).toString() };
+    }
+
+    /**
+     * Remove properties up to and including the specified property. Return the property if found.
+     * 
+     * @param name name of the property.
+     * @param defaultValue default value to use if not found.
+     * @return value of the property if found. Otherwise the default value.
+     */
+    private Boolean remove(String name, Boolean defaultValue) throws SQLException {
+        Boolean value = null;
+
+        for (int diff; value == null && entry != null && (diff = entry.getKey().compareTo(name)) <= 0; entry = entries.pollFirstEntry()) {
+            if (diff == 0) // matched
+                value = entry.getValue() instanceof Boolean ? (Boolean) entry.getValue()
+                                : Boolean.parseBoolean((String) entry.getValue());
+            else {
+                // TODO: when we have a stricter variant of onError, apply it to unrecognized attributes
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                    Tr.debug(this, tc, "unrecognized attribute: " + entry.getKey());
+                //SQLException ex = AdapterUtil.ignoreWarnOrFail(tc, null, SQLException.class, "PROP_NOT_FOUND", jndiName == null ? id : jndiName, entry.getKey());
+                //if (ex != null)
+                //    throw ex;
+            }
+        }
+
+        return value == null ? defaultValue : value;
+    }
+
+    /**
+     * Remove properties up to and including the specified property. Return the property if found.
+     * 
+     * @param name name of the property.
+     * @param defaultValue default value to use if not found.
+     * @param type the enumeration class.
+     * @return value of the property if found. Otherwise the default value.
+     * @throws Exception if an error occurs.
+     */
+    private <E extends Enum<E>> E remove(String name, E defaultValue, Class<E> type) throws Exception {
+        E value = null;
+
+        for (int diff; value == null && entry != null && (diff = entry.getKey().compareTo(name)) <= 0; entry = entries.pollFirstEntry()) {
+            if (diff == 0) // matched
+                try {
+                    value = (E) E.valueOf(type, (String) entry.getValue());
+                } catch (Exception x) {
+                    x = connectorSvc.ignoreWarnOrFail(null, x, x.getClass(), "UNSUPPORTED_VALUE_J2CA8011", entry.getValue(), name, jndiName == null ? id : jndiName);
+                    if (x != null)
+                        throw x;
+                }
+            else {
+                // TODO: when we have a stricter variant of onError, apply it to unrecognized attributes
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                    Tr.debug(this, tc, "unrecognized attribute: " + entry.getKey());
+                //SQLException ex = AdapterUtil.ignoreWarnOrFail(tc, null, SQLException.class, "PROP_NOT_FOUND", jndiName == null ? id : jndiName, entry.getKey());
+                //if (ex != null)
+                //    throw ex;
+            }
+        }
+
+        return value == null ? defaultValue : value;
+    }
+
+    /**
+     * Remove properties up to and including the specified property. Return the property if found.
+     * 
+     * @param name name of the property.
+     * @param defaultValue default value to use if not found.
+     * @param min minimum permitted value
+     * @param units units for duration type. Null if not a duration.
+     * @param range range of permitted values, in ascending order. If unspecified, then the range is min..Integer.MAX_VALUE
+     * @return value of the property if found. Otherwise the default value.
+     */
+    private Integer remove(String name, Integer defaultValue, int min, TimeUnit units, int... range) throws Exception {
+        Object value = null;
+
+        for (int diff; value == null && entry != null && (diff = entry.getKey().compareTo(name)) <= 0; entry = entries.pollFirstEntry()) {
+            if (diff == 0) // matched
+                value = entry.getValue();
+            else {
+                // TODO: when we have a stricter variant of onError, apply it to unrecognized attributes
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                    Tr.debug(this, tc, "unrecognized attribute: " + entry.getKey());
+                //SQLException ex = AdapterUtil.ignoreWarnOrFail(tc, null, SQLException.class, "PROP_NOT_FOUND", jndiName == null ? id : jndiName, entry.getKey());
+                //if (ex != null)
+                //    throw ex;
+            }
+        }
+
+        long l;
+        if (value == null)
+            return defaultValue;
+        else if (value instanceof Number)
+            l = ((Number) value).longValue();
+        else
+            try {
+                l = units == null ? Integer.parseInt((String) value)
+                                : MetatypeUtils.evaluateDuration((String) value, units);
+            } catch (Exception x) {
+                x = connectorSvc.ignoreWarnOrFail(null, x, x.getClass(), "UNSUPPORTED_VALUE_J2CA8011", value, name, jndiName == null ? id : jndiName);
+                if (x == null)
+                    return defaultValue;
+                else
+                    throw x;
+            }
+
+        if (l < min || l > Integer.MAX_VALUE || range.length > 0 && Arrays.binarySearch(range, (int) l) < 0) {
+            SQLNonTransientException x = connectorSvc.ignoreWarnOrFail
+                            (null, null, SQLNonTransientException.class, "UNSUPPORTED_VALUE_J2CA8011", value, name, jndiName == null ? id : jndiName);
+            if (x == null)
+                return defaultValue;
+            else
+                throw x;
+        }
+
+        return (int) l;
+    }
+
+    /**
+     * Remove properties up to and including the specified property. Return the property if found.
+     * 
+     * @param name name of the property.
+     * @param defaultValue default value to use if not found.
+     * @return value of the property if found. Otherwise the default value.
+     */
+    private String[] remove(String name, String[] defaultValue) throws SQLException {
+        String[] value = null;
+
+        for (int diff; value == null && entry != null && (diff = entry.getKey().compareTo(name)) <= 0; entry = entries.pollFirstEntry()) {
+            if (diff == 0) // matched
+                value = entry.getValue() instanceof String[] ? (String[]) entry.getValue() : new String[] { (String) entry.getValue() };
+            else {
+                // TODO: when we have a stricter variant of onError, apply it to unrecognized attributes
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                    Tr.debug(this, tc, "unrecognized attribute: " + entry.getKey());
+                //SQLException ex = AdapterUtil.ignoreWarnOrFail(tc, null, SQLException.class, "PROP_NOT_FOUND", jndiName == null ? id : jndiName, entry.getKey());
+                //if (ex != null)
+                //    throw ex;
+            }
+        }
+
+        return value == null ? defaultValue : value;
+    }
+}

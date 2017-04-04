@@ -1,0 +1,36 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+#
+# ORIGINS: 27         (used for IBM originated files)
+#
+# Caution: because some text editors automatically convert
+# consecutive runs of spaces to tabs, use the Java "\ " escape
+# sequence to represent each space in a run of multiple spaces.
+#
+# translator:
+# Translate words on the right hand side of the = sign.
+# Do not translate {0}, {1}, %1, %2 etc.
+# Do NOT translate any words when they START with: '-
+# Do NOT translate any words when they START with: @
+# Preserve all spaces after a backslash (\) even at the end of a line.
+#
+# NLS_MESSAGEFORMAT_ALL
+#
+#CMVCPATHNAME com.ibm.ws.jaxws.ejb/resources/com/ibm/ws/jaxb/tools/internal/resources/JaxbToolsMessages.nlsprops
+#ISMESSAGEFILE TRUE
+#COMPONENTPREFIX CWWKW
+#COMPONENTNAMEFOR CWWKW WebSphere JAXB Tools Code
+#RANGE 0700 - 0799
+#
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+
+# -------------------------------------------------------------------------------------------------
+
+error.parameter.target.missed=CWWKW0700E: No se ha especificado el par\u00e1metro de destino obligatorio.
+error.parameter.target.missed.explanation=Si se especifica el par\u00e1metro de destino, las aplicaciones existentes pueden volver a generarse sin cambiar su comportamiento cuando el nivel de especificaci\u00f3n JAXB que soporta Liberty Profile se actualiza.
+error.parameter.target.missed.useraction=Especifique el nivel de especificaci\u00f3n JAXB al que se ajusta el c\u00f3digo generado. El valor v\u00e1lido es 2.0, 2.1, o 2.2.

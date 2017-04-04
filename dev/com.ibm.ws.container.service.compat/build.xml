@@ -1,0 +1,9 @@
+<project name="com.ibm.ws.container.service.compat" default="build">
+  <!-- Indicate that the NLS messages come from tWAS and hence shouldn't be duplicated in the Infocenter -->
+  <property name="nlsxml.files.need.copying" value="false"/>
+    
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  
+  <target name="post-compile">
+  </target>
+</project>

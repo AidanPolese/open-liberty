@@ -1,0 +1,11 @@
+<project name="com.ibm.websphere.javaee.transaction.1.2" default="build">
+    <property name="spec.name" value="transaction"/>
+    <property name="spec.marketing.version" value="1.2"/>
+    <property name="spec.javadoc.name" value="javax.transaction-api-1.2-javadoc.jar"/>
+    <property name="bundle.version" value="1.0"/>
+
+    <import file="../ant_build/public_imports/spec_imports.xml"/>
+ 
+    <target name="package" depends="spec.package"/>
+    <target name="publishToImage" depends="spec.publishToImage" />    
+</project>

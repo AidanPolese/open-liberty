@@ -1,0 +1,15 @@
+<project name="com.ibm.ws.monitor-api" default="buildApiSpi">
+  <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+       Top level builds use this task explicity.  Changing the
+       default will create an incompatibility between a default
+       project build and a top level build. -->
+       
+  <!-- IBM-API required properties. -->
+  <property name="bundleName" value="WebSphere Monitor API" />
+  <property name="api.ibm.symbolic.suffix" value="monitor" />
+  <property name="api.ibm.version" value="1.1"/>  
+  <property name="feature.project" value="com.ibm.websphere.appserver.monitor-1.0" />
+        
+  <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+ 
+</project>

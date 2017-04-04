@@ -1,0 +1,5 @@
+<project name="com.ibm.ws.jca.cm" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  <property name="instrument.ffdc" value="false" />
+  <property name="no.trace.instrumentation" value="true" />
+</project>

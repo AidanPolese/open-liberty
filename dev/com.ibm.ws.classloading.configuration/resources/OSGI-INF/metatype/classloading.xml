@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed Materials - Property of IBM
+
+  "Restricted Materials of IBM"
+
+  Copyright IBM Corp. 2011 All Rights Reserved.
+
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+-->
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0" localization="OSGI-INF/l10n/classloading" xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0">
+
+  <OCD name="%classloading.config.name" description="%classloading.config.desc"
+       id="com.ibm.ws.classloading.global"
+       ibm:supportExtensions="true" ibm:alias="classloading">
+    
+     <AD name="%usejarurls" description="%usejarurls.desc"  
+        id="useJarUrls" 
+        required="false" 
+        default="false"
+        type="Boolean"      
+    />
+   </OCD>
+   
+   <Designate pid="com.ibm.ws.classloading.global">
+      <Object ocdref="com.ibm.ws.classloading.global"/>
+  </Designate>
+   
+  
+</metatype:MetaData>

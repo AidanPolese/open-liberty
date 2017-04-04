@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Unified Expression Language Implementation" 
+            projectURL="http://tomcat.apache.org/" 
+            version="3.0" revision="" 
+            license-type="Apachev2" 
+            contact="not@us.ibm.com" 
+            encryption="no">      
+   </project>
+   
+   <clearencehistory/>
+   
+   <notes>
+   The source was taken from http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.15/src/apache-tomcat-8.0.15-src.zip
+   </notes>   
+</ossc>

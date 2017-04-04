@@ -1,0 +1,43 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-bindings-soap-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+
+XML_STREAM_EXC=Eroare la citirea XMLStreamReader.
+XML_WRITE_EXC=Eroare la scrierea \u00een XMLStreamWriter.
+COULD_NOT_VALIDATE_SOAP_HEADER_CAUSED_BY=Nu a putut valida antetul soap cauzat de: {0}: {1}.
+MUST_UNDERSTAND=Anteturi MustUnderstand: {0} nu sunt \u00een\u0163elese.
+PARSER_EXC=DOM DocumentBuilder nu a putut fi creat.
+NO_OPERATION=Nu exist\u0103 o asemenea opera\u0163ie: {0}
+ATTACHMENT_IO=Ata\u015fament excep\u0163ie I/E: {0}
+INVALID_VERSION="{0}", spa\u0163iul nume din elementul "{1}", nu este o versiune SOAP valid\u0103.
+INVALID_11_VERSION=Un mesaj SOAP 1.2 nu este valid atunci c\u00e2nd este trimis doar c\u0103tre un punct final de tip SOAP 1.1.
+INVALID_FAULT=Con\u0163inut de defect SOAP invalid
+NO_NAMESPACE=Nici un spa\u0163iu nume \u00een elementul "{0}". Trebuie sa trimite\u0163i o cerere SOAP.
+BP_2211_RPCLIT_CANNOT_BE_NULL=Partea {0} nu poate fi scris\u0103. P\u0103r\u0163ile componente RPC/Literal nu pot fi null. (WS-I BP R2211)
+UNKNOWN_RPC_LIT_PART=Elementul {0} a fost g\u0103sit, dar partea component\u0103 RPC/Literal potrivit\u0103 nu a putut fi g\u0103sit\u0103
+SOAP_ACTION_MISMATCH=Ac\u0163iunea SOAPAction {0} dat\u0103 nu se potrive\u015fte cu nici o opera\u0163ie.

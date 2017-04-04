@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Yoko Corba Spec"
+            projectURL="https://github.ibm.com/was-liberty-iiop/geronimo-yoko"
+            version="2.4" revision=""
+            license-type="Apachev2"
+            contact="neil_richards@uk.ibm.com"
+            encryption="no">
+      <download location="https://github.ibm.com/was-liberty-iiop/geronimo-yoko/commit/c00a8a2b90321c7fa9dab853f2148a6bda25e348">
+         <file basename="org.apache.yoko.corba.spec-1.5.SNAPSHOT.jar" checksum="e07b7c73671b6cc82394dea66ec6434f"/>
+      </download>
+   </project>
+
+    <clearencehistory/>
+</ossc>

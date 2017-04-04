@@ -1,0 +1,17 @@
+# For information on bnd syntax, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Java Batch RI SPI 
+Bundle-SymbolicName: com.ibm.jbatch.spi
+Bundle-Description: Java Batch RI SPI (for configuration by host environment)
+
+WS-TraceGroup: wsbatch
+
+Export-Package: com.ibm.jbatch.spi;provide:=true
+
+Private-Package: com.ibm.jbatch.spi
+
+-buildpath: \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

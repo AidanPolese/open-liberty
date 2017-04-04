@@ -1,0 +1,5 @@
+<project name="com.ibm.ws.jpa.container.core" default="build">
+	<import file="../ant_build/public_imports/standard_imports.xml"/>
+	<!-- Disable trace FFDC instrumentation -->
+	<target name="post-compile"/>
+</project>

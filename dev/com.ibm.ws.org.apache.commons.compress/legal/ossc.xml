@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Commons Compress" 
+            projectURL="http://commons.apache.org" 
+            version="1.10" revision="" 
+            license-type="Apachev2" 
+            contact="alasdair@us.ibm.com" 
+            encryption="no">
+      <download location="http://mirrors.koehn.com/apache//commons/compress/binaries/commons-compress-1.10-bin.zip">
+         <file basename="org.apache.commons.compress-1.10.jar" checksum="c1169464be26d435f268f03918b6baf7"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+</ossc>

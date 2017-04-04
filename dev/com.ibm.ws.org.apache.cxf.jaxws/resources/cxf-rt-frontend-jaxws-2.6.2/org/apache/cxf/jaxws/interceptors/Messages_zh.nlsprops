@@ -1,0 +1,38 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+INVOCATION_TARGET_EXC = \u672a\u80fd\u8c03\u7528 getFaultInfo \u65b9\u6cd5\u3002
+NO_GETFAULTINFO_METHOD = \u4f7f\u7528 getFaultInfo \u65b9\u6cd5\u65f6\u9700\u8981 JAX-WS \u6545\u969c\u3002
+COULD_NOT_INVOKE = \u672a\u80fd\u5bf9\u5f02\u5e38\u8c03\u7528 getFaultInfo \u65b9\u6cd5\u3002
+DISPATCH_OBJECT_CANNOT_BE_NULL = \u5411\u5206\u6d3e\u7f16\u7ec4\u4f20\u9012\u4e86\u7a7a\u5bf9\u8c61
+EXCEPTION_WRITING_OBJECT = \u5c06\u5206\u6d3e\u5bf9\u8c61\u7f16\u7ec4\u5230\u6d41\u4e2d\u65f6\u53d1\u751f\u5f02\u5e38
+ATTACHMENT_NOT_SUPPORTED = \u7c7b\u578b\u4e3a {0} \u7684\u9644\u4ef6\u4e0d\u53d7\u652f\u6301\u3002
+DISPATCH_OBJECT_NOT_SUPPORTED_SOAPBINDING = {0} \u5728\u5e26\u6709 SOAP/HTTP \u7ed1\u5b9a\u7684 {1} \u65b9\u5f0f\u4e2d\u65e0\u6548\u3002
+DISPATCH_OBJECT_NOT_SUPPORTED_XMLBINDING = {0} \u5728\u5e26\u6709 XML/HTTP \u7ed1\u5b9a\u7684 {1} \u65b9\u5f0f\u4e2d\u65e0\u6548\u3002
+EXCEPTION_WHILE_WRITING_FAULT = \u5199\u5165\u6545\u969c\u65f6\u53d1\u751f\u4e86\u5f02\u5e38\u3002
+CANNOT_SET_HOLDER_OBJECTS = \u8f93\u5165\u6d88\u606f\u548c\u8f93\u51fa\u6d88\u606f\u7684\u6d88\u606f\u5185\u5bb9\u5217\u8868\u76f8\u540c\uff0cCXF \u65e0\u6cd5\u5c06\u5360\u4f4d\u7b26\u5bf9\u8c61\u8bbe\u7f6e\u5230\u8f93\u51fa\u6d88\u606f\u7684\u6d88\u606f\u5185\u5bb9\u5217\u8868\u4e2d\u3002

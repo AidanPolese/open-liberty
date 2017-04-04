@@ -1,0 +1,43 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-bindings-soap-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+
+XML_STREAM_EXC=Errore durante la lettura di XMLStreamReader.
+XML_WRITE_EXC=Errore durante la scrittura su XMLStreamWriter.
+COULD_NOT_VALIDATE_SOAP_HEADER_CAUSED_BY=Impossibile convalidare l''intestazione soap a causa di: {0}: {1}.
+MUST_UNDERSTAND=Le intestazioni MustUnderstand: {0} non sono comprensibili.
+PARSER_EXC=Impossibile creare DocumentBuilder DOM.
+NO_OPERATION=Nessuna operazione di questo tipo: {0}
+ATTACHMENT_IO=Eccezione IO dell''allegato: {0}
+INVALID_VERSION="{0}", lo spazio dei nomi sull''elemento "{1}", non \u00e8 una versione SOAP valida.
+INVALID_11_VERSION=Un messaggio SOAP 1.2 non \u00e8 valido quando viene inviato ad un endpoint solo SOAP 1.1.
+INVALID_FAULT=Contenuto errore SOAP non valido
+NO_NAMESPACE=Nessuno spazio dei nomi sull''elemento "{0}". \u00c8 necessario inviare una richiesta SOAP.
+BP_2211_RPCLIT_CANNOT_BE_NULL=Impossibile scrivere la parte {0}. Le parti RPC/letterali non possono essere null. (WS-I BP R2211)
+UNKNOWN_RPC_LIT_PART=\u00c8 stato trovato l''elemento {0}, ma non \u00e8 stata trovata la parte RPC/letterale corrispondente
+SOAP_ACTION_MISMATCH=LSOAPAction {0} non corrispondente a un''operazione.

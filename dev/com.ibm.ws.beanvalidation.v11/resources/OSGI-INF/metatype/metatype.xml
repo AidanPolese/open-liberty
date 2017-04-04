@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed Materials - Property of IBM
+
+  "Restricted Materials of IBM"
+
+  Copyright IBM Corp. 2015 All Rights Reserved.
+
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+-->
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0" 
+                   xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
+                   localization="OSGI-INF/l10n/metatype">
+
+	<OCD description="internal use only" name="internal" 
+         id="com.ibm.ws.beanvalidation.service.ValidationReleasableFactory">
+
+        <AD name="internal" description="internal use only"
+            id="type" required="true" type="String"/>
+    </OCD>
+    
+    <Designate factoryPid="com.ibm.ws.beanvalidation.service.ValidationReleasableFactory">
+        <Object ocdref="com.ibm.ws.beanvalidation.service.ValidationReleasableFactory"/>
+    </Designate>
+    
+    <OCD name="internal" description="internal use only"
+         id="com.ibm.ws.beanvalidation.v11.config.internal.ValidationConfigurationV11FactoryImpl">
+
+        <AD name="internal" description="internal use only"
+            id="ValidationReleasableFactory" required="true" type="String" cardinality="100"
+            ibm:type="pid" ibm:reference="com.ibm.ws.beanvalidation.service.ValidationReleasableFactory" default="*" ibm:final="true"/> 
+
+        <AD id="ValidationReleasableFactory.cardinality.minimum" name="internal"  description="internal use only" 
+            type="String" required="true" default="${count(ValidationReleasableFactory)}"/>
+    </OCD>
+    
+    <Designate pid="com.ibm.ws.beanvalidation.v11.config.internal.ValidationConfigurationV11FactoryImpl">
+        <Object ocdref="com.ibm.ws.beanvalidation.v11.config.internal.ValidationConfigurationV11FactoryImpl"/>
+    </Designate>
+    
+</metatype:MetaData>

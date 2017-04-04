@@ -1,0 +1,39 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.5
+
+Bundle-Name: Collective APIs and SPIs
+Bundle-Description: Collective APIs and SPIs, version=${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.collective
+Bundle-ActivationPolicy: lazy
+
+WS-TraceGroup: Collective
+
+Export-Package: \
+  com.ibm.websphere.collective.controller, \
+  com.ibm.websphere.collective.repository, \
+  com.ibm.websphere.scaling.manager.stack, \
+  com.ibm.ws.collective.member.heartbeat, \
+  com.ibm.ws.collective.member.security, \
+  com.ibm.ws.collective.security, \
+  com.ibm.ws.collective.utils, \
+  com.ibm.wsspi.collective.member.connection, \
+  com.ibm.wsspi.collective.repository, \
+  com.ibm.wsspi.collective.repository.publisher, \
+  com.ibm.wsspi.stackManager
+
+Private-Package: \
+  com.ibm.wsspi.collective.internal.resources
+  
+-dsannotations: \
+  com.ibm.wsspi.collective.repository.RepositoryConnectionFactory
+
+instrument.classesExcludes: com/ibm/wsspi/collective/internal/resources/*.class
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging,\
+	com.ibm.websphere.appserver.spi.kernel.service,\
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0,\
+	com.ibm.wsspi.org.osgi.service.event.1.3.1, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

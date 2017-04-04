@@ -1,0 +1,4 @@
+<server>
+    <dataSource id="DefaultDataSource" javaCompDefaultName="DefaultDataSource" service.ranking="100">
+    </dataSource>
+</server>

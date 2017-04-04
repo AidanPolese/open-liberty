@@ -1,0 +1,19 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2012, 2013.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.websphere.wim.util/resources/com/ibm/websphere/wim/util/resources/WebsphereWimUtilMessages.nlsprops
+#COMPONENTPREFIX CWIML
+#COMPONENTNAMEFOR Virtual Member Manager wim utilities 
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: Profile Manager: 1000-1999
+
+GENERIC=CWIML1999E: Impossibile completare l''operazione del registro utente. Si \u00e8 verificato un errore di runtime durante l''elaborazione: {0}
+GENERIC.explanation=Il programma ha rilevato l'errore specificato durante l'operazione.
+GENERIC.useraction= Esaminare i log per determinare la causa di questo errore e intraprendere l'azione appropriata.

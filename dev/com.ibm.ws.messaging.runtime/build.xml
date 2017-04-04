@@ -1,0 +1,7 @@
+<project name="com.ibm.ws.messaging.runtime" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml" />
+  <import file="../ant_build/public_imports/sib_imports.xml" />
+  <!-- Disable trace/ffdc injection as it is hard-coded in this project -->
+  <property name="no.trace.instrumentation" value="true" />
+  <target name="findbugs" />
+</project>

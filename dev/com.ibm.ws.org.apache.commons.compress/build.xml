@@ -1,0 +1,4 @@
+<project name="com.ibm.ws.org.apache.commons.compress" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+</project>

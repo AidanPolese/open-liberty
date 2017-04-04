@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Jasper EL" 
+            projectURL="" 
+            version="2.2" revision="" 
+            license-type="Apachev2" 
+            contact="rvennam@us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.build/botp/WASX.SERV1/test/ee1315.02.linux/linux/zipper/fe.zip">
+         <file basename="jasper-el.jar" checksum="30890b5919b0ececb9082a02a791c45f"/>
+      </download>
+   </project>
+   
+   <notes>
+   The download location is the FE.zip that includes the C:\dev\WASX\bld\SERV1\ws\code\prereq.elimpl\build\lib\jasper-el.jar,
+   which has then been renamed.
+   
+   Classes in org.apche.japser.el move to jsp-2.2 under same package name.
+   </notes>
+
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8.5 and has been cleared previously by WAS v8.5
+   </clearencehistory>
+</ossc>

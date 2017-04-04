@@ -1,0 +1,34 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+NO_MATCHING_BEAN_MSG = ID \u304c {0} \u306e Bean \u306e\u5b9a\u7fa9\u3092\u898b\u3064\u3051\u308b\u3053\u3068\u304c\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002\u30a4\u30f3\u30b8\u30a7\u30af\u30b7\u30e7\u30f3\u306f\u5b9f\u884c\u3055\u308c\u307e\u305b\u3093\u3002
+COULD_NOT_DETERMINE_BEAN_NAME_MSG = \u30af\u30e9\u30b9 {0} \u306e\u30a4\u30f3\u30b9\u30bf\u30f3\u30b9\u306e Bean \u540d\u3092\u5224\u5225\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002
+ERROR_DETERMINING_BEAN_NAME_EXC = Bean \u540d\u306e\u5224\u5225\u306b\u5931\u6557\u3057\u307e\u3057\u305f\u3002
+JAXB_PROPERTY_EDITOR_EXC = \u30d7\u30ed\u30d1\u30c6\u30a3\u30fc\u30fb\u30a8\u30c7\u30a3\u30bf\u30fc\u306f\u30a8\u30ec\u30e1\u30f3\u30c8 {0} \u306e\u30d0\u30a4\u30f3\u30c9\u306b\u5931\u6557\u3057\u307e\u3057\u305f\u3002
+WILDCARD_BEAN_ID_WITH_NO_CLASS_MSG = ID \u304c {0} \u306e\u3001\u300c*\u300d\u307e\u305f\u306f\u30ef\u30a4\u30eb\u30c9\u30ab\u30fc\u30c9\u3092\u4f7f\u7528\u3059\u308b\u69cb\u6210 Bean \u306b\u306f\u3001\u30af\u30e9\u30b9\u5c5e\u6027\u304c\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002
+ONE_WILDCARD_BEAN_ID_PER_CLASS_MSG = ID \u304c {0} \u306e\u30ef\u30a4\u30eb\u30c9\u30ab\u30fc\u30c9\u69cb\u6210 Bean \u306f\u3001\u30af\u30e9\u30b9 {1} \u306b\u65e2\u306b\u5b58\u5728\u3057\u307e\u3059\u3002 ID \u304c {2} \u306e\u30ef\u30a4\u30eb\u30c9\u30ab\u30fc\u30c9 Bean \u306f\u7121\u8996\u3055\u308c\u307e\u3059\u3002  

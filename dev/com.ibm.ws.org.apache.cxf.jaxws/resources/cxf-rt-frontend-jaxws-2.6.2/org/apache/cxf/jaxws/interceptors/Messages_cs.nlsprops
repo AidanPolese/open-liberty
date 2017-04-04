@@ -1,0 +1,38 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+INVOCATION_TARGET_EXC = Nelze vyvolat metodu getFaultInfo.
+NO_GETFAULTINFO_METHOD = Pro chyby JAX-WS je vy\u017eadov\u00e1na metoda getFaultInfo.
+COULD_NOT_INVOKE = P\u0159i v\u00fdjimce nelze vyvolat metodu getFaultInfo.
+DISPATCH_OBJECT_CANNOT_BE_NULL = Do za\u0159azov\u00e1n\u00ed odbaven\u00ed byl p\u0159ed\u00e1n objekt s hodnotou null.
+EXCEPTION_WRITING_OBJECT = Do\u0161lo k v\u00fdjimce p\u0159i za\u0159azov\u00e1n\u00ed objektu odbaven\u00ed do proudu.
+ATTACHMENT_NOT_SUPPORTED = P\u0159\u00edlohy typu {0} nejsou podporov\u00e1ny.
+DISPATCH_OBJECT_NOT_SUPPORTED_SOAPBINDING = Objekt {0} je v re\u017eimu {1} s vazbou SOAP/HTTP neplatn\u00fd.
+DISPATCH_OBJECT_NOT_SUPPORTED_XMLBINDING = Objekt {0} je v re\u017eimu {1} s vazbou XML/HTTP neplatn\u00fd.
+EXCEPTION_WHILE_WRITING_FAULT = Do\u0161lo k v\u00fdjimce p\u0159i z\u00e1pisu chyby.
+CANNOT_SET_HOLDER_OBJECTS = Seznam obsahu vstupn\u00ed i v\u00fdstupn\u00ed zpr\u00e1vy je stejn\u00fd, CXF nem\u016f\u017ee nastavit objekt dr\u017eitele do seznamu obsahu odchoz\u00ed zpr\u00e1vy.

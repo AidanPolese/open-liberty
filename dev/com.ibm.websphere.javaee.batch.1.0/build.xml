@@ -1,0 +1,17 @@
+<project name="com.ibm.websphere.javaee.batch.1.0" default="build">
+	
+    <property name="spec.name" value="batch"/>
+    <property name="spec.marketing.version" value="1.0"/>
+    <property name="spec.javadoc.name" value="javax.batch-api-1.0-javadoc.jar"/>
+	
+	<import file="../ant_build/public_imports/spec_imports.xml"/>
+	
+		<!-- Since this PartitionPlanImpl class is in the spec with the bug, let's ignore it -->
+	<property name="skip.findbugs" value="true"/>
+	<property name="no.trace.instrumentation" value="true" />
+	
+    <target name="package" depends="spec.package"/>
+    <target name="publishToImage" depends="spec.publishToImage" />
+  	
+	<!--<target name="post-compile" />-->
+</project>

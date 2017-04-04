@@ -1,0 +1,6 @@
+-include= jar:${fileuri;lib/commons-digester-1.8.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+
+-includeresource: \
+   @lib/commons-digester-1.8.jar
+
+-buildpath: lib/commons-digester-1.8.jar;version=file

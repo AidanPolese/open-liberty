@@ -1,0 +1,8 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="javax.jms-2.0" fe="SERV1" level="cf021143.02" components="prereq.jms"/>
+
+  <notes>
+j2ee.jms.jar renamed to com.ibm.ws.javax.jms_2.0.jar to allow multiple versions to be present
+The WAS component uses the prereq identified in the ossc.xml
+  </notes>
+</releaseInfo>
