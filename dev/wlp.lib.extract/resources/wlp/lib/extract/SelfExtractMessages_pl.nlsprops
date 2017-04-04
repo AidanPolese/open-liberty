@@ -84,9 +84,7 @@ warunki umowy licencyjnej.
 # 
 extractInstruction=Podaj katalog dla plik\u00f3w produktu lub pozostaw pole puste, aby \
 zaakceptowa\u0107 warto\u015b\u0107 domy\u015bln\u0105.
-extractLicenseInstruction=Podaj katalog dla \
-plik\u00f3w licencji lub pozostaw pole puste, aby zaakceptowa\u0107 warto\u015b\u0107 \
-domy\u015bln\u0105.
+extractLicenseInstruction=Okre\u015bl katalog archiwum aktualizacji licencji lub naci\u015bnij klawisz Enter, aby zaakceptowa\u0107 katalog domy\u015blny.
 extractDefault=Domy\u015blny katalog docelowy to {0}
 extractDirectoryExists=Katalog ju\u017c istnieje: {0}
 extractDirectoryError=Utworzenie katalogu nie powiod\u0142o si\u0119: {0}
@@ -298,5 +296,15 @@ rozpakowanych plik\u00f3w {1} do czasu r\u0119cznego zako\u0144czenia procesu ja
 
 UNABLE_TO_ATTACH_AGENT=Nie mo\u017cna przy\u0142\u0105czy\u0107 agenta Java serwera Liberty. Ten serwer b\u0119dzie dzia\u0142a\u0107, ale nie b\u0119dzie m\u00f3g\u0142 wykonywa\u0107 funkcji wymagaj\u0105cych agenta Java, na przyk\u0142ad monitorowania lub \u015bledzenia. Wyj\u0105tek: {0}
 
-UNABLE_TO_FIND_TOOLS_JAR=Nie mo\u017cna przy\u0142\u0105czy\u0107 agenta Java serwera Liberty, poniewa\u017c ten serwer u\u017cywa \u015brodowiska JRE, a nie JAVA SDK. Ten serwer b\u0119dzie dzia\u0142a\u0107, ale nie b\u0119dzie m\u00f3g\u0142 wykonywa\u0107 funkcji wymagaj\u0105cych agenta Java, na przyk\u0142ad monitorowania lub \u015bledzenia. 
-UNABLE_TO_FIND_JAVA_AGENT=Nie mo\u017cna znale\u017a\u0107 agenta Java serwera Liberty. Ten serwer b\u0119dzie dzia\u0142a\u0107, ale nie b\u0119dzie m\u00f3g\u0142 wykonywa\u0107 funkcji wymagaj\u0105cych agenta Java, na przyk\u0142ad monitorowania lub \u015bledzenia. 
+UNABLE_TO_FIND_TOOLS_JAR=Nie mo\u017cna przy\u0142\u0105czy\u0107 agenta Java serwera Liberty, poniewa\u017c ten serwer u\u017cywa \u015brodowiska JRE, a nie JAVA SDK. Ten serwer b\u0119dzie dzia\u0142a\u0107, ale nie b\u0119dzie m\u00f3g\u0142 wykonywa\u0107 funkcji wymagaj\u0105cych agenta Java, na przyk\u0142ad monitorowania lub \u015bledzenia.
+
+UNABLE_TO_FIND_JAVA_AGENT=Nie mo\u017cna znale\u017a\u0107 agenta Java serwera Liberty. Ten serwer b\u0119dzie dzia\u0142a\u0107, ale nie b\u0119dzie m\u00f3g\u0142 wykonywa\u0107 funkcji wymagaj\u0105cych agenta Java, na przyk\u0142ad monitorowania lub \u015bledzenia.
+
+
+# messages for LicenseSelfEctractor
+LICENSE_invalidInstall=Katalog {0} nie zawiera poprawnej instalacji produktu Liberty. Podaj katalog g\u0142\u00f3wny instalacji produktu Liberty, kt\u00f3ry chcesz zaktualizowa\u0107.
+LICENSE_invalidVersion=Nie mo\u017cna zaktualizowa\u0107 licencji, poniewa\u017c zainstalowano produkt w wersji {0}, a mo\u017cna aktualizowa\u0107 wy\u0142\u0105cznie licencj\u0119 wersji {1}.
+LICENSE_invalidEdition=Nie mo\u017cna zaktualizowa\u0107 licencji, poniewa\u017c zainstalowano edycj\u0119 produktu {0}, a mo\u017cna aktualizowa\u0107 wy\u0142\u0105cznie licencj\u0119 nast\u0119puj\u0105cych edycji {1}.
+LICENSE_invalidLicense=Nie mo\u017cna zaktualizowa\u0107 licencji, poniewa\u017c zainstalowano produkt z licencj\u0105 {0}, a mo\u017cna aktualizowa\u0107 wy\u0142\u0105cznie produkty z licencj\u0105 {1}.
+LICENSE_invalidInstallType=Nie mo\u017cna zaktualizowa\u0107 licencji, poniewa\u017c okre\u015blony produkt zainstalowano przy u\u017cyciu programu IBM Installation Manager. U\u017cyj programu IBM Installation Manager, aby zaktualizowa\u0107 instalacj\u0119.
+

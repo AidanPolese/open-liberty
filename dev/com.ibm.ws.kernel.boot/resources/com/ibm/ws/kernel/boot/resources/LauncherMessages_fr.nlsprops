@@ -385,6 +385,10 @@ audit.jvm.shutdown=CWWKE0085I: Le serveur {0} est en cours d''arr\u00eat car JVM
 audit.jvm.shutdown.explanation=Le serveur a intercept\u00e9 une demande d'arr\u00eat de la machine JVM et il va essayer de s'arr\u00eater de mani\u00e8re ordonn\u00e9e. La machine JVM est peut-\u00eatre en cours d'arr\u00eat car le syst\u00e8me d'exploitation a envoy\u00e9 un signal d'arr\u00eat au processus serveur.
 audit.jvm.shutdown.useraction=Si l'arr\u00eat du serveur \u00e9tait inattendu, d\u00e9terminez si un signal d'arr\u00eat a \u00e9t\u00e9 envoy\u00e9 au processus serveur.
 
+warning.serverStartedCommandPortDisabled=CWWKE0087W: Le d\u00e9marrage du serveur a \u00e9t\u00e9 lanc\u00e9 pour le serveur {0}, mais il est impossible de d\u00e9terminer s''il s''est achev\u00e9 car le port de commande serveur est d\u00e9sactiv\u00e9.
+warning.serverStartedCommandPortDisabled.explanation=Le port de commande serveur est requis pour la communication avec un serveur en op\u00e9ration.  Le port de commande ayant \u00e9t\u00e9 d\u00e9sactiv\u00e9 explicitement pour ce serveur, il est impossible de savoir quand son d\u00e9marrage s'est termin\u00e9.
+warning.serverStartedCommandPortDisabled.useraction=V\u00e9rifiez manuellement les fichiers journaux du serveur pour v\u00e9rifier que son d\u00e9marrage a abouti.
+
 warning.serverStartedWithPIDCommandPortDisabled=CWWKE0088W: Le d\u00e9marrage du serveur a \u00e9t\u00e9 lanc\u00e9 pour le serveur {0} avec l''ID de processus {1}, mais il est impossible de d\u00e9terminer s''il s''est achev\u00e9 car le port de commande serveur est d\u00e9sactiv\u00e9.
 warning.serverStartedWithPIDCommandPortDisabled.explanation=Le port de commande serveur est requis pour la communication avec un serveur en op\u00e9ration.  Le port de commande ayant \u00e9t\u00e9 d\u00e9sactiv\u00e9 explicitement pour ce serveur, il est impossible de savoir quand son d\u00e9marrage s'est termin\u00e9.
 warning.serverStartedWithPIDCommandPortDisabled.useraction=V\u00e9rifiez manuellement les fichiers journaux du serveur pour v\u00e9rifier que son d\u00e9marrage a abouti.

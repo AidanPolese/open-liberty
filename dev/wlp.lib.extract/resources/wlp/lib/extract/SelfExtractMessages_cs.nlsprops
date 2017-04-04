@@ -78,7 +78,7 @@ licenseAccepted=Byl zji\u0161t\u011bn argument {0}. Tento argument ozna\u010duje
 # {0} c:/full/directory/path
 # 
 extractInstruction=Zadejte adres\u00e1\u0159 pro soubory produktu nebo pole ponechejte pr\u00e1zdn\u00e9, a t\u00edm p\u0159ijm\u011bte v\u00fdchoz\u00ed hodnotu.
-extractLicenseInstruction=Zadejte adres\u00e1\u0159 pro soubory s licencemi nebo pole ponechejte pr\u00e1zdn\u00e9, a t\u00edm p\u0159ijm\u011bte v\u00fdchoz\u00ed hodnotu.
+extractLicenseInstruction=Ur\u010dete adres\u00e1\u0159 archivu upgradu licence, nebo stisknut\u00edm kl\u00e1vesy Enter p\u0159ijm\u011bte v\u00fdchoz\u00ed adres\u00e1\u0159.
 extractDefault=V\u00fdchoz\u00ed c\u00edlov\u00fd adres\u00e1\u0159: {0}
 extractDirectoryExists=Adres\u00e1\u0159 ji\u017e existuje: {0}.
 extractDirectoryError=Nelze vytvo\u0159it adres\u00e1\u0159: {0}.
@@ -261,3 +261,12 @@ vy\u017eaduj\u00ed agenta jazyka Java, jako je monitorov\u00e1n\u00ed nebo traso
 
 UNABLE_TO_FIND_JAVA_AGENT=Nelze nal\u00e9zt agenta jazyka Java serveru Liberty. Tento server se spust\u00ed, ale nem\u016f\u017ee prov\u00e1d\u011bt funkce, kter\u00e9 vy\u017eaduj\u00ed agenta jazyka Java, jako je monitorov\u00e1n\u00ed nebo \
 trasov\u00e1n\u00ed.
+
+
+# messages for LicenseSelfEctractor
+LICENSE_invalidInstall=Adres\u00e1\u0159 {0} nen\u00ed platnou instalac\u00ed Liberty. Ur\u010dete ko\u0159enov\u00fd adres\u00e1\u0159 instalace Liberty, kterou chcete upgradovat.
+LICENSE_invalidVersion=Licenci nelze upgradovat, proto\u017ee ur\u010den\u00e1 instalace produktu je ve verzi {0}, licenci lze upgradovat pouze z verze {1}.
+LICENSE_invalidEdition=Licenci nelze upgradovat, proto\u017ee ur\u010den\u00e1 instalace produktu je ve vyd\u00e1n\u00ed {0}, licence m\u016f\u017ee upgradovat pouze n\u00e1sleduj\u00edc\u00ed vyd\u00e1n\u00ed: {1}
+LICENSE_invalidLicense=Licenci nelze upgradovat, proto\u017ee ur\u010den\u00e1 instalace produktu m\u00e1 licenci {0}, licence m\u016f\u017ee upgradovat pouze produkty s licenc\u00ed {1}.
+LICENSE_invalidInstallType=Licenci nelze upgradovat, proto\u017ee ur\u010den\u00e1 instalace produktu byla nainstalov\u00e1na pomoc\u00ed produktu IBM Installation Manager. Pomoc\u00ed produktu IBM Installation Manager upgradujte instalaci.
+

@@ -385,6 +385,10 @@ audit.jvm.shutdown=CWWKE0085I: Der Server {0} wird gerade gestoppt, weil die JVM
 audit.jvm.shutdown.explanation=Der Server hat eine Anforderung zum Stoppen der JVM abgefangen und versucht, die JVM ordnungsgem\u00e4\u00df zu stoppen. Die JVM wird m\u00f6glicherweise beendet, weil das Betriebssystem ein Beendigungssignal an den Serverprozess gesendet hat.
 audit.jvm.shutdown.useraction=Wenn das Stoppen des Servers unerwartet ist, stellen Sie fest, ob ein Beendigungssignal an den Serverprozess gesendet wurde.
 
+warning.serverStartedCommandPortDisabled=CWWKE0087W: Der Serverstart f\u00fcr den Server {0} wurde eingeleitet. Es ist nicht bekannt, ob der Start erfolgreich war, da der Serverbefehlsport inaktiviert ist.
+warning.serverStartedCommandPortDisabled.explanation=Der Serverbefehlsport ist f\u00fcr die Kommunikation mit einem aktiven Server erforderlich.  Der Befehlsport f\u00fcr diesen Server wurde explizit inaktiviert. Daher ist nicht bekannt, ob der Serverstart ausgef\u00fchrt wurde.
+warning.serverStartedCommandPortDisabled.useraction=Pr\u00fcfen Sie manuell anhand der Serverprotokolle, ob der Server erfolgreich gestartet wurde.
+
 warning.serverStartedWithPIDCommandPortDisabled=CWWKE0088W: Der Serverstart f\u00fcr den Server {0} mit der Prozess-ID {1} wurde eingeleitet. Es ist nicht bekannt, ob der Start ausgef\u00fchrt wurde, da der Serverbefehlsport inaktiviert ist.
 warning.serverStartedWithPIDCommandPortDisabled.explanation=Der Serverbefehlsport ist f\u00fcr die Kommunikation mit einem aktiven Server erforderlich.  Der Befehlsport f\u00fcr diesen Server wurde explizit inaktiviert. Daher ist nicht bekannt, ob der Serverstart ausgef\u00fchrt wurde.
 warning.serverStartedWithPIDCommandPortDisabled.useraction=Pr\u00fcfen Sie manuell anhand der Serverprotokolle, ob der Server erfolgreich gestartet wurde.

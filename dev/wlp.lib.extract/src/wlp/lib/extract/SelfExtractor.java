@@ -609,11 +609,11 @@ public class SelfExtractor implements LicenseProvider {
                                                                                                                   longIDs,
                                                                                                                   props.getProperty("com.ibm.websphere.productLicenseType") });
                                 } else {
-                                    return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_invalidVersion", new Object[] { props.getProperty("com.ibm.websphere.productVersion"),
-                                                                                                                          match.getVersion(),
-                                                                                                                          edition,
-                                                                                                                          longIDs,
-                                                                                                                          props.getProperty("com.ibm.websphere.productLicenseType") });
+                                    return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_replace_invalidVersion", new Object[] { props.getProperty("com.ibm.websphere.productVersion"),
+                                                                                                                                  match.getVersion(),
+                                                                                                                                  edition,
+                                                                                                                                  longIDs,
+                                                                                                                                  props.getProperty("com.ibm.websphere.productLicenseType") });
                                 }
                             } else if (result == ProductMatch.INVALID_EDITION) {
                                 if (forSelfExtractor) {
@@ -635,8 +635,8 @@ public class SelfExtractor implements LicenseProvider {
                                 return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidInstallType", new Object[] { props.getProperty("com.ibm.websphere.productInstallType"),
                                                                                                                   match.getInstallType() });
                             } else {
-                                return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_invalidInstallType", new Object[] { props.getProperty("com.ibm.websphere.productInstallType"),
-                                                                                                                          match.getInstallType() });
+                                return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_replace_invalidInstallType", new Object[] { props.getProperty("com.ibm.websphere.productInstallType"),
+                                                                                                                                  match.getInstallType() });
                             }
                         } else if (result == ProductMatch.INVALID_LICENSE) {
                             if (forSelfExtractor) {

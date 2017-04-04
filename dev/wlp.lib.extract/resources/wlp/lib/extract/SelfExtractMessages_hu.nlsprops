@@ -78,7 +78,7 @@ licenseAccepted=A(z) {0} argumentum nem tal\u00e1lhat\u00f3. Ez jelzi, hogy elfo
 # {0} c:/full/directory/path
 # 
 extractInstruction=Adja meg a term\u00e9k f\u00e1jljainak a k\u00f6nyvt\u00e1r\u00e1t, vagy hagyja \u00fcresen az alap\u00e9rt\u00e9k elfogad\u00e1s\u00e1hoz.
-extractLicenseInstruction=Adja meg a licencf\u00e1jlok k\u00f6nyvt\u00e1r\u00e1t, vagy hagyja \u00fcresen az alap\u00e9rt\u00e9k elfogad\u00e1s\u00e1hoz.
+extractLicenseInstruction=Adja meg a licencfriss\u00edt\u00e9si arch\u00edvum k\u00f6nyvt\u00e1r\u00e1t, vagy nyomja le az Entert az alap\u00e9rtelmezett k\u00f6nyvt\u00e1r elfogad\u00e1s\u00e1hoz.
 extractDefault=Az alap\u00e9rtelmezett c\u00e9lk\u00f6nyvt\u00e1r: {0}
 extractDirectoryExists=A k\u00f6nyvt\u00e1r m\u00e1r l\u00e9tezik: {0}
 extractDirectoryError=Nem siker\u00fclt l\u00e9trehozni a k\u00f6nyvt\u00e1rat: {0}
@@ -255,5 +255,16 @@ UNABLE_TO_FIND_PID=Nem siker\u00fclt lek\u00e9rdezni a java -jar folyamat folyam
 
 UNABLE_TO_ATTACH_AGENT=A Liberty Java \u00fcgyn\u00f6k\u00f6t nem lehet csatlakoztatni. A kiszolg\u00e1l\u00f3 futni fog, de nem tud ell\u00e1tni Java \u00fcgyn\u00f6k\u00f6t ig\u00e9nyl\u0151 funkci\u00f3kat, mint p\u00e9ld\u00e1ul a megfigyel\u00e9st vagy nyomk\u00f6vet\u00e9st. Kiv\u00e9tel: {0}
 
-UNABLE_TO_FIND_TOOLS_JAR=A Liberty Java \u00fcgyn\u00f6k\u00f6t nem lehetett csatlakoztatni, mert nem Java SDK-t, hanem JRE fejleszt\u0151eszk\u00f6zt haszn\u00e1l. A kiszolg\u00e1l\u00f3 futni fog, de nem tud ell\u00e1tni Java \u00fcgyn\u00f6k\u00f6t ig\u00e9nyl\u0151 funkci\u00f3kat, mint p\u00e9ld\u00e1ul a megfigyel\u00e9st vagy nyomk\u00f6vet\u00e9st. 
-UNABLE_TO_FIND_JAVA_AGENT=A Liberty Java \u00fcgyn\u00f6k nem tal\u00e1lhat\u00f3. A kiszolg\u00e1l\u00f3 futni fog, de nem tud ell\u00e1tni Java \u00fcgyn\u00f6k\u00f6t ig\u00e9nyl\u0151 funkci\u00f3kat, mint p\u00e9ld\u00e1ul a megfigyel\u00e9st vagy nyomk\u00f6vet\u00e9st. 
+UNABLE_TO_FIND_TOOLS_JAR=A Liberty Java \u00fcgyn\u00f6k\u00f6t nem lehetett csatlakoztatni, mert nem Java SDK-t, hanem JRE fejleszt\u0151eszk\u00f6zt haszn\u00e1l. A kiszolg\u00e1l\u00f3 futni fog, de nem tud ell\u00e1tni Java \u00fcgyn\u00f6k\u00f6t ig\u00e9nyl\u0151 funkci\u00f3kat, mint p\u00e9ld\u00e1ul a megfigyel\u00e9st vagy nyomk\u00f6vet\u00e9st.
+
+UNABLE_TO_FIND_JAVA_AGENT=A Liberty Java \u00fcgyn\u00f6k nem tal\u00e1lhat\u00f3. A kiszolg\u00e1l\u00f3 futni fog, de nem tud ell\u00e1tni Java \u00fcgyn\u00f6k\u00f6t ig\u00e9nyl\u0151 funkci\u00f3kat, mint p\u00e9ld\u00e1ul a megfigyel\u00e9st vagy nyomk\u00f6vet\u00e9st.
+
+
+# messages for LicenseSelfEctractor
+LICENSE_invalidInstall=A(z) {0} k\u00f6nyvt\u00e1r nem \u00e9rv\u00e9nyes Liberty telep\u00edt\u00e9s. \
+Adja meg a friss\u00edteni k\u00edv\u00e1nt Liberty telep\u00edt\u00e9s gy\u00f6k\u00e9rk\u00f6nyvt\u00e1r\u00e1t.
+LICENSE_invalidVersion=A licenc nem friss\u00edthet\u0151, mert a megadott term\u00e9ktelep\u00edt\u00e9s v\u00e1ltozatsz\u00e1ma {0}, \u00e9s a licenc csak {1} v\u00e1ltozatr\u00f3l friss\u00edthet\u0151.
+LICENSE_invalidEdition=A licenc nem friss\u00edthet\u0151, mert a megadott term\u00e9ktelep\u00edt\u00e9s kiad\u00e1sa {0}, \u00e9s a licenc csak {1} kiad\u00e1sr\u00f3l friss\u00edthet\u0151.
+LICENSE_invalidLicense=A licenc nem friss\u00edthet\u0151, mert a megadott term\u00e9ktelep\u00edt\u00e9s licence {0}, \u00e9s a licenc csak {1} licenccel rendelkez\u0151 term\u00e9ket friss\u00edt.
+LICENSE_invalidInstallType=A licenc nem friss\u00edthet\u0151, mert a megadott term\u00e9ktelep\u00edt\u00e9s az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel ker\u00fclt telep\u00edt\u00e9sre. A telep\u00edt\u00e9st az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel friss\u00edtse. 
+

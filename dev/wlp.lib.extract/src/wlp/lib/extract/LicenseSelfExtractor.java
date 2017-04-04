@@ -57,10 +57,20 @@ public class LicenseSelfExtractor extends SelfExtractor {
 
     private static final String LA_FILES_PREFIX = "lafiles/";
     private static final String FEATURES_PREFIX = "lib/features";
+    private static final String ASSETS_PREFIX = "lib/assets";
     private static final String TAG_FILES_PREFIX = "lib/versions/tags/";
     private static final String WAS_PROPERTIES_FILE = "lib/versions/WebSphereApplicationServer.properties";
     private static final String FIX_NAME_FRAGMENT_FIX_PACK = " Fix Pack ";
     private static final Pattern validNumericVersion = Pattern.compile("^(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)$");
+    private static final String DOWNGRADESupportedVersion = "8.5.5.8";
+    public static final String[][] DOWNGRADE_EDITION_MATCH = new String[][] {
+                                                                              { "LIBERTY_CORE", "BASE", "BASE_ILAN", "ND" },
+                                                                              { "BASE", "ND" },
+    };
+    public static final String[][] UPGRADE_EDITION_MATCH = new String[][] {
+                                                                            { "ND", "BASE", "LIBERTY_CORE", "BASE_ILAN" },
+                                                                            { "BASE", "LIBERTY_CORE", "BASE_ILAN" },
+    };
 
     private final LicenseArchive licenseArchive;
 
@@ -434,13 +444,22 @@ public class LicenseSelfExtractor extends SelfExtractor {
         return result;
     }
 
-    private static ReturnCode validateInstalledFeatures(File outputDir, WASProperties props) throws SelfExtractorFileException {
+    public static String getFeatureSymbolicName(Attributes attrs) {
+        String manifestSymbolicName = attrs.getValue("Subsystem-SymbolicName");
+        int i = manifestSymbolicName.indexOf(";");
+        if (i >= 0)
+            manifestSymbolicName = manifestSymbolicName.substring(0, i);
+        return manifestSymbolicName.trim();
+    }
+
+    private static ReturnCode validateAddonsFeatures(File featuresDir, WASProperties props, List invalidAddonsFeatures) throws SelfExtractorFileException {
+
         // Create fileFilter to get just the manifest files.
         FilenameFilter manifestFilter = createManifestFilter();
-        File featuresDir = new File(outputDir, FEATURES_PREFIX);
         if (featuresDir.exists()) {
             File[] manifestFiles = featuresDir.listFiles(manifestFilter);
             if (manifestFiles != null) {
+                String invalidFeatures = "";
                 for (int i = 0; i < manifestFiles.length; ++i) {
                     FileInputStream fis = null;
                     File currentManifestFile = null;
@@ -475,11 +494,10 @@ public class LicenseSelfExtractor extends SelfExtractor {
                                     longIDs.add(editionName);
                                 }
 
-                                String edition = InstallUtils.getEditionName(props.getProductEdition());
-                                return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_invalidEdition", new Object[] { edition, longIDs });
+                                invalidFeatures += (invalidFeatures.length() == 0 ? "" : " ") + getFeatureSymbolicName(attrs);
                             } else if (result == ProductMatch.INVALID_INSTALL_TYPE) {
-                                return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_invalidInstallType", new Object[] { props.getProductInstallType(),
-                                                                                                                          match.getInstallType() });
+                                return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_replace_invalidInstallType", new Object[] { props.getProductInstallType(),
+                                                                                                                                  match.getInstallType() });
                             } else if (result == ProductMatch.INVALID_LICENSE) {
                                 return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_invalidLicense", new Object[] { props.getProductLicenseType(),
                                                                                                                       match.getLicenseType() });
@@ -494,7 +512,101 @@ public class LicenseSelfExtractor extends SelfExtractor {
                         SelfExtractUtils.tryToClose(fis);
                     }
                 }
+                if (invalidFeatures.length() > 0) {
+                    invalidAddonsFeatures.add(invalidFeatures);
+                }
             }
+        }
+        return ReturnCode.OK;
+    }
+
+    private static int versionCompare(String version1, String version2) {
+        String[] ver1 = version1.split("\\.");
+        String[] ver2 = version2.split("\\.");
+        int i = 0;
+        while (i < ver1.length && i < ver2.length && ver1[i].equals(ver2[i])) {
+            i++;
+        }
+        if (i < ver1.length && i < ver2.length) {
+            int diff = Integer.valueOf(ver1[i]).compareTo(Integer.valueOf(ver2[i]));
+            return Integer.signum(diff);
+        }
+        return Integer.signum(ver1.length - ver2.length);
+    }
+
+    private static ReturnCode validateInstalledFeatures(File outputDir, WASProperties props) throws SelfExtractorFileException {
+
+        String licenseEdition = props.getProductEdition();
+        File libertyPropsFile = new File(outputDir, WAS_PROPERTIES_FILE);
+        Properties libertyProps = new Properties();
+        InputStream is = null;
+        try {
+            is = new FileInputStream(libertyPropsFile);
+            libertyProps.load(is);
+        } catch (IOException ioe) {
+            return new ReturnCode(ReturnCode.BAD_OUTPUT, "extractFileError", ioe.getMessage());
+        } finally {
+            SelfExtractUtils.tryToClose(is);
+        }
+        String wlpProductEdition = libertyProps.getProperty("com.ibm.websphere.productEdition");
+        String wlpProductVersion = libertyProps.getProperty("com.ibm.websphere.productVersion");
+
+        // Liberty v8.5.5.7 and lower do not support IBM-AppliesTo feature attribute.
+        // Therefore, installer can not validate installed features for license downgrade.
+        // Stop installation and issue error message.
+        if (versionCompare(wlpProductVersion, DOWNGRADESupportedVersion) < 0) {
+            for (int i = 0; i < DOWNGRADE_EDITION_MATCH.length; i++) {
+                if (DOWNGRADE_EDITION_MATCH[i][0].equalsIgnoreCase(licenseEdition)) {
+                    for (int j = 1; j < DOWNGRADE_EDITION_MATCH[i].length; j++) {
+                        if (DOWNGRADE_EDITION_MATCH[i][j].equalsIgnoreCase(wlpProductEdition)) {
+                            return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_downgrade_block_8557_low", new Object[] { DOWNGRADESupportedVersion,
+                                                                                                                            wlpProductVersion
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        File featuresDir = new File(outputDir, FEATURES_PREFIX);
+        List invalidFeatures = new ArrayList();
+        ReturnCode rc = validateAddonsFeatures(featuresDir, props, invalidFeatures);
+        if (rc != ReturnCode.OK)
+            return rc;
+
+        if (invalidFeatures.size() > 0) {
+
+            return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_replace_invalidEditonFeatures", new Object[] { InstallUtils.getEditionName(props.getProductEdition()),
+                                                                                                                 invalidFeatures.get(0),
+                                                                                                                 InstallUtils.getEditionName(wlpProductEdition),
+                                                                                                                 "\"bin" + System.getProperty("file.separator") + "installUtility uninstall "
+                                                                                                                                                                 + invalidFeatures.get(0)
+                                                                                                                                                                 + "\"" });
+        }
+
+        //Do not check addons in upgrade scenario
+        for (int i = 0; i < UPGRADE_EDITION_MATCH.length; i++) {
+            if (UPGRADE_EDITION_MATCH[i][0].equalsIgnoreCase(licenseEdition)) {
+                for (int j = 1; j < UPGRADE_EDITION_MATCH[i].length; j++) {
+                    if (UPGRADE_EDITION_MATCH[i][j].equalsIgnoreCase(wlpProductEdition)) {
+                        return ReturnCode.OK;
+                    }
+                }
+            }
+        }
+
+        File addonsDir = new File(outputDir, ASSETS_PREFIX);
+        List invalidAddons = new ArrayList();
+        rc = validateAddonsFeatures(addonsDir, props, invalidAddons);
+        if (rc != ReturnCode.OK)
+            return rc;
+
+        if (invalidFeatures.size() > 0) {
+
+            return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_replace_invalidEditonFeatures", new Object[] { InstallUtils.getEditionName(props.getProductEdition()),
+                                                                                                                 invalidAddons.get(0),
+                                                                                                                 InstallUtils.getEditionName(wlpProductEdition),
+                                                                                                                 "bin/installUtility install " + invalidAddons.get(0) });
         }
         return ReturnCode.OK;
     }

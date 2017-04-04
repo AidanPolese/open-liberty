@@ -560,6 +560,14 @@ audit.jvm.shutdown=CWWKE0085I: Serwer {0} jest zatrzymywany, poniewa\u017c ko\u0
 audit.jvm.shutdown.explanation=Serwer przechwyci\u0142 \u017c\u0105danie zatrzymania maszyny JVM i podejmie pr\u00f3b\u0119 zatrzymania w prawid\u0142owy spos\u00f3b. Dzia\u0142anie maszyny JVM mo\u017ce by\u0107 ko\u0144czone, poniewa\u017c system operacyjny wys\u0142a\u0142 sygna\u0142 przerywania do procesu serwera.
 audit.jvm.shutdown.useraction=Je\u015bli zatrzymanie serwera by\u0142o nieoczekiwane, okre\u015bl, czy do procesu serwera zosta\u0142 wys\u0142any sygna\u0142 przerywania.
 
+warning.serverStartedCommandPortDisabled=CWWKE0087W: Zainicjowano procedur\u0119 uruchamiania serwera {0}, \
+jednak nie mo\u017cna stwierdzi\u0107, czy zosta\u0142a ona zako\u0144czona, poniewa\u017c port komend serwera jest wy\u0142\u0105czony.
+warning.serverStartedCommandPortDisabled.explanation=Port komend serwera jest wymagany do komunikacji \
+z dzia\u0142aj\u0105cym serwerem.  Port komend zosta\u0142 jawnie wy\u0142\u0105czony dla tego serwera, dlatego nie mo\u017cna stwierdzi\u0107, \
+kiedy uruchamianie serwera zosta\u0142o zako\u0144czone.
+warning.serverStartedCommandPortDisabled.useraction=R\u0119cznie sprawd\u017a dzienniki serwera w celu sprawdzenia, \
+czy serwer zosta\u0142 pomy\u015blnie uruchomiony.
+
 warning.serverStartedWithPIDCommandPortDisabled=CWWKE0088W: Zainicjowano procedur\u0119 uruchamiania serwera {0} \
 (ID procesu: {1}), jednak nie mo\u017cna stwierdzi\u0107, czy zosta\u0142a ona zako\u0144czona, poniewa\u017c port komend serwera jest wy\u0142\u0105czony.
 warning.serverStartedWithPIDCommandPortDisabled.explanation=Port komend serwera jest wymagany do komunikacji \

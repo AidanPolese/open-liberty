@@ -78,7 +78,7 @@ licenseAccepted=Argumentul {0} a fost g\u0103sit. Acest lucru indic\u0103 faptul
 # {0} c:/full/directory/path
 # 
 extractInstruction=Introduce\u0163i directorul pentru fi\u015fierele de produs sau l\u0103sa\u0163i gol pentru a accepta valoarea implicit\u0103.
-extractLicenseInstruction=Introduce\u0163i directorul pentru fi\u015fierele de licen\u0163\u0103 sau l\u0103sa\u0163i-l blanc pentru a accepta valoarea implicit\u0103.
+extractLicenseInstruction=Specifica\u0163i directorul arhivei de modernizare licen\u0163\u0103 sau ap\u0103sa\u0163i Enter pentru a accepta directorul implicit.
 extractDefault=Directorul \u0163int\u0103 implicit este {0}
 extractDirectoryExists=Directorul exist\u0103 deja: {0}
 extractDirectoryError=E\u015fuare la crearea directorului: {0}
@@ -255,5 +255,15 @@ UNABLE_TO_FIND_PID=A e\u015fuat ob\u0163inerea ID-ului de Proces din procesul ja
 
 UNABLE_TO_ATTACH_AGENT=Agentul Liberty Java nu a putut fi ata\u015fat. Acest server va rula dar nu poate realiza func\u0163ii care necesit\u0103 agentul Java, precum monitorizarea sau urm\u0103rirea. Excep\u0163ie: {0}
 
-UNABLE_TO_FIND_TOOLS_JAR=Agentul Liberty Java nu a putut fi ata\u015fat deoarece acest server utilizeaz\u0103 un JRE mai degrab\u0103 dec\u00e2t un Java SDK. Acest server va rula dar nu poate realiza func\u0163ii care necesit\u0103 agentul Java, precum monitorizarea sau urm\u0103rirea. 
-UNABLE_TO_FIND_JAVA_AGENT=Agentul Liberty Java nu a putut fi localizat. Acest server va rula dar nu poate realiza func\u0163ii care necesit\u0103 agentul Java, precum monitorizarea sau urm\u0103rirea. 
+UNABLE_TO_FIND_TOOLS_JAR=Agentul Liberty Java nu a putut fi ata\u015fat deoarece acest server utilizeaz\u0103 un JRE mai degrab\u0103 dec\u00e2t un Java SDK. Acest server va rula dar nu poate realiza func\u0163ii care necesit\u0103 agentul Java, precum monitorizarea sau urm\u0103rirea.
+
+UNABLE_TO_FIND_JAVA_AGENT=Agentul Liberty Java nu a putut fi localizat. Acest server va rula dar nu poate realiza func\u0163ii care necesit\u0103 agentul Java, precum monitorizarea sau urm\u0103rirea.
+
+
+# messages for LicenseSelfEctractor
+LICENSE_invalidInstall=Directorul {0} nu este o instalare Liberty valid\u0103. Specifica\u0163i directorul root al instal\u0103rii Liberty pe care vre\u0163i s\u0103 o moderniza\u0163i.
+LICENSE_invalidVersion=Licen\u0163a nu poate fi modernizat\u0103 deoarece instalarea de produs specificat\u0103 este la versiunea {0}, dar licen\u0163a nu poate fi modernizat\u0103 dec\u00e2t de la versiunea {1}.
+LICENSE_invalidEdition=Licen\u0163a nu poate fi modernizat\u0103 deoarece instalarea de produs specificat\u0103 este la edi\u0163ia {0} dar licen\u0163a nu poate fi modernizat\u0103 dec\u00e2t de la urm\u0103toarele edi\u0163ii: {1}
+LICENSE_invalidLicense=Licen\u0163a nu poate fi modernizat\u0103 deoarece instalarea de produs specificat\u0103 are o licen\u0163\u0103 {0} dar licen\u0163a nu poate fi moderniza dec\u00e2t produse cu o licen\u0163\u0103 {1}.
+LICENSE_invalidInstallType=Licen\u0163a nu poate fi modernizat\u0103 deoarece instalarea de produs specificat\u0103 a fost instalat\u0103 utiliz\u00e2nd IBM Installation Manager. Utiliza\u0163i IBM Installation Manager pentru a v\u0103 moderniza instalarea.
+
