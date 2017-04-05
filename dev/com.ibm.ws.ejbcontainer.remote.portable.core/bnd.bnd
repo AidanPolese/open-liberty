@@ -1,6 +1,17 @@
 -include= ~../cnf/resources/bnd/bundle.props
 bVersion=1.0
 
+Export-Package: \
+	com.ibm.ejs.container,\
+	com.ibm.ejs.container.activator,\
+	com.ibm.ejs.container.finder,\
+	com.ibm.ejs.container.lock,\
+	com.ibm.ejs.persistence,\
+	com.ibm.websphere.cpi,\
+	com.ibm.websphere.cpmi,\
+	com.ibm.websphere.csi,\
+	com.ibm.ws.ejb.portable
+
 instrument.disabled: true
 
 publish.wlp.jar.disabled: true
