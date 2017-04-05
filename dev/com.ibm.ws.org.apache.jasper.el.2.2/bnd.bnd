@@ -1,0 +1,15 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Apache EL
+Bundle-SymbolicName: com.ibm.ws.org.apache.jasper.el.2.2
+Bundle-Description: Apache EL, version 2.2
+
+Export-Package: org.apache.el;thread-context=true, \
+   org.apache.el.lang;thread-context=true, \
+   org.apache.el.parser, \
+   org.apache.el.util
+
+-buildpath: \
+	lib/jasper-el.jar;version=file,\
+	com.ibm.websphere.javaee.el.2.2;version=latest

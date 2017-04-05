@@ -1,0 +1,3 @@
+<server>
+	<authorization id="defaultAuthorization" useRoleAsGroupName="true" />
+</server>

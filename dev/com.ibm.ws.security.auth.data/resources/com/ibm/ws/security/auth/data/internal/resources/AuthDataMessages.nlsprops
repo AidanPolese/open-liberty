@@ -1,0 +1,24 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security.auth.data/resources/com/ibm/ws/security/auth/data/internal/resources/AuthDataMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Application Server Security Authentication Data
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKS1350 - CWWKS1399
+# Do not translate DefaultPrincipalMapping, JAAS, HashMap, and WSMappingCallbackHandler.
+MISSING_MAP_IN_CALLBACK_WSMAPPINGCALLBAKHANDLER=CWWKS1350E: The DefaultPrincipalMapping JAAS programmatic login cannot be performed because the WSMappingCallbackHandler was created without the mapping properties HashMap object.
+MISSING_MAP_IN_CALLBACK_WSMAPPINGCALLBAKHANDLER.explanation=The WSMappingCallbackHandler used to perform the DefaultPrincipalMapping JAAS programmatic login did not contain a java.util.Map parameter.
+MISSING_MAP_IN_CALLBACK_WSMAPPINGCALLBAKHANDLER.useraction=Verify that the application performing the DefaultPrincipalMapping JAAS programmatic login creates the WSMappingCallbackHandler with a java.util.Map instance.
+
+# Do not translate DefaultPrincipalMapping, JAAS, HashMap, WSMappingCallbackHandler, and com.ibm.wsspi.security.auth.callback.Constants.MAPPING_ALIAS.
+MISSING_MAPPING_ALIAS_IN_CALLBACK_WSMAPPINGCALLBAKHANDLER=CWWKS1351E: The DefaultPrincipalMapping JAAS programmatic login cannot be performed because the com.ibm.wsspi.security.auth.callback.Constants.MAPPING_ALIAS entry was not found in the mapping properties HashMap object.
+MISSING_MAPPING_ALIAS_IN_CALLBACK_WSMAPPINGCALLBAKHANDLER.explanation=The java.util.Map parameter of the WSMappingCallbackHandler used to perform the DefaultPrincipalMapping JAAS programmatic login did not contain a value for the com.ibm.wsspi.security.auth.callback.Constants.MAPPING_ALIAS entry.
+MISSING_MAPPING_ALIAS_IN_CALLBACK_WSMAPPINGCALLBAKHANDLER.useraction=Verify that the application performing the DefaultPrincipalMapping JAAS programmatic login creates the WSMappingCallbackHandler with a java.util.Map instance with a value for the com.ibm.wsspi.security.auth.callback.Constants.MAPPING_ALIAS entry.

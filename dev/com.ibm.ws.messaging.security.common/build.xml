@@ -1,0 +1,7 @@
+<project name="com.ibm.ws.messaging.security.common" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  
+  <target name="compile" depends="compile.compile"/>
+  <property name="no.trace.instrumentation" value="true" />
+  <target name="findbugs" />
+</project>

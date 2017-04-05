@@ -1,0 +1,31 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.websphere.collective/resources/com/ibm/wsspi/collective/internal/resources/CollectiveSPIMessages.nlsprops
+#COMPONENTPREFIX CWWKX
+#COMPONENTNAMEFOR WebSphere Collective SPI
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKX8000 - CWWKX8049
+
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE=CWWKX8000E: Se ha producido un error de configuraci\u00f3n. No hay disponible ninguna implementaci\u00f3n de RepositoryClient. Especifique una caracter\u00edstica como collectiveMember-1.0 o collectiveController-1.0 y defina la configuraci\u00f3n necesaria para resolver este problema. 
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.explanation=Las caracter\u00edsticas de colectivo proporcionan la implementaci\u00f3n de RepositoryClient, pero no se ha podido encontrar dicha implementaci\u00f3n.
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.useraction=Especifique una caracter\u00edstica de colectivo como collectiveMember-1.0 o collectiveController-1.0 y defina la configuraci\u00f3n necesaria para resolver este problema.
+
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES=CWWKX8001E: Se ha producido un error de configuraci\u00f3n. Hay disponibles diversas implementaciones de RepositoryClientDelegate. El paquete {0} proporciona la implementaci\u00f3n actual. Elimine las caracter\u00edsticas personalizadas o de terceros que incluyen el paquete {1}. 
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.explanation=RepositoryConnectionFactory requiere una implementaci\u00f3n de RepositoryClientDelegate espec\u00edfica y una implementaci\u00f3n adicional se ha registrado como servicio OSGi. S\u00f3lo se permite una implementaci\u00f3n.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.useraction=Elimine las caracter\u00edsticas personalizadas o de terceros que incluyen este paquete especificado.
+
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE=CWWKX8002E: Se ha producido un error de configuraci\u00f3n. No hay disponible ninguna implementaci\u00f3n de RepositoryMember. Especifique una caracter\u00edstica como collectiveMember-1.0 o collectiveController-1.0 y defina la configuraci\u00f3n necesaria para resolver este problema. 
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.explanation=Las caracter\u00edsticas de colectivo proporcionan la implementaci\u00f3n de RepositoryMember, pero no se ha podido encontrar dicha implementaci\u00f3n.
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.useraction=Especifique una caracter\u00edstica de colectivo como collectiveMember-1.0 o collectiveController-1.0 y defina la configuraci\u00f3n necesaria para resolver este problema.
+
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES=CWWKX8003E: Se ha producido un error de configuraci\u00f3n. Hay disponibles diversas implementaciones de RepositoryMemberDelegate. El paquete {0} proporciona la implementaci\u00f3n actual. Elimine las caracter\u00edsticas personalizadas o de terceros que incluyen el paquete {1}.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.explanation=RepositoryConnectionFactory requiere una implementaci\u00f3n de RepositoryMemberDelegate espec\u00edfica y una implementaci\u00f3n adicional se ha registrado como servicio OSGi. S\u00f3lo se permite una implementaci\u00f3n.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.useraction=Elimine las caracter\u00edsticas personalizadas o de terceros que incluyen este paquete especificado.

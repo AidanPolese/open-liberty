@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Unknown" 
+            projectURL="Unknown" 
+            version="1.0" revision="" 
+            license-type="javax" 
+            contact="???@us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.dev_tools/prereqs/prereq.jaxrs.api/1.1/WASX_JAXRS.1903/javax.j2ee.jaxrs.jar">
+         <file basename="javax.j2ee.jaxrs_1.1.jar" checksum="5a0f03da3927b821349fc8d8c2d5f5a4"/>
+      </download>
+   </project>
+   
+  <notes>
+  WAS.prereq.jaxrs.api gets javax.j2ee.jaxrs.jar from the download.zip file located at 
+  https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.dev_tools/prereqs/prereq.jaxrs.api/1.1/WASX_JAXRS.1903/
+  </notes>
+   
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and v8.5 and has been cleared previously by WAS
+   </clearencehistory>
+</ossc>

@@ -1,0 +1,13 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.wsspi.appserver.webBundle-1.0
+
+publish.feature.resources: **
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.servlet-3.0;version=latest, \
+	com.ibm.ws.app.manager.wab;version=latest, \
+	com.ibm.ws.eba.wab.integrator;version=latest, \
+	com.ibm.websphere.appserver.spi.wab.configure;version=latest

@@ -1,0 +1,6 @@
+
+<server>
+    <distributedMap id="baseCache" jndiName="services/cache/basecache" memorySizeInEntries="2000" cacheProviderName="default" createCacheAtServerStartup="true"/>
+    
+    <distributedMap id="defaultCache" jndiName="services/cache/distributedmap" memorySizeInEntries="2000" cacheProviderName="default"/>
+</server>

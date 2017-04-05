@@ -1,0 +1,49 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=${bundle.version}
+
+Bundle-Name: Apache CXF Runtime Core
+Bundle-Description: Apache CXF Runtime Core, version ${original.jar.version}
+Bundle-SymbolicName: ${symbolic.name}
+Bundle-Activator: org.apache.cxf.bus.osgi.CXFActivator
+
+Export-Package: \
+ META-INF.cxf, \
+ org.apache.cxf.*;version=2.6.2
+
+Import-Package: \
+ javax.xml.bind.*;version="[2.2,3)", \
+ com.sun.xml.fastinfoset.stax;resolution:=optional, \
+ junit.framework.*;resolution:=optional, \
+ org.apache.xml.resolver.*;resolution:=optional, \
+ org.junit.*;resolution:=optional, \
+ javax.activation, \
+ javax.mail;version="[0.0,2)", \
+ javax.annotation;version="[0.0,2)", \
+ javax.xml.bind.*;version="[2.2,3)", \
+ javax.xml.stream.*, \
+ !org.springframework.*;resolution:=optional;version="[2.5,4)", \
+ !org.apache.aries.*;version="[0.3,2)", \
+ !org.osgi.service.blueprint.*, \
+ com.ibm.websphere.ras, \
+ com.ibm.websphere.ras.annotation, \
+ com.ibm.ws.ffdc, \
+ org.apache.cxf.*;version="[2.6.2,2.6.3)", \
+ *
+ 
+DynamicImport-Package: com.ctc.wstx.*
+
+Include-Resource:\
+ @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/cxf/**, \
+ @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/services/**, \
+ @build/tmp/lib/cxf-rt-core-2.6.2.jar!/schemas/**, \
+ @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/spring.handlers, \
+ @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/spring.schemas, \
+ @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/DEPENDENCIES, \
+ @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/LICENSE, \
+ @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/NOTICE, \
+ build/tmp/bnd/cxf-rt-core-2.6.2
+ 
+ 
+# Remove the resources (blueprint/metadata configuration files) in the OSGI-INF directory
+# As we have no plan to support that, will add these things back with NLS support in the future 
+# @lib/cxf-rt-core-2.6.2.jar!/OSGI-INF/**, \

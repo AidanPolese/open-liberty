@@ -1,0 +1,38 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-management-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+REGISTER_FAILURE_MSG = \u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044f \u043e\u0431\u044a\u0435\u043a\u0442\u0430 MBean {0} \u0432 MBeanServer \u043d\u0435 \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0430: {1}
+UNREGISTER_FAILURE_MSG = \u041e\u0442\u043c\u0435\u043d\u0430 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438 \u043e\u0431\u044a\u0435\u043a\u0442\u0430 MBean {0} \u0432 MBeanServer \u043d\u0435 \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0430: {1}
+INSTANTIANTE_FAILURE_MSG = \u0421\u043e\u0437\u0434\u0430\u043d\u0438\u0435 \u044d\u043a\u0437\u0435\u043c\u043f\u043b\u044f\u0440\u0430 \u043c\u043e\u0434\u0435\u043b\u0438 MBean \u0432 MBeanServer \u043d\u0435 \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u043e: {0}
+MBEAN_FAILURE_MSG = \u0421\u0431\u043e\u0439 \u043e\u043f\u0446\u0438\u0438 MBean: {0}
+SET_MANAGED_RESOURCE_FAILURE_MSG = \u0421\u0431\u043e\u0439 \u0440\u0435\u0441\u0443\u0440\u0441\u0430, \u0443\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c\u043e\u0433\u043e \u043d\u0430\u0431\u043e\u0440\u043e\u043c ModelMBean: {0}
+START_CONNECTOR_FAILURE_MSG = \u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0437\u0430\u043f\u0443\u0441\u0442\u0438\u0442\u044c \u0441\u0435\u0440\u0432\u0435\u0440 \u043a\u043e\u043d\u043d\u0435\u043a\u0442\u043e\u0440\u0430 JMX: {0}
+STOP_CONNECTOR_FAILURE_MSG = \u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0437\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u044c \u0440\u0430\u0431\u043e\u0442\u0443 \u0441\u0435\u0440\u0432\u0435\u0440\u0430 \u043a\u043e\u043d\u043d\u0435\u043a\u0442\u043e\u0440\u0430 JMX: {0}
+GET_MANAGED_INFORMATION_FAILURE_MSG = \u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u043f\u043e\u043b\u0443\u0447\u0438\u0442\u044c \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044e, \u0443\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c\u0443\u044e \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0435\u043c {0} 
+CREATE_REGISTRY_FAULT_MSG = \u0418\u0441\u043a\u043b\u044e\u0447\u0438\u0442\u0435\u043b\u044c\u043d\u0430\u044f \u0441\u0438\u0442\u0443\u0430\u0446\u0438\u044f \u043f\u0440\u0438 \u0437\u0430\u043f\u0443\u0441\u043a\u0435 \u0440\u0435\u0435\u0441\u0442\u0440\u0430 RMI \u0434\u043b\u044f JMX: {0}
+OBJECT_NAME_FALUE_MSG = \u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u043f\u043e\u043b\u0443\u0447\u0438\u0442\u044c \u0444\u0430\u0439\u043b \u043e\u0431\u044a\u0435\u043a\u0442\u043d\u043e\u0433\u043e \u0438\u043c\u0435\u043d\u0438 {0}: {1}

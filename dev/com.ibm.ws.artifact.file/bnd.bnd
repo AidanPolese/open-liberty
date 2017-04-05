@@ -1,0 +1,32 @@
+# For information on bnd syntax, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Artifact API File Implementation
+Bundle-SymbolicName: com.ibm.ws.artifact.file
+Bundle-Description: Implementation of artifact api for filesystem directories; version=${bVersion}
+
+WS-TraceGroup: archive.artifact.file
+
+Private-Package: com.ibm.ws.artifact.file.internal
+
+Export-Package: com.ibm.ws.artifact.file
+
+Service-Component: \
+   com.ibm.ws.artifact.file.service;\
+    implementation:=com.ibm.ws.artifact.file.internal.FileContainerFactory;\
+    provide:=com.ibm.ws.artifact.contributor.ArtifactContainerFactoryHelper;\
+    configuration-policy:=ignore;\
+    containerFactory=com.ibm.wsspi.artifact.factory.ArtifactContainerFactory;\
+    dynamic:='containerFactory';\
+    properties:="service.vendor=IBM,handlesType=java.io.File,category=DIR"
+
+-buildpath: \
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.ws.artifact;version=latest,\
+	com.ibm.ws.kernel.filemonitor,\
+	com.ibm.ws.kernel.service,\
+	com.ibm.ws.logging.core, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

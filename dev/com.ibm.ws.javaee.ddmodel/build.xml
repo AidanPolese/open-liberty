@@ -1,0 +1,24 @@
+<project name="com.ibm.ws.javaee.ddmodel" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  <include file="../com.ibm.ws.javaee.ddmetadata/genddmodel.xml"/>
+
+  <property name="sourcePath" value="${src.dir}${path.separator}${basedir}/src.gen"/>
+
+  <target name="genddmodel" description="Manual target to regenerate src.gen">
+    <genddmodel packages="com.ibm.ws.javaee.dd.appbnd,
+                          com.ibm.ws.javaee.dd.appext,
+                          com.ibm.ws.javaee.dd.clientbnd,
+                          com.ibm.ws.javaee.dd.commonbnd,
+                          com.ibm.ws.javaee.dd.commonext,
+                          com.ibm.ws.javaee.dd.ejbbnd,
+                          com.ibm.ws.javaee.dd.ejbext,
+                          com.ibm.ws.javaee.dd.managedbean,
+                          com.ibm.ws.javaee.dd.webbnd,
+                          com.ibm.ws.javaee.dd.webext">
+      <src>
+        <src path="../com.ibm.ws.javaee.dd/src"/>
+        <src path="../com.ibm.ws.javaee.dd.ejb/src"/>
+      </src>
+    </genddmodel>
+  </target>
+</project>

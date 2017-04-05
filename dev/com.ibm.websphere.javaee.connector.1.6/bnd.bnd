@@ -1,0 +1,20 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.connector.1.6; singleton:=true
+
+Export-Package: javax.resource.*; version="1.6"
+
+Import-Package: javax.naming; resolution:=optional, \
+  javax.security.auth; resolution:=optional, \
+  javax.security.auth.callback; resolution:=optional, \
+  javax.transaction; version="1.1.0", \
+  javax.transaction.xa; version="1.1.0"
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/javax.j2ee.connector_1.6.jar;version=file

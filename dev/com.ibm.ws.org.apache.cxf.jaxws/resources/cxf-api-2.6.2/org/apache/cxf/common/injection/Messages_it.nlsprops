@@ -1,0 +1,41 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+RESOURCE_RESOLVE_FAILED=impossibile risolvere la risorsa {0}
+FAILED_TO_INJECT_FIELD=l'accesso al campo non \u00e8 consentito
+INJECTION_SETTER_NOT_VISIBLE=il setter {0} non \u00e8 visibile
+INJECTION_SETTER_RAISED_EXCEPTION=eccezione generata durante il richiamo del setter {0}
+PRIVATE_FIELD_INJECTION_NYI=l''injection della risorsa per i campi privati non \u00e8 ancora incrementata: {0}
+INJECTION_COMPLETE_NOT_VISIBLE=il metodo annotato da @PostConstruct non \u00e8 visibile: {0}
+INJECTION_COMPLETE_THREW_EXCEPTION=il metodo annotato da @PostConstruct genera un'eccezione quando viene richiamato
+PRE_DESTROY_NOT_VISIBLE=Il metodo annotato da @PreDestroy non \u00e8 visibile: {0}
+PRE_DESTROY_THREW_EXCEPTION=Il metodo annotato da @PreDestroy genera un'eccezione quando viene richiamato
+SETTER_INJECTION_WITH_INCORRECT_TYPE=setter per la risorsa trovato, ma con firma errata: {0}
+RESOURCE_NAME_NOT_SPECIFIED=L''annotazione della risorse su {0} deve specificare il nome della risorsa
+NO_SETTER_OR_FIELD_FOR_RESOURCE=Annotazione della risorsa su {0} ma non \u00e8 stato trovato alcun campo o setter.
+INJECTION_SETTER_METHOD_NOT_FOUND = Impossibile trovare il metodo setter di injection: {0}

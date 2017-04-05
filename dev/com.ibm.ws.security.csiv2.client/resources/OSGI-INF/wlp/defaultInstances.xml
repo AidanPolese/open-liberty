@@ -1,0 +1,12 @@
+<client>
+    <com.ibm.ws.transport.iiop.spi.SubsystemFactory type="CSIv2Client"/>
+
+    <orb id="defaultOrb">
+        <clientPolicy.clientContainerCsiv2>
+            <layers>
+                <authenticationLayer mechanisms="GSSUP" establishTrustInClient="Supported"/>
+                <transportLayer/>
+            </layers>
+        </clientPolicy.clientContainerCsiv2>
+    </orb>
+</client>

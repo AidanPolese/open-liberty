@@ -1,0 +1,39 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-bindings-xml-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+STREAM_CREATE_EXC = Impossible de cr\u00e9er XMLStreamReader.
+STAX_READ_EXC = Impossible de lire dans l'\u00e9l\u00e9ment XMLStreamReader.
+STAX_WRITE_EXC = Impossible d'\u00e9crire dans l'\u00e9l\u00e9ment XMLStreamReader.
+NO_OPERATION_ELEMENT=Il doit exister un \u00e9l\u00e9ment operation.
+NO_OPERATION=Aucune op\u00e9ration de ce type : {0}
+NO_DATAREADER=Aucun \u00e9l\u00e9ment DataReader n''est disponible pour le service : {0}
+NO_DATAWRITER=Aucun \u00e9l\u00e9ment DataWriter n''est disponible pour le service : {0}
+UNKNOWN_EXCEPTION=Impossible de reconna\u00eetre le type d''exception : {0}
+COULD_NOT_UNRWAP=Impossible de d\u00e9sencapsuler les parties de message.
+REQ_NOT_UNDERSTOOD=Impossible de lire la demande. L''op\u00e9ration {0} est inconnue.
+ILLEGAL_XMLFAULT_FORMAT=Format de message d'erreur xml non conforme.

@@ -1,0 +1,7 @@
+<project name="com.ibm.ws.javaee.persistence.2.1" default="build">
+	<!-- Trace instrumentation not required this library -->
+	<property name="no.trace.instrumentation" value="true" />
+	<!-- FFDC not required for this library -->
+	<property name="instrument.ffdc" value="false" />
+	<import file="../ant_build/public_imports/standard_imports.xml"/>
+</project>

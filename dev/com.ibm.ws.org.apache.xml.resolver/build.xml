@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.org.apache.xml.resolver" default="build">
+    <import file="../ant_build/public_imports/rejar_imports.xml"/>
+    <property name="original.jar.name" value="org.apache.xml.resolver"/>
+    <property name="original.jar.version" value="1.2"/>
+
+    <target name="package"> 
+        <bndPackage version="1.0" bnd.file="bnd.bnd"/>
+    </target>
+
+</project>

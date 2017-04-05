@@ -1,0 +1,6 @@
+Build: d1410.01
+
+Components (files -deleted and !modified):
+  SERV1/ws/code/jpa
+
+  SERV1/ws/code/jpa.impl

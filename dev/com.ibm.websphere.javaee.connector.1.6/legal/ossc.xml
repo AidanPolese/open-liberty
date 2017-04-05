@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Unknown" 
+            projectURL="Unknown" 
+            version="1.0" revision="" 
+            license-type="???" 
+            contact="???us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/projects/w/was.build/botp/WASX.SERV1/test/yy1304.07.linux/linux/zipper/fe.zip">
+         <file basename="javax.j2ee.connector_1.6.jar" checksum="b9d7b34c9d2c9a8051962ddf036327e6"/>
+      </download>
+   </project>
+   
+   <notes>
+   </notes>
+   
+   <clearencehistory>
+   </clearencehistory>
+</ossc>

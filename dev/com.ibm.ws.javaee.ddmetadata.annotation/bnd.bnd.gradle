@@ -1,0 +1,6 @@
+-include ~../cnf/resources/bnd/liberty-release.props
+
+publish.wlp.jar.disabled: true
+
+-buildpath: \
+	com.ibm.ws.logging.core

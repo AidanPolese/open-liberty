@@ -1,0 +1,52 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+STREAM_CREATE_EXC = \u672a\u80fd\u521b\u5efa XMLStreamReader\uff08\u8f93\u5165\u4e3a\u7f16\u7801 {0}\uff09\u3002
+INVALID_HTML_RESPONSETYPE = \u54cd\u5e94\u4e3a\u610f\u5916 text/html ContentType\u3002HTML \u6d41\u7684\u5165\u5c40\u90e8\u5206\uff1a{0}
+STAX_READ_EXC = \u672a\u80fd\u4ece XMLStreamReader \u8bfb\u53d6\u6570\u636e\u3002
+STAX_WRITE_EXC = \u672a\u80fd\u5c06\u6570\u636e\u5199\u81f3 XMLStreamWriter\u3002
+NO_OPERATION_ELEMENT=\u5fc5\u987b\u6709\u64cd\u4f5c\u5143\u7d20\u3002
+NO_OPERATION=\u6ca1\u6709\u8fd9\u7c7b\u64cd\u4f5c\uff1a{0}
+NO_OPERATION_PATH=\u6ca1\u6709\u8fd9\u7c7b\u64cd\u4f5c\uff1a{0} (HTTP GET PATH_INFO: {1})
+NO_DATAREADER=\u670d\u52a1 {0} \u6ca1\u6709\u53ef\u7528 DataReader
+NO_DATAWRITER=\u670d\u52a1 {0} \u6ca1\u6709\u53ef\u7528 DataWriter
+COULD_NOT_UNRWAP=\u672a\u80fd\u6253\u5f00\u6d88\u606f\u90e8\u5206\u3002
+COULD_NOT_SEND=\u672a\u80fd\u53d1\u9001\u6d88\u606f\u3002
+NO_PART_FOUND=\u6d88\u606f\u90e8\u5206 {0} \u4e0d\u53ef\u8bc6\u522b\u3002\uff08\u5b83\u5728\u670d\u52a1 WSDL \u4e2d\u662f\u5426\u5b58\u5728\uff1f\uff09
+ORDERED_PARAM_REQUIRED=\u5e94\u6309\u4ee5\u4e0b\u987a\u5e8f\u5bf9\u53c2\u6570\u6392\u5e8f\uff1a{0}
+WRITE_ATTACHMENTS=\u672a\u80fd\u7f16\u5199\u9644\u4ef6\u3002
+INVOKE_FAULT_INFO=\u672a\u80fd\u8c03\u7528 getFaultInfo \u65b9\u6cd5\u3002
+NO_FAULT_INFO_METHOD=\u5b9a\u5236\u6545\u969c\u9700\u8981 getFaultInfo \u65b9\u6cd5\u3002
+NO_ACCCESS_FAULT_INFO=\u672a\u80fd\u8bbf\u95ee getFaultInfo \u65b9\u6cd5\u3002
+COULD_NOT_CREATE_ANNOTATION_OBJECT=\u672a\u80fd\u521b\u5efa\u6ce8\u91ca\u5bf9\u8c61\uff1a{0}
+COULD_NOT_FIND_SEICLASS=\u627e\u4e0d\u5230\u7c7b\uff1a{0}
+EXCEPTION_WHILE_WRITING_FAULT = \u5199\u5165\u6545\u969c\u65f6\u53d1\u751f\u4e86\u5f02\u5e38\u3002
+EXCEPTION_WHILE_CREATING_EXCEPTION = \u521b\u5efa\u5f02\u5e38 {0} \u65f6\u53d1\u751f\u5f02\u5e38
+UNEXPECTED_WRAPPER_ELEMENT = \u53d1\u73b0\u610f\u5916\u5305\u88c5\u5668\u5143\u7d20 {0}\u3002\u9884\u671f\u5305\u88c5\u5668\u5143\u7d20\u4e3a {1}\u3002
+UNEXPECTED_ELEMENT = \u53d1\u73b0\u610f\u5916\u5143\u7d20 {0}\u3002\u9884\u671f\u5143\u7d20\u4e3a {1}\u3002
+ 

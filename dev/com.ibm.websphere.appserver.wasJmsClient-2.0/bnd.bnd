@@ -1,0 +1,18 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.wasJmsClient-2.0
+
+publish.feature.resources: **
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.internal.jms-2.0;version=latest, \
+	com.ibm.websphere.appserver.channelfw-1.0;version=latest, \
+	com.ibm.websphere.appserver.transaction-1.2;version=latest, \
+	com.ibm.ws.messaging.common;version=latest, \
+	com.ibm.ws.resource;version=latest, \
+	com.ibm.ws.messaging.utils;version=latest, \
+	com.ibm.ws.messaging.jms.common;version=latest, \
+	com.ibm.ws.messaging.jms.2.0;version=latest, \
+	com.ibm.ws.messaging.comms.client;version=latest

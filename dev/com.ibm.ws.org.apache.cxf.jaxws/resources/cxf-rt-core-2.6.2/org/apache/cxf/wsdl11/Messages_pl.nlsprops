@@ -1,0 +1,49 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-core-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+WSDL_SCHEMA_GENERATION_FAILURE_MSG = Nie mo\u017cna wygenerowa\u0107 plik\u00f3w schematu i/lub WSDL.
+WSDL_UNREADABLE_MSG = Nie mo\u017cna odczyta\u0107 wygenerowanego pliku WSDL.
+WSDL_GENERATION_TMP_DIR_MSG = Nie mo\u017cna utworzy\u0107 katalogu tymczasowego w celu wygenerowania pliku WSDL.
+WSDL_GENERATION_FAILURE_MSG = Nie mo\u017cna wygenerowa\u0107 pliku WSDL.
+WSDL_GENERATION_BAD_RESULT_MSG = Generator zwr\u00f3ci\u0142 warto\u015b\u0107 wyj\u015bcia {0}.
+EXTENSION_ADD_FAILED_MSG = Nie powiod\u0142o si\u0119 dodanie elementu rozszerzenia.
+SERVICE_CREATION_MSG = Nie powiod\u0142o si\u0119 utworzenie us\u0142ugi.
+NO_SUCH_SERVICE_EXC = Nie mo\u017cna znale\u017a\u0107 definicji dla us\u0142ugi {0}.
+NO_SUCH_ENDPOINT_EXC = Nie mo\u017cna znale\u017a\u0107 definicji dla portu {0}.
+FAIL_TO_CREATE_WSDL_DEFINITION = Nie powiod\u0142o si\u0119 utworzenie definicji WSDL na podstawie elementu {0}\r\nPrzyczyna: {1} 
+MISSING_DESTINATION_FACTORY = Nie mo\u017cna znale\u017a\u0107 fabryki miejsc docelowych, sprawd\u017a port //wsdl:port[@name=''{0}'']
+MISSING_SERVICE= Brak definicji us\u0142ugi {0} w pliku WSDL.
+WSDL4J_BAD_ELEMENT_PART= Cz\u0119\u015b\u0107 {0} zosta\u0142a zdefiniowana jako element {1}, kt\u00f3ry nie znajduje si\u0119 w schemacie.
+PART_NO_NAME_NO_TYPE= Cz\u0119\u015b\u0107 {0} zosta\u0142a zdefiniowana bez elementu i bez typu.
+NO_MESSAGE=Dla operacji {1} i wej\u015bcia o nazwie {2} nie znaleziono komunikatu {0}.  Sprawd\u017a plik WSDL pod k\u0105tem b\u0142\u0119d\u00f3w.
+BINDING_MISSING_TYPE=Nie mo\u017cna znale\u017a\u0107 w\u0142a\u015bciwo\u015bci portType dla powi\u0105zania {0}. Sprawd\u017a plik WSDL pod k\u0105tem b\u0142\u0119d\u00f3w.
+WRAPPED_RULE_1 = Nie mo\u017cna rozpakowa\u0107 operacji {0}. Komunikaty wej\u015bciowe i wyj\u015bciowe (je\u015bli istniej\u0105) musz\u0105 zawiera\u0107 tylko jedn\u0105 cz\u0119\u015b\u0107.
+WRAPPED_RULE_2 = Nie mo\u017cna rozpakowa\u0107 operacji {0}. Komunikat wej\u015bciowy musi odwo\u0142ywa\u0107 si\u0119 do deklaracji elementu globalnego o tej samej nazwie lokalnej co operacja.
+WRAPPED_RULE_3 = Nie mo\u017cna rozpakowa\u0107 operacji {0}. Komunikat wyj\u015bciowy musi odwo\u0142ywa\u0107 si\u0119 do deklaracji elementu globalnego.
+WRAPPED_RULE_4 = Nie mo\u017cna rozpakowa\u0107 operacji {0}. Jej odwo\u0142anie wsdl:part/@element musi by\u0107 zgodne z elementem xs:complexType/xs:sequence.
+WRAPPED_RULE_5 = Nie mo\u017cna rozpakowa\u0107 operacji {0}. Jej element wsdl:part/@element mo\u017ce zawiera\u0107 tylko sekwencje xs:sequence element\u00f3w xs:element[@name and not(@nillable)].

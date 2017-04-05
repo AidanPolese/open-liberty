@@ -1,0 +1,8 @@
+<project name="com.ibm.ws.ejbcontainer.core" default="build">
+  <property name="javac.boot.classpath" value="1.7"/>
+
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+  <!-- This project is manually traced. -->
+  <target name="post-compile"/>
+</project>

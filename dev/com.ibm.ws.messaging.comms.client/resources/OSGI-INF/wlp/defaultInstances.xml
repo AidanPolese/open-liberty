@@ -1,0 +1,6 @@
+<server>
+     <wasJmsOutbound id="BootstrapBasicMessaging"/>
+
+     <wasJmsOutbound id="BootstrapSecureMessaging"
+     useSSL="true" />
+</server>

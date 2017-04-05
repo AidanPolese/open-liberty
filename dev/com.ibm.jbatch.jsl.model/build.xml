@@ -1,0 +1,7 @@
+<project name="com.ibm.jbatch.jsl.model" default="build">
+	<property name="findbugs.known.failing.project" value="true" />
+	<property name="skip.findbugs" value="true" />
+
+	<import file="../ant_build/public_imports/standard_imports.xml" />
+
+</project>

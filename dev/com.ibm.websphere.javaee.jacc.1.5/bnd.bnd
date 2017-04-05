@@ -1,0 +1,16 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Require-Capability: osgi.ee; filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.jacc.1.5; singleton:=true
+
+Export-Package: javax.security.jacc
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/javax.security.jacc-api-1.5.jar;version=file

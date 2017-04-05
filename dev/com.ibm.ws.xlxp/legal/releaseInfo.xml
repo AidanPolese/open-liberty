@@ -1,0 +1,15 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="com.ibm.ws.xlxp-1.5.3">
+  <notes>
+    The following binary files are included, which are extracted from the download zip file in GSA site
+    fcg.jar
+    xlxpJAR.jar
+    xlxpScanner.jar
+    xlxpScannerUtils.jar
+    xlxpVM.jar
+    xlxpWASParsers.jar
+    
+    Source code repository:
+    RTC Repository: csnext.ibm.com, Project Area: XML Common Technologies, Stream: XL XP-J 1.5 for WAS V8.5
+  </notes>
+</releaseInfo>

@@ -1,0 +1,20 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.websocket.1.1; singleton:=true
+
+Export-Package: \
+	javax.websocket; version="1.1.0",\
+	javax.websocket.server; version="1.1.0"
+
+Include-Resource: \
+  @lib/javax.websocket-api-1.1.jar!/META-INF/LICENSE, \
+  @lib/javax.websocket-api-1.1.jar!/META-INF/NOTICE
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/javax.websocket-api-1.1.jar;version=file

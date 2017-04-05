@@ -1,0 +1,37 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-transports-http-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+LOAD_BUS_WITHOUT_APPLICATION_CONTEXT = Na\u010d\u00edst sb\u011brnici bez kontextu aplikace
+LOAD_BUS_WITH_APPLICATION_CONTEXT = Na\u010d\u00edst sb\u011brnici s kontextem aplikace
+REPLACED_HTTP_DESTIONFACTORY = C\u00edlov\u00e1 tov\u00e1rna HTTP byla nahrazena tov\u00e1rnou p\u0159enosu servlet\u016f
+BUILD_ENDPOINTS_FROM_CONFIG_LOCATION = Koncov\u00e9 body sestaven\u00ed z um\u00edst\u011bn\u00ed konfigurace: {0}
+DESTIONFACTORY_ALREADY_REGISTERED = Tov\u00e1rna p\u0159enosu servlet\u016f je ji\u017e registrov\u00e1na 
+UNEXPECTED_RESPONSE_TYPE_MSG = Neo\u010dek\u00e1van\u00fd typ odezvy {0}
+DECOUPLED_RESPONSE_FAILED_MSG = Odezva rozpojen\u00ed se nezda\u0159ila
+FAILED_TO_LOAD_SPRING_BUS = Nezda\u0159ilo se na\u010d\u00edst sb\u011brnici architektury Spring: {0}
+INVALID_ENCODING_MSG = Neplatn\u00e1 znakov\u00e1 sada {0} v po\u017eadavku.

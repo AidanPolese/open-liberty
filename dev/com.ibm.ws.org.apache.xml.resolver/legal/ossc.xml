@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Unknown" 
+            projectURL="Unknown" 
+            version="1.0" revision="" 
+            license-type="???" 
+            contact="???us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.build/botp/WASX.WSSEC/test/uu1231.01.linux/linux/zipper/fe.zip">
+         <file basename="xml-resolver-1.2.jar" checksum="706c533146c1f4ee46b66659ea14583a"/>
+      </download>
+   </project>
+   
+   <notes>
+   Copy of repository/xml-resolver/xml-resolver/1.2/xml-resolver-1.2.jar
+   </notes>
+   
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and v8.5 and has been cleared previously by WAS
+   </clearencehistory>
+</ossc>

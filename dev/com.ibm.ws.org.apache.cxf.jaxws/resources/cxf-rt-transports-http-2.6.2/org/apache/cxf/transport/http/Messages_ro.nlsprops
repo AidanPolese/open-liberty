@@ -1,0 +1,37 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-transports-http-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+UNEXPECTED_RESPONSE_TYPE_MSG = Tip de r\u0103spuns nea\u015fteptat {0}
+INVALID_ENCODING_MSG = Caracter invalid setat {0} \u00een cerere.
+NULL_RESPONSE_MSG = Obiectul r\u0103spuns este nul
+DECOUPLED_RESPONSE_FAILED_MSG = Decuplarea r\u0103spunsului a e\u015fuat
+MISSING_PATH_INFO = PATH_INFO nu este prezent \u00een contextul mesajului, ID-ul multiplex este indisponibil. Asigura\u0163i-v\u0103 c\u0103 portName transmis la getCurrentEndpointReferenceId este corect dac\u0103 serviciul are mai multe porturi
+INVALID_TIMEOUT_FORMAT = Pereche invalid\u0103 nume/valoare {0}={1} setat\u0103 \u00een RequestConext 
+NO_HTTP_DESTINATION_FACTORY_FOUND = Nu se poate g\u0103si nici un HttpDestinationFactory \u00eenregistrat de la Magistral\u0103.
+EXECUTOR_FULL = Executorul a respins taskul de fundal pentru a extrage r\u0103spunsul, ce ruleaz\u0103 pe firul de execu\u0163ie curent.
+EXECUTOR_FULL_WARNING = Executorul a respins taskul de fundal pentru a extrage r\u0103spunsul.  Sugera\u0163i cre\u015fterea set\u0103rilor cozii de lucru.

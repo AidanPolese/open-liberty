@@ -1,0 +1,27 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: com.ibm.ws.cdi.1.2.interfaces
+Bundle-SymbolicName: com.ibm.ws.cdi.1.2.interfaces
+
+Bundle-Description:cdi 1.2 interfaces, version ${bVersion}
+
+Service-Component: \
+ com.ibm.ws.weld.deserializationClassProvider;\
+    implementation:=com.ibm.ws.serialization.DeserializationClassProvider;\
+    provide:=com.ibm.ws.serialization.DeserializationClassProvider;\
+    properties:="service.vendor=IBM,\
+      packages=com.ibm.ws.cdi\
+        |com.ibm.ws.cdi.extension"
+
+Export-Package: com.ibm.ws.cdi, \
+                com.ibm.ws.cdi.extension
+
+WS-TraceGroup: JCDI
+
+-buildpath: \
+	com.ibm.websphere.javaee.cdi.1.2;version=latest,\
+	com.ibm.ws.adaptable.module;version=latest,\
+	com.ibm.ws.container.service;version=latest,\
+	com.ibm.websphere.appserver.spi.logging;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

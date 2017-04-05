@@ -1,0 +1,26 @@
+# IBM Confidential OCO Source Material
+# 5648-C83, 5648-C84 (C) COPYRIGHT International Business Machines Corp. 1997-2001
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+#
+# This file has been modified to follow the WebSphere Message Guidelines.
+# For more information, visit:
+#   http://washome.austin.ibm.com/xwiki/bin/view/InformationDevelopmentTeam/MESSAGES_DISTRIBUTED
+#
+# cmvc_en_version_level=1.4,0,04/02/09,12:44:41
+#
+#CMVCPATHNAME ws/code/webcontainer/src/com/ibm/ws/webcontainer/resources/ErrorPage.nlsprops
+#COMPONENTPREFIX SRVE
+#COMPONENTNAMEFOR SRVE Servlet Engine
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_NONE
+#NLS_ENCODING=UNICODE
+
+original.exception=\u30aa\u30ea\u30b8\u30ca\u30eb\u4f8b\u5916
+error.page.exception=\u30a8\u30e9\u30fc\u30fb\u30da\u30fc\u30b8\u4f8b\u5916
+error.message=\u30a8\u30e9\u30fc\u30fb\u30e1\u30c3\u30bb\u30fc\u30b8
+error.code=\u30a8\u30e9\u30fc\u30fb\u30b3\u30fc\u30c9
+error.stack=\u30a8\u30e9\u30fc\u30fb\u30b9\u30bf\u30c3\u30af
+target.servlet=\u30bf\u30fc\u30b2\u30c3\u30c8\u30fb\u30b5\u30fc\u30d6\u30ec\u30c3\u30c8
+

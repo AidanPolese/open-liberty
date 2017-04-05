@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+  <project project="WELD" 
+            projectURL="http://weld.cdi-spec.org/" 
+            version="2.3.4.Final"  
+            license-type="Apachev2" 
+            contact="emijiang@uk.ibm.com" 
+            encryption="no">
+      <download location="http://mvnrepository.com/artifact/org.jboss.logging/jboss-logging/3.1.3.GA http://mvnrepository.com/artifact/org.jboss.logging/jboss-logging-processor/1.1.0.Final">
+         <file basename="jboss-logging-3.3.0.Final.jar" checksum="bc11af4b8ce7138cdc79b7ba8561638c"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+   
+   <notes>
+   </notes>
+</ossc> 

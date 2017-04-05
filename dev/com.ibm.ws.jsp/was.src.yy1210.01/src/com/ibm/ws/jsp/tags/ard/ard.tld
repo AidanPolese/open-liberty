@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_1.xsd"
+	version="2.1">
+
+	<description>This is the tag library which contains the tags for asynchronously including jsps</description>
+	<display-name>Asynchronous Include Jsp Tag Library</display-name>
+    <tlib-version>2.1</tlib-version>
+    <short-name>ARD</short-name>
+    <uri>http://www.ibm.com/jsp/ard</uri>
+
+	<tag>
+		<desciption>Tag which allows for asynchonous jsp dispatching</desciption>
+		<display-name>Import</display-name>
+		<name>import</name>
+		<tag-class>com.ibm.ws.jsp.tags.ard.ImportTag</tag-class>
+		<tei-class>com.ibm.ws.jsp.tags.ard.ImportExtraInfo</tei-class>
+	    <body-content>empty</body-content>
+		<!-- Either a url or a var needs to be provided -->
+		<attribute>
+			<description>url</description>
+			<name>url</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>var</description>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Scope of var</description>
+			<name>scope</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Context</description>
+			<name>context</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Blocking</description>
+			<name>blocking</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<!-- Config Attributes -->
+		<attribute>
+			<description>expiration timeout override</description>
+			<name>expirationTimeoutOverride</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>rejected message</description>
+			<name>rejectedMessage</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>rejected message encoding</description>
+			<name>rejectedEncoding</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>retriable</description>
+			<name>retriable</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>use Default Javascript</description>
+			<name>useDefaultJavascript</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>transferState</description>
+			<name>transferState</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>execution Timeout Message</description>
+			<name>executionTimeoutMessage</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>execution timeout message encoding</description>
+			<name>executionTimeoutEncoding</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>execution timeout override</description>
+			<name>executionTimeoutOverride</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<desciption>Tag which allows for generating a fragment response</desciption>
+		<display-name>FragmentResponse</display-name>
+		<name>fragmentResponse</name>
+		<tag-class>com.ibm.ws.jsp.tags.ard.FragmentResponseTag</tag-class>
+	    <body-content>empty</body-content>
+		<attribute>
+			<description>url</description>
+			<name>url</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>var</description>
+			<name>var</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Scope of var</description>
+			<name>scope</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Context</description>
+			<name>context</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<!-- Config Attributes -->
+		<attribute>
+			<description>expiration timeout override</description>
+			<name>expirationTimeoutOverride</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>rejected message</description>
+			<name>rejectedMessage</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>rejected message encoding</description>
+			<name>rejectedEncoding</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>retriable</description>
+			<name>retriable</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>use Default Javascript</description>
+			<name>useDefaultJavascript</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>transferState</description>
+			<name>transferState</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>execution Timeout Message</description>
+			<name>executionTimeoutMessage</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>execution timeout message encoding</description>
+			<name>executionTimeoutEncoding</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>execution timeout override</description>
+			<name>executionTimeoutOverride</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<desciption>Tag which allows for inserting a fragment response</desciption>
+		<display-name>InsertFragment</display-name>
+		<name>insertFragment</name>
+		<tag-class>com.ibm.ws.jsp.tags.ard.InsertFragmentTag</tag-class>
+	    <body-content>empty</body-content>
+		<attribute>
+			<description>var</description>
+			<name>var</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Scope of var</description>
+			<name>scope</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Blocking</description>
+			<name>blocking</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<desciption>Tag which allows for setting the configuration for ARD</desciption>
+		<display-name>DispatcherConfig</display-name>
+		<name>dispatcherConfig</name>
+		<tag-class>com.ibm.ws.jsp.tags.ard.DispatcherConfigTag</tag-class>
+	    <body-content>empty</body-content>
+		<!-- Stored as ardConfig var on request scope -->
+		<!-- Config Attributes -->
+		<attribute>
+			<description>expiration timeout override</description>
+			<name>expirationTimeoutOverride</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>rejected message</description>
+			<name>rejectedMessage</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>rejected message encoding</description>
+			<name>rejectedEncoding</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>retriable</description>
+			<name>retriable</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>use Default Javascript</description>
+			<name>useDefaultJavascript</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>transferState</description>
+			<name>transferState</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>execution Timeout Message</description>
+			<name>executionTimeoutMessage</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>execution timeout message encoding</description>
+			<name>executionTimeoutEncoding</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>execution timeout override</description>
+			<name>executionTimeoutOverride</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>

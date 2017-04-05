@@ -1,0 +1,11 @@
+<project name="com.ibm.websphere.javaee.mail.1.5" default="build">
+    <property name="spec.name" value="mail"/>
+    <property name="spec.marketing.version" value="1.5"/>
+    <property name="spec.javadoc.name" value="javamail-1.5.0-javadocs.zip"/>
+    <property name="bundle.version" value="1.0"/>
+
+    <import file="../ant_build/public_imports/spec_imports.xml"/>
+ 
+    <target name="package" depends="spec.package"/>
+    <target name="publishToImage" depends="spec.publishToImage" />  
+</project>

@@ -1,0 +1,9 @@
+<server>
+		<com.ibm.ws.sib.queue id="Default.Queue" />
+		<com.ibm.ws.sib.topicSpace id="Default.Topic.Space" />
+		<com.ibm.ws.sib.fileStore id="defaultFileStore"/>
+	
+	<executor name="LargeThreadPool" id="default" coreThreads="60" maxThreads="0" 
+          keepAlive="60s" stealPolicy="STRICT" rejectedWorkPolicy="CALLER_RUNS" />  
+	
+</server>

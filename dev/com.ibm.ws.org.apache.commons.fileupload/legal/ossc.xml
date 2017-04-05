@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Commons File Upload" 
+            projectURL="Unknown" 
+            version="1.2.1" revision="" 
+            license-type="Apachev2" 
+            contact="rvennam@us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/projects/w/was.build/botp/WAS80.SERV1/test/cf011134.04.linux/linux/zipper/fe.zip">
+         <file basename="org.apache.commons.fileupload-1.2.1.jar" checksum="91f093d9350823566416ed5d20e224e7"/>
+      </download>
+   </project>
+      
+   <notes>
+   The download location is the FE.zip that includes the commons.fileupload.jar (in the prereq.commons.fileupload build component),
+   which has then been renamed.
+   </notes>
+
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and has been cleared previously by WAS v8
+   </clearencehistory>
+
+</ossc>

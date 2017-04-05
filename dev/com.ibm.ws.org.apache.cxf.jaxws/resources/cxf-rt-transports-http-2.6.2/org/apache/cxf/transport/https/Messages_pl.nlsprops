@@ -1,0 +1,85 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-transports-http-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SSL_CONTEXT_INIT_FAILURE = Wyst\u0105pi\u0142 problem podczas inicjowania protoko\u0142u SSL dla \u017c\u0105dania wychodz\u0105cego. Wyj\u0105tek zg\u0142oszony przez dostawc\u0119 zabezpiecze\u0144: {0}
+UNKNOWN_SSL_CLIENT_POLICY_DATA = Nieznana w\u0142a\u015bciwo\u015b\u0107 SSLClientPolicy: {0}
+UNKNOWN_SSL_SERVER_POLICY_DATA = Nieznana w\u0142a\u015bciwo\u015b\u0107 SSLServerPolicy: {0}
+UNSUPPORTED_SSL_CLIENT_POLICY_DATA = Nieobs\u0142ugiwana w\u0142a\u015bciwo\u015b\u0107 SSLClientPolicy: {0}
+UNSUPPORTED_SSL_SERVER_POLICY_DATA = Nieobs\u0142ugiwana w\u0142a\u015bciwo\u015b\u0107 SSLServerPolicy: {0}
+KEY_STORE_NOT_SET = Po\u0142o\u017cenie magazynu kluczy nie zosta\u0142o ustawione za pomoc\u0105 parametru systemowego ani w konfiguracji. Zostanie u\u017cyta warto\u015b\u0107 domy\u015blna {0}.
+KEY_STORE_SET = Ustawiono nast\u0119puj\u0105ce po\u0142o\u017cenie magazynu kluczy: {0}.
+KEY_STORE_SYSTEM_PROPERTY_SET = Po\u0142o\u017cenie magazynu kluczy zosta\u0142o ustawione za pomoc\u0105 w\u0142a\u015bciwo\u015bci systemowej na {0}.
+KEY_STORE_TYPE_NOT_SET = Typ magazynu kluczy nie zosta\u0142 ustawiony w konfiguracji, dlatego zostanie u\u017cyta warto\u015b\u0107 domy\u015blna {0}.
+KEY_STORE_TYPE_SYSTEM_SET = Typ magazynu kluczy zosta\u0142 ustawiony za pomoc\u0105 w\u0142a\u015bciwo\u015bci systemowej na {0}.
+KEY_STORE_TYPE_SET = Typ magazynu kluczy zosta\u0142 ustawiony w konfiguracji na {0}.
+KEY_STORE_PROVIDER_NOT_SET = Dostawca magazynu kluczy nie zosta\u0142 ustawiony w konfiguracji, dlatego zostanie u\u017cyta warto\u015b\u0107 domy\u015blna {0}.
+KEY_STORE_PROVIDER_SYSTEM_SET = Dostawca magazynu kluczy zosta\u0142 ustawiony za pomoc\u0105 w\u0142a\u015bciwo\u015bci systemowej na {0}.
+KEY_STORE_PROVIDER_SET = Dostawca magazynu kluczy zosta\u0142 ustawiony w konfiguracji na {0}.
+LOADED_KEYSTORE = Magazyn kluczy {0} zosta\u0142 pomy\u015blnie za\u0142adowany.
+FAILED_TO_LOAD_KEYSTORE = \u0141adowanie magazynu kluczy {0} nie powiod\u0142o si\u0119. Wyst\u0105pi\u0142 nast\u0119puj\u0105cy problem: {1}.
+FAILED_TO_LOAD_KEYSTORE_NULL_PASSWORD = \u0141adowanie magazynu kluczy {0} nie powiod\u0142o si\u0119, poniewa\u017c nie ustawiono has\u0142a.
+TRUST_STORE_NOT_SET = Po\u0142o\u017cenie magazynu zaufanych certyfikat\u00f3w nie zosta\u0142o ustawione za pomoc\u0105 parametru systemowego ani w konfiguracji. Zostanie u\u017cyta warto\u015b\u0107 domy\u015blna {0}.
+TRUST_STORE_SET = Po\u0142o\u017cenie magazynu zaufanych certyfikat\u00f3w zosta\u0142o ustawione w konfiguracji na {0}.
+TRUST_STORE_SYSTEM_PROPERTY_SET = Po\u0142o\u017cenie magazynu zaufanych certyfikat\u00f3w zosta\u0142o ustawione za pomoc\u0105 w\u0142a\u015bciwo\u015bci systemowej na {0}.
+TRUST_STORE_TYPE_NOT_SET = Typ magazynu zaufanych certyfikat\u00f3w nie zosta\u0142 ustawiony w konfiguracji, dlatego zostanie u\u017cyta warto\u015b\u0107 domy\u015blna {0}.
+TRUST_STORE_TYPE_SET = Typ magazynu zaufanych certyfikat\u00f3w zosta\u0142 ustawiony w konfiguracji na {0}.
+TRUST_STORE_TYPE_SYSTEM_SET = Typ magazynu zaufanych certyfikat\u00f3w zosta\u0142 ustawiony za pomoc\u0105 w\u0142a\u015bciwo\u015bci systemowej na {0}.
+FAILED_TO_LOAD_TRUST_STORE = \u0141adowanie magazynu zaufanych certyfikat\u00f3w {0} nie powiod\u0142o si\u0119. Wyst\u0105pi\u0142 nast\u0119puj\u0105cy problem: {1}.
+LOADED_TRUST_STORE = Magazyn zaufanych certyfikat\u00f3w {0} zosta\u0142 pomy\u015blnie za\u0142adowany.
+KEY_STORE_PASSWORD_NOT_SET = Has\u0142o magazynu kluczy nie zosta\u0142o ustawione za pomoc\u0105 w\u0142a\u015bciwo\u015bci systemowej ani w konfiguracji. Odczytywanie danych z magazynu kluczy zako\u0144czy si\u0119 niepowodzeniem.
+KEY_STORE_PASSWORD_SET = Has\u0142o magazynu kluczy zosta\u0142o ustawione w konfiguracji i b\u0119dzie u\u017cywane.
+KEY_STORE_PASSWORD_SYSTEM_PROPERTY_SET = Has\u0142o magazynu kluczy zosta\u0142o ustawione za pomoc\u0105 w\u0142a\u015bciwo\u015bci systemowej i b\u0119dzie u\u017cywane.
+KEY_PASSWORD_NOT_SET = Has\u0142o klucza nie zosta\u0142o ustawione za pomoc\u0105 w\u0142a\u015bciwo\u015bci systemowej ani w konfiguracji. Odczytywanie danych z magazynu kluczy zako\u0144czy si\u0119 niepowodzeniem.
+KEY_PASSWORD_SET = Has\u0142o klucza zosta\u0142o ustawione w konfiguracji i b\u0119dzie u\u017cywane.
+KEY_PASSWORD_SYSTEM_PROPERTY_SET = Has\u0142o klucza zosta\u0142o ustawione za pomoc\u0105 w\u0142a\u015bciwo\u015bci systemowej i b\u0119dzie u\u017cywane.
+SECURE_SOCKET_PROTOCOL_NOT_SET = Protok\u00f3\u0142 zabezpieczonego gniazda nie zosta\u0142 ustawiony. Zostanie u\u017cyta warto\u015b\u0107 domy\u015blna TLSv1.
+SECURE_SOCKET_PROTOCOL_SET = Protok\u00f3\u0142 zabezpieczonego gniazda zosta\u0142 ustawiony na {0}.
+REQUIRE_CLIENT_AUTHENTICATION_NOT_SET = Wymaganie uwierzytelniania klienta nie zosta\u0142o ustawione jawnie w konfiguracji. Zostanie u\u017cyta warto\u015b\u0107 domy\u015blna fa\u0142sz.
+REQUIRE_CLIENT_AUTHENTICATION_SET = Wymaganie uwierzytelniania klienta ustawiono na warto\u015b\u0107 {0}.
+WANT_CLIENT_AUTHENTICATION_NOT_SET = \u017b\u0105danie uwierzytelniania klienta nie zosta\u0142o ustawione jawnie w konfiguracji. Zostanie u\u017cyta warto\u015b\u0107 domy\u015blna fa\u0142sz.
+WANT_CLIENT_AUTHENTICATION_SET = \u017b\u0105danie uwierzytelniania klienta ustawiono na warto\u015b\u0107 {0}.
+KEY_PASSWORD_NOT_SAME_KEYSTORE_PASSWORD = Warto\u015b\u0107 podana dla has\u0142a magazynu kluczy jest inna ni\u017c has\u0142o klucza. Obecne ograniczenia biblioteki JSSE wymagaj\u0105, aby by\u0142y one takie same. Zostanie u\u017cyta tylko warto\u015b\u0107 has\u0142a magazynu kluczy.
+CIPHERSUITES_SET = Zestawy algorytm\u00f3w szyfrowania ustawiono na {0}.  
+CIPHERSUITES_NOT_SET = Zestawy algorytm\u00f3w szyfrowania nie zosta\u0142y skonfigurowane. Powr\u00f3t do filtr\u00f3w zestaw\u00f3w algorytm\u00f3w szyfrowania.
+CIPHERSUITE_FILTERS_NOT_SET = Filtry zestaw\u00f3w algorytm\u00f3w szyfrowania nie zosta\u0142y skonfigurowane. Powr\u00f3t do domy\u015blnych filtr\u00f3w.
+CIPHERSUITE_FILTER = Filtr zestaw\u00f3w algorytm\u00f3w szyfrowania: 
+CIPHERSUITE_INCLUDED = Zestaw algorytm\u00f3w szyfrowania {0} zosta\u0142 do\u0142\u0105czony przez filtr.
+CIPHERSUITE_EXCLUDED = Zestaw algorytm\u00f3w szyfrowania {0} zosta\u0142 wykluczony przez filtr.
+CIPHERSUITE_INCLUDE_FILTER = Filtr do\u0142\u0105czania zestaw\u00f3w algorytm\u00f3w szyfrowania: {0}
+CIPHERSUITE_EXCLUDE_FILTER = Filtr wykluczania zestaw\u00f3w algorytm\u00f3w szyfrowania: {0}
+CIPHERSUITES_FILTERED = Przefiltrowane w\u0142\u0105czone zestawy algorytm\u00f3w szyfrowania: {0}.
+CIPHERSUITES_EXCLUDED = Przefiltrowane wykluczone zestawy algorytm\u00f3w szyfrowania: {0}.  
+SUCCESS_INVOKING_SECURITY_CONFIGURER = Metoda konfiguruj\u0105ca {0} niestandardowego konfiguratora zabezpiecze\u0144 zosta\u0142a pomy\u015blnie wywo\u0142ana.
+ERROR_INVOKING_SECURITY_CONFIGURER = Niepowodzenie podczas wywo\u0142ywania niestandardowego konfiguratora zabezpiecze\u0144 {0}. Zg\u0142oszony wyj\u0105tek: {1}.
+KEY_STORE_ALGORITHM_NOT_SET = Algorytm fabryki mened\u017cera kluczy magazynu kluczy nie zosta\u0142 ustawiony w konfiguracji, dlatego zostanie u\u017cyta warto\u015b\u0107 domy\u015blna {0}.
+KEY_STORE_ALGORITHM_SET = Algorytm fabryki mened\u017cera kluczy magazynu kluczy zosta\u0142 ustawiony w konfiguracji na {0}.
+TRUST_STORE_ALGORITHM_NOT_SET = Algorytm fabryki mened\u017cera kluczy magazynu zaufanych certyfikat\u00f3w nie zosta\u0142 ustawiony w konfiguracji, dlatego zostanie u\u017cyta warto\u015b\u0107 domy\u015blna {0}.
+TRUST_STORE_ALGORITHM_SET = Algorytm fabryki mened\u017cera kluczy magazynu zaufanych certyfikat\u00f3w zosta\u0142 ustawiony w konfiguracji na {0}.
+COULD_NOT_CREATE_OUTBOUND_REQUEST_SOCKET = Utworzenie po\u0142\u0105czenia z hostem {0} na porcie {1} nie powiod\u0142o si\u0119. Zg\u0142oszony b\u0142\u0105d: {2}. 
+PROBLEM_CREATING_OUTBOUND_REQUEST_SOCKET = Utworzenie po\u0142\u0105czenia z hostem {0} na porcie {1} nie powiod\u0142o si\u0119.
+UNOFFICIAL_SECURITY_CONFIGURER = U\u017cycie konfiguratora zabezpiecze\u0144 jest obs\u0142ugiwane w wersji 1.0 produktu Celtix, ale interfejs API mo\u017ce ulec zmianie w przysz\u0142ych wersjach.

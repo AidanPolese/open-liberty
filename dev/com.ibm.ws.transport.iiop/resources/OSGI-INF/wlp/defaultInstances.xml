@@ -1,0 +1,6 @@
+<server>
+
+  <com.ibm.ws.transport.iiop.spi.SubsystemFactory type="Naming"/>
+  <com.ibm.ws.transport.iiop.spi.SubsystemFactory type="DefaultSocketFactory"/>
+
+</server>

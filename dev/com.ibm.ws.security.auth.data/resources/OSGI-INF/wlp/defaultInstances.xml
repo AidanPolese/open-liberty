@@ -1,0 +1,7 @@
+<server>
+
+    <jaasLoginModule id="wsPrincipalMappingLoginModule" className="com.ibm.websphere.security.jca.WSPrincipalMappingLoginModule" controlFlag="REQUIRED" libraryRef="jaasSharedLib" />
+
+	<jaasLoginContextEntry id="DefaultPrincipalMapping" name="DefaultPrincipalMapping" loginModuleRef="wsPrincipalMappingLoginModule" />
+    
+</server>

@@ -1,0 +1,12 @@
+<project name="com.ibm.ws.org.apache.commons.beanutils" default="build">
+    <property name="original.jar.name" value="org.apache.commons.beanutils"/>
+    <property name="original.jar.version" value="1.8.3"/>
+
+    <property name="bundle.version" value="1.0"/>
+    
+    <import file="../ant_build/public_imports/rejar_imports.xml" />
+    
+    <target name="package"> 
+        <bndPackage version="1.0" bnd.file="bnd.bnd"/>
+    </target>
+</project>

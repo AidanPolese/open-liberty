@@ -1,0 +1,22 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: JSR 77
+Bundle-SymbolicName: com.ibm.ws.management.j2ee
+Bundle-Description: JSR 77; version=${bVersion}
+
+WS-TraceGroup: applications
+
+Export-Package: \
+  com.ibm.websphere.management.j2ee
+  
+Private-Package: \
+  com.ibm.ws.management.j2ee.mbeans.internal
+    
+Import-Package: \
+  !*.internal.*, \
+  *
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

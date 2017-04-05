@@ -1,0 +1,31 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-management-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+CAN_NOT_GET_BUS_FROM_EXCHANGE = \u4e0d\u80fd\u901a\u8fc7\u4ea4\u6362\u6765\u83b7\u53d6\u603b\u7ebf\u5b9e\u4f8b\uff0c\u8bf7\u6539\u7528\u7f3a\u7701\u603b\u7ebf
+CREATE_COUNTER_OBJECTNAME_FAILED = \u521b\u5efa\u8ba1\u6570\u5668\u7684 ObjectName \u5931\u8d25\u3002{0}
+NO_COUNTER_REPOSITORY = \u65e0\u6cd5\u901a\u8fc7\u7f3a\u7701\u603b\u7ebf\u627e\u5230 CounterRepository

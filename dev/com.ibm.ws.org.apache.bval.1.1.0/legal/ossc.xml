@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Bean Validation" 
+            projectURL="http://bval.apache.org" 
+            version="1.1.0" revision="1662255" 
+            license-type="Apachev2" 
+            contact="nmittles@us.ibm.com" 
+            encryption="no">
+      <download location="https://svn.apache.org/repos/asf/bval/branches/bval-11/">
+         <file basename="org.apache.bval.bundle-1.1.0-alpha-SNAPSHOT.jar" checksum="53535c323de22387441cadc0674c2b62"/>
+      </download>
+   </project>
+   
+   <notes>
+    This open source binary was built locally from the svn repository branch listed above.
+   </notes>
+   
+   <clearencehistory/>
+</ossc>

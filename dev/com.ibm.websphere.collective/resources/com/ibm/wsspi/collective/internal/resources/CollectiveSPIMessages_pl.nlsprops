@@ -1,0 +1,29 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.websphere.collective/resources/com/ibm/wsspi/collective/internal/resources/CollectiveSPIMessages.nlsprops
+#COMPONENTPREFIX CWWKX
+#COMPONENTNAMEFOR WebSphere Collective SPI
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKX8000 - CWWKX8049
+
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE=CWWKX8000E: Wyst\u0105pi\u0142 b\u0142\u0105d konfiguracji. Brak dost\u0119pnych implementacji klasy RepositoryClient. Okre\u015bl sk\u0142adnik taki jak collectiveMember-1.0 lub collectiveController-1.0 i zdefiniuj wszystkie wymagane konfiguracje, aby rozwi\u0105za\u0107 ten problem. 
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.explanation=Sk\u0142adniki kolektywu udost\u0119pniaj\u0105 implementacj\u0119 klasy RepositoryClient. Nie mo\u017cna znale\u017a\u0107 takiej implementacji.
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.useraction=Okre\u015bl sk\u0142adnik kolektywu taki jak collectiveMember-1.0 lub collectiveController-1.0 i zdefiniuj wszystkie wymagane konfiguracje, aby rozwi\u0105za\u0107 ten problem. 
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES=CWWKX8001E: Wyst\u0105pi\u0142 b\u0142\u0105d konfiguracji. Dost\u0119pnych jest wiele implementacji klasy RepositoryClientDelegate. Bie\u017c\u0105ca implementacja jest udost\u0119pniana przez pakunek {0}. Usu\u0144 funkcje niestandardowe lub funkcje innych firm, kt\u00f3re zawieraj\u0105 pakunek {1}. 
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.explanation=Klasa RepositoryConnectionFactory wymaga konkretnej implementacji klasy RepositoryClientDelegate. Zarejestrowano dodatkow\u0105 implementacj\u0119 jako us\u0142ug\u0119 OSGi. Dozwolona jest tylko jedna implementacja.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.useraction=Usu\u0144 funkcje niestandardowe lub funkcje innych firm, kt\u00f3re zawieraj\u0105 okre\u015blony pakunek.
+
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE=CWWKX8002E: Wyst\u0105pi\u0142 b\u0142\u0105d konfiguracji. Brak dost\u0119pnych implementacji klasy RepositoryMember. Okre\u015bl sk\u0142adnik taki jak collectiveMember-1.0 lub collectiveController-1.0 i zdefiniuj wszystkie wymagane konfiguracje, aby rozwi\u0105za\u0107 ten problem. 
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.explanation=Sk\u0142adniki kolektywu udost\u0119pniaj\u0105 implementacj\u0119 klasy RepositoryMember. Nie mo\u017cna znale\u017a\u0107 takiej implementacji.
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.useraction=Okre\u015bl sk\u0142adnik kolektywu taki jak collectiveMember-1.0 lub collectiveController-1.0 i zdefiniuj wszystkie wymagane konfiguracje, aby rozwi\u0105za\u0107 ten problem. 
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES=CWWKX8003E: Wyst\u0105pi\u0142 b\u0142\u0105d konfiguracji. Dost\u0119pnych jest wiele implementacji klasy RepositoryMemberDelegate. Bie\u017c\u0105ca implementacja jest udost\u0119pniana przez pakunek {0}. Usu\u0144 funkcje niestandardowe lub funkcje innych firm, kt\u00f3re zawieraj\u0105 pakunek {1}.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.explanation=Klasa RepositoryConnectionFactory wymaga konkretnej implementacji klasy RepositoryMemberDelegate. Zarejestrowano dodatkow\u0105 implementacj\u0119 jako us\u0142ug\u0119 OSGi. Dozwolona jest tylko jedna implementacja.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.useraction=Usu\u0144 funkcje niestandardowe lub funkcje innych firm, kt\u00f3re zawieraj\u0105 okre\u015blony pakunek.

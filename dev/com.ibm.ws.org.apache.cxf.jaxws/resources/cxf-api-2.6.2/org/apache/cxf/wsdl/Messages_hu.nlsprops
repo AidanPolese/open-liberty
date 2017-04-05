@@ -1,0 +1,33 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SEI_LOAD_FAILURE_MSG = Webszolg\u00e1ltat\u00e1s SEI nem t\u00f6lthet\u0151 be
+
+COULD_NOT_CREATE_TRANSFORMER = Nem hozhat\u00f3 l\u00e9tre \u00e1talak\u00edt\u00f3
+COULD_NOT_POPULATE_EPR = Metaadatok felt\u00f6lt\u00e9se EPR-be meghi\u00fasult
+EXTENSION_NOT_REGISTERED = {0} wdsl oszt\u00e1ly {1} sz\u00fcl\u0151vel nem jegyezhet\u0151 be, mert az elemn\u00e9v nem \u00e1llap\u00edthat\u00f3 meg

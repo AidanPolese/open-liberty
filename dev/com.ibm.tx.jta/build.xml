@@ -1,0 +1,6 @@
+<project name="com.ibm.tx.jta" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+  <!-- This project is manually traced. -->
+  <target name="post-compile"/>
+</project>

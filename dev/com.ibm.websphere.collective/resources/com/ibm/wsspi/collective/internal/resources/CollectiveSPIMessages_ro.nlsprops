@@ -1,0 +1,31 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.websphere.collective/resources/com/ibm/wsspi/collective/internal/resources/CollectiveSPIMessages.nlsprops
+#COMPONENTPREFIX CWWKX
+#COMPONENTNAMEFOR WebSphere Collective SPI
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKX8000 - CWWKX8049
+
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE=CWWKX8000E: A ap\u0103rut o eroare de configurare. Nu este nici o implementare RepositoryClient disponibil\u0103. Specifica\u0163i o caracteristic\u0103 precum collectiveMember-1.0 sau collectiveController-1.0 \u015fi defini\u0163i configura\u0163ia necesar\u0103 pentru a rezolva aceast\u0103 problem\u0103. 
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.explanation=Caracteristicile colective furnizeaz\u0103 implementarea pentru RepositoryClient \u015fi nu s-a g\u0103sit nici o asemenea implementare.
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.useraction=Specifica\u0163i o caracteristic\u0103 colectiv\u0103, precum collectiveMember-1.0 sau collectiveController-1.0 \u015fi defini\u0163i orice configura\u0163ie necesar\u0103 pentru a rezolva aceast\u0103 problem\u0103.
+
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES=CWWKX8001E: A ap\u0103rut o eroare de configurare. Sunt disponibile mai multe implement\u0103ri RepositoryClientDelegate. Implementarea curent\u0103 este furnizat\u0103 de bundle-ul {0}. \u00cenl\u0103tura\u0163i toate caracteristicile personalizate sau de ter\u0163\u0103 parte ce includ bundle-ul {1}. 
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.explanation=RepositoryConnectionFactory necesit\u0103 o anumit\u0103 implementare RepositoryClientDelegate \u015fi s-a \u00eenregistrat o implementare suplimentar\u0103 ca serviciu OSGi. Este permis\u0103 o singur\u0103 implementare.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.useraction=\u00cenl\u0103tura\u0163i toate caracteristicile personalizate sau de ter\u0163\u0103 parte ce includ acest bundle specificat.
+
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE=CWWKX8002E: A ap\u0103rut o eroare de configurare. Nu este nici o implementare RepositoryMember disponibil\u0103. Specifica\u0163i o caracteristic\u0103 precum collectiveMember-1.0 sau collectiveController-1.0 \u015fi defini\u0163i configura\u0163ia necesar\u0103 pentru a rezolva aceast\u0103 problem\u0103. 
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.explanation=Caracteristicile colective furnizeaz\u0103 implementarea pentru RepositoryMember \u015fi nu s-a g\u0103sit nici o asemenea implementare.
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.useraction=Specifica\u0163i o caracteristic\u0103 colectiv\u0103, precum collectiveMember-1.0 sau collectiveController-1.0 \u015fi defini\u0163i orice configura\u0163ie necesar\u0103 pentru a rezolva aceast\u0103 problem\u0103.
+
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES=CWWKX8003E: A ap\u0103rut o eroare de configurare. Sunt disponibile mai multe implement\u0103ri RepositoryMemberDelegate. Implementarea curent\u0103 este furnizat\u0103 de bundle-ul {0}. \u00cenl\u0103tura\u0163i toate caracteristicile personalizate sau de ter\u0163\u0103 parte ce includ bundle-ul {1}.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.explanation=RepositoryConnectionFactory necesit\u0103 o anumit\u0103 implementare RepositoryMemberDelegate \u015fi s-a \u00eenregistrat o implementare suplimentar\u0103 ca serviciu OSGi. Este permis\u0103 o singur\u0103 implementare.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.useraction=\u00cenl\u0103tura\u0163i toate caracteristicile personalizate sau de ter\u0163\u0103 parte ce includ acest bundle specificat.

@@ -1,0 +1,16 @@
+<!-- NOTE: This is a generated file. Do not edit it directly. -->
+
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0"
+xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
+localization="OSGI-INF/l10n/metatype">
+
+<OCD id="com.ibm.ws.javaee.dd.webext.MimeFilter" name="%mimefiltermetatype.name" description="%mimefiltermetatype.desc">
+    <AD id="target" description="%MimeFilterMetatype.target.desc" name="%MimeFilterMetatype.target.name" type="String" required="false" cardinality="0"/>
+    <AD id="mime-type" description="%MimeFilterMetatype.mime-type.desc" name="%MimeFilterMetatype.mime-type.name" type="String" required="false" cardinality="0"/>
+</OCD>
+
+<Designate factoryPid="com.ibm.ws.javaee.dd.webext.MimeFilter">
+     <Object ocdref="com.ibm.ws.javaee.dd.webext.MimeFilter"/>
+</Designate>
+
+</metatype:MetaData>

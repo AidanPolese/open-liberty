@@ -1,0 +1,10 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.jta-1.1
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.javaee.transaction.1.1;version=latest, \
+	com.ibm.websphere.appserver.api.transaction;version=latest

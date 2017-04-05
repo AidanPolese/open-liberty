@@ -1,0 +1,36 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-ws-addr-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SOAP_HEADER_ENCODE_FAILURE_MSG = WS-Addressing - falha em codificar Propriedades de Endere\u00e7amento de Mensagens como Cabe\u00e7alhos SOAP:
+SOAP_HEADER_DECODE_FAILURE_MSG = WS-Addressing - falha em decodificar Propriedades de Endere\u00e7amento de Mensagens a partir de Cabe\u00e7alhos SOAP:
+UNSUPPORTED_VERSION_MSG = WS-Addressing vers\u00e3o {0} n\u00e3o suportado
+IGNORE_NON_ELEMENT_REF_PARAM_MSG = Ignorando o par\u00e2metro de refer\u00eancia {0} porque n\u00e3o \u00e9 um JAXBElement
+CORRELATION_FAILURE_MSG = Falha em correlacionar mensagem, abortando despacho.
+RESPONSE_NOT_USING_WSADDRESSING = A mensagem de resposta n\u00e3o cont\u00e9m propriedades de WS-Addressing.  N\u00e3o correlacionando a resposta.
+INVALID_CARDINALITY_MESSAGE = Cabe\u00e7alho {0} de WS-Addressing duplicado
+INVALID_ADDRESSING_PROPERTY_MESSAGE = Um cabe\u00e7alho que representa uma Propriedade de Endere\u00e7amento de Mensagens n\u00e3o \u00e9 v\u00e1lido e a mensagem n\u00e3o pode ser processada

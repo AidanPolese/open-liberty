@@ -1,0 +1,15 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Security Audit Context
+Bundle-SymbolicName: com.ibm.ws.security.audit.context
+Bundle-Description: Security Audit Context: Security Audit Context; version=${bVersion}
+WS-TraceGroup: audit
+
+Export-Package: \
+   com.ibm.ws.security.audit.context
+
+-buildpath: \
+	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
+	com.ibm.ws.logging.core;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

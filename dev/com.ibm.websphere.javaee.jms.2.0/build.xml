@@ -1,0 +1,9 @@
+<project name="com.ibm.websphere.javaee.jms.2.0" default="build">
+    <property name="spec.name" value="jms"/>
+    <property name="spec.marketing.version" value="2.0"/>
+    <property name="spec.javadoc.name" value="jms-2.0-javadoc.zip"/>
+	<property name="bundle.version" value="1.0"/>
+    <import file="../ant_build/public_imports/spec_imports.xml"/>
+    <target name="package" depends="spec.package"/>
+    <target name="publishToImage" depends="spec.publishToImage" />  
+</project>

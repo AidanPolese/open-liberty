@@ -1,0 +1,14 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: JMX Request Context
+Bundle-SymbolicName: com.ibm.ws.jmx.request
+Bundle-Description: Project for JMX Request Context
+
+WS-TraceGroup: Management
+
+Export-Package: \
+  com.ibm.ws.jmx.request
+
+-buildpath: \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

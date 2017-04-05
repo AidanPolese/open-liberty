@@ -1,0 +1,13 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.wasJmsSecurity-1.0
+
+publish.feature.resources: **
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.security-1.0;version=latest, \
+	com.ibm.ws.messaging.utils;version=latest, \
+	com.ibm.ws.messaging.security;version=latest, \
+	com.ibm.ws.messaging.security.common;version=latest

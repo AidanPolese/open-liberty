@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Commons Logging" 
+            projectURL="http://commons.apache.org" 
+            version="1.0.3" revision="" 
+            license-type="Apachev2" 
+            contact="not@us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.dev_tools/prereqs/prereq.commons-logging/1.0.3/20030407/commons-logging-api.jar">
+         <file basename="commons-logging-api.jar" checksum="6c295d399582842dba8ea375239c2c66"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+   
+   <notes>
+   The Log, LocConfigurationException, and Jdk14Logger classes are unmodified copies of the commons-logging 1.0.3 source.  The LogFactory and LogSource classes 
+   are modified by David Jencks to hardcode the use of the Jdk14Logger and provide reasonable concurrency.  This avoids the well known problems of commons logging
+   not working in all but the simplest classloader environments.
+   </notes>
+</ossc>

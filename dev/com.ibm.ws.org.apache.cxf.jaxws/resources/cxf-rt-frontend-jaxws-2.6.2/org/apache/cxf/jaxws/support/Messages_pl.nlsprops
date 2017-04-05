@@ -1,0 +1,47 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SEI_LOAD_FAILURE_EXC = Za\u0142adowanie interfejsu punktu ko\u0144cowego us\u0142ugi nie powiod\u0142o si\u0119.
+INVALID_PROVIDER_EXC = Element {0} nie jest poprawnym dostawc\u0105 JAXWS.
+SEI_LOAD_FAILURE_MSG = Nie mo\u017cna za\u0142adowa\u0107 interfejsu SEI us\u0142ugi Web Service
+SEI_WITHOUT_WEBSERVICE_ANNOTATION_EXC = Interfejs punktu ko\u0144cowego us\u0142ugi nie ma adnotacji @WebService.
+ILLEGAL_ATTRIBUTE_IN_SEI_ANNOTATION_EXC = Atrybuty portName, serviceName i endpointInterface nie s\u0105 dozwolone w adnotacji @WebService interfejsu SEI.
+MALFORMED_URL_IN_WEBSERVICE_ANNOTATION_EXC = Zniekszta\u0142cony adres URL w atrybucie wsdlLocation adnotacji @WebService.
+LOAD_WSDL_EXC = Nie mo\u017cna za\u0142adowa\u0107 pliku WSDL z adresu URL {0}.
+COULD_NOT_FIND_ENDPOINT = Nie mo\u017cna znale\u017a\u0107 punktu ko\u0144cowego o nazwie {0}.  Mo\u017cliwe warto\u015bci to {1}.
+SOAPBinding_MESSAGE_RPC= W metodzie {0} znaleziono adnotacj\u0119 SOAPBinding JAX-WS o stylu RPC. Taka operacja nie jest obs\u0142ugiwana.
+INVALID_REQUEST_WRAPPER = Klasa @RequestWrapper {0} jest taka sama jak rzeczywisty parametr {1}.  Taka konfiguracja prawdopodobnie nie b\u0119dzie dzia\u0142a\u0107. 
+INVALID_RESPONSE_WRAPPER = Klasa @ResponseWrapper {0} jest taka sama jak rzeczywista klasa powrotu {1}.  Taka konfiguracja prawdopodobnie nie b\u0119dzie dzia\u0142a\u0107. 
+SERVICECLASS_MUST_BE_SET = W\u0142a\u015bciwo\u015b\u0107 serviceClass musi by\u0107 ustawiona na poprawn\u0105 klas\u0119 lub interfejs us\u0142ugi
+XMLSEEALSO_NULL_CLASS = W \u015bcie\u017cce klasy nie mo\u017cna znale\u017a\u0107 klasy wymienionej w adnotacji XmlSeeAlso klasy us\u0142ugi %s. Indeks: %d listy klas XmlSeeAlso.
+WEBMETHOD_EXCLUDE_NOT_ALLOWED = Adnotacji @javax.jws.WebMethod(exclude=true) nie mo\u017cna u\u017cywa\u0107 w interfejsie punktu ko\u0144cowego us\u0142ugi. Metoda: {0}
+WEBSERVICE_ANNOTATIONS_IS_LOADED_BY_OTHER_CLASSLOADER = Adnotacja {0} zosta\u0142a ju\u017c za\u0142adowana przez inny program \u0142aduj\u0105cy klasy. Sprawd\u017a, czy w \u015bcie\u017cce klasy znajduje si\u0119 wiele wersji pliku JAR adnotacji us\u0142ugi Web Service.
+UNKONWN_REQUIRED_WSDL_BINDING = Znaleziono nieznane rozszerzenie powi\u0105zania WSDL o atrybucie required=true, gdy u\u017cywana jest klasa RespectBindingFeature.
+
+
+

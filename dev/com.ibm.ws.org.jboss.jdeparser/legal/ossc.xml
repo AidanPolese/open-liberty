@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+  <project project="WELD" 
+            projectURL="http://weld.cdi-spec.org/" 
+            version="2.3.4.Final"  
+            license-type="Apachev2" 
+            contact="emijiang@uk.ibm.com" 
+            encryption="no">
+      <download location="http://mvnrepository.com/artifact/org.jboss.jdeparser/jdeparser/1.0.0.Final">
+         <file basename="jdeparser-1.0.0.Final.jar" checksum="cc1290b4629ccdda487329b7e95fcac8"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+   
+   <notes>
+   </notes>
+</ossc> 

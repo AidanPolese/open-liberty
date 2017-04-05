@@ -1,0 +1,39 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-bindings-xml-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+STREAM_CREATE_EXC = XMLStreamReader\ub97c \uc791\uc131\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+STAX_READ_EXC = XMLStreamReader\uc5d0\uc11c \uc77d\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+STAX_WRITE_EXC = XMLStreamReader\uc5d0\uc11c \uc4f8 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+NO_OPERATION_ELEMENT=\uc870\uc791 \uc694\uc18c\uac00 \uc788\uc5b4\uc57c \ud569\ub2c8\ub2e4.
+NO_OPERATION=\ud574\ub2f9 \uc870\uc791\uc774 \uc5c6\uc74c: {0}
+NO_DATAREADER=\uc11c\ube44\uc2a4\uc5d0 \ub300\ud574 \uc0ac\uc6a9 \uac00\ub2a5\ud55c DataReader\uac00 \uc5c6\uc2b5\ub2c8\ub2e4. {0}
+NO_DATAWRITER=\uc11c\ube44\uc2a4\uc5d0 \ub300\ud574 \uc0ac\uc6a9 \uac00\ub2a5\ud55c DataWriter\uac00 \uc5c6\uc2b5\ub2c8\ub2e4. {0}
+UNKNOWN_EXCEPTION=\uc608\uc678 \uc720\ud615\uc744 \uc778\uc2dd\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4. {0}
+COULD_NOT_UNRWAP=\uba54\uc2dc\uc9c0 \ud30c\ud2b8\ub97c \ub7a9\ud551 \ud574\uc81c\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+REQ_NOT_UNDERSTOOD=\uc694\uccad\uc744 \uc77d\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4. \uc870\uc791 {0}\uc744(\ub97c) \uc54c \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+ILLEGAL_XMLFAULT_FORMAT=\uc798\ubabb\ub41c xml \uacb0\ud568 \uba54\uc2dc\uc9c0 \ud615\uc2dd\uc785\ub2c8\ub2e4.

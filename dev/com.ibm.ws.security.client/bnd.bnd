@@ -1,0 +1,47 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Client Container Security Implementation
+Bundle-SymbolicName: com.ibm.ws.security.client
+Bundle-Description: Client Container Security Implementation, version=${bVersion}
+Bundle-ActivationPolicy: lazy
+
+# client container security is part of EE7 and therefore requires java 1.7
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))" 
+
+WS-TraceGroup: \
+  security
+
+Export-Package: \
+  com.ibm.ws.security.client.jaas.modules;thread-context=true
+
+Private-Package: \
+  com.ibm.ws.security.client.internal.*
+
+Include-Resource: \
+  OSGI-INF/wlp=resources/OSGI-INF/wlp
+
+IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml
+
+Service-Component: \
+
+-dsannotations: \
+  com.ibm.ws.security.client.internal.jaas.JAASClientService, \
+  com.ibm.ws.security.client.internal.jaas.JAASClientConfigurationImpl, \
+  com.ibm.ws.security.client.internal.authentication.ClientAuthenticationService
+
+instrument.classesExcludes: com/ibm/ws/security/client/internal/resources/*.class
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.websphere.security;version=latest,\
+	com.ibm.ws.security.authentication;version=latest,\
+	com.ibm.ws.security.credentials;version=latest,\
+	com.ibm.ws.security.jaas.common;version=latest,\
+	com.ibm.ws.clientcontainer;version=latest,\
+	com.ibm.ws.logging.core;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

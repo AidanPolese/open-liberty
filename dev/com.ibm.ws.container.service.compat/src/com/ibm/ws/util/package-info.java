@@ -1,0 +1,26 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * Copyright IBM Corp. 2009
+ *
+ * The source code for this program is not published or other-
+ * wise divested of its trade secrets, irrespective of what has
+ * been deposited with the U.S. Copyright Office.
+ *
+ * Change activity:
+ *
+ * Issue       Date        Name     Description
+ * ----------- ----------- -------- ------------------------------------
+ */
+/**
+ * TODO: get version from WAS v8
+ * @version 1.0
+ */
+@org.osgi.annotation.versioning.Version("1.0")
+@TraceOptions(traceGroup = "Compat", messageBundle = "com.ibm.ws.runtime.runtime")
+package com.ibm.ws.util;
+
+import com.ibm.websphere.ras.annotation.TraceOptions;
+

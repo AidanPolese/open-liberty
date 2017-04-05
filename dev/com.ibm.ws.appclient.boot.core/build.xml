@@ -1,0 +1,7 @@
+<project name="com.ibm.ws.appclient.boot.core" default="build">
+  
+  <!-- Disable trace/ffdc injection as it is hard-coded in this project -->
+  <property name="no.trace.instrumentation" value="true" />
+
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+</project>

@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.1
+
+Bundle-Name: JavaEE Deployment Descriptor API service
+Bundle-SymbolicName: com.ibm.ws.javaee.dd.common
+Bundle-Description: JavaEE Deployment Descriptor API service, version ${bVersion}
+
+# For each exported package, create (in that package) a package-info.java
+# file, and place an @version javadoc tag in package-level javadoc. 
+# Append ";provide:=true" if this bundle also provides an implementation
+# for the exported API.
+
+Export-Package: \
+    com.ibm.ws.javaee.dd.common, \
+    com.ibm.ws.javaee.dd.common.wsclient
+
+-buildpath: \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Geronimo" 
+            projectURL="https://geronimo.apache.org/" 
+            version="1.1" revision="" 
+            license-type="Apachev2" 
+            contact="???@us.ibm.com" 
+            encryption="no">
+      <download location="http://repo1.maven.org/maven2/org/apache/geronimo/specs/geronimo-validation_1.0_spec/1.1/geronimo-validation_1.0_spec-1.1.jar">
+         <file basename="geronimo-validation_1.0_spec-1.1.jar" checksum="4fb0ab3c4b0e2fecd0801b0a8d0f3867"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+</ossc>

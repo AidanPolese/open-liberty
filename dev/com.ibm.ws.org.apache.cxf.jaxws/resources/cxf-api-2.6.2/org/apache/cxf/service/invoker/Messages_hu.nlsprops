@@ -1,0 +1,37 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SVC_CLASS_IS_INTERFACE=A(z) {0} szolg\u00e1ltat\u00e1soszt\u00e1ly nem p\u00e9ld\u00e1nyos\u00edthat\u00f3, mert az egy interf\u00e9sz.
+SVC_CLASS_IS_ABSTRACT=A(z) {0} szolg\u00e1ltat\u00e1soszt\u00e1ly nem p\u00e9ld\u00e1nyos\u00edthat\u00f3, mert az egy absztrakt.
+COULD_NOT_INSTANTIATE=Szolg\u00e1ltat\u00e1sobjektum nem p\u00e9ld\u00e1nyos\u00edthat\u00f3.
+ILLEGAL_ACCESS=Szolg\u00e1ltat\u00e1sobjektum nem \u00e9rhet\u0151 el.
+CREATE_SERVICE_OBJECT_EXC=Szolg\u00e1ltat\u00e1sobjektum nem p\u00e9ld\u00e1nyos\u00edthat\u00f3.
+EXCEPTION_INVOKING_OBJECT={0} a(z) {1} {2} param\u00e9terekkel t\u00f6rt\u00e9n\u0151 megh\u00edv\u00e1sa sor\u00e1n.
+SUSPENDED_INVOCATION_EXCEPTION=A(z) {1} met\u00f3dus megh\u00edv\u00e1sa {0} objektumon {2} param\u00e9terekkel felf\u00fcggeszt\u00e9sre ker\u00fclt.
+INVOKING_METHOD={1} met\u00f3dus megh\u00edv\u00e1sa {0} objektumon {2} param\u00e9terekkel.
+MISSING_BINDING_OPERATION= Megh\u00edv\u00e1s k\u00f6t\u00e9si m\u0171velet n\u00e9lk\u00fcl.

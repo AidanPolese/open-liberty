@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache MyFaces JavaServer Faces 2.2 APIs" 
+            projectURL="http://myfaces.apache.org/" 
+            version="2.2" revision="" 
+            license-type="Apachev2" 
+            contact="pnicoluc@us.ibm.com" 
+            encryption="no">      
+   </project>
+   
+   <download location="http://mvnrepository.com/artifact/org.apache.myfaces.buildtools/myfaces-builder-annotations/1.0.9">
+         <file basename="myfaces-builder-annotations-1.0.9.jar" checksum="ae0778d003da484a57117996c33ae792"/>
+   </download>
+   <download location="https://ebitzone.hursley.ibm.com:8443/jim/download?file=FR84929">
+         <file basename="javax.faces-api-2.2-javadoc.jar" checksum="664ab1715fd64e77eb1e3f17fef2de8d"/>
+   </download>
+   
+   <clearencehistory/>
+   
+   <notes>
+   The source was taken from http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-core-assembly-2.2.8-src.zip
+   The javadoc was taken from JIM.
+   </notes>   
+</ossc>

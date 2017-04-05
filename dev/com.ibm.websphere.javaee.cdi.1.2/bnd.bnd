@@ -1,0 +1,45 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.2
+
+javac.source: 1.7
+javac.target: 1.7
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.cdi.1.2; singleton:=true
+
+Export-Package: javax.decorator; version=1.1, \
+ javax.enterprise; version=1.1, \
+ javax.enterprise.context; version=1.1, \
+ javax.enterprise.context.spi; version=1.1, \
+ javax.enterprise.event; version=1.1, \
+ javax.enterprise.inject; version=1.1, \
+ javax.enterprise.inject.deployment; version=1.1, \
+ javax.enterprise.inject.spi; version=1.1, \
+ javax.enterprise.inject.stereotype; version=1.1, \
+ javax.enterprise.util; version=1.1, \
+ javax.inject; version=1, \
+
+Import-Package:  javax.el; version="[3.0.0,4.0.0)", \
+ javax.decorator;version="1.1", \
+ javax.enterprise.context;version="1.1", \
+ javax.enterprise.context.spi;version="1.1", \
+ javax.enterprise.event;version="1.1", \
+ javax.enterprise.inject;version="1.1", \
+ javax.enterprise.inject.spi;version="1.1", \
+ javax.enterprise.util;version="1.1", \
+ javax.inject;version=1, \
+ javax.interceptor;version="1.2"
+
+Include-Resource: \
+  @lib/cdi-api-1.2.jar!/beans_1_0.xsd, \
+  @lib/cdi-api-1.2.jar!/beans_1_1.xsd
+
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java7}, \
+	lib/javax.inject.jar;version=file,\
+	lib/cdi-api-1.2.jar;version=file

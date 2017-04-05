@@ -1,0 +1,47 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-core-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+NO_METHOD_FOR_OP=Nenhum m\u00e9todo foi localizado para a opera\u00e7\u00e3o WSDL {0}.
+INVALID_SCHEMA_URL=N\u00e3o foi poss\u00edvel carregar o esquema {0}
+ERROR_READING_SCHEMA=Houve um erro ao ler o esquema {0}.
+COULD_NOT_FIND_PORTTYPE = N\u00e3o foi poss\u00edvel localizar o portType chamado {0}
+USING_PROXY_FOR_SERVICE = A classe de servi\u00e7o: {0} \u00e9 uma inst\u00e2ncia de java.lang.reflect.Proxy.  \
+Sabe-se que isso n\u00e3o funciona bem porque anota\u00e7\u00f5es na inst\u00e2ncia real n\u00e3o est\u00e3o dispon\u00edveis.  \
+Sugerimos substituir a ServiceClass por meio de spring config ou outra configura\u00e7\u00e3o. \
+(atributos serviceClass/implementorClass na entrada de endpoint/servidor de spring config)
+REFERENCE_TO_UNDEFINED_TYPE = O elemento do esquema {0} referencia o tipo indefinido {1} para o servi\u00e7o {2}.
+UNMAPPABLE_PORT_TYPE= A classe de servi\u00e7o {0} m\u00e9todo {1} parte {2} n\u00e3o pode ser mapeada para o esquema. \
+Verifique quanto ao uso de um tipo espec\u00edfico de JAX-WS sem o bean de factory de servi\u00e7o JAX-WS.
+INTRACTABLE_PART= A parte da mensagem {0} da Mensagem {1} n\u00e3o pode ser processada. \
+Isso pode ser causado pelo uso de tipos espec\u00edficos de JAX-WS sem o bean de factory de servi\u00e7o JAX-WS.
+JAXWS_ANNOTATION_FOUND=Um Anota\u00e7\u00e3o JAX-WS foi localizada em {0} ao usar o front-end Simples.  Para melhores resultados, use o front-end JAX-WS.
+XSD_VALIDATION_ERROR= Erro no esquema XML W3C associado ao servi\u00e7o: {0}
+COULD_NOT_UNWRAP=N\u00e3o foi poss\u00edvel fazer unwrap da Opera\u00e7\u00e3o {0} para corresponder ao m\u00e9todo "{1}"
+NO_WSDL_PROVIDED=WSDL \u00e9 requerido para servi\u00e7os criados a partir da classe {0}, mas nenhum local WSDL foi especificado. 
+NO_FAULT_PART = N\u00e3o foi poss\u00edvel localizar uma parte de falha para {0}. A mensagem de falha deve ter uma \u00fanica parte.
+INVALID_BARE_METHOD= O m\u00e9todo {0} est\u00e1 configurado como BARE mas h\u00e1 mais de um par\u00e2metro com @Webparam errado anotado ou sem @WebParam anotado.

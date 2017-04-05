@@ -1,0 +1,78 @@
+<!-- This pom.xml file downloads EclipseLink jars from Maven's central repository and calls an ant file to packages them 
+    and updates the referencing files with the new versions and jar names. To download different versions of the EclipseLink 
+    jars, look up the available versions on Maven central repository and update the corresponding property elements. 
+    
+    NOTE: I had to run mvn with JAVA_HOME set to an Oracle JVM as I was getting some odd errors with the IBM JVM.
+    
+    * -Dgsa.skip will exclude uploading a new download.zip to GSA
+    * -Dskip.message.check will exclude nsl message checking
+    -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <groupId>org.eclipselink.downloadJars</groupId>
+    <artifactId>EclipseLinkJarsDownload</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <version>1.0</version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <profiles>
+        <profile>
+            <id>release.build</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <target>
+                                        <ant antfile="${basedir}/package.xml" inheritRefs="true"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-commons-net</artifactId>
+                                <version>1.8.1</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>commons-net</groupId>
+                                <artifactId>commons-net</artifactId>
+                                <version>1.4.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <build>
+		<plugins>
+  			<plugin>
+    			<artifactId>maven-clean-plugin</artifactId>
+    			<version>2.4.1</version>
+    			<executions>
+      				<execution>
+        				<id>auto-clean</id>
+        				<phase>install</phase>
+        				<goals>
+          					<goal>clean</goal>
+        				</goals>
+      				</execution>
+    			</executions>
+  			</plugin>
+		</plugins>
+  	</build>
+</project>

@@ -1,0 +1,11 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.json-1.0
+
+publish.feature.resources: **
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.api.json;version=latest,\
+	com.ibm.json4j;version=latest

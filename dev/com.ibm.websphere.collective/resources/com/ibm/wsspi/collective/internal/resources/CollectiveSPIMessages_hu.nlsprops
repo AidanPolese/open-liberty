@@ -1,0 +1,31 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.websphere.collective/resources/com/ibm/wsspi/collective/internal/resources/CollectiveSPIMessages.nlsprops
+#COMPONENTPREFIX CWWKX
+#COMPONENTNAMEFOR WebSphere Collective SPI
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKX8000 - CWWKX8049
+
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE=CWWKX8000E: Konfigur\u00e1ci\u00f3s hiba t\u00f6rt\u00e9nt. Nincs el\u00e9rhet\u0151 RepositoryClient megval\u00f3s\u00edt\u00e1s. A probl\u00e9ma megold\u00e1sa \u00e9rdek\u00e9ben adjon meg egy szolg\u00e1ltat\u00e1st, p\u00e9ld\u00e1ul: collectiveMember-1.0 vagy collectiveController-1.0, \u00e9s hat\u00e1rozzon meg valamilyen ig\u00e9nyelt konfigur\u00e1ci\u00f3t. 
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.explanation=Az egy\u00fcttes szolg\u00e1ltat\u00e1sok biztos\u00edtj\u00e1k a RepositoryClient megval\u00f3s\u00edt\u00e1s\u00e1t, \u00e9s nem tal\u00e1lhat\u00f3 ilyen megval\u00f3s\u00edt\u00e1s.
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.useraction=A probl\u00e9ma megold\u00e1sa \u00e9rdek\u00e9ben adjon meg egy egy\u00fcttes szolg\u00e1ltat\u00e1st, p\u00e9ld\u00e1ul: collectiveMember-1.0 vagy collectiveController-1.0, \u00e9s hat\u00e1rozzon meg valamilyen ig\u00e9nyelt konfigur\u00e1ci\u00f3t.
+
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES=CWWKX8001E: Konfigur\u00e1ci\u00f3s hiba t\u00f6rt\u00e9nt. T\u00f6bb RepositoryClientDelegate megval\u00f3s\u00edt\u00e1s is el\u00e9rhet\u0151. A jelenlegi megval\u00f3s\u00edt\u00e1st a(z) {0} k\u00f6teg biztos\u00edtja. T\u00e1vol\u00edtsa el mindazokat a k\u00fcls\u0151 vagy egy\u00e9ni szolg\u00e1ltat\u00e1sokat, amelyek tartalmazz\u00e1k a(z) {1} k\u00f6teget. 
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.explanation=A RepositoryConnectionFactory megk\u00f6vetel egy adott RepositoryClientDelegate megval\u00f3s\u00edt\u00e1st, \u00e9s egy tov\u00e1bbi megval\u00f3s\u00edt\u00e1s lett regisztr\u00e1lva OSGi szolg\u00e1ltat\u00e1sk\u00e9nt. Csak egy megval\u00f3s\u00edt\u00e1s megengedett.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.useraction=T\u00e1vol\u00edtsa el a megadott k\u00f6teget tartalmaz\u00f3 k\u00fcls\u0151 vagy egy\u00e9ni szolg\u00e1ltat\u00e1sokat.
+
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE=CWWKX8002E: Konfigur\u00e1ci\u00f3s hiba t\u00f6rt\u00e9nt. Nincs el\u00e9rhet\u0151 RepositoryMember megval\u00f3s\u00edt\u00e1s. A probl\u00e9ma megold\u00e1sa \u00e9rdek\u00e9ben adjon meg egy szolg\u00e1ltat\u00e1st, p\u00e9ld\u00e1ul: collectiveMember-1.0 vagy collectiveController-1.0, \u00e9s hat\u00e1rozzon meg valamilyen ig\u00e9nyelt konfigur\u00e1ci\u00f3t. 
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.explanation=Az egy\u00fcttes szolg\u00e1ltat\u00e1sok biztos\u00edtj\u00e1k a RepositoryMember megval\u00f3s\u00edt\u00e1s\u00e1t, \u00e9s nem tal\u00e1lhat\u00f3 ilyen megval\u00f3s\u00edt\u00e1s.
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.useraction=A probl\u00e9ma megold\u00e1sa \u00e9rdek\u00e9ben adjon meg egy egy\u00fcttes szolg\u00e1ltat\u00e1st, p\u00e9ld\u00e1ul: collectiveMember-1.0 vagy collectiveController-1.0, \u00e9s hat\u00e1rozzon meg valamilyen ig\u00e9nyelt konfigur\u00e1ci\u00f3t.
+
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES=CWWKX8003E: Konfigur\u00e1ci\u00f3s hiba t\u00f6rt\u00e9nt. T\u00f6bb RepositoryMemberDelegate megval\u00f3s\u00edt\u00e1s is el\u00e9rhet\u0151. A jelenlegi megval\u00f3s\u00edt\u00e1st a(z) {0} k\u00f6teg biztos\u00edtja. T\u00e1vol\u00edtsa el mindazokat a k\u00fcls\u0151 vagy egy\u00e9ni szolg\u00e1ltat\u00e1sokat, amelyek tartalmazz\u00e1k a(z) {1} k\u00f6teget.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.explanation=A RepositoryConnectionFactory megk\u00f6vetel egy adott RepositoryMemberDelegate megval\u00f3s\u00edt\u00e1st, \u00e9s egy tov\u00e1bbi megval\u00f3s\u00edt\u00e1s lett regisztr\u00e1lva OSGi szolg\u00e1ltat\u00e1sk\u00e9nt. Csak egy megval\u00f3s\u00edt\u00e1s megengedett.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.useraction=T\u00e1vol\u00edtsa el a megadott k\u00f6teget tartalmaz\u00f3 k\u00fcls\u0151 vagy egy\u00e9ni szolg\u00e1ltat\u00e1sokat.

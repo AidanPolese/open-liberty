@@ -1,0 +1,4 @@
+<project name="com.ibm.ws.security.wim.adapter.ldap" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  <import file="../ant_build/public_imports/unittest_imports.xml"/>
+</project>

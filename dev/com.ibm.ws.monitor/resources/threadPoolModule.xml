@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed Materials - Property of IBM
+
+  "Restricted Materials of IBM"
+
+  Copyright IBM Corp. 2012 All Rights Reserved.
+
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+-->
+<!DOCTYPE Stats SYSTEM "stats.dtd">
+
+<Stats type="com.ibm.ws.monitors.threadPoolModule">
+    <description>threadPoolModule.desc</description>
+    <resourceBundle>com.ibm.ws.pmi.properties.PMIText</resourceBundle>
+    <BoundedRangeStatistic name="threadPoolModule.activeThreads" ID="3">
+        <level>high</level>
+        <unit>unit.none</unit>
+		<description>threadPoolModule.activeThreads.desc</description>		
+        <comment>The number of concurrently active threads</comment>        
+		<updateOnRequest>true</updateOnRequest>
+        <statisticSet>basic</statisticSet>
+    </BoundedRangeStatistic>
+    <BoundedRangeStatistic name="threadPoolModule.poolSize" ID="4">
+        <level>high</level>
+        <unit>unit.none</unit>
+		<description>threadPoolModule.poolSize.desc</description>
+        <comment>Average number of threads in Pool</comment>
+		<updateOnRequest>true</updateOnRequest>        
+        <statisticSet>basic</statisticSet>
+    </BoundedRangeStatistic>
+</Stats>

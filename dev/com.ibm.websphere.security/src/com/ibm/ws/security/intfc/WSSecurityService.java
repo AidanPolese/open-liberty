@@ -1,0 +1,57 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * Copyright IBM Corp. 2012
+ *
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
+ * U.S. Copyright Office.
+ */
+package com.ibm.ws.security.intfc;
+
+import java.util.List;
+
+import com.ibm.websphere.security.UserRegistry;
+import com.ibm.websphere.security.WSSecurityException;
+
+/**
+ *
+ */
+public interface WSSecurityService {
+
+    public final String KEY_WS_SECURITY_SERVICE = "wsSecurityService";
+
+    public boolean isSecurityEnabled();
+
+    /**
+     * Gets the UserRegistry object for the given realm. If the realm name is null
+     * returns the active registry. If the realm is not valid, or security is not
+     * enabled, or no registry is configured, returns null.
+     * 
+     * @param realmName
+     * @return UserRegistry object
+     * @throws WSSecurityException if there is an internal error
+     */
+    public UserRegistry getUserRegistry(String realmName) throws WSSecurityException;
+
+    /**
+     * Gets the realms trusted for the given realm. If the realm name is null
+     * returns the realms trusted for active user registry. If the realm is not valid,
+     * or security is not enabled, or no registry is configured, returns an empty list.
+     * 
+     * @param realmName
+     * @return list of trusted realms
+     * @throws WSSecurityException if there is an internal error
+     */
+    public List<String> getInboundTrustedRealms(String realmName) throws WSSecurityException;
+
+    /**
+     * 
+     * @param inboundRealm
+     * @param localRealm
+     * @return
+     */
+    public boolean isRealmInboundTrusted(String inboundRealm, String localRealm);
+}

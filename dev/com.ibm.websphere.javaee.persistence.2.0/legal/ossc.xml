@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Unknown" 
+            projectURL="Unknown" 
+            version="1.0" revision="" 
+            license-type="???" 
+            contact="???us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.build/botp/WASX.SERV1/test/xx1209.07.linux/linux/zipper/fe.zip">
+         <file basename="javax.persistence_2.0.jar" checksum="8e0239d1cc2882c7eec2fa5c9d7f2cec"/>
+      </download>
+   </project>
+   
+   <notes>
+<![CDATA[
+changed the name of javax.j2ee.persistence.jar to javax.persistence_2.0.jar
+]]>
+   </notes>
+   
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and v8.5 and has been cleared previously by WAS
+   </clearencehistory>
+</ossc>

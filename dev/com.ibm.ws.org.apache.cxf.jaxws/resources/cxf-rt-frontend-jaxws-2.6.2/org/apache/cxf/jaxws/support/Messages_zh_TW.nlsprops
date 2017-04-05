@@ -1,0 +1,47 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SEI_LOAD_FAILURE_EXC = \u7121\u6cd5\u8f09\u5165\u670d\u52d9\u7aef\u9ede\u4ecb\u9762\u3002
+INVALID_PROVIDER_EXC = {0} \u4e0d\u662f\u6709\u6548\u7684 JAXWS \u63d0\u4f9b\u8005\u3002
+SEI_LOAD_FAILURE_MSG = \u7121\u6cd5\u8f09\u5165 Webservice SEI
+SEI_WITHOUT_WEBSERVICE_ANNOTATION_EXC = \u670d\u52d9\u7aef\u9ede\u4ecb\u9762\u6c92\u6709 @WebService \u8a3b\u91cb\u3002
+ILLEGAL_ATTRIBUTE_IN_SEI_ANNOTATION_EXC = \u5728 SEI \u7684 @WebService \u8a3b\u91cb\u4e2d\uff0c\u4e0d\u63a5\u53d7 portName\u3001serviceName \u548c endpointInterface \u7b49\u5c6c\u6027\u3002
+MALFORMED_URL_IN_WEBSERVICE_ANNOTATION_EXC = @WebService \u8a3b\u91cb\u5c6c\u6027 wsdlLocation \u4e2d\u7684 URL \u5f62\u614b\u7570\u5e38\u3002
+LOAD_WSDL_EXC = \u7121\u6cd5\u5f9e URL {0} \u4e2d\u8f09\u5165 WSDL\u3002
+COULD_NOT_FIND_ENDPOINT = \u627e\u4e0d\u5230\u540d\u7a31\u70ba {0} \u7684\u7aef\u9ede\u3002\u53ef\u80fd\u7684\u503c\u5982\u4e0b\uff1a{1}\u3002
+SOAPBinding_MESSAGE_RPC= \u5728 {0} \u65b9\u6cd5\u4e0a\uff0c\u627e\u5230\u6a23\u5f0f\u70ba RPC \u7684 JAX-WS SOAPBinding \u8a3b\u91cb\u3002\u9019\u662f\u4e0d\u652f\u63f4\u7684\u3002
+INVALID_REQUEST_WRAPPER = @RequestWrapper \u985e\u5225 {0} \u8207\u5be6\u969b\u53c3\u6578 {1} \u76f8\u540c\u3002\u9019\u5f88\u53ef\u80fd\u7121\u6cd5\u904b\u4f5c\u3002
+INVALID_RESPONSE_WRAPPER = @ResponseWrapper \u985e\u5225 {0} \u8207\u5be6\u969b\u7684\u50b3\u56de\u985e\u5225 {1} \u76f8\u540c\u3002\u9019\u5f88\u53ef\u80fd\u7121\u6cd5\u904b\u4f5c\u3002
+SERVICECLASS_MUST_BE_SET = serviceClass \u5fc5\u9808\u8a2d\u70ba\u6709\u6548\u7684\u670d\u52d9\u4ecb\u9762\u6216\u985e\u5225
+XMLSEEALSO_NULL_CLASS = \u5728\u985e\u5225\u8def\u5f91\u4e0a\uff0c\u627e\u4e0d\u5230\u670d\u52d9\u985e\u5225 %s \u7684 XmlSeeAlso \u8a3b\u91cb\u6240\u5217\u7684\u985e\u5225\u3002\u7d22\u5f15\uff1aXmlSeeAlso \u985e\u5225\u6e05\u55ae\u4e2d\u7684 %d\u3002
+WEBMETHOD_EXCLUDE_NOT_ALLOWED = \u5728\u670d\u52d9\u7aef\u9ede\u4ecb\u9762\u4e0a\uff0c\u7121\u6cd5\u4f7f\u7528 @javax.jws.WebMethod(exclude=true)\u3002\u65b9\u6cd5\uff1a{0}
+WEBSERVICE_ANNOTATIONS_IS_LOADED_BY_OTHER_CLASSLOADER = \u53e6\u4e00\u500b\u985e\u5225\u8f09\u5165\u5668\u5df2\u8f09\u5165 {0} \u8a3b\u91cb\u3002\u8acb\u6aa2\u67e5\u5728\u60a8\u7684\u985e\u5225\u8def\u5f91\u4e2d\uff0cWebService \u8a3b\u91cb JAR \u662f\u5426\u6709\u591a\u91cd\u7248\u672c\u3002
+UNKONWN_REQUIRED_WSDL_BINDING = \u555f\u7528 RespectBindingFeature \u6642\uff0c\u767c\u73fe\u6709\u4e0d\u660e\u7684 WSDL \u9023\u7d50\u5ef6\u4f38\u898f\u683c\u5177\u5099 required=true \u5c6c\u6027
+
+
+

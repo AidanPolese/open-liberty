@@ -1,0 +1,25 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: SQL Recoverylog Plug-in
+Bundle-SymbolicName: com.ibm.rls.jdbc
+Bundle-Description: RLS JDBC support, version ${bVersion}
+
+WS-TraceGroup: Transaction
+    
+Service-Component: com.ibm.rls.jdbc; \
+    implementation:=com.ibm.rls.jdbc.SQLRecoveryLogFactory; \
+    provide:='com.ibm.ws.recoverylog.spi.RecoveryLogFactory'
+            
+Export-Package: com.ibm.rls.jdbc;version=1.0.16,\
+ com.ibm.ws.recoverylog.custom.jdbc.impl;version=1.0.0
+
+instrument.disabled: true
+
+-buildpath: \
+	com.ibm.tx.util;version=latest,\
+	com.ibm.ws.resource;version=latest,\
+	com.ibm.ws.transaction;version=latest,\
+	com.ibm.ws.recoverylog;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.websphere.appserver.spi.logging

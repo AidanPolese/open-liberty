@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Unified Expression Language APIs" 
+            projectURL="http://juel.sourceforge.net/index.html" 
+            version="2.1" revision="" 
+            license-type="Apachev2" 
+            contact="not@us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.build/botp/WASX.SERV1/test/uu1209.05.linux/linux/zipper/fe.zip">
+         <file basename="javax.el_2.2.jar" checksum="6f1bed2f00be24aaaac346b7ba7cfbfb"/>
+      </download>
+   </project>
+   
+   <notes>
+   The download location is the FE.zip that includes the javax.j2ee.el.jar (in the prereq.elapi build component),
+   which has then been renamed.
+   </notes>
+
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and has been cleared previously by WAS v8
+   </clearencehistory>
+</ossc>

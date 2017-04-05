@@ -1,0 +1,41 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+RESOURCE_RESOLVE_FAILED=rezolvarea resursei {0} a e\u015fuat
+FAILED_TO_INJECT_FIELD=accesul la fi\u015fierul nu este permis
+INJECTION_SETTER_NOT_VISIBLE=setter-ul {0} nu este vizibil
+INJECTION_SETTER_RAISED_EXCEPTION=excep\u021bie ridicat\u0103 la invocarea setter-ului {0}
+PRIVATE_FIELD_INJECTION_NYI=injec\u0163ia de resurse pentru c\u00e2mpurile private nu este \u00eenc\u0103 pus\u0103 \u00een aplicare: {0}
+INJECTION_COMPLETE_NOT_VISIBLE=metoda adnotat\u0103 cu @PostConstruct nu este vizibil\u0103: {0}
+INJECTION_COMPLETE_THREW_EXCEPTION=metoda adnotat\u0103 cu @PostConstruct arunc\u0103 o excep\u0163ie atunci c\u00e2nd este invocat\u0103
+PRE_DESTROY_NOT_VISIBLE=metoda adnotat\u0103 cu @PreDestroy nu este vizibil\u0103: {0}
+PRE_DESTROY_THREW_EXCEPTION=Metoda adnotat\u0103 cu @PreDestroy arunc\u0103 o excep\u0163ie la invocare
+SETTER_INJECTION_WITH_INCORRECT_TYPE=setter-ul resursei a fost g\u0103sit dau cu o semn\u0103tur\u0103 gre\u015fit\u0103: {0}
+RESOURCE_NAME_NOT_SPECIFIED=Adnotarea resursei din {0} trebuie s\u0103 specifice un nume de resurs\u0103
+NO_SETTER_OR_FIELD_FOR_RESOURCE=Notarea resursei \u00een {0} dar nu a fost g\u0103sit un c\u00e2mp sau un setter.
+INJECTION_SETTER_METHOD_NOT_FOUND = Metoda setter de injec\u0163ie nu poate fi g\u0103sit\u0103: {0}

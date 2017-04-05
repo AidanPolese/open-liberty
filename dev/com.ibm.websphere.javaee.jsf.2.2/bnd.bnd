@@ -1,0 +1,31 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+Bundle-Name: WS_J2EE_jsf
+Bundle-SymbolicName: com.ibm.websphere.javaee.jsf.2.2; singleton:=true
+Bundle-Description: WS_J2EE_jsf, version 2.2
+
+Export-Package: javax.faces.*
+
+Include-Resource: \
+    javax/faces=resources/javax/faces, \
+    META-INF=@src/META-INF
+
+DynamicImport-Package: com.ibm.ws.jsf.spi, \
+                com.ibm.ws.managedobject, \
+                org.apache.myfaces.cdi.dependent, \
+                org.apache.myfaces.spi
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.javaee.cdi.1.2;version=latest,\
+	com.ibm.websphere.javaee.el.3.0;version=latest,\
+	lib/myfaces-builder-annotations-1.0.9.jar;version=file,\
+	com.ibm.websphere.javaee.validation.1.1;version=latest,\
+	com.ibm.websphere.javaee.jstl.1.2;version=latest,\
+	com.ibm.websphere.javaee.jsp.2.3;version=latest,\
+	com.ibm.websphere.javaee.servlet.3.1;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

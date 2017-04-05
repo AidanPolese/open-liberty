@@ -1,0 +1,17 @@
+
+task rmic(dependsOn: compileJava) {
+  doLast {
+    String rmicClasspath = compileJava.destinationDir
+    sourceSets.main.compileClasspath.each {
+      rmicClasspath += ':' + it
+    }
+    println "ant.rmic(classname: 'javax.management.j2ee.Management', base: " + compileJava.destinationDir + ", classpath: " + rmicClasspath + ", iiop: 'true')"
+    ant.rmic(classname: 'javax.management.j2ee.Management', base: compileJava.destinationDir, classpath: rmicClasspath, iiop: 'true')
+    println "ant.rmic(classname: 'javax.management.j2ee.ManagementHome', base: " + compileJava.destinationDir + ", classpath: " + rmicClasspath + ", iiop: 'true')"
+    ant.rmic(classname: 'javax.management.j2ee.ManagementHome', base: compileJava.destinationDir, classpath: rmicClasspath, iiop: 'true')
+  }
+}
+
+jar {
+    dependsOn rmic
+}

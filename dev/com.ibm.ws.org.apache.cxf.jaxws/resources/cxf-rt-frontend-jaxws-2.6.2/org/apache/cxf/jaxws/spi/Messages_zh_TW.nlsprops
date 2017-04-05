@@ -1,0 +1,32 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+INVALID_IMPLEMENTOR_EXC = \u7121\u6cd5\u5efa\u7acb\u6c92\u6709 WebService \u8a3b\u91cb\u4e14\u672a\u5be6\u4f5c\u300c\u63d0\u4f9b\u8005\u300d\u4ecb\u9762\u4e4b\u5be6\u4f5c\u7a0b\u5f0f\u7684\u7aef\u9ede\u3002
+ENDPOINT_CREATION_FAILED_MSG = \u7121\u6cd5\u5efa\u7acb\u7aef\u9ede
+JAXBCONTEXT_CREATION_FAILED = \u7121\u6cd5\u5efa\u7acb W3CEndpointReference \u7684 JAXBContext\u3002
+ERROR_UNMARSHAL_ENDPOINTREFERENCE = \u7121\u6cd5\u5f9e\u8cc7\u8a0a\u96c6\u4e2d\u89e3\u9664\u914d\u7f6e EndpointReference\u3002

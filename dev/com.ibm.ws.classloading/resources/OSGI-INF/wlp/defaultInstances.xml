@@ -1,0 +1,9 @@
+<server>
+ 
+   <library id="global" apiTypeVisibility="spec, ibm-api, api">
+    <fileset dir="${shared.config.dir}/lib/global/" includes="*" />
+    <fileset dir="${server.config.dir}/lib/global/" includes="*" />
+    <folder dir="${server.config.dir}/lib/global/"  />
+    <folder dir="${shared.config.dir}/lib/global/" />
+  </library>
+</server>

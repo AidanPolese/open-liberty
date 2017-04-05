@@ -1,0 +1,11 @@
+<project name="com.ibm.ws.request.probes" default="build">
+
+  <property name="spi.symbolic.suffix" value="basics" />	
+  <property name="feature.file" value="${basedir}/externals.mf" />	
+  <property name="spibndfile" value="${basedir}/build/spi.bnd" /> 
+  <property name="spi.bundleName" value="WebSphere Request Probe SPI" /> 
+  <property name="noibmapi" value="true" />
+  <property name="no.trace.instrumentation" value="true" />
+  <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+</project>

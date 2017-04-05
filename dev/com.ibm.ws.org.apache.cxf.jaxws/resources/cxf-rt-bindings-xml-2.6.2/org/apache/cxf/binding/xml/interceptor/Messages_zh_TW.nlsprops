@@ -1,0 +1,39 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-bindings-xml-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+STREAM_CREATE_EXC = \u7121\u6cd5\u5efa\u7acb XMLStreamReader\u3002
+STAX_READ_EXC = \u7121\u6cd5\u5f9e XMLStreamReader \u8b80\u53d6\u3002
+STAX_WRITE_EXC = \u7121\u6cd5\u5f9e XMLStreamReader \u5beb\u5165\u3002
+NO_OPERATION_ELEMENT=\u5fc5\u9808\u6709\u4e00\u500b\u4f5c\u696d\u5143\u7d20\u3002
+NO_OPERATION=\u6c92\u6709\u9019\u985e\u4f5c\u696d\uff1a{0}
+NO_DATAREADER={0} \u670d\u52d9\u6c92\u6709\u53ef\u7528\u7684 DataReader
+NO_DATAWRITER={0} \u670d\u52d9\u6c92\u6709\u53ef\u7528\u7684 DataWriter
+UNKNOWN_EXCEPTION=\u7121\u6cd5\u8fa8\u8b58\u7570\u5e38\u72c0\u6cc1\u985e\u578b\uff1a{0}
+COULD_NOT_UNRWAP=\u7121\u6cd5\u89e3\u958b\u8a0a\u606f\u7d44\u4ef6\u3002
+REQ_NOT_UNDERSTOOD=\u7121\u6cd5\u8b80\u53d6\u8981\u6c42\u3002{0} \u4f5c\u696d\u4e0d\u660e\u3002
+ILLEGAL_XMLFAULT_FORMAT=XML \u932f\u8aa4\u8a0a\u606f\u683c\u5f0f\u7121\u6548\u3002

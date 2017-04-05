@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Unknown" 
+            projectURL="Unknown" 
+            version="1.2" revision="" 
+            license-type="Apachev2" 
+            contact="emijiang@uk.ibm.com" 
+            encryption="no">
+      <download location="http://mvnrepository.com/artifact/javax.enterprise/cdi-api/1.2 http://mvnrepository.com/artifact/javax.inject/javax.inject/1">
+         <file basename="cdi-api-1.2.jar " checksum="2a8c973affa178efb89e6c50f78d79da"/>
+         <file basename="javax.inject.jar " checksum="289075e48b909e9e74e6c915b3631d2e"/>
+      </download>
+      <download location="https://ebitzone.hursley.ibm.com:8443/jim/download?file=FR85034">
+         <file basename="cdi-api-1.2-javadoc.jar " checksum="564f0b553c1944ffc5d79ad909318b0e"/>
+      </download>
+   </project>
+   
+   <notes>
+   The download location is the location where it is downloaded 
+   </notes>
+   
+   
+</ossc>

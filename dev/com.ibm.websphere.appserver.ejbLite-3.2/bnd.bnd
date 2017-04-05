@@ -1,0 +1,20 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.ejbLite-3.2
+
+publish.feature.resources: **
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.javaeePlatform-7.0;version=latest, \
+	com.ibm.websphere.appserver.javax.ejb-3.2;version=latest, \
+	com.ibm.websphere.appserver.ejbLiteCore-1.0;version=latest, \
+	com.ibm.websphere.appserver.contextService-1.0;version=latest, \
+	com.ibm.websphere.appserver.transaction-1.2;version=latest, \
+	com.ibm.websphere.appserver.javaeeCompatible-7.0;version=latest, \
+	com.ibm.websphere.appserver.javax.interceptor-1.2;version=latest, \
+	com.ibm.ws.ejbcontainer.v32;version=latest, \
+	com.ibm.ws.ejbcontainer.timer;version=latest, \
+	com.ibm.ws.ejbcontainer.async;version=latest, \
+	com.ibm.websphere.appserver.api.ejbcontainer;version=latest

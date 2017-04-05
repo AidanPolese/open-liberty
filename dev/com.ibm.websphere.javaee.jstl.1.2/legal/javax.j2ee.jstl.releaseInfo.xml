@@ -1,0 +1,7 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="javax.j2ee.jsf-2.0">
+  <originbase release="WAS80" fe="SERV1" level="m1116.12" components="WAS.prereq.jstl"/>
+
+  <notes>
+  </notes>
+</releaseInfo>

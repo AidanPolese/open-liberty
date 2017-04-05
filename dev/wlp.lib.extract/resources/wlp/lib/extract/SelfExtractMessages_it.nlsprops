@@ -78,7 +78,7 @@ licenseAccepted=Trovato argomento {0}. Indica che sono stati accettati i termini
 # {0} c:/full/directory/path
 # 
 extractInstruction=Immettere la directory per i file di prodotto o lasciare il campo vuoto per accettare i valori predefiniti.
-extractLicenseInstruction=Immettere la directory per i file di licenza o lasciare il campo vuoto per accettare i valori predefiniti.
+extractLicenseInstruction=Specificare la directory dell''archivio di aggiornamento della licenza o premere Invio per accettare la directory predefinita.
 extractDefault=La directory di destinazione predefinita \u00e8 {0}
 extractDirectoryExists=Directory gi\u00e0 esistente: {0}
 extractDirectoryError=Impossibile creare la directory: {0}
@@ -255,5 +255,17 @@ UNABLE_TO_FIND_PID=Impossibile ottenere l''ID del processo java -jar. Impossibil
 
 UNABLE_TO_ATTACH_AGENT=Impossibile collegare l''agent Liberty Java. Questo server funzioner\u00e0, ma non potr\u00e0 eseguire funzioni che richiedono l''agent Java, come monitoraggio e traccia. Eccezione: {0}
 
-UNABLE_TO_FIND_TOOLS_JAR=Impossibile collegare l''agent Liberty Java perch\u00e9 questo server utilizza un JRE piuttosto che un Java SDK. Questo server funzioner\u00e0, ma non potr\u00e0 eseguire funzioni che richiedono l''agent Java, come monitoraggio e traccia. 
-UNABLE_TO_FIND_JAVA_AGENT=Impossibile individuare l''agent Liberty Java. Questo server funzioner\u00e0, ma non potr\u00e0 eseguire funzioni che richiedono l''agent Java, come monitoraggio e traccia. 
+UNABLE_TO_FIND_TOOLS_JAR=Impossibile collegare l''agent Liberty Java perch\u00e9 questo server utilizza un JRE piuttosto che un Java SDK. Questo server funzioner\u00e0, ma non potr\u00e0 eseguire funzioni che richiedono l''agent Java, come monitoraggio e traccia.
+
+UNABLE_TO_FIND_JAVA_AGENT=Impossibile individuare l''agent Liberty Java. Questo server funzioner\u00e0, ma non potr\u00e0 eseguire funzioni che richiedono l''agent Java, come monitoraggio e traccia.
+
+
+# messages for LicenseSelfEctractor
+LICENSE_invalidInstall=La directory {0} non \u00e8 un''installazione Liberty valida. \
+Specificare la directory root dell''installazione Liberty che si desidera aggiornare.
+LICENSE_invalidVersion=Impossibile aggiornare la licenza perch\u00e9 l''installazione del prodotto specificata \u00e8 alla versione {0}, ma la licenza pu\u00f2 essere aggiornata solo dalla versione {1}.
+LICENSE_invalidEdition=Impossibile aggiornare la licenza perch\u00e9 l''installazione del prodotto specificata \u00e8 un''edizione {0}, ma la licenza pu\u00f2 aggiornare solo le seguenti edizioni: {1}
+LICENSE_invalidLicense=Impossibile aggiornare la licenza perch\u00e9 l''installazione del prodotto specificata ha una licenza {0}, ma la licenza pu\u00f2 aggiornare solo prodotti con una licenza {1}.
+LICENSE_invalidInstallType=Impossibile aggiornare la licenza perch\u00e9 l''installazione del prodotto specificato \u00e8 stata effettuata utilizzando IBM Installation Manager. \
+Utilizzare IBM Installation Manager per aggiornare l''installazione.
+

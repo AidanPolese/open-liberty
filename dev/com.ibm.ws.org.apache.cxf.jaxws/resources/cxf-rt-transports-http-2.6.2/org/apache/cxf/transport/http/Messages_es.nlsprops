@@ -1,0 +1,37 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-transports-http-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+UNEXPECTED_RESPONSE_TYPE_MSG = Tipo de respuesta inesperado {0}
+INVALID_ENCODING_MSG = Juego de caracteres no v\u00e1lido {0} en la solicitud.
+NULL_RESPONSE_MSG = El objeto de respuesta es nulo
+DECOUPLED_RESPONSE_FAILED_MSG = La respuesta de desacoplamiento ha fallado
+MISSING_PATH_INFO = PATH_INFO no est\u00e1 presente en el contexto de mensaje, el id de multiplexar no est\u00e1 disponible. Aseg\u00farese de que el portName pasado a getCurrentEndpointReferenceId sea correcto si el servicio tiene varios puertos.
+INVALID_TIMEOUT_FORMAT = Se ha especificado un par nombre/valor {0}={1} no v\u00e1lido en RequestConext 
+NO_HTTP_DESTINATION_FACTORY_FOUND = No se puede encontrar ninguna HttpDestinationFactory registrada desde el bus.
+EXECUTOR_FULL = El ejecutor ha rechazado la tarea en segundo plano para recuperar la respuesta, que se ejecuta en la hebra actual.
+EXECUTOR_FULL_WARNING = El ejecutor ha rechazado la tarea en segundo plano para recuperar la respuesta. Se sugiere aumentar los valores de cola de trabajos. 

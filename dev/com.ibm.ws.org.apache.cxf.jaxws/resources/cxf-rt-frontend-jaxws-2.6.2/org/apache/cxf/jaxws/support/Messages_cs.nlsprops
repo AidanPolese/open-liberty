@@ -1,0 +1,47 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SEI_LOAD_FAILURE_EXC = Nezda\u0159ilo se na\u010d\u00edst rozhran\u00ed SEI.
+INVALID_PROVIDER_EXC = {0} nen\u00ed platn\u00fd poskytovatel JAXWS.
+SEI_LOAD_FAILURE_MSG = Nelze na\u010d\u00edst rozhran\u00ed SEI webov\u00e9 slu\u017eby
+SEI_WITHOUT_WEBSERVICE_ANNOTATION_EXC = Rozhran\u00ed SEI neobsahuje anotaci @WebService.
+ILLEGAL_ATTRIBUTE_IN_SEI_ANNOTATION_EXC = Atributy portName, serviceName a endpointInterface nejsou v anotaci @WebService rozhran\u00ed SEI povoleny.
+MALFORMED_URL_IN_WEBSERVICE_ANNOTATION_EXC = Chybn\u00e1 adresa URL v atributu wsdlLocation anotace @WebService.
+LOAD_WSDL_EXC = Nelze na\u010d\u00edst WSDL z adresy URL {0}.
+COULD_NOT_FIND_ENDPOINT = Nebyl nalezen koncov\u00fd bod s n\u00e1zvem {0}. Mo\u017en\u00e9 hodnoty: {1}.
+SOAPBinding_MESSAGE_RPC= Na metod\u011b {0} byla nalezena anotace JAX-WS SOAPBinding se stylem RPC. Tato akce nen\u00ed podporov\u00e1na.
+INVALID_REQUEST_WRAPPER = T\u0159\u00edda @RequestWrapper {0} je stejn\u00e1 jako skute\u010dn\u00fd parametr {1}. To pravd\u011bpodobn\u011b nebude fungovat. 
+INVALID_RESPONSE_WRAPPER = T\u0159\u00edda @ResponseWrapper {0} je stejn\u00e1 jako skute\u010dn\u00e1 t\u0159\u00edda n\u00e1vratu {1}. To pravd\u011bpodobn\u011b nebude fungovat. 
+SERVICECLASS_MUST_BE_SET = T\u0159\u00edda serviceClass mus\u00ed b\u00fdt nastavena na platn\u00e9 rozhran\u00ed slu\u017eby nebo t\u0159\u00eddu.
+XMLSEEALSO_NULL_CLASS = Na cest\u011b ke t\u0159\u00edd\u011b nelze naj\u00edt t\u0159\u00eddu uvedenou v anotaci XmlSeeAlso t\u0159\u00eddy slu\u017eeb %s. Index: %d seznamu t\u0159\u00edd XmlSeeAlso.
+WEBMETHOD_EXCLUDE_NOT_ALLOWED = Na rozhran\u00ed SEI nelze pou\u017e\u00edt metodu @javax.jws.WebMethod(exclude=true). Metoda: {0}
+WEBSERVICE_ANNOTATIONS_IS_LOADED_BY_OTHER_CLASSLOADER = Anotace {0} ji\u017e byla na\u010dtena jin\u00fdm zavad\u011b\u010dem t\u0159\u00edd. Zkontrolujte, zda na cest\u011b ke t\u0159\u00edd\u011b existuje v\u00edce verz\u00ed souboru JAR anotace webov\u00e9 slu\u017eby.
+UNKONWN_REQUIRED_WSDL_BINDING = Bylo nalezeno nezn\u00e1m\u00e9 roz\u0161\u00ed\u0159en\u00ed vazby WSDL s atributem required=true p\u0159i povolen\u00e9m RespectBindingFeature.
+
+
+

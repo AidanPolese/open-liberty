@@ -1,0 +1,14 @@
+<project name="com.ibm.ws.org.apache.aries.jndi.api" default="build">
+    <import file="../ant_build/public_imports/rejar_imports.xml"/>
+    
+    <!-- don't instrument the Activator class -->
+    <!-- FFDC not required for this library -->
+    <property name="instrument.ffdc" value="false" />
+    <!-- Trace instrumentation not required this library -->
+    <property name="no.trace.instrumentation" value="true" />
+    
+    <target name="package">
+        <!-- Don't pick up our patches in the jndi.api bundle -->
+    	<rejar version="1.1" src.jar="lib/org.apache.aries.jndi.api-1.*.jar" skip.local.classes="true"/>
+    </target>
+</project>

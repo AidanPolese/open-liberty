@@ -1,0 +1,15 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Apache commons logging
+Bundle-SymbolicName: com.ibm.ws.org.apache.commons.logging.1.0.3
+Bundle-Description: Apache common logging, version 1.0.3
+
+Export-Package: org.apache.commons.logging;version="1.0.3", \
+org.apache.commons.logging.impl;version="1.0.3"
+
+# no notice file in source jar
+Include-Resource: \
+  META-INF/LICENSE.txt=resources/META-INF/LICENSE.txt
+
+instrument.disabled: true

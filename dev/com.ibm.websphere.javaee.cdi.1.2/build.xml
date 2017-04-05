@@ -1,0 +1,10 @@
+<project name="com.ibm.websphere.javaee.cdi.1.2" default="build">
+    <property name="spec.name" value="cdi"/>
+    <property name="spec.marketing.version" value="1.2"/>
+    <property name="spec.javadoc.name" value="cdi-api-1.2-javadoc.jar"/>
+    <property name="bundle.version" value="1.2"/>
+    <import file="../ant_build/public_imports/spec_imports.xml"/>
+ 
+    <target name="package" depends="spec.package"/>
+    <target name="publishToImage" depends="spec.publishToImage" />    
+</project>

@@ -1,0 +1,65 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Management Security Liberty Project
+Bundle-SymbolicName: com.ibm.ws.management.security
+Bundle-Description: Management Security Services; version=${bVersion}
+
+WS-TraceGroup: ManagementSecurity
+
+Export-Package: \
+  com.ibm.ws.management.security
+
+Private-Package: \
+  com.ibm.ws.management.security.internal.*, \
+
+Include-Resource: \
+    OSGI-INF=resources/OSGI-INF
+
+Service-Component: \
+  com.ibm.ws.management.security.authorizationTable; \
+    implementation:=com.ibm.ws.management.security.internal.ManagementSecurityAuthorizationTable; \
+    provide:='com.ibm.ws.security.authorization.AuthorizationTableService,com.ibm.ws.security.registry.UserRegistryChangeListener'; \
+    immediate:=true; \
+    activate:=activate; \
+    deactivate:=deactivate; \
+    configuration-policy:=ignore; \
+    securityService=com.ibm.ws.security.SecurityService; \
+    configurationAdmin=org.osgi.service.cm.ConfigurationAdmin; \
+    managementRole=com.ibm.ws.management.security.ManagementRole; \
+    optional:='managementRole,configurationAdmin'; \
+    multiple:='managementRole'; \
+    dynamic:='securityService,managementRole'; \
+    properties:="service.vendor=IBM,com.ibm.ws.security.authorization.table.name=Management", \
+  com.ibm.ws.management.security.role.administrator; \
+    implementation:=com.ibm.ws.management.security.internal.AdministratorRole; \
+    provide:=com.ibm.ws.management.security.ManagementRole; \
+    activate:=activate; \
+    modified:=modify; \
+    deactivate:=deactivate; \
+    configuration-policy:=require; \
+    properties:="service.vendor=IBM,com.ibm.ws.management.security.role.name=Administrator"
+#  The JMXSecurityMBeanServer is currently disabled
+#  com.ibm.ws.management.security.MBeanServer; \
+#    implementation:=com.ibm.ws.management.security.internal.JMXSecurityMBeanServer; \
+#    activate:=activate; \
+#    deactivate:=deactivate; \
+#    configuration-policy:=ignore; \
+#    mBeanServerPipeline=com.ibm.ws.kernel.boot.jmx.service.MBeanServerPipeline; \
+#    securityService=com.ibm.ws.security.SecurityService; \
+#    properties:="service.vendor=IBM"
+
+instrument.classesExcludes: com/ibm/ws/management/security/internal/resources/*.class
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging,\
+	com.ibm.websphere.appserver.spi.kernel.service,\
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.ws.kernel.boot,\
+	com.ibm.websphere.org.osgi.service.cm.1.5.0,\
+	com.ibm.ws.security;version=latest,\
+	com.ibm.ws.security.authentication;version=latest,\
+	com.ibm.ws.security.registry;version=latest,\
+	com.ibm.ws.security.authorization;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

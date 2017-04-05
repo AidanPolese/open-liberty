@@ -1,0 +1,31 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.websphere.collective/resources/com/ibm/wsspi/collective/internal/resources/CollectiveSPIMessages.nlsprops
+#COMPONENTPREFIX CWWKX
+#COMPONENTNAMEFOR WebSphere Collective SPI
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKX8000 - CWWKX8049
+
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE=CWWKX8000E: \uad6c\uc131 \uc624\ub958\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4. \uc0ac\uc6a9 \uac00\ub2a5\ud55c RepositoryClient \uad6c\ud604\uc774 \uc5c6\uc2b5\ub2c8\ub2e4. \uc774 \ubb38\uc81c\ub97c \ud574\uacb0\ud558\ub824\uba74 collectiveMember-1.0 \ub610\ub294 collectiveController-1.0\uacfc \uac19\uc740 \uae30\ub2a5\uc744 \uc9c0\uc815\ud558\uace0 \ud544\uc694\ud55c \uad6c\uc131\uc744 \uc815\uc758\ud558\uc2ed\uc2dc\uc624. 
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.explanation=\ud1b5\ud569 \uae30\ub2a5\uc740 RepositoryClient\uc5d0 \ub300\ud55c \uad6c\ud604\uc744 \uc81c\uacf5\ud558\uba70 \ud574\ub2f9 \uad6c\ud604\uc744 \ucc3e\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.useraction=\uc774 \ubb38\uc81c\ub97c \ud574\uacb0\ud558\ub824\uba74 collectiveMember-1.0 \ub610\ub294 collectiveController-1.0\uacfc \uac19\uc740 \ud1b5\ud569 \uae30\ub2a5\uc744 \uc9c0\uc815\ud558\uace0 \ud544\uc694\ud55c \uad6c\uc131\uc744 \uc815\uc758\ud558\uc2ed\uc2dc\uc624.
+
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES=CWWKX8001E: \uad6c\uc131 \uc624\ub958\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4. \uc5ec\ub7ec RepositoryClientDelegate \uad6c\ud604\uc774 \uc0ac\uc6a9 \uac00\ub2a5\ud569\ub2c8\ub2e4. {0} \ubc88\ub4e4\uc5d0\uc11c \ud604\uc7ac \uad6c\ud604\uc744 \uc81c\uacf5\ud569\ub2c8\ub2e4. {1} \ubc88\ub4e4\uc774 \ud3ec\ud568\ub41c \uc368\ub4dc\ud30c\ud2f0 \ub610\ub294 \uc0ac\uc6a9\uc790 \uc815\uc758 \uae30\ub2a5\uc744 \uc81c\uac70\ud558\uc2ed\uc2dc\uc624. 
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.explanation=RepositoryConnectionFactory\ub294 \ud2b9\uc815 RepositoryClientDelegate \uad6c\ud604\uc774 \ud544\uc694\ud558\uba70 \ucd94\uac00 \uad6c\ud604\uc774 OSGi \uc11c\ube44\uc2a4\ub85c \ub4f1\ub85d\ub418\uc5c8\uc2b5\ub2c8\ub2e4. \ud558\ub098\uc758 \uad6c\ud604\ub9cc \ud5c8\uc6a9\ub429\ub2c8\ub2e4.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.useraction=\uc774 \uc9c0\uc815\ub41c \ubc88\ub4e4\uc774 \ud3ec\ud568\ub41c \uc368\ub4dc\ud30c\ud2f0 \ub610\ub294 \uc0ac\uc6a9\uc790 \uc815\uc758 \uae30\ub2a5\uc744 \uc81c\uac70\ud558\uc2ed\uc2dc\uc624.
+
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE=CWWKX8002E: \uad6c\uc131 \uc624\ub958\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4. \uc0ac\uc6a9 \uac00\ub2a5\ud55c RepositoryMember \uad6c\ud604\uc774 \uc5c6\uc2b5\ub2c8\ub2e4. \uc774 \ubb38\uc81c\ub97c \ud574\uacb0\ud558\ub824\uba74 collectiveMember-1.0 \ub610\ub294 collectiveController-1.0\uacfc \uac19\uc740 \uae30\ub2a5\uc744 \uc9c0\uc815\ud558\uace0 \ud544\uc694\ud55c \uad6c\uc131\uc744 \uc815\uc758\ud558\uc2ed\uc2dc\uc624. 
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.explanation=\ud1b5\ud569 \uae30\ub2a5\uc740 RepositoryMember\uc5d0 \ub300\ud55c \uad6c\ud604\uc744 \uc81c\uacf5\ud558\uba70 \ud574\ub2f9 \uad6c\ud604\uc744 \ucc3e\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.useraction=\uc774 \ubb38\uc81c\ub97c \ud574\uacb0\ud558\ub824\uba74 collectiveMember-1.0 \ub610\ub294 collectiveController-1.0\uacfc \uac19\uc740 \ud1b5\ud569 \uae30\ub2a5\uc744 \uc9c0\uc815\ud558\uace0 \ud544\uc694\ud55c \uad6c\uc131\uc744 \uc815\uc758\ud558\uc2ed\uc2dc\uc624.
+
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES=CWWKX8003E: \uad6c\uc131 \uc624\ub958\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4. \uc5ec\ub7ec RepositoryMemberDelegate \uad6c\ud604\uc774 \uc0ac\uc6a9 \uac00\ub2a5\ud569\ub2c8\ub2e4. {0} \ubc88\ub4e4\uc5d0\uc11c \ud604\uc7ac \uad6c\ud604\uc744 \uc81c\uacf5\ud569\ub2c8\ub2e4. {1} \ubc88\ub4e4\uc774 \ud3ec\ud568\ub41c \uc368\ub4dc\ud30c\ud2f0 \ub610\ub294 \uc0ac\uc6a9\uc790 \uc815\uc758 \uae30\ub2a5\uc744 \uc81c\uac70\ud558\uc2ed\uc2dc\uc624.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.explanation=RepositoryConnectionFactory\ub294 \ud2b9\uc815 RepositoryMemberDelegate \uad6c\ud604\uc774 \ud544\uc694\ud558\uba70 \ucd94\uac00 \uad6c\ud604\uc774 OSGi \uc11c\ube44\uc2a4\ub85c \ub4f1\ub85d\ub418\uc5c8\uc2b5\ub2c8\ub2e4. \ud558\ub098\uc758 \uad6c\ud604\ub9cc \ud5c8\uc6a9\ub429\ub2c8\ub2e4.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.useraction=\uc774 \uc9c0\uc815\ub41c \ubc88\ub4e4\uc774 \ud3ec\ud568\ub41c \uc368\ub4dc\ud30c\ud2f0 \ub610\ub294 \uc0ac\uc6a9\uc790 \uc815\uc758 \uae30\ub2a5\uc744 \uc81c\uac70\ud558\uc2ed\uc2dc\uc624.

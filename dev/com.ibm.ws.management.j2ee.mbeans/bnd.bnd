@@ -1,0 +1,30 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: J2EE MBeans related to system management
+Bundle-SymbolicName: com.ibm.ws.management.j2ee.mbeans
+Bundle-Description: J2EE MBeans related to system management: Implements JSR 77 specifications; version=${bVersion}
+
+Export-Package: com.ibm.ws.management.j2ee.mbeans
+
+Private-Package: com.ibm.ws.management.j2ee.mbeans.internal, \
+  com.ibm.ws.management.j2ee.mbeans.internal.resources.*
+
+-dsannotations: \
+  com.ibm.ws.management.j2ee.mbeans.internal.SMActivator
+
+Import-Package: \
+!*.internal.*, \
+*
+
+instrument.classesExcludes: com/ibm/ws/management/j2ee/mbeans/internal/resources/*.class
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
+	com.ibm.ws.kernel.boot;version=latest,\
+	com.ibm.ws.management.j2ee;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

@@ -389,6 +389,10 @@ audit.jvm.shutdown=CWWKE0085I: Server {0} se zastavuje, proto\u017ee se ukon\u01
 audit.jvm.shutdown.explanation=Server zachytil po\u017eadavek na zastaven\u00ed JVM a pokus\u00ed se zastavit spo\u0159\u00e1dan\u00fdm zp\u016fsobem. Ukon\u010den\u00ed JVM m\u016f\u017ee b\u00fdt zp\u016fsobeno sign\u00e1lem k ukon\u010den\u00ed, kter\u00fd opera\u010dn\u00ed syst\u00e9m zaslal procesu serveru.
 audit.jvm.shutdown.useraction=Pokud bylo zastaven\u00ed serveru neo\u010dek\u00e1van\u00e9, ur\u010dete, zda byl procesu serveru zasl\u00e1n sign\u00e1l k ukon\u010den\u00ed.
 
+warning.serverStartedCommandPortDisabled=CWWKE0087W: Pro server {0} bylo zah\u00e1jeno spu\u0161t\u011bn\u00ed serveru, ale nen\u00ed mo\u017en\u00e9 sd\u011blit, zda bylo toto spu\u0161t\u011bn\u00ed dokon\u010deno, proto\u017ee je p\u0159\u00edkazov\u00fd port serveru vypnut\u00fd.
+warning.serverStartedCommandPortDisabled.explanation=P\u0159\u00edkazov\u00fd port serveru je nezbytn\u00fd pro komunikaci s b\u011b\u017e\u00edc\u00edm serverem. P\u0159\u00edkazov\u00fd port byl pro tento server explicitn\u011b vypnut, proto nen\u00ed mo\u017en\u00e9 sd\u011blit, zda server spu\u0161t\u011bn\u00ed dokon\u010dil.
+warning.serverStartedCommandPortDisabled.useraction=Ru\u010dn\u011b zkontrolujte protokoly serveru, zda se server \u00fasp\u011b\u0161n\u011b spustil.
+
 warning.serverStartedWithPIDCommandPortDisabled=CWWKE0088W: Pro server {0} bylo zah\u00e1jeno spu\u0161t\u011bn\u00ed serveru s ID procesu {1}, ale nen\u00ed mo\u017en\u00e9 sd\u011blit, zda bylo toto spu\u0161t\u011bn\u00ed dokon\u010deno, proto\u017ee je port p\u0159\u00edkazu serveru vypnut\u00fd.
 warning.serverStartedWithPIDCommandPortDisabled.explanation=Port p\u0159\u00edkazu serveru je nezbytn\u00fd pro komunikaci s b\u011b\u017e\u00edc\u00edm serverem. Port p\u0159\u00edkazu byl pro tento server explicitn\u011b vypnut, proto nen\u00ed mo\u017en\u00e9 sd\u011blit, zda server spu\u0161t\u011bn\u00ed dokon\u010dil.
 warning.serverStartedWithPIDCommandPortDisabled.useraction=Ru\u010dn\u011b zkontrolujte protokoly serveru, zda se server \u00fasp\u011b\u0161n\u011b spustil.

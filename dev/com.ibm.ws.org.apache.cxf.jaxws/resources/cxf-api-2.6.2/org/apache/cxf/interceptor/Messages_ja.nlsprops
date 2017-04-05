@@ -1,0 +1,52 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+STREAM_CREATE_EXC = XMLStreamReader \u3092\u4f5c\u6210\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f (\u5165\u529b\u306e\u30a8\u30f3\u30b3\u30fc\u30c9\u306f {0})\u3002
+INVALID_HTML_RESPONSETYPE = \u5fdc\u7b54\u306f\u4e88\u671f\u3057\u306a\u3044 text/html ContentType \u3067\u3057\u305f\u3002  HTML \u30b9\u30c8\u30ea\u30fc\u30e0\u306e\u7740\u4fe1\u90e8\u5206: {0}
+STAX_READ_EXC = XMLStreamReader \u304b\u3089\u8aad\u307f\u53d6\u308b\u3053\u3068\u304c\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002
+STAX_WRITE_EXC = XMLStreamWriter \u306b\u66f8\u304d\u8fbc\u3080\u3053\u3068\u304c\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002
+NO_OPERATION_ELEMENT=\u64cd\u4f5c\u30a8\u30ec\u30e1\u30f3\u30c8\u304c\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002
+NO_OPERATION=\u305d\u306e\u3088\u3046\u306a\u64cd\u4f5c\u304c\u3042\u308a\u307e\u305b\u3093\u3002{0}
+NO_OPERATION_PATH=\u305d\u306e\u3088\u3046\u306a\u64cd\u4f5c\u304c\u3042\u308a\u307e\u305b\u3093\u3002{0} (HTTP GET PATH_INFO: {1})
+NO_DATAREADER=\u30b5\u30fc\u30d3\u30b9\u306b\u9069\u3057\u305f DataReader \u304c\u3042\u308a\u307e\u305b\u3093\u3002{0}
+NO_DATAWRITER=\u30b5\u30fc\u30d3\u30b9\u306b\u9069\u3057\u305f DataWriter \u304c\u3042\u308a\u307e\u305b\u3093\u3002{0}
+COULD_NOT_UNRWAP=\u30e1\u30c3\u30bb\u30fc\u30b8\u90e8\u5206\u3092\u30a2\u30f3\u30e9\u30c3\u30d7\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002
+COULD_NOT_SEND=\u30e1\u30c3\u30bb\u30fc\u30b8\u3092\u9001\u4fe1\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002
+NO_PART_FOUND=\u30e1\u30c3\u30bb\u30fc\u30b8\u90e8\u5206 {0} \u306f\u8a8d\u8b58\u3055\u308c\u307e\u305b\u3093\u3067\u3057\u305f\u3002  (\u30b5\u30fc\u30d3\u30b9 WSDL \u5185\u306b\u5b58\u5728\u3057\u307e\u3059\u304b?)
+ORDERED_PARAM_REQUIRED=\u30d1\u30e9\u30e1\u30fc\u30bf\u30fc\u306f\u6b21\u306e\u9806\u5e8f\u306b\u914d\u5217\u3055\u308c\u308b\u5fc5\u8981\u304c\u3042\u308a\u307e\u3059\u3002{0}
+WRITE_ATTACHMENTS=\u6dfb\u4ed8\u3092\u66f8\u304d\u8fbc\u3080\u3053\u3068\u304c\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002
+INVOKE_FAULT_INFO=getFaultInfo \u30e1\u30bd\u30c3\u30c9\u3092\u547c\u3073\u51fa\u3059\u3053\u3068\u304c\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002
+NO_FAULT_INFO_METHOD=\u30ab\u30b9\u30bf\u30e0\u969c\u5bb3\u306b getFaultInfo \u30e1\u30bd\u30c3\u30c9\u304c\u5fc5\u8981\u3067\u3059\u3002
+NO_ACCCESS_FAULT_INFO=getFaultInfo \u30e1\u30bd\u30c3\u30c9\u306b\u30a2\u30af\u30bb\u30b9\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002
+COULD_NOT_CREATE_ANNOTATION_OBJECT=\u30a2\u30ce\u30c6\u30fc\u30b7\u30e7\u30f3\u30fb\u30aa\u30d6\u30b8\u30a7\u30af\u30c8\u3092\u4f5c\u6210\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002{0}
+COULD_NOT_FIND_SEICLASS=\u30af\u30e9\u30b9\u3092\u898b\u3064\u3051\u308b\u3053\u3068\u304c\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002{0}
+EXCEPTION_WHILE_WRITING_FAULT = \u969c\u5bb3\u306e\u66f8\u304d\u8fbc\u307f\u4e2d\u306b\u4f8b\u5916\u304c\u767a\u751f\u3057\u307e\u3057\u305f\u3002
+EXCEPTION_WHILE_CREATING_EXCEPTION = \u4f8b\u5916\u306e\u4f5c\u6210\u4e2d\u306b\u4f8b\u5916\u304c\u767a\u751f\u3057\u307e\u3057\u305f\u3002{0}
+UNEXPECTED_WRAPPER_ELEMENT = \u4e88\u671f\u3057\u306a\u3044\u30e9\u30c3\u30d1\u30fc\u30fb\u30a8\u30ec\u30e1\u30f3\u30c8 {0} \u304c\u898b\u3064\u304b\u308a\u307e\u3057\u305f\u3002   \u6b63\u3057\u304f\u306f {1} \u3067\u3059\u3002
+UNEXPECTED_ELEMENT = \u4e88\u671f\u3057\u306a\u3044\u30a8\u30ec\u30e1\u30f3\u30c8 {0} \u304c\u898b\u3064\u304b\u308a\u307e\u3057\u305f\u3002   \u6b63\u3057\u304f\u306f {1} \u3067\u3059\u3002
+ 

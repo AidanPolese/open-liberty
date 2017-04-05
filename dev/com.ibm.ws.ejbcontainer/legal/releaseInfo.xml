@@ -1,0 +1,10 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="com.ibm.ws.ejbcontainer">
+  <notes>
+<![CDATA[
+com.ibm.ws.ejb.embeddableContainer_nls_8.5.0.jar:
+https://ausgsa.ibm.com/projects/w/was.build/botp/WAS855.SERV1/test/cf021412.02.linux/linux/zipper/fe.zip
+SERV1/ws/code/ejbcontainer.embeddable/build/lib/com.ibm.ws.ejb.embeddableContainer_nls_8.5.0.jar
+]]>
+  </notes>
+</releaseInfo>

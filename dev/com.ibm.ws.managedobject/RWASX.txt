@@ -1,0 +1,7 @@
+Build: d1410.01
+
+Components (files -deleted and !modified):
+  SERV1/ws/code/managedobject/src
+    !com/ibm/ws/managedobject/internal/ManagedObjectImpl.java
+    !com/ibm/ws/managedobject/internal/ManagedObjectServiceImpl.java
+  

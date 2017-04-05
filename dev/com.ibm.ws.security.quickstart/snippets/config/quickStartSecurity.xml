@@ -1,0 +1,18 @@
+<server description="Quick start security sample configuration">
+
+    <!-- NOTE: This file is for reference only. -->
+
+    <!-- Enable appSecurity-2.0 feature -->
+    <featureManager>
+        <feature>appSecurity-2.0</feature>
+    </featureManager>
+
+    <!-- Sample configuration for the quick start security configuration.
+         This user can be user to authenticate to both administrative and
+	     non-administrative applications.
+         This user will implicitly be granted the "Administrator" role. -->
+<!--
+    <quickStartSecurity userName="admin" userPassword="admin123" />
+-->
+
+</server>

@@ -1,0 +1,43 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=${bundle.version}
+
+Bundle-Name: Apache CXF Runtime HTTP Transport
+Bundle-Description: Apache CXF Runtime HTTP Transport, version ${original.jar.version}
+Bundle-SymbolicName: ${symbolic.name}
+Bundle-Activator: org.apache.cxf.transport.http.osgi.HTTPTransportActivator
+
+Export-Package: \
+ META-INF.cxf.osgi, \
+ org.apache.cxf.*;version=2.6.2
+
+Import-Package: \
+ org.apache.cxf.ws.policy.*;resolution:=optional;version="[2.6.2,2.6.3)", \
+ org.apache.neethi;resolution:=optional, \
+ javax.servlet.*;resolution:=optional;version="[0.0,4)", \
+ javax.xml.bind.*;version="[2.2,3)", \
+ !org.springframework.*;resolution:=optional;version="[2.5,4)", \
+ !org.apache.aries.*;version="[0.3,2)", \
+ !org.osgi.service.blueprint.*, \
+ org.apache.cxf.*;version="[2.6.2,2.6.3)", \
+ *
+ 
+DynamicImport-Package: com.ctc.wstx.*
+
+Include-Resource:\
+ @build/tmp/lib/cxf-rt-transports-http-2.6.2.jar!/META-INF/cxf/**, \
+ @build/tmp/lib/cxf-rt-transports-http-2.6.2.jar!/schemas/**, \
+ @build/tmp/lib/cxf-rt-transports-http-2.6.2.jar!/META-INF/spring.handlers, \
+ @build/tmp/lib/cxf-rt-transports-http-2.6.2.jar!/META-INF/spring.schemas, \
+ @build/tmp/lib/cxf-rt-transports-http-2.6.2.jar!/META-INF/DEPENDENCIES, \
+ @build/tmp/lib/cxf-rt-transports-http-2.6.2.jar!/META-INF/LICENSE, \
+ @build/tmp/lib/cxf-rt-transports-http-2.6.2.jar!/META-INF/NOTICE, \
+ build/tmp/bnd/cxf-rt-transports-http-2.6.2
+ 
+# does not exist
+# META-INF/cxf=resources/cxf-rt-transports-http-2.6.2/META-INF/cxf
+ 
+ 
+ 
+# Remove the resources (blueprint/metadata configuration files) in the OSGI-INF directory
+# As we have no plan to support that, will add these things back with NLS support in the future 
+# @lib/cxf-rt-transports-http-2.6.2.jar!/OSGI-INF/**, \

@@ -1,0 +1,10 @@
+<project name="com.ibm.ws.org.apache.commons.codec" default="build">
+	
+  <import file="../ant_build/public_imports/rejar_imports.xml"/>
+	
+  <property name="bundle.version" value="1.0"/>
+  <!-- The bundle in lib has a name which doesn't match our expectations, so override some properties -->
+  <property name="original.jar.name" value="org.apache.commons.codec"/>
+  <property name="original.jar.version" value="1.4"/>
+
+</project>

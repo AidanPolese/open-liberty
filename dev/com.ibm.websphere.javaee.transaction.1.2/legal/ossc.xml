@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Oracle RI" 
+      projectURL="https://maven.java.net" 
+      version="1.2" revision="" 
+      license-type="CDDL" 
+      contact="jon.hawkes@uk.ibm.com" 
+      encryption="no">
+   
+      <download location="https://maven.java.net/content/repositories/releases/javax/transaction/javax.transaction-api/1.2/javax.transaction-api-1.2.jar">
+         <file basename="javax.transaction-api-1.2.jar" checksum="2dfee184286530e726ad155816e15b4c"/>
+      </download>
+      <download location="https://maven.java.net/content/repositories/releases/javax/transaction/javax.transaction-api/1.2/javax.transaction-api-1.2-javadoc.jar">
+         <file basename="javax.transaction-api-1.2-javadoc.jar" checksum="b7437df4d8ddf6f071b56d9d0332c530"/>
+      </download>
+   </project>
+
+   <clearencehistory>
+
+   </clearencehistory>
+</ossc>

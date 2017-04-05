@@ -1,0 +1,20 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.4
+
+Bundle-Name: WebSphere JMX REST Connector API
+Bundle-Description: WebSphere JMX REST Connector API, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.api.restConnector
+
+Import-Package: com.ibm.websphere.filetransfer,com.ibm.websphere.jmx.connector.rest,com.ibm.ws.jmx.connector.client.rest
+
+Export-Package: com.ibm.websphere.filetransfer,com.ibm.websphere.jmx.connector.rest,com.ibm.ws.jmx.connector.client.rest
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.restConnector/pom.xml=com.ibm.websphere.appserver.api.restConnector.pom}
+
+publish.wlp.jar.suffix: dev/api/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.filetransfer, \
+	com.ibm.ws.jmx.connector.client.rest, \
+	com.ibm.ws.jmx.connector.server.rest

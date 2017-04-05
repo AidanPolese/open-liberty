@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Unknown" 
+            projectURL="Unknown" 
+            version="1.0" revision="" 
+            license-type="javax" 
+            contact="???@us.ibm.com" 
+            encryption="no">
+      <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.build/botp/WAS85.SERV1/test/gm1216.02.linux/linux/zipper/fe.zip">
+         <file basename="com.ibm.ws.prereq.wsdl4j.jar" checksum="923e5c9283fb4f04d051e8ec334278f9"/>
+      </download>
+   </project>
+  
+  <notes>
+    The download location is the FE.zip that includes the com.ibm.ws.prereq.wsdl4j.jar from the directory ws\code\prereq.wsdl4j\build\
+  </notes>
+   
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and v8.5 and has been cleared previously by WAS
+   </clearencehistory>
+</ossc>

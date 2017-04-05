@@ -1,0 +1,12 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: WebSphere REST SPIs
+Bundle-SymbolicName: com.ibm.websphere.rest.handler
+Bundle-Description: SPIs for WebSphere REST Services; version=${bVersion}
+
+Export-Package: \
+  com.ibm.wsspi.rest.handler
+
+-buildpath: \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

@@ -1,0 +1,37 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-transports-http-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+LOAD_BUS_WITHOUT_APPLICATION_CONTEXT = Charger le bus sans contexte d'application
+LOAD_BUS_WITH_APPLICATION_CONTEXT = Charger le bus avec le contexte d'application
+REPLACED_HTTP_DESTIONFACTORY = La fabrique de destination HTTP a \u00e9t\u00e9 remplac\u00e9e par la fabrique de transport de servlet
+BUILD_ENDPOINTS_FROM_CONFIG_LOCATION = G\u00e9n\u00e9rer des noeuds finaux \u00e0 partir de config-location : {0}
+DESTIONFACTORY_ALREADY_REGISTERED = La fabrique de transport de servlet est d\u00e9j\u00e0 enregistr\u00e9e 
+UNEXPECTED_RESPONSE_TYPE_MSG = Type de r\u00e9ponse inattendu {0}
+DECOUPLED_RESPONSE_FAILED_MSG = Echec du d\u00e9couplage de la r\u00e9ponse
+FAILED_TO_LOAD_SPRING_BUS = Echec du chargement du bus Spring : {0}
+INVALID_ENCODING_MSG = Ensemble de caract\u00e8res {0} non valide dans la demande.

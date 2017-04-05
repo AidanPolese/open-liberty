@@ -1,0 +1,17 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: WAS JSP 2.2 JASPER EL
+Bundle-SymbolicName: com.ibm.ws.jsp.jasper
+Bundle-Description: WAS JSP 2.2 Jasper EL, version ${bVersion} - implementation classes that are specific to JSP version 2.2
+
+Export-Package: org.apache.jasper.el;thread-context=true;version=2.2.0 ,\
+   org.apache.jasper;version=2.2.0
+
+instrument.ffdc: false
+
+-buildpath: \
+	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
+	com.ibm.websphere.javaee.el.2.2;version=latest,\
+	com.ibm.websphere.javaee.jsp.2.2;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

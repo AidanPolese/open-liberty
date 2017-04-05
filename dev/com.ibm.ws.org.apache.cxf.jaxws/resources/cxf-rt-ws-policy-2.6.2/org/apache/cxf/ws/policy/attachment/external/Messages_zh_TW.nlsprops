@@ -1,0 +1,32 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-ws-policy-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+NO_DOMAINEXPRESSIONBUILDER_EXC = \u672a\u767b\u9304\u4efb\u4f55 {0} \u985e\u578b\u7684\u7db2\u57df\u8868\u793a\u5f0f\u5efa\u7f6e\u5668\u3002
+EPR_DOMAIN_EXPRESSION_BUILD_EXC = \u7121\u6cd5\u5efa\u7f6e\u7aef\u9ede\u53c3\u7167\u985e\u578b\u7db2\u57df\u8868\u793a\u5f0f\u3002
+EPR_DOMAIN_EXPRESSION_BUILDER_INIT_EXC = \u7121\u6cd5\u8d77\u59cb\u8a2d\u5b9a\u7aef\u9ede\u53c3\u7167\u985e\u578b\u7db2\u57df\u8868\u793a\u5f0f\u5efa\u7f6e\u5668\u3002
+COULD_NOT_OPEN_ATTACHMENT_DOC_EXC = \u7121\u6cd5\u958b\u555f\u539f\u5247\u9644\u4ef6\u6587\u4ef6 {0}\u3002

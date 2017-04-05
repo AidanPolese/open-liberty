@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Unknown" 
+            projectURL="Unknown" 
+            version="1.0" revision="" 
+            license-type="???" 
+            contact="???us.ibm.com" 
+            encryption="no">
+      <!-- <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.build/botp/WA80.SERV1/test/cf021143.02.linux/linux/zipper/fe.zip">-->
+      <download location="https://espresso.hursley.ibm.com/perl/secure/fetch/JAX-2.2/jaxws/jaxws_2.2/20140709_01/jaxws_2.2-20140709_01.zip">
+         <file basename="jaxws-api.jar" checksum="f0fd18b93b2456ec4d1448476429bba3"/>
+      </download>
+      <download location="https://ebitzone.hursley.ibm.com:8443/jim/download?file=FR84935">
+         <file basename="jaxws-api-2.2.10-javadoc.jar" checksum="fff39e9ffb608cd003037c4ba76a7923"/>
+      </download>
+   </project>
+   
+   <notes>
+   Copy of j2ee.ejb.bundle/build/javax.j2ee.ejb.jar
+   </notes>
+   
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and v8.5 and has been cleared previously by WAS.
+   The javadoc was downloaded from JIM.
+   </clearencehistory>
+</ossc>

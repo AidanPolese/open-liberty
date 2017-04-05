@@ -1,0 +1,18 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion: 1.0
+
+Bundle-Name: WebSphere JAX-RS 20 Engine API
+Bundle-Description: WebSphere JAX-RS 20 Engine API, version ${bVersion}
+Bundle-SymbolicName: com.ibm.websphere.appserver.api.jaxrs20
+
+Import-Package: com.ibm.websphere.jaxrs.providers.json4j,com.ibm.websphere.jaxrs20.multipart
+
+Export-Package: com.ibm.websphere.jaxrs.providers.json4j,com.ibm.websphere.jaxrs20.multipart
+
+-includeresource: {META-INF/maven/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.jaxrs20/pom.xml=com.ibm.websphere.appserver.api.jaxrs20.pom}
+
+publish.wlp.jar.suffix: dev/api/ibm
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.jaxrs.2.0.common;version=latest

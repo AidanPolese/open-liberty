@@ -1,0 +1,36 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: wimregistry service
+Bundle-Description: wimregistry service, version ${bVersion}
+Bundle-SymbolicName: com.ibm.ws.security.wim.registry
+
+Private-Package: com.ibm.ws.security.wim.registry.util.resources 
+   
+Export-Package: \
+  !com.ibm.ws.security.wim.registry.util.resources,\
+  com.ibm.ws.security.wim.registry.*
+  
+Include-Resource: \
+  OSGI-INF=resources/OSGI-INF
+
+IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml
+  
+-metatypeannotations: com.ibm.ws.security.wim.registry.WIMUserRegistryConfig
+  
+-dsannotations: com.ibm.ws.security.wim.registry.WIMUserRegistry
+
+instrument.classesExcludes: com/ibm/ws/security/wim/registry/util/resources/*.class
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.ws.security.wim.core;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
+	com.ibm.ws.security.registry;version=latest,\
+	com.ibm.websphere.security.wim.base;version=latest,\
+	com.ibm.ws.bnd.annotations;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.metatype.annotations.1.3.0;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

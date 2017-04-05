@@ -1,0 +1,30 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.jsp.2.2; singleton:=true
+
+Export-Package: \
+	javax.servlet.jsp,\
+	javax.servlet.jsp.el,\
+	javax.servlet.jsp.resources,\
+	javax.servlet.jsp.tagext
+
+Import-Package: !javax.servlet.jsp.*, \
+  javax.el; version="2.2.0", \
+  javax.servlet.*; version="2.6.0", \
+  javax.xml.parsers; resolution:=optional, \
+  org.apache.taglibs.standard.resources; resolution:=optional, \
+  org.apache.taglibs.standard.tag.common.fmt; resolution:=optional, \
+  org.xml.sax; resolution:=optional, \
+  org.xml.sax.helpers; resolution:=optional
+
+Include-Resource: \
+  @lib/javax.servlet.jsp_2.2.jar!/javax/servlet/jsp/resources/**
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/javax.servlet.jsp_2.2.jar;version=file

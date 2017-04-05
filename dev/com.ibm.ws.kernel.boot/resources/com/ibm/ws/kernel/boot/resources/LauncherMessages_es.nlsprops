@@ -383,6 +383,10 @@ audit.jvm.shutdown=CWWKE0085I: El servidor {0} se detiene porque la JVM est\u00e
 audit.jvm.shutdown.explanation=El servidor ha interceptado una petici\u00f3n para detener la JVM e intentar\u00e1 la detenci\u00f3n de forma ordenada. Es posible que la JVM concluya debido a que el sistema operativo ha enviado una se\u00f1al de terminaci\u00f3n al proceso de servidor.
 audit.jvm.shutdown.useraction=Si no se esperaba la detenci\u00f3n del servidor, determine si se ha enviado una se\u00f1al de terminaci\u00f3n al proceso de servidor.
 
+warning.serverStartedCommandPortDisabled=CWWKE0087W: Se ha iniciado el arranque del servidor {0}, pero no es posible saber si se ha completado el arranque porque el puerto de mandatos del servidor est\u00e1 inhabilitado.
+warning.serverStartedCommandPortDisabled.explanation=Se necesita el puerto de mandatos del servidor para comunicarse con un servidor en ejecuci\u00f3n.  El puerto de mandatos se ha inhabilitado expl\u00edcitamente para este servidor, por lo tanto no es posible saber si se ha completado el arranque del servidor.
+warning.serverStartedCommandPortDisabled.useraction=Compruebe manualmente los registros del servidor para verificar si el servidor se ha iniciado satisfactoriamente.
+
 warning.serverStartedWithPIDCommandPortDisabled=CWWKE0088W: Se ha iniciado el arranque del servidor {0} con el ID de proceso {1}, pero no es posible saber si se ha completado el arranque porque el puerto de mandatos del servidor est\u00e1 inhabilitado.
 warning.serverStartedWithPIDCommandPortDisabled.explanation=Se necesita el puerto de mandatos del servidor para comunicarse con un servidor en ejecuci\u00f3n.  El puerto de mandatos se ha inhabilitado expl\u00edcitamente para este servidor, por lo tanto no es posible saber si se ha completado el arranque del servidor.
 warning.serverStartedWithPIDCommandPortDisabled.useraction=Compruebe manualmente los registros del servidor para verificar si el servidor se ha iniciado satisfactoriamente.

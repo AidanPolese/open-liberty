@@ -1,0 +1,40 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-databinding-jaxb-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+INIT_OBJ_CONTEXT_FAILED = ObjectMessageContext inicializ\u00e1l\u00e1s meghi\u00fasult.
+SCHEMA_NOT_RESOLVED = Nem oldhat\u00f3 fel az URI: {0}
+UNKNOWN_SOURCE = Elrendez\u00e9si hiba, fel nem ismert forr\u00e1s: {0}.
+MARSHAL_ERROR = Elrendez\u00e9si hiba: {0}
+UNMARSHAL_ERROR = Visszarendez\u00e9si hiba: {0} 
+UNKNOWN_ELEMENT_NAME = A(z) {0} elemneve nem \u00e1llap\u00edthat\u00f3 meg.
+UNKNOWN_PACKAGE_NS = A(z) {0} oszt\u00e1lyhoz nem tal\u00e1lhat\u00f3k csomaginform\u00e1ci\u00f3k. Az alap\u00e9rtelmezett s\u00e9ma n\u00e9vt\u00e9r nem kereshet\u0151 ki.
+SCHEMA_GEN_EXC = Nem \u00e1ll\u00edthat\u00f3k el\u0151 s\u00e9m\u00e1k.
+CREATED_JAXB_CONTEXT = "{0}" JAXBContext l\u00e9trehozva {1} oszt\u00e1lyokkal.
+NO_BEAN_INFO = Nem tal\u00e1lhat\u00f3k JAXB inform\u00e1ci\u00f3k a(z) {0} komponenshez a k\u00f6rnyezetben.   Gy\u0151z\u0151dj\u00f6n meg r\u00f3la, hogy k\u00f6veti-e a JAXB meg\u00e1llapod\u00e1sokat.
+CANNOT_CREATE_ELEMENT = Nem hozhat\u00f3 l\u00e9tre {0} elem {1} t\u00edpussal, mert az elem m\u00e1r l\u00e9tezik {2} t\u00edpussal.
+DATATYPE_FACTORY_INSTANTIATION_EXC = Nem hozhat\u00f3 l\u00e9tre adatt\u00edpus gy\u00e1r.

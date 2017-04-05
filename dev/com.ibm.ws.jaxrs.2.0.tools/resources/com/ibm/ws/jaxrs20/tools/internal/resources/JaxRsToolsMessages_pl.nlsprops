@@ -1,0 +1,36 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+#
+# ORIGINS: 27         (used for IBM originated files)
+#
+# Caution: because some text editors automatically convert
+# consecutive runs of spaces to tabs, use the Java "\ " escape
+# sequence to represent each space in a run of multiple spaces.
+#
+# translator:
+# Translate words on the right hand side of the = sign.
+# Do not translate {0}, {1}, %1, %2 etc.
+# Do NOT translate any words when they START with: '-
+# Do NOT translate any words when they START with: @
+# Preserve all spaces after a backslash (\) even at the end of a line.
+#
+# NLS_MESSAGEFORMAT_ALL
+#
+#CMVCPATHNAME com.ibm.ws.jaxrs-2.0.tools/resources/com/ibm/ws/jaxrs20/tools/internal/resources/JaxRsToolsMessages.nlsprops
+#ISMESSAGEFILE TRUE
+#COMPONENTPREFIX CWWKW
+#COMPONENTNAMEFOR CWWKW WebSphere JAXRS 2.0 Tools Code
+#RANGE 0900-9999
+#
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+
+# -------------------------------------------------------------------------------------------------
+
+error.badVersion=CWWKW0900E: Nie jest uruchomiona poprawna wersja \u015brodowiska Java. \u015arodowisko wykonawcze wymaga \u015brodowiska Java 7 lub nowszego.
+error.badVersion.explanation=Uruchomiona jest nieobs\u0142ugiwana wersja \u015brodowiska Java lub zmienna systemowa JAVA_HOME jest ustawiona tak, \u017ce wskazuje starsz\u0105 wersj\u0119 \u015brodowiska Java.
+error.badVersion.useraction= Zaktualizuj \u015brodowisko Java do wersji 7 lub dopasuj zmienn\u0105 systemow\u0105 JAVA_HOME tak, aby wskazywa\u0142a \u015brodowisko Java 7.

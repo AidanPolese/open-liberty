@@ -1,0 +1,31 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security.ready.service/resources/com/ibm/ws/security/internal/resources/SecurityReadyServiceMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Application Server Security Service
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKS0007 - CWWKS0009
+
+#
+# NOTE: CWWKS0007 through CWWKS0009 have been moved from com.ibm.ws.security project, they should not be retranslated!
+#
+
+SECURITY_SERVICE_STARTING=CWWKS0007I: Le service de s\u00e9curit\u00e9 d\u00e9marre...
+SECURITY_SERVICE_STARTING.explanation=Le service de s\u00e9curit\u00e9 est en cours de d\u00e9marrage. Cela peut prendre un certain temps si son initialisation doit avoir lieu une fois pour toutes.
+SECURITY_SERVICE_STARTING.useraction=Aucune action de l'utilisateur n'est requise.
+
+SECURITY_SERVICE_READY=CWWKS0008I: Le service de s\u00e9curit\u00e9 est pr\u00eat.
+SECURITY_SERVICE_READY.explanation=Il s'agit d'un message d'information.
+SECURITY_SERVICE_READY.useraction=Aucune action de l'utilisateur n'est requise.
+
+SECURITY_SERVICE_STOPPED=CWWKS0009I: Le service de s\u00e9curit\u00e9 s'est arr\u00eat\u00e9.
+SECURITY_SERVICE_STOPPED.explanation=Il s'agit d'un message d'information.
+SECURITY_SERVICE_STOPPED.useraction=Aucune action de l'utilisateur n'est requise.

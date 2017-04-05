@@ -1,0 +1,71 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: WAS Security Public APIs 
+Bundle-SymbolicName: com.ibm.websphere.security; singleton:=true
+Bundle-Description: WAS Security Public APIs, version ${bVersion}
+
+WS-TraceGroup: \
+  security
+  
+
+Export-Package: \
+  com.ibm.websphere.security, \
+  com.ibm.websphere.security.audit, \
+  com.ibm.websphere.security.auth; provide:=true, \
+  com.ibm.websphere.security.cred, \
+  com.ibm.ws.security.authentication.utility; provide:=true, \
+  com.ibm.ws.security.core; provide:=true, \
+  com.ibm.ws.security.filemonitor, \
+  com.ibm.ws.security.notifications, \
+  com.ibm.ws.security.intfc, \
+  com.ibm.ws.security.utils, \
+  com.ibm.wsspi.security.audit, \
+  com.ibm.wsspi.security.registry.*; provide:=true
+
+Service-Component: \
+  wsSubjectService; \
+    implementation:=com.ibm.websphere.security.auth.WSSubject; \
+    immediate:=true; \
+    configuration-policy:=ignore; \
+    activate:=activate; \
+    deactivate:=deactivate; \
+    subjectManagerService=com.ibm.ws.security.intfc.SubjectManagerService; \
+    dynamic:='subjectManagerService'; \
+    optional:='subjectManagerService'; \
+    properties:='service.vendor=IBM', \
+  wsSecurityHelperService; \
+    implementation:=com.ibm.websphere.security.WSSecurityHelper; \
+    immediate:=true; \
+    configuration-policy:=ignore; \
+    activate:=activate; \
+    deactivate:=deactivate; \
+    wsSecurityService=com.ibm.ws.security.intfc.WSSecurityService; \
+    dynamic:='wsSecurityService'; \
+    optional:='wsSecurityService'; \
+    properties:='service.vendor=IBM', \
+  registryHelperService; \
+    implementation:=com.ibm.wsspi.security.registry.RegistryHelper; \
+    immediate:=true; \
+    configuration-policy:=ignore; \
+    activate:=activate; \
+    deactivate:=deactivate; \
+    wsSecurityService=com.ibm.ws.security.intfc.WSSecurityService; \
+    dynamic:='wsSecurityService'; \
+    optional:='wsSecurityService'; \
+    properties:='service.vendor=IBM'
+
+-dsannotations: \
+   com.ibm.ws.security.utils.SecurityUtils
+
+-buildpath: \
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.filemonitor;version=latest,\
+	com.ibm.ws.logging.core;version=latest,\
+	com.ibm.ws.kernel.security.thread;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+
+    

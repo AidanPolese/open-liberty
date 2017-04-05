@@ -1,0 +1,7 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="javax.j2ee.cdi">
+  <originbase release="WAS85" fe="SERV1" level="cf011232.01" components="WAS.prereq.jcdi"/>
+
+  <notes>
+  </notes>
+</releaseInfo>

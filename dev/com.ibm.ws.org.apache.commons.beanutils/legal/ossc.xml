@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Commons BeanUtils" 
+            projectURL="http://commons.apache.org/proper/commons-beanutils/" 
+            version="1.8.3" revision="" 
+            license-type="Apachev2" 
+            contact="???@us.ibm.com" 
+            encryption="no">
+      <download location="http://archive.apache.org/dist/commons/beanutils/binaries/commons-beanutils-1.8.3-bin.zip">
+         <file basename="commons-beanutils-1.8.3.jar" checksum="b45be74134796c89db7126083129532f"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+</ossc>

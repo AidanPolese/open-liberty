@@ -1,0 +1,13 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.csiv2Client-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.iiopclient-1.0;version=latest, \
+	com.ibm.ws.security.csiv2.client;version=latest, \
+	com.ibm.ws.security.csiv2.common;version=latest, \
+	com.ibm.websphere.security;version=latest, \
+	com.ibm.websphere.security.impl;version=latest

@@ -1,0 +1,33 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.7.0
+Created-By: 2.3 (IBM Corporation)
+Bundle-ManifestVersion: 2
+Bundle-Name: Recovery Log Bundle
+Bundle-SymbolicName: com.ibm.ws.recoverylog
+DynamicImport-Package: *
+    
+# all packages have packageinfo files (package-info.java with @version javadoc)
+Export-Package: com.ibm.ws.recoverylog.spi,\
+ com.ibm.ws.recoverylog.utils
+
+Service-Component: \
+  RecoveryLogManager; \
+    implementation:=com.ibm.ws.recoverylog.spi.LibertyRecoveryDirectorImpl; \
+    provide:='com.ibm.ws.recoverylog.spi.RecoveryDirector'; \
+    immediate:='true'; \
+    recoveryLogFactory=com.ibm.ws.recoverylog.spi.RecoveryLogFactory; \
+    properties:='service.vendor=IBM'
+
+Private-Package: com.ibm.ws.recoverylog.resources
+
+instrument.classesExcludes: com/ibm/ws/recoverylog/resources/*.class
+
+-buildpath: \
+	com.ibm.ws.logging.core,\
+	com.ibm.tx.util;version=latest,\
+	com.ibm.ws.resource;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

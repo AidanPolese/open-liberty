@@ -1,0 +1,26 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Serialization
+Bundle-SymbolicName: com.ibm.ws.serialization
+Bundle-Description: Serialization utilities; version=${bVersion}
+
+WS-TraceGroup: serialization
+
+Export-Package:\
+  com.ibm.ws.serialization; provide:=true
+
+Private-Package:\
+  com.ibm.ws.serialization.internal.*
+
+-dsannotations-inherit: true
+-dsannotations: \
+  com.ibm.ws.serialization.internal.SerializationServiceImpl
+
+-buildpath: \
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0,\
+	com.ibm.ws.logging.core,\
+	com.ibm.ws.kernel.service, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

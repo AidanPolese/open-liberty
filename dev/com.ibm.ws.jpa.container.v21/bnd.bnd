@@ -1,0 +1,26 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: JPA 2.1 Container Runtime
+Bundle-SymbolicName: com.ibm.ws.jpa.container.v21
+Bundle-Description: JPA 2.1 Container Runtime; version=${bVersion}
+
+WS-TraceGroup: JPA
+
+Private-Package: \
+  com.ibm.ws.jpa.container.v21.*
+
+-dsannotations: \
+  com.ibm.ws.jpa.container.v21.JPAPCtxtAttributeAccessorV21, \
+  com.ibm.ws.jpa.container.v21.internal.JPA21Runtime
+
+-buildpath: \
+	com.ibm.ws.jpa.container;version=latest,\
+	com.ibm.websphere.javaee.persistence.2.1;version=latest,\
+	com.ibm.wsspi.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.tx.core;version=latest,\
+	com.ibm.ws.tx.embeddable;version=latest,\
+	com.ibm.ws.logging.core;version=latest,\
+	com.ibm.ws.container.service;version=latest,\
+	com.ibm.websphere.javaee.transaction.1.2;version=latest

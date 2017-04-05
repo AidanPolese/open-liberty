@@ -1,0 +1,7 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="javax.j2ee.connector_1.6">
+  <originbase release="WASX" fe="SERV1" level="yy1304.07" components="WAS.prereq.connector"/>
+
+  <notes>
+  </notes>
+</releaseInfo>

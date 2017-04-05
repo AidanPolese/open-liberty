@@ -1,0 +1,11 @@
+<project name="com.ibm.ws.org.slf4j.api" default="build">
+  <import file="../ant_build/public_imports/rejar_imports.xml" />
+
+  <property name="bundle.version" value="1.0" />
+
+  <target name="package">
+    <rejar original.jar.name="org.slf4j.api" original.jar.version="1.7.7" version="1.0" src.jar="lib/slf4j-api-1.7.7.jar" />
+
+  </target>
+
+</project>

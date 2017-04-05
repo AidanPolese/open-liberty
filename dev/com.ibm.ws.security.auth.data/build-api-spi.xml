@@ -1,0 +1,30 @@
+<project name="com.ibm.ws.security.auth.data-api" default="buildApiSpi"> 
+  <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+       Top level builds use this task explicity.  Changing the
+       default will create an incompatibility between a default
+       project build and a top level build. -->
+    
+  <!-- IBM-API required properties. -->
+  <property name="bundleName" value="WebSphere Security Auth Data"/>
+  <property name="api.ibm.symbolic.suffix" value="authData"/>
+  
+  <property name="api.ibm.version" value="1.0"/>
+<!--
+  <property name="feature.file" value="${basedir}/publish/features/authData-1.0.mf"/>
+-->
+  <property name="feature.project" value="com.ibm.websphere.appserver.passwordUtilities-1.0"/>
+
+  <!-- This API jar is only used to expose the WSPrincipalLoginModule to the JAAS framework -->
+  <property name="api.ibm.packages.exceptions"
+            value="com.ibm.websphere.security.jca"/>
+
+  <!-- Add Auth Data into the API. -->
+  <path id="bnd.jars">    
+    <fileset dir="../com.ibm.ws.security.auth.data.common/build/lib/" includes="*.jar"/>
+  </path>
+
+  <property name="additional.javadoc.src.dirs" value="${basedir}/../com.ibm.ws.security.auth.data.common/src/"/>
+
+  <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+
+</project>

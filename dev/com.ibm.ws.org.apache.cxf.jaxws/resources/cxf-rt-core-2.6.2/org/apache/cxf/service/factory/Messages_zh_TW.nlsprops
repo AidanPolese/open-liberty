@@ -1,0 +1,47 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-core-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+NO_METHOD_FOR_OP=\u627e\u4e0d\u5230 WSDL \u4f5c\u696d {0} \u7684\u65b9\u6cd5\u3002
+INVALID_SCHEMA_URL=\u7121\u6cd5\u8f09\u5165\u7db1\u76ee {0}
+ERROR_READING_SCHEMA=\u8b80\u53d6\u7db1\u76ee {0} \u6642\u767c\u751f\u932f\u8aa4\u3002
+COULD_NOT_FIND_PORTTYPE = \u627e\u4e0d\u5230\u540d\u7a31\u70ba {0} \u7684 portType
+USING_PROXY_FOR_SERVICE = \u670d\u52d9\u985e\u5225 {0} \u662f java.lang.reflect.Proxy \u5be6\u4f8b\u3002\
+\u5df2\u77e5\u9019\u662f\u7121\u6cd5\u9069\u7576\u904b\u4f5c\u7684\uff0c\u56e0\u5be6\u969b\u5be6\u4f8b\u7684\u8a3b\u91cb\u4e0d\u662f\u53ef\u7528\u7684\u3002\
+\u5efa\u8b70\u900f\u904e\u5f48\u6027\u914d\u7f6e\u6216\u5176\u4ed6\u914d\u7f6e\u4f86\u7f6e\u63db ServiceClass\u3002\
+\uff08\u7aef\u9ede/\u4f3a\u670d\u5668\u5f48\u6027\u914d\u7f6e\u9805\u76ee\u4e2d\u7684 serviceClass/implementorClass \u5c6c\u6027\uff09
+REFERENCE_TO_UNDEFINED_TYPE = \u7db1\u76ee\u5143\u7d20 {0} \u53c3\u7167\u4e86\u670d\u52d9 {2} \u672a\u5b9a\u7fa9\u7684 {1} \u985e\u578b\u3002
+UNMAPPABLE_PORT_TYPE= \u670d\u52d9\u985e\u5225 {0} \u65b9\u6cd5 {1} \u7d44\u4ef6 {2} \u7121\u6cd5\u5c0d\u6620\u81f3\u7db1\u76ee\u3002\
+\u8acb\u6aa2\u67e5\u6240\u7528\u7684 JAX-WS \u5c08\u7528\u985e\u578b\u4e2d\u662f\u5426\u6c92\u6709 JAX-WS \u670d\u52d9 Factory Bean\u3002
+INTRACTABLE_PART= \u7121\u6cd5\u8655\u7406\u8a0a\u606f {1} \u4e2d\u7684\u8a0a\u606f\u7d44\u4ef6 {0}\u3002\
+\u9019\u53ef\u80fd\u662f\u6240\u7528\u7684 JAX-WS \u5c08\u7528\u985e\u578b\u4e2d\u6c92\u6709 JAX-WS \u670d\u52d9 Factory Bean\u3002
+JAXWS_ANNOTATION_FOUND=\u4f7f\u7528\u300c\u7c21\u6613\u300d\u524d\u7aef\u7cfb\u7d71\u6642\uff0c\u5728 {0} \u4e2d\u767c\u73fe\u300cJAX-WS \u8a3b\u91cb\u300d\u3002\u5982\u679c\u8981\u53d6\u5f97\u8f03\u597d\u7684\u7d50\u679c\uff0c\u8acb\u4f7f\u7528 JAX-WS \u524d\u7aef\u7cfb\u7d71\u3002
+XSD_VALIDATION_ERROR= \u8207\u670d\u52d9 {0} \u76f8\u95dc\u806f\u7684 W3C XML \u7db1\u76ee\u4e2d\u767c\u751f\u932f\u8aa4
+COULD_NOT_UNWRAP=\u7121\u6cd5\u53d6\u6d88\u5c01\u88dd\u4f5c\u696d {0} \u4f86\u7b26\u5408\u65b9\u6cd5 "{1}"
+NO_WSDL_PROVIDED=\u5f9e\u985e\u5225 {0} \u5efa\u7acb\u7684\u670d\u52d9\u9700\u8981 WSDL\uff0c\u4f46\u662f\u672a\u6307\u5b9a WSDL \u4f4d\u7f6e\u3002
+NO_FAULT_PART = \u627e\u4e0d\u5230 {0} \u7684\u932f\u8aa4\u7d44\u4ef6\u3002\u932f\u8aa4\u8a0a\u606f\u5fc5\u9808\u6709\u55ae\u4e00\u7d44\u4ef6\u3002
+INVALID_BARE_METHOD= \u5c07\u65b9\u6cd5 {0} \u914d\u7f6e\u6210 BARE\uff0c\u4f46\u662f\u6709\u591a\u500b\u53c3\u6578\u7684 @Webparam \u8a3b\u91cb\u932f\u8aa4\uff0c\u6216\u8005\u672a\u8a3b\u91cb @WebParam\u3002

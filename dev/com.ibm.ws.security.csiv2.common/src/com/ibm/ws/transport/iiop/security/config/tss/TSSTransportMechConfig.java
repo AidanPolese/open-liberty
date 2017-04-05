@@ -1,0 +1,97 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * Copyright IBM Corp. 2015
+ *
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
+ * U.S. Copyright Office.
+ */
+/*
+ * Some of the code was derived from code supplied by the Apache Software Foundation licensed under the Apache License, Version 2.0.
+ */
+package com.ibm.ws.transport.iiop.security.config.tss;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.net.ssl.SSLSession;
+import javax.security.auth.Subject;
+
+import org.omg.CSIIOP.TAG_NULL_TAG;
+import org.omg.CSIIOP.TAG_SECIOP_SEC_TRANS;
+import org.omg.CSIIOP.TAG_TLS_SEC_TRANS;
+import org.omg.IOP.Codec;
+import org.omg.IOP.TaggedComponent;
+
+import com.ibm.websphere.ras.annotation.Trivial;
+import com.ibm.ws.transport.iiop.security.SASException;
+import com.ibm.wsspi.security.csiv2.TrustedIDEvaluator;
+
+/**
+ * @version $Rev: 503274 $ $Date: 2007-02-03 10:19:18 -0800 (Sat, 03 Feb 2007) $
+ */
+public abstract class TSSTransportMechConfig implements Serializable {
+
+    private boolean trustEveryone;
+    private boolean trustNoone = true;
+    private final List entities = new ArrayList();
+
+    public boolean isTrustEveryone() {
+        return trustEveryone;
+    }
+
+    public void setTrustEveryone(boolean trustEveryone) {
+        this.trustEveryone = trustEveryone;
+    }
+
+    public boolean isTrustNoone() {
+        return trustNoone;
+    }
+
+    public void setTrustNoone(boolean trustNoone) {
+        this.trustNoone = trustNoone;
+    }
+
+    public List getEntities() {
+        return entities;
+    }
+
+    public abstract short getSupports();
+
+    public abstract short getRequires();
+
+    public abstract TaggedComponent encodeIOR(Codec codec) throws Exception;
+
+    public static TSSTransportMechConfig decodeIOR(Codec codec, TaggedComponent tc) throws Exception {
+        TSSTransportMechConfig result = null;
+
+        if (tc.tag == TAG_NULL_TAG.value) {
+            result = new TSSNULLTransportConfig();
+        } else if (tc.tag == TAG_TLS_SEC_TRANS.value) {
+            result = new TSSSSLTransportConfig(tc, codec);
+        } else if (tc.tag == TAG_SECIOP_SEC_TRANS.value) {
+            result = new TSSSECIOPTransportConfig(tc, codec);
+        }
+
+        return result;
+    }
+
+    public abstract Subject check(SSLSession session) throws SASException;
+
+    @Override
+    public String toString() {
+        StringBuilder buf = new StringBuilder();
+        toString("", buf);
+        return buf.toString();
+    }
+
+    @Trivial
+    abstract void toString(String spaces, StringBuilder buf);
+
+    public abstract boolean isTrusted(TrustedIDEvaluator trustedIDEvaluator, SSLSession session);
+
+}

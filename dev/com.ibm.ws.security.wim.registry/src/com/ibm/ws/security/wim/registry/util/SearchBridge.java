@@ -1,0 +1,395 @@
+/************** Begin Copyright - Do not add comments here **************
+ *
+ * IBM Confidential OCO Source Material
+ * Virtual Member Manager (C) COPYRIGHT International Business Machines Corp. 2012 - 2015
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ *
+ * Change History:
+ *
+ * Tag          Person   Defect/Feature      Comments
+ * ----------   ------   --------------      --------------------------------------------------
+ *         suraj_chandegave    93943         SVT: FFDC logs generated for each incorrect user/password during login with LDAP
+ * 06/10/201    rzunzarr  102797/PM91261     getGroups call fails when search pattern is specified is a DN
+ * 04/15/2015   suraj_chandegave    168255          Test Failure (20150319-1329): com.ibm.ws.security.wim.registry.fat.DefaultWIMRealmTest.checkPasswordWithInvalidUser
+ */
+
+package com.ibm.ws.security.wim.registry.util;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
+
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.websphere.security.wim.Service;
+import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.security.registry.RegistryException;
+import com.ibm.ws.security.registry.SearchResult;
+import com.ibm.ws.security.wim.registry.dataobject.IDAndRealm;
+import com.ibm.ws.security.wim.util.UniqueNameHelper;
+import com.ibm.wsspi.security.wim.SchemaConstants;
+import com.ibm.wsspi.security.wim.exception.EntityNotFoundException;
+import com.ibm.wsspi.security.wim.exception.InvalidUniqueNameException;
+import com.ibm.wsspi.security.wim.exception.WIMException;
+import com.ibm.wsspi.security.wim.model.Context;
+import com.ibm.wsspi.security.wim.model.Control;
+import com.ibm.wsspi.security.wim.model.Entity;
+import com.ibm.wsspi.security.wim.model.Group;
+import com.ibm.wsspi.security.wim.model.IdentifierType;
+import com.ibm.wsspi.security.wim.model.PersonAccount;
+import com.ibm.wsspi.security.wim.model.Root;
+import com.ibm.wsspi.security.wim.model.SearchControl;
+
+/**
+ * Bridge class for mapping user and group search methods.
+ *
+ * @author Ankit Jain
+ */
+public class SearchBridge {
+    /**
+     * Copyright notice.
+     */
+    private static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
+
+    private static final TraceComponent tc = Tr.register(SearchBridge.class);
+
+    /**
+     * Property mappings.
+     */
+    private TypeMappings propertyMap = null;
+
+    /**
+     * Mappings utility class.
+     */
+    private BridgeUtils mappingUtils = null;
+
+    /**
+     * RDN property for a group.
+     */
+    private String groupRDN = "cn";
+
+    /**
+     * Default constructor.
+     *
+     * @param mappingUtil
+     */
+    @FFDCIgnore(Exception.class)
+    public SearchBridge(BridgeUtils mappingUtil) {
+        String methodName = "SearchBridge";
+        this.mappingUtils = mappingUtil;
+        propertyMap = new TypeMappings(mappingUtil);
+        try {
+            // Get the group RDN property
+            String[] groupRDNList = this.mappingUtils.getCoreConfiguration().getRDNProperties(Service.DO_GROUP);
+
+            if (groupRDNList != null && groupRDNList.length > 0)
+                groupRDN = groupRDNList[0];
+        } catch (Exception excp) {
+            if (tc.isEventEnabled()) {
+                Tr.event(tc, methodName + " " + excp.getMessage());
+            }
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.ws.security.registry.UserRegistry#getUsers(java.lang.String, int)
+     */
+    @FFDCIgnore(WIMException.class)
+    public SearchResult getUsers(String inputPattern, int inputLimit) throws RegistryException {
+        String methodName = "getUsers";
+        // initialize the return value
+        SearchResult returnValue = new SearchResult();
+        // bridge the APIs
+        try {
+            // validate the id
+            this.mappingUtils.validateId(inputPattern);
+            // separate the ID and the realm
+            IDAndRealm idAndRealm = this.mappingUtils.separateIDAndRealm(inputPattern);
+            // create an empty root DataObject
+            Root root = this.mappingUtils.getWimService().createRootObject();
+            // if realm is defined
+            if (idAndRealm.isRealmDefined()) {
+                // create the realm DataObject
+                this.mappingUtils.createRealmDataObject(root, idAndRealm.getRealm());
+            }
+
+            // search on the principalName if the input attribute is an identifier type
+            String inputAttrName = this.propertyMap.getInputUserSecurityName(idAndRealm.getRealm());
+            boolean isInputAttrIdentifier = this.mappingUtils.isIdentifierTypeProperty(inputAttrName);
+            if (isInputAttrIdentifier)
+                inputAttrName = "principalName";
+
+            // use the root DataGraph to create a SearchControl DataGraph
+            List<Control> controls = root.getControls();
+            SearchControl searchControl = new SearchControl();
+            if (controls != null) {
+                controls.add(searchControl);
+            }
+            // d115256
+            if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
+                searchControl.getProperties().add(
+                                                  this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()));
+            }
+            // set the "expression" string to "type=LoginAccount and MAP(userSecurityName)="userPattern""
+            String quote = "'";
+            String id = idAndRealm.getId();
+            if (id.indexOf("'") != -1) {
+                quote = "\"";
+            }
+
+            // d112199
+            searchControl.setExpression("//" + Service.DO_ENTITIES + "[@xsi:type='"
+                                        + Service.DO_LOGIN_ACCOUNT + "' and " + inputAttrName + "=" + quote + id + quote + "]");
+            // d122142
+            // if limit > 0, set the search limit to limit + 1
+            if (inputLimit > 0) {
+                searchControl.setCountLimit((inputLimit + 1));
+            } else {
+                searchControl.setCountLimit((inputLimit));
+            }
+
+            // Set context to use userFilter if applicable
+            Context context = new Context();
+            context.set("key", SchemaConstants.USE_USER_FILTER_FOR_SEARCH);
+            context.set("value", id);
+            root.getContexts().add(context);
+
+            // invoke ProfileService.search with the input root DataGraph
+            root = this.mappingUtils.getWimService().search(root);
+            List<Entity> returnedList = root.getEntities();
+            if (!returnedList.isEmpty()) {
+                // add the MAP(userSecurityName)s to the Result list while count < limit
+                ArrayList people = new ArrayList();
+                for (int count = 0; count < returnedList.size(); count++) {
+                    // d122142
+                    if ((inputLimit > 0) && (count == inputLimit)) {
+                        // set the Result boolean to true
+                        //returnValue.setHasMore();
+                        break;
+                    }
+                    PersonAccount loginAccount = (PersonAccount) returnedList.get(count);
+                    // d115256
+                    if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
+                        people.add(loginAccount.get(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm())));
+                    } else {
+                        people.add(loginAccount.getIdentifier().get(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm())));
+                    }
+                }
+                returnValue = new SearchResult(people, true);
+            } else {
+                returnValue = new SearchResult(new ArrayList(), false);
+            }
+        }
+        // other cases
+        catch (WIMException toCatch) {
+            // f113366
+            if (toCatch instanceof EntityNotFoundException) {
+                returnValue = new SearchResult(new ArrayList(), false);
+            }
+            // log the Exception
+            else {
+                if (tc.isDebugEnabled()) {
+                    Tr.debug(tc, methodName + " " + toCatch.getMessage());
+                }
+                if (tc.isErrorEnabled()) {
+                    Tr.error(tc, toCatch.getMessage());
+                }
+                throw new RegistryException(toCatch.getMessage(), toCatch);
+            }
+        }
+        return returnValue;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.ws.security.registry.UserRegistry#getGroups(java.lang.String, int)
+     */
+    @FFDCIgnore({ WIMException.class, InvalidNameException.class })
+    public SearchResult getGroups(String inputPattern, int inputLimit) throws RegistryException {
+        // initialize the method name
+        String methodName = "getGroups";
+        // initialize the return value
+        SearchResult returnValue = new SearchResult();
+        // bridge the APIs
+        try {
+            // validate the id
+            this.mappingUtils.validateId(inputPattern);
+            // separate the ID and the realm
+            IDAndRealm idAndRealm = this.mappingUtils.separateIDAndRealm(inputPattern);
+            // create an empty root DataObject
+            Root root = this.mappingUtils.getWimService().createRootObject();
+            // if realm is defined
+            if (idAndRealm.isRealmDefined()) {
+                // set "WIM.Realm" in the Context DataGraph to the realm
+                this.mappingUtils.createRealmDataObject(root, idAndRealm.getRealm());
+            }
+
+            // search on the group RDN if the input attribute is an identifier type
+            String inputAttrName = this.propertyMap.getInputGroupSecurityName(idAndRealm.getRealm());
+            boolean isInputAttrIdentifier = this.mappingUtils.isIdentifierTypeProperty(inputAttrName);
+            if (isInputAttrIdentifier)
+                inputAttrName = groupRDN;
+            String quote = "'";
+            String id = idAndRealm.getId();
+            if (id.indexOf("'") != -1) {
+                quote = "\"";
+            }
+
+            // PM37404 call isDN method to find out if the input to the method is DN
+            boolean callGetAPI = false;
+            String groupSecNameAttr = this.propertyMap.getInputGroupSecurityName(idAndRealm.getRealm());
+
+            if (UniqueNameHelper.isDN(id) != null && groupSecNameAttr.equals(Service.PROP_UNIQUE_NAME)) {
+                if (tc.isEventEnabled()) {
+                    Tr.event(tc, methodName + " " + "Group Security name mapped to uniqueName. Invoking get instead of search", methodName);
+                }
+                // call get API
+                callGetAPI = true;
+                // Change 3 ... create a SDO for entity type GROUP
+                //DataObject entity = SDOHelper.createEntityDataObject(root, null, Service.DO_GROUP);
+                List<Entity> entities = root.getEntities();
+                Group entity = new Group();
+                if (entities != null) {
+                    entities.add(entity);
+                }
+                IdentifierType idfType = new IdentifierType();
+                idfType.setUniqueName(id);
+                entity.setIdentifier(idfType);
+                root = this.mappingUtils.getWimService().get(root);
+
+            } else {
+                // use the root DataGraph to create a SearchControl DataGraph
+                List<Control> controls = root.getControls();
+                SearchControl searchControl = new SearchControl();
+                if (controls != null) {
+                    controls.add(searchControl);
+                }
+                // add MAP(groupSecurityName) to the return list of properties
+                // d115913
+                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()))) {
+                    searchControl.getProperties().add(
+                                                      this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()));
+                }
+                // set the "expression" string to "type=Group and MAP(groupSecurityName)="groupPattern""
+                /*
+                 * String quote = "'";
+                 * String id = idAndRealm.getId();
+                 * if (id.indexOf("'") != -1) {
+                 * quote = "\"";
+                 * }
+                 */
+
+                // d112199
+                LdapName dnName = null;
+                try {
+                    dnName = new LdapName(inputPattern);
+                } catch (InvalidNameException e) {
+                }
+                if (dnName != null) {
+                    int index = inputPattern.indexOf("=");
+                    int endIndex = inputPattern.indexOf(",", index);
+                    String attrName = inputAttrName;
+                    String value = null;
+                    if (index > 0) {
+                        attrName = inputPattern.substring(0, index);
+                        value = inputPattern.substring(index + 1, endIndex);
+                    }
+
+                    String searchBase = null;
+                    if (endIndex + 1 < inputPattern.length()) {
+                        searchBase = inputPattern.substring(endIndex + 1);
+                        searchControl.getSearchBases().add(searchBase);
+                    }
+                    searchControl.setExpression("//" + Service.DO_ENTITIES + "[@xsi:type='"
+                                                + Service.DO_GROUP + "' and " + attrName + "=" + quote + value + quote + "]");
+                } else
+                    searchControl.setExpression("//" + Service.DO_ENTITIES + "[@xsi:type='"
+                                                + Service.DO_GROUP + "' and " + inputAttrName + "=" + quote + id + quote + "]");
+                // d122142
+                // if limit > 0, set the search limit to limit + 1
+                if (inputLimit > 0) {
+                    searchControl.setCountLimit(inputLimit + 1);
+                } else {
+                    searchControl.setCountLimit(inputLimit);
+                }
+
+                // Set context to use groupFilter if applicable
+                Context context = new Context();
+                context.set("key", SchemaConstants.USE_GROUP_FILTER_FOR_SEARCH);
+                context.set("value", id);
+                root.getContexts().add(context);
+
+                // invoke ProfileService.search with the input root DataGraph
+                root = this.mappingUtils.getWimService().search(root);
+            }
+            List<Entity> returnedList = root.getEntities();
+            if (!returnedList.isEmpty()) {
+                // add the MAP(groupSecurityName)s to the Result list while count < limit
+                ArrayList groups = new ArrayList();
+                for (int count = 0; count < returnedList.size(); count++) {
+                    // d122142
+                    if ((inputLimit > 0) && (count == inputLimit)) {
+                        // set the Result boolean to true
+                        //returnValue.setHasMore();
+                        break;
+                    }
+                    Group group = (Group) returnedList.get(count);
+                    boolean isEntityTypeGrp = false;
+                    if (callGetAPI) {
+                        //isEntityTypeGrp = SchemaManager.singleton().isSuperType(Service.DO_GROUP,
+                        //        SchemaManager.singleton().getQualifiedTypeName(group.getType()));
+                        isEntityTypeGrp = group.isSubType(Service.DO_GROUP);
+                    } else {
+                        isEntityTypeGrp = true;
+                    }
+                    if (tc.isEventEnabled()) {
+                        Tr.event(tc, methodName + " " + "Value of isEntityTypGrp :" + isEntityTypeGrp, methodName);
+                    }
+                    // d113801
+                    if (isEntityTypeGrp) {
+                        if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()))) {
+                            groups.add(group.get(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm())));
+                        } else {
+                            groups.add(group.getIdentifier().get(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm())));
+                        }
+                    } else {
+                        if (tc.isEventEnabled()) {
+                            Tr.event(tc, methodName + " " + "The Entity type was not compatible with Group. The entityType is : "
+                                         + group.getTypeName());
+                        }
+                    }
+                }
+                returnValue = new SearchResult(groups, true);
+
+            } else {
+                returnValue = new SearchResult(new ArrayList(), false);
+            }
+        }
+        // other cases
+        catch (WIMException toCatch) {
+            // f113366
+            // PM37404 Catch the invalid uniqueName exception for get() API
+            if (toCatch instanceof EntityNotFoundException || toCatch instanceof InvalidUniqueNameException) {
+                returnValue = new SearchResult(new ArrayList(), false);
+            }
+            // log the Exception
+            else {
+                if (tc.isDebugEnabled()) {
+                    Tr.debug(tc, methodName + " " + toCatch.getMessage());
+                }
+                if (tc.isErrorEnabled()) {
+                    Tr.error(tc, toCatch.getMessage());
+                }
+                throw new RegistryException(toCatch.getMessage(), toCatch);
+            }
+        }
+        return returnValue;
+    }
+}

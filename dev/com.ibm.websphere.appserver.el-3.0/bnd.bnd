@@ -1,0 +1,11 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.el-3.0
+
+publish.feature.resources: **
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.javax.el-3.0;version=latest, \
+	com.ibm.ws.org.apache.jasper.el.3.0;version=latest

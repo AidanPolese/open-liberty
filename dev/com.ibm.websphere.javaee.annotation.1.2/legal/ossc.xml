@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Oracle RI" 
+            projectURL="https://maven.java.net" 
+            version="1.0" revision="" 
+            license-type="CDDL" 
+            contact="bitonti@us.ibm.com" 
+            encryption="no">
+      <download location="https://maven.java.net/content/repositories/releases/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar">
+         <file basename="javax.annotation-api-1.2.jar" checksum="75fe320d2b3763bd6883ae1ede35e987"/>
+      </download>
+      <download location="https://maven.java.net/content/repositories/releases/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2-javadoc.jar">
+         <file basename="javax.annotation-api-1.2-javadoc.jar" checksum="87b6b64986a771dd85380182669b206e"/>
+      </download>
+   </project>
+   
+   <notes>
+   </notes>
+   
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and v8.5 and has been cleared previously by WAS.
+   Javadoc was downloaded from JIM.
+   </clearencehistory>
+</ossc>

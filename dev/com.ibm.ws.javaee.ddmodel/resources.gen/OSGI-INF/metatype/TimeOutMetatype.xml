@@ -1,0 +1,15 @@
+<!-- NOTE: This is a generated file. Do not edit it directly. -->
+
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0"
+xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
+localization="OSGI-INF/l10n/metatype">
+
+<OCD id="com.ibm.ws.javaee.dd.ejbext.TimeOut" name="%timeoutmetatype.name" description="%timeoutmetatype.desc">
+    <AD id="value" default="0" description="%TimeOutMetatype.value.desc" name="%TimeOutMetatype.value.name" type="String" required="true" ibm:type="duration(s)" cardinality="0"/>
+</OCD>
+
+<Designate factoryPid="com.ibm.ws.javaee.dd.ejbext.TimeOut">
+     <Object ocdref="com.ibm.ws.javaee.dd.ejbext.TimeOut"/>
+</Designate>
+
+</metatype:MetaData>

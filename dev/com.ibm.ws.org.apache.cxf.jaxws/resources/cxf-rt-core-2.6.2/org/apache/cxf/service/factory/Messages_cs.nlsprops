@@ -1,0 +1,47 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-core-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+NO_METHOD_FOR_OP=Nebyla nalezena metoda pro operaci WSDL {0}.
+INVALID_SCHEMA_URL=Nelze na\u010d\u00edst sch\u00e9ma {0}
+ERROR_READING_SCHEMA=Do\u0161lo k chyb\u011b p\u0159i \u010dten\u00ed sch\u00e9matu {0}.
+COULD_NOT_FIND_PORTTYPE = Nebyl nalezen typ portu s n\u00e1zvem {0}
+USING_PROXY_FOR_SERVICE = T\u0159\u00edda slu\u017eby: {0} je instanc\u00ed objektu java.lang.reflect.Proxy. \
+Je zn\u00e1mo, \u017ee toto nepracuje p\u0159\u00edli\u0161 dob\u0159e, proto\u017ee anotace nejsou k dispozici v re\u00e1ln\u00e9 instanci. \
+Navrhujeme v\u00e1m potla\u010den\u00ed t\u0159\u00eddy ServiceClass prost\u0159ednictv\u00edm konfigurace spring nebo jin\u00e9 konfigurace. \
+(atributy serviceClass/implementorClass v polo\u017ece konfigurace spring koncov\u00e9ho bodu/serveru)
+REFERENCE_TO_UNDEFINED_TYPE = Prvek sch\u00e9matu {0} odkazuje na nedefinovan\u00fd typ {1} pro slu\u017ebu {2}.
+UNMAPPABLE_PORT_TYPE= Nelze prov\u00e9st mapov\u00e1n\u00ed na sch\u00e9ma pro t\u0159\u00eddu slu\u017eby {0}, metodu {1} a \u010d\u00e1st {2}. \
+Zkontrolujte pou\u017eit\u00ed typu specifick\u00e9ho pro JAX-WS bez objektu bean tov\u00e1rny slu\u017eeb JAX-WS.
+INTRACTABLE_PART= Nelze zpracovat \u010d\u00e1st zpr\u00e1vy {0} pro zpr\u00e1vu {1}. \
+To m\u016f\u017ee b\u00fdt zp\u016fsobeno pou\u017eit\u00edm typ\u016f specifick\u00fdch JAX-WS bez objektu bean tov\u00e1rny slu\u017eeb JAX-WS.
+JAXWS_ANNOTATION_FOUND=V {0} byla nalezena anotace JAX-WS p\u0159i pou\u017eit\u00ed frontendu "Simple". Lep\u0161\u00edch v\u00fdsledk\u016f dos\u00e1hnete p\u0159i pou\u017eit\u00ed frontendu JAX-WS.
+XSD_VALIDATION_ERROR= Chyba ve sch\u00e9matu W3C XML p\u0159idru\u017een\u00e9mu ke slu\u017eb\u011b: {0}
+COULD_NOT_UNWRAP=Nelze rozbalit operaci {0} k porovn\u00e1n\u00ed s metodou "{1}"
+NO_WSDL_PROVIDED=Pro slu\u017eby vytvo\u0159en\u00e9 ze t\u0159\u00eddy {0} je zapot\u0159eb\u00ed WSDL, av\u0161ak um\u00edst\u011bn\u00ed WSDL nebylo zad\u00e1no. 
+NO_FAULT_PART = Nebyla nalezena \u010d\u00e1st chyby pro {0}. Chybov\u00e1 zpr\u00e1va mus\u00ed m\u00edt jedinou \u010d\u00e1st.
+INVALID_BARE_METHOD= Metoda {0} je nakonfigurov\u00e1na jako prost\u00e1 (BARE), av\u0161ak existuje v\u00edce ne\u017e jeden parametr s nespr\u00e1vnou anotac\u00ed @Webparam nebo bez anotace @WebParam.

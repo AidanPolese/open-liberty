@@ -1,0 +1,30 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Artifact API Loose Implementation
+Bundle-SymbolicName: com.ibm.ws.artifact.loose
+Bundle-Description: Implementation of artifact api for loose archives; version=${bVersion}
+
+WS-TraceGroup: archive.artifact.xml
+
+Private-Package: com.ibm.ws.artifact.loose.internal*
+
+Service-Component: \
+   com.ibm.ws.artifact.loose.service;\
+    implementation:=com.ibm.ws.artifact.loose.internal.LooseContainerFactoryHelper;\
+    provide:=com.ibm.ws.artifact.contributor.ArtifactContainerFactoryHelper;\
+    configuration-policy:=ignore;\
+    locationService=com.ibm.wsspi.kernel.service.location.WsLocationAdmin;\
+    containerFactory=com.ibm.wsspi.artifact.factory.ArtifactContainerFactory;\
+    dynamic:='containerFactory';\
+    properties:="service.vendor=IBM,handlesType=java.io.File,category=LOOSE"
+
+instrument.classesExcludes: com/ibm/ws/artifact/loose/internal/resources/*.class
+
+-buildpath: \
+	com.ibm.ws.artifact;version=latest,\
+	com.ibm.ws.kernel.service,\
+	com.ibm.ws.logging.core,\
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.ws.kernel.filemonitor

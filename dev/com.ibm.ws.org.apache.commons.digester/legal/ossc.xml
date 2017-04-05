@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache Commons Digester" 
+            projectURL="http://commons.apache.org" 
+            version="1.8" revision="" 
+            license-type="Apachev2" 
+            contact="pnicoluc@us.ibm.com" 
+            encryption="no">
+      <download location="http://mvnrepository.com/artifact/commons-digester/commons-digester/1.8">
+         <file basename="commons-digester-1.8.jar" checksum="cf89c593f0378e9509a06fce7030aeba"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+   
+   <notes>
+        The binary was taken from http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-core-assembly-2.2.7-bin.zip 
+        but the MyFaces build actually pulls it from the mvn repository.
+   </notes>   
+</ossc>

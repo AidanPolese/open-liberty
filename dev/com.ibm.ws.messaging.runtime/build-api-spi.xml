@@ -1,0 +1,18 @@
+<project name="com.ibm.ws.messaging-api" default="buildApiSpi">
+  <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+       Top level builds use this task explicity.  Changing the
+       default will create an incompatibility between a default
+       project build and a top level build. -->
+           
+  <!-- IBM-API required properties. -->
+  <property name="bundleName" value="WebSphere Embedded Messaging API"/>  	
+  <property name="api.ibm.symbolic.suffix" value="messaging"/>
+  <!-- Accept the default 'api.ibm.version' of '1.0'. -->   
+  <property name="feature.project" value="com.ibm.websphere.appserver.wasJmsServer-1.0"/>
+  
+  <!-- The API has references to Messaging. -->
+  <property name="additional.javadoc.src.dirs" value="${basedir}/../com.ibm.ws.messaging.common/src/"/>
+    
+  <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+  
+</project>

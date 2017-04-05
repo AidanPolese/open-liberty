@@ -1,0 +1,15 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.ltpa-1.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.containerServices-1.0;version=latest, \
+	com.ibm.ws.security.credentials;version=latest, \
+	com.ibm.ws.security.token;version=latest, \
+	com.ibm.websphere.security;version=latest, \
+	com.ibm.ws.security.credentials.ssotoken;version=latest, \
+	com.ibm.ws.security.token.ltpa;version=latest, \
+	com.ibm.ws.crypto.ltpakeyutil;version=latest

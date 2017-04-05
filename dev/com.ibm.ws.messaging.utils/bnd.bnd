@@ -1,0 +1,35 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Messaging Utils
+Bundle-SymbolicName: com.ibm.ws.messaging.utils
+Bundle-Description: Messaging Utils; version=${bVersion}
+
+Export-Package: com.ibm.ws.sib.shell.util,\
+ com.ibm.ws.sib.utils,\
+ com.ibm.ws.sib.utils.collections.linkedlist,\
+ com.ibm.ws.sib.utils.comms,\
+ com.ibm.ws.sib.utils.ffdc,\
+ com.ibm.ws.sib.utils.ras,\
+ com.ibm.wsspi.sib.utils.ras,\
+ com.ibm.ejs.util.am
+
+Service-Component=messaging.util.AlarmManager; \
+  implementation:=com.ibm.ejs.util.am.AlarmManager; \
+  provide:=com.ibm.ejs.util.am.AlarmManager; \
+  scheduledExecutor=java.util.concurrent.ScheduledExecutorService; \
+  immediate:=true; \
+  configuration-policy:=ignore; \
+  properties:="service.vendor=IBM"
+
+instrument.disabled: true
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.ws.logging.core;version=latest,\
+	com.ibm.ws.kernel.service;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

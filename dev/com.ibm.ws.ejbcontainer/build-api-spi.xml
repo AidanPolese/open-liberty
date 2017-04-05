@@ -1,0 +1,15 @@
+<project name="com.ibm.ws.ejbcontainer-api" default="buildApiSpi">
+  <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+       Top level builds use this task explicitly.  Changing the
+       default will create an incompatibility between a default
+       project build and a top level build. -->
+           
+  <!-- IBM-API required properties. -->
+  <property name="bundleName" value="WebSphere EJB Container API"/>  	
+  <property name="api.ibm.symbolic.suffix" value="ejbcontainer"/>
+  <property name="api.ibm.version" value="1.0"/>
+  <property name="feature.project" value="com.ibm.websphere.appserver.ejbLite-3.2"/>
+      
+  <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+  
+</project>

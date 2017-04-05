@@ -1,0 +1,10 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="com.ibm.ws.jdbc">
+  <originbase release="WAS85" fe="SERV1" level="rr1303.02" components="WAS.adapter"/>
+  <originbase release="WAS85" fe="SERV1" level="rr1303.02" components="WAS.j2c"/>
+
+  <notes>
+<![CDATA[
+]]>
+  </notes>
+</releaseInfo>

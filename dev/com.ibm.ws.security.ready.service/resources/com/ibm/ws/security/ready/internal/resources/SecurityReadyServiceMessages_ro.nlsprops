@@ -1,0 +1,31 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security.ready.service/resources/com/ibm/ws/security/internal/resources/SecurityReadyServiceMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Application Server Security Service
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKS0007 - CWWKS0009
+
+#
+# NOTE: CWWKS0007 through CWWKS0009 have been moved from com.ibm.ws.security project, they should not be retranslated!
+#
+
+SECURITY_SERVICE_STARTING=CWWKS0007I: Serviciul de securitate porne\u015fte...
+SECURITY_SERVICE_STARTING.explanation=Serviciul de securitate este \u00een proces de a porni. Aceasta poate dura dac\u0103 trebuie s\u0103 aib\u0103 loc ini\u0163ializarea de o singur\u0103 dat\u0103.
+SECURITY_SERVICE_STARTING.useraction=Nu este necesar\u0103 nicio ac\u0163iune.
+
+SECURITY_SERVICE_READY=CWWKS0008I: Serviciul de securitate este gata.
+SECURITY_SERVICE_READY.explanation=Acest mesaj este pur informativ.
+SECURITY_SERVICE_READY.useraction=Nu este necesar\u0103 nicio ac\u0163iune.
+
+SECURITY_SERVICE_STOPPED=CWWKS0009I: Serviciul de securitate s-a oprit.
+SECURITY_SERVICE_STOPPED.explanation=Acest mesaj este pur informativ.
+SECURITY_SERVICE_STOPPED.useraction=Nu este necesar\u0103 nicio ac\u0163iune.

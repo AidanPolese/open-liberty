@@ -167,7 +167,6 @@ O valor especificado referencia um recurso do arquivo existente. \
 Valor: {1}
 error.specifiedLocation.explanation=O local fornecido se refere a um arquivo existente em vez de um diret\u00f3rio.
 error.specifiedLocation.useraction=Altere o local especificado para um diret\u00f3rio, em seguida, tente a a\u00e7\u00e3o novamente.
-
 warning.noPlatformCache=CWWKE0026W: O sistema n\u00e3o p\u00f4de gravar o arquivo de cache de plataforma ({0}). Exce\u00e7\u00e3o: {1}
 warning.noPlatformCache.explanation=O arquivo de cache de plataforma especificado n\u00e3o p\u00f4de ser gravado.
 warning.noPlatformCache.useraction=Verifique e resolva a exce\u00e7\u00e3o e, em seguida, tente novamente a a\u00e7\u00e3o.
@@ -449,6 +448,11 @@ audit.jvm.shutdown=CWWKE0085I: O servidor {0} est\u00e1 parando porque a JVM est
 audit.jvm.shutdown.explanation=O servidor interceptou uma solicita\u00e7\u00e3o para parar a JVM e tentar\u00e1 par\u00e1-la de uma maneira ordenada. A JVM pode estar saindo porque o sistema operacional enviou um sinal de t\u00e9rmino ao processo do servidor.
 audit.jvm.shutdown.useraction=Se a parada do servidor foi inesperada, determine se um sinal de t\u00e9rmino foi enviado ao processo do servidor.
 
+warning.serverStartedCommandPortDisabled=CWWKE0087W: O in\u00edcio do servidor foi iniciado para o servidor {0}, mas n\u00e3o \u00e9 poss\u00edvel afirmar se a inicializa\u00e7\u00e3o foi conclu\u00edda, porque a porta de comando do servidor est\u00e1 desativada.
+warning.serverStartedCommandPortDisabled.explanation=A porta de comando do servidor \u00e9 requerida para comunica\u00e7\u00e3o com um servidor em execu\u00e7\u00e3o.  A porta de comando foi desativada explicitamente para este servidor, portanto, n\u00e3o \u00e9 poss\u00edvel dizer quando o servidor \
+concluiu a inicializa\u00e7\u00e3o.
+warning.serverStartedCommandPortDisabled.useraction=Examine manualmente os logs do servidor para verificar se o servidor iniciou com \u00eaxito.
+
 warning.serverStartedWithPIDCommandPortDisabled=CWWKE0088W: O in\u00edcio do servidor foi iniciado para o servidor {0} com ID de processo {1}, mas n\u00e3o \u00e9 poss\u00edvel afirmar se a inicializa\u00e7\u00e3o foi conclu\u00edda, porque a porta de comando do servidor est\u00e1 desativada.
 warning.serverStartedWithPIDCommandPortDisabled.explanation=A porta de comando do servidor \u00e9 requerida para comunica\u00e7\u00e3o com um servidor em execu\u00e7\u00e3o.  A porta de comando foi desativada explicitamente para este servidor, portanto, n\u00e3o \u00e9 poss\u00edvel dizer quando o servidor \
 concluiu a inicializa\u00e7\u00e3o.
@@ -705,22 +709,17 @@ a\u00e7\u00e3o foi tomada.
 warning.server.pause.invalid.targets.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o de pausa com uma lista de metas vazia na op\u00e7\u00e3o de destino. A solicita\u00e7\u00e3o foi conclu\u00edda, mas nenhuma a\u00e7\u00e3o foi tomada.
 warning.server.pause.invalid.targets.useraction=Especifique na op\u00e7\u00e3o de destino uma lista de componentes para pausar. Para pausar todos os componentes com capacidade de pausa no servidor, emita uma solicita\u00e7\u00e3o de pausa sem a op\u00e7\u00e3o de destino.
 
-warning.server.resume.invalid.targets=CWWKE0932W: Uma solicita\u00e7\u00e3o foi recebida para continuar componentes espec\u00edficos, mas a lista de componentes na op\u00e7\u00e3o de destino estava vazia. Nenhuma \
-a\u00e7\u00e3o foi tomada.
+warning.server.resume.invalid.targets=CWWKE0932W: Uma solicita\u00e7\u00e3o foi recebida para continuar componentes espec\u00edficos, mas a lista de componentes na op\u00e7\u00e3o de destino estava vazia. Nenhuma a\u00e7\u00e3o foi tomada.
 warning.server.resume.invalid.targets.explanation=Um usu\u00e1rio emitiu uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o com uma lista de metas vazia na op\u00e7\u00e3o de destino. A solicita\u00e7\u00e3o foi conclu\u00edda, mas nenhuma a\u00e7\u00e3o foi tomada.
 warning.server.resume.invalid.targets.useraction=Especifique na op\u00e7\u00e3o de destino uma lista de componentes para continuar. Para \
 continuar todos os componentes pausados no servidor, emita uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o sem a op\u00e7\u00e3o de destino.
 
-warning.server.pause.no.targets=CWWKE0933W: Uma solicita\u00e7\u00e3o de pausa foi recebida, mas nenhum componente com capacidade de pausa foi localizado no servidor. Nenhuma \
-a\u00e7\u00e3o foi tomada.
-warning.server.pause.no.targets.explanation=O servidor processou uma solicita\u00e7\u00e3o de pausa, mas nenhum componente com capacidade de pausa foi localizado no servidor. Nenhuma \
-a\u00e7\u00e3o foi tomada.
+warning.server.pause.no.targets=CWWKE0933W: Uma solicita\u00e7\u00e3o de pausa foi recebida, mas nenhum componente com capacidade de pausa foi localizado no servidor. Nenhuma a\u00e7\u00e3o foi tomada.
+warning.server.pause.no.targets.explanation=O servidor processou uma solicita\u00e7\u00e3o de pausa, mas nenhum componente com capacidade de pausa foi localizado no servidor. Nenhuma a\u00e7\u00e3o foi tomada.
 warning.server.pause.no.targets.useraction=Verifique se os componentes com capacidade de pausa est\u00e3o dispon\u00edveis no servidor.
 
-warning.server.resume.no.targets=CWWKE0934W: Uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o foi recebida, mas nenhum componente com capacidade de pausa foi localizado no servidor. Nenhuma \
-a\u00e7\u00e3o foi tomada.
-warning.server.resume.no.targets.explanation=O servidor processou uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o, mas nenhum componente com capacidade de pausa foi localizado. Nenhuma \
-a\u00e7\u00e3o foi tomada.
+warning.server.resume.no.targets=CWWKE0934W: Uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o foi recebida, mas nenhum componente com capacidade de pausa foi localizado no servidor. Nenhuma a\u00e7\u00e3o foi tomada.
+warning.server.resume.no.targets.explanation=O servidor processou uma solicita\u00e7\u00e3o de continua\u00e7\u00e3o, mas nenhum componente com capacidade de pausa foi localizado. Nenhuma a\u00e7\u00e3o foi tomada.
 warning.server.resume.no.targets.useraction=Verifique se os componentes com capacidade de pausa est\u00e3o dispon\u00edveis no servidor.
 
 warning.server.pause.missing.targets=CWWKE0935W: Uma solicita\u00e7\u00e3o de pausa foi recebida, mas os componentes a seguir n\u00e3o puderam ser localizados: {0}

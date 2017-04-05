@@ -1,0 +1,47 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+SEI_LOAD_FAILURE_EXC = Falha em carregar a interface do terminal em servi\u00e7o.
+INVALID_PROVIDER_EXC = {0} n\u00e3o \u00e9 um Provedor JAXWS v\u00e1lido.
+SEI_LOAD_FAILURE_MSG = N\u00e3o foi poss\u00edvel carregar a SEI de Webservice
+SEI_WITHOUT_WEBSERVICE_ANNOTATION_EXC = A interface do terminal em servi\u00e7o n\u00e3o tem uma anota\u00e7\u00e3o @WebService.
+ILLEGAL_ATTRIBUTE_IN_SEI_ANNOTATION_EXC = Os atributos portName, serviceName e endpointInterface n\u00e3o s\u00e3o permitidos na anota\u00e7\u00e3o @WebService de uma SEI.
+MALFORMED_URL_IN_WEBSERVICE_ANNOTATION_EXC = URL mal formatada na anota\u00e7\u00e3o @WebService, atributo wsdlLocation.
+LOAD_WSDL_EXC = N\u00e3o foi poss\u00edvel localizar WSDL da URL {0}.
+COULD_NOT_FIND_ENDPOINT = N\u00e3o foi poss\u00edvel localizar o terminal denominado {0}.  Valores poss\u00edveis s\u00e3o {1}.
+SOAPBinding_MESSAGE_RPC= Anota\u00e7\u00e3o JAX-WS SOAPBinding com Estilo de RPC localizada no m\u00e9todo {0}. Esse processo n\u00e3o \u00e9 suportado.
+INVALID_REQUEST_WRAPPER = A classe @RequestWrapper {0} \u00e9 igual ao par\u00e2metro real {1}.  Isso provavelmente n\u00e3o funcionar\u00e1. 
+INVALID_RESPONSE_WRAPPER = A classe @ResponseWrapper {0} \u00e9 a mesma que a classe de retorno real {1}.  Isso provavelmente n\u00e3o funcionar\u00e1. 
+SERVICECLASS_MUST_BE_SET = serviceClass deve ser configurada para uma interface de servi\u00e7o ou classe v\u00e1lida
+XMLSEEALSO_NULL_CLASS = Uma classe listada na anota\u00e7\u00e3o XmlSeeAlso da classe de servi\u00e7o %s n\u00e3o pode ser localizada no caminho de classe. \u00cdndice: %d da lista de classe XmlSeeAlso.
+WEBMETHOD_EXCLUDE_NOT_ALLOWED = @javax.jws.WebMethod(exclude=true) n\u00e3o pode ser usado em uma interface de terminal de servi\u00e7o. M\u00e9todo: {0}
+WEBSERVICE_ANNOTATIONS_IS_LOADED_BY_OTHER_CLASSLOADER = A anota\u00e7\u00e3o {0} j\u00e1 foi carregada por outro carregador de classes. Verifique se h\u00e1 diversas vers\u00f5es do jar de anota\u00e7\u00e3o de servi\u00e7o da web em seu caminho de classe.
+UNKONWN_REQUIRED_WSDL_BINDING = Extens\u00e3o de liga\u00e7\u00e3o de wsdl desconhecida com o atributo required=true localizada enquanto RespectBindingFeature ativado
+
+
+

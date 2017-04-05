@@ -1,0 +1,88 @@
+/************** Begin Copyright - Do not add comments here **************
+ *
+ *  
+ * IBM Confidential OCO Source Material
+ * Virtual Member Manager (C) COPYRIGHT International Business Machines Corp. 2012
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ * 
+ * Change History:
+ * 
+ * Tag          Person   Defect/Feature      Comments
+ * ----------   ------   --------------      --------------------------------------------------
+ */
+package com.ibm.websphere.security.wim.ras;
+
+import java.util.logging.Logger;
+
+/**
+ * This class provides static methods to retrieve message and trace logger.
+ * For convenience, this class sets the default resource bundle for message loggers.
+ * This class should be used on vmm server side. This class can also be
+ * used on the vmm client side, but if the client is running in non-WAS
+ * environment then the log properties file must be provided for the 
+ * messaging and tracing to work.<p>
+ * This class also defines static signature strings that can be used during
+ * method entry and exit trace calls
+ * 
+ * @author Ranjan Kumar
+ **/
+public class WIMLogger
+{
+    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
+
+    /**
+     * Default message resource bundle for vmm
+     **/
+    public final static String MESSAGE_RB = "com.ibm.websphere.wim.ras.properties.CWWIMMessages";
+
+    /**
+     * Signature string for method Entry
+     **/
+    public final static String ENTRY = ">>ENTRY";
+
+    /**
+     * Signature string for method Exit
+     **/
+    public final static String EXIT = "<<EXIT";
+
+    /**
+     * Signature string for vmm API
+     **/
+    public final static String API_PREFIX = "WIM_API ";
+
+    /**
+     * Signature string for vmm SPI
+     **/
+    public final static String SPI_PREFIX = "WIM_SPI ";
+
+    /**
+     * Return the trace logger for the specified package.
+     * @param name A name for the trace logger. This should be a dot-separated
+     *        name and should normally be based on the package names, 
+     *        such as com.ibm.webshere.wim, com.ibm.ws.wim.adapter, com.ibm.wsspi.wim
+     *
+     * @return a trace logger
+     * @see java.util.logging.Logger
+     **/
+    public static Logger getTraceLogger(String name)
+    {
+        return Logger.getLogger(name);
+    }
+
+    /**
+     * Return the message logger for the vmm. The vmm message 
+     * resource bundle is set for this logger to use.
+     * @param name A name for the message logger. This should be a dot-separated
+     *        name and should normally be based on the package names, 
+     *        such as com.ibm.webshere.wim, com.ibm.ws.wim.adapter, com.ibm.wsspi.wim
+     *
+     * @return a message logger
+     * @see java.util.logging.Logger
+     **/
+    public static Logger getMessageLogger(String name)
+    {
+        return Logger.getLogger(name, MESSAGE_RB);
+    }
+}

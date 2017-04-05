@@ -1,0 +1,37 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-core-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+USER_CFG_FILE_NOT_FOUND_MSG = Na cest\u011b ke t\u0159\u00edd\u011b nebyl nalezen konfigura\u010dn\u00ed soubor {0}.
+USER_CFG_FILE_IN_USE= Byl na\u010dten konfigura\u010dn\u00ed soubor {0}.
+USER_CFG_FILE_URL_ERROR_MSG = Adresa URL konfigura\u010dn\u00edho souboru {0} je chybn\u00e1.
+USER_CFG_FILE_URL_NOT_FOUND_MSG = Na adrese URL {0} nebyl nalezen konfigura\u010dn\u00ed soubor.
+APP_CONTEXT_CREATION_FAILED_MSG = Nepoda\u0159ilo se vytvo\u0159it kontext aplikace.
+INITIAL_APP_CONTEXT_CREATION_FAILED_MSG = Po\u010d\u00e1te\u010dn\u00ed pokus o vytvo\u0159en\u00ed kontextu aplikace byl ne\u00fasp\u011b\u0161n\u00fd.
+USER_CFG_FILE_NOT_LOADED=Nepoda\u0159ilo se na\u010d\u00edst konfiguraci {0}
+DEPRECATED_IMPORT=Import META-INF/cxf/{0} byl zam\u00edtnut\u00fd a je zbyte\u010dn\u00fd.
+DEPRECATED_OBJECT_RETRIEVAL=Z\u00e1vislost architektury Spring na objektu {0} byla zam\u00edtnuta. 

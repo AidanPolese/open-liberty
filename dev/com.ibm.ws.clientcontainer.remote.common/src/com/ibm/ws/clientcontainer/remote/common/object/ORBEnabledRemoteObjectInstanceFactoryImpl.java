@@ -1,0 +1,39 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * WLP Copyright IBM Corp. 2015
+ *
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
+ * U.S. Copyright Office.
+ */
+package com.ibm.ws.clientcontainer.remote.common.object;
+
+import java.rmi.Remote;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+
+import com.ibm.ws.container.service.naming.RemoteObjectInstance;
+import com.ibm.ws.container.service.naming.RemoteObjectInstanceFactory;
+import com.ibm.ws.container.service.naming.RemoteObjectInstanceFactoryImpl;
+
+/**
+ *
+ */
+@Component(service = RemoteObjectInstanceFactory.class, configurationPolicy = ConfigurationPolicy.IGNORE, immediate = true,
+           property = { "service.vendor=IBM", "service.ranking:Integer=10" })
+public class ORBEnabledRemoteObjectInstanceFactoryImpl extends RemoteObjectInstanceFactoryImpl {
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.ibm.ws.clientcontainer.remote.common.object.RemoteObjectInstanceFactory#create(java.rmi.Remote, java.lang.String)
+     */
+    @Override
+    public RemoteObjectInstance create(Remote remoteObject, String interfaceNameToNarrowTo) {
+        return new RemoteCORBAObjectInstanceImpl(remoteObject, interfaceNameToNarrowTo);
+    }
+}

@@ -1,0 +1,9 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.ws.messaging.jmsspec.common; singleton:=true
+Bundle-Description: Common bundle for javax.jms-1.1 and javax.jms-2.0; version=${bVersion}
+
+
+Include-Resource: \
+    OSGI-INF=resources/OSGI-INF

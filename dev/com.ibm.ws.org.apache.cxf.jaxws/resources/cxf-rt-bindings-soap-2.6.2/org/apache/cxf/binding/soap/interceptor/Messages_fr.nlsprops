@@ -1,0 +1,43 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-bindings-soap-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+
+XML_STREAM_EXC=Une erreur est survenue lors de la lecture de l'\u00e9l\u00e9ment XMLStreamReader.
+XML_WRITE_EXC=Une erreur est survenue lors l'\u00e9criture dans XMLStreamWriter.
+COULD_NOT_VALIDATE_SOAP_HEADER_CAUSED_BY=Impossible de valider l''en-t\u00eate SOAP provoqu\u00e9 par : {0} : {1}.
+MUST_UNDERSTAND=Les en-t\u00eates MustUnderstand {0} ne sont pas compris.
+PARSER_EXC=Impossible de cr\u00e9er le document DOM DocumentBuilder.
+NO_OPERATION=Aucune op\u00e9ration de ce type : {0}
+ATTACHMENT_IO=Exception d''E-S de la pi\u00e8ce jointe : {0}
+INVALID_VERSION="{0}", l''espace de nom sur l''\u00e9l\u00e9ment "{1}", n''est pas une version SOAP valide.
+INVALID_11_VERSION=Un message SOAP 1.2 n'est pas valide lorsqu'il est envoy\u00e9 uniquement \u00e0 un noeud final SOAP 1.1.
+INVALID_FAULT=Contenu d'erreur SOAP non valide
+NO_NAMESPACE=Aucun espace de nom sur l''\u00e9l\u00e9ment "{0}". Vous devez envoyer une demande SOAP.
+BP_2211_RPCLIT_CANNOT_BE_NULL=Impossible d''\u00e9crire le composant {0}. Les composants RPC/Literal ne peuvent pas \u00eatre de type null. (WS-I BP R2211)
+UNKNOWN_RPC_LIT_PART=El\u00e9ment {0} trouv\u00e9 mais impossible de trouver le composant RPC/Literal correspondant
+SOAP_ACTION_MISMATCH=L''\u00e9l\u00e9ment SOAPAction {0} indiqu\u00e9 ne correspond \u00e0 aucune op\u00e9ration.

@@ -1,0 +1,13 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.javaMail-1.5
+
+publish.feature.resources: **
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.javax.mail-1.5;version=latest, \
+	com.ibm.ws.javamail;version=latest, \
+	com.ibm.websphere.javaee.mail.1.5;version=latest, \
+	com.ibm.websphere.appserver.thirdparty.mail;version=latest

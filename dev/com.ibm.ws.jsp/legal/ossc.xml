@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="JSP" 
+      projectURL="http://apache.petsads.us" 
+      version="8.0.0" revision="" 
+      license-type="Apachev2" 
+      contact="???@us.ibm.com" 
+      encryption="no">
+      
+      <download location="http://apache.petsads.us/xml/xalan-j/binaries/xalan-j_2_7_0-bin-2jars.zip">
+         <file basename="xalan.jar"      checksum="717e05a25a57173c6bdefbcf815c6f10"/>
+         <file basename="xercesImpl.jar" checksum="3b900fe7a218f30379abd129c3ea0cb3"/>
+      </download>
+   </project>
+   
+   <project project="???" 
+      projectURL="???" 
+      version="???" revision="" 
+      license-type="???" 
+      contact="???@us.ibm.com" 
+      encryption="no">
+      
+      <download location="???">
+         <file basename="standard.jar" checksum="0a09deda02a326285e1881ada445800b"/>
+         <file basename="standardtld.jar" checksum="3351257fe8f3df50efd6eaf6835c8fff"/>
+         <file basename="web.jsp.jar"  checksum="24b8ea126c2d11a863eddf69c3b86d5f"/>
+      </download>
+   </project>
+   
+   <notes>
+   xalan and xerces jars sourced from: http://apache.petsads.us/xml/xalan-j/binaries/xalan-j_2_7_0-bin-2jars.zip   
+
+   standardtld.jar is just the **/*.tld subset of standard.jar
+   </notes>
+   
+   <clearencehistory>
+   This has OSSC review level 1:  "Products which bundle newer versions of Xerces-J/Xalan-J may have no IBM alternatives, 
+   and they would need to complete a Verified Package checklist for these Apache releases (exempt from EPR) and go 
+   through the OSSC review process themselves. "
+   </clearencehistory>
+</ossc>

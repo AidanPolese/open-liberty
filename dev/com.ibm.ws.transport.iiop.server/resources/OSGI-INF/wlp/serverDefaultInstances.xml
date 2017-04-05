@@ -1,0 +1,13 @@
+<server>
+
+  <iiopEndpoint id="defaultIiopEndpoint" iiopPort="2809">
+    <iiopsOptions  iiopsPort="9402"/>
+  </iiopEndpoint>
+  
+  <orb id="defaultOrb" iiopEndpointRef="defaultIiopEndpoint"/>
+
+  <com.ibm.ws.transport.iiop.spi.SubsystemFactory type="Dispatch"/>
+
+  <namingServiceAdapterActivator id="defaultNamingServiceAdapterActivator"/>
+
+</server>

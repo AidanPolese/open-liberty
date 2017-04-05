@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MBean SYSTEM "MbeanDescriptor.dtd">
+<MBean type="CustomStats"
+  version="5.0"
+  platform="dynamicproxy"
+  stateObjectClass="com.ibm.ws.pmi.dynamicproxy.MBeanStatsStateObject"
+  eventHandlerClass="com.ibm.ws.pmi.dynamicproxy.StatsAggregatorEventHandler"
+  aggregationHandlerClass="com.ibm.ws.pmi.dynamicproxy.MBeanStatsAggregationHandler"
+
+  description="Management interface for custom stats created using Custom PMI API.">
+
+  <parentType type="StatisticsProvider"/>
+</MBean>
+

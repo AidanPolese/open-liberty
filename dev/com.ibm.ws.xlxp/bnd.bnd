@@ -1,0 +1,63 @@
+-include= ~../cnf/resources/bnd/bundle.props, \
+          ~../cnf/resources/bnd/app-resources.bnd
+bVersion=1.0
+bSymbolicName=com.ibm.ws.xlxp.1.5.3
+
+Bundle-SymbolicName: com.ibm.ws.xlxp.1.5.3; singleton:=true
+
+# The SPI definition under META-INF/services
+app-resources= \
+  META-INF/services/javax.xml.stream.XMLOutputFactory | \
+  META-INF/services/javax.xml.stream.XMLInputFactory | \
+  META-INF/services/javax.xml.stream.XMLEventFactory | \
+  META-INF/services/com.ibm.xml.xlxp.jaxb.fallback.context
+
+# Headers for geronimo osgi provider registry to track
+Export-Provider: com.ibm.xml.xlxp2.jaxb.JAXBContextFactory
+SPI-Provider: true
+
+Import-Package: javax.xml.bind.*; version="[2.2,3)", \
+  com.ibm.xml.jaxb.internal.marshaller;resolution:=optional, \
+  com.sun.xml.bind.marshaller;resolution:=optional, \
+  com.sun.xml.bind.v2, \
+  com.ibm.wsspi.classloading, \
+  !org.apache.xerces*, \
+  !com.ibm*, \
+  !org.apache.xml*, \
+  *
+
+Export-Package: com.ibm.xml.xlxp2.api.was;version="1.0.16"; packageType="was_internal"; mandatory:=packageType, \
+  com.ibm.xml.xlxp2.api.jaxb;version="2.1.0", \
+  com.ibm.xml.xlxp2.api.stax;version="2.1.0";thread-context=true, \
+  com.ibm.xml.xlxp2.api.util;version="1.1.0", \
+  com.ibm.xml.xlxp2.api.wssec;version="2.1.0";thread-context=true, \
+  com.ibm.xml.xlxp2.datatype;version="1.1.0", \
+  com.ibm.xml.xlxp2.jaxb;version="1.2.0";thread-context=true, \
+  com.ibm.xml.xlxp2.jaxb.marshal.impl;version="2.0.0", \
+  com.ibm.xml.xlxp2.jaxb.model;version="1.2.0", \
+  com.ibm.xml.xlxp2.jaxb.unmarshal.impl;version="2.1.0", \
+  com.ibm.xml.xlxp2.runtime;version="2.1.0", \
+  com.ibm.xml.xlxp2.scan.util;version="2.1.0"
+
+Private-Package: com.ibm.fcg.*, \
+  com.ibm.xml.xlxp2.*, \
+  com.ibm.xml.jaxp.*
+
+Include-Resource: \
+  @lib/xlxpJAXB.jar!/META-INF/services/*, \
+  @lib/xlxpScannerUtils.jar!/META-INF/services/*, \
+  META-INF/services=resources/META-INF/services
+
+Copyright: Licensed Materials - Property of IBM 5724-J08, 5724-I63, 57\
+24-H88, 5724-H89, 5655-W65, 5733-W70 Copyright IBM Corp. 1998, 2011 A\
+ll Rights Reserved. US Government Users Restricted Rights - Use, dupl\
+ication or disclosure restricted by GSA ADP Schedule Contract with IB\
+M Corp.
+
+-buildpath: \
+	lib/fcg.jar;version=file, \
+	lib/xlxpJAXB.jar;version=file, \
+	lib/xlxpScanner.jar;version=file, \
+	lib/xlxpScannerUtils.jar;version=file, \
+	lib/xlxpVM.jar;version=file, \
+	lib/xlxpWASParsers.jar;version=file

@@ -77,7 +77,7 @@ licenseAccepted=Das Argument {0} wurde gefunden. Dies deutet darauf hin, dass Si
 # {0} c:/full/directory/path
 # 
 extractInstruction=Geben Sie das Verzeichnis f\u00fcr die Produktdateien ein, oder \u00fcbernehmen Sie den Standardwert, indem Sie keine Eingabe vornehmen.
-extractLicenseInstruction=Geben Sie das Verzeichnis f\u00fcr die Lizenzdateien ein oder \u00fcbernehmen Sie den Standardwert, indem Sie keine Eingabe vornehmen.
+extractLicenseInstruction=Geben Sie das Verzeichnis des Lizenzupgradearchivs an oder dr\u00fccken Sie die Eingabetaste, um das Standardverzeichnis zu akzeptieren.
 extractDefault=Das Standardzielsverzeichnis ist {0}.
 extractDirectoryExists=Das Verzeichnis {0} ist bereits vorhanden.
 extractDirectoryError=Fehler beim Erstellen des Verzeichnisses {0}.
@@ -259,3 +259,12 @@ UNABLE_TO_ATTACH_AGENT=Der Liberty-Java-Agent konnte nicht zugeordnet werden. De
 UNABLE_TO_FIND_TOOLS_JAR=Der Liberty-Java-Agent konnte nicht zugeordnet werden, weil dieser Server eine JRE und kein Java SDK verwendet. Der Server wird zwar ausgef\u00fchrt, kann aber keine Funktionen ausf\u00fchren, die den Java-Agenten erfordern, wie z. B. \u00dcberwachung und Traceerstellung.
 
 UNABLE_TO_FIND_JAVA_AGENT=Der Liberty-Java-Agent konnte nicht geladen werden. Der Server wird zwar ausgef\u00fchrt, kann aber keine Funktionen ausf\u00fchren, die den Java-Agenten erfordern, wie z. B. \u00dcberwachung und Traceerstellung.
+
+
+# messages for LicenseSelfEctractor
+LICENSE_invalidInstall=Das Verzeichnis {0} ist keine g\u00fcltige Liberty-Installation. Geben Sie das Stammverzeichnis der Liberty-Installation an, f\u00fcr das Sie das Upgrade durchf\u00fchren m\u00f6chten.
+LICENSE_invalidVersion=Das Lizenzupgrade kann nicht durchgef\u00fchrt werden, weil die angegebene Produktinstallation die Version {0} hat. Ein Lizenzupgrade ist nur von Version {1} m\u00f6glich.
+LICENSE_invalidEdition=Das Lizenzupgrade kann nicht durchgef\u00fchrt werden, weil die angegebene Produktinstallation die Edition {0} hat. Ein Lizenzupgrade ist nur von den Editionen {1} m\u00f6glich.
+LICENSE_invalidLicense=Das Lizenzupgrade kann nicht durchgef\u00fchrt werden, weil die angegebene Produktinstallation eine Lizenz des Typs {0} hat. Mit dem Lizenzupgrade k\u00f6nnen aber nur Produkte mit einer {1}-Lizenz aktualisiert werden.
+LICENSE_invalidInstallType=Das Lizenzupgrade kann nicht durchgef\u00fchrt werden, weil die angegebene Produktinstallation mit IBM Installation Manager installiert wurde. Verwenden Sie IBM Installation Manager f\u00fcr das Upgrade Ihrer Installation. 
+

@@ -1,0 +1,39 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: com.ibm.ws.jaxws.tools.2.2.10
+Bundle-Description: IBM JAXWS Tools, version ${bVersion}
+Bundle-SymbolicName: com.ibm.ws.jaxws.tools.2.2.10
+
+Export-Package: com.sun.tools.ws.ant;version="2.2.10", \
+ com.ibm.jtc.jax.tools.ws;version=1.0.0, \
+ com.ibm.jtc.jax.tools.ws.spi;version=1.0.0, \
+ com.ibm.jtc.jax.xml.ws.api;version=1.0.0, \
+ com.ibm.jtc.jax.xml.ws.policy;version=1.0.0, \
+ com.ibm.ws.jaxws.tools;version="2.2.10", \
+
+Import-Package: \
+ com.sun.xml.bind*;version="2.2.10"
+
+ 
+Private-Package:\
+   com.ibm.ws.jaxws.tools.*
+
+-includeresource:\
+ @lib/jaxws-rt.jar, \
+ @lib/jaxws-tools.jar, \
+ @lib/policy.jar, \
+ @lib/resolver.jar, \
+ @lib/stax-ex.jar, \
+ @lib/streambuffer.jar, \
+
+instrument.disabled: true
+
+-buildpath: \
+	lib/jaxws-rt.jar;version=file, \
+	lib/jaxws-tools.jar;version=file, \
+	lib/policy.jar;version=file, \
+	lib/resolver.jar;version=file, \
+	lib/stax-ex.jar;version=file, \
+	lib/streambuffer.jar;version=file, \
+	com.ibm.ws.org.apache.ant;version=latest

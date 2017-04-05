@@ -1,0 +1,23 @@
+<project name="com.ibm.ws.jmx.connector.server-api" default="buildApiSpi">
+  <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+       Top level builds use this task explicity.  Changing the
+       default will create an incompatibility between a default
+       project build and a top level build. -->
+       
+  <!-- IBM-API required properties. -->        
+  <property name="bundleName" value="WebSphere JMX REST Connector API"/>
+  <property name="api.ibm.symbolic.suffix" value="restConnector"/>
+  <property name="api.ibm.version" value="1.4"/>
+  <property name="feature.project" value="com.ibm.websphere.appserver.restConnector-2.0"/>
+    
+  <property name="api.ibm.packages.exceptions" value="com.ibm.ws.jmx.connector.client.rest"/>
+    
+  <!-- Include JMX Rest Client and FileTransfer in the API. -->
+  <path id="bnd.jars">
+    <fileset dir="../com.ibm.websphere.filetransfer/build/lib/" includes="*.jar"/>
+  </path>
+  <property name="additional.javadoc.src.dirs" value="${basedir}/../com.ibm.ws.jmx.connector.client.rest/src/${path.separator}${basedir}/../com.ibm.websphere.filetransfer/src/"/>
+
+  <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+  
+</project>

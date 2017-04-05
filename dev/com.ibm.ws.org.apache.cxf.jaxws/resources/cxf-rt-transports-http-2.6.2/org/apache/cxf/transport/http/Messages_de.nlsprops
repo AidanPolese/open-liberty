@@ -1,0 +1,37 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-transports-http-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+UNEXPECTED_RESPONSE_TYPE_MSG = Nicht erwarteter Antworttyp: {0}
+INVALID_ENCODING_MSG = Ung\u00fcltiger Zeichensatz {0} in Anforderung.
+NULL_RESPONSE_MSG = Antwortobjekt ist null
+DECOUPLED_RESPONSE_FAILED_MSG = Entkopplung der Antwort fehlgeschlagen
+MISSING_PATH_INFO = PATH_INFO ist nicht im Nachrichtenkontext vorhanden. Es ist keine Multiplex-ID verf\u00fcgbar. Stellen Sie sicher, dass der an getCurrentEndpointReferenceId \u00fcbergebene portName-Wert richtig ist, wenn der Service mehrere Ports hat.
+INVALID_TIMEOUT_FORMAT = Das im RequestContext definierte Name/Wert-Paar {0}={1} ist ung\u00fcltig. 
+NO_HTTP_DESTINATION_FACTORY_FOUND = Es wurde keine registrierte HttpDestinationFactory im Bus gefunden.
+EXECUTOR_FULL = Das Steuerprogramm hat die Hintergrundtask zum Abrufen der Antwort zur\u00fcckgewiesen. Die Task wird im aktuellen Thread ausgef\u00fchrt.
+EXECUTOR_FULL_WARNING = Das Steuerprogramm hat die Hintergrundtask zum Abrufen der Antwort zur\u00fcckgewiesen. Es wird vorgeschlagen, die Einstellungen f\u00fcr die Arbeitswarteschlange zu erh\u00f6hen.

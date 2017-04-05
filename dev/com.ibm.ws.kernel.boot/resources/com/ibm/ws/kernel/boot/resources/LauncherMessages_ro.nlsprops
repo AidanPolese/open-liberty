@@ -383,6 +383,10 @@ audit.jvm.shutdown=CWWKE0085I: Serverul {0} se opre\u015fte pentru c\u0103 JVM i
 audit.jvm.shutdown.explanation=Serverul a interceptat o cerere de a opri JVM \u015fi va \u00eencerca s\u0103 se opreasc\u0103 \u00eentr-o manier\u0103 ordonat\u0103. JVM ar putea s\u0103 ias\u0103 pentru c\u0103 sistemul de operare a trimis un semnal de terminare la procesul serverului.
 audit.jvm.shutdown.useraction=Dac\u0103 oprirea serverului a fost nea\u015fteptat\u0103, determina\u0163i dac\u0103 s-a trimis un semnal de terminare la procesul serverului.
 
+warning.serverStartedCommandPortDisabled=CWWKE0087W: Pornirea serverului a fost ini\u0163ializat\u0103 pentru serverul {0}, dar nu  este posibil s\u0103 se spun\u0103 dac\u0103 pornirea a fost finalizat\u0103 deoarece portul de comand\u0103 este dezactivat.
+warning.serverStartedCommandPortDisabled.explanation=Portul de comand\u0103 server este necesar pentru comunica\u0163ia cu un server care ruleaz\u0103.  Portul de comand\u0103 a fost dezactivat \u00een mod explicit pentru acest server, prin urmare nu este posibil de spus c\u00e2nd serverul \u015fi-a finalizat pornirea.
+warning.serverStartedCommandPortDisabled.useraction=Verifica\u0163i manual istoricele de server pentru a verifica faptul c\u0103 serverul a pornit cu succes.
+
 warning.serverStartedWithPIDCommandPortDisabled=CWWKE0088W: Pornirea serverului a fost ini\u0163ializat\u0103 pentru serverul {0} cu ID proces {1}, dar nu  este posibil s\u0103 se spun\u0103 dac\u0103 pornirea a fost finalizat\u0103 deoarece portul de comand\u0103 este dezactivat.
 warning.serverStartedWithPIDCommandPortDisabled.explanation=Portul de comand\u0103 server este necesar pentru comunica\u0163ia cu un server care ruleaz\u0103.  Portul de comand\u0103 a fost dezactivat \u00een mod explicit pentru acest server, prin urmare nu este posibil de spus c\u00e2nd serverul \u015fi-a finalizat pornirea.
 warning.serverStartedWithPIDCommandPortDisabled.useraction=Verifica\u0163i manual istoricele de server pentru a verifica faptul c\u0103 serverul a pornit cu succes.

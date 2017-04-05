@@ -1,0 +1,31 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.websphere.collective/resources/com/ibm/wsspi/collective/internal/resources/CollectiveSPIMessages.nlsprops
+#COMPONENTPREFIX CWWKX
+#COMPONENTNAMEFOR WebSphere Collective SPI
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKX8000 - CWWKX8049
+
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE=CWWKX8000E: Ocorreu um erro de configura\u00e7\u00e3o. N\u00e3o h\u00e1 nenhuma implementa\u00e7\u00e3o de RepositoryClient dispon\u00edvel. Especifique um recurso, como collectiveMember-1.0 ou collectiveController-1.0 e defina qualquer configura\u00e7\u00e3o necess\u00e1ria para resolver esse problema. 
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.explanation=Os recursos coletivos fornecem a implementa\u00e7\u00e3o para o RepositoryClient e nenhuma implementa\u00e7\u00e3o desse tipo p\u00f4de ser localizada.
+REGISTRY_CONFIG_FACTORY_NO_CLIENT_SERVICE.useraction=Especifique um recurso coletivo, como collectiveMember-1.0 ou collectiveController-1.0 e defina qualquer configura\u00e7\u00e3o necess\u00e1ria para resolver esse problema.
+
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES=CWWKX8001E: Ocorreu um erro de configura\u00e7\u00e3o. V\u00e1rias implementa\u00e7\u00f5es de RepositoryClientDelegate est\u00e3o dispon\u00edveis. A implementa\u00e7\u00e3o atual \u00e9 fornecida pelo pacote configur\u00e1vel {0}. Remova quaisquer recursos de terceiros ou customizados que incluam o pacote configur\u00e1vel {1}. 
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.explanation=O RepositoryConnectionFactory requer uma implementa\u00e7\u00e3o RepositoryClientDelegate espec\u00edfica, e uma implementa\u00e7\u00e3o adicional foi registrada como um servi\u00e7o OSGi. Somente uma implementa\u00e7\u00e3o \u00e9 permitida.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_CLIENT_SERVICES.useraction=Remova quaisquer recursos de terceiros ou customizados que incluam esse pacote configur\u00e1vel.
+
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE=CWWKX8002E: Ocorreu um erro de configura\u00e7\u00e3o. N\u00e3o h\u00e1 nenhuma implementa\u00e7\u00e3o de RepositoryMember dispon\u00edvel. Especifique um recurso, como collectiveMember-1.0 ou collectiveController-1.0 e defina qualquer configura\u00e7\u00e3o necess\u00e1ria para resolver esse problema. 
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.explanation=Os recursos coletivos fornecem a implementa\u00e7\u00e3o para o RepositoryMember e nenhuma implementa\u00e7\u00e3o desse tipo p\u00f4de ser localizada.
+REGISTRY_CONFIG_FACTORY_NO_MEMBER_SERVICE.useraction=Especifique um recurso coletivo, como collectiveMember-1.0 ou collectiveController-1.0 e defina qualquer configura\u00e7\u00e3o necess\u00e1ria para resolver esse problema.
+
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES=CWWKX8003E: Ocorreu um erro de configura\u00e7\u00e3o. V\u00e1rias implementa\u00e7\u00f5es de RepositoryMemberDelegate est\u00e3o dispon\u00edveis. A implementa\u00e7\u00e3o atual \u00e9 fornecida pelo pacote configur\u00e1vel {0}. Remova quaisquer recursos de terceiros ou customizados que incluam o pacote configur\u00e1vel {1}.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.explanation=O RepositoryConnectionFactory requer uma implementa\u00e7\u00e3o RepositoryMemberDelegate espec\u00edfica, e uma implementa\u00e7\u00e3o adicional foi registrada como um servi\u00e7o OSGi. Somente uma implementa\u00e7\u00e3o \u00e9 permitida.
+REGISTRY_CONFIG_FACTORY_TOO_MANY_MEMBER_SERVICES.useraction=Remova quaisquer recursos de terceiros ou customizados que incluam esse pacote configur\u00e1vel.

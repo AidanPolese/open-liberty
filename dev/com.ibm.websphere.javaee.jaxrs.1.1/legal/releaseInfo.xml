@@ -1,0 +1,9 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="javax.j2ee.jaxrs-1.1">
+  <originbase release="WAS80" fe="SERV1" level="m1116.12" components="WAS.prereq.jaxrs.api"/>
+
+  <notes>
+  WAS.prereq.jaxrs.api gets javax.j2ee.jaxrs.jar from the download.zip file located at 
+  https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.dev_tools/prereqs/prereq.jaxrs.api/1.1/WASX_JAXRS.1903/
+  </notes>
+</releaseInfo>

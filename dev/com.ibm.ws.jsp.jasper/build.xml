@@ -1,0 +1,8 @@
+<project name="com.ibm.ws.jsp.jasper" default="build">
+
+  <property name="bundle.version" value="1.0"/>
+  <property name="instrument.ffdc" value="false"/>
+
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+</project>

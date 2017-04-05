@@ -1,0 +1,10 @@
+<project name="com.ibm.ws.org.apache.jasper.el" default="build">  
+	
+  <property name="build.with.java.level" value="1.7"/>  
+  
+  <!-- FFDC not required for this library -->
+  <property name="instrument.ffdc" value="false" />
+  
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+   
+</project>

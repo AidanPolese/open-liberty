@@ -1,0 +1,10 @@
+<?xml charset="UTF-8" version="1.0"?>
+<releaseInfo project="javax.persistence-2.0">
+  <originbase release="WASX" fe="SERV1" level="xx1209.07" components="WAS.j2ee.persistence.bundle"/>
+
+  <notes>
+<![CDATA[
+changed the name of javax.j2ee.persistence.jar to javax.persistence_2.0.jar
+]]>
+  </notes>
+</releaseInfo>

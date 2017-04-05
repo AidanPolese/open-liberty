@@ -1,0 +1,28 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.management.j2ee.1.1
+
+Require-Capability: osgi.ee; filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+
+Export-Package: javax.management.j2ee, \
+  javax.management.j2ee.statistics, \
+  org.omg.stub.javax.management.j2ee
+  
+Import-Package: \
+javax.rmi.*;version="[2.4,3)", \
+org.omg.*;version="[2.4,3)", \
+!*.internal.*, \
+*
+DynamicImport-Package: *
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+rmic.iiop.classes: javax.management.j2ee.Management, javax.management.j2ee.ManagementHome
+
+-buildpath: \
+	${javac.bootclasspath.java7}, \
+	com.ibm.websphere.javaee.ejb.3.2;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

@@ -1,0 +1,10 @@
+<validator-exclude>
+    <OCD id="com.ibm.ws.jdbc.dataSource.properties.db2.i.toolbox">
+        <AD id="dateSeparator">
+            <Option value=" " validatorKey="white.space.found"/>
+        </AD>
+        <AD id="timeSeparator">
+            <Option value=" " validatorKey="white.space.found"/>
+        </AD>
+    </OCD>
+</validator-exclude>

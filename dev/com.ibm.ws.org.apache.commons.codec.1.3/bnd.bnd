@@ -1,0 +1,11 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Apache commons codec
+Bundle-SymbolicName: com.ibm.ws.org.apache.commons.codec.1.3
+Bundle-Description: Apache commons codec, version 1.3
+
+Export-Package: org.apache.commons.codec.*;version="1.3"
+
+Include-Resource: \
+    @lib/commons-codec-1.3.jar

@@ -1,0 +1,4 @@
+<project name="com.ibm.ws.webcontainer.security" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  <property name="use.findbugs3" value="true"/>	
+</project>

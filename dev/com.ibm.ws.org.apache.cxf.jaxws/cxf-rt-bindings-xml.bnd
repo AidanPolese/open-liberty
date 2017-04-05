@@ -1,0 +1,33 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=${bundle.version}
+
+Bundle-Name: Apache CXF Runtime XML Binding
+Bundle-Description: Apache CXF Runtime XML Binding, version ${original.jar.version}
+Bundle-SymbolicName: ${symbolic.name}
+
+Export-Package: \
+  org.apache.cxf.*;version=2.6.2
+
+Import-Package: \
+ javax.xml.bind.*;version="[2.2,3)", \
+ org.apache.cxf.tools.*;resolution:=optional;version="[2.6.2,2.6.3)", \
+ !org.springframework.*;resolution:=optional;version="[2.5,4)", \
+ !org.apache.aries.*;version="[0.3,2)", \
+ !org.osgi.service.blueprint.*, \
+ com.ibm.websphere.ras, \
+ com.ibm.websphere.ras.annotation, \
+ com.ibm.ws.ffdc, \
+ org.apache.cxf.*;version="[2.6.2,2.6.3)", \
+ *
+ 
+Include-Resource:\
+ @build/tmp/lib/cxf-rt-bindings-xml-2.6.2.jar!/META-INF/cxf/**, \
+ @build/tmp/lib/cxf-rt-bindings-xml-2.6.2.jar!/META-INF/DEPENDENCIES, \
+ @build/tmp/lib/cxf-rt-bindings-xml-2.6.2.jar!/META-INF/LICENSE, \
+ @build/tmp/lib/cxf-rt-bindings-xml-2.6.2.jar!/META-INF/NOTICE, \
+ @build/tmp/lib/cxf-rt-bindings-xml-2.6.2.jar!/META-INF/tools.service.validator.xml, \
+ @build/tmp/lib/cxf-rt-bindings-xml-2.6.2.jar!/META-INF/wsdl.plugin.xml, \
+ @build/tmp/lib/cxf-rt-bindings-xml-2.6.2.jar!/schemas/**, \
+ build/tmp/bnd/cxf-rt-bindings-xml-2.6.2
+ 
+ 

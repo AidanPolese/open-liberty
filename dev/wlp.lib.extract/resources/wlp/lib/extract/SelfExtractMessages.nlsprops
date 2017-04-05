@@ -280,10 +280,9 @@ LICENSE_invalidLicense=The license cannot be upgraded because the specified prod
 LICENSE_invalidInstallType=The license cannot be upgraded because the specified product installation was installed using IBM Installation Manager. Use IBM Installation Manager to upgrade your installation.
 
 # new messages for license upgrade and downgrade
-LICENSE_replace_invalidVersion=The license cannot be replaced because the specified product installation is at version {0}, but the license can only be replaced from version {1}.
-LICENSE_replace_invalidInstallType=The license cannot be modified because the specified product installation was installed using IBM Installation Manager. Use IBM Installation Manager to modify your installation.
+LICENSE_replace_invalidVersion=The license cannot be applied because the specified product installation is at version {0}, but the license can only be applied from version {1}.
+LICENSE_replace_invalidInstallType=The license cannot be applied because the specified product installation was installed using IBM Installation Manager. Use IBM Installation Manager to apply your installation.
 
-LICENSE_replace_invalidEditonFeatures=The following features are no longer applicable to {0} and must be removed before replacing the license: {1}
-LICENSE_replace_uninstallFeatures_manually=Use the following command to uninstall these features before replacing the license for {0}: {1}
+LICENSE_replace_invalidEditonFeatures=The following features do not apply to the {0} edition and must be uninstalled before applying the license: {1}\n\nUse the following command to uninstall these features before applying the license for {2} edition: {3}
 
-
+LICENSE_downgrade_block_8557_low=This license can only be applied to installation at {0} or above. The current installation is at {1}. Download and update to the latest level and re-apply the license.

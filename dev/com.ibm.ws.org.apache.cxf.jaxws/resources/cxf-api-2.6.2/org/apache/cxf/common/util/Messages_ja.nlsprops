@@ -1,0 +1,32 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-api-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+BASE64_RUNTIME_EXCEPTION = \u51fa\u529b\u4e2d\u306b Base64Utility.decode() \u3067\u5b9f\u884c\u6642\u4f8b\u5916\u304c\u3042\u308a\u307e\u3057\u305f
+BASE64_DECODE_IOEXCEPTION = \u51fa\u529b\u30b9\u30c8\u30ea\u30fc\u30e0\u3078\u306e decode() \u3067 IOException \u304c\u767a\u884c\u3055\u308c\u307e\u3057\u305f
+BASE64_ENCODE_IOEXCEPTION = \u51fa\u529b\u30b9\u30c8\u30ea\u30fc\u30e0\u3078\u306e encode() \u3067 IOException \u304c\u767a\u884c\u3055\u308c\u307e\u3057\u305f
+BASE64_ENCODE_WRITER_IOEXCEPTION = Writer \u3078\u306e encode() \u3067\u4f8b\u5916\u304c\u767a\u884c\u3055\u308c\u307e\u3057\u305f

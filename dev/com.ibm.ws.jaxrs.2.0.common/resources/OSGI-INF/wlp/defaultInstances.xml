@@ -1,0 +1,7 @@
+<server>
+    <!-- Set to 60 because the jms feature also config the executor, and we don't want to break their cases. -->
+    <!-- Anyway, we are misusing the defaultInstances.xml, from the original logic in XMLBundleProcessor.processBundleConfig, 
+         a component should not set the default for the metatype defined in other components. -->
+    <!-- Original issue was solved in other component, thus this config parameter as a workaround was no longer needed and removed -->    
+    <!-- executor coreThreads="60" /-->  
+</server>

@@ -1,0 +1,22 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.batch-1.0
+
+publish.feature.resources: **
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.websphere.appserver.javax.cdi-1.2;version=latest, \
+	com.ibm.websphere.appserver.jndi-1.0;version=latest, \
+	com.ibm.websphere.appserver.servlet-3.1;version=latest, \
+	com.ibm.ws.persistence-1.0;version=latest, \
+	com.ibm.websphere.appserver.contextService-1.0;version=latest, \
+	com.ibm.websphere.appserver.jdbc-4.1;version=latest, \
+	com.ibm.websphere.appserver.transaction-1.2;version=latest, \
+	com.ibm.websphere.appserver.javaeeCompatible-7.0;version=latest, \
+	com.ibm.jbatch.spi;version=latest, \
+	com.ibm.ws.security.credentials;version=latest, \
+	com.ibm.websphere.security;version=latest, \
+	com.ibm.jbatch.container;version=latest, \
+	com.ibm.websphere.javaee.batch.1.0;version=latest

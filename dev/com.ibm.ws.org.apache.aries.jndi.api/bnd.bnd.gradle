@@ -1,0 +1,7 @@
+# this needs to be replaced with a repo reference to a build artifact
+-include= jar:${fileuri;lib/org.apache.aries.jndi.api-1.1.1-ibm-s20170124-0721.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+
+instrument.disabled: true
+
+-buildpath: \
+    lib/org.apache.aries.jndi.api-1.1.1-ibm-s20170124-0721.jar;version=file

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Unknown" 
+            projectURL="Unknown" 
+            version="1.0" revision="" 
+            license-type="???" 
+            contact="not@us.ibm.com" 
+            encryption="no">
+      <download location="https://maven.java.net/content/repositories/releases/javax/mail/javax.mail-api/1.5.5/javax.mail-api-1.5.5.jar">
+         <file basename="javax.mail-api-1.5.0.jar"  checksum="1e1fdd5801a2f388f461b8186dd7eebc"/>
+      </download>
+   </project>
+   
+   <clearencehistory>
+   </clearencehistory>
+</ossc>

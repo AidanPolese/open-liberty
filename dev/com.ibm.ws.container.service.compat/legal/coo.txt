@@ -1,0 +1,13 @@
+This document contains information required by the Release Services team to
+prepare a 'Certificate of Originality' document for this project.
+
+Source code origin:
+WAS 7.0 and Alpine
+
+Alpine contributors:
+Alex Mulholland
+Erin Schnabel
+Matt Sykes
+
+resources/com/ibm/ws/runtime/runtime.nlsprops (and friends) taken from WASX.SERV1 gg1142.04
+(and cut down to just WSVR0602, WSVR0623, WSVR0629 and WSVR0630)

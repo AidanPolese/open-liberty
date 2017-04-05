@@ -1,0 +1,25 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: WebSphere WebServices Global Handler service
+Bundle-SymbolicName: com.ibm.ws.webservices.handler; singleton:=true
+Bundle-Description: WebSphere WebServices Global Handler service, version ${bVersion}
+
+-dsannotations: com.ibm.webservices.handler.impl.GlobalHandlerServiceImpl
+
+# For each exported package, create (in that package) a package-info.java
+# file, and place an @version javadoc tag in package-level javadoc. 
+# Append ";provide:=true" if this bundle also provides an implementation
+# for the exported API.
+Export-Package: \
+ com.ibm.wsspi.webservices.handler;provide:=true, \
+ com.ibm.webservices.handler.impl;provide:=true
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging,\
+	com.ibm.websphere.appserver.spi.kernel.service,\
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0,\
+	com.ibm.websphere.javaee.servlet.3.0;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

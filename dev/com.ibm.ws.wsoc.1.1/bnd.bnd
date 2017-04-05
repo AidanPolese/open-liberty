@@ -1,0 +1,29 @@
+-include= ~../cnf/resources/bnd/bundle.props, \
+          ~../cnf/resources/bnd/app-resources.bnd
+-nouses=true
+bVersion=1.0
+bSymbolicName=com.ibm.ws.wsoc11
+
+javac.source: 1.7
+javac.target: 1.7
+
+Bundle-Name: WebSocket
+Bundle-SymbolicName: com.ibm.ws.wsoc.1.1; singleton:=true
+Bundle-Description: WebSocket, version ${bVersion}
+
+Private-Package: \
+  com.ibm.ws.wsoc.external.v11
+
+# Register a marker service to enable 1.1 WebSocket incompatibilities.
+Service-Component: \
+  com.ibm.ws.wsoc.external.v11; \
+    implementation:=com.ibm.ws.wsoc.external.v11.WebSocketFactoryV11; \
+    provide:=com.ibm.ws.wsoc.external.WebSocketFactory; \
+    configuration-policy:=ignore;\
+    immediate:=true;\
+    properties:="service.vendor=IBM"
+
+-buildpath: \
+	${javac.bootclasspath.java7}, \
+	com.ibm.websphere.javaee.websocket.1.1;version=latest,\
+	com.ibm.ws.wsoc;version=latest

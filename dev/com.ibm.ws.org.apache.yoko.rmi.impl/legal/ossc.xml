@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+    <project project="Apache Yoko RMI impl"
+            projectURL="https://github.ibm.com/was-liberty-iiop/geronimo-yoko"
+            version="1.5-SNAPSHOT" revision=""
+            license-type="Apachev2"
+            contact="neil_richards@uk.ibm.com"
+            encryption="no">
+      <download location="https://github.ibm.com/was-liberty-iiop/geronimo-yoko/commit/c00a8a2b90321c7fa9dab853f2148a6bda25e348">
+         <file basename="org.apache.yoko.rmi.impl-1.5.SNAPSHOT.jar" checksum="c5c5194bd5ad9c41ebb3e2c631174335"/>
+      </download>
+   </project>
+
+    <clearencehistory/>
+</ossc>

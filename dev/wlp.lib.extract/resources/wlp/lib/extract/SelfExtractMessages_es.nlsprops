@@ -84,7 +84,7 @@ licenseAccepted=Se ha encontrado el argumento {0}. Esto indica que ha aceptado l
 # {0} c:/full/directory/path
 # 
 extractInstruction=Especifique el directorio para los archivos de producto o d\u00e9jelo en blanco para aceptar los valores predeterminados.
-extractLicenseInstruction=Especifique el directorio para los archivos de licencia o d\u00e9jelo en blanco para aceptar los valores predeterminados.
+extractLicenseInstruction=Especifique el directorio del archivo de actualizaci\u00f3n de licencia, o pulse Intro para aceptar el directorio predeterminado.
 extractDefault=El directorio de destino predeterminado es {0}
 extractDirectoryExists=Ya existe el directorio: {0}
 extractDirectoryError=Se ha producido un fallo al crear el directorio: {0}
@@ -264,3 +264,12 @@ UNABLE_TO_ATTACH_AGENT=No se ha podido conectar el agente Java de Liberty. Este 
 UNABLE_TO_FIND_TOOLS_JAR=No se ha podido conectar el agente Java de Liberty porque este servidor usa un JRE en lugar de un SDK Java. Este servidor ejecutar\u00e1, pero no podr\u00e1 realizar funciones que requieran el agente Java como, por ejemplo, supervisi\u00f3n o rastreo.
 
 UNABLE_TO_FIND_JAVA_AGENT=No se ha podido localizar el agente Java de Liberty. Este servidor ejecutar\u00e1, pero no podr\u00e1 realizar funciones que requieran el agente Java como, por ejemplo, supervisi\u00f3n o rastreo.
+
+
+# messages for LicenseSelfEctractor
+LICENSE_invalidInstall=El directorio {0} no es una instalaci\u00f3n v\u00e1lida de Liberty. Especifique el directorio ra\u00edz de la instalaci\u00f3n de Liberty que desea actualizar.
+LICENSE_invalidVersion=La licencia no se puede actualizar porque la instalaci\u00f3n del producto especificado est\u00e1 en la versi\u00f3n {0}, pero la licencia solo se puede actualizar desde la versi\u00f3n {1}.
+LICENSE_invalidEdition=La licencia no se puede actualizar porque la instalaci\u00f3n del producto especificada es la edici\u00f3n {0}, pero la licencia solo puede actualizar las ediciones siguientes: {1}
+LICENSE_invalidLicense=La licencia no se puede actualizar porque la instalaci\u00f3n del producto especificada tiene una licencia {0}, pero la licencia solo puede actualizar con productos con una licencia {1}.
+LICENSE_invalidInstallType=La licencia no se puede actualizar porque la instalaci\u00f3n del productos especificada se instal\u00f3 utilizando IBM Installation Manager. Utilice IBM Installation Manager para actualizar la instalaci\u00f3n.
+

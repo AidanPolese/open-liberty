@@ -1,0 +1,16 @@
+<!-- NOTE: This is a generated file. Do not edit it directly. -->
+
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0"
+xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
+localization="OSGI-INF/l10n/metatype">
+
+<OCD id="com.ibm.ws.javaee.dd.ejbext.Session" name="%sessionmetatype.name" description="%sessionmetatype.desc" ibm:extends="com.ibm.ws.javaee.dd.ejbext.EnterpriseBean">
+    <AD id="time-out" description="%SessionMetatype.time-out.desc" name="%SessionMetatype.time-out.name" type="String" required="false" ibm:type="pid" cardinality="0" ibm:reference="com.ibm.ws.javaee.dd.ejbext.TimeOut"/>
+    <AD id="time-out.target" default="${servicePidOrFilter(time-out)}" description="internal" name="internal" type="String" required="true" cardinality="0"/>
+</OCD>
+
+<Designate factoryPid="com.ibm.ws.javaee.dd.ejbext.Session">
+     <Object ocdref="com.ibm.ws.javaee.dd.ejbext.Session"/>
+</Designate>
+
+</metatype:MetaData>

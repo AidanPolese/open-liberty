@@ -1,0 +1,38 @@
+# The contents of this file contains messages from the apache cxf project
+# The markers for the file claim this is not a message file - this is correct as it is NOT a file
+# that conforms to the IBM standard error message conventions.
+#
+#CMVCPATHNAME com.ibm.ws.org.apache.cxf.jaxws/resources/cxf-rt-frontend-jaxws-2.6.2/extractedpropertyfile
+#ISMESSAGEFILE FALSE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+#
+#    Licensed to the Apache Software Foundation (ASF) under one
+#    or more contributor license agreements. See the NOTICE file
+#    distributed with this work for additional information
+#    regarding copyright ownership. The ASF licenses this file
+#    to you under the Apache License, Version 2.0 (the
+#    "License"); you may not use this file except in compliance
+#    with the License. You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing,
+#    software distributed under the License is distributed on an
+#    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#    KIND, either express or implied. See the License for the
+#    specific language governing permissions and limitations
+#    under the License.
+#
+#
+NO_INPUT_STREAM_EXC = Aucun flux d'entr\u00e9e disponible.
+NO_OUTPUT_STREAM_EXC = Aucun flux de sortie disponible.
+ANNOTATION_WITHOUT_URL_EXC = La valeur de membre "file" manque dans l'annotation @HandlerChain
+HANDLER_CFG_FILE_NOT_FOUND_EXC = Impossible de trouver le fichier de configuration du gestionnaire {0} sp\u00e9cifi\u00e9 par l''annotation @HandlerChain
+HANDLER_INSTANTIATION_EXC = Impossible d'instancier le gestionnaire
+CHAIN_NOT_SPECIFIED_EXC = Cha\u00eene non sp\u00e9cifi\u00e9e
+SEI_LOAD_FAILURE_EXC = Echec du chargement de l'interface de noeud final de service.
+NOT_A_QNAME_PATTER = Le mod\u00e8le {0} n''est pas un mod\u00e8le qname dans xml {1}
+NOT_VALID_ELEMENT_IN_HANDLER = L''\u00e9l\u00e9ment {0} n''est pas admis dans la cha\u00eene de gestionnaire
+NOT_VALID_ROOT_ELEMENT = {0} {1} L''\u00e9l\u00e9ment {2} n''est pas un \u00e9l\u00e9ment racine valide dans le fichier {3}
