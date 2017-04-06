@@ -1261,13 +1261,8 @@ public class SchemaWriterTest {
 
     private Node getElement(XPath xpath, Node node, String typeName, String name) throws XPathExpressionException {
         Node n = getElement(xpath, node, typeName, "xsd:choice", name);
-        if (n != null) {
-            assert (n.getChildNodes().getLength() > 1);
-        } else {
+        if (n == null) {
             n = getElement(xpath, node, typeName, "xsd:sequence", name);
-            if (n != null) {
-                assert (n.getChildNodes().getLength() == 1);
-            }
         }
         return n;
     }
