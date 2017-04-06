@@ -1,0 +1,27 @@
+<project name="pass-back">
+    <!-- Common place to control which properties we need to 'dump' into the
+         pass-back.properties file. This approach is needed because we have
+         <antcall> targets which define values needed by the caller. When a
+         target is invoked by <antcall>, any newly defined properties will not
+         be visible to the caller. This approach allows the caller to load
+         the properties we push into pass-back. -->
+    <property name="pass-back.property.file" value="pass-back.properties" />
+
+    <!-- In order to load the properties saved, do this:
+         <property file="${pass-back.property.file}" />
+         -->
+    <target name="save-to-pass-back">
+        <!-- Load any properties that may have been previously saved -->
+        <property file="${pass-back.property.file}" />
+        <echoproperties destfile="${pass-back.property.file}">
+            <propertyset>
+                <propertyref name="all.failures.accounted.for"/>
+                <propertyref name="commits.empty"/>
+                <propertyref name="final.build.status.is.ok"/>
+                <propertyref name="git.build.tag"/>
+                <propertyref name="skip.build.empty.commits"/>
+            </propertyset>
+        </echoproperties>
+    </target>
+
+</project>
