@@ -43,7 +43,7 @@ public class XMLConfigValidatorTest {
     /**
      * Name of directory within RTC project that contains test files.
      */
-    private static final String S_VALIDATOR_TEST_DIR = "resources" + File.separator + "test_xml_validator";
+    private static final String S_VALIDATOR_TEST_DIR = "test-resources" + File.separator + "test_xml_validator";
 
     static WsLocationAdmin alpineLocation;
     static XMLConfigParser configParser;

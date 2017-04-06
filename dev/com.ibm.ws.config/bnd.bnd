@@ -67,3 +67,17 @@ instrument.classesExcludes: com/ibm/ws/config/internal/resources/*.class
 	com.ibm.ws.org.eclipse.equinox.metatype.1.4.200;version=latest,\
 	com.ibm.ws.kernel.service;version=latest,\
 	com.ibm.websphere.appserver.spi.logging;version=latest
+
+-testpath: \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar;version=file, \
+	../build.sharedResources/lib/jmock/legacy/objenesis.jar;version=file, \
+	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \
+	com.ibm.ws.kernel.service.location;version=latest, \
+	com.ibm.ws.logging;version=latest, \
+	com.ibm.ws.kernel.boot.logging;version=latest, \
+	com.ibm.ws.kernel.security.thread;version=latest

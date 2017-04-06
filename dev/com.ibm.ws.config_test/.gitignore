@@ -1,9 +1,0 @@
-*.log
-bundles
-ffdc
-dist
-/*.log*
-/bundle.cfg
-/coverage.ec
-/lib
-/reports
