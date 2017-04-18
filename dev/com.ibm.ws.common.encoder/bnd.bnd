@@ -12,3 +12,13 @@ publish.wlp.jar.disabled: true
 -buildpath: \
 	${javac.bootclasspath.java6}, \
 	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+
+-testpath: \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+    com.ibm.ws.logging;version=latest, \
+    com.ibm.ws.kernel.boot.logging;version=latest, \
+    com.ibm.ws.kernel.security.thread;version=latest
