@@ -7,7 +7,7 @@ There are multiple ways to contribute: report bugs, fix bugs, contribute code, i
 * [Coding Standards](https://github.ibm.com/was-liberty/open-liberty/blob/master/CONTRIBUTING.md#raising-issues)
 
 ## Developer's Certificate of Origin
-All contributors must signoff on the [Developer's Certificate of Origin 1.1](https://github.ibm.com/was-liberty/open-liberty/blob/integration/DCO1.1.md) when submitting a new pull request.
+All contributors must signoff on the [Developer's Certificate of Origin 1.1](https://github.ibm.com/was-liberty/open-liberty/blob/master/DCO1.1.md) when submitting a new pull request.
 
 
 ## Raising issues
