@@ -1,7 +1,0 @@
-bundles
-dist
-/*.log*
-/coverage.ec
-/ffdc
-/lib
-/readme.txt
