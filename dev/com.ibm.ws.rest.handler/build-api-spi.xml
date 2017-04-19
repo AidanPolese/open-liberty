@@ -16,10 +16,8 @@
 
   <path id="bnd.jars"> 
     <fileset dir="../com.ibm.websphere.rest.handler/build/lib/" includes="*.jar"/> 
-    <fileset dir="../com.ibm.websphere.collective.plugins/build/lib/" includes="*.jar"/> 
-  	<fileset dir="../com.ibm.websphere.rest.api.discovery/build/lib/" includes="*.jar"/>
   </path>
-  <property name="additional.javadoc.src.dirs" value="${basedir}/../com.ibm.websphere.rest.handler/src/${path.separator}${basedir}/../com.ibm.websphere.collective.plugins/src/${path.separator}${basedir}/../com.ibm.websphere.rest.api.discovery/src/"/>
+  <property name="additional.javadoc.src.dirs" value="${basedir}/../com.ibm.websphere.rest.handler/src/"/>
     
   <import file="../ant_build/public_imports/apibnd_imports.xml"/>
 

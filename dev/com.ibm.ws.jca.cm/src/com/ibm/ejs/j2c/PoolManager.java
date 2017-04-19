@@ -78,7 +78,7 @@ public final class PoolManager implements Runnable, PropertyChangeListener, Veto
     protected J2CGlobalConfigProperties gConfigProps;
 
     protected boolean reaperThreadStarted = false;
-    private final Object taskTimerLockObject = new byte[0];
+    private final Object taskTimerLockObject = new Object();
     protected int waitSkip = 0;
     protected boolean displayInfiniteWaitMessage;
 
@@ -95,15 +95,15 @@ public final class PoolManager implements Runnable, PropertyChangeListener, Veto
 
     private ClassLoader raClassLoader;
 
-    protected final Object pmCounterLock = new byte[0];
-    protected final Object destroyMCWrapperListLock = new byte[0];
+    protected final Object pmCounterLock = new Object();
+    protected final Object destroyMCWrapperListLock = new Object();
     protected final AtomicInteger totalConnectionCount = new AtomicInteger(0);
-    protected final Object poolManagerBalancePoolLock = new byte[0];
-    protected final Object waiterFreePoolLock = new byte[0];
+    protected final Object poolManagerBalancePoolLock = new Object();
+    protected final Object waiterFreePoolLock = new Object();
     protected int waiterCount = 0;
     protected boolean allowConnectionRequests = true;
     private boolean connectionPoolShutDown = false;
-    protected final Object poolManagerTestConnectionLock = new byte[0];
+    protected final Object poolManagerTestConnectionLock = new Object();
 
     private ManagedConnectionFactory _managedConnectionFactory = null;
 
@@ -135,17 +135,17 @@ public final class PoolManager implements Runnable, PropertyChangeListener, Veto
 
     protected MCWrapper parkedMCWrapper = null;
     protected boolean createParkedConnection = false;
-    protected final Object parkedConnectionLockObject = new byte[0];
+    protected final Object parkedConnectionLockObject = new Object();
     protected int totalPoolConnectionRequests = 0;
     protected ScheduledFuture<?> am = null;
-    protected final Object amLockObject = new byte[0];
+    protected final Object amLockObject = new Object();
     private boolean pmQuiesced = false;
     protected final AtomicInteger activeRequest = new AtomicInteger(0);
-    protected final Object updateToPoolInProgressLockObject = new byte[0];
+    protected final Object updateToPoolInProgressLockObject = new Object();
     protected boolean updateToPoolInProgress = false;
     protected int updateToPoolInProgressSleepTime = 250;
     protected final AtomicInteger activeTLSRequest = new AtomicInteger(0);
-    protected final Object updateToTLSPoolInProgressLockObject = new byte[0];
+    protected final Object updateToTLSPoolInProgressLockObject = new Object();
     protected final AtomicBoolean updateToTLSPoolInProgress = new AtomicBoolean(false);
     protected int updateToTLSPoolInProgressSleepTime = 250;
     protected Writer writer = null;

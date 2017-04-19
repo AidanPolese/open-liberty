@@ -22,6 +22,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TrConfigurator;
@@ -45,7 +46,7 @@ public class WsByteBufferPoolManagerImpl implements WsByteBufferPoolManager {
         static {
             WsByteBufferPoolManager newInstance;
             try {
-                newInstance = new WsByteBufferPoolManagerImpl();
+                newInstance = new WsByteBufferPoolManagerImpl(new AtomicReference<DirectByteBufferHelper>());
             } catch (WsBBConfigException e) {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
                     Tr.event(tc, "Error constructing default instance", e);
@@ -65,6 +66,8 @@ public class WsByteBufferPoolManagerImpl implements WsByteBufferPoolManager {
 
     /** Reference to single instance of this class */
     private static WsByteBufferPoolManager instanceRef = null;
+
+    private final AtomicReference<DirectByteBufferHelper> directByteBufferHelper;
 
     // For Speed and Simplicity, the pools will be kept in an array, and
     // another array for their entry sizes, and the number of Pool will be tracked locally.
@@ -96,11 +99,14 @@ public class WsByteBufferPoolManagerImpl implements WsByteBufferPoolManager {
 
     /**
      * Create the one WsByteBufferPool Manager that is to be used.
+     * @param directByteBufferHelper 
      * 
      * @param properties
      * @throws WsBBConfigException
      */
-    public WsByteBufferPoolManagerImpl(Map<String, Object> properties) throws WsBBConfigException {
+    public WsByteBufferPoolManagerImpl(AtomicReference<DirectByteBufferHelper> directByteBufferHelper, Map<String, Object> properties) throws WsBBConfigException {
+        this.directByteBufferHelper = directByteBufferHelper;
+
         String key = null;
         Object value = null;
 
@@ -234,8 +240,8 @@ public class WsByteBufferPoolManagerImpl implements WsByteBufferPoolManager {
      * 
      * @throws WsBBConfigException
      */
-    public WsByteBufferPoolManagerImpl() throws WsBBConfigException {
-        this(new HashMap<String, Object>());
+    public WsByteBufferPoolManagerImpl(AtomicReference<DirectByteBufferHelper> directByteBufferHelper) throws WsBBConfigException {
+        this(directByteBufferHelper, new HashMap<String, Object>());
     }
 
     /**
@@ -553,7 +559,14 @@ public class WsByteBufferPoolManagerImpl implements WsByteBufferPoolManager {
      */
     protected WsByteBufferImpl allocateBufferDirect(WsByteBufferImpl buffer,
                                                     int size, boolean overrideRefCount) {
-        buffer.setByteBufferNonSafe(ByteBuffer.allocateDirect(size));
+        DirectByteBufferHelper directByteBufferHelper = this.directByteBufferHelper.get();
+        ByteBuffer byteBuffer;
+        if (directByteBufferHelper != null) {
+            byteBuffer = directByteBufferHelper.allocateDirectByteBuffer(size);
+        } else {
+            byteBuffer = ByteBuffer.allocateDirect(size);
+        }
+        buffer.setByteBufferNonSafe(byteBuffer);
         return buffer;
     }
 
@@ -616,7 +629,12 @@ public class WsByteBufferPoolManagerImpl implements WsByteBufferPoolManager {
      * @param buffer
      */
     protected void releasing(ByteBuffer buffer) {
-        // nothing to do
+        if (buffer != null && buffer.isDirect()) {
+            DirectByteBufferHelper directByteBufferHelper = this.directByteBufferHelper.get();
+            if (directByteBufferHelper != null) {
+                directByteBufferHelper.releaseDirectByteBuffer(buffer);
+            }
+        }
     }
 
     /**

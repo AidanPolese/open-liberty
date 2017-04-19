@@ -10,9 +10,9 @@
   <property name="com.ibm.ws.superseded.apars" value="PM70625"/>
   <property name="recommended" value="false"/>
   <resolves problemCount="4" description="This fix resolves APARS:" showList="true">
+    <problem id="com.ibm.ws.apar.Apar1" displayId="Apar1" description="Apar1"/>
     <problem id="com.ibm.ws.apar.Apar2" displayId="Apar2" description="Apar2"/>
     <problem id="com.ibm.ws.apar.Apar3" displayId="Apar3" description="Apar3"/>
-    <problem id="com.ibm.ws.apar.Apar1" displayId="Apar1" description="Apar1"/>
     <problem id="com.ibm.ws.apar.Apar4" displayId="Apar4" description="Apar4"/>
   </resolves>
   <updates>

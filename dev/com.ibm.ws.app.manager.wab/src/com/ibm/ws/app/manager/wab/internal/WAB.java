@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2012, 2014
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.app.manager.wab.internal;
@@ -30,10 +30,11 @@ import com.ibm.ws.app.manager.module.DeployedModuleInfo;
 import com.ibm.ws.app.manager.wab.internal.WABState.State;
 import com.ibm.ws.container.service.app.deploy.ApplicationInfo;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.wsspi.kernel.service.utils.FrameworkState;
 
 /**
  * Lock hierarchy..
- * 
+ *
  * This class wraps the tracker lifecycle controls in a lock on the AtomicReference 'terminated'
  * - this lock is used to guard the reasoning when the tracker is started,
  * to prevent add/remove callbacks occuring before we are complete making lifecycle choices.
@@ -43,16 +44,16 @@ import com.ibm.ws.ffdc.annotation.FFDCIgnore;
  * this allows us to treat the reference both as a gate to protect function, and as a flag
  * checked after the lock is acquired to know that the tracker has been terminated, and no
  * action should be taken.
- * 
+ *
  * The other lock is the 'add remove lock' .
  * - used to ensure we do not attempt an add and a remove operation concurrently for the same WAB.
  * - Usually this is called while holding the terminated lock, but it is also called from
  * wabgroup _AFTER_ the wab has been terminated.
  * - Once terminated, the add remove lock is used without an enclosing terminated lock, from wab
  * group to shutdown and remove the wabs from the webcontainer.
- * 
+ *
  * Critically, code inside the add remove lock never attempts to obtain the terminated lock.
- * 
+ *
  */
 class WAB implements BundleTrackerCustomizer<WAB> {
 
@@ -116,6 +117,11 @@ class WAB implements BundleTrackerCustomizer<WAB> {
             installer.executeRunnable(new Runnable() {
                 @Override
                 public void run() {
+                    // Don't bother running if the server is shutting down.
+                    if (FrameworkState.isStopping()) {
+                        return;
+                    }
+
                     installer.wabLifecycleDebug("SubTracker open has initiated. ", WAB.this);
                     synchronized (terminated) {
                         installer.wabLifecycleDebug("SubTracker open has obtained terminate lock ", WAB.this);
@@ -140,11 +146,11 @@ class WAB implements BundleTrackerCustomizer<WAB> {
                         //the deploy, resulting in DEPLOYED, or FAILED.
 
                         //if we are stuck in DEPLOYING, that means the
-                        //opening of the tracker did not deploy us. 
+                        //opening of the tracker did not deploy us.
 
                         //which is kinda odd, because we were created by WABInstaller
-                        //because our bundle was in starting/active, and normally calling 
-                        //tracker.open should have driven the addingBundle method on us, 
+                        //because our bundle was in starting/active, and normally calling
+                        //tracker.open should have driven the addingBundle method on us,
                         //that should have installed the WAB and moved it's state along.
 
                         //it's possible that at this point, the WAB we represent
@@ -154,17 +160,17 @@ class WAB implements BundleTrackerCustomizer<WAB> {
 
                         //if the WAB is still in active state, then osgi has chosen not
                         //to call us back on our thread during open, and has likely already
-                        //called us back on a different thread, which is now blocked 
+                        //called us back on a different thread, which is now blocked
                         //at the addingBundle method, by the lock we are holding on terminated.
 
                         int bundleState = wabBundle.getState();
                         //if our bundle is still in active/deploying.. then we 'should' be told about it
-                        //via open.. but mebbe it will come in later.. 
+                        //via open.. but mebbe it will come in later..
                         if (getState() == State.DEPLOYING) {
-                            //still in deploying.. are we still eligible to start 
+                            //still in deploying.. are we still eligible to start
                             //(eg, could there be an addingBundle call pending on another thread)
                             if (!(bundleState == Bundle.ACTIVE || bundleState == Bundle.STARTING)) {
-                                //bundle state is no longer eligible.. 
+                                //bundle state is no longer eligible..
                                 //most likely we missed the bundle, it reverted to stopped
                                 //before we woke up to open the tracker.
 
@@ -174,9 +180,9 @@ class WAB implements BundleTrackerCustomizer<WAB> {
                                 //for WABS does not allow us to move back from DEPLOYING to UNDEPLOYED.
                                 setState(State.FAILED);
 
-                                //set terminated, to block other threads that may be blocked at 
+                                //set terminated, to block other threads that may be blocked at
                                 //the sync blocks in added/removed bundles from proceeding to install
-                                //the wab we just declared failed. 
+                                //the wab we just declared failed.
                                 terminated.set(true);
 
                                 //remove use from the collision set in the installer..
@@ -189,7 +195,7 @@ class WAB implements BundleTrackerCustomizer<WAB> {
                                 //this context path.
                                 performCollisionResolution();
                             } else {
-                                //the wab state was still DEPLOYING, and the bundle state must still be active or starting. 
+                                //the wab state was still DEPLOYING, and the bundle state must still be active or starting.
                                 //we allow the wab to proceed, we should get our callback soon.
                                 installer.wabLifecycleDebug("SubTracker did not advance WAB state during open, and bundle is still eligible.", this, wabBundle.getState());
                             }
@@ -217,7 +223,7 @@ class WAB implements BundleTrackerCustomizer<WAB> {
 
     /**
      * state should only transition while the terminated lock is held.
-     * 
+     *
      * @param newState
      * @return
      */
@@ -256,7 +262,7 @@ class WAB implements BundleTrackerCustomizer<WAB> {
             if (terminated.get()) {
                 return;
             }
-            //transitions from failed to deploying are allowed.. 
+            //transitions from failed to deploying are allowed..
             //any colliding wabs should be in failed state.
             if (setState(State.DEPLOYING)) {
                 installer.wabLifecycleDebug("WAB opening SubTracker for WAB as a result of collision resolution ", this);
@@ -462,7 +468,7 @@ class WAB implements BundleTrackerCustomizer<WAB> {
     }
 
     /** {@inheritDoc} */
-    //marked trivial as there will be one of these per wab, and they get told about all bundles in the framework.. 
+    //marked trivial as there will be one of these per wab, and they get told about all bundles in the framework..
     //so we don't want that in the trace all the time
     @Override
     @Trivial
@@ -475,13 +481,13 @@ class WAB implements BundleTrackerCustomizer<WAB> {
             synchronized (terminated) {
                 if (terminated.get()) {
                     installer.wabLifecycleDebug("SubTracker unable to add bundle, as has been terminated.", this, bundle.getBundleId());
-                    //if we are terminated, then the WABGroup will be handling the uninstall 
+                    //if we are terminated, then the WABGroup will be handling the uninstall
                     //and state transitions.. so it's important not to get involved here.
                     return null;
                 }
                 installer.wabLifecycleDebug("SubTracker adding bundle.", this);
 
-                //only deploy the wab, if the state is still deploying.. 
+                //only deploy the wab, if the state is still deploying..
                 //it pretty much should be..
                 if (getState() == State.DEPLOYING) {
                     installer.wabLifecycleDebug("SubTracker adding WAB to WebContainer", this);
@@ -501,25 +507,25 @@ class WAB implements BundleTrackerCustomizer<WAB> {
     /** {@inheritDoc} */
     @Override
     @Trivial
-    //marked trivial as there will be one of these per wab, and they get told about all bundles in the framework.. 
+    //marked trivial as there will be one of these per wab, and they get told about all bundles in the framework..
     //so we don't want that in the trace all the time
     public void modifiedBundle(final Bundle bundle, BundleEvent event, WAB wab) {
         //No-op, we don't mind about changes between starting/active
-        //if we ever add code here, it should be sync'd on terminated 
+        //if we ever add code here, it should be sync'd on terminated
         //and become a no-op if terminated is true.
     }
 
     /** {@inheritDoc} */
     @Override
     @Trivial
-    //marked trivial as there will be one of these per wab, and they get told about all bundles in the framework.. 
+    //marked trivial as there will be one of these per wab, and they get told about all bundles in the framework..
     //so we don't want that in the trace all the time
     public void removedBundle(Bundle bundle, BundleEvent event, WAB wab) {
         if (bundle.getBundleId() == wabBundleId) {
             synchronized (terminated) {
                 if (terminated.get()) {
                     installer.wabLifecycleDebug("SubTracker unable to remove bundle, as has been terminated.", this, wab);
-                    //if we are terminated, then the WABGroup will be handling the uninstall 
+                    //if we are terminated, then the WABGroup will be handling the uninstall
                     //and state transitions.. so it's important not to get involved here.
                     return;
                 } else {
@@ -537,7 +543,7 @@ class WAB implements BundleTrackerCustomizer<WAB> {
         synchronized (terminated) {
             if (terminated.get()) {
                 installer.wabLifecycleDebug("WAB processing removal of terminated WAB.", this);
-                //do not exit early for a terminated wab.. this is the one method that 
+                //do not exit early for a terminated wab.. this is the one method that
                 //will be used to tidy up a wab after it's been killed off.
             } else {
                 installer.wabLifecycleDebug("WAB processing removal.", this);
@@ -557,30 +563,30 @@ class WAB implements BundleTrackerCustomizer<WAB> {
                     //if the wab makes it out of the web container,
                     //collision resolution will occur normally.
                     //the only alternative currently is the web container
-                    //has gone away, in which case, collision resolution 
-                    //is impossible. 
-                    //undeploying can only move to undeployed in 
+                    //has gone away, in which case, collision resolution
+                    //is impossible.
+                    //undeploying can only move to undeployed in
                     //the current code.
                     return result;
                 case DEPLOYING:
-                    //if state is still deploying, then the 
+                    //if state is still deploying, then the
                     //wab was scheduled to be deployed, but its
                     //tracker didn't open before we terminated it.
-                    //we could go thru deployed->undeploying, but 
+                    //we could go thru deployed->undeploying, but
                     //going thru failed seems more appropriate,
                     //the wab was never deployed, and "failed" because
                     //the extender is going away.
                     result &= setState(State.FAILED);
-                    //we must perform collision resolution here, as 
-                    //the state will never become undeployed. 
+                    //we must perform collision resolution here, as
+                    //the state will never become undeployed.
                     performCollisionResolution();
                     return result;
                 case UNDEPLOYING:
-                    //state is already undeploying.. 
+                    //state is already undeploying..
                     removeFromWebContainer();
                     //if the wab makes it out of the web container,
                     //collision resolution will occur normally.
-                    //undeploying can only move to undeployed in 
+                    //undeploying can only move to undeployed in
                     //the current code.
                     return result;
                 case UNDEPLOYED:
@@ -607,7 +613,7 @@ class WAB implements BundleTrackerCustomizer<WAB> {
     }
 
     /**
-     * 
+     *
      */
     private void closeTracker() {
         installer.wabLifecycleDebug("SubTracker closing tracker.", WAB.this, wabBundle.getState());

@@ -2,18 +2,18 @@
 <ossc>
   <project project="WELD" 
             projectURL="http://weld.cdi-spec.org/" 
-            version="2.3.4.Final"  
+            version="2.4.3.Final"  
             license-type="Apachev2" 
             contact="emijiang@uk.ibm.com" 
             encryption="no">
-      <download location="http://central.maven.org/maven2/org/jboss/weld/weld-osgi-bundle/2.4.2.SP1/weld-osgi-bundle-2.4.2.SP1.jar">
-         <file basename="weld-osgi-bundle-2.4.2.SP1.jar" checksum="575a200aa4d77e43ec5c1f09b7ea1569"/>
+      <download location="http://central.maven.org/maven2/org/jboss/weld/weld-osgi-bundle/2.4.3.Final/weld-osgi-bundle-2.4.3.Final.jar">
+         <file basename="weld-osgi-bundle-2.4.3.Final.jar" checksum="0fe8bf65bc5b4074c76be3d5cbc6a659"/>
       </download>
    </project>
    
    <clearencehistory/>
    
    <notes>
-   Source are taken from http://central.maven.org/maven2/org/jboss/weld/weld-osgi-bundle/2.4.2.SP1/weld-osgi-bundle-2.4.2.SP1-sources.jar 
+   Source are taken from http://central.maven.org/maven2/org/jboss/weld/weld-osgi-bundle/2.4.3.Final/weld-osgi-bundle-2.4.3.Final-sources.jar
    </notes>
 </ossc> 

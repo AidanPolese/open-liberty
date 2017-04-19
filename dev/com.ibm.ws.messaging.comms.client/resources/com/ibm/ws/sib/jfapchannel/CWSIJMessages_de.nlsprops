@@ -1,6 +1,6 @@
 # -------------------------------------------------------------------------------------------------
 # @start_prolog@
-# Version: @(#) 1.43 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/CWSIJMessages.nlsprops, SIB.comms, WASX.SIB 10/10/14 01:07:38 [11/9/10 00:07:27]
+# Version: @(#) 1.43 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/CWSIJMessages.nlsprops, SIB.comms, WASX.SIB, uu1215.01 10/10/14 01:07:38 [4/12/12 22:14:11]
 # ============================================================================
 # IBM Confidential OCO Source Materials
 #
@@ -108,7 +108,7 @@ CF_NOT_AVAILABLE_SICJ0005.useraction=Stellen Sie sicher, dass der Zielserver ges
 # -------------------------------------------------------------------------------------------------
 EXCP_CONN_FAIL_NO_CF_SICJ0007=CWSIJ0007E: Die Verbindung ist fehlgeschlagen, weil die Kommunikationskomponente nicht initialisiert wurde.
 EXCP_CONN_FAIL_NO_CF_SICJ0007.explanation=Der Versuch, eine Netzverbindung herzustellen, ist fehlgeschlagen, weil die Kommunikationskomponente nicht ordnungsgem\u00e4\u00df initialisiert wurde.
-EXCP_CONN_FAIL_NO_CF_SICJ0007.useraction=Suchen Sie in den Protokolldateien des Anwendungsservers nach Hinweisen zur Fehlerursache. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen, und beheben Sie das Problem, sofern dies m\u00f6glich ist.
+EXCP_CONN_FAIL_NO_CF_SICJ0007.useraction=Suchen Sie in den Protokolldateien des Anwendungsservers nach Hinweisen zur Fehlerursache. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen und beheben Sie das Problem, sofern dies m\u00f6glich ist.
 
 # -------------------------------------------------------------------------------------------------
 # {0} the name of the default channel chain which is not defined
@@ -346,14 +346,14 @@ CONNECTION_INTERNAL_SICJ0043.useraction=CMSG0002
 
 # -------------------------------------------------------------------------------------------------
 CONNECTION_CLOSED_SICJ0044=CWSIJ0044E: Es wurde versucht, eine Operation in einer bereits geschlossenen Verbindung durchzuf\u00fchren.
-CONNECTION_CLOSED_SICJ0044.explanation=Es wurde versucht, eine Operaton f\u00fcr eine Verbindungsressource durchzuf\u00fchren, die bereits geschlossen wurde. Dieses Problem kann auf einen Fehler bei der Anwendungsprogrammierung oder darauf zur\u00fcckzuf\u00fchren sein, dass das System die Verbindungsressource als Folge eines Fehlers geschlossen hat.
-CONNECTION_CLOSED_SICJ0044.useraction=Stellen Sie anhand der Protokolldateien zu Ihrem Anwendungsserver fest, warum die Verbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen, und beheben Sie das Problem, sofern dies m\u00f6glich ist.
+CONNECTION_CLOSED_SICJ0044.explanation=Es wurde versucht, eine Operation f\u00fcr eine Verbindungsressource durchzuf\u00fchren, die bereits geschlossen wurde. Dieses Problem kann auf einen Fehler bei der Anwendungsprogrammierung oder darauf zur\u00fcckzuf\u00fchren sein, dass das System die Verbindungsressource als Folge eines Fehlers geschlossen hat.
+CONNECTION_CLOSED_SICJ0044.useraction=Stellen Sie anhand der Protokolldateien zu Ihrem Anwendungsserver fest, warum die Verbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen und beheben Sie das Problem, sofern dies m\u00f6glich ist.
 
 # -------------------------------------------------------------------------------------------------
 # {0} is the host name, {1} is the chain
 CONVERSATIONIMPL_INVALIDATE_SICJ0045=CWSIJ0045E: Es ist ein unerwartetes Ereignis eingetreten, das zum Schlie\u00dfen der Netzverbindung von Host {0} \u00fcber die Transportkette {1} gef\u00fchrt hat.
 CONVERSATIONIMPL_INVALIDATE_SICJ0045.explanation=Eine Netzverbindung wurde aufgrund eines unerwartetes Ereignisses geschlossen.
-CONVERSATIONIMPL_INVALIDATE_SICJ0045.useraction=Stellen Sie anhand der zugeh\u00f6rigen Ausnahmen und Protokolldateien zu Ihrem Anwendungsserver fest, warum die Netzverbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen, und beheben Sie das Problem, sofern dies m\u00f6glich ist.
+CONVERSATIONIMPL_INVALIDATE_SICJ0045.useraction=Stellen Sie anhand der zugeh\u00f6rigen Ausnahmen und Protokolldateien zu Ihrem Anwendungsserver fest, warum die Netzverbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen und beheben Sie das Problem, sofern dies m\u00f6glich ist.
 
 # -------------------------------------------------------------------------------------------------
 CONVERSATIONIMPL_INTERNAL_SICJ0046=CWSIJ0046E: Es ist ein interner Fehler aufgetreten.
@@ -362,8 +362,8 @@ CONVERSATIONIMPL_INTERNAL_SICJ0046.useraction=CMSG0002
 
 # -------------------------------------------------------------------------------------------------
 CONVERSATIONIMPL_CLOSED_SICJ0047=CWSIJ0047E: Es wurde versucht, eine Operation in einer bereits geschlossenen Verbindung durchzuf\u00fchren.
-CONVERSATIONIMPL_CLOSED_SICJ0047.explanation=Es wurde versucht, eine Operaton f\u00fcr eine Verbindungsressource durchzuf\u00fchren, die bereits geschlossen wurde. Dieses Problem kann auf einen Fehler bei der Anwendungsprogrammierung oder darauf zur\u00fcckzuf\u00fchren sein, dass das System die Verbindungsressource als Folge eines Fehlers geschlossen hat.
-CONVERSATIONIMPL_CLOSED_SICJ0047.useraction=Stellen Sie anhand der Protokolldateien zu Ihrem Anwendungsserver fest, warum die Verbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen, und beheben Sie das Problem, sofern dies m\u00f6glich ist.
+CONVERSATIONIMPL_CLOSED_SICJ0047.explanation=Es wurde versucht, eine Operation f\u00fcr eine Verbindungsressource durchzuf\u00fchren, die bereits geschlossen wurde. Dieses Problem kann auf einen Fehler bei der Anwendungsprogrammierung oder darauf zur\u00fcckzuf\u00fchren sein, dass das System die Verbindungsressource als Folge eines Fehlers geschlossen hat.
+CONVERSATIONIMPL_CLOSED_SICJ0047.useraction=Stellen Sie anhand der Protokolldateien zu Ihrem Anwendungsserver fest, warum die Verbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen und beheben Sie das Problem, sofern dies m\u00f6glich ist.
 
 # -------------------------------------------------------------------------------------------------
 CONVERSATIONTABLE_INTERNAL_SICJ0048=CWSIJ0048E: Es ist ein interner Fehler aufgetreten.
@@ -384,7 +384,7 @@ IDTABLE_INTERNAL_SICJ0050.useraction=CMSG0002
 # {0} is the host name, {1} is the chain name
 INBOUNDCONV_INVALIDATE_SICJ0051=CWSIJ0051E: Es ist ein unerwartetes Ereignis eingetreten, das zum Schlie\u00dfen der Netzverbindung von Host {0} \u00fcber die Transportkette {1} gef\u00fchrt hat.
 INBOUNDCONV_INVALIDATE_SICJ0051.explanation=Eine Netzverbindung wurde aufgrund eines unerwartetes Ereignisses geschlossen. Suchen Sie in den zugeh\u00f6rigen Ausnahmen nach n\u00e4heren Informationen.
-INBOUNDCONV_INVALIDATE_SICJ0051.useraction=Stellen Sie anhand der zugeh\u00f6rigen Ausnahmen und Protokolldateien zu Ihrem Anwendungsserver fest, warum die Netzverbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen, und beheben Sie das Problem, sofern dies m\u00f6glich ist.
+INBOUNDCONV_INVALIDATE_SICJ0051.useraction=Stellen Sie anhand der zugeh\u00f6rigen Ausnahmen und Protokolldateien zu Ihrem Anwendungsserver fest, warum die Netzverbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen und beheben Sie das Problem, sofern dies m\u00f6glich ist.
 
 # -------------------------------------------------------------------------------------------------
 INBOUNDCONV_INTERNAL_SICJ0052=CWSIJ0052E: Es ist ein interner Fehler aufgetreten.
@@ -405,13 +405,13 @@ TRANSPARSER_INTERNAL_SICJ0054.useraction=CMSG0002
 # -------------------------------------------------------------------------------------------------
 OUTBOUNDCONN_IDTABLEFULL_SICJ0055=CWSIJ0055E: Aufgrund einer Ressourcenknappheit konnte keine neue Verbindung erstellt werden.
 OUTBOUNDCONN_IDTABLEFULL_SICJ0055.explanation=Es kann keine neue Verbindung hergestellt werden, weil nicht gen\u00fcgend erforderliche Ressourcen verf\u00fcgbar sind. Dieses Problem wird durch eine hohe Anzahl aktiver, aufgebauter Verbindungen verursacht.
-OUTBOUNDCONN_IDTABLEFULL_SICJ0055.useraction=Reduzieren Sie die Ressourcden, die von Anwendnungen verwendet werden, indem Sie alle nicht mehr ben\u00f6tigten Verbindungen schlie\u00dfen.
+OUTBOUNDCONN_IDTABLEFULL_SICJ0055.useraction=Reduzieren Sie die Ressourcen, die von Anwendungen verwendet werden, indem Sie alle nicht mehr ben\u00f6tigten Verbindungen schlie\u00dfen.
 
 # -------------------------------------------------------------------------------------------------
 # {0} is the host name, {1} is the port number, {2} is the chain name
 OUTBOUNDCONV_INVALIDATE_SICJ0056=CWSIJ0056E: Eine Netzverbindung auf dem Host {0} an Port {1} mit der Kette {2} wurde wegen einer unerwarteten Bedingung geschlossen.
 OUTBOUNDCONV_INVALIDATE_SICJ0056.explanation=Eine Netzverbindung wurde aufgrund eines unerwartetes Ereignisses geschlossen.
-OUTBOUNDCONV_INVALIDATE_SICJ0056.useraction=Stellen Sie anhand der zugeh\u00f6rigen Ausnahmen und Protokolldateien zu Ihrem Anwendungsserver fest, warum die Netzverbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen, und beheben Sie das Problem, sofern dies m\u00f6glich ist.
+OUTBOUNDCONV_INVALIDATE_SICJ0056.useraction=Stellen Sie anhand der zugeh\u00f6rigen Ausnahmen und Protokolldateien zu Ihrem Anwendungsserver fest, warum die Netzverbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen und beheben Sie das Problem, sofern dies m\u00f6glich ist.
 
 # -------------------------------------------------------------------------------------------------
 PRIORITYQUEUE_INTERNAL_SICJ0057=CWSIJ0057E: Es ist ein interner Fehler aufgetreten.
@@ -501,7 +501,7 @@ CLIENT_NOT_RESPONDING_OUTBOUND_SICJ0071.useraction=Weitere Informationen zur Beh
 # {0} is the host name, {1} is the port and {2} is the chain
 CONVERSATIONIMPL_INVALIDATE_OUTBOUND_SICJ0072=CWSIJ0072E: Es ist ein unerwartetes Ereignis eingetreten, das zum Schlie\u00dfen der Netzverbindung mit dem Host {0} an Port {1} \u00fcber die Transportkette {2} gef\u00fchrt hat.
 CONVERSATIONIMPL_INVALIDATE_OUTBOUND_SICJ0072.explanation=Eine Netzverbindung wurde aufgrund eines unerwartetes Ereignisses geschlossen.
-CONVERSATIONIMPL_INVALIDATE_OUTBOUND_SICJ0072.useraction=Suchen Sie in den verkn\u00fcpften Ausnahmen und Protokolldateien Ihres Anwendungsservers nach Hinweisen darauf, warum die Netzverbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen, und beheben Sie das Problem, sofern dies m\u00f6glich ist.
+CONVERSATIONIMPL_INVALIDATE_OUTBOUND_SICJ0072.useraction=Suchen Sie in den verkn\u00fcpften Ausnahmen und Protokolldateien Ihres Anwendungsservers nach Hinweisen darauf, warum die Netzverbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen und beheben Sie das Problem, sofern dies m\u00f6glich ist.
 
 # -------------------------------------------------------------------------------------------------
 # *** ignore this message - it is no longer used in the code. ***
@@ -528,12 +528,12 @@ BUFFER_ALREADY_RELEASED_SICJ0076.useraction=CMSG0002
 # -------------------------------------------------------------------------------------------------
 PRIORITY_QUEUE_PURGED_SICJ0077=CWSIJ0077E: Es ist ein unerwartetes Ereignis eingetreten, das zum Schlie\u00dfen der Netzverbindung gef\u00fchrt hat.
 PRIORITY_QUEUE_PURGED_SICJ0077.explanation=Eine Netzverbindung wurde aufgrund eines unerwartetes Ereignisses geschlossen.
-PRIORITY_QUEUE_PURGED_SICJ0077.useraction=Stellen Sie anhand der zugeh\u00f6rigen Ausnahmen und Protokolldateien zu Ihrem Anwendungsserver fest, warum die Netzverbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen, und beheben Sie das Problem, sofern dies m\u00f6glich ist.
+PRIORITY_QUEUE_PURGED_SICJ0077.useraction=Stellen Sie anhand der zugeh\u00f6rigen Ausnahmen und Protokolldateien zu Ihrem Anwendungsserver fest, warum die Netzverbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen und beheben Sie das Problem, sofern dies m\u00f6glich ist.
 
 # -------------------------------------------------------------------------------------------------
 CANNOT_START_INBOUND_CHAIN_SICJ0078=CWSIJ0078E: Die unerwartete Bedingung {0} hat verhindert, dass die Transportkette {1} gestartet wird.
 CANNOT_START_INBOUND_CHAIN_SICJ0078.explanation=Die angegebene Transportkette kann nicht gestartet werden, weil die angegebene Ausnahme eingetreten ist. Andere Prozesse k\u00f6nnen \u00fcber die angegebene Transportkette keine Netzverbindungen zu diesem Server aufbauen.
-CANNOT_START_INBOUND_CHAIN_SICJ0078.useraction=Untersuchen Sie die in der Nachricht angebenene Ausnahme, und stellen Sie fest, ob sie gen\u00fcgend Informationen zur Behebung des Problems enth\u00e4lt. Weitere Informationen zur Behebung dieses Fehlers finden Sie in den Informationen zur Fehlerbestimmung auf der Unterst\u00fctzungswebseite von WebSphere Application Server unter der Adresse "http://www.ibm.com/software/webservers/appserv/was/support".
+CANNOT_START_INBOUND_CHAIN_SICJ0078.useraction=Untersuchen Sie die in der Nachricht angegebene Ausnahme und stellen Sie fest, ob sie gen\u00fcgend Informationen zur Behebung des Problems enth\u00e4lt. Weitere Informationen zur Behebung dieses Fehlers finden Sie in den Informationen zur Fehlerbestimmung auf der Unterst\u00fctzungswebseite von WebSphere Application Server unter der Adresse "http://www.ibm.com/software/webservers/appserv/was/support".
 
 # -------------------------------------------------------------------------------------------------
 INBOUND_CHAIN_NOT_PERMITTED_SICJ0079=CWSIJ0079I: Die Messaging-Transportkette {0} wurde nicht gestartet.
@@ -542,7 +542,7 @@ INBOUND_CHAIN_NOT_PERMITTED_SICJ0079.useraction=Sehen Sie sich die Transporte an
 
 # -------------------------------------------------------------------------------------------------
 CONNDATAGROUP_CONNFAILED_SICJ0080=CWSIJ0080E: Es kann keine speicher\u00fcbergreifende Verbindung zum Adjunct-Prozess der Steuerregion hergestellt werden.
-CONNDATAGROUP_CONNFAILED_SICJ0080.explanation=Es kann keine speicher\u00fcbergreifende Verbindung hergestellt werden. Dies kann auf das asynchrone Starten von Anwendungsserverpozessen zur\u00fcckzuf\u00fchren sein.
+CONNDATAGROUP_CONNFAILED_SICJ0080.explanation=Es kann keine speicher\u00fcbergreifende Verbindung hergestellt werden. Dies kann auf das asynchrone Starten von Anwendungsserverprozessen zur\u00fcckzuf\u00fchren sein.
 CONNDATAGROUP_CONNFAILED_SICJ0080.useraction=Es ist keine Aktion erforderlich, wenn diese Nachricht wegen des asynchronen Starts des Anwendungsserverprozesses ausgegeben wurde. Wenn diese Nachricht permanent generiert wird, wenden Sie sich an den IBM Service.
 
 # -------------------------------------------------------------------------------------------------
@@ -561,12 +561,12 @@ EXCP_DURING_INIT_SICJ0082.useraction=CMSG0002
 # -------------------------------------------------------------------------------------------------
 NETWORK_FAILURE_SICJ0083=CWSIJ0083E: Es ist ein unerwartetes Ereignis eingetreten, das zum Schlie\u00dfen der Netzverbindung gef\u00fchrt hat.
 NETWORK_FAILURE_SICJ0083.explanation=Eine Netzverbindung wurde aufgrund eines unerwartetes Ereignisses geschlossen.
-NETWORK_FAILURE_SICJ0083.useraction=Stellen Sie anhand der zugeh\u00f6rigen Ausnahmen und Protokolldateien zu Ihrem Anwendungsserver fest, warum die Netzverbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen, und beheben Sie das Problem, sofern dies m\u00f6glich ist.
+NETWORK_FAILURE_SICJ0083.useraction=Stellen Sie anhand der zugeh\u00f6rigen Ausnahmen und Protokolldateien zu Ihrem Anwendungsserver fest, warum die Netzverbindung geschlossen wurde. Suchen Sie in den begleitenden Fehlernachrichten nach weiteren Informationen und beheben Sie das Problem, sofern dies m\u00f6glich ist.
 
 # -------------------------------------------------------------------------------------------------
 CANNOT_STOP_INBOUND_CHAIN_SICJ0084=CWSIJ0084E: Die unerwartete Bedingung {0} hat verhindert, dass die Transportkette {1} ordnungsgem\u00e4\u00df gestoppt wird.
 CANNOT_STOP_INBOUND_CHAIN_SICJ0084.explanation=Die angegebene Transportkette wurde wegen der angegebenen Ausnahme m\u00f6glicherweise nicht ordnungsgem\u00e4\u00df gestoppt. Wenn die Transportkette nicht gestoppt werden konnte, k\u00f6nnen andere Prozesse \u00fcber die angegebene Transportkette m\u00f6glicherweise weiterhin Netzverbindungen zu diesem Server aufbauen.
-CANNOT_STOP_INBOUND_CHAIN_SICJ0084.useraction=Untersuchen Sie die in der Nachricht angebenene Ausnahme, und stellen Sie fest, ob sie gen\u00fcgend Informationen zur Behebung des Problems enth\u00e4lt. Weitere Informationen zur Behebung dieses Fehlers finden Sie in den Informationen zur Fehlerbestimmung auf der Unterst\u00fctzungswebseite von WebSphere Application Server unter der Adresse "http://www.ibm.com/software/webservers/appserv/was/support".
+CANNOT_STOP_INBOUND_CHAIN_SICJ0084.useraction=Untersuchen Sie die in der Nachricht angegebene Ausnahme und stellen Sie fest, ob sie gen\u00fcgend Informationen zur Behebung des Problems enth\u00e4lt. Weitere Informationen zur Behebung dieses Fehlers finden Sie in den Informationen zur Fehlerbestimmung auf der Unterst\u00fctzungswebseite von WebSphere Application Server unter der Adresse "http://www.ibm.com/software/webservers/appserv/was/support".
 
 # -------------------------------------------------------------------------------------------------
 INBOUND_CHAIN_NOT_PERMITTED_SICJ0085=CWSIJ0085I: Die Messaging-Transportkette {0} wurde gestoppt.

@@ -82,17 +82,4 @@
     <Designate factoryPid="com.ibm.ws.udpchannel.options">
         <Object ocdref="com.ibm.ws.udpchannel.options"/>
     </Designate>
-    
-    <!-- ZOSAIO .......................................................................... -->
-    
-    <OCD name="internal" description="%zosaio.desc"
-         id="com.ibm.ws.tcpchannel.zosaio" ibm:alias="zosaio">
-
-        <AD name="internal" description="internal use only"
-            id="service.ranking" required="false" type="Integer" default="0"/>
-    </OCD>
-    
-    <Designate factoryPid="com.ibm.ws.tcpchannel.zosaio">
-        <Object ocdref="com.ibm.ws.tcpchannel.zosaio"/>
-    </Designate>
 </metatype:MetaData>

@@ -38,7 +38,7 @@ Include-Resource: OSGI-INF=resources/OSGI-INF
 instrument.classesExcludes: com/ibm/ws/jndi/internal/resources/*.class
 
 -buildpath: \
-	com.ibm.ws.logging.core,\
+	com.ibm.ws.logging,\
 	com.ibm.ws.crypto.passwordutil,\
 	com.ibm.ws.kernel.service,\
 	com.ibm.websphere.org.osgi.core.6.0.0,\
@@ -48,3 +48,11 @@ instrument.classesExcludes: com/ibm/ws/jndi/internal/resources/*.class
 	org.eclipse.osgi,\
 	com.ibm.ws.classloading;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+
+-testpath: \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	com.ibm.ws.kernel.boot;version=latest

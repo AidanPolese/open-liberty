@@ -357,12 +357,14 @@ public class CDIContainerImpl implements InjectionMetaDataListener {
 
             ArchiveType childType = child.getType();
             String archiveID = null;
+            String eeModuleDescriptorID = null;
             if (childType == ArchiveType.WEB_INF_LIB ||
                 childType == ArchiveType.MANIFEST_CLASSPATH ||
                 childType == ArchiveType.JAR_MODULE ||
                 childType == ArchiveType.SHARED_LIB) {
 
                 archiveID = parentModule.getId() + "#" + childType + "#" + child.getName();
+                eeModuleDescriptorID = parentModule.getEEModuleDescriptorId();
 
             } else {
                 // This isn't the right type to be a child library, skip it
@@ -384,7 +386,8 @@ public class CDIContainerImpl implements InjectionMetaDataListener {
             WebSphereBeanDeploymentArchive newChildBda = BDAFactory.createBDA(parentModule.getCDIDeployment(),
                                                                               archiveID,
                                                                               child,
-                                                                              cdiRuntime);
+                                                                              cdiRuntime,
+                                                                              eeModuleDescriptorID);
 
             discoveredBdas.addDiscoveredBda(parentType, newChildBda);
             moduleArchivePaths.add(childPath);

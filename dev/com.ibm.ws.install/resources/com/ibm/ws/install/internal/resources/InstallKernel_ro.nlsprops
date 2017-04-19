@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2010, 2015
+# (C) COPYRIGHT International Business Machines Corp. 2010, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -500,6 +500,10 @@ LOG_VALIDATION_DONE=S-a finalizat cu succes validarea fi\u015fierului de configu
 LOG_DELETING_TEMP_SERVER_DIR=\u015etergerea directorului temporar al serverului {0}...
 LOG_NOT_DELETING_TEMP_SERVER_DIR=Directorul de server temporar {0} nu a fost \u015fters deoarece ar putea con\u0163ine informa\u0163ii legate de eroare \u00een directorul istoric. Dac\u0103 nu ave\u0163i nevoie de aceste informa\u0163ii, pute\u0163i \u015fterge manual directorul {1}.
 LOG_CREATED_TEMP_SERVER_DIR=A creat directorul temporar de server {0}.
+
+LOG_CANNOT_CLOSE_OBJECT=Fi\u015fierele temporare nu pot fi \u015fterse.
+LOG_CANNOT_CLOSE_OBJECT.explanation=Exemplul necesit\u0103 Java 7 sau o versiune superioar\u0103 pentru a \u015fterge directorul installTmp.
+LOG_CANNOT_CLOSE_OBJECT.action=\u00cenl\u0103tura\u0163i manual directorul installTmp sau utiliza\u0163i Java 7 sau o versiune superioar\u0103.
 
 LOG_PASSWORD_NOT_ENCODED_PROXY=Parola pentru proxy-ul urm\u0103tor nu este codificat\u0103: {0}. Pute\u0163i codifica parola prin rularea comenzii de codificare securityUtility cu op\u0163iunea --encoding setat\u0103 la un tip de codificare suportat\u0103, care sunt xor (implicit), aes \u015fi hash. De exemplu: securityUtility encode --encoding=aes proxyPassword
 LOG_PENDING_UNINSTALLING_FEATURE=Caracteristici de dezinstalat:

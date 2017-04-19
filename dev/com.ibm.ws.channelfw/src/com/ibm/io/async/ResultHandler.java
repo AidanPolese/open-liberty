@@ -22,9 +22,6 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.osgi.service.component.annotations.Reference;
-
-import com.ibm.websphere.channelfw.osgi.CHFWBundle;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
@@ -53,9 +50,6 @@ final class ResultHandler {
     private String myGroupID = null;
     /** IO event batch size */
     private int batchSize = 1;
-
-    /** Service for access to WsByteBufferManager */
-    private volatile CHFWBundle chfwBundle;
 
     /**
      * Creates a result handler for the completion port provided, working with
@@ -109,39 +103,6 @@ final class ResultHandler {
     }
 
     /**
-     * DS method for setting the required channel framework service.
-     *
-     * @param bundle
-     */
-    @Reference(name = "chfwBundle")
-    protected void setChfwBundle(CHFWBundle bundle) {
-        chfwBundle = bundle;
-    }
-
-    /**
-     * DS method for removing the reference to the channel framework.
-     *
-     * @param bundle
-     */
-    protected void unsetChfwBundle(CHFWBundle bundle) {
-        if (bundle == chfwBundle) {
-            chfwBundle = null;
-        }
-    }
-
-    /**
-     * Access the current reference to the bytebuffer pool manager.
-     *
-     * @return WsByteBufferPoolManager
-     */
-    protected WsByteBufferPoolManager getBufferManager() {
-        if (null == this.chfwBundle) {
-            return ChannelFrameworkFactory.getBufferManager();
-        }
-        return this.chfwBundle.getBufferManager();
-    }
-
-    /**
      * Access the grouping ID field.
      *
      * @return String
@@ -182,7 +143,7 @@ final class ResultHandler {
         final int size = this.batchSize;
         final int jitSize = 8192;
         final int timeout = AsyncProperties.completionTimeout;
-        final WsByteBufferPoolManager wsByteBufferManager = this.getBufferManager();
+        final WsByteBufferPoolManager wsByteBufferManager = ChannelFrameworkFactory.getBufferManager();
         final boolean jitCapable = provider.hasCapability(IAsyncProvider.CAP_JIT_BUFFERS);
         final boolean batchCapable = (1 < size);
 

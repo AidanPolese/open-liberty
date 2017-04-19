@@ -63,8 +63,11 @@ public class PropertyService extends Properties {
      */
     public static final List<String> DURATION_S_INT_PROPS = Arrays.asList(
                                                                            "abandonedConnectionTimeout",
+                                                                           "affinityFailbackInterval",
                                                                            "blockingReadConnectionTimeout",
+                                                                           "commandTimeout",
                                                                            "connectionRetryDelay",
+                                                                           "connectionTimeout",
                                                                            "connectionWaitTimeout",
                                                                            "currentLockTimeout",
                                                                            "ifxIFX_LOCK_MODE_WAIT",
@@ -74,6 +77,7 @@ public class PropertyService extends Properties {
                                                                            "loginTimeout",
                                                                            "maxConnectionReuseTime",
                                                                            "maxIdleTime",
+                                                                           "memberConnectTimeout",
                                                                            "queryTimeout",
                                                                            "retryIntervalForClientReroute",
                                                                            "soLinger",

@@ -74,8 +74,8 @@ import com.ibm.wsspi.injectionengine.ReferenceContext;
 /**
  * The implementation of Weld spi BeanDeploymentArchive to represent a CDI bean
  * archive.
- * 
- * 
+ *
+ *
  */
 public class BeanDeploymentArchiveImpl implements WebSphereBeanDeploymentArchive {
 
@@ -98,6 +98,7 @@ public class BeanDeploymentArchiveImpl implements WebSphereBeanDeploymentArchive
 
     private final ServiceRegistry weldServiceRegistry;
     private final String id;
+    private final String eeModuleDescptorId;
 
     private final Set<WebSphereBeanDeploymentArchive> accessibleBDAs = new HashSet<WebSphereBeanDeploymentArchive>();
     private final Set<WebSphereBeanDeploymentArchive> descendantBDAs = new HashSet<WebSphereBeanDeploymentArchive>();
@@ -143,8 +144,10 @@ public class BeanDeploymentArchiveImpl implements WebSphereBeanDeploymentArchive
                               Set<String> additionalClasses,
                               Set<String> additionalBeanDefiningAnnotations,
                               boolean extensionCanSeeApplicationBDAs,
-                              Set<String> extensionClassNames) throws CDIException {
+                              Set<String> extensionClassNames,
+                              String eeModuleDescptorId) throws CDIException {
         this.id = archiveID;
+        this.eeModuleDescptorId = eeModuleDescptorId == null ? archiveID : eeModuleDescptorId;
         this.archive = archive;
         this.cdiDeployment = cdiDeployment;
         this.extensionCanSeeApplicationBDAs = extensionCanSeeApplicationBDAs;
@@ -173,7 +176,7 @@ public class BeanDeploymentArchiveImpl implements WebSphereBeanDeploymentArchive
         WebSphereInjectionServices injectionServices = cdiDeployment.getInjectionServices();
         bdaInjectionServices = new BdaInjectionServicesImpl(injectionServices, cdiRuntime, cdiDeployment, archive);
 
-        EEModuleDescriptor eeModuleDescriptor = new EEModuleDescriptorImpl(archiveID, getWeldModuleType());
+        EEModuleDescriptor eeModuleDescriptor = new EEModuleDescriptorImpl(this.eeModuleDescptorId, getWeldModuleType());
         this.weldServiceRegistry.add(InjectionServices.class, injectionServices);
         this.weldServiceRegistry.add(EjbInjectionServices.class, bdaInjectionServices);
         this.weldServiceRegistry.add(JaxwsInjectionServices.class, bdaInjectionServices);
@@ -263,7 +266,7 @@ public class BeanDeploymentArchiveImpl implements WebSphereBeanDeploymentArchive
      * If there is no beans.xml, the mode will be annotated, unless the enableImplicitBeanArchives is configured as false via the server.xml.
      * If there is no beans.xml and the enableImplicitBeanArchives attribute on cdi12 is configured to false, the scanning mode is none.
      * If there is no beans.xml and this archive is an extension, the bean discovery mode is none.
-     * 
+     *
      * @return
      */
     private BeanDiscoveryMode getBeanDiscoveryMode() {
@@ -495,7 +498,7 @@ public class BeanDeploymentArchiveImpl implements WebSphereBeanDeploymentArchive
      * This is needed so that we don't try and do injection on any classes which are managed by the client archive.
      * <p>
      * Must only be called if this bean archive is a client application jar.
-     * 
+     *
      * @return The set of classes which are managed by the client archive
      */
     private Map<String, Class<?>> getClientContainerManagedClasses() throws CDIException {
@@ -534,7 +537,7 @@ public class BeanDeploymentArchiveImpl implements WebSphereBeanDeploymentArchive
 
     /**
      * Need to removed the vetoed classes from the set so that we can ignore them
-     * 
+     *
      * @param classes
      */
     private void removeVetoedClasses(Set<Class<?>> classes) {
@@ -650,7 +653,7 @@ public class BeanDeploymentArchiveImpl implements WebSphereBeanDeploymentArchive
 
     /**
      * Check whether the archive is an extension (application or runtime) or not
-     * 
+     *
      * @return
      */
     @Override
@@ -771,7 +774,7 @@ public class BeanDeploymentArchiveImpl implements WebSphereBeanDeploymentArchive
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws CDIException
      */
     @Override
@@ -931,7 +934,7 @@ public class BeanDeploymentArchiveImpl implements WebSphereBeanDeploymentArchive
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param <T>
      * @throws CDIException
      */
@@ -991,5 +994,11 @@ public class BeanDeploymentArchiveImpl implements WebSphereBeanDeploymentArchive
     public Set<EjbDescriptor<?>> getEjbDescriptor(Class<?> clazz) {
 
         return ejbDescriptorMap.get(clazz);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getEEModuleDescriptorId() {
+        return eeModuleDescptorId;
     }
 }

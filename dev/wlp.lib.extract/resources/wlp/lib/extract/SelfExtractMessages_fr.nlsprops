@@ -299,10 +299,8 @@ UNABLE_TO_FIND_TOOLS_JAR=L''agent Liberty Java n''a pas pu \u00eatre li\u00e9 ca
 
 UNABLE_TO_FIND_JAVA_AGENT=L''agent Liberty Java n''a pas pu \u00eatre localis\u00e9. Ce serveur fonctionnera, mais il ne pourra pas prendre en charge les fonctions n\u00e9cessitant l''agent Java, telles que la surveillance ou le tra\u00e7age.
 
-
 # messages for LicenseSelfEctractor
-LICENSE_invalidInstall=Le r\u00e9pertoire {0} n''est pas celui d''une installation Liberty valide. \
-Sp\u00e9cifiez le r\u00e9pertoire racine de l''installation Liberty que vous voulez mettre \u00e0 niveau.
+LICENSE_invalidInstall=Le r\u00e9pertoire {0} n''est pas celui d''une installation Liberty valide. Sp\u00e9cifiez le r\u00e9pertoire racine de l''installation Liberty que vous voulez mettre \u00e0 niveau.
 LICENSE_invalidVersion=La licence ne peut pas \u00eatre mise \u00e0 niveau. En effet, l''installation de produit sp\u00e9cifi\u00e9e est \u00e0 \
 la version {0}, alors que la licence ne peut \u00eatre mise \u00e0 niveau qu''\u00e0 partir de la version {1}.
 LICENSE_invalidEdition=La licence ne peut pas \u00eatre mise \u00e0 niveau. En effet, l''installation de produit sp\u00e9cifi\u00e9e est \
@@ -310,6 +308,15 @@ l''\u00e9dition {0}. Or la mise \u00e0 niveau de la licence ne peut s''appliquer
 LICENSE_invalidLicense=La licence ne peut pas \u00eatre mise \u00e0 niveau. En effet, l''installation de produit sp\u00e9cifi\u00e9e comporte \
 une licence {0}. Or la mise \u00e0 niveau de la licence ne peut s''appliquer qu''aux produits pourvus d''une licence {1}.
 LICENSE_invalidInstallType=La licence ne peut pas \u00eatre mise \u00e0 niveau, car l''installation de produit sp\u00e9cifi\u00e9e a \
-\u00e9t\u00e9 install\u00e9e par l''outil IBM Installation Manager. \
-Utilisez ce m\u00eame outil pour mettre \u00e0 niveau votre installation.
+\u00e9t\u00e9 install\u00e9e par l''outil IBM Installation Manager. Utilisez ce m\u00eame outil pour mettre \u00e0 niveau votre installation.
+
+# new messages for license upgrade and downgrade
+LICENSE_replace_invalidVersion=La licence ne peut pas \u00eatre remplac\u00e9e. En effet, l''installation de produit sp\u00e9cifi\u00e9e est \u00e0 \
+la version {0}, alors que la licence ne peut \u00eatre remplac\u00e9e qu''\u00e0 partir de la version {1}.
+LICENSE_replace_invalidInstallType=La licence ne peut pas \u00eatre chang\u00e9e, car l''installation de produit sp\u00e9cifi\u00e9e a \
+\u00e9t\u00e9 install\u00e9e par l''outil IBM Installation Manager. Utilisez ce m\u00eame outil pour modifier votre installation.
+
+LICENSE_replace_invalidEditonFeatures=Les fonctionnalit\u00e9s suivantes ne s''appliquent plus \u00e0 {0} et doivent \u00eatre retir\u00e9es avant le remplacement de la licence : {1}
+LICENSE_replace_uninstallFeatures_manually=Utilisez la commande suivante pour d\u00e9sinstaller ces fonctionnalit\u00e9s avant de remplacer la licence de {0} : {1}
+
 

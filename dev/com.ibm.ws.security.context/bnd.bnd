@@ -1,0 +1,41 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Security context service
+Bundle-SymbolicName: com.ibm.ws.security.context
+Bundle-Description: Security context service; version=${bVersion}
+
+WS-TraceGroup: \
+  security
+
+IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml
+
+Import-Package: \
+  com.ibm.ws.security.authentication.helper, \
+  com.ibm.ws.security.authentication.principals, \
+  !*.internal.*, *
+
+Private-Package: \
+  com.ibm.ws.security.context.internal.*
+
+Include-Resource: \
+    OSGI-INF=resources/OSGI-INF
+
+-dsannotations: \
+  com.ibm.ws.security.context.internal.SecurityContextProviderImpl
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging,\
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.service.cm.1.5.0,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0,\
+	com.ibm.websphere.appserver.spi.kernel.service,\
+	com.ibm.ws.context;version=latest,\
+	com.ibm.ws.security;version=latest,\
+	com.ibm.ws.security.authentication;version=latest,\
+	com.ibm.websphere.security;version=latest,\
+	com.ibm.ws.security.credentials;version=latest,\
+	com.ibm.ws.security.token;version=latest,\
+	com.ibm.ws.security.authentication.builtin;version=latest,\
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

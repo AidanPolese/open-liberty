@@ -36,6 +36,8 @@ import org.junit.runners.model.Statement;
 
 import com.ibm.websphere.simplicity.log.Log;
 
+import componenttest.custom.junit.runner.Mode;
+import componenttest.custom.junit.runner.Mode.TestMode;
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.impl.LibertyServerFactory;
 import junit.framework.AssertionFailedError;
@@ -143,6 +145,7 @@ public class EmbeddedServerAddProductExtensionMultipleTest {
     }
 
     @Test
+    @Mode(TestMode.QUARANTINE)
     public void testAddProductExtensionMultiple() throws Throwable {}
 
     private static void embeddedServerTestHelper(final String REMOTE_METHOD_NAME) throws Throwable {

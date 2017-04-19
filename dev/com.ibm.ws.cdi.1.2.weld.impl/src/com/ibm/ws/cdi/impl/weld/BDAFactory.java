@@ -25,8 +25,8 @@ import com.ibm.ws.cdi.interfaces.ExtensionArchive;
 /**
  * The implementation of Weld spi BeanDeploymentArchive to represent a CDI bean
  * archive.
- * 
- * 
+ *
+ *
  */
 public class BDAFactory {
 
@@ -39,6 +39,14 @@ public class BDAFactory {
                                                            String archiveID,
                                                            CDIArchive archive,
                                                            CDIRuntime cdiRuntime) throws CDIException {
+        return createBDA(deployment, archiveID, archive, cdiRuntime, null);
+    }
+
+    public static WebSphereBeanDeploymentArchive createBDA(WebSphereCDIDeployment deployment,
+                                                           String archiveID,
+                                                           CDIArchive archive,
+                                                           CDIRuntime cdiRuntime,
+                                                           String eEModuleDescriptorId) throws CDIException {
         Set<String> additionalClasses = Collections.<String> emptySet();
         Set<String> additionalAnnotations = Collections.<String> emptySet();
 
@@ -49,7 +57,8 @@ public class BDAFactory {
                                                        additionalClasses,
                                                        additionalAnnotations,
                                                        false,
-                                                       false);
+                                                       false,
+                                                       eEModuleDescriptorId);
         return bda;
     }
 
@@ -71,7 +80,8 @@ public class BDAFactory {
                                                        additionalClasses,
                                                        additionalAnnotations,
                                                        extensionCanSeeApplicationBDAs,
-                                                       extClassesOnlyBDA);
+                                                       extClassesOnlyBDA,
+                                                       null);
         return bda;
     }
 
@@ -88,7 +98,8 @@ public class BDAFactory {
                                                             Set<String> additionalClasses,
                                                             Set<String> additionalBeanDefiningAnnotations,
                                                             boolean extensionCanSeeApplicationBDAs,
-                                                            boolean extensionClassesOnlyBDA) throws CDIException {
+                                                            boolean extensionClassesOnlyBDA,
+                                                            String eEModuleDescriptorId) throws CDIException {
         Set<String> extensionClassNames = archive.getExtensionClasses();
         Set<String> allClassNames = new HashSet<String>();
         if (archive.getType() == ArchiveType.RUNTIME_EXTENSION) {
@@ -115,6 +126,6 @@ public class BDAFactory {
 
         }
 
-        return new BeanDeploymentArchiveImpl(deployment, archiveID, archive, cdiRuntime, allClassNames, additionalClasses, additionalBeanDefiningAnnotations, extensionCanSeeApplicationBDAs, extensionClassNames);
+        return new BeanDeploymentArchiveImpl(deployment, archiveID, archive, cdiRuntime, allClassNames, additionalClasses, additionalBeanDefiningAnnotations, extensionCanSeeApplicationBDAs, extensionClassNames, eEModuleDescriptorId);
     }
 }

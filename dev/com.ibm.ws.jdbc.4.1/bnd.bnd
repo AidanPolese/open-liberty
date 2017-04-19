@@ -11,9 +11,19 @@ WS-TraceGroup: RRA
 
 Require-Capability: osgi.ee; filter:="(&(osgi.ee=JavaSE)(version=1.7))"
 
-Private-Package: \
-  com.ibm.ws.jdbc.osgi.v41
-  
+Import-Package: \
+    com.ibm.ws.jdbc.osgi, \
+    com.ibm.ws.jdbc.osgi.v40, \
+    com.ibm.ws.rsadapter, \
+    com.ibm.ws.rsadapter.jdbc, \
+    com.ibm.ws.rsadapter.spi, \
+    com.ibm.ws.ffdc, \
+    com.ibm.websphere.ras
+
+Export-Package: \
+    com.ibm.ws.jdbc.osgi.v41, \
+    com.ibm.ws.rsadapter.jdbc.v41
+
 # Register a marker service to enable 4.1 incompatibilities.
 Service-Component: \
   com.ibm.ws.jdbc.v41; \
@@ -21,8 +31,16 @@ Service-Component: \
     provide:=com.ibm.ws.jdbc.osgi.JDBCRuntimeVersion; \
     properties:="version=4.1,service.ranking:Integer=41"
 
+instrument.disabled: true
+
+-buildpath.bootclasspath: ${javac.bootclasspath.1.7}
+
 -buildpath: \
-	${javac.bootclasspath.java7}, \
-	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.javaee.connector.1.7;version=latest,\
+	com.ibm.websphere.javaee.transaction.1.2;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.ws.jca.cm;version=latest,\
 	com.ibm.ws.jdbc;version=latest,\
-	com.ibm.websphere.appserver.spi.logging
+	com.ibm.ws.jdbc.4.0;version=latest,\
+	com.ibm.websphere.appserver.spi.logging;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

@@ -13,16 +13,19 @@ package com.ibm.ws.bytebuffer.internal;
 
 import java.lang.reflect.Constructor;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.ws.channelfw.internal.ChannelFrameworkImpl;
 import com.ibm.ws.ffdc.FFDCFilter;
-import com.ibm.ws.kernel.zos.NativeMethodManager;
 import com.ibm.wsspi.bytebuffer.WsByteBufferPoolManager;
+import com.ibm.wsspi.bytebuffer.WsByteBufferPoolManager.DirectByteBufferHelper;
 
 /**
  *
@@ -39,13 +42,26 @@ public class ByteBufferConfiguration {
     /** Reference to the pool manager, only create once */
     private volatile WsByteBufferPoolManager wsbbmgr = null;
 
+    @Activate
     protected void activate(Map<String, Object> configuration) {
         modified(configuration);
     }
 
+    @Deactivate
     protected void deactivate() {
         // TODO shouldn't there be a pool manager cleanup step?
         this.wsbbmgr = null;
+    }
+
+    private final AtomicReference<DirectByteBufferHelper> directByteBufferHelper = new AtomicReference<DirectByteBufferHelper>();
+
+    @Reference(name="directByteBufferHelper", service=DirectByteBufferHelper.class)
+    protected void setDirectByteBufferHelper(DirectByteBufferHelper helper) {
+        this.directByteBufferHelper.set(helper);
+    }
+
+    protected void unsetDirectByteBufferHelper(DirectByteBufferHelper helper) {
+        this.directByteBufferHelper.compareAndSet(helper, null);
     }
 
     public WsByteBufferPoolManager getBufferManager() {
@@ -121,25 +137,14 @@ public class ByteBufferConfiguration {
             }
         }
 
-        NativeMethodManager nativeMethodManager = ChannelFrameworkImpl.getRef().getNativeMethodManager();
-        if (nativeMethodManager != null) {
+        // try the default class with the configuration (assuming that
+        // config did not previously fail)
+        if (null == configError) {
             try {
-                return new ZOSWsByteBufferPoolManagerImpl(config, nativeMethodManager);
+                return new WsByteBufferPoolManagerImpl(directByteBufferHelper, config);
             } catch (WsBBConfigException e) {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
                     Tr.event(this, tc, "Error in configuration: " + e);
-                }
-            }
-        } else {
-            // try the default class with the configuration (assuming that
-            // config did not previously fail)
-            if (null == configError) {
-                try {
-                    return new WsByteBufferPoolManagerImpl(config);
-                } catch (WsBBConfigException e) {
-                    if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
-                        Tr.event(this, tc, "Error in configuration: " + e);
-                    }
                 }
             }
         }
@@ -149,7 +154,7 @@ public class ByteBufferConfiguration {
             Tr.debug(this, tc, "Using default pool class with default config");
         }
         try {
-            return new WsByteBufferPoolManagerImpl();
+            return new WsByteBufferPoolManagerImpl(directByteBufferHelper);
         } catch (WsBBConfigException e) {
             // shouldn't be possible with default config...
             FFDCFilter.processException(e, getClass().getName() + ".createBufferManager", "2");

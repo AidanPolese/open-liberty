@@ -1,0 +1,31 @@
+# For information on bnd syntax, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Database Connectivity
+Bundle-SymbolicName: com.ibm.ws.jdbc.4.0
+Bundle-Description: Database connectivity infrastructure, version ${bVersion}
+
+WS-TraceGroup: RRA
+
+Import-Package: \
+    com.ibm.ws.jdbc.osgi, \
+	com.ibm.ws.rsadapter.jdbc, \
+	com.ibm.ws.rsadapter.spi
+
+Export-Package: \
+  com.ibm.ws.jdbc.osgi.v40
+  
+Service-Component: \
+  com.ibm.ws.jdbc.v40; \
+    implementation:=com.ibm.ws.jdbc.osgi.v40.JDBCRuntimeVersion40; \
+    provide:=com.ibm.ws.jdbc.osgi.JDBCRuntimeVersion; \
+    properties:="version=4.0,service.ranking:Integer=40"
+
+-buildpath: \
+	com.ibm.websphere.javaee.connector.1.6;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.ws.jdbc;version=latest,\
+	com.ibm.websphere.appserver.spi.logging, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

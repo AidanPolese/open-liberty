@@ -1,0 +1,13 @@
+<project name="scimt" default="scimt" basedir="/com.ibm.ws.security.wim.scim/src/com/ibm/ws/security/wim/scim/parser">
+
+  <property name="javacc.home" value="C:/software/javacc-6.0/"/>
+
+  <target name="scimt" description="Builds 'scimt'">
+    
+    <jjtree target="FilterInterpreter.jjt" outputdirectory="." javacchome="${javacc.home}"/>
+
+    <javacc target="FilterInterpreter.jj" outputdirectory="." javacchome="${javacc.home}"/>
+
+  </target>
+
+</project>

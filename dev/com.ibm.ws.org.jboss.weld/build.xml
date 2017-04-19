@@ -3,6 +3,6 @@
     <import file="../ant_build/public_imports/rejar_imports.xml"/>
     
     <target name="package"> 
-    	<bndPackage version="1.0" original.jar.name="org.jboss.weld" original.jar.version="2.4.2" bnd.classpath="lib/weld-osgi-bundle-2.4.2.SP1.jar" bnd.file="bnd.bnd"  />
+    	<bndPackage version="1.0" original.jar.name="org.jboss.weld" original.jar.version="2.4.3" bnd.classpath="lib/weld-osgi-bundle-2.4.3.Final.jar" bnd.file="bnd.bnd"  />
     </target>
 </project>

@@ -39,10 +39,9 @@ import com.ibm.ws.channelfw.internal.ChannelFrameworkConstants;
  */
 public class EndPointMgrImpl implements EndPointMgr {
     /** Trace service */
-    private static final TraceComponent tc =
-                    Tr.register(EndPointMgrImpl.class,
-                                ChannelFrameworkConstants.BASE_TRACE_NAME,
-                                ChannelFrameworkConstants.BASE_BUNDLE);
+    private static final TraceComponent tc = Tr.register(EndPointMgrImpl.class,
+                                                         ChannelFrameworkConstants.BASE_TRACE_NAME,
+                                                         ChannelFrameworkConstants.BASE_BUNDLE);
     /**
      * Name key to be used in the jmx.objectname
      */
@@ -82,7 +81,7 @@ public class EndPointMgrImpl implements EndPointMgr {
 
     /**
      * Access the singleton instance of this class, creating if necessary.
-     * 
+     *
      * @return EndPointMgrImpl
      */
     public static EndPointMgr getRef() {
@@ -95,7 +94,7 @@ public class EndPointMgrImpl implements EndPointMgr {
 
     /**
      * Construct the endpoint MBean object name.
-     * 
+     *
      * @param name endpoint name
      *            WebSphere:feature=channelfw,type=endpoint,name=name
      * @return the value used in jmx.objectname property
@@ -118,11 +117,12 @@ public class EndPointMgrImpl implements EndPointMgr {
      */
     private ServiceRegistration<DynamicMBean> registerMBeanAsService(String name, EndPointInfo endpoint) {
         return bundleContext.registerService(DynamicMBean.class, endpoint, createMBeanServiceProperties(name, endpoint));
+
     }
 
     /**
      * Register an endpoint MBean and publish it.
-     * 
+     *
      * @param endpoint
      */
     private void registerEndpointMBean(String name, EndPointInfo ep) {
@@ -130,14 +130,14 @@ public class EndPointMgrImpl implements EndPointMgr {
     }
 
     /**
-     * Update the properties of a registered endpoint MBean and publish it.
-     * 
+     * Unregister and register the endpoint MBean and publish it.
+     *
      * @param endpoint
      */
     private void updateEndpointMBean(String name, EndPointInfo ep) {
-        ServiceRegistration<DynamicMBean> reg = endpointMBeans.get(name);
-        if (reg != null)
-            reg.setProperties(createMBeanServiceProperties(name, ep));
+        unregisterMBeanInService(name);
+        registerEndpointMBean(name, ep);
+        this.endpoints.put(name, ep);
     }
 
     /**
@@ -169,7 +169,7 @@ public class EndPointMgrImpl implements EndPointMgr {
         try {
             EndPointInfo ep = new EndPointInfo(name, host, port);
             synchronized (this.endpoints) {
-                // if the endpoint with the same name already exists, 
+                // if the endpoint with the same name already exists,
                 //    - unregister the mbean from service registry
                 //    - delete the mbean from Atlas
                 if (this.endpoints.containsKey(name)) {
@@ -201,7 +201,7 @@ public class EndPointMgrImpl implements EndPointMgr {
     /**
      * If the MBean was registered, unpublish and unregister, and finally
      * remove it from the map of registered MBeans.
-     * 
+     *
      * @param name endpoint name of the mbean to be unregistered
      */
     private void unregisterMBeanInService(String name) {
@@ -215,7 +215,7 @@ public class EndPointMgrImpl implements EndPointMgr {
 
     /**
      * Delete the endpoint that matches the provided name.
-     * 
+     *
      * @param name
      */
     @Override

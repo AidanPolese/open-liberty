@@ -1,0 +1,11 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: JMS DefaultConnectionFactory 
+Bundle-SymbolicName: com.ibm.ws.messaging.jms.defaultresource
+Bundle-Description: JMS DefaultConnectionFactory: Private feature to enable DefaultConnectionFactory; version=${bVersion}
+
+IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml
+
+Include-Resource: \
+    OSGI-INF=resources/OSGI-INF

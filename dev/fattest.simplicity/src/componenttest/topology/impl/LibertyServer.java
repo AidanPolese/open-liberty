@@ -401,6 +401,8 @@ public class LibertyServer implements LogMonitorClient {
 
     protected long lastConfigUpdate = 0; // Time stamp (in millis) of the last configuration update
 
+    protected Map<String, String> additionalSystemProperties = null;
+
     protected String relativeLogsRoot = "/logs/"; // this will be appended to logsRoot in setUp
     protected String consoleFileName = DEFAULT_CONSOLE_FILE; // Console log file name
     protected String messageFileName = DEFAULT_MSG_FILE; // Messages log file name (optionally changed by the FAT)
@@ -1052,6 +1054,10 @@ public class LibertyServer implements LogMonitorClient {
             preStartServerLogsTidy();
 
         final Properties envVars = new Properties();
+
+        if (this.additionalSystemProperties != null && this.additionalSystemProperties.size() > 0) {
+            envVars.putAll(this.additionalSystemProperties);
+        }
         checkPortsOpen(true);
 
         final String cmd = installRoot + "/bin/server";
@@ -2578,7 +2584,6 @@ public class LibertyServer implements LogMonitorClient {
             for (RemoteFile file : files) {
                 String filename = file.getAbsolutePath();
                 if (filename.endsWith(".dmp")) {
-
                     Properties envVars = new Properties();
                     envVars.setProperty("JAVA_HOME", machineJava);
                     Log.info(c, "runJextract", "Running jextract on file: " + filename);
@@ -2611,7 +2616,6 @@ public class LibertyServer implements LogMonitorClient {
      * @throws Exception
      */
     protected void recursivelyCopyDirectory(RemoteFile remoteDirectory, LocalFile destination, boolean ignoreFailures, boolean skipArchives, boolean moveFile) throws Exception {
-        String method = "recursivelyCopyDirectory";
         destination.mkdirs();
 
         ArrayList<String> logs = new ArrayList<String>();
@@ -6174,6 +6178,14 @@ public class LibertyServer implements LogMonitorClient {
 
     public void setConsoleLogName(String consoleLogName) {
         this.consoleFileName = consoleLogName;
+    }
+
+    public void setAdditionalSystemProperties(Map<String, String> additionalSystemProperties) {
+        this.additionalSystemProperties = additionalSystemProperties;
+    }
+
+    public void clearAdditionalSystemProperties() {
+        this.additionalSystemProperties.clear();
     }
 
     /*

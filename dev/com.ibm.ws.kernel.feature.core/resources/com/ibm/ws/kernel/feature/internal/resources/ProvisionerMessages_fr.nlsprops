@@ -45,7 +45,7 @@ UPDATE_LIFECYCLE_EXCEPTIONS_ERROR=CWWKF0005E: Une exception a \u00e9t\u00e9 g\u0
 UPDATE_LIFECYCLE_EXCEPTIONS_ERROR.explanation=Une exception s'est produite lors du changement d'\u00e9tat d'un bundle g\u00e9r\u00e9 par le gestionnaire de fonctions.
 UPDATE_LIFECYCLE_EXCEPTIONS_ERROR.useraction=Reportez-vous \u00e0 l'exception r\u00e9f\u00e9renc\u00e9e et aux enregistrements FFDC g\u00e9n\u00e9r\u00e9s pour plus d'informations.
 
-UPDATE_BUNDLE_CACHE_WARNING=CWWKF0006W: Le syst\u00e8me n''a pas pu lire ni stocker la liste des bundles de fonctions charg\u00e9s pour cette instance de serveur dans {0}. Le cache de bundles pour d\u00e9marrage \u00e0 chaud a donc \u00e9t\u00e9 d\u00e9sactiv\u00e9. Exception : {1}.
+UPDATE_BUNDLE_CACHE_WARNING=CWWKF0006W: Le syst\u00e8me n''a pas pu lire ni stocker la liste des bundles de fonctions charg\u00e9s pour cette instance de serveur dans {0}. Le cache de bundles pour d\u00e9marrage \u00e0 chaud a donc \u00e9t\u00e9 d\u00e9sactiv\u00e9. Exception : {1}
 UPDATE_BUNDLE_CACHE_WARNING.explanation=Le fichier du cache de bundles n'a pas pu \u00eatre cr\u00e9\u00e9 ni lu. Reportez-vous \u00e0 l'exception r\u00e9f\u00e9renc\u00e9e pour plus d'informations. 
 UPDATE_BUNDLE_CACHE_WARNING.useraction=V\u00e9rifiez que le r\u00e9pertoire du serveur et son sous-r\u00e9pertoire workarea sont accessibles en \u00e9criture. 
 
@@ -77,7 +77,7 @@ FEATURES_REMOVED=CWWKF0013I: Le serveur a supprim\u00e9 les fonctions suivantes 
 FEATURES_REMOVED.explanation=Le serveur a supprim\u00e9 un ensemble de fonctions.
 FEATURES_REMOVED.useraction=Aucune action n'est requise.
 
-TEST_FIX_DETECTED=CWWKF0014W: Les correctifs de test suivants sont actifs dans l''environnement d''ex\u00e9cution du serveur : {0}. Pour une liste compl\u00e8te des correctifs install\u00e9s, ex\u00e9cutez : productInfo version --ifixes
+TEST_FIX_DETECTED=CWWKF0014W: Les correctifs de test suivants sont actifs dans l''environnement d''ex\u00e9cution du serveur : {0}.  Pour une liste compl\u00e8te des correctifs install\u00e9s, ex\u00e9cutez : productInfo version --ifixes
 TEST_FIX_DETECTED.explanation=Les bundles OSGi charg\u00e9s dans l'environnement d'ex\u00e9cution ont \u00e9t\u00e9 modifi\u00e9s par certains des correctifs de test install\u00e9s. Une liste de tous les correctifs install\u00e9s peut \u00eatre obtenue \u00e0 l'aide de la commande : productInfo version --ifixes
 TEST_FIX_DETECTED.useraction=Aucun correctif de test ne doit \u00eatre install\u00e9 sur un serveur de production. Si vous utilisez un serveur de production, supprimez les correctifs de test et red\u00e9marrez le serveur.
 
@@ -109,7 +109,7 @@ SUPERSEDED_CONFIGURATION_ERROR.useraction=Assurez-vous que les attributs superse
 
 UPDATE_NOT_PUBLIC_FEATURE_ERROR=CWWKF0021E: La fonction {0} sp\u00e9cifi\u00e9e dans le fichier server.xml n''est pas une fonction publique ; par cons\u00e9quent, elle ne sera pas ex\u00e9cut\u00e9e par le serveur.
 UPDATE_NOT_PUBLIC_FEATURE_ERROR.explanation=Seules les fonctions peuvent \u00eatre sp\u00e9cifi\u00e9s dans server.xml.
-UPDATE_NOT_PUBLIC_FEATURE_ERROR.useraction=Modifiez la configuration de serveur en sp\u00e9cifiant une fonction publique qui fournit la fonction requise.  Si vous d\u00e9veloppez une fonction que les utilisateurs doivent indiquer dans leur configuration de serveur, modifiez-la en lui affectant de la visibilit\u00e9 publique. Pour ce  faire, ajoutez visibility=public en tant qu'attribut \u00e0 l'\u00e9l\u00e9ment Subsystem-SymbolicName de la fonction.
+UPDATE_NOT_PUBLIC_FEATURE_ERROR.useraction=Modifiez la configuration de serveur en sp\u00e9cifiant une fonction publique qui fournit la fonction requise.  Si vous d\u00e9veloppez une fonction que les utilisateurs doivent indiquer dans leur configuration de serveur, modifiez-la en lui affectant de la visibilit\u00e9 publique. Pour ce faire, ajoutez visibility=public en tant qu'attribut \u00e0 l'\u00e9l\u00e9ment Subsystem-SymbolicName de la fonction.
 
 UNSUPPORTED_FEATURE_VERSION=CWWKF0022E: La fonction {0} n''est pas prise en charge. L''en-t\u00eate IBM-Feature-Version a pour valeur {1}.
 UNSUPPORTED_FEATURE_VERSION.explanation=Le serveur ne prend en charge que les fonctions dont l'en-t\u00eate IBM-Feature-Version a pour valeur 2. Une valeur sup\u00e9rieure \u00e0 2 indique que la fonction est destin\u00e9e \u00e0 \u00eatre utilis\u00e9e avec une version ult\u00e9rieure du produit.
@@ -158,7 +158,7 @@ FEATURE_JAVA_LEVEL_NOT_MET_ERROR.explanation=Pour utiliser la fonction r\u00e9pe
 FEATURE_JAVA_LEVEL_NOT_MET_ERROR.useraction=Mettez \u00e0 niveau votre environnement d'ex\u00e9cution Java vers la version sp\u00e9cifi\u00e9e ou une version plus r\u00e9cente.
 
 UPDATE_CONFLICT_FEATURE_ERROR=CWWKF0033E: Les fonctions de singleton {0} et {1} ne peuvent pas \u00eatre charg\u00e9es en m\u00eame temps.  Les fonctions configur\u00e9es {2} et {3} incluent une ou plusieurs fonctions qui causent le conflit. Votre configuration n''est pas prise en charge. Mettez \u00e0 jour le fichier server.xml afin de supprimer les fonctions incompatibles.
-UPDATE_CONFLICT_FEATURE_ERROR.explanation=Plusieurs versions d'une fonction de  singleton ne peuvent pas \u00eatre charg\u00e9es en m\u00eame temps.  Ce conflit se produit si deux versions d'une fonction de singleton sont configur\u00e9es directement dans la configuration serveur. Ou bien, si les fonctions configur\u00e9es incluent diff\u00e9rentes versions d'une fonction de singleton et ne peuvent pas tol\u00e9rer une version commune de la fonction de singleton.
+UPDATE_CONFLICT_FEATURE_ERROR.explanation=Plusieurs versions d'une fonction de singleton ne peuvent pas \u00eatre charg\u00e9es en m\u00eame temps.  Ce conflit se produit si deux versions d'une fonction de singleton sont configur\u00e9es directement dans la configuration serveur. Ou bien, si les fonctions configur\u00e9es incluent diff\u00e9rentes versions d'une fonction de singleton et ne peuvent pas tol\u00e9rer une version commune de la fonction de singleton.
 UPDATE_CONFLICT_FEATURE_ERROR.useraction=Essayez d'indiquer une version diff\u00e9rente des fonctions configur\u00e9es qui ont provoqu\u00e9 le conflit dans server.xml.  Si aucune autre version n'est disponible, les fonctions configur\u00e9es ne sont pas compatibles entre elles et ne peuvent pas \u00eatre configur\u00e9es en m\u00eame temps.
 
 FEATURES_ADDED_CLIENT=CWWKF0034I: Le client a install\u00e9 les fonctions suivantes : {0}.
@@ -177,7 +177,7 @@ SERVER_GATHER_FEATURES.useraction=Aucune action n'est requise.
 
 UPDATE_NOT_PUBLIC_FEATURE_CLIENT_ERROR=CWWKF0037E: La fonction {0} sp\u00e9cifi\u00e9e dans le fichier client.xml n''est pas une fonction publique et elle ne sera pas ex\u00e9cut\u00e9e par le client.
 UPDATE_NOT_PUBLIC_FEATURE_CLIENT_ERROR.explanation=Vous pouvez uniquement indiquer des fonctions publiques dans le fichier client.xml.
-UPDATE_NOT_PUBLIC_FEATURE_CLIENT_ERROR.useraction=Modifiez la configuration de client en sp\u00e9cifiant une fonction publique qui fournit la fonction requise.  Si vous d\u00e9veloppez une fonction que les utilisateurs doivent indiquer dans leur configuration de client, modifiez-la en lui affectant de la visibilit\u00e9 publique. Pour ce  faire, ajoutez visibility=public en tant qu'attribut \u00e0 l'\u00e9l\u00e9ment Subsystem-SymbolicName de la fonction.
+UPDATE_NOT_PUBLIC_FEATURE_CLIENT_ERROR.useraction=Modifiez la configuration de client en sp\u00e9cifiant une fonction publique qui fournit la fonction requise.  Si vous d\u00e9veloppez une fonction que les utilisateurs doivent indiquer dans leur configuration de client, modifiez-la en lui affectant de la visibilit\u00e9 publique. Pour ce faire, ajoutez visibility=public en tant qu'attribut \u00e0 l'\u00e9l\u00e9ment Subsystem-SymbolicName de la fonction.
 
 UPDATE_WRONG_PROCESS_TYPE_CONFIGURED_ERROR=CWWKF0038E: La fonction {0} sp\u00e9cifi\u00e9e dans le fichier {1} prend uniquement en charge les types de processus client ; par cons\u00e9quent, cette fonction n''est pas ex\u00e9cut\u00e9e par le processus serveur.
 UPDATE_WRONG_PROCESS_TYPE_CONFIGURED_ERROR.explanation=La fonction configur\u00e9e ne prend pas en charge le type de processus indiqu\u00e9.
@@ -196,7 +196,7 @@ UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_CLIENT_ERROR.explanation=La fonction config
 UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_CLIENT_ERROR.useraction=Retirez la fonction de la configuration ou modifiez le fichier manifeste de la fonction pour activer la prise en charge du type de processus souhait\u00e9.
 
 # CWWK042E  {0} = feature Name: {1} = server name 
-UPDATE_MISSING_CORE_FEATURE_ERROR=CWWKF0042E: Une d\u00e9finition de fonction est introuvable pour la fonction {0}. Essayez d''ex\u00e9cuter la commande, bin/installUtility install {0},  pour installer la fonction. Vous pouvez aussi ex\u00e9cuter la commande, bin/installUtility install {1}, pour installer toutes les fonctions qui sont r\u00e9f\u00e9renc\u00e9es par cette configuration.
+UPDATE_MISSING_CORE_FEATURE_ERROR=CWWKF0042E: Une d\u00e9finition de fonction est introuvable pour la fonction {0}.  Essayez d''ex\u00e9cuter la commande, bin/installUtility install {0},  pour installer la fonction. Vous pouvez aussi ex\u00e9cuter la commande, bin/installUtility install {1}, pour installer toutes les fonctions qui sont r\u00e9f\u00e9renc\u00e9es par cette configuration.
 UPDATE_MISSING_CORE_FEATURE_ERROR.explanation=Le gestionnaire de fonctions n'a pas trouv\u00e9 de d\u00e9finition pour la fonction sp\u00e9cifi\u00e9e.
 UPDATE_MISSING_CORE_FEATURE_ERROR.useraction=V\u00e9rifiez que le nom de la fonction sp\u00e9cifi\u00e9e est correct.  \
 V\u00e9rifiez \u00e9galement que la d\u00e9finition de fonction existe et qu'elle est lisible dans le r\u00e9pertoire lib/features. \
@@ -299,11 +299,11 @@ tool.missing.option.useraction=Ex\u00e9cutez \u00e0 nouveau la commande avec l'o
 
 tool.classpath.feature.not.found=CWWKF1026E: Fonction {0} inexistante.
 tool.classpath.feature.not.found.explanation=Une fonction inexistante a \u00e9t\u00e9 sp\u00e9cifi\u00e9e.
-tool.classpath.feature.not.found.useraction=Ex\u00e9cutez de nouveau la commande sans sans indiquer cette fonction. 
+tool.classpath.feature.not.found.useraction=Ex\u00e9cutez de nouveau la commande sans indiquer cette fonction. 
 
 tool.classpath.feature.not.public=CWWKF1027E: La fonction {0} n''est pas publique.
 tool.classpath.feature.not.public.explanation=Une fonction indiqu\u00e9e n'est pas publique.
-tool.classpath.feature.not.public.useraction=Ex\u00e9cutez de nouveau la commande sans sans indiquer cette fonction.
+tool.classpath.feature.not.public.useraction=Ex\u00e9cutez de nouveau la commande sans indiquer cette fonction.
 
 tool.classpath.wrong.drive=CWWKF1028E: Le fichier de sortie {0} doit se trouver sur la m\u00eame unit\u00e9 que le fichier {1}.
 tool.classpath.wrong.drive.explanation=Le fichier de sortie doit se trouver sur la m\u00eame unit\u00e9 que tous les fichiers qui sont r\u00e9f\u00e9renc\u00e9s par les fonctions sp\u00e9cifi\u00e9es.

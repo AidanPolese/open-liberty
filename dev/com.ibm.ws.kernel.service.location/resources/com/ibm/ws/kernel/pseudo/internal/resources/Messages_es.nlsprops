@@ -26,6 +26,6 @@
 # -------------------------------------------------------------------------------------------------
 
 jndi.not.installed=CWWKE0800W: Se ha intentado recuperar un contexto inicial para [{0}] pero no se ha configurado ninguna caracter\u00edstica JNDI.
-jndi.not.installed.explanation=La caracter\u00edstica JNDI proporciona un registro JNDI y programas de utilidad asociados. Esto es normalmente necesario si una aplicaci\u00f3n o una caracter\u00edstica debe buscar entradas en un contexto JNDI.
+jndi.not.installed.explanation=La caracter\u00edstica JNDI proporciona un registro JNDI y programas de utilidad asociados.  Esto es normalmente necesario si una aplicaci\u00f3n o una caracter\u00edstica debe buscar entradas en un contexto JNDI.
 jndi.not.installed.useraction=Aseg\u00farese de que se haya proporcionado una implementaci\u00f3n de JNDI (p. ej., configurando la caracter\u00edstica JNDI en la configuraci\u00f3n de este servidor).
 

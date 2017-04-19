@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2010, 2015
+# (C) COPYRIGHT International Business Machines Corp. 2010, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -500,6 +500,10 @@ LOG_VALIDATION_DONE=Se ha completado satisfactoriamente la validaci\u00f3n del a
 LOG_DELETING_TEMP_SERVER_DIR=Suprimiendo el directorio de servidor temporal {0}...
 LOG_NOT_DELETING_TEMP_SERVER_DIR=El directorio de servidor temporal {0} no se ha suprimido porque podr\u00eda contener informaci\u00f3n de error en el directorio logs. Si no necesita la informaci\u00f3n, puede suprimir manualmente el directorio {1}.
 LOG_CREATED_TEMP_SERVER_DIR=Se ha creado el directorio de servidor {0} temporal.
+
+LOG_CANNOT_CLOSE_OBJECT=No se pueden suprimir los archivos temporales.
+LOG_CANNOT_CLOSE_OBJECT.explanation=El ejemplo requiere Java 7 o superior para suprimir el directorio installTmp.
+LOG_CANNOT_CLOSE_OBJECT.action=Elimine el directorio installTmp manualmente o utilice Java 7 o superior.
 
 LOG_PASSWORD_NOT_ENCODED_PROXY=La contrase\u00f1a para el proxy siguiente no est\u00e1 codificada: {0}. Puede codificar la contrase\u00f1a ejecutando el mandato securityUtility encode con la opci\u00f3n --encoding establecida en un tipo de codificaci\u00f3n soportada, que son xor (valor predeterminado), aes y hash. Por ejemplo: securityUtility encode --encoding=aes Contrase\u00f1aProxy
 LOG_PENDING_UNINSTALLING_FEATURE=Caracter\u00edsticas a desinstalar:

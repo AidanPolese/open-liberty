@@ -28,9 +28,6 @@ package com.ibm.io.async;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import org.osgi.service.component.annotations.Reference;
-
-import com.ibm.websphere.channelfw.osgi.CHFWBundle;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
@@ -92,9 +89,6 @@ public class CompletionKey {
     private long channelIdentifier;
     private long callIdentifier;
 
-    /** Service for access to WsByteBufferManager */
-    private volatile CHFWBundle chfwBundle;
-
     /**
      * Constructor.
      */
@@ -132,41 +126,8 @@ public class CompletionKey {
         this.bufferCount = bufferCount;
     }
 
-    /**
-     * DS method for setting the required channel framework service.
-     * 
-     * @param bundle
-     */
-    @Reference(name = "chfwBundle")
-    protected void setChfwBundle(CHFWBundle bundle) {
-        chfwBundle = bundle;
-    }
-
-    /**
-     * DS method for removing the reference to the channel framework.
-     * 
-     * @param bundle
-     */
-    protected void unsetChfwBundle(CHFWBundle bundle) {
-        if (bundle == chfwBundle) {
-            chfwBundle = null;
-        }
-    }
-
-    /**
-     * Access the current reference to the bytebuffer pool manager.
-     * 
-     * @return WsByteBufferPoolManager
-     */
-    protected WsByteBufferPoolManager getBufferManager() {
-        if (null == this.chfwBundle) {
-            return ChannelFrameworkFactory.getBufferManager();
-        }
-        return this.chfwBundle.getBufferManager();
-    }
-
     protected ByteBuffer allocateDirect(int bufferLength) {
-        WsByteBufferPoolManager wsByteBufferManager = this.getBufferManager();
+        WsByteBufferPoolManager wsByteBufferManager = ChannelFrameworkFactory.getBufferManager();
         return wsByteBufferManager.allocateDirect(bufferLength).getWrappedByteBufferNonSafe();
     }
 
@@ -403,53 +364,6 @@ public class CompletionKey {
         /** Constructor */
         LocalByteBuffer(int size) {
             this.data = new byte[size];
-        }
-
-        /** Absolute get (byte). Caller must verify index is valid. */
-        byte get(int index) {
-            return data[index];
-        }
-
-        /** Absolute put (byte). Caller must verify index is valid. */
-        void put(int index, byte value) {
-            data[index] = value;
-        }
-
-        /** Absolute get (byte[]). Caller must verify index/length is valid. */
-        void get(int index, byte[] dst, int offset, int length) {
-            System.arraycopy(data, index, dst, offset, length);
-        }
-
-        /** Absolute put (byte[]). Caller must verify index/length is valid. */
-        void put(int index, byte[] value, int offset, int length) {
-            System.arraycopy(value, offset, data, index, length);
-        }
-
-        /** Absolute get (short). Caller must verify index/length is valid. */
-        short getShort(int index) {
-            return (short) (((short) ((data[index + 1] & 0xFF) << 0)) + ((short) ((data[index] & 0xFF) << 8)));
-        }
-
-        /** Absolute put (short). Caller must verify index/length is valid. */
-        void putShort(int index, short value) {
-            data[index + 1] = (byte) (value >>> 0);
-            data[index + 0] = (byte) (value >>> 8);
-        }
-
-        /** Absolute get (int). Caller must verify index/length is valid. */
-        int getInt(int index) {
-            return ((data[index + 3] & 0xFF) << 0) +
-                   ((data[index + 2] & 0xFF) << 8) +
-                   ((data[index + 1] & 0xFF) << 16) +
-                   ((data[index + 0]) << 24);
-        }
-
-        /** Absoulte put (int). Caller must verify index/length is valid. */
-        void putInt(int index, int value) {
-            data[index + 3] = (byte) (value >>> 0);
-            data[index + 2] = (byte) (value >>> 8);
-            data[index + 1] = (byte) (value >>> 16);
-            data[index + 0] = (byte) (value >>> 24);
         }
 
         /** Absolute get (long). Caller must verify index/length is valid. */

@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2010, 2015
+# (C) COPYRIGHT International Business Machines Corp. 2010, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -500,6 +500,10 @@ LOG_VALIDATION_DONE=A konfigur\u00e1ci\u00f3s f\u00e1jl \u00e9rv\u00e9nyes\u00ed
 LOG_DELETING_TEMP_SERVER_DIR=A(z) {0} ideiglenes kiszolg\u00e1l\u00f3 k\u00f6nyvt\u00e1r t\u00f6rl\u00e9se...
 LOG_NOT_DELETING_TEMP_SERVER_DIR=A(z) {0} ideiglenes kiszolg\u00e1l\u00f3 k\u00f6nyvt\u00e1r nem lett t\u00f6r\u00f6lve, mert a napl\u00f3k\u00f6nyvt\u00e1rban hiba inform\u00e1ci\u00f3kat tartalmazhat. Ha nincs sz\u00fcks\u00e9ge ezekre az inform\u00e1ci\u00f3kra, akkor k\u00e9zzel t\u00f6r\u00f6lheti a(z) {1} k\u00f6nyvt\u00e1rat.
 LOG_CREATED_TEMP_SERVER_DIR=A(z) {0} ideiglenes kiszolg\u00e1l\u00f3 k\u00f6nyvt\u00e1r l\u00e9trehoz\u00e1sra ker\u00fclt.
+
+LOG_CANNOT_CLOSE_OBJECT=Az ideiglenes f\u00e1jlok nem t\u00f6r\u00f6lhet\u0151k.
+LOG_CANNOT_CLOSE_OBJECT.explanation=A minta Java 7 vagy \u00fajabb v\u00e1ltozatot ig\u00e9nyel az installTmp k\u00f6nyvt\u00e1r t\u00f6rl\u00e9s\u00e9hez.
+LOG_CANNOT_CLOSE_OBJECT.action=T\u00e1vol\u00edtsa el az installTmp k\u00f6nyvt\u00e1rat manu\u00e1lisan, illetve haszn\u00e1ljon Java 7 vagy \u00fajabb v\u00e1ltozatot.
 
 LOG_PASSWORD_NOT_ENCODED_PROXY=A k\u00f6vetkez\u0151 proxy jelszava nincs k\u00f3dolva: {0}. A jelsz\u00f3 k\u00f3dol\u00e1s\u00e1hoz futtassa a securityUtility encode parancsot az --encoding param\u00e9ter be\u00e1ll\u00edt\u00e1s\u00e1val egy t\u00e1mogatott k\u00f3dol\u00e1si t\u00edpusra, ami xor (alap\u00e9rtelmez\u00e9s), aes, \u00e9s hash lehet. P\u00e9ld\u00e1ul: securityUtility encode --encoding=aes proxyPassword
 LOG_PENDING_UNINSTALLING_FEATURE=Elt\u00e1vol\u00edtand\u00f3 szolg\u00e1ltat\u00e1sok:

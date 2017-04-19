@@ -1,0 +1,31 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2015.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security.authorization.jacc.ejb/resources/com/ibm/ws/security/authorization/jacc/ejb/resources/JaccEjbAuthorizationMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Application Security JACC Authorization
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKS2890 - CWWKS2899
+
+JACC_EJB_GET_POLICYCONFIGURATION_FAILURE=CWWKS2890E: El servicio JACC no puede obtener el objeto PolicyConfiguration con el contextID {0}. La excepci\u00f3n es {1}.
+JACC_EJB_GET_POLICYCONFIGURATION_FAILURE.explanation=El servicio JACC no puede obtener el objeto PolicyConfiguration del proveedor de JACC. Esto podr\u00eda ser un error grave del proveedor de JACC.
+JACC_EJB_GET_POLICYCONFIGURATION_FAILURE.useraction=Revise los registros de proveedor de JACC y los registros del servidor para obtener m\u00e1s informaci\u00f3n.
+
+JACC_EJB_IMPLIES_FAILURE=CWWKS2891E: La autorizaci\u00f3n para el recurso con el contextID {0} ha fallado debido a la excepci\u00f3n {1}.
+JACC_EJB_IMPLIES_FAILURE.explanation=La autorizaci\u00f3n para el recurso especificado ha fallado.
+JACC_EJB_IMPLIES_FAILURE.useraction=Revise los registros de proveedor de JACC y los registros del servidor para obtener m\u00e1s informaci\u00f3n.
+
+JACC_EJB_PERMISSION_PROPAGATION_FAILURE=CWWKS2892E: El servicio JACC no puede propagar los roles de seguridad EJB del contextID {0} al proveedor de JACC debido a la excepci\u00f3n {1}.
+JACC_EJB_PERMISSION_PROPAGATION_FAILURE.explanation=El servicio JACC no puede propagar los roles de seguridad EJB al proveedor de JACC debido a la excepci\u00f3n inesperada.
+JACC_EJB_PERMISSION_PROPAGATION_FAILURE.useraction=Revise los registros de proveedor de JACC y los registros del servidor para obtener m\u00e1s informaci\u00f3n.
+
+JACC_EJB_SPI_PARAMETER_ERROR=CWWKS2893E: El objeto de par\u00e1metro {0} del m\u00e9todo {1} no es v\u00e1lido. El objeto esperado del par\u00e1metro es {2}.
+JACC_EJB_SPI_PARAMETER_ERROR.explanation=El servicio JACC no puede completar la solicitud debido a que el objeto del par\u00e1metro no es v\u00e1lido. Se trata de un error interno.
+JACC_EJB_SPI_PARAMETER_ERROR.useraction=Se trata de un error interno. Si el problema persiste, consulte la informaci\u00f3n sobre determinaci\u00f3n de problemas en la p\u00e1gina de soporte de WebSphere Application Server en http://www.ibm.com/software/webservers/appserv/was/support/. 

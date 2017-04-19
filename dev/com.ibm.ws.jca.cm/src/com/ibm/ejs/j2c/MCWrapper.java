@@ -44,7 +44,7 @@ import com.ibm.ws.j2c.TranWrapper;
 import com.ibm.ws.jca.adapter.WSManagedConnection;
 import com.ibm.ws.jca.adapter.WSManagedConnectionFactory;
 import com.ibm.ws.tx.embeddable.RecoverableXAResourceAccessor;
-import com.ibm.ws.tx.zos.RRSXAResourceFactory;
+import com.ibm.ws.tx.rrs.RRSXAResourceFactory;
 
 /**
  * Scope : Server

@@ -942,7 +942,6 @@ public class JSONConverter {
      * @see #readJMX(InputStream)
      */
     public void writeJMX(OutputStream out, JMXServerInfo value) throws IOException {
-        assert value != null;
         writeStartObject(out);
         writeIntField(out, OM_VERSION, value.version);
         writeStringField(out, OM_MBEANS, value.mbeansURL);
@@ -1000,7 +999,6 @@ public class JSONConverter {
      */
     public void writeObjectInstance(OutputStream out, ObjectInstanceWrapper value) throws IOException {
         // ObjectInstance has no known sub-class.
-        assert value != null && value.objectInstance != null;
         writeStartObject(out);
         writeObjectNameField(out, OM_OBJECTNAME, value.objectInstance.getObjectName());
         writeStringField(out, OM_CLASSNAME, value.objectInstance.getClassName());
@@ -1033,7 +1031,6 @@ public class JSONConverter {
      * @see #writeObjectInstance(OutputStream, ObjectInstanceWrapper)
      */
     public void writeObjectInstanceArray(OutputStream out, ObjectInstanceWrapper[] value) throws IOException {
-        assert value != null;
         writeStartArray(out);
         for (ObjectInstanceWrapper item : value) {
             writeArrayItem(out);
@@ -1076,7 +1073,6 @@ public class JSONConverter {
      * @see #readMBeanQuery(InputStream)
      */
     public void writeMBeanQuery(OutputStream out, MBeanQuery value) throws IOException {
-        assert value != null;
         writeStartObject(out);
         writeObjectNameField(out, OM_OBJECTNAME, value.objectName);
         // TODO: Produce proper JSON for QueryExp?
@@ -1126,7 +1122,6 @@ public class JSONConverter {
      * @see #readCreateMBean(InputStream)
      */
     public void writeCreateMBean(OutputStream out, CreateMBean value) throws IOException {
-        assert value != null;
         writeStartObject(out);
         writeStringField(out, OM_CLASSNAME, value.className);
         writeObjectNameField(out, OM_OBJECTNAME, value.objectName);
@@ -1239,7 +1234,6 @@ public class JSONConverter {
         // Model has more convenience methods for retrieving individual
         // items, and methods to set the descriptors.
         // Same for subclasses of the various items.
-        assert value != null && value.mbeanInfo != null && value.attributeURLs != null && value.operationURLs != null;
         writeStartObject(out);
         if (USE_BASE64_FOR_MBEANINFO) {
             writeSerializedField(out, OM_SERIALIZED, value.mbeanInfo);
@@ -1341,7 +1335,6 @@ public class JSONConverter {
         writeStartArray(out);
         if (value != null) {
             for (Attribute item : value.asList()) {
-                assert item != null;
                 writeArrayItem(out);
                 writeStartObject(out);
                 writeStringField(out, OM_NAME, item.getName());
@@ -1390,7 +1383,6 @@ public class JSONConverter {
      * @see #readInvocation(InputStream)
      */
     public void writeInvocation(OutputStream out, Invocation value) throws IOException {
-        assert value != null;
         writeStartObject(out);
         writePOJOArrayField(out, OM_PARAMS, value.params);
         writeStringArrayField(out, OM_SIGNATURE, value.signature);
@@ -1429,7 +1421,6 @@ public class JSONConverter {
      * @see #readNotificationArea(InputStream)
      */
     public void writeNotificationArea(OutputStream out, NotificationArea value) throws IOException {
-        assert value != null;
         writeStartObject(out);
         writeStringField(out, OM_REGISTRATIONS, value.registrationsURL);
         writeStringField(out, OM_SERVERREGISTRATIONS, value.serverRegistrationsURL);
@@ -1473,7 +1464,6 @@ public class JSONConverter {
      * @see #writeNotificationFilters(OutputStream, NotificationFilter[])
      */
     public void writeNotificationRegistration(OutputStream out, NotificationRegistration value) throws IOException {
-        assert value != null;
         writeStartObject(out);
         writeObjectNameField(out, OM_OBJECTNAME, value.objectName);
         writeNotificationFiltersField(out, OM_FILTERS, value.filters);
@@ -1517,7 +1507,6 @@ public class JSONConverter {
      * @see #readServerNotificationRegistration(InputStream)
      */
     public void writeServerNotificationRegistration(OutputStream out, ServerNotificationRegistration value) throws IOException {
-        assert value != null;
         writeStartObject(out);
         boolean hasOperation = value.operation != null;
         if (hasOperation) {
@@ -1694,9 +1683,7 @@ public class JSONConverter {
         }
 
         for (NotificationRecord nr : value) {
-            assert nr != null;
             Notification item = nr.getNotification();
-            assert item != null;
             writeArrayItem(out);
             writeStartObject(out);
 
@@ -1726,10 +1713,6 @@ public class JSONConverter {
                 String hostName = (String) routingInfo.get(ClientProvider.ROUTING_KEY_HOST_NAME);
                 String serverName = (String) routingInfo.get(ClientProvider.ROUTING_KEY_SERVER_NAME);
                 String serverUserDir = (String) routingInfo.get(ClientProvider.ROUTING_KEY_SERVER_USER_DIR);
-
-                assert hostName != null;
-                assert serverName != null;
-                assert serverUserDir != null;
 
                 writeStringField(out, OM_HOSTNAME, hostName);
                 writeStringField(out, OM_SERVERNAME, serverName);
@@ -1914,7 +1897,6 @@ public class JSONConverter {
      * @see #readNotificationSettings(InputStream)
      */
     public void writeNotificationSettings(OutputStream out, NotificationSettings value) throws IOException {
-        assert value != null;
         writeStartObject(out);
         writeIntField(out, OM_DELIVERYINTERVAL, value.deliveryInterval);
         writeIntField(out, OM_INBOXEXPIRTY, value.inboxExpiry);
@@ -1951,7 +1933,6 @@ public class JSONConverter {
      * @see #readThrowable(InputStream)
      */
     public void writeThrowable(OutputStream out, Throwable value) throws IOException {
-        assert value != null;
         writeStartObject(out);
         writeSerializedField(out, OM_THROWABLE, value);
         StringWriter sw = new StringWriter();
@@ -4002,7 +3983,6 @@ public class JSONConverter {
             writeBooleanField(out, OM_ISIS, item.isIs());
             writeBooleanField(out, OM_ISREADABLE, item.isReadable());
             writeBooleanField(out, OM_ISWRITABLE, item.isWritable());
-            assert urls.containsKey(item.getName());
             writeStringField(out, OM_URL, urls.get(item.getName()));
             writeEndObject(out);
         }
@@ -4183,7 +4163,6 @@ public class JSONConverter {
             writeIntField(out, OM_IMPACT, item.getImpact());
             writeStringField(out, OM_RETURNTYPE, item.getReturnType());
             writeParameters(out, OM_SIGNATURE, item.getSignature());
-            assert urls.containsKey(item.getName());
             writeStringField(out, OM_URL, urls.get(item.getName()));
             writeEndObject(out);
         }
@@ -4238,7 +4217,6 @@ public class JSONConverter {
     }
 
     private void writeNotificationFilterInternal(OutputStream out, NotificationFilter value, boolean allowOther) throws IOException {
-        assert value != null;
         writeStartObject(out);
         Class<?> clazz = value.getClass();
         writeSimpleStringField(out, OM_CLASSNAME, clazz.getName());
@@ -4284,7 +4262,6 @@ public class JSONConverter {
             writeSerializedField(out, OM_SERIALIZED, value);
         } else {
             // The caller guarantees that only the known classes are used.
-            assert false;
         }
         writeEndObject(out);
     }

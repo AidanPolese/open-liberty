@@ -1,0 +1,47 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: EJB EPC enablement feature for JPA
+Bundle-SymbolicName: com.ibm.ws.ejbcontainer.jpa
+Bundle-Description: EJB EPC enablement feature for JPA; version=${bVersion}
+
+WS-TraceGroup: EJBContainer
+
+Private-Package: \
+  com.ibm.ws.ejbcontainer.jpa.internal.*,\
+  com.ibm.ws.ejbcontainer.jpa.resources
+  
+Export-Package: \
+  com.ibm.ws.ejbcontainer.jpa.injection.factory
+  
+Service-Component:\
+  com.ibm.ws.ejbcontainer.jpa.runtime;\
+    implementation:=com.ibm.ws.ejbcontainer.jpa.internal.EJBJPAContainerImpl;\
+    provide:='com.ibm.ws.ejbcontainer.runtime.EJBJPAContainer';\
+    jpaComponent/setJPAComponent=com.ibm.ws.jpa.JPAComponent;\
+    ejbContainer/setEJBContainer=com.ibm.ws.ejbcontainer.osgi.EJBContainer;\
+    properties:="service.vendor=IBM",\
+  com.ibm.ws.ejbcontainer.jpa.context;\
+    implementation:=com.ibm.ws.ejbcontainer.jpa.internal.JPAContextAccessor;\
+    provide:='com.ibm.ws.jpa.JPAExPcBindingContextAccessor';\
+    ejbContainer/setEJBContainer=com.ibm.ws.ejbcontainer.osgi.EJBContainer;\
+    properties:="service.vendor=IBM",\
+  com.ibm.ws.ejbcontainer.jpa.factory;\
+    implementation:=com.ibm.ws.ejbcontainer.jpa.injection.factory.HybridJPAObjectFactory;\
+    provide:='javax.naming.spi.ObjectFactory,com.ibm.ws.ejbcontainer.jpa.injection.factory.HybridJPAObjectFactory';\
+    lookupDelegate=com.ibm.ws.jpa.JPALookupDelegate?;\
+    properties:="service.vendor=IBM"
+
+-buildpath: \
+	com.ibm.ws.container.service;version=latest,\
+	com.ibm.ws.ejbcontainer;version=latest,\
+	com.ibm.ws.injection;version=latest,\
+	com.ibm.ws.logging;version=latest,\
+	com.ibm.ws.kernel.service;version=latest,\
+	com.ibm.ws.ejbcontainer.core;version=latest,\
+	com.ibm.ws.jpa.container;version=latest,\
+	com.ibm.ws.jpa.container.core;version=latest,\
+	com.ibm.websphere.javaee.ejb.3.1;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

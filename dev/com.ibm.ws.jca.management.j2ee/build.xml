@@ -1,0 +1,4 @@
+<project name="com.ibm.ws.jca.management.j2ee" default="build">
+	<property name="javac.boot.classpath" value="1.7" />
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+</project>

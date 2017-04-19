@@ -40,7 +40,7 @@ instrument.classesExcludes: com/ibm/ws/injection/resources/*.class
 	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0,\
 	com.ibm.ws.resource;version=latest,\
 	com.ibm.ws.kernel.service,\
-	com.ibm.ws.logging.core,\
+	com.ibm.ws.logging,\
 	com.ibm.ws.container.service;version=latest,\
 	com.ibm.ws.javaee.dd;version=latest,\
 	com.ibm.ws.javaee.dd.common;version=latest,\
@@ -48,3 +48,11 @@ instrument.classesExcludes: com/ibm/ws/injection/resources/*.class
 	com.ibm.ws.org.apache.aries.jndi.api.1.1.1;version=latest,\
 	com.ibm.ws.serialization;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+
+-testpath: \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	com.ibm.ws.kernel.boot;version=latest

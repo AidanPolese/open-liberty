@@ -1,0 +1,78 @@
+#CMVCPATHNAME SERV1/ws/code/prereq.jcdi/src/com/ibm/ws/webbeans/resources/jcdi.nlsprops
+#COMPONENTPREFIX CWOWB
+#COMPONENTNAMEFOR CWOWB Java EE Contexts and Dependency Injection 
+#NLS_ENCODING=UNICODE
+#NLS_MESSAGEFORMAT_NONE
+#ISMESSAGEFILE true
+# #########################################################################
+#
+#  COMPONENT_NAME: WAS.prereq.jcdi
+#
+#  THIS PRODUCT CONTAINS RESTRICTED MATERIALS OF IBM
+#  5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 
+#  (C) COPYRIGHT International Business Machines Corp. 2009, 2011
+#  The source code for this program is not published or otherwise divested
+#  of its trade secrets, irrespective of what has been deposited with the
+#  U.S. Copyright Office.
+#
+# Translator Instructions:
+#
+# The messages to be translated are contained in key/text pairs and
+# contains three parts:
+#
+# 1) A key (a text string) which is an identifier used by the code to
+#    retrieve data.  This is required - and SHOULD NOT be translated.
+# 2) A equals ("=") sign separating the key and text.  This is required.
+# 3) A string containing data that will be displayed to
+#    the user when running the application.  This is required and
+#    SHOULD be translated.
+#
+# In short, each line in the resource array contains two strings.
+# The SECOND quoted string on each line should be translated.
+#
+# Some of the strings to be translated contain special codes
+# for data that will be inserted into the string when the string
+# is displayed to the user.  For example, say you have the
+# following string to translate:
+#
+#   This file was written by the IBM Administrator on {0,date}.
+#
+# {0,date} is a code that tells java to insert a parameter into
+# this space when displaying it to the user.  In this case,
+# the parameter that is inserted is a date.
+#
+# The 0 indicates that this is where the first parameter is
+# inserted in the string.  There may be more than one parameter
+# in any one string.  The 'date' tells java to format this
+# parameter as a date.
+#
+# The {0,date} code should be placed at the appropriate position
+# in the translated text.  Please note that the code in the
+# translation must match exactly the code in the original
+# string.
+#
+# The developer should describe in comments above the string to be
+# translated each of the parameters so that you will be able to
+# determine where the best location for each parameter in the
+# translated string.
+#
+# Lines that begin with a pound sign (#) are comments and should not be
+# translated.
+# -----------------------------------------------------------------------
+# This file follows the WebSphere Message Guidelines.
+# For more information, visit: 
+# http://washome.austin.ibm.com/xwiki/bin/view/MessagesTeam/
+#
+
+#-----------------------------------------------------------------------------------------------------------------------------
+# Messages used by JCDI
+#-----------------------------------------------------------------------------------------------------------------------------
+
+transactional.annotation.on.ejb.CWOWB2000E=CWOWB2000E: \uc5b4\ub178\ud14c\uc774\uc158 {0}\uc740(\ub294) EJB\uc5d0\uc11c \ud5c8\uc6a9\ub418\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4: {1}
+transactional.annotation.on.ejb.CWOWB2000E.explanation=\uc5b4\ub178\ud14c\uc774\uc158 Transactional\uc740 EJB\uc640 \ud568\uaed8 \uc0ac\uc6a9\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.
+transactional.annotation.on.ejb.CWOWB2000E.useraction=EJB\uc5d0\ub294 Transactional \ub300\uc2e0 TransactionAttribute\ub97c \uc0ac\uc6a9\ud574\uc57c \ud569\ub2c8\ub2e4.
+
+lifecycle.interceptor.exception.CWOWB2001E=CWOWB2001E: {0} \ub77c\uc774\ud504\uc0ac\uc774\ud074 \uc778\ud130\uc149\ud130\uc5d0\uc11c \uc608\uc678 \ubc1c\uc0dd: {1}
+lifecycle.interceptor.exception.CWOWB2001E.explanation=\ub77c\uc774\ud504\uc0ac\uc774\ud074 \uc778\ud130\uc149\ud130\uc5d0\uc11c \ud655\uc778\ub41c \uc608\uc678\ub294 \ubc1c\uc0dd\ud558\uc9c0 \uc54a\uc544\uc57c \ud569\ub2c8\ub2e4.
+lifecycle.interceptor.exception.CWOWB2001E.useraction=\ub85c\uadf8\ub97c \ud655\uc778\ud558\uc5ec \ubb38\uc81c\uc810\uc744 \ud310\ubcc4\ud558\uc2ed\uc2dc\uc624.
+

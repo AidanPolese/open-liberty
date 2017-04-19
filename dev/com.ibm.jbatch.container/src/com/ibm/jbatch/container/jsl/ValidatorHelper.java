@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 
 public class ValidatorHelper {
 
-    public final static String SCHEMA_LOCATION = "xsd/jobXML_1_0.xsd";
+    public final static String SCHEMA_LOCATION = "jobXML_1_0.xsd";
     
     private static Schema schema = null;
     
@@ -42,7 +42,7 @@ public class ValidatorHelper {
     public static synchronized Schema getXJCLSchema() {
         if (schema == null) {
             try {
-                URL url = ValidatorHelper.class.getResource("/" + SCHEMA_LOCATION);
+                URL url = ValidatorHelper.class.getResource(SCHEMA_LOCATION);
                 schema = sf.newSchema(url);
             } catch (SAXException e) {
                 throw new RuntimeException(e);

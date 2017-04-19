@@ -13,6 +13,4 @@
 
 	<udpOptions id="defaultUDPOptions" service.ranking="-1" />
 
-	<zosaio id="defaultZOSAIO" service.ranking="-1" />
-
 </server>

@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.security.audit.AuditEvent;
+import com.ibm.ws.common.internal.encoder.Base64Coder;
 import com.ibm.ws.security.SecurityService;
 import com.ibm.ws.security.authentication.tai.TAIService;
 import com.ibm.ws.webcontainer.security.internal.SSOAuthenticator;
@@ -40,7 +41,7 @@ import com.ibm.wsspi.security.tai.TrustAssociationInterceptor;
 /**
  * The responsibility of this WebProviderAuthenticatorProxy is to authenticate request with TAI, SSO, access token or
  * OpenID and OpenID Connect providers
- * 
+ *
  */
 public class WebProviderAuthenticatorProxy implements WebAuthenticator {
 
@@ -100,7 +101,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
 
     /*
      * This method is the main method calling by the WebAuthenticatorProxy to handle TAI, SSO, and access token
-     * 
+     *
      * TODO: Refactor to use config filters/ordering
      */
     @Override
@@ -157,6 +158,13 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
                         }
                         authResult = jaspiAuthenticator.authenticate(webRequest);
                         if (authResult.getStatus() != AuthResult.CONTINUE) {
+                            String authHeader = webRequest.getHttpServletRequest().getHeader("Authorization");
+                            if (authHeader != null && authHeader.startsWith("Basic ")) {
+                                String basicAuthHeader = decodeCookieString(authHeader.substring(6));
+                                int index = basicAuthHeader.indexOf(':');
+                                String uid = basicAuthHeader.substring(0, index);
+                                authResult.setAuditCredValue(uid);
+                            }
                             authResult.setAuditCredType(AuditEvent.CRED_TYPE_JASPIC);
                         }
                     }
@@ -166,6 +174,13 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
                                                                      webRequest.getHttpServletResponse(),
                                                                      props);
                         if (authResult.getStatus() != AuthResult.CONTINUE) {
+                            String authHeader = webRequest.getHttpServletRequest().getHeader("Authorization");
+                            if (authHeader != null && authHeader.startsWith("Basic ")) {
+                                String basicAuthHeader = decodeCookieString(authHeader.substring(6));
+                                int index = basicAuthHeader.indexOf(':');
+                                String uid = basicAuthHeader.substring(0, index);
+                                authResult.setAuditCredValue(uid);
+                            }
                             authResult.setAuditCredType(AuditEvent.CRED_TYPE_JASPIC);
                         }
                     } catch (Exception e) {
@@ -240,8 +255,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
         AuthenticationResult authResult = null;
         if (taiAuthenticator == null) {
             authResult = new AuthenticationResult(AuthResult.CONTINUE, "TAI invoke " + (beforeSSO == true ? "before" : "after") + " SSO is not available, skipping TAI...");
-        }
-        else {
+        } else {
             authResult = taiAuthenticator.authenticate(webRequest, beforeSSO);
             if (authResult.getStatus() != AuthResult.CONTINUE) {
                 authResult.setAuditCredType(AuditEvent.CRED_TYPE_TAI);
@@ -328,7 +342,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
 
     /**
      * The OpenID Connect client redirects a request to the OpenID Connect provider for authentication.
-     * 
+     *
      * @param req
      * @param res
      * @return
@@ -422,7 +436,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
 
     /**
      * The oauth service will call the provider to authenticate a user with the access token
-     * 
+     *
      * @param webRequest
      * @return
      */
@@ -476,7 +490,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
 
     /**
      * Create an instance of SSOAuthenticator.
-     * 
+     *
      * @param webRequest
      * @return The SSOAuthenticator, or {@code null} if it could not be created.
      */
@@ -497,5 +511,13 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
      */
     public ConcurrentServiceReferenceMap<String, WebAuthenticator> getWebAuthenticatorRefs() {
         return webAuthenticatorRef;
+    }
+
+    private String decodeCookieString(String cookieString) {
+        try {
+            return Base64Coder.base64Decode(cookieString);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

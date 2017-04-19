@@ -1,0 +1,71 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Webcontainer Application Security Collaborator
+Bundle-Description: Webcontainer Application Security Collaborator, version=${bVersion}
+Bundle-SymbolicName: com.ibm.ws.webcontainer.security.app
+
+WS-TraceGroup: \
+  SecurityCollaborator
+
+Export-Package: com.ibm.websphere.security.web
+
+Private-Package: 
+
+Include-Resource: \
+  OSGI-INF=resources/OSGI-INF
+
+Service-Component: \
+  com.ibm.ws.webcontainer.security.WebAppSecurityCollaboratorImpl; \
+    implementation:=com.ibm.ws.webcontainer.security.WebAppSecurityCollaboratorImpl; \
+    provide:='com.ibm.wsspi.webcontainer.collaborator.IWebAppSecurityCollaborator'; \
+    activate:=activate; \
+    deactivate:=deactivate; \
+    modified:='modified'; \
+    configuration-policy:=optional; \
+    immediate:=true; \
+    securityService='com.ibm.ws.security.SecurityService(Authentication=*)'; \
+    taiService=com.ibm.ws.security.authentication.tai.TAIService; \
+    interceptorService='com.ibm.wsspi.security.tai.TrustAssociationInterceptor'; \
+    oauthService=com.ibm.ws.webcontainer.security.oauth20.OAuth20Service; \
+    oidcServer=com.ibm.ws.webcontainer.security.openidconnect.OidcServer; \
+    oidcClient=com.ibm.ws.webcontainer.security.openidconnect.OidcClient; \
+    openidClientService=com.ibm.ws.webcontainer.security.openid20.OpenidClientService; \
+    webAuthenticator=com.ibm.ws.webcontainer.security.WebAuthenticator; \
+    locationAdmin=com.ibm.wsspi.kernel.service.location.WsLocationAdmin; \
+    unauthenticatedSubjectService=com.ibm.ws.security.authentication.UnauthenticatedSubjectService; \
+    unprotectedResourceService=com.ibm.ws.webcontainer.security.UnprotectedResourceService; \
+    jaccService=com.ibm.ws.security.authorization.jacc.JaccService;\
+    multiple:='interceptorService, webAuthenticator, unprotectedResourceService'; \
+    greedy:='interceptorService, webAuthenticator, unprotectedResourceService'; \
+    optional:='taiService,interceptorService,oauthService,oidcServer,oidcClient,openidClientService,webAuthenticator,jaccService,unprotectedResourceService'; \
+    dynamic:='taiService,interceptorService,oauthService,oidcServer,oidcClient,openidClientService,webAuthenticator,jaccService,unprotectedResourceService'; \
+    properties:="service.vendor=IBM", \
+  com.ibm.ws.webcontainer.security.ServletStartedListener; \
+    implementation:=com.ibm.ws.webcontainer.security.ServletStartedListener; \
+    provide:='com.ibm.wsspi.webcontainer.collaborator.WebAppInitializationCollaborator'; \
+    activate:=activate;\
+    deactivate:=deactivate;\
+    jaccService=com.ibm.ws.security.authorization.jacc.JaccService;\
+    dynamic:='jaccService';\
+    optional:='jaccService';\
+    configuration-policy:=ignore;\
+    properties:="service.vendor=IBM", \
+  SecurityTransferContextService; \
+    implementation:=com.ibm.ws.webcontainer.security.context.SecurityTransferContextService; \
+    provide:=com.ibm.wsspi.webcontainer.servlet.ITransferContextService; \
+    configuration-policy:=ignore; \
+    securityService=com.ibm.ws.security.SecurityService; \
+    properties:="service.vendor=IBM", \
+  MetaDataListenerImpl; \
+    implementation:=com.ibm.ws.webcontainer.security.MetaDataListenerImpl; \
+    provide:='com.ibm.ws.container.service.metadata.ModuleMetaDataListener'; \
+    configuration-policy:=ignore; \
+    activate:=activate; \
+    deactivate:=deactivate; \
+    jaccService=com.ibm.ws.security.authorization.jacc.JaccService; \
+    dynamic:='jaccService'; \
+    optional:='jaccService'; \
+    properties:="service.vendor=IBM"
+
+-buildpath: com.ibm.ws.webcontainer.security;version=latest

@@ -81,7 +81,7 @@ TEST_FIX_DETECTED=CWWKF0014W: Serverul are urm\u0103toarele corec\u0163ii de tes
 TEST_FIX_DETECTED.explanation=Bundle-urile OSGi \u00eenc\u0103rcate la runtime au fost modificate de c\u00e2teva dintre corec\u0163iile de testare instalate. O listare a tuturor corec\u0163iilor instalate poate fi ob\u0163inut\u0103 folosind comanda: productInfo versiunea --ifixes
 TEST_FIX_DETECTED.useraction=Un server de produc\u0163ie nu trebuie s\u0103 aib\u0103 corec\u0163ii de test instalate. Dac\u0103 acesta este un server de produc\u0163ie \u00eenl\u0103tura\u0163i corec\u0163iile test \u015fi reporni\u0163i serverul.
 
-INTERIM_FIX_DETECTED=CWWKF0015I: Serverul are urm\u0103toarele corec\u0163ii interimare active la runtime: {0}.  Pentru o listare complet\u0103 de corec\u0163ii instalate, rula\u0163i: productInfo versiunea --ifixes
+INTERIM_FIX_DETECTED=CWWKF0015I: Serverul are urm\u0103toarele corec\u0163ii interimare active la runtime: {0}. Pentru o listare complet\u0103 de corec\u0163ii instalate, rula\u0163i: productInfo versiunea --ifixes
 INTERIM_FIX_DETECTED.explanation=Bundle-urile OSGi \u00eenc\u0103rcate la runtime au fost modificate de c\u00e2teva dintre corec\u0163iile interimare instalate. O listare a tuturor corec\u0163iilor instalate poate fi ob\u0163inut\u0103 folosind comanda: productInfo versiunea --ifixes
 INTERIM_FIX_DETECTED.useraction=Nu este necesar\u0103 nicio ac\u0163iune.
 

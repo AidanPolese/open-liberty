@@ -57,6 +57,7 @@ import com.ibm.ws.Transaction.UOWCoordinator;
 import com.ibm.ws.Transaction.UOWCurrent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.ffdc.FFDCSelfIntrospectable;
+import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.jca.adapter.WSManagedConnection;
 import com.ibm.ws.jdbc.internal.DataSourceDef;
 import com.ibm.ws.jdbc.osgi.JDBCRuntimeVersion;
@@ -90,8 +91,6 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
                 javax.sql.ConnectionEventListener, 
                 StatementEventListener, 
                 FFDCSelfIntrospectable {
-
-    private boolean aborted;
 
     /**
      * Indicates whether any Vendor Specific Connection properties have changed.
@@ -220,7 +219,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
 
 
     //Connections
-    java.sql.Connection sqlConn;
+    protected java.sql.Connection sqlConn;
     private javax.sql.PooledConnection poolConn;
 
     /**
@@ -250,7 +249,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
     private static final int KNOWN_NUMBER_OF_CELS = 1; 
     private static final int CEL_ARRAY_INCREMENT_SIZE = 3; 
 
-    WSManagedConnectionFactoryImpl mcf;
+    protected WSManagedConnectionFactoryImpl mcf;
     DatabaseHelper helper;
 
     /**
@@ -290,8 +289,10 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
     private String defaultCatalog;
     private Map<String, Class<?>> defaultTypeMap;
     private boolean defaultReadOnly;
-    private String defaultSchema, currentSchema = null;
-    private int defaultNetworkTimeout;
+    private String defaultSchema;
+
+    protected String currentSchema = null;
+    protected int defaultNetworkTimeout;
     public int currentNetworkTimeout = 0;
 
     /** Current transaction isolation level */
@@ -301,7 +302,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
     private boolean isolationChanged;
 
     /** Indicates whether catalog, typeMap, readOnly, schema, or networkTimeout has been changed. */
-    private boolean connectionPropertyChanged;
+    protected boolean connectionPropertyChanged;
 
     /** current cursor holdability */
     private int currentHoldability; 
@@ -963,7 +964,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
      * 
      * @throws ResourceException if an error occurs retrieving default values.
      */
-    private void initializeConnectionProperties() throws ResourceException {
+    protected void initializeConnectionProperties() throws ResourceException {
         try {
             // Retrieve the default values for all Connection properties. 
             // Save the default values for when null is specified in the CRI. 
@@ -1000,7 +1001,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
             throw new DataStoreAdapterException("DSA_ERROR", sqlX, getClass());
         }
     }
-
+    
     /**
      * @return relevant FFDC information for this class, formatted as a String array.
      */
@@ -2367,7 +2368,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
         // be recorded yet. In this case, use the current thread id. 
         // Use the already-casted CRI here. 
 
-        WSJdbcConnection handle = new WSJdbcConnection(this, sqlConn, key, threadID);
+        WSJdbcConnection handle = mcf.jdbcRuntime.newConnection(this, sqlConn, key, threadID);
         addHandle(handle);
 
         //here is one of two boundaries to enable/disable tracing
@@ -4195,32 +4196,8 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
 
     }
     
-    /**
-     * Set a schema for this managed connection.
-     * @param schema The schema to set on the connection.
-     */
     public void setSchema(String schema) throws SQLException {
-        Transaction suspendTx = null;
-
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            throw new SQLFeatureNotSupportedException();
-
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-            Tr.debug(this, tc, "Set Schema to " + schema);
-        // Global trans must be suspended for jdbc-4.1 getters and setters on zOS 
-        if (AdapterUtil.isZOS() && isGlobalTransactionActive())
-            suspendTx = suspendGlobalTran();
-
-        try {
-            mcf.jdbcRuntime.doSetSchema(sqlConn, schema);
-            currentSchema = schema;
-            connectionPropertyChanged = true;
-        } catch (SQLException sqle) {
-            throw sqle;
-        } finally {
-            if (suspendTx != null)
-                resumeGlobalTran(suspendTx);
-        }
+        throw new SQLFeatureNotSupportedException();
     }
     
     /**
@@ -4229,23 +4206,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
      * NOTE: If this method is called below JDBC version 4.1, null will be returned.
      */
     public String getSchema() throws SQLException {
-        Transaction suspendTx = null;
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            return null;
-        // Global trans must be suspended for jdbc-4.1 getters and setters on zOS 
-        if (AdapterUtil.isZOS() && isGlobalTransactionActive())
-            suspendTx = suspendGlobalTran();
-
-        String schema;
-        try {
-            schema = mcf.jdbcRuntime.doGetSchema(sqlConn);
-        } catch (SQLException sqle) {
-            throw sqle;
-        } finally {
-            if (suspendTx != null)
-                resumeGlobalTran(suspendTx);
-        }
-        return schema;
+        return null;
     }
     
     public String getSchemaSafely() throws SQLException {
@@ -4257,11 +4218,8 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
         Throwable x;
         try{
             return getSchema();
-        } catch(AbstractMethodError e){
-            // If we are running pre-Java7
-            x = e;
-        } catch(NoSuchMethodError e){
-            // If the driver is pre-4.1
+        } catch(IncompatibleClassChangeError e){
+            // If the JDBC driver was compiled with Java 6
             x = e;
         } catch (SQLException e) {
         	// In case the driver is not 4.1 compliant but says it is 
@@ -4280,46 +4238,20 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
 
     @Override
     public void abort(Executor ex) throws SQLFeatureNotSupportedException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-          throw new SQLFeatureNotSupportedException();
-        try {
-            setAborted(true);
-            mcf.jdbcRuntime.doAbort(sqlConn, ex);
-        } catch (SQLException e) {
-            // avoid raising an error so connection management code can continue its own abort processing
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                Tr.debug(this, tc, "abort failure", e);
-        }
+        throw new SQLFeatureNotSupportedException();
     }
     
     @Override
     public boolean isAborted() {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            return false;
-        return aborted;
+        return false;
     }
     
     public void setAborted(boolean aborted) throws SQLFeatureNotSupportedException{
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-          throw new SQLFeatureNotSupportedException();
-        this.aborted = aborted;
+        throw new SQLFeatureNotSupportedException();
     }
     
     public int getNetworkTimeout() throws SQLException {
-        int timeOut;
-        Transaction suspendTx = null;
-        // Global trans must be suspended for jdbc-4.1 getters and setters on zOS 
-        if (AdapterUtil.isZOS() && isGlobalTransactionActive())
-            suspendTx = suspendGlobalTran();
-        try {
-            timeOut = mcf.jdbcRuntime.doGetNetworkTimeout(sqlConn);
-        } catch (SQLException sqle) {
-            throw sqle;
-        } finally {
-            if (suspendTx != null)
-                resumeGlobalTran(suspendTx);
-        }
-        return timeOut;
+        throw new SQLFeatureNotSupportedException();
     }
     
     /**
@@ -4337,12 +4269,6 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
         Throwable x;
         try{
             return getNetworkTimeout();
-        } catch(AbstractMethodError e){
-            // If we are running pre-Java7
-            x = e;
-        } catch(NoSuchMethodError e){
-            // If the driver is pre-4.1
-            x = e;
         } catch (SQLException e) {
             // In case the driver is not 4.1 compliant but says it is 
             if (AdapterUtil.isUnsupportedException(e))
@@ -4356,32 +4282,11 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
         return defaultNetworkTimeout;
     }
     
-    public void setNetworkTimeout(Executor executor, int milliseconds)
-                    throws SQLException {
-
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            throw new SQLFeatureNotSupportedException();
-
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-            Tr.debug(this, tc, "Set NetworkTimeout to " + milliseconds);
-
-        Transaction suspendTx = null;
-        // Global trans must be suspended for jdbc-4.1 getters and setters on zOS 
-        if (AdapterUtil.isZOS() && isGlobalTransactionActive())
-            suspendTx = suspendGlobalTran();
-        try {
-            mcf.jdbcRuntime.doSetNetworkTimeout(sqlConn, executor, milliseconds);
-        } catch (SQLException sqle) {
-            throw sqle;
-        } finally {
-            if (suspendTx != null)
-                resumeGlobalTran(suspendTx);
-        }
-        currentNetworkTimeout = milliseconds;
-        connectionPropertyChanged = true;
+    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+        throw new SQLFeatureNotSupportedException();
     }
 
-    private Transaction suspendGlobalTran() throws SQLException {
+    protected Transaction suspendGlobalTran() throws SQLException {
         EmbeddableWebSphereTransactionManager tm = mcf.connectorSvc.getTransactionManager();
         try {
             return tm.suspend();
@@ -4390,7 +4295,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
         }
     }
     
-    private void resumeGlobalTran(Transaction t) throws SQLException {
+    protected void resumeGlobalTran(Transaction t) throws SQLException {
         EmbeddableWebSphereTransactionManager tm = mcf.connectorSvc.getTransactionManager();
         try{
             tm.resume(t);

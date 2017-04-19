@@ -31,7 +31,7 @@ OSGI_MSG001.explanation=Un message d'information a \u00e9t\u00e9 consign\u00e9 \
 OSGI_MSG001.useraction=Aucune action n'est requise.
 
 OSGI_WARNING_MSG=CWWKE0700W: {0} {1} {2} {3} {4}
-OSGI_WARNING_MSG.explanation=Un message d'avertissement a \u00e9t\u00e9 consign\u00e9 \u00e0  l'aide du service de journalisation OSGi.
+OSGI_WARNING_MSG.explanation=Un message d'avertissement a \u00e9t\u00e9 consign\u00e9 \u00e0 l'aide du service de journalisation OSGi.
 OSGI_WARNING_MSG.useraction=Pour plus d'informations, voir le message d'avertissement.
 
 OSGI_ERROR_MSG=CWWKE0701E: {0} {1} {2} {3} {4}

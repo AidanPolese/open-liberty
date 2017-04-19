@@ -265,11 +265,18 @@ UNABLE_TO_FIND_TOOLS_JAR=No se ha podido conectar el agente Java de Liberty porq
 
 UNABLE_TO_FIND_JAVA_AGENT=No se ha podido localizar el agente Java de Liberty. Este servidor ejecutar\u00e1, pero no podr\u00e1 realizar funciones que requieran el agente Java como, por ejemplo, supervisi\u00f3n o rastreo.
 
-
 # messages for LicenseSelfEctractor
 LICENSE_invalidInstall=El directorio {0} no es una instalaci\u00f3n v\u00e1lida de Liberty. Especifique el directorio ra\u00edz de la instalaci\u00f3n de Liberty que desea actualizar.
 LICENSE_invalidVersion=La licencia no se puede actualizar porque la instalaci\u00f3n del producto especificado est\u00e1 en la versi\u00f3n {0}, pero la licencia solo se puede actualizar desde la versi\u00f3n {1}.
 LICENSE_invalidEdition=La licencia no se puede actualizar porque la instalaci\u00f3n del producto especificada es la edici\u00f3n {0}, pero la licencia solo puede actualizar las ediciones siguientes: {1}
 LICENSE_invalidLicense=La licencia no se puede actualizar porque la instalaci\u00f3n del producto especificada tiene una licencia {0}, pero la licencia solo puede actualizar con productos con una licencia {1}.
 LICENSE_invalidInstallType=La licencia no se puede actualizar porque la instalaci\u00f3n del productos especificada se instal\u00f3 utilizando IBM Installation Manager. Utilice IBM Installation Manager para actualizar la instalaci\u00f3n.
+
+# new messages for license upgrade and downgrade
+LICENSE_replace_invalidVersion=La licencia no puede sustituirse porque la instalaci\u00f3n del producto especificado est\u00e1 en la versi\u00f3n {0}, pero la licencia solo puede sustituirse desde la versi\u00f3n {1}.
+LICENSE_replace_invalidInstallType=La licencia no puede sustituirse porque la instalaci\u00f3n del productos especificada se instal\u00f3 utilizando IBM Installation Manager. Utilice IBM Installation Manager para modificar la instalaci\u00f3n.
+
+LICENSE_replace_invalidEditonFeatures=Las siguientes caracter\u00edsticas ya no pueden aplicarse a {0} y deben eliminarse antes de sustituir la licencia: {1}
+LICENSE_replace_uninstallFeatures_manually=Utilice el siguiente mandato para desinstalar estas caracter\u00edsticas antes de sustituir la licencia de {0}: {1}
+
 

@@ -26,6 +26,6 @@
 # -------------------------------------------------------------------------------------------------
 
 jndi.not.installed=CWWKE0800W: Foi feita uma tentativa para recuperar um contexto inicial para [{0}], mas n\u00e3o h\u00e1 nenhum recurso JNDI configurado.
-jndi.not.installed.explanation=O recurso JNDI fornece um registro JNDI e utilit\u00e1rios associados. Isso normalmente \u00e9 necess\u00e1rio se um aplicativo ou recurso precisar consultar entradas em um contexto JNDI.
+jndi.not.installed.explanation=O recurso JNDI fornece um registro JNDI e utilit\u00e1rios associados.  Isso normalmente \u00e9 necess\u00e1rio se um aplicativo ou recurso precisar consultar entradas em um contexto JNDI.
 jndi.not.installed.useraction=Assegure-se de que uma implementa\u00e7\u00e3o de JNDI seja fornecida (por exemplo, configurando o recurso JNDI na configura\u00e7\u00e3o para este servidor).
 

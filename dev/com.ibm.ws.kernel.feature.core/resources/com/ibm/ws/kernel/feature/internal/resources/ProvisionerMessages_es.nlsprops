@@ -77,12 +77,12 @@ FEATURES_REMOVED=CWWKF0013I: El servidor ha eliminado las caracter\u00edsticas s
 FEATURES_REMOVED.explanation=El servidor ha eliminado un conjunto de caracter\u00edsticas.
 FEATURES_REMOVED.useraction=No se requiere ninguna acci\u00f3n.
 
-TEST_FIX_DETECTED=CWWKF0014W: El servidor tiene los arreglos de prueba siguientes en el tiempo de ejecuci\u00f3n: {0}. Para obtener un listado completo de los arreglos instalados, ejecute: productInfo version --ifixes
+TEST_FIX_DETECTED=CWWKF0014W: El servidor tiene los arreglos de prueba siguientes en el tiempo de ejecuci\u00f3n: {0}.  Para obtener un listado completo de los arreglos instalados, ejecute: productInfo version --ifixes
 TEST_FIX_DETECTED.explanation=Los paquetes OSGi cargados en el tiempo de ejecuci\u00f3n los ha modificado alguno de los arreglos de prueba instalados. Se puede obtener un listado de todos los arreglos instalados utilizando el mandato: productInfo version --ifixes
 TEST_FIX_DETECTED.useraction=Un servidor de producci\u00f3n no debe tener instalados arreglos de prueba. Si se trata de un servidor de producci\u00f3n, elimine los arreglos de prueba y reinicie el servidor.
 
 INTERIM_FIX_DETECTED=CWWKF0015I: El servidor tiene los siguientes arreglos temporales activos en el tiempo de ejecuci\u00f3n: {0}. Para obtener un listado completo de los arreglos instalados, ejecute: productInfo version --ifixes
-INTERIM_FIX_DETECTED.explanation=Los paquetes OSGi cargados en el tiempo de ejecuci\u00f3n los ha modificado alguno de los arreglos temporalesinstalados. Se puede obtener un listado de todos los arreglos instalados utilizando el mandato: productInfo version --ifixes
+INTERIM_FIX_DETECTED.explanation=Los paquetes OSGi cargados en el tiempo de ejecuci\u00f3n los ha modificado alguno de los arreglos temporales instalados. Se puede obtener un listado de todos los arreglos instalados utilizando el mandato: productInfo version --ifixes
 INTERIM_FIX_DETECTED.useraction=No se requiere ninguna acci\u00f3n.
 
 # IBM-Provision-Capability is a manifest header name and should not be translated.
@@ -183,7 +183,7 @@ UPDATE_WRONG_PROCESS_TYPE_CONFIGURED_ERROR=CWWKF0038E: La caracter\u00edstica {0
 UPDATE_WRONG_PROCESS_TYPE_CONFIGURED_ERROR.explanation=La caracter\u00edstica configurada no da soporte al tipo de proceso especificado.
 UPDATE_WRONG_PROCESS_TYPE_CONFIGURED_ERROR.useraction=Elimine la caracter\u00edstica de la configuraci\u00f3n o cambie el archivo de manifiesto de caracter\u00edstica para habilitar el soporte para el tipo de proceso que desee.
 
-UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_ERROR=CWWKF0039E: La caracter\u00edstica {0} s\u00f3lo da soporte a los tipos de proceso de cliente que dar\u00e1n como resultado que el proceso de servidor no ejecute esta caracter\u00edstica. La caracter\u00edstica {1} que se ha especificado en el archivo {2} no funciona correctamente debido a una dependencia de la caracter\u00edstica {0}.
+UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_ERROR=CWWKF0039E: La caracter\u00edstica {0} s\u00f3lo da soporte a los tipos de proceso de cliente que dar\u00e1n como resultado que el proceso de servidor no ejecute esta caracter\u00edstica.  La caracter\u00edstica {1} que se ha especificado en el archivo {2} no funciona correctamente debido a una dependencia de la caracter\u00edstica {0}.
 UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_ERROR.explanation=La caracter\u00edstica configurada no da soporte al tipo de proceso especificado.
 UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_ERROR.useraction=Elimine la caracter\u00edstica de la configuraci\u00f3n o cambie el archivo de manifiesto de caracter\u00edstica para habilitar el soporte para el tipo de proceso que desee.
 
@@ -191,12 +191,12 @@ UPDATE_WRONG_PROCESS_TYPE_CONFIGURED_CLIENT_ERROR=CWWKF0040E: La caracter\u00eds
 UPDATE_WRONG_PROCESS_TYPE_CONFIGURED_CLIENT_ERROR.explanation=La caracter\u00edstica configurada no da soporte al tipo de proceso especificado.
 UPDATE_WRONG_PROCESS_TYPE_CONFIGURED_CLIENT_ERROR.useraction=Elimine la caracter\u00edstica de la configuraci\u00f3n o cambie el archivo de manifiesto de caracter\u00edstica para habilitar el soporte para el tipo de proceso que desee.
 
-UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_CLIENT_ERROR=CWWKF0041E: La caracter\u00edstica {0} s\u00f3lo da soporte a los tipos de proceso de servidor que dar\u00e1n como resultado que el proceso de cliente no ejecute esta caracter\u00edstica. La caracter\u00edstica {1} que se ha especificado en el archivo {2} no funciona correctamente debido a una dependencia de la caracter\u00edstica {0}.
+UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_CLIENT_ERROR=CWWKF0041E: La caracter\u00edstica {0} s\u00f3lo da soporte a los tipos de proceso de servidor que dar\u00e1n como resultado que el proceso de cliente no ejecute esta caracter\u00edstica.  La caracter\u00edstica {1} que se ha especificado en el archivo {2} no funciona correctamente debido a una dependencia de la caracter\u00edstica {0}.
 UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_CLIENT_ERROR.explanation=La caracter\u00edstica configurada no da soporte al tipo de proceso especificado.
 UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_CLIENT_ERROR.useraction=Elimine la caracter\u00edstica de la configuraci\u00f3n o cambie el archivo de manifiesto de caracter\u00edstica para habilitar el soporte para el tipo de proceso que desee.
 
 # CWWK042E  {0} = feature Name: {1} = server name 
-UPDATE_MISSING_CORE_FEATURE_ERROR=CWWKF0042E: No se puede encontrar una definici\u00f3n de caracter\u00edstica para la caracter\u00edstica {0}. Intente ejecutar el mandato, bin/installUtility install {0}, para instalar la caracter\u00edstica. Otra posibilidad es ejecutar el mandato, bin/installUtility install {1}, para instalar todas las caracter\u00edsticas a las que hace referencia esta configuraci\u00f3n.
+UPDATE_MISSING_CORE_FEATURE_ERROR=CWWKF0042E: No se puede encontrar una definici\u00f3n de caracter\u00edstica para la caracter\u00edstica {0}.  Intente ejecutar el mandato, bin/installUtility install {0}, para instalar la caracter\u00edstica. Otra posibilidad es ejecutar el mandato, bin/installUtility install {1}, para instalar todas las caracter\u00edsticas a las que hace referencia esta configuraci\u00f3n.
 UPDATE_MISSING_CORE_FEATURE_ERROR.explanation=El gestor de caracter\u00edsticas no ha podido encontrar una definici\u00f3n para la caracter\u00edstica especificada.
 UPDATE_MISSING_CORE_FEATURE_ERROR.useraction=Compruebe que el nombre de la caracter\u00edstica especificada est\u00e9 bien escrito.  \
 Compruebe tambi\u00e9n que la definici\u00f3n de la caracter\u00edstica existe y que se puede leer en el directorio lib/features. \
@@ -281,8 +281,8 @@ tool.install.two.subsystem.manifests.useraction=Suprima uno de los archivos SUBS
 
 # {0} is the path to the (missing) feature directory
 tool.feature.dir.not.found=CWWKF1024E: El mandato featureManager no ha podido encontrar el directorio features y no ha podido crear uno en la v\u00eda de acceso del directorio {0}.
-tool.feature.dir.not.found.explanation=El directorio features para este servidor no existe. El directorio previsto con el nombre de features puede haberse creado inadvertidamente como archivo. El mandato featureManager ha intentado crear el directorio features, pero no ha podido. Si el directorio features no se puede crear, a menudo el usuario no dispone de los permisos de escritura para la v\u00eda de acceso del directorio. 
-tool.feature.dir.not.found.useraction=Realice una de las acciones siguientes : (1) Cree manualmente el directorio especificado y vuelva a ejecutar el mandato featureManager. (2) Vuelva a ejecutar el mandato featureManager como usuario con acceso de grabaci\u00f3n suficiente para la v\u00eda de acceso al directorio especificado. 
+tool.feature.dir.not.found.explanation=El directorio features para este servidor no existe. El directorio previsto con el nombre de features puede haberse creado inadvertidamente como archivo.   El mandato featureManager ha intentado crear el directorio features, pero no ha podido. Si el directorio features no se puede crear, a menudo el usuario no dispone de los permisos de escritura para la v\u00eda de acceso del directorio. 
+tool.feature.dir.not.found.useraction=Realice una de las acciones siguientes : (1) Cree manualmente el directorio especificado y vuelva a ejecutar el mandato featureManager. (2) Vuelva a ejecutar el mandato featureManager como usuario con acceso de grabaci\u00f3n suficiente para la v\u00eda de acceso al directorio especificado.  
 
 tool.find.view.info.name=\ \ \ \ Nombre: {0}
 tool.find.view.info.symbolic.name=\ \ \ \ Nombre simb\u00f3lico: {0}

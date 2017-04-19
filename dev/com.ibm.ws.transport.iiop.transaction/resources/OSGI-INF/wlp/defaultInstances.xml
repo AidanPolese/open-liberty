@@ -1,0 +1,6 @@
+<server>
+  <!-- This causes an entry in configuration 
+       which the ORB uses to count how many 
+       subsystem factories to wait for -->
+  <com.ibm.ws.transport.iiop.spi.SubsystemFactory type="Transaction"/>
+</server>

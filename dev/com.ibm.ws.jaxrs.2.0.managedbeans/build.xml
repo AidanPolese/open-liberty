@@ -1,0 +1,4 @@
+<project name="com.ibm.ws.jaxrs.2.0.managedbeans" default="build">
+  <property name="build.with.java.level" value="1.7"/>
+	<import file="../ant_build/public_imports/standard_imports.xml"/>   
+</project>

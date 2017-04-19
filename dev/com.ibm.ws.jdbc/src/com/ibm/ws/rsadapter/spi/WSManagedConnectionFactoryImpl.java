@@ -238,12 +238,12 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
     /**
      * Indicates whether or not the JDBC driver supports Connection.getNetworkTimeout.
      */
-    boolean supportsGetNetworkTimeout;
+    public boolean supportsGetNetworkTimeout;
 
     /**
      * Indicates whether or not the JDBC driver supports Connection.getSchema.
      */
-    boolean supportsGetSchema;
+    public boolean supportsGetSchema;
 
     /**
      * Indicates whether the JDBC driver supports <code>java.sql.Connection.getTypeMap</code>.
@@ -649,7 +649,7 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
         try {
             results = getConnection(userName, password, subject, cri, useKerb, credential);
 
-            mc = new WSRdbManagedConnectionImpl(this, results.pooledConnection, results.connection, subject, cri);
+            mc = jdbcRuntime.newManagedConnection(this, results.pooledConnection, results.connection, subject, cri);
 
             if (useKerb)
                 mc.setKerberosConnection();

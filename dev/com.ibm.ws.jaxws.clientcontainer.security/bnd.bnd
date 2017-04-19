@@ -1,0 +1,28 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: JAX-WS ClientContainer Security
+Bundle-SymbolicName: com.ibm.ws.jaxws.clientcontainer.security
+Bundle-Description: IBM JAX-WS ClientContainer Security; version=${bVersion}
+
+Import-Package: \
+   org.apache.cxf.*;version="[2.6.2,2.6.3)", \
+   *
+
+Export-Package: \
+   com.ibm.ws.jaxws.clientcontainer.security
+
+-dsannotations: com.ibm.ws.jaxws.clientcontainer.security.JaxWsSecurityConfigurationServiceImpl
+
+-buildpath: \
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-api-2.6.2-ibm-s20170216-1739.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-transports-http-2.6.2-ibm-s20170216-1739.jar;version=file,\
+	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.websphere.appserver.api.ssl;version=latest,\
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
+	com.ibm.websphere.appserver.spi.ssl;version=latest,\
+	com.ibm.ws.jaxws.clientcontainer;version=latest,\
+	com.ibm.ws.logging.core;version=latest,\
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

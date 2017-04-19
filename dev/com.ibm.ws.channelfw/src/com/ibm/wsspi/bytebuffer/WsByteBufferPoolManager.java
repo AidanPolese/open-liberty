@@ -24,11 +24,20 @@ import java.nio.channels.FileChannel;
 
 /**
  * This interface contains methods for obtaining WsByteBuffer objects either
- * from a pool of WsByteBuffer objects or derived from an existing WsBteBuffer
+ * from a pool of WsByteBuffer objects or derived from an existing WsByteBuffer
  * object
- * 
+ *
  */
 public interface WsByteBufferPoolManager {
+
+    /**
+     * Service interface for a direct ByteBuffer allocator
+     */
+    public interface DirectByteBufferHelper {
+        ByteBuffer allocateDirectByteBuffer(long size);
+
+        void releaseDirectByteBuffer(ByteBuffer buffer);
+    }
 
     /**
      * name for Pool Manager as bound to JNDI

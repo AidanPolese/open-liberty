@@ -47,7 +47,7 @@ public class WSJdbcCallableStatement extends WSJdbcPreparedStatement
      * 
      * @throws SQLException if an error occurs wrapping the CallableStatement.
      */
-    protected WSJdbcCallableStatement(CallableStatement cstmtImplObject, WSJdbcConnection connWrapper, 
+    public WSJdbcCallableStatement(CallableStatement cstmtImplObject, WSJdbcConnection connWrapper, 
                                       int theHoldability, String cstmtSQL) 
     throws SQLException 
     {
@@ -92,7 +92,7 @@ public class WSJdbcCallableStatement extends WSJdbcPreparedStatement
      * 
      * @throws SQLException if an error occurs wrapping the CallableStatement.
      */
-    protected WSJdbcCallableStatement(CallableStatement cstmtImplObject, WSJdbcConnection connWrapper,
+    public WSJdbcCallableStatement(CallableStatement cstmtImplObject, WSJdbcConnection connWrapper,
                                       int theHoldability, String cstmtSQL, 
                                       StatementCacheKey cstmtKey) throws SQLException 
     {
@@ -154,19 +154,19 @@ public class WSJdbcCallableStatement extends WSJdbcPreparedStatement
      * @param rsetImpl result set to wrap.
      * @return wrapper
      */
-    private WSJdbcResultSet createWrapper(ResultSet rsetImpl) {
+    protected WSJdbcResultSet createWrapper(ResultSet rsetImpl) {
         // If the childWrapper is null, and the childWrappers is null or 
         // empty, set the result set to childWrapper;
         // Otherwise, add the result set to childWrappers
         WSJdbcResultSet rsetWrapper;
         if (childWrapper == null && (childWrappers == null || childWrappers.isEmpty())) {
-            childWrapper = rsetWrapper = new WSJdbcResultSet(rsetImpl, this);
+            childWrapper = rsetWrapper = mcf.jdbcRuntime.newResultSet(rsetImpl, this);
             if (TraceComponent.isAnyTracingEnabled() &&  tc.isDebugEnabled())
                 Tr.debug(tc, "Set the result set to child wrapper"); 
         } else {
             if (childWrappers == null) 
                 childWrappers = new ArrayList<Wrapper>(5); 
-            rsetWrapper = new WSJdbcResultSet(rsetImpl, this);
+            rsetWrapper = mcf.jdbcRuntime.newResultSet(rsetImpl, this);
             childWrappers.add(rsetWrapper);
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(tc, "Add the result set to child wrappers list."); 
@@ -574,13 +574,7 @@ public class WSJdbcCallableStatement extends WSJdbcPreparedStatement
 
     public Object getObject(int i) throws SQLException {
         try {
-            Object o = cstmtImpl.getObject(i);
-            if (mcf.atLeastJDBCVersion(JDBCRuntimeVersion.VERSION_4_2) && o instanceof ResultSet) {
-                o = createWrapper((ResultSet) o);
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "getObject", i, o);
-            }
-            return o;
+            return cstmtImpl.getObject(i);
         } catch (SQLException ex) {
             FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcCallableStatement.getObject", "366", this);
             throw WSJdbcUtil.mapException(this, ex);
@@ -592,13 +586,7 @@ public class WSJdbcCallableStatement extends WSJdbcPreparedStatement
 
     public Object getObject(int i, java.util.Map<String, Class<?>> map) throws SQLException {
         try {
-            Object o = cstmtImpl.getObject(i, map);
-            if (mcf.atLeastJDBCVersion(JDBCRuntimeVersion.VERSION_4_2) && o instanceof ResultSet) {
-                o = createWrapper((ResultSet) o);
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "getObject", i, o, map);
-            }
-            return o;
+            return cstmtImpl.getObject(i, map);
         } catch (SQLException ex) {
             FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcCallableStatement.getObject", "386", this);
             throw WSJdbcUtil.mapException(this, ex);
@@ -2406,13 +2394,7 @@ public class WSJdbcCallableStatement extends WSJdbcPreparedStatement
 
     public Object getObject(String parameterName) throws SQLException {
         try {
-            Object o = cstmtImpl.getObject(parameterName);
-            if (mcf.atLeastJDBCVersion(JDBCRuntimeVersion.VERSION_4_2) && o instanceof ResultSet) {
-                o = createWrapper((ResultSet) o);
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "getObject", parameterName, o);
-            }
-            return o;
+            return cstmtImpl.getObject(parameterName);
         } catch (SQLException ex) {
             FFDCFilter.processException(ex,
                                         "com.ibm.ws.rsadapter.jdbc.WSJdbcCallableStatement.getObject(String)", "1506", this);
@@ -2427,13 +2409,7 @@ public class WSJdbcCallableStatement extends WSJdbcPreparedStatement
     public Object getObject(String parameterName, java.util.Map<String, Class<?>> map)
                     throws SQLException {
         try {
-            Object o = cstmtImpl.getObject(parameterName, map);
-            if (mcf.atLeastJDBCVersion(JDBCRuntimeVersion.VERSION_4_2) && o instanceof ResultSet) {
-                o = createWrapper((ResultSet) o);
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "getObject", parameterName, map, o);
-            }
-            return o;
+            return cstmtImpl.getObject(parameterName, map);
         } catch (SQLException ex) {
             FFDCFilter.processException(ex,
                                         "com.ibm.ws.rsadapter.jdbc.WSJdbcCallableStatement.getObject(String, Map)", "1524", this);
@@ -2445,43 +2421,11 @@ public class WSJdbcCallableStatement extends WSJdbcPreparedStatement
     }
     
     public <T> T getObject(int parameterIndex, Class<T> type) throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            throw new SQLFeatureNotSupportedException();
-        try {
-            T o = mcf.jdbcRuntime.doGetObject(cstmtImpl, parameterIndex, type);
-            if (mcf.atLeastJDBCVersion(JDBCRuntimeVersion.VERSION_4_2) && o instanceof ResultSet) {
-                o = type.cast(createWrapper((ResultSet) o));
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "getObject", parameterIndex, type, o);
-            }
-            return o;
-        } catch (SQLException ex) {
-            FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcCallableStatement.getObject", "2483", this);
-            throw WSJdbcUtil.mapException(this, ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            throw runtimeXIfNotClosed(nullX);
-        }
+        throw new SQLFeatureNotSupportedException();
     }
 
     public <T> T getObject(String parameterName, Class<T> type) throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            throw new SQLFeatureNotSupportedException();
-        try {
-            T o = mcf.jdbcRuntime.doGetObject(cstmtImpl, parameterName, type);
-            if (mcf.atLeastJDBCVersion(JDBCRuntimeVersion.VERSION_4_2) && o instanceof ResultSet) {
-                o = type.cast(createWrapper((ResultSet) o));
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "getObject", parameterName, type, o);
-            }
-            return o;
-        } catch (SQLException ex) {
-            FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcCallableStatement.getObject", "2495", this);
-            throw WSJdbcUtil.mapException(this, ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            throw runtimeXIfNotClosed(nullX);
-        }
+        throw new SQLFeatureNotSupportedException();
     }
 
     public java.sql.Ref getRef(String parameterName) throws SQLException {

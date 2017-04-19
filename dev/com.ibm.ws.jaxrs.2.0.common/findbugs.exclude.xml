@@ -352,4 +352,12 @@
       <Class name="com.ibm.ws.jaxrs20.clientconfig.JAXRSClientConfigHolder" /> 
       </Or>
    </Match>
+   
+      <Match>
+      <Bug pattern="SE_BAD_FIELD" />
+      <Or>
+      <Class name="org.apache.cxf.jaxrs.JAXRSServiceImpl" />
+      <Class name="org.apache.cxf.message.ExchangeImpl" /> 
+      </Or>
+   </Match>
 </FindBugsFilter>

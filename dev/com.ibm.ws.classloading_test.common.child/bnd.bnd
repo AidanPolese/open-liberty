@@ -1,0 +1,11 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.ws.classloading_test.common.child
+
+Export-Package: test;version=1.0
+
+publish.wlp.jar.disabled: true
+
+-buildpath: \
+	com.ibm.websphere.javaee.servlet.3.1;version=latest

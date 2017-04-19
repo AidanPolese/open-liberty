@@ -1,0 +1,51 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+#
+# ORIGINS: 27         (used for IBM originated files)
+#
+# Caution: because some text editors automatically convert
+# consecutive runs of spaces to tabs, use the Java "\ " escape
+# sequence to represent each space in a run of multiple spaces.
+#
+# translator:
+# Translate words on the right hand side of the = sign.
+# Do not translate {0}, {1}, %1, %2 etc.
+# Do NOT translate any words when they START with: '-
+# Do NOT translate any words when they START with: @
+# Preserve all spaces after a backslash (\) even at the end of a line.
+#
+# NLS_MESSAGEFORMAT_ALL
+#
+#CMVCPATHNAME com.ibm.ws.jaxrs-2.0.ejb/resources/com/ibm/ws/jaxrs20/ejb/internal/resources/JaxRsEJBMessages.nlsprops
+#ISMESSAGEFILE TRUE
+#COMPONENTPREFIX CWWKW
+#COMPONENTNAMEFOR CWWKW WebSphere JAXRS EJB Code
+#RANGE 1100 - 1199
+#
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+
+# -------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
+
+
+
+warning.jaxrs.ejb.resource.mismatch=CWWKW1100W: The JAXRS-2.0 Resource {0} scope {1} does not match the EJB scope {2}. Liberty gets resource instance from {3}.
+warning.jaxrs.ejb.resource.mismatch.explanation=If the JAXRS-2.0 Resource scope does not match the EJB scope, and the resource instance exists in EJB, Liberty gets the resource instance from EJB.
+warning.jaxrs.ejb.resource.mismatch.useraction=No action is required. 
+
+warning.jaxrs.ejb.provider.mismatch=CWWKW1102W: The EJB scope of the JAXRS-2.0 Provider {0} is {1}. Liberty gets the provider instance from {2}.
+warning.jaxrs.ejb.provider.mismatch.explanation=Provider instance is Singleton only. Liberty gets provider instances from EJB if the EJB scope of provider is Dependent or ApplicationScoped.
+warning.jaxrs.ejb.provider.mismatch.useraction=No action is required.
+
+warning.failed.instantiate.ejb.instance=CWWKW1103W: The EJB instance for class {0} cannot be instantiated. Liberty gets the instance from JAXRS.
+warning.failed.instantiate.ejb.instance.explanation= The EJB class {0} does not have default constructor. Liberty gets the InstantiationException exception when it tries to instantiate the EJB instance.
+warning.failed.instantiate.ejb.instance.useraction=No action is required.
+
+error.failed.toloadejbclass=CWWKW1104W: The EJB class {0} can not be loaded.
+error.failed.toloadejbclass.explanation= The EJB class {0} can not be loaded.
+error.failed.toloadejbclass.useraction=Correct your application to fix the issue.

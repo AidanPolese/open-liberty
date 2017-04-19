@@ -16,6 +16,7 @@ Export-Package: \
  com.ibm.ws.tx.embeddable,\
  com.ibm.tx.remote,\
  com.ibm.ws.tx.jta.embeddable,\
+ com.ibm.ws.tx.rrs, \
  com.ibm.ws.tx.util.logging, \
  com.ibm.ws.uow.embeddable,\
  com.ibm.ws.uow.embeddable.jndi,\

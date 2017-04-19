@@ -42,7 +42,6 @@ Export-Package: com.ibm.ws.kernel.launch.service;provide:=true, \
   com.ibm.ws.kernel.provisioning;provide:=true, \
   com.ibm.ws.kernel.security.thread;provide:=true, \
   com.ibm.ws.kernel.provisioning.packages;provide:=true, \
-  com.ibm.ws.kernel.zos;provide:=true, \
   com.ibm.wsspi.kernel.security.thread;provide:=true
  
 Import-Package: !org.omg.CORBA*, *
@@ -90,4 +89,4 @@ instrument.disabled: true
 	com.ibm.ws.kernel.security.thread;version=latest,\
 	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
 	com.ibm.ws.logging.core;version=latest,\
-    com.ibm.ws.ras.instrument;version=latest
+	com.ibm.ws.ras.instrument;version=latest

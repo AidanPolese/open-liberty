@@ -53,7 +53,7 @@ Service-Component: \
     executor=java.util.concurrent.ExecutorService; \
     nonDeferrableScheduledExecutor=java.util.concurrent.ScheduledExecutorService; \
     embeddableWebSphereTransactionManager=com.ibm.ws.tx.embeddable.EmbeddableWebSphereTransactionManager; \
-    rRSXAResourceFactory=com.ibm.ws.tx.zos.RRSXAResourceFactory; \
+    rRSXAResourceFactory=com.ibm.ws.tx.rrs.RRSXAResourceFactory; \
     variableRegistry=com.ibm.wsspi.kernel.service.location.VariableRegistry; \
     dynamic:='rRSXAResourceFactory'; \
 	greedy:='rRSXAResourceFactory';\
@@ -64,13 +64,12 @@ instrument.disabled: true
 -buildpath: \
 	com.ibm.ws.logging.core,\
 	com.ibm.tx.jta;version=latest,\
-	com.ibm.websphere.javaee.connector.1.6;version=latest,\
+	com.ibm.websphere.javaee.connector.1.7;version=latest,\
 	com.ibm.ws.javaee.dd.common;version=latest,\
 	com.ibm.ws.kernel.service,\
 	com.ibm.ws.container.service;version=latest,\
 	com.ibm.ws.resource;version=latest,\
 	com.ibm.ws.tx.embeddable;version=latest,\
-	com.ibm.ws.tx.zos;version=latest,\
 	com.ibm.ws.security.jca;version=latest,\
 	com.ibm.websphere.javaee.transaction.1.1;version=latest,\
 	com.ibm.ws.kernel.security.thread,\

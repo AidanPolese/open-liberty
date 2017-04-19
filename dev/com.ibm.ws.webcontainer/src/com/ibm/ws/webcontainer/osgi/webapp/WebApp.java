@@ -27,6 +27,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1395,9 +1396,19 @@ public class WebApp extends com.ibm.ws.webcontainer.webapp.WebApp implements Com
   }
   
   @Override
-  protected <T> T createAsManageObject(Class<?> Klass) throws ServletException {
+  protected <T> T createAsManageObject(final Class<?> Klass) throws ServletException {
+      ManagedObject<?> mo = null;
       try {
-          ManagedObject mo = this.injectAndPostConstruct(Klass);
+          if (System.getSecurityManager()!=null) {
+              mo = AccessController.doPrivileged(new PrivilegedExceptionAction<ManagedObject<?>>() {
+                  @Override
+                  public ManagedObject<?> run() throws Exception {
+                      return injectAndPostConstruct(Klass);
+                  }
+              });
+          } else { 
+              mo = injectAndPostConstruct(Klass);
+          }
           cdiContexts.put(mo.getObject(), mo);
           return ((T)mo.getObject());
       } catch (Exception e) {

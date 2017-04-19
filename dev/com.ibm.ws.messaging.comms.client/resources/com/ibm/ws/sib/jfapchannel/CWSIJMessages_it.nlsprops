@@ -1,6 +1,6 @@
 # -------------------------------------------------------------------------------------------------
 # @start_prolog@
-# Version: @(#) 1.43 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/CWSIJMessages.nlsprops, SIB.comms, WASX.SIB 10/10/14 01:07:38 [11/9/10 00:07:27]
+# Version: @(#) 1.43 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/CWSIJMessages.nlsprops, SIB.comms, WASX.SIB, uu1215.01 10/10/14 01:07:38 [4/12/12 22:14:11]
 # ============================================================================
 # IBM Confidential OCO Source Materials
 #
@@ -73,7 +73,7 @@
 # -------------------------------------------------------------------------------------------------
 # {0} the class name where the exception was caught
 # {1} is the value of the Exception
-EXCP_DURING_INIT_SICJ0001=CWSIJ0001E: Si \u00e8 verificato un errore interno.  Non \u00e8 possibile creare un oggetto di classe {0} a causa dell''eccezione: {1}.
+EXCP_DURING_INIT_SICJ0001=CWSIJ0001E: Si \u00e8 verificato un errore interno.  Impossibile creare un oggetto di classe {0} a causa dell''eccezione: {1}.
 EXCP_DURING_INIT_SICJ0001.explanation=CMSG0001
 EXCP_DURING_INIT_SICJ0001.useraction=CMSG0002
 
@@ -88,7 +88,7 @@ EXCP_DURING_INIT_SICJ0002.useraction=CMSG0002
 # -------------------------------------------------------------------------------------------------
 # {0} the class name where the exception was caught
 # {1} is the value of the Exception
-EXCP_DURING_INIT_SICJ0003=CWSIJ0003E: Si \u00e8 verificato un errore interno.  Non \u00e8 possibile creare un oggetto di classe {0} a causa dell''eccezione: {1}.
+EXCP_DURING_INIT_SICJ0003=CWSIJ0003E: Si \u00e8 verificato un errore interno.  Impossibile creare un oggetto di classe {0} a causa dell''eccezione: {1}.
 EXCP_DURING_INIT_SICJ0003.explanation=CMSG0001
 EXCP_DURING_INIT_SICJ0003.useraction=CMSG0002
 
@@ -102,7 +102,7 @@ EXCP_DURING_INIT_SICJ0004.useraction=CMSG0002
 
 # -------------------------------------------------------------------------------------------------
 CF_NOT_AVAILABLE_SICJ0005=CWSIJ0005E: Impossibile trovare un'istanza del servizio framework del canale da utilizzare per le comunicazioni.
-CF_NOT_AVAILABLE_SICJ0005.explanation=Non \u00e8 possibile trovare un'istanza del servizio framework del canale.  Non \u00e8 possibile effettuare comunicazioni di rete.
+CF_NOT_AVAILABLE_SICJ0005.explanation=Non \u00e8 possibile trovare un'istanza del servizio framework del canale.  Impossibile effettuare comunicazioni di rete.
 CF_NOT_AVAILABLE_SICJ0005.useraction=Verificare che il server di destinazione sia avviato e che utilizzi la porta di avvio predefinita 2809 sulla macchina locale. In caso contrario, eseguire nuovamente il comando launchClient con il parametro -CCBootstrapPort, che specifica il numero di porta corretto, ed il parametro -CCBootstrapHost, che specifica il nome host corretto del server di destinazione. Per ulteriori informazioni relative alla risoluzione di questo errore, consultare le informazioni relative alla determinazione dei problemi nella pagina Web di supporto del server delle applicazioni all'indirizzo: http://www.ibm.com/software/webservers/appserv/was/support.
 
 # -------------------------------------------------------------------------------------------------
@@ -351,7 +351,7 @@ CONNECTION_CLOSED_SICJ0044.useraction=Esaminare i file log del server delle appl
 
 # -------------------------------------------------------------------------------------------------
 # {0} is the host name, {1} is the chain
-CONVERSATIONIMPL_INVALIDATE_SICJ0045=CWSIJ0045E: Una condizione non prevista ha determinato la chiusura di una connessione di rete dall''host {0} tramite la catena {1} .
+CONVERSATIONIMPL_INVALIDATE_SICJ0045=CWSIJ0045E: Una condizione non prevista ha determinato la chiusura di una connessione di rete dall''host {0} tramite la catena {1}.
 CONVERSATIONIMPL_INVALIDATE_SICJ0045.explanation=Il rilevamento di una condizione non prevista ha causato la chiusura di una connessione di rete.
 CONVERSATIONIMPL_INVALIDATE_SICJ0045.useraction=Esaminare tutte le eccezioni collegate ed i file log del server delle applicazioni per determinare la causa della chiusura della connessione di rete. Consultare i messaggi di errore di accompagnamento per ulteriori informazioni e correggere il problema, se possibile.
 
@@ -382,7 +382,7 @@ IDTABLE_INTERNAL_SICJ0050.useraction=CMSG0002
 
 # -------------------------------------------------------------------------------------------------
 # {0} is the host name, {1} is the chain name
-INBOUNDCONV_INVALIDATE_SICJ0051=CWSIJ0051E: Una condizione non prevista ha determinato la chiusura di una connessione di rete dall''host {0} tramite la catena {1} .
+INBOUNDCONV_INVALIDATE_SICJ0051=CWSIJ0051E: Una condizione non prevista ha determinato la chiusura di una connessione di rete dall''host {0} tramite la catena {1}.
 INBOUNDCONV_INVALIDATE_SICJ0051.explanation=Il rilevamento di una condizione non prevista ha causato la chiusura di una connessione di rete.  Per ulteriori informazioni controllare tutte le eccezioni collegate.
 INBOUNDCONV_INVALIDATE_SICJ0051.useraction=Esaminare tutte le eccezioni collegate ed i file log del server delle applicazioni per determinare la causa della chiusura della connessione di rete. Consultare i messaggi di errore di accompagnamento per ulteriori informazioni e correggere il problema, se possibile.
 

@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2010, 2015
+# (C) COPYRIGHT International Business Machines Corp. 2010, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -500,6 +500,10 @@ LOG_VALIDATION_DONE=Ov\u011b\u0159ov\u00e1n\u00ed konfigura\u010dn\u00edho soubo
 LOG_DELETING_TEMP_SERVER_DIR=Odstra\u0148ov\u00e1n\u00ed do\u010dasn\u00e9ho adres\u00e1\u0159e serveru {0}...
 LOG_NOT_DELETING_TEMP_SERVER_DIR=Do\u010dasn\u00fd adres\u00e1\u0159 serveru {0} nebyl odstran\u011bn, proto\u017ee adres\u00e1\u0159 protokolu m\u016f\u017ee obsahovat informace o chyb\u00e1ch. Pokud tyto informace nepot\u0159ebujete, m\u016f\u017eete adres\u00e1\u0159 {1} odstranit ru\u010dn\u011b.
 LOG_CREATED_TEMP_SERVER_DIR=Byl vytvo\u0159en do\u010dasn\u00fd adres\u00e1\u0159 serveru {0}.
+
+LOG_CANNOT_CLOSE_OBJECT=Do\u010dasn\u00e9 soubory nelze odstranit.
+LOG_CANNOT_CLOSE_OBJECT.explanation=Uk\u00e1zka vy\u017eaduje k odstran\u011bn\u00ed adres\u00e1\u0159e installTmp prost\u0159ed\u00ed Java 7 nebo vy\u0161\u0161\u00ed.
+LOG_CANNOT_CLOSE_OBJECT.action=Odeberte adres\u00e1\u0159 installTmp ru\u010dn\u011b, nebo pou\u017eijte prost\u0159ed\u00ed Java 7 nebo vy\u0161\u0161\u00ed.
 
 LOG_PASSWORD_NOT_ENCODED_PROXY=Heslo pro tento server proxy nen\u00ed zak\u00f3dovan\u00e9: {0}. Heslo je mo\u017en\u00e9 zak\u00f3dovat pomoc\u00ed p\u0159\u00edkazu securityUtility encode s volbou --encoding nastavenou na podporovan\u00fd typ k\u00f3dov\u00e1n\u00ed, tedy xor (v\u00fdchoz\u00ed), aes nebo hash. Nap\u0159\u00edklad: securityUtility encode --encoding=aes proxyPassword
 LOG_PENDING_UNINSTALLING_FEATURE=Funkce ur\u010den\u00e9 k odinstalaci:

@@ -60,7 +60,7 @@ public class WSJdbcResultSet extends WSJdbcObject implements ResultSet, WSJdbcOb
      * @param rsImpl the JDBC ResultSet implementation class to be wrapped.
      * @param parent the Statement or DatabaseMetaData wrapper creating this ResultSet.
      */
-    protected WSJdbcResultSet(ResultSet rsImpl, WSJdbcObject parent) 
+    public WSJdbcResultSet(ResultSet rsImpl, WSJdbcObject parent) 
     {
         if (tc.isEntryEnabled())
             Tr.entry(this, tc, "<init>", AdapterUtil.toString(rsImpl), parent);
@@ -4763,7 +4763,7 @@ public class WSJdbcResultSet extends WSJdbcObject implements ResultSet, WSJdbcOb
         }
     }
 
-    private void addFreedResources(Object result){
+    protected void addFreedResources(Object result){
         if (freeResourcesOnClose)
             if (result instanceof Closeable)
                 resources.add((Closeable) result);
@@ -4778,34 +4778,10 @@ public class WSJdbcResultSet extends WSJdbcObject implements ResultSet, WSJdbcOb
     }
 
     public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            throw new SQLFeatureNotSupportedException();
-        try {
-            T result = mcf.jdbcRuntime.doGetObject(rsetImpl, columnIndex, type);
-            addFreedResources(result);
-            return result;
-        } catch (SQLException ex) {
-            FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcResultSet.getObject", "4975", this);
-            throw WSJdbcUtil.mapException(this, ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            throw runtimeXIfNotClosed(nullX);
-        }
+        throw new SQLFeatureNotSupportedException();
     }
 
     public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            throw new SQLFeatureNotSupportedException();
-        try {
-            T result = mcf.jdbcRuntime.doGetObject(rsetImpl, columnLabel, type);
-            addFreedResources(result);
-            return result;
-        } catch (SQLException ex) {
-            FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcResultSet.getObject", "4990", this);
-            throw WSJdbcUtil.mapException(this, ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            throw runtimeXIfNotClosed(nullX);
-        }
+        throw new SQLFeatureNotSupportedException();
     }
 }

@@ -77,13 +77,11 @@ FEATURES_REMOVED=CWWKF0013I: Il server ha rimosso le seguenti funzioni: {0}.
 FEATURES_REMOVED.explanation=Il server ha rimosso un insieme di funzioni.
 FEATURES_REMOVED.useraction=Non \u00e8 richiesta alcuna azione.
 
-TEST_FIX_DETECTED=CWWKF0014W: Sul server sono attive le seguenti fix di test nel runtime: {0}. \
-Per un elenco completo di fix installate eseguire: productInfo version --ifixes
+TEST_FIX_DETECTED=CWWKF0014W: Sul server sono attive le seguenti fix di test nel runtime: {0}.  Per un elenco completo di fix installate eseguire: productInfo version --ifixes
 TEST_FIX_DETECTED.explanation=I bundle OSGi caricati nel runtime  sono stati modificati da alcune delle fix di test installate. \u00c8 possibile ottenere un elenco di tutte le fix installate utilizzando il comando: productInfo version --ifixes
 TEST_FIX_DETECTED.useraction=Su un server di produzione non devono essere installate fix di test. Se questo \u00e8 un server di produzione, rimuovere le fix di test e riavviare il server.
 
-INTERIM_FIX_DETECTED=CWWKF0015I: Sul server sono attive le seguenti fix temporanee nel runtime: {0}. \
-Per un elenco completo di fix installate eseguire: productInfo version --ifixes
+INTERIM_FIX_DETECTED=CWWKF0015I: Sul server sono attive le seguenti fix temporanee nel runtime: {0}. Per un elenco completo di fix installate eseguire: productInfo version --ifixes
 INTERIM_FIX_DETECTED.explanation=I bundle OSGi caricati nel runtime  sono stati modificati da alcune delle fix temporanee installate. \u00c8 possibile ottenere un elenco di tutte le fix installate utilizzando il comando: productInfo version --ifixes
 INTERIM_FIX_DETECTED.useraction=Non \u00e8 richiesta alcuna azione.
 
@@ -198,7 +196,7 @@ UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_CLIENT_ERROR.explanation=La funzione config
 UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_CLIENT_ERROR.useraction=Rimuovere la funzione dalla configurazione o modificare il file manifest della funzione per abilitare il supporto per il tipo di processo desiderato.
 
 # CWWK042E  {0} = feature Name: {1} = server name 
-UPDATE_MISSING_CORE_FEATURE_ERROR=CWWKF0042E: Impossibile trovare una definizione di funzione per la funzione {0}. Provare ad eseguire il comando bin/installUtility install {0},  per installare la funzione. In alternativa \u00e8 possibile eseguire il comando bin/installUtility install {1},  per installare tutte le funzioni cui fa riferimento questa configurazione.
+UPDATE_MISSING_CORE_FEATURE_ERROR=CWWKF0042E: Impossibile trovare una definizione di funzione per la funzione {0}.  Provare ad eseguire il comando bin/installUtility install {0},  per installare la funzione. In alternativa \u00e8 possibile eseguire il comando bin/installUtility install {1},  per installare tutte le funzioni cui fa riferimento questa configurazione.
 UPDATE_MISSING_CORE_FEATURE_ERROR.explanation=Il gestore funzioni non \u00e8 stato in grado di trovare una definizione per la funzione specificata.
 UPDATE_MISSING_CORE_FEATURE_ERROR.useraction=Verificare che il nome della funzione specificata sia scritto correttamente.  \
 Verificare anche che  la definizione di funzione esista e sia leggibile nella directory lib/features. \

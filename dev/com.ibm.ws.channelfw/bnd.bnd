@@ -37,9 +37,7 @@ Include-Resource: \
     OSGI-INF=resources/OSGI-INF
 
 -dsannotations: com.ibm.websphere.channelfw.osgi.CHFWBundle,\
-   com.ibm.ws.bytebuffer.internal.ByteBufferConfiguration, \
-   com.ibm.io.async.ResultHandler, \
-   com.ibm.io.async.CompletionKey
+   com.ibm.ws.bytebuffer.internal.ByteBufferConfiguration
 
 Service-Component: \
     com.ibm.ws.tcpchannel.options; \
@@ -58,19 +56,12 @@ Service-Component: \
         implementation:=com.ibm.ws.channelfw.internal.CHFWEventHandler; \
         configuration-policy:=ignore;\
         provide:=com.ibm.websphere.event.EventHandler; \
-        properties:="event.topics=com/ibm/websphere/channelfw/*,service.vendor=IBM",\
-    com.ibm.ws.tcpchannel.zosaio; \
-        provide:=com.ibm.ws.tcpchannel.internal.ZosAio; \
-        implementation:=com.ibm.ws.tcpchannel.internal.ZosAio; \
-        angelUtils=com.ibm.ws.kernel.zos.AngelUtils; \
-        configuration-policy:=optional; \
-        immediate:=true; \
-        properties:="service.vendor=IBM"
+        properties:="event.topics=com/ibm/websphere/channelfw/*,service.vendor=IBM"
 
 instrument.disabled: true
 
 -buildpath: \
-	com.ibm.ws.logging.core,\
+	com.ibm.ws.logging,\
 	com.ibm.ws.event,\
 	com.ibm.websphere.org.osgi.core.6.0.0,\
 	com.ibm.websphere.org.osgi.service.component.1.3.0,\
@@ -81,3 +72,17 @@ instrument.disabled: true
 	com.ibm.ws.kernel.security.thread,\
 	com.ibm.ws.kernel.boot.core;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+
+#  <property name="unittest.prop.com.ibm.ws.logging.exception.log.enabled" value="false" />
+#  file /dev/com.ibm.ws.channelfw/unittestports.properties
+
+-testpath: \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	../build.sharedResources/lib/jmock/legacy/objenesis.jar;version=file, \
+	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \
+	../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar;version=file, \
+	com.ibm.ws.kernel.boot;version=latest

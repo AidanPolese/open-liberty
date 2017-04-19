@@ -27,7 +27,8 @@ import javax.resource.ResourceException;
 import com.ibm.ejs.cm.logger.TraceWriter;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.ws.rsadapter.AdapterUtil; 
+import com.ibm.ws.rsadapter.AdapterUtil;
+import com.ibm.ws.rsadapter.jdbc.WSJdbcStatement; 
 
 /**
  * Helper for the Informix JDBC driver.
@@ -100,7 +101,7 @@ public class InformixHelper extends DatabaseHelper {
      * @see com.ibm.ws.rsadapter.spi.DatabaseHelper#getUpdateCount(java.sql.Statement)
      */
     @Override
-    public long getUpdateCount(Statement stmt) throws SQLException {
+    public long getUpdateCount(WSJdbcStatement stmt) throws SQLException {
         try {
             return super.getUpdateCount(stmt);
         } catch (SQLException x) {

@@ -11,255 +11,100 @@
  */
 package com.ibm.ws.jdbc.osgi.v41;
 
-import java.sql.BatchUpdateException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.sql.Statement;
-import java.util.concurrent.Executor;
+
+import javax.resource.ResourceException;
+import javax.security.auth.Subject;
+import javax.sql.PooledConnection;
 
 import org.osgi.framework.Version;
 
 import com.ibm.websphere.ras.annotation.Trivial;
 import com.ibm.ws.jdbc.osgi.JDBCRuntimeVersion;
+import com.ibm.ws.jdbc.osgi.v40.JDBCRuntimeVersion40;
+import com.ibm.ws.rsadapter.jdbc.WSJdbcCallableStatement;
+import com.ibm.ws.rsadapter.jdbc.WSJdbcConnection;
+import com.ibm.ws.rsadapter.jdbc.WSJdbcDatabaseMetaData;
+import com.ibm.ws.rsadapter.jdbc.WSJdbcObject;
+import com.ibm.ws.rsadapter.jdbc.WSJdbcPreparedStatement;
+import com.ibm.ws.rsadapter.jdbc.WSJdbcResultSet;
+import com.ibm.ws.rsadapter.jdbc.WSJdbcStatement;
+import com.ibm.ws.rsadapter.jdbc.v41.WSJdbcCallableStatement41;
+import com.ibm.ws.rsadapter.jdbc.v41.WSJdbcConnection41;
+import com.ibm.ws.rsadapter.jdbc.v41.WSJdbcDatabaseMetaData41;
+import com.ibm.ws.rsadapter.jdbc.v41.WSJdbcPreparedStatement41;
+import com.ibm.ws.rsadapter.jdbc.v41.WSJdbcResultSet41;
+import com.ibm.ws.rsadapter.jdbc.v41.WSJdbcStatement41;
+import com.ibm.ws.rsadapter.jdbc.v41.WSRdbManagedConnection41;
+import com.ibm.ws.rsadapter.spi.StatementCacheKey;
+import com.ibm.ws.rsadapter.spi.WSConnectionRequestInfoImpl;
+import com.ibm.ws.rsadapter.spi.WSManagedConnectionFactoryImpl;
+import com.ibm.ws.rsadapter.spi.WSRdbManagedConnectionImpl;
 
 @Trivial
-public class JDBCRuntimeVersion41 implements JDBCRuntimeVersion {
+public class JDBCRuntimeVersion41 extends JDBCRuntimeVersion40 implements JDBCRuntimeVersion {
     @Override
     public Version getVersion() {
         return VERSION_4_1;
     }
 
     @Override
-    public void doSetSchema(Connection sqlConn, String schema) throws SQLException {
-        try {
-            sqlConn.setSchema(schema);
-        } catch (IncompatibleClassChangeError e) { // pre-4.1 driver
-            throw new SQLFeatureNotSupportedException(e);
-        }
+    public WSJdbcConnection newConnection(WSRdbManagedConnectionImpl mc, Connection conn, Object key, Object currentThreadID) {
+        return new WSJdbcConnection41(mc, conn, key, currentThreadID);
     }
 
     @Override
-    public String doGetSchema(Connection sqlConn) throws SQLException {
-        try {
-            return sqlConn.getSchema();
-        } catch (IncompatibleClassChangeError e) { // pre-4.1 driver
-            throw new SQLFeatureNotSupportedException(e);
-        }
+    public WSRdbManagedConnectionImpl newManagedConnection(WSManagedConnectionFactoryImpl mcf1, PooledConnection poolConn1, Connection conn, Subject sub,
+                                                           WSConnectionRequestInfoImpl cxRequestInfo) throws ResourceException {
+        return new WSRdbManagedConnection41(mcf1, poolConn1, conn, sub, cxRequestInfo);
     }
 
     @Override
-    public void doAbort(Connection sqlConn, Executor ex) throws SQLException {
-        try {
-            sqlConn.abort(ex);
-        } catch (IncompatibleClassChangeError e) { // pre-4.1 driver
-            throw new SQLFeatureNotSupportedException(e);
-        }
+    public WSJdbcDatabaseMetaData newDatabaseMetaData(DatabaseMetaData metaDataImpl,
+                                                      WSJdbcConnection connWrapper) throws SQLException {
+        return new WSJdbcDatabaseMetaData41(metaDataImpl, connWrapper);
     }
 
     @Override
-    public void doSetNetworkTimeout(Connection sqlConn, Executor ex, int millis) throws SQLException {
-        try {
-            sqlConn.setNetworkTimeout(ex, millis);
-        } catch (IncompatibleClassChangeError e) { // pre-4.1 driver
-            throw new SQLFeatureNotSupportedException(e);
-        }
+    public WSJdbcStatement newStatement(Statement stmtImplObject, WSJdbcConnection connWrapper, int theHoldability) {
+        return new WSJdbcStatement41(stmtImplObject, connWrapper, theHoldability);
     }
 
     @Override
-    public int doGetNetworkTimeout(Connection sqlConn) throws SQLException {
-        try {
-            return sqlConn.getNetworkTimeout();
-        } catch (IncompatibleClassChangeError e) { // pre-4.1 driver
-            throw new SQLFeatureNotSupportedException(e);
-        }
+    public WSJdbcPreparedStatement newPreparedStatement(PreparedStatement pstmtImplObject, WSJdbcConnection connWrapper,
+                                                        int theHoldability, String pstmtSQL) throws SQLException {
+        return new WSJdbcPreparedStatement41(pstmtImplObject, connWrapper, theHoldability, pstmtSQL);
     }
 
     @Override
-    public ResultSet doGetPseudoColumns(DatabaseMetaData md, String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) throws SQLException {
-        try {
-            return md.getPseudoColumns(catalog, schemaPattern, tableNamePattern, columnNamePattern);
-        } catch (IncompatibleClassChangeError e) { // pre-4.1 driver
-            throw new SQLFeatureNotSupportedException(e);
-        }
+    public WSJdbcPreparedStatement newPreparedStatement(PreparedStatement pstmtImplObject, WSJdbcConnection connWrapper,
+                                                        int theHoldability, String pstmtSQL,
+                                                        StatementCacheKey pstmtKey) throws SQLException {
+        return new WSJdbcPreparedStatement41(pstmtImplObject, connWrapper, theHoldability, pstmtSQL, pstmtKey);
     }
 
     @Override
-    public boolean doGeneratedKeyAlwaysReturned(DatabaseMetaData md) throws SQLException {
-        try {
-            return md.generatedKeyAlwaysReturned();
-        } catch (IncompatibleClassChangeError e) { // pre-4.1 driver
-            throw new SQLFeatureNotSupportedException(e);
-        }
+    public WSJdbcCallableStatement newCallableStatement(CallableStatement cstmtImplObject, WSJdbcConnection connWrapper,
+                                                        int theHoldability, String cstmtSQL) throws SQLException {
+        return new WSJdbcCallableStatement41(cstmtImplObject, connWrapper, theHoldability, cstmtSQL);
     }
 
     @Override
-    public <T> T doGetObject(CallableStatement cstmt, int parameterIndex, Class<T> type) throws SQLException {
-        try {
-            return cstmt.getObject(parameterIndex, type);
-        } catch (IncompatibleClassChangeError e) { // pre-4.1 driver
-            throw new SQLFeatureNotSupportedException(e);
-        }
+    public WSJdbcCallableStatement newCallableStatement(CallableStatement cstmtImplObject, WSJdbcConnection connWrapper,
+                                                        int theHoldability, String cstmtSQL,
+                                                        StatementCacheKey cstmtKey) throws SQLException {
+        return new WSJdbcCallableStatement41(cstmtImplObject, connWrapper, theHoldability, cstmtSQL, cstmtKey);
     }
 
     @Override
-    public <T> T doGetObject(CallableStatement cstmt, String parameterName, Class<T> type) throws SQLException {
-        try {
-            return cstmt.getObject(parameterName, type);
-        } catch (IncompatibleClassChangeError e) { // pre-4.1 driver
-            throw new SQLFeatureNotSupportedException(e);
-        }
+    public WSJdbcResultSet newResultSet(ResultSet rsImpl, WSJdbcObject parent) {
+        return new WSJdbcResultSet41(rsImpl, parent);
     }
 
-    @Override
-    public <T> T doGetObject(ResultSet rs, int columnIndex, Class<T> type) throws SQLException {
-        try {
-            return rs.getObject(columnIndex, type);
-        } catch (IncompatibleClassChangeError e) { // pre-4.1 driver
-            throw new SQLFeatureNotSupportedException(e);
-        }
-    }
-
-    @Override
-    public <T> T doGetObject(ResultSet rs, String columnLabel, Class<T> type) throws SQLException {
-        try {
-            return rs.getObject(columnLabel, type);
-        } catch (IncompatibleClassChangeError e) { // pre-4.1 driver
-            throw new SQLFeatureNotSupportedException(e);
-        }
-    }
-
-    @Override
-    public long getLargeUpdateCount(Statement stmt) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void setLargeMaxRows(Statement stmt, long max) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public long getLargeMaxRows(Statement stmt) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public long[] executeLargeBatch(Statement stmt) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public long executeLargeUpdate(Statement stmt, String sql) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public long executeLargeUpdate(Statement stmt, String sql, int autoGeneratedKeys) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public long executeLargeUpdate(Statement stmt, String sql, int[] columnIndexes) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public long executeLargeUpdate(Statement stmt, String sql, String[] columnNames) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public boolean supportsRefCursors(DatabaseMetaData md) throws SQLException {
-        return false; // matches default implementation
-    }
-
-    @Override
-    public long getMaxLogicalLobSize(DatabaseMetaData md) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public BatchUpdateException newBatchUpdateException(BatchUpdateException copyFrom, String newMessage) {
-        return new BatchUpdateException(newMessage, copyFrom.getSQLState(), copyFrom.getErrorCode(), copyFrom.getUpdateCounts());
-    }
-
-    @Override
-    public void registerOutputParameter(CallableStatement cstmt, int parameterIndex, Object sqlType) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void registerOutputParameter(CallableStatement cstmt, int parameterIndex, Object sqlType, int scale) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void registerOutputParameter(CallableStatement cstmt, int parameterIndex, Object sqlType, String typeName) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void registerOutputParameter(CallableStatement cstmt, String parameterName, Object sqlType) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void registerOutputParameter(CallableStatement cstmt, String parameterName, Object sqlType, int scale) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void registerOutputParameter(CallableStatement cstmt, String parameterName, Object sqlType, String typeName) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void setObject(CallableStatement cstmt, String parameterName, Object x, Object targetSqlType) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void setObject(CallableStatement cstmt, String parameterName, Object x, Object tragetSqlType, int scaleOrLength) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public long executeLargeUpdate(PreparedStatement pstmt) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void setObject(PreparedStatement pstmt, int parameterIndex, Object x, Object targetSqlType) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public long setObject(PreparedStatement pstmt, int parameterIndex, Object x, Object targetSqlType, int scaleOrLength) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void updateObject(ResultSet rs, int columnIndex, Object x, Object targetSqlType) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void updateObject(ResultSet rs, int columnIndex, Object x, Object targetSqlType, int scaleOrLength) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void updateObject(ResultSet rs, String columnLabel, Object x, Object targetSqlType) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
-
-    @Override
-    public void updateObject(ResultSet rs, String columnLabel, Object x, Object targetSqlType, int scaleOrLength) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
-    }
 }

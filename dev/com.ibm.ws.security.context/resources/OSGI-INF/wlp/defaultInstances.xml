@@ -1,0 +1,8 @@
+<server>
+
+  <!-- merge securityContext into default instance -->
+  <contextService id="DefaultContextService">
+    <securityContext/>
+  </contextService>
+
+</server>

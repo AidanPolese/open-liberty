@@ -29,6 +29,7 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
+import com.ibm.io.async.IAsyncProvider.AsyncIOHelper;
 import com.ibm.websphere.channelfw.ChainData;
 import com.ibm.websphere.channelfw.ChannelUtils;
 import com.ibm.websphere.channelfw.EndPointMgr;
@@ -43,7 +44,6 @@ import com.ibm.ws.channelfw.internal.ChannelFrameworkImpl;
 import com.ibm.ws.channelfw.internal.chains.EndPointMgrImpl;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.kernel.feature.ServerStarted;
-import com.ibm.ws.kernel.zos.NativeMethodManager;
 import com.ibm.ws.tcpchannel.internal.TCPChannelFactory;
 import com.ibm.ws.udpchannel.internal.UDPChannelFactory;
 import com.ibm.wsspi.bytebuffer.WsByteBufferPoolManager;
@@ -172,13 +172,13 @@ public class CHFWBundle implements ServerQuiesceListener {
         this.chfw.updateConfig(cfwConfiguration);
     }
 
-    @Reference(service = NativeMethodManager.class, cardinality = ReferenceCardinality.OPTIONAL)
-    protected void setNativeMethodManager(NativeMethodManager nativeMethodManager) {
-        chfw.setNativeMethodManager(nativeMethodManager);
+    @Reference(service = AsyncIOHelper.class, cardinality = ReferenceCardinality.OPTIONAL)
+    protected void setAsyncIOHelper(AsyncIOHelper asyncIOHelper) {
+        chfw.setAsyncIOHelper(asyncIOHelper);
     }
 
-    protected void unsetNativeMethodManager(NativeMethodManager nativeMethodManager) {
-        chfw.setNativeMethodManager(null);
+    protected void unsetAsyncIOHelper(AsyncIOHelper asyncIOHelper) {
+        chfw.setAsyncIOHelper(null);
     }
 
     /**

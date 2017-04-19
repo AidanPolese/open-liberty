@@ -1,0 +1,26 @@
+# @start_prolog@
+# ============================================================================
+# IBM Confidential OCO Source Materials
+#
+# 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-W65 Copyright IBM Corp. 2015
+#
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# ============================================================================
+# @end_prolog@
+#COMPONENTPREFIX CWWKJ
+#COMPONENTNAMEFOR CWWKJ J2EE JavaMail
+#CMVCPATHNAME com.ibm.ws.javamail.management.j2ee/resources/com/ibm/ws/javamail/management/j2ee/internal/resources/JavaMailMessages.nlsprops
+#ISMESSAGEFILE FALSE
+#NLS_ENCODING=UNICODE
+#NLS_MESSAGEFORMAT_NONE
+#
+# Message prefix block: CWWKJ0300 - CWWKJ0309
+
+#-----  MailSessionRegistrarImpl
+
+OSGI_SERVICE_ERROR=CWWKJ0300E: Slu\u017eba OSGi {0} nen\u00ed k dispozici. Zkuste restartovat server s volbou --clean.
+OSGI_SERVICE_ERROR.explanation=Uveden\u00e1 slu\u017eba nen\u00ed dostupn\u00e1, co\u017e zp\u016fsobuje intern\u00ed chybu serveru.
+OSGI_SERVICE_ERROR.useraction=Restartujte server s volbou --clean.
+

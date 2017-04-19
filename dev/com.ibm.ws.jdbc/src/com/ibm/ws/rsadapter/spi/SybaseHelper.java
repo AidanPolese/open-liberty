@@ -27,7 +27,8 @@ import javax.sql.XADataSource;
 import com.ibm.ejs.cm.logger.TraceWriter;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.ws.rsadapter.AdapterUtil; 
+import com.ibm.ws.rsadapter.AdapterUtil;
+import com.ibm.ws.rsadapter.jdbc.WSJdbcStatement; 
 
 /**
  * Helper for Sybase.
@@ -173,7 +174,7 @@ public class SybaseHelper extends DatabaseHelper
     /**
      * @see com.ibm.ws.rsadapter.spi.DatabaseHelper#getUpdateCount(java.sql.Statement)
      */
-    public long getUpdateCount(Statement stmt) throws SQLException
+    public long getUpdateCount(WSJdbcStatement stmt) throws SQLException
     {
         try
         {

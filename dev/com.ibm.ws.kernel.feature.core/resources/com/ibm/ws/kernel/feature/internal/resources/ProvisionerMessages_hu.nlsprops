@@ -51,11 +51,11 @@ UPDATE_BUNDLE_CACHE_WARNING.useraction=Gy\u0151z\u0151dj\u00f6n meg r\u00f3la, h
 
 STARTING_AUDIT=CWWKF0007I: A szolg\u00e1ltat\u00e1sfriss\u00edt\u00e9s elindult.
 STARTING_AUDIT.explanation=A szolg\u00e1ltat\u00e1skezel\u0151 elkezdte feldolgozni az enged\u00e9lyezett szolg\u00e1ltat\u00e1sokat. A m\u00e1sodpercekben megadott id\u0151tartam a platform ind\u00edt\u00e1s\u00e1hoz van viszony\u00edtva.
-STARTING_AUDIT.useraction=Semmit sem kell tennie.
+STARTING_AUDIT.useraction=Nincs teend\u0151.
 
 COMPLETE_AUDIT=CWWKF0008I: A szolg\u00e1ltat\u00e1sfriss\u00edt\u00e9s befejez\u0151d\u00f6tt {0} m\u00e1sodperc alatt.
 COMPLETE_AUDIT.explanation=A szolg\u00e1ltat\u00e1skezel\u0151 befejezte az enged\u00e9lyezett szolg\u00e1ltat\u00e1sok feldolgoz\u00e1s\u00e1t. A m\u00e1sodpercekben megadott id\u0151tartam a platform ind\u00edt\u00e1s\u00e1hoz van viszony\u00edtva.
-COMPLETE_AUDIT.useraction=Semmit sem kell tennie.
+COMPLETE_AUDIT.useraction=Nincs teend\u0151.
 
 EMPTY_FEATURES_WARNING=CWWKF0009W: A kiszolg\u00e1l\u00f3 nem lett be\u00e1ll\u00edtva szolg\u00e1ltat\u00e1sok telep\u00edt\u00e9s\u00e9re.
 EMPTY_FEATURES_WARNING.explanation=Nincsenek be\u00e1ll\u00edtva telep\u00edtend\u0151 szolg\u00e1ltat\u00e1sok. 
@@ -67,27 +67,23 @@ BUNDLE_MATCH_WARNING.useraction=Gy\u0151z\u0151dj\u00f6n meg r\u00f3la, hogy a s
 
 SERVER_STARTED=CWWKF0011I: A(z) {0} kiszolg\u00e1l\u00f3 k\u00e9szen \u00e1ll egy intelligensebb planet futtat\u00e1s\u00e1ra.
 SERVER_STARTED.explanation=A kiszolg\u00e1l\u00f3 sikeresen elindult.
-SERVER_STARTED.useraction=Semmit sem kell tennie.
+SERVER_STARTED.useraction=Nincs teend\u0151.
 
 FEATURES_ADDED=CWWKF0012I: A kiszolg\u00e1l\u00f3 telep\u00edtett a k\u00f6vetkez\u0151 szolg\u00e1ltat\u00e1sokat: {0}.
 FEATURES_ADDED.explanation=A kiszolg\u00e1l\u00f3 telep\u00edtett egy szolg\u00e1ltat\u00e1sk\u00e9szletet.
-FEATURES_ADDED.useraction=Semmit sem kell tennie.
+FEATURES_ADDED.useraction=Nincs teend\u0151.
 
 FEATURES_REMOVED=CWWKF0013I: A kiszolg\u00e1l\u00f3 elt\u00e1vol\u00edtotta a k\u00f6vetkez\u0151 szolg\u00e1ltat\u00e1sokat: {0}.
 FEATURES_REMOVED.explanation=A kiszolg\u00e1l\u00f3 elt\u00e1vol\u00edtott egy szolg\u00e1ltat\u00e1sk\u00e9szletet.
-FEATURES_REMOVED.useraction=Semmit sem kell tennie.
+FEATURES_REMOVED.useraction=Nincs teend\u0151.
 
-TEST_FIX_DETECTED=CWWKF0014W: A kiszolg\u00e1l\u00f3 a k\u00f6vetkez\u0151, fut\u00e1si k\u00f6rnyezetben akt\u00edv tesztjav\u00edt\u00e1sokkal rendelkezik: {0}. \
-A telep\u00edtett jav\u00edt\u00e1sok teljes list\u00e1j\u00e1\u00e9rt futtassa a ''productInfo version --ifixes'' parancsot.
-TEST_FIX_DETECTED.explanation=A fut\u00e1si k\u00f6rnyezetbe bet\u00f6lt\u00f6tt OSGi k\u00f6tegeket n\u00e9h\u00e1ny telep\u00edtett tesztjav\u00edt\u00e1s m\u00f3dos\u00edtotta.  \
-A 'productInfo version --ifixes' parancs haszn\u00e1lat\u00e1val megkaphatja az \u00f6sszes telep\u00edtett jav\u00edt\u00e1s list\u00e1j\u00e1t.
+TEST_FIX_DETECTED=CWWKF0014W: A kiszolg\u00e1l\u00f3 a k\u00f6vetkez\u0151, fut\u00e1si k\u00f6rnyezetben akt\u00edv tesztjav\u00edt\u00e1sokkal rendelkezik: {0}.  A telep\u00edtett jav\u00edt\u00e1sok teljes list\u00e1j\u00e1\u00e9rt futtassa a ''productInfo version --ifixes'' parancsot.
+TEST_FIX_DETECTED.explanation=A fut\u00e1si k\u00f6rnyezetbe bet\u00f6lt\u00f6tt OSGi k\u00f6tegeket n\u00e9h\u00e1ny telep\u00edtett tesztjav\u00edt\u00e1s m\u00f3dos\u00edtotta. A 'productInfo version --ifixes' parancs haszn\u00e1lat\u00e1val megkaphatja az \u00f6sszes telep\u00edtett jav\u00edt\u00e1s list\u00e1j\u00e1t.
 TEST_FIX_DETECTED.useraction=Az \u00e9les kiszolg\u00e1l\u00f3n nem lehetnek tesztjav\u00edt\u00e1sok telep\u00edtve. Ha ez egy \u00e9les kiszolg\u00e1l\u00f3, t\u00e1vol\u00edtsa el a tesztjav\u00edt\u00e1sokat, \u00e9s ind\u00edtsa \u00fajra a kiszolg\u00e1l\u00f3t.
 
-INTERIM_FIX_DETECTED=CWWKF0015I: A kiszolg\u00e1l\u00f3 a k\u00f6vetkez\u0151, fut\u00e1si k\u00f6rnyezetben akt\u00edv k\u00f6ztes jav\u00edt\u00e1sokkal rendelkezik: {0}. \
-A telep\u00edtett jav\u00edt\u00e1sok teljes list\u00e1j\u00e1\u00e9rt futtassa a ''productInfo version --ifixes'' parancsot.
-INTERIM_FIX_DETECTED.explanation=A fut\u00e1si k\u00f6rnyezetbe bet\u00f6lt\u00f6tt OSGi k\u00f6tegeket n\u00e9h\u00e1ny telep\u00edtett k\u00f6ztes jav\u00edt\u00e1s m\u00f3dos\u00edtotta.  \
-A 'productInfo version --ifixes' parancs haszn\u00e1lat\u00e1val megkaphatja az \u00f6sszes telep\u00edtett jav\u00edt\u00e1s list\u00e1j\u00e1t.
-INTERIM_FIX_DETECTED.useraction=Semmit sem kell tennie.
+INTERIM_FIX_DETECTED=CWWKF0015I: A kiszolg\u00e1l\u00f3 a k\u00f6vetkez\u0151, fut\u00e1si k\u00f6rnyezetben akt\u00edv k\u00f6ztes jav\u00edt\u00e1sokkal rendelkezik: {0}. A telep\u00edtett jav\u00edt\u00e1sok teljes list\u00e1j\u00e1\u00e9rt futtassa a ''productInfo version --ifixes'' parancsot.
+INTERIM_FIX_DETECTED.explanation=A fut\u00e1si k\u00f6rnyezetbe bet\u00f6lt\u00f6tt OSGi k\u00f6tegeket n\u00e9h\u00e1ny telep\u00edtett k\u00f6ztes jav\u00edt\u00e1s m\u00f3dos\u00edtotta. A 'productInfo version --ifixes' parancs haszn\u00e1lat\u00e1val megkaphatja az \u00f6sszes telep\u00edtett jav\u00edt\u00e1s list\u00e1j\u00e1t.
+INTERIM_FIX_DETECTED.useraction=Nincs teend\u0151.
 
 # IBM-Provision-Capability is a manifest header name and should not be translated.
 INVALID_PROVISION_CAPABILITY_FILTER=CWWKF0016I: A(z) {0} sz\u0171r\u0151 a(z) {1} \u00f6sszetev\u0151 le\u00edr\u00f3f\u00e1jlj\u00e1nak fejl\u00e9c\u00e9ben helytelen: {2}
@@ -120,7 +116,7 @@ UNSUPPORTED_FEATURE_VERSION.explanation=A kiszolg\u00e1l\u00f3 csak olyan szolg\
 UNSUPPORTED_FEATURE_VERSION.useraction=Keresse meg a szolg\u00e1ltat\u00e1s szerz\u0151j\u00e9t a term\u00e9k jelen v\u00e1ltozat\u00e1hoz tervezett p\u00e9ld\u00e1ny beszerz\u00e9se \u00e9rdek\u00e9ben.
 
 #Minify feature query messages
-ERROR_OPENING_JAR_FOR_CLASSPATH=CWWKF0023W: Egy szolg\u00e1ltat\u00e1s olyan {1} arch\u00edvumra hivatkozott, amely nem dolgozhat\u00f3 fel egy csomagol\u00e1si lek\u00e9rdez\u00e9s sor\u00e1n. Kiv\u00e9tel: {2}.
+ERROR_OPENING_JAR_FOR_CLASSPATH=CWWKF0023W: Egy szolg\u00e1ltat\u00e1s olyan {1} arch\u00edvumra hivatkozott, amely nem dolgozhat\u00f3 fel egy csomagol\u00e1si lek\u00e9rdez\u00e9s sor\u00e1n. Kiv\u00e9tel: {2}
 ERROR_OPENING_JAR_FOR_CLASSPATH.explanation=Kiv\u00e9tel t\u00f6rt\u00e9nt a szolg\u00e1ltat\u00e1s jar f\u00e1jlj\u00e1nak olvas\u00e1sakor egy csomagol\u00e1si lek\u00e9rdez\u00e9s sor\u00e1n.
 ERROR_OPENING_JAR_FOR_CLASSPATH.useraction=R\u00e9szletek\u00e9rt tekintse meg a hivatkozott kiv\u00e9telt \u00e9s a hozz\u00e1 tartoz\u00f3 FFDC rekordokat.
 
@@ -134,7 +130,7 @@ ERROR_UNKNOWN_FEATURE_RESOURCE_TYPE.useraction=Ellen\u0151rizze, hogy a term\u00
 
 SERVER_MINIFY=CWWKF0026I: A(z) {0} kiszolg\u00e1l\u00f3 k\u00e9szen \u00e1ll egy kisebb csomag \u00f6ssze\u00e9p\u00edt\u00e9s\u00e9re.
 SERVER_MINIFY.explanation=A kiszolg\u00e1l\u00f3 inform\u00e1ci\u00f3kat k\u00e9sz\u00edt el\u0151 egy f\u00fcgg\u0151ben l\u00e9v\u0151 kiszolg\u00e1l\u00f3 csomagol\u00e1si m\u0171velethez.
-SERVER_MINIFY.useraction=Semmit sem kell tennie.
+SERVER_MINIFY.useraction=Nincs teend\u0151.
 # end Minify feature query messages
 
 PRODUCT_FEATURE_INSTALL_PATH_SYMBOL_ERROR=CWWKF0027E: Nem ker\u00fclnek telep\u00edt\u00e9sre term\u00e9kb\u0151v\u00edtm\u00e9ny szolg\u00e1ltat\u00e1sok, mert a term\u00e9kb\u0151v\u00edtm\u00e9ny {0} tulajdons\u00e1gf\u00e1jlj\u00e1ban megadott term\u00e9kb\u0151v\u00edtm\u00e9ny telep\u00edt\u00e9si \u00fatvonal {1} szimbolikus helyet tartalmaz.
@@ -168,16 +164,16 @@ UPDATE_CONFLICT_FEATURE_ERROR.useraction=Pr\u00f3b\u00e1lja meg megadni a server
 
 FEATURES_ADDED_CLIENT=CWWKF0034I: Az \u00fcgyf\u00e9l telep\u00edtette a k\u00f6vetkez\u0151 szolg\u00e1ltat\u00e1sokat: {0}.
 FEATURES_ADDED_CLIENT.explanation=Az \u00fcgyf\u00e9l telep\u00edtett egy szolg\u00e1ltat\u00e1sk\u00e9szletet.
-FEATURES_ADDED_CLIENT.useraction=Semmit sem kell tennie.
+FEATURES_ADDED_CLIENT.useraction=Nincs teend\u0151.
 
 CLIENT_STARTED=CWWKF0035I: A(z){0} \u00fcgyf\u00e9l fut.
 CLIENT_STARTED.explanation=Az \u00fcgyf\u00e9l sikeresen elindult.
-CLIENT_STARTED.useraction=Semmit sem kell tennie.
+CLIENT_STARTED.useraction=Nincs teend\u0151.
 
 #Required feature gather query messages
 SERVER_GATHER_FEATURES=CWWKF0036I: A(z) {0} kiszolg\u00e1l\u00f3 befejezte a sz\u00fcks\u00e9ges szolg\u00e1ltat\u00e1sok list\u00e1j\u00e1nak \u00f6sszegy\u0171jt\u00e9s\u00e9t.
 SERVER_GATHER_FEATURES.explanation=A kiszolg\u00e1l\u00f3 \u00f6ssze\u00e1ll\u00edtotta a sz\u00fcks\u00e9ges szolg\u00e1ltat\u00e1sok list\u00e1j\u00e1t.
-SERVER_GATHER_FEATURES.useraction=Semmit sem kell tennie.
+SERVER_GATHER_FEATURES.useraction=Nincs teend\u0151.
 #End required feature gather query messages
 
 UPDATE_NOT_PUBLIC_FEATURE_CLIENT_ERROR=CWWKF0037E: A client.xml f\u00e1jlban megadott {0} szolg\u00e1ltat\u00e1s nem nyilv\u00e1nos szolg\u00e1ltat\u00e1s, \u00e9s az \u00fcgyf\u00e9l nem fogja futtatni.
@@ -211,7 +207,7 @@ Ha a szolg\u00e1ltat\u00e1s nem l\u00e9tezik, akkor a szolg\u00e1ltat\u00e1s tel
 
 tool.feature.exists=CWWKF1000I: A(z) {0} szolg\u00e1ltat\u00e1s m\u00e1r l\u00e9tezik. Ez nem ker\u00fclnek ism\u00e9t telep\u00edt\u00e9sre. Egy megl\u00e9v\u0151 szolg\u00e1ltat\u00e1s m\u00f3dos\u00edt\u00e1s\u00e1hoz el\u0151sz\u00f6r k\u00e9zileg el kell t\u00e1vol\u00edtania.
 tool.feature.exists.explanation=A telep\u00edteni k\u00edv\u00e1nt szolg\u00e1ltat\u00e1s m\u00e1r l\u00e9tezik.
-tool.feature.exists.useraction=Semmit sem kell tennie.
+tool.feature.exists.useraction=Nincs teend\u0151.
 tool.missing.args=CWWKF1001E: A(z) {0} {1} argumentumot ig\u00e9nyel, de {2} volt megadva.
 tool.missing.args.explanation=A m\u0171velet megh\u00edv\u00e1s\u00e1hoz nem a megfelel\u0151 sz\u00e1m\u00fa argumentum ker\u00fclt felhaszn\u00e1l\u00e1sra.
 tool.missing.args.useraction=Futtassa \u00fajra a parancsot a helyes argumentumokkal.
@@ -263,7 +259,7 @@ tool.install.dir.create.fail.explanation=A telep\u00edt\u00e9s alatt l\u00e9v\u0
 tool.install.dir.create.fail.useraction=Gy\u0151z\u0151dj\u00f6n meg r\u00f3la, hogy a megadott k\u00f6nyvt\u00e1r l\u00e9tezik, \u00e9s hogy a megvannak a k\u00f6nyvt\u00e1rszerkezet l\u00e9trehoz\u00e1s\u00e1t lehet\u0151v\u00e9 t\u00e9v\u0151 sz\u00fcks\u00e9ges enged\u00e9lyek. Futtassa \u00fajra a telep\u00edt\u00e9si m\u0171veletet.
 tool.install.feature.ok=CWWKF1017I: Legal\u00e1bb egy szolg\u00e1ltat\u00e1s sikeresen telep\u00edtve: {0}.
 tool.install.feature.ok.explanation=Ez az \u00fczenet csak inform\u00e1ci\u00f3s c\u00e9lt szolg\u00e1l.
-tool.install.feature.ok.useraction=Semmit sem kell tennie.
+tool.install.feature.ok.useraction=Nincs teend\u0151.
 tool.install.invalid.when.file.exists.value=CWWKF1018E: A(z) {0} \u00e9rt\u00e9k nem \u00e9rv\u00e9nyes be\u00e1ll\u00edt\u00e1s a --when-file-exists param\u00e9terhez. Az \u00e9rv\u00e9nyes param\u00e9terek: fail, replace vagy ignore.
 tool.install.invalid.when.file.exists.value.explanation=A --when-file-exists param\u00e9ter be\u00e1ll\u00edt\u00e1sa csak fail, replace vagy ignore lehet.
 tool.install.invalid.when.file.exists.value.useraction=Adja meg az \u00e9rv\u00e9nyes fail, replace vagy ignore \u00e9rt\u00e9kek egyik\u00e9t.

@@ -28,8 +28,7 @@
 # OSGI Log Message
 OSGI_MSG001={0} {1} {2} {3} {4}
 OSGI_MSG001.explanation=Eine Informationsnachricht wurde mit dem OSGi-Protokollservice aufgezeichnet.
-OSGI_MSG001.useraction=Es ist keine Aktion erforderlich.
-
+OSGI_MSG001.useraction=Es ist keine Aktion erforderlich. 
 OSGI_WARNING_MSG=CWWKE0700W: {0} {1} {2} {3} {4}
 OSGI_WARNING_MSG.explanation=Eine Warnung wurde mit dem OSGi-Protokollservice aufgezeichnet.
 OSGI_WARNING_MSG.useraction=Suchen Sie in der Warnung nach Informationen.

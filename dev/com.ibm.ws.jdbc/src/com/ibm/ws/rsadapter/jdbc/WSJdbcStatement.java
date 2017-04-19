@@ -77,7 +77,7 @@ public class WSJdbcStatement extends WSJdbcObject implements Statement, WSJdbcOb
     int requestedFetchSize;
 
     /** Indicates whether any statement properties have changed. */
-    boolean haveStatementPropertiesChanged;
+    protected boolean haveStatementPropertiesChanged;
 
     /** Indicate the cursor holdability value */
     protected int holdability; 
@@ -93,7 +93,7 @@ public class WSJdbcStatement extends WSJdbcObject implements Statement, WSJdbcOb
      * Indicates if any parameters are set on the prepared batch statement that haven't been
      * executed yet. This value applies only to PreparedStatements and CallableStatements.
      */
-    boolean hasBatchParameters;
+    protected boolean hasBatchParameters;
 
     /**
      * Value of the query timeout before syncing it with the transaction timeout.
@@ -117,7 +117,7 @@ public class WSJdbcStatement extends WSJdbcObject implements Statement, WSJdbcOb
     /**
      * Do not use. Constructor exists only for PreparedStatement wrapper.
      */
-    protected WSJdbcStatement() 
+    public WSJdbcStatement() 
     {}
 
     /**
@@ -127,7 +127,7 @@ public class WSJdbcStatement extends WSJdbcObject implements Statement, WSJdbcOb
      * @param connWrapper the WebSphere JDBC Connection wrapper creating this statement.
      * @param theHoldability the cursor holdability value of this statement
      */
-    protected WSJdbcStatement(Statement stmtImplObject, WSJdbcConnection connWrapper, int theHoldability) 
+    public WSJdbcStatement(Statement stmtImplObject, WSJdbcConnection connWrapper, int theHoldability) 
     {
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled(); 
 
@@ -339,17 +339,16 @@ public class WSJdbcStatement extends WSJdbcObject implements Statement, WSJdbcOb
         return null;
     }
 
-    //  - change return type from ResultSet to WSJdbcObject
     /**
      * Creates a wrapper for the supplied ResultSet object.
      * 
      * @param rsetImplObject a ResultSet that needs a wrapper.
      * 
-     * @return the ResultSet wrapper.
+     * @return the ResultSet wrapper if a valid ResultSet. Null if the ResultSet is null.
      */
     protected WSJdbcResultSet createResultSetWrapper(ResultSet rsetImplObject) 
     {
-        return new WSJdbcResultSet(rsetImplObject, this);
+        return rsetImplObject == null ? null : mcf.jdbcRuntime.newResultSet(rsetImplObject, this);
     }
 
     /**
@@ -543,198 +542,7 @@ public class WSJdbcStatement extends WSJdbcObject implements Statement, WSJdbcOb
         return results;
     }
 
-    /**
-     * @see java.sql.Statement#executeLargeBatch()
-     */
-    public long[] executeLargeBatch() throws SQLException {
-        final boolean isTraceOn = TraceComponent.isAnyTracingEnabled(); 
-        if (isTraceOn && tc.isEntryEnabled())
-            Tr.entry(this, tc, "executeLargeBatch");
 
-        long[] results;
-        try {
-            if (childWrapper != null)
-                closeAndRemoveResultSet();
-
-            if (childWrappers != null && !childWrappers.isEmpty())
-                closeAndRemoveResultSets();
-
-            parentWrapper.beginTransactionIfNecessary();
-
-            enforceStatementProperties();
-
-            results = mcf.jdbcRuntime.executeLargeBatch(stmtImpl);
-
-            // Batch parameters are cleared after executing the batch, so reset the batch parameter flag. 
-            hasBatchParameters = false; 
-        } catch (SQLException sqlX) {
-            // No FFDC code needed. Might be an application error. 
-            if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "executeLargeBatch", sqlX); 
-            throw WSJdbcUtil.mapException(this, sqlX);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "executeLargeBatch", nullX);
-            throw runtimeXIfNotClosed(nullX);
-        }
-
-        if (isTraceOn && tc.isEntryEnabled())
-            Tr.exit(this, tc, "executeLargeBatch", Arrays.toString(results));
-        return results;
-    }
-
-    /**
-     * @see java.sql.Statement#executeLargeUpdate(java.lang.String)
-     */
-    public long executeLargeUpdate(String sql) throws SQLException {
-        final boolean isTraceOn = TraceComponent.isAnyTracingEnabled(); 
-        if (isTraceOn && tc.isEntryEnabled())
-            Tr.entry(this, tc, "executeLargeUpdate", sql);
-
-        long numUpdates;
-        try {
-            if (childWrapper != null)
-                closeAndRemoveResultSet();
-
-            if (childWrappers != null && !childWrappers.isEmpty())
-                closeAndRemoveResultSets();
-
-            parentWrapper.beginTransactionIfNecessary();
-
-            enforceStatementProperties();
-
-            numUpdates = mcf.jdbcRuntime.executeLargeUpdate(stmtImpl, sql);
-        } catch (SQLException ex) {
-            // No FFDC code needed. Might be an application error. 
-            if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "executeLargeUpdate", ex); 
-            throw WSJdbcUtil.mapException(this, ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "executeLargeUpdate", nullX);
-            throw runtimeXIfNotClosed(nullX);
-        }
-
-        if (isTraceOn && tc.isEntryEnabled())
-            Tr.exit(this, tc, "executeLargeUpdate", numUpdates);
-        return numUpdates;
-    }
-
-    /**
-     * @see java.sql.Statement#executeLargeUpdate(java.lang.String, int)
-     */
-    public long executeLargeUpdate(String sql, int autoGeneratedKeys) throws SQLException {
-        final boolean isTraceOn = TraceComponent.isAnyTracingEnabled(); 
-        if (isTraceOn && tc.isEntryEnabled())
-            Tr.entry(this, tc, "executeLargeUpdate", sql, AdapterUtil.getAutoGeneratedKeyString(autoGeneratedKeys));
-
-        long numUpdates;
-        try {
-            if (childWrapper != null)
-                closeAndRemoveResultSet();
-
-            if (childWrappers != null && !childWrappers.isEmpty())
-                closeAndRemoveResultSets();
-
-            parentWrapper.beginTransactionIfNecessary();
-
-            enforceStatementProperties();
-
-            numUpdates = mcf.jdbcRuntime.executeLargeUpdate(stmtImpl, sql, autoGeneratedKeys);
-        } catch (SQLException ex) {
-            // No FFDC code needed. Might be an application error. 
-            if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "executeLargeUpdate", ex); 
-            throw WSJdbcUtil.mapException(this, ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "executeLargeUpdate", nullX);
-            throw runtimeXIfNotClosed(nullX);
-        }
-
-        if (isTraceOn && tc.isEntryEnabled())
-            Tr.exit(this, tc, "executeLargeUpdate", numUpdates);
-        return numUpdates;
-    }
-
-    /**
-     * @see java.sql.Statement#executeLargeUpdate(java.lang.String, int[])
-     */
-    public long executeLargeUpdate(String sql, int[] columnIndices) throws SQLException {
-        final boolean isTraceOn = TraceComponent.isAnyTracingEnabled(); 
-        if (isTraceOn && tc.isEntryEnabled())
-            Tr.entry(this, tc, "executeLargeUpdate", sql, Arrays.toString(columnIndices));
-
-        long numUpdates;
-        try {
-            if (childWrapper != null)
-                closeAndRemoveResultSet();
-
-            if (childWrappers != null && !childWrappers.isEmpty())
-                closeAndRemoveResultSets();
-
-            parentWrapper.beginTransactionIfNecessary();
-
-            enforceStatementProperties();
-
-            numUpdates = mcf.jdbcRuntime.executeLargeUpdate(stmtImpl, sql, columnIndices);
-        } catch (SQLException ex) {
-            // No FFDC code needed. Might be an application error. 
-            if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "executeLargeUpdate", ex); 
-            throw WSJdbcUtil.mapException(this, ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "executeLargeUpdate", nullX);
-            throw runtimeXIfNotClosed(nullX);
-        }
-
-        if (isTraceOn && tc.isEntryEnabled())
-            Tr.exit(this, tc, "executeLargeUpdate", numUpdates);
-        return numUpdates;
-    }
-
-    /**
-     * @see java.sql.Statement#executeLargeUpdate(java.lang.String, java.lang.String[])
-     */
-    public long executeLargeUpdate(String sql, String[] columnNames) throws SQLException {
-        final boolean isTraceOn = TraceComponent.isAnyTracingEnabled(); 
-        if (isTraceOn && tc.isEntryEnabled())
-            Tr.entry(this, tc, "executeLargeUpdate", sql, Arrays.toString(columnNames));
-
-        long numUpdates;
-        try {
-            if (childWrapper != null)
-                closeAndRemoveResultSet();
-
-            if (childWrappers != null && !childWrappers.isEmpty())
-                closeAndRemoveResultSets();
-
-            parentWrapper.beginTransactionIfNecessary();
-
-            enforceStatementProperties();
-
-            numUpdates = mcf.jdbcRuntime.executeLargeUpdate(stmtImpl, sql, columnNames);
-        } catch (SQLException ex) {
-            // No FFDC code needed. Might be an application error. 
-            if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "executeLargeUpdate", ex); 
-            throw WSJdbcUtil.mapException(this, ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "executeLargeUpdate", nullX);
-            throw runtimeXIfNotClosed(nullX);
-        }
-
-        if (isTraceOn && tc.isEntryEnabled())
-            Tr.exit(this, tc, "executeLargeUpdate", numUpdates);
-        return numUpdates;
-    }
 
     public ResultSet executeQuery(String sql) throws SQLException {
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled(); 
@@ -869,28 +677,6 @@ public class WSJdbcStatement extends WSJdbcObject implements Statement, WSJdbcOb
     }
 
 
-    public long getLargeMaxRows() throws SQLException {
-        try {
-            return mcf.jdbcRuntime.getLargeMaxRows(stmtImpl);
-        } catch (SQLException x) {
-            FFDCFilter.processException(x, getClass().getName(), "691", this);
-            throw WSJdbcUtil.mapException(this, x);
-        } catch (NullPointerException x) {
-            throw runtimeXIfNotClosed(x);
-        }
-    }
-
-    public long getLargeUpdateCount() throws SQLException {
-        try {
-            return mcf.jdbcRuntime.getLargeUpdateCount(stmtImpl);
-        } catch (SQLException x) {
-            FFDCFilter.processException(x, getClass().getName(), "699", this);
-            throw WSJdbcUtil.mapException(this, x);
-        } catch (NullPointerException x) {
-            throw runtimeXIfNotClosed(x);
-        }        
-    }
-
     /**
      * @see com.ibm.ws.jdbc.timedoperations.WSJdbcObjectHelper#getUniqueIdentifier()
      * 
@@ -956,7 +742,7 @@ public class WSJdbcStatement extends WSJdbcObject implements Statement, WSJdbcOb
             
             // If there are truly no more ResultSets for this Statement and closeOnCompletion
             // is enabled, close the Statement
-            if(deferCloseOnCompletion && !hasMoreResults && mcf.getHelper().getUpdateCount(stmtImpl) == -1){
+            if(deferCloseOnCompletion && !hasMoreResults && mcf.getHelper().getUpdateCount(this) == -1){
                 this.close();
             }
 
@@ -1239,22 +1025,6 @@ public class WSJdbcStatement extends WSJdbcObject implements Statement, WSJdbcOb
         requestedFetchSize = rows;
     }
 
-    public void setLargeMaxRows(long max) throws SQLException {
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-            Tr.debug(this, tc, "setLargeMaxRows", max); 
-
-        try {
-            mcf.jdbcRuntime.setLargeMaxRows(stmtImpl, max);
-        } catch (SQLException x) {
-            FFDCFilter.processException(x, getClass().getName(), "1041", this);
-            throw WSJdbcUtil.mapException(this, x);
-        } catch (NullPointerException x) {
-            throw runtimeXIfNotClosed(x);
-        }
-
-        haveStatementPropertiesChanged = true;
-    }
-
     public void setMaxFieldSize(int max) throws SQLException {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
             Tr.debug(this, tc, "setMaxFieldSize", max); 
@@ -1445,7 +1215,7 @@ public class WSJdbcStatement extends WSJdbcObject implements Statement, WSJdbcOb
             
             // If there are truly no more ResultSets for this Statement and closeOnCompletion
             // is enabled, close the Statement
-            if(deferCloseOnCompletion && !hasMoreResults && (Statement.KEEP_CURRENT_RESULT != current) && mcf.getHelper().getUpdateCount(stmtImpl) == -1){
+            if(deferCloseOnCompletion && !hasMoreResults && (Statement.KEEP_CURRENT_RESULT != current) && mcf.getHelper().getUpdateCount(this) == -1){
                 this.close();
             }
 
@@ -1917,36 +1687,40 @@ public class WSJdbcStatement extends WSJdbcObject implements Statement, WSJdbcOb
     }
 
     public void closeOnCompletion() throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
+        if(mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
             throw new SQLFeatureNotSupportedException();
         
         // If method is called on an already closed Statement
-        if(isClosed()){
+        if (isClosed()) {
             SQLException sqle = createClosedException("Statement");
-            FFDCFilter.processException(sqle, "com.ibm.ws.rsadapter.jdbc.WSJdbcResultSet.closeOnCompletion", "2074", this);
+            FFDCFilter.processException(sqle, "com.ibm.ws.rsadapter.jdbc.WSJdbcStatement41.closeOnCompletion", "45", this);
             throw sqle;
         }
-        
+
         // If close on completion is already enabled, return
-        if(closeOnCompletion)
+        if (closeOnCompletion)
             return;
-        
-        if(tc.isDebugEnabled())
+
+        if (tc.isDebugEnabled())
             Tr.debug(tc, "closeOnCompletion enabled");
         closeOnCompletion = true;
     }
 
     public boolean isCloseOnCompletion() throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
+        if(mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
             throw new SQLFeatureNotSupportedException();
         
         // If method is called on an already closed Statement
-        if(isClosed()){
+        if (isClosed()) {
             SQLException sqle = createClosedException("Statement");
-            FFDCFilter.processException(sqle, "com.ibm.ws.rsadapter.jdbc.WSJdbcResultSet.isCloseOnCompletion", "2118", this);
+            FFDCFilter.processException(sqle, "com.ibm.ws.rsadapter.jdbc.WSJdbcStatement41.isCloseOnCompletion", "62", this);
             throw sqle;
         }
-        
+
         return closeOnCompletion;
+    }
+    
+    public long getCompatibleUpdateCount() throws SQLException {
+        return stmtImpl.getUpdateCount();
     }
 }
