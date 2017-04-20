@@ -1,0 +1,12 @@
+-include= ~../cnf/resources/bnd/liberty-release.props
+bVersion=1.0
+
+-testpath: \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.ws.org.apache.aries.util.1.1.2;version=latest, \
+	com.ibm.ws.logging;version=latest, \
+	com.ibm.ws.kernel.boot.logging;version=latest, \
+	com.ibm.ws.kernel.security.thread;version=latest, \
+	wlp.lib.extract;version=latest

@@ -1,8 +1,8 @@
 -include= ~../cnf/resources/bnd/bundle.props
 bVersion=1.0
 
-javac.source: 1.6
-javac.target: 1.6
+javac.source: 1.4
+javac.target: 1.4
 
 Bundle-Name: WLP Lib Extract
 Bundle-SymbolicName: wlp.lib.extract
@@ -19,12 +19,3 @@ publish.wlp.jar.disabled: true
 -buildpath: \
 	${javac.bootclasspath.java6}, \
 	../prereq.java.tools/lib/tools.jar;version=file
-
--testpath: \
-	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
-	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
-	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
-	com.ibm.ws.org.apache.aries.util.1.1.2;version=latest, \
-    com.ibm.ws.logging;version=latest, \
-    com.ibm.ws.kernel.boot.logging;version=latest, \
-    com.ibm.ws.kernel.security.thread;version=latest
