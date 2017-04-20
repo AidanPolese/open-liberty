@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed Materials - Property of IBM
+
+  "Restricted Materials of IBM"
+
+  Copyright IBM Corp. 2012 All Rights Reserved.
+
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+-->
+<!DOCTYPE Stats SYSTEM "stats.dtd">
+
+<Stats type="com.ibm.ws.webcontainer.pmi.servletStats">	
+	<description>webAppModule.servlets.desc</description>
+	<resourceBundle>com.ibm.ws.pmi.properties.PMIText</resourceBundle>
+       <CountStatistic name="webAppModule.servlets.totalRequests" ID="11">
+            <level>low</level>
+			<unit>unit.none</unit>  
+            <description>webAppModule.servlets.totalRequests.desc</description>
+            <comment>Total number of requests a servlet processed</comment>
+            <statisticSet>basic</statisticSet>
+        </CountStatistic>
+        <TimeStatistic name="webAppModule.servlets.responseTime" ID="13">
+            <level>medium</level>
+            <unit>unit.ms</unit>
+            <description>webAppModule.servlets.responseTime.desc</description>
+            <comment>The response time (in milliseconds) a servlet request is finished</comment>
+            <statisticSet>basic</statisticSet>
+        </TimeStatistic>
+</Stats>

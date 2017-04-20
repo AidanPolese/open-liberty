@@ -281,7 +281,7 @@ LICENSE_invalidInstallType=The license cannot be upgraded because the specified 
 
 # new messages for license upgrade and downgrade
 LICENSE_replace_invalidVersion=The license cannot be applied because the specified product installation is at version {0}, but the license can only be applied from version {1}.
-LICENSE_replace_invalidInstallType=The license cannot be applied because the specified product installation was installed using IBM Installation Manager. Use IBM Installation Manager to apply your installation.
+LICENSE_replace_invalidInstallType=The license cannot be applied because the specified product installation was installed using IBM Installation Manager. Use IBM Installation Manager to upgrade your installation.
 
 LICENSE_replace_invalidEditonFeatures=The following features do not apply to the {0} edition and must be uninstalled before applying the license: {1}\n\nUse the following command to uninstall these features before applying the license for {2} edition: {3}
 

@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2010, 2015
+# (C) COPYRIGHT International Business Machines Corp. 2010, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -500,6 +500,10 @@ LOG_VALIDATION_DONE=Pomy\u015blnie zako\u0144czono sprawdzanie poprawno\u015bci 
 LOG_DELETING_TEMP_SERVER_DIR=Usuwanie katalogu tymczasowego serwera {0}...
 LOG_NOT_DELETING_TEMP_SERVER_DIR=Katalog tymczasowy serwera {0} nie zosta\u0142 usuni\u0119ty, poniewa\u017c mo\u017ce zawiera\u0107 informacje o b\u0142\u0119dach w katalogu dziennik\u00f3w. Je\u015bli te informacje nie s\u0105 potrzebne, mo\u017cna r\u0119cznie usun\u0105\u0107 katalog {1}.
 LOG_CREATED_TEMP_SERVER_DIR=Utworzono katalog tymczasowy serwera {0}.
+
+LOG_CANNOT_CLOSE_OBJECT=Nie mo\u017cna usun\u0105\u0107 plik\u00f3w tymczasowych.
+LOG_CANNOT_CLOSE_OBJECT.explanation=Ten przyk\u0142ad wymaga \u015brodowiska Java 7 lub nowszego w celu usuni\u0119cia katalogu installTmp.
+LOG_CANNOT_CLOSE_OBJECT.action=Usu\u0144 r\u0119cznie katalog installTmp lub u\u017cyj \u015brodowiska Java 7 lub nowszego.
 
 LOG_PASSWORD_NOT_ENCODED_PROXY=Has\u0142o dla nast\u0119puj\u0105cego serwera proxy nie jest zakodowane: {0}. Mo\u017cna zakodowa\u0107 has\u0142o przez uruchomienie komendy securityUtility encode z opcj\u0105 --encoding ustawion\u0105 na obs\u0142ugiwany typ kodowania, kt\u00f3rymi s\u0105 xor (domy\u015blny), aes i hash. Na przyk\u0142ad: securityUtility encode --encoding=aes proxyPassword
 LOG_PENDING_UNINSTALLING_FEATURE=Sk\u0142adniki do zdeinstalowania:

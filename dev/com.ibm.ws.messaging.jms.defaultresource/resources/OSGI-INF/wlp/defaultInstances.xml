@@ -1,0 +1,5 @@
+<server>
+	<jmsConnectionFactory id="DefaultJMSConnectionFactory" javaCompDefaultName="DefaultJMSConnectionFactory">
+		<properties.wasJms  />
+	</jmsConnectionFactory> 
+</server>

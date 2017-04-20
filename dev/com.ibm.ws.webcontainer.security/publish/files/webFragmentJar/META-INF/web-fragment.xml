@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-fragment xmlns="http://java.sun.com/xml/ns/javaee"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="..."
+      version="3.0">
+<servlet-mapping id="ServletMapping_webFragment">
+         <servlet-name>ProgrammaticApiServlet</servlet-name>
+         <url-pattern>/formLoginWebFragment/*</url-pattern>
+      </servlet-mapping>
+<security-constraint>
+      <display-name>SecurityConstraint_01</display-name>
+         <web-resource-collection>
+           <web-resource-name>WebResourceCollection_01</web-resource-name>
+           <url-pattern>/formLoginWebFragment</url-pattern>
+         </web-resource-collection>
+          <auth-constraint>
+        <role-name>DeclaredWebFragmentRole</role-name>         
+     </auth-constraint>
+</security-constraint>
+
+<security-role id="SecurityRole_webFragment">
+         <description>Role defined in the web fragment</description>
+         <role-name>DeclaredWebFragmentRole</role-name>
+</security-role>
+
+</web-fragment>

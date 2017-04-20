@@ -39,7 +39,6 @@ import com.ibm.ws.jmx.connector.datatypes.ServerNotificationRegistration;
 import com.ibm.ws.jmx.connector.server.rest.APIConstants;
 import com.ibm.ws.jmx.connector.server.rest.helpers.ErrorHelper;
 import com.ibm.ws.jmx.connector.server.rest.helpers.MBeanRoutedNotificationHelper;
-import com.ibm.ws.jmx.connector.server.rest.helpers.MBeanRouterHelper;
 import com.ibm.ws.jmx.connector.server.rest.helpers.MBeanServerHelper;
 import com.ibm.ws.jmx.connector.server.rest.helpers.RESTHelper;
 import com.ibm.wsspi.rest.handler.RESTRequest;
@@ -208,12 +207,26 @@ public class ClientNotificationArea {
     }
 
     /**
+     * Builds an instance of NotificationTargetInformation from the headers of an RESTRequest and a JMX ObjectName (as a string).
+     */
+    private NotificationTargetInformation toNotificationTargetInformation(RESTRequest request, String objectName) {
+        //Handle incoming routing context (if applicable)
+        String[] routingContext = RESTHelper.getRoutingContext(request, false);
+
+        if (routingContext != null) {
+            return new NotificationTargetInformation(objectName, routingContext[0], routingContext[2], routingContext[1]);
+        }
+
+        return new NotificationTargetInformation(objectName);
+    }
+
+    /**
      * Fetch or create a new listener for the given object name
      */
     public void addClientNotificationListener(RESTRequest request, NotificationRegistration notificationRegistration, JSONConverter converter) {
         String objectNameStr = notificationRegistration.objectName.getCanonicalName();
 
-        NotificationTargetInformation nti = MBeanRouterHelper.toNotificationTargetInformation(request, objectNameStr);
+        NotificationTargetInformation nti = toNotificationTargetInformation(request, objectNameStr);
 
         // Get the listener
         ClientNotificationListener listener = listeners.get(nti);
@@ -251,7 +264,7 @@ public class ClientNotificationArea {
      * Update the listener for the given object name with the provided filters
      */
     public void updateClientNotificationListener(RESTRequest request, String objectNameStr, NotificationFilter[] filters, JSONConverter converter) {
-        NotificationTargetInformation nti = MBeanRouterHelper.toNotificationTargetInformation(request, objectNameStr);
+        NotificationTargetInformation nti = toNotificationTargetInformation(request, objectNameStr);
 
         ClientNotificationListener listener = listeners.get(nti);
 
@@ -340,7 +353,7 @@ public class ClientNotificationArea {
      * Remove the given NotificationListener
      */
     public void removeClientNotificationListener(RESTRequest request, ObjectName name) {
-        NotificationTargetInformation nti = MBeanRouterHelper.toNotificationTargetInformation(request, name.getCanonicalName());
+        NotificationTargetInformation nti = toNotificationTargetInformation(request, name.getCanonicalName());
 
         // Remove locally
         ClientNotificationListener listener = listeners.remove(nti);
@@ -360,7 +373,7 @@ public class ClientNotificationArea {
      * Remove the appropriate server notifications from our list
      */
     public void removeAllListeners(RESTRequest request, ObjectName source_objName, JSONConverter converter) {
-        NotificationTargetInformation nti = MBeanRouterHelper.toNotificationTargetInformation(request, source_objName.getCanonicalName());
+        NotificationTargetInformation nti = toNotificationTargetInformation(request, source_objName.getCanonicalName());
 
         //Get the corresponding List for the given ObjectName
         List<ServerNotification> notifications = serverNotifications.get(nti);
@@ -405,7 +418,7 @@ public class ClientNotificationArea {
      */
     public void removeServerNotificationListener(RESTRequest request, ServerNotificationRegistration removedRegistration, final boolean removeAll,
                                                  JSONConverter converter, boolean cleanupHttpIDs) {
-        NotificationTargetInformation nti = MBeanRouterHelper.toNotificationTargetInformation(request, removedRegistration.objectName.getCanonicalName());
+        NotificationTargetInformation nti = toNotificationTargetInformation(request, removedRegistration.objectName.getCanonicalName());
 
         //Get the corresponding List for the given ObjectName
         List<ServerNotification> notifications = serverNotifications.get(nti);
@@ -475,7 +488,7 @@ public class ClientNotificationArea {
     }
 
     public List<ServerNotification> getServerRegistrations(RESTRequest request, String objectName) {
-        NotificationTargetInformation nti = MBeanRouterHelper.toNotificationTargetInformation(request, objectName);
+        NotificationTargetInformation nti = toNotificationTargetInformation(request, objectName);
         return serverNotifications.get(nti);
     }
 
@@ -483,7 +496,7 @@ public class ClientNotificationArea {
      * Add the server notification to our internal list so we can cleanup afterwards
      */
     public void addServerNotificationListener(RESTRequest request, ServerNotificationRegistration serverNotificationRegistration, JSONConverter converter) {
-        NotificationTargetInformation nti = MBeanRouterHelper.toNotificationTargetInformation(request, serverNotificationRegistration.objectName.getCanonicalName());
+        NotificationTargetInformation nti = toNotificationTargetInformation(request, serverNotificationRegistration.objectName.getCanonicalName());
 
         //Fetch the filter/handback objects
         NotificationFilter filter = (NotificationFilter) getObject(serverNotificationRegistration.filterID, serverNotificationRegistration.filter, converter);
@@ -628,7 +641,7 @@ public class ClientNotificationArea {
     }
 
     public NotificationFilter[] getRegisteredFilters(RESTRequest request, String objectNameStr, JSONConverter converter) {
-        NotificationTargetInformation nti = MBeanRouterHelper.toNotificationTargetInformation(request, objectNameStr);
+        NotificationTargetInformation nti = toNotificationTargetInformation(request, objectNameStr);
 
         ClientNotificationListener listener = listeners.get(nti);
 

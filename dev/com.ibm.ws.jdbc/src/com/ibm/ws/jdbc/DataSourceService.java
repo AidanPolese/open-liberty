@@ -11,6 +11,7 @@
  */
 package com.ibm.ws.jdbc;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -809,10 +810,21 @@ public class DataSourceService extends AbstractConnectionFactoryService implemen
                 } catch (SQLFeatureNotSupportedException x) {}
 
                 try {
-                    String schema = jdbcRuntime.doGetSchema(con);
+                    // Don't need to use reflection here when we don't support java 6 anymore
+                    String schema = (String) con.getClass().getMethod("getSchema").invoke(con);
                     if (schema != null && schema.length() > 0)
                         result.put("schema", schema);
-                } catch (SQLFeatureNotSupportedException x) {}
+                } catch (NoSuchMethodException ignore) {
+                } catch (InvocationTargetException x) {
+                    Throwable cause = x.getCause();
+                    if(cause instanceof SQLFeatureNotSupportedException) {
+                        // ignore
+                    } else if (cause instanceof IncompatibleClassChangeError) {
+                        // ignore
+                    } else {
+                        throw cause;
+                    }
+                }
 
                 String userName = metadata.getUserName();
                 if (userName != null && userName.length() > 0)

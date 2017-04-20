@@ -109,8 +109,7 @@ FEATURES_REMOVED.explanation=Usuni\u0119to z serwera zestaw sk\u0142adnik\u00f3w
 FEATURES_REMOVED.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
 
 TEST_FIX_DETECTED=CWWKF0014W: Na serwerze s\u0105 aktywne \
-nast\u0119puj\u0105ce poprawki testowe w \u015brodowisku wykonawczym: {0}. \
-Aby otrzyma\u0107 pe\u0142n\u0105 list\u0119 zainstalowanych poprawek, uruchom komend\u0119: productInfo \
+nast\u0119puj\u0105ce poprawki testowe w \u015brodowisku wykonawczym: {0}.  Aby otrzyma\u0107 pe\u0142n\u0105 list\u0119 zainstalowanych poprawek, uruchom komend\u0119: productInfo \
 version --ifixes
 TEST_FIX_DETECTED.explanation=Pakunki OSGi za\u0142adowane w \
 \u015brodowisku wykonawczym zosta\u0142y zmodyfikowane przez niekt\u00f3re zainstalowane \
@@ -119,8 +118,7 @@ pomoc\u0105 komendy: productInfo version --ifixes
 TEST_FIX_DETECTED.useraction=Na serwerze produkcyjnym nie nale\u017cy instalowa\u0107 poprawek testowych. Je\u015bli ten serwer jest produkcyjny, usu\u0144 z niego poprawki testowe i zrestartuj go.
 
 INTERIM_FIX_DETECTED=CWWKF0015I: Na serwerze s\u0105 aktywne \
-nast\u0119puj\u0105ce poprawki tymczasowe w \u015brodowisku wykonawczym: {0}. \
-Aby otrzyma\u0107 pe\u0142n\u0105 list\u0119 zainstalowanych poprawek, uruchom komend\u0119: productInfo \
+nast\u0119puj\u0105ce poprawki tymczasowe w \u015brodowisku wykonawczym: {0}. Aby otrzyma\u0107 pe\u0142n\u0105 list\u0119 zainstalowanych poprawek, uruchom komend\u0119: productInfo \
 version --ifixes
 INTERIM_FIX_DETECTED.explanation=Pakunki OSGi \
 za\u0142adowane w \u015brodowisku wykonawczym zosta\u0142y zmodyfikowane przez niekt\u00f3re \
@@ -278,7 +276,7 @@ UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_CLIENT_ERROR.useraction=Usu\u0144 sk\u0142a
 
 # CWWK042E  {0} = feature Name: {1} = server name 
 UPDATE_MISSING_CORE_FEATURE_ERROR=CWWKF0042E: Nie mo\u017cna \
-znale\u017a\u0107 definicji sk\u0142adnika {0}. Spr\u00f3buj uruchomi\u0107 komend\u0119 bin/installUtility install {0}, aby zainstalowa\u0107 ten sk\u0142adnik. Mo\u017cna r\u00f3wnie\u017c uruchomi\u0107 komend\u0119 bin/installUtility install {1}, aby zainstalowa\u0107 wszystkie sk\u0142adniki przywo\u0142ywane przez t\u0119 konfiguracj\u0119.
+znale\u017a\u0107 definicji sk\u0142adnika {0}.  Spr\u00f3buj uruchomi\u0107 komend\u0119 bin/installUtility install {0}, aby zainstalowa\u0107 ten sk\u0142adnik. Mo\u017cna r\u00f3wnie\u017c uruchomi\u0107 komend\u0119 bin/installUtility install {1}, aby zainstalowa\u0107 wszystkie sk\u0142adniki przywo\u0142ywane przez t\u0119 konfiguracj\u0119.
 UPDATE_MISSING_CORE_FEATURE_ERROR.explanation=Mened\u017cer sk\u0142adnik\u00f3w nie mo\u017ce znale\u017a\u0107 definicji okre\u015blonego sk\u0142adnika.
 UPDATE_MISSING_CORE_FEATURE_ERROR.useraction=Sprawd\u017a, czy nazwa okre\u015blonego sk\u0142adnika zosta\u0142a podana bez b\u0142\u0119d\u00f3w.  \
 Sprawd\u017a r\u00f3wnie\u017c, czy definicja sk\u0142adnika istnieje i czy jest dost\u0119pna do odczytu w katalogu lib/features. \

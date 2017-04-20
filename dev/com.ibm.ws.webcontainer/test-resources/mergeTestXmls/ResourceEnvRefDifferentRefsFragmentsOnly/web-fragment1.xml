@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-fragment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
+	id="WebFragment_ID" version="3.0">
+
+	<name>MyFragment1</name>
+
+
+		<resource-env-ref>  
+		<resource-env-ref-name>jms/StockQueueIBM</resource-env-ref-name>  
+		<resource-env-ref-type>javax.jms.Queue2</resource-env-ref-type> 
+		
+	</resource-env-ref> 
+
+
+
+</web-fragment>

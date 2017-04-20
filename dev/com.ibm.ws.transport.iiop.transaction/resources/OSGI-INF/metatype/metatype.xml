@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed Materials - Property of IBM "Restricted Materials of IBM" Copyright IBM Corp. 2011 All Rights Reserved. US Government Users Restricted Rights - Use, duplication or disclosure restricted by 
+  GSA ADP Schedule Contract with IBM Corp. -->
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0" 
+                   xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
+                   localization="OSGI-INF/l10n/metatype">
+
+  <!-- Declare an OCD with ...SubsystemFactory.type 
+       so that the ORB can count the number of subsystems.
+       Of course this is no use unless we also declare 
+       something in defaultInstances.xml to cause an instance
+       of this to be found in the configuration -->
+  <OCD id="com.ibm.ws.transport.iiop.transaction.TransactionSubsystemFactory" name="internal" description="internal use only">
+    <AD id="id"                                                  type="String" default="subsystemFactory.transaction" required="true" ibm:final="true" name="internal" description="internal use only" />
+    <AD id="com.ibm.ws.transport.iiop.spi.SubsystemFactory.type" type="String" default="subsystemFactory.transaction" required="true" ibm:final="true" name="internal" description="internal use only" />
+  </OCD>
+
+  <Designate factoryPid="com.ibm.ws.transport.iiop.transaction.TransactionSubsystemFactory">
+    <Object ocdref="com.ibm.ws.transport.iiop.transaction.TransactionSubsystemFactory" />
+  </Designate>
+</metatype:MetaData>

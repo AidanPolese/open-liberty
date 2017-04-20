@@ -1,6 +1,6 @@
 # -------------------------------------------------------------------------------------------------
 # @start_prolog@
-# Version: @(#) 1.43 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/CWSIJMessages.nlsprops, SIB.comms, WASX.SIB 10/10/14 01:07:38 [11/9/10 00:07:27]
+# Version: @(#) 1.43 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/CWSIJMessages.nlsprops, SIB.comms, WASX.SIB, uu1215.01 10/10/14 01:07:38 [4/12/12 22:14:11]
 # ============================================================================
 # IBM Confidential OCO Source Materials
 #
@@ -383,7 +383,7 @@ IDTABLE_INTERNAL_SICJ0050.useraction=CMSG0002
 # -------------------------------------------------------------------------------------------------
 # {0} is the host name, {1} is the chain name
 INBOUNDCONV_INVALIDATE_SICJ0051=CWSIJ0051E: Una condici\u00f3n inesperada ha provocado que se cierre una conexi\u00f3n a la red desde el host {0} utilizando la cadena {1}.
-INBOUNDCONV_INVALIDATE_SICJ0051.explanation=Una condici\u00f3n inesperada ha provocado que se cierre una conexi\u00f3n a la red.  Consulte todas las excepciones enlazadas para obtener m\u00e1s informaci\u00f3n.
+INBOUNDCONV_INVALIDATE_SICJ0051.explanation=Una condici\u00f3n inesperada ha provocado que se cierre una conexi\u00f3n con la red.  Consulte todas las excepciones enlazadas para obtener m\u00e1s informaci\u00f3n.
 INBOUNDCONV_INVALIDATE_SICJ0051.useraction=Examine todas las excepciones enlazadas y los archivos de anotaciones cronol\u00f3gicas del servidor de aplicaciones para determinar por qu\u00e9 se ha cerrado la conexi\u00f3n de red. Consulte los mensajes adjuntos para obtener m\u00e1s informaci\u00f3n y si es posible corrija el problema.
 
 # -------------------------------------------------------------------------------------------------
@@ -571,7 +571,7 @@ CANNOT_STOP_INBOUND_CHAIN_SICJ0084.useraction=Examine la excepci\u00f3n nombrada
 # -------------------------------------------------------------------------------------------------
 INBOUND_CHAIN_NOT_PERMITTED_SICJ0085=CWSIJ0085I: Se ha detenido la cadena de transporte de mensajer\u00eda {0}.
 INBOUND_CHAIN_NOT_PERMITTED_SICJ0085.explanation=Se ha detenido la cadena de transporte despu\u00e9s de un cambio de configuraci\u00f3n de seguridad lo que significa que ning\u00fan bus definido en la c\u00e9lula permitir\u00e1 ya el uso de la cadena.
-INBOUND_CHAIN_NOT_PERMITTED_SICJ0085.useraction=No es necesaria ninguna acci\u00f3n.
+INBOUND_CHAIN_NOT_PERMITTED_SICJ0085.useraction=No se requiere ninguna acci\u00f3n.
 
 # Emergency use
 # -------------------------------------------------------------------------------------------------

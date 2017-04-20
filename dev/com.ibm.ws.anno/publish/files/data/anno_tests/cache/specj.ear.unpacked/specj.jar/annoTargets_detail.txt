@@ -1,0 +1,1248 @@
+# ============================================================
+# Encoding: UTF-8
+# Version: 1.0
+# TimeStamp: TBD
+# ============================================================
+# Class Source Data:
+Class-Source: specj.jar
+# ============================================================
+# Package Data:
+Package: org.spec.jappserver.ejb.mfg.session.jaxws
+  PackageSource: specj.jar
+  PackageAnnotation: javax.xml.bind.annotation.XmlSchemaType
+Package: org.spec.jappserver.ejb.mfg.session
+  PackageSource: specj.jar
+  PackageAnnotation: javax.xml.bind.annotation.XmlSchemaType
+Package: org.spec.jappserver.ejb.mfg.entity
+  PackageSource: specj.jar
+  PackageAnnotation: javax.xml.bind.annotation.XmlSchemaType
+# ============================================================
+# Class Data:
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.ScheduleWorkOrderByDate
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.ejb.supplier.entity.Supplier
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Embedded
+  FieldAnnotation: javax.persistence.AttributeOverrides
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.ejb.orders.session.OrderAuditService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.WorkOrderSessionRemote
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.WorkOrderService
+  ClassAnnotation: javax.ejb.Remote
+Class-Seed: org.spec.jappserver.ejb.orders.entity.OrderLinePK
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.Embeddable
+Class-Seed: org.spec.jappserver.ejb.orders.session.OrderSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.OrderService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.ejb.supplier.session.SupplierAuditService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.orders.session.OrderAuditSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.OrderAuditService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.loader.StandaloneLoadTracker$1
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.Runnable
+Class-Seed: org.spec.jappserver.ejb.supplier.entity.SupplierComponentPK
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.Embeddable
+Class-Seed: org.spec.jappserver.ejb.mfg.session.MfgSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.MfgSessionLocal
+  Interface: org.spec.jappserver.ejb.mfg.session.MfgSessionRemote
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.persistence.PersistenceContext
+  MethodAnnotation: javax.ejb.TransactionAttribute
+Class-Seed: org.spec.jappserver.ejb.mfg.entity.InventoryPK
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.Embeddable
+Class-Seed: org.spec.jappserver.ejb.orders.session.CustomerSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.CustomerSessionLocal
+  Interface: org.spec.jappserver.ejb.orders.session.CustomerSessionRemote
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.annotation.Resource
+  FieldAnnotation: javax.persistence.PersistenceContext
+  MethodAnnotation: javax.ejb.TransactionAttribute
+Class-Seed: org.spec.jappserver.loader.LoadOrders
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.loader.Load
+Class-Seed: org.spec.jappserver.ejb.mfg.entity.BomPK
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.Embeddable
+Class-Seed: org.spec.jappserver.ejb.mfg.entity.Assembly
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.ejb.mfg.entity.Component
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.DiscriminatorValue
+  FieldAnnotation: javax.persistence.OneToMany
+Class-Seed: org.spec.jappserver.ejb.mfg.session.MfgAuditSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.MfgAuditService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.ejb.supplier.entity.SupplierComponent
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.EmbeddedId
+  FieldAnnotation: javax.persistence.AttributeOverrides
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.ejb.orders.session.LargeOrderSenderSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.LargeOrderSenderService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.loader.entity.Loader$State
+  ClassSource: specj.jar
+  Superclass: java.lang.Enum
+Class-Seed: org.spec.jappserver.ejb.orders.entity.Order
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.TableGenerator
+  FieldAnnotation: javax.persistence.GeneratedValue
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Temporal
+  FieldAnnotation: javax.persistence.OneToMany
+  FieldAnnotation: javax.persistence.ManyToOne
+  FieldAnnotation: javax.persistence.JoinColumn
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.common.Address
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.Embeddable
+Class-Seed: org.spec.jappserver.loader.Assembly
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.loader.Part
+Class-Seed: org.spec.jappserver.ejb.mfg.entity.WorkOrder
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.TableGenerator
+  FieldAnnotation: javax.persistence.GeneratedValue
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Temporal
+  FieldAnnotation: javax.xml.bind.annotation.XmlSchemaType
+  FieldAnnotation: javax.persistence.ManyToOne
+  FieldAnnotation: javax.persistence.JoinColumn
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.ejb.mfg.session.LargeOrderService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.WorkOrderSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.WorkOrderService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.ejb.orders.session.OrderSessionRemote
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.OrderService
+  ClassAnnotation: javax.ejb.Remote
+Class-Seed: org.spec.jappserver.ejb.supplier.mdb.BuyerMDB
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: javax.jms.MessageListener
+  ClassAnnotation: javax.ejb.MessageDriven
+  ClassAnnotation: javax.ejb.TransactionManagement
+  FieldAnnotation: javax.annotation.Resource
+  FieldAnnotation: javax.ejb.EJB
+  FieldAnnotation: javax.persistence.PersistenceContext
+  MethodAnnotation: javax.annotation.PostConstruct
+  MethodAnnotation: javax.ejb.TransactionAttribute
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.CheckForRequestedWorkResponse
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.ejb.supplier.session.SupplierAuditSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.supplier.session.SupplierAuditService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.UpdateWorkOrder
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.loader.LoadSupplier
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.loader.Load
+Class-Seed: org.spec.jappserver.common.util.DateTimeNormalizer$1
+  ClassSource: specj.jar
+  Superclass: java.lang.ThreadLocal
+Class-Seed: org.spec.jappserver.ejb.mfg.session.MfgSessionRemote
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.MfgService
+  ClassAnnotation: javax.ejb.Remote
+Class-Seed: org.spec.jappserver.loader.session.LoaderSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.loader.session.LoaderSessionLocal
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.annotation.Resource
+  FieldAnnotation: javax.persistence.PersistenceContext
+  MethodAnnotation: javax.ejb.TransactionAttribute
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.GetWorkOrdersByStatus
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.ejb.orders.session.CustomerSessionRemote
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.CustomerService
+  ClassAnnotation: javax.ejb.Remote
+Class-Seed: org.spec.jappserver.common.AuditValidationException
+  ClassSource: specj.jar
+  Superclass: java.lang.Exception
+Class-Seed: org.spec.jappserver.ejb.mfg.session.MfgAuditSessionRemote
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.MfgAuditService
+  ClassAnnotation: javax.ejb.Remote
+Class-Seed: org.spec.jappserver.common.util.DateTimeNormalizer$SpecialCalendar
+  ClassSource: specj.jar
+  Superclass: java.util.GregorianCalendar
+Class-Seed: org.spec.jappserver.ejb.orders.session.CorpAuditService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.NoSuchOrderException
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.common.SPECjAppServerException
+Class-Seed: org.spec.jappserver.loader.Customer
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.mdb.LargerOrderMDB
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: javax.jms.MessageListener
+  ClassAnnotation: javax.ejb.MessageDriven
+  FieldAnnotation: javax.annotation.Resource
+  FieldAnnotation: javax.ejb.EJB
+Class-Seed: org.spec.jappserver.ejb.orders.session.CorpAuditSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.CorpAuditSessionRemote
+  Interface: org.spec.jappserver.ejb.orders.session.CorpAuditSessionLocal
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.persistence.PersistenceContext
+Class-Seed: org.spec.jappserver.loader.Assembly$RandomGenerator
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.loader.session.LoaderService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.supplier.session.SupplierAuditSessionRemote
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.supplier.session.SupplierAuditService
+  ClassAnnotation: javax.ejb.Remote
+Class-Seed: org.spec.jappserver.ejb.orders.mdb.FulfillOrderMDB
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: javax.jms.MessageListener
+  ClassAnnotation: javax.ejb.MessageDriven
+  FieldAnnotation: javax.ejb.EJB
+  FieldAnnotation: javax.persistence.PersistenceContext
+  FieldAnnotation: javax.annotation.Resource
+Class-Seed: org.spec.jappserver.ejb.mfg.entity.Component
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Inheritance
+  ClassAnnotation: javax.persistence.DiscriminatorColumn
+  ClassAnnotation: javax.persistence.DiscriminatorValue
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.OneToMany
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.ejb.orders.session.ItemBrowserService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.loader.LoadManufacturing
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.loader.Load
+Class-Seed: org.spec.jappserver.common.util.DebugPrint
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.common.util.Debug
+Class-Seed: org.spec.jappserver.loader.SeedGenerator
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.loader.session.LoaderSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.loader.session.LoaderService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.ejb.supplier.session.SupplierSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.supplier.session.SupplierSessionRemote
+  Interface: org.spec.jappserver.ejb.supplier.session.SupplierSessionLocal
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.annotation.Resource
+  FieldAnnotation: javax.ejb.EJB
+  FieldAnnotation: javax.persistence.PersistenceContext
+  MethodAnnotation: javax.ejb.TransactionAttribute
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.ScheduleWorkOrder
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.ejb.mfg.session.MfgSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.MfgService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.ejb.mfg.session.MessageSenderService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.FindWorkOrderResponse
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.ejb.orders.session.CustomerSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.CustomerService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.common.util.BigDecimalUtils
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.loader.LoadTracker
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.loader.Address$RandomGenerator
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.service.load.DataLoadingService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.service.PersistenceService
+Class-Seed: org.spec.jappserver.loader.RandNum
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.common.names.JNDINames
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.WorkOrderService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.entity.Bom
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.EmbeddedId
+  FieldAnnotation: javax.persistence.AttributeOverrides
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.ManyToOne
+  FieldAnnotation: javax.persistence.JoinColumn
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.ScheduleWorkOrderResponse
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.ejb.supplier.mdb.BuyerSegmentCache$1
+  ClassSource: specj.jar
+  Superclass: java.lang.ThreadLocal
+Class-Seed: org.spec.jappserver.ejb.mfg.session.LargeOrderSessionRemote
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.LargeOrderService
+  ClassAnnotation: javax.ejb.Remote
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.FindWorkOrder
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.common.DocumentSegmentCache
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.GetWorkOrdersByStatusResponse
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.service.PersistenceService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.loader.Part
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.loader.mdb.LoaderMDB
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: javax.jms.MessageListener
+  ClassAnnotation: javax.ejb.MessageDriven
+  ClassAnnotation: javax.ejb.TransactionAttribute
+Class-Seed: org.spec.jappserver.ejb.supplier.session.SupplierSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.supplier.session.SupplierService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.ejb.mfg.entity.WorkOrderStatus$1
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.loader.FlatFileStatement
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.reflect.InvocationHandler
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.UpdateWorkOrderResponse
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.loader.Helper
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.loader.CardDeck
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.MfgService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.CancelWorkOrder
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.ejb.orders.entity.Customer
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Temporal
+  FieldAnnotation: javax.persistence.OneToMany
+  FieldAnnotation: javax.persistence.Embedded
+  FieldAnnotation: javax.persistence.AttributeOverrides
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.ejb.orders.session.ItemBrowserSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.ItemBrowserSessionRemote
+  Interface: org.spec.jappserver.ejb.orders.session.ItemBrowserSessionLocal
+  ClassAnnotation: javax.ejb.Stateful
+  FieldAnnotation: javax.persistence.PersistenceContext
+  MethodAnnotation: javax.ejb.TransactionAttribute
+Class-Seed: org.spec.jappserver.loader.Address$1
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.common.util.Utils
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.common.Constants
+Class-Seed: org.spec.jappserver.common.util.FileSegmentLoader
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.common.util.SegmentLoader
+Class-Seed: org.spec.jappserver.ejb.shoppingcart.entity.ShoppingCart
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+Class-Seed: org.spec.jappserver.ejb.supplier.session.SupplierService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.MessageSenderSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.MessageSenderSessionLocal
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.annotation.Resource
+Class-Seed: org.spec.jappserver.ejb.mfg.session.LargeOrderSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.LargeOrderService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.common.AttachmentDataSource
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: javax.activation.DataSource
+Class-Seed: org.spec.jappserver.common.util.DeliveryInfo
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.CompleteWorkOrder
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.ejb.supplier.session.SupplierSessionRemote
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.supplier.session.SupplierService
+  ClassAnnotation: javax.ejb.Remote
+Class-Seed: org.spec.jappserver.common.util.SegmentLoaderFactory$SegmentType
+  ClassSource: specj.jar
+  Superclass: java.lang.Enum
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.CancelWorkOrderResponse
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.service.load.DataLoadingServiceImpl
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.service.PersistenceServiceImpl
+  Interface: org.spec.jappserver.service.load.DataLoadingService
+Class-Seed: org.spec.jappserver.ejb.orders.session.InsufficientCreditException
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.common.SPECjAppServerException
+Class-Seed: org.spec.jappserver.ejb.orders.entity.OrderStatus
+  ClassSource: specj.jar
+  Superclass: java.lang.Enum
+  Interface: java.io.Serializable
+Class-Seed: org.spec.jappserver.ejb.orders.session.OrderService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.supplier.entity.PurchaseOrderLine
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.EmbeddedId
+  FieldAnnotation: javax.persistence.AttributeOverrides
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Temporal
+  FieldAnnotation: javax.persistence.ManyToOne
+  FieldAnnotation: javax.persistence.JoinColumn
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.loader.entity.Section$State
+  ClassSource: specj.jar
+  Superclass: java.lang.Enum
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.CompleteWorkOrderResponse
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.common.util.DateTimeNormalizer
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.WorkOrderSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.WorkOrderSessionLocal
+  Interface: org.spec.jappserver.ejb.mfg.session.WorkOrderSessionRemote
+  Interface: org.spec.jappserver.ejb.mfg.session.WorkOrderWebService
+  ClassAnnotation: javax.jws.WebService
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.persistence.PersistenceContext
+  FieldAnnotation: javax.ejb.EJB
+  MethodAnnotation: javax.ejb.TransactionAttribute
+Class-Seed: org.spec.jappserver.ejb.mfg.session.MfgAuditService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.common.XmlTags
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.common.util.SegmentLoaderFactory
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.orders.session.ItemBrowserSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.ItemBrowserService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.ejb.orders.entity.CustomerInventory
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  Interface: java.util.Comparator
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.TableGenerator
+  FieldAnnotation: javax.persistence.GeneratedValue
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.ManyToOne
+  FieldAnnotation: javax.persistence.JoinColumn
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.ejb.orders.entity.OrderLine
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.EmbeddedId
+  FieldAnnotation: javax.persistence.AttributeOverrides
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Temporal
+  FieldAnnotation: javax.persistence.ManyToOne
+  FieldAnnotation: javax.persistence.JoinColumn
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.ejb.supplier.entity.SComponent
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.ejb.orders.session.CustomerService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.loader.Load$InfrequentChecker
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.supplier.entity.PurchaseOrderLinePK
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.Embeddable
+Class-Seed: org.spec.jappserver.loader.Component
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.loader.Part
+Class-Seed: org.spec.jappserver.loader.StandaloneLoadTracker
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.loader.LoadTracker
+Class-Seed: org.spec.jappserver.loader.entity.Section
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  Interface: java.lang.Cloneable
+  Interface: java.lang.Comparable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.ScheduleWorkOrderBySalesId
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.ScheduleWorkOrderBySalesIdResponse
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.common.util.DeliveryStats
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+Class-Seed: org.spec.jappserver.ejb.orders.session.ItemBrowserSessionRemote
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.ItemBrowserService
+  ClassAnnotation: javax.ejb.Remote
+Class-Seed: org.spec.jappserver.ejb.mfg.entity.ComponentDemand
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+Class-Seed: org.spec.jappserver.service.PersistenceServiceImpl
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.service.PersistenceService
+Class-Seed: org.spec.jappserver.loader.Address
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.common.BinaryInputStream
+  ClassSource: specj.jar
+  Superclass: java.io.InputStream
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.GetAllWorkOrdersResponse
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.ejb.mfg.entity.WorkOrderStatus
+  ClassSource: specj.jar
+  Superclass: java.lang.Enum
+  Interface: java.io.Serializable
+Class-Seed: org.spec.jappserver.loader.CarNameGen
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.loader.DatabaseHelper
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.MessageSenderSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.MessageSenderService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.service.load.RandomGenerator
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.common.SPECjAppServerException
+  ClassSource: specj.jar
+  Superclass: java.lang.Exception
+Class-Seed: org.spec.jappserver.loader.Component$RandomGenerator
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.orders.entity.Item
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.ejb.orders.session.OrderAuditSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.OrderAuditSessionLocal
+  Interface: org.spec.jappserver.ejb.orders.session.OrderAuditSessionRemote
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.persistence.PersistenceContext
+Class-Seed: org.spec.jappserver.loader.Load
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.service.search.FinderServiceImpl
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.service.PersistenceServiceImpl
+  Interface: org.spec.service.search.FinderService
+Class-Seed: org.spec.jappserver.common.BinarySegmentCache
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.ScheduleWorkOrderByDateResponse
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Seed: org.spec.jappserver.ejb.supplier.entity.ComponentQuantities
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+Class-Seed: org.spec.jappserver.loader.LoadSupplier$PurchaseOrder
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.orders.session.CorpAuditSessionLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.CorpAuditService
+  ClassAnnotation: javax.ejb.Local
+Class-Seed: org.spec.jappserver.common.util.DatabaseSegmentLoader
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.common.util.SegmentLoader
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.GetAllWorkOrders
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+Class-Seed: org.spec.jappserver.ejb.supplier.mdb.BuyerSegmentCache
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.loader.FlatFileConnection
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.reflect.InvocationHandler
+Class-Seed: org.spec.jappserver.loader.WebLoadTracker
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.loader.LoadTracker
+Class-Seed: org.spec.jappserver.loader.Component$1
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.service.search.FinderService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.service.PersistenceService
+Class-Seed: org.spec.jappserver.ejb.supplier.entity.PurchaseOrder
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.TableGenerator
+  FieldAnnotation: javax.persistence.GeneratedValue
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.ManyToOne
+  FieldAnnotation: javax.persistence.JoinColumn
+  FieldAnnotation: javax.persistence.OneToMany
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.loader.entity.Loader
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Temporal
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.loader.entity.Message
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.TableGenerator
+  FieldAnnotation: javax.persistence.GeneratedValue
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Lob
+Class-Seed: org.spec.jappserver.ejb.orders.session.LargeOrderSenderSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.LargeOrderSenderSessionLocal
+  Interface: org.spec.jappserver.ejb.orders.session.LargeOrderSenderSessionRemote
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.annotation.Resource
+Class-Seed: org.spec.jappserver.common.util.DataSegment
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.persistence.NamedQuery
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Lob
+  FieldAnnotation: javax.persistence.Basic
+Class-Seed: org.spec.jappserver.ejb.mfg.mdb.ReceiveMDB
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: javax.jms.MessageListener
+  ClassAnnotation: javax.ejb.MessageDriven
+  FieldAnnotation: javax.annotation.Resource
+  FieldAnnotation: javax.ejb.EJB
+Class-Seed: org.spec.jappserver.common.NotReadyException
+  ClassSource: specj.jar
+  Superclass: org.spec.jappserver.common.SPECjAppServerException
+Class-Seed: org.spec.jappserver.ejb.orders.session.OrderSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.OrderSessionRemote
+  Interface: org.spec.jappserver.ejb.orders.session.OrderSessionLocal
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.persistence.PersistenceContext
+  FieldAnnotation: javax.annotation.Resource
+  FieldAnnotation: javax.ejb.EJB
+  MethodAnnotation: javax.ejb.TransactionAttribute
+Class-Seed: org.spec.jappserver.common.util.SQLSender
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.session.WorkOrderWebService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.WorkOrderService
+  ClassAnnotation: javax.jws.WebService
+  MethodAnnotation: javax.jws.WebMethod
+  MethodAnnotation: javax.xml.ws.RequestWrapper
+  MethodAnnotation: javax.xml.ws.ResponseWrapper
+Class-Seed: org.spec.jappserver.common.util.SegmentLoader
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.orders.session.LargeOrderSenderService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.common.Constants
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.supplier.mdb.BuyerMDB$1
+  ClassSource: specj.jar
+  Superclass: java.lang.ThreadLocal
+Class-Seed: org.spec.jappserver.ejb.orders.session.OrderAuditSessionRemote
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.OrderAuditService
+  ClassAnnotation: javax.ejb.Remote
+Class-Seed: org.spec.jappserver.ejb.supplier.entity.ComponentOrder
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+Class-Seed: org.spec.jappserver.loader.StandaloneLoader
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.orders.session.CorpAuditSessionRemote
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.CorpAuditService
+  ClassAnnotation: javax.ejb.Remote
+Class-Seed: org.spec.jappserver.service.load.RandomDataGenerator
+  ClassSource: specj.jar
+  Superclass: java.util.Random
+Class-Seed: org.spec.jappserver.loader.Customer$RandomGenerator
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.service.load.Range
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.common.util.Rounding
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.mfg.entity.Inventory
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.EmbeddedId
+  FieldAnnotation: javax.persistence.AttributeOverrides
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.Temporal
+  FieldAnnotation: javax.persistence.Version
+  FieldAnnotation: javax.persistence.ManyToOne
+  FieldAnnotation: javax.persistence.JoinColumn
+Class-Seed: org.spec.jappserver.ejb.mfg.session.LargeOrderSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.LargeOrderSessionLocal
+  Interface: org.spec.jappserver.ejb.mfg.session.LargeOrderSessionRemote
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.ejb.EJB
+  FieldAnnotation: javax.persistence.PersistenceContext
+  MethodAnnotation: javax.ejb.TransactionAttribute
+Class-Seed: org.spec.jappserver.ejb.mfg.entity.LargeOrder
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  ClassAnnotation: javax.persistence.NamedQueries
+  ClassAnnotation: javax.persistence.Entity
+  ClassAnnotation: javax.persistence.Table
+  FieldAnnotation: javax.persistence.Id
+  FieldAnnotation: javax.persistence.TableGenerator
+  FieldAnnotation: javax.persistence.GeneratedValue
+  FieldAnnotation: javax.persistence.Column
+  FieldAnnotation: javax.persistence.ManyToOne
+  FieldAnnotation: javax.persistence.JoinColumn
+  FieldAnnotation: javax.persistence.Temporal
+  FieldAnnotation: javax.persistence.Version
+Class-Seed: org.spec.jappserver.ejb.mfg.session.MfgAuditSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.mfg.session.MfgAuditSessionRemote
+  Interface: org.spec.jappserver.ejb.mfg.session.MfgAuditSessionLocal
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.persistence.PersistenceContext
+Class-Seed: org.spec.jappserver.loader.CustHelper
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Seed: org.spec.jappserver.ejb.supplier.session.SupplierAuditSession
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.supplier.session.SupplierAuditSessionRemote
+  Interface: org.spec.jappserver.ejb.supplier.session.SupplierAuditSessionLocal
+  ClassAnnotation: javax.ejb.Stateless
+  FieldAnnotation: javax.persistence.PersistenceContext
+Class-Seed: org.spec.jappserver.common.util.Debug
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+Class-Seed: org.spec.jappserver.ejb.orders.session.LargeOrderSenderSessionRemote
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: org.spec.jappserver.ejb.orders.session.LargeOrderSenderService
+  ClassAnnotation: javax.ejb.Remote
+Class-Seed: org.spec.jappserver.ejb.mfg.session.jaxws.CheckForRequestedWork
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  ClassAnnotation: javax.xml.bind.annotation.XmlRootElement
+  ClassAnnotation: javax.xml.bind.annotation.XmlAccessorType
+  ClassAnnotation: javax.xml.bind.annotation.XmlType
+  FieldAnnotation: javax.xml.bind.annotation.XmlElement
+Class-Excluded: javax.activation.DataSource
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Excluded: javax.persistence.Id
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.Basic
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.ManyToOne
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.xml.bind.annotation.XmlAccessorType
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.AttributeOverrides
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.JoinColumn
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.xml.bind.annotation.XmlElement
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: java.lang.Comparable
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Excluded: javax.persistence.Column
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.PersistenceContext
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: java.util.GregorianCalendar
+  ClassSource: specj.jar
+  Superclass: java.util.Calendar
+Class-Excluded: java.lang.annotation.Annotation
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Excluded: java.util.Calendar
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+  Interface: java.lang.Cloneable
+  Interface: java.lang.Comparable
+Class-Excluded: java.io.InputStream
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Closeable
+Class-Excluded: javax.annotation.PostConstruct
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: java.util.Random
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+Class-Excluded: javax.persistence.NamedQuery
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: java.lang.Object
+  ClassSource: specj.jar
+Class-Excluded: javax.persistence.Embedded
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.Lob
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.Temporal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.jws.WebService
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.xml.bind.annotation.XmlSchemaType
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: java.lang.reflect.InvocationHandler
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Excluded: java.lang.Throwable
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.io.Serializable
+Class-Excluded: javax.jws.WebMethod
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: java.util.Comparator
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Excluded: java.io.Closeable
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Excluded: javax.persistence.EmbeddedId
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.xml.ws.RequestWrapper
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.Inheritance
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.Embeddable
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.Entity
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.xml.bind.annotation.XmlRootElement
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: java.lang.Runnable
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Excluded: javax.persistence.DiscriminatorColumn
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: java.lang.Exception
+  ClassSource: specj.jar
+  Superclass: java.lang.Throwable
+Class-Excluded: javax.xml.bind.annotation.XmlType
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.GeneratedValue
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: java.lang.Enum
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.Comparable
+  Interface: java.io.Serializable
+Class-Excluded: java.io.Serializable
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Excluded: javax.annotation.Resource
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.Version
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.NamedQueries
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.DiscriminatorValue
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.xml.ws.ResponseWrapper
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: java.lang.Cloneable
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+Class-Excluded: javax.persistence.Table
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.TableGenerator
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: javax.persistence.OneToMany
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+  Interface: java.lang.annotation.Annotation
+Class-Excluded: java.lang.ThreadLocal
+  ClassSource: specj.jar
+  Superclass: java.lang.Object
+# ============================================================
+# Unresolved Package Data:
+# ============================================================
+# Unresolved Class Data:
+Class-Unresolved: javax.ejb.Stateful
+Class-Unresolved: javax.ejb.Stateless
+Class-Unresolved: javax.jms.MessageListener
+Class-Unresolved: javax.ejb.Local
+Class-Unresolved: javax.ejb.TransactionAttribute
+Class-Unresolved: javax.ejb.EJB
+Class-Unresolved: javax.ejb.MessageDriven
+Class-Unresolved: javax.ejb.TransactionManagement
+Class-Unresolved: javax.ejb.Remote
+# ============================================================

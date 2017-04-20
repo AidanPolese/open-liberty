@@ -1,0 +1,8 @@
+<project name="com.ibm.ws.dynacache.web" default="build">
+
+    <property name="instrument.ffdc" value="true" />
+    <property name="no.trace.instrumentation" value="true" />
+
+    <import file="../ant_build/public_imports/standard_imports.xml" />
+
+</project>

@@ -41,11 +41,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.websphere.security.audit.AuditAuthResult;
 import com.ibm.websphere.security.audit.AuditAuthenticationResult;
-import com.ibm.websphere.security.audit.AuditEvent;
-import com.ibm.ws.security.audit.Audit;
-import com.ibm.ws.security.audit.utils.AuditConstants;
 import com.ibm.ws.security.authorization.jacc.JaccService;
 import com.ibm.ws.security.authorization.jacc.MethodInfo;
 import com.ibm.ws.security.authorization.jacc.RoleInfo;
@@ -347,15 +343,16 @@ public class JaccServiceImpl implements JaccService {
         uriName = substituteAsterisk(uriName);
         WebResourcePermission webPerm = new WebResourcePermission(uriName, methodNameArray);
         boolean isAuthorized = wsv.checkResourceConstraints(getContextId(applicationName, moduleName), req, webPerm, subject);
-        if (isAuthorized) {
-            authResult = new AuditAuthenticationResult(AuditAuthResult.SUCCESS, subject, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_SUCCESS);
-            Audit.audit(Audit.EventID.SECURITY_AUTHZ_02, req, authResult, webPerm, uriName, AuditConstants.WEB_CONTAINER, Integer.valueOf("200"));
-        } else {
-            authResult = new AuditAuthenticationResult(AuditAuthResult.FAILURE, subject, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_FAILURE);
-            Audit.audit(Audit.EventID.SECURITY_AUTHZ_02, req, authResult, webPerm, uriName, AuditConstants.WEB_CONTAINER, Integer.valueOf("403"));
-
-        }
-        return isAuthorized;
+/*
+ * if (isAuthorized) {
+ * authResult = new AuditAuthenticationResult(AuditAuthResult.SUCCESS, subject, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_SUCCESS);
+ * Audit.audit(Audit.EventID.SECURITY_AUTHZ_02, req, authResult, webPerm, uriName, AuditConstants.WEB_CONTAINER, Integer.valueOf("200"));
+ * } else {
+ * authResult = new AuditAuthenticationResult(AuditAuthResult.FAILURE, subject, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_FAILURE);
+ * Audit.audit(Audit.EventID.SECURITY_AUTHZ_02, req, authResult, webPerm, uriName, AuditConstants.WEB_CONTAINER, Integer.valueOf("403"));
+ * 
+ * }
+ */ return isAuthorized;
     }
 
     @Override

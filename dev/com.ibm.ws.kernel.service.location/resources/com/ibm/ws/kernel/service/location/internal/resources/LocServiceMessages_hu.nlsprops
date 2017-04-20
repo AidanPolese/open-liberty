@@ -41,7 +41,7 @@ missingTmpDir.useraction=Gy\u0151z\u0151dj\u00f6n meg r\u00f3la, hogy a megadott
 
 relativeTmpDir=CWWKE0203I: A java.io.tempdir relat\u00edv \u00fatvonallal lett megadva. A feloldott \u00fatvonal: {0}.
 relativeTmpDir.explanation=A java.io.tmpdir form\u00e1ban (rendszertulajdons\u00e1gon vagy platform-specifikus k\u00f6rnyezeti v\u00e1ltoz\u00f3n kereszt\u00fcl) megadott k\u00f6nyvt\u00e1r \u00fatvonala relat\u00edv volt, \u00e9s az ind\u00edt\u00e1si k\u00f6nyvt\u00e1rhoz k\u00e9pest lett feloldva.
-relativeTmpDir.useraction=Semmit sem kell tennie.
+relativeTmpDir.useraction=Nincs teend\u0151.
 
 locationInitializationError=CWWKE0204E: A platform hely szolg\u00e1ltat\u00e1s nem inicializ\u00e1lhat\u00f3; ok={0}.
 locationInitializationError.explanation=CMSG0001

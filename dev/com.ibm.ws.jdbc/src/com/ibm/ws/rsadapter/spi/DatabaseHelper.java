@@ -53,6 +53,7 @@ import com.ibm.ws.resource.ResourceRefInfo;
 import com.ibm.ws.rsadapter.AdapterUtil;
 import com.ibm.ws.rsadapter.DSConfig;
 import com.ibm.ws.rsadapter.exceptions.DataStoreAdapterException;
+import com.ibm.ws.rsadapter.jdbc.WSJdbcStatement;
 
 /**
  * Helper for generic relational databases, coded to the most common cases.
@@ -337,10 +338,8 @@ public class DatabaseHelper {
      *         object or there are no more results.
      * @throws SQLException if a database access error occurs or this method is called on a closed Statement.
      */
-    public long getUpdateCount(Statement stmt) throws SQLException {
-        return mcf.jdbcDriverSpecVersion >= 42 && mcf.atLeastJDBCVersion(JDBCRuntimeVersion.VERSION_4_2)
-                        ? mcf.jdbcRuntime.getLargeUpdateCount(stmt)
-                        : stmt.getUpdateCount();
+    public long getUpdateCount(WSJdbcStatement stmt) throws SQLException {
+        return stmt.getCompatibleUpdateCount();
     }
 
     /**
@@ -924,6 +923,8 @@ public class DatabaseHelper {
                 Tr.warning(tc, "FEATURE_NOT_IMPLEMENTED", "java.sql.Connection.getClientInfo");
             }
 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+            Tr.debug(this, tc, "JDBC spec version implemented by driver", mcf.jdbcDriverSpecVersion);
     }
 
     /**

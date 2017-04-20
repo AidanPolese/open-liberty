@@ -1,6 +1,6 @@
 # -------------------------------------------------------------------------------------------------
 # @start_prolog@
-# Version: @(#) 1.43 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/CWSIJMessages.nlsprops, SIB.comms, WASX.SIB 10/10/14 01:07:38 [11/9/10 00:07:27]
+# Version: @(#) 1.43 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/CWSIJMessages.nlsprops, SIB.comms, WASX.SIB, uu1215.01 10/10/14 01:07:38 [4/12/12 22:14:11]
 # ============================================================================
 # IBM Confidential OCO Source Materials
 #
@@ -113,25 +113,25 @@ EXCP_CONN_FAIL_NO_CF_SICJ0007.useraction=Prohl\u00e9dn\u011bte si soubory protok
 # -------------------------------------------------------------------------------------------------
 # {0} the name of the default channel chain which is not defined
 NO_DEFAULT_OUTBOUND_SICJ0008=CWSIJ0008W: V\u00fdchoz\u00ed \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v {0} nen\u00ed pro tento aplika\u010dn\u00ed server definov\u00e1n.
-NO_DEFAULT_OUTBOUND_SICJ0008.explanation=V\u00fdchoz\u00ed \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v nen\u00ed pro tento aplika\u010dn\u00ed server definov\u00e1n. Tento aplika\u010dn\u00ed server nemus\u00ed b\u00fdt schopen vytvo\u0159it p\u0159ipojen\u00ed ke stroj\u016fm syst\u00e9mu zpr\u00e1v vzd\u00e1len\u00e9 br\u00e1ny.
+NO_DEFAULT_OUTBOUND_SICJ0008.explanation=V\u00fdchoz\u00ed \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v nen\u00ed pro tento aplika\u010dn\u00ed server definov\u00e1n. Tento aplika\u010dn\u00ed server nemus\u00ed b\u00fdt schopen vytvo\u0159it p\u0159ipojen\u00ed k j\u00e1dr\u016fm syst\u00e9mu zpr\u00e1v vzd\u00e1len\u00e9 br\u00e1ny.
 NO_DEFAULT_OUTBOUND_SICJ0008.useraction=Definujte v\u00fdchoz\u00ed \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v pro tento aplika\u010dn\u00ed server.
 
 # -------------------------------------------------------------------------------------------------
 # {0} the name of the default channel chain which is not defined
 NO_DEFAULT_SECURE_OUTBOUND_SICJ0009=CWSIJ0009W: V\u00fdchoz\u00ed zabezpe\u010den\u00fd \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v {0} nen\u00ed pro tento aplika\u010dn\u00ed server definov\u00e1n.
-NO_DEFAULT_SECURE_OUTBOUND_SICJ0009.explanation=V\u00fdchoz\u00ed zabezpe\u010den\u00fd \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v nen\u00ed pro tento aplika\u010dn\u00ed server definov\u00e1n. Tento aplika\u010dn\u00ed server nemus\u00ed b\u00fdt schopen vytvo\u0159it p\u0159ipojen\u00ed ke stroj\u016fm syst\u00e9mu zpr\u00e1v vzd\u00e1len\u00e9 br\u00e1ny.
+NO_DEFAULT_SECURE_OUTBOUND_SICJ0009.explanation=V\u00fdchoz\u00ed zabezpe\u010den\u00fd \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v nen\u00ed pro tento aplika\u010dn\u00ed server definov\u00e1n. Tento aplika\u010dn\u00ed server nemus\u00ed b\u00fdt schopen vytvo\u0159it p\u0159ipojen\u00ed k j\u00e1dr\u016fm syst\u00e9mu zpr\u00e1v vzd\u00e1len\u00e9 br\u00e1ny.
 NO_DEFAULT_SECURE_OUTBOUND_SICJ0009.useraction=Definujte v\u00fdchoz\u00ed zabezpe\u010den\u00fd \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v pro tento aplika\u010dn\u00ed server.
 
 # -------------------------------------------------------------------------------------------------
 # {0} the name of the default channel chain which is not defined
 NO_DEFAULT_TUNNELED_OUTBOUND_SICJ0010=CWSIJ0010W: V\u00fdchoz\u00ed tunelovan\u00fd \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v {0} nen\u00ed pro tento aplika\u010dn\u00ed server definov\u00e1n.
-NO_DEFAULT_TUNNELED_OUTBOUND_SICJ0010.explanation=V\u00fdchoz\u00ed tunelovan\u00fd \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v nen\u00ed pro tento aplika\u010dn\u00ed server definov\u00e1n. Tento aplika\u010dn\u00ed server nemus\u00ed b\u00fdt schopen vytvo\u0159it p\u0159ipojen\u00ed ke stroj\u016fm syst\u00e9mu zpr\u00e1v vzd\u00e1len\u00e9 br\u00e1ny.
+NO_DEFAULT_TUNNELED_OUTBOUND_SICJ0010.explanation=V\u00fdchoz\u00ed tunelovan\u00fd \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v nen\u00ed pro tento aplika\u010dn\u00ed server definov\u00e1n. Tento aplika\u010dn\u00ed server nemus\u00ed b\u00fdt schopen vytvo\u0159it p\u0159ipojen\u00ed k j\u00e1dr\u016fm syst\u00e9mu zpr\u00e1v vzd\u00e1len\u00e9 br\u00e1ny.
 NO_DEFAULT_TUNNELED_OUTBOUND_SICJ0010.useraction=Definujte v\u00fdchoz\u00ed tunelovan\u00fd \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v pro tento aplika\u010dn\u00ed server.
 
 # -------------------------------------------------------------------------------------------------
 # {0} the name of the default channel chain which is not defined
 NO_DEFAULT_TUNNELED_SECURE_OUTBOUND_SICJ0011=CWSIJ0011W: V\u00fdchoz\u00ed tunelovan\u00fd zabezpe\u010den\u00fd \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v {0} nen\u00ed pro tento aplika\u010dn\u00ed server definov\u00e1n.
-NO_DEFAULT_TUNNELED_SECURE_OUTBOUND_SICJ0011.explanation=V\u00fdchoz\u00ed tunelovan\u00fd zabezpe\u010den\u00fd \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v nen\u00ed pro tento aplika\u010dn\u00ed server definov\u00e1n. Tento aplika\u010dn\u00ed server nemus\u00ed b\u00fdt schopen vytvo\u0159it p\u0159ipojen\u00ed ke stroj\u016fm syst\u00e9mu zpr\u00e1v vzd\u00e1len\u00e9 br\u00e1ny.
+NO_DEFAULT_TUNNELED_SECURE_OUTBOUND_SICJ0011.explanation=V\u00fdchoz\u00ed tunelovan\u00fd zabezpe\u010den\u00fd \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v nen\u00ed pro tento aplika\u010dn\u00ed server definov\u00e1n. Tento aplika\u010dn\u00ed server nemus\u00ed b\u00fdt schopen vytvo\u0159it p\u0159ipojen\u00ed k j\u00e1dr\u016fm syst\u00e9mu zpr\u00e1v vzd\u00e1len\u00e9 br\u00e1ny.
 NO_DEFAULT_TUNNELED_SECURE_OUTBOUND_SICJ0011.useraction=Definujte v\u00fdchoz\u00ed tunelovan\u00fd zabezpe\u010den\u00fd \u0159et\u011bzec kan\u00e1lu odchoz\u00edch zpr\u00e1v pro tento aplika\u010dn\u00ed server.
 
 # -------------------------------------------------------------------------------------------------
@@ -235,7 +235,7 @@ CANNOT_CREATE_TUNNELED_SECURE_OUTBOUND_CHANNEL_SICJ0026.useraction=CMSG0002
 
 # -------------------------------------------------------------------------------------------------
 CANNOT_START_INBOUND_CHAINS_SICJ0027=CWSIJ0027W: Pro tento aplika\u010dn\u00ed server nelze spustit \u017e\u00e1dn\u00e9 \u0159et\u011bzce kan\u00e1lu p\u0159\u00edchoz\u00edch zpr\u00e1v.
-CANNOT_START_INBOUND_CHAINS_SICJ0027.explanation=Nelze spustit \u017e\u00e1dn\u00e9 \u0159et\u011bzce kan\u00e1lu p\u0159\u00edchoz\u00edch zpr\u00e1v, pravd\u011bpodobn\u011b proto, \u017ee nebyl \u017e\u00e1dn\u00fd pro tento aplika\u010dn\u00ed server definov\u00e1n. Klienti syst\u00e9mu zpr\u00e1v nebo jin\u00e9 stroje syst\u00e9mu zpr\u00e1v nemus\u00ed um\u011bt \u00fasp\u011b\u0161n\u011b nav\u00e1zat p\u0159ipojen\u00ed k tomuto aplika\u010dn\u00edmu serveru.
+CANNOT_START_INBOUND_CHAINS_SICJ0027.explanation=Nelze spustit \u017e\u00e1dn\u00e9 \u0159et\u011bzce kan\u00e1lu p\u0159\u00edchoz\u00edch zpr\u00e1v, pravd\u011bpodobn\u011b proto, \u017ee nebyl \u017e\u00e1dn\u00fd pro tento aplika\u010dn\u00ed server definov\u00e1n. Klienti syst\u00e9mu zpr\u00e1v nebo jin\u00e9 j\u00e1dra syst\u00e9mu zpr\u00e1v nemus\u00ed um\u011bt \u00fasp\u011b\u0161n\u011b nav\u00e1zat p\u0159ipojen\u00ed k tomuto aplika\u010dn\u00edmu serveru.
 CANNOT_START_INBOUND_CHAINS_SICJ0027.useraction=Definujte na aplika\u010dn\u00edm serveru dal\u0161\u00ed \u0159et\u011bzce kan\u00e1lu p\u0159\u00edchoz\u00edch zpr\u00e1v pro \u00fa\u010dely zas\u00edl\u00e1n\u00ed zpr\u00e1v.
 
 # -------------------------------------------------------------------------------------------------
@@ -294,7 +294,7 @@ NO_DISPATCHTOALL_IMPL_SICJ0034.useraction=CMSG0002
 # -------------------------------------------------------------------------------------------------
 # {0} is the host name / endpoint and {1} is the chain name
 ME_UNEXPECTED_DISCONNECT_SICJ0035=CWSIJ0035E: Stroj syst\u00e9mu zpr\u00e1v, kter\u00fd byl p\u0159edt\u00edm p\u0159ipojen\u00fd z hostitele {0} v transportn\u00edm \u0159et\u011bzci {1}, se neo\u010dek\u00e1van\u011b odpojil.
-ME_UNEXPECTED_DISCONNECT_SICJ0035.explanation=Stroj syst\u00e9mu zpr\u00e1v se odpojil od tohoto aplika\u010dn\u00edho serveru bez n\u00e1sledov\u00e1n\u00ed o\u010dek\u00e1van\u00fdch protokol\u016f odpojen\u00ed.
+ME_UNEXPECTED_DISCONNECT_SICJ0035.explanation=J\u00e1dro syst\u00e9mu zpr\u00e1v se odpojilo od tohoto aplika\u010dn\u00edho serveru bez n\u00e1sledov\u00e1n\u00ed o\u010dek\u00e1van\u00fdch protokol\u016f odpojen\u00ed.
 ME_UNEXPECTED_DISCONNECT_SICJ0035.useraction=Dal\u0161\u00ed informace o \u0159e\u0161en\u00ed tohoto probl\u00e9mu naleznete v informac\u00edch t\u00fdkaj\u00edc\u00edch se ur\u010dov\u00e1n\u00ed probl\u00e9m\u016f na webu podpory pro produkt Application Server na adrese http://www.ibm.com/software/webservers/appserv/was/support/.
 
 # -------------------------------------------------------------------------------------------------
@@ -306,13 +306,13 @@ CLIENT_UNEXPECTED_DISCONNECT_SICJ0036.useraction=Dal\u0161\u00ed informace o \u0
 # -------------------------------------------------------------------------------------------------
 # {0} is the host name / endpoint and {1} is the chain name
 ME_BAD_DATA_RECEIVED_SICJ0037=CWSIJ0037E: Nav\u00e1zan\u00e9 p\u0159ipojen\u00ed stroje syst\u00e9mu zpr\u00e1v bylo ukon\u010deno z p\u0159\u00ed\u010diny p\u0159ijet\u00ed neplatn\u00fdch po\u010d\u00e1te\u010dn\u00edch dat z hostitele {0} v transportn\u00edm \u0159et\u011bzci {1}.
-ME_BAD_DATA_RECEIVED_SICJ0037.explanation=P\u0159ipojen\u00ed stroje syst\u00e9mu zpr\u00e1v ze zadan\u00e9ho hostitele bylo odpojeno z p\u0159\u00ed\u010diny p\u0159enosu neplatn\u00fdch dat.
+ME_BAD_DATA_RECEIVED_SICJ0037.explanation=P\u0159ipojen\u00ed j\u00e1dra syst\u00e9mu zpr\u00e1v ze zadan\u00e9ho hostitele bylo odpojeno z p\u0159\u00ed\u010diny p\u0159enosu neplatn\u00fdch dat.
 ME_BAD_DATA_RECEIVED_SICJ0037.useraction=Dal\u0161\u00ed informace o \u0159e\u0161en\u00ed tohoto probl\u00e9mu naleznete v informac\u00edch t\u00fdkaj\u00edc\u00edch se ur\u010dov\u00e1n\u00ed probl\u00e9m\u016f na webu podpory pro produkt Application Server na adrese http://www.ibm.com/software/webservers/appserv/was/support/.
 
 # -------------------------------------------------------------------------------------------------
 # {0} is the host name / endpoint and {1} is the chain name
 ME_BAD_DATA_ON_CONNECT_SICJ0038=CWSIJ0038E: P\u0159ipojen\u00ed stroje syst\u00e9mu zpr\u00e1v bylo ukon\u010deno z p\u0159\u00ed\u010diny p\u0159ijet\u00ed neplatn\u00fdch po\u010d\u00e1te\u010dn\u00edch dat z hostitele {0} v transportn\u00edm \u0159et\u011bzci {1}.
-ME_BAD_DATA_ON_CONNECT_SICJ0038.explanation=P\u0159ipojen\u00ed stroje syst\u00e9mu zpr\u00e1v ze zadan\u00e9ho hostitele bylo odpojeno z p\u0159\u00ed\u010diny p\u0159enosu neplatn\u00fdch dat.
+ME_BAD_DATA_ON_CONNECT_SICJ0038.explanation=P\u0159ipojen\u00ed j\u00e1dra syst\u00e9mu zpr\u00e1v ze zadan\u00e9ho hostitele bylo odpojeno z p\u0159\u00ed\u010diny p\u0159enosu neplatn\u00fdch dat.
 ME_BAD_DATA_ON_CONNECT_SICJ0038.useraction=Dal\u0161\u00ed informace o \u0159e\u0161en\u00ed tohoto probl\u00e9mu naleznete v informac\u00edch t\u00fdkaj\u00edc\u00edch se ur\u010dov\u00e1n\u00ed probl\u00e9m\u016f na webu podpory pro produkt Application Server na adrese http://www.ibm.com/software/webservers/appserv/was/support/.
 
 # -------------------------------------------------------------------------------------------------
@@ -330,7 +330,7 @@ CLIENT_BAD_DATA_ON_CONNECT_SICJ0040.useraction=Dal\u0161\u00ed informace o \u015
 # -------------------------------------------------------------------------------------------------
 # {0} is the host name, {1} is the chain name and {2} is the heartbeat interval
 ME_NOT_RESPONDING_SICJ0041=CWSIJ0041E: P\u0159ipojen\u00ed stroje syst\u00e9mu zpr\u00e1v z hostitele {0} v transportn\u00edm \u0159et\u011bzci {1} bylo ukon\u010deno pot\u00e9, co p\u0159estalo odpov\u00eddat po uplynut\u00ed {2} sekund.
-ME_NOT_RESPONDING_SICJ0041.explanation=P\u0159ipojen\u00ed stroje syst\u00e9mu zpr\u00e1v ze zadan\u00e9ho hostitele bylo odpojeno, proto\u017ee p\u0159estalo odpov\u00eddat.
+ME_NOT_RESPONDING_SICJ0041.explanation=P\u0159ipojen\u00ed j\u00e1dra syst\u00e9mu zpr\u00e1v ze zadan\u00e9ho hostitele bylo odpojeno, proto\u017ee p\u0159estalo odpov\u00eddat.
 ME_NOT_RESPONDING_SICJ0041.useraction=Dal\u0161\u00ed informace o \u0159e\u0161en\u00ed tohoto probl\u00e9mu naleznete v informac\u00edch t\u00fdkaj\u00edc\u00edch se ur\u010dov\u00e1n\u00ed probl\u00e9m\u016f na webu podpory pro produkt Application Server na adrese http://www.ibm.com/software/webservers/appserv/was/support/.
 
 # -------------------------------------------------------------------------------------------------
@@ -447,7 +447,7 @@ CONNDATAGROUP_INTERNAL_SICJ0062.useraction=CMSG0002
 # {0} is the hostname, {1} is the port.
 CONNDATAGROUP_CONNFAILED_SICJ0063=CWSIJ0063E: S\u00ed\u0165ov\u00e9 p\u0159ipojen\u00ed k n\u00e1zvu hostitele {0}, portu {1} nelze nav\u00e1zat.
 CONNDATAGROUP_CONNFAILED_SICJ0063.explanation=Nelze nav\u00e1zat s\u00ed\u0165ov\u00e9 p\u0159ipojen\u00ed k zadan\u00e9mu n\u00e1zvu hostitele a portu.
-CONNDATAGROUP_CONNFAILED_SICJ0063.useraction=Ur\u010dete, zda je zadan\u00fd n\u00e1zev hostitele platn\u00fd a zda proces naslouch\u00e1 p\u0159ipojen\u00ed na zadan\u00e9m portu. Probl\u00e9m s p\u0159ipojen\u00edm SSL, ke kter\u00e9mu do\u0161lo p\u0159i pou\u017eit\u00ed tenk\u00e9ho klienta nebo adapt\u00e9ru prost\u0159edk\u016f pro platformu JMS s produktem WebSphere Application Server, lze snadn\u011bji diagnostikovat po nakonfigurov\u00e1n\u00ed syst\u00e9mov\u00e9 vlastnosti javax.net.debug=all (prost\u0159ed\u00ed Sun JSSE) nebo javax.net.debug=true (prost\u0159ed\u00ed IBM JSSE) a zopakov\u00e1n\u00ed operace pro aplika\u010dn\u00edho klienta.
+CONNDATAGROUP_CONNFAILED_SICJ0063.useraction=Ur\u010dete, zda je zadan\u00fd n\u00e1zev hostitele platn\u00fd a zda proces naslouch\u00e1 p\u0159ipojen\u00ed na zadan\u00e9m portu. Probl\u00e9m s p\u0159ipojen\u00edm SSL, ke kter\u00e9mu do\u0161lo p\u0159i pou\u017eit\u00ed tenk\u00e9ho klienta nebo adapt\u00e9ru prost\u0159edku pro platformu JMS s produktem WebSphere Application Server, lze snadn\u011bji diagnostikovat po nakonfigurov\u00e1n\u00ed syst\u00e9mov\u00e9 vlastnosti javax.net.debug=all (prost\u0159ed\u00ed Sun JSSE) nebo javax.net.debug=true (prost\u0159ed\u00ed IBM JSSE) a zopakov\u00e1n\u00ed operace pro aplika\u010dn\u00edho klienta.
 
 # -------------------------------------------------------------------------------------------------
 OUTCONNTRACKER_INTERNAL_SICJ0064=CWSIJ0064E: Do\u0161lo k intern\u00ed chyb\u011b.
@@ -469,7 +469,7 @@ CONNDATAGROUP_BADSLLCHAINNAME_SICJ0066.useraction=Definujte dal\u0161\u00ed tran
 # {0} is a transport chain name.  {1} is the name of a machine.
 CONNDATAGROUP_NOTSSLCHAIN_SICJ0067=CWSIJ0067W: Transportn\u00ed \u0159et\u011bzec s n\u00e1zvem {0} neobsahuje konfiguraci SSL, kter\u00e1 m\u016f\u017ee b\u00fdt po\u017eadov\u00e1na k nav\u00e1z\u00e1n\u00ed p\u0159ipojen\u00ed se vzd\u00e1len\u00fdm hostitelem s n\u00e1zvem {1}.
 CONNDATAGROUP_NOTSSLCHAIN_SICJ0067.explanation=Informace, kter\u00e9 jsou po\u017eadov\u00e1ny k p\u0159ipojen\u00ed zalo\u017een\u00e9mu na protokolu SSL k rovnocenn\u00e9mu partnerovi, nejsou v aktu\u00e1ln\u00ed konfiguraci k dispozici. Tyto informace se obvykle z\u00edsk\u00e1vaj\u00ed z vhodn\u00e9 definice transportn\u00edho \u0159et\u011bzce. Tato definice \u0159et\u011bzce m\u00e1 n\u00e1zev, kter\u00fd odpov\u00edd\u00e1 \u0159et\u011bzci p\u0159\u00edtomn\u00e9mu na vzd\u00e1len\u00e9m serveru typu peer. Takov\u00fd transportn\u00ed \u0159et\u011bzec nelze naj\u00edt. Pravd\u011bpodobn\u011b nebude mo\u017en\u00e9 nav\u00e1zat p\u0159ipojen\u00ed.
-CONNDATAGROUP_NOTSSLCHAIN_SICJ0067.useraction=Konfigurujte dal\u0161\u00ed transportn\u00ed kan\u00e1ly SSL.
+CONNDATAGROUP_NOTSSLCHAIN_SICJ0067.useraction=Konfigurujte dal\u0161\u00ed transportn\u00ed \u0159et\u011bz SSL pro ur\u010den\u00fd transportn\u00ed \u0159et\u011bz.
 
 # -------------------------------------------------------------------------------------------------
 # {0} the name of the channel that could not be created
@@ -488,7 +488,7 @@ CANNOT_CREATE_OUTBOUND_TCP_PROXY_CHANNEL_SICJ0069.useraction=CMSG0002
 # -------------------------------------------------------------------------------------------------
 # {0} is the host name, {1} is the port number, {2} is the chain name and {3} is the heartbeat interval
 ME_NOT_RESPONDING_OUTBOUND_SICJ0070=CWSIJ0070E: P\u0159ipojen\u00ed stroje syst\u00e9mu zpr\u00e1v k hostiteli {0} na portu {1} v transportn\u00edm \u0159et\u011bzu {2} bylo ukon\u010deno pot\u00e9, co p\u0159estalo odpov\u00eddat po uplynut\u00ed {3} sekund.
-ME_NOT_RESPONDING_OUTBOUND_SICJ0070.explanation=P\u0159ipojen\u00ed stroje syst\u00e9mu zpr\u00e1v ze zadan\u00e9ho hostitele bylo odpojeno, proto\u017ee p\u0159estalo odpov\u00eddat.
+ME_NOT_RESPONDING_OUTBOUND_SICJ0070.explanation=P\u0159ipojen\u00ed j\u00e1dra syst\u00e9mu zpr\u00e1v ze zadan\u00e9ho hostitele bylo odpojeno, proto\u017ee p\u0159estalo odpov\u00eddat.
 ME_NOT_RESPONDING_OUTBOUND_SICJ0070.useraction=Dal\u0161\u00ed informace o \u0159e\u0161en\u00ed tohoto probl\u00e9mu naleznete v informac\u00edch t\u00fdkaj\u00edc\u00edch se ur\u010dov\u00e1n\u00ed probl\u00e9m\u016f na webu podpory pro produkt Application Server na adrese http://www.ibm.com/software/webservers/appserv/was/support/.
 
 # -------------------------------------------------------------------------------------------------
@@ -571,7 +571,7 @@ CANNOT_STOP_INBOUND_CHAIN_SICJ0084.useraction=Prov\u011b\u0159te v\u00fdjimku ve
 # -------------------------------------------------------------------------------------------------
 INBOUND_CHAIN_NOT_PERMITTED_SICJ0085=CWSIJ0085I: Transportn\u00ed \u0159et\u011bzec syst\u00e9mu zpr\u00e1v {0} byl zastaven.
 INBOUND_CHAIN_NOT_PERMITTED_SICJ0085.explanation=Transportn\u00ed \u0159et\u011bz byl zastaven po zm\u011bn\u011b konfigurace zabezpe\u010den\u00ed, kter\u00e1 znamen\u00e1, \u017ee \u017e\u00e1dn\u00e1 sb\u011brnice definovan\u00e1 pro bu\u0148ku nad\u00e1le nepovoluje jeho pou\u017eit\u00ed.
-INBOUND_CHAIN_NOT_PERMITTED_SICJ0085.useraction=Nen\u00ed po\u017eadov\u00e1na \u017e\u00e1dn\u00e1 akce.
+INBOUND_CHAIN_NOT_PERMITTED_SICJ0085.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
 
 # Emergency use
 # -------------------------------------------------------------------------------------------------

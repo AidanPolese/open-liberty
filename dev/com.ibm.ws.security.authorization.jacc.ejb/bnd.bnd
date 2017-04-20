@@ -1,0 +1,28 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: WAS Security EJB support for JACC 1.5 Service
+Bundle-SymbolicName: com.ibm.ws.security.authorization.jacc.ejb
+Bundle-Description: WAS Security EJB support for JACC Service, version=${bVersion}
+Bundle-ActivationPolicy: lazy
+
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+
+WS-TraceGroup: Authorization
+
+Export-Package: \
+ com.ibm.ws.security.authorization.jacc.ejb.impl;provide:=true, \
+
+-dsannotations: \
+  com.ibm.ws.security.authorization.jacc.ejb.impl.EJBServiceImpl
+
+-buildpath: \
+	com.ibm.ws.security.authorization.jacc;version=latest,\
+	com.ibm.websphere.javaee.jacc.1.5;version=latest,\
+	com.ibm.websphere.javaee.ejb.3.1;version=latest,\
+	com.ibm.websphere.appserver.spi.logging,\
+	com.ibm.ws.jaxrpc.stub;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0,\
+	com.ibm.ws.container.service;version=latest,\
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

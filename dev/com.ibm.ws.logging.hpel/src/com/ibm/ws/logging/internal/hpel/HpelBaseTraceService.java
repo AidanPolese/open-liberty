@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 import com.ibm.websphere.logging.WsLevel;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.kernel.boot.logging.LoggerHandlerManager;
 import com.ibm.ws.logging.internal.impl.BaseTraceService;
 import com.ibm.ws.logging.internal.impl.LogProviderConfigImpl;
@@ -83,7 +84,6 @@ public class HpelBaseTraceService extends BaseTraceService {
         int levelValue = level.intValue();
 
         if (levelValue >= Level.INFO.intValue()) {
-            // hasMessageRouters() would do the same check as below. Confirm with Don.
             if (externalMessageRouter.get() != null || internalMessageRouter.get() != null) { // ***THIS IS THE PERFORMANCE OPTIMIZATION***
                 formattedMsg = formatter.formatMessage(logRecord);
                 formattedVerboseMsg = formatter.formatVerboseMessage(logRecord, formattedMsg);
@@ -97,9 +97,15 @@ public class HpelBaseTraceService extends BaseTraceService {
                 if (!logNormally)
                     return;
             }
+            trWriter.repositoryPublish(logRecord);
         }
-
-        trWriter.repositoryPublish(logRecord);
+        //Route other types of logs (<INFO) to trace (RTC237423)
+        else {
+            if (TraceComponent.isAnyTracingEnabled()) {
+                TraceWriter detailLog = traceLog;
+                publishTraceLogRecord(detailLog, logRecord, NULL_ID, formattedMsg, formattedVerboseMsg);
+            }
+        }
     }
 
     /** {@inheritDoc} */
@@ -108,9 +114,10 @@ public class HpelBaseTraceService extends BaseTraceService {
         if (formattedVerboseMsg == null) {
             formattedVerboseMsg = formatter.formatVerboseMessage(logRecord, formattedMsg, false);
         }
-        String traceDetail = formatter.traceLogFormat(logRecord, id, formattedMsg, formattedVerboseMsg);
-        invokeTraceRouters(new RoutedMessageImpl(formattedMsg, formattedVerboseMsg, traceDetail, logRecord));
-
+        //RTC237423: This method (specifically SimpleDateFormat) significantly slows down logging when enabled
+        //but the results of this call are not actually used anywhere (for traces), so it can be disabled for now
+        //String traceDetail = formatter.traceLogFormat(logRecord, id, formattedMsg, formattedVerboseMsg);
+        invokeTraceRouters(new RoutedMessageImpl(formattedMsg, formattedVerboseMsg, null, logRecord));
         trWriter.repositoryPublish(logRecord);
     }
 

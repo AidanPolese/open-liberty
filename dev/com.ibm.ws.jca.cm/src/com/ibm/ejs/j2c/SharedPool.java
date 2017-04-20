@@ -43,7 +43,7 @@ public final class SharedPool {
     /*
      * SharedLockObject to synchronize access to the mcWrapperList
      */
-    protected Object sharedLockObject = new byte[0];
+    protected Object sharedLockObject = new Object();
     /*
      * mcWrapperList - contains shared mcWrappers
      * mcWrapperListTemp - used for changing the mcWrapperList

@@ -11,8 +11,6 @@
  */
 package componenttest.custom.junit.runner;
 
-import java.lang.reflect.Method;
-
 import org.junit.Test;
 
 import componenttest.annotation.MinimumJavaLevel;
@@ -28,18 +26,9 @@ import componenttest.custom.junit.runner.Mode.TestMode;
  */
 public class AlwaysPassesTest {
 
-    static final String ALWAYS_PASSES_METHOD_NAME = "testThatWillAlwaysPass";
-
     @Test
     @Mode(TestMode.LITE)
     @MinimumJavaLevel(javaLevel = 1.6)
     public void testThatWillAlwaysPass() throws Exception {}
 
-    static Method getAlwaysPassesMethod() {
-        try {
-            return AlwaysPassesTest.class.getMethod(ALWAYS_PASSES_METHOD_NAME);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

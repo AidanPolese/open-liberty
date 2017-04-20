@@ -44,5 +44,5 @@ instrument.classesExcludes: com/ibm/ws/runtime/update/internal/resources/*.class
 	../build.sharedResources/lib/jmock/legacy/objenesis.jar;version=file, \
 	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \
 	com.ibm.ws.threading;version=latest, \
-    com.ibm.ws.logging.core;version=latest, \
-    com.ibm.ws.logging;version=latest
+	com.ibm.ws.logging.core;version=latest, \
+	com.ibm.ws.logging;version=latest

@@ -1,0 +1,11 @@
+<project name="com.ibm.ws.cdi.1.2.jndi" default="build">
+  <property name="original.jar.name" value="cdi.1.2.jndi"/>
+  <property name="original.jar.version" value="1.0.0"/>
+	
+  <import file="../ant_build/public_imports/rejar_imports.xml"/>
+	
+    <target name="package"> 
+        <bndPackage version="1.0" bnd.file="bnd.bnd" />
+    </target>
+
+</project>

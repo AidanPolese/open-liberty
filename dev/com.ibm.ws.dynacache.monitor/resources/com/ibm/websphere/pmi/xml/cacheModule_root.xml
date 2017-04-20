@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Stats SYSTEM "stats.dtd">
+
+<Stats type="com.ibm.websphere.pmi.xml.cacheModule_root">
+    <description>cacheModule.desc</description>
+    <resourceBundle>com.ibm.ws.pmi.properties.PMIText</resourceBundle>
+
+    <CountStatistic ID="1" name="cacheModule.maxInMemoryCacheEntryCount">
+        <level>low</level>
+        <unit>unit.none</unit>                
+        <description>cacheModule.maxInMemoryCacheEntryCount.desc</description>                
+        <aggregatable>true</aggregatable>
+        <statisticSet>basic</statisticSet>             
+    </CountStatistic>
+    <CountStatistic ID="2" name="cacheModule.inMemoryCacheEntryCount">
+        <level>low</level>
+        <unit>unit.none</unit>                
+        <description>cacheModule.inMemoryCacheEntryCount.desc</description>                
+        <aggregatable>true</aggregatable>
+        <statisticSet>basic</statisticSet>                   
+    </CountStatistic>
+</Stats>

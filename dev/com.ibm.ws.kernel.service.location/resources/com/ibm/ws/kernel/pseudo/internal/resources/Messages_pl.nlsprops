@@ -26,6 +26,6 @@
 # -------------------------------------------------------------------------------------------------
 
 jndi.not.installed=CWWKE0800W: Podj\u0119to pr\u00f3b\u0119 pobrania kontekstu pocz\u0105tkowego dla [{0}], ale nie jest skonfigurowany \u017caden sk\u0142adnik JNDI.
-jndi.not.installed.explanation=Sk\u0142adnik JNDI udost\u0119pnia rejestr JNDI i powi\u0105zane programy narz\u0119dziowe. Zazwyczaj jest to wymagane, je\u015bli aplikacja lub sk\u0142adnik wyszukuje pozycje w kontek\u015bcie JNDI.
+jndi.not.installed.explanation=Sk\u0142adnik JNDI udost\u0119pnia rejestr JNDI i powi\u0105zane programy narz\u0119dziowe.  Zazwyczaj jest to wymagane, je\u015bli aplikacja lub sk\u0142adnik wyszukuje pozycje w kontek\u015bcie JNDI.
 jndi.not.installed.useraction=Upewnij si\u0119, \u017ce implementacja JNDI zosta\u0142a udost\u0119pniona (np. przez skonfigurowanie sk\u0142adnika JNDI w konfiguracji dla tego serwera).
 

@@ -95,7 +95,7 @@ public abstract class WSJdbcObject extends WSJdbcWrapper implements FFDCSelfIntr
      * 
      * @throw SQLException if an error occurs or the current state is invalid.
      */
-    protected void beginTransactionIfNecessary() throws SQLException {
+    public void beginTransactionIfNecessary() throws SQLException {
         getConnectionWrapper().beginTransactionIfNecessary();
     }
 

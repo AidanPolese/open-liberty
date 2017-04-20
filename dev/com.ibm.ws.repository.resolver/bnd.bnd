@@ -16,7 +16,7 @@ Private-Package: com.ibm.ws.repository.resolver.internal*
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
+	${javac.bootclasspath.java6},\
 	com.ibm.ws.kernel.boot.core;version=latest,\
 	com.ibm.ws.kernel.feature;version=latest,\
 	com.ibm.ws.product.utility;version=latest,\
@@ -25,7 +25,7 @@ instrument.disabled: true
 	org.eclipse.osgi;version=latest,\
 	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
 	com.ibm.wsspi.org.osgi.service.subsystem.1.1.0;version=latest,\
-	com.ibm.ws.org.apache.aries.util.1.1.2;version=latest, \
+	com.ibm.ws.org.apache.aries.util.1.1.2;version=latest,\
 	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
 
 -testpath: \
@@ -34,6 +34,7 @@ instrument.disabled: true
 	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
 	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
 	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	com.ibm.websphere.javaee.jsonp.1.0;version=latest, \
 	com.ibm.websphere.org.osgi.core.6.0.0;version=latest, \
 	org.eclipse.osgi;version=latest, \
 	com.ibm.ws.kernel.boot.core;version=latest, \
@@ -42,4 +43,4 @@ instrument.disabled: true
 	com.ibm.ws.product.utility;version=latest, \
 	com.ibm.ws.repository;version=latest, \
 	com.ibm.ws.repository.liberty;version=latest, \
-    ../com.ibm.ws.org.glassfish.json/lib/javax.json-1.0.4.jar;version=file
+	com.ibm.ws.org.glassfish.json.1.0;version=latest

@@ -22,6 +22,7 @@ import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.ibm.io.async.IAsyncProvider.AsyncIOHelper;
 import com.ibm.websphere.channelfw.CFEndPoint;
 import com.ibm.websphere.channelfw.CFEndPointCriteria;
 import com.ibm.websphere.channelfw.ChainData;
@@ -44,7 +45,6 @@ import com.ibm.ws.channelfw.internal.chains.OutboundChain;
 import com.ibm.ws.channelfw.internal.chains.StopChainTask;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.ffdc.FFDCSelfIntrospectable;
-import com.ibm.ws.kernel.zos.NativeMethodManager;
 import com.ibm.wsspi.channelfw.BoundRegion;
 import com.ibm.wsspi.channelfw.ChainEventListener;
 import com.ibm.wsspi.channelfw.Channel;
@@ -184,7 +184,7 @@ public class ChannelFrameworkImpl implements ChannelFramework, FFDCSelfIntrospec
     /** Unique counter for dynamically generated channel names */
     private final AtomicLong channelNameCounter = new AtomicLong(0);
 
-    private NativeMethodManager nativeMethodManager = null;
+    private AsyncIOHelper asyncIOHelper = null;
 
     /**
      * Constructor for the channel framework.
@@ -5078,22 +5078,32 @@ public class ChannelFrameworkImpl implements ChannelFramework, FFDCSelfIntrospec
     }
 
     /**
-     * Save NativeMethodManager reference for use by Async IO (AsyncLibrary).
+     * Save AsyncIOHelper reference for use by Async IO (AsyncLibrary).
      * 
-     * @param NativeMethodManager
+     * @param AsyncIOHelper
      * @throws
      */
-    public void setNativeMethodManager(NativeMethodManager nativeMethodManager) {
-        this.nativeMethodManager = nativeMethodManager;
+    public void setAsyncIOHelper(AsyncIOHelper asyncIOHelper) {
+        this.asyncIOHelper = asyncIOHelper;
     }
 
     /**
-     * Retrieve NativeMethodManager reference for use by Async IO (AsyncLibrary).
+     * Retrieve AsyncIOHelper reference for use by Async IO (AsyncLibrary).
      * 
-     * @return NativeMethodManager
+     * @return AsyncIOHelper
      * @throws
      */
-    public NativeMethodManager getNativeMethodManager() {
-        return nativeMethodManager;
+    public AsyncIOHelper getAsyncIOHelper() {
+        return asyncIOHelper;
+    }
+
+    /**
+     * Check if AsyncIO is enabled
+     *
+     * @return
+     */
+    public boolean getAsyncIOEnabled() {
+        AsyncIOHelper asyncIOHelper = this.asyncIOHelper;
+        return asyncIOHelper != null && asyncIOHelper.enableAsyncIO();
     }
 }

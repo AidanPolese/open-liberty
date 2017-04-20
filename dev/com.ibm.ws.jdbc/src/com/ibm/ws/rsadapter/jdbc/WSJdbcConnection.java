@@ -117,18 +117,6 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
      */
     private static final AtomicBoolean warnedAboutTypeMapMatching = new AtomicBoolean();
     
-    /**
-     * Indicates whether we have warned the customer (when they do setTypeMap)
-     * about the changes to how connection matching is done for connection sharing.
-     */
-    private static final AtomicBoolean warnedAboutSchemaMatching = new AtomicBoolean();
-    
-    /**
-     * Indicates whether we have warned the customer (when they do setTypeMap)
-     * about the changes to how connection matching is done for connection sharing.
-     */
-    private static final AtomicBoolean warnedAboutNetworkTimeoutMatching = new AtomicBoolean();
-
     //client info set on this handle to be used when reassocaition
     private String[] currentClientInfo;
     private boolean clientInfoSetExplicitly;
@@ -138,7 +126,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
     /** The underlying JDBC Connection implementation object. */
     protected Connection connImpl;
     /** SPI ManagedConnection containing a Connection impl object from the JDBC driver. */
-    WSRdbManagedConnectionImpl managedConn; 
+    protected WSRdbManagedConnectionImpl managedConn; 
     /** Connection Manager instance - needed for handle reassociation. */
     private WSConnectionManager cm; 
     /** The same Connection Manager instance, with interfaces for lazy enlistment. */
@@ -179,7 +167,6 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
      * flag to keep track of isolation level switching on connection support or not
      **/
     protected boolean supportIsolvlSwitching = false; 
-    private boolean aborted = false;
 
     /**
      * Create a WebSphere JDBC Connection wrapper. To associate a JDBC Connection with a CCI
@@ -337,7 +324,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
      * @throws SQLException if an error occurs or the current state is not valid.
      */
     @Override
-    protected void beginTransactionIfNecessary() throws SQLException
+    public void beginTransactionIfNecessary() throws SQLException
     {
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled(); 
         if (isTraceOn && tc.isEntryEnabled())
@@ -813,7 +800,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
         isResultSetClosedAtCommit =
                         isResultSetClosedAtCommit
                                         || holdability == ResultSet.CLOSE_CURSORS_AT_COMMIT;
-        return new WSJdbcCallableStatement(
+        return mcf.jdbcRuntime.newCallableStatement(
                         cstmtImplObject, this, holdability, sql); 
     }
 
@@ -838,7 +825,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
         isResultSetClosedAtCommit =
                         isResultSetClosedAtCommit
                                         || holdability == ResultSet.CLOSE_CURSORS_AT_COMMIT;
-        return new WSJdbcCallableStatement(
+        return mcf.jdbcRuntime.newCallableStatement(
                         cstmtImplObject,
                         this,
                         holdability,
@@ -911,8 +898,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
         isResultSetClosedAtCommit =
                         isResultSetClosedAtCommit
                                         || holdability == ResultSet.CLOSE_CURSORS_AT_COMMIT;
-        return new WSJdbcPreparedStatement(
-                        pstmtImplObject, this, holdability, sql); 
+        return mcf.jdbcRuntime.newPreparedStatement(pstmtImplObject, this, holdability, sql); 
     }
 
     //  - Add cursor holdability parameter
@@ -937,7 +923,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
         isResultSetClosedAtCommit =
                         isResultSetClosedAtCommit
                                         || holdability == ResultSet.CLOSE_CURSORS_AT_COMMIT;
-        return new WSJdbcPreparedStatement(
+        return mcf.jdbcRuntime.newPreparedStatement(
                         pstmtImplObject,
                         this,
                         holdability,
@@ -953,11 +939,11 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
      * 
      * @return the ResultSet wrapper.
      */
-    protected WSJdbcResultSet createResultSetWrapper(
+    public WSJdbcResultSet createResultSetWrapper(
                                                      ResultSet rsetImplObject,
                                                      WSJdbcObject rsetParentWrapper) 
     {
-        return new WSJdbcResultSet(rsetImplObject, rsetParentWrapper);
+        return mcf.jdbcRuntime.newResultSet(rsetImplObject, rsetParentWrapper);
     }
 
     /**
@@ -1098,7 +1084,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
         isResultSetClosedAtCommit =
                         isResultSetClosedAtCommit
                                         || holdability == ResultSet.CLOSE_CURSORS_AT_COMMIT;
-        return new WSJdbcStatement(stmtImplObject, this, holdability);
+        return mcf.jdbcRuntime.newStatement(stmtImplObject, this, holdability);
     }
 
     /**
@@ -1585,7 +1571,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
             beginTransactionIfNecessary();
             childWrapper =
                             childWrapper == null
-                                            ? new WSJdbcDatabaseMetaData(connImpl.getMetaData(), this)
+                                            ? mcf.jdbcRuntime.newDatabaseMetaData(connImpl.getMetaData(), this)
                                             : childWrapper;
         } catch (SQLException ex) {
             FFDCFilter.processException(
@@ -2029,7 +2015,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
                         (CallableStatement) method.invoke(implObject, args) :
                         (CallableStatement) s;
 
-                cstmtWrapper = new WSJdbcCallableStatement(
+                cstmtWrapper = mcf.jdbcRuntime.newCallableStatement(
                                cstmt, this, holdability, sql, key); 
                 cstmtWrapper.sqljSection = section;
             }
@@ -2039,7 +2025,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
 
 
                 // Wrap the CallableStatement.
-                cstmtWrapper = new WSJdbcCallableStatement(
+                cstmtWrapper = mcf.jdbcRuntime.newCallableStatement(
                                cstmt, this, holdability, sql); 
             }
 
@@ -2132,7 +2118,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
                         (PreparedStatement) method.invoke(implObject, args) :
                         (PreparedStatement) s;
 
-                pstmtWrapper = new WSJdbcPreparedStatement(
+                pstmtWrapper = mcf.jdbcRuntime.newPreparedStatement(
                                pstmt, this, holdability, sql, key); 
                 pstmtWrapper.sqljSection = section;
             }
@@ -2140,8 +2126,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
             {
                 PreparedStatement pstmt = (PreparedStatement) method.invoke(implObject, args);
 
-                pstmtWrapper = new WSJdbcPreparedStatement(
-                               pstmt, this, holdability, sql);
+                pstmtWrapper = mcf.jdbcRuntime.newPreparedStatement(pstmt, this, holdability, sql);
             }
 
             sqljWrapper = pstmtWrapper.unwrap(method.getReturnType());
@@ -2263,7 +2248,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
      * @throws SQLException if an error occurs reactivating the handle.
      */
     @Override
-    final void activate() throws SQLException 
+    protected final void activate() throws SQLException 
     {
         switch (state) {
             case ACTIVE:
@@ -4095,146 +4080,31 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
     }
 
     public void abort(Executor executor) throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-          throw new SQLFeatureNotSupportedException();
-        /*
-         * Mark this connection as aborted and mark the managed connection.
-         */
-        setAborted(true);
-        managedConn.setAborted(true);
-        /*
-         * Call abort with the provided exceutor to abort the connection.
-         */
-        mcf.jdbcRuntime.doAbort(connImpl, executor);
-        
-        fireConnectionErrorEvent(null, false);
+        throw new SQLFeatureNotSupportedException();
     }
 
-    /**
-     * @return the aborted
-     */
     public boolean isAborted() throws SQLFeatureNotSupportedException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-          throw new SQLFeatureNotSupportedException();
-        return aborted;
+        throw new SQLFeatureNotSupportedException();
     }
 
-    /**
-     * @param aborted the aborted to set
-     */
     public void setAborted(boolean aborted) throws SQLFeatureNotSupportedException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-          throw new SQLFeatureNotSupportedException();
-        this.aborted = aborted;
+        throw new SQLFeatureNotSupportedException();
     }
 
     public int getNetworkTimeout() throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            throw new SQLFeatureNotSupportedException();
-        
-        activate();
-
-        try {
-            return managedConn.getNetworkTimeout();
-        } catch (SQLException ex) {
-            FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcConnection.getSchema", "4200", this);
-            throw proccessSQLException(ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            throw runtimeXIfNotClosed(nullX);
-        }
+        throw new SQLFeatureNotSupportedException();
     }
     
-    public void setNetworkTimeout(Executor executor, int milliseconds)
-                    throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            throw new SQLFeatureNotSupportedException();
-
-        if (warnedAboutNetworkTimeoutMatching.compareAndSet(false, true))
-            Tr.info(tc, "DEFAULT_MATCH_ORIGINAL", "NetworkTimeout", DSConfig.CONNECTION_SHARING);
-        
-        activate();
-
-        try {
-            // Setters are not permitted when multiple handles are sharing the same
-            // ManagedConnection.   Except we've decided to allow
-            // them when the specified value is the same as the current value. 
-            if (managedConn.getHandleCount() > 1 && milliseconds != managedConn.getCurrentNetworkTimeout())
-                throw createSharingException("setNetworkTimeout");
-            
-            managedConn.setNetworkTimeout(executor, milliseconds);
-            
-            // Update the connection request information with the new value, so that 
-            // requests for shared connections will match based on the updated criteria.
-            if (managedConn.connectionSharing == ConnectionSharing.MatchCurrentState)
-            {
-                WSConnectionRequestInfoImpl cri = (WSConnectionRequestInfoImpl) managedConn.getConnectionRequestInfo();
-                if (!cri.isCRIChangable()) // only set the cri if its not one of the static ones.
-                    managedConn.setCRI(cri = WSConnectionRequestInfoImpl.createChangableCRIFromNon(cri));
-
-                cri.setNetworkTimeout(milliseconds);
-            }
-        } catch (SQLException ex) {
-            FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcConnection.setNetworkTimeout", "4234", this);
-            throw proccessSQLException(ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            throw runtimeXIfNotClosed(nullX);
-        }
+    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+        throw new SQLFeatureNotSupportedException();
     }
 
     public String getSchema() throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            throw new SQLFeatureNotSupportedException();
-        
-        activate();
-
-        try {
-            return managedConn.getSchema();
-        } catch (SQLException ex) {
-            FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcConnection.getSchema", "4200", this);
-            throw proccessSQLException(ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            throw runtimeXIfNotClosed(nullX);
-        }
+        throw new SQLFeatureNotSupportedException();
     }
 
     public void setSchema(String schema) throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            throw new SQLFeatureNotSupportedException();
-        
-        if (warnedAboutSchemaMatching.compareAndSet(false, true))
-            Tr.info(tc, "DEFAULT_MATCH_ORIGINAL", "Schema", DSConfig.CONNECTION_SHARING);
-        
-        activate();
-
-        try {
-            // Setters are not permitted when multiple handles are sharing the same
-            // ManagedConnection.   Except we've decided to allow
-            // them when the specified value is the same as the current value. 
-            if (managedConn.getHandleCount() > 1 && !AdapterUtil.match(schema, managedConn.getCurrentSchema()))
-                throw createSharingException("setSchema");
-            
-            managedConn.setSchema(schema);
-            
-            // Update the connection request information with the new value, so that 
-            // requests for shared connections will match based on the updated criteria.
-            if (managedConn.connectionSharing == ConnectionSharing.MatchCurrentState)
-            {
-                WSConnectionRequestInfoImpl cri = (WSConnectionRequestInfoImpl) managedConn.getConnectionRequestInfo();
-                if (!cri.isCRIChangable()) // only set the cri if its not one of the static ones.
-                    managedConn.setCRI(cri = WSConnectionRequestInfoImpl.createChangableCRIFromNon(cri));
-
-                cri.setSchema(schema);
-            }
-        } catch (SQLException ex) {
-            FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcConnection.setSchema", "4214", this);
-            throw proccessSQLException(ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            throw runtimeXIfNotClosed(nullX);
-        }
+        throw new SQLFeatureNotSupportedException();
     }
     
     /**
@@ -4243,26 +4113,8 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
      * JDBC driver must close when a NetworkTimeout occurs.
      * <li> After the first check is complete, the exception gets mapped using <code>WSJdbcUtil</code> 
      */
-    private SQLException proccessSQLException(SQLException ex)
+    protected SQLException proccessSQLException(SQLException ex)
     {
-        // First need to check if a NetworkTimeout occurred
-        if (mcf.atLeastJDBCVersion(JDBCRuntimeVersion.VERSION_4_1) &&
-           managedConn != null && managedConn.currentNetworkTimeout != 0){ // If NetworkTimeout was changed
-            try{
-                if(!isClosed() && connImpl != null && connImpl.isClosed()){ // If wrapper not closed, but driver impl is closed
-                    if(tc.isDebugEnabled())
-                        Tr.debug(tc, "Network timeout detected, closing wrapper objects.");
-                    close(true);
-                }
-            } catch(SQLException e){
-                // If an exception occurred while trying to check if the connection is closed,
-                // log a message and continue normally.
-                if(tc.isDebugEnabled())
-                    Tr.debug(tc, "Exception ocurred while processing SQLException: ", e);
-            }
-        }
-        
-        // Finally, map the exception
         return WSJdbcUtil.mapException(this, ex);
     }
 }

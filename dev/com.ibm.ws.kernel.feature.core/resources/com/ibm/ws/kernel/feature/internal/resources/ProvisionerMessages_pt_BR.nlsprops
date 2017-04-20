@@ -62,8 +62,8 @@ UPDATE_BUNDLE_CACHE_WARNING.useraction=Certifique-se de que o diret\u00f3rio do 
 grav\u00e1veis. 
 
 STARTING_AUDIT=CWWKF0007I: Atualiza\u00e7\u00e3o do recurso iniciada.
-STARTING_AUDIT.explanation=O gerenciador de recursos iniciou o processamento de recursos ativados. O intervalo (em \
-segundos) \u00e9 relativo a quando a plataforma foi ativada.
+STARTING_AUDIT.explanation=O gerenciador de recursos iniciou o processamento de recursos ativados. O intervalo (em segundos) \u00e9 relativo a quando a plataforma foi \
+ativada.
 STARTING_AUDIT.useraction=Nenhuma a\u00e7\u00e3o \u00e9 necess\u00e1ria.
 
 COMPLETE_AUDIT=CWWKF0008I: Atualiza\u00e7\u00e3o do recurso conclu\u00edda em {0} segundos.
@@ -95,7 +95,7 @@ FEATURES_REMOVED=CWWKF0013I: O servidor removeu os recursos a seguir: {0}.
 FEATURES_REMOVED.explanation=O servidor removeu um conjunto de recursos.
 FEATURES_REMOVED.useraction=Nenhuma a\u00e7\u00e3o \u00e9 necess\u00e1ria.
 
-TEST_FIX_DETECTED=CWWKF0014W: O servidor tem as corre\u00e7\u00f5es de teste a seguir ativas no tempo de execu\u00e7\u00e3o: {0}. Para uma listagem integral de corre\u00e7\u00f5es instaladas, execute: productInfo version --ifixes
+TEST_FIX_DETECTED=CWWKF0014W: O servidor tem as corre\u00e7\u00f5es de teste a seguir ativas no tempo de execu\u00e7\u00e3o: {0}.  Para uma listagem integral de corre\u00e7\u00f5es instaladas, execute: productInfo version --ifixes
 TEST_FIX_DETECTED.explanation=Os pacotes configur\u00e1veis OSGi carregados no tempo de execu\u00e7\u00e3o foram modificados por algumas das corre\u00e7\u00f5es de teste instaladas. Uma listagem de todas as corre\u00e7\u00f5es instaladas pode ser obtida usando o comando: productInfo version --ifixes
 TEST_FIX_DETECTED.useraction=Um servidor de produ\u00e7\u00e3o n\u00e3o deve ter corre\u00e7\u00f5es de teste instaladas. Se este for um servidor de produ\u00e7\u00e3o, remova as corre\u00e7\u00f5es de teste e reinicie o servidor.
 
@@ -227,7 +227,7 @@ UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_CLIENT_ERROR.explanation=O recurso configur
 UPDATE_WRONG_PROCESS_TYPE_DEPENDENCY_CLIENT_ERROR.useraction=Remova o recurso da configura\u00e7\u00e3o ou altere o arquivo manifest do recurso para ativar o suporte para o tipo de processo desejado.
 
 # CWWK042E  {0} = feature Name: {1} = server name 
-UPDATE_MISSING_CORE_FEATURE_ERROR=CWWKF0042E: Uma defini\u00e7\u00e3o de recurso n\u00e3o pode ser localizada para o recurso {0}. Tente \
+UPDATE_MISSING_CORE_FEATURE_ERROR=CWWKF0042E: Uma defini\u00e7\u00e3o de recurso n\u00e3o pode ser localizada para o recurso {0}.  Tente \
 executar o comando bin/installUtility install {0} para instalar o \
 recurso. Alternativamente, \u00e9 poss\u00edvel executar o comando \
 bin/installUtility install {1} para instalar todos os recursos \

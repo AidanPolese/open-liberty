@@ -1,3 +1,5 @@
--include= jar:${fileuri;lib/weld-osgi-bundle-2.4.2.SP1.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;lib/weld-osgi-bundle-2.4.3.Final.jar}!/META-INF/MANIFEST.MF,bnd.overrides
 
--buildpath: lib/weld-osgi-bundle-2.4.2.SP1.jar;version=file
+-buildpath: \
+	lib/weld-osgi-bundle-2.4.3.Final.jar;version=file, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

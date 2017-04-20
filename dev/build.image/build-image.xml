@@ -336,6 +336,7 @@
               <contains string="${profile}" substring="beta" />
               <equals arg1="${profile}" arg2="kernel" />
               <equals arg1="${profile}" arg2="osgi" />
+              <equals arg1="${profile}" arg2="laos" />
             </or>
           </not>
           <then>
@@ -611,7 +612,7 @@ ${liberty.service.version}
 
     <iff>
       <not>
-        <istrue value="${run.SLE.package}" />
+        <istrue value="${skip.profile.packaging}" />
       </not>
       <then>
         <!-- Create profile zips. -->
@@ -728,7 +729,7 @@ ${liberty.service.version}
         </foreach>
       </then>
       <else>
-        <echo message="Skipping extra profile zip creation steps for SLE zip generation build." />
+        <echo message="Skipping extra profile packaging steps." />
       </else>
     </iff>
 
@@ -903,7 +904,7 @@ ${liberty.service.version}
 
     <iff>
       <not>
-        <istrue value="${run.SLE.package}" />
+        <istrue value="${skip.profile.packaging}" />
       </not>
       <then>
         <!-- Also add in explicit links to the two most useful archives. Don't use one of our macros since
@@ -912,12 +913,6 @@ ${liberty.service.version}
         <artifactLinkPublisher buildResultUUID="${buildResultUUID}" repositoryAddress="${repositoryAddress}" userId="${userId}" passwordFile="${passwordFile}" verbose="true" url="https://${fe.gsa.server}/${fe.gsa.basedir}/${buildLabel}.${fe.suffix}/${fe.path}/${install.name}-developers-extended-${liberty.service.version}.jar" localFilePath="${file.local.dir}/upload/externals/installables/${install.name}-developers-extended-${liberty.service.version}.jar" label="Image for extended installable archive" componentName="Images" />
         <artifactLinkPublisher buildResultUUID="${buildResultUUID}" repositoryAddress="${repositoryAddress}" userId="${userId}" passwordFile="${passwordFile}" verbose="true" url="https://${fe.gsa.server}/${fe.gsa.basedir}/${buildLabel}.${fe.suffix}/${fe.path}/${install.name}-developers-ipla-all-${liberty.service.version}.jar" localFilePath="${file.local.dir}/upload/externals/installables/${install.name}-developers-ipla-all-${liberty.service.version}.jar" label="Image for all installable archive" componentName="Images" />
       </then>
-      <else>
-        <!-- Blank out files.to.upload so we can set it to something different in the next call. -->
-        <var name="files.to.upload" unset="true" />
-        <!-- We don't compile FATs in SLE builds, so we need to separately call the target to create the build file archive that the async builds require. -->
-        <ant antfile="build-fat-image.xml" target="uploadAsyncArchive" inheritAll="true" inheritRefs="true" />
-      </else>
     </iff>
 
   </target>

@@ -26,6 +26,12 @@ import java.io.IOException;
  */
 public interface IAsyncProvider {
 
+    public interface AsyncIOHelper {
+        boolean enableAsyncIO();
+
+        void loadLibrary(Class<? extends IAsyncProvider> providerClass, String libraryName);
+    }
+
     /* Definitions for potential provider capabilities. */
 
     /**

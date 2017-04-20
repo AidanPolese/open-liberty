@@ -25,7 +25,6 @@ Import-Package: \
   org.aopalliance.intercept.*;resolution:=optional, \
   *
 
-
 Include-Resource: \
  @lib/guice-2.0.jar!/LICENSE,\
  @lib/guice-2.0.jar!/NOTICE

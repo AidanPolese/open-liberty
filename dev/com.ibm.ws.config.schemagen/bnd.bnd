@@ -28,6 +28,6 @@ Private-Package: com.ibm.ws.config.schemagen.internal
 	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
 	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
 	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
-    com.ibm.ws.logging;version=latest, \
-    com.ibm.ws.org.apache.aries.util.1.1.2;version=latest, \
-    com.ibm.ws.kernel.service;version=latest
+	com.ibm.ws.logging;version=latest, \
+	com.ibm.ws.org.apache.aries.util.1.1.2;version=latest, \
+	com.ibm.ws.kernel.service;version=latest

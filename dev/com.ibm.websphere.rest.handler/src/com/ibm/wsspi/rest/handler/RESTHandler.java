@@ -69,7 +69,7 @@ public interface RESTHandler {
     public static final String PROPERTY_REST_HANDLER_CUSTOM_SECURITY = "com.ibm.wsspi.rest.handler.custom.security";
 
     /**
-     * OSGi property used to specify whether or not this RESTHandler will implement its own Collective routing code.
+     * OSGi property used to specify whether or not this RESTHandler will implement its own routing code.
      * 
      * <ul>
      * <li>Optional property.</li>

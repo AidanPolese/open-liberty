@@ -1,0 +1,8 @@
+<project name="com.ibm.ws.webcontainer.servlet.3.1.factories" default="build">
+    <property name="build.with.java.level" value="1.7"/>
+    <import file="../ant_build/public_imports/standard_imports.xml"/>
+    
+    <!-- Disable trace/ffdc injection as these factories were never instrumented
+         in the servlet.3.1 bundle. -->
+    <property name="no.trace.instrumentation" value="true"/>
+</project>

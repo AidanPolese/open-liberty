@@ -164,6 +164,7 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
 
     private boolean isJaspiEnabled = false;
     private Subject savedSubject = null;
+    private boolean byPassedAuthRequest = false;
 
     private static ThreadLocal<AuditThreadContext> threadLocal = new ThreadLocal<AuditThreadContext>();
 
@@ -623,7 +624,7 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
         }
         validateWebReply(webSecurityContext, webReply);
 
-        if (webReply.getStatusCode() == HttpServletResponse.SC_OK) {
+        if (webReply.getStatusCode() == HttpServletResponse.SC_OK && byPassedAuthRequest) {
             AuthenticationResult authResult = new AuthenticationResult(AuthResult.SUCCESS, receivedSubject, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_SUCCESS);
             Audit.audit(Audit.EventID.SECURITY_AUTHZ_01, webRequest, authResult, uriName, Integer.valueOf(webReply.getStatusCode()));
         }
@@ -874,8 +875,11 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
      * @return Non-null WebReply
      */
     public WebReply determineWebReply(Subject receivedSubject, String uriName, WebRequest webRequest) {
+        byPassedAuthRequest = false;
+
         WebReply webReply = performInitialChecks(webRequest, uriName);
         if (webReply != null) {
+            byPassedAuthRequest = true;
             return webReply;
         }
         AuthenticationResult authResult = authenticateRequest(webRequest);

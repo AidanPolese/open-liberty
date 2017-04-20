@@ -262,11 +262,18 @@ vy\u017eaduj\u00ed agenta jazyka Java, jako je monitorov\u00e1n\u00ed nebo traso
 UNABLE_TO_FIND_JAVA_AGENT=Nelze nal\u00e9zt agenta jazyka Java serveru Liberty. Tento server se spust\u00ed, ale nem\u016f\u017ee prov\u00e1d\u011bt funkce, kter\u00e9 vy\u017eaduj\u00ed agenta jazyka Java, jako je monitorov\u00e1n\u00ed nebo \
 trasov\u00e1n\u00ed.
 
-
 # messages for LicenseSelfEctractor
 LICENSE_invalidInstall=Adres\u00e1\u0159 {0} nen\u00ed platnou instalac\u00ed Liberty. Ur\u010dete ko\u0159enov\u00fd adres\u00e1\u0159 instalace Liberty, kterou chcete upgradovat.
 LICENSE_invalidVersion=Licenci nelze upgradovat, proto\u017ee ur\u010den\u00e1 instalace produktu je ve verzi {0}, licenci lze upgradovat pouze z verze {1}.
 LICENSE_invalidEdition=Licenci nelze upgradovat, proto\u017ee ur\u010den\u00e1 instalace produktu je ve vyd\u00e1n\u00ed {0}, licence m\u016f\u017ee upgradovat pouze n\u00e1sleduj\u00edc\u00ed vyd\u00e1n\u00ed: {1}
 LICENSE_invalidLicense=Licenci nelze upgradovat, proto\u017ee ur\u010den\u00e1 instalace produktu m\u00e1 licenci {0}, licence m\u016f\u017ee upgradovat pouze produkty s licenc\u00ed {1}.
 LICENSE_invalidInstallType=Licenci nelze upgradovat, proto\u017ee ur\u010den\u00e1 instalace produktu byla nainstalov\u00e1na pomoc\u00ed produktu IBM Installation Manager. Pomoc\u00ed produktu IBM Installation Manager upgradujte instalaci.
+
+# new messages for license upgrade and downgrade
+LICENSE_replace_invalidVersion=Licenci nelze nahradit, proto\u017ee ur\u010den\u00e1 instalace produktu je ve verzi {0}, licenci lze nahradit pouze z verze {1}.
+LICENSE_replace_invalidInstallType=Licenci nelze upravit, proto\u017ee ur\u010den\u00e1 instalace produktu byla nainstalov\u00e1na pomoc\u00ed produktu IBM Installation Manager. Pomoc\u00ed produktu IBM Installation Manager upravte instalaci.
+
+LICENSE_replace_invalidEditonFeatures=N\u00e1sleduj\u00edc\u00ed funkce ji\u017e nejsou pou\u017eiteln\u00e9 pro {0}, a mus\u00ed b\u00fdt odebr\u00e1ny p\u0159ed nahrazen\u00edm licence: {1}
+LICENSE_replace_uninstallFeatures_manually=Pomoc\u00ed n\u00e1sleduj\u00edc\u00edho p\u0159\u00edkazu odinstalujte tyto funkce p\u0159ed nahrazen\u00edm licence pro {0}: {1}
+
 

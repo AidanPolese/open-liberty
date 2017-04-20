@@ -85,7 +85,7 @@ public abstract class WSJdbcWrapper implements InvocationHandler, Wrapper
     /**
      * Managed connection factory.
      */
-    WSManagedConnectionFactoryImpl mcf; 
+    protected WSManagedConnectionFactoryImpl mcf; 
 
     /**
      * Activates a wrapper. This method is a no-op if the wrapper is already active.

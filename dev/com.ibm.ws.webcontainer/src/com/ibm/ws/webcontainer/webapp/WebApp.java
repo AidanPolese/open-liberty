@@ -1,6 +1,6 @@
 //IBM Confidential OCO Source Material
 //5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70
-// (C) COPYRIGHT International Business Machines Corp. 1997, 2016
+// (C) COPYRIGHT International Business Machines Corp. 1997, 2017
 //The source code for this program is not published or otherwise divested
 //of its trade secrets, irrespective of what has been deposited with the
 //U.S. Copyright Office.
@@ -80,6 +80,7 @@
 //PI60797       05/02/16    pmdinh          Option to disable all methods but POST for /j_security_check
 //PI58875       06/06/16    pmdinh          Option to stop app from startup when there is exception in listener.  Also fix classLoader memo leak when app fails to start
 //224732        09/21/16    sartoris        threads blocking during heavy load in lookupMethod
+//238764        04/04/17    ttorres         Add doPrivileged for System.getProperty("com.ibm.servlet.engine.disableServletAuditLogging")
 //
 package com.ibm.ws.webcontainer.webapp;
 
@@ -3136,7 +3137,13 @@ public abstract class WebApp extends BaseContainer implements ServletContext, IS
     public static boolean isDisableServletAuditLogging() {
         // 89638
         if (disableServletAuditLogging == -1) {
-            String skipAudit = System.getProperty("com.ibm.servlet.engine.disableServletAuditLogging");
+            String skipAudit = AccessController.doPrivileged(new PrivilegedAction<String>(){
+
+                @Override
+                public String run() {
+                    return System.getProperty("com.ibm.servlet.engine.disableServletAuditLogging");
+                }
+            });
 
             if (skipAudit != null && skipAudit.toLowerCase().equals("true")) {
                 disableServletAuditLogging = 1;

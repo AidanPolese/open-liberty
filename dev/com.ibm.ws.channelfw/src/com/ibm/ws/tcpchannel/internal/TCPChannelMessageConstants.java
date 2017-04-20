@@ -76,9 +76,4 @@ public interface TCPChannelMessageConstants {
     String NEW_CONFIG_VALUE_NOT_EQUAL = "NEW_CONFIG_VALUE_NOT_EQUAL";
     /** Config update failed to be processed */
     String UPDATED_CONFIG_NOT_IMPLEMENTED = "UPDATED_CONFIG_NOT_IMPLEMENTED";
-
-    /** Native Asynchronous I/O support on z/OS has activated */
-    String ZOSAIO_ACTIVATED = "ZOSAIO_ACTIVATED";
-    /** Native Asynchronous I/O support on z/OS has deactivated */
-    String ZOSAIO_DEACTIVATED = "ZOSAIO_DEACTIVATED";
 }

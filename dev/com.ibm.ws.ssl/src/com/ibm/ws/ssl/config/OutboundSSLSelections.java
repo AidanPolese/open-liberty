@@ -335,7 +335,7 @@ public class OutboundSSLSelections {
                  * Cache the connectionInfo / SSLConfig association for later use.
                  ***/
 
-                String sslCfgAlias = dynamicSelections.get(dynamicSelectionInfo);
+                String sslCfgAlias = selectionList.get(dynamicSelectionInfo);
 
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                     Tr.debug(tc, "Found a dynamic selection match! with ssl configuration: " + sslCfgAlias);

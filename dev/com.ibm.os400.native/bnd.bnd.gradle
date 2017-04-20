@@ -1,6 +1,0 @@
--include= ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
-
--nobundles=true
-
-instrument.disabled: true

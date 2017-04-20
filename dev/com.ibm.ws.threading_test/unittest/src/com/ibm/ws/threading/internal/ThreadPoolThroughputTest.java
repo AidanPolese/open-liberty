@@ -1,5 +1,7 @@
 package com.ibm.ws.threading.internal;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -91,7 +93,7 @@ public class ThreadPoolThroughputTest {
         executor.awaitTermination(ThreadPoolThroughputTest.TERMINATION_WAIT_TIME, TimeUnit.SECONDS);
         long elapsedTime = System.nanoTime() - startTime;
 
-        assert (iterations == executor.getCompletedTaskCount());
+        assertTrue(iterations == executor.getCompletedTaskCount());
         return elapsedTime;
     }
 
@@ -113,7 +115,7 @@ public class ThreadPoolThroughputTest {
             System.out.println("executor = " + executor);
             System.out.println("Alpine foreign source execution, timed out without termination, completed tasks = " + executor.getCompletedTaskCount());
         }
-        assert (iterations == executor.getCompletedTaskCount());
+        assertTrue(iterations == executor.getCompletedTaskCount());
         return elapsedTime;
     }
 
@@ -132,7 +134,7 @@ public class ThreadPoolThroughputTest {
         executor.awaitTermination(ThreadPoolThroughputTest.TERMINATION_WAIT_TIME, TimeUnit.SECONDS);
         long elapsedTime = System.nanoTime() - startTime;
 
-        assert (iterations * batchSize == executor.getCompletedTaskCount());
+        assertTrue(iterations * batchSize == executor.getCompletedTaskCount());
         return elapsedTime;
     }
 
@@ -158,7 +160,7 @@ public class ThreadPoolThroughputTest {
             System.out.println("executor = " + executor);
             System.out.println("Alpine batch/wait execution, timed out without termination, completed tasks = " + executor.getCompletedTaskCount());
         }
-        assert (iterations * batchSize == executor.getCompletedTaskCount());
+        assertTrue(iterations * batchSize == executor.getCompletedTaskCount());
         return elapsedTime;
     }
 

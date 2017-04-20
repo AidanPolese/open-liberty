@@ -33,6 +33,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
@@ -46,8 +47,8 @@ import com.ibm.ws.jmx.connector.converter.NotificationRecord;
 import com.ibm.ws.jmx.connector.converter.NotificationTargetInformation;
 import com.ibm.ws.jmx.connector.server.rest.APIConstants;
 import com.ibm.ws.jmx.connector.server.rest.notification.ClientNotificationListener;
-import com.ibm.wsspi.collective.plugins.CollectivePlugin;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
+import com.ibm.wsspi.rest.handler.helper.RESTRoutingHelper;
 
 /**
  * This service component provides support for exchanging EventAdmin events
@@ -60,6 +61,7 @@ public class MBeanRoutedNotificationHelper {
 
     private static final TraceComponent tc = Tr.register(MBeanRoutedNotificationHelper.class);
     private static final String KEY_EVENT_ADMIN = "eventAdmin";
+    private static final String KEY_ROUTING_HELPER = "routingHelper";
 
     /**
      * Event-related topics and properties.
@@ -87,11 +89,14 @@ public class MBeanRoutedNotificationHelper {
     private final AtomicServiceReference<EventAdmin> eventAdminRef = new AtomicServiceReference<EventAdmin>(KEY_EVENT_ADMIN);
     private final AtomicReference<ServiceRegistration<EventHandler>> eventHandlerServiceRegRef = new AtomicReference<ServiceRegistration<EventHandler>>();
 
+    private final AtomicServiceReference<RESTRoutingHelper> routingHelperRef = new AtomicServiceReference<RESTRoutingHelper>(KEY_ROUTING_HELPER);
+
     private static ComponentContext componentContext;
 
     @Activate
     protected void activate(ComponentContext cc) {
         eventAdminRef.activate(cc);
+        routingHelperRef.activate(cc);
 
         // Set up an EventHandler for Notifications from the Target-Client Manager.
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -116,6 +121,7 @@ public class MBeanRoutedNotificationHelper {
         }
 
         eventAdminRef.deactivate(cc);
+        routingHelperRef.deactivate(cc);
 
         // Unregister the NotifcationEventHandler when the MBeanRoutedNotificationHelper is deactivated.
         ServiceRegistration<EventHandler> eventHandlerServiceReg = eventHandlerServiceRegRef.get();
@@ -136,14 +142,23 @@ public class MBeanRoutedNotificationHelper {
         eventAdminRef.unsetReference(ref);
     }
 
+    @Reference(name = KEY_ROUTING_HELPER, service = RESTRoutingHelper.class, policyOption = ReferencePolicyOption.GREEDY)
+    protected void setRoutingHelperRef(ServiceReference<RESTRoutingHelper> ref) {
+        routingHelperRef.setReference(ref);
+    }
+
+    protected void unsetRoutingHelperRef(ServiceReference<RESTRoutingHelper> ref) {
+        routingHelperRef.unsetReference(ref);
+    }
+
     public void addRoutedNotificationListener(NotificationTargetInformation nti, ClientNotificationListener listener, JSONConverter converter) {
         // Add the ClientNotificationListener to the map so that we can dispatch
         // notifications to it when we receive events from the Target-Client Manager.
         try {
-            // Ensure that the CollectivePlugin is available before proceeding.
-            // If plugin is not available then we should fail immediately.
-            CollectivePlugin reader = MBeanRouterHelper.getReader();
-            if (reader != null) {
+            // Ensure that the routing is available before proceeding.
+            // If routing is not available then we should fail immediately.
+            RESTRoutingHelper routingHelper = routingHelperRef.getServiceWithException();
+            if (routingHelper.routingAvailable()) {
                 final boolean modified;
                 synchronized (listenerMap) {
                     Set<ClientNotificationListener> listeners = listenerMap.get(nti);

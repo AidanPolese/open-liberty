@@ -352,6 +352,9 @@ public class WebApp31 extends com.ibm.ws.webcontainer.osgi.webapp.WebApp
         if (withinContextInitOfProgAddListener) {
             throw new UnsupportedOperationException(nls.getString("Unsupported.op.from.servlet.context.listener"));
         }
+        if (com.ibm.ws.webcontainer.osgi.WebContainer.isServerStopping()) {
+            return;
+        }
         Class className = listenerClass;
         try {
             if (listenerClassName != null) {

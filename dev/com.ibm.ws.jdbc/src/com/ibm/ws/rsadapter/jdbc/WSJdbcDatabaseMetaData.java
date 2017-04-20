@@ -38,7 +38,7 @@ public class WSJdbcDatabaseMetaData extends WSJdbcObject implements DatabaseMeta
      * Warning: Currently the getJDBCMajor/MinorVersion depends on mDataImpl NOT being
      * reassociated for this object due to caching values.
      */
-    private DatabaseMetaData mDataImpl;
+    protected DatabaseMetaData mDataImpl;
 
     private int cachedJDBCMajorVerion = -1;
 
@@ -48,7 +48,7 @@ public class WSJdbcDatabaseMetaData extends WSJdbcObject implements DatabaseMeta
      * @param metaDataImpl the JDBC DatabaseMetaData implementation class to be wrapped.
      * @param connWrapper the WebSphere JDBC Connection wrapper creating this MetaData.
      */
-    WSJdbcDatabaseMetaData(DatabaseMetaData metaDataImpl, WSJdbcConnection connWrapper)
+    public WSJdbcDatabaseMetaData(DatabaseMetaData metaDataImpl, WSJdbcConnection connWrapper)
         throws SQLException {
         if (tc.isEntryEnabled())
             Tr.entry(this, tc, "<init>", AdapterUtil.toString(metaDataImpl), connWrapper);
@@ -2013,18 +2013,6 @@ public class WSJdbcDatabaseMetaData extends WSJdbcObject implements DatabaseMeta
         }
     }
 
-    public boolean supportsRefCursors() throws SQLException {
-        try {
-            return mcf.jdbcRuntime.supportsRefCursors(mDataImpl);
-        } catch (SQLException ex) {
-            FFDCFilter.processException(ex, getClass().getName(), "2020", this);
-            throw WSJdbcUtil.mapException(this, ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            throw runtimeXIfNotClosed(nullX);
-        }
-    }
-
     public boolean supportsResultSetConcurrency(int type, int concurrency) throws SQLException {
         try {
             return mDataImpl.supportsResultSetConcurrency(type, concurrency);
@@ -2673,35 +2661,12 @@ public class WSJdbcDatabaseMetaData extends WSJdbcObject implements DatabaseMeta
     }
 
     public boolean generatedKeyAlwaysReturned() throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            throw new SQLFeatureNotSupportedException();
-        try {
-           return mcf.jdbcRuntime.doGeneratedKeyAlwaysReturned(mDataImpl);
-        } catch (SQLException ex) {
-            FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcDatabaseMetaData.generatedKeyAlwaysReturned", "2808", this);
-            throw WSJdbcUtil.mapException(this, ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            throw runtimeXIfNotClosed(nullX);
-        }
+        // jdbc 4.1 method
+        throw new SQLFeatureNotSupportedException();
     }
 
-    public ResultSet getPseudoColumns(String catalog, String schemaPattern, 
-                                      String tableNamePattern, String columnNamePattern) throws SQLException {
-        if (mcf.beforeJDBCVersion(JDBCRuntimeVersion.VERSION_4_1))
-            throw new SQLFeatureNotSupportedException();
-        ResultSet rset;
-        try {
-            rset = mcf.jdbcRuntime.doGetPseudoColumns(mDataImpl, catalog, schemaPattern, tableNamePattern, columnNamePattern);
-        } catch (SQLException ex) {
-            FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcDatabaseMetaData.getPseudoColumns", "2828", this);
-            throw WSJdbcUtil.mapException(this, ex);
-        } catch (NullPointerException nullX) {
-            // No FFDC code needed; we might be closed.
-            throw runtimeXIfNotClosed(nullX);
-        }
-        rset = ((WSJdbcConnection) parentWrapper).createResultSetWrapper(rset, this);
-        childWrappers.add(rset);
-        return rset;
+    public ResultSet getPseudoColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) throws SQLException {
+        // jdbc 4.1 method
+        throw new SQLFeatureNotSupportedException();
     }
 }

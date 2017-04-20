@@ -18,6 +18,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,11 +33,10 @@ import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.jmx.connector.client.rest.ClientProvider;
 import com.ibm.ws.jmx.connector.converter.JSONConverter;
 import com.ibm.ws.jmx.connector.server.rest.APIConstants;
-import com.ibm.ws.rest.handler.helper.ServletRESTRequestWithParams;
 import com.ibm.wsspi.rest.handler.RESTRequest;
-import com.ibm.wsspi.rest.handler.helper.DefaultRoutingHelper;
 import com.ibm.wsspi.rest.handler.helper.RESTHandlerMissingRequiredParam;
 import com.ibm.wsspi.rest.handler.helper.RESTHandlerUnsupportedMediaType;
+import com.ibm.wsspi.webcontainer.util.RequestUtils;
 
 /**
  *
@@ -140,27 +140,6 @@ public class RESTHelper {
          * response.addHeader("Access-Control-Allow-Credentials", "true");
          * }
          */
-    }
-
-    /**
-     * Quick check for multiple-target routing context, without actually fetching all pieces
-     */
-    public static boolean containsMultipleRoutingContext(RESTRequest request) {
-        //TODO: add a check for query string
-
-        if (request instanceof ServletRESTRequestWithParams) {
-            ServletRESTRequestWithParams req = (ServletRESTRequestWithParams) request;
-            return req.getParam(ClientProvider.COLLECTIVE_HOST_NAMES) != null;
-        }
-        return request.getHeader(ClientProvider.COLLECTIVE_HOST_NAMES) != null;
-    }
-
-    /**
-     * Quick check for multiple routing context, without actually fetching all pieces
-     */
-    public static boolean containsSingleRoutingContext(RESTRequest request) {
-        //TODO: add a check for query string
-        return request.getHeader(ClientProvider.ROUTING_KEY_HOST_NAME) != null;
     }
 
     /**
@@ -277,7 +256,7 @@ public class RESTHelper {
     public static String getQueryParam(RESTRequest request, String paramName, boolean decode) {
         // POST request's body can be read once. Use getQueryParameterValue to avoid re-reading
         // the request's body
-        String param = DefaultRoutingHelper.getQueryParameterValue(request, paramName);
+        String param = getQueryParameterValue(request, paramName);
 
         if (decode && (param != null && !param.isEmpty())) {
             param = URLDecoder(param, null);
@@ -293,7 +272,7 @@ public class RESTHelper {
     private static List<String> getQueryParams(RESTRequest request, String paramName, boolean decode) {
         // POST request's body can be read once. Use getQueryParameterValues to avoid re-reading
         // the request's body
-        List<String> params = asList(DefaultRoutingHelper.getQueryParameterValues(request, paramName));
+        List<String> params = asList(getQueryParameterValues(request, paramName));
 
         if (decode) {
             ArrayList<String> decodedParams = new ArrayList<String>();
@@ -307,6 +286,60 @@ public class RESTHelper {
         }
 
         return params;
+    }
+
+    // Use this method for parsing query string for POST. Using RESTRequest's method will read the
+    // request's body once and for all.
+    public static String getQueryParameterValue(RESTRequest request, String name) {
+        if (!"post".equalsIgnoreCase(request.getMethod())) {
+            return request.getParameter(name);
+        }
+
+        if (request.getQueryString() == null) {
+            return null;
+        }
+
+        Hashtable params = null;
+        try {
+            params = RequestUtils.parseQueryString(request.getQueryString());
+        } catch (Exception e) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+                Tr.event("DefaultRoutingHelper", tc, "Failed to parse the query string:\n Exception: " + e);
+            }
+            return null;
+        }
+
+        String[] values = (String[]) params.get(name);
+        String value = null;
+        if (values != null && values.length > 0) {
+            value = values[0];
+        }
+
+        return value;
+    }
+
+    // Use this method for parsing query string for POST. Using RESTRequest's method will read the
+    // request's body once and for all.
+    public static String[] getQueryParameterValues(RESTRequest request, String name) {
+        if (!"post".equalsIgnoreCase(request.getMethod())) {
+            return request.getParameterValues(name);
+        }
+
+        if (request.getQueryString() == null) {
+            return null;
+        }
+
+        Hashtable params = null;
+        try {
+            params = RequestUtils.parseQueryString(request.getQueryString());
+        } catch (Exception e) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+                Tr.event("DefaultRoutingHelper", tc, "Failed to parse the query string:\n Exception: " + e);
+            }
+            return null;
+        }
+
+        return (String[]) params.get(name);
     }
 
     public static InputStream getInputStream(RESTRequest request) {

@@ -1,0 +1,22 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: Third Party JPA Container
+Bundle-SymbolicName: com.ibm.ws.jpa.container.thirdparty
+Bundle-Description: Container-managed Third Party JPA support, version ${bVersion}
+
+WS-TraceGroup: JPA
+
+-dsannotations: com.ibm.ws.jpa.container.thirdparty.ThirdPartyJPAProvider
+
+Export-Package: com.ibm.ws.jpa.container.thirdparty
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.websphere.javaee.persistence.2.0;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.ws.container.service;version=latest,\
+	com.ibm.ws.jpa.container.core;version=latest,\
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

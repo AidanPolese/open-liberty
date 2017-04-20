@@ -285,4 +285,11 @@ public interface WebSphereBeanDeploymentArchive extends BeanDeploymentArchive {
      */
     Set<EjbDescriptor<?>> getEjbDescriptor(Class<?> clazz);
 
+    /**
+     * Get hold of the EEModuleDescriptorID for this module
+     *
+     * @return the the EEModuleDescriptorID
+     */
+    String getEEModuleDescriptorId();
+
 }

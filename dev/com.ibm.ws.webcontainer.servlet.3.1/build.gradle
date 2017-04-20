@@ -13,9 +13,8 @@ compileJava {
                 exclude(name: '**/com/ibm/ws/webcontainer31/**')
                 exclude(name: '**/com/ibm/wsspi/webcontainer31/**')
                 include(name: '**/com/ibm/ws/webcontainer31/osgi/**/*.class')
-                include(name: '**/com/ibm/wsspi/webcontainer31/osgi/**/*.class')
                 exclude(name: '**/com/ibm/ws/webcontainer31/osgi/response/WCOutputStream31.class')
-                exclude(name: '**/com/ibm/ws/webcontainer31/osgi/request/IRequestImpl31.class')
+                exclude(name: '**/com/ibm/ws/webcontainer31/osgi/request/IRequest31Impl.class')
                 exclude(name: '**/com/ibm/ws/webcontainer31/osgi/webapp/WebApp31.class')
             }
         }

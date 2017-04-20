@@ -1,0 +1,21 @@
+<server>
+	<com.ibm.ws.transport.iiop.spi.SubsystemFactory type="CSIv2"/>
+
+	<orb id="defaultOrb">
+        <serverPolicy.csiv2>
+            <layers>
+                <attributeLayer identityAssertionEnabled="false"/>
+                <authenticationLayer mechanisms="LTPA,GSSUP" establishTrustInClient="Required"/>
+                <transportLayer/>
+            </layers>
+        </serverPolicy.csiv2>
+        <clientPolicy.csiv2>
+            <layers>
+                <attributeLayer identityAssertionEnabled="false"/>
+                <authenticationLayer mechanisms="LTPA,GSSUP" establishTrustInClient="Supported"/>
+                <transportLayer/>
+            </layers>
+        </clientPolicy.csiv2>
+    </orb>
+
+</server>

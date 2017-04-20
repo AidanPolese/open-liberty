@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2010, 2015
+# (C) COPYRIGHT International Business Machines Corp. 2010, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -500,6 +500,10 @@ LOG_VALIDATION_DONE=\u5df2\u6210\u529f\u5b8c\u6210\u5bf9\u914d\u7f6e\u6587\u4ef6
 LOG_DELETING_TEMP_SERVER_DIR=\u6b63\u5728\u5220\u9664 {0} \u4e34\u65f6\u670d\u52a1\u5668\u76ee\u5f55...
 LOG_NOT_DELETING_TEMP_SERVER_DIR=\u672a\u5220\u9664 {0} \u4e34\u65f6\u670d\u52a1\u5668\u76ee\u5f55\uff0c\u56e0\u4e3a\u5b83\u53ef\u80fd\u5728 logs \u76ee\u5f55\u4e2d\u5305\u542b\u9519\u8bef\u4fe1\u606f\u3002\u5982\u679c\u4e0d\u9700\u8981\u6b64\u4fe1\u606f\uff0c\u90a3\u4e48\u53ef\u624b\u52a8\u5220\u9664 {1} \u76ee\u5f55\u3002
 LOG_CREATED_TEMP_SERVER_DIR=\u5df2\u521b\u5efa {0} \u4e34\u65f6\u670d\u52a1\u5668\u76ee\u5f55\u3002
+
+LOG_CANNOT_CLOSE_OBJECT=\u65e0\u6cd5\u5220\u9664\u4e34\u65f6\u6587\u4ef6\u3002
+LOG_CANNOT_CLOSE_OBJECT.explanation=\u6837\u672c\u9700\u8981 Java 7 \u6216\u66f4\u9ad8\u7248\u672c\u4ee5\u5220\u9664 installTmp \u76ee\u5f55\u3002
+LOG_CANNOT_CLOSE_OBJECT.action=\u624b\u52a8\u79fb\u9664 installTmp \u76ee\u5f55\uff0c\u6216\u4f7f\u7528 Java 7 \u6216\u66f4\u9ad8\u7248\u672c\u3002
 
 LOG_PASSWORD_NOT_ENCODED_PROXY=\u672a\u5bf9\u4ee5\u4e0b\u4ee3\u7406\u7684\u5bc6\u7801\u8fdb\u884c\u7f16\u7801\uff1a{0}. \u60a8\u53ef\u4ee5\u901a\u8fc7\u8fd0\u884c securityUtility \u7f16\u7801\u547d\u4ee4\uff08--encoding \u9009\u9879\u8bbe\u7f6e\u4e3a\u53d7\u652f\u6301\u7f16\u7801\u7c7b\u578b xor\uff08\u7f3a\u7701\u503c\uff09\u3001aes \u548c hash\uff09\u6765\u5bf9\u5bc6\u7801\u8fdb\u884c\u7f16\u7801\u3002\u4f8b\u5982\uff1asecurityUtility encode --encoding=aes proxyPassword
 LOG_PENDING_UNINSTALLING_FEATURE=\u8981\u5378\u8f7d\u7684\u529f\u80fd\u90e8\u4ef6\uff1a

@@ -1,0 +1,10 @@
+<server>
+    <featureManager>
+        <feature>servlet-3.0</feature>
+    </featureManager>
+
+    <application type="war" id="snoop" name="snoop" location="${shared.app.dir}/webcontainer/snoop" />
+    <include location="../fatTestPorts.xml"/>
+    
+    <!-- NOW THIS MESSAGE CHANGED -->
+</server>

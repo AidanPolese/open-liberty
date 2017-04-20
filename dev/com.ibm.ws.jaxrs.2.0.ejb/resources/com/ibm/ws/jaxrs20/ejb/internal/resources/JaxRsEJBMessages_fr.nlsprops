@@ -1,0 +1,51 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+#
+# ORIGINS: 27         (used for IBM originated files)
+#
+# Caution: because some text editors automatically convert
+# consecutive runs of spaces to tabs, use the Java "\ " escape
+# sequence to represent each space in a run of multiple spaces.
+#
+# translator:
+# Translate words on the right hand side of the = sign.
+# Do not translate {0}, {1}, %1, %2 etc.
+# Do NOT translate any words when they START with: '-
+# Do NOT translate any words when they START with: @
+# Preserve all spaces after a backslash (\) even at the end of a line.
+#
+# NLS_MESSAGEFORMAT_ALL
+#
+#CMVCPATHNAME com.ibm.ws.jaxrs-2.0.ejb/resources/com/ibm/ws/jaxrs20/ejb/internal/resources/JaxRsEJBMessages.nlsprops
+#ISMESSAGEFILE TRUE
+#COMPONENTPREFIX CWWKW
+#COMPONENTNAMEFOR CWWKW WebSphere JAXRS EJB Code
+#RANGE 1100 - 1199
+#
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+
+# -------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
+
+
+
+warning.jaxrs.ejb.resource.mismatch=CWWKW1100W: La porte {1} de JAXRS-2.0 Resource {0} ne correspond pas \u00e0 la port\u00e9e EJB {2}. Liberty obtient l''instance de ressource de {3}.
+warning.jaxrs.ejb.resource.mismatch.explanation=Si la port\u00e9e JAXRS-2.0 Resource ne correspond pas \u00e0 la port\u00e9e EJB, et si l'instance de ressource existe dans EJB, Liberty obtient l'instance de ressource de EJB.
+warning.jaxrs.ejb.resource.mismatch.useraction=Aucune action n'est requise. 
+
+warning.jaxrs.ejb.provider.mismatch=CWWKW1102W: La port\u00e9e EJB de JAXRS-2.0 Provider {0} est {1}. Liberty obtient l''instance de fournisseur de {2}.
+warning.jaxrs.ejb.provider.mismatch.explanation=L'instance de fournisseur est Singleton uniquement. Liberty obtient les instances de fournisseur de EJB si la port\u00e9e EJB du fournisseur est de type Dependent ou ApplicationScoped.
+warning.jaxrs.ejb.provider.mismatch.useraction=Aucune action de l'utilisateur n'est requise.
+
+warning.failed.instantiate.ejb.instance=CWWKW1103W: L''instance EJB de la classe {0} ne peut pas \u00eatre instanci\u00e9e. Liberty obtient l''instance de fournisseur de JAXRS.
+warning.failed.instantiate.ejb.instance.explanation= La classe EJB {0} n''a pas de constructeur par d\u00e9faut. Liberty obtient l''exception InstantiationException lorsqu''il essaie d''instancier l''instance EJB.
+warning.failed.instantiate.ejb.instance.useraction=Aucune action n'est requise.
+
+error.failed.toloadejbclass=CWWKW1104W: La classe EJB {0} ne peut pas \u00eatre charg\u00e9e.
+error.failed.toloadejbclass.explanation= La classe EJB {0} ne peut pas \u00eatre charg\u00e9e.
+error.failed.toloadejbclass.useraction=Corrigez votre application afin de rem\u00e9dier au probl\u00e8me.

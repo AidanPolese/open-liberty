@@ -46,7 +46,6 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.channelfw.internal.ChannelFrameworkImpl;
 import com.ibm.ws.ffdc.FFDCFilter;
-import com.ibm.ws.kernel.zos.NativeMethodManager;
 import com.ibm.ws.tcpchannel.internal.TCPChannelMessageConstants;
 import com.ibm.wsspi.channelfw.objectpool.CircularObjectPool;
 
@@ -545,12 +544,11 @@ public class AsyncLibrary implements IAsyncProvider {
                 if (os.equals("os/400")) {
                     System.load(LIBRARY_NAME);
                 } else {
-                    // Get the nativeMethodManager and drive registerNatives() for this
-                    // class. This should only run on z/OS.
+                    // Get the asyncIOHelper and pass it the loadLibrary request for this implementation class.
                     ChannelFrameworkImpl chfw = ChannelFrameworkImpl.getRef();
-                    NativeMethodManager nativeMethodManager = chfw.getNativeMethodManager();
-                    if (nativeMethodManager != null) {
-                        nativeMethodManager.registerNatives(AsyncLibrary.class);
+                    AsyncIOHelper asyncIOHelper = chfw.getAsyncIOHelper();
+                    if (asyncIOHelper != null) {
+                        asyncIOHelper.loadLibrary(AsyncLibrary.class, LIBRARY_NAME);
                     } else {
                         System.loadLibrary(LIBRARY_NAME);
                     }

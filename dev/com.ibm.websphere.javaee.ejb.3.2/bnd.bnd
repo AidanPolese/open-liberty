@@ -23,3 +23,10 @@ publish.wlp.jar.suffix: dev/api/spec
 -buildpath: \
 	${javac.bootclasspath.java6}, \
 	lib/javax.ejb-api-3.2.jar;version=file
+
+-testpath: \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock.jar;version=file

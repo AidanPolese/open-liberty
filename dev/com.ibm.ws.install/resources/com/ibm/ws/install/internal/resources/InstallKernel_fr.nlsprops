@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2010, 2015
+# (C) COPYRIGHT International Business Machines Corp. 2010, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -500,6 +500,10 @@ LOG_VALIDATION_DONE=La validation du fichier de configuration a abouti.\n
 LOG_DELETING_TEMP_SERVER_DIR=Suppression du r\u00e9pertoire {0} sur le serveur...
 LOG_NOT_DELETING_TEMP_SERVER_DIR=Le r\u00e9pertoire temporaire {0} du serveur n''a pas \u00e9t\u00e9 supprim\u00e9, car il peut contenir des informations sur les erreurs dans le r\u00e9pertoire des journaux. Si vous n''avez pas besoin de ces informations, vous pouvez supprimer manuellement le r\u00e9pertoire {1}.
 LOG_CREATED_TEMP_SERVER_DIR=Le r\u00e9pertoire temporaire {0} a \u00e9t\u00e9 cr\u00e9\u00e9 sur le serveur.
+
+LOG_CANNOT_CLOSE_OBJECT=Impossible de supprimer les fichiers temporaires.
+LOG_CANNOT_CLOSE_OBJECT.explanation=L'exemple requiert Java 7 (ou version ult\u00e9rieure) pour la suppression du r\u00e9pertoire installTmp.
+LOG_CANNOT_CLOSE_OBJECT.action=Supprimez manuellement le r\u00e9pertoire installTmp ou bien utilisez Java 7 (ou version ult\u00e9rieure).
 
 LOG_PASSWORD_NOT_ENCODED_PROXY=Le mot de passe du proxy suivant n''est pas cod\u00e9 : {0}. Vous pouvez coder le mot de passe \u00e0 l''aide de la commande securityUtility encode et de l''option --encoding d\u00e9finie sur un type de codage pris en charge : xor (par d\u00e9faut), aes et hash. Par exemple : securityUtility encode --encoding=aes proxyPassword
 LOG_PENDING_UNINSTALLING_FEATURE=Fonctions \u00e0 d\u00e9sinstaller :

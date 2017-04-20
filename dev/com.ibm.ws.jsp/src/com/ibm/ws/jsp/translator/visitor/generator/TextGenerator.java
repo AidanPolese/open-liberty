@@ -14,6 +14,7 @@
 //PK76583	mconcini	2009/02/04	Fix extra escape characters being appended in EL expressions.
 //PM94792   hmpadill    2014/07/30  Disable escaping CR, LF, and Tab within an expression
 //PI67257   hmpadill    2016/08/16  Escaped EL expressions after an escaped dollar sign are executed
+//PI79800   hmpadill    2017/04/11  EL expressions preceded by large character data block might be escaped
 
 package com.ibm.ws.jsp.translator.visitor.generator;
 
@@ -127,13 +128,9 @@ public class TextGenerator extends CodeGeneratorBase {
                 if (section == CodeGenerationPhase.METHOD_SECTION) {
                 	writeDebugStartBegin(writer);
                 }
-                int newCurrentStringCount = nextStringNum.intValue();
-                while (current < limit) {
-                    int from = current;
-                    int to = Math.min(current + MAXSIZE, limit);
-                    newCurrentStringCount = generateChunk(chars, writer, from, to, section, newCurrentStringCount);
-                    current = to;
-                }
+                //PI79800
+                int newCurrentStringCount = generateChunk(chars, writer, section, nextStringNum.intValue());
+                
                 if (section == CodeGenerationPhase.CLASS_SECTION) {
                     persistentData.put("nextStringNum", new Integer(newCurrentStringCount));
                 }
@@ -145,6 +142,10 @@ public class TextGenerator extends CodeGeneratorBase {
     }
 
     public void endGeneration(int section, JavaCodeWriter writer)  throws JspCoreException {
+    }
+    
+    protected int generateChunk(char[] chars, JavaCodeWriter writer, int section, int currentStringCount) {
+        return generateChunk(chars, writer, 0, chars.length, section, currentStringCount);
     }
     
     protected int generateChunk(char[] chars, 

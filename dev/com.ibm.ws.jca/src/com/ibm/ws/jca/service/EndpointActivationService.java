@@ -53,7 +53,7 @@ import com.ibm.ws.jca.osgi.JCARuntimeVersion16;
 import com.ibm.ws.kernel.service.util.PrivHelper;
 import com.ibm.ws.threadContext.ComponentMetaDataAccessorImpl;
 import com.ibm.ws.tx.embeddable.EmbeddableWebSphereTransactionManager;
-import com.ibm.ws.tx.zos.RRSXAResourceFactory;
+import com.ibm.ws.tx.rrs.RRSXAResourceFactory;
 import com.ibm.wsspi.application.lifecycle.ApplicationRecycleComponent;
 import com.ibm.wsspi.application.lifecycle.ApplicationRecycleContext;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;

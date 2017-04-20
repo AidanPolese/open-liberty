@@ -16,8 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.websphere.security.audit.AuditAuthResult;
+import com.ibm.websphere.security.audit.AuditAuthenticationResult;
+import com.ibm.websphere.security.audit.AuditEvent;
 import com.ibm.ws.runtime.metadata.ComponentMetaData;
 import com.ibm.ws.security.audit.Audit;
+import com.ibm.ws.security.audit.utils.AuditConstants;
 import com.ibm.ws.security.authentication.principals.WSPrincipal;
 import com.ibm.ws.security.authorization.jacc.JaccService;
 import com.ibm.ws.threadContext.ComponentMetaDataAccessorImpl;
@@ -66,6 +70,19 @@ public class WebAppJaccAuthorizationHelper implements WebAppAuthorizationHelper 
     public boolean authorize(AuthenticationResult authResult, WebRequest webRequest, String uriName) {
         HttpServletRequest req = webRequest.getHttpServletRequest();
         boolean isAuthorized = jaccServiceRef.getService().isAuthorized(getApplicationName(), getModuleName(), uriName, req.getMethod(), req, authResult.getSubject());
+        //String[] methodNameArray = new String[] { req.getMethod() };
+        //WebResourcePermission webPerm = new WebResourcePermission(uriName, methodNameArray);
+        WebReply reply = isAuthorized ? new PermitReply() : DENY_AUTHZ_FAILED;
+
+        if (isAuthorized) {
+            AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.SUCCESS, authResult.getSubject(), AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_SUCCESS);
+            Audit.audit(Audit.EventID.SECURITY_AUTHZ_02, webRequest, authResult, uriName, AuditConstants.WEB_CONTAINER, Integer.valueOf(reply.getStatusCode()));
+        } else {
+            AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.FAILURE, authResult.getSubject(), AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_FAILURE);
+            Audit.audit(Audit.EventID.SECURITY_AUTHZ_02, webRequest, authResult, uriName, AuditConstants.WEB_CONTAINER, Integer.valueOf(reply.getStatusCode()));
+
+        }
+
         if (!isAuthorized) {
             String authUserName = authResult.getUserName();
             String authRealm = authResult.getRealm();
@@ -75,11 +92,11 @@ public class WebAppJaccAuthorizationHelper implements WebAppAuthorizationHelper 
             } else {
                 // We have a subject if we got this far, use it to determine the name
                 authUserName = authResult.getSubject().getPrincipals(WSPrincipal.class).iterator().next().getName();
-                WebReply reply = isAuthorized ? new PermitReply() : DENY_AUTHZ_FAILED;
+                //WebReply reply = isAuthorized ? new PermitReply() : DENY_AUTHZ_FAILED;
                 Tr.audit(tc, "SEC_JACC_AUTHZ_FAILED", authUserName, appName, uriName);
             }
-            WebReply reply = isAuthorized ? new PermitReply() : DENY_AUTHZ_FAILED;
-            Audit.audit(Audit.EventID.SECURITY_AUTHZ_01, webRequest, authResult, uriName, Integer.valueOf(reply.getStatusCode()));
+            //WebReply reply = isAuthorized ? new PermitReply() : DENY_AUTHZ_FAILED;
+            //Audit.audit(Audit.EventID.SECURITY_AUTHZ_01, webRequest, authResult, uriName, Integer.valueOf(reply.getStatusCode()));
 
         }
         return isAuthorized;

@@ -1,0 +1,32 @@
+<project name="com.ibm.ws.dynacache.web-api" default="buildApiSpi">
+    <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+       Top level builds use this task explicity.  Changing the
+       default will create an incompatibility between a default
+       project build and a top level build. -->
+
+    <!-- IBM-API required properties. -->
+    <property name="bundleName" value="WebSphere Web Cache API" />
+    <property name="api.ibm.symbolic.suffix" value="webCache" />
+    <property name="api.ibm.version" value="1.1" />
+    <property name="feature.project" value="com.ibm.websphere.appserver.webCache-1.0" />
+
+    <property name="api.ibm.packages.exceptions" value="com.ibm.wsspi.cache.servlet" />
+
+    <!-- IBM-SPI required properties. -->
+    <property name="spibndfile" value="${basedir}/build/spi.bnd" />
+    <property name="spi.ibm.symbolic.suffix" value="webCache" />
+    <property name="spi.ibm.bundleName" value="WebSphere Web Cache SPI" />
+    <property name="spi.ibm.version" value="1.0" />
+
+    <fileset id="api.ibm.schema.fileset" dir="resources">
+      <include name="cachespec.dtd"/>
+    </fileset>
+    
+    <fileset id="api.ibm.schema.fileset" dir="resources">
+      <include name="cachespec.xsd"/>
+    </fileset>
+
+    <import file="../ant_build/public_imports/apibnd_imports.xml" />
+
+</project>
+

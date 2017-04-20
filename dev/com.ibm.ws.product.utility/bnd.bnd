@@ -35,7 +35,7 @@ instrument.disabled: true
 	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \
 	com.ibm.ws.kernel.boot.core;version=latest, \
 	com.ibm.ws.kernel.feature.core;version=latest, \
-    com.ibm.ws.kernel.boot.logging;version=latest, \
-    com.ibm.ws.kernel.security.thread;version=latest, \
-    com.ibm.ws.logging;version=latest, \
+	com.ibm.ws.kernel.boot.logging;version=latest, \
+	com.ibm.ws.kernel.security.thread;version=latest, \
+	com.ibm.ws.logging;version=latest, \
 	com.ibm.ws.logging.core;version=latest

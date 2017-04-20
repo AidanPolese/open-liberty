@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2010, 2015
+# (C) COPYRIGHT International Business Machines Corp. 2010, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -500,6 +500,10 @@ LOG_VALIDATION_DONE=Valida\u00e7\u00e3o do arquivo de configura\u00e7\u00e3o con
 LOG_DELETING_TEMP_SERVER_DIR=Excluindo o {0} diret\u00f3rio do servidor provis\u00f3rio ...
 LOG_NOT_DELETING_TEMP_SERVER_DIR=O {0} diret\u00f3rio do servidor provis\u00f3rio n\u00e3o foi exclu\u00eddo porque ele pode conter informa\u00e7\u00f5es de erro no diret\u00f3rio logs. Se voc\u00ea n\u00e3o precisar de informa\u00e7\u00e3o alguma, poder\u00e1 excluir manualmente o diret\u00f3rio {1}.
 LOG_CREATED_TEMP_SERVER_DIR=Criado o {0} diret\u00f3rio do servidor provis\u00f3rio.
+
+LOG_CANNOT_CLOSE_OBJECT=Os arquivos tempor\u00e1rios n\u00e3o podem ser exclu\u00eddos.
+LOG_CANNOT_CLOSE_OBJECT.explanation=A amostra requer Java 7 ou superior para excluir o diret\u00f3rio installTmp.
+LOG_CANNOT_CLOSE_OBJECT.action=Remova o diret\u00f3rio installTmp manualmente ou use Java 7 ou superior.
 
 LOG_PASSWORD_NOT_ENCODED_PROXY=A senha para o proxy a seguir n\u00e3o est\u00e1 codificada: {0}. \u00c9 poss\u00edvel codificar a senha executando o comando de codifica\u00e7\u00e3o securityUtility com a op\u00e7\u00e3o --encoding configurada para um tipo de codifica\u00e7\u00e3o suportado, que s\u00e3o xor (padr\u00e3o), aes e hash. Por exemplo: securityUtility encode --encoding=aes proxyPassword
 LOG_PENDING_UNINSTALLING_FEATURE=Recursos a serem desinstalados:

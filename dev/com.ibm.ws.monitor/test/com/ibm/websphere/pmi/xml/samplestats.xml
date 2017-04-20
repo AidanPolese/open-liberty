@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Stats SYSTEM ".stats.dtd">
+
+<Stats type="com.ibm.websphere.pmi.xml.samplestats">
+    <description>SampleStats</description>
+   <!-- <resourceBundle>com.ibm.ws.pmi.properties.PMIText</resourceBundle>-->
+
+    <BoundedRangeStatistic  ID="1" name="SampleCounter1">
+        <level>high</level>
+	    <unit>unit.kbyte</unit>
+	    <description>jvmRuntimeModule.totalMemory.desc</description>		
+        <statisticSet>basic</statisticSet>                    
+    </BoundedRangeStatistic>
+
+    <CountStatistic name="SampleCounter2" ID="2">
+        <level>low</level>
+        <unit>unit.none</unit>
+	    <description>SampleCounter2</description>        		
+        <statisticSet>basic</statisticSet>                    
+    </CountStatistic>
+
+    
+</Stats>

@@ -1,0 +1,6 @@
+<server>
+
+  <com.ibm.ws.beanvalidation.service.ValidationReleasableFactory type="CDIValidationReleasableFactory"/>
+  <com.ibm.ws.beanvalidation.v11.config.internal.ValidationConfigurationV11FactoryImpl />
+
+</server>

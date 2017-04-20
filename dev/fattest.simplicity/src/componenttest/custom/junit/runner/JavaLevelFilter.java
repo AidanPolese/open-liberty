@@ -1,49 +1,25 @@
 package componenttest.custom.junit.runner;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
 
 import com.ibm.websphere.simplicity.log.Log;
 
 import componenttest.annotation.FeatureRequiresMinimumJavaLevel;
 import componenttest.annotation.MaximumJavaLevel;
 import componenttest.annotation.MinimumJavaLevel;
+import componenttest.topology.impl.JavaInfo;
 
 public class JavaLevelFilter extends Filter {
 
     public static final String FEATURE_UNDER_TEST;
-    public static final double JAVA_VERSION;
 
-    private static boolean hasRealTests = false;
+    private static double JAVA_VERSION;
 
     static {
         FEATURE_UNDER_TEST = System.getProperty(FeatureFilter.FEATURE_UNDER_TEST_PROPERTY_NAME);
         Log.info(JavaLevelFilter.class, "<clinit>", "System property: " + FeatureFilter.FEATURE_UNDER_TEST_PROPERTY_NAME + " is " + FEATURE_UNDER_TEST);
-        String specVersion = System.getProperty("java.specification.version");
-        Log.info(JavaLevelFilter.class, "<clinit>", "System property java.specification.version: " + specVersion);
-        // Convert to a double (by stripping any non-numeric characters)
-        if (specVersion != null) {
-            Matcher matcher = Pattern.compile("([0-9][0-9]*\\.[0-9][0-9]*)").matcher(specVersion);
-            boolean hasNumber = matcher.find();
-            if (hasNumber) {
-                JAVA_VERSION = Double.parseDouble(matcher.group(1));
-                Log.info(JavaLevelFilter.class, "<clinit>", "Parsed java version: " + JAVA_VERSION);
-
-            } else {
-                JAVA_VERSION = 0;
-                Log.info(JavaLevelFilter.class, "<clinit>", "Could not parse a java version, so assuming " + JAVA_VERSION);
-
-            }
-        } else {
-            JAVA_VERSION = 0;
-            Log.info(JavaLevelFilter.class, "<clinit>", "Could not find a system property for java.specification.version, so assuming " + JAVA_VERSION);
-
-        }
+        JAVA_VERSION = Double.valueOf("1." + JavaInfo.JAVA_VERSION);
     }
 
     private static Class<?> getMyClass() {
@@ -70,25 +46,6 @@ public class JavaLevelFilter extends Filter {
     /** {@inheritDoc} */
     @Override
     public boolean shouldRun(Description desc) {
-        boolean shouldRun = shouldRunTest(desc);
-        if (shouldRun) {
-            boolean isSyntheticTest = AlwaysPassesTest.ALWAYS_PASSES_METHOD_NAME.equals(desc.getMethodName());
-            if (isSyntheticTest) {
-                // If there are real tests, don't run synthetic test.
-                // If there are no more tests, do run the synthetic test.
-                return !hasRealTests;
-            } else {
-                hasRealTests = true;
-            }
-        }
-        return shouldRun;
-    }
-
-    public static boolean hasRealTests() {
-        return hasRealTests;
-    }
-
-    public static boolean shouldRunTest(Description desc) {
         MaximumJavaLevel maximumJavaLevelAnnotation = desc.getAnnotation(MaximumJavaLevel.class);
         if (maximumJavaLevelAnnotation == null) {
             //there was no method level annotation
@@ -144,19 +101,5 @@ public class JavaLevelFilter extends Filter {
         }
 
         return true;
-    }
-
-    /**
-     * Returns a method which can be run as a junit test.
-     */
-    public FrameworkMethod createSyntheticTest() {
-        return new SyntheticAlwaysPassesTest();
-    }
-
-    public static Statement emptyStatement() {
-        return new Statement() {
-            @Override
-            public void evaluate() throws Throwable {}
-        };
     }
 }

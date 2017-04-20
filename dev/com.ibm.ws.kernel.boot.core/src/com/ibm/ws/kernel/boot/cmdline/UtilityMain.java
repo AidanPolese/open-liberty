@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2012, 2013
+ * Copyright IBM Corp. 2012, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.kernel.boot.cmdline;
@@ -66,10 +66,8 @@ public class UtilityMain {
      * @throws InvocationTargetException
      * @throws IllegalArgumentException
      */
-    public static void internal_main(String[] args) throws IOException, ClassNotFoundException,
-                    SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException,
-                    IllegalArgumentException, InvocationTargetException {
-        // The sole element of the classpath should be the jar that was launched.. 
+    public static void internal_main(String[] args) throws IOException, ClassNotFoundException, SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        // The sole element of the classpath should be the jar that was launched..
         String jarName = System.getProperty("java.class.path");
 
         // Get the Attributes from the jar file
@@ -77,7 +75,7 @@ public class UtilityMain {
         Attributes a = jarFile.getManifest().getMainAttributes();
         jarFile.close();
 
-        // Look for the attributes we need to find the real launch target: 
+        // Look for the attributes we need to find the real launch target:
 
         // Command-Class redirects us to the real main
         String commandClass = a.getValue("Command-Class");
@@ -89,7 +87,7 @@ public class UtilityMain {
         // If set to bootstrap,
         String parentCL = a.getValue("Parent-ClassLoader");
 
-        // A list of packages that will be loaded first by the nested/created PackageDelegateClassLoader, 
+        // A list of packages that will be loaded first by the nested/created PackageDelegateClassLoader,
         // the value should be like javax.xml.ws, javax.xml.jaxb
         String parentLastPackages = a.getValue("Parent-Last-Package");
 
@@ -113,7 +111,7 @@ public class UtilityMain {
         BundleRepositoryRegistry.initializeDefaults(null, false);
         List<AbstractResourceRepository> repos = getAllRepositories();
 
-        // Collect the list of jars required for the command.. 
+        // Collect the list of jars required for the command..
         List<URL> urls = new ArrayList<URL>();
         urls = selectResources(repos, rbs, urls);
 
@@ -128,13 +126,16 @@ public class UtilityMain {
             }
         }
 
-        //if the Require-Compiler is true, add the <JDK_HOME>/lib/tools.jar in the classpath.
+        // if the Require-Compiler is true, ensure that a compiler is available
         if (compilerTools) {
             File toolsFile = Utils.getJavaTools();
             if (toolsFile != null) {
                 urls.add(toolsFile.toURI().toURL());
-            } else if (!Utils.hasToolsByDefault()) {
-                error("error.sdkRequired", System.getProperty("java.home"));
+            } else if (!isCompilerAvailable()) {
+                if (javaVersion() <= 8)
+                    error("error.sdkRequired", System.getProperty("java.home"));
+                else
+                    error("error.compilerMissing");
                 System.exit(ExitCode.ERROR_BAD_JAVA_VERSION);
                 return;
             }
@@ -215,5 +216,26 @@ public class UtilityMain {
             repos.add(new NameBasedLocalBundleRepository(extDir));
         }
         return repos;
+    }
+
+    private static boolean isCompilerAvailable() {
+        try {
+            return javax.tools.ToolProvider.getSystemJavaCompiler() != null;
+        } catch (Exception e) {
+            // On JDK 6-8 the ToolProvider interface is in the rt.jar and therefore always available.
+            // On JDK 9 the ToolProvider interface is in the "java.compiler" module which may not
+            // be available at runtime and result in a CNFE.
+            return false;
+        }
+    }
+
+    private static int javaVersion() {
+        String version = System.getProperty("java.version");
+        String[] versionElements = version.split("\\D"); // split on non-digits
+
+        // Pre-JDK 9 the java.version is 1.MAJOR.MINOR
+        // Post-JDK 9 the java.version is MAJOR.MINOR
+        int i = Integer.valueOf(versionElements[0]) == 1 ? 1 : 0;
+        return Integer.valueOf(versionElements[i]);
     }
 }

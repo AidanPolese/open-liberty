@@ -259,12 +259,17 @@ UNABLE_TO_FIND_TOOLS_JAR=A Liberty Java \u00fcgyn\u00f6k\u00f6t nem lehetett csa
 
 UNABLE_TO_FIND_JAVA_AGENT=A Liberty Java \u00fcgyn\u00f6k nem tal\u00e1lhat\u00f3. A kiszolg\u00e1l\u00f3 futni fog, de nem tud ell\u00e1tni Java \u00fcgyn\u00f6k\u00f6t ig\u00e9nyl\u0151 funkci\u00f3kat, mint p\u00e9ld\u00e1ul a megfigyel\u00e9st vagy nyomk\u00f6vet\u00e9st.
 
-
 # messages for LicenseSelfEctractor
-LICENSE_invalidInstall=A(z) {0} k\u00f6nyvt\u00e1r nem \u00e9rv\u00e9nyes Liberty telep\u00edt\u00e9s. \
-Adja meg a friss\u00edteni k\u00edv\u00e1nt Liberty telep\u00edt\u00e9s gy\u00f6k\u00e9rk\u00f6nyvt\u00e1r\u00e1t.
+LICENSE_invalidInstall=A(z) {0} k\u00f6nyvt\u00e1r nem \u00e9rv\u00e9nyes Liberty telep\u00edt\u00e9s. Adja meg a friss\u00edteni k\u00edv\u00e1nt Liberty telep\u00edt\u00e9s gy\u00f6k\u00e9rk\u00f6nyvt\u00e1r\u00e1t.
 LICENSE_invalidVersion=A licenc nem friss\u00edthet\u0151, mert a megadott term\u00e9ktelep\u00edt\u00e9s v\u00e1ltozatsz\u00e1ma {0}, \u00e9s a licenc csak {1} v\u00e1ltozatr\u00f3l friss\u00edthet\u0151.
 LICENSE_invalidEdition=A licenc nem friss\u00edthet\u0151, mert a megadott term\u00e9ktelep\u00edt\u00e9s kiad\u00e1sa {0}, \u00e9s a licenc csak {1} kiad\u00e1sr\u00f3l friss\u00edthet\u0151.
 LICENSE_invalidLicense=A licenc nem friss\u00edthet\u0151, mert a megadott term\u00e9ktelep\u00edt\u00e9s licence {0}, \u00e9s a licenc csak {1} licenccel rendelkez\u0151 term\u00e9ket friss\u00edt.
-LICENSE_invalidInstallType=A licenc nem friss\u00edthet\u0151, mert a megadott term\u00e9ktelep\u00edt\u00e9s az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel ker\u00fclt telep\u00edt\u00e9sre. A telep\u00edt\u00e9st az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel friss\u00edtse. 
+LICENSE_invalidInstallType=A licenc nem friss\u00edthet\u0151, mert a megadott term\u00e9ktelep\u00edt\u00e9s az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel ker\u00fclt telep\u00edt\u00e9sre. A telep\u00edt\u00e9st az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel friss\u00edtse.
+
+# new messages for license upgrade and downgrade
+LICENSE_replace_invalidVersion=A licenc nem cser\u00e9lhet\u0151 le, mert a megadott term\u00e9ktelep\u00edt\u00e9s v\u00e1ltozatsz\u00e1ma {0}, \u00e9s a licenc csak a(z) {1} v\u00e1ltozatr\u00f3l cser\u00e9lhet\u0151 le.
+LICENSE_replace_invalidInstallType=A licenc nem m\u00f3dos\u00edthat\u00f3, mert a megadott term\u00e9ktelep\u00edt\u00e9s az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel ker\u00fclt telep\u00edt\u00e9sre. A telep\u00edt\u00e9st az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel m\u00f3dos\u00edtsa. 
+LICENSE_replace_invalidEditonFeatures=Az al\u00e1bbi szolg\u00e1ltat\u00e1sok a tov\u00e1bbiakban nem alkalmazhat\u00f3k a(z) {0} eset\u00e9n, \u00e9s licenccsere el\u0151tt el kell \u0151ket t\u00e1vol\u00edtani: {1}
+LICENSE_replace_uninstallFeatures_manually=A szolg\u00e1ltat\u00e1sokat a k\u00f6vetkez\u0151 parancs seg\u00edts\u00e9g\u00e9vel t\u00e1vol\u00edthatja el a(z) {0} licenc\u00e9nek cser\u00e9je el\u0151tt: {1}
+
 

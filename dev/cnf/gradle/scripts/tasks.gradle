@@ -341,6 +341,25 @@ subprojects {
     options.warnings = false
     options.fork = true
   }
+
+  test {
+    jvmArgs "-Dtest.buildDir=${buildDir}"
+  }
+
+  test {
+    def testports = fileTree(dir: "${projectDir}/bin_test", include: 'unittestports.properties')
+    doFirst {
+      if (testports.isEmpty())
+        return
+      ant.taskdef(name: 'portSelector', classname: 'com.ibm.aries.buildtasks.PortSelector') {
+        classpath {
+          fileset(dir: "${rootDir}/cnf/lib", includes: 'infra.buildtasks-core_4.0.jar')
+        }
+      }
+      ant.portSelector(engineName: "${bnd.buildEngineName}", location: "${projectDir}/bin_test/unittestports.properties", jvmarg: 'jvmargPorts')
+      jvmArgs ant.jvmargPorts.tokenize()
+    }
+  }
 }
 
 private boolean parseBoolean(String value) {

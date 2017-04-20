@@ -1,6 +1,6 @@
 # -------------------------------------------------------------------------------------------------
 # @start_prolog@
-# Version: @(#) 1.43 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/CWSIJMessages.nlsprops, SIB.comms, WASX.SIB 10/10/14 01:07:38 [11/9/10 00:07:27]
+# Version: @(#) 1.43 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/CWSIJMessages.nlsprops, SIB.comms, WASX.SIB, uu1215.01 10/10/14 01:07:38 [4/12/12 22:14:11]
 # ============================================================================
 # IBM Confidential OCO Source Materials
 #
@@ -113,25 +113,25 @@ EXCP_CONN_FAIL_NO_CF_SICJ0007.useraction=Examinez les fichiers journaux de votre
 # -------------------------------------------------------------------------------------------------
 # {0} the name of the default channel chain which is not defined
 NO_DEFAULT_OUTBOUND_SICJ0008=CWSIJ0008W: La cha\u00eene de canaux de messagerie de communications sortantes par d\u00e9faut {0} n''est pas d\u00e9finie sur ce serveur d''applications.
-NO_DEFAULT_OUTBOUND_SICJ0008.explanation=La cha\u00eene de canaux de messagerie de communications sortantes par d\u00e9faut n'est pas d\u00e9finie sur ce serveur d'applications.  Ce serveur d'applications peut ne pas \u00eatre capable d'\u00e9tablir des connexions \u00e0 des moteurs de messagerie de passerelle \u00e9loign\u00e9s.
+NO_DEFAULT_OUTBOUND_SICJ0008.explanation=La cha\u00eene de canaux de messagerie de communications sortantes par d\u00e9faut n'est pas d\u00e9finie sur ce serveur d'applications.  Ce serveur d'applications peut ne pas \u00eatre en mesure d'\u00e9tablir des connexions aux moteurs de messagerie de passerelle distante.
 NO_DEFAULT_OUTBOUND_SICJ0008.useraction=D\u00e9finissez la cha\u00eene de canaux de messagerie de communications sortantes par d\u00e9faut pour ce serveur d'applications.
 
 # -------------------------------------------------------------------------------------------------
 # {0} the name of the default channel chain which is not defined
 NO_DEFAULT_SECURE_OUTBOUND_SICJ0009=CWSIJ0009W: La cha\u00eene de canaux de messagerie de communications sortantes s\u00e9curis\u00e9es par d\u00e9faut {0} n''est pas d\u00e9finie sur ce serveur d''applications.
-NO_DEFAULT_SECURE_OUTBOUND_SICJ0009.explanation=La cha\u00eene de canaux de messagerie de communications sortantes s\u00e9curis\u00e9es par d\u00e9faut n'est pas d\u00e9finie sur ce serveur d'applications.  Ce serveur d'applications peut ne pas \u00eatre capable d'\u00e9tablir des connexions sur des moteurs de messagerie de passerelle \u00e9loign\u00e9s.
+NO_DEFAULT_SECURE_OUTBOUND_SICJ0009.explanation=La cha\u00eene de canaux de messagerie de communications sortantes s\u00e9curis\u00e9es par d\u00e9faut n'est pas d\u00e9finie sur ce serveur d'applications.  Ce serveur d'applications peut ne pas \u00eatre en mesure d'\u00e9tablir des connexions aux moteurs de messagerie de passerelle distante.
 NO_DEFAULT_SECURE_OUTBOUND_SICJ0009.useraction=D\u00e9finissez une cha\u00eene de canaux de messagerie de communications sortantes s\u00e9curis\u00e9es par d\u00e9faut pour ce serveur d'applications.
 
 # -------------------------------------------------------------------------------------------------
 # {0} the name of the default channel chain which is not defined
 NO_DEFAULT_TUNNELED_OUTBOUND_SICJ0010=CWSIJ0010W: La cha\u00eene de canaux de messagerie de communications sortantes plac\u00e9es en tunnel par d\u00e9faut {0} n''est pas d\u00e9finie sur ce serveur d''applications.
-NO_DEFAULT_TUNNELED_OUTBOUND_SICJ0010.explanation=La cha\u00eene de canaux de messagerie de communications sortantes plac\u00e9es en tunnel par d\u00e9faut n'est pas d\u00e9finie sur ce serveur d'applications.  Ce serveur d'applications peut ne pas \u00eatre capable d'\u00e9tablir des connexions sur des moteurs de messagerie de passerelle \u00e9loign\u00e9s.
+NO_DEFAULT_TUNNELED_OUTBOUND_SICJ0010.explanation=La cha\u00eene de canaux de messagerie de communications sortantes plac\u00e9es en tunnel par d\u00e9faut n'est pas d\u00e9finie sur ce serveur d'applications.  Ce serveur d'applications peut ne pas \u00eatre en mesure d'\u00e9tablir des connexions aux moteurs de messagerie de passerelle distante.
 NO_DEFAULT_TUNNELED_OUTBOUND_SICJ0010.useraction=D\u00e9finissez une cha\u00eene de canaux de messagerie de communications sortantes plac\u00e9es en tunnel par d\u00e9faut pour ce serveur d'applications.
 
 # -------------------------------------------------------------------------------------------------
 # {0} the name of the default channel chain which is not defined
 NO_DEFAULT_TUNNELED_SECURE_OUTBOUND_SICJ0011=CWSIJ0011W: La cha\u00eene de canaux de messagerie de communications sortantes s\u00e9curis\u00e9es et plac\u00e9es en tunnel par d\u00e9faut {0} n''est pas d\u00e9finie sur ce serveur d''applications.
-NO_DEFAULT_TUNNELED_SECURE_OUTBOUND_SICJ0011.explanation=La cha\u00eene de canaux de messagerie de communications sortantes s\u00e9curis\u00e9es et plac\u00e9es en tunnel par d\u00e9faut n'est pas d\u00e9finie sur ce serveur d'applications.  Ce serveur d'applications peut ne pas \u00eatre capable d'\u00e9tablir des connexions sur des moteurs de messagerie de passerelle \u00e9loign\u00e9s.
+NO_DEFAULT_TUNNELED_SECURE_OUTBOUND_SICJ0011.explanation=La cha\u00eene de canaux de messagerie de communications sortantes s\u00e9curis\u00e9es et plac\u00e9es en tunnel par d\u00e9faut n'est pas d\u00e9finie sur ce serveur d'applications.  Ce serveur d'applications peut ne pas \u00eatre en mesure d'\u00e9tablir des connexions aux moteurs de messagerie de passerelle distante.
 NO_DEFAULT_TUNNELED_SECURE_OUTBOUND_SICJ0011.useraction=D\u00e9finissez une cha\u00eene de canaux de messagerie de communications sortantes s\u00e9curis\u00e9es et plac\u00e9es en tunnel par d\u00e9faut pour ce serveur d'applications.
 
 # -------------------------------------------------------------------------------------------------
@@ -571,7 +571,7 @@ CANNOT_STOP_INBOUND_CHAIN_SICJ0084.useraction=Examinez l'exception nomm\u00e9e d
 # -------------------------------------------------------------------------------------------------
 INBOUND_CHAIN_NOT_PERMITTED_SICJ0085=CWSIJ0085I: La de transport de messagerie {0} a \u00e9t\u00e9 arr\u00eat\u00e9e.
 INBOUND_CHAIN_NOT_PERMITTED_SICJ0085.explanation=La cha\u00eene de transport a \u00e9t\u00e9 arr\u00eat\u00e9e \u00e0 la suite d'une modification de configuration de la s\u00e9curit\u00e9 qui se traduit par le fait qu'aucun bus d\u00e9fini sur la cellule n'autorisera l'utilisation de la cha\u00eene.
-INBOUND_CHAIN_NOT_PERMITTED_SICJ0085.useraction=Aucune intervention de l'utilisateur n'est requise.
+INBOUND_CHAIN_NOT_PERMITTED_SICJ0085.useraction=Aucune action n'est requise.
 
 # Emergency use
 # -------------------------------------------------------------------------------------------------

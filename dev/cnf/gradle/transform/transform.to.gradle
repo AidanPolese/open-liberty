@@ -272,10 +272,6 @@ void transformCnf(File sourceRootDir, File targetRootDir) {
         include 'wlp-metatypeValidator.jar'
     }
     copy {
-        from new File(sourceRootDir, 'cnf/release.gradle')
-        into new File(targetRootDir, 'cnf/release')
-    }
-    copy {
         from new File(sourceRootDir, 'cnf/resources/bnd')
         into new File(targetRootDir, 'cnf/resources/bnd')
         include '*.gradle'

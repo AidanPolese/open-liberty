@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed Materials - Property of IBM
+
+  "Restricted Materials of IBM"
+
+  Copyright IBM Corp. 2012 All Rights Reserved.
+
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+-->
+<!DOCTYPE Stats SYSTEM "stats.dtd">
+
+<Stats type="com.ibm.ws.webcontainer.pmi.webAppModuleStats">
+    <description>webAppModule.desc</description>
+    <resourceBundle>com.ibm.ws.pmi.properties.PMIText</resourceBundle>
+    <CountStatistic  ID="1" name="webAppModule.numLoadedServlets">
+        <level>low</level>
+		<unit>unit.none</unit>   
+        <description>webAppModule.numLoadedServlets.desc</description>
+        <comment>Number of servlets that were loaded</comment>
+        <statisticSet>basic</statisticSet>
+    </CountStatistic>
+
+
+    <CountStatistic  ID="2" name="webAppModule.numReloads">
+        <level>low</level>
+		<unit>unit.none</unit>   
+        <description>webAppModule.numReloads.desc</description>
+        <comment>Number of servlets that were reloaded</comment>
+        <statisticSet>basic</statisticSet>
+    </CountStatistic>
+
+
+</Stats>

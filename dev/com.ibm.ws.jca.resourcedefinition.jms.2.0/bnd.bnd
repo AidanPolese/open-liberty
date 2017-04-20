@@ -1,0 +1,61 @@
+# For information on bnd syntax, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: JMS Connection Factory and Destination Resource Definition
+Bundle-SymbolicName: com.ibm.ws.jca.resourcedefinition.jms.2.0
+Bundle-Description: Enables JMSConnectionFactory and JMSDestination Resource Definition; version=${bVersion}
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+
+WS-TraceGroup: JMSRD
+
+Private-Package: \
+    com.ibm.ws.jca.processor.jms.service, \
+    com.ibm.ws.jca.processor.jms.destination, \
+    com.ibm.ws.jca.processor.jms.connectionfactory, \
+    com.ibm.ws.jca.processor.jms.util
+	
+-dsannotations: \
+  com.ibm.ws.jca.processor.jms.connectionfactory.JMSConnectionFactoryDefinitionProcessorProvider, \
+  com.ibm.ws.jca.processor.jms.destination.JMSDestinationDefinitionProcessorProvider
+	
+Service-Component: \
+ com.ibm.ws.jca.processor.jms.service.JMSConnectionFactoryResourceBuilder; \
+    implementation:=com.ibm.ws.jca.processor.jms.service.JMSConnectionFactoryResourceBuilder; \
+    provide:=com.ibm.ws.resource.ResourceFactoryBuilder; \
+    configAdmin=org.osgi.service.cm.ConfigurationAdmin; \
+    variableRegistry=com.ibm.wsspi.kernel.service.location.VariableRegistry; \
+    wsConfigurationHelper=com.ibm.websphere.config.WSConfigurationHelper; \
+    metaTypeService=org.osgi.service.metatype.MetaTypeService; \
+    immediate:=true; \
+    properties:='creates.objectClass=javax.jms.ConnectionFactory',\
+ com.ibm.ws.jca.processor.jms.service.JMSDestinationResourceFactoryBuilder; \
+    implementation:=com.ibm.ws.jca.processor.jms.service.JMSDestinationResourceFactoryBuilder; \
+    provide:=com.ibm.ws.resource.ResourceFactoryBuilder; \
+    configAdmin=org.osgi.service.cm.ConfigurationAdmin; \
+    variableRegistry=com.ibm.wsspi.kernel.service.location.VariableRegistry; \
+    wsConfigurationHelper=com.ibm.websphere.config.WSConfigurationHelper; \
+    metaTypeService=org.osgi.service.metatype.MetaTypeService; \
+    immediate:=true; \
+    properties:='creates.objectClass=javax.jms.Destination'
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.websphere.javaee.jms.2.0;version=latest,\
+	com.ibm.websphere.javaee.connector.1.7;version=latest,\
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.cm.1.5.0;version=latest,\
+	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.wsspi.org.osgi.service.metatype.1.3.0;version=latest,\
+	com.ibm.ws.config;version=latest,\
+	com.ibm.ws.container.service;version=latest,\
+	com.ibm.ws.injection;version=latest,\
+	com.ibm.ws.javaee.dd;version=latest,\
+	com.ibm.ws.javaee.dd.common;version=latest,\
+	com.ibm.ws.jca;version=latest,\
+	com.ibm.ws.jca.cm;version=latest,\
+	com.ibm.ws.logging.core;version=latest,\
+	com.ibm.ws.resource;version=latest

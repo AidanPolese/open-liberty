@@ -1,0 +1,154 @@
+options {
+  IGNORE_CASE = true;
+  STATIC = false;
+}
+
+PARSER_BEGIN(FilterInterpreter)
+/************** Begin Copyright - Do not add comments here **************
+
+ * IBM Confidential OCO Source Material
+ * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2015
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U. S. Copyright Office.
+ * 
+ * Change History:
+ * 
+ * Tag           Person           Defect/Feature      Comments
+ * ----------    ------           --------------      --------------------------------------------------
+ */
+
+package com.ibm.ws.security.wim.scim.parser;
+
+public class FilterInterpreter {
+
+}
+
+PARSER_END(FilterInterpreter)
+
+SKIP :
+{
+  " "
+| "\n"
+| "\r"
+}
+
+TOKEN :
+{
+  < DT: "\""
+        (
+          (["0"-"9"] ["0"-"9"] ["0"-"9"] ["0"-"9"]) "-"
+          (["0"-"1"] ["0"-"9"]) "-"
+          (["0"-"3"] ["0"-"9"]) "T"
+          (["0"-"9"] ["0"-"9"]) ":"
+          (["0"-"9"] ["0"-"9"]) ":"
+          (["0"-"9"] ["0"-"9"])
+        )
+        "\"" >
+|
+  < BOOL: ("true" | "false") >
+|
+  < ATTR_OP: ("eq" | "co" | "sw" | "pr" | "gt" | "ge" | "lt" | "le") >
+|
+  < LGCL_OP: "and" | "or" >
+|
+  < ATTRIBUTE: <LETTER> (<LETTER>|".")* <LETTER> >
+|
+  < NUM: ( <DIGIT> )+ >
+|
+  < LETTER: ["a"-"z"] >
+|
+  < DIGIT: ["0"-"9"] >
+|
+  < STR:
+      "\""
+      (   (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "\""
+  >
+|
+  < LBRACE: "(" >
+| 
+  < RBRACE: ")" >
+
+}
+
+/** 
+ http://www.simplecloud.info/specs/draft-scim-api-01.html#query-resources
+
+ Each expression MUST contain an attribute name followed by an attribute operator and optional value.
+ Multiple expressions MAY be combined using the two logical operators.
+ Furthermore expressions can be grouped together using "()".
+*/
+SimpleNode parse() : {}
+{
+  Expression() <EOF>
+  { return jjtThis; }
+}
+
+void Expression() : {}
+{
+    (SimpleExpression() | ( LBrace() Expression() RBrace() ) ) [ LgclOp() Expression() ]
+}
+
+void LgclOp() :
+{ Token t = null; }
+{
+  t = <LGCL_OP>
+{ jjtThis.value = t.image; }
+}
+
+void RBrace() :
+{ Token t = null; }
+{
+  t = <RBRACE>
+{ jjtThis.value = t.image; }
+}
+
+void LBrace() :
+{ Token t = null; }
+{
+  t = <LBRACE>
+{ jjtThis.value = t.image; }
+}
+
+void SimpleExpression() : {}
+{
+  Attribute() AttrOp() [ Value() ]
+}
+
+void AttrOp() :
+{ Token t = null; }
+{
+  t = <ATTR_OP>
+{ jjtThis.value = t.image; }
+}
+
+void Attribute() :
+{ Token t = null; }
+{
+  t = <ATTRIBUTE>
+{ jjtThis.value = t.image; }
+}
+
+void Value() :
+{ Token t = null; }
+{
+  t = <STR>
+{ jjtThis.value = t.image; }
+|
+  t = <NUM>
+{ jjtThis.value = t.image; }
+|
+  t = <DT>
+{ jjtThis.value = t.image; }
+|
+  t = <BOOL>
+{ jjtThis.value = t.image; }
+}

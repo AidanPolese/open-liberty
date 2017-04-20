@@ -459,7 +459,7 @@ public class LicenseSelfExtractor extends SelfExtractor {
         if (featuresDir.exists()) {
             File[] manifestFiles = featuresDir.listFiles(manifestFilter);
             if (manifestFiles != null) {
-                String invalidFeatures = "";
+                String invalidFeatures = invalidAddonsFeatures.size() == 0 ? "" : (String) invalidAddonsFeatures.get(0);
                 for (int i = 0; i < manifestFiles.length; ++i) {
                     FileInputStream fis = null;
                     File currentManifestFile = null;
@@ -513,6 +513,7 @@ public class LicenseSelfExtractor extends SelfExtractor {
                     }
                 }
                 if (invalidFeatures.length() > 0) {
+                    invalidAddonsFeatures.clear();
                     invalidAddonsFeatures.add(invalidFeatures);
                 }
             }
@@ -574,39 +575,33 @@ public class LicenseSelfExtractor extends SelfExtractor {
         if (rc != ReturnCode.OK)
             return rc;
 
-        if (invalidFeatures.size() > 0) {
-
-            return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_replace_invalidEditonFeatures", new Object[] { InstallUtils.getEditionName(props.getProductEdition()),
-                                                                                                                 invalidFeatures.get(0),
-                                                                                                                 InstallUtils.getEditionName(wlpProductEdition),
-                                                                                                                 "\"bin" + System.getProperty("file.separator") + "installUtility uninstall "
-                                                                                                                                                                 + invalidFeatures.get(0)
-                                                                                                                                                                 + "\"" });
-        }
-
         //Do not check addons in upgrade scenario
         for (int i = 0; i < UPGRADE_EDITION_MATCH.length; i++) {
             if (UPGRADE_EDITION_MATCH[i][0].equalsIgnoreCase(licenseEdition)) {
                 for (int j = 1; j < UPGRADE_EDITION_MATCH[i].length; j++) {
                     if (UPGRADE_EDITION_MATCH[i][j].equalsIgnoreCase(wlpProductEdition)) {
-                        return ReturnCode.OK;
+                        if (invalidFeatures.size() == 0) {
+                            return ReturnCode.OK;
+                        }
                     }
                 }
             }
         }
 
         File addonsDir = new File(outputDir, ASSETS_PREFIX);
-        List invalidAddons = new ArrayList();
-        rc = validateAddonsFeatures(addonsDir, props, invalidAddons);
+        List invalidAddonsFeatures = new ArrayList(invalidFeatures);
+        rc = validateAddonsFeatures(addonsDir, props, invalidAddonsFeatures);
         if (rc != ReturnCode.OK)
             return rc;
 
-        if (invalidFeatures.size() > 0) {
+        if (invalidAddonsFeatures.size() > 0) {
 
             return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_replace_invalidEditonFeatures", new Object[] { InstallUtils.getEditionName(props.getProductEdition()),
-                                                                                                                 invalidAddons.get(0),
+                                                                                                                 invalidAddonsFeatures.get(0),
                                                                                                                  InstallUtils.getEditionName(wlpProductEdition),
-                                                                                                                 "bin/installUtility install " + invalidAddons.get(0) });
+                                                                                                                 "\"bin" + System.getProperty("file.separator") + "installUtility uninstall "
+                                                                                                                                                                 + invalidAddonsFeatures.get(0)
+                                                                                                                                                                 + "\"" });
         }
         return ReturnCode.OK;
     }

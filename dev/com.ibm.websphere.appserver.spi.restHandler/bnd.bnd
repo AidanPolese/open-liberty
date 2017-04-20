@@ -5,9 +5,9 @@ Bundle-Name: WebSphere REST Handler SPI
 Bundle-Description: WebSphere REST Handler SPI, version ${bVersion}
 Bundle-SymbolicName: com.ibm.websphere.appserver.spi.restHandler
 
-Import-Package: com.ibm.wsspi.collective.plugins,com.ibm.wsspi.collective.plugins.helpers,com.ibm.wsspi.rest.api.discovery,com.ibm.wsspi.rest.handler,com.ibm.wsspi.rest.handler.helper
+Import-Package: com.ibm.wsspi.rest.handler,com.ibm.wsspi.rest.handler.helper
 
-Export-Package: com.ibm.wsspi.collective.plugins,com.ibm.wsspi.collective.plugins.helpers,com.ibm.wsspi.rest.api.discovery,com.ibm.wsspi.rest.handler,com.ibm.wsspi.rest.handler.helper
+Export-Package: com.ibm.wsspi.rest.handler,com.ibm.wsspi.rest.handler.helper
 
 -includeresource: {META-INF/maven/com.ibm.websphere.appserver.spi/com.ibm.websphere.appserver.spi.restHandler/pom.xml=com.ibm.websphere.appserver.spi.restHandler.pom}
 
@@ -16,6 +16,4 @@ publish.wlp.jar.suffix: dev/spi/ibm
 -buildpath: \
 	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.rest.handler, \
-	com.ibm.websphere.collective.plugins, \
-	com.ibm.websphere.rest.api.discovery, \
 	com.ibm.ws.rest.handler

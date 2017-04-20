@@ -2,9 +2,6 @@
 -nouses=true
 bVersion=1.0
 
-javac.source: 1.4
-javac.target: 1.4
-
 Bundle-Name: WebSphere Liberty app client bootstrap
 Bundle-SymbolicName: com.ibm.ws.appclient.boot; singleton:=true
 Bundle-Description: WebSphere Liberty app client launcher, version ${bVersion}
@@ -24,3 +21,16 @@ instrument.disabled: true
 -buildpath: \
 	com.ibm.ws.appclient.boot.cmdline;version=latest, \
 	com.ibm.ws.appclient.boot.core;version=latest
+
+-testpath: \
+	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/jmock/legacy/objenesis.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar;version=file, \
+	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \
+	com.ibm.websphere.org.osgi.core.6.0.0;version=latest, \
+	com.ibm.ws.logging;version=latest, \
+	com.ibm.ws.kernel.boot;version=latest

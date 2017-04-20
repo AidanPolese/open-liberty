@@ -80,18 +80,19 @@ public class FATRunner extends BlockJUnit4ClassRunner {
     private static final long TMP_DIR_SIZE_THRESHOLD = 20 * 1024; // 20k
 
     //list of filters to apply
-    private static final Filter[] testFiltersToApply = new Filter[] { new TestModeFilter(), new TestNameFilter(), new FeatureFilter(), new SystemPropertyFilter() };
-    // This filter gets managed separately
-    private static final JavaLevelFilter JAVA_LEVEL_FILTER = new JavaLevelFilter();
-
-    private volatile FrameworkMethod syntheticTest = null;
+    private static final Filter[] testFiltersToApply = new Filter[] {
+                                                                      new TestModeFilter(),
+                                                                      new TestNameFilter(),
+                                                                      new FeatureFilter(),
+                                                                      new SystemPropertyFilter(),
+                                                                      new JavaLevelFilter()
+    };
 
     static {
         Log.info(c, "<clinit>", "Using filters " + Arrays.toString(testFiltersToApply));
     }
 
-    //flag for whether the current test class has any tests to run
-    private boolean hasTestsToRun = true;
+    private boolean hasTests = true;
 
     class FFDCInfo {
         int count;
@@ -120,17 +121,12 @@ public class FATRunner extends BlockJUnit4ClassRunner {
         try {
             //filter any tests, using our list of filters
             filter(new CompoundFilter(testFiltersToApply));
-
-            // Now try again filtering out the tests which can't run on this version of Java
-            // Check to see if this sets a minimum java level that might need independent validation
-            // filter any tests, using our list of filters
-            filter(JAVA_LEVEL_FILTER);
         } catch (NoTestsRemainException e) {
-            //swallow this exception, because we might have Test classes that contain only tests that run in a mode we aren't currently in
-            //log a warning so we know
+            //swallow this exception, because we might have Test classes that contain only tests that
+            // run in a mode we aren't currently in log a warning so we know
             Log.warning(this.getClass(), "All tests were filtered out for class " + getTestClass().getName());
             //set the flag so we can shortcut and avoid wasting time on @BeforeClass etc for stuff we aren't going to run any tests for
-            hasTestsToRun = false;
+            hasTests = false;
         }
     }
 
@@ -142,22 +138,12 @@ public class FATRunner extends BlockJUnit4ClassRunner {
     public List<FrameworkMethod> getChildren() {
         List<FrameworkMethod> unfilteredChildren = super.getChildren();
         unfilteredChildren.addAll(TestServletProcessor.getServletTests(getTestClass()));
-
-        // It seems we only go through this method once but let's be defensive and check if we already stuffed in the synthetic method
-        if (syntheticTest == null || !unfilteredChildren.contains(syntheticTest)) {
-            // Stuff a synthetic test into the list. If it's not needed the filter will remove it again.
-            syntheticTest = JAVA_LEVEL_FILTER.createSyntheticTest();
-            unfilteredChildren.add(syntheticTest);
-        }
         return unfilteredChildren;
     }
 
     @Override
     public void run(RunNotifier notifier) {
-        if (!JavaLevelFilter.hasRealTests())
-            hasTestsToRun = false;
-
-        if (hasTestsToRun) {
+        if (hasTests) {
             injectLibertyServers();
             super.run(notifier);
         }
@@ -171,10 +157,6 @@ public class FATRunner extends BlockJUnit4ClassRunner {
      */
     @Override
     public Statement methodBlock(final FrameworkMethod method) {
-        if (!JavaLevelFilter.hasRealTests()) {
-            return JavaLevelFilter.emptyStatement();
-        }
-
         final Statement superStatement = super.methodBlock(method);
 
         Statement statement = new Statement() {
@@ -291,15 +273,33 @@ public class FATRunner extends BlockJUnit4ClassRunner {
         }
     }
 
+//    @Override
+//    protected Statement withBeforeClasses(Statement statement) {
+//        return hasTestsToRun() ? super.withBeforeClasses(statement) : statement;
+//    }
+//
+//    @Override
+//    protected Statement withAfterClasses(Statement statement) {
+//        return hasTestsToRun() ? super.withAfterClasses(statement) : statement;
+//    }
+//
+//    @Override
+//    @SuppressWarnings("deprecation")
+//    protected Statement withBefores(FrameworkMethod method, Object target, Statement statement) {
+//        return hasTestsToRun() ? super.withBefores(method, target, statement) : statement;
+//    }
+//
+//    @Override
+//    @SuppressWarnings("deprecation")
+//    protected Statement withAfters(FrameworkMethod method, Object target, Statement statement) {
+//        return hasTestsToRun() ? super.withAfters(method, target, statement) : statement;
+//    }
+
     /**
      * Run at the end of the whole test. Tidy up and check for any FFDCs which were produced by the cleanup.
      */
     @Override
     public Statement classBlock(RunNotifier notifier) {
-        if (!JavaLevelFilter.hasRealTests()) {
-            return JavaLevelFilter.emptyStatement();
-        }
-
         final Statement superStatement = super.classBlock(notifier);
 
         Statement statement = new Statement() {

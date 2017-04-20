@@ -1,0 +1,20 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-Name: com.ibm.ws.cdi.1.2.client
+Bundle-SymbolicName: com.ibm.ws.cdi.1.2.client
+Bundle-Description: CDI app client integration, version=${bVersion}
+
+Private-Package: \
+  com.ibm.ws.cdi.client.liberty
+
+-dsannotations: com.ibm.ws.cdi.client.liberty.ClientSecurityContextStore
+
+WS-TraceGroup: JCDI
+
+-buildpath: \
+	com.ibm.websphere.appserver.spi.logging;version=latest,\
+	com.ibm.websphere.security;version=latest,\
+	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0;version=latest,\
+	com.ibm.ws.cdi.1.2.weld.impl;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

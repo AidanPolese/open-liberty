@@ -40,11 +40,21 @@ instrument.disabled: true
 	com.ibm.ws.channelfw;version=latest,\
 	com.ibm.websphere.appserver.api.ssl;version=latest,\
 	com.ibm.websphere.appserver.spi.ssl;version=latest,\
-	com.ibm.websphere.appserver.spi.logging;version=latest,\
 	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
 	com.ibm.websphere.org.osgi.service.cm.1.5.0;version=latest,\
 	com.ibm.websphere.org.osgi.service.component.1.3.0;version=latest,\
 	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
+	com.ibm.ws.logging;version=latest,\
 	com.ibm.ws.timer;version=latest,\
 	com.ibm.ws.event;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+
+#  <property name="extra.vmargs" value="-Dexception.log.enabled=false" />
+
+-testpath: \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	com.ibm.ws.kernel.boot;version=latest

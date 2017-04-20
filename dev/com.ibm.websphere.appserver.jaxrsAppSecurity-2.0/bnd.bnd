@@ -1,0 +1,10 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.jaxrsAppSecurity-2.0
+
+publish.feature.resources: *.mf
+
+-buildpath: \
+	com.ibm.websphere.appserver.appSecurity-2.0;version=latest, \
+	com.ibm.ws.jaxrs.2.0.security;version=latest

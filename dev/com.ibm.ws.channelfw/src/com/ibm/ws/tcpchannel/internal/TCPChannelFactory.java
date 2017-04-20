@@ -22,6 +22,7 @@ import com.ibm.websphere.channelfw.ChannelFactoryData;
 import com.ibm.websphere.channelfw.OutboundChannelDefinition;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.channelfw.internal.ChannelFrameworkImpl;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.wsspi.channelfw.Channel;
 import com.ibm.wsspi.channelfw.ChannelFactory;
@@ -71,8 +72,9 @@ public class TCPChannelFactory implements ChannelFactory, CrossRegionSharable {
         // Note, this call will throw an exception if any properties are invalid.
         new TCPFactoryConfiguration(data.getProperties());
 
+        boolean asyncIOEnabled = ChannelFrameworkImpl.getRef().getAsyncIOEnabled();
         // see if an alternate Comm channel class was specified, if so load it
-        commClassName = TCPFactoryConfiguration.getCommClass();
+        commClassName = TCPFactoryConfiguration.getCommClass(asyncIOEnabled);
         if (commClassName != null) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "Using comm class name [" + commClassName + "]");
@@ -154,7 +156,7 @@ public class TCPChannelFactory implements ChannelFactory, CrossRegionSharable {
         boolean isOverrideClassUsed = false;
         if ((!newCC.isNIOOnly())
             && (commClass != null)
-            && (ZosAio.isZosAioRegistered())) {
+            && (ChannelFrameworkImpl.getRef().getAsyncIOEnabled())) {
             try {
                 channel = (TCPChannel) commClass.newInstance();
                 ChannelTermination ct = channel.setup(channelData, newCC, this);

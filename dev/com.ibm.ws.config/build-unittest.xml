@@ -1,5 +1,0 @@
-<project name="com.ibm.ws.config_test" default="unittest">
-  <property name="unittest.disable.logging.instrument" value="true" />
-  <import file="../ant_build/public_imports/standard_imports.xml"/>
-  <import file="../ant_build/public_imports/unittest_imports.xml"/>
-</project>

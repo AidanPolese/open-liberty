@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2010, 2015
+# (C) COPYRIGHT International Business Machines Corp. 2010, 2017
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -500,6 +500,10 @@ LOG_VALIDATION_DONE=Convalida del file di configurazione completata correttament
 LOG_DELETING_TEMP_SERVER_DIR=Eliminazione della directory server temporanea {0}...
 LOG_NOT_DELETING_TEMP_SERVER_DIR=La directory server temporanea {0} non \u00e8 stata eliminata perch\u00e9 potrebbe contenere informazioni di errore nella directory logs. Se non sono necessarie le informazioni, \u00e8 possibile eliminare manualmente la directory {1}.
 LOG_CREATED_TEMP_SERVER_DIR=Directory server temporanea {0} creata.
+
+LOG_CANNOT_CLOSE_OBJECT=Impossibile eliminare i file temporanei.
+LOG_CANNOT_CLOSE_OBJECT.explanation=L'esempio richiede Java 7 o successive per eliminare la directory installTmp.
+LOG_CANNOT_CLOSE_OBJECT.action=Rimuovere manualmente la directory installTmp o utilizzare Java 7 o successive.
 
 LOG_PASSWORD_NOT_ENCODED_PROXY=La password per il seguente proxy non \u00e8 codificata: {0}. \u00c8 possibile codificare la password eseguendo il comando securityUtility encode con l''opzione --encoding impostata su un tipo di codifica supportato, cio\u00e8 xor (valore predefinito), aes e hash. Ad esempio: securityUtility encode --encoding=aes proxyPassword
 LOG_PENDING_UNINSTALLING_FEATURE=Funzioni da disinstallare:

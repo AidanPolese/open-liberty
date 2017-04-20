@@ -14,4 +14,5 @@ publish.feature.resources: **
 	com.ibm.websphere.appserver.connectionManagement-1.0;version=latest, \
 	com.ibm.websphere.appserver.requestProbes-1.0;version=latest, \
 	com.ibm.ws.jdbc;version=latest, \
+	com.ibm.ws.jdbc.4.0;version=latest, \
 	com.ibm.ws.jdbc.4.1;version=latest

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0"  
+                   xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
+                   localization="OSGI-INF/l10n/metatype">
+
+  <Designate factoryPid="com.ibm.ws.javaee.metadata.context">
+    <Object ocdref="com.ibm.ws.javaee.metadata.context"/>
+  </Designate>
+
+  <OCD id="com.ibm.ws.javaee.metadata.context" ibm:extendsAlias="!jeeMetadataContext" ibm:extends="com.ibm.wsspi.threadcontext.config" name="%javaee.metadata.context.provider" description="%javaee.metadata.context.provider.desc">
+    <AD id="config.parentPID" type="String" required="false" name="internal" description="internal use only"/>
+  </OCD>
+
+</metatype:MetaData>

@@ -70,7 +70,7 @@ public class WSJdbcPreparedStatement extends WSJdbcStatement implements Prepared
     /**
      * Do not use. Constructor exists only for CallableStatement wrapper.
      */
-    protected WSJdbcPreparedStatement() 
+    public WSJdbcPreparedStatement() 
     {
         poolabilityHint = true; // Default for prepared statements. 
     }
@@ -86,7 +86,7 @@ public class WSJdbcPreparedStatement extends WSJdbcStatement implements Prepared
      * 
      * @throws SQLException if an error occurs making the PreparedStatement wrapper.
      */
-    protected WSJdbcPreparedStatement(PreparedStatement pstmtImplObject, WSJdbcConnection connWrapper,
+    public WSJdbcPreparedStatement(PreparedStatement pstmtImplObject, WSJdbcConnection connWrapper,
                                       int theHoldability, String pstmtSQL) 
     throws SQLException 
     {
@@ -132,7 +132,7 @@ public class WSJdbcPreparedStatement extends WSJdbcStatement implements Prepared
      * 
      * @throws SQLException if an error occurs making the PreparedStatement wrapper.
      */
-    protected WSJdbcPreparedStatement(PreparedStatement pstmtImplObject, WSJdbcConnection connWrapper,
+    public WSJdbcPreparedStatement(PreparedStatement pstmtImplObject, WSJdbcConnection connWrapper,
                                       int theHoldability, String pstmtSQL, 
                                       StatementCacheKey pstmtKey) throws SQLException 
     {
@@ -306,7 +306,7 @@ public class WSJdbcPreparedStatement extends WSJdbcStatement implements Prepared
         // Attempt to cache the statement.
         else
             try {
-                if (!pstmtImpl.getMoreResults() && (mcf.getHelper().getUpdateCount(pstmtImpl) == -1)) { 
+                if (!pstmtImpl.getMoreResults() && (mcf.getHelper().getUpdateCount(this) == -1)) { 
                     // Reset any statement properties that have changed. 
                     if (haveStatementPropertiesChanged) {
                         if (isTraceOn && tc.isDebugEnabled())
@@ -546,42 +546,6 @@ public class WSJdbcPreparedStatement extends WSJdbcStatement implements Prepared
         return numUpdates;
     }
 
-    public long executeLargeUpdate() throws SQLException {
-        final boolean isTraceOn = TraceComponent.isAnyTracingEnabled(); 
-
-        if (isTraceOn && tc.isEntryEnabled())
-            Tr.entry(this, tc, "executeLargeUpdate"); 
-
-        long numUpdates;
-        try {
-            if (childWrapper != null)
-                closeAndRemoveResultSet();
-
-            if (childWrappers != null && !childWrappers.isEmpty())
-                closeAndRemoveResultSets();
-
-            parentWrapper.beginTransactionIfNecessary();
-
-            enforceStatementProperties();
-
-            numUpdates = mcf.jdbcRuntime.executeLargeUpdate(pstmtImpl);
-        } catch (SQLException x) {
-            // No FFDC code needed. Might be an application error.  
-            if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "executeLargeUpdate", x); 
-            throw WSJdbcUtil.mapException(this, x);
-        } catch (RuntimeException x) {
-            // No FFDC code needed; we might be closed.
-            if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "executeLargeUpdate", x); 
-            throw x;
-        } 
-
-        if (isTraceOn && tc.isEntryEnabled())
-            Tr.exit(this, tc, "executeLargeUpdate", numUpdates); 
-        return numUpdates;
-    }
-        
     public String getSql(){
         return sql;         
     }
@@ -643,13 +607,13 @@ public class WSJdbcPreparedStatement extends WSJdbcStatement implements Prepared
             // empty, set the result set to childWrapper;
             // Otherwise, add the result set to childWrappers
             if (childWrapper == null && (childWrappers == null || childWrappers.isEmpty())) {
-                childWrapper = rsetWrapper = new WSJdbcResultSet(rsetImpl, this);
+                childWrapper = rsetWrapper = mcf.jdbcRuntime.newResultSet(rsetImpl, this);
                 if (trace &&  tc.isDebugEnabled())
                     Tr.debug(tc, "Set the result set to child wrapper"); 
             } else {
                 if (childWrappers == null) 
                     childWrappers = new ArrayList<Wrapper>(5); 
-                rsetWrapper = new WSJdbcResultSet(rsetImpl, this);
+                rsetWrapper = mcf.jdbcRuntime.newResultSet(rsetImpl, this);
                 childWrappers.add(rsetWrapper);
                 if (trace && tc.isDebugEnabled())
                     Tr.debug(tc, "Add the result set to child wrappers list."); 
@@ -695,13 +659,13 @@ public class WSJdbcPreparedStatement extends WSJdbcStatement implements Prepared
 
             WSJdbcResultSet rsetWrapper;
             if (childWrapper == null && (childWrappers == null || childWrappers.isEmpty())) {
-                childWrapper = rsetWrapper = new WSJdbcResultSet(rsetImpl, this);
+                childWrapper = rsetWrapper = mcf.jdbcRuntime.newResultSet(rsetImpl, this);
                 if (TraceComponent.isAnyTracingEnabled() &&  tc.isDebugEnabled()) Tr.debug(tc, "Set the result set to child wrapper");  
             }
             else {
                 if (childWrappers == null) 
                     childWrappers = new ArrayList<Wrapper>(5); 
-                rsetWrapper = new WSJdbcResultSet(rsetImpl, this);
+                rsetWrapper = mcf.jdbcRuntime.newResultSet(rsetImpl, this);
                 childWrappers.add(rsetWrapper);
                 if (isTraceOn && tc.isDebugEnabled()) Tr.debug(tc, 
                     "Add the result set to child wrappers list."); 

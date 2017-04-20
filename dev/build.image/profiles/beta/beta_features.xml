@@ -15,6 +15,7 @@
 	<feature>logstashCollector-1.1</feature>
 	<feature>microProfileConfig-0.1</feature>
     <feature>microProfileFaultTolerance-0.1</feature>
+    <feature>socialLogin-1.0</feature>
     <feature>validator-1.0</feature>
 
 	<!--  The following features are already available and have beta enhancements to them -->

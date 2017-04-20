@@ -541,7 +541,7 @@ public class DB2JCCHelper extends DB2Helper {
         Object rtnctx = null; 
         try {
             if (mc.cachedConnection == null) {
-                mc.cachedConnection = new WSJdbcConnection(mc, mc.sqlConn, WSRdbManagedConnectionImpl.key, mc.threadID);
+                mc.cachedConnection = mcf.jdbcRuntime.newConnection(mc, mc.sqlConn, WSRdbManagedConnectionImpl.key, mc.threadID);
                 mc.cachedConnection.initialize(mc.mcf.connMgr, WSRdbManagedConnectionImpl.key);
                 mc.cachedConnection.setCurrentAutoCommit(mc.currentAutoCommit, WSRdbManagedConnectionImpl.key);
             } else { 

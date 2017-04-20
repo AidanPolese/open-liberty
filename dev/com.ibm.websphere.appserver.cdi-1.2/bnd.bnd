@@ -23,7 +23,7 @@ publish.feature.resources: **
 	com.ibm.websphere.appserver.transaction-1.2;version=latest,\
 	com.ibm.websphere.appserver.javax.servlet-3.1;version=latest,\
 	com.ibm.websphere.appserver.internal.slf4j-1.7.7;version=latest,\
-	com.ibm.ws.org.jboss.weld.2.4.2;version=latest,\
+	com.ibm.ws.org.jboss.weld.2.4.3;version=latest,\
 	com.ibm.ws.org.jboss.jdeparser.1.0.0;version=latest,\
 	com.ibm.ws.managedobject;version=latest,\
 	com.ibm.ws.org.jboss.logging.3.3.0;version=latest,\

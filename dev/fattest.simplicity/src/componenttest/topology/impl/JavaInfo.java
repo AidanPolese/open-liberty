@@ -3,7 +3,6 @@ package componenttest.topology.impl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +15,18 @@ import com.ibm.websphere.simplicity.log.Log;
 public class JavaInfo {
     private static Class<?> c = JavaInfo.class;
     private static Map<String, JavaInfo> cache = new HashMap<String, JavaInfo>();
+
+    public static int JAVA_VERSION = JavaInfo.forCurrentVM().majorVersion();
+
+    public static JavaInfo forCurrentVM() {
+        String javaHome = System.getProperty("java.home");
+        JavaInfo info = cache.get(javaHome);
+        if (info == null) {
+            info = new JavaInfo();
+            cache.put(javaHome, info);
+        }
+        return info;
+    }
 
     /**
      * Get the JavaInfo for a given JDK path
@@ -37,7 +48,7 @@ public class JavaInfo {
      * <ol>
      * <li> ${server.config.dir}/server.env
      * <li> ${wlp.install.dir}/etc/server.env
-     * <li> JAVA_HOME of the system
+     * <li> JAVA_HOME returned by LibertyServer.getMachineJavaJDK()
      * </ol>
      */
     public static JavaInfo forServer(LibertyServer server) throws IOException {
@@ -45,9 +56,13 @@ public class JavaInfo {
         return fromPath(serverJava);
     }
 
+    /**
+     * The java.vendor of the JDK. Note that Sun and Oracle JDKs are considered to be the same.
+     */
     public static enum Vendor {
         IBM,
-        ORACLE
+        SUN_ORACLE,
+        UNKNOWN
     }
 
     final String JAVA_HOME;
@@ -60,6 +75,34 @@ public class JavaInfo {
         MAJOR = major;
         MINOR = minor;
         VENDOR = v;
+
+        Log.info(c, "<init>", this.toString());
+    }
+
+    private JavaInfo() {
+        JAVA_HOME = System.getProperty("java.home");
+
+        // Parse MAJOR and MINOR versions
+        String specVersion = System.getProperty("java.specification.version");
+        String[] versions = specVersion.split("[^0-9]"); // split on non-numeric chars
+        // Offset for 1.MAJOR.MINOR vs. MAJOR.MINOR version syntax
+        int offset = "1".equals(versions[0]) ? 1 : 0;
+        if (versions.length <= offset)
+            throw new IllegalStateException("Bad Java runtime version string: " + specVersion);
+        MAJOR = Integer.parseInt(versions[offset]);
+        MINOR = versions.length < (2 + offset) ? 0 : Integer.parseInt(versions[(1 + offset)]);
+
+        // Parse vendor
+        String vendorInfo = System.getProperty("java.vendor").toLowerCase();
+        if (vendorInfo.contains("ibm")) {
+            VENDOR = Vendor.IBM;
+        } else if (vendorInfo.contains("oracle") || vendorInfo.contains("sun")) {
+            VENDOR = Vendor.SUN_ORACLE;
+        } else {
+            VENDOR = Vendor.UNKNOWN;
+        }
+
+        Log.info(c, "<init>", this.toString());
     }
 
     public int majorVersion() {
@@ -98,12 +141,18 @@ public class JavaInfo {
         Log.info(c, m, vendorInfo);
 
         // Parse vendor
-        Vendor v = vendorInfo.toLowerCase().contains("ibm") ? Vendor.IBM : Vendor.ORACLE;
+        Vendor v;
+        if (vendorInfo.toLowerCase().contains("ibm")) {
+            v = Vendor.IBM;
+        } else if (vendorInfo.toLowerCase().contains("oracle")) {
+            v = Vendor.SUN_ORACLE;
+        } else {
+            v = Vendor.UNKNOWN;
+        }
 
         // Parse major/minor versions
         versionInfo = versionInfo.substring(versionInfo.indexOf('"') + 1, versionInfo.lastIndexOf('"'));
         String[] versions = versionInfo.split("[^0-9]"); // split on non-numeric chars
-        System.out.println(Arrays.toString(versions));
 
         // Offset for 1.MAJOR.MINOR vs. MAJOR.MINOR version syntax
         int offset = "1".equals(versions[0]) ? 1 : 0;

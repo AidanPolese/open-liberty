@@ -1,0 +1,44 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2011.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+#
+# ORIGINS: 27         (used for IBM originated files)
+#
+# Caution: because some text editors automatically convert
+# consecutive runs of spaces to tabs, use the Java "\ " escape
+# sequence to represent each space in a run of multiple spaces.
+#
+# translator:
+# Translate words on the right hand side of the = sign.
+# Do not translate {0}, {1}, %1, %2 etc.
+# Do NOT translate any words when they START with: '-
+# Do NOT translate any words when they START with: @
+# Preserve all spaces after a backslash (\) even at the end of a line.
+#
+# NLS_MESSAGEFORMAT_ALL
+#
+#CMVCPATHNAME com.ibm.ws.jaxrs-2.0.cdi/resources/com/ibm/ws/jaxrs20/cdi/internal/resources/JAXRSCDIMessages.nlsprops
+#ISMESSAGEFILE TRUE
+#COMPONENTPREFIX CWWKW
+#COMPONENTNAMEFOR CWWKW WebSphere JAXRS20 CDI Integration Code
+#RANGE 1000 - 1099
+#
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+#
+
+# -------------------------------------------------------------------------------------------------
+# JAXRS 2.0 CDI Message ------------------------
+warning.jaxrs.cdi.resource=CWWKW1000W: La port\u00e9e de JAXRS-2.0 Resource {0} est {1}. Liberty obtient l''instance de ressource de {2}.
+warning.jaxrs.cdi.resource.explanation=Liberty obtient l'instance de ressource de JAXRS s'il ne peut pas obtenir l'instance de CDI.
+warning.jaxrs.cdi.resource.useraction=Aucune action n'est requise. 
+
+warning.jaxrs.cdi.resource.mismatch=CWWKW1001W: La port\u00e9e {1} de JAXRS-2.0 Resource {0} ne correspond pas \u00e0 la port\u00e9e CDI {2}. Liberty obtient l''instance de ressource de {3}.
+warning.jaxrs.cdi.resource.mismatch.explanation=Si la port\u00e9e JAXRS-2.0 Resource ne correspond pas \u00e0 la port\u00e9e CDI et si l'instance de ressource existe dans CDI, Liberty obtient l'instance de ressource de CDI. L'instance inclut pas l'injection CDI si elle provient de JAXRS.
+warning.jaxrs.cdi.resource.mismatch.useraction=Aucune action n'est requise. 
+
+warning.jaxrs.cdi.provider.mismatch=CWWKW1002W: La port\u00e9e CDI de JAXRS-2.0 Provider {0} est {1}. Liberty obtient l''instance de fournisseur de {2}.
+warning.jaxrs.cdi.provider.mismatch.explanation=L'instance de fournisseur est Singleton uniquement. Liberty obtient l'instance de fournisseur de CDI si la port\u00e9e CDI du fournisseur est de type Dependent ou ApplicationScoped. L'instance inclut pas l'injection CDI si elle provient de JAXRS.
+warning.jaxrs.cdi.provider.mismatch.useraction=Aucune action n'est requise.

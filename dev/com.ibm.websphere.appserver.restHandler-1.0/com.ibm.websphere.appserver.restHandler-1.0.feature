@@ -15,12 +15,10 @@ IBM-SPI-Package: com.ibm.wsspi.rest.handler; type="ibm-spi", \
  com.ibm.websphere.appserver.httptransport-1.0, \
  com.ibm.websphere.appserver.json-1.0, \
  com.ibm.wsspi.appserver.webBundle-1.0
--bundles=com.ibm.websphere.collective.plugins, \
- com.ibm.ws.org.joda.time.1.6.2, \
+-bundles=com.ibm.ws.org.joda.time.1.6.2, \
  com.ibm.websphere.jsonsupport, \
  com.ibm.ws.rest.handler, \
- com.ibm.websphere.rest.handler, \
- com.ibm.websphere.rest.api.discovery
+ com.ibm.websphere.rest.handler
 -jars=com.ibm.websphere.appserver.spi.restHandler; location:=dev/spi/ibm/
 -files=dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.restHandler_1.5-javadoc.zip
 kind=ga

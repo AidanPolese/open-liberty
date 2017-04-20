@@ -291,11 +291,11 @@ public class TCPFactoryConfiguration implements FFDCSelfIntrospectable {
      * 
      * @return String
      */
-    public static String getCommClass() {
+    public static String getCommClass(boolean asyncIOEnabled) {
         // Check to see if the TCP class has been changed from its default value.
         // If it hasn't and the native z/OS AIO support is ready and able then update the
         // class to use the native z/OS support.
-        if ((commClass != null) && commClass.equals(commClassNio) && ZosAio.isZosAioRegistered()) {
+        if ((commClass != null) && commClass.equals(commClassNio) && asyncIOEnabled) {
             commClass = commClassAio;
         }
 

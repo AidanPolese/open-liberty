@@ -1,0 +1,4 @@
+<project name="com.ibm.ws.ejbcontainer.remote.client.server" default="build">
+	<import file="../ant_build/public_imports/standard_imports.xml"/>
+	<property name="skip.findbugs" value="true"/>
+</project>
