@@ -276,7 +276,7 @@ public class InfoStoreTest {
 
         ClassInfo bInfo = infoStore.getDelayableClassInfo(BClass.class.getCanonicalName());
         methods = new ArrayList<MethodInfo>(bInfo.getMethods());
-        removeMethod(methods, subInfo, "publicMethod", "()V");
+        removeMethod(methods, bInfo, "publicMethod", "()V");
         removeMethod(methods, bInfo, "publicMethod", "(I)Ljava/lang/Number;"); // Number
         removeMethod(methods, bInfo, "publicMethod", "(I)Ljava/lang/Integer;"); // Integer
         removeMethod(methods, subInfo, "protectedMethod", "()Ljava/util/Map;");

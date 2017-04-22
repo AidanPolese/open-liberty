@@ -17,6 +17,6 @@ before_install:
 install: ./gradlew cnf:initialize --no-daemon
 
 
-script: ./gradlew build --no-daemon
+script: ./gradlew build --no-daemon --continue
 
 
