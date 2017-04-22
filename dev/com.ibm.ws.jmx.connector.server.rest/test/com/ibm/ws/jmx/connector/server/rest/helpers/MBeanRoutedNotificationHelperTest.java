@@ -5,8 +5,8 @@
  *
  * WLP Copyright IBM Corp. 2013, 2016
  *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
  * U.S. Copyright Office.
  */
 package com.ibm.ws.jmx.connector.server.rest.helpers;
@@ -36,13 +36,13 @@ import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 
+import test.common.SharedOutputManager;
+
 import com.ibm.ws.jmx.connector.converter.JSONConverter;
 import com.ibm.ws.jmx.connector.converter.NotificationTargetInformation;
 import com.ibm.ws.jmx.connector.server.rest.notification.ClientNotificationArea;
 import com.ibm.ws.jmx.connector.server.rest.notification.ClientNotificationListener;
 import com.ibm.wsspi.rest.handler.helper.RESTRoutingHelper;
-
-import test.common.SharedOutputManager;
 
 /**
  *

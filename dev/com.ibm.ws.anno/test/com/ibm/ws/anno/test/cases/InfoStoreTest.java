@@ -204,7 +204,7 @@ public class InfoStoreTest {
 
         info = infoStore.getDelayableClassInfo(BClass.class.getCanonicalName());
         methods = getMethods(info.getMethods(), "publicMethod");
-        Assert.assertEquals(2, methods.size()); // Integer & Number
+        Assert.assertEquals(3, methods.size()); // Integer & Number
         method = methods.get(0);
         if (!method.getReturnTypeName().equals("java.lang.Integer")) {
             method = methods.get(1);
@@ -276,8 +276,9 @@ public class InfoStoreTest {
 
         ClassInfo bInfo = infoStore.getDelayableClassInfo(BClass.class.getCanonicalName());
         methods = new ArrayList<MethodInfo>(bInfo.getMethods());
-        removeMethod(methods, bInfo, "publicMethod", "()V");
-        removeMethod(methods, subInfo, "publicMethod", "(I)Ljava/lang/Number;");
+        removeMethod(methods, subInfo, "publicMethod", "()V");
+        removeMethod(methods, bInfo, "publicMethod", "(I)Ljava/lang/Number;"); // Number
+        removeMethod(methods, bInfo, "publicMethod", "(I)Ljava/lang/Integer;"); // Integer
         removeMethod(methods, subInfo, "protectedMethod", "()Ljava/util/Map;");
         removeMethod(methods, bInfo, "privateMethod", "()V");
         removeMethod(methods, subInfo, "privateMethod", "()V");

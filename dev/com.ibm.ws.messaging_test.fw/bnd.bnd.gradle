@@ -12,7 +12,7 @@ publish.wlp.jar.disabled: true
 	com.ibm.websphere.javaee.jms.2.0;version=latest,\
 	com.ibm.ws.messaging.utils;version=latest,\
 	com.ibm.ws.container.service;version=latest,\
-	com.ibm.ws.logging.core;version=latest,\
+	com.ibm.ws.logging;version=latest,\
 	com.ibm.ws.messaging.common;version=latest,\
 	com.ibm.ws.messaging.runtime;version=latest, \
 	com.ibm.websphere.javaee.connector.1.6;version=latest, \

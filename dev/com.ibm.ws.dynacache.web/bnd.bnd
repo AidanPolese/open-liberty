@@ -46,7 +46,7 @@ instrument.disabled: true
 	com.ibm.ws.common.encoder;version=latest, \
 	com.ibm.ws.container.service;version=latest,\
 	com.ibm.ws.webcontainer;version=latest,\
-	com.ibm.ws.logging.core,\
+	com.ibm.ws.logging;version=latest,\
 	com.ibm.websphere.javaee.jsp.2.2;version=latest,\
 	com.ibm.websphere.appserver.spi.kernel.service,\
 	com.ibm.ws.jsp;version=latest,\
@@ -60,5 +60,6 @@ instrument.disabled: true
 	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
 	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
 	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	com.ibm.ws.kernel.boot;version=latest,\
 	com.ibm.websphere.org.osgi.service.component.1.3.0,\
 	com.ibm.ws.resource;version=latest
