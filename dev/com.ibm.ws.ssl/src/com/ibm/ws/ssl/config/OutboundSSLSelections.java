@@ -221,13 +221,14 @@ public class OutboundSSLSelections {
 
         String connInfoRemoteHost = (String) connectionInfo.get(Constants.CONNECTION_INFO_REMOTE_HOST);
         String connInfoRemotePort = (String) connectionInfo.get(Constants.CONNECTION_INFO_REMOTE_PORT);
+        Tr.debug(tc, "Host from connectionInfo is " + connInfoRemoteHost + " and port from connectionInfo is " + connInfoRemotePort);
 
         /***
          * Look through all of the SSLConfigs in this list which all contain a
          * property with values for com.ibm.ssl.dynamicSelectionInfo.
          ***/
 
-        if (connInfoRemoteHost != null && connInfoRemotePort != null) {
+        if (connInfoRemoteHost != null) {
             SSLConfig sslCfg = lookForMatchInList(dynamicHostPortSelections, connInfoRemoteHost, connInfoRemotePort);
 
             if (sslCfg != null) {

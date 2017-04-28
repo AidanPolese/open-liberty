@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2015
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.repository.connections.liberty;
@@ -68,7 +68,7 @@ public class MainRepository {
 
     /**
      * Creates a LoginInfoEntry with a proxy. This will then load the default repository using a hosted properties file on DHE.
-     * 
+     *
      * @param proxy
      * @throws RepositoryBackendIOException
      */
@@ -113,7 +113,7 @@ public class MainRepository {
     /**
      * Tests if the repository description properties file exists as defined by the
      * location override system property or at the default location
-     * 
+     *
      * @return true if the properties file exists, otherwise false
      */
     public static boolean repositoryDescriptionFileExists(RestRepositoryConnectionProxy proxy) {
@@ -127,8 +127,7 @@ public class MainRepository {
 
                 if (proxy.isHTTPorHTTPS()) {
 
-                    Proxy javaNetProxy = new Proxy(Proxy.Type.HTTP,
-                                    new InetSocketAddress(proxy.getProxyURL().getHost(), proxy.getProxyURL().getPort()));
+                    Proxy javaNetProxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy.getProxyURL().getHost(), proxy.getProxyURL().getPort()));
                     URLConnection connection = propertiesFileURL.openConnection(javaNetProxy);
                     InputStream is = connection.getInputStream();
 
@@ -173,13 +172,13 @@ public class MainRepository {
 
                         if (proxy.isHTTPorHTTPS()) {
 
-                            Proxy javaNetProxy = new Proxy(Proxy.Type.HTTP,
-                                            new InetSocketAddress(proxy.getProxyURL().getHost(), proxy.getProxyURL().getPort()));
+                            Proxy javaNetProxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy.getProxyURL().getHost(), proxy.getProxyURL().getPort()));
                             URLConnection connection = propertiesFileURL.openConnection(javaNetProxy);
 
                             checkHttpResponseCodeValid(connection);
 
                             Reader reader = new InputStreamReader(connection.getInputStream(), "UTF-8");
+
                             props = new Properties();
                             try {
                                 props.load(reader);
@@ -193,12 +192,14 @@ public class MainRepository {
 
                         } else {
                             // The proxy is not an HTTP or HTTPS proxy we do not support this
+
                             UnsupportedOperationException ue = new UnsupportedOperationException("Non-HTTP proxy not supported");
                             throw new IOException(ue);
                         }
 
                     } else {
                         URLConnection connection = propertiesFileURL.openConnection();
+
                         checkHttpResponseCodeValid(connection);
 
                         Reader reader = new InputStreamReader(propertiesFileURL.openStream(), "UTF-8");
@@ -255,7 +256,7 @@ public class MainRepository {
 
     /**
      * Checks for a valid response code and throws and exception with the response code if an error
-     * 
+     *
      * @param connection
      * @throws RepositoryHttpException
      * @throws IOException

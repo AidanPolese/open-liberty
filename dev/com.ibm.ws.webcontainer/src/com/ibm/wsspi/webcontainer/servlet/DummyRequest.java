@@ -681,4 +681,14 @@ public class DummyRequest implements HttpServletRequest, IExtendedRequest {
         return 0;
     }
 
+    /* (non-Javadoc)
+     * @see com.ibm.wsspi.webcontainer.servlet.IExtendedRequest#setValuesIfMultiReadofPostdataEnabled()
+     */
+    @Override
+    public void setValuesIfMultiReadofPostdataEnabled() {
+        // TODO Auto-generated method stub
+        
+    }
+
+
 }

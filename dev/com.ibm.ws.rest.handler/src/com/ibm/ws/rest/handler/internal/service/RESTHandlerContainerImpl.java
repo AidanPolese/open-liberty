@@ -41,6 +41,8 @@ import com.ibm.wsspi.rest.handler.RESTHandler;
 import com.ibm.wsspi.rest.handler.RESTHandlerContainer;
 import com.ibm.wsspi.rest.handler.RESTRequest;
 import com.ibm.wsspi.rest.handler.RESTResponse;
+import com.ibm.wsspi.rest.handler.helper.DefaultAuthorizationHelper;
+import com.ibm.wsspi.rest.handler.helper.DefaultRoutingHelper;
 import com.ibm.wsspi.rest.handler.helper.RESTHandlerInternalError;
 import com.ibm.wsspi.rest.handler.helper.RESTHandlerJsonException;
 import com.ibm.wsspi.rest.handler.helper.RESTHandlerMethodNotAllowedError;
@@ -62,6 +64,9 @@ public class RESTHandlerContainerImpl implements RESTHandlerContainer {
     private static final TraceComponent tc = Tr.register(RESTHandlerContainerImpl.class);
 
     static final String REST_HANDLER_REF = "restHandler";
+
+    private final String KEY_AUTHORIZATION_HELPER = "authorizationHelper";
+    private final AtomicServiceReference<DefaultAuthorizationHelper> authorizationHelperRef = new AtomicServiceReference<DefaultAuthorizationHelper>(KEY_AUTHORIZATION_HELPER);
 
     private final String KEY_ROUTING_HELPER = "routingHelper";
     private final AtomicServiceReference<RESTRoutingHelper> routingHelperRef = new AtomicServiceReference<RESTRoutingHelper>(KEY_ROUTING_HELPER);
@@ -89,6 +94,7 @@ public class RESTHandlerContainerImpl implements RESTHandlerContainer {
     @Activate
     protected void activate(ComponentContext context, Map<String, Object> properties) {
         handlerMap.activate(context);
+        authorizationHelperRef.activate(context);
         routingHelperRef.activate(context);
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(this, tc, "Activating RESTHandlerContainer", properties);
@@ -98,6 +104,7 @@ public class RESTHandlerContainerImpl implements RESTHandlerContainer {
     @Deactivate
     protected void deactivate(ComponentContext context, int reason) {
         handlerMap.deactivate(context);
+        authorizationHelperRef.deactivate(context);
         routingHelperRef.deactivate(context);
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(this, tc, "Deactivating, reason=" + reason);
@@ -166,6 +173,25 @@ public class RESTHandlerContainerImpl implements RESTHandlerContainer {
         }
 
         return routingHelper;
+    }
+
+    @Reference(service = DefaultAuthorizationHelper.class, name = KEY_AUTHORIZATION_HELPER)
+    protected void setAuthorizationHelper(ServiceReference<DefaultAuthorizationHelper> authorizationHelper) {
+        authorizationHelperRef.setReference(authorizationHelper);
+    }
+
+    protected void unsetAuthorizationHelper(ServiceReference<DefaultAuthorizationHelper> authorizationHelper) {
+        authorizationHelperRef.unsetReference(authorizationHelper);
+    }
+
+    protected DefaultAuthorizationHelper getAuthorizationHelper() throws IOException {
+        DefaultAuthorizationHelper authorizationHelper = authorizationHelperRef.getService();
+
+        if (authorizationHelper == null) {
+            throw new IOException(Tr.formatMessage(tc, "OSGI_SERVICE_ERROR", "DefaultAuthorizationHelper"));
+        }
+
+        return authorizationHelper;
     }
 
     @Reference(service = RESTHandler.class,
@@ -385,7 +411,7 @@ public class RESTHandlerContainerImpl implements RESTHandlerContainer {
     public boolean handleRequest(RESTRequest request, RESTResponse response) throws IOException {
         final String requestURL = request.getContextPath() + request.getPath();
         final HandlerInfo handlerInfo = getHandler(requestURL);
-        final boolean isRouting = getRoutingHelper().containsLegacyRoutingContext(request) || getRoutingHelper().containsRoutingContext(request);
+        final boolean isRouting = DefaultRoutingHelper.containsLegacyRoutingContext(request) || DefaultRoutingHelper.containsRoutingContext(request);
 
         if (handlerInfo == null && !isRouting) {
             //calling proxy servlet will handle this case 
@@ -399,10 +425,8 @@ public class RESTHandlerContainerImpl implements RESTHandlerContainer {
                 //The first argument will be true if we're routing the call and a corresponding service wasn't present on this controller
                 if (handlerInfo == null || !hasProperty(handlerInfo.handlerRef, RESTHandler.PROPERTY_REST_HANDLER_CUSTOM_SECURITY)) {
                     //This path is not performing custom security, so check for default authorization
-                    if (!request.isUserInRole("Administrator")) {
-                        //Not in admin role, so built error msg
-                        //TODO: Translate msg
-                        response.sendError(403, "Administrator role needed.");
+                    if (!getAuthorizationHelper().checkAdministratorRole(request, response)) {
+                        //We failed the check, so return true, since the default authorization helper would have filled up the response already.
                         return true;
                     }
                 }

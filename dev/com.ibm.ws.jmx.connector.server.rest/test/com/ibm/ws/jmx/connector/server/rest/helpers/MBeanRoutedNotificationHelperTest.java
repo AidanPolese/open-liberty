@@ -107,7 +107,7 @@ public class MBeanRoutedNotificationHelperTest {
 
         notificationHelper = new MBeanRoutedNotificationHelper();
         notificationHelper.setEventAdminRef(eventAdminRef);
-        notificationHelper.setRoutingHelperRef(routingHelperRef);
+        notificationHelper.setRoutingHelper(routingHelperRef);
         notificationHelper.activate(cc);
     }
 
@@ -121,7 +121,7 @@ public class MBeanRoutedNotificationHelperTest {
         });
 
         notificationHelper.deactivate(cc);
-        notificationHelper.unsetRoutingHelperRef(routingHelperRef);
+        notificationHelper.unsetRoutingHelper(routingHelperRef);
         notificationHelper.unsetEventAdminRef(eventAdminRef);
         notificationHelper = null;
 
@@ -155,9 +155,6 @@ public class MBeanRoutedNotificationHelperTest {
 
         mock.checking(new Expectations() {
             {
-                one(routingHelper).routingAvailable();
-                will(returnValue(true));
-
                 one(eventAdmin).postEvent(with(any(Event.class)));
                 one(eventAdmin).postEvent(with(any(Event.class)));
             }

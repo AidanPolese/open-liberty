@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2012, 2014
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package wlp.lib.extract;
@@ -25,6 +25,7 @@ public class ReturnCode {
     public static final int UNREADABLE = 2;
     public static final int BAD_INPUT = 3;
     public static final int BAD_OUTPUT = 4;
+    public static final int NOT_APPLICABLE_FEATURE = 5;
 
     private final int code;
     private final String msgKey;
@@ -68,7 +69,6 @@ public class ReturnCode {
     }
 
     public Object[] getParameters() {
-        return (null == params || params.length == 0) ?
-                        new Object[0] : Arrays.copyOf(params, params.length);
+        return (null == params || params.length == 0) ? new Object[0] : Arrays.copyOf(params, params.length);
     }
 }

@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2014, 2015
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.security.csiv2.server.config.css;
@@ -15,6 +15,7 @@ import java.util.Map;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.websphere.ssl.SSLException;
 import com.ibm.ws.security.csiv2.Authenticator;
 import com.ibm.ws.security.csiv2.config.css.CommonClientCfg;
 import com.ibm.ws.security.csiv2.server.TraceConstants;
@@ -24,6 +25,9 @@ import com.ibm.ws.transport.iiop.security.config.css.CSSSASITTAbsent;
 import com.ibm.ws.transport.iiop.security.config.css.CSSSASITTAnonymous;
 import com.ibm.ws.transport.iiop.security.config.css.CSSSASITTPrincipalNameDynamic;
 import com.ibm.ws.transport.iiop.security.config.css.CSSSASMechConfig;
+import com.ibm.ws.transport.iiop.security.config.css.CSSSSLTransportConfig;
+import com.ibm.ws.transport.iiop.security.config.css.CSSTransportMechConfig;
+import com.ibm.ws.transport.iiop.security.config.tss.OptionsKey;
 import com.ibm.wsspi.kernel.service.utils.SerializableProtectedString;
 
 /**
@@ -36,6 +40,21 @@ public class ClientConfigHelper extends CommonClientCfg {
 
     public ClientConfigHelper(Authenticator authenticator, String domain, String defaultAlias) {
         super(authenticator, domain, defaultAlias, TYPE);
+    }
+
+    @Override
+    protected CSSTransportMechConfig extractSSLTransport(Map<String, Object> transportLayerProperties) throws SSLException {
+        String sslRef = (String) transportLayerProperties.get(KEY_SSL_REF);
+        CSSSSLTransportConfig transportLayerConfig = new CSSSSLTransportConfig();
+        if (sslRef != null) {
+            OptionsKey options = sslConfig.getAssociationOptions(sslRef);
+            transportLayerConfig.setSupports(options.supports);
+            transportLayerConfig.setRequires(options.requires);
+            transportLayerConfig.setSslConfigName(sslRef);
+        } else {
+            transportLayerConfig.setOutboundSSLReference();
+        }
+        return transportLayerConfig;
     }
 
     @Override

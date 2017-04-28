@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2013, 2014
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.install.internal.cmdline;
@@ -59,7 +59,7 @@ public class InstallExecutor {
     }
 
     // strip off any punctuation or other noise, see if the rest appears to be a help request.
-    // note that the string is already trim()'d by command-line parsing unless user explicitly escaped a space 
+    // note that the string is already trim()'d by command-line parsing unless user explicitly escaped a space
     private static boolean looksLikeHelp(String taskname) {
         if (taskname == null)
             return false; // applied paranoia, since this isn't in a performance path

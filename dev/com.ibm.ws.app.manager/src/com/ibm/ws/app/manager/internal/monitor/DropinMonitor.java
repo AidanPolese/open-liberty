@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2011, 2013
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.app.manager.internal.monitor;
@@ -45,6 +45,7 @@ import com.ibm.wsspi.kernel.filemonitor.FileMonitor;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.location.WsLocationConstants;
 import com.ibm.wsspi.kernel.service.utils.FilterUtils;
+import com.ibm.wsspi.kernel.service.utils.FrameworkState;
 
 /**
  * App manager file monitoring service which monitors a given directory for applications being added/deleted and starts/stops them as
@@ -117,7 +118,7 @@ public class DropinMonitor {
 
         /**
          * {@inheritDoc}
-         * 
+         *
          * This is called when the initial scan completes on setup and returns a list of files already in
          * the dropins directory. It starts these applications.
          */
@@ -132,9 +133,9 @@ public class DropinMonitor {
          */
         /**
          * {@inheritDoc}
-         * 
+         *
          * This method is called each time a scan of the dropins directory completes.
-         * 
+         *
          */
         @Override
         public void onChange(Collection<File> createdFiles, Collection<File> modifiedFiles, Collection<File> deletedFiles) {
@@ -173,6 +174,9 @@ public class DropinMonitor {
                         mon.setProperty(FileMonitor.MONITOR_FILTER, ".*"); // find all types of file (including folders)
                         mon.setProperty(FileMonitor.MONITOR_DIRECTORIES, new String[] { filePath });
 
+                        // Don't register new file monitors while we're shutting down
+                        if (FrameworkState.isStopping())
+                            return;
                         mon.register(_ctx, FileMonitor.class, new FileMonitorImpl(name, filePath));
                     }
                 } else {
@@ -196,7 +200,7 @@ public class DropinMonitor {
 
     /**
      * Initialize the dropins manager based on configured properties
-     * 
+     *
      * @param properties
      * @return
      */
@@ -248,7 +252,7 @@ public class DropinMonitor {
     /**
      * Set the properties for the _coreMonitor that are modifiable. All others
      * are set when this component activates ( {@link DropinMonitor#activate()} ).
-     * 
+     *
      * @param config
      */
     private void configureCoreMonitor(ApplicationMonitorConfig config) {
@@ -287,7 +291,7 @@ public class DropinMonitor {
     /**
      * Clean up the monitored directory if we built it and it is empty.
      * (i.e. clean up after ourselves if we can)
-     * 
+     *
      */
     private void tidyUpMonitoredDirectory(boolean createdDir, File dirToCleanup) {
         if (createdDir && dirToCleanup != null) {
@@ -306,9 +310,9 @@ public class DropinMonitor {
     /**
      * Takes a file and a pid and will stop the file with that PID from running, and remove the pid to app
      * mapping from the app pid mapper
-     * 
+     *
      * @param ca
-     * 
+     *
      * @param currentFile the application's file (can be file or directory)
      */
     private void stopApplication(File currentFile) {
@@ -343,7 +347,7 @@ public class DropinMonitor {
 
     /**
      * Returns the message helper for the specified application handler type.
-     * 
+     *
      * @param type application handler type
      * @param fileName file name from which type can be inferred if not specified
      * @return the message helper for the specified application handler type.
@@ -354,9 +358,7 @@ public class DropinMonitor {
             if (parts.length > 0) {
                 String last = parts[parts.length - 1];
                 int dot = last.indexOf('.');
-                type = dot >= 0
-                                ? last.substring(dot + 1)
-                                : parts.length > 1 ? parts[parts.length - 2] : null;
+                type = dot >= 0 ? last.substring(dot + 1) : parts.length > 1 ? parts[parts.length - 2] : null;
             }
         }
         if (type != null)
@@ -382,11 +384,11 @@ public class DropinMonitor {
     /**
      * Takes a file and an optional file type, and updates the file. If no type is given it will use the
      * extension of the file given.
-     * 
+     *
      * @param ca the configuration admin service.
      * @param currentFile the file of the application to install. Can be a directory
      * @param type the type of the application.
-     * 
+     *
      */
     private void startApplication(File currentFile, String type) {
         if (_tc.isEventEnabled()) {
@@ -423,7 +425,7 @@ public class DropinMonitor {
 
     /**
      * Not thread safe: only call from threadsafe method
-     * 
+     *
      * @param newMonitoredFolder
      * @return
      */

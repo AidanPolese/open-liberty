@@ -10,11 +10,6 @@
  *
  * Tag          Person   	Defect/Feature      Comments
  * ----------   ------   	--------------      --------------------------------------------------
- *		ankit_jain	  92798			Change the NLS formatting method for exception message
- *            suraj_chandegave    93943         SVT: FFDC logs generated for each incorrect user/password during login with LDAP
- * 04/15/2015   suraj_chandegave    168255          Test Failure (20150319-1329): com.ibm.ws.security.wim.registry.fat.DefaultWIMRealmTest.checkPasswordWithInvalidUser
- * 05/07/2015   rzunzarr           172850           Modified code to remove duplicate error messages in message.log
- * 11/17/2015   rzunzarr           195133           Modified code to display CWIML4538E error message about duplicate group name.
  */
 
 package com.ibm.ws.security.wim.registry.util;
@@ -34,6 +29,7 @@ import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.security.registry.EntryNotFoundException;
 import com.ibm.ws.security.registry.RegistryException;
 import com.ibm.ws.security.wim.registry.dataobject.IDAndRealm;
+import com.ibm.ws.security.wim.util.SchemaConstantsInternal;
 import com.ibm.wsspi.security.wim.SchemaConstants;
 import com.ibm.wsspi.security.wim.exception.EntityNotFoundException;
 import com.ibm.wsspi.security.wim.exception.InvalidIdentifierException;
@@ -49,13 +45,8 @@ import com.ibm.wsspi.security.wim.model.SearchControl;
 /**
  * Bridge class for mapping user and group unique ID methods.
  *
- * @author Ankit Jain
  */
 public class UniqueIdBridge {
-    /**
-     * Copyright notice.
-     */
-    private static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
 
     private static final TraceComponent tc = Tr.register(UniqueIdBridge.class);
 
@@ -158,7 +149,7 @@ public class UniqueIdBridge {
 
             // Add context for URBridge
             Context context = new Context();
-            context.setKey(SchemaConstants.IS_URBRIDGE_RESULT);
+            context.setKey(SchemaConstantsInternal.IS_URBRIDGE_RESULT);
             context.setValue("false");
             root.getContexts().add(context);
 
@@ -174,7 +165,7 @@ public class UniqueIdBridge {
                     throw e;
             }
 
-         // Did you find data in URBridge
+            // Did you find data in URBridge
             boolean foundInURBridge = false;
             if (resultRoot != null && !resultRoot.getEntities().isEmpty()) {
                 // Determine if the return object to check if the context was set.
@@ -182,7 +173,7 @@ public class UniqueIdBridge {
                 for (Context ctx : contexts) {
                     String key = ctx.getKey();
 
-                    if (key != null && Service.IS_URBRIDGE_RESULT.equals(key)) {
+                    if (key != null && SchemaConstantsInternal.IS_URBRIDGE_RESULT.equals(key)) {
                         if ("true".equalsIgnoreCase((String) ctx.getValue()))
                             foundInURBridge = true;
                     }
@@ -295,7 +286,7 @@ public class UniqueIdBridge {
         } catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, methodName + " " + toCatch.getMessage());
+                Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
             }
             // if (tc.isErrorEnabled()) {
             //     Tr.error(tc, toCatch.getMessage());
@@ -310,21 +301,21 @@ public class UniqueIdBridge {
             }
         }
 
-     // Determine if the returned object to check if the context was set.
+        // Determine if the returned object to check if the context was set.
         String isURBrigeResult = "false";
         if (root != null) {
             List<Context> contexts = root.getContexts();
             for (Context contextInput : contexts) {
                 String key = contextInput.getKey();
 
-                if (key != null && Service.IS_URBRIDGE_RESULT.equals(key)) {
+                if (key != null && SchemaConstantsInternal.IS_URBRIDGE_RESULT.equals(key)) {
                     isURBrigeResult = String.valueOf(contextInput.getValue());
                 }
             }
         }
 
         HashMap<String, String> result = new HashMap<String, String>();
-        result.put(Service.IS_URBRIDGE_RESULT, isURBrigeResult);
+        result.put(SchemaConstantsInternal.IS_URBRIDGE_RESULT, isURBrigeResult);
         result.put("RESULT", returnValue);
 
         return result;
@@ -459,7 +450,7 @@ public class UniqueIdBridge {
         } catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, methodName + " " + toCatch.getMessage());
+                Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
             }
             // if (tc.isErrorEnabled()) {
             //     Tr.error(tc, toCatch.getMessage());

@@ -39,7 +39,6 @@ Service-Component: \
 instrument.classesExcludes: com/ibm/ws/jaxrs20/client/internal/resources/*.class
     
 -buildpath: \
-	${javac.bootclasspath.java7}, \
 	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.1.8.jar;version=file,\
 	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-frontend-jaxrs-3.1.8.jar;version=file,\
 	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-client-3.1.8.jar;version=file,\
@@ -49,6 +48,7 @@ instrument.classesExcludes: com/ibm/ws/jaxrs20/client/internal/resources/*.class
 	com.ibm.ws.artifact;version=latest,\
 	com.ibm.ws.artifact.overlay;version=latest,\
 	com.ibm.ws.container.service;version=latest,\
+	com.ibm.ws.kernel.service;version=latest,\
 	com.ibm.ws.webcontainer.security;version=latest,\
 	com.ibm.websphere.javaee.jaxrs.2.0;version=latest,\
 	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
@@ -56,6 +56,5 @@ instrument.classesExcludes: com/ibm/ws/jaxrs20/client/internal/resources/*.class
 	com.ibm.websphere.appserver.spi.logging,\
 	com.ibm.websphere.org.osgi.core.6.0.0,\
 	com.ibm.websphere.org.osgi.service.component.1.3.0,\
-	com.ibm.websphere.appserver.spi.kernel.service,\
 	com.ibm.wsspi.org.osgi.service.component.annotations.1.3.0,\
 	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest

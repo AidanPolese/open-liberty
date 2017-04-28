@@ -107,11 +107,12 @@ public class CDIManagedObjectService implements ManagedObjectService {
 
     @Override
     public <T> ManagedObjectFactory<T> createEJBManagedObjectFactory(ModuleMetaData mmd, Class<T> klass, String ejbName) throws ManagedObjectException {
+        ManagedObjectFactory<T> defaultEJBManagedObjectFactory = getDefaultManagedObjectService().createEJBManagedObjectFactory(mmd, klass, ejbName);
         if (isCDIEnabled(mmd)) {
-            return new CDIEJBManagedObjectFactoryImpl<T>(klass, ejbName, getCDIRuntime());
+            return new CDIEJBManagedObjectFactoryImpl<T>(klass, ejbName, getCDIRuntime(), defaultEJBManagedObjectFactory);
         }
         else {
-            return getDefaultManagedObjectService().createEJBManagedObjectFactory(mmd, klass, ejbName);
+            return defaultEJBManagedObjectFactory;
         }
     }
 

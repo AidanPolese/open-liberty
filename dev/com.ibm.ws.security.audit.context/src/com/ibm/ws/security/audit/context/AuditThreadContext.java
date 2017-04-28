@@ -24,16 +24,35 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class AuditThreadContext {
 
-    private HttpServletRequest auditReq;
+    private Object auditReq;
+    private Object auditWebReq;
+    private String auditRealm;
     private ArrayList<String> delegatedUsers;
 
-    public void setHttpServletRequest(HttpServletRequest req) {
+    public void setHttpServletRequest(Object req) {
         auditReq = req;
     }
 
-    public HttpServletRequest getHttpServletRequest() {
+    public Object getHttpServletRequest() {
         return auditReq;
     }
+    
+    public void setWebRequest(Object webreq) {
+    	auditWebReq = webreq;
+    }
+    
+    public Object getWebRequest() {
+    	return auditWebReq;
+    }
+    
+    public void setRealm(String realm) {
+    	auditRealm = realm;
+    }
+    
+    public String getRealm() {
+    	return auditRealm;
+    }
+
 
     public void setDelegatedUsers(ArrayList<String> delUsers) {
         if (delUsers != null) {

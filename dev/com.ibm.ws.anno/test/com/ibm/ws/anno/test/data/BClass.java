@@ -32,6 +32,11 @@ public class BClass extends SubBase implements CIntf {
     @Override
     public void publicMethod() {}
 
+    @Override
+    public Integer publicMethod(int n) {
+        return null;
+    }
+
     private void privateMethod() {}
 
     @Override

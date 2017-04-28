@@ -208,6 +208,7 @@ public abstract class WebAppConfiguration extends BaseConfiguration implements W
     private boolean disableStaticMappingCache = false;      //PM84305
     private Map jspCachedLocations = null;
     private String primedSTSHeader = null;
+    private boolean enablemultireadofpostdata = false; //MultiRead
 
     /**
      * Constructor.
@@ -2071,5 +2072,46 @@ public abstract class WebAppConfiguration extends BaseConfiguration implements W
         return this.encodeDispatchedRequestURI;
     }
 
+    //MultiRead Start
+    /**
+     * @return
+     */
+    public boolean isEnablemultireadofpostdata() {
+        return this.enablemultireadofpostdata;
+    }
+    
+    public void setMultiReadOfPostDataValue() {
+        String multiRead  = null;
+        if (this.contextParams != null){
+            multiRead = (String) this.contextParams.get("com.ibm.ws.webcontainer.SET_MULTI_READ_WEBAPP");
+            if (multiRead != null){
+                if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))
+                    logger.logp(Level.FINE, CLASS_NAME,"setMultiReadOfPostDataValue", "cxtParam provided for MULTI_READ: "+multiRead +" in web application -> "+ applicationName);                                              
+
+                if(multiRead.equalsIgnoreCase("true")){
+                    this.setEnablemultireadofpostdata(true);
+                }
+                else if(multiRead.equalsIgnoreCase("false")){
+                    this.setEnablemultireadofpostdata(false);
+                }
+                return;
+            }
+        }
+        //if null check server level property
+        if(multiRead == null) {
+            this.setEnablemultireadofpostdata(WCCustomProperties.ENABLE_MULTI_READ_OF_POST_DATA);
+        }
+    }
+    
+    /**
+     * @param enablemultireadofpostdata the enablemultireadofpostdata to set
+     */
+    private void setEnablemultireadofpostdata(boolean enablemultireadofpostdata) {
+        if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))
+            logger.logp(Level.FINE, CLASS_NAME,"setEnablemultireadofpostdata", "set enablemultireadofpostdata: "+enablemultireadofpostdata);                                              
+
+        this.enablemultireadofpostdata = enablemultireadofpostdata;
+    }
+    //MultiRead End
 
 }

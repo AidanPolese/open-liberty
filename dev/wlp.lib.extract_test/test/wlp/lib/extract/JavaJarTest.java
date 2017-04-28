@@ -59,6 +59,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.aries.util.manifest.BundleManifest;
 import org.apache.aries.util.manifest.ManifestProcessor;
 import org.junit.After;
@@ -70,6 +74,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 import org.osgi.framework.Version;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import test.common.SharedOutputManager;
 import wlp.lib.extract.platform.Platform;
@@ -80,9 +86,9 @@ public class JavaJarTest {
     private static final File outputUploadDir;
     private static boolean disableTestSuite;
     private static boolean runCoreTest;
-    private static final File Repo8555 = new File("https://ausgsa.ibm.com/gsa/ausgsa/projects/l/liberty.shipped/liberty/WAS85.LIBERTY/shipped/cl50520150305-2202.21.linux/linux/zipper/externals/installables/");
-    private static final File Repo8556 = new File("https://ausgsa.ibm.com/gsa/ausgsa/projects/l/liberty.shipped/liberty/WAS85.LIBERTY/shipped/cl50620150610-1749.56.linux/linux/zipper/externals/installables/");
-    private static final File Repo8557 = new File("https://ausgsa.ibm.com/gsa/ausgsa/projects/l/liberty.shipped/liberty/WAS85.LIBERTY/shipped/cl50720150827-0437.55.linux/linux/zipper/externals/installables/");
+    private static final File Repo8555 = new File("old_version_jar/8555");
+    private static final File Repo8556 = new File("old_version_jar/8556");
+    private static final File Repo8557 = new File("old_version_jar/8557");
 
     // ***IMPORTANT***
     // Mac and Sun builds do NOT produce the wlp-developers-8.5.0.0.zip. Until they do, we need to
@@ -146,6 +152,7 @@ public class JavaJarTest {
     private static final File samplesNdLicDir = new File("build/unittest/samplesndlictmp");
     private static final File samplesBaseLicDir = new File("build/unittest/samplesbaselictmp");
     private static final File samplesWlpDir = new File(samplesTmpDir, "wlp");
+    private static final File samplesMavenDir = new File("build/unittest/samplesmaventmp");
 
     private static final File dummySampleJar = new File("build/dummySample/output/dummySample.jar");
     private static final File dummySampleFileErrorJar = new File("build/dummySampleFileError/output/dummySampleFileError.jar");
@@ -161,6 +168,7 @@ public class JavaJarTest {
     private static final int EXIT_OK = 0;
     private static final int EXIT_BAD_INPUT = 3;
     private static final int EXIT_EXTRACT_ERROR = 4;
+    private static final int NOT_APPLICABLE_FEATURE = 5;
 
     private static final String LA_PREFIX = "wlp/lafiles/LA_";
     private static final String LI_PREFIX = "wlp/lafiles/LI_";
@@ -283,10 +291,13 @@ public class JavaJarTest {
                 jarFilePrefix = "wlp-nd-license";
                 break;
         }
-        File[] files = outputUploadDir.listFiles();
-        if (repo != null) {
+        File[] files;
+        if (repo == null) {
+            files = outputUploadDir.listFiles();
+        } else {
             files = repo.listFiles();
         }
+
         if (files != null) {
             for (File file : files) {
                 String name = file.getName();
@@ -866,6 +877,14 @@ public class JavaJarTest {
         }
 
         return wasProperty;
+    }
+
+    private String getXMLProperty(String property, File propertyFile) throws IOException, ParserConfigurationException, SAXException {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Document document = documentBuilder.parse(propertyFile);
+        String xmlProperty = document.getElementsByTagName(property).item(0).getTextContent();
+        return xmlProperty;
     }
 
     private void setManifestProperty(String property, String value, File manifestFile) throws IOException {
@@ -2405,8 +2424,8 @@ public class JavaJarTest {
             Assert.assertFalse("Original Edition fixpack tag still exists", originalFxTag.exists());
             Assert.assertFalse("Original Edition software tag still exists", originalSwTag.exists());
             return;
-        } else if (expectedExit == EXIT_EXTRACT_ERROR) {
-            Collection<String> output = execute(null, null, null, licenseJar, null, new String[0], EXIT_EXTRACT_ERROR,
+        } else if (expectedExit == NOT_APPLICABLE_FEATURE) {
+            Collection<String> output = execute(null, null, null, licenseJar, null, new String[0], NOT_APPLICABLE_FEATURE,
                                                 input("x", "x", "1", samplesLicenseDowngradeDir.getAbsolutePath() + "/wlp"),
                                                 find("Use the following command to uninstall these features before applying the license"));
             File toolsEdition = new File(samplesLicenseDowngradeDir, "wlp/bin/tools");
@@ -2462,8 +2481,8 @@ public class JavaJarTest {
         if (expectedExit == EXIT_OK) {
             execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
                     input("x", "x", "1", samplesILANDowngradeDir.getAbsolutePath() + "/wlp"));
-        } else if (expectedExit == EXIT_EXTRACT_ERROR) {
-            Collection<String> output = execute(null, null, null, licenseJar, null, new String[0], EXIT_EXTRACT_ERROR,
+        } else if (expectedExit == NOT_APPLICABLE_FEATURE) {
+            Collection<String> output = execute(null, null, null, licenseJar, null, new String[0], NOT_APPLICABLE_FEATURE,
                                                 input("x", "x", "1", samplesILANDowngradeDir.getAbsolutePath() + "/wlp"),
                                                 find("Use the following command to uninstall these features before applying the license"));
             File toolsEdition = new File(samplesILANDowngradeDir, "wlp/bin/tools");
@@ -2484,12 +2503,12 @@ public class JavaJarTest {
 
     @Test
     public void testDowngradeEdition() throws Exception {
-        testLegalDowngradeEditionHelper(WlpJarType.ND, WlpJarType.BASE_LIC, "ND", "BASE", EXIT_EXTRACT_ERROR);
+        testLegalDowngradeEditionHelper(WlpJarType.ND, WlpJarType.BASE_LIC, "ND", "BASE", NOT_APPLICABLE_FEATURE);
         if (runCoreTest) {
             //in this case, testLegalUpgradeEditionHelper can be used here
-            testLegalDowngradeEditionHelper(WlpJarType.ND, WlpJarType.CORE_LIC, "ND", "LIBERTY_CORE", EXIT_EXTRACT_ERROR);
+            testLegalDowngradeEditionHelper(WlpJarType.ND, WlpJarType.CORE_LIC, "ND", "LIBERTY_CORE", NOT_APPLICABLE_FEATURE);
             testLegalDowngradeEditionHelper(WlpJarType.BASE, WlpJarType.CORE_LIC, "BASE", "LIBERTY_CORE", EXIT_OK);
-            testLegalDowngradeZipHelper("wlp-javaee7-", WlpJarType.CORE_LIC, "BASE_ILAN", "LIBERTY_CORE", EXIT_EXTRACT_ERROR);
+            testLegalDowngradeZipHelper("wlp-javaee7-", WlpJarType.CORE_LIC, "BASE_ILAN", "LIBERTY_CORE", NOT_APPLICABLE_FEATURE);
             testLegalDowngradeZipHelper("wlp-webProfile7-", WlpJarType.CORE_LIC, "BASE_ILAN", "LIBERTY_CORE", EXIT_OK);
         }
 
@@ -2569,14 +2588,14 @@ public class JavaJarTest {
         if (expectedExit == EXIT_OK) {
             execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
                     input("x", "x", "1", samplesBundleDowngradeDir.getAbsolutePath() + "/wlp"));
-        } else if (expectedExit == EXIT_EXTRACT_ERROR) {
+        } else if (expectedExit == NOT_APPLICABLE_FEATURE) {
             String bundle_name = "";
             if (originalEdition == "ND") {
                 bundle_name = "ndMemberBundle";
             } else if (originalEdition == "BASE") {
                 bundle_name = "baseBundle";
             }
-            Collection<String> output = execute(null, null, null, licenseJar, null, new String[0], EXIT_EXTRACT_ERROR,
+            Collection<String> output = execute(null, null, null, licenseJar, null, new String[0], NOT_APPLICABLE_FEATURE,
                                                 input("x", "x", "1", samplesBundleDowngradeDir.getAbsolutePath() + "/wlp"), find(bundle_name),
                                                 find("Use the following command to uninstall these features before applying the license"));
             File toolsEdition = new File(samplesBundleDowngradeDir, "wlp/bin/tools");
@@ -2607,9 +2626,9 @@ public class JavaJarTest {
         if (!runCoreTest || disableTestSuite) {
             return;
         }
-        testDowngradeWithBundleHelper(WlpJarType.ND, WlpJarType.BASE_LIC, "ND", "BASE", EXIT_EXTRACT_ERROR);
-        testDowngradeWithBundleHelper(WlpJarType.ND, WlpJarType.CORE_LIC, "ND", "LIBERTY_CORE", EXIT_EXTRACT_ERROR);
-        testDowngradeWithBundleHelper(WlpJarType.BASE, WlpJarType.CORE_LIC, "BASE", "LIBERTY_CORE", EXIT_EXTRACT_ERROR);
+        testDowngradeWithBundleHelper(WlpJarType.ND, WlpJarType.BASE_LIC, "ND", "BASE", NOT_APPLICABLE_FEATURE);
+        testDowngradeWithBundleHelper(WlpJarType.ND, WlpJarType.CORE_LIC, "ND", "LIBERTY_CORE", NOT_APPLICABLE_FEATURE);
+        testDowngradeWithBundleHelper(WlpJarType.BASE, WlpJarType.CORE_LIC, "BASE", "LIBERTY_CORE", NOT_APPLICABLE_FEATURE);
     }
 
     private void testOldVersionDowngradeHelper(WlpJarType installationJar, WlpJarType licenseJar, String originalEdition, String targetEdition, File repo) throws Exception {
@@ -2653,6 +2672,7 @@ public class JavaJarTest {
 
     }
 
+    @Test
     public void testOldVersionDowngrade() throws Exception {
         if (disableTestSuite) {
             return;
@@ -2889,6 +2909,73 @@ public class JavaJarTest {
             }
         }
         return true;
+    }
+
+    public void maventestHelper(WlpJarType installationJar, String nameprefix) throws Exception {
+
+        if (disableTestSuite) {
+            return;
+        }
+        if (samplesMavenDir.exists() && samplesMavenDir.listFiles().length > 0)
+            deleteDir(samplesMavenDir);
+        Assert.assertTrue("mkdir -p " + samplesMavenDir.getAbsolutePath(), samplesMavenDir.mkdirs() || samplesMavenDir.isDirectory());
+
+        File zipfile = null;
+        File[] files = outputUploadDir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                String name = file.getName();
+                if (file.isFile() && name.startsWith(nameprefix) && name.endsWith(".jar")) {
+                    zipfile = file;
+                }
+            }
+        }
+        Assert.assertTrue("Failed to extract the jar license file", unzip(zipfile, samplesMavenDir));
+
+        // Check the existence of the files in the META-INF directory
+        File propertyFile = new File(samplesMavenDir, "META-INF/maven/com.ibm.websphere.appserver.license/" + nameprefix + "/pom.properties");
+        Assert.assertTrue("The " + propertyFile.getAbsolutePath() + " file does not exist", propertyFile.exists());
+        File xmlFile = new File(samplesMavenDir, "META-INF/maven/com.ibm.websphere.appserver.license/" + nameprefix + "/pom.xml");
+        Assert.assertTrue("The " + xmlFile.getAbsolutePath() + " file does not exist", xmlFile.exists());
+
+        //check the content of the pom.properties file
+        File wlpproperties = new File(samplesMavenDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
+        Assert.assertTrue(wlpproperties.getAbsolutePath() + "doesn't exist", wlpproperties.exists());
+
+        String version_wlp = getWASProperty("com.ibm.websphere.productVersion", wlpproperties);
+        String version_meta = getWASProperty("version", propertyFile);
+
+        Assert.assertEquals("The version in wlp is:" + version_wlp + " , in META is:" + version_meta + " , doesn't match", version_wlp, version_meta);
+        Assert.assertEquals("groupID is not correct", getWASProperty("groupId", propertyFile), "com.ibm.websphere.appserver.license");
+        Assert.assertEquals("artifactID is not correct", getWASProperty("artifactId", propertyFile), nameprefix);
+
+        //check the content of the pom.xml file
+        Assert.assertEquals("groupID is not correct in xml file", getXMLProperty("groupId", xmlFile),
+                            "com.ibm.websphere.appserver.license");
+        Assert.assertEquals("artifactID is not correct in xml file", getXMLProperty("artifactId", xmlFile), nameprefix);
+        Assert.assertEquals("version is not correct in xml file", getXMLProperty("version", xmlFile), version_wlp);
+
+        if (nameprefix == "wlp-base-license") {
+            Assert.assertEquals("description is not correct in xml file", getXMLProperty("description", xmlFile),
+                                "WebSphere Application Server Liberty " + version_wlp + " License");
+        } else if (nameprefix == "wlp-nd-license") {
+            Assert.assertEquals("description is not correct in xml file", getXMLProperty("description", xmlFile),
+                                "WebSphere Application Server Liberty Network Deployment " + version_wlp + " License");
+        } else if (nameprefix == "wlp-core-license") {
+            Assert.assertEquals("description is not correct in xml file", getXMLProperty("description", xmlFile),
+                                "WebSphere Application Server Liberty Core " + version_wlp + " License");
+        }
+        deleteDir(samplesMavenDir);
+        return;
+    }
+
+    @Test
+    public void maventest() throws Exception {
+        maventestHelper(WlpJarType.BASE_LIC, "wlp-base-license");
+        maventestHelper(WlpJarType.ND_LIC, "wlp-nd-license");
+        if (runCoreTest) {
+            maventestHelper(WlpJarType.CORE_LIC, "wlp-core-license");
+        }
     }
 
     /**

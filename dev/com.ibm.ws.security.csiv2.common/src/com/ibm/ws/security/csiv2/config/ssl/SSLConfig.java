@@ -256,4 +256,35 @@ public class SSLConfig {
 
         return null;
     }
+
+    /**
+     * @param host - Remote host of the connection
+     * @param port - Remote port of the connection
+     * @return String - default SSL configuration alias name
+     * @throws SSLException
+     */
+    @FFDCIgnore(PrivilegedActionException.class)
+    public String getSSLAlias(String host, int port) throws SSLException {
+        final Map<String, Object> connectionInfo = new HashMap<String, Object>();
+        connectionInfo.put(Constants.CONNECTION_INFO_DIRECTION, Constants.DIRECTION_OUTBOUND);
+        connectionInfo.put(Constants.CONNECTION_INFO_REMOTE_HOST, host);
+        connectionInfo.put(Constants.CONNECTION_INFO_REMOTE_PORT, String.valueOf(port));
+
+        Properties sslProps = null;
+        try {
+            sslProps = (Properties) AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
+                @Override
+                public Object run() throws Exception {
+                    return jsseHelper.getProperties(null, connectionInfo, null);
+                }
+            });
+        } catch (PrivilegedActionException pae) {
+            throw (SSLException) pae.getCause();
+        }
+
+        if (sslProps != null)
+            return sslProps.getProperty(Constants.SSLPROP_ALIAS);
+
+        return null;
+    }
 }

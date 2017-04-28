@@ -140,12 +140,28 @@ public class JPAQueryHelper {
      * @param wsso
      */
     private void processLastUpdatedTimeParams() {
-        if (wsso.getLastUpdatedTime() != null) {
+        if (wsso.getStartLastUpdatedTime() != null && wsso.getEndLastUpdatedTime() != null) {
             instanceVersion = 2;
             handleSQLForAND();
-            whereClause.append("x.lastUpdatedTime BETWEEN :lastUpdatedTimeStart AND :lastUpdatedTimeEnd");
-            parameterMap.put("lastUpdatedTimeStart", setDayStartForDate(wsso.getLastUpdatedTime()));
-            parameterMap.put("lastUpdatedTimeEnd", setDayEndForDate(wsso.getLastUpdatedTime()));
+            whereClause.append("x.lastUpdatedTime BETWEEN :startLastUpdatedTime AND :endLastUpdatedTime");
+            parameterMap.put("startLastUpdatedTime", wsso.getStartLastUpdatedTime());
+            parameterMap.put("endLastUpdatedTime", wsso.getEndLastUpdatedTime());
+        } else if (wsso.getSpecificLastUpdatedTime() != null) {
+            instanceVersion = 2;
+            handleSQLForAND();
+            whereClause.append("x.lastUpdatedTime BETWEEN :specificLastUpdatedTimeStart AND :specificLastUpdatedTimeEnd");
+            parameterMap.put("specificLastUpdatedTimeStart", setDayStartForDate(wsso.getSpecificLastUpdatedTime()));
+            parameterMap.put("specificLastUpdatedTimeEnd", setDayEndForDate(wsso.getSpecificLastUpdatedTime()));
+        } else if (wsso.getLessThanLastUpdatedTime() != null) {
+            instanceVersion = 2;
+            handleSQLForAND();
+            whereClause.append("x.lastUpdatedTime <= :lessThanLastUpdatedTime");
+            parameterMap.put("lessThanLastUpdatedTime", setDayEndForDate(subtractDaysFromCurrentDate(new Integer(wsso.getLessThanLastUpdatedTime()))));
+        } else if (wsso.getGreaterThanLastUpdatedTime() != null) {
+            instanceVersion = 2;
+            handleSQLForAND();
+            whereClause.append("x.lastUpdatedTime >= :greaterThanLastUpdatedTime");
+            parameterMap.put("greaterThanLastUpdatedTime", setDayStartForDate(subtractDaysFromCurrentDate(new Integer(wsso.getGreaterThanLastUpdatedTime()))));
         }
     }
 

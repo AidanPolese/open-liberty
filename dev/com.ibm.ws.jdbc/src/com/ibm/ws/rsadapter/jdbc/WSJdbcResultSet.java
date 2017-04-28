@@ -38,7 +38,6 @@ import java.util.Map;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
-import com.ibm.ws.jdbc.osgi.JDBCRuntimeVersion;
 import com.ibm.ws.jdbc.timedoperations.WSJdbcObjectHelper;
 import com.ibm.ws.rsadapter.AdapterUtil;
 import com.ibm.ws.rsadapter.DSConfig;
@@ -2270,9 +2269,6 @@ public class WSJdbcResultSet extends WSJdbcObject implements ResultSet, WSJdbcOb
                 getConnectionWrapper().beginTransactionIfNecessary();
 
             boolean moreRows = rsetImpl.next();            
-            if(!moreRows && dsConfig.get().resultSetUnusableWhenNoMoreResults && rsetImpl.isClosed())
-                close();
-            
             return moreRows;
         } catch (SQLException ex) {
             FFDCFilter.processException(ex, "com.ibm.ws.rsadapter.jdbc.WSJdbcResultSet.next", "2624", this);

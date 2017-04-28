@@ -1,5 +1,5 @@
 <project name="com.ibm.ws.jdbc.4.1" default="build">
-  <property name="javac.boot.classpath" value="1.7"/>
+  <property name="build.with.java.level" value="1.7"/>
   <import file="../ant_build/public_imports/standard_imports.xml"/>
 	
   <property name="instrument.ffdc" value="false" />

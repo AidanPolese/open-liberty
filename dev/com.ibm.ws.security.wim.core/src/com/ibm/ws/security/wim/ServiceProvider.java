@@ -1,21 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013, 2014
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person        Defect/Feature      Comments
- * -------      ------       --------------      --------------------------------------------------
- * 01/22/2013   ankit_jain        87236           Message should be logged when VMM service is up.
- * 04/16/2013   ankit_jain        99009           Handled WIMException due to unparseable argument defined in the INVALID_CERTIFICATE_FILTER message
- * 01/07/2014   rzunzarr          109880          Delete API implementation
- * 02/12/2014   rzunzarr          109887          Create API implementation
- * 03/05/2014   rzunzarr          109879          Update API implementation
+ *
  */
 package com.ibm.ws.security.wim;
 
@@ -34,13 +25,9 @@ import com.ibm.wsspi.security.wim.exception.WIMException;
 import com.ibm.wsspi.security.wim.model.Root;
 
 /**
- * @author Ankit Jain
- * 
- *         The service provider for the virtual member manager service.
+ * The service provider for the virtual member manager service.
  */
-public class ServiceProvider implements Service
-{
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_LONG_2012;
+public class ServiceProvider implements Service {
 
     private static final TraceComponent tc = Tr.register(ServiceProvider.class);
 
@@ -101,8 +88,7 @@ public class ServiceProvider implements Service
     }
 
     @Override
-    public Root createRootObject() throws WIMException
-    {
+    public Root createRootObject() throws WIMException {
         final String METHODNAME = "createRootObject";
 
         Root result = null;
@@ -114,8 +100,7 @@ public class ServiceProvider implements Service
     }
 
     @Override
-    public Root get(Root root) throws WIMException
-    {
+    public Root get(Root root) throws WIMException {
         final String METHODNAME = "get";
         Root result = null;
         if (tc.isDebugEnabled()) {
@@ -129,8 +114,7 @@ public class ServiceProvider implements Service
     }
 
     @Override
-    public Root search(Root root) throws WIMException
-    {
+    public Root search(Root root) throws WIMException {
         final String METHODNAME = "search";
         Root result = null;
         if (tc.isDebugEnabled()) {
@@ -145,8 +129,7 @@ public class ServiceProvider implements Service
     }
 
     @Override
-    public Root login(Root root) throws WIMException
-    {
+    public Root login(Root root) throws WIMException {
         final String METHODNAME = "login";
         Root result = null;
         if (tc.isDebugEnabled()) {
@@ -160,8 +143,7 @@ public class ServiceProvider implements Service
     }
 
     @Override
-    public Root delete(Root root) throws WIMException
-    {
+    public Root delete(Root root) throws WIMException {
         // final String METHODNAME = "delete";
 
         // f116502
@@ -202,8 +184,7 @@ public class ServiceProvider implements Service
     }
 
     @Override
-    public Root create(Root root) throws WIMException
-    {
+    public Root create(Root root) throws WIMException {
         Root result = null;
 
         // boolean success = false;
@@ -249,7 +230,7 @@ public class ServiceProvider implements Service
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.websphere.security.wim.ProfileServiceLite#update(com.ibm.wsspi.security.wim.model.Root)
      */
     @Override

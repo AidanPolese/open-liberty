@@ -21,14 +21,9 @@ import com.ibm.websphere.security.wim.Service;
 /**
  * Constants and definitions for the WIMUserRegistry.
  *
- * @author Ankit Jain
  */
 @Trivial
 public interface WIMUserRegistryDefines {
-    /**
-     * Copyright notice.
-     */
-    String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
 
     /**
      * Backslash character.

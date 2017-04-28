@@ -56,6 +56,12 @@ import com.ibm.wsspi.kernel.service.location.WsLocationConstants;
            xmlns = "http://felix.apache.org/xmlns/scr/v1.2.0-felix")
 public class SSLComponent extends GenericSSLConfigService implements SSLSupportOptional {
 
+    /** Value for the SSLSupport property that indicates an active instance */
+    private static final String SSL_SUPPORT_VALUE_ACTIVE = "active";
+
+    /** Key that reference clients use to target an active SSL component */
+    private static final String SSL_SUPPORT_KEY = "SSLSupport";
+
     private static final TraceComponent tc = Tr.register(SSLComponent.class);
 
     protected static final String MY_ALIAS = "sslDefault";
@@ -100,9 +106,24 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
         activated = true;
 
         Map<String, Object> ret = processConfig(true);
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
-            Tr.event(tc, "activate return: " + ret);
+        if (ret.containsKey(SSL_SUPPORT_KEY)) {
+            // If we set SSLSupport=active in processConfig, setKeyStore and setRepertoire have already been called.
+            // In this case, return the new service properties.
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+                Tr.event(tc, "activate return: " + ret);
+            }
+        } else {
+            // SSLSupport=active has not been set. Return null so that we don't update service properties here -- it
+            // will happen later when setKeyStore and setRepertoire have been called. This avoids a race condition where
+            // this method is called, but before the properties are updated another thread calls setKeyStore or setRepertoire
+            // and ends up setting SSLSupport=active, and then the initial properties update from this method is sent out, thus
+            // overwriting the other update (and effectively removing the SSLSupport property.)
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+                Tr.event(tc, "activate returning null - SSLSupport=active not set");
+            }
+            return null;
         }
+
         return ret;
     }
 
@@ -345,7 +366,7 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
             }
         }
         if (!repertoireMap.isEmpty() && !keystoreIdMap.isEmpty()) {
-            serviceProps.put("SSLSupport", "active");
+            serviceProps.put(SSL_SUPPORT_KEY, SSL_SUPPORT_VALUE_ACTIVE);
         }
         return serviceProps;
     }

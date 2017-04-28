@@ -64,11 +64,17 @@ public class AuditEvent {
     public static final String TARGET_FAILOVER_AUTH_TYPE = "target.authtype.failover";
     public static final String TARGET_URINAME = "target.uriname";
     public static final String TARGET_ROLE_NAMES = "target.role.names";
+    public static final String TARGET_RUNAS_ROLE = "target.runas.role";
     public static final String TARGET_JACC_PERMISSIONS = "target.jacc.permissions";
     public static final String TARGET_JACC_CONTAINER = "target.jacc.container";
     public static final String TARGET_JASPI_PROVIDER = "target.jaspi.provider";
     public static final String TARGET_JASPI_AUTHTYPE = "target.jaspi.authtype";
     public static final String TARGET_REALM = "target.realm";
+    public static final String TARGET_EJB_MODULE_NAME = "target.ejb.module.name";
+    public static final String TARGET_EJB_METHOD_INTERFACE = "target.ejb.method.interface";
+    public static final String TARGET_EJB_METHOD_SIGNATURE = "target.ejb.method.signature";
+    public static final String TARGET_EJB_BEAN_NAME = "target.ejb.beanname";
+    public static final String TARGET_EJB_METHOD_PARAMETERS = "target.ejb.method.parameters";
 
     public final static String INITIATOR = "initiator";
     public final static String INITIATOR_ID = "initiator.id";
@@ -97,6 +103,10 @@ public class AuditEvent {
      */
     public static final String REASON_TYPE_HTTP = "HTTP";
     public static final String REASON_TYPE_HTTPS = "HTTPS";
+    public static final String REASON_TYPE_EJB_DENYALL = "EJB Deny All";
+    public static final String REASON_TYPE_EJB_PERMITALL = "EJB Permit All";
+    public static final String REASON_TYPE_EJB_NO_ROLES = "EBJ No Roles";
+    public static final String REASON_TYPE_EJB_NO_AUTHZ_SERVICE = "EJB No Authorization Service Found";
 
     /**
      * Outcomes
@@ -122,6 +132,9 @@ public class AuditEvent {
     public static final String CRED_TYPE_OAUTH_TOKEN = "OAuth token";
     public static final String CRED_TYPE_LTPATOKEN2 = "LtpaToken2";
     public static final String CRED_TYPE_JASPI_AUTH = "JASPI_AUTH";
+
+    public static final String WEB = "WEB";
+    public static final String EJB = "EJB";
 
     /**
      * Static declarations and initialization

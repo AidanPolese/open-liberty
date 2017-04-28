@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * WLP Copyright IBM Corp. 2001, 2013
+ * WLP Copyright IBM Corp. 2001, 2017
  *
  * The source code for this program is not published or otherwise divested 
  * of its trade secrets, irrespective of what has been deposited with the 
@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.rsadapter.AdapterUtil;
-import com.ibm.ws.rsadapter.spi.WSRdbManagedConnectionImpl;
+import com.ibm.ws.rsadapter.impl.WSRdbManagedConnectionImpl;
 
 /**
  * This is a utility class containing static methods for use throughout the JDBC code.

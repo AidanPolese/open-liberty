@@ -395,22 +395,10 @@ public class BasicRegistry implements UserRegistry {
      * <li>? -> .</li>
      * </ul>
      *
-     * @param pattern: Note that although we use regex, because it is easiest, from an end-user point of view the search is a text search and not a regex search.
+     * @param pattern
      * @return regular expression
      */
-    protected String convertToRegex(String pattern) {
-
-        /*
-         * These are the regex metacharacters. We need to escape them, because generally speaking, we are not going to honor them.
-         * The backslash is intentionally first in the list. We will be escaping potentially many characters and don't want to escape the added escapes.
-         * Although the "*" is a regex metachar, we are not going to escape it. At the end we will convert it to a wildcard ".*".
-         */
-        String elements[] = { "\\", "(", "[", "{", "^", "-", "=", "$", "!", "|", "]", "}", ")", "?", "+", "." };
-        for (int i = 0; i < elements.length; i++) {
-            CharSequence metachar = elements[i];
-            CharSequence newMetachar = "\\" + metachar;
-            pattern = pattern.replace(metachar, newMetachar);
-        }
+    private String convertToRegex(String pattern) {
         return pattern.replace("*", ".*");
     }
 
@@ -425,7 +413,6 @@ public class BasicRegistry implements UserRegistry {
      */
     private SearchResult searchMap(Map<String, ?> map, String pattern, int limit) {
 
-        String regexPattern = null, searchPattern = null;
         if (pattern == null) {
             throw new IllegalArgumentException("pattern is null");
         }
@@ -433,16 +420,13 @@ public class BasicRegistry implements UserRegistry {
             throw new IllegalArgumentException("pattern is an empty String");
         }
 
+        String regexPattern = convertToRegex(pattern);
+
         if (limit < 0) {
             return new SearchResult();
         }
         if (map.size() == 0) {
             return new SearchResult();
-        }
-        if (pattern.contains("*")) {
-            regexPattern = convertToRegex(pattern);
-        } else {
-            searchPattern = pattern;
         }
         int count = 0;
         // Set the stopping point 1 past our limit. If we reach
@@ -456,33 +440,15 @@ public class BasicRegistry implements UserRegistry {
         List<String> matched = new ArrayList<String>();
         Set<String> userNames = map.keySet();
         Iterator<String> itr = userNames.iterator();
-        //Wildcard found, perform a regex compare.
-        if (regexPattern != null) {
-            while (itr.hasNext()) {
-                String name = itr.next();
-                if (name.matches(regexPattern)) {
-                    matched.add(name);
-                    count++;
-                    if (count == stoppingPoint) {
-                        matched.remove(name);
-                        hasMore = true;
-                        break;
-                    }
-                }
-            }
-        }
-        //No wildcard, perform a String compare.
-        else {
-            while (itr.hasNext()) {
-                String name = itr.next();
-                if (name.equals(searchPattern)) {
-                    matched.add(name);
-                    count++;
-                    if (count == stoppingPoint) {
-                        matched.remove(name);
-                        hasMore = true;
-                        break;
-                    }
+        while (itr.hasNext()) {
+            String name = itr.next();
+            if (name.matches(regexPattern)) {
+                matched.add(name);
+                count++;
+                if (count == stoppingPoint) {
+                    matched.remove(name);
+                    hasMore = true;
+                    break;
                 }
             }
         }

@@ -1,17 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013, 2014
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person          Defect/Feature      Comments
- * ----------   ------          --------------      --------------------------------------------------
- * 04/24/2104   ankit_jain      128429              Cleanup findbugs.exclude file
+ *
  */
 package com.ibm.ws.security.wim.env.was;
 
@@ -96,7 +91,7 @@ public class Cache implements ICacheUtil {
      * DoPriv action that swaps the thread's context classloader between
      * the system loader (first invocation) and the original thread's
      * context class loader.
-     * 
+     *
      */
     private class SwapTCCLAction implements PrivilegedAction<ClassLoader> {
 
@@ -105,7 +100,7 @@ public class Cache implements ICacheUtil {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see java.security.PrivilegedAction#run()
          */
         @Override
@@ -131,7 +126,7 @@ public class Cache implements ICacheUtil {
         // must ensure that we are not using any application classloader
         // as the current thread's context classloader.  Otherwise, it
         // is possible that the new Timer thread would hold on to the
-        // app classloader indefinitely, thereby leaking it and all 
+        // app classloader indefinitely, thereby leaking it and all
         // classes that it loaded, long after the app has been stopped.
         SwapTCCLAction swapTCCL = new SwapTCCLAction();
         AccessController.doPrivileged(swapTCCL);
@@ -224,7 +219,7 @@ public class Cache implements ICacheUtil {
         if (tc.isDebugEnabled()) {
             Tr.debug(tc,
                      METHODNAME + " The current cache (" + hashCode() + ") size is " + size + "( " + primaryTable.size() + ", " + secondaryTable.size() + ", "
-                                     + tertiaryTable.size() + ")");
+                         + tertiaryTable.size() + ")");
         }
 
         if (entryLimit != 0 && entryLimit != Integer.MAX_VALUE) {

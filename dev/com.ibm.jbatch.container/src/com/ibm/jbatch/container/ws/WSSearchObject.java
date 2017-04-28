@@ -40,8 +40,12 @@ public class WSSearchObject {
     String lessThanCreateTime = null;
     String greaterThanCreateTime = null;
     Date specificCreateTime = null;
+    Date startLastUpdatedTime = null;
+    Date endLastUpdatedTime = null;
+    String lessThanLastUpdatedTime = null;
+    String greaterThanLastUpdatedTime = null;
+    Date specificLastUpdatedTime = null;
     Map<String, String> jobParams = null;
-    Date lastUpdatedTime = null;
     String submitter = null;
     String appName = null;
     String jobName = null;
@@ -123,7 +127,19 @@ public class WSSearchObject {
      */
     private void processLastUpdatedTimeParams(String params) throws Exception {
         DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
-        this.lastUpdatedTime = dFormat.parse(params);
+        if (params.contains(":")) {
+            String[] parts = params.split(":");
+            this.startLastUpdatedTime = setDayStartForDate(dFormat.parse(parts[0]));
+            this.endLastUpdatedTime = setDayEndForDate(dFormat.parse(parts[1]));
+        } else if (params.contains("<")) {
+            this.lessThanLastUpdatedTime = params.substring(1, params.indexOf("d"));
+        } else if (params.contains(">")) {
+            this.greaterThanLastUpdatedTime = params.substring(1,
+                                                               params.indexOf("d"));
+        } else { // This handles a single date
+            dFormat = new SimpleDateFormat("yyyy-MM-dd");
+            this.specificLastUpdatedTime = dFormat.parse(params);
+        }
     }
 
     /**
@@ -338,20 +354,52 @@ public class WSSearchObject {
         this.instanceIdList = instanceIdList;
     }
 
-    public Date getLastUpdatedTime() {
-        return lastUpdatedTime;
-    }
-
-    public void setLastUpdatedTime(Date lastUpdatedTime) {
-        this.lastUpdatedTime = lastUpdatedTime;
-    }
-
     public Date getSpecificCreateTime() {
         return specificCreateTime;
     }
 
     public void setSpecificCreateTime(Date specificCreateTime) {
         this.specificCreateTime = specificCreateTime;
+    }
+
+    public Date getStartLastUpdatedTime() {
+        return startLastUpdatedTime;
+    }
+
+    public void setStartLastUpdatedTime(Date startLastUpdatedTime) {
+        this.startLastUpdatedTime = startLastUpdatedTime;
+    }
+
+    public Date getEndLastUpdatedTime() {
+        return endLastUpdatedTime;
+    }
+
+    public void setEndLastUpdatedTime(Date endLastUpdatedTime) {
+        this.endLastUpdatedTime = endLastUpdatedTime;
+    }
+
+    public String getLessThanLastUpdatedTime() {
+        return lessThanLastUpdatedTime;
+    }
+
+    public void setLessThanLastUpdatedTime(String lessThanLastUpdatedTime) {
+        this.lessThanLastUpdatedTime = lessThanLastUpdatedTime;
+    }
+
+    public String getGreaterThanLastUpdatedTime() {
+        return greaterThanLastUpdatedTime;
+    }
+
+    public void setGreaterThanLastUpdatedTime(String greaterThanLastUpdatedTime) {
+        this.greaterThanLastUpdatedTime = greaterThanLastUpdatedTime;
+    }
+
+    public Date getSpecificLastUpdatedTime() {
+        return specificLastUpdatedTime;
+    }
+
+    public void setSpecificLastUpdatedTime(Date specificLastUpdatedTime) {
+        this.specificLastUpdatedTime = specificLastUpdatedTime;
     }
 
     public String getSubmitter() {
@@ -418,7 +466,11 @@ public class WSSearchObject {
         sb.append("greaterThanCreateTime = " + this.greaterThanCreateTime + "\n");
         sb.append("instanceIdList = " + this.instanceIdList + "\n");
         sb.append("specificCreateTime = " + this.specificCreateTime + "\n");
-        sb.append("lastUpdatedTime = " + this.lastUpdatedTime + "\n");
+        sb.append("startLastUpdatedTime = " + this.startLastUpdatedTime + "\n");
+        sb.append("endLastUpdatedTime = " + this.endLastUpdatedTime + "\n");
+        sb.append("lessThanLastUpdatedTime = " + this.lessThanLastUpdatedTime + "\n");
+        sb.append("greaterThanLastUpdatedTime = " + this.greaterThanLastUpdatedTime + "\n");
+        sb.append("specificLastUpdatedTime = " + this.specificLastUpdatedTime + "\n");
         sb.append("sortList = " + this.sortList + "\n");
         sb.append("submitter = " + this.submitter + "\n");
         sb.append("authSubmitter = " + this.authSubmitter + "\n");

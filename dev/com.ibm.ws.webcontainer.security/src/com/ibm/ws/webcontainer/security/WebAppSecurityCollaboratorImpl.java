@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.security.auth.Subject;
+import javax.security.auth.login.CredentialExpiredException;
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,8 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Sensitive;
 import com.ibm.websphere.security.audit.AuditConstants;
 import com.ibm.websphere.security.audit.AuditEvent;
+import com.ibm.websphere.security.auth.CredentialDestroyedException;
+import com.ibm.websphere.security.cred.WSCredential;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.kernel.security.thread.ThreadIdentityException;
 import com.ibm.ws.kernel.security.thread.ThreadIdentityManager;
@@ -772,6 +775,16 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
     private void performDelegation(String servletName) {
 
         Subject delegationSubject = subjectManager.getCallerSubject();
+        if (delegationSubject != null && delegationSubject.getPublicCredentials(WSCredential.class) != null
+            && delegationSubject.getPublicCredentials(WSCredential.class).iterator() != null &&
+            delegationSubject.getPublicCredentials(WSCredential.class).iterator().hasNext()) {
+            WSCredential credential = delegationSubject.getPublicCredentials(WSCredential.class).iterator().next();
+            try {
+                extraAuditData.put("REALM", credential.getRealmName());
+            } catch (CredentialExpiredException e) {
+            } catch (CredentialDestroyedException e) {
+            }
+        }
         ArrayList<String> delUsers = new ArrayList<String>();
         if (delegationSubject != null) {
             String buff = delegationSubject.toString();
@@ -793,6 +806,8 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
             String roleName = secMetadata.getRunAsRoleForServlet(servletName);
             String invalidUser = "";
             if (roleName != null) {
+                extraAuditData.put("RUN_AS_ROLE", roleName);
+
                 try {
                     SecurityService securityService = securityServiceRef.getService();
                     AuthenticationService authService = securityService.getAuthenticationService();
@@ -880,6 +895,19 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
         WebReply webReply = performInitialChecks(webRequest, uriName);
         if (webReply != null) {
             byPassedAuthRequest = true;
+            String realm = collabUtils.getUserRegistryRealm(securityServiceRef);
+
+            if (webReply instanceof PermitReply) {
+                AuthenticationResult authResult = new AuthenticationResult(AuthResult.SUCCESS, receivedSubject, AuditEvent.CRED_TYPE_BASIC, realm, AuditEvent.OUTCOME_SUCCESS);
+                Audit.audit(Audit.EventID.SECURITY_AUTHN_01, webRequest, authResult, Integer.valueOf(webReply.getStatusCode()));
+                Audit.audit(Audit.EventID.SECURITY_AUTHZ_01, webRequest, authResult, uriName, Integer.valueOf(webReply.getStatusCode()));
+
+            } else {
+                AuthenticationResult authResult = new AuthenticationResult(AuthResult.FAILURE, receivedSubject, AuditEvent.CRED_TYPE_BASIC, realm, AuditEvent.OUTCOME_FAILURE);
+                Audit.audit(Audit.EventID.SECURITY_AUTHN_01, webRequest, authResult, Integer.valueOf(webReply.getStatusCode()));
+                Audit.audit(Audit.EventID.SECURITY_AUTHZ_01, webRequest, authResult, uriName, Integer.valueOf(webReply.getStatusCode()));
+            }
+
             return webReply;
         }
         AuthenticationResult authResult = authenticateRequest(webRequest);
@@ -919,6 +947,10 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
         }
         // For audit set reply now but leave Subject on thread
         reply = isAuthorized ? new PermitReply() : DENY_AUTHZ_FAILED;
+
+        auditManager.setWebRequest(webRequest);
+        auditManager.setRealm(authResult.getTargetRealm());
+
         Audit.audit(Audit.EventID.SECURITY_AUTHZ_01, webRequest, authResult, uriName, Integer.valueOf(reply.getStatusCode()));
         // now update current thread context
         if (isAuthorized) {

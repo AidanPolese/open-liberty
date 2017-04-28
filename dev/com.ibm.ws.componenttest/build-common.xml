@@ -221,7 +221,7 @@
         <echo>Validating ${validate.server.xmls.files.count} server.xml against ${validate.server.xsd}</echo>
 
         <condition property="validate.server.xmls.rethrow" value="false" else="true">
-          <istrue value="${is.running.rtc.build}"/>
+          <istrue value="${is.running.automated.build}"/>
         </condition>
 
         <mkdir dir="${basedir}/build"/>
@@ -238,7 +238,7 @@
           <catch>
             <record name="${validate.server.xmls.log}" action="stop"/>
             <iff>
-              <istrue value="${is.running.rtc.build}"/>
+              <istrue value="${is.running.automated.build}"/>
               <then>
                 <loadfile property="validate.server.xmls.error" srcfile="${validate.server.xmls.log}"/>
                 <publishAsJunitFailure claimedTestClassName="${ant.project.name} server.xml XSD validation error"

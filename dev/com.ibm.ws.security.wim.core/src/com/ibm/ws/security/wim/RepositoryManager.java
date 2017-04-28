@@ -6,14 +6,6 @@
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
  *
- * Change History:
- *
- * Tag          Person   	Defect/Feature      Comments
- * ----------   ------   	--------------      --------------------------------------------------
- * 02/22/2013    ankit_jain          92798           Change the NLS formatting method for exception message
- * 04/16/2013   ankit_jain           99009           Handled WIMException due to unparseable argument defined in the INVALID_CERTIFICATE_FILTER message
- * 07/16/2014   rzunzarr             107232          Federation of custom user registry
- * 09/29/2015   rzunzarr             186925          participatingBaseEntry tag fixed.
  */
 
 package com.ibm.ws.security.wim;
@@ -54,8 +46,7 @@ import com.ibm.wsspi.security.wim.model.Root;
 
 /**
  * Single point of contact for core to interact with different repositories
- * 
- * @author Ezhilarasi
+ *
  */
 public class RepositoryManager {
     public final static String CLASSNAME = RepositoryManager.class.getName();
@@ -260,7 +251,7 @@ public class RepositoryManager {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see com.ibm.ws.security.wim.RepositoryConfig#isReadOnly()
              */
             @Override
@@ -272,7 +263,7 @@ public class RepositoryManager {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see com.ibm.ws.security.wim.RepositoryConfig#resetConfig()
              */
             @Override
@@ -283,7 +274,7 @@ public class RepositoryManager {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see com.ibm.ws.security.wim.RepositoryConfig#getReposId()
              */
             @Override
@@ -293,7 +284,7 @@ public class RepositoryManager {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see com.ibm.ws.security.wim.RepositoryConfig#getRepositoryBaseEntries()
              */
             @Override
@@ -303,7 +294,7 @@ public class RepositoryManager {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see com.ibm.ws.security.wim.RepositoryConfig#getRepositoriesForGroups()
              */
             //TODO WHAT IS THIS SUPPOSED TO MEAN?
@@ -318,7 +309,7 @@ public class RepositoryManager {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see com.ibm.ws.security.wim.Repository#get(com.ibm.wsspi.security.wim.model.Root)
              */
             @Override
@@ -328,7 +319,7 @@ public class RepositoryManager {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see com.ibm.ws.security.wim.Repository#search(com.ibm.wsspi.security.wim.model.Root)
              */
             @Override
@@ -338,7 +329,7 @@ public class RepositoryManager {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see com.ibm.ws.security.wim.Repository#login(com.ibm.wsspi.security.wim.model.Root)
              */
             @Override
@@ -348,7 +339,7 @@ public class RepositoryManager {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see com.ibm.ws.security.wim.Repository#getRealm()
              */
             @Override
@@ -358,7 +349,7 @@ public class RepositoryManager {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see com.ibm.ws.security.wim.Repository#delete(com.ibm.wsspi.security.wim.model.Root)
              */
             @Override
@@ -368,7 +359,7 @@ public class RepositoryManager {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see com.ibm.ws.security.wim.Repository#create(com.ibm.wsspi.security.wim.model.Root)
              */
             @Override
@@ -378,7 +369,7 @@ public class RepositoryManager {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see com.ibm.ws.security.wim.Repository#update(com.ibm.wsspi.security.wim.model.Root)
              */
             @Override
@@ -421,7 +412,7 @@ public class RepositoryManager {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see com.ibm.ws.security.wim.RepositoryManager.AbstractRepositoryHolder#getRepositoryConfig()
          */
         @Override
@@ -543,7 +534,7 @@ public class RepositoryManager {
 
     /**
      * Returns the id of the repository to which the uniqueName belongs to.
-     * 
+     *
      * @throws InvalidUniqueNameException
      */
     protected String getRepositoryIdByUniqueName(String uniqueName) throws WIMException {
@@ -706,7 +697,7 @@ public class RepositoryManager {
 
     /**
      * sorts a list of base entries into the repositories that provide them.
-     * 
+     *
      * @param realmBaseEntries
      * @return map of repository id to base entries that that repository provides.
      * @throws WIMException

@@ -7,12 +7,6 @@
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
  *
- * Change History:
- *
- * Tag           Person      Defect/Feature      Comments
- * -------       ------      --------------      --------------------------------------------------
- * 01/12/2014    rzunzarr       109887           Create API implementation
- * 03/05/2014    rzunzarr       109879           Update API implementation
  */
 package com.ibm.ws.security.wim;
 
@@ -23,7 +17,6 @@ import com.ibm.wsspi.security.wim.model.Root;
  * TODO fold into ConfiguredRepository (or fold RepositoryConfig into here)
  * Repository interface to be implemented by all adapters.
  *
- * @author Ezhilarasi
  */
 
 public interface Repository {
@@ -49,7 +42,7 @@ public interface Repository {
      * expression and returns them with the requested properties.
      * The search method is used to search entities. Only the entities which match
      * the search expression will be returned.
-     * The following four controls are
+     * The following five controls are
      * related to search. There are SearchControl, PageControl, SortControl,
      * PageResponseControl, and SortResponseControl. The SearchControl contains
      * the property name list which you want to return from the search operation.

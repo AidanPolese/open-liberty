@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -57,7 +58,9 @@ import com.ibm.ws.managedobject.ManagedObject;
 import com.ibm.ws.managedobject.ManagedObjectException;
 import com.ibm.ws.managedobject.ManagedObjectFactory;
 import com.ibm.ws.managedobject.ManagedObjectService;
+import com.ibm.ws.runtime.metadata.ComponentMetaData;
 import com.ibm.ws.runtime.metadata.ModuleMetaData;
+import com.ibm.ws.threadContext.ComponentMetaDataAccessorImpl;
 import com.ibm.wsspi.adaptable.module.Container;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 
@@ -81,6 +84,8 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
         validSingletonScopeList.add(JAXRSCDIConstants.DEPENDENT_SCOPE);
         validSingletonScopeList.add(JAXRSCDIConstants.APPLICATION_SCOPE);
     }
+
+    private final Map<ComponentMetaData, BeanManager> beanManagers = new WeakHashMap<ComponentMetaData, BeanManager>();
 
     /*
      * (non-Javadoc)
@@ -183,13 +188,10 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
             return null;
         }
 
-//        ManagedObject<?> managedObject = newContext.get(serviceObject.getClass());
         Object newServiceObject = null;
-//        if (managedObject == null) {
+
         newServiceObject = getInstanceFromManagedObject(serviceObject, context);
-//        } else {
-//            newServiceObject = managedObject.getObject();
-//        }
+
         return (T) newServiceObject;
 
     }
@@ -435,7 +437,6 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
                 resourcesManagedbyCDI.put(o.getProviderResourceClass(), null);
                 if (o.isJaxRsProvider()) {
                     if (validSingletonScopeList.contains(scopeName)) {
-//                        o.putCustomizedProperty("scope", "s");
                         Tr.warning(tc, "warning.jaxrs.cdi.provider.mismatch", clazz.getSimpleName(), scopeName, "CDI");
                     }
                     //else report warning, keep using provider from rs: change to use RuntimeType.POJO
@@ -490,29 +491,27 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
     @FFDCIgnore(NameNotFoundException.class)
     private BeanManager getBeanManager() {
 
-        BeanManager manager = null;
-//        BeanManager manager = JAXRSCDIServiceImplByJndi.getBeanManager();
-//
-//        if (manager != null)
-//        {
-//            return manager;
-//        }
-//        else {
-        try {
-            InitialContext initialContext = new InitialContext();
-            manager = (BeanManager) initialContext.lookup(JAXRSCDIConstants.JDNI_STRING);
-            JAXRSCDIServiceImplByJndi.setBeanManager(manager);
+        ComponentMetaData cmd = ComponentMetaDataAccessorImpl.getComponentMetaDataAccessor().getComponentMetaData();
+        BeanManager manager = beanManagers.get(cmd);
 
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "Found BeanManager through JNDI lookup: " + JAXRSCDIConstants.JDNI_STRING + ". The manager is: " + manager.toString());
-            }
-        } catch (NameNotFoundException e) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "Couldn't get BeanManager through JNDI: " + JAXRSCDIConstants.JDNI_STRING + ", but ignore the FFDC: " + e.toString());
-            }
-        } catch (Exception e) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "Got BeanManager through JNDI failed: " + e.toString());
+        if (manager == null) {
+            try {
+                InitialContext initialContext = new InitialContext();
+                manager = (BeanManager) initialContext.lookup(JAXRSCDIConstants.JDNI_STRING);
+                JAXRSCDIServiceImplByJndi.setBeanManager(manager);
+                beanManagers.put(cmd, manager);
+
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "Found BeanManager through JNDI lookup: " + JAXRSCDIConstants.JDNI_STRING + ". The manager is: " + manager.toString());
+                }
+            } catch (NameNotFoundException e) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "Couldn't get BeanManager through JNDI: " + JAXRSCDIConstants.JDNI_STRING + ", but ignore the FFDC: " + e.toString());
+                }
+            } catch (Exception e) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "Got BeanManager through JNDI failed: " + e.toString());
+                }
             }
         }
         return manager;
@@ -618,10 +617,6 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
             return null;
         }
 
-//        if (managedObjectFactoryCache.containsKey(clazz)) {
-//            return managedObjectFactoryCache.get(clazz);
-//        };
-
         ManagedObjectFactory<?> mof = null;
         try {
             ManagedObjectService mos = managedObjectServiceRef.getServiceWithException();
@@ -630,7 +625,6 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
             }
             ModuleMetaData mmd = JaxRsUtils.getModuleInfo(container).getMetaData();
             mof = mos.createManagedObjectFactory(mmd, clazz, true);
-//            managedObjectFactoryCache.put(clazz, mof);
 
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "Successfully to create ManagedObjectFactory for class: " + clazz.getName());

@@ -111,6 +111,7 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.servlet.request.IRequest;
 import com.ibm.websphere.servlet.response.IResponse;
 import com.ibm.ws.genericbnf.PasswordNullifier;
+import com.ibm.ws.http.channel.inputstream.HttpInputStreamObserver;
 import com.ibm.ws.session.utils.IDGeneratorImpl;
 import com.ibm.ws.webcontainer.async.AsyncContextImpl;
 import com.ibm.ws.webcontainer.async.AsyncIllegalStateException;
@@ -146,7 +147,7 @@ import com.ibm.wsspi.webcontainer.webapp.IWebAppDispatcherContext;
 
 
 @SuppressWarnings("unchecked")
-public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, IServletRequest, IPrivateRequestAttributes, IInputStreamObserver, ServletRequestExtended
+public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, IServletRequest, IPrivateRequestAttributes, IInputStreamObserver, ServletRequestExtended, HttpInputStreamObserver
 {
     // Class level objects
     // =========================
@@ -206,6 +207,10 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
     protected static final int OFFSET_CONTENT_TYPE_LEN = 1;
     protected static final int OFFSET_CONTENT_TYPE_DATA = 2;
     protected static final int OFFSET_CONTENT_DATA = 3;
+    
+    // ========================= Following required for MultiRead
+    protected boolean multiReadPropertyEnabled = false;
+    protected boolean httpUpdatedwMultiReadValues = false;
 
     //=========================
 
@@ -332,7 +337,7 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
      */
     public void initForNextRequest(IRequest req) {
         // 321485
-        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {  //306998.15
+        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {
             logger.logp(Level.FINE, CLASS_NAME,"initForNextRequest", "this->"+this+": ");
         }
 
@@ -343,9 +348,17 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
         try {
 
             if (req == null) {
+                // MultiRead Start
+                if(this.multiReadPropertyEnabled) {
+                    if(this._in instanceof SRTInputStream) {
+                        ((SRTInputStream) this._in).cleanupforMultiRead();
+                    }
+                    multiReadPropertyEnabled = false;
+                    httpUpdatedwMultiReadValues = false;
+                }// MultiRead End
                 _in.init(null);
                 return;
-            }
+            } 
 
             _setInputStreamContentType = null; // PK57679
             _setInputStreamContentLength = -1; // PK57679
@@ -360,12 +373,7 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
             if( this.getContentLength() > 0 ){            
                 _in.setContentLength(this.getContentLength());
             }
-            //  end 280584.1    SVT: StackOverflowError when installing app larger than 2GB    WAS.webcontainer
-            //F00349 Start - register with InputStream so that alertOPen and alertClosed
-            // are notified when the InputStream is opened for re-read and closed.
-            //if (WCCustomProperties.ENABLE_MULTI_READ_OF_POST_DATA) {
-            //    _in.setObserver(this);
-            //}
+            //  end 280584.1 
         } catch (IOException e) {
             // shouldn't happen.
             com.ibm.wsspi.webcontainer.util.FFDCWrapper.processException(
@@ -1131,39 +1139,35 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
     /**
      * Returns an input stream for reading binary request data.
      * 
-     * Note for multi-read:
-     *  If this is the first call - register an observer to get a notifiction (alertClose()) when input stream is closed.
-     *  If the is first call after alerClose, restart the input stream. This will cause a notification (alertOpen()) that the input stream has been opened.  
+     * Note for MultiRead:
+     *  If this is the first call - register an observer to get a notification (alertClose()) when input stream is closed.
+     *  If this is first call afterClose, restart the input stream. This will cause a notification (alertOpen()) that the input stream has been opened.
      *  Any other call - no special processing.
      */
     public ServletInputStream getInputStream() throws IOException {
 
-        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {  //306998.15
+        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {
             logger.logp(Level.FINE, CLASS_NAME,"getInputStream", "this->"+this+": gotReader = " + _srtRequestHelper._gotReader);
         }
         if (WCCustomProperties.CHECK_REQUEST_OBJECT_IN_USE){
             checkRequestObjectInUse();
         }
-
-        if (_srtRequestHelper._gotReader)
-            throw new IllegalStateException(
-                                            liberty_nls.getString(
-                                                                  "Reader.already.obtained",
-                                                            "Reader already obtained"));
-
-        // F003449 Start
+        // MultiRead Start
         // if stream is currently closed, allow re-read.
-        // otherwise this must be thr first read so register as an 
-        // observer to be notified when close occurs.
-        //if (WCCustomProperties.ENABLE_MULTI_READ_OF_POST_DATA) {
-        //    if (_srtRequestHelper._InputStreamClosed) {
-        //        _in.restart();
-        //    } 
-        //}    
-        // F003449 End
-        _srtRequestHelper._gotInputStream = true;
+        // otherwise this must be the first read so register as an observer to be notified when close occurs.
+        if (this.multiReadPropertyEnabled) {
+            if (_srtRequestHelper._InputStreamClosed) {
+                ((SRTInputStream) this._in).restart();
+            } 
+        }
         
-        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {  //306998.15
+        if (_srtRequestHelper._gotReader)
+            throw new IllegalStateException( liberty_nls.getString("Reader.already.obtained", "Reader already obtained"));
+        
+        // MultiRead End
+        _srtRequestHelper._gotInputStream = true;
+
+        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {
             logger.logp(Level.FINE, CLASS_NAME,"getInputStream", "stream->"+_in+": gotReader = " + _srtRequestHelper._gotReader);
         }
         return _in;
@@ -1171,27 +1175,27 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
 
 
     /*
-     * Added for F003449 for use by ParseParameters
-     * For multi read returns a ServletInputStream input stream irrespective of whether a 
+     * Added for MultiRead for use by ParseParameters
+     * For multi-read returns a ServletInputStream input stream irrespective of whether a 
      * reader has been obtained. The behavior if a reader has been obtained but not closed
      * is the same as normal behavior (no multi-read) if parseParameters gets the input stream
-     * when a servletInputStream has been previously obtained but not closed. A failue will 
+     * when a servletInputStream has been previously obtained but not closed. A failure will 
      * result - insufficient post data.   
      */
-    protected ServletInputStream getInputStreamInternal() throws IOException {
-        if (WCCustomProperties.CHECK_REQUEST_OBJECT_IN_USE){
-            checkRequestObjectInUse();
-        }
-        //if (WCCustomProperties.ENABLE_MULTI_READ_OF_POST_DATA) {
-        //    if (_srtRequestHelper._InputStreamClosed) {
-        //        _in.restart();
-        //    } 
-        //    _srtRequestHelper._gotInputStream = true;
-        //    return _in;
-        //} else {
-            return getInputStream();
-        //}
-    }
+//    protected ServletInputStream getInputStreamInternal() throws IOException {
+//        if (WCCustomProperties.CHECK_REQUEST_OBJECT_IN_USE){
+//            checkRequestObjectInUse();
+//        }
+//        if (this.multiReadPropertyEnabled) {
+//            if (_srtRequestHelper._InputStreamClosed) {
+//                ((SRTInputStream) this._in).restart();
+//            }
+//            _srtRequestHelper._gotInputStream = true;
+//            return _in;
+//        } else {
+//            return getInputStream();
+//        }
+//    }
 
 
     public IRequest getIRequest(){
@@ -1206,59 +1210,39 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
     }
 
     /*
-     * Note for multi-read:
-     *  If this is the first call - register an observer to get a notifiction (alertClose()) when input stream is closed.
+     * Note for MultiRead:
+     *  If this is the first call - register an observer to get a notification (alertClose()) when input stream is closed.
      *  If the is first call after alerClose, restart the input stream. This will cause a notification (alertOpen()) that the input stream has been opened.  
      *  Any other call - no special processing.
      */
     public synchronized BufferedReader getReader()
                     throws UnsupportedEncodingException, IOException {
 
-        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {  //306998.15
-            logger.logp(Level.FINE, CLASS_NAME,"getReader", "this->"+this+": gotReader = " + _srtRequestHelper._gotInputStream);
+        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {
+            logger.logp(Level.FINE, CLASS_NAME,"getReader", "this->"+this+": gotInputStream = " + _srtRequestHelper._gotInputStream);
         }
         if (WCCustomProperties.CHECK_REQUEST_OBJECT_IN_USE){
             checkRequestObjectInUse();
         }
-
-        if (_srtRequestHelper._gotInputStream)
-            throw new IllegalStateException(
-                                            liberty_nls.getString(
-                                                                  "InputStream.already.obtained",
-                                                            "Input Stream already obtained"));
+        // MultiRead Start
+        if (this.multiReadPropertyEnabled) {
+            if (_srtRequestHelper._InputStreamClosed) {
+                ((SRTInputStream) this._in).restart();
+            } 
+        }
+        // MultiRead End
+        if (_srtRequestHelper._gotInputStream){
+            throw new IllegalStateException(liberty_nls.getString(  "InputStream.already.obtained", "Input Stream already obtained"));
+        }
 
         if (_srtRequestHelper._reader == null) {
-            _srtRequestHelper._gotReader = true;
-
-
-            // F003449 Start
-            // Even if reader is null the input stream may already have
-            // been read by parseParameters.
-            //if (WCCustomProperties.ENABLE_MULTI_READ_OF_POST_DATA) {
-            //    if (_srtRequestHelper._InputStreamClosed) {
-            //        _in.restart();
-            //    } 
-            //}
-            // F003449 End
-
-
             _srtRequestHelper._reader =
-                            new BufferedReader(
-                                               new InputStreamReader(_in, getReaderEncoding()));
-            // F003449 Start
-            // if input stream has already been read and closed allow re-read   
-        } //else if (WCCustomProperties.ENABLE_MULTI_READ_OF_POST_DATA) {
-          //  if (_srtRequestHelper._InputStreamClosed){                      
-          //      _in.restart();
-          //
-          //      _srtRequestHelper._reader =
-          //                      new BufferedReader(
-          //                                         new InputStreamReader(_in, getReaderEncoding()));
-          //  }    
-        //}
-        // F003449 End
-
-
+                            new BufferedReader( new InputStreamReader(_in, getReaderEncoding()));
+        }
+        _srtRequestHelper._gotReader = true; // MultiRead
+        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {
+            logger.logp(Level.FINE, CLASS_NAME,"getReader", "this->"+this+": reader = " + _srtRequestHelper._reader);
+        }
         return _srtRequestHelper._reader;
     }
 
@@ -1270,6 +1254,9 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
             checkRequestObjectInUse();
         }
         if (_srtRequestHelper._gotInputStream) {
+            if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {  
+                logger.logp(Level.FINE, CLASS_NAME,"releaseInputStream()" ,"");
+            }
             _srtRequestHelper._gotInputStream = false;
         }
     }
@@ -1282,11 +1269,15 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
             checkRequestObjectInUse();
         }
         if (_srtRequestHelper._gotReader) {
+            if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {  
+                logger.logp(Level.FINE, CLASS_NAME,"releaseReader()" ,"");
+            }
             _srtRequestHelper._gotReader = false;
+            _srtRequestHelper._reader = null;
         }
     }
 
-    // F003449 Start
+    // MultiRead Start
     /* Indicates that the input stream, obtained using either getInputStream
      * or getReader has been closed.
      */
@@ -1313,6 +1304,7 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
         }
         _srtRequestHelper._InputStreamClosed=true;
     }
+    
     /**
      * @return SRTConnectionContext
      */
@@ -2374,7 +2366,14 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
             if (contentType != null && contentType.startsWith("application/x-www-form-urlencoded"))
             {
                 // Only read parameters from post data if app has not already go a reader or input stream.
-                // See servlet spec section 3.1.1 - When parameters are available.
+                // See servlet spec section 3.1.1 - When parameters are available.     
+                
+                if (this.multiReadPropertyEnabled) {
+                    if (_srtRequestHelper._InputStreamClosed) {
+                        ((SRTInputStream) this._in).restart();
+                    }
+                }
+                
                 if (!_srtRequestHelper._gotInputStream && !_srtRequestHelper._gotReader) {
                     try
                     {
@@ -2529,11 +2528,11 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
         if( getContentLength() > 0){
             if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))  //306998.15
                 logger.logp(Level.FINE, CLASS_NAME,"parsePostData", "parsing post data based upon content length");
-            return RequestUtils.parsePostData(getContentLength(), getInputStreamInternal(), getReaderEncoding());  // F003449
+            return RequestUtils.parsePostData(getContentLength(), getInputStream(), getReaderEncoding(), this.multiReadPropertyEnabled);  // MultiRead
         } 
         if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))  //306998.15
             logger.logp(Level.FINE, CLASS_NAME,"parsePostData", "parsing post data based upon input stream (possibly chunked)");
-        return RequestUtils.parsePostData(getInputStreamInternal(), getReaderEncoding());   // F003449
+        return RequestUtils.parsePostData(getInputStream(), getReaderEncoding(),this.multiReadPropertyEnabled);   // MultiRead
     }
 
     // Begin 256836
@@ -3404,7 +3403,7 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
         private String _characterEncoding = null;
         private boolean _gotReader = false;
         private boolean _gotInputStream = false;
-        private boolean _InputStreamClosed = false; // F003449
+        private boolean _InputStreamClosed = false; // MultiRead
         private String _method = null;
         private boolean _parametersRead = false;                            //PM03928
         private DispatcherType dispatcherType = DispatcherType.REQUEST;
@@ -4231,5 +4230,71 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
         }
         return value;
     }
+    
+    //MultiRead Start
+    /* (non-Javadoc)
+     * @see com.ibm.ws.http.channel.inputstream.HttpInputStreamObserver#alertISOpen()
+     */
+    @Override
+    public void alertISOpen() {
+        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {  
+            logger.logp(Level.FINE, CLASS_NAME,"alertISOpen()", "");
+        }
+        if (WCCustomProperties.CHECK_REQUEST_OBJECT_IN_USE){
+            checkRequestObjectInUse();
+        }
+        _srtRequestHelper._InputStreamClosed=false;
+        this.releaseInputStream();
+        this.releaseReader();
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.ws.http.channel.inputstream.HttpInputStreamObserver#alertISClose()
+     */
+    @Override
+    public void alertISClose() {
+        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {
+            logger.logp(Level.FINE, CLASS_NAME,"alertISClose()", "");
+        }
+        if (WCCustomProperties.CHECK_REQUEST_OBJECT_IN_USE){
+            checkRequestObjectInUse();
+        }
+        _srtRequestHelper._InputStreamClosed=true;      
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.wsspi.webcontainer.servlet.IExtendedRequest#setValuesIfMultiReadofPostdataEnabled()
+     */
+    @Override
+    public void setValuesIfMultiReadofPostdataEnabled() {
+        if(!httpUpdatedwMultiReadValues) {
+            WebApp webapp = getDispatchContext().getWebApp();
+            if (webapp != null){
+                multiReadPropertyEnabled = webapp.getConfiguration().isEnablemultireadofpostdata();
+                if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {  
+                    logger.logp(Level.FINE, CLASS_NAME,"setValuesIfMultiReadofPostdataEnabled", "this._in->"+this._in+": multiReadPropertyEnabled is " + multiReadPropertyEnabled);
+                }
+                if(multiReadPropertyEnabled){
+                    if(this._in instanceof SRTInputStream) {
+                        ((SRTInputStream)this._in).setupforMultiRead(true);
+                        ((SRTInputStream) this._in).setISObserver(this);
+                    }
+                }
+                httpUpdatedwMultiReadValues = true;
+            }
+            else{
+                if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {  
+                    logger.logp(Level.FINE, CLASS_NAME,"setValuesIfMultiReadofPostdataEnabled", "this->"+this+": webapp is " + webapp);
+                }
+            }
+        }
+        else{
+            if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {
+                logger.logp(Level.FINE, CLASS_NAME,"setValuesIfMultiReadofPostdataEnabled", "this->"+this+": channelUpdated -> " +httpUpdatedwMultiReadValues);
+            }
+        }
+    }
+    
+    //MultiRead End
 
 }

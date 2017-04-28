@@ -1,15 +1,11 @@
 /************** Begin Copyright - Do not add comments here **************
- *  
+ *
  * IBM Confidential OCO Source Material
  * Virtual Member Manager (C) COPYRIGHT International Business Machines Corp. 2012
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person   Defect/Feature      Comments
- * ----------   ------   --------------      --------------------------------------------------
+ *
  */
 package com.ibm.ws.security.wim.util;
 
@@ -22,21 +18,13 @@ import com.ibm.wsspi.security.wim.model.Control;
 import com.ibm.wsspi.security.wim.model.Root;
 
 /**
- * @author Ankit Jain
- *
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 @Trivial
-public class ControlsHelper
-{
-    /**
-     * IBM Copyright string
-     */
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
+public class ControlsHelper {
 
-    public static Map <String, Control>getControlMap(Root root)
-    {
+    public static Map<String, Control> getControlMap(Root root) {
         Map ctrlMap = new HashMap();
         List controls = root.getControls();
         if (controls != null) {
@@ -50,5 +38,5 @@ public class ControlsHelper
         }
         return ctrlMap;
     }
- 
+
 }

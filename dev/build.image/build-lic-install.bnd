@@ -29,7 +29,8 @@ Include-Resource: \
   ${install.name}/lafiles=editions/${edition}/${archive}/lafiles/,\
   ${install.name}/lib/versions/tags/=editions/${edition}/tags/sw/,\
   ${install.name}/lib/versions/tags/=editions/${edition}/tags/85tags/,\
-  ${install.name}/lib/versions/tags/=build/fxtag
+  ${install.name}/lib/versions/tags/=build/fxtag,\
+  META-INF/=build/wlp-${edition}-license-maven/
   
 Applies-To: ${license.applies.to}
 

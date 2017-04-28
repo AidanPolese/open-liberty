@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.jaxb-2.2
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.classloading-1.0;version=latest, \
 	com.ibm.websphere.javaee.jaxb.2.2;version=latest, \
 	com.ibm.ws.org.apache.geronimo.osgi.registry.1.1;version=latest, \

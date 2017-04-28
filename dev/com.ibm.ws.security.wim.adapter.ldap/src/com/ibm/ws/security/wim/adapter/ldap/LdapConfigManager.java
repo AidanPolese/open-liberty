@@ -1,44 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013, 2014, 2015
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag           Person            Defect/Feature    Comments
- * -------       ------            --------------    --------------------------------------------------
- * 02/22/2013    ankit_jain          92798	     Change the NLS formatting method for exception message
- * 03/21/2013    rzunzarr            95808           Added code to set the login property from filter
- * 01/04/2013    suraj_chandegave    96925           groups not accessible when using Sun LDAP server
- * 04/05/2013    ankit_jain          98106           All 3 ldapEntityTypes has be to specified in config, even to override values of one
- * 02/12/13      ankit_jain          97916           Handling square brace in certificate filter
- * 04/23/13      ankit_jain          99007           REmove Unused properties in VMM and ensure all stand alone LDAP properties are used in VMM LDAP as well
- * 04/24/13      suraj_chandegave    99194           LDAP nested group search fails for registry API getGroupsForUser
- * 06/10/201     rzunzarr           102797/PM91261   getGroups call fails when search pattern is specified is a DN
- * 01/07/2014    rzunzarr            109880          Delete API implementation
- * 01/12/2014    rzunzarr            109887          Create API implementation
- * 02/03/13      ankit_jain         121732/PI09981   IMPROVE VMM PERFORMANCE DURING LOGIN WITH NO AUTHENTICATION CACHE 
- * 03/06/13      ankit_jain         123291           getuserDisplayName is not returning the property configured in the userIdMap filter
- * 03/26/2014    suraj_chandegave   128422           First login property should be principalName
- * 04/24/2014    suraj_chandegave   131479           Properties like telephoneNumber and mail are not supported for PersonAccount
- * 04/24/2104    ankit_jain         128429           Cleanup findbugs.exclude file
- * 06/02/2014    ankit_jain         131900           Add externalId attribute configuration and related functionality  
- * 06/11/2014    ankit_jain         134807           Use auto generated model classes changes to VMM Java Beans
- * 07/02/2014    rzunzarr           135637           User created using create VMM API does not have password set
- * 09/22/2014    ankit_jain         146771           User filter does not considered the attribute mapping defined for login attributes
- * 04/29/2015    rzunzarr           171885           Complex UserFilter expressions do not work.
- * 06/19/2015    rzunzarr           176692           Exception is thrown when external Id attribute exists but has a null value.
- * 07/07/2015    rzunzarr           179573           Login with ignoreCase fails.
- * 08/13/2015    suraj_chandegave   182939           RDN property config under ldapEntityType is not working
- * 08/27/2015    rzunzarr           185315           SCIM create API support.
- * 09/15/2015    rzunzarr           186256           SCIM update API support.
- * 09/26/2015    rzunzarr           188772           Support for propertyNotSupported
- * 11/25/2015    omhingmire         187213           LDAP BINARY ATTRIBUTE HANDLING IN VMM
- * 04/21/2016    speddapa           200011           FEDERATED REPOSITORY DO NOT ALLOW A USER LOGIN WITH TURKISH CHARACTERS
+ *
  */
 package com.ibm.ws.security.wim.adapter.ldap;
 
@@ -87,11 +55,6 @@ import com.ibm.wsspi.security.wim.model.PersonAccount;
 
 public class LdapConfigManager {
 
-    /**
-     * IBM Copyright string.
-     */
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2014;
-
     /**  */
     private static final String GROUP_PROPERTIES = "groupProperties";
 
@@ -131,12 +94,12 @@ public class LdapConfigManager {
      * </ul>
      */
     public MessageFormat[] CONDITION_FORMATS = {
-                                                new MessageFormat("({0}={1})"),
-                                                new MessageFormat("(!({0}={1}))"),
-                                                new MessageFormat("(&({0}>={1})(!({0}={1})))"),
-                                                new MessageFormat("(&({0}<={1})(!({0}={1})))"),
-                                                new MessageFormat("({0}>={1})"),
-                                                new MessageFormat("({0}<={1})"),
+                                                 new MessageFormat("({0}={1})"),
+                                                 new MessageFormat("(!({0}={1}))"),
+                                                 new MessageFormat("(&({0}>={1})(!({0}={1})))"),
+                                                 new MessageFormat("(&({0}<={1})(!({0}={1})))"),
+                                                 new MessageFormat("({0}>={1})"),
+                                                 new MessageFormat("({0}<={1})"),
     };
 
     /**
@@ -436,9 +399,9 @@ public class LdapConfigManager {
     /**
      * Refreshes the caches using the given configuration data object.
      * This method should be called when there are changes in configuration and schema.
-     * 
+     *
      * @param reposConfig the data object containing configuration information of the repository.
-     * 
+     *
      * @throws WIMException
      */
     public void initialize(Map<String, Object> configProps) throws WIMException {
@@ -482,8 +445,7 @@ public class LdapConfigManager {
                 baseEntryMap = new HashMap<String, String>();
                 if (name != null) {
                     baseEntryMap.put(name, baseDN);
-                }
-                else {
+                } else {
                     baseEntryMap.put(baseDN, baseDN);
                 }
                 baseEntries.add(baseEntryMap);
@@ -559,7 +521,7 @@ public class LdapConfigManager {
         useEncodingInSearchExpression = System.getProperty(ConfigConstants.CONFIG_CUSTOM_PROP_USE_ENCODING_IN_SEARCH_EXPRESSION);
         if (useEncodingInSearchExpression != null) {
             try {
-                COPYRIGHT_NOTICE.getBytes(useEncodingInSearchExpression);
+                "string to test encoding".getBytes(useEncodingInSearchExpression);
             } catch (UnsupportedEncodingException e) {
                 if (tc.isDebugEnabled())
                     Tr.debug(tc, METHODNAME + " java.io.UnsupportedEncodingException: " + e.getMessage());
@@ -608,7 +570,7 @@ public class LdapConfigManager {
 
     /**
      * Set the filters depending on the ldap type selected.
-     * 
+     *
      * @param configProps
      */
     private void setFilters(Map<String, Object> configProps) {
@@ -711,8 +673,7 @@ public class LdapConfigManager {
                             iLoginProps.add(propName);
                         }
                         startIndex = index + 1;
-                    }
-                    else
+                    } else
                         hasLoginProperties = false;
                 }
                 if (ldapEntity != null)
@@ -821,8 +782,7 @@ public class LdapConfigManager {
 
                             }
                             ldapEntity.setRDNAttributes(updatedRdnAttrs, updatedRdnObjCls);
-                        }
-                        else {
+                        } else {
                             ldapEntity.setRDNAttributes(rdnAttrs, rdnObjCls);
                         }
                         if (ldapEntity.needTranslateRDN()) {
@@ -868,8 +828,7 @@ public class LdapConfigManager {
                             iNeedTranslateRDN = true;
                         }
                     }
-                }
-                else if (tc.isDebugEnabled())
+                } else if (tc.isDebugEnabled())
                     Tr.debug(tc, "Could not find entity for Group!!");
             }
 
@@ -960,7 +919,7 @@ public class LdapConfigManager {
     }
 
     /**
-     * 
+     *
      */
     private void initializeRacfFilters() {
         isRacf = true;
@@ -989,7 +948,7 @@ public class LdapConfigManager {
     }
 
     /**
-     * 
+     *
      */
     private void resetEntitySearchFilters() {
         // Re-create all the required ldapEntity filters
@@ -1092,8 +1051,7 @@ public class LdapConfigManager {
                 if (rdns != null && rdns.length > 0) {
                     iLoginAttrs.add(rdns[0][0]);
                     iLoginProps.add(rdns[0][0]);
-                }
-                else {
+                } else {
                     iLoginAttrs.add("uid");
                     iLoginProps.add("uid");
                 }
@@ -1150,7 +1108,7 @@ public class LdapConfigManager {
                     else if (unPropName.equals("ibm-jobTitle"))
                         unProps.add("ibmJobTitle");
                 } else {
-                    // apply to different entity types. 
+                    // apply to different entity types.
                     for (int j = 0; j < entityTypes.size(); j++) {
                         String qTypeName = entityTypes.get(j);
                         Set<String> props = entityUnProps.get(qTypeName);
@@ -1201,7 +1159,7 @@ public class LdapConfigManager {
             if (qName == null ||
                 ((!qName.equalsIgnoreCase(SchemaConstants.DO_PERSON)) &&
                  (!qName.equalsIgnoreCase(SchemaConstants.DO_PERSON_ACCOUNT)) &&
-                (!qName.equalsIgnoreCase(SchemaConstants.DO_GROUP))))
+                 (!qName.equalsIgnoreCase(SchemaConstants.DO_GROUP))))
                 continue;
 
             Set<String> notSupportedProps = entityUnProps.get(qName);
@@ -1345,7 +1303,7 @@ public class LdapConfigManager {
                 }
             }
         } else {
-            // apply to specified entity type. 
+            // apply to specified entity type.
             String qTypeName = entityType;
             if (propName != null) {
                 LdapEntity ldapEntity = getLdapEntity(qTypeName);
@@ -1654,12 +1612,10 @@ public class LdapConfigManager {
                 String[] objectClasses = (String[]) entityProps.get(ConfigConstants.CONFIG_DO_OBJECTCLASSES);
 
                 if (getLdapEntity(entityType) != null) {
-                    throw new InitializationException(WIMMessageKey.DUPLICATE_ENTITY_TYPE,
-                                    Tr.formatMessage(
-                                                     tc,
-                                                     WIMMessageKey.DUPLICATE_ENTITY_TYPE,
-                                                     WIMMessageHelper.generateMsgParms(entityType)
-                                                    ));
+                    throw new InitializationException(WIMMessageKey.DUPLICATE_ENTITY_TYPE, Tr.formatMessage(
+                                                                                                            tc,
+                                                                                                            WIMMessageKey.DUPLICATE_ENTITY_TYPE,
+                                                                                                            WIMMessageHelper.generateMsgParms(entityType)));
                 }
 
                 List<Map<String, Object>> rdnAttributes = Nester.nest(ConfigConstants.CONFIG_DO_RDN_PROPERTY, entityProps);
@@ -1736,8 +1692,7 @@ public class LdapConfigManager {
                 }
 
                 String[] searchBases = (String[]) entityProps.get(ConfigConstants.CONFIG_PROP_SEARCHBASES);
-                if (searchBases != null)
-                {
+                if (searchBases != null) {
                     searchBases = validateSearchBases(searchBases, baseEntries);
                     ldapEntity.setSearchBases(searchBases);
                 }
@@ -1789,10 +1744,8 @@ public class LdapConfigManager {
         List<String> validSearchBase = new ArrayList<String>();
 
         boolean isValid = false;
-        for (int j = 0; j < searchBases.length; j++)
-        {
-            for (int i = 0; i < baseEntries.size(); i++)
-            {
+        for (int j = 0; j < searchBases.length; j++) {
+            for (int i = 0; i < baseEntries.size(); i++) {
                 /*
                  * HashMap<String, String> baseEntrymap = new HashMap<String, String>();
                  * baseEntrymap = baseEntries.get(i);
@@ -1800,15 +1753,10 @@ public class LdapConfigManager {
                 Set keys = baseEntries.get(i).keySet();
                 Iterator itr = keys.iterator();
 
-                while (itr.hasNext())
-                {
+                while (itr.hasNext()) {
                     String key = (String) itr.next();
-                    //String value = baseEntrymap.get(key);
-                    //System.out.println("Key :" + key + " - Value : " + value);
-                    //System.out.println("Search bases :" + searchBases[j]);
 
-                    if (searchBases[j].trim().toLowerCase().endsWith(key.toLowerCase()))
-                    {
+                    if (searchBases[j].trim().toLowerCase().endsWith(key.toLowerCase())) {
                         isValid = true;
                         validSearchBase.add(searchBases[j]);
                         break;
@@ -1970,7 +1918,7 @@ public class LdapConfigManager {
 
     /**
      * Return the configured membership attribute
-     * 
+     *
      * @return
      */
     @Trivial
@@ -1980,7 +1928,7 @@ public class LdapConfigManager {
 
     /**
      * Return the configured scope of the membership attribute
-     * 
+     *
      * @return
      */
     @Trivial
@@ -2003,7 +1951,7 @@ public class LdapConfigManager {
 
     /**
      * Return the sub-list of properties, for the given entity, supported by this repository, from a given list of properties.
-     * 
+     *
      * @param inEntityTypes : List of entity types
      * @param propNames : List of property names read from data object
      * @return list of properties supported by repository for given entity type
@@ -2040,7 +1988,7 @@ public class LdapConfigManager {
     /**
      * Return the list of properties supported for a given LDAP entity.
      * This is an overloaded method to support getSupportedProperties(String, List)
-     * 
+     *
      * @param ldapEntity : A given LDAP entity
      * @param propNames : List of property names read from data object
      * @return list of properties supported by repository for given LDAP entity
@@ -2075,7 +2023,7 @@ public class LdapConfigManager {
      * The method returns the list of VMM entity types based on the qualifiedType read from the data graph.
      * The qualifiedType is first compared with the defined VMM entity types. If a match is not found, it then
      * determines if qualifiedType is a parent entity of defined entity types.
-     * 
+     *
      * @param qualifiedType
      * @return a List of entity types
      */
@@ -2131,7 +2079,7 @@ public class LdapConfigManager {
                 } else if (Entity.getSubEntityTypes(qualifiedType) != null && Entity.getSubEntityTypes(qualifiedType).contains(entityType)) {
                     return iLdapEntities.get(i);
                 }
-                // New:: Had to add this condition as "Entity.getSubEntityTypes('LoginAccount')" is returning null at runtime 
+                // New:: Had to add this condition as "Entity.getSubEntityTypes('LoginAccount')" is returning null at runtime
                 else if (qualifiedType.equalsIgnoreCase(SchemaConstants.DO_LOGIN_ACCOUNT) &&
                          entityType.equalsIgnoreCase(SchemaConstants.DO_PERSON_ACCOUNT)) {
                     return iLdapEntities.get(i);
@@ -2229,15 +2177,15 @@ public class LdapConfigManager {
 
     /**
      * Gets the LDAP filter expression for search groups a member belongs to.
-     * 
+     *
      * @param groupMemberDN The Distinguished Name of the member to find groups.
-     * 
+     *
      * @return The LDAP filter expression.
      */
     public String getGroupMemberFilter(String groupMemberDN) {
         groupMemberDN = escapeSpecialCharacters(groupMemberDN);
         Object[] args = {
-                         groupMemberDN
+                          groupMemberDN
         };
         return new MessageFormat(iGrpMbrFilter).format(args);
     }
@@ -2264,9 +2212,9 @@ public class LdapConfigManager {
      * cn=users,dc=yourco,dc=com <--> o=users,o=yourco
      * For example, a given unique name: uid=amber,cn=users,dc=yourco,dc=com will be switched to
      * uid=amber,o=users,o=yourco.
-     * 
+     *
      * @param uniqueName the unique name.
-     * 
+     *
      * @return unique name with LDAP node.
      */
     public String switchToLdapNode(String uniqueName) {
@@ -2350,12 +2298,10 @@ public class LdapConfigManager {
                         }
                     }
                 } catch (NamingException e) {
-                    throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION,
-                                    Tr.formatMessage(
-                                                     tc,
-                                                     WIMMessageKey.NAMING_EXCEPTION,
-                                                     WIMMessageHelper.generateMsgParms(e.toString(true))
-                                                    ));
+                    throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION, Tr.formatMessage(
+                                                                                                  tc,
+                                                                                                  WIMMessageKey.NAMING_EXCEPTION,
+                                                                                                  WIMMessageHelper.generateMsgParms(e.toString(true))));
                 }
             }
             return null;
@@ -2378,8 +2324,8 @@ public class LdapConfigManager {
     }
 
     /**
-     * Returns the top level repository iNodes of ths repository in lower case form.
-     * Top level means these ndoes are not contained by other iNodes.
+     * Returns the top level repository iNodes of this repository in lower case form.
+     * Top level means these nodes are not contained by other iNodes.
      * For example, if there are the following iNodes defined:
      * <UL>
      * <LI>dc=yourco,dc=com
@@ -2388,7 +2334,7 @@ public class LdapConfigManager {
      * </UL>
      * "dc=yourco,dc=com" is the top level node.
      * The iNodes in the array are in lower case form.
-     * 
+     *
      * @return A string array of all top level repository iNodes in lower case form.
      */
     @Trivial
@@ -2429,12 +2375,10 @@ public class LdapConfigManager {
                     }
                     return attributes.toArray(new String[0]);
                 } catch (NamingException e) {
-                    throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION,
-                                    Tr.formatMessage(
-                                                     tc,
-                                                     WIMMessageKey.NAMING_EXCEPTION,
-                                                     WIMMessageHelper.generateMsgParms(e.toString(true))
-                                                    ));
+                    throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION, Tr.formatMessage(
+                                                                                                  tc,
+                                                                                                  WIMMessageKey.NAMING_EXCEPTION,
+                                                                                                  WIMMessageHelper.generateMsgParms(e.toString(true))));
                 }
 
             }
@@ -2548,11 +2492,10 @@ public class LdapConfigManager {
 
     public String getCertificateLDAPFilter(X509Certificate cert) throws CertificateMapperException {
         if (iCertFilterEles == null) {
-            throw new CertificateMapperException(WIMMessageKey.INVALID_CERTIFICATE_FILTER,
-                            Tr.formatMessage(
-                                             tc,
-                                             WIMMessageKey.INVALID_CERTIFICATE_FILTER,
-                                             "null"));
+            throw new CertificateMapperException(WIMMessageKey.INVALID_CERTIFICATE_FILTER, Tr.formatMessage(
+                                                                                                            tc,
+                                                                                                            WIMMessageKey.INVALID_CERTIFICATE_FILTER,
+                                                                                                            "null"));
         }
 
         StringBuffer filter = new StringBuffer();
@@ -2595,20 +2538,17 @@ public class LdapConfigManager {
                 // TBD - filter.append (cert.getSubjectUniqueID());
             } else if (str.equals("${TBSCertificate}") || str.equals("$[TBSCertificate]")) {
                 // filter.append (cert.getTBSCertificate());
-                throw new CertificateMapperException(WIMMessageKey.TBS_CERTIFICATE_UNSUPPORTED,
-                                Tr.formatMessage(
-                                                 tc,
-                                                 WIMMessageKey.TBS_CERTIFICATE_UNSUPPORTED,
-                                                 null));
+                throw new CertificateMapperException(WIMMessageKey.TBS_CERTIFICATE_UNSUPPORTED, Tr.formatMessage(
+                                                                                                                 tc,
+                                                                                                                 WIMMessageKey.TBS_CERTIFICATE_UNSUPPORTED,
+                                                                                                                 null));
             } else if (str.equals("${Version}") || str.equals("$[Version]")) {
                 filter.append(cert.getVersion());
             } else {
-                throw new CertificateMapperException(WIMMessageKey.UNKNOWN_CERTIFICATE_ATTRIBUTE,
-                                Tr.formatMessage(
-                                                 tc,
-                                                 WIMMessageKey.UNKNOWN_CERTIFICATE_ATTRIBUTE,
-                                                 WIMMessageHelper.generateMsgParms(str)
-                                                ));
+                throw new CertificateMapperException(WIMMessageKey.UNKNOWN_CERTIFICATE_ATTRIBUTE, Tr.formatMessage(
+                                                                                                                   tc,
+                                                                                                                   WIMMessageKey.UNKNOWN_CERTIFICATE_ATTRIBUTE,
+                                                                                                                   WIMMessageHelper.generateMsgParms(str)));
             }
         }
         return filter.toString();
@@ -2646,7 +2586,7 @@ public class LdapConfigManager {
                     if (ldapEntities != null && ldapEntities.size() > 0) {
                         for (int j = 0; j < ldapEntities.size(); j++) {
                             LdapEntity ldapEntity = ldapEntities.get(j);
-                            // If entity type is specified, retrieve supported attributes of that entity types                      
+                            // If entity type is specified, retrieve supported attributes of that entity types
                             attrNames.addAll(ldapEntity.getAttributes());
                         }
                     } else {
@@ -2791,7 +2731,7 @@ public class LdapConfigManager {
                                     (Entity.getSubEntityTypes(inputType) != null && Entity.getSubEntityTypes(inputType).contains(type))) {
                                     possibleTypes.add(type);
                                 }
-                                // New:: Had to add this condition as "Entity.getSubEntityTypes('LoginAccount')" is returning null at runtime 
+                                // New:: Had to add this condition as "Entity.getSubEntityTypes('LoginAccount')" is returning null at runtime
                                 else if (inputType.equalsIgnoreCase(SchemaConstants.DO_LOGIN_ACCOUNT) &&
                                          type.equalsIgnoreCase(SchemaConstants.DO_PERSON_ACCOUNT)) {
                                     possibleTypes.add(type);
@@ -2840,12 +2780,10 @@ public class LdapConfigManager {
         }
 
         if (extIdAttr.size() > 1) {
-            throw new WIMSystemException(WIMMessageKey.EXT_ID_HAS_MULTIPLE_VALUES,
-                            Tr.formatMessage(
-                                             tc,
-                                             WIMMessageKey.EXT_ID_HAS_MULTIPLE_VALUES,
-                                             WIMMessageHelper.generateMsgParms(extIdName)
-                                            ));
+            throw new WIMSystemException(WIMMessageKey.EXT_ID_HAS_MULTIPLE_VALUES, Tr.formatMessage(
+                                                                                                    tc,
+                                                                                                    WIMMessageKey.EXT_ID_HAS_MULTIPLE_VALUES,
+                                                                                                    WIMMessageHelper.generateMsgParms(extIdName)));
         }
         LdapAttribute ldapAttr = getAttribute(extIdName);
         try {
@@ -2866,12 +2804,10 @@ public class LdapConfigManager {
                     return val.toString();
             }
         } catch (NamingException e) {
-            throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION,
-                            Tr.formatMessage(
-                                             tc,
-                                             WIMMessageKey.NAMING_EXCEPTION,
-                                             WIMMessageHelper.generateMsgParms(e.toString(true))
-                                            ));
+            throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION, Tr.formatMessage(
+                                                                                          tc,
+                                                                                          WIMMessageKey.NAMING_EXCEPTION,
+                                                                                          WIMMessageHelper.generateMsgParms(e.toString(true))));
         }
     }
 
@@ -2912,7 +2848,7 @@ public class LdapConfigManager {
                         //Everything is under empty node.
                         node = iNodes[i];
                         if (node != null && node.length() != 0) {
-                            uNameBuf.append(","); // if node name is not "", append "," before appending the nodename  
+                            uNameBuf.append(","); // if node name is not "", append "," before appending the nodename
                         }
                         isUnderNode = true;
                         break;
@@ -3081,11 +3017,10 @@ public class LdapConfigManager {
             HashMap<String, String> entry = entryList.get(i);
             String nodeName = UniqueNameHelper.getValidUniqueName(entry.keySet().iterator().next());
             if (nodeName == null) {
-                throw new InvalidInitPropertyException(WIMMessageKey.INVALID_UNIQUE_NAME_SYNTAX,
-                                Tr.formatMessage(
-                                                 tc,
-                                                 WIMMessageKey.INVALID_UNIQUE_NAME_SYNTAX,
-                                                 null));
+                throw new InvalidInitPropertyException(WIMMessageKey.INVALID_UNIQUE_NAME_SYNTAX, Tr.formatMessage(
+                                                                                                                  tc,
+                                                                                                                  WIMMessageKey.INVALID_UNIQUE_NAME_SYNTAX,
+                                                                                                                  null));
             }
             String reposNodeName = entry.get(nodeName);
             if (reposNodeName == null) {
@@ -3093,11 +3028,10 @@ public class LdapConfigManager {
             } else {
                 reposNodeName = LdapHelper.getValidDN(reposNodeName);
                 if (reposNodeName == null) {
-                    throw new InvalidInitPropertyException(WIMMessageKey.INVALID_DN_SYNTAX,
-                                    Tr.formatMessage(
-                                                     tc,
-                                                     WIMMessageKey.INVALID_DN_SYNTAX,
-                                                     null));
+                    throw new InvalidInitPropertyException(WIMMessageKey.INVALID_DN_SYNTAX, Tr.formatMessage(
+                                                                                                             tc,
+                                                                                                             WIMMessageKey.INVALID_DN_SYNTAX,
+                                                                                                             null));
                 }
             }
             // Determine if need to switch node.
@@ -3141,25 +3075,25 @@ public class LdapConfigManager {
 /*
  * private List<String> getSupportedEntityTypes() {
  * ArrayList<String> supportedEntityTypes = new ArrayList<String>();
- * 
+ *
  * if (iLdapEntities == null || iLdapEntities.size() == 0)
  * return supportedEntityTypes;
- * 
+ *
  * for (int i = 0; i < iLdapEntities.size(); i++) {
  * supportedEntityTypes.add(iLdapEntities.get(i).getName());
  * }
- * 
+ *
  * return supportedEntityTypes;
  * }
  */
 
     /**
      * Returns the names of properties that are used for RDN for the given entity type.
-     * 
+     *
      * Entity types under WIM package should not have any name space prefix. For example, "Person".
-     * 
+     *
      * @param qualifiedEntityType The prefixed entity type.
-     * 
+     *
      * @return A list of RDN property names of the given entity type. If the entity type is not supported, null will be returned.
      */
 /*
@@ -3186,8 +3120,7 @@ public class LdapConfigManager {
     }
 
     @Trivial
-    public boolean updateGroupMembership()
-    {
+    public boolean updateGroupMembership() {
         if (getLdapType().startsWith("DOMINO") || getLdapType().startsWith("SUNONE"))
             return true;
         else
@@ -3195,8 +3128,7 @@ public class LdapConfigManager {
     }
 
     @Trivial
-    public String getDummyMember(String mbrAttr)
-    {
+    public String getDummyMember(String mbrAttr) {
         if (iDummyMbrMap.containsKey(mbrAttr))
             return iDummyMbrMap.get(mbrAttr);
         else {
@@ -3210,20 +3142,17 @@ public class LdapConfigManager {
     private String defaultDummyMember() {
         if (iLdapType.startsWith(LdapConstants.IDS_LDAP_SERVER) || iLdapType.startsWith(LdapConstants.DOMINO_LDAP_SERVER)) {
             return LdapConstants.LDAP_DUMMY_MEMBER_DEFAULT;
-        }
-        else
+        } else
             return null;
     }
 
     @Trivial
-    public Set<String> getAttributesWithDefaultValue()
-    {
+    public Set<String> getAttributesWithDefaultValue() {
         return iDefaultValueAttrs;
     }
 
     @Trivial
-    public Set<String> getAttributesWithDefaultAttribute()
-    {
+    public Set<String> getAttributesWithDefaultAttribute() {
         return iDefaultAttrAttrs;
     }
 
@@ -3248,8 +3177,7 @@ public class LdapConfigManager {
         return iLoginProps;
     }
 
-    public Map getAttributes()
-    {
+    public Map getAttributes() {
         return iAttrNameToAttrMap;
     }
 }

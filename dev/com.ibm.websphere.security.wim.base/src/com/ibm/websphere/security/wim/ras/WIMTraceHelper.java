@@ -1,20 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person          Defect/Feature      Comments
- * ----------   ------          --------------      --------------------------------------------------
- * 04/01/2013   ankit_jain      95574               StackOverflowError occurs while starting the web applications
- * 07/10/2013   ankit_jain      105090              Mask password for all classes in trace for VMM
- * 08/21/2015   rzunzarr        184098              Simplified Object trace output
- * 09/25/2015   rzunzarr        188399              Trace output includes extended properties
+ *
  */
 package com.ibm.websphere.security.wim.ras;
 
@@ -43,7 +35,7 @@ public class WIMTraceHelper {
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");//$NON-NLS-1$
 
     /**
-     * The string used for display password in the trace. For security reason, password can not be printed out in the trace or message.
+     * The string used for display password in the trace. For security reasons, password can not be printed out in the trace or message.
      */
     public final static String DUMMY_VALUE = "****";
 
@@ -54,7 +46,7 @@ public class WIMTraceHelper {
 
     /**
      * Method takes the JavaBean object and returns InputStream for tracing purpose
-     * 
+     *
      */
     public static String trace(Object boundData) {
 
@@ -99,8 +91,7 @@ public class WIMTraceHelper {
             if ("com.ibm.wsspi.security.wim.model.PersonAccount".equals(className)) {
                 Set<String> propertyNames = ((PersonAccount) boundData).getExtendedPropertyNames();
                 processExtendedProperties((PersonAccount) boundData, propertyNames, strBuffer);
-            }
-            else if ("com.ibm.wsspi.security.wim.model.Group".equals(className)) {
+            } else if ("com.ibm.wsspi.security.wim.model.Group".equals(className)) {
                 Set<String> propertyNames = ((Group) boundData).getExtendedPropertyNames();
                 processExtendedProperties((Group) boundData, propertyNames, strBuffer);
             }
@@ -153,8 +144,9 @@ public class WIMTraceHelper {
      * This method can be called recursively if the Parent Bean contains
      * members that are complex types
      */
-    public static void processClass(PropertyDescriptor[] properties, HashSet systemProps, StringBuffer strBuffer, Object boundData, boolean isContainment) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, IntrospectionException {
-        //--use beanintrospector to traverse the bean properties 
+    public static void processClass(PropertyDescriptor[] properties, HashSet systemProps, StringBuffer strBuffer, Object boundData,
+                                    boolean isContainment) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, IntrospectionException {
+        //--use beanintrospector to traverse the bean properties
         Method readMethod = null;
         Method getterMethod = null;
         Object returnValue = null;
@@ -249,8 +241,7 @@ public class WIMTraceHelper {
                 //--if it is simple array
                 if (strCurrentProp.equalsIgnoreCase("password")) {
                     strBuffer.append("*****");
-                }
-                else if (returnValue.getClass().isArray()) {
+                } else if (returnValue.getClass().isArray()) {
 
                     int arrayLength = Array.getLength(returnValue);
 
@@ -261,7 +252,7 @@ public class WIMTraceHelper {
                     }
                     strBuffer.deleteCharAt(strBuffer.length() - 2);
 
-                    //--if it is an arraylist	
+                    //--if it is an arraylist
                 } else if (returnValue instanceof List) {
 
                     List list = (List) returnValue;
@@ -288,8 +279,7 @@ public class WIMTraceHelper {
                             }
 
                             strBuffer.append(printString.substring(startIndex));
-                        }
-                        else
+                        } else
                             strBuffer.append(objectInsideArray);
 
                         if (k < (list.size() - 1)) { //Don't add a comma after the last item in the List of Strings

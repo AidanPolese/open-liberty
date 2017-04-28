@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 1997,2016
+ * Copyright IBM Corp. 1997,2017
  *
  * The source code for this program is not published or otherwise divested 
  * of its trade secrets, irrespective of what has been deposited with the 
@@ -35,8 +35,8 @@ import com.ibm.ws.resource.ResourceRefConfigFactory;
 import com.ibm.ws.resource.ResourceRefInfo;
 import com.ibm.ws.rsadapter.AdapterUtil;
 import com.ibm.ws.rsadapter.DSConfig;
-import com.ibm.ws.rsadapter.spi.WSConnectionRequestInfoImpl;
-import com.ibm.ws.rsadapter.spi.WSManagedConnectionFactoryImpl;
+import com.ibm.ws.rsadapter.impl.WSConnectionRequestInfoImpl;
+import com.ibm.ws.rsadapter.impl.WSManagedConnectionFactoryImpl;
 import com.ibm.ws.runtime.metadata.ComponentMetaData;
 import com.ibm.ws.threadContext.ComponentMetaDataAccessorImpl;
 import com.ibm.wsspi.kernel.service.utils.FilterUtils;

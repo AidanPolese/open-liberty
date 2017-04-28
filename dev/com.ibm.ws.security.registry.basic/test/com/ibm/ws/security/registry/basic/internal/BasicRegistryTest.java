@@ -77,205 +77,131 @@ public class BasicRegistryTest {
             @Override
             public User[] user() {
                 return new User[] {
-                                   new User() {
+                                    new User() {
 
-                                       @Override
-                                       public String name() {
-                                           return "notGrouped";
-                                       }
+                                    @Override
+                                    public String name() {
+                                        return "notGrouped";
+                                    }
 
-                                       @Override
-                                       public SerializableProtectedString password() {
-                                           return new SerializableProtectedString("nopwd".toCharArray());
-                                       }
-                                   },
-                                   new User() {
+                                    @Override
+                                    public SerializableProtectedString password() {
+                                        return new SerializableProtectedString("nopwd".toCharArray());
+                                    }
+                                },
+                                    new User() {
 
-                                       @Override
-                                       public String name() {
-                                           return "user1";
-                                       }
+                                    @Override
+                                    public String name() {
+                                        return "user1";
+                                    }
 
-                                       @Override
-                                       public SerializableProtectedString password() {
-                                           return new SerializableProtectedString("pass1".toCharArray());
-                                       }
-                                   },
-                                   new User() {
+                                    @Override
+                                    public SerializableProtectedString password() {
+                                        return new SerializableProtectedString("pass1".toCharArray());
+                                    }
+                                },
+                                    new User() {
 
-                                       @Override
-                                       public String name() {
-                                           return "user 2";
-                                       }
+                                    @Override
+                                    public String name() {
+                                        return "user 2";
+                                    }
 
-                                       @Override
-                                       public SerializableProtectedString password() {
-                                           return new SerializableProtectedString("pass 2".toCharArray());
-                                       }
-                                   },
-                                   new User() {
+                                    @Override
+                                    public SerializableProtectedString password() {
+                                        return new SerializableProtectedString("pass 2".toCharArray());
+                                    }
+                                },
+                                    new User() {
 
-                                       @Override
-                                       public String name() {
-                                           return "CN=dnUser";
-                                       }
+                                    @Override
+                                    public String name() {
+                                        return "CN=dnUser";
+                                    }
 
-                                       @Override
-                                       public SerializableProtectedString password() {
-                                           return new SerializableProtectedString("pwd".toCharArray());
-                                       }
-                                   },
-                                   new User() {
-
-                                       @Override
-                                       public String name() {
-                                           return "realm\\user3";
-                                       }
-
-                                       @Override
-                                       public SerializableProtectedString password() {
-                                           return new SerializableProtectedString("pass3".toCharArray());
-                                       }
-                                   },
-                                   new User() {
-
-                                       @Override
-                                       public String name() {
-                                           return "$realm\\!user 4]";
-                                       }
-
-                                       @Override
-                                       public SerializableProtectedString password() {
-                                           return new SerializableProtectedString("pass 4".toCharArray());
-                                       }
-                                   },
-                                   new User() {
-
-                                       @Override
-                                       public String name() {
-                                           return "$realm\\!user5]";
-                                       }
-
-                                       @Override
-                                       public SerializableProtectedString password() {
-                                           return new SerializableProtectedString("pass5".toCharArray());
-                                       }
-                                   }
-
+                                    @Override
+                                    public SerializableProtectedString password() {
+                                        return new SerializableProtectedString("pwd".toCharArray());
+                                    }
+                                }
                 };
             }
 
             @Override
             public Group[] group() {
                 return new Group[] {
-                                    new Group() {
+                                     new Group() {
 
-                                        @Override
-                                        public String name() {
-                                            return "group0";
-                                        }
-
-                                        @Override
-                                        public Member[] member() {
-                                            return new Member[] {};
-                                        }
-                                    },
-                                    new Group() {
-
-                                        @Override
-                                        public String name() {
-                                            return "group1";
-                                        }
-
-                                        @Override
-                                        public Member[] member() {
-                                            return new Member[] {
-                                                                 new Member() {
-
-                                                                     @Override
-                                                                     public String name() {
-                                                                         return "user1";
-                                                                     }
-                                                                 }
-                                            };
-                                        }
-                                    },
-                                    new Group() {
-
-                                        @Override
-                                        public String name() {
-                                            return "my group 2";
-                                        }
-
-                                        @Override
-                                        public Member[] member() {
-                                            return new Member[] {
-                                                                 new Member() {
-
-                                                                     @Override
-                                                                     public String name() {
-                                                                         return "user1";
-                                                                     }
-                                                                 },
-                                                                 new Member() {
-
-                                                                     @Override
-                                                                     public String name() {
-                                                                         return "user 2";
-                                                                     }
-                                                                 }
-                                            };
-                                        }
-                                    },
-                                    new Group() {
-
-                                        @Override
-                                        public String name() {
-                                            return "myGroupWithNoUsers";
-                                        }
-
-                                        @Override
-                                        public Member[] member() {
-                                            return new Member[] {};
-                                        }
-                                    },
-                                    new Group() {
-
-                                        @Override
-                                        public String name() {
-                                            return "realm\\group3";
-                                        }
-
-                                        @Override
-                                        public Member[] member() {
-                                            return new Member[] {};
-                                        }
-                                    },
-                                    new Group() {
-
-                                        @Override
-                                        public String name() {
-                                            return "$realm\\!group 4]";
-                                        }
-
-                                        @Override
-                                        public Member[] member() {
-                                            return new Member[] {};
-                                        }
-                                    },
-                                    new Group() {
-
-                                        @Override
-                                        public String name() {
-                                            return "$realm\\!group5]";
-                                        }
-
-                                        @Override
-                                        public Member[] member() {
-                                            return new Member[] {};
-                                        }
+                                    @Override
+                                    public String name() {
+                                        return "group0";
                                     }
 
+                                    @Override
+                                    public Member[] member() {
+                                        return new Member[] {};
+                                    }
+                                },
+                                     new Group() {
+
+                                    @Override
+                                    public String name() {
+                                        return "group1";
+                                    }
+
+                                    @Override
+                                    public Member[] member() {
+                                        return new Member[] {
+                                                              new Member() {
+
+                                                            @Override
+                                                            public String name() {
+                                                                return "user1";
+                                                            }
+                                                        }
+                                        };
+                                    }
+                                },
+                                     new Group() {
+
+                                    @Override
+                                    public String name() {
+                                        return "my group 2";
+                                    }
+
+                                    @Override
+                                    public Member[] member() {
+                                        return new Member[] {
+                                                              new Member() {
+
+                                                            @Override
+                                                            public String name() {
+                                                                return "user1";
+                                                            }
+                                                        },
+                                                              new Member() {
+
+                                                            @Override
+                                                            public String name() {
+                                                                return "user 2";
+                                                            }
+                                                        }
+                                        };
+                                    }
+                                },
+                                     new Group() {
+
+                                    @Override
+                                    public String name() {
+                                        return "myGroupWithNoUsers";
+                                    }
+
+                                    @Override
+                                    public Member[] member() {
+                                        return new Member[] {};
+                                    }
+                                }
                 };
             }
 
@@ -541,7 +467,7 @@ public class BasicRegistryTest {
      */
     @Test
     public void getUsers_multipleResultUnderBound() throws Exception {
-        SearchResult result = fullBasicRegistry().getUsers("user*", 1);
+        SearchResult result = fullBasicRegistry().getUsers("user.*", 1);
         assertNotNull("SearchResult must never be NULL", result);
         assertEquals(1, result.getList().size());
         assertTrue(result.hasMore());
@@ -552,7 +478,7 @@ public class BasicRegistryTest {
      */
     @Test
     public void getUsers_multipleResultOverBound() throws Exception {
-        SearchResult result = fullBasicRegistry().getUsers("user*", 3);
+        SearchResult result = fullBasicRegistry().getUsers("user.*", 3);
         assertNotNull("SearchResult must never be NULL", result);
         assertEquals(2, result.getList().size());
         assertFalse(result.hasMore());
@@ -563,7 +489,7 @@ public class BasicRegistryTest {
      */
     @Test
     public void getUsers_multipleResultBounded() throws Exception {
-        SearchResult result = fullBasicRegistry().getUsers("user*", 2);
+        SearchResult result = fullBasicRegistry().getUsers("user.*", 2);
         assertNotNull("SearchResult must never be NULL", result);
         assertEquals(2, result.getList().size());
         assertFalse(result.hasMore());
@@ -574,7 +500,7 @@ public class BasicRegistryTest {
      */
     @Test
     public void getUsers_multipleResultUnbounded() throws Exception {
-        SearchResult result = fullBasicRegistry().getUsers("user*", 0);
+        SearchResult result = fullBasicRegistry().getUsers("user.*", 0);
         assertNotNull("SearchResult must never be NULL", result);
         assertEquals(2, result.getList().size());
         assertFalse(result.hasMore());
@@ -585,7 +511,7 @@ public class BasicRegistryTest {
      */
     @Test
     public void getUsers_allEntiresUnderBound() throws Exception {
-        SearchResult result = fullBasicRegistry().getUsers("*", 1);
+        SearchResult result = fullBasicRegistry().getUsers(".*", 1);
         assertNotNull("SearchResult must never be NULL", result);
         assertEquals(1, result.getList().size());
         assertTrue(result.hasMore());
@@ -596,9 +522,9 @@ public class BasicRegistryTest {
      */
     @Test
     public void getUsers_allEntiresOverBound() throws Exception {
-        SearchResult result = fullBasicRegistry().getUsers("*", 8);
+        SearchResult result = fullBasicRegistry().getUsers(".*", 5);
         assertNotNull("SearchResult must never be NULL", result);
-        assertEquals(7, result.getList().size());
+        assertEquals(4, result.getList().size());
         assertFalse(result.hasMore());
     }
 
@@ -607,17 +533,14 @@ public class BasicRegistryTest {
      */
     @Test
     public void getUsers_allEntiresBounded() throws Exception {
-        SearchResult result = fullBasicRegistry().getUsers("*", 7);
+        SearchResult result = fullBasicRegistry().getUsers(".*", 4);
         assertNotNull("SearchResult must never be NULL", result);
-        assertEquals("Should only be 7 entries", 7, result.getList().size());
+        assertEquals("Should only be 4 entries", 4, result.getList().size());
         assertFalse("Should not think there are more results", result.hasMore());
         assertTrue("Should contain notGrouped", result.getList().contains("notGrouped"));
         assertTrue("Should contain user1", result.getList().contains("user1"));
         assertTrue("Should contain user 2", result.getList().contains("user 2"));
         assertTrue("Should contain CN=dnUser", result.getList().contains("CN=dnUser"));
-        assertTrue("Should contain realm\\user3", result.getList().contains("realm\\user3"));
-        assertTrue("Should contain $realm\\!user 4]", result.getList().contains("$realm\\!user 4]"));
-        assertTrue("Should contain $realm\\!user5]", result.getList().contains("$realm\\!user5]"));
     }
 
     /**
@@ -625,18 +548,14 @@ public class BasicRegistryTest {
      */
     @Test
     public void getUsers_allEntiresUnbounded() throws Exception {
-        SearchResult result = fullBasicRegistry().getUsers("*", 0);
+        SearchResult result = fullBasicRegistry().getUsers(".*", 0);
         assertNotNull("SearchResult must never be NULL", result);
-        assertEquals("Should only be 7 entries", 7, result.getList().size());
+        assertEquals("Should only be 4 entries", 4, result.getList().size());
         assertFalse("Should not think there are more results", result.hasMore());
         assertTrue("Should contain notGrouped", result.getList().contains("notGrouped"));
         assertTrue("Should contain user1", result.getList().contains("user1"));
         assertTrue("Should contain user 2", result.getList().contains("user 2"));
         assertTrue("Should contain CN=dnUser", result.getList().contains("CN=dnUser"));
-        assertTrue("Should contain realm\\user3", result.getList().contains("realm\\user3"));
-        assertTrue("Should contain $realm\\!user 4]", result.getList().contains("$realm\\!user 4]"));
-        assertTrue("Should contain $realm\\!user5]", result.getList().contains("$realm\\!user5]"));
-
     }
 
     /**
@@ -783,7 +702,7 @@ public class BasicRegistryTest {
      */
     @Test
     public void getGroups_multipleResultUnderBounded() throws Exception {
-        SearchResult result = fullBasicRegistry().getGroups("group*", 1);
+        SearchResult result = fullBasicRegistry().getGroups("group.*", 1);
         assertNotNull("SearchResult must never be NULL", result);
         assertEquals(1, result.getList().size());
         assertTrue(result.hasMore());
@@ -794,7 +713,7 @@ public class BasicRegistryTest {
      */
     @Test
     public void getGroups_multipleResultBonded() throws Exception {
-        SearchResult result = fullBasicRegistry().getGroups("group*", 3);
+        SearchResult result = fullBasicRegistry().getGroups("group.*", 3);
         assertNotNull("SearchResult must never be NULL", result);
         assertEquals(2, result.getList().size());
         assertFalse(result.hasMore());
@@ -805,17 +724,14 @@ public class BasicRegistryTest {
      */
     @Test
     public void getGroups_allEntiresBounded() throws Exception {
-        SearchResult result = fullBasicRegistry().getGroups("*", 7);
+        SearchResult result = fullBasicRegistry().getGroups(".*", 4);
         assertNotNull("SearchResult must never be NULL", result);
-        assertEquals("Should only be 7 entries", 7, result.getList().size());
+        assertEquals("Should only be 4 entries", 4, result.getList().size());
         assertFalse("Should not think there are more results", result.hasMore());
         assertTrue("Should contain group0", result.getList().contains("group0"));
         assertTrue("Should contain group1", result.getList().contains("group1"));
         assertTrue("Should contain 'my group 2'", result.getList().contains("my group 2"));
         assertTrue("Should contain myGroupWithNoUsers", result.getList().contains("myGroupWithNoUsers"));
-        assertTrue("Should contain realm\\group3", result.getList().contains("realm\\group3"));
-        assertTrue("Should contain '$realm\\!group 4]'", result.getList().contains("$realm\\!group 4]"));
-        assertTrue("Should contain $realm\\!group5]", result.getList().contains("$realm\\!group5]"));
     }
 
     /**
@@ -993,31 +909,4 @@ public class BasicRegistryTest {
         assertTrue(groups.contains("my group 2"));
     }
 
-    /**
-     * Test method for {@link com.ibm.ws.security.registry.basic.internal.BasicRegistry#convertToRegex(String)}.
-     */
-    @Test
-    public void convertToRegex_backslash() throws Exception {
-        /*
-         * List<String> groups = fullBasicRegistry().getGroupsForUser("user1");
-         * assertNotNull(groups);
-         * assertEquals(2, groups.size());
-         * assertTrue(groups.contains("group1"));
-         * assertTrue(groups.contains("my group 2"));
-         */
-        String backslashPattern = "realm\\id1";
-        String patternReturned = fullBasicRegistry().convertToRegex(backslashPattern);
-        assertTrue("Escaping all the regex metachars for " + backslashPattern + " should result in returned value=" + patternReturned,
-                   patternReturned.equals("realm\\\\id1"));
-
-        backslashPattern = "{rea?lm\\Id1.";
-        patternReturned = fullBasicRegistry().convertToRegex(backslashPattern);
-        assertTrue("Escaping all the regex metachars for " + backslashPattern + " should result in returned value=" + patternReturned,
-                   patternReturned.equals("\\{rea\\?lm\\\\Id1\\."));
-
-        backslashPattern = "{re*a?lm\\Id1.*";
-        patternReturned = fullBasicRegistry().convertToRegex(backslashPattern);
-        assertTrue("Escaping all the regex metachars for " + backslashPattern + " should result in returned value=" + patternReturned,
-                   patternReturned.equals("\\{re.*a\\?lm\\\\Id1\\..*"));
-    }
 }

@@ -1,10 +1,6 @@
 package com.ibm.websphere.event;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -59,5 +55,6 @@ public class ReservedKeyTest {
         ReservedKey test = new ReservedKey("test");
         assertNotNull(test.toString());
         assertTrue(test.toString().contains("test"));
+        assertTrue(test.toString().contains("@" + test.getSlot()));
     }
 }

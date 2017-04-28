@@ -18,6 +18,7 @@ import javax.servlet.ReadListener;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.http.channel.inputstream.HttpInputStreamConnectWeb;
 import com.ibm.ws.webcontainer.srt.SRTInputStream;
 import com.ibm.ws.webcontainer31.async.AsyncAlreadyReadCallback;
 import com.ibm.ws.webcontainer31.async.AsyncReadCallback;
@@ -61,16 +62,23 @@ public class SRTInputStream31 extends SRTInputStream
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
             Tr.debug(tc, "Initializing the stream : " + this);
         if(in != null){
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "init , Servlet 3.1 enabled, casting to HttpInputStreamExtended");
-            }
+
             //The passed in should always be an HttpInputStreamExtended if Servlet 3.1 is enabled
-            if (in instanceof HttpInputStreamEE7)
+            if (in instanceof HttpInputStreamEE7) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "init , Servlet 3.1 enabled, casting to HttpInputStreamExtended");
+                }
                 this.httpin = (HttpInputStreamEE7)in;
+            }           
             this.in = in;
+            // below cast needed for SIP
+            if (in instanceof HttpInputStreamConnectWeb)
+                this.inStream = (HttpInputStreamConnectWeb) in;
+            
         } else {
             this.httpin = null;
             this.in = null;
+            this.inStream = null;
         }
 
         this.listener = null;
@@ -200,14 +208,14 @@ public class SRTInputStream31 extends SRTInputStream
         // post data has already been read and re-populated by the security component.In 
         // this case create a callback which works for the already read data.
         if (getISC()==null) {
-            this.callback = new AsyncAlreadyReadCallback(this.listener, this, tcm);
+            this.callback = new AsyncAlreadyReadCallback(this, tcm);
         } else {
             //Create a new HttpServletCallback so we can use it for our async read callbacks
-            this.callback = new AsyncReadCallback(this.listener, this, tcm);
+            this.callback = new AsyncReadCallback(this, tcm);
         }    
 
         try {
-            ReadListenerRunnable rlRunnable = new ReadListenerRunnable(this.callback, tcm, getISC(), this.listener);
+            ReadListenerRunnable rlRunnable = new ReadListenerRunnable(tcm, this);
             
             com.ibm.ws.webcontainer.osgi.WebContainer.getExecutorService().execute(rlRunnable);
         } catch (Exception e) {
@@ -251,7 +259,7 @@ public class SRTInputStream31 extends SRTInputStream
         
         int returnByte;
         
-        if(this.request.isAsyncStarted()){
+        if(this.request.isAsyncStarted()&& (this.getReadListener()!= null)){
             synchronized(this){
 //                Check if isReady had returned false. If it did then an IllegalArgumentException will be thrown if a listener is set
                 isReadyFalseCheck();
@@ -292,7 +300,7 @@ public class SRTInputStream31 extends SRTInputStream
         
         int returnSize = 0;
         
-        if(this.request.isAsyncStarted()){
+        if(this.request.isAsyncStarted() && (this.getReadListener()!= null)){
             synchronized(this){
                 
                 //Check if isReady had returned false. If it did then an IllegalArgumentException will be thrown if a listener is set
@@ -323,7 +331,7 @@ public class SRTInputStream31 extends SRTInputStream
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(tc, "Nothing to read, stream is closed : " + isClosed + ", or finished : " + isFinished());
             return -1;
-        }
+        }        
         
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(tc, "read" , "SRTInputStream31.read(byte[], int, int)");
@@ -342,7 +350,7 @@ public class SRTInputStream31 extends SRTInputStream
         
         int returnSize = 0;
         
-        if(this.request.isAsyncStarted()){
+        if(this.request.isAsyncStarted() && (this.getReadListener()!= null)){
             synchronized(this){
                 //Check if isReady had returned false. If it did then an IllegalArgumentException will be thrown if a listener is set
                 isReadyFalseCheck();
@@ -444,12 +452,34 @@ public class SRTInputStream31 extends SRTInputStream
      */
     @Override
     public void close() throws IOException {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+            Tr.debug(tc, "The input stream has been closed : " + this + " read Listener running ->" + listener);
+        
         isClosed = true;
         listener = null;
         
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-            Tr.debug(tc, "The input stream has been closed : " + this);
+            Tr.debug(tc, "The input stream has been closed : " + this + " read Listener ->" + listener);
         
         super.close();
+    }
+    
+    /* (non-Javadoc)
+     * @see com.ibm.ws.webcontainer.srt.SRTInputStream#restart()
+     */
+    @Override
+    public void restart() {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "restart", "SRTInputStream31: Start re-read of data");
+        }
+        this.isClosed = false;
+        super.restart();
+    }
+    
+    /**
+     * @return the callback
+     */
+    public InterChannelCallback getCallback() {
+        return callback;
     }
 }

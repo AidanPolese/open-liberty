@@ -53,7 +53,7 @@ public abstract class CommonClientCfg extends CommonCfg {
     protected final String domain;
     private final String TYPE;
     private final Authenticator authenticator;
-    private final SSLConfig sslConfig;
+    protected final SSLConfig sslConfig;
 
     /* ctor */
     public CommonClientCfg(Authenticator authenticator, String domain, String defaultAlias, String type) {
@@ -103,13 +103,12 @@ public abstract class CommonClientCfg extends CommonCfg {
         return compoundSecMechConfigs;
     }
 
-    private void setTransportLayerConfig(List<CSSCompoundSecMechConfig> compoundSecMechs, LayersData mechInfo) throws SSLException {
+    protected void setTransportLayerConfig(List<CSSCompoundSecMechConfig> compoundSecMechs, LayersData mechInfo) throws SSLException {
         Map<String, Object> transportLayerProperties = mechInfo.transportLayer;
         CSSTransportMechConfig cssTransportMechConfig;
         if (transportLayerProperties != null) {
             printTrace("Transport Layer", null, 2);
             boolean sslEnabled = (Boolean) transportLayerProperties.get(KEY_SSL_ENABLED);
-            String sslAliasName = (String) transportLayerProperties.get(KEY_SSL_REF);
             if (sslEnabled) {
                 cssTransportMechConfig = extractSSLTransport(transportLayerProperties);
             } else {
@@ -124,7 +123,7 @@ public abstract class CommonClientCfg extends CommonCfg {
         }
     }
 
-    private CSSTransportMechConfig extractSSLTransport(Map<String, Object> transportLayerProperties) throws SSLException {
+    protected CSSTransportMechConfig extractSSLTransport(Map<String, Object> transportLayerProperties) throws SSLException {
         String sslRef = (String) transportLayerProperties.get(KEY_SSL_REF);
         if (sslRef == null) {
             sslRef = sslConfig.getSSLAlias();

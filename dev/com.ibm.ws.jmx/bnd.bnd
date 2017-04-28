@@ -31,7 +31,6 @@ Private-Package: com.ibm.ws.jmx, \
 -dsannotations=com.ibm.ws.jmx.internal.DelayedMBeanActivatorHelper
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.event;version=latest,\
 	com.ibm.ws.kernel.boot.core;version=latest,\
 	com.ibm.ws.org.apache.aries.jmx.api.1.1.6;version=latest,\

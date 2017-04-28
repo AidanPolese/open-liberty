@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2001,2013
+ * Copyright IBM Corp. 2001,2017
  *
  * The source code for this program is not published or otherwise divested 
  * of its trade secrets, irrespective of what has been deposited with the 
@@ -49,7 +49,6 @@ import com.ibm.ws.kernel.service.util.PrivHelper;
  * This class provides generic JDBC method level tracing for JDBC drivers (like the
  * Microsoft SQL Server 2005 JDBC Driver) that don't themselves provide sufficient trace.
  */
-@SuppressWarnings("deprecation")
 public class WSJdbcTracer implements InvocationHandler
 {
     static final Set<String> METHODS_TO_SKIP = new HashSet<String>(); 

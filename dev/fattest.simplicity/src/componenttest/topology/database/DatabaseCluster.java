@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -167,6 +168,9 @@ public class DatabaseCluster {
     public void createDatabase() throws Exception {
         if (dbInUse != null)
             throw new IllegalStateException("Cannot call createDatabase more than once per cluster instance.");
+
+        // Randomize the database ordering in attempt to distribute the load
+        Collections.shuffle(databases);
 
         Exception last = null;
         for (Database db : databases)

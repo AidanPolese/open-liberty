@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2015, 2016
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.install;
@@ -85,13 +85,13 @@ public class RepositoryConfigUtils {
                 repoPropertiesInput = new FileInputStream(repoPropertiesFile);
                 repoProperties.load(repoPropertiesInput);
             } catch (Exception e) {
-                throw new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("ERROR_TOOL_REPOSITORY_PROPS_NOT_LOADED", getRepoPropertiesFileLocation()), InstallException.IO_FAILURE);
+                throw new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("ERROR_TOOL_REPOSITORY_PROPS_NOT_LOADED",
+                                                                                          getRepoPropertiesFileLocation()), InstallException.IO_FAILURE);
             } finally {
                 InstallUtils.close(repoPropertiesInput);
             }
-        }
-        else if (isPropsLocationOverridden) {
-            //Checks if the override location is a directory 
+        } else if (isPropsLocationOverridden) {
+            //Checks if the override location is a directory
             throw new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage(repoPropertiesFile.isDirectory() ? "ERROR_TOOL_REPOSITORY_PROPS_NOT_FILE" : "ERROR_TOOL_REPOSITORY_PROPS_NOT_EXISTS",
                                                                                       getRepoPropertiesFileLocation()), InstallException.IO_FAILURE);
         }
@@ -104,8 +104,7 @@ public class RepositoryConfigUtils {
         //Gets the repository properties file path from the default location
         if (overrideLocation == null) {
             return installDirPath + InstallConstants.DEFAULT_REPO_PROPERTIES_LOCATION;
-        }
-        else {
+        } else {
             //Gets the repository properties file from user specified location
             return overrideLocation;
         }
@@ -155,12 +154,10 @@ public class RepositoryConfigUtils {
                     //Check proxy port number in range
                     if (proxyURL.getPort() < 0 || proxyURL.getPort() > 0xFFFF)
                         throw new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("ERROR_TOOL_INVALID_PROXY_PORT", String.valueOf(proxyURL.getPort())));
-                }
-                else {
+                } else {
                     if ((proxyHost == null || proxyHost.isEmpty()) && proxyPort != null) {
                         throw new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("ERROR_TOOL_PROXY_HOST_MISSING"), InstallException.MISSING_CONTENT);
-                    }
-                    else if (proxyHost != null && (proxyPort == null || proxyPort.isEmpty())) {
+                    } else if (proxyHost != null && (proxyPort == null || proxyPort.isEmpty())) {
                         throw new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("ERROR_TOOL_PROXY_PORT_MISSING"), InstallException.MISSING_CONTENT);
                     }
                 }
@@ -260,7 +257,8 @@ public class RepositoryConfigUtils {
                 }
 
             } catch (IOException e) {
-                throw new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("ERROR_TOOL_REPOSITORY_PROPS_NOT_LOADED", getRepoPropertiesFileLocation()), InstallException.IO_FAILURE);
+                throw new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("ERROR_TOOL_REPOSITORY_PROPS_NOT_LOADED",
+                                                                                          getRepoPropertiesFileLocation()), InstallException.IO_FAILURE);
             } finally {
                 InstallUtils.close(repoPropertiesInput);
                 InstallUtils.close(repoPropertiesReader);
@@ -358,8 +356,7 @@ public class RepositoryConfigUtils {
                     } catch (Exception e) {
                         throw new InstallException(RepositoryUtils.getMessage("ERROR_DIRECTORY_NOT_EXISTS", repoDir));
                     }
-                }
-                else {
+                } else {
                     if (rc.getUrl().equalsIgnoreCase(repoConn.getRepositoryLocation())) {
                         repoName = rc.getId();
                         break;
@@ -405,15 +402,14 @@ public class RepositoryConfigUtils {
 
             //empty key check
             if (key == null || key.isEmpty()) {
-                validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.EMPTY_KEY,
-                                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_EMPTY_KEY")));
+                validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.EMPTY_KEY, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_EMPTY_KEY")));
                 return;
             }
 
             //key is not supported
             if (!isKeySupported(key)) {
-                validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.INVALID_KEY,
-                                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_KEY", key)));
+                validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.INVALID_KEY, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_KEY",
+                                                                                                                                                                       key)));
                 return;
             }
 
@@ -427,8 +423,7 @@ public class RepositoryConfigUtils {
                 //Check for empty repository names
                 if (repoName.isEmpty()) {
                     logger.log(Level.FINE, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("LOG_NO_REPO_NAME", line));
-                    validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.MISSING_REPONAME,
-                                    Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_EMPTY_REPONAME")));
+                    validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.MISSING_REPONAME, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_EMPTY_REPONAME")));
                     return;
                 }
             }
@@ -437,8 +432,9 @@ public class RepositoryConfigUtils {
              * duplicate keys
              */
             if (configMap.containsKey(key)) {
-                validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.DUPLICATE_KEY,
-                                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_DUPLICATE_KEY", key, lineMap.get(key))));
+                validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.DUPLICATE_KEY, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_DUPLICATE_KEY",
+                                                                                                                                                                         key,
+                                                                                                                                                                         lineMap.get(key))));
                 return;
             } else {
                 configMap.put(key, value);
@@ -447,8 +443,8 @@ public class RepositoryConfigUtils {
 
             //empty value check
             if (value == null || value.isEmpty()) {
-                validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.EMPTY_VALUE,
-                                Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_EMPTY_VALUE", key)));
+                validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.EMPTY_VALUE, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_EMPTY_VALUE",
+                                                                                                                                                                       key)));
                 return;
             }
 
@@ -457,8 +453,8 @@ public class RepositoryConfigUtils {
              */
             if (key.equals(USE_WLP_REPO)) {
                 if (!(value.toLowerCase().equals("true") || value.toLowerCase().equals("false"))) {
-                    validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.INVALID_VALUE,
-                                    Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_DEFAULTREPO_VALUE", value)));
+                    validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.INVALID_VALUE, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_DEFAULTREPO_VALUE",
+                                                                                                                                                                             value)));
                     return;
                 }
             }
@@ -466,7 +462,7 @@ public class RepositoryConfigUtils {
             if (key.endsWith(URL_SUFFIX)) {
                 /**
                  * invalid url
-                 * 
+                 *
                  */
                 String url = value;
                 url = repoProperties.getProperty(key);
@@ -480,16 +476,15 @@ public class RepositoryConfigUtils {
                          */
                         String protocol = repoUrl.getProtocol();
                         if (!protocol.equalsIgnoreCase("http") && !protocol.equalsIgnoreCase("https") && !protocol.equalsIgnoreCase("file")) {
-                            validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.UNSUPPORTED_PROTOCOL,
-                                            Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_UNSUPPORT_PROTOCOL",
-                                                                                           value)));
+                            validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.UNSUPPORTED_PROTOCOL, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_UNSUPPORT_PROTOCOL",
+                                                                                                                                                                                            value)));
                             return;
                         }
                     }
 
                 } catch (MalformedURLException e) {
-                    validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.INVALID_URL,
-                                    Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_URL", value)));
+                    validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.INVALID_URL, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_URL",
+                                                                                                                                                                           value)));
                     return;
                 }
 
@@ -504,15 +499,13 @@ public class RepositoryConfigUtils {
                     int port = Integer.parseInt(value);
                     //Check proxy port number in range
                     if (port <= 0 || port > 0xFFFF) {
-                        validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.INVALID_PORT,
-                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_PORT_VALUE",
-                                                                                       value)));
+                        validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.INVALID_PORT, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_PORT_VALUE",
+                                                                                                                                                                                value)));
                         return;
                     }
                 } catch (Exception e) {
-                    validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.INVALID_PORT,
-                                    Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_PORT_VALUE",
-                                                                                   value)));
+                    validationResults.add(new RepositoryConfigValidationResult(lineNum, ValidationFailedReason.INVALID_PORT, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_PORT_VALUE",
+                                                                                                                                                                            value)));
                     return;
                 }
 
@@ -548,9 +541,8 @@ public class RepositoryConfigUtils {
                 if (configMap.containsKey(PROXY_HOST)) {
                     int ln = lineMap.get(PROXY_HOST);
                     if (!configMap.containsKey(PROXY_PORT)) {
-                        validationResults.add(new RepositoryConfigValidationResult(ln, ValidationFailedReason.MISSING_PORT,
-                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_MISSING_PORT_VALUE",
-                                                                                       configMap.get(PROXY_HOST))));
+                        validationResults.add(new RepositoryConfigValidationResult(ln, ValidationFailedReason.MISSING_PORT, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_MISSING_PORT_VALUE",
+                                                                                                                                                                           configMap.get(PROXY_HOST))));
                     } else {
                         /**
                          * verify proxy host url along with the port number
@@ -565,18 +557,15 @@ public class RepositoryConfigUtils {
                             if (proxyHost.toLowerCase().contains("://")) {
                                 proxyUrl = new URL(proxyHost + ":" + proxyPort);
                                 if (!proxyUrl.getProtocol().toLowerCase().equals("http"))
-                                    validationResults.add(new RepositoryConfigValidationResult(ln, ValidationFailedReason.INVALID_HOST,
-                                                    Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_HOST",
-                                                                                                   configMap.get(PROXY_HOST))));
-                            }
-                            else {
+                                    validationResults.add(new RepositoryConfigValidationResult(ln, ValidationFailedReason.INVALID_HOST, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_HOST",
+                                                                                                                                                                                       configMap.get(PROXY_HOST))));
+                            } else {
                                 new URL("http://" + proxyHost + ":" + proxyPort);
                             }
 
                         } catch (MalformedURLException e) {
-                            validationResults.add(new RepositoryConfigValidationResult(ln, ValidationFailedReason.INVALID_HOST,
-                                            Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_HOST",
-                                                                                           configMap.get(PROXY_HOST))));
+                            validationResults.add(new RepositoryConfigValidationResult(ln, ValidationFailedReason.INVALID_HOST, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_INVALID_HOST",
+                                                                                                                                                                               configMap.get(PROXY_HOST))));
                         }
                     }
                 } else {
@@ -588,8 +577,7 @@ public class RepositoryConfigUtils {
                             ln = lineMap.get(PROXY_USER);
                         else
                             ln = lineMap.get(PROXY_PASSWORD);
-                        validationResults.add(new RepositoryConfigValidationResult(ln, ValidationFailedReason.MISSING_HOST,
-                                        Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_MISSING_HOST")));
+                        validationResults.add(new RepositoryConfigValidationResult(ln, ValidationFailedReason.MISSING_HOST, Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("MSG_VALIDATION_MISSING_HOST")));
                     }
                 }
             } catch (IOException e) {

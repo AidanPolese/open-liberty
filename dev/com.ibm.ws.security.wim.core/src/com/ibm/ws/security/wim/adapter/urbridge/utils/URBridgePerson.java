@@ -1,17 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013, 2014
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person              Defect/Feature      Comments
- * -------      ------              --------------      --------------------------------------------------
- * 10/15/2015   rzunzarr           192087               Removed stripRDN code.
+ *
  */
 package com.ibm.ws.security.wim.adapter.urbridge.utils;
 
@@ -20,7 +15,6 @@ import java.util.Map;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.websphere.security.wim.copyright.IBMCopyright;
 import com.ibm.websphere.security.wim.ras.WIMMessageHelper;
 import com.ibm.websphere.security.wim.ras.WIMMessageKey;
 import com.ibm.ws.security.wim.adapter.urbridge.URBridge;
@@ -35,11 +29,6 @@ import com.ibm.wsspi.security.wim.model.Root;
 public class URBridgePerson extends URBridgeEntity {
 
     /**
-     * Copyright
-     */
-    static final String COPYRIGHT_NOTICE = IBMCopyright.COPYRIGHT_NOTICE_SHORT_2014;
-
-    /**
      * Register the class to trace service.
      */
     private final static TraceComponent tc = Tr.register(URBridgePerson.class);
@@ -47,7 +36,7 @@ public class URBridgePerson extends URBridgeEntity {
     /**
      * Create an URBridgePerson. Extracts and set Property mapping
      * from the inAttrMap.
-     * 
+     *
      * @param inEntity The entity to be wrapped by the URBridgePerson. This
      *            entity's type determines which type of URBridgeEntity
      *            is created.
@@ -57,8 +46,7 @@ public class URBridgePerson extends URBridgeEntity {
      * @param inBaseEntry The name of the baseEntry.
      */
     public URBridgePerson(Entity inEntity, URBridge urBridge, Map<String, String> inAttrMap, String inBaseEntry,
-                          Map<String, String> inEntityConfigMap)
-    {
+                          Map<String, String> inEntityConfigMap) {
         super(inEntity, urBridge, inAttrMap, inBaseEntry, inEntityConfigMap);
 
         // Get the attrMap. From it get the values.
@@ -70,50 +58,46 @@ public class URBridgePerson extends URBridgeEntity {
 
     /**
      * Request to retrieve the uniqueUserId from the registry.
-     * 
+     *
      * @param securityName the userSecurityName of the user in the
      *            underlying registry.
      */
     @Override
-    public String getUniqueIdForEntity(String securityName) throws Exception
-    {
+    public String getUniqueIdForEntity(String securityName) throws Exception {
         return urBridge.getUniqueUserId(securityName);
     }
 
     /**
      * Request to retrieve the userSecurityName from the registry.
-     * 
+     *
      * @param uniqueId the uniqueUserId of the user in the
      *            underlying registry.
      */
     @Override
-    public String getSecurityNameForEntity(String uniqueId) throws Exception
-    {
+    public String getSecurityNameForEntity(String uniqueId) throws Exception {
         return urBridge.getUserSecurityName(uniqueId);
     }
 
     /**
      * Request to retrieve the userDisplayName from the registry.
-     * 
+     *
      * @param securityName the userSecurityName of the user in the
      *            underlying registry.
      */
     @Override
-    public String getDisplayNameForEntity(String securityName) throws Exception
-    {
+    public String getDisplayNameForEntity(String securityName) throws Exception {
         return urBridge.getUserDisplayName(securityName);
     }
 
     /**
      * Get the members for the group and add the specified attributes
      * to each of the members.
-     * 
+     *
      * @param grpMbrAttrs the attributes to be added to the members.
      * @WIMException an error occurs in the underlying registry
      */
     @Override
-    public void getGroupsForUser(List<String> grpMbrshipAttrs, int countLimit) throws WIMException
-    {
+    public void getGroupsForUser(List<String> grpMbrshipAttrs, int countLimit) throws WIMException {
         String securityName = null;
         try {
             securityName = getSecurityName(false);
@@ -144,17 +128,14 @@ public class URBridgePerson extends URBridgeEntity {
                 entity.getGroups().add(memberDO);
             }
         } catch (com.ibm.websphere.security.EntryNotFoundException enfe) {
-            throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND,
-                            Tr.formatMessage(tc, WIMMessageKey.ENTITY_NOT_FOUND,
-                                             WIMMessageHelper.generateMsgParms(securityName)));
+            throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, Tr.formatMessage(tc, WIMMessageKey.ENTITY_NOT_FOUND,
+                                                                                               WIMMessageHelper.generateMsgParms(securityName)));
         } catch (com.ibm.websphere.security.NotImplementedException nie) {
-            throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND,
-                            Tr.formatMessage(tc, WIMMessageKey.ENTITY_NOT_FOUND,
-                                             WIMMessageHelper.generateMsgParms(securityName)));
+            throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, Tr.formatMessage(tc, WIMMessageKey.ENTITY_NOT_FOUND,
+                                                                                               WIMMessageHelper.generateMsgParms(securityName)));
         } catch (Exception e) {
-            throw new WIMApplicationException(WIMMessageKey.ENTITY_GET_FAILED,
-                            Tr.formatMessage(tc, WIMMessageKey.ENTITY_GET_FAILED,
-                                             WIMMessageHelper.generateMsgParms(securityName, e.toString())));
+            throw new WIMApplicationException(WIMMessageKey.ENTITY_GET_FAILED, Tr.formatMessage(tc, WIMMessageKey.ENTITY_GET_FAILED,
+                                                                                                WIMMessageHelper.generateMsgParms(securityName, e.toString())));
         }
     }
 }

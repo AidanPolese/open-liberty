@@ -1,19 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013, 2014
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person     Defect/Feature      Comments
- * ----------   ------     --------------      --------------------------------------------------
- * 01/07/2014   rzunzarr   109880              Delete API implementation
- * 02/12/2014   rzunzarr   109887              Create API implementation
- * 03/05/2014   rzunzarr   109879              Update API implementation
+ *
  */
 package com.ibm.websphere.security.wim;
 
@@ -26,8 +19,7 @@ import com.ibm.wsspi.security.wim.model.Root;
 /**
  * The profile service interface.
  */
-public interface ProfileServiceLite extends SchemaConstants
-{
+public interface ProfileServiceLite extends SchemaConstants {
     public static int ASSIGN_MODE = 1;
     public static int REPLACE_ASSIGN_MODE = 2;
     public static int UNASSIGN_MODE = 3;
@@ -42,7 +34,7 @@ public interface ProfileServiceLite extends SchemaConstants
      * For example, PropertyControl is used for returning the properties of the
      * entity/entities. GroupMembershipControl is used for returning groups the
      * entity/entities belongs to.
-     * 
+     *
      * @param root The root data object containing the request information.
      * @return The root data object containing the requested information.
      * @throws WIMException
@@ -62,7 +54,7 @@ public interface ProfileServiceLite extends SchemaConstants
      * For example, you want to get uid, cn for all the people whose sn equals to "Doe".
      * The search expression is also included in the SearchControl. If you want to
      * use the paged search function, the PageControl is needed.
-     * 
+     *
      * @param root the root data object containing the control(s) related to search.
      * @return the root data object containing the entities matching the search expression.
      * @throws WIMException
@@ -75,7 +67,7 @@ public interface ProfileServiceLite extends SchemaConstants
      * User can be authenticated either using loginId/password or using X509Certificate.
      * The successfully authenticated LoginAccount data object will be returned with requested properties
      * specified in the LoginControl. <br>
-     * 
+     *
      * @param root the root data object containing the LoginAccount to authenticate.
      * @return the root data object containing the LoginAccount which is successfully authenticated.
      * @throws WIMException
@@ -85,13 +77,13 @@ public interface ProfileServiceLite extends SchemaConstants
 
     /**
      * Deletes the entity specified in the root data object. Only one entity can be delete at one time.
-     * 
+     *
      * @param root The root data object which contains the entity to delete.
      *            The identifier of the entity should be specified.
-     * 
+     *
      * @return The root data object containing the deleted entity and its descendants
      *         (if there are any), with their identifiers.
-     * 
+     *
      * @throws WIMException
      * @throws RemoteException
      */
@@ -103,7 +95,7 @@ public interface ProfileServiceLite extends SchemaConstants
      * can be added under the root data object along with the properties.<br>
      * The output root data object of the create method contains the created entity data object
      * which contains its identifier.
-     * 
+     *
      * @param root The root data object which contains the entity to be created.
      * @return The root data object which contains the created entity and its identifier.
      * @throws WIMException
@@ -115,7 +107,7 @@ public interface ProfileServiceLite extends SchemaConstants
      * Updates entity specified in the root data object.
      * The caller can create a empty root data object and specify
      * the changes needed. All the changes will replace the existing values.
-     * 
+     *
      * @param root The root data object containing entity with changes need to update.
      * @return The root data object containing the updated entity with its identifier.
      * @throws WIMException

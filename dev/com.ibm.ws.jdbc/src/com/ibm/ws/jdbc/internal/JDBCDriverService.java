@@ -94,6 +94,11 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
      * We will ignore these for ConnectionPoolDataSource/DataSource.
      */
     private static final List<String> PROPS_FOR_XA_ONLY = Arrays.asList("ifxIFX_XASPEC");
+    
+    /**
+     * Properties that should not be set on the JDBC driver.
+     */
+    private static final List<String> PROPS_NOT_SET_ON_DRIVER = Arrays.asList("isolationLevelSwitchingSupport");
 
     /**
      * Class loader instance.
@@ -275,8 +280,8 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
                     // Are there any properties remaining for which we couldn't find setters?
                     if (!p.isEmpty())
                         for (Object propertyName : p.keySet())
-                            // Filter out properties that only apply to XA
-                            if (!PROPS_FOR_XA_ONLY.contains(propertyName) || ds instanceof XADataSource) {
+                            // Filter out properties that only apply to XA or that shouldn't be set on the driver
+                            if ((!PROPS_FOR_XA_ONLY.contains(propertyName) || ds instanceof XADataSource) && !PROPS_NOT_SET_ON_DRIVER.contains(propertyName) ) {
                                 SQLException failure = connectorSvc.ignoreWarnOrFail(tc, null, SQLException.class, "PROP_NOT_FOUND", className, propertyName);
                                 if (failure != null)
                                     throw failure;

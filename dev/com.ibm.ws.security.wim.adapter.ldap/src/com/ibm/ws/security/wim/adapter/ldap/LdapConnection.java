@@ -7,26 +7,6 @@
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
  *
- * Change History:
- *
- * Tag          Person              Defect/Feature      Comments
- * -------      ------              --------------      --------------------------------------------------
- * 02/22/2013	ankit_jain	    92798		Change the NLS formatting method for exception message
- * 03/20/2013   suraj_chandegave    93943               SVT: FFDC logs generated for each incorrect user/password during login with LDAP
- * 04/05/2013   ankit_jain          98106               All 3 ldapEntityTypes has be to specified in config, even to override values of one
- * 04/23/2013   ankit_jain          99007               REmove Unused properties in VMM and ensure all stand alone LDAP properties are used in VMM LDAP as well
- * 04/24/2013   suraj_chandegave    99194               LDAP nested group search fails for registry API getGroupsForUser
- * 07/17/2013   rzunzarr            101377              ReuseConnection flag should work like it does in stand-alone Ldap.
- * 08/22/2013   rzunzarr            107755              FP8551SVT: REG: repetitive LdapConnection messages display in 8551 Liberty messages.log
- * 01/07/2014   rzunzarr            109880              Delete API implementation
- * 01/12/2014   rzunzarr            109887              Create API implementation
- * 02/03/13     ankit_jain          121732/PI09981      IMPROVE VMM PERFORMANCE DURING LOGIN WITH NO AUTHENTICATION CACHE
- * 02/24/2014   rzunzarr            123788              Authentication did not succeed during stress test
- * 03/05/2014   rzunzarr            109879              Update API implementation
- * 04/08/2014   suraj_chandegave    129979/PI10300      Honor the searchTimeout property for login
- * 04/24/2104   ankit_jain          128429              Cleanup findbugs.exclude file
- * 07/07/2015   rzunzarr            179573              Login with ignoreCase fails.
- * 11/25/2015   omhingmire          187213               LDAP BINARY ATTRIBUTE HANDLING IN VMM
  */
 package com.ibm.ws.security.wim.adapter.ldap;
 

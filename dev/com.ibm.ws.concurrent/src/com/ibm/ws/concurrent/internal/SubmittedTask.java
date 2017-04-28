@@ -47,7 +47,7 @@ public class SubmittedTask<T> extends AbstractTask<T> implements Runnable {
     /**
      * Lock for accessing the executionThread.
      */
-    private final byte[] executionThreadLock = new byte[0];
+    private final Integer executionThreadLock = new Integer(0);
 
     /**
      * Failure (if any) that occurred when running the task.
@@ -116,7 +116,7 @@ public class SubmittedTask<T> extends AbstractTask<T> implements Runnable {
     /**
      * Create a managed task, initialized with SUBMITTED state.
      * The caller is responsible for actually submitting the task to an executor of its choosing.
-     * 
+     *
      * @param managedExecSvc managed executor service to which the task was submitted
      * @param task the task
      * @param execProps execution properties
@@ -335,7 +335,7 @@ public class SubmittedTask<T> extends AbstractTask<T> implements Runnable {
 
     /**
      * Future for this scheduled task.
-     * 
+     *
      * Note: this class has a natural ordering that is inconsistent with equals.
      */
     @Trivial

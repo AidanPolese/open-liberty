@@ -92,6 +92,8 @@ import com.ibm.websphere.servlet.response.ResponseUtils;
 import com.ibm.ws.container.Container;
 import com.ibm.ws.container.DeployedModule;
 import com.ibm.ws.javaee.dd.webext.WebExt;
+import com.ibm.ws.security.audit.context.AuditManager;
+import com.ibm.ws.security.audit.context.AuditThreadContext;
 import com.ibm.ws.util.WSThreadLocal;
 import com.ibm.ws.webcontainer.async.AsyncContextFactory;
 import com.ibm.ws.webcontainer.async.AsyncContextImpl;
@@ -191,6 +193,11 @@ public abstract class WebContainer extends BaseContainer {
     private static ArrayList httpResponseListeners = new ArrayList();
 
     private static ServiceLoader<ServletContainerInitializer> servletContainerInitializers;
+    
+    protected AuditManager auditManager;
+
+    private static ThreadLocal<AuditThreadContext> threadLocal = new ThreadLocal<AuditThreadContext>();
+
 
     private static int invocationCacheSize = 500;
     static {
@@ -241,6 +248,7 @@ public abstract class WebContainer extends BaseContainer {
 
     public void initialize(WebContainerConfiguration config) {
         this.wcconfig = config;
+        this.auditManager = new AuditManager();
 
         // initialize the encoding
         getURIEncoding();
@@ -935,13 +943,15 @@ public abstract class WebContainer extends BaseContainer {
                     // end 272738    Duplicate CacheServletWrappers when url-rewriting is enabled    WAS.webcontainer: rewritten to handle jsessionid.
 
                     currDispatchContext.setQueryString(((SRTServletRequest) hreq).getQueryString());
-
+                    hreq.setValuesIfMultiReadofPostdataEnabled(); //MultiRead
                     if (vhost != null) {
                         vhost.addSecureRedirect(hreq, vhostKey);
                     }
                     if (isTraceOn&&logger.isLoggable (Level.FINE)) {                     
                         logger.logp(Level.FINE, CLASS_NAME,"handleRequest", "start handling the resource by wrapper -->["+ wrapper.getName()+"]");
                     }
+                    auditManager.setHttpServletRequest((Object)hreq);
+
                     wrapper.handleRequest(hreq, hres);
                 } catch (InvalidCacheTargetException ne) {
                     // This will happen when the cacheWrapper has been invalidated

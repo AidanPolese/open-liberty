@@ -7,25 +7,7 @@
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
  *
- * Change History:
- *
- * Tag           Person                 Defect/Feature      Comments
- * -------      ------                  --------------      --------------------------------------------------
- * 02/22/2013	ankit_jain		92798	            Change the NLS formatting method for exception message
- * 03/21/2013   suraj_chandegave        93943               SVT: FFDC logs generated for each incorrect user/password during login with LDAP
- * 01/04/2013   suraj_chandegave        97217               No duplicate user exception thrown when using federatedRepository
- * 04/16/2013   ankit_jain              99009               Handled WIMException due to unparseable argument defined in the INVALID_CERTIFICATE_FILTER message
- * 04/17/2013   suraj_chandegave        99120               maxSearchResults and searchTimeOut are not picked up dynamically
- * 01/07/2014   rzunzarr                109880              Delete API implementation
- * 01/12/2014   rzunzarr                109887              Create API implementation
- * 03/05/2014   rzunzarr                109879              Update API implementation
- * 04/24/2104   ankit_jain              128429              Cleanup findbugs.exclude file
- * 07/09/2014   rzunzarr                135773              Repository ID is required for deleting entity from Ldap.
- * 08/04/2015   rzunzarr                180566              Modified code to support Paging and Sorting according to SCIM 1.1 specs
- * 08/27/2015   rzunzarr                185315              SCIM create API support.
- * 09/25/2015   rzunzarr                188399              Fixed default parent scope issue
- * 10/07/2015   rzunzarr                190522              Fixed entity realm scope problem for users without LdapName as uniqueName
- */
+*/
 package com.ibm.ws.security.wim;
 
 import java.io.StringReader;
@@ -55,6 +37,7 @@ import com.ibm.websphere.security.wim.util.PasswordUtil;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.security.wim.env.ICacheUtil;
 import com.ibm.ws.security.wim.util.ControlsHelper;
+import com.ibm.ws.security.wim.util.SchemaConstantsInternal;
 import com.ibm.ws.security.wim.util.SortHandler;
 import com.ibm.ws.security.wim.util.UniqueNameHelper;
 import com.ibm.ws.security.wim.xpath.FederationLogicalNode;
@@ -113,17 +96,7 @@ import com.ibm.wsspi.security.wim.model.SearchResponseControl;
 import com.ibm.wsspi.security.wim.model.SortControl;
 import com.ibm.wsspi.security.wim.model.SortKeyType;
 
-/**
- *
- * @author Rohan Zunzarrao
- *
- */
 public class ProfileManager implements ProfileServiceLite {
-
-    /*
-     * The copyright message
-     */
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_LONG_2012;
 
     /**
      * Register the class to trace service.
@@ -185,7 +158,7 @@ public class ProfileManager implements ProfileServiceLite {
     private ConfigManager configMgr;
     private final RepositoryManager repositoryManager;
 
-    //TODO For now it doesnt make any diff. Could be be implemented as service only LA comes in picture
+    //TODO For now it doesn't make any diff. Could be be implemented as service only LA comes in picture
     PropertyManager propMgr = new PropertyManager();
 
     /**
@@ -1106,7 +1079,7 @@ public class ProfileManager implements ProfileServiceLite {
         if (isURBrigeResult) {
             // Add context for URBridge
             Context context = new Context();
-            context.setKey(SchemaConstants.IS_URBRIDGE_RESULT);
+            context.setKey(SchemaConstantsInternal.IS_URBRIDGE_RESULT);
             context.setValue("true");
             retRootDO.getContexts().add(context);
         }
@@ -1812,7 +1785,7 @@ public class ProfileManager implements ProfileServiceLite {
                                                                                                    WIMMessageKey.MISSING_BASE_ENTRY_IN_REALM,
                                                                                                    WIMMessageHelper.generateMsgParms(realmName)));
             }
-            // now separate same basedon repository id
+            // now separate same basedn repository id
             baseMap = getRepositoryManager().getBaseEntriesForRepos(realmBaseEntries);
         }
         // if no matching realm participating base entries, get all baseEntries of repository
@@ -1949,9 +1922,9 @@ public class ProfileManager implements ProfileServiceLite {
      * prepare the identifier DataObject for caller.
      *
      * @param id the identifier DataObject
-     * @param qualifiedEntityType the qualified entity type of the identifier repsented entity
-     * @param uid unique ID of the entity before updating operation (the should be only specified for updage operation, for other operations, set the uid to null)
-     * @param uName unique name of the entity before updating operation (the should be only specified for updage operation, for other operations, set the uName to null)
+     * @param qualifiedEntityType the qualified entity type of the identifier represented entity
+     * @param uid unique ID of the entity before updating operation (the should be only specified for update operation, for other operations, set the uid to null)
+     * @param uName unique name of the entity before updating operation (the should be only specified for update operation, for other operations, set the uName to null)
      * @throws WIMException
      */
     private void prepareForCaller(IdentifierType id, String qualifiedEntityType, String uid, String uName,
@@ -3405,7 +3378,7 @@ public class ProfileManager implements ProfileServiceLite {
             for (Context context : contexts) {
                 String key = context.getKey();
 
-                if (key != null && Service.IS_URBRIDGE_RESULT.equals(key)) {
+                if (key != null && SchemaConstantsInternal.IS_URBRIDGE_RESULT.equals(key)) {
                     if ("true".equalsIgnoreCase((String) context.getValue()))
                         return true;
                 }

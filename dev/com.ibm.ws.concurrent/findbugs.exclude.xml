@@ -60,5 +60,14 @@
     <Class name="com.ibm.ws.concurrent.internal.ManagedThreadFactoryService$ManagedThreadFactoryImpl"/>
     <Method name="newThread"/>
   </Match>
+  
+     <!-- Using new Integer(0) ensures we lock on a nonboxed Integer which will be unique -->
+   <Match>
+     <Or>
+       <Class name="com.ibm.ws.concurrent.internal.SubmittedTask" />
+       <Class name="com.ibm.ws.concurrent.internal.SubmittedTask$FutureImpl" />
+     </Or>
+     <Bug pattern="DL_SYNCHRONIZATION_ON_BOXED_PRIMITIVE"/>
+   </Match>
 
 </FindBugsFilter>

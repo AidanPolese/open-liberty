@@ -11,7 +11,6 @@
  *
  * Tag       Person      Defect/Feature      Comments
  * -------   ------      --------------      --------------------------------------------------
- *      suraj_chandegave    94474            SVT: Liberty855: CWWIM1015E: The format of the value of the principalName property is not valid
  */
 
 package com.ibm.ws.security.wim.registry.util;
@@ -48,13 +47,8 @@ import com.ibm.wsspi.security.wim.model.Root;
 /**
  * Utility class for common bridge functions.
  *
- * @author Ankit Jain
  */
 public class BridgeUtils implements WIMUserRegistryDefines {
-    /**
-     * Copyright notice.
-     */
-    private static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_LONG_2012;
 
     private static final TraceComponent tc = Tr.register(BridgeUtils.class);
 

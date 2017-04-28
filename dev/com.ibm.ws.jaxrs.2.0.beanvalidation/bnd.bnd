@@ -44,7 +44,6 @@ Private-Package:\
 -dsannotations: com.ibm.ws.jaxrs20.beanvalidation.component.*    
  
 -buildpath: \
-	${javac.bootclasspath.java7}, \
 	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.1.8.jar;version=file,\
 	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-frontend-jaxrs-3.1.8.jar;version=file,\
 	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\

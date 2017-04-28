@@ -10,10 +10,6 @@
  *
  * Tag           Person           Defect/Feature      Comments
  * ----------    ------           --------------      --------------------------------------------------
- * 03/18/2013    rzunzarr           95515             Added code from stand-alone that checks user details on thread-local
- * 03/21/2013    suraj_chandegave   93943             SVT: FFDC logs generated for each incorrect user/password during login with LDAP
- * 04/16/2013    ankit_jain         99009             Handled WIMException due to unparseable argument defined in the INVALID_CERTIFICATE_FILTER message
-
  */
 package com.ibm.ws.security.wim.registry;
 
@@ -33,7 +29,6 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Sensitive;
-import com.ibm.websphere.security.wim.Service;
 import com.ibm.ws.bnd.metatype.annotation.Ext;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.security.registry.CertificateMapFailedException;
@@ -55,14 +50,15 @@ import com.ibm.ws.security.wim.registry.util.SearchBridge;
 import com.ibm.ws.security.wim.registry.util.SecurityNameBridge;
 import com.ibm.ws.security.wim.registry.util.UniqueIdBridge;
 import com.ibm.ws.security.wim.registry.util.ValidBridge;
+import com.ibm.ws.security.wim.util.SchemaConstantsInternal;
 
 @ObjectClassDefinition(pid = "com.ibm.ws.security.wim.registry.WIMUserRegistry", name = Ext.INTERNAL, description = Ext.INTERNAL_DESC, localization = Ext.LOCALIZATION)
 @Ext.ObjectClassClass(FederationRegistry.class)
 interface WIMUserRegistryConfig {}
 
 /*
- * 
- * This component is bizarre in that it shares configuration with the ConfigManager, which is in another bundle.
+ *
+ * This component shares configuration with the ConfigManager, which is in another bundle.
  * I'd think the registry adapter should go in core and be one component.
  */
 //TODO policy REQUIRE when we count this....
@@ -80,11 +76,6 @@ public class WIMUserRegistry implements FederationRegistry, UserRegistry {
 
     @Reference
     VMMService vmmService;
-
-    /**
-     * Copyright notice.
-     */
-    private static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
 
     /**
      * WIM Delimiter to seperate token
@@ -138,7 +129,7 @@ public class WIMUserRegistry implements FederationRegistry, UserRegistry {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.security.registry.UserRegistry#getType()
      */
     @Override
@@ -267,8 +258,8 @@ public class WIMUserRegistry implements FederationRegistry, UserRegistry {
     }
 
     /**
-     * Incase of SAF registry securityName returned will be of format <userId>::<token>.
-     * 
+     * In case of SAF registry securityName returned will be of format <userId>::<token>.
+     *
      * @return the userId
      */
     protected String parseUserId(String securityName) {
@@ -310,7 +301,7 @@ public class WIMUserRegistry implements FederationRegistry, UserRegistry {
         try {
             result = uniqueBridge.getUniqueUserId(parseUserId(inputUniqueUserId));
 
-            boolean isURBridgeResult = Boolean.parseBoolean(result.get(Service.IS_URBRIDGE_RESULT));
+            boolean isURBridgeResult = Boolean.parseBoolean(result.get(SchemaConstantsInternal.IS_URBRIDGE_RESULT));
             if (!isURBridgeResult) {
                 String returnValue = result.get("RESULT");
                 if (!inputUniqueUserId.equalsIgnoreCase(returnValue))
@@ -492,7 +483,7 @@ public class WIMUserRegistry implements FederationRegistry, UserRegistry {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.security.registry.UserRegistry#getUsersForGroup(java.lang.String, int)
      */
     @Override
@@ -536,7 +527,7 @@ public class WIMUserRegistry implements FederationRegistry, UserRegistry {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.security.registry.FederationRegistry#removeAllFederatedRegistries()
      */
     @Override

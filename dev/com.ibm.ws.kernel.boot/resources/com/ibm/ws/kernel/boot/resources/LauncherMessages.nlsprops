@@ -464,6 +464,12 @@ warning.javase6.endofservice=CWWKE0109W: Support for Java SE 6 with WebSphere Ap
 warning.javase6.endofservice.explanation=IBM will discontinue support for Java SE 6 with WebSphere Application Server Liberty after September 2017. Continuing to use Java SE 6 after its end of support might expose your applications to security risks.
 warning.javase6.endofservice.useraction=IBM highly recommends that you use the latest Java SE version, Java SE 8. 
 
+#
+# W A R N I N G:   Do not use CWWKE0100 - CCWKE0199 they are reserved in ServiceMessages.nlsprops
+#
+# Too Late for CWWKE0101 - CWWKE0107 they have dual use currently and CWWKE0108 and CWWKE0109 are only used here.
+#
+
 error.clientNameCharacter=CWWKE0900E: The specified client name contains a character that is not valid (name={0}). \
   Valid characters are: Unicode alphanumeric (e.g. 0-9, a-z, A-Z), underscore (_), dash (-), plus (+), and period (.). \
   A client name cannot begin with a dash (-) or period (.).
@@ -650,6 +656,9 @@ info.server.resume.request.completed=CWWKE0939I: A resume request completed.
 info.server.resume.request.completed.explanation=A resume request completed.
 info.server.resume.request.completed.useraction=No action is required.
 
+info.envProductExtension=CWWKE0940I: The {0} product extension has a product identifier of {1} and a product installation location of {2}. This product extension was enabled by specifying the WLP_PRODUCT_EXT_DIR environment variable. 
+info.envProductExtension.explanation= The WLP_PRODUCT_EXT_DIR environment variable points to the location of the product extension. The server found and is using the product extension.
+info.envProductExtension.useraction=No action is required.
 
 info.serverStarting=Starting server {0}.
 info.serverStarted=Server {0} started.

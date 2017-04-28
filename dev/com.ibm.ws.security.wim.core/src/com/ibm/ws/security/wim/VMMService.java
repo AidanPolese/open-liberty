@@ -7,15 +7,6 @@
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
  *
- * Change History:
- *
- * Tag          Person        Defect/Feature      Comments
- * -------      ------       --------------      --------------------------------------------------
- * 01/07/2014   rzunzarr          109880          Delete API implementation
- * 01/12/2014   rzunzarr          109887          Create API implementation
- * 03/05/2014   rzunzarr          109879          Update API implementation
- * 07/16/2014   rzunzarr          107232          Federation of custom user registry
- * 09/29/2015   rzunzarr          186925          participatingBaseEntry tag fixed.
  */
 package com.ibm.ws.security.wim;
 
@@ -82,7 +73,6 @@ import com.ibm.wsspi.security.wim.model.Root;
            service = { VMMService.class },
            property = "service.vendor=IBM")
 public class VMMService implements Service, RealmConfigChangeListener {
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_LONG_2012;
 
     private static final TraceComponent tc = Tr.register(VMMService.class);
 
@@ -153,7 +143,7 @@ public class VMMService implements Service, RealmConfigChangeListener {
         getConfigManager().registerRealmConfigChangeListener(this);
 
         // Verify participating base entry
-        //n.b. this is totally bogus without forcing all repositories to be registered using a minimum cardinality.
+        //this is totally bogus without forcing all repositories to be registered using a minimum cardinality.
         //Presumably this would break the current ability to have misconfigured repositories/adapters that can't possibly start.
         //The problem is that repositories can be registered at any time after the VMMService starts, whereas  the configmanager is
         //configured directly with the other half of the info used in this check.

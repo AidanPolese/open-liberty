@@ -223,6 +223,8 @@ public class WebContainer extends com.ibm.ws.webcontainer.WebContainer implement
     private ServiceReference<ServletVersion> versionRef;
     
     private static boolean serverStopping = false;
+    private int modulesStarting=0;
+    
     
     
     /**
@@ -336,6 +338,18 @@ public class WebContainer extends com.ibm.ws.webcontainer.WebContainer implement
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(tc, methodName, "Exception caught while waiting for background web apps to initialize");
                 }
+            }
+        }
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "waitForApplicationInitialization: Number of modules starting = " + modulesStarting );
+        }    
+        // if any modules are still starting wait for up to 20 seconds for them to complete.
+        for (int  i=0 ; i<40 && modulesStarting >0 ; i++) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                // don't bother sleeping again.
+                i=40;
             }
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
@@ -847,62 +861,81 @@ public class WebContainer extends com.ibm.ws.webcontainer.WebContainer implement
      */
     public Future<Boolean> startModule(ExtendedModuleInfo moduleInfo) throws StateChangeException {
         final WebModuleInfo webModule = (WebModuleInfo) moduleInfo;
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "startModule: " + webModule.getName() + " " + webModule.getContextRoot());
+        
+        // Track number of modules starting. Rarely a server can begin shutting down while a module is still starting which
+        // can result in an NPE. By counting modules in start, if there are module still starting during server quiesce the
+        // webcontainer can hold server start while modules finish starting.
+        modulesStarting++;
+        Future<Boolean> result;
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.entry(tc, "startModule: " + webModule.getName() + " " + webModule.getContextRoot() + ", modulesStarting = " + modulesStarting);
         }
         try {
-            WebModuleMetaData wmmd = (WebModuleMetaData) ((ExtendedModuleInfo)webModule).getMetaData();
-            J2EEName j2eeName = wmmd.getJ2EEName();
-            WebAppConfiguration appConfig = (WebAppConfiguration) wmmd.getConfiguration();
-
-            WebCollaboratorComponentMetaDataImpl wccmdi = (WebCollaboratorComponentMetaDataImpl) wmmd.getCollaboratorComponentMetaData();
-            wccmdi.setJ2EEName(j2eeName);
-            metaDataService.fireComponentMetaDataCreated(wccmdi);
-
-            WebComponentMetaDataImpl wcmdi = (WebComponentMetaDataImpl) appConfig.getDefaultComponentMetaData();
-            wcmdi.setJ2EEName(j2eeName);
-            metaDataService.fireComponentMetaDataCreated(wcmdi);
-
-            for (Iterator<IServletConfig> servletConfigs = appConfig.getServletInfos(); servletConfigs.hasNext();) {
-                IServletConfig servletConfig = servletConfigs.next();
-                wcmdi = (WebComponentMetaDataImpl) servletConfig.getMetaData();
-                wcmdi.setJ2EEName(j2eeNameFactory.create(j2eeName.getApplication(), j2eeName.getModule(), servletConfig.getName()));
-                metaDataService.fireComponentMetaDataCreated(wcmdi);
-            }
-
-            final ClassLoader moduleLoader = webModule.getClassLoader();
-
-            // The class loader for this application will do two things:
-            // 1. Provide classes needed for the application to run
-            // 2. Provide internal classes that implement third party or spec interfaces and are loaded by factories inspecting the thread context class loader
-            // The class loader on the web module can handle 1 already but we enhance it with some internal classes in order to support 2.
-            // Note that we only have one class loader though as it delegates to the enhanced class loader or app class loader which means that when app classes 
-            // are created they will use the app class loader but when something asks the TCCL for one of the internal class they will go to the enhanced CL delegate
-            final ClassLoadingService cls = classLoadingSRRef.getService();
-            final ClassLoader threadClassLoader = cls.createThreadContextClassLoader(moduleLoader);
-            com.ibm.wsspi.adaptable.module.Container webModuleContainer = webModule.getContainer();
-            final DeployedModule dMod = new DeployedModule(webModuleContainer, appConfig, threadClassLoader);
-            this.deployedModuleMap.put(webModule, dMod);
-            addWebApplication(dMod);
-            
-            // If the Webcontainer attribute "deferServletLoad" is set to "false" (not the default)
-            // then start the web application now, inline on this thread
-            // otherwise, launch is on its own thread and continue. 
-            
-            if (!WCCustomProperties.DEFER_SERVLET_LOAD) {
-                if (!startWebApplication(dMod)) {
-                    throw new StateChangeException("startWebApplication");
+            // If server is stopping return don't start the application, just an future set to true. 
+            if (isServerStopping()) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "startModule: " + "server is stopping");
                 }
+                // Server is stopping so we don't want to continue but options for return are not great:
+                // - null is not an option, it results in an NPE from the caller.
+                // - a Future with no result : server will wait 30 seconds for the result to be set
+                // - a Future with the result set to False : server will output a W message to say app did not start.
+                // - a Future with the result set to True  : sever will output an I message to say app has started.
+                // Go with the latter, because a W message would cause tests to fail,
+                result = futureMonitor.createFutureWithResult(Boolean.TRUE);
             } else {
-                backgroundWebAppStartFutures.add(es, new Runnable() {
-                    @Override
-                    public void run() {
-                            startWebApplication(dMod); 
+                WebModuleMetaData wmmd = (WebModuleMetaData) ((ExtendedModuleInfo)webModule).getMetaData();
+                J2EEName j2eeName = wmmd.getJ2EEName();
+                WebAppConfiguration appConfig = (WebAppConfiguration) wmmd.getConfiguration();
+ 
+                WebCollaboratorComponentMetaDataImpl wccmdi = (WebCollaboratorComponentMetaDataImpl) wmmd.getCollaboratorComponentMetaData();
+                wccmdi.setJ2EEName(j2eeName);
+                metaDataService.fireComponentMetaDataCreated(wccmdi);
+
+                WebComponentMetaDataImpl wcmdi = (WebComponentMetaDataImpl) appConfig.getDefaultComponentMetaData();
+                wcmdi.setJ2EEName(j2eeName);
+                metaDataService.fireComponentMetaDataCreated(wcmdi);
+
+                for (Iterator<IServletConfig> servletConfigs = appConfig.getServletInfos(); servletConfigs.hasNext();) {
+                    IServletConfig servletConfig = servletConfigs.next();
+                    wcmdi = (WebComponentMetaDataImpl) servletConfig.getMetaData();
+                    wcmdi.setJ2EEName(j2eeNameFactory.create(j2eeName.getApplication(), j2eeName.getModule(), servletConfig.getName()));
+                    metaDataService.fireComponentMetaDataCreated(wcmdi);
+                }
+
+                final ClassLoader moduleLoader = webModule.getClassLoader();
+
+                // The class loader for this application will do two things:
+                // 1. Provide classes needed for the application to run
+                // 2. Provide internal classes that implement third party or spec interfaces and are loaded by factories inspecting the thread context class loader
+                // The class loader on the web module can handle 1 already but we enhance it with some internal classes in order to support 2.
+                // Note that we only have one class loader though as it delegates to the enhanced class loader or app class loader which means that when app classes 
+                // are created they will use the app class loader but when something asks the TCCL for one of the internal class they will go to the enhanced CL delegate
+                final ClassLoadingService cls = classLoadingSRRef.getService();
+                final ClassLoader threadClassLoader = cls.createThreadContextClassLoader(moduleLoader);
+                com.ibm.wsspi.adaptable.module.Container webModuleContainer = webModule.getContainer();
+                final DeployedModule dMod = new DeployedModule(webModuleContainer, appConfig, threadClassLoader);
+                this.deployedModuleMap.put(webModule, dMod);
+                addWebApplication(dMod);
+            
+                // If the Webcontainer attribute "deferServletLoad" is set to "false" (not the default)
+                // then start the web application now, inline on this thread
+                // otherwise, launch is on its own thread
+                if (!WCCustomProperties.DEFER_SERVLET_LOAD) {
+                    if (!startWebApplication(dMod)) {
+                        throw new StateChangeException("startWebApplication");
                     }
-                });
+                } else {
+                    backgroundWebAppStartFutures.add(es, new Runnable() {
+                        @Override
+                        public void run() {
+                                startWebApplication(dMod); 
+                        }
+                    });
+                }
+                registerMBeans((WebModuleMetaDataImpl) wmmd, webModuleContainer);
+                result =  addContextRootRequirement(dMod);
             }
-            registerMBeans((WebModuleMetaDataImpl) wmmd, webModuleContainer);
-            return addContextRootRequirement(dMod);
         } catch (Throwable e) {
             FFDCWrapper.processException(e, getClass().getName(), "startModule", new Object[] { webModule, this });
             if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
@@ -912,7 +945,13 @@ public class WebContainer extends com.ibm.ws.webcontainer.WebContainer implement
             //PI58875
             this.stopModule(moduleInfo);
             throw new StateChangeException(e);
+        } finally {
+            modulesStarting--;
         }
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.exit(tc, "startModule: ", "modulesStarting = " + modulesStarting);
+        }
+        return result;
     }
 
     /**

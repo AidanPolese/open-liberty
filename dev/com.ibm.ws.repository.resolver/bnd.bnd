@@ -16,7 +16,6 @@ Private-Package: com.ibm.ws.repository.resolver.internal*
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6},\
 	com.ibm.ws.kernel.boot.core;version=latest,\
 	com.ibm.ws.kernel.feature;version=latest,\
 	com.ibm.ws.product.utility;version=latest,\

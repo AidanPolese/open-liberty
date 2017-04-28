@@ -1,16 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person   Defect/Feature      Comments
- * ----------   ------   --------------      --------------------------------------------------
+ *
  */
 package com.ibm.websphere.security.wim.ras;
 
@@ -18,7 +14,6 @@ package com.ibm.websphere.security.wim.ras;
  * This file contains the virtual member manager message keys.
  */
 public interface WIMMessageKey {
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_LONG_2012;
 
     /**
      * property 'prop_name' is not defined.
@@ -176,7 +171,7 @@ public interface WIMMessageKey {
     String ENTITY_TYPE_NOT_SUPPORTED = "ENTITY_TYPE_NOT_SUPPORTED";
 
     /**
-     * The specifed attribute type is not supported.
+     * The specified attribute type is not supported.
      */
     String ATTRIBUTE_NOT_SUPPORTED = "ATTRIBUTE_NOT_SUPPORTED";
 
@@ -201,7 +196,7 @@ public interface WIMMessageKey {
     String MALFORMED_SEARCH_EXPRESSION = "MALFORMED_SEARCH_EXPRESSION";
 
     /**
-     * An RDN sytle format is required but not set for the identifiers uniqueName
+     * An RDN style format is required but not set for the identifiers uniqueName
      */
     String RDN_STYLE_FORMAT_REQUIRED = "RDN_STYLE_FORMAT_REQUIRED";
 
@@ -361,7 +356,7 @@ public interface WIMMessageKey {
     String MISSING_OR_EMPTY_PASSWORD = "MISSING_OR_EMPTY_PASSWORD";
 
     /**
-     * The search expression does not follow the supported search expression grammer
+     * The search expression does not follow the supported search expression grammar
      */
     String SEARCH_EXPRESSION_ERROR = "SEARCH_EXPRESSION_ERROR";
 
@@ -382,7 +377,7 @@ public interface WIMMessageKey {
 
     /**
      * The specified property definition "{0}" with value "{1}" for property "{2}" is invalid.
-     * 
+     *
      */
     String INVALID_PROPERTY_DEFINITION = "INVALID_PROPERTY_DEFINITION";
 
@@ -407,7 +402,7 @@ public interface WIMMessageKey {
     String INVALID_PROPERTY_VALUE = "INVALID_PROPERTY_VALUE";
 
     /**
-     * 
+     *
      */
     String EXT_ID_HAS_MULTIPLE_VALUES = "EXT_ID_HAS_MULTIPLE_VALUES";
 
@@ -494,7 +489,7 @@ public interface WIMMessageKey {
     public final static String PLUGIN_MANAGER_TOPIC_EMITTER_MISSING_ERROR = "PLUGIN_MANAGER_TOPIC_EMITTER_MISSING_ERROR";
 
     /**
-     * Critical exception has occured inside a subscriber of plugin: {0}
+     * Critical exception has occurred inside a subscriber of plugin: {0}
      */
     public final static String SUBSCRIBER_CRITICAL_EXCEPTION = "SUBSCRIBER_CRITICAL_EXCEPTION";
 
@@ -643,7 +638,7 @@ public interface WIMMessageKey {
     String ENTITY_TYPE_ALREADY_DEFINED = "ENTITY_TYPE_ALREADY_DEFINED";
 
     /**
-     * The property type 'propType' is aleady defined for entity type 'entityType."
+     * The property type 'propType' is already defined for entity type 'entityType."
      */
     String PROPERTY_TYPE_ALREADY_DEFINED = "PROPERTY_TYPE_ALREADY_DEFINED";
 
@@ -658,7 +653,7 @@ public interface WIMMessageKey {
     String INVALID_SEARCH_EXPRESSION = "INVALID_SEARCH_EXPRESSION";
 
     /**
-     * Duplicate entity type 'entity_type' is defined in virtual member manager configuraiton XML file.
+     * Duplicate entity type 'entity_type' is defined in virtual member manager configuration XML file.
      */
     String DUPLICATE_ENTITY_TYPE = "DUPLICATE_ENTITY_TYPE";
 
@@ -728,7 +723,7 @@ public interface WIMMessageKey {
     String INVALID_PROPERTY_VALUE_FORMAT = "INVALID_PROPERTY_VALUE_FORMAT";
 
     /**
-     * The value '{0}' of 'countLimit' parmeter in the SearchControl DataObject is greater than the value '{1}' of the 'searchLimit' parameter.
+     * The value '{0}' of 'countLimit' parameter in the SearchControl DataObject is greater than the value '{1}' of the 'searchLimit' parameter.
      */
     String CANNOT_SPECIFY_COUNT_LIMIT = "CANNOT_SPECIFY_COUNT_LIMIT";
 
@@ -763,7 +758,7 @@ public interface WIMMessageKey {
     String SUPPORTED_ENTITY_TYPE_ALREADY_EXISTS = "SUPPORTED_ENTITY_TYPE_ALREADY_EXISTS";
 
     /**
-     * RDN attibute {0} already exists.
+     * RDN attribute {0} already exists.
      */
     String RDN_ATTR_ALREADY_EXISTS = "RDN_ATTR_ALREADY_EXISTS";
 
@@ -879,7 +874,7 @@ public interface WIMMessageKey {
     String CONFIG_NON_PROFILE_REPO_CANNOT_BE_UPDATED = "CONFIG_NON_PROFILE_REPO_CANNOT_BE_UPDATED";
 
     /**
-     * A duplicate value is not allowed for paramater '{0}'
+     * A duplicate value is not allowed for parameter '{0}'
      */
     String CONFIG_GROUP_SCOPE_CANNOT_BE_SET = "CONFIG_GROUP_SCOPE_CANNOT_BE_SET";
 
@@ -935,7 +930,7 @@ public interface WIMMessageKey {
     String CANNOT_WRITE_TO_READ_ONLY_REPOSITORY = "CANNOT_WRITE_TO_READ_ONLY_REPOSITORY";
 
     /**
-     * The initialization property '{0}' is missing from configuraiton.
+     * The initialization property '{0}' is missing from configuration.
      */
     String MISSING_INI_PROPERTY = "MISSING_INI_PROPERTY";
 
@@ -1355,7 +1350,7 @@ public interface WIMMessageKey {
 
     /* LI-80054-Start */
     /**
-     * Successfull added new property '' {0}'' to the entity ''{1}''
+     * Successfully added new property '' {0}'' to the entity ''{1}''
      */
     String EXTEND_SCHEMA_PROPERTY_EXTENSION_SUCCESSFUL = "EXTEND_SCHEMA_PROPERTY_EXTENSION_SUCCESSFUL";
 

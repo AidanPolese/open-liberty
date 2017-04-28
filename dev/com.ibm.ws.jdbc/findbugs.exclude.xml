@@ -90,19 +90,19 @@
     </Match>
     
     <Match> 
-      <Class name="com.ibm.ws.rsadapter.spi.DB2Helper" />
+      <Class name="com.ibm.ws.rsadapter.impl.DB2Helper" />
       <Method name="&lt;clinit&gt;"/>
       <Bug code="TR" />
     </Match>
 
     <Match> 
-      <Class name="com.ibm.ws.rsadapter.spi.DB2Helper" />
+      <Class name="com.ibm.ws.rsadapter.impl.DB2Helper" />
       <Method name="doConnectionSetup"/>
       <Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE" />
     </Match>
 
     <Match> 
-      <Class name="com.ibm.ws.rsadapter.spi.DB2JCCHelper" />
+      <Class name="com.ibm.ws.rsadapter.impl.DB2JCCHelper" />
       <Or>
         <Method name="shouldTraceBeDisabled"/>
         <Method name="shouldTraceBeEnabled"/>
@@ -111,7 +111,7 @@
     </Match>
     
     <Match> 
-      <Class name="com.ibm.ws.rsadapter.spi.DataDirectConnectSQLServerHelper" />
+      <Class name="com.ibm.ws.rsadapter.impl.DataDirectConnectSQLServerHelper" />
       <Or>
         <Method name="getPrintWriter"/>
         <Method name="shouldTraceBeDisabled"/>
@@ -121,7 +121,7 @@
     </Match>
     
     <Match> 
-      <Class name="com.ibm.ws.rsadapter.spi.DerbyHelper" />
+      <Class name="com.ibm.ws.rsadapter.impl.DerbyHelper" />
       <Or>
         <Method name="getPrintWriter"/>
         <Method name="shouldTraceBeDisabled"/>
@@ -131,13 +131,13 @@
     </Match>
     
     <Match>
-      <Class name="com.ibm.ws.rsadapter.spi.DerbyHelper" />
+      <Class name="com.ibm.ws.rsadapter.impl.DerbyHelper" />
       <Method name="&lt;clinit&gt;" />
       <Bug pattern="TR_WRONG_CLASS_NAME" />
     </Match>
     
     <Match> 
-      <Class name="com.ibm.ws.rsadapter.spi.DerbyNetworkClientHelper" />
+      <Class name="com.ibm.ws.rsadapter.impl.DerbyNetworkClientHelper" />
       <Or>
         <Method name="getPrintWriter"/>
         <Method name="enableJdbcLogging"/>
@@ -146,13 +146,13 @@
     </Match>
     
     <Match>
-      <Class name="com.ibm.ws.rsadapter.spi.DatabaseHelper" />
+      <Class name="com.ibm.ws.rsadapter.impl.DatabaseHelper" />
       <Method name="&lt;clinit&gt;" />
       <Bug pattern="TR_WRONG_CLASS_NAME" />
     </Match>
     
     <Match> 
-      <Class name="com.ibm.ws.rsadapter.spi.InformixHelper" />
+      <Class name="com.ibm.ws.rsadapter.impl.InformixHelper" />
       <Or>
         <Method name="getPrintWriter"/>
         <Method name="shouldTraceBeDisabled"/>
@@ -162,7 +162,7 @@
     </Match>
     
     <Match> 
-      <Class name="com.ibm.ws.rsadapter.spi.InformixJCCHelper" />
+      <Class name="com.ibm.ws.rsadapter.impl.InformixJCCHelper" />
       <Or>
         <Method name="&lt;clinit&gt;"/>
         <Method name="disableJdbcLogging"/>
@@ -175,7 +175,7 @@
     </Match>
     
     <Match> 
-      <Class name="com.ibm.ws.rsadapter.spi.MicrosoftSQLServerHelper" />
+      <Class name="com.ibm.ws.rsadapter.impl.MicrosoftSQLServerHelper" />
       <Or>
         <Method name="shouldTraceBeDisabled"/>
         <Method name="shouldTraceBeEnabled"/>
@@ -184,46 +184,46 @@
     </Match>
     
     <Match> 
-      <Class name="com.ibm.ws.rsadapter.spi.OracleHelper" />
+      <Class name="com.ibm.ws.rsadapter.impl.OracleHelper" />
       <Method name="&lt;init&gt;"/>
       <Bug code="LG" />
     </Match>
 
     <Match> 
-      <Class name="com.ibm.ws.rsadapter.spi.OracleHelper" />
+      <Class name="com.ibm.ws.rsadapter.impl.OracleHelper" />
       <Method name="&lt;clinit&gt;"/>
       <Bug code="TR" />
     </Match>
 
     <Match>
-      <Class name="com.ibm.ws.rsadapter.spi.SybaseHelper" />
+      <Class name="com.ibm.ws.rsadapter.impl.SybaseHelper" />
       <Method name="doConnectionSetup" />
       <Bug pattern="DLS_DEAD_LOCAL_STORE" />
     </Match>
 
     <!-- There is no need for Statement.close on exception path because the Connection will be destroyed -->
     <Match>
-      <Class name="com.ibm.ws.rsadapter.spi.WSManagedConnectionFactoryImpl" />
+      <Class name="com.ibm.ws.rsadapter.impl.WSManagedConnectionFactoryImpl" />
       <Method name="onConnect"/>
       <Bug pattern="OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE" />
     </Match>
 
     <Match> 
-      <Class name="com.ibm.ws.rsadapter.spi.WSRdbManagedConnectionImpl" />
+      <Class name="com.ibm.ws.rsadapter.impl.WSRdbManagedConnectionImpl" />
       <Method name="cleanupTransactions"/>
       <Bug code="TR" />
     </Match>
 
     <!-- Preexisting calls to System.currentTimeMillis -->
     <Match>
-      <Class name="com.ibm.ws.rsadapter.spi.WSRdbManagedConnectionImpl"/>
+      <Class name="com.ibm.ws.rsadapter.impl.WSRdbManagedConnectionImpl"/>
       <Method name="processConnectionErrorOccurredEvent"/>
       <Bug pattern="SYSTEM_CURRENT_TIME_MILLIS_CALLED"/>
     </Match>
     
     <!-- Preexisting calls to System.currentTimeMillis -->
     <Match>
-      <Class name="com.ibm.ws.rsadapter.spi.WSRdbXaResourceImpl"/>
+      <Class name="com.ibm.ws.rsadapter.impl.WSRdbXaResourceImpl"/>
       <Method name="~(commit|rollback)"/>
       <Bug pattern="SYSTEM_CURRENT_TIME_MILLIS_CALLED"/>
     </Match>
@@ -235,17 +235,17 @@
       <Bug pattern="DM_DEFAULT_ENCODING"/>
     </Match>
     <Match>
-      <Class name="com.ibm.ws.rsadapter.spi.DB2JCCHelper"/>
+      <Class name="com.ibm.ws.rsadapter.impl.DB2JCCHelper"/>
       <Method name="&lt;init&gt;"/>
       <Bug pattern="DM_DEFAULT_ENCODING"/>
     </Match>
     <Match>
-      <Class name="com.ibm.ws.rsadapter.spi.DerbyNetworkClientHelper$1"/>
+      <Class name="com.ibm.ws.rsadapter.impl.DerbyNetworkClientHelper$1"/>
       <Method name="run"/>
       <Bug pattern="DM_DEFAULT_ENCODING"/>
     </Match>
     <Match>
-      <Class name="com.ibm.ws.rsadapter.spi.OracleHelper"/>
+      <Class name="com.ibm.ws.rsadapter.impl.OracleHelper"/>
       <Method name="psSetString"/>
       <Bug pattern="DM_DEFAULT_ENCODING"/>
     </Match>
@@ -265,7 +265,7 @@
     
     <!-- Public fields, so I'm not going to delete them -->
     <Match>
-      <Class name="com.ibm.ws.rsadapter.spi.StatementCacheKey"/>
+      <Class name="com.ibm.ws.rsadapter.impl.StatementCacheKey"/>
       <Bug pattern="UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"/>
     </Match>
 

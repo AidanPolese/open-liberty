@@ -8,8 +8,11 @@
      -->
 <server>
 
-  <!--  Include the minimal set of Liberty for Bluemix features -->
+  <!--  Include the runtime set of Liberty for Bluemix features -->
   <include location="${editions.bluemix}/runtime.xml"/>
+
+  <!--  Include the extended set of Liberty for Bluemix features -->
+  <include location="${editions.bluemix}/extended.xml"/>
 
   <!-- Include the general beta features -->
   <include location="${profiles.beta}/beta_features.xml"/>

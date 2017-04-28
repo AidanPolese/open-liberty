@@ -49,6 +49,7 @@ public class AuditConstants {
     static public final String SECURITY_ROLE_MAPPING = "SECURITY_ROLE_MAPPING";
     static public final String SECURITY_AUTHN = "SECURITY_AUTHN";
     static public final String SECURITY_AUTHN_DELEGATION = "SECURITY_AUTHN_DELEGATION";
+    static public final String SECURITY_AUTHZ_DELEGATION = "SECURITY_AUTHZ_DELEGATION";
     static public final String SECURITY_AUTHN_TERMINATE = "SECURITY_AUTHN_TERMINATE";
     static public final String SECURITY_AUTHN_FAILOVER = "SECURITY_AUTHN_FAILOVER";
     static public final String SECURITY_AUTHZ = "SECURITY_AUTHZ";
@@ -65,8 +66,8 @@ public class AuditConstants {
     static public final List<String> validEventNamesList = Arrays.asList("CONFIG_SNAPSHOT", "SECURITY_AUDIT_MGMT", "SECURITY_MEMBER_MGMT", "SECURITY_SESSION_LOGIN",
                                                                          "SECURITY_SESSION_LOGOUT", "SECURITY_SESSION_EXPIRY", "SECURITY_API_AUTHN",
                                                                          "SECURITY_API_AUTHN_TERMINATE", "SECURITY_ROLE_MAPPING", "SECURITY_AUTHN",
-                                                                         "SECURITY_AUTHN_FAILOVER",
-                                                                         "SECURITY_AUTHN_DELEGATION", "SECURITY_AUTHN_TERMINATE", "SECURITY_AUTHZ",
+                                                                         "SECURITY_AUTHN_FAILOVER", "SECURITY_AUTHN_DELEGATION", "SECURITY_AUTHZ_DELEGATION",
+                                                                         "SECURITY_AUTHN_TERMINATE", "SECURITY_AUTHZ",
                                                                          "SECURITY_SIGNING", "SECURITY_ENCRYPTION", "SECURITY_RESOURCE_ACCESS", "SECURITY_MGMT_KEY",
                                                                          "SECURITY_RUNTIME_KEY", "JMX_MBEANS", "JMX_NOTIFICATION", "JMS", "CUSTOM");
 

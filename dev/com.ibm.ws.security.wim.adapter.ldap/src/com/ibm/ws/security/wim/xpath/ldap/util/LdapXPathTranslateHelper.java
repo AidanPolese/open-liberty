@@ -1,19 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag           Person        Defect/Feature      Comments
- * -------       ------        --------------      --------------------------------------------------
- *		 ankit_jain    92798		   Change the NLS formatting method for exception message
- * 04/24/2104    ankit_jain    128429              Cleanup findbugs.exclude file
- * 04/21/2016    speddapa      203909              USER LOGIN FAILURE WHEN UNIQUEUSERIDMAPPING INPUTPROPERTY SET TO NON DEFAULT VALUES.
+ *
  */
 package com.ibm.ws.security.wim.xpath.ldap.util;
 
@@ -40,10 +33,6 @@ import com.ibm.wsspi.security.wim.model.Person;
 import com.ibm.wsspi.security.wim.model.PersonAccount;
 
 public class LdapXPathTranslateHelper implements XPathTranslateHelper {
-    /**
-     * IBM Copyright string
-     */
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
 
     private LdapConfigManager ldapConfigMgr = null;
     private Set<String> entityTypes = null;
@@ -75,7 +64,7 @@ public class LdapXPathTranslateHelper implements XPathTranslateHelper {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.wim.xpath.util.XPathTranslateHelper#genSearchString(java.lang.StringBuffer, com.ibm.ws.wim.xpath.mapping.datatype.PropertyNode)
      */
     private void genSearchString(StringBuffer searchExpBuffer, PropertyNode propNode) throws WIMException {
@@ -107,8 +96,8 @@ public class LdapXPathTranslateHelper implements XPathTranslateHelper {
                 if (dataType != null) {
                     value = ldapConfigMgr.getLdapValue(propNode.getValue(), dataType, ldapAttrName);
                 } else {
-                    throw new PropertyNotDefinedException(WIMMessageKey.PROPERTY_NOT_DEFINED,
-                                    Tr.formatMessage(tc, WIMMessageKey.PROPERTY_NOT_DEFINED, WIMMessageHelper.generateMsgParms(propName)));
+                    throw new PropertyNotDefinedException(WIMMessageKey.PROPERTY_NOT_DEFINED, Tr.formatMessage(tc, WIMMessageKey.PROPERTY_NOT_DEFINED,
+                                                                                                               WIMMessageHelper.generateMsgParms(propName)));
                 }
             }
 
@@ -162,7 +151,7 @@ public class LdapXPathTranslateHelper implements XPathTranslateHelper {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.wim.xpath.util.XPathTranslateHelper#genSearchString(java.lang.StringBuffer, com.ibm.ws.wim.xpath.mapping.datatype.LogicalNode)
      */
     private void genSearchString(StringBuffer searchExpBuffer, LogicalNode logicalNode) throws WIMException {
@@ -197,7 +186,7 @@ public class LdapXPathTranslateHelper implements XPathTranslateHelper {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.wim.xpath.util.XPathTranslateHelper#genSearchString(java.lang.StringBuffer, com.ibm.ws.wim.xpath.mapping.datatype.ParenthesisNode)
      */
     private void genSearchString(StringBuffer searchExpBuffer, ParenthesisNode parenNode) throws WIMException {

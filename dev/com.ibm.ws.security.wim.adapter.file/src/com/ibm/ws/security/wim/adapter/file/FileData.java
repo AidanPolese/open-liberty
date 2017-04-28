@@ -43,9 +43,6 @@ public class FileData {
         try {
             docBuilder = DOMFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            // TODO Auto-generated catch block
-            // Do you need FFDC here? Remember FFDC instrumentation and @FFDCIgnore
-            // http://was.pok.ibm.com/xwiki/bin/view/Liberty/LoggingFFDC
             e.printStackTrace();
         }
     }
@@ -337,7 +334,6 @@ public class FileData {
         xpath.setNamespaceContext(new WIMNamespaceContext());
         if (returnSubType) {
             // append entity types
-            // TODO:: HOW???
         }
         String xpathString = "//*[@type='wim:" + entityType + "' and " + searchStr + "]";
         // System.out.println(xpathString);

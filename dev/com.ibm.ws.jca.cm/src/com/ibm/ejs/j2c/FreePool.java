@@ -48,7 +48,7 @@ public final class FreePool implements JCAPMIHelper {
 
     protected final MCWrapperList mcWrapperList;
     private final String nl = CommonFunction.nl;
-    protected final Object freeConnectionLockObject = new Object();
+    protected final Integer freeConnectionLockObject = new Integer(0);
     private PoolManager pm = null;
     protected int numberOfConnectionsInFreePool = 0;
     protected int numberOfConnectionsAssignedToThisFreePool = 0;

@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2012, 2016
+ * Copyright IBM Corp. 2012, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.serialization;
@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.security.AccessController;
@@ -23,6 +24,7 @@ import java.security.PrivilegedAction;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.kernel.service.util.JavaInfo;
 
 /**
  * Constructs a class loader that delegates class loading to a specific class
@@ -37,6 +39,22 @@ public class DeserializationObjectInputStream extends ObjectInputStream {
     private static final Class<?> thisClass = DeserializationObjectInputStream.class;
 
     private final ClassLoader classLoader;
+
+    // The PlatformClassloader. It is set when running with java 9 and above.
+    private static final ClassLoader platformClassloader;
+    static {
+        ClassLoader pcl = null;
+        if (JavaInfo.majorVersion() >= 9) {
+            try {
+                Method getPlatformClassLoader = ClassLoader.class.getMethod("getPlatformClassLoader");
+                pcl = (ClassLoader) getPlatformClassLoader.invoke(null);
+            } catch (Throwable t) {
+                // Log an FFDC.
+            }
+        }
+
+        platformClassloader = pcl;
+    }
 
     public DeserializationObjectInputStream(InputStream in, ClassLoader classLoader) throws IOException {
         super(in);
@@ -84,8 +102,8 @@ public class DeserializationObjectInputStream extends ObjectInputStream {
             } while (name.charAt(numComponents) == '[');
 
             if (name.charAt(numComponents) != 'L') {
-                // Primitive array class expected.  Use the bootstrap loader.
-                return resolveClassWithBoostrapCL(name);
+                // Primitive array class expected.
+                return resolveClassWithCL(name);
             }
 
             if (name.charAt(name.length() - 1) != ';') {
@@ -94,9 +112,8 @@ public class DeserializationObjectInputStream extends ObjectInputStream {
             }
 
             if (name.regionMatches(numComponents + 1, "java.", 0, 5)) {
-                // Fast path for "java." classes, which can only be loaded from
-                // the bootstrap loader.
-                return resolveClassWithBoostrapCL(name);
+                // Path for "java." classes.
+                return resolveClassWithCL(name);
             }
 
             // Load the actual class, and then use that class' loader to load
@@ -107,27 +124,41 @@ public class DeserializationObjectInputStream extends ObjectInputStream {
         }
 
         if (name.startsWith("java.")) {
-            // Fast path for "java." classes, which can only be loaded from
-            // the bootstrap loader.
-            return resolveClassWithBoostrapCL(name);
+            // Path for "java." classes.
+            return resolveClassWithCL(name);
         }
 
         return loadClass(name);
     }
 
-    // Get as close as possible to boostrap classloader before calling Class.forName()
-    private Class<?> resolveClassWithBoostrapCL(String name) throws ClassNotFoundException {
+    /**
+     * Resolves a class using the appropriate classloader.
+     *
+     * @param name The name of the class to resolve.
+     * @return The resolved class.
+     *
+     * @throws ClassNotFoundException
+     */
+    private Class<?> resolveClassWithCL(String name) throws ClassNotFoundException {
         SecurityManager security = System.getSecurityManager();
         if (security != null) {
             return Class.forName(name, false, getClassLoader(thisClass));
         }
-        return Class.forName(name, false, null);
+
+        // The platform classloader is null if we failed to get it when using java 9, or if we are
+        // running with a java level below 9. In those cases, the bootstrap classloader
+        // is used to resolve the needed class.
+        // Note that this change is being made to account for the fact that in java 9, classes
+        // such as java.sql.* (java.sql module) are no longer discoverable through the bootstrap
+        // classloader. Those classes are now discoverable through the java 9 platform classloader.
+        // The platform classloader is between the bootstrap classloader and the app classloader.
+        return Class.forName(name, false, platformClassloader);
     }
 
     /**
      * Delegates class loading to to {@link #resolveClass(String)} rather than
      * using {@code Class.forName}.
-     * 
+     *
      * <p>{@inheritDoc}
      */
     @Override
@@ -189,7 +220,7 @@ public class DeserializationObjectInputStream extends ObjectInputStream {
 
     /**
      * Delegates class loading to the specified class loader.
-     * 
+     *
      * <p>{@inheritDoc}
      */
     @Override

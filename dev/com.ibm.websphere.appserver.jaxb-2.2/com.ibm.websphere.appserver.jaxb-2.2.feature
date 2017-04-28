@@ -13,7 +13,11 @@ IBM-API-Package: javax.xml.bind;  type="spec", \
  com.ibm.xml.xlxp2.jaxb.marshal.impl;type="internal", \
  com.ibm.xml.xlxp2.jaxb.model;type="internal", \
  com.ibm.xml.xlxp2.datatype;type="internal", \
- com.ibm.xml.xlxp2.scan.util;type="internal"
+ com.ibm.xml.xlxp2.scan.util;type="internal", \
+ com.ibm.xml.xlxp2.api.jaxb; type="internal", \
+ com.ibm.xml.xlxp2.api.stax; type="internal", \
+ com.ibm.xml.xlxp2.api.wssec; type="internal", \
+ com.ibm.xml.xlxp2.jaxb; type="internal"
 IBM-ShortName: jaxb-2.2
 IBM-Process-Types: client, \
  server

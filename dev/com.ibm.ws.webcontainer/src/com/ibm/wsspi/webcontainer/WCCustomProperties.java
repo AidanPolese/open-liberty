@@ -159,7 +159,6 @@ public class WCCustomProperties {
 
     public static String HTTPONLY_COOKIES; //F004323
     public static boolean REINIT_SERVLET_ON_INIT_UNAVAILABLE_EXCEPTION; //PM01373
-    //public static boolean ENABLE_MULTI_READ_OF_POST_DATA; // F003449
     //End 7.0.0.9
 
     // Start 7.0.0.11
@@ -346,6 +345,8 @@ public class WCCustomProperties {
     
     //start 17.0.0.1
     public static boolean USE_MAXREQUESTSIZE_FOR_MULTIPART; //PI75528
+
+    public static boolean ENABLE_MULTI_READ_OF_POST_DATA; //MultiRead
     
     static {
         setCustomPropertyVariables(); //initilizes all the variables
@@ -367,7 +368,6 @@ public class WCCustomProperties {
         WCCustomProperties.FullyQualifiedPropertiesMap.put("toleratesymboliclinks", "com.ibm.ws.webcontainer.TolerateSymbolicLinks");
         WCCustomProperties.FullyQualifiedPropertiesMap.put("symboliclinkscachesize", "com.ibm.ws.webcontainer.SymbolicLinksCacheSize");
         WCCustomProperties.FullyQualifiedPropertiesMap.put("enableerrorexceptiontypefirst", "com.ibm.ws.webcontainer.enableErrorExceptionTypeFirst");
-        //WCCustomProperties.FullyQualifiedPropertiesMap.put("enablemultireadofpostdata", "com.ibm.ws.webcontainer.enablemultireadofpostdata");
         WCCustomProperties.FullyQualifiedPropertiesMap.put("copyattributeskeyset", "com.ibm.ws.webcontainer.copyattributeskeyset");
         WCCustomProperties.FullyQualifiedPropertiesMap.put("dispatcherrethrowser", "com.ibm.ws.webcontainer.dispatcherrethrowser");
         WCCustomProperties.FullyQualifiedPropertiesMap.put("ignoresessiononstaticfilerequest", "com.ibm.ws.webcontainer.IgnoreSessiononStaticFileRequest");
@@ -435,7 +435,7 @@ public class WCCustomProperties {
         WCCustomProperties.FullyQualifiedPropertiesMap.put("addstricttransportsecurityheader", "com.ibm.ws.webcontainer.addstricttransportsecurityheader"); //PI67099
         WCCustomProperties.FullyQualifiedPropertiesMap.put("encodedispatchedrequesturi", "com.ibm.ws.webcontainer.encodedispatchedrequesturi"); //PI67942
         WCCustomProperties.FullyQualifiedPropertiesMap.put("usemaxrequestsizeformultipart", "com.ibm.ws.webcontainer.usemaxrequestsizeformultipart"); //PI75528
-
+        WCCustomProperties.FullyQualifiedPropertiesMap.put("enablemultireadofpostdata", "com.ibm.ws.webcontainer.enablemultireadofpostdata");
     }
 
     //some properties require "com.ibm.ws.webcontainer." on the front
@@ -603,7 +603,6 @@ public class WCCustomProperties {
         REINIT_SERVLET_ON_INIT_UNAVAILABLE_EXCEPTION = Boolean.valueOf(WebContainer.getWebContainerProperties().
               getProperty("com.ibm.ws.webcontainer.reinitservletoninitunavailableexception","true")).booleanValue(); //PM01373
         
-        //ENABLE_MULTI_READ_OF_POST_DATA = Boolean.valueOf(WebContainer.getWebContainerProperties().getProperty("com.ibm.ws.webcontainer.enablemultireadofpostdata")).booleanValue(); // F003449
         //End 7.0.0.9
 
         // Start 7.0.0.11
@@ -808,6 +807,9 @@ public class WCCustomProperties {
         
         //Start 17.0.0.1
         USE_MAXREQUESTSIZE_FOR_MULTIPART = Boolean.valueOf(WebContainer.getWebContainerProperties().getProperty("com.ibm.ws.webcontainer.usemaxrequestsizeformultipart")).booleanValue();
+        
+        ENABLE_MULTI_READ_OF_POST_DATA = Boolean.valueOf(WebContainer.getWebContainerProperties().getProperty("com.ibm.ws.webcontainer.enablemultireadofpostdata")).booleanValue(); // MultiRead
+
   
     }
 

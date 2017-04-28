@@ -81,8 +81,11 @@ public class ExternalContextContractResourceLoader extends ContractResourceLoade
             // are found, let resourceVersion remain null.
             for (String resourcePath : resourcePaths)
             {
-                String version = resourcePath.substring(path.length());
-
+                String version = "";
+                if (path.length() < resourcePath.length()) {
+                    version = resourcePath.substring(path.length());
+                }
+                
                 if (RESOURCE_VERSION_CHECKER.matcher(version).matches())
                 {
                     version = version.substring(1, version.lastIndexOf('.'));

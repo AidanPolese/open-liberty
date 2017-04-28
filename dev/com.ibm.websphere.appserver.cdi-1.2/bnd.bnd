@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.cdi-1.2
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.javax.jsp-2.3;version=latest,\
 	com.ibm.websphere.appserver.containerServices-1.0;version=latest,\
 	com.ibm.websphere.appserver.javax.persistence-2.1;version=latest,\

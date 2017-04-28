@@ -166,6 +166,53 @@ public class JPAQueryHelperTest {
     }
 
     @Test
+    public void testLastUpdatedTime() throws Exception {
+        WSSearchObject wsso = new WSSearchObject(null, null, null, null, "2015-08-24:2015-09-01", null, null);
+        JPAQueryHelper jqh = new JPAQueryHelper(wsso);
+
+        assertEquals(BASEQUERY.replaceAll("JobInstanceEntity", "JobInstanceEntityV2") + " WHERE x.lastUpdatedTime BETWEEN :startLastUpdatedTime AND :endLastUpdatedTime",
+                     jqh.getQuery());
+        assertTrue(jqh.parameterMap.containsKey("startLastUpdatedTime"));
+        assertNotNull(jqh.parameterMap.containsValue("startLastUpdatedTime"));
+        assertTrue(jqh.parameterMap.containsKey("endLastUpdatedTime"));
+        assertNotNull(jqh.parameterMap.containsValue("endLastUpdatedTime"));
+
+    }
+
+    @Test
+    public void testLastUpdatedTimeGreaterThan() throws Exception {
+        WSSearchObject wsso = new WSSearchObject(null, null, null, null, ">2d", null, null);
+        JPAQueryHelper jqh = new JPAQueryHelper(wsso);
+
+        assertEquals(BASEQUERY.replaceAll("JobInstanceEntity", "JobInstanceEntityV2") + " WHERE x.lastUpdatedTime >= :greaterThanLastUpdatedTime", jqh.getQuery());
+        assertTrue(jqh.parameterMap.containsKey("greaterThanLastUpdatedTime"));
+        assertNotNull(jqh.parameterMap.get("greaterThanLastUpdatedTime"));
+    }
+
+    @Test
+    public void testLastUpdatedTimeLessThan() throws Exception {
+        WSSearchObject wsso = new WSSearchObject(null, null, null, null, "<2d", null, null);
+        JPAQueryHelper jqh = new JPAQueryHelper(wsso);
+
+        assertEquals(BASEQUERY.replaceAll("JobInstanceEntity", "JobInstanceEntityV2") + " WHERE x.lastUpdatedTime <= :lessThanLastUpdatedTime", jqh.getQuery());
+        assertTrue(jqh.parameterMap.containsKey("lessThanLastUpdatedTime"));
+        assertNotNull(jqh.parameterMap.get("lessThanLastUpdatedTime"));
+    }
+
+    @Test
+    public void testLastUpdatedTimeSpecificDay() throws Exception {
+        WSSearchObject wsso = new WSSearchObject(null, null, null, null, "2015-09-01", null, null);
+        JPAQueryHelper jqh = new JPAQueryHelper(wsso);
+
+        assertEquals(BASEQUERY.replaceAll("JobInstanceEntity", "JobInstanceEntityV2")
+                     + " WHERE x.lastUpdatedTime BETWEEN :specificLastUpdatedTimeStart AND :specificLastUpdatedTimeEnd", jqh.getQuery());
+        assertTrue(jqh.parameterMap.containsKey("specificLastUpdatedTimeStart"));
+        assertNotNull(jqh.parameterMap.get("specificLastUpdatedTimeStart"));
+        assertTrue(jqh.parameterMap.containsKey("specificLastUpdatedTimeEnd"));
+        assertNotNull(jqh.parameterMap.get("specificLastUpdatedTimeEnd"));
+    }
+
+    @Test
     public void testInstanceState() throws Exception {
 
         List<InstanceState> values = new ArrayList<InstanceState>();

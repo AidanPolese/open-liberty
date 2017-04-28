@@ -1,19 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag       Person      Defect/Feature      Comments
- * -------   ------      --------------      --------------------------------------------------
- * 04/09/12  ankit_jain     98161            Error CWIMK0007E when using federatedRepository in server.xml
- * 04/23/13  ankit_jain     99007            REmove Unused properties in VMM and ensure all stand alone LDAP properties are used in VMM LDAP as well
- * 01/12/14  rzunzarr       109887           Create API implementation
+ *
  */
 package com.ibm.ws.security.wim;
 
@@ -29,8 +22,6 @@ import com.ibm.ws.config.xml.internal.nester.Nester;
 
 /**
  * Realm Configuration wrapper object
- * 
- * @author Ezhilarasi
  */
 public class RealmConfig extends HashMap<String, Object> {
 
@@ -127,7 +118,7 @@ public class RealmConfig extends HashMap<String, Object> {
         int i = 0;
         for (Map<String, Object> baseEntry : baseEntries) {
             String name = (String) baseEntry.get(NAME);
-            if (name == null || name.trim().length() == 0) {
+            if (name == null) {
                 //TODO this message doesn't make sense any more
                 Tr.error(tc, WIMMessageKey.INVALID_PARTICIPATING_BASE_ENTRY_DEFINITION, baseEntry);
             } else {

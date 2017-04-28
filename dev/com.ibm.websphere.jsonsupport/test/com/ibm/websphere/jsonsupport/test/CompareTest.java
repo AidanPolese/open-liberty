@@ -49,7 +49,7 @@ public class CompareTest {
         su.managedUsersList = managedUsers;
         su.managedUsers = managedUsers.toArray(su.managedUsers);
 
-        //setup hashmaps for tesitng
+        //setup hashmaps for tesitng		
         su.userMap = new HashMap<Object, User>();
         User u1 = new User();
         u1.height = 5.8f;
@@ -72,7 +72,7 @@ public class CompareTest {
         //setup a POJO java object for comparison
         SuperUser td = setupUser();
 
-        //Use ObjectMapper to JSONP
+        //Use ObjectMapper to JSONP 
         JSON j = new JSONJacksonImpl();
         String jsonPString = null;
         jsonPString = j.stringify(td);
@@ -92,12 +92,13 @@ public class CompareTest {
 
     @Ignore
     @Test
-    public void marshallIgnoreNullTest() throws JsonGenerationException, JsonMappingException, IOException, JSONMarshallException {
+    public void marshallIgnoreNullTest()
+                    throws JsonGenerationException, JsonMappingException, IOException, JSONMarshallException {
 
         //setup a POJO java object for comparison
         SuperUser td = setupUser();
 
-        //Setup and use JSONP mapper
+        //Setup and use JSONP mapper 
         JSON j = new JSONJacksonImpl();
         String jsonPString = null;
         jsonPString = j.stringify(td);

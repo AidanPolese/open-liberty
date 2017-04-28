@@ -1,15 +1,11 @@
 /************** Begin Copyright - Do not add comments here **************
- *  
+ *
  * IBM Confidential OCO Source Material
  * Virtual Member Manager (C) COPYRIGHT International Business Machines Corp. 2012
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person   Defect/Feature      Comments
- * ----------   ------   --------------      --------------------------------------------------
+ *
  */
 package com.ibm.ws.security.wim.util;
 
@@ -24,17 +20,11 @@ import com.ibm.wsspi.security.wim.model.SortControl;
 import com.ibm.wsspi.security.wim.model.SortKeyType;
 
 /**
- * @author Rohan Zunzarrao
- * 
+ *
  * Class to sort entities
- * 
+ *
  */
-public class SortHandler
-{
-    /**
-     * IBM Copyright string
-     */
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_LONG_2012;
+public class SortHandler {
 
     private SortControl sortControl = null;
 
@@ -42,31 +32,30 @@ public class SortHandler
      * Constructor for SortHandler.
      */
     @Trivial
-    public SortHandler()
-    {
+    public SortHandler() {
         super();
     }
 
     /**
      * Constructor for SortHandlerData.
-     * @param desiredSortControl  the sort control object
+     *
+     * @param desiredSortControl the sort control object
      */
     @Trivial
-    public SortHandler(SortControl sortControl)
-    {
+    public SortHandler(SortControl sortControl) {
         super();
         this.sortControl = sortControl;
     }
 
     /**
      * Compares the two entity data objects.
+     *
      * @param member1 the first member object to be compared
      * @param member2 the second member object to be compared
-     * @return a negative integer, zero, or a positive integer as the first member object is less than, 
-     * 		   equal to, or greater than the second. 
+     * @return a negative integer, zero, or a positive integer as the first member object is less than,
+     *         equal to, or greater than the second.
      */
-    public int compareEntitysWithRespectToProperties(Entity entity1, Entity entity2)
-    {
+    public int compareEntitysWithRespectToProperties(Entity entity1, Entity entity2) {
         List<SortKeyType> sortKeys = sortControl.getSortKeys();
 
         int temp = 0;
@@ -86,31 +75,31 @@ public class SortHandler
 
     /**
      * Sets the SortControl object to the class
-     * @param sortControl  the SortControl object which includes the sort keys,and other sorting related information
+     *
+     * @param sortControl the SortControl object which includes the sort keys,and other sorting related information
      */
     @Trivial
-    public void setSortControl(SortControl sortControl)
-    {
+    public void setSortControl(SortControl sortControl) {
         this.sortControl = sortControl;
     }
 
     /**
      * Gets the SortControl object
+     *
      * @return the SortControl object which is used for sorting
      */
     @Trivial
-    public SortControl getSortControl()
-    {
+    public SortControl getSortControl() {
         return sortControl;
     }
 
     /**
      * Sorts the set of Member Objects
-     * @param members  a set of Member objects to be sorted
+     *
+     * @param members a set of Member objects to be sorted
      * @return a list of sorted Member objects
      */
-    public List<Entity> sortEntities(List<Entity> entities)
-    {
+    public List<Entity> sortEntities(List<Entity> entities) {
         if (entities != null && entities.size() > 0) {
             Entity[] ents = (Entity[]) entities.toArray(new Entity[entities.size()]);
             WIMSortCompare<Entity> wimSortComparator = new WIMSortCompare<Entity>(sortControl);
@@ -123,21 +112,18 @@ public class SortHandler
         return entities;
     }
 
-    private Object getPropertyValue(Entity entity, String propName, boolean ascending)
-    {
+    private Object getPropertyValue(Entity entity, String propName, boolean ascending) {
         Object value = null;
         Object propValue = null;
         try {
             propValue = entity.get(propName);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             value = null;
         }
 
         if (propValue != null && !(propValue instanceof List)) {
             value = propValue;
-        }
-        else if (propValue != null) {
+        } else if (propValue != null) {
             List<?> props = (List<?>) propValue;
             if (props.size() > 0) {
                 value = props.get(0);
@@ -152,8 +138,7 @@ public class SortHandler
         return value;
     }
 
-    private int compareProperties(Object prop1, Object prop2)
-    {
+    private int compareProperties(Object prop1, Object prop2) {
         Collator localeCollator = null;
         int returnCode = 0;
         if (sortControl != null) {
@@ -165,8 +150,7 @@ public class SortHandler
                     String lang = localeStr.substring(0, index);
                     String country = localeStr.substring(index + 1);
                     locale = new Locale(lang, country);
-                }
-                else {
+                } else {
                     locale = new Locale(localeStr);
                 }
             }
@@ -174,30 +158,23 @@ public class SortHandler
                 localeCollator = Collator.getInstance(locale);
                 localeCollator.setStrength(Collator.IDENTICAL);
             }
-            
+
             if (prop1 == null && prop2 == null) {
                 returnCode = 0;
-            }
-            else if (prop1 == null) {
+            } else if (prop1 == null) {
                 returnCode = -1;
-            }
-            else if (prop2 == null) {
+            } else if (prop2 == null) {
                 returnCode = 1;
-            }
-            else {
+            } else {
                 if (prop1 instanceof String) {
                     returnCode = localeCollator.compare(prop1, prop2);
-                }
-                else if (prop1 instanceof Integer) {
-                    returnCode = ((Integer) prop1).compareTo((Integer)prop2);
-                }
-                else if (prop1 instanceof Long) {
-                    returnCode = ((Long) prop1).compareTo((Long)prop2);
-                }
-                else if (prop1 instanceof Double) {
-                    returnCode = ((Double) prop1).compareTo((Double)prop2);
-                }
-                else {
+                } else if (prop1 instanceof Integer) {
+                    returnCode = ((Integer) prop1).compareTo((Integer) prop2);
+                } else if (prop1 instanceof Long) {
+                    returnCode = ((Long) prop1).compareTo((Long) prop2);
+                } else if (prop1 instanceof Double) {
+                    returnCode = ((Double) prop1).compareTo((Double) prop2);
+                } else {
                     returnCode = localeCollator.compare(prop1.toString(), prop2.toString());
                 }
             }

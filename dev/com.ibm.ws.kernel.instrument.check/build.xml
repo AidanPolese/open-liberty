@@ -21,10 +21,7 @@
 			<fileset dir="../com.ibm.ws.kernel.instrument.agent/build/classes" includes="com/ibm/ws/kernel/instrument/BootstrapAgent*"/>
 			<fileset dir="${classes.dir}" includes="com/ibm/ws/kernel/instrument/EnvCheck*"/>
 			<manifest>
-				<!-- Temporarily disallow class redefinition (incremental publishing) 
-				     until the server can handle updates to annotations -->
 				<attribute name="Can-Redefine-Classes" value="false" />
-				
 				<attribute name="Can-Retransform-Classes" value="true" />
 				<attribute name="Main-Class" value="com.ibm.ws.kernel.instrument.EnvCheck"/>
 				<attribute name="Premain-Class" value="com.ibm.ws.kernel.instrument.EnvCheck"/>
@@ -36,10 +33,5 @@
 	<target name="publishExtra" if="publish.image.dir">
 		<echo>Publishing ws-javaagent.jar to ${publish.image.dir}/${image.write.bin.tools.dir}</echo>
 		<copy tofile="${publish.image.dir}/${image.write.bin.tools.dir}/ws-javaagent.jar" file="${lib.dir}/bootstrap-agent.jar"/>
-	</target>
-
-	<target name="publish.instrumentation" depends="package" description="Manual target: copy jar to ant_build/lib">
-		<echo>${lib.dir}</echo>
-		<copy todir="../ant_build/lib" file="${lib.dir}/bootstrap-agent.jar" />
 	</target>
 </project>

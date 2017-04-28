@@ -33,12 +33,15 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 
+import com.ibm.ejs.ras.TraceNLS;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.jmx.connector.client.rest.ClientProvider;
@@ -60,8 +63,8 @@ import com.ibm.wsspi.rest.handler.helper.RESTRoutingHelper;
 public class MBeanRoutedNotificationHelper {
 
     private static final TraceComponent tc = Tr.register(MBeanRoutedNotificationHelper.class);
-    private static final String KEY_EVENT_ADMIN = "eventAdmin";
     private static final String KEY_ROUTING_HELPER = "routingHelper";
+    private static final String KEY_EVENT_ADMIN = "eventAdmin";
 
     /**
      * Event-related topics and properties.
@@ -86,17 +89,16 @@ public class MBeanRoutedNotificationHelper {
      */
     private final Map<NotificationTargetInformation, Set<ClientNotificationListener>> listenerMap = new HashMap<NotificationTargetInformation, Set<ClientNotificationListener>>();
 
+    private final AtomicServiceReference<RESTRoutingHelper> routingHelperRef = new AtomicServiceReference<RESTRoutingHelper>(KEY_ROUTING_HELPER);
     private final AtomicServiceReference<EventAdmin> eventAdminRef = new AtomicServiceReference<EventAdmin>(KEY_EVENT_ADMIN);
     private final AtomicReference<ServiceRegistration<EventHandler>> eventHandlerServiceRegRef = new AtomicReference<ServiceRegistration<EventHandler>>();
-
-    private final AtomicServiceReference<RESTRoutingHelper> routingHelperRef = new AtomicServiceReference<RESTRoutingHelper>(KEY_ROUTING_HELPER);
 
     private static ComponentContext componentContext;
 
     @Activate
     protected void activate(ComponentContext cc) {
-        eventAdminRef.activate(cc);
         routingHelperRef.activate(cc);
+        eventAdminRef.activate(cc);
 
         // Set up an EventHandler for Notifications from the Target-Client Manager.
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -120,8 +122,8 @@ public class MBeanRoutedNotificationHelper {
             Tr.event(tc, this.getClass().getSimpleName() + " has been deactivated.");
         }
 
-        eventAdminRef.deactivate(cc);
         routingHelperRef.deactivate(cc);
+        eventAdminRef.deactivate(cc);
 
         // Unregister the NotifcationEventHandler when the MBeanRoutedNotificationHelper is deactivated.
         ServiceRegistration<EventHandler> eventHandlerServiceReg = eventHandlerServiceRegRef.get();
@@ -142,23 +144,42 @@ public class MBeanRoutedNotificationHelper {
         eventAdminRef.unsetReference(ref);
     }
 
-    @Reference(name = KEY_ROUTING_HELPER, service = RESTRoutingHelper.class, policyOption = ReferencePolicyOption.GREEDY)
-    protected void setRoutingHelperRef(ServiceReference<RESTRoutingHelper> ref) {
-        routingHelperRef.setReference(ref);
+    @Reference(service = RESTRoutingHelper.class,
+               name = KEY_ROUTING_HELPER,
+               cardinality = ReferenceCardinality.OPTIONAL,
+               policy = ReferencePolicy.DYNAMIC,
+               policyOption = ReferencePolicyOption.GREEDY)
+    protected void setRoutingHelper(ServiceReference<RESTRoutingHelper> routingHelper) {
+        routingHelperRef.setReference(routingHelper);
     }
 
-    protected void unsetRoutingHelperRef(ServiceReference<RESTRoutingHelper> ref) {
-        routingHelperRef.unsetReference(ref);
+    protected void unsetRoutingHelper(ServiceReference<RESTRoutingHelper> routingHelper) {
+        routingHelperRef.unsetReference(routingHelper);
+    }
+
+    private RESTRoutingHelper getRoutingHelper() throws IOException {
+        RESTRoutingHelper routingHelper = routingHelperRef.getService();
+
+        if (routingHelper == null) {
+            IOException ioe = new IOException(TraceNLS.getFormattedMessage(this.getClass(),
+                                                                           APIConstants.TRACE_BUNDLE_FILE_TRANSFER,
+                                                                           "OSGI_SERVICE_ERROR",
+                                                                           new Object[] { "RESTRoutingHelper" },
+                                                                           "CWWKX0122E: OSGi service is not available."));
+            throw ErrorHelper.createRESTHandlerJsonException(ioe, null, APIConstants.STATUS_INTERNAL_SERVER_ERROR);
+        }
+
+        return routingHelper;
     }
 
     public void addRoutedNotificationListener(NotificationTargetInformation nti, ClientNotificationListener listener, JSONConverter converter) {
         // Add the ClientNotificationListener to the map so that we can dispatch
         // notifications to it when we receive events from the Target-Client Manager.
         try {
-            // Ensure that the routing is available before proceeding.
-            // If routing is not available then we should fail immediately.
-            RESTRoutingHelper routingHelper = routingHelperRef.getServiceWithException();
-            if (routingHelper.routingAvailable()) {
+            // Ensure that the CollectivePlugin is available before proceeding.
+            // If plugin is not available then we should fail immediately.
+            RESTRoutingHelper helper = getRoutingHelper();
+            if (helper != null) {
                 final boolean modified;
                 synchronized (listenerMap) {
                     Set<ClientNotificationListener> listeners = listenerMap.get(nti);

@@ -25,20 +25,18 @@ import com.sun.tools.xjc.outline.Outline;
 /**
  * Generates generic get, set APIs to replace dynamic SDO APIs
  * Generates metadata APIs for retrieving the bean info, superTypes, subTypes and its field datatypes.
- * 
+ *
  * Update wimdatagraph.xsd with globalbindings to generate isSetXX/unSetXX methods
  * Place the vmmjaxbplugin.jar in the classpath
  * Generate bean from xsd using below command from WAS_HOME\bin OR from the JDK_HOME/bin
  * xjc -classpath <jar_loc>\vmmjaxbplugin.jar -p com.ibm.websphere.wim.model wimdatagraph.xsd -extension -Xvmmcodegen -no-header
- * 
+ *
  * The model classes will be generated in the current working directory by default.
  * Use -d option to specify the directory where you want to generate the model classes
- * 
- * @author Ezhilarasi, Ankit Jain
- * 
+ *
+ *
  */
-public class VMMAXBCodeGenPlugin extends Plugin
-{
+public class VMMAXBCodeGenPlugin extends Plugin {
 
     private static final String PROPNAME = "propName";
     private static final String GET_API = "get";
@@ -61,20 +59,17 @@ public class VMMAXBCodeGenPlugin extends Plugin
     Outline outline = null;
 
     @Override
-    public String getOptionName()
-    {
+    public String getOptionName() {
         return "Xvmmcodegen";
     }
 
     @Override
-    public String getUsage()
-    {
+    public String getUsage() {
         return "  -Xvmmcodegen        :  generate metadata code and getter setter api in generated beans";
     }
 
     @Override
-    public boolean run(Outline outline, Options opt, ErrorHandler errorHandler)
-    {
+    public boolean run(Outline outline, Options opt, ErrorHandler errorHandler) {
         this.outline = outline;
         voidType = outline.getCodeModel().VOID;
         boolType = outline.getCodeModel().BOOLEAN;
@@ -119,8 +114,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
         return true;
     }
 
-    public void generateGetter()
-    {
+    public void generateGetter() {
 
         JType returnType = null;
         String methodName = GET_API;
@@ -169,23 +163,19 @@ public class VMMAXBCodeGenPlugin extends Plugin
 
     }
 
-    public void generateSetter()
-    {
+    public void generateSetter() {
         generateSetters(SET_API);
     }
 
-    public void generateUnSetter()
-    {
+    public void generateUnSetter() {
         generateSetters(UN_SET_API);
     }
 
-    public void generateIsSet()
-    {
+    public void generateIsSet() {
         generateSetters(IS_SET_API);
     }
 
-    public void generateSetters(String methodName)
-    {
+    public void generateSetters(String methodName) {
 
         JType returnType = null;
         JVar jvarParam2 = null;
@@ -245,8 +235,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
                     cond = body._if(jvarParam.invoke("equals").arg(fieldNameOrg));
                     if (jMethod != null) {
                         cond._then().add(JExpr.invoke(jMethod).arg(JExpr.cast(field.type().boxify(), jvarParam2)));
-                    }
-                    else {
+                    } else {
                         //for set if no match found which is the case for MV props, invoke, getXXX.add() example getDisplayName().add(newItem);
                         JType[] temp = {};
                         jMethod = implClass.getMethod(GET_API + fieldName, temp);
@@ -271,7 +260,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
                         cond = body._if(jvarParam.invoke("equals").arg(fieldNameOrg));
                         cond._then().add(JExpr.invoke(jMethod));
                     }
-                }//isSet API
+                } //isSet API
                 else if (methodName.equals(IS_SET_API)) {
                     if (jMethod != null) {
                         //only add the if condition for isSet/unset when method is found else empty if can be seen
@@ -288,22 +277,19 @@ public class VMMAXBCodeGenPlugin extends Plugin
 
                     body.add(JExpr._super().invoke(methodName).arg(jvarParam).arg(jvarParam2));
 
-            }
-            else if (methodName.equals(UN_SET_API)) {
+            } else if (methodName.equals(UN_SET_API)) {
                 if (!implClass._extends().equals(objType))
 
                     body.add(JExpr._super().invoke(methodName).arg(jvarParam));
 
-                if (implClass.name().equalsIgnoreCase("Entity"))
-                {
+                if (implClass.name().equalsIgnoreCase("Entity")) {
                     JFieldVar fieldVar = implClass.field(JMod.PRIVATE, ListType, "deletedProperties", JExpr._null());
                     JConditional cond = null;
                     cond = body._if(fieldVar.eq(JExpr._null()));
                     cond._then().assign(fieldVar, JExpr._new(listType));
                     body.add(fieldVar.invoke("add").arg(jvarParam));
                 }
-            }
-            else if (methodName.equals(IS_SET_API)) {
+            } else if (methodName.equals(IS_SET_API)) {
                 if (!implClass._extends().equals(objType))
 
                     body._return(JExpr._super().invoke(methodName).arg(jvarParam));
@@ -313,8 +299,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
         }
     }
 
-    public void generateGetTypeName()
-    {
+    public void generateGetTypeName() {
         for (ClassOutline classOutline : outline.getClasses()) {
             JDefinedClass implClass = classOutline.implClass;
             int mods = JMod.PUBLIC;
@@ -326,8 +311,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
         }
     }
 
-    public void generateSuperTypes()
-    {
+    public void generateSuperTypes() {
         int mods = JMod.STATIC;
 
         for (ClassOutline classOutline : outline.getClasses()) {
@@ -346,8 +330,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
 
     }
 
-    public void generateSetSuperTypes()
-    {
+    public void generateSetSuperTypes() {
         for (ClassOutline classOutline : outline.getClasses()) {
             JDefinedClass implClass = classOutline.implClass;
             int mods = JMod.STATIC | JMod.PRIVATE | JMod.SYNCHRONIZED;
@@ -357,7 +340,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
             JBlock body = dynamicMethod.body();
             JBlock staticBlock = implClass.init();
             staticBlock.invoke(dynamicMethod);
-			JFieldVar fieldVar = implClass.field(JMod.PRIVATE | JMod.STATIC, listType, "superTypeList", JExpr._null());
+            JFieldVar fieldVar = implClass.field(JMod.PRIVATE | JMod.STATIC, listType, "superTypeList", JExpr._null());
             JConditional cond = null;
             cond = body._if(fieldVar.eq(JExpr._null()));
             cond._then().assign(fieldVar, JExpr._new(listType));
@@ -369,8 +352,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
         }
     }
 
-    public void generateSetDataTypeMap()
-    {
+    public void generateSetDataTypeMap() {
 
         for (ClassOutline classOutline : outline.getClasses()) {
             JDefinedClass implClass = classOutline.implClass;
@@ -400,16 +382,15 @@ public class VMMAXBCodeGenPlugin extends Plugin
                     !fieldName.equals("mandatoryProperties") && !fieldName.equals("transientProperties")
                     && !fieldName.equals("deletedProperties") && !fieldName.equals("properties"))
                     body.add(fieldVar.invoke("put").arg(fieldName).arg(JExpr.lit(typeName)));
-                if(fieldName.equals("properties") && implClass.name().equalsIgnoreCase("PropertyControl"))
-                	body.add(fieldVar.invoke("put").arg(fieldName).arg(JExpr.lit(typeName)));
+                if (fieldName.equals("properties") && implClass.name().equalsIgnoreCase("PropertyControl"))
+                    body.add(fieldVar.invoke("put").arg(fieldName).arg(JExpr.lit(typeName)));
             }
 
         }
 
     }
 
-    public void generateSubTypes()
-    {
+    public void generateSubTypes() {
         int mods = JMod.STATIC;
 
         for (ClassOutline classOutline : outline.getClasses()) {
@@ -430,8 +411,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
         }
     }
 
-    public void generateSetSubTypes()
-    {
+    public void generateSetSubTypes() {
         for (ClassOutline classOutline : outline.getClasses()) {
             JDefinedClass implClass = classOutline.implClass;
             int mods = JMod.STATIC | JMod.PRIVATE | JMod.SYNCHRONIZED;
@@ -457,8 +437,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
         }
     }
 
-    public void generateEntitySubTypes()
-    {
+    public void generateEntitySubTypes() {
         int mods = JMod.STATIC | JMod.PUBLIC;
 
         for (ClassOutline classOutline : outline.getClasses()) {
@@ -479,7 +458,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
                 JDefinedClass cImplClass = cClass.implClass;
                 if (cImplClass.outer() == null && implClass.isAssignableFrom(cImplClass))
                     bodyOfSubTypeMapMethod.add(fieldVar.invoke("put").arg(cImplClass.name()).arg(
-                            cImplClass.staticInvoke("getSubTypes")));
+                                                                                                 cImplClass.staticInvoke("getSubTypes")));
             }
 
             JMethod dynamicMethodForSubEntityTypes = implClass.method(mods, implClass, "getSubEntityTypes");
@@ -494,15 +473,14 @@ public class VMMAXBCodeGenPlugin extends Plugin
                 JCodeModel model = new JCodeModel();
                 JClass cls = model.directClass("LoginAccount");
                 jVar = implClass.fields().get("subTypeMap");
-            	jcond1._then().add(jVar.invoke("put").arg("LoginAccount").arg(cls.staticInvoke("getSubTypes")));
+                jcond1._then().add(jVar.invoke("put").arg("LoginAccount").arg(cls.staticInvoke("getSubTypes")));
             }
             bodyOfEntityTypesMethod._return(JExpr.cast(setType, jVar.invoke("get").arg(jvarParam)));
         }
 
     }
 
-    public void generateGetSubTypes()
-    {
+    public void generateGetSubTypes() {
         for (ClassOutline classOutline : outline.getClasses()) {
             JDefinedClass implClass = classOutline.implClass;
             int mods = JMod.PUBLIC | JMod.STATIC;
@@ -520,8 +498,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
 
     }
 
-    public void generateGetSuperTypes()
-    {
+    public void generateGetSuperTypes() {
         for (ClassOutline classOutline : outline.getClasses()) {
             JDefinedClass implClass = classOutline.implClass;
             int mods = JMod.PUBLIC;
@@ -539,8 +516,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
 
     }
 
-    public void generateIsSubType()
-    {
+    public void generateIsSubType() {
         for (ClassOutline classOutline : outline.getClasses()) {
             JDefinedClass implClass = classOutline.implClass;
 
@@ -560,8 +536,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
 
     }
 
-    public void generateGetDataType()
-    {
+    public void generateGetDataType() {
         for (ClassOutline classOutline : outline.getClasses()) {
             JDefinedClass implClass = classOutline.implClass;
 
@@ -590,8 +565,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
 
     }
 
-    public void generateDataTypeMapping()
-    {
+    public void generateDataTypeMapping() {
         int mods = JMod.STATIC;
 
         for (ClassOutline classOutline : outline.getClasses()) {
@@ -653,8 +627,8 @@ public class VMMAXBCodeGenPlugin extends Plugin
                 if (!fieldName.equals("propertyNames") && !fieldName.equals("mandatoryProperties")
                     && !fieldName.equals("transientProperties") && !fieldName.equals("deletedProperties")
                     && !fieldName.equals("properties"))
-                jblock.add(jbfieldVar.invoke("add").arg(fieldName));
-                if(fieldName.equals("properties") && implClass.name().equalsIgnoreCase("PropertyControl"))
+                    jblock.add(jbfieldVar.invoke("add").arg(fieldName));
+                if (fieldName.equals("properties") && implClass.name().equalsIgnoreCase("PropertyControl"))
                     jblock.add(jbfieldVar.invoke("add").arg(fieldName));
             }
             if (!implClass._extends().equals(objType))
@@ -667,8 +641,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
         }
     }
 
-    private static String convertCase(String inValue)
-    {
+    private static String convertCase(String inValue) {
         char[] chars = inValue.toCharArray();
         char c = Character.toUpperCase(chars[0]);
         chars[0] = c;
@@ -676,8 +649,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
         return outValue;
     }
 
-    public void generatetoString()
-    {
+    public void generatetoString() {
         for (ClassOutline classOutline : outline.getClasses()) {
             JDefinedClass implClass = classOutline.implClass;
             int mods = JMod.PUBLIC;
@@ -705,11 +677,11 @@ public class VMMAXBCodeGenPlugin extends Plugin
     public void generateCustomSetter(String propName) {
         for (ClassOutline classOutline : outline.getClasses()) {
             JDefinedClass implClass = classOutline.implClass;
-            if(implClass.name().equalsIgnoreCase("Entity") || implClass.name().equalsIgnoreCase("Group") 
-            		|| implClass.name().equalsIgnoreCase("PersonAccount")
-            		|| implClass.name().equalsIgnoreCase("Party")
-            		|| implClass.name().equalsIgnoreCase("RolePlayer")
-            		|| implClass.name().equalsIgnoreCase("LoginAccount")){
+            if (implClass.name().equalsIgnoreCase("Entity") || implClass.name().equalsIgnoreCase("Group")
+                || implClass.name().equalsIgnoreCase("PersonAccount")
+                || implClass.name().equalsIgnoreCase("Party")
+                || implClass.name().equalsIgnoreCase("RolePlayer")
+                || implClass.name().equalsIgnoreCase("LoginAccount")) {
                 int mods = JMod.STATIC | JMod.PRIVATE | JMod.SYNCHRONIZED;
                 JType returnType = voidType;
                 JMethod dynamicMethod = null;
@@ -733,7 +705,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
                 if (fieldVar.name().equalsIgnoreCase("mandatoryProperties")) {
                     if (implClass.name().equalsIgnoreCase("PersonAccount"))
                         body.add(fieldVar.invoke("add").arg("sn"));
-	            	if(implClass.name().equalsIgnoreCase("PersonAccount") || implClass.name().equalsIgnoreCase("Group"))
+                    if (implClass.name().equalsIgnoreCase("PersonAccount") || implClass.name().equalsIgnoreCase("Group"))
                         body.add(fieldVar.invoke("add").arg("cn"));
                     if (implClass.name().equalsIgnoreCase("Entity")) {
                         body.add(fieldVar.invoke("add").arg("identifier"));
@@ -745,7 +717,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
                     if (implClass.name().equalsIgnoreCase("Group"))
                         body.add(fieldVar.invoke("add").arg("members"));
                     if (implClass.name().equalsIgnoreCase("Entity")) {
-         		body.add(fieldVar.invoke("add").arg("identifier"));
+                        body.add(fieldVar.invoke("add").arg("identifier"));
                         body.add(fieldVar.invoke("add").arg("viewIdentifier"));
                         body.add(fieldVar.invoke("add").arg("parent"));
                         body.add(fieldVar.invoke("add").arg("children"));
@@ -753,23 +725,24 @@ public class VMMAXBCodeGenPlugin extends Plugin
                         body.add(fieldVar.invoke("add").arg("entitlementInfo"));
                         body.add(fieldVar.invoke("add").arg("changeType"));
                     }
-	            	if(implClass.name().equalsIgnoreCase("LoginAccount"))
-		            	body.add(fieldVar.invoke("add").arg("certificate"));
-	            	if(!implClass._extends().equals(objType)){
-	            		body.add(fieldVar.invoke("addAll").arg(implClass._extends().staticInvoke("getTransientProperties")));
+                    if (implClass.name().equalsIgnoreCase("LoginAccount"))
+                        body.add(fieldVar.invoke("add").arg("certificate"));
+                    if (!implClass._extends().equals(objType)) {
+                        body.add(fieldVar.invoke("addAll").arg(implClass._extends().staticInvoke("getTransientProperties")));
+                    }
                 }
             }
         }
     }
-    }
+
     public void generateCustomIsSetter(String propName) {
         for (ClassOutline classOutline : outline.getClasses()) {
             JDefinedClass implClass = classOutline.implClass;
-            if(implClass.name().equalsIgnoreCase("Entity") || implClass.name().equalsIgnoreCase("Group") 
-            		|| implClass.name().equalsIgnoreCase("PersonAccount")
-            		|| implClass.name().equalsIgnoreCase("Party")
-            		|| implClass.name().equalsIgnoreCase("RolePlayer")
-            		|| implClass.name().equalsIgnoreCase("LoginAccount")){
+            if (implClass.name().equalsIgnoreCase("Entity") || implClass.name().equalsIgnoreCase("Group")
+                || implClass.name().equalsIgnoreCase("PersonAccount")
+                || implClass.name().equalsIgnoreCase("Party")
+                || implClass.name().equalsIgnoreCase("RolePlayer")
+                || implClass.name().equalsIgnoreCase("LoginAccount")) {
                 int mods = JMod.PUBLIC;
                 JType returnType = JType.parse(outline.getCodeModel(), "boolean");
                 JMethod dynamicMethod = null;
@@ -777,8 +750,7 @@ public class VMMAXBCodeGenPlugin extends Plugin
                 if (propName.equalsIgnoreCase("mandatoryProperties")) {
                     dynamicMethod = implClass.method(mods, implClass, "isMandatory");
                     fieldVar = implClass.fields().get("mandatoryProperties");
-                }
-                else if (propName.equalsIgnoreCase("transientProperties")) {
+                } else if (propName.equalsIgnoreCase("transientProperties")) {
                     dynamicMethod = implClass.method(mods, implClass, "isPersistentProperty");
                     fieldVar = implClass.fields().get("transientProperties");
                 }
@@ -794,45 +766,43 @@ public class VMMAXBCodeGenPlugin extends Plugin
                     cond1 = body._if(fieldVar.invoke("contains").arg(jvarParam));
                     cond1._then()._return(JExpr.TRUE);
                     cond1._else()._return(JExpr.FALSE);
-                }
-                else if (propName.equalsIgnoreCase("transientProperties")) {
+                } else if (propName.equalsIgnoreCase("transientProperties")) {
                     cond._then().invoke("setTransientPropertyNames");
                     cond1 = body._if(fieldVar.invoke("contains").arg(jvarParam));
-	                cond1._then()._return(JExpr.FALSE);
-	                cond1._else()._return(JExpr.TRUE);
+                    cond1._then()._return(JExpr.FALSE);
+                    cond1._else()._return(JExpr.TRUE);
                 }
             }
         }
     }
-    
-    public void generateGetTransientProperties(){
-    	for (ClassOutline classOutline : outline.getClasses()) {
+
+    public void generateGetTransientProperties() {
+        for (ClassOutline classOutline : outline.getClasses()) {
             JDefinedClass implClass = classOutline.implClass;
-            if(implClass.name().equalsIgnoreCase("Entity") || implClass.name().equalsIgnoreCase("Group") 
-            		|| implClass.name().equalsIgnoreCase("PersonAccount")
-            		|| implClass.name().equalsIgnoreCase("Party")
-            		|| implClass.name().equalsIgnoreCase("RolePlayer")
-            		|| implClass.name().equalsIgnoreCase("LoginAccount")){
-	            int mods = JMod.STATIC | JMod.PROTECTED ;
-                    JType returnType = ListType;
-                    JMethod dynamicMethod = null;
-                    dynamicMethod = implClass.method(mods, implClass, "getTransientProperties");
-                    dynamicMethod.type(returnType);
-	            JBlock body = dynamicMethod.body();
-	            JBlock staticBlock = implClass.init();
-	            staticBlock.invoke(dynamicMethod);
-	            JFieldVar fieldVar = null;
-	            fieldVar = implClass.fields().get("transientProperties");
-                    JConditional cond = null;
-                    cond = body._if(fieldVar.eq(JExpr._null()));
-	            cond._then().invoke("setTransientPropertyNames");
-	            body._return(fieldVar);
+            if (implClass.name().equalsIgnoreCase("Entity") || implClass.name().equalsIgnoreCase("Group")
+                || implClass.name().equalsIgnoreCase("PersonAccount")
+                || implClass.name().equalsIgnoreCase("Party")
+                || implClass.name().equalsIgnoreCase("RolePlayer")
+                || implClass.name().equalsIgnoreCase("LoginAccount")) {
+                int mods = JMod.STATIC | JMod.PROTECTED;
+                JType returnType = ListType;
+                JMethod dynamicMethod = null;
+                dynamicMethod = implClass.method(mods, implClass, "getTransientProperties");
+                dynamicMethod.type(returnType);
+                JBlock body = dynamicMethod.body();
+                JBlock staticBlock = implClass.init();
+                staticBlock.invoke(dynamicMethod);
+                JFieldVar fieldVar = null;
+                fieldVar = implClass.fields().get("transientProperties");
+                JConditional cond = null;
+                cond = body._if(fieldVar.eq(JExpr._null()));
+                cond._then().invoke("setTransientPropertyNames");
+                body._return(fieldVar);
             }
         }
     }
-    
-    public void generateSetPropertyNames()
-    {
+
+    public void generateSetPropertyNames() {
         int mods = JMod.STATIC | JMod.PRIVATE | JMod.SYNCHRONIZED;
 
         for (ClassOutline classOutline : outline.getClasses()) {

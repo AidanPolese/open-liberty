@@ -343,16 +343,7 @@ public class JaccServiceImpl implements JaccService {
         uriName = substituteAsterisk(uriName);
         WebResourcePermission webPerm = new WebResourcePermission(uriName, methodNameArray);
         boolean isAuthorized = wsv.checkResourceConstraints(getContextId(applicationName, moduleName), req, webPerm, subject);
-/*
- * if (isAuthorized) {
- * authResult = new AuditAuthenticationResult(AuditAuthResult.SUCCESS, subject, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_SUCCESS);
- * Audit.audit(Audit.EventID.SECURITY_AUTHZ_02, req, authResult, webPerm, uriName, AuditConstants.WEB_CONTAINER, Integer.valueOf("200"));
- * } else {
- * authResult = new AuditAuthenticationResult(AuditAuthResult.FAILURE, subject, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_FAILURE);
- * Audit.audit(Audit.EventID.SECURITY_AUTHZ_02, req, authResult, webPerm, uriName, AuditConstants.WEB_CONTAINER, Integer.valueOf("403"));
- * 
- * }
- */ return isAuthorized;
+        return isAuthorized;
     }
 
     @Override

@@ -482,6 +482,7 @@ public class WebAppSecurityCollaboratorImplTest {
 
         mock.checking(new Expectations() {
             {
+                allowing(userRegistry).getRealm();
                 one(taiService).isInvokeForUnprotectedURI();
                 will(returnValue(false));
             }

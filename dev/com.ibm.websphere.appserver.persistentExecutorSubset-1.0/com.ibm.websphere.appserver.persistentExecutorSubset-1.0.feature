@@ -4,7 +4,7 @@ visibility=private
 -features=com.ibm.websphere.appserver.appLifecycle-1.0, \
  com.ibm.ws.persistence-1.0, \
  com.ibm.websphere.appserver.contextService-1.0, \
- com.ibm.websphere.appserver.jdbc-4.1, \
+ com.ibm.websphere.appserver.jdbc-4.1; ibm.tolerates:="4.2", \
  com.ibm.websphere.appserver.transaction-1.2
 -bundles=com.ibm.ws.javaee.platform.defaultresource, \
  com.ibm.websphere.javaee.concurrent.1.0; location:="dev/api/spec/,lib/", \

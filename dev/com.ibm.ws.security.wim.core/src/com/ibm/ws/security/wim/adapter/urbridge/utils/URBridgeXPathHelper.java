@@ -1,16 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013, 2014
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person              Defect/Feature      Comments
- * -------      ------              --------------      --------------------------------------------------
+ *
  */
 package com.ibm.ws.security.wim.adapter.urbridge.utils;
 
@@ -37,11 +33,6 @@ import com.ibm.wsspi.security.wim.model.Entity;
 public class URBridgeXPathHelper {
 
     /**
-     * The copyright message
-     */
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_LONG_2014;
-
-    /**
      * Register the class to trace service.
      */
     private final static TraceComponent tc = Tr.register(URBridgeXPathHelper.class);
@@ -56,8 +47,7 @@ public class URBridgeXPathHelper {
      */
     private List<String> entityTypes = null;
 
-    public URBridgeXPathHelper(String searchExpr) throws WIMException
-    {
+    public URBridgeXPathHelper(String searchExpr) throws WIMException {
         parseSearchExpression(searchExpr);
     }
 
@@ -69,12 +59,11 @@ public class URBridgeXPathHelper {
      * // searchExpr = "//entities[(@xsi:type='Group' or @xsi:type='LoginAccount') and cn='*']"; //Returns Group And Users matching the pattern.
      * // searchExpr = "//entities[@xsi:type='LoginAccount' and uid='*']";//Returns Users with pattern *.
      * // searchExpr = "//entities[@xsi:type='Entity' and cn='*']";////Returns Group And Users matching the pattern.
-     * 
+     *
      * @param searchExpr
      * @throws WIMException
      */
-    public void parseSearchExpression(String searchExpr) throws WIMException
-    {
+    public void parseSearchExpression(String searchExpr) throws WIMException {
         try {
             if (searchExpr == null || searchExpr.trim().length() == 0) {
                 return;
@@ -90,12 +79,12 @@ public class URBridgeXPathHelper {
             HashMap propNodes = new HashMap();
             if (node != null) {
                 Iterator<PropertyNode> propNodesItr = node.getPropertyNodes(propNodes);
-                // skip if more than one node present. if (uid="a*" or cn="b*") then only one of the node uid=a* or cn=b* will be taken 
+                // skip if more than one node present. if (uid="a*" or cn="b*") then only one of the node uid=a* or cn=b* will be taken
                 // since urbridge supports only search by prinicpal Name.
-                // we can implement/override  PropertyNode to return ListIterator so that it always uses first node uid=a* 
+                // we can implement/override  PropertyNode to return ListIterator so that it always uses first node uid=a*
                 while (propNodesItr.hasNext()) {
                     PropertyNode propNode = propNodesItr.next();
-                    node = propNode; //PM43353 assign node to first propNode 
+                    node = propNode; //PM43353 assign node to first propNode
                     propNode.setName(removeNamespace(propNode.getName()));
                     // validate property
                     boolean foundProperty = false;
@@ -108,28 +97,25 @@ public class URBridgeXPathHelper {
                         foundProperty = Entity.getPropertyNames(entityType).contains(propName);
                     }
                     if (!foundProperty) {
-                        throw new PropertyNotDefinedException(WIMMessageKey.PROPERTY_NOT_DEFINED_FOR_ENTITY,
-                                        Tr.formatMessage(tc, WIMMessageKey.PROPERTY_NOT_DEFINED_FOR_ENTITY,
-                                                         WIMMessageHelper.generateMsgParms(propName, entityTypes)));
+                        throw new PropertyNotDefinedException(WIMMessageKey.PROPERTY_NOT_DEFINED_FOR_ENTITY, Tr.formatMessage(tc, WIMMessageKey.PROPERTY_NOT_DEFINED_FOR_ENTITY,
+                                                                                                                              WIMMessageHelper.generateMsgParms(propName,
+                                                                                                                                                                entityTypes)));
                     }
                     break;
                     //validate end
                 }
             }
         } catch (Exception e) {
-            throw new WIMApplicationException(WIMMessageKey.MALFORMED_SEARCH_EXPRESSION,
-                            Tr.formatMessage(tc, WIMMessageKey.MALFORMED_SEARCH_EXPRESSION,
-                                             WIMMessageHelper.generateMsgParms(searchExpr)));
+            throw new WIMApplicationException(WIMMessageKey.MALFORMED_SEARCH_EXPRESSION, Tr.formatMessage(tc, WIMMessageKey.MALFORMED_SEARCH_EXPRESSION,
+                                                                                                          WIMMessageHelper.generateMsgParms(searchExpr)));
         } catch (TokenMgrError e) {
-            throw new SearchControlException(WIMMessageKey.INVALID_SEARCH_EXPRESSION,
-                            Tr.formatMessage(tc, WIMMessageKey.INVALID_SEARCH_EXPRESSION,
-                                             WIMMessageHelper.generateMsgParms(searchExpr)));
+            throw new SearchControlException(WIMMessageKey.INVALID_SEARCH_EXPRESSION, Tr.formatMessage(tc, WIMMessageKey.INVALID_SEARCH_EXPRESSION,
+                                                                                                       WIMMessageHelper.generateMsgParms(searchExpr)));
         }
     }
 
     //  transforms 'namespace:entityType' to entityType(for example, 'wim:Person' to Person)
-    public String removeNamespace(String entityType)
-    {
+    public String removeNamespace(String entityType) {
         String str = entityType.replace('\'', ' ').trim();
         int index = str.indexOf(":");
         if (index > 0)
@@ -137,8 +123,7 @@ public class URBridgeXPathHelper {
         return str;
     }
 
-    public String getExpression() throws Exception
-    {
+    public String getExpression() throws Exception {
         switch (node.getNodeType()) {
             case XPathNode.NODE_PROPERTY:
                 return getExpression((PropertyNode) node);
@@ -146,15 +131,13 @@ public class URBridgeXPathHelper {
         return "";
     }
 
-    private String getExpression(PropertyNode propNode) throws Exception
-    {
+    private String getExpression(PropertyNode propNode) throws Exception {
         String pattern = (String) propNode.getValue();
 
         return pattern;
     }
 
-    public List<String> getEntityTypes()
-    {
+    public List<String> getEntityTypes() {
         return entityTypes;
     }
 }

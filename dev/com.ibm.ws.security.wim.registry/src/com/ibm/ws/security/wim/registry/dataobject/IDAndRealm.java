@@ -1,14 +1,14 @@
 /************** Begin Copyright - Do not add comments here **************
 *
- *  
+ *
  * IBM Confidential OCO Source Material
  * Virtual Member Manager (C) COPYRIGHT International Business Machines Corp. 2012
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
- * 
+ *
  * Change History:
- * 
+ *
  * Tag          Person   Defect/Feature      Comments
  * ----------   ------   --------------      --------------------------------------------------
  */
@@ -20,16 +20,10 @@ import com.ibm.ws.security.wim.registry.WIMUserRegistryDefines;
 
 /**
  * Data object to manage the user/group and realm parameters used in the UserRegistry methods.
- * 
- * @author Ankit Jain
+ *
  */
 @Trivial
-public class IDAndRealm implements WIMUserRegistryDefines
-{
-    /**
-     * Copyright notice.
-     */
-    public static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
+public class IDAndRealm implements WIMUserRegistryDefines {
 
     /**
      * UserRegistry ID.
@@ -54,42 +48,36 @@ public class IDAndRealm implements WIMUserRegistryDefines
     /**
      * ID/Realm constructor.
      */
-    public IDAndRealm()
-    {
-    }
+    public IDAndRealm() {}
 
     /**
      * ID/Realm constructor.
      */
-    public IDAndRealm(String inputID, String inputRealm)
-    {
+    public IDAndRealm(String inputID, String inputRealm) {
         setId(inputID);
         setRealm(inputRealm);
     }
 
-
-	/**
+    /**
      * Get the id.
-     * 
+     *
      * @return Returns the id.
-     * 
+     *
      * @post $return != null
      */
-    public String getId()
-    {
+    public String getId() {
         return this.id;
     }
 
     /**
      * Set the id.
-     * 
+     *
      * @param inputId The id to set.
-     * 
+     *
      * @pre inputId != null
      * @pre inputId != ""
      */
-    public void setId(String inputId)
-    {
+    public void setId(String inputId) {
         if ((inputId != null) && (!inputId.equals(""))) {
             this.id = inputId;
         }
@@ -97,26 +85,24 @@ public class IDAndRealm implements WIMUserRegistryDefines
 
     /**
      * Get the realm.
-     * 
+     *
      * @return Returns the realm.
-     * 
+     *
      * @post $return != null
      */
-    public String getRealm()
-    {
+    public String getRealm() {
         return this.realm;
     }
 
     /**
      * Set the realm.
-     * 
+     *
      * @param inputRealm The realm to set.
-     * 
+     *
      * @pre inputRealm != null
      * @pre inputRealm != ""
      */
-    public void setRealm(String inputRealm)
-    {
+    public void setRealm(String inputRealm) {
         if ((inputRealm != null) && (!inputRealm.equals(""))) {
             this.realm = inputRealm;
             setRealmDefined(true);
@@ -125,46 +111,42 @@ public class IDAndRealm implements WIMUserRegistryDefines
 
     /**
      * Determine if the realm is defined for this data object.
-     * 
+     *
      * @return Returns the realmDefined.
      */
-    public boolean isRealmDefined()
-    {
+    public boolean isRealmDefined() {
         return this.realmDefined;
     }
 
     /**
      * Set the realmDefined flag.
-     * 
+     *
      * @param realmDefined The realmDefined to set.
      */
-    private void setRealmDefined(boolean inputRealmDefined)
-    {
+    private void setRealmDefined(boolean inputRealmDefined) {
         this.realmDefined = inputRealmDefined;
     }
 
     /**
      * Get the realm delimiter.
-     * 
+     *
      * @return Returns the delimiter.
-     * 
+     *
      * @post $return != null
      */
-    public String getDelimiter()
-    {
+    public String getDelimiter() {
         return this.delimiter;
     }
 
     /**
      * Set the realm delimiter.
-     * 
+     *
      * @param inputDelimiter The delimiter to set.
-     * 
+     *
      * @pre inputDelimiter != null
      * @pre inputDelimiter != ""
      */
-    public void setDelimiter(String inputDelimiter)
-    {
+    public void setDelimiter(String inputDelimiter) {
         if ((inputDelimiter != null) && (!inputDelimiter.equals(""))) {
             this.delimiter = inputDelimiter;
         }
@@ -172,8 +154,7 @@ public class IDAndRealm implements WIMUserRegistryDefines
 
     /** {@inheritDoc} */
     @Override
-    public String toString()
-    {
+    public String toString() {
         // initialize the return value
         StringBuffer returnValue = new StringBuffer();
         returnValue.append(IDAndRealm.class.getName());
@@ -185,23 +166,20 @@ public class IDAndRealm implements WIMUserRegistryDefines
 
     /** {@inheritDoc} */
     @Override
-    public boolean equals(Object inputObject)
-    {
+    public boolean equals(Object inputObject) {
         // initialize the return value
         boolean returnValue = false;
         if (inputObject != null && inputObject instanceof IDAndRealm) {
             if ((getId().equals(((IDAndRealm) inputObject).getId()))
-                    && (getRealm().equals(((IDAndRealm) inputObject).getRealm()))
-                    && (isRealmDefined() == (((IDAndRealm) inputObject).isRealmDefined())))
+                && (getRealm().equals(((IDAndRealm) inputObject).getRealm()))
+                && (isRealmDefined() == (((IDAndRealm) inputObject).isRealmDefined())))
 
             {
                 returnValue = true;
-            }
-            else {
+            } else {
                 returnValue = false;
             }
-        }
-        else {
+        } else {
             returnValue = false;
         }
         return returnValue;
@@ -209,8 +187,7 @@ public class IDAndRealm implements WIMUserRegistryDefines
 
     /** {@inheritDoc} */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         // initialize the return value
         int returnValue = 0;
         returnValue += getId().hashCode();

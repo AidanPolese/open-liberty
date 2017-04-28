@@ -1,20 +1,15 @@
 /************** Begin Copyright - Do not add comments here **************
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012 - 2015
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
+ *
  * Change History:
- * 
+ *
  * Tag          Person   	Defect/Feature      Comments
  * ----------   ------   	--------------      --------------------------------------------------
- * 02/22/2013   ankit_jain	    92798	    Change the NLS formatting method for exception message
- * 03/21/2013   suraj_chandegave    93943           SVT: FFDC logs generated for each incorrect user/password during login with LDAP
- * 04/16/2013   ankit_jain          99009           Handled WIMException due to unparseable argument defined in the INVALID_CERTIFICATE_FILTER message
- * 04/15/2015   suraj_chandegave    168255          Test Failure (20150319-1329): com.ibm.ws.security.wim.registry.fat.DefaultWIMRealmTest.checkPasswordWithInvalidUser
- * 07/30/2015   rzunzarr            181294          Count of LoginControl set same as SearchControl to increase cache hit at login
  */
 package com.ibm.ws.security.wim.registry.util;
 
@@ -43,15 +38,9 @@ import com.ibm.wsspi.security.wim.model.Root;
 
 /**
  * Bridge class for mapping login and mapCertificate methods.
- * 
- * @author Ankit Jain
+ *
  */
-public class LoginBridge
-{
-    /**
-     * Copyright notice.
-     */
-    private static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
+public class LoginBridge {
 
     private static final TraceComponent tc = Tr.register(LoginBridge.class);
 
@@ -67,23 +56,21 @@ public class LoginBridge
 
     /**
      * Default constructor.
-     * 
+     *
      * @param mappingUtil
      */
-    public LoginBridge(BridgeUtils mappingUtil)
-    {
+    public LoginBridge(BridgeUtils mappingUtil) {
         this.mappingUtils = mappingUtil;
         propertyMap = new TypeMappings(mappingUtil);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.security.registry.UserRegistry#checkPassword(java.lang.String, java.lang.String)
      */
     @FFDCIgnore(WIMException.class)
-    public String checkPassword(String inputUser, @Sensitive String inputPassword) throws RegistryException
-    {
+    public String checkPassword(String inputUser, @Sensitive String inputPassword) throws RegistryException {
 
         // initialize the return value
         StringBuffer returnValue = new StringBuffer();
@@ -113,8 +100,7 @@ public class LoginBridge
             if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
                 this.mappingUtils.createLoginControlDataObject(root,
                                                                this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()));
-            }
-            else {
+            } else {
                 LoginControl ctrl = new LoginControl();
                 ctrl.setCountLimit(this.mappingUtils.getCoreConfiguration().getMaxSearchResults() + 1);
                 root.getControls().add(ctrl);
@@ -143,10 +129,9 @@ public class LoginBridge
                     Tr.error(tc, WIMMessageKey.ENTITY_NOT_FOUND, WIMMessageHelper.generateMsgParms(inputUser));
                 }
                 throw new com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException(WIMMessageKey.ENTITY_NOT_FOUND, Tr.formatMessage(
-                                                                                                                                                 tc,
-                                                                                                                                                 WIMMessageKey.ENTITY_NOT_FOUND,
-                                                                                                                                                 WIMMessageHelper.generateMsgParms(inputUser)
-                                ));
+                                                                                                                                             tc,
+                                                                                                                                             WIMMessageKey.ENTITY_NOT_FOUND,
+                                                                                                                                             WIMMessageHelper.generateMsgParms(inputUser)));
             }
             // the user was authenticated
             else {
@@ -155,8 +140,7 @@ public class LoginBridge
                 // add MAP(userSecurityName) to the return list of properties
                 if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
                     returnValue.append(entity.get(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm())));
-                }
-                else {
+                } else {
                     // d113681
                     returnValue.append(entity.getIdentifier().get(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm())));
                 }
@@ -170,10 +154,10 @@ public class LoginBridge
         } catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, toCatch.getMessage());
+                Tr.debug(tc, toCatch.getMessage(), toCatch);
             }
             if (tc.isErrorEnabled()) {
-                Tr.error(tc, toCatch.getMessage());
+                Tr.error(tc, toCatch.getMessage(), toCatch);
             }
             // the user/password is invalid
             //TODO:: PasswordCheckFailedException is not there in the ws.security.registry package.
@@ -199,13 +183,11 @@ public class LoginBridge
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.security.registry.UserRegistry#mapCertificate(java.security.cert.X509Certificate)
      */
     @FFDCIgnore(WIMException.class)
-    public String mapCertificate(X509Certificate inputCertificate) throws CertificateMapNotSupportedException,
-                    CertificateMapFailedException, RegistryException
-    {
+    public String mapCertificate(X509Certificate inputCertificate) throws CertificateMapNotSupportedException, CertificateMapFailedException, RegistryException {
 
         // initialize the return value
         StringBuffer returnValue = new StringBuffer();
@@ -247,8 +229,7 @@ public class LoginBridge
                 Entity entity = (Entity) returnList.get(0);
                 if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
                     returnValue.append(entity.get(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm())));
-                }
-                else {
+                } else {
                     // d113681
                     returnValue.append(entity.getIdentifier().get(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm())));
                 }
@@ -263,17 +244,17 @@ public class LoginBridge
         } catch (CertificateEncodingException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, toCatch.getMessage());
+                Tr.debug(tc, toCatch.getMessage(), toCatch);
             }
-            throw new RegistryException(toCatch.getMessage());
+            throw new RegistryException(toCatch.getMessage(), toCatch);
         } catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, toCatch.getMessage());
+                Tr.debug(tc, toCatch.getMessage(), toCatch);
             }
             // certificate mapping isn't supported
             if (toCatch instanceof com.ibm.wsspi.security.wim.exception.CertificateMapNotSupportedException) {
-                throw new CertificateMapNotSupportedException(toCatch.getMessage());
+                throw new CertificateMapNotSupportedException(toCatch.getMessage(), toCatch);
             }
             // certificate mapping failed
             else if (toCatch instanceof com.ibm.wsspi.security.wim.exception.CertificateMapFailedException) {

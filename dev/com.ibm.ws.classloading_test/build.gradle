@@ -1,0 +1,10 @@
+
+test {
+    doFirst {
+        ant.jar(destfile: "${projectDir}/bin_test/test.jar", manifest: "${projectDir}/test-resources/PackageDefineTestResources/MANIFEST.MF") {
+            fileset(dir: "${projectDir}/bin_test", includes: "test/")
+        }
+    }
+
+    jvmArgs "-Dservlet.jar.location=${rootDir}/com.ibm.websphere.javaee.servlet.3.1/lib/com.ibm.ws.javaee.servlet.3.1.jar"
+}

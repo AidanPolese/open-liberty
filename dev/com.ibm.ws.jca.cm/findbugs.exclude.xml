@@ -154,5 +154,16 @@
      <Method name="createOrWaitForConnection"/>
      <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
    </Match>
+   
+   <!-- Using new Integer(0) ensures we lock on a nonboxed Integer which will be unique -->
+   <Match>
+     <Or>
+        <Class name="com.ibm.ejs.j2c.FreePool" />
+        <Class name="com.ibm.ejs.j2c.MCWrapper" />
+        <Class name="com.ibm.ejs.j2c.PoolManager" />
+        <Class name="com.ibm.ejs.j2c.SharedPool" />
+     </Or>
+     <Bug pattern="DL_SYNCHRONIZATION_ON_BOXED_PRIMITIVE"/>
+   </Match>
 
 </FindBugsFilter>

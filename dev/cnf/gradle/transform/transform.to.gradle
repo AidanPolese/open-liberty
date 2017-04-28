@@ -9,6 +9,8 @@ DirectoryScanner.removeDefaultExclude("**/.gitattributes")
 
 Set<String> kernelProjectTypeSet = ['Kernel', 'KernelPrereq', 'KernelTest' ]
 Set<String> laosProjectTypeSet = ['LAOS', 'Kernel', 'KernelPrereq', 'KernelTest' ]
+Set<String> kernelMergedTestProjectTypeSet = ['KernelTestMerged']
+Set<String> laosMergedTestProjectTypeSet = ['LAOSTestMerged', 'KernelTestMerged']
 
 task transform {
     File sourceRootDir = new File('.')
@@ -80,6 +82,7 @@ task transform {
         }
         if (transformLAOSRootDir != null) {
             transformProjects(sourceRootDir, transformLAOSRootDir, props, laosProjectTypeSet)
+            MergeUnittestIntoProjects(sourceRootDir, transformLAOSRootDir, props, laosMergedTestProjectTypeSet)
             transformCnf(sourceRootDir, transformLAOSRootDir)
         }
     }
@@ -246,6 +249,307 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
             }
         }
     }
+}
+
+void MergeUnittestIntoProjects(File sourceRootDir, File targetRootDir, Properties props, Set<String> projectTypeSet) {
+    props.keys().each { projectName ->
+        String projectType = props.getProperty(projectName)
+        if (projectTypeSet.contains(projectType)) {
+            String testProjectName = projectName
+            projectName = testProjectName.substring(0, testProjectName.indexOf('_test'))
+            println 'Copying ' + testProjectName + '/unittest/src into ' + projectName + '/test'
+            copy {
+                from new File(sourceRootDir, testProjectName + '/unittest/src')
+                into new File(targetRootDir, projectName + '/test')
+            }
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.jbatch.container_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.jbatch.container/test')
+        include 'com/ibm/jbatch/container/jsl/impl/JobModelTest.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('"unittest/files/', '"test/files/')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.jbatch.container_test/unittest')
+        into new File(targetRootDir, 'com.ibm.jbatch.container/test')
+        include 'files/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.anno_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.anno/test')
+        include 'com/ibm/ws/anno/test/cases/AnnotationTargetsTest.java'
+        include 'com/ibm/ws/anno/test/cases/InfoStoreTest.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('"build", "build/unittest/classes"', '"bin_test", "bin_test"')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.anno_test')
+        into new File(targetRootDir, 'com.ibm.ws.anno')
+        include 'publish/files/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.app.manager.war_test')
+        into new File(targetRootDir, 'com.ibm.ws.app.manager.war')
+        include 'publish/files/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.appclient.boot_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.appclient.boot/test')
+        include 'com/ibm/ws/appclient/boot/ClientLauncherTest.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('../com.ibm.ws.appclient.boot_test/build/tmp/', 'generated/test/tmp/')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.appclient.boot_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.appclient.boot/test')
+        include 'com/ibm/ws/kernel/boot/internal/commands/FrameworkManagerTest.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('"unittest"', '"test"')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.appclient.boot_test/unittest')
+        into new File(targetRootDir, 'com.ibm.ws.appclient.boot/test')
+        include 'test data/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.channelfw_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.channelfw/test')
+        include 'com/ibm/ws/bytebuffer/test/ByteBufferTest.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('"." + sep + "unittest"', '"test"')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.channelfw_test/unittest')
+        into new File(targetRootDir, 'com.ibm.ws.channelfw/test')
+        include 'testdata'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.channelfw_test')
+        into new File(targetRootDir, 'com.ibm.ws.channelfw/test')
+        include 'unittestports.properties'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.config_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.config/test')
+        include 'com/ibm/ws/config/xml/internal/validator/XMLConfigValidatorTest.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('"resources"', '"test-resources"')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.config_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.config/test')
+        include 'test/utils/SharedConstants.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('../com.ibm.ws.config_test/resources', 'test-resources')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.config_test/resources')
+        into new File(targetRootDir, 'com.ibm.ws.config/test-resources')
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.config.schemagen_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.config.schemagen/test')
+        include 'com/ibm/ws/config/schemagen/internal/GeneratorTestBase.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('"unittest/src"', '"test"')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.dynacache_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.dynacache.web/test')
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.dynamic.bundle_test/unittest')
+        into new File(targetRootDir, 'com.ibm.ws.dynamic.bundle/test')
+        include 'PackageDefineTestResources/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.ejbcontainer_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.ejbcontainer/test')
+        include 'com/ibm/ws/ejbcontainer/osgi/internal/PassivationDirectoryTest.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('build/unittest/tmp', 'bin_test/tmp')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.product.utility_test/resources')
+        into new File(targetRootDir, 'com.ibm.ws.product.utility/test')
+        include 'lafiles/**'
+        include 'md5Tests/**'
+        include 'mockInstalls/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.rest.handler_test/unittest')
+        into new File(targetRootDir, 'com.ibm.ws.rest.handler/test')
+        include 'jsonfile.txt'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.security.authentication.builtin_test')
+        into new File(targetRootDir, 'com.ibm.ws.security.authentication.builtin')
+        include 'publish/certificates/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.security.registry_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.security.quickstart/test')
+        include 'com/ibm/ws/security/registry/UserRegistryIllegalArgumentTemplate.java'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.security.registry_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.security.registry.basic/test')
+        include 'com/ibm/ws/security/registry/UserRegistryIllegalArgumentTemplate.java'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.security.token.ltpa_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.security.token.ltpa/test')
+        include 'test/UTLocationHelper.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('../com.ibm.ws.security.token.ltpa_test/', 'test-resources/')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.security.token.ltpa_test')
+        into new File(targetRootDir, 'com.ibm.ws.security.token.ltpa/test-resources')
+        include 'test data/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.security.utility_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.security.utility/test')
+        include 'com/ibm/ws/security/utility/utils/FileUtilityTest.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('com.ibm.ws.security.utility_test', 'com.ibm.ws.security.utility')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.security.wim.core_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.security.wim.registry/test')
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.ssl_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.ssl/test')
+        include 'com/ibm/ws/ssl/config/WSKeyStoreTest.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('../com.ibm.ws.ssl_test/unittest/', 'test/')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.ssl_test/unittest')
+        into new File(targetRootDir, 'com.ibm.ws.ssl/test')
+        include 'files/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.transaction_test/resources')
+        into new File(targetRootDir, 'com.ibm.ws.transaction/test-resources')
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.webcontainer_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.webcontainer/test')
+        include 'com/ibm/ws/webcontainer/osgi/mbeans/PluginGeneratorTest.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('"build/unittest/', '"bin_test/')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.webcontainer_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.webcontainer/test')
+        include 'com/ibm/ws/webcontainer/webapp/config/WebFragmentMergerTest.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('"resources/', '"test-resources/')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.webcontainer_test/resources')
+        into new File(targetRootDir, 'com.ibm.ws.webcontainer/test-resources')
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.webcontainer.security_test')
+        into new File(targetRootDir, 'com.ibm.ws.webcontainer.security')
+        include 'publish/certificates/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.wsoc/resources')
+        into new File(targetRootDir, 'com.ibm.ws.wsoc/test')
+        include 'META-INF/services/**'
+    }
+    copy {
+        from sourceRootDir
+        into targetRootDir
+        include 'com.ibm.ws.classloading_test/**'
+        include 'com.ibm.ws.security.jaas.common_test/**'
+        include 'wlp.lib.extract_test/**'
+        exclude '*/build-unittest.xml'
+        exclude '*/delivery.sets'
+        exclude '*/unittest/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.classloading_test/unittest')
+        into new File(targetRootDir, 'com.ibm.ws.classloading_test/test-resources')
+        include 'PackageDefineTestResources/**'
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.classloading_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.classloading_test/test')
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.security.jaas.common_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.security.jaas.common_test/test')
+    }
+    copy {
+        from new File(sourceRootDir, 'wlp.lib.extract_test/unittest/src')
+        into new File(targetRootDir, 'wlp.lib.extract_test/test')
+    }
+    copy {
+        from sourceRootDir
+        into targetRootDir
+        include 'com.ibm.ws.classloading_test/.classpath.gradle'
+        include 'com.ibm.ws.classloading_test/bnd.bnd.gradle'
+        include 'com.ibm.ws.security.jaas.common_test/.classpath.gradle'
+        include 'com.ibm.ws.security.jaas.common_test/bnd.bnd.gradle'
+        include 'wlp.lib.extract_test/.classpath.gradle'
+        include 'wlp.lib.extract_test/bnd.bnd.gradle'
+        rename { String fileName ->
+            fileName.replace('.gradle', '')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.classloading_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.classloading_test/test')
+        include 'com/ibm/ws/classloading/internal/TestUtil.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line
+                .replace('"../com.ibm.websphere.javaee.servlet.3.1/lib/com.ibm.ws.javaee.servlet.3.1.jar"', '"servlet.jar.location"')
+                .replace('"classloading_test/.*", "classloading_test.jar" + otherSource + "/build/classes/"', '"classloading_test/.*", "classloading_test.jar" + otherSource + "/bin/"')
+                .replace('File(SERVLET_JAR_LOCATION)', 'File(System.getProperty(SERVLET_JAR_LOCATION))')
+        }
+    }
+    new File(targetRootDir, 'com.ibm.ws.jaxws.common/test/com/ibm/ws/jaxws/utils/StAXUtilsTest.java').delete()
+    new File(targetRootDir, 'com.ibm.ws.security.jaas.common/test/com/ibm/ws/security/jaas/common/internal/JAASLoginModuleConfigImplTestWithMock.java').delete()
+    new File(targetRootDir, 'com.ibm.ws.security.jaas.common/test/com/ibm/ws/security/jaas/common/internal/JAASSecurityConfigurationTest.java').delete()
+    new File(targetRootDir, 'com.ibm.ws.security.jaas.common/test/com/ibm/ws/security/jaas/common/modules/WSLoginModuleProxyTest.java').delete()
+    new File(targetRootDir, 'com.ibm.ws.security.jaas.common/test/com/ibm/ws/security/jaas/common/modules').delete()
 }
 
 void transformCnf(File sourceRootDir, File targetRootDir) {

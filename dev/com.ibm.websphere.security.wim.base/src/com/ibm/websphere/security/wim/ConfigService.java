@@ -12,29 +12,11 @@
  * deposited with the U.S. Copyright Office.
  *
  ***************************** End Copyright ****************************/
-/************************************************************************
- * %Z% %I% %W% %G% %U% [%H% %T%]
- * "File version %I%, last changed %E%"
- *
- * File Name: ConfigService.java
- *
- * Description:
- * 
- *
- * Change History:
- *
- * mm/dd/yy userid   track 	change history description here
- * -------- ------   ----- -------------------------------------------
- * 12/15/04 yazhuang        create
- * 07/26/05 yazhuang        interface change: DataGraph --> DataObject
- * 06/15/07 Joyce           add system constants for new schema directory
- ************************************************************************/
 package com.ibm.websphere.security.wim;
 
 /**
- * The configuation service interface.
+ * The configuration service interface.
  */
-public interface ConfigService extends ConfigConstants
-{
+public interface ConfigService extends ConfigConstants {
 
 }

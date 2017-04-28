@@ -138,7 +138,7 @@ public final class J2CGlobalConfigProperties implements PropertyChangeListener, 
     protected boolean checkManagedConnectionInstanceof = true;
     //The following lock is NOT a config prop but I'm putting
     //it here for convience.
-    protected final transient Object checkManagedConnectionInstanceofLock = new Object();
+    protected final transient Integer checkManagedConnectionInstanceofLock = new Integer(0);
     protected boolean checkManagedConnectionInstanceofInitialized = false;
 
     protected boolean embeddedRa = false;
@@ -381,9 +381,9 @@ public final class J2CGlobalConfigProperties implements PropertyChangeListener, 
     protected Properties dsMetaDataProps = null;
     public boolean callResourceAdapterStatMethods = false;
     public int numberOfInuseConnections = 0;
-    public transient Object numberOfInuseConnectionsLockObject = new Object();
+    public transient Integer numberOfInuseConnectionsLockObject = new Integer(0);
     public int numberOfFreeConnections = 0;
-    public transient Object numberOfFreeConnectionsLockObject = new Object();
+    public transient Integer numberOfFreeConnectionsLockObject = new Integer(0);
     protected transient Integer maxNumberOfMCsAllowableInThread = null;
     protected transient Boolean throwExceptionOnMCThreadCheck = null;
 

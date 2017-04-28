@@ -5,8 +5,8 @@
  *
  * WLP Copyright IBM Corp. 2014
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.kernel.boot.internal.commands;
@@ -24,6 +24,7 @@ import org.junit.Test;
 import com.ibm.websphere.simplicity.Machine;
 import com.ibm.websphere.simplicity.ProgramOutput;
 import com.ibm.websphere.simplicity.log.Log;
+
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.impl.LibertyServerFactory;
 
@@ -65,16 +66,16 @@ public class LogLevelPropertyTest {
     public void testLogLevelPropertyDisabled() throws Exception {
         try {
             if (isMac) {
-                // There might (with Java7 on some versions of the OS) be garbage in console.log that is 
-                // printed by the JVM (we have no control over it). It looks something like this: 
+                // There might (with Java7 on some versions of the OS) be garbage in console.log that is
+                // printed by the JVM (we have no control over it). It looks something like this:
                 // objc[25086]: Class JavaLaunchHelper is implemented in both /.../jre/bin/java and /.../jre/lib/libinstrument.dylib. One of the two will be used. Which one is undefined.
                 // only test for the empty console log if that message isn't present
                 if (server.waitForStringInLog("objc.*", 0, server.getConsoleLogFile()) == null) {
                     assertEquals("Console log file was not empty.", 0, server.getConsoleLogFile().length());
                 }
-            } else if (server.isJavaVersion8() && server.isOracleJVM()) {
-                // On Oracle JDK 8, the JVM will complain about the MaxPermSize option
-                if (server.waitForStringInLog(".*support was removed in 8.0", 0, server.getConsoleLogFile()) == null) {
+            } else if (server.isJavaVersion8()) {
+                // On Oracle JDK and OpenJDK 8, the JVM will complain about the MaxPermSize option
+                if (server.waitForStringInLog(".*MaxPermSize", 0, server.getConsoleLogFile()) == null) {
                     assertEquals("Console log file was not empty.", 0, server.getConsoleLogFile().length());
                 }
             } else {
@@ -89,9 +90,9 @@ public class LogLevelPropertyTest {
                 Machine machine = server.getMachine();
                 ProgramOutput output = machine.execute("ls",
                                                        new String[] {
-                                                                     "-l",
-                                                                     new File(server.getUserDir(), "servers/.classCache").getAbsolutePath(),
-                                                                     new File(server.getUserDir(), "servers/.classCache/javasharedresources").getAbsolutePath() });
+                                                                      "-l",
+                                                                      new File(server.getUserDir(), "servers/.classCache").getAbsolutePath(),
+                                                                      new File(server.getUserDir(), "servers/.classCache/javasharedresources").getAbsolutePath() });
                 Log.info(c, m, "ls -l diagnostic return code: " + output.getReturnCode());
                 Log.info(c, m, "ls -l diagnostic stdout: " + output.getStdout());
                 Log.info(c, m, "ls -l diagnostic stderr: " + output.getStderr());
@@ -103,10 +104,10 @@ public class LogLevelPropertyTest {
 
                 output = machine.execute(new File(server.getMachineJavaJDK(), "../bin/jar").getAbsolutePath(),
                                          new String[] {
-                                                       "cfM",
-                                                       // Weird extension to avoid filtering.
-                                                       new File(server.getServerRoot(), "scControlFiles.zip.diag").getAbsolutePath(),
-                                                       new File(server.getUserDir(), "servers/.classCache").getAbsolutePath()
+                                                        "cfM",
+                                                        // Weird extension to avoid filtering.
+                                                        new File(server.getServerRoot(), "scControlFiles.zip.diag").getAbsolutePath(),
+                                                        new File(server.getUserDir(), "servers/.classCache").getAbsolutePath()
                                          });
                 Log.info(c, m, "jar cf diagnostic return code: " + output.getReturnCode());
                 Log.info(c, m, "jar cf diagnostic stdout: " + output.getStdout());

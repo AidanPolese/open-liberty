@@ -448,6 +448,8 @@ public class LibertyServer implements LogMonitorClient {
 
     protected boolean serverCleanupProblem = false;
 
+    protected boolean ffdcChecking = true;
+
     /** When we stopped searching for a string in the logs. */
     public long searchStopTime;
 
@@ -6186,6 +6188,28 @@ public class LibertyServer implements LogMonitorClient {
 
     public void clearAdditionalSystemProperties() {
         this.additionalSystemProperties.clear();
+    }
+
+    /**
+     * Sets the flag that prevents FFDCs associated with this server from being collected and
+     * reported to the logic that checks for unexpected FFDCs during server stop.
+     *
+     * NOTE: The use of this method to disable unexpected FFDC checking is discouraged unless
+     * there is a real need for it. The value of this variable is true by default.
+     *
+     * @param ffdcChecking. False to disable unexpected FFDC checking. True, otherwise.
+     */
+    public void setFFDCChecking(boolean ffdcChecking) {
+        this.ffdcChecking = ffdcChecking;
+    }
+
+    /**
+     * Returns true if unexpected FFDC checking is enabled. False, otherwise.
+     *
+     * @return True if unexpected FFDC checking is enabled. False, otherwise.
+     */
+    public boolean getFFDCChecking() {
+        return this.ffdcChecking;
     }
 
     /*

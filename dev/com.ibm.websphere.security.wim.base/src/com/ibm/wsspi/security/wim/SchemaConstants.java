@@ -7,10 +7,6 @@
  * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  *
- * Change History:
- *
- * Tag          Person   Defect/Feature      Comments
- * ----------   ------   --------------      --------------------------------------------------
  */
 package com.ibm.wsspi.security.wim;
 
@@ -18,10 +14,6 @@ package com.ibm.wsspi.security.wim;
  * The interface containing all schema related constants.
  */
 public interface SchemaConstants {
-    /**
-     * IBM Copyright string
-     */
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
 
     /**
      * The name space URI of vmm data graph model.
@@ -80,7 +72,7 @@ public interface SchemaConstants {
      */
     String DO_ENTITY_CONFIGURATION = "entityConfiguration";
     /**
-     * The name of the property "defaultParent" in vmm data graph. Its value is the unqiue name of the dafault parent of an entity type.
+     * The name of the property "defaultParent" in vmm data graph. Its value is the unique name of the default parent of an entity type.
      */
     String PROP_DEFAULT_PARENT = "defaultParent";
     /**
@@ -506,12 +498,6 @@ public interface SchemaConstants {
      */
     String META_LDAP_OBJECT_CLASSES = "objectClasses";
     /**
-     * @deprecated This field has been replaced by <code> META_LDAP_OBJECT_CLASSES_FOR_CREATE </code>
-     *             The constant for LDAP object class meta data that is used for entity creation.
-     */
-    @Deprecated
-    String META_LDAP_OBJECT_CLASS_FOR_CREATE = "objectClassesForCreate";
-    /**
      * The constant for LDAP object class meta data that is used for entity creation.
      */
     String META_LDAP_OBJECT_CLASSES_FOR_CREATE = "objectClassesForCreate";
@@ -552,12 +538,6 @@ public interface SchemaConstants {
      * The constant for property name "complete";
      **/
     String PROP_COMPLETE = "complete";
-    /**
-     * @deprecated This field has been replaced by <code> DO_EXTENSION_PROPERTY_SCHEMA </code>
-     *             The constant for element "extensionPropertySchema".
-     */
-    @Deprecated
-    String DO_EXTENSION_PROPERTIY_SCHEMA = "extensionPropertySchema";
     /**
      * The constant for element "extensionPropertySchema".
      */
@@ -894,7 +874,5 @@ public interface SchemaConstants {
      * Constant to force using groupFilter while searching groups (if applicable)
      */
     static final String USE_GROUP_FILTER_FOR_SEARCH = "useGroupFilterForSearch";
-
-    static final String IS_URBRIDGE_RESULT = "isURBridgeResult";
 
 }

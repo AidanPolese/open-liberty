@@ -60,12 +60,3 @@ instrument.disabled: true
 	com.ibm.ws.serialization;version=latest,\
 	com.ibm.ws.resource;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
-
-# <property name="extra.vmargs" value="-Xmx1g" />
-
--testpath: \
-	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
-	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
-	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
-	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
-	../build.sharedResources/lib/jmock/old/jmock.jar;version=file

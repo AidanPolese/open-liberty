@@ -54,6 +54,7 @@ Subsystem-Category: JavaEE7Application
  com.ibm.ws.session, \
  com.ibm.ws.webcontainer, \
  com.ibm.ws.webcontainer.cors, \
+ com.ibm.ws.security.audit.context, \
  com.ibm.ws.http.plugin.merge, \
  com.ibm.ws.webserver.plugin.runtime, \
  com.ibm.ws.webserver.plugin.runtime.interfaces

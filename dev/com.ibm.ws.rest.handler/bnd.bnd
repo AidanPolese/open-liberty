@@ -30,8 +30,8 @@ Include-Resource: \
     WEB-INF=resources/WEB-INF
       
 -dsannotations: \
-  com.ibm.ws.rest.handler.internal.service.DefaultRoutingHelper, \
-  com.ibm.ws.rest.handler.internal.service.RESTHandlerContainerImpl
+  com.ibm.ws.rest.handler.internal.service.RESTHandlerContainerImpl, \
+  com.ibm.wsspi.rest.handler.helper.DefaultAuthorizationHelper
 
 instrument.classesExcludes: com/ibm/ws/rest/handler/internal/resources/*.class
 

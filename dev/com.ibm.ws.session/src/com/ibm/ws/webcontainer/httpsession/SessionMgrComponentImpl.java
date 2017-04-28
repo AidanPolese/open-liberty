@@ -70,8 +70,6 @@ public class SessionMgrComponentImpl implements SessionManager {
         SessionMgrComponentImpl service = INSTANCE.get();
         if (service == null) {
             // no session manager service is available
-            LoggingUtil.SESSION_LOGGER_CORE.logp(Level.SEVERE, methodClassName, "getServerSessionManagerConfig", "No session manager service is available, please ensure <httpSession> elements are correctly configured in server.xml");
-            LoggingUtil.SESSION_LOGGER_CORE.logp(Level.SEVERE, methodClassName, "getServerSessionManagerConfig", "Consult http://www-01.ibm.com/support/knowledgecenter/SSD28V_8.5.5/com.ibm.websphere.wlp.core.doc/ae/rwlp_config_httpSession.html?lang=en for more details");
             return null; 
         }
         return service.getServerConfig();

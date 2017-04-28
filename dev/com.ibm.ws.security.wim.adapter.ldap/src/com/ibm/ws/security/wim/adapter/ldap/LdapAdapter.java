@@ -7,32 +7,6 @@
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
  *
- * Change History:
- *
- * Tag          Person              Defect/Feature      Comments
- * -------      ------              --------------      --------------------------------------------------
- * 02/22/2013   ankit_jain          92798               Change the NLS formatting method for exception message
- * 03/20/2013   suraj_chandegave    93943               SVT: FFDC logs generated for each incorrect user/password during login with LDAP
- * 01/04/2013   suraj_chandegave    96925               groups not accessible when using Sun LDAP server
- * 04/05/2013   ankit_jain          98106               All 3 ldapEntityTypes has be to specified in config, even to override values of one
- * 04/16/2013   ankit_jain          99009               Handled WIMException due to unparseable argument defined in the INVALID_CERTIFICATE_FILTER message
- * 04/24/2013   suraj_chandegave    99194               LDAP nested group search fails for registry API getGroupsForUser
- * 01/07/2014   rzunzarr            109880              Delete API implementation
- * 01/12/2014   rzunzarr            109887              Create API implementation
- * 03/05/2014   rzunzarr            109879              Update API implementation
- * 04/08/2014   suraj_chandegave    129979/PI10300      Honor the searchTimeout property for login
- * 04/24/2014   ankit_jain          128429              Cleanup findbugs.exclude file
- * 05/19/2014   ankit_jain          133351              VMM makes too many LDAP JNDI calls with allGroups enabled
- * 07/02/2014   rzunzarr            135637              User created using create VMM API does not have password set
- * 04/29/2015   rzunzarr            171885              Complex UserFilter expressions do not work.
- * 06/25/2015   suraj_chandegave    178700              Login with DN fails
- * 07/07/2015   rzunzarr            179573              Login with ignoreCase fails.
- * 07/15/2015   omhingmire          179494              Use of entity type search filter in Get group membership call if membership attribute defined
- * 08/27/2015   rzunzarr            185315              SCIM create API support.
- * 09/15/2015   rzunzarr            186256              SCIM update API support.
- * 09/23/2015   rzunzarr                                Fixed the name of a method
- * 09/26/2015   rzunzarr            188772              Support for propertyNotSupported
- * 10/16/2015   omhingmire          191708              getMembersByMembership returns duplicate members for nested group
  */
 package com.ibm.ws.security.wim.adapter.ldap;
 
@@ -202,11 +176,6 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
      * methods to use the configuration data.
      */
     private LdapConfigManager iLdapConfigMgr = null;
-
-    /**
-     * The copyright message
-     */
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_LONG_2012;
 
     private static final Object DATA_TYPE_STRING = "String";
 

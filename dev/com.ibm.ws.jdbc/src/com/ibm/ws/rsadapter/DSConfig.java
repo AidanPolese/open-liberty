@@ -31,7 +31,7 @@ import com.ibm.ws.jca.cm.ConnectorService;
 import com.ibm.ws.jdbc.internal.DataSourceDef;
 import com.ibm.ws.jdbc.internal.PropertyService;
 import com.ibm.ws.kernel.service.util.PrivHelper;
-import com.ibm.ws.rsadapter.spi.WSManagedConnectionFactoryImpl;
+import com.ibm.ws.rsadapter.impl.WSManagedConnectionFactoryImpl;
 import com.ibm.wsspi.kernel.service.utils.MetatypeUtils;
 import com.ibm.wsspi.resource.ResourceFactory;
 
@@ -55,7 +55,6 @@ public class DSConfig implements FFDCSelfIntrospectable {
                     ON_CONNECT = "onConnect",
                     QUERY_TIMEOUT = "queryTimeout",
                     RECOVERY_AUTH_DATA_REF = "recoveryAuthDataRef",
-                    RESULTSET_UNUSABLE_WHEN_NO_MORE_RESULTS= "resultSetUnusableWhenNoMoreResults",
                     STATEMENT_CACHE_SIZE = "statementCacheSize",
                     SUPPLEMENTAL_JDBC_TRACE = "supplementalJDBCTrace",
                     SYNC_QUERY_TIMEOUT_WITH_TRAN_TIMEOUT = "syncQueryTimeoutWithTransactionTimeout",
@@ -218,12 +217,6 @@ public class DSConfig implements FFDCSelfIntrospectable {
      * for SQL statements. Default value is false.
      */
     public final boolean syncQueryTimeoutWithTransactionTimeout;
-    
-    /**
-     * Close the ResultSet wrapper if the jdbc driver (db2 jcc) implicitly closes the ResultSet
-     * Default value is false.
-     */
-    public final boolean resultSetUnusableWhenNoMoreResults;
 
     /**
      * Determines whether or not to participate in JTA transactions.
@@ -307,7 +300,6 @@ public class DSConfig implements FFDCSelfIntrospectable {
         isolationLevel = remove(DataSourceDef.isolationLevel.name(), -1, -1, null, -1, 0, 1, 2, 4, 8, 16, 4096);
         onConnect = remove(ON_CONNECT, (String[]) null);
         queryTimeout = remove(QUERY_TIMEOUT, (Integer) null, 0, TimeUnit.SECONDS);
-        resultSetUnusableWhenNoMoreResults = remove(RESULTSET_UNUSABLE_WHEN_NO_MORE_RESULTS,false);
         statementCacheSize = remove(STATEMENT_CACHE_SIZE, enableWASConnectionPooling ? 10 : 0, 0, null);
         supplementalJDBCTrace = remove(SUPPLEMENTAL_JDBC_TRACE, (Boolean) null);
         syncQueryTimeoutWithTransactionTimeout = remove(SYNC_QUERY_TIMEOUT_WITH_TRAN_TIMEOUT, false);
@@ -369,7 +361,6 @@ public class DSConfig implements FFDCSelfIntrospectable {
                                                ResourceFactory.JNDI_NAME, jndiName,
                                                ENABLE_CONNECTION_CASTING, enableConnectionCasting,
                                                QUERY_TIMEOUT, queryTimeout,
-                                               RESULTSET_UNUSABLE_WHEN_NO_MORE_RESULTS, resultSetUnusableWhenNoMoreResults,
                                                STATEMENT_CACHE_SIZE, statementCacheSize,
                                                SUPPLEMENTAL_JDBC_TRACE, supplementalJDBCTrace,
                                                SYNC_QUERY_TIMEOUT_WITH_TRAN_TIMEOUT, syncQueryTimeoutWithTransactionTimeout,
