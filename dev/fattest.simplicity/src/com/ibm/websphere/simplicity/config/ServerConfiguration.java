@@ -202,6 +202,9 @@ public class ServerConfiguration implements Cloneable {
     @XmlElement(name = "apiDiscovery")
     private APIDiscoveryElement apiDiscoveryElement;
 
+    @XmlElement(name = "openapi")
+    private OpenAPIElement openAPIElement;
+
     @XmlAnyAttribute
     private Map<QName, Object> unknownAttributes;
 
@@ -514,6 +517,14 @@ public class ServerConfiguration implements Cloneable {
         }
 
         return this.apiDiscoveryElement;
+    }
+
+    public OpenAPIElement getOpenAPIElement() {
+        if (this.openAPIElement == null) {
+            this.openAPIElement = new OpenAPIElement();
+        }
+
+        return this.openAPIElement;
     }
 
     /**

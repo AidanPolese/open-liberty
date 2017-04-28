@@ -132,9 +132,13 @@ public class ProviderInfo<T> extends AbstractResourceInfo {
     //Liberty 226760 begin
     @Override
     public String toString() {
-        return super.toString() + "{" + provider.getClass().getName() + "}";
+        if (provider != null) {
+            return super.toString() + "{" + provider.getClass().getName() + "}";
+        } else {
+            return "{NULL}";
+        }
+
     }
     //Liberty 226760 end
-
 
 }

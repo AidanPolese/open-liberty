@@ -7,12 +7,6 @@
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
  *
- * Change History:
- *
- * Tag          Person          Defect/Feature      Comments
- * -------      ------          --------------      --------------------------------------------------
- * 04/16/2013   ankit_jain          99009           Handled WIMException due to unparseable argument defined in the INVALID_CERTIFICATE_FILTER message
-
  */
 package com.ibm.ws.security.wim;
 
@@ -32,8 +26,6 @@ import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 
 /**
  * Manage and retrieve configuration information for repository configuration
- *
- * @author Ezhilarasi
  */
 public class BaseRepository implements RepositoryConfig {
     private static final TraceComponent tc = Tr.register(BaseRepository.class);

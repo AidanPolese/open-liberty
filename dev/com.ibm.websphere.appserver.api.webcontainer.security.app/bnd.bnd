@@ -15,4 +15,4 @@ publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \
-	com.ibm.ws.webcontainer.security.app
+	com.ibm.ws.webcontainer.security

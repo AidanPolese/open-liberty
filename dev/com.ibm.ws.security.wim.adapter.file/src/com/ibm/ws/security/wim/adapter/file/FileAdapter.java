@@ -11,9 +11,6 @@
  *
  * Tag          Person      Defect/Feature      Comments
  * -------      ------      --------------      --------------------------------------------------
- *              ankit_jain   92798		Change the NLS formatting method for exception message
- * 02/12/2014   rzunzarr     109887             Create API implementation
- * 03/05/2014   rzunzarr     109879             Update API implementation
  */
 package com.ibm.ws.security.wim.adapter.file;
 
@@ -57,7 +54,7 @@ import com.ibm.wsspi.security.wim.model.SearchControl;
 @Component(configurationPolicy = ConfigurationPolicy.REQUIRE,
            configurationPid = "com.ibm.ws.security.wim.adapter.file.config",
            property = "service.vendor=IBM",
-           reference = @Reference(bind = "setSecurityService", unbind = "unsetSecurityService", service = SecurityService.class, name = BaseRepository.KEY_SECURITY_SERVICE) )
+           reference = @Reference(bind = "setSecurityService", unbind = "unsetSecurityService", service = SecurityService.class, name = BaseRepository.KEY_SECURITY_SERVICE))
 public class FileAdapter extends BaseRepository implements ConfiguredRepository {
 
     private final FileData data = new FileData();
@@ -419,7 +416,7 @@ public class FileAdapter extends BaseRepository implements ConfiguredRepository 
      */
     @Override
     public Root delete(Root root) throws WIMException {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
@@ -430,7 +427,7 @@ public class FileAdapter extends BaseRepository implements ConfiguredRepository 
      */
     @Override
     public Root create(Root root) throws WIMException {
-        // TODO Auto-generated method stub
+
         return root;
     }
 
@@ -441,7 +438,7 @@ public class FileAdapter extends BaseRepository implements ConfiguredRepository 
      */
     @Override
     public Root update(Root root) throws WIMException {
-        // TODO Auto-generated method stub
+
         return null;
     }
 }

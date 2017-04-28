@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.jcaInboundSecurity-1.0
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.transaction-1.1;version=latest, \
 	com.ibm.websphere.appserver.security-1.0;version=latest, \
 	com.ibm.websphere.appserver.jca-1.7;version=latest, \

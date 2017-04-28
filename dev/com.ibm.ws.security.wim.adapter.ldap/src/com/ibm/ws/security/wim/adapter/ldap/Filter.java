@@ -1,24 +1,18 @@
 /************** Begin Copyright - Do not add comments here **************
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2015
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag           Person            Defect/Feature    Comments
- * -------       ------            --------------    --------------------------------------------------
+ *
  */
 package com.ibm.ws.security.wim.adapter.ldap;
 
 import java.util.ArrayList;
 
-/**
- *
- */
 class Filter {
+
     final static String delimiters = " \t\r\n";
 
     static class SubExpr {
@@ -92,6 +86,7 @@ class Filter {
     }
 
     public String prepare(String toks) {
+
         ArrayList<SubExpr> tokens = new ArrayList<SubExpr>(3);
         int idx = 0;
         while (idx != -1) {
@@ -137,7 +132,6 @@ class Filter {
                 sb.append(o);
             }
         }
-
         return sb.toString();
     }
 

@@ -1,16 +1,15 @@
 /************** Begin Copyright - Do not add comments here **************
- *  
+ *
  * IBM Confidential OCO Source Material
  * Virtual Member Manager (C) COPYRIGHT International Business Machines Corp. 2012
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
- * 
+ *
  * Change History:
- * 
+ *
  * Tag          Person   Defect/Feature      Comments
  * ----------   ------   --------------      --------------------------------------------------
- *         suraj_chandegave    93943         SVT: FFDC logs generated for each incorrect user/password during login with LDAP
  */
 
 package com.ibm.ws.security.wim.registry.util;
@@ -32,15 +31,9 @@ import com.ibm.wsspi.security.wim.model.SearchControl;
 
 /**
  * Bridge class for mapping user and group validity methods.
- * 
- * @author Ankit Jain
+ *
  */
-public class ValidBridge
-{
-    /**
-     * Copyright notice.
-     */
-    private static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
+public class ValidBridge {
 
     private static final TraceComponent tc = Tr.register(ValidBridge.class);
 
@@ -54,20 +47,18 @@ public class ValidBridge
      */
     private BridgeUtils mappingUtils = null;
 
-    public ValidBridge(BridgeUtils mappingUtil)
-    {
+    public ValidBridge(BridgeUtils mappingUtil) {
         this.mappingUtils = mappingUtil;
         propertyMap = new TypeMappings(mappingUtil);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.security.registry.UserRegistry#isValidUser(java.lang.String)
      */
     @FFDCIgnore(WIMException.class)
-    public boolean isValidUser(String inputUserSecurityName) throws RegistryException
-    {
+    public boolean isValidUser(String inputUserSecurityName) throws RegistryException {
         String methodName = "isValidUser";
         // initialize the return value
         boolean returnValue = false;
@@ -101,9 +92,7 @@ public class ValidBridge
                                                                       id, outputAttrName, this.mappingUtils);
             if (resultRoot != null) {
                 root = resultRoot;
-            }
-            else
-            {
+            } else {
                 // use the root DataGraph to create a SearchControl DataGraph
                 List<Control> controls = root.getControls();
                 SearchControl searchControl = new SearchControl();
@@ -153,7 +142,7 @@ public class ValidBridge
         catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, methodName + " " + toCatch.getMessage());
+                Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
             }
             throw new RegistryException(toCatch.getMessage(), toCatch);
         }
@@ -162,12 +151,11 @@ public class ValidBridge
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.security.registry.UserRegistry#isValidGroup(java.lang.String)
      */
     @FFDCIgnore(WIMException.class)
-    public boolean isValidGroup(String inputGroupSecurityName) throws RegistryException
-    {
+    public boolean isValidGroup(String inputGroupSecurityName) throws RegistryException {
         String methodName = "isValidGroup";
         // initialize the return value
         boolean returnValue = false;
@@ -201,9 +189,7 @@ public class ValidBridge
                                                                       id, outputAttrName, this.mappingUtils);
             if (resultRoot != null) {
                 root = resultRoot;
-            }
-            else
-            {
+            } else {
                 // use the root DataGraph to create a SearchControl DataGraph
                 List<Control> controls = root.getControls();
                 SearchControl searchControl = new SearchControl();
@@ -252,7 +238,7 @@ public class ValidBridge
         catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, methodName + " " + toCatch.getMessage());
+                Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
             }
             throw new RegistryException(toCatch.getMessage(), toCatch);
         }

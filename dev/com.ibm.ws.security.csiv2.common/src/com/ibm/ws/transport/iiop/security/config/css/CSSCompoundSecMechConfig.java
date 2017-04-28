@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2015
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 /*
@@ -15,6 +15,10 @@
 package com.ibm.ws.transport.iiop.security.config.css;
 
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
@@ -22,6 +26,7 @@ import org.omg.CORBA.UserException;
 import org.omg.CSI.EstablishContext;
 import org.omg.CSI.SASContextBody;
 import org.omg.CSI.SASContextBodyHelper;
+import org.omg.CSIIOP.TransportAddress;
 import org.omg.IOP.Codec;
 import org.omg.IOP.SecurityAttributeService;
 import org.omg.IOP.ServiceContext;
@@ -31,8 +36,13 @@ import com.ibm.ejs.ras.TraceNLS;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
+import com.ibm.websphere.ssl.SSLException;
+import com.ibm.ws.security.csiv2.config.ssl.SSLConfig;
+import com.ibm.ws.security.csiv2.util.SecurityServices;
 import com.ibm.ws.transport.iiop.security.config.ConfigUtil;
+import com.ibm.ws.transport.iiop.security.config.tss.OptionsKey;
 import com.ibm.ws.transport.iiop.security.config.tss.TSSCompoundSecMechConfig;
+import com.ibm.ws.transport.iiop.security.config.tss.TSSSSLTransportConfig;
 
 /**
  * @version $Rev: 503274 $ $Date: 2007-02-03 10:19:18 -0800 (Sat, 03 Feb 2007) $
@@ -48,6 +58,7 @@ public class CSSCompoundSecMechConfig implements Serializable {
     private CSSASMechConfig as_mech;
     private CSSSASMechConfig sas_mech;
     private String cantHandleMsg;
+    private final Map<TransportAddress, CSSTransportMechConfig> addressTransportMechMap = new HashMap<TransportAddress, CSSTransportMechConfig>();
 
     public CSSTransportMechConfig getTransport_mech() {
         return transport_mech;
@@ -88,6 +99,11 @@ public class CSSCompoundSecMechConfig implements Serializable {
             Tr.debug(tc, "    TSS REQUIRES: " + ConfigUtil.flags(requirement.getRequires()));
         }
 
+        // If no sslRef is specified then go the path to pick up the outbound SSL default/filter match
+        if (transport_mech.getOutboundSSLReference()) {
+            return extractSSLTransportForEachAddress(requirement);
+        }
+
         if ((supports & requirement.getRequires()) != requirement.getRequires()) {
             buildSupportsFailedMsg(requirement);
             return false;
@@ -112,6 +128,93 @@ public class CSSCompoundSecMechConfig implements Serializable {
             cantHandleMsg = sas_mech.getCantHandleMsg();
             return false;
         }
+
+        return true;
+    }
+
+    /**
+     * @param requirement
+     */
+    private boolean extractSSLTransportForEachAddress(TSSCompoundSecMechConfig requirement) {
+
+        //from the requirement get the addresses
+        TSSSSLTransportConfig transportConfig = (TSSSSLTransportConfig) requirement.getTransport_mech();
+        TransportAddress[] addresses = transportConfig.getTransportAddresses();
+        if (addresses.length == 0) {
+            return false;
+        }
+
+        for (TransportAddress addr : addresses) {
+            int sslPort = addr.port;
+            String sslHost = addr.host_name;
+            InetAddress ina = null;
+            String sslCfgAlias = null;
+            OptionsKey options = null;
+
+            short localSupports = supports;
+            short localRequires = requires;
+
+            try {
+                ina = InetAddress.getByName(sslHost);
+                sslHost = ina.getCanonicalHostName();
+            } catch (UnknownHostException e) {
+                // What to do with this exception???
+            }
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "get sslConfig for target " + sslHost + ":" + sslPort);
+            }
+
+            SSLConfig sslConfig = SecurityServices.getSSLConfig();
+            try {
+                sslCfgAlias = sslConfig.getSSLAlias(sslHost, sslPort);
+
+                // If sslCfgAlias is null then options are created with no protection
+                options = sslConfig.getAssociationOptions(sslCfgAlias);
+                CSSSSLTransportConfig transportLayerConfig = new CSSSSLTransportConfig();
+                if (options != null) {
+                    transportLayerConfig.setSupports(options.supports);
+                    transportLayerConfig.setRequires(options.requires);
+                }
+
+                localSupports |= transportLayerConfig.getSupports();
+                if ((localSupports & requirement.getRequires()) != requirement.getRequires()) {
+                    buildSupportsFailedMsg(requirement);
+                    continue;
+                }
+
+                localRequires |= transportLayerConfig.getRequires();
+                if ((localRequires & requirement.getSupports()) != localRequires) {
+                    buildRequiresFailedMsg(requirement);
+                    continue;
+                }
+
+                if (!transportLayerConfig.canHandle(requirement.getTransport_mech(), as_mech.getMechanism())) {
+                    cantHandleMsg = transportLayerConfig.getCantHandleMsg();
+                    continue;
+                }
+
+                if (!as_mech.canHandle(requirement.getAs_mech())) {
+                    buildAsFailedMsg(requirement);
+                    continue;
+                }
+
+                if (!sas_mech.canHandle(requirement.getSas_mech(), as_mech.getMechanism())) {
+                    cantHandleMsg = sas_mech.getCantHandleMsg();
+                    continue;
+                }
+
+                // if sslCfgAlias is null don't set it
+                if (sslCfgAlias != null) {
+                    transportLayerConfig.setSslConfigName(sslCfgAlias);
+                    addressTransportMechMap.put(addr, transportLayerConfig);
+                }
+            } catch (SSLException e) {
+                //What to do
+            }
+        }
+
+        if (addressTransportMechMap.isEmpty())
+            return false;
 
         return true;
     }
@@ -237,6 +340,21 @@ public class CSSCompoundSecMechConfig implements Serializable {
             sas_mech.toString(moreSpaces, buf);
         }
         buf.append(spaces).append("]\n");
+    }
+
+    public Map<TransportAddress, CSSTransportMechConfig> getTransportMechMap() {
+        return addressTransportMechMap;
+    }
+
+    public String getSSLCfgForTransportAddress(TransportAddress addr) {
+        String sslCfg = null;
+        if (addressTransportMechMap.isEmpty()) {
+            sslCfg = transport_mech.getSslConfigName();
+        } else {
+            CSSTransportMechConfig mech = addressTransportMechMap.get(addr);
+            sslCfg = mech.getSslConfigName();
+        }
+        return sslCfg;
     }
 
 }

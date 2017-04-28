@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2015
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 /*
@@ -23,7 +23,7 @@ import com.ibm.ws.transport.iiop.security.config.tss.TSSTransportMechConfig;
 
 /**
  * At the moment, this config class can only handle a single address.
- * 
+ *
  * @version $Rev: 503274 $ $Date: 2007-02-03 10:19:18 -0800 (Sat, 03 Feb 2007) $
  */
 public class CSSSSLTransportConfig implements CSSTransportMechConfig {
@@ -34,6 +34,17 @@ public class CSSSSLTransportConfig implements CSSTransportMechConfig {
 
     private String sslConfigName;
     private String cantHandleMsg;
+
+    private boolean lookupOutboundSSLRef = false;
+
+    public void setOutboundSSLReference() {
+        lookupOutboundSSLRef = true;
+    }
+
+    @Override
+    public boolean getOutboundSSLReference() {
+        return lookupOutboundSSLRef;
+    }
 
     @Override
     public short getSupports() {
@@ -135,6 +146,7 @@ public class CSSSSLTransportConfig implements CSSTransportMechConfig {
         buf.append(spaces).append("CSSSSLTransportConfig: [\n");
         buf.append(moreSpaces).append("SUPPORTS: ").append(ConfigUtil.flags(supports)).append("\n");
         buf.append(moreSpaces).append("REQUIRES: ").append(ConfigUtil.flags(requires)).append("\n");
+        buf.append(moreSpaces).append("dynamicSSLEnabled: ").append(lookupOutboundSSLRef).append("\n");
         buf.append(spaces).append("]\n");
     }
 }

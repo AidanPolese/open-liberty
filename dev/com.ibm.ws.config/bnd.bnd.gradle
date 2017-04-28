@@ -51,7 +51,6 @@ com.ibm.ws.config.featuregen.internal.FeatureListMBeanImpl
 instrument.classesExcludes: com/ibm/ws/config/internal/resources/*.class
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.runtime.update;version=latest,\
 	com.ibm.ws.config.ext;version=latest,\
 	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest,\

@@ -35,6 +35,8 @@ import com.ibm.ws.jaxrs20.client.configuration.LibertyJaxRsClientProxyIntercepto
 import com.ibm.ws.jaxrs20.client.configuration.LibertyJaxRsClientTimeOutInterceptor;
 import com.ibm.ws.jaxrs20.client.security.LibertyJaxRsClientSSLOutInterceptor;
 import com.ibm.ws.jaxrs20.client.security.ltpa.LibertyJaxRsClientLtpaInterceptor;
+import com.ibm.ws.jaxrs20.client.security.oauth.LibertyJaxRsClientOAuthInterceptor;
+import com.ibm.ws.jaxrs20.client.security.saml.PropagationHandler;
 import com.ibm.ws.jaxrs20.client.util.JaxRSClientUtil;
 
 /**
@@ -93,6 +95,12 @@ public class JAXRSClientImpl extends ClientImpl {
 
         //add Liberty Ltpa handler Interceptor to check if is using ltpa token for sso 
         ccfg.getOutInterceptors().add(new LibertyJaxRsClientLtpaInterceptor());
+
+        //add Liberty Jax-RS OAuth Interceptor to check whether it has to propagate OAuth/access token  
+        ccfg.getOutInterceptors().add(new LibertyJaxRsClientOAuthInterceptor());
+
+        //add  Interceptor to check whether it has to propagate SAML token for sso 
+        ccfg.getOutInterceptors().add(new PropagationHandler());
 
         /**
          * if no any user programmed SSL context info

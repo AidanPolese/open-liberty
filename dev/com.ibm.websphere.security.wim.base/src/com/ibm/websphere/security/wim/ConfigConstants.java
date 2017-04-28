@@ -1,21 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag            Person        Defect/Feature       Comments
- * -------        ------        --------------       --------------------------------------------------
- * 07/17/2013     rzunzarr        101377             ReuseConnection flag should work like it does in stand-alone Ldap.
- * 06/02/2014     ankit_jain      131900             Add externalId attribute configuration and related functionality
- * 08/13/2015     suraj_chandega  182939             RDN property config under ldapEntityType is not working
- * 09/26/2015     rzunzarr        188772             Changed constant for propertyNotSupported
- * 04/21/2016     speddapa        200011             FEDERATED REPOSITORY DO NOT ALLOW A USER LOGIN WITH TURKISH CHARACTERS
+ *
  */
 package com.ibm.websphere.security.wim;
 
@@ -23,8 +14,6 @@ package com.ibm.websphere.security.wim;
  * The interface containing all configuration related constants.
  */
 public interface ConfigConstants {
-
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_LONG_2012;
 
     /**
      * The constant for context pool configuration tag.
@@ -211,7 +200,7 @@ public interface ConfigConstants {
      */
     String CONFIG_DO_REPOSITORIES_FOR_GROUPS = "repositoriesForGroups";
     /**
-     * The name of the data object in vmm configuration data graph which represnts repositories
+     * The name of the data object in vmm configuration data graph which represents repositories
      */
     String CONFIG_DO_REPOSITORIES = "repositories";
     /**
@@ -255,7 +244,7 @@ public interface ConfigConstants {
      */
     String CONFIG_PROP_DEFAULT_PARENT = "defaultParent";
     /**
-     * The property name which is used for specifing adapter class.
+     * The property name which is used for specifying adapter class.
      */
     String CONFIG_PROP_REPOS_ADAPTER_CLASS_NAME = "adapterClassName";
     //String CONFIG_DO_LDAP_ENTITY_TYPE_LIST = "ldapEntityTypeList";
@@ -368,12 +357,12 @@ public interface ConfigConstants {
     String CONFIG_VALUE_SECURITY_USE_NOT_SELECTABLE = "notSelectable";
 
     String[] CONFIG_REALM_SECURITY_USE_VALUES = {
-                                                 CONFIG_VALUE_SECURITY_USE_ACTIVE,
-                                                 CONFIG_VALUE_SECURITY_USE_INACTIVE,
-                                                 CONFIG_VALUE_SECURITY_USE_NOT_SELECTABLE
+                                                  CONFIG_VALUE_SECURITY_USE_ACTIVE,
+                                                  CONFIG_VALUE_SECURITY_USE_INACTIVE,
+                                                  CONFIG_VALUE_SECURITY_USE_NOT_SELECTABLE
     };
 
-    // LDAP Adapter related configuratoin
+    // LDAP Adapter related configuration
     String CONFIG_DO_LDAP_SERVER_CONFIGURATION = "ldapServerConfiguration";
     String CONFIG_PROP_LDAP_SERVER_TYPE = "ldapType";
     String CONFIG_DO_LDAP_SERVERS = "ldapServers";
@@ -412,7 +401,7 @@ public interface ConfigConstants {
      */
     String CONFIG_PROP_ALLOW_WRITE_TO_SECONDARY_SERVERS = "allowWriteToSecondaryServers";
     /**
-     * Define whether or not automatically return back to the primary server if it is available again after failovering to secondary server.
+     * Define whether or not automatically return back to the primary server if it is available again after failing over to secondary server.
      * default value is false.
      */
     String CONFIG_PROP_RETURN_TO_PRIMARY_SERVER = "returnToPrimaryServer";
@@ -484,7 +473,7 @@ public interface ConfigConstants {
     // String CONFIG_VALUE_FILTER_DESCRIPTOR_MODE = "filterDescriptorMode";
     String CONFIG_VALUE_FILTER_DESCRIPTOR_MODE = "CERTIFICATE_FILTER";
     String[] CONFIG_PROP_CERTIFICATE_MAP_MODE_VALUES = {
-                                                        CONFIG_VALUE_EXTACT_DN_MODE, CONFIG_VALUE_FILTER_DESCRIPTOR_MODE
+                                                         CONFIG_VALUE_EXTACT_DN_MODE, CONFIG_VALUE_FILTER_DESCRIPTOR_MODE
     };
     String CONFIG_PROP_CERTIFICATE_FILTER = "certificateFilter";
     /**
@@ -540,14 +529,14 @@ public interface ConfigConstants {
      * then this list should be updated too.
      */
     String[] CONFIG_LDAP_SUPPORTED_TYPES = {
-                                            CONFIG_LDAP_IDS,
-                                            CONFIG_LDAP_ZOSDS,
-                                            CONFIG_LDAP_DOMINO,
-                                            CONFIG_LDAP_NDS,
-                                            CONFIG_LDAP_SUNONE,
-                                            CONFIG_LDAP_AD,
-                                            CONFIG_LDAP_ADAM,
-                                            CONFIG_LDAP_CUSTOM
+                                             CONFIG_LDAP_IDS,
+                                             CONFIG_LDAP_ZOSDS,
+                                             CONFIG_LDAP_DOMINO,
+                                             CONFIG_LDAP_NDS,
+                                             CONFIG_LDAP_SUNONE,
+                                             CONFIG_LDAP_AD,
+                                             CONFIG_LDAP_ADAM,
+                                             CONFIG_LDAP_CUSTOM
     };
 
     // DB Types
@@ -564,16 +553,16 @@ public interface ConfigConstants {
      * then this list should be updated too.
      */
     String[] CONFIG_DB_SUPPORTED_TYPES = {
-                                          CONFIG_DB_DB2,
-                                          CONFIG_DB_ORACLE,
-                                          CONFIG_DB_INFORMIX,
-                                          CONFIG_DB_SQLSERVER,
-                                          CONFIG_DB_DERBY,
-                                          CONFIG_DB_DB2ZOS,
-                                          CONFIG_DB_DB2ISERIES
+                                           CONFIG_DB_DB2,
+                                           CONFIG_DB_ORACLE,
+                                           CONFIG_DB_INFORMIX,
+                                           CONFIG_DB_SQLSERVER,
+                                           CONFIG_DB_DERBY,
+                                           CONFIG_DB_DB2ZOS,
+                                           CONFIG_DB_DB2ISERIES
     };
 
-    // Message Digest algoritms
+    // Message Digest algorithms
     String CONFIG_MDALGO_SHA1 = "SHA-1";
     String CONFIG_MDALGO_SHA256 = "SHA-256";
     String CONFIG_MDALGO_SHA384 = "SHA-384";
@@ -584,7 +573,7 @@ public interface ConfigConstants {
      * then this list should be updated too.
      */
     String[] CONFIG_SUPPORTED_MDALGORITHMS = {
-                                              CONFIG_MDALGO_SHA1, CONFIG_MDALGO_SHA256, CONFIG_MDALGO_SHA384, CONFIG_MDALGO_SHA512
+                                               CONFIG_MDALGO_SHA1, CONFIG_MDALGO_SHA256, CONFIG_MDALGO_SHA384, CONFIG_MDALGO_SHA512
     };
 
     // String constants for authentication types
@@ -592,7 +581,7 @@ public interface ConfigConstants {
     String CONFIG_AUTHENTICATION_TYPE_SIMPLE = "simple";
     String CONFIG_AUTHENTICATION_TYPE_STRONG = "strong";
     String[] CONFIG_AUTHENTICATION_TYPES = {
-                                            CONFIG_AUTHENTICATION_TYPE_NONE, CONFIG_AUTHENTICATION_TYPE_SIMPLE, CONFIG_AUTHENTICATION_TYPE_STRONG
+                                             CONFIG_AUTHENTICATION_TYPE_NONE, CONFIG_AUTHENTICATION_TYPE_SIMPLE, CONFIG_AUTHENTICATION_TYPE_STRONG
     };
 
     // string constants for scope
@@ -600,7 +589,7 @@ public interface ConfigConstants {
     String CONFIG_SCOPE_NESTED = "nested";
     String CONFIG_SCOPE_ALL = "all";
     String[] CONFIG_SCOPES = {
-                              CONFIG_SCOPE_DIRECT, CONFIG_SCOPE_NESTED, CONFIG_SCOPE_ALL
+                               CONFIG_SCOPE_DIRECT, CONFIG_SCOPE_NESTED, CONFIG_SCOPE_ALL
     };
 
     String CONFIG_PROP_SERVER_EXTERNAL_NAME = "serverExternalName";
@@ -625,9 +614,9 @@ public interface ConfigConstants {
      * List of Dynacache distribution policies.
      */
     String[] CONFIG_CACHE_DIST_POLICIES = {
-                                           CONFIG_CACHE_DIST_NONE,
-                                           CONFIG_CACHE_DIST_PUSH,
-                                           CONFIG_CACHE_DIST_PUSH_PULL
+                                            CONFIG_CACHE_DIST_NONE,
+                                            CONFIG_CACHE_DIST_PUSH,
+                                            CONFIG_CACHE_DIST_PUSH_PULL
     };
 
     /**
@@ -636,7 +625,7 @@ public interface ConfigConstants {
     String PROP_CHANGE_HANDLER_CLASS_NAME = "ChangeHandlerClassName";
 
     /**
-     * One of the possible values for supportChnageLog repository configuration attribute is None
+     * One of the possible values for supportChangeLog repository configuration attribute is None
      * which means there is no mechanism in the repository to track changes
      */
     String CONFIG_SUPPORT_CHANGE_LOG_NONE = "none";
@@ -649,8 +638,8 @@ public interface ConfigConstants {
 
     //String CONFIG_SUPPORT_CHANGE_LOG_VMM = "vmm";
     String[] CONFIG_CHANGELOG_SUPPORT_TYPES = {
-                                               CONFIG_SUPPORT_CHANGE_LOG_NONE,
-                                               CONFIG_SUPPORT_CHANGE_LOG_NATIVE,
+                                                CONFIG_SUPPORT_CHANGE_LOG_NONE,
+                                                CONFIG_SUPPORT_CHANGE_LOG_NATIVE,
                     //CONFIG_SUPPORT_CHANGE_LOG_VMM
     };
 

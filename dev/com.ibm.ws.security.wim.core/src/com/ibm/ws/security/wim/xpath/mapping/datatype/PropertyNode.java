@@ -1,16 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * Virtual Member Manager (C) COPYRIGHT International Business Machines Corp. 2012
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person   Defect/Feature      Comments
- * ----------   ------   --------------      --------------------------------------------------
+ *
  */
 package com.ibm.ws.security.wim.xpath.mapping.datatype;
 
@@ -20,54 +16,52 @@ import java.util.Iterator;
 import com.ibm.websphere.ras.annotation.Trivial;
 
 @Trivial
-public class PropertyNode implements XPathPropertyNode
-{
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_LONG_2012;
+public class PropertyNode implements XPathPropertyNode {
 
     private String operator = null;
     private String name = null;
     private Object value = null;
     private boolean inRepos = true;
 
-    public void setOperator(String operator)
-    {
+    @Override
+    public void setOperator(String operator) {
         this.operator = operator;
     }
 
-    public String getOperator()
-    {
+    @Override
+    public String getOperator() {
         return operator;
     }
 
-    public void setName(String name)
-    {
+    @Override
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getName()
-    {
+    @Override
+    public String getName() {
         return name;
     }
 
-    public void setValue(Object value)
-    {
+    @Override
+    public void setValue(Object value) {
 
         this.value = value;
     }
 
-    public Object getValue()
-    {
+    @Override
+    public Object getValue() {
         return value;
     }
 
-    public short getNodeType()
-    {
+    @Override
+    public short getNodeType() {
         return XPathNode.NODE_PROPERTY;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    public Iterator getPropertyNodes(HashMap attNodeMap)
-    {
+    public Iterator getPropertyNodes(HashMap attNodeMap) {
         HashMap nodeMap = attNodeMap;
 
         if (nodeMap == null) {
@@ -77,18 +71,18 @@ public class PropertyNode implements XPathPropertyNode
         return nodeMap.values().iterator();
     }
 
-    public void setPropertyLocation(boolean inRepos)
-    {
+    @Override
+    public void setPropertyLocation(boolean inRepos) {
         this.inRepos = inRepos;
     }
 
-    public boolean isPropertyInRepository()
-    {
+    @Override
+    public boolean isPropertyInRepository() {
         return inRepos;
     }
 
-    public String toString()
-    {
+    @Override
+    public String toString() {
         StringBuffer s = new StringBuffer();
         s = s.append(name + " " + operator + " " + value.toString());
         return s.toString();

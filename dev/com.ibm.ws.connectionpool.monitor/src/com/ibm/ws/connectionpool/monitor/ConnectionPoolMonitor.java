@@ -39,6 +39,9 @@ public class ConnectionPoolMonitor extends StatisticActions {
     private static final TraceComponent tc = Tr.register(ConnectionPoolMonitor.class, "ConnectionPoolMonitor");
 
     private final ThreadLocal<Long> tlocalforwtTime = new ThreadLocal<Long>();
+    private final ThreadLocal<Long> tlocalforiuTime = new ThreadLocal<Long>();
+    private final ThreadLocal<Integer> tlocalforiumconThread = new ThreadLocal<Integer>();
+
     private final ThreadLocal<Boolean> tlocalfpsize = new ThreadLocal<Boolean>() {
         @Override
         public Boolean initialValue() {
@@ -376,6 +379,16 @@ public class ConnectionPoolMonitor extends StatisticActions {
                 }
                 return;
             }
+            Long iuTime = tlocalforiuTime.get();
+            if (iuTime != null) {
+                long elapsed = (System.nanoTime() - tlocalforiuTime.get());
+                cStats.updateInuseTime(elapsed);
+                if (tlocalforiumconThread.get() < 2) {
+                    tlocalforiuTime.set(null);
+                } else {
+                    tlocalforiumconThread.set(tlocalforiumconThread.get() - 1);
+                }
+            }
             cStats.incFreeConnectionCount();
             tlocalfpsize.set(true);
             if (tc.isEntryEnabled()) {
@@ -416,6 +429,13 @@ public class ConnectionPoolMonitor extends StatisticActions {
                 }
                 if (JNDIName.contains(":")) {
                     JNDIName = JNDIName.replace(":", "-");
+                }
+                Long iuTime = tlocalforiuTime.get();
+                if (iuTime == null) {
+                    tlocalforiuTime.set(System.nanoTime()); // start the in use time for connections
+                    tlocalforiumconThread.set(1);
+                } else {
+                    tlocalforiumconThread.set(tlocalforiumconThread.get() + 1);
                 }
                 ConnectionPoolStats cStats = connectionPoolCountByName.get(JNDIName);
                 if (cStats == null) {

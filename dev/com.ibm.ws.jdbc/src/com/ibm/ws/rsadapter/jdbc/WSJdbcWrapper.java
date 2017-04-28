@@ -32,7 +32,7 @@ import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.kernel.service.util.PrivHelper;
 import com.ibm.ws.rsadapter.AdapterUtil;
 import com.ibm.ws.rsadapter.DSConfig;
-import com.ibm.ws.rsadapter.spi.WSManagedConnectionFactoryImpl; 
+import com.ibm.ws.rsadapter.impl.WSManagedConnectionFactoryImpl; 
 
 /**
  * <p>This class is the superclass of all WebSphere JDBC wrappers:</p>

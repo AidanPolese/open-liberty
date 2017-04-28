@@ -69,7 +69,6 @@ IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml; addIfMissing=true
 -dsannotations=com.ibm.ws.transport.iiop.server.security.CSIv2SubsystemFactory
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.spi.logging;version=latest,\
 	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
 	com.ibm.ws.security.authentication;version=latest,\

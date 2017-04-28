@@ -200,16 +200,14 @@ public abstract class BasePluginConfigCommandTask implements CommandTask {
         // define a value.
         for (int i = firstArg; i < args.length; i++) {
             String argName = getArgName(args[i]);
-            //String value = getValue(args[i]);
             if (!isKnownArgument(argName)) {
                 throw new IllegalArgumentException(getMessage("invalidArg", argName));
-            } 
-            //else {
-            //    if (!(promptableArgs.contains(argName) || confirmedArgs.contains(argName) || flagArgs.contains(argName))
-            //        && ((value == null)) && !noValueRequiredArgs.contains(argName)) {
-            //        throw new IllegalArgumentException(getMessage("missingValue", argName));
-            //    }
-            //}
+            }
+            // Everything we accept as an arg expects an name=value pair.
+            // If we see anything without the =value pair, error
+            if (!args[i].contains("=")) {
+                throw new IllegalArgumentException(getMessage("missingValue", argName));
+            }
         }
     }
     
@@ -275,14 +273,7 @@ public abstract class BasePluginConfigCommandTask implements CommandTask {
         for (int i = 1; i < args.length; i++) {
             String currentArgName = getArgName(args[i]); // return what's to left of = if there is one
             if (currentArgName.equalsIgnoreCase(argName)) {
-                String value = getValue(args[i]);
-                //if (value == null && promptableArgs.contains(argName)) {
-                //    return promptForPassword(arg); // and throw exc. if not supplied
-                //} else if (value == null && confirmedArgs.contains(argName)) {
-                //    return promptForText(arg); // and throw exc. if not supplied.
-                //} else {
-                return value;
-                //}
+                return getValue(args[i]);
             }
         }
         return defalt;

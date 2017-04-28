@@ -37,6 +37,7 @@ import com.ibm.ws.repository.common.enums.ResourceType;
 import com.ibm.ws.repository.connections.RepositoryConnection;
 import com.ibm.ws.repository.connections.RestRepositoryConnectionProxy;
 import com.ibm.ws.repository.exceptions.RepositoryBackendException;
+import com.ibm.ws.repository.exceptions.RepositoryBackendIOException;
 import com.ibm.ws.repository.exceptions.RepositoryException;
 import com.ibm.ws.repository.exceptions.RepositoryResourceException;
 import com.ibm.ws.repository.resolver.RepositoryResolutionException;
@@ -136,6 +137,9 @@ public class ExceptionUtils {
             }
             return create(Messages.UTILITY_MESSAGES.getLogMessage("version.replaced.product.not.exist", replacesId,
                                                                   productInfo.getFile().getAbsoluteFile()));
+        }
+        if (e instanceof RepositoryBackendIOException) {
+            return create((RepositoryException) e, new Throwable(e), (RestRepositoryConnectionProxy) null, true);
         }
         return create(e.getMessage(), e, InstallException.RUNTIME_EXCEPTION);
     }

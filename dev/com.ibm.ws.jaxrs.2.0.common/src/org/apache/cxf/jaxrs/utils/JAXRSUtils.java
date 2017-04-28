@@ -480,12 +480,12 @@ public final class JAXRSUtils {
             }
             //Liberty Change start
             // need to check httpmethod as well for OPTIONS
-            if (!("OPTIONS".equalsIgnoreCase(httpMethod) && ori.getHttpMethod() == null)) {
+            //if (!("OPTIONS".equalsIgnoreCase(httpMethod) && ori.getHttpMethod() == null)) {
 
-                pushOntoStack(ori, matchedValues, message);
-                return ori;
+            pushOntoStack(ori, matchedValues, message);
+            return ori;
 
-            }
+            //}
             //Liberty Change end
         }
 

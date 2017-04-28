@@ -1,20 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag               Person      Defect/Feature      Comments
- * -------           ------      --------------      --------------------------------------------------
- *		   ankit_jain	 92798		     Change the NLS formatting method for exception message
- * 02/12/13        ankit_jain    97916               Handling square brace in certificate filter
- * 01/12/2014      rzunzarr      109887              Create API implementation
- * 09/15/2015      rzunzarr      186256              SCIM update API support.
+ *
  */
 package com.ibm.ws.security.wim.adapter.ldap;
 
@@ -85,14 +77,14 @@ public class LdapHelper {
 
     /**
      * Returns a date String from the specified Date object. It is expected to be called before passing the date to SDO set method.
-     * 
+     *
      * For example:
      * date = new Date();
      * entity.set("registerDate", SDOHelper.getDateString(date));
-     * 
+     *
      * Input: 2005-05-04T09:34:18.444-0400
      * Output: 2005-05-04T09:34:18.444-04:00
-     * 
+     *
      * @param date The Date object.
      * @return A date String that converted from Date object.
      */
@@ -102,20 +94,20 @@ public class LdapHelper {
         StringBuffer dateBuffer = new StringBuffer(sdf.format(date));
         // above string is in this format
         //    2005-05-04T09:34:18.444-0400
-        // convert it to 
+        // convert it to
         //    2005-05-04T09:34:18.444-04:00
         dateBuffer.insert(dateBuffer.length() - 2, ":");
         return dateBuffer.toString();
     }
 
     /**
-     * Called by LDAP search method. to get the full Distinguisehd Name from search result and search base.
+     * Called by LDAP search method. to get the full Distinguished Name from search result and search base.
      * Some LDAP server returns the full DN in search result, some only returns RDN. The method is used to
      * get the full DN in both case.
-     * 
+     *
      * @param DN The Distinguished Name returned by the search result, may be a RDN.
      * @param searchRoot the Distinguished Name of the search base.
-     * 
+     *
      * @return The full Distinguished Name.
      */
     public static String prepareDN(String DN, String searchRoot) {
@@ -248,7 +240,7 @@ public class LdapHelper {
 
     /**
      * Return an array of RDN attributes of the given DN in lower case form.
-     * 
+     *
      * @param dn
      * @return
      */
@@ -269,7 +261,7 @@ public class LdapHelper {
     /**
      * Gets the RDN from the specified DN
      * For example "uid=persona" will be returned for given "uid=persona,cn=users,dc=yourco,dc=com".
-     * 
+     *
      * @param DN The DN
      * @return The RDN
      */
@@ -387,9 +379,9 @@ public class LdapHelper {
      * Validates and returns the valid and formatted LDAP Distinguished Name (DN) from the given DN.
      * Extra spaces will be removed from the DN during formatting.
      * If the specified DN does not satisfy the LDAP DN syntax rule, null will be returned.
-     * 
+     *
      * @param dn The DN to be formatted.
-     * 
+     *
      * @return The formatted DN. null will be returned if the specified DN is invalid.
      */
     @SuppressWarnings("unchecked")
@@ -433,7 +425,7 @@ public class LdapHelper {
 
     /**
      * Gets the LdapURL array from the given dynamic member attribute.
-     * 
+     *
      * @param attr The dynamic member attribute.
      * @return The LdapURL array.
      * @throws WIMException
@@ -456,12 +448,10 @@ public class LdapHelper {
                     }
                 }
             } catch (NamingException e) {
-                throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION,
-                                Tr.formatMessage(
-                                                 tc,
-                                                 WIMMessageKey.NAMING_EXCEPTION,
-                                                 WIMMessageHelper.generateMsgParms(e.toString(true))
-                                                ));
+                throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION, Tr.formatMessage(
+                                                                                              tc,
+                                                                                              WIMMessageKey.NAMING_EXCEPTION,
+                                                                                              WIMMessageHelper.generateMsgParms(e.toString(true))));
             }
             ldapURLs = ldapURLList.toArray(ldapURLs);
         }
@@ -492,12 +482,10 @@ public class LdapHelper {
                 return null;
             }
         } catch (NamingException e) {
-            throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION,
-                            Tr.formatMessage(
-                                             tc,
-                                             WIMMessageKey.NAMING_EXCEPTION,
-                                             WIMMessageHelper.generateMsgParms(e.toString(true))
-                                            ));
+            throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION, Tr.formatMessage(
+                                                                                          tc,
+                                                                                          WIMMessageKey.NAMING_EXCEPTION,
+                                                                                          WIMMessageHelper.generateMsgParms(e.toString(true))));
         }
     }
 
@@ -554,9 +542,9 @@ public class LdapHelper {
 
     /**
      * Helper method used by trace to print out detail informaiton about the LDAP <code>javax.naming.directory.SearchControl</code>.
-     * 
+     *
      * @param searchControls The <code>SearchControl</code> object needs to print out.
-     * 
+     *
      * @return The print out string of the <code>SearchControl</code> object.
      */
     public static String printSearchControls(SearchControls searchControls) {
@@ -573,7 +561,7 @@ public class LdapHelper {
 
     /**
      * Determine if the given DN is under the given Base.
-     * 
+     *
      * @param dn
      * @param base
      * @return
@@ -644,12 +632,10 @@ public class LdapHelper {
             }
         }
 
-        throw new CertificateMapperException(WIMMessageKey.UNKNOWN_DN_FIELD,
-                        Tr.formatMessage(
-                                         tc,
-                                         WIMMessageKey.UNKNOWN_DN_FIELD,
-                                         WIMMessageHelper.generateMsgParms(varName)
-                                        ));
+        throw new CertificateMapperException(WIMMessageKey.UNKNOWN_DN_FIELD, Tr.formatMessage(
+                                                                                              tc,
+                                                                                              WIMMessageKey.UNKNOWN_DN_FIELD,
+                                                                                              WIMMessageHelper.generateMsgParms(varName)));
     }
 
     static public boolean containIgnorecaseValue(Attribute attr, String value) throws WIMSystemException {
@@ -664,19 +650,17 @@ public class LdapHelper {
                 }
             }
         } catch (NamingException e) {
-            throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION,
-                            Tr.formatMessage(
-                                             tc,
-                                             WIMMessageKey.NAMING_EXCEPTION,
-                                             WIMMessageHelper.generateMsgParms(e.toString(true))
-                                            ));
+            throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION, Tr.formatMessage(
+                                                                                          tc,
+                                                                                          WIMMessageKey.NAMING_EXCEPTION,
+                                                                                          WIMMessageHelper.generateMsgParms(e.toString(true))));
         }
         return false;
     }
 
     /**
      * Handle special character '?' (\u00df) which will be transformed to "SS" during String.toUpperCase().
-     * 
+     *
      * @param dn
      * @return
      */
@@ -703,8 +687,7 @@ public class LdapHelper {
         return newDN;
     }
 
-    public static Object getStringLdapValue(Object value, LdapAttribute ldapAttr, String ldapType)
-                    throws WIMSystemException {
+    public static Object getStringLdapValue(Object value, LdapAttribute ldapAttr, String ldapType) throws WIMSystemException {
         Object ldapValue = null;
         String strValue = (String) value;
         String syntax = LdapConstants.LDAP_ATTR_SYNTAX_STRING;
@@ -720,12 +703,10 @@ public class LdapHelper {
                 try {
                     ldapValue = getOctetString(strValue);
                 } catch (NumberFormatException nfe) {
-                    throw new WIMSystemException(WIMMessageKey.SYSTEM_EXCEPTION,
-                                    Tr.formatMessage(
-                                                     tc,
-                                                     WIMMessageKey.SYSTEM_EXCEPTION,
-                                                     WIMMessageHelper.generateMsgParms(nfe.getMessage())
-                                                    ));
+                    throw new WIMSystemException(WIMMessageKey.SYSTEM_EXCEPTION, Tr.formatMessage(
+                                                                                                  tc,
+                                                                                                  WIMMessageKey.SYSTEM_EXCEPTION,
+                                                                                                  WIMMessageHelper.generateMsgParms(nfe.getMessage())));
                 }
             } else {
                 // If LDAP data type is not specified or is String, return String value.
@@ -738,9 +719,9 @@ public class LdapHelper {
     /**
      * Encode the input password from String format to special byte array format so that it can be stored in
      * attribute <code>unicodePwd</code> in Active Directory.
-     * 
+     *
      * @param password The password to be encoded.
-     * 
+     *
      * @return The encoded byte array which can be stored in <code>unicodePwd</code> attribute in Active Directory.
      */
     public static byte[] encodePassword(String password) throws WIMSystemException {
@@ -763,12 +744,10 @@ public class LdapHelper {
                 }
             }
         } catch (Exception e) {
-            throw new WIMSystemException(WIMMessageKey.GENERIC,
-                            Tr.formatMessage(
-                                             tc,
-                                             WIMMessageKey.GENERIC,
-                                             WIMMessageHelper.generateMsgParms(e.getMessage())
-                                            ));
+            throw new WIMSystemException(WIMMessageKey.GENERIC, Tr.formatMessage(
+                                                                                 tc,
+                                                                                 WIMMessageKey.GENERIC,
+                                                                                 WIMMessageHelper.generateMsgParms(e.getMessage())));
         }
 
         return encodedPassword;
@@ -786,8 +765,7 @@ public class LdapHelper {
         return byteArr;
     }
 
-    public static Object getDateLdapValue(Object value, LdapAttribute ldapAttr, String ldapType)
-                    throws WIMSystemException {
+    public static Object getDateLdapValue(Object value, LdapAttribute ldapAttr, String ldapType) throws WIMSystemException {
         try {
             String vStr = value.toString();
             Date date = null;
@@ -796,8 +774,8 @@ public class LdapHelper {
             String ldapValue = null;
 
             if (isUTCDate) {
-                // For remote mode calls, the date set by SDOHelper.getDateString() 
-                // is changed to the EMF UTC format.  This occurs because the datagraph 
+                // For remote mode calls, the date set by SDOHelper.getDateString()
+                // is changed to the EMF UTC format.  This occurs because the datagraph
                 // is serialized/de-serialized as it's transmitted from client to server
                 if (containsMillisec)
                     date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(vStr);
@@ -838,12 +816,10 @@ public class LdapHelper {
             }
             return ldapValue;
         } catch (java.text.ParseException e) {
-            throw new WIMSystemException(WIMMessageKey.SYSTEM_EXCEPTION,
-                            Tr.formatMessage(
-                                             tc,
-                                             WIMMessageKey.SYSTEM_EXCEPTION,
-                                             WIMMessageHelper.generateMsgParms(e.toString())
-                                            ));
+            throw new WIMSystemException(WIMMessageKey.SYSTEM_EXCEPTION, Tr.formatMessage(
+                                                                                          tc,
+                                                                                          WIMMessageKey.SYSTEM_EXCEPTION,
+                                                                                          WIMMessageHelper.generateMsgParms(e.toString())));
         }
     }
 
@@ -851,7 +827,7 @@ public class LdapHelper {
         TimeZone tz = TimeZone.getDefault();
         Date ret = new Date(date.getTime() - tz.getRawOffset());
 
-        // if we are now in DST, back off by the delta.  
+        // if we are now in DST, back off by the delta.
         // Note that we are checking the GMT date, this is the KEY.
         if (tz.inDaylightTime(ret)) {
             Date dstDate = new Date(ret.getTime() - tz.getDSTSavings());
@@ -906,12 +882,10 @@ public class LdapHelper {
                 cur_idx = mapDesc.indexOf("}", prev_idx);
             }
             if (cur_idx == -1) {
-                throw new CertificateMapperException(WIMMessageKey.INVALID_CERTIFICATE_FILTER,
-                                Tr.formatMessage(
-                                                 tc,
-                                                 WIMMessageKey.INVALID_CERTIFICATE_FILTER,
-                                                 WIMMessageHelper.generateMsgParms(mapDesc)
-                                                ));
+                throw new CertificateMapperException(WIMMessageKey.INVALID_CERTIFICATE_FILTER, Tr.formatMessage(
+                                                                                                                tc,
+                                                                                                                WIMMessageKey.INVALID_CERTIFICATE_FILTER,
+                                                                                                                WIMMessageHelper.generateMsgParms(mapDesc)));
             }
             cur_idx++;
             list.add(mapDesc.substring(prev_idx, cur_idx));
@@ -925,7 +899,7 @@ public class LdapHelper {
 
     /**
      * Gets the short form the scope from the string form of the scope
-     * 
+     *
      * @param scope A string represent a scope ('direct', 'nested' and 'all').
      * @return The short represent a scope (0, 1, 2)
      */
@@ -950,7 +924,7 @@ public class LdapHelper {
      * Returns array of RDN attribute types from the given RDN string.
      * RDN string may contain multiple RDNs separated by "+".
      * For example, "uid=persona+mail=persona@mail.com" string will return [uid=persona, mail=persona@mail.com].
-     * 
+     *
      * @param rdnStr the RDN string
      * @return the array of separated RDNs.
      */
@@ -967,7 +941,7 @@ public class LdapHelper {
 
     /**
      * Is the address an IPv6 Address.
-     * 
+     *
      * @param host
      * @return
      */
@@ -990,7 +964,7 @@ public class LdapHelper {
 
     /**
      * Format the given address as an IPv6 Address.
-     * 
+     *
      * @param host
      * @return
      */
@@ -1003,13 +977,12 @@ public class LdapHelper {
 
     /**
      * Whether the specified attribute name is contained in the attributes.
-     * 
+     *
      * @param attrName The name of the attribute
      * @param attrs The Attributes object
      * @return true if the Attributes contain the attribute name (case-insensitive); false otherwise
      */
-    public static boolean inAttributes(String attrName, Attributes attrs)
-    {
+    public static boolean inAttributes(String attrName, Attributes attrs) {
         for (NamingEnumeration<String> neu = attrs.getIDs(); neu.hasMoreElements();) {
             String attrId = neu.nextElement();
             if (attrId.equalsIgnoreCase(attrName)) {
@@ -1021,29 +994,27 @@ public class LdapHelper {
 
     /**
      * Clone the specified attribute with a new name.
-     * 
+     *
      * @param newAttrName The new name of the attribute
      * @param attr The Attribute object to be cloned.
      * @return The cloned Attribute object with the new name.
      * @throws WIMSystemException
      */
-    public static Attribute cloneAttribute(String newAttrName, Attribute attr) throws WIMSystemException
-    {
+    public static Attribute cloneAttribute(String newAttrName, Attribute attr) throws WIMSystemException {
         Attribute newAttr = new BasicAttribute(newAttrName);
         try {
             for (NamingEnumeration<?> neu = attr.getAll(); neu.hasMoreElements();) {
                 newAttr.add(neu.nextElement());
             }
         } catch (NamingException e) {
-            throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION,
-                            Tr.formatMessage(tc, WIMMessageKey.NAMING_EXCEPTION, WIMMessageHelper.generateMsgParms(e.toString(true))));
+            throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION, Tr.formatMessage(tc, WIMMessageKey.NAMING_EXCEPTION, WIMMessageHelper.generateMsgParms(e.toString(true))));
         }
         return newAttr;
     }
 
     /**
      * Convert the byte array to Active Directory GUID format.
-     * 
+     *
      * @return
      */
     public static String convertToDashedString(byte[] objectGUID) {
@@ -1073,8 +1044,7 @@ public class LdapHelper {
         return displayStr.toString();
     }
 
-    private static String prefixZeros(int value)
-    {
+    private static String prefixZeros(int value) {
         if (value <= 15) {
             StringBuilder sb = new StringBuilder("0");
             sb.append(Integer.toHexString(value));

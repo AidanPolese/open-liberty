@@ -198,4 +198,6 @@ public interface IExtendedRequest extends HttpServletRequest {
     @SuppressWarnings("rawtypes")
     public long sizeInputStreamData(Map isd) throws UnsupportedEncodingException, IllegalStateException;
 
+    //used to set MultiRead custom property
+    public void setValuesIfMultiReadofPostdataEnabled();
 }

@@ -82,7 +82,6 @@
   <AD id="recoveryAuthDataRef"                    name="%recoveryAuth" description="%recoveryAuth.desc" ibmui:group="Advanced" required="false" type="String"  cardinality="1" ibm:type="pid" ibm:reference="com.ibm.ws.security.jca.internal.authdata.config"/>
   <AD id="recoveryAuthData.target"                name="internal"      description="internal use only"  required="false" type="String" ibm:final="true" default="(service.pid=${recoveryAuthDataRef})"/>
   <AD id="recoveryAuthData.cardinality.minimum"   name="internal"      description="internal use only"  type="String" ibm:final="true" default="${count(recoveryAuthDataRef)}"/>
-  <AD id="resultSetUnusableWhenNoMoreResults"     name="internal"      description="internal use only"  ibmui:group="Advanced" required="false" type="Boolean" default="false"/>
   <AD id="syncQueryTimeoutWithTransactionTimeout" name="%syncQryTx"    description="%syncQryTx.desc"    ibmui:group="Advanced" required="false" type="Boolean" default="false"/>
   <AD id="supplementalJDBCTrace"                  name="%supJDBCTrace" description="%supJDBCTrace.desc" ibmui:group="Advanced" required="false" type="Boolean"/>
   <AD id="service.ranking"                        name="internal"      description="internal use only"  type="Integer" default="0"/>
@@ -373,6 +372,12 @@
    <Option value="256" label="256"/>
    <Option value="512" label="512"/>
   </AD>
+  <AD id="characterTruncation"                 ibmui:group="Advanced" required="false" type="String" name="%charTruncation" description="%charTruncation.desc">
+  	<Option value="default" label="default"/>
+  	<Option value="warning" label="warning"/>
+  	<Option value="none" label="none"/>
+  </AD>
+  <AD id="concurrentAccessResolution"         ibmui:group="Advanced" required="false" type="Integer" min="0" max="3" name="%concurrentAccessResolution" description="%concurrentAccessResolution.desc"/>
   <AD id="cursorHold"                         ibmui:group="Advanced" required="false" type="Boolean" default="false" name="%cursorHold" description="%cursorHold.desc"/>
   <AD id="cursorSensitivity"                  ibmui:group="Advanced" required="false" type="String"  default="asensitive" name="%cursorSensitivity" description="%cursorSensitivity.desc">
    <Option value="asensitive"  label="asensitive"/>
@@ -398,10 +403,21 @@
    <Option value="\," label="%char.comma.desc"/>
    <Option value=" "  label="%char.space.desc"/>
   </AD>
+  <AD id="decfloatRoundingMode"               ibmui:group="Advanced" required="false" type="String"  name="%decfloatRounding" description="%decfloatRounding.desc">
+  	<Option value="half even" label="half even"/>
+  	<Option value="half up" label="half up"/>
+  	<Option value="down" label="down"/>
+  	<Option value="ceiling" label="ceiling"/>
+  	<Option value="floor" label="floor"/>
+ 	<Option value="half down" label="half down"/>
+  	<Option value="up" label="up"/>	
+  </AD>
+  <AD id="decimalDataErrors"                  ibmui:group="Advanced" required="false" type="String"  name="%decimalDataErrors" description="%decimalDataErrors.desc"/>
   <AD id="decimalSeparator"                   ibmui:group="Advanced" required="false" type="String"  name="%decimalSeparator" description="%decimalSeparator.desc">
    <Option value="."  label="%char.period.desc"/>
    <Option value="\," label="%char.comma.desc"/>
   </AD>
+  <AD id="describeOption"                     ibmui:group="Advanced" required="false" type="String"  name="%describeOption" description="%describeOption.desc"/>
   <AD id="driver"                             ibmui:group="Advanced" required="false" type="String"  default="toolbox" name="%driver" description="%driver.desc">
    <Option value="native"  label="native"/>
    <Option value="toolbox" label="toolbox"/>
@@ -415,6 +431,7 @@
   <AD id="fullOpen"                           ibmui:group="Advanced" required="false" type="Boolean" default="false" name="%fullOpen" description="%fullOpen.desc"/>
   <AD id="holdInputLocators"                  ibmui:group="Advanced" required="false" type="Boolean" default="true" name="%holdInputLocators" description="%holdInputLocators.desc"/>
   <AD id="holdStatements"                     ibmui:group="Advanced" required="false" type="Boolean" default="false" name="%holdStatements" description="%holdStatements.desc"/>
+  <AD id="ignoreWarnings"                     ibmui:group="Advanced" required="false" type="String"  name="%ignoreWarnings" description="%ignoreWarnings.desc"/>
   <AD id="isolationLevelSwitchingSupport"     ibmui:group="Advanced" required="false" type="Boolean" default="false" name="%isolationLevelSwitchingSupport" description="%isolationLevelSwitchingSupport.desc"/>
   <AD id="keepAlive"                          ibmui:group="Advanced" required="false" type="Boolean" name="%keepAlive" description="%keepAlive.desc"/>
   <AD id="lazyClose"                          ibmui:group="Advanced" required="false" type="Boolean" default="false" name="%lazyClose" description="%lazyClose.desc"/>
@@ -425,12 +442,18 @@
    <Option value="31" label="31"/>
    <Option value="63" label="64"/>
   </AD>
+  <AD id="maximumBlockedInputRows"            ibmui:group="Advanced" required="false" type="Integer" min="1" max="32000" name="%maximumBlockedInputRows" description="%maximumBlockedInputRows.desc"/>
   <AD id="maximumScale"                       ibmui:group="Advanced" required="false" type="Integer" default="31" min="0" max="63" name="%maximumScale" description="%maximumScale.desc"/>
   <AD id="metaDataSource"                     ibmui:group="Advanced" required="false" type="Integer" default="1" min="0" max="1" name="%metaDataSource" description="%metaDataSource.desc"/>
   <AD id="minimumDivideScale"                 ibmui:group="Advanced" required="false" type="Integer" default="0" min="0" max="9" name="%minimumDivideScale" description="%minimumDivideScale.desc"/>
   <AD id="naming"                             ibmui:group="Advanced" required="false" type="String"  default="sql" name="%naming" description="%naming.desc">
    <Option value="sql"    label="sql"/>
    <Option value="system" label="system"/>
+  </AD>
+  <AD id="numericRangeError"                  ibmui:group="Advanced" required="false" type="String"  name="%numericRangeError" description="%numericRangeError.desc">
+  <Option value="default" label="default"/>
+  <Option value="warning" label="warning"/>
+  <Option value="none"    label="none"/>
   </AD>
   <AD id="package"                            ibmui:group="Advanced" required="false" type="String"  name="%package" description="%package.desc"/>
   <AD id="packageAdd"                         ibmui:group="Advanced" required="false" type="Boolean" default="true" name="%packageAdd" description="%packageAdd.desc"/>
@@ -455,6 +478,12 @@
   <AD id="proxyServer"                        ibmui:group="Advanced" required="false" type="String"  name="%proxyServer" description="%proxyServer.desc"/>
   <AD id="qaqqiniLibrary"                     ibmui:group="Advanced" required="false" type="String"  name="%qaqqiniLibrary" description="%qaqqiniLibrary.desc"/>
   <AD id="queryOptimizeGoal"                  ibmui:group="Advanced" required="false" type="Integer" default="0" min="0" max="2" name="%queryOptimizeGoal" description="%queryOptimizeGoal.desc"/>
+  <AD id="queryReplaceTruncatedParameter"     ibmui:group="Advanced" required="false" type="String" name="%queryReplaceTruncatedParameter" description="%queryReplaceTruncatedParameter.desc"/>
+  <AD id="queryTimeoutMechanism"              ibmui:group="Advanced" required="false" type="String" name="%queryTimeoutMechanism" description="%queryTimeoutMechanism.desc">
+  	<Option value="qqrytimlmt" label="qqrytimlmt"/>
+  	<Option value="cancel" label="cancel"/>
+  </AD>
+  <AD id="queryStorageLimit"                  ibmui:group="Advanced" required="false" type="Integer" min="-1" name="%queryStorageLimit" description="%queryStorageLimit"/>
   <AD id="receiveBufferSize"                  ibmui:group="Advanced" required="false" type="Integer" min="1" name="%receiveBufferSize" description="%receiveBufferSize.desc"/>
   <AD id="remarks"                            ibmui:group="Advanced" required="false" type="String"  default="system" name="%remarks" description="%remarks.desc">
    <Option value="sql"    label="sql"/>
@@ -464,8 +493,10 @@
   <AD id="savePasswordWhenSerialized"         ibmui:group="Advanced" required="false" type="Boolean" default="false" name="%savePasswordWhenSerialized" description="%savePasswordWhenSerialized.desc"/>
   <AD id="secondaryUrl"                       ibmui:group="Advanced" required="false" type="String"  name="%secondaryUrl" description="%secondaryUrl.desc"/>
   <AD id="secure"                             ibmui:group="Advanced" required="false" type="Boolean" default="false" name="%secure" description="%secure.desc"/>
+  <AD id="secureCurrentUser"                  ibmui:group="Advanced" required="false" type="Boolean" name="%secureCurrentUser" description="%secureCurrentUser.desc"/>
   <AD id="sendBufferSize"                     ibmui:group="Advanced" required="false" type="Integer" min="1" name="%sendBufferSize" description="%sendBufferSize.desc"/>
   <AD id="serverTraceCategories"              ibmui:group="Advanced" required="false" type="Integer" default="0" name="%serverTraceCategories" description="%serverTraceCategories.desc"/>
+  <AD id="serverTrace"                        ibmui:group="Advanced" required="false" type="Integer" name="%serverTrace" description="%serverTrace.desc"/>
   <AD id="soLinger"                           ibmui:group="Advanced" required="false" type="String"  ibm:type="duration(s)" min="-1" name="%soLinger" description="%soLinger.desc"/>
   <AD id="soTimeout"                          ibmui:group="Advanced" required="false" type="String"  ibm:type="duration(ms)" min="0" name="%soTimeout" description="%soTimeout.desc"/>
   <AD id="sort"                               ibmui:group="Advanced" required="false" type="String"  default="hex" name="%sort" description="%sort.desc">
@@ -494,6 +525,10 @@
    <Option value="\," label="%char.comma.desc"/>
    <Option value=" "  label="%char.space.desc"/>
   </AD>
+  <AD id="timestampFormat"                    ibmui:group="Advanced" required="false" type="String"  name="%timestampFormat" description="%timestampFormat.desc">
+  	<Option value="iso" label="iso"/>
+  	<Option value="ibmsql" label="ibmsql"/>
+ </AD>
   <AD id="toolboxTrace"                       ibmui:group="Advanced" required="false" type="String"  name="%toolboxTrace" description="%toolboxTrace.desc">
    <Option value="none"        label="none"/>
    <Option value="datastream"  label="datastream"/>
@@ -516,7 +551,15 @@
    <Option value="character" label="character"/>
   </AD>
   <AD id="trueAutoCommit"                     ibmui:group="Advanced" required="false" type="Boolean" default="false" name="%trueAutoCommit" description="%trueAutoCommit.desc"/>
+  <AD id="useBlockUpdate"                     ibmui:group="Advanced" required="false" type="Boolean" name="%useBlockUpdate" description="%useBlockUpdate.desc"/>
+  <AD id="useDrdaMetadataVersion"             ibmui:group="Advanced" required="false" type="Boolean" name="%useDrdaMetadataVersion" description="%useDrdaMetadataVersion.desc"/>
   <AD id="user"                               ibmui:group="Advanced" required="false" type="String"  name="%user" description="%user.desc"/>  
+  <AD id="variableFieldCompression"           ibmui:group="Advanced" required="false" type="String" name="%variableFieldCompression" description="%variableFieldCompression.desc">
+  <Option value="true" label="true"/>
+  <Option value="false" label="false"/>
+  <Option value="insert" label="insert"/>
+  <Option value="all" label="all"/>
+  </AD>
   <AD id="xaLooselyCoupledSupport"            ibmui:group="Advanced" required="false" type="Integer" default="0" min="0" max="1" name="%xaLooselyCoupledSupport" description="%xaLooselyCoupledSupport.desc"/>
  </OCD>
 
@@ -536,7 +579,7 @@
   <AD id="portNumber"                         required="false" type="Integer" default="50000" name="%portNumber" description="%portNumber.desc"/>
   <!-- Advanced properties for properties.db2.jcc -->
   <!-- TODO: consider having another group for heterogeneous pooling properties -->
-  <!-- TODO: consider having another group for client reroute properties -->
+  <AD id="accountingInterval"                     ibmui:group="Advanced" required="false" type="String"  name="%accountingInterval" description="%accountingInterval.desc"/>
   <AD id="activateDatabase"                       ibmui:group="Advanced" required="false" type="Integer" name="%activateDatabase" description="%activateDatabase.desc"/>
   <AD id="affinityFailbackInterval"               ibmui:group="AutomaticClientReroute" required="false" type="String"  ibm:type="duration(s)" name="%affinityFailbackInterval" description="%affinityFailbackInterval.desc"/>
   <AD id="allowNextOnExhaustedResultSet"          ibmui:group="Advanced" required="false" type="Integer" name="%allowNextOnExhaustedResultSet" description="%allowNextOnExhaustedResultSet.desc">
@@ -555,6 +598,8 @@
     <Option value="2" label="NO"/>
   </AD>
   <AD id="blockingReadConnectionTimeout"          ibmui:group="Advanced" required="false" type="String"  ibm:type="duration(s)" min="0" name="%blockingReadConnectionTimeout" description="%blockingReadConnectionTimeout.desc"/>
+  <AD id="charOutputSize"                         ibmui:group="Advanced" required="false" type="Short"   name="%charOutputSize" description="%charOutputSize.desc"/>
+  <AD id="clientApplcompat"                       ibmui:group="Advanced" required="false" type="String"  name="%clientApplcompat" description="%clientApplcompat.desc"/>
   <AD id="clientAccountingInformation"            ibmui:group="Advanced" required="false" type="String"  name="%clientAccountingInformation" description="%clientAccountingInformation.desc"/>
   <AD id="clientApplicationInformation"           ibmui:group="Advanced" required="false" type="String"  name="%clientApplicationInformation" description="%clientApplicationInformation.desc"/>
   <AD id="clientBidiStringType"                   ibmui:group="Advanced" required="false" type="Integer" name="%clientBidiStringType" description="%clientBidiStringType.desc">
@@ -568,28 +613,66 @@
     <Option value="11" label="BIDI_ST11"/>
   </AD>
   <AD id="clientDebugInfo"                        ibmui:group="Advanced" required="false" type="String"  max="254" name="%clientDebugInfo" description="%clientDebugInfo.desc"/>
+  <AD id="clientProgramId"                        ibmui:group="Advanced" required="false" type="String"  max="80" name="%clientProgramId" description="%clientProgramId.desc"/>
+  <AD id="clientProgramName"                      ibmui:group="Advanced" required="false" type="String"  max="12" name="%clientProgramName" description="%clientProgramName.desc"/>
   <AD id="clientRerouteAlternatePortNumber"		  ibmui:group="AutomaticClientReroute" required="false" type="String"  name="%clientRerouteAlternatePortNumber" description="%clientRerouteAlternatePortNumber.desc"/>
   <AD id="clientRerouteAlternateServerName"		  ibmui:group="AutomaticClientReroute" required="false" type="String"  name="%clientRerouteAlternateServerName" description="%clientRerouteAlternateServerName.desc"/>
   <AD id="clientUser"                             ibmui:group="Advanced" required="false" type="String"  name="%clientUser" description="%clientUser.desc"/>
   <AD id="clientWorkstation"                      ibmui:group="Advanced" required="false" type="String"  name="%clientWorkstation" description="%clientWorkstation.desc"/>
   <AD id="commandTimeout"                         ibmui:group="Advanced" required="false" type="String"  ibm:type="duration(s)" name="%commandTimeout" description="%commandTimeout.desc"/>
+  <AD id="concurrentAccessResolution"             ibmui:group="Advanced" required="false" type="Integer" name="%concurrentAccessResolution" description="%concurrentAccessResolution.desc">
+    <Option value="1" label="CONCURRENTACCESS_USE_CURRENTLY_COMMITTED"/>
+    <Option value="2" label="CONCURRENTACCESS_WAIT_FOR_OUTCOME"/>
+  </AD>
   <AD id="connectionCloseWithInFlightTransaction" ibmui:group="Advanced" required="false" type="Integer" name="%connectionCloseWithInFlightTransaction" description="%connectionCloseWithInFlightTransaction.desc">
     <Option value="1" label="CONNECTION_CLOSE_WITH_EXCEPTION"/>
     <Option value="2" label="CONNECTION_CLOSE_WITH_ROLLBACK"/>
   </AD>
   <AD id="connectionTimeout"                      ibmui:group="Advanced" required="false" type="String"  ibm:type="duration(s)" name="%connectionTimeout" description="%connectionTimeout.desc"/>
+  <AD id="connectNode"                            ibmui:group="Advanced" required="false" type="Integer" max="999" min="0" name="%connectNode" description="%connectNode.desc"/>
   <AD id="currentAlternateGroupEntry"             ibmui:group="Advanced" required="false" type="Integer" name="%currentAlternateGroupEntry" description="%currentAlternateGroupEntry.desc"/>
+  <AD id="currentDegree"                          ibmui:group="Advanced" required="false" type="String"  name="%currentDegree" description="%currentDegree.desc"/>
+  <AD id="currentExplainMode"                     ibmui:group="Advanced" required="false" type="String"  max="254" name="%currentExplainMode" description="%currentExplainMode.desc"/>
+  <AD id="currentExplainSnapshot"                 ibmui:group="Advanced" required="false" type="Integer" max="8" name="%currentExplainSnapshot" description="%currentExplainSnapshot.desc"/>
   <AD id="currentFunctionPath"                    ibmui:group="Advanced" required="false" type="String"  name="%currentFunctionPath" description="%currentFunctionPath.desc"/>
   <AD id="currentLocaleLcCtype"                   ibmui:group="Advanced" required="false" type="String"  name="%currentLocaleLcCtype" description="%currentLocaleLcCtype.desc"/>
   <AD id="currentLockTimeout"                     ibmui:group="Advanced" required="false" type="String"  ibm:type="duration(s)" min="-1" max="32767" name="%currentLockTimeout" description="%currentLockTimeout.desc"/>
+  <AD id="currentMaintainedTableTypesForOptimization" ibmui:group="Advanced" required="false" type="String" name="%currentMaintainedTableTypesForOptimization" description="%currentMaintainedTableTypesForOptimization.desc">
+    <Option value="ALL" label="ALL"/>
+    <Option value="NONE" label="NONE"/>
+    <Option value="SYSTEM" label="SYSTEM"/>
+    <Option value="USER" label="USER"/>
+  </AD>
   <AD id="currentPackagePath"                     ibmui:group="Advanced" required="false" type="String"  name="%currentPackagePath" description="%currentPackagePath.desc"/>
   <AD id="currentPackageSet"                      ibmui:group="Advanced" required="false" type="String"  name="%currentPackageSet" description="%currentPackageSet.desc"/>
+  <AD id="currentQueryOptimization"               ibmui:group="Advanced" required="false" type="Integer" name="%currentQueryOptimization" description="%currentQueryOptimization.desc">
+    <Option value="0" label="0"/>
+    <Option value="1" label="1"/>
+    <Option value="2" label="2"/>
+    <Option value="3" label="3"/>
+    <Option value="5" label="5"/>
+    <Option value="7" label="7"/>
+    <Option value="9" label="9"/>
+  </AD>
   <AD id="currentSQLID"                           ibmui:group="Advanced" required="false" type="String"  name="%currentSQLID" description="%currentSQLID.desc"/>
   <AD id="currentSchema"                          ibmui:group="Advanced" required="false" type="String"  name="%currentSchema" description="%currentSchema.desc"/>
   <AD id="cursorSensitivity"                      ibmui:group="Advanced" required="false" type="Integer" name="%cursorSensitivity" description="%cursorSensitivity.desc">
    <Option value="0" label="TYPE_SCROLL_SENSITIVE_STATIC"/>
    <Option value="1" label="TYPE_SCROLL_SENSITIVE_DYNAMIC"/>
    <Option value="2" label="TYPE_SCROLL_ASENSITIVE"/>
+  </AD>
+  <AD id="dateFormat"                             ibmui:group="Advanced" required="false" type="Integer" name="%dateFormat" description="%dateFormat.desc">
+    <Option value="1" label="ISO"/>
+    <Option value="2" label="USA"/>
+    <Option value="3" label="EUR"/>
+    <Option value="4" label="JIS"/>
+  </AD>
+  <AD id="decimalRoundingMode"                    ibmui:group="Advanced" required="false" type="Integer" name="%decimalRoundingMode" description="%decimalRoundingMode.desc">
+    <Option value="1" label="ROUND_DOWN"/>
+    <Option value="2" label="ROUND_CEILING"/>
+    <Option value="3" label="ROUND_HALF_EVEN"/>
+    <Option value="4" label="ROUND_HALF_UP"/>
+    <Option value="6" label="ROUND_FLOOR"/>
   </AD>
   <AD id="decimalSeparator"                       ibmui:group="Advanced" required="false" type="Integer" name="%decimalSeparator" description="%decimalSeparator.desc">
    <Option value="1" label="DECIMAL_SEPARATOR_PERIOD"/>
@@ -607,6 +690,7 @@
    <Option value="1" label="YES"/>
    <Option value="2" label="NO"/>
   </AD>
+  <AD id="enableConnectionConcentrator"           ibmui:group="Advanced" required="false" type="Boolean" name="%enableConnectionConcentrator" description="%enableConnectionConcentrator.desc"/>
   <AD id="enableExtendedDescribe"                 ibmui:group="Advanced" required="false" type="Integer" name="%enableExtendedDescribe" description="%enableExtendedDescribe.desc">
     <Option value="1" label="YES"/>
     <Option value="2" label="NO"/>
@@ -615,15 +699,37 @@
    <Option value="1" label="YES"/>
    <Option value="2" label="NO"/>
   </AD>
+  <AD id="enableMultiRowInsertSupport"            ibmui:group="Advanced" required="false" type="Boolean" name="%enableMultiRowInsertSupport" description="%enableMultiRowInsertSupport.desc"/>
   <AD id="enableNamedParameterMarkers"            ibmui:group="Advanced" required="false" type="Integer" name="%enableNamedParameterMarkers" description="%enableNamedParameterMarkers.desc">
    <Option value="1" label="YES"/>
    <Option value="2" label="NO"/>
+  </AD>
+  <AD id="enableRowsetSupport"                    ibmui:group="Advanced" required="false" type="Integer" name="%enableRowsetSupport" description="%enableRowsetSupport.desc">
+    <Option value="1" label="YES"/>
+    <Option value="2" label="NO"/>
   </AD>
   <AD id="enableSeamlessFailover"                 ibmui:group="Advanced" required="false" type="Integer" name="%enableSeamlessFailover" description="%enableSeamlessFailover.desc">
    <Option value="1" label="YES"/>
    <Option value="2" label="NO"/>
   </AD>
   <AD id="enableSysplexWLB"                       ibmui:group="Advanced" required="false" type="Boolean" name="%enableSysplexWLB" description="%enableSysplexWLB.desc"/>
+  <AD id="enableT2zosLBF"                         ibmui:group="Advanced" required="false" type="Integer" name="%enableT2zosLBF" description="%enableT2zosLBF.desc">
+    <Option value="1" label="YES"/>
+    <Option value="2" label="NO"/>
+  </AD>
+  <AD id="enableT2zosLBFSPResultSets"             ibmui:group="Advanced" required="false" type="Integer" name="%enableT2zosLBFSPResultSets" description="%enableT2zosLBFSPResultSets.desc">
+    <Option value="1" label="YES"/>
+    <Option value="2" label="NO"/>
+  </AD>
+  <AD id="enableXACleanTransaction"               ibmui:group="Advanced" required="false" type="Boolean" name="%enableXACleanTransaction" description="%enableXACleanTransaction.desc"/>
+  <AD id="encryptionAlgorithm"                    ibmui:group="Advanced" required="false" type="Integer" name="%encryptionAlgorithm" description="%encryptionAlgorithm.desc">
+    <Option value="1" label="1"/>
+    <Option value="2" label="2"/>
+  </AD>
+  <AD id="extendedTableInfo"                      ibmui:group="Advanced" required="false" type="Integer" name="%extendedTableInfo" description="%extendedTableInfo.desc">
+    <Option value="1" label="YES"/>
+    <Option value="2" label="NO"/>
+  </AD>
   <AD id="fetchSize"                              ibmui:group="Advanced" required="false" type="Integer" name="%fetchSize" description="%fetchSize.desc"/>
   <AD id="fullyMaterializeInputStreams"           ibmui:group="Advanced" required="false" type="Boolean" name="%fullyMaterializeInputStreams" description="%fullyMaterializeInputStreams.desc"/>
   <AD id="fullyMaterializeInputStreamsOnBatchExecution" ibmui:group="Advanced" required="false" type="Integer" name="%fullyMaterializeInputStreamsOnBatchExecution" description="%fullyMaterializeInputStreamsOnBatchExecution.desc">
@@ -641,14 +747,20 @@
     <Option value="1" label="INTERRUPT_PROCESSING_MODE_STATEMENT_CANCEL"/>
     <Option value="2" label="INTERRUPT_PROCESSING_MODE_CLOSE_SOCKET"/>
   </AD>
+  <AD id="jdbcCollection"                         ibmui:group="Advanced" required="false" type="String"  name="%jdbcCollection" description="%jdbcCollection.desc"/>
   <AD id="keepAliveTimeOut"                       ibmui:group="Advanced" required="false" type="String"  ibm:type="duration(s)" name="%keepAliveTimeOut" description="%keepAliveTimeOut.desc"/>
   <AD id="keepDynamic"                            ibmui:group="Advanced" required="false" type="Integer" name="%keepDynamic" description="%keepDynamic.desc"/>
   <AD id="kerberosServerPrincipal"                ibmui:group="Advanced" required="false" type="String"  name="%kerberosServerPrincipal" description="%kerberosServerPrincipal.desc"/>
   <AD id="loginTimeout"                           ibmui:group="Advanced" required="false" type="String"  ibm:type="duration(s)" min="0" name="%loginTimeout" description="%loginTimeout.desc"/>
   <AD id="maxConnCachedParamBufferSize"           ibmui:group="Advanced" required="false" type="Integer" name="%maxConnCachedParamBufferSize" description="%maxConnCachedParamBufferSize.desc"/>
   <AD id="maxRetriesForClientReroute"             ibmui:group="AutomaticClientReroute" required="false" type="Integer" name="%maxRetriesForClientReroute" description="%maxRetriesForClientReroute.desc"/>
+  <AD id="maxRowsetSize"                          ibmui:group="Advanced" required="false" type="Integer" name="%maxRowsetSize" description="%maxRowsetSize.desc"/>
+  <AD id="maxTransportObjects"                    ibmui:group="Advanced" required="false" type="Integer" name="%maxTransportObjects" description="%maxTransportObjects.desc"/>
   <AD id="memberConnectTimeout"                   ibmui:group="AutomaticClientReroute" required="false" type="String"  ibm:type="duration(s)" name="%memberConnectTimeout" description="%memberConnectTimeout.desc"/>
+  <AD id="optimizationProfile"                    ibmui:group="Advanced" required="false" type="String"  name="%optimizationProfile" description="%optimizationProfile.desc"/>
+  <AD id="optimizationProfileToFlush"             ibmui:group="Advanced" required="false" type="String"  name="%optimizationProfileToFlush" description="%optimizationProfileToFlush.desc"/>
   <AD id="password"                               ibmui:group="Advanced" required="false" type="String"  ibm:type="password" name="%password" description="%password.desc"/>
+  <AD id="pkList"                                 ibmui:group="Advanced" required="false" type="String"  name="%pkList" description="%pkList.desc"/>
   <AD id="profileName"                            ibmui:group="Advanced" required="false" type="String"  name="%profileName" description="%profileName.desc"/>
   <AD id="progressiveStreaming"                   ibmui:group="Advanced" required="false" type="Integer" name="%progressiveStreaming" description="%progressiveStreaming.desc">
     <Option value="1" label="YES"/>
@@ -668,6 +780,10 @@
     <Option value="1" label="YES"/>
     <Option value="2" label="NO"/>
   </AD>
+  <AD id="reportLongTypes"                        ibmui:group="Advanced" required="false" type="Short"   name="%reportLongTypes" description="%reportLongTypes.desc">
+    <Option value="1" label="YES"/>
+    <Option value="2" label="NO"/>
+  </AD>
   <AD id="resultSetHoldability"                   ibmui:group="Advanced" required="false" type="Integer" name="%resultSetHoldability" description="%resultSetHoldability.desc">
    <Option value="1" label="HOLD_CURSORS_OVER_COMMIT"/>
    <Option value="2" label="CLOSE_CURSORS_AT_COMMIT"/>
@@ -678,6 +794,14 @@
   </AD>
   <AD id="retrieveMessagesFromServerOnGetMessage" ibmui:group="Advanced" required="false" type="Boolean" default="true" name="%retrieveMessagesFromServerOnGetMessage" description="%retrieveMessagesFromServerOnGetMessage.desc"/>
   <AD id="retryIntervalForClientReroute"          ibmui:group="AutomaticClientReroute" required="false" type="String"  ibm:type="duration(s)" name="%retryIntervalForClientReroute" description="%retryIntervalForClientReroute.desc"/>
+  <AD id="retryWithAlternativeSecurityMechanism"  ibmui:group="Advanced" required="false" type="Integer" name="%retryWithAlternativeSecurityMechanism" description="%retryWithAlternativeSecurityMechanism.desc">
+    <Option value="1" label="YES"/>
+    <Option value="2" label="NO"/>
+  </AD>
+  <AD id="returnAlias"                            ibmui:group="Advanced" required="false" type="Short"   name="%returnAlias" description="%returnAlias.desc">	
+    <Option value="1" label="1"/>
+    <Option value="2" label="2"/>
+  </AD>
   <AD id="securityMechanism"                      ibmui:group="Advanced" required="false" type="Short" name="%securityMechanism" description="%securityMechanism.db2.jcc.desc">
    <Option value="3"  label="CLEAR_TEXT_PASSWORD_SECURITY"/>
    <Option value="4"  label="USER_ONLY_SECURITY"/>
@@ -689,6 +813,10 @@
    <Option value="15" label="PLUGIN_SECURITY"/>
    <Option value="16" label="ENCRYPTED_USER_ONLY_SECURITY"/>
    <Option value="18" label="TLS_CLIENT_CERTIFICATE_SECURITY"/>
+  </AD>
+  <AD id="sendCharInputsUTF8"                     ibmui:group="Advanced" required="false" type="Integer" name="%sendCharInputsUTF8" description="%sendCharInputsUTF8.desc">
+    <Option value="1" label="YES"/>
+    <Option value="2" label="NO"/>
   </AD>
   <AD id="sendDataAsIs"                           ibmui:group="Advanced" required="false" type="Boolean" name="%sendDataAsIs" description="%sendDataAsIs.desc"/>
   <AD id="serverBidiStringType"                   ibmui:group="Advanced" required="false" type="Integer" name="%serverBidiStringType" description="%serverBidiStringType.desc">
@@ -704,13 +832,29 @@
   <AD id="sessionTimeZone"                        ibmui:group="Advanced" required="false" type="String"  name="%sessionTimeZone" description="%sessionTimeZone.desc"/>
   <AD id="sqljCloseStmtsWithOpenResultSet"        ibmui:group="Advanced" required="false" type="Boolean" name="%sqljCloseStmtsWithOpenResultSet" description="%sqljCloseStmtsWithOpenResultSet.desc"/>
   <AD id="sqljEnableClassLoaderSpecificProfiles"  ibmui:group="Advanced" required="false" type="Boolean" name="%sqljEnableClassLoaderSpecificProfiles" description="%sqljEnableClassLoaderSpecificProfiles.desc"/>
+  <AD id="ssid"                                   ibmui:group="Advanced" required="false" type="String"  name="%ssid" description="%ssid.desc"/>
+  <AD id="sslCertLocation"                        ibmui:group="Advanced" required="false" type="String"  name="%sslCertLocation" description="%sslCertLocation.desc"/>
+  <AD id="SSLCipherSuites"                        ibmui:group="Advanced" required="false" type="String"  name="%SSLCipherSuites" description="%SSLCipherSuites.desc"/>
   <AD id="sslConnection"                          ibmui:group="Advanced" required="false" type="Boolean" name="%sslConnection" description="%sslConnection.desc"/>
+  <AD id="sslTrustStoreLocation"                  ibmui:group="Advanced" required="false" type="String"  name="%sslTrustStoreLocation" description="%sslTrustStoreLocation.desc"/>
+  <AD id="sslTrustStorePassword"                  ibmui:group="Advanced" required="false" type="String"  ibm:type="password" name="%sslTrustStorePassword" description="%sslTrustStorePassword.desc"/>
+  <AD id="sslTrustStoreType"                      ibmui:group="Advanced" required="false" type="String"  name="%sslTrustStoreType" description="%sslTrustStoreType.desc"/>
+  <AD id="statementConcentrator"                  ibmui:group="Advanced" required="false" type="Integer" name="%statementConcentrator" description="%statementConcentrator.desc">
+    <Option value="1" label="STATEMENT_CONCENTRATOR_OFF"/>
+    <Option value="2" label="STATEMENT_CONCENTRATOR_WITH_LITERALS"/>
+  </AD>
   <AD id="streamBufferSize"                       ibmui:group="Advanced" required="false" type="Integer" name="%streamBufferSize" description="%streamBufferSize.desc"/>
   <AD id="stripTrailingZerosForDecimalNumbers"    ibmui:group="Advanced" required="false" type="Integer" name="%stripTrailingZerosForDecimalNumbers" description="%stripTrailingZerosForDecimalNumbers.desc">
     <Option value="1" label="YES"/>
     <Option value="2" label="NO"/>
   </AD>
   <AD id="sysSchema"                              ibmui:group="Advanced" required="false" type="String"  name="%sysSchema" description="%sysSchema.desc"/>
+  <AD id="timeFormat"                             ibmui:group="Advanced" required="false" type="Integer" name="%timeFormat" description="%timeFormat.desc">
+    <Option value="1" label="ISO"/>
+    <Option value="2" label="USA"/>
+    <Option value="3" label="EUR"/>
+    <Option value="4" label="JIS"/>
+  </AD>
   <AD id="timerLevelForQueryTimeOut"              ibmui:group="Advanced" required="false" type="Integer" name="%timerLevelForQueryTimeOut" description="%timerLevelForQueryTimeOut.desc">
     <Option value="-1" label="QUERYTIMEOUT_DISABLED"/>
     <Option value="1"  label="QUERYTIMEOUT_STATEMENT_LEVEL"/>
@@ -719,6 +863,10 @@
   <AD id="timestampFormat"                        ibmui:group="Advanced" required="false" type="Integer" name="%timestampFormat" description="%timestampFormat.desc">
     <Option value="1" label="ISO"/>
     <Option value="5" label="JDBC"/>
+  </AD>
+  <AD id="timestampOutputType"                    ibmui:group="Advanced" required="false" type="Integer" name="%timestampOutputType" description="%timestampOutputType.desc">
+    <Option value="1" label="JDBC_TIMESTAMP"/>
+    <Option value="2" label="JCC_DBTIMESTAMP"/>
   </AD>
   <AD id="timestampPrecisionReporting"            ibmui:group="Advanced" required="false" type="Integer" name="%timestampPrecisionReporting" description="%timestampPrecisionReporting.desc">
     <Option value="1" label="TIMESTAMP_JDBC_STANDARD"/>
@@ -753,8 +901,13 @@
     <Option value="2" label="NO"/>
   </AD>
   <AD id="user"                                   ibmui:group="Advanced" required="false" type="String"  name="%user" description="%user.desc"/>
+  <AD id="useRowsetCursor"                        ibmui:group="Advanced" required="false" type="Boolean" name="%useRowsetCursor" description="%useRowsetCursor.desc"/>
   <AD id="useTransactionRedirect"                 ibmui:group="Advanced" required="false" type="Boolean" name="%useTransactionRedirect" description="%useTransactionRedirect.desc"/>
   <AD id="xaNetworkOptimization"                  ibmui:group="Advanced" required="false" type="Boolean" name="%xaNetworkOptimization" description="%xaNetworkOptimization.desc"/>
+  <AD id="xmlFormat"                              ibmui:group="Advanced" required="false" type="Integer" name="%xmlFormat" description="%xmlFormat.desc">
+    <Option value="0" label="XML_FORMAT_TEXTUAL"/>
+    <Option value="1" label="XML_FORMAT_BINARY"/>
+  </AD>
  </OCD>
 
  <!-- Derby Network Client properties -->

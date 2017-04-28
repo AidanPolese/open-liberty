@@ -1,21 +1,15 @@
 /************** Begin Copyright - Do not add comments here **************
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012 - 2015
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
+ *
  * Change History:
- * 
+ *
  * Tag          Person   	Defect/Feature      Comments
  * ----------   ------   	--------------      --------------------------------------------------
- *	     ankit_jain		92798			Change the NLS formatting method for exception message
- *          suraj_chandegave    93943         SVT: FFDC logs generated for each incorrect user/password during login with LDAP
- * 04/15/2015   suraj_chandegave    168255          Test Failure (20150319-1329): com.ibm.ws.security.wim.registry.fat.DefaultWIMRealmTest.checkPasswordWithInvalidUser
- * 05/07/2015   rzunzarr           172850           Modified code to remove duplicate error messages in message.log
- * 11/03/2015   rzunzarr           195183           Modified code to avoid FFDC in getUserDisplayName() in case of federation of Basic/Custom registry
- * 06/10/2016   speddapa           217168           GETUSERDISPLAYNAME RETURNING NULL WHEN BASICREGISTRY IS CONFIGURED         
  */
 
 package com.ibm.ws.security.wim.registry.util;
@@ -34,6 +28,7 @@ import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.security.registry.EntryNotFoundException;
 import com.ibm.ws.security.registry.RegistryException;
 import com.ibm.ws.security.wim.registry.dataobject.IDAndRealm;
+import com.ibm.ws.security.wim.util.SchemaConstantsInternal;
 import com.ibm.wsspi.security.wim.SchemaConstants;
 import com.ibm.wsspi.security.wim.exception.EntityNotFoundException;
 import com.ibm.wsspi.security.wim.exception.InvalidIdentifierException;
@@ -48,15 +43,9 @@ import com.ibm.wsspi.security.wim.model.SearchControl;
 
 /**
  * Bridge class for mapping user and group display name methods.
- * 
- * @author Ankit Jain
+ *
  */
-public class DisplayNameBridge
-{
-    /**
-     * Copyright notice.
-     */
-    private static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
+public class DisplayNameBridge {
 
     private static final TraceComponent tc = Tr.register(DisplayNameBridge.class);
 
@@ -70,21 +59,18 @@ public class DisplayNameBridge
      */
     private BridgeUtils mappingUtils = null;
 
-    public DisplayNameBridge(BridgeUtils mappingUtil)
-    {
+    public DisplayNameBridge(BridgeUtils mappingUtil) {
         this.mappingUtils = mappingUtil;
         propertyMap = new TypeMappings(mappingUtil);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.security.registry.UserRegistry#getUserDisplayName(java.lang.String)
      */
     @FFDCIgnore(WIMException.class)
-    public String getUserDisplayName(String inputUserSecurityName) throws EntryNotFoundException,
-                    RegistryException
-    {
+    public String getUserDisplayName(String inputUserSecurityName) throws EntryNotFoundException, RegistryException {
         // initialize the return value
         String returnValue = "";
         // bridge the APIs
@@ -131,7 +117,7 @@ public class DisplayNameBridge
 
             // Add context for URBridge
             Context context = new Context();
-            context.setKey(SchemaConstants.IS_URBRIDGE_RESULT);
+            context.setKey(SchemaConstantsInternal.IS_URBRIDGE_RESULT);
             context.setValue("false");
             root.getContexts().add(context);
 
@@ -161,7 +147,7 @@ public class DisplayNameBridge
                 for (Context ctx : contexts) {
                     String key = ctx.getKey();
 
-                    if (key != null && Service.IS_URBRIDGE_RESULT.equals(key)) {
+                    if (key != null && SchemaConstantsInternal.IS_URBRIDGE_RESULT.equals(key)) {
                         if ("true".equalsIgnoreCase((String) ctx.getValue()))
                             foundInURBridge = true;
                     }
@@ -172,9 +158,7 @@ public class DisplayNameBridge
 
             if (resultRoot != null && !resultRoot.getEntities().isEmpty() && (isDN(id) || foundInURBridge)) {
                 root = resultRoot;
-            }
-            else
-            {
+            } else {
                 // use the root DataGraph to create a SearchControl DataGraph
 
                 List<Control> controls = root.getControls();
@@ -227,18 +211,15 @@ public class DisplayNameBridge
                 throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, Tr.formatMessage(
                                                                                                    tc,
                                                                                                    WIMMessageKey.ENTITY_NOT_FOUND,
-                                                                                                   WIMMessageHelper.generateMsgParms(inputUserSecurityName)
-                                ));
-            }
-            else if (returnList.size() != 1) {
+                                                                                                   WIMMessageHelper.generateMsgParms(inputUserSecurityName)));
+            } else if (returnList.size() != 1) {
                 // if (tc.isErrorEnabled()) {
                 //     Tr.error(tc, WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, WIMMessageHelper.generateMsgParms(inputUserSecurityName));
                 // }
                 throw new EntityNotFoundException(WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, Tr.formatMessage(
                                                                                                             tc,
                                                                                                             WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND,
-                                                                                                            WIMMessageHelper.generateMsgParms(inputUserSecurityName)
-                                ));
+                                                                                                            WIMMessageHelper.generateMsgParms(inputUserSecurityName)));
             }
             // the user was found
             else {
@@ -252,27 +233,23 @@ public class DisplayNameBridge
                             returnValue = "";
                         else
                             returnValue = loginAccount.getDisplayName().get(0);
-                    }
-                    else if (mappedProp.equals("principalName") && foundInURBridge) {
+                    } else if (mappedProp.equals("principalName") && foundInURBridge) {
                         if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()))) {
                             returnValue = (String) loginAccount.get(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
-                        }
-                        else {
+                        } else {
                             returnValue = (String) loginAccount.getIdentifier().get(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
                         }
-                    }
-                    else {
+                    } else {
                         returnValue = (String) loginAccount.get(mappedProp);
                     }
-                }
-                else {
+                } else {
                     returnValue = (String) loginAccount.getIdentifier().get(this.propertyMap.getOutputUserDisplayName(idAndRealm.getRealm()));
                 }
             }
         } catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, toCatch.getMessage());
+                Tr.debug(tc, toCatch.getMessage(), toCatch);
             }
             // if (tc.isErrorEnabled()) {
             //     Tr.error(tc, toCatch.getMessage());
@@ -290,13 +267,11 @@ public class DisplayNameBridge
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.security.registry.UserRegistry#getGroupDisplayName(java.lang.String)
      */
     @FFDCIgnore(WIMException.class)
-    public String getGroupDisplayName(String inputGroupSecurityName) throws EntryNotFoundException,
-                    RegistryException
-    {
+    public String getGroupDisplayName(String inputGroupSecurityName) throws EntryNotFoundException, RegistryException {
         // initialize the return value
         String returnValue = "";
         // bridge the APIs
@@ -334,9 +309,7 @@ public class DisplayNameBridge
                                                                       id, outputAttrName, this.mappingUtils);
             if (resultRoot != null) {
                 root = resultRoot;
-            }
-            else
-            {
+            } else {
                 // use the root DataGraph to create a SearchControl DataGraph
                 List<Control> controls = root.getControls();
                 SearchControl searchControl = new SearchControl();
@@ -384,18 +357,15 @@ public class DisplayNameBridge
                 throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, Tr.formatMessage(
                                                                                                    tc,
                                                                                                    WIMMessageKey.ENTITY_NOT_FOUND,
-                                                                                                   WIMMessageHelper.generateMsgParms(inputGroupSecurityName)
-                                ));
-            }
-            else if (returnList.size() != 1) {
+                                                                                                   WIMMessageHelper.generateMsgParms(inputGroupSecurityName)));
+            } else if (returnList.size() != 1) {
                 // if (tc.isErrorEnabled()) {
                 //     Tr.error(tc, WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, WIMMessageHelper.generateMsgParms(inputGroupSecurityName));
                 // }
                 throw new EntityNotFoundException(WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, Tr.formatMessage(
                                                                                                             tc,
                                                                                                             WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND,
-                                                                                                            WIMMessageHelper.generateMsgParms(inputGroupSecurityName)
-                                ));
+                                                                                                            WIMMessageHelper.generateMsgParms(inputGroupSecurityName)));
             }
             // the group was found
             else {
@@ -409,8 +379,7 @@ public class DisplayNameBridge
                         returnValue = (String) value;
                     else
                         returnValue = String.valueOf(((List<?>) value).get(0));
-                }
-                else {
+                } else {
                     // get the identifier to return
                     returnValue = (String) group.getIdentifier().get(this.propertyMap.getOutputGroupDisplayName(idAndRealm.getRealm()));
                 }
@@ -418,7 +387,7 @@ public class DisplayNameBridge
         } catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, toCatch.getMessage());
+                Tr.debug(tc, toCatch.getMessage(), toCatch);
             }
             // if (tc.isErrorEnabled()) {
             //     Tr.error(tc, toCatch.getMessage());

@@ -6,15 +6,6 @@
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
  *
- * Change History:
- *
- * Tag          Person   	Defect/Feature      Comments
- * ----------   ------  	--------------      --------------------------------------------------
- *		ankit_jain	92798		   Change the NLS formatting method for exception message
- * 04/24/2013    rzunzarr       99645              SVT: REG: Authorization error when using Federated Repository
- * 01/12/2014   rzunzarr        109887             Create API implementation
- * 08/04/2015   rzunzarr        180566             Added configuration for Page Cache Size and Timeout
- * 09/25/2015   rzunzarr        188399             Fixed Default Parent configuration and removed default attribute
  */
 
 package com.ibm.ws.security.wim;
@@ -48,8 +39,6 @@ import com.ibm.wsspi.security.wim.model.PersonAccount;
 
 /**
  * Manage and retrieve configuration information for core and realm configuration
- *
- * @author Ezhilarasi
  */
 
 @Component(configurationPid = "com.ibm.ws.security.wim.core.config",

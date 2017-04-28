@@ -10,10 +10,6 @@
  *
  * Tag          Person   	Defect/Feature      Comments
  * ----------   ------   	--------------      --------------------------------------------------
- *		ankit_jain	   92798			Change the NLS formatting method for exception message
- *             suraj_chandegave    93943         SVT: FFDC logs generated for each incorrect user/password during login with LDAP
- * 04/15/2015   suraj_chandegave    168255          Test Failure (20150319-1329): com.ibm.ws.security.wim.registry.fat.DefaultWIMRealmTest.checkPasswordWithInvalidUser
- * 05/07/2015   rzunzarr           172850           Modified code to remove duplicate error messages in message.log
  */
 
 package com.ibm.ws.security.wim.registry.util;
@@ -55,13 +51,8 @@ import com.ibm.wsspi.security.wim.model.SearchControl;
 /**
  * Bridge class for mapping user and group membership methods.
  *
- * @author Ankit Jain
  */
 public class MembershipBridge {
-    /**
-     * Copyright notice.
-     */
-    private static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
 
     private static final TraceComponent tc = Tr.register(MembershipBridge.class);
 
@@ -288,7 +279,7 @@ public class MembershipBridge {
         } catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, toCatch.getMessage());
+                Tr.debug(tc, toCatch.getMessage(), toCatch);
             }
             // if (tc.isErrorEnabled()) {
             //     Tr.error(tc, toCatch.getMessage());
@@ -403,7 +394,6 @@ public class MembershipBridge {
             // the group was found
             else {
                 Group group = (Group) returnList.get(0);
-                // NOTE: here is what you meant - do i need the identifier part?
                 idAndRealm.setId(group.getIdentifier().getUniqueName());
             }
             // create an empty root DataObject
@@ -499,7 +489,7 @@ public class MembershipBridge {
         } catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, toCatch.getMessage());
+                Tr.debug(tc, toCatch.getMessage(), toCatch);
             }
             // if (tc.isErrorEnabled()) {
             //     Tr.error(tc, toCatch.getMessage());
@@ -755,7 +745,7 @@ public class MembershipBridge {
         } catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, methodName + " " + toCatch.getMessage());
+                Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
             }
             // if (tc.isErrorEnabled()) {
             //     Tr.error(tc, toCatch.getMessage());

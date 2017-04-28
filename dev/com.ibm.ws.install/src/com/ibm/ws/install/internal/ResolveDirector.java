@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2015
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.install.internal;
@@ -30,8 +30,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipException;
-
-import wlp.lib.extract.SelfExtractor;
 
 import com.ibm.websphere.crypto.InvalidPasswordDecodingException;
 import com.ibm.websphere.crypto.PasswordUtil;
@@ -76,6 +74,8 @@ import com.ibm.ws.repository.resources.AttachmentResource;
 import com.ibm.ws.repository.resources.EsaResource;
 import com.ibm.ws.repository.resources.RepositoryResource;
 import com.ibm.ws.repository.resources.SampleResource;
+
+import wlp.lib.extract.SelfExtractor;
 
 class ResolveDirector extends AbstractDirector {
 

@@ -49,6 +49,8 @@ Export-Package: com.ibm.ws.jsp.runtime;version=2.2;thread-context=true, \
    com.ibm.ws.jsp.webcontainerext;version=2.2, \
    com.ibm.ws.jsp.webcontainerext.ws;version=2.2, \
    org.apache.taglibs.standard.tag.common.sql;version=2.3, \
+   org.apache.taglibs.standard.tlv;thread-context=true;version=2.2, \
+   org.apache.taglibs.standard.tei;thread-context=true;version=2.2, \
    org.apache.taglibs*;version=2.2, \
    org.apache.jasper.compiler
    

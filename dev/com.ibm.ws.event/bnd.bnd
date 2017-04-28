@@ -29,7 +29,6 @@ Import-Package: \
   com.ibm.ws.event.internal.ScheduledEventServiceImpl
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.spi.logging;version=latest,\
 	com.ibm.websphere.appserver.spi.threading;version=latest,\
 	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\

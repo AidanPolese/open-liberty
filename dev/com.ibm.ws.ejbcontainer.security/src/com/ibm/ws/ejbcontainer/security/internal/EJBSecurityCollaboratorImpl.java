@@ -14,11 +14,14 @@ package com.ibm.ws.ejbcontainer.security.internal;
 import java.security.Identity;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.security.auth.Subject;
+import javax.security.auth.login.CredentialExpiredException;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -27,6 +30,12 @@ import com.ibm.ejs.container.BeanMetaData;
 import com.ibm.ejs.ras.TraceNLS;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.websphere.security.audit.AuditAuthResult;
+import com.ibm.websphere.security.audit.AuditAuthenticationResult;
+import com.ibm.websphere.security.audit.AuditConstants;
+import com.ibm.websphere.security.audit.AuditEvent;
+import com.ibm.websphere.security.auth.CredentialDestroyedException;
+import com.ibm.websphere.security.cred.WSCredential;
 import com.ibm.ws.container.service.metadata.ComponentMetaDataListener;
 import com.ibm.ws.container.service.metadata.MetaDataEvent;
 import com.ibm.ws.ejbcontainer.EJBComponentMetaData;
@@ -39,6 +48,8 @@ import com.ibm.ws.ejbcontainer.security.internal.jacc.JaccUtil;
 import com.ibm.ws.runtime.metadata.ComponentMetaData;
 import com.ibm.ws.runtime.metadata.MetaData;
 import com.ibm.ws.security.SecurityService;
+import com.ibm.ws.security.audit.Audit;
+import com.ibm.ws.security.audit.context.AuditManager;
 import com.ibm.ws.security.authentication.AuthenticationService;
 import com.ibm.ws.security.authentication.UnauthenticatedSubjectService;
 import com.ibm.ws.security.authentication.principals.WSIdentity;
@@ -69,6 +80,11 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
     protected SubjectManager subjectManager;
     protected CollaboratorUtils collabUtils;
 
+    public HashMap<String, Object> ejbAuditHashMap = new HashMap<String, Object>();
+
+    protected AuditManager auditManager;
+    public HashMap<String, Object> extraAuditData = new HashMap<String, Object>();
+
     protected volatile EJBSecurityConfig ejbSecConfig = null;
     private EJBAuthorizationHelper eah = this;
 
@@ -77,6 +93,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
      */
     public EJBSecurityCollaboratorImpl() {
         this(new SubjectManager());
+        this.auditManager = new AuditManager();
     }
 
     public EJBSecurityCollaboratorImpl(SubjectManager subjectManager) {
@@ -146,7 +163,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
      * on a bean. Called after bean is activated and loaded, but before EJB
      * method is dispatched. The preInvoke will authorize the request and then
      * delegate to the run-as user, if specified. {@inheritDoc}
-     * 
+     *
      * @throws EJBAccessDeniedException when the caller is not authorized to invoke
      *             the given request
      */
@@ -245,8 +262,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
             //create unauth subject if caller subjcect is expired
             CredentialsService credService = credServiceRef.getService();
             if (credService != null && !credService.isSubjectValid(callerSubject)) {
-                callerSubject = unauthenticatedSubjectServiceRef.getService().
-                                getUnauthenticatedSubject();
+                callerSubject = unauthenticatedSubjectServiceRef.getService().getUnauthenticatedSubject();
             }
         }
 
@@ -289,7 +305,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
     /**
      * Check if the methodMetaData interface is internal and supposed to be unprotected as per
      * spec.
-     * 
+     *
      * @param methodMetaData methodMetaData to get the interface type
      * @return true if it should be unprotected, otherwise false
      */
@@ -303,16 +319,16 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
          * 3.1 spec adds the ability to specify timeout methods without a Timer argument,
          * and it also adds new timeout callback methods via the @Schedule annotation. In
          * all of these cases, the MethodInterface will be TIMED_OBJECT.
-         * 
+         *
          * For LIFECYCLE_INTERCEPTOR, this type is used only for lifecycle interceptors of
          * EJB 3.1 singleton session beans. This type should have been added to the EJB 3.1
          * spec, but it was overlooked by the EG. However, EJB container needs to classify
          * methods in this way, so an internal type was added.
-         * 
+         *
          * For background on why returning true from internalUnprotected is correct for
          * LIFECYCLE_INTERCEPTOR, a singleton method invocation has two steps, and the
          * container invokes the security collaborator for each.
-         * 
+         *
          * 1. Obtain the bean instance if it does not already exist.
          * If the bean does not exist, the container calls the security collaborator
          * with LifecycleInterceptor to establish a RunAs security context. However,
@@ -320,18 +336,18 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
          * initialization, not business logic. Further, attempting to pass the
          * internal-only LifecycleInterceptor type to JACC causes an
          * IllegalArgumentException.
-         * 
+         *
          * If a singleton session bean is annotated @Startup, then the container
          * performs this step as part of application start rather than when a method
          * is first invoked on the bean. This is the scenario for this defect.
-         * 
+         *
          * 2. Invoke the business method.
          * The container calls the security collaborator "as normal" with Local,
          * Remote, or ServiceEndpoint to both authorize the caller security context
          * and to establish a RunAs security context as needed.
-         * 
+         *
          * Per EJB spec section 22.2.2:
-         * 
+         *
          * Since the ejbTimeout method is an internal method of the bean class,
          * it has no client security context. When getCallerPrincipal is called
          * from within the ejbTimeout method, it returns the container
@@ -340,7 +356,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
          * it has no client security context. The Bean Provider should use the
          * run-as deployment descriptor element to specify a security identity to
          * be used for the invocation of methods from within the ejbTimeout method.
-         * 
+         *
          * Because of the above spec requirements, we still need to establish the
          * runasSpecified identity when this method is called.
          **/
@@ -352,6 +368,31 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
         return false;
     }
 
+    public void populateAuditEJBHashMap(EJBRequestData request) {
+        EJBMethodMetaData methodMetaData = request.getEJBMethodMetaData();
+        Object[] methodArguments = request.getMethodArguments();
+        String applicationName = methodMetaData.getEJBComponentMetaData().getJ2EEName().getApplication();
+        String moduleName = methodMetaData.getEJBComponentMetaData().getJ2EEName().getModule();
+        String methodName = methodMetaData.getMethodName();
+        String methodInterface = methodMetaData.getEJBMethodInterface().specName();
+        String methodSignature = methodMetaData.getMethodSignature();
+        String beanName = methodMetaData.getEJBComponentMetaData().getJ2EEName().getComponent();
+        List<Object> methodParameters = null;
+        if (methodArguments != null && methodArguments.length > 0) {
+            methodParameters = Arrays.asList(methodArguments);
+        }
+
+        ejbAuditHashMap.put("methodArguments", methodArguments);
+        ejbAuditHashMap.put("applicationName", applicationName);
+        ejbAuditHashMap.put("moduleName", moduleName);
+        ejbAuditHashMap.put("methodName", methodName);
+        ejbAuditHashMap.put("methodInterface", methodInterface);
+        ejbAuditHashMap.put("methodSignature", methodSignature);
+        ejbAuditHashMap.put("beanName", beanName);
+        ejbAuditHashMap.put("methodParameters", methodParameters);
+
+    }
+
     /**
      * Authorizes the subject to call the given EJB, based on the given method info.
      * If the subject is not authorized, an exception is thrown. The following checks are made:
@@ -359,7 +400,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
      * <li>are the required roles null or empty</li>
      * <li>is EVERYONE granted to any of the required roles</li>
      * <li>is the subject authorized to any of the required roles</li>
-     * 
+     *
      * @param EBJRequestData the info on the EJB method to call
      * @param subject the subject authorize
      * @throws EJBAccessDeniedException when the subject is not authorized to the EJB
@@ -367,16 +408,23 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
     @Override
     public void authorizeEJB(EJBRequestData request, Subject subject) throws EJBAccessDeniedException {
         EJBMethodMetaData methodMetaData = request.getEJBMethodMetaData();
-        String authzUserName = subject.getPrincipals(WSPrincipal.class).
-                        iterator().
-                        next().
-                        getName();
+        String authzUserName = subject.getPrincipals(WSPrincipal.class).iterator().next().getName();
         String applicationName = getApplicationName(methodMetaData);
         String methodName = methodMetaData.getMethodName();//TODO: which API to call? methodInfo.getMethodSignature()+":"+methodInfo.getInterfaceType().getValue();
 
+        Object req = (auditManager != null) ? auditManager.getHttpServletRequest() : null;
+        Object webRequest = (auditManager != null) ? auditManager.getWebRequest() : null;
+        String realm = (auditManager != null) ? auditManager.getRealm() : null;
+
+        populateAuditEJBHashMap(request);
+
         //check if bean method is excluded
         if (methodMetaData.isDenyAll()) {
+            ejbAuditHashMap.put(AuditEvent.REASON_TYPE, AuditEvent.REASON_TYPE_EJB_DENYALL);
             Tr.audit(tc, "EJB_AUTHZ_EXCLUDED", authzUserName, methodName, applicationName);
+            AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.FAILURE, authzUserName, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_FAILURE);
+            Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, Integer.valueOf("403"));
+
             throw new EJBAccessDeniedException(TraceNLS.getFormattedMessage(this.getClass(),
                                                                             TraceConstants.MESSAGE_BUNDLE,
                                                                             "EJB_AUTHZ_EXCLUDED",
@@ -389,6 +437,10 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "Authorization granted for " + methodName + " on " + applicationName + " because permitAll is set.");
             }
+            ejbAuditHashMap.put(AuditEvent.REASON_TYPE, AuditEvent.REASON_TYPE_EJB_PERMITALL);
+            AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.SUCCESS, authzUserName, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_SUCCESS);
+            Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, Integer.valueOf("200"));
+
             return;
         }
 
@@ -397,6 +449,10 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "Authorization granted for " + methodName + " on " + applicationName + " because no roles are required.");
             }
+            ejbAuditHashMap.put(AuditEvent.REASON_TYPE, AuditEvent.REASON_TYPE_EJB_NO_ROLES);
+            AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.SUCCESS, authzUserName, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_SUCCESS);
+            Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, Integer.valueOf("200"));
+
             return;
         }
         SecurityService securityService = securityServiceRef.getService();
@@ -404,6 +460,10 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
 
         if (authzService == null) {
             // If we can not get the authorization service, fail securely
+            ejbAuditHashMap.put(AuditEvent.REASON_TYPE, AuditEvent.REASON_TYPE_EJB_NO_AUTHZ_SERVICE);
+            AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.FAILURE, authzUserName, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_FAILURE);
+            Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, Integer.valueOf("403"));
+
             Tr.error(tc, "EJB_AUTHZ_SERVICE_NOTFOUND", authzUserName, methodName, applicationName);
             throw new EJBAccessDeniedException(TraceNLS.getFormattedMessage(this.getClass(),
                                                                             TraceConstants.MESSAGE_BUNDLE,
@@ -412,13 +472,21 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
                                                                             "CWWKS9403E: The authorization service could not be found. As a result, the user is not authorized."));
         } else {
             if (!authzService.isAuthorized(applicationName, roles, subject)) {
+                ejbAuditHashMap.put(AuditEvent.REASON_TYPE, AuditEvent.EJB);
+                AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.FAILURE, authzUserName, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_FAILURE);
+                Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, Integer.valueOf("403"));
+
                 Tr.audit(tc, "EJB_AUTHZ_FAILED", authzUserName, methodName, applicationName, roles);
                 throw new EJBAccessDeniedException(TraceNLS.getFormattedMessage(this.getClass(),
                                                                                 TraceConstants.MESSAGE_BUNDLE,
                                                                                 "EJB_AUTHZ_FAILED",
                                                                                 new Object[] { authzUserName, methodName, applicationName,
-                                                                                              roles },
+                                                                                               roles },
                                                                                 "CWWKS9400A: Authorization failed. The user is not granted access to any of the required roles."));
+            } else {
+                ejbAuditHashMap.put(AuditEvent.REASON_TYPE, AuditEvent.EJB);
+                AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.SUCCESS, authzUserName, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_SUCCESS);
+                Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, Integer.valueOf("200"));
             }
         }
     }
@@ -433,7 +501,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
 
     /**
      * Get the name of the application currently executing
-     * 
+     *
      * @return the application name
      */
     protected String getApplicationName(EJBMethodMetaData methodMetaData) {
@@ -442,7 +510,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
 
     /**
      * Get the name of the module currently executing
-     * 
+     *
      * @return the module name
      */
     protected String getModuleName(EJBMethodMetaData methodMetaData) {
@@ -451,7 +519,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
 
     /**
      * Get the name of the component/bean currently executing
-     * 
+     *
      * @return the component/bean name
      */
     protected String getComponentName(EJBMethodMetaData methodMetaData) {
@@ -462,26 +530,55 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
      * Gets the run-as subject for the given EJB method, and sets it as the invocation subject.
      * If the run-as subject is null or the deployment descriptor specifies to run as the caller,
      * then the passed-in subject is set as the invocation subject instead.
-     * 
+     *
      * @param methodMetaData the EJB method info
      * @param delegationSubject subject to set as the invocation when running as caller
      */
     private void performDelegation(EJBMethodMetaData methodMetaData, Subject delegationSubject) {
+        ArrayList<String> delUsers = new ArrayList<String>();
+        String invalidUser = "";
+        if (delegationSubject != null && delegationSubject.getPublicCredentials(WSCredential.class) != null
+            && delegationSubject.getPublicCredentials(WSCredential.class).iterator() != null &&
+            delegationSubject.getPublicCredentials(WSCredential.class).iterator().hasNext()) {
+            WSCredential credential = delegationSubject.getPublicCredentials(WSCredential.class).iterator().next();
+            try {
+                extraAuditData.put("REALM", credential.getRealmName());
+            } catch (CredentialExpiredException e) {
+            } catch (CredentialDestroyedException e) {
+            }
+            try {
+                delUsers.add("user:" + credential.getRealmSecurityName());
+            } catch (CredentialExpiredException e1) {
+                // TODO Auto-generated catch block
+            } catch (CredentialDestroyedException e1) {
+                // TODO Auto-generated catch block
+            }
+        }
+
         String applicationName = getApplicationName(methodMetaData);
         String methodName = methodMetaData.getMethodName();//TODO: which API to call? methodInfo.getMethodSignature()+":"+methodInfo.getInterfaceType().getValue();
+
+        if (auditManager != null && auditManager.getHttpServletRequest() != null) {
+            extraAuditData.put("HTTP_SERVLET_REQUEST", auditManager.getHttpServletRequest());
+        }
+
+        extraAuditData.put("REASON_TYPE", "EJB");
 
         if (methodMetaData.isUseSystemPrincipal()) {
             // fail request because run-as-mode SYSTEM_IDENTITY is not supported on Liberty
             Tr.error(tc, "EJB_RUNAS_SYSTEM_NOT_SUPPORTED", methodName, applicationName);
+            delUsers.add("EJB_RUNAS_SYSTEM");
+            extraAuditData.put("DELEGATION_USERS_LIST", delUsers);
+            Audit.audit(Audit.EventID.SECURITY_AUTHN_DELEGATION_01, extraAuditData, AuditConstants.FAILURE, Integer.valueOf(401));
             throw new EJBAccessDeniedException(TraceNLS.getFormattedMessage(this.getClass(),
                                                                             TraceConstants.MESSAGE_BUNDLE,
                                                                             "EJB_RUNAS_SYSTEM_NOT_SUPPORTED",
                                                                             new Object[] { methodName, applicationName },
                                                                             "CWWKS9405E: Authorization failed for EJB method"
-                                                                                            + methodName
-                                                                                            + " in the application "
-                                                                                            + applicationName
-                                                                                            + ". The run-as-mode of SYSTEM_IDENTITY specified in the ibm-ejb-jar-ext.xml is not supported and must be removed or replaced."));
+                                                                                                                          + methodName
+                                                                                                                          + " in the application "
+                                                                                                                          + applicationName
+                                                                                                                          + ". The run-as-mode of SYSTEM_IDENTITY specified in the ibm-ejb-jar-ext.xml is not supported and must be removed or replaced."));
 
         } else if (methodMetaData.isUseCallerPrincipal()) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -490,12 +587,64 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
             return;
         } else {
             String roleName = getRunAsRole(methodMetaData);
+            extraAuditData.put("RUN_AS_ROLE", roleName);
             if (roleName != null) {
                 try {
                     SecurityService securityService = securityServiceRef.getService();
                     AuthenticationService authService = securityService.getAuthenticationService();
                     delegationSubject = authService.delegate(roleName, getApplicationName(methodMetaData));
+
+                    if (delegationSubject != null) {
+                        String buff = delegationSubject.toString();
+                        if (buff != null) {
+                            int a = buff.indexOf("accessId");
+                            if (a != -1) {
+                                buff = buff.substring(a + 9);
+                                a = buff.indexOf(",");
+                                if (a != -1) {
+                                    buff = buff.substring(0, a);
+                                    delUsers.add(buff);
+                                }
+                            }
+
+                        }
+                    } else {
+                        invalidUser = authService.getInvalidDelegationUser();
+                        delUsers.add(invalidUser);
+                    }
+                    extraAuditData.put("DELEGATION_USERS_LIST", delUsers);
+                    if (delegationSubject != null) {
+                        Audit.audit(Audit.EventID.SECURITY_AUTHN_DELEGATION_01, extraAuditData, AuditConstants.SUCCESS, Integer.valueOf(200));
+                    } else {
+                        Audit.audit(Audit.EventID.SECURITY_AUTHN_DELEGATION_01, extraAuditData, AuditConstants.FAILURE, Integer.valueOf(401));
+
+                    }
+
                 } catch (IllegalArgumentException e) {
+                    if (delegationSubject != null) {
+                        String buff = delegationSubject.toString();
+                        if (buff != null) {
+                            int a = buff.indexOf("accessId");
+                            if (a != -1) {
+                                buff = buff.substring(a + 9);
+                                a = buff.indexOf(",");
+                                if (a != -1) {
+                                    buff = buff.substring(0, a);
+                                    delUsers.add(buff);
+                                }
+                            }
+
+                        }
+                    } else {
+                        SecurityService securityService = securityServiceRef.getService();
+                        AuthenticationService authService = securityService.getAuthenticationService();
+                        invalidUser = authService.getInvalidDelegationUser();
+                        delUsers.add(invalidUser);
+                        extraAuditData.put("DELEGATION_USERS_LIST", delUsers);
+                    }
+
+                    Audit.audit(Audit.EventID.SECURITY_AUTHN_DELEGATION_01, extraAuditData, AuditConstants.FAILURE, Integer.valueOf(401));
+
                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                         Tr.debug(tc, "Exception performing delegation.", e);
                     }
@@ -511,7 +660,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
     /**
      * Gets the run-as role specified in the deployment descriptor or
      * via annotations for the given EJB method info.
-     * 
+     *
      * @param methodMetaData the EJB method info
      * @return the runAs role
      */
@@ -521,7 +670,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
 
     /**
      * If invoked and received cred are null, then set the unauthenticated subject.
-     * 
+     *
      * @param invokedSubject
      * @param receivedSubject
      * @return {@code true} if the unauthenticated subject was set, {@code false} otherwise.
@@ -529,8 +678,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
     private boolean setUnauthenticatedSubjectIfNeeded(Subject invokedSubject, Subject receivedSubject) {
         if ((invokedSubject == null) && (receivedSubject == null)) {
             // create the unauthenticated subject and set as the invocation subject
-            subjectManager.setInvocationSubject(unauthenticatedSubjectServiceRef.getService().
-                            getUnauthenticatedSubject());
+            subjectManager.setInvocationSubject(unauthenticatedSubjectServiceRef.getService().getUnauthenticatedSubject());
             return true;
         }
         return false;
@@ -548,7 +696,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.container.service.metadata.ComponentMetaDataListener#componentMetaDataCreated(com.ibm.ws.container.service.metadata.MetaDataEvent)
      */
     @Override
@@ -566,7 +714,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.container.service.metadata.ComponentMetaDataListener#componentMetaDataDestroyed(com.ibm.ws.container.service.metadata.MetaDataEvent)
      */
     @Override

@@ -17,11 +17,14 @@ package com.ibm.ws.security.audit;
 public class Audit {
     public static enum EventID {
         SECURITY_AUTHN_01,
-        SECURITY_AUTHZ_01,
-        SECURITY_AUTHZ_02,
+        SECURITY_AUTHZ_01, // web
+        SECURITY_AUTHZ_02, // jacc web
+        SECURITY_AUTHZ_03, // jacc ejb
+        SECURITY_AUTHZ_04, // ejb
         SECURITY_AUDIT_MGMT_01,
         SECURITY_AUDIT_MGMT_02,
         SECURITY_AUTHN_DELEGATION_01,
+        SECURITY_AUTHZ_DELEGATION_01,
         SECURITY_API_AUTHN_01,
         SECURITY_API_AUTHN_TERMINATE_01,
         SECURITY_AUTHN_TERMINATE_01,

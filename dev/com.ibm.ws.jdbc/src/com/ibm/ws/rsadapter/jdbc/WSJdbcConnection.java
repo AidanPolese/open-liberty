@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2001,2016
+ * Copyright IBM Corp. 2001,2017
  *
  * The source code for this program is not published or otherwise divested 
  * of its trade secrets, irrespective of what has been deposited with the 
@@ -62,20 +62,19 @@ import com.ibm.ws.Transaction.UOWCurrent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.javaee.dd.common.ResourceRef;
 import com.ibm.ws.jca.adapter.WSConnectionManager;
-import com.ibm.ws.jdbc.osgi.JDBCRuntimeVersion;
 import com.ibm.ws.kernel.service.util.PrivHelper;
 import com.ibm.ws.rsadapter.AdapterUtil;
 import com.ibm.ws.rsadapter.ConnectionSharing; 
 import com.ibm.ws.rsadapter.DSConfig;
 import com.ibm.ws.rsadapter.exceptions.DataStoreAdapterException;
-import com.ibm.ws.rsadapter.spi.CSCacheKey;
-import com.ibm.ws.rsadapter.spi.DB2SQLJCSCacheKey;
-import com.ibm.ws.rsadapter.spi.DB2SQLJPSCacheKey;
-import com.ibm.ws.rsadapter.spi.PSCacheKey;
-import com.ibm.ws.rsadapter.spi.StatementCacheKey;
-import com.ibm.ws.rsadapter.spi.WSConnectionRequestInfoImpl;
-import com.ibm.ws.rsadapter.spi.WSRdbManagedConnectionImpl;
-import com.ibm.ws.rsadapter.spi.WSStateManager;
+import com.ibm.ws.rsadapter.impl.CSCacheKey;
+import com.ibm.ws.rsadapter.impl.DB2SQLJCSCacheKey;
+import com.ibm.ws.rsadapter.impl.DB2SQLJPSCacheKey;
+import com.ibm.ws.rsadapter.impl.PSCacheKey;
+import com.ibm.ws.rsadapter.impl.StatementCacheKey;
+import com.ibm.ws.rsadapter.impl.WSConnectionRequestInfoImpl;
+import com.ibm.ws.rsadapter.impl.WSRdbManagedConnectionImpl;
+import com.ibm.ws.rsadapter.impl.WSStateManager;
 
 /**
  * This class wraps a JDBC Connection.
@@ -2256,6 +2255,8 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
             case CLOSED:
                 throw createClosedException("Connection");
                 // else INACTIVE
+            default:
+                break;
         }
 
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled(); 
@@ -2648,7 +2649,9 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
                 close();
                 throw createClosedException("Connection");
             case CLOSED:
-                throw createClosedException("Connection"); 
+                throw createClosedException("Connection");
+            default:
+                break; 
         }
         return runtimeX;
     }

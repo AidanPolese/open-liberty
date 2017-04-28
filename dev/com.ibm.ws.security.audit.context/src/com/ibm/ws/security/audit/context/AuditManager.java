@@ -27,7 +27,7 @@ public class AuditManager {
     /**
      * Sets the HttpServletRequest on the thread
      */
-    public void setHttpServletRequest(HttpServletRequest req) {
+    public void setHttpServletRequest(Object req) {
         AuditThreadContext auditThreadContext = getAuditThreadContext();
         auditThreadContext.setHttpServletRequest(req);
 
@@ -36,9 +36,42 @@ public class AuditManager {
     /**
      * Gets the HttpServletRequest from the thread
      */
-    public HttpServletRequest getHttpServletRequest() {
+    public Object getHttpServletRequest() {
         AuditThreadContext auditThreadContext = getAuditThreadContext();
         return auditThreadContext.getHttpServletRequest();
+    }
+    
+    /**
+     * Sets the WebRequest on the thread
+     */
+    public void setWebRequest(Object webreq) {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        auditThreadContext.setWebRequest(webreq);
+
+    }
+
+    /**
+     * Gets the WebRequest from the thread
+     */
+    public Object getWebRequest() {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        return auditThreadContext.getWebRequest();
+    }
+    
+    /**
+     * Sets the realm on the thread
+     */
+    public void setRealm(String realm) {
+    	AuditThreadContext auditThreadContext = getAuditThreadContext();
+    	auditThreadContext.setRealm(realm);
+    }
+    
+    /**
+     * Gets the realm on the thread
+     */
+    public String getRealm() {
+    	AuditThreadContext auditThreadContext = getAuditThreadContext();
+    	return auditThreadContext.getRealm();
     }
 
     /**

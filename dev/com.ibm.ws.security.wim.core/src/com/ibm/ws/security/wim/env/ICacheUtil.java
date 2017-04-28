@@ -1,16 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * Virtual Member Manager (C) COPYRIGHT International Business Machines Corp. 2012
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person   Defect/Feature      Comments
- * ----------   ------   --------------      --------------------------------------------------
+ *
  */
 package com.ibm.ws.security.wim.env;
 
@@ -57,7 +53,7 @@ public interface ICacheUtil extends Map<String, Object> {
 
     /**
      * setSharingPolicy - sets the sharing policy for cache. This applies to distributed cache only.
-     * 
+     *
      * @see #getSharingPolicy()
      */
     public void setSharingPolicy(int sharingPolicy);
@@ -65,16 +61,16 @@ public interface ICacheUtil extends Map<String, Object> {
     /**
      * getSharingPolicyInt - gets the integer value of the sharing policy for Cache.
      * This applies to distributed cache only.
-     * 
+     *
      * @param sharingPolicyStr Sharing policy string.
-     * 
+     *
      * @return returns the current sharing policy. Return SHARED_NA if not applicable.
      */
     public int getSharingPolicyInt(String sharingPolicyStr);
 
     /**
      * Set the global time-to-live (in seconds) for this cache.
-     * 
+     *
      * @param timeToLive
      */
     public void setTimeToLive(int timeToLive);
@@ -86,11 +82,11 @@ public interface ICacheUtil extends Map<String, Object> {
      * map contains no mapping for the key; it's also possible that the map
      * explicitly maps the key to <tt>null</tt>. The <tt>containsKey</tt>
      * operation may be used to distinguish these two cases.
-     * 
+     *
      * @param key key whose associated value is to be returned.
      * @return the value to which this cache maps the specified key, or
      *         <tt>null</tt> if the cache contains no mapping for this key.
-     * 
+     *
      * @see #containsKey(Object)
      */
     @Override
@@ -99,7 +95,7 @@ public interface ICacheUtil extends Map<String, Object> {
     /**
      * Associates the specified value with the specified key. If the cache previously
      * contained a mapping for this key, the old value is replaced.
-     * 
+     *
      * @param key key with which the specified value is to be associated.
      * @param value value to be associated with the specified key.
      * @return previous value associated with specified key, or <tt>null</tt>
@@ -115,7 +111,7 @@ public interface ICacheUtil extends Map<String, Object> {
      * Associates the specified value with the specified key in this cache
      * (optional operation). If the map previously contained a mapping for
      * this key, the old value is replaced.
-     * 
+     *
      * @param key key with which the specified value is to be associated.
      * @param value value to be associated with the specified key.
      * @param priority the priority value for the cache entry. entries
@@ -143,7 +139,7 @@ public interface ICacheUtil extends Map<String, Object> {
      * invalidated. If the key is for a dependency id, then
      * all objects that share that dependency id will be
      * invalidated.
-     * 
+     *
      * @param key the key which will be invalidated
      * @see #remove(Object key)
      */
@@ -157,7 +153,7 @@ public interface ICacheUtil extends Map<String, Object> {
     /**
      * Returns the total number of key-value mappings. Returns size of memory map plus disk map if includeDiskCache is
      * true. Returns size of memory map size if includeDiskCache is false.
-     * 
+     *
      * @param includeDiskCache true to get the size of the memory and disk maps; false to get the size of memory map.
      * @return the number of key-value mappings in this map.
      */
@@ -166,7 +162,7 @@ public interface ICacheUtil extends Map<String, Object> {
     /**
      * Returns true if this map contains no key-value mappings. Checks both memory and disk maps if includeDiskCache
      * is true. Check only memory cache if includeDiskCache is false.
-     * 
+     *
      * @param includeDiskCache true to check the memory and disk maps; false to check the memory map.
      * @return true if this map contains no key-value mappings.
      */
@@ -181,7 +177,7 @@ public interface ICacheUtil extends Map<String, Object> {
     /**
      * Returns true if this map contains mapping for the specified key. Checks both memory and disk map if includeDiskCache
      * is true. Check only memory map if includeDiskCache is false.
-     * 
+     *
      * @param key whose presence in this map is to be tested.
      * @param includeDiskCache true to check the specified key contained in the memory or disk maps; false to check the specified key contained in the memory map.
      * @return true if this map contains a mapping for the specified key.
@@ -193,7 +189,7 @@ public interface ICacheUtil extends Map<String, Object> {
      * Return only keys in memory map if includeDiskCache is false.
      * Warning: If this method is used with includeDiskCache set to true, all the keys on disk are read into memory and that might consume a lot of memory depending
      * on the size of disk map.
-     * 
+     *
      * @param includeDiskCache true to get keys contained in the memory and disk maps; false to get keys contained in the memory map.
      * @return a set view of the keys contained in this map.
      */
@@ -201,7 +197,7 @@ public interface ICacheUtil extends Map<String, Object> {
 
     /**
      * Initialize the cache.
-     * 
+     *
      * @param cacheName name of the cache
      * @param cacheSize size of the cache
      * @param diskOffLoad should the cache data be stored on the disk
@@ -210,7 +206,7 @@ public interface ICacheUtil extends Map<String, Object> {
 
     /**
      * Initialize the cache.
-     * 
+     *
      * @param cacheName name of the cache
      * @param cacheSize size of the cache
      * @param diskOffLoad should the cache data be stored on the disk

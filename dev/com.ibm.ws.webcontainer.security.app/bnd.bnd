@@ -8,7 +8,7 @@ Bundle-SymbolicName: com.ibm.ws.webcontainer.security.app
 WS-TraceGroup: \
   SecurityCollaborator
 
-Export-Package: com.ibm.websphere.security.web
+Export-Package:
 
 Private-Package: 
 

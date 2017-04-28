@@ -1,17 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag       Person      Defect/Feature      Comments
- * -------   ------      --------------      --------------------------------------------------
- *			ankit_jain		92798			Change the NLS formatting method for exception message
+ *
  */
 package com.ibm.ws.security.wim.adapter.ldap;
 
@@ -27,35 +22,30 @@ import com.ibm.wsspi.security.wim.exception.WIMSystemException;
 
 /**
  * LdapURL class - Reference Implementation of RFC 2255.
- * 
- * @author: "Patrick Y. Lin" <plin@notesdev.ibm.com>
- *          Contains the parsed details of an LDAP URL information.
- * 
- *          An LDAP URL begins with the protocol prefix "ldap" and is defined by
- *          the following grammar.
- * 
- *          ldapurl = scheme "://" [hostport] ["/"
- *          [dn ["?" [attributes] ["?" [scope]
- *          ["?" [filter] ["?" extensions]]]]]]
- *          scheme = "ldap"
- *          attributes = attrdesc *("," attrdesc)
- *          scope = "base" / "one" / "sub"
- *          dn = distinguishedName from Section 3 of [1]
- *          hostport = hostport from Section 5 of RFC 1738 [5]
- *          attrdesc = AttributeDescription from Section 4.1.5 of [2]
- *          filter = filter from Section 4 of [4]
- *          extensions = extension *("," extension)
- *          extension = ["!"] extype ["=" exvalue]
- *          extype = token / xtoken
- *          exvalue = LDAPString from section 4.1.2 of [2]
- *          token = oid from section 4.1 of [3]
- *          xtoken = ("X-" / "x-") token
+ *
+ * Contains the parsed details of an LDAP URL information.
+ *
+ * An LDAP URL begins with the protocol prefix "ldap" and is defined by
+ * the following grammar.
+ *
+ * ldapurl = scheme "://" [hostport] ["/"
+ * [dn ["?" [attributes] ["?" [scope]
+ * ["?" [filter] ["?" extensions]]]]]]
+ * scheme = "ldap"
+ * attributes = attrdesc *("," attrdesc)
+ * scope = "base" / "one" / "sub"
+ * dn = distinguishedName from Section 3 of [1]
+ * hostport = hostport from Section 5 of RFC 1738 [5]
+ * attrdesc = AttributeDescription from Section 4.1.5 of [2]
+ * filter = filter from Section 4 of [4]
+ * extensions = extension *("," extension)
+ * extension = ["!"] extype ["=" exvalue]
+ * extype = token / xtoken
+ * exvalue = LDAPString from section 4.1.2 of [2]
+ * token = oid from section 4.1 of [3]
+ * xtoken = ("X-" / "x-") token
  */
 public final class LdapURL extends Object {
-    /**
-     * IBM Copyright string.
-     */
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
 
     /**
      * The full qualified class name.
@@ -301,12 +291,10 @@ public final class LdapURL extends Object {
             if (this.parsedone == false)
                 this.parse();
         } catch (UnsupportedEncodingException e) {
-            throw new WIMSystemException(WIMMessageKey.GENERIC,
-                            Tr.formatMessage(
-                                             tc,
-                                             WIMMessageKey.GENERIC,
-                                             WIMMessageHelper.generateMsgParms(e.toString())
-                                            ));
+            throw new WIMSystemException(WIMMessageKey.GENERIC, Tr.formatMessage(
+                                                                                 tc,
+                                                                                 WIMMessageKey.GENERIC,
+                                                                                 WIMMessageHelper.generateMsgParms(e.toString())));
         } catch (Exception e) {
             e.getMessage();
             this.parsedOK = false;
@@ -315,7 +303,7 @@ public final class LdapURL extends Object {
     }
 
     /**
-     * Contains an message informing of any errors encounted during the
+     * Contains a message informing of any errors encountered during the
      * parsing of the URL
      */
     public String get_parseMsg() {

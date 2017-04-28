@@ -1,19 +1,15 @@
 /************** Begin Copyright - Do not add comments here **************
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012 - 2015
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
+ *
  * Change History:
- * 
+ *
  * Tag          Person   	Defect/Feature      Comments
  * ----------   ------   	--------------      --------------------------------------------------
- *	     ankit_jain		92798			Change the NLS formatting method for exception message
- *         suraj_chandegave    93943         SVT: FFDC logs generated for each incorrect user/password during login with LDAP
- * 04/15/2015   suraj_chandegave    168255          Test Failure (20150319-1329): com.ibm.ws.security.wim.registry.fat.DefaultWIMRealmTest.checkPasswordWithInvalidUser
- * 05/07/2015   rzunzarr           172850           Modified code to remove duplicate error messages in message.log        
  */
 
 package com.ibm.ws.security.wim.registry.util;
@@ -47,15 +43,9 @@ import com.ibm.wsspi.security.wim.model.SearchControl;
 
 /**
  * Bridge class for mapping user and group security name methods.
- * 
- * @author Ankit Jain
+ *
  */
-public class SecurityNameBridge
-{
-    /**
-     * Copyright notice.
-     */
-    private static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
+public class SecurityNameBridge {
 
     private static final TraceComponent tc = Tr.register(SecurityNameBridge.class);
 
@@ -71,11 +61,10 @@ public class SecurityNameBridge
 
     /**
      * Default constructor.
-     * 
+     *
      * @param mappingUtil
      */
-    public SecurityNameBridge(BridgeUtils mappingUtil)
-    {
+    public SecurityNameBridge(BridgeUtils mappingUtil) {
         this.mappingUtils = mappingUtil;
         propertyMap = new TypeMappings(mappingUtil);
         // initialize the method name
@@ -83,12 +72,11 @@ public class SecurityNameBridge
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.security.registry.UserRegistry#getUserSecurityName(java.lang.String)
      */
     @FFDCIgnore(WIMException.class)
-    public String getUserSecurityName(String inputUniqueUserId) throws EntryNotFoundException, RegistryException
-    {
+    public String getUserSecurityName(String inputUniqueUserId) throws EntryNotFoundException, RegistryException {
         // initialize the method name
         String methodName = "getUserSecurityName";
         // initialize the return value
@@ -156,8 +144,7 @@ public class SecurityNameBridge
                 String inputName = null;
                 if (allowDNAsPrincipalName) {
                     inputName = "principalName";
-                }
-                else {
+                } else {
                     inputName = this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm());
                 }
                 searchControl.setExpression("//" + Service.DO_ENTITIES + "[@xsi:type='"
@@ -217,39 +204,32 @@ public class SecurityNameBridge
                 throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, Tr.formatMessage(
                                                                                                    tc,
                                                                                                    WIMMessageKey.ENTITY_NOT_FOUND,
-                                                                                                   WIMMessageHelper.generateMsgParms(inputUniqueUserId)
-                                ));
-            }
-            else if (returnList.size() != 1) {
+                                                                                                   WIMMessageHelper.generateMsgParms(inputUniqueUserId)));
+            } else if (returnList.size() != 1) {
                 // if (tc.isErrorEnabled()) {
                 //     Tr.error(tc, WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, WIMMessageHelper.generateMsgParms(inputUniqueUserId));
                 // }
                 throw new EntityNotFoundException(WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, Tr.formatMessage(
                                                                                                             tc,
                                                                                                             WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND,
-                                                                                                            WIMMessageHelper.generateMsgParms(inputUniqueUserId)
-                                ));
+                                                                                                            WIMMessageHelper.generateMsgParms(inputUniqueUserId)));
             }
             // the user was found
             else {
                 Entity entity = returnList.get(0);
-                if (entity instanceof LoginAccount)
-                {
+                if (entity instanceof LoginAccount) {
                     LoginAccount loginAct = (LoginAccount) entity;
 
                     // d115256
                     if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()))) {
                         returnValue = (String) loginAct.get(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
-                    }
-                    else {
+                    } else {
                         returnValue = (String) loginAct.getIdentifier().get(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
                     }
-                }
-                else if (entity != null) {
+                } else if (entity != null) {
                     if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()))) {
                         returnValue = (String) entity.get(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
-                    }
-                    else {
+                    } else {
                         returnValue = (String) entity.getIdentifier().get(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
                     }
                 }
@@ -257,7 +237,7 @@ public class SecurityNameBridge
         } catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, methodName + " " + toCatch.getMessage());
+                Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
             }
             // if (tc.isErrorEnabled()) {
             //     Tr.error(tc, toCatch.getMessage());
@@ -273,8 +253,7 @@ public class SecurityNameBridge
             // the identifier is invalid
             else if (toCatch instanceof InvalidUniqueNameException) {
                 throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
-            }
-            else if (toCatch instanceof InvalidIdentifierException) {
+            } else if (toCatch instanceof InvalidIdentifierException) {
                 throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
             }
             // other cases
@@ -287,13 +266,11 @@ public class SecurityNameBridge
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.security.registry.UserRegistry#getGroupSecurityName(java.lang.String)
      */
     @FFDCIgnore(WIMException.class)
-    public String getGroupSecurityName(String inputUniqueGroupId) throws EntryNotFoundException,
-                    RegistryException
-    {
+    public String getGroupSecurityName(String inputUniqueGroupId) throws EntryNotFoundException, RegistryException {
         // initialize the method name
         String methodName = "getGroupSecurityName";
         // initialize the return value
@@ -343,8 +320,7 @@ public class SecurityNameBridge
                 }
                 // invoke ProfileService.get with the input root DataGraph
                 root = this.mappingUtils.getWimService().get(root);
-            }
-            else {
+            } else {
                 // use the root DataGraph to create a SearchControl DataGraph
                 List<Control> controls = root.getControls();
                 SearchControl searchControl = new SearchControl();
@@ -389,18 +365,15 @@ public class SecurityNameBridge
                 throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, Tr.formatMessage(
                                                                                                    tc,
                                                                                                    WIMMessageKey.ENTITY_NOT_FOUND,
-                                                                                                   WIMMessageHelper.generateMsgParms(inputUniqueGroupId)
-                                ));
-            }
-            else if (returnList.size() != 1) {
+                                                                                                   WIMMessageHelper.generateMsgParms(inputUniqueGroupId)));
+            } else if (returnList.size() != 1) {
                 // if (tc.isErrorEnabled()) {
                 //     Tr.error(tc, WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, WIMMessageHelper.generateMsgParms(inputUniqueGroupId));
                 // }
                 throw new EntityNotFoundException(WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, Tr.formatMessage(
                                                                                                             tc,
                                                                                                             WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND,
-                                                                                                            WIMMessageHelper.generateMsgParms(inputUniqueGroupId)
-                                ));
+                                                                                                            WIMMessageHelper.generateMsgParms(inputUniqueGroupId)));
             }
             // the group was found
             else {
@@ -414,15 +387,14 @@ public class SecurityNameBridge
                     else
                         returnValue = String.valueOf(((List<?>) value).get(0));
 
-                }
-                else {
+                } else {
                     returnValue = (String) group.getIdentifier().get(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()));
                 }
             }
         } catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, methodName + " " + toCatch.getMessage());
+                Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
             }
             // if (tc.isErrorEnabled()) {
             //     Tr.error(tc, toCatch.getMessage());
@@ -438,8 +410,7 @@ public class SecurityNameBridge
             // the identifier is invalid
             else if (toCatch instanceof InvalidUniqueNameException) {
                 throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
-            }
-            else if (toCatch instanceof InvalidIdentifierException) {
+            } else if (toCatch instanceof InvalidIdentifierException) {
                 throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
             }
             // other cases

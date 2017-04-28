@@ -86,7 +86,6 @@ public class MergePluginFilesTask extends BasePluginConfigCommandTask {
                            null, null,
                            null, footer,
                            scriptName);
-
     }
 
     @Override
@@ -99,8 +98,6 @@ public class MergePluginFilesTask extends BasePluginConfigCommandTask {
         scriptHelp.append(getOption("MergePluginFilesTask.desc"));
         scriptHelp.append(NL);
         return scriptHelp.toString();
-
-
      }
 
     private void mergePluginFilesFromList(final CommandConsole console,String[] sourceFileNames, String targetPath) {
@@ -143,18 +140,18 @@ public class MergePluginFilesTask extends BasePluginConfigCommandTask {
 
     }
 
-    private void mergePluginFilesFromDir(final CommandConsole console,String sourcePath, String targetPath) {
+    private void mergePluginFilesFromDir(final CommandConsole console, String sourcePath, String targetPath) {
         console.printlnInfoMessage(getMessage("MergePluginFilesTask.merging.plugin.dir", sourcePath));
 
         File sourcePathFile = new File(sourcePath);
 
         if (!sourcePathFile.exists()) {
-            abort(console,getMessage("MergePluginFilesTask.merging.plugin.source.dir.not.exists", sourcePathFile));
+            abort(console, getMessage("MergePluginFilesTask.merging.plugin.source.dir.not.exists", sourcePathFile));
             return;
         }    
 
         if (!sourcePathFile.isDirectory()) {
-            abort(console,getMessage("MergePluginFilesTask.merging.plugin.source.file.not.directory", sourcePathFile));
+            abort(console, getMessage("MergePluginFilesTask.merging.plugin.source.file.not.directory", sourcePathFile));
             return;
         }    
 
@@ -170,7 +167,7 @@ public class MergePluginFilesTask extends BasePluginConfigCommandTask {
 
         // If there are not at least 2 files to be merged abort
         if(files.length < 2) {
-            abort(console,getMessage("MergePluginFilesTask.merging.plugin.insufficent.number.of.source.files"));
+            abort(console, getMessage("MergePluginFilesTask.merging.plugin.insufficent.number.of.source.files"));
             return;
         }
         

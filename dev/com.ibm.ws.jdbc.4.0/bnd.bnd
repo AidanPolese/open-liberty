@@ -9,17 +9,12 @@ Bundle-Description: Database connectivity infrastructure, version ${bVersion}
 
 WS-TraceGroup: RRA
 
-Import-Package: \
-    com.ibm.ws.jdbc.osgi, \
-	com.ibm.ws.rsadapter.jdbc, \
-	com.ibm.ws.rsadapter.spi
-
 Export-Package: \
   com.ibm.ws.jdbc.osgi.v40
   
 Service-Component: \
   com.ibm.ws.jdbc.v40; \
-    implementation:=com.ibm.ws.jdbc.osgi.v40.JDBCRuntimeVersion40; \
+    implementation:=com.ibm.ws.jdbc.osgi.v40.JDBC40Runtime; \
     provide:=com.ibm.ws.jdbc.osgi.JDBCRuntimeVersion; \
     properties:="version=4.0,service.ranking:Integer=40"
 

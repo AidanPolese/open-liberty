@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2001, 2014
+ * Copyright IBM Corp. 2001, 2017
  *
  * The source code for this program is not published or otherwise divested 
  * of its trade secrets, irrespective of what has been deposited with the 
@@ -42,7 +42,7 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.jdbc.timedoperations.WSJdbcObjectHelper;
 import com.ibm.ws.rsadapter.AdapterUtil;
-import com.ibm.ws.rsadapter.spi.StatementCacheKey;
+import com.ibm.ws.rsadapter.impl.StatementCacheKey;
 
 /**
  * This class wraps a PreparedStatement.
@@ -266,7 +266,7 @@ public class WSJdbcPreparedStatement extends WSJdbcStatement implements Prepared
                 throw runtimeX;
         }
 
-        com.ibm.ws.rsadapter.spi.WSRdbManagedConnectionImpl mc;
+        com.ibm.ws.rsadapter.impl.WSRdbManagedConnectionImpl mc;
 
         // A null key means statement caching is disabled. Do not cache. Close instead.
         // Also don't cache if the poolability hint is FALSE.   

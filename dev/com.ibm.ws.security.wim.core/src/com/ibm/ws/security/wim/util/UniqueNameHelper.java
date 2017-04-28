@@ -1,17 +1,11 @@
 /************** Begin Copyright - Do not add comments here **************
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person   	Defect/Feature      Comments
- * ----------   ------   	--------------      --------------------------------------------------
- *	         ankit_jain	92798		    Change the NLS formatting method for exception message
- * 01/12/2014    rzunzarr       109887              Create API implementation
+ *
  */
 package com.ibm.ws.security.wim.util;
 
@@ -33,15 +27,7 @@ import com.ibm.wsspi.security.wim.exception.MissingMandatoryPropertyException;
 import com.ibm.wsspi.security.wim.exception.WIMException;
 import com.ibm.wsspi.security.wim.model.Entity;
 
-/**
- * @author Ankit Jain
- */
-public class UniqueNameHelper
-{
-    /**
-     * IBM Copyright string
-     */
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
+public class UniqueNameHelper {
 
     private static final TraceComponent tc = Tr.register(UniqueNameHelper.class);
 
@@ -51,8 +37,7 @@ public class UniqueNameHelper
     public final static String ENTITY_DN_SEPARATOR = ",";
 
     @Trivial
-    public static String isDN(String uniqueName)
-    {
+    public static String isDN(String uniqueName) {
         if (uniqueName == null) {
             return null;
         }
@@ -62,15 +47,14 @@ public class UniqueNameHelper
     /**
      * Formats the specified entity unique name and also check it using the LDAP DN syntax rule.
      * The formatting including remove
-     * 
+     *
      * @param The unique name of the entity to be formatted.
-     * 
+     *
      * @return The formatted entity unique name.
-     * 
+     *
      * @exception InvalidUniqueNameException if the specified member DN does not pass the syntax check.
      */
-    public static String formatUniqueName(String uniqueName) throws InvalidUniqueNameException
-    {
+    public static String formatUniqueName(String uniqueName) throws InvalidUniqueNameException {
         String validName = getValidUniqueName(uniqueName);
         if (validName == null) {
             if (tc.isErrorEnabled()) {
@@ -80,24 +64,22 @@ public class UniqueNameHelper
                                                                                                             tc,
                                                                                                             WIMMessageKey.INVALID_UNIQUE_NAME_SYNTAX,
                                                                                                             WIMMessageHelper.generateMsgParms(uniqueName)));
-        }
-        else {
+        } else {
             return validName;
         }
     }
 
     /**
-     * Validates and returns the fomratted unique name.
+     * Validates and returns the formatted unique name.
      * Extra spaces will be removed from the unique name during formatting.
      * If the specified unique name does not satisfy the LDAP DN syntax rule, null will be returned.
-     * 
+     *
      * @param uniqueName The unique name to be formatted.
-     * 
+     *
      * @return The valid and formatted unique name. null will be returned if the unique name is invalid.
      */
     @Trivial
-    public static String getValidUniqueName(String uniqueName)
-    {
+    public static String getValidUniqueName(String uniqueName) {
         return getValidDN(uniqueName);
     }
 
@@ -114,17 +96,15 @@ public class UniqueNameHelper
 
     /**
      * Returns the unique name based on the input value.
-     * 
+     *
      * @param RDNs a list possible rdns
      * @param entity the entity DataObject which contains the entity data
      * @param parentDN the unique name of the parent
-     * @param throwExc if true, exception is thrown if an uniqueName can not be constructed
+     * @param throwExc if true, exception is thrown if a uniqueName can not be constructed
      * @return the unique name, null if uniqueName can not be constructed and throwExc is false
      * @exception WIMException if throwExc is true
      */
-    public static String constructUniqueName(String[] RDNs, Entity entity, String parentDN, boolean throwExc)
-                    throws WIMException
-    {
+    public static String constructUniqueName(String[] RDNs, Entity entity, String parentDN, boolean throwExc) throws WIMException {
         boolean found = false;
         String uniqueName = null;
         String missingPropName = null;
@@ -139,13 +119,12 @@ public class UniqueNameHelper
                 if (thisRDNValue == null || "null".equalsIgnoreCase(thisRDNValue)) {
                     findValue = false;
                     missingPropName = thisRDN;
-                }
-                else if (thisRDNValue.trim().length() == 0) {
+                } else if (thisRDNValue.trim().length() == 0) {
                     String qualifiedEntityType = entity.getTypeName();
-                    throw new InvalidPropertyValueException(WIMMessageKey.CAN_NOT_CONSTRUCT_UNIQUE_NAME,
-                                    Tr.formatMessage(tc, WIMMessageKey.CAN_NOT_CONSTRUCT_UNIQUE_NAME, WIMMessageHelper.generateMsgParms(thisRDN, qualifiedEntityType)));
-                }
-                else {
+                    throw new InvalidPropertyValueException(WIMMessageKey.CAN_NOT_CONSTRUCT_UNIQUE_NAME, Tr.formatMessage(tc, WIMMessageKey.CAN_NOT_CONSTRUCT_UNIQUE_NAME,
+                                                                                                                          WIMMessageHelper.generateMsgParms(thisRDN,
+                                                                                                                                                            qualifiedEntityType)));
+                } else {
                     RDNValues[j] = thisRDNValue;
                 }
             }
@@ -153,17 +132,17 @@ public class UniqueNameHelper
                 if (!found) {
                     uniqueName = constructUniqueName(localRDNs, RDNValues, parentDN);
                     found = true;
-                }
-                else if (throwExc) {
+                } else if (throwExc) {
                     String qualifiedEntityType = entity.getTypeName();
-                    throw new InvalidUniqueNameException(WIMMessageKey.CAN_NOT_CONSTRUCT_UNIQUE_NAME,
-                                    Tr.formatMessage(tc, WIMMessageKey.CAN_NOT_CONSTRUCT_UNIQUE_NAME, WIMMessageHelper.generateMsgParms(RDNs[i], qualifiedEntityType)));
+                    throw new InvalidUniqueNameException(WIMMessageKey.CAN_NOT_CONSTRUCT_UNIQUE_NAME, Tr.formatMessage(tc, WIMMessageKey.CAN_NOT_CONSTRUCT_UNIQUE_NAME,
+                                                                                                                       WIMMessageHelper.generateMsgParms(RDNs[i],
+                                                                                                                                                         qualifiedEntityType)));
                 }
             }
         }
         if (missingPropName != null && !found && throwExc) {
-            throw new MissingMandatoryPropertyException(WIMMessageKey.MISSING_MANDATORY_PROPERTY,
-                            Tr.formatMessage(tc, WIMMessageKey.MISSING_MANDATORY_PROPERTY, WIMMessageHelper.generateMsgParms(missingPropName)));
+            throw new MissingMandatoryPropertyException(WIMMessageKey.MISSING_MANDATORY_PROPERTY, Tr.formatMessage(tc, WIMMessageKey.MISSING_MANDATORY_PROPERTY,
+                                                                                                                   WIMMessageHelper.generateMsgParms(missingPropName)));
         }
         return uniqueName;
     }
@@ -173,21 +152,18 @@ public class UniqueNameHelper
      * For example, the list of RDNs contains "uid" and "email", the string array of RDNValues contains "joedoe" and "jdoe@acom.com"
      * and the parentDN has the value of "cn=users,dc=acom,dc=com". The return unique name will be
      * "uid=joedoe+email=jdoe@acom.com,cn=users,dc=acom,dc=com"
-     * 
+     *
      * @param RDNs a string array contains the property name of the rdn
      * @param RDNValues a string array contains the values of the rdn properties.
      * @param parentDN the unique name of the parent
      * @return the unqiue name
      * @throws InvalidEntityUniqueNameException
      */
-    public static String constructUniqueName(String[] RDNs, String[] RDNValues, String parentDN)
-                    throws InvalidUniqueNameException
-    {
+    public static String constructUniqueName(String[] RDNs, String[] RDNValues, String parentDN) throws InvalidUniqueNameException {
         int length;
         if (RDNs != null) {
             length = RDNs.length;
-        }
-        else {
+        } else {
             return null;
         }
         if (length != RDNValues.length || length == 0)
@@ -208,8 +184,7 @@ public class UniqueNameHelper
         String DN = null;
         if (parentDN.length() == 0) {
             DN = RDN.toString();
-        }
-        else {
+        } else {
             DN = RDN.toString() + "," + parentDN;
         }
 
@@ -218,10 +193,10 @@ public class UniqueNameHelper
 
     /**
      * Given the value of an attribute, returns a string suitable for inclusion in a DN.
-     * 
+     *
      * If the value is a string, this is accomplished by using backslash (\) to escape
      * the following characters: , = + < > # ; " \
-     * 
+     *
      * @param value
      * @return
      */
@@ -262,12 +237,11 @@ public class UniqueNameHelper
      * Returns array of RDN attribute types from the given RDN string.
      * RDN string may contain multiple RDNs separated by "+".
      * For example, "uid+mail" string will return [uid, mail].
-     * 
+     *
      * @param rdnStr the RDN string
      * @return the array of separated RDNs.
      */
-    public static String[] getRDNs(String rdnStr)
-    {
+    public static String[] getRDNs(String rdnStr) {
         StringTokenizer st = new StringTokenizer(rdnStr, "+");
         ArrayList<String> list = new ArrayList<String>();
         while (st.hasMoreTokens()) {

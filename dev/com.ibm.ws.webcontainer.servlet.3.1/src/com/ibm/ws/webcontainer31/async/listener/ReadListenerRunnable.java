@@ -11,13 +11,11 @@
 */
 package com.ibm.ws.webcontainer31.async.listener;
 
-import javax.servlet.ReadListener;
-
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.ws.webcontainer31.async.AsyncReadCallback;
 import com.ibm.ws.webcontainer31.async.ThreadContextManager;
 import com.ibm.ws.webcontainer31.osgi.osgi.WebContainerConstants;
+import com.ibm.ws.webcontainer31.srt.SRTInputStream31;
 import com.ibm.wsspi.channelfw.InterChannelCallback;
 import com.ibm.wsspi.http.channel.inbound.HttpInboundServiceContext;
 
@@ -27,26 +25,24 @@ import com.ibm.wsspi.http.channel.inbound.HttpInboundServiceContext;
 public class ReadListenerRunnable implements Runnable {
     
     private final static TraceComponent tc = Tr.register(ReadListenerRunnable.class, WebContainerConstants.TR_GROUP, WebContainerConstants.NLS_PROPS);
-    
-    //private ThreadContextManager _tcm = null;
+
     private HttpInboundServiceContext _isc = null;
     private InterChannelCallback _callback = null;
-    private ReadListener _listener = null;
+    private SRTInputStream31 in;
 
-    public ReadListenerRunnable(InterChannelCallback callback, ThreadContextManager tcm, HttpInboundServiceContext isc, ReadListener rl) {
-            _callback = callback;
-            //_tcm = tcm;
-            _isc = isc;
-            _listener = rl;
+    public ReadListenerRunnable(ThreadContextManager tcm, SRTInputStream31 in) {
+        this.in = in;
+        _callback = in.getCallback();
+        _isc = in.getISC();
     }
-    
+
     /* (non-Javadoc)
      * @see java.lang.Runnable#run()
      */
     @Override
     public void run() {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.entry(tc, "run", Thread.currentThread().getName() + " " + _listener);
+            Tr.entry(tc, "run", Thread.currentThread().getName() + " " + this.in.getReadListener());
         }
         
         try {     
@@ -70,11 +66,12 @@ public class ReadListenerRunnable implements Runnable {
             }
             e.printStackTrace();
             //There was a problem with the read so we should invoke their onError, since technically it's been set now
-            _listener.onError(e);
+            if(this.in.getReadListener()!= null)
+                this.in.getReadListener().onError(e);
         }
         
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.exit(tc, "run", _listener);
+            Tr.exit(tc, "run", this.in.getReadListener());
         }
     }
 

@@ -25,6 +25,7 @@ import com.ibm.ws.managedobject.ManagedObjectFactory;
 import com.ibm.ws.managedobject.ManagedObjectInvocationContext;
 
 public class CDIInterceptorManagedObjectFactoryImpl<T> extends AbstractManagedObjectFactory<T> implements ManagedObjectFactory<T> {
+
     public CDIInterceptorManagedObjectFactoryImpl(Class<T> classToManage, CDIRuntime cdiRuntime) {
         super(classToManage, cdiRuntime, false);
     }

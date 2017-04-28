@@ -4784,6 +4784,11 @@ public abstract class WebApp extends BaseContainer implements ServletContext, IS
             partialUri = "/";
         dispatchContext.setWebApp(this);
         dispatchContext.setRelativeUri(partialUri);
+        
+        if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && logger.isLoggable(Level.FINE)) {
+            logger.logp(Level.FINE, CLASS_NAME, "handleRequest", "setValues IfMultiReadofPostdataEnabled");
+        }
+        req.setValuesIfMultiReadofPostdataEnabled(); //MultiRead
 
         if (isForbidden(partialUri)) {
             WebAppErrorReport ser = new WebAppErrorReport(new ServletException(MessageFormat.format(nls.getString("File.not.found",

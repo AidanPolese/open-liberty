@@ -1,19 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person          Defect/Feature      Comments
- * -------      ------          --------------      --------------------------------------------------
- *		ankit_jain	    92798	    Change the NLS formatting method for exception message
- * 01/12/2014   rzunzarr            109887          Create API implementation
- * 02/03/13     ankit_jain      121732/PI09981      IMPROVE VMM PERFORMANCE DURING LOGIN WITH NO AUTHENTICATION CACHE 
+ *
  */
 package com.ibm.ws.security.wim.adapter.ldap;
 
@@ -43,10 +36,6 @@ import com.ibm.wsspi.security.wim.exception.MissingInitPropertyException;
  */
 @Trivial
 public class LdapEntity {
-    /**
-     * IBM Copyright string.
-     */
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
 
     private String iQEntityType = null;
 
@@ -208,7 +197,7 @@ public class LdapEntity {
 
     /**
      * Returns all object object classes of this entity type.
-     * 
+     *
      * @return A set of of object classes of this entity type in lower case form.
      */
     public List<String> getObjectClasses() {
@@ -217,7 +206,7 @@ public class LdapEntity {
 
     /**
      * Gets all search bases for this member type.
-     * 
+     *
      * @return All search bases for this member type.
      */
     public String[] getSearchBases() {
@@ -235,10 +224,10 @@ public class LdapEntity {
 
     /**
      * Sets a list of defining object classes for this entity type.
-     * The object classes will be stored in lower case form for comparsion.
-     * 
+     * The object classes will be stored in lower case form for comparison.
+     *
      * @param objectClasses A list of defining object class names to be added.
-     * 
+     *
      */
     public void setObjectClasses(List<String> objectClasses) {
         int size = objectClasses.size();
@@ -253,9 +242,9 @@ public class LdapEntity {
 
     /**
      * Sets the object classes attribute for creating.
-     * 
+     *
      * @param objectClasses A list of defining object class names to be added.
-     * 
+     *
      */
     public void setObjectClassesForCreate(List<String> objectClasses) {
         if (iRDNObjectClass != null && iRDNObjectClass.length > 1) {
@@ -405,7 +394,7 @@ public class LdapEntity {
     /**
      * Sets the RDN attribute types of this member type.
      * RDN attribute types will be converted to lower case.
-     * 
+     *
      * @param The RDN attribute types of this member type.
      */
     public void setRDNAttributes(List<Map<String, Object>> rdnAttrList) throws MissingInitPropertyException {
@@ -426,12 +415,10 @@ public class LdapEntity {
                     iRDNAttrs[i] = rdns;
                     String[] objCls = (String[]) rdnAttr.get(ConfigConstants.CONFIG_PROP_OBJECTCLASS);
                     if (objCls == null) {
-                        throw new MissingInitPropertyException(WIMMessageKey.MISSING_INI_PROPERTY,
-                                        Tr.formatMessage(
-                                                         tc,
-                                                         WIMMessageKey.MISSING_INI_PROPERTY,
-                                                         WIMMessageHelper.generateMsgParms(ConfigConstants.CONFIG_PROP_OBJECTCLASS)
-                                                        ));
+                        throw new MissingInitPropertyException(WIMMessageKey.MISSING_INI_PROPERTY, Tr.formatMessage(
+                                                                                                                    tc,
+                                                                                                                    WIMMessageKey.MISSING_INI_PROPERTY,
+                                                                                                                    WIMMessageHelper.generateMsgParms(ConfigConstants.CONFIG_PROP_OBJECTCLASS)));
                     } else {
                         iRDNObjectClass[i] = objCls;
                     }
@@ -443,15 +430,13 @@ public class LdapEntity {
 
     /**
      * Gets the LDAP object class attribute that contains all object classes needed to create the member on LDAP server.
-     * 
+     *
      * @return The LDAP object class attribute of this member type.
      */
-    public Attribute getObjectClassAttribute(String dn)
-    {
+    public Attribute getObjectClassAttribute(String dn) {
         if (iObjectClassAttrs.length == 1 || dn == null) {
             return iObjectClassAttrs[0];
-        }
-        else {
+        } else {
 
             String[] rdns = LdapHelper.getRDNAttributes(dn);
 

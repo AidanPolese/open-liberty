@@ -7,8 +7,6 @@ IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
-IBM-SPI-Package: com.ibm.wsspi.collective.plugins; type=ibm-spi,
- com.ibm.wsspi.collective.plugins.helpers; type=ibm-spi
 IBM-ShortName: restConnector-2.0
 Subsystem-Content: restConnector.jar; type=file; location:="clients/restConnector.jar",
  restConnector.py; type=file; location:="clients/jython/restConnector.py",
@@ -19,7 +17,6 @@ Subsystem-Content: restConnector.jar; type=file; location:="clients/restConnecto
  com.ibm.websphere.appserver.servlet-3.0; ibm.tolerates:="3.1"; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.spi.restHandler; location:="dev/spi/ibm/,lib/"; type=jar; version="[1.5.0,1.5.200)",
  com.ibm.websphere.appserver.api.restConnector; location:="dev/api/ibm/,lib/"; type=jar; version="[1.4.0,1.4.200)",
- com.ibm.websphere.collective.plugins; version="[1.0.0,1.0.200)",
  com.ibm.ws.filetransfer.routing.archiveExpander; version="[1.0.0,1.0.200)",
  com.ibm.ws.jmx.connector.server.rest; version="[1.1.0,1.1.200)",
  com.ibm.ws.jmx.connector.client.rest; version="[1.0.0,1.0.200)",

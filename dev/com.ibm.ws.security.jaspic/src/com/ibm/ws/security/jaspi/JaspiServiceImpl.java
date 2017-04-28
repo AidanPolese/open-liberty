@@ -54,6 +54,7 @@ import com.ibm.ws.security.audit.Audit;
 import com.ibm.ws.security.authentication.AuthenticationException;
 import com.ibm.ws.security.authentication.UnauthenticatedSubjectService;
 import com.ibm.ws.security.context.SubjectManager;
+import com.ibm.ws.webcontainer.internalRuntimeExport.srt.IPrivateRequestAttributes;
 import com.ibm.ws.webcontainer.security.AuthResult;
 import com.ibm.ws.webcontainer.security.AuthenticationResult;
 import com.ibm.ws.webcontainer.security.JaspiService;
@@ -68,7 +69,6 @@ import com.ibm.ws.webcontainer.security.metadata.FormLoginConfiguration;
 import com.ibm.ws.webcontainer.security.metadata.LoginConfiguration;
 import com.ibm.ws.webcontainer.security.metadata.SecurityMetadata;
 import com.ibm.ws.webcontainer.security.util.WebConfigUtils;
-import com.ibm.ws.webcontainer.srt.SRTServletRequest;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.security.jaspi.ProviderService;
@@ -807,8 +807,8 @@ public class JaspiServiceImpl implements JaspiService, WebAuthenticator {
             while (sr != null && sr instanceof HttpServletRequestWrapper)
                 sr = (HttpServletRequest) ((HttpServletRequestWrapper) sr).getRequest();
         }
-        if (sr != null && sr instanceof SRTServletRequest) {
-            ((SRTServletRequest) sr).setPrivateAttribute(key, object);
+        if (sr != null && sr instanceof IPrivateRequestAttributes) {
+            ((IPrivateRequestAttributes) sr).setPrivateAttribute(key, object);
         }
     }
 
@@ -821,8 +821,8 @@ public class JaspiServiceImpl implements JaspiService, WebAuthenticator {
             while (sr != null && sr instanceof HttpServletRequestWrapper)
                 sr = (HttpServletRequest) ((HttpServletRequestWrapper) sr).getRequest();
         }
-        if (sr != null && sr instanceof SRTServletRequest) {
-            return ((SRTServletRequest) sr).getPrivateAttribute(key);
+        if (sr != null && sr instanceof IPrivateRequestAttributes) {
+            return ((IPrivateRequestAttributes) sr).getPrivateAttribute(key);
         }
         return null;
     }
@@ -943,7 +943,8 @@ public class JaspiServiceImpl implements JaspiService, WebAuthenticator {
         AuthenticationResult authResult = new AuthenticationResult(AuthResult.SUCCESS, subject);
 
         authResult.setAuditCredType(AuditEvent.CRED_TYPE_JASPIC);
-        authResult.setAuditAuthConfigProviderName(provider.getClass().toString());
+        if (provider != null)
+            authResult.setAuditAuthConfigProviderName(provider.getClass().toString());
         authResult.setAuditAuthConfigProviderAuthType(getRequestAuthType(jaspiRequest.getHttpServletRequest(), "AUTH_TYPE"));
         authResult.setAuditOutcome(AuditEvent.OUTCOME_SUCCESS);
         Audit.audit(Audit.EventID.SECURITY_API_AUTHN_TERMINATE_01, req, authResult, Integer.valueOf(res.getStatus()));

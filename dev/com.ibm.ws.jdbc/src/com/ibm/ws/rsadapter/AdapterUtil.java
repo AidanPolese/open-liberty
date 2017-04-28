@@ -53,10 +53,10 @@ import com.ibm.ws.rsadapter.exceptions.DataStoreAdapterException;
 import com.ibm.ws.rsadapter.jdbc.WSJdbcConnection; 
 import com.ibm.ws.rsadapter.jdbc.WSJdbcTracer;
 import com.ibm.ws.rsadapter.jdbc.WSJdbcUtil;
-import com.ibm.ws.rsadapter.spi.DatabaseHelper;
-import com.ibm.ws.rsadapter.spi.WSConnectionEvent;
-import com.ibm.ws.rsadapter.spi.WSManagedConnectionFactoryImpl; 
-import com.ibm.ws.rsadapter.spi.WSRdbManagedConnectionImpl;
+import com.ibm.ws.rsadapter.impl.DatabaseHelper;
+import com.ibm.ws.rsadapter.impl.WSConnectionEvent;
+import com.ibm.ws.rsadapter.impl.WSManagedConnectionFactoryImpl; 
+import com.ibm.ws.rsadapter.impl.WSRdbManagedConnectionImpl;
 import com.ibm.wsspi.library.Library;
 
 /**

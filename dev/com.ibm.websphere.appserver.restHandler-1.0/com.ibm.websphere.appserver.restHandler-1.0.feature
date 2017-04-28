@@ -4,10 +4,7 @@ visibility=protected
 IBM-App-ForceRestart: uninstall, \
  install
 IBM-SPI-Package: com.ibm.wsspi.rest.handler; type="ibm-spi", \
- com.ibm.wsspi.rest.handler.helper; type="ibm-spi", \
- com.ibm.wsspi.collective.plugins; type="ibm-spi", \
- com.ibm.wsspi.collective.plugins.helpers; type="ibm-spi", \
- com.ibm.wsspi.rest.api.discovery; type="ibm-spi"
+ com.ibm.wsspi.rest.handler.helper; type="ibm-spi"
 -features=com.ibm.websphere.appserver.ssl-1.0, \
  com.ibm.websphere.appserver.adminSecurity-1.0, \
  com.ibm.wsspi.appserver.webBundleSecurity-1.0, \

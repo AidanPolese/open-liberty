@@ -37,12 +37,14 @@ public class CDIEJBManagedObjectFactoryImpl<T> extends AbstractManagedObjectFact
     private static final TraceComponent tc = Tr.register(CDIEJBManagedObjectFactoryImpl.class);
 
     private String _ejbName = null;
+    private ManagedObjectFactory<T> defaultEJBManagedObjectFactory = null;
 
     private EjbDescriptor<T> _ejbDescriptor;
 
-    public CDIEJBManagedObjectFactoryImpl(Class<T> classToManage, String ejbName, CDIRuntime cdiRuntime) {
+    public CDIEJBManagedObjectFactoryImpl(Class<T> classToManage, String ejbName, CDIRuntime cdiRuntime, ManagedObjectFactory<T> defaultEJBManagedObjectFactory) {
         super(classToManage, cdiRuntime, false);
         _ejbName = ejbName;
+        this.defaultEJBManagedObjectFactory = defaultEJBManagedObjectFactory;
     }
 
     @Override
@@ -171,6 +173,15 @@ public class CDIEJBManagedObjectFactoryImpl<T> extends AbstractManagedObjectFact
     @Override
     public ManagedObject<T> createManagedObject() throws Exception {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ManagedObject<T> createManagedObject(ManagedObjectInvocationContext<T> invocationContext) throws Exception {
+        if (getBean() == null) {
+            return defaultEJBManagedObjectFactory.createManagedObject(invocationContext);
+        } else {
+            return super.createManagedObject(invocationContext);
+        }
     }
 
     /**

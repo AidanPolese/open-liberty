@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2001,2013
+ * Copyright IBM Corp. 2001,2017
  *
  * The source code for this program is not published or otherwise divested 
  * of its trade secrets, irrespective of what has been deposited with the 
@@ -25,7 +25,6 @@ import org.osgi.framework.Version;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
-import com.ibm.ws.jdbc.osgi.JDBCRuntimeVersion;
 import com.ibm.ws.rsadapter.AdapterUtil;
 
 /**

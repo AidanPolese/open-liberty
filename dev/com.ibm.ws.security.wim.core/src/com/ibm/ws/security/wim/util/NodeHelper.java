@@ -1,16 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * Virtual Member Manager (C) COPYRIGHT International Business Machines Corp. 2012
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person   Defect/Feature      Comments
- * ----------   ------   --------------      --------------------------------------------------
+ *
  */
 package com.ibm.ws.security.wim.util;
 
@@ -19,20 +15,20 @@ import java.util.Arrays;
 
 public class NodeHelper {
     /**
-     * Returns the top level nodes inside the give nodes in lowercase.
-     * Top level means these ndoes are not contained by other nodes.
+     * Returns the top level nodes inside the given nodes in lowercase.
+     * Top level means these nodes are not contained by other nodes.
      * For example, if there are the following nodes defined:
      * <UL>
      * <LI>dc=yourco,dc=com
-     * <LI>cn=users,dc=yourco,dc=com 
-     * <LI>cn=groups,dc=yourco,dc=com 
+     * <LI>cn=users,dc=yourco,dc=com
+     * <LI>cn=groups,dc=yourco,dc=com
      * </UL>
      * "dc=yourco,dc=com" is the top level node.
+     *
      * @param nodes the nodes
      * @return top level nodes in lower case form.
      */
-    public static String[] getTopNodes(String[] nodes)
-    {
+    public static String[] getTopNodes(String[] nodes) {
         int nodeSize = nodes.length;
         if (nodeSize == 1) {
             return nodes;
@@ -43,7 +39,7 @@ public class NodeHelper {
             // If one of the nodes is empty node, one this empty node is top node
             if (DN.length() == 0) {
                 return new String[] {
-                    DN
+                                      DN
                 };
             }
             // Remove duplicate nodes

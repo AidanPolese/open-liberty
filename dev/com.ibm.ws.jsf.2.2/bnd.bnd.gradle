@@ -73,9 +73,11 @@ org.apache.myfaces.context.servlet;thread-context=true;mandatory:="thread-contex
 org.apache.myfaces.config.annotation;thread-context=true;mandatory:="thread-context", \
 org.apache.myfaces.config.impl.digester.elements;thread-context=true;mandatory:="thread-context", \
 org.apache.myfaces.flow;thread-context=true;mandatory:="thread-context", \
+org.apache.myfaces.flow.cdi;thread-context=true;mandatory:="thread-context", \
 org.apache.myfaces.lifecycle;thread-context=true;mandatory:="thread-context", \
 org.apache.myfaces.renderkit;thread-context=true;mandatory:="thread-context", \
 org.apache.myfaces.renderkit.html;thread-context=true;mandatory:="thread-context", \
+org.apache.myfaces.shared.context.flash;thread-context=true;mandatory:="thread-context", \
 org.apache.myfaces.shared.taglib;thread-context=true;mandatory:="thread-context", \
 org.apache.myfaces.shared.taglib.core;thread-context=true;mandatory:="thread-context", \
 org.apache.myfaces.spi.impl;thread-context=true;mandatory:="thread-context", \

@@ -108,7 +108,7 @@
                Do not fail ant build if running in an RTC build (keep going) -->
           <condition property="halt.on.packaging.failure">
             <not>
-              <isset property="is.running.rtc.build" />
+              <isset property="is.running.automated.build" />
             </not>
           </condition>
         </then>
@@ -176,6 +176,9 @@
       <local name="addon.esa.editions"/>
       <local name="dhe.license.path"/>
       <local name ="license.editions" />
+      <local name ="license.maven.groupId" />
+      <local name ="license.maven.artifactId" />
+      <local name ="license.maven.description" />
       <local name="files.to.strip"/>
 
       <!-- Build up the default archive name in case one of the properties want to use it -->
@@ -189,6 +192,9 @@
       <property name="archive.name" value="${default.archive.name}" />
       <property name="addon.esa.editions" value="${editions}" />
       <property name="license.editions" value="${license.editions}" />
+      <property name="license.maven.groupId" value="${license.maven.groupId}" />
+      <property name="license.maven.artifactId" value="${license.maven.artifactId}" />
+      <property name="license.maven.description" value="${license.maven.description}" />
 
       <!-- We only build if the edition build properties file says it always builds, or 
              the build is building all the images -->
@@ -368,7 +374,28 @@ ${li.header}
           <iff>
             <available file="@{license.properties}" />
             <then>
-              <bnd eclipse="false"
+                <local name="maven.dir" />
+                <property name="maven.dir" value='build/wlp-${edition}-license-maven/maven/${license.maven.groupId}/${license.maven.artifactId}'/>
+            	<mkdir dir="${maven.dir}" />
+            	<copy todir="${maven.dir}">
+            	  <fileset dir="${basedir}/resources/maven"/>
+            	  <filterset>
+             		  <filter 
+             		    token="GROUPID" 
+             		    value="${license.maven.groupId}"/>
+            		  <filter 
+            		    token="ARTIFACTID" 
+            		    value="${license.maven.artifactId}"/>
+             		  <filter 
+             		    token="VERSION" 
+             		    value="${display.edition.version}"/>
+             		  <filter 
+            		    token="DESCRIPTION" 
+            		    value="${license.maven.description}"/>
+              	  </filterset>
+            	</copy>
+
+            <bnd eclipse="false"
              failok="false"
              exceptions="true"
              classpath="${pcp}"
@@ -1229,12 +1256,15 @@ ${li.header}
       <echo message="Generating checksums"/>
       <generateChecksums installRoot="${install.name}" ignoreBinFiles="true"/>
 
-      <!-- This can not run for beta-zos packaging because it includes all Liberty Features.
+      <!-- This can not run for beta-bluemix or beta-zos packaging because it includes all Liberty Features.
            It may be that future profiles will also need to package these EE6 features but
            until then this is just conditional on the specific profile name. -->
       <iff>
         <not>
+          <or>
+            <equals arg1="@{profile}" arg2="beta-bluemix" />
             <equals arg1="@{profile}" arg2="beta-zos" />
+          </or>
         </not>
         <then>
           <!-- Create temp directory and copy over ee-6 feature manifests so that they are not packaged -->
@@ -1261,6 +1291,7 @@ ${li.header}
       <iff>
         <not>
           <or>
+            <equals arg1="@{profile}" arg2="beta-bluemix" />
             <equals arg1="@{profile}" arg2="beta-zos" />
           </or>
         </not>
@@ -1619,7 +1650,7 @@ license.name=@{license.name}
             <and>
               <istrue value="${ossc.failure}"/>
               <not>
-                <isset property="is.running.rtc.build"/>
+                <isset property="is.running.automated.build"/>
               </not>
             </and>
             <then>

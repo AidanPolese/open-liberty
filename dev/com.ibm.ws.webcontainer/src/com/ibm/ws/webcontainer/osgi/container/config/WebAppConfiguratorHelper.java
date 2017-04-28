@@ -527,6 +527,7 @@ class WebAppConfiguratorHelper implements ServletConfiguratorHelper {
             config.setDisableStaticMappingCache();
             config.setSTSHeaderValue(); //PI67099
             config.setEncodeDispatchedRequestURI(); //PI67942
+            config.setMultiReadOfPostDataValue(); //MultiRead
         }
         
         public void setVirtualHostName(VirtualHost virtualHost) {

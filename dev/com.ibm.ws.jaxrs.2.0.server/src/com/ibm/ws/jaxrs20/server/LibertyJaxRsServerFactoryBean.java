@@ -249,7 +249,7 @@ public class LibertyJaxRsServerFactoryBean extends JAXRSServerFactoryBean {
         }
     }
 
-    protected void doInit() throws ServletException {
+    protected synchronized void doInit() throws ServletException {
 
         /**
          * commonBundlerClassLoader for classes under package org.apache.cxf.jaxrs.validation

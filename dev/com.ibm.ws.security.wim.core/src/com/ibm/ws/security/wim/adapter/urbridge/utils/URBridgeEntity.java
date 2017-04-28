@@ -1,18 +1,12 @@
 /************** Begin Copyright - Do not add comments here **************
  *
- *  
+ *
  * IBM Confidential OCO Source Material
  * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013, 2014
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person              Defect/Feature      Comments
- * -------      ------              --------------      --------------------------------------------------
- * 10/15/2015   rzunzarr           192087               Removed stripRDN code.
- * 06/10/2016   speddapa           217168               GETUSERDISPLAYNAME RETURNING NULL WHEN BASICREGISTRY IS CONFIGURED
+ *
  */
 package com.ibm.ws.security.wim.adapter.urbridge.utils;
 
@@ -21,7 +15,6 @@ import java.util.Map;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.websphere.security.wim.copyright.IBMCopyright;
 import com.ibm.websphere.security.wim.ras.WIMMessageKey;
 import com.ibm.ws.security.wim.adapter.urbridge.URBridge;
 import com.ibm.wsspi.security.wim.SchemaConstants;
@@ -30,10 +23,6 @@ import com.ibm.wsspi.security.wim.exception.WIMException;
 import com.ibm.wsspi.security.wim.model.Entity;
 
 public abstract class URBridgeEntity {
-    /**
-     * Copyright
-     */
-    static final String COPYRIGHT_NOTICE = IBMCopyright.COPYRIGHT_NOTICE_SHORT_2014;
 
     /**
      * Register the class to trace service.
@@ -56,18 +45,17 @@ public abstract class URBridgeEntity {
 
     /**
      * Create an URBridgeEntity.
-     * 
+     *
      * @param inEntity The entity to be wrapped by the URBridgeEntity. This
      *            entity's type determines which type of URBridgeEntity
      *            is created.
      * @param urBridge The UserRegisty associated with the adapter.
-     * @param inAttrMap An attribute map containing the configuraiton information
+     * @param inAttrMap An attribute map containing the configuration information
      *            on how underlying UR attributes map to WIM attributes.
      * @param baseEntryName The name of the baseEntryName.
-     * */
+     */
     public URBridgeEntity(Entity inEntity, URBridge urBridge, Map<String, String> inAttrMap, String inBaseEntryName,
-                          Map<String, String> inEntityConfigMap)
-    {
+                          Map<String, String> inEntityConfigMap) {
         super();
         entity = inEntity;
         this.urBridge = urBridge;
@@ -78,7 +66,7 @@ public abstract class URBridgeEntity {
 
     /**
      * Retrieve the groupSecurityName or userSecurityName from the registry.
-     * 
+     *
      * @param uniqueId the uniqueGroupId or uniqueUserId of the group
      *            or user in the underlying registry.
      */
@@ -86,7 +74,7 @@ public abstract class URBridgeEntity {
 
     /**
      * Retrieve the uniqueGroupId or uniqueUserId from the registry.
-     * 
+     *
      * @param securityName the groupSecurityName or userSecurityName of the user
      *            or group in the underlying registry.
      */
@@ -94,22 +82,21 @@ public abstract class URBridgeEntity {
 
     /**
      * Retrieve the groupDisplayName or userDisplayName from the registry.
-     * 
+     *
      * @param securityName the securityName of the user or group in the
      *            underlying registry.
      */
     public abstract String getDisplayNameForEntity(String arg) throws Exception;
 
     /**
-     * 
+     *
      * Adds a list of specified attributes to the entity.
-     * 
+     *
      * @param attrList a list of attributes to be added to the entity
      * @throws Exception an invalid attribute was requested or an exception
      *             was thrown from an underlying function.
      */
-    public void populateEntity(List<String> attrList) throws WIMException
-    {
+    public void populateEntity(List<String> attrList) throws WIMException {
         boolean uniqueIdPropSet = false;
         setIdentifierProperties();
 
@@ -119,16 +106,14 @@ public abstract class URBridgeEntity {
             try {
                 if (attrName.equals(displayNameProp)) {
                     getDisplayName(true);
-                }
-                else if (attrName.equals(rdnProp)) {
+                } else if (attrName.equals(rdnProp)) {
                     entity.set(rdnProp, entity.getIdentifier().get(securityNameProp));
-                }
-                else if (attrName.equals(SchemaConstants.PROP_PRINCIPAL_NAME) || attrName.equals("displayBridgePrincipalName")) {
-                    if ((attrMap.containsKey(LOCAL_DOMAIN_REGISTRY_PROP) && (attrMap.get(LOCAL_DOMAIN_REGISTRY_PROP).toString().equalsIgnoreCase("local") || attrMap.get(LOCAL_DOMAIN_REGISTRY_PROP).toString().equalsIgnoreCase("domain")))
+                } else if (attrName.equals(SchemaConstants.PROP_PRINCIPAL_NAME) || attrName.equals("displayBridgePrincipalName")) {
+                    if ((attrMap.containsKey(LOCAL_DOMAIN_REGISTRY_PROP) && (attrMap.get(LOCAL_DOMAIN_REGISTRY_PROP).toString().equalsIgnoreCase("local")
+                                                                             || attrMap.get(LOCAL_DOMAIN_REGISTRY_PROP).toString().equalsIgnoreCase("domain")))
                         || attrMap.containsKey(SECURITY_NAME_RDN_PROP)) {
                         entity.set(SchemaConstants.PROP_PRINCIPAL_NAME, urBridge.getUserSecurityName(getUniqueId(true)));
-                    }
-                    else {
+                    } else {
                         entity.set(SchemaConstants.PROP_PRINCIPAL_NAME,
                                    entity.getIdentifier().get(securityNameProp));
                     }
@@ -149,45 +134,39 @@ public abstract class URBridgeEntity {
      * Sets the securityNameProperty. This is useful when creating a new object
      * and wanting to populate its attributes. Mainly because you need 1 attribute
      * before you can retrieve others.
-     * 
+     *
      * @param securityName used to set the securityName property
      * @Exception an error occurred in the underlying repository.
      */
-    public void setSecurityNameProp(String securityName)
-    {
+    public void setSecurityNameProp(String securityName) {
         if (securityName != null)
             entity.getIdentifier().set(securityNameProp, securityName);
     }
 
-    public void setPrincipalName(String securityName)
-    {
+    public void setPrincipalName(String securityName) {
         if (securityName != null)
             entity.set(SchemaConstants.PROP_PRINCIPAL_NAME, securityName);
     }
 
     /**
      * Returns the securityName of a user or a group.
-     * 
+     *
      * @param setAttr a boolean indicating whether to actually set the attribute
      *            in the entity or just perform a lookup.
      * @return the user or group's securityName.
      * @throws Exception identifier values are missing or the underlying
      *             registry threw an error.
      */
-    public String getSecurityName(boolean setAttr) throws Exception
-    {
+    public String getSecurityName(boolean setAttr) throws Exception {
         String securityName = null;
         if (entity.getIdentifier().isSet(securityNameProp)) {
             securityName = (String) entity.getIdentifier().get(securityNameProp);
         }
 
         // Neither identifier is set.
-        if (securityName == null && !entity.getIdentifier().isSet(uniqueIdProp))
-        {
-            throw new WIMApplicationException(WIMMessageKey.REQUIRED_IDENTIFIERS_MISSING,
-                            Tr.formatMessage(tc, WIMMessageKey.REQUIRED_IDENTIFIERS_MISSING));
-        }
-        else if (securityName == null) {
+        if (securityName == null && !entity.getIdentifier().isSet(uniqueIdProp)) {
+            throw new WIMApplicationException(WIMMessageKey.REQUIRED_IDENTIFIERS_MISSING, Tr.formatMessage(tc, WIMMessageKey.REQUIRED_IDENTIFIERS_MISSING));
+        } else if (securityName == null) {
             String uniqueId = (String) entity.getIdentifier().get(uniqueIdProp);
 
             // Get the securityName.
@@ -205,8 +184,7 @@ public abstract class URBridgeEntity {
         return securityName;
     }
 
-    public void setIdentifierProperties() throws WIMException
-    {
+    public void setIdentifierProperties() throws WIMException {
         try {
             getUniqueId(true);
             getSecurityName(true);
@@ -217,15 +195,14 @@ public abstract class URBridgeEntity {
 
     /**
      * Returns the uniqueId of a user or a group.
-     * 
+     *
      * @param setAttr a boolean indicating whether to actually set the attribute
      *            in the entity or just perform a lookup.
      * @return the user or group's uniqueId.
      * @throws Exception identifier values are missing or the underlying
      *             registry threw an error.
      */
-    public String getUniqueId(boolean setAttr) throws Exception
-    {
+    public String getUniqueId(boolean setAttr) throws Exception {
         String uniqueName = null;
         String uniqueId = null;
         if (entity.getIdentifier().isSet(uniqueIdProp)) {
@@ -235,8 +212,7 @@ public abstract class URBridgeEntity {
         uniqueName = (String) entity.getIdentifier().get(securityNameProp);
 
         if ((uniqueId == null) && (uniqueName == null)) {
-            throw new WIMApplicationException(WIMMessageKey.REQUIRED_IDENTIFIERS_MISSING,
-                            Tr.formatMessage(tc, WIMMessageKey.REQUIRED_IDENTIFIERS_MISSING));
+            throw new WIMApplicationException(WIMMessageKey.REQUIRED_IDENTIFIERS_MISSING, Tr.formatMessage(tc, WIMMessageKey.REQUIRED_IDENTIFIERS_MISSING));
         }
 
         // Get the attribute value. If it's part of the DN we must strip it out.
@@ -253,7 +229,7 @@ public abstract class URBridgeEntity {
 
     /**
      * Returns the displayName of a user or a group.
-     * 
+     *
      * @param setAttr a boolean indicating whether to actually set the attribute
      *            in the entity or just perform a lookup.
      * @return the user or group's displayName.
@@ -261,8 +237,7 @@ public abstract class URBridgeEntity {
      *             registry threw an error.
      */
     @SuppressWarnings("unchecked")
-    public String getDisplayName(boolean setAttr) throws Exception
-    {
+    public String getDisplayName(boolean setAttr) throws Exception {
         String displayName = null;
         String securityName = getSecurityName(false);
         displayName = getDisplayNameForEntity(securityName);
@@ -273,8 +248,7 @@ public abstract class URBridgeEntity {
         return displayName;
     }
 
-    public void setRDNPropValue(String value)
-    {
+    public void setRDNPropValue(String value) {
         if (value != null)
             entity.set(entityConfigMap.get(entity.getTypeName()), value);
     }
@@ -282,26 +256,22 @@ public abstract class URBridgeEntity {
     /**
      * Ensure that an exception will be thrown if this function is called
      * but not implemented by the child class.
-     * 
+     *
      * @param grpMbrshipAttrs
      * @throws Exception on all calls.
      */
-    public void getGroupsForUser(List<String> grpMbrshipAttrs, int countLimit) throws Exception
-    {
-        throw new WIMApplicationException(WIMMessageKey.METHOD_NOT_IMPLEMENTED,
-                        Tr.formatMessage(tc, WIMMessageKey.METHOD_NOT_IMPLEMENTED));
+    public void getGroupsForUser(List<String> grpMbrshipAttrs, int countLimit) throws Exception {
+        throw new WIMApplicationException(WIMMessageKey.METHOD_NOT_IMPLEMENTED, Tr.formatMessage(tc, WIMMessageKey.METHOD_NOT_IMPLEMENTED));
     }
 
     /**
      * Ensure that an exception will be thrown if this function is called
      * but not implemented by the child class.
-     * 
+     *
      * @param grpMbrshipAttrs
      * @throws Exception on all calls.
      */
-    public void getUsersForGroup(List<String> grpMbrAttrs, int countLimit) throws Exception
-    {
-        throw new WIMApplicationException(WIMMessageKey.METHOD_NOT_IMPLEMENTED,
-                        Tr.formatMessage(tc, WIMMessageKey.METHOD_NOT_IMPLEMENTED));
+    public void getUsersForGroup(List<String> grpMbrAttrs, int countLimit) throws Exception {
+        throw new WIMApplicationException(WIMMessageKey.METHOD_NOT_IMPLEMENTED, Tr.formatMessage(tc, WIMMessageKey.METHOD_NOT_IMPLEMENTED));
     }
 }

@@ -25,6 +25,11 @@ public class Utils {
     public static final String TEST_DATA_DIR = "../com.ibm.ws.kernel.service_test/unittest/test data";
 
     public static final File TEST_DATA = new File(TEST_DATA_DIR);
+
+    public static final String OUTPUT_DATA_DIR = "../com.ibm.ws.kernel.service_test/build/output data";
+
+    public static final File OUTPUT_DATA = new File(OUTPUT_DATA_DIR);
+
     private static final File testRoot = new File("../com.ibm.ws.kernel.service_test/build/unittest/tmp");
 
     public static void recursiveClean(final File fileToRemove) {

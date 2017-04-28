@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2011, 2015
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.wsspi.kernel.service.utils;
@@ -58,26 +58,26 @@ public class PathUtils {
 
     /**
      * Pattern used to determine if a URI is an absolute URI.
-     * 
+     *
      * The pattern is "^[^/#\\?]+?:/.*". The pattern is an approximation
      * for full URI matching.
-     * 
+     *
      * For example, the pattern matches "file:/" and "schema:/" as absolute URIs.
      */
     final static Pattern ABSOLUTE_URI = Pattern.compile("^[^/#\\?]+?:/.*");
 
     /**
      * Cache of whether the active file system is case insensitive.
-     * 
+     *
      * The result is computed by {@link #isPossiblyCaseInsensitive()}.
      */
     private static boolean IS_POSSIBLY_CASE_INSENSITIVE = isPossiblyCaseInsensitive();
 
     /**
      * File name restricted characters. Used by {@link #replaceRestrictedCharactersInFileName(String)}.
-     * 
+     *
      * The file name restricted characters are: &lt; &gt; \: \" \/ \\ \| \? \*
-     * 
+     *
      * Used by {@link #replaceRestrictedCharactersInFileName(String)}.
      */
     private static String FILE_NAME_RESTRICTED_CHARS = "<>:\"/\\|?*";
@@ -86,25 +86,25 @@ public class PathUtils {
      * Test whether the active file system may be case <em>insensitive</em>. A true result means
      * that the active file system <em>might</em> be case insensitive. A false result means
      * that the active file system is <em>definitely</em> not case insensitive.
-     * 
+     *
      * Equivalently, a false result means that the active file system is <em>definitely</em> case
      * sensitive, and a true result means the active file system <em>might be</em> case sensitive.
-     * 
+     *
      * The test accesses the bundle context of this class, and creates and removes files in the
      * persistent data storage area of that bundle context. The test answers true if the bundle
      * or bundle context are not available, or if the persistent data storage area cannot be
      * accessed.
-     * 
+     *
      * The result is used when testing for file existence. See {@link #checkCase(File, String)}.
      * When the file system is definitely case sensitive, the results of case sensitive string
      * comparisons is used to match file names. When the file system cannot be determined to
      * be case sensitive, additional tests using the canonical name of the file are performed.
-     * 
+     *
      * @return True or false telling if the active file system may be case insensitive. Answer
      *         true if the bundle, bundle context, or bundle persistent data storage area are not
      *         available or cannot be used.
      */
-    private static boolean isPossiblyCaseInsensitive() {
+    static boolean isPossiblyCaseInsensitive() {
         File caseSensitiveFile = null;
         Bundle bundle = FrameworkUtil.getBundle(PathUtils.class);
         if (bundle != null) {
@@ -132,16 +132,30 @@ public class PathUtils {
             }
         }
 
+        try {
+            // need to double check, since the above code is intended to be run in an
+            // OSGi environment, not a Java SE / JUnit env
+            caseSensitiveFile = File.createTempFile("caseSENSITIVEprefix", "TxT");
+            boolean amICaseSensitive = !caseSensitiveFile.getCanonicalFile().equals(new File(caseSensitiveFile.getAbsolutePath().toUpperCase()));
+            if (amICaseSensitive)
+                return false;
+        } catch (IOException e) {
+            // we can't tell if this OS is case sensitive or not.
+            // Assume we might be case insensitive.
+            return true;
+        } finally {
+            //caseSensitiveFile.delete();
+        }
         // Something went wrong. Assume we might be case insensitive.
         return true;
     }
 
     /**
      * Copy the path, replacing backward slashes ('\\') with forward slashes ('/').
-     * 
+     *
      * @param path The path in which to replace slashes. An exception
      *            will be thrown if the path is null.
-     * 
+     *
      * @return The path with backward slashes replaced with forward slashes.
      *         Answer the initial file path if no backward slashes are present.
      */
@@ -154,15 +168,15 @@ public class PathUtils {
     /**
      * Normalize a relative path using {@link #normalize(String)} and verify that
      * the normalized path does not begin with an upwards path element ("..").
-     * 
+     *
      * The path is required to be a relative path which uses forward slashes ('/').
-     * 
+     *
      * The normalized path is tested as an absolute path according to {@link #pathIsAbsolute(String)}.
-     * 
+     *
      * @param relativePath The relative path which is to be normalized.
-     * 
+     *
      * @return The normalized path. An empty path if the path was null.
-     * 
+     *
      * @throws MalformedLocationException Thrown if the normalized path starts with an upwards path element ("..").
      */
     @Trivial
@@ -181,16 +195,16 @@ public class PathUtils {
     /**
      * Normalize a relative path using {@link #normalize(String)} and verify that the normalized path is
      * an absolute path. Answer the normalized path.
-     * 
+     *
      * The path is required to be a relative path which uses forward slashes ('/').
-     * 
+     *
      * The normalized path is an absolute path according to the rules implemented by {@link #pathIsAbsolute(String)}.
-     * 
+     *
      * @param relativePath The relative path which is to be normalized. An exception will
      *            be thrown if the path is null.
-     * 
+     *
      * @return The normalized path.
-     * 
+     *
      * @throws MalformedLocationException Thrown if the normalized path is not an absolute path.
      */
     @Trivial
@@ -205,26 +219,26 @@ public class PathUtils {
 
     /**
      * Tell if a normalized path is an absolute path.
-     * 
+     *
      * A normalized path which starts with a forward slash character ('/') is absolute.
-     * 
+     *
      * A normalized path which starts with a symbolic substitution (see {@link #isSymbol(String)} is absolute.
-     * 
+     *
      * A true result for paths which start with a symbolic substitution is a conservative
      * answer: Whether the resulting path is absolute after performing symbolic substitution
      * depends on what value was placed by the substitution.
-     * 
+     *
      * A normalized path which starts with a drive letter combination followed by a forward
      * slash character, for example, "C\:/", is absolute.
-     * 
+     *
      * A normalized path which starts with a protocol followed by a forward slash character,
      * for example, "file:/", is absolute.
-     * 
+     *
      * Otherwise, the path is not absolute.
-     * 
+     *
      * @param normalizedPath The normalized path which is to be tested.
      *            An exception will be thrown if the path is null.
-     * 
+     *
      * @return True or false telling if the path is absolute.
      */
     @Trivial
@@ -253,22 +267,22 @@ public class PathUtils {
 
     /**
      * Normalize a path. Remove all "." elements, and resolve all ".." elements.
-     * 
+     *
      * ".." elements are resolved by removing the ".." element along with the higher (preceding)
      * element. Leading ".." elements are not removed.
-     * 
+     *
      * Paths which represent resource locators (which start with "http:", "https:", or "ftp:")
      * are not modified. Paths which represent file resource locators (which start with "file:")
      * are modified. However, the "file:" prefix is preserved. Normalization is performed on the
      * text which follows the "file:" prefix.
-     * 
+     *
      * @param path The path which is to be normalized. An exception will be thrown if the path is null.
-     * 
+     *
      * @return The normalized path.
      */
     public static String normalize(String path) {
         // We don't want to normalize if this is not a file name. This could be improved, but
-        // might involve some work. 
+        // might involve some work.
         if ((path.startsWith("http:") || (path.startsWith("https:")) || (path.startsWith("ftp:")))) {
             return path;
         }
@@ -426,13 +440,13 @@ public class PathUtils {
     /**
      * Tell if a path starts with a symbolic substitution. A symbolic substitution is
      * the character sequence "\$\{\}" with at least one character between braces.
-     * 
+     *
      * Other than requiring at least one character, this method does not validate
      * the characters between the braces. This method does not validate that
      * a closing brace is present.
-     * 
+     *
      * @param path The path to test for a symbolic substitution.
-     * 
+     *
      * @return True or false telling if the path contains and starts with
      *         a symbolic substitution.
      */
@@ -448,15 +462,15 @@ public class PathUtils {
      * Tell if a path contains a symbolic substitution. A symbolic substitution
      * is the character sequence "\$\{\}" with at least one character between
      * braces.
-     * 
+     *
      * Other than requiring at least one character, this method does not validate
      * the characters between the braces.
-     * 
+     *
      * The return value is unpredictable for a path which contains a malformed substitution,
      * for example, "leading\$\{A/inner/\$\{B\}/trailing".
-     * 
+     *
      * @param path The path to test for a symbolic substitution.
-     * 
+     *
      * @return True or false telling if the path contains a symbolic substitution.
      */
     @Trivial
@@ -485,22 +499,22 @@ public class PathUtils {
 
     /**
      * Answer the first symbolic substitution within a path.
-     * 
+     *
      * See {@link #containsSymbol(String)} for a description of a symbolic substitution.
-     * 
+     *
      * Answer null if the path is null or if the path contains no symbolic substitution.
-     * 
+     *
      * For example, for "leading/trailing" answer null.
-     * 
+     *
      * For example, for "leading/\$\{A\}"/trailing" answer "\$\{A\}".
-     * 
+     *
      * For example, for "leading/\$\{A\}"/inner/\$\{B\}/trailing" answer "\$\{A\}".
-     * 
+     *
      * Paths with badly formed substitutions answer unpredictable values. For example,
      * for "leading\$\{A/inner/\$\{B\}/trailing" answer "\$\{A/inner/\$\{B\}".
-     * 
+     *
      * @param path The path from which to obtain the first symbol.
-     * 
+     *
      * @return The first symbol of the path. Null if the path is null or contains
      *         no symbolic substitutions.
      */
@@ -532,10 +546,10 @@ public class PathUtils {
     /**
      * Answer a copy of the path with the trailing forward slash ('/') removed.
      * Answer the path itself if the path has no trailing forward slash.
-     * 
+     *
      * @param path The path from which to remove the trailing slash. An exception will
      *            be thrown if the path is null.
-     * 
+     *
      * @return The path with any trailing forward slash removed.
      */
     @Trivial
@@ -552,21 +566,21 @@ public class PathUtils {
     /**
      * Tell if a file is a child of another. Answer true for both immediate and
      * non-immediate cases.
-     * 
+     *
      * An immediate case is, for example, "aParent/aChild".
-     * 
+     *
      * A non-immediate case is, for example, "aParent/anIntermediate/aChild".
-     * 
+     *
      * The test uses normalized absolute paths. See {@link #normalize(String)} and {@link File#getAbsolutePath()}.
-     * 
+     *
      * Answer false when applied to a single file as both the parent and the child file
      * (a non-reflexive parent-child relationship test is implemented).
-     * 
+     *
      * @param candidateParent The file which is tested as a parent. An exception will be
      *            thrown if the path is null.
      * @param candidateChild The file which is tested as a child. An exception will result
      *            if the path is null.
-     * 
+     *
      * @return True or false telling if candidate child is a child of the candidate parent.
      */
     static boolean isFileAChild(File parent, File child) {
@@ -618,30 +632,30 @@ public class PathUtils {
         /**
          * Compare two relative paths. Take into account the presence of path separator
          * characters. That is, the path are compared lists of path segments.
-         * 
+         *
          * The result will be one of {@link #CMP_LT}, {@link #CMP_EQ}, {@link #CMP_GT},
          * or, an integer value which measures the difference between the
          * two path (subtracting the second value from the first), with the sign of
          * the difference indicating the comparison result. In effect:
-         * 
+         *
          * <code>Math.signum(compare(path1, path2)) == Math.signum(path1 - path2)</code>
-         * 
+         *
          * "In effect", because an actual difference between two path values is not
          * defined. This implementation answers the difference between the first
          * characters which do not match, or the differences between the path lengths
          * if all characters of the shorter path match characters of the longer path,
          * or CMP_LT or CMP_GT if slashes are not in the same positions in both paths.
-         * 
+         *
          * For example, "parent/child" is compared as \{ "parent", "child" \}.
-         * 
+         *
          * Then, "parent/child" is less than "parentAlt/child", because
          * "parent" is less than "parentAlt".
-         * 
+         *
          * @param path1 The first relative path which is to be compared.
          *            An exception will result if the path is null.
          * @param path2 The second second path which is to be compared.
          *            An exception will result if the path is null.
-         * 
+         *
          * @return A integer value which corresponds to the comparison result.
          *         A value less than zero indicates that the first path is less than
          *         the second path. A value greater than zero indicates that first
@@ -674,39 +688,39 @@ public class PathUtils {
     /**
      * Answer the path with the last file name removed, using forward
      * slash ('/') as the path separator character.
-     * 
+     *
      * Answer null for a path which contains no slashes.
-     * 
+     *
      * Answer null for a path which is a single slash character.
-     * 
+     *
      * Answer the path which is a single slash character when
      * the path starts with a slash, which is not a single slash
      * character, and which contains no other slashes.
-     * 
+     *
      * Answer the path with the trailing slash removed for
      * a path which has a trailing slash and which is not a single
      * slash character.
-     * 
+     *
      * Answer the the path up to but not including the trailing
      * slash in all other cases.
-     * 
+     *
      * For example:
-     * 
+     *
      * For "/grandParent/parent/child" answer "/grandParent/parent".
-     * 
+     *
      * For "/grandParent/parent/" answer "/grandParent/parent".
-     * 
+     *
      * For "/parent" answer "/".
-     * 
+     *
      * For "/" answer null.
-     * 
+     *
      * For "child" answer null.
-     * 
+     *
      * For "" answer null.
-     * 
+     *
      * @param path The path with the last file named removed. An exception
      *            will be thrown if the path is null.
-     * 
+     *
      * @return The path with the last file name removed.
      */
     public static String getParent(String path) {
@@ -729,19 +743,19 @@ public class PathUtils {
      * Answer the last file name of a path, using the forward slash ('/') as the
      * path separator character. Answer the path element which follows the last
      * forward slash of the path.
-     * 
+     *
      * Answer the entire path if the path contains no path separator.
-     * 
+     *
      * For example:
-     * 
+     *
      * For "/parent/child" answer "child".
-     * 
+     *
      * For "child" answer "child".
-     * 
+     *
      * An exception will be thrown if the path ends with a trailing slash.
-     * 
+     *
      * @param path The path from which to answer the last file name.
-     * 
+     *
      * @return The last file name of the path.
      */
     public static String getName(String pathAndName) {
@@ -760,27 +774,27 @@ public class PathUtils {
      * Answer the first file name of a path, using the forward slash character ('/')
      * as the path separator character. Answer the path element which follows the last
      * forward slash of the path.
-     * 
+     *
      * Answer the entire path if the path contains no path separator.
-     * 
+     *
      * Answer the path element which precedes the first path separator,
      * except, ignore a leading path separator.
-     * 
+     *
      * For example:
-     * 
+     *
      * For "/parent/child" answer "parent".
-     * 
+     *
      * For "parent/child" answer "parent".
-     * 
+     *
      * For "parent" answer "parent".
-     * 
+     *
      * For "/parent" answer "parent".
-     * 
+     *
      * For "/" answer "".
-     * 
+     *
      * @param path The path from which to answer the first file name.
      *            An exception will be thrown if the path is null.
-     * 
+     *
      * @return The first file name of the path.
      */
     public static String getFirstPathComponent(String path) {
@@ -805,7 +819,7 @@ public class PathUtils {
             return path.substring(0, sIdx);
         } else {
             //path starts with /, has multiple /'s present
-            //remove 1st char and return up to but not including 1st / position. 
+            //remove 1st char and return up to but not including 1st / position.
             return path.substring(1, path.indexOf('/', 1));
         }
 
@@ -813,18 +827,18 @@ public class PathUtils {
 
     /**
      * Answer the first path element of a path which follows a leading sub-path.
-     * 
+     *
      * For example, for path "/grandParent/parent/child/grandChild" and
      * leading sub-path "/grandParent/parent", answer "child".
-     * 
+     *
      * The result is unpredictable if the leading path does not start the
      * target path, and does not reach a separator character in the target
      * path. An exception will be thrown if the leading path is longer
      * than the target path.
-     * 
+     *
      * @param path The path from which to obtain a path element.
      * @param leadingPath A leading sub-path of the target path.
-     * 
+     *
      * @return The first path element of the target path following the
      *         leading sub-path.
      */
@@ -840,16 +854,16 @@ public class PathUtils {
      * the target location. For example, "../siblingParent/child", when applied
      * to "grandParent/parent" reaches "grandParent/siblingParent/child",
      * which is not beneath the initial target location.
-     * 
+     *
      * The test resolves all ".." elements before performing the test. A test which
      * simply examines the starting character of the path is not sufficient. For
      * example, the path "parent/../../siblingParent/child" reaches above target
      * locations.
-     * 
+     *
      * The path must use forward slashes.
-     * 
+     *
      * @param path The path which is to be tested.
-     * 
+     *
      * @return True or false telling if the path reaches above target locations.
      */
     public static boolean isUnixStylePathAbsolute(String unixStylePath) {
@@ -865,12 +879,12 @@ public class PathUtils {
      * Tell if a path, if applied to a target location, will reach above the
      * target location. The path must use forward slashes and must have
      * all ".." elements resolved.
-     * 
+     *
      * The path reaches above target locations if it is "..", or if it starts
      * with "../" or starts with "/..".
-     * 
+     *
      * @param normalizedPath The path which is to be tested.
-     * 
+     *
      * @return True or false telling if the path reaches above target locations.
      */
     public static boolean isNormalizedPathAbsolute(String nPath) {
@@ -881,19 +895,19 @@ public class PathUtils {
 
     /**
      * Resolve all ".." elements of a path. The path must use forward slashes.
-     * 
+     *
      * Verify that the path does not reach above target elements (see {@link #isUnixStylePathAbsolute(String)}.
-     * 
+     *
      * Add a leading slash if the path does not have one.
-     * 
+     *
      * Remove any trailing slash.
-     * 
+     *
      * Verify that the resulting path is neither empty nor a single slash character.
-     * 
+     *
      * @param path The path which is to be normalized.
-     * 
+     *
      * @return The normalized path. An exception will result if the path is null.
-     * 
+     *
      * @throws IllegalArgumentException If the resolved path is empty or has just a single slash,
      *             or if the resolved path reaches above target locations.
      */
@@ -911,7 +925,7 @@ public class PathUtils {
             path = '/' + path;
         }
 
-        //remove trailing /'s 
+        //remove trailing /'s
         if (path.endsWith("/")) {
             path = path.substring(0, path.length() - 1);
         }
@@ -933,16 +947,16 @@ public class PathUtils {
 
     /**
      * Normalize a path, resolving as many ".." elements as possible.
-     * 
+     *
      * Do not remove a leading '/', but remove a trailing '/'.
-     * 
+     *
      * The path must use forward slashes as path separators.
-     * 
+     *
      * After resolution, all unresolved ".." elements will be at the beginning
      * of the path, possibly including a leading '/'.
-     * 
+     *
      * @param path A path which is to be normalized.
-     * 
+     *
      * @return The normalized path.
      */
     public static String normalizeUnixStylePath(String path) {
@@ -969,10 +983,13 @@ public class PathUtils {
 
         FAST_PARSING: {
             // Loop BACKWARDS from the final character to the SECOND character.
-            // If we get as far as the second character without needing to 
-            // do any transformation, then the first character can never make 
+            // If we get as far as the second character without needing to
+            // do any transformation, then the first character can never make
             // any difference and the string will be returned without transformation.
-            WALKING_BACKWARDS: for (pathIndex = pathLen - 1; pathIndex > 0; pathIndex--) {
+            // Er... the above statement is not true in cases where there is a leading
+            // double slash - i.e. //META-INF/resources/someFile.  We need to check the
+            // first character in the path string.
+            WALKING_BACKWARDS: for (pathIndex = pathLen - 1; pathIndex >= 0; pathIndex--) {
                 final char c = path.charAt(pathIndex);
                 switch (state) {
                     case NEW_ELEM:
@@ -1120,7 +1137,7 @@ public class PathUtils {
         final char c = buffer[0];
         final boolean pathHasLeadingSlash = c == '/';
         // check whether we just finished skipping an element
-        // write in any dots that were previously ignored 
+        // write in any dots that were previously ignored
         // this path has no further scope to collapse them
         switch (state) {
             case IN_ELEM: // FALL-THROUGH
@@ -1186,32 +1203,37 @@ public class PathUtils {
     /**
      * Tell if the case of the characters of the path of a file match a path,
      * taking into account whether the current environment is case sensitive.
-     * 
-     * Currently, all environments except windows are case sensitive.
-     * 
+     *
+     * Currently, all environments except Windows and possibly Mac are case
+     * sensitive. If this method is called while executing in an environment
+     * that uses a file system that we've determined to be case insensitive,
+     * then this method will return true, regardless of whether the passed-in
+     * pathToTest matches the passed-in File's path.
+     *
      * The path is matched as a trailing path of the file which is being tested.
-     * 
+     *
      * The trailing path must use forward slashes as the path separator.
-     * 
+     *
      * Unpredictable results will be obtained if the trailing path is not
      * a trailing path of the file which is being tested. For example, true
      * is always obtained when the current environment is not case sensitive,
      * regardless of the relationship between the trailing path and the target
      * file.
-     * 
+     *
      * @param file The file which is to be tested.
-     * @param trailingPath The path which is to be tested against the file.
-     * 
-     * @return True or false telling if the file has the trailing path,
-     *         checking the case of file path and the trailing path according
-     *         to the case sensitivity of the current platform.
+     * @param pathToTest The path which is to be tested against the file.
+     *
+     * @return Always true if the file system is case insensitive.
+     *         For case sensitive file systems, true is returned if the passed-in
+     *         file's path ends with the passed-in pathToTest, taking into account
+     *         trailing slashes and symbolic links.
      */
     public static boolean checkCase(final File file, String pathToTest) {
         if (pathToTest == null || pathToTest.isEmpty()) {
             return true;
         }
 
-        if (!IS_POSSIBLY_CASE_INSENSITIVE) {
+        if (IS_POSSIBLY_CASE_INSENSITIVE) {
             // since it is assumed that the file exists, it's case must match if we
             // know that the file system is case sensitive
             return true;
@@ -1238,18 +1260,18 @@ public class PathUtils {
 
     /**
      * Test that the path to a file matches a specified path.
-     * 
+     *
      * The test does a case sensitive string comparison of the canonical path
      * of the file with the specified path, restricting the form of the
      * path which may be used for the test.
-     * 
+     *
      * Trailing slashes on either the file or the path are ignored.
-     * 
+     *
      * @param file The file which is to be tested.
      * @param trailingPath The path which is to be tested.
-     * 
+     *
      * @return True or false telling if the path reaches the file.
-     * 
+     *
      * @throws PrivilegedActionException Thrown if the caller does not
      *             have privileges to access the file or its ascending path.
      */
@@ -1291,20 +1313,19 @@ public class PathUtils {
      * Test if a file is reached by a path. Handle symbolic links. The
      * test uses the canonical path of the file, and does a case sensitive
      * string comparison.
-     * 
+     *
      * Ignore a leading slash of the path.
-     * 
+     *
      * @param file The file which is to be tested.
      * @param trailingPath The path which is to be tested.
-     * 
+     *
      * @return True or false telling if the path reaches the file.
-     * 
+     *
      * @throws PrivilegedActionException Thrown if the caller does not
      *             have privileges to access the file or its ascending path.
      */
-    private static boolean checkCaseSymlink(File file, String pathToTest)
-                    throws PrivilegedActionException {
-        // java.nio.Path.toRealPath(LinkOption.NOFOLLOW_LINKS) in java 7 seems to do what 
+    private static boolean checkCaseSymlink(File file, String pathToTest) throws PrivilegedActionException {
+        // java.nio.Path.toRealPath(LinkOption.NOFOLLOW_LINKS) in java 7 seems to do what
         // we are trying to do here
 
         //On certain platforms, i.e. iSeries, the path starts with a slash.
@@ -1342,16 +1363,16 @@ public class PathUtils {
      * Test if a file is a symbolic link. Test only the step from the
      * parent of the file to the file. A symbolic link elsewhere in the path
      * to the file is not detected.
-     * 
+     *
      * The test uses {@link File#equals(Object)}, which takes into account
      * casing differences depending on the current platform.
-     * 
+     *
      * @param candidateChildFile The file to test as a symbolic link.
      * @param candidateParentFile The immediate parent of the target file.
-     * 
+     *
      * @return True or false telling if the child file is a symbolic link
      *         from the parent file.
-     * 
+     *
      * @throws PrivilegedActionException Thrown in case of a failure to
      *             obtain a canonical file.
      */
@@ -1366,11 +1387,11 @@ public class PathUtils {
     /**
      * Obtain the canonical file for a file. Performs a call to {@link File#getCanonicalFile()},
      * wrapping the calling a {@link PrivelegedExceptionAction}.
-     * 
+     *
      * @param file The file for which to obtain the canonical file.
-     * 
+     *
      * @return The canonical file for the file.
-     * 
+     *
      * @throws PrivilegedActionException Thrown if the call to {@link File#getCanonicalFile()} threw an exception.
      */
     private static File getCanonicalFile(final File file) throws PrivilegedActionException {
@@ -1386,15 +1407,15 @@ public class PathUtils {
     /**
      * Tell if a file name is present in an array of file names. Test
      * file names using case sensitive {@link String#equals(Object)}.
-     * 
+     *
      * The parameter file names collection is expected to be obtained from
      * a call to {@link File#list()}, which can return null.
-     * 
+     *
      * @param fileNames The file names to test against. The array may
      *            be null, but may not contain null elements.
-     * 
+     *
      * @param fileName The file name to test. May be null.
-     * 
+     *
      * @return True or false telling if the file name matches any of
      *         the file names. False if the file names array is null.
      */
@@ -1414,28 +1435,30 @@ public class PathUtils {
     /**
      * Copy a file name, replacing each restricted character with a single period
      * character ('.').
-     * 
+     *
      * Restricted characters are control characters and the following:
+     *
      * <pre>
      * &lt; &gt; : " / \\ | ? *
      * </pre>
+     *
      * (See {@link #FILE_NAME_RESTRICTED_CHARS}.
-     * 
+     *
      * Control characters are character with a value greater than or equal to zero
      * and less than or equal to 31.
-     * 
+     *
      * The set of restricted characters was selected conservatively based on the
      * rules for Windows file names.
-     * 
+     *
      * The parameter should be a file name. Both the forward slash ('/') and
      * the backwards slash ('\\') are restricted characters.
-     * 
+     *
      * Answer null if all characters of the file name are replaced, or if the resulting
      * file name is "." or "..".
-     * 
+     *
      * @param name The file name in which to replace restricted characters. An exception
      *            will be thrown if the file name is null.
-     * 
+     *
      * @return The copy of the file name with all restricted characters replaced. Null
      *         if all characters were replaced or of the replaced file name is "." or "..".
      */
@@ -1445,7 +1468,7 @@ public class PathUtils {
         for (int x = 0; x < name.length(); x++) {
             char y = name.charAt(x);
             if ((FILE_NAME_RESTRICTED_CHARS.indexOf(y) == -1) &&
-                ((y < 0) || (y > 31))) /* Exclude control characters */{
+                ((y < 0) || (y > 31))) /* Exclude control characters */ {
                 sb.append(y);
             } else {
                 sb.append('.');
@@ -1464,13 +1487,12 @@ public class PathUtils {
 
     /**
      * Answer a canonical path for a target path using {@link #fixPathString(File)}.
-     * 
+     *
      * @param targetPath The path for which to obtain a canonical path.
-     * 
+     *
      * @return The canonical path for the target path.
      */
-    public static String fixPathString(String absPath)
-    {
+    public static String fixPathString(String absPath) {
         return fixPathString(new File(absPath));
     }
 
@@ -1480,34 +1502,33 @@ public class PathUtils {
      * obtain the canonical value using {@link File#getCanonicalPath()}. If that
      * fails, obtain the canonical value using {@link File#getAbsolutePath()}. On
      * a non-windows environment, obtain the canonical value using {@link File#getAbsolutePath()}.
-     * 
+     *
      * A failure of {@link File#getCanonicalPath()} causes an FFDC exception
      * report to be generated. However, processing continues with the call to {@link File#getAbsolutePath()}.
-     * 
+     *
      * Use of canonical paths enables the use of java case sensitive string comparisons
      * for file name comparisons. See {@link #IS_POSSIBLY_CASE_INSENSITIVE}.
-     * 
+     *
      * @param targetFile The file for which to answer the canonical path.
-     * 
+     *
      * @return The canonical path for the file.
      */
     @FFDCIgnore(IOException.class)
-    public static String fixPathString(File absPath)
-    {
+    public static String fixPathString(File absPath) {
         //on windows.. the path from config can have a different case to the actual filesystem path
         //and when notifications come back, they'll come back with the actual filsystem casing.
         //so, so ensure we all agree on what that should be, for windows, we use canonical path.
         //
-        //getCanonicalPath however, sees 'through' symlinks, which means if we use it on paths 
+        //getCanonicalPath however, sees 'through' symlinks, which means if we use it on paths
         //that are symlinked into the app, we'll see the actual paths instead of the symlinked ones.
         //
-        //getCanonicalPath on windows however just happens not to be able to see through windows 
+        //getCanonicalPath on windows however just happens not to be able to see through windows
         //symlinks (which are infrequently used anyways), so we're still safe to use it there, and
         //non-windows platforms are just fine sticking with the casing of the path supplied via
-        //config. 
+        //config.
         //
-        //A future alternative will be to use File.toPath().getRealPath(LinkOptions.NOFOLLOW_LINKS); 
-        //when Liberty is java7 only.. 
+        //A future alternative will be to use File.toPath().getRealPath(LinkOptions.NOFOLLOW_LINKS);
+        //when Liberty is java7 only..
         if (isWindows) {
             try {
                 return absPath.getCanonicalPath();
@@ -1526,11 +1547,11 @@ public class PathUtils {
      * Apply {@link #fixPathString(File)} to a collection of paths. Create a file
      * on each of the adjusted paths. Collect and return the files created on the
      * adjusted paths.
-     * 
+     *
      * Answer an empty collection if the paths collection is null.
-     * 
+     *
      * @param paths The paths to which to apply {@link #fixPathString(String)}.
-     * 
+     *
      * @return The files created from the adjusted paths.
      */
     public static Set<File> getFixedPathFiles(Collection<String> paths) {
@@ -1545,11 +1566,11 @@ public class PathUtils {
     /**
      * Collect the results of applying {@link #fixPathString(File)} to
      * a collection of files.
-     * 
+     *
      * Answer an empty collection if the file collection is null.
-     * 
+     *
      * @param files The files to which to apply {@link #fixPathString(File)}.
-     * 
+     *
      * @return The collected files.
      */
     public static Set<File> fixPathFiles(Collection<File> files) {

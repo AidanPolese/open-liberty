@@ -10,9 +10,6 @@
  *
  * Tag          Person   Defect/Feature      Comments
  * ----------   ------   --------------      --------------------------------------------------
- *         suraj_chandegave    93943         SVT: FFDC logs generated for each incorrect user/password during login with LDAP
- * 06/10/201    rzunzarr  102797/PM91261     getGroups call fails when search pattern is specified is a DN
- * 04/15/2015   suraj_chandegave    168255          Test Failure (20150319-1329): com.ibm.ws.security.wim.registry.fat.DefaultWIMRealmTest.checkPasswordWithInvalidUser
  */
 
 package com.ibm.ws.security.wim.registry.util;
@@ -47,13 +44,8 @@ import com.ibm.wsspi.security.wim.model.SearchControl;
 /**
  * Bridge class for mapping user and group search methods.
  *
- * @author Ankit Jain
  */
 public class SearchBridge {
-    /**
-     * Copyright notice.
-     */
-    private static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2012;
 
     private static final TraceComponent tc = Tr.register(SearchBridge.class);
 
@@ -195,10 +187,10 @@ public class SearchBridge {
             // log the Exception
             else {
                 if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, methodName + " " + toCatch.getMessage());
+                    Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
                 }
                 if (tc.isErrorEnabled()) {
-                    Tr.error(tc, toCatch.getMessage());
+                    Tr.error(tc, toCatch.getMessage(), toCatch);
                 }
                 throw new RegistryException(toCatch.getMessage(), toCatch);
             }
@@ -382,10 +374,10 @@ public class SearchBridge {
             // log the Exception
             else {
                 if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, methodName + " " + toCatch.getMessage());
+                    Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
                 }
                 if (tc.isErrorEnabled()) {
-                    Tr.error(tc, toCatch.getMessage());
+                    Tr.error(tc, toCatch.getMessage(), toCatch);
                 }
                 throw new RegistryException(toCatch.getMessage(), toCatch);
             }

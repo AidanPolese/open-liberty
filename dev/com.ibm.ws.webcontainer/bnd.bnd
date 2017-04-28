@@ -126,6 +126,7 @@ Import-Package: \
     com.ibm.ejs.j2c, \
     com.ibm.websphere.csi, \
     com.ibm.websphere.security, \
+    com.ibm.ws.security.audit.context, \
     com.ibm.ws.container.service.app.deploy, \
     com.ibm.ws.genericbnf, \
     org.apache.commons.fileupload*;version=1.2.1;packageType="was_internal", \
@@ -135,6 +136,7 @@ Import-Package: \
      !com.ibm.websphere.monitor.jmx, \
     *
     
+ 
 # Use dynamic import of monitor packages to support indepndent/dynamic enablement of servlet & monitor features
 # Will be removed if webapp monitoring can be moved to an auto feature
 DynamicImport-Package: com.ibm.websphere.monitor.meters;version="1.0.0", \
@@ -178,6 +180,7 @@ instrument.disabled: true
 	com.ibm.ws.injection;version=latest,\
 	com.ibm.ws.managedobject;version=latest,\
 	com.ibm.websphere.security;version=latest,\
+	com.ibm.ws.security.audit.context;version=latest,\
 	com.ibm.ws.classloading;version=latest,\
 	com.ibm.ws.runtime.update;version=latest,\
 	com.ibm.ws.javaee.version;version=latest,\

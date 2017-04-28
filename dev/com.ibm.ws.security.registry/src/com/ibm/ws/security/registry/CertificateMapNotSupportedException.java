@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2011
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.security.registry;
@@ -25,4 +25,7 @@ public class CertificateMapNotSupportedException extends Exception {
         super(msg);
     }
 
+    public CertificateMapNotSupportedException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

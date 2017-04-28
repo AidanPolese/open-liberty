@@ -245,9 +245,9 @@
 			<sequential>
 				<junit printsummary="on" fork="on" dir="${dir.test.current.directory}" timeout="${fattest.timeout}" failureproperty="test.failure" includeantruntime="no">
 					<!-- junit printsummary="on" fork="on" dir="${dir.test.current.directory}" watchdog="TimeoutWatchdog(${fattest.timeout})" failureproperty="test.failure" includeantruntime="no" -->
-					<!-- Push in the is.running.rtc.build and isPersonalBuild -->
+					<!-- Push in the is.running.automated.build and isPersonalBuild -->
 					<sysproperty key="disable.ffdc.checking" value="${disable.ffdc.checking}" />
-					<sysproperty key="is.running.rtc.build" value="${is.running.rtc.build}" />
+					<sysproperty key="is.running.automated.build" value="${is.running.automated.build}" />
 					<sysproperty key="isPersonalBuild" value="${isPersonalBuild}" />
 					<sysproperty key="user.dir" value="${dir.test.current.directory}" />
 					<sysproperty key="console.log" value="console.${buildLabel}.log" />
@@ -731,7 +731,7 @@
 			<and>
 				<not>
 					<!-- This is only activated if we are NOT in an RTC build -->
-					<isset property="is.running.rtc.build" />
+					<isset property="is.running.automated.build" />
 				</not>
 				<!-- and the halt flag is either not set or set true-ish -->
 				<or>

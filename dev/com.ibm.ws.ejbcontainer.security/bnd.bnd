@@ -32,9 +32,10 @@ Service-Component: \
     dynamic:='jaccService'; \
     optional:='jaccService'; \
     properties:="service.vendor=IBM"
-    
+
 -buildpath: \
 	com.ibm.ws.logging,\
+	com.ibm.ws.security.audit.context;version=latest,\
 	com.ibm.ws.security.authentication;version=latest,\
 	com.ibm.ws.security.authorization;version=latest,\
 	com.ibm.ws.security.authentication.builtin;version=latest,\

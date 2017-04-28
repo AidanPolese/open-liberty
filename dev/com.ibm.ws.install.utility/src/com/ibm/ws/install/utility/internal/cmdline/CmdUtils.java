@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2014, 2016
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.install.utility.internal.cmdline;
@@ -38,9 +38,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import wlp.lib.extract.SelfExtract;
-import wlp.lib.extract.platform.Platform;
-
 import com.ibm.websphere.crypto.InvalidPasswordDecodingException;
 import com.ibm.websphere.crypto.PasswordUtil;
 import com.ibm.websphere.crypto.UnsupportedCryptoAlgorithmException;
@@ -67,6 +64,9 @@ import com.ibm.ws.repository.connections.liberty.MainRepository;
 import com.ibm.ws.repository.exceptions.RepositoryBackendIOException;
 import com.ibm.ws.repository.exceptions.RepositoryHttpException;
 import com.ibm.ws.repository.transport.exceptions.RequestFailureException;
+
+import wlp.lib.extract.SelfExtract;
+import wlp.lib.extract.platform.Platform;
 
 public class CmdUtils {
 
@@ -202,8 +202,7 @@ public class CmdUtils {
             try {
                 zipFile = new ZipFile(zip);
                 final Enumeration<? extends ZipEntry> entries = zipFile.entries();
-                while (entries.hasMoreElements())
-                {
+                while (entries.hasMoreElements()) {
                     final ZipEntry entry = entries.nextElement();
                     if (entry.getName().equalsIgnoreCase("repository.config")) {
                         return true;
@@ -228,8 +227,7 @@ public class CmdUtils {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
-            if (sw.toString().contains("com.ibm.websphere.ssl.protocol.SSLSocketFactory"))
-            {
+            if (sw.toString().contains("com.ibm.websphere.ssl.protocol.SSLSocketFactory")) {
                 logger.log(Level.FINEST, getStackTrace(e), e);
                 return CmdlineConstants.WRONG_JDK;
             }
@@ -248,15 +246,15 @@ public class CmdUtils {
                                                             getMessage("LOG_REPO_CONNECTION_EXCEPTION",
                                                                        RepositoryConfigUtils.WLP_REPO,
                                                                        e.getClass().getSimpleName()
-                                                                                       + ": "
-                                                                                       + getMessage("LOG_HTTP_SERVER_RESPONSE_CODE",
-                                                                                                    ((RepositoryHttpException) e).get_httpRespCode(),
-                                                                                                    getMessage("MSG_DEFAULT_REPO_NAME")))), "    "));
+                                                                                                       + ": "
+                                                                                                       + getMessage("LOG_HTTP_SERVER_RESPONSE_CODE",
+                                                                                                                    ((RepositoryHttpException) e).get_httpRespCode(),
+                                                                                                                    getMessage("MSG_DEFAULT_REPO_NAME")))),
+                                                 "    "));
                     logger.log(Level.FINEST, getStackTrace(e), e);
                 }
                 return ((RepositoryHttpException) e).get_httpRespCode();
-            }
-            else {
+            } else {
                 synchronized (CheckRepositoryStatusRunnable.class) {
                     logger.log(Level.FINE,
                                getWordWrappedMsg(getMessage("MSG_CONNECT_REPO_FAILED").replace(".", ": ")
@@ -265,7 +263,8 @@ public class CmdUtils {
                     logger.log(Level.FINE,
                                getWordWrappedMsg(getMessage("FIELD_REPO_REASON",
                                                             getMessage("LOG_REPO_CONNECTION_EXCEPTION", RepositoryConfigUtils.WLP_REPO,
-                                                                       e.getClass().getSimpleName() + ": " + e.getMessage())), "    "));
+                                                                       e.getClass().getSimpleName() + ": " + e.getMessage())),
+                                                 "    "));
                     logger.log(Level.FINEST, getStackTrace(e), e);
                 }
                 return CmdlineConstants.CONNECTION_REFUSED;
@@ -299,8 +298,7 @@ public class CmdUtils {
         if (isWlpRepoEnabled) {
             //Add Default repository
             numOfRepos = loginInfo != null ? loginInfo.size() + 1 : 1;
-        }
-        else {
+        } else {
             numOfRepos = loginInfo.size();
         }
 
@@ -347,8 +345,7 @@ public class CmdUtils {
 
             // Wait until all threads are finished
             while (!executor.isTerminated());
-        }
-        else if (isWlpRepoEnabled) {
+        } else if (isWlpRepoEnabled) {
             //Only default repository is configured
             defaultRepoStatus = testConnectionToDefaultRepo(proxy);
             ReturnCode rc = checkDefaultRepoStatus(proxy, repoProperties, defaultRepoStatus, actionName);
@@ -383,13 +380,11 @@ public class CmdUtils {
                     connectionStatus = credentialsPrompt((RestRepositoryConnection) rc, repoProperties, actionName);
                     if (connectionStatus == CmdlineConstants.USER_ABORT_ACTION) {
                         return ReturnCode.USER_ABORT;
-                    }
-                    else if (connectionStatus == InstallConstants.PROXY_AUTH_HTTP_RESPONSE_CODE) {
+                    } else if (connectionStatus == InstallConstants.PROXY_AUTH_HTTP_RESPONSE_CODE) {
                         //Add all repositories that require authentication to invalid list
                         invalidRepoList.addAll(repoAuthenticationList);
                         break;
-                    }
-                    else if (connectionStatus != CmdlineConstants.HTTP_SUCCESS_RESPONSE_CODE) {
+                    } else if (connectionStatus != CmdlineConstants.HTTP_SUCCESS_RESPONSE_CODE) {
                         //Add unauthenticated repository to invalid list
                         invalidRepoList.add(rc);
                         continue;
@@ -406,8 +401,7 @@ public class CmdUtils {
                     ReturnCode rc = checkDefaultRepoStatus(proxy, repoProperties, defaultRepoStatus, actionName);
                     if (rc != ReturnCode.OK) {
                         return rc;
-                    }
-                    else {
+                    } else {
                         isDefaultRepoConnected = true;
                         RestRepositoryConnection lie = null;
                         try {
@@ -430,7 +424,8 @@ public class CmdUtils {
         if ((invalidRepoList != null && !invalidRepoList.isEmpty()) || (isWlpRepoEnabled && !isDefaultRepoConnected)) {
             //Proxy not authenticated, and no directory-based repositories
             if (connectionStatus == InstallConstants.PROXY_AUTH_HTTP_RESPONSE_CODE && invalidRepoList.size() == loginInfo.size() && invalidRepoList.containsAll(loginInfo)) {
-                throw new InstallException(getMessage("ERROR_TOOL_INCORRECT_PROXY_CREDENTIALS", RepositoryConfigUtils.getRepoPropertiesFileLocation()), InstallException.CONNECTION_FAILED);
+                throw new InstallException(getMessage("ERROR_TOOL_INCORRECT_PROXY_CREDENTIALS",
+                                                      RepositoryConfigUtils.getRepoPropertiesFileLocation()), InstallException.CONNECTION_FAILED);
             }
             //All configured repositories are bad
             if (invalidRepoList.containsAll(loginInfo) && invalidRepoList.size() == loginInfo.size()) {
@@ -469,7 +464,8 @@ public class CmdUtils {
                 return ReturnCode.USER_ABORT;
             }
             if (status == InstallConstants.PROXY_AUTH_HTTP_RESPONSE_CODE) {
-                throw new InstallException(getMessage("ERROR_TOOL_INCORRECT_PROXY_CREDENTIALS", RepositoryConfigUtils.getRepoPropertiesFileLocation()), InstallException.CONNECTION_FAILED);
+                throw new InstallException(getMessage("ERROR_TOOL_INCORRECT_PROXY_CREDENTIALS",
+                                                      RepositoryConfigUtils.getRepoPropertiesFileLocation()), InstallException.CONNECTION_FAILED);
             }
         }
         if (status == CmdlineConstants.UNTRUSTED_CERTIFICATE) {
@@ -482,8 +478,7 @@ public class CmdUtils {
 
         if (status != CmdlineConstants.HTTP_SUCCESS_RESPONSE_CODE) {
             throw new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("ERROR_FAILED_TO_CONNECT"), InstallException.CONNECTION_FAILED);
-        }
-        else {
+        } else {
             logger.log(Level.FINE,
                        getWordWrappedMsg(getMessage("MSG_CONNECT_REPO_SUCCESS").replace(".", ": ")
                                          + InstallUtils.NEWLINE
@@ -494,15 +489,16 @@ public class CmdUtils {
 
     /**
      * Gets the LoginInfo object for all the configured repositories. This object does not include the IBM WebSphere Liberty Repository
-     * 
+     *
      * @param installKernel
      * @param repoProperties
      * @param proxy
-     * 
+     *
      * @return The object list of loginInfo, which contains all the information of the configured repositories except the IBM WebSphere Liberty Repository
      * @throws InstallException if there is an error
      */
-    private static RepositoryConnectionList getLoginInfo(InstallKernelInteractive installKernel, Properties repoProperties, RestRepositoryConnectionProxy proxy) throws InstallException {
+    private static RepositoryConnectionList getLoginInfo(InstallKernelInteractive installKernel, Properties repoProperties,
+                                                         RestRepositoryConnectionProxy proxy) throws InstallException {
         RepositoryConnectionList loginInfo = null;
         List<RepositoryConfig> repositoryConfigs = RepositoryConfigUtils.getRepositoryConfigs(repoProperties);
         List<RepositoryConnection> loginEntries = new ArrayList<RepositoryConnection>(repositoryConfigs.size());
@@ -591,16 +587,14 @@ public class CmdUtils {
                 //Credentials already defined in configuration, no prompt
                 if (((proxyUser != null && !proxyUser.isEmpty()) && (proxyPwd != null && !proxyPwd.isEmpty()))) {
                     return responseCode;
-                }
-                else {
+                } else {
                     logger.log(Level.INFO, proxyRetries == 3 ? getMessage("MSG_AUTHENTICATION_PROMPT") : getMessage("MSG_AUTHENTICATION_RETRY", proxyRetries));
                     logger.log(Level.INFO, getMessage("FIELD_PROXY", proxy.getProxyURL().toString()));
                     if (proxyUser != null && !proxyUser.isEmpty() && proxyRetries == 3) {
                         inputUser = proxyUser;
                         logger.log(Level.INFO, getMessage("TOOL_PROMPT_USERNAME") + " " + inputUser);
                         inputPwd = getPromptPassword();
-                    }
-                    else {
+                    } else {
                         inputUser = getPromptUsername();
                         inputPwd = getPromptPassword();
                     }
@@ -621,7 +615,7 @@ public class CmdUtils {
                 logger.log(Level.FINE, getMessage("LOG_PROMPT_PROXY_SUCCESS", proxy.getProxyURL().toString()));
             }
             return responseCode;
-        };
+        } ;
         if (proxyRetries < 3)
             logger.log(Level.FINE, getMessage("LOG_PROMPT_PROXY_SUCCESS", proxy.getProxyURL().toString()));
         return responseCode;
@@ -649,16 +643,14 @@ public class CmdUtils {
                 //Credentials already defined in configuration, no prompt
                 if (((proxyUser != null && !proxyUser.isEmpty()) && (proxyPwd != null && !proxyPwd.isEmpty()))) {
                     return responseCode;
-                }
-                else {
+                } else {
                     logger.log(Level.INFO, proxyRetries == 3 ? getMessage("MSG_AUTHENTICATION_PROMPT") : getMessage("MSG_AUTHENTICATION_RETRY", proxyRetries));
                     logger.log(Level.INFO, getMessage("FIELD_PROXY", lie.getProxy().getProxyURL().toString()));
                     if (proxyUser != null && !proxyUser.isEmpty() && proxyRetries == 3) {
                         inputUser = proxyUser;
                         logger.log(Level.INFO, getMessage("TOOL_PROMPT_USERNAME") + " " + inputUser);
                         inputPwd = getPromptPassword();
-                    }
-                    else {
+                    } else {
                         inputUser = getPromptUsername();
                         inputPwd = getPromptPassword();
                     }
@@ -689,16 +681,14 @@ public class CmdUtils {
                 //Credentials already defined in configuration, no prompt
                 if ((repoUser != null && !repoUser.isEmpty()) && (repoPwd != null && !repoPwd.isEmpty())) {
                     return responseCode;
-                }
-                else {
+                } else {
                     logger.log(Level.INFO, repoRetries == 3 ? getMessage("MSG_AUTHENTICATION_PROMPT") : getMessage("MSG_AUTHENTICATION_RETRY", repoRetries));
                     logger.log(Level.INFO, getMessage("FIELD_REPO", RepositoryConfigUtils.getRepoName(repoProperties, lie), lie.getRepositoryUrl()));
                     if (repoUser != null && !repoUser.isEmpty() && repoRetries == 3) {
                         inputUser = repoUser;
                         logger.log(Level.INFO, getMessage("TOOL_PROMPT_USERNAME") + " " + inputUser);
                         inputPwd = getPromptPassword();
-                    }
-                    else {
+                    } else {
                         inputUser = getPromptUsername();
                         inputPwd = getPromptPassword();
                     }
@@ -717,16 +707,18 @@ public class CmdUtils {
                        getWordWrappedMsg(getMessage("MSG_CONNECT_REPO_FAILED").replace(".", ": ") + InstallUtils.NEWLINE + RepositoryConfigUtils.getRepoName(repoProperties, lie)
                                          + " (" + (lie.getRepositoryUrl() + ")")));
             return responseCode;
-        };
+        } ;
         if (repoRetries < 3) {
             logger.log(Level.FINE, getMessage("LOG_PROMPT_REPO_SUCCESS", RepositoryConfigUtils.getRepoName(repoProperties, lie)));
         }
         logger.log(Level.FINE,
                    getWordWrappedMsg(getMessage("MSG_CONNECT_REPO_SUCCESS").replace(".", ": ")
                                      + InstallUtils.NEWLINE
-                                     + (RepositoryConfigUtils.isLibertyRepository(lie, repoProperties) ?
-                                                     getMessage("MSG_DEFAULT_REPO_NAME") : RepositoryConfigUtils.getRepoName(repoProperties, lie) + " (" + lie.getRepositoryUrl()
-                                                                                           + ")")));
+                                     + (RepositoryConfigUtils.isLibertyRepository(lie,
+                                                                                  repoProperties) ? getMessage("MSG_DEFAULT_REPO_NAME") : RepositoryConfigUtils.getRepoName(repoProperties,
+                                                                                                                                                                            lie)
+                                                                                                                                          + " (" + lie.getRepositoryUrl()
+                                                                                                                                          + ")")));
         return responseCode;
     }
 
@@ -743,7 +735,7 @@ public class CmdUtils {
             if (promptPwd != null) {
                 pwdStr = new String(promptPwd);
                 if (Platform.isZOS() && Charset.isSupported(InstallPlatformUtils.getEBCIDICSystemCharSet()) && !isStringASCII(pwdStr)) {
-                    //Get EBCIDIC encoded string 
+                    //Get EBCIDIC encoded string
                     pwdStr = new String(pwdStr.getBytes(Charset.defaultCharset()), Charset.forName(InstallPlatformUtils.getEBCIDICSystemCharSet())).trim();
                 }
             }
@@ -808,7 +800,8 @@ public class CmdUtils {
                 logger.log(Level.FINE,
                            getWordWrappedMsg(getMessage("FIELD_REPO_REASON",
                                                         getMessage("LOG_REPO_CONNECTION_EXCEPTION", RepositoryConfigUtils.getRepoName(repoProperties, rc),
-                                                                   ioe.getClass().getSimpleName() + ": " + ioe.getMessage())), "    "));
+                                                                   ioe.getClass().getSimpleName() + ": " + ioe.getMessage())),
+                                             "    "));
                 logger.log(Level.FINEST, getStackTrace(ioe), ioe);
             }
         } catch (RequestFailureException rfe) {
@@ -828,9 +821,11 @@ public class CmdUtils {
                                                         getMessage("LOG_REPO_CONNECTION_EXCEPTION",
                                                                    RepositoryConfigUtils.getRepoName(repoProperties, rc),
                                                                    rfe.getClass().getSimpleName()
-                                                                                   + ": "
-                                                                                   + getMessage("LOG_HTTP_SERVER_RESPONSE_CODE", rfe.getResponseCode(),
-                                                                                                ((RestRepositoryConnection) rc).getRepositoryUrl()))), "    "));
+                                                                                                                          + ": "
+                                                                                                                          + getMessage("LOG_HTTP_SERVER_RESPONSE_CODE",
+                                                                                                                                       rfe.getResponseCode(),
+                                                                                                                                       ((RestRepositoryConnection) rc).getRepositoryUrl()))),
+                                             "    "));
                 logger.log(Level.FINEST, getStackTrace(rfe), rfe);
             }
         }
@@ -882,8 +877,7 @@ public class CmdUtils {
             try {
                 if (repositoryConnection != null && !testDefaultRepo) {
                     checkInvalidRepository(repositoryConnection, repoProperties);
-                }
-                else {
+                } else {
                     defaultRepoStatus = testConnectionToDefaultRepo(proxy);
                 }
             } catch (InstallException e) {
@@ -893,19 +887,15 @@ public class CmdUtils {
         }
     }
 
-    public static InstallException convertToBadConnectionError(InstallException e, boolean isBadConnectionFound)
-    {
+    public static InstallException convertToBadConnectionError(InstallException e, boolean isBadConnectionFound) {
         if (isBadConnectionFound) {
             List<Object> data = e.getData();
 
-            if (e.getMessage().contains("CWWKF1259E"))
-            {
+            if (e.getMessage().contains("CWWKF1259E")) {
                 return new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("ERROR_FAILED_TO_RESOLVE_ASSETS_BAD_CONNECTION",
                                                                                            data.get(0)), e.getCause(), e.getRc());
 
-            }
-            else if (e.getMessage().contains("CWWKF1258E"))
-            {
+            } else if (e.getMessage().contains("CWWKF1258E")) {
                 return new InstallException(Messages.INSTALL_KERNEL_MESSAGES.getLogMessage("ERROR_ASSET_MISSING_DEPENDENT_BAD_CONNECTION",
                                                                                            data.get(0), data.get(1)), e.getCause(), e.getRc());
 

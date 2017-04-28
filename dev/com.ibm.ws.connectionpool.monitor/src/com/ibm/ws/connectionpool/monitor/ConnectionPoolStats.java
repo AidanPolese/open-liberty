@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2013
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.connectionpool.monitor;
@@ -26,7 +26,7 @@ public class ConnectionPoolStats extends Meter implements ConnectionPoolStatsMXB
     private final Counter createCount, destroyCount;
     private final Gauge poolSize, freeConnectionCount;
     private final Gauge managedConnectionCount, connectionHandleCount;
-    private final StatisticsMeter waitTime;
+    private final StatisticsMeter waitTime, inuseTime;
 
     public ConnectionPoolStats() {
         createCount = new Counter();
@@ -36,6 +36,7 @@ public class ConnectionPoolStats extends Meter implements ConnectionPoolStatsMXB
         connectionHandleCount = new Gauge();
         waitTime = new StatisticsMeter();
         freeConnectionCount = new Gauge();
+        inuseTime = new StatisticsMeter();
     }
 
     /**
@@ -82,6 +83,10 @@ public class ConnectionPoolStats extends Meter implements ConnectionPoolStatsMXB
         this.waitTime.addDataPoint(elapsed);
     }
 
+    public void updateInuseTime(long elapsed) {
+        this.inuseTime.addDataPoint(elapsed);
+    }
+
     public void incFreeConnectionCount() {
         this.freeConnectionCount.incrementCurrentValue(1);
     }
@@ -114,7 +119,7 @@ public class ConnectionPoolStats extends Meter implements ConnectionPoolStatsMXB
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.websphere.connectionpool.monitor.ConnectionPoolStatsMXBean#getConnectionHandleCount()
      */
     @Override
@@ -130,9 +135,20 @@ public class ConnectionPoolStats extends Meter implements ConnectionPoolStatsMXB
     }
 
     @Override
+    public double getInuseTime() {
+        return this.inuseTime.getMean();
+    }
+
+    @Override
     public long getFreeConnectionCount() {
         // TODO Auto-generated method stub
         return this.freeConnectionCount.getCurrentValue();
+    }
+
+    @Override
+    public String toString() {
+        return "ConnectionPoolStats [createCount=" + createCount + ", destroyCount=" + destroyCount + ", poolSize=" + poolSize + ", freeConnectionCount=" + freeConnectionCount
+               + ", managedConnectionCount=" + managedConnectionCount + ", connectionHandleCount=" + connectionHandleCount + ", waitTime=" + waitTime + "]";
     }
 
 }

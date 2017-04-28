@@ -16,7 +16,6 @@ Private-Package: \
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.json4j;version=latest,\
 	com.ibm.ws.crypto.certificateutil;version=latest,\
 	com.ibm.ws.crypto.ltpakeyutil;version=latest,\

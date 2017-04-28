@@ -596,12 +596,12 @@ public class LicenseSelfExtractor extends SelfExtractor {
 
         if (invalidAddonsFeatures.size() > 0) {
 
-            return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_replace_invalidEditonFeatures", new Object[] { InstallUtils.getEditionName(props.getProductEdition()),
-                                                                                                                 invalidAddonsFeatures.get(0),
-                                                                                                                 InstallUtils.getEditionName(wlpProductEdition),
-                                                                                                                 "\"bin" + System.getProperty("file.separator") + "installUtility uninstall "
-                                                                                                                                                                 + invalidAddonsFeatures.get(0)
-                                                                                                                                                                 + "\"" });
+            return new ReturnCode(ReturnCode.NOT_APPLICABLE_FEATURE, "LICENSE_replace_invalidEditonFeatures", new Object[] { InstallUtils.getEditionName(props.getProductEdition()),
+                                                                                                                             invalidAddonsFeatures.get(0),
+                                                                                                                             InstallUtils.getEditionName(wlpProductEdition),
+                                                                                                                             "\"bin" + System.getProperty("file.separator") + "installUtility uninstall "
+                                                                                                                                                                             + invalidAddonsFeatures.get(0)
+                                                                                                                                                                             + "\"" });
         }
         return ReturnCode.OK;
     }

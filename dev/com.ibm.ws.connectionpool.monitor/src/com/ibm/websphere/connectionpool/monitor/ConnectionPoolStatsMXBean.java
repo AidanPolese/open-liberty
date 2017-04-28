@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2013
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.websphere.connectionpool.monitor;
@@ -15,7 +15,7 @@ package com.ibm.websphere.connectionpool.monitor;
  * Management interface for the MBean "WebSphere:type=ConnectionPoolStats".
  * The Liberty profile makes this MBean available in its platform MBean server when the monitor-1.0 feature is
  * enabled to allow monitoring of the connection pool.
- * 
+ *
  * @ibm-api
  */
 public interface ConnectionPoolStatsMXBean {
@@ -49,4 +49,11 @@ public interface ConnectionPoolStatsMXBean {
      * The number of free connections in the pool.
      */
     public long getFreeConnectionCount();
+
+    /**
+     * The average connection in use time in milliseconds
+     *
+     * @return
+     */
+    public double getInuseTime();
 }

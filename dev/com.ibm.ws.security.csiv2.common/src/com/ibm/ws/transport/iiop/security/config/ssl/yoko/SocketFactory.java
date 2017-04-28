@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2015
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 /*
@@ -56,6 +56,7 @@ import com.ibm.ws.security.csiv2.config.ssl.SSLConfig;
 import com.ibm.ws.security.csiv2.util.SecurityServices;
 import com.ibm.ws.transport.iiop.security.ClientPolicy;
 import com.ibm.ws.transport.iiop.security.config.css.CSSConfig;
+import com.ibm.ws.transport.iiop.security.config.css.CSSTransportMechConfig;
 import com.ibm.ws.transport.iiop.security.config.tss.OptionsKey;
 import com.ibm.ws.transport.iiop.security.config.tss.TSSCompoundSecMechListConfig;
 import com.ibm.ws.transport.iiop.security.config.tss.TSSSSLTransportConfig;
@@ -66,7 +67,7 @@ import com.ibm.ws.transport.iiop.yoko.helper.SocketFactoryHelper;
  * Socket factory instance used to interface openejb2
  * with the Yoko ORB. Also enables the ORB for
  * SSL-type connections.
- * 
+ *
  * @version $Revision: 505035 $ $Date: 2007-02-08 16:01:06 -0500 (Thu, 08 Feb 2007) $
  */
 public class SocketFactory extends SocketFactoryHelper {
@@ -110,12 +111,12 @@ public class SocketFactory extends SocketFactoryHelper {
     /**
      * Create a client socket of the appropriate
      * type using the provided IOR and Policy information.
-     * 
+     *
      * @param ior The target IOR of the connection.
      * @param policies Policies in effect for this ORB.
      * @param address The target address of the connection.
      * @param port The connection port.
-     * 
+     *
      * @return A Socket (either plain or SSL) configured for connection
      *         to the target.
      * @exception IOException
@@ -160,39 +161,23 @@ public class SocketFactory extends SocketFactoryHelper {
                         }
                         LinkedList<CompatibleMechanisms> compatibleMechanismsList = cssConfig.findCompatibleList(config);
                         for (CompatibleMechanisms compatibleMechanisms : compatibleMechanismsList) {
-                            String sslConfigName = compatibleMechanisms.getCSSCompoundSecMechConfig().getTransport_mech().getSslConfigName();
+                            Map<TransportAddress, CSSTransportMechConfig> cssTransport_mechs = compatibleMechanisms.getCSSCompoundSecMechConfig().getTransportMechMap();
                             TSSTransportMechConfig transport_mech = compatibleMechanisms.getTSSCompoundSecMechConfig().getTransport_mech();
-                            if (transport_mech instanceof TSSSSLTransportConfig) {
-                                TSSSSLTransportConfig transportConfig = (TSSSSLTransportConfig) transport_mech;
 
-//                                int supports = transportConfig.getSupports();
-                                int requires = transportConfig.getRequires();
-                                TransportAddress[] addresses = transportConfig.getTransportAddresses();
-                                if (addresses.length == 0) {
-                                    continue;
-                                }
-                                for (TransportAddress addr : addresses) {
-                                    int sslPort = addr.port;
-                                    String sslHost = addr.host_name;
-                                    InetAddress ina = InetAddress.getByName(sslHost);
-                                    sslHost = ina.getCanonicalHostName();
-                                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                                        Tr.debug(tc, "IOR to target " + sslHost + ":" + sslPort + " using client sslConfig " + sslConfigName);
-//                                        Tr.debug(tc, "   SUPPORTS: " + ConfigUtil.flags(supports));
-//                                        Tr.debug(tc, "   REQUIRES: " + ConfigUtil.flags(requires));
-                                    }
-                                    // TLS is configured.  If this is explicitly noprotection, then
-                                    // just go create a plain socket using the configured port. 
-                                    try {
-                                        if ((NoProtection.value & requires) == NoProtection.value) {
-                                            return new Socket(ina, sslPort);
-                                        }
-                                        //TODO should we additionally filter the cipher suites by what the target requires and supports, or let the negotiation do that?
-                                        // we need SSL, so create an SSLSocket for this connection.
-                                        return createSSLSocket(sslHost, sslPort, sslConfigName);
-                                    } catch (IOException e) {
-                                        //ignore, should be logged?
-                                    }
+                            if (transport_mech instanceof TSSSSLTransportConfig) {
+                                // if cssTransport_mechs is empty there we are not dealing with dynamic SSL config
+                                if (!cssTransport_mechs.isEmpty()) {
+                                    Socket socket = createSocketFromTransportMechList(cssTransport_mechs, transport_mech);
+                                    if (socket != null)
+                                        return socket;
+                                } else {
+                                    String sslConfigName = compatibleMechanisms.getCSSCompoundSecMechConfig().getTransport_mech().getSslConfigName();
+                                    if (((TSSSSLTransportConfig) transport_mech).getTransportAddresses().length > 0) {
+                                        Socket socket = createSocketFromTransportMech(transport_mech, sslConfigName);
+                                        if (socket != null)
+                                            return socket;
+                                    } else
+                                        continue;
                                 }
                             } else {
                                 try {
@@ -213,12 +198,91 @@ public class SocketFactory extends SocketFactoryHelper {
     }
 
     /**
+     * @param transport_mech
+     * @param sslConfigName
+     * @return
+     * @throws IOException
+     */
+    private Socket createSocketFromTransportMech(TSSTransportMechConfig transport_mech, String sslConfigName) throws IOException {
+        TSSSSLTransportConfig transportConfig = (TSSSSLTransportConfig) transport_mech;
+
+        int requires = transportConfig.getRequires();
+        TransportAddress[] addresses = transportConfig.getTransportAddresses();
+        for (TransportAddress addr : addresses) {
+            int sslPort = addr.port;
+            String sslHost = addr.host_name;
+            InetAddress ina = InetAddress.getByName(sslHost);
+            sslHost = ina.getCanonicalHostName();
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "IOR to target " + sslHost + ":" + sslPort + " using client sslConfig " + sslConfigName);
+            }
+            // TLS is configured.  If this is explicitly noprotection, then
+            // just go create a plain socket using the configured port.
+            try {
+                if ((NoProtection.value & requires) == NoProtection.value) {
+                    return new Socket(ina, sslPort);
+                }
+                //TODO should we additionally filter the cipher suites by what the target requires and supports, or let the negotiation do that?
+                // we need SSL, so create an SSLSocket for this connection.
+                return createSSLSocket(sslHost, sslPort, sslConfigName);
+            } catch (IOException e) {
+                //ignore, should be logged?
+            }
+        }
+
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param cssTransport_mechs
+     * @param transport_mech
+     * @return
+     * @throws IOException
+     */
+    private Socket createSocketFromTransportMechList(Map<TransportAddress, CSSTransportMechConfig> cssTransport_mechs, TSSTransportMechConfig transport_mech) throws IOException {
+        TSSSSLTransportConfig transportConfig = (TSSSSLTransportConfig) transport_mech;
+        int requires = transportConfig.getRequires();
+
+        for (Map.Entry<TransportAddress, CSSTransportMechConfig> entry : cssTransport_mechs.entrySet()) {
+
+            TransportAddress addr = entry.getKey();
+            CSSTransportMechConfig mech_cfg = entry.getValue();
+
+            String sslConfigName = mech_cfg.getSslConfigName();
+
+            int sslPort = addr.port;
+            String sslHost = addr.host_name;
+            InetAddress ina = InetAddress.getByName(sslHost);
+            sslHost = ina.getCanonicalHostName();
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "IOR to target " + sslHost + ":" + sslPort + " using client sslConfig " + sslConfigName);
+            }
+            // TLS is configured.  If this is explicitly noprotection, then
+            // just go create a plain socket using the configured port.
+            try {
+                if ((NoProtection.value & requires) == NoProtection.value) {
+                    return new Socket(ina, sslPort);
+                }
+                //TODO should we additionally filter the cipher suites by what the target requires and supports, or let the negotiation do that?
+                // we need SSL, so create an SSLSocket for this connection.
+                return createSSLSocket(sslHost, sslPort, sslConfigName);
+            } catch (IOException e) {
+                //ignore, should be logged?
+            }
+        }
+
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
      * Create a loopback connection to the hosting
      * ORB.
-     * 
+     *
      * @param address The address information for the server.
      * @param port The target port.
-     * 
+     *
      * @return An appropriately configured socket based on the
      *         listener characteristics.
      * @exception IOException
@@ -245,8 +309,7 @@ public class SocketFactory extends SocketFactoryHelper {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
                     Tr.debug(tc, "Created plain endpoint to " + address.getHostName() + ":" + port);
                 return new Socket(address, port);
-            }
-            else {
+            } else {
                 return createSSLSocket(address.getHostName(), port, info.sslConfigName);
             }
         } catch (IOException ex) {
@@ -257,10 +320,10 @@ public class SocketFactory extends SocketFactoryHelper {
 
     /**
      * Create a server socket listening on the given port.
-     * 
+     *
      * @param port The target listening port.
      * @param backlog The desired backlog value.
-     * 
+     *
      * @return An appropriate server socket for this connection.
      * @exception IOException
      * @exception ConnectException
@@ -272,11 +335,11 @@ public class SocketFactory extends SocketFactoryHelper {
 
     /**
      * Create a server socket for this connection.
-     * 
+     *
      * @param port The target listener port.
      * @param backlog The requested backlog value for the connection.
      * @param address The host address information we're publishing under.
-     * 
+     *
      * @return An appropriately configured ServerSocket for this
      *         connection.
      * @exception IOException
@@ -304,8 +367,7 @@ public class SocketFactory extends SocketFactoryHelper {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
                     Tr.debug(tc, "Created plain server socket for port " + port);
                 socket = new ServerSocket();
-            }
-            else {
+            } else {
                 // SSL is required.  Create one from the SSLServerFactory retrieved from the config.  This will
                 // require additional QOS configuration after creation.
                 SSLServerSocketFactory serverSocketFactory = getServerSocketFactory(sslConfigName);
@@ -315,10 +377,10 @@ public class SocketFactory extends SocketFactoryHelper {
             }
             // there is a situation that yoko closes and opens a server socket quickly upon updating
             // the configuration, and occasionally, the openSocket is invoked while closeSocket is processing.
-            // To avoid the issue, try binding the socket a few times. Since this is the error scenario, 
+            // To avoid the issue, try binding the socket a few times. Since this is the error scenario,
             // it is less impact for the performance.
             IOException bindError = null;
-            for (int i=0; i < 3; i++) {
+            for (int i = 0; i < 3; i++) {
                 bindError = openSocket(port, backlog, address, socket, soReuseAddr);
                 if (bindError == null) {
                     break;
@@ -349,7 +411,7 @@ public class SocketFactory extends SocketFactoryHelper {
 
     /**
      * On-demand creation of an SSL socket factory for the ssl alias provided
-     * 
+     *
      * @return The SSLSocketFactory this connection should be using to create
      *         secure connections.
      * @throws java.io.IOException if we can't get a socket factory
@@ -361,8 +423,7 @@ public class SocketFactory extends SocketFactoryHelper {
             // the SSLConfig is optional, so if it's not there, use the default SSLSocketFactory.
             if (id == null) {
                 socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-            }
-            else {
+            } else {
                 // ask the SSLConfig bean to create a factory for us.
                 try {
                     socketFactory = sslConfig.createSSLFactory(id);
@@ -378,7 +439,7 @@ public class SocketFactory extends SocketFactoryHelper {
 
     /**
      * On-demand creation of an SSL server socket factory for an ssl alias
-     * 
+     *
      * @return The SSLServerSocketFactory this connection should be using to create
      *         secure connections.
      * @throws java.io.IOException if we can't get a server socket factory
@@ -390,8 +451,7 @@ public class SocketFactory extends SocketFactoryHelper {
             // the SSLConfig is optional, so if it's not there, use the default SSLSocketFactory.
             if (id == null) {
                 serverSocketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-            }
-            else {
+            } else {
                 try {
                     serverSocketFactory = sslConfig.createSSLServerFactory(id);
                 } catch (Exception e) {
@@ -414,10 +474,10 @@ public class SocketFactory extends SocketFactoryHelper {
     /**
      * Set the server socket configuration to our required
      * QOS values.
-     * 
+     *
      * A small experiment shows that setting either (want, need) parameter to either true or false sets the
      * other parameter to false.
-     * 
+     *
      * @param serverSocket
      *            The newly created SSLServerSocket.
      * @param sslConfigName name of the sslConfig used to select cipher suites
@@ -461,7 +521,7 @@ public class SocketFactory extends SocketFactoryHelper {
      * Create an SSL client socket using the IOR-encoded
      * security characteristics.
      * Setting want/need client auth on a client socket has no effect so all we can do is use the right host, port, ciphers
-     * 
+     *
      * @param host The target host name.
      * @param port The target connection port.
      * @param clientSSLConfigName name of the sslConfig used for cipher suite selection

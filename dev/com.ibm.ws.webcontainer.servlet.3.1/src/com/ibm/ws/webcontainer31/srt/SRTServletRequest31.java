@@ -31,6 +31,7 @@ import com.ibm.websphere.servlet.request.IRequest;
 import com.ibm.websphere.servlet31.request.IRequest31;
 import com.ibm.ws.managedobject.ManagedObject;
 import com.ibm.ws.webcontainer.servlet.RequestUtils;
+import com.ibm.ws.webcontainer.srt.SRTInputStream;
 import com.ibm.ws.webcontainer.srt.SRTServletRequest;
 import com.ibm.ws.webcontainer.srt.SRTServletRequestThreadData;
 import com.ibm.ws.webcontainer.webapp.WebApp;
@@ -100,6 +101,14 @@ public class SRTServletRequest31 extends SRTServletRequest implements HttpServle
         try {
 
             if (req == null) {
+                // MultiRead Start
+                if(this.multiReadPropertyEnabled) {
+                    if(this._in instanceof SRTInputStream) {
+                        ((SRTInputStream) this._in).cleanupforMultiRead();
+                    }
+                    multiReadPropertyEnabled = false;
+                    httpUpdatedwMultiReadValues = false;
+                }
                 _in.init(null);
                 return;
             }
@@ -117,11 +126,6 @@ public class SRTServletRequest31 extends SRTServletRequest implements HttpServle
                 _in.setContentLength(this.getContentLengthLong());
             }
             //  end 280584.1    SVT: StackOverflowError when installing app larger than 2GB    WAS.webcontainer
-            //F00349 Start - register with InputStream so that alertOPen and alertClosed
-            // are notified when the InputStream is opened for re-read and closed.
-            //if (WCCustomProperties.ENABLE_MULTI_READ_OF_POST_DATA) {
-            //    _in.setObserver(this);
-            //}
         } catch (IOException e) {
       // shouldn't happen.
             com.ibm.wsspi.webcontainer.util.FFDCWrapper.processException(
@@ -282,22 +286,22 @@ public class SRTServletRequest31 extends SRTServletRequest implements HttpServle
 
     @Override
     protected Hashtable parsePostData() throws IOException {
-        
+
         if(((SRTInputStream31) _in).getReadListener() != null) {
             if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))  
                 logger.logp(Level.FINE, CLASS_NAME,"prepareMultipart", "Non-Blocking read already started on this InputStream , cannot parse again->" + _in);
             return null;
         }
-        
+
         if( getContentLengthLong() > 0){
 
-            if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))  //306998.15
+            if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))  
                 logger.logp(Level.FINE, CLASS_NAME,"parseParameters", "parsing post data based upon content length long");
-            return  RequestUtils.parsePostDataLong(getContentLengthLong(), getInputStreamInternal(), getReaderEncoding());  // F003449
+            return  RequestUtils.parsePostDataLong(getContentLengthLong(), getInputStream(), getReaderEncoding(), this.multiReadPropertyEnabled);  // MultiRead
         } 
-        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))  //306998.15
+        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))  
             logger.logp(Level.FINE, CLASS_NAME,"parseParameters", "parsing post data based upon input stream (possibly chunked)");
-        return RequestUtils.parsePostData(getInputStreamInternal(), getReaderEncoding());   // F003449
+        return RequestUtils.parsePostData(getInputStream(), getReaderEncoding(), this.multiReadPropertyEnabled);   // MultiRead
     }
 
     @Override

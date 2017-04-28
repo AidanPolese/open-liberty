@@ -189,4 +189,95 @@ public interface ConnectorSettings {
      */
     public static final String ROUTING_KEY_SERVER_USER_DIR = "com.ibm.websphere.jmx.connector.rest.routing.serverUserDir";
 
+    /**
+     * This parameter represents a comma-separated list of host names within the collective.
+     *
+     * This parameter is not applicable to the settings passed into the client-side of the JMX REST connector.
+     * It is used only by the file transfer RESTful endpoint, exposed by the server-side of the JMX REST connector.
+     */
+    public static final String COLLECTIVE_HOST_NAMES = "com.ibm.websphere.collective.hostNames";
+
+    /**
+     * This parameter represents a request for an asynchronous execution within the collective.
+     *
+     * This parameter is not applicable to the settings passed into the client-side of the JMX REST connector.
+     * It is used only by the file transfer RESTful endpoint, exposed by the server-side of the JMX REST connector.
+     */
+    public static final String ASYNC_EXECUTION = "com.ibm.websphere.jmx.connector.rest.asyncExecution";
+
+    /**
+     * This parameter represents the set of credentials to be used for the transfer action.
+     * The payload of the header is a JSON object with attributes from the CollectiveRegistrationMBean.
+     * Only credentials (user name, password, keys) are defined. The host and port attributes are not supported.
+     *
+     * This parameter is not applicable to the settings passed into the client-side of the JMX REST connector.
+     * It is used only by the file transfer RESTful endpoint, exposed by the server-side of the JMX REST connector.
+     */
+    public static final String TRANSFER_CREDENTIALS = "com.ibm.websphere.jmx.connector.rest.transferCredentials";
+
+    /**
+     * This parameter represents the request for a pre transfer action within the collective.
+     *
+     * This parameter is not applicable to the settings passed into the client-side of the JMX REST connector.
+     * It is used only by the file transfer RESTful endpoint, exposed by the server-side of the JMX REST connector.
+     */
+    public static final String PRE_TRANSFER_ACTION = "com.ibm.websphere.jmx.connector.rest.preTransferAction";
+
+    /**
+     * This parameter represents the request for a post transfer action within the collective.
+     *
+     * This parameter is not applicable to the settings passed into the client-side of the JMX REST connector.
+     * It is used only by the file transfer RESTful endpoint, exposed by the server-side of the JMX REST connector.
+     */
+    public static final String POST_TRANSFER_ACTION = "com.ibm.websphere.jmx.connector.rest.postTransferAction";
+
+    /**
+     * This parameter represents the default value for the collective pre-transfer-action.
+     *
+     * This parameter is not applicable to the settings passed into the client-side of the JMX REST connector.
+     * It is used only by the file transfer RESTful endpoint, exposed by the server-side of the JMX REST connector.
+     */
+    public static final String PRE_TRANSFER_ACTION_DEFAULT = "com.ibm.websphere.jmx.connector.rest.preTransferAction.remove";
+
+    /**
+     * This parameter represents the default value for the collective post-transfer-action.
+     *
+     * This parameter is not applicable to the settings passed into the client-side of the JMX REST connector.
+     * It is used only by the file transfer RESTful endpoint, exposed by the server-side of the JMX REST connector.
+     */
+    public static final String POST_TRANSFER_ACTION_DEFAULT = "com.ibm.websphere.jmx.connector.rest.postTransferAction.join";
+
+    /**
+     * This parameter represents the action of extarcting a severName from a Liberty zip package for the collective post-transfer-action.
+     *
+     * This parameter is not applicable to the settings passed into the client-side of the JMX REST connector.
+     * It is used only by the file transfer RESTful endpoint, exposed by the server-side of the JMX REST connector.
+     */
+    public static final String POST_TRANSFER_ACTION_FIND_SERVER_NAME = "com.ibm.websphere.jmx.connector.rest.postTransferAction.findServerName";
+
+    /**
+     * This parameter represents the options pertaining to the collective pre-transfer-action.
+     *
+     * This parameter is not applicable to the settings passed into the client-side of the JMX REST connector.
+     * It is used only by the file transfer RESTful endpoint, exposed by the server-side of the JMX REST connector.
+     */
+    public static final String PRE_TRANSFER_ACTION_OPTIONS = "com.ibm.websphere.jmx.connector.rest.preTransferAction.options";
+
+    /**
+     * This parameter represents the options pertaining to the collective post-transfer-action.
+     *
+     * This parameter is not applicable to the settings passed into the client-side of the JMX REST connector.
+     * It is used only by the file transfer RESTful endpoint, exposed by the server-side of the JMX REST connector.
+     */
+    public static final String POST_TRANSFER_ACTION_OPTIONS = "com.ibm.websphere.jmx.connector.rest.postTransferAction.options";
+
+    /**
+     * This parameter represents a set of environment variables and their corresponding values.
+     * The payload of the header is a JSON object that has envKey : envValue pairs.
+     *
+     * This parameter is not applicable to the settings passed into the client-side of the JMX REST connector.
+     * It is used only by the file transfer RESTful endpoint, exposed by the server-side of the JMX REST connector.
+     */
+    public static final String TRANSFER_ENV_VARS = "com.ibm.websphere.jmx.connector.rest.transferEnvVars";
+
 }

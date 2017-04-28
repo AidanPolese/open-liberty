@@ -353,20 +353,20 @@ protected static Logger logger = LoggerFactory.getInstance().getLogger("com.ibm.
        return postedBody;
     }
     
-    public static Hashtable parsePostData(int len, ServletInputStream in, String encoding) /* 157338 add throws */ throws IOException
+    public static Hashtable parsePostData(int len, ServletInputStream in, String encoding, boolean multireadPropertyEnabled) /* 157338 add throws */ throws IOException // MultiRead
     {    
         String postedBody = getPostBody(len, in, encoding);
-        
-        // F003449 Start
-        //if (WCCustomProperties.ENABLE_MULTI_READ_OF_POST_DATA) {
-        //    in.close();
-        //}
-        // F003449 End
+
+        // MultiRead Start
+        if (multireadPropertyEnabled) {
+            in.close();
+        }
+        // MultiRead End
 
         return parseQueryString(postedBody, encoding);
     }
     
-    public static Hashtable parsePostDataLong(long len, ServletInputStream in, String encoding) throws IOException
+    public static Hashtable parsePostDataLong(long len, ServletInputStream in, String encoding, boolean multireadPropertyEnabled) throws IOException // MultiRead
     {
         if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))
             logger.logp(Level.FINE,CLASS_NAME,"parsePostDataLong","len = " + len, ", encoding = " + encoding);
@@ -374,7 +374,7 @@ protected static Logger logger = LoggerFactory.getInstance().getLogger("com.ibm.
         int MaxBufferSize = WCCustomProperties.SERVLET31_PRIVATE_BUFFERSIZE_FOR_LARGE_POST_DATA;
         
         if (len<=MaxBufferSize) {
-            return parsePostData((int)len,in,encoding);
+            return parsePostData((int)len,in,encoding, multireadPropertyEnabled); // MultiRead
         } 
         
         long remaining = len;
@@ -407,6 +407,12 @@ protected static Logger logger = LoggerFactory.getInstance().getLogger("com.ibm.
             index++;
             remaining-=readLen;
             
+            // MultiRead Start
+            if (multireadPropertyEnabled) {
+                in.close();
+            }
+            // MultiRead End
+            
          }
         
          return  parseQueryString(paramData, encoding);
@@ -414,7 +420,7 @@ protected static Logger logger = LoggerFactory.getInstance().getLogger("com.ibm.
     }
     
     // begin 231634    Support posts with query parms in chunked body    WAS.webcontainer    
-    public static Hashtable parsePostData(ServletInputStream in, String encoding) /* 157338 add throws */ throws IOException
+    public static Hashtable parsePostData(ServletInputStream in, String encoding, boolean multireadPropertyEnabled) /* 157338 add throws */ throws IOException
     {
         int inputLen;
         byte[] postedBytes = null;
@@ -441,11 +447,11 @@ protected static Logger logger = LoggerFactory.getInstance().getLogger("com.ibm.
             }
             while (inputLen != -1);
             
-            // F003449 Start
-        	//if (WCCustomProperties.ENABLE_MULTI_READ_OF_POST_DATA) {
-        	//	in.close();
-        	//}
-            // F003449 End
+            // MultiRead Start
+            if (multireadPropertyEnabled) {
+                in.close();
+            }
+            // MultiRead End
             
             postedBytes = byteOS.toByteArray();
             if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))

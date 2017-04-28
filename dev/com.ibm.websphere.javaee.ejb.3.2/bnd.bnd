@@ -21,7 +21,6 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/javax.ejb-api-3.2.jar;version=file
 
 -testpath: \

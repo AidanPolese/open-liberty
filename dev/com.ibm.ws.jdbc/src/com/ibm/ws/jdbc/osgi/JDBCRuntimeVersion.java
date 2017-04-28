@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * WLP Copyright IBM Corp. 2014
+ * WLP Copyright IBM Corp. 2014, 2017
  *
  * The source code for this program is not published or otherwise divested 
  * of its trade secrets, irrespective of what has been deposited with the 
@@ -19,10 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import javax.resource.ResourceException;
-import javax.security.auth.Subject;
-import javax.sql.PooledConnection;
+import java.util.concurrent.Executor;
 
 import org.osgi.framework.Version;
 
@@ -33,10 +30,8 @@ import com.ibm.ws.rsadapter.jdbc.WSJdbcObject;
 import com.ibm.ws.rsadapter.jdbc.WSJdbcPreparedStatement;
 import com.ibm.ws.rsadapter.jdbc.WSJdbcResultSet;
 import com.ibm.ws.rsadapter.jdbc.WSJdbcStatement;
-import com.ibm.ws.rsadapter.spi.StatementCacheKey;
-import com.ibm.ws.rsadapter.spi.WSConnectionRequestInfoImpl;
-import com.ibm.ws.rsadapter.spi.WSManagedConnectionFactoryImpl;
-import com.ibm.ws.rsadapter.spi.WSRdbManagedConnectionImpl;
+import com.ibm.ws.rsadapter.impl.StatementCacheKey;
+import com.ibm.ws.rsadapter.impl.WSRdbManagedConnectionImpl;
 
 /**
  * Interface used to proxy method calls to external packages which may require
@@ -51,16 +46,11 @@ public interface JDBCRuntimeVersion {
 
     public Version getVersion();
 
+    // JDBC wrapper object constructor delegates
     public WSJdbcConnection newConnection(WSRdbManagedConnectionImpl mc,
                                           Connection conn,
                                           Object key,
                                           Object currentThreadID);
-
-    public WSRdbManagedConnectionImpl newManagedConnection(WSManagedConnectionFactoryImpl mcf1,
-                                                           PooledConnection poolConn1,
-                                                           Connection conn,
-                                                           Subject sub,
-                                                           WSConnectionRequestInfoImpl cxRequestInfo) throws ResourceException;
 
     public WSJdbcDatabaseMetaData newDatabaseMetaData(DatabaseMetaData metaDataImpl,
                                                       WSJdbcConnection connWrapper) throws SQLException;
@@ -83,5 +73,13 @@ public interface JDBCRuntimeVersion {
 
     public WSJdbcResultSet newResultSet(ResultSet rsImpl, WSJdbcObject parent);
 
+    // JDBC 4.1 Connection methods
+    public void doSetSchema(Connection sqlConn, String schema) throws SQLException;
+    public String doGetSchema(Connection sqlConn) throws SQLException;
+    public void doAbort(Connection sqlConn, Executor ex) throws SQLException;
+    public void doSetNetworkTimeout(Connection sqlConn, Executor ex, int millis) throws SQLException;
+    public int doGetNetworkTimeout(Connection sqlConn) throws SQLException;
+    
+    // JDBC 4.2 BatchUpdateException constructor
     public BatchUpdateException newBatchUpdateException(BatchUpdateException copyFrom, String newMessage);
 }

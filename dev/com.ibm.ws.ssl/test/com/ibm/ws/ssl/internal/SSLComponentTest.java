@@ -14,6 +14,7 @@ package com.ibm.ws.ssl.internal;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -246,10 +247,7 @@ public class SSLComponentTest {
             });
 
             Map<String, Object> props = sslComponent.activate(new HashMap<String, Object>());
-            assertEquals(3, props.size());
-            assertTrue(Arrays.equals(EMPTY, (String[]) props.get(SSLSupportOptional.KEYSTORE_IDS)));
-            assertTrue(Arrays.equals(EMPTY, (String[]) props.get(SSLSupportOptional.REPERTOIRE_IDS)));
-            assertTrue(Arrays.equals(EMPTY, (String[]) props.get(SSLSupportOptional.REPERTOIRE_PIDS)));
+            assertNull(props);
 
             props = sslComponent.setRepertoire(repConfig);
             assertEquals(4, props.size());

@@ -7,13 +7,6 @@
  * of its trade secrets, irrespective of what has been deposited with the
  * U. S. Copyright Office.
  *
- * Change History:
- *
- * Tag          Person              Defect/Feature      Comments
- * -------      ------              --------------      --------------------------------------------------
- * 10/15/2015   rzunzarr           192087               Removed stripRDN code.
- * 10/23/2015   rzunzarr           193069               Handle CertificateMapFailed exception
- * 11/09/2015   rzunzarr           195235               Changed Login to check for SAFRegistry.isValidUser()
  */
 package com.ibm.ws.security.wim.adapter.urbridge;
 
@@ -55,6 +48,7 @@ import com.ibm.ws.security.wim.adapter.urbridge.utils.URBridgeHelper;
 import com.ibm.ws.security.wim.adapter.urbridge.utils.URBridgeXPathHelper;
 import com.ibm.ws.security.wim.env.ICacheUtil;
 import com.ibm.ws.security.wim.util.ControlsHelper;
+import com.ibm.ws.security.wim.util.SchemaConstantsInternal;
 import com.ibm.wsspi.security.wim.SchemaConstants;
 import com.ibm.wsspi.security.wim.exception.EntityNotFoundException;
 import com.ibm.wsspi.security.wim.exception.InitializationException;
@@ -77,11 +71,6 @@ import com.ibm.wsspi.security.wim.model.Root;
 import com.ibm.wsspi.security.wim.model.SearchControl;
 
 public class URBridge implements Repository {
-
-    /**
-     * The copyright message
-     */
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_LONG_2014;
 
     /**
      * The underlying User Registry
@@ -253,7 +242,7 @@ public class URBridge implements Repository {
 
     /**
      * Constructor
-     * 
+     *
      * @param configProps
      * @throws InitializationException
      */
@@ -291,9 +280,9 @@ public class URBridge implements Repository {
 
     /**
      * Initializes the user registry for use by the adapter.
-     * 
+     *
      * @param configProps
-     * 
+     *
      * @return
      */
 
@@ -315,7 +304,7 @@ public class URBridge implements Repository {
              * Properties supportedRegistries = new Properties();
              * String registryImplClass = customPropertyMap.get(URBridgeConstants.CUSTOM_REGISTRY_IMPL_CLASS) == null
              * ? null : (String) customPropertyMap.get(URBridgeConstants.CUSTOM_REGISTRY_IMPL_CLASS);
-             * 
+             *
              * if (registryImplClass == null) {
              * String osType = System.getProperty("os.name");
              * if (osType.startsWith("Windows")) {
@@ -329,15 +318,15 @@ public class URBridge implements Repository {
              * Tr.formatMessage(tc, WIMMessageKey.MISSING_OR_INVALID_CUSTOM_REGISTRY_CLASS_NAME,
              * WIMMessageHelper.generateMsgParms(registryImplClass)));
              * }
-             * 
+             *
              * ClassLoader contextCL = Thread.currentThread().getContextClassLoader();
              * if (contextCL == null) {
              * contextCL = this.getClass().getClassLoader();
              * }
-             * 
+             *
              * Class wrapperClass = Class.forName(registryImplClass, true, contextCL);
              * Object wrapperObj = wrapperClass.newInstance();
-             * 
+             *
              * if (wrapperObj instanceof UserRegistry) {
              * userRegistry = (UserRegistry) wrapperObj;
              * Properties initProperties = new Properties();
@@ -359,7 +348,7 @@ public class URBridge implements Repository {
     /**
      * Set the baseEntryname from the configuration. The configuration
      * should have only 1 baseEntry
-     * 
+     *
      * @param configProps Map containing the configuration information
      *            for the baseEntries.
      * @throws WIMException Exception is thrown if no baseEntry is set.
@@ -367,7 +356,7 @@ public class URBridge implements Repository {
     private void setBaseEntry(Map<String, Object> configProps) throws WIMException {
 /*
  * Map<String, List<Map<String, Object>>> configMap = Nester.nest(configProps, BASE_ENTRY);
- * 
+ *
  * for (Map<String, Object> entry : configMap.get(BASE_ENTRY)) {
  * baseEntryName = (String) entry.get(BASE_ENTRY_NAME);
  * }
@@ -382,7 +371,7 @@ public class URBridge implements Repository {
 
     /**
      * Set Custom UR Bridge properties.
-     * 
+     *
      * @param propList
      * @throws WIMException
      */
@@ -410,9 +399,9 @@ public class URBridge implements Repository {
      * Set the mapping of RDN properties for each entity type. A map is created
      * with the key as the entity type and the value as the RDN property to be used.
      * This information is taken from the configuration.
-     * 
+     *
      * @param configProps map containing the configuration information.
-     * 
+     *
      * @throws WIMException throw when there is not a mapping for a user
      *             or not a mapping for a group.
      */
@@ -457,16 +446,16 @@ public class URBridge implements Repository {
 
     /**
      * Get the information about Users and Groups from the underlying User Registry
-     * 
+     *
      * @param root Input object containing set identifiers of objects to be fetched,
      *            and optionally control objects.
-     * 
+     *
      * @throws WIMException improper control objects are in the input datagraph,
      *             invalid properties are in a propertyControl object,or the underlying
      *             user registry throws an exception.
-     * 
+     *
      * @return A Root object containing the required Person(s) or Group(s)
-     * 
+     *
      */
     @Override
     public Root get(Root root) throws WIMException {
@@ -556,9 +545,9 @@ public class URBridge implements Repository {
     }
 
     /**
-     * 
+     *
      * Get the attributes requested for the entity.
-     * 
+     *
      * @param controlObject the control object containing the attributes.
      * @param type the type of object the attributes are requested for. Group or Person.
      */
@@ -615,9 +604,9 @@ public class URBridge implements Repository {
     }
 
     /**
-     * 
+     *
      * Validates if a entity is member of the registry.
-     * 
+     *
      * @param controlObject the control object containing the attrs.
      * @throws WIMException if the entity is not valid in the Registry or if the registry is bad or down.
      */
@@ -687,7 +676,7 @@ public class URBridge implements Repository {
     /**
      * Since UserRegistry throws CustomRegistryException in case of secName not found
      * modify code to handle CustomRegistryException similar to EntryNotFoundException.
-     * 
+     *
      * @param uniqueId
      * @return
      * @throws WIMException
@@ -1304,7 +1293,7 @@ public class URBridge implements Repository {
                 for (Context contextInput : contexts) {
                     String key = contextInput.getKey();
 
-                    if (key != null && Service.IS_URBRIDGE_RESULT.equals(key)) {
+                    if (key != null && SchemaConstantsInternal.IS_URBRIDGE_RESULT.equals(key)) {
                         hasIsURBrigeResult = true;
                     }
                 }
@@ -1313,7 +1302,7 @@ public class URBridge implements Repository {
             if (hasIsURBrigeResult) {
                 // Add context for URBridge
                 Context context = new Context();
-                context.setKey(SchemaConstants.IS_URBRIDGE_RESULT);
+                context.setKey(SchemaConstantsInternal.IS_URBRIDGE_RESULT);
                 context.setValue("true");
                 returnRoot.getContexts().add(context);
             }
@@ -1368,27 +1357,27 @@ public class URBridge implements Repository {
  * Root returnRoot = new Root();
  * Entity inEntity = root.getEntities().get(0);
  * IdentifierType inId = inEntity.getIdentifier();
- * 
+ *
  * String memberType = validateEntity(inEntity);
  * String uniqueName = inId.getUniqueName();
- * 
+ *
  * Entity returnEntity = null;
  * if (Service.DO_GROUP.equalsIgnoreCase(memberType))
  * returnEntity = new Group();
  * else
  * returnEntity = new PersonAccount();
- * 
+ *
  * returnRoot.getEntities().add(returnEntity);
  * IdentifierType identifier = new IdentifierType();
  * identifier.setRepositoryId(reposId);
  * returnEntity.setIdentifier(identifier);
- * 
+ *
  * // Wrap the entity in an object that provides functionality to the entity.
  * URBridgeEntityFactory osEntityFactory = new URBridgeEntityFactory();
  * URBridgeEntity osEntity = osEntityFactory.createObject(returnEntity, userRegistry,
  * propsMap, baseEntryName, entityConfigMap);
  * osEntity.setSecurityNameProp(uniqueName);
- * 
+ *
  * if (Service.DO_GROUP.equalsIgnoreCase(memberType))
  * try {
  * ((WriteableUserRegistry)userRegistry).deleteGroup(uniqueName);
@@ -1401,7 +1390,7 @@ public class URBridge implements Repository {
  * } catch (DeleteUserFailedException e) {
  * throw new WIMException(e);
  * }
- * 
+ *
  * return returnRoot;
  * }
  * }
@@ -1410,10 +1399,10 @@ public class URBridge implements Repository {
  * Tr.formatMessage(tc, WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY,
  * WIMMessageHelper.generateMsgParms(reposId)));
  * }
- * 
+ *
  * return null;
  * }
- * 
+ *
  * @Override
  * public Root create(Root root) throws WIMException {
  * if(userRegistry instanceof WriteableUserRegistry) {
@@ -1421,27 +1410,27 @@ public class URBridge implements Repository {
  * Root returnRoot = new Root();
  * Entity inEntity = root.getEntities().get(0);
  * IdentifierType inId = inEntity.getIdentifier();
- * 
+ *
  * String memberType = validateEntity(inEntity);
  * String uniqueName = inId.getUniqueName();
- * 
+ *
  * Entity returnEntity = null;
  * if (Service.DO_GROUP.equalsIgnoreCase(memberType))
  * returnEntity = new Group();
  * else
  * returnEntity = new PersonAccount();
- * 
+ *
  * returnRoot.getEntities().add(returnEntity);
  * IdentifierType identifier = new IdentifierType();
  * identifier.setRepositoryId(reposId);
  * returnEntity.setIdentifier(identifier);
- * 
+ *
  * // Wrap the entity in an object that provides functionality to the entity.
  * URBridgeEntityFactory osEntityFactory = new URBridgeEntityFactory();
  * URBridgeEntity osEntity = osEntityFactory.createObject(returnEntity, userRegistry,
  * propsMap, baseEntryName, entityConfigMap);
  * osEntity.setSecurityNameProp(uniqueName);
- * 
+ *
  * if (Service.DO_GROUP.equalsIgnoreCase(memberType))
  * try {
  * List<Entity> memberEntities = ((Group)inEntity).getMembers();
@@ -1463,7 +1452,7 @@ public class URBridge implements Repository {
  * } catch (CreateUserFailedException e) {
  * throw new WIMException(e);
  * }
- * 
+ *
  * return returnRoot;
  * }
  * }
@@ -1472,10 +1461,10 @@ public class URBridge implements Repository {
  * Tr.formatMessage(tc, WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY,
  * WIMMessageHelper.generateMsgParms(reposId)));
  * }
- * 
+ *
  * return null;
  * }
- * 
+ *
  * @Override
  * public Root update(Root root) throws WIMException {
  * if(userRegistry instanceof WriteableUserRegistry) {
@@ -1483,27 +1472,27 @@ public class URBridge implements Repository {
  * Root returnRoot = new Root();
  * Entity inEntity = root.getEntities().get(0);
  * IdentifierType inId = inEntity.getIdentifier();
- * 
+ *
  * String type = validateEntity(inEntity);
  * String uniqueName = inId.getUniqueName();
- * 
+ *
  * Entity returnEntity = null;
  * if (Service.DO_GROUP.equalsIgnoreCase(type))
  * returnEntity = new Group();
  * else
  * returnEntity = new PersonAccount();
- * 
+ *
  * returnRoot.getEntities().add(returnEntity);
  * IdentifierType identifier = new IdentifierType();
  * identifier.setRepositoryId(reposId);
  * returnEntity.setIdentifier(identifier);
- * 
+ *
  * // Wrap the entity in an object that provides functionality to the entity.
  * URBridgeEntityFactory osEntityFactory = new URBridgeEntityFactory();
  * URBridgeEntity osEntity = osEntityFactory.createObject(returnEntity, userRegistry,
  * propsMap, baseEntryName, entityConfigMap);
  * osEntity.setSecurityNameProp(uniqueName);
- * 
+ *
  * if (Service.DO_GROUP.equalsIgnoreCase(type)) {
  * try {
  * if(((Group)inEntity).isSetDescription() && ((Group)inEntity).getDescription().size() > 0) {
@@ -1524,7 +1513,7 @@ public class URBridge implements Repository {
  * break;
  * }
  * }
- * 
+ *
  * if(replaceMembers || deleteMembers) {
  * List<String> members = new ArrayList<String>();
  * for(Entity member : ((Group)inEntity).getMembers()) {
@@ -1566,7 +1555,7 @@ public class URBridge implements Repository {
  * break;
  * }
  * }
- * 
+ *
  * if(newuserSecurityName != null)
  * ((WriteableUserRegistry)userRegistry).renameUser(uniqueName, newuserSecurityName);
  * }
@@ -1575,7 +1564,7 @@ public class URBridge implements Repository {
  * throw new WIMException(e);
  * }
  * }
- * 
+ *
  * return returnRoot;
  * }
  * }
@@ -1584,7 +1573,7 @@ public class URBridge implements Repository {
  * Tr.formatMessage(tc, WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY,
  * WIMMessageHelper.generateMsgParms(reposId)));
  * }
- * 
+ *
  * return null;
  * }
  */

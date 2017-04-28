@@ -5,56 +5,38 @@
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
- * 
- * Change History:
- * 
- * Tag          Person   Defect/Feature      Comments
- * ----------   ------   --------------      --------------------------------------------------
+ *
  */
 package com.ibm.wsspi.security.wim.exception;
 
-/**
- * @author Rohan Zunzarrao
- */
-public class DefaultParentNotFoundException extends WIMApplicationException
-{
-    static final String COPYRIGHT_NOTICE = com.ibm.websphere.security.wim.copyright.IBMCopyright.COPYRIGHT_NOTICE_SHORT_2014;
-
+public class DefaultParentNotFoundException extends WIMApplicationException {
     /**
-     * 
+     *
      */
-    public DefaultParentNotFoundException()
-    {
+    public DefaultParentNotFoundException() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     /**
      * @param message
      */
-    public DefaultParentNotFoundException(String key, String message)
-    {
+    public DefaultParentNotFoundException(String key, String message) {
         super(key, message);
-        // TODO Auto-generated constructor stub
     }
 
     /**
      * @param cause
      */
-    public DefaultParentNotFoundException(Throwable cause)
-    {
+    public DefaultParentNotFoundException(Throwable cause) {
         super(cause);
-        // TODO Auto-generated constructor stub
     }
 
     /**
      * @param message
      * @param cause
      */
-    public DefaultParentNotFoundException(String key, String message, Throwable cause)
-    {
+    public DefaultParentNotFoundException(String key, String message, Throwable cause) {
         super(key, message, cause);
-        // TODO Auto-generated constructor stub
     }
 
 }
