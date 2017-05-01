@@ -222,7 +222,7 @@ public class FileTransferHelper {
     }
 
     @FFDCIgnore({ UnsupportedEncodingException.class })
-    protected static String decodeFilePath(String filePath) {
+    public static String decodeFilePath(String filePath) {
         //Decode the pathInfo
         try {
             return URLDecoder.decode(filePath, "UTF-8");
@@ -305,7 +305,7 @@ public class FileTransferHelper {
         return fileService.expandArchive(sourcePath, targetPath);
     }
 
-    protected static String getTempArchiveName(RESTRequest request, String path) {
+    public static String getTempArchiveName(RESTRequest request, String path) {
         String archiveName = getTempArchiveName(path);
         if (archiveName.endsWith("_original")) {
             //The requested target directory did not have an extension, so append closest match to ensure our temp archive has an extension
@@ -333,7 +333,7 @@ public class FileTransferHelper {
         }
     }
 
-    protected void writeResponseFromFile(String processedPath, RESTRequest request, RESTResponse response, boolean legacyFileTransfer) {
+    public void writeResponseFromFile(String processedPath, RESTRequest request, RESTResponse response, boolean legacyFileTransfer) {
         writeResponseFromFile(processedPath, 0, -1, request, response, legacyFileTransfer);
     }
 
@@ -428,7 +428,7 @@ public class FileTransferHelper {
     }
 
     @FFDCIgnore({ FileNotFoundException.class })
-    protected void readRequestIntoFile(String processedPath, RESTRequest request, boolean legacyFileTransfer) {
+    public void readRequestIntoFile(String processedPath, RESTRequest request, boolean legacyFileTransfer) {
         InputStream is = null;
         RandomAccessFile uploadFile = null;
         try {
@@ -481,7 +481,7 @@ public class FileTransferHelper {
         }
     }
 
-    protected WsLocationAdmin getWsLocationAdmin() {
+    public WsLocationAdmin getWsLocationAdmin() {
         WsLocationAdmin wsLocationAdmin = wsLocationAdminRef.getService();
 
         if (wsLocationAdmin == null) {
@@ -513,7 +513,7 @@ public class FileTransferHelper {
     /**
      * Return a unique directory within the workarea directory
      */
-    protected String getWritableLocation() {
+    public String getWritableLocation() {
         String writableLocation = getWsLocationAdmin().resolveString("${server.output.dir}/workarea/" + UUID.randomUUID() + "/");
         if (writableLocation == null) {
             IOException ioe = new IOException(TraceNLS.getFormattedMessage(this.getClass(),
@@ -545,7 +545,7 @@ public class FileTransferHelper {
         return path.substring(index + 1);
     }
 
-    protected static String processRoutingPathLight(String originalPath) {
+    public static String processRoutingPathLight(String originalPath) {
         //First we decode the path
         originalPath = decodeFilePath(originalPath);
 

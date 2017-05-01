@@ -18,121 +18,121 @@ import com.ibm.wsspi.kernel.service.location.WsLocationConstants;
 public enum ServerPath {
     INSTALL_DIR {
         @Override
-        String getSymbol() {
+        public String getSymbol() {
             return WsLocationConstants.SYMBOL_INSTALL_DIR;
         }
 
         @Override
-        String getName() {
+        public String getName() {
             return WsLocationConstants.LOC_INSTALL_DIR;
         }
 
         @Override
-        String getDefault(String userDir, String serverName) {
+        public String getDefault(String userDir, String serverName) {
             int index = userDir.lastIndexOf("usr/");
             return userDir.substring(0, index);
         }
     },
     USER_DIR {
         @Override
-        String getSymbol() {
+        public String getSymbol() {
             return WsLocationConstants.SYMBOL_USER_DIR;
         }
 
         @Override
-        String getName() {
+        public String getName() {
             return WsLocationConstants.LOC_USER_DIR;
         }
 
         @Override
-        String getDefault(String userDir, String serverName) {
+        public String getDefault(String userDir, String serverName) {
             return userDir;
         }
     },
     OUTPUT_DIR {
         @Override
-        String getSymbol() {
+        public String getSymbol() {
             return WsLocationConstants.SYMBOL_SERVER_OUTPUT_DIR;
         }
 
         @Override
-        String getName() {
+        public String getName() {
             return WsLocationConstants.LOC_SERVER_OUTPUT_DIR;
         }
 
         @Override
-        String getDefault(String userDir, String serverName) {
+        public String getDefault(String userDir, String serverName) {
             return userDir + "servers/" + serverName + "/";
         }
     },
     CONFIG_DIR {
         @Override
-        String getSymbol() {
+        public String getSymbol() {
             return WsLocationConstants.SYMBOL_SERVER_CONFIG_DIR;
         }
 
         @Override
-        String getName() {
+        public String getName() {
             return WsLocationConstants.LOC_SERVER_CONFIG_DIR;
         }
 
         @Override
-        String getDefault(String userDir, String serverName) {
+        public String getDefault(String userDir, String serverName) {
             return userDir + "servers/" + serverName + "/";
         }
     },
     SHARED_APPS_DIR {
         @Override
-        String getSymbol() {
+        public String getSymbol() {
             return WsLocationConstants.SYMBOL_SHARED_APPS_DIR;
         }
 
         @Override
-        String getName() {
+        public String getName() {
             return WsLocationConstants.LOC_SHARED_APPS_DIR;
         }
 
         @Override
-        String getDefault(String userDir, String serverName) {
+        public String getDefault(String userDir, String serverName) {
             return userDir + "shared/apps/";
         }
     },
     SHARED_CONFIG_DIR {
         @Override
-        String getSymbol() {
+        public String getSymbol() {
             return WsLocationConstants.SYMBOL_SHARED_CONFIG_DIR;
         }
 
         @Override
-        String getName() {
+        public String getName() {
             return WsLocationConstants.LOC_SHARED_CONFIG_DIR;
         }
 
         @Override
-        String getDefault(String userDir, String serverName) {
+        public String getDefault(String userDir, String serverName) {
             return userDir + "shared/config/";
         }
     },
     SHARED_RESC_DIR {
         @Override
-        String getSymbol() {
+        public String getSymbol() {
             return WsLocationConstants.SYMBOL_SHARED_RESC_DIR;
         }
 
         @Override
-        String getName() {
+        public String getName() {
             return WsLocationConstants.LOC_SHARED_RESC_DIR;
         }
 
         @Override
-        String getDefault(String userDir, String serverName) {
+        public String getDefault(String userDir, String serverName) {
             return userDir + "shared/resources/";
         }
     };
 
-    abstract String getSymbol();
+    public abstract String getSymbol();
 
-    abstract String getName();
+    public abstract String getName();
 
-    abstract String getDefault(String userDir, String serverName);
+    public abstract String getDefault(String userDir, String serverName);
 }

@@ -5,8 +5,8 @@
  *
  * WLP Copyright IBM Corp. 2014
  *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
  * U.S. Copyright Office.
  */
 package com.ibm.ws.jaxrs20.client.security.saml;
@@ -34,7 +34,7 @@ import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.jaxrs20.client.JAXRSClientConstants;
 
 /**
- *
+ * 
  */
 public class PropagationHandler extends AbstractPhaseInterceptor<Message> {
     private static final TraceComponent tc = Tr.register(PropagationHandler.class, JAXRSClientConstants.TR_GROUP, JAXRSClientConstants.TR_RESOURCE_BUNDLE);
@@ -80,7 +80,7 @@ public class PropagationHandler extends AbstractPhaseInterceptor<Message> {
                 Tr.debug(tc, "About to get a SAML authentication token from the runAs Subject");
             }
 
-            // retrieve the saml token from the runAs Subject in current thread
+            // retrieve the saml token from the runAs Subject in current thread 
             try {
                 saml = getEncodedSaml20Token();
 
@@ -88,9 +88,10 @@ public class PropagationHandler extends AbstractPhaseInterceptor<Message> {
                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                         Tr.debug(tc, "Retrieved the encoded SAML token. About to set it on the request Header " + saml);
                     }
-                    //Authorization=[saml="<SAML_HERE>"]
+                    //Authorization=[saml="<SAML_HERE>"] 
                     @SuppressWarnings("unchecked")
-                    Map<String, List<String>> headers = (Map<String, List<String>>) message.get(Message.PROTOCOL_HEADERS);
+                    Map<String, List<String>> headers = (Map<String, List<String>>) message
+                                    .get(Message.PROTOCOL_HEADERS);
                     headers.put("Authorization", Arrays.asList("SAML " + saml));
                     message.put(Message.PROTOCOL_HEADERS, headers);
                 }

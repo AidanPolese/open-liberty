@@ -1,9 +1,0 @@
-<project name="com.ibm.ws.threading_test" default="unittest">
-  <import file="../ant_build/public_imports/standard_imports.xml"/>
-  <import file="../ant_build/public_imports/unittest_imports.xml"/>
-  
-  <!-- property name="extra.vmargs" value="-Xverify:all,nofallback -Dcom.ibm.ws.ras.traceSpecification=*=all=enabled"/ -->
-  <!-- property name="extra.vmargs" value="-XX:-FailOverToOldVerifier -Dcom.ibm.ws.ras.traceSpecification=*=all=enabled"/ -->
-  <property name="extra.vmargs" value="-Dcom.ibm.ws.ras.trace.specification=com.ibm.ws.threading.*=event=enabled" />
-
-</project>

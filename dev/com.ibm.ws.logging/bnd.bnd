@@ -46,3 +46,16 @@ instrument.disabled: true
 	com.ibm.wsspi.org.osgi.service.event.1.3.1;version=latest,\
 	com.ibm.wsspi.org.osgi.service.log.1.3.0;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+
+-nojunit: true
+
+-testpath: \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
+	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \
+	../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar;version=file, \
+	../build.sharedResources/lib/jmock/legacy/objenesis.jar;version=file, \
+	org.eclipse.osgi;version=latest

@@ -1,0 +1,4 @@
+
+test {
+    jvmArgs '-Dcom.ibm.ws.ras.trace.specification=com.ibm.ws.threading.*=event=enabled'
+}

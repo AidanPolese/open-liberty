@@ -59,9 +59,7 @@ Service-Component: \
   com.ibm.ws.jmx.connector.server.rest.handlers.NotificationRegistrationsHandler, \
   com.ibm.ws.jmx.connector.server.rest.handlers.NotificationServerRegistrationsHandler, \
   com.ibm.ws.jmx.connector.server.rest.helpers.MBeanRoutedNotificationHelper, \
-  com.ibm.ws.jmx.connector.server.rest.helpers.MBeanRouterHelper, \
-  com.ibm.ws.jmx.connector.server.rest.helpers.FileTransferHelper, \
-  com.ibm.ws.jmx.connector.server.rest.helpers.MultipleRoutingHelper
+  com.ibm.ws.jmx.connector.server.rest.helpers.FileTransferHelper
 
 instrument.classesExcludes: com/ibm/ws/jmx/connector/server/internal/resources/*.class
 
