@@ -1,0 +1,22 @@
+
+testClasses {
+  doFirst {
+    String unittestBuildDir = "${buildDir}/test"
+    String unittestLibDir = "${unittestBuildDir}/test data/lib"
+
+    // Create the distribution directory
+    new File("${unittestLibDir}").mkdirs()
+
+    copy {
+      from 'test'
+      into "${unittestBuildDir}"
+      include 'test data/**'
+      include 'resolverData/**'
+    }
+
+    ant.jar(destfile: "${unittestLibDir}/simple_1.jar", manifest: "test/simple1.mf")
+    ant.jar(destfile: "${unittestLibDir}/simple_2.jar", manifest: "test/simple2.mf")
+    ant.jar(destfile: "${unittestLibDir}/simple_3.jar", manifest: "test/simple3.mf")
+    ant.jar(destfile: "${unittestLibDir}/simple_4.jar", manifest: "test/simple4.mf")
+  }
+}

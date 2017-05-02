@@ -31,7 +31,7 @@ import com.ibm.ws.kernel.boot.cmdline.ExitCode;
 import test.common.SharedOutputManager;
 
 public class ClientLauncherTest {
-    static final String TEST_TMP_ROOT = "generated/test/tmp/";
+    static final String TEST_TMP_ROOT = "generated/tmp/";
     static final File TEST_TMP_ROOT_FILE = new File(TEST_TMP_ROOT);
     static final File defaultClient = new File(TEST_TMP_ROOT, "usr/clients/defaultClient");
     static SharedOutputManager outputMgr = SharedOutputManager.getInstance();

@@ -1,5 +1,5 @@
 -include= ~../cnf/resources/bnd/bundle.props
-bVersion: 1.5
+bVersion: 1.6
 
 Bundle-Name: WebSphere REST Handler SPI
 Bundle-Description: WebSphere REST Handler SPI, version ${bVersion}
