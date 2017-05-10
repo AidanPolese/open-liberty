@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2011, 2016
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.webcontainer.security;
@@ -34,8 +34,6 @@ import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.security.util.ByteArray;
 import com.ibm.ws.webcontainer.security.internal.SSOAuthenticator;
 import com.ibm.ws.webcontainer.security.internal.StringUtil;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcServer;
-import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.security.token.SingleSignonToken;
 
 /**
@@ -46,27 +44,20 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
 
     private static ConcurrentMap<ByteArray, String> cookieByteStringCache = new ConcurrentHashMap<ByteArray, String>(20);
     private static int MAX_COOKIE_STRING_ENTRIES = 100;
-    private static final String OIDC_BROWSER_STATE_COOKIE = "oidc_bsc";
     private String cookieName = null;
 
     private final WebAppSecurityConfig config;
-    private final AtomicServiceReference<OidcServer> oidcServerRef;
 
     /**
      * Only have a custom cookie name for JASPI session as of now.
      */
     public SSOCookieHelperImpl(WebAppSecurityConfig config, String ssoCookieName) {
-        this(config, (AtomicServiceReference<OidcServer>) null);
         cookieName = ssoCookieName;
+        this.config = config;
     }
 
     public SSOCookieHelperImpl(WebAppSecurityConfig config) {
-        this(config, (AtomicServiceReference<OidcServer>) null);
-    }
-
-    public SSOCookieHelperImpl(WebAppSecurityConfig config, AtomicServiceReference<OidcServer> oidcServerRef) {
         this.config = config;
-        this.oidcServerRef = oidcServerRef;
     }
 
     /** {@inheritDoc} */
@@ -99,20 +90,13 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
         Cookie ssoCookie = createCookie(req, cookieByteString);
         resp.addCookie(ssoCookie);
 
-        if (oidcServerRef != null && oidcServerRef.getService() != null) {
-            // oidc server exists, remove browser state cookie.
-            if (isBrowserStateEnabled(req)) {
-                removeBrowserStateCookie(req, resp);
-            }
-        }
-
     }
 
     /**
      * Creates the SSO cookie with max age of <code>-1</code>, path set to <code>/</code>,
      * and an optional domain name. The cookie's <code>secure</code> flag depends on the
      * <code>ssoRequiresSSL</code> configuration.
-     * 
+     *
      * @param req the HTTP servlet request.
      * @param cookieValue the value used to create the cookie from.
      * @return ssoCookie the SSO cookie.
@@ -137,7 +121,7 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
      * 1) If SSO is NOT enabled, returns false.
      * 2) If SSO requires SSL is true and NOT HTTPs request, returns false.
      * 3) Otherwise returns true.
-     * 
+     *
      * @param req
      * @return
      */
@@ -161,7 +145,7 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
 
     /**
      * Remove a cookie from the response
-     * 
+     *
      * @param subject
      * @param resp
      */
@@ -174,7 +158,7 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
      * Perform some cookie cache maintenance. If the cookie cache has grown too
      * large, clear it. Otherwise, store the cookieByteString into the cache
      * based on the cookieBytes.
-     * 
+     *
      * @param cookieBytes
      * @param cookieByteString
      */
@@ -200,11 +184,6 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
                 if (cookies[i].getName().equalsIgnoreCase(ssoCookieName)) {
                     cookies[i].setValue(null);
                     addLogoutCookieToList(req, ssoCookieName, logoutCookieList);
-                } else if (cookies[i].getName().equalsIgnoreCase(OIDC_BROWSER_STATE_COOKIE)) {
-                    // remove oidc browser state cookie, if it exists.
-                    if (oidcServerRef != null && oidcServerRef.getService() != null) {
-                        removeBrowserStateCookie(req, res);
-                    }
                 }
             }
             for (Cookie cookie : logoutCookieList) {
@@ -260,11 +239,9 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
         SingleSignonToken ssoToken = null;
         java.util.Set privateCredentials = null;
         try {
-            privateCredentials = (java.util.Set) AccessController.doPrivileged(new java.security.PrivilegedAction()
-            {
+            privateCredentials = (java.util.Set) AccessController.doPrivileged(new java.security.PrivilegedAction() {
                 @Override
-                public Object run()
-                {
+                public Object run() {
                     return subject.getPrivateCredentials(SingleSignonToken.class);
                 }
             });
@@ -300,7 +277,7 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
      * 2) The hostname is not fully qualify or localhost
      * 3) useURLDomain is false
      * 3) Request URL is an IP address
-     * 
+     *
      * @param req
      * @param ssoDomainList
      * @param useDomainFromURL
@@ -368,31 +345,5 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
         URL url = new URL(requestUrl);
         String host = url.getHost().trim();
         return host;
-    }
-
-    /**
-     * check whether BrowserState cookie exists in a http request.
-     * 
-     * @param req
-     * @return true if the cookie exists, false otherwise
-     */
-    protected boolean isBrowserStateEnabled(HttpServletRequest req) {
-        Cookie[] cookies = req.getCookies();
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                if (cookies[i].getName().equalsIgnoreCase(OIDC_BROWSER_STATE_COOKIE)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    protected void removeBrowserStateCookie(HttpServletRequest req, HttpServletResponse res) {
-        Cookie c = new Cookie(OIDC_BROWSER_STATE_COOKIE, "");
-        c.setMaxAge(0);
-        c.setPath("/");
-        c.setSecure(req.isSecure());
-        res.addCookie(c);
     }
 }

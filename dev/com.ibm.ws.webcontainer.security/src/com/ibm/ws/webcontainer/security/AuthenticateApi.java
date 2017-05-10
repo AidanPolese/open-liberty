@@ -39,7 +39,6 @@ import com.ibm.ws.security.context.SubjectManager;
 import com.ibm.ws.webcontainer.security.internal.BasicAuthAuthenticator;
 import com.ibm.ws.webcontainer.security.internal.ChallengeReply;
 import com.ibm.ws.webcontainer.security.internal.DenyReply;
-import com.ibm.ws.webcontainer.security.internal.OAuthChallengeReply;
 import com.ibm.ws.webcontainer.security.internal.RedirectReply;
 import com.ibm.ws.webcontainer.security.internal.SRTServletRequestUtils;
 import com.ibm.ws.webcontainer.security.internal.SSOAuthenticator;
@@ -527,8 +526,6 @@ public class AuthenticateApi {
 
             case SEND_401:
                 return new ChallengeReply(realm);
-            case OAUTH_CHALLENGE:
-                return new OAuthChallengeReply(authResult.getReason());
 
             case TAI_CHALLENGE:
                 return new TAIChallengeReply(authResult.getTAIChallengeCode());

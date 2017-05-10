@@ -9,9 +9,6 @@ Bundle-SymbolicName: com.ibm.ws.webcontainer.security
 Export-Package: \
   com.ibm.websphere.security.web, \
   com.ibm.ws.webcontainer.security, \
-  com.ibm.ws.webcontainer.security.oauth20, \
-  com.ibm.ws.webcontainer.security.openid20, \
-  com.ibm.ws.webcontainer.security.openidconnect, \
   com.ibm.ws.webcontainer.security.context, \
   com.ibm.ws.webcontainer.security.metadata, \
   com.ibm.ws.webcontainer.security.util

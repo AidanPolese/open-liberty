@@ -32,7 +32,6 @@ import com.ibm.ws.webcontainer.security.internal.SRTServletRequestUtils;
 import com.ibm.ws.webcontainer.security.internal.WebReply;
 import com.ibm.ws.webcontainer.security.metadata.LoginConfiguration;
 import com.ibm.ws.webcontainer.security.metadata.SecurityMetadata;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcServer;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 
 /**
@@ -46,26 +45,16 @@ public class WebAuthenticatorProxy implements WebAuthenticator {
     private volatile WebAppSecurityConfig webAppSecurityConfig;
     private volatile PostParameterHelper postParameterHelper;
     private final WebProviderAuthenticatorProxy providerAuthenticatorProxy;
-    private final AtomicServiceReference<OidcServer> oidcServerRef;
     public HashMap<String, Object> extraAuditData = new HashMap<String, Object>();
 
     public WebAuthenticatorProxy(WebAppSecurityConfig webAppSecurityConfig,
                                  PostParameterHelper postParameterHelper,
                                  AtomicServiceReference<SecurityService> securityServiceRef,
                                  WebProviderAuthenticatorProxy providerAuthenticatorProxy) {
-        this(webAppSecurityConfig, postParameterHelper, securityServiceRef, providerAuthenticatorProxy, (AtomicServiceReference<OidcServer>) null);
-    }
-
-    public WebAuthenticatorProxy(WebAppSecurityConfig webAppSecurityConfig,
-                                 PostParameterHelper postParameterHelper,
-                                 AtomicServiceReference<SecurityService> securityServiceRef,
-                                 WebProviderAuthenticatorProxy providerAuthenticatorProxy,
-                                 AtomicServiceReference<OidcServer> oidcServerRef) {
         this.webAppSecurityConfig = webAppSecurityConfig;
         this.postParameterHelper = postParameterHelper;
         this.securityServiceRef = securityServiceRef;
         this.providerAuthenticatorProxy = providerAuthenticatorProxy;
-        this.oidcServerRef = oidcServerRef;
     }
 
     /** {@inheritDoc} */
@@ -233,7 +222,7 @@ public class WebAuthenticatorProxy implements WebAuthenticator {
         UserRegistry userRegistry = null;
         if (userRegistryService.isUserRegistryConfigured())
             userRegistry = userRegistryService.getUserRegistry();
-        SSOCookieHelper sSOCookieHelper = new SSOCookieHelperImpl(webAppSecurityConfig, oidcServerRef);
+        SSOCookieHelper sSOCookieHelper = new SSOCookieHelperImpl(webAppSecurityConfig);
         return new BasicAuthAuthenticator(securityService.getAuthenticationService(), userRegistry, sSOCookieHelper, webAppSecurityConfig);
     }
 
@@ -254,7 +243,7 @@ public class WebAuthenticatorProxy implements WebAuthenticator {
      */
     public CertificateLoginAuthenticator createCertificateLoginAuthenticator() {
         SecurityService securityService = securityServiceRef.getService();
-        return new CertificateLoginAuthenticator(securityService.getAuthenticationService(), new SSOCookieHelperImpl(webAppSecurityConfig, oidcServerRef));
+        return new CertificateLoginAuthenticator(securityService.getAuthenticationService(), new SSOCookieHelperImpl(webAppSecurityConfig));
     }
 
     @Override

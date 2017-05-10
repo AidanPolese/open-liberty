@@ -37,14 +37,13 @@ import com.ibm.ws.webcontainer.security.metadata.FormLoginConfiguration;
  */
 public class FormLoginAuthenticator implements WebAuthenticator {
     private static final TraceComponent tc = Tr.register(FormLoginAuthenticator.class);
-    static final String REFERRER_URL_OIDC_COOKIENAME = "WASReqURLOidc";
     private final WebAuthenticator ssoAuthenticator;
     private final WebAppSecurityConfig webAppSecurityConfig;
     private final PostParameterHelper postParameterHelper;
     private final WebProviderAuthenticatorProxy providerAuthenticatorProxy;
 
     /**
-     * @param providerAuthenticatorProxy TODO
+     * @param providerAuthenticatorProxy
      * @param authenticationService
      * @param securityMetadata
      */

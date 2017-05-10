@@ -25,7 +25,6 @@ import com.ibm.ws.webcontainer.security.PostParameterHelper;
 import com.ibm.ws.webcontainer.security.WebAppSecurityCollaboratorImpl;
 import com.ibm.ws.webcontainer.security.WebAppSecurityConfig;
 import com.ibm.ws.webcontainer.security.WebAuthenticatorProxy;
-import com.ibm.ws.webcontainer.security.WebProviderAuthenticatorProxy;
 import com.ibm.wsspi.webcontainer.webapp.WebAppConfig;
 
 public class FeatureWebSecurityCollaboratorImpl extends WebAppSecurityCollaboratorImpl implements FeatureAuthorizationTableService {
@@ -50,13 +49,8 @@ public class FeatureWebSecurityCollaboratorImpl extends WebAppSecurityCollaborat
         interceptorServiceRef.activate(cc);
         webAuthenticatorRef.activate(cc);
         unprotectedResourceServiceRef.activate(cc);
-        oauthServiceRef.activate(cc);
-        oidcServerRef.activate(cc);
-        oidcClientRef.activate(cc);
-        openidClientRef.activate(cc);
         webAppSecConfig = featureSecConfig;
         postParameterHelper = new PostParameterHelper(webAppSecConfig);
-        providerAuthenticatorProxy = new WebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig, oauthServiceRef, openidClientRef, oidcServerRef, oidcClientRef, webAuthenticatorRef);
         authenticatorProxy = new WebAuthenticatorProxy(webAppSecConfig, postParameterHelper, securityServiceRef, providerAuthenticatorProxy);
     }
 

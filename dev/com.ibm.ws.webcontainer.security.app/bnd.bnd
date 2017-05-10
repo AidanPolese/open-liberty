@@ -27,10 +27,6 @@ Service-Component: \
     securityService='com.ibm.ws.security.SecurityService(Authentication=*)'; \
     taiService=com.ibm.ws.security.authentication.tai.TAIService; \
     interceptorService='com.ibm.wsspi.security.tai.TrustAssociationInterceptor'; \
-    oauthService=com.ibm.ws.webcontainer.security.oauth20.OAuth20Service; \
-    oidcServer=com.ibm.ws.webcontainer.security.openidconnect.OidcServer; \
-    oidcClient=com.ibm.ws.webcontainer.security.openidconnect.OidcClient; \
-    openidClientService=com.ibm.ws.webcontainer.security.openid20.OpenidClientService; \
     webAuthenticator=com.ibm.ws.webcontainer.security.WebAuthenticator; \
     locationAdmin=com.ibm.wsspi.kernel.service.location.WsLocationAdmin; \
     unauthenticatedSubjectService=com.ibm.ws.security.authentication.UnauthenticatedSubjectService; \
@@ -38,8 +34,8 @@ Service-Component: \
     jaccService=com.ibm.ws.security.authorization.jacc.JaccService;\
     multiple:='interceptorService, webAuthenticator, unprotectedResourceService'; \
     greedy:='interceptorService, webAuthenticator, unprotectedResourceService'; \
-    optional:='taiService,interceptorService,oauthService,oidcServer,oidcClient,openidClientService,webAuthenticator,jaccService,unprotectedResourceService'; \
-    dynamic:='taiService,interceptorService,oauthService,oidcServer,oidcClient,openidClientService,webAuthenticator,jaccService,unprotectedResourceService'; \
+    optional:='taiService,interceptorService,webAuthenticator,jaccService,unprotectedResourceService'; \
+    dynamic:='taiService,interceptorService,webAuthenticator,jaccService,unprotectedResourceService'; \
     properties:="service.vendor=IBM", \
   com.ibm.ws.webcontainer.security.ServletStartedListener; \
     implementation:=com.ibm.ws.webcontainer.security.ServletStartedListener; \

@@ -66,7 +66,6 @@ import com.ibm.ws.webcontainer.security.internal.DenyReply;
 import com.ibm.ws.webcontainer.security.internal.FormLoginExtensionProcessor;
 import com.ibm.ws.webcontainer.security.internal.FormLogoutExtensionProcessor;
 import com.ibm.ws.webcontainer.security.internal.HTTPSRedirectHandler;
-import com.ibm.ws.webcontainer.security.internal.OAuthChallengeReply;
 import com.ibm.ws.webcontainer.security.internal.PermitReply;
 import com.ibm.ws.webcontainer.security.internal.RedirectReply;
 import com.ibm.ws.webcontainer.security.internal.ReturnReply;
@@ -85,10 +84,6 @@ import com.ibm.ws.webcontainer.security.metadata.SecurityConstraint;
 import com.ibm.ws.webcontainer.security.metadata.SecurityConstraintCollection;
 import com.ibm.ws.webcontainer.security.metadata.SecurityMetadata;
 import com.ibm.ws.webcontainer.security.metadata.WebResourceCollection;
-import com.ibm.ws.webcontainer.security.oauth20.OAuth20Service;
-import com.ibm.ws.webcontainer.security.openid20.OpenidClientService;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcClient;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcServer;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.kernel.service.utils.ConcurrentServiceReferenceMap;
@@ -112,10 +107,6 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
     public static final String KEY_SECURITY_SERVICE = "securityService";
     public static final String KEY_TAI_SERVICE = "taiService";
     public static final String KEY_INTERCEPTOR_SERVICE = "interceptorService";
-    static final String KEY_OAUTH_SERVICE = "oauthService";
-    static final String KEY_OIDC_SERVER = "oidcServer";
-    static final String KEY_OIDC_CLIENT = "oidcClient";
-    static final String KEY_OPENID_CLIENT_SERVICE = "openidClientService";
     static final String KEY_JACC_SERVICE = "jaccService";
     static final String JASPI_SERVICE_COMPONENT_NAME = "com.ibm.ws.security.jaspi";
     public static final String KEY_WEB_AUTHENTICATOR = "webAuthenticator";
@@ -126,10 +117,6 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
 
     protected final AtomicServiceReference<TAIService> taiServiceRef = new AtomicServiceReference<TAIService>(KEY_TAI_SERVICE);
     protected final ConcurrentServiceReferenceMap<String, TrustAssociationInterceptor> interceptorServiceRef = new ConcurrentServiceReferenceMap<String, TrustAssociationInterceptor>(KEY_INTERCEPTOR_SERVICE);
-    protected final AtomicServiceReference<OAuth20Service> oauthServiceRef = new AtomicServiceReference<OAuth20Service>(KEY_OAUTH_SERVICE);
-    protected final AtomicServiceReference<OidcServer> oidcServerRef = new AtomicServiceReference<OidcServer>(KEY_OIDC_SERVER);
-    protected final AtomicServiceReference<OidcClient> oidcClientRef = new AtomicServiceReference<OidcClient>(KEY_OIDC_CLIENT);
-    protected final AtomicServiceReference<OpenidClientService> openidClientRef = new AtomicServiceReference<OpenidClientService>(KEY_OPENID_CLIENT_SERVICE);
     protected final AtomicServiceReference<SecurityService> securityServiceRef = new AtomicServiceReference<SecurityService>(KEY_SECURITY_SERVICE);
     protected final AtomicServiceReference<JaccService> jaccServiceRef = new AtomicServiceReference<JaccService>(KEY_JACC_SERVICE);
 
@@ -235,44 +222,6 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
         interceptorServiceRef.removeReference(id, ref);
     }
 
-    protected void setOauthService(ServiceReference<OAuth20Service> reference) {
-        oauthServiceRef.setReference(reference);
-    }
-
-    protected void unsetOauthService(ServiceReference<OAuth20Service> reference) {
-        oauthServiceRef.unsetReference(reference);
-    }
-
-    protected void setOidcServer(ServiceReference<OidcServer> reference) {
-        oidcServerRef.setReference(reference);
-        if (webAppSecConfig != null) {
-            webAppSecConfig.setSsoCookieName(oidcServerRef, oidcClientRef);
-        }
-    }
-
-    protected void unsetOidcServer(ServiceReference<OidcServer> reference) {
-        oidcServerRef.unsetReference(reference);
-    }
-
-    protected void setOidcClient(ServiceReference<OidcClient> reference) {
-        oidcClientRef.setReference(reference);
-        if (webAppSecConfig != null) {
-            webAppSecConfig.setSsoCookieName(oidcServerRef, oidcClientRef);
-        }
-    }
-
-    protected void unsetOidcClient(ServiceReference<OidcClient> reference) {
-        oidcClientRef.unsetReference(reference);
-    }
-
-    protected void setOpenidClientService(ServiceReference<OpenidClientService> reference) {
-        openidClientRef.setReference(reference);
-    }
-
-    protected void unsetOpenidClientService(ServiceReference<OpenidClientService> reference) {
-        openidClientRef.unsetReference(reference);
-    }
-
     public void setWebAuthenticator(ServiceReference<WebAuthenticator> ref) {
         String cn = (String) ref.getProperty(KEY_COMPONENT_NAME);
         webAuthenticatorRef.putReference(cn, ref);
@@ -341,35 +290,31 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
         securityServiceRef.activate(cc);
         interceptorServiceRef.activate(cc);
         taiServiceRef.activate(cc);
-        oauthServiceRef.activate(cc);
-        oidcServerRef.activate(cc);
-        oidcClientRef.activate(cc);
-        openidClientRef.activate(cc);
         jaccServiceRef.activate(cc);
         webAuthenticatorRef.activate(cc);
         unprotectedResourceServiceRef.activate(cc);
-        webAppSecConfig = new WebAppSecurityConfigImpl(props, locationAdminRef, oidcServerRef, oidcClientRef);
+        webAppSecConfig = new WebAppSecurityConfigImpl(props, locationAdminRef);
         WebSecurityHelperImpl.setWebAppSecurityConfig(webAppSecConfig);
-        SSOCookieHelper ssoCookieHelper = new SSOCookieHelperImpl(webAppSecConfig, oidcServerRef);
+        SSOCookieHelper ssoCookieHelper = new SSOCookieHelperImpl(webAppSecConfig);
         authenticateApi = new AuthenticateApi(ssoCookieHelper, securityServiceRef, collabUtils, webAuthenticatorRef, unprotectedResourceServiceRef);
         postParameterHelper = new PostParameterHelper(webAppSecConfig);
 
-        providerAuthenticatorProxy = new WebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig, oauthServiceRef, openidClientRef, oidcServerRef, oidcClientRef, webAuthenticatorRef);
-        authenticatorProxy = new WebAuthenticatorProxy(webAppSecConfig, postParameterHelper, securityServiceRef, providerAuthenticatorProxy, oidcServerRef);
+        providerAuthenticatorProxy = new WebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig, webAuthenticatorRef);
+        authenticatorProxy = new WebAuthenticatorProxy(webAppSecConfig, postParameterHelper, securityServiceRef, providerAuthenticatorProxy);
     }
 
     protected void modified(Map<String, Object> newProperties) {
-        WebAppSecurityConfig newWebAppSecConfig = new WebAppSecurityConfigImpl(newProperties, locationAdminRef, oidcServerRef, oidcClientRef);
+        WebAppSecurityConfig newWebAppSecConfig = new WebAppSecurityConfigImpl(newProperties, locationAdminRef);
         // Capture the properties that were changed for our audit record
         String deltaString = newWebAppSecConfig.getChangedProperties(webAppSecConfig);
         webAppSecConfig = newWebAppSecConfig;
 
         WebSecurityHelperImpl.setWebAppSecurityConfig(webAppSecConfig);
-        SSOCookieHelper ssoCookieHelper = new SSOCookieHelperImpl(webAppSecConfig, oidcServerRef);
+        SSOCookieHelper ssoCookieHelper = new SSOCookieHelperImpl(webAppSecConfig);
         authenticateApi = new AuthenticateApi(ssoCookieHelper, securityServiceRef, collabUtils, webAuthenticatorRef, unprotectedResourceServiceRef);
         postParameterHelper = new PostParameterHelper(webAppSecConfig);
-        providerAuthenticatorProxy = new WebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig, oauthServiceRef, openidClientRef, oidcServerRef, oidcClientRef, webAuthenticatorRef);
-        authenticatorProxy = new WebAuthenticatorProxy(webAppSecConfig, postParameterHelper, securityServiceRef, providerAuthenticatorProxy, oidcServerRef);
+        providerAuthenticatorProxy = new WebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig, webAuthenticatorRef);
+        authenticatorProxy = new WebAuthenticatorProxy(webAppSecConfig, postParameterHelper, securityServiceRef, providerAuthenticatorProxy);
         Tr.audit(tc, "WEB_APP_SECURITY_CONFIGURATION_UPDATED", deltaString);
     }
 
@@ -378,10 +323,6 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
         securityServiceRef.deactivate(cc);
         taiServiceRef.deactivate(cc);
         interceptorServiceRef.deactivate(cc);
-        oauthServiceRef.deactivate(cc);
-        oidcServerRef.deactivate(cc);
-        oidcClientRef.deactivate(cc);
-        openidClientRef.deactivate(cc);
         jaccServiceRef.deactivate(cc);
         webAuthenticatorRef.deactivate(cc);
         unprotectedResourceServiceRef.deactivate(cc);
@@ -398,7 +339,7 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
             if (userRegistryService.isUserRegistryConfigured())
                 userRegistry = userRegistryService.getUserRegistry();
 
-            return new FormLoginExtensionProcessor(webAppSecConfig, securityService.getAuthenticationService(), userRegistry, webapp, providerAuthenticatorProxy, oidcServerRef, webAuthenticatorRef);
+            return new FormLoginExtensionProcessor(webAppSecConfig, securityService.getAuthenticationService(), userRegistry, webapp, providerAuthenticatorProxy, webAuthenticatorRef);
         } catch (RegistryException e) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "RegistryException while trying to create FormLoginExtensionProcessor", e);
@@ -409,7 +350,7 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
 
     @Override
     public ExtensionProcessor getFormLogoutExtensionProcessor(IServletContext webapp) {
-        return new FormLogoutExtensionProcessor(webapp, webAppSecConfig, getAuthenticateApi(webAppSecConfig, oidcServerRef, securityServiceRef, collabUtils));
+        return new FormLogoutExtensionProcessor(webapp, webAppSecConfig, getAuthenticateApi(webAppSecConfig, securityServiceRef, collabUtils));
     }
 
     /**
@@ -718,23 +659,9 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
     }
 
     private boolean needToAuthenticateSubject(WebRequest webRequest) {
-        HttpServletRequest req = webRequest.getHttpServletRequest();
-        OAuth20Service oauthService = oauthServiceRef.getService();
-        OidcServer oidcServer = oidcServerRef.getService();
-        if (isProviderSpecialProtectedURI(req, oauthService, oidcServer, false)) {
-            // all oauth or oidc URI, no matter protected or not-protected
-            if (isProviderSpecialProtectedURI(req, oauthService, oidcServer, true)) {
-                // oauth or oidc URI which are protected
-                webRequest.setProviderSpecialUnprotectedURI(true);
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            if (webRequest.hasAuthenticationData())
-                return true;
-            return isUnprotectedResourceAuthenRequired(webRequest);
-        }
+        if (webRequest.hasAuthenticationData())
+            return true;
+        return isUnprotectedResourceAuthenRequired(webRequest);
     }
 
     private WebReply unprotectedResource(WebRequest webRequest) {
@@ -1010,7 +937,6 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
             authResult = authenticateRequest(webRequest);
         }
         if (authResult.getStatus() == AuthResult.SUCCESS) {
-            authenticateApi = getAuthenticateApi(webAppSecConfig, oidcServerRef, securityServiceRef, collabUtils);
             authenticateApi.postProgrammaticAuthenticate(req, resp, authResult);
         } else {
             String realm = authResult.realm;
@@ -1064,7 +990,7 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
                                                                     "CWWKS9116E: Login to the URL {0} failed for user {1} due to an internal error. Review the server logs for more information."));
 
         }
-        AuthenticateApi aa = getAuthenticateApi(webAppSecConfig, oidcServerRef, securityServiceRef, collabUtils);
+        AuthenticateApi aa = getAuthenticateApi(webAppSecConfig, securityServiceRef, collabUtils);
         aa.login(req, resp, username, password, webAppSecConfig, basicAuthAuthenticator);
         String authType = getSecurityMetadata().getLoginConfiguration().getAuthenticationMethod();
         SRTServletRequestUtils.setPrivateAttribute(req, AUTH_TYPE, authType);
@@ -1072,7 +998,7 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
 
     @Override
     public void logout(HttpServletRequest res, HttpServletResponse resp) throws ServletException {
-        AuthenticateApi aa = getAuthenticateApi(webAppSecConfig, oidcServerRef, securityServiceRef, collabUtils);
+        AuthenticateApi aa = getAuthenticateApi(webAppSecConfig, securityServiceRef, collabUtils);
         aa.logoutServlet30(res, resp, webAppSecConfig);
     }
 
@@ -1140,8 +1066,6 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
 
             case SEND_401:
                 return new ChallengeReply(realm);
-            case OAUTH_CHALLENGE:
-                return new OAuthChallengeReply(authResult.getReason());
 
             case TAI_CHALLENGE:
                 return new TAIChallengeReply(authResult.getTAIChallengeCode());
@@ -1430,30 +1354,13 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
         return globalConfig;
     }
 
-    protected AuthenticateApi getAuthenticateApi(WebAppSecurityConfig webAppSecConfig, AtomicServiceReference<OidcServer> oidcServerRef,
+    protected AuthenticateApi getAuthenticateApi(WebAppSecurityConfig webAppSecConfig,
                                                  AtomicServiceReference<SecurityService> securityServiceRef, CollaboratorUtils collabUtils) {
         if (authenticateApi == null) {
-            SSOCookieHelper ssoCookieHelper = new SSOCookieHelperImpl(webAppSecConfig, oidcServerRef);
+            SSOCookieHelper ssoCookieHelper = new SSOCookieHelperImpl(webAppSecConfig);
             authenticateApi = new AuthenticateApi(ssoCookieHelper, securityServiceRef, collabUtils, webAuthenticatorRef, unprotectedResourceServiceRef);
         }
         return authenticateApi;
-    }
-
-    protected boolean isProviderSpecialProtectedURI(HttpServletRequest req,
-                                                    OAuth20Service oauthService,
-                                                    OidcServer oidcServer,
-                                                    boolean protectedUri) {
-        if (oidcServer != null) {
-            if (oidcServer.isOIDCSpecificURI(req, protectedUri)) {
-                return true;
-            }
-        }
-        if (oauthService != null) {
-            if (oauthService.isOauthSpecificURI(req, protectedUri)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

@@ -25,8 +25,6 @@ import org.junit.Test;
 
 import com.ibm.ws.webcontainer.security.internal.CookieMatcher;
 import com.ibm.ws.webcontainer.security.internal.StringUtil;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcServer;
-import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.security.token.SingleSignonToken;
 
 public class SSOCookieHelperImplTest {
@@ -48,10 +46,7 @@ public class SSOCookieHelperImplTest {
     private final Cookie cookie = new Cookie(cookieName, cookieValue);
     private final WebAppSecurityConfig config = mock.mock(WebAppSecurityConfig.class);
     @SuppressWarnings("unchecked")
-    private final AtomicServiceReference<OidcServer> osr = mock.mock(AtomicServiceReference.class);
-    private final OidcServer oidcServer = mock.mock(OidcServer.class);
     private final SSOCookieHelperImpl ssoCookieHelper = new SSOCookieHelperImpl(config);
-    private final SSOCookieHelperImpl ssoCookieHelperWithOidc = new SSOCookieHelperImpl(config, osr);
     private final Subject subject = new Subject();
 
     private class SSOCookieHelperImplTestDouble extends SSOCookieHelperImpl {
@@ -81,7 +76,7 @@ public class SSOCookieHelperImplTest {
      * matches the Cookie that is instantiated in
      * FormLoginAuthenticator.restorePostParamsFromCookie(), based
      * on name, value, age, and path.
-     * 
+     *
      * @param cookie
      * @return boolean if the cookie's properties match
      */
@@ -172,46 +167,6 @@ public class SSOCookieHelperImplTest {
         Subject subject = new Subject();
         subject.getPrivateCredentials().add(ssoToken);
         ssoCookieHelper.addSSOCookiesToResponse(subject, req, resp);
-        mock.assertIsSatisfied();
-        assertTrue("The removeSSOCookieFromResponse method should NOT be invoked.", ssoCookieHelper.removeSSOCookieFromResponseNOTInvoked);
-    }
-
-    /**
-     * Test addSSOCookiesToResponse() with subject that have SSOToken with oidc server enabled.
-     */
-    @Test
-    public void testAddSSOCookiesToResponse_SubjectWithSSOTokenWithOidcEnabled() {
-        SSOCookieHelperImplTestDouble ssoCookieHelper = new SSOCookieHelperImplTestDouble(config);
-        mock.checking(new Expectations() {
-            {
-                one(req).getCookies();
-                will(returnValue(new Cookie[] { new Cookie("oidc_bsc", "value") }));
-                one(osr).getService();
-                will(returnValue(oidcServer));
-                one(config).isSingleSignonEnabled();
-                will(returnValue(true));
-                allowing(ssoToken).getName();
-                will(returnValue(cookieName));
-                allowing(ssoToken).getBytes();
-                will(returnValue(cookieBytes));
-                allowing(config).getSSOCookieName();
-                will(returnValue(cookieName));
-                one(config).getHttpOnlyCookies();
-                will(returnValue(true));
-                allowing(resp).addCookie(with(any(Cookie.class)));
-                allowing(req).isSecure();
-                will(returnValue(true));
-                allowing(config).getSSORequiresSSL();
-                will(returnValue(false));
-                allowing(config).getSSODomainList();
-                allowing(config).getSSOUseDomainFromURL();
-                allowing(req).getRequestURL();
-                will(returnValue(new StringBuffer(TEST_URL_STRING)));
-            }
-        });
-        Subject subject = new Subject();
-        subject.getPrivateCredentials().add(ssoToken);
-        ssoCookieHelperWithOidc.addSSOCookiesToResponse(subject, req, resp);
         mock.assertIsSatisfied();
         assertTrue("The removeSSOCookieFromResponse method should NOT be invoked.", ssoCookieHelper.removeSSOCookieFromResponseNOTInvoked);
     }
@@ -515,33 +470,6 @@ public class SSOCookieHelperImplTest {
     }
 
     @Test
-    public void createLogoutCookies_withSSOCookieOidcEnabled() {
-        final Cookie matchCookie = new Cookie("LtpaToken", "");
-        matchCookie.setMaxAge(0);
-        final StringBuffer sb = new StringBuffer("myhost.austin.ibm.com");
-        mock.checking(new Expectations() {
-            {
-                one(osr).getService();
-                will(returnValue(oidcServer));
-                one(config).getSSOCookieName();
-                will(returnValue("LtpaToken"));
-                one(req).getCookies();
-                will(returnValue(new Cookie[] { new Cookie("oidc_bsc", "value"), new Cookie("LtpaToken", "value") }));
-                allowing(req).isSecure();
-                will(returnValue(true));
-                allowing(resp).addCookie(with(any(Cookie.class)));
-                one(config).getSSODomainList();
-                one(config).getSSOUseDomainFromURL();
-                will(returnValue(false));
-                one(req).getRequestURL();
-                will(returnValue(sb));
-                one(config).getHttpOnlyCookies();
-            }
-        });
-        ssoCookieHelperWithOidc.createLogoutCookies(req, resp);
-    }
-
-    @Test
     public void createLogoutCookies_withMultpleCookies() {
         final Cookie matchCookie = new Cookie("LtpaToken", "");
         matchCookie.setMaxAge(0);
@@ -565,57 +493,4 @@ public class SSOCookieHelperImplTest {
         });
         ssoCookieHelper.createLogoutCookies(req, resp);
     }
-
-    @Test
-    public void testIsBrowserStateEnabledNoCookie() {
-        mock.checking(new Expectations() {
-            {
-                one(req).getCookies();
-                will(returnValue(null));
-            }
-        });
-        assertFalse(ssoCookieHelper.isBrowserStateEnabled(req));
-    }
-
-    @Test
-    public void testIsBrowserStateEnabledFalse() {
-        final Cookie bsc = new Cookie("different", "test");
-        mock.checking(new Expectations() {
-            {
-                one(req).getCookies();
-                will(returnValue(new Cookie[] { bsc }));
-            }
-        });
-        assertFalse(ssoCookieHelper.isBrowserStateEnabled(req));
-    }
-
-    @Test
-    public void testIsBrowserStateEnabledMultipleTrue() {
-        final Cookie different = new Cookie("not_oidc_bsc", "test");
-        final Cookie bsc = new Cookie("oidc_bsc", "test");
-        mock.checking(new Expectations() {
-            {
-                one(req).getCookies();
-                will(returnValue(new Cookie[] { different, bsc }));
-            }
-        });
-        assertTrue(ssoCookieHelper.isBrowserStateEnabled(req));
-    }
-
-    @Test
-    public void testRemoveBrowserStateCookie() {
-        final Cookie matchCookie = new Cookie("oidc_bsc", "");
-        matchCookie.setMaxAge(0);
-        matchCookie.setPath("/");
-        matchCookie.setSecure(true);
-        mock.checking(new Expectations() {
-            {
-                one(req).isSecure();
-                will(returnValue(true));
-                one(resp).addCookie(with(matchingCookie(matchCookie)));
-            }
-        });
-        ssoCookieHelper.removeBrowserStateCookie(req, resp);
-    }
-
 }

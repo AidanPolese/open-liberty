@@ -5,17 +5,13 @@
  *
  * Copyright IBM Corp. 2011
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.webcontainer.security;
 
 import java.util.List;
-
-import com.ibm.ws.webcontainer.security.openidconnect.OidcClient;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcServer;
-import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 
 /**
  * Encapsulate the web application security settings.
@@ -47,7 +43,7 @@ public interface WebAppSecurityConfig {
 
     /**
      * Is failover to BASIC from CLIENT_CERT allowed?
-     * 
+     *
      * @return {@code true} if BASIC failover is allowed
      */
     boolean getAllowFailOverToBasicAuth();
@@ -74,7 +70,7 @@ public interface WebAppSecurityConfig {
      * Calculates the delta between this WebAppSecurityConfig and the provided
      * WebAppSecurityConfig. The values returned are the values from this Object.
      * If no properties were changed, an empty String should be returned.
-     * 
+     *
      * @param webAppSecConfig WebAppSecurityConfig object to compare settings against
      * @return String in the format of "name=value, name=value, ..." encapsulating the
      *         properties that are different between this WebAppSecurityConfig and the specified one
@@ -85,23 +81,17 @@ public interface WebAppSecurityConfig {
 
     /**
      * Is failover to FORM from CLIENT_CERT allowed?
-     * 
+     *
      * @return {@code true} if FORM failover is allowed
      */
     boolean getAllowFailOverToFormLogin();
 
     /**
      * Is any failover from CLIENT_CERT allowed?
-     * 
+     *
      * @return {@code true} if any failover is allowed
      */
     boolean allowFailOver();
-
-    /**
-     * @param oidcServerRef
-     * @param oidcClientRef
-     */
-    void setSsoCookieName(AtomicServiceReference<OidcServer> oidcServerRef, AtomicServiceReference<OidcClient> oidcClientRef);
 
     /**
      * Is tracking of logged out LTPA tokens enabled.
