@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2011
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.webcontainer.security.feature.internal;
@@ -17,9 +17,6 @@ import java.util.Map;
 
 import com.ibm.ws.webcontainer.security.WebAppSecurityCollaboratorImpl;
 import com.ibm.ws.webcontainer.security.WebAppSecurityConfig;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcClient;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcServer;
-import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 
 /**
  * Represents security configurable options for web admin applications.
@@ -282,12 +279,6 @@ class FeatureWebSecurityConfigImpl implements WebAppSecurityConfig {
             return WebAppSecurityCollaboratorImpl.getGlobalWebAppSecurityConfig().allowFailOver();
         else
             return false;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void setSsoCookieName(AtomicServiceReference<OidcServer> oidcServerRef, AtomicServiceReference<OidcClient> oidcClientRef) {
-        //do nothing
     }
 
     /** {@inheritDoc} */

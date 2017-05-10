@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corporation. 2011, 2016
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.webcontainer.security;
@@ -42,7 +42,7 @@ public class ReferrerURLCookieHandler extends URLHandler {
     /**
      * Retrieve the referrer URL from the HttpServletRequest's cookies.
      * This will decode the URL and restore the host name if it was removed.
-     * 
+     *
      * @param req
      * @return referrerURL
      */
@@ -61,7 +61,7 @@ public class ReferrerURLCookieHandler extends URLHandler {
     /**
      * Create the referrer URL cookie.
      * This cookie should be session length (age == -1).
-     * 
+     *
      * @param authResult
      * @param url
      */
@@ -89,10 +89,9 @@ public class ReferrerURLCookieHandler extends URLHandler {
      */
     public Cookie createCookie(String cookieName, @Sensitive String value, boolean enableHttpOnly, HttpServletRequest req) {
         Cookie c = new Cookie(cookieName, value);
-        if (cookieName.equals("WASReqURL") || cookieName.startsWith("WASOidcStateKey")) {
+        if (cookieName.equals("WASReqURL")) {
             c.setPath(getPathName(req));
-        }
-        else {
+        } else {
             c.setPath("/");
         }
         c.setMaxAge(-1);
@@ -114,7 +113,7 @@ public class ReferrerURLCookieHandler extends URLHandler {
     /**
      * Invalidate (clear) the referrer URL cookie in the HttpServletResponse.
      * Setting age to 0 invalidates it.
-     * 
+     *
      * @param res
      */
     public void invalidateReferrerURLCookie(HttpServletRequest req, HttpServletResponse res, String cookieName) {
@@ -124,15 +123,14 @@ public class ReferrerURLCookieHandler extends URLHandler {
     /**
      * Invalidate (clear) the referrer URL cookie in the HttpServletResponse.
      * Setting age to 0 invalidates it.
-     * 
+     *
      * @param res
      */
     public void invalidateCookie(HttpServletRequest req, HttpServletResponse res, String cookieName, boolean enableHttpOnly) {
         Cookie c = new Cookie(cookieName, "");
         if (cookieName.equals("WASReqURL")) {
             c.setPath(getPathName(req));
-        }
-        else {
+        } else {
             c.setPath("/");
         }
         c.setMaxAge(0);
@@ -148,7 +146,7 @@ public class ReferrerURLCookieHandler extends URLHandler {
     /**
      * Removes the referrer URL cookie from the HttpServletResponse if set in the
      * HttpServletRequest.
-     * 
+     *
      * @param req
      * @param res
      */
@@ -161,7 +159,7 @@ public class ReferrerURLCookieHandler extends URLHandler {
     }
 
     /**
-     * 
+     *
      * @param req
      * @param res
      * @param securityConfig
@@ -202,11 +200,9 @@ public class ReferrerURLCookieHandler extends URLHandler {
         return result;
     }
 
-    public String getPathName(HttpServletRequest req)
-    {
+    public String getPathName(HttpServletRequest req) {
         String pathName = "/";
-        if (webAppSecConfig.isIncludePathInWASReqURL())
-        {
+        if (webAppSecConfig.isIncludePathInWASReqURL()) {
             pathName = req.getContextPath();
         }
         return pathName;
@@ -216,21 +212,18 @@ public class ReferrerURLCookieHandler extends URLHandler {
      * Sets the referrer URL cookie into the AuthenticationResult. If
      * PRESERVE_FULLY_QUALIFIED_REFERRER_URL is not set, or set to false,
      * then the host name of the referrer URL is removed.
-     * 
+     *
      * @param authResult AuthenticationResult instance
      * @param url non-null URL String
      * @param securityConfig SecurityConfig instance
      */
-    public void setReferrerURLCookie(HttpServletRequest req, AuthenticationResult authResult, String url)
-    {
+    public void setReferrerURLCookie(HttpServletRequest req, AuthenticationResult authResult, String url) {
         //PM81345: If the URL contains favicon, then we will not update the value of the ReffererURL. The only way
-        //we will do it, is if the value of the cookie is null. This will solve the Error 500. 
-        if (url.contains("/favicon.ico") && CookieHelper.getCookieValue(req.getCookies(), REFERRER_URL_COOKIENAME) != null)
-        {
+        //we will do it, is if the value of the cookie is null. This will solve the Error 500.
+        if (url.contains("/favicon.ico") && CookieHelper.getCookieValue(req.getCookies(), REFERRER_URL_COOKIENAME) != null) {
             if (tc.isDebugEnabled())
                 Tr.debug(tc, "Will not update the WASReqURL cookie");
-        }
-        else {
+        } else {
             if (!webAppSecConfig.getPreserveFullyQualifiedReferrerUrl()) {
                 url = removeHostNameFromURL(url);
             }
@@ -280,8 +273,7 @@ public class ReferrerURLCookieHandler extends URLHandler {
                         }
                         RuntimeException e = new RuntimeException("WASReqURL:" + "'" + storedReq + "'" + " is not a valid URL.", me);
                         throw e;
-                    }
-                    else {
+                    } else {
                         if (tc.isDebugEnabled()) {
                             Tr.debug(tc, "currentURL:" + currentReqURL + " is a MalformedURL.");
                         }

@@ -20,8 +20,6 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.webcontainer.security.WebAppSecurityCollaboratorImpl;
 import com.ibm.ws.webcontainer.security.WebAppSecurityConfig;
 import com.ibm.ws.webcontainer.security.metadata.LoginConfiguration;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcClient;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcServer;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 
@@ -67,7 +65,7 @@ public class WebAppSecurityConfigImpl implements WebAppSecurityConfig {
     private final Boolean allowLogoutPageRedirectToAnyHost;
     private final String wasReqURLRedirectDomainNames;
     private final String logoutPageRedirectDomainNames;
-    private String ssoCookieName;
+    private final String ssoCookieName;
     private final Boolean autoGenSsoCookieName;
     private final Boolean allowFailOverToBasicAuth;
     private final Boolean displayAuthenticationRealm;
@@ -84,14 +82,9 @@ public class WebAppSecurityConfigImpl implements WebAppSecurityConfig {
     private final Boolean useOnlyCustomCookieName;
 
     protected final AtomicServiceReference<WsLocationAdmin> locationAdminRef;
-    protected final AtomicServiceReference<OidcServer> oidcServerRef;
-    protected final AtomicServiceReference<OidcClient> oidcClientRef;
 
-    public WebAppSecurityConfigImpl(Map<String, Object> newProperties, AtomicServiceReference<WsLocationAdmin> locationAdminRef, AtomicServiceReference<OidcServer> oidcServerRef,
-                                    AtomicServiceReference<OidcClient> oidcClientRef) {
+    public WebAppSecurityConfigImpl(Map<String, Object> newProperties, AtomicServiceReference<WsLocationAdmin> locationAdminRef) {
         this.locationAdminRef = locationAdminRef;
-        this.oidcServerRef = oidcServerRef;
-        this.oidcClientRef = oidcClientRef;
         logoutOnHttpSessionExpire = (Boolean) newProperties.get(CFG_KEY_LOGOUT_ON_HTTP_SESSION_EXPIRE);
         singleSignonEnabled = (Boolean) newProperties.get(CFG_KEY_SINGLE_SIGN_ON_ENABLED);
         preserveFullyQualifiedReferrerUrl = (Boolean) newProperties.get(CFG_KEY_PRESERVE_FULLY_QUALIFIED_REFERRER_URL);
@@ -118,31 +111,13 @@ public class WebAppSecurityConfigImpl implements WebAppSecurityConfig {
         WebAppSecurityCollaboratorImpl.setGlobalWebAppSecurityConfig(this);
     }
 
-    /*
-     * This method set the runtime auto generate cookie name for OIDC server and client.
-     */
-    @Override
-    public void setSsoCookieName(AtomicServiceReference<OidcServer> oidcServerRef,
-                                 AtomicServiceReference<OidcClient> oidcClientRef) {
-        if (DEFAULT_SSO_COOKIE_NAME.equalsIgnoreCase(ssoCookieName) && isRunTimeAutoGenSsoCookieName()) {
-            String genCookieName = generateSsoCookieName();
-            if (genCookieName != null) {
-                ssoCookieName = genCookieName;
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "auto generate ssoCookieName: ", ssoCookieName);
-                }
-            }
-        }
-    }
-
     /**
      *
      */
     protected String resolveSsoCookieName(Map<String, Object> newProperties) {
         String genCookieName = null;
         String cookieName = (String) newProperties.get(CFG_KEY_SSO_COOKIE_NAME);
-        if (DEFAULT_SSO_COOKIE_NAME.equalsIgnoreCase(cookieName) &&
-            (autoGenSsoCookieName || isRunTimeAutoGenSsoCookieName())) {
+        if (DEFAULT_SSO_COOKIE_NAME.equalsIgnoreCase(cookieName) && autoGenSsoCookieName) {
             genCookieName = generateSsoCookieName();
         }
 
@@ -151,17 +126,6 @@ public class WebAppSecurityConfigImpl implements WebAppSecurityConfig {
         } else {
             return cookieName;
         }
-    }
-
-    /*
-     * This method will turn on the auto generation SSO cookie name if OIDC client and/or server services
-     * available.
-     */
-    private boolean isRunTimeAutoGenSsoCookieName() {
-        if (oidcClientRef.getService() != null || (oidcServerRef.getService() != null && !oidcServerRef.getService().allowDefaultSsoCookieName()))
-            return true;
-        else
-            return false;
     }
 
     /**

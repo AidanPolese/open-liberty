@@ -83,8 +83,6 @@ import com.ibm.ws.webcontainer.security.metadata.SecurityConstraint;
 import com.ibm.ws.webcontainer.security.metadata.SecurityConstraintCollection;
 import com.ibm.ws.webcontainer.security.metadata.SecurityMetadata;
 import com.ibm.ws.webcontainer.security.metadata.WebResourceCollection;
-import com.ibm.ws.webcontainer.security.oauth20.OAuth20Service;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcServer;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.security.tai.TrustAssociationInterceptor;
 import com.ibm.wsspi.security.token.AttributeNameConstants;
@@ -136,9 +134,6 @@ public class WebAppSecurityCollaboratorImplTest {
     private final HttpServletResponse commongResp = mock.mock(HttpServletResponse.class, "commongResp");
     private final ServiceReference<SecurityService> securityServiceRef = mock.mock(ServiceReference.class, "securityServiceRef");
 
-    private final AtomicServiceReference<OAuth20Service> oauthServiceRef = mock.mock(AtomicServiceReference.class, "oauthServiceRef");
-    private final AtomicServiceReference<OidcServer> oidcServerRef = mock.mock(AtomicServiceReference.class, "oidcServerRef");
-
     private final SecurityService securityService = mock.mock(SecurityService.class);
     private final UnauthenticatedSubjectService unauthSubjSrv = mock.mock(UnauthenticatedSubjectService.class);
 
@@ -168,7 +163,7 @@ public class WebAppSecurityCollaboratorImplTest {
     private final PostParameterHelper postParameterHelper = mock.mock(PostParameterHelper.class);
     private final AtomicServiceReference<SecurityService> securityAtomicServiceRef = mock.mock(AtomicServiceReference.class, "securityAtomicServiceRef");
     private final AtomicServiceReference<TAIService> taiAtomicServiceRef = mock.mock(AtomicServiceReference.class, "taiAtomicServiceRef");
-    private final WebAuthenticatorProxy authenticatorProxyForTest = new WebAuthenticatorProxyTestDouble(webAppSecurityConfig, postParameterHelper, securityAtomicServiceRef, taiAtomicServiceRef, null);
+    private final WebAuthenticatorProxy authenticatorProxyForTest = new WebAuthenticatorProxyTestDouble(webAppSecurityConfig, postParameterHelper, securityAtomicServiceRef, taiAtomicServiceRef);
     final AuthenticationService authenticationService = mock.mock(AuthenticationService.class);
     final HttpServletRequest req = mock.mock(HttpServletRequest.class, "req");
     final HttpServletResponse res = mock.mock(HttpServletResponse.class, "res");
@@ -1795,8 +1790,7 @@ public class WebAppSecurityCollaboratorImplTest {
         secColl = new WebAppSecurityCollaboratorImpl(null, null, null, webAppSecurityConfig);
         secColl.optionallyAuthenticateUnprotectedResource(commonWebRequest);
 
-        assertNull("Nothing to persist, no subject should be set.",
-                   subjectManager.getCallerSubject());
+        assertNull("Nothing to persist, no subject should be set.", subjectManager.getCallerSubject());
     }
 
     /**
@@ -1818,8 +1812,6 @@ public class WebAppSecurityCollaboratorImplTest {
                 will(returnValue(commonReq)); //
                 one(commonWebRequest).hasAuthenticationData();
                 will(returnValue(false));
-                one(commonWebRequest).getHttpServletRequest(); //
-                will(returnValue(commonReq)); //
             }
         });
         secColl = new WebAppSecurityCollaboratorImpl(null, null, null, webAppSecurityConfig);
@@ -1878,8 +1870,6 @@ public class WebAppSecurityCollaboratorImplTest {
             {
                 one(webAppSecurityConfig).isUseAuthenticationDataForUnprotectedResourceEnabled();
                 will(returnValue(true));
-                one(commonWebRequest).getHttpServletRequest(); //
-                will(returnValue(commonReq)); //
                 one(commonWebRequest).hasAuthenticationData();
                 will(returnValue(true));
                 one(commonWebRequest).getRequiredRoles();
@@ -1911,8 +1901,6 @@ public class WebAppSecurityCollaboratorImplTest {
         roles.add("Role1");
         mock.checking(new Expectations() {
             {
-                one(commonWebRequest).getHttpServletRequest(); //
-                will(returnValue(commonReq)); //
                 one(commonWebRequest).hasAuthenticationData();
                 will(returnValue(true));
                 one(commonWebRequest).getRequiredRoles();
@@ -2087,8 +2075,7 @@ public class WebAppSecurityCollaboratorImplTest {
     class WebAuthenticatorProxyTestDouble extends WebAuthenticatorProxy {
 
         public WebAuthenticatorProxyTestDouble(WebAppSecurityConfig webAppSecurityConfig, PostParameterHelper postParameterHelper,
-                                               AtomicServiceReference<SecurityService> securityServiceRef, AtomicServiceReference<TAIService> taiServiceRef,
-                                               AtomicServiceReference<OAuth20Service> oauthAtomicServiceRef) {
+                                               AtomicServiceReference<SecurityService> securityServiceRef, AtomicServiceReference<TAIService> taiServiceRef) {
             super(webAppSecurityConfig, postParameterHelper, securityServiceRef, providerAuthenticatorProxy);
         }
 

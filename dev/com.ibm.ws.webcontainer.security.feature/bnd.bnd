@@ -29,15 +29,11 @@ Service-Component: \
     securityService=com.ibm.ws.security.SecurityService; \
     taiService=com.ibm.ws.security.authentication.tai.TAIService; \
     interceptorService='com.ibm.wsspi.security.tai.TrustAssociationInterceptor(id=*)'; \
-    oauthService=com.ibm.ws.webcontainer.security.oauth20.OAuth20Service; \
-    oidcServer=com.ibm.ws.webcontainer.security.openidconnect.OidcServer; \
-    oidcClient=com.ibm.ws.webcontainer.security.openidconnect.OidcClient; \
-    openidClientService=com.ibm.ws.webcontainer.security.openid20.OpenidClientService; \
-     locationAdmin=com.ibm.wsspi.kernel.service.location.WsLocationAdmin; \
+    locationAdmin=com.ibm.wsspi.kernel.service.location.WsLocationAdmin; \
     unauthenticatedSubjectService=com.ibm.ws.security.authentication.UnauthenticatedSubjectService; \
     multiple:='interceptorService'; \
-	optional:='taiService,interceptorService,oauthService,oidcServer,oidcClient,openidClientService'; \
-	dynamic:='securityService,taiService,interceptorService,oauthService,oidcClient,oidcServer,openidClientService'; \
+	optional:='taiService,interceptorService'; \
+	dynamic:='securityService,taiService,interceptorService'; \
     properties:="service.vendor=IBM,com.ibm.ws.security.type=com.ibm.ws.feature"
 
 instrument.classesExcludes: com/ibm/ws/webcontainer/security/feature/resources/*.class

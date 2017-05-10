@@ -50,13 +50,9 @@ public class FeatureWebSecurityCollaboratorImpl extends WebAppSecurityCollaborat
         interceptorServiceRef.activate(cc);
         webAuthenticatorRef.activate(cc);
         unprotectedResourceServiceRef.activate(cc);
-        oauthServiceRef.activate(cc);
-        oidcServerRef.activate(cc);
-        oidcClientRef.activate(cc);
-        openidClientRef.activate(cc);
         webAppSecConfig = featureSecConfig;
         postParameterHelper = new PostParameterHelper(webAppSecConfig);
-        providerAuthenticatorProxy = new WebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig, oauthServiceRef, openidClientRef, oidcServerRef, oidcClientRef, webAuthenticatorRef);
+        providerAuthenticatorProxy = new WebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig, webAuthenticatorRef);
         authenticatorProxy = new WebAuthenticatorProxy(webAppSecConfig, postParameterHelper, securityServiceRef, providerAuthenticatorProxy);
     }
 

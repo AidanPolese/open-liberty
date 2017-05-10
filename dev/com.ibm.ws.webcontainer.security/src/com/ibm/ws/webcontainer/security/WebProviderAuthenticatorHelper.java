@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2013
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.webcontainer.security;
@@ -34,8 +34,7 @@ import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.security.token.AttributeNameConstants;
 
 /**
- * The responsibility of this WebProviderAuthenticatorProxy is to authenticate request with TAI, SSO, access token or
- * OpenID and OpenID Connect providers
+ * The responsibility of this WebProviderAuthenticatorProxy is to authenticate request with TAI and SSO
  */
 public class WebProviderAuthenticatorHelper {
     private static final TraceComponent tc = Tr.register(WebProviderAuthenticatorHelper.class);

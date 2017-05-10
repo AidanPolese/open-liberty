@@ -45,9 +45,7 @@ import com.ibm.ws.webcontainer.security.WebRequestImpl;
 import com.ibm.ws.webcontainer.security.metadata.FormLoginConfiguration;
 import com.ibm.ws.webcontainer.security.metadata.LoginConfiguration;
 import com.ibm.ws.webcontainer.security.metadata.SecurityMetadata;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcServer;
 import com.ibm.ws.webcontainer.webapp.WebAppConfigExtended;
-import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.kernel.service.utils.ConcurrentServiceReferenceMap;
 import com.ibm.wsspi.webcontainer.metadata.WebModuleMetaData;
 import com.ibm.wsspi.webcontainer.osgi.extension.WebExtensionProcessor;
@@ -79,27 +77,6 @@ public class FormLoginExtensionProcessor extends WebExtensionProcessor {
      * @param authenticationService
      * @param userRegistry
      * @param webapp
-     * @param providerAuthenticatorProxy
-     */
-    public FormLoginExtensionProcessor(WebAppSecurityConfig webAppSecConfig,
-                                       AuthenticationService authenticationService,
-                                       UserRegistry userRegistry,
-                                       IServletContext webapp,
-                                       WebProviderAuthenticatorProxy providerAuthenticatorProxy,
-                                       ConcurrentServiceReferenceMap<String, WebAuthenticator> webAuthenticatorRef) {
-        this(webAppSecConfig, authenticationService, userRegistry, webapp, providerAuthenticatorProxy, (AtomicServiceReference<OidcServer>) null, webAuthenticatorRef);
-    }
-
-    /**
-     * This class handles form login and openId authentication and call by the WebContainer
-     * extension processor. It's store the original request and re-direct to a
-     * login page for user id and password.
-     * If anything wrong in the process, it redirects to an error page.
-     *
-     * @param webAppSecConfig
-     * @param authenticationService
-     * @param userRegistry
-     * @param webapp
      * @param rpServiceRef
      * @param providerAuthenticatorProxy
      */
@@ -108,7 +85,6 @@ public class FormLoginExtensionProcessor extends WebExtensionProcessor {
                                        UserRegistry userRegistry,
                                        IServletContext webapp,
                                        WebProviderAuthenticatorProxy providerAuthenticatorProxy,
-                                       AtomicServiceReference<OidcServer> oidcServerRef,
                                        ConcurrentServiceReferenceMap<String, WebAuthenticator> webAuthenticatorRef) {
         super(webapp);
         this.subjectManager = new SubjectManager();
@@ -117,7 +93,7 @@ public class FormLoginExtensionProcessor extends WebExtensionProcessor {
         this.webAppSecConfig = webAppSecConfig;
         this.providerAuthenticatorProxy = providerAuthenticatorProxy;
         this.webAuthenticatorRef = webAuthenticatorRef;
-        ssoCookieHelper = new SSOCookieHelperImpl(webAppSecConfig, oidcServerRef);
+        ssoCookieHelper = new SSOCookieHelperImpl(webAppSecConfig);
         referrerURLHandler = new ReferrerURLCookieHandler(webAppSecConfig);
 
         this.wac = webapp.getWebAppConfig();

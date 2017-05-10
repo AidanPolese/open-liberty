@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2011
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.webcontainer.security.admin.internal;
@@ -16,9 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.ibm.ws.webcontainer.security.WebAppSecurityConfig;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcClient;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcServer;
-import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 
 /**
  * Represents security configurable options for web admin applications.
@@ -176,7 +173,7 @@ class WebAdminSecurityConfigImpl implements WebAppSecurityConfig {
      * {@inheritDoc}<p>
      * This does not need an implemented as the Admin Application security
      * configuration properties never change.
-     * 
+     *
      * @return {@code null}
      */
     @Override
@@ -186,7 +183,7 @@ class WebAdminSecurityConfigImpl implements WebAppSecurityConfig {
 
     /**
      * {@inheritDoc} Admin Applications do not have a default Form Login URL.
-     * 
+     *
      * @return {@code null}
      */
     @Override
@@ -204,12 +201,6 @@ class WebAdminSecurityConfigImpl implements WebAppSecurityConfig {
     @Override
     public boolean allowFailOver() {
         return allowFailOverToBasicAuth || allowFailOverToFormLogin;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void setSsoCookieName(AtomicServiceReference<OidcServer> oidcServerRef, AtomicServiceReference<OidcClient> oidcClientRef) {
-        //do nothing
     }
 
     /** {@inheritDoc} */

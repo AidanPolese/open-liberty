@@ -11,11 +11,8 @@
  */
 package com.ibm.ws.webcontainer.security;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,30 +27,18 @@ import com.ibm.ws.security.authentication.tai.TAIService;
 import com.ibm.ws.webcontainer.security.internal.SSOAuthenticator;
 import com.ibm.ws.webcontainer.security.internal.TAIAuthenticator;
 import com.ibm.ws.webcontainer.security.metadata.SecurityMetadata;
-import com.ibm.ws.webcontainer.security.oauth20.OAuth20Service;
-import com.ibm.ws.webcontainer.security.openid20.OpenidClientService;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcClient;
-import com.ibm.ws.webcontainer.security.openidconnect.OidcServer;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.kernel.service.utils.ConcurrentServiceReferenceMap;
 import com.ibm.wsspi.security.tai.TrustAssociationInterceptor;
 
 /**
- * The responsibility of this WebProviderAuthenticatorProxy is to authenticate request with TAI, SSO, access token or
- * OpenID and OpenID Connect providers
+ * The responsibility of this WebProviderAuthenticatorProxy is to authenticate request with TAI and SSO
  *
  */
 public class WebProviderAuthenticatorProxy implements WebAuthenticator {
 
     private static final TraceComponent tc = Tr.register(WebProviderAuthenticatorProxy.class);
 
-    static final List<String> authenticatorOdering = Collections.unmodifiableList(Arrays.asList(new String[] { "com.ibm.ws.security.spnego", "com.ibm.ws.security.openid" }));
-
-    AuthenticationResult OAUTH_CONT = new AuthenticationResult(AuthResult.CONTINUE, "OAuth service said continue...");
-    AuthenticationResult OPENID_CLIENT_CONT = new AuthenticationResult(AuthResult.CONTINUE, "OpenID client service said continue...");
-    AuthenticationResult OIDC_SERVER_CONT = new AuthenticationResult(AuthResult.CONTINUE, "OpenID Connect server said continue...");
-    AuthenticationResult OIDC_CLIENT_CONT = new AuthenticationResult(AuthResult.CONTINUE, "OpenID Connect client said continue...");
-    AuthenticationResult SPNEGO_CONT = new AuthenticationResult(AuthResult.CONTINUE, "SPNEGO said continue...");
     AuthenticationResult JASPI_CONT = new AuthenticationResult(AuthResult.CONTINUE, "JASPI said continue...");
     private final AtomicServiceReference<SecurityService> securityServiceRef;
     private final AtomicServiceReference<TAIService> taiServiceRef;
@@ -62,77 +47,35 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
 
     private final ConcurrentServiceReferenceMap<String, WebAuthenticator> webAuthenticatorRef;
 
-    private final AtomicServiceReference<OAuth20Service> oauthServiceRef;
-    private final AtomicServiceReference<OpenidClientService> openIdClientServiceRef;
-    private final AtomicServiceReference<OidcServer> oidcServerRef;
-    private final AtomicServiceReference<OidcClient> oidcClientRef;
-    private WebProviderAuthenticatorHelper authHelper;
-    private ReferrerURLCookieHandler referrerURLCookieHandler = null;
-
     public WebProviderAuthenticatorProxy(AtomicServiceReference<SecurityService> securityServiceRef,
                                          AtomicServiceReference<TAIService> taiServiceRef,
                                          ConcurrentServiceReferenceMap<String, TrustAssociationInterceptor> interceptorServiceRef,
                                          WebAppSecurityConfig webAppSecurityConfig,
-                                         AtomicServiceReference<OAuth20Service> oauthServiceRef,
-                                         AtomicServiceReference<OpenidClientService> openIdClientServiceRef,
-                                         AtomicServiceReference<OidcServer> oidcServerRef,
-                                         AtomicServiceReference<OidcClient> oidcClientRef,
                                          ConcurrentServiceReferenceMap<String, WebAuthenticator> webAuthenticatorRef) {
 
         this.securityServiceRef = securityServiceRef;
         this.taiServiceRef = taiServiceRef;
         this.interceptorServiceRef = interceptorServiceRef;
         this.webAppSecurityConfig = webAppSecurityConfig;
-        this.oauthServiceRef = oauthServiceRef;
-        this.oidcServerRef = oidcServerRef;
-        this.openIdClientServiceRef = openIdClientServiceRef;
-        this.oidcClientRef = oidcClientRef;
         this.webAuthenticatorRef = webAuthenticatorRef;
-        authHelper = new WebProviderAuthenticatorHelper(securityServiceRef);
-        referrerURLCookieHandler = new ReferrerURLCookieHandler(webAppSecurityConfig);
     }
 
     /*
-     * need for unit test*
-     */
-    public void setWebProviderAuthenticatorHelper(WebProviderAuthenticatorHelper authHelper) {
-        this.authHelper = authHelper;
-    }
-
-    /*
-     * This method is the main method calling by the WebAuthenticatorProxy to handle TAI, SSO, and access token
-     *
-     * TODO: Refactor to use config filters/ordering
+     * This method is the main method calling by the WebAuthenticatorProxy to handle TAI and SSO
      */
     @Override
     public AuthenticationResult authenticate(WebRequest webRequest) {
-        HttpServletRequest request = webRequest.getHttpServletRequest();
-        HttpServletResponse response = webRequest.getHttpServletResponse();
         AuthenticationResult authResult = handleTAI(webRequest, true);
         if (authResult.getStatus() == AuthResult.CONTINUE) {
-            authResult = handleAccessToken(webRequest);
+            authResult = handleSSO(webRequest, null);
             if (authResult.getStatus() == AuthResult.CONTINUE) {
-                webRequest.setCallAfterSSO(false);
-                authResult = handleSpnego(webRequest);
-                if (authResult.getStatus() == AuthResult.CONTINUE) {
-                    authResult = handleOidcClient(request, response, true);
-                    if (authResult.getStatus() == AuthResult.CONTINUE) {
-                        authResult = handleSSO(webRequest, null);
-                        if (authResult.getStatus() == AuthResult.CONTINUE) {
-                            webRequest.setCallAfterSSO(true);
-                            authResult = handleSpnego(webRequest);
-                            if (authResult.getStatus() == AuthResult.CONTINUE) {
-                                authResult = handleTAI(webRequest, false);
-                                if (authResult.getStatus() == AuthResult.CONTINUE) {
-                                    authResult = handleOidcClient(request, response, false);
-                                }
-                            }
-                        }
-                    }
-                }
+                webRequest.setCallAfterSSO(true);
+                authResult = handleTAI(webRequest, false);
             }
         }
+
         return authResult;
+
     }
 
     /**
@@ -238,9 +181,6 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
                                              HashMap<String, Object> props) throws Exception {
         WebRequest webRequest = new WebRequestImpl(request, response, null, null, null, null, null);
         AuthenticationResult authResult = handleJaspi(webRequest, props);
-        if (authResult.getStatus() == AuthResult.CONTINUE) {
-            authResult = handleOpenidClient(request, response);
-        }
         return authResult;
     }
 
@@ -274,154 +214,6 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
     }
 
     /**
-     * @param webRequest
-     * @param req
-     * @param res
-     * @return
-     */
-    private AuthenticationResult handleAccessToken(WebRequest webRequest) {
-        HttpServletRequest req = webRequest.getHttpServletRequest();
-        HttpServletResponse res = webRequest.getHttpServletResponse();
-
-        AuthenticationResult authResult = handleOAuth(req, res);
-        if (authResult.getStatus() != AuthResult.CONTINUE) {
-            authResult.setAuditCredType(AuditEvent.CRED_TYPE_OAUTH_TOKEN);
-        }
-        return authResult;
-    }
-
-    private AuthenticationResult handleSpnego(WebRequest webRequest) {
-        AuthenticationResult authResult = SPNEGO_CONT;
-        if (webAuthenticatorRef != null) {
-            WebAuthenticator webAuthenticator = webAuthenticatorRef.getService("com.ibm.ws.security.spnego");
-            if (webAuthenticator != null) {
-                authResult = webAuthenticator.authenticate(webRequest);
-                if (authResult.getStatus() == AuthResult.SUCCESS) {
-                    HttpServletRequest request = webRequest.getHttpServletRequest();
-                    HttpServletResponse response = webRequest.getHttpServletResponse();
-                    authResult = authHelper.loginWithHashtable(request, response, authResult.getSubject());
-                    if (AuthResult.SUCCESS == authResult.getStatus()) {
-                        SSOCookieHelper ssoCh = new SSOCookieHelperImpl(webAppSecurityConfig);
-                        ssoCh.addSSOCookiesToResponse(authResult.getSubject(), request, response);
-                    }
-                }
-            }
-        }
-        if (authResult.getStatus() != AuthResult.CONTINUE) {
-            authResult.setAuditCredType(AuditEvent.CRED_TYPE_SPNEGO);
-        }
-        return authResult;
-    }
-
-    /*
-     * The OpenID client redirects the request to OpenID provider for authentication
-     */
-    private AuthenticationResult handleOpenidClient(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        AuthenticationResult authResult = OPENID_CLIENT_CONT;
-        OpenidClientService openIdClientService = openIdClientServiceRef.getService();
-        if (openIdClientService != null) {
-            String opId = openIdClientService.getOpenIdIdentifier(request);
-            if (opId != null && !opId.isEmpty()) {
-                openIdClientService.createAuthRequest(request, response);
-                authResult = new AuthenticationResult(AuthResult.REDIRECT_TO_PROVIDER, "OpenID client creates auth request...");
-            } else if (openIdClientService.getRpRequestIdentifier(request, response) != null) {
-                ProviderAuthenticationResult result = openIdClientService.verifyOpResponse(request, response);
-                if (result.getStatus() != AuthResult.SUCCESS) {
-                    return new AuthenticationResult(AuthResult.FAILURE, "OpenID client failed with status code " + result.getStatus());
-                }
-
-                authResult = authHelper.loginWithUserName(request, response, result.getUserName(), result.getSubject(), result.getCustomProperties(),
-                                                          openIdClientService.isMapIdentityToRegistryUser());
-            }
-        }
-        if (authResult.getStatus() != AuthResult.CONTINUE) {
-            authResult.setAuditCredType(AuditEvent.CRED_TYPE_IDTOKEN);
-        }
-        return authResult;
-    }
-
-    /**
-     * The OpenID Connect client redirects a request to the OpenID Connect provider for authentication.
-     *
-     * @param req
-     * @param res
-     * @return
-     */
-    private AuthenticationResult handleOidcClient(HttpServletRequest req, HttpServletResponse res, boolean firstCall) {
-        AuthenticationResult authResult = OIDC_CLIENT_CONT;
-        OidcClient oidcClient = oidcClientRef.getService();
-        if (oidcClient == null) {
-            return new AuthenticationResult(AuthResult.CONTINUE, "OpenID Connect client is not available, skipping OpenID Connect client...");
-        }
-
-        if (firstCall) {
-            // let's check if any oidcClient need to be called beforeSso. If not, return
-            if (!oidcClient.anyClientIsBeforeSso()) {
-                return authResult;
-            }
-        }
-
-        String provider = oidcClient.getOidcProvider(req);
-        if (provider == null) {
-            return new AuthenticationResult(AuthResult.CONTINUE, "not an OpenID Connect client request, skipping OpenID Connect client...");
-        }
-        ProviderAuthenticationResult oidcResult = oidcClient.authenticate(req, res, provider, referrerURLCookieHandler, firstCall);
-
-        if (oidcResult.getStatus() == AuthResult.CONTINUE) {
-            return OIDC_CLIENT_CONT;
-        }
-
-        if (oidcResult.getStatus() == AuthResult.REDIRECT_TO_PROVIDER) {
-            return new AuthenticationResult(AuthResult.REDIRECT, oidcResult.getRedirectUrl());
-        }
-
-        if (oidcResult.getStatus() == AuthResult.FAILURE) {
-            if (HttpServletResponse.SC_UNAUTHORIZED == oidcResult.getHttpStatusCode()) {
-                // return new AuthenticationResult(AuthResult.SEND_401, "OpenID Connect client failed the request...");
-                return new AuthenticationResult(AuthResult.OAUTH_CHALLENGE, "OpenID Connect client failed the request...");
-            } else {
-                return new AuthenticationResult(AuthResult.FAILURE, "OpenID Connect client failed the request...");
-            }
-        }
-
-        if (oidcResult.getStatus() != AuthResult.SUCCESS) {
-            if (HttpServletResponse.SC_UNAUTHORIZED == oidcResult.getHttpStatusCode()) {
-                // return new AuthenticationResult(AuthResult.SEND_401, "OpenID Connect client returned with status: " + oidcResult.getStatus());
-                return new AuthenticationResult(AuthResult.OAUTH_CHALLENGE, "OpenID Connect client returned with status: " + oidcResult.getStatus());
-            } else {
-                return new AuthenticationResult(AuthResult.FAILURE, "OpenID Connect client returned with status: " + oidcResult.getStatus());
-            }
-        }
-
-        if (oidcResult.getStatus() == AuthResult.SUCCESS && oidcResult.getUserName() != null) {
-            authResult = authHelper.loginWithUserName(req, res, oidcResult.getUserName(), oidcResult.getSubject(),
-                                                      oidcResult.getCustomProperties(), oidcClient.isMapIdentityToRegistryUser(provider));
-            if (AuthResult.SUCCESS == authResult.getStatus()) {
-                // If firstCall is true then disableLtpaCookie is true
-                boolean bDisableLtpaCookie = firstCall; // let's make it clear
-                boolean bPropagationTokenAuthenticated = isNotNullAndTrue(req, OidcClient.PROPAGATION_TOKEN_AUTHENTICATED);
-                boolean bAuthnSessionDisabled = (Boolean) req.getAttribute(OidcClient.AUTHN_SESSION_DISABLED); // this will not be null
-                String inboundValue = (String) req.getAttribute(OidcClient.INBOUND_PROPAGATION_VALUE); // this will not be null
-                if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, "Booleans: fisrtCall:" + firstCall +
-                                 " tokenAuthenticated:" + bPropagationTokenAuthenticated +
-                                 " SessionDisabled:" + bAuthnSessionDisabled +
-                                 " inboundValue:" + inboundValue);
-                }
-                // extra handling when authenticated by the inbound propagation token (task 210993)
-                if ((OidcClient.inboundNone.equals(inboundValue) && !bDisableLtpaCookie) ||
-                    (OidcClient.inboundRequired.equals(inboundValue) && !bAuthnSessionDisabled) ||
-                    (OidcClient.inboundSupported.equals(inboundValue) && (!bPropagationTokenAuthenticated) && !bDisableLtpaCookie)) {
-                    SSOCookieHelper ssoCh = new SSOCookieHelperImpl(webAppSecurityConfig);
-                    ssoCh.addSSOCookiesToResponse(authResult.getSubject(), req, res);
-                }
-            }
-        }
-
-        return authResult;
-    }
-
-    /**
      * @param req
      * @param propagationTokenAuthenticated
      * @return
@@ -435,45 +227,6 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
     }
 
     /**
-     * The oauth service will call the provider to authenticate a user with the access token
-     *
-     * @param webRequest
-     * @return
-     */
-    private AuthenticationResult handleOAuth(HttpServletRequest req, HttpServletResponse res) {
-        AuthenticationResult authResult = OAUTH_CONT;
-        if (oauthServiceRef != null) {
-            OAuth20Service oauthService = oauthServiceRef.getService();
-            if (oauthService == null) {
-                return new AuthenticationResult(AuthResult.CONTINUE, "OAuth service is not available, skipping OAuth...");
-            }
-
-            ProviderAuthenticationResult oauthResult = oauthService.authenticate(req, res);
-            if (oauthResult.getStatus() == AuthResult.CONTINUE) {
-                return OAUTH_CONT;
-            }
-
-            if (oauthResult.getStatus() == AuthResult.FAILURE) {
-                if (HttpServletResponse.SC_UNAUTHORIZED == oauthResult.getHttpStatusCode()) {
-                    return new AuthenticationResult(AuthResult.OAUTH_CHALLENGE, "OAuth service failed the request");
-                }
-                return new AuthenticationResult(AuthResult.FAILURE, "OAuth service failed the request...");
-            }
-            if (oauthResult.getStatus() != AuthResult.SUCCESS) {
-                if (HttpServletResponse.SC_UNAUTHORIZED == oauthResult.getHttpStatusCode()) {
-                    return new AuthenticationResult(AuthResult.OAUTH_CHALLENGE, "OAuth service failed the request due to unsuccessful request");
-                }
-                return new AuthenticationResult(AuthResult.FAILURE, "OAuth service returned with status: " + oauthResult.getStatus());
-            }
-            if (oauthResult.getUserName() != null) {
-                authResult = authHelper.loginWithUserName(req, res, oauthResult.getUserName(), oauthResult.getSubject(), oauthResult.getCustomProperties(), true);
-            }
-        }
-
-        return authResult;
-    }
-
-    /**
      * @return
      */
     private TAIAuthenticator getTaiAuthenticator() {
@@ -482,7 +235,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
         Iterator<TrustAssociationInterceptor> interceptorServices = interceptorServiceRef.getServices();
         if (taiService != null || (interceptorServices != null && interceptorServices.hasNext())) {
             SecurityService securityService = securityServiceRef.getService();
-            taiAuthenticator = new TAIAuthenticator(taiService, interceptorServiceRef, securityService.getAuthenticationService(), new SSOCookieHelperImpl(webAppSecurityConfig, oidcServerRef));
+            taiAuthenticator = new TAIAuthenticator(taiService, interceptorServiceRef, securityService.getAuthenticationService(), new SSOCookieHelperImpl(webAppSecurityConfig));
         }
 
         return taiAuthenticator;
@@ -501,7 +254,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
         if (ssoCookieName != null) {
             cookieHelper = new SSOCookieHelperImpl(webAppSecurityConfig, ssoCookieName);
         } else {
-            cookieHelper = new SSOCookieHelperImpl(webAppSecurityConfig, oidcServerRef);
+            cookieHelper = new SSOCookieHelperImpl(webAppSecurityConfig);
         }
         return new SSOAuthenticator(securityService.getAuthenticationService(), securityMetadata, webAppSecurityConfig, cookieHelper);
     }

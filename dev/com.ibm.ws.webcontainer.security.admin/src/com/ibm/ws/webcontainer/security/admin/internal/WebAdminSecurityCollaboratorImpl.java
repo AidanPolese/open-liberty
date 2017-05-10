@@ -42,32 +42,6 @@ import com.ibm.ws.webcontainer.security.metadata.SecurityServletConfiguratorHelp
 import com.ibm.ws.webcontainer.security.metadata.WebResourceCollection;
 import com.ibm.wsspi.webcontainer.collaborator.IWebAppSecurityCollaborator;
 
-/*
- * Service-Component: \
-  com.ibm.ws.webcontainer.security.admin.internal.WebAdminSecurityCollaboratorImpl; \
-    implementation:=com.ibm.ws.webcontainer.security.admin.internal.WebAdminSecurityCollaboratorImpl; \
-    provide:='com.ibm.wsspi.webcontainer.collaborator.IWebAppSecurityCollaborator'; \
-    activate:=activate; \
-    deactivate:=deactivate; \
-    modified:='modified'; \
-    configuration-policy:=optional; \
-    immediate:=true; \
-    securityService=com.ibm.ws.security.SecurityService; \
-    taiService=com.ibm.ws.security.authentication.tai.TAIService; \
-    interceptorService='com.ibm.wsspi.security.tai.TrustAssociationInterceptor(id=*)'; \
-    oauthService=com.ibm.ws.webcontainer.security.oauth20.OAuth20Service; \
-    oidcServer=com.ibm.ws.webcontainer.security.openidconnect.OidcServer; \
-    oidcClient=com.ibm.ws.webcontainer.security.openidconnect.OidcClient; \
-    openidClientService=com.ibm.ws.webcontainer.security.openid20.OpenidClientService; \
-    locationAdmin=com.ibm.wsspi.kernel.service.location.WsLocationAdmin; \
-    unauthenticatedSubjectService=com.ibm.ws.security.authentication.UnauthenticatedSubjectService; \
-    multiple:='interceptorService'; \
-        optional:='taiService,interceptorService,oauthService,oidcServer,oidcClient,openidClientService'; \
-        dynamic:='taiService,interceptorService,oauthService,oidcServer,oidcClient,openidClientService'; \
-    properties:="service.vendor=IBM,com.ibm.ws.security.type=com.ibm.ws.management"
-
- */
-
 @Component(configurationPolicy = ConfigurationPolicy.IGNORE,
            immediate = true,
            property = { "service.vendor=IBM", "com.ibm.ws.security.type=com.ibm.ws.management" })
@@ -87,7 +61,7 @@ public class WebAdminSecurityCollaboratorImpl extends WebAppSecurityCollaborator
         SSOCookieHelper ssoCookieHelper = new SSOCookieHelperImpl(webAppSecConfig);
         authenticateApi = new AuthenticateApi(ssoCookieHelper, securityServiceRef, collabUtils, webAuthenticatorRef, unprotectedResourceServiceRef);
         postParameterHelper = new PostParameterHelper(webAppSecConfig);
-        providerAuthenticatorProxy = new WebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig, oauthServiceRef, openidClientRef, oidcServerRef, oidcClientRef, webAuthenticatorRef);
+        providerAuthenticatorProxy = new WebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig, webAuthenticatorRef);
         authenticatorProxy = new WebAuthenticatorProxy(webAppSecConfig, postParameterHelper, securityServiceRef, providerAuthenticatorProxy);
     }
 
