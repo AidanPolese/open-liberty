@@ -937,6 +937,7 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
             authResult = authenticateRequest(webRequest);
         }
         if (authResult.getStatus() == AuthResult.SUCCESS) {
+            authenticateApi = getAuthenticateApi(webAppSecConfig, securityServiceRef, collabUtils);
             authenticateApi.postProgrammaticAuthenticate(req, resp, authResult);
         } else {
             String realm = authResult.realm;

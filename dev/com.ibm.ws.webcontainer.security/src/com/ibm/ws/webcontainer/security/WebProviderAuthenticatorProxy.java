@@ -32,8 +32,7 @@ import com.ibm.wsspi.kernel.service.utils.ConcurrentServiceReferenceMap;
 import com.ibm.wsspi.security.tai.TrustAssociationInterceptor;
 
 /**
- * The responsibility of this WebProviderAuthenticatorProxy is to authenticate request with TAI, SSO, access token or
- * OpenID and OpenID Connect providers
+ * The responsibility of this WebProviderAuthenticatorProxy is to authenticate request with TAI and SSO
  *
  */
 public class WebProviderAuthenticatorProxy implements WebAuthenticator {
