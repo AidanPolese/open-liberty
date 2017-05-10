@@ -48,16 +48,16 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
 
     private final WebAppSecurityConfig config;
 
+    public SSOCookieHelperImpl(WebAppSecurityConfig config) {
+        this(config, (String) null);
+    }
+
     /**
      * Only have a custom cookie name for JASPI session as of now.
      */
     public SSOCookieHelperImpl(WebAppSecurityConfig config, String ssoCookieName) {
+        this.config = config;
         cookieName = ssoCookieName;
-        this.config = config;
-    }
-
-    public SSOCookieHelperImpl(WebAppSecurityConfig config) {
-        this.config = config;
     }
 
     /** {@inheritDoc} */
