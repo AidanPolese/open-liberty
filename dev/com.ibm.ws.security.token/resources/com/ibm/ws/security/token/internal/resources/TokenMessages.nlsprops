@@ -31,11 +31,3 @@ TOKEN_SERVICE_INVALID_TOKEN_INFO=CWWKS4001I: The security token cannot be valida
 3. The token service which created the token is no longer available.
 TOKEN_SERVICE_INVALID_TOKEN_INFO.explanation=The token cannot be recreated by the currently configured token services.
 TOKEN_SERVICE_INVALID_TOKEN_INFO.useraction=Check that at least one feature includes a token service that is properly configured to recreate the token.
-
-KRB_S4U2PROXY_NOT_SUPPORTED=CWWKS4002E: The constrained delegation (S4U2self and S4U2proxy) API requires a minimum Java runtime environment version of JavaSE 1.8.
-KRB_S4U2PROXY_NOT_SUPPORTED.explanation=The constrained delegation (S4U2self and S4U2proxy) APIs require a minimum Java runtime environment version of IBM JavaSE 1.8.
-KRB_S4U2PROXY_NOT_SUPPORTED.useraction=Make sure to use a Java runtime environment of IBM JavaSE 1.8.
-
-KRB_OSGI_SERVICE_ERROR=CWWKS4003E: The constrained delegation OSGi service {0} is not available.
-KRB_OSGI_SERVICE_ERROR.explanation=The specified OSGi service is not available.
-KRB_OSGI_SERVICE_ERROR.useraction=Ensure that the constrained delegation feature is enabled and make sure to use a Java runtime environment of IBM JavaSE 1.8. Review the server logs for more information.

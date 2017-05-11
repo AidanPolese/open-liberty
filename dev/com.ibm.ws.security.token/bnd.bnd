@@ -19,8 +19,7 @@ Export-Package: \
 Import-Package: com.ibm.ws.common.internal.encoder, !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
 
 Private-Package: \
-  com.ibm.ws.security.token.internal.*,\
-  com.ibm.ws.security.token.krb5.*
+  com.ibm.ws.security.token.internal.*
 
 # Update the metatype.xml for your component in the resources/OSGI-INF/metatype folder
 Include-Resource: \
