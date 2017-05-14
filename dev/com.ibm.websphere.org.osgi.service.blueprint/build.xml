@@ -4,6 +4,8 @@
 
   <target name="publishBundles"/>
 
+  <property name="original.jar.name" value="org.osgi.service.blueprint"/>
+  <property name="original.jar.version" value=""/>
   <target name="package">
   
     <rejar base.name="com.ibm.websphere" version="1.0" src.jar="lib/org.osgi.service.blueprint-1.0.2.jar" output.dir="${dev.dir}/api/spec" />

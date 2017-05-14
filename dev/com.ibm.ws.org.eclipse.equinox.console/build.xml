@@ -11,7 +11,7 @@
     <!-- Do pick up our patches in the eclipse console bundle (the default) -->
 	<rejar version="1.0" src.jar="lib/org.eclipse.equinox.console_*.jar"
         original.jar.name="org.eclipse.equinox.console"
-        original.jar.version="1.1.200"
+        original.jar.version=""
 		no.require.bundle="true"/>
 
   </target>

@@ -7,6 +7,8 @@
     <!-- Trace instrumentation not required this library -->
     <property name="no.trace.instrumentation" value="true" />
     
+    <property name="original.jar.name" value="org.apache.aries.jndi.core"/>
+    <property name="original.jar.version" value=""/>
     <target name="package">
         <!-- Do pick up our patches in the jndi.core bundle (the default) -->
     	<rejar version="1.1" src.jar="lib/org.apache.aries.jndi.core-1.*.jar"/>

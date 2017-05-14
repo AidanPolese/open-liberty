@@ -6,9 +6,10 @@
     <!-- Trace instrumentation not required this library -->
     <property name="no.trace.instrumentation" value="true" />
 
+    <property name="original.jar.name" value="org.apache.aries.util"/>
+    <property name="original.jar.version" value=""/>
     <property name="bundle.version" value="1.0"/>
 
-      <patternset id="publish.specs">
-      </patternset>
+    <patternset id="publish.specs"/>
 
 </project>

@@ -12,7 +12,7 @@ Subsystem-Content: restConnector.jar; type=file; location:="clients/restConnecto
  restConnector.py; type=file; location:="clients/jython/restConnector.py",
  com.ibm.websphere.appserver.api.restConnector_1.3-javadoc.zip; type=file; location:="dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.restConnector_1.3-javadoc.zip",
  README; type=file; location:="clients/jython/README",
- com.ibm.websphere.appserver.spi.restHandler_1.6-javadoc.zip; type=file; location:="dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.restHandler_1.6-javadoc.zip",
+ com.ibm.websphere.appserver.spi.restHandler_2.0-javadoc.zip; type=file; location:="dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.restHandler_2.0-javadoc.zip",
  com.ibm.websphere.appserver.restHandler-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.servlet-3.0; ibm.tolerates:="3.1"; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.spi.restHandler; location:="dev/spi/ibm/,lib/"; type=jar; version="[1.6.0,1.6.200)",

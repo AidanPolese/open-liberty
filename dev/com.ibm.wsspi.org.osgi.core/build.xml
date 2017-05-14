@@ -4,6 +4,8 @@
 
   <target name="publishBundles"/>
 
+  <property name="original.jar.name" value="org.osgi.core"/>
+  <property name="original.jar.version" value=""/>
   <target name="package">
   
     <rejar base.name="com.ibm.wsspi" version="1.0" src.jar="../com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar" output.dir="${dev.dir}/spi/spec" />

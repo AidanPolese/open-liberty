@@ -5,5 +5,4 @@
     @lib/org.apache.aries.jmx.api-1.1.6-ibm-s20170508-0700.jar!/!META-INF/maven/*
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/org.apache.aries.jmx.api-1.1.6-ibm-s20170508-0700.jar;version=file

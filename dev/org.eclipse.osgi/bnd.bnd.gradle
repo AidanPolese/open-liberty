@@ -5,8 +5,6 @@
 -includeresource: \
    @lib/org.eclipse.osgi_3.11.4.201705101649.jar
 
-instrument.disabled: true
-
 -buildpath: \
 	${javac.bootclasspath.java6}, \
 	lib/org.eclipse.osgi_3.11.4.201705101649.jar;version=file

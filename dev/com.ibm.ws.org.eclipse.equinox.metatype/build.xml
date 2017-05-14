@@ -1,7 +1,7 @@
 <project name="com.ibm.ws.org.eclipse.equinox.metatype" default="build">
 
 	  <property name="original.jar.name" value="org.eclipse.equinox.metatype"/>
-	  <property name="original.jar.version" value="1.4.200"/>
+	  <property name="original.jar.version" value=""/>
       <import file="../ant_build/public_imports/rejar_imports.xml"/>
 
 	  <target name="package"> 

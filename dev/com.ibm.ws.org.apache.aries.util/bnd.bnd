@@ -4,6 +4,5 @@
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/org.apache.aries.util-1.1.2-ibm-s20170508-0700.jar;version=file,\
 	com.ibm.websphere.org.osgi.core;version=latest

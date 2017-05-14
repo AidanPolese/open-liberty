@@ -4,6 +4,8 @@
 
   <target name="publishBundles"/>
 
+  <property name="original.jar.name" value="org.osgi.service.metatype"/>
+  <property name="original.jar.version" value=""/>
   <target name="package">
   
     <rejar base.name="com.ibm.wsspi" version="1.0" src.jar="lib/org.osgi.service.metatype-1.3.0.jar" output.dir="${dev.dir}/spi/spec" />

@@ -13,15 +13,13 @@ Export-Package: \
   com.ibm.ws.security;provide:=true, \
   com.ibm.ws.security.audit, \
   com.ibm.ws.security.collaborator;provide:=true, \
-  com.ibm.ws.security.context;provide:=true, \
-  com.ibm.ws.security.s4u2proxy;provide:=true
+  com.ibm.ws.security.context;provide:=true
 
 Import-Package: com.ibm.ws.common.internal.encoder, !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
 
 Private-Package: \
   com.ibm.ws.security.context.internal, \
-  com.ibm.ws.security.internal.*,\
-  com.ibm.ws.security.token.krb5.*
+  com.ibm.ws.security.internal.*
   
 DynamicImport-Package: \
   com.ibm.wsspi.request.probe.*

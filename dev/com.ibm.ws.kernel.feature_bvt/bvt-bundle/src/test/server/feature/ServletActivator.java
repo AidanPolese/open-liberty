@@ -247,7 +247,7 @@ public class ServletActivator implements SynchronousBundleListener {
     public void bundleChanged(BundleEvent event) {
         Bundle b = event.getBundle();
         System.err.println("BUNDLE IS " + b.getSymbolicName());
-        if (b.getSymbolicName().startsWith("com.ibm.ws.org.eclipse.equinox.console.")) {
+        if (b.getSymbolicName().equals("com.ibm.ws.org.eclipse.equinox.console")) {
             if (event.getType() == BundleEvent.INSTALLED) {
                 synchronized (osgiConsoleAdded) {
                     osgiConsoleAdded.set(true);
