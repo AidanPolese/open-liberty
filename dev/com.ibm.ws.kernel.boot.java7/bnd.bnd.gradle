@@ -14,4 +14,4 @@ publish.wlp.jar.disabled: true
 	${javac.bootclasspath.java7}, \
 	com.ibm.ws.kernel.boot.common;version=latest,\
 	com.ibm.ws.logging.core;version=latest, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

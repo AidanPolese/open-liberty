@@ -2,9 +2,9 @@
 
 -includeresource: \
    @lib/org.eclipse.equinox.metatype_1.4.200.v20160324-1850.jar!/org/eclipse/equinox/metatype/*,\
-   @${repo;com.ibm.wsspi.org.osgi.service.metatype.1.3.0}!/org/osgi/service/metatype/*
+   @${repo;com.ibm.wsspi.org.osgi.service.metatype}!/org/osgi/service/metatype/*
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \
 	lib/org.eclipse.equinox.metatype_1.4.200.v20160324-1850.jar;version=file,\
-	com.ibm.wsspi.org.osgi.service.metatype.1.3.0;version=latest
+	com.ibm.wsspi.org.osgi.service.metatype;version=latest

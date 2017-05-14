@@ -8,6 +8,7 @@ IBM-ShortName: audit-1.0
 Subsystem-Content: com.ibm.websphere.appserver.auditCollector-1.0; type="osgi.subsystem.feature",
  com.ibm.ws.security.audit.file; version="[1.0.0,1.0.200)",
  com.ibm.ws.security.audit.utils; version="[1.0.0,1.0.200)",
+ com.ibm.websphere.security; version="[1.0.0,1.0.200)",
  com.ibm.json4j; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description
 Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1

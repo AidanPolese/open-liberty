@@ -466,6 +466,12 @@ warning.javase6.endofservice=CWWKE0109W: WebSphere Application Server Liberty \u
 warning.javase6.endofservice.explanation=IBM \u5728 2017 \u5e74 9 \u6708\u4e4b\u5f8c\u5c07\u505c\u6b62\u652f\u63f4 WebSphere Application Server Liberty Java SE 6 \u652f\u63f4\u3002\u5728\u9019\u9805\u652f\u63f4\u7d50\u675f\u4e4b\u5f8c\uff0c\u5982\u679c\u60a8\u7e7c\u7e8c\u4f7f\u7528 Java SE 6\uff0c\u60a8\u7684\u61c9\u7528\u7a0b\u5f0f\u53ef\u80fd\u66b4\u9732\u5728\u5b89\u5168\u98a8\u96aa\u4e2d\u3002
 warning.javase6.endofservice.useraction=IBM \u5f37\u70c8\u5efa\u8b70\u60a8\u4f7f\u7528\u6700\u65b0\u7684 Java SE \u7248\u672c\uff0c\u4ea6\u5373 Java SE 8\u3002
 
+#
+# W A R N I N G:   Do not use CWWKE0100 - CCWKE0199 they are reserved in ServiceMessages.nlsprops
+#
+# Too Late for CWWKE0101 - CWWKE0107 they have dual use currently and CWWKE0108 and CWWKE0109 are only used here.
+#
+
 error.clientNameCharacter=CWWKE0900E: \u6307\u5b9a\u7684\u7528\u6236\u7aef\u540d\u7a31\u5305\u542b\u7121\u6548\u7684\u5b57\u5143\uff08\u540d\u7a31={0}\uff09\u3002\
 \u6709\u6548\u5b57\u5143\u5982\u4e0b\uff1aUnicode \u82f1\u6578\u5b57\u5143\uff08\u4f8b\u5982\
 0-9\u3001a-z\u3001A-Z\uff09\u3001\u5e95\u7dda (_)\u3001\u6a6b\u7dda (-)\u3001\u53e5\u9ede (.)\u3002\
@@ -654,7 +660,9 @@ info.server.resume.request.completed=CWWKE0939I: \u5df2\u5b8c\u6210\u56de\u5fa9\
 info.server.resume.request.completed.explanation=\u5df2\u5b8c\u6210\u56de\u5fa9\u8981\u6c42\u3002
 info.server.resume.request.completed.useraction=\u4e0d\u9700\u63a1\u53d6\u4efb\u4f55\u52d5\u4f5c\u3002
 
-
+info.envProductExtension=CWWKE0940I: {0} \u7522\u54c1\u5ef6\u4f38\u7684\u7522\u54c1 ID \u70ba {1}\uff0c\u7522\u54c1\u5b89\u88dd\u4f4d\u7f6e\u70ba {2}\u3002\u6b64\u7522\u54c1\u5ef6\u4f38\u662f\u85c9\u7531\u6307\u5b9a WLP_PRODUCT_EXT_DIR \u74b0\u5883\u8b8a\u6578\u4f86\u555f\u7528\u3002
+info.envProductExtension.explanation= WLP_PRODUCT_EXT_DIR \u74b0\u5883\u8b8a\u6578\u6307\u5411\u7522\u54c1\u5ef6\u4f38\u7684\u4f4d\u7f6e\u3002\u627e\u5230\u4f3a\u670d\u5668\uff0c\u4e14\u5176\u6b63\u5728\u4f7f\u7528\u7522\u54c1\u5ef6\u4f38\u3002
+info.envProductExtension.useraction=\u4e0d\u9700\u63a1\u53d6\u4efb\u4f55\u52d5\u4f5c\u3002
 info.serverStarting=\u6b63\u5728\u555f\u52d5\u4f3a\u670d\u5668 {0}\u3002
 info.serverStarted=\u5df2\u555f\u52d5\u4f3a\u670d\u5668 {0}\u3002
 info.serverStartedWithPID=\u5df2\u555f\u52d5\u4f3a\u670d\u5668 {0}\uff0c\u5176\u7a0b\u5e8f ID \u70ba {1}\u3002
@@ -717,7 +725,6 @@ info.seconds={0} \u79d2
 info.configNotExist=\u672a\u6307\u5b9a server.xml
 info.syslogs=\u8f38\u51fa\u91cd\u65b0\u5c0e\u5411\u81f3 {0} \u4e2d\u7684 SystemOut.log \u548c SystemErr.log
 info.initlogs=\u6b63\u5728\u5c07\u6a19\u6e96\u8f38\u51fa\u548c\u6a19\u6e96\u932f\u8aa4\u91cd\u65b0\u5c0e\u5411\u81f3\u6a94\u6848 {0}
-
 
 info.no.servers.defined=\u4f7f\u7528\u8005\u76ee\u9304 {0} \u4e2d\u672a\u5b9a\u7fa9\u4efb\u4f55\u4f3a\u670d\u5668\u3002
 info.list.of.defined.servers=\u4e0b\u5217\u4f3a\u670d\u5668\u662f\u76f8\u5c0d\u65bc\u4f7f\u7528\u8005\u76ee\u9304 {0} \u800c\u5b9a\u7fa9\u3002

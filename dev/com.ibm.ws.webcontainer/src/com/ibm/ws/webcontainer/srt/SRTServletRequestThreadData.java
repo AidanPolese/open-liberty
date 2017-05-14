@@ -1,14 +1,14 @@
 /*
-* IBM Confidential
-*
-* OCO Source Materials
-*
-* Copyright IBM Corp. 2016
-*
-* The source code for this program is not published or otherwise divested 
-* of its trade secrets, irrespective of what has been deposited with the 
-* U.S. Copyright Office.
-*/
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * Copyright IBM Corp. 2016
+ *
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
+ * U.S. Copyright Office.
+ */
 package com.ibm.ws.webcontainer.srt;
 
 import java.util.Hashtable;
@@ -27,11 +27,11 @@ import com.ibm.wsspi.webcontainer.webapp.IWebAppDispatcherContext;
  *
  */
 public class SRTServletRequestThreadData {
-    
+
     protected static final Logger logger = LoggerFactory.getInstance().getLogger("com.ibm.ws.webcontainer.srt");
     private static final String CLASS_NAME="com.ibm.ws.webcontainer.srt.SRTServletRequestThreadData";
 
-    
+
     private IWebAppDispatcherContext _dispatchContext;
     private String _requestURI = null;
     private String _pathInfo = null;
@@ -40,35 +40,36 @@ public class SRTServletRequestThreadData {
     private LinkedList _queryStringList = null; // 256836
     private boolean _qsSetExplicit = false;
 
-    
+
     private UnsynchronizedStack _paramStack = new UnsynchronizedStack();
-    
+
     private static WSThreadLocal<SRTServletRequestThreadData> instance = new WSThreadLocal<SRTServletRequestThreadData>();
-    
+
     public static SRTServletRequestThreadData getInstance () {
-        
+
         SRTServletRequestThreadData tempState = null;
         tempState=(SRTServletRequestThreadData) instance.get();
-         
-         if (tempState == null) {
-                tempState = new SRTServletRequestThreadData();
-                instance.set(tempState);
-         }
-         
-         return tempState;
-   }
 
+        if (tempState == null) {
+            tempState = new SRTServletRequestThreadData();
+            instance.set(tempState);
+        }
 
-    
-    public SRTServletRequestThreadData() {
-        
+        return tempState;
     }
 
-     
-    public void init(SRTServletRequestThreadData data) {
-        
+
+
+    public SRTServletRequestThreadData() {
         if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))
-            logger.logp(Level.FINE, CLASS_NAME,"int","init data : " + data);
+            logger.logp(Level.FINE, CLASS_NAME,"constructor"," " + super.toString());
+    }
+
+
+    public void init(SRTServletRequestThreadData data) {
+
+        if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))
+            logger.logp(Level.FINE, CLASS_NAME, "int ["+super.toString()+"] " , "init data : " + data);
 
         if (data == null) {
             _dispatchContext = null;
@@ -97,10 +98,8 @@ public class SRTServletRequestThreadData {
      */
     @Override
     public String toString() {
-        return "SRTServletRequestThreadData [_requestURI=" + _requestURI + ", _pathInfo=" + _pathInfo + ", _queryString=" + _queryString + ", _parameters=" + _parameters + ", _qsSetExplicit=" + _qsSetExplicit + "]";
+        return  super.toString() + ", [_requestURI=" + _requestURI + ", _pathInfo=" + _pathInfo + ", _queryString=" + _queryString + ", _parameters=" + _parameters + ", _qsSetExplicit=" + _qsSetExplicit + ", _dispatchContext= " + _dispatchContext+ "]";
     }
-
-
 
     /**
      * @return the _requestURI
@@ -155,7 +154,7 @@ public class SRTServletRequestThreadData {
         this._qsSetExplicit = true;
         this._queryString = queryString;
     }
-    
+
     /**
      * @return the _qsSetExplicit
      */
@@ -170,7 +169,7 @@ public class SRTServletRequestThreadData {
     public IWebAppDispatcherContext getDispatchContext() {
         return _dispatchContext;
     }
-   
+
 
 
     /**
@@ -197,9 +196,9 @@ public class SRTServletRequestThreadData {
     public void setParameters(Map parameters) {
         if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))
             logger.logp(Level.FINE, CLASS_NAME,"setParameters", "Number of parameters = " + (parameters==null? "none": parameters.size()));
-         this._parameters = parameters;
+        this._parameters = parameters;
     }
-    
+
     /**
      * Save the state of the parameters before a call to include or forward.
      */
@@ -223,7 +222,7 @@ public class SRTServletRequestThreadData {
         {
             _parameters = (Hashtable) _paramStack.pop();
         } catch (java.util.EmptyStackException empty) {
-          /// tbd
+            /// tbd
         }
     }
 
@@ -244,8 +243,8 @@ public class SRTServletRequestThreadData {
     public void setQueryStringList(LinkedList _queryStringList) {
         if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))
             logger.logp(Level.FINE, CLASS_NAME,"setQueryStringList", "Number in list = " + (_queryStringList==null? "none": _queryStringList.size()));
-       this._queryStringList = _queryStringList;
+        this._queryStringList = _queryStringList;
     }
 
-    
+
 }

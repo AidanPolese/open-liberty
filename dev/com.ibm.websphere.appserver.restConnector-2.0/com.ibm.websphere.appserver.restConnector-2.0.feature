@@ -22,6 +22,6 @@ Subsystem-Name: JMX REST Connector 2.0
  clients/jython/restConnector.py, \
  dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.restConnector_1.3-javadoc.zip, \
  clients/jython/README, \
- dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.restHandler_1.5-javadoc.zip
+ dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.restHandler_1.6-javadoc.zip
 kind=ga
 edition=core

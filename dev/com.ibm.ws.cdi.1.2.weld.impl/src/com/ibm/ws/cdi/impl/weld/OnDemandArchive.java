@@ -74,7 +74,7 @@ public class OnDemandArchive extends AbstractCDIArchive implements CDIArchive {
             } else {
 
                 StringBuilder sb = new StringBuilder();
-                sb.append(bundle.getSymbolicName());
+                sb.append(CDIUtils.getSymbolicNameWithoutMinorOrMicroVersionPart(bundle.getSymbolicName()));
                 sb.append("_");
                 sb.append(CDIUtils.getOSGIVersionForBndName(bundle.getVersion()));
 

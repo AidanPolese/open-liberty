@@ -602,4 +602,8 @@ ssl.hwkeystore.load.error.CWPKI0814E.useraction=Ensure that the hardware configu
 ssl.dynamicSelection.conflict.CWPKI0815W=CWPKI0815W: More than one OutboundConnection element specifies the [{0}] host and [{1}] port as a filter. The OutboundConnection element configured on the [{2}] SSL element will be used.
 ssl.dynamicSelection.conflict.CWPKI0815W.explanation=Conflicting OutboundConnection elements are defined in the server configuration. To determine the outbound SSL configuration, the server uses the first OutboundConnection element that it processes.
 ssl.dynamicSelection.conflict.CWPKI0815W.useraction=Review the conflicting OutboundConnection elements in the server configuration, and remove the element that you do not need.
+#--------------------------------------------------------------------------------------------------
+ssl.defaultOutbound.conflict.CWPKI0816W=CWPKI0816W: The outboundConnection element with an asterisk (*) as the host and port is set to the [{0}] SSL configuration. This setting is in conflict with the outboundSSLRef attribute setting. The {1} SSL configuration that is specified by the outboundSSLRef attribute is used.
+ssl.defaultOutbound.conflict.CWPKI0816W.explanation=The outboundConnection element with an asterisk (*) as the host and port is in conflict with the outboundSSLRef attribute that is configured. The server uses the SSL configuration that is specified by the outboundSSLRef attribute.
+ssl.defaultOutbound.conflict.CWPKI0816W.useraction=Review the conflicting configuration and determine which configuration to use as the default SSL configuration. Remove the configuration that you do not need.
 

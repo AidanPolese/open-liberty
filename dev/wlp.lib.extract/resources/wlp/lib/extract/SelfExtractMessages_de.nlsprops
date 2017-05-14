@@ -267,10 +267,10 @@ LICENSE_invalidEdition=Das Lizenzupgrade kann nicht durchgef\u00fchrt werden, we
 LICENSE_invalidLicense=Das Lizenzupgrade kann nicht durchgef\u00fchrt werden, weil die angegebene Produktinstallation eine Lizenz des Typs {0} hat. Mit dem Lizenzupgrade k\u00f6nnen aber nur Produkte mit einer {1}-Lizenz aktualisiert werden.
 LICENSE_invalidInstallType=Das Lizenzupgrade kann nicht durchgef\u00fchrt werden, weil die angegebene Produktinstallation mit IBM Installation Manager installiert wurde. Verwenden Sie IBM Installation Manager f\u00fcr das Upgrade Ihrer Installation. 
 # new messages for license upgrade and downgrade
-LICENSE_replace_invalidVersion=Die Lizenz kann nicht ersetzt werden, weil die angegebene Produktinstallation die Version {0} hat. Das Ersetzen der Lizenz ist nur mit Version {1} m\u00f6glich.
-LICENSE_replace_invalidInstallType=Die Lizenz kann nicht ge\u00e4ndert werden, weil die angegebene Produktinstallation mit IBM Installation Manager installiert wurde. Verwenden Sie IBM Installation Manager, um Ihre Installation zu \u00e4ndern.
+LICENSE_replace_invalidVersion=Die Lizenz kann nicht angewendet werden, weil die angegebene Produktinstallation die Version {0} hat. Das Anwenden der Lizenz ist nur mit Version {1} m\u00f6glich.
+LICENSE_replace_invalidInstallType=Die Lizenz kann nicht angewendet werden, weil die angegebene Produktinstallation mit IBM Installation Manager installiert wurde. Verwenden Sie IBM Installation Manager f\u00fcr das Upgrade Ihrer Installation. 
+LICENSE_replace_invalidEditonFeatures=Die folgenden Features sind f\u00fcr die Edition {0} nicht g\u00fcltig und m\u00fcssen vor dem Anwenden der Lizenz deinstalliert werden: {1}\n\
+\n\
+Verwenden Sie den folgenden Befehl, um diese Features zu deinstallieren, bevor Sie die Lizenz f\u00fcr die Edition {2} anwenden: {3}
 
-LICENSE_replace_invalidEditonFeatures=Die folgenden Features sind nicht mehr f\u00fcr {0} verf\u00fcgbar und m\u00fcssen entfernt werden, bevor die Lizenz ersetzt wird: {1}
-LICENSE_replace_uninstallFeatures_manually=Verwenden Sie den folgenden Befehl, um diese Features vor dem Ersetzen der Lizenz f\u00fcr {0} zu deinstallieren: {1}
-
-
+LICENSE_downgrade_block_8557_low=Diese Lizenz kann nur auf eine Installation von {0} und h\u00f6her angewendet werden. Die aktuelle Installation ist {1}. Laden Sie die neueste Version herunter und installieren Sie sie. Wenden Sie anschlie\u00dfend die Lizenz erneut an.

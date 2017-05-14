@@ -1244,17 +1244,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
         }
 
         if (numHandlesInUse == 0) 
-        { 
-            try 
-            { 
-                helper.processLastHandleClosed(sqlConn, currentAutoCommit, inGlobalTransaction()); 
-            } 
-            catch (SQLException sqle) 
-            { 
-                FFDCFilter.processException(sqle, getClass().getName() + ".processConnectionClosedEvent", "1467", this); 
-                throw new DataStoreAdapterException("DSA_ERROR", sqle, getClass()); 
-            } 
-
+        {
             if (haveVendorConnectionPropertiesChanged) {
                 try {
 
@@ -2764,15 +2754,6 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
                 helper.resetClientInformation(this);
             }
 
-            //now do internal cleanup if that is needed.  if any change is done, we
-            // don't need to recheck any of the values sine its done on the mc directly.
-            // Also, since we do it before the external one (one done by the external helper), we don't
-            // have to worry about affecting customer's doConnectionCleanup implementation
-            if (!connectionErrorDetected) 
-            {
-                helper.doConnectionCleanupOnWrapper(this);
-            }
-
             wasCleanupReturnTrue = mcf.helper.doConnectionCleanup(sqlConn);
 
             if (!connectionErrorDetected) 
@@ -3852,10 +3833,9 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
 
             sqlConn.setAutoCommit(value); 
             currentAutoCommit = value; 
-            if (cachedConnection != null) 
-                cachedConnection.setCurrentAutoCommit(currentAutoCommit, key);
-
         }
+        if (cachedConnection != null) 
+            cachedConnection.setCurrentAutoCommit(currentAutoCommit, key);
     }
 
     /**
@@ -3875,11 +3855,10 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
 
             sqlConn.setTransactionIsolation(isoLevel); 
             currentTransactionIsolation = isoLevel; 
-            if (cachedConnection != null) 
-                cachedConnection.setCurrentTransactionIsolation(currentTransactionIsolation, key);
-
             isolationChanged = true; 
         }
+        if (cachedConnection != null) 
+            cachedConnection.setCurrentTransactionIsolation(currentTransactionIsolation, key);
     }
 
     /**

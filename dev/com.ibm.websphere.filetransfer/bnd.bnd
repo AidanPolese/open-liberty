@@ -12,7 +12,7 @@ instrument.disabled: true
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest
 
 -testpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \

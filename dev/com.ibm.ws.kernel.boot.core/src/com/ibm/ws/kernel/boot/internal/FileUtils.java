@@ -44,7 +44,7 @@ public class FileUtils {
 
     /**
      * List files according to the patterns and the pattern type
-     * 
+     *
      * @param target
      * @param patterns
      * @param include
@@ -72,7 +72,7 @@ public class FileUtils {
 
     /**
      * Copy from one file to the other
-     * 
+     *
      * @param dest
      * @param source
      * @throws IOException
@@ -89,7 +89,7 @@ public class FileUtils {
 
     /**
      * Read the content from an inputStream and write out to the other file
-     * 
+     *
      * @param dest
      * @param sourceInput
      * @throws IOException
@@ -121,8 +121,39 @@ public class FileUtils {
     }
 
     /**
+     * Read the content from an inputStream and write to the end of the dest file
+     *
+     * @param dest
+     * @param sourceInput
+     * @throws IOException
+     */
+    public static void appendFile(final File dest, final InputStream sourceInput) throws IOException {
+        if (sourceInput == null || dest == null)
+            return;
+
+        FileOutputStream fos = null;
+        try {
+            if (!dest.getParentFile().exists()) {
+                throw new FileNotFoundException();
+            }
+            fos = TextFileOutputStreamFactory.createOutputStream(dest, true);
+            byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+
+            int count = -1;
+            while ((count = sourceInput.read(buffer)) > 0) {
+                fos.write(buffer, 0, count);
+            }
+            fos.flush();
+        } finally {
+            Utils.tryToClose(fos);
+            Utils.tryToClose(sourceInput);
+        }
+
+    }
+
+    /**
      * Recursively copy the files from one dir to the other.
-     * 
+     *
      * @param from The directory to copy from, must exist.
      * @param to The directory to copy to, must exist, must be empty.
      * @throws IOException
@@ -150,7 +181,7 @@ public class FileUtils {
      * 1 The parentDir is relative, will create the java.io.tempdir/parentDir/tempFile;
      * 2 The parentDir is absolute, will create the parentDir/tempFile;
      * 3 The parentDir is null, will create the java.io.tempdir/tempFile.
-     * 
+     *
      * @param prefix
      * @param suffix
      * @param parentDir
@@ -179,7 +210,7 @@ public class FileUtils {
 
     /**
      * If child is under parent, will return true, otherwise, return false.
-     * 
+     *
      * @param child
      * @param parent
      * @return
@@ -196,7 +227,7 @@ public class FileUtils {
 
     /**
      * Create the directory
-     * 
+     *
      * @param dir
      * @return
      */
@@ -213,7 +244,7 @@ public class FileUtils {
      * If the filePath is a relative path, the File returned will be relative to the server's directory (as provided by
      * {@link com.ibm.ws.kernel.boot.BootstrapConfig#getConfigFile(String) BootstrapConfig.getSeverFile(filePath)} If an unknown location symbol is used in the filePath, an
      * IllegalArgument Exception will be thrown.
-     * 
+     *
      * @param filePath
      * @return
      * @exception IllegalArgumentException if the location symbol could not be resolved
@@ -249,7 +280,7 @@ public class FileUtils {
 
     /**
      * Normalize a relative entry path, so that it can be used in an archive.
-     * 
+     *
      * @param entryPath
      * @return
      */
@@ -272,7 +303,7 @@ public class FileUtils {
 
     /**
      * Normalize a path that represents a directory
-     * 
+     *
      * @param dirPath
      * @return
      */
@@ -291,7 +322,7 @@ public class FileUtils {
 
     /**
      * Normalize the case of the drive letter on Windows.
-     * 
+     *
      * @param path a path, possibly absolute
      * @return the path with a normalized drive letter
      */
@@ -304,7 +335,7 @@ public class FileUtils {
 
     /**
      * Strip "." and ".." elements from path.
-     * 
+     *
      * @param path
      * @return
      */
@@ -454,7 +485,7 @@ public class FileUtils {
 
     /**
      * Tests if the input string start with the ${ symbolic characters.
-     * 
+     *
      * @param s The string to test.
      * @return True if the input string starts with the ${ symbolic characters. False otherwise.
      */
@@ -470,7 +501,7 @@ public class FileUtils {
      * Test if a path is absolute.<p>
      * Returns true if the path is an absolute one.<br>
      * Eg. c:/wibble/fish, /wibble/fish, ${wibble}/fish
-     * 
+     *
      * @param normalizedPath
      * @return true if absolute, false otherwise.
      */
@@ -511,7 +542,7 @@ public class FileUtils {
 
     /**
      * Convert \ separators into /'s
-     * 
+     *
      * @param filePath path to process, must not be null.
      * @return filePath with \'s converted to /.
      */
@@ -523,14 +554,14 @@ public class FileUtils {
 
     /**
      * Recursively delete directory: used to clean up for clean start.
-     * 
+     *
      * @param fileToRemove
      *            Name of file/directory to delete. If the File is a directory,
      *            all sub-directories and files will also be deleted except for
      *            the server lock and server running file.
-     * 
+     *
      *            This method will return false if the file can not be read or deleted.
-     * 
+     *
      * @return true if the clean succeeded, false otherwise
      */
     public static boolean recursiveClean(final File fileToRemove) {
@@ -541,11 +572,9 @@ public class FileUtils {
         final File f_fileToRemove = fileToRemove;
 
         try {
-            fileExists = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<Boolean>()
-            {
+            fileExists = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<Boolean>() {
                 @Override
-                public Boolean run() throws Exception
-                {
+                public Boolean run() throws Exception {
                     if (f_fileToRemove.exists()) {
                         return Boolean.TRUE;
                     }
@@ -565,11 +594,9 @@ public class FileUtils {
         Boolean fileIsDirectory = null;
         //final File f_fileToRemove = fileToRemove;
         try {
-            fileIsDirectory = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<Boolean>()
-            {
+            fileIsDirectory = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<Boolean>() {
                 @Override
-                public Boolean run() throws Exception
-                {
+                public Boolean run() throws Exception {
                     if (f_fileToRemove.isDirectory()) {
                         return Boolean.TRUE;
                     }
@@ -589,9 +616,10 @@ public class FileUtils {
                 if (file.isDirectory()) {
                     success |= recursiveClean(file);
                 } else if ((file.getName().equals(BootstrapConstants.S_LOCK_FILE) &&
-                           fileToRemove.getName().equals(BootstrapConstants.LOC_AREA_NAME_WORKING)) ||
+                            fileToRemove.getName().equals(BootstrapConstants.LOC_AREA_NAME_WORKING))
+                           ||
                            ((fileToRemove.getName().equals(BootstrapConstants.LOC_AREA_NAME_WORKING))) &&
-                           (file.getName().equals(BootstrapConstants.SERVER_RUNNING_FILE))) {
+                              (file.getName().equals(BootstrapConstants.SERVER_RUNNING_FILE))) {
                     // skip/preserve workarea/.sLock and workarea/.sRunning files
                 } else {
                     success |= file.delete();
@@ -605,11 +633,9 @@ public class FileUtils {
             Boolean successful_delete = Boolean.TRUE;
             final File ftr = fileToRemove;
             try {
-                successful_delete = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<Boolean>()
-                {
+                successful_delete = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<Boolean>() {
                     @Override
-                    public Boolean run() throws Exception
-                    {
+                    public Boolean run() throws Exception {
                         Boolean s = ftr.delete();
                         return s;
                     }
@@ -625,7 +651,7 @@ public class FileUtils {
 
     /**
      * A method that translates a "file:" URL into a File.
-     * 
+     *
      * @param url
      *            the "file:" URL to convert into a file name
      * @return file derived from URL

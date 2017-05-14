@@ -34,6 +34,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import com.ibm.websphere.simplicity.OperatingSystem;
 import com.ibm.websphere.simplicity.log.Log;
 
 import componenttest.custom.junit.runner.Mode;
@@ -89,6 +90,9 @@ public class EmbeddedServerAddProductExtensionMultipleTest {
 
         // Find the necessary bundles in our install image
         ls = LibertyServerFactory.getLibertyServer("com.ibm.wsspi.kernel.embeddable.add.product.extension.multiple.fat");
+        if (ls.getMachine().getOperatingSystem().equals(OperatingSystem.WINDOWS)) {
+            ls.setNeedsPostRecover(false); //avoid cleanup on Windows
+        }
         testServerClasses = new File("build/classes");
 
         wsServerBundle = new File(ls.getInstallRoot() + "/bin/tools/ws-server.jar");

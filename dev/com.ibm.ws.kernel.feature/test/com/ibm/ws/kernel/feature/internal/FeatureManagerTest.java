@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -61,6 +62,7 @@ import com.ibm.ws.kernel.feature.internal.subsystem.FeatureRepository;
 import com.ibm.ws.kernel.feature.internal.subsystem.FeatureResourceImpl;
 import com.ibm.ws.kernel.feature.internal.subsystem.SubsystemFeatureDefinitionImpl;
 import com.ibm.ws.kernel.feature.provisioning.FeatureResource;
+import com.ibm.ws.kernel.feature.provisioning.ProvisioningFeatureDefinition;
 import com.ibm.ws.kernel.feature.resolver.FeatureResolver.Result;
 import com.ibm.ws.kernel.provisioning.BundleRepositoryRegistry;
 import com.ibm.ws.kernel.provisioning.BundleRepositoryRegistry.BundleRepositoryHolder;
@@ -91,6 +93,7 @@ public class FeatureManagerTest {
     static final SharedOutputManager outputMgr = SharedOutputManager.getInstance().trace("*=audit=enabled:featureManager=all=enabled");
 
     static final String serverName = "FeatureManagerTest";
+    static final Collection<ProvisioningFeatureDefinition> noKernelFeatures = Collections.<ProvisioningFeatureDefinition> emptySet();
     static WsLocationAdmin locSvc;
     static Field bListResources;
 
@@ -510,7 +513,7 @@ public class FeatureManagerTest {
         final String m = "testLoadFeatureInclude";
         try {
             BundleInstallStatus installStatus = new BundleInstallStatus();
-            Result result = FeatureManager.featureResolver.resolveFeatures(fm.featureRepository, Collections.singleton("include"), Collections.<String> emptySet(), false);
+            Result result = FeatureManager.featureResolver.resolveFeatures(fm.featureRepository, noKernelFeatures, Collections.singleton("include"), Collections.<String> emptySet(), false);
             fm.reportErrors(result, Collections.<String> emptyList(), Collections.singleton("include"), installStatus);
             assertTrue("CWWKF0042E error message", outputMgr.checkForStandardErr("CWWKF0042E"));
         } catch (Throwable t) {
@@ -687,7 +690,7 @@ public class FeatureManagerTest {
             BundleInstallStatus installStatus = new BundleInstallStatus();
 
             // make sure handles just a :
-            Result result = FeatureManager.featureResolver.resolveFeatures(fm.featureRepository, Collections.singleton(":"), Collections.<String> emptySet(), false);
+            Result result = FeatureManager.featureResolver.resolveFeatures(fm.featureRepository, noKernelFeatures, Collections.singleton(":"), Collections.<String> emptySet(), false);
             fm.reportErrors(result, Collections.<String> emptyList(), Collections.singleton(":"), installStatus);
             assertTrue("CWWKF0001E error message", outputMgr.checkForStandardErr("CWWKF0001E:"));
             assertTrue("There should be missing features", installStatus.featuresMissing());
@@ -697,7 +700,7 @@ public class FeatureManagerTest {
 
             // make sure handles nothing after :
             // CWWKF0001E: A feature definition could not be found for usr:
-            result = FeatureManager.featureResolver.resolveFeatures(fm.featureRepository, Collections.singleton("usr:"), Collections.<String> emptySet(), false);
+            result = FeatureManager.featureResolver.resolveFeatures(fm.featureRepository, noKernelFeatures, Collections.singleton("usr:"), Collections.<String> emptySet(), false);
             fm.reportErrors(result, Collections.<String> emptyList(), Collections.singleton("usr:"), installStatus);
             assertTrue("CWWKF0001E error message", outputMgr.checkForStandardErr("CWWKF0001E:"));
             assertTrue("specification of usr:", outputMgr.checkForStandardErr("usr:"));
@@ -707,14 +710,14 @@ public class FeatureManagerTest {
 
             // give it one it should not find
             // CWWKF0001E: A feature definition could not be found for usr:bad
-            result = FeatureManager.featureResolver.resolveFeatures(fm.featureRepository, Collections.singleton("usr:bad"), Collections.<String> emptySet(), false);
+            result = FeatureManager.featureResolver.resolveFeatures(fm.featureRepository, noKernelFeatures, Collections.singleton("usr:bad"), Collections.<String> emptySet(), false);
             fm.reportErrors(result, Collections.<String> emptyList(), Collections.singleton("usr:bad"), installStatus);
             assertTrue("CWWKF0001E error message", outputMgr.checkForStandardErr("CWWKF0001E:"));
             assertTrue("specification of usr:bad", outputMgr.checkForStandardErr("usr:bad"));
             assertTrue("installStatus should contain : as missing feature", installStatus.getMissingFeatures().contains("usr:bad"));
 
             // now test with a 'core' feature with no ':'
-            result = FeatureManager.featureResolver.resolveFeatures(fm.featureRepository, Collections.singleton("coreMissing-1.0"), Collections.<String> emptySet(), false);
+            result = FeatureManager.featureResolver.resolveFeatures(fm.featureRepository, noKernelFeatures, Collections.singleton("coreMissing-1.0"), Collections.<String> emptySet(), false);
             fm.reportErrors(result, Collections.<String> emptyList(), Collections.singleton("coreMissing-1.0"), installStatus);
             assertTrue("CWWKF0042E error message", outputMgr.checkForStandardErr("CWWKF0042E:"));
             assertTrue("specification of coreMissing-1.0", outputMgr.checkForStandardErr("coreMissing-1.0"));

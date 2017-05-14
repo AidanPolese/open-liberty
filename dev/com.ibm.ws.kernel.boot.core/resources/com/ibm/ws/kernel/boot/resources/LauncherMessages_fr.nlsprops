@@ -465,6 +465,12 @@ warning.javase6.endofservice=CWWKE0109W: Le support pour Java SE 6 avec WebSpher
 warning.javase6.endofservice.explanation=IBM n'assurera plus le support pour Java SE 6 avec WebSphere Application Server Liberty apr\u00e8s septembre 2017. Si vous continuez \u00e0 utiliser Java SE 6 apr\u00e8s cette date, vous exposez vos applications \u00e0 des risques li\u00e9s \u00e0 la s\u00e9curit\u00e9.
 warning.javase6.endofservice.useraction=IBM vous recommande vivement d'utiliser la version la plus r\u00e9cente de Java SE , \u00e0 savoir Java SE 8. 
 
+#
+# W A R N I N G:   Do not use CWWKE0100 - CCWKE0199 they are reserved in ServiceMessages.nlsprops
+#
+# Too Late for CWWKE0101 - CWWKE0107 they have dual use currently and CWWKE0108 and CWWKE0109 are only used here.
+#
+
 error.clientNameCharacter=CWWKE0900E: Le nom de client sp\u00e9cifi\u00e9 contient un caract\u00e8re qui n''est pas valide (nom={0}). \
 Les caract\u00e8res valides sont : alphanum\u00e9riques Unicode (par exemple : \
 0-9, a-z, A-Z), trait de soulignement (_), tiret (-), signe plus (+) et point (.). \
@@ -646,6 +652,9 @@ info.server.resume.request.completed=CWWKE0939I: Une demande de reprise d'op\u00
 info.server.resume.request.completed.explanation=Une demande de reprise d'op\u00e9ration a abouti.
 info.server.resume.request.completed.useraction=Aucune action n'est requise.
 
+info.envProductExtension=CWWKE0940I: L''extension de produit {0} a l''identificateur de produit {1} et l''emplacement d''installation de produit {2}. Cette extension de produit a \u00e9t\u00e9 activ\u00e9e en sp\u00e9cifiant la variable d''environnement WLP_PRODUCT_EXT_DIR. 
+info.envProductExtension.explanation= La variable d'environnement WLP_PRODUCT_EXT_DIR pointe vers l'emplacement de l'extension de produit. Le serveur a trouv\u00e9 l'extension de produit et l'utilise.
+info.envProductExtension.useraction=Aucune action n'est requise.
 
 info.serverStarting=D\u00e9marrage du serveur {0}.
 info.serverStarted=Le serveur {0} a d\u00e9marr\u00e9.

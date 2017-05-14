@@ -1325,18 +1325,22 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
     public IWebAppDispatcherContext getWebAppDispatcherContext() {
         //321485
         if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {  //306998.15
-            logger.logp(Level.FINE, CLASS_NAME,"getWebAppDispatcherContext", "");
+            logger.logp(Level.FINE, CLASS_NAME,"getWebAppDispatcherContext", " "+this);
         }
         if (WCCustomProperties.CHECK_REQUEST_OBJECT_IN_USE){
             checkRequestObjectInUse();
         }
         IWebAppDispatcherContext dc=null;
         dc = SRTServletRequestThreadData.getInstance().getDispatchContext();
-        if (dc==null)
-            dc = _dispatchContext;
-        
-        return dc;
+        if (dc==null){
+            if (TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {  //306998.15
+                logger.logp(Level.FINE, CLASS_NAME,"getWebAppDispatcherContext", " return _dispatchContext "+ _dispatchContext );
+            }
 
+            dc = _dispatchContext;
+        }
+
+        return dc;
     }
 
     /* (non-Javadoc)

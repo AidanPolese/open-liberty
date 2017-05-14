@@ -308,15 +308,12 @@ LICENSE_invalidLicense=Nie mo\u017cna zaktualizowa\u0107 licencji, poniewa\u017c
 LICENSE_invalidInstallType=Nie mo\u017cna zaktualizowa\u0107 licencji, poniewa\u017c okre\u015blony produkt zainstalowano przy u\u017cyciu programu IBM Installation Manager. U\u017cyj programu IBM Installation Manager, aby zaktualizowa\u0107 instalacj\u0119.
 
 # new messages for license upgrade and downgrade
-LICENSE_replace_invalidVersion=Nie mo\u017cna zast\u0105pi\u0107 \
-licencji, poniewa\u017c zainstalowano produkt w wersji {0}, a mo\u017cna zast\u0105pi\u0107 wy\u0142\u0105cznie licencj\u0119 wersji {1}.
-LICENSE_replace_invalidInstallType=Nie mo\u017cna \
-zmodyfikowa\u0107 licencji, poniewa\u017c okre\u015blony produkt zainstalowano przy u\u017cyciu \
-programu IBM Installation Manager. Do zmodyfikowania instalacji u\u017cyj programu IBM Installation Manager.
-LICENSE_replace_invalidEditonFeatures=Nast\u0119puj\u0105ce \
-sk\u0142adniki nie maj\u0105 ju\u017c zastosowania w wersji {0} i nale\u017cy je usun\u0105\u0107 przed \
-zast\u0105pieniem licencji: {1}
-LICENSE_replace_uninstallFeatures_manually=Przed zast\u0105pieniem \
-licencji na potrzeby {0} zdeinstaluj sk\u0142adniki przy u\u017cyciu nast\u0119puj\u0105cej komendy: {1}
+LICENSE_replace_invalidVersion=Nie mo\u017cna zastosowa\u0107 \
+licencji, poniewa\u017c zainstalowano produkt w wersji {0}, a mo\u017cna zastosowa\u0107 wy\u0142\u0105cznie licencj\u0119 wersji {1}.
+LICENSE_replace_invalidInstallType=Nie mo\u017cna zastosowa\u0107 licencji, poniewa\u017c okre\u015blony produkt zainstalowano przy u\u017cyciu programu IBM Installation Manager. U\u017cyj programu IBM Installation Manager, aby zaktualizowa\u0107 instalacj\u0119.
 
+LICENSE_replace_invalidEditonFeatures=Nast\u0119puj\u0105ce sk\u0142adniki nie maj\u0105 zastosowania do edycji {0} i nale\u017cy je zdeinstalowa\u0107 przed zastosowaniem licencji: {1}\n\
+\n\
+U\u017cyj nast\u0119puj\u0105cej komendy, aby zdeinstalowa\u0107 te sk\u0142adniki przed zastosowaniem licencji dla edycji {2}: {3}
 
+LICENSE_downgrade_block_8557_low=T\u0119 licencj\u0119 mo\u017cna zastosowa\u0107 tylko do instalacji w wersji {0} lub nowszej. Aktualnie zainstalowana wersja to {1}. Pobierz i zaktualizuj do najnowszej wersji, a nast\u0119pnie ponownie zastosuj licencj\u0119.

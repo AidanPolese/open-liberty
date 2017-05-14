@@ -14,7 +14,7 @@ public class HttpConfigConstants {
 
     /**
      * Private constructor... this class just provides some constants
-     * 
+     *
      */
     private HttpConfigConstants() {
         // nothing to do
@@ -368,4 +368,6 @@ public class HttpConfigConstants {
     /** Will swallow inbound connections IOE */
     public static final String PROPNAME_THROW_IOE_FOR_INBOUND_CONNECTIONS = "ThrowIOEForInboundConnections"; //PI57542
 
+    /** Equivalent to CookiesConfigureNoCache - required due to 'configure' not being an allowed word for metatype **/
+    public static final String PROPNAME_NO_CACHE_COOKIES_CONTROL = "NoCacheCookiesControl"; //PI75280
 }

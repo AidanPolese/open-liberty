@@ -35,6 +35,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import com.ibm.websphere.simplicity.OperatingSystem;
 import com.ibm.websphere.simplicity.log.Log;
 
 import componenttest.topology.impl.LibertyServer;
@@ -88,6 +89,9 @@ public class EmbeddedServerTest {
 
         // Find the necessary bundles in our install image
         ls = LibertyServerFactory.getLibertyServer("com.ibm.wsspi.kernel.embeddable.fat");
+        if (ls.getMachine().getOperatingSystem().equals(OperatingSystem.WINDOWS)) {
+            ls.setNeedsPostRecover(false); //avoid cleanup on Windows
+        }
 
         testServerClasses = new File("build/classes");
 

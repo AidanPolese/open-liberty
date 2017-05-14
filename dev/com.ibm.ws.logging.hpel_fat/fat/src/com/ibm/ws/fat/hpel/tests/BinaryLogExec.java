@@ -2,7 +2,7 @@
 /**
  *
  * IBM Confidential OCO Source Material
- * 5639-D57 (C) COPYRIGHT International Business Machines Corp. 2002
+ * 5639-D57 (C) COPYRIGHT International Business Machines Corp. 2002, 2017
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
@@ -15,6 +15,7 @@
  * Reason  		 Version	Date        User id     Description
  * ----------------------------------------------------------------------------
  * 95263                8.5.5           06/13/2013   sumam      Fixed the test case for binaryLog utility command
+ * rtc240434            17.0            05/01/2017   gkwan      Added test case for binaryLog view at servers dir
  *
  */
 
@@ -243,6 +244,50 @@ public class BinaryLogExec extends VerboseTestCase {
     }
 
     /**
+     * Tests that binaryLog view action works as expected where is executed at usr/servers directory.
+     *
+     * @throws Exception
+     */
+    public void testbinaryLogViewExecutesAtServersDir() throws Exception {
+
+        // need to have messages for the binaryLog to process.
+        CommonTasks.createLogEntries(HpelSetup.getServerUnderTest(), BinaryLogExec.class.getName(), "Some Msg goes here", null, 25, CommonTasks.LOGS, -1);
+
+        Node node = HpelSetup.getNodeUnderTest();
+        rOutLog = new RemoteFile(node.getMachine(), node.getMachine().getTempDir(), outFileName);
+
+        this.logStep("executing binaryLog for " + HpelSetup.SERVER_NAME);
+
+        String arg1 = "view";
+
+        ProgramOutput lvPrgmOut;
+
+        RemoteFile usrDir = new RemoteFile(HpelSetup.getNodeUnderTest().getMachine(), rProfRootDir, "usr");
+        RemoteFile serversDir = new RemoteFile(HpelSetup.getNodeUnderTest().getMachine(), usrDir, "servers");
+
+        lvPrgmOut = exeBinaryLog(new String[] { arg1, HpelSetup.SERVER_NAME }, serversDir.getAbsolutePath());
+
+        this.logVerificationPoint("Verifying binaryLog std out/err and status return code.");
+        logMsg("    === BinaryLog's stdout: === ");
+        logMsg(lvPrgmOut.getStdout());
+        logMsg(" ");
+        if (lvPrgmOut.getStderr().length() > 0) {
+            // LogViewer reported some errors.
+            logMsg("    === BinaryLog's std.err: ===");
+            logMsg(lvPrgmOut.getStderr());
+        }
+
+        Pattern p1 = Pattern.compile("\\d{1,2}/\\d{1,2}/\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}:\\d\\d\\d");
+        Matcher m1 = p1.matcher(lvPrgmOut.getStdout());
+        assertTrue("Failed assertion that binaryLog exited with successful return code", (lvPrgmOut.getReturnCode() == 0));
+        assertTrue("Failed assertion that binaryLog did produce an output file", lvPrgmOut.getStdout().contains("Some Msg goes here"));
+        assertTrue("Failed assertion that binaryLog displayed default date format", m1.find());
+
+        this.logVerificationPassed();
+        this.logStepCompleted();
+    }
+
+    /**
      * Tests that binaryLog view action works as expected.
      * Steps:
      * 1.Create log entries and then use listInstances action to view instances of the binary logs.
@@ -421,6 +466,10 @@ public class BinaryLogExec extends VerboseTestCase {
      * @throws Exception
      */
     private ProgramOutput exeBinaryLog(String[] cmdLineOptions) throws Exception {
+        return exeBinaryLog(cmdLineOptions, null);
+    }
+
+    private ProgramOutput exeBinaryLog(String[] cmdLineOptions, String workDir) throws Exception {
         // make platform agnostic to handle .sh and .bat
         String exeExt = "";
         final String BINARY_LOG = "binaryLog";
@@ -446,7 +495,7 @@ public class BinaryLogExec extends VerboseTestCase {
         logMsg("executing: " + cmd.toString());
 //        logMsg("executing: " + rProfBinFile.getAbsolutePath() + HpelSetup.getNodeUnderTest().getMachine().getOperatingSystem().getFileSeparator() + cmd.toString());
 //        return HpelSetup.getNodeUnderTest().getMachine().execute(LOG_VIEWER + exeExt, cmdLineOptions, rProfBinFile.getAbsolutePath());
-        return HpelSetup.getNodeUnderTest().getMachine().execute(cmd.toString(), rProfBinFile.getAbsolutePath());
+        return HpelSetup.getNodeUnderTest().getMachine().execute(cmd.toString(), workDir == null ? rProfBinFile.getAbsolutePath() : workDir);
 
 //              }
 //              //iSeries LogViewer needs to be executed in the shell qsh

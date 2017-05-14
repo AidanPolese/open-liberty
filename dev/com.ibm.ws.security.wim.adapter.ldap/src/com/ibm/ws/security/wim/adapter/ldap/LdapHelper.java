@@ -12,7 +12,6 @@ package com.ibm.ws.security.wim.adapter.ldap;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
-import java.security.MessageDigest;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,7 +42,6 @@ import com.ibm.websphere.ras.annotation.Trivial;
 import com.ibm.websphere.security.wim.ras.WIMMessageHelper;
 import com.ibm.websphere.security.wim.ras.WIMMessageKey;
 import com.ibm.websphere.security.wim.ras.WIMTraceHelper;
-import com.ibm.ws.security.wim.util.StringUtil;
 import com.ibm.wsspi.security.wim.exception.CertificateMapperException;
 import com.ibm.wsspi.security.wim.exception.WIMException;
 import com.ibm.wsspi.security.wim.exception.WIMSystemException;
@@ -117,6 +115,7 @@ public class LdapHelper {
         // unescape double blackslashes
         DN = unescapeDoubleBackslash(DN);
         DN = unescapeSingleQuote(DN); // fix login failure when single quote (') is in userid
+        DN = unescapeSpaces(DN);
 
         //process special character enclosing double quotes
         int length = DN.length();
@@ -206,6 +205,37 @@ public class LdapHelper {
                 DN = searchRoot;
         return DN;
 
+    }
+
+    /**
+     * Replace any unnecessary escaped spaces from the input DN.
+     *
+     * @param in The input DN.
+     * @return The DN without unnecessary escaped spaces.
+     */
+    private static String unescapeSpaces(String in) {
+        char[] chars = in.toCharArray();
+        int end = chars.length;
+        StringBuffer out = new StringBuffer(in.length());
+        for (int i = 0; i < end; i++) {
+
+            /*
+             * Remove any backslashes that precede spaces.
+             */
+            boolean isSlashSpace = (chars[i] == '\\') && (i + 1 < end) && (chars[i + 1] == ' ');
+            if (isSlashSpace) {
+                boolean isStart = (i > 0) && (chars[i - 1] == '=');
+                boolean isEnd = (i + 2 >= end) || ((i + 2 < end) && (chars[i + 2] == ','));
+
+                if (!isStart && !isEnd) {
+                    ++i;
+                }
+            }
+
+            out.append(chars[i]);
+        }
+
+        return new String(out);
     }
 
     public static String unescapeDoubleBackslash(String in) {
@@ -412,8 +442,7 @@ public class LdapHelper {
 
         if (result == null) {
             try {
-                LdapName name = new LdapName(dn);
-                result = name.getPrefix(name.size()).toString();
+                result = new LdapName(dn).toString();
                 dnCache.get(sDomainName).put(dn, result);
             } catch (InvalidNameException e) {
                 e.getMessage();
@@ -464,8 +493,8 @@ public class LdapHelper {
             for (int i = 0; i < entityTypes.size(); i++) {
 
                 String thisType = entityTypes.get(i);
-                HashSet hs = Entity.getSubEntityTypes(thisType);
-                if (thisType.equals(entityType) || (Entity.getSubEntityTypes(thisType) != null && Entity.getSubEntityTypes(thisType).contains(entityType))) {
+                HashSet<?> hs = Entity.getSubEntityTypes(thisType);
+                if (thisType.equals(entityType) || (hs != null && hs.contains(entityType))) {
                     return true;
                 }
             }
@@ -589,21 +618,6 @@ public class LdapHelper {
         // TODO::
         // return Base64Coder.base64Encode(getDigest(key.toString()));
         return null;
-    }
-
-    /**
-     * Given 'input', return the digest version.
-     */
-    private static String getDigest(String input) {
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("MD5");
-        } catch (Exception e) {
-            e.getMessage();
-            return null;
-        }
-        md.update(StringUtil.getBytes(input));
-        return StringUtil.toString(md.digest());
     }
 
     /**

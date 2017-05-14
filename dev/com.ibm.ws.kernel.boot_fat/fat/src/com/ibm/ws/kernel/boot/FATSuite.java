@@ -26,6 +26,7 @@ import com.ibm.ws.kernel.provisioning.KernelChangeTest;
 import com.ibm.ws.kernel.provisioning.ProvisioningTest;
 import com.ibm.wsspi.kernel.embeddable.EmbeddedServerAddProductExtensionMultipleTest;
 import com.ibm.wsspi.kernel.embeddable.EmbeddedServerAddProductExtensionTest;
+import com.ibm.wsspi.kernel.embeddable.EmbeddedServerMergeProductExtensionTest;
 import com.ibm.wsspi.kernel.embeddable.EmbeddedServerTest;
 
 /**
@@ -54,6 +55,7 @@ import com.ibm.wsspi.kernel.embeddable.EmbeddedServerTest;
                 StartCommandTest.class,
                 ServerClasspathTest.class,
                 ServerStartJVMOptionsTest.class,
-                PauseResumeCommandTest.class
+                PauseResumeCommandTest.class,
+                EmbeddedServerMergeProductExtensionTest.class
 })
 public class FATSuite {}

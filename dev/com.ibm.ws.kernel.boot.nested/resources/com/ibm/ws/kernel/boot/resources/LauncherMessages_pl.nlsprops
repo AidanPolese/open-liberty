@@ -667,6 +667,12 @@ warning.javase6.endofservice=CWWKE0109W: Obs\u0142uga \u015brodowiska Java SE 6 
 warning.javase6.endofservice.explanation=IBM zako\u0144czy obs\u0142ug\u0119 \u015brodowiska Java SE 6 z serwerem WebSphere Application Server Liberty wraz z ko\u0144cem wrze\u015bnia 2017. Kontynuowanie korzystania ze \u015brodowiska Java SE 6 po zako\u0144czeniu jego obs\u0142ugi mo\u017ce uwra\u017cliwi\u0107 aplikacje na zagro\u017cenia bezpiecze\u0144stwa.
 warning.javase6.endofservice.useraction=IBM zaleca korzystanie z najnowszej wersji \u015brodowiska Java SE, czyli Java SE 8. 
 
+#
+# W A R N I N G:   Do not use CWWKE0100 - CCWKE0199 they are reserved in ServiceMessages.nlsprops
+#
+# Too Late for CWWKE0101 - CWWKE0107 they have dual use currently and CWWKE0108 and CWWKE0109 are only used here.
+#
+
 error.clientNameCharacter=CWWKE0900E: Okre\u015blona nazwa \
 klienta zawiera niepoprawny znak (nazwa={0}). \
 Poprawne znaki to: Unicode alfanumeryczne (np. \
@@ -890,6 +896,9 @@ info.server.resume.request.completed=CWWKE0939I: \u017b\u0105danie wznowienia zo
 info.server.resume.request.completed.explanation=\u017b\u0105danie wznowienia zosta\u0142o wykonane.
 info.server.resume.request.completed.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
 
+info.envProductExtension=CWWKE0940I: Rozszerzenie produktu {0} ma identyfikator {1}, a miejscem instalacji produktu jest {2}. To rozszerzenie produktu zosta\u0142o w\u0142\u0105czone przez okre\u015blenie zmiennej \u015brodowiskowej WLP_PRODUCT_EXT_DIR. 
+info.envProductExtension.explanation= Zmienna \u015brodowiskowa WLP_PRODUCT_EXT_DIR wskazuje po\u0142o\u017cenie rozszerzenia produktu. Serwer znalaz\u0142 to rozszerzenie produktu i u\u017cywa go.
+info.envProductExtension.useraction=Nie jest wymagana \u017cadna czynno\u015b\u0107.
 
 info.serverStarting=Uruchamianie serwera {0}.
 info.serverStarted=Serwer {0} zosta\u0142 uruchomiony.

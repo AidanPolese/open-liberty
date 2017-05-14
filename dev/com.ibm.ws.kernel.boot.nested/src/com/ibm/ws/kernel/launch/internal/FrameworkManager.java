@@ -26,13 +26,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
@@ -214,6 +212,8 @@ public class FrameworkManager {
 
             outputEmbeddedProductExtensions();
 
+            outputEnvironmentVariableProductExtensions();
+
             // Save the bootstrap config locally
             this.config = config;
 
@@ -387,8 +387,6 @@ public class FrameworkManager {
     }
 
     private void outputEmbeddedProductExtensions() {
-
-        HashMap<String, Properties> embeddedProductExtensions = null;
         String embededData = System.getProperty(BootstrapConstants.ENV_PRODUCT_EXTENSIONS_ADDED_BY_EMBEDDER);
 
         if (embededData != null) {
@@ -396,6 +394,19 @@ public class FrameworkManager {
             for (int i = 0; (i < extensions.length) && ((i + 3) <= extensions.length); i = i + 3) {
 
                 Tr.info(tc, "info.addProductExtension", extensions[i], extensions[i + 1], extensions[i + 2]);
+
+            }
+        }
+    }
+
+    private void outputEnvironmentVariableProductExtensions() {
+        String envData = System.getProperty(BootstrapConstants.ENV_PRODUCT_EXTENSIONS_ADDED_BY_ENV);
+
+        if (envData != null) {
+            String[] extensions = envData.split("\n");
+            for (int i = 0; (i < extensions.length) && ((i + 3) <= extensions.length); i = i + 3) {
+
+                Tr.info(tc, "info.envProductExtension", extensions[i], extensions[i + 1], extensions[i + 2]);
 
             }
         }

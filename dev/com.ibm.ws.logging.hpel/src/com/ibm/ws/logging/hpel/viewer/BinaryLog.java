@@ -16,6 +16,7 @@
  * Reason      Version   Date        User id     Description
  * ----------------------------------------------------------------------------
  * rtc235241    17.0     01/02/2017  frankji     add iso-8601 date time format support to binaryLog
+ * rtc240434    17.0     05/01/2017  gkwan       fix for binaryLog view at servers directory
  */
 package com.ibm.ws.logging.hpel.viewer;
 
@@ -140,8 +141,20 @@ public class BinaryLog extends LogViewer {
             // to an existing file, we assume it's a repositoryPath.
             // Else, we assume it's a server name.
             repositoryDir = new File(serverNameOrRepositoryPath);
-            if (!(serverNameOrRepositoryPath.contains(File.separator) || repositoryDir.exists())) {
-                repositoryDir = new File(Utils.getServerOutputDir(serverNameOrRepositoryPath), "logs");
+            if (!serverNameOrRepositoryPath.contains(File.separator)) {
+                File serverOutputDir = Utils.getServerOutputDir(serverNameOrRepositoryPath);
+                if (repositoryDir.exists()) {
+                    File currentDir = new File(".", serverNameOrRepositoryPath);
+                    try {
+                        if (currentDir.getCanonicalFile().equals(serverOutputDir.getCanonicalFile())) {
+                            repositoryDir = new File(serverOutputDir, "logs");
+                        }
+                    } catch (IOException e) {
+                        // Do nothing if failed to compare
+                    }
+                } else {
+                    repositoryDir = new File(serverOutputDir, "logs");
+                }
             }
         }
 

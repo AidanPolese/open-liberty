@@ -20,8 +20,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.javaee.dd.common.JNDIEnvironmentRef;
 import com.ibm.wsspi.injectionengine.ComponentNameSpaceConfiguration;
@@ -149,14 +149,14 @@ public class InjectionProcessorManager
                                                 "300", this, new Object[] { processor });
                     // Include the cause message in the logged message, and don't
                     // unnecessarily wrap the exception.                          F53641
-                    Tr.error(tc, "FAILED_TO_PROCESS_XML_FROM_DD_CWNEN0009E", new Object[] { iex.getMessage() });
+                    Tr.error(tc, "FAILED_TO_PROCESS_XML_FROM_DD_CWNEN0009E", iex.getMessage());
                     throw iex;
                 } catch (Throwable t)
                 {
                     FFDCFilter.processException(t, CLASS_NAME + ".processXML",
                                                 "768", this, new Object[] { processor });
                     // Include the cause stack in the logged message.             F53641
-                    Tr.error(tc, "FAILED_TO_PROCESS_XML_FROM_DD_CWNEN0009E", new Object[] { t });
+                    Tr.error(tc, "FAILED_TO_PROCESS_XML_FROM_DD_CWNEN0009E", t);
                     throw new InjectionConfigurationException("Failed to process xml from Deployment Descriptor.", t);
                 }
             }
@@ -392,8 +392,7 @@ public class InjectionProcessorManager
             if (classHierarchy != klass)
             {
                 Tr.warning(tc, "SUPER_FIELD_ANNOTATIONS_IGNORED_CWNEN0048W",
-                           new Object[] { klass.getName(), classHierarchy.getName(),
-                                         ex.toString() }); // d479669 RTC119889
+                           klass.getName(), classHierarchy.getName(), ex.toString()); // d479669 RTC119889
                 if (ivInjectionEngine.isValidationFailable(ivNameSpaceConfig.isCheckApplicationConfiguration())) // F743-14449
                 {
                     throw new RuntimeException("Resource annotations on the fields of the " + klass.getName() +
@@ -407,7 +406,7 @@ public class InjectionProcessorManager
             else
             {
                 Tr.warning(tc, "FIELD_ANNOTATIONS_IGNORED_CWNEN0047W",
-                           new Object[] { klass.getName(), ex.toString() }); // d479669 d641396 RTC119889
+                           klass.getName(), ex.toString()); // d479669 d641396 RTC119889
                 if (ivInjectionEngine.isValidationFailable(ivNameSpaceConfig.isCheckApplicationConfiguration())) // F743-14449
                 {
                     throw new RuntimeException("Resource annotations on the fields of the " + klass.getName() +
@@ -500,14 +499,14 @@ public class InjectionProcessorManager
                                                     "480", this, new Object[] { processor });
                         // Include the cause message in the logged message, and don't
                         // unnecessarily wrap the exception.                          F53641
-                        Tr.error(tc, "FAILED_TO_PROCESS_BINDINGS_CWNEN0011E", new Object[] { iex.getMessage() });
+                        Tr.error(tc, "FAILED_TO_PROCESS_BINDINGS_CWNEN0011E", iex.getMessage());
                         throw iex;
                     } catch (Throwable t)
                     {
                         FFDCFilter.processException(t, CLASS_NAME + ".processBindings",
                                                     "815", this, new Object[] { processor });
                         // Include the cause stack in the logged message.             F53641
-                        Tr.error(tc, "FAILED_TO_PROCESS_BINDINGS_CWNEN0011E", new Object[] { t });
+                        Tr.error(tc, "FAILED_TO_PROCESS_BINDINGS_CWNEN0011E", t);
                         throw new InjectionException("Failed to process bindings for metadata", t);
                     }
                 }

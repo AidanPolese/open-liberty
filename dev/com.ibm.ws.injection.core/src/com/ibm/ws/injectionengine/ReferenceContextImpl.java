@@ -32,9 +32,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.javaee.dd.common.JNDIEnvironmentRef;
 import com.ibm.ws.javaee.dd.common.PersistenceContextRef;
@@ -626,14 +626,14 @@ public class ReferenceContextImpl implements ReferenceContext {
         ivInjectionEngine.notifyInjectionMetaDataListeners(this, masterCompNSConfig);
 
         if (isTraceOn && tc.isDebugEnabled()) {
-            Tr.debug(tc, "Output component context:", new Object[] { ivComponentJavaContext });
+            Tr.debug(tc, "Output component context:", ivComponentJavaContext);
             if (ivJavaColonCompEnvMap != null) // d705480
             {
-                Tr.debug(tc, "Output java:comp/env map: ", new Object[] { dumpJavaColonCompEnvMap() }); // F743-17630CodRv
+                Tr.debug(tc, "Output java:comp/env map: ", dumpJavaColonCompEnvMap()); // F743-17630CodRv
             }
-            Tr.debug(tc, "Output EJB context 1.0: ", new Object[] { ivEjbContext10 });
-            Tr.debug(tc, "Output ResourceRefs: ", new Object[] { ivResourceRefConfigList });
-            Tr.debug(tc, "Output InjectionBindings: ", new Object[] { injectionBindings }); // F743-21481
+            Tr.debug(tc, "Output EJB context 1.0: ", ivEjbContext10);
+            Tr.debug(tc, "Output ResourceRefs: ", ivResourceRefConfigList);
+            Tr.debug(tc, "Output InjectionBindings: ", injectionBindings); // F743-21481
         }
     }
 
@@ -854,14 +854,14 @@ public class ReferenceContextImpl implements ReferenceContext {
                     } else if (!binding.equals(oldBinding)) {
                         ComponentNameSpaceConfiguration oldCompNSConfig = allComps.get(refName);
                         Tr.error(tc, "CONFLICTING_REFERENCES_CWNEN0062E",
-                                 new Object[] { oldCompNSConfig.getDisplayName(),
-                                                compNSConfig.getDisplayName(),
-                                                compNSConfig.getModuleName(),
-                                                compNSConfig.getApplicationName(),
-                                                whatAttribute,
-                                                refName,
-                                                oldBinding,
-                                                binding });
+                                 oldCompNSConfig.getDisplayName(),
+                                 compNSConfig.getDisplayName(),
+                                 compNSConfig.getModuleName(),
+                                 compNSConfig.getApplicationName(),
+                                 whatAttribute,
+                                 refName,
+                                 oldBinding,
+                                 binding);
                         success = false;
                     }
                 }
@@ -909,14 +909,14 @@ public class ReferenceContextImpl implements ReferenceContext {
         if (!success) {
             for (ResourceRefConfig.MergeConflict conflict : conflicts) {
                 Tr.error(tc, "CONFLICTING_REFERENCES_CWNEN0062E",
-                         new Object[] { compNSConfigs.get(conflict.getIndex1()).getDisplayName(),
-                                        compNSConfigs.get(conflict.getIndex2()).getDisplayName(),
-                                        masterCompNSConfig.getModuleName(),
-                                        masterCompNSConfig.getApplicationName(),
-                                        conflict.getAttributeName(),
-                                        conflict.getResourceRefConfig().getName(),
-                                        conflict.getValue1(),
-                                        conflict.getValue2() });
+                         compNSConfigs.get(conflict.getIndex1()).getDisplayName(),
+                         compNSConfigs.get(conflict.getIndex2()).getDisplayName(),
+                         masterCompNSConfig.getModuleName(),
+                         masterCompNSConfig.getApplicationName(),
+                         conflict.getAttributeName(),
+                         conflict.getResourceRefConfig().getName(),
+                         conflict.getValue1(),
+                         conflict.getValue2());
             }
         }
 

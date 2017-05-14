@@ -1,3 +1,14 @@
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * Copyright IBM Corp. 2012, 2017
+ *
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ */
 package wlp.lib.extract;
 
 import java.io.BufferedReader;
@@ -36,12 +47,12 @@ public class SelfExtract {
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle(SelfExtract.class.getName() + "Messages");
     private static BufferedReader in;
 
-    private static boolean acceptLicense = false;
-    private static boolean downloadDependencies = false;
-    private static boolean verbose = false;
-    private static String targetString = null;
+    protected static boolean acceptLicense = false;
+    protected static boolean downloadDependencies = false;
+    protected static boolean verbose = false;
+    protected static String targetString = null;
 
-    private static final class VerboseExtractProgress implements ExtractProgress {
+    public static final class VerboseExtractProgress implements ExtractProgress {
         public void extractedFile(String f) {
             System.out.println("\t" + f);
         }
@@ -191,7 +202,7 @@ public class SelfExtract {
     }
 
     // TODO we should revisit this logic. The validate is doing more work than is required by this method.
-    private static File findValidWlpInstallPath(File searchDirectory, SelfExtractor extractor) {
+    protected static File findValidWlpInstallPath(File searchDirectory, SelfExtractor extractor) {
         // Checks the supplied directory to see if it either IS a valid wlp install dir for this archive, or CONTAINS a valid wlp install dir
         // (For core, we'll usually break out right away, as any new directory is valid)
         if ((extractor.isProductAddon() || extractor.isUserSample()) && extractor.validate(searchDirectory) != ReturnCode.OK) {

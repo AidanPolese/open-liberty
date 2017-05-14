@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2013, 2016
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.kernel.provisioning;
@@ -17,15 +17,24 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import com.ibm.ws.kernel.boot.cmdline.Utils;
 import com.ibm.ws.kernel.boot.internal.BootstrapConstants;
 
 /**
  * Product Extension.
+ *
+ * Product Extension may be specified by 3 separate means:
+ * 1) Embedder SPI;
+ * 2) WLP_PRODUCT_EXT_DIR environment variable; and
+ * 3) etc/extensions.
+ *
+ * The order listed is the order of override when gathering the list of ProductExtensionInfo.
  */
 public class ProductExtension {
 
@@ -36,6 +45,8 @@ public class ProductExtension {
     public static final String PRODUCT_EXTENSIONS_INSTALL = "com.ibm.websphere.productInstall";
 
     public static final String PRODUCT_EXTENSIONS_ID = "com.ibm.websphere.productId";
+
+    private static final String PRODUCT_EXTENSIONS_ENV = "WLP_PRODUCT_EXT_DIR";
 
     private static FileFilter PROPERTIESFilter = new FileFilter() {
         @Override
@@ -52,30 +63,82 @@ public class ProductExtension {
         return getProductExtensions(Utils.getInstallDir());
     }
 
+    private static File getFileFromDirectory(File dir, String path) {
+        StringBuilder sBuilder = new StringBuilder(dir.getAbsolutePath());
+        for (String p : path.split("/")) {
+            sBuilder.append(File.separator).append(p);
+        }
+
+        return new File(sBuilder.toString());
+    }
+
     /**
      * Get a list of configured product extensions.
-     * 
-     * @return
+     *
+     * Merge any Product Extensions from:
+     * 1) Embedder SPI;
+     * 2) WLP_PRODUCT_EXT_DIR environment variable; and
+     * 3) etc/extensions.
+     *
+     * The order listed is the order of override when gathering the list of ProductExtensionInfo.
+     *
+     * @param installDir File representing the install path.
+     * @return List of ProductExtensionInfo objects.
      */
     public static List<ProductExtensionInfo> getProductExtensions(File installDir) {
         ArrayList<ProductExtensionInfo> productList = new ArrayList<ProductExtensionInfo>();
+        Set<String> extensionsSoFar = new HashSet<String>();
 
-        HashMap<String, Properties> extraProductExtensions = getExtraProductExtensions();
-        if (extraProductExtensions != null) {
+        // Get the embedder SPI product extensions
+        HashMap<String, Properties> embedderProductExtensions = getExtraProductExtensions();
+        if (embedderProductExtensions != null) {
             ProductExtensionInfo prodInfo;
-            for (Entry<String, Properties> entry : extraProductExtensions.entrySet()) {
+            for (Entry<String, Properties> entry : embedderProductExtensions.entrySet()) {
                 String name = entry.getKey();
                 Properties featureProperties = entry.getValue();
-                String installLocation = featureProperties.getProperty(ProductExtension.PRODUCT_EXTENSIONS_INSTALL);
-                String productId = featureProperties.getProperty(ProductExtension.PRODUCT_EXTENSIONS_ID);
-                prodInfo = new ProductExtensionInfoImpl(name, productId, installLocation);
-                productList.add(prodInfo);
+                if (ExtensionConstants.USER_EXTENSION.equalsIgnoreCase(name) == false) {
+                    String installLocation = featureProperties.getProperty(ProductExtension.PRODUCT_EXTENSIONS_INSTALL);
+                    String productId = featureProperties.getProperty(ProductExtension.PRODUCT_EXTENSIONS_ID);
+                    prodInfo = new ProductExtensionInfoImpl(name, productId, installLocation);
+                    productList.add(prodInfo);
+                    extensionsSoFar.add(name);
+                }
             }
         }
 
+        // Apply any product extensions specified from the WLP_PRODUCT_EXT_DIR environment variable
+        String extensionEnv = System.getenv(PRODUCT_EXTENSIONS_ENV);
+        if (extensionEnv != null) {
+            File productExtensionEnvDir = new File(extensionEnv);
+            if (!!!productExtensionEnvDir.isAbsolute()) {
+                productExtensionEnvDir = getFileFromDirectory(installDir.getParentFile(), extensionEnv);
+            }
+
+            // Extensions added by the embedder SPI will override extensions from the WLP_PRODUCT_EXT_DIR env of the same name.
+            String envData = mergeExtensions(productList, extensionsSoFar, productExtensionEnvDir);
+
+            // Push Env Product Extension information found via Env to FrameworkManager for issuing a Message.
+            System.clearProperty(BootstrapConstants.ENV_PRODUCT_EXTENSIONS_ADDED_BY_ENV);
+            if (!!!envData.isEmpty()) {
+                System.setProperty(BootstrapConstants.ENV_PRODUCT_EXTENSIONS_ADDED_BY_ENV, envData);
+            }
+        }
+
+        // Get the installed etc/extensions.
         File productExtensionsDir = getExtensionDir(installDir);
-        if (productExtensionsDir.exists()) {
-            File[] productPropertiesFiles = productExtensionsDir.listFiles(PROPERTIESFilter);
+
+        // Extensions added by the embedder SPI or WLP_PRODUCT_EXT_DIR
+        // will override extensions of the same name that exist in the install root.
+        mergeExtensions(productList, extensionsSoFar, productExtensionsDir);
+
+        return productList;
+    }
+
+    private static String mergeExtensions(ArrayList<ProductExtensionInfo> productList, Set<String> extensionsSoFar, File mergeProductExtensionDir) {
+        StringBuffer mergedProdInfo = new StringBuffer();
+
+        if (mergeProductExtensionDir.exists()) {
+            File[] productPropertiesFiles = mergeProductExtensionDir.listFiles(PROPERTIESFilter);
 
             // Iterate over all the *.properties files in the product extensions dir.
             for (File file : productPropertiesFiles) {
@@ -84,26 +147,29 @@ public class ProductExtension {
                 // Get the product name.
                 String productName = fileName.substring(0, fileName.indexOf(PRODUCT_EXTENSIONS_FILE_EXTENSION));
 
-                // skip a file called just .properties
+                // Skip a file called just .properties
                 if (0 != productName.length()) {
                     if (ExtensionConstants.USER_EXTENSION.equalsIgnoreCase(productName) == false) {
-                        // extensions added by the embedder SPI will override extensions of the same name that exist in the install root.
-                        if ((extraProductExtensions == null) || (extraProductExtensions.containsKey(productName) == false)) {
+                        // Extensions added by previous calls will override later merges.
+                        if (extensionsSoFar.contains(productName) == false) {
                             // Read data in .properties file.
                             ProductExtensionInfo prodInfo;
                             try {
                                 prodInfo = loadExtensionInfo(productName, file);
-                                if (prodInfo != null)
+                                if (prodInfo != null) {
                                     productList.add(prodInfo);
+                                    extensionsSoFar.add(productName);
+                                    mergedProdInfo.append(prodInfo.getName() + "\n" + prodInfo.getProductID() + "\n" + prodInfo.getLocation() + "\n");
+                                }
                             } catch (IOException e) {
                             }
                         }
                     }
                 }
             }
-        }
 
-        return productList;
+        }
+        return mergedProdInfo.toString();
     }
 
     private static HashMap<String, Properties> getExtraProductExtensions() {
@@ -125,26 +191,20 @@ public class ProductExtension {
     }
 
     /**
-     * Get a list of configured product extensions.
-     * 
+     * Find and return a particular configured product extension.
+     *
      * @return
      */
     public static ProductExtensionInfo getProductExtension(String extensionName) throws IOException {
-
         ProductExtensionInfo productExtensionInfo = null;
-        HashMap<String, Properties> extraProductExtensions = getExtraProductExtensions();
-        if (extraProductExtensions != null) {
-            Properties featureProperties = extraProductExtensions.get(extensionName);
-            if (featureProperties != null) {
-                String installLocation = featureProperties.getProperty(PRODUCT_EXTENSIONS_INSTALL);
-                String productId = featureProperties.getProperty(PRODUCT_EXTENSIONS_ID);
-                productExtensionInfo = new ProductExtensionInfoImpl(extensionName, productId, installLocation);
-            }
-        }
 
-        if (productExtensionInfo == null) {
-            File extensionFile = new File(getExtensionDir(Utils.getInstallDir()), extensionName + ".properties");
-            productExtensionInfo = loadExtensionInfo(extensionName, extensionFile);
+        List<ProductExtensionInfo> productExtensionList = getProductExtensions(Utils.getInstallDir());
+
+        for (ProductExtensionInfo currentProductExtension : productExtensionList) {
+            if (currentProductExtension.getName().equalsIgnoreCase(extensionName)) {
+                productExtensionInfo = currentProductExtension;
+                break;
+            }
         }
 
         return productExtensionInfo;
@@ -182,7 +242,7 @@ public class ProductExtension {
 
         /**
          * Constructor.
-         * 
+         *
          * @param productName
          * @param location
          * @param productId

@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -111,7 +111,7 @@ public class ClasspathAction implements ActionHandler {
         FeatureRepository repo = new FeatureRepository();
         repo.init();
         FeatureResolver resolver = new FeatureResolverImpl();
-        Result r = resolver.resolveFeatures(repo, Arrays.asList(features), new HashSet<String>(), false);
+        Result r = resolver.resolveFeatures(repo, Collections.<ProvisioningFeatureDefinition> emptySet(), Arrays.asList(features), Collections.<String> emptySet(), false);
 
         Map<String, FeatureInfo> featuresToCheck = new HashMap<String, FeatureInfo>();
         for (String name : r.getResolvedFeatures()) {

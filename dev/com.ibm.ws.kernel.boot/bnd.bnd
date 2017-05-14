@@ -67,7 +67,7 @@ Private-Package: \
     OSGI-OPT=resources/OSGI-OPT, \
     OSGI-OPT/websphere/bin/tools/ws-server.jar=${repo;com.ibm.ws.kernel.boot.ws-server}, \
     {OSGI-OPT/websphere/autopd-collection-environment-v2.xml=resources/OSGI-OPT/websphere/autopd-collection-environment-v2.xml}, \
-    @${repo;com.ibm.websphere.org.osgi.core.6.0.0}!/org/osgi/framework/Version*, \
+    @${repo;com.ibm.websphere.org.osgi.core}!/org/osgi/framework/Version*, \
     @${repo;com.ibm.ws.kernel.boot.core}!/!com/ibm/ws/kernel/boot/resources/, \
     @${repo;com.ibm.ws.kernel.boot.nested}!/!com/ibm/ws/kernel/boot/resources/, \
     @${repo;com.ibm.ws.kernel.boot.cmdline}!/!com/ibm/ws/kernel/boot/resources/, \
@@ -87,6 +87,6 @@ instrument.disabled: true
 	com.ibm.ws.kernel.boot.logging;version=latest,\
 	com.ibm.ws.kernel.boot.nested;version=latest,\
 	com.ibm.ws.kernel.security.thread;version=latest,\
-	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.core;version=latest,\
 	com.ibm.ws.logging.core;version=latest,\
 	com.ibm.ws.ras.instrument;version=latest

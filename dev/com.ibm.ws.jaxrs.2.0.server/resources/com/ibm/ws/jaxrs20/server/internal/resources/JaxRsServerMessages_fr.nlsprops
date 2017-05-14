@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2011.
+# (C) COPYRIGHT International Business Machines Corp. 2011, 2017.
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -19,13 +19,16 @@
 #
 # NLS_MESSAGEFORMAT_ALL
 #
-#CMVCPATHNAME com.ibm.ws.jaxws.webcontainer/resources/com/ibm/ws/jaxws/webcontainer/internal/resources/JaxWsWebContainerMessages.nlsprops
+#CMVCPATHNAME com.ibm.ws.jaxrs.2.0.server/resources/com/ibm/ws/jaxrs20/server/internal/resources/JaxRsWebServerMessages.nlsprops
 #ISMESSAGEFILE TRUE
 #COMPONENTPREFIX CWWKW
-#COMPONENTNAMEFOR CWWKW WebSphere JAXWS WebContainer Code
+#COMPONENTNAMEFOR CWWKW WebSphere JAXRS WebContainer Code
 #RANGE 0100 - 0199
 #
 #NLS_MESSAGEFORMAT_VAR
 #NLS_ENCODING=UNICODE
 #
 
+warn.provider.no.public.ctor=CWWKW0100W: La classe de fournisseur JAX-RS, {0}, dans l''application contient un constructeur non public. Le serveur ignorera ce fournisseur.
+warn.provider.no.public.ctor.explanation=La sp\u00e9cification JAX-RS requiert que les classes de fournisseur contiennent au moins un constructeur public pour l'impl\u00e9mentation de conteneur JAX-RS \u00e0 appeler. Le classe de fournisseur sp\u00e9cifi\u00e9 ne contient pas de constructeur public, le serveur l'ignorera donc.
+warn.provider.no.public.ctor.useraction=Si l'application requiert ce fournisseur, cette classe doit \u00eatre modifi\u00e9e pour inclure au moins un constructeur public. Consultez la section 4.1.2 de la sp\u00e9cification JAX-RS 2.0 (JSR 339) pour plus d'informations.

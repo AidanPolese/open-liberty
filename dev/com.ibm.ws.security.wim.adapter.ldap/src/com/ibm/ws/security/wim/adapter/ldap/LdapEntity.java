@@ -453,4 +453,29 @@ public class LdapEntity {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getName()).append(":{");
+        sb.append("iAttrs=").append(iAttrs);
+        sb.append(", iAttrToPropMap=").append(iAttrToPropMap);
+        sb.append(", iExtId=").append(iExtId);
+        sb.append(", iObjectClassAttrs=").append(Arrays.toString(iObjectClassAttrs));
+        sb.append(", iObjectClasses=").append(iObjectClasses);
+        sb.append(", iProps=").append(iProps);
+        sb.append(", iPropToAttrMap=").append(iPropToAttrMap);
+        sb.append(", iQEntityType=").append(iQEntityType);
+        sb.append(", iRDNAttrs=").append(Arrays.deepToString(iRDNAttrs));
+        sb.append(", iRDNObjectClass=").append(Arrays.deepToString(iRDNObjectClass));
+        sb.append(", iSearchBaseConfigured=").append(iSearchBaseConfigured);
+        sb.append(", iSearchBaseList=").append(iSearchBaseList);
+        sb.append(", iSearchBases=").append(Arrays.toString(iSearchBases));
+        sb.append(", iSearchFilter=").append(iSearchFilter);
+        sb.append(", iTranslatedRDN=").append(iTranslatedRDN);
+        sb.append(", iWIMRDNAttrs=").append(Arrays.deepToString(iWIMRDNAttrs));
+        sb.append(", iWIMRDNProps=").append(Arrays.deepToString(iWIMRDNProps));
+        sb.append("}");
+        return sb.toString();
+    }
 }

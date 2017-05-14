@@ -238,7 +238,7 @@ public class WsocConnLink {
             while (true) {
 
                 if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, "linkStatus: " + linkStatus + "  writeLinkStatus: " + writeLinkStatus);
+                    Tr.debug(tc, "okToWrite entry WsocConnLink: " + this.hashCode() + " linkStatus: " + linkStatus + " writeLinkStatus: " + writeLinkStatus);
                 }
 
                 if (calledFromClose) {
@@ -277,6 +277,9 @@ public class WsocConnLink {
                         }
                         writeNotifyTriggered = false;
                         while (writeNotifyTriggered == false) {
+                            if (tc.isDebugEnabled()) {
+                                Tr.debug(tc, "okToWrite WsocConnLink: " + this.hashCode() + " linkSync.wait()");
+                            }
                             linkSync.wait();
                         }
                     } catch (InterruptedException e) {
@@ -305,6 +308,10 @@ public class WsocConnLink {
 
         synchronized (linkSync) {
 
+            if (tc.isDebugEnabled()) {
+                Tr.debug(tc, "waitToClose entry WsocConnLink: " + this.hashCode() + " linkStatus: " + linkStatus + " writeLinkStatus: " + writeLinkStatus);
+            }
+
             while (true) {
 
                 if (tc.isDebugEnabled()) {
@@ -321,6 +328,9 @@ public class WsocConnLink {
                     }
                     writeNotifyTriggered = false;
                     while (writeNotifyTriggered == false) {
+                        if (tc.isDebugEnabled()) {
+                            Tr.debug(tc, "waitToClose WsocConnLink: " + this.hashCode() + " linkSync.wait() ");
+                        }
                         linkSync.wait();
                     }
                 } catch (InterruptedException e) {
@@ -461,31 +471,66 @@ public class WsocConnLink {
 
     public void signalNotWriting() {
         synchronized (linkSync) {
+            if (tc.isDebugEnabled()) {
+                Tr.debug(tc, "signalNotWriting WsocConnLink: " + this.hashCode());
+            }
             writeLinkStatus = WRITE_LINK_STATUS.OK_TO_WRITE;
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, "linkSync.notify()");
+                Tr.debug(tc, "signalNotWriting WsocConnLink: " + this.hashCode() + " linkSync.notifyAll()");
             }
             writeNotifyTriggered = true;
             linkSync.notifyAll();
         }
     }
 
-    public void signalLocalClose() {
+    public boolean signalLocalClose() {
         synchronized (linkSync) {
-            if (linkStatus != LINK_STATUS.IO_NOT_OK) {
-                linkStatus = LINK_STATUS.LOCAL_CLOSING;
+            LINK_STATUS x = getLinkStatus();
+
+            if (tc.isDebugEnabled()) {
+                Tr.debug(tc, "signalLocalClose WsocConnLink: " + this.hashCode() + " entry linkStatus: " + x);
             }
+
+            if ((x == LINK_STATUS.CLOSED) || (x == LINK_STATUS.LOCAL_CLOSING) || (x == LINK_STATUS.IO_NOT_OK)) {
+                if (tc.isDebugEnabled()) {
+                    Tr.debug(tc, "Close has been called while a previous close/destroy is in progress. Link Status: " + getLinkStatus());
+                }
+                return true;
+            }
+
+            linkStatus = LINK_STATUS.LOCAL_CLOSING;
+            return false;
         }
     }
 
-    public void signalClose() {
+    public boolean signalClose() {
+        // return true if this was closed/closing/"io not ok" coming in, else return false
+        // set status to close either way.
+
+        boolean rc = false;
         synchronized (linkSync) {
+
+            LINK_STATUS x = getLinkStatus();
+
+            if (tc.isDebugEnabled()) {
+                Tr.debug(tc, "signalClosed WsocConnLink: " + this.hashCode() + " entry linkStatus: " + x);
+            }
+
+            if ((x == LINK_STATUS.CLOSED) || (x == LINK_STATUS.LOCAL_CLOSING) || (x == LINK_STATUS.IO_NOT_OK)) {
+                rc = true;
+            }
+
             linkStatus = LINK_STATUS.CLOSED;
         }
+        return rc;
     }
 
     public void setLinkStatusesToOK() {
         synchronized (linkSync) {
+            if (tc.isDebugEnabled()) {
+                Tr.debug(tc, "setLinkStatusesToOK WsocConnLink: " + this.hashCode());
+            }
+
             linkStatus = LINK_STATUS.IO_OK;
             readLinkStatus = READ_LINK_STATUS.OK_TO_READ;
             writeLinkStatus = WRITE_LINK_STATUS.OK_TO_WRITE;
@@ -497,6 +542,9 @@ public class WsocConnLink {
 
     public void setLinkStatusToNotOK() {
         synchronized (linkSync) {
+            if (tc.isDebugEnabled()) {
+                Tr.debug(tc, "setLinkStatusToNotOK WsocConnLink: " + this.hashCode());
+            }
             linkStatus = LINK_STATUS.IO_NOT_OK;
             readLinkStatus = READ_LINK_STATUS.READ_NOT_OK;
             writeLinkStatus = WRITE_LINK_STATUS.WRITE_NOT_OK;
@@ -542,12 +590,15 @@ public class WsocConnLink {
 
     @FFDCIgnore(IOException.class)
     protected void close(CloseReason cr, boolean needToCloseSession, boolean cleanupRead) {
-        //signal to close
-        signalClose();
+        //signal to close, return if already closing
+        boolean closedAlready = false;
+        closedAlready = signalClose();
 
         try {
             // tell the user app that a close is going to happen
-            appEndPoint.onClose(wsocSession, cr);
+            if (!closedAlready) {
+                appEndPoint.onClose(wsocSession, cr);
+            }
         } finally {
 
             if (needToCloseSession) {
@@ -564,40 +615,41 @@ public class WsocConnLink {
                 linkRead.resetReader();
             }
 
-            // write a close frame to the client
-            if (tc.isDebugEnabled()) {
-                Tr.debug(tc, "close reason phrase is: " + cr.getReasonPhrase());
-            }
-
-            int closeValue = cr.getCloseCode().getCode();
-
-            if (tc.isDebugEnabled()) {
-                Tr.debug(tc, "close reason code is: " + closeValue);
-            }
-
-            //close frame data needs to be 125 UTF-8 encoded bytes. First 2 bytes are for close code and next 123 bytes are for reason phrase
-            byte[] reasonBytes = cr.getReasonPhrase().getBytes(Utils.UTF8_CHARSET);
-            //at this point of execution close reason is already trimmed off to <=123 UTF-8 encoded byte length. Hence no need to check for it again here.
-            int len = reasonBytes.length;
-            if (tc.isDebugEnabled()) {
-                Tr.debug(tc, "close reason len is: " + len);
-            }
-            byte[] closeData = new byte[len + 2];
-            closeData[0] = (byte) ((closeValue >> 8) & (0x000000FF));
-            closeData[1] = (byte) ((closeValue & 0x000000FF));
-            System.arraycopy(reasonBytes, 0, closeData, 2, len);
-            try {
+            if (!closedAlready) {
+                // write a close frame to the client
                 if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, "close :closeframe: sending close frame. readLinkStatus: " + readLinkStatus);
+                    Tr.debug(tc, "close reason phrase is: " + cr.getReasonPhrase());
                 }
-                linkWrite.writeBuffer(getBufferManager().wrap(closeData), OpcodeType.CONNECTION_CLOSE, WRITE_TYPE.SYNC, null, 0);
-            } catch (IOException x) {
-                //just log the message in FFDC and trace. Nothing else can be done at this point since onClose() is already called
-                if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, "Caught IOException: " + x.getMessage());
-                }
-                // allow instrumented FFDC to be used here
 
+                int closeValue = cr.getCloseCode().getCode();
+
+                if (tc.isDebugEnabled()) {
+                    Tr.debug(tc, "close reason code is: " + closeValue);
+                }
+
+                //close frame data needs to be 125 UTF-8 encoded bytes. First 2 bytes are for close code and next 123 bytes are for reason phrase
+                byte[] reasonBytes = cr.getReasonPhrase().getBytes(Utils.UTF8_CHARSET);
+                //at this point of execution close reason is already trimmed off to <=123 UTF-8 encoded byte length. Hence no need to check for it again here.
+                int len = reasonBytes.length;
+                if (tc.isDebugEnabled()) {
+                    Tr.debug(tc, "close reason len is: " + len);
+                }
+                byte[] closeData = new byte[len + 2];
+                closeData[0] = (byte) ((closeValue >> 8) & (0x000000FF));
+                closeData[1] = (byte) ((closeValue & 0x000000FF));
+                System.arraycopy(reasonBytes, 0, closeData, 2, len);
+                try {
+                    if (tc.isDebugEnabled()) {
+                        Tr.debug(tc, "close :closeframe: sending close frame. readLinkStatus: " + readLinkStatus);
+                    }
+                    linkWrite.writeBuffer(getBufferManager().wrap(closeData), OpcodeType.CONNECTION_CLOSE, WRITE_TYPE.SYNC, null, 0);
+                } catch (IOException x) {
+                    //just log the message in FFDC and trace. Nothing else can be done at this point since onClose() is already called
+                    if (tc.isDebugEnabled()) {
+                        Tr.debug(tc, "Caught IOException: " + x.getMessage());
+                    }
+                    // allow instrumented FFDC to be used here
+                }
             }
 
             //close down the link
@@ -776,10 +828,9 @@ public class WsocConnLink {
 
     public void outgoingCloseConnection(CloseReason cr) {
         // stop close loops. For example, if app code calls session.close() from onClose.
-        if (checkIfClosingAlready())
+        if (signalLocalClose()) {
             return;
-
-        signalLocalClose();
+        } ;
 
         CloseReason updatedCr = new CloseReason(cr.getCloseCode(), cr.getReasonPhrase());
 
@@ -1063,6 +1114,10 @@ public class WsocConnLink {
     }
 
     public void processWrite(TCPWriteRequestContext wsc) {
+        if (tc.isDebugEnabled()) {
+            Tr.debug(tc, "processWrite WsocConnLink: " + this.hashCode());
+        }
+
         linkWrite.frameCleanup();
         if (writeBufferToRelease != null) {
             writeBufferToRelease.release();
@@ -1075,6 +1130,10 @@ public class WsocConnLink {
     }
 
     public void processWriteError(TCPWriteRequestContext wsc, IOException ioe) {
+        if (tc.isDebugEnabled()) {
+            Tr.debug(tc, "processWriteError WsocConnLink: " + this.hashCode());
+        }
+
         if (writeBufferToRelease != null) {
             writeBufferToRelease.release();
             writeBufferToRelease = null;

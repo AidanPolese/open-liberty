@@ -378,7 +378,7 @@ public abstract class FeatureToolTestCommon {
         NodeList defaultConfigList = e.getElementsByTagName("defaultConfiguration");
         assertEquals("There should only be one defaultConfiguration node in the feature list", defaultConfigList.getLength(), 1);
         List<Element> elements = findDefaultConfigurationByProvidingFeature(defaultConfigList, "com.ibm.websphere.appserver.channelfw-1.0");
-        assertTrue("There should be three default instances provided by channelfw-1.0, found:" + elements.size(), elements.size() == 4);
+        assertTrue("There should be three default instances provided by channelfw-1.0, found:" + elements.size(), elements.size() == 3);
         for (Element instance : elements) {
             NodeList configs = instance.getElementsByTagName("*");
             assertEquals(1, configs.getLength());
@@ -394,9 +394,6 @@ public abstract class FeatureToolTestCommon {
                 assertEquals("localhost", config.getAttribute("value"));
             } else if ("udpOptions".equals(name)) {
                 assertEquals("defaultUDPOptions", config.getAttribute("id"));
-                assertEquals("-1", config.getAttribute("service.ranking"));
-            } else if ("zosaio".equals(name)) {
-                assertEquals("defaultZOSAIO", config.getAttribute("id"));
                 assertEquals("-1", config.getAttribute("service.ranking"));
             } else {
                 org.junit.Assert.fail("Invalid default configuration found for channelfw-1.0: " + name);

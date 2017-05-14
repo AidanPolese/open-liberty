@@ -3,21 +3,21 @@
  
    <project project="Eclipse Equinox OSGi" 
             projectURL="http://ies.ottawa.ibm.com/iss/ies/downloads/index.php" 
-            version="3.11.3" revision="M20170126-1300" 
+            version="3.11.4" revision="3d4ebc0d1b7977a5a971200ea4d6b490dae182d5" 
             license-type="EPL" 
             contact="tjwatson@us.ibm.com" 
             encryption="no">
       <download location="Not available.">
-         <file basename="org.eclipse.osgi_3.11.3.v20170118-1931.jar" checksum="d38238e48a71be02ba101bc7612ce7ce"/>
-         <file basename="org.eclipse.osgi.source_3.11.3.v20170118-1931.jar" checksum="a0986cba43c5bffa919b8569b0be5f05"/>
+         <file basename="org.eclipse.osgi_3.11.4.201705101649.jar" checksum="7cb01abb57404be2cf669d534d5e6493"/>
+         <file basename="org.eclipse.osgi.source_3.11.4.201705101649.jar" checksum="2ec8e2aeb74bad7a78b61ad885d255c9"/>
       </download>
    </project>
 
    <notes>
-   These equinox binaries are from the current stream for the ongoing 4.6.2 Equinox (Neon.2) release.
-   The 4.6.2 Equinox release is not yet available from the IBM Eclipse SDK (IES) download site.
-   A separate OSSC approval needs to be done on these binaries until the 4.6.2 Equinox (Neon.2)
-   release is made available from the IBM Eclipse SDK (IES) download site and is on the
+   These equinox binaries are from the current stream for the ongoing 4.6.3+ Equinox (Neon.3+).
+   The 4.6.3+ Equinox is in the R4_6_maintenance branch which IES can produce supported patch builds from.
+   A separate OSSC approval needs to be done on these binaries until IES can produce the supported patch
+   and made available from the IBM Eclipse SDK (IES) download site and is on the
    All Usage Approved (AUA) list.
    </notes>
          

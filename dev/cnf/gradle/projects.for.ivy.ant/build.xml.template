@@ -1,0 +1,4 @@
+<project name="@PROJECT_NAME@" default="build">
+    <target name="build" description="stub build target"/>
+    <target name="clean" description="stub clean target"/>
+</project>

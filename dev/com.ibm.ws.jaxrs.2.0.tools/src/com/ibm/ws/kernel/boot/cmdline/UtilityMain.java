@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2012, 2013
+ * Copyright IBM Corp. 2012, 2017
  *
  * The source code for this program is not published or otherwise divested 
  * of its trade secrets, irrespective of what has been deposited with the 
@@ -149,14 +149,17 @@ public class UtilityMain {
         }
         urls.addAll(embeddedLibUrls);
 
-        //if the Require-Compiler is true, add the <JDK_HOME>/lib/tools.jar in the classpath.
+        // If the Require-Compiler is true, ensure that a compiler is available.
         if (compilerTools) {
             File toolsFile = Utils.getJavaTools();
             if (toolsFile != null) {
                 urls.add(toolsFile.toURI().toURL());
-            } else if (!Utils.hasToolsByDefault()) {
-                error("error.sdkRequired", System.getProperty("java.home"));
-
+            } else if (!isCompilerAvailable()) {
+            	if(javaVersion() <= 8) {
+                    error("error.sdkRequired", System.getProperty("java.home"));
+            	} else {
+            		error("error.compilerMissing");
+            	}
                 System.exit(ExitCode.ERROR_BAD_JAVA_VERSION);
                 return;
             }
@@ -305,5 +308,24 @@ public class UtilityMain {
         return installDir;
     }
     
-    
+    private static boolean isCompilerAvailable() {
+        try {
+            return javax.tools.ToolProvider.getSystemJavaCompiler() != null;
+        } catch (Exception e) {
+            // On JDK 6-8 the ToolProvider interface is in the rt.jar and therefore always available.
+            // On JDK 9 the ToolProvider interface is in the "java.compiler" module which may not
+            // be available at runtime and result in a CNFE.
+            return false;
+        }
+    }
+
+    private static int javaVersion() {
+        String version = System.getProperty("java.version");
+        String[] versionElements = version.split("\\D"); // split on non-digits
+
+        // Pre-JDK 9 the java.version is 1.MAJOR.MINOR
+        // Post-JDK 9 the java.version is MAJOR.MINOR
+        int i = Integer.valueOf(versionElements[0]) == 1 ? 1 : 0;
+        return Integer.valueOf(versionElements[i]);
+    }
 }

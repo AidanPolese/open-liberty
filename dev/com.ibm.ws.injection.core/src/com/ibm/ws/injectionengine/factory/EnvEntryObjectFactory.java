@@ -23,9 +23,9 @@ import javax.naming.RefAddr;
 import javax.naming.Reference;
 import javax.naming.spi.ObjectFactory;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.util.ThreadContextAccessor;
 import com.ibm.wsspi.injectionengine.ComponentNameSpaceConfiguration;
 import com.ibm.wsspi.injectionengine.InjectionConfigConstants;
@@ -40,7 +40,7 @@ public class EnvEntryObjectFactory
 {
     private static final String CLASS_NAME = EnvEntryObjectFactory.class.getName();
 
-    private static final TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(EnvEntryObjectFactory.class,
                                                          InjectionConfigConstants.traceString,
                                                          InjectionConfigConstants.messageFile);
 

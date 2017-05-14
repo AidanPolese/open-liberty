@@ -238,14 +238,4 @@
       <Bug pattern="DM_DEFAULT_ENCODING"/>
     </Match>
 
-    <!-- Suppress warning about exceptional return value of java.io.File.delete()
-    ignored -->
-    <Match>
-      <Class name="wlp.lib.extract.LicenseSelfExtractor" />
-      <Method name="updateFixpackVersionInISOTagFile"/>
-      <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"/>
-    </Match>
-    
-
-
 </FindBugsFilter>

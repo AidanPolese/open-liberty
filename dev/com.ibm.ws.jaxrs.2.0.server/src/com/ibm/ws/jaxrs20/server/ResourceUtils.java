@@ -83,7 +83,11 @@ import org.apache.cxf.staxutils.StaxUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+
 public final class ResourceUtils {
+    private static final TraceComponent tc = Tr.register(ResourceUtils.class);
 
     private static final String CLASSPATH_PREFIX = "classpath:";
     private static final Set<String> SERVER_PROVIDER_CLASS_NAMES;
@@ -187,9 +191,7 @@ public final class ResourceUtils {
         if (model == null) {
             throw new RuntimeException("Resource class " + sClass.getName() + " has no model info");
         }
-        ClassResourceInfo cri =
-                        new ClassResourceInfo(sClass, sClass, isRoot, enableStatic, true,
-                                        model.getConsumes(), model.getProduces(), bus);
+        ClassResourceInfo cri = new ClassResourceInfo(sClass, sClass, isRoot, enableStatic, true, model.getConsumes(), model.getProduces(), bus);
         URITemplate t = URITemplate.createTemplate(model.getPath());
         cri.setURITemplate(t);
         MethodDispatcher md = new MethodDispatcher();
@@ -199,17 +201,12 @@ public final class ResourceUtils {
             if (op == null || op.getName() == null) {
                 continue;
             }
-            OperationResourceInfo ori =
-                            new OperationResourceInfo(m, cri, URITemplate.createTemplate(op.getPath()),
-                                            op.getVerb(), op.getConsumes(), op.getProduces(),
-                                            op.getParameters(),
-                                            op.isOneway());
+            OperationResourceInfo ori = new OperationResourceInfo(m, cri, URITemplate.createTemplate(op.getPath()), op.getVerb(), op.getConsumes(), op.getProduces(), op.getParameters(), op.isOneway());
             String rClassName = m.getReturnType().getName();
             if (op.getVerb() == null) {
                 if (resources.containsKey(rClassName)) {
-                    ClassResourceInfo subCri = rClassName.equals(model.getName()) ? cri
-                                    : createServiceClassResourceInfo(resources, resources.get(rClassName),
-                                                                     m.getReturnType(), false, enableStatic, bus);
+                    ClassResourceInfo subCri = rClassName.equals(model.getName()) ? cri : createServiceClassResourceInfo(resources, resources.get(rClassName),
+                                                                                                                         m.getReturnType(), false, enableStatic, bus);
                     if (subCri != null) {
                         cri.addSubClassResourceInfo(subCri);
                         md.bind(ori, m);
@@ -276,9 +273,8 @@ public final class ResourceUtils {
                         ClassResourceInfo subCri = cri.findResource(subClass, subClass);
                         if (subCri == null) {
                             ClassResourceInfo ancestor = getAncestorWithSameServiceClass(cri, subClass);
-                            subCri = ancestor != null ? ancestor
-                                            : createClassResourceInfo(subClass, subClass, cri, false, enableStatic,
-                                                                      cri.getBus());
+                            subCri = ancestor != null ? ancestor : createClassResourceInfo(subClass, subClass, cri, false, enableStatic,
+                                                                                           cri.getBus());
                         }
 
                         if (subCri != null) {
@@ -304,6 +300,9 @@ public final class ResourceUtils {
     public static Constructor<?> findResourceConstructor(Class<?> resourceClass, boolean perRequest) {
         List<Constructor<?>> cs = new LinkedList<Constructor<?>>();
         for (Constructor<?> c : resourceClass.getConstructors()) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "findResourceConstructor - checking ctor: " + c);
+            }
             Class<?>[] params = c.getParameterTypes();
             Annotation[][] anns = c.getParameterAnnotations();
             boolean match = true;
@@ -497,9 +496,8 @@ public final class ResourceUtils {
 
     public static List<UserResource> getResourcesFromElement(Element modelEl) {
         List<UserResource> resources = new ArrayList<UserResource>();
-        List<Element> resourceEls =
-                        DOMUtils.findAllElementsByTagNameNS(modelEl,
-                                                            "http://cxf.apache.org/jaxrs", "resource");
+        List<Element> resourceEls = DOMUtils.findAllElementsByTagNameNS(modelEl,
+                                                                        "http://cxf.apache.org/jaxrs", "resource");
         for (Element e : resourceEls) {
             resources.add(getResourceFromElement(e));
         }
@@ -630,9 +628,8 @@ public final class ResourceUtils {
         resource.setPath(e.getAttribute("path"));
         resource.setConsumes(e.getAttribute("consumes"));
         resource.setProduces(e.getAttribute("produces"));
-        List<Element> operEls =
-                        DOMUtils.findAllElementsByTagNameNS(e,
-                                                            "http://cxf.apache.org/jaxrs", "operation");
+        List<Element> operEls = DOMUtils.findAllElementsByTagNameNS(e,
+                                                                    "http://cxf.apache.org/jaxrs", "operation");
         List<UserOperation> opers = new ArrayList<UserOperation>(operEls.size());
         for (Element operEl : operEls) {
             opers.add(getOperationFromElement(operEl));
@@ -649,9 +646,8 @@ public final class ResourceUtils {
         op.setOneway(Boolean.parseBoolean(e.getAttribute("oneway")));
         op.setConsumes(e.getAttribute("consumes"));
         op.setProduces(e.getAttribute("produces"));
-        List<Element> paramEls =
-                        DOMUtils.findAllElementsByTagNameNS(e,
-                                                            "http://cxf.apache.org/jaxrs", "param");
+        List<Element> paramEls = DOMUtils.findAllElementsByTagNameNS(e,
+                                                                     "http://cxf.apache.org/jaxrs", "param");
         List<Parameter> params = new ArrayList<Parameter>(paramEls.size());
         for (int i = 0; i < paramEls.size(); i++) {
             Element paramEl = paramEls.get(i);
@@ -678,8 +674,7 @@ public final class ResourceUtils {
         Annotation[][] anns = c.getParameterAnnotations();
         Type[] genericTypes = c.getGenericParameterTypes();
         @SuppressWarnings("unchecked")
-        MultivaluedMap<String, String> templateValues = m == null ? null
-                        : (MultivaluedMap<String, String>) m.get(URITemplate.TEMPLATE_PARAMETERS);
+        MultivaluedMap<String, String> templateValues = m == null ? null : (MultivaluedMap<String, String>) m.get(URITemplate.TEMPLATE_PARAMETERS);
         Object[] values = new Object[params.length];
         for (int i = 0; i < params.length; i++) {
             if (AnnotationUtils.getAnnotation(anns[i], Context.class) != null) {

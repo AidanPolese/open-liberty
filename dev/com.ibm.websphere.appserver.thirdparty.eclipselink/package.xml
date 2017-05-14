@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!--Downloads binaries from GSA and builds the ossc file-->
+<!--Downloads binaries, checks nls props for updates, and builds the ossc file-->
 <project name="EclipseLink Setup" default="build">
     <import file="../ant_build/public_imports/internal_imports/buildtasks.xml" />
     <import file="../ant_build/public_imports/internal_imports/standard_macros.xml" />
@@ -7,7 +7,7 @@
     <!-- Basic build structure properties and eclipselink binary version to download -->
     <property file="build.properties" />
 
-    <!-- The expected start of the artifacts, used for regex matching -->
+    <!-- The EclipseLink bundles brought in, used for regex matching -->
     <property name="binary.core.start" value="org.eclipse.persistence.core" />
     <property name="binary.jpa.start" value="org.eclipse.persistence.jpa" />
     <property name="binary.jpql.start" value="org.eclipse.persistence.jpa.jpql" />
@@ -22,8 +22,8 @@
             <fileset dir="${build.dir}" />
         </delete>
     </target>
-	
-	<target name="download" depends="local-download, gsa-download"/>
+
+	<target name="download" depends="local-download, ftp-download"/>
 
     <target name="local-download" if="local.build">
         <!-- Make sure required properties are being passed -->
@@ -31,29 +31,36 @@
         <property name="remote.location" value="LOCAL_BUILD" />
     </target>
 
-    <!-- Downloads the artifacts from GSA to a local directory in ${build.dir} -->
-    <target name="gsa-download" unless="local.build">
-    	<fail message="Please provide the Git Hash to indicate which binary zip to download from GSA" unless="git.hash"/>
-    	
-        <!-- GSA Properties-->
-        <property name="gsa.zip.dir" value="${gsa.root}/${build.type}" />
-        <property name="gsa.download.dir" value="${build.dir}/${eclipselink.version}-${build.type}" />
-        <!-- Set the download directory other targets use to be the gsa directory-->
-        <property name="plugin.dir" value="${gsa.download.dir}" />
-        <property name="remote.location" value="ftp://${gsa.server}/${gsa.zip.dir}" />
+    <target name="check-arguments">
+        <fail message="Missing argument { git.hash }. Provide the GIT hash value for the binaries" unless="git.hash"/>
+        <fail message="Missing argument { ftp.id }. Provide the user id for ftp login" unless="ftp.id"/>
+        <fail message="Missing argument { ftp.password }. Provide the password for ftp login" unless="ftp.password"/>
+        <fail message="Missing argument { ftp.server }. Provide the ftp location" unless="ftp.server"/>
+        <fail message="Missing argument { ftp.root }. Provide the root directory at the ftp location" unless="ftp.root"/>
+    </target>
 
-        <!-- Changes the expected GSA zip file name depending on ${build.type} -->
-        <condition property="gsa.zip.file" value="*${git.hash}*.zip" else="${eclipselink.version}*.zip">
+    <!-- Downloads the artifacts to a local directory in ${build.dir} -->
+    <target name="ftp-download" depends="check-arguments" unless="local.build">
+    	
+        <!-- FTP Properties-->
+        <property name="ftp.zip.dir" value="${ftp.root}/${build.type}" />
+        <property name="ftp.download.dir" value="${build.dir}/${eclipselink.version}-${build.type}" />
+        <!-- Set the download directory other targets use to be the ftp directory-->
+        <property name="plugin.dir" value="${ftp.download.dir}" />
+        <property name="remote.location" value="ftp://${ftp.server}/${ftp.zip.dir}" />
+
+        <!-- Changes the expected FTP zip file name depending on ${build.type} -->
+        <condition property="ftp.zip.file" value="*${git.hash}*.zip" else="${eclipselink.version}*.zip">
             <equals arg1="${build.type}" arg2="SNAPSHOT" />
         </condition>
 
-        <!-- FTP download the artifacts from GSA -->
-        <remoteGet server="${gsa.server}" userid="${gsa.id}" password="${gsa.password}" name="${gsa.zip.file}" remotedir="${gsa.zip.dir}" dir="${gsa.download.dir}" />
+        <!-- FTP download the artifacts -->
+        <remoteGet server="${ftp.server}" userid="${ftp.id}" password="${ftp.password}" name="${ftp.zip.file}" remotedir="${ftp.zip.dir}" dir="${ftp.download.dir}" />
 
         <!-- Unzip the artifacts -->
-        <unzip dest="${gsa.download.dir}">
-            <fileset dir="${gsa.download.dir}">
-                <include name="\*.zip" />
+        <unzip dest="${ftp.download.dir}">
+            <fileset dir="${ftp.download.dir}">
+                <include name="*.zip" />
             </fileset>
         </unzip>
     </target>
@@ -161,15 +168,15 @@
         </copy>
     </target>
 
-    <!-- Copies the binary jars from the local GSA download location in ${build.dir} to their location in ${lib.dir}.
+    <!-- Copies the binary jars from the local download location in ${build.dir} to their location in ${lib.dir}.
 	Renames the jars as they move, generates the checksums for ossc, and grabs the revision value from the manifest-->
     <target name="process-binaries">
-        <!-- Location that GSA artifacts were downloaded to in ${build.dir}-->
+        <!-- Location that artifacts were downloaded to in ${build.dir}-->
         <property name="binary.download.dir" value="${plugin.dir}" />
         <!-- Location to place the binaries after renaming. This location must be outside ${build.dir} -->
         <property name="binary.final.dir" value="${lib.dir}" />
 
-        <!-- The final name of the jar after being moved. -->
+        <!-- The final name of the bundle after being moved. -->
         <property name="binary.core.final.jar" value="${binary.core.start}.WAS.jar" />
         <property name="binary.jpa.final.jar" value="${binary.jpa.start}.WAS.jar" />
         <property name="binary.jpql.final.jar" value="${binary.jpql.start}.WAS.jar" />
@@ -247,44 +254,4 @@
             </filterchain>
         </loadfile>
     </target>
-
-    <!-- Use this target to invoke a remote release build on the Jenkins server -->
-    <!-- Right now, build status can be obtained by navigating to the url manually in a browser -->
-    <!-- TODO: Load the antcontrib library needed for "post" target -->
-    <!-- TODO: Find a way to check status of build -->
-    <!--
-    <dependency>
-        <groupId>ant-contrib</groupId>
-        <artifactId>ant-contrib</artifactId>
-        <version>1.0b3</version>
-        <exclusions>
-            <exclusion>
-                <groupId>ant</groupId>
-                <artifactId>ant</artifactId>
-            </exclusion>
-        </exclusions>
-    </dependency>
-    -->
-    <target name="remote-build-release">
-        <taskdef resource="net/sf/antcontrib/antcontrib.properties">
-            <classpath>
-                <pathelement location="${plugins.dir}/ant-contrib-1.0b3.jar" />
-            </classpath>
-        </taskdef>
-        <!-- This token is configurable within the project configuration in Jenkins, it is project specific -->
-        <property name="token-name" value="RELEASEBUILD" />
-        <!-- This is the tag that Jenkins will attempt to use to pull source. Default is ${eclipselink.version}, but can be overridden at runtime to any valid tag. -->
-        <property name="git.tag" value="${eclipselink.version}" />
-
-        <echo message="Initiating release build at ${jenkins.url}/job/${jenkins.release.job}" />
-        <echo message="Using tag: ${git.tag}" />
-
-        <!-- Pokes Jenkins to pull source for the given tag and start a build -->
-        <!-- Best case: GSA will update with the artifacts from the build -->
-        <!-- Worst case: Build will fail and no artifacts will be uploaded -->
-        <post to="${jenkins.url}/job/${jenkins.release.job}/buildWithParameters?token=${token-name}" verbose="true" failonerror="true">
-            <prop name="git.tag" value="${git.tag}" />
-        </post>
-    </target>
-
 </project>

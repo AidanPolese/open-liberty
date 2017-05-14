@@ -18,9 +18,9 @@ import java.lang.reflect.Type;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.dopriv.SetAccessiblePrivilegedAction;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**
@@ -31,10 +31,9 @@ public class InjectionTargetMethod extends InjectionTarget
 {
     private static final String CLASS_NAME = InjectionTargetMethod.class.getName();
 
-    private static final TraceComponent tc = Tr.register
-                    (InjectionTargetMethod.class,
-                     InjectionConfigConstants.traceString,
-                     InjectionConfigConstants.messageFile);
+    private static final TraceComponent tc = Tr.register(InjectionTargetMethod.class,
+                                                         InjectionConfigConstants.traceString,
+                                                         InjectionConfigConstants.messageFile);
 
     /**
      * The method that is the target of injection.
@@ -65,7 +64,7 @@ public class InjectionTargetMethod extends InjectionTarget
         if (Modifier.isStatic(methodModifiers) && !isFromClient)
         {
             Tr.warning(tc, "INJECTION_TARGET_MUST_NOT_BE_STATIC_CWNEN0057W",
-                       new Object[] { method.getDeclaringClass().getName(), method.getName() });
+                       method.getDeclaringClass().getName(), method.getName());
             if (binding.isValidationFailable()) // fail if enabled             F743-14449
             {
                 throw new InjectionConfigurationException("The " + method.getDeclaringClass().getName() + "." +
@@ -76,7 +75,7 @@ public class InjectionTargetMethod extends InjectionTarget
         else if (!Modifier.isStatic(methodModifiers) && isFromClient)
         {
             Tr.error(tc, "INJECTION_TARGET_IN_CLIENT_MUST_BE_STATIC_CWNEN0058E",
-                     new Object[] { method.getDeclaringClass().getName(), method.getName() });
+                     method.getDeclaringClass().getName(), method.getName());
             InjectionConfigurationException icex = new InjectionConfigurationException
                             ("The injection target method " + method.getName() +
                              " must be declared static in the client container.");

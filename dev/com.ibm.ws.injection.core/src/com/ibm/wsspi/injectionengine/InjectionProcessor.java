@@ -22,10 +22,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.IncidentStream;
 import com.ibm.ws.injectionengine.ffdc.Formattable;
 import com.ibm.wsspi.injectionengine.factory.OverrideReferenceFactory;
@@ -35,12 +35,9 @@ import com.ibm.wsspi.injectionengine.factory.OverrideReferenceFactory;
  */
 public abstract class InjectionProcessor<A extends Annotation, AS extends Annotation> implements Formattable
 {
-    private static final String CLASS_NAME = InjectionProcessor.class.getName();
-
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     InjectionConfigConstants.traceString,
-                     InjectionConfigConstants.messageFile);
+    private static final TraceComponent tc = Tr.register(InjectionProcessor.class,
+                                                         InjectionConfigConstants.traceString,
+                                                         InjectionConfigConstants.messageFile);
 
     //Single Annotation
     private final Class<A> ivAnnotationClass; //LIDB3294-35.1
@@ -571,10 +568,10 @@ public abstract class InjectionProcessor<A extends Annotation, AS extends Annota
         if (isValidationLoggable()) // F50309.6
         {
             Tr.error(tc, "MISSING_CLASS_LEVEL_ANNOTATION_NAME_CWNEN0073E",
-                     new Object[] { '@' + annotation.annotationType().getSimpleName(),
-                                   instanceClass.getName(),
-                                   ivNameSpaceConfig.getModuleName(),
-                                   ivNameSpaceConfig.getApplicationName() });
+                     '@' + annotation.annotationType().getSimpleName(),
+                     instanceClass.getName(),
+                     ivNameSpaceConfig.getModuleName(),
+                     ivNameSpaceConfig.getApplicationName());
             if (isValidationFailable())
             {
                 throw new InjectionException("The @" + annotation.annotationType().getSimpleName() +
@@ -696,7 +693,7 @@ public abstract class InjectionProcessor<A extends Annotation, AS extends Annota
             String displayName = ivNameSpaceConfig.getDisplayName();
             while (missingBindingIter.hasNext()) {
                 resRefName = missingBindingIter.next();
-                Tr.error(tc, "UNABLE_TO_RESOLVE_THE_RESOURCE_REFERENCE_CWNEN0044E", new Object[] { resRefName, displayName });
+                Tr.error(tc, "UNABLE_TO_RESOLVE_THE_RESOURCE_REFERENCE_CWNEN0044E", resRefName, displayName);
             }
             throw new InjectionException("CWNEN0044E: A resource reference binding could not be found for the following resource references " + ivMissingBindings.toString()
                                          + ", defined for the " + displayName + " component.");

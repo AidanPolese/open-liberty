@@ -18,7 +18,7 @@ Subsystem-Content: com.ibm.websphere.appserver.ejbRemoteClient-1.0; type="osgi.s
  com.ibm.websphere.appserver.javaMail-1.5; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.jaxb-2.2; type="osgi.subsystem.feature",
  com.ibm.websphere.appclient.appClient-1.0; type="osgi.subsystem.feature",
- com.ibm.websphere.appserver.jdbc-4.1; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jdbc-4.1; ibm.tolerates:="4.2"; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.transaction-1.2; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.managedBeans-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.wasJmsClient-2.0; type="osgi.subsystem.feature"

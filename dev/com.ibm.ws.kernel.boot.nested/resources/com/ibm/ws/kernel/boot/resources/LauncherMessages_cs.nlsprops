@@ -390,7 +390,7 @@ audit.jvm.shutdown.explanation=Server zachytil po\u017eadavek na zastaven\u00ed 
 audit.jvm.shutdown.useraction=Pokud bylo zastaven\u00ed serveru neo\u010dek\u00e1van\u00e9, ur\u010dete, zda byl procesu serveru zasl\u00e1n sign\u00e1l k ukon\u010den\u00ed.
 
 warning.serverStartedCommandPortDisabled=CWWKE0087W: Pro server {0} bylo zah\u00e1jeno spu\u0161t\u011bn\u00ed serveru, ale nen\u00ed mo\u017en\u00e9 sd\u011blit, zda bylo toto spu\u0161t\u011bn\u00ed dokon\u010deno, proto\u017ee je port p\u0159\u00edkazu serveru vypnut\u00fd.
-warning.serverStartedCommandPortDisabled.explanation=Port p\u0159\u00edkazu serveru je nezbytn\u00fd pro komunikaci s b\u011b\u017e\u00edc\u00edm serverem. Port p\u0159\u00edkazu byl pro tento server explicitn\u011b vypnut, proto nen\u00ed mo\u017en\u00e9 sd\u011blit, zda server spu\u0161t\u011bn\u00ed dokon\u010dil.
+warning.serverStartedCommandPortDisabled.explanation=P\u0159\u00edkazov\u00fd port serveru je nezbytn\u00fd pro komunikaci s b\u011b\u017e\u00edc\u00edm serverem. P\u0159\u00edkazov\u00fd port byl pro tento server explicitn\u011b vypnut, proto nen\u00ed mo\u017en\u00e9 sd\u011blit, zda server spu\u0161t\u011bn\u00ed dokon\u010dil.
 warning.serverStartedCommandPortDisabled.useraction=Ru\u010dn\u011b zkontrolujte protokoly serveru, zda se server \u00fasp\u011b\u0161n\u011b spustil.
 
 warning.serverStartedWithPIDCommandPortDisabled=CWWKE0088W: Pro server {0} bylo zah\u00e1jeno spu\u0161t\u011bn\u00ed serveru s ID procesu {1}, ale nen\u00ed mo\u017en\u00e9 sd\u011blit, zda bylo toto spu\u0161t\u011bn\u00ed dokon\u010deno, proto\u017ee je port p\u0159\u00edkazu serveru vypnut\u00fd.
@@ -468,6 +468,12 @@ info.addProductExtension.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 
 warning.javase6.endofservice=CWWKE0109W: Podpora pro prost\u0159ed\u00ed Java SE 6 s produktem WebSphere Application Server Liberty kon\u010d\u00ed v z\u00e1\u0159\u00ed 2017. Chcete-li b\u00fdt i nad\u00e1le aktu\u00e1ln\u00ed a sn\u00ed\u017eit riziko bezpe\u010dnostn\u00edch rizik, aktualizujte na prost\u0159ed\u00ed Java SE 8.
 warning.javase6.endofservice.explanation=IBM nebude od z\u00e1\u0159\u00ed 2017 u produktu WebSphere Application Server Liberty d\u00e1le podporovat prost\u0159ed\u00ed Java SE 6. Budete-li i nad\u00e1le pou\u017e\u00edvat prost\u0159ed\u00ed Java SE 6 po ukon\u010den\u00ed podpory, m\u016f\u017eete va\u0161e aplikace vystavit bezpe\u010dnostn\u00edm rizik\u016fm.
 warning.javase6.endofservice.useraction=IBM velmi doporu\u010duje, abyste pou\u017e\u00edvali posledn\u00ed verzi prost\u0159ed\u00ed Java SE, tj. verzi Java SE 8. 
+
+#
+# W A R N I N G:   Do not use CWWKE0100 - CCWKE0199 they are reserved in ServiceMessages.nlsprops
+#
+# Too Late for CWWKE0101 - CWWKE0107 they have dual use currently and CWWKE0108 and CWWKE0109 are only used here.
+#
 
 error.clientNameCharacter=CWWKE0900E: Uveden\u00fd n\u00e1zev klienta obsahuje neplatn\u00fd znak (name={0}). \
 Platn\u00e9 znaky: alfanumerick\u00e9 Unicode (nap\u0159. \
@@ -651,6 +657,9 @@ info.server.resume.request.completed=CWWKE0939I: Po\u017eadavek na obnoven\u00ed
 info.server.resume.request.completed.explanation=Po\u017eadavek na obnoven\u00ed byl dokon\u010den.
 info.server.resume.request.completed.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
 
+info.envProductExtension=CWWKE0940I: Roz\u0161\u00ed\u0159en\u00ed produktu {0} m\u00e1 identifik\u00e1tor produktu {1} a um\u00edst\u011bn\u00ed instalace produktu {2}. Toto roz\u0161\u00ed\u0159en\u00ed produktu bylo povoleno zad\u00e1n\u00edm prom\u011bnn\u00e9 prost\u0159ed\u00ed WLP_PRODUCT_EXT_DIR. 
+info.envProductExtension.explanation= Prom\u011bnn\u00e1 prost\u0159ed\u00ed WLP_PRODUCT_EXT_DIR ukazuje na um\u00edst\u011bn\u00ed roz\u0161\u00ed\u0159en\u00ed produktu. Server nalezl a pou\u017e\u00edv\u00e1 roz\u0161\u00ed\u0159en\u00ed produktu.
+info.envProductExtension.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
 
 info.serverStarting=Spou\u0161t\u011bn\u00ed serveru {0}.
 info.serverStarted=Server {0} byl spu\u0161t\u011bn.

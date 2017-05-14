@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.injectionengine.InternalInjectionEngine;
 
@@ -39,10 +39,9 @@ public class MethodMap extends HashMap<String, List<Method>>
     private static final long serialVersionUID = 4877455330504864506L;
     private static final String CLASS_NAME = MethodMap.class.getName();
 
-    private static final TraceComponent tc =
-                    Tr.register(CLASS_NAME,
-                                InjectionConfigConstants.traceString,
-                                InjectionConfigConstants.messageFile);
+    private static final TraceComponent tc = Tr.register(MethodMap.class,
+                                                         InjectionConfigConstants.traceString,
+                                                         InjectionConfigConstants.messageFile);
 
     /**
      * Returns true if the modifiers have default access.
@@ -299,8 +298,7 @@ public class MethodMap extends HashMap<String, List<Method>>
             if (thisClass != clazz)
             {
                 Tr.warning(tc, "SUPER_METHOD_ANNOTATIONS_IGNORED_CWNEN0050W",
-                           new Object[] { thisClass.getName(), clazz.getName(),
-                                         ex.toString() });
+                           thisClass.getName(), clazz.getName(), ex.toString());
                 if (injectionEngine == null || injectionEngine.isValidationFailable(false)) // F743-14449, F50309.6
                 {
                     throw new RuntimeException("Resource annotations on the methods of the " + thisClass.getName() +
@@ -313,8 +311,7 @@ public class MethodMap extends HashMap<String, List<Method>>
             }
             else
             {
-                Tr.warning(tc, "METHOD_ANNOTATIONS_IGNORED_CWNEN0049W",
-                           new Object[] { thisClass.getName(), ex.toString() });
+                Tr.warning(tc, "METHOD_ANNOTATIONS_IGNORED_CWNEN0049W", thisClass.getName(), ex.toString());
                 if (injectionEngine == null || injectionEngine.isValidationFailable(false)) // F743-14449, F50309.6
                 {
                     throw new RuntimeException("Resource annotations on the methods of the " + thisClass.getName() +

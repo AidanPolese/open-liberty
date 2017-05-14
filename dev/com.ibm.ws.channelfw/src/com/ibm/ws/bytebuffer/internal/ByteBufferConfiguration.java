@@ -20,6 +20,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
@@ -55,7 +56,7 @@ public class ByteBufferConfiguration {
 
     private final AtomicReference<DirectByteBufferHelper> directByteBufferHelper = new AtomicReference<DirectByteBufferHelper>();
 
-    @Reference(name="directByteBufferHelper", service=DirectByteBufferHelper.class)
+    @Reference(name="directByteBufferHelper", service=DirectByteBufferHelper.class, cardinality = ReferenceCardinality.OPTIONAL)
     protected void setDirectByteBufferHelper(DirectByteBufferHelper helper) {
         this.directByteBufferHelper.set(helper);
     }

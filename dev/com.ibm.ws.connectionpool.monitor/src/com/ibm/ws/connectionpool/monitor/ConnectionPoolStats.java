@@ -26,7 +26,7 @@ public class ConnectionPoolStats extends Meter implements ConnectionPoolStatsMXB
     private final Counter createCount, destroyCount;
     private final Gauge poolSize, freeConnectionCount;
     private final Gauge managedConnectionCount, connectionHandleCount;
-    private final StatisticsMeter waitTime, inuseTime;
+    private final StatisticsMeter waitTime, inUseTime;
 
     public ConnectionPoolStats() {
         createCount = new Counter();
@@ -36,7 +36,7 @@ public class ConnectionPoolStats extends Meter implements ConnectionPoolStatsMXB
         connectionHandleCount = new Gauge();
         waitTime = new StatisticsMeter();
         freeConnectionCount = new Gauge();
-        inuseTime = new StatisticsMeter();
+        inUseTime = new StatisticsMeter();
     }
 
     /**
@@ -83,8 +83,8 @@ public class ConnectionPoolStats extends Meter implements ConnectionPoolStatsMXB
         this.waitTime.addDataPoint(elapsed);
     }
 
-    public void updateInuseTime(long elapsed) {
-        this.inuseTime.addDataPoint(elapsed);
+    public void updateInUseTime(long elapsed) {
+        this.inUseTime.addDataPoint(elapsed);
     }
 
     public void incFreeConnectionCount() {
@@ -135,8 +135,8 @@ public class ConnectionPoolStats extends Meter implements ConnectionPoolStatsMXB
     }
 
     @Override
-    public double getInuseTime() {
-        return this.inuseTime.getMean();
+    public double getInUseTime() {
+        return this.inUseTime.getMean();
     }
 
     @Override

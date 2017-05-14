@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * WLP Copyright IBM Corp. 2015
+ * WLP Copyright IBM Corp. 2015, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package wlp.lib.extract;
@@ -40,8 +40,7 @@ public final class ChangeHistory {
                 final File file = new File(filePath);
                 if (file.delete()) {
                     return ReturnCode.OK;
-                }
-                else {
+                } else {
                     return new ReturnCode(ReturnCode.BAD_INPUT);
                 }
             }

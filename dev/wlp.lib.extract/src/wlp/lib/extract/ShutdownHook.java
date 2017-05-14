@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * WLP Copyright IBM Corp. 2015
+ * WLP Copyright IBM Corp. 2015, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package wlp.lib.extract;
@@ -43,7 +43,7 @@ public class ShutdownHook implements Runnable {
 
     /**
      * The only constructor.
-     * 
+     *
      * @param platformType - platform type: unix(1), windows(2), cygwin(3)
      * @param dir - extraction directory
      * @param serverName - name of server from jar (in extraction directory)
@@ -66,7 +66,7 @@ public class ShutdownHook implements Runnable {
 
     /**
      * Return PID from server directory for cygwin environment only.
-     * 
+     *
      * @return PID string or null if not cygwin environment or exception occurs
      * @throws IOException, FileNotFoundException if anything goes wrong
      */
@@ -97,31 +97,29 @@ public class ShutdownHook implements Runnable {
 
     /**
      * Run server stop command
-     * 
+     *
      * @throws IOException if exec fails
      */
     private void stopServer() throws IOException {
 
-        // build stop command for Unix platforms 
+        // build stop command for Unix platforms
         String cmd = dir + File.separator + "wlp" + File.separator + "bin" + File.separator + "server stop " + serverName;
 
         if (platformType == SelfExtractUtils.PlatformType_UNIX) {
-            // use command as-is            
-        }
-        else if (platformType == SelfExtractUtils.PlatformType_WINDOWS) {
+            // use command as-is
+        } else if (platformType == SelfExtractUtils.PlatformType_WINDOWS) {
             cmd = "cmd /k " + cmd;
-        }
-        else if (platformType == SelfExtractUtils.PlatformType_CYGWIN) {
+        } else if (platformType == SelfExtractUtils.PlatformType_CYGWIN) {
             cmd = "bash -c  " + '"' + cmd.replace('\\', '/') + '"';
         }
 
-        Runtime.getRuntime().exec(cmd, SelfExtractUtils.runEnv(dir), null); // stop server 
+        Runtime.getRuntime().exec(cmd, SelfExtractUtils.runEnv(dir), null); // stop server
 
     }
 
     /**
      * Start async deletion using background script
-     * 
+     *
      * @throws IOException
      */
     private void startAsyncDelete() throws IOException {
@@ -131,24 +129,22 @@ public class ShutdownHook implements Runnable {
             scriptFile = writeCleanupFile(SelfExtractUtils.PlatformType_UNIX);
             rt.exec("chmod 750 " + scriptFile.getAbsolutePath());
             rt.exec("sh -c " + scriptFile.getAbsolutePath() + " &");
-        }
-        else if (platformType == SelfExtractUtils.PlatformType_WINDOWS) {
+        } else if (platformType == SelfExtractUtils.PlatformType_WINDOWS) {
             scriptFile = writeCleanupFile(SelfExtractUtils.PlatformType_WINDOWS);
             // Note: must redirect output in order for script to run on windows.
             // This is a quirk validated by testing. Redirect to NUL is fine since we're
-            // not trying to trap this output anyway. 
+            // not trying to trap this output anyway.
             rt.exec("cmd /k start /B " + scriptFile.getAbsolutePath() + " >/NUL 2>/NUL");
-        }
-        else if (platformType == SelfExtractUtils.PlatformType_CYGWIN) {
+        } else if (platformType == SelfExtractUtils.PlatformType_CYGWIN) {
             scriptFile = writeCleanupFile(SelfExtractUtils.PlatformType_CYGWIN);
-            // convert to Unix type path and run under bash                    
+            // convert to Unix type path and run under bash
             rt.exec("bash -c " + scriptFile.getAbsolutePath().replace('\\', '/') + " &");
         }
     }
 
     /**
      * Write logic for windows cleanup script
-     * 
+     *
      * @param file - script File object
      * @param bw - bufferedWriter to write into script file
      * @throws IOException
@@ -172,7 +168,7 @@ public class ShutdownHook implements Runnable {
 
     /**
      * Write logic for Unix cleanup script
-     * 
+     *
      * @param file - script File object
      * @param bw - bufferedWriter to write into script file
      * @throws IOException
@@ -195,15 +191,15 @@ public class ShutdownHook implements Runnable {
 
     /**
      * Write logic for Cygwin cleanup script
-     * 
+     *
      * @param file - script File object
      * @param bw - bufferedWriter to write into script file
      * @throws IOException
      */
     private void writeCygwinCleanup(File file, BufferedWriter bw) throws IOException {
-        // Under cygwin, must explicitly kill the process that runs  
-        // the server. It simply does not die on its own. And it's 
-        // JVM holds file locks which will prevent cleanup of extraction 
+        // Under cygwin, must explicitly kill the process that runs
+        // the server. It simply does not die on its own. And it's
+        // JVM holds file locks which will prevent cleanup of extraction
         // directory. So kill it.
         String pid = getPID(dir, serverName);
         if (pid != null)
@@ -226,7 +222,7 @@ public class ShutdownHook implements Runnable {
      * launching a background script offers the added value
      * of doing the delete in the background, even after the
      * foreground process has terminated.
-     * 
+     *
      * @param type is the platform type: unix(1), windows(2), or cygwin(3)
      * @return a script File object
      * @throws IOException
@@ -252,11 +248,9 @@ public class ShutdownHook implements Runnable {
 
         if (platformType == SelfExtractUtils.PlatformType_UNIX) {
             writeUnixCleanup(file, bw);
-        }
-        else if (platformType == SelfExtractUtils.PlatformType_WINDOWS) {
+        } else if (platformType == SelfExtractUtils.PlatformType_WINDOWS) {
             writeWindowsCleanup(file, bw);
-        }
-        else if (platformType == SelfExtractUtils.PlatformType_CYGWIN) {
+        } else if (platformType == SelfExtractUtils.PlatformType_CYGWIN) {
             writeCygwinCleanup(file, bw);
         }
 
@@ -271,20 +265,19 @@ public class ShutdownHook implements Runnable {
      */
     public void run() {
         try {
-            stopServer(); // first, stop server 
+            stopServer(); // first, stop server
 
             // wait on error/output stream threads to complete
             // note on Windows the streams never close, so wait with brief timeout
             if (!System.getProperty("os.name").startsWith("Win")) {
                 out.join();
                 err.join();
-            }
-            else { // windows, so use timeout 
+            } else { // windows, so use timeout
                 out.join(500);
                 err.join(500);
             }
 
-            startAsyncDelete(); // now launch async process to cleanup extraction directory 
+            startAsyncDelete(); // now launch async process to cleanup extraction directory
 
         } catch (Exception e) {
             throw new RuntimeException("Shutdown hook failed with exception " + e.getMessage());

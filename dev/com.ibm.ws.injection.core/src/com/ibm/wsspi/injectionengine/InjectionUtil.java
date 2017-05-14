@@ -13,18 +13,16 @@ package com.ibm.wsspi.injectionengine;
 
 import java.util.HashMap;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Injection utility methods.
  */
 public class InjectionUtil
 {
-    private static final String CLASS_NAME = InjectionUtil.class.getName();
-
-    private final static TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(InjectionUtil.class,
                                                          InjectionConfigConstants.traceString,
                                                          InjectionConfigConstants.messageFile);
 

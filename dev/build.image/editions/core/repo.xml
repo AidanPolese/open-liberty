@@ -47,5 +47,6 @@
     <feature>microProfile-1.0</feature>
     <feature>transportSecurity-1.0</feature>
     <feature>productInsights-1.0</feature>
+    <feature>socialLogin-1.0</feature>
   </featureManager>
 </server>

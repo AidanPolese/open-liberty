@@ -1,5 +1,5 @@
 -include= ~../cnf/resources/bnd/bundle.props
-bVersion: 1.4
+bVersion: 1.3
 
 Bundle-Name: WebSphere JMX REST Connector API
 Bundle-Description: WebSphere JMX REST Connector API, version ${bVersion}

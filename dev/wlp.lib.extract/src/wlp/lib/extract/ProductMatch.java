@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * WLP Copyright IBM Corp. 2013
+ * WLP Copyright IBM Corp. 2013, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package wlp.lib.extract;
@@ -20,12 +20,12 @@ import java.util.regex.Pattern;
 /**
  * This class parses the appliesTo header, the only documentation
  * for this header is currently the logic in this class.
- * 
+ *
  * Please note if you alter this logic, additional parsers for the
  * appliesTo header can be found in the following class(es).
- * 
+ *
  * com.ibm.ws.repository.resources.internal.AppliesToProcessor.
- * 
+ *
  * These parsers must be kept in sync.
  */
 public final class ProductMatch {
@@ -37,11 +37,11 @@ public final class ProductMatch {
     private static final Pattern validNumericVersionOrRange = Pattern.compile("^(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)\\+?$");
     private static final Pattern validBaseVersion = Pattern.compile("^(\\d+)\\.(\\d+)\\.(\\d+)$");
     static final int MATCHED = 0;
-    static final int NOT_APPLICABLE = -1;
-    static final int INVALID_VERSION = -2;
-    static final int INVALID_EDITION = -3;
-    static final int INVALID_INSTALL_TYPE = -4;
-    static final int INVALID_LICENSE = -5;
+    public static final int NOT_APPLICABLE = -1;
+    public static final int INVALID_VERSION = -2;
+    public static final int INVALID_EDITION = -3;
+    public static final int INVALID_INSTALL_TYPE = -4;
+    public static final int INVALID_LICENSE = -5;
 
     /**
      * @param substring
@@ -83,8 +83,7 @@ public final class ProductMatch {
                     if (!versionSatisfiesMinimum(minAppliesToVersion, targetProductVersion)) {
                         return INVALID_VERSION;
                     }
-                }
-                else {
+                } else {
                     // If one of the versions matches the base product version (n.n.n), check
                     // that the other version (m.m.m.m or m.m.m.m+) starts with this base version string.
                     final Matcher baseAppliesToMatcher = validBaseVersion.matcher(version);
@@ -96,14 +95,13 @@ public final class ProductMatch {
                             if (!!!(productVersionMatcher.matches() && productVersion.startsWith(version + '.'))) {
                                 return INVALID_VERSION;
                             }
-                        }
-                        else {
+                        } else {
                             if (!!!(appliesToMatcher.matches() && version.startsWith(productVersion + '.'))) {
                                 return INVALID_VERSION;
                             }
                         }
                     }
-                    // If appliesTo version doesn't end in +, if both versions match base product version, 
+                    // If appliesTo version doesn't end in +, if both versions match base product version,
                     // or target product version is non-numeric, require String.equals()
                     else if (!!!version.equals(productVersion)) {
                         return INVALID_VERSION;
@@ -132,7 +130,7 @@ public final class ProductMatch {
     /**
      * Takes groups 1 to n of a matcher with groupCount() == n
      * and places them in order into an int[] array of size n.
-     * 
+     *
      * @param matcher
      * @return
      */
@@ -187,15 +185,15 @@ public final class ProductMatch {
 
     /**
      * Evaluate whether queryVersion is considered to be greater or equal than minimumVersion.
-     * 
+     *
      * Expects version numbers in array form, where the elements of the array are the digits of the version
      * number, in order.
-     * 
+     *
      * Returns true if the version represented by queryVersion is greater than or equal to the
      * version represented by minimumVersion.
-     * 
+     *
      * Returns false if the version numbers are not of the same length, or the minimum version is not satisfied.
-     * 
+     *
      * @param minimumVersion
      * @param queryVersion
      * @return

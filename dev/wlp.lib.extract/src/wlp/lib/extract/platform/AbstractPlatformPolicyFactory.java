@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2015
+ * Copyright IBM Corp. 2015, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package wlp.lib.extract.platform;
@@ -46,7 +46,7 @@ public abstract class AbstractPlatformPolicyFactory {
     /**
      * Override this method in derived class if you must provide platform
      * specific functionality
-     * 
+     *
      * @return newly created Platform specific object
      */
     protected Object createWindowsPolicy() {
@@ -56,7 +56,7 @@ public abstract class AbstractPlatformPolicyFactory {
     /**
      * Override this method in derived class if you must provide platform
      * specific functionality
-     * 
+     *
      * @return newly created Platform specific object
      */
     protected Object createLinuxPolicy() {
@@ -66,7 +66,7 @@ public abstract class AbstractPlatformPolicyFactory {
     /**
      * Override this method in derived class if you must provide platform
      * specific functionality
-     * 
+     *
      * @return newly created Platform specific object
      */
     protected Object createSolarisPolicy() {
@@ -76,7 +76,7 @@ public abstract class AbstractPlatformPolicyFactory {
     /**
      * Override this method in derived class if you must provide platform
      * specific functionality
-     * 
+     *
      * @return newly created Platform specific object
      */
     protected Object createAIXPolicy() {
@@ -86,7 +86,7 @@ public abstract class AbstractPlatformPolicyFactory {
     /**
      * Override this method in derived class if you must provide platform
      * specific functionality
-     * 
+     *
      * @return newly created Platform specific object
      */
     protected Object createHPUXPolicy() {
@@ -96,7 +96,7 @@ public abstract class AbstractPlatformPolicyFactory {
     /**
      * Override this method in derived class if you must provide platform
      * specific functionality
-     * 
+     *
      * @return newly created Platform specific object
      */
     protected Object createZOSPolicy() {
@@ -106,7 +106,7 @@ public abstract class AbstractPlatformPolicyFactory {
     /**
      * Override this method in derived class if you must provide platform
      * specific functionality
-     * 
+     *
      * @return newly created Platform specific object
      */
     protected Object createOS400Policy() {
@@ -116,7 +116,7 @@ public abstract class AbstractPlatformPolicyFactory {
     /**
      * Override this method in derived class if you must provide platform
      * specific functionality
-     * 
+     *
      * @return newly created Platform specific object
      */
     protected Object createMACOSPolicy() {

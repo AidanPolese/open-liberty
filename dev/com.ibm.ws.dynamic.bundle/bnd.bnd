@@ -13,10 +13,10 @@ Export-Package: com.ibm.ws.dynamic.bundle;provide:=true
 Private-Package: com.ibm.ws.dynamic.bundle.internal
 
 -buildpath: \
-	com.ibm.websphere.org.osgi.core.6.0.0,\
-	com.ibm.websphere.org.osgi.service.component.1.3.0,\
-	com.ibm.ws.org.eclipse.equinox.region.1.3.2, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.core,\
+	com.ibm.websphere.org.osgi.service.component,\
+	com.ibm.ws.org.eclipse.equinox.region, \
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest,\
 	com.ibm.ws.logging
 
 -testpath: \

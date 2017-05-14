@@ -9,6 +9,7 @@ IBM-ProductID: com.ibm.websphere.appserver
 IBM-ShortName: persistentExecutor-1.0
 Subsystem-Content: com.ibm.websphere.appserver.concurrent-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.persistentExecutorSubset-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jdbc-4.1; ibm.tolerates:="4.2"; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.transaction-1.2; type="osgi.subsystem.feature"
 Subsystem-Description: %description
 Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1

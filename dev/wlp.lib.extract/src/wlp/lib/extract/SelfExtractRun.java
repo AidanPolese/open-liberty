@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * WLP Copyright IBM Corp. 2015
+ * WLP Copyright IBM Corp. 2015, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package wlp.lib.extract;
@@ -19,8 +19,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.lang.management.RuntimeMXBean;
 import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -45,7 +45,7 @@ public class SelfExtractRun extends SelfExtract {
      * Java user.home property is correct in all cases except
      * for cygwin. For cygwin, user.home is Windows home,
      * so use HOME env var instead.
-     * 
+     *
      * @return user home directory
      */
     private static String getUserHome() {
@@ -54,8 +54,7 @@ public class SelfExtractRun extends SelfExtract {
         if (platformType == SelfExtractUtils.PlatformType_CYGWIN) {
 
             home = System.getenv("HOME");
-        }
-        else {
+        } else {
             home = System.getProperty("user.home");
         }
         return home;
@@ -63,7 +62,7 @@ public class SelfExtractRun extends SelfExtract {
 
     /**
      * Return server name from extractor
-     * 
+     *
      * @return server name
      */
     private static String getServerName() {
@@ -73,15 +72,14 @@ public class SelfExtractRun extends SelfExtract {
 
     /**
      * Create input directory if it does not exist
-     * 
+     *
      * @return directory name
      */
     private static String createIfNeeded(String dir) {
         File f = new File(dir);
         if (f.exists()) {
             return dir;
-        }
-        else {
+        } else {
             boolean success = f.mkdirs();
             if (success)
                 return dir;
@@ -92,13 +90,13 @@ public class SelfExtractRun extends SelfExtract {
 
     /**
      * Return jar file name from input archive
-     * 
+     *
      * @return <name> from path/<name>.jar
      */
     private static String jarFileName() {
-        // do this first so we can access extractor, ok to invoke more than once  
+        // do this first so we can access extractor, ok to invoke more than once
         createExtractor();
-        // get <name> from path/<name>.jar 
+        // get <name> from path/<name>.jar
         String fullyQualifiedFileName = extractor.jarFile.getName();
         int lastSeparator = fullyQualifiedFileName.lastIndexOf(File.separatorChar);
         String simpleFileName = fullyQualifiedFileName.substring(lastSeparator + 1);
@@ -109,7 +107,7 @@ public class SelfExtractRun extends SelfExtract {
     /**
      * Generate unique directory name of form:
      * basedir/fileStem<time-in-nanos>
-     * 
+     *
      * @param baseDir
      * @param fileStem
      * @return unique dir name
@@ -125,20 +123,19 @@ public class SelfExtractRun extends SelfExtract {
      * 1) ${WLP_JAR_EXTRACT_DIR}
      * 2) ${WLP_JAR_EXTRACT_ROOT}/<jar file name>_nnnnnnnnnnnnnnnnnnn
      * 3) default - <home>/wlpExtract/<jar file name>_nnnnnnnnnnnnnnnnnnn
-     * 
+     *
      * @return extraction directory
      */
     private static String getExtractDirectory() {
 
-        // check if user specified explicit directory  
+        // check if user specified explicit directory
         String extractDirVar = System.getenv("WLP_JAR_EXTRACT_DIR");
 
-        // if so, return it and done 
+        // if so, return it and done
         if (extractDirVar != null && extractDirVar.length() > 0) {
             String retVal = createIfNeeded(extractDirVar.trim());
             return retVal;
-        }
-        else {
+        } else {
 
             String extractDirVarRoot = System.getenv("WLP_JAR_EXTRACT_ROOT");
             if (extractDirVarRoot == null || extractDirVarRoot.length() == 0) {
@@ -160,7 +157,7 @@ public class SelfExtractRun extends SelfExtract {
      * 2PC transactions are disabled by default because default transaction
      * log is stored in extract directory and therefore foils transaction
      * recovery if the server terminates unexpectedly.
-     * 
+     *
      * @param extractDirectory
      * @param serverName
      * @throws IOException
@@ -183,9 +180,8 @@ public class SelfExtractRun extends SelfExtract {
                 if (!success) {
                     throw new IOException("Failed to create file " + fileName);
                 }
-            }
-            else {
-                // read existing file content 
+            } else {
+                // read existing file content
 
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF-8"));
                 while ((sCurrentLine = br.readLine()) != null) {
@@ -213,7 +209,7 @@ public class SelfExtractRun extends SelfExtract {
     /**
      * Run server extracted from jar
      * If environment variable WLP_JAR_DEBUG is set, use 'server debug' instead
-     * 
+     *
      * @param extractDirectory
      * @param serverName
      * @return server run return code
@@ -229,7 +225,7 @@ public class SelfExtractRun extends SelfExtract {
         if (System.getenv("WLP_JAR_DEBUG") != null)
             action = "debug";
 
-        // unless user specifies to enable 2PC,  disable it 
+        // unless user specifies to enable 2PC,  disable it
         if (System.getenv("WLP_JAR_ENABLE_2PC") == null)
             disable2PC(extractDirectory, serverName);
 
@@ -238,18 +234,16 @@ public class SelfExtractRun extends SelfExtract {
         System.out.println(cmd);
 
         if (platformType == SelfExtractUtils.PlatformType_UNIX) {
-            // cmd ready as-is for Unix        
-        }
-        else if (platformType == SelfExtractUtils.PlatformType_WINDOWS) {
+            // cmd ready as-is for Unix
+        } else if (platformType == SelfExtractUtils.PlatformType_WINDOWS) {
             cmd = "cmd /k " + cmd;
-        }
-        else if (platformType == SelfExtractUtils.PlatformType_CYGWIN) {
+        } else if (platformType == SelfExtractUtils.PlatformType_CYGWIN) {
             cmd = "bash -c  " + '"' + cmd.replace('\\', '/') + '"';
         }
 
-        Process proc = rt.exec(cmd, SelfExtractUtils.runEnv(extractDirectory), null); // run server 
+        Process proc = rt.exec(cmd, SelfExtractUtils.runEnv(extractDirectory), null); // run server
 
-        // setup and start reader threads for error and output streams 
+        // setup and start reader threads for error and output streams
         StreamReader errorReader = new StreamReader(proc.getErrorStream(), "ERROR");
         errorReader.start();
         StreamReader outputReader = new StreamReader(proc.getInputStream(), "OUTPUT");
@@ -272,8 +266,7 @@ public class SelfExtractRun extends SelfExtract {
         String extractDirectory = getExtractDirectory();
         if (extractDirectory == null) {
             throw new RuntimeException("Failed to run jar because unable to create extraction directory.");
-        }
-        else {
+        } else {
             /*
              * call parent main to do extraction.
              * only arg is extractDirectory
@@ -310,7 +303,8 @@ public class SelfExtractRun extends SelfExtract {
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      */
-    private static int runServerInline(String extractDirectory, String serverName) throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    private static int runServerInline(String extractDirectory,
+                                       String serverName) throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         File serverLaunchJar = new File(extractDirectory, "wlp/bin/tools/ws-server.jar");
         JarFile jar = new JarFile(serverLaunchJar);
         String className = jar.getManifest().getMainAttributes().getValue("Main-Class");
@@ -348,10 +342,10 @@ public class SelfExtractRun extends SelfExtract {
                 URL thisJar = SelfExtractRun.class.getProtectionDomain().getCodeSource().getLocation();
                 try {
                     URL toolsJar = new URL("file:" + f.getCanonicalPath());
-                    URLClassLoader cl = new URLClassLoader(new URL[]{thisJar, toolsJar}, null);
+                    URLClassLoader cl = new URLClassLoader(new URL[] { thisJar, toolsJar }, null);
                     Class clazz = cl.loadClass("wlp.lib.extract.AgentAttach");
-                    Method m = clazz.getDeclaredMethod("attach", new Class[]{String.class});
-                    Object result = m.invoke(null, new String[]{javaAgent.getAbsolutePath()});
+                    Method m = clazz.getDeclaredMethod("attach", new Class[] { String.class });
+                    Object result = m.invoke(null, new String[] { javaAgent.getAbsolutePath() });
                     if (result != null) {
                         format("UNABLE_TO_ATTACH_AGENT", result);
                     }
@@ -375,7 +369,6 @@ public class SelfExtractRun extends SelfExtract {
             format("UNABLE_TO_FIND_JAVA_AGENT");
         }
     }
-
 
     /**
      * @param serverName

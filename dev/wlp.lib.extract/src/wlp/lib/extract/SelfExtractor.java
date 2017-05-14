@@ -69,7 +69,7 @@ public class SelfExtractor implements LicenseProvider {
     protected final List productMatches;
     private final String archiveContentType;
     private final String providedFeatures;
-    private final boolean productAddOn;
+    protected final boolean productAddOn;
     private final boolean extractInstaller;
     private final LicenseProvider licenseProvider;
     private final String requiredFeatures;
@@ -81,7 +81,7 @@ public class SelfExtractor implements LicenseProvider {
     // For command line installs, we handle finding the user dir automatically. Tools will override with a specific one.
     private File userDirOverride = null;
 
-    private boolean allowNonEmptyInstallDirectory = false;
+    protected boolean allowNonEmptyInstallDirectory = false;
     private String productInstallType = null;
 
     public File getUserDirOverride() {
@@ -285,7 +285,6 @@ public class SelfExtractor implements LicenseProvider {
             }
         }
 
-        boolean isLicenseArchive = false;
         boolean isIfix = false;
         String ifixExtractorNameString = null;
         String archiveContentType = mainAttributes.getValue("Archive-Content-Type");
@@ -295,8 +294,6 @@ public class SelfExtractor implements LicenseProvider {
             if (ifixExtractorNameString == null) {
                 return new ReturnCode(ReturnCode.UNREADABLE, "missingFixInstallerHeader", new Object[] { "Archive-Extractor-Class" });
             }
-        } else if ("license".equals(archiveContentType)) {
-            isLicenseArchive = true;
         }
 
         if (isIfix) {
@@ -335,15 +332,7 @@ public class SelfExtractor implements LicenseProvider {
                                                                                                    + e.getMessage() });
             }
         } else {
-            if (isLicenseArchive) {
-                try {
-                    instance = new LicenseSelfExtractor(jar, hasLicense ? ZipLicenseProvider.getInstance() : null, mainAttributes);
-                } catch (IOException e) {
-                    return new ReturnCode(ReturnCode.NOT_FOUND, "licenseNotFound", new Object[] {});
-                }
-            } else {
-                instance = new SelfExtractor(jar, hasLicense ? ZipLicenseProvider.getInstance() : null, mainAttributes);
-            }
+            instance = new SelfExtractor(jar, hasLicense ? ZipLicenseProvider.getInstance() : null, mainAttributes);
         }
 
         return ReturnCode.OK;
@@ -539,10 +528,6 @@ public class SelfExtractor implements LicenseProvider {
         return rc;
     }
 
-    public static ReturnCode validateProductMatches(File outputDir, List productMatches) {
-        return validateProductMatches(outputDir, productMatches, true);
-    }
-
     /**
      * This method will validate that the install location proposed is valid for the list of productMatches supplied. The {@link ProductMatch#matches(Properties)} method will be
      * invoked for all of the supplied <code>productMatches</code> objects and for all of the properties files found in the lib/versions directory for the current install. The
@@ -553,7 +538,7 @@ public class SelfExtractor implements LicenseProvider {
      * @param productMatches The list of {@link ProductMatch} objects that need to be satisfied to the current install
      * @return A {@link ReturnCode} indicating if this was successful or not
      */
-    public static ReturnCode validateProductMatches(File outputDir, List productMatches, boolean forSelfExtractor) {
+    public static ReturnCode validateProductMatches(File outputDir, List productMatches) {
         boolean dirExists;
         dirExists = outputDir.exists();
         if (dirExists) {
@@ -561,11 +546,7 @@ public class SelfExtractor implements LicenseProvider {
             File[] files = f.listFiles();
             if (files == null || files.length == 0) {
                 // output error
-                if (forSelfExtractor) {
-                    return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidInstall", outputDir.getAbsolutePath());
-                } else {
-                    return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_invalidInstall", outputDir.getAbsolutePath());
-                }
+                return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidInstall", outputDir.getAbsolutePath());
             } else {
                 propFiles: for (int i = 0; i < files.length; i++) {
                     Properties props = new Properties();
@@ -602,50 +583,24 @@ public class SelfExtractor implements LicenseProvider {
                             String edition = InstallUtils.getEditionName(props.getProperty("com.ibm.websphere.productEdition"));
 
                             if (result == ProductMatch.INVALID_VERSION) {
-                                if (forSelfExtractor) {
-                                    return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidVersion", new Object[] { props.getProperty("com.ibm.websphere.productVersion"),
-                                                                                                                  match.getVersion(),
-                                                                                                                  edition,
-                                                                                                                  longIDs,
-                                                                                                                  props.getProperty("com.ibm.websphere.productLicenseType") });
-                                } else {
-                                    return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_replace_invalidVersion", new Object[] { props.getProperty("com.ibm.websphere.productVersion"),
-                                                                                                                                  match.getVersion(),
-                                                                                                                                  edition,
-                                                                                                                                  longIDs,
-                                                                                                                                  props.getProperty("com.ibm.websphere.productLicenseType") });
-                                }
+                                return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidVersion", new Object[] { props.getProperty("com.ibm.websphere.productVersion"),
+                                                                                                              match.getVersion(),
+                                                                                                              edition,
+                                                                                                              longIDs,
+                                                                                                              props.getProperty("com.ibm.websphere.productLicenseType") });
                             } else if (result == ProductMatch.INVALID_EDITION) {
-                                if (forSelfExtractor) {
-                                    return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidEdition", new Object[] { edition,
-                                                                                                                  longIDs,
-                                                                                                                  props.getProperty("com.ibm.websphere.productVersion"),
-                                                                                                                  match.getVersion(),
-                                                                                                                  props.getProperty("com.ibm.websphere.productLicenseType") });
-                                } else {
-                                    return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_invalidEdition", new Object[] { edition,
-                                                                                                                          longIDs,
-                                                                                                                          props.getProperty("com.ibm.websphere.productVersion"),
-                                                                                                                          match.getVersion(),
-                                                                                                                          props.getProperty("com.ibm.websphere.productLicenseType") });
-                                }
+                                return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidEdition", new Object[] { edition,
+                                                                                                              longIDs,
+                                                                                                              props.getProperty("com.ibm.websphere.productVersion"),
+                                                                                                              match.getVersion(),
+                                                                                                              props.getProperty("com.ibm.websphere.productLicenseType") });
                             }
                         } else if (result == ProductMatch.INVALID_INSTALL_TYPE) {
-                            if (forSelfExtractor) {
-                                return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidInstallType", new Object[] { props.getProperty("com.ibm.websphere.productInstallType"),
-                                                                                                                  match.getInstallType() });
-                            } else {
-                                return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_replace_invalidInstallType", new Object[] { props.getProperty("com.ibm.websphere.productInstallType"),
-                                                                                                                                  match.getInstallType() });
-                            }
+                            return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidInstallType", new Object[] { props.getProperty("com.ibm.websphere.productInstallType"),
+                                                                                                              match.getInstallType() });
                         } else if (result == ProductMatch.INVALID_LICENSE) {
-                            if (forSelfExtractor) {
-                                return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidLicense", new Object[] { props.getProperty("com.ibm.websphere.productLicenseType"),
-                                                                                                              match.getLicenseType() });
-                            } else {
-                                return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_invalidLicense", new Object[] { props.getProperty("com.ibm.websphere.productLicenseType"),
-                                                                                                                      match.getLicenseType() });
-                            }
+                            return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidLicense", new Object[] { props.getProperty("com.ibm.websphere.productLicenseType"),
+                                                                                                          match.getLicenseType() });
                         }
                         break propFiles;
                     }
@@ -653,11 +608,7 @@ public class SelfExtractor implements LicenseProvider {
             }
         } else {
             // output error
-            if (forSelfExtractor) {
-                return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidInstall", outputDir.getAbsolutePath());
-            } else {
-                return new ReturnCode(ReturnCode.BAD_OUTPUT, "LICENSE_invalidInstall", outputDir.getAbsolutePath());
-            }
+            return new ReturnCode(ReturnCode.BAD_OUTPUT, "invalidInstall", outputDir.getAbsolutePath());
         }
         return ReturnCode.OK;
     }
@@ -1271,7 +1222,7 @@ public class SelfExtractor implements LicenseProvider {
      *
      * @return A Set of Strings containing the features that are missing from the installation runtime.
      */
-    private Set listMissingCoreFeatures(File outputDir) throws SelfExtractorFileException {
+    protected Set listMissingCoreFeatures(File outputDir) throws SelfExtractorFileException {
 
         Set missingFeatures = new HashSet();
 

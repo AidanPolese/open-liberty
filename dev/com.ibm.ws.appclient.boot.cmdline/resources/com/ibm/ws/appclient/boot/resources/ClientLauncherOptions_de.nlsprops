@@ -67,9 +67,10 @@ option-desc.archive=\tGeben Sie das durch die Paketaktion zu generierende \n\
 \tArchivierungsziel an. Das Ziel kann als absoluter Pfad oder als relativer Pfad \n\
 \tangegeben werden. Wird diese Option ausgelassen, wird die Archivdatei im\n\
 \tAusgabeverzeichnis des Clients erstellt. Die Erweiterung des Zieldateinamens \n\
-\tkann Einfluss auf das Format des generierten Archivs haben.       \n\
+\tkann Einfluss auf das Format des generierten Archivs haben.         \n\
 \tDas Standardarchivformat f\u00fcr die Paketaktion ist "pax" unter z/OS   \n\
-\tund "zip" auf allen anderen Plattformen.                                    \n\
+\tund "zip" auf allen anderen Plattformen. \
+                                   \n\
 \tDas Archivformat "jar" erzeugt eine selbst extrahierende JAR-Datei, die dem \n\
 \turspr\u00fcnglichen Installationsarchiv gleicht.
 #------------------------------\n at 72 chars -- leading tab-----------\n\#

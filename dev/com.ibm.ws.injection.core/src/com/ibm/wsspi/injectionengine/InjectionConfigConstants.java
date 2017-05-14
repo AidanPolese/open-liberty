@@ -29,7 +29,7 @@ public class InjectionConfigConstants
      * indicate the message file to be used by the WebSphere RAS component for trace
      * and error reporting.<p>
      *
-     * @see com.ibm.ejs.ras.TraceComponent
+     * @see com.ibm.websphere.ras.TraceComponent
      **/
 
     public static final String messageFile = "com.ibm.wsspi.injectionengine.injection"; //448046
@@ -47,7 +47,7 @@ public class InjectionConfigConstants
      * indicate the trace string to be used by the WebSphere RAS component for trace
      * and error reporting.<p>
      *
-     * @see com.ibm.ejs.ras.TraceComponent
+     * @see com.ibm.websphere.ras.TraceComponent
      **/
 
     public static final String traceString = "Injection";
@@ -67,7 +67,7 @@ public class InjectionConfigConstants
      * indicate the trace string to be used by the WebSphere RAS component
      * for detailed trace and error reporting.<p>
      *
-     * @see com.ibm.ejs.ras.TraceComponent
+     * @see com.ibm.websphere.ras.TraceComponent
      **/
 
     public static final String detailTraceString = "InjectionDetail";

@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2015
+ * Copyright IBM Corp. 2015, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package wlp.lib.extract.platform;
@@ -155,8 +155,7 @@ public class PlatformUtils {
     public static ReturnCode setExtendedAttributes(Map extattrFilesMap) throws IOException {
         Map extAttrFilesMap = new HashMap();
 
-        if (extattrFilesMap.size() > EXTENDED_ATTRIBUTES.length)
-        {
+        if (extattrFilesMap.size() > EXTENDED_ATTRIBUTES.length) {
             for (Iterator entryIt = extattrFilesMap.entrySet().iterator(); entryIt.hasNext();) {
                 Map.Entry entry = (Map.Entry) entryIt.next();
                 String attrs = (String) entry.getKey();
@@ -165,24 +164,20 @@ public class PlatformUtils {
                 for (int i = 0; i < EXTENDED_ATTRIBUTES.length; i++) {
                     if (attrs.contains(EXTENDED_ATTRIBUTES[i])) {
                         String key = EXTENDED_ATTRIBUTES_ADD + EXTENDED_ATTRIBUTES[i];
-                        Set attrfiles = ((extAttrFilesMap.containsKey(key)) ?
-                                        (Set) extAttrFilesMap.get(key) : new HashSet());
+                        Set attrfiles = ((extAttrFilesMap.containsKey(key)) ? (Set) extAttrFilesMap.get(key) : new HashSet());
 
                         attrfiles.addAll(files);
                         extAttrFilesMap.put(key, attrfiles);
-                    }
-                    else {
+                    } else {
                         String key = EXTENDED_ATTRIBUTES_REMOVE + EXTENDED_ATTRIBUTES[i];
-                        Set attrfiles = (extAttrFilesMap.containsKey(key)) ?
-                                        (Set) extAttrFilesMap.get(key) : new HashSet();
+                        Set attrfiles = (extAttrFilesMap.containsKey(key)) ? (Set) extAttrFilesMap.get(key) : new HashSet();
 
                         attrfiles.addAll(files);
                         extAttrFilesMap.put(key, attrfiles);
                     }
                 }
             }
-        }
-        else {
+        } else {
             for (Iterator entryIt = extattrFilesMap.entrySet().iterator(); entryIt.hasNext();) {
                 Map.Entry entry = (Map.Entry) entryIt.next();
                 String attrs = (String) entry.getKey();
@@ -197,11 +192,9 @@ public class PlatformUtils {
                 String antiAttrs = antiAttrsBuffer.toString();
                 if (!"".equals(antiAttrs) && !"".equals(attrs)) {
                     attrs = EXTENDED_ATTRIBUTES_ADD + attrs + " " + EXTENDED_ATTRIBUTES_REMOVE + antiAttrs;
-                }
-                else if ("".equals(antiAttrs)) {
+                } else if ("".equals(antiAttrs)) {
                     attrs = EXTENDED_ATTRIBUTES_ADD + attrs;
-                }
-                else {
+                } else {
                     attrs = EXTENDED_ATTRIBUTES_REMOVE + antiAttrs;
                 }
                 extAttrFilesMap.put(attrs, files);
@@ -309,12 +302,12 @@ class PPPlatformUtils extends AbstractPlatformPolicyFactory {
             Writer err = new StringWriter();
 
             returnStatus = PlatformUtils.executeCommand((String[]) cmdList.toArray(
-                            new String[cmdList.size()]), null, null, out, err);
+                                                                                   new String[cmdList.size()]),
+                                                        null, null, out, err);
 
             if (returnStatus != 0) {
-                return new ReturnCode(ReturnCode.BAD_OUTPUT, "ERROR_EXECUTING_COMMAND",
-                                new String[] { convertListToString(cmdList, " "),
-                                              Integer.toString(returnStatus), err.toString() });
+                return new ReturnCode(ReturnCode.BAD_OUTPUT, "ERROR_EXECUTING_COMMAND", new String[] { convertListToString(cmdList, " "),
+                                                                                                       Integer.toString(returnStatus), err.toString() });
             }
 
             return ReturnCode.OK;
@@ -380,7 +373,8 @@ class PPPlatformUtils extends AbstractPlatformPolicyFactory {
 
             if ("".equals(shellCommand)) {
                 throw new IOException(MessageFormat.format(RESOURCE_BUNDLE.getString(
-                                "ERROR_UNABLE_TO_LOCATE_COMMAND_EXE"), new String[] { "sh", "/bin/sh" }));
+                                                                                     "ERROR_UNABLE_TO_LOCATE_COMMAND_EXE"),
+                                                           new String[] { "sh", "/bin/sh" }));
             }
 
             List umaskCmdList = new ArrayList();
@@ -393,12 +387,13 @@ class PPPlatformUtils extends AbstractPlatformPolicyFactory {
             Writer out = new StringWriter();
 
             returnStatus = PlatformUtils.executeCommand((String[]) umaskCmdList.toArray(
-                            new String[umaskCmdList.size()]), null, null, out, err);
+                                                                                        new String[umaskCmdList.size()]),
+                                                        null, null, out, err);
 
             if (returnStatus != 0) {
                 throw new IOException(MessageFormat.format(RESOURCE_BUNDLE.getString("ERROR_EXECUTING_COMMAND"),
                                                            new String[] { convertListToString(umaskCmdList, " "),
-                                                                         Integer.toString(returnStatus), err.toString() }));
+                                                                          Integer.toString(returnStatus), err.toString() }));
             } else if (out.toString().length() == 0) {
                 throw new IOException(MessageFormat.format(RESOURCE_BUNDLE.getString("ERROR_UNABLE_TO_GET_UMASK"),
                                                            new String[] { convertListToString(umaskCmdList, " ") }));
@@ -469,8 +464,8 @@ class PPPlatformUtils extends AbstractPlatformPolicyFactory {
             if (null == perm || "".equals(perm)) {
                 return ReturnCode.OK;
             } else if ("".equals(chmodCmd)) {
-                return new ReturnCode(ReturnCode.NOT_FOUND, "ERROR_UNABLE_TO_LOCATE_COMMAND_EXE",
-                                new String[] { "chmod", convertListToString(Arrays.asList(chmod_locations), ", ") });
+                return new ReturnCode(ReturnCode.NOT_FOUND, "ERROR_UNABLE_TO_LOCATE_COMMAND_EXE", new String[] { "chmod",
+                                                                                                                 convertListToString(Arrays.asList(chmod_locations), ", ") });
             }
 
             return runCommand(chmodCmd, fileList, new String[] { perm });
@@ -524,20 +519,18 @@ class PPPlatformUtils extends AbstractPlatformPolicyFactory {
         private String systemASCII = null;
         private String systemEBCDIC = null;
 
-        ReturnCode extattr(String[] fileList, String attr) throws IOException
-        {
+        ReturnCode extattr(String[] fileList, String attr) throws IOException {
             if (null == attr || "".equals(attr)) {
                 return ReturnCode.OK;
             } else if (!validateExtAttrArgs(attr)) {
-                return new ReturnCode(ReturnCode.BAD_INPUT, "ERROR_INVALID_EXTATTR_PARMS",
-                                new String[] { attr });
+                return new ReturnCode(ReturnCode.BAD_INPUT, "ERROR_INVALID_EXTATTR_PARMS", new String[] { attr });
             }
 
             String extattrCmd = getCmdLocation(extattr_locations);
 
             if ("".equals(extattrCmd)) {
-                return new ReturnCode(ReturnCode.NOT_FOUND, "ERROR_UNABLE_TO_LOCATE_COMMAND_EXE",
-                                new String[] { "extattr", convertListToString(Arrays.asList(extattr_locations), ", ") });
+                return new ReturnCode(ReturnCode.NOT_FOUND, "ERROR_UNABLE_TO_LOCATE_COMMAND_EXE", new String[] { "extattr",
+                                                                                                                 convertListToString(Arrays.asList(extattr_locations), ", ") });
 
             }
 
@@ -561,8 +554,8 @@ class PPPlatformUtils extends AbstractPlatformPolicyFactory {
             String chcpCmd = getCmdLocation(chcp_locations);
 
             if ("".equals(chcpCmd)) {
-                return new ReturnCode(ReturnCode.NOT_FOUND, "ERROR_UNABLE_TO_LOCATE_COMMAND_EXE",
-                                new String[] { "chcp", convertListToString(Arrays.asList(chcp_locations), ", ") });
+                return new ReturnCode(ReturnCode.NOT_FOUND, "ERROR_UNABLE_TO_LOCATE_COMMAND_EXE", new String[] { "chcp",
+                                                                                                                 convertListToString(Arrays.asList(chcp_locations), ", ") });
             }
 
             List chcpCmdList = new ArrayList();
@@ -574,12 +567,12 @@ class PPPlatformUtils extends AbstractPlatformPolicyFactory {
             Writer out = new StringWriter();
 
             returnStatus = PlatformUtils.executeCommand((String[]) chcpCmdList.toArray(
-                            new String[chcpCmdList.size()]), null, null, out, err);
+                                                                                       new String[chcpCmdList.size()]),
+                                                        null, null, out, err);
 
             if (returnStatus != 0) {
-                return new ReturnCode(ReturnCode.BAD_OUTPUT, "ERROR_EXECUTING_COMMAND",
-                                new String[] { convertListToString(chcpCmdList, " "),
-                                              Integer.toString(returnStatus), err.toString() });
+                return new ReturnCode(ReturnCode.BAD_OUTPUT, "ERROR_EXECUTING_COMMAND", new String[] { convertListToString(chcpCmdList, " "),
+                                                                                                       Integer.toString(returnStatus), err.toString() });
             } else if (out.toString().length() > 0) {
                 String ascii_regex = "^.*ASCII.*:\\s*(.*)$";
                 String ebcdic_regex = "^.*EBCDIC.*:\\s*(.*)$";

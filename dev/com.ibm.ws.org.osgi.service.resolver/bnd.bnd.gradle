@@ -3,4 +3,6 @@
 -includeresource: \
    @lib/org.osgi.service.resolver-1.0.1.jar!/!(OSGI-OPT/src|META-INF/maven)/*
 
+publish.wlp.jar.disabled: true
+
 -buildpath: lib/org.osgi.service.resolver-1.0.1.jar;version=file

@@ -619,9 +619,16 @@ public class FATRunner extends BlockJUnit4ClassRunner {
     public List<String> getAllowedFFDCAnnotationFromTest(FrameworkMethod m) {
 
         ArrayList<String> annotationListPerClass = new ArrayList<String>();
-        AllowedFFDC ffdc = m.getAnnotation(AllowedFFDC.class);
-        if (ffdc != null) {
-            String[] exceptionClasses = ffdc.value();
+        AllowedFFDC methodFFDC = m.getAnnotation(AllowedFFDC.class);
+        if (methodFFDC != null) {
+            String[] exceptionClasses = methodFFDC.value();
+            for (String exceptionClass : exceptionClasses) {
+                annotationListPerClass.add(exceptionClass);
+            }
+        }
+        AllowedFFDC classFFDC = getTestClass().getJavaClass().getAnnotation(AllowedFFDC.class);
+        if (classFFDC != null) {
+            String[] exceptionClasses = classFFDC.value();
             for (String exceptionClass : exceptionClasses) {
                 annotationListPerClass.add(exceptionClass);
             }

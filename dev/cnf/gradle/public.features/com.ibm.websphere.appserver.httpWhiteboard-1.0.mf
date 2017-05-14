@@ -12,8 +12,8 @@ IBM-ShortName: httpWhiteboard-1.0
 Subsystem-Content: com.ibm.websphere.appserver.servlet-3.0; ibm.tolerates:="3.1"; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.httptransport-1.0; type="osgi.subsystem.feature",
  com.ibm.wsspi.appserver.webBundle-1.0; type="osgi.subsystem.feature",
- com.ibm.websphere.org.osgi.service.http.1.2.1; location:="dev/api/spec/,lib/"; type=jar; version="[1.0.0,1.0.200)",
- com.ibm.websphere.org.osgi.service.http.whiteboard.1.0.0; location:="dev/api/spec/,lib/"; type=jar; version="[1.0.0,1.0.200)",
+ com.ibm.websphere.org.osgi.service.http; location:="dev/api/spec/,lib/"; type=jar; version="[1.0.0,1.0.200)",
+ com.ibm.websphere.org.osgi.service.http.whiteboard; location:="dev/api/spec/,lib/"; type=jar; version="[1.0.0,1.0.200)",
  com.ibm.ws.http.whiteboard; start-phase:=APPLICATION_EARLY; version="[1.0.0,1.0.200)",
  com.ibm.ws.org.apache.aries.subsystem.api.2.0.9; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description

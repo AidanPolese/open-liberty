@@ -10,4 +10,4 @@ Bundle-Description: Bundle for runtime interfaces supporting automatic plugin-cf
 Export-Package: com.ibm.ws.webserver.plugin.runtime.interfaces
 
 -buildpath: \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

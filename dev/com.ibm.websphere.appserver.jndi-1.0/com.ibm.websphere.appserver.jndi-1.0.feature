@@ -12,8 +12,8 @@ Subsystem-Name: Java Naming and Directory Interface
  com.ibm.websphere.appserver.anno-1.0, \
  com.ibm.websphere.appserver.internal.slf4j-1.7.7
 -bundles=com.ibm.ws.jndi.url.contexts, \
- com.ibm.ws.org.apache.aries.jndi.core.1.0.3, \
- com.ibm.ws.org.apache.aries.jndi.api.1.1.1, \
+ com.ibm.ws.org.apache.aries.jndi.core, \
+ com.ibm.ws.org.apache.aries.jndi.api, \
  com.ibm.ws.jndi
 kind=ga
 edition=core

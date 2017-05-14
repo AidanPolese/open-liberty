@@ -2531,7 +2531,7 @@ public class LibertyServer implements LogMonitorClient {
         return needsPostTestRecover;
     }
 
-    void setNeedsPostRecover(boolean b) {
+    public void setNeedsPostRecover(boolean b) {
         needsPostTestRecover = b;
     }
 
@@ -4778,11 +4778,11 @@ public class LibertyServer implements LogMonitorClient {
                     } else
                         // Remove the corresponding regexp from the watchFor list
                         for (Iterator<String> it = watchFor.iterator(); it.hasNext();) {
-                        String regexp = it.next();
-                        if (Pattern.compile(regexp).matcher(line).find()) {
-                        it.remove();
-                        break;
-                        }
+                            String regexp = it.next();
+                            if (Pattern.compile(regexp).matcher(line).find()) {
+                                it.remove();
+                                break;
+                            }
                         }
                 }
             }

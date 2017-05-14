@@ -34,4 +34,4 @@ instrument.disabled: true
 	com.ibm.websphere.appserver.spi.logging;version=latest,\
 	com.ibm.ws.monitor;version=latest,\
 	com.ibm.ws.session;version=latest,\
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

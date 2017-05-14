@@ -463,6 +463,12 @@ warning.javase6.endofservice=CWWKE0109W: Il supporto per Java SE 6 con WebSphere
 warning.javase6.endofservice.explanation=IBM interromper\u00e0 il supporto per Java SE 6 con WebSphere Application Server Liberty dopo settembre 2017. Se si continua a utilizzare Java SE 6 dopo la fine del supporto, le applicazioni potrebbero essere esposte a rischi di sicurezza.
 warning.javase6.endofservice.useraction=IBM consiglia di utilizzare l'ultima versione Java SE, Java SE 8. 
 
+#
+# W A R N I N G:   Do not use CWWKE0100 - CCWKE0199 they are reserved in ServiceMessages.nlsprops
+#
+# Too Late for CWWKE0101 - CWWKE0107 they have dual use currently and CWWKE0108 and CWWKE0109 are only used here.
+#
+
 error.clientNameCharacter=CWWKE0900E: Il nome client specificato contiene un carattere non valido (nome={0}). \
 I caratteri validi sono: caratteri alfanumerici Unicode (ad esempio, \
 0-9, a-z, A-Z), caratteri di sottolineatura (_), trattino (-), segno pi\u00f9 (+) e punto (.). \
@@ -581,23 +587,19 @@ error.package.missingLibExtractDir.useraction=Reinstallare WebSphere Liberty Pro
 
 
 info.server.pause.all.request.received=CWWKE0923I: \u00c8 stata ricevuta una richiesta di sospendere tutti i componenti sospendibili nel server.
-info.server.pause.all.request.received.explanation=\u00c8 stata emessa una richiesta di sospendere tutti i componenti sospendibili nel server. \
-Il server tenter\u00e0 di sospendere questi componenti. 
+info.server.pause.all.request.received.explanation=\u00c8 stata emessa una richiesta di sospendere tutti i componenti sospendibili nel server. Il server tenter\u00e0 di sospendere questi componenti. 
 info.server.pause.all.request.received.useraction=Non \u00e8 richiesta alcuna azione.
 
 info.server.pause.request.received=CWWKE0924I: \u00c8 stata ricevuta una richiesta di sospendere i seguenti componenti nel server: {0}
-info.server.pause.request.received.explanation=\u00c8 stata emessa una richiesta di sospendere componenti specifici nel server. \
-Il server tenter\u00e0 di sospendere questi componenti. 
+info.server.pause.request.received.explanation=\u00c8 stata emessa una richiesta di sospendere componenti specifici nel server. Il server tenter\u00e0 di sospendere questi componenti. 
 info.server.pause.request.received.useraction=Non \u00e8 richiesta alcuna azione.
 
 info.server.resume.all.request.received=CWWKE0925I: \u00c8 stata ricevuta una richiesta di riattivare tutti i componenti sospesi nel server.
-info.server.resume.all.request.received.explanation=\u00c8 stata emessa una richiesta di riattivare tutti i componenti sospesi nel server. \
-Il server tenter\u00e0 di riattivare questi componenti.
+info.server.resume.all.request.received.explanation=\u00c8 stata emessa una richiesta di riattivare tutti i componenti sospesi nel server. Il server tenter\u00e0 di riattivare questi componenti.
 info.server.resume.all.request.received.useraction=Non \u00e8 richiesta alcuna azione.
 
 info.server.resume.request.received=CWWKE0926I: \u00c8 stata ricevuta una richiesta di riattivare i seguenti componenti nel server: {0}
-info.server.resume.request.received.explanation=\u00c8 stata emessa una richiesta di riattivare componenti specifici nel server. \
-Il server tenter\u00e0 di riattivare questi componenti se sospesi.
+info.server.resume.request.received.explanation=\u00c8 stata emessa una richiesta di riattivare componenti specifici nel server. Il server tenter\u00e0 di riattivare questi componenti se sospesi.
 info.server.resume.request.received.useraction=Non \u00e8 richiesta alcuna azione.
 
 error.pause.request.failed=CWWKE0927E: \u00c8 stata ricevuta una richiesta di sospensione, ma l'infrastruttura per sospendere i componenti non \u00e8 disponibile. Impossibile elaborare la richiesta. 
@@ -652,6 +654,9 @@ info.server.resume.request.completed=CWWKE0939I: Una richiesta di riattivazione 
 info.server.resume.request.completed.explanation=Una richiesta di riattivazione \u00e8 stata completata.
 info.server.resume.request.completed.useraction=Non \u00e8 richiesta alcuna azione.
 
+info.envProductExtension=CWWKE0940I: L''estensione del prodotto {0} ha un identificativo prodotto di {1} e un''ubicazione di intallazione prodotto di {2}. Questa estensione di prodotto \u00e8 stata abilitata specificando la variabile di ambiente WLP_PRODUCT_EXT_DIR. 
+info.envProductExtension.explanation= La variabile di ambiente WLP_PRODUCT_EXT_DIR punta all'ubicazione dell'estensione del prodotto. Il server \u00e8 stato trovato e utilizza l'estensione del prodotto.
+info.envProductExtension.useraction=Non \u00e8 richiesta alcuna azione.
 
 info.serverStarting=Avvio del server {0} in corso.
 info.serverStarted=Server {0} avviato.

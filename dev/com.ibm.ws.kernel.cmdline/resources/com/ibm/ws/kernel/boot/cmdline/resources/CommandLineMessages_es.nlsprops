@@ -28,3 +28,7 @@
 error.sdkRequired=CWWKE0600E: Esta herramienta requiere un SDK Java, pero se ha iniciado utilizando un JRE: {0}
 error.sdkRequired.explanation=La herramienta requiere un SDK Java, pero se ha iniciado utilizando un entorno de tiempo de ejecuci\u00f3n Java simple.
 error.sdkRequired.useraction=Establezca la variable de entorno JAVA_HOME en la v\u00eda de acceso de un SDK Java y vuelva a intentar el mandato.
+
+error.compilerMissing=CWWKE0601E: Esta herramienta requiere que est\u00e9 disponible un compilador Java. Aseg\u00farese de que el m\u00f3dulo java.compiler est\u00e9 disponible.
+error.compilerMissing.explanation=La herramienta requiere un compilador Java. Sin embargo, la herramienta se ha iniciado sin uno.
+error.compilerMissing.useraction=Verifique que el m\u00f3dulo java.compiler est\u00e9 disponible en la imagen Java. A continuaci\u00f3n, verifique que est\u00e1 disponible en tiempo de ejecuci\u00f3n especificando la opci\u00f3n de l\u00ednea de mandatos siguiente: --add-modules java.compiler

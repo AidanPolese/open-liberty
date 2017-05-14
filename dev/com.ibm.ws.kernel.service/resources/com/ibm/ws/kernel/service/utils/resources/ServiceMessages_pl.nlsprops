@@ -51,3 +51,7 @@ invalidIntegerArray.useraction=Sprawd\u017a, czy warto\u015b\u0107 okre\u015blon
 invalidDuration=CWWKE0107W: Okre\u015blony parametr nie reprezentuje warto\u015bci przedzia\u0142u czasu. {1}={2} dla elementu {0}
 invalidDuration.explanation=Warto\u015b\u0107 okre\u015blonego parametru konfiguracyjnego nie jest warto\u015bci\u0105 przedzia\u0142u czasu lub nie mo\u017cna jej przekszta\u0142ci\u0107 w warto\u015b\u0107 przedzia\u0142u czasu.
 invalidDuration.useraction=Sprawd\u017a, czy warto\u015b\u0107 okre\u015blona w konfiguracji serwera jest poprawn\u0105 reprezentacj\u0105 warto\u015bci przedzia\u0142u czasu.
+
+#
+# W A R N I N G:   Do not use CWWKE0108 - CCWKE0109 they are currently in use LauncherMessages.nlsprops
+#

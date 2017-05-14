@@ -746,36 +746,6 @@ public class DatabaseHelper {
     }
 
     /**
-     * This method will be called by WAS BEFORE calling the doConnectionCleanup method on the external helper.
-     * There are some cases where we need to do some controlled connection cleanup on our connection and
-     * get those new values tracked in our Wrappers with the least amount of work. To do that, we will do the
-     * cleanup on the mc which will update the variables.
-     * Since this method is called before, it will not affect any work done by the customers in the doConnectionCleanup.
-     * 
-     * @param WSRdbManagedConnectionImpl mc to do the work on
-     * @return void
-     * @throws SQLException
-     */
-    public void doConnectionCleanupOnWrapper(WSRdbManagedConnectionImpl mc) throws SQLException {
-        // no-op
-    }
-
-    /**
-     * This method is used to do DataStore specific Connection processing when the last Connection
-     * handle to a given ManagedConnection is closed. This is generally called before transaction
-     * completion and cleanup.
-     * 
-     * @param conn the Connection that will be processed
-     * @param autoCommit a boolean indicating the current autoCommit setting on the Connection
-     * @param inGlobal a boolean indicating whether we are in the middle of a Global Tran
-     * 
-     * @throws SQLException
-     */
-    public void processLastHandleClosed(Connection conn, boolean autoCommit, boolean inGlobal) throws SQLException 
-    { 
-    } 
-
-    /**
      * This method is used to get the metadata information from the connection and displaying it along with any other
      * connection related information
      * 

@@ -11,7 +11,9 @@
  */
 package com.ibm.ws.ssl.internal;
 
+import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -19,7 +21,9 @@ import java.util.Set;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import org.apache.felix.scr.component.ExtComponentContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -73,9 +77,10 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
     private final Map<String, WSKeyStore> keystorePidMap = new HashMap<String, WSKeyStore>();
     private volatile WsLocationAdmin locSvc;
 
-    private boolean activated;
     private FeatureProvisioner provisionerService;
     private boolean transportSecurityEnabled;
+
+    private ExtComponentContext componentContext;
 
     /**
      * DS method to activate this component.
@@ -84,7 +89,7 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
      * @param properties
      */
     @Activate
-    protected synchronized Map<String, Object> activate(Map<String, Object> properties) {
+    protected synchronized void activate(ComponentContext ctx, Map<String, Object> properties) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(tc, "Activated: " + properties);
         }
@@ -103,28 +108,10 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
 
         super.activate(MY_ALIAS, properties);
 
-        activated = true;
+        this.componentContext = (ExtComponentContext) ctx;
 
-        Map<String, Object> ret = processConfig(true);
-        if (ret.containsKey(SSL_SUPPORT_KEY)) {
-            // If we set SSLSupport=active in processConfig, setKeyStore and setRepertoire have already been called.
-            // In this case, return the new service properties.
-            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
-                Tr.event(tc, "activate return: " + ret);
-            }
-        } else {
-            // SSLSupport=active has not been set. Return null so that we don't update service properties here -- it
-            // will happen later when setKeyStore and setRepertoire have been called. This avoids a race condition where
-            // this method is called, but before the properties are updated another thread calls setKeyStore or setRepertoire
-            // and ends up setting SSLSupport=active, and then the initial properties update from this method is sent out, thus
-            // overwriting the other update (and effectively removing the SSLSupport property.)
-            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
-                Tr.event(tc, "activate returning null - SSLSupport=active not set");
-            }
-            return null;
-        }
+        processConfig(true);
 
-        return ret;
     }
 
     /**
@@ -133,7 +120,7 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
      * @param context
      */
     @Deactivate
-    protected synchronized Map<String, Object> deactivate(int reason) {
+    protected synchronized void deactivate(int reason) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(tc, "Deactivated: " + reason);
         }
@@ -144,26 +131,19 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
         repertoirePIDMap.clear();
         keystoreIdMap.clear();
         keystorePidMap.clear();
-        Map<String, Object> props = processConfig(true);
-        activated = false;
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
-            Tr.event(tc, "deactivate return: " + props);
-        }
-        return props;
+        processConfig(true);
+        this.componentContext = null;
+
     }
 
     @Modified
-    protected synchronized Map<String, Object> modified(Map<String, Object> properties) {
+    protected synchronized void modified(Map<String, Object> properties) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(tc, "Modified: " + properties);
         }
         super.modified(MY_ALIAS, properties);
 
-        Map<String, Object> ret = processConfig(true);
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
-            Tr.event(tc, "modified return: " + ret);
-        }
-        return ret;
+        processConfig(true);
     }
 
     /**
@@ -175,15 +155,12 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
      */
     //TODO bug in bnd requires setting service in @Reference annotation
     @Reference(service = KeystoreConfig.class, cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, target = "(id=*)")
-    protected synchronized Map<String, Object> setKeyStore(KeystoreConfig config) {
+    protected synchronized void setKeyStore(KeystoreConfig config) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(tc, "Adding keystore: " + config.getId());
         }
-        Map<String, Object> ret = addKeyStores(false, config);
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
-            Tr.event(tc, "setKeyStore return: " + ret);
-        }
-        return ret;
+        addKeyStores(false, config);
+
     }
 
     protected synchronized void updatedKeyStore(KeystoreConfig config) {
@@ -200,7 +177,7 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
      *
      * @param ref Reference to an unregistered KeyStoreConfigService
      */
-    protected synchronized Map<String, Object> unsetKeyStore(KeystoreConfig config) {
+    protected synchronized void unsetKeyStore(KeystoreConfig config) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(tc, "Removing keystore: " + config.getId());
         }
@@ -216,14 +193,11 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
                 repertoirePIDMap.remove(rep.getPID());
             }
         }
-        Map<String, Object> ret = processConfig(true);
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
-            Tr.event(tc, "unsetKeyStore return: " + ret);
-        }
-        return ret;
+        processConfig(true);
+
     }
 
-    private Map<String, Object> addKeyStores(boolean updateSSLConfigManager, KeystoreConfig... keystores) {
+    private void addKeyStores(boolean updateSSLConfigManager, KeystoreConfig... keystores) {
         for (KeystoreConfig config : keystores) {
             WSKeyStore keystore = config.getKeyStore();
             if (keystore != keystoreIdMap.put(config.getId(), keystore)) {
@@ -231,7 +205,8 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
                 keystorePidMap.put(config.getPid(), keystore);
             }
         }
-        return processConfig(updateSSLConfigManager);
+
+        processConfig(updateSSLConfigManager);
     }
 
     /**
@@ -243,7 +218,7 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
      */
     //TODO bug in bnd requires setting service
     @Reference(service = RepertoireConfigService.class, cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, target = "(id=*)")
-    protected synchronized Map<String, Object> setRepertoire(RepertoireConfigService config) {
+    protected synchronized void setRepertoire(RepertoireConfigService config) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(tc, "Adding repertoire: " + config.getAlias());
         }
@@ -251,25 +226,19 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
         repertoireMap.put(config.getAlias(), config);
         repertoirePIDMap.put(config.getPID(), config.getAlias());
         repertoirePropertiesMap.put(config.getAlias(), properties);
-        Map<String, Object> ret = addKeyStores(true, config.getKeyStore(), config.getTrustStore());
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
-            Tr.event(tc, "setRepertoire return: " + ret);
-        }
-        return ret;
+        addKeyStores(true, config.getKeyStore(), config.getTrustStore());
+
     }
 
-    protected synchronized Map<String, Object> updatedRepertoire(RepertoireConfigService config) {
+    protected synchronized void updatedRepertoire(RepertoireConfigService config) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(tc, "Updating repertoire: " + config.getAlias());
         }
         Map<String, Object> properties = config.getProperties();
         repertoirePropertiesMap.put((String) properties.get(LibertyConstants.KEY_ID), properties);
         repertoirePIDMap.put(config.getPID(), config.getAlias());
-        Map<String, Object> ret = addKeyStores(true, config.getKeyStore(), config.getTrustStore());
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
-            Tr.event(tc, "updatedRepertoire return: " + ret);
-        }
-        return ret;
+        addKeyStores(true, config.getKeyStore(), config.getTrustStore());
+
     }
 
     /**
@@ -279,18 +248,15 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
      *
      * @param config RepertoireConfigService
      */
-    protected synchronized Map<String, Object> unsetRepertoire(RepertoireConfigService config) {
+    protected synchronized void unsetRepertoire(RepertoireConfigService config) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(tc, "Removing repertoire: " + config.getAlias());
         }
         repertoireMap.remove(config.getAlias());
         repertoirePIDMap.remove(config.getPID());
         repertoirePropertiesMap.remove(config.getAlias());
-        Map<String, Object> ret = processConfig(repertoirePropertiesMap.remove(config.getAlias()) != null);
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
-            Tr.event(tc, "unsetRepertoire return: " + ret);
-        }
-        return ret;
+        processConfig(repertoirePropertiesMap.remove(config.getAlias()) != null);
+
     }
 
     /**
@@ -332,12 +298,12 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
      *
      * @param properties
      */
-    private Map<String, Object> processConfig(boolean updateSSLConfigManager) {
-        if (!activated) {
+    private synchronized void processConfig(boolean updateSSLConfigManager) {
+        if (componentContext == null) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "Not yet activated, can not process config");
             }
-            return null;
+            return;
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(tc, "Processing configuration");
@@ -345,7 +311,7 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
 
         boolean isServer = locSvc.resolveString(WsLocationConstants.SYMBOL_PROCESS_TYPE).equals(WsLocationConstants.LOC_PROCESS_TYPE_SERVER);
 
-        Map<String, Object> serviceProps = new HashMap<String, Object>(config);
+        Dictionary<String, Object> serviceProps = new Hashtable<String, Object>(config);
         serviceProps.put(REPERTOIRE_IDS, repertoireMap.keySet().toArray(new String[repertoireMap.size()]));
         serviceProps.put(KEYSTORE_IDS, keystoreIdMap.keySet().toArray(new String[keystoreIdMap.size()]));
         serviceProps.put(REPERTOIRE_PIDS, repertoirePIDMap.keySet().toArray(new String[repertoirePIDMap.size()]));
@@ -368,7 +334,8 @@ public class SSLComponent extends GenericSSLConfigService implements SSLSupportO
         if (!repertoireMap.isEmpty() && !keystoreIdMap.isEmpty()) {
             serviceProps.put(SSL_SUPPORT_KEY, SSL_SUPPORT_VALUE_ACTIVE);
         }
-        return serviceProps;
+
+        this.componentContext.setServiceProperties(serviceProps);
     }
 
     /**

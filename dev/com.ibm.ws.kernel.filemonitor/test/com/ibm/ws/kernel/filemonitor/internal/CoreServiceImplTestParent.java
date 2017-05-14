@@ -54,13 +54,13 @@ import org.junit.runners.model.Statement;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 
-import test.common.SharedOutputManager;
-import test.utils.TestUtils;
-
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.wsspi.kernel.filemonitor.FileMonitor;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
+
+import test.common.SharedOutputManager;
+import test.utils.TestUtils;
 
 /**
  * Higher level tests which test that the core service drives its injected FileMonitors appropriately
@@ -85,7 +85,8 @@ public abstract class CoreServiceImplTestParent {
     private enum ChangeType {
         CREATE(0, "created"),
         MODIFY(1, "modified"),
-        DELETE(2, "deleted");
+        DELETE(2, "deleted"),
+        NOCHANGE(3, "no change");
 
         private final int position;
         private final String description;
@@ -220,8 +221,7 @@ public abstract class CoreServiceImplTestParent {
 
         assertEqualsOrderless("The wrong files were given as a baseline.", expectedBaselineFiles, initFiles.get(0));
 
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.CREATE) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.CREATE) {
 
             // callback method for creating the directory and file
             @Override
@@ -248,9 +248,6 @@ public abstract class CoreServiceImplTestParent {
 
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
-
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
 
         modifyFilesAndAssert(mockFileMonitor, file);
     }
@@ -299,9 +296,6 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
         modifyFilesAndAssert(mockFileMonitor, firstFile, thirdFile);
     }
 
@@ -317,11 +311,7 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.CREATE) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.CREATE) {
 
             // callback method for creating the file
             @Override
@@ -347,9 +337,6 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
         // Yes modify, not created.  We're testing modifying a file just created
         modifyFilesAndAssert(mockFileMonitor, file);
     }
@@ -363,10 +350,7 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
-        deleteFilesAndAssert(mockFileMonitor, file);
+        deleteFilesAndAssertDeleted(mockFileMonitor, file);
     }
 
     /**
@@ -384,16 +368,12 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
         // Rename the file, which we hope will preserve timestamps
         final File newFile = new File(file.getAbsolutePath() + ".renamed");
 
         // Wait for the monitor to notice our file gets deleted by doing an assertion
 
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.DELETE) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.DELETE) {
 
             // callback method for deleting the file
             @Override
@@ -403,8 +383,7 @@ public abstract class CoreServiceImplTestParent {
             }
         };
 
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.CREATE) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.CREATE) {
 
             // callback method to restore the original file
             @Override
@@ -432,8 +411,7 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.CREATE) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.CREATE) {
 
             // callback method to create and modify the file
             @Override
@@ -456,7 +434,7 @@ public abstract class CoreServiceImplTestParent {
     @Test
     public void testFileCreationThenDeletionCountsAsNothing() throws Exception {
 
-        File file = createFile();
+        final File file = createFile();
         // Delete the file we just created so it doesn't exist :)
         deleteFile(file);
 
@@ -465,13 +443,18 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Now that we're being watched, create a file ...
-        file.createNewFile();
-        waitForChangeToGetNoticedButNotNotified();
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.NOCHANGE) {
 
-        deleteFile(file);
+            // callback method to create and modify the file
+            @Override
+            public void doCrud() throws IOException, InterruptedException {
 
-        assertNoNotification(mockFileMonitor);
+                file.createNewFile(); // Now that we're being watched, create a file ...
+                waitForChangeToGetNoticedButNotNotified();
+                deleteFile(file);
+                // not adding anything to expectedFile List since we expect no notification
+            }
+        };
     }
 
     @Test
@@ -479,21 +462,40 @@ public abstract class CoreServiceImplTestParent {
 
         final File file = createFile();
 
+        Thread.sleep(500); // Need to let the time stamp on the file age a bit.
+
         addFileToPropsForMonitoring(props, file);
 
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.MODIFY) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.MODIFY) {
 
             // callback method to create the file
             @Override
             public void doCrud() throws IOException, InterruptedException {
 
+                // Deleting and recreating should just change the time stamp of the file.
+                // However, if we don't wait long enough between the original createFile
+                // above, and the createNewFile() below, then the time stamp might not change.
+                // In that case, the test case would time out waiting for the file
+                // to be modified. It times out because nothing actually changed.
+                // But you can't put all of that delay after the delete because the monitor
+                // might detect the delete, and that will fail the test case.
+                // So there is a delay added above right after the original file is created,
+                // and there is also the delay in activate core service and then a small delay
+                // after the delete.
+                // I do not understand why any delay needs to be after the delete, but the
+                // other test cases are set up that way, and I am keeping it the same in case
+                // there is some reason the delay is needed there.
+                // For this test case, total delays need to add up to about a second.
+                // If the test continues to fail intermittently, I think it should just be removed.
                 deleteFile(file);
                 waitForChangeToGetNoticedButNotNotified();
-                file.createNewFile();
+
+                // Check that the file actually gets created
+                boolean created = file.createNewFile();
+                assertTrue("Problem with test code.  Test code not able to create the file [" + file.getAbsolutePath() + "]", created);
                 expectedFileList.add(file);
             }
         };
@@ -509,8 +511,7 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.DELETE) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.DELETE) {
 
             // callback method to modify and delete the file
             @Override
@@ -534,8 +535,7 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.MODIFY) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.MODIFY) {
 
             // callback method to modify the file
             @Override
@@ -651,11 +651,8 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
         // We should get told the directory got deleted
-        deleteFilesAndAssert(mockFileMonitor, dir);
+        deleteFilesAndAssertDeleted(mockFileMonitor, dir);
     }
 
     @Test
@@ -670,17 +667,11 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
-        // If we delete files inside the directory, we should obviously still be told about them being deleted
-        deleteFilesAndAssert(mockFileMonitor, file);
-
-        // What happens if the directory itself is deleted?
-        deleteFile(dir);
+        // If we delete files inside the directory, we should still be told about them being deleted
+        deleteFilesAndAssertDeleted(mockFileMonitor, file);
 
         // We're not monitoring the directory itself, so we shouldn't get any notifications
-        assertNoNotification(mockFileMonitor);
+        deleteFilesAndAssertNoChange(mockFileMonitor, dir);
     }
 
     @Test
@@ -693,9 +684,6 @@ public abstract class CoreServiceImplTestParent {
 
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
-
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
 
         modifyFilesAndAssert(mockFileMonitor, file);
     }
@@ -715,12 +703,8 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
         // We should get told about both the directory and the file being created
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.CREATE) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.CREATE) {
 
             // callback method to make the directory and create the file
             @Override
@@ -750,9 +734,6 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
         // We should get told about the directory which didn't exist when the monitor started
         createFilesAndAssert(mockFileMonitor, FILE_TYPE.DIRECTORY, dir);
 
@@ -775,11 +756,7 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.MODIFY) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.MODIFY) {
 
             // callback method to modify the files
             @Override
@@ -795,9 +772,9 @@ public abstract class CoreServiceImplTestParent {
     @Test
     public void testFileMonitorIsNotNotifiedOfDeletionOfDirectoryUsingFileOnlyFilter() throws Exception {
 
-        File dir = createDirectory();
+        final File dir = createDirectory();
         final File file = createFile(dir);
-        File childDir = createDirectory(dir);
+        final File childDir = createDirectory(dir);
 
         addDirToPropsForMonitoring(props, dir);
         props.put(FileMonitor.MONITOR_FILTER, FileMonitor.MONITOR_FILTER_FILES_ONLY);
@@ -805,22 +782,18 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
-        // If we delete files inside the directory, we should obviously still be told about them being deleted
-        deleteFilesAndAssert(mockFileMonitor, file);
+        // If we delete files inside the directory, we should still be told about them being deleted
+        deleteFilesAndAssertDeleted(mockFileMonitor, file);
 
         // We shouldn't get notified if we delete the child directory, because of our filter
-        deleteFile(childDir);
-        assertNoNotification(mockFileMonitor);
+        deleteFilesAndAssertNoChange(mockFileMonitor, childDir);
     }
 
     @Test
     public void testFileMonitorIsNotNotifiedOfDeletionOfFileUsingDirectoryOnlyFilter() throws Exception {
 
-        File dir = createDirectory();
-        File file = createFile(dir);
+        final File dir = createDirectory();
+        final File file = createFile(dir);
         final File childDir = createDirectory(dir);
 
         addDirToPropsForMonitoring(props, dir);
@@ -829,15 +802,11 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
         // If we delete directories inside the directory, we should be told about them being deleted
-        deleteFilesAndAssert(mockFileMonitor, childDir);
+        deleteFilesAndAssertDeleted(mockFileMonitor, childDir);
 
         // If we delete files inside the directory, we shouldn't get told
-        deleteFile(file);
-        assertNoNotification(mockFileMonitor);
+        deleteFilesAndAssertNoChange(mockFileMonitor, file);
     }
 
     @Test
@@ -853,12 +822,8 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
         // If we delete files inside the child directory, we shouldn't get told
-        deleteFile(grandChildFile);
-        assertNoNotification(mockFileMonitor);
+        deleteFilesAndAssertNoChange(mockFileMonitor, grandChildFile);
     }
 
     @Test
@@ -875,33 +840,8 @@ public abstract class CoreServiceImplTestParent {
         FileMonitor mockFileMonitor = registerFileMonitor(props);
         activateCoreService();
 
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
         // If we delete files inside the child directory, we better get told
-        deleteFilesAndAssert(mockFileMonitor, childFile, grandChildFile);
-    }
-
-    @Test
-    public void testFileMonitorIsNotNotifiedOfDeletionOfFileInsideChildDirectoryWithoutRecursion() throws Exception {
-
-        final File dir = createDirectory();
-        createFile(dir);
-        final File childDir = createDirectory(dir);
-        final File grandChildFile = createFile(childDir);
-
-        props.put(FileMonitor.MONITOR_RECURSE, false);
-        addDirToPropsForMonitoring(props, dir);
-
-        FileMonitor mockFileMonitor = registerFileMonitor(props);
-        activateCoreService();
-
-        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
-        waitForMonitorsToStabilise();
-
-        // If we delete files inside the child directory, we better not get told
-        deleteFile(grandChildFile);
-        assertNoNotification(mockFileMonitor);
+        deleteFilesAndAssertDeleted(mockFileMonitor, childFile, grandChildFile);
     }
 
     private Map<String, Object> generateDefaultProperties() {
@@ -970,7 +910,7 @@ public abstract class CoreServiceImplTestParent {
     }
 
     private void waitForChangeToGetNoticedButNotNotified() throws InterruptedException {
-        // Wait long enough for the creation to get noticed, but not so long the monitor gets notified
+        // Wait long enough for the change to get noticed, but not so long the monitor gets notified
         Thread.sleep(timeInterval + MonitorHolder.TIME_TO_WAIT_FOR_COPY_TO_COMPLETE);
     }
 
@@ -1079,6 +1019,8 @@ public abstract class CoreServiceImplTestParent {
     protected void activateCoreService() throws Exception {
         coreService.activate(mockComponentContext, null);
 
+        // Wait for everything to get initialized before changing anything, to make sure our change gets noticed
+        waitForMonitorsToStabilise();
     }
 
     protected FileMonitor registerFileMonitor(final Map<String, Object> props) {
@@ -1178,8 +1120,7 @@ public abstract class CoreServiceImplTestParent {
                                       final FILE_TYPE fileType,
                                       final File... files) throws IOException, InterruptedException {
 
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.CREATE) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.CREATE) {
 
             // callback method to create the files or directories
             @Override
@@ -1208,11 +1149,10 @@ public abstract class CoreServiceImplTestParent {
      * @throws IOException
      * @throws InterruptedException
      */
-    private void deleteFilesAndAssert(final FileMonitor mockFileMonitor,
-                                      final File... files) throws IOException, InterruptedException {
+    private void deleteFilesAndAssertDeleted(final FileMonitor mockFileMonitor,
+                                             final File... files) throws IOException, InterruptedException {
 
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.DELETE) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.DELETE) {
 
             // callback method to delete the files
             @Override
@@ -1221,6 +1161,37 @@ public abstract class CoreServiceImplTestParent {
                 for (File file : files) {
                     deleteFile(file);
                     expectedFileList.add(file);
+                }
+            }
+        };
+    }
+
+    /**
+     * Accepts a list of either files or directories. One or the other; not both.
+     * It uses a CrudDetectionVerifier to delete the files or directories and
+     * to verify that no change is detected.
+     *
+     * For use when the delete should not be noticed; i.e. when a filter is applied.
+     *
+     * @param mockFileMonitor
+     * @param files
+     *
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    private void deleteFilesAndAssertNoChange(final FileMonitor mockFileMonitor,
+                                              final File... files) throws IOException, InterruptedException {
+
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.NOCHANGE) {
+
+            // callback method to delete the files
+            @Override
+            public void doCrud() throws IOException, InterruptedException {
+
+                for (File file : files) {
+                    deleteFile(file);
+                    // Not expecting a change to be detected so don't add
+                    //expectedFileList.add(file);
                 }
             }
         };
@@ -1279,6 +1250,12 @@ public abstract class CoreServiceImplTestParent {
      * It uses a CrudDetectionVerifier to modify the files or directories and
      * to verify the mock file monitor picked up the changes.
      *
+     * This method assumes that the caller has already done some setup:
+     * For example:
+     * addFileToPropsForMonitoring(props, file);
+     * FileMonitor mockFileMonitor = registerFileMonitor(props);
+     * activateCoreService();
+     *
      * @param mockFileMonitor - JMock of FileMonitor
      * @param files - files to monitor (can handle multiple files, but normally just one is passed)
      *
@@ -1288,8 +1265,7 @@ public abstract class CoreServiceImplTestParent {
     private void modifyFilesAndAssert(final FileMonitor mockFileMonitor,
                                       final File... files) throws IOException, InterruptedException {
 
-        new CrudDetectionVerifier(mockFileMonitor,
-                                  ChangeType.MODIFY) {
+        new CrudDetectionVerifier(mockFileMonitor, ChangeType.MODIFY) {
 
             // callback method to modify the files
             @Override
@@ -1301,40 +1277,6 @@ public abstract class CoreServiceImplTestParent {
                 }
             }
         };
-    }
-
-    /**
-     * Tests that nothing get notified. Normally in JMock that would just mean adding
-     * no expectations, but this doesn't work here. If the mock of scanComplete gets called
-     * unexpectedly, JMock throws an AssertionError. However, it's not the test who sees
-     * the error, it's either the MonitorHolder or the ScheduledExecutorService. Therefore
-     * we need to allow the invocation but fail if it happens.
-     *
-     * BE AWARE: JMock expectations hang around indefinitely and can't be cleared, so this method can't be used
-     * within a single test method before
-     * assertDeleted() or assertCreated() or assertModified() without breaking the second assertion
-     * with an inexplicable failure
-     * (or worse yet, causing broken code to pass the tests nicely).
-     *
-     * @throws InterruptedException
-     */
-    @SuppressWarnings("unchecked")
-    private void assertNoNotification(final FileMonitor mockFileMonitor) throws InterruptedException {
-        // Let the call happen if it's going to ...
-        final List<Collection<File>> parameters = new ArrayList<Collection<File>>();
-        context.checking(new Expectations() {
-            {
-                // Use allowing, not one of, since in the ideal case no call happens
-                allowing(mockFileMonitor).onChange(with(any(Collection.class)), with(any(Collection.class)), with(any(Collection.class)));
-                will(grabParameters(parameters));
-            }
-        });
-        waitForNotification();
-        context.assertIsSatisfied();
-        // Now we should be able to collect the parameters, which better be empty
-        // The number of parameters will be proportional to the number of types of events we expect
-        int numberOfInvocations = parameters.size() / ChangeType.values().length;
-        assertEquals("The file monitor was invoked when it shouldn't have been.", 0, numberOfInvocations);
     }
 
     /**
@@ -1350,7 +1292,8 @@ public abstract class CoreServiceImplTestParent {
      * system there because this class has no idea what changes the test needs
      * to make to the file system. So the test needs to make the file changes (Create,
      * Update, or Delete or some combination of those), and then tell us what to expect
-     * by adding files to the "expectedFileList".
+     * by adding files to the "expectedFileList" and passing in the "ChangeType" on the
+     * constructor.
      *
      * The assertCreated & assertDeleted methods should not need to be overridden.
      */
@@ -1387,8 +1330,10 @@ public abstract class CoreServiceImplTestParent {
         final States stateMachine = context.states("stateMachine").startsAs("notDone");
 
         /**
-         * Constructor - Basically, you just create a CrudDetectionVerify, and it does it all.
-         * 1. It creates the expectations for the file mock monitor.
+         * Constructor - Basically, you just create a CrudDetectionVerifier, and it does everything
+         * but the file system manipulation. The test case has to override to the doCrud() method
+         * manipulate the file system.
+         * 1. It creates the "expectations" for the file mock monitor.
          * 2. Calls the doCrud() method which is test-case specific.
          * 3. Waits for notification from JMock that the scanner had called the on change
          * method. We get the parameters back from that.
@@ -1404,7 +1349,11 @@ public abstract class CoreServiceImplTestParent {
 
             this.changeType = changeType;
             this.mockFileMonitor = mockFileMonitor;
-            setExpectationsModifyAndWait();
+            if (ChangeType.NOCHANGE == changeType) {
+                setNullExpectationsModifyAndWait();
+            } else {
+                setExpectationsModifyAndWait();
+            }
             assertExpectationsMet();
         }
 
@@ -1428,6 +1377,8 @@ public abstract class CoreServiceImplTestParent {
                 assertModified(parameters);
             } else if (changeType == ChangeType.DELETE) {
                 assertDeleted(parameters);
+            } else if (changeType == ChangeType.NOCHANGE) {
+                assertNoChange(parameters);
             } else {
                 throw new RuntimeException("Invalid changeType [" + changeType + "] passed to doCrudAndVerify() ");
             }
@@ -1475,6 +1426,61 @@ public abstract class CoreServiceImplTestParent {
         }
 
         /**
+         * Verifies that no change occurred.
+         *
+         * @param collectedListOfFiles
+         */
+        public void assertNoChange(List<Collection<File>> collectedListOfFiles) {
+            assertNone(collectedListOfFiles, ChangeType.CREATE);
+            assertNone(collectedListOfFiles, ChangeType.MODIFY);
+            assertNone(collectedListOfFiles, ChangeType.DELETE);
+        }
+
+        private void setNullExpectationsModifyAndWait() throws InterruptedException, IOException {
+            // Let the call happen if it's going to ...
+            final List<Collection<File>> parameters = new ArrayList<Collection<File>>();
+            context.checking(new Expectations() {
+                {
+                    // Use allowing, not "one of", since we are not actually expecting onChange to be called
+                    allowing(mockFileMonitor).onChange(with(any(Collection.class)), with(any(Collection.class)), with(any(Collection.class)));
+                    will(grabParameters(parameters));
+                }
+            });
+
+            doCrud();
+
+            // We are expecting nothing to happen.  So there is no event to wait for.
+            // Just wait a "reasonable" amount of time.
+            waitForNotification();
+
+            // This assertion probably isn't necessary.  It just checks that the JMock expectations were met,
+            // but all we set was an "allowing onChange".  The real checks are performed below and by the caller.
+            context.assertIsSatisfied();
+
+            // Now we should be able to collect the parameters, which better be empty
+            int parametersSize = parameters.size() / ChangeType.values().length;
+            assertEquals("The file monitor was invoked when it shouldn't have been.", 0, parametersSize);
+
+            // Debug:  Display the parameters to see what unexpected change occurred
+            if (parametersSize > 0) {
+                String[] labels = { "Created", "Modified", "Deleted" };
+                int i = 0;
+                for (Collection<File> listOfFiles : parameters) {
+                    if (i < labels.length) {
+                        System.out.println(labels[i]);
+                    } else {
+                        System.out.println("!!! Unexpected number of parameters !!!");
+                    }
+                    i++;
+
+                    for (File file : listOfFiles) {
+                        System.out.println(file.getAbsolutePath());
+                    }
+                }
+            }
+        }
+
+        /**
          *
          * @return
          * @throws InterruptedException
@@ -1483,8 +1489,8 @@ public abstract class CoreServiceImplTestParent {
         @SuppressWarnings("unchecked")
         public List<Collection<File>> setExpectationsModifyAndWait() throws InterruptedException, IOException {
 
-            // 1. Begin with the state machine in the not done state.
-            // 2. Expect the mock file monitor's onChange method to be called.
+            // 1. Begin with the state machine in the "notDone" state.
+            // 2. Set expectation for the mock file monitor's onChange method to be called.
             // 3. When that happens, JMock will set the state to done.
             // 4. grabParameters will capture the parameters that were passed to the onChange
             //    method and store them in the member variable "parameters"
@@ -1497,21 +1503,26 @@ public abstract class CoreServiceImplTestParent {
                 }
             });
 
-            // create, modify or update files
+            // Expectations are set.  Now create, modify or update files
             doCrud();
 
             // Wait for notification and check results
             synchroniser.waitUntil(stateMachine.is("done"), TIME_OUT);
-            context.assertIsSatisfied(); // asserts all JMock expectations have been met, but
-                                         // doesn't verify the expected parameter values.
+            context.assertIsSatisfied(); // asserts all JMock expectations have been met,
+                                         // but doesn't verify the expected parameter values.
+                                         // Caller must do that.
             return parameters;
         }
     }
 
     private void assertNone(final List<Collection<File>> parameters, ChangeType changeType) {
-        Collection<File> collection = parameters.get(changeType.position);
-        assertTrue("The following files were unexpectedly reported as " + changeType + ": " + collection,
-                   collection.isEmpty());
+        if (parameters.size() > 0) {
+            Collection<File> collection = parameters.get(changeType.position);
+            assertTrue("The following files were unexpectedly reported as " + changeType + ": " + collection,
+                       collection.isEmpty());
+        } else {
+            // No changes of any type.
+        }
     }
 
     /**
@@ -1551,7 +1562,7 @@ public abstract class CoreServiceImplTestParent {
 
     private void deleteFile(File file) throws IOException {
         file.delete();
-        assertFalse("Could not delete " + file, file.exists());
+        assertFalse("Problem with test code. Could not delete " + file, file.exists());
     }
 
     private File createDirectory() throws IOException {
@@ -1592,7 +1603,7 @@ public abstract class CoreServiceImplTestParent {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.hamcrest.SelfDescribing#describeTo(org.hamcrest.Description)
          */
         @Override
@@ -1602,7 +1613,7 @@ public abstract class CoreServiceImplTestParent {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.jmock.api.Invokable#invoke(org.jmock.api.Invocation)
          */
         @SuppressWarnings("unchecked")

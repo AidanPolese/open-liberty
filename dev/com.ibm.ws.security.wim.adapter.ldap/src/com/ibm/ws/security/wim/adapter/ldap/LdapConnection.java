@@ -1542,13 +1542,7 @@ public class LdapConnection {
                     count = 0;
                     while (clone2.hasMore()) {
                         SearchResult result = clone2.nextElement();
-                        String name = result.getName();
-                        String dnKey = "";
-                        if (name == null || name.trim().length() == 0)
-                            dnKey = searchBase;
-                        else
-                            dnKey = name + "," + searchBase;
-
+                        String dnKey = LdapHelper.prepareDN(result.getName(), searchBase);
                         Object cached = getAttributesCache().get(dnKey);
                         Attributes cachedAttrs = null;
                         if (cached != null && cached instanceof Attributes) {

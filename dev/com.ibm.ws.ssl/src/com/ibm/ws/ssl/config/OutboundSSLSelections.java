@@ -23,6 +23,7 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ssl.Constants;
 import com.ibm.websphere.ssl.SSLConfig;
 import com.ibm.ws.config.xml.internal.nester.Nester;
+import com.ibm.ws.ssl.internal.LibertyConstants;
 
 /**
  * OutboundSSLSelections
@@ -33,6 +34,8 @@ import com.ibm.ws.config.xml.internal.nester.Nester;
  */
 public class OutboundSSLSelections {
     private static final TraceComponent tc = Tr.register(OutboundSSLSelections.class, "SSL", "com.ibm.ws.ssl.resources.ssl");
+
+    private static boolean warningIssued = false;
 
     // used to hold SSL configurations and outbound connection info
     private final Map<String, String> dynamicHostPortSelections = new HashMap<String, String>();
@@ -111,6 +114,12 @@ public class OutboundSSLSelections {
                         dynamicHostPortSelections.put(key, sslCfgAlias);
                     }
                 } else {
+                    // special check for host "*" and port "*"
+                    if (host.equals("*")) {
+                        if (!warningIssued && isDefaultOutboundRefSet(sslCfgAlias))
+                            continue;
+                    }
+
                     key = host + ",*";
                     if (dynamicHostSelections.containsKey(key)) {
                         if (!dynamicHostSelections.get(key).equals(sslCfgAlias))
@@ -136,6 +145,24 @@ public class OutboundSSLSelections {
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
             Tr.exit(tc, "loadOutboundConnectionInfo");
+    }
+
+    /**
+     * @param sslCfgAlias
+     * @return
+     */
+    private boolean isDefaultOutboundRefSet(String sslCfgAlias) {
+
+        // Need to see if outboundSSLRef is set
+        String defaultOutboundAlias = SSLConfigManager.getInstance().getGlobalProperty(LibertyConstants.SSLPROP_OUTBOUND_DEFAULT_ALIAS);
+        if (defaultOutboundAlias != null) {
+            Tr.warning(tc, "ssl.defaultOutbound.conflict.CWPKI0816W", sslCfgAlias, defaultOutboundAlias);
+            warningIssued = true;
+            return true;
+        }
+
+        // outbound default not set
+        return false;
     }
 
     /**
@@ -273,6 +300,9 @@ public class OutboundSSLSelections {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
             Tr.entry(tc, "lookForMatchInList", new Object[] { remoteHost, remotePort });
 
+        String sslCfgAlias = null;
+        String domainMatch = null;
+
         /***
          * Look through all of the SSLConfigs in this list which all contain a
          * property with values for com.ibm.ssl.dynamicSelectionInfo.
@@ -281,6 +311,8 @@ public class OutboundSSLSelections {
         for (String dynamicSelectionInfo : selectionList.keySet()) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(tc, "SSLConfig dynamic selection info: " + dynamicSelectionInfo);
+
+            boolean domainCheck = false;
 
             /***
              * Split the dynamic selection info into separate entries for
@@ -303,6 +335,9 @@ public class OutboundSSLSelections {
                 String host = dynamicSelectionAttributes[0];
                 String port = dynamicSelectionAttributes[1];
 
+                if (host.startsWith("*."))
+                    domainCheck = true;
+
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                     Tr.debug(tc, "Host: " + host + ", Port: " + port);
 
@@ -313,18 +348,7 @@ public class OutboundSSLSelections {
                 }
 
                 /***
-                 * The host must be a valid value in order to continue evaluation.
-                 ***/
-
-                if (!host.equals("*") && (remoteHost == null || !doesHostMatch(host, remoteHost))) {
-                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                        Tr.debug(tc, "Host does not match.");
-                    continue;
-                }
-
-                /***
-                 * The port is similar to the protocol in that it may be * but
-                 * otherwise must be an exact match.
+                 * The port will either be "*" or an exact match.
                  ***/
                 if (!port.equals("*") && (remotePort == null || !doesPortMatch(port, remotePort))) {
                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
@@ -333,24 +357,50 @@ public class OutboundSSLSelections {
                 }
 
                 /***
-                 * Cache the connectionInfo / SSLConfig association for later use.
+                 * The host must be a valid value in order to continue evaluation.
+                 * Checks for domain matches takes place here too
                  ***/
 
-                String sslCfgAlias = selectionList.get(dynamicSelectionInfo);
-
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                    Tr.debug(tc, "Found a dynamic selection match! with ssl configuration: " + sslCfgAlias);
-
-                SSLConfig config = getSSLConfigForAlias(sslCfgAlias);
-
-                if (config != null) {
-                    if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
-                        Tr.exit(tc, "lookForMatchInList", config);
-                    return config;
+                if (domainCheck) {
+                    // If we get a match on the domain then want to keep going to see if there is another
+                    if ((remoteHost == null || !doesHostDomainMatch(host, remoteHost))) {
+                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                            Tr.debug(tc, "Host does not match.");
+                        continue;
+                    }
+                    if ((domainMatch == null) || (domainMatch != null) && host.length() > domainMatch.length()) {
+                        sslCfgAlias = selectionList.get(dynamicSelectionInfo);
+                        domainMatch = host;
+                        continue;
+                    }
+                } else {
+                    if (!host.equals("*") && (remoteHost == null || !doesHostMatch(host, remoteHost))) {
+                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                            Tr.debug(tc, "Host does not match.");
+                        continue;
+                    }
+                    // If we get this far there is host exact match and port match
+                    sslCfgAlias = selectionList.get(dynamicSelectionInfo);
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                        Tr.debug(tc, "Exact match on the host so this config is selected: " + sslCfgAlias);
+                    break;
                 }
-                continue;
             }
         }
+
+        if (sslCfgAlias != null) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                Tr.debug(tc, "Found a dynamic selection match! with ssl configuration: " + sslCfgAlias);
+
+            SSLConfig config = getSSLConfigForAlias(sslCfgAlias);
+
+            if (config != null) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
+                    Tr.exit(tc, "lookForMatchInList", config);
+                return config;
+            }
+        }
+
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
             Tr.debug(tc, "No match found list");
 
@@ -414,6 +464,12 @@ public class OutboundSSLSelections {
 
         if (remoteHost.equalsIgnoreCase(connectionObjHost))
             match = true;
+
+        return match;
+    }
+
+    private boolean doesHostDomainMatch(String connectionObjHost, String remoteHost) {
+        boolean match = false;
 
         // see if we need to do a domain match
         if (connectionObjHost.startsWith("*.")) {

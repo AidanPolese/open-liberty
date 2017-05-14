@@ -51,3 +51,7 @@ invalidIntegerArray.useraction=Stellen Sie sicher, dass der in der Serverkonfigu
 invalidDuration=CWWKE0107W: Der angegebene Parameter stellt keinen g\u00fcltigen Dauerwert dar. {1}={2} f\u00fcr {0}
 invalidDuration.explanation=Der Wert f\u00fcr den angegebenen Konfigurationsparameter wurde nicht bzw. konnte nicht in einen Dauerwert konvertiert werden.
 invalidDuration.useraction=Stellen Sie sicher, dass der in der Serverkonfiguration angegebene Wert eine g\u00fcltige Darstellung eines Dauerwerts ist.
+
+#
+# W A R N I N G:   Do not use CWWKE0108 - CCWKE0109 they are currently in use LauncherMessages.nlsprops
+#

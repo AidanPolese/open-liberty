@@ -80,7 +80,7 @@ Subsystem-Content: com.ibm.websphere.appserver.jndi-1.0; type="osgi.subsystem.fe
  com.ibm.websphere.appserver.beanValidation-1.0; ibm.tolerates:="1.1"; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.jpaApiStub-2.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.servlet-3.0; ibm.tolerates:="3.1"; type="osgi.subsystem.feature",
- com.ibm.websphere.appserver.jdbc-4.0; ibm.tolerates:="4.1"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jdbc-4.0; ibm.tolerates:="4.1, 4.2"; type="osgi.subsystem.feature",
  com.ibm.ws.jpa.container; version="[1.0.0,1.0.200)",
  com.ibm.ws.jpa; version="[1.2.0,1.2.200)",
  com.ibm.ws.org.apache.commons.lang.2.4; version="[1.0.0,1.0.200)",

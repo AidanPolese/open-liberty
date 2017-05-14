@@ -17,10 +17,9 @@ import java.lang.reflect.Type;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
-import com.ibm.ejs.ras.TraceNLS;
 import com.ibm.ejs.util.Util;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**
@@ -31,11 +30,9 @@ import com.ibm.ws.ffdc.FFDCFilter;
 public abstract class InjectionTarget {
     private static final String CLASS_NAME = InjectionTarget.class.getName();
 
-    private static final TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(InjectionTarget.class,
                                                          InjectionConfigConstants.traceString,
                                                          InjectionConfigConstants.messageFile);
-
-    private static final TraceNLS traceNLS = TraceNLS.getTraceNLS(InjectionConfigConstants.messageFile);
 
     protected InjectionBinding<?> ivInjectionBinding;
 
@@ -117,12 +114,11 @@ public abstract class InjectionTarget {
         {
             FFDCFilter.processException(ex, CLASS_NAME + ".inject", "140", this,
                                         new Object[] { objectToInject, targetContext, injectedObject, ivInjectionBinding });
-
-            String msg = traceNLS.getFormattedMessage("INCOMPATIBLE_INJECTED_OBJECT_TYPE_CWNEN0074E",
-                                                      new Object[] { injectedObject.getClass().getName(),
-                                                                     ivInjectionBinding.getDisplayName(),
-                                                                     getMember() },
-                                                      null);
+            String msg = Tr.formatMessage(tc,
+                                          "INCOMPATIBLE_INJECTED_OBJECT_TYPE_CWNEN0074E",
+                                          injectedObject.getClass().getName(),
+                                          ivInjectionBinding.getDisplayName(),
+                                          getMember());
             InjectionException targetEx = new InjectionException(msg, ex);
             if (isTraceOn && tc.isEntryEnabled()) {
                 final Class<?>[] types = getInjectionClassTypes();
@@ -202,7 +198,7 @@ public abstract class InjectionTarget {
             InjectionException iex = new InjectionException("The injection engine encountered an error injecting " +
                                                             name + " into " + getMember() + ": " + targetEx, targetEx);
             Tr.error(tc, "INJECTION_FAILED_CWNEN0028E",
-                     new Object[] { name, getMember(), targetEx.getMessage() });
+                     name, getMember(), targetEx.getMessage());
             if (isTraceOn && tc.isEntryEnabled())
                 Tr.exit(tc, "inject : " + targetEx);
             throw iex;

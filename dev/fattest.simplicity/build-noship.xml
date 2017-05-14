@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="fattest.simplicity" default="localbuild" basedir=".">
-	
-  <!-- Ensure we do NOT try to use global bundle micro version for test assets --> 
-  <property name="use.global.micro" value="false"/> 
+
+  <!-- Ensure we do NOT try to use global bundle micro version for test assets -->
+  <property name="use.global.micro" value="false"/>
   <property name="skip.findbugs" value="true"/>
   <!-- The source for this project lives in src, not fat/src -->
   <property name="src.dir" location="${basedir}/src" />
@@ -10,25 +10,39 @@
   <import file="../test_build/build-common.xml" />
 
   <target name="localbuild" depends="build" />
-  
+
   <target name="post-compile">
     <mkdir dir="${fat.bootstrap.path}" />
     <copy todir="${fat.bootstrap.path}">
       <fileset dir="${basedir}/../test_prereqs/defaults" />
     </copy>
 
-    <jar destfile="${lib.dir}/fattest.encoder.jar" basedir="${basedir}/../com.ibm.ws.common.encoder/build/classes"/>
+    <iff>
+      <available file="${basedir}/../com.ibm.ws.common.encoder/build" />
+      <then>
+        <jar destfile="${lib.dir}/fattest.encoder.jar" basedir="${basedir}/../com.ibm.ws.common.encoder/build/classes"/>
+      </then>
+      <else>
+        <jar destfile="${lib.dir}/fattest.encoder.jar">
+          <archives>
+            <zips>
+              <fileset dir="${basedir}/../prereq.published/lib" includes="com.ibm.ws.common.encoder-*.jar"/>
+            </zips>
+          </archives>
+        </jar>
+      </else>
+    </iff>
   </target>
-    
+
   <target name="clean">
       <delete dir="${build.dir}" />
       <delete dir="${basedir}/autoFVT" />
       <delete file="${basedir}/autoFVT-defaults/simplicity.properties" />
       <delete file="${basedir}/autoFVT-defaults/local.properties" />
   </target>
-  
+
    <!-- This isn't a bundle so needs slightly different packaging (no bnd, no manifest) -->
-   <!-- This section changed so as not to unzip class files from the autoFVT/lib dir.  
+   <!-- This section changed so as not to unzip class files from the autoFVT/lib dir.
         This was leading to errors when re-running a component buildandrun -->
    <target name="package" depends="compile, test.build.common.package">
      <echo message="packaging extras in ${lib.dir}/${ant.project.name}.jar from ${classes.dir}" />

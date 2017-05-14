@@ -18,9 +18,9 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.annotation.Resource.AuthenticationType;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.injectionengine.annotation.ResourceImpl;
 import com.ibm.ws.injectionengine.factory.EnvEntryObjectFactory;
@@ -47,7 +47,7 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
     private static final String CLASS_NAME = ResourceInjectionBinding.class.getName();
 
     private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
+                    (ResourceInjectionBinding.class,
                      InjectionConfigConstants.traceString,
                      InjectionConfigConstants.messageFile);
 
@@ -237,15 +237,15 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
             // Error - conflicting env-entry-value/lookup-name values
             String elementType = "env-entry";
             Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
-                     new Object[] { ivComponent,
-                                   ivModule,
-                                   ivApplication,
-                                   "env-entry-value/lookup-name",
-                                   elementType,
-                                   "env-entry-name",
-                                   getJndiName(),
-                                   ivEnvValue,
-                                   ivLookup });
+                     ivComponent,
+                     ivModule,
+                     ivApplication,
+                     "env-entry-value/lookup-name",
+                     elementType,
+                     "env-entry-name",
+                     getJndiName(),
+                     ivEnvValue,
+                     ivLookup);
             String exMsg = "The " + ivComponent + " bean in the " + ivModule +
                            " module of the " + ivApplication + " application" +
                            " has conflicting configuration data in the XML" +
@@ -365,19 +365,19 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                 else
                 {
                     // Error - conflicting annotation type classes detected
-                    Tr.error(tc, "CONFLICTING_XML_ANNOTATION_VALUES_CWNEN0053E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     ivXMLType.type_element(),
-                     "type",
-                     ivXMLType,
-                     "@Resource",
-                     ivXMLType.name_element(),
-                     "name",
-                     getJndiName(),
-                     currentAnnotation.type().getName(),
-                     annotation.type().getName() }); // d479669
+                    Tr.error(tc, "CONFLICTING_XML_ANNOTATION_VALUES_CWNEN0053E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             ivXMLType.type_element(),
+                             "type",
+                             ivXMLType,
+                             "@Resource",
+                             ivXMLType.name_element(),
+                             "name",
+                             getJndiName(),
+                             currentAnnotation.type().getName(),
+                             annotation.type().getName()); // d479669
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data between" +
@@ -458,19 +458,19 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                     (!(currentAnnotation.type().equals(annotation.type()))))
                 {
                     // Error - conflicting resource type specified
-                    Tr.error(tc, "CONFLICTING_XML_ANNOTATION_VALUES_CWNEN0053E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     ivXMLType.type_element(),
-                     "type",
-                     ivXMLType,
-                     "@Resource",
-                     ivXMLType.name_element(),
-                     "name",
-                     getJndiName(),
-                     currentAnnotation.type().getName(),
-                     annotation.type().getName() }); // d479669
+                    Tr.error(tc, "CONFLICTING_XML_ANNOTATION_VALUES_CWNEN0053E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             ivXMLType.type_element(),
+                             "type",
+                             ivXMLType,
+                             "@Resource",
+                             ivXMLType.name_element(),
+                             "name",
+                             getJndiName(),
+                             currentAnnotation.type().getName(),
+                             annotation.type().getName()); // d479669
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data between" +
@@ -490,19 +490,19 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                     (!(currentAnnotation.authenticationType().equals(annotation.authenticationType()))))
                 {
                     // Error - conflicting Authentication Type specified
-                    Tr.error(tc, "CONFLICTING_XML_ANNOTATION_VALUES_CWNEN0053E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     "res-auth",
-                     "authenticationType",
-                     ivXMLType,
-                     "@Resource",
-                     ivXMLType.name_element(),
-                     "name",
-                     getJndiName(),
-                     currentAnnotation.authenticationType(),
-                     annotation.authenticationType() }); // d479669
+                    Tr.error(tc, "CONFLICTING_XML_ANNOTATION_VALUES_CWNEN0053E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             "res-auth",
+                             "authenticationType",
+                             ivXMLType,
+                             "@Resource",
+                             ivXMLType.name_element(),
+                             "name",
+                             getJndiName(),
+                             currentAnnotation.authenticationType(),
+                             annotation.authenticationType()); // d479669
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data between" +
@@ -523,19 +523,19 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                     (currentAnnotation.shareable() != annotation.shareable()))
                 {
                     // Error - conflicting shareable resource specified
-                    Tr.error(tc, "CONFLICTING_XML_ANNOTATION_VALUES_CWNEN0053E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     "res-sharing-scope",
-                     "shareable",
-                     ivXMLType,
-                     "@Resource",
-                     ivXMLType.name_element(),
-                     "name",
-                     getJndiName(),
-                     currentAnnotation.shareable(),
-                     annotation.shareable() }); // d479669
+                    Tr.error(tc, "CONFLICTING_XML_ANNOTATION_VALUES_CWNEN0053E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             "res-sharing-scope",
+                             "shareable",
+                             ivXMLType,
+                             "@Resource",
+                             ivXMLType.name_element(),
+                             "name",
+                             getJndiName(),
+                             currentAnnotation.shareable(),
+                             annotation.shareable()); // d479669
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data between" +
@@ -556,19 +556,19 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                     (!(currentAnnotation.mappedName().equals(annotation.mappedName()))))
                 {
                     // Error - conflicting mapped name specified
-                    Tr.error(tc, "CONFLICTING_XML_ANNOTATION_VALUES_CWNEN0053E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     "mapped-name",
-                     "mappedName",
-                     ivXMLType,
-                     "@Resource",
-                     ivXMLType.name_element(),
-                     "name",
-                     getJndiName(),
-                     currentAnnotation.mappedName(),
-                     annotation.mappedName() }); // d479669
+                    Tr.error(tc, "CONFLICTING_XML_ANNOTATION_VALUES_CWNEN0053E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             "mapped-name",
+                             "mappedName",
+                             ivXMLType,
+                             "@Resource",
+                             ivXMLType.name_element(),
+                             "name",
+                             getJndiName(),
+                             currentAnnotation.mappedName(),
+                             annotation.mappedName()); // d479669
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data between" +
@@ -592,16 +592,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                 if (!(currentAnnotation.type().equals(annotation.type())))
                 {
                     // Error - conflicting resource type specified
-                    Tr.error(tc, "CONFLICTING_ANNOTATION_VALUES_CWNEN0054E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     "type",
-                     "@Resource",
-                     "name",
-                     getJndiName(),
-                     currentAnnotation.type().getName(),
-                     annotation.type().getName() }); // d479669
+                    Tr.error(tc, "CONFLICTING_ANNOTATION_VALUES_CWNEN0054E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             "type",
+                             "@Resource",
+                             "name",
+                             getJndiName(),
+                             currentAnnotation.type().getName(),
+                             annotation.type().getName()); // d479669
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data" +
@@ -618,16 +618,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                 if (!(currentAnnotation.authenticationType().equals(annotation.authenticationType())))
                 {
                     // Error - conflicting authentication type specified
-                    Tr.error(tc, "CONFLICTING_ANNOTATION_VALUES_CWNEN0054E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     "authenticationType",
-                     "@Resource",
-                     "name",
-                     getJndiName(),
-                     currentAnnotation.authenticationType(),
-                     annotation.authenticationType() }); // d479669
+                    Tr.error(tc, "CONFLICTING_ANNOTATION_VALUES_CWNEN0054E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             "authenticationType",
+                             "@Resource",
+                             "name",
+                             getJndiName(),
+                             currentAnnotation.authenticationType(),
+                             annotation.authenticationType()); // d479669
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data" +
@@ -644,16 +644,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                 if (currentAnnotation.shareable() != annotation.shareable())
                 {
                     // Error - conflicting shareable resource specified
-                    Tr.error(tc, "CONFLICTING_ANNOTATION_VALUES_CWNEN0054E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     "shareable",
-                     "@Resource",
-                     "name",
-                     getJndiName(),
-                     currentAnnotation.shareable(),
-                     annotation.shareable() }); // d479669
+                    Tr.error(tc, "CONFLICTING_ANNOTATION_VALUES_CWNEN0054E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             "shareable",
+                             "@Resource",
+                             "name",
+                             getJndiName(),
+                             currentAnnotation.shareable(),
+                             annotation.shareable()); // d479669
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data" +
@@ -670,16 +670,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                 if (!(currentAnnotation.mappedName().equals(annotation.mappedName())))
                 {
                     // Error - conflicting mapped name specified
-                    Tr.error(tc, "CONFLICTING_ANNOTATION_VALUES_CWNEN0054E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     "mappedName",
-                     "@Resource",
-                     "name",
-                     getJndiName(),
-                     currentAnnotation.mappedName(),
-                     annotation.mappedName() }); // d479669
+                    Tr.error(tc, "CONFLICTING_ANNOTATION_VALUES_CWNEN0054E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             "mappedName",
+                             "@Resource",
+                             "name",
+                             getJndiName(),
+                             currentAnnotation.mappedName(),
+                             annotation.mappedName()); // d479669
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data" +
@@ -717,15 +717,15 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                     {
                         // Error - conflicting lookup values between annotations
                         Tr.error(tc, "CONFLICTING_ANNOTATION_VALUES_CWNEN0054E",
-                                 new Object[] { ivComponent,
-                                               ivModule,
-                                               ivApplication,
-                                               "lookup",
-                                               "@Resource",
-                                               "name",
-                                               getJndiName(),
-                                               ivLookup,
-                                               lookup });
+                                 ivComponent,
+                                 ivModule,
+                                 ivApplication,
+                                 "lookup",
+                                 "@Resource",
+                                 "name",
+                                 getJndiName(),
+                                 ivLookup,
+                                 lookup);
                         String exMsg = "The " + ivComponent + " bean in the " +
                                        ivModule + " module of the " + ivApplication +
                                        " application has conflicting configuration data" +
@@ -786,16 +786,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
         {
             if (!curMappedName.equals(mappedName))
             {
-                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                { ivComponent,
-                 ivModule,
-                 ivApplication,
-                 "mapped-name",
-                 "env-entry",
-                 "env-entry-name",
-                 getJndiName(),
-                 curMappedName,
-                 mappedName }); // d479669
+                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                         ivComponent,
+                         ivModule,
+                         ivApplication,
+                         "mapped-name",
+                         "env-entry",
+                         "env-entry-name",
+                         getJndiName(),
+                         curMappedName,
+                         mappedName); // d479669
                 String exMsg = "The " + ivComponent + " bean in the " +
                                ivModule + " module of the " + ivApplication +
                                " application has conflicting configuration data in the XML" +
@@ -821,16 +821,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
             if (!isEnvEntryTypeCompatible(type)) // F743-32443
             {
                 Class<?> curType = getInjectionClassType();
-                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                { ivComponent,
-                 ivModule,
-                 ivApplication,
-                 "env-entry-type",
-                 "env-entry",
-                 "env-entry-name",
-                 getJndiName(),
-                 curType,
-                 type }); // d479669
+                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                         ivComponent,
+                         ivModule,
+                         ivApplication,
+                         "env-entry-type",
+                         "env-entry",
+                         "env-entry-name",
+                         getJndiName(),
+                         curType,
+                         type); // d479669
                 String exMsg = "The " + ivComponent + " bean in the " +
                                ivModule + " module of the " + ivApplication +
                                " application has conflicting configuration data in the XML" +
@@ -853,15 +853,15 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
             if (!curValue.equals(value))
             {
                 Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
-                         new Object[] { ivComponent,
-                                       ivModule,
-                                       ivApplication,
-                                       "env-entry-value",
-                                       "env-entry",
-                                       "env-entry-name",
-                                       getJndiName(),
-                                       curValue,
-                                       value }); // d479669
+                         ivComponent,
+                         ivModule,
+                         ivApplication,
+                         "env-entry-value",
+                         "env-entry",
+                         "env-entry-name",
+                         getJndiName(),
+                         curValue,
+                         value); // d479669
                 String exMsg = "The " + ivComponent + " bean in the " +
                                ivModule + " module of the " + ivApplication +
                                " application has conflicting configuration data in the XML" +
@@ -898,16 +898,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
             {
                 if (!lookup.equals(ivLookup))
                 {
-                    Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     "lookup-name",
-                     "env-entry",
-                     "env-entry-name",
-                     jndiName,
-                     ivLookup,
-                     lookup });
+                    Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             "lookup-name",
+                             "env-entry",
+                             "env-entry-name",
+                             jndiName,
+                             ivLookup,
+                             lookup);
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data in the XML" +
@@ -936,15 +936,15 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
             // Error - conflicting env-entry-value/lookup-name values
             String elementType = "env-entry";
             Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
-                     new Object[] { ivComponent,
-                                   ivModule,
-                                   ivApplication,
-                                   "env-entry-value/lookup-name",
-                                   elementType,
-                                   "env-entry-name",
-                                   getJndiName(),
-                                   ivEnvValue,
-                                   ivLookup });
+                     ivComponent,
+                     ivModule,
+                     ivApplication,
+                     "env-entry-value/lookup-name",
+                     elementType,
+                     "env-entry-name",
+                     getJndiName(),
+                     ivEnvValue,
+                     ivLookup);
             String exMsg = "The " + ivComponent + " bean in the " + ivModule +
                            " module of the " + ivApplication + " application" +
                            " has conflicting configuration data in the XML" +
@@ -1023,16 +1023,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
         {
             if (!curMappedName.equals(mappedName))
             {
-                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                { ivComponent,
-                 ivModule,
-                 ivApplication,
-                 "mapped-name",
-                 "message-destination-ref",
-                 "message-destination-ref-name",
-                 getJndiName(),
-                 curMappedName,
-                 mappedName }); // d479669
+                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                         ivComponent,
+                         ivModule,
+                         ivApplication,
+                         "mapped-name",
+                         "message-destination-ref",
+                         "message-destination-ref-name",
+                         getJndiName(),
+                         curMappedName,
+                         mappedName); // d479669
                 String exMsg = "The " + ivComponent + " bean in the " +
                                ivModule + " module of the " + ivApplication +
                                " application has conflicting configuration data in the XML" +
@@ -1062,16 +1062,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
         {
             if (!curLink.equals(link))
             {
-                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                { ivComponent,
-                 ivModule,
-                 ivApplication,
-                 "message-destination-link",
-                 "message-destination-ref",
-                 "message-destination-ref-name",
-                 getJndiName(),
-                 curLink,
-                 link }); // d479669
+                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                         ivComponent,
+                         ivModule,
+                         ivApplication,
+                         "message-destination-link",
+                         "message-destination-ref",
+                         "message-destination-ref-name",
+                         getJndiName(),
+                         curLink,
+                         link); // d479669
                 String exMsg = "The " + ivComponent + " bean in the " +
                                ivModule + " module of the " + ivApplication +
                                " application has conflicting configuration data in the XML" +
@@ -1106,16 +1106,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
             {
                 if (!lookup.equals(ivLookup))
                 {
-                    Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     "lookup-name",
-                     "message-destination-ref",
-                     "message-destination-ref-name",
-                     jndiName,
-                     ivLookup,
-                     lookup });
+                    Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             "lookup-name",
+                             "message-destination-ref",
+                             "message-destination-ref-name",
+                             jndiName,
+                             ivLookup,
+                             lookup);
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data in the XML" +
@@ -1201,16 +1201,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
         {
             if (!curMappedName.equals(mappedName))
             {
-                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                { ivComponent,
-                 ivModule,
-                 ivApplication,
-                 "mapped-name",
-                 "resource-env-ref",
-                 "resource-env-ref-name",
-                 getJndiName(),
-                 curMappedName,
-                 mappedName }); // d479669
+                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                         ivComponent,
+                         ivModule,
+                         ivApplication,
+                         "mapped-name",
+                         "resource-env-ref",
+                         "resource-env-ref-name",
+                         getJndiName(),
+                         curMappedName,
+                         mappedName); // d479669
                 String exMsg = "The " + ivComponent + " bean in the " +
                                ivModule + " module of the " + ivApplication +
                                " application has conflicting configuration data in the XML" +
@@ -1252,16 +1252,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
             {
                 if (!lookup.equals(ivLookup))
                 {
-                    Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     "lookup-name",
-                     "resource-env-ref",
-                     "resource-env-ref-name",
-                     jndiName,
-                     ivLookup,
-                     lookup });
+                    Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             "lookup-name",
+                             "resource-env-ref",
+                             "resource-env-ref-name",
+                             jndiName,
+                             ivLookup,
+                             lookup);
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data in the XML" +
@@ -1355,16 +1355,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
         {
             if (!curMappedName.equals(mappedName))
             {
-                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                { ivComponent,
-                 ivModule,
-                 ivApplication,
-                 "mapped-name",
-                 "resource-ref",
-                 "res-ref-name",
-                 getJndiName(),
-                 curMappedName,
-                 mappedName }); // d479669
+                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                         ivComponent,
+                         ivModule,
+                         ivApplication,
+                         "mapped-name",
+                         "resource-ref",
+                         "res-ref-name",
+                         getJndiName(),
+                         curMappedName,
+                         mappedName); // d479669
                 String exMsg = "The " + ivComponent + " bean in the " +
                                ivModule + " module of the " + ivApplication +
                                " application has conflicting configuration data in the XML" +
@@ -1394,16 +1394,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
         {
             if (!(curAnnotation.authenticationType() == authenticationType))
             {
-                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                { ivComponent,
-                 ivModule,
-                 ivApplication,
-                 "res-auth",
-                 "resource-ref",
-                 "res-ref-name",
-                 getJndiName(),
-                 curAnnotation.authenticationType(),
-                 authenticationType }); // d479669
+                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                         ivComponent,
+                         ivModule,
+                         ivApplication,
+                         "res-auth",
+                         "resource-ref",
+                         "res-ref-name",
+                         getJndiName(),
+                         curAnnotation.authenticationType(),
+                         authenticationType); // d479669
                 String exMsg = "The " + ivComponent + " bean in the " +
                                ivModule + " module of the " + ivApplication +
                                " application has conflicting configuration data in the XML" +
@@ -1427,16 +1427,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
         {
             if (!(curAnnotation.shareable() == shareable))
             {
-                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                { ivComponent,
-                 ivModule,
-                 ivApplication,
-                 "res-sharing-scope",
-                 "resource-ref",
-                 "res-ref-name",
-                 getJndiName(),
-                 curAnnotation.shareable(),
-                 shareable }); // d479669
+                Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                         ivComponent,
+                         ivModule,
+                         ivApplication,
+                         "res-sharing-scope",
+                         "resource-ref",
+                         "res-ref-name",
+                         getJndiName(),
+                         curAnnotation.shareable(),
+                         shareable); // d479669
                 String exMsg = "The " + ivComponent + " bean in the " +
                                ivModule + " module of the " + ivApplication +
                                " application has conflicting configuration data in the XML" +
@@ -1472,16 +1472,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
             {
                 if (!lookup.equals(ivLookup))
                 {
-                    Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                    { ivComponent,
-                     ivModule,
-                     ivApplication,
-                     "lookup-name",
-                     "resource-ref",
-                     "res-ref-name",
-                     jndiName,
-                     ivLookup,
-                     lookup });
+                    Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                             ivComponent,
+                             ivModule,
+                             ivApplication,
+                             "lookup-name",
+                             "resource-ref",
+                             "res-ref-name",
+                             jndiName,
+                             ivLookup,
+                             lookup);
                     String exMsg = "The " + ivComponent + " bean in the " +
                                    ivModule + " module of the " + ivApplication +
                                    " application has conflicting configuration data in the XML" +
@@ -1565,14 +1565,14 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
             {
                 primaryConflict = conflict;
                 Tr.error(tc, "CONFLICTING_REFERENCES_CWNEN0062E",
-                         new Object[] { ivComponent,
-                                       resourceBinding.ivComponent,
-                                       ivModule,
-                                       ivApplication,
-                                       conflict.getAttributeName(),
-                                       getJndiName(),
-                                       conflict.getValue1(),
-                                       conflict.getValue2() });
+                         ivComponent,
+                         resourceBinding.ivComponent,
+                         ivModule,
+                         ivApplication,
+                         conflict.getAttributeName(),
+                         getJndiName(),
+                         conflict.getValue1(),
+                         conflict.getValue2());
             }
         }
 
@@ -1660,16 +1660,16 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                     Class<?> mostSpecificClass = mostSpecificClass(type, curType);
                     if (mostSpecificClass == null)
                     {
-                        Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E", new Object[]
-                        { ivComponent,
-                         ivModule,
-                         ivApplication,
-                         typeElement,
-                         element,
-                         nameElement,
-                         getJndiName(),
-                         curType,
-                         type }); // d479669
+                        Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
+                                 ivComponent,
+                                 ivModule,
+                                 ivApplication,
+                                 typeElement,
+                                 element,
+                                 nameElement,
+                                 getJndiName(),
+                                 curType,
+                                 type); // d479669
                         String exMsg = "The " + ivComponent +
                                        " bean in the " + ivModule +
                                        " module of the " + ivApplication +
@@ -1785,9 +1785,7 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                     if (classType == null || !classType.isEnum())
                     {
                         Tr.error(tc, "INVALID_ENV_ENTRY_TYPE_CWNEN0064E",
-                                 new Object[] { envEntry.getName(), ivModule,
-                                               ivApplication,
-                                               typeName });
+                                 envEntry.getName(), ivModule, ivApplication, typeName);
                         throw new InjectionConfigurationException("A type, which is not valid, has been specified for the " +
                                                                   envEntry.getName() + " simple environment entry in the " +
                                                                   ivModule + " module of the " + ivApplication +
@@ -1873,7 +1871,7 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                 FFDCFilter.processException(e, CLASS_NAME + ".resolveEnvEntryValue",
                                             "337", this, new Object[] { value });
                 Tr.warning(tc, "NUMBER_FORMAT_EXCEPTION_CWNEN0013W",
-                           new Object[] { getJndiName(), value, e });
+                           getJndiName(), value, e);
                 if (isValidationFailable()) // fail if enabled          F743-14449
                 {
                     throw new InjectionConfigurationException("The " + value + " value for the " + getJndiName() +
@@ -1893,8 +1891,7 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
             if (!((Boolean) injectionObject).booleanValue() &&
                 !value.equalsIgnoreCase("false"))
             {
-                Tr.warning(tc, "INVALID_BOOLEAN_FORMAT_CWNEN0014W", //d452568
-                           new Object[] { getJndiName(), value });
+                Tr.warning(tc, "INVALID_BOOLEAN_FORMAT_CWNEN0014W", getJndiName(), value);
                 if (isValidationFailable()) // fail if enabled          F743-14449
                 {
                     throw new InjectionConfigurationException("The " + value + " value for the " + getJndiName() +
@@ -1915,7 +1912,7 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                 FFDCFilter.processException(e, CLASS_NAME + ".resolveEnvEntryValue",
                                             "369", this, new Object[] { value });
                 Tr.warning(tc, "NUMBER_FORMAT_EXCEPTION_CWNEN0013W",
-                           new Object[] { getJndiName(), value, e });
+                           getJndiName(), value, e);
                 if (isValidationFailable()) // fail if enabled          F743-14449
                 {
                     throw new InjectionConfigurationException("The " + value + " value for the " + getJndiName() +
@@ -1936,7 +1933,7 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                 FFDCFilter.processException(e, CLASS_NAME + ".resolveEnvEntryValue",
                                             "386", this, new Object[] { value });
                 Tr.warning(tc, "NUMBER_FORMAT_EXCEPTION_CWNEN0013W",
-                           new Object[] { getJndiName(), value, e });
+                           getJndiName(), value, e);
                 if (isValidationFailable()) // fail if enabled          F743-14449
                 {
                     throw new InjectionConfigurationException("The " + value + " value for the " + getJndiName() +
@@ -1957,7 +1954,7 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                 FFDCFilter.processException(e, CLASS_NAME + ".resolveEnvEntryValue",
                                             "403", this, new Object[] { value });
                 Tr.warning(tc, "NUMBER_FORMAT_EXCEPTION_CWNEN0013W",
-                           new Object[] { getJndiName(), value, e });
+                           getJndiName(), value, e);
                 if (isValidationFailable()) // fail if enabled          F743-14449
                 {
                     throw new InjectionConfigurationException("The " + value + " value for the " + getJndiName() +
@@ -1978,7 +1975,7 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                 FFDCFilter.processException(e, CLASS_NAME + ".resolveEnvEntryValue",
                                             "366", this, new Object[] { value });
                 Tr.warning(tc, "NUMBER_FORMAT_EXCEPTION_CWNEN0013W",
-                           new Object[] { getJndiName(), value, e });
+                           getJndiName(), value, e);
                 if (isValidationFailable()) // fail if enabled          F743-14449
                 {
                     throw new InjectionConfigurationException("The " + value + " value for the " + getJndiName() +
@@ -1999,7 +1996,7 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                 FFDCFilter.processException(e, CLASS_NAME + ".resolveEnvEntryValue",
                                             "437", this, new Object[] { value });
                 Tr.warning(tc, "NUMBER_FORMAT_EXCEPTION_CWNEN0013W",
-                           new Object[] { getJndiName(), value, e });
+                           getJndiName(), value, e);
                 if (isValidationFailable()) // fail if enabled          F743-14449
                 {
                     throw new InjectionConfigurationException("The " + value + " value for the " + getJndiName() +
@@ -2020,7 +2017,7 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                 FFDCFilter.processException(e, CLASS_NAME + ".resolveEnvEntryValue",
                                             "454", this, new Object[] { value });
                 Tr.warning(tc, "THROWABLE_WHILE_CONSTRUCTING_JAVA_COMP_ENV_CWNEN0015W",
-                           new Object[] { getJndiName(), value, e });
+                           getJndiName(), value, e);
                 if (isValidationFailable()) // fail if enabled          F743-14449
                 {
                     throw new InjectionConfigurationException("The " + value + " value for the " + getJndiName() +
@@ -2082,8 +2079,7 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
                     FFDCFilter.processException(ex, CLASS_NAME + ".resolveEnvEntryValue",
                                                 "1946", this, new Object[] { value });
                     Tr.error(tc, "INVALID_ENUM_IDENTIFIER_CWNEN0063E",
-                             new Object[] { getJndiName(), ivModule, ivApplication,
-                                           type.getName(), value });
+                             getJndiName(), ivModule, ivApplication, type.getName(), value);
                     throw new InjectionConfigurationException("CWNEN0063E: The " + getJndiName() + " simple environment entry in the " +
                                                               ivModule + " module of the " + ivApplication +
                                                               " application, which is the " + type.getName() +
@@ -2114,7 +2110,7 @@ public class ResourceInjectionBinding extends InjectionBinding<Resource>
     throws InjectionConfigurationException
     {
         Tr.warning(tc, "INVALID_TYPE_IN_JAVA_COMP_ENV_CWNEN0016W",
-                   new Object[] { typeName, getJndiName(), ivComponent, ivModule });
+                   typeName, getJndiName(), ivComponent, ivModule);
         if (isValidationFailable()) // fail if enabled          F743-14449
         {
             throw new InjectionConfigurationException("The " + typeName + " type, which is not valid, has been specified for the " +

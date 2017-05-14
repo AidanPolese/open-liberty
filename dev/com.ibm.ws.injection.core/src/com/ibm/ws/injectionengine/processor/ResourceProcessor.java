@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2006, 2015
+ * Copyright IBM Corp. 2006, 2016
  *
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
@@ -25,9 +25,9 @@ import javax.annotation.Resource.AuthenticationType;
 import javax.annotation.Resources;
 import javax.naming.Reference;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.injectionengine.AbstractInjectionEngine;
 import com.ibm.ws.injectionengine.InjectionScopeData;
@@ -159,12 +159,12 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
     /**
      * Processes all of tha XML entries that correspond to the @Resource
      * annotation. This includes the following:
-     * 
+     *
      * - <env-entry>
      * - <resource-ref>
      * - <resource-env-ref>
      * - <message-destination-ref>
-     * 
+     *
      * @see InjectionProcessor#processXML()
      */
     @Override
@@ -385,7 +385,7 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
                 {
                     String displayName = ivNameSpaceConfig.getDisplayName();
                     Tr.warning(tc, "UNABLE_TO_RESOLVE_THE_ENV_ENTRY_CWNEN0045W",
-                               new Object[] { refJndiName, displayName });
+                               refJndiName, displayName);
                 }
             }
             else
@@ -468,7 +468,7 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
                 Tr.debug(tc, "resolve : looking for binding");
 
             // --------------------------------------------------------------------
-            // Bind indirect jndi lookups to Resource-Refs
+            // Bind indirect lookups to resource/resource-env/message-destination
             //
             // Check for a binding in the ResourceRef, ResourceEnvRef and
             // MessageDestinationRef binding maps, and if found, run the binding
@@ -649,16 +649,16 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
     /**
      * Bind indirect lookups to resource/resource-env/message-destination from
      * the value from the binding file.
-     * 
+     *
      * Check for a binding in the ResourceRef, ResourceEnvRef and MessageDestinationRef
      * binding maps, and if found, run the binding name through the variable map service
      * (server only), create a Ref Lookup binding, and finally add the reference to the
      * ResRefList.
-     * 
+     *
      * Because of past supported behavior, a binding file match is accepted for any of
      * the different binding types. For example, a resource-ref could be matched to a
      * message-destination-ref binding.
-     * 
+     *
      * @param resourceBinding the resource binding to resolve
      * @param refJndiName normalized or denormalized ref name
      * @return the Reference object that resolves the binding or null
@@ -730,11 +730,11 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
     /**
      * Common code to create the special indirect JNDI lookup Reference for
      * a managed resource reference, and add it to the ResRefList.
-     * 
+     *
      * @param binding the specific resource injection binding being processed.
      * @param refJndiName JNDI name of the resource reference.
      * @param boundToJndiName JNDI name to re-direct the refJndiName to.
-     * 
+     *
      * @return an indirect JNDI lookup Reference.
      **/
     // F743-21028.4
@@ -796,12 +796,12 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
     /**
      * Common code to create the indirect JNDI lookup Reference for
      * a non-managed resource reference.
-     * 
+     *
      * @param binding the specific resource injection binding being processed.
      * @param refJndiName JNDI name of the resource reference.
      * @param boundToJndiName JNDI name to re-direct the refJndiName to.
      * @param type the XML type of the resource reference.
-     * 
+     *
      * @return an indirect JNDI lookup Reference.
      **/
     // F743-21028.4
@@ -834,9 +834,9 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
      * Common code to create the indirect JNDI lookup Reference for
      * a resource reference that is mapped to the java:comp/env JNDI
      * context of the consuming component.
-     * 
+     *
      * @param binding the specific resource injection binding being processed.
-     * 
+     *
      * @return an indirect JNDI lookup Reference.
      **/
     private Reference createIndirectJndiLookupInConsumerContext(ResourceInjectionBinding binding)
@@ -865,7 +865,7 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
 
     /**
      * Check attributes for registered ObjectFactory's.
-     * 
+     *
      * @param resourceBinding
      * @param extensionFactory
      * @throws InjectionConfigurationException
@@ -901,13 +901,13 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
             String injectTypeName = resourceBinding.getInjectionClassTypeName();
 
             Tr.error(tc, "INVALID_OBJECT_FACTORY_ATTRIBUTE_CWNEN0071E",
-                     new Object[] { name,
-                                   resourceBinding.ivComponent,
-                                   resourceBinding.ivModule,
-                                   resourceBinding.ivApplication,
-                                   injectTypeName,
-                                   attributeName,
-                                   value });
+                     name,
+                     resourceBinding.ivComponent,
+                     resourceBinding.ivModule,
+                     resourceBinding.ivApplication,
+                     injectTypeName,
+                     attributeName,
+                     value);
 
             throw new InjectionConfigurationException("The " + name +
                                                       " reference for the " + resourceBinding.ivComponent +
@@ -921,7 +921,7 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
 
     /**
      * Creates a Reference for a binding from a registered ObjectFactory.
-     * 
+     *
      * @param extensionFactory the object factory info
      * @param resourceBinding the resource binding
      * @return the reference
@@ -942,7 +942,7 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
 
     /**
      * Creates a ResourceInfo for a binding.
-     * 
+     *
      * @param resourceBinding the binding
      * @return the info
      */
@@ -969,26 +969,26 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
      * Determines if the specified jndiName is for an EJB 1.0 environment
      * property, and if so, adds the specified injection object to the
      * EJB Environment properties with the appropriate property name. <p>
-     * 
+     *
      * EJB 1.0 environment properties are only for env-entries of type String.
      * This methods should not be called for other types. <p>
-     * 
+     *
      * Here is an example of what this would look like in xml:
-     * 
+     *
      * <env-entry>
      * <env-entry-name>ejb10-properties/hello</env-entry-name>
      * <env-entry-type>java.lang.String</env-entry-type>
      * <env-entry-value>howdy</env-entry-value>
      * </env-entry>
-     * 
+     *
      * And to access in the EJB, the code would be:
-     * 
+     *
      * Properties env = ejbContext.getEnvironment();
      * String value = env.getProperty("hello");
-     * 
+     *
      * @param jndiName env-entry-name value
      * @param injectionObject env-entry value
-     * 
+     *
      * @throws InjectionException if a problem occurs parsing the jndiName
      */
     // F743-22218.3
@@ -1011,10 +1011,10 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
 
     /**
      * Returns true if the specified type is a ManagedBean. <p>
-     * 
+     *
      * Supports the type in class form (normal server) and String form
      * (server side client support). <p>
-     * 
+     *
      * @param injectType injection type; may be null if name specified.
      * @param injectTypeName injection type; may be null if class specified.
      */
@@ -1050,7 +1050,7 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
 
     /**
      * Process : <env-entry>
-     * 
+     *
      * For lookup and injection of :
      * - Primitive Wrappers ( Character, Integer, Boolean,
      * Double, Byte, Short, Long, Float )
@@ -1145,11 +1145,11 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
 
     /**
      * Process : <resource-ref>
-     * 
+     *
      * For lookup and injection of resource manager connection factories. <p>
-     * 
+     *
      * Includes injection and binding of the ORB. <p>
-     * 
+     *
      * Resource manager connection factories may be configured as shared or
      * not shared, and may have CONTAINER or APPLICATION authentication.
      **/
@@ -1236,8 +1236,7 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
                                                 "898", this, new Object[] { resourceRef, jndiName, injectionBinding, targetName, targetClassName });
                     InjectionException icex;
                     icex = new InjectionException("Failed to process the XML for " + "resource-ref " + resourceRef, e);
-                    Tr.error(tc, "FAILED_TO_PROCESS_XML_CWNEN0032E",
-                             new Object[] { "resource-ref", resourceRef });
+                    Tr.error(tc, "FAILED_TO_PROCESS_XML_CWNEN0032E", "resource-ref", resourceRef);
                     throw icex;
                 }
             }
@@ -1246,14 +1245,14 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
 
     /**
      * Process : <resource-env-ref>
-     * 
+     *
      * For lookup and injection of administerd objects :
      * - EJBContext ( SessionContext or MessageDrivenContext )
      * - TimerService
      * - UserTransaction
      * - TransactionSynchronizationRegistry
      * - administered objects associated with resources
-     * 
+     *
      * Differs from resource references in that resource env references are
      * not shareable and do not require authentication.
      **/
@@ -1331,8 +1330,7 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
                                                 "454", this, new Object[] { resourceEnvRef, jndiName, injectionBinding, targetName, targetClassName });
                     InjectionException icex;
                     icex = new InjectionException("Failed to process the XML for " + "resource-env-ref " + resourceEnvRef, e);
-                    Tr.error(tc, "FAILED_TO_PROCESS_XML_CWNEN0032E",
-                             new Object[] { "resource-env-ref", resourceEnvRef });
+                    Tr.error(tc, "FAILED_TO_PROCESS_XML_CWNEN0032E", "resource-env-ref", resourceEnvRef);
                     throw icex;
                 }
             }
@@ -1341,12 +1339,12 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
 
     /**
      * Process : <message-destination-ref>
-     * 
+     *
      * For lookup and injection of message destination objects.
-     * 
+     *
      * Differs from resource references in that message destination references
      * are not shareable and do not require authentication.
-     * 
+     *
      * @throws InjectionException
      **/
     private void processXMLMsgDestRefs(List<? extends MessageDestinationRef> msgDestRefs)
@@ -1431,8 +1429,7 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
                                                 "1077", this, new Object[] { msgDestRef, jndiName, injectionBinding, targetName, targetClassName });
                     InjectionException icex;
                     icex = new InjectionException("Failed to process the XML for " + "message-destination-ref " + msgDestRef, e); //d645991
-                    Tr.error(tc, "FAILED_TO_PROCESS_XML_CWNEN0032E",
-                             new Object[] { "message-destination-ref", msgDestRef }); //d645991
+                    Tr.error(tc, "FAILED_TO_PROCESS_XML_CWNEN0032E", "message-destination-ref", msgDestRef); //d645991
                     throw icex;
                 }
             }
@@ -1455,10 +1452,10 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
     /**
      * Check if the class is one of the simple environment entry types
      * (primitive, primitive wrapper, String, Class, or Enum).
-     * 
+     *
      * Note: If EE5Compatibility is enabled, then Class and Enum will
      * not be considered simple environment entry types.
-     * 
+     *
      * @param clazz class to check for type.
      * @return true if the class is a simple environment entry type.
      **/
@@ -1493,11 +1490,11 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
     //d463452 added method
     /**
      * Internal method to isolate the class loading logic. <p>
-     * 
+     *
      * Returns the loaded type class using the component specific ClassLoader,
      * or null if the specified class name was null or the empty string, if the
      * class loader was null, or if the class fails to load. <p>
-     * 
+     *
      * @param className name of the class to load
      * @param refName name of the resource reference this class is
      *            associated with, for ras.
@@ -1534,8 +1531,7 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
             // a warning will be logged for this, rather than a failure.  d476227.1
 
             String module = ivNameSpaceConfig.getModuleName();
-            Tr.warning(tc, "RESOURCE_TYPE_NOT_FOUND_CWNEN0046W",
-                       new Object[] { className, refName, module }); // d479669
+            Tr.warning(tc, "RESOURCE_TYPE_NOT_FOUND_CWNEN0046W", className, refName, module); // d479669
             if (isValidationFailable()) // F50309.6
             {
                 throw new InjectionConfigurationException("CWNEN0046W: The " + className +
@@ -1557,15 +1553,15 @@ public class ResourceProcessor extends InjectionProcessor<Resource, Resources>
     /**
      * Converts the String Authentiction type in XML to the Enum authentication
      * type of the @Resource annotation. <p>
-     * 
+     *
      * The Authentication type in XML must be either 'Application' or
      * 'Container', and the default is 'Container'. <p>
-     * 
+     *
      * If the specified resAuthType is null, the default of CONTAINER
      * will be returned. <p>
-     * 
+     *
      * @parm resAuthType Resource Auth type from XML (WCCM)
-     * 
+     *
      * @return the @Resouce AuthenticationType enum value
      **/
     // d543514

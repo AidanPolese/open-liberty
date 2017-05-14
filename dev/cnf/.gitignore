@@ -3,3 +3,5 @@
 /release/
 /generated/
 /settings.xml
+/maven-local/
+/mavenlocal.mvn

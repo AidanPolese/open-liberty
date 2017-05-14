@@ -30,18 +30,18 @@ import java.security.PrivilegedAction;
 
 import com.ibm.ejs.ras.Tr;
 import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.ws.kernel.service.util.JavaInfo;
 
 /**
  * Helper to access thread context variables. Callers should ensure that they
  * do not allow unprivileged code to have access to an implementation of this
  * class. Callers should use {@link #getPrivilegedAction} to obtain an
  * instance of this class and then store it in a static variable:
- * 
+ *
  * <pre>
- * private static final ThreadContextAccessor threadContextAccessor =
- * AccessController.doPrivileged(ThreadContextAccessor.getPrivilegedAction());
+ * private static final ThreadContextAccessor threadContextAccessor = AccessController.doPrivileged(ThreadContextAccessor.getPrivilegedAction());
  * </pre>
- * 
+ *
  * <p>If the only privileged operation that a caller needs to perform within a
  * code path is a single get or set of a context class loader, then the caller
  * should use the "ForUnprivileged" methods. Otherwise, if {@link #isPrivileged} returns false, the caller should create their own
@@ -62,10 +62,10 @@ public abstract class ThreadContextAccessor {
      * Default visibility so that ThreadPool can check it.
      */
     //D658409
-    final static boolean PRINT_STACK_ON_SET_CTX_CLASSLOADER =
-                    Boolean.getBoolean("com.ibm.ws.util.threadpool.PrintStackOnSetContextClassLoader");
+    final static boolean PRINT_STACK_ON_SET_CTX_CLASSLOADER = Boolean.getBoolean("com.ibm.ws.util.threadpool.PrintStackOnSetContextClassLoader");
 
     private static final PrivilegedAction<ThreadContextAccessor> PRIVILEGED_ACTION = new PrivilegedAction<ThreadContextAccessor>() {
+        @Override
         public ThreadContextAccessor run() {
             return getThreadContextAccessor();
         }
@@ -87,7 +87,7 @@ public abstract class ThreadContextAccessor {
      * Checks whether the implementation is privileged. If an implementation
      * is privileged, then calls to other methods do not need to be wrapped in
      * a call to <code>AccessController.doPrivileged</code>.
-     * 
+     *
      * @return <code>true</code> if the implementation is privileged
      */
     public abstract boolean isPrivileged();
@@ -97,7 +97,7 @@ public abstract class ThreadContextAccessor {
      * <code>Thread.getContextClassLoader</code> except that it might be
      * implemented without security checks. The calling stack must have
      * <code>RuntimePermission("getClassLoader")</code> permission unless {@link #isPrivileged} returns true.
-     * 
+     *
      * @param thread the thread to check
      * @return the context class loader
      * @see #getContextClassLoaderForUnprivileged
@@ -108,7 +108,7 @@ public abstract class ThreadContextAccessor {
      * Gets the thread context class loader. This method is equivalent to
      * calling <code>Thread.getContextClassLoader</code> with
      * <code>RuntimePermission("getClassLoader")</code> permission.
-     * 
+     *
      * @param thread the thread to check
      * @return the context class loader
      */
@@ -119,7 +119,7 @@ public abstract class ThreadContextAccessor {
      * <code>Thread.setContextClassLoader</code> except that it might be
      * implemented without security checks. The calling stack must have
      * <code>RuntimePermission("setContextClassLoader")</code> permission unless {@link #isPrivileged} returns true.
-     * 
+     *
      * @param thread the thread to modify
      * @param loader the new context class loader
      * @see #setContextClassLoaderForUnprivileged
@@ -130,7 +130,7 @@ public abstract class ThreadContextAccessor {
      * Sets the thread context class loader. This method is equivalent to
      * calling <code>Thread.setContextClassLoader</code> with
      * <code>RuntimePermission("setContextClassLoader")</code> permission.
-     * 
+     *
      * @param thread the thread to modify
      * @param loader the new context class loader
      */
@@ -140,7 +140,7 @@ public abstract class ThreadContextAccessor {
      * Sets the context class loader of the current thread, and returns either {@link #UNCHANGED} or the original class loader. The calling stack must
      * have <code>RuntimePermission("getClassLoader")</code> and
      * <code>RuntimePermission("setContextClassLoader")</code> permission unless {@link #isPrivileged} returns true.
-     * 
+     *
      * @param loader the new context class loader
      * @return the original context class loader, or {@link #UNCHANGED}
      * @see #pushContextClassLoaderForUnprivileged
@@ -152,7 +152,7 @@ public abstract class ThreadContextAccessor {
      * equivalent to calling {@link #pushContextClassLoader} with
      * <code>RuntimePermission("setContextClassLoader")</code> permission. The
      * suggested pattern of use is:
-     * 
+     *
      * <pre>
      * Object origCL = threadContextAccessor.pushContextClassLoaderForUnprivileged(cl);
      * try {
@@ -161,7 +161,7 @@ public abstract class ThreadContextAccessor {
      * threadContextAccessor.popContextClassLoaderForUnprivileged(origCL);
      * }
      * </pre>
-     * 
+     *
      * @param loader the new context class loader
      * @return the original context class loader, or {@link #UNCHANGED}
      */
@@ -172,7 +172,7 @@ public abstract class ThreadContextAccessor {
      * the original class loader is {@link #UNCHANGED}, then this is equivalent
      * to {@link #pushContextClassLoader}). Otherwise, this is equivalent to {@link #setContextClassLoader}, and the passed class loader is returned.
      * The suggested pattern of use is:
-     * 
+     *
      * <pre>
      * Object origCL = ThreadContextAccessor.UNCHANGED;
      * try {
@@ -185,7 +185,7 @@ public abstract class ThreadContextAccessor {
      * svThreadContextAccessor.popContextClassLoader(origCL);
      * }
      * </pre>
-     * 
+     *
      * @param origLoader the result of {@link #pushContextClassLoader} or {@link #repushContextClassLoader}
      * @param loader the new context class loader
      * @return the original context class loader, or {@link #UNCHANGED}
@@ -204,7 +204,7 @@ public abstract class ThreadContextAccessor {
      * the original class loader is {@link #UNCHANGED}, then this is equivalent
      * to {@link #pushContextClassLoader}). Otherwise, this is equivalent to {@link #setContextClassLoader}, and the passed class loader is returned.
      * The suggested pattern of use is:
-     * 
+     *
      * <pre>
      * Object origCL = ThreadContextAccessor.UNCHANGED;
      * try {
@@ -217,7 +217,7 @@ public abstract class ThreadContextAccessor {
      * svThreadContextAccessor.popContextClassLoaderForUnprivileged(origCL);
      * }
      * </pre>
-     * 
+     *
      * @param origLoader the result of {@link #pushContextClassLoader} or {@link #repushContextClassLoader}
      * @param loader the new context class loader
      * @return the original context class loader, or {@link #UNCHANGED}
@@ -234,7 +234,7 @@ public abstract class ThreadContextAccessor {
     /**
      * Resets the context class loader of the current thread after a call to {@link #pushContextClassLoader} or {@link #repushContextClassLoader}.
      * This method does nothing if the specified class loader is {@link #UNCHANGED}. Otherwise, this method is equivalent to calling {@link #setContextClassLoader}.
-     * 
+     *
      * @param origLoader the result of {@link #pushContextClassLoader} or {@link #repushContextClassLoader}
      */
     public void popContextClassLoader(Object origLoader) {
@@ -248,7 +248,7 @@ public abstract class ThreadContextAccessor {
      * This method does
      * nothing if the specified class loader is {@link #UNCHANGED}. Otherwise,
      * this method is equivalent to calling {@link #setContextClassLoaderForUnprivileged}
-     * 
+     *
      * @param origLoader the result of {@link #pushContextClassLoaderForUnprivileged} or {@link #repushContextClassLoaderForUnprivileged}
      */
     public void popContextClassLoaderForUnprivileged(Object origLoader) {
@@ -261,7 +261,7 @@ public abstract class ThreadContextAccessor {
 
     static {
         ThreadContextAccessor myThreadContextAccessor;
-        if (PRINT_STACK_ON_SET_CTX_CLASSLOADER) {
+        if (PRINT_STACK_ON_SET_CTX_CLASSLOADER || JavaInfo.majorVersion() >= 9) {
             // If we are printing the stack trace when thread pool threads'
             // setContextClassLoader is invoked, then we want to skip the
             // performance optimization in order to ensure that we print
@@ -293,13 +293,13 @@ public abstract class ThreadContextAccessor {
      * Gets an implementation of <code>ThreadContextAccessor</code>. Callers
      * should ensure that they do not allow unprivileged code to have access to
      * the object returned by this method.
-     * 
+     *
      * <p>If there is a security manager, then the security manager's
      * <code>checkPermission</code> method is called with a
      * <code>RuntimePermission("getClassLoader")</code> and
      * <code>RuntimePermission("setContextClassLoader")</code> to see if it's
      * ok to get and set the context ClassLoader.
-     * 
+     *
      * @return a <code>ThreadContextAccessor</code> implementation
      * @throws SecurityException if a security manager exists and its
      *             <code>checkPermission</code> method doesn't allow getting or setting the
@@ -319,7 +319,7 @@ public abstract class ThreadContextAccessor {
 
     /**
      * Gets a <code>PrivilegedAction</code> that calls {@link #getThreadContextAccessor}.
-     * 
+     *
      * @return a privileged action to obtain a thread context accessor
      */
     public static PrivilegedAction<ThreadContextAccessor> getPrivilegedAction() {
@@ -346,6 +346,7 @@ public abstract class ThreadContextAccessor {
             }
 
             return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+                @Override
                 public ClassLoader run() {
                     return thread.getContextClassLoader();
                 }
@@ -363,6 +364,7 @@ public abstract class ThreadContextAccessor {
                 thread.setContextClassLoader(loader);
             } else {
                 AccessController.doPrivileged(new PrivilegedAction<Void>() {
+                    @Override
                     public Void run() {
                         thread.setContextClassLoader(loader);
                         return null;
@@ -390,6 +392,7 @@ public abstract class ThreadContextAccessor {
             }
 
             return AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                @Override
                 public Object run() {
                     return pushContextClassLoader(loader);
                 }
@@ -400,7 +403,7 @@ public abstract class ThreadContextAccessor {
     // An implementation of ThreadContextAccessor that uses reflection to
     // directly set and get the value of a Field.
     static class ReflectionThreadContextAccessorImpl extends ThreadContextAccessor {
-        private Field field;
+        private final Field field;
 
         public ReflectionThreadContextAccessorImpl(Field field) {
             this.field = field;
@@ -456,6 +459,7 @@ public abstract class ThreadContextAccessor {
             return pushContextClassLoaderForUnprivileged(loader);
         }
 
+        @Override
         public Object pushContextClassLoaderForUnprivileged(ClassLoader loader) {
             Thread thread = Thread.currentThread();
 

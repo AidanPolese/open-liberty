@@ -128,20 +128,20 @@ public class RepositoryManager {
             return baseEntry.equals(uniqueName) || isUserInRealm(uniqueName);
         }
 
-        @FFDCIgnore(RegistryException.class)
+        @FFDCIgnore(Exception.class)
         private boolean isUserInRealm(String uniqueName) {
             try {
                 SearchResult result = ur.getUsers(uniqueName, 1);
                 if (result != null && result.getList().size() > 0)
                     return true;
-            } catch (RegistryException e) {
+            } catch (Exception e) {
             }
 
             try {
                 SearchResult result = ur.getGroups(uniqueName, 1);
                 if (result != null && result.getList().size() > 0)
                     return true;
-            } catch (RegistryException e) {
+            } catch (Exception e) {
             }
             return false;
 
@@ -877,7 +877,7 @@ public class RepositoryManager {
      * @param uniqueName
      * @return
      */
-    @FFDCIgnore({ RegistryException.class, EntryNotFoundException.class })
+    @FFDCIgnore(Exception.class)
     public List<String> getFederationUREntityType(String data) {
         for (RepositoryHolder rh : repositories.values()) {
             if (rh instanceof URBridgeHolder) {
@@ -891,7 +891,7 @@ public class RepositoryManager {
                         returnValue.add(data);
                         return returnValue;
                     }
-                } catch (RegistryException e) {
+                } catch (Exception e) {
                 }
 
                 try {
@@ -902,7 +902,7 @@ public class RepositoryManager {
                         returnValue.add(data);
                         return returnValue;
                     }
-                } catch (RegistryException e) {
+                } catch (Exception e) {
                 }
 
                 try {
@@ -913,8 +913,7 @@ public class RepositoryManager {
                         returnValue.add(result);
                         return returnValue;
                     }
-                } catch (RegistryException e) {
-                } catch (EntryNotFoundException e) {
+                } catch (Exception e) {
                 }
 
                 try {
@@ -925,8 +924,7 @@ public class RepositoryManager {
                         returnValue.add(result);
                         return returnValue;
                     }
-                } catch (RegistryException e) {
-                } catch (EntryNotFoundException e) {
+                } catch (Exception e) {
                 }
             }
         }

@@ -85,6 +85,8 @@ public final class BootstrapConstants {
     public static final String ENV_LOG_FILE = "LOG_FILE";
     /** Product extensions added by embedder */
     public static final String ENV_PRODUCT_EXTENSIONS_ADDED_BY_EMBEDDER = "PRODUCT_EXTENSIONS_ADDED_BY_EMBEDDER";
+    /** Product Extensions added by Environment Variable */
+    public static final String ENV_PRODUCT_EXTENSIONS_ADDED_BY_ENV = "PRODUCT_EXTENSIONS_ADDED_BY_ENV";
 
     public static final String LOC_PROPERTY_INSTALL_DIR = "wlp.install.dir";
     public static final String LOC_INTERNAL_LIB_DIR = "wlp.lib.dir";

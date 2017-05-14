@@ -28,3 +28,7 @@
 error.sdkRequired=CWWKE0600E: Tento n\u00e1stroj vy\u017eaduje sadu Java SDK, ale byla spu\u0161t\u011bna pomoc\u00ed prost\u0159ed\u00ed JRE: {0}
 error.sdkRequired.explanation=N\u00e1stroj vy\u017eaduje sadu Java SDK, ale byla spu\u0161t\u011bna pomoc\u00ed prost\u00e9ho prost\u0159ed\u00ed Java Runtime Environment.
 error.sdkRequired.useraction=Nastavte prom\u011bnnou prost\u0159ed\u00ed JAVA_HOME na cestu sady Java SDK a potom zkuste znovu p\u0159\u00edkaz.
+
+error.compilerMissing=CWWKE0601E: Tento n\u00e1stroj vy\u017eaduje dostupn\u00fd kompil\u00e1tor jazyka Java. Zkontrolujte, zda je modul java.compiler dostupn\u00fd.
+error.compilerMissing.explanation=N\u00e1stroj vy\u017eaduje kompil\u00e1tor jazyka Java. Tento n\u00e1stroj se v\u0161ak spustil bez jak\u00e9hokoliv takov\u00e9ho modulu.
+error.compilerMissing.useraction=Ov\u011b\u0159te, zda m\u00e1 v\u00e1\u0161 obraz jazyka Java dostupn\u00fd modul java.compiler. Pak ov\u011b\u0159te, zda je dostupn\u00fd i za b\u011bhu tak, \u017ee zad\u00e1te n\u00e1sleduj\u00edc\u00ed volbu p\u0159\u00edkazov\u00e9ho \u0159\u00e1dku: --add-modules java.compiler

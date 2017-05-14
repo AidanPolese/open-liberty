@@ -1,0 +1,62 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+# For more information, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+Bundle-Name: Security Token
+Bundle-SymbolicName: com.ibm.ws.security.token
+Bundle-Description: Security Token, version=${bVersion}
+Bundle-ActivationPolicy: lazy
+
+WS-TraceGroup: \
+  Token
+
+Export-Package: \
+  com.ibm.ws.security.token;provide:=true, \
+  com.ibm.wsspi.security.ltpa, \
+  com.ibm.wsspi.security.token
+
+Import-Package: com.ibm.ws.common.internal.encoder, !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
+
+Private-Package: \
+  com.ibm.ws.security.token.internal.*,\
+  com.ibm.ws.security.token.krb5.*
+
+# Update the metatype.xml for your component in the resources/OSGI-INF/metatype folder
+Include-Resource: \
+    OSGI-INF/metatype=resources/OSGI-INF/metatype, \
+    OSGI-INF/l10n=resources/OSGI-INF/l10n
+
+Service-Component: \
+  com.ibm.ws.security.token; \
+    implementation:=com.ibm.ws.security.token.internal.TokenManagerImpl; \
+    provide:=com.ibm.ws.security.token.TokenManager; \
+    activate:=activate; \
+    deactivate:=deactivate; \
+    modified:='modified'; \
+    configuration-policy:=optional; \
+    tokenService=com.ibm.ws.security.token.TokenService; \
+    dynamic:='tokenService'; \
+    optional:='tokenService'; \
+    multiple:='tokenService'; \
+    properties:='service.vendor=IBM'
+
+instrument.classesExcludes: com/ibm/ws/security/token/internal/resources/*.class
+
+-buildpath: \
+	com.ibm.websphere.security;version=latest,\
+	com.ibm.ws.logging,\
+	com.ibm.ws.kernel.service,\
+	com.ibm.websphere.org.osgi.core,\
+	com.ibm.websphere.org.osgi.service.component,\
+	com.ibm.ws.common.encoder,\
+	com.ibm.ws.security.jaas.common;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest
+
+-testpath: \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
+	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	com.ibm.ws.kernel.boot;version=latest

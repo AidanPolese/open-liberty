@@ -667,4 +667,25 @@ public class BatchKernelImpl implements IBatchKernelService, ServerQuiesceListen
         shutdown();
     }
 
+    /*
+     * Retrieves the batch status of the specified job execution from the
+     * in memory collection of executing jobs.
+     *
+     * @param the specified job to locate
+     *
+     * @return the batch status of the specified job, or null if not found
+     */
+    @Override
+    public BatchStatus getBatchStatus(long jobExecutionId) {
+        BatchStatus retVal = null;
+        BatchWorkUnit bwu = executingJobs.get(jobExecutionId);
+        if (bwu != null) {
+            retVal = bwu.getRuntimeWorkUnitExecution().getBatchStatus();
+            logger.finer("Returning local BatchStatus of: " + retVal);
+        } else {
+            logger.finer("Local BatchStatus not found, returning <null>");
+        }
+        return retVal;
+    }
+
 }

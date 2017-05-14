@@ -405,7 +405,7 @@ public class KernelBootstrap {
 
             NameBasedLocalBundleRepository repo = new NameBasedLocalBundleRepository(bootProps.getInstallRoot());
 
-            File bestMatchFile = repo.selectBundle("com.ibm.ws.org.eclipse.equinox.region.1.3.2",
+            File bestMatchFile = repo.selectBundle("com.ibm.ws.org.eclipse.equinox.region",
                                                    VersionUtility.stringToVersionRange("[1.0,1.0.100)"));
             if (bestMatchFile == null) {
                 throw new LaunchException("Could not find bundle for " + "com.ibm.ws.org.eclipse.equinox.region" + ".",

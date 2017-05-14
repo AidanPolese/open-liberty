@@ -37,4 +37,4 @@ Export-Package: \
 -buildpath: \
 	com.ibm.ws.javaee.ddmetadata.annotation;version=latest,\
 	com.ibm.ws.javaee.dd.common;version=latest, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

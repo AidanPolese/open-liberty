@@ -118,7 +118,7 @@ public class RuntimeFactory {
             BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
             ClassLoader loader = bundleWiring.getClassLoader();
             if (container != null) {
-                ExtensionContainerInfo containerInfo = new ExtensionContainerInfo(container, loader, bundle.getSymbolicName() + "_"
+                ExtensionContainerInfo containerInfo = new ExtensionContainerInfo(container, loader, CDIUtils.getSymbolicNameWithoutMinorOrMicroVersionPart(bundle.getSymbolicName()) + "_"
                                                                                                      + CDIUtils.getOSGIVersionForBndName(bundle.getVersion()), extraClasses, extraAnnotations, applicationBDAsVisible, extClassesOnly);
 
                 extensionArchive = new ExtensionArchiveImpl(containerInfo, this);

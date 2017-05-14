@@ -1,21 +1,23 @@
 Bundle-Distributor: IBM
 
-# No ~ on the generated.build.id include.. we want the included file to replace 
+# No ~ on the generated.build.id include.. we want the included file to replace
 # the value in this one but we do need a leading - as the file may not be there.
 # Similarly, the copyright.properties file might not exist
--include= -../generated.build.id
-
--include= -liberty-release.props
+-include= -../generated.build.id, -liberty-release.props, ${workspace}/generated.properties
 
 # Default bFullVersion is major.minor.release-micro, but this can be overridden
 # in specific bnd files if required
 bFullVersion=${version;==;${bVersion}}.${libertyBundleMicroVersion}
 
-# This sets the version to the major.minor.micro of the provided bundle version, 
+# Default bBranchName to master, but this should be determined by the gradle build
+# and included here.
+bGitBranch=master
+
+# This sets the version to the major.minor.micro of the provided bundle version,
 # and uses the RTC buildLabel for the qualifier. The "generated.build.id" file
 # (included above) will predefine the Build-Identifier header.
 Build-Identifier: SNAPSHOT-${now}
-Bundle-Version: ${bFullVersion}.${buildLabel}
+Bundle-Version: ${bFullVersion}${if;${is;${bGitBranch};master};.${tstamp};.${bGitBranch}}-SNAPSHOT
 
 -donotcopy      = (CVS|.svn|.+.bak|nlsbuild|~.+|.+~|.jazzignore)
 -removeheaders  = Include-Resource, Ignore-Package, TODAY, DSTAMP, TSTAMP, Bnd-LastModified

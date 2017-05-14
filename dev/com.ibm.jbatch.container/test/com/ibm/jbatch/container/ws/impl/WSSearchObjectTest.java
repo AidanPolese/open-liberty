@@ -10,10 +10,10 @@ import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 
-import test.common.SharedOutputManager;
-
 import com.ibm.jbatch.container.ws.InstanceState;
 import com.ibm.jbatch.container.ws.WSSearchObject;
+
+import test.common.SharedOutputManager;
 
 public class WSSearchObjectTest {
 
@@ -40,10 +40,9 @@ public class WSSearchObjectTest {
         values.add(12L);
         values.add(17L);
         List<Long> instanceIdList = wsso.getInstanceIdList();
-        for(int i = 0; i < instanceIdList.size(); i++) {
+        for (int i = 0; i < instanceIdList.size(); i++) {
             assertTrue(values.contains(instanceIdList.get(i)));
         }
-        
 
         // Test Range of values
         wsso = new WSSearchObject("10:15", null, null, null);
@@ -89,7 +88,7 @@ public class WSSearchObjectTest {
     @Test
     public void testExitStatus() throws Exception {
         WSSearchObject wsso = new WSSearchObject(null, null, null, "HELP");
-        assertEquals("HELP", wsso.getExitStatus());
+        assertEquals("HELP", wsso.getExitStatusList().get(0));
     }
 
     @Test
@@ -108,13 +107,13 @@ public class WSSearchObjectTest {
         wsso = new WSSearchObject(null, "<99d", null, null);
         assertEquals("99", wsso.getLessThanCreateTime());
     }
-    
+
     @Test
     public void testCreateTime_SpecificDay() throws Exception {
         WSSearchObject wsso = new WSSearchObject(null, "2015-08-22", null, null);
         assertNotNull(wsso.getSpecificCreateTime());
     }
-    
+
     @Test(expected = Exception.class)
     public void testCreateTime_BadDateInRange() throws Exception {
         WSSearchObject wsso = new WSSearchObject(null, "2015-08-22:2015-09-", null, null);
@@ -125,13 +124,13 @@ public class WSSearchObjectTest {
         List<InstanceState> list = new ArrayList<InstanceState>();
         list.add(InstanceState.COMPLETED);
 
-        WSSearchObject wsso = new WSSearchObject("11:17", "2015-08-24", "COMPLETED" , "HELP AGAIN!");
-       
+        WSSearchObject wsso = new WSSearchObject("11:17", "2015-08-24", "COMPLETED", "HELP AGAIN!");
+
         assertEquals(11L, wsso.getStartInstanceId());
         assertEquals(17L, wsso.getEndInstanceId());
         assertNotNull(wsso.getSpecificCreateTime());
         assertTrue(wsso.getInstanceState().containsAll(list));
-        assertEquals("HELP AGAIN!", wsso.getExitStatus());
+        assertEquals("HELP AGAIN!", wsso.getExitStatusList().get(0));
     }
 
 }

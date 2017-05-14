@@ -79,6 +79,16 @@ public class PackageRunnableTest {
     @AfterClass
     public static void tearDownClass() throws Exception {}
 
+    private void deleteDir(File file) {
+        File[] contents = file.listFiles();
+        if (contents != null) {
+            for (File f : contents) {
+                deleteDir(f);
+            }
+        }
+        file.delete();
+    }
+
     @Test
     public void testRunnableJar() throws Exception {
 
@@ -128,17 +138,14 @@ public class PackageRunnableTest {
         assertTrue("Server did not start successfully in time.", found);
 
         outputReader.setIs(null);
-        System.out.println("Waiting...3 second");
-        Thread.sleep(3000); // wait 3 second
         proc.destroy(); // ensure no process left behind
         System.out.println("Removing WLP installation directory: " + extractDirectory.getAbsolutePath());
         if (extractDirectory.exists()) {
-            if (extractDirectory.delete()) {
-                System.out.println("WLP installation directory was removed. proc.waitFor()...");
-                proc.waitFor();
-            } else
-                System.out.println("WLP installation directory could not be removed: " + extractDirectory.getAbsolutePath());
+            deleteDir(extractDirectory);
+            System.out.println("WLP installation directory was removed.");
         }
+        System.out.println("Waiting 30 seconds...to make sure all Liberty thread exiting.");
+        Thread.sleep(30000); // wait 30 second
     }
 
     class StreamReader extends Thread {

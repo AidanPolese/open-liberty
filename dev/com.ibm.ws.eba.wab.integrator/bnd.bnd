@@ -10,6 +10,6 @@ Export-Package: com.ibm.ws.eba.wab.integrator;provide:=false
 
 -buildpath: \
 	com.ibm.ws.container.service;version=latest,\
-	com.ibm.websphere.org.osgi.core.6.0.0,\
+	com.ibm.websphere.org.osgi.core,\
 	com.ibm.websphere.appserver.spi.logging, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

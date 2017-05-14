@@ -64,7 +64,7 @@ option-desc.archive=\tEspecifique el destino de archivado que va a generar\n\
 \tla acci\u00f3n de empaquetado. El destino puede especificarse como v\u00eda de acceso absoluta o como \n\
 \tv\u00eda de acceso relativa. Si se omite esta opci\u00f3n, el archivo de archivado se crear\u00e1\n\
 \ten el directorio de salida del cliente. La extensi\u00f3n del nombre \n\
-\tdel archivo de destino podr\u00eda influir en el formato del archivo generado. \n\
+\tdel archivo de destino podr\u00eda influir en el formato del archivo generado.       \n\
 \tEl formato de archivo predeterminado para la acci\u00f3n de empaquetado es "pax"\n\
 \ten z/OS y "zip" para todas las dem\u00e1s plataformas.                                    \n\
 \tEl formato de archivo "jar" generar\u00e1 un jar de autoextracci\u00f3n similar al   \n\

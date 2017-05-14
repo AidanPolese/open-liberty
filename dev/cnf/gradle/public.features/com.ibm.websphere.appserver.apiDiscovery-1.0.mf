@@ -12,6 +12,7 @@ IBM-ShortName: apiDiscovery-1.0
 Subsystem-Content: com.ibm.websphere.appserver.restHandler-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.servlet-3.0; ibm.tolerates:="3.1"; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.internal.slf4j-1.7.7; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.openapi-2.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.thirdparty.swagger.annotations; location:="dev/api/third-party/,lib/"; version="[1.1.0,1.1.200)",
  com.ibm.ws.com.fasterxml.jackson.2.4.5; version="[1.0.0,1.0.200)",
  com.ibm.ws.org.apache.commons.lang3.3.5; location:="lib/"; version="[1.0.0,1.0.200)",
@@ -22,6 +23,7 @@ Subsystem-Content: com.ibm.websphere.appserver.restHandler-1.0; type="osgi.subsy
  com.ibm.ws.rest.api.discovery.ui.public; version="[1.0.0,1.0.200)",
  com.ibm.ws.rest.api.discovery; version="[1.0.0,1.0.200)",
  com.ibm.ws.rest.api.discovery.public; version="[1.0.0,1.0.200)",
+ com.ibm.ws.openapi.ui; version="[1.0.0,1.0.200)",
  com.ibm.ws.org.apache.commons.io.2.4; location:="lib/"; version="[1.0.0,1.0.200)",
  com.ibm.ws.io.swagger.models; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description

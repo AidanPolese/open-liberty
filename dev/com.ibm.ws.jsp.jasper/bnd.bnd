@@ -14,4 +14,4 @@ instrument.ffdc: false
 	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
 	com.ibm.websphere.javaee.el.2.2;version=latest,\
 	com.ibm.websphere.javaee.jsp.2.2;version=latest, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

@@ -18,7 +18,7 @@
 * Defect PK29373  Provide backward compatibility with v5(Page scope variables )
 * defect 393421 - CTS:jsp translation error not occuring for wrong  <jsp:output> 2006/09/27 Scott Johnson
 * defect 396002 CTS: no jsp fatal translation error for  taglib after actions Scott Johnson 10/17/2006
-* defect PK30879 "Unmatched end tags" exception not to be thrown in v6 (Aetna) Scott Johnson 10/18/2006
+* "Unmatched end tags" exception not to be thrown in v6 10/18/2006
 * defect 402921(PK31135) Change in Iteration eval in v6 causes infinite loops in certain scenarios
 * defect PK34989 Supercedes PK26679 (Provides an optional flag to trim text before creating CDATA section) 2007/02/13
 * defect PK47738 v6 does not allow page authors to encode params within params tag(spec compliant) maintain backward compatibility with v5 which allows encoding of params. 2007/09/05 Anuradha Natarajan

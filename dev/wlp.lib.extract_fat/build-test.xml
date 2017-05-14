@@ -24,11 +24,7 @@
         <else>
           <!-- use ivy resolved jar for classes -->
           <path id="wlp.lib.extract.path">
-            <fileset dir="../prereq.published/lib">
-              <include name="wlp.lib.extract-*.jar"/>
-              <exclude name="*-javadoc.jar" />
-              <exclude name="*-sources.jar" />
-            </fileset>
+            <fileset dir="../prereq.published/lib" includes="wlp.lib.extract-*.jar"/>
           </path>
           <property name="wlp.lib.extract.jar" refid="wlp.lib.extract.path"/>
 

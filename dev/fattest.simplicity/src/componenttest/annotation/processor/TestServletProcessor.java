@@ -50,12 +50,15 @@ public class TestServletProcessor {
                 testServlets.addAll(Arrays.asList(serverField.getAnnotation(TestServlets.class).value()));
 
             // For each @TestServlet for this server, add all @Test methods
-            for (TestServlet anno : testServlets)
-                for (Method method : getTestServletMethods(anno))
+            for (TestServlet anno : testServlets) {
+                int initialSize = testMethods.size();
+                for (Method method : getTestServletMethods(anno)) {
                     if (method.isAnnotationPresent(Test.class)) {
-                        Log.info(c, m, "adding servlet test: " + method);
                         testMethods.add(new SyntheticServletTest(serverField, anno, method));
                     }
+                }
+                Log.info(c, m, "Added " + (testMethods.size() - initialSize) + " test methods from " + anno.servlet());
+            }
         }
         return testMethods;
     }

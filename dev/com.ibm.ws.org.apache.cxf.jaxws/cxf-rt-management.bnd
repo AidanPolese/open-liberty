@@ -1,9 +1,9 @@
 -include= ~../cnf/resources/bnd/bundle.props
-bVersion=${bundle.version}
+bVersion=1.0
 
 Bundle-Name: Apache CXF JMX Management
-Bundle-Description: Apache CXF JMX Management, version ${original.jar.version}
-Bundle-SymbolicName: ${symbolic.name}
+Bundle-Description: Apache CXF JMX Management, version 2.6.2
+Bundle-SymbolicName: com.ibm.ws.org.apache.cxf-rt-management.2.6.2
 
 Export-Package: \
   org.apache.cxf.*;version=2.6.2
@@ -17,10 +17,10 @@ Import-Package: \
  *
  
 Include-Resource:\
- @build/tmp/lib/cxf-rt-management-2.6.2.jar!/META-INF/cxf/**, \
- @build/tmp/lib/cxf-rt-management-2.6.2.jar!/schemas/configuration/**, \
- @build/tmp/lib/cxf-rt-management-2.6.2.jar!/META-INF/DEPENDENCIES, \
- @build/tmp/lib/cxf-rt-management-2.6.2.jar!/META-INF/LICENSE, \
- @build/tmp/lib/cxf-rt-management-2.6.2.jar!/META-INF/NOTICE, \
- build/tmp/bnd/cxf-rt-management-2.6.2
+ @lib/cxf-rt-management-2.6.2-ibm-s20170216-1739.jar!/META-INF/cxf/**, \
+ @lib/cxf-rt-management-2.6.2-ibm-s20170216-1739.jar!/schemas/configuration/**, \
+ @lib/cxf-rt-management-2.6.2-ibm-s20170216-1739.jar!/META-INF/DEPENDENCIES, \
+ @lib/cxf-rt-management-2.6.2-ibm-s20170216-1739.jar!/META-INF/LICENSE, \
+ @lib/cxf-rt-management-2.6.2-ibm-s20170216-1739.jar!/META-INF/NOTICE, \
+ @lib/cxf-rt-management-2.6.2-ibm-s20170216-1739.jar!/org/apache/cxf/**
  

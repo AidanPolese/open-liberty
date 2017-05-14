@@ -34,6 +34,7 @@ import com.ibm.websphere.security.audit.AuditAuthResult;
 import com.ibm.websphere.security.audit.AuditAuthenticationResult;
 import com.ibm.websphere.security.audit.AuditConstants;
 import com.ibm.websphere.security.audit.AuditEvent;
+import com.ibm.websphere.security.audit.context.AuditManager;
 import com.ibm.websphere.security.auth.CredentialDestroyedException;
 import com.ibm.websphere.security.cred.WSCredential;
 import com.ibm.ws.container.service.metadata.ComponentMetaDataListener;
@@ -49,7 +50,6 @@ import com.ibm.ws.runtime.metadata.ComponentMetaData;
 import com.ibm.ws.runtime.metadata.MetaData;
 import com.ibm.ws.security.SecurityService;
 import com.ibm.ws.security.audit.Audit;
-import com.ibm.ws.security.audit.context.AuditManager;
 import com.ibm.ws.security.authentication.AuthenticationService;
 import com.ibm.ws.security.authentication.UnauthenticatedSubjectService;
 import com.ibm.ws.security.authentication.principals.WSIdentity;
@@ -418,12 +418,14 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
 
         populateAuditEJBHashMap(request);
 
+        Collection<String> roles = getRequiredRoles(methodMetaData);
+
         //check if bean method is excluded
         if (methodMetaData.isDenyAll()) {
             ejbAuditHashMap.put(AuditEvent.REASON_TYPE, AuditEvent.REASON_TYPE_EJB_DENYALL);
             Tr.audit(tc, "EJB_AUTHZ_EXCLUDED", authzUserName, methodName, applicationName);
             AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.FAILURE, authzUserName, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_FAILURE);
-            Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, Integer.valueOf("403"));
+            Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, roles, Integer.valueOf("403"));
 
             throw new EJBAccessDeniedException(TraceNLS.getFormattedMessage(this.getClass(),
                                                                             TraceConstants.MESSAGE_BUNDLE,
@@ -439,19 +441,18 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
             }
             ejbAuditHashMap.put(AuditEvent.REASON_TYPE, AuditEvent.REASON_TYPE_EJB_PERMITALL);
             AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.SUCCESS, authzUserName, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_SUCCESS);
-            Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, Integer.valueOf("200"));
+            Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, roles, Integer.valueOf("200"));
 
             return;
         }
 
-        Collection<String> roles = getRequiredRoles(methodMetaData);
         if (roles == null || roles.isEmpty()) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "Authorization granted for " + methodName + " on " + applicationName + " because no roles are required.");
             }
             ejbAuditHashMap.put(AuditEvent.REASON_TYPE, AuditEvent.REASON_TYPE_EJB_NO_ROLES);
             AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.SUCCESS, authzUserName, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_SUCCESS);
-            Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, Integer.valueOf("200"));
+            Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, null, Integer.valueOf("200"));
 
             return;
         }
@@ -462,7 +463,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
             // If we can not get the authorization service, fail securely
             ejbAuditHashMap.put(AuditEvent.REASON_TYPE, AuditEvent.REASON_TYPE_EJB_NO_AUTHZ_SERVICE);
             AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.FAILURE, authzUserName, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_FAILURE);
-            Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, Integer.valueOf("403"));
+            Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, roles, Integer.valueOf("403"));
 
             Tr.error(tc, "EJB_AUTHZ_SERVICE_NOTFOUND", authzUserName, methodName, applicationName);
             throw new EJBAccessDeniedException(TraceNLS.getFormattedMessage(this.getClass(),
@@ -474,7 +475,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
             if (!authzService.isAuthorized(applicationName, roles, subject)) {
                 ejbAuditHashMap.put(AuditEvent.REASON_TYPE, AuditEvent.EJB);
                 AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.FAILURE, authzUserName, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_FAILURE);
-                Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, Integer.valueOf("403"));
+                Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, roles, Integer.valueOf("403"));
 
                 Tr.audit(tc, "EJB_AUTHZ_FAILED", authzUserName, methodName, applicationName, roles);
                 throw new EJBAccessDeniedException(TraceNLS.getFormattedMessage(this.getClass(),
@@ -486,7 +487,7 @@ public class EJBSecurityCollaboratorImpl implements EJBSecurityCollaborator<Secu
             } else {
                 ejbAuditHashMap.put(AuditEvent.REASON_TYPE, AuditEvent.EJB);
                 AuditAuthenticationResult auditAuthResult = new AuditAuthenticationResult(AuditAuthResult.SUCCESS, authzUserName, AuditEvent.CRED_TYPE_BASIC, null, AuditEvent.OUTCOME_SUCCESS);
-                Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, Integer.valueOf("200"));
+                Audit.audit(Audit.EventID.SECURITY_AUTHZ_04, auditAuthResult, ejbAuditHashMap, req, webRequest, realm, subject, roles, Integer.valueOf("200"));
             }
         }
     }

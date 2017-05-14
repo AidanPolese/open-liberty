@@ -53,6 +53,7 @@ public class FeatureResolverTest {
     static final String serverName = "FeatureResolverTest";
     static final AtomicBoolean returnAutoFeatures = new AtomicBoolean(false);
     static final FeatureResolver resolver = new FeatureResolverImpl();
+    static final Collection<ProvisioningFeatureDefinition> noKernelFeatures = Collections.<ProvisioningFeatureDefinition> emptySet();
     static FeatureResolver.Repository repository;
     static Map<String, List<String>> overrideTolerates = new HashMap<String, List<String>>();
 
@@ -123,7 +124,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testSingleFeatureResolve() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.a-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.a-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.a-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -132,7 +133,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testSingleFeatureTwoResolve() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.b-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.b-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.a-1.0", "t1.b-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -141,7 +142,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testSimplePreferLatestResolve() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.b-1.1"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.b-1.1"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.a-1.1", "t1.b-1.1"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -150,7 +151,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testPreferLowestExplicitHighestResolve() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t2.x-1.0", "t2.y-1.1"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t2.x-1.0", "t2.y-1.1"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t2.x-1.0", "t2.y-1.1", "t2.z-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -160,7 +161,7 @@ public class FeatureResolverTest {
     @Test
     public void testSimpleAutoFeature() {
         returnAutoFeatures.set(true);
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.c-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.c-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.a-1.0", "t1.c-1.0", "t1.auto.t1.c-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -176,7 +177,7 @@ public class FeatureResolverTest {
     }
 
     private void doSimpleRequireLowest(Set<String> toResolve) {
-        Result result = resolver.resolveFeatures(repository, toResolve, Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, toResolve, Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.a-1.0", "t1.b-1.1", "t1.c-1.0", "t1.auto.t1.c-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -185,7 +186,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testSimpleRootConflict() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.a-1.0", "t1.a-1.1"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.a-1.0", "t1.a-1.1"), Collections.<String> emptySet(), false);
         Assert.assertEquals("Wrong number of results: " + result, 0, result.getResolvedFeatures().size());
         Assert.assertEquals("Unexpected missing.", Collections.emptySet(), result.getMissing());
         checkConflict(result.getConflicts(), "t1.a");
@@ -193,7 +194,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testSimpleRootConflictAllowMultiple() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.a-1.0", "t1.a-1.1"), Collections.<String> emptySet(), true);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.a-1.0", "t1.a-1.1"), Collections.<String> emptySet(), true);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.a-1.0", "t1.a-1.1"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -202,7 +203,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testAllowMultipleWithMissingPreferred() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.b-0.9"), Collections.<String> emptySet(), true);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.b-0.9"), Collections.<String> emptySet(), true);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.a-1.0", "t1.b-0.9"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -211,7 +212,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testAllowMultipleWithMissingPreferredConflict() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.b-0.9", "t1.c-1.1"), Collections.<String> emptySet(), true);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.b-0.9", "t1.c-1.1"), Collections.<String> emptySet(), true);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.a-1.0", "t1.a-1.1", "t1.b-0.9", "t1.c-1.1"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -220,7 +221,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testRootConflictWithOtherFeature() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.a-1.0", "t1.a-1.1", "t1.b-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.a-1.0", "t1.a-1.1", "t1.b-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.b-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected missing.", Collections.emptySet(), result.getMissing());
@@ -229,7 +230,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testSimplePreresolve1() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.a-1.0"), new HashSet<String>(Arrays.asList("t1.a-1.1")), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.a-1.0"), new HashSet<String>(Arrays.asList("t1.a-1.1")), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.a-1.1"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -238,7 +239,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testSimplePreresolve2() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.a-1.1"), new HashSet<String>(Arrays.asList("t1.a-1.1")), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.a-1.1"), new HashSet<String>(Arrays.asList("t1.a-1.1")), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.a-1.1"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -247,7 +248,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testSimplePreresolve3() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.a-1.1"), new HashSet<String>(Arrays.asList("t1.a-1.1", "missing-1.0")), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.a-1.1"), new HashSet<String>(Arrays.asList("t1.a-1.1", "missing-1.0")), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.a-1.1"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -256,7 +257,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testSimplePreresolve4() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t1.a-1.0"), new HashSet<String>(Arrays.asList("t1.a-1.1", "missing-1.0")), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t1.a-1.0"), new HashSet<String>(Arrays.asList("t1.a-1.1", "missing-1.0")), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t1.a-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -265,7 +266,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testPostponedDandE() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t3.a-1.0", "t3.b-1.0", "t3.c-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t3.a-1.0", "t3.b-1.0", "t3.c-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t3.a-1.0", "t3.b-1.0", "t3.c-1.0", "t3.d-2.0", "t3.e-2.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -274,7 +275,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testPostponedDandEWithDirectConflictF() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t3.a-1.0", "t3.b-1.0", "t3.c-1.0", "t3.f-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t3.a-1.0", "t3.b-1.0", "t3.c-1.0", "t3.f-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t3.a-1.0", "t3.b-1.0", "t3.c-1.0", "t3.f-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected missing.", Collections.emptySet(), result.getMissing());
@@ -285,7 +286,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testPostponedDandEWithConflictG() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t3.a-1.0", "t3.b-1.0", "t3.c-1.0", "t3.g-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t3.a-1.0", "t3.b-1.0", "t3.c-1.0", "t3.g-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t3.a-1.0", "t3.b-1.0", "t3.c-1.0", "t3.g-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected missing.", Collections.emptySet(), result.getMissing());
@@ -296,7 +297,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testConflictingPreferences1() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t4.c-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t4.c-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected1 = new TreeSet<String>(Arrays.asList("t4.c-1.0", "t4.a-1.0", "t4.b-1.0"));
         Set<String> expected2 = new TreeSet<String>(Arrays.asList("t4.c-1.0", "t4.a-2.0", "t4.b-2.0"));
         assertOneOf(new TreeSet<String>(result.getResolvedFeatures()), expected1, expected2);
@@ -306,7 +307,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testConflictingPreferences2() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t4.f-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t4.f-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected1 = new TreeSet<String>(Arrays.asList("t4.f-1.0", "t4.d-2.0", "t4.e-2.0"));
         Set<String> expected2 = new TreeSet<String>(Arrays.asList("t4.f-1.0", "t4.d-1.0", "t4.e-1.0"));
         assertOneOf(new TreeSet<String>(result.getResolvedFeatures()), expected1, expected2);
@@ -323,7 +324,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testSimpleCycle() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t5.a-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t5.a-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t5.a-1.0", "t5.b-1.0", "t5.c-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -332,7 +333,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testMissing() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t6.a-1.0", "missing.d-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t6.a-1.0", "missing.d-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t6.a-1.0", "t6.b-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -341,7 +342,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testComplicatedPreference() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.a-1.0", "t7.b-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.a-1.0", "t7.b-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.c-2.0", "t7.d-2.0", "t7.f-1.0", "t7.g-1.0", "t7.h-2.0", "t7.i-2.0", "t7.j-2.0",
                                                                  "t7.k-2.0", "t7.l-1.0", "t7.m-1.0", "t7.n-1.0", "t7.o-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
@@ -351,7 +352,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testComplicatedPreferenceAllowMultiple() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.a-1.0", "t7.b-1.0"), Collections.<String> emptySet(), true);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.a-1.0", "t7.b-1.0"), Collections.<String> emptySet(), true);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.c-1.0", "t7.d-1.0", "t7.f-1.0", "t7.g-1.0",
                                                                  "t7.h-1.0", "t7.h-2.0", "t7.i-1.0", "t7.i-2.0", "t7.j-1.0", "t7.j-2.0", "t7.k-1.0", "t7.k-2.0",
                                                                  "t7.l-1.0", "t7.m-1.0", "t7.n-1.0", "t7.o-1.0"));
@@ -363,7 +364,7 @@ public class FeatureResolverTest {
     @Test
     public void testComplicatedPreferenceWithAutoFeature() {
         returnAutoFeatures.set(true);
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.a-1.0", "t7.b-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.a-1.0", "t7.b-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.auto.1-1.0", "t7.auto.3-1.0", "t7.a-1.0", "t7.b-1.0", "t7.c-2.0", "t7.d-2.0", "t7.f-1.0", "t7.g-1.0",
                                                                  "t7.h-2.0", "t7.i-2.0", "t7.j-2.0", "t7.k-2.0", "t7.l-1.0", "t7.m-1.0", "t7.n-1.0", "t7.o-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
@@ -374,7 +375,7 @@ public class FeatureResolverTest {
     @Test
     public void testComplicatedPreferenceWithAutoFeatureAllowMultiple() {
         returnAutoFeatures.set(true);
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.p-1.0", "t7.q-1.0"), Collections.<String> emptySet(), true);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.p-1.0", "t7.q-1.0"), Collections.<String> emptySet(), true);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.auto.1-1.0", "t7.auto.2-1.0", "t7.auto.3-1.0", "t7.auto.4-1.0", "t7.auto.5-1.0", "t7.a-1.0", "t7.b-1.0",
                                                                  "t7.c-1.0", "t7.d-1.0", "t7.f-1.0", "t7.g-1.0",
                                                                  "t7.h-1.0", "t7.h-2.0", "t7.i-1.0", "t7.i-2.0", "t7.j-1.0", "t7.j-2.0", "t7.k-1.0", "t7.k-2.0",
@@ -386,7 +387,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testComplicatedPreferenceWithHardConflict() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.h-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.h-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.c-1.0", "t7.d-1.0", "t7.f-1.0", "t7.g-1.0",
                                                                  "t7.l-1.0", "t7.m-1.0", "t7.n-1.0", "t7.o-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
@@ -400,7 +401,7 @@ public class FeatureResolverTest {
     @Test
     public void testComplicatedPreferenceWithHardConflictAndAutoFeatures() {
         returnAutoFeatures.set(true);
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.h-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.h-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.c-1.0", "t7.d-1.0", "t7.f-1.0", "t7.g-1.0",
                                                                  "t7.l-1.0", "t7.m-1.0", "t7.n-1.0", "t7.o-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
@@ -414,7 +415,7 @@ public class FeatureResolverTest {
     @Test
     public void TestComplicatedPreferenceWithAutoFeatureConflict() {
         returnAutoFeatures.set(true);
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.a-1.0", "t7.p-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.a-1.0", "t7.p-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.auto.2-1.0", "t7.auto.3-1.0", "t7.auto.4-1.0", "t7.a-1.0", "t7.b-1.0", "t7.c-1.0", "t7.d-1.0", "t7.f-1.0",
                                                                  "t7.g-1.0", "t7.h-1.0", "t7.i-1.0", "t7.j-1.0", "t7.k-1.0", "t7.l-1.0", "t7.m-1.0", "t7.n-1.0", "t7.o-1.0",
                                                                  "t7.p-1.0"));
@@ -429,7 +430,7 @@ public class FeatureResolverTest {
     @Test
     public void TestComplicatedPreferenceWithAutoFeatureLooping() {
         returnAutoFeatures.set(true);
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.p-1.0", "t7.q-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.p-1.0", "t7.q-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.auto.1-1.0", "t7.auto.3-1.0", "t7.auto.4-1.0", "t7.auto.5-1.0", "t7.a-1.0", "t7.b-1.0", "t7.c-2.0",
                                                                  "t7.d-2.0", "t7.f-1.0", "t7.g-1.0", "t7.h-2.0", "t7.i-2.0", "t7.j-2.0", "t7.k-2.0", "t7.l-1.0", "t7.m-1.0",
                                                                  "t7.n-1.0", "t7.o-1.0", "t7.p-1.0", "t7.q-1.0"));
@@ -440,7 +441,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testComplicatedPreferenceWithTransitiveChecks1() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.r-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.r-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.c-2.0", "t7.d-2.0", "t7.f-1.0", "t7.g-1.0", "t7.h-2.0", "t7.i-2.0", "t7.j-2.0",
                                                                  "t7.k-2.0", "t7.l-1.0", "t7.m-1.0", "t7.n-1.0", "t7.o-1.0", "t7.r-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
@@ -450,7 +451,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testComplicatedPreferenceWithTransitiveChecks2() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.s-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.s-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.c-2.0", "t7.d-2.0", "t7.f-1.0", "t7.g-1.0", "t7.h-2.0", "t7.i-2.0", "t7.j-2.0",
                                                                  "t7.k-2.0", "t7.l-1.0", "t7.m-1.0", "t7.n-1.0", "t7.o-1.0", "t7.s-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
@@ -460,7 +461,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testComplicatedPreferenceWithTransitiveChecks3() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.t-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.t-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.c-1.0", "t7.d-1.0", "t7.f-1.0", "t7.g-1.0", "t7.l-1.0", "t7.m-1.0", "t7.n-1.0",
                                                                  "t7.o-1.0", "t7.t-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
@@ -473,7 +474,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testComplicatedPreferenceWithTransitiveChecks4() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.u-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.u-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.c-2.0", "t7.d-2.0", "t7.f-1.0", "t7.g-1.0", "t7.h-2.0", "t7.i-2.0", "t7.j-2.0",
                                                                  "t7.k-2.0", "t7.l-1.0", "t7.m-1.0", "t7.n-1.0", "t7.o-1.0", "t7.s-1.0", "t7.u-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
@@ -483,7 +484,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testComplicatedPreferenceWithTransitiveChecks5() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t7.v-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t7.v-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t7.a-1.0", "t7.b-1.0", "t7.c-1.0", "t7.d-1.0", "t7.f-1.0", "t7.g-1.0", "t7.l-1.0", "t7.m-1.0", "t7.n-1.0",
                                                                  "t7.o-1.0", "t7.s-1.0", "t7.v-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
@@ -496,7 +497,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample1() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.jsp-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.jsp-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.jsp-1.0", "t8.servlet-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -505,7 +506,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample2() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.jsp-1.0", "t8.portlet-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.jsp-1.0", "t8.portlet-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.jsp-1.0", "t8.servlet-1.0", "t8.portlet-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -514,7 +515,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample3() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.jsp-1.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.jsp-1.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.jsp-1.0", "t8.servlet-2.0", "t8.websockets-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -523,7 +524,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample4() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.portlet-1.0", "t8.jsp-1.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.portlet-1.0", "t8.jsp-1.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.jsp-1.0", "t8.websockets-1.0", "t8.portlet-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected missing.", Collections.emptySet(), result.getMissing());
@@ -532,7 +533,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample5() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.jsp-1.0", "t8.servlet-2.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.jsp-1.0", "t8.servlet-2.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.jsp-1.0", "t8.servlet-2.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -541,7 +542,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample6() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.jsp-1.0", "t8.servlet-2.0", "t8.portlet-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.jsp-1.0", "t8.servlet-2.0", "t8.portlet-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.jsp-1.0", "t8.portlet-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected missing.", Collections.emptySet(), result.getMissing());
@@ -551,7 +552,7 @@ public class FeatureResolverTest {
     @Test
     public void testServletExample6OverrideTolerates() {
         overrideTolerates.put("t8.servlet", Collections.singletonList("2.0"));
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.jsp-1.0", "t8.servlet-2.0", "t8.portlet-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.jsp-1.0", "t8.servlet-2.0", "t8.portlet-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.jsp-1.0", "t8.servlet-2.0", "t8.portlet-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected missing.", Collections.emptySet(), result.getMissing());
@@ -560,7 +561,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample7() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.jsp-1.0", "t8.portlet-2.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.jsp-1.0", "t8.portlet-2.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.jsp-1.0", "t8.servlet-1.0", "t8.portlet-2.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -569,7 +570,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample8() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.jsp-1.0", "t8.portlet-2.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.jsp-1.0", "t8.portlet-2.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.jsp-1.0", "t8.servlet-2.0", "t8.portlet-2.0", "t8.websockets-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -578,7 +579,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample9() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.portlet-2.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.portlet-2.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.jsp-1.0", "t8.servlet-2.0", "t8.portlet-2.0", "t8.websockets-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -587,7 +588,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample10() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.portlet-1.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.portlet-1.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.jsp-1.0", "t8.websockets-1.0", "t8.portlet-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected missing.", Collections.emptySet(), result.getMissing());
@@ -597,7 +598,7 @@ public class FeatureResolverTest {
     @Test
     public void testServletExample10OverrideTolerates() {
         overrideTolerates.put("t8.servlet", Collections.singletonList("2.0"));
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.portlet-1.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.portlet-1.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.jsp-1.0", "t8.servlet-2.0", "t8.websockets-1.0", "t8.portlet-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected missing.", Collections.emptySet(), result.getMissing());
@@ -606,7 +607,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample11() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.x-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.x-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.x-1.0", "t8.jsp-1.0", "t8.servlet-1.0", "t8.portlet-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -615,7 +616,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample12() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.websockets-1.0", "t8.x-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.websockets-1.0", "t8.x-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.x-1.0", "t8.jsp-1.0", "t8.websockets-1.0", "t8.portlet-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected missing.", Collections.emptySet(), result.getMissing());
@@ -625,7 +626,7 @@ public class FeatureResolverTest {
     @Test
     public void testServletExample12OverrideTolerates() {
         overrideTolerates.put("t8.servlet", Collections.singletonList("2.0"));
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.websockets-1.0", "t8.x-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.websockets-1.0", "t8.x-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.x-1.0", "t8.jsp-1.0", "t8.websockets-1.0", "t8.portlet-1.0", "t8.servlet-2.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected missing.", Collections.emptySet(), result.getMissing());
@@ -634,7 +635,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testServletExample13() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t8.x-2.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t8.x-2.0", "t8.websockets-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t8.x-2.0", "t8.websockets-1.0", "t8.jsp-1.0", "t8.servlet-2.0", "t8.portlet-2.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -681,7 +682,7 @@ public class FeatureResolverTest {
         String serverFeatureA = "t9.a.server-1.0";
         String clientFeatureA = "t9.a.client-1.0";
         Collection<String> rootFeatures = Arrays.asList(serverFeatureA, clientFeatureA);
-        Result result = resolver.resolveFeatures(repository, rootFeatures, Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, rootFeatures, Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(rootFeatures);
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertFalse("Unexpected failures.", result.hasErrors());
@@ -732,7 +733,7 @@ public class FeatureResolverTest {
 
     private void verifyFailProcessType(List<String> features, EnumSet<ProcessType> unsupportedTypes) {
         Collection<String> rootFeatures = Arrays.asList(features.get(0));
-        Result result = resolver.resolveFeatures(repository, rootFeatures, Collections.<String> emptySet(), false, unsupportedTypes);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, rootFeatures, Collections.<String> emptySet(), false, unsupportedTypes);
 
         Set<String> expected = new HashSet<String>(features);
         expected.remove(features.get(features.size() - 1));
@@ -745,7 +746,7 @@ public class FeatureResolverTest {
 
     private void verifySuccessProcessType(List<String> features, EnumSet<ProcessType> supportedTypes) {
         Collection<String> rootFeatures = Arrays.asList(features.get(0));
-        Result result = resolver.resolveFeatures(repository, rootFeatures, Collections.<String> emptySet(), false, supportedTypes);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, rootFeatures, Collections.<String> emptySet(), false, supportedTypes);
         Set<String> expected = new HashSet<String>(features);
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertFalse("Unexpected failures.", result.hasErrors());
@@ -753,7 +754,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testToleratesTransitively01() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t9.a-1.0"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t9.a-1.0"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t9.a-1.0", "t9.b-1.1", "t9.c-1.0", "t9.d-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         Assert.assertEquals("Unexpected Conflicts.", Collections.emptyMap(), result.getConflicts());
@@ -762,7 +763,7 @@ public class FeatureResolverTest {
 
     @Test
     public void testToleratesTransitively02() {
-        Result result = resolver.resolveFeatures(repository, Arrays.asList("t9.a-1.1"), Collections.<String> emptySet(), false);
+        Result result = resolver.resolveFeatures(repository, noKernelFeatures, Arrays.asList("t9.a-1.1"), Collections.<String> emptySet(), false);
         Set<String> expected = new HashSet<String>(Arrays.asList("t9.a-1.1", "t9.c-1.0", "t9.d-1.0"));
         Assert.assertEquals("Wrong results found.", new TreeSet<String>(expected), new TreeSet<String>(result.getResolvedFeatures()));
         checkConflict(result.getConflicts(), "t9.b", "t9.d-1.0");

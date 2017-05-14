@@ -36,6 +36,11 @@ public class WrapperRunnableImpl extends ServiceWrapper implements WrapperRunnab
             super(asyncContext);
             this.runnable = run;
             this.asyncContext = asyncContext;
+            
+            if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && logger.isLoggable(Level.FINEST)) {
+                logger.logp(Level.FINEST, CLASS_NAME, "constructor", " "+ this);
+            }
+            
             requestDataOnStartRequestThread = new  SRTServletRequestThreadData();
             requestDataOnStartRequestThread.init(SRTServletRequestThreadData.getInstance());
     }
@@ -43,65 +48,67 @@ public class WrapperRunnableImpl extends ServiceWrapper implements WrapperRunnab
 
     @Override
     public void run() {
-         if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINEST)) { 
-                    logger.entering(CLASS_NAME,"run",this);
-            }
+        if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINEST)) { 
+            logger.entering(CLASS_NAME,"run",this);
+        }
 
-            // Start:PM90834
-            if (!this.asyncContext.transferContext()) {
-                popContextData();
-            }
-            // End:PM90834
-         
-            synchronized(asyncContext){
-                    asyncContext.removeStartRunnable(this);
-            }
-            
-            //we could try to run this runnable even though it will be removed from the list
-            //if the expiration timer executes. Therefore add AtomicBoolean to see if we've already run
-            //it or cancelled it.
-            if (!getAndSetRunning(true)){
-                    if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINEST)) { 
-                            logger.logp(Level.FINEST, CLASS_NAME, "run", "running");
-                    }
-                    WebContainerRequestState reqState = WebContainerRequestState.getInstance(false);
-                    if (reqState!=null)
-                    {
-                            reqState.init();
-                    }
-                    
-                    // Add the request data from the thread on which start was called to the request data for
-                    // the thread of thet started runnable.
-                    SRTServletRequestThreadData.getInstance().init(requestDataOnStartRequestThread);
- 
-                    //The spec says "The container MAY take care of the errors from the thread issued via AsyncContext.start."
-                    //We will catch an error and invoke async error handling, but allow an already dispatched thread to continue processing
-                    //We do not need to complete the async context as this will be done either by the error handling on the thread which created this (?)
-                    try {
-                        if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && logger.isLoggable(Level.FINEST)) {
-                            logger.logp(Level.FINEST, CLASS_NAME, "run", "Context Class loader before run: " + Thread.currentThread().getContextClassLoader());
-                        }
-                            runnable.run();
-                    } catch(Throwable th) {
-                            logger.logp(Level.WARNING, CLASS_NAME, "run", "error.occurred.during.async.servlet.handling", th);
-                            ListenerHelper.invokeAsyncErrorHandling(asyncContext, reqState, th, AsyncListenerEnum.ERROR,ExecuteNextRunnable.FALSE,CheckDispatching.TRUE);
-                    }
-            }
-            else {
-                    if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINEST)) { 
-                            logger.logp(Level.FINEST, CLASS_NAME, "run", "not running because it has already ran or been cancelled");
-                    }
-            }
+        // Start:PM90834
+        if (!this.asyncContext.transferContext()) {
+            popContextData();
+        }
+        // End:PM90834
 
-            // Start:PM90834
-            if (!this.asyncContext.transferContext()) {
-                resetContextData();
-            }
-            // End:PM90834
- 
+        synchronized(asyncContext){
+            asyncContext.removeStartRunnable(this);
+        }
+
+        //we could try to run this runnable even though it will be removed from the list
+        //if the expiration timer executes. Therefore add AtomicBoolean to see if we've already run
+        //it or cancelled it.
+        if (!getAndSetRunning(true)){
             if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINEST)) { 
-                    logger.exiting(CLASS_NAME,"run",this);
+                logger.logp(Level.FINEST, CLASS_NAME, "run", "running");
             }
+            WebContainerRequestState reqState = WebContainerRequestState.getInstance(false);
+            if (reqState!=null)
+            {
+                reqState.init();
+            }
+
+            // Add the request data from the thread on which start was called to the request data for
+            // the thread of thet started runnable.
+            SRTServletRequestThreadData.getInstance().init(requestDataOnStartRequestThread);
+
+            //The spec says "The container MAY take care of the errors from the thread issued via AsyncContext.start."
+            //We will catch an error and invoke async error handling, but allow an already dispatched thread to continue processing
+            //We do not need to complete the async context as this will be done either by the error handling on the thread which created this (?)
+            try {
+                if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && logger.isLoggable(Level.FINEST)) {
+                    logger.logp(Level.FINEST, CLASS_NAME, "run", "Context Class loader before run: " + Thread.currentThread().getContextClassLoader());
+                }
+                runnable.run();
+            } catch(Throwable th) {
+                logger.logp(Level.WARNING, CLASS_NAME, "run", "error.occurred.during.async.servlet.handling", th);
+                ListenerHelper.invokeAsyncErrorHandling(asyncContext, reqState, th, AsyncListenerEnum.ERROR,ExecuteNextRunnable.FALSE,CheckDispatching.TRUE);
+            }
+        }
+        else {
+            if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINEST)) { 
+                logger.logp(Level.FINEST, CLASS_NAME, "run", "not running because it has already ran or been cancelled");
+            }
+        }
+
+        // Start:PM90834
+        if (!this.asyncContext.transferContext()) {
+            resetContextData();
+        }
+        // End:PM90834
+
+        SRTServletRequestThreadData.getInstance().init(null);
+
+        if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINEST)) { 
+            logger.exiting(CLASS_NAME,"run",this);
+        }
     }
     
     public String toString(){

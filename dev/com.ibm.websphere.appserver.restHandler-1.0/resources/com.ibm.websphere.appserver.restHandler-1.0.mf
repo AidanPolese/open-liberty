@@ -7,10 +7,7 @@ IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
 IBM-SPI-Package: com.ibm.wsspi.rest.handler; type=ibm-spi,
- com.ibm.wsspi.rest.handler.helper; type=ibm-spi,
- com.ibm.wsspi.collective.plugins; type=ibm-spi,
- com.ibm.wsspi.collective.plugins.helpers; type=ibm-spi,
- com.ibm.wsspi.rest.api.discovery; type=ibm-spi
+ com.ibm.wsspi.rest.handler.helper; type=ibm-spi
 Subsystem-Content: com.ibm.websphere.appserver.spi.restHandler_1.6-javadoc.zip; type=file; location:="dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.restHandler_1.6-javadoc.zip",
  com.ibm.websphere.appserver.ssl-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.adminSecurity-1.0; type="osgi.subsystem.feature",

@@ -86,9 +86,9 @@ public class JavaJarTest {
     private static final File outputUploadDir;
     private static boolean disableTestSuite;
     private static boolean runCoreTest;
-    private static final File Repo8555 = new File("old_version_jar/8555");
-    private static final File Repo8556 = new File("old_version_jar/8556");
-    private static final File Repo8557 = new File("old_version_jar/8557");
+    private static final File Repo8555 = new File("jar/8.5.5.5");
+    private static final File Repo8556 = new File("jar/8.5.5.6");
+    private static final File Repo8557 = new File("jar/8.5.5.7");
 
     // ***IMPORTANT***
     // Mac and Sun builds do NOT produce the wlp-developers-8.5.0.0.zip. Until they do, we need to
@@ -2248,7 +2248,7 @@ public class JavaJarTest {
                             manifestToUpdate);
 
         // Test that the upgrade is blocked
-        execute(null, null, null, WlpJarType.ND_LIC, null, new String[0], EXIT_EXTRACT_ERROR,
+        execute(null, null, null, WlpJarType.ND_LIC, null, new String[0], NOT_APPLICABLE_FEATURE,
                 input("x", "x", "1", samplesBaseUpgradeWithFeatureDir.getAbsolutePath() + "/wlp"));
 
         // Modify the IBM-AppliesTo property of a feature so that it applies to a different version than the upgrade
@@ -2426,17 +2426,27 @@ public class JavaJarTest {
             return;
         } else if (expectedExit == NOT_APPLICABLE_FEATURE) {
             Collection<String> output = execute(null, null, null, licenseJar, null, new String[0], NOT_APPLICABLE_FEATURE,
-                                                input("x", "x", "1", samplesLicenseDowngradeDir.getAbsolutePath() + "/wlp"),
-                                                find("Use the following command to uninstall these features before applying the license"));
+                                                input("x", "x", "1", samplesLicenseDowngradeDir.getAbsolutePath() + "/wlp"));
             File toolsEdition = new File(samplesLicenseDowngradeDir, "wlp/bin/tools");
-            File toolsinstallUtility = new File(samplesLicenseDowngradeDir, "wlp/bin/tools/installUtility.jar");
-            String out = output.toString();
+            File toolsinstallUtility = new File(samplesLicenseDowngradeDir, "wlp/bin/tools/ws-installUtility.jar");
+
+            String out = "";
+            for (String s : output) {
+                out += s + " ";
+            }
+            Assert.assertTrue("doesn't contain the command, output: " + out, out.contains("Use the following command to uninstall these features before applying the license"));
             int startpoint = out.lastIndexOf("uninstall");
             int endpoint = out.lastIndexOf("\"");
-            String command = out.substring(startpoint, endpoint);
+            System.out.println(out);
+            if (!((startpoint >= 0) && (startpoint < out.length()) && (startpoint < endpoint) && (endpoint >= 0) && (endpoint < out.length()))) {
+                Assert.fail("start point or end point not valid: startpoint = " + startpoint + "endpoint = " + endpoint + " output: " + out);
+            }
+            String command = out.substring(startpoint + "uninstall".length(), endpoint);
+            command = "uninstall" + command;
+            String[] commands = command.split(" ");
             execute(toolsEdition, null, null,
-                    new String[] { command },
-                    EXIT_OK, toolsinstallUtility, input(""));
+                    commands,
+                    EXIT_OK, toolsinstallUtility, input("\n"));
             execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
                     input("x", "x", "1", samplesLicenseDowngradeDir.getAbsolutePath() + "/wlp"));
             return;
@@ -2483,19 +2493,28 @@ public class JavaJarTest {
                     input("x", "x", "1", samplesILANDowngradeDir.getAbsolutePath() + "/wlp"));
         } else if (expectedExit == NOT_APPLICABLE_FEATURE) {
             Collection<String> output = execute(null, null, null, licenseJar, null, new String[0], NOT_APPLICABLE_FEATURE,
-                                                input("x", "x", "1", samplesILANDowngradeDir.getAbsolutePath() + "/wlp"),
-                                                find("Use the following command to uninstall these features before applying the license"));
+                                                input("x", "x", "1", samplesILANDowngradeDir.getAbsolutePath() + "/wlp"));
             File toolsEdition = new File(samplesILANDowngradeDir, "wlp/bin/tools");
-            File toolsinstallUtility = new File(samplesILANDowngradeDir, "wlp/bin/tools/installUtility.jar");
-            String out = output.toString();
+            File toolsinstallUtility = new File(samplesILANDowngradeDir, "wlp/bin/tools/ws-installUtility.jar");
+            String out = "";
+            for (String s : output) {
+                out += s + " ";
+            }
+            Assert.assertTrue("doesn't contain the command, output: " + out, out.contains("Use the following command to uninstall these features before applying the license"));
             int startpoint = out.lastIndexOf("uninstall");
             int endpoint = out.lastIndexOf("\"");
-            String command = out.substring(startpoint, endpoint);
+            if (startpoint == -1 || endpoint == -1 || startpoint > endpoint) {
+                Assert.fail("start point or end point not valid: startpoint = " + startpoint + "endpoint = " + endpoint + " output: " + out);
+            }
+            String command = out.substring(startpoint + "uninstall".length(), endpoint);
+            command = "uninstall" + command;
+            String[] commands = command.split(" ");
             execute(toolsEdition, null, null,
-                    new String[] { command },
-                    EXIT_OK, toolsinstallUtility, input(""));
+                    commands,
+                    EXIT_OK, toolsinstallUtility, input("\n"));
             execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
                     input("x", "x", "1", samplesILANDowngradeDir.getAbsolutePath() + "/wlp"));
+
         }
         deleteDir(samplesILANDowngradeDir);
         return;
@@ -2505,7 +2524,6 @@ public class JavaJarTest {
     public void testDowngradeEdition() throws Exception {
         testLegalDowngradeEditionHelper(WlpJarType.ND, WlpJarType.BASE_LIC, "ND", "BASE", NOT_APPLICABLE_FEATURE);
         if (runCoreTest) {
-            //in this case, testLegalUpgradeEditionHelper can be used here
             testLegalDowngradeEditionHelper(WlpJarType.ND, WlpJarType.CORE_LIC, "ND", "LIBERTY_CORE", NOT_APPLICABLE_FEATURE);
             testLegalDowngradeEditionHelper(WlpJarType.BASE, WlpJarType.CORE_LIC, "BASE", "LIBERTY_CORE", EXIT_OK);
             testLegalDowngradeZipHelper("wlp-javaee7-", WlpJarType.CORE_LIC, "BASE_ILAN", "LIBERTY_CORE", NOT_APPLICABLE_FEATURE);
@@ -2538,12 +2556,17 @@ public class JavaJarTest {
                             manifestToUpdate);
 
         // Test that the downgrade is blocked
-        execute(null, null, null, WlpJarType.BASE_LIC, null, new String[0], EXIT_EXTRACT_ERROR,
+        execute(null, null, null, WlpJarType.BASE_LIC, null, new String[0], NOT_APPLICABLE_FEATURE,
                 input("x", "x", "1", samplesNdDowngradeWithFeatureDir.getAbsolutePath() + "/wlp"), find("Use the following command to uninstall these features"));
 
-        // Modify the IBM-AppliesTo property of a feature so that it applies to a different version than the upgrade
-        setManifestProperty("IBM-AppliesTo", "com.ibm.websphere.appserver; productVersion=8.1.1.1; productInstallType=Archive; productEdition=\"LIBERTY_CORE,BASE,BASE_ILAN,ND\"",
-                            manifestToUpdate);
+        if (manifestFiles != null) {
+            for (File file : manifestFiles) {
+                // Modify the IBM-AppliesTo property of a feature so that it applies to a different edition than the upgrade
+                setManifestProperty("IBM-AppliesTo",
+                                    "com.ibm.websphere.appserver; productVersion=" + version + "; productInstallType=Archive; productEdition=\"LIBERTY_CORE,BASE,BASE_ILAN,ND\"",
+                                    file);
+            }
+        }
 
         // Test that the downgrade should not be blocked since the upgrade jar is now version insensitive.
         execute(null, null, null, WlpJarType.BASE_LIC, null, new String[0], EXIT_OK,
@@ -2574,16 +2597,21 @@ public class JavaJarTest {
 
         //install the bundle to the installation jar
         File toolsBundleEdition = new File(samplesBundleDowngradeDir, "wlp/bin/tools");
-        File toolsinstallUtility = new File(samplesBundleDowngradeDir, "wlp/bin/tools/installUtility.jar");
+        File toolsinstallUtility = new File(samplesBundleDowngradeDir, "wlp/bin/tools/ws-installUtility.jar");
         String bundlename = originalEdition.toLowerCase() + "Bundle";
         if (originalEdition == "ND") {
             bundlename = "ndControllerBundle";
         } else if (originalEdition == "LIBERTY_CORE") {
             bundlename = "libertyCoreBundle";
         }
-        execute(toolsBundleEdition, null, null,
-                new String[] { "install " + bundlename + " --from=" + outputUploadDir + "/wlp-featureRepo-" + version + ".zip  --acceptLicense" },
-                EXIT_OK, toolsinstallUtility, find(""));
+        Collection<String> output_1 = execute(toolsBundleEdition, null, null,
+                                              new String[] { "install", bundlename, "--from=" + outputUploadDir + "/wlp-featureRepo-" + version + ".zip", "--acceptLicense" },
+                                              EXIT_OK, toolsinstallUtility);
+        String out_1 = "";
+        for (String s : output_1) {
+            out_1 += s + " ";
+        }
+        Assert.assertTrue("doesn't contain the command, output: " + out_1, out_1.contains("All assets were successfully installed."));
         // Attempt to perform the license downgrade
         if (expectedExit == EXIT_OK) {
             execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
@@ -2591,20 +2619,29 @@ public class JavaJarTest {
         } else if (expectedExit == NOT_APPLICABLE_FEATURE) {
             String bundle_name = "";
             if (originalEdition == "ND") {
-                bundle_name = "ndMemberBundle";
+                bundle_name = "ndControllerBundle";
             } else if (originalEdition == "BASE") {
                 bundle_name = "baseBundle";
             }
             Collection<String> output = execute(null, null, null, licenseJar, null, new String[0], NOT_APPLICABLE_FEATURE,
-                                                input("x", "x", "1", samplesBundleDowngradeDir.getAbsolutePath() + "/wlp"), find(bundle_name),
-                                                find("Use the following command to uninstall these features before applying the license"));
+                                                input("x", "x", "1", samplesBundleDowngradeDir.getAbsolutePath() + "/wlp"));
             File toolsEdition = new File(samplesBundleDowngradeDir, "wlp/bin/tools");
-            String out = output.toString();
+            String out = "";
+            for (String s : output) {
+                out += s + " ";
+            }
+            Assert.assertTrue("doesn't contain the command, output: " + out, out.contains("Use the following command to uninstall these features before applying the license"));
+            Assert.assertTrue("doesn't contain the bundle" + bundle_name + "output:" + out, out.contains(bundle_name));
             int startpoint = out.lastIndexOf("uninstall");
             int endpoint = out.lastIndexOf("\"");
-            String command = out.substring(startpoint, endpoint);
+            if (startpoint == -1 || endpoint == -1 || startpoint > endpoint) {
+                Assert.fail("start point or end point not valid: startpoint = " + startpoint + "endpoint = " + endpoint + " output: " + out);
+            }
+            String command = out.substring(startpoint + "uninstall".length(), endpoint);
+            command = "uninstall" + command;
+            String[] commands = command.split(" ");
             execute(toolsEdition, null, null,
-                    new String[] { command },
+                    commands,
                     EXIT_OK, toolsinstallUtility, input("\n"));
             execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
                     input("x", "x", "1", samplesBundleDowngradeDir.getAbsolutePath() + "/wlp"));
@@ -2616,9 +2653,10 @@ public class JavaJarTest {
         Assert.assertTrue(propertiesBaseEdition.getAbsolutePath(), propertiesBaseEdition.exists());
 
         String edition_after = getWASProperty("com.ibm.websphere.productEdition", propertiesBaseEdition);
-        Assert.assertEquals("Expected edition should be" + originalEdition, originalEdition, edition_after);
+        Assert.assertEquals("Expected edition should be" + targetEdition, targetEdition, edition_after);
 
         deleteDir(samplesBundleDowngradeDir);
+
     }
 
     @Test
@@ -2714,10 +2752,15 @@ public class JavaJarTest {
 
         //install the bundle to the installation jar
         File toolsBundleEdition = new File(samplesBundleUpgradeDir, "wlp/bin/tools");
-        File toolsinstallUtility = new File(samplesBundleUpgradeDir, "wlp/bin/tools/installUtility.jar");
-        execute(toolsBundleEdition, null, null,
-                new String[] { "install " + bundlename + " --from=" + outputUploadDir + "/wlp-featureRepo-" + version + ".zip  --acceptLicense" },
-                EXIT_OK, toolsinstallUtility, input(""));
+        File toolsinstallUtility = new File(samplesBundleUpgradeDir, "wlp/bin/tools/ws-installUtility.jar");
+        Collection<String> output = execute(toolsBundleEdition, null, null,
+                                            new String[] { "install", bundlename, "--from=" + outputUploadDir + "/wlp-featureRepo-" + version + ".zip", "--acceptLicense" },
+                                            EXIT_OK, toolsinstallUtility);
+        String out = "";
+        for (String s : output) {
+            out += s + " ";
+        }
+        Assert.assertTrue("doesn't contain All assets were successfully installed. out: " + out, out.contains("All assets were successfully installed."));
 
         // Attempt to perform the license upgrade
         execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,

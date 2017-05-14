@@ -17,8 +17,8 @@ import java.util.List;
 import javax.annotation.sql.DataSourceDefinition;
 import javax.annotation.sql.DataSourceDefinitions;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.javaee.dd.common.DataSource;
 import com.ibm.wsspi.injectionengine.InjectionBinding;
 import com.ibm.wsspi.injectionengine.InjectionConfigConstants;
@@ -28,9 +28,7 @@ import com.ibm.wsspi.injectionengine.InjectionProcessor;
 public class DataSourceDefinitionProcessor
                 extends InjectionProcessor<DataSourceDefinition, DataSourceDefinitions>
 {
-    private final static String CLASS_NAME = DataSourceDefinitionProcessor.class.getName();
-
-    private final static TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(DataSourceDefinitionProcessor.class,
                                                          InjectionConfigConstants.traceString,
                                                          InjectionConfigConstants.messageFile);
 

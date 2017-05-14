@@ -150,7 +150,7 @@ public class RESTHelper {
 
         if (request instanceof ServletRESTRequestWithParams) {
             ServletRESTRequestWithParams req = (ServletRESTRequestWithParams) request;
-            return req.getParam(ClientProvider.COLLECTIVE_HOST_NAMES) != null;
+            return (req.getParam(ClientProvider.COLLECTIVE_HOST_NAMES) != null || request.getHeader(ClientProvider.COLLECTIVE_HOST_NAMES) != null);
         }
         return request.getHeader(ClientProvider.COLLECTIVE_HOST_NAMES) != null;
     }

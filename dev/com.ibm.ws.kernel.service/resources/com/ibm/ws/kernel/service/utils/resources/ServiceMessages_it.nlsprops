@@ -51,3 +51,7 @@ invalidIntegerArray.useraction=Verificare che il valore specificato nella config
 invalidDuration=CWWKE0107W: Il parametro specificato non rappresenta un valore di durata. {1}={2} per {0}
 invalidDuration.explanation=Il valore per il parametro di configurazione specificato non \u00e8 o non pu\u00f2 essere convertito in un valore di durata.
 invalidDuration.useraction=Verificare che il valore specificato nella configurazione del server sia una rappresentazione valida di un valore di durata.
+
+#
+# W A R N I N G:   Do not use CWWKE0108 - CCWKE0109 they are currently in use LauncherMessages.nlsprops
+#

@@ -270,10 +270,11 @@ LICENSE_invalidLicense=Licenci nelze upgradovat, proto\u017ee ur\u010den\u00e1 i
 LICENSE_invalidInstallType=Licenci nelze upgradovat, proto\u017ee ur\u010den\u00e1 instalace produktu byla nainstalov\u00e1na pomoc\u00ed produktu IBM Installation Manager. Pomoc\u00ed produktu IBM Installation Manager upgradujte instalaci.
 
 # new messages for license upgrade and downgrade
-LICENSE_replace_invalidVersion=Licenci nelze nahradit, proto\u017ee ur\u010den\u00e1 instalace produktu je ve verzi {0}, licenci lze nahradit pouze z verze {1}.
-LICENSE_replace_invalidInstallType=Licenci nelze upravit, proto\u017ee ur\u010den\u00e1 instalace produktu byla nainstalov\u00e1na pomoc\u00ed produktu IBM Installation Manager. Pomoc\u00ed produktu IBM Installation Manager upravte instalaci.
+LICENSE_replace_invalidVersion=Licenci nelze pou\u017e\u00edt, proto\u017ee uveden\u00e1 instalace produktu je ve verzi {0}, ale tuto licenci lze pou\u017e\u00edt pouze z verze {1}.
+LICENSE_replace_invalidInstallType=Licenci nelze pou\u017e\u00edt, proto\u017ee uveden\u00e1 instalace produktu byla nainstalov\u00e1na prost\u0159ednictv\u00edm produktu IBM Installation Manager. Pomoc\u00ed produktu IBM Installation Manager upgradujte instalaci.
 
-LICENSE_replace_invalidEditonFeatures=N\u00e1sleduj\u00edc\u00ed funkce ji\u017e nejsou pou\u017eiteln\u00e9 pro {0}, a mus\u00ed b\u00fdt odebr\u00e1ny p\u0159ed nahrazen\u00edm licence: {1}
-LICENSE_replace_uninstallFeatures_manually=Pomoc\u00ed n\u00e1sleduj\u00edc\u00edho p\u0159\u00edkazu odinstalujte tyto funkce p\u0159ed nahrazen\u00edm licence pro {0}: {1}
+LICENSE_replace_invalidEditonFeatures=N\u00e1sleduj\u00edc\u00ed funkce neplat\u00ed pro vyd\u00e1n\u00ed {0}, a mus\u00ed b\u00fdt odinstalov\u00e1ny d\u0159\u00edve, ne\u017e pou\u017eijete licenci: {1}\n\
+\n\
+Pomoc\u00ed n\u00e1sleduj\u00edc\u00edho p\u0159\u00edkazu odinstalujte uveden\u00e9 funkce, teprve pak pou\u017eijte licenci pro vyd\u00e1n\u00ed {2}: {3}
 
-
+LICENSE_downgrade_block_8557_low=Tuto licenci lze pou\u017e\u00edt pouze na instalace ve verzi {0} a vy\u0161\u0161\u00edch. Aktu\u00e1ln\u00ed instalace je ve verzi {1}. St\u00e1hn\u011bte a aktualizujte na posledn\u00ed \u00farove\u0148, a znovu pou\u017eijte licenci.

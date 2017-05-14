@@ -5,8 +5,7 @@
 	<target name="addRequiredLibraries" description="Add libraries required by the tests">
 		<copy todir="${required.lib.dir}">
 			<fileset dir="${basedir}/lib" includes="*.jar" />
-			<!--fileset dir="../com.ibm.ws.logging.hpel/lib" includes="*.jar" /-->
-			<fileset dir="../com.ibm.ws.logging.hpel/build/lib" includes="com.ibm.ws.logging.hpel_*.jar"/>
+			<fileset dir="../build.image/wlp/lib" includes="com.ibm.ws.logging.hpel_*.jar"/>
 			<fileset dir="${shared.httpunit.dir}" includes="httpunit.jar" />
 			<fileset dir="${shared.httpunit.jars}" includes="*.jar" />
 		</copy> 
