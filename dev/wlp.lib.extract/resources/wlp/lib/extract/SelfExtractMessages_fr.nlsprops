@@ -311,12 +311,11 @@ LICENSE_invalidInstallType=La licence ne peut pas \u00eatre mise \u00e0 niveau, 
 \u00e9t\u00e9 install\u00e9e par l''outil IBM Installation Manager. Utilisez ce m\u00eame outil pour mettre \u00e0 niveau votre installation.
 
 # new messages for license upgrade and downgrade
-LICENSE_replace_invalidVersion=La licence ne peut pas \u00eatre remplac\u00e9e. En effet, l''installation de produit sp\u00e9cifi\u00e9e est \u00e0 \
-la version {0}, alors que la licence ne peut \u00eatre remplac\u00e9e qu''\u00e0 partir de la version {1}.
-LICENSE_replace_invalidInstallType=La licence ne peut pas \u00eatre chang\u00e9e, car l''installation de produit sp\u00e9cifi\u00e9e a \
-\u00e9t\u00e9 install\u00e9e par l''outil IBM Installation Manager. Utilisez ce m\u00eame outil pour modifier votre installation.
+LICENSE_replace_invalidVersion=La licence ne peut pas \u00eatre appliqu\u00e9e. En effet, le niveau de l''installation de produit sp\u00e9cifi\u00e9e correspond \u00e0 la version {0}, alors que la licence ne peut \u00eatre appliqu\u00e9e qu''\u00e0 partir de la version {1}.
+LICENSE_replace_invalidInstallType=La licence ne peut pas \u00eatre appliqu\u00e9e, car l''installation de produit sp\u00e9cifi\u00e9e a \u00e9t\u00e9 install\u00e9e \u00e0 l''aide d''IBM Installation Manager. Utilisez IBM Installation Manager pour mettre \u00e0 niveau votre installation.
 
-LICENSE_replace_invalidEditonFeatures=Les fonctionnalit\u00e9s suivantes ne s''appliquent plus \u00e0 {0} et doivent \u00eatre retir\u00e9es avant le remplacement de la licence : {1}
-LICENSE_replace_uninstallFeatures_manually=Utilisez la commande suivante pour d\u00e9sinstaller ces fonctionnalit\u00e9s avant de remplacer la licence de {0} : {1}
+LICENSE_replace_invalidEditonFeatures=Les fonctions suivantes ne s''appliquent pas \u00e0 l''\u00e9dition {0} et doivent \u00eatre d\u00e9sinstall\u00e9es avant l''application de la licence : {1}\n\
+\n\
+Utilisez la commande suivante pour d\u00e9sinstaller ces fonctions avant d''appliquer la licence pour l''\u00e9dition {2} : {3}
 
-
+LICENSE_downgrade_block_8557_low=Cette licence ne peut \u00eatre appliqu\u00e9e qu''\u00e0 l''installation au niveau de la version {0} ou ult\u00e9rieure. Le niveau en cours de l''installation est la version {1}. T\u00e9l\u00e9chargez le niveau le plus r\u00e9cent et effectuez la mise \u00e0 jour, puis r\u00e9appliquez la licence.

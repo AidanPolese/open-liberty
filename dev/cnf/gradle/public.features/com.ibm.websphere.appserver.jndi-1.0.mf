@@ -14,8 +14,8 @@ Subsystem-Content: com.ibm.websphere.appserver.artifact-1.0; type="osgi.subsyste
  com.ibm.websphere.appserver.anno-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.internal.slf4j-1.7.7; type="osgi.subsystem.feature",
  com.ibm.ws.jndi.url.contexts; version="[1.0.0,1.0.200)",
- com.ibm.ws.org.apache.aries.jndi.core.1.0.3; version="[1.1.0,1.1.200)",
- com.ibm.ws.org.apache.aries.jndi.api.1.1.1; version="[1.1.0,1.1.200)",
+ com.ibm.ws.org.apache.aries.jndi.core; version="[1.1.0,1.1.200)",
+ com.ibm.ws.org.apache.aries.jndi.api; version="[1.1.0,1.1.200)",
  com.ibm.ws.jndi; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description
 Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1

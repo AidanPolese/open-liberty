@@ -1,0 +1,12 @@
+
+task publishEmptyTemplatesFolders {
+  dependsOn publishTemplates
+  doLast {
+    file("${rootDir}/build.image/wlp/templates/servers/defaultServer/apps").mkdir()
+    file("${rootDir}/build.image/wlp/templates/servers/defaultServer/dropins").mkdir()
+  }
+}
+
+assemble {
+  dependsOn publishEmptyTemplatesFolders
+}

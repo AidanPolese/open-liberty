@@ -12,5 +12,5 @@ Export-Package: com.ibm.ws.app.manager.ready
 -buildpath: \
 	com.ibm.ws.app.manager;version=latest,\
 	com.ibm.ws.logging.core;version=latest,\
-	com.ibm.websphere.org.osgi.core.6.0.0;version=latest, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.websphere.org.osgi.core;version=latest, \
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

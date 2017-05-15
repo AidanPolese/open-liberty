@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2007, 2014
+ * Copyright IBM Corp. 2007, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.ejbcontainer.jitdeploy;
@@ -68,6 +68,7 @@ import static org.objectweb.asm.Type.VOID_TYPE;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -81,41 +82,43 @@ import org.objectweb.asm.commons.GeneratorAdapter;
 
 import com.ibm.ejs.container.EJBConfigurationException;
 import com.ibm.ejs.container.util.DeploymentUtil;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.wsspi.ejbcontainer.JITDeploy;
 
 /**
  * Provides Just In Time deployment of Stubs for EJB Wrapper classes. <p>
  */
-public final class JIT_Stub
-{
-    private static final String CLASS_NAME = JIT_Stub.class.getName();
+public final class JIT_Stub {
 
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     JITUtils.JIT_TRACE_GROUP,
-                     JITUtils.JIT_RSRC_BUNDLE);
+    private static final TraceComponent tc = Tr.register(JIT_Stub.class,
+                                                         JITUtils.JIT_TRACE_GROUP,
+                                                         JITUtils.JIT_RSRC_BUNDLE);
+
+    private static final String throwRemoteFromEjb3Stub = "com.ibm.websphere.ejbcontainer.ejb3StubThrowsRemote";
+    private static final boolean ThrowRemoteFromEjb3Stub = Boolean.getBoolean((throwRemoteFromEjb3Stub));
+
+    private static final Type TYPE_RemoteException = Type.getType("Ljava/rmi/RemoteException;");
+    private static final Type TYPE_TransactionRolledbackException = Type.getType("Ljavax/transaction/TransactionRolledbackException;");
 
     /**
      * Utility method that returns the name of the remote interface
      * corresponding to the specified Stub class name. <p>
-     * 
+     *
      * Null will be returned if the specified name is either null or
-     * not a valide Stub class name. <p>
-     * 
+     * not a valid Stub class name. <p>
+     *
      * Basically, the name of the Stub class for any remote interface is
      * the name of the remote interface class, with an '_' prepended,
      * and '_Stub' appended. <p>
-     * 
+     *
      * This method properly modifies the class name with or without
      * a package qualification. <p>
-     * 
+     *
      * @param stubClassName the fully qualified class name of the
      *            Stub class.
      **/
-    public static String getRemoteInterfaceName(String stubClassName)
-    {
+    public static String getRemoteInterfaceName(String stubClassName) {
         if (stubClassName != null && stubClassName.endsWith("_Stub") &&
             !stubClassName.endsWith("._Stub")) // PM25511
         {
@@ -137,16 +140,14 @@ public final class JIT_Stub
     /**
      * Core method for generating the Stub class bytes. Intended for
      * use by JITDeploy only (should not be called directly). <p>
-     * 
+     *
      * @param remoteInterface Interface implemented by the generated Stub;
      *            not required to implement java.rmi.Remote.
      * @param rmicCompatible rmic compatibility flags
      **/
     // d457086
     public static byte[] generateStubBytes(Class<?> remoteInterface,
-                                           int rmicCompatible)
-                    throws EJBConfigurationException
-    {
+                                           int rmicCompatible) throws EJBConfigurationException {
         String stubClassName = getStubClassName(remoteInterface.getName());
         Method[] remoteMethods = remoteInterface.getMethods();
         String[] idlNames = getIdlMethodNames(remoteMethods);
@@ -163,19 +164,18 @@ public final class JIT_Stub
      * Utility method that returns the name of the Stub class that needs to
      * be generated for the specified remote interface class. Intended for
      * use by JITDeploy only (should not be called directly). <p>
-     * 
+     *
      * Basically, the name of the Stub class for any remote interface is
      * the name of the remote interface class, with an '_' prepended,
      * and '_Stub' appended. <p>
-     * 
+     *
      * This method properly modifies the class name with or without
      * a package qualification. <p>
-     * 
+     *
      * @param remoteInterfaceName the fully qualified class name of the
      *            remote interface.
      **/
-    public static String getStubClassName(String remoteInterfaceName)
-    {
+    public static String getStubClassName(String remoteInterfaceName) {
         StringBuilder stubBuilder = new StringBuilder(remoteInterfaceName);
         int packageOffset = Math.max(remoteInterfaceName.lastIndexOf('.') + 1,
                                      remoteInterfaceName.lastIndexOf('$') + 1);
@@ -188,13 +188,13 @@ public final class JIT_Stub
     /**
      * Core method for generating the Stub class bytes. Intended for
      * use by JITDeploy only (should not be called directly). <p>
-     * 
+     *
      * Although the 'methods' parameter could be obtained from the
      * specified remote interface, the 'methods' and 'idlNames'
      * parameters are requested to improve performance... allowing
      * the two arrays to be obtained once and shared by the code
      * that generates the corresponding Tie class. <p>
-     * 
+     *
      * @param stubClassName name of the Stub class to be generated.
      * @param remoteInterface Interface implemented by the generated Stub;
      *            not required to implement java.rmi.Remote.
@@ -208,9 +208,7 @@ public final class JIT_Stub
                                      Class<?> remoteInterface,
                                      Method[] remoteMethods,
                                      String[] idlNames,
-                                     int rmicCompatible) // PM46698
-    throws EJBConfigurationException
-    {
+                                     int rmicCompatible) throws EJBConfigurationException {
         String[] remoteInterfaceNames;
         int numMethods = remoteMethods.length;
 
@@ -220,16 +218,14 @@ public final class JIT_Stub
         String internalInterfaceName = convertClassName(remoteInterface.getName());
 
         // Stubs may only be generated for interfaces.                     d458392
-        if (!Modifier.isInterface(remoteInterface.getModifiers()))
-        {
+        if (!Modifier.isInterface(remoteInterface.getModifiers())) {
             throw new EJBConfigurationException("The " + remoteInterface.getName() + " class is not an interface class. " +
                                                 "Stubs may only be generated for interface classes.");
         }
 
         // Remote Business interfaces may or may not extend java.rmi.Remote
         boolean isRmiRemote = (Remote.class).isAssignableFrom(remoteInterface);
-        boolean isAbstractInterface =
-                        isRmiRemote || CORBA_Utils.isAbstractInterface(remoteInterface, rmicCompatible);
+        boolean isAbstractInterface = isRmiRemote || CORBA_Utils.isAbstractInterface(remoteInterface, rmicCompatible);
 
         // The ORB requires that all stubs implement java.rmi.Remote, so add
         // that in for those EJB 'business' remote interfaces that do not.
@@ -248,19 +244,16 @@ public final class JIT_Stub
         Set<String> classConstantFieldNames = new LinkedHashSet<String>();
 
         Class<?>[][] checkedExceptions = new Class<?>[numMethods][];
-        for (int i = 0; i < numMethods; ++i)
-        {
+        for (int i = 0; i < numMethods; ++i) {
             checkedExceptions[i] = DeploymentUtil.getCheckedExceptions(remoteMethods[i],
                                                                        isRmiRemote,
                                                                        DeploymentUtil.DeploymentTarget.STUB); // d660332
         }
 
-        if (TraceComponent.isAnyTracingEnabled())
-        {
+        if (TraceComponent.isAnyTracingEnabled()) {
             if (tc.isEntryEnabled())
                 Tr.entry(tc, "generateClassBytes");
-            if (tc.isDebugEnabled())
-            {
+            if (tc.isDebugEnabled()) {
                 Tr.debug(tc, INDENT + "className = " + internalStubClassName);
                 Tr.debug(tc, INDENT + "interface = " + internalInterfaceName);
                 if (isRmiRemote)
@@ -275,8 +268,7 @@ public final class JIT_Stub
         cw.visit(V1_2, ACC_PUBLIC + ACC_SUPER,
                  internalStubClassName,
                  null,
-                 isAbstractInterface ? "javax/rmi/CORBA/Stub" :
-                                 "com/ibm/ejs/container/SerializableStub", // PM46698
+                 isAbstractInterface ? "javax/rmi/CORBA/Stub" : "com/ibm/ejs/container/SerializableStub", // PM46698
                  remoteInterfaceNames);
 
         // Define the source code file and debug settings
@@ -298,8 +290,7 @@ public final class JIT_Stub
 
         // Add all of the methods to the Stub, based on the reflected
         // Method objects from the interface.
-        for (int i = 0; i < numMethods; ++i)
-        {
+        for (int i = 0; i < numMethods; ++i) {
             addStubMethod(cw,
                           internalStubClassName,
                           classConstantFieldNames, // RTC111522
@@ -331,17 +322,16 @@ public final class JIT_Stub
     /**
      * Defines the static and instance variables that are the same
      * for all Stub classes. <p>
-     * 
+     *
      * <ul>
      * <li> private static final String _type_ids[];
      * </ul>
-     * 
+     *
      * The fields are NOT initialized. <p>
-     * 
+     *
      * @param cw ASM ClassWriter to add the fields to.
      **/
-    private static void addFields(ClassWriter cw)
-    {
+    private static void addFields(ClassWriter cw) {
         FieldVisitor fv;
 
         // -----------------------------------------------------------------------
@@ -357,15 +347,15 @@ public final class JIT_Stub
 
     /**
      * Initializes the static variables common to all Stub classes. <p>
-     * 
+     *
      * _type_ids = { "RMI:<remote interface name>:0000000000000000",
      * "RMI:<remote interface parent>:0000000000000000",
      * etc... };
-     * 
+     *
      * Note: like a Stub generated with RMIC from the remote
      * interface, the _type_ids field for JIT Deploy Subs includes
      * the remote interface and all parents, excluding Remote. <p>
-     * 
+     *
      * @param cw ASM ClassWriter to add the fields to.
      * @param stubClassName fully qualified name of the Stub class
      *            with '/' as the separator character
@@ -375,8 +365,7 @@ public final class JIT_Stub
      **/
     private static void initializeStaticFields(ClassWriter cw,
                                                String stubClassName,
-                                               Class<?> remoteInterface)
-    {
+                                               Class<?> remoteInterface) {
         GeneratorAdapter mg;
 
         // -----------------------------------------------------------------------
@@ -385,10 +374,7 @@ public final class JIT_Stub
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
             Tr.debug(tc, INDENT + "adding method : <clinit> ()V");
 
-        org.objectweb.asm.commons.Method m = new org.objectweb.asm.commons.Method
-                        ("<clinit>",
-                                        VOID_TYPE,
-                                        new Type[0]);
+        org.objectweb.asm.commons.Method m = new org.objectweb.asm.commons.Method("<clinit>", VOID_TYPE, new Type[0]);
 
         mg = new GeneratorAdapter(ACC_STATIC, m, null, null, cw);
         mg.visitCode();
@@ -404,8 +390,7 @@ public final class JIT_Stub
         mg.push(remoteTypes.length);
         mg.visitTypeInsn(ANEWARRAY, "java/lang/String");
 
-        for (int i = 0; i < remoteTypes.length; ++i)
-        {
+        for (int i = 0; i < remoteTypes.length; ++i) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(tc, INDENT + "   _type_ids = " + remoteTypes[i]);
             mg.visitInsn(DUP);
@@ -426,13 +411,13 @@ public final class JIT_Stub
 
     /**
      * Adds the default (no arg) constructor. <p>
-     * 
+     *
      * There are no exceptions in the throws clause; none are required
      * for the constructors of Stubs. <p>
-     * 
+     *
      * Currently, the generated method body is intentionally empty;
      * Stubs require no initialization in the constructor. <p>
-     * 
+     *
      * @param cw ASM ClassWriter to add the constructor to.
      * @param stubClassName the fully qualified class name of the
      *            Stub class.
@@ -446,8 +431,7 @@ public final class JIT_Stub
                                 String stubClassName,
                                 Set<String> classConstantFieldNames,
                                 Class<?> remoteInterface,
-                                boolean isAbstractInterface)
-    {
+                                boolean isAbstractInterface) {
         MethodVisitor mv;
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
@@ -461,12 +445,9 @@ public final class JIT_Stub
         mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
         mv.visitCode();
         mv.visitVarInsn(ALOAD, 0);
-        if (isAbstractInterface)
-        {
+        if (isAbstractInterface) {
             mv.visitMethodInsn(INVOKESPECIAL, "javax/rmi/CORBA/Stub", "<init>", "()V");
-        }
-        else
-        {
+        } else {
             // Non-abstract interfaces extend SerializableStub.          // PM46698
             JITUtils.loadClassConstant(mv, stubClassName, classConstantFieldNames, remoteInterface); // RTC111522
             mv.visitMethodInsn(INVOKESPECIAL, "com/ibm/ejs/container/SerializableStub",
@@ -479,19 +460,18 @@ public final class JIT_Stub
 
     /**
      * Adds all methods common to all Stub classes. <p>
-     * 
+     *
      * These methods are all defined by the Tie interface, javax.rmi.CORBA.Tie.
      * Methods inherited by Tie (like _invoke from InvokeHandler) are
      * NOT implemented here, but added elsewhere if required. <p>
-     * 
+     *
      * @param cw ASM ClassWriter to add the methods to.
      * @param stubClassName fully qualified name of the Stub class
      *            with '/' as the separator character
      *            (i.e. internal name).
      **/
     private static void addCommonStubMethods(ClassWriter cw,
-                                             String stubClassName)
-    {
+                                             String stubClassName) {
         MethodVisitor mv;
 
         // -----------------------------------------------------------------------
@@ -516,10 +496,10 @@ public final class JIT_Stub
     /**
      * Adds a standard Stub method corresponding to a method on the
      * remote interface. <p>
-     * 
+     *
      * The added method will handle both normal 'remote' ORB flow, as well as
      * the 'local' optimization; just like a stub generated from RMIC. <p>
-     * 
+     *
      * @param cw ASM Class writer to add the method to.
      * @param className fully qualified name of the Stub class
      *            with '/' as the separator character
@@ -538,9 +518,7 @@ public final class JIT_Stub
                                       Class<?>[] checkedExceptions, // d676434
                                       String idlName,
                                       boolean isRmiRemote,
-                                      int rmicCompatible)
-                    throws EJBConfigurationException
-    {
+                                      int rmicCompatible) throws EJBConfigurationException {
         GeneratorAdapter mg;
         String methodName = method.getName();
         String methodSignature = jdiMethodSignature(method); // d457086
@@ -557,6 +535,19 @@ public final class JIT_Stub
         // will be sorted to parent-last order, to avoid 'unreachable' code.
         Class<?>[] methodExceptions = method.getExceptionTypes();
 
+        // If the interface extends Remote, the property is enabled to allow
+        // remote exceptions, or any of the thrown exceptions are remote exceptions,
+        // then allow remote exceptions to be thrown from the stub methods.
+        boolean throwsRemoteEx = isRmiRemote || ThrowRemoteFromEjb3Stub;
+        if (!throwsRemoteEx) {
+            for (Class<?> exClass : methodExceptions) {
+                if (RemoteException.class.isAssignableFrom(exClass)) {
+                    throwsRemoteEx = true;
+                    break;
+                }
+            }
+        }
+
         // Convert the return value, arguments, and exception classes to
         // ASM Type objects, and create the ASM Method object which will
         // be used to actually add the method and method code.
@@ -570,10 +561,7 @@ public final class JIT_Stub
         String declaringName = convertClassName(declaringClass.getName());
         final int numArgs = methodParameters.length;
 
-        org.objectweb.asm.commons.Method m =
-                        new org.objectweb.asm.commons.Method(methodName,
-                                        returnType,
-                                        argTypes);
+        org.objectweb.asm.commons.Method m = new org.objectweb.asm.commons.Method(methodName, returnType, argTypes);
 
         // Create an ASM GeneratorAdapter object for the ASM Method, which
         // makes generating dynamic code much easier... as it keeps track
@@ -584,6 +572,16 @@ public final class JIT_Stub
         // Begin Method Code...
         // -----------------------------------------------------------------------
         mg.visitCode();
+
+        // -----------------------------------------------------------------------
+        // // If EJB 3 non-RMI method; add try/catch to map RemoteException
+        // try
+        // {
+        // -----------------------------------------------------------------------
+        Label map_remote_try_begin = new Label();
+        if (!throwsRemoteEx) {
+            mg.visitLabel(map_remote_try_begin);
+        }
 
         // -----------------------------------------------------------------------
         // ServantObject servantObj;
@@ -649,8 +647,7 @@ public final class JIT_Stub
         //              or
         //         Util.writeRemoteObject(outputstream, arg);
         // -----------------------------------------------------------------------
-        for (int i = 0; i < numArgs; i++)
-        {
+        for (int i = 0; i < numArgs; i++) {
             JITUtils.setLineNumber(mg, JITUtils.LINE_NUMBER_ARG_BEGIN + i); // d726162
             mg.loadLocal(outputstream);
             mg.loadArg(i);
@@ -669,12 +666,9 @@ public final class JIT_Stub
         mg.loadLocal(outputstream);
         mg.visitMethodInsn(INVOKEVIRTUAL, "org/omg/CORBA/portable/ObjectImpl", "_invoke",
                            "(Lorg/omg/CORBA/portable/OutputStream;)Lorg/omg/CORBA/portable/InputStream;");
-        if (returnType == Type.VOID_TYPE)
-        {
+        if (returnType == Type.VOID_TYPE) {
             mg.pop();
-        }
-        else
-        {
+        } else {
             mg.checkCast(inputStreamType);
             mg.storeLocal(inputstream);
         }
@@ -694,8 +688,7 @@ public final class JIT_Stub
         JITUtils.setLineNumber(mg, JITUtils.LINE_NUMBER_RETURN); // d726162
         int returnValue = -1;
 
-        if (returnType != Type.VOID_TYPE)
-        {
+        if (returnType != Type.VOID_TYPE) {
             returnValue = mg.newLocal(returnType);
             mg.loadLocal(inputstream);
             read_value(mg, className, classConstantFieldNames, // RTC111522
@@ -709,8 +702,7 @@ public final class JIT_Stub
         Label not_local_finally_begin = new Label();
         mg.visitJumpInsn(JSR, not_local_finally_begin); // execute finally
 
-        if (returnType != Type.VOID_TYPE)
-        {
+        if (returnType != Type.VOID_TYPE) {
             mg.loadLocal(returnValue);
         }
         mg.returnValue();
@@ -763,17 +755,14 @@ public final class JIT_Stub
         // both mangled and unmangled, but we look for unmangled first.    PM94096
         boolean rmicCompatibleExceptions = JITDeploy.isRMICCompatibleExceptions(rmicCompatible);
         Set<String> exceptionNamesIDLUsed = rmicCompatibleExceptions ? null : new HashSet<String>();
-        for (int pass = rmicCompatibleExceptions ? 1 : 0; pass < 2; pass++)
-        {
+        for (int pass = rmicCompatibleExceptions ? 1 : 0; pass < 2; pass++) {
             boolean mangleComponents = pass == 1;
 
-            for (int i = 0; i < checkedExceptions.length; ++i)
-            {
+            for (int i = 0; i < checkedExceptions.length; ++i) {
                 String exceptionName = checkedExceptions[i].getName();
                 String exceptionNameIDL = getIdlExceptionName(exceptionName, mangleComponents); // PM94096
 
-                if (exceptionNamesIDLUsed == null || exceptionNamesIDLUsed.add(exceptionNameIDL))
-                {
+                if (exceptionNamesIDLUsed == null || exceptionNamesIDLUsed.add(exceptionNameIDL)) {
                     JITUtils.setLineNumber(mg, JITUtils.LINE_NUMBER_CATCH_BEGIN + 1 + i); // d726162
                     mg.loadLocal(exIdlName);
                     mg.visitLdcInsn(exceptionNameIDL);
@@ -921,23 +910,17 @@ public final class JIT_Stub
         int firstMutableArg = -1;
         int[] argCopy = null;
 
-        if (numArgs > 0)
-        {
+        if (numArgs > 0) {
             argCopy = new int[numArgs];
 
-            for (int i = 0; i < numArgs; ++i)
-            {
-                if (isMutable(methodParameters[i]))
-                {
+            for (int i = 0; i < numArgs; ++i) {
+                if (isMutable(methodParameters[i])) {
                     argCopy[i] = mg.newLocal(argTypes[i]);
                     ++numMutableArgs;
-                    if (firstMutableArg == -1)
-                    {
+                    if (firstMutableArg == -1) {
                         firstMutableArg = i;
                     }
-                }
-                else
-                {
+                } else {
                     argCopy[i] = -1;
                 }
             }
@@ -948,8 +931,7 @@ public final class JIT_Stub
         //
         //   <arg type> argCopy = Util.copyObject( arg, _orb() );
         // -----------------------------------------------------------------------
-        if (numMutableArgs == 1)
-        {
+        if (numMutableArgs == 1) {
             JITUtils.setLineNumber(mg, JITUtils.LINE_NUMBER_ARG_BEGIN); // d726162
             mg.loadArg(firstMutableArg);
             mg.loadThis();
@@ -967,17 +949,14 @@ public final class JIT_Stub
         //
         //   Object argCopyarray[] = Util.copyObjects(new Object[] { args... }, _orb());
         // -----------------------------------------------------------------------
-        else if (numMutableArgs > 1)
-        {
+        else if (numMutableArgs > 1) {
             JITUtils.setLineNumber(mg, JITUtils.LINE_NUMBER_ARG_BEGIN); // d726162
             mg.push(numMutableArgs);
             mg.visitTypeInsn(ANEWARRAY, "java/lang/Object");
 
             int argCopyArrayIndex = 0;
-            for (int i = firstMutableArg; i < numArgs; ++i)
-            {
-                if (argCopy[i] > -1)
-                {
+            for (int i = firstMutableArg; i < numArgs; ++i) {
+                if (argCopy[i] > -1) {
                     mg.visitInsn(DUP);
                     mg.push(argCopyArrayIndex++);
                     mg.loadArg(i);
@@ -999,10 +978,8 @@ public final class JIT_Stub
             //   <arg type> argCopy<i> = (<arg type>)argCopyArray[<i>]; // for each arg
             // -----------------------------------------------------------------------
             argCopyArrayIndex = 0;
-            for (int i = firstMutableArg; i < numArgs; ++i)
-            {
-                if (argCopy[i] > -1)
-                {
+            for (int i = firstMutableArg; i < numArgs; ++i) {
+                if (argCopy[i] > -1) {
                     JITUtils.setLineNumber(mg, JITUtils.LINE_NUMBER_ARG_BEGIN + i); // d726162
                     mg.loadLocal(argCopyArray);
                     mg.push(argCopyArrayIndex++);
@@ -1029,8 +1006,7 @@ public final class JIT_Stub
                           "servant", "Ljava/lang/Object;");
         JITUtils.checkCast(mg, declaringType.getInternalName()); // d726162
 
-        for (int i = 0; i < numArgs; ++i)
-        {
+        for (int i = 0; i < numArgs; ++i) {
             if (argCopy[i] > -1)
                 mg.loadLocal(argCopy[i]); // mutable - the copy
             else
@@ -1039,14 +1015,12 @@ public final class JIT_Stub
         mg.visitMethodInsn(INVOKEINTERFACE, declaringName,
                            methodName, m.getDescriptor());
 
-        if (returnType != Type.VOID_TYPE)
-        {
+        if (returnType != Type.VOID_TYPE) {
             JITUtils.setLineNumber(mg, JITUtils.LINE_NUMBER_RETURN); // d726162
             returnValue = mg.newLocal(returnType);
             mg.storeLocal(returnValue);
 
-            if (isMutable(returnClass))
-            {
+            if (isMutable(returnClass)) {
                 mg.loadLocal(returnValue);
                 mg.loadThis();
                 mg.visitMethodInsn(INVOKEVIRTUAL, "org/omg/CORBA/portable/ObjectImpl",
@@ -1064,8 +1038,7 @@ public final class JIT_Stub
         Label local_finally_begin = new Label();
         mg.visitJumpInsn(JSR, local_finally_begin); // execute finally
 
-        if (returnType != Type.VOID_TYPE)
-        {
+        if (returnType != Type.VOID_TYPE) {
             mg.loadLocal(returnValue);
         }
         mg.returnValue();
@@ -1103,8 +1076,7 @@ public final class JIT_Stub
         //   else
         // -----------------------------------------------------------------------
         Label[] checked_else = new Label[checkedExceptions.length];
-        for (int i = 0; i < checkedExceptions.length; ++i)
-        {
+        for (int i = 0; i < checkedExceptions.length; ++i) {
             JITUtils.setLineNumber(mg, JITUtils.LINE_NUMBER_CATCH_BEGIN + 1 + i); // d726162
             String checkedName = convertClassName(checkedExceptions[i].getName());
             mg.loadLocal(exCopy);
@@ -1172,6 +1144,56 @@ public final class JIT_Stub
         mg.ret(local_finally_return);
 
         // -----------------------------------------------------------------------
+        // // If EJB 3 non-RMI method; complete try/catch to map RemoteException
+        // -----------------------------------------------------------------------
+        Label map_remote_try_end = null;
+        Label catch_tran_rollback_label = null;
+        Label catch_remote_label = null;
+        if (!throwsRemoteEx) {
+            // -----------------------------------------------------------------------
+            // }
+            // -----------------------------------------------------------------------
+            map_remote_try_end = new Label();
+            mg.visitLabel(map_remote_try_end);
+
+            // -----------------------------------------------------------------------
+            // catch(TransactionRolledbackException trbex)
+            // {
+            //   throw new EJBTransactionRolledbackException(trbex);
+            // }
+            // -----------------------------------------------------------------------
+            JITUtils.setLineNumber(mg, JITUtils.LINE_NUMBER_CATCH_BEGIN + 100);
+            catch_tran_rollback_label = map_remote_try_end;
+            int trbex = mg.newLocal(JIT_Stub.TYPE_TransactionRolledbackException);
+            mg.storeLocal(trbex);
+
+            mg.visitTypeInsn(NEW, "javax/ejb/EJBTransactionRolledbackException");
+            mg.visitInsn(DUP);
+            mg.visitInsn(ACONST_NULL);
+            mg.loadLocal(trbex);
+            mg.visitMethodInsn(INVOKESPECIAL, "javax/ejb/EJBTransactionRolledbackException", "<init>", "(Ljava/lang/String;Ljava/lang/Exception;)V");
+            mg.visitInsn(ATHROW);
+
+            // -----------------------------------------------------------------------
+            // catch(RemoteException rex)
+            // {
+            //   throw new EJBException(rex);
+            // }
+            // -----------------------------------------------------------------------
+            JITUtils.setLineNumber(mg, JITUtils.LINE_NUMBER_CATCH_BEGIN + 101);
+            catch_remote_label = new Label();
+            mg.visitLabel(catch_remote_label);
+            int rex = mg.newLocal(JIT_Stub.TYPE_RemoteException);
+            mg.storeLocal(rex);
+
+            mg.visitTypeInsn(NEW, "javax/ejb/EJBException");
+            mg.visitInsn(DUP);
+            mg.loadLocal(rex);
+            mg.visitMethodInsn(INVOKESPECIAL, "javax/ejb/EJBException", "<init>", "(Ljava/lang/Exception;)V");
+            mg.visitInsn(ATHROW);
+        }
+
+        // -----------------------------------------------------------------------
         // All Try-Catch-Finally definitions for above
         // -----------------------------------------------------------------------
 
@@ -1200,6 +1222,17 @@ public final class JIT_Stub
                               local_try_catch_end,
                               local_finally_ex,
                               null);
+
+        if (!throwsRemoteEx) {
+            mg.visitTryCatchBlock(map_remote_try_begin,
+                                  map_remote_try_end,
+                                  catch_tran_rollback_label,
+                                  "javax/transaction/TransactionRolledbackException");
+            mg.visitTryCatchBlock(map_remote_try_begin,
+                                  map_remote_try_end,
+                                  catch_remote_label,
+                                  "java/rmi/RemoteException");
+        }
 
         // -----------------------------------------------------------------------
         // End Method Code...

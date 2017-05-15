@@ -13,7 +13,9 @@ Subsystem-Content: com.ibm.websphere.appserver.javax.connector.internal-1.7; ibm
  com.ibm.websphere.appserver.connectionManagement-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.requestProbes-1.0; type="osgi.subsystem.feature",
  com.ibm.ws.jdbc; version="[1.0.0,1.0.200)",
- com.ibm.ws.jdbc.4.2; version="[1.0.0,1.0.200)"
+ com.ibm.ws.jdbc.4.1; version="[1.0.0,1.0.200)",
+ com.ibm.ws.jdbc.4.2; version="[1.0.0,1.0.200)",
+ com.ibm.ws.jdbc.4.2.feature; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description
 Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
 Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.jdbc-4.2

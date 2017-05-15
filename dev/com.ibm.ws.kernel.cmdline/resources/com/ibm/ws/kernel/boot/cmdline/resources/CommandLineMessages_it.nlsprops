@@ -28,3 +28,7 @@
 error.sdkRequired=CWWKE0600E: Questo strumento richiede un SDK Java, ma \u00e8 stato avviato utilizzando un JRE: {0}
 error.sdkRequired.explanation=Lo strumento richiede un SDK Java, ma \u00e8 stato avviata utilizzando un ambiente di runtime Java semplice.
 error.sdkRequired.useraction=Impostare la variabile di ambiente JAVA HOME sul percorso di un SDK Java e rieseguire il comando.
+
+error.compilerMissing=CWWKE0601E: Questo strumento richiede che sia disponibile un compilatore Java. Assicurarsi che sia disponibile il modulo java.compiler.
+error.compilerMissing.explanation=Lo strumento richiede un compilatore Java. Tuttavia, lo strumento \u00e8 stato avviato senza.
+error.compilerMissing.useraction=Assicurarsi che sia disponibile il modulo java.compiler nell'immagine Java. Quindi, verificare che sia disponibile al runtime specificando la seguente opzione della riga comandi: --add-modules java.compiler

@@ -1,0 +1,26 @@
+Created-By: 1.8.0_121 (Oracle Corporation)
+IBM-API-Package: com.ibm.websphere.microprofile.faulttolerance; version="1.0",
+ com.ibm.websphere.microprofile.faulttolerance.spi; version="1.0",
+ org.eclipse.microprofile.faulttolerance; version="1.0",
+ org.eclipse.microprofile.faulttolerance.spi; version="1.0"
+IBM-App-ForceRestart: install,
+ uninstall
+IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: com.ibm.websphere.appserver
+IBM-ShortName: mpFaultTolerance-1.0
+Subsystem-Content: com.ibm.websphere.appserver.org.eclipse.microprofile.faulttolerance-1.0; type="osgi.subsystem.feature",
+ com.ibm.ws.net.jodah.failsafe.1.0.1; apiJar=false; location:="lib/"; version="[1.0.0,1.0.200)",
+ com.ibm.ws.microprofile.faulttolerance; apiJar=false; location:="lib/"; version="[1.0.0,1.0.200)"
+Subsystem-Description: %description
+Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
+Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.mpFaultTolerance-1.0
+Subsystem-ManifestVersion: 1
+Subsystem-Name: MicroProfile Fault Tolerance 1.0
+Subsystem-SymbolicName: com.ibm.websphere.appserver.mpFaultTolerance-1.0; visibility:=public; singleton:=true
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-3.3.0.201609221906

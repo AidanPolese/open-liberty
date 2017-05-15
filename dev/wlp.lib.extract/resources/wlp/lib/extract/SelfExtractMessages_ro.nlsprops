@@ -267,10 +267,11 @@ LICENSE_invalidLicense=Licen\u0163a nu poate fi modernizat\u0103 deoarece instal
 LICENSE_invalidInstallType=Licen\u0163a nu poate fi modernizat\u0103 deoarece instalarea de produs specificat\u0103 a fost instalat\u0103 utiliz\u00e2nd IBM Installation Manager. Utiliza\u0163i IBM Installation Manager pentru a v\u0103 moderniza instalarea.
 
 # new messages for license upgrade and downgrade
-LICENSE_replace_invalidVersion=Licen\u0163a nu poate fi \u00eenlocuit\u0103 deoarece instalarea de produs specificat\u0103 este la versiunea {0}, dar licen\u0163a nu poate fi \u00eenlocuit\u0103 de la versiunea {1}.
-LICENSE_replace_invalidInstallType=Licen\u0163a nu poate fi modernizat\u0103 deoarece instalarea de produs specificat\u0103 a fost instalat\u0103 utiliz\u00e2nd IBM Installation Manager. Utiliza\u0163i IBM Installation Manager pentru a v\u0103 modifica instalarea.
+LICENSE_replace_invalidVersion=Licen\u0163a nu poate fi aplicat\u0103 deoarece instalarea de produs specificat\u0103 este la versiunea {0}, dar licen\u0163a nu poate fi aplicat\u0103 dec\u00e2t de la versiunea {1}.
+LICENSE_replace_invalidInstallType=Licen\u0163a nu poate fi aplicat\u0103 deoarece instalarea de produs specificat\u0103 a fost instalat\u0103 utiliz\u00e2nd IBM Installation Manager. Utiliza\u0163i IBM Installation Manager pentru a v\u0103 moderniza instalarea.
 
-LICENSE_replace_invalidEditonFeatures=Urm\u0103toarele caracteristici nu mai sunt aplicabile pentru {0} \u015fi trebuie s\u0103 fie \u00eenl\u0103turate \u00eenainte de a \u00eenlocui licen\u0163a: {1}
-LICENSE_replace_uninstallFeatures_manually=Utiliza\u0163i urm\u0103toarea comand\u0103 pentru a dezinstala aceste caracteristici \u00eenainte de a \u00eenlocui licen\u0163a pentru {0}: {1}
+LICENSE_replace_invalidEditonFeatures=Caracteristicile urm\u0103toare nu se aplic\u0103 la edi\u0163ia {0} \u015fi trebuie s\u0103 fie dezinstalate \u00eenainte de aplicarea licen\u0163ei: {1}\n\
+\n\
+Utiliza\u0163i urm\u0103toarea comand\u0103 pentru a dezinstala aceste caracteristici \u00eenainte de a aplica licen\u0163a pentru edi\u0163ia {2}: {3}
 
-
+LICENSE_downgrade_block_8557_low=Aceast\u0103 licen\u0163\u0103 poate fi aplicat\u0103 doar la o instalare la {0} sau superioar\u0103. Instalarea curent\u0103 este la {1}. Desc\u0103rca\u0163i \u015fi actualiza\u0163i la ultimul nivel \u015fi reaplica\u0163i licen\u0163a.

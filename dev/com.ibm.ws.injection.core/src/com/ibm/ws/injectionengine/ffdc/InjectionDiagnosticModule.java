@@ -14,9 +14,9 @@ package com.ibm.ws.injectionengine.ffdc;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.DiagnosticModule;
 import com.ibm.ws.ffdc.FFDC;
 import com.ibm.ws.ffdc.IncidentStream;
@@ -72,10 +72,8 @@ import com.ibm.wsspi.injectionengine.InjectionConfigConstants;
 public class InjectionDiagnosticModule
                 extends DiagnosticModule
 {
-    private static final String CLASS_NAME = InjectionDiagnosticModule.class.getName();
-
     private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
+                    (InjectionDiagnosticModule.class,
                      InjectionConfigConstants.traceString,
                      InjectionConfigConstants.messageFile);
 

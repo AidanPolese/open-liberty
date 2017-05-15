@@ -1,4 +1,0 @@
-<project name="com.ibm.ws.repository" default="build">
-  <import file="../ant_build/public_imports/standard_imports.xml"/>
-
-</project>

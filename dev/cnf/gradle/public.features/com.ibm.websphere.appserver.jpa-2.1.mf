@@ -226,6 +226,7 @@ IBM-ProductID: com.ibm.websphere.appserver
 IBM-ShortName: jpa-2.1
 Subsystem-Content: com.ibm.websphere.appserver.jndi-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.transaction-1.2; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jdbc-4.1; ibm.tolerates:="4.2"; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.jpaContainer-2.1; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.thirdparty.eclipselink; location:="dev/api/third-party/,lib/"; version="[1.0.0,1.0.200)",
  com.ibm.ws.jpa.container.eclipselink; version="[1.0.0,1.0.200)"

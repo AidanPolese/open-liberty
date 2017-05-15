@@ -55,6 +55,7 @@ import com.ibm.wsspi.artifact.factory.ArtifactContainerFactory;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.location.WsResource;
 import com.ibm.wsspi.kernel.service.utils.FileUtils;
+import com.ibm.wsspi.kernel.service.utils.FrameworkState;
 
 class ApplicationStateMachineImpl extends ApplicationStateMachine implements ApplicationMonitor.UpdateHandler, Runnable {
     private static final TraceComponent _tc = Tr.register(ApplicationStateMachineImpl.class);
@@ -323,6 +324,10 @@ class ApplicationStateMachineImpl extends ApplicationStateMachine implements App
 
     @Override
     public void handleMonitorUpdate(boolean shouldRemove) {
+        if (FrameworkState.isStopping()) {
+            // we are stopping so ignore any monitor updates
+            return;
+        }
         if (_tc.isEventEnabled()) {
             Tr.event(_tc, asmLabel() + "handleMonitorUpdate: interruptible=" + isInterruptible());
         }

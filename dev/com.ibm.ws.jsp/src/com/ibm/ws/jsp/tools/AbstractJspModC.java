@@ -14,7 +14,7 @@
  * defect PK29373  Provide backward compatibility with v5(Page scope variables )
  * defect 393421 - CTS:jsp translation error not occuring for wrong  <jsp:output> 2006/09/27 Scott Johnson
  * defect 396002 CTS: no jsp fatal translation error for  taglib after actions Scott Johnson 10/17/2006
- * defect PK30879 "Unmatched end tags" exception not to be thrown in v6 (Aetna) Scott Johnson 10/18/2006
+ * "Unmatched end tags" exception not to be thrown in v6 10/18/2006
  * defect 400645 "Batchcompiler needs to get webcon custom props"  2004/10/25 Scott Johnson
  * defect 402921(PK31135) Change in Iteration eval in v6 causes infinite loops in certain scenarios 2006/11/03 Anuradha Natarajan
  * Feature LIDB4293-2 - "In-memory translation/compilation of JSPs" 2006/11/11 Scott Johnson

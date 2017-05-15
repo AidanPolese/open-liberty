@@ -6,7 +6,7 @@ IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
 IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.requestProbeJDBC-1.0))",
- osgi.identity; filter:="(|(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.jdbc-4.0))(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.jdbc-4.1)))"
+ osgi.identity; filter:="(&(type=osgi.subsystem.feature)(|(osgi.identity=com.ibm.websphere.appserver.jdbc-4.0)(osgi.identity=com.ibm.websphere.appserver.jdbc-4.1)(osgi.identity=com.ibm.websphere.appserver.jdbc-4.2)))"
 Subsystem-Content: com.ibm.ws.request.probe.jdbc; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description
 Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1

@@ -200,7 +200,11 @@ public class ServerBuilder {
      * multiple times to add multiple extensions.
      * <p>
      * When the server is started, any product extension files added by this method
-     * will be combined with the product extension files found in
+     * will be combined with the product extension files found in other source locations.
+     * Any duplicate product names will invoke the following override logic: product extensions
+     * defined through this SPI will override product extensions defined by the Environment
+     * variable <code>WLP_PRODUCT_EXT_DIR</code> which in turn would override product extensions
+     * found in
      * <code>$WLP_INSTALL_DIR/etc/extensions</code> to constitute the full set of product
      * extensions for this instance of the running server.
      *

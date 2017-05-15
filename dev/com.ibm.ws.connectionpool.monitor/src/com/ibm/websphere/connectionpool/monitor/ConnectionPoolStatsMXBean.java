@@ -21,39 +21,37 @@ package com.ibm.websphere.connectionpool.monitor;
 public interface ConnectionPoolStatsMXBean {
 
     /**
-     * The total number of connections created
+     * The total number of managed connections created since pool creation.
      */
     public long getCreateCount();
 
     /**
-     * The total number of connections closed.
+     * The total number of managed connections destroyed since pool creation.
      */
     public long getDestroyCount();
 
     /**
-     * The number of Connection objects in use for a particular connection pool.
+     * The number of connections that are in use, including multiple connections shared from a single managed connection.
      */
     public long getConnectionHandleCount();
 
     /**
-     * The number of ManagedConnection objects in use for a particular connection pool.
+     * The total number of managed connections in the free, shared, and unshared pools.
      */
     public long getManagedConnectionCount();
 
     /**
-     * The average waiting time in milliseconds until a connection is granted.
+     * The average waiting time in milliseconds until a connection is granted if a connection is not currently available.
      */
     public double getWaitTime();
 
     /**
-     * The number of free connections in the pool.
+     * The number of managed connections in the free pool.
      */
     public long getFreeConnectionCount();
 
     /**
-     * The average connection in use time in milliseconds
-     *
-     * @return
+     * The average time in milliseconds a connection is in use.
      */
-    public double getInuseTime();
+    public double getInUseTime();
 }

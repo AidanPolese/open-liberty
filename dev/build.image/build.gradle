@@ -18,14 +18,14 @@ task copyReadmeToBuildImage (type:Copy) {
     filter(ReplaceTokens,
            tokens: [BUILD_ID: bnd.buildID, LIBERTY_VERSION: bnd.libertyRelease])
 }
-
+/*
 task copyCopyrightToBuildImage (type:Copy) {
     dependsOn jar
     from "${projectDir}"
     into "${rootDir}/build.image/wlp"
     include 'Copyright.txt'
 }
-
+*/
 task copyGeneratedToBuildImageBinTools (type:Copy) {
     dependsOn jar
     from "${projectDir}/wlp/lib"
@@ -45,7 +45,7 @@ task copyGeneratedToCnfLib (type:Copy) {
 assemble {
     dependsOn copyPropertiesToBuildImage
     dependsOn copyReadmeToBuildImage
-    dependsOn copyCopyrightToBuildImage
+    //dependsOn copyCopyrightToBuildImage
     dependsOn copyGeneratedToBuildImageBinTools
     dependsOn copyGeneratedToCnfLib
 }

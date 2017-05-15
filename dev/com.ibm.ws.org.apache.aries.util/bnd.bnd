@@ -1,9 +1,8 @@
 # this needs to be replaced with a repo reference to a build artifact
--include= jar:${fileuri;lib/org.apache.aries.util-1.1.2-ibm-s20170124-0721.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;lib/org.apache.aries.util-1.1.2-ibm-s20170508-0700.jar}!/META-INF/MANIFEST.MF,bnd.overrides
 
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
-	lib/org.apache.aries.util-1.1.2-ibm-s20170124-0721.jar;version=file,\
-	com.ibm.websphere.org.osgi.core.6.0.0;version=latest
+	lib/org.apache.aries.util-1.1.2-ibm-s20170508-0700.jar;version=file,\
+	com.ibm.websphere.org.osgi.core;version=latest

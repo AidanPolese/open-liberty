@@ -18,9 +18,9 @@ import java.lang.reflect.Type;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.dopriv.SetAccessiblePrivilegedAction;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**
@@ -31,10 +31,9 @@ public class InjectionTargetField extends InjectionTarget
 {
     private static final String CLASS_NAME = InjectionTargetField.class.getName();
 
-    private static final TraceComponent tc = Tr.register
-                    (InjectionTargetField.class,
-                     InjectionConfigConstants.traceString,
-                     InjectionConfigConstants.messageFile);
+    private static final TraceComponent tc = Tr.register(InjectionTargetField.class,
+                                                         InjectionConfigConstants.traceString,
+                                                         InjectionConfigConstants.messageFile);
 
     Field ivField = null;
 
@@ -75,7 +74,7 @@ public class InjectionTargetField extends InjectionTarget
         if (Modifier.isStatic(fieldModifiers) && !isFromClient)
         {
             Tr.warning(tc, "INJECTION_TARGET_MUST_NOT_BE_STATIC_CWNEN0057W",
-                       new Object[] { field.getDeclaringClass().getName(), field.getName() });
+                       field.getDeclaringClass().getName(), field.getName());
             if (binding.isValidationFailable()) // fail if enabled     F743-14449
             {
                 throw new InjectionConfigurationException("The " + field.getDeclaringClass().getName() + "." +
@@ -85,7 +84,7 @@ public class InjectionTargetField extends InjectionTarget
         else if (!Modifier.isStatic(fieldModifiers) && isFromClient)
         {
             Tr.error(tc, "INJECTION_TARGET_IN_CLIENT_MUST_BE_STATIC_CWNEN0058E",
-                     new Object[] { field.getDeclaringClass().getName(), field.getName() });
+                     field.getDeclaringClass().getName(), field.getName());
             InjectionConfigurationException icex = new InjectionConfigurationException
                             ("The injection target field " + field.getName() + " must be declared static in the client container.");
             if (isTraceOn && tc.isEntryEnabled())

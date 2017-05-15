@@ -494,12 +494,15 @@ public class ProfileManager implements ProfileServiceLite {
             Root retDgRoot = null;
             try {
                 retDgRoot = getRepositoryManager().getRepository(key).get(dgRoot);
-            } catch (WIMException we) {
+            } catch (Exception e) {
                 if (!isAllowOperationIfReposDown) {
-                    throw we;
+                    if (e instanceof WIMException) {
+                        throw (WIMException) e;
+                    }
+                    throw new WIMException(e);
                 } else {
                     if (tc.isDebugEnabled())
-                        Tr.debug(tc, METHODNAME + " IGNORE: exception [" + we.getMessage() + "] on repository [" + key + "]");
+                        Tr.debug(tc, METHODNAME + " IGNORE: exception [" + e.getMessage() + "] on repository [" + key + "]");
                     failureRepositoryIds.add(key);
                     continue;
                 }
@@ -507,7 +510,6 @@ public class ProfileManager implements ProfileServiceLite {
 
             if (ctrlMap.containsKey(Service.DO_GROUP_MEMBERSHIP_CONTROL)) {
                 GroupMembershipControl ctrl = (GroupMembershipControl) ctrlMap.get(Service.DO_GROUP_MEMBERSHIP_CONTROL);
-                int level = ctrl.getLevel();
 
                 // If a group membership control is passed, check if there is also a clear cache control
                 CacheControl clearCacheCtrl = null;
@@ -522,7 +524,6 @@ public class ProfileManager implements ProfileServiceLite {
             }
             if (ctrlMap.containsKey(Service.DO_GROUP_MEMBER_CONTROL)) {
                 GroupMemberControl ctrl = (GroupMemberControl) ctrlMap.get(Service.DO_GROUP_MEMBER_CONTROL);
-                int level = ctrl.getLevel();
 
                 // If a group member control is passed, check if there is also a clear cache control
                 CacheControl clearCacheCtrl = null;
@@ -1136,12 +1137,15 @@ public class ProfileManager implements ProfileServiceLite {
             } else {
                 returnDO = getRepositoryManager().getRepository(reposId).search(inputRootDO);
             }
-        } catch (WIMException we) {
+        } catch (Exception e) {
             if (!isAllowOperationIfReposDown) {
-                throw we;
+                if (e instanceof WIMException) {
+                    throw (WIMException) e;
+                }
+                throw new WIMException(e);
             } else {
                 if (tc.isDebugEnabled())
-                    Tr.debug(tc, METHODNAME + " IGNORE: exception [" + we.getMessage() + "] on repository [" + reposId + "]");
+                    Tr.debug(tc, METHODNAME + " IGNORE: exception [" + e.getMessage() + "] on repository [" + reposId + "]");
                 failureRepositoryIds.add(reposId);
             }
         }
@@ -2062,12 +2066,15 @@ public class ProfileManager implements ProfileServiceLite {
                             }
                         } else
                             throw wse;
-                    } catch (WIMException we) {
+                    } catch (Exception e) {
                         if (!isAllowOperationIfReposDown) {
-                            throw we;
+                            if (e instanceof WIMException) {
+                                throw (WIMException) e;
+                            }
+                            throw new WIMException(e);
                         } else {
                             if (tc.isDebugEnabled())
-                                Tr.debug(tc, METHODNAME + " IGNORE: exception [" + we.getMessage()
+                                Tr.debug(tc, METHODNAME + " IGNORE: exception [" + e.getMessage()
                                              + "] when retrieve entity from repository [" + reposId + "]");
                             failureRepositoryIds.add(reposId);
 
@@ -2239,12 +2246,19 @@ public class ProfileManager implements ProfileServiceLite {
                 } catch (EntityNotFoundException e) {
                     i++;
                     ex = e;
-                } catch (WIMException we) {
+                } catch (Exception e) {
+                    WIMException we = null;
+                    if (e instanceof WIMException) {
+                        we = (WIMException) e;
+                    } else {
+                        we = new WIMException(e);
+                    }
+
                     if (!isAllowOperationIfReposDown) {
                         throw we;
                     } else {
                         if (tc.isDebugEnabled())
-                            Tr.debug(tc, METHODNAME + " IGNORE: exception [" + we.getMessage()
+                            Tr.debug(tc, METHODNAME + " IGNORE: exception [" + e.getMessage()
                                          + "] on repository [" + reposId + "]");
                         failureRepositoryIds.add(reposId);
                         ex = we;
@@ -2353,13 +2367,16 @@ public class ProfileManager implements ProfileServiceLite {
                                             }
                                         }
                                     }
-                                } catch (WIMException we) {
+                                } catch (Exception e) {
                                     if (!isAllowOperationIfReposDown) {
-                                        throw we;
+                                        if (e instanceof WIMException) {
+                                            throw (WIMException) e;
+                                        }
+                                        throw new WIMException(e);
                                     } else {
                                         if (tc.isDebugEnabled())
                                             Tr.debug(tc, METHODNAME + " IGNORE: exception ["
-                                                         + we.getMessage() + "] on repository [" + targetId + "]");
+                                                         + e.getMessage() + "] on repository [" + targetId + "]");
                                         failureRepositoryIds.add(targetId);
                                     }
                                 }
@@ -2964,7 +2981,7 @@ public class ProfileManager implements ProfileServiceLite {
      * @return the unique name of the entity which has the specified unique ID
      * @throws WIMException
      */
-    @FFDCIgnore({ EntityNotFoundException.class, WIMException.class })
+    @FFDCIgnore({ EntityNotFoundException.class, Exception.class })
     private String getUniqueNameByUniqueId(String uniqueId, boolean isAllowOperationIfReposDown, Set<String> failureRepositoryIds) throws WIMException {
         final String METHODNAME = "getUniqueNameByUniqueId";
         String uniqueName = null;
@@ -2998,12 +3015,15 @@ public class ProfileManager implements ProfileServiceLite {
             } catch (EntityNotFoundException e) {
                 // Move on to the next repository
                 i++;
-            } catch (WIMException we) {
+            } catch (Exception e) {
                 if (!isAllowOperationIfReposDown) {
-                    throw we;
+                    if (e instanceof WIMException) {
+                        throw (WIMException) e;
+                    }
+                    throw new WIMException(e);
                 } else {
                     if (tc.isDebugEnabled())
-                        Tr.debug(tc, METHODNAME + " IGNORE: exception [" + we.getMessage()
+                        Tr.debug(tc, METHODNAME + " IGNORE: exception [" + e.getMessage()
                                      + "] on repository [" + repositoryIds.get(i) + "]");
                     failureRepositoryIds.add(repositoryIds.get(i));
 

@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2015
+ * Copyright IBM Corp. 2015, 2017
  *
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
@@ -53,6 +53,7 @@ import com.ibm.websphere.ssl.SSLException;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.security.csiv2.config.CompatibleMechanisms;
 import com.ibm.ws.security.csiv2.config.ssl.SSLConfig;
+import com.ibm.ws.security.csiv2.config.tss.ServerTransportAddress;
 import com.ibm.ws.security.csiv2.util.SecurityServices;
 import com.ibm.ws.transport.iiop.security.ClientPolicy;
 import com.ibm.ws.transport.iiop.security.config.css.CSSConfig;
@@ -161,7 +162,7 @@ public class SocketFactory extends SocketFactoryHelper {
                         }
                         LinkedList<CompatibleMechanisms> compatibleMechanismsList = cssConfig.findCompatibleList(config);
                         for (CompatibleMechanisms compatibleMechanisms : compatibleMechanismsList) {
-                            Map<TransportAddress, CSSTransportMechConfig> cssTransport_mechs = compatibleMechanisms.getCSSCompoundSecMechConfig().getTransportMechMap();
+                            Map<ServerTransportAddress, CSSTransportMechConfig> cssTransport_mechs = compatibleMechanisms.getCSSCompoundSecMechConfig().getTransportMechMap();
                             TSSTransportMechConfig transport_mech = compatibleMechanisms.getTSSCompoundSecMechConfig().getTransport_mech();
 
                             if (transport_mech instanceof TSSSSLTransportConfig) {
@@ -240,19 +241,20 @@ public class SocketFactory extends SocketFactoryHelper {
      * @return
      * @throws IOException
      */
-    private Socket createSocketFromTransportMechList(Map<TransportAddress, CSSTransportMechConfig> cssTransport_mechs, TSSTransportMechConfig transport_mech) throws IOException {
+    private Socket createSocketFromTransportMechList(Map<ServerTransportAddress, CSSTransportMechConfig> cssTransport_mechs,
+                                                     TSSTransportMechConfig transport_mech) throws IOException {
         TSSSSLTransportConfig transportConfig = (TSSSSLTransportConfig) transport_mech;
         int requires = transportConfig.getRequires();
 
-        for (Map.Entry<TransportAddress, CSSTransportMechConfig> entry : cssTransport_mechs.entrySet()) {
+        for (Map.Entry<ServerTransportAddress, CSSTransportMechConfig> entry : cssTransport_mechs.entrySet()) {
 
-            TransportAddress addr = entry.getKey();
+            ServerTransportAddress addr = entry.getKey();
             CSSTransportMechConfig mech_cfg = entry.getValue();
 
             String sslConfigName = mech_cfg.getSslConfigName();
 
-            int sslPort = addr.port;
-            String sslHost = addr.host_name;
+            int sslPort = addr.getPort();
+            String sslHost = addr.getHost();
             InetAddress ina = InetAddress.getByName(sslHost);
             sslHost = ina.getCanonicalHostName();
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {

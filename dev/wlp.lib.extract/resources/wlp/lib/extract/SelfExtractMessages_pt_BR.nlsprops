@@ -270,10 +270,11 @@ LICENSE_invalidLicense=N\u00e3o \u00e9 poss\u00edvel fazer upgrade da licen\u00e
 LICENSE_invalidInstallType=N\u00e3o \u00e9 poss\u00edvel fazer upgrade da licen\u00e7a porque a instala\u00e7\u00e3o do produto especificada foi instalada usando o IBM Installation Manager. Use o IBM Installation Manager para fazer upgrade de sua instala\u00e7\u00e3o.
 
 # new messages for license upgrade and downgrade
-LICENSE_replace_invalidVersion=N\u00e3o \u00e9 poss\u00edvel substituir a licen\u00e7a, pois a instala\u00e7\u00e3o do produto especificado est\u00e1 na vers\u00e3o {0}, mas a licen\u00e7a pode ser substitu\u00edda somente da vers\u00e3o {1}.
-LICENSE_replace_invalidInstallType=A licen\u00e7a n\u00e3o pode ser modificada, pois a instala\u00e7\u00e3o do produto especificada foi instalada usando o IBM Installation Manager. Use o IBM Installation Manager para modificar sua instala\u00e7\u00e3o.
+LICENSE_replace_invalidVersion=A licen\u00e7a n\u00e3o pode ser aplicada porque a instala\u00e7\u00e3o do produto especificada est\u00e1 na vers\u00e3o {0}, mas a licen\u00e7a pode ser aplicada somente na vers\u00e3o {1}.
+LICENSE_replace_invalidInstallType=A licen\u00e7a n\u00e3o pode ser aplicada porque a instala\u00e7\u00e3o do produto especificada foi instalada usando o IBM Installation Manager. Use o IBM Installation Manager para fazer upgrade de sua instala\u00e7\u00e3o.
 
-LICENSE_replace_invalidEditonFeatures=Os seguintes recursos n\u00e3o s\u00e3o mais aplic\u00e1veis ao {0} e devem ser removidos antes de substituir a licen\u00e7a: {1}
-LICENSE_replace_uninstallFeatures_manually=Use o seguinte comando para desinstalar esses recursos antes de substituir a licen\u00e7a por {0}: {1}
+LICENSE_replace_invalidEditonFeatures=Os recursos a seguir n\u00e3o se aplicam \u00e0 edi\u00e7\u00e3o {0} e devem ser desinstalados antes de aplicar a licen\u00e7a: {1}\n\
+\n\
+Use o comando a seguir para desinstalar esses recursos antes de aplicar a licen\u00e7a para a edi\u00e7\u00e3o do {2}: {3}
 
-
+LICENSE_downgrade_block_8557_low=Essa licen\u00e7a pode ser aplicada somente \u00e0 instala\u00e7\u00e3o na {0} ou superior. A instala\u00e7\u00e3o atual est\u00e1 na {1}. Fa\u00e7a download e atualize para o n\u00edvel mais recente e reaplique a licen\u00e7a.

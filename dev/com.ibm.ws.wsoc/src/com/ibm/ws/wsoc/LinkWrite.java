@@ -96,6 +96,13 @@ public class LinkWrite {
     public void processError(TCPWriteRequestContext wsc, Throwable ioe) {
         // write completed with an error - call sendHandler if this was the result of websocket async write
         // if a Send with a Future is being used, then we are using our future send handler here.
+
+        // cleanup up before calling onResult, since onResult, or an async user thread, may want to oddly write data right away
+        // no cleanup if exception occurred before trying to write on the wire
+        if (wsc != null) {
+            messageWriter.frameCleanup();
+        }
+
         if (wsocSendOutstanding == true) {
 
             wsocSendOutstanding = false;
@@ -107,11 +114,6 @@ public class LinkWrite {
                 }
                 wsocSendHandler.onResult(result);
             }
-        }
-
-        // no cleanup if exception occurred before trying to write on the wire
-        if (wsc != null) {
-            messageWriter.frameCleanup();
         }
 
     }

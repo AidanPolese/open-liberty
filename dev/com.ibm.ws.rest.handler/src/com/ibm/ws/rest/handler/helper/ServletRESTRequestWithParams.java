@@ -30,11 +30,37 @@ import com.ibm.wsspi.rest.handler.RESTRequest;
 public class ServletRESTRequestWithParams implements RESTRequest {
     private final RESTRequest request;
     private final Map<String, String> params;
+    private Map<String, Object> hostsInfo;
     public static final TraceComponent tc = Tr.register(ServletRESTRequestWithParams.class);
 
     public ServletRESTRequestWithParams(RESTRequest req) {
         this.request = req;
         params = new HashMap<String, String>();
+        hostsInfo = new HashMap<String, Object>();
+    }
+
+    /**
+     * @return the hostsInfo
+     */
+    public Map<String, Object> getHostsInfo() {
+        return hostsInfo;
+    }
+
+    /**
+     * @param hostsInfo the hostsInfo to set
+     */
+    public void setHostsInfo(Map<String, Object> hostsInfo) {
+        this.hostsInfo = hostsInfo;
+    }
+
+    /**
+     * Get a host info
+     *
+     * @param a hostName
+     * @return Object containing per host info
+     */
+    public Object getHostInfo(String hostName) {
+        return this.hostsInfo.get(hostName);
     }
 
     /*
@@ -48,7 +74,6 @@ public class ServletRESTRequestWithParams implements RESTRequest {
         if (ret != null)
             return ret.getInput();
         return null;
-
     }
 
     /*
@@ -162,8 +187,7 @@ public class ServletRESTRequestWithParams implements RESTRequest {
      */
     @Override
     public String getQueryString() {
-        // TODO Auto-generated method stub
-        return null;
+        return request.getQueryString();
     }
 
     /*

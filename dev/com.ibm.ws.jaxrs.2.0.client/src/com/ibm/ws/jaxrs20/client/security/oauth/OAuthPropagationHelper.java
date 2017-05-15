@@ -31,6 +31,7 @@ import com.ibm.ws.jaxrs20.client.JAXRSClientConstants;
 
 public class OAuthPropagationHelper {
     private static final TraceComponent tc = Tr.register(OAuthPropagationHelper.class, JAXRSClientConstants.TR_GROUP, JAXRSClientConstants.TR_RESOURCE_BUNDLE);
+    public static final String ISSUED_JWT_TOKEN = "issuedJwt"; // new jwt token
 
     /**
      * Get the type of access token which the runAsSubject authenticated
@@ -45,8 +46,30 @@ public class OAuthPropagationHelper {
         return getSubjectAttributeString("access_token", true);
     }
 
-    public static String getJwtToken() {
-        return getSubjectAttributeString("id_token", true);
+//    public static String getJwtToken() {
+//        return getSubjectAttributeString("id_token", true);
+//    }
+
+    public static String getJwtToken() throws Exception {
+        String jwt = getIssuedJwtToken();
+        if (jwt == null) {
+            jwt = getAccessToken(); // the one that the client received
+            if (!isJwt(jwt)) {
+                jwt = null;
+            }
+        }
+        return jwt;
+    }
+
+    private static boolean isJwt(String jwt) {
+        if (jwt != null && jwt.indexOf(".") >= 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public static String getIssuedJwtToken() throws Exception {
+        return getSubjectAttributeString(ISSUED_JWT_TOKEN, true); // the newly issued token
     }
 
     public static String getScopes() {

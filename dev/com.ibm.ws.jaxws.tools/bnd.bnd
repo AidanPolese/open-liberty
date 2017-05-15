@@ -15,17 +15,17 @@ Export-Package: com.sun.tools.ws.ant;version="2.2.10", \
 Import-Package: \
  com.sun.xml.bind*;version="2.2.10"
 
- 
+
 Private-Package:\
    com.ibm.ws.jaxws.tools.*
 
 -includeresource:\
- @lib/jaxws-rt.jar, \
- @lib/jaxws-tools.jar, \
- @lib/policy.jar, \
- @lib/resolver.jar, \
- @lib/stax-ex.jar, \
- @lib/streambuffer.jar, \
+ @lib/jaxws-rt.jar!/!META-INF/maven/*, \
+ @lib/jaxws-tools.jar!/!META-INF/maven/*, \
+ @lib/policy.jar!/!META-INF/maven/*, \
+ @lib/resolver.jar!/!META-INF/maven/*, \
+ @lib/stax-ex.jar!/!META-INF/maven/*, \
+ @lib/streambuffer.jar!/!META-INF/maven/*
 
 instrument.disabled: true
 

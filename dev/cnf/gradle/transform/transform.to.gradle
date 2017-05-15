@@ -7,12 +7,15 @@ import org.apache.tools.ant.DirectoryScanner
 DirectoryScanner.removeDefaultExclude("**/.gitignore")
 DirectoryScanner.removeDefaultExclude("**/.gitattributes")
 
-Set<String> kernelProjectTypeSet = ['Kernel', 'KernelPrereq', 'KernelTest' ]
-Set<String> laosProjectTypeSet = ['LAOS', 'Kernel', 'KernelPrereq', 'KernelTest' ]
+Set<String> kernelProjectTypeSet = ['Kernel', 'KernelPrereq', 'KernelTest', 'LAOSKernelTest' ]
+Set<String> laosProjectTypeSet = ['LAOS', 'Kernel', 'KernelPrereq', 'KernelTest', 'LAOSKernelTest', 'LAOSTest' ]
 Set<String> kernelMergedTestProjectTypeSet = ['KernelTestMerged']
 Set<String> laosMergedTestProjectTypeSet = ['LAOSTestMerged', 'KernelTestMerged']
 
 task transform {
+    File filesToRemove = null
+    String nl = System.getProperty("line.separator")
+
     File sourceRootDir = new File('.')
     sourceRootDir = file(sourceRootDir.absolutePath)
     while (!sourceRootDir.name.equals('dev')) {
@@ -56,6 +59,8 @@ task transform {
         }
         if (transformLAOSRootDir != null) {
             transformLAOSRootDir.mkdirs()
+            filesToRemove = new File(transformLAOSRootDir, 'filesToRemove.properties')
+            filesToRemove.createNewFile()
         }
 
         FileTree tree = fileTree(sourceRootDir).include('*/build.gradle')
@@ -63,26 +68,33 @@ task transform {
             File buildGradle = new File("$element.relativePath")
             if (buildGradle.name.equals('build.gradle')) {
                 String projectName = buildGradle.getParent()
-                transformProject(projectName, sourceRootDir, transformRootDir)
+                //transformProject(projectName, sourceRootDir, transformRootDir)
                 String projectType = props.getProperty(projectName)
                 if (transformKernelRootDir != null && projectType != null && kernelProjectTypeSet.contains(projectType)) {
                     transformProject(projectName, sourceRootDir, transformKernelRootDir)
                 }
                 if (transformLAOSRootDir != null && projectType != null && laosProjectTypeSet.contains(projectType)) {
                     transformProject(projectName, sourceRootDir, transformLAOSRootDir)
+                    if (projectType.equals('Kernel') || projectType.equals('LAOS') || projectType.equals('LAOSKernelTest')) {
+                        if (projectName.equals('com.ibm.websphere.appserver.kernelCore-1.0') || projectName.equals('com.ibm.websphere.appserver.laosBundle')) {
+                            filesToRemove.append(projectName + ':LAOSRemoveProject' + nl)
+                        } else {
+                            filesToRemove.append(projectName + ':LAOSReplaceProjectSourceWithArtifact' + nl)
+                        }
+                    }
                 }
             }
         }
 
-        transformProjects(sourceRootDir, transformRootDir, null, null)
-        transformCnf(sourceRootDir, transformRootDir)
+        //transformProjects(sourceRootDir, transformRootDir, null, null, null, nl)
+        //transformCnf(sourceRootDir, transformRootDir)
         if (transformKernelRootDir != null) {
-            transformProjects(sourceRootDir, transformKernelRootDir, props, kernelProjectTypeSet)
+            transformProjects(sourceRootDir, transformKernelRootDir, props, kernelProjectTypeSet, null, nl)
             transformCnf(sourceRootDir, transformKernelRootDir)
         }
         if (transformLAOSRootDir != null) {
-            transformProjects(sourceRootDir, transformLAOSRootDir, props, laosProjectTypeSet)
-            MergeUnittestIntoProjects(sourceRootDir, transformLAOSRootDir, props, laosMergedTestProjectTypeSet)
+            transformProjects(sourceRootDir, transformLAOSRootDir, props, laosProjectTypeSet, filesToRemove, nl)
+            MergeUnittestIntoProjects(sourceRootDir, transformLAOSRootDir, props, laosMergedTestProjectTypeSet, filesToRemove, nl)
             copyOverlay(sourceRootDir, transformLAOSRootDir)
             transformCnf(sourceRootDir, transformLAOSRootDir)
         }
@@ -108,21 +120,23 @@ void transformProject(String projectName, File sourceRootDir, File targetRootDir
     }
 }
 
-void transformProjects(File sourceRootDir, File targetRootDir, Properties props, Set<String> projectTypeSet) {
+void transformProjects(File sourceRootDir, File targetRootDir, Properties props, Set<String> projectTypeSet, File filesToRemove, String nl) {
     File templateDir = new File(sourceRootDir, 'cnf/gradle/internal.features')
     FileTree tree = fileTree(sourceRootDir).include('com.ibm.websphere.features.internal.*/*.feature')
     tree.visit {element ->
         File featureFile = new File("$element.relativePath")
-        if (featureFile.name.endsWith('.feature')) {
-            String featureName = featureFile.name.replace('.feature', '')
-            if (props == null || projectTypeSet.contains(props.getProperty(featureName))) {
+        String featureFileName = featureFile.name
+        if (!element.isDirectory() && (props == null || projectTypeSet.contains(props.getProperty(featureFileName.replace('.feature', ''))))) {
             String parentFolder = featureFile.getParent()
-            String featureFileName = featureFile.name
-            String bndFileName = featureFile.name.replace('.feature', '.bnd')
-            String mfFileName = featureFile.name.replace('.feature', '.mf')
+            String featureName = featureFileName.replace('.feature', '')
+            String bndFileName = featureFileName.replace('.feature', '.bnd')
+            String mfFileName = featureFileName.replace('.feature', '.mf')
             File newDir = new File(targetRootDir, featureName)
             File resourcesDir = new File(newDir, 'resources')
             println "Creating internal feature project " + featureName
+            if (filesToRemove != null) {
+                filesToRemove.append(parentFolder + '/' + featureFileName + ':LAOSRemoveFile' + nl)
+            }
             newDir.deleteDir()
             resourcesDir.mkdirs()
             copy {
@@ -152,7 +166,6 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
                 from templateDir
                 into resourcesDir
                 include mfFileName
-            }
             }
         }
     }
@@ -252,13 +265,16 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
     }
 }
 
-void MergeUnittestIntoProjects(File sourceRootDir, File targetRootDir, Properties props, Set<String> projectTypeSet) {
+void MergeUnittestIntoProjects(File sourceRootDir, File targetRootDir, Properties props, Set<String> projectTypeSet, File filesToRemove, String nl) {
     props.keys().each { projectName ->
         String projectType = props.getProperty(projectName)
         if (projectTypeSet.contains(projectType)) {
             String testProjectName = projectName
             projectName = testProjectName.substring(0, testProjectName.indexOf('_test'))
             println 'Copying ' + testProjectName + '/unittest/src into ' + projectName + '/test'
+            if (!testProjectName.equals('com.ibm.ws.httpservice_test')) {
+                filesToRemove.append(testProjectName + ':LAOSRemoveTestProject' + nl)
+            }
             copy {
                 from new File(sourceRootDir, testProjectName + '/unittest/src')
                 into new File(targetRootDir, projectName + '/test')
@@ -373,11 +389,6 @@ void MergeUnittestIntoProjects(File sourceRootDir, File targetRootDir, Propertie
         }
     }
     copy {
-        from new File(sourceRootDir, 'com.ibm.ws.config.utility_test')
-        into new File(targetRootDir, 'com.ibm.ws.config.utility')
-        include 'publish/files/massive/**'
-    }
-    copy {
         from new File(sourceRootDir, 'com.ibm.ws.crypto.passwordutil_test/unittest')
         into new File(targetRootDir, 'com.ibm.ws.crypto.passwordutil/test')
         include 'test_data/**'
@@ -410,10 +421,6 @@ void MergeUnittestIntoProjects(File sourceRootDir, File targetRootDir, Propertie
         filter { String line ->
             line.replace('"/build/unittest/test_data/', '"/generated/test/test_data/')
         }
-    }
-    copy {
-        from new File(sourceRootDir, 'com.ibm.ws.dynacache_test/unittest/src')
-        into new File(targetRootDir, 'com.ibm.ws.dynacache.web/test')
     }
     copy {
         from new File(sourceRootDir, 'com.ibm.ws.dynamic.bundle_test/unittest')
@@ -468,6 +475,15 @@ void MergeUnittestIntoProjects(File sourceRootDir, File targetRootDir, Propertie
             line
                 .replace('"../com.ibm.ws.kernel.filemonitor_test/unittest/test data"', '"bin_test/test data"')
                 .replace('"../com.ibm.ws.kernel.filemonitor_test/build/unittest/tmp"', '"generated/test/tmp"')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.kernel.metatype.helper_test/unittest/src')
+        into new File(targetRootDir, 'com.ibm.ws.kernel.metatype.helper/test')
+        include 'com/ibm/wsspi/config/internal/FilesetTest.java'
+        filteringCharset = 'UTF-8'
+        filter { String line ->
+            line.replace('"build/tmp/', '"generated/tmp/')
         }
     }
     copy {
@@ -533,6 +549,14 @@ void MergeUnittestIntoProjects(File sourceRootDir, File targetRootDir, Propertie
             line
                 .replace('"../com.ibm.ws.logging_test/unittest/test data/"', '"test/test data/"')
                 .replace('"../com.ibm.ws.logging_test/build/logs/"', '"generated/logs/"')
+        }
+    }
+    copy {
+        from new File(sourceRootDir, 'com.ibm.ws.org.apache.cxf.jaxws')
+        into new File(targetRootDir, 'com.ibm.ws.org.apache.cxf.jaxws')
+        include 'cxf-*.bnd'
+        filter { String line ->
+            line.replaceFirst('build/tmp/bnd/(cxf-.*-2.6.2)', '@lib/$1-ibm-s20170216-1739.jar!/org/apache/cxf/**')
         }
     }
     copy {
@@ -648,6 +672,7 @@ void MergeUnittestIntoProjects(File sourceRootDir, File targetRootDir, Propertie
         exclude '*/build-unittest.xml'
         exclude '*/delivery.sets'
         exclude '*/unittest/**'
+        exclude 'wlp.lib.extract_test/jar/**'
     }
     copy {
         from new File(sourceRootDir, 'com.ibm.ws.classloading_test/unittest')
@@ -691,12 +716,8 @@ void MergeUnittestIntoProjects(File sourceRootDir, File targetRootDir, Propertie
                 .replace('File(SERVLET_JAR_LOCATION)', 'File(System.getProperty(SERVLET_JAR_LOCATION))')
         }
     }
-    delete fileTree(dir: targetRootDir , include: 'com.ibm.ws.kernel.boot.core/src/com/ibm/ws/kernel/zos/**')
-    new File(targetRootDir, 'com.ibm.ws.kernel.boot.core/src/com/ibm/ws/kernel/zos').delete()
     delete fileTree(dir: targetRootDir , include: 'com.ibm.ws.logging/test/com/ibm/ws/logging/internal/osgi/**')
     new File(targetRootDir, 'com.ibm.ws.logging/test/com/ibm/ws/logging/internal/osgi').delete()
-    new File(targetRootDir, 'com.ibm.ws.channelfw/src/com/ibm/ws/bytebuffer/internal/ZOSWsByteBufferPoolManagerImpl.java').delete()
-    new File(targetRootDir, 'com.ibm.ws.channelfw/src/com/ibm/ws/tcpchannel/internal/ZosAio.java').delete()
     new File(targetRootDir, 'com.ibm.ws.jaxws.common/test/com/ibm/ws/jaxws/utils/StAXUtilsTest.java').delete()
     new File(targetRootDir, 'com.ibm.ws.security.jaas.common/test/com/ibm/ws/security/jaas/common/internal/JAASLoginModuleConfigImplTestWithMock.java').delete()
     new File(targetRootDir, 'com.ibm.ws.security.jaas.common/test/com/ibm/ws/security/jaas/common/internal/JAASSecurityConfigurationTest.java').delete()
@@ -714,6 +735,13 @@ void copyOverlay(File sourceRootDir, File targetRootDir) {
                 into targetRootDir
                 include "$element.relativePath"
             }
+        }
+    }
+    File deleteDir = new File(sourceRootDir, 'cnf/gradle/transform/delete')
+    tree = fileTree(deleteDir).include('com.ibm.*/**')
+    tree.visit { element ->
+        if (!element.isDirectory()) {
+            new File(targetRootDir, "$element.relativePath").delete()
         }
     }
 }

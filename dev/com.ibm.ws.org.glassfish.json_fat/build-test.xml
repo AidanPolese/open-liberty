@@ -2,7 +2,7 @@
 <project name="com.ibm.ws.org.glassfish.json_fat" default="buildandrun" basedir=".">
   <import file="../ant_build/public_imports/fat_imports.xml" />
   <property name="fat.image.type" value="use-full-image"/>
-  <property name="unittest.endorsed" value="${classes.dir}/../../../com.ibm.websphere.javaee.annotation.1.1/lib/"/>
+  <property name="unittest.endorsed" value="${basedir}/../prereq.published/lib.ext/com.ibm.websphere.javaee.annotation.1.1/lib/"/>
               
   <target name="addRequiredFiles">
     <!-- expose project dependencies to runtime JRE by storing them in autoFVT.zip (build/lib copied automatically) -->

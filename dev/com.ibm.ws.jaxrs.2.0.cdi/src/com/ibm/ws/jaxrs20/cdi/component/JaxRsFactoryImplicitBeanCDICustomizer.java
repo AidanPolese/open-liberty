@@ -26,8 +26,6 @@ import java.util.WeakHashMap;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
-import javax.naming.InitialContext;
-import javax.naming.NameNotFoundException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 
@@ -44,6 +42,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.cdi.CDIService;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.jaxrs20.JaxRsConstants;
 import com.ibm.ws.jaxrs20.api.JaxRsFactoryBeanCustomizer;
@@ -74,6 +73,8 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
     private static final TraceComponent tc = Tr.register(JaxRsFactoryImplicitBeanCDICustomizer.class);
     Container containerContext;
     private final AtomicServiceReference<ManagedObjectService> managedObjectServiceRef = new AtomicServiceReference<ManagedObjectService>("managedObjectService");
+
+    private CDIService cdiService;
 
     private static List<String> validRequestScopeList = new ArrayList<String>();
     private static List<String> validSingletonScopeList = new ArrayList<String>();
@@ -196,11 +197,21 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
 
     }
 
+    private BeanManager getBeanManager() {
+        ComponentMetaData cmd = ComponentMetaDataAccessorImpl.getComponentMetaDataAccessor().getComponentMetaData();
+        BeanManager beanMgr = beanManagers.get(cmd);
+        if (beanMgr == null) {
+            beanMgr = cdiService.getCurrentModuleBeanManager();
+            beanManagers.put(cmd, beanMgr);
+        }
+        return beanMgr;
+    }
+
     private Object getClassFromCDI(Class<?> clazz) {
         BeanManager manager = getBeanManager();
         Bean<?> bean = getBeanFromCDI(clazz);
         Object obj = null;
-        if (bean != null) {
+        if (bean != null && manager != null) {
             obj = manager.getReference(bean, clazz,
                                        manager.createCreationalContext(bean));
         }
@@ -488,35 +499,6 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
         return beanManager == null ? false : true;
     }
 
-    @FFDCIgnore(NameNotFoundException.class)
-    private BeanManager getBeanManager() {
-
-        ComponentMetaData cmd = ComponentMetaDataAccessorImpl.getComponentMetaDataAccessor().getComponentMetaData();
-        BeanManager manager = beanManagers.get(cmd);
-
-        if (manager == null) {
-            try {
-                InitialContext initialContext = new InitialContext();
-                manager = (BeanManager) initialContext.lookup(JAXRSCDIConstants.JDNI_STRING);
-                JAXRSCDIServiceImplByJndi.setBeanManager(manager);
-                beanManagers.put(cmd, manager);
-
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "Found BeanManager through JNDI lookup: " + JAXRSCDIConstants.JDNI_STRING + ". The manager is: " + manager.toString());
-                }
-            } catch (NameNotFoundException e) {
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "Couldn't get BeanManager through JNDI: " + JAXRSCDIConstants.JDNI_STRING + ", but ignore the FFDC: " + e.toString());
-                }
-            } catch (Exception e) {
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "Got BeanManager through JNDI failed: " + e.toString());
-                }
-            }
-        }
-        return manager;
-    }
-
     /**
      * @param clazz
      * @return
@@ -660,6 +642,15 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
 
     protected void unsetManagedObjectService(ServiceReference<ManagedObjectService> ref) {
         this.managedObjectServiceRef.unsetReference(ref);
+    }
+
+    @Reference
+    protected void setCDIService(CDIService cdiService) {
+        this.cdiService = cdiService;
+    }
+
+    protected void unsetCDIService(CDIService cdiService) {
+        this.cdiService = null;
     }
 
     /*

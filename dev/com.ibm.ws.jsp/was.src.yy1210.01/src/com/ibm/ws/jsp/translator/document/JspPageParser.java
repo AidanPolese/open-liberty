@@ -16,7 +16,7 @@
 //  PK26679-rework  ANU PK26679 to be reworked
 //  383041 --- rework of PK26679 Scott Johnson 8/10/2006
 //  defect 396002 CTS: no jsp fatal translation error for  taglib after actions Scott Johnson 10/17/2006
-//  defect PK30879 "Unmatched end tags" exception not to be thrown in v6 (Aetna) Scott Johnson 10/18/2006
+//  "Unmatched end tags" exception not to be thrown in v6 10/18/2006
 // jsp2.1work
 // defect 414623 FVT:Default JSP version should be 2.0 not 2.1 2007/01/12 10:15:37 Scott Johnson
 //  PK43599  ANU  space/tab/newline/carriage return before the end tag causes erroneous output

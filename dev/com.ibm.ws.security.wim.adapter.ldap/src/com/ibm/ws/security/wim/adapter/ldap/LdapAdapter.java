@@ -557,8 +557,7 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
             //Check is input principalName is DN, if it is DN use the same for login otherwise use userFilter
             String principalNameDN = null;
             try {
-                LdapName name = new LdapName(principalName);
-                principalNameDN = name.getPrefix(name.size()).toString();
+                principalNameDN = new LdapName(principalName).toString();
             } catch (InvalidNameException e) {
                 e.getMessage();
             }
@@ -826,8 +825,7 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
                 if (inputPattern != null && inputPattern.length() > 0) {
                     String dn = null;
                     try {
-                        LdapName name = new LdapName(inputPattern);
-                        dn = name.getPrefix(name.size()).toString();
+                        dn = new LdapName(inputPattern).toString();
                     } catch (InvalidNameException e) {
                         e.getMessage();
                     }
@@ -842,8 +840,7 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
                     if (inputPattern != null && inputPattern.length() > 0) {
                         String dn = null;
                         try {
-                            LdapName name = new LdapName(inputPattern);
-                            dn = name.getPrefix(name.size()).toString();
+                            dn = new LdapName(inputPattern).toString();
                         } catch (InvalidNameException e) {
                             e.getMessage();
                         }

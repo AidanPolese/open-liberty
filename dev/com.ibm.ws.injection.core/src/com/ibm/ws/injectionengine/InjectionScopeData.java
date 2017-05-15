@@ -17,9 +17,9 @@ import java.util.Map;
 
 import javax.naming.Reference;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.wsspi.injectionengine.InjectionBinding;
 import com.ibm.wsspi.injectionengine.InjectionConfigConstants;

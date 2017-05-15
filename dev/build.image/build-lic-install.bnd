@@ -20,7 +20,7 @@ TODAY, DSTAMP, TSTAMP, \
 Include-Resource, Export-Package, Private-Package, Ignore-Package, \
 Bundle-SymbolicName, Bundle-Name, Bundle-Description, Bundle-ManifestVersion, Bundle-Version
 
-Main-Class: wlp.lib.extract.SelfExtract
+Main-Class: wlp.lib.extract.extension.ExtendedSelfExtract
 Private-Package: wlp.*
 
 ## Use variables available when bnd is called.

@@ -17,7 +17,7 @@ Subsystem-Content: com.ibm.websphere.appserver.cdi-1.0; type="osgi.subsystem.fea
  com.ibm.websphere.appserver.jsp-2.2; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.servlet-3.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.ejbLite-3.1; type="osgi.subsystem.feature",
- com.ibm.websphere.appserver.jdbc-4.0; ibm.tolerates:="4.1"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jdbc-4.0; ibm.tolerates:="4.1, 4.2"; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.managedBeans-1.0; type="osgi.subsystem.feature"
 Subsystem-Description: %description
 Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1

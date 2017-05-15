@@ -41,6 +41,7 @@ public class AuditConstants {
     static public final String CONFIG_SNAPSHOT = "CONFIG_SNAPSHOT";
     static public final String SECURITY_AUDIT_MGMT = "SECURITY_AUDIT_MGMT";
     static public final String SECURITY_MEMBER_MGMT = "SECURITY_MEMBER_MGMT";
+    static public final String SECURITY_SERVICE_MGMT = "SECURITY_SERVICE_MGMT";
     static public final String SECURITY_SESSION_LOGIN = "SECURITY_SESSION_LOGIN";
     static public final String SECURITY_SESSION_LOGOUT = "SECURITY_SESSION_LOGOUT";
     static public final String SECURITY_SESSION_EXPIRY = "SECURITY_SESSION_EXPIRY";
@@ -63,7 +64,8 @@ public class AuditConstants {
     static public final String JMS = "JMS";
     static public final String CUSTOM = "CUSTOM";
 
-    static public final List<String> validEventNamesList = Arrays.asList("CONFIG_SNAPSHOT", "SECURITY_AUDIT_MGMT", "SECURITY_MEMBER_MGMT", "SECURITY_SESSION_LOGIN",
+    static public final List<String> validEventNamesList = Arrays.asList("CONFIG_SNAPSHOT", "SECURITY_AUDIT_MGMT", "SECURITY_MEMBER_MGMT", "SECURITY_SERVICE_MGMT",
+                                                                         "SECURITY_SESSION_LOGIN",
                                                                          "SECURITY_SESSION_LOGOUT", "SECURITY_SESSION_EXPIRY", "SECURITY_API_AUTHN",
                                                                          "SECURITY_API_AUTHN_TERMINATE", "SECURITY_ROLE_MAPPING", "SECURITY_AUTHN",
                                                                          "SECURITY_AUTHN_FAILOVER", "SECURITY_AUTHN_DELEGATION", "SECURITY_AUTHZ_DELEGATION",

@@ -85,10 +85,8 @@ public class UniqueNameHelper {
 
     @FFDCIgnore(InvalidNameException.class)
     private static String getValidDN(String uniqueName) {
-        LdapName name = null;
         try {
-            name = new LdapName(uniqueName);
-            return name.getPrefix(name.size()).toString();
+            return new LdapName(uniqueName).toString();
         } catch (InvalidNameException e) {
             return null;
         }

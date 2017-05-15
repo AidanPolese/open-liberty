@@ -242,11 +242,19 @@ public class JPAQueryHelper {
      */
     private void processExitStatusParams() {
         String wildcard = null;
-        if (wsso.getExitStatus() != null) {
+        if (wsso.getExitStatusList() != null && !wsso.getExitStatusList().isEmpty()) {
             handleSQLForAND();
-            wildcard = wsso.getExitStatus().replaceAll("\\*", "%");
-            whereClause.append("x.exitStatus like :exitStatus");
-            parameterMap.put("exitStatus", wildcard);
+            whereClause.append("(");
+            int i = 1;
+            for (String status : wsso.getExitStatusList()) {
+                if (i > 1)
+                    whereClause.append(" OR ");
+                wildcard = status.replaceAll("\\*", "%");
+                whereClause.append(doIgnoreCase("x.exitStatus") + " like " + doIgnoreCase(":exitStatus" + i));
+                parameterMap.put("exitStatus" + i, wildcard);
+                i++;
+            }
+            whereClause.append(")");
         }
     }
 
@@ -257,12 +265,19 @@ public class JPAQueryHelper {
      * @return
      */
     private void processSubmitterParams() {
-        String wildcard = null;
-        if (wsso.getSubmitter() != null) {
+        if (wsso.getSubmitterList() != null && !wsso.getSubmitterList().isEmpty()) {
             handleSQLForAND();
-            wildcard = wsso.getSubmitter().replaceAll("\\*", "%");
-            whereClause.append("x.submitter like :submitter");
-            parameterMap.put("submitter", wildcard);
+            whereClause.append("(");
+            int i = 1;
+            for (String submitter : wsso.getSubmitterList()) {
+                if (i > 1)
+                    whereClause.append(" OR ");
+                String wildcard = submitter.replaceAll("\\*", "%");
+                whereClause.append(doIgnoreCase("x.submitter") + " like " + doIgnoreCase(":submitter" + i));
+                parameterMap.put("submitter" + i, wildcard);
+                i++;
+            }
+            whereClause.append(")");
         }
     }
 
@@ -294,18 +309,26 @@ public class JPAQueryHelper {
          * 1) The full repository entry including the # separator and all terms
          * 2) No # separator, in which case we assume they are matching on the first term (app name)
          */
-        String wildcard = null;
-        if (wsso.getAppName() != null) {
+
+        if (wsso.getAppNameList() != null && !wsso.getAppNameList().isEmpty()) {
             handleSQLForAND();
-            wildcard = wsso.getAppName().replaceAll("\\*", "%");
+            whereClause.append("(");
+            int i = 1;
+            for (String appName : wsso.getAppNameList()) {
+                if (i > 1)
+                    whereClause.append(" OR ");
+                String wildcard = appName.replaceAll("\\*", "%");
 
-            // If the input does not include the # separator, assume they want to match the first term (app name).
-            if (!wildcard.contains("#")) {
-                wildcard = wildcard.concat("#%");
+                // If the input does not include the # separator, assume they want to match the first term (app name).
+                if (!wildcard.contains("#")) {
+                    wildcard = wildcard.concat("#%");
+                }
+
+                whereClause.append(doIgnoreCase("x.amcName") + " like " + doIgnoreCase(":appName" + i));
+                parameterMap.put("appName" + i, wildcard);
+                i++;
             }
-
-            whereClause.append("x.amcName like :appName");
-            parameterMap.put("appName", wildcard);
+            whereClause.append(")");
         }
     }
 
@@ -316,12 +339,19 @@ public class JPAQueryHelper {
      * @return
      */
     private void processJobNameParams() {
-        String wildcard = null;
-        if (wsso.getJobName() != null) {
+        if (wsso.getJobNameList() != null && !wsso.getJobNameList().isEmpty()) {
             handleSQLForAND();
-            wildcard = wsso.getJobName().replaceAll("\\*", "%");
-            whereClause.append("x.jobName like :jobName");
-            parameterMap.put("jobName", wildcard);
+            whereClause.append("(");
+            int i = 1;
+            for (String jobName : wsso.getJobNameList()) {
+                if (i > 1)
+                    whereClause.append(" OR ");
+                String wildcard = jobName.replaceAll("\\*", "%");
+                whereClause.append(doIgnoreCase("x.jobName") + " like " + doIgnoreCase(":jobName" + i));
+                parameterMap.put("jobName" + i, wildcard);
+                i++;
+            }
+            whereClause.append(")");
         }
     }
 
@@ -355,15 +385,15 @@ public class JPAQueryHelper {
                 if (i == 0) {
                     subquery1.append("(SELECT e from JobExecutionEntityV2 e"
                                      + " JOIN e.jobParameterElements p");
-                    subquery2.append(" WHERE p.name like :" + queryParam
-                                     + " AND p.value like :" + queryValue
+                    subquery2.append(" WHERE " + doIgnoreCase("p.name") + " like " + doIgnoreCase(":" + queryParam)
+                                     + " AND " + doIgnoreCase("p.value") + " like " + doIgnoreCase(":" + queryValue)
                                      + " AND e.jobInstance = x");
                 } else {
                     // Additional parameters require inner joins on the parameter table
                     String pnum = "p" + i;
                     subquery1.append(" JOIN e.jobParameterElements " + pnum);
-                    subquery2.append(" AND " + pnum + ".name like :" + queryParam
-                                     + " AND " + pnum + ".value like :" + queryValue);
+                    subquery2.append(" AND " + doIgnoreCase(pnum + ".name") + " like " + doIgnoreCase(":" + queryParam)
+                                     + " AND " + doIgnoreCase(pnum + ".value") + " like " + doIgnoreCase(":" + queryValue));
 
                 }
 
@@ -444,6 +474,17 @@ public class JPAQueryHelper {
             String name = iterator.next();
             Object value = parameterMap.get(name);
             query.setParameter(name, value);
+        }
+    }
+
+    /**
+     * Wrap the text with UPPER if we're ignoring case
+     */
+    private String doIgnoreCase(String input) {
+        if (wsso.getIgnoreCase() == true) {
+            return "UPPER(" + input + ")";
+        } else {
+            return input;
         }
     }
 

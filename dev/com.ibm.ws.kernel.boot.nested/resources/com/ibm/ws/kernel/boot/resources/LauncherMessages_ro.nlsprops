@@ -463,6 +463,12 @@ warning.javase6.endofservice=CWWKE0109W: Suportul pentru Java SE 6 cu WebSphere 
 warning.javase6.endofservice.explanation=IBM va \u00eentrerupe suportul pentru Java SE 6 cu WebSphere Application Server Liberty dup\u0103 septembrie 2017. Dac\u0103 folosi\u0163i \u00een continuare Java SE 6 dup\u0103 terminarea suportului pute\u0163i expune aplica\u0163iile dumneavoastr\u0103 la riscuri de securitate.
 warning.javase6.endofservice.useraction=IBM recomanda cu t\u0103rie s\u0103 folosi\u0163i cea mai recent\u0103 versiune de Java SE, Java SE 8. 
 
+#
+# W A R N I N G:   Do not use CWWKE0100 - CCWKE0199 they are reserved in ServiceMessages.nlsprops
+#
+# Too Late for CWWKE0101 - CWWKE0107 they have dual use currently and CWWKE0108 and CWWKE0109 are only used here.
+#
+
 error.clientNameCharacter=CWWKE0900E: Numele de client specificat con\u0163ine un caracter care nu este valid (name={0}). \
 Caracterele valide sunt: alfanumerice Unicode (de ex. \
 0-9, a-z, A-Z), liniu\u0163\u0103 de subliniere (_), liniu\u0163\u0103 (-), plus (+) \u015fi punct (.). \
@@ -644,6 +650,9 @@ info.server.resume.request.completed=CWWKE0939I: O cerere de reluare s-a finaliz
 info.server.resume.request.completed.explanation=O cerere de reluare s-a finalizat.
 info.server.resume.request.completed.useraction=Nu este necesar\u0103 nici o ac\u0163iune.
 
+info.envProductExtension=CWWKE0940I: Extensia produsului {0} are un identificator de produs {1} \u015fi o loca\u0163ie de instalare a produsului {2}. Aceast\u0103 extensia de produs a fost activat\u0103 prin specificarea variabilei de mediu WLP_PRODUCT_EXT_DIR. 
+info.envProductExtension.explanation= Variabila de mediu WLP_PRODUCT_EXT_DIR indic\u0103 loca\u0163ia extensiei de produs. Serverul a fost g\u0103sit \u015fi utilizeaz\u0103 extensia de produs.
+info.envProductExtension.useraction=Nu este necesar\u0103 nici o ac\u0163iune.
 
 info.serverStarting=Se porne\u015fte serverul {0}.
 info.serverStarted=Serverul {0} a pornit.

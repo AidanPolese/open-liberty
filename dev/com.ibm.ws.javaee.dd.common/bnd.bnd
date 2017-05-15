@@ -15,4 +15,4 @@ Export-Package: \
     com.ibm.ws.javaee.dd.common.wsclient
 
 -buildpath: \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

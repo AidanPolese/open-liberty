@@ -240,6 +240,8 @@ public class FeatureManager implements FeatureProvisioner, FrameworkReady, Manag
     /** ProvisioningMode to use for next updated() call */
     protected volatile ProvisioningMode provisioningMode;
 
+    protected Collection<ProvisioningFeatureDefinition> kernelFeatures;
+
     /** Package inspector: tracks API/SPI packages for various resolver hooks */
     protected final PackageInspectorImpl packageInspector;
 
@@ -304,10 +306,13 @@ public class FeatureManager implements FeatureProvisioner, FrameworkReady, Manag
 
         if (ServerContentHelper.isServerContentRequest(bundleContext)) {
             provisioningMode = ProvisioningMode.CONTENT_REQUEST;
+            kernelFeatures = KernelFeatureDefinitionImpl.getAllKernelFeatures(bundleContext, locationService);
         } else if (ServerFeaturesHelper.isServerFeaturesRequest(bundleContext)) {
             provisioningMode = ProvisioningMode.FEATURES_REQUEST;
+            kernelFeatures = KernelFeatureDefinitionImpl.getAllKernelFeatures(bundleContext, locationService);
         } else {
             provisioningMode = ProvisioningMode.INITIAL_PROVISIONING;
+            kernelFeatures = KernelFeatureDefinitionImpl.getKernelFeatures(bundleContext, locationService);
         }
 
         //register the BundleOriginMonitor for tracking bundles installed by non-feature manager bundles
@@ -1041,7 +1046,7 @@ public class FeatureManager implements FeatureProvisioner, FrameworkReady, Manag
         }
         // resolve the features
         // TODO Note that we are just supporting all types at runtime right now.  In the future this may be restricted by the actual running process type
-        Result result = featureResolver.resolveFeatures(restrictedRespository, rootFeatures, Collections.<String> emptySet(), allowMultipleVersions);
+        Result result = featureResolver.resolveFeatures(restrictedRespository, kernelFeatures, rootFeatures, Collections.<String> emptySet(), allowMultipleVersions);
         restrictedAccessAttempts.addAll(restrictedRepoAccessAttempts);
 
         return result;

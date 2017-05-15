@@ -463,6 +463,12 @@ warning.javase6.endofservice=CWWKE0109W: El soporte de Java SE 6 con WebSphere A
 warning.javase6.endofservice.explanation=IBM dejar\u00e1 de dar soporte para Java SE 6 con WebSphere Application Server Liberty a partir de septiembre de 2017. Si contin\u00faa utilizando Java SE 6 una vez que el soporte haya finalizado, podr\u00eda exponer sus aplicaciones a riesgos de seguridad.
 warning.javase6.endofservice.useraction=IBM recomienda encarecidamente que utilice la \u00faltima versi\u00f3n de Java SE versi\u00f3n, Java SE 8. 
 
+#
+# W A R N I N G:   Do not use CWWKE0100 - CCWKE0199 they are reserved in ServiceMessages.nlsprops
+#
+# Too Late for CWWKE0101 - CWWKE0107 they have dual use currently and CWWKE0108 and CWWKE0109 are only used here.
+#
+
 error.clientNameCharacter=CWWKE0900E: El nombre de cliente especificado contiene un car\u00e1cter que no es v\u00e1lido (nombre={0}). \
 Los caracteres v\u00e1lidos son: alfanum\u00e9ricos Unicode (por ejemplo, \
 0-9, a-z, A-Z), subrayado (_), gui\u00f3n (-), signo m\u00e1s (+) y punto (.). \
@@ -646,6 +652,9 @@ info.server.resume.request.completed=CWWKE0939I: Se ha completado una solicitud 
 info.server.resume.request.completed.explanation=Se ha completado una solicitud de reanudaci\u00f3n.
 info.server.resume.request.completed.useraction=No se requiere ninguna acci\u00f3n.
 
+info.envProductExtension=CWWKE0940I: La extensi\u00f3n de producto {0} tiene un identificador de producto de {1} y una ubicaci\u00f3n de instalaci\u00f3n de producto de {2}. Esta extensi\u00f3n de producto se ha habilitado especificando la variable de entorno WLP_PRODUCT_EXT_DIR. 
+info.envProductExtension.explanation= La variable de entorno WLP_PRODUCT_EXT_DIR apunta a la ubicaci\u00f3n de la extensi\u00f3n de producto. Se ha encontrado el servidor y utiliza la extensi\u00f3n de producto.
+info.envProductExtension.useraction=No es necesaria ninguna acci\u00f3n.
 
 info.serverStarting=Se est\u00e1 iniciando el servidor {0}.
 info.serverStarted=Servidor {0} iniciado.

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -93,9 +94,9 @@ public class JPAQueryHelperTest {
         WSSearchObject wsso = new WSSearchObject(null, null, null, "ABC");
         JPAQueryHelper jqh = new JPAQueryHelper(wsso);
 
-        assertEquals(BASEQUERY + " WHERE x.exitStatus like :exitStatus", jqh.getQuery());
-        assertTrue(jqh.parameterMap.containsKey("exitStatus"));
-        assertEquals("ABC", jqh.parameterMap.get("exitStatus"));
+        assertEquals(BASEQUERY + " WHERE (x.exitStatus like :exitStatus1)", jqh.getQuery());
+        assertTrue(jqh.parameterMap.containsKey("exitStatus1"));
+        assertEquals("ABC", jqh.parameterMap.get("exitStatus1"));
     }
 
     @Test
@@ -103,21 +104,21 @@ public class JPAQueryHelperTest {
         WSSearchObject wsso = new WSSearchObject(null, null, null, "*ABC");
         JPAQueryHelper jqh = new JPAQueryHelper(wsso);
 
-        assertEquals(BASEQUERY + " WHERE x.exitStatus like :exitStatus", jqh.getQuery());
-        assertTrue(jqh.parameterMap.containsKey("exitStatus"));
-        assertEquals("%ABC", jqh.parameterMap.get("exitStatus"));
+        assertEquals(BASEQUERY + " WHERE (x.exitStatus like :exitStatus1)", jqh.getQuery());
+        assertTrue(jqh.parameterMap.containsKey("exitStatus1"));
+        assertEquals("%ABC", jqh.parameterMap.get("exitStatus1"));
 
         wsso = new WSSearchObject(null, null, null, "ABC*");
         jqh = new JPAQueryHelper(wsso);
 
-        assertTrue(jqh.parameterMap.containsKey("exitStatus"));
-        assertEquals("ABC%", jqh.parameterMap.get("exitStatus"));
+        assertTrue(jqh.parameterMap.containsKey("exitStatus1"));
+        assertEquals("ABC%", jqh.parameterMap.get("exitStatus1"));
 
         wsso = new WSSearchObject(null, null, null, "*ABC*");
         jqh = new JPAQueryHelper(wsso);
 
-        assertTrue(jqh.parameterMap.containsKey("exitStatus"));
-        assertEquals("%ABC%", jqh.parameterMap.get("exitStatus"));
+        assertTrue(jqh.parameterMap.containsKey("exitStatus1"));
+        assertEquals("%ABC%", jqh.parameterMap.get("exitStatus1"));
     }
 
     @Test
@@ -237,7 +238,7 @@ public class JPAQueryHelperTest {
 
         assertEquals(BASEQUERY
                      + " WHERE x.instanceId BETWEEN :startInstanceId AND :endInstanceId AND x.createTime BETWEEN :specificCreateTimeStart AND :specificCreateTimeEnd AND x.instanceState IN :instanceStateList "
-                     + "AND x.exitStatus like :exitStatus", jqh.getQuery());
+                     + "AND (x.exitStatus like :exitStatus1)", jqh.getQuery());
 
         assertTrue(jqh.parameterMap.containsKey("startInstanceId"));
         assertTrue(jqh.parameterMap.containsKey("endInstanceId"));
@@ -253,8 +254,8 @@ public class JPAQueryHelperTest {
         List<InstanceState> instanceStateList = (List<InstanceState>) jqh.parameterMap.get("instanceStateList");
         assertTrue(wsso.getInstanceState().containsAll(values));
 
-        assertTrue(jqh.parameterMap.containsKey("exitStatus"));
-        assertEquals("ABC", jqh.parameterMap.get("exitStatus"));
+        assertTrue(jqh.parameterMap.containsKey("exitStatus1"));
+        assertEquals("ABC", jqh.parameterMap.get("exitStatus1"));
 
         assertTrue(jqh.parameterMap.containsKey("specificCreateTimeStart"));
         assertNotNull(jqh.parameterMap.get("specificCreateTimeStart"));
@@ -268,7 +269,7 @@ public class JPAQueryHelperTest {
         JPAQueryHelper jqh = new JPAQueryHelper(wsso);
 
         assertEquals(BASEQUERY + " WHERE x.instanceId BETWEEN :startInstanceId AND :endInstanceId AND x.instanceState IN :instanceStateList "
-                     + "AND x.exitStatus like :exitStatus", jqh.getQuery());
+                     + "AND (x.exitStatus like :exitStatus1)", jqh.getQuery());
 
         assertTrue(jqh.parameterMap.containsKey("startInstanceId"));
         assertTrue(jqh.parameterMap.containsKey("endInstanceId"));
@@ -284,8 +285,8 @@ public class JPAQueryHelperTest {
         List<InstanceState> instanceStateList = (List<InstanceState>) jqh.parameterMap.get("instanceStateList");
         assertTrue(wsso.getInstanceState().containsAll(values));
 
-        assertTrue(jqh.parameterMap.containsKey("exitStatus"));
-        assertEquals("ABC", jqh.parameterMap.get("exitStatus"));
+        assertTrue(jqh.parameterMap.containsKey("exitStatus1"));
+        assertEquals("ABC", jqh.parameterMap.get("exitStatus1"));
     }
 
     @Test
@@ -293,7 +294,7 @@ public class JPAQueryHelperTest {
         WSSearchObject wsso = new WSSearchObject(null, null, "COMPLETED, SUBMITTED, STOPPED, FAILED , ABANDONED", "ABC");
         JPAQueryHelper jqh = new JPAQueryHelper(wsso);
 
-        assertEquals(BASEQUERY + " WHERE x.instanceState IN :instanceStateList AND x.exitStatus like :exitStatus", jqh.getQuery());
+        assertEquals(BASEQUERY + " WHERE x.instanceState IN :instanceStateList AND (x.exitStatus like :exitStatus1)", jqh.getQuery());
 
         List<InstanceState> values = new ArrayList<InstanceState>();
         values.add(InstanceState.COMPLETED);
@@ -304,20 +305,22 @@ public class JPAQueryHelperTest {
         List<InstanceState> instanceStateList = (List<InstanceState>) jqh.parameterMap.get("instanceStateList");
         assertTrue(wsso.getInstanceState().containsAll(values));
 
-        assertTrue(jqh.parameterMap.containsKey("exitStatus"));
-        assertEquals("ABC", jqh.parameterMap.get("exitStatus"));
+        assertTrue(jqh.parameterMap.containsKey("exitStatus1"));
+        assertEquals("ABC", jqh.parameterMap.get("exitStatus1"));
     }
 
     @Test
     public void testSubmitter() throws Exception {
-        String submitter = "SarahSubmitter";
         WSSearchObject wsso = new WSSearchObject(null, null, null, null);
-        wsso.setSubmitter(submitter);
+        wsso.setSubmitterList(Arrays.asList("sarahSubmitter", "simonSubmitter"));
         JPAQueryHelper jqh = new JPAQueryHelper(wsso);
 
-        assertEquals(BASEQUERY + " WHERE x.submitter like :submitter", jqh.getQuery());
-        assertTrue(jqh.parameterMap.containsKey("submitter"));
-        assertEquals(submitter, jqh.parameterMap.get("submitter"));
+        assertEquals(BASEQUERY + " WHERE (x.submitter like :submitter1 OR x.submitter like :submitter2)", jqh.getQuery());
+        assertTrue(jqh.parameterMap.containsKey("submitter1"));
+        assertEquals("sarahSubmitter", jqh.parameterMap.get("submitter1"));
+        assertTrue(jqh.parameterMap.containsKey("submitter2"));
+        assertEquals("simonSubmitter", jqh.parameterMap.get("submitter2"));
+
     }
 
     @Test
@@ -337,13 +340,13 @@ public class JPAQueryHelperTest {
         String submitter = "AliceSubmitter";
         String authSubmitter = "BobSubmitter";
         WSSearchObject wsso = new WSSearchObject(null, null, null, null);
-        wsso.setSubmitter(submitter);
+        wsso.setSubmitterList(Arrays.asList(submitter));
         wsso.setAuthSubmitter(authSubmitter);
         JPAQueryHelper jqh = new JPAQueryHelper(wsso);
 
-        assertEquals(BASEQUERY + " WHERE x.submitter like :submitter AND x.submitter = :authSubmitter", jqh.getQuery());
-        assertTrue(jqh.parameterMap.containsKey("submitter"));
-        assertEquals(submitter, jqh.parameterMap.get("submitter"));
+        assertEquals(BASEQUERY + " WHERE (x.submitter like :submitter1) AND x.submitter = :authSubmitter", jqh.getQuery());
+        assertTrue(jqh.parameterMap.containsKey("submitter1"));
+        assertEquals(submitter, jqh.parameterMap.get("submitter1"));
         assertTrue(jqh.parameterMap.containsKey("authSubmitter"));
         assertEquals(authSubmitter, jqh.parameterMap.get("authSubmitter"));
     }
@@ -351,37 +354,43 @@ public class JPAQueryHelperTest {
     @Test
     public void testAppName() throws Exception {
         String appName = "MyApp";
+        String appName2 = "YourApp";
         WSSearchObject wsso = new WSSearchObject(null, null, null, null);
-        wsso.setAppName(appName);
+        wsso.setAppNameList(Arrays.asList(appName, appName2));
         JPAQueryHelper jqh = new JPAQueryHelper(wsso);
 
-        assertEquals(BASEQUERY + " WHERE x.amcName like :appName", jqh.getQuery());
-        assertTrue(jqh.parameterMap.containsKey("appName"));
-        assertEquals(appName + "#%", jqh.parameterMap.get("appName"));
+        assertEquals(BASEQUERY + " WHERE (x.amcName like :appName1 OR x.amcName like :appName2)", jqh.getQuery());
+        assertTrue(jqh.parameterMap.containsKey("appName1"));
+        assertEquals(appName + "#%", jqh.parameterMap.get("appName1"));
+        assertTrue(jqh.parameterMap.containsKey("appName2"));
+        assertEquals(appName2 + "#%", jqh.parameterMap.get("appName2"));
     }
 
     @Test
     public void testAppNameWithPound() throws Exception {
         String appName = "MyApp#MyApp.ear";
         WSSearchObject wsso = new WSSearchObject(null, null, null, null);
-        wsso.setAppName(appName);
+        wsso.setAppNameList(Arrays.asList(appName));
         JPAQueryHelper jqh = new JPAQueryHelper(wsso);
 
-        assertEquals(BASEQUERY + " WHERE x.amcName like :appName", jqh.getQuery());
-        assertTrue(jqh.parameterMap.containsKey("appName"));
-        assertEquals(appName, jqh.parameterMap.get("appName"));
+        assertEquals(BASEQUERY + " WHERE (x.amcName like :appName1)", jqh.getQuery());
+        assertTrue(jqh.parameterMap.containsKey("appName1"));
+        assertEquals(appName, jqh.parameterMap.get("appName1"));
     }
 
     @Test
     public void testJobName() throws Exception {
         String jobName = "myJobName";
+        String jobName2 = "anotherJobName";
         WSSearchObject wsso = new WSSearchObject(null, null, null, null);
-        wsso.setJobName(jobName);
+        wsso.setJobNameList(Arrays.asList(jobName, jobName2));
         JPAQueryHelper jqh = new JPAQueryHelper(wsso);
 
-        assertEquals(BASEQUERY + " WHERE x.jobName like :jobName", jqh.getQuery());
-        assertTrue(jqh.parameterMap.containsKey("jobName"));
-        assertEquals(jobName, jqh.parameterMap.get("jobName"));
+        assertEquals(BASEQUERY + " WHERE (x.jobName like :jobName1 OR x.jobName like :jobName2)", jqh.getQuery());
+        assertTrue(jqh.parameterMap.containsKey("jobName1"));
+        assertEquals(jobName, jqh.parameterMap.get("jobName1"));
+        assertTrue(jqh.parameterMap.containsKey("jobName2"));
+        assertEquals(jobName2, jqh.parameterMap.get("jobName2"));
     }
 
     @Test
@@ -439,6 +448,29 @@ public class JPAQueryHelperTest {
                    "param2".equals(jqh.parameterMap.get("jobParamName1")));
         assertTrue("false".equals(jqh.parameterMap.get("jobParamValue")) ||
                    "false".equals(jqh.parameterMap.get("jobParamValue1")));
+    }
+
+    @Test
+    public void testIgnoreCase() throws Exception {
+        String jobName = "myJobName";
+        String appName = "myAppName";
+        String submitter = "submitter";
+        WSSearchObject wsso = new WSSearchObject(null, null, null, null);
+        wsso.setJobNameList(Arrays.asList(jobName));
+        wsso.setAppNameList(Arrays.asList(appName));
+        wsso.setSubmitterList(Arrays.asList(submitter));
+        wsso.setIgnoreCase(true);
+        JPAQueryHelper jqh = new JPAQueryHelper(wsso);
+
+        assertEquals(BASEQUERY + " WHERE (UPPER(x.submitter) like UPPER(:submitter1)) " +
+                     "AND (UPPER(x.amcName) like UPPER(:appName1)) " +
+                     "AND (UPPER(x.jobName) like UPPER(:jobName1))", jqh.getQuery());
+        assertTrue(jqh.parameterMap.containsKey("jobName1"));
+        assertEquals(jobName, jqh.parameterMap.get("jobName1"));
+        assertTrue(jqh.parameterMap.containsKey("appName1"));
+        assertEquals(appName + "#%", jqh.parameterMap.get("appName1"));
+        assertTrue(jqh.parameterMap.containsKey("submitter1"));
+        assertEquals(submitter, jqh.parameterMap.get("submitter1"));
     }
 
     /**

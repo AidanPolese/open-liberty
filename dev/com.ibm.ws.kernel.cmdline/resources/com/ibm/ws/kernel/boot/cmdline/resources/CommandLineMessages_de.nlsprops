@@ -28,3 +28,7 @@
 error.sdkRequired=CWWKE0600E: Dieses Tool ben\u00f6tigt ein Java-SDK, wurde aber mit einer JRE gestartet: {0}
 error.sdkRequired.explanation=Das Tool ben\u00f6tigt ein Java-SDK, wurde aber mit einer einfachen Java Runtime Environment gestartet.
 error.sdkRequired.useraction=Setzen Sie die Umgebungsvariable JAVA_HOME auf den Pfad zu einem Java-SDK, und f\u00fchren Sie den Befehl erneut aus.
+
+error.compilerMissing=CWWKE0601E: Dieses Tool setzt die Verf\u00fcgbarkeit eines Java-Compilers voraus. Stellen Sie sicher, dass das Modul java.compiler verf\u00fcgbar ist.
+error.compilerMissing.explanation=Das Tool setzt einen Java-Compiler voraus. Das Tool wurde jetzt ohne Java-Compiler gestartet.
+error.compilerMissing.useraction=Vergewissern Sie sich, dass das Modul java.compiler in Ihrem Java-Image verf\u00fcgbar ist. Stellen Sie au\u00dferdem sicher, dass dieser Compiler zur Laufzeit verf\u00fcgbar ist, indem Sie die folgende Befehlszeilenoption angeben: --add-modules java.compiler

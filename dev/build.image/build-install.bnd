@@ -37,4 +37,4 @@ Map-Based-Self-Extractor: wlp.lib.extract.MapBasedSelfExtractor
 Archive-Root: wlp/
 Extract-Installer: true
 Provide-Feature: ${provide.feature}
-IBM-Java-Options: -Xshareclasses:name=liberty-%u,nonfatal,cacheDirPerm=1000 -XX:ShareClassesEnableBCI -Xscmx60m -Xscmaxaot4m -XX:+EnableHCR
+IBM-Java-Options: -Xshareclasses:name=liberty-%u,nonfatal,cacheDirPerm=1000 -XX:ShareClassesEnableBCI -Xscmx60m -Xscmaxaot8m -XX:+EnableHCR

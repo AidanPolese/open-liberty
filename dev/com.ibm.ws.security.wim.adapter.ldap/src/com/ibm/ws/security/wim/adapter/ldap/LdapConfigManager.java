@@ -2490,6 +2490,21 @@ public class LdapConfigManager {
         return iCertMapMode;
     }
 
+    // PM76997
+    private String removeSpacesInDN(String DN) {
+        String attrs[] = DN.split(",");
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < attrs.length; i++) {
+            if (attrs[i].indexOf("=") >= 0)
+                result.append(attrs[i].trim());
+            else
+                result.append(attrs[i]);
+            if (i != (attrs.length - 1))
+                result.append(",");
+        }
+        return result.toString();
+    }
+
     public String getCertificateLDAPFilter(X509Certificate cert) throws CertificateMapperException {
         if (iCertFilterEles == null) {
             throw new CertificateMapperException(WIMMessageKey.INVALID_CERTIFICATE_FILTER, Tr.formatMessage(
@@ -2512,7 +2527,8 @@ public class LdapConfigManager {
             } else if (str.equals("${BasicConstraints}") || str.equals("$[BasicConstraints]")) {
                 // TBD - filter.append (cert.getBasicConstraints());
             } else if (str.startsWith("${Issuer") || str.startsWith("$[Issuer")) {
-                filter.append(LdapHelper.getDNSubField(str.substring(8, str.length() - 1), cert.getIssuerX500Principal().getName()));
+                // PM76997: Modify to use X500Principal.toString()
+                filter.append(LdapHelper.getDNSubField(str.substring(8, str.length() - 1), removeSpacesInDN(cert.getIssuerX500Principal().toString())));
             } else if (str.equals("${IssuerUniqueID}") || str.equals("$[IssuerUniqueID]")) {
                 // TBD - filter.append (cert.getIssuerUniqueID());
             } else if (str.equals("${KeyUsage}") || str.equals("$[KeyUsage]")) {
@@ -2532,8 +2548,9 @@ public class LdapConfigManager {
             } else if (str.equals("${Signature}") || str.equals("$[Signature]")) {
                 // TBD - filter.append (cert.getSignature());
             } else if (str.startsWith("${Subject") || str.startsWith("$[Subject")) {
+                // PM76997: Modify to use X500Principal.toString()
                 filter.append(LdapHelper.getDNSubField(str.substring(9, str.length() - 1),
-                                                       cert.getSubjectX500Principal().getName()));
+                                                       removeSpacesInDN(cert.getSubjectX500Principal().toString())));
             } else if (str.equals("${SubjectUniqueID}") || str.equals("$[SubjectUniqueID]")) {
                 // TBD - filter.append (cert.getSubjectUniqueID());
             } else if (str.equals("${TBSCertificate}") || str.equals("$[TBSCertificate]")) {

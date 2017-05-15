@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * WLP Copyright IBM Corp. 2014
+ * WLP Copyright IBM Corp. 2014, 2017
  *
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
@@ -41,6 +41,7 @@ import org.apache.cxf.jaxrs.model.OperationResourceInfo;
 import org.apache.cxf.jaxrs.utils.AnnotationUtils;
 import org.apache.cxf.jaxrs.utils.InjectionUtils;
 import org.apache.cxf.message.Exchange;
+import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.service.Service;
 
@@ -218,44 +219,12 @@ public class LibertyJaxRsServerFactoryBean extends JAXRSServerFactoryBean {
         }
     }
 
-    /**
-     * using reflect to add CXF bean validation related providers
-     *
-     * @param providers
-     * @param commonBundlerClassLoader
-     * @param className
-     */
-    private void addValidationProvider(List<Object> providers, ClassLoader commonBundlerClassLoader, String className) {
-        if (className == null || "".equals(className))
-            return;
-        try {
-            Class c = commonBundlerClassLoader.loadClass(className);
-            providers.add(c.newInstance());
-        } catch (ClassNotFoundException e) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc,
-                         "Can't load Bean Validation Provider \"" + className + "\". " + e.getMessage());
-            }
-        } catch (InstantiationException e) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc,
-                         "Can't init instance of Bean Validation Provider \"" + className + "\". " + e.getMessage());
-            }
-        } catch (IllegalAccessException e) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc,
-                         "Can't access Bean Validation Provider \"" + className + "\". " + e.getMessage());
-            }
-        }
-    }
-
     protected synchronized void doInit() throws ServletException {
 
         /**
          * commonBundlerClassLoader for classes under package org.apache.cxf.jaxrs.validation
          * if no Bean Validation feature, no reason to import package org.apache.cxf.jaxrs.validation or javax.validation.*
          */
-        //ClassLoader commonBundlerClassLoader = this.moduleMetadata.getClass().getClassLoader();
 
         //create server bus to the endpoint
         Bus serverBus = this.moduleMetadata.getServerMetaData().getServerBus();
@@ -279,7 +248,7 @@ public class LibertyJaxRsServerFactoryBean extends JAXRSServerFactoryBean {
         /**
          * add LibertyClearInjectRuntimeCtxOutInterceptor to clear InjectionRuntimeContext from thread local
          */
-        this.getBus().getOutInterceptors().add(new LibertyClearInjectRuntimeCtxOutInterceptor(Phase.MARSHAL));
+        this.getBus().getOutInterceptors().add(new LibertyClearInjectRuntimeCtxOutInterceptor<Message>(Phase.MARSHAL));
 
         //step 2: init application object
         CXFJaxRsProviderResourceHolder cxfPRHolder = new CXFJaxRsProviderResourceHolder();
@@ -303,8 +272,6 @@ public class LibertyJaxRsServerFactoryBean extends JAXRSServerFactoryBean {
         if (endpointInfo.getPerRequestProviderAndPathInfos().isEmpty() && endpointInfo.getSingletonProviderAndPathInfos().isEmpty()
             && endpointInfo.getAbstractClassInterfaceList().isEmpty()) {
             throw new ServletException("At least one provider or resource class should be specified for application class \"" + endpointInfo.getAppClassName());
-        } else {
-            //callPostConstructResourceProvider(endpointInfo.getSingletonProviderAndPathInfos(), endpointInfo.getPerRequestProviderAndPathInfos());
         }
 
         //step 3: prepare the EJB or CDI provider & resources to EJB or CDI's beanCustomizer
@@ -384,31 +351,6 @@ public class LibertyJaxRsServerFactoryBean extends JAXRSServerFactoryBean {
         }
     }
 
-//    private void callPostConstructResourceProvider(Set<ProviderResourceInfo> singletonProviderAndPathInfos, Set<ProviderResourceInfo> perRequestProviderAndPathInfos) {
-//
-//        for (ProviderResourceInfo o : singletonProviderAndPathInfos)
-//        {
-//
-//            if (o.getRuntimeType() == RuntimeType.POJO && o.isJaxRsProvider() == true)
-//            {
-//                Method postConstructMethod = ResourceUtils.findPostConstructMethod(o.getProviderResourceClass());
-//                InjectionUtils.invokeLifeCycleMethod(o.getObject(), postConstructMethod);
-//            }
-//
-//        }
-//
-//        for (ProviderResourceInfo o : perRequestProviderAndPathInfos)
-//        {
-//
-//            if (o.getRuntimeType() == RuntimeType.POJO && o.isJaxRsProvider() == true)
-//            {
-//                Method postConstructMethod = ResourceUtils.findPostConstructMethod(o.getProviderResourceClass());
-//                InjectionUtils.invokeLifeCycleMethod(o.getObject(), postConstructMethod);
-//            }
-//
-//        }
-//    }
-
     private void updateEndpointInfo(EndpointInfo endpointInfo, Application app, JaxRsModuleMetaData moduleMetaData, CXFJaxRsProviderResourceHolder cxfPRHolder) {
         Set<ProviderResourceInfo> perRequestProviderAndPathInfos = endpointInfo.getPerRequestProviderAndPathInfos();
         Set<ProviderResourceInfo> singletonProviderAndPathInfos = endpointInfo.getSingletonProviderAndPathInfos();
@@ -443,6 +385,11 @@ public class LibertyJaxRsServerFactoryBean extends JAXRSServerFactoryBean {
                             isJaxRsProvider = true;
                             try {
                                 Constructor<?> c = ResourceUtils.findResourceConstructor(clazz, false);
+                                if (c == null) {
+                                    // CWWKW0100W: The JAX-RS Provider class, {0} in the application contains no public constructor. The server will ignore this provider.
+                                    Tr.warning(tc, "warn.provider.no.public.ctor", clazz.getName());
+                                    continue;
+                                }
                                 if (c.getParameterTypes().length == 0) {
                                     singletonProviderInstance = c.newInstance();
                                     cxfPRHolder.addProvider(singletonProviderInstance);
@@ -518,7 +465,7 @@ public class LibertyJaxRsServerFactoryBean extends JAXRSServerFactoryBean {
                      * check if the class is a provider
                      */
                     boolean isJaxRsProvider = false;
-                    Class clazz = singleton.getClass();
+                    Class<?> clazz = singleton.getClass();
 
                     /**
                      * the object of the same class should be processed only once
@@ -581,6 +528,11 @@ public class LibertyJaxRsServerFactoryBean extends JAXRSServerFactoryBean {
                             isJaxRsProvider = true;
                             try {
                                 Constructor<?> c = ResourceUtils.findResourceConstructor(clazz, false);
+                                if (c == null) {
+                                    // CWWKW0100W: The JAX-RS Provider class, {0} in the application contains no public constructor. The server will ignore this provider.
+                                    Tr.warning(tc, "warn.provider.no.public.ctor", clazz.getName());
+                                    continue;
+                                }
                                 if (c.getParameterTypes().length == 0) {
                                     singletonProviderInstance = c.newInstance();
                                     cxfPRHolder.addProvider(singletonProviderInstance);
@@ -710,34 +662,6 @@ public class LibertyJaxRsServerFactoryBean extends JAXRSServerFactoryBean {
     @Override
     protected void checkResources(boolean server) {
         super.checkResources(server);
-//        customizeSingletoneServices();
-    }
-
-    /**
-     * a place for SPI to decorate the singleton resource service objects before context injection.
-     * Only used for no-context injection one.
-     */
-    private void customizeSingletoneServices() {
-        for (ClassResourceInfo cri : serviceFactory.getClassResourceInfo()) {
-            ResourceProvider resourceProvider = cri.getResourceProvider();
-            if (!cri.contextsAvailable() && !cri.paramsAvailable()) {
-                if (resourceProvider == null)
-                    resourceProvider = resourceProviders.get(cri.getResourceClass());
-
-                if (resourceProvider != null) {
-                    if (resourceProvider instanceof SingletonResourceProvider) {
-                        SingletonResourceProvider singletonProvider = (SingletonResourceProvider) resourceProvider;
-                        JaxRsFactoryBeanCustomizer beanCustomizer = findBeanCustomizer(singletonProvider.getResourceClass());
-                        if (beanCustomizer != null) {
-                            singletonProvider = new SingletonResourceProvider(beanCustomizer.onSingletonServiceInit(singletonProvider.getInstance(null),
-                                                                                                                    getBeanCustomizerContext(beanCustomizer)));
-
-                        }
-                        cri.setResourceProvider(singletonProvider);
-                    }
-                }
-            }
-        }
     }
 
     public JaxRsFactoryBeanCustomizer findBeanCustomizer(Class<?> clazz) {

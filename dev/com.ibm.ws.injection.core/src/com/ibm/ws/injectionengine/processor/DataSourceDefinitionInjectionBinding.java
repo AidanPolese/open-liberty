@@ -22,8 +22,8 @@ import java.util.TreeMap;
 
 import javax.annotation.sql.DataSourceDefinition;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.javaee.dd.common.DataSource;
 import com.ibm.ws.javaee.dd.common.Property;
 import com.ibm.wsspi.injectionengine.ComponentNameSpaceConfiguration;
@@ -257,11 +257,11 @@ public class DataSourceDefinitionInjectionBinding
         String jndiName = getJndiName();
 
         Tr.error(tc, "INVALID_DATA_SOURCE_ANNOTATION_ISOLATION_LEVEL_CWNEN0067E",
-                 new Object[] { jndiName,
-                               component,
-                               module,
-                               application,
-                               newValue });
+                 jndiName,
+                 component,
+                 module,
+                 application,
+                 newValue);
 
         if (failable)
         {

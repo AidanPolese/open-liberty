@@ -18,4 +18,4 @@ publish.wlp.jar.disabled: true
 	com.ibm.websphere.javaee.connector.1.6;version=latest, \
 	com.ibm.websphere.javaee.transaction.1.1;version=latest, \
 	com.ibm.ws.messaging.jms.2.0;version=latest, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

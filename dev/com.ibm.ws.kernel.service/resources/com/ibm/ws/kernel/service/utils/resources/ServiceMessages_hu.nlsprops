@@ -51,3 +51,7 @@ invalidIntegerArray.useraction=Gy\u0151z\u0151dj\u00f6n meg r\u00f3la, hogy a ki
 invalidDuration=CWWKE0107W: A megadott param\u00e9ter nem id\u0151tartam \u00e9rt\u00e9ket \u00e1br\u00e1zol. {1}={2} a k\u00f6vetkez\u0151n\u00e9l: {0}
 invalidDuration.explanation=A megadott konfigur\u00e1ci\u00f3s param\u00e9ter \u00e9rt\u00e9ke nem id\u0151tartam, vagy nem alak\u00edthat\u00f3 \u00e1t id\u0151tartam \u00e9rt\u00e9kk\u00e9.
 invalidDuration.useraction=Gy\u0151z\u0151dj\u00f6n meg r\u00f3la, hogy a kiszolg\u00e1l\u00f3konfigur\u00e1ci\u00f3ban megadott \u00e9rt\u00e9k egy id\u0151tartam \u00e9rt\u00e9k \u00e9rv\u00e9nyes \u00e1br\u00e1zol\u00e1sa.
+
+#
+# W A R N I N G:   Do not use CWWKE0108 - CCWKE0109 they are currently in use LauncherMessages.nlsprops
+#

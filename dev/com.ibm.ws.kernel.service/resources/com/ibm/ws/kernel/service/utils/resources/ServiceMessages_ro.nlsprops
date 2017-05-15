@@ -51,3 +51,7 @@ invalidIntegerArray.useraction=Asigura\u0163i-v\u0103 c\u0103 valoarea specifica
 invalidDuration=CWWKE0107W: Parametrul specificat nu reprezint\u0103 o valoarea de durat\u0103. {1}={2} pentru {0}
 invalidDuration.explanation=Valoarea pentru parametrul de configurare specificat nu este, sau nu poate fi convertit\u0103 la, o valoare de durat\u0103.
 invalidDuration.useraction=Asigura\u0163i-v\u0103 c\u0103 valoarea specificat\u0103 \u00een configura\u0163ia serverului este o reprezentare valid\u0103 a unei valori de durat\u0103.
+
+#
+# W A R N I N G:   Do not use CWWKE0108 - CCWKE0109 they are currently in use LauncherMessages.nlsprops
+#

@@ -105,7 +105,7 @@ public class BootstrapConfig {
 
     /**
      * Classloader created to launch the framework
-     * 
+     *
      * @see Launcher#buildClassLoader(List)
      */
     protected ClassLoader frameworkLaunchClassloader;
@@ -120,11 +120,9 @@ public class BootstrapConfig {
     public BootstrapConfig() {
         File fbootstrapLib = null;
         try {
-            fbootstrapLib = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<File>()
-            {
+            fbootstrapLib = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<File>() {
                 @Override
-                public File run() throws Exception
-                {
+                public File run() throws Exception {
                     return KernelUtils.getBootstrapLibDir();
                 }
             });
@@ -137,7 +135,7 @@ public class BootstrapConfig {
 
     /**
      * Light processing: find main locations
-     * 
+     *
      * @param initProps
      *            Initial set of properties we're working with, contains some
      *            properties populated by command line parser
@@ -145,14 +143,14 @@ public class BootstrapConfig {
      * @param outputDirStr Value of WLP_OUTPUT_DIR environment variable
      * @param logDirStr Value of X_LOG_DIR or LOG_DIR environment variable
      * @param consoleLogFileStr Value of X_LOG_FILE or LOG_FILE environment variable
-     * 
+     *
      * @throws LocationException
      */
     protected void findLocations(String newServerName,
-                       String instanceDirStr,
-                       String outputDirStr,
-                       String logDirStr,
-                       String consoleLogFileStr) throws LocationException {
+                                 String instanceDirStr,
+                                 String outputDirStr,
+                                 String logDirStr,
+                                 String consoleLogFileStr) throws LocationException {
 
         // Server name only found via command line
         setProcessName(newServerName);
@@ -172,13 +170,12 @@ public class BootstrapConfig {
         configDir = new File(processesRoot, processName);
 
         // Canonicalize server name for case-insensitive file systems.
-        // UNLESS it is a symlink, in which case we just try to match case. 
+        // UNLESS it is a symlink, in which case we just try to match case.
         String canonicalServerName = processName;
         try {
             // canonicalServerName = configDir.getCanonicalFile().getName();
             File parentDir = configDir.getParentFile();
-            if (!isSymbolicLink(configDir, parentDir))
-            {
+            if (!isSymbolicLink(configDir, parentDir)) {
                 canonicalServerName = configDir.getCanonicalFile().getName();
                 if (!processName.equals(canonicalServerName)) {
                     processName = canonicalServerName;
@@ -186,26 +183,20 @@ public class BootstrapConfig {
                     // getCanonicalFile above) to preserve symlinks.
                     configDir = new File(processesRoot, processName);
                 }
-            }
-            else
-            {
+            } else {
                 // Find exact match, OR find case-variant if exact fails.
                 File candidate = null;
                 File[] siblings = parentDir.listFiles();
                 File canonicalConfigDir = configDir.getCanonicalFile();
-                for (int i = 0; i < siblings.length; ++i)
-                {
+                for (int i = 0; i < siblings.length; ++i) {
                     File sibling = siblings[i];
                     if (!sibling.isDirectory())
                         continue;
                     String sibname = sibling.getCanonicalFile().getName();
-                    if (sibname.equals(processName))
-                    {
+                    if (sibname.equals(processName)) {
                         candidate = sibling;
                         break; // exact match exists, use as it stands
-                    }
-                    else if (sibname.equalsIgnoreCase(processName))
-                    {
+                    } else if (sibname.equalsIgnoreCase(processName)) {
                         if (sibling.getCanonicalFile().equals(canonicalConfigDir))
                             candidate = sibling; // Not exact match, but same file.
                         // Continue scanning in case exact match also exists.
@@ -214,8 +205,7 @@ public class BootstrapConfig {
                         // could tell the user to stop typing nonsense.
                     }
                 }
-                if (candidate != null)
-                {
+                if (candidate != null) {
                     processName = candidate.getName();
                     // Recreate configDir (rather than using the result of
                     // getCanonicalFile above) to preserve symlinks.
@@ -250,13 +240,13 @@ public class BootstrapConfig {
      * Given a file and it's parent file, determine if the file is a symbolic
      * link. This will not check for a symbolic anywhere in the file's path,
      * only the explicit file referred to.
-     * 
+     *
      * Swiped from PathUtils, which isn't currently exposed to BootstrapConfig
-     * 
+     *
      * @param file file to check if is a symbolic link
      * @param parentFile parent of the file to check
      * @return whether the given file refers to a symbolic link
-     * 
+     *
      * @throws PrivilegedActionException
      * @throws IOException
      */
@@ -270,7 +260,7 @@ public class BootstrapConfig {
 
     /**
      * Return the root directory name of the processes.
-     * 
+     *
      * @return BootstrapConstants.LOC_AREA_NAME_SERVERS
      */
     protected String getProcessesSubdirectory() {
@@ -279,7 +269,7 @@ public class BootstrapConfig {
 
     /**
      * Return the output directory name value set in the environment variable WLP_OUTPUT_DIR.
-     * 
+     *
      * @return BootstrapConstants.ENV_WLP_OUTPUT_DIR
      */
     protected String getOutputDirectoryEnvName() {
@@ -294,14 +284,14 @@ public class BootstrapConfig {
      * <p>
      * This is package protected: this is not intended to be called by anything other
      * than the Launcher.
-     * 
+     *
      * @param initProps
      *            Initial set of properties we're working with, contains some
      *            properties populated by command line parser
      * @param instanceDirStr Value of WLP_USER_DIR environment variable
      * @param outputDirStr Value of WLP_OUTPUT_DIR environment variable
      * @param logDirStr Value of X_LOG_DIR or LOG_DIR environment variable
-     * 
+     *
      * @throws LocationException
      */
     protected void configure(Map<String, String> initProps) throws LocationException {
@@ -370,7 +360,7 @@ public class BootstrapConfig {
     /**
      * Ensure that the given directory either does not yet exists,
      * or exists as a directory.
-     * 
+     *
      * @param dirName
      *            Name/path to directory
      * @param locName
@@ -382,23 +372,22 @@ public class BootstrapConfig {
     protected File assertDirectory(String dirName, String locName) {
         File d = new File(dirName);
         if (d.isFile())
-            throw new LocationException("Path must reference a directory",
-                            MessageFormat.format(BootstrapConstants.messages.getString("error.specifiedLocation"), locName,
-                                                 d.getAbsolutePath()));
+            throw new LocationException("Path must reference a directory", MessageFormat.format(BootstrapConstants.messages.getString("error.specifiedLocation"), locName,
+                                                                                                d.getAbsolutePath()));
         return d;
     }
 
     /**
      * A process (server/client) name must be specified on the command line.
      * It must be looked for (and set as a member variable) before we calculate locations.
-     * 
+     *
      * This method looks at the provided process name, if it is not null it checks to make
      * sure the provided process name contains only valid characters. If the process name is
      * specified and uses valid characters, it will be used as the process name, if it contains
      * invalid characters, an exception will be thrown preventing the process from starting.
-     * 
+     *
      * If no process name was specified, "defaultServer" or "defaultClient" will be used.
-     * 
+     *
      * @param newProcessName A process name being used.
      */
     protected void setProcessName(String newProcessName) {
@@ -409,9 +398,8 @@ public class BootstrapConfig {
             // Translation of the above regex for the faint of heart:
             // The first character can be a +, an _, a unicode letter \p{L}, or a unicode number \\p{N}
             // Subsequent characters can be any of the above, in addition to a . and a -
-            throw new LocationException("Bad server name: " + newProcessName,
-                            MessageFormat.format(BootstrapConstants.messages.getString(getErrorProcessNameCharacterMessageKey()),
-                                                 newProcessName));
+            throw new LocationException("Bad server name: " + newProcessName, MessageFormat.format(BootstrapConstants.messages.getString(getErrorProcessNameCharacterMessageKey()),
+                                                                                                   newProcessName));
         } else
             // use the new server name
             processName = newProcessName;
@@ -432,11 +420,9 @@ public class BootstrapConfig {
                 final String key = entry.getKey();
                 final String value = entry.getValue();
                 try {
-                    AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<Void>()
-                    {
+                    AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<Void>() {
                         @Override
-                        public Void run() throws Exception
-                        {
+                        public Void run() throws Exception {
                             System.setProperty(key, value);
                             return null;
                         }
@@ -451,7 +437,7 @@ public class BootstrapConfig {
      * Get value from initial configuration properties. If property is not
      * present in initial/framework properties, try finding it in system
      * properties.
-     * 
+     *
      * @param key
      *            Property key
      * @return Object value, or null if not found.
@@ -463,11 +449,9 @@ public class BootstrapConfig {
         String value = initProps.get(key);
         if (value == null) {
             try {
-                value = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<String>()
-                {
+                value = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<String>() {
                     @Override
-                    public String run() throws Exception
-                    {
+                    public String run() throws Exception {
                         return System.getProperty(key);
                     }
                 });
@@ -481,7 +465,7 @@ public class BootstrapConfig {
     /**
      * Set new property into set of initial properties. No effect (and returns
      * null) if key is null.
-     * 
+     *
      * @param key
      *            Property key string
      * @param value
@@ -497,7 +481,7 @@ public class BootstrapConfig {
 
     /**
      * Clear property
-     * 
+     *
      * @param key
      *            Key of property to clear
      * @return current/removed value
@@ -528,11 +512,9 @@ public class BootstrapConfig {
             String value = null;
             if (value == null) {
                 try {
-                    value = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<String>()
-                    {
+                    value = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<String>() {
                         @Override
-                        public String run() throws Exception
-                        {
+                        public String run() throws Exception {
                             return System.getenv("X_CMD");
                         }
                     });
@@ -547,11 +529,9 @@ public class BootstrapConfig {
 
             String java_home_value = null;
             try {
-                java_home_value = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<String>()
-                {
+                java_home_value = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<String>() {
                     @Override
-                    public String run() throws Exception
-                    {
+                    public String run() throws Exception {
                         return System.getProperty("java.home");
                     }
                 });
@@ -607,7 +587,7 @@ public class BootstrapConfig {
     /**
      * Allocate a file in the user output directory, e.g.
      * WLP_OUTPUT_DIR/relativePath
-     * 
+     *
      * @param relativePath
      *            relative path of file to create in the WLP_OUTPUT_DIR directory
      * @return File object for relative path, or for the WLP_OUTPUT_DIR directory itself
@@ -623,7 +603,7 @@ public class BootstrapConfig {
     /**
      * Allocate a file in the server config directory, e.g.
      * usr/servers/serverName/relativeServerPath
-     * 
+     *
      * @param relativeServerPath
      *            relative path of file to create in the server directory
      * @return File object for relative path, or for the server directory itself
@@ -639,7 +619,7 @@ public class BootstrapConfig {
     /**
      * Allocate a file in the server output directory, e.g.
      * server-data/serverName/relativeServerPath
-     * 
+     *
      * @param relativeServerPath
      *            relative path of file to create in the server directory
      * @return File object for relative path, or for the server directory itself
@@ -655,7 +635,7 @@ public class BootstrapConfig {
     /**
      * Allocate a file in the server directory, e.g.
      * usr/servers/serverName/workarea/relativeServerWorkareaPath
-     * 
+     *
      * @param relativeServerWorkareaPath
      *            relative path of file to create in the server's workarea
      * @return File object for relative path, or for the server workarea itself if
@@ -672,7 +652,7 @@ public class BootstrapConfig {
      * Merge properties from resource specified by urlStr (which is resolved
      * against the given
      * baseURL, in the case of relative paths) into the target map.
-     * 
+     *
      * @param target
      *            Target map to populate with new properties
      * @param baseURL
@@ -705,13 +685,10 @@ public class BootstrapConfig {
                 processIncludes(target, url, includes);
         } catch (MalformedURLException e) {
             Debug.printStackTrace(e);
-            throw new LocationException("Bad bootstrap.properties URI: " + urlStr,
-                            MessageFormat.format(BootstrapConstants.messages.getString("error.bootPropsURI"), urlStr, e),
-                            e);
+            throw new LocationException("Bad bootstrap.properties URI: " + urlStr, MessageFormat.format(BootstrapConstants.messages.getString("error.bootPropsURI"), urlStr, e), e);
         } catch (IOException e) {
-            throw new LocationException("IOException reading bootstrap.properties: " + urlStr,
-                            MessageFormat.format(BootstrapConstants.messages.getString("error.bootPropsStream"), urlStr, e),
-                            e);
+            throw new LocationException("IOException reading bootstrap.properties: " + urlStr, MessageFormat.format(BootstrapConstants.messages.getString("error.bootPropsStream"),
+                                                                                                                    urlStr, e), e);
         }
     }
 
@@ -722,7 +699,7 @@ public class BootstrapConfig {
      * has been specified. If the property is present as a System property
      * (from the command line or jvm.options), that value is used instead
      * of bootstrap.properties.
-     * 
+     *
      * @param source The source properties file (bootstrap.properties or include)
      * @param target The target map
      */
@@ -749,7 +726,7 @@ public class BootstrapConfig {
      * should be specified using a) relative path from the containing
      * bootstrap.properties,
      * b) absolute path, or c) full URI/URLs.
-     * 
+     *
      * @param mergeProps
      * @param includeProps
      */
@@ -765,7 +742,7 @@ public class BootstrapConfig {
 
     /**
      * Perform substitution of symbols used in config
-     * 
+     *
      * @param initProps
      */
     protected void substituteSymbols(Map<String, String> initProps) {
@@ -791,7 +768,7 @@ public class BootstrapConfig {
      * Look for symbols in the given string, if that symbol is present in
      * the map of initial properties (or in system properties), replace the
      * symbol with the initial property value.
-     * 
+     *
      * @param str
      *            String to evaluate for symbols
      * @return String with known symbols replaced by the associated values.
@@ -816,10 +793,10 @@ public class BootstrapConfig {
      * server does not already exist. Otherwise, verify that the server already
      * exists; if the server is 'defaultServer' and is being started, create it
      * if it doesn't already exist.
-     * 
+     *
      * If the server is created, default bootstrap.properties and server.xml files will be
      * created unless the files to use were specified explicitly on the command line.
-     * 
+     *
      * @param verifyServerString
      *            A value from the {@link BootstrapConstants.VerifyServer} enum: describes
      *            whether or not a server should be created if it does not exist.
@@ -854,37 +831,41 @@ public class BootstrapConfig {
                         createConfigDirectory(template);
                         disablePermGenIfNecessary();
                     } catch (IOException e) {
-                        throw new LocationException("Error occurred while trying to create new process " + processName,
-                                        MessageFormat.format(BootstrapConstants.messages.getString(getErrorCreatingNewProcessMessageKey()), processName,
-                                                             configDir.getAbsolutePath(),
-                                                             e.getMessage()), e);
+                        throw new LocationException("Error occurred while trying to create new process "
+                                                    + processName, MessageFormat.format(BootstrapConstants.messages.getString(getErrorCreatingNewProcessMessageKey()), processName,
+                                                                                        configDir.getAbsolutePath(),
+                                                                                        e.getMessage()), e);
                     }
                 } else {
                     //if the location hasn't been created since our last exist check
                     if (!!!configDir.exists()) {
-                        throw new LocationException("Unable to create process config directory " + configDir.getAbsolutePath(),
-                                        MessageFormat.format(BootstrapConstants.messages.getString(getErrorCreatingNewProcessMkDirFailMessageKey()), processName,
-                                                             configDir.getAbsolutePath()), null);
+                        throw new LocationException("Unable to create process config directory " + configDir.getAbsolutePath(), MessageFormat.format(
+                                                                                                                                                     BootstrapConstants.messages.getString(getErrorCreatingNewProcessMkDirFailMessageKey()),
+                                                                                                                                                     processName,
+                                                                                                                                                     configDir.getAbsolutePath()), null);
                     } else {
                         //something else created the server location AFTER we did the exists check at the start of this method
-                        throw new LocationException("Something else has been detected creating the process config directory " + configDir.getAbsolutePath(),
-                                        MessageFormat.format(BootstrapConstants.messages.getString(getErrorCreatingNewProcessExistsMessageKey()), processName,
-                                                             configDir.getAbsolutePath()), null);
+                        throw new LocationException("Something else has been detected creating the process config directory "
+                                                    + configDir.getAbsolutePath(), MessageFormat.format(BootstrapConstants.messages.getString(getErrorCreatingNewProcessExistsMessageKey()),
+                                                                                                        processName,
+                                                                                                        configDir.getAbsolutePath()), null);
 
                     }
                 }
             } else {
                 // Throw exception for missing server config.
-                LaunchException le = new LaunchException("Process config directory does not exist, and --create option not specified for " + processName,
-                                MessageFormat.format(BootstrapConstants.messages.getString(getErrorNoExistingProcessMessageKey()), processName,
-                                                     configDir.getAbsolutePath()));
+                LaunchException le = new LaunchException("Process config directory does not exist, and --create option not specified for "
+                                                         + processName, MessageFormat.format(BootstrapConstants.messages.getString(getErrorNoExistingProcessMessageKey()),
+                                                                                             processName,
+                                                                                             configDir.getAbsolutePath()));
                 le.setReturnCode(ReturnCode.SERVER_NOT_EXIST_STATUS);
                 throw le;
             }
         } else {
             if (verifyServer == BootstrapConstants.VerifyServer.CREATE) {
-                LaunchException le = new LaunchException("Unable to create the process " + processName + " because the process config directory already exists",
-                                MessageFormat.format(BootstrapConstants.messages.getString(getErrorProcessDirExistsMessageKey()), processName, configDir));
+                LaunchException le = new LaunchException("Unable to create the process " + processName
+                                                         + " because the process config directory already exists", MessageFormat.format(BootstrapConstants.messages.getString(getErrorProcessDirExistsMessageKey()),
+                                                                                                                                        processName, configDir));
                 le.setReturnCode(ReturnCode.REDUNDANT_ACTION_STATUS);
                 throw le;
             }
@@ -907,9 +888,8 @@ public class BootstrapConfig {
             }
 
             if (!f.exists() || !f.canRead()) {
-                throw new LocationException("Not Found " + f.getAbsolutePath(),
-                                MessageFormat.format(BootstrapConstants.messages.getString("error.badConfigRoot"),
-                                                     f.getAbsolutePath(), "file not found"));
+                throw new LocationException("Not Found " + f.getAbsolutePath(), MessageFormat.format(BootstrapConstants.messages.getString("error.badConfigRoot"),
+                                                                                                     f.getAbsolutePath(), "file not found"));
             }
         }
     }
@@ -962,9 +942,9 @@ public class BootstrapConfig {
                         Properties prop = KernelUtils.getProperties(new FileInputStream(extensionProp.getAbsoluteFile()));
                         directory = prop.getProperty("com.ibm.websphere.productInstall");
                     } catch (Exception e) {
-                        throw new LaunchException("Unable to load property: com.ibm.websphere.productInstall",
-                                        MessageFormat.format(BootstrapConstants.messages.getString("error.unable.load.property"),
-                                                             "com.ibm.websphere.productInstall", extensionProp.getAbsolutePath()));
+                        throw new LaunchException("Unable to load property: com.ibm.websphere.productInstall", MessageFormat.format(BootstrapConstants.messages.getString("error.unable.load.property"),
+                                                                                                                                    "com.ibm.websphere.productInstall",
+                                                                                                                                    extensionProp.getAbsolutePath()));
                     }
                     if (directory != null) {
                         File productInstallPath = new File(directory);
@@ -974,9 +954,8 @@ public class BootstrapConfig {
                         f = new File(productInstallPath, getProcessesTemplateDir() + templateName);
                     }
                 } else {
-                    throw new LaunchException("Not Found " + extensionProp.getAbsolutePath(),
-                                    MessageFormat.format(BootstrapConstants.messages.getString("error.fileNotFound"),
-                                                         extensionProp.getAbsolutePath()));
+                    throw new LaunchException("Not Found " + extensionProp.getAbsolutePath(), MessageFormat.format(BootstrapConstants.messages.getString("error.fileNotFound"),
+                                                                                                                   extensionProp.getAbsolutePath()));
                 }
             } else {
                 f = new File(f, getProcessesTemplateDir() + templateExtension);
@@ -984,9 +963,8 @@ public class BootstrapConfig {
 
             File serverConfig = new File(f, getProcessXMLFilename());
             if (!serverConfig.isFile()) {
-                throw new LaunchException("Not Found " + serverConfig.getAbsolutePath(),
-                                MessageFormat.format(BootstrapConstants.messages.getString("error.fileNotFound"),
-                                                     serverConfig.getAbsolutePath()));
+                throw new LaunchException("Not Found " + serverConfig.getAbsolutePath(), MessageFormat.format(BootstrapConstants.messages.getString("error.fileNotFound"),
+                                                                                                              serverConfig.getAbsolutePath()));
             }
         }
 
@@ -999,7 +977,7 @@ public class BootstrapConfig {
      * This set of properties is passed (for example) to log providers, who can
      * then add/remove additional
      * framework properties.
-     * 
+     *
      * @return the properties used to start the framework.
      */
     public Map<String, String> getFrameworkProperties() {
@@ -1080,7 +1058,7 @@ public class BootstrapConfig {
 
     /**
      * Check osgi clean start properties, ensure set correctly for clean start
-     * 
+     *
      * @see forceCleanStart
      */
     public boolean checkCleanStart() {
@@ -1095,7 +1073,7 @@ public class BootstrapConfig {
 
     /**
      * Force a framework clean start
-     * 
+     *
      * @see #checkCleanProperties(Map)
      */
     public void forceCleanStart() {
@@ -1159,7 +1137,7 @@ public class BootstrapConfig {
      * longer supported. This method checks the Java level and if it is
      * less than Java 8, it simply returns OK. If it is Java 8 or higher,
      * this method will attempt to create a server.env file with
-     * 
+     *
      * @param bootProps
      * @return
      */
@@ -1167,11 +1145,9 @@ public class BootstrapConfig {
         double jvmLevel;
         String s = null;
         try {
-            s = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<String>()
-            {
+            s = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<String>() {
                 @Override
-                public String run() throws Exception
-                {
+                public String run() throws Exception {
                     String javaSpecVersion = System.getProperty("java.specification.version");
                     return javaSpecVersion;
                 }
@@ -1180,20 +1156,21 @@ public class BootstrapConfig {
         } catch (Exception ex) {
             // If we get here, it is most likely because the java.specification.version property
             // is not a valid double.  Return bad java version
-            throw new LaunchException("Invalid java.specification.version, " + s,
-                            MessageFormat.format(BootstrapConstants.messages.getString("error.create.unknownJavaLevel"), s),
-                            ex, ReturnCode.ERROR_BAD_JAVA_VERSION);
+            throw new LaunchException("Invalid java.specification.version, " + s, MessageFormat.format(BootstrapConstants.messages.getString("error.create.unknownJavaLevel"),
+                                                                                                       s), ex, ReturnCode.ERROR_BAD_JAVA_VERSION);
         }
 
         if (jvmLevel >= 1.8) {
             BufferedWriter bw = null;
             File serverEnv = getConfigFile("server.env");
             try {
-            	FileUtils.createFile(serverEnv, new ByteArrayInputStream("WLP_SKIP_MAXPERMSIZE=true".getBytes("UTF-8")));
+                if (serverEnv.exists())
+                    FileUtils.appendFile(serverEnv, new ByteArrayInputStream((System.getProperty("line.separator") + "WLP_SKIP_MAXPERMSIZE=true").getBytes("UTF-8")));
+                else
+                    FileUtils.createFile(serverEnv, new ByteArrayInputStream("WLP_SKIP_MAXPERMSIZE=true".getBytes("UTF-8")));
             } catch (IOException ex) {
-                throw new LaunchException("Failed to create/update the server.env file for this server",
-                                MessageFormat.format(BootstrapConstants.messages.getString("error.create.java8serverenv"), serverEnv.getAbsolutePath()),
-                                ex, ReturnCode.LAUNCH_EXCEPTION);
+                throw new LaunchException("Failed to create/update the server.env file for this server", MessageFormat.format(BootstrapConstants.messages.getString("error.create.java8serverenv"),
+                                                                                                                              serverEnv.getAbsolutePath()), ex, ReturnCode.LAUNCH_EXCEPTION);
             } finally {
                 if (bw != null) {
                     try {

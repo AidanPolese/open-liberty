@@ -292,7 +292,7 @@ public class ConnectionPoolMonitor extends StatisticActions {
         if (tc.isEntryEnabled()) {
             Tr.entry(tc, "waitTimeEntry");
         }
-        tlocalforwtTime.set(System.nanoTime());
+        tlocalforwtTime.set(System.currentTimeMillis());
         if (tc.isEntryEnabled()) {
             Tr.exit(tc, "waitTimeEntry");
         }
@@ -308,7 +308,7 @@ public class ConnectionPoolMonitor extends StatisticActions {
         if (tc.isEntryEnabled()) {
             Tr.entry(tc, "waitTimeExit");
         }
-        long elapsed = (System.nanoTime() - tlocalforwtTime.get());
+        long elapsed = (System.currentTimeMillis() - tlocalforwtTime.get());
         JCAPMIHelper mObject = (JCAPMIHelper) wtobj;
         String JNDIName = mObject.getJNDIName(); //First get the actual JNDIName
         if (JNDIName == null) { //Check for null
@@ -381,8 +381,8 @@ public class ConnectionPoolMonitor extends StatisticActions {
             }
             Long iuTime = tlocalforiuTime.get();
             if (iuTime != null) {
-                long elapsed = (System.nanoTime() - tlocalforiuTime.get());
-                cStats.updateInuseTime(elapsed);
+                long elapsed = (System.currentTimeMillis() - tlocalforiuTime.get());
+                cStats.updateInUseTime(elapsed);
                 if (tlocalforiumconThread.get() < 2) {
                     tlocalforiuTime.set(null);
                 } else {
@@ -432,7 +432,7 @@ public class ConnectionPoolMonitor extends StatisticActions {
                 }
                 Long iuTime = tlocalforiuTime.get();
                 if (iuTime == null) {
-                    tlocalforiuTime.set(System.nanoTime()); // start the in use time for connections
+                    tlocalforiuTime.set(System.currentTimeMillis()); // start the in use time for connections
                     tlocalforiumconThread.set(1);
                 } else {
                     tlocalforiumconThread.set(tlocalforiumconThread.get() + 1);

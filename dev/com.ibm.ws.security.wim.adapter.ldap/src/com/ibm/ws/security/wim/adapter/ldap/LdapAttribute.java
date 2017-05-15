@@ -22,17 +22,17 @@ public class LdapAttribute {
 
     private String iAttrName = null;
     private String iSyntax = LdapConstants.LDAP_ATTR_SYNTAX_STRING;
-    private Map iDefaultValueMap = null;
-    private Map iDefaultAttrMap = null;
+    private Map<String, String> iDefaultValueMap = null;
+    private Map<String, String> iDefaultAttrMap = null;
     private boolean iWIMGenerate = false;
-    private Set iEntityTypes = null;
+    private Set<String> iEntityTypes = null;
 
     /**
      *
      */
     public LdapAttribute(String attrName) {
         iAttrName = attrName;
-        iEntityTypes = new HashSet();
+        iEntityTypes = new HashSet<String>();
     }
 
     public String getName() {
@@ -49,7 +49,7 @@ public class LdapAttribute {
 
     public void setDefaultValue(String entityType, String value) {
         if (iDefaultValueMap == null) {
-            iDefaultValueMap = new Hashtable();
+            iDefaultValueMap = new Hashtable<String, String>();
         }
         iDefaultValueMap.put(entityType, value);
     }
@@ -63,14 +63,14 @@ public class LdapAttribute {
 
     public void setDefaultAttribute(String entityType, String attr) {
         if (iDefaultAttrMap == null) {
-            iDefaultAttrMap = new Hashtable();
+            iDefaultAttrMap = new Hashtable<String, String>();
         }
         iDefaultAttrMap.put(entityType, attr);
     }
 
     public String getDefaultAttribute(String entityType) {
         if ((iDefaultAttrMap != null) && (iDefaultAttrMap.size() > 0))
-            return (String) iDefaultAttrMap.get(entityType);
+            return iDefaultAttrMap.get(entityType);
         else
             return null;
     }
@@ -83,7 +83,7 @@ public class LdapAttribute {
         return iWIMGenerate;
     }
 
-    public Set getEntityTypes() {
+    public Set<String> getEntityTypes() {
         return iEntityTypes;
     }
 
@@ -91,4 +91,16 @@ public class LdapAttribute {
         iEntityTypes.add(entityType);
     }
 
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(this.getClass().getName()).append(":{");
+        sb.append("iAttrName=").append(iAttrName);
+        sb.append(", iDefaultAttrMap=").append(iDefaultAttrMap);
+        sb.append(", iEntityTypes=").append(iEntityTypes);
+        sb.append(", iSyntax=").append(iSyntax);
+        sb.append(", iWIMGenerate=").append(iWIMGenerate);
+        sb.append("}");
+        return sb.toString();
+    }
 }

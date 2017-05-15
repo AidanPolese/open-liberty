@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2012,2015
+ * Copyright IBM Corp. 2012,2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.jmx.connector.converter;
@@ -128,6 +128,26 @@ public class JSONConverter {
         HashMap, Hashtable, TreeMap,
         HashSet,
         CompositeDataSupport, TabularDataSupport
+    }
+
+    private static final Set<String> PrimitiveArrayTypes = new HashSet<String>();
+    static {
+        PrimitiveArrayTypes.add(boolean.class.getName());
+        PrimitiveArrayTypes.add(Boolean.class.getName());
+        PrimitiveArrayTypes.add(char.class.getName());
+        PrimitiveArrayTypes.add(Character.class.getName());
+        PrimitiveArrayTypes.add(byte.class.getName());
+        PrimitiveArrayTypes.add(Byte.class.getName());
+        PrimitiveArrayTypes.add(short.class.getName());
+        PrimitiveArrayTypes.add(Short.class.getName());
+        PrimitiveArrayTypes.add(int.class.getName());
+        PrimitiveArrayTypes.add(Integer.class.getName());
+        PrimitiveArrayTypes.add(long.class.getName());
+        PrimitiveArrayTypes.add(Long.class.getName());
+        PrimitiveArrayTypes.add(float.class.getName());
+        PrimitiveArrayTypes.add(Float.class.getName());
+        PrimitiveArrayTypes.add(double.class.getName());
+        PrimitiveArrayTypes.add(Double.class.getName());
     }
 
     // Map from supported classes to Type enumeration, so that we can
@@ -482,10 +502,10 @@ public class JSONConverter {
     private static final byte[] OM_VERSION = { '"', 'v', 'e', 'r', 's', 'i', 'o', 'n', '"', ':' };
 
     private static final byte[] LONG_MIN = { '-', '9', '2', '2', '3', '3', '7',
-                                            '2', '0', '3', '6', '8', '5', '4',
-                                            '7', '7', '5', '8', '0', '8' };
+                                             '2', '0', '3', '6', '8', '5', '4',
+                                             '7', '7', '5', '8', '0', '8' };
     private static final byte[] INT_MIN = { '-', '2', '1', '4', '7', '4', '8',
-                                           '3', '6', '4', '8' };
+                                            '3', '6', '4', '8' };
     private static final byte[] TRUE = { 't', 'r', 'u', 'e' };
     private static final byte[] FALSE = { 'f', 'a', 'l', 's', 'e' };
     private static final byte[] NULL = { 'n', 'u', 'l', 'l' };
@@ -626,7 +646,7 @@ public class JSONConverter {
      * Retrieve an instance of the JSON converter. When the converter is no
      * longer needed, it can be returned to a global pool for reuse, by
      * calling {@link #returnConverter(JSONConverter)}.
-     * 
+     *
      * @return an instance of the JSONConverter. {@code null} is not returned.
      */
     public static JSONConverter getConverter() {
@@ -640,7 +660,7 @@ public class JSONConverter {
 
     /**
      * Returns the JSONConverter instance to the global pool for reuse later.
-     * 
+     *
      * @param converter the JSONConverter to return. {@code null} is not supported.
      */
     public static void returnConverter(JSONConverter converter) {
@@ -654,7 +674,7 @@ public class JSONConverter {
     /**
      * Encode an integer value as JSON. An array is used to wrap the value:
      * [ Integer ]
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The integer value to encode
      * @throws IOException If an I/O error occurs
@@ -668,7 +688,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve an integer value.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded integer value
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -686,7 +706,7 @@ public class JSONConverter {
     /**
      * Encode a boolean value as JSON. An array is used to wrap the value:
      * [ true | false ]
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The boolean value to encode
      * @throws IOException If an I/O error occurs
@@ -700,7 +720,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve an boolean value.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded boolean value
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -718,7 +738,7 @@ public class JSONConverter {
     /**
      * Encode a String value as JSON. An array is used to wrap the value:
      * [ String ]
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The String value to encode.
      * @throws IOException If an I/O error occurs
@@ -732,7 +752,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve a String value.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded String value
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -750,7 +770,7 @@ public class JSONConverter {
     /**
      * Encode a String array as JSON:
      * [ String* ]
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The String array to encode. Can't be null.
      * @throws IOException If an I/O error occurs
@@ -761,7 +781,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve a String array.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded String array
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -774,79 +794,79 @@ public class JSONConverter {
 
     /**
      * Encode an Object as JSON.
-     * 
+     *
      * Format:
-     * 
+     *
      * {
      * serialized: Base64, ? // If object has cyclic references. Otherwise use the following fields instead.
      * value: Value, ?
      * type: Type, ?
      * openTypes: [ OpenType * ], ? // Only if open types are used
      * }
-     * 
+     *
      * *** Value ***
-     * 
+     *
      * 1. For "null" value, or a value that's not expressible in JSON
-     * 
+     *
      * null
-     * 
+     *
      * 2. For a simple value (primitive, String, BigInteger/Decimal, Date,
      * ObjectName), or Object. For Object, "" is used.
-     * 
+     *
      * String
-     * 
+     *
      * 3. For array or collection
-     * 
+     *
      * [ Value* ]
-     * 
+     *
      * 4. For map where all keys are simple values
-     * 
+     *
      * {
      * String: Value *
      * }
-     * 
+     *
      * 5. For map with complex keys
-     * 
+     *
      * [ {key: Value, value: Value}* ]
-     * 
+     *
      * 6. For CompositeData
-     * 
+     *
      * {
      * String: Value *
      * }
-     * 
+     *
      * 7. and TabularData
-     * 
+     *
      * [ CompositeData* ]
-     * 
+     *
      * *** Type ***
-     * 
+     *
      * 1. For "null" value
-     * 
+     *
      * null
-     * 
+     *
      * 2. For a simple value, arrays of primitives or final simple values,
      * or Object. For Object, "" is used.
-     * 
+     *
      * String // The class name
-     * 
+     *
      * 3. Otherwise
-     * 
+     *
      * {
      * class: String, // Class name of the object
      * serialized: Base64 ? // Optional: If the class is not supported. The java serialization of the value.
      * }
-     * 
+     *
      * The following additional fields apply depending on the kind of value.
-     * 
+     *
      * 3.1 For complex array or collection classes:
-     * 
+     *
      * {
      * items: [ Type* ]
      * }
-     * 
+     *
      * 3.4 For maps
-     * 
+     *
      * {
      * simpleKey: boolean, // Whether all keys are simple. Then each entry has a "key" field.
      * entries: [
@@ -856,50 +876,50 @@ public class JSONConverter {
      * value: Type
      * } *
      * ]
-     * 
+     *
      * 3.5 For CompositeData and TabularData
-     * 
+     *
      * {
      * openType: Integer // Reference to the OpenType array in root Type
      * }
-     * 
+     *
      * *** OpenType ***
-     * 
+     *
      * 1. For SimpleType instances:
-     * 
+     *
      * String // The name of the simple type.
-     * 
+     *
      * 2. For all other OpenTypes:
-     * 
+     *
      * {
      * openTypeClass: String, // The OpenType class.
      * serialized: Base64 // Optional: If the class is not supported. The java serialization of the OpenType object.
-     * 
+     *
      * className: String,
      * typeName: String,
      * description: String,
      * }
-     * 
+     *
      * 2.1 ArrayType
-     * 
+     *
      * {
      * dimension: Integer,
      * elementType: Integer,
      * }
-     * 
+     *
      * 2.2 CompositeType
-     * 
+     *
      * {
      * items: { String: { description: String, type: Integer } *}
      * }
-     * 
+     *
      * 2.3 TabularType
-     * 
+     *
      * {
      * rowType: Integer,
      * indexNames: [String*]
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The Object to encode. Can be null.
      * @throws IOException If an I/O error occurs
@@ -911,7 +931,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve an Object.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded Object
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -935,7 +955,7 @@ public class JSONConverter {
      * "notifications" : URL,
      * "instanceOf" : URL
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The JMX instance to encode. Can't be null.
      * @throws IOException If an I/O error occurs
@@ -959,7 +979,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve a JMX instance.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded JMX instance
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -990,7 +1010,7 @@ public class JSONConverter {
      * "className" : String,
      * "URL" : URL,
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The ObjectInstanceWrapper instance to encode.
      *            The value and value.objectInstance can't be null.
@@ -1008,7 +1028,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve an ObjectInstanceWrapper instance.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded ObjectInstanceWrapper instance
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1022,7 +1042,7 @@ public class JSONConverter {
     /**
      * Encode an ObjectInstanceWrapper array as JSON:
      * [ ObjectInstanceWrapper* ]
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The ObjectInstanceWrapper array to encode. Can't be null.
      *            And none of its entries can be null.
@@ -1041,7 +1061,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve an ObjectInstanceWrapper array.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded ObjectInstanceWrapper array
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1066,7 +1086,7 @@ public class JSONConverter {
      * "queryExp" : Base64,
      * "className" : String,
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The MBeanQuery instance to encode. Can't be null.
      * @throws IOException If an I/O error occurs
@@ -1083,7 +1103,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve an MBeanQuery instance.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded MBeanQuery instance
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1115,7 +1135,7 @@ public class JSONConverter {
      * "useLoader" : Boolean,
      * "useSignatue" : Boolean
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The CreateMBean instance to encode. Can't be null.
      * @throws IOException If an I/O error occurs
@@ -1135,7 +1155,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve a CreateMBean instance.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded CreateMBean instance
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1168,13 +1188,13 @@ public class JSONConverter {
      * "notifications" : [ MBeanNotificationInfo* ],
      * "operations" : [ MBeanOperationInfo* ]
      * }
-     * 
+     *
      * Descriptor:
      * {
      * "names" : [ String* ],{
      * "values" : [ POJO* ]
      * }
-     * 
+     *
      * MBeanAttributeInfo:
      * {
      * "name" : String,
@@ -1186,7 +1206,7 @@ public class JSONConverter {
      * "isWritable" : Boolean,
      * "URL" : URL
      * }
-     * 
+     *
      * MBeanConstructorInfo:
      * {
      * "name" : String,
@@ -1194,7 +1214,7 @@ public class JSONConverter {
      * "descriptor" : Descriptor,
      * "signature" : [ MBeanParameterInfo* ]
      * }
-     * 
+     *
      * MBeanParameterInfo:
      * {
      * "name" : String,
@@ -1202,7 +1222,7 @@ public class JSONConverter {
      * "description" : String,
      * "descriptor" : Descriptor
      * }
-     * 
+     *
      * MBeanNotificationInfo:
      * {
      * "name" : String,
@@ -1210,7 +1230,7 @@ public class JSONConverter {
      * "descriptor" : Descriptor,
      * "notifTypes" [ String* ]
      * }
-     * 
+     *
      * MBeanOperationInfo:
      * {
      * "name" : String,
@@ -1221,7 +1241,7 @@ public class JSONConverter {
      * "signature" : [ MBeanParameterInfo* ],
      * "URI" : URI
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The MBeanInfoWrapper instance to encode.
      *            The value and its members can't be null.
@@ -1258,9 +1278,9 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve an MBeanInfoWrapper instance.
-     * 
+     *
      * Note that all descriptors are of class ImmutableDescriptor.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded MBeanInfoWrapper instance
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1310,9 +1330,7 @@ public class JSONConverter {
             }
             ret.mbeanInfo = (MBeanInfo) o;
         } else {
-            ret.mbeanInfo = new MBeanInfo(className, description, attributes,
-                            constructors, operations, notifications,
-                            descriptor);
+            ret.mbeanInfo = new MBeanInfo(className, description, attributes, constructors, operations, notifications, descriptor);
         }
         return ret;
     }
@@ -1323,7 +1341,7 @@ public class JSONConverter {
      * "name" : String,
      * "value" : POJO
      * }* ]
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The AttributeList instance to encode. Can be null,
      *            but its Attribute items can't be null.
@@ -1347,7 +1365,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve an AttributeList instance.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded AttributeList instance
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1376,7 +1394,7 @@ public class JSONConverter {
      * "params" : [ POJO* ],
      * "signature" : [ String* ]
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The Invocation instance to encode. Can't be null.
      * @throws IOException If an I/O error occurs
@@ -1391,7 +1409,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve an Invocation instance.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded Invocation instance
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1414,7 +1432,7 @@ public class JSONConverter {
      * "serverRegistrations" : URL,
      * "inbox" : URL
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The NotificationArea instance to encode. Can't be null.
      * @throws IOException If an I/O error occurs
@@ -1431,7 +1449,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve a NotificationArea instance.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded NotificationArea instance
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1454,7 +1472,7 @@ public class JSONConverter {
      * "objectName" : ObjectName,
      * "filters" : [ NotificationFilter* ]
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The NotificationRegistration instance to encode.
      *            Can't be null. See writeNotificationFilters() for
@@ -1472,7 +1490,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve a NotificationRegistration instance.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded NotificationRegistration instance
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1499,7 +1517,7 @@ public class JSONConverter {
      * "filterID" : Integer,
      * "handbackID" : Integer
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The ServerNotificationRegistration instance to encode.
      *            Can't be null.
@@ -1525,7 +1543,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve a ServerNotificationRegistration instance.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded ServerNotificationRegistration instance
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1550,7 +1568,7 @@ public class JSONConverter {
     /**
      * Check if a NotificationFilter is a standard filter that can be
      * send to a JMX server.
-     * 
+     *
      * @param filter The filter to check. Can't be null.
      * @return Whether the filter is a standard one
      */
@@ -1564,7 +1582,7 @@ public class JSONConverter {
     /**
      * Encode a NotificationFilter array as JSON:
      * [ NotificationFilter* ]
-     * 
+     *
      * Format of NotificationFilter:
      * {
      * className: "AttributeChangeNotificationFilter" | "MBeanServerNotificationFilter" | "NotificationFilterSupport",
@@ -1572,7 +1590,7 @@ public class JSONConverter {
      * disabled: [ String* ], // For MBeanServerNotificationFilter
      * types: [ String* ], // For MBeanServerNotificationFilter and NotificationFilterSupport
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The NotificationFilter array to encode. Can be null.
      *            The individual filters can't be null either. They must be of
@@ -1586,7 +1604,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve a NotificationFilter array.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded NotificationFilter array
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1600,7 +1618,7 @@ public class JSONConverter {
 
     /**
      * Encode an array of Notification instance as JSON:
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The Notification array to encode. Value can be null,
      *            but its items can't be null.
@@ -1643,20 +1661,20 @@ public class JSONConverter {
      * "timeStamp" : Long,
      * "message" : String,
      * "userData" : POJO,
-     * 
+     *
      * "hostName" : String, // For routed Notifications only
      * "serverName" : String,
      * "serverUserDir" : String,
-     * 
+     *
      * "attributeName" : String, // For AttributeChangeNotification only
      * "attributeType" : String,
      * "oldValue", POJO,
      * "newValue", POJO,
-     * 
+     *
      * "connectionId" : String, // For JMXConnectionNotification
-     * 
+     *
      * "mbeanName" : String, // For MBeanServerNotification
-     * 
+     *
      * "relationId" : String, // For RelationNotification
      * "relationTypeName" : String,
      * "objectName" : String,
@@ -1664,10 +1682,10 @@ public class JSONConverter {
      * "roleName" : String,
      * "oldRoleValue" : [String*],
      * "newRoleValue" : [String*],
-     * 
+     *
      * "notificationID" : Integer, // For TimerNotification
      * } * ]
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The NotificationRecord array to encode. Value can be null,
      *            but its items can't be null.
@@ -1763,7 +1781,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve an array of Notification instances.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded Notification array
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1782,7 +1800,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve an array of NotificationRecord instances.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The non-null decoded NotificationRecord array
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1833,8 +1851,7 @@ public class JSONConverter {
                 String attributeType = readStringInternal(obj.get(N_ATTRIBUTETYPE));
                 Object oldValue = readPOJOInternal(obj.get(N_OLDVALUE));
                 Object newValue = readPOJOInternal(obj.get(N_NEWVALUE));
-                n = new AttributeChangeNotification(source, sequenceNumber, timeStamp, message,
-                                attributeName, attributeType, oldValue, newValue);
+                n = new AttributeChangeNotification(source, sequenceNumber, timeStamp, message, attributeName, attributeType, oldValue, newValue);
             } else if ("javax.management.remote.JMXConnectionNotification".equals(className)) {
                 String connectionId = readStringInternal(obj.get(N_CONNECTIONID));
                 n = new JMXConnectionNotification(type, source, connectionId, sequenceNumber, message, userData);
@@ -1852,14 +1869,11 @@ public class JSONConverter {
                 String roleName = readStringInternal(obj.get(N_ROLENAME));
                 if (roleName == null) {
                     List<ObjectName> mbeansToUnregister = readObjectNameList(obj.get(N_MBEANSTOUNREGISTER));
-                    n = new RelationNotification(type, source, sequenceNumber, timeStamp, message,
-                                    relationId, typeName, objectName, mbeansToUnregister);
+                    n = new RelationNotification(type, source, sequenceNumber, timeStamp, message, relationId, typeName, objectName, mbeansToUnregister);
                 } else {
                     List<ObjectName> oldValue = readObjectNameList(obj.get(N_OLDROLEVALUE));
                     List<ObjectName> newValue = readObjectNameList(obj.get(N_NEWROLEVALUE));
-                    n = new RelationNotification(type, source, sequenceNumber, timeStamp, message,
-                                    relationId, typeName, objectName,
-                                    roleName, oldValue, newValue);
+                    n = new RelationNotification(type, source, sequenceNumber, timeStamp, message, relationId, typeName, objectName, roleName, oldValue, newValue);
                 }
             } else if ("javax.management.timer.TimerNotification".equals(className)) {
                 Integer notificationID = readIntInternal(obj.get(N_NOTIFICATIONID));
@@ -1890,7 +1904,7 @@ public class JSONConverter {
      * {
      * "deliveryInterval" : Integer
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The NotificationSettings instance to encode. Can't be null.
      * @throws IOException If an I/O error occurs
@@ -1905,7 +1919,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve a NotificationSettings instance.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded NotificationSettings instance
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1926,7 +1940,7 @@ public class JSONConverter {
      * "throwable" : Base64,
      * "stackTrace" : String
      * }
-     * 
+     *
      * @param out The stream to write JSON to
      * @param value The Throwable instance to encode. Can't be null.
      * @throws IOException If an I/O error occurs
@@ -1943,7 +1957,7 @@ public class JSONConverter {
 
     /**
      * Decode a JSON document to retrieve a Throwable instance.
-     * 
+     *
      * @param in The stream to read JSON from
      * @return The decoded Throwable instance
      * @throws ConversionException If JSON uses unexpected structure/format
@@ -1970,7 +1984,7 @@ public class JSONConverter {
 
     /**
      * Converts inputstream to bytearray
-     * 
+     *
      * @param in
      * @return
      * @throws IOException
@@ -1991,7 +2005,7 @@ public class JSONConverter {
 
     /**
      * Converts inputstream to String
-     * 
+     *
      * @param in
      * @return
      * @throws IOException
@@ -2014,7 +2028,7 @@ public class JSONConverter {
      * Encode a String in base64. The content of the string is first encoded
      * as UTF-8 bytes, the bytes are then base64 encoded. The resulting base64
      * value is returned as a String.
-     * 
+     *
      * @param value The String to encode
      * @return The encoded base64 String
      * @throws ConversionException If the String content can not be UTF-8 encoded.
@@ -2137,7 +2151,7 @@ public class JSONConverter {
      * Debug (dump) the contents of an input stream. This effectively copies
      * the input stream into a byte array, dumps one and then returns another.
      * If logging is not enabled, nothing happens.
-     * 
+     *
      * @param in
      * @throws IOException
      */
@@ -2170,7 +2184,7 @@ public class JSONConverter {
 
     /**
      * Parse (and possible debug) the InputStream as a JSONArtifact.
-     * 
+     *
      * @param in
      * @return
      * @throws IOException
@@ -3379,7 +3393,7 @@ public class JSONConverter {
             }
             OpenType<?> etype = readOpenType(json, elementType, openTypes);
             if (etype instanceof SimpleType<?>) {
-                return openTypes[i] = new ArrayType((SimpleType<?>) etype, true);
+                return openTypes[i] = new ArrayType((SimpleType<?>) etype, PrimitiveArrayTypes.contains(etype.getClassName()));
             } else {
                 return openTypes[i] = new ArrayType(dimension, etype);
             }
@@ -4011,9 +4025,7 @@ public class JSONConverter {
             boolean isWritable = readBooleanInternal(value.get(N_ISWRITABLE));
             boolean isIs = readBooleanInternal(value.get(N_ISIS));
             Descriptor descriptor = readDescriptor(value.get(N_DESCRIPTOR));
-            ret[pos++] = new MBeanAttributeInfo(name, type, description,
-                            isReadable, isWritable, isIs,
-                            descriptor);
+            ret[pos++] = new MBeanAttributeInfo(name, type, description, isReadable, isWritable, isIs, descriptor);
             urls.put(name, readStringInternal(value.get(N_URL)));
         }
         return ret;
@@ -4056,8 +4068,7 @@ public class JSONConverter {
             String description = readStringInternal(value.get(N_DESCRIPTION));
             MBeanParameterInfo[] signature = readParameters(value.get(N_SIGNATURE));
             Descriptor descriptor = readDescriptor(value.get(N_DESCRIPTOR));
-            ret[pos++] = new MBeanConstructorInfo(name, description,
-                            signature, descriptor);
+            ret[pos++] = new MBeanConstructorInfo(name, description, signature, descriptor);
         }
         return ret;
     }
@@ -4099,8 +4110,7 @@ public class JSONConverter {
             String type = readStringInternal(value.get(N_TYPE));
             String description = readStringInternal(value.get(N_DESCRIPTION));
             Descriptor descriptor = readDescriptor(value.get(N_DESCRIPTOR));
-            ret[pos++] = new MBeanParameterInfo(name, type, description,
-                            descriptor);
+            ret[pos++] = new MBeanParameterInfo(name, type, description, descriptor);
         }
         return ret;
     }
@@ -4142,8 +4152,7 @@ public class JSONConverter {
             String description = readStringInternal(value.get(N_DESCRIPTION));
             String[] notifTypes = readStringArrayInternal(value.get(N_NOTIFTYPES));
             Descriptor descriptor = readDescriptor(value.get(N_DESCRIPTOR));
-            ret[pos++] = new MBeanNotificationInfo(notifTypes, name, description,
-                            descriptor);
+            ret[pos++] = new MBeanNotificationInfo(notifTypes, name, description, descriptor);
         }
         return ret;
     }
@@ -4190,8 +4199,7 @@ public class JSONConverter {
             String returnType = readStringInternal(value.get(N_RETURNTYPE));
             MBeanParameterInfo[] signature = readParameters(value.get(N_SIGNATURE));
             Descriptor descriptor = readDescriptor(value.get(N_DESCRIPTOR));
-            ret[pos++] = new MBeanOperationInfo(name, description, signature,
-                            returnType, impact, descriptor);
+            ret[pos++] = new MBeanOperationInfo(name, description, signature, returnType, impact, descriptor);
             urls.put(name, readStringInternal(value.get(N_URL)));
         }
         return ret;

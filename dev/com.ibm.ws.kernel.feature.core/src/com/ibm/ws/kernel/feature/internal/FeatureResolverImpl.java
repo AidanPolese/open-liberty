@@ -81,9 +81,9 @@ public class FeatureResolverImpl implements FeatureResolver {
      * 
      * @see com.ibm.ws.kernel.feature.resolver.FeatureResolver#resolveFeatures(com.ibm.ws.kernel.feature.resolver.FeatureResolver.Repository, java.util.Collection, java.util.Set)
      */
-    public Result resolveFeatures(FeatureResolver.Repository repository, Collection<String> rootFeatures, Set<String> preResolved, boolean allowMultipleVersions) {
+    public Result resolveFeatures(FeatureResolver.Repository repository, Collection<ProvisioningFeatureDefinition> kernelFeatures, Collection<String> rootFeatures, Set<String> preResolved, boolean allowMultipleVersions) {
         // Note that when no process type is passed we support all process types.
-        return resolveFeatures(repository, rootFeatures, preResolved, allowMultipleVersions, EnumSet.allOf(ProcessType.class));
+        return resolveFeatures(repository, kernelFeatures, rootFeatures, preResolved, allowMultipleVersions, EnumSet.allOf(ProcessType.class));
     }
 
     /*
@@ -97,7 +97,7 @@ public class FeatureResolverImpl implements FeatureResolver {
      * 3) Check if there are any auto features to resolve; if so return to step 2 and resolve the auto-features as root features
      */
     @Override
-    public Result resolveFeatures(Repository repository, Collection<String> rootFeatures, Set<String> preResolved, boolean allowMultipleVersions,
+    public Result resolveFeatures(Repository repository, Collection<ProvisioningFeatureDefinition> kernelFeatures, Collection<String> rootFeatures, Set<String> preResolved, boolean allowMultipleVersions,
                                   EnumSet<ProcessType> supportedProcessTypes) {
         SelectionContext selectionContext = new SelectionContext(repository, allowMultipleVersions, supportedProcessTypes);
 
@@ -130,7 +130,7 @@ public class FeatureResolverImpl implements FeatureResolver {
                 preResolved = resolved;
             }
             resolved = doResolveFeatures(rootFeatures, preResolved, selectionContext);
-        } while (!!!(autoFeaturesToInstall = processAutoFeatures(resolved, seenAutoFeatures, selectionContext)).isEmpty());
+        } while (!!!(autoFeaturesToInstall = processAutoFeatures(kernelFeatures, resolved, seenAutoFeatures, selectionContext)).isEmpty());
         // Finally set the resolved features in the final result and return it.
         return selectionContext.getResult().setResolvedFeatures(resolved);
     }
@@ -494,11 +494,11 @@ public class FeatureResolverImpl implements FeatureResolver {
      * We then need to recursively check the new set of features to see if other features have their capabilities satisfied by these auto features and keep
      * going round until we've got the complete list.
      */
-    private Set<String> processAutoFeatures(Set<String> result, Set<String> seenAutoFeatures, SelectionContext selectionContext) {
+    private Set<String> processAutoFeatures(Collection<ProvisioningFeatureDefinition> kernelFeatures, Set<String> result, Set<String> seenAutoFeatures, SelectionContext selectionContext) {
 
         Set<String> autoFeaturesToProcess = new HashSet<String>();
 
-        Set<ProvisioningFeatureDefinition> filteredFeatureDefs = new HashSet<ProvisioningFeatureDefinition>();
+        Set<ProvisioningFeatureDefinition> filteredFeatureDefs = new HashSet<ProvisioningFeatureDefinition>(kernelFeatures);
         for (String feature : result) {
             filteredFeatureDefs.add(selectionContext.getRepository().getFeature(feature));
         }

@@ -385,5 +385,15 @@ public class CDIUtils {
     public static String getOSGIVersionForBndName(Version version) {
         return String.valueOf(version.getMajor());
     }
-
+    
+    //This method looks for bnd symbolic names that end with the string <number>.<number>.<number>
+    //And removes the last ".<number.<number>" 
+    @Trivial
+    public static String getSymbolicNameWithoutMinorOrMicroVersionPart(String symbolicName) {
+        if (symbolicName.matches(".*\\d+\\.\\d+\\.\\d+$")){
+            return symbolicName.replaceAll("\\.\\d+\\.\\d+$", "");
+        } else {
+            return symbolicName;
+        }
+    }
 }

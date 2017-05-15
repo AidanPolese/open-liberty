@@ -14,17 +14,18 @@ package com.ibm.ws.ssl.internal;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.felix.scr.component.ExtComponentContext;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -34,6 +35,11 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.ComponentInstance;
 
 import com.ibm.websphere.ssl.Constants;
 import com.ibm.ws.kernel.feature.FeatureProvisioner;
@@ -75,6 +81,93 @@ public class SSLComponentTest {
     private final FeatureProvisioner provisionerService = mock.mock(FeatureProvisioner.class);
 
     private SSLComponent sslComponent;
+
+    private final ComponentContext componentContext = new ExtComponentContext() {
+
+        private Dictionary<String, Object> properties;
+
+        @Override
+        public Object[] locateServices(String name) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public <S> S locateService(String name, ServiceReference<S> reference) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public Object locateService(String name) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public Bundle getUsingBundle() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public ServiceReference<?> getServiceReference() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public Dictionary<String, Object> getProperties() {
+            return properties;
+        }
+
+        @Override
+        public ComponentInstance getComponentInstance() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public BundleContext getBundleContext() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public void enableComponent(String name) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void disableComponent(String name) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void setServiceProperties(Dictionary<String, ?> properties) {
+            this.properties = copyToDictionary(properties, false);
+
+        }
+
+        protected Dictionary<String, Object> copyToDictionary(final Dictionary<String, ?> source,
+                                                              final boolean allProps) {
+            Hashtable<String, Object> target = new Hashtable<String, Object>();
+
+            if (source != null && !source.isEmpty()) {
+                for (Enumeration<String> ce = source.keys(); ce.hasMoreElements();) {
+                    // cast is save, because key must be a string as per the spec
+                    String key = ce.nextElement();
+                    if (allProps || key.charAt(0) != '.') {
+                        target.put(key, source.get(key));
+                    }
+                }
+            }
+
+            return target;
+        }
+    };
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -152,7 +245,7 @@ public class SSLComponentTest {
             // on each activate call.
             sslComponent.setKeyStore(keyConfig);
             sslComponent.setRepertoire(repConfig);
-            sslComponent.activate(map);
+            sslComponent.activate(componentContext, map);
 
             Map<String, Object> globalPropMap = sslComponent.getGlobalProps();
             assertNotNull("Generic config info should be non-null",
@@ -177,7 +270,7 @@ public class SSLComponentTest {
             map.put(LibertyConstants.KEY_DEFAULT_REPERTOIRE, "DefaultSSLSettings");
             map.put("com.ibm.test", "testValue");
 
-            sslComponent.activate(map);
+            sslComponent.activate(componentContext, map);
             sslComponent.setKeyStore(keyConfig);
             sslComponent.setRepertoire(repConfig);
 
@@ -203,7 +296,7 @@ public class SSLComponentTest {
             final Map<String, Object> map = new HashMap<String, Object>();
 
             sslComponent.setRepertoire(repConfig);
-            sslComponent.activate(map);
+            sslComponent.activate(componentContext, map);
             sslComponent.setKeyStore(keyConfig);
 
             Map<String, Object> globalPropMap = sslComponent.getGlobalProps();
@@ -246,21 +339,27 @@ public class SSLComponentTest {
                 }
             });
 
-            Map<String, Object> props = sslComponent.activate(new HashMap<String, Object>());
-            assertNull(props);
+            sslComponent.activate(componentContext, new HashMap<String, Object>());
 
-            props = sslComponent.setRepertoire(repConfig);
+            Dictionary<String, Object> props = componentContext.getProperties();
+            assertTrue(Arrays.equals(EMPTY, (String[]) props.get(SSLSupportOptional.KEYSTORE_IDS)));
+            assertTrue(Arrays.equals(EMPTY, (String[]) props.get(SSLSupportOptional.REPERTOIRE_IDS)));
+            sslComponent.setRepertoire(repConfig);
+
+            props = componentContext.getProperties();
             assertEquals(4, props.size());
             assertTrue(Arrays.equals(TEST_KEYSTORE_ARRAY, (String[]) props.get(SSLSupportOptional.KEYSTORE_IDS)));
             assertTrue(Arrays.equals(TEST_SSL_ARRAY, (String[]) props.get(SSLSupportOptional.REPERTOIRE_IDS)));
             assertEquals("active", props.get("SSLSupport"));
 
-            props = sslComponent.setKeyStore(keyConfig);
+            sslComponent.setKeyStore(keyConfig);
+            props = componentContext.getProperties();
             assertEquals(4, props.size());
             assertTrue(Arrays.equals(TEST_KEYSTORE_ARRAY, (String[]) props.get(SSLSupportOptional.KEYSTORE_IDS)));
             assertTrue(Arrays.equals(TEST_SSL_ARRAY, (String[]) props.get(SSLSupportOptional.REPERTOIRE_IDS)));
 
-            props = sslComponent.setRepertoire(myRepConfig);
+            sslComponent.setRepertoire(myRepConfig);
+            props = componentContext.getProperties();
             assertEquals(4, props.size());
             assertTrue(Arrays.equals(TEST_KEYSTORE_ARRAY, (String[]) props.get(SSLSupportOptional.KEYSTORE_IDS)));
             assertTrue(Arrays.equals(new String[] { "default", TEST_SSL }, (String[]) props.get(SSLSupportOptional.REPERTOIRE_IDS)));

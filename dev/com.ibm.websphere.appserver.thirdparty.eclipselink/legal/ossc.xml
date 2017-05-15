@@ -2,17 +2,17 @@
 <ossc>
   <project project="EclipseLink"
     projectURL="https://www.eclipse.org/eclipselink/"
-    version="2.6.3_WAS" revision="2.6.3.WAS-v20170321-cdfc319"
+    version="2.6.3_WAS" revision="2.6.3.WAS-v20170504-7d42382"
     license-type="EPLv1"
     contact="sutter@us.ibm.com"
     encryption="no">
-    <download location="ftp://rchgsa.ibm.com/projects/j/jpabuild/SNAPSHOT">
+    <download location="ftp://rchgsa.ibm.com//projects/j/jpabuild/SNAPSHOT">
         <file basename="org.eclipse.persistence.antlr.WAS.jar" checksum="fbff890f1913157445e092fb3aa63d94"/>
         <file basename="org.eclipse.persistence.asm.WAS.jar" checksum="4134f84bf557326f7cb42177c3128e89"/>
-        <file basename="org.eclipse.persistence.core.WAS.jar" checksum="cc182885b98b7bd665d7001c21a50da8"/>
-        <file basename="org.eclipse.persistence.jpa.WAS.jar" checksum="b21530e78d1e30109395a3c4734ac5b6"/>
-        <file basename="org.eclipse.persistence.jpa.jpql.WAS.jar" checksum="2854cea547a204b77855119b7460bd51"/>
-        <file basename="org.eclipse.persistence.jpa.modelgen.WAS.jar" checksum="c368dc2e41bf2f77b05fa0081f2810d3"/>
+        <file basename="org.eclipse.persistence.core.WAS.jar" checksum="d7f32b4bf3ee09e0633f17c370b356a1"/>
+        <file basename="org.eclipse.persistence.jpa.WAS.jar" checksum="7dddbb37e4a31b2627b910e6d392c6d7"/>
+        <file basename="org.eclipse.persistence.jpa.jpql.WAS.jar" checksum="9c4773fe63afe13a909fb019b89965f2"/>
+        <file basename="org.eclipse.persistence.jpa.modelgen.WAS.jar" checksum="6b6972a3266fe08b45a27b2ef2b2f7bc"/>
       </download>
   </project>
   <clearencehistory/>

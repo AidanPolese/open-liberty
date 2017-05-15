@@ -30,5 +30,5 @@ public class WSSearchConstants {
     // Valid search parameters.  Search parameters specified other than these (excepting job parameters) will end up in the X-IBM-Unrecognized-Fields response header
     static public List<String> VALID_SEARCH_PARAMS_V4 = Arrays.asList("jobInstanceId", "createTime", "instanceState", "exitStatus",
                                                                       "lastUpdatedTime", "page", "pageSize", "sort",
-                                                                      "submitter", "appName", "jobName");
+                                                                      "submitter", "appName", "jobName", "ignoreCase");
 }

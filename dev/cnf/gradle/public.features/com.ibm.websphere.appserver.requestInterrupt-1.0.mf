@@ -1,19 +1,16 @@
 Created-By: 1.8.0_121 (Oracle Corporation)
-IBM-API-Package: com.ibm.websphere.interrupt;type="ibm-api"
+IBM-API-Package: com.ibm.websphere.interrupt;type="internal"
 IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
 IBM-ShortName: requestInterrupt-1.0
-Subsystem-Content: com.ibm.websphere.appserver.api.requestInterrupt_1.0-javadoc.zip; type=file; location:="dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.requestInterrupt_1.0-javadoc.zip",
- com.ibm.websphere.appserver.requestTiming-1.0; type="osgi.subsystem.feature",
+Subsystem-Content: com.ibm.websphere.appserver.requestTiming-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.containerServices-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.appLifecycle-1.0; type="osgi.subsystem.feature",
- com.ibm.websphere.appserver.api.requestInterrupt; location:="dev/api/ibm/,lib/"; type=jar; version="[1.0.0,1.0.200)",
  com.ibm.websphere.interrupt; version="[1.0.0,1.0.200)",
- com.ibm.ws.request.interrupt; version="[1.0.0,1.0.200)",
- com.ibm.json4j; version="[1.0.0,1.0.200)"
+ com.ibm.ws.request.interrupt; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description
 Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
 Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.requestInterrupt-1.0

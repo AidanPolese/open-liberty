@@ -11,8 +11,8 @@
  */
 package com.ibm.wsspi.injectionengine;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.injectionengine.InternalInjectionEngine;
 
 /**
@@ -22,8 +22,7 @@ import com.ibm.ws.injectionengine.InternalInjectionEngine;
  */
 public class InjectionEngineAccessor
 {
-    private static final String CLASS_NAME = InjectionEngineAccessor.class.getName();
-    private static final TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(InjectionEngineAccessor.class,
                                                          InjectionConfigConstants.traceString,
                                                          InjectionConfigConstants.messageFile);
 

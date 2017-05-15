@@ -25,8 +25,12 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
@@ -52,12 +56,12 @@ import org.junit.rules.TestRule;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.ibm.ws.kernel.boot.internal.BootstrapConstants;
+import com.ibm.ws.kernel.boot.internal.BootstrapConstants.VerifyServer;
+
 import test.common.SharedOutputManager;
 import test.shared.Constants;
 import test.shared.TestUtils;
-
-import com.ibm.ws.kernel.boot.internal.BootstrapConstants;
-import com.ibm.ws.kernel.boot.internal.BootstrapConstants.VerifyServer;
 
 /**
  *
@@ -212,9 +216,9 @@ public class BootstrapConfigTest {
 
     /**
      * Expect a LocationException when an unresolvable file is used as install dir
-     * 
+     *
      * Test method for {@link com.ibm.ws.kernel.boot.BootstrapConfig#configure(java.util.Map)}.
-     * 
+     *
      * @throws IOException
      */
     @Test(expected = com.ibm.ws.kernel.boot.LocationException.class)
@@ -306,7 +310,7 @@ public class BootstrapConfigTest {
             // configure(map, userDir, outputDir, logDir)
             bc.findLocations(testName.getMethodName(), null, null, null, null);
 
-            // This set should be identical to the conditions used in A (i.e. the defaults, 
+            // This set should be identical to the conditions used in A (i.e. the defaults,
             //  as null is passed in as a parameters)
             checkDirs("E", bc);
             assertEquals("E: userRoot should be child of installRoot", bc.installRoot, bc.userRoot.getParentFile());
@@ -601,6 +605,11 @@ public class BootstrapConfigTest {
         assertEquals(ServerTemplateType.KERNEL, getServerTemplateType(bc.getConfigFile(BootstrapConstants.SERVER_XML)));
     }
 
+    @Test
+    public void testVerifyServerEnvAppend() throws Exception {
+
+    }
+
     /**
      * VerifyServer.CREATE_DEFAULT is like EXISTS for non-defaultServer:
      * non-existent server = SERVER_NOT_EXIST_STATUS
@@ -663,6 +672,52 @@ public class BootstrapConfigTest {
 
             File sFile = new File(bc.configDir, "server.xml");
             assertTrue("I: new server should have server.xml file created", sFile.exists() && sFile.isFile());
+        } finally {
+            TestUtils.cleanTempFiles(newServerDir.getParentFile()); // servers dir
+        }
+    }
+
+    @Test
+    public void testNewServerCustomServerEnvAppend() throws Exception {
+        File commonFile = new File(Constants.TEST_TMP_ROOT);
+        File newServerDir = new File(commonFile, "servers/newEnvServer");
+
+        try {
+            TestUtils.cleanTempFiles(newServerDir);
+
+            // Simulate a java8 JDK
+            initProps.put("java.specification.version", "1.8");
+            File serverEnv = TestUtils.createTempFile("server", "env");
+
+            //Simulate creation of a server.env template file
+            BufferedWriter bw = new BufferedWriter(new FileWriter(serverEnv));
+            bw.write("WLP_MY_ENV_VAR=true");
+            bw.close();
+
+            //Create bootstrap props to make a new server from.
+            bc = new ServerEnvTestBootstrapConfig(serverEnv, initProps);
+            bc.findLocations("newEnvServer", Constants.TEST_TMP_ROOT, null, null, null);
+            System.out.println(newServerDir.toURI().toString());
+
+            // Invoke configure with property indicating that the server should be created
+            bc.verifyProcess(VerifyServer.CREATE, null);
+
+            //Sanity check that a server was created
+            assertTrue("new server should have been created", newServerDir.exists() && newServerDir.isDirectory());
+            assertEquals("intended server should be created", newServerDir.getCanonicalFile(), bc.configDir.getCanonicalFile());
+
+            //Real testing lines. Verify server.env was appended to instead of overwritten.
+            BufferedReader br = new BufferedReader(new FileReader(serverEnv));
+            String customAdditionLine = br.readLine();
+            String maxPermSizeLine = br.readLine();
+
+            System.out.println(customAdditionLine);
+            System.out.println(maxPermSizeLine);
+            br.close();
+
+            assertTrue("Server env file should contain WLP_MY_ENV_VAR=true as the first line", "WLP_MY_ENV_VAR=true".equals(customAdditionLine));
+            assertTrue("Server env file should contain WLP_SKIP_MAXPERMSIZE=true as the second line", "WLP_SKIP_MAXPERMSIZE=true".equals(maxPermSizeLine));
+
         } finally {
             TestUtils.cleanTempFiles(newServerDir.getParentFile()); // servers dir
         }
@@ -767,6 +822,27 @@ public class BootstrapConfigTest {
 
         // sanity check the calculated directories
         assertEquals(bc.outputDir, bc.workarea.getParentFile());
+    }
+
+    //A class to override the server.env file only. A bit ugly but works fine.
+    protected class ServerEnvTestBootstrapConfig extends BootstrapConfig {
+        ServerEnvTestBootstrapConfig(File tempEnvFile, Map<String, String> initProps) {
+            super();
+            this.tempEnvFile = tempEnvFile;
+            super.initProps = initProps;
+        }
+
+        private final File tempEnvFile;
+
+        @Override
+        public File getConfigFile(String relativeServerPath) {
+            if (relativeServerPath == null)
+                return configDir;
+            else if ((tempEnvFile != null) && "server.env".equals(relativeServerPath))
+                return this.tempEnvFile;
+            else
+                return new File(configDir, relativeServerPath);
+        }
     }
 
     protected class TestBootstrapConfig extends BootstrapConfig {

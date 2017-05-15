@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2011.
+# (C) COPYRIGHT International Business Machines Corp. 2011, 2017.
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -19,13 +19,16 @@
 #
 # NLS_MESSAGEFORMAT_ALL
 #
-#CMVCPATHNAME com.ibm.ws.jaxws.webcontainer/resources/com/ibm/ws/jaxws/webcontainer/internal/resources/JaxWsWebContainerMessages.nlsprops
+#CMVCPATHNAME com.ibm.ws.jaxrs.2.0.server/resources/com/ibm/ws/jaxrs20/server/internal/resources/JaxRsWebServerMessages.nlsprops
 #ISMESSAGEFILE TRUE
 #COMPONENTPREFIX CWWKW
-#COMPONENTNAMEFOR CWWKW WebSphere JAXWS WebContainer Code
+#COMPONENTNAMEFOR CWWKW WebSphere JAXRS WebContainer Code
 #RANGE 0100 - 0199
 #
 #NLS_MESSAGEFORMAT_VAR
 #NLS_ENCODING=UNICODE
 #
 
+warn.provider.no.public.ctor=CWWKW0100W: The JAX-RS Provider class, {0} in the application contains no public constructor. The server will ignore this provider.
+warn.provider.no.public.ctor.explanation=The JAX-RS specification requires that provider classes must contain at least one public constructor for the JAX-RS container implementation to invoke. The specified provider class does not contain a public constructor, so the server will ignore it.
+warn.provider.no.public.ctor.useraction=If the application requires this provider, then this class must be modified to include at least one public constructor.  See section 4.1.2 of the JAX-RS 2.0 (JSR 339) specification for more information.

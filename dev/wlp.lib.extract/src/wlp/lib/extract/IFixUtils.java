@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * WLP Copyright IBM Corp. 2013
+ * WLP Copyright IBM Corp. 2013, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package wlp.lib.extract;
@@ -48,7 +48,7 @@ public class IFixUtils {
 
     /**
      * Parse an iFix.xml file
-     * 
+     *
      * @param fixFile
      * @return
      * @throws ParserConfigurationException
@@ -96,7 +96,7 @@ public class IFixUtils {
     /**
      * For a given list of newly extracted files, determine whether any of those files would have been ifixed
      * had they been present before the iFixes in $wlpDir/lib/fixes were applied.
-     * 
+     *
      * @param wlpDir
      * @param extractedFiles - the files we've just extracted into wlpDir
      * @return List of iFixes to reapply
@@ -128,7 +128,7 @@ public class IFixUtils {
 
     /**
      * This method returns a Set containing File Objects representing all ifix xml files.
-     * 
+     *
      * @param wlpDir - the Liberty install dir.
      * @return - A Set of File objects for the ifix xml files.
      */
@@ -146,7 +146,7 @@ public class IFixUtils {
      * This method loads all of the ifix xml files, and checks to see which ones have been superseded by other xmls, and only
      * returns those that haven't been superseded. This is to prevent the ifix re application message being issued for an apar which
      * has been superseded by another.
-     * 
+     *
      * @param wlpInstallationDirectory - The Liberty install dir.
      * @return A Set of File objects for valid Ifixs that haven't been superseded by others.
      */
@@ -185,7 +185,7 @@ public class IFixUtils {
      * This method compares the list of Apar strings from 1 ifix xml, against
      * another xml. If the 2nd xml contains all of the apars Strings, then the 1st
      * ifix xml has been superseded.
-     * 
+     *
      * @param apars1 - The list of apars from the ifix to check.
      * @param apars2 - A list of apars from another ifix xml
      * @return - a boolean indicating whether the all apars strings from the 1st fix are
@@ -215,20 +215,20 @@ public class IFixUtils {
     /**
      * Does a file that we've just extracted look like it might have been affected had it been present
      * when one of our iFixes, that we applied earlier, was applied?
-     * 
+     *
      * Extracted file may be of the form
      * ../path/to/wlp/lib/com.ibm.ws.a.jar,
      * or if laid down by a tooling install,
      * ../some/path/to/lib/com.ibm.ws.a.jar
      * whereas iFixedFile will be relative to the wlp/ directory, i.e. lib/com.ibm.ws.a.jar
-     * 
+     *
      * @param extractedFile
      * @param iFixedFile
      * @return
      */
     static boolean matchesIFixedFile(String extractedFile, String iFixedFile) {
         /*
-         * 
+         *
          * Thus we use .endsWith() rather than .equals()
          */
         if (extractedFile.endsWith(iFixedFile)) {
@@ -249,7 +249,7 @@ public class IFixUtils {
         // We'll match by splitting patched and extracted on the last /
         //   we need extractedDir to endWith patchedDir and
         //           patchedFile to startWith extractedFile
-        //   
+        //
         //
         String extractedDir = extractedBundle.substring(0, extractedBundle.lastIndexOf("/"));
         String fixedDir = iFixedFile.substring(0, iFixedFile.lastIndexOf("/"));

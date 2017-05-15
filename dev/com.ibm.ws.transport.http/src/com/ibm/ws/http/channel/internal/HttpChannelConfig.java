@@ -25,7 +25,7 @@ import com.ibm.wsspi.http.logging.DebugLog;
 /**
  * Class to handle parsing the configuration data and storing/supplying the
  * various configuration parameters to the rest of the code.
- * 
+ *
  */
 public class HttpChannelConfig {
 
@@ -123,7 +123,7 @@ public class HttpChannelConfig {
 
     /**
      * Constructor for an HTTP channel config object.
-     * 
+     *
      * @param cc
      */
     public HttpChannelConfig(ChannelData cc) {
@@ -132,7 +132,7 @@ public class HttpChannelConfig {
 
     /**
      * Update the existing configuration with the input channel config object.
-     * 
+     *
      * @param cc
      */
     public void updateConfig(ChannelData cc) {
@@ -141,7 +141,7 @@ public class HttpChannelConfig {
 
     /**
      * Parse the configuration data into the separate values.
-     * 
+     *
      * @param cc
      */
     private void parseConfig(ChannelData cc) {
@@ -349,7 +349,7 @@ public class HttpChannelConfig {
         parseStrictURLFormat(props);
         parseServerHeader(props);
         parseDateHeaderRange(props);
-        parseCookieUpdate(props);
+        parseCookieUpdate(props);//PI75280
         parseHeaderChangeLimit(props);
         parseAutoDecompression(props);
         parseRequestSmugglingProtection(props);
@@ -369,7 +369,7 @@ public class HttpChannelConfig {
 
     /**
      * Access the property that may or may not exist for the given key.
-     * 
+     *
      * @param props
      * @param key
      * @return String
@@ -385,7 +385,7 @@ public class HttpChannelConfig {
     /**
      * Method to handle parsing all of the persistence related configuration
      * values.
-     * 
+     *
      * @param props
      */
     private void parsePersistence(Map<Object, Object> props) {
@@ -399,7 +399,7 @@ public class HttpChannelConfig {
      * Check the input configuration for the default flag on whether to use
      * persistent connections or not. If this is false, then the other related
      * configuration values will be ignored (such as MaxKeepAliveRequests).
-     * 
+     *
      * @param props
      */
     private void parseKeepAliveEnabled(Map<Object, Object> props) {
@@ -417,7 +417,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for the maximum allowed requests per socket
      * setting.
-     * 
+     *
      * @param props
      */
     private void parseMaxPersist(Map<Object, Object> props) {
@@ -443,7 +443,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for the default outgoing HTTP version
      * setting.
-     * 
+     *
      * @param props
      */
     private void parseOutgoingVersion(Map<Object, Object> props) {
@@ -459,7 +459,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for the type of ByteBuffer to use, direct
      * or indirect.
-     * 
+     *
      * @param props
      */
     private void parseBufferType(Map<Object, Object> props) {
@@ -475,7 +475,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for the maximum buffer size allowed for
      * marshalling headers outbound.
-     * 
+     *
      * @param props
      */
     private void parseOutgoingBufferSize(Map<Object, Object> props) {
@@ -498,7 +498,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for the buffer size to use when parsing
      * the incoming headers.
-     * 
+     *
      * @param props
      */
     private void parseIncomingHdrBufferSize(Map<Object, Object> props) {
@@ -521,7 +521,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for the buffer size to use when reading
      * the incoming body.
-     * 
+     *
      * @param props
      */
     private void parseIncomingBodyBufferSize(Map<Object, Object> props) {
@@ -544,7 +544,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for the timeout to use in between
      * persistent requests.
-     * 
+     *
      * @param props
      */
     private void parsePersistTimeout(Map<Object, Object> props) {
@@ -567,7 +567,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for the timeout to use when doing any read
      * during a connection.
-     * 
+     *
      * @param props
      */
     private void parseReadTimeout(Map<Object, Object> props) {
@@ -590,7 +590,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for the timeout to use when writing data
      * during the connection.
-     * 
+     *
      * @param props
      */
     private void parseWriteTimeout(Map<Object, Object> props) {
@@ -612,7 +612,7 @@ public class HttpChannelConfig {
 
     /**
      * Check the input configuration for the size of the parse byte cache to use.
-     * 
+     *
      * @param props
      */
     private void parseByteCacheSize(Map<Object, Object> props) {
@@ -635,7 +635,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for the flag on whether to immediately
      * extract header values during the parsing stage or not.
-     * 
+     *
      * @param props
      */
     private void parseDelayedExtract(Map<Object, Object> props) {
@@ -651,7 +651,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for whether the parsing and marshalling
      * should use the binary transport mode or not.
-     * 
+     *
      * @param props
      */
     private void parseBinaryTransport(Map<Object, Object> props) {
@@ -666,7 +666,7 @@ public class HttpChannelConfig {
 
     /**
      * Check the input configuration for a maximum size allowed for HTTP fields.
-     * 
+     *
      * @param props
      */
     private void parseLimitFieldSize(Map<Object, Object> props) {
@@ -689,7 +689,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for a maximum limit on the number of
      * headers allowed per message.
-     * 
+     *
      * @param props
      */
     private void parseLimitNumberHeaders(Map<Object, Object> props) {
@@ -712,7 +712,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration for a maximum limit on the number of
      * temporary responses that will be read and skipped past.
-     * 
+     *
      * @param props
      */
     private void parseLimitNumberResponses(Map<Object, Object> props) {
@@ -740,7 +740,7 @@ public class HttpChannelConfig {
     /**
      * Parse the possible configuration limit on the incoming message body.
      * size.
-     * 
+     *
      * @param props
      */
     private void parseLimitMessageSize(Map<Object, Object> props) {
@@ -763,7 +763,7 @@ public class HttpChannelConfig {
     /**
      * Query the limit on the incoming message body, this will return UNLIMITED
      * if not set.
-     * 
+     *
      * @return long
      */
     public long getMessageSizeLimit() {
@@ -772,7 +772,7 @@ public class HttpChannelConfig {
 
     /**
      * Parse the NCSA access log information from the property map.
-     * 
+     *
      * @param props
      */
     private void parseAccessLog(Map<Object, Object> props) {
@@ -792,7 +792,7 @@ public class HttpChannelConfig {
 
     /**
      * Check the input configuration for the access/error logging configuration.
-     * 
+     *
      * @param props
      */
     private void parseLoggingInfo(Map<Object, Object> props) {
@@ -802,7 +802,7 @@ public class HttpChannelConfig {
     /**
      * Parse the input configuration for the flag on whether to allow retries
      * or not.
-     * 
+     *
      * @param props
      */
     private void parseAllowRetries(Map<Object, Object> props) {
@@ -817,7 +817,7 @@ public class HttpChannelConfig {
 
     /**
      * Parse the configuration on whether to perform header validation or not.
-     * 
+     *
      * @param props
      */
     private void parseHeaderValidation(Map<Object, Object> props) {
@@ -833,7 +833,7 @@ public class HttpChannelConfig {
     /**
      * Parse the configuration on whether to perform JIT allocate only reads
      * or leave it to the default behavior.
-     * 
+     *
      * @param props
      */
     private void parseJITOnlyReads(Map<Object, Object> props) {
@@ -849,7 +849,7 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration to decide whether to enforce a strict RFC
      * compliance while parsing URLs.
-     * 
+     *
      * @param props
      */
     private void parseStrictURLFormat(Map<Object, Object> props) {
@@ -865,14 +865,14 @@ public class HttpChannelConfig {
     /**
      * Check the input configuration map for the parameters that control the
      * Server header value.
-     * 
+     *
      * @param props
      */
     private void parseServerHeader(Map<Object, Object> props) {
         // @PK15848
         String value = getProp(props, HttpConfigConstants.PROPNAME_SERVER_HEADER_VALUE);
         if (null == value || "".equals(value)) {
-            // due to security change, do not default value in Server header. // PM87013 Start 
+            // due to security change, do not default value in Server header. // PM87013 Start
         } else {
             if ("DefaultServerVersion".equalsIgnoreCase(value)) {
                 value = "WebSphere Application Server";
@@ -895,7 +895,7 @@ public class HttpChannelConfig {
 
     /**
      * Parse the date header range value from the input properties.
-     * 
+     *
      * @param props
      */
     private void parseDateHeaderRange(Map<Object, Object> props) {
@@ -918,23 +918,40 @@ public class HttpChannelConfig {
 
     /**
      * Check the configuration map for the Set-Cookie updating no-cache value.
-     * 
+     *
      * @param props
      */
     private void parseCookieUpdate(Map<Object, Object> props) {
-        // @PK20531 - add Cache-Control header
-        Object value = props.get(HttpConfigConstants.PROPNAME_COOKIES_CONFIGURE_NOCACHE);
+        //This property needed to be documented using a new name because
+        //the original property contains a banned word for metatype: 'config'
+        //This change will verify if either (or both) original/documented properties
+        //are set. The instance variable they reference will be set to false if
+        //either property is set to false.
+
+        Object value = props.get(HttpConfigConstants.PROPNAME_NO_CACHE_COOKIES_CONTROL);
+        Object value2 = props.get(HttpConfigConstants.PROPNAME_COOKIES_CONFIGURE_NOCACHE);
+        boolean documentedProperty = true;
+        boolean originalProperty = true;
+
         if (null != value) {
-            this.bCookiesConfigureNoCache = convertBoolean(value);
+            documentedProperty = convertBoolean(value);
             if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
-                Tr.event(tc, "Config: set-cookie configures no-cache is " + shouldCookiesConfigureNoCache());
+                Tr.event(tc, "Config: set no-cache cookie control is " + documentedProperty);
             }
         }
+
+        if (null != value2) {
+            originalProperty = convertBoolean(value2);
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+                Tr.event(tc, "Config: set-cookie configures no-cache is " + originalProperty);
+            }
+        }
+        this.bCookiesConfigureNoCache = originalProperty && documentedProperty;
     }
 
     /**
      * Parse the header change limit property.
-     * 
+     *
      * @param props
      */
     private void parseHeaderChangeLimit(Map<Object, Object> props) {
@@ -956,7 +973,7 @@ public class HttpChannelConfig {
 
     /**
      * Check whether or not the request smuggling protection has been changed.
-     * 
+     *
      * @param props
      */
     private void parseRequestSmugglingProtection(Map<Object, Object> props) {
@@ -972,7 +989,7 @@ public class HttpChannelConfig {
 
     /**
      * Query if this channel has the request smuggling protection on or off.
-     * 
+     *
      * @return boolean
      */
     public boolean isRequestSmugglingProtectionEnabled() {
@@ -982,7 +999,7 @@ public class HttpChannelConfig {
     /**
      * Check the configuration map for the property turning on or off the body
      * autodecompression code.
-     * 
+     *
      * @param props
      */
     private void parseAutoDecompression(Map<Object, Object> props) {
@@ -998,7 +1015,7 @@ public class HttpChannelConfig {
 
     /**
      * Check the for the property v0CookieDateRFC1123compat
-     * 
+     *
      * @param props
      */
     private void parsev0CookieDateRFC1123compat(Map<?, ?> props) {
@@ -1016,7 +1033,7 @@ public class HttpChannelConfig {
     /**
      * Check the configuration map for if we should skip adding the quote
      * to the cookie path attribute
-     * 
+     *
      * @ param props
      */
     private void parseSkipCookiePathQuotes(Map<?, ?> props) {
@@ -1032,7 +1049,7 @@ public class HttpChannelConfig {
 
     /**
      * Check the configuration map for the property to tell us if we should prevent multiple set-cookies with the same name
-     * 
+     *
      * @ param props
      */
     private void parseDoNotAllowDuplicateSetCookies(Map<?, ?> props) {
@@ -1048,7 +1065,7 @@ public class HttpChannelConfig {
 
     /**
      * Check the configuration map for using WaitForEndOfMessage
-     * 
+     *
      * @param props
      */
     private void parseWaitForEndOfMessage(Map props) {
@@ -1064,7 +1081,7 @@ public class HttpChannelConfig {
 
     /**
      * Check the configuration map for to see if we should send or not content-length on 1xx and 204 responses
-     * 
+     *
      * @ param props
      */
     private void parseRemoveCLHeaderInTempStatusRespRFC7230compat(Map props) {
@@ -1081,7 +1098,7 @@ public class HttpChannelConfig {
 
     /**
      * Check the configuration map for if we should prevent response splitting
-     * 
+     *
      * @ param props
      */
     private void parsePreventResponseSplit(Map<?, ?> props) {
@@ -1097,7 +1114,7 @@ public class HttpChannelConfig {
 
     /**
      * Check the configuration map for using purge behavior at the close of the connection
-     * 
+     *
      * @ param props
      */
     private void parseAttemptPurgeData(Map props) {
@@ -1113,7 +1130,7 @@ public class HttpChannelConfig {
 
     /**
      * Check the configuration map for if we should swallow inbound connections IOEs
-     * 
+     *
      * @ param props
      */
     private void parseThrowIOEForInboundConnections(Map<?, ?> props) {
@@ -1130,7 +1147,7 @@ public class HttpChannelConfig {
     /**
      * Convert a String to a boolean value. If the string does not
      * match "true", then it defaults to false.
-     * 
+     *
      * @param s
      * @return boolean
      */
@@ -1156,7 +1173,7 @@ public class HttpChannelConfig {
      * Take the user input size variable and make sure it is inside
      * the given range of min and max. If it is outside the range,
      * then set the value to the closest limit.
-     * 
+     *
      * @param size
      * @param min
      * @param max
@@ -1180,7 +1197,7 @@ public class HttpChannelConfig {
     /**
      * Return the larger value of either the input int or the minimum
      * limit.
-     * 
+     *
      * @param input
      * @param min
      * @return int
@@ -1198,7 +1215,7 @@ public class HttpChannelConfig {
     /**
      * Return the larger value of either the input long or the minimum
      * limit.
-     * 
+     *
      * @param input
      * @param min
      * @return int
@@ -1215,7 +1232,7 @@ public class HttpChannelConfig {
 
     /**
      * Query the value of the "maximum requests" on a persistent connection.
-     * 
+     *
      * @return int
      */
     public int getMaximumPersistentRequests() {
@@ -1224,7 +1241,7 @@ public class HttpChannelConfig {
 
     /**
      * Query the value of the default outgoing HTTP version.
-     * 
+     *
      * @return VersionValues
      */
     public VersionValues getOutgoingVersion() {
@@ -1233,7 +1250,7 @@ public class HttpChannelConfig {
 
     /**
      * Query whether the configuration is for direct or indirect byte buffers.
-     * 
+     *
      * @return boolean (true means direct)
      */
     public boolean isDirectBufferType() {
@@ -1242,7 +1259,7 @@ public class HttpChannelConfig {
 
     /**
      * Query whether outgoing requests are "Keep-Alive" by default.
-     * 
+     *
      * @return boolean
      */
     public boolean isKeepAliveEnabled() {
@@ -1251,7 +1268,7 @@ public class HttpChannelConfig {
 
     /**
      * Query the size of the buffers to use while marshalling headers.
-     * 
+     *
      * @return int
      */
     public int getOutgoingHdrBufferSize() {
@@ -1260,7 +1277,7 @@ public class HttpChannelConfig {
 
     /**
      * Query the size of the buffers to use while parsing incoming headers.
-     * 
+     *
      * @return int
      */
     public int getIncomingHdrBufferSize() {
@@ -1269,7 +1286,7 @@ public class HttpChannelConfig {
 
     /**
      * Query the size of the buffers to use while reading message bodies.
-     * 
+     *
      * @return int
      */
     public int getIncomingBodyBufferSize() {
@@ -1279,7 +1296,7 @@ public class HttpChannelConfig {
     /**
      * Query the timeout value to use while waiting for secondary requests
      * on a persistent connection (time idle between requests).
-     * 
+     *
      * @return int
      */
     public int getPersistTimeout() {
@@ -1288,7 +1305,7 @@ public class HttpChannelConfig {
 
     /**
      * Query the timeout value used while waiting on a read to finish.
-     * 
+     *
      * @return int
      */
     public int getReadTimeout() {
@@ -1297,7 +1314,7 @@ public class HttpChannelConfig {
 
     /**
      * Query the timeout value used while waiting on a write to finish.
-     * 
+     *
      * @return int
      */
     public int getWriteTimeout() {
@@ -1306,7 +1323,7 @@ public class HttpChannelConfig {
 
     /**
      * Size of the buffer to cache bytes for parsing tokens.
-     * 
+     *
      * @return int
      */
     public int getByteCacheSize() {
@@ -1317,7 +1334,7 @@ public class HttpChannelConfig {
      * Query whether the configuration says to extract the header
      * value immediately (true) or wait until it is requested by a
      * channel (false).
-     * 
+     *
      * @return boolean
      */
     public boolean shouldExtractValue() {
@@ -1327,7 +1344,7 @@ public class HttpChannelConfig {
     /**
      * Query whether the configuration says to use the binary transport
      * encoding/decoding methods or not.
-     * 
+     *
      * @return boolean
      */
     public boolean isBinaryTransportEnabled() {
@@ -1336,7 +1353,7 @@ public class HttpChannelConfig {
 
     /**
      * Access the log for the NCSA access logging information.
-     * 
+     *
      * @return AccessLog
      */
     public AccessLog getAccessLog() {
@@ -1345,7 +1362,7 @@ public class HttpChannelConfig {
 
     /**
      * Access the log file for generic HTTP debug or error messages.
-     * 
+     *
      * @return DebugLog
      */
     public DebugLog getDebugLog() {
@@ -1354,7 +1371,7 @@ public class HttpChannelConfig {
 
     /**
      * Query the current size setting on the maximum limit for a field size.
-     * 
+     *
      * @return int
      */
     public int getLimitOfFieldSize() {
@@ -1363,7 +1380,7 @@ public class HttpChannelConfig {
 
     /**
      * Query the current limit on number of headers allowed per message.
-     * 
+     *
      * @return int
      */
     public int getLimitOnNumberOfHeaders() {
@@ -1372,7 +1389,7 @@ public class HttpChannelConfig {
 
     /**
      * Query the current limit on number of temporary responses to allow.
-     * 
+     *
      * @return int
      */
     public int getLimitOnNumberOfResponses() {
@@ -1381,7 +1398,7 @@ public class HttpChannelConfig {
 
     /**
      * Query whether this configuration allows retries or not.
-     * 
+     *
      * @return boolean
      */
     public boolean allowsRetries() {
@@ -1390,7 +1407,7 @@ public class HttpChannelConfig {
 
     /**
      * Query whether we are running on the Z/OS servant region or not.
-     * 
+     *
      * @return boolean
      */
     public boolean isServantRegion() {
@@ -1399,7 +1416,7 @@ public class HttpChannelConfig {
 
     /**
      * Query whether we are running on the Z/OS control region or not.
-     * 
+     *
      * @return boolean
      */
     public boolean isControlRegion() {
@@ -1408,7 +1425,7 @@ public class HttpChannelConfig {
 
     /**
      * Query whether or not we are running on a z/OS machine.
-     * 
+     *
      * @return boolean
      */
     public boolean runningOnZOS() {
@@ -1417,7 +1434,7 @@ public class HttpChannelConfig {
 
     /**
      * Query whether the header validation is enabled or not.
-     * 
+     *
      * @return boolean
      */
     public boolean isHeaderValidationEnabled() {
@@ -1427,7 +1444,7 @@ public class HttpChannelConfig {
     /**
      * Query whether this channel instance should perform JIT allocate only
      * reads or not.
-     * 
+     *
      * @return boolean
      */
     public boolean isJITOnlyReads() {
@@ -1437,7 +1454,7 @@ public class HttpChannelConfig {
     /**
      * Query whether or not this config is enforcing strict URL parsing based
      * on RFCs.
-     * 
+     *
      * @return boolean
      */
     public boolean isStrictURLFormat() {
@@ -1446,7 +1463,7 @@ public class HttpChannelConfig {
 
     /**
      * Query what the default server header value is.
-     * 
+     *
      * @return byte[]
      */
     public byte[] getServerHeaderValue() {
@@ -1457,7 +1474,7 @@ public class HttpChannelConfig {
     /**
      * Query whether this channel should remove the Server header from outgoing
      * response message.
-     * 
+     *
      * @return boolean
      */
     public boolean removeServerHeader() {
@@ -1467,7 +1484,7 @@ public class HttpChannelConfig {
 
     /**
      * Query what the Date header range is configured to allow. <br>
-     * 
+     *
      * @return long
      */
     public long getDateHeaderRange() {
@@ -1477,7 +1494,7 @@ public class HttpChannelConfig {
     /**
      * Query whether or not the presence of Set-Cookie(2) headers should auto-
      * matically add the Cache-Control no-cache values.
-     * 
+     *
      * @return boolean
      */
     public boolean shouldCookiesConfigureNoCache() {
@@ -1488,7 +1505,7 @@ public class HttpChannelConfig {
     /**
      * Query the configured limit on the number of header changes to allow
      * before completely remarshalling the headers.
-     * 
+     *
      * @return int
      */
     public int getHeaderChangeLimit() {
@@ -1497,7 +1514,7 @@ public class HttpChannelConfig {
 
     /**
      * Query whether or not autodecompression of bodies is enabled or not.
-     * 
+     *
      * @return boolean
      */
     public boolean isAutoDecompressionEnabled() {
@@ -1507,7 +1524,7 @@ public class HttpChannelConfig {
 
     /**
      * Query whether or not the HTTP access logging is enabled
-     * 
+     *
      * @return boolean
      */
     public boolean isAccessLoggingEnabled() {
@@ -1516,7 +1533,7 @@ public class HttpChannelConfig {
 
     /**
      * Query whether or not v0CookieDateRFC1123compat is set.
-     * 
+     *
      * @return boolean
      */
     public boolean isv0CookieDateRFC1123compat() {
@@ -1526,7 +1543,7 @@ public class HttpChannelConfig {
     /**
      * Query whether or not the HTTP Channel should skip adding the quotes
      * to the cookie attribute
-     * 
+     *
      * @return boolean
      */
     public boolean shouldSkipCookiePathQuotes() {
@@ -1536,8 +1553,8 @@ public class HttpChannelConfig {
 
     /**
      * Query whether or not the HTTP Channel should allow duplicate set-cookies
-     * 
-     * 
+     *
+     *
      * @return boolean
      */
     public boolean doNotAllowDuplicateSetCookies() {
@@ -1549,7 +1566,7 @@ public class HttpChannelConfig {
      * Query whether or not the HTTP Channel should wait for
      * data to arrive to the TCP layer to determine if the
      * end of message has been parsed.
-     * 
+     *
      * @return boolean
      */
     public boolean shouldWaitForEndOfMessage() {
@@ -1559,7 +1576,7 @@ public class HttpChannelConfig {
     /**
      * Query whether or not the HTTP Channel should send content-length on
      * response messages with status code of 1xx or 204 (RFC7230)
-     * 
+     *
      * @return boolean
      */
     public boolean shouldRemoveCLHeaderInTempStatusRespRFC7230compat() {
@@ -1569,7 +1586,7 @@ public class HttpChannelConfig {
 
     /**
      * Query whether or not the HTTP Channel should prevent response splitting
-     * 
+     *
      * @return boolean
      */
     public boolean shouldPreventResponseSplit() {
@@ -1580,7 +1597,7 @@ public class HttpChannelConfig {
     /**
      * Query whether or not the HTTP Channel should attempt to
      * purge the data at the close of the connection
-     * 
+     *
      * @return boolean
      */
     public boolean shouldAttemptPurgeData() {
@@ -1590,7 +1607,7 @@ public class HttpChannelConfig {
     /**
      * Query whether or not the HTTP Channel should swallow
      * inbound connections IOE
-     * 
+     *
      * @return boolean
      */
     public boolean throwIOEForInboundConnections() {

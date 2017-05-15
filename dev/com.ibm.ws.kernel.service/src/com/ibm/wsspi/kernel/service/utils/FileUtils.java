@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2015
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.wsspi.kernel.service.utils;
@@ -33,7 +33,7 @@ public class FileUtils {
 
     /**
      * Execute the {@link File#isFile()} from within a {@link PrivilegedAction}.
-     * 
+     *
      * @param f
      * @return
      */
@@ -54,7 +54,7 @@ public class FileUtils {
 
     /**
      * Execute the {@link File#isDirectory()} from within a {@link PrivilegedAction}.
-     * 
+     *
      * @param f
      * @return
      */
@@ -75,11 +75,11 @@ public class FileUtils {
 
     /**
      * Execute the {@link File#exists()} from within a {@link PrivilegedAction}.
-     * 
+     *
      * @param target
      * @return
      */
-    public static boolean fileExists(final File target) {
+    public static synchronized boolean fileExists(final File target) {
         Object token = ThreadIdentityManager.runAsServer();
         try {
             return AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
@@ -96,7 +96,7 @@ public class FileUtils {
 
     /**
      * Execute the {@link File#length()} from within a {@link PrivilegedAction}.
-     * 
+     *
      * @param target
      * @return
      */
@@ -117,7 +117,7 @@ public class FileUtils {
 
     /**
      * Execute the {@link File#listFiles()} from within a {@link PrivilegedAction}.
-     * 
+     *
      * @param f
      * @return
      */
@@ -138,7 +138,7 @@ public class FileUtils {
 
     /**
      * Execute the {@link File#list()} from within a {@link PrivilegedAction}.
-     * 
+     *
      * @param f
      * @return
      */
@@ -207,7 +207,7 @@ public class FileUtils {
 
     /**
      * Execute the {@link File#lastModified()} from within a {@link PrivilegedAction}.
-     * 
+     *
      * @param target The file to get the last modified for
      * @return The last modified for the file
      */
@@ -228,7 +228,7 @@ public class FileUtils {
 
     /**
      * Execute the {@link File#canRead()} from within a {@link PrivilegedAction}.
-     * 
+     *
      * @param target The file to test if it can be read
      * @return <code>true</code> if the file can be read
      */
@@ -249,7 +249,7 @@ public class FileUtils {
 
     /**
      * Execute the {@link File#canWrite()} from within a {@link PrivilegedAction}.
-     * 
+     *
      * @param target The file to test if it can be written
      * @return <code>true</code> if the file can be written
      */
@@ -271,11 +271,11 @@ public class FileUtils {
     /**
      * Calls {@link File#mkdirs()} on the specified <code>target</code> from
      * within a {@link PrivilegedAction}.
-     * 
+     *
      * @param target The tarket to make a directory for
      * @return <code>true</code> if this succeeded.
      */
-    public static boolean fileMkDirs(final File target) {
+    public static synchronized boolean fileMkDirs(final File target) {
         Object token = ThreadIdentityManager.runAsServer();
         try {
             return AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
@@ -292,7 +292,7 @@ public class FileUtils {
 
     /**
      * Delete file
-     * 
+     *
      * @parm file or empty directory to delete
      * @return <code>true</code> if file was deleted
      */
@@ -313,7 +313,7 @@ public class FileUtils {
 
     /**
      * Calls {@link File#mkdirs()} and {@link File#exists()} on the specified <code>target</code>
-     * 
+     *
      * @param target The target to check for existence or to create if it doesn't exist
      * @return <code>true</code> if either call succeeded.
      */
@@ -323,7 +323,7 @@ public class FileUtils {
 
     /**
      * Close the closeable object
-     * 
+     *
      * @param closeable
      */
     public static boolean tryToClose(Closeable closeable) {
@@ -370,7 +370,7 @@ public class FileUtils {
      * <p>
      * This is a best effort attempt as Windows does NOT play
      * nicely with file perms.
-     * 
+     *
      * @param an existing File
      */
     public static boolean setUserReadWriteOnly(final File file) {
@@ -379,7 +379,7 @@ public class FileUtils {
 
     /**
      * Calls {@link File#createNewFile()} on the specified <code>target</code>
-     * 
+     *
      * @param target The target to create if it doesn't exist
      * @return <code>true</code> if call succeeded.
      */

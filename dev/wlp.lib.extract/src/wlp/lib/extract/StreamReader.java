@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * WLP Copyright IBM Corp. 2015
+ * WLP Copyright IBM Corp. 2015, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package wlp.lib.extract;
@@ -20,39 +20,34 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-class StreamReader extends Thread
-{
+class StreamReader extends Thread {
     InputStream is;
     String type;
     OutputStream os;
 
-    StreamReader(InputStream is, String type)
-    {
+    StreamReader(InputStream is, String type) {
         this(is, type, null);
     }
 
-    StreamReader(OutputStream os, String type)
-    {
+    StreamReader(OutputStream os, String type) {
         this.os = os;
         this.type = type;
 
     }
 
-    StreamReader(InputStream is, String type, OutputStream redirect)
-    {
+    StreamReader(InputStream is, String type, OutputStream redirect) {
         this.is = is;
         this.type = type;
         this.os = redirect;
     }
 
-    public void run()
-    {
+    public void run() {
         try {
             // stdin, process stream is output
             if (type.equals("INPUT")) {
                 runOutputStream();
             }
-            // else stdout, stderr, process stream is input 
+            // else stdout, stderr, process stream is input
             else {
                 runInputStream();
             }
@@ -69,8 +64,7 @@ class StreamReader extends Thread
         InputStreamReader isr = new InputStreamReader(is, "UTF-8");
         BufferedReader br = new BufferedReader(isr);
         String line = null;
-        while ((line = br.readLine()) != null)
-        {
+        while ((line = br.readLine()) != null) {
             if (pw != null)
                 pw.println(line);
             System.out.println(line);

@@ -1,0 +1,21 @@
+<project name="com.ibm.ws.ejbcontainer.remote.portable" default="build">
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+  <property name="clients.dir" value="${build.dir}/clients"/>
+  <property name="client.jar" value="ejbRemotePortable.jar"/>
+
+  <!-- This project is manually traced. -->
+  <target name="post-compile"/>
+
+  <target name="package" depends="package.package">
+    <jar jarfile="${clients.dir}/${client.jar}" duplicate="preserve">
+      <!-- This project first to allow overriding of core classes. -->
+      <fileset dir="${classes.dir}" includes="**/*.class"/>
+      <zipfileset src="../prereq.published/lib.ext/com.ibm.ws.ejbcontainer.remote.portable.core/lib/com.ibm.ws.ejbcontainer.remote.portable.core.jar" includes="**/*.class"/>
+    </jar>
+  </target>
+
+  <target name="publishExtra">
+    <copy file="${clients.dir}/${client.jar}" todir="${publish.image.install.dir}/clients"/>
+  </target>
+</project>

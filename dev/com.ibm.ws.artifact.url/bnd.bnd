@@ -29,9 +29,9 @@ Service-Component: \
 -buildpath: \
 	com.ibm.ws.artifact.zip;version=latest,\
 	com.ibm.ws.kernel.security.thread,\
-	com.ibm.websphere.org.osgi.core.6.0.0,\
-	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.websphere.org.osgi.core,\
+	com.ibm.websphere.org.osgi.service.component,\
 	com.ibm.websphere.appserver.spi.kernel.service,\
 	com.ibm.websphere.appserver.spi.logging,\
-	com.ibm.ws.org.apache.aries.util.1.1.2, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.apache.aries.util, \
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

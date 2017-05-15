@@ -267,9 +267,11 @@ LICENSE_invalidLicense=A licenc nem friss\u00edthet\u0151, mert a megadott term\
 LICENSE_invalidInstallType=A licenc nem friss\u00edthet\u0151, mert a megadott term\u00e9ktelep\u00edt\u00e9s az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel ker\u00fclt telep\u00edt\u00e9sre. A telep\u00edt\u00e9st az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel friss\u00edtse.
 
 # new messages for license upgrade and downgrade
-LICENSE_replace_invalidVersion=A licenc nem cser\u00e9lhet\u0151 le, mert a megadott term\u00e9ktelep\u00edt\u00e9s v\u00e1ltozatsz\u00e1ma {0}, \u00e9s a licenc csak a(z) {1} v\u00e1ltozatr\u00f3l cser\u00e9lhet\u0151 le.
-LICENSE_replace_invalidInstallType=A licenc nem m\u00f3dos\u00edthat\u00f3, mert a megadott term\u00e9ktelep\u00edt\u00e9s az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel ker\u00fclt telep\u00edt\u00e9sre. A telep\u00edt\u00e9st az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel m\u00f3dos\u00edtsa. 
-LICENSE_replace_invalidEditonFeatures=Az al\u00e1bbi szolg\u00e1ltat\u00e1sok a tov\u00e1bbiakban nem alkalmazhat\u00f3k a(z) {0} eset\u00e9n, \u00e9s licenccsere el\u0151tt el kell \u0151ket t\u00e1vol\u00edtani: {1}
-LICENSE_replace_uninstallFeatures_manually=A szolg\u00e1ltat\u00e1sokat a k\u00f6vetkez\u0151 parancs seg\u00edts\u00e9g\u00e9vel t\u00e1vol\u00edthatja el a(z) {0} licenc\u00e9nek cser\u00e9je el\u0151tt: {1}
+LICENSE_replace_invalidVersion=A licenc nem alkalmazhat\u00f3, mert a megadott term\u00e9ktelep\u00edt\u00e9s v\u00e1ltozatsz\u00e1ma {0}, \u00e9s a licenc csak a(z) {1} v\u00e1ltozatt\u00f3l alkalmazhat\u00f3.
+LICENSE_replace_invalidInstallType=A licenc nem alkalmazhat\u00f3, mert a megadott term\u00e9ktelep\u00edt\u00e9s az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel ker\u00fclt telep\u00edt\u00e9sre. A telep\u00edt\u00e9st az IBM Installation Manager seg\u00edts\u00e9g\u00e9vel friss\u00edtse.
 
+LICENSE_replace_invalidEditonFeatures=A k\u00f6vetkez\u0151 szolg\u00e1ltat\u00e1sok nem \u00e9rv\u00e9nyesek a(z) {0} kiad\u00e1sra, \u00e9s el kell t\u00e1vol\u00edtani ezeket a licenc alkalmaz\u00e1sa el\u0151tt: {1}\n\
+\n\
+A szolg\u00e1ltat\u00e1sok elt\u00e1vol\u00edt\u00e1s\u00e1hoz haszn\u00e1lja a k\u00f6vetkez\u0151 parancsot, miel\u0151tt alkalmazn\u00e1 a(z) {2} kiad\u00e1s licenc\u00e9t: {3}
 
+LICENSE_downgrade_block_8557_low=Ez a licenc nem alkalmazhat\u00f3 a(z) {0} vagy \u00fajabb telep\u00edt\u00e9sre. A jelenlegi telep\u00edt\u00e9s {1} szinten van. T\u00f6ltse le \u00e9s friss\u00edtse a term\u00e9ket a leg\u00fajabb szintre, \u00e9s alkalmazza \u00fajra a licencet.

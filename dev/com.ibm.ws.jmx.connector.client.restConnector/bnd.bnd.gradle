@@ -1,0 +1,20 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.ws.jmx.connector.client.restConnector
+Client-Name: REST Connector Client JAR
+Client-Description: REST Connector Client JAR; version=${bVersion}
+
+Private-Package: \
+  com.ibm.json.*, \
+  com.ibm.websphere.jmx.connector.rest, \
+  com.ibm.ws.jmx.connector.client.rest.*, \
+  com.ibm.ws.jmx.connector.converter, \
+  com.ibm.ws.jmx.connector.datatypes
+
+Include-Resource: \
+  META-INF=resources/META-INF
+
+-buildpath: \
+	com.ibm.ws.jmx.connector.client.rest;version=latest, \
+	com.ibm.json4j;version=latest

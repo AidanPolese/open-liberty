@@ -398,7 +398,7 @@ ${li.header}
             <bnd eclipse="false"
              failok="false"
              exceptions="true"
-             classpath="${pcp}"
+             classpath="${pcp}:${basedir}/../wlp.lib.extract.extension/build/classes"
              output="${liberty.image.output.upload.dir}/wlp-${edition}-license.jar"
              files="${basedir}/build-lic-install-@{edition}.bnd" />
             </then>
@@ -1329,6 +1329,19 @@ ${li.header}
       <!-- Create the tags directory required by ILMT (used for auditing and license management) -->
       <mkdir dir="${create.profile.zip.tmp}/wlp/lib/versions/tags"/>
 
+      <!-- Add CHANGES.TXT to non-beta zips  -->
+      <iff>
+        <and>
+          <available file="${liberty.dir}/CHANGES.TXT" />
+          <not>
+            <contains string="@{profile}" substring="beta" />
+          </not>
+        </and>
+        <then>
+          <copy file="${liberty.dir}/CHANGES.TXT" todir="${create.profile.zip.tmp}/wlp"/>
+        </then>
+      </iff>
+    	
       <!-- Generate a temporary bnd file to pass variables into the bdn packaging step
            The key variable passed is license.type, as this is used for packaging the
            correct license files into the final zip. It is referenced in the Include-Resource

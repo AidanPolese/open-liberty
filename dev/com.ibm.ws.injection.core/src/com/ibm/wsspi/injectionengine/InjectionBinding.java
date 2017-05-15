@@ -28,11 +28,10 @@ import javax.naming.RefAddr;
 import javax.naming.Reference;
 import javax.naming.spi.ObjectFactory;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
-import com.ibm.ejs.ras.TraceNLS;
 import com.ibm.ejs.util.Util;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.ffdc.IncidentStream;
 import com.ibm.ws.injectionengine.InternalInjectionEngine;
@@ -51,7 +50,6 @@ implements Formattable
     private static final TraceComponent tc = Tr.register(InjectionBinding.class,
                                                          InjectionConfigConstants.traceString,
                                                          InjectionConfigConstants.messageFile);
-    private static final TraceNLS traceNLS = TraceNLS.getTraceNLS(InjectionBinding.class, InjectionConfigConstants.messageFile);
 
     private InjectionProcessorContext ivContext; // F743-33811.1
 
@@ -341,16 +339,15 @@ implements Formattable
                 declaredMethods = getDeclaredSetMethods(injectionClass, isClient); // F743-32443
             } catch (LinkageError err) // RTC116577
             {
-                String message = traceNLS.getFormattedMessage
-                                ("DECLARED_MEMBER_LINKAGE_ERROR_CWNEN0075E",
-                                 new Object[] { targetClassName,
-                                               setMethodName,
-                                               getJndiName(),
-                                               ivNameSpaceConfig.getDisplayName(),
-                                               ivNameSpaceConfig.getModuleName(),
-                                               ivNameSpaceConfig.getApplicationName(),
-                                               err.toString() },
-                                 null);
+                String message = Tr.formatMessage(tc,
+                                                  "DECLARED_MEMBER_LINKAGE_ERROR_CWNEN0075E",
+                                                  targetClassName,
+                                                  setMethodName,
+                                                  getJndiName(),
+                                                  ivNameSpaceConfig.getDisplayName(),
+                                                  ivNameSpaceConfig.getModuleName(),
+                                                  ivNameSpaceConfig.getApplicationName(),
+                                                  err.toString());
                 InjectionException ex = new InjectionException(message, err);
 
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
@@ -443,9 +440,9 @@ implements Formattable
                                          compatibleMethods.get(1) + " method are both type compatible with the " +
                                          injectionType + " type.");
                         Tr.error(tc, "AMBIGUOUS_INJECTION_METHODS_CWNEN0061E",
-                                 new Object[] { targetName, getJndiName(), targetClassName,
-                                               compatibleMethods.get(0), compatibleMethods.get(1),
-                                               injectionType });
+                                 targetName, getJndiName(), targetClassName,
+                                 compatibleMethods.get(0), compatibleMethods.get(1),
+                                 injectionType);
                         throw iex;
                     }
                 }
@@ -496,7 +493,7 @@ implements Formattable
                         // could result in customer regressions.
                         String qualifiedTargetName = injectionClass.getName() + "." + targetName; // d668039
                         Tr.warning(tc, "FIELD_IS_DECLARED_DIFFERENT_THAN_THE_INECTION_TYPE_CWNEN0021W",
-                                   new Object[] { qualifiedTargetName, fieldClass.getName(), injectionType.getName() });
+                                   qualifiedTargetName, fieldClass.getName(), injectionType.getName());
 
                         if (isValidationFailable()) // fail if enabled    F743-14449
                         {
@@ -519,20 +516,19 @@ implements Formattable
                                      setMethodName + " method nor the " + targetName +
                                      " field exist on the " + targetClassName + " class.");
                     Tr.error(tc, "UNABLE_TO_FIND_THE_MEMBER_SPECIFIED_CWNEN0022E",
-                             new Object[] { getJndiName(), setMethodName, targetName, targetClassName });
+                             getJndiName(), setMethodName, targetName, targetClassName);
                     throw iex;
                 } catch (LinkageError err) // RTC116577
                 {
-                    String message = traceNLS.getFormattedMessage
-                                    ("DECLARED_MEMBER_LINKAGE_ERROR_CWNEN0075E",
-                                     new Object[] { targetClassName,
-                                                   targetName,
-                                                   getJndiName(),
-                                                   ivNameSpaceConfig.getDisplayName(),
-                                                   ivNameSpaceConfig.getModuleName(),
-                                                   ivNameSpaceConfig.getApplicationName(),
-                                                   err.toString() },
-                                     null);
+                    String message = Tr.formatMessage(tc,
+                                                      "DECLARED_MEMBER_LINKAGE_ERROR_CWNEN0075E",
+                                                      targetClassName,
+                                                      targetName,
+                                                      getJndiName(),
+                                                      ivNameSpaceConfig.getDisplayName(),
+                                                      ivNameSpaceConfig.getModuleName(),
+                                                      ivNameSpaceConfig.getApplicationName(),
+                                                      err.toString());
                     InjectionException ex = new InjectionException(message, err);
 
                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
@@ -548,7 +544,7 @@ implements Formattable
             InjectionException iex;
             iex = new InjectionException("One or more of these argument(s) is null.  " + targetName + " targetName, " + injectionType + " injectionType, " + injectionClass
                                          + " injectionClass");
-            Tr.error(tc, "INCORRECT_OR_NULL_INJECTION_TARGETS_SPECIFIED_CWNEN0023E", new Object[] { targetName, injectionType, injectionClass });
+            Tr.error(tc, "INCORRECT_OR_NULL_INJECTION_TARGETS_SPECIFIED_CWNEN0023E", targetName, injectionType, injectionClass);
             throw iex;
         }
 
@@ -686,10 +682,10 @@ implements Formattable
 
                         // Annotation present on both the field and method... error.
                         Tr.error(tc, "INJECTION_DECLARED_IN_BOTH_THE_FIELD_AND_METHOD_OF_A_BEAN_CWNEN0056E",
-                                 new Object[] { ivJndiName,
-                                               member.getDeclaringClass().getName(),
-                                               ivNameSpaceConfig.getModuleName(),
-                                               ivNameSpaceConfig.getApplicationName() });
+                                 ivJndiName,
+                                 member.getDeclaringClass().getName(),
+                                 ivNameSpaceConfig.getModuleName(),
+                                 ivNameSpaceConfig.getApplicationName());
                         throw new InjectionConfigurationException("Injection of the " + ivJndiName +
                                                                   " resource was specified for both a property instance" +
                                                                   " variable and its corresponding set method on the " +
@@ -823,26 +819,26 @@ implements Formattable
 
         if (xml) {
             Tr.error(tc, "CONFLICTING_XML_VALUES_CWNEN0052E",
-                     new Object[] { component,
-                                   module,
-                                   application,
-                                   elementName,
-                                   refType.getXMLElementName(),
-                                   refType.getNameXMLElementName(),
-                                   jndiName,
-                                   oldValue,
-                                   newValue });
+                     component,
+                     module,
+                     application,
+                     elementName,
+                     refType.getXMLElementName(),
+                     refType.getNameXMLElementName(),
+                     jndiName,
+                     oldValue,
+                     newValue);
         } else {
             Tr.error(tc, "CONFLICTING_ANNOTATION_VALUES_CWNEN0054E",
-                     new Object[] { component,
-                                   module,
-                                   application,
-                                   elementName,
-                                   '@' + refType.getAnnotationShortName(),
-                                   refType.getNameAnnotationElementName(),
-                                   jndiName,
-                                   oldValue,
-                                   newValue });
+                     component,
+                     module,
+                     application,
+                     elementName,
+                     '@' + refType.getAnnotationShortName(),
+                     refType.getNameAnnotationElementName(),
+                     jndiName,
+                     oldValue,
+                     newValue);
         }
 
         String exMsg;
@@ -995,13 +991,13 @@ implements Formattable
         String jndiName = getJndiName();
 
         Tr.error(tc, "INVALID_ANNOTATION_PROPERTY_CWNEN0066E",
-                 new Object[] { '@' + refType.getAnnotationShortName(),
-                               jndiName,
-                               refType.getNameAnnotationElementName(),
-                               component,
-                               module,
-                               application,
-                               property });
+                 '@' + refType.getAnnotationShortName(),
+                 jndiName,
+                 refType.getNameAnnotationElementName(),
+                 component,
+                 module,
+                 application,
+                 property);
 
         String exMsg = "The @" + refType.getAnnotationShortName() +
                        " source code annotation with the " + jndiName +
@@ -1182,7 +1178,7 @@ implements Formattable
         if (oldValue == null ? newValue != null : !oldValue.equals(newValue))
         {
             Tr.error(tc, "INCOMPATIBLE_MERGE_ATTRIBUTES_CWNEN0072E",
-                     new Object[] { getJndiName(), name, oldValue, newValue });
+                     getJndiName(), name, oldValue, newValue);
             throw new InjectionConfigurationException("The " + getJndiName() +
                                                       " reference has conflicting values for the " + name +
                                                       " attribute: " + oldValue + " and " + newValue);
@@ -1263,7 +1259,7 @@ implements Formattable
     {
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
         if (isTraceOn && tc.isDebugEnabled())
-            Tr.debug(tc, "setObjects", new Object[] { injectionObject, bindingObject });
+            Tr.debug(tc, "setObjects", injectionObject, bindingObject);
 
         this.ivInjectedObject = injectionObject; // d392996.3
         this.ivBindingObject = (bindingObject != null) ? bindingObject : injectionObject;
@@ -1290,7 +1286,7 @@ implements Formattable
     {
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
         if (isTraceOn && tc.isDebugEnabled())
-            Tr.debug(tc, "setObjects", new Object[] { injectionObject, bindingObjectToString(bindingObject) });
+            Tr.debug(tc, "setObjects", injectionObject, bindingObjectToString(bindingObject));
 
         ivInjectedObject = injectionObject; // d392996.3
 
@@ -1336,7 +1332,7 @@ implements Formattable
     {
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
         if (isTraceOn && tc.isEntryEnabled())
-            Tr.entry(tc, "setReferenceObject", new Object[] { bindingObjectToString(bindingObject), objectFactory });
+            Tr.entry(tc, "setReferenceObject", bindingObjectToString(bindingObject), objectFactory);
 
         ivInjectedObject = null;
         ivBindingObject = bindingObject;
@@ -1452,9 +1448,10 @@ implements Formattable
                     exMessage = ex.toString();
                 }
 
-                String message = traceNLS.getFormattedMessage("FAILED_TO_CREATE_OBJECT_INSTANCE_CWNEN0030E",
-                                                              new Object[] { displayName, exMessage },
-                                                              null);
+                String message = Tr.formatMessage(tc,
+                                                  "FAILED_TO_CREATE_OBJECT_INSTANCE_CWNEN0030E",
+                                                  displayName,
+                                                  exMessage);
                 InjectionException ex2 = new InjectionException(message, ex);
 
                 if (isTraceOn && tc.isEntryEnabled())
@@ -1481,11 +1478,11 @@ implements Formattable
                 classTypeName = ivInjectionClassType == null ? "UNKNOWN" : ivInjectionClassType.getName();
 
                 Tr.error(tc, "UNABLE_TO_RESOLVE_INJECTION_OBJECT_CWNEN0035E",
-                         new Object[] { getDisplayName(),
-                                       classTypeName,
-                                       component,
-                                       module,
-                                       app }); // d468667 d502635.1
+                         getDisplayName(),
+                         classTypeName,
+                         component,
+                         module,
+                         app); // d468667 d502635.1
 
                 if (isTraceOn && tc.isEntryEnabled())
                     Tr.exit(tc, "getInjectionObject : failed");
@@ -1737,9 +1734,9 @@ implements Formattable
         if (parameterTypes.length != 1) // d660818.1
         {
             Tr.error(tc, "INJECTION_METHOD_MUST_HAVE_ONE_PARAM_CWNEN0069E",
-                     new Object[] { method.getDeclaringClass().getName(),
-                                   method.getName(),
-                                   method.getParameterTypes().length });
+                     method.getDeclaringClass().getName(),
+                     method.getName(),
+                     method.getParameterTypes().length);
             InjectionConfigurationException icex = new InjectionConfigurationException
                             ("The injection method " + method.getDeclaringClass().getName() +
                              "." + method.getName() + " must have exactly one parameter" +
@@ -1792,10 +1789,10 @@ implements Formattable
                 String application = ivNameSpaceConfig.getApplicationName();
 
                 Tr.error(tc, "INVALID_REFERENCE_NAME_CWNEN0065E",
-                         new Object[] { ivJndiName,
-                                       component,
-                                       module,
-                                       application });
+                         ivJndiName,
+                         component,
+                         module,
+                         application);
 
                 throw new InjectionConfigurationException("The " + ivJndiName +
                                                           " reference for the " + component +

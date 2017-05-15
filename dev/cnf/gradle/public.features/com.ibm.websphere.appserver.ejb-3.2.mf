@@ -11,6 +11,7 @@ Subsystem-Category: JavaEE7Application
 Subsystem-Content: com.ibm.websphere.appserver.ejbPersistentTimer-3.2; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.ejbHome-3.2; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.ejbLite-3.2; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jdbc-4.1; ibm.tolerates:="4.2"; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.mdb-3.2; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.transaction-1.2; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.ejbRemote-3.2; type="osgi.subsystem.feature"

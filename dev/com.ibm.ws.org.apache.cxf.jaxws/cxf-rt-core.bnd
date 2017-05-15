@@ -1,13 +1,13 @@
 -include= ~../cnf/resources/bnd/bundle.props
-bVersion=${bundle.version}
+bVersion=1.0
 
 Bundle-Name: Apache CXF Runtime Core
-Bundle-Description: Apache CXF Runtime Core, version ${original.jar.version}
-Bundle-SymbolicName: ${symbolic.name}
+Bundle-Description: Apache CXF Runtime Core, version 2.6.2
+Bundle-SymbolicName: com.ibm.ws.org.apache.cxf-rt-core.2.6.2
 Bundle-Activator: org.apache.cxf.bus.osgi.CXFActivator
 
 Export-Package: \
- META-INF.cxf, \
+ META-INF.cxf;version=2.6.2, \
  org.apache.cxf.*;version=2.6.2
 
 Import-Package: \
@@ -33,15 +33,15 @@ Import-Package: \
 DynamicImport-Package: com.ctc.wstx.*
 
 Include-Resource:\
- @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/cxf/**, \
- @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/services/**, \
- @build/tmp/lib/cxf-rt-core-2.6.2.jar!/schemas/**, \
- @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/spring.handlers, \
- @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/spring.schemas, \
- @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/DEPENDENCIES, \
- @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/LICENSE, \
- @build/tmp/lib/cxf-rt-core-2.6.2.jar!/META-INF/NOTICE, \
- build/tmp/bnd/cxf-rt-core-2.6.2
+ @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/cxf/**, \
+ @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/services/**, \
+ @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/schemas/**, \
+ @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/spring.handlers, \
+ @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/spring.schemas, \
+ @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/DEPENDENCIES, \
+ @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/LICENSE, \
+ @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/NOTICE, \
+ @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/org/apache/cxf/**
  
  
 # Remove the resources (blueprint/metadata configuration files) in the OSGI-INF directory

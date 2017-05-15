@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2015
+ * Copyright IBM Corp. 2015, 2017
  *
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
@@ -38,6 +38,7 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
 import com.ibm.websphere.ssl.SSLException;
 import com.ibm.ws.security.csiv2.config.ssl.SSLConfig;
+import com.ibm.ws.security.csiv2.config.tss.ServerTransportAddress;
 import com.ibm.ws.security.csiv2.util.SecurityServices;
 import com.ibm.ws.transport.iiop.security.config.ConfigUtil;
 import com.ibm.ws.transport.iiop.security.config.tss.OptionsKey;
@@ -58,7 +59,7 @@ public class CSSCompoundSecMechConfig implements Serializable {
     private CSSASMechConfig as_mech;
     private CSSSASMechConfig sas_mech;
     private String cantHandleMsg;
-    private final Map<TransportAddress, CSSTransportMechConfig> addressTransportMechMap = new HashMap<TransportAddress, CSSTransportMechConfig>();
+    private final Map<ServerTransportAddress, CSSTransportMechConfig> addressTransportMechMap = new HashMap<ServerTransportAddress, CSSTransportMechConfig>();
 
     public CSSTransportMechConfig getTransport_mech() {
         return transport_mech;
@@ -206,7 +207,7 @@ public class CSSCompoundSecMechConfig implements Serializable {
                 // if sslCfgAlias is null don't set it
                 if (sslCfgAlias != null) {
                     transportLayerConfig.setSslConfigName(sslCfgAlias);
-                    addressTransportMechMap.put(addr, transportLayerConfig);
+                    addressTransportMechMap.put(new ServerTransportAddress(addr), transportLayerConfig);
                 }
             } catch (SSLException e) {
                 //What to do
@@ -342,7 +343,7 @@ public class CSSCompoundSecMechConfig implements Serializable {
         buf.append(spaces).append("]\n");
     }
 
-    public Map<TransportAddress, CSSTransportMechConfig> getTransportMechMap() {
+    public Map<ServerTransportAddress, CSSTransportMechConfig> getTransportMechMap() {
         return addressTransportMechMap;
     }
 
@@ -351,7 +352,7 @@ public class CSSCompoundSecMechConfig implements Serializable {
         if (addressTransportMechMap.isEmpty()) {
             sslCfg = transport_mech.getSslConfigName();
         } else {
-            CSSTransportMechConfig mech = addressTransportMechMap.get(addr);
+            CSSTransportMechConfig mech = addressTransportMechMap.get(new ServerTransportAddress(addr));
             sslCfg = mech.getSslConfigName();
         }
         return sslCfg;

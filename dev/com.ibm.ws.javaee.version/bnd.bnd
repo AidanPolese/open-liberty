@@ -9,5 +9,5 @@ Export-Package: \
     com.ibm.ws.javaee.version
 
 -buildpath: \
-	com.ibm.websphere.org.osgi.core.6.0.0, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.websphere.org.osgi.core, \
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

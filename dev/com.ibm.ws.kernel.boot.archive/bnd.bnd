@@ -24,4 +24,4 @@ instrument.disabled: true
 	com.ibm.ws.kernel.boot.common;version=latest, \
 	com.ibm.ws.kernel.boot;version=latest, \
 	com.ibm.ws.kernel.boot.java7;version=latest, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

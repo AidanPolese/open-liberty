@@ -27,7 +27,6 @@ publish.feature.resources: **
 	com.ibm.ws.session;version=latest, \
 	com.ibm.ws.webcontainer;version=latest, \
 	com.ibm.ws.webcontainer.cors;version=latest, \
-	com.ibm.ws.security.audit.context;version=latest, \
 	com.ibm.ws.http.plugin.merge;version=latest, \
 	com.ibm.ws.webserver.plugin.runtime;version=latest, \
 	com.ibm.ws.webserver.plugin.runtime.interfaces;version=latest, \

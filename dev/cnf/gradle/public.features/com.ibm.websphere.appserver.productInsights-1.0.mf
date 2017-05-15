@@ -4,8 +4,11 @@ IBM-Feature-Version: 2
 IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
+IBM-SPI-Package: com.ibm.wsspi.cloud.productinsights
 IBM-ShortName: productInsights-1.0
-Subsystem-Content: com.ibm.websphere.appserver.ssl-1.0; type="osgi.subsystem.feature",
+Subsystem-Content: com.ibm.websphere.appserver.spi.productInsights_1.0-javadoc.zip; type=file; location:="dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.productInsights_1.0-javadoc.zip",
+ com.ibm.websphere.appserver.ssl-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.spi.productInsights; location:="dev/spi/ibm/,lib/"; type=jar; version="[1.0.0,1.0.200)",
  com.ibm.ws.cloud.productinsights; version="[1.0.0,1.0.200)",
  com.ibm.json4j; version="[1.0.0,1.0.200)",
  com.ibm.ws.product.utility; version="[1.0.0,1.0.200)"

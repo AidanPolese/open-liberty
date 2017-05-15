@@ -30,9 +30,9 @@ import javax.naming.RefAddr;
 import javax.naming.Reference;
 import javax.naming.spi.ObjectFactory;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.util.ThreadContextAccessor;
 import com.ibm.wsspi.injectionengine.ComponentNameSpaceConfiguration;
@@ -193,13 +193,12 @@ public class MBLinkObjectFactory implements ObjectFactory
                     throws InjectionException
     {
         String displayName = mbClass.getName();
-        // Caution: Do NOT port this change to WAS Classic.  This class is only used by the
-        // WAS Classic client container; the use of J2EENameImpl will not build in Liberty
+        // Caution: Do NOT port this change to traditional WAS.
         if (mbClass != String.class)
         {
             throw new UnsupportedOperationException();
         }
-        //J2EEName j2eeName = new J2EENameImpl( info.ivApplication, info.ivModule, null );
+
         J2EEName j2eeName = null;
 
         ComponentNameSpaceConfiguration compNSConfig = new ComponentNameSpaceConfiguration(displayName, j2eeName);
@@ -291,8 +290,7 @@ public class MBLinkObjectFactory implements ObjectFactory
         {
             // CNTR0229E: The {0} interceptor method must not be declared as final or static.
             String method = m.toGenericString();
-            Object[] data = new Object[] { method };
-            Tr.error(tc, "INVALID_INTERCEPTOR_METHOD_MODIFIER_CNTR0229E", data);
+            Tr.error(tc, "INVALID_INTERCEPTOR_METHOD_MODIFIER_CNTR0229E", method);
             throw new InjectionConfigurationException(lifeCycle + " interceptor \"" + method
                                                       + "\" must not be declared as final or static.");
         }
@@ -308,8 +306,7 @@ public class MBLinkObjectFactory implements ObjectFactory
             // CNTR0231E: The {0} method signature is not valid as
             // a {1} method of an enterprise bean class.
             String method = m.toGenericString();
-            Object[] data = new Object[] { method, lifeCycle };
-            Tr.error(tc, "INVALID_LIFECYCLE_SIGNATURE_CNTR0231E", data);
+            Tr.error(tc, "INVALID_LIFECYCLE_SIGNATURE_CNTR0231E", method, lifeCycle);
             throw new InjectionConfigurationException(lifeCycle + " interceptor \"" + method
                                                       + "\" must have void as return type.");
         }
@@ -326,8 +323,7 @@ public class MBLinkObjectFactory implements ObjectFactory
             // CNTR0231E: The {1} method specifies the {0} method signature of the
             // lifecycle interceptor, which is not correct for an enterprise bean.
             String method = m.toGenericString();
-            Object[] data = new Object[] { lifeCycle, method };
-            Tr.error(tc, "INVALID_LIFECYCLE_SIGNATURE_CNTR0231E", data);
+            Tr.error(tc, "INVALID_LIFECYCLE_SIGNATURE_CNTR0231E", lifeCycle, method);
             throw new InjectionConfigurationException(lifeCycle + " interceptor \"" + method
                                                       + "\" must not throw application exceptions.");
         }
@@ -341,8 +337,7 @@ public class MBLinkObjectFactory implements ObjectFactory
             {
                 // CNTR0231E: "{0}" interceptor method "{1}" signature is incorrect.
                 String method = m.toGenericString();
-                Object[] data = new Object[] { lifeCycle, method };
-                Tr.error(tc, "INVALID_LIFECYCLE_SIGNATURE_CNTR0231E", data);
+                Tr.error(tc, "INVALID_LIFECYCLE_SIGNATURE_CNTR0231E", lifeCycle, method);
                 throw new InjectionConfigurationException(lifeCycle + " interceptor \"" + method
                                                           + "\" must have zero parameters.");
             }
@@ -360,8 +355,7 @@ public class MBLinkObjectFactory implements ObjectFactory
                 // CNTR0232E: The {0} method does not have the required
                 // method signature for a {1} method of a interceptor class.
                 String method = m.toGenericString();
-                Object[] data = new Object[] { method, lifeCycle };
-                Tr.error(tc, "INVALID_LIFECYCLE_SIGNATURE_CNTR0232E", data);
+                Tr.error(tc, "INVALID_LIFECYCLE_SIGNATURE_CNTR0232E", method, lifeCycle);
                 throw new InjectionConfigurationException("CNTR0232E: The \"" + method
                                                           + "\" method does not have the required method signature for a \""
                                                           + lifeCycle + "\" method of a interceptor class.");

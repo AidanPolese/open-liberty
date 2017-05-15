@@ -18,7 +18,7 @@ instrument.disabled: true
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \
-	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
-	com.ibm.websphere.org.osgi.service.cm.1.5.0;version=latest,\
+	com.ibm.websphere.org.osgi.core;version=latest,\
+	com.ibm.websphere.org.osgi.service.cm;version=latest,\
 	com.ibm.websphere.appserver.spi.logging;version=latest,\
 	com.ibm.ws.logging.hpel;version=latest

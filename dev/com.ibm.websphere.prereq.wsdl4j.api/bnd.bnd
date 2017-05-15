@@ -34,4 +34,4 @@ javax.wsdl.*
 
 Eclipse-ExtensibleAPI: true
 
-publish.wlp.jar.disabled: true
+publish.wlp.jar.suffix: dev/api/spec

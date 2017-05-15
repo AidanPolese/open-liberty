@@ -23,4 +23,4 @@ instrument.disabled: true
 	com.ibm.ws.org.apache.commons.io.1.4;version=latest,\
 	com.ibm.ws.webserver.plugin.runtime.interfaces;version=latest,\
 	com.ibm.ws.webserver.plugin.utility.webserverPluginutil;version=latest, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

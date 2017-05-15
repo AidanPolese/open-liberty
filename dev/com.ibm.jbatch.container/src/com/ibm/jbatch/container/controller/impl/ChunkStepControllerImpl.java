@@ -1,13 +1,13 @@
 /*
  * Copyright 2012 International Business Machines Corp.
- * 
+ *
  * See the NOTICE file distributed with this work for additional information
- * regarding copyright ownership. Licensed under the Apache License, 
+ * regarding copyright ownership. Licensed under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -142,11 +142,11 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
 
     /**
      * Utility Class to hold status for the chunk as a whole.
-     * 
+     *
      * One key usage is to maintain the state reflecting the sequence in which
      * we catch a retryable exception, rollback the previous chunk, process 1-item-at-a-time
      * until we reach "where we left off", then revert to normal chunk processing.
-     * 
+     *
      * Another usage is simply to communicate that the reader readItem() returned 'null', so
      * we're done the chunk.
      */
@@ -231,7 +231,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
      * items). So, this method loops until we either reached the end of the
      * reader (not more items to read), or the writer buffer is full or a
      * checkpoint is triggered.
-     * 
+     *
      * @return an array list of objects to write
      */
     private List<Object> readAndProcess() {
@@ -273,9 +273,17 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
                 break;
             }
 
+            // Try the in memory map first, then the DB if not found
+            BatchStatus status = getBatchKernelService().getBatchStatus(runtimeWorkUnitExecution.getTopLevelExecutionId());
+
+            if (null == status) {
+                logger.finer("Local BatchStatus not found, querying DB");
+                JobExecutionEntity jobExecution = getPersistenceManagerService().getJobExecution(runtimeWorkUnitExecution.getTopLevelExecutionId());
+                status = jobExecution.getBatchStatus();
+            }
+
             // This will force the current item to finish processing if top level job is stopping or stopped
-            JobExecutionEntity jobExecution = getPersistenceManagerService().getJobExecution(runtimeWorkUnitExecution.getTopLevelExecutionId());
-            if (jobExecution.getBatchStatus().equals(BatchStatus.STOPPING) || jobExecution.getBatchStatus().equals(BatchStatus.STOPPED)) {
+            if (status.equals(BatchStatus.STOPPING) || status.equals(BatchStatus.STOPPED)) {
                 currentChunkStatus.markStopping();
                 // The call below is important since the STOP may have been done against a top-level job executing remotely
                 // (at the time of this writing that implies the current object controls a partition level chunk).
@@ -302,7 +310,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
 
     /**
      * Reads an item from the reader
-     * 
+     *
      * @return the item read
      */
     private Object readItem() {
@@ -345,33 +353,27 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
                         // retry with rollback
                         currentChunkStatus.markForRollbackWithRetry(e);
                     }
-                }
-                else if (skipReadException(e)) {
+                } else if (skipReadException(e)) {
                     currentItemStatus.setSkipped(true);
                     runtimeStepExecution.getMetric(MetricImpl.MetricType.READ_SKIP_COUNT).incValue();
-                }
-                else {
+                } else {
                     throw new BatchContainerRuntimeException(e);
                 }
-            }
-            else {
+            } else {
                 // coming from a rollback retry
                 if (skipReadException(e)) {
                     currentItemStatus.setSkipped(true);
                     runtimeStepExecution.getMetric(MetricImpl.MetricType.READ_SKIP_COUNT).incValue();
 
-                }
-                else if (retryReadException(e)) {
+                } else if (retryReadException(e)) {
                     if (!retryHandler.isRollbackException(e)) {
                         // retry without rollback
                         itemRead = readItem();
-                    }
-                    else {
+                    } else {
                         // retry with rollback
                         currentChunkStatus.markForRollbackWithRetry(e);
                     }
-                }
-                else {
+                } else {
                     throw new BatchContainerRuntimeException(e);
                 }
             }
@@ -386,7 +388,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
 
     /**
      * Process an item previously read by the reader
-     * 
+     *
      * @param itemRead
      *            the item read
      * @return the processed item
@@ -427,16 +429,13 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
                     } else {
                         currentChunkStatus.markForRollbackWithRetry(e);
                     }
-                }
-                else if (skipProcessException(e, itemRead)) {
+                } else if (skipProcessException(e, itemRead)) {
                     currentItemStatus.setSkipped(true);
                     runtimeStepExecution.getMetric(MetricImpl.MetricType.PROCESS_SKIP_COUNT).incValue();
-                }
-                else {
+                } else {
                     throw new BatchContainerRuntimeException(e);
                 }
-            }
-            else {
+            } else {
                 if (skipProcessException(e, itemRead)) {
                     currentItemStatus.setSkipped(true);
                     runtimeStepExecution.getMetric(MetricImpl.MetricType.PROCESS_SKIP_COUNT).incValue();
@@ -464,7 +463,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
 
     /**
      * Writes items
-     * 
+     *
      * @param theChunk
      *            the array list with all items processed ready to be written
      */
@@ -503,8 +502,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
                         throw new BatchContainerRuntimeException(e);
                     }
 
-                }
-                else {
+                } else {
                     if (skipWriteException(e, theChunk)) {
                         runtimeStepExecution.getMetric(MetricImpl.MetricType.WRITE_SKIP_COUNT).incValueBy(1);
                     } else if (retryWriteException(e, theChunk)) {
@@ -531,7 +529,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
      * Prime the next chunk's ChunkStatus based on the previous one
      * (if there was one), particularly taking into account retry-with-rollback
      * and the one-at-a-time processing it entails.
-     * 
+     *
      * @return the upcoming chunk's ChunkStatus
      */
     private ChunkStatus getNextChunkStatusBasedOnPrevious() {
@@ -587,7 +585,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
 
     /**
      * Main Read-Process-Write loop
-     * 
+     *
      * @throws Exception
      */
     private void invokeChunk() {
@@ -620,8 +618,9 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
                 }
 
                 JoblogUtil.logToJobLogAndTraceOnly(Level.FINEST, "chunk.started", new Object[] {
-                                                                                                runtimeStepExecution.getStepName(), getJobInstanceId(), getJobExecutionId(),
-                                                                                                runtimeStepExecution.getMetrics() }, logger);
+                                                                                                 runtimeStepExecution.getStepName(), getJobInstanceId(), getJobExecutionId(),
+                                                                                                 runtimeStepExecution.getMetrics() },
+                                                   logger);
 
                 chunkToWrite = readAndProcess();
 
@@ -656,8 +655,9 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
                 getTransactionManager().commit();
 
                 JoblogUtil.logToJobLogAndTraceOnly(Level.FINEST, "chunk.ended", new Object[] {
-                                                                                              runtimeStepExecution.getStepName(), getJobInstanceId(), getJobExecutionId(),
-                                                                                              runtimeStepExecution.getMetrics() }, logger);
+                                                                                               runtimeStepExecution.getStepName(), getJobInstanceId(), getJobExecutionId(),
+                                                                                               runtimeStepExecution.getMetrics() },
+                                                   logger);
 
                 checkpointManager.endCheckpoint();
 
@@ -682,8 +682,9 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
             // level does not need to be considered as either.
             try {
                 JoblogUtil.logToJobLogAndTraceOnly(Level.FINE, "chunk.rollback", new Object[] {
-                                                                                               runtimeStepExecution.getStepName(), getJobInstanceId(), getJobExecutionId(),
-                                                                                               runtimeStepExecution.getMetrics() }, logger);
+                                                                                                runtimeStepExecution.getStepName(), getJobInstanceId(), getJobExecutionId(),
+                                                                                                runtimeStepExecution.getMetrics() },
+                                                   logger);
 
                 callReaderAndWriterCloseOnThrowable(t);
 
@@ -708,7 +709,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
 
     /**
      * Helper method to publish checkpoint event
-     * 
+     *
      * @param stepName
      * @param jobInstanceId
      * @param jobExecutionId
@@ -753,8 +754,9 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
 
     private void rollbackAfterRetryableException(int currentChunk) {
         JoblogUtil.logToJobLogAndTraceOnly(Level.FINE, "chunk.rollback.and.retry", new Object[] {
-                                                                                                 runtimeStepExecution.getStepName(), getJobInstanceId(), getJobExecutionId(),
-                                                                                                 runtimeStepExecution.getMetrics() }, logger);
+                                                                                                  runtimeStepExecution.getStepName(), getJobInstanceId(), getJobExecutionId(),
+                                                                                                  runtimeStepExecution.getMetrics() },
+                                           logger);
 
         writerProxy.close();
         readerProxy.close();
@@ -770,13 +772,13 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
         try {
             writerProxy.close();
         } catch (Throwable t1) {
-            // FFDC 
+            // FFDC
         }
 
         try {
             readerProxy.close();
         } catch (Throwable t1) {
-            // FFDC 
+            // FFDC
         }
     }
 
@@ -851,8 +853,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
         ItemReader itemReader = chunk.getReader();
         List<Property> itemReaderProps = itemReader.getProperties() == null ? null : itemReader.getProperties().getPropertyList();
         try {
-            InjectionReferences injectionRef = new InjectionReferences(runtimeWorkUnitExecution.getWorkUnitJobContext(), runtimeStepExecution,
-                            itemReaderProps);
+            InjectionReferences injectionRef = new InjectionReferences(runtimeWorkUnitExecution.getWorkUnitJobContext(), runtimeStepExecution, itemReaderProps);
 
             readerProxy = ProxyFactory.createItemReaderProxy(itemReader.getRef(), injectionRef, runtimeStepExecution);
 
@@ -868,8 +869,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
             List<Property> itemProcessorProps = itemProcessor.getProperties() == null ? null : itemProcessor.getProperties().getPropertyList();
             try {
 
-                InjectionReferences injectionRef = new InjectionReferences(runtimeWorkUnitExecution.getWorkUnitJobContext(), runtimeStepExecution,
-                                itemProcessorProps);
+                InjectionReferences injectionRef = new InjectionReferences(runtimeWorkUnitExecution.getWorkUnitJobContext(), runtimeStepExecution, itemProcessorProps);
 
                 processorProxy = ProxyFactory.createItemProcessorProxy(itemProcessor.getRef(), injectionRef, runtimeStepExecution);
                 if (logger.isLoggable(Level.FINE)) {
@@ -883,8 +883,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
         ItemWriter itemWriter = chunk.getWriter();
         List<Property> itemWriterProps = itemWriter.getProperties() == null ? null : itemWriter.getProperties().getPropertyList();
         try {
-            InjectionReferences injectionRef = new InjectionReferences(runtimeWorkUnitExecution.getWorkUnitJobContext(), runtimeStepExecution,
-                            itemWriterProps);
+            InjectionReferences injectionRef = new InjectionReferences(runtimeWorkUnitExecution.getWorkUnitJobContext(), runtimeStepExecution, itemWriterProps);
 
             writerProxy = ProxyFactory.createItemWriterProxy(itemWriter.getRef(), injectionRef, runtimeStepExecution);
             if (logger.isLoggable(Level.FINE)) {
@@ -894,8 +893,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
             throw new BatchContainerServiceException("Cannot create the ItemWriter [" + itemWriter.getRef() + "]", e);
         }
 
-        InjectionReferences injectionRef = new InjectionReferences(runtimeWorkUnitExecution.getWorkUnitJobContext(), runtimeStepExecution,
-                        null);
+        InjectionReferences injectionRef = new InjectionReferences(runtimeWorkUnitExecution.getWorkUnitJobContext(), runtimeStepExecution, null);
 
         this.chunkListeners = runtimeWorkUnitExecution.getListenerFactory().getChunkListeners(getStep(), injectionRef, runtimeStepExecution);
         this.skipProcessListeners = runtimeWorkUnitExecution.getListenerFactory().getSkipProcessListeners(getStep(), injectionRef, runtimeStepExecution);
@@ -961,7 +959,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
 
     @Override
     public void stop() {
-        StopLock stopLock = getStopLock(); // Store in local variable to facilitate Ctrl+Shift+G search in Eclipse 
+        StopLock stopLock = getStopLock(); // Store in local variable to facilitate Ctrl+Shift+G search in Eclipse
         synchronized (stopLock) {
             if (isStepStartingOrStarted()) {
                 markStepStopping();
@@ -1053,9 +1051,9 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
 
         if (customCheckpointPolicy) {
             // Even on a retry-with-rollback, we'll continue to let
-            // the custom CheckpointAlgorithm set a tran timeout.  
+            // the custom CheckpointAlgorithm set a tran timeout.
             //
-            // We're guessing the application could need a smaller timeout than 
+            // We're guessing the application could need a smaller timeout than
             // 180 seconds, (the default established by the batch chunk).
             nextTimeout = this.checkpointManager.checkpointTimeout();
         } else {
@@ -1066,7 +1064,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
 
     /**
      * Note we can rely on the StepContext properties already having been set at this point.
-     * 
+     *
      * @return global transaction timeout defined in step properties. default
      *         timeout value is 180
      */

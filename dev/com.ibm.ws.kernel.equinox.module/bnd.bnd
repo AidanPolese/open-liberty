@@ -22,6 +22,6 @@ Import-Package: !*
 -buildpath: \
 	${javac.bootclasspath.java6}, \
 	com.ibm.ws.logging.core;version=latest,\
-	com.ibm.websphere.org.osgi.core.6.0.0;version=latest,\
+	com.ibm.websphere.org.osgi.core;version=latest,\
 	org.eclipse.osgi;version=latest, \
-	com.ibm.ws.org.osgi.annotation.versioning.1.0.0;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest

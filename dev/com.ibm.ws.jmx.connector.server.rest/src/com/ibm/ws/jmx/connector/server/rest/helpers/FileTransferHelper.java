@@ -48,6 +48,7 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.filetransfer.util.FileServiceUtil;
 import com.ibm.ws.jmx.connector.server.rest.APIConstants;
+import com.ibm.ws.rest.handler.helper.ServletRESTRequestWithParams;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.kernel.service.utils.FileUtils;
@@ -97,11 +98,13 @@ public class FileTransferHelper {
     @Activate
     protected void activate(ComponentContext cc) {
         wsLocationAdminRef.activate(cc);
+        routingHelperRef.activate(cc);
     }
 
     @Deactivate
     protected void deactivate(ComponentContext cc) {
         wsLocationAdminRef.deactivate(cc);
+        routingHelperRef.deactivate(cc);
     }
 
     //Location Admin
@@ -431,12 +434,26 @@ public class FileTransferHelper {
     public void readRequestIntoFile(String processedPath, RESTRequest request, boolean legacyFileTransfer) {
         InputStream is = null;
         RandomAccessFile uploadFile = null;
+        boolean nodeDeployment = false;
+
+        if (request instanceof ServletRESTRequestWithParams) {
+            ServletRESTRequestWithParams req = (ServletRESTRequestWithParams) request;
+            String deployType = req.getParam("deployService");
+            if (deployType != null && "node.js".equals(deployType.trim())) {
+                nodeDeployment = true;
+            }
+        }
         try {
             //Get the incoming stream
             String actionHeader = request.getHeader(ConnectorSettings.POST_TRANSFER_ACTION);
 
-            if (ConnectorSettings.POST_TRANSFER_ACTION_FIND_SERVER_NAME.equals(actionHeader)) {
+            if (ConnectorSettings.POST_TRANSFER_ACTION_FIND_SERVER_NAME.equals(actionHeader) || nodeDeployment) {
                 is = request.getPart("file");
+                if (is == null) {
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                        Tr.debug(this, tc, "******************* Error InputStream is NULL **************************");
+                    }
+                }
             } else {
                 is = request.getInputStream();
             }

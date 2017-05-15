@@ -469,6 +469,12 @@ warning.javase6.endofservice=CWWKE0109W: Podpora pro prost\u0159ed\u00ed Java SE
 warning.javase6.endofservice.explanation=IBM nebude od z\u00e1\u0159\u00ed 2017 u produktu WebSphere Application Server Liberty d\u00e1le podporovat prost\u0159ed\u00ed Java SE 6. Budete-li i nad\u00e1le pou\u017e\u00edvat prost\u0159ed\u00ed Java SE 6 po ukon\u010den\u00ed podpory, m\u016f\u017eete va\u0161e aplikace vystavit bezpe\u010dnostn\u00edm rizik\u016fm.
 warning.javase6.endofservice.useraction=IBM velmi doporu\u010duje, abyste pou\u017e\u00edvali posledn\u00ed verzi prost\u0159ed\u00ed Java SE, tj. verzi Java SE 8. 
 
+#
+# W A R N I N G:   Do not use CWWKE0100 - CCWKE0199 they are reserved in ServiceMessages.nlsprops
+#
+# Too Late for CWWKE0101 - CWWKE0107 they have dual use currently and CWWKE0108 and CWWKE0109 are only used here.
+#
+
 error.clientNameCharacter=CWWKE0900E: Uveden\u00fd n\u00e1zev klienta obsahuje neplatn\u00fd znak (name={0}). \
 Platn\u00e9 znaky: alfanumerick\u00e9 Unicode (nap\u0159. \
 0-9, a-z, A-Z), podtr\u017e\u00edtko (_), poml\u010dka (-), plus (+) a te\u010dka (.). \
@@ -655,6 +661,9 @@ info.server.resume.request.completed=CWWKE0939I: Po\u017eadavek na obnoven\u00ed
 info.server.resume.request.completed.explanation=Po\u017eadavek na obnoven\u00ed byl dokon\u010den.
 info.server.resume.request.completed.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
 
+info.envProductExtension=CWWKE0940I: Roz\u0161\u00ed\u0159en\u00ed produktu {0} m\u00e1 identifik\u00e1tor produktu {1} a um\u00edst\u011bn\u00ed instalace produktu {2}. Toto roz\u0161\u00ed\u0159en\u00ed produktu bylo povoleno zad\u00e1n\u00edm prom\u011bnn\u00e9 prost\u0159ed\u00ed WLP_PRODUCT_EXT_DIR. 
+info.envProductExtension.explanation= Prom\u011bnn\u00e1 prost\u0159ed\u00ed WLP_PRODUCT_EXT_DIR ukazuje na um\u00edst\u011bn\u00ed roz\u0161\u00ed\u0159en\u00ed produktu. Server nalezl a pou\u017e\u00edv\u00e1 roz\u0161\u00ed\u0159en\u00ed produktu.
+info.envProductExtension.useraction=Nen\u00ed pot\u0159eba \u017e\u00e1dn\u00e1 akce.
 
 info.serverStarting=Spou\u0161t\u011bn\u00ed serveru {0}.
 info.serverStarted=Server {0} byl spu\u0161t\u011bn.

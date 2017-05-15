@@ -69,7 +69,6 @@ public class DB2JCCHelper extends DB2Helper {
      */
     private final AtomicReference<Method>
                     getDB2Correlator = new AtomicReference<Method>(),
-                    getDB2Object = new AtomicReference<Method>(),
                     isInDB2UnitOfWork = new AtomicReference<Method>(),
                     reuseDB2Connection = new AtomicReference<Method>(),
                     setDB2ClientUser = new AtomicReference<Method>(),
@@ -282,28 +281,6 @@ public class DB2JCCHelper extends DB2Helper {
         }
 
         return javax.transaction.xa.XAResource.TMNOFLAGS;
-    }
-
-    /**
-     * Invokes DB2Wrapper.getDB2Object on the connection.
-     * 
-     * @param con connection that implements com.ibm.db2.jcc.DB2Wrapper.
-     * @return the DB2 object.
-     */
-    @Override
-    Object getDB2Object(Connection con) {
-        try {
-            Method m = getDB2Object.get();
-            if (m == null) {
-                Class<?> DB2Wrapper = PrivHelper.loadClass(mcf.dsConfig.get().classloader, "com.ibm.db2.jcc.DB2Wrapper");
-                getDB2Object.set(m = DB2Wrapper.getMethod("getDB2Object"));
-            }
-            return m.invoke(con);
-        } catch (RuntimeException x) {
-            throw x;
-        } catch (Exception x) {
-            throw new RuntimeException((x instanceof InvocationTargetException) ? x.getCause() : x);
-        }
     }
 
     /**
@@ -580,20 +557,6 @@ public class DB2JCCHelper extends DB2Helper {
         if (isTraceOn && tc.isEntryEnabled()) 
             Tr.exit(this, tc, "getSQLJContext", rtnctx);
         return rtnctx;
-    }
-
-    @Override
-    public void processLastHandleClosed(Connection conn, boolean autoCommit, boolean inGlobal) throws SQLException 
-    { 
-      // we will no-op since there is nothing to do
-      // the generic helper also no-ops, but since we inherit directly from the
-      // DB2Helper (which does NOT no-op), we need to reimplement this method here
-    } 
-
-    @Override
-    public void doConnectionCleanupOnWrapper(WSRdbManagedConnectionImpl mc) throws SQLException
-    { 
-      //the checking and cleanup for UOW will be done in the cleanupTransaction for all not jut for Z T2 using universal
     } 
 
     @Override

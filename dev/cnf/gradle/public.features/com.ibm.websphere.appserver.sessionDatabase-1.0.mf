@@ -8,7 +8,7 @@ IBM-ShortName: sessionDatabase-1.0
 Subsystem-Content: com.ibm.websphere.appserver.jndi-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.javax.servlet-3.0; ibm.tolerates:="3.1"; apiJar=false; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.transaction-1.1; ibm.tolerates:="1.2"; type="osgi.subsystem.feature",
- com.ibm.websphere.appserver.jdbc-4.0; ibm.tolerates:="4.1"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jdbc-4.0; ibm.tolerates:="4.1, 4.2"; type="osgi.subsystem.feature",
  com.ibm.websphere.security; version="[1.0.0,1.0.200)",
  com.ibm.ws.session.db; version="[1.0.0,1.0.200)",
  com.ibm.ws.serialization; version="[1.0.0,1.0.200)",

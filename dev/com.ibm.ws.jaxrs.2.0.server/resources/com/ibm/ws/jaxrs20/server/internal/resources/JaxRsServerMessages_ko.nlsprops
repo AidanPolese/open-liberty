@@ -1,5 +1,5 @@
 # IBM Confidential OCO Source Material
-# (C) COPYRIGHT International Business Machines Corp. 2011.
+# (C) COPYRIGHT International Business Machines Corp. 2011, 2017.
 # The source code for this program is not published or otherwise divested
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
@@ -19,13 +19,16 @@
 #
 # NLS_MESSAGEFORMAT_ALL
 #
-#CMVCPATHNAME com.ibm.ws.jaxws.webcontainer/resources/com/ibm/ws/jaxws/webcontainer/internal/resources/JaxWsWebContainerMessages.nlsprops
+#CMVCPATHNAME com.ibm.ws.jaxrs.2.0.server/resources/com/ibm/ws/jaxrs20/server/internal/resources/JaxRsWebServerMessages.nlsprops
 #ISMESSAGEFILE TRUE
 #COMPONENTPREFIX CWWKW
-#COMPONENTNAMEFOR CWWKW WebSphere JAXWS WebContainer Code
+#COMPONENTNAMEFOR CWWKW WebSphere JAXRS WebContainer Code
 #RANGE 0100 - 0199
 #
 #NLS_MESSAGEFORMAT_VAR
 #NLS_ENCODING=UNICODE
 #
 
+warn.provider.no.public.ctor=CWWKW0100W: \uc560\ud50c\ub9ac\ucf00\uc774\uc158 \ub0b4\uc758 JAX-RS \uc81c\uacf5\uc790 \ud074\ub798\uc2a4\uc778 {0}\uc5d0 \uacf5\uc6a9 \uc0dd\uc131\uc790\uac00 \uc5c6\uc2b5\ub2c8\ub2e4. \uc11c\ubc84\uac00 \uc774 \uc81c\uacf5\uc790\ub97c \ubb34\uc2dc\ud569\ub2c8\ub2e4.
+warn.provider.no.public.ctor.explanation=JAX-RS \uc2a4\ud399\uc758 \uacbd\uc6b0, \uc81c\uacf5\uc790 \ud074\ub798\uc2a4\uac00 \ud638\ucd9c\ud560 JAX-RS \ucee8\ud14c\uc774\ub108 \uad6c\ud604\uc5d0 \ub300\ud55c \uacf5\uc6a9 \uc0dd\uc131\uc790\ub97c \ud558\ub098 \uc774\uc0c1 \ud3ec\ud568\ud574\uc57c \ud569\ub2c8\ub2e4. \uc9c0\uc815\ub41c \uc81c\uacf5\uc790 \ud074\ub798\uc2a4\uac00 \uacf5\uc6a9 \uc0dd\uc131\uc790\ub97c \ud3ec\ud568\ud558\uc9c0 \uc54a\uc73c\ubbc0\ub85c \uc11c\ubc84\uac00 \uc774\ub97c \ubb34\uc2dc\ud569\ub2c8\ub2e4.
+warn.provider.no.public.ctor.useraction=\uc560\ud50c\ub9ac\ucf00\uc774\uc158\uc5d0 \uc774 \uc81c\uacf5\uc790\uac00 \ud544\uc694\ud55c \uacbd\uc6b0, \uc774 \ud074\ub798\uc2a4\uac00 \ud558\ub098 \uc774\uc0c1\uc758 \uacf5\uc6a9 \uc0dd\uc131\uc790\ub97c \ud3ec\ud568\ud558\ub3c4\ub85d \uc218\uc815\ub418\uc5b4\uc57c \ud569\ub2c8\ub2e4. \uc790\uc138\ud55c \uc815\ubcf4\ub294 JAX-RS 2.0(JSR 339) \uc2a4\ud399\uc758 4.1.2\uc808\uc744 \ucc38\uc870\ud558\uc2ed\uc2dc\uc624.

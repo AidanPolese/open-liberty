@@ -22,7 +22,7 @@ Service-Component: \
     properties:="service.vendor=IBM,handlesType=org.osgi.framework.Bundle,category=BUNDLE"
 
 -buildpath: \
-	com.ibm.websphere.org.osgi.core.6.0.0,\
-	com.ibm.websphere.org.osgi.service.component.1.3.0,\
+	com.ibm.websphere.org.osgi.core,\
+	com.ibm.websphere.org.osgi.service.component,\
 	com.ibm.ws.artifact;version=latest,\
 	com.ibm.ws.kernel.service

@@ -1,10 +1,10 @@
--include= jar:${fileuri;lib/org.eclipse.osgi_3.11.3.v20170118-1931.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;lib/org.eclipse.osgi_3.11.4.201705101649.jar}!/META-INF/MANIFEST.MF,bnd.overrides
 -nouses: true
 -nodefaultversion: true
 
 -includeresource: \
-   @lib/org.eclipse.osgi_3.11.3.v20170118-1931.jar
+   @lib/org.eclipse.osgi_3.11.4.201705101649.jar
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \
-	lib/org.eclipse.osgi_3.11.3.v20170118-1931.jar;version=file
+	lib/org.eclipse.osgi_3.11.4.201705101649.jar;version=file

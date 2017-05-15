@@ -38,4 +38,4 @@ publish.wlp.jar.suffix: dev/api/spec
 -buildpath: \
 	${javac.bootclasspath.java6}, \
 	lib/javax.persistence_2.0.jar;version=file,\
-	com.ibm.websphere.org.osgi.core.6.0.0
+	com.ibm.websphere.org.osgi.core

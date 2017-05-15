@@ -28,6 +28,10 @@ import java.security.ProtectionDomain;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleReference;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
 import com.ibm.ws.jsp.Constants;
 import com.ibm.wsspi.jsp.context.JspClassloaderContext;
@@ -42,6 +46,7 @@ public class JSPExtensionClassLoader extends URLClassLoader {
         }
     }
 
+    private static final TraceComponent tc = Tr.register(JSPExtensionClassLoader.class);
     private PermissionCollection permissionCollection = null;
     private CodeSource codeSource = null;
     private String className = null;
@@ -275,7 +280,28 @@ public class JSPExtensionClassLoader extends URLClassLoader {
             synchronized(pdCache) {
                 pd = pdCache.get(codeLocationString);
                 if (pd == null) {
-                    pd = new ProtectionDomain(new CodeSource(codeLocation, codeSource == null ? null : codeSource.getCertificates()), permissionCollection);
+                    ClassLoader tccl = null;
+                    try {
+                        tccl = (ClassLoader)AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
+                            public Object run() {
+                                    return Thread.currentThread().getContextClassLoader();
+                            }
+                        });
+                    }catch (PrivilegedActionException pae)
+                        {
+                            if (tc.isDebugEnabled()) Tr.debug(tc, "Failed to get the ContextClassLoader." + pae);
+                        }
+                    
+                    if (tccl !=null && tccl instanceof BundleReference) {
+                        Bundle b = ((BundleReference) tccl).getBundle();
+                        if (b.getHeaders("Web-ContextPath") != null) {
+                            pd = b.adapt(ProtectionDomain.class);
+                            if (tc.isDebugEnabled()) Tr.debug(tc, "WAB ProtectionDomain obtained" + pd);
+                        }
+                    }
+                    if (pd == null) {
+                        pd = new ProtectionDomain(new CodeSource(codeLocation, codeSource == null ? null : codeSource.getCertificates()), permissionCollection);
+                    }
                     pdCache.put(codeLocationString, pd);
                 }
             }

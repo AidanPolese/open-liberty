@@ -22,6 +22,28 @@ ext.bndWorkspace = new Workspace(rootDir, bnd_cnf).setOffline(gradle.startParame
 
 ext.cnf = rootProject.project(bnd_cnf)
 
+def gitBranch() {
+    def branch = ""
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.in.eachLine { line -> branch = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+    branch
+}
+
+ext.branchName = System.env.BRANCH_NAME ?: gitBranch()
+
+/* Write git branchName to properties file */
+Properties props = new Properties()
+File propsFile = new File('generated.properties')
+
+if (branchName == '' || branchName == 'HEAD') {
+    props.setProperty('bGitBranch', 'master')
+} else {
+    props.setProperty('bGitBranch', branchName)
+}
+props.store(propsFile.newWriter(), null)
+
 /* Configure the subprojects */
 subprojects {
   def bndProject = bndWorkspace.getProject(name)

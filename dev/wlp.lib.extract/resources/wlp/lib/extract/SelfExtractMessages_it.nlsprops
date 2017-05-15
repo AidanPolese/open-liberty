@@ -267,11 +267,11 @@ LICENSE_invalidLicense=Impossibile aggiornare la licenza perch\u00e9 l''installa
 LICENSE_invalidInstallType=Impossibile aggiornare la licenza perch\u00e9 l''installazione del prodotto specificato \u00e8 stata effettuata utilizzando IBM Installation Manager. Utilizzare IBM Installation Manager per aggiornare l''installazione.
 
 # new messages for license upgrade and downgrade
-LICENSE_replace_invalidVersion=Impossibile sostituire la licenza perch\u00e9 l''installazione del prodotto specificata \u00e8 alla versione {0}, ma la licenza pu\u00f2 essere sostituita solo dalla versione {1}.
-LICENSE_replace_invalidInstallType=Impossibile modificare la licenza perch\u00e9 l''installazione del prodotto specificato \u00e8 stata effettuata utilizzando IBM Installation Manager. \
-Utilizzare IBM Installation Manager per modificare l''installazione.
+LICENSE_replace_invalidVersion=Impossibile applicare la licenza perch\u00e9 l''installazione del prodotto specificata \u00e8 alla versione {0}, ma la licenza pu\u00f2 essere applicata solo dalla versione {1}.
+LICENSE_replace_invalidInstallType=Impossibile applicare la licenza perch\u00e9 l''installazione del prodotto specificato \u00e8 stata effettuata utilizzando IBM Installation Manager. \
+Utilizzare IBM Installation Manager per aggiornare l''installazione.
 
-LICENSE_replace_invalidEditonFeatures=Le seguenti funzioni non sono pi\u00f9 applicabili a {0} e devono essere rimosse prima di sostituire la licenza: {1}
-LICENSE_replace_uninstallFeatures_manually=Utilizzare il seguente comando per disinstallare queste funzioni prima di sostituire la licenza per {0}: {1}
+LICENSE_replace_invalidEditonFeatures=Le seguenti funzioni non si applicano all''edizione {0} e devono essere disinstallate prima dell''applicazione della licenza: {1}\n \n\
+Utilizzare il seguente comando per disinstallare queste funzioni prima di applicare la licenza per l''edizione {2}: {3}
 
-
+LICENSE_downgrade_block_8557_low=Questa licenza pu\u00f2 essere applicata solo a {0} o superiore. L''installazione corrente \u00e8 a {1}. Scaricare e aggiornare l''ultimo livello e riapplicare la licenza.

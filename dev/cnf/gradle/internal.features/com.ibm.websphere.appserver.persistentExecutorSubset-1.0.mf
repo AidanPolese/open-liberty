@@ -7,7 +7,7 @@ IBM-ProductID: com.ibm.websphere.appserver
 Subsystem-Content: com.ibm.websphere.appserver.appLifecycle-1.0; type="osgi.subsystem.feature",
  com.ibm.ws.persistence-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.contextService-1.0; type="osgi.subsystem.feature",
- com.ibm.websphere.appserver.jdbc-4.1; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jdbc-4.1; ibm.tolerates:="4.2"; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.transaction-1.2; type="osgi.subsystem.feature",
  com.ibm.ws.javaee.platform.defaultresource; version="[1.0.0,1.0.200)",
  com.ibm.websphere.javaee.concurrent.1.0; location:="dev/api/spec/,lib/"; version="[1.0.0,1.0.200)",

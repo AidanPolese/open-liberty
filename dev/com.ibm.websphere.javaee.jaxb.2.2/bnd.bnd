@@ -17,7 +17,7 @@ Import-Package: \
 Bundle-Activator: org.apache.geronimo.osgi.locator.Activator
   
 Include-Resource:\
- @lib/jaxb-api.jar, \
+ @lib/jaxb-api.jar!/!META-INF/maven/*, \
  @lib/geronimo-jaxb_2.2_spec-1.0.1.jar!/org/apache/geronimo/osgi/locator/*, \
  @lib/geronimo-jaxb_2.2_spec-1.0.1.jar!/javax/xml/bind/ContextFinder.class, \
  @lib/geronimo-jaxb_2.2_spec-1.0.1.jar!/javax/xml/bind/JAXBContext.class, \

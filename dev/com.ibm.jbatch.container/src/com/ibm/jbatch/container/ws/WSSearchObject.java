@@ -34,7 +34,7 @@ public class WSSearchObject {
     long greaterThanInstanceId = -1;
     List<Long> instanceIdList;
     List<InstanceState> instanceState;
-    String exitStatus;
+    List<String> exitStatusList;
     Date startCreateTime = null;
     Date endCreateTime = null;
     String lessThanCreateTime = null;
@@ -45,10 +45,11 @@ public class WSSearchObject {
     String lessThanLastUpdatedTime = null;
     String greaterThanLastUpdatedTime = null;
     Date specificLastUpdatedTime = null;
+    boolean ignoreCase = false;
     Map<String, String> jobParams = null;
-    String submitter = null;
-    String appName = null;
-    String jobName = null;
+    List<String> submitterList = null;
+    List<String> appNameList = null;
+    List<String> jobNameList = null;
 
     // Non-Search/Purge related variables
     String authSubmitter = null;
@@ -59,22 +60,22 @@ public class WSSearchObject {
     public WSSearchObject(String instanceIdParams, String createTimeParams,
                           String instanceStateParams, String exitStatusParams) throws Exception {
 
-        this(instanceIdParams, createTimeParams, instanceStateParams, exitStatusParams, null, null, null, null, null, null);
+        this(instanceIdParams, createTimeParams, instanceStateParams, new String[] { exitStatusParams }, null, null, null, null, null, null, null);
     }
 
-    // Constructor
+    // Constructor v3
     public WSSearchObject(String instanceIdParams, String createTimeParams,
                           String instanceStateParams, String exitStatusParams, String lastUpdatedTimeParams,
                           String sortParams, Map<String, String> jobParams) throws Exception {
 
-        this(instanceIdParams, createTimeParams, instanceStateParams, exitStatusParams, lastUpdatedTimeParams, sortParams, jobParams, null, null, null);
+        this(instanceIdParams, createTimeParams, instanceStateParams, new String[] { exitStatusParams }, lastUpdatedTimeParams, sortParams, jobParams, null, null, null, null);
     }
 
-    // Constructor
+    // Constructor v4
     public WSSearchObject(String instanceIdParams, String createTimeParams,
-                          String instanceStateParams, String exitStatusParams, String lastUpdatedTimeParams,
+                          String instanceStateParams, String[] exitStatusParams, String lastUpdatedTimeParams,
                           String sortParams, Map<String, String> jobParams,
-                          String submitterParams, String appNameParams, String jobNameParams) throws Exception {
+                          String[] submitterParams, String[] appNameParams, String[] jobNameParams, String ignoreCaseParams) throws Exception {
 
         if (instanceIdParams != null)
             processInstanceIdParams(instanceIdParams);
@@ -105,6 +106,9 @@ public class WSSearchObject {
 
         if (jobNameParams != null)
             processJobNameParams(jobNameParams);
+
+        if (ignoreCaseParams != null)
+            processIgnoreCaseParams(ignoreCaseParams);
     }
 
     /**
@@ -148,8 +152,11 @@ public class WSSearchObject {
      * @param params
      * @throws Exception
      */
-    private void processExitStatusParams(String params) throws Exception {
-        this.exitStatus = params;
+    private void processExitStatusParams(String[] params) throws Exception {
+        // In the this() call from the earlier constructors, if exitStatus is null, we end up with a String[]
+        // with a null element that we need to check for here.
+        if (params != null && params[0] != null)
+            this.exitStatusList = Arrays.asList(params);
     }
 
     public void processJobParameter(Map<String, String> jobParams) {
@@ -252,16 +259,22 @@ public class WSSearchObject {
         }
     }
 
-    private void processSubmitterParams(String params) {
-        this.submitter = params;
+    private void processSubmitterParams(String[] params) {
+        this.submitterList = Arrays.asList(params);
     }
 
-    private void processAppNameParams(String params) {
-        this.appName = params;
+    private void processAppNameParams(String[] params) {
+        this.appNameList = Arrays.asList(params);
     }
 
-    private void processJobNameParams(String params) {
-        this.jobName = params;
+    private void processJobNameParams(String[] params) {
+        this.jobNameList = Arrays.asList(params);
+    }
+
+    private void processIgnoreCaseParams(String params) {
+        if ("true".equalsIgnoreCase(params)) {
+            this.ignoreCase = true;
+        }
     }
 
     // Getters and Setters
@@ -306,12 +319,12 @@ public class WSSearchObject {
         this.instanceState = instanceState;
     }
 
-    public String getExitStatus() {
-        return exitStatus;
+    public List<String> getExitStatusList() {
+        return exitStatusList;
     }
 
-    public void setExitStatus(String exitStatus) {
-        this.exitStatus = exitStatus;
+    public void setExitStatusList(List<String> exitStatus) {
+        this.exitStatusList = exitStatus;
     }
 
     public Date getStartCreateTime() {
@@ -402,12 +415,12 @@ public class WSSearchObject {
         this.specificLastUpdatedTime = specificLastUpdatedTime;
     }
 
-    public String getSubmitter() {
-        return submitter;
+    public List<String> getSubmitterList() {
+        return submitterList;
     }
 
-    public void setSubmitter(String submitter) {
-        this.submitter = submitter;
+    public void setSubmitterList(List<String> submitter) {
+        this.submitterList = submitter;
     }
 
     public String getAuthSubmitter() {
@@ -418,20 +431,28 @@ public class WSSearchObject {
         this.authSubmitter = submitter;
     }
 
-    public String getAppName() {
-        return appName;
+    public List<String> getAppNameList() {
+        return appNameList;
     }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
+    public void setAppNameList(List<String> appNames) {
+        this.appNameList = appNames;
     }
 
-    public String getJobName() {
-        return jobName;
+    public List<String> getJobNameList() {
+        return jobNameList;
     }
 
-    public void setJobName(String jobName) {
-        this.jobName = jobName;
+    public void setJobNameList(List<String> jobNames) {
+        this.jobNameList = jobNames;
+    }
+
+    public boolean getIgnoreCase() {
+        return ignoreCase;
+    }
+
+    public void setIgnoreCase(boolean ignoreCase) {
+        this.ignoreCase = ignoreCase;
     }
 
     public Map<String, String> getJobParameters() {
@@ -459,7 +480,7 @@ public class WSSearchObject {
         sb.append("lessThanInstanceId = " + this.lessThanInstanceId + "\n");
         sb.append("greaterThanInstanceId = " + this.greaterThanInstanceId + "\n");
         sb.append("instanceState = " + this.instanceState + "\n");
-        sb.append("exitStatus = " + this.exitStatus + "\n");
+        sb.append("exitStatus = " + this.exitStatusList + "\n");
         sb.append("startCreateTime = " + this.startCreateTime + "\n");
         sb.append("endCreateTime = " + this.endCreateTime + "\n");
         sb.append("lessThanCreateTime = " + this.lessThanCreateTime + "\n");
@@ -472,10 +493,11 @@ public class WSSearchObject {
         sb.append("greaterThanLastUpdatedTime = " + this.greaterThanLastUpdatedTime + "\n");
         sb.append("specificLastUpdatedTime = " + this.specificLastUpdatedTime + "\n");
         sb.append("sortList = " + this.sortList + "\n");
-        sb.append("submitter = " + this.submitter + "\n");
+        sb.append("submitter = " + this.submitterList + "\n");
         sb.append("authSubmitter = " + this.authSubmitter + "\n");
-        sb.append("appName = " + this.appName + "\n");
-        sb.append("jobName = " + this.jobName + "\n");
+        sb.append("appName = " + this.appNameList + "\n");
+        sb.append("jobName = " + this.jobNameList + "\n");
+        sb.append("ignoreCase = " + this.ignoreCase + "\n");
         if (jobParams != null) {
             for (Map.Entry<String, String> e : this.jobParams.entrySet()) {
                 sb.append("jobParameter." + e.getKey() + "=" + e.getValue() + "\n");

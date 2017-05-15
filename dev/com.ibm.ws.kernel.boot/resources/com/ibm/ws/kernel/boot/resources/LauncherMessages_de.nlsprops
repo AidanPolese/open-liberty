@@ -464,6 +464,12 @@ warning.javase6.endofservice=CWWKE0109W: Die Unterst\u00fctzung f\u00fcr Java SE
 warning.javase6.endofservice.explanation=IBM stellt Unterst\u00fctzung f\u00fcr Java SE 6 mit WebSphere Application Server Liberty Ende September 2017 ein. Wenn Sie Java SE 6 nach dem Ende der Unterst\u00fctzung weiterhin verwenden, setzen Sie Ihre Anwendungen unter Umst\u00e4nden Sicherheitsrisiken aus.
 warning.javase6.endofservice.useraction=IBM empfiehlt dringend, die neueste Java SE-Version, Java SE 8, zu verwenden. 
 
+#
+# W A R N I N G:   Do not use CWWKE0100 - CCWKE0199 they are reserved in ServiceMessages.nlsprops
+#
+# Too Late for CWWKE0101 - CWWKE0107 they have dual use currently and CWWKE0108 and CWWKE0109 are only used here.
+#
+
 error.clientNameCharacter=CWWKE0900E: Der angegebene Clientname enth\u00e4lt ein Zeichen, das nicht g\u00fcltig ist (Name={0}). \
 Die g\u00fcltigen Zeichen sind alphanumerische Unicode-Zeichen (z. B. \
 0-9, a-z, A-Z), Unterstreichungszeichen (_), Minuszeichen (-), Pluszeichen (+) und Punkte (.). \
@@ -644,7 +650,9 @@ info.server.pause.request.completed.useraction=Es ist keine Aktion erforderlich.
 info.server.resume.request.completed=CWWKE0939I: Eine Wiederaufnahmeanforderung wurde ausgef\u00fchrt.
 info.server.resume.request.completed.explanation=Eine Wiederaufnahmeanforderung wurde ausgef\u00fchrt.
 info.server.resume.request.completed.useraction=Es ist keine Aktion erforderlich. 
-
+info.envProductExtension=CWWKE0940I: Die Produkterweiterung {0} hat die Produkt-ID {1} und das Produktinstallationsverzeichnis {2}. Diese Produkterweiterung wurde mit der Umgebungsvariablen WLP_PRODUCT_EXT_DIR angegeben. 
+info.envProductExtension.explanation= Die Umgebungsvariable WLP_PRODUCT_EXT_DIR verweist auf die Position der Produkterweiterung. Der Server hat die Produkterweiterung gefunden und verwendet sie.
+info.envProductExtension.useraction=Es ist keine Aktion erforderlich. 
 info.serverStarting=Server {0} wird gestartet.
 info.serverStarted=Der Server {0} wurde gestartet.
 info.serverStartedWithPID=Der Server {0} wurde mit der Prozess-ID {1} gestartet.

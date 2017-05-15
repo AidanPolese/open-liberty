@@ -1,9 +1,9 @@
 -include= ~../cnf/resources/bnd/bundle.props
-bVersion=${bundle.version}
+bVersion=1.0
 
-Bundle-Name: Apache CXF Runtime WS Policy
-Bundle-Description: Apache CXF Runtime WS Policy, version ${original.jar.version}
-Bundle-SymbolicName: ${symbolic.name}
+Bundle-Name: Apache CXF Runtime WS Addressing
+Bundle-Description: Apache CXF Runtime WS Addressing, version 2.6.2
+Bundle-SymbolicName: com.ibm.ws.org.apache.cxf-rt-ws-addr.2.6.2
 
 Export-Package: \
   org.apache.cxf.*;version=2.6.2
@@ -18,14 +18,14 @@ Import-Package: \
  *
  
 Include-Resource:\
- @build/tmp/lib/cxf-rt-ws-addr-2.6.2.jar!/META-INF/cxf/**, \
- @build/tmp/lib/cxf-rt-ws-addr-2.6.2.jar!/META-INF/spring.handlers, \
- @build/tmp/lib/cxf-rt-ws-addr-2.6.2.jar!/META-INF/spring.schemas, \
- @build/tmp/lib/cxf-rt-ws-addr-2.6.2.jar!/schemas/**, \
- @build/tmp/lib/cxf-rt-ws-addr-2.6.2.jar!/META-INF/DEPENDENCIES, \
- @build/tmp/lib/cxf-rt-ws-addr-2.6.2.jar!/META-INF/LICENSE, \
- @build/tmp/lib/cxf-rt-ws-addr-2.6.2.jar!/META-INF/NOTICE, \
- build/tmp/bnd/cxf-rt-ws-addr-2.6.2
+ @lib/cxf-rt-ws-addr-2.6.2-ibm-s20170216-1739.jar!/META-INF/cxf/**, \
+ @lib/cxf-rt-ws-addr-2.6.2-ibm-s20170216-1739.jar!/META-INF/spring.handlers, \
+ @lib/cxf-rt-ws-addr-2.6.2-ibm-s20170216-1739.jar!/META-INF/spring.schemas, \
+ @lib/cxf-rt-ws-addr-2.6.2-ibm-s20170216-1739.jar!/schemas/**, \
+ @lib/cxf-rt-ws-addr-2.6.2-ibm-s20170216-1739.jar!/META-INF/DEPENDENCIES, \
+ @lib/cxf-rt-ws-addr-2.6.2-ibm-s20170216-1739.jar!/META-INF/LICENSE, \
+ @lib/cxf-rt-ws-addr-2.6.2-ibm-s20170216-1739.jar!/META-INF/NOTICE, \
+ @lib/cxf-rt-ws-addr-2.6.2-ibm-s20170216-1739.jar!/org/apache/cxf/**
  
  
 # Remove the resources (blueprint/metadata configuration files) in the OSGI-INF directory

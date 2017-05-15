@@ -33,7 +33,7 @@ Subsystem-Name: JavaServer Faces 2.2
  com.ibm.websphere.appserver.jsp-2.3, \
  com.ibm.websphere.appserver.javaeeCompatible-7.0
 -bundles=com.ibm.ws.org.apache.commons.beanutils.1.8.3, \
- com.ibm.ws.org.apache.commons.collections.3.2, \
+ com.ibm.ws.org.apache.commons.collections.3.2.1, \
  com.ibm.ws.jsf.2.2, \
  com.ibm.ws.org.apache.commons.discovery.0.2, \
  com.ibm.ws.org.apache.commons.codec.1.3, \

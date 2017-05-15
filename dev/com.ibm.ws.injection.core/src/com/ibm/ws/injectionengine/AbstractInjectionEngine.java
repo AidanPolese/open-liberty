@@ -33,10 +33,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.naming.Context;
 import javax.naming.spi.ObjectFactory;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.IncidentStream;
 import com.ibm.ws.injectionengine.factory.MBLinkReferenceFactoryImpl;
 import com.ibm.ws.injectionengine.ffdc.Formattable;
@@ -592,7 +592,7 @@ public abstract class AbstractInjectionEngine
                         String codeSourceLocation = codeSource == null ? null : String.valueOf(codeSource.getLocation());
 
                         Tr.warning(tc, "INCOMPATIBLE_ANNOTATION_CLASS_CWNEN0070W",
-                                   new Object[] { className, codeSourceLocation });
+                                   className, codeSourceLocation);
                     }
                 }
             }
@@ -827,7 +827,7 @@ public abstract class AbstractInjectionEngine
     {
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
         if (isTraceOn && tc.isEntryEnabled())
-            Tr.entry(tc, "inject", new Object[] { objectToInject, injectionTarget });
+            Tr.entry(tc, "inject", objectToInject, injectionTarget);
 
         injectionTarget.inject(objectToInject, null);
 
@@ -893,7 +893,7 @@ public abstract class AbstractInjectionEngine
                                                "with the injection engine.");
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
-            Tr.entry(tc, "registerInjectionMetaDataListener", new Object[] { metaDataListener.getClass().getName() });
+            Tr.entry(tc, "registerInjectionMetaDataListener", metaDataListener.getClass().getName());
         metaDataListeners.add(metaDataListener);
     } //492391.2 end
 
@@ -909,7 +909,7 @@ public abstract class AbstractInjectionEngine
                                                "from the injection engine.");
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
-            Tr.entry(tc, "unregisterInjectionMetaDataListener", new Object[] { metaDataListener.getClass().getName() });
+            Tr.entry(tc, "unregisterInjectionMetaDataListener", metaDataListener.getClass().getName());
         metaDataListeners.remove(metaDataListener);
     } // D96791
 
@@ -1096,8 +1096,7 @@ public abstract class AbstractInjectionEngine
                     throws InjectionException
     {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-            Tr.debug(tc, "registerOverrideReferenceFactory",
-                     new Object[] { annotation, factory });
+            Tr.debug(tc, "registerOverrideReferenceFactory", annotation, factory);
 
         if (annotation == null ||
             factory == null)

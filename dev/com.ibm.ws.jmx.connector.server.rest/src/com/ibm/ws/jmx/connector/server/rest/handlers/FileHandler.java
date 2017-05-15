@@ -126,58 +126,65 @@ public class FileHandler implements RESTHandler {
         String expand = RESTHelper.getQueryParam(request, APIConstants.PARAM_EXPAND_ON_COMPLETION);
         String local = RESTHelper.getQueryParam(request, APIConstants.PARAM_LOCAL);
         String actionHeader = request.getHeader(ConnectorSettings.POST_TRANSFER_ACTION);
-
-        ServletRESTRequestWithParams req = null;
-
         String filePath = null;
+        String originPackagePath = null;
+        ServletRESTRequestWithParams req = null;
+        boolean deploymentAPICall = false;
+        boolean nodeDeployment = false;
+        boolean nodeDeploymentRemote = false;
+        boolean nodeDeploymentLocal = false;
+
         String deployService = null;
+        boolean isMultipartRequest = request.isMultiPartRequest();
+
         if (request instanceof ServletRESTRequestWithParams) {
+            // This type of request only comes from DeploymentAPI
+            // when the request is of this type it means that the request is NOT a multi-part request
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, "Request object is of type: " + request.getClass().getName());
+                Tr.debug(tc, "File transfer call from DeploymentAPI for Liberty or Node.js deployment.");
             }
             req = (ServletRESTRequestWithParams) request;
             if (req.getAdditionalParamaMap().containsKey("deployService")) {
-                deployService = req.getParam("deployService");
-                if (deployService != null && "true".equalsIgnoreCase(deployService)) {
-                    if (tc.isDebugEnabled()) {
-                        Tr.debug(tc, "FileHandler service received a call from Deployment service.");
+                deploymentAPICall = true;
+                deployService = req.getParam("deployService"); // the value is either liberty OR node.js
+                local = req.getParam("local");
+
+                filePath = req.getParam("targetPath");
+                originPackagePath = req.getParam("originPackagePath");
+                if ("liberty".equalsIgnoreCase(deployService)) {
+                    expand = "true";
+                    try {
+                        filePath = URLDecoder.decode(filePath, "UTF8");
+                        if (tc.isDebugEnabled()) {
+                            Tr.debug(tc, "Server package is located on the controller, filePath is:" + filePath);
+                        }
+                    } catch (UnsupportedEncodingException e) {
+                        if (tc.isDebugEnabled()) {
+                            Tr.debug(tc, "Exception while decoding the filePath string.");
+                        }
                     }
-                    local = req.getParam("local").toLowerCase();
-                    filePath = req.getParam("targetPath");
-                    actionHeader = req.getParam(ConnectorSettings.POST_TRANSFER_ACTION);
+                } else if ("node.js".equalsIgnoreCase(deployService)) {
+                    nodeDeployment = true;
+                    deploymentAPICall = true;
+                    expand = "false";
+                    if (isMultipartRequest)
+                        nodeDeploymentRemote = true;
+                    else
+                        nodeDeploymentLocal = true;
+                } else {
+                    throw new IllegalArgumentException("Invalid deployment type " + deployService);
                 }
             }
         }
 
-        if (ConnectorSettings.POST_TRANSFER_ACTION_FIND_SERVER_NAME.equals(actionHeader)) {
-            expand = "true";
+        if (isMultipartRequest && (ConnectorSettings.POST_TRANSFER_ACTION_FIND_SERVER_NAME.equals(actionHeader) || nodeDeploymentRemote)) {
+            deploymentAPICall = true;
+            filePath = RESTHelper.getQueryParam(request, "filePath");
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, "AdminCenter deployment");
+                Tr.debug(tc, "AdminCenter deployment. Server package NOT located on controller, filePath is:" + filePath);
             }
-
-            if (request.isMultiPartRequest()) {
-                // Multi-part request is for server packages not located on the controller
-                if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, "Server package NOT located on controller");
-                }
-                filePath = RESTHelper.getQueryParam(request, "filePath");
-            } else {
-                if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, "Server package is located on controller");
-                }
-                try {
-                    filePath = URLDecoder.decode(filePath, "UTF8");
-                } catch (UnsupportedEncodingException e) {
-                    if (tc.isDebugEnabled()) {
-                        Tr.debug(tc, "Exception while decoding the filePath string.");
-                    }
-                }
-            }
-
-            if (tc.isDebugEnabled()) {
-                Tr.debug(tc, "filePath Value: " + filePath);
-            }
-        } else {
+        }
+        if (filePath == null && !nodeDeployment) {
             filePath = RESTHelper.getRequiredParam(request, APIConstants.PARAM_FILEPATH);
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, "file path: " + filePath);
@@ -188,7 +195,9 @@ public class FileHandler implements RESTHandler {
             Tr.debug(tc, "Expand: " + expand);
             Tr.debug(tc, "Local: " + local);
             Tr.debug(tc, "ActionHeader: " + actionHeader);
-            Tr.debug(tc, "TargetPath: " + filePath);
+            Tr.debug(tc, "Origin package Path: " + originPackagePath);
+            Tr.debug(tc, "TargetPath: " + filePath + ". Target path is not used for node.js Deployment");
+
         }
 
         //Fetch optional query params
@@ -203,10 +212,15 @@ public class FileHandler implements RESTHandler {
         //UPLOAD also supports multiple routing
         if (RESTHelper.containsMultipleRoutingContext(request)) {
             try {
-                if (deployService != null && req != null)
-                    uploadResults = getMultipleRoutingHelper().multipleUploadInternal(req, filePath, expansion, localFile);
-                else
-                    uploadResults = getMultipleRoutingHelper().multipleUploadInternal(request, filePath, expansion, localFile);
+//                if (isMultipartRequest && "liberty".equalsIgnoreCase(deployService) && req != null) {
+//                    if (tc.isDebugEnabled()) {
+//                        Tr.debug(tc, "This is a Liberty Multipart request, passing the cunstom request object req.");
+//                    }
+//                    uploadResults = getMultipleRoutingHelper().multipleUploadInternal(req, filePath, expansion, localFile);
+//                }
+//
+//                else
+                uploadResults = getMultipleRoutingHelper().multipleUploadInternal(request, filePath, expansion, localFile);
             } catch (IOException e) {
                 throw ErrorHelper.createRESTHandlerJsonException(e, null, APIConstants.STATUS_INTERNAL_SERVER_ERROR);
             }
@@ -222,11 +236,16 @@ public class FileHandler implements RESTHandler {
 
             uploadResults = null;
         }
-
-        if (ConnectorSettings.POST_TRANSFER_ACTION_FIND_SERVER_NAME.equals(actionHeader)) {
+        if (deploymentAPICall) {
+            //  if (ConnectorSettings.POST_TRANSFER_ACTION_FIND_SERVER_NAME.equals(actionHeader)) {
             ServletRESTResponseWithWriter customResponse = (ServletRESTResponseWithWriter) response;
             try {
                 Writer wr = customResponse.geStringtWriter();
+                if (uploadResults != null && uploadResults.contains("failed")) {
+                    OutputHelper.writeJsonOutput(response,
+                                                 "File Transfer failed, please check your deployment input variables or run update host command to ensure that the target host information are accurate.");
+                }
+
                 wr.write(uploadResults);
                 if (tc.isDebugEnabled()) {
                     Tr.debug(tc, "String written to response object is: " + uploadResults);
@@ -241,7 +260,6 @@ public class FileHandler implements RESTHandler {
         } else {
             OutputHelper.writeJsonOutput(response, uploadResults);
         }
-
     }
 
     private void delete(RESTRequest request, RESTResponse response) {

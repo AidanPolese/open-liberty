@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2012, 2015
+ * Copyright IBM Corp. 2012, 2015, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package wlp.lib.extract;
@@ -70,7 +70,7 @@ public class SelfExtractUtils {
     // Manifest subsystem-content attribute ibm.executable directive name
     private static final String EXECUTABLE_DIRECTIVE = "ibm.executable:=";
 
-    static final File getSelf() {
+    public static final File getSelf() {
         File s = null;
 
         ProtectionDomain pd = SelfExtract.class.getProtectionDomain();
@@ -146,7 +146,7 @@ public class SelfExtractUtils {
             return lines;
         }
 
-        // Split a more complicated line... 
+        // Split a more complicated line...
         for (int begin = 0; begin < line.length();) {
             // ??? Java has no wcwidth (Unicode TR#11), so we assume
             // all code points have a console width of 1.
@@ -287,7 +287,7 @@ public class SelfExtractUtils {
         }
 
         return Arrays.asList(new Object[] { "usr/shared/apps", "usr/shared/config", "usr/shared/resources", "templates/servers/defaultServer/apps",
-                                           "templates/servers/defaultServer/dropins" });
+                                            "templates/servers/defaultServer/dropins" });
     }
 
     /**
@@ -529,10 +529,9 @@ public class SelfExtractUtils {
             return new File[0];
         }
 
-        // Get an Array of all manifest files in the specified directory. 
+        // Get an Array of all manifest files in the specified directory.
         File[] manifestFiles = (File[]) AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run()
-            {
+            public Object run() {
                 File[] manifestFiles = featureDir.listFiles(new FileFilter() {
                     public boolean accept(File pathname) {
                         boolean result = false;
@@ -554,8 +553,7 @@ public class SelfExtractUtils {
 
     private static String[] getSubSystemContentFromManifest(final File manifestFile) throws PrivilegedActionException {
         Manifest manifest = (Manifest) AccessController.doPrivileged(new PrivilegedExceptionAction() {
-            public Object run() throws FileNotFoundException, IOException
-            {
+            public Object run() throws FileNotFoundException, IOException {
                 FileInputStream fin = null;
                 Manifest mf = new Manifest();
                 try {
@@ -572,8 +570,7 @@ public class SelfExtractUtils {
         Attributes attributes = manifest.getMainAttributes();
         String value = attributes.getValue(SUBSYSTEM_CONTENT);
 
-        return (null != value && !value.isEmpty()) ?
-                        value.split(",") : new String[0];
+        return (null != value && !value.isEmpty()) ? value.split(",") : new String[0];
     }
 
     public static ReturnCode processExecutableDirective(File outputDir) throws Exception {
@@ -586,8 +583,7 @@ public class SelfExtractUtils {
                 subSystemContent = getSubSystemContentFromManifest(manifestfiles[i]);
             } catch (PrivilegedActionException e) {
                 // PriviledgedActionException is just a wrapper.  Return the cause of the exception.
-                return new ReturnCode(ReturnCode.UNREADABLE, "exception.reading.manifest",
-                                new String[] { manifestfiles[i].getAbsolutePath(), e.getCause().getMessage() });
+                return new ReturnCode(ReturnCode.UNREADABLE, "exception.reading.manifest", new String[] { manifestfiles[i].getAbsolutePath(), e.getCause().getMessage() });
 
             }
 
@@ -622,7 +618,7 @@ public class SelfExtractUtils {
     /**
      * Return String array copy of environment. If environment contains
      * WLP_USER_DIR, override by setting to extractDirectory/wlp/usr
-     * 
+     *
      * @param extractDirectory specifies extraction directory for app jar
      * @return string array of environment
      */
@@ -638,8 +634,7 @@ public class SelfExtractUtils {
             String val = (String) envmap.get(key);
             if (key.equals("WLP_USER_DIR")) {
                 envArray[i++] = "WLP_USER_DIR=" + extractDirectory + File.separator + "wlp" + File.separator + "usr";
-            }
-            else {
+            } else {
                 envArray[i++] = key + "=" + val;
             }
         }
@@ -650,7 +645,7 @@ public class SelfExtractUtils {
 
     /**
      * Check if WLP_JAR_CYGWIN env var set, indicating running under cygwin.
-     * 
+     *
      * @return true if running under cygwin else false
      */
     private static boolean isCygwin() {
@@ -658,8 +653,7 @@ public class SelfExtractUtils {
 
         if (cygwin != null) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -678,19 +672,17 @@ public class SelfExtractUtils {
      * 1) If Java os.name property indicates Windows and the WLP_CYGWIN env var is not set, then it's Windows.
      * 2) If Java os.name property indicates Windows and the WLP_CYGWIN env var *is* set, then it's Cygwin.
      * 3) If Java os.name property indicates other than Windows, then platform type is regarded a Unix.
-     * 
+     *
      * @return int value for unix(1), windows(2), or cygwin(3) according to interrogation
      */
     public static int getPlatform() {
         if (System.getProperty("os.name").startsWith("Win")) {
             if (SelfExtractUtils.isCygwin()) {
                 return PlatformType_CYGWIN;
-            }
-            else {
+            } else {
                 return PlatformType_WINDOWS;
             }
-        }
-        else {
+        } else {
             return PlatformType_UNIX;
         }
     }

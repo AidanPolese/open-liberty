@@ -27,7 +27,6 @@ import org.apache.cxf.phase.Phase;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.websphere.security.WSSecurityException;
 import com.ibm.websphere.security.auth.WSSubject;
 import com.ibm.ws.common.internal.encoder.Base64Coder;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
@@ -109,6 +108,7 @@ public class PropagationHandler extends AbstractPhaseInterceptor<Message> {
         }
     }
 
+    @FFDCIgnore({ NoSuchMethodException.class })
     public static String getEncodedSaml20Token() {
         String base64Saml = null;
         String samlString = null;
@@ -121,11 +121,13 @@ public class PropagationHandler extends AbstractPhaseInterceptor<Message> {
                     Method method = credentialClass.getDeclaredMethod("getSAMLAsString");
                     samlString = (String) method.invoke(credential);
                     break;
+                } catch (NoSuchMethodException e) {
+                    continue;
                 } catch (Exception e) {
                     Tr.warning(tc, "failed_to_extract_saml_token_from_subject", e.getLocalizedMessage());
                 }
             }
-        } catch (WSSecurityException e) {
+        } catch (Exception e) {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, "Exception while getting SAML token from subject:", e.getCause());
             }

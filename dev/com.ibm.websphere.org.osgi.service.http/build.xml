@@ -4,6 +4,8 @@
 
   <target name="publishBundles"/>
 
+  <property name="original.jar.name" value="org.osgi.service.http"/>
+  <property name="original.jar.version" value=""/>
   <target name="package">
   
     <rejar base.name="com.ibm.websphere" version="1.0" src.jar="lib/org.osgi.service.http-1.2.1.jar" output.dir="${dev.dir}/api/spec" />

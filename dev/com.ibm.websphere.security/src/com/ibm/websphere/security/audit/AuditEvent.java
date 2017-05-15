@@ -19,8 +19,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-//import com.ibm.ws.security.audit.context.AuditManager;
-//import com.ibm.ws.security.audit.context.AuditThreadContext;
 import com.ibm.ws.security.utils.SecurityUtils;
 import com.ibm.wsspi.security.audit.AuditService;
 
@@ -160,11 +158,7 @@ public class AuditEvent {
 
     private static String serverID = null;
 
-    //private static ThreadLocal<AuditThreadContext> threadLocal = new ThreadLocal<AuditThreadContext>();
-    //private final AuditManager auditManager;
-
     public AuditEvent() {
-        //this.auditManager = new AuditManager();
         setEventTime(getCurrentTime());
 
     }

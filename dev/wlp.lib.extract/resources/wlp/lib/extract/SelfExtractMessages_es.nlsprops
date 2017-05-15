@@ -84,7 +84,7 @@ licenseAccepted=Se ha encontrado el argumento {0}. Esto indica que ha aceptado l
 # {0} c:/full/directory/path
 # 
 extractInstruction=Especifique el directorio para los archivos de producto o d\u00e9jelo en blanco para aceptar los valores predeterminados.
-extractLicenseInstruction=Especifique el directorio del archivo de actualizaci\u00f3n de licencia, o pulse Intro para aceptar el directorio predeterminado.
+extractLicenseInstruction=Especifique el directorio del archivo de actualizaci\u00f3n de licencia o pulse la tecla Intro aceptar el directorio predeterminado.
 extractDefault=El directorio de destino predeterminado es {0}
 extractDirectoryExists=Ya existe el directorio: {0}
 extractDirectoryError=Se ha producido un fallo al crear el directorio: {0}
@@ -229,6 +229,7 @@ invalidMetaDataFile=Se ha detectado un error interno al procesar metadatos del a
 # {0} is the filename of the log that had the error, {1} is the error.
 unableToCreateFixLog=No se puede crear el archivo de registro de instalaci\u00f3n del arreglo {0} debido a {1}. No se puede aplicar el arreglo. 
 
+
 #Used when the fix installer is unable to understand the content of a manifest contained in the fix.
 #{0} is the manifest with the issue, {1} is the error.
 invalidFixManifest=Se ha detectado un error interno al procesar los datos del manifiesto del arreglo {0}: {1}. No se puede aplicar el arreglo.
@@ -259,24 +260,23 @@ ERROR_UNABLE_TO_LOCATE_COMMAND_EXE=No se ha podido ubicar el ejecutable {0} desp
 # java -jar messages 
 UNABLE_TO_FIND_PID=No se ha podido obtener el ID de proceso del proceso java -jar. No se puede suprimir el directorio de extracci\u00f3n temporal {1} hasta que no finalice manualmente el proceso java -jar.
 
-UNABLE_TO_ATTACH_AGENT=No se ha podido conectar el agente Java de Liberty. Este servidor ejecutar\u00e1, pero no podr\u00e1 realizar funciones que requieran el agente Java como, por ejemplo, supervisi\u00f3n o rastreo. Excepci\u00f3n: {0}
+UNABLE_TO_ATTACH_AGENT=No se ha podido conectar el agente Java de Liberty. Se ejecutar\u00e1 este servidor, pero no podr\u00e1 realizar funciones que requieran el agente Java, como la supervisi\u00f3n o el rastreo. Excepci\u00f3n: {0}
 
-UNABLE_TO_FIND_TOOLS_JAR=No se ha podido conectar el agente Java de Liberty porque este servidor usa un JRE en lugar de un SDK Java. Este servidor ejecutar\u00e1, pero no podr\u00e1 realizar funciones que requieran el agente Java como, por ejemplo, supervisi\u00f3n o rastreo.
-
-UNABLE_TO_FIND_JAVA_AGENT=No se ha podido localizar el agente Java de Liberty. Este servidor ejecutar\u00e1, pero no podr\u00e1 realizar funciones que requieran el agente Java como, por ejemplo, supervisi\u00f3n o rastreo.
-
+UNABLE_TO_FIND_TOOLS_JAR=No se ha podido conectar el agente Java de Liberty porque este servidor utiliza un JRE en lugar de un SDK Java. Se ejecutar\u00e1 este servidor, pero no podr\u00e1 realizar funciones que requieran el agente Java, como la supervisi\u00f3n o el rastreo. 
+UNABLE_TO_FIND_JAVA_AGENT=No se ha podido localizar el agente Java de Liberty. Se ejecutar\u00e1 este servidor, pero no podr\u00e1 realizar funciones que requieran el agente Java, como la supervisi\u00f3n o el rastreo. 
 # messages for LicenseSelfEctractor
-LICENSE_invalidInstall=El directorio {0} no es una instalaci\u00f3n v\u00e1lida de Liberty. Especifique el directorio ra\u00edz de la instalaci\u00f3n de Liberty que desea actualizar.
-LICENSE_invalidVersion=La licencia no se puede actualizar porque la instalaci\u00f3n del producto especificado est\u00e1 en la versi\u00f3n {0}, pero la licencia solo se puede actualizar desde la versi\u00f3n {1}.
-LICENSE_invalidEdition=La licencia no se puede actualizar porque la instalaci\u00f3n del producto especificada es la edici\u00f3n {0}, pero la licencia solo puede actualizar las ediciones siguientes: {1}
-LICENSE_invalidLicense=La licencia no se puede actualizar porque la instalaci\u00f3n del producto especificada tiene una licencia {0}, pero la licencia solo puede actualizar con productos con una licencia {1}.
-LICENSE_invalidInstallType=La licencia no se puede actualizar porque la instalaci\u00f3n del productos especificada se instal\u00f3 utilizando IBM Installation Manager. Utilice IBM Installation Manager para actualizar la instalaci\u00f3n.
+LICENSE_invalidInstall=El directorio {0} no es una instalaci\u00f3n de Liberty v\u00e1lida. Especifique el directorio ra\u00edz de la instalaci\u00f3n de Liberty que desea actualizar.
+LICENSE_invalidVersion=No se puede actualizar la licencia porque la instalaci\u00f3n del producto especificada tiene la versi\u00f3n {0}, pero la licencia solo se puede actualizar desde la versi\u00f3n {1}.
+LICENSE_invalidEdition=No se puede actualizar la licencia porque la instalaci\u00f3n del producto especificada es de la edici\u00f3n {0}, pero la licencia solo puede actualizar las ediciones siguientes: {1}
+LICENSE_invalidLicense=No se puede actualizar la licencia porque la instalaci\u00f3n del producto especificada tiene una licencia {0}, pero la licencia solo puede actualizar los productos con una licencia {1}.
+LICENSE_invalidInstallType=No se puede actualizar la licencia porque la instalaci\u00f3n del producto especificada se ha instalado mediante IBM Installation Manager. Utilice IBM Installation Manager para actualizar la instalaci\u00f3n.
 
 # new messages for license upgrade and downgrade
-LICENSE_replace_invalidVersion=La licencia no puede sustituirse porque la instalaci\u00f3n del producto especificado est\u00e1 en la versi\u00f3n {0}, pero la licencia solo puede sustituirse desde la versi\u00f3n {1}.
-LICENSE_replace_invalidInstallType=La licencia no puede sustituirse porque la instalaci\u00f3n del productos especificada se instal\u00f3 utilizando IBM Installation Manager. Utilice IBM Installation Manager para modificar la instalaci\u00f3n.
+LICENSE_replace_invalidVersion=No se puede actualizar la licencia porque la instalaci\u00f3n del producto especificada tiene la versi\u00f3n {0}, pero la licencia solo se puede aplicar desde la versi\u00f3n {1}.
+LICENSE_replace_invalidInstallType=No se puede aplicar la licencia porque la instalaci\u00f3n del producto especificada se ha instalado mediante IBM Installation Manager. Utilice IBM Installation Manager para actualizar la instalaci\u00f3n.
 
-LICENSE_replace_invalidEditonFeatures=Las siguientes caracter\u00edsticas ya no pueden aplicarse a {0} y deben eliminarse antes de sustituir la licencia: {1}
-LICENSE_replace_uninstallFeatures_manually=Utilice el siguiente mandato para desinstalar estas caracter\u00edsticas antes de sustituir la licencia de {0}: {1}
+LICENSE_replace_invalidEditonFeatures=Las caracter\u00edsticas siguientes no son aplicables a la edici\u00f3n {0} y se deben desinstalar antes de aplicar la licencia: {1}\n\
+\n\
+Utilice el mandato siguiente para desinstalar estas caracter\u00edsticas antes de aplicar la licencia para la edici\u00f3n {2}: {3}
 
-
+LICENSE_downgrade_block_8557_low=Esta licencia solo es aplicable a la instalaci\u00f3n en {0} o superior. La instalaci\u00f3n actual est\u00e1 en {1}. Descargue y actualice al \u00faltimo nivel y vuelva a aplicar la licencia.

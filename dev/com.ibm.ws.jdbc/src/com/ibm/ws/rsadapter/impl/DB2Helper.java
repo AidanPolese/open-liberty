@@ -12,7 +12,6 @@
 package com.ibm.ws.rsadapter.impl;
 
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLInvalidAuthorizationSpecException; 
@@ -56,7 +55,6 @@ public class DB2Helper extends DatabaseHelper {
     String threadIdentitySupport = THREAD_IDENTITY_SUPPORT_NOTALLOWED;
     boolean threadSecurity = false;
     boolean localZOS = false;
-    private static Field mTransactionStateField = null; 
     String productName = null;
     // : the connection type. 1 = jdbc driver; 2 = jcc driver
     static int JDBC = 1; 
@@ -190,10 +188,6 @@ public class DB2Helper extends DatabaseHelper {
         return true;
     }
 
-    Object getDB2Object(Connection con) {
-        throw new UnsupportedOperationException(); // should only be invoked if using DB2JCCHelper, which properly implements
-    }
-
     @Override
     public int getDefaultIsolationLevel() {
         return Connection.TRANSACTION_REPEATABLE_READ;
@@ -297,100 +291,6 @@ public class DB2Helper extends DatabaseHelper {
                     return true;
             }
         return super.isStaleStatement(x);
-    }
-
-    @Override
-    public void processLastHandleClosed(Connection conn, boolean autoCommit, boolean inGlobal) throws SQLException 
-    { 
-      // although not intuitive, it is possible for the DB2 for z/OS Legacy JDBC Driver to leave
-      // its internal Connection on a Unit of Work boundary even when auto commit is true;
-      // most application developers won't know this, so to save an application from experiencing an
-      // LTC rollback when auto commit is true, we can detect here if the Connection is not on a
-      // UOW boundary and reset it
-        if (localZOS && autoCommit && !inGlobal) 
-        { 
-            resetUOWBoundary(conn); 
-        } 
-    } 
-
-    @Override
-    public void doConnectionCleanupOnWrapper(WSRdbManagedConnectionImpl mc) throws SQLException 
-    { 
-      // because DB2 for z/OS is RRS transactional, it is extremely important to
-      // ensure that Connections being returned to the Free Pool are on a Unit of
-      // Work boundary; otherwise, errors such as SQLException -925, or server
-      // abends may occur when the Connection is later reused
-        if (localZOS) 
-        { 
-            resetUOWBoundary(mc.sqlConn); 
-        } 
-    } 
-
-    /**
-     * This method uses proprietary logic to detect if the conn parameter is on a Unit of Work boundary,
-     * and if not, the connection is rolled back in order to set it on a Unit of Work boundary.
-     * 
-     * @param conn the Connection that will be reset on a UOW boundary
-     * 
-     * @throws SQLException
-     */
-
-    private void resetUOWBoundary(Connection conn) throws SQLException 
-    { 
-        if (tc.isEntryEnabled()) 
-        { 
-            Tr.entry(this, tc, "resetUOWBoundary"); 
-        } 
-        // by default, always rollback to fulfull the implied condition
-        // of the method name that we will reset this connection on a
-        // unit of work boundary
-        //
-        // however, if there is driver specific logic available to
-        // predetermine if we are on a Unit of Work boundary, then we
-        // can disable the rollback for a performance improvement
-        boolean rollback = true;
-        if (localZOS && mcf.supportsUOWDetection) 
-        { 
-            try 
-            { 
-                Object db2Obj = getDB2Object(conn);
-                if (mTransactionStateField == null) 
-                { 
-                    Class<?> db2ObjClass = db2Obj.getClass(); 
-                    mTransactionStateField = db2ObjClass.getField("mTransactionState"); 
-                } 
-                int mTransactionStateValue = mTransactionStateField.getInt(db2Obj); 
-                if (mTransactionStateValue == 0) 
-                { 
-                    rollback = false; 
-                } 
-            } 
-            catch (Exception e) 
-            { 
-                // don't throw exception further; we can still function, but for
-                // whatever reason the driver isn't supporting detection of the
-                // unit of work boundary
-                if (tc.isEventEnabled())
-                    Tr.event(this, tc, "JDBC Driver does not support UOW detection because of: ", e); 
-            } 
-        } 
-
-        if (rollback) 
-        { 
-            if (tc.isDebugEnabled()) 
-            { 
-                Tr.debug(this, tc, "Issuing rollback to reset UOW boundary"); 
-            } 
-            conn.rollback(); 
-        } 
-        else if (tc.isDebugEnabled()) 
-        { 
-            Tr.debug(this, tc, "Connection already on UOW boundary; skip rollback"); 
-        } 
-        if (tc.isEntryEnabled()) 
-        { 
-            Tr.exit(this, tc, "resetUOWBoundary"); 
-        } 
     }
 
     @Override

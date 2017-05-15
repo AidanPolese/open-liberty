@@ -9,14 +9,11 @@
   <property name="api.ibm.symbolic.suffix" value="servlet"/>
   <property name="api.ibm.version" value="1.1"/>
   
-  <property name="feature.project" value="com.ibm.websphere.appserver.servlet-3.0"/>
+  <property name="feature.project" value="com.ibm.websphere.appserver.servlet-3.1"/>
   
   <property name="api.ibm.packages.exceptions" value="com.ibm.wsspi.servlet.session"/>
   
-  <!-- Include WebContainer Source from the 'vv1209.06' TWAS build. -->    
-  <property name="additional.javadoc.src.dirs" value="${basedir}/was.src.ss1215.01/${path.separator}${basedir}/../com.ibm.ws.session-3.0/src"/>     
-  
-  <!-- IBM SPI required properties. -->
+ <!-- IBM SPI required properties. -->
   <property name="spibndfile.predefined" value="true" />
   <property name="spibndfile" value="${basedir}/spi.bnd"/>
   <property name="spi.ibm.packages" value="${basedir}/spi.ibm.packages"/>
@@ -107,13 +104,6 @@
 	<property name="spi.classes.override" value="${basedir}/build/spiclasses" />
 	
 	<!-- For javadoc: Copy *.java files  -->
-	<!-- Copy classes from tWAS source first -->
-	<mkdir dir="${basedir}/build/spisource" />
-	<copy toDir="${basedir}/build/spisource" overwrite="true">
-		<fileset dir="${basedir}/was.src.ss1215.01">
-			<patternset refid="liberty-classes" />
-	    </fileset>
-	</copy>
 	<!-- Overwrite from liberty source -->
 	<copy toDir="${basedir}/build/spisource" overwrite="true">
 		<fileset dir="${basedir}/src">

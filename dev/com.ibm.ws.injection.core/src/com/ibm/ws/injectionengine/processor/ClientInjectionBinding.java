@@ -16,9 +16,9 @@ import java.lang.reflect.Member;
 
 import javax.naming.Context;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.wsspi.injectionengine.ClientInjection;
 import com.ibm.wsspi.injectionengine.ComponentNameSpaceConfiguration;
 import com.ibm.wsspi.injectionengine.InjectionBinding;
@@ -35,9 +35,7 @@ import com.ibm.wsspi.injectionengine.InjectionTargetContext;
 public class ClientInjectionBinding
                 extends InjectionBinding<Annotation>
 {
-    private static final String CLASS_NAME = InjectionBinding.class.getName();
-
-    private static final TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(InjectionBinding.class,
                                                          InjectionConfigConstants.traceString,
                                                          InjectionConfigConstants.messageFile);
 

@@ -14,8 +14,8 @@ package com.ibm.wsspi.injectionengine;
 import java.util.Hashtable;
 import java.util.Map;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Provides a factory which resolves message-destination-refs to message
@@ -23,12 +23,9 @@ import com.ibm.ejs.ras.TraceComponent;
  **/
 public class MessageDestinationLinkFactory
 {
-    private static final String CLASS_NAME = MessageDestinationLinkFactory.class.getName();
-
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     InjectionConfigConstants.traceString,
-                     InjectionConfigConstants.messageFile);
+    private static final TraceComponent tc = Tr.register(MessageDestinationLinkFactory.class,
+                                                         InjectionConfigConstants.traceString,
+                                                         InjectionConfigConstants.messageFile);
 
     /**
      * Map of message destination bindings per module per application.
