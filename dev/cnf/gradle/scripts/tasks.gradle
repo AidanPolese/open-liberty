@@ -142,6 +142,46 @@ subprojects {
     }
   }
 
+  task autoFVT {
+    dependsOn jar
+    enabled new File("${projectDir}/fat").exists()
+
+    // For now we are just forcing the autoFVT create every time, this will be fixed
+    // TODO: Be smart about when to recreate the autoFVT.zip
+    doLast {
+
+      // Copy the compiled classes
+      copy {
+        from "${projectDir}/bin/"
+        into "${projectDir}/generated/autoFVT/build/classes"
+      }
+
+      copy {
+        from "${rootDir}/cnf/lib"
+        into "${projectDir}/generated/autoFVT/build/lib"
+        include 'infra.buildtasks-core_4.0*.jar'
+        include 'asm-all-5.0.3.jar'
+        include 'org.apache.aries.util-*.jar'
+        include 'osgi.core.jar'
+        include 'jackson*.jar'
+      }
+    }
+  }
+
+  task zipAutoFVT(type: Zip) {
+    dependsOn autoFVT
+    from "${projectDir}/generated/autoFVT"
+    into 'autoFVT'
+    baseName 'autoFVT'
+  }
+
+  task zipProjectFVT(type: Zip) {
+    dependsOn zipAutoFVT
+    baseName project.name
+    from 'build-test.xml'
+    into 'build/lib', {from 'generated/distributions/autoFVT.zip'}
+  }
+
   assemble {
     dependsOn publishWLPJars
     dependsOn publishToolJars
@@ -151,7 +191,19 @@ subprojects {
     dependsOn publishBinScripts
     dependsOn publishClientScripts
     dependsOn publishLibNative
+    dependsOn zipProjectFVT
   }
+
+  /*publishing {
+    enabled new File("${projectDir}/fat").exists()
+    publications {
+      maven(MavenPublication) {
+        artifactId project.name
+        version bnd('Bundle-Version', '1.0') + '.' + branchName + (!'master'.equals(branchName) ? '-SNAPSHOT' : '')
+        artifact zipProjectFVT
+      }
+    }
+  }*/
 
   task generateToolBinScripts {
     enabled !bnd('publish.tool.jar', '').empty
