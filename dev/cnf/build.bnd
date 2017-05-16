@@ -2,7 +2,7 @@
 -include ${workspace}/gradle.properties, ${workspace}/generated.properties
 
 # Artifactory repository credentials
--connection-settings: ~/.bnd/connection-settings.xml
+-connection-settings: ${.}/connection-settings.xml
 
 # Logging for repository connection when debugging
 #-connection-log: ~/.bnd/connection-log.txt
