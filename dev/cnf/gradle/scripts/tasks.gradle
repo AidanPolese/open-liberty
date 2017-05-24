@@ -156,6 +156,7 @@ subprojects {
         into "${projectDir}/generated/autoFVT/build/classes"
       }
 
+      // Copy the buildtask jars
       copy {
         from "${rootDir}/cnf/lib"
         into "${projectDir}/generated/autoFVT/build/lib"
@@ -164,6 +165,73 @@ subprojects {
         include 'org.apache.aries.util-*.jar'
         include 'osgi.core.jar'
         include 'jackson*.jar'
+      }
+
+      // Copy the ws-junit jar
+      copy {
+        from "${rootDir}/build.sharedResources/lib/ws-junit/ws-junit.jar"
+        into "${projectDir}/generated/autoFVT/build/lib"
+      }
+
+      // Copy the bundle jar
+      copy {
+        from "${projectDir}/generated/"
+        include '*.jar'
+        into "${projectDir}/generated/autoFVT/build/lib"
+      }
+
+      // Copy the DDL files
+      // TODO: Consider if this can be removed, it looks like there's only a single project for this rule
+      copy {
+        from "${projectDir}/ddl"
+        include '**/*'
+        into "${projectDir}/generated/autoFVT/ddl"
+      }
+
+      // Copy the autoFVT-defaults
+      copy {
+        from "${rootDir}/fattest.simplicity/autoFVT-defaults"
+        include '**/*'
+        into "${projectDir}/generated/autoFVT"
+      }
+
+      // Copy the component test libs
+      // TODO: It looks like the componenttest.app.jar got combined into something else, so this is now way more source in the jar than was there before. This might need changing then.
+      copy {
+        from "${rootDir}/com.ibm.ws.componenttest/generated"
+        include 'com.ibm.ws.componenttest.jar'
+        rename 'com.ibm.ws.componenttest.jar', 'componenttest.app.jar'
+        into "${projectDir}/generated/autoFVT/lib"
+      }
+
+      // Copy the fattest libs
+      copy {
+        from "${rootDir}/fattest.simplicity/generated/"
+        include 'fattest*.*'
+        into "${projectDir}/generated/autoFVT/lib"
+      }
+
+      // TODO: This is to compensate for the fact that the ant build of fattest.simplicity produced this jar but the gradle build doesn't
+      copy {
+        from "${rootDir}/com.ibm.ws.common.encoder/generated"
+        include 'com.ibm.ws.common.encoder.jar'
+        rename 'com.ibm.ws.common.encoder.jar', 'fattest.encoder.jar'
+        into "${projectDir}/generated/autoFVT/lib"
+      }
+
+      // Copy the published files
+      copy {
+        from "${projectDir}/publish/files"
+        include '**/*'
+        into "${projectDir}/generated/autoFVT/lib/LibertyFATTestFiles"
+      }
+
+      // Copy the publish directory (minus the 'files' directory)
+      copy {
+        from "${projectDir}/publish"
+        include '**/*'
+        exclude 'files'
+        into "${projectDir}/generated/autoFVT/publish"
       }
     }
   }
