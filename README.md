@@ -1,7 +1,7 @@
 #OpenLiberty
 [![Build Status](https://travis.ibm.com/was-liberty/open-liberty.svg?token=PsNAEgmnTFbhywLCP5JB&branch=integration)](https://travis.innovate.ibm.com/was-liberty/open-liberty)
 [![License](https://img.shields.io/badge/License-EPL%201.0-green.svg)](https://opensource.org/licenses/EPL-1.0)
-[![Chat](https://img.shields.io/badge/chat-on%20slack-brightgreen.svg)](https://ibm-cloud.slack.com/messages/was-open-liberty/)
+[![Chat](https://img.shields.io/badge/chat-on%20slack-brightgreen.svg)](https://ibm-cloud.slack.com/messages/was-openliberty/)
 
 OpenLiberty is a highly composable, fast to start, dynamic application server runtime environment. **More of a description goes here**.
 
