@@ -22,8 +22,8 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.AroundTimeout;
 
 import com.ibm.ejs.container.LifecycleInterceptorWrapper;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.javaee.dd.common.InterceptorCallback;
 import com.ibm.ws.javaee.dd.ejb.Interceptor;
 import com.ibm.ws.javaee.dd.ejb.MessageDriven;

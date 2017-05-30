@@ -11,6 +11,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class EntityTypeNotSupportedException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -763052045976696867L;
+
     /**
      *
      */

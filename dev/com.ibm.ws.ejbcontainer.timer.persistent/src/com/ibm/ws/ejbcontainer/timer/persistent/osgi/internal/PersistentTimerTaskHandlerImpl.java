@@ -205,7 +205,7 @@ class PersistentTimerTaskHandlerImpl extends PersistentTimerTaskHandler implemen
     @Override
     public boolean skipRun(LastExecution lastExecutionInfo, Date scheduledRunTime) {
         // EJB Timers never skip, however this is where a warning may be logged
-        // if a timer is running noticeably later than scheduled, like ASYN0091_LATE_ALARM on tWAS
+        // if a timer is running noticeably later than scheduled, like ASYN0091_LATE_ALARM on traditional WAS
         EJBRuntime ejbRuntime = EJSContainer.getDefaultContainer().getEJBRuntime();
         ejbRuntime.checkLateTimerThreshold(scheduledRunTime, TaskIdAccessor.get().toString(), j2eeName);
 

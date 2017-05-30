@@ -56,8 +56,8 @@ import com.ibm.ejs.container.LocalBeanWrapperProxy;
 import com.ibm.ejs.container.WrapperProxyState;
 import com.ibm.ejs.container.util.DeploymentUtil;
 import com.ibm.ejs.container.util.NameUtil;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Provides Just In Time deployment of EJB Wrapper Proxy classes. The wrapper

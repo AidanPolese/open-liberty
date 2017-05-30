@@ -83,7 +83,7 @@ package com.ibm.tx.jta.impl;
 /*  02/06/09  mallam      596067         package move                                */
 /*  09-08-19  mallam      602532.3       ltc bundle                                  */
 /*  09-12-08  johawkes    631451         Cleanup instantiation                       */
-/*  09-12-22  mallam      633225         Changes for Aries/Alpine osgi services      */
+/*  09-12-22  mallam      633225         Changes for Aries/Liberty osgi services      */
 /*  11-10-18  johawkes    719671         UOWEventListener support                    */
 /*  25/02/13  johawkes    744928         Add begin(timeout)                          */
 /* ********************************************************************************* */

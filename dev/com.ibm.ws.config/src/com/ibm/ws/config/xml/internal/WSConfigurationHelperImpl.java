@@ -84,4 +84,38 @@ public class WSConfigurationHelperImpl implements WSConfigurationHelper {
         return bundleProcessor.removeDefaultConfiguration(pid, id);
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.websphere.config.WSConfigurationHelper#getMetaTypeAttributeName(java.lang.String, java.lang.String)
+     */
+    @Override
+    public String getMetaTypeAttributeName(String pid, String attributeID) {
+        return metatypeRegistry.getAttributeName(pid, attributeID);
+    }
+
+    @Override
+    public String getMetaTypeElementName(String pid) {
+        return metatypeRegistry.getElementName(pid);
+    }
+
+    @Override
+    public boolean registryEntryExists(String pid) {
+        return metatypeRegistry.getRegistryEntryByPidOrAlias(pid) != null ? true : false;
+    }
+
+    @Override
+    public String aliasFor(String pid, String baseAlias) {
+        RegistryEntry ent = metatypeRegistry.getRegistryEntryByPidOrAlias(pid);
+        String alias = ent.getAlias();
+        if (alias != null)
+            return alias;
+
+        String extendsAlias = ent.getExtendsAlias();
+        if (extendsAlias == null)
+            return baseAlias;
+        if (extendsAlias.startsWith("!"))
+            return extendsAlias.substring(1);
+        return baseAlias == null ? extendsAlias : baseAlias + "." + extendsAlias;
+    }
 }

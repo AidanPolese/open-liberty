@@ -35,6 +35,7 @@ import com.ibm.ws.security.registry.UserRegistry;
 import com.ibm.ws.webcontainer.security.AuthResult;
 import com.ibm.ws.webcontainer.security.AuthenticationResult;
 import com.ibm.ws.webcontainer.security.ReferrerURLCookieHandler;
+import com.ibm.ws.webcontainer.security.SSOCookieHelperImpl;
 import com.ibm.ws.webcontainer.security.WebAppSecurityConfig;
 import com.ibm.ws.webcontainer.security.WebProviderAuthenticatorProxy;
 import com.ibm.ws.webcontainer.security.metadata.FormLoginConfiguration;
@@ -116,6 +117,11 @@ public class FormLoginExtensionProcessorTest {
                 allowing(flcfg).getErrorPage();
                 will(returnValue(loginErrorPage));
                 when(testState.is("initial-state"));
+
+                allowing(webAppSecConfig).createSSOCookieHelper();
+                will(returnValue(new SSOCookieHelperImpl(webAppSecConfig)));
+                allowing(webAppSecConfig).createReferrerURLCookieHandler();
+                will(returnValue(new ReferrerURLCookieHandler(webAppSecConfig)));
 
                 // formLogin() method
                 allowing(webAppSecConfig).getLogoutOnHttpSessionExpire();

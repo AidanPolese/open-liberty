@@ -82,7 +82,7 @@ public class ContainerConfigConstants
      * <p>
      * <B>Description:</B>
      * <p>
-     * In WebSphere 5.0X, in order to obtain J2EE 1.3 compliance, changes were made in the
+     * In WebSphere 5.0X, in order to obtain Java EE 1.3 compliance, changes were made in the
      * classes that implement the EJB Handle, HomeHandle, and EJBMetaData interfaces. These
      * classes are required to be usable in another vendor's container implementation. Thus,
      * some of the changes broke interoperability with prior releases of websphere. Similar
@@ -93,14 +93,14 @@ public class ContainerConfigConstants
      * can be made available to SUN reference implementation of a client or web container.
      * By doing so, interoperability testing that CTS does between SUN RI container and a
      * websphere container is obtained. This jar can also be made available to other vendor's
-     * container that are J2EE 1.3 compliant.
+     * container that are Java EE 1.3 compliant.
      * <p>
      * To regain interoperability with websphere 3.5.6 and 4.0x, the ejbportable.jar classes
      * are made available to the prior releases in the form of a PTF. Since not every server
      * in the network can be forced to upgrade to the same level at the same time, it became
      * necessary to add this property. By setting this property to false, it will for the
      * 5.0 server to use the old implementation of these classes. Since we are certified
-     * as J2EE 1.3 compliant, by default this property is set to true so that the new portable
+     * as Java EE 1.3 compliant, by default this property is set to true so that the new portable
      * classes found in ejbportable.jar is used (which allows CTS to pass).
      * <p>
      * Until all websphere client are upgraded to have the ejbportable.jar, a 5.0 server must

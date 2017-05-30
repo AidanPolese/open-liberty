@@ -14,5 +14,4 @@ Export-Package: com.ibm.websphere.cache,com.ibm.websphere.cache.exception,com.ib
 publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.dynacache

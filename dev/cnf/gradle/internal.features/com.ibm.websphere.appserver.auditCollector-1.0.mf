@@ -1,4 +1,4 @@
-Created-By: 1.8.0_121 (Oracle Corporation)
+Created-By: 1.8.0_131 (Oracle Corporation)
 IBM-API-Package: com.ibm.websphere.security.audit; type="ibm-api"
 IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
 IBM-Feature-Version: 2
@@ -7,7 +7,9 @@ IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
 IBM-SPI-Package: com.ibm.wsspi.security.audit; type="ibm-spi"
 Subsystem-Content: com.ibm.websphere.appserver.collectorManager-1.0; type="osgi.subsystem.feature",
- com.ibm.ws.security.audit.source; version="[1.0.0,1.0.200)"
+ com.ibm.ws.security.audit.source; version="[1.0.0,1.0.200)",
+ com.ibm.websphere.rest.handler; version="[1.0.0,1.0.200)",
+ com.ibm.websphere.security.wim.base; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description
 Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
 Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.auditCollector-1.0

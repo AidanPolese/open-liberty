@@ -11,8 +11,21 @@
     <target name="addRequiredFiles">
         <copy todir="${required.lib.dir}">            
             <fileset dir="${basedir}/../build.image/wlp/lib/" includes="org.eclipse.osgi_*.jar"/>
-            <fileset dir="${basedir}/../com.ibm.ws.org.apache.commons.compress/lib/"/>
         </copy>
+    	
+    	<iff>
+	      <available file="../com.ibm.ws.org.apache.commons.compress/lib/" />
+	      <then>
+			<copy todir="${required.lib.dir}">
+				<fileset dir="../com.ibm.ws.org.apache.commons.compress/lib/" includes="*" />
+			</copy>
+		  </then>
+		  <else>
+			<copy todir="${required.lib.dir}">
+				<fileset dir="${basedir}/../prereq.published/lib/" includes="com.ibm.ws.org.apache.commons.compress.1.10-1.0.${micro.version}-SNAPSHOT.jar" />
+			</copy>
+		  </else>
+		</iff>
         
         <!-- If we are doing a building the image then we will create some ESAs, copy these in now -->
       <iff>

@@ -17,8 +17,8 @@ import javax.ejb.Asynchronous;
 import javax.ejb.StatefulTimeout;
 
 import com.ibm.ejs.container.BeanMetaData;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.InternalConstants;
 import com.ibm.ws.javaee.dd.ejb.EnterpriseBean;
 import com.ibm.ws.javaee.dd.ejb.Session;

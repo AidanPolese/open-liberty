@@ -24,13 +24,13 @@ import java.security.PrivilegedExceptionAction;
 import com.ibm.ejs.container.activator.ActivationStrategy;
 import com.ibm.ejs.container.util.ByteArray;
 import com.ibm.ejs.container.util.EJSPlatformHelper;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.CSIRuntimeException;
 import com.ibm.websphere.csi.EJBKey;
 import com.ibm.websphere.csi.J2EEName;
 import com.ibm.websphere.csi.StatefulSessionKey;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.InternalConstants;
 import com.ibm.ws.ejbcontainer.failover.SfFailoverKey;
 import com.ibm.ws.ejbcontainer.runtime.EJBRuntime;
@@ -42,7 +42,7 @@ import com.ibm.ws.ffdc.FFDCFilter;
  * 
  * The identity of an EJB within an EJS container is defined by the pair
  * (home, primary key). The home is identified by a string containing the
- * J2EE name of the bean as configured in the container this
+ * Java EE name of the bean as configured in the container this
  * <code>BeanId</code> is associated with. The primary key differs
  * depending on the type of EJB this <code>BeanId</code> identifies. For an
  * entity bean, the primary key is just the primary key of the entity
@@ -82,7 +82,7 @@ public class BeanId
 
     //89554
     /**
-     * J2EE Name of the EJB this BeanId identifies <p>
+     * Java EE Name of the EJB this BeanId identifies <p>
      */
     J2EEName j2eeName;
 
@@ -419,9 +419,9 @@ public class BeanId
 
     //89554
     /**
-     * Get J2EE name associated with this BeanId. <p>
+     * Get Java EE name associated with this BeanId. <p>
      * 
-     * @return <code>Serializable</code> J2EE name associated with
+     * @return <code>Serializable</code> Java EE name associated with
      *         this <code>EJBId</code> <p>
      */
     public final J2EEName getJ2EEName()
@@ -831,7 +831,7 @@ public class BeanId
                 pkey = readPKey(bytes, pkeyIndex, j2eeName);
                 break;
 
-            // Simplest case : A stateless bean. Read the j2ee name
+            // Simplest case : A stateless bean. Read the Java EE name
             // and we are done
             // MessageDriven are just like Stateless....                  d176974
             case SINGLETON_BEAN:
@@ -1068,9 +1068,9 @@ public class BeanId
 
     /**
      * Returns a byte array containing the bytes associated with the
-     * J2EE Name for the specified servant key.
+     * Java EE Name for the specified servant key.
      * 
-     * @exception CSIException thrown if unable to determine the J2EE
+     * @exception CSIException thrown if unable to determine the Java EE name
      *                bytes for the specified key.
      */
     // d145400.1
@@ -1100,7 +1100,7 @@ public class BeanId
         }
 
         // Make sure this is a valid bean type, and if so, then read the
-        // J2EE Name bytes from the key bytes.
+        // Java EE Name bytes from the key bytes.
         switch (bytes[HEADER_LEN])
         {
             case HOME_BEAN:
@@ -1182,7 +1182,7 @@ public class BeanId
         }
 
         // Make sure this is a valid bean type, and if so, if there is a
-        // primary key, then read the J2EE Name bytes from the key bytes,
+        // primary key, then read the Java EE Name bytes from the key bytes,
         // followed by the primary key.
         switch (bytes[HEADER_LEN])
         {

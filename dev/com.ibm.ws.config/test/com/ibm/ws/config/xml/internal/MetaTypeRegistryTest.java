@@ -35,7 +35,7 @@ import test.common.SharedOutputManager;
 
 public class MetaTypeRegistryTest {
 
-    static WsLocationAdmin alpineLocation;
+    static WsLocationAdmin libertyLocation;
     static XMLConfigParser configParser;
     static SharedOutputManager outputMgr;
 

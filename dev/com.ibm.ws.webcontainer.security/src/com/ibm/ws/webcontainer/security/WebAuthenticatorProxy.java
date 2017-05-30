@@ -41,8 +41,8 @@ public class WebAuthenticatorProxy implements WebAuthenticator {
 
     private static final TraceComponent tc = Tr.register(WebAuthenticatorProxy.class);
     private static final String AUTH_TYPE = "AUTH_TYPE";
-    private final AtomicServiceReference<SecurityService> securityServiceRef;
-    private volatile WebAppSecurityConfig webAppSecurityConfig;
+    protected final AtomicServiceReference<SecurityService> securityServiceRef;
+    protected volatile WebAppSecurityConfig webAppSecurityConfig;
     private volatile PostParameterHelper postParameterHelper;
     private final WebProviderAuthenticatorProxy providerAuthenticatorProxy;
     public HashMap<String, Object> extraAuditData = new HashMap<String, Object>();
@@ -222,7 +222,7 @@ public class WebAuthenticatorProxy implements WebAuthenticator {
         UserRegistry userRegistry = null;
         if (userRegistryService.isUserRegistryConfigured())
             userRegistry = userRegistryService.getUserRegistry();
-        SSOCookieHelper sSOCookieHelper = new SSOCookieHelperImpl(webAppSecurityConfig);
+        SSOCookieHelper sSOCookieHelper = webAppSecurityConfig.createSSOCookieHelper();
         return new BasicAuthAuthenticator(securityService.getAuthenticationService(), userRegistry, sSOCookieHelper, webAppSecurityConfig);
     }
 
@@ -243,7 +243,7 @@ public class WebAuthenticatorProxy implements WebAuthenticator {
      */
     public CertificateLoginAuthenticator createCertificateLoginAuthenticator() {
         SecurityService securityService = securityServiceRef.getService();
-        return new CertificateLoginAuthenticator(securityService.getAuthenticationService(), new SSOCookieHelperImpl(webAppSecurityConfig));
+        return new CertificateLoginAuthenticator(securityService.getAuthenticationService(), webAppSecurityConfig.createSSOCookieHelper());
     }
 
     @Override

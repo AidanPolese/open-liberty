@@ -4,7 +4,6 @@ bVersion=1.0
 publish.wlp.jar.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	org.eclipse.osgi;version=latest,\
 	wlp.lib.extract;version=latest,\
 	com.ibm.ws.config;version=latest,\

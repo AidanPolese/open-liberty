@@ -11,16 +11,15 @@
  */
 package com.ibm.ws.traceinfo.ejbcontainer;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Processor to write out and read in a EJB Transaction life cycle state records.
  */
 public class TETxLifeCycleInfo implements TEInfoConstants
 {
-    private static final String CLASS_NAME = TETxLifeCycleInfo.class.getName();
-    private static final TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(TETxLifeCycleInfo.class,
                                                          "TEExplorer",
                                                          "com.ibm.ws.traceinfo.ejbcontainer");
 

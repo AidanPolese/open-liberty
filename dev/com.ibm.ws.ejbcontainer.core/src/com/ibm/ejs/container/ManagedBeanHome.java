@@ -15,10 +15,10 @@ import java.rmi.RemoteException;
 
 import javax.ejb.CreateException;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
 import com.ibm.websphere.csi.CSIException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.managedobject.ManagedObjectContext;
 
@@ -31,7 +31,7 @@ public final class ManagedBeanHome extends EJSHome
 
     private static final String CLASS_NAME = ManagedBeanHome.class.getName();
 
-    private static final TraceComponent tc = Tr.register(CLASS_NAME, "EJBContainer",
+    private static final TraceComponent tc = Tr.register(ManagedBeanHome.class, "EJBContainer",
                                                          "com.ibm.ejs.container.container");
 
     /**

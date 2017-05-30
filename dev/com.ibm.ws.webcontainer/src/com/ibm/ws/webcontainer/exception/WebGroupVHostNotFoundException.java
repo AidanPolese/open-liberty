@@ -10,7 +10,7 @@ import java.text.MessageFormat;
 
 import com.ibm.ejs.ras.TraceNLS;
 
-//Alpine - Change import
+//Liberty - Change import
 //import com.ibm.ejs.sm.client.ui.NLS;
 
 
@@ -19,7 +19,7 @@ public class WebGroupVHostNotFoundException extends WebContainerException {
 	 * Comment for <code>serialVersionUID</code>
 	 */
 	private static final long serialVersionUID = 4120848863067584569L;
-    // Alpine - Changed to TraceNLS
+    // Liberty - Changed to TraceNLS
     //private static NLS nls = new NLS("com.ibm.ws.webcontainer.resources.Messages");
     private static TraceNLS nls = TraceNLS.getTraceNLS(WebGroupVHostNotFoundException.class, "com.ibm.ws.webcontainer.resources.Messages");
 

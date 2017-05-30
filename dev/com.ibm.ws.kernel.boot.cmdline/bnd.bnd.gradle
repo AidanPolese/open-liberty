@@ -11,5 +11,4 @@ instrument.disabled: true
 publish.wlp.jar.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.kernel.boot.core;version=latest

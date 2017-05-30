@@ -23,8 +23,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -285,55 +283,7 @@ public class SelfExtractor implements LicenseProvider {
             }
         }
 
-        boolean isIfix = false;
-        String ifixExtractorNameString = null;
-        String archiveContentType = mainAttributes.getValue("Archive-Content-Type");
-        if ("ifix".equals(archiveContentType)) {
-            isIfix = true;
-            ifixExtractorNameString = mainAttributes.getValue("Archive-Extractor-Class");
-            if (ifixExtractorNameString == null) {
-                return new ReturnCode(ReturnCode.UNREADABLE, "missingFixInstallerHeader", new Object[] { "Archive-Extractor-Class" });
-            }
-        }
-
-        if (isIfix) {
-            //create the IFixExtractor instance reflectively =)
-            final String ifixExtractorName = ifixExtractorNameString;
-            try {
-                Class ifixExtractorClass = Class.forName(ifixExtractorName);
-                Constructor ifixExtractorConstructor = ifixExtractorClass.getConstructor(new Class[] { JarFile.class, LicenseProvider.class, Attributes.class });
-                Object ifixExtractorObjectInstance = ifixExtractorConstructor.newInstance(new Object[] { jar, hasLicense ? ZipLicenseProvider.getInstance() : null,
-                                                                                                         mainAttributes });
-                if (ifixExtractorObjectInstance instanceof SelfExtractor) {
-                    instance = (SelfExtractor) ifixExtractorObjectInstance;
-                } else {
-                    return new ReturnCode(ReturnCode.UNREADABLE, "badFixInstaller", new Object[] { ifixExtractorNameString });
-                }
-            } catch (ClassNotFoundException e) {
-                return new ReturnCode(ReturnCode.UNREADABLE, "invalidFixInstaller", new Object[] { "Archive-Extractor-Class : " + ifixExtractorNameString + " : "
-                                                                                                   + e.getMessage() });
-            } catch (SecurityException e) {
-                return new ReturnCode(ReturnCode.UNREADABLE, "invalidFixInstaller", new Object[] { "Archive-Extractor-Class : " + ifixExtractorNameString + " : "
-                                                                                                   + e.getMessage() });
-            } catch (NoSuchMethodException e) {
-                return new ReturnCode(ReturnCode.UNREADABLE, "invalidFixInstaller", new Object[] { "Archive-Extractor-Class : " + ifixExtractorNameString + " : "
-                                                                                                   + e.getMessage() });
-            } catch (IllegalArgumentException e) {
-                return new ReturnCode(ReturnCode.UNREADABLE, "invalidFixInstaller", new Object[] { "Archive-Extractor-Class : " + ifixExtractorNameString + " : "
-                                                                                                   + e.getMessage() });
-            } catch (InstantiationException e) {
-                return new ReturnCode(ReturnCode.UNREADABLE, "invalidFixInstaller", new Object[] { "Archive-Extractor-Class : " + ifixExtractorNameString + " : "
-                                                                                                   + e.getMessage() });
-            } catch (IllegalAccessException e) {
-                return new ReturnCode(ReturnCode.UNREADABLE, "invalidFixInstaller", new Object[] { "Archive-Extractor-Class : " + ifixExtractorNameString + " : "
-                                                                                                   + e.getMessage() });
-            } catch (InvocationTargetException e) {
-                return new ReturnCode(ReturnCode.UNREADABLE, "invalidFixInstaller", new Object[] { "Archive-Extractor-Class : " + ifixExtractorNameString + " : "
-                                                                                                   + e.getMessage() });
-            }
-        } else {
-            instance = new SelfExtractor(jar, hasLicense ? ZipLicenseProvider.getInstance() : null, mainAttributes);
-        }
+        instance = new SelfExtractor(jar, hasLicense ? ZipLicenseProvider.getInstance() : null, mainAttributes);
 
         return ReturnCode.OK;
     }
@@ -1352,7 +1302,7 @@ public class SelfExtractor implements LicenseProvider {
     /**
      * Display command line usage.
      */
-    private static void displayCommandLineHelp(SelfExtractor extractor) {
+    protected static void displayCommandLineHelp(SelfExtractor extractor) {
         // This method takes a SelfExtractor in case we want to tailor the help to the current archive
         // Get the name of the JAR file to display in the command syntax");
         String jarName = System.getProperty("sun.java.command", "wlp-liberty-developers-core.jar");

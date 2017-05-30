@@ -20,6 +20,7 @@ public class JavaLevelFilter extends Filter {
         FEATURE_UNDER_TEST = System.getProperty(FeatureFilter.FEATURE_UNDER_TEST_PROPERTY_NAME);
         Log.info(JavaLevelFilter.class, "<clinit>", "System property: " + FeatureFilter.FEATURE_UNDER_TEST_PROPERTY_NAME + " is " + FEATURE_UNDER_TEST);
         JAVA_VERSION = Double.valueOf("1." + JavaInfo.JAVA_VERSION);
+        Log.info(JavaLevelFilter.class, "<clinit>", "Parsed java version: " + JAVA_VERSION);
     }
 
     private static Class<?> getMyClass() {

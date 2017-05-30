@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.distributedMap-1.0
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.jndi-1.0;version=latest,\
 	com.ibm.websphere.appserver.containerServices-1.0;version=latest,\
 	com.ibm.websphere.appserver.classloading-1.0;version=latest,\

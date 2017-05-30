@@ -5,11 +5,23 @@
  *
  * Copyright IBM Corp. 2015
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.transport.iiop.yoko.helper;
+
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import org.apache.yoko.orb.OCI.IIOP.ExtendedConnectionHelper;
+import org.omg.CORBA.ORB;
+import org.omg.CORBA.ORBPackage.InvalidName;
+import org.omg.IOP.Codec;
+import org.omg.IOP.CodecFactoryHelper;
+import org.omg.IOP.CodecFactoryPackage.UnknownEncoding;
+import org.omg.IOP.ENCODING_CDR_ENCAPS;
+import org.omg.IOP.Encoding;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -18,22 +30,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
-
-import org.apache.yoko.orb.OCI.IIOP.ExtendedConnectionHelper;
-import org.omg.CORBA.ORB;
-import org.omg.CORBA.ORBPackage.InvalidName;
-import org.omg.IIOP.ProfileBody_1_0;
-import org.omg.IIOP.ProfileBody_1_0Helper;
-import org.omg.IOP.Codec;
-import org.omg.IOP.CodecFactoryHelper;
-import org.omg.IOP.ENCODING_CDR_ENCAPS;
-import org.omg.IOP.Encoding;
-import org.omg.IOP.IOR;
-import org.omg.IOP.CodecFactoryPackage.UnknownEncoding;
-
-import com.ibm.websphere.ras.Tr;
-import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 
 /**
  *
@@ -127,7 +123,7 @@ public abstract class SocketFactoryHelper implements ExtendedConnectionHelper {
     /**
      * Attempt a socket bind to the input address with the given re-use option
      * flag.
-     * 
+     *
      * @param address
      * @param reuseflag
      * @throws IOException
@@ -159,7 +155,7 @@ public abstract class SocketFactoryHelper implements ExtendedConnectionHelper {
 
     /**
      * Initialize the socket factory instance.
-     * 
+     *
      * @param orb The hosting ORB.
      * @param configName The initialization parameter passed to the socket factor.
      *            This contains the abstract name of our configurator,
@@ -174,56 +170,17 @@ public abstract class SocketFactoryHelper implements ExtendedConnectionHelper {
         } catch (UnknownEncoding e) {
             // TODO Auto-generated catch block
             // Do you need FFDC here? Remember FFDC instrumentation and @FFDCIgnore
-            // https://websphere.pok.ibm.com/~alpine/secure/docs/dev/API/com.ibm.ws.ras/com/ibm/ws/ffdc/annotation/FFDCIgnore.html
+            // https://websphere.pok.ibm.com/~liberty/secure/docs/dev/API/com.ibm.ws.ras/com/ibm/ws/ffdc/annotation/FFDCIgnore.html
             // e.printStackTrace();
         } catch (InvalidName e) {
             // TODO Auto-generated catch block
             // Do you need FFDC here? Remember FFDC instrumentation and @FFDCIgnore
-            // https://websphere.pok.ibm.com/~alpine/secure/docs/dev/API/com.ibm.ws.ras/com/ibm/ws/ffdc/annotation/FFDCIgnore.html
+            // https://websphere.pok.ibm.com/~liberty/secure/docs/dev/API/com.ibm.ws.ras/com/ibm/ws/ffdc/annotation/FFDCIgnore.html
             // e.printStackTrace();
         }
     }
 
-    protected Socket createSocketFromProfile(IOR ior, String host, int port) throws IOException {
-        // the Yoko ORB will use both the primary and secondary targets for connections, which
-        // sometimes gets us into trouble, forcing us to use an SSL target when we really need to
-        // use the plain socket connection.  Therefore, we will ignore what's passed to us,
-        // and extract the primary port information directly from the profile.
-        for (int i = 0; i < ior.profiles.length; i++) {
-            if (ior.profiles[i].tag == org.omg.IOP.TAG_INTERNET_IOP.value) {
-                try {
-                    //
-                    // Get the IIOP profile body
-                    //
-                    byte[] data = ior.profiles[i].profile_data;
-                    ProfileBody_1_0 body = ProfileBody_1_0Helper.extract(codec.decode_value(data, ProfileBody_1_0Helper.type()));
-
-                    //
-                    // Create new connector for this profile
-                    //
-                    if (body.port < 0) {
-                        port = 0xffff + body.port + 1;
-                    } else {
-                        port = body.port;
-                    }
-                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                        Tr.debug(tc, "set port from IOR: " + port);
-                    break; // TODO: Verify under what conditions we can break.
-                } catch (org.omg.IOP.CodecPackage.FormatMismatch e) {
-                    // just keep the original port.
-                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                        Tr.debug(tc, "could not set port from IOR: ", e);
-                    break;
-                } catch (org.omg.IOP.CodecPackage.TypeMismatch e) {
-                    // just keep the original port.
-                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                        Tr.debug(tc, "could not set port from IOR: ", e);
-                    break;
-                }
-
-            }
-        }
-
+    protected Socket createPlainSocket(String host, int port) throws IOException {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
             Tr.debug(tc, "Creating plain endpoint to " + host + ":" + port);
         return new Socket(host, port);

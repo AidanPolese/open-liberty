@@ -4,7 +4,7 @@
 <!--
  * ============================================================================
  * Licensed Materials - Property of IBM
- * Project Alpine
+ * Project Liberty
  *
  * (C) Copyright IBM Corp. 2009  All Rights Reserved.
  *
@@ -20,7 +20,7 @@
 <body>
 
 <h1>Threading Services</h1>
-<p>One of the goals of the Alpine core is to have excellent scaling
+<p>One of the goals of the Liberty core is to have excellent scaling
 characteristics in multi-core environments.  Given the current industry
 trends, it is clear that single thread performance gains have been minor
 compared with past improvements.  It is also clear that the number of
@@ -29,14 +29,14 @@ hardware threads supported on newer machines has been increasing rapidly.
 <p>
 While in the past we would have expected single thread performance to roughly
 double every 18 months, now we expect the number of hardware threads to
-roughly double every 18 months.  With that in mind, Alpine must provide
+roughly double every 18 months.  With that in mind, Liberty must provide
 easy to use services that allow users to schedule multiple tasks for
 parallel execution.
 </p>
 
-<h2>Work Execution Services Provided by Alpine</h2>
+<h2>Work Execution Services Provided by Liberty</h2>
 <p>
-In order to prevent the proliferation of code to manage threads, Alpine has
+In order to prevent the proliferation of code to manage threads, Liberty has
 provided a reference to a <code>java.util.concurrent.ExecutorService</code>
 implementation in the OSGi Service Registry.  The implementation of the
 employs a work stealing scheduler and automatic tuning that attempts to 

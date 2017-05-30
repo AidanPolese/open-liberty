@@ -32,13 +32,13 @@ import com.ibm.ejs.container.interceptors.InvocationContextImpl;
 import com.ibm.ejs.container.passivator.StatefulPassivator;
 import com.ibm.ejs.container.util.ExceptionUtil;
 import com.ibm.ejs.csi.UOWCookie;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.CacheElement;
 import com.ibm.websphere.csi.ExceptionType;
 import com.ibm.websphere.csi.StatefulSessionKey;
 import com.ibm.websphere.csi.TransactionAttribute;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.CallbackKind;
 import com.ibm.ws.ejbcontainer.EJBPMICollaborator;
 import com.ibm.ws.ejbcontainer.failover.SfFailoverClient;
@@ -1074,7 +1074,7 @@ public abstract class StatefulBeanO
 
         switch (state) {
             case METHOD_READY:
-                // For BMStatefulBeanO - pre J2EE 1.3 only
+                // For BMStatefulBeanO - pre Java EE 1.3 only
                 setState(IN_METHOD);
                 break;
 
@@ -1469,7 +1469,7 @@ public abstract class StatefulBeanO
         // -----------------------------------------------------------------------
         // EJB Specification 2.1, 7.6.1 - Timer methods are only allowed during
         // business methods, afterBegin and beforeCompletion.
-        // - Note that with J2EE 1.3 (EJB 2.0), business methods will not longer
+        // - Note that with Java EE 1.3 (EJB 2.0), business methods will not longer
         //   run in the IN_METHOD state, as there will be a Local Tran.
         // -----------------------------------------------------------------------
         if ((state == TX_IN_METHOD) || // business method

@@ -49,3 +49,13 @@ assemble {
     dependsOn copyGeneratedToBuildImageBinTools
     dependsOn copyGeneratedToCnfLib
 }
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      artifactId 'openliberty'
+      version project.version
+      artifact parent.zipOpenLiberty
+    }
+  }
+}

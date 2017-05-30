@@ -14,7 +14,6 @@ Export-Package: com.ibm.ws.container.service.annotations,com.ibm.ws.container.se
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.container.service, \
 	com.ibm.ws.resource, \
 	com.ibm.ws.serialization

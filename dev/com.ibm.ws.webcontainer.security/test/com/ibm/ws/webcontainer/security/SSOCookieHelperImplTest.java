@@ -45,7 +45,6 @@ public class SSOCookieHelperImplTest {
     private final String cookieName = "LTPAToken2";
     private final Cookie cookie = new Cookie(cookieName, cookieValue);
     private final WebAppSecurityConfig config = mock.mock(WebAppSecurityConfig.class);
-    @SuppressWarnings("unchecked")
     private final SSOCookieHelperImpl ssoCookieHelper = new SSOCookieHelperImpl(config);
     private final Subject subject = new Subject();
 

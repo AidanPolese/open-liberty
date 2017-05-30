@@ -40,12 +40,12 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
     private static final TraceComponent tc = Tr.register(WebProviderAuthenticatorProxy.class);
 
     AuthenticationResult JASPI_CONT = new AuthenticationResult(AuthResult.CONTINUE, "JASPI said continue...");
-    private final AtomicServiceReference<SecurityService> securityServiceRef;
-    private final AtomicServiceReference<TAIService> taiServiceRef;
-    private final ConcurrentServiceReferenceMap<String, TrustAssociationInterceptor> interceptorServiceRef;
-    private volatile WebAppSecurityConfig webAppSecurityConfig;
+    protected final AtomicServiceReference<SecurityService> securityServiceRef;
+    protected final AtomicServiceReference<TAIService> taiServiceRef;
+    protected final ConcurrentServiceReferenceMap<String, TrustAssociationInterceptor> interceptorServiceRef;
+    protected volatile WebAppSecurityConfig webAppSecurityConfig;
 
-    private final ConcurrentServiceReferenceMap<String, WebAuthenticator> webAuthenticatorRef;
+    protected final ConcurrentServiceReferenceMap<String, WebAuthenticator> webAuthenticatorRef;
 
     public WebProviderAuthenticatorProxy(AtomicServiceReference<SecurityService> securityServiceRef,
                                          AtomicServiceReference<TAIService> taiServiceRef,
@@ -82,7 +82,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
      * @param webRequest
      * @return
      */
-    AuthenticationResult handleJaspi(WebRequest webRequest, HashMap<String, Object> props) {
+    protected AuthenticationResult handleJaspi(WebRequest webRequest, HashMap<String, Object> props) {
         AuthenticationResult authResult = JASPI_CONT;
         if (webAuthenticatorRef != null) {
             WebAuthenticator jaspiAuthenticator = webAuthenticatorRef.getService("com.ibm.ws.security.jaspi");
@@ -148,7 +148,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
                                                       webRequest.getHttpServletRequest(),
                                                       webRequest.getHttpServletResponse());
                     }
-                    SSOCookieHelper ssoCh = new SSOCookieHelperImpl(webAppSecurityConfig);
+                    SSOCookieHelper ssoCh = webAppSecurityConfig.createSSOCookieHelper();
                     if (props != null &&
                         props.get("authType") != null &&
                         props.get("authType").equals("FORM_LOGIN")) {
@@ -190,7 +190,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
      * @param beforeSSO
      * @return
      */
-    private AuthenticationResult handleTAI(WebRequest webRequest, boolean beforeSSO) {
+    protected AuthenticationResult handleTAI(WebRequest webRequest, boolean beforeSSO) {
         TAIAuthenticator taiAuthenticator = getTaiAuthenticator();
         AuthenticationResult authResult = null;
         if (taiAuthenticator == null) {
@@ -204,7 +204,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
         return authResult;
     }
 
-    private AuthenticationResult handleSSO(WebRequest webRequest, String ssoCookieName) {
+    protected AuthenticationResult handleSSO(WebRequest webRequest, String ssoCookieName) {
         WebAuthenticator authenticator = getSSOAuthenticator(webRequest, ssoCookieName);
         AuthenticationResult authResult = authenticator.authenticate(webRequest);
         if (authResult == null || authResult.getStatus() != AuthResult.SUCCESS) {
@@ -218,7 +218,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
      * @param propagationTokenAuthenticated
      * @return
      */
-    boolean isNotNullAndTrue(HttpServletRequest req, String key) {
+    protected boolean isNotNullAndTrue(HttpServletRequest req, String key) {
         Boolean result = (Boolean) req.getAttribute(key);
         if (result != null) {
             return result.booleanValue();
@@ -229,13 +229,13 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
     /**
      * @return
      */
-    private TAIAuthenticator getTaiAuthenticator() {
+    protected TAIAuthenticator getTaiAuthenticator() {
         TAIAuthenticator taiAuthenticator = null;
         TAIService taiService = taiServiceRef.getService();
         Iterator<TrustAssociationInterceptor> interceptorServices = interceptorServiceRef.getServices();
         if (taiService != null || (interceptorServices != null && interceptorServices.hasNext())) {
             SecurityService securityService = securityServiceRef.getService();
-            taiAuthenticator = new TAIAuthenticator(taiService, interceptorServiceRef, securityService.getAuthenticationService(), new SSOCookieHelperImpl(webAppSecurityConfig));
+            taiAuthenticator = new TAIAuthenticator(taiService, interceptorServiceRef, securityService.getAuthenticationService(), webAppSecurityConfig.createSSOCookieHelper());
         }
 
         return taiAuthenticator;
@@ -254,7 +254,7 @@ public class WebProviderAuthenticatorProxy implements WebAuthenticator {
         if (ssoCookieName != null) {
             cookieHelper = new SSOCookieHelperImpl(webAppSecurityConfig, ssoCookieName);
         } else {
-            cookieHelper = new SSOCookieHelperImpl(webAppSecurityConfig);
+            cookieHelper = webAppSecurityConfig.createSSOCookieHelper();
         }
         return new SSOAuthenticator(securityService.getAuthenticationService(), securityMetadata, webAppSecurityConfig, cookieHelper);
     }

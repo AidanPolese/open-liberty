@@ -28,10 +28,10 @@ import javax.xml.rpc.handler.MessageContext;
 import com.ibm.ejs.container.interceptors.InterceptorProxy;
 import com.ibm.ejs.container.interceptors.InvocationContextImpl;
 import com.ibm.ejs.container.util.ExceptionUtil;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.MethodInterface;
 import com.ibm.websphere.ejbcontainer.SessionContextExtension;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.CallbackKind;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.traceinfo.ejbcontainer.TEBeanLifeCycleInfo;
@@ -388,7 +388,7 @@ public abstract class SessionBeanO
         } catch (Throwable ex) {
             // p113724
             // Not expecting any Throwable to occur. Log unexpected Throwable and
-            // throw a ContainerEJBException since this is a J2EE architected interface.
+            // throw a ContainerEJBException since this is a Java EE architected interface.
             FFDCFilter.processException(ex, CLASS_NAME + ".getEJBLocalObject", "236", this);
             ContainerEJBException cex = new ContainerEJBException("getEJBLocalObject() failed",
                             ex);
@@ -575,7 +575,7 @@ public abstract class SessionBeanO
         } catch (Throwable ex)
         {
             // Not expecting any Throwable to occur. Log unexpected Throwable and
-            // throw an EJBException since this is a J2EE architected interface.
+            // throw an EJBException since this is a Java EE architected interface.
             FFDCFilter.processException(ex, CLASS_NAME + ".getBusinessObject", "516", this);
             EJBException ejbex = ExceptionUtil.EJBException("getBusinessObject() failed",
                                                             ex);

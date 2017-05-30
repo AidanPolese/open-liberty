@@ -12,6 +12,7 @@
 package com.ibm.ws.cdi.web.liberty;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -25,6 +26,7 @@ import com.ibm.ws.webcontainer31.osgi.listener.PreEventListenerProvider;
 import com.ibm.wsspi.adaptable.module.Container;
 import com.ibm.wsspi.adaptable.module.NonPersistentCache;
 import com.ibm.wsspi.adaptable.module.UnableToAdaptException;
+import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.webcontainer.servlet.IServletContext;
 
 /**
@@ -35,11 +37,30 @@ import com.ibm.wsspi.webcontainer.servlet.IServletContext;
                 immediate = true,
                 property = { "service.vendor=IBM", "service.ranking:Integer=100" })
 public class WeldInitialListenerRegistration extends AbstractInitialListenerRegistration implements PreEventListenerProvider {
+    
+    private final AtomicServiceReference<CDIWebRuntime> cdiWebRuntimeRef = new AtomicServiceReference<CDIWebRuntime>(
+                    "cdiWebRuntime");
 
+    protected void activate(ComponentContext context) {
+        cdiWebRuntimeRef.activate(context);
+    }
+
+    protected void deactivate(ComponentContext context) {
+        cdiWebRuntimeRef.deactivate(context);
+    }
+
+    protected void unsetCdiWebRuntime(ServiceReference<CDIWebRuntime> ref) {
+        cdiWebRuntimeRef.unsetReference(ref);
+    }
+    
     @Override
+    protected CDIWebRuntime getCDIWebRuntime(){
+        return cdiWebRuntimeRef.getService();
+    }
+
     @Reference(name = "cdiWebRuntime", service = CDIWebRuntime.class)
     protected void setCdiWebRuntime(ServiceReference<CDIWebRuntime> ref) {
-        super.setCdiWebRuntime(ref);
+        cdiWebRuntimeRef.setReference(ref);
     }
 
     private ExtendedModuleInfo getModuleInfo(Container container) throws CDIException {

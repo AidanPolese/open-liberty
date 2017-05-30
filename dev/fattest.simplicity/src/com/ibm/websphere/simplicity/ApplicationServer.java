@@ -41,7 +41,7 @@ public class ApplicationServer extends Server {
     }
 
     /**
-     * Starts the server using the underlying com.ibm.alpine.Server instance.
+     * Starts the server using the underlying com.ibm.liberty.Server instance.
      * 
      * @throws Exception If the server did not start successfully and is not already started.
      */
@@ -51,7 +51,7 @@ public class ApplicationServer extends Server {
     }
 
     /**
-     * Starts the server using the underlying com.ibm.alpine.Server instance.
+     * Starts the server using the underlying com.ibm.liberty.Server instance.
      * 
      * @param mbeanWaitDuration This value is ignored.
      * 
@@ -63,7 +63,7 @@ public class ApplicationServer extends Server {
     }
 
     /**
-     * Stops the server using the underlying com.ibm.alpine.Server instance.
+     * Stops the server using the underlying com.ibm.liberty.Server instance.
      * 
      * @throws Exception If the server did not stop successfully and is not already stopped.
      */
@@ -73,7 +73,7 @@ public class ApplicationServer extends Server {
     }
 
     /**
-     * Stops the server using the underlying com.ibm.alpine.Server instance.
+     * Stops the server using the underlying com.ibm.liberty.Server instance.
      * 
      * @param timeout This value is ignored.
      * 

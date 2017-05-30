@@ -52,7 +52,7 @@ class InjectionProcessorContext
      *
      * <p>This field should be true in the embeddable EJB container and Liberty
      * since the injection engine must ensure that java:global/:app/:module
-     * metadata is consistent across components. In tWAS server environments,
+     * metadata is consistent across components. In traditional WAS server environments,
      * app install ensures this consistency, so this field should be false during
      * component metadata processing in the server.
      */

@@ -16,10 +16,10 @@ import java.rmi.RemoteException;
 import com.ibm.ejs.container.BeanO;
 import com.ibm.ejs.container.ContainerTx;
 import com.ibm.ejs.container.StatefulBeanO;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.IllegalOperationException;
 import com.ibm.websphere.csi.PassivationPolicy;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.failover.SfFailoverCache;
 import com.ibm.ws.ffdc.FFDCFilter;
 

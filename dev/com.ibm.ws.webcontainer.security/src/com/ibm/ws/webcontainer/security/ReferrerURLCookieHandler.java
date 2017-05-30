@@ -91,7 +91,8 @@ public class ReferrerURLCookieHandler extends URLHandler {
         Cookie c = new Cookie(cookieName, value);
         if (cookieName.equals("WASReqURL")) {
             c.setPath(getPathName(req));
-        } else {
+        }
+        else {
             c.setPath("/");
         }
         c.setMaxAge(-1);

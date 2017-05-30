@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 
+import com.ibm.ws.security.SecurityService;
 import com.ibm.ws.webcontainer.security.WebAppSecurityConfig;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
@@ -31,6 +32,7 @@ public class WebAppSecurityConfigImplTest {
     private final ComponentContext cc = mock.mock(ComponentContext.class);
     private final BundleContext bundleContext = mock.mock(BundleContext.class);
     private final AtomicServiceReference<WsLocationAdmin> locationAdminRef = mock.mock(AtomicServiceReference.class, "locationAdminRef");
+    private final AtomicServiceReference<SecurityService> securityServiceRef = mock.mock(AtomicServiceReference.class, "securityServiceRef");
     private final WsLocationAdmin locateService = mock.mock(WsLocationAdmin.class);
 
     private final String USER_DIR = "userDir";
@@ -56,7 +58,7 @@ public class WebAppSecurityConfigImplTest {
         mockCookie(cfg, false);
         cfg.put("ssoDomainNames", "austin.ibm.com|raleigh.ibm.com");
 
-        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
         List<String> webCfgList = webCfg.getSSODomainList();
         assertTrue(webCfgList.contains("austin.ibm.com"));
         assertTrue(webCfgList.contains("raleigh.ibm.com"));
@@ -68,7 +70,7 @@ public class WebAppSecurityConfigImplTest {
         mockCookie(cfg, false);
         cfg.put("ssoDomainNames", "austin.ibm.com|raleigh.ibm.com|useDomainFromURL");
 
-        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
         List<String> webCfgList = webCfg.getSSODomainList();
         assertTrue(webCfgList.contains("austin.ibm.com"));
         assertTrue(webCfgList.contains("raleigh.ibm.com"));
@@ -84,7 +86,7 @@ public class WebAppSecurityConfigImplTest {
         mockCookie(cfg, false);
         cfg.put("ssoDomainNames", "austin.ibm.com|raleigh.ibm.com|useDomainFromURL");
 
-        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
         assertEquals("When the object is not the same implementation type, an empty String should be returned",
                      "", webCfg.getChangedProperties(mockedConfig));
     }
@@ -99,7 +101,7 @@ public class WebAppSecurityConfigImplTest {
         mockCookie(cfg, false);
         cfg.put("ssoDomainNames", "austin.ibm.com|raleigh.ibm.com|useDomainFromURL");
 
-        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
         assertEquals("When the object is the same, an empty String should be returned",
                      "", webCfg.getChangedProperties(webCfg));
     }
@@ -114,14 +116,14 @@ public class WebAppSecurityConfigImplTest {
         mockCookie(cfg, false);
         cfg.put("ssoCookieName", "webSSOCookie");
         cfg.put("ssoDomainNames", "austin.ibm.com|raleigh.ibm.com|useDomainFromURL");
-        WebAppSecurityConfig webCfgOld = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfgOld = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
 
         String newValue = "austin.ibm.com|raleigh.ibm.com";
         // Intentionally causing a new String to be created to guard against
         // accidentally doing instance comparison
         cfg.put("ssoCookieName", new String("webSSOCookie"));
         cfg.put("ssoDomainNames", newValue);
-        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, null);
+        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
         assertEquals("When one setting has changed, that new value should be returned",
                      "ssoDomainNames=" + newValue, webCfg.getChangedProperties(webCfgOld));
     }
@@ -138,13 +140,13 @@ public class WebAppSecurityConfigImplTest {
         cfg.put("autoGenSsoCookieName", Boolean.FALSE);
         cfg.put("ssoDomainNames", "austin.ibm.com|raleigh.ibm.com|useDomainFromURL");
         cfg.put("webAlwaysLogin", Boolean.TRUE);
-        WebAppSecurityConfig webCfgOld = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfgOld = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
 
         String newCookieValue = "mySSOCookie";
         cfg.put("ssoCookieName", newCookieValue);
         String newDomainValue = "";
         cfg.put("ssoDomainNames", newDomainValue);
-        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
         assertEquals("Only the settings that changed should be listed",
                      "ssoCookieName=" + newCookieValue + ",ssoDomainNames=" + newDomainValue,
                      webCfg.getChangedProperties(webCfgOld));
@@ -159,7 +161,7 @@ public class WebAppSecurityConfigImplTest {
         cfg.put("autoGenSsoCookieName", Boolean.FALSE);
         cfg.put("ssoDomainNames", "austin.ibm.com|raleigh.ibm.com|useDomainFromURL");
         cfg.put("webAlwaysLogin", Boolean.TRUE);
-        WebAppSecurityConfig webCfgOld = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfgOld = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
 
         cfg.put("allowFailOverToBasicAuth", Boolean.FALSE);
         cfg.put("displayAuthenticationRealm", Boolean.TRUE);
@@ -167,7 +169,7 @@ public class WebAppSecurityConfigImplTest {
         cfg.put("autoGenSsoCookieName", Boolean.FALSE);
         cfg.put("ssoDomainNames", "");
         cfg.put("webAlwaysLogin", Boolean.FALSE);
-        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
 
         assertEquals("When all settings have changed, all should be listed",
                      "allowFailOverToBasicAuth=false,displayAuthenticationRealm=true,ssoCookieName=mySSOCookie,ssoDomainNames=,webAlwaysLogin=false",
@@ -177,10 +179,10 @@ public class WebAppSecurityConfigImplTest {
     private void driveSingleAttributeTest(String name, Object oldValue, Object newValue) {
         Map<String, Object> cfg = new HashMap<String, Object>();
         cfg.put(name, oldValue);
-        WebAppSecurityConfig webCfgOld = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfgOld = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
 
         cfg.put(name, newValue);
-        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
         assertEquals("Did not get expected name value pair for attribute " + name,
                      name + "=" + newValue, webCfg.getChangedProperties(webCfgOld));
     }
@@ -298,7 +300,7 @@ public class WebAppSecurityConfigImplTest {
         Map<String, Object> cfg = new HashMap<String, Object>();
         mockCookie(cfg, true);
         cfg.put("ssoCookieName", WebAppSecurityConfigImpl.DEFAULT_SSO_COOKIE_NAME);
-        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
         String expectCookieName = createExpectSsoCookieName(webCfg);
         assertEquals("Did not get expected ssoCookieName " + expectCookieName, expectCookieName, webCfg.getSSOCookieName());
     }
@@ -308,7 +310,7 @@ public class WebAppSecurityConfigImplTest {
         Map<String, Object> cfg = new HashMap<String, Object>();
         mockCookie(cfg, true);
         cfg.put("ssoCookieName", "myCookieName");
-        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef);
+        WebAppSecurityConfig webCfg = new WebAppSecurityConfigImpl(cfg, locationAdminRef, securityServiceRef);
         assertEquals("Did not get expected ssoCookieName myCookieName", "myCookieName", webCfg.getSSOCookieName());
     }
 

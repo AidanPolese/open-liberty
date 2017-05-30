@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.j2eeManagement-1.1
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.javax.ejb-3.2;version=latest, \
 	com.ibm.websphere.appserver.iiopcommon-1.0;version=latest, \
 	com.ibm.websphere.appserver.transaction-1.2;version=latest, \

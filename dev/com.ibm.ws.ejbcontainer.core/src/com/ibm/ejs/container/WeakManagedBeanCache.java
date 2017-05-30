@@ -20,9 +20,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Specialized cache for ManagedBeans, which will weakly reference a
@@ -31,9 +31,7 @@ import com.ibm.ejs.util.Util;
  */
 public final class WeakManagedBeanCache
 {
-    private static final String CLASS_NAME = WeakManagedBeanCache.class.getName();
-
-    private static final TraceComponent tc = Tr.register(CLASS_NAME, "EJBContainer",
+    private static final TraceComponent tc = Tr.register(WeakManagedBeanCache.class, "EJBContainer",
                                                          "com.ibm.ejs.container.container");
 
     /**

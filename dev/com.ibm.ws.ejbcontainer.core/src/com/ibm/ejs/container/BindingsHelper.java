@@ -18,9 +18,9 @@ import java.util.HashSet;
 import javax.naming.NameAlreadyBoundException;
 import javax.naming.Reference;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.util.AmbiguousEJBRefReferenceFactory;
 
 /**
@@ -31,12 +31,9 @@ import com.ibm.ws.ejbcontainer.util.AmbiguousEJBRefReferenceFactory;
  **/
 public class BindingsHelper
 {
-    private static final String CLASS_NAME = BindingsHelper.class.getName();
-
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     "EJBContainer",
-                     "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(BindingsHelper.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     /**
      * Server wide map of bininding name to a list of EJBs mapped using that

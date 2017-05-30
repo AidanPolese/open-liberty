@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class InitializationException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -720095445717591596L;
+
     /**
      *
      */

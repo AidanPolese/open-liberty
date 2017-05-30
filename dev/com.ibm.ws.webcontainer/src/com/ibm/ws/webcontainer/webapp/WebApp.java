@@ -550,7 +550,7 @@ public abstract class WebApp extends BaseContainer implements ServletContext, IS
         // Synchronize: Concurrent get/put are possible.
         // All access to storage (noOpClassNames and annotatedMethodNames) are
         // performed through lookupMethod.
-        private Method lookupMethod(Class<?> targetClass) throws NoSuchMethodException, InjectionException {
+        private Method lookupMethod(final Class<?> targetClass) throws NoSuchMethodException, InjectionException {
             String methodName = "lookupMethod";
             
             String targetClassName = targetClass.getName();
@@ -590,8 +590,16 @@ public abstract class WebApp extends BaseContainer implements ServletContext, IS
             Method annotatedMethod = null;
 
             Method[] declaredMethods;            
-            try {
-                declaredMethods = targetClass.getDeclaredMethods();
+            try {                
+                declaredMethods = (Method [])AccessController.doPrivileged(new java.security.PrivilegedAction<Object []>()
+                {
+                    public Object[] run()
+                    {
+                        return(targetClass.getDeclaredMethods());
+                    }
+                });
+
+                
             } catch (NoClassDefFoundError e) {
                 // See the comment preceding this method for a sample stack showing a
                 // problem of using reflection to locate annotated methods.
@@ -683,7 +691,7 @@ public abstract class WebApp extends BaseContainer implements ServletContext, IS
 
             // Would a cache of names of classes with empty results for their
             // overall result be worth keeping?
-            
+
             Class<? extends Object> originalClass = obj.getClass();
             List<Class<? extends Object>> classesList = new ArrayList<Class<? extends Object>>();
             for (Class<?> objClass = originalClass; objClass != null; objClass = objClass.getSuperclass()) {
@@ -1556,6 +1564,9 @@ public abstract class WebApp extends BaseContainer implements ServletContext, IS
      *     which is to be processed for annotations.
      */
     private void initializeNonDDRepresentableAnnotation(IServletConfig servletConfig) {
+        if (com.ibm.ws.webcontainer.osgi.WebContainer.isServerStopping())
+            return;
+        
         String methodName = "initializeNonDDRepresentableAnnotation";
         
         String configClassName = servletConfig.getClassName();

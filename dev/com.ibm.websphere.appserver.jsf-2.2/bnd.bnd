@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.jsf-2.2
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.javax.cdi-1.2;version=latest, \
 	com.ibm.websphere.appserver.servlet-3.1;version=latest, \
 	com.ibm.websphere.appserver.javax.validation-1.1;version=latest, \

@@ -138,7 +138,7 @@ public class FormLoginAuthenticator implements WebAuthenticator {
 
         if (allowToAddCookieToResponse(webAppSecurityConfig, req)) {
             postParameterHelper.save(req, res, authResult);
-            ReferrerURLCookieHandler referrerURLHandler = new ReferrerURLCookieHandler(webAppSecurityConfig);
+            ReferrerURLCookieHandler referrerURLHandler = webAppSecurityConfig.createReferrerURLCookieHandler();
 //            referrerURLHandler.setReferrerURLCookie(authResult, getReqURL(req));
             Cookie c = referrerURLHandler.createReferrerURLCookie(ReferrerURLCookieHandler.REFERRER_URL_COOKIENAME, getReqURL(req), req);
             authResult.setCookie(c);

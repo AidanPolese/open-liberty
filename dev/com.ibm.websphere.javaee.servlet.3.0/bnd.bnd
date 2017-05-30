@@ -20,5 +20,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/com.ibm.ws.javax.servlet_3.0.jar;version=file

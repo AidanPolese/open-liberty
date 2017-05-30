@@ -31,17 +31,21 @@ def gitBranch() {
     branch
 }
 
-ext.branchName = System.env.BRANCH_NAME ?: gitBranch()
-
-/* Write git branchName to properties file */
+/* Property for git branch */
 Properties props = new Properties()
-File propsFile = new File('generated.properties')
-
+ext.branchName = System.env.BRANCH_NAME ?: gitBranch()
 if (branchName == '' || branchName == 'HEAD') {
-    props.setProperty('bGitBranch', 'master')
-} else {
-    props.setProperty('bGitBranch', branchName)
+  // default to master if something went wrong
+  branchName = 'master'
 }
+props.setProperty('bGitBranch', branchName)
+
+/* Property for Artifactory matrix parameters */
+ext.matrixParams = ";GIT_BRANCH=master;GIT_FEATURE_BRANCH=${branchName}"
+props.setProperty('matrixParams', matrixParams)
+
+/* Write generated properties file */
+File propsFile = new File('generated.properties')
 props.store(propsFile.newWriter(), null)
 
 /* Configure the subprojects */

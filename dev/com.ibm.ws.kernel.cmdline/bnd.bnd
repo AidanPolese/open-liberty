@@ -21,7 +21,6 @@ Private-Package: com.ibm.ws.kernel.boot.cmdline;-split-package:=merge-last, \
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.org.osgi.core;version=latest, \
 	com.ibm.ws.kernel.boot;version=latest
 

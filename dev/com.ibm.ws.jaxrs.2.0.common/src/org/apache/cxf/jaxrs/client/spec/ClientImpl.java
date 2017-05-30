@@ -47,6 +47,7 @@ import org.apache.cxf.jaxrs.client.ClientProviderFactory;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.model.FilterProviderInfo;
+import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.https.SSLUtils;
 
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
@@ -61,21 +62,24 @@ public class ClientImpl implements Client {
     private static final String HTTP_PROXY_SERVER_PROP = "http.proxy.server.uri";
     private static final String HTTP_PROXY_SERVER_PORT_PROP = "http.proxy.server.port";
     private static final String HTTP_AUTOREDIRECT_PROP = "http.autoredirect";
+    private static final String HTTP_MAINTAIN_SESSION_PROP = "http.maintain.session";
     private static final String HTTP_RESPONSE_AUTOCLOSE_PROP = "http.response.stream.auto.close";
     private static final String THREAD_SAFE_CLIENT_PROP = "thread.safe.client";
     private static final String THREAD_SAFE_CLIENT_STATE_CLEANUP_PROP = "thread.safe.client.state.cleanup.period";
     private static final Boolean DEFAULT_THREAD_SAFETY_CLIENT_STATUS;
     private static final Integer THREAD_SAFE_CLIENT_STATE_CLEANUP_PERIOD;
     static {
-        DEFAULT_THREAD_SAFETY_CLIENT_STATUS = Boolean.parseBoolean(SystemPropertyAction.getPropertyOrNull(THREAD_SAFE_CLIENT_PROP));
-        THREAD_SAFE_CLIENT_STATE_CLEANUP_PERIOD = getIntValue(SystemPropertyAction.getPropertyOrNull(THREAD_SAFE_CLIENT_STATE_CLEANUP_PROP));
+        DEFAULT_THREAD_SAFETY_CLIENT_STATUS = 
+            Boolean.parseBoolean(SystemPropertyAction.getPropertyOrNull(THREAD_SAFE_CLIENT_PROP));
+        THREAD_SAFE_CLIENT_STATE_CLEANUP_PERIOD = 
+            getIntValue(SystemPropertyAction.getPropertyOrNull(THREAD_SAFE_CLIENT_STATE_CLEANUP_PROP));
     }
 
     private final Configurable<Client> configImpl;
     private final TLSConfiguration secConfig;
     private boolean closed;
-    private Set<WebClient> baseClients = Collections.newSetFromMap(new WeakHashMap<WebClient, Boolean>());
-
+    private Set<WebClient> baseClients = 
+        Collections.newSetFromMap(new WeakHashMap<WebClient, Boolean>());
     public ClientImpl(Configuration config,
                       TLSConfiguration secConfig) {
         configImpl = new ClientConfigurableImpl<Client>(this, config);
@@ -359,6 +363,10 @@ public class ClientImpl implements Client {
             if (autoRedirectValue != null) {
                 clientCfg.getHttpConduit().getClient().setAutoRedirect(autoRedirectValue);
             }
+            Boolean mantainSessionValue = getBooleanValue(configProps.get(HTTP_MAINTAIN_SESSION_PROP));
+            if (mantainSessionValue != null) {
+                clientCfg.getRequestContext().put(Message.MAINTAIN_SESSION, mantainSessionValue);
+            }
         }
 
         private void initTargetClientIfNeeded(Map<String, Object> configProps) {
@@ -487,20 +495,13 @@ public class ClientImpl implements Client {
             return newWebTarget(getUriBuilder().resolveTemplatesFromEncoded(templatesMap));
         }
 
-        @FFDCIgnore(IllegalArgumentException.class)
         private WebTarget newWebTarget(UriBuilder newBuilder) {
             WebClient newClient;
             if (targetClient != null) {
-                try {
-                    newBuilder.build();
-                } catch (IllegalArgumentException ex) {
-                    //the builder still has unresolved vars
-                }
                 newClient = WebClient.fromClient(targetClient);
             } else {
                 newClient = null;
             }
-
             return new WebTargetImpl(newBuilder, getConfiguration(), newClient);
         }
 
@@ -577,15 +578,14 @@ public class ClientImpl implements Client {
             checkNull(templatesMap.values().toArray());
         }
     }
-
     private static Long getLongValue(Object o) {
-        return o instanceof Long ? (Long) o : o instanceof String ? Long.valueOf(o.toString()) : null;
+        return o instanceof Long ? (Long)o 
+            : o instanceof String ? Long.valueOf(o.toString()) 
+            : o instanceof Integer ? ((Integer)o).longValue() : null;
     }
-
     private static Integer getIntValue(Object o) {
         return o instanceof Integer ? (Integer) o : o instanceof String ? Integer.valueOf(o.toString()) : null;
     }
-
     private static Boolean getBooleanValue(Object o) {
         return o instanceof Boolean ? (Boolean) o : o instanceof String ? Boolean.valueOf(o.toString()) : null;
     }

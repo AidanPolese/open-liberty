@@ -194,7 +194,7 @@ public class PluginGenerator {
                                File writeDirectory) {
         
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.entry(tc, "generateXML", "server = " + serverName + ", Framework is stopping = " + FrameworkState.isStopping() + ", pcd = " + pcd);
+            Tr.entry(tc, "generateXML", "server = " + serverName + ", Framework is stopping = " + FrameworkState.isStopping() + ", pcd = " + pcd + ", this = " + this);
         }
 
         // Because this method is synchronized there can become a queue of requests waiting which then don't get started

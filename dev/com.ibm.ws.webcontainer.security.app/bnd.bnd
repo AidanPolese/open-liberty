@@ -29,13 +29,14 @@ Service-Component: \
     interceptorService='com.ibm.wsspi.security.tai.TrustAssociationInterceptor'; \
     webAuthenticator=com.ibm.ws.webcontainer.security.WebAuthenticator; \
     locationAdmin=com.ibm.wsspi.kernel.service.location.WsLocationAdmin; \
+    authenticatorFactory=com.ibm.ws.webcontainer.security.WebAuthenticatorFactory; \
     unauthenticatedSubjectService=com.ibm.ws.security.authentication.UnauthenticatedSubjectService; \
     unprotectedResourceService=com.ibm.ws.webcontainer.security.UnprotectedResourceService; \
     jaccService=com.ibm.ws.security.authorization.jacc.JaccService;\
     multiple:='interceptorService, webAuthenticator, unprotectedResourceService'; \
-    greedy:='interceptorService, webAuthenticator, unprotectedResourceService'; \
+    greedy:='interceptorService, webAuthenticator, unprotectedResourceService,authenticatorFactory'; \
     optional:='taiService,interceptorService,webAuthenticator,jaccService,unprotectedResourceService'; \
-    dynamic:='taiService,interceptorService,webAuthenticator,jaccService,unprotectedResourceService'; \
+    dynamic:='taiService,interceptorService,webAuthenticator,jaccService,unprotectedResourceService,authenticatorFactory'; \
     properties:="service.vendor=IBM", \
   com.ibm.ws.webcontainer.security.ServletStartedListener; \
     implementation:=com.ibm.ws.webcontainer.security.ServletStartedListener; \

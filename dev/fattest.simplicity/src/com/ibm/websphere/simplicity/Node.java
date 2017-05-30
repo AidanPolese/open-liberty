@@ -251,7 +251,7 @@ public class Node extends Scope {
         if (this.baseProductVersion == null) {
             // To avoid stack overflow, assign a default "8.0" version
             this.baseProductVersion = new WebSphereVersion("8.0");
-            // TODO Call Alpine to get the product version
+            // TODO Call Liberty to get the product version
             //            String versionString = (String)task.run(this).getResult();
             //            Log.finer(c, method, "version: " + versionString);
             //            this.baseProductVersion = new WebSphereVersion(versionString.trim());

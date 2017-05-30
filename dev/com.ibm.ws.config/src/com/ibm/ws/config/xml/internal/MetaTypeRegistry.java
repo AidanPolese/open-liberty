@@ -1627,6 +1627,27 @@ final class MetaTypeRegistry {
         return null;
     }
 
+    String getAttributeName(String pid, String attributeID) {
+        RegistryEntry ent = getRegistryEntryByPidOrAlias(pid);
+        if (ent != null) {
+            Map<String, ExtendedAttributeDefinition> attributeMap;
+            attributeMap = ent.getAttributeMap();
+            if (attributeMap != null && attributeMap.containsKey(attributeID))
+                return attributeMap.get(attributeID).getName();
+        }
+        return null;
+    }
+
+    String getElementName(String pid) {
+        RegistryEntry ent = getRegistryEntryByPidOrAlias(pid);
+        if (ent != null) {
+            ObjectClassDefinition ocd = ent.getObjectClassDefinition();
+            if (ocd != null)
+                return ocd.getName();
+        }
+        return null;
+    }
+
     List<AttributeDefinition> getRequiredAttributesForHierarchy(String factoryPid) {
         RegistryEntry entry = getRegistryEntry(factoryPid);
         if (entry != null) {

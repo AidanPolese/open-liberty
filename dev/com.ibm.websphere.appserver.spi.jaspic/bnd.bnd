@@ -14,5 +14,4 @@ Export-Package: com.ibm.wsspi.security.jaspi
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.security.jaspic.1.1

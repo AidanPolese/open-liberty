@@ -18,7 +18,6 @@ Private-Package: \
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/org.apache.commons.compress-1.10.jar;version=file, \
 	com.ibm.ws.logging;version=latest, \
 	com.ibm.ws.kernel.boot.common;version=latest, \

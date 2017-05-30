@@ -14,6 +14,5 @@ Export-Package: com.ibm.ws.javaee.dd.appbnd,com.ibm.ws.javaee.dd.common,com.ibm.
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.javaee.dd, \
 	com.ibm.ws.javaee.dd.common

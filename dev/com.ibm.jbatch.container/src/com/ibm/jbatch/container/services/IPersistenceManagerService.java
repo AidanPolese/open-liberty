@@ -45,7 +45,6 @@ import com.ibm.jbatch.container.persistence.jpa.TopLevelStepInstanceEntity;
 import com.ibm.jbatch.container.persistence.jpa.TopLevelStepInstanceKey;
 import com.ibm.jbatch.container.ws.InstanceState;
 import com.ibm.jbatch.container.ws.RemotablePartitionState;
-import com.ibm.jbatch.container.ws.WSSearchObject;
 import com.ibm.jbatch.container.ws.WSStepThreadExecutionAggregate;
 import com.ibm.jbatch.spi.services.IBatchServiceBase;
 
@@ -499,7 +498,7 @@ public interface IPersistenceManagerService extends IBatchServiceBase {
      * @param wsso
      *
      */
-    public List<JobInstanceEntity> getJobInstances(WSSearchObject wsso, int page, int pageSize);
+    public List<JobInstanceEntity> getJobInstances(IJPAQueryHelper queryHelper, int page, int pageSize);
 
     /**
      * Creates an entry for this remote partition in the RemotablePartition table

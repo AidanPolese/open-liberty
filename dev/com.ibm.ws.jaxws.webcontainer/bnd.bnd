@@ -49,6 +49,8 @@ Include-Resource: OSGI-INF=resources/OSGI-INF
     
 IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml
 
+instrument.classesExcludes: com/ibm/ws/jaxws/webcontainer/internal/resources/*.class
+
 -buildpath.bootclasspath: \
 	com.ibm.websphere.javaee.jaxb.2.2;version=latest;boot=true,\
 	com.ibm.websphere.javaee.jaxws.2.2;version=latest;boot=true,\

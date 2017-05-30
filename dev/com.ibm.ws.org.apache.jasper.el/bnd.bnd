@@ -29,7 +29,6 @@ instrument.ffdc: false
 instrument.classesExcludes: org/apache/el/Message*.class
 
 -buildpath: \
-	${javac.bootclasspath.java7}, \
 	com.ibm.websphere.javaee.el.3.0;version=latest,\
 	com.ibm.websphere.appserver.spi.logging;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest

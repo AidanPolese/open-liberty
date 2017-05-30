@@ -27,7 +27,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import com.ibm.websphere.ras.TrConfigurator;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.TraceComponentChangeListener;
-import com.ibm.ws.ras.instrument.internal.main.AlpineRuntimeTransformer;
+import com.ibm.ws.ras.instrument.internal.main.LibertyRuntimeTransformer;
 
 /**
  * Activator for the RAS/FFDC bundle.
@@ -50,7 +50,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer<Even
 
     /**
      * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-     * @see com.ibm.alpine.kernel.internal.Activator#start(org.osgi.framework.BundleContext)
+     * @see com.ibm.liberty.kernel.internal.Activator#start(org.osgi.framework.BundleContext)
      */
     @Override
     public void start(BundleContext context) throws Exception {
@@ -85,9 +85,9 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer<Even
         ServiceReference<Instrumentation> instReference = context.getServiceReference(Instrumentation.class);
         if (instReference != null) {
             inst = context.getService(instReference);
-            AlpineRuntimeTransformer.setInstrumentation(inst);
+            LibertyRuntimeTransformer.setInstrumentation(inst);
         } else {
-            AlpineRuntimeTransformer.setInstrumentation(null);
+            LibertyRuntimeTransformer.setInstrumentation(null);
         }
 
         // Register an adapter for the RuntimeTransformer to get notifications
@@ -146,7 +146,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer<Even
 
         @Override
         public void traceComponentUpdated(TraceComponent tc) {
-            AlpineRuntimeTransformer.traceStateChanged(tc);
+            LibertyRuntimeTransformer.traceStateChanged(tc);
         }
     }
 

@@ -1,4 +1,4 @@
--include= ~../cnf/resources/bnd/liberty-release.props
+-include= ~../cnf/resources/bnd/bundle.props
 bVersion=1.0
 
 javac.source: 1.4
@@ -20,5 +20,4 @@ publish.wlp.jar.rename: false
 -removeheaders=Bnd-LastModified, Bundle-ManifestVersion, Bundle-Name, Bundle-Version, Private-Package, Require-Capability, Tool
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.kernel.instrument.agent;version=latest

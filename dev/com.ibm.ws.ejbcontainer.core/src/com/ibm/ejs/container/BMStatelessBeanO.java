@@ -13,8 +13,9 @@ package com.ibm.ejs.container;
 
 import java.rmi.RemoteException;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+
 
 /**
  * Create new <code>BMStatelessBeanO</code>. <p>

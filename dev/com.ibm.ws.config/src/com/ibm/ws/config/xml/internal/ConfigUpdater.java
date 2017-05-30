@@ -419,7 +419,7 @@ class ConfigUpdater {
     /**
      * Compare two configuration values and determine if they are equal or not.
      * Acceptable value types are String, String array, or Map of Strings (the
-     * alpine supported config value types).
+     * liberty supported config value types).
      * For String array value comparison, all values and must be equal at same
      * index.
      * For Map of String value comparison, all keys and values must be equal.

@@ -16,8 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.ibm.ejs.container.EJBConfigurationException;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * EJBInterceptorBinding is used to store the interceptor binding metadata
@@ -33,8 +33,7 @@ import com.ibm.ejs.ras.TraceComponent;
  */
 public class EJBInterceptorBinding
 {
-    private static final String CLASS_NAME = EJBInterceptorBinding.class.getName();
-    private static final TraceComponent tc = Tr.register(CLASS_NAME, "EJB3Interceptors", "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(EJBInterceptorBinding.class, "EJB3Interceptors", "com.ibm.ejs.container.container");
 
     private static final List<String> EMPTY_LIST = new LinkedList<String>();
 

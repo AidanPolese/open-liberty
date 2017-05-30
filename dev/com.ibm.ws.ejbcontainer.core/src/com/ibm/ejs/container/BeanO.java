@@ -39,13 +39,13 @@ import com.ibm.ejs.container.util.ExceptionUtil;
 import com.ibm.ejs.csi.NullSecurityCollaborator;
 import com.ibm.ejs.j2c.HandleList;
 import com.ibm.ejs.j2c.HandleListInterface;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.BeanInstanceInfo;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.MethodInterface;
 import com.ibm.websphere.csi.TransactionAttribute;
 import com.ibm.websphere.ejbcontainer.EJBContextExtension;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.csi.DispatchEventListener;
 import com.ibm.ws.csi.DispatchEventListenerCookie;
 import com.ibm.ws.ejbcontainer.EJBMethodMetaData;
@@ -744,7 +744,7 @@ public abstract class BeanO
 
             // This should never happen. Something is wrong.
             // Need to throw a runtime exception since this is a
-            // J2EE architected interface that does not allow a checked
+            // Java EE architected interface that does not allow a checked
             // exceptions to be thrown. So, throw ContainerEJBException.
             FFDCFilter.processException(ex, CLASS_NAME + ".getEJBHome", "522", this);
             ContainerEJBException ex2 = new ContainerEJBException("Failed to get the wrapper for home.", ex);

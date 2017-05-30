@@ -14,7 +14,6 @@ Export-Package: com.ibm.websphere.crypto,com.ibm.websphere.security.auth.data,co
 publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.crypto.passwordutil;version=latest, \
 	com.ibm.ws.security.auth.data;version=latest, \
 	com.ibm.ws.security.auth.data.common;version=latest

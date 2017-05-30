@@ -2,6 +2,6 @@
 /bin/
 /release/
 /generated/
-/settings.xml
+/connection-settings.xml
 /maven-local/
-/mavenlocal.mvn
+/*.mvn

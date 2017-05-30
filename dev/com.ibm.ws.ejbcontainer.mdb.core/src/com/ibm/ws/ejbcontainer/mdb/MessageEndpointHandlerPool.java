@@ -11,8 +11,8 @@
  */
 package com.ibm.ws.ejbcontainer.mdb;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.util.PoolDiscardStrategy;
 
 /**

@@ -16,6 +16,8 @@ package com.ibm.wsspi.security.wim.exception;
  */
 public class MultipleEntriesFoundException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -5745701539262116645L;
+
     /**
      * Creates the Multiple Entries Found Exception
      */
@@ -25,7 +27,7 @@ public class MultipleEntriesFoundException extends WIMApplicationException {
 
     /**
      * Creates the Multiple Entries Found Exception
-     * 
+     *
      * @param message The message or message key of the exception.
      */
     public MultipleEntriesFoundException(String key, String message) {
@@ -34,7 +36,7 @@ public class MultipleEntriesFoundException extends WIMApplicationException {
 
     /**
      * Creates the Multiple Entries Found Exception
-     * 
+     *
      * @param message The message or message key of the exception.
      * @param cause The cause of the exception.
      */
@@ -44,7 +46,7 @@ public class MultipleEntriesFoundException extends WIMApplicationException {
 
     /**
      * Creates the Multiple Entries Found Exception
-     * 
+     *
      * @param cause The cause of the exception.
      */
     public MultipleEntriesFoundException(Throwable cause) {

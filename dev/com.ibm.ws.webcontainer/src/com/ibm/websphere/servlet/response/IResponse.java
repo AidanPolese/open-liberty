@@ -292,19 +292,19 @@ public interface IResponse {
   public void removeCookie(String cookieName);
   
   // ALPINE
-  // Added for Alpine support.
+  // Added for Liberty support.
   public void resetBuffer();
 
   // ALPINE
-  // Added for Alpine support.
+  // Added for Liberty support.
   public int getBufferSize();
 
   // ALPINE
-  // Added for Alpine support.
+  // Added for Liberty support.
   public void setBufferSize(int bufferSize);
 
   // ALPINE
-  // Added for Alpine support.
+  // Added for Liberty support.
   public void flushBuffer() throws IOException;
 
 }

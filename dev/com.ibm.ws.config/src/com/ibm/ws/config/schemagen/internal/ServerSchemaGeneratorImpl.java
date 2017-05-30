@@ -140,7 +140,7 @@ public class ServerSchemaGeneratorImpl extends StandardMBean implements ServerSc
             str = out.toString();
         } catch (IOException e) {
             // Do you need FFDC here? Remember FFDC instrumentation and @FFDCIgnore
-            // https://websphere.pok.ibm.com/~alpine/secure/docs/dev/API/com.ibm.ws.ras/com/ibm/ws/ffdc/annotation/FFDCIgnore.html
+            // https://websphere.pok.ibm.com/~liberty/secure/docs/dev/API/com.ibm.ws.ras/com/ibm/ws/ffdc/annotation/FFDCIgnore.html
         }
         return str;
     }

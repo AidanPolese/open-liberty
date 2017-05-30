@@ -66,7 +66,6 @@ public class WorkUnitThreadControllerImpl implements IThreadRootController {
         this.runtimeWorkUnitExecution = runtimeWorkUnitExecution;
         this.threadTypeBasedControllerHelper = new ThreadTypeBasedHelperFactory().createControllerHelper();
         this.jobNavigator = runtimeWorkUnitExecution.getJobNavigator();
-        setupListeners();
     }
 
     /*
@@ -140,6 +139,7 @@ public class WorkUnitThreadControllerImpl implements IThreadRootController {
 
         ExecutionStatus retVal = null;
         boolean workStarted = false;
+        setupListeners();
 
         try {
             StopLock stopLock = getStopLock(); // Store in local variable to facilitate Ctrl+Shift+G search in Eclipse

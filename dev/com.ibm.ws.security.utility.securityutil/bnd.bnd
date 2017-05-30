@@ -23,6 +23,3 @@ instrument.disabled: true
 
 publish.tool.jar=ws-securityutil.jar
 publish.tool.script=securityUtility
-
--buildpath: \
-	${javac.bootclasspath.java6}

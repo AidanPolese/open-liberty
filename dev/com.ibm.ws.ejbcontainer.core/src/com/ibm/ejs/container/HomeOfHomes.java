@@ -28,8 +28,6 @@ import com.ibm.ejs.container.BeanOFactory.BeanOFactoryType;
 import com.ibm.ejs.container.activator.ActivationStrategy;
 import com.ibm.ejs.container.activator.Activator;
 import com.ibm.ejs.csi.EJBModuleMetaDataImpl;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.FastHashtable;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.EJBModuleMetaData;
@@ -37,6 +35,8 @@ import com.ibm.websphere.csi.J2EEName;
 import com.ibm.websphere.csi.J2EENameFactory;
 import com.ibm.websphere.ejbcontainer.AmbiguousEJBReferenceException;
 import com.ibm.websphere.ejbcontainer.EJBStoppedException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.InternalConstants;
 import com.ibm.ws.ejbcontainer.diagnostics.IncidentStreamWriter;
 import com.ibm.ws.ejbcontainer.diagnostics.IntrospectionWriter;
@@ -1115,7 +1115,7 @@ public final class HomeOfHomes implements HomeInternal
     }
 
     /**
-     * Get the J2EE name of the EJBFactory. <p>
+     * Get the Java EE name of the EJBFactory. <p>
      **/
     // d440604
     public J2EEName getEJBFactoryJ2EEName()
@@ -1160,7 +1160,7 @@ public final class HomeOfHomes implements HomeInternal
     }
 
     /**
-     * Get the J2EE name of this home. <p>
+     * Get the Java EE name of this home. <p>
      */
     @Override
     public J2EEName getJ2EEName()
@@ -1512,7 +1512,7 @@ public final class HomeOfHomes implements HomeInternal
     private static int fastHashTableSize = 2053;//d140003.7
 
     /**
-     * The home table maps the J2EE name of the bean installed
+     * The home table maps the Java EE name of the bean installed
      * in this container to its corresponding HomeRecord (see below).
      */
     private final FastHashtable<J2EEName, HomeRecord> homesByName = new FastHashtable<J2EEName, HomeRecord>(fastHashTableSize);//d140003.7 // d366845.3

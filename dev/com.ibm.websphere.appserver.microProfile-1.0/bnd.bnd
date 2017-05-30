@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.microProfile-1.0
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.cdi-1.2;version=latest, \
 	com.ibm.websphere.appserver.jaxrs-2.0;version=latest, \
 	com.ibm.websphere.appserver.jsonp-1.0;version=latest, \

@@ -21,6 +21,3 @@ instrument.disabled: true
 
 publish.tool.jar=ws-webserverPluginutil.jar
 publish.tool.script=pluginUtility
-
--buildpath: \
-	${javac.bootclasspath.java6}

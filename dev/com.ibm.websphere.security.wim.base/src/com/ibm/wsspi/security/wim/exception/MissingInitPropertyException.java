@@ -17,6 +17,8 @@ package com.ibm.wsspi.security.wim.exception;
  */
 public class MissingInitPropertyException extends InitializationException {
 
+    private static final long serialVersionUID = 9005324454219277762L;
+
     /**
      * Creates the Missing Initialization Property Exception
      */
@@ -26,7 +28,7 @@ public class MissingInitPropertyException extends InitializationException {
 
     /**
      * Creates the Missing Initialization Property Exception
-     * 
+     *
      * @param message The message or message key of the exception.
      */
     public MissingInitPropertyException(String key, String message) {

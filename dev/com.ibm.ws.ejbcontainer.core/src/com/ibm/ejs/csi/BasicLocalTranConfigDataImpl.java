@@ -13,11 +13,11 @@ package com.ibm.ejs.csi;
 
 import java.security.AccessController;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.dopriv.SystemGetPropertyPrivileged;
 import com.ibm.tx.jta.embeddable.LocalTransactionSettings;
 import com.ibm.websphere.csi.LocalTranConfigData;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * This class is an implementation of GlobalTranConfigData that does not

@@ -21,6 +21,7 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.inputstream.HttpInputStreamConnectWeb;
 import com.ibm.ws.webcontainer.srt.SRTInputStream;
 import com.ibm.ws.webcontainer31.async.AsyncAlreadyReadCallback;
+import com.ibm.ws.webcontainer31.async.AsyncContext31Impl;
 import com.ibm.ws.webcontainer31.async.AsyncReadCallback;
 import com.ibm.ws.webcontainer31.async.ThreadContextManager;
 import com.ibm.ws.webcontainer31.async.listener.ReadListenerRunnable;
@@ -213,17 +214,25 @@ public class SRTInputStream31 extends SRTInputStream
             //Create a new HttpServletCallback so we can use it for our async read callbacks
             this.callback = new AsyncReadCallback(this, tcm);
         }    
+        
+        AsyncContext31Impl ac = (AsyncContext31Impl)request.getAsyncContext();
 
         try {
-            ReadListenerRunnable rlRunnable = new ReadListenerRunnable(tcm, this);
+            
+            
+            ReadListenerRunnable rlRunnable = new ReadListenerRunnable(tcm, this,ac);
+            
+            ac.setReadListenerRunning(true);
             
             com.ibm.ws.webcontainer.osgi.WebContainer.getExecutorService().execute(rlRunnable);
+            
         } catch (Exception e) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "An exception occurred while setting the ReadListener : " + e);
             }
             //There was a problem with the read so we should invoke their onError, since technically it's been set now
             this.listener.onError(e);
+            ac.setReadListenerRunning(false);
         }
         
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())

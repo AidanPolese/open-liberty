@@ -25,7 +25,7 @@ import com.ibm.wsspi.webcontainer.metadata.WebComponentMetaData;
 import com.ibm.wsspi.webcontainer.metadata.WebModuleMetaData;
 
 /**
- * Alpine level of configuration for the Webapp.
+ * Liberty level of configuration for the Webapp.
  */
 public class WebAppConfiguration extends com.ibm.ws.webcontainer.webapp.WebAppConfiguration
 {

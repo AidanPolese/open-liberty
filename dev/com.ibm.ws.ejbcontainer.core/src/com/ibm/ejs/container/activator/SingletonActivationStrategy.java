@@ -17,8 +17,8 @@ import com.ibm.ejs.container.BeanId;
 import com.ibm.ejs.container.BeanO;
 import com.ibm.ejs.container.ContainerTx;
 import com.ibm.ejs.container.EJBThreadData;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**

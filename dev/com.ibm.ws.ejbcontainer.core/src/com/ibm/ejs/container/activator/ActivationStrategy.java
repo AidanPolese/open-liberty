@@ -20,10 +20,10 @@ import com.ibm.ejs.container.ContainerAS;
 import com.ibm.ejs.container.ContainerTx;
 import com.ibm.ejs.container.EJBThreadData;
 import com.ibm.ejs.container.util.locking.LockTable;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 
 import com.ibm.websphere.csi.EJBCache;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**

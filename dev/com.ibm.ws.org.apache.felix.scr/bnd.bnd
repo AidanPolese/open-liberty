@@ -5,5 +5,4 @@
    @lib/org.apache.felix.scr-2.0.8.jar!/!META-INF/maven/*
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/org.apache.felix.scr-2.0.8.jar;version=file

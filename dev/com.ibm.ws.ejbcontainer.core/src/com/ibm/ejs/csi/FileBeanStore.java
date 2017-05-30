@@ -29,11 +29,11 @@ import com.ibm.ejs.container.BeanId;
 import com.ibm.ejs.container.StatefulBeanReaper;
 import com.ibm.ejs.container.activator.StatefulSessionActivationStrategy;
 import com.ibm.ejs.container.util.EJSPlatformHelper;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.SessionBeanStore;
 import com.ibm.websphere.csi.StreamUnavailableException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**

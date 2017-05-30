@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.ibm.ejs.container.EJBConfigurationException;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.jitdeploy.EJBWrapperType;
 
 /**
@@ -32,12 +32,9 @@ import com.ibm.ws.ejbcontainer.jitdeploy.EJBWrapperType;
 
 public final class DeploymentUtil
 {
-    private static final String CLASS_NAME = DeploymentUtil.class.getName();
-
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     "EJBContainer",
-                     "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(DeploymentUtil.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     public static final String declaredUncheckedAreSystemExceptions =
                     "com.ibm.websphere.ejbcontainer.declaredUncheckedAreSystemExceptions"; // d660332

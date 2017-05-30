@@ -13,5 +13,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/javax.enterprise.concurrent-api-1.0.jar;version=file

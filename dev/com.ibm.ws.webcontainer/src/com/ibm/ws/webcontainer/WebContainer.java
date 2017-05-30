@@ -802,6 +802,7 @@ public abstract class WebContainer extends BaseContainer {
             connContext.prepareForNextConnection(req, res);
             hreq = connContext.getRequest();
             hres = connContext.getResponse();
+            auditManager.setHttpServletRequest((Object)hreq);
 
             reqState.setCurrentThreadsIExtendedRequest(hreq);
             reqState.setCurrentThreadsIExtendedResponse(hres);
@@ -950,7 +951,7 @@ public abstract class WebContainer extends BaseContainer {
                     if (isTraceOn&&logger.isLoggable (Level.FINE)) {                     
                         logger.logp(Level.FINE, CLASS_NAME,"handleRequest", "start handling the resource by wrapper -->["+ wrapper.getName()+"]");
                     }
-                    auditManager.setHttpServletRequest((Object)hreq);
+                    //auditManager.setHttpServletRequest((Object)hreq);
 
                     wrapper.handleRequest(hreq, hres);
                 } catch (InvalidCacheTargetException ne) {

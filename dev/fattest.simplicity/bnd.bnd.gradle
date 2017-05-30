@@ -40,6 +40,8 @@ Export-Package: \
 
 publish.wlp.jar.disabled: true
 
+test.project: true
+
 -buildpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file,\
 	lib/com.ibm.componenttest.common.jar;version=file,\

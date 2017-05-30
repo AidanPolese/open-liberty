@@ -29,8 +29,8 @@ import com.ibm.ejs.container.WrapperInterface;
 import com.ibm.ejs.container.WrapperManager;
 import com.ibm.ejs.container.WrapperProxy;
 import com.ibm.ejs.container.WrapperProxyState;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.util.EJBSerializer;
 
 /**
@@ -40,10 +40,9 @@ import com.ibm.ws.ejbcontainer.util.EJBSerializer;
  */
 public class EJBSerializerImpl extends EJBSerializer
 {
-    private static final String CLASS_NAME = EJBSerializerImpl.class.getName();
-
-    private final static TraceComponent tc =
-                    Tr.register(CLASS_NAME, "EJBContainer", "com.ibm.ejs.container.container");
+    private final static TraceComponent tc = Tr.register(EJBSerializerImpl.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     /*
      * (non-Javadoc)

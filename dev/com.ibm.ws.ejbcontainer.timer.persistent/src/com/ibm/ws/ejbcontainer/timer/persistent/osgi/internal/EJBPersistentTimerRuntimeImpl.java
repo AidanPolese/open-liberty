@@ -76,7 +76,7 @@ public class EJBPersistentTimerRuntimeImpl implements EJBPersistentTimerRuntime 
     private volatile boolean serverStopping;
 
     /**
-     * Map of J2EE Name -> allowCachedTimerData integer value; where J2EEName is either the
+     * Map of Java EE Name -> allowCachedTimerData integer value; where J2EEName is either the
      * String representation of a J2EEName or the wild card, "*".
      */
     private volatile Map<String, Integer> allowCachedTimerDataMap;
@@ -119,8 +119,8 @@ public class EJBPersistentTimerRuntimeImpl implements EJBPersistentTimerRuntime 
     private void updateConfiguration(Map<String, Object> properties) {
 
         // For quick access, regardless of whether an application is even installed,
-        // build a map of J2EE name string to timer data cache setting; where the
-        // J2EE name string may be "*" to indicate all beans.
+        // build a map of Java EE name string to timer data cache setting; where the
+        // Java EE name string may be "*" to indicate all beans.
         if (AllowCachedTimerDataFor != null) {
             Map<String, Integer> newAllowCachedTimerDataMap = new HashMap<String, Integer>();
             StringTokenizer st = new StringTokenizer(AllowCachedTimerDataFor, ":");

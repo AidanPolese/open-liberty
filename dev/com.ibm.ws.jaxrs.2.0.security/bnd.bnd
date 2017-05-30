@@ -31,7 +31,6 @@ Private-Package:\
 -dsannotations: com.ibm.ws.jaxrs20.appsecurity.component.*    
  
 -buildpath: \
-	${javac.bootclasspath.java7}, \
 	com.ibm.ws.jaxrs.2.0.common;version=latest,\
 	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
 	com.ibm.ws.ssl;version=latest,\

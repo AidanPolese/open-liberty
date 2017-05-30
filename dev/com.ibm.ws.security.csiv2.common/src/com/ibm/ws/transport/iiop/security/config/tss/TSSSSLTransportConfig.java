@@ -3,37 +3,16 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2015
+ * Copyright IBM Corp. 2015, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 /*
  * Some of the code was derived from code supplied by the Apache Software Foundation licensed under the Apache License, Version 2.0.
  */
 package com.ibm.ws.transport.iiop.security.config.tss;
-
-import java.security.cert.Certificate;
-import java.security.cert.X509Certificate;
-import java.util.List;
-
-import javax.net.ssl.SSLPeerUnverifiedException;
-import javax.net.ssl.SSLSession;
-import javax.security.auth.Subject;
-import javax.security.auth.login.CredentialExpiredException;
-
-import org.omg.CORBA.Any;
-import org.omg.CORBA.ORB;
-import org.omg.CORBA.UserException;
-import org.omg.CSIIOP.EstablishTrustInClient;
-import org.omg.CSIIOP.TAG_NULL_TAG;
-import org.omg.CSIIOP.TAG_TLS_SEC_TRANS;
-import org.omg.CSIIOP.TLS_SEC_TRANS;
-import org.omg.CSIIOP.TLS_SEC_TRANSHelper;
-import org.omg.CSIIOP.TransportAddress;
-import org.omg.IOP.Codec;
-import org.omg.IOP.TaggedComponent;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
@@ -50,10 +29,29 @@ import com.ibm.ws.transport.iiop.security.SASException;
 import com.ibm.ws.transport.iiop.security.SASInvalidEvidenceException;
 import com.ibm.ws.transport.iiop.security.config.ConfigUtil;
 import com.ibm.wsspi.security.csiv2.TrustedIDEvaluator;
+import org.omg.CORBA.Any;
+import org.omg.CORBA.ORB;
+import org.omg.CORBA.UserException;
+import org.omg.CSIIOP.EstablishTrustInClient;
+import org.omg.CSIIOP.TAG_NULL_TAG;
+import org.omg.CSIIOP.TAG_TLS_SEC_TRANS;
+import org.omg.CSIIOP.TLS_SEC_TRANS;
+import org.omg.CSIIOP.TLS_SEC_TRANSHelper;
+import org.omg.CSIIOP.TransportAddress;
+import org.omg.IOP.Codec;
+import org.omg.IOP.TaggedComponent;
+
+import javax.net.ssl.SSLPeerUnverifiedException;
+import javax.net.ssl.SSLSession;
+import javax.security.auth.Subject;
+import javax.security.auth.login.CredentialExpiredException;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
+import java.util.List;
 
 /**
  * At the moment, this config class can only handle a single address.
- * 
+ *
  * @version $Rev: 504461 $ $Date: 2007-02-07 00:42:26 -0800 (Wed, 07 Feb 2007) $
  */
 public class TSSSSLTransportConfig extends TSSTransportMechConfig {
@@ -244,9 +242,12 @@ public class TSSSSLTransportConfig extends TSSTransportMechConfig {
         buf.append(spaces).append("TSSSSLTransportConfig: [\n");
         buf.append(moreSpaces).append("SUPPORTS: ").append(ConfigUtil.flags(supports)).append("\n");
         buf.append(moreSpaces).append("REQUIRES: ").append(ConfigUtil.flags(requires)).append("\n");
-        for (TransportAddress addr : transportAddresses) {
-            buf.append(moreSpaces).append("  ").append("hostName: ").append(addr.host_name)
-                            .append(",  port    : ").append(addr.port).append("\n");
+        if (transportAddresses != null) {
+            for (TransportAddress addr : transportAddresses) {
+                if (addr != null) {
+                    buf.append(moreSpaces).append("  ").append("hostName: ").append(addr.host_name).append(",  port    : ").append(addr.port).append("\n");
+                }
+            }
         }
         buf.append(moreSpaces).append("handshakeTimeout: ").append(handshakeTimeout).append("\n");
         buf.append(spaces).append("]\n");

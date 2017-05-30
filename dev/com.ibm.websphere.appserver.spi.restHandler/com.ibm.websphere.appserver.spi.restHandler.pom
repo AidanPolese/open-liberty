@@ -22,5 +22,5 @@ restricted by GSA ADP Schedule Contract with IBM Corp.
   <artifactId>com.ibm.websphere.appserver.spi.restHandler</artifactId>
   <version>${bFullVersion}</version>
   <name>WebSphere REST Handler SPI</name>
-  <description>WebSphere REST Handler SPI, version 1.5</description>
+  <description>WebSphere REST Handler SPI, version 2.0</description>
 </project>

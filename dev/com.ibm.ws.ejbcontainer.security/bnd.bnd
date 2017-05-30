@@ -33,6 +33,8 @@ Service-Component: \
     optional:='jaccService'; \
     properties:="service.vendor=IBM"
 
+instrument.classesExcludes: com/ibm/ws/ejbcontainer/security/internal/resources/*.class
+
 -buildpath: \
 	com.ibm.ws.logging,\
 	com.ibm.ws.security.authentication;version=latest,\

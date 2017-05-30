@@ -15,8 +15,8 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.javaee.dd.ejb.NamedMethod;
 
 /**

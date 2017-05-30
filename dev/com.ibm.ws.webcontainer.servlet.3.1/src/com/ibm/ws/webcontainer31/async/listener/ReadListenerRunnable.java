@@ -13,6 +13,7 @@ package com.ibm.ws.webcontainer31.async.listener;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.webcontainer31.async.AsyncContext31Impl;
 import com.ibm.ws.webcontainer31.async.ThreadContextManager;
 import com.ibm.ws.webcontainer31.osgi.osgi.WebContainerConstants;
 import com.ibm.ws.webcontainer31.srt.SRTInputStream31;
@@ -29,11 +30,13 @@ public class ReadListenerRunnable implements Runnable {
     private HttpInboundServiceContext _isc = null;
     private InterChannelCallback _callback = null;
     private SRTInputStream31 in;
+    private AsyncContext31Impl asyncContext;
 
-    public ReadListenerRunnable(ThreadContextManager tcm, SRTInputStream31 in) {
+    public ReadListenerRunnable(ThreadContextManager tcm, SRTInputStream31 in,AsyncContext31Impl ac) {
         this.in = in;
         _callback = in.getCallback();
         _isc = in.getISC();
+        asyncContext = ac;
     }
 
     /* (non-Javadoc)
@@ -68,6 +71,8 @@ public class ReadListenerRunnable implements Runnable {
             //There was a problem with the read so we should invoke their onError, since technically it's been set now
             if(this.in.getReadListener()!= null)
                 this.in.getReadListener().onError(e);
+        } finally {
+            asyncContext.setReadListenerRunning(false);
         }
         
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {

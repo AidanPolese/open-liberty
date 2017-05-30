@@ -25,11 +25,13 @@ import java.util.Set;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.websphere.security.audit.context.AuditManager;
 import com.ibm.websphere.security.wim.ConfigConstants;
 import com.ibm.websphere.security.wim.Service;
 import com.ibm.websphere.security.wim.ras.WIMMessageHelper;
 import com.ibm.websphere.security.wim.ras.WIMMessageKey;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.security.audit.Audit;
 import com.ibm.ws.security.registry.CertificateMapFailedException;
 import com.ibm.ws.security.registry.CertificateMapNotSupportedException;
 import com.ibm.ws.security.registry.CustomRegistryException;
@@ -1311,18 +1313,30 @@ public class URBridge implements Repository {
 
     @Override
     public Root delete(Root root) throws WIMException {
+        AuditManager auditManager = new AuditManager();
+        Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "delete", auditManager.getRepositoryId(), auditManager.getRepositoryUniqueName(),
+                    auditManager.getRepositoryRealm(), root, Integer.valueOf("209"));
+
         throw new WIMApplicationException(WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY, Tr.formatMessage(tc, WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY,
                                                                                                                WIMMessageHelper.generateMsgParms(reposId)));
     }
 
     @Override
     public Root create(Root root) throws WIMException {
+        AuditManager auditManager = new AuditManager();
+        Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", auditManager.getRepositoryId(), auditManager.getRepositoryUniqueName(),
+                    auditManager.getRepositoryRealm(), root, Integer.valueOf("209"));
+
         throw new WIMApplicationException(WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY, Tr.formatMessage(tc, WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY,
                                                                                                                WIMMessageHelper.generateMsgParms(reposId)));
     }
 
     @Override
     public Root update(Root root) throws WIMException {
+        AuditManager auditManager = new AuditManager();
+        Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "update", auditManager.getRepositoryId(), auditManager.getRepositoryUniqueName(),
+                    auditManager.getRepositoryRealm(), root, Integer.valueOf("209"));
+
         throw new WIMApplicationException(WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY, Tr.formatMessage(tc, WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY,
                                                                                                                WIMMessageHelper.generateMsgParms(reposId)));
     }

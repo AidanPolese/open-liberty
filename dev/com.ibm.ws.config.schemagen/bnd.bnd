@@ -14,7 +14,6 @@ Private-Package: com.ibm.ws.config.schemagen.internal
 -dsannotations:
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.config;version=latest,\
 	com.ibm.ws.kernel.cmdline;version=latest,\
 	com.ibm.ws.kernel.feature;version=latest,\

@@ -17,8 +17,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import com.ibm.ejs.container.ContainerProperties;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**
@@ -75,6 +75,7 @@ implements EvictionStrategy,
     // overwhelming trace logs in long-run scenarios.
     private static final TraceComponent tcOOM =
                     Tr.register(BackgroundLruEvictionStrategy.class.getName() + "2"
+                                , BackgroundLruEvictionStrategy.class
                                 , "EJBContainer.OOM"
                                 , "com.ibm.ejs.container.container");
 
@@ -526,7 +527,7 @@ implements EvictionStrategy,
             } finally
             {
                 // Unless the preferred size has been reached, use the deferrable 
-                // scheduler.  They will be the same for tWAS, but in Liberty we 
+                // scheduler.  They will be the same for traditional WAS, but in Liberty we 
                 // use the deferrable until we need the non-deferrable one to keep
                 // up with cache usage.
                 ScheduledExecutorService executor = preferredSizeReached() ?

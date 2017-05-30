@@ -36,8 +36,6 @@ import javax.transaction.TransactionRequiredException;
 import javax.transaction.TransactionRolledbackException;
 
 import com.ibm.ejs.container.util.ExceptionUtil;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.CSIAccessException;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.CSIInvalidTransactionException;
@@ -46,6 +44,8 @@ import com.ibm.websphere.csi.CSITransactionRequiredException;
 import com.ibm.websphere.csi.CSITransactionRolledbackException;
 import com.ibm.websphere.csi.ExceptionType;
 import com.ibm.websphere.csi.OrbUtils;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**
@@ -87,7 +87,7 @@ public class RemoteExceptionMappingStrategy extends ExceptionMappingStrategy
      * Map the remote exception to a CORBA system exception. This is the
      * exception that will be thrown to the client stub. The client stub
      * will then reconvert this exception back to a remote exception.
-     * All fun and games in order to comply with both the J2EE spec
+     * All fun and games in order to comply with both the Java EE spec
      * and the RMI/IIOP spec.
      *
      * This method is used for EJB 2.1 (and earlier) component remote interfaces

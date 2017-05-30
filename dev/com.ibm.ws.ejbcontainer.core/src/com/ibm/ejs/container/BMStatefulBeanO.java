@@ -14,9 +14,9 @@ package com.ibm.ejs.container;
 import java.rmi.RemoteException;
 
 import com.ibm.ejs.container.CallbackContextHelper.Tx;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.CSIException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * A <code>BMStatefulBeanO</code> manages the lifecycle of a

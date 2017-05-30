@@ -13,8 +13,8 @@ package com.ibm.ejs.container;
 
 import java.util.Date;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * <code>TimeoutElement</code> is a holder object used by the

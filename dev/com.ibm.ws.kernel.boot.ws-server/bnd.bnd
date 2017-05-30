@@ -10,6 +10,3 @@ Bundle-SymbolicName: com.ibm.ws.kernel.boot.ws-server
 -fixupmessages.empty: The JAR is empty
 
 publish.tool.jar=ws-server.jar
-
--buildpath: \
-	${javac.bootclasspath.java6}

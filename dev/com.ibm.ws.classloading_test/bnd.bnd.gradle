@@ -7,6 +7,8 @@ bVersion=1.0
 	com.ibm.ws.classloading_test.jarA, \
 	com.ibm.ws.classloading_test.jarB
 
+test.project: true
+
 -testpath: \
 	com.ibm.websphere.org.osgi.core;version=latest,\
 	com.ibm.websphere.org.osgi.service.cm;version=latest,\

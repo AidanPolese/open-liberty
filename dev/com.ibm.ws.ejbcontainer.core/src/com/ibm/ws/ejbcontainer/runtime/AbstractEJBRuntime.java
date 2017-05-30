@@ -76,8 +76,6 @@ import com.ibm.ejs.csi.EJBApplicationMetaData;
 import com.ibm.ejs.csi.EJBModuleMetaDataImpl;
 import com.ibm.ejs.csi.UOWControl;
 import com.ibm.ejs.csi.UOWHandle;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.cache.BackgroundLruEvictionStrategy;
 import com.ibm.ejs.util.cache.Cache;
 import com.ibm.ejs.util.cache.SweepLruEvictionStrategy;
@@ -94,6 +92,8 @@ import com.ibm.websphere.ejbcontainer.EJBContextExtension;
 import com.ibm.websphere.ejbcontainer.EntityContextExtension;
 import com.ibm.websphere.ejbcontainer.MessageDrivenContextExtension;
 import com.ibm.websphere.ejbcontainer.SessionContextExtension;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.EJBPMICollaboratorFactory;
 import com.ibm.ws.ejbcontainer.EJBRequestCollaborator;
 import com.ibm.ws.ejbcontainer.EJBSecurityCollaborator;
@@ -708,14 +708,14 @@ public abstract class AbstractEJBRuntime
     {
         // This method is overridden in WASEJBRuntimeImpl to allow for Persistence
         // Manager logic to be moved out of shared logic and into specific
-        // tWAS logic.
+        // traditional WAS logic.
     }
 
     protected void postInvokeStartModule(EJBModuleMetaDataImpl mmd, String appJarName) // d621157
     {
         // This method is overridden in WASEJBRuntimeImpl to allow for Persistence
         // Manager logic to be moved out of shared logic and into specific
-        // tWAS logic.
+        // traditional WAS logic.
     }
 
     protected void beanInstall(BeanMetaData bmd) // RTC112791
@@ -723,7 +723,7 @@ public abstract class AbstractEJBRuntime
     {
         // This method is overridden in WASEJBRuntimeImpl to allow for Persistence
         // Manager logic to be moved out of shared logic and into specific
-        // tWAS logic.
+        // traditional WAS logic.
     }
 
     /**
@@ -926,7 +926,7 @@ public abstract class AbstractEJBRuntime
     {
         // This method is overridden in WASEJBRuntimeImpl to allow for Persistence
         // Manager logic to be moved out of shared logic and into specific
-        // tWAS logic.
+        // traditional WAS logic.
     }
 
     /**

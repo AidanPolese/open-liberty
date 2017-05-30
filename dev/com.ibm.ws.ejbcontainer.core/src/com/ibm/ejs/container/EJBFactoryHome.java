@@ -17,11 +17,11 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 
 import com.ibm.ejs.container.activator.ActivationStrategy;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.J2EEName;
 import com.ibm.websphere.csi.J2EENameFactory;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * EJBFactoryHome acts as the Home of the HomeOfHomes (or EJBFactory). <p>
@@ -89,7 +89,7 @@ public final class EJBFactoryHome implements HomeInternal
     }
 
     /**
-     * Get the J2EE name of the EJBFactory Home. <p>
+     * Get the Java EE name of the EJBFactory Home. <p>
      */
     @Override
     public J2EEName getJ2EEName()

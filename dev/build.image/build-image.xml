@@ -298,10 +298,15 @@
         <pathelement path="${mvt.package.dir}/wlp/lib/**/*.jar" />
         <pathelement path="${mvt.package.dir}/wlp/bin/tools/ws-productutil.jar" />
       </path>
+      
+      <condition property="conditional.mvt.java9.args" value="--add-modules java.se.ee" else="">
+        <istrue value="${is.java9}"/>
+      </condition>
 
       <sleep seconds="3" />
       <!-- WTF is this here for -->
       <java jar="${mvt.package.dir}/wlp/bin/tools/ws-productutil.jar" resultProperty="errorCode" fork="true" output="${mvt.package.dir}/productInfoValidateResult.log">
+        <jvmarg line="${conditional.mvt.java9.args}"/>
         <arg value="validate" />
         <classpath refid="productInfoClasspath" />
       </java>
@@ -370,6 +375,7 @@
   </target>
 
   <target name="prepareForPackaging">
+  	
     <pathconvert property="pcp" refid="project.class.path" />
     <echo level="verbose" message="bnd classpath is: ${pcp}" />
 
@@ -410,6 +416,49 @@ ${liberty.service.version}
         <property name="jvm.gsa.server" value="ausgsa.ibm.com" />
         <property name="jvm.prop.dir" value="resources/jvmlevel-properties/java8" />
 
+      	<iff>
+      	    <available file="${jvm.prop.dir}/Java-level.properties"/>
+      	    <then>
+      	    	<!--Create the property files-->
+      	    	<local name="gsa.dir.linux.amd64" />
+      	       	<local name="target.sdk.level.linux.amd64" />
+      	      	<local name="gsa.dir.linux.ppcle" />
+      	      	<local name="target.sdk.level.linux.ppcle" />
+      	       	<local name="gsa.dir.linux.ppc64" />
+      	        <local name="target.sdk.level.linux.ppc64" />
+       	        <local name="gsa.dir.linux.s390x" />
+      	    	<local name="target.sdk.level.linux.s390x" />
+      	    	<local name="gsa.dir.win.x86_64" />
+      	    	<local name="target.sdk.level.win.x86_64" />
+      	    	<property file="${jvm.prop.dir}/Java-level.properties" />
+      	    	<touch file="${jvm.prop.dir}/Linux-amd64.properties"/>
+      	    	<concat destfile="${jvm.prop.dir}/Linux-amd64.properties" append="true">
+      	    		#Based on the 8.5 levels listed in http://www-01.ibm.com/support/docview.wss?uid=swg27005002${line.separator}gsa.dir=${gsa.dir.linux.amd64}${line.separator}target.sdk.level=${target.sdk.level.linux.amd64}${line.separator}platform.info=osgi.native; filter:="(&amp;(osgi.native.processor=x86-64)(osgi.native.osname=Linux))"
+      	    	</concat>
+      	    	<touch file="${jvm.prop.dir}/Linux-ppc-le-x64.properties"/>
+      	    	<concat destfile="${jvm.prop.dir}/Linux-ppc-le-x64.properties" append="true">
+      	    		#Based on the 8.5 levels listed in http://www-01.ibm.com/support/docview.wss?uid=swg27005002${line.separator}gsa.dir=${gsa.dir.linux.ppcle}${line.separator}target.sdk.level=${target.sdk.level.linux.ppcle}${line.separator}platform.info=osgi.native; filter:="(&amp;(osgi.native.processor=PowerPC-64-LE)(osgi.native.osname=Linux))"
+      	    	</concat>
+      	    	<touch file="${jvm.prop.dir}/Linux-ppc64.properties"/>
+      	    	<concat destfile="${jvm.prop.dir}/Linux-ppc64.properties" append="true">
+      	    		#Based on the 8.5 levels listed in http://www-01.ibm.com/support/docview.wss?uid=swg27005002${line.separator}gsa.dir=${gsa.dir.linux.ppc64}${line.separator}target.sdk.level=${target.sdk.level.linux.ppc64}${line.separator}platform.info=osgi.native; filter:="(&amp;(osgi.native.processor=PowerPC-64)(osgi.native.osname=Linux))"
+      	    	</concat>
+      	    	<touch file="${jvm.prop.dir}/Linux-s390x.properties"/>
+      	    	<concat destfile="${jvm.prop.dir}/Linux-s390x.properties" append="true">
+      	    		#Based on the 8.5 levels listed in http://www-01.ibm.com/support/docview.wss?uid=swg27005002${line.separator}gsa.dir=${gsa.dir.linux.s390x}${line.separator}target.sdk.level=${target.sdk.level.linux.s390x}${line.separator}platform.info=osgi.native; filter:="(&amp;(osgi.native.processor=S390x)(osgi.native.osname=Linux))"
+      	    	</concat>
+      	    	<touch file="${jvm.prop.dir}/Windows.7-x64.properties"/>
+      	    	<concat destfile="${jvm.prop.dir}/Windows.7-x64.properties" append="true">
+      	    		#Based on the 8.5 levels listed in http://www-01.ibm.com/support/docview.wss?uid=swg27005002${line.separator}gsa.dir=${gsa.dir.win.x86_64}${line.separator}target.sdk.level=${target.sdk.level.win.x86_64}${line.separator}platform.info=osgi.native; filter:="(&amp;(osgi.native.processor=x86-64)(osgi.native.osname=Win32))"
+      	    	</concat>
+      	    	      	
+      	    	<delete file="${jvm.prop.dir}/Java-level.properties"/>
+      	    </then>
+      		<else>
+      			<echo message="Skip creating the files"/>
+      		</else>
+      	</iff>
+      	
         <!-- Downloading 8 java versions as per their jvmLevelProperty files 
   				:Windows 7-x64.properties
   				:Windows 7-x86.properties
@@ -423,7 +472,7 @@ ${liberty.service.version}
         <fileset id="propertyFiles" dir="${jvm.prop.dir}" includes="*.properties" excludes="**/AIX*.properties, 
   													**/HP*.properties, 
   													**Server*.properties, 
-  													**XP*.properties" />
+  													**XP*.properties, Java-level.properties" />
 
         <foreach param="propertyFile" in="propertyFiles">
           <echo message="Java property File: ${propertyFile}" />
@@ -942,7 +991,7 @@ ${liberty.service.version}
     <echo>Creating the profile zips</echo>
     <foreach param="profileDir" in="profiles">
       <local name="profile" />
-      <basename property="profile" file="${profileDir}" />
+      <basename property="profile" file="${profileDir}"/>
       <createProfileZip profile="${profile}" jvm.prop.dir="${jvm.prop.dir}" />
     </foreach>
   </target>

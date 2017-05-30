@@ -2,6 +2,3 @@
 bVersion=1.0
 
 publish.wlp.jar.disabled: true
-
--buildpath: \
-	${javac.bootclasspath.java6}

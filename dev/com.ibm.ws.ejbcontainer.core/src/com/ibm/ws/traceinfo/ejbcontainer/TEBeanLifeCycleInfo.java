@@ -11,8 +11,8 @@
  */
 package com.ibm.ws.traceinfo.ejbcontainer;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Processor to write out and read in a EJB bean life cycle state and ejb callback
@@ -20,8 +20,7 @@ import com.ibm.ejs.ras.TraceComponent;
  */
 public class TEBeanLifeCycleInfo implements TEInfoConstants
 {
-    private static final String CLASS_NAME = TEBeanLifeCycleInfo.class.getName();
-    private static final TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(TEBeanLifeCycleInfo.class,
                                                          "TEExplorer",
                                                          "com.ibm.ws.traceinfo.ejbcontainer");
 

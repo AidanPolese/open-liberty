@@ -135,7 +135,7 @@ public class GeneratePluginConfigMBean extends StandardMBean implements Generate
      * @param utilityRequest True if plugin config creation is being done automatically or via the pluginUtility, False if it is being done because of a call to the mbean
      * @param writeDirectory The directory to write the plugin-cfg.xml file to
      */
-    public void generatePluginConfig(String root, String serverName,boolean utilityRequest, File writeDirectory) {
+    public synchronized void generatePluginConfig(String root, String serverName,boolean utilityRequest, File writeDirectory) {
         try { 
             
             PluginGenerator generator = pluginGenerator;

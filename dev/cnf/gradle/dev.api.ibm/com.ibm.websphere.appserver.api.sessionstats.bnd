@@ -14,5 +14,4 @@ Export-Package: com.ibm.websphere.session.monitor
 publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.session.monitor

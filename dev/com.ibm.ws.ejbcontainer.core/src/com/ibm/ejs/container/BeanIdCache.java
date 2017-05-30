@@ -12,9 +12,9 @@
 package com.ibm.ejs.container;
 
 import java.io.Serializable; // d156807.3
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.MathUtil;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.diagnostics.IntrospectionWriter;
 
 /**

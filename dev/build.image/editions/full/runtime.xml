@@ -24,7 +24,6 @@
   <featureManager>
     <feature>jdbc-4.2</feature>
     <feature>mqtt-3.1</feature>
-    <feature>openapi-3.0</feature>
     <feature>osgiAppConsole-1.0</feature>
     <feature>persistentExecutor-1.0</feature>
     <feature>requestInterrupt-1.0</feature>

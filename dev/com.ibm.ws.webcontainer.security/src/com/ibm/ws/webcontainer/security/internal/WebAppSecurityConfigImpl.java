@@ -17,8 +17,13 @@ import java.util.Map;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.security.SecurityService;
+import com.ibm.ws.webcontainer.security.ReferrerURLCookieHandler;
+import com.ibm.ws.webcontainer.security.SSOCookieHelper;
+import com.ibm.ws.webcontainer.security.SSOCookieHelperImpl;
 import com.ibm.ws.webcontainer.security.WebAppSecurityCollaboratorImpl;
 import com.ibm.ws.webcontainer.security.WebAppSecurityConfig;
+import com.ibm.ws.webcontainer.security.WebAuthenticatorProxy;
 import com.ibm.ws.webcontainer.security.metadata.LoginConfiguration;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
@@ -41,7 +46,7 @@ public class WebAppSecurityConfigImpl implements WebAppSecurityConfig {
     static final String CFG_KEY_ALLOW_LOGOUT_PAGE_REDIRECT_TO_ANY_HOST = "allowLogoutPageRedirectToAnyHost";
     static final String CFG_KEY_LOGOUT_PAGE_REDIRECT_DOMAIN_NAMES = "logoutPageRedirectDomainNames";
     static final String CFG_KEY_WAS_REQ_URL_REDIRECT_DOMAIN_NAMES = "wasReqURLRedirectDomainNames";
-    static final String CFG_KEY_SSO_COOKIE_NAME = "ssoCookieName";
+    protected static final String CFG_KEY_SSO_COOKIE_NAME = "ssoCookieName";
     static final String CFG_KEY_AUTO_GEN_SSO_COOKIE_NAME = "autoGenSsoCookieName";
     public static final String CFG_KEY_FAIL_OVER_TO_BASICAUTH = "allowFailOverToBasicAuth";
     static final String CFG_KEY_DISPLAY_AUTHENTICATION_REALM = "displayAuthenticationRealm";
@@ -65,8 +70,8 @@ public class WebAppSecurityConfigImpl implements WebAppSecurityConfig {
     private final Boolean allowLogoutPageRedirectToAnyHost;
     private final String wasReqURLRedirectDomainNames;
     private final String logoutPageRedirectDomainNames;
-    private final String ssoCookieName;
-    private final Boolean autoGenSsoCookieName;
+    protected String ssoCookieName;
+    protected final Boolean autoGenSsoCookieName;
     private final Boolean allowFailOverToBasicAuth;
     private final Boolean displayAuthenticationRealm;
     private final Boolean httpOnlyCookies;
@@ -82,9 +87,13 @@ public class WebAppSecurityConfigImpl implements WebAppSecurityConfig {
     private final Boolean useOnlyCustomCookieName;
 
     protected final AtomicServiceReference<WsLocationAdmin> locationAdminRef;
+    protected final AtomicServiceReference<SecurityService> securityServiceRef;
 
-    public WebAppSecurityConfigImpl(Map<String, Object> newProperties, AtomicServiceReference<WsLocationAdmin> locationAdminRef) {
+    public WebAppSecurityConfigImpl(Map<String, Object> newProperties,
+                                    AtomicServiceReference<WsLocationAdmin> locationAdminRef,
+                                    AtomicServiceReference<SecurityService> securityServiceRef) {
         this.locationAdminRef = locationAdminRef;
+        this.securityServiceRef = securityServiceRef;
         logoutOnHttpSessionExpire = (Boolean) newProperties.get(CFG_KEY_LOGOUT_ON_HTTP_SESSION_EXPIRE);
         singleSignonEnabled = (Boolean) newProperties.get(CFG_KEY_SINGLE_SIGN_ON_ENABLED);
         preserveFullyQualifiedReferrerUrl = (Boolean) newProperties.get(CFG_KEY_PRESERVE_FULLY_QUALIFIED_REFERRER_URL);
@@ -398,6 +407,24 @@ public class WebAppSecurityConfigImpl implements WebAppSecurityConfig {
                                   this.wasReqURLRedirectDomainNames, orig.wasReqURLRedirectDomainNames);
 
         return buf.toString();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public SSOCookieHelper createSSOCookieHelper() {
+        return new SSOCookieHelperImpl(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ReferrerURLCookieHandler createReferrerURLCookieHandler() {
+        return new ReferrerURLCookieHandler(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public WebAuthenticatorProxy createWebAuthenticatorProxy() {
+        return new WebAuthenticatorProxy(this, null, securityServiceRef, null);
     }
 
 }

@@ -14,5 +14,4 @@ Export-Package: com.ibm.websphere.jaxrs.providers.json4j,com.ibm.websphere.jaxrs
 publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.jaxrs.2.0.common;version=latest

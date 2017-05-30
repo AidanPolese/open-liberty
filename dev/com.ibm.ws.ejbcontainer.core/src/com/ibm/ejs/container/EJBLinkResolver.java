@@ -17,11 +17,11 @@ import java.rmi.RemoteException;
 import javax.ejb.EJBException;
 
 import com.ibm.ejs.container.util.ExceptionUtil;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.J2EEName;
 import com.ibm.websphere.csi.J2EENameFactory;
 import com.ibm.websphere.ejbcontainer.EJBFactory;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.runtime.EJBRuntime;
 import com.ibm.ws.ffdc.FFDCFilter;
 

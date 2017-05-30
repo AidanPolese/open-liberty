@@ -21,8 +21,8 @@ import javax.ejb.TimerHandle;
 
 import com.ibm.ejs.container.passivator.PassivatorSerializableHandle;
 import com.ibm.ejs.container.util.EJSPlatformHelper;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejb.portable.Constants;
 import com.ibm.ws.ejbcontainer.runtime.EJBRuntime;
 

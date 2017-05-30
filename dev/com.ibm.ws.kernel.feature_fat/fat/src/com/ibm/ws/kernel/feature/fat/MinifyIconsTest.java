@@ -32,6 +32,7 @@ import org.junit.Test;
 
 import com.ibm.websphere.simplicity.OperatingSystem;
 import com.ibm.websphere.simplicity.RemoteFile;
+
 import componenttest.topology.impl.LibertyFileManager;
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.impl.LibertyServerFactory;
@@ -51,7 +52,7 @@ public class MinifyIconsTest {
      * Set up the test. This method is called very early on and does almost all of the heavy lifting. That's
      * because minify will be very slow when we have a bunch of features. So instead of re-minifying each
      * test we do it once. But to make sure what we minify is good we need to do a few pre-flight checks.
-     * 
+     *
      * @throws Exception
      */
     @BeforeClass
@@ -124,11 +125,14 @@ public class MinifyIconsTest {
             RemoteFile fatTestCommon = server.getFileFromLibertyServerRoot("/../fatTestCommon.xml");
             RemoteFile fatTestPorts = server.getFileFromLibertyServerRoot("/../fatTestPorts.xml");
             RemoteFile testPortsProps = server.getFileFromLibertyServerRoot("/../testports.properties");
+            RemoteFile serverEnv = server.getFileFromLibertyInstallRoot("/etc/server.env");
 
             // Put the required test files into the right place for new server..
             fatTestCommon.copyToDest(new RemoteFile(minifiedServer.getMachine(), minifiedServer.getServerRoot() + "/../fatTestCommon.xml"));
             fatTestPorts.copyToDest(new RemoteFile(minifiedServer.getMachine(), minifiedServer.getServerRoot() + "/../fatTestPorts.xml"));
             testPortsProps.copyToDest(new RemoteFile(minifiedServer.getMachine(), minifiedServer.getServerRoot() + "/../testports.properties"));
+            if (serverEnv.exists())
+                serverEnv.copyToDest(new RemoteFile(minifiedServer.getMachine(), minifiedServer.getInstallRoot() + "/etc/server.env"));
 
             // We should start the server again and make sure all our features are available
             minifiedServer.startServer();
@@ -154,7 +158,7 @@ public class MinifyIconsTest {
 
     /**
      * Deploy the feature file, the feature bundle, and both unexpected and expected icon files
-     * 
+     *
      * @param iconFeature the feature to deploy
      * @throws Exception
      */
@@ -198,7 +202,7 @@ public class MinifyIconsTest {
     /**
      * We need to tidy up the minified server at the end of the test, and also ensure that no test files
      * were left behind
-     * 
+     *
      * @throws Exception
      */
     @AfterClass
@@ -217,7 +221,7 @@ public class MinifyIconsTest {
 
     /**
      * Delete all files relating to the feature
-     * 
+     *
      * @param feature
      * @throws Exception
      */
@@ -229,7 +233,7 @@ public class MinifyIconsTest {
 
     /**
      * Verify that a feature with a badly formed Subsystem-Icon header will get its icons ignored
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -240,7 +244,7 @@ public class MinifyIconsTest {
 
     /**
      * Verify that a feature with a Subsystem-Icon header but no content will get no icons
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -251,7 +255,7 @@ public class MinifyIconsTest {
 
     /**
      * Verify that a valid header will get its icons picked up
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -261,7 +265,7 @@ public class MinifyIconsTest {
 
     /**
      * Verify that directives to not stop the icons being gathered
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -271,7 +275,7 @@ public class MinifyIconsTest {
 
     /**
      * Verify that we can ignore icons that are in the Subsystem-Icon header but not on disk
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -282,7 +286,7 @@ public class MinifyIconsTest {
     /**
      * Verify that if the header is totally missing no icons are gathered but the feature is correctly
      * minified
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -292,7 +296,7 @@ public class MinifyIconsTest {
 
     /**
      * Validate that the passed in feature was installed correctly, its expected icons were laid down and nothing unexpected was laid down.
-     * 
+     *
      * @param featureName The feature to validate
      * @throws Exception
      */
@@ -333,7 +337,7 @@ public class MinifyIconsTest {
     /**
      * This method is used to get a connection stream from an HTTP connection. It
      * gives the output from the webpage that it gets from the connection
-     * 
+     *
      * @param con The connection to the HTTP address
      * @return The Output from the webpage
      */
@@ -346,7 +350,7 @@ public class MinifyIconsTest {
 
     /**
      * This method creates a connection to a webpage and then reutrns the connection
-     * 
+     *
      * @param url The Http Address to connect to
      * @return The connection to the http address
      */

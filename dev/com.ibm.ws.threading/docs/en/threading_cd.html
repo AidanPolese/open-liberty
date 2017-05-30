@@ -4,7 +4,7 @@
 <!--
  * ============================================================================
  * Licensed Materials - Property of IBM
- * Project Alpine
+ * Project Liberty
  *
  * (C) Copyright IBM Corp. 2008  All Rights Reserved.
  *
@@ -15,14 +15,14 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Alpine Threading Conceptual Design</title>
+<title>Liberty Threading Conceptual Design</title>
 </head>
 <body>
 
 <h1>Conceptual Design of Threading Package</h1>
 
 <p>
-There are basically three efforts that have influenced the Alpine
+There are basically three efforts that have influenced the Liberty
 threading package.  The overall concept is that the execution framework we
 deliver should be able to support a pipelined execution strategy, a fork/join
 programming model, and employ work-stealing within the scheduler.
@@ -75,7 +75,7 @@ adjusted at runtime in an attempt to provide the best overall throughput for
 the system.
 </p>
 <p>
-The Alpine Event Engine is capable of associating event topics with a named
+The Liberty Event Engine is capable of associating event topics with a named
 work stage.  The idea is that mapping mainline event topics to stages will
 allow us to implement a SEDA-style architecture if we choose to.  If, instead
 of a SEDA-style implementation we prefer to process all events on the thread
@@ -94,7 +94,7 @@ JSR 166y, planned for Java 7, introduces implementations that support
 fork-join style parallel programming.  This style of programming works to
 decompose the processing of a data set into smaller chunks that can be
 scheduled to run in parallel.  By implementing a work-stealing style
-<code>ExecutorService</code> in Alpine, it should be possible to either
+<code>ExecutorService</code> in Liberty, it should be possible to either
 reuse our implementation or replace it with what comes out with the JDK.
 </p>
 <p>

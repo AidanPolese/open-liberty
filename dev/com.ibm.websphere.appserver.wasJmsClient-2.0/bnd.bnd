@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.wasJmsClient-2.0
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.internal.jms-2.0;version=latest, \
 	com.ibm.websphere.appserver.channelfw-1.0;version=latest, \
 	com.ibm.websphere.appserver.transaction-1.2;version=latest, \

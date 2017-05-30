@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class MaxResultsExceededException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -246640993723598147L;
+
     /**
      *
      */

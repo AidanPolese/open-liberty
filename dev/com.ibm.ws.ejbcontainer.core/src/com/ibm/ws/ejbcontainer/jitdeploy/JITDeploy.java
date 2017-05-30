@@ -27,8 +27,8 @@ import java.util.HashMap;
 
 import com.ibm.ejs.container.EJBConfigurationException;
 import com.ibm.ejs.container.EJBMethodInfoImpl;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.InternalConstants;
 import com.ibm.ws.ffdc.FFDCFilter;
 

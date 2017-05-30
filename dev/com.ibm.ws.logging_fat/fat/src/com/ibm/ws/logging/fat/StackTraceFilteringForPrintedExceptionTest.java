@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2012
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.logging.fat;
@@ -14,6 +14,7 @@ package com.ibm.ws.logging.fat;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import componenttest.topology.impl.JavaInfo;
 import componenttest.topology.impl.LibertyServerFactory;
 
 public class StackTraceFilteringForPrintedExceptionTest extends AbstractStackTraceFilteringTest {
@@ -54,10 +55,17 @@ public class StackTraceFilteringForPrintedExceptionTest extends AbstractStackTra
                                     "at com.ibm.ws.webcontainer", traceCount);
 
         // The java.* classes used by the user code should not be trimmed
-        assertConsoleLogContains("The console stack was trimmed too aggressively of java classes.",
-                                 "at java.util.HashMap.put");
-        assertConsoleLogContains("The console stack was trimmed too aggressively of java classes.",
-                                 "at java.util.HashSet.add");
+        if (JavaInfo.forServer(server).majorVersion() >= 9) {
+            assertConsoleLogContains("The console stack was trimmed too aggressively of java classes.",
+                                     "at java.base/java.util.HashMap.put");
+            assertConsoleLogContains("The console stack was trimmed too aggressively of java classes.",
+                                     "at java.base/java.util.HashSet.add");
+        } else {
+            assertConsoleLogContains("The console stack was trimmed too aggressively of java classes.",
+                                     "at java.util.HashMap.put");
+            assertConsoleLogContains("The console stack was trimmed too aggressively of java classes.",
+                                     "at java.util.HashSet.add");
+        }
 
     }
 

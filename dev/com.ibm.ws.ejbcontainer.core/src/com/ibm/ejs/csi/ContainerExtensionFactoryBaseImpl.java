@@ -24,10 +24,10 @@ import javax.transaction.UserTransaction;
 import com.ibm.ejs.container.BeanMetaData;
 import com.ibm.ejs.container.activator.ActivationStrategy;
 import com.ibm.ejs.container.activator.Activator;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.ContainerExtensionFactory;
 import com.ibm.websphere.csi.PassivationPolicy;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.failover.SfFailoverCache;
 
 public class ContainerExtensionFactoryBaseImpl implements ContainerExtensionFactory {

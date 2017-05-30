@@ -18,6 +18,8 @@ Import-Package: \
 !*.internal.*, \
 *
 
+instrument.classesExcludes: com/ibm/ws/javamail/management/j2ee/internal/resources/*.class
+
 -buildpath: \
 	com.ibm.websphere.appserver.api.j2eemanagement;version=latest, \
 	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\

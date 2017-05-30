@@ -15,6 +15,8 @@ package com.ibm.wsspi.security.wim.exception;
  */
 public class InvalidPropertyException extends WIMApplicationException {
 
+    private static final long serialVersionUID = 1960694189457977904L;
+
     /**
      * Creates the Invalid Attribute Exception
      */
@@ -24,7 +26,7 @@ public class InvalidPropertyException extends WIMApplicationException {
 
     /**
      * Creates the Invalid Attribute Exception
-     * 
+     *
      * @param message The message or message key of the exception.
      */
     public InvalidPropertyException(String key, String message) {
@@ -33,7 +35,7 @@ public class InvalidPropertyException extends WIMApplicationException {
 
     /**
      * Creates the Invalid Attribute Exception
-     * 
+     *
      * @param message The message or message key of the exception.
      * @param cause The cause of the exception.
      */
@@ -43,7 +45,7 @@ public class InvalidPropertyException extends WIMApplicationException {
 
     /**
      * Creates the Invalid Attribute Exception
-     * 
+     *
      * @param cause The cause of the exception.
      */
     public InvalidPropertyException(Throwable cause) {

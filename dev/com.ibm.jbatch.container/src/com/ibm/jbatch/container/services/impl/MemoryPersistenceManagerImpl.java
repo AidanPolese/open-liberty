@@ -64,13 +64,13 @@ import com.ibm.jbatch.container.persistence.jpa.StepThreadInstanceKey;
 import com.ibm.jbatch.container.persistence.jpa.TopLevelStepExecutionEntity;
 import com.ibm.jbatch.container.persistence.jpa.TopLevelStepInstanceEntity;
 import com.ibm.jbatch.container.persistence.jpa.TopLevelStepInstanceKey;
+import com.ibm.jbatch.container.services.IJPAQueryHelper;
 import com.ibm.jbatch.container.services.IPersistenceManagerService;
 import com.ibm.jbatch.container.util.WSStepThreadExecutionAggregateImpl;
 import com.ibm.jbatch.container.ws.BatchLocationService;
 import com.ibm.jbatch.container.ws.InstanceState;
 import com.ibm.jbatch.container.ws.RemotablePartitionState;
 import com.ibm.jbatch.container.ws.WSPartitionStepThreadExecution;
-import com.ibm.jbatch.container.ws.WSSearchObject;
 import com.ibm.jbatch.container.ws.WSStepThreadExecutionAggregate;
 import com.ibm.jbatch.container.ws.WSTopLevelStepExecution;
 import com.ibm.jbatch.spi.services.IBatchConfig;
@@ -1327,7 +1327,7 @@ public class MemoryPersistenceManagerImpl extends AbstractPersistenceManager imp
     }
 
     @Override
-    public List<JobInstanceEntity> getJobInstances(WSSearchObject wsso, int page, int pageSize) {
+    public List<JobInstanceEntity> getJobInstances(IJPAQueryHelper queryHelper, int page, int pageSize) {
         // TODO: Should we implement this for Memory Persistence?
         throw new UnsupportedOperationException("The REST URL search parameters requesting this function "
                                                 + "are not supported by the Java batch memory-based persistence configuration.");

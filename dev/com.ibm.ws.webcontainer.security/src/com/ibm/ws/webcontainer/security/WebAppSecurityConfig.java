@@ -103,4 +103,9 @@ public interface WebAppSecurityConfig {
      */
     boolean isUseOnlyCustomCookieName();
 
+    SSOCookieHelper createSSOCookieHelper();
+
+    ReferrerURLCookieHandler createReferrerURLCookieHandler();
+
+    WebAuthenticatorProxy createWebAuthenticatorProxy();
 }

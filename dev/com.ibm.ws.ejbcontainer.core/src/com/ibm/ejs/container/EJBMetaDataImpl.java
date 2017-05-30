@@ -18,9 +18,9 @@ import javax.ejb.EJBHome;
 import javax.ejb.EJBMetaData;
 import javax.rmi.PortableRemoteObject;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.InternalConstants;
 import com.ibm.ws.ffdc.FFDCFilter;
 

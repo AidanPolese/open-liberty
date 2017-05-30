@@ -2,7 +2,17 @@
 <project name="com.ibm.ws.org.glassfish.json_fat" default="buildandrun" basedir=".">
   <import file="../ant_build/public_imports/fat_imports.xml" />
   <property name="fat.image.type" value="use-full-image"/>
-  <property name="unittest.endorsed" value="${basedir}/../prereq.published/lib.ext/com.ibm.websphere.javaee.annotation.1.1/lib/"/>
+	<property name="unittest.endorsed" value="${basedir}/build/endorsed/lib/"/>
+
+	<target name="pre-build">
+		<path id="annotation.jar.path">
+			<fileset dir="${basedir}/../build.image/wlp/dev/api/spec" includes="com.ibm.websphere.javaee.annotation.1.1_*.jar"/>
+		</path>
+		<property name="annotation.jar" refid="annotation.jar.path"/>
+		<delete dir="${basedir}/build/endorsed/lib"/>
+		<mkdir dir="${basedir}/build/endorsed/lib"/>
+		<copy todir="${basedir}/build/endorsed/lib" file="${annotation.jar}"/>
+	</target>
               
   <target name="addRequiredFiles">
     <!-- expose project dependencies to runtime JRE by storing them in autoFVT.zip (build/lib copied automatically) -->

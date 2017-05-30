@@ -6,7 +6,7 @@ Bundle-Description:  wim base, version ${bVersion}
 Bundle-SymbolicName: com.ibm.websphere.security.wim.base
 
 Private-Package: com.ibm.websphere.security.wim.util.resources 
-          
+
 Export-Package: \
  com.ibm.wsspi.security.wim, \
  com.ibm.wsspi.security.wim.exception, \
@@ -15,6 +15,8 @@ Export-Package: \
  com.ibm.websphere.security.wim.copyright;provide:=true, \
  com.ibm.websphere.security.wim.ras;provide:=true, \
  com.ibm.websphere.security.wim.util;provide:=true
+
+instrument.classesExcludes: com/ibm/websphere/security/wim/util/resources/*.class
 
 -buildpath: \
 	com.ibm.ws.logging;version=latest, \

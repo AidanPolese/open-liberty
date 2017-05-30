@@ -14,5 +14,4 @@ Export-Package: com.ibm.wsspi.webservices.wsat
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.wsat.common

@@ -26,6 +26,10 @@ public class AuditThreadContext {
     private Object auditWebReq;
     private String auditRealm;
     private ArrayList<String> delegatedUsers;
+    private String repositoryId;
+    private String repositoryUniqueName;
+    private String repositoryRealm;
+    private Object restRequest;
 
     public void setHttpServletRequest(Object req) {
         auditReq = req;
@@ -60,4 +64,37 @@ public class AuditThreadContext {
     public ArrayList<String> getDelegatedUsers() {
         return delegatedUsers;
     }
+
+    public void setRESTRequest(Object request) {
+        restRequest = request;
+    }
+
+    public Object getRESTRequest() {
+        return restRequest;
+    }
+
+    public void setRepositoryId(String repoId) {
+        repositoryId = repoId;
+    }
+
+    public String getRepositoryId() {
+        return repositoryId;
+    }
+
+    public void setRepositoryUniqueName(String uniqueName) {
+        repositoryUniqueName = uniqueName;
+    }
+
+    public String getRepositoryUniqueName() {
+        return repositoryUniqueName;
+    }
+
+    public void setRepositoryRealm(String realm) {
+        repositoryRealm = realm;
+    }
+
+    public String getRepositoryRealm() {
+        return repositoryRealm;
+    }
+
 }

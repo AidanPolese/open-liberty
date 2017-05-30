@@ -18,7 +18,7 @@ import com.ibm.ejs.container.util.ExceptionUtil;
 /**
  * This subclass of EJBException is intended to be used by the
  * ejb container when it needs to throw an exception from a method that
- * implements a SUN architected J2EE interface and the interface does not
+ * implements a SUN architected Java EE interface and the interface does not
  * permit an appropriate checked exception to be thrown
  * (e.g. ContainerInternalError exception). Since it is a RuntimeException,
  * it can be thrown by any method. However, please only use this

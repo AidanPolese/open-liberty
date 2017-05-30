@@ -27,8 +27,6 @@ import javax.transaction.TransactionRequiredException;
 import javax.transaction.TransactionRolledbackException;
 
 import com.ibm.ejs.container.util.ExceptionUtil;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.CSIAccessException;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.CSIInvalidTransactionException;
@@ -37,6 +35,8 @@ import com.ibm.websphere.csi.CSITransactionRequiredException;
 import com.ibm.websphere.csi.CSITransactionRolledbackException;
 import com.ibm.websphere.csi.ExceptionType;
 import com.ibm.websphere.ejbcontainer.EJBStoppedException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**
@@ -211,7 +211,7 @@ public class BusinessExceptionMappingStrategy extends ExceptionMappingStrategy
      * Map the exception to an EJBException exception for the EJB 3.0 Business
      * interfaces. This is the exception that will be thrown to the client. <p>
      *
-     * All fun and games in order to comply with both the J2EE spec. <p>
+     * All fun and games in order to comply with both the Java EE spec. <p>
      */
     private EJBException mapException(Throwable ex)
     {

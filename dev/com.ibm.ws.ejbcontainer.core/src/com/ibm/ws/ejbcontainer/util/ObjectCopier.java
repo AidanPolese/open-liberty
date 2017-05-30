@@ -16,9 +16,9 @@ import java.util.Date;
 
 import javax.ejb.ScheduleExpression;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 public abstract class ObjectCopier
 {

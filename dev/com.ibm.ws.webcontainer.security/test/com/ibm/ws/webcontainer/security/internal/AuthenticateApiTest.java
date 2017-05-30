@@ -34,6 +34,7 @@ import com.ibm.ws.security.registry.UserRegistry;
 import com.ibm.ws.webcontainer.security.AuthResult;
 import com.ibm.ws.webcontainer.security.AuthenticateApi;
 import com.ibm.ws.webcontainer.security.AuthenticationResult;
+import com.ibm.ws.webcontainer.security.ReferrerURLCookieHandler;
 import com.ibm.ws.webcontainer.security.SSOCookieHelper;
 import com.ibm.ws.webcontainer.security.UnprotectedResourceService;
 import com.ibm.ws.webcontainer.security.WebAppSecurityConfig;
@@ -80,6 +81,9 @@ public class AuthenticateApiTest {
 
         mock.checking(new Expectations() {
             {
+                allowing(config).createReferrerURLCookieHandler();
+                will(returnValue(new ReferrerURLCookieHandler(config)));
+
                 one(req).getAuthType();
                 one(resp).getStatus();
                 allowing(ssoCookieHelper).createLogoutCookies(req, resp);
@@ -115,6 +119,9 @@ public class AuthenticateApiTest {
 
         mock.checking(new Expectations() {
             {
+                allowing(config).createReferrerURLCookieHandler();
+                will(returnValue(new ReferrerURLCookieHandler(config)));
+
                 one(req).getAuthType();
                 one(resp).getStatus();
                 allowing(ssoCookieHelper).createLogoutCookies(req, resp);
@@ -150,6 +157,9 @@ public class AuthenticateApiTest {
         subjectManager.setCallerSubject(subject);
         mock.checking(new Expectations() {
             {
+                allowing(config).createReferrerURLCookieHandler();
+                will(returnValue(new ReferrerURLCookieHandler(config)));
+
                 one(req).getAuthType();
                 one(resp).getStatus();
                 one(ssoCookieHelper).createLogoutCookies(req, resp);

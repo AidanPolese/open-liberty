@@ -19,6 +19,3 @@ instrument.disabled: true
 
 publish.tool.jar=ws-productutil.jar
 publish.tool.script=productInfo
-
--buildpath: \
-	${javac.bootclasspath.java6}

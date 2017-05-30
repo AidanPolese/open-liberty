@@ -19,5 +19,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/com.ibm.ws.prereq.wsdl4j.jar;version=file

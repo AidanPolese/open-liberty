@@ -14,8 +14,8 @@ package com.ibm.ejs.util.cache;
 import java.util.HashMap;
 
 import com.ibm.ejs.container.EJSWrapperCommon;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * WrapperBucket is a type specific implementation of the hash table bucket

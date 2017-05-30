@@ -200,6 +200,21 @@ public interface FeatureResolver {
     }
 
     /**
+     * Resolves a collection of root features against a repository.
+     * This is a convenience method that effectively does the following:
+     * <code>
+     * resolveFeatures(repository, Collections.emptySet(), rootFeatures, preResolved, allowMultipleVersions)
+     * </code>
+     * 
+     * @param repository the feature repository to use
+     * @param rootFeatures the root features to resolve
+     * @param preResolved the set of already resolved features to base the resolution delta off of
+     * @param allowMultipleVersions a flag that allows multiple versions (this flag will effectively ignore singletons)
+     * @return the resolution result
+     */
+    public Result resolveFeatures(Repository repository, Collection<String> rootFeatures, Set<String> preResolved, boolean allowMultipleVersions);
+    
+    /**
      * Resolves a collection of root features against a repository
      * 
      * @param repository the feature repository to use

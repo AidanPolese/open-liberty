@@ -370,7 +370,7 @@ public class Headers {
     public String determineContentType() {
         String ct = null;
         List<Object> ctList = CastUtils.cast(headers.get(Message.CONTENT_TYPE));
-        if (ctList != null && ctList.size() == 1) {
+        if (ctList != null && ctList.size() == 1 && ctList.get(0) != null) {
             ct = ctList.get(0).toString();
         } else {
             ct = (String) message.get(Message.CONTENT_TYPE);
@@ -484,7 +484,7 @@ public class Headers {
             return true;
         }
         try {
-            if (Integer.valueOf(ctLen.get(0)) == 0) {
+            if (Integer.parseInt(ctLen.get(0)) == 0) {
                 return false;
             }
         } catch (NumberFormatException ex) {

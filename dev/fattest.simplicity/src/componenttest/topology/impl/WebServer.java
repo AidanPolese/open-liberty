@@ -276,7 +276,7 @@ public class WebServer extends Server implements LogMonitorClient {
         Log.entering(c, method, connectorType);
         Log.finer(c, method, "server is " + this.getNodeName() + ", " + this.getName());
         //PortType port = PortType.valueOf(connectorType.getEndpointName());
-        Integer portNumber = getPortNumber(PortType.OSGi); // there is no RMI, SOAP, IPC, etc port in alpine (yet?), so assume OSGi
+        Integer portNumber = getPortNumber(PortType.OSGi); // there is no RMI, SOAP, IPC, etc port in liberty (yet?), so assume OSGi
         Log.exiting(c, method, portNumber);
         return portNumber;
     }

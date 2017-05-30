@@ -11,8 +11,8 @@
  */
 package com.ibm.ejs.container;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.Transaction.UOWCallback;
 import com.ibm.ws.Transaction.UOWCoordinator;
 
@@ -39,12 +39,9 @@ import com.ibm.ws.Transaction.UOWCoordinator;
  */
 public class RunUnderUOWCallback implements UOWCallback
 {
-    private static final String CLASS_NAME = RunUnderUOWCallback.class.getName();
-
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     "EJBContainer",
-                     "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(RunUnderUOWCallback.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     /**
      * This method will be called for POST_BEGIN and POST_END for all

@@ -36,7 +36,6 @@ import com.ibm.ws.webcontainer.security.AuthenticationResult;
 import com.ibm.ws.webcontainer.security.CookieHelper;
 import com.ibm.ws.webcontainer.security.ReferrerURLCookieHandler;
 import com.ibm.ws.webcontainer.security.SSOCookieHelper;
-import com.ibm.ws.webcontainer.security.SSOCookieHelperImpl;
 import com.ibm.ws.webcontainer.security.WebAppSecurityConfig;
 import com.ibm.ws.webcontainer.security.WebAuthenticator;
 import com.ibm.ws.webcontainer.security.WebProviderAuthenticatorProxy;
@@ -59,7 +58,7 @@ public class FormLoginExtensionProcessor extends WebExtensionProcessor {
     private final UserRegistry userRegistry;
     private final SecurityMetadata securityMetadata;
     private final WebAppSecurityConfig webAppSecConfig;
-    private final SSOCookieHelper ssoCookieHelper;
+    protected SSOCookieHelper ssoCookieHelper;
     private String appName = null;
     private final WebProviderAuthenticatorProxy providerAuthenticatorProxy;
     private ConcurrentServiceReferenceMap<String, WebAuthenticator> webAuthenticatorRef = null;
@@ -93,8 +92,8 @@ public class FormLoginExtensionProcessor extends WebExtensionProcessor {
         this.webAppSecConfig = webAppSecConfig;
         this.providerAuthenticatorProxy = providerAuthenticatorProxy;
         this.webAuthenticatorRef = webAuthenticatorRef;
-        ssoCookieHelper = new SSOCookieHelperImpl(webAppSecConfig);
-        referrerURLHandler = new ReferrerURLCookieHandler(webAppSecConfig);
+        ssoCookieHelper = webAppSecConfig.createSSOCookieHelper();
+        referrerURLHandler = webAppSecConfig.createReferrerURLCookieHandler();
 
         this.wac = webapp.getWebAppConfig();
 

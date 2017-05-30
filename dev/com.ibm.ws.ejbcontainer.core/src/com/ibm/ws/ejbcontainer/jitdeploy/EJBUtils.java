@@ -16,8 +16,8 @@ import java.lang.reflect.Modifier;
 import javax.ejb.EntityBean;
 
 import com.ibm.ejs.container.EJBConfigurationException;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.InternalConstants;
 
 import static com.ibm.ws.ejbcontainer.jitdeploy.JITUtils.NO_PARAMS;
@@ -29,12 +29,9 @@ import static com.ibm.ws.ejbcontainer.jitdeploy.JITUtils.NO_PARAMS;
  */
 public final class EJBUtils
 {
-    private static final String CLASS_NAME = EJBUtils.class.getName();
-
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     JITUtils.JIT_TRACE_GROUP,
-                     JITUtils.JIT_RSRC_BUNDLE);
+    private static final TraceComponent tc = Tr.register(EJBUtils.class,
+                                                         JITUtils.JIT_TRACE_GROUP,
+                                                         JITUtils.JIT_RSRC_BUNDLE);
 
     /**
      * Returns the 'methodId' of the specified method, which is basically

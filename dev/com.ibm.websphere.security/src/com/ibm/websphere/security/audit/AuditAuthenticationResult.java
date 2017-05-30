@@ -80,6 +80,9 @@ public class AuditAuthenticationResult {
             case REDIRECT:
                 redirectURL = str;
                 break;
+            case OAUTH_CHALLENGE:
+                reason = str;
+                break;
             default:
                 break;
         }
@@ -153,6 +156,10 @@ public class AuditAuthenticationResult {
             case REDIRECT:
                 str.append(" redirectURL=");
                 str.append(redirectURL);
+                break;
+            case OAUTH_CHALLENGE:
+                str.append(" reason=");
+                str.append(reason);
                 break;
             default:
                 break;

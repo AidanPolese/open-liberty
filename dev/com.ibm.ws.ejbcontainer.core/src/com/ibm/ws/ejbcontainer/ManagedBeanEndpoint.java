@@ -19,7 +19,7 @@ import com.ibm.websphere.csi.J2EEName;
 public interface ManagedBeanEndpoint {
 
     /**
-     * @return the j2EE name for managed bean.
+     * @return the Java EE name for managed bean.
      */
     J2EEName getJ2EEName();
 

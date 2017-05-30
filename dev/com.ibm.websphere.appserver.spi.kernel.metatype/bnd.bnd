@@ -14,5 +14,4 @@ Export-Package: com.ibm.wsspi.config
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.kernel.metatype.helper;version=latest

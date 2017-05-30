@@ -19,5 +19,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	${javac.bootclasspath.java7}, \
 	lib/javax.resource-api-1.7.jar;version=file

@@ -74,6 +74,7 @@ import com.ibm.ws.webcontainer.security.internal.HTTPSRedirectHandler;
 import com.ibm.ws.webcontainer.security.internal.RedirectReply;
 import com.ibm.ws.webcontainer.security.internal.TAIChallengeReply;
 import com.ibm.ws.webcontainer.security.internal.WebAppSecurityConfigImpl;
+import com.ibm.ws.webcontainer.security.internal.WebAuthenticatorFactoryImpl;
 import com.ibm.ws.webcontainer.security.internal.WebReply;
 import com.ibm.ws.webcontainer.security.internal.WebSecurityCollaboratorException;
 import com.ibm.ws.webcontainer.security.metadata.FormLoginConfiguration;
@@ -136,6 +137,8 @@ public class WebAppSecurityCollaboratorImplTest {
 
     private final SecurityService securityService = mock.mock(SecurityService.class);
     private final UnauthenticatedSubjectService unauthSubjSrv = mock.mock(UnauthenticatedSubjectService.class);
+
+    private final WebAuthenticatorFactory authenticatorFactory = new WebAuthenticatorFactoryImpl();
 
     private final TAIService taiService = mock.mock(TAIService.class, "commonTaiService");
 
@@ -275,6 +278,7 @@ public class WebAppSecurityCollaboratorImplTest {
         // secColl needs to be activated to be useful, this simulates DS
         // creating and starting the class
         secColl = new WebAppSecurityCollaboratorImpl();
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.setSecurityService(securityServiceRef);
         secColl.setTaiService(taiServiceRef);
         secColl.setUnauthenticatedSubjectService(unauthSubjSrv);
@@ -941,6 +945,7 @@ public class WebAppSecurityCollaboratorImplTest {
         createTestSpecificIsEveryoneGrantedExpectations(APP_NAME, requiredRoles, false);
         createTestSpecificIsAuthorizedExpectations(APP_NAME, requiredRoles, null, true);
 
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.setSecurityService(securityServiceRef);
         secColl.setTaiService(taiServiceRef);
         secColl.activate(cc, configProps);
@@ -982,6 +987,7 @@ public class WebAppSecurityCollaboratorImplTest {
         createTestSpecificIsEveryoneGrantedExpectations(APP_NAME, requiredRoles, false);
         createTestSpecificUserRegistryExpectations("someRealm");
 
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.setSecurityService(securityServiceRef);
         secColl.setTaiService(taiServiceRef);
         secColl.activate(cc, configProps);
@@ -1043,6 +1049,7 @@ public class WebAppSecurityCollaboratorImplTest {
             }
         });
 
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.setSecurityService(securityServiceRef);
         secColl.setTaiService(taiServiceRef);
         secColl.activate(cc, configProps);
@@ -1613,6 +1620,7 @@ public class WebAppSecurityCollaboratorImplTest {
             }
         });
         configProps.put(WebAppSecurityConfigImpl.CFG_KEY_SINGLE_SIGN_ON_ENABLED, false);
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.setSecurityService(securityServiceRef);
         secColl.setTaiService(taiServiceRef);
         secColl.activate(cc, configProps);
@@ -1635,6 +1643,7 @@ public class WebAppSecurityCollaboratorImplTest {
         });
 
         configProps.put(WebAppSecurityConfigImpl.CFG_KEY_SINGLE_SIGN_ON_ENABLED, false);
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.setSecurityService(securityServiceRef);
         secColl.setTaiService(taiServiceRef);
         secColl.activate(cc, configProps);
@@ -1694,6 +1703,7 @@ public class WebAppSecurityCollaboratorImplTest {
         });
 
         secColl = new WebAppSecurityCollaboratorImpl(null, null, null);
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.setSecurityService(securityServiceRef);
         secColl.setTaiService(taiServiceRef);
         secColl.activate(cc, configProps);
@@ -1704,6 +1714,7 @@ public class WebAppSecurityCollaboratorImplTest {
     @Test
     public void getBasicAuthAuthenticator() throws Exception {
         secColl = new WebAppSecurityCollaboratorImpl(null, null, null);
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.setSecurityService(securityServiceRef);
         secColl.setTaiService(taiServiceRef);
         secColl.activate(cc, configProps);
@@ -1815,6 +1826,7 @@ public class WebAppSecurityCollaboratorImplTest {
             }
         });
         secColl = new WebAppSecurityCollaboratorImpl(null, null, null, webAppSecurityConfig);
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.optionallyAuthenticateUnprotectedResource(commonWebRequest);
 
         assertNull("Nothing to persist, no subject should be set.",
@@ -1846,6 +1858,7 @@ public class WebAppSecurityCollaboratorImplTest {
             }
         });
         secColl = new WebAppSecurityCollaboratorImpl(null, null, null, webAppSecurityConfig);
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.setSecurityService(securityServiceRef);
         secColl.activate(cc, configProps);
         secColl.optionallyAuthenticateUnprotectedResource(commonWebRequest);
@@ -1880,6 +1893,7 @@ public class WebAppSecurityCollaboratorImplTest {
             }
         });
         secColl = new WebAppSecurityCollaboratorImplTestDouble2(webAppSecurityConfig);
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.optionallyAuthenticateUnprotectedResource(commonWebRequest);
 
         assertSame("The request for the unprotected resource must use the authenticated subject.",
@@ -1915,6 +1929,7 @@ public class WebAppSecurityCollaboratorImplTest {
             }
         });
         secColl = new WebAppSecurityCollaboratorImplTestDouble2(webAppSecurityConfig);
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.setSecurityService(securityServiceRef);
         secColl.activate(cc, configProps);
         secColl.optionallyAuthenticateUnprotectedResource(commonWebRequest);
@@ -2053,6 +2068,7 @@ public class WebAppSecurityCollaboratorImplTest {
 
     private void createActivatedWebAppSecurityCollaboratorTestDouble() {
         secColl = new WebAppSecurityCollaboratorImplTestDouble();
+        secColl.setAuthenticatorFactory(authenticatorFactory);
         secColl.setSecurityService(securityServiceRef);
         secColl.setTaiService(taiServiceRef);
         secColl.activate(cc, configProps);

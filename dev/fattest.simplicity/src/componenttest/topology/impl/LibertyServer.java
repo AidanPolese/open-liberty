@@ -16,6 +16,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -92,17 +93,21 @@ import com.ibm.ws.jmx.connector.client.rest.ClientProvider;
 import componenttest.common.apiservices.Bootstrap;
 import componenttest.common.apiservices.LocalMachine;
 import componenttest.exception.TopologyException;
+import componenttest.topology.impl.JavaInfo.Vendor;
 import componenttest.topology.impl.LibertyFileManager.LogSearchResult;
 import componenttest.topology.utils.CollectiveUtilities;
 import componenttest.topology.utils.CollectiveUtilities.MaintenanceModeExpectedResult;
 import componenttest.topology.utils.CollectiveUtilities.MaintenanceModeTargetType;
 import componenttest.topology.utils.FileUtils;
+import componenttest.topology.utils.Java9Helper;
 import componenttest.topology.utils.LibertyServerUtils;
 
 public class LibertyServer implements LogMonitorClient {
+
     protected static final Class<?> c = LibertyServer.class;
     protected static final String CLASS_NAME = c.getName();
     protected static Logger LOG = Logger.getLogger(CLASS_NAME); // why don't we always use the Logger directly?
+
     /** How frequently we poll the logs when waiting for something to happen */
     protected static final int WAIT_INCREMENT = 300;
 
@@ -135,39 +140,11 @@ public class LibertyServer implements LogMonitorClient {
         }
     });
 
-    protected static final boolean JAVA_VERSION_6 = JAVA_VERSION.startsWith("1.6.");
-    protected static final boolean JAVA_VERSION_8 = JAVA_VERSION.startsWith("1.8");
-
-    protected static final boolean J9_JVM_RUN = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
-        @Override
-        public Boolean run() {
-            boolean b;
-            String vm = System.getProperty("java.vm.name");
-            Log.info(c, "<clinit>", "java.vm.name=" + vm);
-            b = vm != null && vm.contains("J9");
-            Log.info(c, "<clinit>", "J9_JVM_RUN=" + b);
-            return b;
-        }
-    });
-
-    protected static final boolean HOTSPOT_JVM_RUN = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
-        @Override
-        public Boolean run() {
-            String hotspotString = System.getProperty("fat.on.hotspot");
-            boolean hotspot;
-            if (hotspotString != null) {
-                Log.info(c, "<clinit>", "fat.on.hotspot=" + hotspotString);
-                hotspot = Boolean.parseBoolean(hotspotString);
-            } else {
-                String vm = System.getProperty("java.vm.name");
-                Log.info(c, "<clinit>", "java.vm.name=" + vm);
-                hotspot = vm.contains("HotSpot");
-            }
-
-            Log.info(c, "<clinit>", "HOTSPOT_JVM_RUN=" + hotspot);
-            return hotspot;
-        }
-    });
+    protected static final JavaInfo javaInfo = JavaInfo.forCurrentVM();
+    protected static final boolean JAVA_VERSION_6 = javaInfo.majorVersion() == 6;
+    protected static final boolean JAVA_VERSION_8 = javaInfo.majorVersion() == 8;
+    protected static final boolean J9_JVM_RUN = javaInfo.vendor() == Vendor.IBM;
+    protected static final boolean HOTSPOT_JVM_RUN = javaInfo.vendor() == Vendor.SUN_ORACLE;
 
     protected static final String MAC_RUN = AccessController.doPrivileged(new PrivilegedAction<String>() {
         @Override
@@ -176,17 +153,7 @@ public class LibertyServer implements LogMonitorClient {
         }
     });
 
-    protected static final boolean IBM_JVM = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
-        @Override
-        public Boolean run() {
-            String vendor = System.getProperty("java.vendor");
-
-            if (vendor != null) {
-                return vendor.toLowerCase().contains("ibm");
-            }
-            return true;
-        }
-    });
+    protected static final boolean IBM_JVM = javaInfo.vendor() == Vendor.IBM;
 
     protected static final boolean ORACLE_JVM = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
         @Override
@@ -1119,10 +1086,10 @@ public class LibertyServer implements LogMonitorClient {
                         " -Dosgi.classloader.lock=classname";
         }
 
-        // Debug for a Java 8 problem on IBM JVMs. This can be removed when defect 181046 is resolved.
-        if (IBM_JVM && JAVA_VERSION_8) {
-            JVM_ARGS += " -Xdump:system+java+snap:events=throw+systhrow,filter=\"java/lang/ClassCastException#ServiceFactoryUse.<init>*\"";
-            JVM_ARGS += " -Xdump:system+java+snap:events=throw+systhrow,filter=\"java/lang/ClassCastException#org/eclipse/osgi/internal/serviceregistry/ServiceFactoryUse.<init>*\"";
+        JavaInfo info = JavaInfo.forServer(this);
+        if (info.majorVersion() >= 9) {
+            Log.info(c, "startServerWithArgs", "Adding java 9 args: " + Java9Helper.JAVA_9_ARGS);
+            JVM_ARGS += Java9Helper.JAVA_9_ARGS;
         }
 
         // Add JaCoCo java agent to generate code coverage for FAT test run
@@ -1136,8 +1103,8 @@ public class LibertyServer implements LogMonitorClient {
             JVM_ARGS += " " + MAC_RUN;
         }
 
-        //This works around a change in Oracle JKD 8 update 11 documented in 163555: Test Failure (20150216-1921 (tests for cl50520150215-1500, child-e0)): com.ibm.ws.fat.cdi.tests.JavaEightTests.testLambda
-        if (System.getProperty("java.vendor").contains("Oracle") && System.getProperty("java.version").startsWith("1.8")) {
+        if (info.vendor() == JavaInfo.Vendor.SUN_ORACLE && info.majorVersion() >= 8) {
+            //This works around a change in Oracle JKD 8 update 11 documented in 163555: Test Failure (20150216-1921 (tests for cl50520150215-1500, child-e0)): com.ibm.ws.fat.cdi.tests.JavaEightTests.testLambda
             JVM_ARGS += " -noverify";
         }
 
@@ -2539,7 +2506,7 @@ public class LibertyServer implements LogMonitorClient {
      * This method is used to tidy away the server logs at the start.
      */
     protected void preStartServerLogsTidy() throws Exception {
-        //should be .../alpine/usr/servers/<server>/logs
+        //should be .../liberty/usr/servers/<server>/logs
         LibertyFileManager.deleteLibertyDirectoryAndContents(machine, getServerRoot() + "/logs");
 
         // Look for javacore/heapdump/snap. These are collected by stop/archive. We don't need
@@ -5981,15 +5948,35 @@ public class LibertyServer implements LogMonitorClient {
      * @throws Exception If anything goes wrong!
      */
     public JMXConnector getJMXRestConnector(String userName, String password, String keystorePassword) throws Exception {
+        String METHOD_NAME = "getJMXRestConnector";
         Map<String, Object> environment = new HashMap<String, Object>();
         environment.put("jmx.remote.protocol.provider.pkgs", "com.ibm.ws.jmx.connector.client");
         environment.put(JMXConnector.CREDENTIALS, new String[] { userName, password });
         environment.put(ClientProvider.DISABLE_HOSTNAME_VERIFICATION, true);
         environment.put(ClientProvider.READ_TIMEOUT, 2 * 60 * 1000);
 
+        // Load the keystore file from the file system.
         KeyStore keyStore = KeyStore.getInstance("JKS");
-        FileInputStream is = new FileInputStream(getServerRoot() + "/resources/security/key.jks");
-        keyStore.load(is, keystorePassword.toCharArray());
+        String path = getServerRoot() + "/resources/security/key.jks";
+        File keyFile = new File(path);
+        FileInputStream is = new FileInputStream(keyFile);
+        byte[] fileBytes = new byte[(int) keyFile.length()];
+        is.read(fileBytes);
+
+        // Load the file to the Keystore object as type JKS (default).
+        // If the load fails with an IOException, try to load it as type PKCS12.
+        // Note that in java 9, dynamically generated keystores using java's keytool will be of type PKCS12 because
+        // that is the new default. See this link for more information: http://openjdk.java.net/jeps/229
+        // The code below will handle paltform differences and JDK level differences.
+        try {
+            Log.info(c, METHOD_NAME, "Loading keystore: " + path + " as type: " + keyStore.getType() + ". Bytes read from file: " + fileBytes.length);
+            keyStore.load(new ByteArrayInputStream(fileBytes), keystorePassword.toCharArray());
+        } catch (IOException ioe) {
+            keyStore = KeyStore.getInstance("PKCS12");
+            Log.info(c, METHOD_NAME, "Loading keystore: " + path + " as type: " + keyStore.getType() + ". Bytes read from file: " + fileBytes.length);
+            keyStore.load(new ByteArrayInputStream(fileBytes), keystorePassword.toCharArray());
+        }
+
         is.close();
         TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         trustManagerFactory.init(keyStore);
@@ -6000,7 +5987,7 @@ public class LibertyServer implements LogMonitorClient {
         JMXServiceURL url = new JMXServiceURL("REST", getHostname(), getHttpDefaultSecurePort(), "/IBMJMXConnectorREST");
 
         JMXConnector jmxConnector = JMXConnectorFactory.connect(url, environment);
-        Log.info(c, "getJMXRestConnector", "Created JMX connector to server with URL: " + url + " Connector: " + jmxConnector);
+        Log.info(c, METHOD_NAME, "Created JMX connector to server with URL: " + url + " Connector: " + jmxConnector);
 
         return jmxConnector;
     }

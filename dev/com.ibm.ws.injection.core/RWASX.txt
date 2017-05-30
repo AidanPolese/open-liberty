@@ -1,7 +1,0 @@
-Build: d1410.01
-
-Components (files -deleted and !modified):
-  SERV1/ws/code/injection/src
-    !com/ibm/ws/injectionengine/factory/MBLinkObjectFactory.java
-
-  SERV1/ws/code/injection.impl/src

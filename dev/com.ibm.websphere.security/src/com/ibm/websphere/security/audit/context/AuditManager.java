@@ -73,6 +73,70 @@ public class AuditManager {
     }
 
     /**
+     * Sets the REST request on the thread
+     */
+    public void setRESTRequest(Object request) {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        auditThreadContext.setRESTRequest(request);
+    }
+
+    /**
+     * Gets the REST request on the thread
+     */
+    public Object getRESTRequest() {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        return auditThreadContext.getRESTRequest();
+    }
+
+    /**
+     * Sets the repositoryId on the thread
+     */
+    public void setRepositoryId(String repoId) {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        auditThreadContext.setRepositoryId(repoId);
+    }
+
+    /**
+     * Gets the repositoryId on the thread
+     */
+    public String getRepositoryId() {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        return auditThreadContext.getRepositoryId();
+    }
+
+    /**
+     * Sets the repository uniqueName on the thread
+     */
+    public void setRepositoryUniqueName(String uniqueName) {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        auditThreadContext.setRepositoryUniqueName(uniqueName);
+    }
+
+    /**
+     * Gets the repository uniqueName on the thread
+     */
+    public String getRepositoryUniqueName() {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        return auditThreadContext.getRepositoryUniqueName();
+    }
+
+    /**
+     * Sets the repository realm on the thread
+     */
+    public void setRepositoryRealm(String realm) {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        auditThreadContext.setRepositoryRealm(realm);
+    }
+
+    /**
+     * Gets the repository realm on the thread
+     */
+    public String getRepositoryRealm() {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        return auditThreadContext.getRepositoryRealm();
+    }
+
+    /**
      * Sets the list of users from the initial caller through the last caller in a runAs delegation call
      */
     public void setDelegatedUsers(ArrayList<String> delegatedUsers) {

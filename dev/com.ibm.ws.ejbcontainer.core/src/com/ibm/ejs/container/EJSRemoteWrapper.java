@@ -47,14 +47,14 @@ public abstract class EJSRemoteWrapper extends EJSWrapperBase
 
     /**
      * Member that can be used to cache the tie object associated with this
-     * wrapper. This field is not used by distributed tWAS.
+     * wrapper. This field is not used by distributed traditional WAS.
      */
     // LIDB2775-23.8
     public javax.rmi.CORBA.Tie intie;
 
     /**
      * Member that can be used to cache the stub/reference object associated
-     * with this wrapper. This field is not used by distributed tWAS.
+     * with this wrapper. This field is not used by distributed traditional WAS.
      */
     // LIDB2775-23.8
     public Object instub;

@@ -1014,6 +1014,12 @@
   </Match>
 
   <Match>
+    <Class name="com.ibm.ws.jsp.translator.visitor.generator.GeneratorUtils"/>
+    <Field name="fullClassfileInformation"/>
+    <Bug pattern="MS_SHOULD_BE_FINAL"/>
+  </Match>
+  
+  <Match>
     <Class name="com.ibm.ws.jsp.translator.visitor.validator.ValidateVisitor"/>
     <Method name="visitCustomTagEnd" signature="(Lorg/w3c/dom/Element;)V"/>
     <Bug pattern="DLS_DEAD_LOCAL_STORE"/>
@@ -2433,5 +2439,511 @@
   <Match>
     <Class name="com.ibm.ws.jsp.translator.compiler.utils.JspFileManager$WebModuleClassLoaderPackageFinder"/>
     <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.JSPStrBufferImpl"/>
+    <Method name="equals" signature="(Ljava/lang/Object;)Z"/>
+    <Bug pattern="EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.utils.TagFileId"/>
+    <Method name="equals" signature="(Ljava/lang/Object;)Z"/>
+    <Bug pattern="HE_EQUALS_USE_HASHCODE"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.bean.BeanRepository"/>
+    <Method name="ClassFound" signature="(Ljava/lang/String;)Z"/>
+    <Bug pattern="NM_METHOD_NAMING_CONVENTION"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.tools.JspFileUtils"/>
+    <Method name="removeFixedPackageFiles" signature="(Ljava/lang/String;Lcom/ibm/wsspi/jsp/context/translation/JspTranslationContext;Ljava/lang/String;)V"/>
+    <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.tools.JspFileUtils"/>
+    <Method name="removeVersion4Files" signature="(Ljava/io/File;Ljava/lang/String;)V"/>
+    <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspContextWrapper"/>
+    <Method name="include" signature="(Ljava/lang/String;Z)V"/>
+    <Bug pattern="IL_INFINITE_RECURSIVE_LOOP"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.document.ASCIIReader"/>
+    <Method name="read" signature="([CII)I"/>
+    <Bug pattern="INT_BAD_COMPARISON_WITH_SIGNED_BYTE"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.taglib.TagLibraryInfoProxy"/>
+    <Method name="loadTld" signature="()V"/>
+    <Local name="tldInputSource"/>
+    <Bug pattern="NP_ALWAYS_NULL_EXCEPTION"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.utils.JspId"/>
+    <Method name="&lt;init&gt;" signature="(Ljava/lang/String;)V"/>
+    <Field name="filePath"/>
+    <Bug pattern="NP_NULL_ON_SOME_PATH_EXCEPTION"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.document.Jsp2Dom"/>
+    <Method name="detectXMLEncoding" signature="()V"/>
+    <Local name="ret"/>
+    <Bug pattern="DMI_INVOKING_TOSTRING_ON_ARRAY"/>
+  </Match>
+<Match>
+    <Class name="com.ibm.ws.jsp.translator.document.Jsp2Dom"/>
+    <Field name="logger"/>
+    <Bug pattern="MS_SHOULD_BE_FINAL"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.jasper.runtime.HttpJspBase"/>
+    <Method name="&lt;clinit&gt;" signature="()V"/>
+    <Bug pattern="SYSTEM_OUT_USED"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspApplicationContextImpl"/>
+    <Method name="&lt;init&gt;" signature="()V"/>
+    <Field name="logger"/>
+    <Bug pattern="NP_GUARANTEED_DEREF"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspApplicationContextImpl"/>
+    <Method name="&lt;init&gt;" signature="()V"/>
+    <Field name="logger"/>
+    <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspContextWrapper"/>
+    <Method name="include" signature="(Ljava/lang/String;Z)V"/>
+    <Bug pattern="IL_INFINITE_RECURSIVE_LOOP"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspContextWrapper"/>
+    <Method name="copyTagToPageScope" signature="(I)V"/>
+    <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="coerce" signature="(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Object;"/>
+    <Bug pattern="DM_BOOLEAN_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="convert" signature="(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Class;)Ljava/lang/Object;"/>
+    <Bug pattern="DM_BOOLEAN_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="createTypedArray" signature="(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Class;)V"/>
+    <Bug pattern="DM_BOOLEAN_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="handleSetProperty" signature="(Ljava/lang/Object;Ljava/lang/String;Z)V"/>
+    <Bug pattern="DM_BOOLEAN_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="toString" signature="(Ljava/lang/Object;)Ljava/lang/String;"/>
+    <Bug pattern="DM_BOOLEAN_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="toString" signature="(Z)Ljava/lang/String;"/>
+    <Bug pattern="DM_BOOLEAN_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="URLEncode" signature="(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"/>
+    <Bug pattern="DM_DEFAULT_ENCODING"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="decode" signature="(Ljava/lang/String;)Ljava/lang/String;"/>
+    <Bug pattern="DM_DEFAULT_ENCODING"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="coerce" signature="(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Object;"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="coerce" signature="(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Object;"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="coerce" signature="(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Object;"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="coerce" signature="(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Object;"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="coerce" signature="(Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Object;"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="convert" signature="(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Class;)Ljava/lang/Object;"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="createTypedArray" signature="(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Class;)V"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="handleSetProperty" signature="(Ljava/lang/Object;Ljava/lang/String;B)V"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="handleSetProperty" signature="(Ljava/lang/Object;Ljava/lang/String;C)V"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="handleSetProperty" signature="(Ljava/lang/Object;Ljava/lang/String;I)V"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="handleSetProperty" signature="(Ljava/lang/Object;Ljava/lang/String;J)V"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="handleSetProperty" signature="(Ljava/lang/Object;Ljava/lang/String;S)V"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="toString" signature="(B)Ljava/lang/String;"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="toString" signature="(C)Ljava/lang/String;"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="toString" signature="(I)Ljava/lang/String;"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="toString" signature="(J)Ljava/lang/String;"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="toString" signature="(S)Ljava/lang/String;"/>
+    <Bug pattern="DM_NUMBER_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="createTypedArray" signature="(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Class;)V"/>
+    <Bug pattern="REC_CATCH_EXCEPTION"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspRuntimeLibrary"/>
+    <Method name="escapeQueryString" signature="(Ljava/lang/String;)Ljava/lang/String;"/>
+    <Bug pattern="SBSC_USE_STRINGBUFFER_CONCATENATION"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.PerThreadTagHandlerPool"/>
+    <Field name="MAX_SIZE"/>
+    <Bug pattern="MS_SHOULD_BE_FINAL"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.TagHandlerPool"/>
+    <Field name="OPTION_MAXSIZE"/>
+    <Bug pattern="MS_SHOULD_BE_FINAL"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.TagHandlerPool"/>
+    <Field name="OPTION_TAGPOOL"/>
+    <Bug pattern="MS_SHOULD_BE_FINAL"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.TagHandlerPool"/>
+    <Method name="getTagHandlerPool" signature="(Ljavax/servlet/ServletConfig;)Lorg/apache/jasper/runtime/TagHandlerPool;"/>
+    <Bug pattern="THROWABLE_PRINT_STACK_TRACE_CALLED"/>
+  </Match>
+ 
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspFactoryImpl$PrivilegedGetPageContext"/>
+    <Bug pattern="SIC_INNER_SHOULD_BE_STATIC"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspFactoryImpl$PrivilegedReleasePageContext"/>
+    <Bug pattern="SIC_INNER_SHOULD_BE_STATIC"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspFragmentHelper"/>
+    <Field name="discriminator"/>
+    <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.JspFragmentHelper"/>
+    <Field name="pageContext"/>
+    <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.runtime.PageContextImpl"/>
+    <Method name="removeAttribute" signature="(Ljava/lang/String;)V"/>
+    <Bug pattern="DE_MIGHT_IGNORE"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.utils.FunctionSignature"/>
+    <Method name="getParameterTypes" signature="()[Ljava/lang/Class;"/>
+    <Field name="parameterTypes"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.jasper.compiler.ELNode$Function"/>
+    <Method name="getParameters" signature="()[Ljava/lang/String;"/>
+    <Field name="parameters"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.compiler.ELNode$Function"/>
+    <Method name="setParameters" signature="([Ljava/lang/String;)V"/>
+    <Field name="parameters"/>
+    <Local name="parameters"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.JspCoreException"/>
+    <Method name="&lt;init&gt;" signature="(Ljava/lang/String;[Ljava/lang/Object;)V"/>
+    <Field name="args"/>
+    <Local name="args"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+
+  <Match>
+    <Class name="com.ibm.ws.jsp.JspCoreException"/>
+    <Method name="&lt;init&gt;" signature="(Ljava/lang/String;[Ljava/lang/Object;Ljava/lang/Throwable;)V"/>
+    <Field name="args"/>
+    <Local name="args"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.JspCoreException"/>
+    <Field name="bundleNLS"/>
+    <Bug pattern="MS_SHOULD_BE_REFACTORED_TO_BE_FINAL"/>
+  </Match>
+
+  <Match>
+    <Class name="com.ibm.ws.jsp.JspCoreException"/>
+    <Method name="getMessage" signature="()Ljava/lang/String;"/>
+    <Bug pattern="SBSC_USE_STRINGBUFFER_CONCATENATION"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.taglib.TagFileTagInfo"/>
+    <Method name="&lt;init&gt;" signature="(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljavax/servlet/jsp/tagext/TagLibraryInfo;Ljavax/servlet/jsp/tagext/TagExtraInfo;[Ljavax/servlet/jsp/tagext/TagAttributeInfo;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljavax/servlet/jsp/tagext/TagVariableInfo;Ljava/lang/String;)V"/>
+    <Field name="attributeInfo"/>
+    <Local name="attributeInfo"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+
+  <Match>
+    <Class name="com.ibm.ws.jsp.taglib.TagFileTagInfo"/>
+    <Method name="&lt;init&gt;" signature="(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljavax/servlet/jsp/tagext/TagLibraryInfo;Ljavax/servlet/jsp/tagext/TagExtraInfo;[Ljavax/servlet/jsp/tagext/TagAttributeInfo;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljavax/servlet/jsp/tagext/TagVariableInfo;Ljava/lang/String;)V"/>
+    <Field name="tvi"/>
+    <Local name="tvi"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.visitor.generator.PageTranslationTimeGenerator"/>
+    <Method name="&lt;init&gt;" signature="([Ljava/lang/String;)V"/>
+    <Field name="translationTimeAttrs"/>
+    <Local name="translationTimeAttrs"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.lite.JSPLiteExtProcessor"/>
+    <Field name="syncObjects"/>
+    <Bug pattern="MS_FINAL_PKGPROTECT"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.taglib.ImplicitTldParser"/>
+    <Field name="logLevel"/>
+    <Bug pattern="MS_SHOULD_BE_FINAL"/>
+  </Match>
+
+  <Match>
+    <Class name="com.ibm.ws.jsp.taglib.ImplicitTldParser"/>
+    <Field name="logger"/>
+    <Bug pattern="MS_SHOULD_BE_FINAL"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.compiler.JspCompilerFactoryImpl"/>
+    <Field name="logger"/>
+    <Bug pattern="MS_SHOULD_BE_FINAL"/>
+  </Match>
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.utils.NameMangler"/>
+    <Field name="keywords"/>
+    <Bug pattern="MS_FINAL_PKGPROTECT"/>
+  </Match>
+
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.utils.NameMangler"/>
+    <Field name="keywordsSlash"/>
+    <Bug pattern="MS_FINAL_PKGPROTECT"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.tsx.tag.RepeatTag"/>
+    <Field name="logger"/>
+    <Bug pattern="MS_SHOULD_BE_FINAL"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.utils.SmapGenerator"/>
+    <Field name="doEmbedded"/>
+    <Bug pattern="IS2_INCONSISTENT_SYNC"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.taglib.TagClassInfo"/>
+    <Method name="toString" signature="()Ljava/lang/String;"/>
+    <Bug pattern="DM_STRING_CTOR"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.optimizedtag.impl.JSTLForEachIteratorSupport$2"/>
+    <Method name="next" signature="()Ljava/lang/Object;"/>
+    <Bug pattern="DM_BOOLEAN_CTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.visitor.validator.ValidateJspVisitor"/>
+    <Method name="visitPageDirectiveStart" signature="(Lorg/w3c/dom/Element;)V"/>
+    <Bug pattern="DM_BOOLEAN_CTOR"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.tsx.tag.GetPropertyTag"/>
+    <Method name="doStartTag" signature="()I"/>
+    <Bug pattern="DM_BOOLEAN_CTOR"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.wsspi.jsp.compiler.JspLineId"/>
+    <Method name="toString" signature="()Ljava/lang/String;"/>
+    <Bug pattern="DM_STRING_CTOR"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.webcontainerext.JSPErrorReport"/>
+    <Method name="getMessageAsHTML" signature="()Ljava/lang/String;"/>
+    <Bug pattern="SBSC_USE_STRINGBUFFER_CONCATENATION"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.document.Jsp2Dom"/>
+    <Field name="parentIsXml"/>
+    <Bug pattern="URF_UNREAD_FIELD"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.tools.JspFileUtils"/>
+    <Method name="removeFixedPackageFiles" signature="(Ljava/lang/String;Lcom/ibm/wsspi/jsp/context/translation/JspTranslationContext;Ljava/lang/String;)V"/>
+    <Bug pattern="DMI_USELESS_SUBSTRING"/>
+  </Match>
+
+  <Match>
+    <Class name="com.ibm.ws.jsp.tools.JspFileUtils"/>
+    <Method name="removeVersion4Files" signature="(Ljava/io/File;Ljava/lang/String;)V"/>
+    <Bug pattern="DMI_USELESS_SUBSTRING"/>
+  </Match>
+
+  <Match>
+    <Class name="org.apache.jasper.compiler.ELParser"/>
+    <Method name="isELReserved" signature="(Ljava/lang/String;)Z"/>
+    <Bug pattern="IM_AVERAGE_COMPUTATION_COULD_OVERFLOW"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.document.JspEncodingScanner"/>
+    <Method name="scan"/>
+    <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.visitor.generator.CustomTagGenerator"/>
+    <Method name="startGeneration" signature="(ILcom/ibm/ws/jsp/translator/visitor/generator/JavaCodeWriter;)V"/>
+    <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.visitor.generator.CustomTagGenerator"/>
+    <Method name="endGeneration" signature="(ILcom/ibm/ws/jsp/translator/visitor/generator/JavaCodeWriter;)V"/>
+    <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.visitor.generator.GenerateJspVisitor"/>
+    <Method name="visit" signature="(Lorg/w3c/dom/Document;IL)V"/>
+    <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.jsp.translator.JspTranslator"/>
+    <Field name="jspOptions"/>
+    <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
   </Match>
 </FindBugsFilter>

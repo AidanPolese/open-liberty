@@ -16,8 +16,8 @@ import java.io.Serializable;
 import com.ibm.ejs.container.EJSContainer;
 import com.ibm.ejs.container.EJSHome;
 import com.ibm.ejs.container.MessageDrivenBeanO;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * BMMessageDrivenBeanO manages the lifecycle of a single MessageDrivenBean

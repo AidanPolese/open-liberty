@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class InvalidUniqueNameException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -6903453162219997792L;
+
     /**
      *
      */

@@ -97,7 +97,7 @@ public class ThreadPoolThroughputTest {
         return elapsedTime;
     }
 
-    public long alpineExecutorForeignSourceThroughput(final long iterations) throws Exception {
+    public long libertyExecutorForeignSourceThroughput(final long iterations) throws Exception {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(poolSize, poolSize, 10, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>());
 
         long startTime = System.nanoTime();
@@ -110,10 +110,10 @@ public class ThreadPoolThroughputTest {
 
         if (terminationComplete && iterations != executor.getCompletedTaskCount()) {
             System.out.println("executor = " + executor);
-            System.out.println("Alpine foreign source execution, completed tasks = " + executor.getCompletedTaskCount());
+            System.out.println("Liberty foreign source execution, completed tasks = " + executor.getCompletedTaskCount());
         } else if (!terminationComplete) {
             System.out.println("executor = " + executor);
-            System.out.println("Alpine foreign source execution, timed out without termination, completed tasks = " + executor.getCompletedTaskCount());
+            System.out.println("Liberty foreign source execution, timed out without termination, completed tasks = " + executor.getCompletedTaskCount());
         }
         assertTrue(iterations == executor.getCompletedTaskCount());
         return elapsedTime;
@@ -138,7 +138,7 @@ public class ThreadPoolThroughputTest {
         return elapsedTime;
     }
 
-    public long alpineExecutorExecuteBatchWait(final long iterations, final long batchSize) throws Exception {
+    public long libertyExecutorExecuteBatchWait(final long iterations, final long batchSize) throws Exception {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(poolSize, poolSize, 10, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(500));
 
         long startTime = System.nanoTime();
@@ -155,10 +155,10 @@ public class ThreadPoolThroughputTest {
 
         if (terminationComplete && (iterations * batchSize) != executor.getCompletedTaskCount()) {
             System.out.println("executor = " + executor);
-            System.out.println("Alpine batch/wait, completed tasks = " + executor.getCompletedTaskCount());
+            System.out.println("Liberty batch/wait, completed tasks = " + executor.getCompletedTaskCount());
         } else if (!terminationComplete) {
             System.out.println("executor = " + executor);
-            System.out.println("Alpine batch/wait execution, timed out without termination, completed tasks = " + executor.getCompletedTaskCount());
+            System.out.println("Liberty batch/wait execution, timed out without termination, completed tasks = " + executor.getCompletedTaskCount());
         }
         assertTrue(iterations * batchSize == executor.getCompletedTaskCount());
         return elapsedTime;
@@ -211,10 +211,10 @@ public class ThreadPoolThroughputTest {
 
             for (int w = 0; w < warmups + 1; w++) {
                 for (int i = 0; i < loopCount; i++) {
-                    times[i] = test.alpineExecutorForeignSourceThroughput(iterations);
+                    times[i] = test.libertyExecutorForeignSourceThroughput(iterations);
                 }
             }
-            results("Alpine Foreign Source", times);
+            results("Liberty Foreign Source", times);
 
             for (int w = 0; w < warmups + 1; w++) {
                 for (int i = 0; i < loopCount; i++) {
@@ -225,10 +225,10 @@ public class ThreadPoolThroughputTest {
 
             for (int w = 0; w < warmups + 1; w++) {
                 for (int i = 0; i < loopCount; i++) {
-                    times[i] = test.alpineExecutorExecuteBatchWait(iterations / batchSize, batchSize);
+                    times[i] = test.libertyExecutorExecuteBatchWait(iterations / batchSize, batchSize);
                 }
             }
-            results("Alpine Foreign Source with Batch and Wait", times);
+            results("Liberty Foreign Source with Batch and Wait", times);
 
             if (warmupPhase) {
                 poolSize = initialPoolSize + 1;

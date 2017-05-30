@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class PropertyNotDefinedException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -1164308229190880710L;
+
     /**
      *
      */

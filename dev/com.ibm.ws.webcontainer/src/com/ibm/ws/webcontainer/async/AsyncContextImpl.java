@@ -360,7 +360,7 @@ public class AsyncContextImpl implements AsyncContext {
                 
                 startWithExecutorThread(localDispatchRunnable);
 
-            } else if (this.completeRunnable!=null){
+            } else if (this.completeRunnable!=null && runComplete()){
                 setDispatching(true);
                 CompleteRunnable localCompleteRunnable = completeRunnable;
                 completeRunnable = null;
@@ -900,5 +900,13 @@ public class AsyncContextImpl implements AsyncContext {
         this.dispatchURI = uri;
     }
     //PI43752 end
+
+    /**
+     * @return
+     */
+    public boolean runComplete() {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
 }

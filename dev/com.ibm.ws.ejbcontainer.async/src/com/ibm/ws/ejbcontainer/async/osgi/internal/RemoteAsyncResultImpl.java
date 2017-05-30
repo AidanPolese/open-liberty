@@ -25,8 +25,8 @@ import javax.rmi.CORBA.Tie;
 import org.omg.PortableServer.Servant;
 
 import com.ibm.ejs.container.RemoteAsyncResult;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
 import com.ibm.ws.ejbcontainer.EJBPMICollaborator;
 import com.ibm.ws.ejbcontainer.jitdeploy.ClassDefiner;
@@ -40,7 +40,7 @@ import com.ibm.ws.ffdc.FFDCFilter;
  * is meant to be returned to remote clients.
  */
 @Trivial
-// NOTE: We do not support RemoteAsyncResultExtended as in tWAS.
+// NOTE: We do not support RemoteAsyncResultExtended as in traditional WAS.
 public final class RemoteAsyncResultImpl extends ServerAsyncResultImpl implements RemoteAsyncResult {
     private static final String CLASS_NAME = RemoteAsyncResultImpl.class.getName();
     private static final TraceComponent tc = Tr.register(RemoteAsyncResultImpl.class, "EJBContainer", "com.ibm.ejs.container.container");
@@ -208,35 +208,6 @@ public final class RemoteAsyncResultImpl extends ServerAsyncResultImpl implement
         // client has already successfully called cancel(true).
         return result;
     }
-
-//    @Override
-//    public Object[] waitForResult(long waitTime) throws ExecutionException, InterruptedException, RemoteException { // F16043
-//        // NOTE: The code flow from the ORB to this method can be augmented by
-//        // AsynchronousServantPluginImpl.  If the call to this method was not
-//        // from a co-located stub, and the server ORB supports asynchronous
-//        // responses, this implementation will only be called if isDone has
-//        // already returned true.
-//
-//        boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
-//        if (isTraceOn)
-//            Tr.entry(tc, "waitForResult: " + waitTime);
-//
-//        if (waitTime <= 0 || waitTime >= ContainerProperties.MaxAsyncResultWaitTime) {
-//            waitTime = ContainerProperties.MaxAsyncResultWaitTime;
-//        }
-//
-//        if (!await(waitTime, TimeUnit.MILLISECONDS)) {
-//            if (isTraceOn)
-//                Tr.exit(tc, "waitForResult: timeout");
-//            return null;
-//        }
-//
-//        Object result = get();
-//
-//        if (isTraceOn)
-//            Tr.exit(tc, "waitForResult: result");
-//        return new Object[] { result };
-//    }
 
     public long getTimeoutStartTime() {
         return ivTimeoutStartTime;

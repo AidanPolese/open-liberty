@@ -3049,5 +3049,29 @@
     <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
   </Match>
   
+  <Match>
+    <Class name="com.ibm.ws.webcontainer.osgi.mbeans.GeneratePluginConfigMBean"/>
+    <Field name="dynVhostMgr"/>
+    <Bug pattern="IS2_INCONSISTENT_SYNC"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.webcontainer.osgi.mbeans.GeneratePluginConfigMBean"/>
+    <Field name="smgr"/>
+    <Bug pattern="IS2_INCONSISTENT_SYNC"/>
+  </Match>
+  
+  <Match>
+    <Class name="com.ibm.ws.webcontainer.osgi.mbeans.GeneratePluginConfigMBean"/>
+    <Field name="locMgr"/>
+    <Bug pattern="IS2_INCONSISTENT_SYNC"/>
+  </Match>
+    
+  <Match>
+    <Class name="com.ibm.ws.webcontainer.osgi.mbeans.GeneratePluginConfigMBean"/>
+    <Field name="webContainer"/>
+    <Bug pattern="IS2_INCONSISTENT_SYNC"/>
+  </Match>
+  
     
 </FindBugsFilter>

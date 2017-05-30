@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.jpaContainer-2.1
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.classloading-1.0;version=latest, \
 	com.ibm.websphere.appserver.javax.persistence-2.1;version=latest, \
 	com.ibm.websphere.appserver.javax.annotation-1.2;version=latest, \

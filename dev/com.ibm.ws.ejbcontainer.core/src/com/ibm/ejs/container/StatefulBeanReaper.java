@@ -22,11 +22,10 @@ import java.util.concurrent.TimeUnit;
 import com.ibm.ejs.container.activator.Activator;
 import com.ibm.ejs.container.passivator.StatefulPassivator;
 import com.ibm.ejs.container.util.EJSPlatformHelper;
-import com.ibm.ejs.ras.Dumpable;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.FastHashtable;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.failover.SfFailoverCache;
 import com.ibm.ws.ffdc.FFDCFilter;
 
@@ -56,9 +55,7 @@ import com.ibm.ws.ffdc.FFDCFilter;
  * @see EJSContainer
  * @see com.ibm.ejs.container.activator.Activator
  **/
-public final class StatefulBeanReaper // dxxxxxx
-implements Runnable, // F73234, d91878
-Dumpable
+public final class StatefulBeanReaper implements Runnable
 {
     private static final TraceComponent tc = Tr.register(StatefulBeanReaper.class,
                                                          "EJBCache",
@@ -123,7 +120,6 @@ Dumpable
         ivSfFailoverCache = failoverCache; //LIDB2018-1
 
         ivScheduledExecutorService = scheduledExecutorService; // F73234
-        Tr.registerDumpable(tc, this);
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
             Tr.exit(tc, "<init> : sweep = " + ivSweepInterval + " ms");
@@ -440,7 +436,7 @@ Dumpable
     /**
      * Get a list of all the passivated beans which belong to a certain home.
      *
-     * @param homeName is the J2EE name of the home that bean ids are to be
+     * @param homeName is the Java EE name of the home that bean ids are to be
      *            returned for.
      **/
     // d103404.1
@@ -482,7 +478,6 @@ Dumpable
     /**
      * Dump the internal state of the cache
      */
-    @Override
     public void dump() {
 
         if (dumped) {
@@ -506,7 +501,6 @@ Dumpable
     /**
      * Reset dumped state of this cache.
      */
-    @Override
     public void resetDump() {
 
         dumped = false;

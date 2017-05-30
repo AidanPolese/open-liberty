@@ -24,6 +24,8 @@ Include-Resource: \
 -dsannotations: \
   com.ibm.ws.security.context.internal.SecurityContextProviderImpl
 
+instrument.classesExcludes: com/ibm/ws/security/context/internal/resources/*.class
+
 -buildpath: \
 	com.ibm.websphere.appserver.spi.logging,\
 	com.ibm.websphere.org.osgi.core,\

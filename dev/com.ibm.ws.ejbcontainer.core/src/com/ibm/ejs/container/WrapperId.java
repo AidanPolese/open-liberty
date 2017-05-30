@@ -13,8 +13,8 @@ package com.ibm.ejs.container;
 
 import com.ibm.ejs.container.util.EJSPlatformHelper;
 import com.ibm.ejs.container.util.ByteArray;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Provides a unique wrapper identifier when multiple remote interfaces
@@ -23,12 +23,9 @@ import com.ibm.ejs.ras.TraceComponent;
 public final class WrapperId
                 extends com.ibm.ejs.util.ByteArray
 {
-    private static final String CLASS_NAME = WrapperId.class.getName();
-
-    private static final TraceComponent tc =
-                    Tr.register(CLASS_NAME,
-                                "EJBContainer",
-                                "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(WrapperId.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     /**
      * Static initialization of the header

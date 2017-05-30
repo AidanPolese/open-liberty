@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2012
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.logging.fat;
@@ -17,6 +17,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import componenttest.topology.impl.JavaInfo;
 import componenttest.topology.impl.LibertyServerFactory;
 
 public class StackTraceFilteringForUserFeatureExceptionTest extends AbstractStackTraceFilteringTest {
@@ -27,12 +28,11 @@ public class StackTraceFilteringForUserFeatureExceptionTest extends AbstractStac
 
     @BeforeClass
     public static void setUp() throws Exception {
-        server = LibertyServerFactory
-                        .getLibertyServer("com.ibm.ws.logging.badconfig.user");
+        server = LibertyServerFactory.getLibertyServer("com.ibm.ws.logging.badconfig.user");
 
-        // install our user feature 
-        server.installUserBundle(BUNDLE_NAME); // NO HYPHENS! NO ".jar" SUFFIX! 
-        server.installUserFeature(FEATURE_NAME); // NO UNDERSCORES! NO ".mf" SUFFIX! 
+        // install our user feature
+        server.installUserBundle(BUNDLE_NAME); // NO HYPHENS! NO ".jar" SUFFIX!
+        server.installUserFeature(FEATURE_NAME); // NO UNDERSCORES! NO ".mf" SUFFIX!
 
         // Just starting the server should be enough to get exceptions
         server.startServer();
@@ -63,9 +63,14 @@ public class StackTraceFilteringForUserFeatureExceptionTest extends AbstractStac
         // case, the third-party stuff survives
         assertConsoleLogCountEquals("The console stack was apparently trimmed, but the SCR classes got left in it",
                                     "at org.apache.felix.scr.impl", 1);
-        // We want a Java line, but only one 
-        assertConsoleLogCountEquals("The console stack should have one Java lines in it.",
-                                    "at java.", 1);
+        // We want a Java line, but only one
+        if (JavaInfo.forServer(server).majorVersion() >= 9) {
+            assertConsoleLogCountEquals("The console stack should have one Java lines in it.",
+                                        "at java.base/java.", 1);
+        } else {
+            assertConsoleLogCountEquals("The console stack should have one Java lines in it.",
+                                        "at java.", 1);
+        }
 
     }
 

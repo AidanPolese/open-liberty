@@ -24,7 +24,7 @@ Modified classes:
     Added @FFDCIgnore(IOException.class) to the public InputStream getInputStream() method.
 
   com/ibm/ws/jsp/taglib/GlobalTagLibraryCache.java
-    Use the JspShim to isolate System.getProperty("was.install.root") vs. using AlpineLocation.
+    Use the JspShim to isolate System.getProperty("was.install.root") vs. using LibertyLocation.
 
     Added code to use loadTldFromClassloader(GlobalTagLibConfig globalTagLibConfig, TldParser tldParser)
     so that we use the class loader and not the jar to get the tag libs.

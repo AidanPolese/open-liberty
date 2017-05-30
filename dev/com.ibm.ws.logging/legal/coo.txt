@@ -4,7 +4,7 @@ prepare a 'Certificate of Originality' document for this project.
 Source code origin:
 WAS 7.0 ras
 
-Alpine contributors:
+Liberty contributors:
 Jeffrey Lee
 Alex Mulholland
 Ki Park

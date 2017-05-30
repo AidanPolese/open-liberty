@@ -11,14 +11,13 @@
  */
 package com.ibm.ws.ejbcontainer.util;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.EJBPMICollaborator;
 import com.ibm.ws.util.LockFreeIndexedStack;
 
 public final class PoolImplThreadSafe extends PoolImplBase {
-    private static final String CLASS_NAME = PoolImplThreadSafe.class.getName();
-    private static final TraceComponent tc = Tr.register(CLASS_NAME, "EJBContainer", null);
+    private static final TraceComponent tc = Tr.register(PoolImplThreadSafe.class, "EJBContainer", null);
 
     /**
      * Percent an inactive pool should be drained each drain interval.

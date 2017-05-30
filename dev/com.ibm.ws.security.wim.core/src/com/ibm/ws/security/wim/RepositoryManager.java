@@ -28,8 +28,6 @@ import com.ibm.websphere.security.wim.ras.WIMMessageHelper;
 import com.ibm.websphere.security.wim.ras.WIMMessageKey;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.security.registry.CustomRegistryException;
-import com.ibm.ws.security.registry.EntryNotFoundException;
-import com.ibm.ws.security.registry.RegistryException;
 import com.ibm.ws.security.registry.SearchResult;
 import com.ibm.ws.security.registry.UserRegistry;
 import com.ibm.ws.security.wim.adapter.urbridge.URBridge;
@@ -75,7 +73,7 @@ public class RepositoryManager {
 
         Set<String> getRepositoryGroups();
 
-        boolean isUniqueNameForRepository(String uniqueName, boolean isDn) throws WIMException;
+        int isUniqueNameForRepository(String uniqueName, boolean isDn) throws WIMException;
     }
 
     static class URBridgeHolder implements RepositoryHolder {
@@ -124,8 +122,12 @@ public class RepositoryManager {
         }
 
         @Override
-        public boolean isUniqueNameForRepository(String uniqueName, boolean isDn) {
-            return baseEntry.equals(uniqueName) || isUserInRealm(uniqueName);
+        public int isUniqueNameForRepository(String uniqueName, boolean isDn) {
+            if (baseEntry.equals(uniqueName))
+                return Integer.MAX_VALUE;
+            if (isUserInRealm(uniqueName))
+                return 0;
+            return -1;
         }
 
         @FFDCIgnore(Exception.class)
@@ -183,7 +185,8 @@ public class RepositoryManager {
         }
 
         @Override
-        public boolean isUniqueNameForRepository(String uniqueName, boolean isDn) throws WIMException {
+        public int isUniqueNameForRepository(String uniqueName, boolean isDn) throws WIMException {
+            int repo = -1;
             if (isDn) {
                 Collection<String> baseEntryList = getRepositoryBaseEntries().keySet();
                 if (baseEntryList.size() == 0) {
@@ -194,17 +197,22 @@ public class RepositoryManager {
                 }
                 int uLength = uniqueName.length();
                 for (String baseEntry : baseEntryList) {
-                    int nodeLength = baseEntry.length();
-                    if (nodeLength == 0) {
-                        return true;
-                    } else if ((uLength == nodeLength) && uniqueName.equalsIgnoreCase(baseEntry)) {
-                        return true;
-                    } else if ((uLength > nodeLength) && (StringUtil.endsWithIgnoreCase(uniqueName, "," + baseEntry))) {
-                        return true;
+                    int baseEntryLength = baseEntry.length();
+                    if (baseEntryLength == 0 && repo == -1) {
+                        //Previously we matched the root to everything, but now we are looking for a better match
+                        repo = 0;
+                    } else if ((uLength == baseEntryLength) && uniqueName.equalsIgnoreCase(baseEntry)) {
+                        //We found an exact match so return with highest priority
+                        return Integer.MAX_VALUE;
+                    } else if ((uLength > baseEntryLength) && (StringUtil.endsWithIgnoreCase(uniqueName, "," + baseEntry))) {
+                        //We found a match, but we need to check if it is better than our currently best match
+                        if (repo < baseEntryLength) {
+                            repo = baseEntryLength;
+                        }
                     }
                 }
             }
-            return false;
+            return repo;
         }
 
     }
@@ -542,10 +550,21 @@ public class RepositoryManager {
         if (isDn)
             uniqueName = UniqueNameHelper.getValidUniqueName(uniqueName).trim();
 
+        String repo = null;
+        int repoMatch = -1;
+        int bestMatch = -1;
+
         for (Map.Entry<String, RepositoryHolder> entry : repositories.entrySet()) {
-            if (entry.getValue().isUniqueNameForRepository(uniqueName, isDn)) {
+            repoMatch = entry.getValue().isUniqueNameForRepository(uniqueName, isDn);
+            if (repoMatch == Integer.MAX_VALUE) {
                 return entry.getKey();
+            } else if (repoMatch > bestMatch) {
+                repo = entry.getKey();
+                bestMatch = repoMatch;
             }
+        }
+        if (repo != null) {
+            return repo;
         }
 
         throw new InvalidUniqueNameException(WIMMessageKey.ENTITY_NOT_IN_REALM_SCOPE, Tr.formatMessage(

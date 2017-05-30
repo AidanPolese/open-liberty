@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.jca-1.7
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.javax.connector-1.7;version=latest, \
 	com.ibm.websphere.appserver.javaeePlatform-7.0;version=latest, \
 	com.ibm.websphere.appserver.internal.jca-1.6;version=latest, \

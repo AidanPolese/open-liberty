@@ -28,9 +28,9 @@ import com.ibm.ejs.container.EJSWrapper;
 import com.ibm.ejs.container.EJSWrapperBase;
 import com.ibm.ejs.container.EJSWrapperCommon;
 import com.ibm.ejs.container.util.ByteArray;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.EJBReference;
 
 public class EJBReferenceImpl implements EJBReference {

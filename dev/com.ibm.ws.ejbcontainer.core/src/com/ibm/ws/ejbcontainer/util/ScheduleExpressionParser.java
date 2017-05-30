@@ -18,9 +18,9 @@ import java.util.TimeZone;
 
 import javax.ejb.ScheduleExpression;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * The <tt>ScheduleExpressionParser</tt> is constructs a {@link ParsedScheduleExpression} object from a <tt>ScheduleExpression</tt>. A
@@ -72,9 +72,7 @@ import com.ibm.ejs.util.Util;
  */
 public class ScheduleExpressionParser
 {
-    private static final String CLASS_NAME = ScheduleExpressionParser.class.getName();
-
-    private static final TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(ScheduleExpressionParser.class,
                                                          "EJBContainer",
                                                          "com.ibm.ejs.container.container");
 

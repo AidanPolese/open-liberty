@@ -83,8 +83,8 @@ public class FileUtilsTest {
             // deprecated File.toURL() as used by java -jar/-cp incorrectly
             // returns file://server/path/, which has an invalid authority
             // component.
-            url = new URL("file://HOST/with%20space/lib/com.ibm.alpine_1.0.jar");
-            expected = "//HOST/with space/lib/com.ibm.alpine_1.0.jar";
+            url = new URL("file://HOST/with%20space/lib/com.ibm.liberty_1.0.jar");
+            expected = "//HOST/with space/lib/com.ibm.liberty_1.0.jar";
             result = FileUtils.getFile(url);
             testResult(url, expected, result);
 
@@ -93,44 +93,44 @@ public class FileUtilsTest {
             // deprecated File.toURL() as used by java -jar/-cp incorrectly
             // returns file://server/path/, which has an invalid authority
             // component.
-            url = new URL("file://HOST/nospace/lib/com.ibm.alpine_1.0.jar");
-            expected = "//HOST/nospace/lib/com.ibm.alpine_1.0.jar";
+            url = new URL("file://HOST/nospace/lib/com.ibm.liberty_1.0.jar");
+            expected = "//HOST/nospace/lib/com.ibm.liberty_1.0.jar";
             result = FileUtils.getFile(url);
             testResult(url, expected, result);
 
             // Windows path with space
-            url = new URL("file:/C:/with%20space/lib/com.ibm.alpine_1.0.jar");
-            expected = "/C:/with space/lib/com.ibm.alpine_1.0.jar";
+            url = new URL("file:/C:/with%20space/lib/com.ibm.liberty_1.0.jar");
+            expected = "/C:/with space/lib/com.ibm.liberty_1.0.jar";
             result = FileUtils.getFile(url);
             testResult(url, expected, result);
 
             // Windows path without space
-            url = new URL("file:/C:/nospace/lib/com.ibm.alpine_1.0.jar");
-            expected = "/C:/nospace/lib/com.ibm.alpine_1.0.jar";
+            url = new URL("file:/C:/nospace/lib/com.ibm.liberty_1.0.jar");
+            expected = "/C:/nospace/lib/com.ibm.liberty_1.0.jar";
             result = FileUtils.getFile(url);
             testResult(url, expected, result);
 
             // Windows path with a literal +
-            url = new URL("file:/C:/with+plus/lib/com.ibm.alpine_1.0.jar");
-            expected = "/C:/with+plus/lib/com.ibm.alpine_1.0.jar";
+            url = new URL("file:/C:/with+plus/lib/com.ibm.liberty_1.0.jar");
+            expected = "/C:/with+plus/lib/com.ibm.liberty_1.0.jar";
             result = FileUtils.getFile(url);
             testResult(url, expected, result);
 
             // *nix path with space
-            url = new URL("file:/with%20space/lib/com.ibm.alpine_1.0.jar");
-            expected = "/with space/lib/com.ibm.alpine_1.0.jar";
+            url = new URL("file:/with%20space/lib/com.ibm.liberty_1.0.jar");
+            expected = "/with space/lib/com.ibm.liberty_1.0.jar";
             result = FileUtils.getFile(url);
             testResult(url, expected, result);
 
             // *nix path without space
-            url = new URL("file:/nospace/lib/com.ibm.alpine_1.0.jar");
-            expected = "/nospace/lib/com.ibm.alpine_1.0.jar";
+            url = new URL("file:/nospace/lib/com.ibm.liberty_1.0.jar");
+            expected = "/nospace/lib/com.ibm.liberty_1.0.jar";
             result = FileUtils.getFile(url);
             testResult(url, expected, result);
 
             // *nix path with a literal +
-            url = new URL("file:/with+plus/lib/com.ibm.alpine_1.0.jar");
-            expected = "/with+plus/lib/com.ibm.alpine_1.0.jar";
+            url = new URL("file:/with+plus/lib/com.ibm.liberty_1.0.jar");
+            expected = "/with+plus/lib/com.ibm.liberty_1.0.jar";
             result = FileUtils.getFile(url);
             testResult(url, expected, result);
         } catch (Throwable t) {

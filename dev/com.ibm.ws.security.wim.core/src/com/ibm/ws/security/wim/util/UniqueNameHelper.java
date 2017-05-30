@@ -86,7 +86,17 @@ public class UniqueNameHelper {
     @FFDCIgnore(InvalidNameException.class)
     private static String getValidDN(String uniqueName) {
         try {
-            return new LdapName(uniqueName).toString();
+            /*
+             * This may seem excessively complex. Well it is. The issue is that the
+             * javax.naming.ldap.LdapName constructor will add additional unescaped
+             * trailing spaces to an RDN. Several LDAP servers will not recognize them
+             * as valid DN's. To get around that, we remove them here.
+             *
+             * The reason we use the LdapName.getPrefix() method is to remove spaces
+             * between RDNs.
+             */
+            LdapName name = new LdapName(uniqueName);
+            return unescapeSpaces(name.getPrefix(name.size()).toString());
         } catch (InvalidNameException e) {
             return null;
         }
@@ -247,5 +257,36 @@ public class UniqueNameHelper {
             list.add(rdn);
         }
         return list.toArray(new String[0]);
+    }
+
+    /**
+     * Replace any unnecessary escaped spaces from the input DN.
+     *
+     * @param in The input DN.
+     * @return The DN without unnecessary escaped spaces.
+     */
+    public static String unescapeSpaces(String in) {
+        char[] chars = in.toCharArray();
+        int end = chars.length;
+        StringBuffer out = new StringBuffer(in.length());
+        for (int i = 0; i < end; i++) {
+
+            /*
+             * Remove any backslashes that precede spaces.
+             */
+            boolean isSlashSpace = (chars[i] == '\\') && (i + 1 < end) && (chars[i + 1] == ' ');
+            if (isSlashSpace) {
+                boolean isStart = (i > 0) && (chars[i - 1] == '=');
+                boolean isEnd = (i + 2 >= end) || ((i + 2 < end) && (chars[i + 2] == ','));
+
+                if (!isStart && !isEnd) {
+                    ++i;
+                }
+            }
+
+            out.append(chars[i]);
+        }
+
+        return new String(out);
     }
 }

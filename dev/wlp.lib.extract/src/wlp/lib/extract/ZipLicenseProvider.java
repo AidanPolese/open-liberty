@@ -97,10 +97,27 @@ public class ZipLicenseProvider implements LicenseProvider {
     private static String getLicenseName(ZipFile zipFile, ZipEntry laZipEntry) {
         BufferedReader r = null;
         try {
-            // The license name is the first line in the LA file
+            // The license name is the sixth line in the LA file
             r = new BufferedReader(new InputStreamReader(zipFile.getInputStream(laZipEntry), "UTF-16"));
+            //read the first line
             String line = r.readLine();
-            if (line != null) {
+            String sixTh_line = "";
+            //if jar is base,core or nd, the name is in the sixth line
+            if (zipFile.getName().contains("base") || zipFile.getName().contains("core") || zipFile.getName().contains("nd")) {
+                //after the loop, r will be the sixth line
+                for (int i = 0; i < 5; i++) {
+                    sixTh_line = r.readLine();
+                }
+                if (sixTh_line != null) {
+                    //get rid of the first three characters, which is "2. "
+                    int startIndex = sixTh_line.indexOf("IBM");
+                    if (startIndex > 0) {
+                        return sixTh_line.substring(startIndex, sixTh_line.length()).trim();
+                    }
+                    return sixTh_line;
+                }
+                return line;
+            } else {
                 return line;
             }
         } catch (IOException e) {
@@ -120,20 +137,27 @@ public class ZipLicenseProvider implements LicenseProvider {
             do {
                 line = r.readLine();
                 if (line != null) {
+
                     if (line.startsWith(PROGRAM_NAME)) {
                         // First two words are translated, IBM is not
                         // Program Name: IBM WebSphere Application Server Network Deployment Version 8.5
-                        return line.substring(PROGRAM_NAME.length() + 1);
+                        line = line.substring(PROGRAM_NAME.length() + 1);
+                        int versionIndex = line.indexOf(" V");
+                        if (versionIndex > 0) {
+                            return line.substring(0, versionIndex).trim();
+                        } else {
+                            return line;
+                        }
                     } else if (line.startsWith(PROGRAM_NAME_PROGRAM_NUMBER)) {
                         // Program Name (Program Number):
                         // IBM WebSphere Application Server Network Deployment V9.0.0.3 (Evaluation)
                         String nextLine = r.readLine();
                         if (nextLine != null) {
-                            int parenthesisIndex = nextLine.indexOf("(");
-                            if (parenthesisIndex > 0) {
-                                return nextLine.substring(0, parenthesisIndex).trim();
+                            int versionIndex = nextLine.indexOf(" V");
+                            if (versionIndex > 0) {
+                                return nextLine.substring(0, versionIndex).trim();
                             } else {
-                                return null;
+                                return nextLine;
                             }
                         }
                     }

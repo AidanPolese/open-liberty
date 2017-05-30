@@ -8,11 +8,27 @@
   <target name="post-compile"/>
 
   <target name="package" depends="package.package">
-    <jar jarfile="${clients.dir}/${client.jar}" duplicate="preserve">
-      <!-- This project first to allow overriding of core classes. -->
-      <fileset dir="${classes.dir}" includes="**/*.class"/>
-      <zipfileset src="../prereq.published/lib.ext/com.ibm.ws.ejbcontainer.remote.portable.core/lib/com.ibm.ws.ejbcontainer.remote.portable.core.jar" includes="**/*.class"/>
-    </jar>
+    <iff>
+      <available file="${basedir}/../com.ibm.ws.ejbcontainer.remote.portable.core/build" />
+      <then>
+        <jar jarfile="${clients.dir}/${client.jar}" duplicate="preserve">
+          <!-- This project first to allow overriding of core classes. -->
+          <fileset dir="${classes.dir}" includes="**/*.class"/>
+          <fileset dir="${basedir}/../com.ibm.ws.ejbcontainer.remote.portable.core/build/classes" includes="**/*.class"/>
+        </jar>
+      </then>
+      <else>
+        <path id="remote.portable.core.jar.path">
+          <fileset dir="${basedir}/../prereq.published/lib" includes="com.ibm.ws.ejbcontainer.remote.portable.core-*.jar"/>
+        </path>
+        <property name="remote.portable.core.jar" refid="remote.portable.core.jar.path"/>
+        <jar jarfile="${clients.dir}/${client.jar}" duplicate="preserve">
+          <!-- This project first to allow overriding of core classes. -->
+          <fileset dir="${classes.dir}" includes="**/*.class"/>
+          <zipfileset src="${remote.portable.core.jar}" includes="**/*.class"/>
+        </jar>
+      </else>
+    </iff>
   </target>
 
   <target name="publishExtra">

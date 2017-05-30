@@ -34,7 +34,10 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -45,10 +48,13 @@ import javax.ws.rs.ext.RuntimeDelegate;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
 import org.apache.cxf.common.i18n.BundleUtils;
+import org.apache.cxf.common.util.PropertyUtils;
 import org.apache.cxf.common.util.StringUtils;
 import org.apache.cxf.common.util.UrlUtils;
 import org.apache.cxf.helpers.CastUtils;
 import org.apache.cxf.jaxrs.impl.HttpHeadersImpl;
+import org.apache.cxf.jaxrs.impl.HttpServletRequestFilter;
+import org.apache.cxf.jaxrs.impl.HttpServletResponseFilter;
 import org.apache.cxf.jaxrs.impl.MetadataMap;
 import org.apache.cxf.jaxrs.impl.PathSegmentImpl;
 import org.apache.cxf.jaxrs.impl.RuntimeDelegateImpl;
@@ -74,7 +80,10 @@ public final class HttpUtils {
 
     private static final String HTTP_SCHEME = "http";
     private static final String LOCAL_HOST_IP_ADDRESS = "127.0.0.1";
+    private static final String REPLACE_LOOPBACK_PROPERTY = "replace.loopback.address.with.localhost";
+    private static final String LOCAL_HOST_IP_ADDRESS_SCHEME = "://" + LOCAL_HOST_IP_ADDRESS;
     private static final String ANY_IP_ADDRESS = "0.0.0.0";
+    private static final String ANY_IP_ADDRESS_SCHEME = "://" + ANY_IP_ADDRESS;
     private static final int DEFAULT_HTTP_PORT = 80;
 
     private static final Pattern ENCODE_PATTERN = Pattern.compile("%[0-9a-fA-F][0-9a-fA-F]");
@@ -84,8 +93,9 @@ public final class HttpUtils {
     private static final String PATH_RESERVED_CHARACTERS = "=@/:!$&\'(),;~";
     private static final String QUERY_RESERVED_CHARACTERS = "?/,";
 
-    private HttpUtils() {}
-
+    private HttpUtils() {
+    }
+    
     public static String urlDecode(String value, String enc) {
         return UrlUtils.urlDecode(value, enc);
     }
@@ -275,15 +285,22 @@ public final class HttpUtils {
         if (value == null) {
             return null;
         }
-
-        String[] values = StringUtils.split(value, "-");
-        if (values.length == 0 || values.length > 2) {
+        String language = null;
+        String locale = null;
+        int index = value.indexOf('-');
+        if (index == 0 || index == value.length() - 1) {
             throw new IllegalArgumentException("Illegal locale value : " + value);
         }
-        if (values.length == 1) {
-            return new Locale(values[0]);
+        if (index > 0) {
+            language = value.substring(0, index);
+            locale = value.substring(index + 1);
         } else {
-            return new Locale(values[0], values[1]);
+            language = value;
+        }
+        if (locale == null) {
+            return new Locale(language);
+        } else {
+            return new Locale(language, locale);
         }
 
     }
@@ -293,7 +310,7 @@ public final class HttpUtils {
             return -1;
         }
         try {
-            int len = Integer.valueOf(value);
+            int len = Integer.parseInt(value);
             return len >= 0 ? len : -1;
         } catch (Exception ex) {
             return -1;
@@ -338,9 +355,11 @@ public final class HttpUtils {
     }
 
     public static URI toAbsoluteUri(URI u, Message message) {
-        HttpServletRequest request = (HttpServletRequest) message.get(AbstractHTTPDestination.HTTP_REQUEST);
+        HttpServletRequest request = 
+            (HttpServletRequest)message.get(AbstractHTTPDestination.HTTP_REQUEST);
         boolean absolute = u.isAbsolute();
-        if (request != null && (!absolute || isLocalHostOrAnyIpAddress(u))) {
+        StringBuilder uriBuf = new StringBuilder(); 
+        if (request != null && (!absolute || isLocalHostOrAnyIpAddress(u, uriBuf, message))) {
             String serverAndPort = request.getServerName();
             boolean localAddressUsed = false;
             if (absolute) {
@@ -363,7 +382,8 @@ public final class HttpUtils {
                 u = URI.create(base + u.toString());
             } else {
                 int originalPort = u.getPort();
-                String hostValue = u.getHost().equals(ANY_IP_ADDRESS) ? ANY_IP_ADDRESS : LOCAL_HOST_IP_ADDRESS;
+                String hostValue = uriBuf.toString().contains(ANY_IP_ADDRESS_SCHEME) 
+                    ? ANY_IP_ADDRESS : LOCAL_HOST_IP_ADDRESS;
                 String replaceValue = originalPort == -1 ? hostValue : hostValue + ":" + originalPort;
                 u = URI.create(u.toString().replace(replaceValue, serverAndPort));
             }
@@ -371,9 +391,16 @@ public final class HttpUtils {
         return u;
     }
 
-    private static boolean isLocalHostOrAnyIpAddress(URI u) {
-        String host = u.getHost();
-        return host != null && (LOCAL_HOST_IP_ADDRESS.equals(host)) || ANY_IP_ADDRESS.equals(host);
+    private static boolean isLocalHostOrAnyIpAddress(URI u, StringBuilder uriStringBuffer, Message m) {
+        String uriString = u.toString();
+        boolean result = uriString.contains(LOCAL_HOST_IP_ADDRESS_SCHEME) && replaceLoopBackAddress(m) 
+            || uriString.contains(ANY_IP_ADDRESS_SCHEME);
+        uriStringBuffer.append(uriString);
+        return result;
+    }
+    private static boolean replaceLoopBackAddress(Message m) {
+        Object prop = m.getContextualProperty(REPLACE_LOOPBACK_PROPERTY);
+        return prop == null || PropertyUtils.isTrue(prop);
     }
 
     public static void resetRequestURI(Message m, String requestURI) {
@@ -440,10 +467,12 @@ public final class HttpUtils {
             if (d instanceof AbstractHTTPDestination) {
                 EndpointInfo ei = ((AbstractHTTPDestination) d).getEndpointInfo();
                 HttpServletRequest request = (HttpServletRequest) m.get(AbstractHTTPDestination.HTTP_REQUEST);
-                Object property = request != null ? request.getAttribute("org.apache.cxf.transport.endpoint.address") : null;
+                Object property = request != null 
+                    ? request.getAttribute("org.apache.cxf.transport.endpoint.address") : null;
                 address = property != null ? property.toString() : ei.getAddress();
             } else {
-                address = m.containsKey(Message.BASE_PATH) ? (String) m.get(Message.BASE_PATH) : d.getAddress().getAddress().getValue();
+                address = m.containsKey(Message.BASE_PATH) 
+                    ? (String)m.get(Message.BASE_PATH) : d.getAddress().getAddress().getValue();
             }
         } else {
             address = (String) m.get(Message.ENDPOINT_ADDRESS);
@@ -547,7 +576,8 @@ public final class HttpUtils {
             "0".getBytes(enc);
             return enc;
         } catch (UnsupportedEncodingException ex) {
-            String message = new org.apache.cxf.common.i18n.Message("UNSUPPORTED_ENCODING", BUNDLE, enc, defaultEncoding).toString();
+            String message = new org.apache.cxf.common.i18n.Message("UNSUPPORTED_ENCODING", 
+                                 BUNDLE, enc, defaultEncoding).toString();
             Tr.warning(tc, message);
             headers.putSingle(HttpHeaders.CONTENT_TYPE,
                               JAXRSUtils.mediaTypeToString(mt, CHARSET_PARAMETER)
@@ -635,5 +665,22 @@ public final class HttpUtils {
         }
 
         return false;
+    }
+    public static <T> T createServletResourceValue(Message m, Class<T> clazz) {
+
+        Object value = null;
+        if (clazz == HttpServletRequest.class) {
+            HttpServletRequest request = (HttpServletRequest)m.get(AbstractHTTPDestination.HTTP_REQUEST);
+            value = request != null ? new HttpServletRequestFilter(request, m) : null;
+        } else if (clazz == HttpServletResponse.class) {
+            HttpServletResponse response = (HttpServletResponse)m.get(AbstractHTTPDestination.HTTP_RESPONSE);
+            value = response != null ? new HttpServletResponseFilter(response, m) : null;
+        } else if (clazz == ServletContext.class) {
+            value = m.get(AbstractHTTPDestination.HTTP_CONTEXT);
+        } else if (clazz == ServletConfig.class) {
+            value = m.get(AbstractHTTPDestination.HTTP_CONFIG);
+        }
+
+        return clazz.cast(value);
     }
 }

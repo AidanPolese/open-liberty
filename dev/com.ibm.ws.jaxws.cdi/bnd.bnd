@@ -21,7 +21,6 @@ Private-Package:\
 -dsannotations: com.ibm.ws.jaxws.cdi.component.*    
 
 -buildpath: \
-	${javac.bootclasspath.java7}, \
 	com.ibm.websphere.appserver.spi.kernel.service,\
 	com.ibm.websphere.appserver.spi.logging,\
 	com.ibm.websphere.javaee.cdi.1.0;version=latest,\

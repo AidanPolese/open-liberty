@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.javaee-7.0
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.concurrent-1.0;version=latest, \
 	com.ibm.websphere.appserver.jaspic-1.1;version=latest, \
 	com.ibm.websphere.appserver.servlet-3.1;version=latest, \

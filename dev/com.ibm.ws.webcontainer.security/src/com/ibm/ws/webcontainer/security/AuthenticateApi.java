@@ -65,7 +65,7 @@ public class AuthenticateApi {
     private AuthenticationService authService = null;
     private ConcurrentServiceReferenceMap<String, WebAuthenticator> webAuthenticatorRefs = null;
     private ConcurrentServiceReferenceMap<String, UnprotectedResourceService> unprotectedResourceServiceRef = null;
-    private static final WebReply DENY_AUTHN_FAILED = new DenyReply("AuthenticationFailed");
+    protected static final WebReply DENY_AUTHN_FAILED = new DenyReply("AuthenticationFailed");
     private Subject logoutSubject = null;
 
     public AuthenticateApi(SSOCookieHelper ssoCookieHelper,
@@ -179,7 +179,7 @@ public class AuthenticateApi {
         ssoCookieHelper.removeSSOCookieFromResponse(res);
         ssoCookieHelper.createLogoutCookies(req, res);
         //If authenticated with form login, we need to clear the RefrrerURLCookie
-        ReferrerURLCookieHandler referrerURLHandler = new ReferrerURLCookieHandler(config);
+        ReferrerURLCookieHandler referrerURLHandler = config.createReferrerURLCookieHandler();
         referrerURLHandler.clearReferrerURLCookie(req, res, ReferrerURLCookieHandler.REFERRER_URL_COOKIENAME);
         SRTServletRequestUtils.removePrivateAttribute(req, "AUTH_TYPE");
         subjectManager.clearSubjects();

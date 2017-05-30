@@ -1,4 +1,4 @@
-Created-By: 1.8.0_121 (Oracle Corporation)
+Created-By: 1.8.0_131 (Oracle Corporation)
 IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductEditionLibertyCore}${mfProductVersion}
 IBM-Feature-Version: 2
 IBM-InstallTo: core
@@ -9,6 +9,7 @@ Subsystem-Content: com.ibm.websphere.appserver.adminCenter-1.0; type="osgi.subsy
  com.ibm.websphere.appserver.apiDiscovery-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.appSecurity-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.appSecurity-2.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.autoRestConnector-2.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.beanValidation-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.beanValidation-1.1; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.bells-1.0; type="osgi.subsystem.feature",

@@ -26,7 +26,7 @@ import javax.ejb.HomeHandle;
  * HandleImpl provides a concrete implementation of a EJB Handle
  * for both Entity and Session beans living in an EJS server.
  * <p>
- * Note: J2EE 1.3 requires interoperability between different vendor's
+ * Note: Java EE 1.3 requires interoperability between different vendor's
  * container implementation. Therefore, this class can not use any
  * proprietary interfaces (be sure not to add Tr method calls).
  */

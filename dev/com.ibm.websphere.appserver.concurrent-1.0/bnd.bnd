@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.concurrent-1.0
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.containerServices-1.0;version=latest, \
 	com.ibm.websphere.appserver.appLifecycle-1.0;version=latest, \
 	com.ibm.websphere.appserver.contextService-1.0;version=latest, \

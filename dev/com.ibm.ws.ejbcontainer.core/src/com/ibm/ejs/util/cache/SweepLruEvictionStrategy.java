@@ -16,8 +16,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**
@@ -63,21 +63,19 @@ public final class SweepLruEvictionStrategy // d583637
 implements EvictionStrategy,
                 Runnable // d91878, F73234
 {
-    private static final TraceComponent tc =
-                    Tr.register(com.ibm.ejs.util.cache.SweepLruEvictionStrategy.class
-                                , "EJBCache"
-                                , "com.ibm.ejs.container.container"); //p111002.4
+    private static final TraceComponent tc = Tr.register(SweepLruEvictionStrategy.class,
+                                                         "EJBCache",
+                                                         "com.ibm.ejs.container.container");
 
     // When enabled, this trace string will only print a message at most once
     // every five minutes.  This can be used instead of EJBCache=all to avoid
     // overwhelming trace logs in long-run scenarios.
-    private static final TraceComponent tcOOM =
-                    Tr.register(SweepLruEvictionStrategy.class.getName() + "2"
-                                , "EJBContainer.OOM"
-                                , "com.ibm.ejs.container.container");
+    private static final TraceComponent tcOOM = Tr.register(SweepLruEvictionStrategy.class.getName() + "2",
+                                                            SweepLruEvictionStrategy.class,
+                                                            "EJBContainer.OOM",
+                                                            "com.ibm.ejs.container.container");
 
-    private static final String CLASS_NAME =
-                    "com.ibm.ejs.util.cache.SweepLruEvictionStrategy";
+    private static final String CLASS_NAME = "com.ibm.ejs.util.cache.SweepLruEvictionStrategy";
 
     //
     // Data
@@ -547,7 +545,7 @@ implements EvictionStrategy,
             } finally
             {
                 // Unless the preferred size has been reached, use the deferrable 
-                // scheduler.  They will be the same for tWAS, but in Liberty we 
+                // scheduler.  They will be the same for traditional WAS, but in Liberty we 
                 // use the deferrable until we need the non-deferrable one to keep
                 // up with cache usage.
                 ScheduledExecutorService executor = preferredSizeReached() ?

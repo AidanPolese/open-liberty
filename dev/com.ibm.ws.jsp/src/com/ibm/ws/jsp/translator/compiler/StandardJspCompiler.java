@@ -260,7 +260,8 @@ public class StandardJspCompiler implements JspCompiler  {
             if (diagnostic.getKind().equals(javax.tools.Diagnostic.Kind.ERROR) || (isVerbose || isDeprecation)){
                 
                 //A new File object needs to be created to get the correct path in the file system.
-                String mapping = findMapping(jspLineIds, diagnostic.getLineNumber(), new File(diagnostic.getSource().toUri().getSchemeSpecificPart()).getPath());
+                String mapping = diagnostic.getSource() == null ? null :
+                    findMapping(jspLineIds, diagnostic.getLineNumber(), new File(diagnostic.getSource().toUri().getSchemeSpecificPart()).getPath());
                 
                 if (mapping == null) {
                     errorMsg.append(separatorString);

@@ -30,8 +30,6 @@ import javax.transaction.TransactionRequiredException;
 import javax.transaction.TransactionRolledbackException;
 
 import com.ibm.ejs.container.util.ExceptionUtil;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.CSIAccessException;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.CSIInvalidTransactionException;
@@ -40,6 +38,8 @@ import com.ibm.websphere.csi.CSITransactionRequiredException;
 import com.ibm.websphere.csi.CSITransactionRolledbackException;
 import com.ibm.websphere.csi.ExceptionType;
 import com.ibm.websphere.ejbcontainer.EJBStoppedException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**
@@ -184,7 +184,7 @@ public class LocalExceptionMappingStrategy extends ExceptionMappingStrategy
     /**
      * Map the exception to an EJBException exception for local
      * interface. This is the exception that will be thrown to the client.
-     * All fun and games in order to comply with both the J2EE spec.
+     * All fun and games in order to comply with both the Java EE spec.
      *
      * This method does not apply to EJB 3.0 business interfaces. All mappings
      * should be based on the EJB 2.1 specification, and the exceptions new

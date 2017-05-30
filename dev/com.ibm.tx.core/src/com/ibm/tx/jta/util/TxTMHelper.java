@@ -31,7 +31,7 @@ package com.ibm.tx.jta.util;
 /*  09-08-19  mallam        602532.3 ltc bundle                                                          */
 /*  09-08-19  mallam        602532.6 ltc bundle                                                          */
 /*  09-11-09  johawkes      F743-305.1 EJB 3.1                                                           */
-/*  09-12-22  mallam        633225   Further changes to support Aries/Alpine osgi services               */
+/*  09-12-22  mallam        633225   Further changes to support Aries/Liberty osgi services               */
 /*  10-02-24  johawkes      640599   Use UserTransactionImpl.instance()                                  */
 /*  11-08-11  johawkes      711992   Allow shutdown to tolerate having configmanager ripped out          */
 /*  11-09-28  johawkes      711992.1 Provide shutdown method for liberty                                 */

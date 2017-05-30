@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class PageControlException extends WIMApplicationException {
 
+    private static final long serialVersionUID = 2164261437087845428L;
+
     /**
      *
      */

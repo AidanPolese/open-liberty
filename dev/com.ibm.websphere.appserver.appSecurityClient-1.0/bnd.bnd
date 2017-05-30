@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.appSecurityClient-1.0
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.javax.servlet-3.0;version=latest,\
 	com.ibm.websphere.appserver.ssl-1.0;version=latest,\
 	com.ibm.websphere.appserver.csiv2Client-1.0;version=latest,\

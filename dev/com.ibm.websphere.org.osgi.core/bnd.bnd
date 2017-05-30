@@ -8,5 +8,4 @@ publish.wlp.jar.suffix: dev/api/spec
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/org.osgi.core-6.0.0.jar;version=file

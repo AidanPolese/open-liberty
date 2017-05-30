@@ -30,7 +30,6 @@ Private-Package:\
 instrument.classesExcludes: com/ibm/ws/jaxrs20/web/internal/resources/*.class
 
 -buildpath: \
-	${javac.bootclasspath.java7}, \
 	com.ibm.ws.jaxrs.2.0.common;version=latest,\
 	com.ibm.ws.adaptable.module;version=latest,\
 	com.ibm.ws.webcontainer;version=latest,\

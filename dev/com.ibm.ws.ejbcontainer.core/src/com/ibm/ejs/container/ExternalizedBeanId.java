@@ -21,9 +21,9 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * ExternalizedBeanId is a subclass of BeanId which is externalizable. BeanId
@@ -288,7 +288,7 @@ class ExternalizedBeanId extends BeanId implements Externalizable
             }
 
             //89554
-            // write the J2EE name
+            // write the Java EE name
             writeExternalJ2EEName(out);
 
             // write the external primary key

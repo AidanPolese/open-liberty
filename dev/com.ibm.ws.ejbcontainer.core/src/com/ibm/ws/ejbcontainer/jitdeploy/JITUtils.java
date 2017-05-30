@@ -45,8 +45,8 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.GeneratorAdapter;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**
@@ -91,15 +91,14 @@ final class JITUtils
     // --------------------------------------------------------------------------
     private static final String CLASS_NAME = JITUtils.class.getName();
 
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     JIT_TRACE_GROUP,
-                     JIT_RSRC_BUNDLE);
+    private static final TraceComponent tc = Tr.register(JITUtils.class,
+                                                         JIT_TRACE_GROUP,
+                                                         JIT_RSRC_BUNDLE);
 
-    private static final TraceComponent tcJITDeployRuntime = Tr.register
-                    (CLASS_NAME + "-Runtime",
-                     "JITDeployRuntime",
-                     null);
+    private static final TraceComponent tcJITDeployRuntime = Tr.register(CLASS_NAME + "-Runtime",
+                                                                         JITUtils.class,
+                                                                         "JITDeployRuntime",
+                                                                         null);
 
     private static final String JIT_DEPLOY_DIR = File.separator + "jitdeploy" + File.separator;
 

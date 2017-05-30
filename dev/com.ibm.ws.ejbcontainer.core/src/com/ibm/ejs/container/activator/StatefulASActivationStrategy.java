@@ -21,10 +21,10 @@ import com.ibm.ejs.container.ContainerAS;
 import com.ibm.ejs.container.ContainerTx;
 import com.ibm.ejs.container.EJBThreadData;
 import com.ibm.ejs.container.StatefulBeanO;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.IllegalOperationException;
 import com.ibm.websphere.csi.PassivationPolicy;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.failover.SfFailoverCache;
 import com.ibm.ws.ffdc.FFDCFilter;
 
@@ -57,10 +57,9 @@ public class StatefulASActivationStrategy
 {
     private static final String CLASS_NAME = StatefulASActivationStrategy.class.getName();
 
-    private static final TraceComponent tc =
-                    Tr.register(CLASS_NAME,
-                                "EJBContainer",
-                                "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(StatefulASActivationStrategy.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     public StatefulASActivationStrategy(Activator activator,
                                         PassivationPolicy policy,

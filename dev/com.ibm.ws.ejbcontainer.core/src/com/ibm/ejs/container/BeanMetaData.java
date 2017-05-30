@@ -29,8 +29,6 @@ import javax.naming.Context;
 import com.ibm.ejs.container.activator.Activator;
 import com.ibm.ejs.container.interceptors.InterceptorMetaData;
 import com.ibm.ejs.csi.EJBModuleMetaDataImpl;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.tx.jta.embeddable.GlobalTransactionSettings;
 import com.ibm.tx.jta.embeddable.LocalTransactionSettings;
 import com.ibm.websphere.cpi.Persister;
@@ -38,6 +36,8 @@ import com.ibm.websphere.csi.ActivitySessionAttribute;
 import com.ibm.websphere.csi.J2EEName;
 import com.ibm.websphere.csi.TransactionAttribute;
 import com.ibm.websphere.ejbcontainer.LightweightLocal;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.CallbackKind;
 import com.ibm.ws.ejbcontainer.EJBComponentMetaData;
 import com.ibm.ws.ejbcontainer.EJBMethodInterface;
@@ -117,7 +117,7 @@ public class BeanMetaData extends com.ibm.ws.runtime.metadata.MetaDataImpl
     public static final int CONCURRENCY_CONTROL_PESSIMISTIC = 0;
     public static final int CONCURRENCY_CONTROL_OPTIMISTIC = 1;
 
-    // J2EE and EJB Version values
+    // Java EE and EJB Version values
 
     public static final int J2EE_EJB_VERSION_UNKNOWN = 0;
     // Consistent with org.eclipse.jst.j2ee.internal.J2EEVersionConstants.EJB_1_0_ID
@@ -202,12 +202,12 @@ public class BeanMetaData extends com.ibm.ws.runtime.metadata.MetaDataImpl
     public GlobalTransactionSettings _globalTran; // LIDB1673-13.1
 
     /**
-     * The J2EE Name (app-module-component) for the bean.
+     * The Java EE Name (app-module-component) for the bean.
      */
     public J2EEName j2eeName;
 
     /**
-     * The 'unversioned' (or 'base') J2EE Name for the bean. Will be null if
+     * The 'unversioned' (or 'base') Java EE Name for the bean. Will be null if
      * a base module version name has not been specified for the module.
      */
     // F54184

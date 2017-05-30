@@ -31,7 +31,7 @@ public interface HomeInternal {
     public String getJNDIName(Object homeKey);//89554
 
     /**
-     * Get the J2EE name of this home. <p>
+     * Get the Java EE name of this home. <p>
      */
     //89554
     public J2EEName getJ2EEName();

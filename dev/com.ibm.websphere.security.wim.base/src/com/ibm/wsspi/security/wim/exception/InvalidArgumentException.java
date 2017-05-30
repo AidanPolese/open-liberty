@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class InvalidArgumentException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -5472875166242746112L;
+
     /**
      *
      */

@@ -13,10 +13,10 @@ package com.ibm.ejs.container;
 
 import java.security.AccessController;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
 import com.ibm.ejs.util.dopriv.GetContextClassLoaderPrivileged;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.util.dopriv.GetClassLoaderPrivileged;
 
 /**

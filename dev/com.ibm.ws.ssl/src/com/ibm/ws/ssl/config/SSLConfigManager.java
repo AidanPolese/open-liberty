@@ -427,8 +427,17 @@ public class SSLConfigManager {
             sslprops.setProperty(Constants.SSLPROP_KEY_STORE_SERVER_ALIAS, serverKeyAlias);
 
         String enabledCiphers = getSystemProperty(Constants.SSLPROP_ENABLED_CIPHERS);
-        if (enabledCiphers != null && 0 < enabledCiphers.length())
+        if (enabledCiphers != null && 0 < enabledCiphers.length()) {
+	    //Removing extra white space
+	    StringBuffer buf = new StringBuffer();
+	    String[] ciphers = enabledCiphers.split("\\s+");
+	    for (int i=0; i < ciphers.length; i++) {
+		buf.append(ciphers[i]);
+		buf.append(" ");
+	    }
+	    enabledCiphers = buf.toString().trim();
             sslprops.setProperty(Constants.SSLPROP_ENABLED_CIPHERS, enabledCiphers);
+	}
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
             Tr.debug(tc, "Saving SSLConfig." + sslprops.toString());

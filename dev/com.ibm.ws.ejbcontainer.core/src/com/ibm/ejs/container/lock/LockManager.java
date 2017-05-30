@@ -14,8 +14,8 @@ package com.ibm.ejs.container.lock;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * The <code>LockManager</code> is designed to run as a singleton within

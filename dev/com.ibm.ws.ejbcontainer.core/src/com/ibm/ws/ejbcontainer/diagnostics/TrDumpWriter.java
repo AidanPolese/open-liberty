@@ -14,8 +14,8 @@ package com.ibm.ws.ejbcontainer.diagnostics;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * IntrospectionWriter implementation that prints all introspection data using
@@ -43,7 +43,7 @@ public class TrDumpWriter implements IntrospectionWriter {
             if (ivDumpData.isEmpty()) {
                 Tr.dump(tc, ivTitle);
             } else {
-                Tr.dump(tc, ivTitle, ivDumpData.toArray(new String[ivDumpData.size()]));
+                Tr.dump(tc, ivTitle, (Object[])ivDumpData.toArray(new String[ivDumpData.size()]));
                 ivDumpData.clear();
             }
             ivTitle = null;

@@ -14,5 +14,4 @@ Export-Package: com.ibm.websphere.security.auth.callback
 publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.security.registry.saf

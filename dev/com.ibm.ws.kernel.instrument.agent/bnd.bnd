@@ -1,4 +1,4 @@
--include= ~../cnf/resources/bnd/liberty-release.props,
+-include= ~../cnf/resources/bnd/bundle.props
 bVersion=1.0
 
 Private-Package: com.ibm.ws.kernel.instrument;-split-package:=merge-last
@@ -10,5 +10,4 @@ publish.wlp.jar.disabled: true
 -removeheaders=Bnd-LastModified, Bundle-ManifestVersion, Bundle-Name, Bundle-Version, Private-Package, Require-Capability, Tool
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest

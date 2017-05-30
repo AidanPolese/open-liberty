@@ -188,7 +188,7 @@ public class EventEngineImplTest {
 
     @Test
     public void testCreateEventTopic() {
-        Topic topic = new Topic("com/ibm/alpine/test/Topic");
+        Topic topic = new Topic("com/ibm/liberty/test/Topic");
         EventImpl event = eventEngine.createEvent(topic);
         assertNotNull(event);
         assertEquals(topic.getName(), event.getTopic());
@@ -197,7 +197,7 @@ public class EventEngineImplTest {
 
     @Test
     public void testCreateEventString() {
-        final String topicName = "com/ibm/alpine/test/Topic";
+        final String topicName = "com/ibm/liberty/test/Topic";
         EventImpl event = eventEngine.createEvent(topicName);
         assertNotNull(event);
         assertEquals(topicName, event.getTopic());
@@ -205,7 +205,7 @@ public class EventEngineImplTest {
 
     @Test
     public void testGetTopic() {
-        final String topicName = "com/ibm/alpine/test/Topic";
+        final String topicName = "com/ibm/liberty/test/Topic";
         Topic topic = eventEngine.getTopic(topicName);
         assertNotNull(topic);
         assertEquals(topicName, topic.getName());

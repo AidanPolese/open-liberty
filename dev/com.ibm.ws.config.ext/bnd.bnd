@@ -9,6 +9,5 @@ Bundle-SymbolicName: com.ibm.ws.config.ext; singleton:=true
 Export-Package: com.ibm.ws.config.ext*
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.spi.logging;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest

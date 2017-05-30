@@ -7,7 +7,7 @@
           Difficult to pull Liberty changes into impl classes for com.ibm.ws.webcontainer.webapp.WebApp & com.ibm.ws.webcontainer.webapp.WebAppConfiguration
 as other API classes call methods directly and don't use the impl.
 
-Overrides to sample classes (imported from Alpine):
+Overrides to sample classes (imported from Liberty):
 
         com.ibm.ws.webcontainer.osgi.osgi.ChildFirstClassLoader
             deleted since it has been obviated by the Class Loading Service
@@ -66,7 +66,7 @@ Overrides to core webcontainer classes:
         com.ibm.ws.webcontainer.session.impl package - to cope with session service being outside webcontainer
 
         com.ibm.ws.webcontainer.srt.SRTInputStream
-                Alpine switched from HttpInputStream to SRTInputStream to avoid IP issues
+                Liberty switched from HttpInputStream to SRTInputStream to avoid IP issues
         com.ibm.ws.webcontainer.srt.SRTOutputStream
                 WsByteBuffer diff package, add write method using FileChannel
         com.ibm.com.ibm.ws.webcontainer.srt.SRTServletRequest

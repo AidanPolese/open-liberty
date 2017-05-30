@@ -20,7 +20,6 @@ instrument.disabled: true
 publish.wlp.jar.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.kernel.boot.logging;version=latest,\
 	com.ibm.websphere.org.osgi.core;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest

@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class InvalidEntityTypeException extends WIMApplicationException {
 
+    private static final long serialVersionUID = 2811162412839820541L;
+
     /**
      *
      */

@@ -12,7 +12,7 @@
 package com.ibm.ejs.container.util;
 
 /**
- * Override EJSPlatformHelper as provided by tWAS. z/OS on Liberty does not use
+ * Override EJSPlatformHelper as provided by traditional WAS. z/OS on Liberty does not use
  * the split-process architecture.
  */
 public class EJSPlatformHelper {

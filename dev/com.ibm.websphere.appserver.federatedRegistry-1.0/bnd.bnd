@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.federatedRegistry-1.0
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.wimcore-1.0;version=latest, \
 	com.ibm.websphere.security;version=latest, \
 	com.ibm.ws.security.registry;version=latest, \

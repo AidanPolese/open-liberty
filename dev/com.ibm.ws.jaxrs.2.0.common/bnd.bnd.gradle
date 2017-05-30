@@ -7,7 +7,7 @@ javac.target: 1.7
 Bundle-Name: JAX-RS 2.0 Engine
 Bundle-SymbolicName: com.ibm.ws.jaxrs.2.0.common
 Bundle-Description: IBM JAX-RS 2.0 engine; version=${bVersion}
-Bundle-ClassPath:  ., lib/cxf-core-3.1.8.jar, lib/cxf-rt-frontend-jaxrs-3.1.8.jar, lib/cxf-rt-rs-client-3.1.8.jar,lib/cxf-rt-transports-http-3.1.8.jar, lib/cxf-tools-common-3.1.8.jar, lib/cxf-tools-wadlto-jaxrs-3.1.8.jar, lib/cxf-rt-rs-service-description-3.1.8.jar, lib/jackson-core-asl-1.6.2.jar, lib/jackson-jaxrs-1.6.2.jar, lib/jackson-mapper-asl-1.6.2.jar, lib/jackson-xc-1.6.2.jar, \
+Bundle-ClassPath:  ., lib/cxf-core-3.1.11.jar, lib/cxf-rt-frontend-jaxrs-3.1.11.jar, lib/cxf-rt-rs-client-3.1.11.jar,lib/cxf-rt-transports-http-3.1.11.jar, lib/cxf-tools-common-3.1.11.jar, lib/cxf-tools-wadlto-jaxrs-3.1.11.jar, lib/cxf-rt-rs-service-description-3.1.11.jar, lib/jackson-core-asl-1.6.2.jar, lib/jackson-jaxrs-1.6.2.jar, lib/jackson-mapper-asl-1.6.2.jar, lib/jackson-xc-1.6.2.jar, \
 
 # jaxrs-2.0 is part of EE7 and therefore requires java 1.7
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
@@ -20,8 +20,8 @@ WS-TraceGroup: JAXRS
 -exportcontents: \
    !org.apache.cxf.validation, \
    !org.apache.cxf.jaxrs.validation, \
-   !org.apache.cxf.databinding;version=3.1.8, \
-   org.apache.cxf.*;version=3.1.8, \
+   !org.apache.cxf.databinding;version=3.1.11, \
+   org.apache.cxf.*;version=3.1.11, \
 
 Export-Package: \
    META-INF.cxf, \
@@ -129,13 +129,13 @@ Private-Package:\
 
 Include-Resource: \
  OSGI-INF=resources/OSGI-INF, \
-  lib/cxf-core-3.1.8.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.1.8.jar, \
-  lib/cxf-rt-frontend-jaxrs-3.1.8.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-frontend-jaxrs-3.1.8.jar, \
-  lib/cxf-rt-rs-client-3.1.8.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-client-3.1.8.jar, \
-  lib/cxf-rt-transports-http-3.1.8.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-transports-http-3.1.8.jar, \
-  lib/cxf-tools-common-3.1.8.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-common-3.1.8.jar, \
-  lib/cxf-tools-wadlto-jaxrs-3.1.8.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-wadlto-jaxrs-3.1.8.jar, \
-  lib/cxf-rt-rs-service-description-3.1.8.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-service-description-3.1.8.jar, \
+  lib/cxf-core-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.1.11.jar, \
+  lib/cxf-rt-frontend-jaxrs-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-frontend-jaxrs-3.1.11.jar, \
+  lib/cxf-rt-rs-client-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-client-3.1.11.jar, \
+  lib/cxf-rt-transports-http-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-transports-http-3.1.11.jar, \
+  lib/cxf-tools-common-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-common-3.1.11.jar, \
+  lib/cxf-tools-wadlto-jaxrs-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-wadlto-jaxrs-3.1.11.jar, \
+  lib/cxf-rt-rs-service-description-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-service-description-3.1.11.jar, \
   lib/jackson-core-asl-1.6.2.jar=../com.ibm.ws.org.codehaus.jackson/lib/jackson-core-asl-1.6.2.jar, \
   lib/jackson-jaxrs-1.6.2.jar=../com.ibm.ws.org.codehaus.jackson/lib/jackson-jaxrs-1.6.2.jar, \
   lib/jackson-mapper-asl-1.6.2.jar=../com.ibm.ws.org.codehaus.jackson/lib/jackson-mapper-asl-1.6.2.jar, \
@@ -151,13 +151,13 @@ Include-Resource: \
 instrument.classesExcludes: com/ibm/ws/jaxrs20/internal/resources/*.class
 
 -buildpath: \
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.1.8.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-frontend-jaxrs-3.1.8.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-client-3.1.8.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-transports-http-3.1.8.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-common-3.1.8.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-wadlto-jaxrs-3.1.8.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-service-description-3.1.8.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.1.11.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-frontend-jaxrs-3.1.11.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-client-3.1.11.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-transports-http-3.1.11.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-common-3.1.11.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-wadlto-jaxrs-3.1.11.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-service-description-3.1.11.jar;version=file,\
 	../com.ibm.ws.org.codehaus.jackson/lib/jackson-core-asl-1.6.2.jar;version=file, \
 	../com.ibm.ws.org.codehaus.jackson/lib/jackson-jaxrs-1.6.2.jar;version=file, \
 	../com.ibm.ws.org.codehaus.jackson/lib/jackson-mapper-asl-1.6.2.jar;version=file, \

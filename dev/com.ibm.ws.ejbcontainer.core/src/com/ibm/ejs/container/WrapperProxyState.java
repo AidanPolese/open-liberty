@@ -16,10 +16,10 @@ import java.rmi.RemoteException;
 
 import javax.ejb.EJBException;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.util.EJBSerializer;
 import com.ibm.ws.ffdc.FFDCFilter;
 

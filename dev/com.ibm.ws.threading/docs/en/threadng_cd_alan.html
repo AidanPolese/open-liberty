@@ -4,7 +4,7 @@
 <!--
  * ============================================================================
  * Licensed Materials - Property of IBM
- * Project Alpine
+ * Project Liberty
  *
  * (C) Copyright IBM Corp. 2008  All Rights Reserved.
  *
@@ -15,13 +15,13 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Project Alpine Documentation</title>
+<title>Project Liberty Documentation</title>
 </head>
 <body>
 
 <h1 id="Threading_CDD">Conceptual Design of Threading Package</h1>
 <h2 id="Threading base structure">Basic Object Layout</h2>
-<p>The basic concept of the threading support included in the Alpine product is to centralize the management of the 
+<p>The basic concept of the threading support included in the Liberty product is to centralize the management of the 
 threading infrastructure.  In classic WAS,  threads were handed out to components and were not returned until the 
 server terminated.  There were also many different pools of threads, and no clear relationship between the various 
 thread pools, so tuning the server for different multi-programming levels was a difficult exercise and as such the 

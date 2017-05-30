@@ -14,6 +14,5 @@ Export-Package: com.ibm.websphere.security,com.ibm.websphere.security.auth.callb
 publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.security, \
 	com.ibm.ws.security.jaas.common

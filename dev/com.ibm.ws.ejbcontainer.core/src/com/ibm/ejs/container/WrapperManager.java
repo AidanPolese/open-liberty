@@ -15,8 +15,6 @@ import java.rmi.RemoteException;
 import java.util.Enumeration;
 
 import com.ibm.ejs.container.util.ByteArray;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.cache.Cache;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.CacheElement;
@@ -27,6 +25,8 @@ import com.ibm.websphere.csi.FaultException;
 import com.ibm.websphere.csi.FaultStrategy;
 import com.ibm.websphere.csi.IllegalOperationException;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.diagnostics.IntrospectionWriter;
 import com.ibm.ws.ejbcontainer.diagnostics.TrDumpWriter;
 import com.ibm.ws.ffdc.FFDCFilter;

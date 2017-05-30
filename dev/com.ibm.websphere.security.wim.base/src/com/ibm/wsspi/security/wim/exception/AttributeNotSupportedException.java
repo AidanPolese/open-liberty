@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class AttributeNotSupportedException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -6031660467113138568L;
+
     /**
      *
      */

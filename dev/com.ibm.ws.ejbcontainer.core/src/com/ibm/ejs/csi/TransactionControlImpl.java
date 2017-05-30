@@ -24,8 +24,6 @@ import javax.transaction.UserTransaction;
 import com.ibm.ejs.container.BeanId;
 import com.ibm.ejs.container.BeanMetaData;
 import com.ibm.ejs.container.EJBMethodInfoImpl;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.FastHashtable;
 import com.ibm.tx.jta.embeddable.EmbeddableTransactionManagerFactory;
 import com.ibm.tx.jta.embeddable.LocalTransactionSettings;
@@ -36,6 +34,8 @@ import com.ibm.websphere.csi.EJBKey;
 import com.ibm.websphere.csi.ExceptionType;
 import com.ibm.websphere.csi.TransactionAttribute;
 import com.ibm.websphere.csi.TxContextChange;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.uow.UOWSynchronizationRegistry;
 import com.ibm.ws.LocalTransaction.LocalTransactionCoordinator;
 import com.ibm.ws.LocalTransaction.LocalTransactionCurrent;
@@ -291,7 +291,7 @@ public class TransactionControlImpl
             }
 
             //---------------------------------------------------------------------
-            // J2EE Compliance - If we are invoking a method on a bean using
+            // Java EE Compliance - If we are invoking a method on a bean using
             // bean managed transactions, then let the method invocation proceed
             // despite the fact that the associated transaction has rolled back.
             // This allows a client to cleanup UserTransaction state (by calling

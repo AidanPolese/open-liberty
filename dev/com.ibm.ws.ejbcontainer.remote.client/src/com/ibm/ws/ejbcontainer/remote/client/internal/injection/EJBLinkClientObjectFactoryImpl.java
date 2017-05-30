@@ -157,7 +157,7 @@ public class EJBLinkClientObjectFactoryImpl implements ObjectFactory {
                 bean = bean.substring(bidx + 1);
 
                 if (!module.endsWith(".jar") && !module.endsWith(".war")) {
-                    Tr.error(tcInjection, "EJB_MODULE_MUST_END_WITH_JAR_CWNEN0034E", new Object[] { bean, module });
+                    Tr.error(tcInjection, "EJB_MODULE_MUST_END_WITH_JAR_CWNEN0034E", bean, module);
                     throw new InjectionConfigurationException("The ejb-link/beanName is specified incorrectly. The " + bean +
                                                               " bean : " + module + " module name must end with .jar or .war.");
                 }
@@ -219,7 +219,7 @@ public class EJBLinkClientObjectFactoryImpl implements ObjectFactory {
         } catch (EJBException exception) {
             if (bean == null) {
                 Tr.error(tcInjection, "ENTERPRISE_BEAN_INTERFACE_NOT_FOUND_ON_NODE_CWNEN0068E",
-                         new Object[] { info.ivRefName, info.ivModule, beanInterface });
+                         info.ivRefName, info.ivModule, beanInterface);
                 throw new InjectionException("The " + info.ivRefName +
                                              " EJB reference in the " + info.ivModule +
                                              " module to the " + beanInterface +
@@ -227,7 +227,7 @@ public class EJBLinkClientObjectFactoryImpl implements ObjectFactory {
             }
 
             Tr.error(tcInjection, "ENTERPRISE_BEAN_NOT_FOUND_ON_NODE_CWNEN0041E",
-                     new Object[] { info.ivRefName, info.ivModule, beanInterface, bean });
+                     info.ivRefName, info.ivModule, beanInterface, bean);
             throw new InjectionException("The " + info.ivRefName +
                                          " EJB reference in the " + info.ivModule +
                                          " module to the " + beanInterface +

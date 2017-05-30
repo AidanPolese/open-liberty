@@ -10,6 +10,9 @@
 package com.ibm.wsspi.security.wim.exception;
 
 public class DefaultParentNotFoundException extends WIMApplicationException {
+
+    private static final long serialVersionUID = -6419684019299652671L;
+
     /**
      *
      */

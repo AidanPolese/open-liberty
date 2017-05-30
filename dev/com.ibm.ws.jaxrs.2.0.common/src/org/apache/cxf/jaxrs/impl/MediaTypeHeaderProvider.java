@@ -44,11 +44,15 @@ import com.ibm.websphere.ras.annotation.Trivial;
 public class MediaTypeHeaderProvider implements HeaderDelegate<MediaType> {
 
     private static final TraceComponent tc = Tr.register(MediaTypeHeaderProvider.class);
-    private static final String STRICT_MEDIA_TYPE_CHECK = "org.apache.cxf.jaxrs.mediaTypeCheck.strict";
-    private static final Pattern COMPLEX_PARAMETERS = Pattern.compile("(([\\w-]+=\"[^\"]*\")|([\\w-]+=[\\w-/\\+]+))");
+    private static final String STRICT_MEDIA_TYPE_CHECK = 
+        "org.apache.cxf.jaxrs.mediaTypeCheck.strict";
+    private static final Pattern COMPLEX_PARAMETERS = 
+        Pattern.compile("(([\\w-]+=\"[^\"]*\")|([\\w-]+=[\\w-/\\+]+))");
+    
 
     private static Map<String, MediaType> map = new ConcurrentHashMap<String, MediaType>();
-    private static final int MAX_MT_CACHE_SIZE = Integer.getInteger("org.apache.cxf.jaxrs.max_mediatype_cache_size", 200);
+    private static final int MAX_MT_CACHE_SIZE = 
+        Integer.getInteger("org.apache.cxf.jaxrs.max_mediatype_cache_size", 200);
 
     @Override
     public MediaType fromString(String mType) {
@@ -112,7 +116,9 @@ public class MediaTypeHeaderProvider implements HeaderDelegate<MediaType> {
             }
         }
 
-        return new MediaType(type.trim().toLowerCase(), subtype.trim().toLowerCase(), parameters);
+        return new MediaType(type.trim().toLowerCase(), 
+                             subtype.trim().toLowerCase(), 
+                             parameters);
     }
 
     private static void addParameter(Map<String, String> parameters, String token) {
@@ -147,7 +153,8 @@ public class MediaTypeHeaderProvider implements HeaderDelegate<MediaType> {
 
         Map<String, String> params = type.getParameters();
         if (params != null) {
-            for (Iterator<Map.Entry<String, String>> iter = params.entrySet().iterator(); iter.hasNext();) {
+            for (Iterator<Map.Entry<String, String>> iter = params.entrySet().iterator();
+                iter.hasNext();) {
                 Map.Entry<String, String> entry = iter.next();
                 if (ignoreParams != null && ignoreParams.contains(entry.getKey())) {
                     continue;
@@ -170,7 +177,9 @@ public class MediaTypeHeaderProvider implements HeaderDelegate<MediaType> {
                     while (st.hasMoreTokens()) {
                         addParameter(parameters, st.nextToken());
                     }
-                    return new MediaType(MediaType.MEDIA_TYPE_WILDCARD, MediaType.MEDIA_TYPE_WILDCARD, parameters);
+                    return new MediaType(MediaType.MEDIA_TYPE_WILDCARD,
+                                         MediaType.MEDIA_TYPE_WILDCARD,
+                                         parameters);
                 } else {
                     return MediaType.WILDCARD_TYPE;
                 }

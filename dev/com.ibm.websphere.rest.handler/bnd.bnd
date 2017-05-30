@@ -6,7 +6,12 @@ Bundle-SymbolicName: com.ibm.websphere.rest.handler
 Bundle-Description: SPIs for WebSphere REST Services; version=${bVersion}
 
 Export-Package: \
-  com.ibm.wsspi.rest.handler
+  com.ibm.wsspi.rest.handler,\
+  com.ibm.wsspi.rest.config
 
 -buildpath: \
+	com.ibm.websphere.org.osgi.core;version=latest,\
+	com.ibm.websphere.org.osgi.service.cm;version=latest,\
+	com.ibm.ws.kernel.service;version=latest,\
+	com.ibm.ws.logging;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest

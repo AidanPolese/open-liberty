@@ -15,7 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.ibm.ws.webcontainer.security.ReferrerURLCookieHandler;
+import com.ibm.ws.webcontainer.security.SSOCookieHelper;
+import com.ibm.ws.webcontainer.security.SSOCookieHelperImpl;
 import com.ibm.ws.webcontainer.security.WebAppSecurityConfig;
+import com.ibm.ws.webcontainer.security.WebAuthenticatorProxy;
 
 /**
  * Represents security configurable options for web admin applications.
@@ -213,6 +217,24 @@ class WebAdminSecurityConfigImpl implements WebAppSecurityConfig {
     @Override
     public boolean isUseOnlyCustomCookieName() {
         return useOnlyCustomCookieName;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public SSOCookieHelper createSSOCookieHelper() {
+        return new SSOCookieHelperImpl(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ReferrerURLCookieHandler createReferrerURLCookieHandler() {
+        return new ReferrerURLCookieHandler(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public WebAuthenticatorProxy createWebAuthenticatorProxy() {
+        return null;
     }
 
 }

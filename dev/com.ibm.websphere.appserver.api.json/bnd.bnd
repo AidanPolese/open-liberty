@@ -14,5 +14,4 @@ Import-Package: com.ibm.json.java,com.ibm.json.xml
 publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.json4j;version=latest

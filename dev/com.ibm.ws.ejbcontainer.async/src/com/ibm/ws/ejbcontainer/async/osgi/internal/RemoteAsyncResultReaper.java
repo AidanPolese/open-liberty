@@ -17,8 +17,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
 
 /**
@@ -282,7 +282,7 @@ public final class RemoteAsyncResultReaper implements Runnable {
 
             if (warn) {
                 Tr.warning(tc, "MAXIMUM_UNCLAIMED_ASYNC_RESULTS_CNTR0328W",
-                           new Object[] { size, ivMaxUnclaimedResults });
+                           size, ivMaxUnclaimedResults);
             }
         }
     } // end add()

@@ -15,8 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.ibm.ejs.container.EJBConfigurationException;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.jitdeploy.JIT_Stub;
 import com.ibm.ws.ejbcontainer.jitdeploy.JIT_StubPluginImpl;
 
@@ -30,12 +30,9 @@ import com.ibm.ws.ejbcontainer.jitdeploy.JIT_StubPluginImpl;
  **/
 public final class JITDeploy
 {
-    private static final String CLASS_NAME = JITDeploy.class.getName();
-
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     "JITDeploy",
-                     "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(JITDeploy.class,
+                                                         "JITDeploy",
+                                                         "com.ibm.ejs.container.container");
 
     public static final String rmicCompatible = "com.ibm.websphere.ejbcontainer.rmicCompatible";
     public static final int RMICCompatible = parseRMICCompatible(System.getProperty(rmicCompatible));

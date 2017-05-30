@@ -14,39 +14,6 @@
  */
 package com.ibm.ws.transport.iiop.security.config.ssl.yoko;
 
-import java.io.IOException;
-import java.net.ConnectException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-import java.security.cert.Certificate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.net.ssl.HandshakeCompletedEvent;
-import javax.net.ssl.HandshakeCompletedListener;
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-
-import org.apache.yoko.orb.OB.IORDump;
-import org.apache.yoko.orb.OCI.ProfileInfo;
-import org.apache.yoko.orb.OCI.ProfileInfoHolder;
-import org.omg.CORBA.Policy;
-import org.omg.CSIIOP.EstablishTrustInClient;
-import org.omg.CSIIOP.NoProtection;
-import org.omg.CSIIOP.TAG_CSI_SEC_MECH_LIST;
-import org.omg.CSIIOP.TransportAddress;
-import org.omg.IOP.IOR;
-
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ssl.SSLException;
@@ -63,6 +30,34 @@ import com.ibm.ws.transport.iiop.security.config.tss.TSSCompoundSecMechListConfi
 import com.ibm.ws.transport.iiop.security.config.tss.TSSSSLTransportConfig;
 import com.ibm.ws.transport.iiop.security.config.tss.TSSTransportMechConfig;
 import com.ibm.ws.transport.iiop.yoko.helper.SocketFactoryHelper;
+import org.apache.yoko.orb.OCI.IIOP.Util;
+import org.omg.CORBA.Policy;
+import org.omg.CORBA.TRANSIENT;
+import org.omg.CSIIOP.EstablishTrustInClient;
+import org.omg.CSIIOP.NoProtection;
+import org.omg.CSIIOP.TAG_CSI_SEC_MECH_LIST;
+import org.omg.CSIIOP.TransportAddress;
+import org.omg.IOP.TaggedComponent;
+
+import javax.net.ssl.HandshakeCompletedEvent;
+import javax.net.ssl.HandshakeCompletedListener;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.security.cert.Certificate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Socket factory instance used to interface openejb2
@@ -73,6 +68,7 @@ import com.ibm.ws.transport.iiop.yoko.helper.SocketFactoryHelper;
  */
 public class SocketFactory extends SocketFactoryHelper {
     private static final TraceComponent tc = Tr.register(SocketFactory.class);
+    private static final String HOST_PROTOCOL = "ssl";
 
     private final Map<String, SSLSocketFactory> socketFactoryMap = new HashMap<String, SSLSocketFactory>(1);
     private final Map<String, SSLServerSocketFactory> serverSocketFactoryMap = new HashMap<String, SSLServerSocketFactory>(1);
@@ -111,28 +107,27 @@ public class SocketFactory extends SocketFactoryHelper {
 
     /**
      * Create a client socket of the appropriate
-     * type using the provided IOR and Policy information.
-     *
-     * @param ior The target IOR of the connection.
-     * @param policies Policies in effect for this ORB.
-     * @param address The target address of the connection.
-     * @param port The connection port.
+     * type using the provided address and port information.
      *
      * @return A Socket (either plain or SSL) configured for connection
      *         to the target.
-     * @exception IOException
-     * @exception ConnectException
      */
     @Override
-    public Socket createSocket(IOR ior, Policy[] policies, InetAddress address, int port) throws IOException {
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "SocketFactory attempting to create socket for address: " + address + " port: " + port);
-            Tr.debug(tc, "Policies: " + Arrays.asList(policies));
-            Tr.debug(tc, IORDump.PrintObjref(orb, ior));
+    public Socket createSocket(String host, int port) throws IOException {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+            Tr.debug(tc, "SocketFactory attempting to create socket for host: " + host + " port: " + port);
+
+        // check for SSL addresses
+        if (Util.isEncodedHost(host, HOST_PROTOCOL)) {
+            String sslConfigName = Util.decodeHostInfo(host);
+            host = Util.decodeHost(host);
+            return createSSLSocket(host, (char) port, sslConfigName);
+        } else {
+            return createPlainSocket(host, port);
         }
+    }
 
-        String host = address.getHostName();
-
+    private static CSSConfig getCssConfig(Policy[] policies) {
         CSSConfig cssConfig = null;
         for (Policy policy : policies) {
             if (policy instanceof ClientPolicy) {
@@ -140,142 +135,21 @@ public class SocketFactory extends SocketFactoryHelper {
                 break;
             }
         }
-        if (cssConfig != null) {
-
-            ProfileInfoHolder holder = new ProfileInfoHolder();
-            // we need to extract the profile information from the IOR to see if this connection has
-            // any transport-level security defined.
-            if (org.apache.yoko.orb.OCI.IIOP.Util.extractProfileInfo(ior, holder)) {
-                ProfileInfo profileInfo = holder.value;
-                for (int i = 0; i < profileInfo.components.length; i++) {
-                    // we're looking for the security mechanism items.
-                    if (profileInfo.components[i].tag == TAG_CSI_SEC_MECH_LIST.value) {
-                        // decode and pull the transport information.
-                        TSSCompoundSecMechListConfig config;
-                        try {
-                            config = TSSCompoundSecMechListConfig.decodeIOR(codec, profileInfo.components[i]);
-                        } catch (Exception e) {
-                            throw new IOException("Could not decode IOR TSSCompoundSecMechListConfig", e);
-                        }
-                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                            Tr.debug(tc, "looking at tss: " + config);
-                        }
-                        LinkedList<CompatibleMechanisms> compatibleMechanismsList = cssConfig.findCompatibleList(config);
-                        for (CompatibleMechanisms compatibleMechanisms : compatibleMechanismsList) {
-                            Map<ServerTransportAddress, CSSTransportMechConfig> cssTransport_mechs = compatibleMechanisms.getCSSCompoundSecMechConfig().getTransportMechMap();
-                            TSSTransportMechConfig transport_mech = compatibleMechanisms.getTSSCompoundSecMechConfig().getTransport_mech();
-
-                            if (transport_mech instanceof TSSSSLTransportConfig) {
-                                // if cssTransport_mechs is empty there we are not dealing with dynamic SSL config
-                                if (!cssTransport_mechs.isEmpty()) {
-                                    Socket socket = createSocketFromTransportMechList(cssTransport_mechs, transport_mech);
-                                    if (socket != null)
-                                        return socket;
-                                } else {
-                                    String sslConfigName = compatibleMechanisms.getCSSCompoundSecMechConfig().getTransport_mech().getSslConfigName();
-                                    if (((TSSSSLTransportConfig) transport_mech).getTransportAddresses().length > 0) {
-                                        Socket socket = createSocketFromTransportMech(transport_mech, sslConfigName);
-                                        if (socket != null)
-                                            return socket;
-                                    } else
-                                        continue;
-                                }
-                            } else {
-                                try {
-                                    return createSocketFromProfile(ior, host, port);
-                                } catch (IOException e) {
-                                    // Ignore so that the next mechanism can be tried, should be logged?
-                                }
-                            }
-                        }
-                        throw new IOException("No connection  possible with any matching address");
-                    }
-                }
-            }
-        }
-
-        //SSL not needed, look in the profile for host/port
-        return createSocketFromProfile(ior, host, port);
+        return cssConfig;
     }
 
-    /**
-     * @param transport_mech
-     * @param sslConfigName
-     * @return
-     * @throws IOException
-     */
-    private Socket createSocketFromTransportMech(TSSTransportMechConfig transport_mech, String sslConfigName) throws IOException {
-        TSSSSLTransportConfig transportConfig = (TSSSSLTransportConfig) transport_mech;
-
-        int requires = transportConfig.getRequires();
-        TransportAddress[] addresses = transportConfig.getTransportAddresses();
-        for (TransportAddress addr : addresses) {
-            int sslPort = addr.port;
-            String sslHost = addr.host_name;
-            InetAddress ina = InetAddress.getByName(sslHost);
-            sslHost = ina.getCanonicalHostName();
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "IOR to target " + sslHost + ":" + sslPort + " using client sslConfig " + sslConfigName);
-            }
-            // TLS is configured.  If this is explicitly noprotection, then
-            // just go create a plain socket using the configured port.
-            try {
-                if ((NoProtection.value & requires) == NoProtection.value) {
-                    return new Socket(ina, sslPort);
-                }
-                //TODO should we additionally filter the cipher suites by what the target requires and supports, or let the negotiation do that?
-                // we need SSL, so create an SSLSocket for this connection.
-                return createSSLSocket(sslHost, sslPort, sslConfigName);
-            } catch (IOException e) {
-                //ignore, should be logged?
-            }
+    private List<CompatibleMechanisms> getCompatibleMechanisms(CSSConfig cssConfig, TaggedComponent comp) {
+        // decode and pull the transport information.
+        TSSCompoundSecMechListConfig config;
+        try {
+            config = TSSCompoundSecMechListConfig.decodeIOR(codec, comp);
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                Tr.debug(tc, "looking at tss: " + config);
+            return cssConfig.findCompatibleList(config);
+        } catch (Exception e) {
+            // TODO: should we have Liberty-specific minor codes?
+            throw (TRANSIENT) new TRANSIENT("Could not decode IOR TSSCompoundSecMechListConfig").initCause(e);
         }
-
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * @param cssTransport_mechs
-     * @param transport_mech
-     * @return
-     * @throws IOException
-     */
-    private Socket createSocketFromTransportMechList(Map<ServerTransportAddress, CSSTransportMechConfig> cssTransport_mechs,
-                                                     TSSTransportMechConfig transport_mech) throws IOException {
-        TSSSSLTransportConfig transportConfig = (TSSSSLTransportConfig) transport_mech;
-        int requires = transportConfig.getRequires();
-
-        for (Map.Entry<ServerTransportAddress, CSSTransportMechConfig> entry : cssTransport_mechs.entrySet()) {
-
-            ServerTransportAddress addr = entry.getKey();
-            CSSTransportMechConfig mech_cfg = entry.getValue();
-
-            String sslConfigName = mech_cfg.getSslConfigName();
-
-            int sslPort = addr.getPort();
-            String sslHost = addr.getHost();
-            InetAddress ina = InetAddress.getByName(sslHost);
-            sslHost = ina.getCanonicalHostName();
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "IOR to target " + sslHost + ":" + sslPort + " using client sslConfig " + sslConfigName);
-            }
-            // TLS is configured.  If this is explicitly noprotection, then
-            // just go create a plain socket using the configured port.
-            try {
-                if ((NoProtection.value & requires) == NoProtection.value) {
-                    return new Socket(ina, sslPort);
-                }
-                //TODO should we additionally filter the cipher suites by what the target requires and supports, or let the negotiation do that?
-                // we need SSL, so create an SSLSocket for this connection.
-                return createSSLSocket(sslHost, sslPort, sslConfigName);
-            } catch (IOException e) {
-                //ignore, should be logged?
-            }
-        }
-
-        // TODO Auto-generated method stub
-        return null;
     }
 
     /**
@@ -347,7 +221,6 @@ public class SocketFactory extends SocketFactoryHelper {
      * @exception IOException
      * @exception ConnectException
      */
-    @SuppressWarnings("resource")
     @Override
     public ServerSocket createServerSocket(int port, int backlog, InetAddress address, String[] params) throws IOException {
         try {
@@ -379,10 +252,10 @@ public class SocketFactory extends SocketFactoryHelper {
             }
             // there is a situation that yoko closes and opens a server socket quickly upon updating
             // the configuration, and occasionally, the openSocket is invoked while closeSocket is processing.
-            // To avoid the issue, try binding the socket a few times. Since this is the error scenario,
+            // To avoid the issue, try binding the socket a few times. Since this is the error scenario, 
             // it is less impact for the performance.
             IOException bindError = null;
-            for (int i = 0; i < 3; i++) {
+            for (int i=0; i < 3; i++) {
                 bindError = openSocket(port, backlog, address, socket, soReuseAddr);
                 if (bindError == null) {
                     break;
@@ -577,4 +450,64 @@ public class SocketFactory extends SocketFactoryHelper {
         }
         return socket;
     }
+
+    @Override
+    public int[] tags() {
+        return new int[] { TAG_CSI_SEC_MECH_LIST.value };
+    }
+
+    private static TransportAddress createPlainTransportAddress(String host, short port) {
+        return new TransportAddress(host, port);
+    }
+
+    private static TransportAddress createSslTransportAddress(String host, short port, String sslConfigName) {
+        String encodedHost = Util.encodeHost(host, HOST_PROTOCOL, sslConfigName);
+        return new TransportAddress(encodedHost, port);
+    }
+
+    @Override
+    public TransportAddress[] getEndpoints(TaggedComponent tagComponent, Policy[] policies) {
+
+        final CSSConfig cssConfig = getCssConfig(policies);
+        List<TransportAddress> addresses = new ArrayList<TransportAddress>();
+        for (CompatibleMechanisms compatibleMechanisms : getCompatibleMechanisms(cssConfig, tagComponent)) {
+            Map<ServerTransportAddress, CSSTransportMechConfig> cssTransport_mechs = compatibleMechanisms.getCSSCompoundSecMechConfig().getTransportMechMap();
+
+            TSSTransportMechConfig transport_mech = compatibleMechanisms.getTSSCompoundSecMechConfig().getTransport_mech();
+            // only handle TSSSSLTransportConfig mechanisms here
+            if (!!! (transport_mech instanceof TSSSSLTransportConfig)) continue;
+            TSSSSLTransportConfig transportConfig = (TSSSSLTransportConfig) transport_mech;
+            // TLS is configured.  Unless this is explicitly NoProtection, treat the configured port as an SSL port.
+            final boolean useProtection = (NoProtection.value & transportConfig.getRequires()) == 0;
+
+            // if cssTransport_mechs is empty then we are not dealing with dynamic SSL config
+            if (cssTransport_mechs.isEmpty()) {
+                String sslConfigName = compatibleMechanisms.getCSSCompoundSecMechConfig().getTransport_mech().getSslConfigName();
+
+                for (TransportAddress addr : transportConfig.getTransportAddresses()) {
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                        Tr.debug(tc, "IOR to target " + addr.host_name + ":" + (int) (char) addr.port + " using client sslConfig " + sslConfigName);
+                    addresses.add(useProtection ?
+                            createSslTransportAddress(addr.host_name, addr.port, sslConfigName) :
+                            createPlainTransportAddress(addr.host_name, addr.port));
+                }
+            } else {
+                for (Map.Entry<ServerTransportAddress, CSSTransportMechConfig> entry : cssTransport_mechs.entrySet()) {
+
+                    ServerTransportAddress addr = entry.getKey();
+                    CSSTransportMechConfig mech_cfg = entry.getValue();
+
+                    String sslConfigName = mech_cfg.getSslConfigName();
+
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                        Tr.debug(tc, "IOR to target " + addr.getHost() + ":" + (int) (char) addr.getPort()+ " using client sslConfig " + sslConfigName);
+                    addresses.add(useProtection ?
+                            createSslTransportAddress(addr.getHost(), addr.getPort(), sslConfigName) :
+                            createPlainTransportAddress(addr.getHost(), addr.getPort()));
+                }
+            }
+        }
+        return addresses.toArray(new TransportAddress[addresses.size()]);
+    }
+
 }

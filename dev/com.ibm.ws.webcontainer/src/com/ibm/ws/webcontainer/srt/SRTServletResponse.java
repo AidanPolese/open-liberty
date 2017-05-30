@@ -2415,7 +2415,7 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
                 logger.logp(Level.FINE, CLASS_NAME,"createOutputStream","size : "+ size +" ["+this+"]");
             }
     
-            // TODO: Alpine - Changed to CoyoteOutputStream
+            // TODO: Liberty - Changed to CoyoteOutputStream
             // return new CoyoteOutputStream(size);
             // return new BufferedServletOutputStream(size);
             try

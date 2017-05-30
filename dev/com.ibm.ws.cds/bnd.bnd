@@ -12,5 +12,4 @@ Fragment-Host: org.eclipse.osgi;bundle-version="3.10.0"
 -includeresource: @lib/com.ibm.cds_3.0.1.201410101357.jar
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/com.ibm.cds_3.0.1.201410101357.jar;version=file

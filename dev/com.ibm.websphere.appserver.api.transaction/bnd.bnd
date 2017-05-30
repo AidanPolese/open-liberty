@@ -14,7 +14,6 @@ Export-Package: com.ibm.tx.jta,com.ibm.websphere.jtaextensions,com.ibm.websphere
 publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.tx.core, \
 	com.ibm.ws.tx.embeddable, \
 	com.ibm.ws.tx.jta.extensions

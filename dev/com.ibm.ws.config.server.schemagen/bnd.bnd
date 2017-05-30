@@ -20,7 +20,6 @@ Private-Package: \
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.config.server.schemagen.serverschemagen;version=latest,\
 	com.ibm.websphere.appserver.api.config;version=latest,\
 	com.ibm.websphere.appserver.spi.logging;version=latest,\

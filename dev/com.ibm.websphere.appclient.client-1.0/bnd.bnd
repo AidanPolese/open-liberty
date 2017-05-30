@@ -6,6 +6,5 @@ Bundle-SymbolicName: com.ibm.websphere.appclient.client-1.0
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.appclient.boot;version=latest,\
 	com.ibm.ws.kernel.boot;version=latest

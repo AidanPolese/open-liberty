@@ -4,7 +4,7 @@
 <!--
  * ============================================================================
  * Licensed Materials - Property of IBM
- * Project Alpine
+ * Project Liberty
  *
  * (C) Copyright IBM Corp. 2008  All Rights Reserved.
  *
@@ -21,7 +21,7 @@
 <body>
 <h1>Threading Overview</h1>
 <p>
-One of the goals of the Alpine platform is to scale well in modern multi-core
+One of the goals of the Liberty platform is to scale well in modern multi-core
 environments.  In support of this, work management, scheduling, and dispatching
 will be centralized in the threading and event services to allow for greater
 control over how work is distributed and executed within a server.
@@ -43,7 +43,7 @@ sub-optimal dispatching policies.
 </p>
 <p>
 To help alleviate the issues (real or imagined) with having so many thread
-pools, components within Alpine are discouraged from (read that as
+pools, components within Liberty are discouraged from (read that as
 &quot;don't do it&quot;) explicitly creating threads or thread pools.  The
 goal is to move components from a model where they &quot;own&quot; threads
 to a model where they submit <em>tasks</em> for execution and rely on the
@@ -154,7 +154,7 @@ execution.
 
 <h2>Submitting Tasks</h2>
 <p>
-The Alpine Event Engine is built on top of the threading services and can
+The Liberty Event Engine is built on top of the threading services and can
 be used to easily implement most pipeline or continuation work flows.  If the
 basic services provided by the event engine are insufficient, components may
 directly submit tasks for execution to an <code>ExecutorService</code>

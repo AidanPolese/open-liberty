@@ -46,6 +46,8 @@ Service-Component: \
     properties:="service.vendor=IBM,\
       classes=com.ibm.ws.jndi.url.contexts.javacolon.internal.JavaURLContextReplacement"
 
+instrument.classesExcludes: com/ibm/ws/jndi/internal/url/contexts/resources/*.class
+
 -buildpath: \
 	com.ibm.ws.logging.core,\
 	com.ibm.ws.container.service;version=latest,\

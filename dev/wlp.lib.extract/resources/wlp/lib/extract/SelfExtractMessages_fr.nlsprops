@@ -318,4 +318,4 @@ LICENSE_replace_invalidEditonFeatures=Les fonctions suivantes ne s''appliquent p
 \n\
 Utilisez la commande suivante pour d\u00e9sinstaller ces fonctions avant d''appliquer la licence pour l''\u00e9dition {2} : {3}
 
-LICENSE_downgrade_block_8557_low=Cette licence ne peut \u00eatre appliqu\u00e9e qu''\u00e0 l''installation au niveau de la version {0} ou ult\u00e9rieure. Le niveau en cours de l''installation est la version {1}. T\u00e9l\u00e9chargez le niveau le plus r\u00e9cent et effectuez la mise \u00e0 jour, puis r\u00e9appliquez la licence.
+LICENSE_downgrade_block_8557_low=Cette licence peut uniquement \u00eatre appliqu\u00e9e \u00e0 l''installation au niveau de la version {0} ou ult\u00e9rieure. Niveau en cours de l''installation : {1}. T\u00e9l\u00e9chargez le niveau le plus r\u00e9cent et effectuez la mise \u00e0 jour, puis r\u00e9appliquez la licence.

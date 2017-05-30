@@ -226,7 +226,7 @@ public class Topology {
      */
     public static void setBootStrappingFile(File bootStrappingFile) {
         if (bootStrappingFile != null) {
-            //FIXME: the import statement might trigger the static block of com.ibm.alpine.Topology too early for this to work
+            //FIXME: the import statement might trigger the static block of com.ibm.liberty.Topology too early for this to work
             System.setProperty("bootstrapping.properties", bootStrappingFile.getPath());
         }
     }

@@ -30,6 +30,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import com.ibm.jbatch.container.persistence.jpa.JobInstanceEntity;
+import com.ibm.jbatch.container.services.IJPAQueryHelper;
 import com.ibm.jbatch.container.services.IPersistenceManagerService;
 import com.ibm.jbatch.container.ws.InstanceState;
 import com.ibm.jbatch.container.ws.RemotablePartitionState;
@@ -38,7 +39,6 @@ import com.ibm.jbatch.container.ws.WSJobExecution;
 import com.ibm.jbatch.container.ws.WSJobInstance;
 import com.ibm.jbatch.container.ws.WSJobRepository;
 import com.ibm.jbatch.container.ws.WSRemotablePartitionExecution;
-import com.ibm.jbatch.container.ws.WSSearchObject;
 import com.ibm.jbatch.container.ws.WSStepThreadExecutionAggregate;
 import com.ibm.jbatch.spi.BatchSecurityHelper;
 
@@ -144,13 +144,13 @@ public class WSJobRepositoryImpl implements WSJobRepository {
      * {@inheritDoc}
      */
     @Override
-    public List<WSJobInstance> getJobInstances(WSSearchObject wsso, int page, int pageSize) throws NoSuchJobExecutionException, JobSecurityException {
+    public List<WSJobInstance> getJobInstances(IJPAQueryHelper queryHelper, int page, int pageSize) throws NoSuchJobExecutionException, JobSecurityException {
 
         if (authService == null || authService.isAdmin() || authService.isMonitor()) {
-            return new ArrayList<WSJobInstance>(persistenceManagerService.getJobInstances(wsso, page, pageSize));
+            return new ArrayList<WSJobInstance>(persistenceManagerService.getJobInstances(queryHelper, page, pageSize));
         } else if (authService.isSubmitter()) {
-            wsso.setAuthSubmitter(authService.getRunAsUser());
-            return new ArrayList<WSJobInstance>(persistenceManagerService.getJobInstances(wsso, page, pageSize));
+            queryHelper.setAuthSubmitter(authService.getRunAsUser());
+            return new ArrayList<WSJobInstance>(persistenceManagerService.getJobInstances(queryHelper, page, pageSize));
         }
 
         throw new JobSecurityException("The current user " + batchSecurityHelper.getRunAsUser() + " is not authorized to perform any batch operations.");
@@ -365,15 +365,21 @@ public class WSJobRepositoryImpl implements WSJobRepository {
         return persistenceManagerService.updateRemotablePartitionInternalState(jobExecutionId, stepName, partitionNumber, internalState);
     }
 
-    /** {@inheritDoc} 
-     * @throws Exception */
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws Exception
+     */
     @Override
     public int getJobExecutionTableVersion() throws Exception {
         return persistenceManagerService.getJobExecutionTableVersion();
     }
-    
-    /** {@inheritDoc} 
-     * @throws Exception */
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws Exception
+     */
     @Override
     public int getJobInstanceTableVersion() throws Exception {
         return persistenceManagerService.getJobInstanceTableVersion();

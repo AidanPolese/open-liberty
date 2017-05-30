@@ -403,7 +403,7 @@ public class MapBasedSelfExtractorTest {
         if (disableTestSuite)
             return;
         Map<String, Object> extractor = getMapBasedExtractorFromJar(coreJar);
-        assertEquals("The product name was not correct", "IBM WebSphere Application Server for Developers V8.5.5", extractor.get("product.name"));
+        assertEquals("The product name was not correct", "IBM WebSphere Application Server for Developers", extractor.get("product.name"));
     }
 
     /**

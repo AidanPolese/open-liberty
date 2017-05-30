@@ -161,11 +161,7 @@ public class BundleInstallOriginBundleListener implements BundleListener, Callab
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.osgi.framework.BundleListener#bundleChanged(org.osgi.framework.BundleEvent)
-     */
+    /** {@inheritDoc} */
     @Override
     @FFDCIgnore(IOException.class)
     public void bundleChanged(BundleEvent event) {
@@ -307,6 +303,7 @@ public class BundleInstallOriginBundleListener implements BundleListener, Callab
     //it will be reloaded from disk if necessary
     private final int purgeDelay = 5;
 
+    @FFDCIgnore(IllegalStateException.class)
     private synchronized void delayPurge() {
 
         //try to cancel any existing task if we can and it isn't running
@@ -321,7 +318,16 @@ public class BundleInstallOriginBundleListener implements BundleListener, Callab
                 ScheduledExecutorService executorService = ctx.getService(sesRef);
                 futurePurge = executorService.schedule(this, purgeDelay, TimeUnit.MINUTES);
             } finally {
-                ctx.ungetService(sesRef);
+                try {
+                    ctx.ungetService(sesRef);
+                } catch(IllegalStateException e) {
+                    // This is highly unlikely, but can happen.
+                    // Rather than do a boolean check, its more efficient in the 99.99% case
+                    // to just handle the exception if it occurs (which is unlikely)
+                    if (tc.isEventEnabled()) {
+                        Tr.event(tc, "IllegalStateException while releasing ServiceReference<ScheduledExecutorService> sesRef - the bundle is stopped or in an otherwise invalid so we shouldn't care",e);
+                    }
+                }
             }
         }
     }

@@ -30,21 +30,20 @@ import com.ibm.jbatch.container.cdi.ProxyFactoryCdi;
 import com.ibm.jbatch.jsl.model.Property;
 
 public class BatchProducerBean {
-    
+
     @Produces
     @BatchProperty
     @Dependent
     public String produceProperty(InjectionPoint injectionPoint) {
 
-        //Seems like this is a CDI bug where null injection points are getting passed in. 
+        //Seems like this is a CDI bug where null injection points are getting passed in.
         //We should be able to ignore these as a workaround.
         if (injectionPoint != null) {
 
             if (ProxyFactoryCdi.getInjectionReferences() == null) {
                 return null;
             }
-            
-            
+
             BatchProperty batchPropAnnotation = injectionPoint.getAnnotated().getAnnotation(BatchProperty.class);
 
             // If a name is not supplied the batch property name defaults to
@@ -58,10 +57,10 @@ public class BatchProducerBean {
 
             List<Property> propList = ProxyFactoryCdi.getInjectionReferences().getProps();
 
-            String propValue =  DependencyInjectionUtilityCdi.getPropertyValue(propList, batchPropName);
-            
+            String propValue = DependencyInjectionUtilityCdi.getPropertyValue(propList, batchPropName);
+
             return propValue;
-            
+
         }
 
         return null;
@@ -71,9 +70,9 @@ public class BatchProducerBean {
     @Produces
     @Dependent
     public JobContext getJobContext() {
-        
+
         if (ProxyFactoryCdi.getInjectionReferences() != null) {
-                return ProxyFactoryCdi.getInjectionReferences().getJobContext();
+            return ProxyFactoryCdi.getInjectionReferences().getJobContext();
         } else {
             return null;
         }
@@ -82,17 +81,13 @@ public class BatchProducerBean {
     @Produces
     @Dependent
     public StepContext getStepContext() {
-        
+
         if (ProxyFactoryCdi.getInjectionReferences() != null) {
             return ProxyFactoryCdi.getInjectionReferences().getStepContext();
         } else {
             return null;
         }
-        
+
     }
-
-
-
-
 
 }

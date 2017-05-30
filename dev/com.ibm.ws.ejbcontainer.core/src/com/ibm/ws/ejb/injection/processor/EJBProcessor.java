@@ -18,9 +18,9 @@ import javax.ejb.EJB;
 import javax.ejb.EJBs;
 import javax.naming.Reference;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejb.injection.annotation.EJBImpl;
 import com.ibm.ws.javaee.dd.common.Description;
 import com.ibm.ws.javaee.dd.common.EJBRef;
@@ -38,12 +38,9 @@ import com.ibm.wsspi.injectionengine.factory.OverrideReferenceFactory;
 
 public class EJBProcessor extends InjectionProcessor<EJB, EJBs>
 {
-    private static final String CLASS_NAME = EJBProcessor.class.getName();
-
-    static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     InjectionConfigConstants.traceString,
-                     InjectionConfigConstants.messageFile);
+    static final TraceComponent tc = Tr.register(EJBProcessor.class,
+                                                 InjectionConfigConstants.traceString,
+                                                 InjectionConfigConstants.messageFile);
 
     /**
      * Naming Reference Factory to be used when an ejb-ref or EJB annotation

@@ -6,7 +6,6 @@ Bundle-SymbolicName: com.ibm.websphere.appserver.servlet-3.1
 publish.feature.resources: **
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.injection-1.0;version=latest, \
 	com.ibm.websphere.appserver.artifact-1.0;version=latest, \
 	com.ibm.websphere.appserver.containerServices-1.0;version=latest, \

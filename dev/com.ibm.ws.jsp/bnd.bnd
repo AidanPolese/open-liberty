@@ -52,7 +52,8 @@ Export-Package: com.ibm.ws.jsp.runtime;version=2.2;thread-context=true, \
    org.apache.taglibs.standard.tlv;thread-context=true;version=2.2, \
    org.apache.taglibs.standard.tei;thread-context=true;version=2.2, \
    org.apache.taglibs*;version=2.2, \
-   org.apache.jasper.compiler
+   org.apache.jasper.compiler;thread-context=true;version=2.2, \
+   org.apache.jasper.runtime;thread-context=true;version=2.2
    
 
 Private-Package: \
@@ -109,7 +110,15 @@ Include-Resource: \
    standard.jar=lib/standardtld.jar, \
    ard.jar=lib/ard.jar, \
    OSGI-INF=resources/OSGI-INF, \
-   com/ibm/ws/jsp/webcontainerext/packageinfo=src/com/ibm/ws/jsp/webcontainerext/packageinfo
+   com/ibm/ws/jsp/webcontainerext/packageinfo=src/com/ibm/ws/jsp/webcontainerext/packageinfo, \
+   com/ibm/ws/jsp/resources/taglibcacheconfig.xml=resources/com/ibm/ws/jsp/resources/taglibcacheconfig.xml, \
+   com/ibm/ws/jsp/resources/optimizedjstltags.xml=resources/com/ibm/ws/jsp/resources/optimizedjstltags.xml, \
+   com/ibm/ws/jsp/resources/optimizedtags.xml=resources/com/ibm/ws/jsp/resources/optimizedtags.xml, \
+   com/ibm/ws/jsp/jsx/tags/jsxFunction.tld=src/com/ibm/ws/jsp/jsx/tags/jsxFunction.tld, \
+   com/ibm/ws/jsp/tsx/tag/tsx.tld=src/com/ibm/ws/jsp/tsx/tag/tsx.tld, \
+   com/ibm/ws/jsp/translator/visitor/configuration/JspVisitorConfiguration.xml=src/com/ibm/ws/jsp/translator/visitor/configuration/JspVisitorConfiguration.xml, \
+   com/ibm/ws/jsp/translator/visitor/configuration/JspVisitorConfiguration.xsd=src/com/ibm/ws/jsp/translator/visitor/configuration/JspVisitorConfiguration.xsd, \
+   com/ibm/ws/jsp/taglib/config/TagLibCacheConfig.xsd=src/com/ibm/ws/jsp/taglib/config/TagLibCacheConfig.xsd
     
 IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml
 
@@ -118,8 +127,6 @@ instrument.classesExcludes: com/ibm/ws/jsp/resources/*.class
 
 -buildpath: \
 	lib/bsf.jar;version=file,\
-	lib/web.jsp.jar;version=file,\
-	lib/web.jspspi.jar;version=file,\
 	com.ibm.ws.org.eclipse.jdt.core.3.10.2.v20160712-0000;version=latest,\
 	com.ibm.websphere.javaee.el.2.2;version=latest,\
 	com.ibm.websphere.javaee.jsp.2.2;version=latest,\
