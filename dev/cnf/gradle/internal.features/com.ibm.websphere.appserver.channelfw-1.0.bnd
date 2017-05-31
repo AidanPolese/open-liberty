@@ -1,11 +1,10 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.channelfw-1.0
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: \
+-dependson: \
 	com.ibm.ws.timer;version=latest, \
 	com.ibm.ws.channelfw;version=latest, \
 	com.ibm.websphere.appserver.api.endpoint;version=latest

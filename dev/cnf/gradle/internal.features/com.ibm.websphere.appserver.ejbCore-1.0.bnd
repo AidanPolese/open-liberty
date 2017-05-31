@@ -1,11 +1,10 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.ejbCore-1.0
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: \
+-dependson: \
 	com.ibm.websphere.appserver.appmanager-1.0;version=latest, \
 	com.ibm.websphere.appserver.javaeePlatform-6.0;version=latest, \
 	com.ibm.websphere.appserver.managedBeansCore-1.0;version=latest, \

@@ -1,10 +1,9 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.collective.rest.notify-1.0
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: \
+-dependson: \
 	com.ibm.ws.org.joda.time.1.6.2;version=latest, \
 	com.ibm.ws.collective.rest.notify;version=latest

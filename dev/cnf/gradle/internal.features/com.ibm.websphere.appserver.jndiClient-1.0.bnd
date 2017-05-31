@@ -1,11 +1,10 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.jndiClient-1.0
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: \
+-dependson: \
 	com.ibm.websphere.appserver.javax.cdi-1.2;version=latest, \
 	com.ibm.websphere.appserver.jndi-1.0;version=latest, \
 	com.ibm.websphere.appserver.transaction-1.2;version=latest, \

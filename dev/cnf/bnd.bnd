@@ -1,3 +1,5 @@
+-include= ~../cnf/resources/bnd/liberty-release.props
+
 -nobundles=true
 
 instrument.disabled: true

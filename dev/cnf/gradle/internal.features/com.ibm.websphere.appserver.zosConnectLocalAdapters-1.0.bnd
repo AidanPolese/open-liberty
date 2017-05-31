@@ -1,10 +1,9 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.zosConnectLocalAdapters-1.0
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: \
-    com.ibm.ws.zos.connect.wola;version=latest, \
-    com.ibm.ws.resource;version=latest
+-dependson: \
+	com.ibm.ws.zos.connect.wola;version=latest, \
+	com.ibm.ws.resource;version=latest

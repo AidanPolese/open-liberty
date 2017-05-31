@@ -1,11 +1,10 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.iiopcommon-1.0
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: \
+-dependson: \
 	com.ibm.websphere.appserver.channelfw-1.0;version=latest, \
 	com.ibm.ws.org.apache.yoko.corba.spec.1.5;version=latest, \
 	com.ibm.ws.org.apache.yoko.osgi.1.5;version=latest, \

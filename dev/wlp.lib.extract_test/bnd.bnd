@@ -1,8 +1,6 @@
 -include= ~../cnf/resources/bnd/liberty-release.props
 
--nobundles: true
-
-publish.wlp.jar.disabled: true
+-nobundles=true
 
 test.project: true
 

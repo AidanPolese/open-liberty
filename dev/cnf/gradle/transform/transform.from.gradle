@@ -54,11 +54,11 @@ task transform {
         File folderPublishedLib = new File(folderCDOpenDev, 'prereq.published/lib')
         folderPublishedLib.mkdir()
         File templateDir = new File(folderCDOpenDev, 'cnf/gradle/projects.for.ivy.ant')
-        File internalFeatureFolder = new File(folderCDOpenDev, 'com.ibm.websphere.features.internal.laos')
+        //File internalFeatureFolder = new File(folderCDOpenDev, 'com.ibm.websphere.features.internal.laos')
         File tempProjectFolder = new File(folderCDOpenCnfGradleTransport, '.tmp/projects')
         tempProjectFolder.mkdirs()
-        File tempFeatureFolder = new File(folderCDOpenCnfGradleTransport, '.tmp/features')
-        tempFeatureFolder.mkdirs()
+        //File tempFeatureFolder = new File(folderCDOpenCnfGradleTransport, '.tmp/features')
+        //tempFeatureFolder.mkdirs()
         String classpathEntries = ""
         bsnToProject.keys().sort().each { bsn ->
             String projectName = bsnToProject.getProperty(bsn)
@@ -81,13 +81,11 @@ task transform {
                         }
                     }
                 }
+                if (artifact == null) {
+                    println 'No artifact was found for project ' + projectName + ', skipping...'
+                } else {
                 if (projectName.equals('com.ibm.ws.org.apache.cxf.jaxws')) {
                     classpathEntries = classpathEntries + '	<classpathentry exported="true" kind="lib" path="/prereq.published/lib/' + artifact + '"/>\n'
-                }
-                fileTree(folderCDOpenDevProject).include('*.feature').visit { element ->
-                    if (!element.isDirectory()) {
-                        println 'Need to save feature file ' + element.file.name
-                    }
                 }
                 File projectTemp = new File(tempProjectFolder, projectName)
                 if (!projectTemp.exists()) {
@@ -104,13 +102,14 @@ task transform {
                         filter(ReplaceTokens, tokens: [PROJECT_NAME: projectName, MAVEN_ARTIFACT: artifact])
                     }
                 }
-            } else {
-                File internalFeature = new File(internalFeatureFolder, projectName + '.feature')
-                if (!internalFeature.exists()) {
-                    throw new GradleException("The folder " + internalFeature + " does not exist")
                 }
-                File internalFeatureTemp = new File(tempFeatureFolder, projectName + '.feature')
-                java.nio.file.Files.move(internalFeature.toPath(), internalFeatureTemp.toPath())
+            //} else {
+            //    File internalFeature = new File(internalFeatureFolder, projectName + '.feature')
+            //    if (!internalFeature.exists()) {
+            //        throw new GradleException("The folder " + internalFeature + " does not exist")
+            //    }
+            //    File internalFeatureTemp = new File(tempFeatureFolder, projectName + '.feature')
+            //    java.nio.file.Files.move(internalFeature.toPath(), internalFeatureTemp.toPath())
             }
         }
         File classpathFile = new File(folderCDOpenDev, 'com.ibm.ws.org.apache.cxf.jaxws/.classpath')
