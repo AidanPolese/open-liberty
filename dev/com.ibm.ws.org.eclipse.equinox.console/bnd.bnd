@@ -3,7 +3,6 @@
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/org.eclipse.equinox.console_1.1.200.v20150929-1405.jar;version=file,\
 	org.eclipse.osgi;version=latest,\
 	com.ibm.websphere.org.osgi.core;version=latest,\

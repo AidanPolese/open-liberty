@@ -22,8 +22,8 @@ import java.util.List;
 import org.omg.CORBA.portable.IDLEntity;
 
 import com.ibm.ejs.container.EJBConfigurationException;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Just In Time deployment utility methods for mapping RMI to IDL for
@@ -31,12 +31,9 @@ import com.ibm.ejs.ras.TraceComponent;
  */
 public final class RMItoIDL
 {
-    private static final String CLASS_NAME = RMItoIDL.class.getName();
-
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     JITUtils.JIT_TRACE_GROUP,
-                     JITUtils.JIT_RSRC_BUNDLE);
+    private static final TraceComponent tc = Tr.register(RMItoIDL.class,
+                                                         JITUtils.JIT_TRACE_GROUP,
+                                                         JITUtils.JIT_RSRC_BUNDLE);
 
     private static final String[] IDL_KEYWORDS = { // PM94096
     "abstract",

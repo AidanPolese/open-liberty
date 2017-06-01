@@ -60,7 +60,6 @@ instrument.classesExcludes: com/ibm/ws/cdi/impl/resources/*.class
 	${javac.bootclasspath.${javac.source}}
 
 -buildpath: \
-	${javac.bootclasspath.java7}, \
 	com.ibm.websphere.javaee.cdi.1.2;version=latest,\
 	com.ibm.ws.container.service;version=latest,\
 	com.ibm.ws.adaptable.module;version=latest,\
@@ -76,15 +75,15 @@ instrument.classesExcludes: com/ibm/ws/cdi/impl/resources/*.class
 	com.ibm.ws.com.google.guava.14.0.1;version=latest,\
 	com.ibm.ws.javaee.dd.common;version=latest,\
 	com.ibm.ws.logging.core,\
-	com.ibm.websphere.javaee.persistence.2.0;version=latest,\
+	com.ibm.websphere.javaee.persistence.2.1;version=latest,\
 	com.ibm.ws.javaee.dd;version=latest,\
 	com.ibm.ws.managedobject;version=latest,\
-	com.ibm.websphere.javaee.jsp.2.2;version=latest,\
+	com.ibm.websphere.javaee.jsp.2.3;version=latest,\
 	org.eclipse.osgi,\
-	com.ibm.websphere.javaee.ejb.3.1;version=latest,\
+	com.ibm.websphere.javaee.ejb.3.2;version=latest,\
 	com.ibm.ws.classloading;version=latest,\
 	com.ibm.ws.kernel.boot,\
-	com.ibm.websphere.javaee.interceptor.1.1;version=latest,\
+	com.ibm.websphere.javaee.interceptor.1.2;version=latest,\
 	com.ibm.ws.org.jboss.weld.2.4.3;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest
 

@@ -5,55 +5,32 @@
 -connection-settings: ${.}/connection-settings.xml
 
 # Logging for repository connection when debugging
-#-connection-log: ~/.bnd/connection-log.txt
-
-# disable central for now until we have a local server we can point to
-#-plugin.1.Central: \
-#	aQute.bnd.deployer.repository.wrapper.Plugin; \
-#		location = "${build}/cache/wrapper"; \
-#		reindex = true, \
-#	aQute.bnd.jpm.Repository; \
-#		includeStaged = true; \
-#		name = Central; \
-#		location = ~/.bnd/shacache; \
-#		index = ${build}/central.json
-
--plugin.1.MavenLocal: \
-	aQute.bnd.repository.maven.provider.MavenBndRepository; \
-		name = MavenLocal; \
-		pretty = true; \
-		local = ${build}/maven-local
-
--plugin.2.Local: \
-	aQute.bnd.deployer.repository.LocalIndexedRepo; \
-		name = Local; \
-		pretty = true; \
-		local = ${build}/local
-
--plugin.3.Templates: \
-	aQute.bnd.deployer.repository.LocalIndexedRepo; \
-		name = Templates; \
-		pretty = true; \
-		local = ${build}/templates
-
--plugin.4.Release: \
-	aQute.bnd.deployer.repository.LocalIndexedRepo; \
-		name = Release; \
-		pretty = true; \
-		local = ${env;LOCAL_REPO_PATH;${build}/release};
+#-connection-log: ${.}/connection-log.txt
 
 # Default to upload artifacts with master tagged, but this should be set by
 # including generated.properties above.
 bGitBranch=master
 
 # Defines what tags to attach to artifacts uploaded on Artifactory.
-matrixParams=\;GIT_BRANCH\=master\;GIT_FEATURE_BRANCH\=${bGitBranch}
+# matrixParams=\;GIT_BRANCH\=master\;GIT_FEATURE_BRANCH\=${bGitBranch}
 
--plugin.5.Artifactory = \
-	aQute.bnd.repository.maven.provider.MavenBndRepository; \
-		releaseUrl="${artifactoryReleaseUrl}${matrixParams}" ; \
-		snapshotUrl="${artifactorySnapshotUrl}${matrixParams}" ; \
-		name = "Artifactory";
+-plugin.1.Local: \
+    aQute.bnd.repository.maven.provider.MavenBndRepository; \
+        name = Local; \
+        noupdateOnRelease = true; \
+        local = ${build}/local
+
+-plugin.2.Release: \
+    aQute.bnd.repository.maven.provider.MavenBndRepository; \
+        name = Release; \
+        noupdateOnRelease = true; \
+        local = ${env;LOCAL_REPO_PATH;${build}/release};
+
+-plugin.3.Artifactory = \
+    aQute.bnd.repository.maven.provider.MavenBndRepository; \
+        releaseUrl="${artifactoryReleaseUrl}${matrixParams}" ; \
+        snapshotUrl="${artifactorySnapshotUrl}${matrixParams}" ; \
+        name = "Artifactory";
 
 # Don't upload sources or javadoc unless bundle overrides
 -maven-release: ${if;${is;${env;PUBLISH_REPO;Release};Artifactory};remote;local}, sources;path=NONE, javadoc;path=NONE
@@ -62,13 +39,16 @@ javac.source: 1.6
 javac.target: 1.6
 javac.debug: true
 javac.encoding: UTF-8
--sources: false
+-sources: true
 
 -pedantic: true
 -fixupmessages.missingexport: "Used bundle version * for exported package";is:=error
 
 -releaserepo: ${env;PUBLISH_REPO;Release}
 -baselinerepo: Release
+-buildrepo: Local
+-groupid: ${if;${test.project};test;dev}
+-pom: 
 
 buildEngineName: defaultEngine
 
@@ -82,6 +62,8 @@ mockito: org.mockito.mockito-core;version="[1.9,2)",\
 -pluginpath: \
     ${workspace}/cnf/lib/wlp-bndPlugins.jar,\
     ${workspace}/cnf/lib/org.apache.aries.util-1.2.0.jar
+
+test.project: false
 
 instrument.disabled: false
 instrument.classesIncludes: **/*.class

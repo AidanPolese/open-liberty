@@ -23,7 +23,7 @@ bGitBranch=master
 # and uses the RTC buildLabel for the qualifier. The "generated.build.id" file
 # (included above) will predefine the Build-Identifier header.
 Build-Identifier: SNAPSHOT-${now}
-Bundle-Version: ${bFullVersion}${if;${is;${bGitBranch};master};.${tstamp};.${bGitBranch}}-SNAPSHOT
+Bundle-Version: ${bFullVersion}.${bGitBranch}-SNAPSHOT
 
 -donotcopy      = (CVS|.svn|.+.bak|nlsbuild|~.+|.+~|.jazzignore)
 -removeheaders  = Include-Resource, Ignore-Package, TODAY, DSTAMP, TSTAMP, Bnd-LastModified

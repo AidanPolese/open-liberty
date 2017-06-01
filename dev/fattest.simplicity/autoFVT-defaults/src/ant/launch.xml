@@ -222,6 +222,16 @@
 		<!-- Server log validation should be done by default -->
 		<!-- Individual buckets must opt-out if they don't want to have logs checked -->
 		<property name="enable.server.log.validation" value="false" />
+		
+		<!-- Java 9 args to launch JUnit with -->
+		<!-- To fully override java9.args specify 'java9.args' -->
+		<!-- To add additonal args, specify 'java9.args.append' -->
+		<property name="java9.args.append" value=""/>
+		<property name="java9.args" value="--add-modules java.activation,java.xml.bind,java.xml.ws,java.xml.ws.annotation ${java9.args.append}"/>
+		<condition property="conditional.java9.args" value="${java9.args}" else="">
+			<istrue value="${is.java9}"/>
+		</condition>
+		<echo message="Launching FAT with java 9 args: ${conditional.java9.args}"/>
 
 		<!-- START coverage properties -->
 		<property name="exec.data.file" location="${dir.log.coverage}/jacoco.exec" />
@@ -317,6 +327,8 @@
 					<jvmarg value="${framework.maxheap}" />
 					<!-- embedded trace conditionals -->
 					<jvmarg value="${framework.debug.embed.jvmarg1}" /> 
+					<!-- add java 9 specific args -->
+                    <jvmarg line="${conditional.java9.args}"/>
 				</junit>
 			</sequential>
 			<finally>

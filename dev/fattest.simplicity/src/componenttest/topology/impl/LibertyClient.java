@@ -66,10 +66,13 @@ import com.ibm.websphere.simplicity.config.ClientConfiguration;
 import com.ibm.websphere.simplicity.config.ClientConfigurationFactory;
 import com.ibm.websphere.simplicity.log.Log;
 import com.ibm.websphere.soe_reporting.SOEHttpPostUtil;
+
 import componenttest.common.apiservices.Bootstrap;
 import componenttest.common.apiservices.LocalMachine;
 import componenttest.exception.TopologyException;
+import componenttest.topology.impl.JavaInfo.Vendor;
 import componenttest.topology.impl.LibertyFileManager.LogSearchResult;
+import componenttest.topology.utils.Java9Helper;
 import componenttest.topology.utils.LibertyServerUtils;
 
 public class LibertyClient {
@@ -99,6 +102,8 @@ public class LibertyClient {
     protected static final boolean DEFAULT_VALIDATE_APPS = true;
     public static boolean VALIDATE_APPS = DEFAULT_VALIDATE_APPS;
 
+    protected static final JavaInfo javaInfo = JavaInfo.forCurrentVM();
+
     protected static final String JAVA_VERSION = AccessController.doPrivileged(new PrivilegedAction<String>() {
         @Override
         public String run() {
@@ -106,38 +111,11 @@ public class LibertyClient {
         }
     });
 
-    protected static final boolean JAVA_VERSION_6 = JAVA_VERSION.startsWith("1.6.");
+    protected static final boolean JAVA_VERSION_6 = javaInfo.majorVersion() == 6;
 
-    protected static final boolean J9_JVM_RUN = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
-        @Override
-        public Boolean run() {
-            boolean b;
-            String vm = System.getProperty("java.vm.name");
-            Log.info(c, "<clinit>", "java.vm.name=" + vm);
-            b = vm != null && vm.contains("J9");
-            Log.info(c, "<clinit>", "J9_JVM_RUN=" + b);
-            return b;
-        }
-    });
+    protected static final boolean J9_JVM_RUN = javaInfo.vendor() == Vendor.IBM;
 
-    protected static final boolean HOTSPOT_JVM_RUN = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
-        @Override
-        public Boolean run() {
-            String hotspotString = System.getProperty("fat.on.hotspot");
-            boolean hotspot;
-            if (hotspotString != null) {
-                Log.info(c, "<clinit>", "fat.on.hotspot=" + hotspotString);
-                hotspot = Boolean.parseBoolean(hotspotString);
-            } else {
-                String vm = System.getProperty("java.vm.name");
-                Log.info(c, "<clinit>", "java.vm.name=" + vm);
-                hotspot = vm.contains("HotSpot");
-            }
-
-            Log.info(c, "<clinit>", "HOTSPOT_JVM_RUN=" + hotspot);
-            return hotspot;
-        }
-    });
+    protected static final boolean HOTSPOT_JVM_RUN = javaInfo.vendor() == Vendor.SUN_ORACLE;
 
     protected static final String MAC_RUN = AccessController.doPrivileged(new PrivilegedAction<String>() {
         @Override
@@ -284,7 +262,7 @@ public class LibertyClient {
 
     /**
      * Returns the value of WLP_USER_DIR for the client.
-     * 
+     *
      * @return
      */
     public String getUserDir() {
@@ -378,7 +356,7 @@ public class LibertyClient {
     /**
      * Protected - This constructor is protected as users should use the
      * LibertyClientFactory's static methods to get LibertyClient instances.
-     * 
+     *
      * @param clientName The name of the client that is going to used
      * @throws Exception
      */
@@ -567,7 +545,7 @@ public class LibertyClient {
      * Set the feature list of the client.xml to the new features specified
      * in the {@code List<String>}. Each String should be the only feature
      * name, e.g. servlet-3.0
-     * 
+     *
      * @param newFeatures
      * @throws Exception
      */
@@ -811,6 +789,11 @@ public class LibertyClient {
             JVM_ARGS += " -Dcom.ibm.ws.logging.trace.specification=" + configuredTrace;
         }
 
+        if (JavaInfo.JAVA_VERSION >= 9) {
+            Log.info(c, "startClientWithArgs", "Adding java 9 args: " + Java9Helper.JAVA_9_ARGS);
+            JVM_ARGS += Java9Helper.JAVA_9_ARGS;
+        }
+
         envVars.setProperty("JVM_ARGS", JVM_ARGS);
 
         // This takes the custom console file name used for tests into consideration
@@ -933,7 +916,7 @@ public class LibertyClient {
 
     /**
      * Create a marker file for the client to indicate it is started.
-     * 
+     *
      * @throws IOException
      */
     protected void createClientMarkerFile() throws Exception {
@@ -955,7 +938,7 @@ public class LibertyClient {
 
     /**
      * Delete a marker file for the client (after stopped).
-     * 
+     *
      * @throws IOException
      */
     protected void deleteClientMarkerFile() throws Exception {
@@ -1000,10 +983,10 @@ public class LibertyClient {
      * We are adding a "soft failure" mode, in an attempt to compensate for the fact that the Virtual Machines
      * we're now running regression tests on have "bursty" performance and may introduce substantial delays with
      * no warning, making the originally coded times fragile.
-     * 
+     *
      * With this change, if intendedTimeout is exceeded, we report this to the SOE client
      * but do not consider it a test failure. Only if extendedTimeout is exceeded will we return a not-found indication.
-     * 
+     *
      * @param regexp a regular expression to search for
      * @param intendedTimeout a timeout, in milliseconds, within which string was expected to occur
      * @param extendedTimeout a timeout, in milliseconds, within which string may acceptably occur
@@ -1090,15 +1073,15 @@ public class LibertyClient {
             DateFormat formatter = DateFormat.getTimeInstance(DateFormat.LONG);
             Log.info(c, method,
                      "Started searching for app manager messages at " +
-                                     formatter.format(new Date(startTime)) +
-                                     " and finished at " +
-                                     formatter.format(new Date(endTime)));
+                                formatter.format(new Date(startTime)) +
+                                " and finished at " +
+                                formatter.format(new Date(endTime)));
         }
     }
 
 /*
  * App Manager messages that tests wait for in the log:
- * 
+ *
  * CWWKZ0001I - many
  * CWWKZ0002E - none
  * CWWKZ0003I - com.ibm.ws.app.manager_fat, com.ibm.ws.classloading_fat, com.ibm.ws.ejbcontainer.security_fat,
@@ -1510,8 +1493,8 @@ public class LibertyClient {
      * Checks client logs for any lines containing errors or warnings that
      * do not match any regular expressions provided in regIgnore.
      * regIgnore list provided by
-     * 
-     * 
+     *
+     *
      * @return A list of lines containing errors/warnings from client logs
      */
     protected void checkLogsForErrorsAndWarnings() throws Exception {
@@ -1578,7 +1561,7 @@ public class LibertyClient {
      * This method is used to tidy away the client logs at the start.
      */
     protected void preStartClientLogsTidy() throws Exception {
-        //should be .../alpine/usr/clients/<client>/logs
+        //should be .../liberty/usr/clients/<client>/logs
         LibertyFileManager.deleteLibertyDirectoryAndContents(machine, getClientRoot() + "/logs");
 
         // Look for javacore/heapdump/snap. These are collected by stop/archive. We don't need
@@ -1743,9 +1726,9 @@ public class LibertyClient {
      * This method will copy a file from the client root into the AutoFVT {@link #pathToAutoFVTTestFiles}/tmp folder.
      * If you are copying a directory and some of the files cannot be copied due to an error then these errors will
      * be ignored, this can happen if the client is still active and the files are locked by another process.
-     * 
+     *
      * If copying a file the destination will be overwritten.
-     * 
+     *
      * @param pathInClientRoot The path to the file or directory in the client root, must not start with a "/"
      * @param destination The place within the temp folder to store this file, must not start with a "/"
      * @return the LocalFile of the copied RemoteFile
@@ -1759,9 +1742,9 @@ public class LibertyClient {
      * This method will copy a file from the install root into the AutoFVT {@link #pathToAutoFVTTestFiles}/tmp folder.
      * If you are copying a directory and some of the files cannot be copied due to an error then these errors will
      * be ignored, this can happen if the client is still active and the files are locked by another process.
-     * 
+     *
      * If copying a file the destination will be overwritten.
-     * 
+     *
      * @param pathInInstallRoot The path to the file or directory in the install root, must not start with a "/"
      * @param destination The place within the temp folder to store this file, must not start with a "/"
      * @return the LocalFile of the copied RemoteFile
@@ -1800,7 +1783,7 @@ public class LibertyClient {
     /**
      * Get the collective dir under the client resources dir. For instance,
      * this is where the collective trust stores are located.
-     * 
+     *
      * @return the path
      */
     public String getCollectiveResourcesPath() {
@@ -1927,7 +1910,7 @@ public class LibertyClient {
      * Non-recursively list the contents of the client install root directory, or if the relativePath
      * parameter is non-null, the indicated directory (relative the the install root). If filter is
      * non-null, return only those directory names or filenames that contain the filter string.
-     * 
+     *
      * @param relativeDir path to a directory relative to the install root directory, should not begin with path separator, may be null.
      * @param filter string to filter the results by, returned file and directory names must contain this, may be null.
      * @return a list of file and directory names indicating the contents of the specified directory.
@@ -1945,7 +1928,7 @@ public class LibertyClient {
      * Non-recursively list the contents of the client install root directory, or if the relativePath
      * parameter is non-null, the indicated directory (relative the the install root). If filter is
      * non-null, return only those directory names or filenames that contain the filter string.
-     * 
+     *
      * @param relativeDir path to a directory relative to the install root directory, should not begin with path separator, may be null.
      * @param filter string to filter the results by, returned file and directory names must contain this, may be null.
      * @return a list of file and directory names indicating the contents of the specified directory.
@@ -1961,7 +1944,7 @@ public class LibertyClient {
 
     /**
      * Method for returning the directory contents as a list of Strings representing first level file/dir names
-     * 
+     *
      * @return ArrayList of File/Directory names
      *         that exist at the first level i.e. it's not recursive. If it's a directory the String in the list is prefixed with a /
      * @throws TopologyException
@@ -2088,7 +2071,7 @@ public class LibertyClient {
      * publish/clients/<clientName>/dropins folder found in the FAT project
      * Under the covers this will not use the install functionality found in the
      * ApplicationManager but use the Application Csar which is part of Liberty.
-     * 
+     *
      * @param appName The name of the application
      * @throws Exception
      */
@@ -2100,7 +2083,7 @@ public class LibertyClient {
     /**
      * Shortcut for new FATTests to install apps assuming the app is
      * located in the publish/clients/<clientName>/apps folder of the FAT project
-     * 
+     *
      * @param appName The name of the application
      * @throws Exception
      */
@@ -2111,7 +2094,7 @@ public class LibertyClient {
 
     /**
      * Shortcut for new FATTests to install apps located anywhere on the file system
-     * 
+     *
      * @param path The absolute path to the application
      * @param appName The name of the application
      * @throws Exception
@@ -2125,7 +2108,7 @@ public class LibertyClient {
      * Given a sample name that corresponds to a sample in a jar named <sample-name>.jar in
      * the FAT files directory, runs the self extractor with the --downloadDependencies and
      * --acceptLicense flag in order to create a working copy of the sample client for test.
-     * 
+     *
      * @param sample
      * @return
      * @throws Exception
@@ -2188,7 +2171,7 @@ public class LibertyClient {
     /**
      * Method used by exposed installApp methods that calls into the ApplicationManager
      * to actually install the required application
-     * 
+     *
      * @param appPath Absoulte path to application (includes app name)
      * @throws Exception
      */
@@ -2219,7 +2202,7 @@ public class LibertyClient {
 
     /**
      * Shortcut for new FATTests to uninstall apps
-     * 
+     *
      * @param appName The name of the application
      * @throws Exception
      */
@@ -2268,7 +2251,7 @@ public class LibertyClient {
      * Reads the current jvm.options file into memory and returns the result.
      * Lines with a '=' in the middle are treated as key-value mappings,
      * and lines without a '=' character are treated as a key with an empty value.
-     * 
+     *
      * @return key/value pairs from the jvm.options file
      * @throws Exception if the file can't be read
      */
@@ -2291,7 +2274,7 @@ public class LibertyClient {
 
     /**
      * Reads the current jvm.options file into memory and returns the result.
-     * 
+     *
      * @return key/value pairs from the jvm.options file
      * @throws Exception if the file can't be read
      */
@@ -2338,7 +2321,7 @@ public class LibertyClient {
      * <li>Non-empty keys mapped to a null or empty value will be added to jvm.options without a value (no '=' suffix).</li>
      * <li>Non-empty keys mapped to a non-empty value will be added to jvm.options in the format: <code>key=value</code>.</li>
      * </ul>
-     * 
+     *
      * @param options key/value pairs to set in the jvm.options file
      * @throws Exception if the jvm.options file can't be written to. Note that this exception may indicate that the file is no longer formatted correctly.
      * @see #getJvmOptions()
@@ -2478,7 +2461,7 @@ public class LibertyClient {
     /**
      * Replaces the client configuration. This encapsulates the necessary logic
      * to deal with system / JDK idiosyncrasies.
-     * 
+     *
      * @param fileName
      * @throws Exception
      */
@@ -2493,7 +2476,7 @@ public class LibertyClient {
      * This will put the named file into the root directory of the client and name it client.xml. As the file name is changed if you want to copy files for use in an include
      * statement or if the location of the config file is being changed using the was.configroot.uri property or --config-root command line then you should use the
      * {@link #copyFileToLibertyInstallRoot(String)} method.
-     * 
+     *
      * @param fileName The name of the file from the FVT test suite
      * @throws Exception
      */
@@ -2505,7 +2488,7 @@ public class LibertyClient {
     /**
      * This will save the current client configuration, so that it can be restored later on via the
      * restoreClientConfiguration method.
-     * 
+     *
      * @throws Exception
      */
     public void saveClientConfiguration() throws Exception {
@@ -2521,7 +2504,7 @@ public class LibertyClient {
     /**
      * This will restore the client configuration that was saved by a prior call to the
      * saveClientConfiguration method.
-     * 
+     *
      * @throws Exception
      */
     public void restoreClientConfiguration() throws Exception {
@@ -2541,7 +2524,7 @@ public class LibertyClient {
 
     /**
      * This will load the {@link ClientConfiguration} from the default config file returned from {@link #getClientConfigurationFile()}.
-     * 
+     *
      * @return The loaded {@link ClientConfiguration}
      * @throws Exception
      */
@@ -2552,7 +2535,7 @@ public class LibertyClient {
 
     /**
      * This gets the {@link ClientConfiguration} for the supplied XML file.
-     * 
+     *
      * @param file The file to load the client configuration from
      * @return The loaded {@link ClientConfiguration}
      * @throws Exception
@@ -2572,7 +2555,7 @@ public class LibertyClient {
 
     /**
      * This updates the supplied file with the supplied config.
-     * 
+     *
      * @param clientConfig The config to store to the file
      * @param file The file to store the config to
      * @throws Exception
@@ -2603,7 +2586,7 @@ public class LibertyClient {
 
     /**
      * This stores the supplied content to the default client XML file returned from {@link #getClientConfigurationFile()}.
-     * 
+     *
      * @param clientConfig The configuration to store
      * @throws Exception
      */
@@ -2617,7 +2600,7 @@ public class LibertyClient {
      * individual line in the file will be logged separately. Some logging
      * formatters look prettier with single line log messages; others look
      * better with multiple-line log messages.
-     * 
+     *
      * @param file
      *            the file whose contents you want to log.
      * @param singleLine
@@ -2707,7 +2690,7 @@ public class LibertyClient {
      * This is just a utility, primarily for pulling out a trace file without
      * worrying about the timestamp, it isn't very clever and just returns
      * the first match it finds.
-     * 
+     *
      * @param regex
      * @return a matching RemoteFile, or null if no match was found
      */
@@ -2730,7 +2713,7 @@ public class LibertyClient {
     /**
      * This method will search the given file on this client for the specified expression.
      * The path given is relative to the install root directory.
-     * 
+     *
      * @param regexp pattern to search for.
      * @param filePath the pathname relative to the install root directory.
      * @return A list of the lines in the file that contains the matching
@@ -2746,7 +2729,7 @@ public class LibertyClient {
     /**
      * This method will search the given file on this client for the specified expression.
      * The path given is relative to the client root directory.
-     * 
+     *
      * @param regexp pattern to search for.
      * @param filePath the pathname relative to the client root directory.
      * @return A list of the lines in the file that contains the matching
@@ -2773,7 +2756,7 @@ public class LibertyClient {
     /**
      * This method will search the output and trace files for this client
      * for the specified expression. The default trace prefix is assumed.
-     * 
+     *
      * @param regexp pattern to search for
      * @return A list of the lines in the trace files which contain the matching
      *         pattern. No match results in an empty list.
@@ -2792,7 +2775,7 @@ public class LibertyClient {
     /**
      * This method will search the output and trace files for this client
      * for the specified expression. The default trace prefix is assumed.
-     * 
+     *
      * @param regexp pattern to search for
      * @return A list of the lines in the trace files which contain the matching
      *         pattern. No match results in an empty list.
@@ -2811,7 +2794,7 @@ public class LibertyClient {
     /**
      * This method will search the output and trace files for this client
      * for the specified expression. The default trace prefix is assumed.
-     * 
+     *
      * @param regexp pattern to search for
      * @return A list of the lines in the trace files which contain the matching
      *         pattern. No match results in an empty list.
@@ -2824,7 +2807,7 @@ public class LibertyClient {
     /**
      * This method will search the output and trace files for this client
      * for the specified expression.
-     * 
+     *
      * @param regexp pattern to search for
      * @param traceFileNamePrefix trace file prefix if the trace file name is not default
      * @return A list of the lines in the trace files which contain the matching
@@ -2853,7 +2836,7 @@ public class LibertyClient {
     /**
      * This method will search the trace files for this client
      * for the specified expression.
-     * 
+     *
      * @param regexp pattern to search for
      * @param traceFileNamePrefix trace file prefix if the trace file name is not default
      * @return A list of the lines in the trace files which contain the matching
@@ -2882,7 +2865,7 @@ public class LibertyClient {
      * on an incremental basis using the default trace prefix. It starts with reading
      * the file at the offset where the last mark was set (or the beginning of the file
      * if no mark has been set) and reads until the end of the file.
-     * 
+     *
      * @param regexp pattern to search for
      * @return A list of the lines in the trace files which contain the matching
      *         pattern. No matches result in an empty list.
@@ -2897,7 +2880,7 @@ public class LibertyClient {
      * on an incremental basis using a custom trace prefix. It starts with reading the
      * file at the offset where the last mark was set (or the beginning of the file
      * if no mark has been set) and reads until the end of the file.
-     * 
+     *
      * @param regexp pattern to search for
      * @param traceFileNamePrefix trace file prefix if the trace file name is not default
      * @return A list of the lines in the trace files which contain the matching
@@ -2930,7 +2913,7 @@ public class LibertyClient {
      * on an incremental basis using the default trace prefix. It starts with reading the file
      * at the offset where the last mark was set (or the beginning of the file
      * if no mark has been set) and reads until the end of the file.
-     * 
+     *
      * @param regexpList a list of expressions to search for
      * @return a <code>List&#60String&#62</code> containing the matches
      * @throws Exception
@@ -2944,7 +2927,7 @@ public class LibertyClient {
      * on an incremental basis using a custom trace prefix. It starts with reading the file
      * at the offset where the last mark was set (or the beginning of the file
      * if no mark has been set) and reads until the end of the file.
-     * 
+     *
      * @param regexpList a list of expressions to search for
      * @param traceFileNamePrefix trace file prefix if the trace file name is not default
      * @return a <code>List&#60String&#62</code> contains the matches
@@ -2988,7 +2971,7 @@ public class LibertyClient {
 
     /**
      * Set the mark offset to the end of the log file.
-     * 
+     *
      * @param log files to mark. If none are specified, the default log file is marked.
      */
     public void setMarkToEndOfLog(RemoteFile... logFiles) throws Exception {
@@ -3034,10 +3017,10 @@ public class LibertyClient {
 
     /**
      * Get the offset into a log or trace file of the last message inspected.
-     * 
+     *
      * If the file name does not exist in the offsets, then create an entry for it and
      * set the offset for that file to '0'.
-     * 
+     *
      * @param String value of the file name
      * @return Long containing the offset into the file of the last message inspected
      */
@@ -3065,7 +3048,7 @@ public class LibertyClient {
 
     /**
      * Returns a subset of the supplied application names that appear to be installed based on the presence of messages in messages.log.
-     * 
+     *
      * @param possiblyInstalledAppNames list of application names to check if installed. The names should be sufficiently unique (not substrings of other names).
      * @return a subset of the supplied application names that appear to be installed based on the presence of messages in messages.log.
      * @throws Exception if an error occurs.
@@ -3107,11 +3090,11 @@ public class LibertyClient {
      * then this method waits for corresponding feature update completed messages (CWWKF0008I).
      * If a list of application names is supplied, this method waits for all of the apps to be started.
      * The offset is incremented every time this method is called.
-     * 
+     *
      * @param appNames optional list of names of applications that should be started before returning from this method.
      * @param regexps optional list of regular expressions that indicate additional messages to wait for. The list should NOT include
      *            the CWWKG0017I, CWWKG0018I, CWWKF0007I or CWWKF0007I messages, as those are implicitly handled by this method.
-     * 
+     *
      * @return list of lines containing relevant messages.
      */
     public List<String> waitForConfigUpdateInLogUsingMark(Set<String> appNames,
@@ -3126,14 +3109,14 @@ public class LibertyClient {
      * specified that a feature update must happen, regardless of when CWWKG0017I appears, CWWKF0008I will
      * be waited for. If a list of application names is supplied, this method waits for all of the apps to be started.
      * The offset is incremented every time this method is called.
-     * 
+     *
      * @param appNames optional list of names of applications that should be started before returning from this method.
      * @param waitForFeatureUpdateCompleted if true, this method will require a feature updated completed message
      *            before returning (if false, it will only wait for this message if a feature update is started
      *            before the config update is completed)
      * @param regexps optional list of regular expressions that indicate additional messages to wait for. The list should NOT include
      *            the CWWKG0017I, CWWKG0018I, CWWKF0007I or CWWKF0007I messages, as those are implicitly handled by this method.
-     * 
+     *
      * @return list of lines containing relevant messages.
      */
     public List<String> waitForConfigUpdateInLogUsingMark(Set<String> appNames,
@@ -3171,7 +3154,7 @@ public class LibertyClient {
             long offset;
             for (offset = getMarkOffset(logFile.getAbsolutePath()); System.currentTimeMillis() - startTime < timeout
                                                                     && (!startedAppNames.containsAll(appNames)
-                                                                    || watchFor.size() > 1); startedAppNames = getInstalledAppNames(appNamesArray)) {
+                                                                        || watchFor.size() > 1); startedAppNames = getInstalledAppNames(appNamesArray)) {
                 // Periodically print diagnostic info if waiting a long time
                 long waited = System.currentTimeMillis() - startTime;
                 if (++count % 10 == 0)
@@ -3205,11 +3188,11 @@ public class LibertyClient {
                     } else
                         // Remove the corresponding regexp from the watchFor list
                         for (Iterator<String> it = watchFor.iterator(); it.hasNext();) {
-                            String regexp = it.next();
-                            if (Pattern.compile(regexp).matcher(line).find()) {
-                                it.remove();
-                                break;
-                            }
+                        String regexp = it.next();
+                        if (Pattern.compile(regexp).matcher(line).find()) {
+                        it.remove();
+                        break;
+                        }
                         }
                 }
             }
@@ -3243,7 +3226,7 @@ public class LibertyClient {
     /**
      * This method will time out after a sensible period of
      * time has elapsed.
-     * 
+     *
      * @param regexp a regular expression to search for
      * @return the matching line in the log, or null if no matches
      *         appear before the timeout expires
@@ -3276,7 +3259,7 @@ public class LibertyClient {
     /**
      * This method will time out after a sensible period of
      * time has elapsed.
-     * 
+     *
      * @param numberOfMatches number of matches required
      * @param regexp a regular expression to search for
      * @return the number of matches in the log, or 0 if no matches
@@ -3292,7 +3275,7 @@ public class LibertyClient {
      * <p>
      * This method will time out after a sensible period of
      * time has elapsed.
-     * 
+     *
      * @param regexp a regular expression to search for
      * @return the matching line in the log, or null if no matches
      *         appear before the timeout expires
@@ -3306,7 +3289,7 @@ public class LibertyClient {
      * <p>
      * This method will time out after a sensible period of
      * time has elapsed.
-     * 
+     *
      * @param regexp a regular expression to search for
      * @return the matching line in the log, or null if no matches
      *         appear before the timeout expires
@@ -3320,7 +3303,7 @@ public class LibertyClient {
      * your string appear super-quickly, or you know your string
      * might take a ridiculously long time (like five minutes),
      * consider using the method which takes a default timeout, {@link }
-     * 
+     *
      * @param regexp
      * @param timeout a timeout, in milliseconds
      * @return
@@ -3334,7 +3317,7 @@ public class LibertyClient {
      * your string appear super-quickly, or you know your string
      * might take a ridiculously long time (like five minutes),
      * consider using the method which takes a default timeout.
-     * 
+     *
      * @param numberOfMatches number of matches required
      * @param regexp a regular expression to search for
      * @param timeout a timeout, in milliseconds
@@ -3357,7 +3340,7 @@ public class LibertyClient {
      * your string appear super-quickly, or you know your string
      * might take a ridiculously long time (like five minutes),
      * consider using the method which takes a default timeout, {@link }
-     * 
+     *
      * @param regexp
      * @param timeout a timeout, in milliseconds
      * @return
@@ -3378,7 +3361,7 @@ public class LibertyClient {
      * your string appear super-quickly, or you know your string
      * might take a ridiculously long time (like five minutes),
      * consider using the method which takes a default timeout, {@link }
-     * 
+     *
      * @param regexp
      * @param timeout a timeout, in milliseconds
      * @return
@@ -3419,7 +3402,7 @@ public class LibertyClient {
 
     /**
      * Check for a number of strings in a potentially remote file
-     * 
+     *
      * @param regexp a regular expression to search for
      * @param timeout a timeout, in milliseconds
      * @param outputFile file to check
@@ -3431,7 +3414,7 @@ public class LibertyClient {
 
     /**
      * Check for a number of strings in a potentially remote file
-     * 
+     *
      * @param numberOfMatches number of matches required
      * @param regexp a regular expression to search for
      * @param timeout a timeout, in milliseconds
@@ -3467,7 +3450,7 @@ public class LibertyClient {
             DateFormat formatter = DateFormat.getTimeInstance(DateFormat.LONG);
             Log.info(LibertyClient.class, "waitForMultipleStringsInLog",
                      "Started waiting for " + numberOfMatches + " messages matching regexp [ " + regexp + "] at " + formatter.format(new Date(startTime))
-                                     + " and finished at " + formatter.format(new Date(endTime)));
+                                                                         + " and finished at " + formatter.format(new Date(endTime)));
         }
         return count;
     }
@@ -3475,7 +3458,7 @@ public class LibertyClient {
     /**
      * Wait for the specified regex in the specified RemoteFile from the last
      * mark.
-     * 
+     *
      * @param regexp
      * @param outputFile
      * @return
@@ -3487,7 +3470,7 @@ public class LibertyClient {
     /**
      * Wait for the specified regexp in the default logs from the last offset.
      * The offset is incremented every time this method is called.
-     * 
+     *
      * @param regexp a regular expression to search for
      * @param timeout a timeout, in milliseconds
      * @param outputFile file to check
@@ -3500,7 +3483,7 @@ public class LibertyClient {
     /**
      * Wait for the specified regexp in the default logs from the last offset.
      * The offset is incremented every time this method is called.
-     * 
+     *
      * @param regexp a regular expression to search for
      * @param intendedTimeout a timeout, in milliseconds, within which we expect the wait to complete. Missing this is a soft fail.
      * @param extendedTimeout a timeout, in milliseconds, within which we insist the wait complete. Missing this is an error.
@@ -3546,7 +3529,7 @@ public class LibertyClient {
             DateFormat formatter = DateFormat.getTimeInstance(DateFormat.LONG);
             Log.info(LibertyClient.class, "waitForStringInLogUsingLastOffset",
                      "Started waiting for message matching regexp [ " + regexp + "] at " + formatter.format(new Date(startTime))
-                                     + " and finished at " + formatter.format(new Date(endTime)));
+                                                                               + " and finished at " + formatter.format(new Date(endTime)));
         }
         // If we didn't find the string, we still want to mark the offest so
         // we don't have to re-search the whole file on the next call.
@@ -3557,7 +3540,7 @@ public class LibertyClient {
     /**
      * Wait for the specified regexp in the default logs from the last mark.
      * The offset is also incremented every time this method is called.
-     * 
+     *
      * @param regexp a regular expression to search for
      * @param timeout a timeout, in milliseconds
      * @param outputFile file to check
@@ -3570,7 +3553,7 @@ public class LibertyClient {
     /**
      * Wait for the specified regexp in the default logs from the last mark.
      * The offset is also incremented every time this method is called.
-     * 
+     *
      * @param regexp a regular expression to search for
      * @param intendedTimeout a timeout, in milliseconds, within which the wait should complete. Exceeding this is a soft fail.
      * @param extendedTimeout a timeout, in milliseconds, within which the wait must complete. Exceeding this is a hard fail.
@@ -3616,14 +3599,14 @@ public class LibertyClient {
             DateFormat formatter = DateFormat.getTimeInstance(DateFormat.LONG);
             Log.info(LibertyClient.class, "waitForStringInLogUsingMark",
                      "Started waiting for message matching regexp [ " + regexp + "] at " + formatter.format(new Date(startTime))
-                                     + " and finished at " + formatter.format(new Date(endTime)));
+                                                                         + " and finished at " + formatter.format(new Date(endTime)));
         }
         return null;
     }
 
     /**
      * Check for multiple instances of the regex in log using mark
-     * 
+     *
      * @param numberOfMatches number of matches required
      * @param regexp a regular expression to search for
      * @return number of matches found
@@ -3639,7 +3622,7 @@ public class LibertyClient {
 
     /**
      * Check for multiple instances of the regex in log using mark
-     * 
+     *
      * @param numberOfMatches number of matches required
      * @param regexp a regular expression to search for
      * @param timeout a timeout, in milliseconds
@@ -3687,7 +3670,7 @@ public class LibertyClient {
             DateFormat formatter = DateFormat.getTimeInstance(DateFormat.LONG);
             Log.info(LibertyClient.class, "waitForMultipleStringsInLog",
                      "Started waiting for " + numberOfMatches + " messages matching regexp [ " + regexp + "] at " + formatter.format(new Date(startTime))
-                                     + " and finished at " + formatter.format(new Date(endTime)) + " finding " + count + " matches.");
+                                                                         + " and finished at " + formatter.format(new Date(endTime)) + " finding " + count + " matches.");
         }
 
         return count;
@@ -3695,7 +3678,7 @@ public class LibertyClient {
 
     /**
      * Wait for a regex in the most recent trace file
-     * 
+     *
      * @param regexp
      * @return
      */
@@ -3705,7 +3688,7 @@ public class LibertyClient {
 
     /**
      * Wait for a regex in the most recent trace file
-     * 
+     *
      * @param regexp
      * @return
      */
@@ -3779,7 +3762,7 @@ public class LibertyClient {
     /**
      * Returns true if the client has been successfully started, and either
      * hasn't been stopped or hit exceptions during client stop.
-     * 
+     *
      * @return
      */
     public boolean isStarted() {
@@ -3799,7 +3782,7 @@ public class LibertyClient {
      * Sets the client's state flag to the state specified by the isStarted parameter.
      * The isStarted flag may not always be correct, if the client happens to be started
      * external from this class. This method allows for management of the state externally.
-     * 
+     *
      * @param isStarted
      */
     public void setStarted(boolean isStarted) {
@@ -3809,7 +3792,7 @@ public class LibertyClient {
     /**
      * This method will check the client state and reset the state based on the results of the
      * status operation.
-     * 
+     *
      * @throws Exception
      */
     public void resetStarted() throws Exception {
@@ -3836,7 +3819,7 @@ public class LibertyClient {
 
     /**
      * Start the client.
-     * 
+     *
      * @throws Exception
      */
     public ProgramOutput startClient() throws Exception {
@@ -3845,7 +3828,7 @@ public class LibertyClient {
 
     /**
      * Start the client.
-     * 
+     *
      * @param cleanStart if true, the client will be started with a clean start
      * @param validateApps if true, block until all of the registered apps have started
      * @throws Exception
@@ -3860,7 +3843,7 @@ public class LibertyClient {
      * <p>
      * This will use {@link #waitForStringInLogUsingMark(String)} so ensure
      * the offset is set to the correct point before invoking.
-     * 
+     *
      * @param fileName the file name of the application, e.g. snoop.war
      * @return {@code true} if the application was restarted successfully, {@code false} otherwise.
      * @throws Exception
@@ -3908,7 +3891,7 @@ public class LibertyClient {
 
     /**
      * Start the client and validate that the client was started
-     * 
+     *
      * @param cleanStart if true, the client will be started with a clean start
      * @param validateApps if true, block until all of the registered apps have started
      * @param preCleanClient if true, the client directory will be reset before the client is started (reverted to vanilla backup).
@@ -3921,7 +3904,7 @@ public class LibertyClient {
 
     /**
      * Start the client and validate that the client was started
-     * 
+     *
      * @param cleanStart if true, the client will be started with a clean start
      * @param validateApps if true, block until all of the registered apps have started
      * @param preCleanClient if true, the client directory will be reset before the client is started (reverted to vanilla backup).
@@ -3934,7 +3917,7 @@ public class LibertyClient {
 
     /**
      * Start the client and validate that the client was started
-     * 
+     *
      * @param preClean if true, the client directory will be reset before
      *            the client is started (reverted to vanilla backup).
      * @param cleanStart if true, the client will be started with a clean start
@@ -3952,7 +3935,7 @@ public class LibertyClient {
 
     /**
      * Issues a client script command against this client
-     * 
+     *
      * @param command command name
      * @param optionalArgs any optional args needed by the command
      * @throws Exception if the operation fails
@@ -3990,7 +3973,7 @@ public class LibertyClient {
 
     /**
      * Set the list of errors to be ignored
-     * 
+     *
      * @param String .... list of expected errors
      * @return void
      */
@@ -4020,9 +4003,9 @@ public class LibertyClient {
     /**
      * Checks the current client to see if it is eligible
      * for log checking.
-     * 
+     *
      * @param none
-     * 
+     *
      * @return boolean true - no need to check, false - check for errors
      */
     protected boolean isClientExemptFromChecking() {
@@ -4051,9 +4034,9 @@ public class LibertyClient {
 
     /**
      * Reads a list of exempt servers into a HashMap for later searching.
-     * 
+     *
      * @param none
-     * 
+     *
      * @return none
      */
 

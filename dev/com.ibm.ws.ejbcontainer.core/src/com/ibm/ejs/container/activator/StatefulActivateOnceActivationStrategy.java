@@ -14,9 +14,9 @@ package com.ibm.ejs.container.activator;
 import com.ibm.ejs.container.BeanO;
 import com.ibm.ejs.container.ContainerTx;
 import com.ibm.ejs.container.StatefulBeanO;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.PassivationPolicy;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 public class StatefulActivateOnceActivationStrategy
                 extends StatefulSessionActivationStrategy

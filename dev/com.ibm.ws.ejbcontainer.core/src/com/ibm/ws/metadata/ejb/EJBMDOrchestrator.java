@@ -94,8 +94,6 @@ import com.ibm.ejs.csi.ActivitySessionMethod;
 import com.ibm.ejs.csi.ApplicationExceptionImpl;
 import com.ibm.ejs.csi.EJBApplicationMetaData;
 import com.ibm.ejs.csi.EJBModuleMetaDataImpl;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.tx.jta.embeddable.LocalTransactionSettings;
 import com.ibm.websphere.cpi.Persister;
 import com.ibm.websphere.csi.ActivitySessionAttribute;
@@ -103,6 +101,8 @@ import com.ibm.websphere.csi.EJBModuleConfigData;
 import com.ibm.websphere.csi.J2EEName;
 import com.ibm.websphere.csi.MethodInterface;
 import com.ibm.websphere.csi.TransactionAttribute;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.CallbackKind;
 import com.ibm.ws.ejbcontainer.InternalConstants;
 import com.ibm.ws.ejbcontainer.facade.EJBClassFactory;
@@ -171,13 +171,13 @@ public abstract class EJBMDOrchestrator
     private static final String CLASS_NAME = EJBMDOrchestrator.class.getName();
     private static final TraceComponent tc = Tr.register(EJBMDOrchestrator.class, "EJBContainer", "com.ibm.ejs.container.container");
 
-    @SuppressWarnings("deprecation")
     private static final TraceComponent tcVerbose = Tr.register(CLASS_NAME + "-Verbose",
+                                                                EJBMDOrchestrator.class,
                                                                 "MetaDataVerbose",
                                                                 "com.ibm.ejs.container.container"); //d481127.11
 
-    @SuppressWarnings("deprecation")
     private static final TraceComponent tcInjection = Tr.register(CLASS_NAME + "-Injection",
+                                                                  EJBMDOrchestrator.class,
                                                                   InjectionConfigConstants.traceString,
                                                                   InjectionConfigConstants.messageFile);
 
@@ -1318,8 +1318,8 @@ public abstract class EJBMDOrchestrator
             bmd.cmpVersion == InternalConstants.CMP_VERSION_1_X) // 134261, d155348
         {
             //Need Isolation level for
-            //1) All beans in J2EE 1.2 app
-            //2) CMP11 beans ONLY in J2EE 1.3 app
+            //1) All beans in Java EE 1.2 app
+            //2) CMP11 beans ONLY in Java EE 1.3 app
             getIsolationLevels(isolationAttrs, // F743-18775
                                metaMethodElementKind,
                                methodNames,
@@ -1667,7 +1667,7 @@ public abstract class EJBMDOrchestrator
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
 
         if (isTraceOn && tc.isEntryEnabled())
-            Tr.entry(tc, "initializeLifecycleInterceptorMethodMD", ejbMethods);
+            Tr.entry(tc, "initializeLifecycleInterceptorMethodMD", (Object[])ejbMethods);
 
         final int numMethods = LifecycleInterceptorWrapper.NUM_METHODS;
         String[] methodNames = new String[numMethods];
@@ -1916,8 +1916,8 @@ public abstract class EJBMDOrchestrator
             bmd.cmpVersion == InternalConstants.CMP_VERSION_1_X) // 134261, d155348
         {
             //Need Isolation level for
-            //1) All beans in J2EE 1.2 app
-            //2) CMP11 beans ONLY in J2EE 1.3 app
+            //1) All beans in Java EE 1.2 app
+            //2) CMP11 beans ONLY in Java EE 1.3 app
             // Get user-specified isolation level settings
             getIsolationLevels(homeIsolationAttrs, // F743-18775
                                metaMethodElementKind,
@@ -4151,7 +4151,7 @@ public abstract class EJBMDOrchestrator
                 // Set localImplClassName based on whether the old or new MDB implementation
                 // is being used. A null value indicates the new MDB implementation and will
                 // always be returned on Liberty. The new MDB implementation runs through JITDeploy.
-                // For tWAS, the old MDB message listener style could be returned (MessageListener.class),
+                // For traditional WAS, the old MDB message listener style could be returned (MessageListener.class),
                 // and we need to preserve this behavior.
                 bmd.localImplClass = runtime.getMessageEndpointImplClass(bmd);
                 if (bmd.localImplClass != null) {

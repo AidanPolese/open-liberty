@@ -68,7 +68,6 @@ Service-Component: \
     configAdmin=org.osgi.service.cm.ConfigurationAdmin
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.org.apache.felix.scr;version=latest,\
 	com.ibm.websphere.org.osgi.core;version=latest,\
 	com.ibm.websphere.org.osgi.service.blueprint;version=latest,\

@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class UpdatePropertyException extends WIMApplicationException {
 
+    private static final long serialVersionUID = 6449986048740351789L;
+
     /**
      *
      */

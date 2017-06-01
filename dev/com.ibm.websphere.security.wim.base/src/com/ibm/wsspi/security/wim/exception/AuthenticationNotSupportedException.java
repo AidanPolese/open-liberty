@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class AuthenticationNotSupportedException extends WIMSystemException {
 
+    private static final long serialVersionUID = -7602232417413645541L;
+
     /**
      *
      */

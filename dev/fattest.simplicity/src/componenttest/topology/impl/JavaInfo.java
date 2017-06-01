@@ -69,12 +69,16 @@ public class JavaInfo {
     final int MAJOR;
     final int MINOR;
     final Vendor VENDOR;
+    final int SERVICE_RELEASE;
+    final int FIXPACK;
 
-    private JavaInfo(String jdk_home, int major, int minor, Vendor v) {
+    private JavaInfo(String jdk_home, int major, int minor, Vendor v, int sr, int fp) {
         JAVA_HOME = jdk_home;
         MAJOR = major;
         MINOR = minor;
         VENDOR = v;
+        SERVICE_RELEASE = sr;
+        FIXPACK = fp;
 
         Log.info(c, "<init>", this.toString());
     }
@@ -102,6 +106,37 @@ public class JavaInfo {
             VENDOR = Vendor.UNKNOWN;
         }
 
+        // Parse service release
+        String buildInfo = System.getProperty("java.runtime.version");
+        int sr = 0;
+        int srloc = buildInfo.toLowerCase().indexOf("sr");
+        if (srloc > (-1)) {
+            srloc += 2;
+            if (srloc < buildInfo.length()) {
+                int len = 0;
+                while ((srloc + len < buildInfo.length()) && Character.isDigit(buildInfo.charAt(srloc + len))) {
+                    len++;
+                }
+                sr = Integer.parseInt(buildInfo.substring(srloc, srloc + len));
+            }
+        }
+        SERVICE_RELEASE = sr;
+
+        // Parse fixpack
+        int fp = 0;
+        int fploc = buildInfo.toLowerCase().indexOf("fp");
+        if (fploc > (-1)) {
+            fploc += 2;
+            if (fploc < buildInfo.length()) {
+                int len = 0;
+                while ((fploc + len < buildInfo.length()) && Character.isDigit(buildInfo.charAt(fploc + len))) {
+                    len++;
+                }
+                fp = Integer.parseInt(buildInfo.substring(fploc, fploc + len));
+            }
+        }
+        FIXPACK = fp;
+
         Log.info(c, "<init>", this.toString());
     }
 
@@ -117,12 +152,37 @@ public class JavaInfo {
         return VENDOR;
     }
 
+    public String javaHome() {
+        return JAVA_HOME;
+    }
+
+    public int serviceRelease() {
+        return SERVICE_RELEASE;
+    }
+
+    public int fixpack() {
+        return FIXPACK;
+    }
+
     private static JavaInfo runJavaVersion(String javaHome) throws IOException {
         final String m = "runJavaVersion";
+
         // output for 'java -version' is always as follows:
         // line 1: java version "1.MAJOR.MINOR"
         // line 2: build info
         // line 3: vendor info
+        //
+        // For example:
+        //      java version "1.7.0"
+        //      Java(TM) SE Runtime Environment (build pxi3270_27sr3fp50-20160720_02(*SR3fp50*))
+        //      IBM J9 VM (build 2.7, JRE 1.7.0 Linux x86-32 20160630_309914 (JIT enabled, AOT enabled)
+        //
+        // Major version = 7
+        // Minor version = 0
+        // Service release (IBM JDK specific) = 3
+        // Fixpack (IBM JDK specific) = 50
+        // Vendor = IBM
+
         ProcessBuilder pb = new ProcessBuilder(javaHome + "/bin/java", "-version");
         Process p = pb.start();
         try {
@@ -132,8 +192,9 @@ public class JavaInfo {
         InputStreamReader isr = new InputStreamReader(p.getErrorStream());
         BufferedReader br = new BufferedReader(isr);
         String versionInfo = br.readLine(); // 1st line has version info
-        br.readLine(); // ignore 2nd line
-        String vendorInfo = br.readLine();
+        String buildInfo = br.readLine(); // 2nd line has service release and fixpack info
+        String vendorInfo = br.readLine().toLowerCase();;
+
         br.close();
         isr.close();
 
@@ -142,9 +203,9 @@ public class JavaInfo {
 
         // Parse vendor
         Vendor v;
-        if (vendorInfo.toLowerCase().contains("ibm")) {
+        if (vendorInfo.contains("ibm") || vendorInfo.contains("j9")) {
             v = Vendor.IBM;
-        } else if (vendorInfo.toLowerCase().contains("oracle")) {
+        } else if (vendorInfo.contains("oracle") || vendorInfo.contains("hotspot")) {
             v = Vendor.SUN_ORACLE;
         } else {
             v = Vendor.UNKNOWN;
@@ -160,11 +221,41 @@ public class JavaInfo {
             throw new IllegalStateException("Bad Java runtime version string: " + versionInfo);
         int major = Integer.parseInt(versions[offset]);
         int minor = versions.length < (2 + offset) ? 0 : Integer.parseInt(versions[(1 + offset)]);
-        return new JavaInfo(javaHome, major, minor, v);
+
+        // Parse service release
+        int sr = 0;
+        int srloc = buildInfo.toLowerCase().indexOf("sr");
+        if (srloc > (-1)) {
+            srloc += 2;
+            if (srloc < buildInfo.length()) {
+                int len = 0;
+                while ((srloc + len < buildInfo.length()) && Character.isDigit(buildInfo.charAt(srloc + len))) {
+                    len++;
+                }
+                sr = Integer.parseInt(buildInfo.substring(srloc, srloc + len));
+            }
+        }
+
+        // Parse fixpack
+        int fp = 0;
+
+        int fploc = buildInfo.toLowerCase().indexOf("fp");
+        if (fploc > (-1)) {
+            fploc += 2;
+            if (fploc < buildInfo.length()) {
+                int len = 0;
+                while ((fploc + len < buildInfo.length()) && Character.isDigit(buildInfo.charAt(fploc + len))) {
+                    len++;
+                }
+                fp = Integer.parseInt(buildInfo.substring(fploc, fploc + len));
+            }
+        }
+
+        return new JavaInfo(javaHome, major, minor, v, sr, fp);
     }
 
     @Override
     public String toString() {
-        return "major=" + MAJOR + "  minor=" + MINOR + "  vendor=" + VENDOR + "  javaHome=" + JAVA_HOME;
+        return "major=" + MAJOR + "  minor=" + MINOR + " service release=" + SERVICE_RELEASE + " fixpack=" + FIXPACK + "  vendor=" + VENDOR + "  javaHome=" + JAVA_HOME;
     }
 }

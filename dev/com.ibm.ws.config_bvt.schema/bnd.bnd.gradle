@@ -1,13 +1,13 @@
 -include= ~../cnf/resources/bnd/liberty-release.props
-bVersion=1.0
 
 -nobundles=true
 
 src: \
 	bvt/src
 
+test.project: true
+
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
 	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
 	fattest.simplicity;version=latest, \

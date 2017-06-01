@@ -68,14 +68,6 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stax.StAXSource;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.cxf.common.classloader.ClassLoaderUtils;
-import org.apache.cxf.common.logging.LogUtils;
-import org.apache.cxf.common.util.PropertyUtils;
-import org.apache.cxf.common.util.StringUtils;
-import org.apache.cxf.common.util.SystemPropertyAction;
-import org.apache.cxf.helpers.CastUtils;
-import org.apache.cxf.helpers.DOMUtils;
-import org.apache.cxf.message.Message;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -89,8 +81,18 @@ import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 import org.w3c.dom.UserDataHandler;
+
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
+
+import org.apache.cxf.common.classloader.ClassLoaderUtils;
+import org.apache.cxf.common.logging.LogUtils;
+import org.apache.cxf.common.util.PropertyUtils;
+import org.apache.cxf.common.util.StringUtils;
+import org.apache.cxf.common.util.SystemPropertyAction;
+import org.apache.cxf.helpers.CastUtils;
+import org.apache.cxf.helpers.DOMUtils;
+import org.apache.cxf.message.Message;
 
 import com.ibm.websphere.ras.annotation.Trivial;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
@@ -101,19 +103,30 @@ import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 public final class StaxUtils {
     // System properies for defaults, but also contextual properties usable
     // for StaxInInterceptor
-    public static final String MAX_CHILD_ELEMENTS = "org.apache.cxf.stax.maxChildElements";
-    public static final String MAX_ELEMENT_DEPTH = "org.apache.cxf.stax.maxElementDepth";
-    public static final String MAX_ATTRIBUTE_COUNT = "org.apache.cxf.stax.maxAttributeCount";
-    public static final String MAX_ATTRIBUTE_SIZE = "org.apache.cxf.stax.maxAttributeSize";
-    public static final String MAX_TEXT_LENGTH = "org.apache.cxf.stax.maxTextLength";
-    public static final String MIN_TEXT_SEGMENT = "org.apache.cxf.stax.minTextSegment";
-    public static final String MAX_ELEMENT_COUNT = "org.apache.cxf.stax.maxElementCount";
-    public static final String MAX_XML_CHARACTERS = "org.apache.cxf.stax.maxXMLCharacters";
+    public static final String MAX_CHILD_ELEMENTS = 
+        "org.apache.cxf.stax.maxChildElements";
+    public static final String MAX_ELEMENT_DEPTH = 
+        "org.apache.cxf.stax.maxElementDepth";
+    public static final String MAX_ATTRIBUTE_COUNT = 
+        "org.apache.cxf.stax.maxAttributeCount";
+    public static final String MAX_ATTRIBUTE_SIZE = 
+        "org.apache.cxf.stax.maxAttributeSize";
+    public static final String MAX_TEXT_LENGTH = 
+        "org.apache.cxf.stax.maxTextLength";
+    public static final String MIN_TEXT_SEGMENT =
+        "org.apache.cxf.stax.minTextSegment";
+    public static final String MAX_ELEMENT_COUNT = 
+        "org.apache.cxf.stax.maxElementCount";
+    public static final String MAX_XML_CHARACTERS = 
+        "org.apache.cxf.stax.maxXMLCharacters";
 
-    public static final String ALLOW_INSECURE_PARSER = "org.apache.cxf.stax.allowInsecureParser";
-
-    private static final String INNER_ELEMENT_COUNT_SYSTEM_PROP = "org.apache.cxf.staxutils.innerElementCountThreshold";
-    private static final String INNER_ELEMENT_LEVEL_SYSTEM_PROP = "org.apache.cxf.staxutils.innerElementLevelThreshold";
+    public static final String ALLOW_INSECURE_PARSER = 
+        "org.apache.cxf.stax.allowInsecureParser";
+    
+    private static final String INNER_ELEMENT_COUNT_SYSTEM_PROP = 
+        "org.apache.cxf.staxutils.innerElementCountThreshold";
+    private static final String INNER_ELEMENT_LEVEL_SYSTEM_PROP = 
+        "org.apache.cxf.staxutils.innerElementLevelThreshold";
 
     private static final Logger LOG = LogUtils.getL7dLogger(StaxUtils.class);
 
@@ -193,8 +206,8 @@ public final class StaxUtils {
 
     }
 
-    private StaxUtils() {}
-
+    private StaxUtils() {
+    }
     private static int getInteger(String prop, int def) {
         try {
             String s = SystemPropertyAction.getPropertyOrNull(prop);
@@ -211,7 +224,6 @@ public final class StaxUtils {
         }
         return def;
     }
-
     private static long getLong(String prop, long def) {
         try {
             String s = SystemPropertyAction.getPropertyOrNull(prop);
@@ -236,7 +248,6 @@ public final class StaxUtils {
         innerElementLevelThreshold = i;
         setProperty(SAFE_INPUT_FACTORY, "com.ctc.wstx.maxElementDepth", i);
     }
-
     public static void setInnerElementCountThreshold(int i) {
         if (i == -1) {
             i = 50000;
@@ -250,7 +261,6 @@ public final class StaxUtils {
      * against the different parsers, this can be used to condition code. Note: if you've got
      * Woodstox in the class path without being the default provider, this will return
      * the wrong answer.
-     *
      * @return true if Woodstox is in the classpath.
      */
     public static boolean isWoodstox() {
@@ -347,7 +357,8 @@ public final class StaxUtils {
         factory.setXMLResolver(new XMLResolver() {
             @Override
             public Object resolveEntity(String publicID, String systemID,
-                                        String baseURI, String namespace) throws XMLStreamException {
+                                        String baseURI, String namespace)
+                throws XMLStreamException {
                 throw new XMLStreamException("Reading external entities is disabled");
             }
         });
@@ -479,7 +490,6 @@ public final class StaxUtils {
             throw new RuntimeException("Couldn't parse stream.", e);
         }
     }
-
     public static boolean toNextTag(XMLStreamReader reader) {
         try {
             // advance to first tag.
@@ -512,7 +522,8 @@ public final class StaxUtils {
         }
     }
 
-    public static void writeStartElement(XMLStreamWriter writer, String prefix, String name, String namespace) throws XMLStreamException {
+    public static void writeStartElement(XMLStreamWriter writer, String prefix, String name, String namespace)
+        throws XMLStreamException {
         if (prefix == null) {
             prefix = "";
         }
@@ -579,7 +590,6 @@ public final class StaxUtils {
         }
         return false;
     }
-
     public static void copy(Source source, OutputStream os) throws XMLStreamException {
         XMLStreamWriter writer = createXMLStreamWriter(os);
         try {
@@ -593,7 +603,6 @@ public final class StaxUtils {
             StaxUtils.close(writer);
         }
     }
-
     public static void copy(Source source, XMLStreamWriter writer) throws XMLStreamException {
         if (source instanceof StaxSource) {
             StaxSource ss = (StaxSource) source;
@@ -650,7 +659,8 @@ public final class StaxUtils {
         reader.close();
     }
 
-    public static Document copy(Document doc) throws XMLStreamException, ParserConfigurationException {
+    public static Document copy(Document doc) 
+        throws XMLStreamException, ParserConfigurationException {
 
         XMLStreamReader reader = createXMLStreamReader(doc);
         W3CDOMStreamWriter writer = new W3CDOMStreamWriter();
@@ -674,7 +684,8 @@ public final class StaxUtils {
         copy(reader, writer);
     }
 
-    public static void copy(XMLStreamReader reader, OutputStream os) throws XMLStreamException {
+    public static void copy(XMLStreamReader reader, OutputStream os)
+        throws XMLStreamException {
         XMLStreamWriter xsw = StaxUtils.createXMLStreamWriter(os);
         StaxUtils.copy(reader, xsw);
         xsw.close();
@@ -683,7 +694,6 @@ public final class StaxUtils {
     public static void writeTo(Node node, OutputStream os) throws XMLStreamException {
         copy(new DOMSource(node), os);
     }
-
     public static void writeTo(Node node, OutputStream os, int indent) throws XMLStreamException {
         if (indent > 0) {
             XMLStreamWriter writer = new PrettyPrintXMLStreamWriter(createXMLStreamWriter(os), indent);
@@ -726,11 +736,10 @@ public final class StaxUtils {
     public static void copy(XMLStreamReader reader, XMLStreamWriter writer) throws XMLStreamException {
         copy(reader, writer, false, false);
     }
-
-    public static void copy(XMLStreamReader reader, XMLStreamWriter writer, boolean fragment) throws XMLStreamException {
+    public static void copy(XMLStreamReader reader, XMLStreamWriter writer, boolean fragment) 
+        throws XMLStreamException {
         copy(reader, writer, fragment, false);
     }
-
     public static void copy(XMLStreamReader reader,
                             XMLStreamWriter writer,
                             boolean fragment,
@@ -776,6 +785,7 @@ public final class StaxUtils {
                     }
                     break;
                 case XMLStreamConstants.CHARACTERS:
+                case XMLStreamConstants.SPACE:
                     String s = reader.getText();
                     if (s != null) {
                         writer.writeCharacters(s);
@@ -799,7 +809,8 @@ public final class StaxUtils {
         }
     }
 
-    private static void writeStartElement(XMLStreamReader reader, XMLStreamWriter writer) throws XMLStreamException {
+    private static void writeStartElement(XMLStreamReader reader, XMLStreamWriter writer)
+        throws XMLStreamException {
         String uri = reader.getNamespaceURI();
         String prefix = reader.getPrefix();
         String local = reader.getLocalName();
@@ -817,7 +828,7 @@ public final class StaxUtils {
                 && StringUtils.isEmpty(writer.getNamespaceContext().getNamespaceURI(""))) {
                 writeElementNS = false;
             }
-            while (it != null && it.hasNext()) {
+            while (it.hasNext()) {
                 String s = it.next();
                 if (s == null) {
                     s = "";
@@ -900,13 +911,15 @@ public final class StaxUtils {
                     writer.writeNamespace(nsPrefix, ns);
                     writer.setPrefix(nsPrefix, ns);
                 }
-                writer.writeAttribute(reader.getAttributePrefix(i), reader.getAttributeNamespace(i), reader.getAttributeLocalName(i), reader.getAttributeValue(i));
+                writer.writeAttribute(reader.getAttributePrefix(i), reader.getAttributeNamespace(i), reader
+                    .getAttributeLocalName(i), reader.getAttributeValue(i));
             }
 
         }
     }
 
-    public static void writeDocument(Document d, XMLStreamWriter writer, boolean repairing) throws XMLStreamException {
+    public static void writeDocument(Document d, XMLStreamWriter writer, boolean repairing)
+        throws XMLStreamException {
         writeDocument(d, writer, true, repairing);
     }
 
@@ -939,7 +952,8 @@ public final class StaxUtils {
      * @param writer
      * @throws XMLStreamException
      */
-    public static void writeElement(Element e, XMLStreamWriter writer, boolean repairing) throws XMLStreamException {
+    public static void writeElement(Element e, XMLStreamWriter writer, boolean repairing) 
+        throws XMLStreamException {
         writeElement(e, writer, repairing, true);
     }
 
@@ -957,7 +971,8 @@ public final class StaxUtils {
     public static void writeElement(Element e,
                                     XMLStreamWriter writer,
                                     boolean repairing,
-                                    boolean endElement) throws XMLStreamException {
+                                    boolean endElement)
+        throws XMLStreamException {
         String prefix = e.getPrefix();
         String ns = e.getNamespaceURI();
         String localName = e.getLocalName();
@@ -1071,7 +1086,8 @@ public final class StaxUtils {
         return sortedAttrs;
     }
 
-    public static void writeNode(Node n, XMLStreamWriter writer, boolean repairing) throws XMLStreamException {
+    public static void writeNode(Node n, XMLStreamWriter writer, boolean repairing) 
+        throws XMLStreamException {
 
         switch (n.getNodeType()) {
             case Node.ELEMENT_NODE:
@@ -1186,7 +1202,7 @@ public final class StaxUtils {
         Document doc = DOMUtils.createDocument();
         if (reader.getLocation().getSystemId() != null) {
             try {
-                doc.setDocumentURI(new String(reader.getLocation().getSystemId()));
+                doc.setDocumentURI(reader.getLocation().getSystemId());
             } catch (Exception e) {
                 //ignore - probably not DOM level 3
             }
@@ -1195,12 +1211,13 @@ public final class StaxUtils {
         return doc;
     }
 
-    public static Document read(DocumentBuilder builder, XMLStreamReader reader, boolean repairing) throws XMLStreamException {
+    public static Document read(DocumentBuilder builder, XMLStreamReader reader, boolean repairing) 
+        throws XMLStreamException {
 
         Document doc = builder == null ? DOMUtils.createDocument() : builder.newDocument();
         if (reader.getLocation().getSystemId() != null) {
             try {
-                doc.setDocumentURI(new String(reader.getLocation().getSystemId()));
+                doc.setDocumentURI(reader.getLocation().getSystemId());
             } catch (Exception e) {
                 //ignore - probably not DOM level 3
             }
@@ -1241,13 +1258,15 @@ public final class StaxUtils {
         return false;
     }
 
-    public static void readDocElements(Node parent, XMLStreamReader reader, boolean repairing) throws XMLStreamException {
+    public static void readDocElements(Node parent, XMLStreamReader reader, boolean repairing) 
+        throws XMLStreamException {
         Document doc = getDocument(parent);
         readDocElements(doc, parent, reader, repairing, false);
     }
 
     public static void readDocElements(Node parent, XMLStreamReader reader, boolean repairing,
-                                       boolean isThreshold) throws XMLStreamException {
+                                       boolean isThreshold) 
+        throws XMLStreamException {
         Document doc = getDocument(parent);
         readDocElements(doc, parent, reader, repairing, false, isThreshold);
     }
@@ -1258,7 +1277,8 @@ public final class StaxUtils {
      * @throws XMLStreamException
      */
     public static void readDocElements(Document doc, Node parent,
-                                       XMLStreamReader reader, boolean repairing, boolean recordLoc) throws XMLStreamException {
+                                       XMLStreamReader reader, boolean repairing, boolean recordLoc)
+        throws XMLStreamException {
         readDocElements(doc, parent, reader, repairing, recordLoc, false);
     }
 
@@ -1269,7 +1289,8 @@ public final class StaxUtils {
      */
     public static void readDocElements(Document doc, Node parent,
                                        XMLStreamReader reader, boolean repairing, boolean recordLoc,
-                                       boolean isThreshold) throws XMLStreamException {
+                                       boolean isThreshold)
+        throws XMLStreamException {
         Stack<Node> stack = new Stack<Node>();
         int event = reader.getEventType();
         int elementCount = 0;
@@ -1427,7 +1448,8 @@ public final class StaxUtils {
         }
     }
 
-    public static void readDocElements(Document doc, Node parent, XMLStreamReader reader, StreamToDOMContext context) throws XMLStreamException {
+    public static void readDocElements(Document doc, Node parent, XMLStreamReader reader, StreamToDOMContext context)
+        throws XMLStreamException {
         int event = reader.getEventType();
         while (reader.hasNext()) {
             switch (event) {
@@ -1527,7 +1549,8 @@ public final class StaxUtils {
         }
     }
 
-    public static Node readDocElement(Document doc, Node parent, XMLEvent ev, StreamToDOMContext context) throws XMLStreamException {
+    public static Node readDocElement(Document doc, Node parent, XMLEvent ev, StreamToDOMContext context)
+        throws XMLStreamException {
         switch (ev.getEventType()) {
             case XMLStreamConstants.START_ELEMENT: {
                 context.incrementCount();
@@ -1695,8 +1718,8 @@ public final class StaxUtils {
     }
 
     public static XMLStreamReader createXMLStreamReader(InputSource src) {
-        String sysId = src.getSystemId() == null ? null : new String(src.getSystemId());
-        String pubId = src.getPublicId() == null ? null : new String(src.getPublicId());
+        String sysId = src.getSystemId() == null ? null : src.getSystemId();
+        String pubId = src.getPublicId() == null ? null : src.getPublicId();
         if (src.getByteStream() != null) {
             if (src.getEncoding() == null) {
                 StreamSource ss = new StreamSource(src.getByteStream(), sysId);
@@ -1889,7 +1912,8 @@ public final class StaxUtils {
      *         is created.
      * @throws XMLStreamException
      */
-    public static String getUniquePrefix(XMLStreamWriter writer, String namespaceURI, boolean declare) throws XMLStreamException {
+    public static String getUniquePrefix(XMLStreamWriter writer, String namespaceURI, boolean declare)
+        throws XMLStreamException {
         String prefix = writer.getPrefix(namespaceURI);
         if (prefix == null) {
             prefix = getUniquePrefix(writer);
@@ -1901,11 +1925,10 @@ public final class StaxUtils {
         }
         return prefix;
     }
-
-    public static String getUniquePrefix(XMLStreamWriter writer, String namespaceURI) throws XMLStreamException {
+    public static String getUniquePrefix(XMLStreamWriter writer, String namespaceURI)
+        throws XMLStreamException {
         return getUniquePrefix(writer, namespaceURI, false);
     }
-
     public static String getUniquePrefix(XMLStreamWriter writer) {
         NamespaceContext nc = writer.getNamespaceContext();
         if (nc == null) {
@@ -1928,6 +1951,7 @@ public final class StaxUtils {
             n++;
         }
     }
+    
 
     public static void printXmlFragment(XMLStreamReader reader) {
         try {
@@ -1946,7 +1970,9 @@ public final class StaxUtils {
         }
     }
 
-    private static void writeStartElementEvent(XMLEvent event, XMLStreamWriter writer) throws XMLStreamException {
+    
+    private static void writeStartElementEvent(XMLEvent event, XMLStreamWriter writer) 
+        throws XMLStreamException {
         StartElement start = event.asStartElement();
         QName name = start.getName();
         String nsURI = name.getNamespaceURI();
@@ -1970,8 +1996,8 @@ public final class StaxUtils {
             writeAttributeEvent(it.next(), writer);
         }
     }
-
-    private static void writeAttributeEvent(XMLEvent event, XMLStreamWriter writer) throws XMLStreamException {
+    private static void writeAttributeEvent(XMLEvent event, XMLStreamWriter writer) 
+        throws XMLStreamException {
 
         Attribute attr = (Attribute) event;
         QName name = attr.getName();
@@ -1989,7 +2015,8 @@ public final class StaxUtils {
         }
     }
 
-    public static void writeEvent(XMLEvent event, XMLStreamWriter writer) throws XMLStreamException {
+    public static void writeEvent(XMLEvent event, XMLStreamWriter writer)
+        throws XMLStreamException {
 
         switch (event.getEventType()) {
             case XMLEvent.START_ELEMENT:
@@ -2054,7 +2081,6 @@ public final class StaxUtils {
                 //shouldn't get here
         }
     }
-
     public static void print(Node node) {
         XMLStreamWriter writer = null;
         try {
@@ -2082,11 +2108,9 @@ public final class StaxUtils {
         }
         return sw.toString();
     }
-
     public static String toString(Node src) {
         return toString(new DOMSource(src));
     }
-
     public static String toString(Document doc) {
         StringWriter sw = new StringWriter(1024);
         XMLStreamWriter writer = null;
@@ -2101,11 +2125,9 @@ public final class StaxUtils {
         }
         return sw.toString();
     }
-
     public static String toString(Element el) {
         return toString(el, 0);
     }
-
     public static String toString(Element el, int indent) {
         StringWriter sw = new StringWriter(1024);
         XMLStreamWriter writer = null;
@@ -2123,7 +2145,6 @@ public final class StaxUtils {
         }
         return sw.toString();
     }
-
     public static void close(XMLStreamReader reader) throws XMLStreamException {
         if (reader != null) {
             reader.close();
@@ -2171,7 +2192,8 @@ public final class StaxUtils {
     public static XMLStreamReader configureReader(XMLStreamReader reader, Integer maxChildElements,
                                                   Integer maxElementDepth, Integer maxAttributeCount,
                                                   Integer maxAttributeSize, Integer maxTextLength,
-                                                  Long maxElementCount, Long maxXMLCharacters) throws XMLStreamException {
+                                       Long maxElementCount, Long maxXMLCharacters) 
+        throws XMLStreamException {
         //CHECKSTYLE:ON
 
         // We currently ONLY support Woodstox 4.2.x for most of this other than a few things
@@ -2241,7 +2263,6 @@ public final class StaxUtils {
         }
         return reader;
     }
-
     private static void setProperty(XMLStreamReader reader, String p, Object v) {
         WoodstoxHelper.setProperty(reader, p, v);
     }

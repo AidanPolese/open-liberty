@@ -38,7 +38,7 @@ import test.utils.SharedConstants;
 
 public class ConfigValidatorTest {
 
-    static WsLocationAdmin alpineLocation;
+    static WsLocationAdmin libertyLocation;
     static XMLConfigParser configParser;
     static SharedOutputManager outputMgr;
 
@@ -74,9 +74,9 @@ public class ConfigValidatorTest {
 
     private void changeLocationSettings(String profileName) {
         SharedLocationManager.createDefaultLocations(SharedConstants.SERVER_XML_INSTALL_ROOT, profileName);
-        alpineLocation = (WsLocationAdmin) SharedLocationManager.getLocationInstance();
+        libertyLocation = (WsLocationAdmin) SharedLocationManager.getLocationInstance();
 
-        configParser = new XMLConfigParser(alpineLocation);
+        configParser = new XMLConfigParser(libertyLocation);
     }
 
     private ConfigElement parseConfiguration(String xml) throws ConfigParserException {

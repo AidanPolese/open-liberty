@@ -22,8 +22,8 @@ import org.objectweb.asm.commons.GeneratorAdapter;
 import com.ibm.ejs.container.EJBConfigurationException;
 import com.ibm.ejs.container.EJBMethodInfoImpl;
 import com.ibm.ejs.container.util.MethodAttribUtils;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 import static com.ibm.ws.ejbcontainer.jitdeploy.EJBUtils.getMethodId;
 import static com.ibm.ws.ejbcontainer.jitdeploy.JITUtils.convertClassName;
@@ -42,12 +42,9 @@ import static com.ibm.ws.ejbcontainer.jitdeploy.JITUtils.TYPE_Object_ARRAY;
  */
 public final class WSEJBProxy
 {
-    private static final String CLASS_NAME = WSEJBProxy.class.getName();
-
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     JITUtils.JIT_TRACE_GROUP,
-                     JITUtils.JIT_RSRC_BUNDLE);
+    private static final TraceComponent tc = Tr.register(WSEJBProxy.class,
+                                                         JITUtils.JIT_TRACE_GROUP,
+                                                         JITUtils.JIT_RSRC_BUNDLE);
 
     /**
      * Core method for generating the EJB Proxy class bytes. Intended for

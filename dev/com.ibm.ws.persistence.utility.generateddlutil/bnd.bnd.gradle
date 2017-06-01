@@ -17,6 +17,3 @@ instrument.disabled: true
 
 publish.tool.jar=ws-generateddlutil.jar
 publish.tool.script=ddlGen
-
--buildpath: \
-	${javac.bootclasspath.java6}

@@ -31,7 +31,6 @@ Private-Package: \
 instrument.classesExcludes: com/ibm/ws/kernel/feature/internal/resources/*.class
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.kernel.feature.cmdline;version=latest,\
 	com.ibm.ws.kernel.feature.core;version=latest,\
 	wlp.lib.extract;version=latest

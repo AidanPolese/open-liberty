@@ -55,4 +55,10 @@
     <Bug pattern="RV_RETURN_VALUE_IGNORED" />
     <Class name="com.ibm.ws.jaxrs20.server.LibertyJaxRsInvoker"/>
    </Match>
+   <!-- Joe Mc said Java team has recommended locking on Integers -->
+   <Match>
+    <Bug pattern="DL_SYNCHRONIZATION_ON_BOXED_PRIMITIVE" />
+    <Class name="com.ibm.ws.jaxrs20.server.LibertyJaxRsServerFactoryBean"/>
+    <Method name="onApplicationInit"/>
+   </Match>
 </FindBugsFilter>

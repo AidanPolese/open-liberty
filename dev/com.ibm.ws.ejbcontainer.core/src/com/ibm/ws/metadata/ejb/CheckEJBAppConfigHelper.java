@@ -11,8 +11,8 @@
  */
 package com.ibm.ws.metadata.ejb;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Helper class for controlling validation of proper metadata configuration
@@ -26,13 +26,15 @@ import com.ibm.ejs.ras.TraceComponent;
 public final class CheckEJBAppConfigHelper
 {
     private static final String CLASS_NAME = CheckEJBAppConfigHelper.class.getName();
-    private static final TraceComponent metadataTc = Tr.register(CLASS_NAME,
+    private static final TraceComponent metadataTc = Tr.register(CheckEJBAppConfigHelper.class,
                                                                  "MetaData",
                                                                  "com.ibm.ws.metadata.metadata");
     private static final TraceComponent ejbTc = Tr.register(CLASS_NAME + "_ejb",
+                                                            CheckEJBAppConfigHelper.class,
                                                             "EJBContainer",
                                                             "com.ibm.ejs.container.container");
     private static final TraceComponent injTc = Tr.register(CLASS_NAME + "_inj",
+                                                            CheckEJBAppConfigHelper.class,
                                                             "Injection",
                                                             "com.ibm.ejs.container.container");
 

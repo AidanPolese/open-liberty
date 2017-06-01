@@ -96,7 +96,7 @@ public class MonitoringProxyActivator {
      * The proxy jar manifest header that indicates the version of the bundle
      * that created the jar.
      */
-    final static String MONITORING_VERSION_MANIFEST_HEADER = "Alpine-Monitoring-Bundle-Version";
+    final static String MONITORING_VERSION_MANIFEST_HEADER = "Liberty-Monitoring-Bundle-Version";
 
     /**
      * The bundle context of the monitoring bundle.
@@ -352,7 +352,7 @@ public class MonitoringProxyActivator {
 
         Attributes manifestAttributes = manifest.getMainAttributes();
         manifestAttributes.putValue(Attributes.Name.MANIFEST_VERSION.toString(), "1.0");
-        manifestAttributes.putValue("Created-By", "Alpine Monitoring Extender");
+        manifestAttributes.putValue("Created-By", "Liberty Monitoring Extender");
         manifestAttributes.putValue("Created-Time", DateFormat.getInstance().format(new Date()));
         manifestAttributes.putValue(MONITORING_VERSION_MANIFEST_HEADER, getCurrentVersion());
 

@@ -171,8 +171,8 @@ public class EJBJavaColonNamingHelper implements JavaColonNamingHelper, JavaColo
      */
     private Object processJavaColonGlobal(String name) throws NamingException {
         // Called to ensure that the java:global lookup code path
-        // is coming from a j2ee thread. If not this will reject the
-        // lookup with the correct j2ee error message.
+        // is coming from a Java EE thread. If not this will reject the
+        // lookup with the correct Java EE error message.
         getComponentMetaData(JavaColonNamespace.GLOBAL, name);
         Lock readLock = javaColonLock.readLock();
         readLock.lock();
@@ -306,8 +306,8 @@ public class EJBJavaColonNamingHelper implements JavaColonNamingHelper, JavaColo
             // This helper only provides support for java:global, java:app, and java:module
             if (namespace == JavaColonNamespace.GLOBAL) {
                 // Called to ensure that the java:global code path
-                // is coming from a j2ee thread. If not this will reject this
-                // method call with the correct j2ee error message.
+                // is coming from a Java EE thread. If not this will reject this
+                // method call with the correct Java EE error message.
                 cmd = getComponentMetaData(namespace, name);
                 bindings = javaColonGlobalBindings;
                 readLock = javaColonLock.readLock();

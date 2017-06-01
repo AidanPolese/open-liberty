@@ -4,5 +4,4 @@
    @lib/javax.json-1.0.4.jar!/org/glassfish/json/*
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/javax.json-1.0.4.jar;version=file

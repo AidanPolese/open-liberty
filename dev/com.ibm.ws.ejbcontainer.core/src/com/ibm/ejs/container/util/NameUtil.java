@@ -13,8 +13,8 @@ package com.ibm.ejs.container.util;
 
 import java.util.StringTokenizer;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.javaee.dd.ejb.ComponentViewableBean;
 import com.ibm.ws.javaee.dd.ejb.EnterpriseBean;
 import com.ibm.ws.javaee.dd.ejb.Entity;

@@ -23,8 +23,8 @@ import com.ibm.ejs.container.WrapperId;
 import com.ibm.ejs.container.WrapperInterface;
 import com.ibm.ejs.container.WrapperManager;
 import com.ibm.ejs.container.WrapperProxyState;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Used as a replacement object during passivation of a SFSB
@@ -35,10 +35,9 @@ public class SerializableByteArray implements Serializable
 {
     private static final long serialVersionUID = 8311919298341109455L;
 
-    private static final String CLASS_NAME = SerializableByteArray.class.getName();
-
-    private final static TraceComponent tc =
-                    Tr.register(CLASS_NAME, "EJBContainer", "com.ibm.ejs.container.container");
+    private final static TraceComponent tc = Tr.register(SerializableByteArray.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     /**
      * Ship to customer with DEBUG_ON set to false so that the

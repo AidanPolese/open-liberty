@@ -23,4 +23,4 @@ Private-Package: \
 	com.ibm.ws.tx.embeddable;version=latest,\
 	com.ibm.ws.logging.core;version=latest,\
 	com.ibm.ws.container.service;version=latest,\
-	com.ibm.websphere.javaee.transaction.1.2;version=latest
+	com.ibm.websphere.javaee.transaction.1.1;version=latest

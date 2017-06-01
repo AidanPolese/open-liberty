@@ -1,10 +1,9 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.internal.slf4j-1.7.7
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: \
+-dependson: \
 	com.ibm.ws.org.slf4j.jdk14.1.7.7;version=latest, \
 	com.ibm.ws.org.slf4j.api.1.7.7;version=latest

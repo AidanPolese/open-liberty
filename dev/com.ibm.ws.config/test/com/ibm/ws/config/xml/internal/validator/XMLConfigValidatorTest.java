@@ -45,7 +45,7 @@ public class XMLConfigValidatorTest {
      */
     private static final String S_VALIDATOR_TEST_DIR = "test-resources" + File.separator + "test_xml_validator";
 
-    static WsLocationAdmin alpineLocation;
+    static WsLocationAdmin libertyLocation;
     static XMLConfigParser configParser;
     static SharedOutputManager outputMgr;
 
@@ -148,9 +148,9 @@ public class XMLConfigValidatorTest {
         SharedLocationManager.createDefaultLocations(testRootDir, profileName, map);
         System.out.println("map = " + map);
 
-        alpineLocation = (WsLocationAdmin) SharedLocationManager.getLocationInstance();
+        libertyLocation = (WsLocationAdmin) SharedLocationManager.getLocationInstance();
 
-        configParser = new XMLConfigParser(alpineLocation);
+        configParser = new XMLConfigParser(libertyLocation);
     }
 
     /**
@@ -168,7 +168,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("singleton");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         ServerConfiguration serverConfig = configParser.parseServerConfiguration(resource);
 
@@ -193,7 +193,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("singleton");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         try {
             configParser.parseServerConfiguration(resource);
@@ -224,7 +224,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("goodSignature");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         assertNotNull(configParser.parseServerConfiguration(resource));
 
@@ -248,7 +248,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("variablesUpdated");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         assertNotNull(configParser.parseServerConfiguration(resource));
 
@@ -273,7 +273,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("addedWhiteSpace");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         assertNotNull(configParser.parseServerConfiguration(resource));
 
@@ -298,7 +298,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("protectedSectionModified");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         try {
             configParser.parseServerConfiguration(resource);
@@ -327,7 +327,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("goodSignatureWithIncludes");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         assertNotNull(configParser.parseServerConfiguration(resource));
 
@@ -352,7 +352,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("includesWithBadSignature");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         try {
             configParser.parseServerConfiguration(resource);
@@ -383,7 +383,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("unauthorizedSignature");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         try {
             configParser.parseServerConfiguration(resource);
@@ -411,7 +411,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("goodSignatureWithOutApplicationMonitor");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         ServerConfiguration configuration =
                         configParser.parseServerConfiguration(resource);
@@ -447,7 +447,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("goodSignatureWithOutDropins");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         ServerConfiguration configuration =
                         configParser.parseServerConfiguration(resource);
@@ -483,7 +483,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("goodSignatureWithDropinsTrue");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         ServerConfiguration configuration =
                         configParser.parseServerConfiguration(resource);
@@ -519,7 +519,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("goodSignatureWithDropinsFalse");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         ServerConfiguration configuration =
                         configParser.parseServerConfiguration(resource);
@@ -549,7 +549,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("certMissing");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         try {
             configParser.parseServerConfiguration(resource);
@@ -577,7 +577,7 @@ public class XMLConfigValidatorTest {
 
         changeLocationSettings("cannotUnmarshall");
 
-        WsResource resource = alpineLocation.resolveResource(CONFIG_ROOT);
+        WsResource resource = libertyLocation.resolveResource(CONFIG_ROOT);
 
         try {
             configParser.parseServerConfiguration(resource);

@@ -8,5 +8,4 @@ publish.wlp.jar.suffix: dev/api/spec
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/org.osgi.service.blueprint-1.0.2.jar;version=file

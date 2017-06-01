@@ -27,6 +27,7 @@ import com.ibm.ws.common.internal.encoder.Base64Coder;
 import com.ibm.ws.webcontainer.security.AuthResult;
 import com.ibm.ws.webcontainer.security.AuthenticationResult;
 import com.ibm.ws.webcontainer.security.PostParameterHelper;
+import com.ibm.ws.webcontainer.security.ReferrerURLCookieHandler;
 import com.ibm.ws.webcontainer.security.WebAppSecurityConfig;
 import com.ibm.ws.webcontainer.security.WebAuthenticator;
 import com.ibm.ws.webcontainer.security.WebProviderAuthenticatorProxy;
@@ -72,6 +73,9 @@ public class FormLoginAuthenticatorTest {
 
         mock.checking(new Expectations() {
             {
+                allowing(webAppSecConfig).createReferrerURLCookieHandler();
+                will(returnValue(new ReferrerURLCookieHandler(webAppSecConfig)));
+
                 // authenticate(WebRequest, WebAttributes)
                 allowing(webAppSecConfig).isIncludePathInWASReqURL();
                 allowing(webRequest).getHttpServletRequest();
@@ -221,6 +225,9 @@ public class FormLoginAuthenticatorTest {
 
         mock.checking(new Expectations() {
             {
+                allowing(webAppSecConfig).createReferrerURLCookieHandler();
+                will(returnValue(new ReferrerURLCookieHandler(webAppSecConfig)));
+
                 // authenticate(WebRequest, WebAttributes)
                 allowing(webAppSecConfig).isIncludePathInWASReqURL();
                 allowing(webRequest).getHttpServletRequest();
@@ -329,6 +336,9 @@ public class FormLoginAuthenticatorTest {
 
         mock.checking(new Expectations() {
             {
+                allowing(webAppSecConfig).createReferrerURLCookieHandler();
+                will(returnValue(new ReferrerURLCookieHandler(webAppSecConfig)));
+
                 // authenticate(WebRequest, WebAttributes)
                 allowing(webAppSecConfig).isIncludePathInWASReqURL();
                 allowing(webRequest).getHttpServletRequest();

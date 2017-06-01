@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class MissingSearchControlException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -7939657696993993837L;
+
     /**
      *
      */

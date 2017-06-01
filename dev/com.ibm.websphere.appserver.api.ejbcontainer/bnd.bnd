@@ -14,5 +14,4 @@ Export-Package: com.ibm.websphere.ejbcontainer.mbean
 publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.ejbcontainer

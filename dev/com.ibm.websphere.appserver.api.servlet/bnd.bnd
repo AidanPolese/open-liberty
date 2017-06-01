@@ -14,6 +14,5 @@ Export-Package: com.ibm.websphere.servlet.container,com.ibm.websphere.servlet.co
 publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.webcontainer;version=latest, \
 	com.ibm.ws.session;version=latest

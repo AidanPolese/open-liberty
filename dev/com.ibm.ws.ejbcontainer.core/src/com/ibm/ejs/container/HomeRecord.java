@@ -139,7 +139,7 @@ public class HomeRecord
     }
 
     /**
-     * getJ2EEName returns the J2EE name of the EJB associated with this <code>HomeRecord</code>.<p>
+     * getJ2EEName returns the Java EE name of the EJB associated with this <code>HomeRecord</code>.<p>
      * 
      * @return <code>J2EEName</code> associated with this HomeRecord.
      */
@@ -343,7 +343,7 @@ public class HomeRecord
     }
 
     /**
-     * Returns true if this bean should be bound into the WebSphere "classic"
+     * Returns true if this bean should be bound into the WebSphere "traditional"
      * global name space and/or "ejblocal" name space.
      */
     // F743-34301

@@ -31,9 +31,9 @@ import com.ibm.ejs.container.EJSHome;
 import com.ibm.ejs.container.EJSWrapper;
 import com.ibm.ejs.container.HomeOfHomes;
 import com.ibm.ejs.container.HomeRecord;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.ejbcontainer.AmbiguousEJBReferenceException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.runtime.EJBRuntime;
 import com.ibm.wsspi.injectionengine.InjectionException;
 

@@ -104,13 +104,13 @@ public class Bootstrap {
     }
 
     /**
-     * Only works for Alpine installations.
+     * Only works for Liberty installations.
      *
      * @return Path to the server.
      */
     public List<String> getServerKeys() {
         Log.entering(c, "getServerKeys");
-        List<String> ret = findKeys("alpine.");
+        List<String> ret = findKeys("liberty.");
         Log.exiting(c, "getServerKeys", ret);
         return ret;
     }

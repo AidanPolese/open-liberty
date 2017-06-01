@@ -25,7 +25,7 @@ import com.ibm.ejs.ras.TraceNLS;
 import com.ibm.websphere.servlet.response.IResponse;
 import com.ibm.wsspi.webcontainer.logging.LoggerFactory;
 import com.ibm.wsspi.webcontainer.servlet.IExtendedResponse;
-//Alpine - Change import
+//Liberty - Change import
 //import com.ibm.ejs.sm.client.ui.NLS;
 
 
@@ -34,7 +34,7 @@ import com.ibm.wsspi.webcontainer.servlet.IExtendedResponse;
  */
 public class IncludedResponse extends HttpServletResponseProxy {
     private HttpServletResponse _resp;
-    // Alpine - Changed to TraceNLS
+    // Liberty - Changed to TraceNLS
     //private static NLS nls = new NLS("com.ibm.ws.webcontainer.resources.Messages");
     private static TraceNLS nls = TraceNLS.getTraceNLS(IncludedResponse.class, "com.ibm.ws.webcontainer.resources.Messages");
 protected static Logger logger = LoggerFactory.getInstance().getLogger("com.ibm.ws.webcontainer.servlet");

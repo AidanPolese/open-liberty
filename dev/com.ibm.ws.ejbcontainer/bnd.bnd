@@ -112,7 +112,7 @@ instrument.classesExcludes: com/ibm/ws/ejbcontainer/osgi/internal/resources/*.cl
 -buildpath: \
 	com.ibm.ws.ejbcontainer.core;version=latest,\
 	com.ibm.ws.ejbcontainer.remote.portable.core;version=latest,\
-	com.ibm.websphere.javaee.ejb.3.2;version=latest,\
+	com.ibm.websphere.javaee.ejb.3.1;version=latest,\
 	com.ibm.ws.container.service;version=latest,\
 	com.ibm.ws.adaptable.module;version=latest,\
 	com.ibm.ws.managedobject;version=latest,\
@@ -148,5 +148,6 @@ instrument.classesExcludes: com/ibm/ws/ejbcontainer/osgi/internal/resources/*.cl
 	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
 	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
 	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	com.ibm.websphere.javaee.ejb.3.2;version=latest,\
 	com.ibm.ws.kernel.boot;version=latest, \
 	com.ibm.ws.app.manager;version=latest

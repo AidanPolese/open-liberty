@@ -553,7 +553,7 @@ public abstract class AbstractClient implements Client {
     }
 
     protected boolean responseStreamCanBeClosed(Message outMessage, Class<?> cls) {
-        return cls != InputStream.class
+        return !JAXRSUtils.isStreamingOutType(cls)
                && MessageUtils.isTrue(outMessage.getContextualProperty("response.stream.auto.close"));
     }
 
@@ -596,7 +596,9 @@ public abstract class AbstractClient implements Client {
                 }
             }
         }
-        ex = message.getContent(Exception.class);
+        if (ex == null) {
+            ex = message.getContent(Exception.class);
+        }
         if (ex != null
             || PropertyUtils.isTrue(exchange.get(SERVICE_NOT_AVAIL_PROPERTY))
             && PropertyUtils.isTrue(exchange.get(COMPLETE_IF_SERVICE_NOT_AVAIL_PROPERTY))) {
@@ -614,16 +616,23 @@ public abstract class AbstractClient implements Client {
     protected void checkClientException(Message outMessage, Exception ex) throws Exception {
         Throwable actualEx = ex instanceof Fault ? ((Fault) ex).getCause() : ex;
 
-        Integer responseCode = getResponseCode(outMessage.getExchange());
+        Exchange exchange = outMessage.getExchange();
+        Integer responseCode = getResponseCode(exchange);
         if (responseCode == null
-            || actualEx instanceof IOException
-            && outMessage.getExchange().get("client.redirect.exception") != null) {
+            || responseCode < 300 && !(actualEx instanceof IOException) 
+            || actualEx instanceof IOException && exchange.get("client.redirect.exception") != null) {
             if (actualEx instanceof ProcessingException) {
-                throw ex;
+                throw (RuntimeException)actualEx;
             } else if (actualEx != null) {
-                throw new ProcessingException(actualEx);
-            } else if (!outMessage.getExchange().isOneWay() || cfg.isResponseExpectedForOneway()) {
-                waitForResponseCode(outMessage.getExchange());
+                Object useProcExProp = exchange.get("wrap.in.processing.exception");
+                if (actualEx instanceof RuntimeException
+                    && useProcExProp != null && PropertyUtils.isFalse(useProcExProp)) {                
+                    throw (Exception)actualEx;    
+                } else {
+                    throw new ProcessingException(actualEx);
+                }
+            } else if (!exchange.isOneWay() || cfg.isResponseExpectedForOneway()) {
+                waitForResponseCode(exchange);
             }
         }
     }
@@ -670,7 +679,9 @@ public abstract class AbstractClient implements Client {
 
         UriBuilder builder = new UriBuilderImpl().uri(newBaseURI);
         String basePath = reqURIPath.startsWith(baseURIPath) ? baseURIPath : getBaseURI().getRawPath();
-        builder.path(reqURIPath.equals(basePath) ? "" : reqURIPath.substring(basePath.length()));
+        String relativePath = reqURIPath.equals(basePath) ? ""
+                : reqURIPath.startsWith(basePath) ? reqURIPath.substring(basePath.length()) : reqURIPath;
+        builder.path(relativePath);
 
         String newQuery = newBaseURI.getRawQuery();
         if (newQuery == null) {
@@ -819,7 +830,7 @@ public abstract class AbstractClient implements Client {
     }
 
     protected static void reportMessageHandlerProblem(String name, Class<?> cls, MediaType ct, Throwable ex) {
-        String errorMessage = JAXRSUtils.logMessageHandlerProblem("NO_MSG_WRITER", cls, ct);
+        String errorMessage = JAXRSUtils.logMessageHandlerProblem(name, cls, ct);
         Throwable actualEx = ex instanceof Fault ? ((Fault) ex).getCause() : ex;
         throw new ProcessingException(errorMessage, actualEx);
     }
@@ -992,9 +1003,10 @@ public abstract class AbstractClient implements Client {
             m.put(Message.REQUEST_URI, requestURIProperty.toString());
         }
 
-        m.put(Message.CONTENT_TYPE, headers.getFirst(HttpHeaders.CONTENT_TYPE));
-
-        body = checkIfBodyEmpty(body);
+        String ct = headers.getFirst(HttpHeaders.CONTENT_TYPE);
+        m.put(Message.CONTENT_TYPE, ct);
+        
+        body = checkIfBodyEmpty(body, ct);
         setEmptyRequestPropertyIfNeeded(m, body);
 
         m.setContent(List.class, getContentsList(body));
@@ -1038,12 +1050,13 @@ public abstract class AbstractClient implements Client {
         }
     }
 
-    protected Object checkIfBodyEmpty(Object body) {
+    protected Object checkIfBodyEmpty(Object body, String contentType) {
         //CHECKSTYLE:OFF
         if (body != null
             && (body.getClass() == String.class && ((String) body).length() == 0
                 || body.getClass() == Form.class && ((Form) body).asMap().isEmpty()
                 || Map.class.isAssignableFrom(body.getClass()) && ((Map<?, ?>) body).isEmpty()
+                && !MediaType.APPLICATION_JSON.equals(contentType)
                 || body instanceof byte[] && ((byte[]) body).length == 0)) {
             body = null;
         }
@@ -1152,6 +1165,12 @@ public abstract class AbstractClient implements Client {
             respClass = Response.class;
         }
         return respClass;
+    }
+    protected void resetResponseStateImmediatelyIfNeeded() {
+        if (state instanceof ThreadLocalClientState
+            && cfg.isResetThreadLocalStateImmediately()) {
+            state.reset();
+        }
     }
     
     protected abstract class AbstractBodyWriter extends AbstractOutDatabindingInterceptor {

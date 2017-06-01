@@ -24,7 +24,7 @@ public class EJBNotFoundException
     /**
      * Create a new <code>EJBNotFoundException</code> instance. <p>
      * 
-     * @param j2eeName unique j2ee name representing the EJB.
+     * @param j2eeName unique Java EE name representing the EJB.
      */
     public EJBNotFoundException(String j2eeName)
     {

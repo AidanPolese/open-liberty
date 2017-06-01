@@ -299,7 +299,7 @@ public class ApplicationManager {
     }
 
     /**
-     * Installs the provides app file into the appropriate Alpine destination.
+     * Installs the provides app file into the appropriate Liberty destination.
      *
      * @param name The name of the application (currently unused)
      * @param app The application archive
@@ -311,7 +311,7 @@ public class ApplicationManager {
     }
 
     /**
-     * Installs the provides app file into the appropriate Alpine destination.
+     * Installs the provides app file into the appropriate Liberty destination.
      *
      * @param name The name of the application (currently unused)
      * @param app The application archive

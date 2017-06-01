@@ -102,7 +102,6 @@ public class AsyncResponseImpl implements AsyncResponse, ContinuationCallback {
         }
         return doResumeFinal(response);
     }
-
     private boolean doResumeFinal(Object response) {
         inMessage.getExchange().put(AsyncResponse.class, this);
         cont.setObject(response);
@@ -134,7 +133,6 @@ public class AsyncResponseImpl implements AsyncResponse, ContinuationCallback {
         if (cancelled) {
             return true;
         }
-
         if (!isSuspended()) {
             return false;
         }
@@ -219,14 +217,12 @@ public class AsyncResponseImpl implements AsyncResponse, ContinuationCallback {
 
     @Override
     public Collection<Class<?>> register(Class<?> callback) throws NullPointerException {
-
         return register(callback, new Class<?>[] {}).get(callback);
     }
 
-    @FFDCIgnore(value = { NullPointerException.class, Throwable.class })
     @Override
-    public Map<Class<?>, Collection<Class<?>>> register(Class<?> callback, Class<?>... callbacks) throws NullPointerException {
-
+    public Map<Class<?>, Collection<Class<?>>> register(Class<?> callback, Class<?>... callbacks) 
+        throws NullPointerException {
         try {
             Object[] extraCallbacks = new Object[callbacks.length];
             for (int i = 0; i < callbacks.length; i++) {
@@ -247,12 +243,15 @@ public class AsyncResponseImpl implements AsyncResponse, ContinuationCallback {
     }
 
     @Override
-    public Map<Class<?>, Collection<Class<?>>> register(Object callback, Object... callbacks) throws NullPointerException {
-        Map<Class<?>, Collection<Class<?>>> map = new HashMap<Class<?>, Collection<Class<?>>>();
+    public Map<Class<?>, Collection<Class<?>>> register(Object callback, Object... callbacks) 
+        throws NullPointerException {
+        Map<Class<?>, Collection<Class<?>>> map = 
+            new HashMap<Class<?>, Collection<Class<?>>>();
 
         Object[] allCallbacks = new Object[1 + callbacks.length];
         allCallbacks[0] = callback;
         System.arraycopy(callbacks, 0, allCallbacks, 1, callbacks.length);
+        
         for (int i = 0; i < allCallbacks.length; i++) {
             if (allCallbacks[i] == null) {
                 throw new NullPointerException();
@@ -300,7 +299,7 @@ public class AsyncResponseImpl implements AsyncResponse, ContinuationCallback {
         }
     }
 
-    public boolean suspendContinuationIfNeeded() {
+    public synchronized boolean suspendContinuationIfNeeded() {
         //Liberty code change start
         //defect 168372
         // isDone then no need to suspend
@@ -353,7 +352,8 @@ public class AsyncResponseImpl implements AsyncResponse, ContinuationCallback {
     }
 
     private void initContinuation() {
-        ContinuationProvider provider = (ContinuationProvider) inMessage.get(ContinuationProvider.class.getName());
+        ContinuationProvider provider = 
+            (ContinuationProvider)inMessage.get(ContinuationProvider.class.getName());
         cont = provider.getContinuation();
         initialSuspend = true;
     }

@@ -5,8 +5,8 @@
  *
  * WLP Copyright IBM Corp. 2014
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.logging.fat;
@@ -18,18 +18,23 @@ import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import componenttest.topology.impl.JavaInfo;
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.impl.LibertyServerFactory;
 import componenttest.topology.utils.HttpUtils;
 
 public class HealthCenterTest {
-    private static final boolean J9 = System.getProperty("java.vm.name", "unknown").contains("J9");
     private static LibertyServer server;
 
     @BeforeClass
-    public static void beforeClass() {
-        Assume.assumeTrue(J9);
-        server = LibertyServerFactory.getStartedLibertyServer("com.ibm.ws.logging.healthcenter");
+    public static void beforeClass() throws Exception {
+        server = LibertyServerFactory.getLibertyServer("com.ibm.ws.logging.healthcenter");
+
+        Assume.assumeTrue(JavaInfo.forServer(server).vendor().equals(JavaInfo.Vendor.IBM));
+
+        if (!server.isStarted())
+            server.startServer();
+
     }
 
     @Test

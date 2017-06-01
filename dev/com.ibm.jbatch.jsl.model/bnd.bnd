@@ -40,7 +40,6 @@ Import-Package: com.ibm.jbatch.spi,\
 publish.wlp.jar.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.spi.logging;version=latest,\
 	com.ibm.websphere.javaee.batch.1.0;version=latest,\
 	com.ibm.websphere.org.osgi.core;version=latest,\

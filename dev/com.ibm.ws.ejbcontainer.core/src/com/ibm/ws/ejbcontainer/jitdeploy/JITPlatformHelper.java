@@ -14,9 +14,9 @@ package com.ibm.ws.ejbcontainer.jitdeploy;
 import java.io.File;
 import java.security.AccessController;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.dopriv.SystemGetPropertyPrivileged;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**

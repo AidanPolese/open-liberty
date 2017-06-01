@@ -1,27 +1,14 @@
-///I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-//1.2 SERV1/ws/code/ejbcontainer.impl/src/com/ibm/ws/ejbcontainer/injection/factory/HybridJPAObjectFactory.java, WAS.ejbcontainer, WASX.SERV1, hh1247.01 8/20/10 11:23:58
-//
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2012, 2013
-//
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//Module  :  HybridJPAObjectFactory.java
-//
-//Source File Description:
-//
-//   See javadoc...
-//
-//Change Activity:
-//
-//Reason    Version   Date     Userid    Change Description
-//--------- --------- -------- --------- -----------------------------------------
-//d658638   WAS80     20100628 tkb      : support EJBs in WARs
-//F743-30682
-//          WAS80     20100820 bkail    : Improve SFSB validation
-//--------- --------- -------- --------- -----------------------------------------
+/*
+ * IBM Confidential
+ *
+ * OCO Source Materials
+ *
+ * WLP Copyright IBM Corp. 2012, 2013
+ *
+ * The source code for this program is not published or otherwise divested 
+ * of its trade secrets, irrespective of what has been deposited with the 
+ * U.S. Copyright Office.
+ */
 package com.ibm.ws.ejbcontainer.jpa.injection.factory;
 
 import com.ibm.ejs.container.BeanMetaData;
@@ -97,12 +84,16 @@ public class HybridJPAObjectFactory extends JPAJndiLookupObjectFactory
           String refName = info.getReferenceName();
           if ( isSFSB && !bmd.ivPersistenceRefNames.contains( refName ) ) // F743-30682
           {
-             Object[] parms = new Object[] { bmd.j2eeName.getComponent(),
-                     bmd.j2eeName.getModule(),
-                     bmd.j2eeName.getApplication(),
-                     refName };
-             Tr.error( tc, "PERSISTENCE_REF_DEPENDENCY_NOT_DECLARED_CNTR0315E", parms);
-             String msg = Tr.formatMessage(tc, "PERSISTENCE_REF_DEPENDENCY_NOT_DECLARED_CNTR0315E", parms);
+             Tr.error(tc, "PERSISTENCE_REF_DEPENDENCY_NOT_DECLARED_CNTR0315E",
+                      bmd.j2eeName.getComponent(),
+                      bmd.j2eeName.getModule(),
+                      bmd.j2eeName.getApplication(),
+                      refName);
+             String msg = Tr.formatMessage(tc, "PERSISTENCE_REF_DEPENDENCY_NOT_DECLARED_CNTR0315E",
+                                           bmd.j2eeName.getComponent(),
+                                           bmd.j2eeName.getModule(),
+                                           bmd.j2eeName.getApplication(),
+                                           refName);
              throw new InjectionException(msg);
           }
        } 

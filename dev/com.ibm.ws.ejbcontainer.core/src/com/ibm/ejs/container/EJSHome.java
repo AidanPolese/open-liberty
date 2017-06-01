@@ -47,8 +47,6 @@ import com.ibm.ejs.container.activator.ActivationStrategy;
 import com.ibm.ejs.container.lock.LockManager;
 import com.ibm.ejs.container.lock.LockStrategy;
 import com.ibm.ejs.container.util.ExceptionUtil;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
 import com.ibm.websphere.cpi.Finder;
 import com.ibm.websphere.cpi.Persister;
@@ -60,6 +58,8 @@ import com.ibm.websphere.csi.J2EEName;
 import com.ibm.websphere.csi.MethodInterface;
 import com.ibm.websphere.csi.TransactionAttribute;
 import com.ibm.websphere.ejbcontainer.EJBStoppedException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejb.portable.EJBMetaDataImpl;
 import com.ibm.ws.ejb.portable.HandleImpl;
 import com.ibm.ws.ejb.portable.HomeHandleImpl;
@@ -132,7 +132,7 @@ public abstract class EJSHome
     protected String jndiName;
 
     /**
-     * The J2EE name of this bean. <p>
+     * The Java EE name of this bean. <p>
      */
     protected J2EEName j2eeName;
 
@@ -690,7 +690,7 @@ public abstract class EJSHome
     } // getJNDIName
 
     /**
-     * Get the J2EE name of this home. <p>
+     * Get the Java EE name of this home. <p>
      */
     @Override
     public J2EEName getJ2EEName()
@@ -2035,7 +2035,7 @@ public abstract class EJSHome
 
                 // p116577 - start of change
                 // Need to make EntityHandle class use only
-                // SUN JDK or J2EE interfaces.  So, we need to pass EJBObject
+                // SUN JDK or Java EE interfaces.  So, we need to pass EJBObject
                 // stub to the EntityHandle constructor.
                 return new HandleImpl((EJBObject) PortableRemoteObject.toStub(wrapper)); // F743-509.CodRev
                 // p116577 - end of change
@@ -3348,7 +3348,7 @@ public abstract class EJSHome
 
             // p116577 - start of change.
             // We need to make EntityHomeHandle class use only
-            // SUN JDK or J2EE interfaces.  So, we need to pass EJBHome
+            // SUN JDK or Java EE interfaces.  So, we need to pass EJBHome
             // stub to the EntityHomeHandle constructor. Unlike EJBHome
             // interface, the EJBLocalHome does not have a getHomeHandle
             // method.  So, it is safe to assume we need a stub.

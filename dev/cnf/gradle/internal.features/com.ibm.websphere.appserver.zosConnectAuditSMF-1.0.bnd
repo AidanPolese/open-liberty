@@ -1,10 +1,9 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.zosConnectAuditSMF-1.0
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: \
-    com.ibm.websphere.zos.request.logging;version=latest, \
-    com.ibm.ws.zos.connect.audit.smf;version=latest
+-dependson: \
+	com.ibm.websphere.zos.request.logging;version=latest, \
+	com.ibm.ws.zos.connect.audit.smf;version=latest

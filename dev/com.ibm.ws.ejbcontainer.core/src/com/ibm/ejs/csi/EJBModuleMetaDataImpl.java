@@ -25,11 +25,11 @@ import javax.ejb.ApplicationException;
 
 import com.ibm.ejs.container.BeanMetaData;
 import com.ibm.ejs.container.ContainerProperties;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.dopriv.SystemGetPropertyPrivileged;
 import com.ibm.websphere.cpmi.PMModuleCookie;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.JCDIHelper;
 import com.ibm.ws.ejbcontainer.runtime.EJBApplicationEventListener;
 import com.ibm.ws.javaee.dd.ejb.Interceptor;
@@ -93,7 +93,7 @@ public class EJBModuleMetaDataImpl extends MetaDataImpl
     public String ivAppName;
 
     /**
-     * J2EE Name of this module (ie. AppName + ModuleName + null ComponentName).
+     * Java EE Name of this module (ie. AppName + ModuleName + null ComponentName).
      * This variable is required by applicationProfile
      */
     public J2EEName ivJ2EEName;
@@ -477,7 +477,7 @@ public class EJBModuleMetaDataImpl extends MetaDataImpl
     }
 
     /**
-     * Return the J2EE name of this module
+     * Return the Java EE name of this module
      *
      * @see com.ibm.ws.runtime.metadata.ModuleMetaData
      */

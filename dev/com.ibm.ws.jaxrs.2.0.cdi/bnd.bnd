@@ -21,11 +21,12 @@ Private-Package:\
    com.ibm.ws.jaxrs20.cdi.*
 
 -dsannotations: com.ibm.ws.jaxrs20.cdi.component.*    
+
+instrument.classesExcludes: com/ibm/ws/jaxrs20/cdi/internal/resources/*.class
  
 -buildpath: \
-	${javac.bootclasspath.java7}, \
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.1.8.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-frontend-jaxrs-3.1.8.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.1.11.jar;version=file,\
+	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-frontend-jaxrs-3.1.11.jar;version=file,\
 	com.ibm.ws.jaxrs.2.0.common;version=latest,\
 	com.ibm.websphere.javaee.jaxrs.2.0;version=latest,\
 	com.ibm.ws.container.service;version=latest,\

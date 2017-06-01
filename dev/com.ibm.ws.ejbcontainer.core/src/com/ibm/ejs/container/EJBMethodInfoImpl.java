@@ -20,12 +20,12 @@ import javax.ejb.LockType;
 
 import com.ibm.ejs.container.interceptors.InterceptorProxy;
 import com.ibm.ejs.container.util.MethodAttribUtils;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.ActivitySessionAttribute;
 import com.ibm.websphere.csi.J2EEName;
 import com.ibm.websphere.csi.MethodInterface;
 import com.ibm.websphere.csi.TransactionAttribute;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.EJBComponentMetaData;
 import com.ibm.ws.ejbcontainer.EJBMethodInterface;
 import com.ibm.ws.ejbcontainer.EJBMethodMetaData;
@@ -985,7 +985,7 @@ public class EJBMethodInfoImpl
     {
         // This method is overridden in SharedEJBMethodInfoImpl to allow for
         // AccessIntent logic to be moved out of shared logic and into specific
-        // tWAS logic.
+        // traditional WAS logic.
     }
 
     /**

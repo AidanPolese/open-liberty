@@ -21,6 +21,7 @@ package org.apache.cxf.common.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -94,18 +95,19 @@ public final class UrlUtils {
         if (needDecode) {
             final byte[] valueBytes = StringUtils.toBytes(value, enc);
             ByteBuffer in = ByteBuffer.wrap(valueBytes);
-            ByteBuffer out = ByteBuffer.allocate(in.capacity() - 2 * escapesCount);
+            ByteBuffer out = ByteBuffer.allocate(in.capacity() - (2 * escapesCount) + 1);
             while (in.hasRemaining()) {
                 final int b = in.get();
                 if (!isPath && b == PLUS_CHAR) {
                     out.put((byte) ' ');
                 } else if (b == ESCAPE_CHAR) {
                     try {
-                        final int u = digit16(in.get());
-                        final int l = digit16(in.get());
+                        final int u = digit16((byte) in.get());
+                        final int l = digit16((byte) in.get());
                         out.put((byte) ((u << 4) + l));
-                    } catch (final ArrayIndexOutOfBoundsException e) {
-                        throw new RuntimeException("Invalid URL encoding: ", e);
+                    } catch (final BufferUnderflowException e) {
+                        throw new IllegalArgumentException(
+                                "Invalid URL encoding: Incomplete trailing escape (%) pattern");
                     }
                 } else {
                     out.put((byte) b);
@@ -121,7 +123,7 @@ public final class UrlUtils {
     private static int digit16(final byte b) {
         final int i = Character.digit((char) b, RADIX);
         if (i == -1) {
-            throw new RuntimeException("Invalid URL encoding: not a valid digit (radix " + RADIX + "): " + b);
+            throw new IllegalArgumentException("Invalid URL encoding: not a valid digit (radix " + RADIX + "): " + b);
         }
         return i;
     }

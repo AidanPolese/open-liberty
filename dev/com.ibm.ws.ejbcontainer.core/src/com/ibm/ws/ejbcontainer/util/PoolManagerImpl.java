@@ -17,16 +17,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.EJBPMICollaborator;
 
 public class PoolManagerImpl
                 extends PoolManager
                 implements Runnable
 {
-    private static final String CLASS_NAME = PoolManagerImpl.class.getName();
-    private static final TraceComponent tc = Tr.register(CLASS_NAME, "EJBContainer", null);
+    private static final TraceComponent tc = Tr.register(PoolManagerImpl.class, "EJBContainer", null);
 
     private final List<PoolImplBase> pools = new ArrayList<PoolImplBase>();
     private PoolImplBase[] poolArray = new PoolImplBase[10];

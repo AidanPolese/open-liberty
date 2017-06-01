@@ -28,5 +28,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/jaxb-api.jar;version=file

@@ -15,6 +15,3 @@ Command-Class: com.ibm.ws.kernel.feature.internal.generator.FeatureListGenerator
 -outputmask: ws-featurelist.jar
 
 publish.tool.jar=ws-featurelist.jar
-
--buildpath: \
-	${javac.bootclasspath.java6}

@@ -27,5 +27,4 @@ Export-Package: com.ibm.wsspi.webcontainer.extension, \
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.webcontainer

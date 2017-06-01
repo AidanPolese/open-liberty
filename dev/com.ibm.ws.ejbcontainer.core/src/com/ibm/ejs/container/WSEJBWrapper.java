@@ -16,8 +16,8 @@ import java.rmi.RemoteException;
 import java.util.Map;
 
 import com.ibm.ejs.container.util.ExceptionUtil;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.wsspi.ejbcontainer.WSEJBEndpointManager;
 
@@ -60,10 +60,9 @@ public class WSEJBWrapper extends EJSWrapperBase implements WSEJBEndpointManager
 {
     private static final String CLASS_NAME = WSEJBWrapper.class.getName();
 
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     "EJBContainer",
-                     "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(WSEJBWrapper.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     /**
      * Method this wrapper instance will be used to invoke.

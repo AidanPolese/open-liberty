@@ -14,7 +14,6 @@ Export-Package: com.ibm.ws.adaptable.module.structure,com.ibm.wsspi.adaptable.mo
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.adaptable.module;version=latest, \
 	com.ibm.ws.artifact;version=latest, \
 	com.ibm.ws.artifact.equinox.module;version=latest, \

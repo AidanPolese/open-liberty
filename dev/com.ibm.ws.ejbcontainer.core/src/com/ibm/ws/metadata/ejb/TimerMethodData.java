@@ -19,8 +19,8 @@ import java.util.List;
 import javax.ejb.ScheduleExpression;
 
 import com.ibm.ejs.container.ContainerProperties;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Temporary storage for timer methods (timeout or automatic timers) prior to
@@ -28,9 +28,7 @@ import com.ibm.ejs.ras.TraceComponent;
  */
 public class TimerMethodData implements Comparable<TimerMethodData>
 {
-    private static final String CLASS_NAME = "com.ibm.ws.metadata.ejb.TimerMethodData";
-
-    private static final TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(TimerMethodData.class,
                                                          "EJBContainer",
                                                          "com.ibm.ejs.container.container");
 

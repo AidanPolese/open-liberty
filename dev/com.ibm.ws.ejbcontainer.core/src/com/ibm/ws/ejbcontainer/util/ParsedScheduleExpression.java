@@ -23,8 +23,8 @@ import java.util.TimeZone;
 
 import javax.ejb.ScheduleExpression;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * A representation of the parsed values from a <tt>ScheduleExpression</tt>,
@@ -33,9 +33,7 @@ import com.ibm.ejs.ras.TraceComponent;
 public class ParsedScheduleExpression
                 implements Serializable
 {
-    private static final String CLASS_NAME = ParsedScheduleExpression.class.getName();
-
-    private static final TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(ParsedScheduleExpression.class,
                                                          "EJBContainer",
                                                          "com.ibm.ejs.container.container");
 

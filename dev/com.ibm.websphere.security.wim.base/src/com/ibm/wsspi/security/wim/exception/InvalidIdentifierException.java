@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class InvalidIdentifierException extends WIMApplicationException {
 
+    private static final long serialVersionUID = 1435755975795200999L;
+
     /**
      *
      */

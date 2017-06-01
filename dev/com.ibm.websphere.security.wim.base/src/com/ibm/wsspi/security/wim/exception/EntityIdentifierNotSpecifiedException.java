@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class EntityIdentifierNotSpecifiedException extends WIMApplicationException {
 
+    private static final long serialVersionUID = 2680552098342735979L;
+
     /**
      *
      */

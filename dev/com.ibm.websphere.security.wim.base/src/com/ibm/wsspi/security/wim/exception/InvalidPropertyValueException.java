@@ -11,6 +11,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class InvalidPropertyValueException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -3995509493602371323L;
+
     /**
      *
      */

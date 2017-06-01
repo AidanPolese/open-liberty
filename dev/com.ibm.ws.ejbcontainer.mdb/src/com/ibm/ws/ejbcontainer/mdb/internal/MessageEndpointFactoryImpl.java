@@ -152,8 +152,6 @@ public class MessageEndpointFactoryImpl extends BaseMessageEndpointFactory imple
     @Trivial
     @FFDCIgnore({ ResourceException.class, Throwable.class })
     protected void activateEndpointInternal(EndpointActivationService eas, int maxEndpoints, AdminObjectService adminObjSvc) throws ResourceException {
-        // TODO : Much of the code in this method is very similar to tWAS,
-        //        refactor to make more common between tWAS and Liberty
         boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
         if (isTraceOn && tc.isEntryEnabled())
             Tr.entry(tc, "MEF.activateEndpointInternal for MDB " + beanMetaData.enterpriseBeanName + "(" + eas + ", " + maxEndpoints + ")");
@@ -188,7 +186,7 @@ public class MessageEndpointFactoryImpl extends BaseMessageEndpointFactory imple
                                                   adminObjectServiceInfo == null ? null : adminObjectServiceInfo.id);
 
                 // Save key required to deactivate endpoint and change to the ACTIVE
-                // state. Note that tWAS defers the move to ACTIVE until the application
+                // state. Note that traditional WAS defers the move to ACTIVE until the application
                 // has started to block createEndpoint calls, but that doesn't work well
                 // with dynamic configuration updates. Instead of blocking on state,
                 // Liberty blocks on checkIfEJBWorkAllowed.
@@ -271,8 +269,6 @@ public class MessageEndpointFactoryImpl extends BaseMessageEndpointFactory imple
      */
     @Trivial
     protected void deactivateEndpointInternal(EndpointActivationService eas) throws ResourceException {
-        // TODO : Much of the code in this method is very similar to tWAS,
-        //        refactor to make more common between tWAS and Liberty
         boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
         if (isTraceOn && tc.isEntryEnabled())
             Tr.entry(tc, "MEF.deactivateEndpointInternal for MDB " + beanMetaData.enterpriseBeanName + "(" + eas + ")");
@@ -352,7 +348,7 @@ public class MessageEndpointFactoryImpl extends BaseMessageEndpointFactory imple
 
     @Override
     public MessageEndpoint createEndpoint(XAResource xaResource, long timeout) throws UnavailableException {
-        // tWAS blocked by not moving the endpoint to ACTIVE until the application
+        // Traditional WAS blocked by not moving the endpoint to ACTIVE until the application
         // had started, but that doesn't work, so well with dynamic configuration
         // updates, so instead Liberty blocks here on application started, which
         // is done with checkIfEJBWorkAllowed in homeEnabled.
@@ -387,10 +383,10 @@ public class MessageEndpointFactoryImpl extends BaseMessageEndpointFactory imple
 
     @Override
     public void applicationStopping(String appName) {
-        // Unlike tWAS, a message endpoint may be deactivated by either stopping the
+        // Unlike traditional WAS, a message endpoint may be deactivated by either stopping the
         // application or removing the activation spec. If the activation spec has
         // already been removed and deactivated this endpoint, then skip the parent
-        // processing as it will just log FFDC, since that is an error on tWAS.
+        // processing as it will just log FFDC, since that is an error on traditional WAS.
         synchronized (ivStateLock) {
             if (ivState != DEACTIVATING_STATE) {
                 super.applicationStopping(appName);

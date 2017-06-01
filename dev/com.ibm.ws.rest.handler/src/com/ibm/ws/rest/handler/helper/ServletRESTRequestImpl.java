@@ -5,8 +5,8 @@
  *
  * WLP Copyright IBM Corp. 2013, 2016
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.rest.handler.helper;
@@ -40,7 +40,7 @@ public class ServletRESTRequestImpl implements RESTRequest {
      * That said, we do not want to expose this object directly as we may
      * replace the underlying mechanism some day to make the handler
      * lighter-weight.
-     * 
+     *
      * @param response The request to wrap.
      */
     public ServletRESTRequestImpl(HttpServletRequest request) {
@@ -115,7 +115,7 @@ public class ServletRESTRequestImpl implements RESTRequest {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws ServletException
      * @throws IOException
      */
@@ -219,4 +219,13 @@ public class ServletRESTRequestImpl implements RESTRequest {
     public String getContentType() {
         return request.getContentType();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getSessionId() {
+        return request.getSession().getId();
+    }
+
 }

@@ -17,5 +17,4 @@ instrument.disabled: true
 publish.wlp.jar.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	../prereq.java.tools/lib/tools.jar;version=file

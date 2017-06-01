@@ -566,9 +566,9 @@ public class InvokerTask implements Runnable, Synchronization {
                 if (tranMgr.getStatus() == Status.STATUS_MARKED_ROLLBACK) {
                     if (trace && tc.isEventEnabled())
                         Tr.event(this, tc, "rolling back task execution attempt");
-                    tranMgr.rollback();
                     if (nextFailureCount == null || nextFailureCount == 0)
                         nextFailureCount = (short) (prevFailureCount == null ? 1 : prevFailureCount < Short.MAX_VALUE ? (prevFailureCount + 1) : Short.MAX_VALUE);
+                    tranMgr.rollback();
                     if (config == null)
                         config = persistentExecutor.configRef.get();
                     processRetryableTaskFailure(failure, loader, nextFailureCount, config, taskName);

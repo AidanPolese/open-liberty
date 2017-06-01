@@ -11,6 +11,9 @@
 package com.ibm.wsspi.security.wim.exception;
 
 public class CertificateMapNotSupportedException extends WIMApplicationException {
+
+    private static final long serialVersionUID = 4234058091551728748L;
+
     /**
      *
      */

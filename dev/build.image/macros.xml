@@ -215,10 +215,18 @@
 
           <!-- Get a server zip that contains everything that would be installed once this addon was installed -->
           <echo message="Building installer ${archive.name}.jar" />
+          <prePackageServer type="addOn" name="@{edition}" />
           <packageServer server="image"
                            archive="${basedir}/build/tmp/${archive.name}.zip" 
                            user.dir="${build.dir}"
                            output.dir="${build.dir}/archives"/>
+          <postPackageServer type="addOn" name="@{edition}" />
+
+          <!-- If the packaging step failed earlier, report the failure.
+               This must be done after the postPackageServer step or we leave
+               the system in a bad state -->
+          <fail if="halt.on.packaging.failure"
+                message="Creating archive failed while running locally.${line.separator}See the previous log messages for what happened."/>
 
           <mkdir dir="build/tmp/big"/>
           <mkdir dir="build/tmp/core"/>
@@ -274,9 +282,17 @@
             </echo>
 
           <!-- minify the embeddable wlp install with the server.xml that has just the extended feature manifests -->
+          <prePackageServer type="embeddable" name="@{edition}" />
           <packageServer server="image"
                            archive="${build.dir}/tmp/${minifyExtendedZip}" 
                            user.dir="${build.dir}"/>
+          <postPackageServer type="embeddable" name="@{edition}" />
+
+          <!-- If the packaging step failed earlier, report the failure.
+               This must be done after the postPackageServer step or we leave
+               the system in a bad state -->
+          <fail if="halt.on.packaging.failure"
+                message="Creating archive failed while running locally.${line.separator}See the previous log messages for what happened."/>
 
           <!-- Get a comma separated String that lists the required core features to add as a manifest header -->
           <local name="require.feature" />
@@ -786,10 +802,18 @@ ${li.header}
           </iff>
 
           <!-- Get a server zip that contains what we need -->
+          <prePackageServer type="edition" name="@{edition}" />
           <packageServer server="image"
                            archive="${archive.zip.full.path}" 
                            user.dir="${build.dir}"
                            output.dir="${build.dir}/archives"/>
+          <postPackageServer type="edition" name="@{edition}" />
+
+          <!-- If the packaging step failed earlier, report the failure.
+               This must be done after the postPackageServer step or we leave
+               the system in a bad state -->
+          <fail if="halt.on.packaging.failure"
+                message="Creating archive failed while running locally.${line.separator}See the previous log messages for what happened."/>
 
           <local name="la.header" />
           <local name="li.header" />
@@ -1001,9 +1025,10 @@ ${li.header}
 
                   <path id="jsonParserClassPath">
                     <pathelement path="../ant_build/lib/repositoryUploadUtilities.jar" />
-                    <pathelement path="../com.ibm.ws.org.glassfish.json/lib/javax.json-1.0.4.jar" />
-                    <fileset dir="../com.ibm.ws.org.apache.aries.util/lib" includes="org.apache.aries.util*.jar"/>
-                    <pathelement path="../com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar" />
+                    <fileset dir="../build.image/wlp/dev/api/spec" includes="com.ibm.websphere.javaee.jsonp.1.0_*.jar" />
+                    <fileset dir="../build.image/wlp/lib" includes="com.ibm.ws.org.glassfish.json.1.0_*.jar" />
+                    <fileset dir="../build.image/wlp/lib" includes="com.ibm.ws.org.apache.aries.util_*.jar"/>
+                    <fileset dir="../build.image/wlp/dev/api/spec" includes="com.ibm.websphere.org.osgi.core_*.jar" />
                   </path>
 
                   <taskdef name="createJsonFromAsset" classname="com.ibm.ws.repository.parsers.internal.CreateJsonRepositoryFiles" 
@@ -1213,6 +1238,7 @@ ${li.header}
       <!-- Local, computed within scope -->
       <local name="default.package.name" />
       <local name="package.name" />
+      <local name="create.profile.zip.tmp" />
       <!-- Local, set from profile.properties -->
       <local name="display.edition.version"/>
       <local name="edition.version"/>
@@ -1256,57 +1282,15 @@ ${li.header}
       <echo message="Generating checksums"/>
       <generateChecksums installRoot="${install.name}" ignoreBinFiles="true"/>
 
-      <!-- This can not run for beta-bluemix or beta-zos packaging because it includes all Liberty Features.
-           It may be that future profiles will also need to package these EE6 features but
-           until then this is just conditional on the specific profile name. -->
-      <iff>
-        <not>
-          <or>
-            <equals arg1="@{profile}" arg2="beta-bluemix" />
-            <equals arg1="@{profile}" arg2="beta-zos" />
-          </or>
-        </not>
-        <then>
-          <!-- Create temp directory and copy over ee-6 feature manifests so that they are not packaged -->
-          <property name="ee6tmp" value="${create.profile.zip.tmp}/ee6tmp"/>
-          <delete dir="${ee6tmp}" />
-          <mkdir dir="${ee6tmp}"/>
-          <move file="${install.name}/lib/features/com.ibm.websphere.appserver.servlet-3.0.mf" todir="${ee6tmp}" failonerror="${require.all.content}" />
-          <move file="${install.name}/lib/features/com.ibm.websphere.appserver.jsp-2.2.mf" todir="${ee6tmp}" failonerror="${require.all.content}" />
-          <move file="${install.name}/lib/features/com.ibm.websphere.appserver.jaxrs-1.1.mf" todir="${ee6tmp}" failonerror="${require.all.content}"/>
-          <move file="${install.name}/lib/features/com.ibm.websphere.appserver.jdbc-4.0.mf" todir="${ee6tmp}" failonerror="${require.all.content}"/>
-          <move file="${install.name}/lib/features/com.ibm.websphere.appserver.jca-1.6.mf" todir="${ee6tmp}" failonerror="${require.all.content}"/>
-          <!-- Exclude internal.jaxrs-1.1 for 231109 (force restConnector-1.0 to resolve with EE7 features) -->
-          <move file="${install.name}/lib/features/com.ibm.websphere.appserver.internal.jaxrs-1.1.mf" todir="${ee6tmp}" failonerror="${require.all.content}" />
-        </then>
-      </iff>
-
-      <!-- Had to duplicate packageServer function because removing ee-6 features cause tests in there to fail -->
+      <prePackageServer type="profile" name="@{profile}" />
       <packageServer server="image"
                      archive="${create.profile.zip.tmp}/${package.name}.zip" 
                      user.dir="${build.dir}"
                      output.dir="${build.dir}/test"/>
-
-      <!-- Move back ee-6 feature manifests back to the install image if we moved them -->
-      <iff>
-        <not>
-          <or>
-            <equals arg1="@{profile}" arg2="beta-bluemix" />
-            <equals arg1="@{profile}" arg2="beta-zos" />
-          </or>
-        </not>
-        <then>
-          <move todir="${install.name}/lib/features" >
-          <fileset dir="${ee6tmp}">
-            <include name="**/*" />
-          </fileset>
-        </move>
-        <delete dir="${ee6tmp}" />
-        </then>
-      </iff>
+      <postPackageServer type="profile" name="@{profile}" />
 
       <!-- If the packaging step failed earlier, report the failure.
-           This must be done after the moving of ee6 features or we leave
+           This must be done after the postPackageServer step or we leave
            the system in a bad state -->
       <fail if="halt.on.packaging.failure"
             message="Creating archive failed while running locally.${line.separator}See the previous log messages for what happened."/>
@@ -1595,7 +1579,7 @@ ${li.header}
         <equals arg1="@{exclude.license.name}" arg2="false"/>
       </condition>
       <copy file="${basedir}/../com.ibm.ws.jpa/containers/com.ibm.ws.jpa.thinclient_8.5.0.jar" todir="build/tmp/extras"/>
-      <copy file="${basedir}/../com.ibm.ws.ejbcontainer/containers/com.ibm.ws.ejb.embeddableContainer_nls_8.5.0.jar" todir="build/tmp/extras"/>
+      <copy file="${basedir}/../com.ibm.ws.ejbcontainer.twas.embeddable/containers/com.ibm.ws.ejb.embeddableContainer_nls_8.5.0.jar" todir="build/tmp/extras"/>
 
       <echo file="extract-@{license.name}.bnd">
 -include= ~build-install-extras.bnd
@@ -1959,7 +1943,119 @@ LayoutPolicyVersion=0.0.0.1
     </sequential>
   </macrodef>
 
-    
+  <macrodef name="prePackageServer">
+    <attribute name="type" />
+    <attribute name="name" />
+    <sequential>
+      <echo>prePackageServer for @{name}</echo>
+      <!-- When packaging beta-bluemix or beta-zos include all of the ee6 features.
+           Otherwise, we want to exclude the EE6 features that cause conflicts with
+           EE7 features or would be otherwise imported by restConnector-1.0. -->
+      <iff>
+        <and>
+          <equals arg1="@{type}" arg2="profile" />
+          <not>
+            <or>
+              <equals arg1="@{name}" arg2="beta-bluemix" />
+              <equals arg1="@{name}" arg2="beta-zos" />
+            </or>
+          </not>
+        </and>
+        <then>
+          <echo>Moving specific EE6 features out of the lib/features directory to avoid packaging them</echo>
+          <!-- Create temp directory and copy over ee-6 feature manifests so that they are not packaged -->
+          <property name="ee6tmp" value="${basedir}/build/tmp/ee6tmp"/>
+          <delete dir="${ee6tmp}" />
+          <mkdir dir="${ee6tmp}"/>
+          <move file="${install.name}/lib/features/com.ibm.websphere.appserver.servlet-3.0.mf" todir="${ee6tmp}" failonerror="${require.all.content}" />
+          <move file="${install.name}/lib/features/com.ibm.websphere.appserver.jsp-2.2.mf" todir="${ee6tmp}" failonerror="${require.all.content}" />
+          <move file="${install.name}/lib/features/com.ibm.websphere.appserver.jaxrs-1.1.mf" todir="${ee6tmp}" failonerror="${require.all.content}"/>
+          <move file="${install.name}/lib/features/com.ibm.websphere.appserver.jdbc-4.0.mf" todir="${ee6tmp}" failonerror="${require.all.content}"/>
+          <move file="${install.name}/lib/features/com.ibm.websphere.appserver.jca-1.6.mf" todir="${ee6tmp}" failonerror="${require.all.content}"/>
+          <!-- Exclude internal.jaxrs-1.1 for 231109 (force restConnector-1.0 to resolve with EE7 features) -->
+          <move file="${install.name}/lib/features/com.ibm.websphere.appserver.internal.jaxrs-1.1.mf" todir="${ee6tmp}" failonerror="${require.all.content}" />
+        </then>
+      </iff>
+
+      <!-- When packaging non zos content, move the lib/platform/zos* content out
+           so it is not bundled. This is definitely a hack and really should be driven
+           properly by the server package minify command which supports os arg. -->
+      <iff>
+        <not>
+          <or>
+            <equals arg1="@{name}" arg2="full" />
+            <equals arg1="@{name}" arg2="zos" />
+            <equals arg1="@{name}" arg2="beta-zos" />
+          </or>
+        </not>
+        <then>
+          <echo>Moving zOS platform features out of the lib/platform directory to avoid packaging them</echo>
+          <!-- Create temp directory and copy over zOS platform feature manifests so that they are not packaged -->
+          <property name="zos.platform.temp" value="${basedir}/build/tmp/zosPlatformTemp"/>
+          <delete dir="${zos.platform.temp}" />
+          <mkdir dir="${zos.platform.temp}" />
+          <mkdir dir="${zos.platform.temp}/checksums" />
+          <move todir="${zos.platform.temp}" failonerror="true">
+            <fileset dir="${install.name}/lib/platform" includes="zos*.mf" />
+          </move>
+          <move todir="${zos.platform.temp}/checksums" failonerror="true">
+            <fileset dir="${install.name}/lib/platform/checksums" includes="com.ibm.websphere.appserver.zos*.cs" />
+          </move>
+        </then>
+      </iff>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="postPackageServer">
+    <attribute name="type" />
+    <attribute name="name"/>
+    <sequential>
+      <echo>postPackageServer for @{name}</echo>
+      <!-- Move back ee-6 feature manifests back to the install image if we moved them -->
+      <iff>
+        <and>
+          <equals arg1="@{type}" arg2="profile" />
+          <not>
+            <or>
+              <equals arg1="@{name}" arg2="beta-bluemix" />
+              <equals arg1="@{name}" arg2="beta-zos" />
+            </or>
+          </not>
+        </and>
+        <then>
+          <echo>Restoring specific EE6 features back to the lib/features directory</echo>
+          <move todir="${install.name}/lib/features" >
+            <fileset dir="${ee6tmp}">
+              <include name="**/*" />
+            </fileset>
+          </move>
+          <delete dir="${ee6tmp}" />
+        </then>
+      </iff>
+
+      <!-- Move back the zOS platform features to the install image if we moved them -->
+      <iff>
+        <not>
+          <or>
+            <equals arg1="@{name}" arg2="full" />
+            <equals arg1="@{name}" arg2="zos" />
+            <equals arg1="@{name}" arg2="beta-zos" />
+          </or>
+        </not>
+        <then>
+          <echo>Moving zOS platform features back to the lib/platform directory</echo>
+          <!-- Create temp directory and copy over zOS platform feature manifests so that they are not packaged -->
+          <move todir="${install.name}/lib/platform" failonerror="true">
+            <fileset dir="${zos.platform.temp}" includes="zos*.mf" />
+          </move>
+          <move todir="${install.name}/lib/platform/checksums" failonerror="true">
+            <fileset dir="${zos.platform.temp}/checksums" includes="com.ibm.websphere.appserver.zos*.cs" />
+          </move>
+        </then>
+      </iff>
+    </sequential>
+  </macrodef>
+
     <macrodef name="verifyChecksum">
         <attribute name="checksum"/>
         <attribute name="file"/>

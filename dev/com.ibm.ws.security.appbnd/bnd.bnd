@@ -18,6 +18,8 @@ Private-Package: \
 
 -dsannotations-inherit: true
 
+instrument.classesExcludes: com/ibm/ws/security/appbnd/internal/resources/*.class
+
 -buildpath: \
 	com.ibm.websphere.appserver.spi.logging,\
 	com.ibm.websphere.org.osgi.core,\

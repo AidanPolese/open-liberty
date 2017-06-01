@@ -19,8 +19,8 @@ import java.io.Serializable;
 
 import javax.transaction.UserTransaction;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * A <code>CMStatelessBeanO</code> manages the lifecycle of a

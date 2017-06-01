@@ -23,12 +23,12 @@
         <jar destfile="${lib.dir}/fattest.encoder.jar" basedir="${basedir}/../com.ibm.ws.common.encoder/build/classes"/>
       </then>
       <else>
+        <path id="encoder.jar.path">
+          <fileset dir="${basedir}/../prereq.published/lib" includes="com.ibm.ws.common.encoder-*.jar"/>
+        </path>
+        <property name="encoder.jar" refid="encoder.jar.path"/>
         <jar destfile="${lib.dir}/fattest.encoder.jar">
-          <archives>
-            <zips>
-              <fileset dir="${basedir}/../prereq.published/lib" includes="com.ibm.ws.common.encoder-*.jar"/>
-            </zips>
-          </archives>
+          <zipfileset src="${encoder.jar}" includes="com/ibm/ws/**"/>
         </jar>
       </else>
     </iff>
@@ -46,9 +46,25 @@
         This was leading to errors when re-running a component buildandrun -->
    <target name="package" depends="compile, test.build.common.package">
      <echo message="packaging extras in ${lib.dir}/${ant.project.name}.jar from ${classes.dir}" />
+
+     <iff>
+      <available file="${basedir}/../com.ibm.ws.componenttest/build" />
+      <then>
+        <path id="componenttest.jar.path">
+          <fileset dir="${basedir}/../com.ibm.ws.componenttest/build/lib" includes="com.ibm.ws.componenttest*.jar"/>
+        </path>
+      </then>
+      <else>
+        <path id="componenttest.jar.path">
+          <fileset dir="${basedir}/../prereq.published/lib" includes="com.ibm.ws.componenttest-*.jar"/>
+        </path>
+      </else>
+    </iff>
+    <property name="componenttest.jar" refid="componenttest.jar.path"/>
+
      <jar destfile="${lib.dir}/${ant.project.name}.jar" update="true">
        <fileset dir="${src.dir}" includes="**/*.properties" />
-       <zipfileset src="../build.image/wlp/lib/com.ibm.ws.componenttest_1.0.jar" includes="componenttest/**" />
+       <zipfileset src="${componenttest.jar}" includes="componenttest/**" />
      </jar>
    </target>
 </project>

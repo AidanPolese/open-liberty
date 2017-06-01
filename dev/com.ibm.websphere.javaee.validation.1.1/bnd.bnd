@@ -29,5 +29,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/geronimo-validation_1.1_spec-1.0-20131115.081150-2.jar;version=file

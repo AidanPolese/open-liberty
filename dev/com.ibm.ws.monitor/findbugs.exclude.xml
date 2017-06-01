@@ -1346,13 +1346,13 @@
   </Match>
 
   <Match>
-    <Class name="com.ibm.ws.monitor.internal.jmx.AlpineMonitorMBean"/>
+    <Class name="com.ibm.ws.monitor.internal.jmx.LibertyMonitorMBean"/>
     <Method name="getAttributeFields" signature="(Ljava/lang/Object;)V"/>
     <Bug pattern="DJV_DO_INSIDE_DO_PRIVILEGED"/>
   </Match>
 
   <Match>
-    <Class name="com.ibm.ws.monitor.internal.jmx.AlpineMonitorMBean"/>
+    <Class name="com.ibm.ws.monitor.internal.jmx.LibertyMonitorMBean"/>
     <Method name="getPublishedFields" signature="(Ljava/lang/Object;)V"/>
     <Bug pattern="DJV_DO_INSIDE_DO_PRIVILEGED"/>
   </Match>

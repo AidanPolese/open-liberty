@@ -28,6 +28,5 @@ Import-Package: \
 publish.wlp.jar.suffix: dev/api/third-party
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.javamail, \
 	com.ibm.ws.com.sun.mail.javax.mail.1.5

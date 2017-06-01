@@ -13,9 +13,9 @@ package com.ibm.ejs.container;
 
 import java.rmi.Remote;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.HomeWrapperSet;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * A home interface binding information wrapper for the CSI HomeWrapperSet

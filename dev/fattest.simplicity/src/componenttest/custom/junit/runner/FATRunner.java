@@ -137,7 +137,12 @@ public class FATRunner extends BlockJUnit4ClassRunner {
     @Override
     public List<FrameworkMethod> getChildren() {
         List<FrameworkMethod> unfilteredChildren = super.getChildren();
-        unfilteredChildren.addAll(TestServletProcessor.getServletTests(getTestClass()));
+        List<FrameworkMethod> servletTests = TestServletProcessor.getServletTests(getTestClass());
+
+        if (servletTests != null && servletTests.size() > 0) {
+            unfilteredChildren.addAll(servletTests);
+        }
+
         return unfilteredChildren;
     }
 

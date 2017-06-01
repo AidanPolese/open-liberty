@@ -42,7 +42,6 @@ Import-Package: \
 publish.wlp.jar.suffix: dev/spi/third-party
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	org.eclipse.osgi;version=latest,\
 	com.ibm.ws.org.eclipse.equinox.coordinator;version=latest,\
 	com.ibm.ws.org.eclipse.equinox.region;version=latest

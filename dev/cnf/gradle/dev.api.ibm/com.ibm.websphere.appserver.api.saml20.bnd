@@ -14,5 +14,4 @@ Export-Package: com.ibm.websphere.security.saml2
 publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.security.sso.common

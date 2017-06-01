@@ -1,8 +1,8 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.autoRequestProbeServlet-1.0
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: com.ibm.ws.request.probe.servlet;version=latest
+-dependson: \
+	com.ibm.ws.request.probe.servlet;version=latest

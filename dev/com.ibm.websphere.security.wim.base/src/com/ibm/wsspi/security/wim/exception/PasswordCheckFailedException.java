@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class PasswordCheckFailedException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -9067114908519104286L;
+
     /**
      *
      */

@@ -16,5 +16,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/javax.websocket-api-1.1.jar;version=file

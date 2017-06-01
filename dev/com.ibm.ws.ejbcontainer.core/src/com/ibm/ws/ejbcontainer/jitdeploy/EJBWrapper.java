@@ -83,8 +83,8 @@ import com.ibm.ejs.container.EJBConfigurationException;
 import com.ibm.ejs.container.EJBMethodInfoImpl;
 import com.ibm.ejs.container.util.DeploymentUtil;
 import com.ibm.ejs.container.util.MethodAttribUtils;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Provides Just In Time deployment of EJB Wrapper classes. The properties of

@@ -6,5 +6,4 @@
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/org.apache.felix.gogo.command-0.16.0.jar;version=file

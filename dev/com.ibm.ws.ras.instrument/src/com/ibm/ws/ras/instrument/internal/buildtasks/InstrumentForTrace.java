@@ -16,7 +16,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Commandline;
 
 import com.ibm.ws.ras.instrument.internal.main.AbstractInstrumentation;
-import com.ibm.ws.ras.instrument.internal.main.AlpineTracePreprocessInstrumentation;
+import com.ibm.ws.ras.instrument.internal.main.LibertyTracePreprocessInstrumentation;
 
 public class InstrumentForTrace extends AbstractInstrumentationTask {
 
@@ -33,7 +33,7 @@ public class InstrumentForTrace extends AbstractInstrumentationTask {
     /**
      * The type of trace to inject.
      */
-    String api = "alpine";
+    String api = "liberty";
 
     /**
      * Indicate whether or not the task should instrument classes with FFDC.
@@ -59,8 +59,8 @@ public class InstrumentForTrace extends AbstractInstrumentationTask {
      */
     public void setApi(String api) {
         api = api.trim();
-        if ("alpine".equalsIgnoreCase(api)) {
-            this.api = "alpine";
+        if ("liberty".equalsIgnoreCase(api)) {
+            this.api = "liberty";
         } else if ("websphere".equalsIgnoreCase(api)) {
             this.api = "tr";
         } else if ("tr".equalsIgnoreCase(api)) {
@@ -95,7 +95,7 @@ public class InstrumentForTrace extends AbstractInstrumentationTask {
 
     @Override
     protected AbstractInstrumentation createInstrumentation() {
-        return new AlpineTracePreprocessInstrumentation();
+        return new LibertyTracePreprocessInstrumentation();
     }
 
 }

@@ -59,10 +59,14 @@ task transform {
         }
         if (transformLAOSRootDir != null) {
             transformLAOSRootDir.mkdirs()
-            filesToRemove = new File(transformLAOSRootDir, 'filesToRemove.properties')
+            new File(transformLAOSRootDir, 'cnf/gradle/transform').mkdirs()
+            filesToRemove = new File(transformLAOSRootDir, 'cnf/gradle/transform/filesToRemove.properties')
+            filesToRemove.delete()
+            filesToRemove = new File(transformLAOSRootDir, 'cnf/gradle/transform/filesToRemove.properties')
             filesToRemove.createNewFile()
         }
 
+        println 'Transforming projects'
         FileTree tree = fileTree(sourceRootDir).include('*/build.gradle')
         tree.visit { element ->
             File buildGradle = new File("$element.relativePath")
@@ -102,11 +106,11 @@ task transform {
 }
 
 void transformProject(String projectName, File sourceRootDir, File targetRootDir) {
-    println "Transforming project " + projectName
     copy {
         from sourceRootDir
         into targetRootDir
         include projectName + "/**"
+        exclude 'cnf/gradle/transform/filesToRemove.properties'
         exclude 'cnf/gradle/transform/.gradle/**'
     }
     copy {
@@ -121,6 +125,7 @@ void transformProject(String projectName, File sourceRootDir, File targetRootDir
 }
 
 void transformProjects(File sourceRootDir, File targetRootDir, Properties props, Set<String> projectTypeSet, File filesToRemove, String nl) {
+    println 'Creating internal feature projects'
     File templateDir = new File(sourceRootDir, 'cnf/gradle/internal.features')
     FileTree tree = fileTree(sourceRootDir).include('com.ibm.websphere.features.internal.*/*.feature')
     tree.visit {element ->
@@ -133,7 +138,6 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
             String mfFileName = featureFileName.replace('.feature', '.mf')
             File newDir = new File(targetRootDir, featureName)
             File resourcesDir = new File(newDir, 'resources')
-            println "Creating internal feature project " + featureName
             if (filesToRemove != null) {
                 filesToRemove.append(parentFolder + '/' + featureFileName + ':LAOSRemoveFile' + nl)
             }
@@ -170,6 +174,7 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
         }
     }
 
+    println 'Updating public feature projects'
     File manifestDir = new File(sourceRootDir, 'cnf/gradle/public.features')
     tree = fileTree(sourceRootDir).include('cnf/gradle/public.features/*.mf')
     tree.visit {element ->
@@ -181,7 +186,6 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
             if (featureDir.exists()) {
                 File resourcesDir = new File(featureDir, 'resources')
                 resourcesDir.mkdirs()
-                println "Updating public feature project " + featureName
                 copy {
                     from manifestDir
                     into resourcesDir
@@ -192,6 +196,7 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
         }
     }
 
+    println 'Creating API projects'
     templateDir = new File(sourceRootDir, 'cnf/gradle/dev.api.ibm')
     tree = fileTree(sourceRootDir).include('cnf/gradle/dev.api.ibm/com.ibm.websphere.appserver.api.*.bnd')
     tree.visit {element ->
@@ -204,7 +209,6 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
             File newDir = new File(targetRootDir, newFolderName)
             newDir.deleteDir()
             newDir.mkdirs()
-            println "Creating API project " + newFolderName
             copy {
                 from templateDir
                 into newDir
@@ -228,6 +232,7 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
         }
     }
 
+    println 'Creating SPI projects'
     templateDir = new File(sourceRootDir, 'cnf/gradle/dev.spi.ibm')
     tree = fileTree(sourceRootDir).include('cnf/gradle/dev.spi.ibm/com.ibm.websphere.appserver.spi.*.bnd')
     tree.visit {element ->
@@ -240,7 +245,6 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
             File newDir = new File(targetRootDir, newFolderName)
             newDir.deleteDir()
             newDir.mkdirs()
-            println "Creating SPI project " + newFolderName
             copy {
                 from templateDir
                 into newDir
@@ -266,12 +270,12 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
 }
 
 void MergeUnittestIntoProjects(File sourceRootDir, File targetRootDir, Properties props, Set<String> projectTypeSet, File filesToRemove, String nl) {
+    println 'Copying /unittest/src into /test folder of runtime projects'
     props.keys().each { projectName ->
         String projectType = props.getProperty(projectName)
         if (projectTypeSet.contains(projectType)) {
             String testProjectName = projectName
             projectName = testProjectName.substring(0, testProjectName.indexOf('_test'))
-            println 'Copying ' + testProjectName + '/unittest/src into ' + projectName + '/test'
             if (!testProjectName.equals('com.ibm.ws.httpservice_test')) {
                 filesToRemove.append(testProjectName + ':LAOSRemoveTestProject' + nl)
             }
@@ -727,21 +731,25 @@ void MergeUnittestIntoProjects(File sourceRootDir, File targetRootDir, Propertie
 
 void copyOverlay(File sourceRootDir, File targetRootDir) {
     File overlayDir = new File(sourceRootDir, 'cnf/gradle/transform/overlay')
-    FileTree tree = fileTree(overlayDir).include('com.ibm.*/**')
-    tree.visit { element ->
-        if (!element.isDirectory()) {
-            copy {
-                from overlayDir
-                into targetRootDir
-                include "$element.relativePath"
+    if (overlayDir.exists()) {
+        FileTree tree = fileTree(overlayDir).include('com.ibm.*/**')
+        tree.visit { element ->
+            if (!element.isDirectory()) {
+                copy {
+                    from overlayDir
+                    into targetRootDir
+                    include "$element.relativePath"
+                }
             }
         }
     }
     File deleteDir = new File(sourceRootDir, 'cnf/gradle/transform/delete')
-    tree = fileTree(deleteDir).include('com.ibm.*/**')
-    tree.visit { element ->
-        if (!element.isDirectory()) {
-            new File(targetRootDir, "$element.relativePath").delete()
+    if (deleteDir.exists()) {
+        FileTree tree = fileTree(deleteDir).include('com.ibm.*/**')
+        tree.visit { element ->
+            if (!element.isDirectory()) {
+                new File(targetRootDir, "$element.relativePath").delete()
+            }
         }
     }
 }

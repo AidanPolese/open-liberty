@@ -130,7 +130,7 @@ public class WsLocationAdminImpl implements WsLocationAdmin {
     final protected SymbolicRootResource installParentRoot;
 
     /**
-     * Location of alpine instance; usually a child of the install root
+     * Location of liberty instance; usually a child of the install root
      * (e.g. wlp/usr).
      * 
      * @see WsLocationConstants#LOC_INSTANCE_DIR

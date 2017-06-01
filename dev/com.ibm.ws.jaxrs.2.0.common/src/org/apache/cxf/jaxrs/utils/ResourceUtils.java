@@ -103,6 +103,7 @@ import org.apache.cxf.jaxrs.model.UserOperation;
 import org.apache.cxf.jaxrs.model.UserResource;
 import org.apache.cxf.jaxrs.provider.JAXBElementProvider;
 import org.apache.cxf.message.Message;
+import org.apache.cxf.message.MessageImpl;
 import org.apache.cxf.resource.ResourceManager;
 import org.apache.cxf.staxutils.StaxUtils;
 import org.w3c.dom.Document;
@@ -129,7 +130,7 @@ public final class ResourceUtils {
         SERVER_PROVIDER_CLASS_NAMES.add("javax.ws.rs.container.ContainerRequestFilter");
         SERVER_PROVIDER_CLASS_NAMES.add("javax.ws.rs.container.ContainerResponseFilter");
         SERVER_PROVIDER_CLASS_NAMES.add("javax.ws.rs.container.DynamicFeature");
-        SERVER_PROVIDER_CLASS_NAMES.add("org.apache.cxf.jaxrs.ext.ContextResolver");
+        SERVER_PROVIDER_CLASS_NAMES.add("org.apache.cxf.jaxrs.ext.ContextProvider");
 
     }
 
@@ -220,7 +221,9 @@ public final class ResourceUtils {
         if (model == null) {
             throw new RuntimeException("Resource class " + sClass.getName() + " has no model info");
         }
-        ClassResourceInfo cri = new ClassResourceInfo(sClass, sClass, isRoot, enableStatic, true, model.getConsumes(), model.getProduces(), bus);
+        ClassResourceInfo cri = 
+            new ClassResourceInfo(sClass, sClass, isRoot, enableStatic, true,
+                                  model.getConsumes(), model.getProduces(), bus);
         URITemplate t = URITemplate.createTemplate(model.getPath());
         cri.setURITemplate(t);
 
@@ -246,11 +249,16 @@ public final class ResourceUtils {
             if (actualMethod == null) {
                 continue;
             }
-            OperationResourceInfo ori = new OperationResourceInfo(actualMethod, cri, URITemplate.createTemplate(op.getPath()), op.getVerb(), op.getConsumes(), op.getProduces(), op.getParameters(), op.isOneway());
+            OperationResourceInfo ori = 
+                new OperationResourceInfo(actualMethod, cri, URITemplate.createTemplate(op.getPath()),
+                                          op.getVerb(), op.getConsumes(), op.getProduces(),
+                                          op.getParameters(),
+                                          op.isOneway());
             String rClassName = actualMethod.getReturnType().getName();
             if (op.getVerb() == null) {
                 if (resources.containsKey(rClassName)) {
-                    ClassResourceInfo subCri = rClassName.equals(model.getName()) ? cri : createServiceClassResourceInfo(resources, resources.get(rClassName),
+                    ClassResourceInfo subCri = rClassName.equals(model.getName()) ? cri 
+                        : createServiceClassResourceInfo(resources, resources.get(rClassName),
                                                                                                                          actualMethod.getReturnType(), false, enableStatic, bus);
                     if (subCri != null) {
                         cri.addSubClassResourceInfo(subCri);
@@ -326,8 +334,9 @@ public final class ResourceUtils {
                         ClassResourceInfo subCri = cri.findResource(subClass, subClass);
                         if (subCri == null) {
                             ClassResourceInfo ancestor = getAncestorWithSameServiceClass(cri, subClass);
-                            subCri = ancestor != null ? ancestor : createClassResourceInfo(subClass, subClass, cri, false, enableStatic,
-                                                                                           cri.getBus());
+                            subCri = ancestor != null ? ancestor
+                                     : createClassResourceInfo(subClass, subClass, cri, false, enableStatic,
+                                                               cri.getBus());
                         }
 
                         if (subCri != null) {
@@ -336,19 +345,18 @@ public final class ResourceUtils {
                     }
                 }
             } else {
-                reportInvalidResourceMethod(m, NOT_RESOURCE_METHOD_MESSAGE_ID, Level.FINE); //Liberty change - CXF-7121
-                if (isFineLevelLoggable) {
-                    LOG.fine(new org.apache.cxf.common.i18n.Message("NOT_RESOURCE_METHOD", BUNDLE, m.getDeclaringClass().getName(), m.getName()).toString());
-                }
+                reportInvalidResourceMethod(m, NOT_RESOURCE_METHOD_MESSAGE_ID, Level.FINE);
             }
         }
         cri.setMethodDispatcher(md);
     }
 
-    private static void reportInvalidResourceMethod(Method m, String messageId, Level logLevel) { //Liberty change - CXF-7121
+    private static void reportInvalidResourceMethod(Method m, String messageId, Level logLevel) {
         if (LOG.isLoggable(logLevel)) { //Liberty change - CXF-7121
-            LOG.log(logLevel, new org.apache.cxf.common.i18n.Message(messageId, //Liberty change - CXF-7121
-                            BUNDLE, m.getDeclaringClass().getName(), m.getName()).toString());
+            LOG.log(logLevel, new org.apache.cxf.common.i18n.Message(messageId, 
+                                                             BUNDLE, 
+                                                             m.getDeclaringClass().getName(),
+                                                             m.getName()).toString());
         }
 
     }
@@ -481,7 +489,11 @@ public final class ResourceUtils {
 
         PathParam a = AnnotationUtils.getAnnotation(anns, PathParam.class);
         if (a != null) {
-            return new Parameter(ParameterType.PATH, index, a.value(), isEncoded, dValue);
+            // Liberty change start
+            Parameter p = new Parameter(ParameterType.PATH, index, a.value(), isEncoded, dValue);
+            p.setJavaType(type);
+            return p;
+            // Liberty change end
         }
         QueryParam q = AnnotationUtils.getAnnotation(anns, QueryParam.class);
         if (q != null) {
@@ -516,7 +528,7 @@ public final class ResourceUtils {
     private static OperationResourceInfo createOperationInfo(Method m, Method annotatedMethod,
                                                              ClassResourceInfo cri, Path path, String httpMethod) {
         OperationResourceInfo ori = new OperationResourceInfo(m, annotatedMethod, cri);
-        URITemplate t = URITemplate.createTemplate(path);
+        URITemplate t = URITemplate.createTemplate(path, ori.getParameters()); // Liberty change
         ori.setURITemplate(t);
         ori.setHttpMethod(httpMethod);
         return ori;
@@ -524,7 +536,9 @@ public final class ResourceUtils {
 
     private static boolean checkMethodDispatcher(ClassResourceInfo cr) {
         if (cr.getMethodDispatcher().getOperationResourceInfos().isEmpty()) {
-            LOG.warning(new org.apache.cxf.common.i18n.Message("NO_RESOURCE_OP_EXC", BUNDLE, cr.getServiceClass().getName()).toString());
+            LOG.warning(new org.apache.cxf.common.i18n.Message("NO_RESOURCE_OP_EXC", 
+                                                               BUNDLE, 
+                                                               cr.getServiceClass().getName()).toString());
             return false;
         }
         return true;
@@ -633,7 +647,8 @@ public final class ResourceUtils {
 
     public static List<UserResource> getResourcesFromElement(Element modelEl) {
         List<UserResource> resources = new ArrayList<UserResource>();
-        List<Element> resourceEls = DOMUtils.findAllElementsByTagNameNS(modelEl,
+        List<Element> resourceEls = 
+            DOMUtils.findAllElementsByTagNameNS(modelEl, 
                                                                         "http://cxf.apache.org/jaxrs", "resource");
         for (Element e : resourceEls) {
             resources.add(getResourceFromElement(e));
@@ -680,7 +695,8 @@ public final class ResourceUtils {
             }
             Type type = method.getGenericReturnType();
             if (jaxbOnly) {
-                checkJaxbType(resource.getServiceClass(), cls, realReturnType == Response.class || ori.isAsync() ? cls : type, types, method.getAnnotations(), jaxbWriter);
+                checkJaxbType(resource.getServiceClass(), cls, realReturnType == Response.class || ori.isAsync() 
+                    ? cls : type, types, method.getAnnotations(), jaxbWriter);
             } else {
                 types.getAllTypes().put(cls, type);
             }
@@ -775,7 +791,8 @@ public final class ResourceUtils {
         resource.setPath(e.getAttribute("path"));
         resource.setConsumes(e.getAttribute("consumes"));
         resource.setProduces(e.getAttribute("produces"));
-        List<Element> operEls = DOMUtils.findAllElementsByTagNameNS(e,
+        List<Element> operEls = 
+            DOMUtils.findAllElementsByTagNameNS(e, 
                                                                     "http://cxf.apache.org/jaxrs", "operation");
         List<UserOperation> opers = new ArrayList<UserOperation>(operEls.size());
         for (Element operEl : operEls) {
@@ -793,7 +810,8 @@ public final class ResourceUtils {
         op.setOneway(Boolean.parseBoolean(e.getAttribute("oneway")));
         op.setConsumes(e.getAttribute("consumes"));
         op.setProduces(e.getAttribute("produces"));
-        List<Element> paramEls = DOMUtils.findAllElementsByTagNameNS(e,
+        List<Element> paramEls = 
+            DOMUtils.findAllElementsByTagNameNS(e, 
                                                                      "http://cxf.apache.org/jaxrs", "param");
         List<Parameter> params = new ArrayList<Parameter>(paramEls.size());
         for (int i = 0; i < paramEls.size(); i++) {
@@ -825,11 +843,15 @@ public final class ResourceUtils {
                                                       Message m,
                                                       boolean perRequest,
                                                       Map<Class<?>, Object> contextValues) {
+        if (m == null) {
+            m = new MessageImpl();
+        }
         Class<?>[] params = c.getParameterTypes();
         Annotation[][] anns = c.getParameterAnnotations();
         Type[] genericTypes = c.getGenericParameterTypes();
         @SuppressWarnings("unchecked")
-        MultivaluedMap<String, String> templateValues = m == null ? null : (MultivaluedMap<String, String>) m.get(URITemplate.TEMPLATE_PARAMETERS);
+        MultivaluedMap<String, String> templateValues = 
+            (MultivaluedMap<String, String>)m.get(URITemplate.TEMPLATE_PARAMETERS);
         Object[] values = new Object[params.length];
         for (int i = 0; i < params.length; i++) {
             if (AnnotationUtils.getAnnotation(anns[i], Context.class) != null) {
@@ -854,13 +876,12 @@ public final class ResourceUtils {
         return values;
     }
 
-    public static JAXRSServerFactoryBean createApplication(Application app, boolean ignoreAppPath) {
-        return createApplication(app, ignoreAppPath, false);
-    }
-
     @SuppressWarnings("unchecked")
-    public static JAXRSServerFactoryBean createApplication(Application app, boolean ignoreAppPath,
-                                                           boolean staticSubresourceResolution) {
+    public static JAXRSServerFactoryBean createApplication(Application app, 
+                                                           boolean ignoreAppPath,
+                                                           boolean staticSubresourceResolution, 
+                                                           boolean useSingletonResourceProvider,
+                                                           Bus bus) {
 
         Set<Object> singletons = app.getSingletons();
         verifySingletons(singletons);
@@ -880,11 +901,14 @@ public final class ResourceUtils {
                     features.add(createFeatureInstance((Class<? extends Feature>) cls));
                 } else {
                     resourceClasses.add(cls);
-                    map.put(cls, new PerRequestResourceProvider(cls));
+                    if (useSingletonResourceProvider) {
+                        map.put(cls, new SingletonResourceProvider(createProviderInstance(cls)));
+                    } else {
+                        map.put(cls, new PerRequestResourceProvider(cls));
+                    }
                 }
             }
         }
-
         // we can get either a provider or resource class here
         for (Object o : singletons) {
             if (isValidProvider(o.getClass())) {
@@ -898,6 +922,9 @@ public final class ResourceUtils {
         }
 
         JAXRSServerFactoryBean bean = new JAXRSServerFactoryBean();
+        if (bus != null) {
+            bean.setBus(bus);
+        }
         String address = "/";
         if (!ignoreAppPath) {
             ApplicationPath appPath = locateApplicationPath(app.getClass());

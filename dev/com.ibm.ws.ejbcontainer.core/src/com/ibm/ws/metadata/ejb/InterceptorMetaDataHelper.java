@@ -29,9 +29,9 @@ import java.util.Map;
 import javax.interceptor.InvocationContext;
 
 import com.ibm.ejs.container.EJBConfigurationException;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.javaee.dd.common.InterceptorCallback;
 import com.ibm.ws.javaee.dd.ejb.EnterpriseBean;
@@ -52,9 +52,9 @@ public class InterceptorMetaDataHelper
 {
     private static final String CLASS_NAME = InterceptorMetaDataHelper.class.getName();
 
-    private static final TraceComponent tc = Tr.register(CLASS_NAME
-                                                         , "EJB3Interceptors"
-                                                         , "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(InterceptorMetaDataHelper.class,
+                                                         "EJB3Interceptors",
+                                                         "com.ibm.ejs.container.container");
 
     private final static Class<?>[] PARM_TYPES = new Class[] { InvocationContext.class };
     private final static Class<?>[] NO_PARMS = null; //d461068

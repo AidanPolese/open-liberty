@@ -46,6 +46,8 @@ instrument.disabled: true
 
 publish.wlp.jar.disabled: true
 
+test.project: true
+
 -buildpath: \
 	lib/org.apache.felix.http.api-2.2.0.jar;version=file,\
 	lib/org.apache.felix.http.base-2.2.0.jar;version=file,\

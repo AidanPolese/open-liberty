@@ -61,7 +61,7 @@ public class ResAutoLinkReferenceFactoryImpl implements ResAutoLinkReferenceFact
 
     /**
      * Determine the binding name that will be used for a reference name. This
-     * implements basically the same algorithm as "default bindings" in tWAS.
+     * implements basically the same algorithm as "default bindings" in traditional WAS.
      */
     public static String getBindingName(String name) {
         // For "java:" names, come up with a reasonable binding name by removing

@@ -14,10 +14,10 @@ package com.ibm.ejs.csi;
 import javax.transaction.Transaction;
 
 import com.ibm.ejs.container.EJBMethodInfoImpl;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.EJBKey;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**

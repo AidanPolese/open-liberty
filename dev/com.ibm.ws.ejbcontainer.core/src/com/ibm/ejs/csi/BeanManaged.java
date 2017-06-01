@@ -18,13 +18,13 @@ import javax.transaction.Transaction;
 import com.ibm.ejs.container.BeanMetaData;
 import com.ibm.ejs.container.EJBMethodInfoImpl;
 import com.ibm.ejs.container.util.EJSPlatformHelper;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.tx.jta.embeddable.EmbeddableTransactionManagerFactory;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.CSITransactionRolledbackException;
 import com.ibm.websphere.csi.EJBKey;
 import com.ibm.websphere.csi.ExceptionType;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.LocalTransaction.LocalTransactionCoordinator;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.tx.embeddable.EmbeddableWebSphereTransactionManager;
@@ -162,7 +162,7 @@ final class BeanManaged extends TranStrategy
             // Othewise, begin a local tx now until the bean code decides
             // to start a global tx (new for R5.0 TD).  This is only done
             // for EJB 2.0 or newer beans to assure no behavioral changes
-            // are introduced for older J2EE 1.2 applications (i.e EJB 1.0
+            // are introduced for older Java EE 1.2 applications (i.e EJB 1.0
             // or EJB 1.1 beans) except for z/OS which always has either   //LIDB2775-107.1
             // a local or global tran active.                              //LIDB2775-107.1
             //-----------------------------------------------------------
@@ -293,7 +293,7 @@ final class BeanManaged extends TranStrategy
             // completed by business method calling either commit or rollback
             // on UserTransaction.  When that happens, the transaction service
             // will create a local tran after completing the sticky global tran.
-            // This only applies to EJB 2.0 or newer components so J2EE 1.2
+            // This only applies to EJB 2.0 or newer components so Java EE 1.2
             // applications (i.e. EJB 1.0 or EJB 1.1 beans) will not
             // experience a behavioral change.
             // zOS behaves like EJB2.0 in that there is always a tran active.  //LIDB2775-107.1

@@ -120,9 +120,18 @@ public class ContainerRequestContextImpl extends AbstractRequestContextImpl impl
         doSetRequestUri(requestUri);
     }
 
-    public void doSetRequestUri(URI requestUri) throws IllegalStateException {
+    protected void doSetRequestUri(URI requestUri) throws IllegalStateException {
         checkNotPreMatch();
+        //Liberty change - using requestUri.toString() to pass CTS
+        // this was changed after 3.1.8 in the community but the CTS
+        // requires the full toString().  we may try to change this
+        // back in the community too, but for now we are only changing
+        // it here.
         HttpUtils.resetRequestURI(m, requestUri.toString());
+        String query = requestUri.getRawQuery();
+        if (query != null) {
+            m.put(Message.QUERY_STRING, query);
+        }
     }
 
     @Override

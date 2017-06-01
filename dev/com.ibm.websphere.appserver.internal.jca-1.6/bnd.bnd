@@ -1,11 +1,10 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.internal.jca-1.6
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: \
+-dependson: \
 	com.ibm.websphere.appserver.transaction-1.1;version=latest, \
 	com.ibm.websphere.appserver.classloading-1.0;version=latest, \
 	com.ibm.websphere.appserver.dynamicBundle-1.0;version=latest, \

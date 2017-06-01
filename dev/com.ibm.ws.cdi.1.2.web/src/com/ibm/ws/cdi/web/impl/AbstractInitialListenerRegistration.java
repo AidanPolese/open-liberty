@@ -30,7 +30,6 @@ import com.ibm.ws.cdi.web.interfaces.CDIWebRuntime;
 import com.ibm.ws.cdi.web.interfaces.PreEventListenerProvider;
 import com.ibm.ws.runtime.metadata.ModuleMetaData;
 import com.ibm.ws.webcontainer.async.AsyncContextImpl;
-import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.webcontainer.filter.IFilterConfig;
 import com.ibm.wsspi.webcontainer.filter.IFilterMapping;
 import com.ibm.wsspi.webcontainer.servlet.IServletContext;
@@ -46,33 +45,15 @@ public abstract class AbstractInitialListenerRegistration implements PreEventLis
 
     public static final String WELD_INITIAL_LISTENER_ATTRIBUTE = "org.jboss.weld.servlet.WeldInitialListener";
 
-    private final AtomicServiceReference<CDIWebRuntime> cdiWebRuntimeRef = new AtomicServiceReference<CDIWebRuntime>(
-                    "cdiWebRuntime");
-
-    protected void activate(ComponentContext context) {
-        cdiWebRuntimeRef.activate(context);
-    }
-
-    protected void deactivate(ComponentContext context) {
-        cdiWebRuntimeRef.deactivate(context);
-    }
-
-    @Reference(name = "cdiWebRuntime", service = CDIWebRuntime.class)
-    protected void setCdiWebRuntime(ServiceReference<CDIWebRuntime> ref) {
-        cdiWebRuntimeRef.setReference(ref);
-    }
-
-    protected void unsetCdiWebRuntime(ServiceReference<CDIWebRuntime> ref) {
-        cdiWebRuntimeRef.unsetReference(ref);
-    }
-
     protected abstract ModuleMetaData getModuleMetaData(IServletContext isc);
+    
+    protected abstract CDIWebRuntime getCDIWebRuntime();
 
     /** {@inheritDoc} */
     @Override
     public void registerListener(IServletContext isc) {
 
-        CDIWebRuntime cdiWebRuntime = cdiWebRuntimeRef.getService();
+        CDIWebRuntime cdiWebRuntime = getCDIWebRuntime();
         if (cdiWebRuntime != null && cdiWebRuntime.isCdiEnabled(isc)) {
             ModuleMetaData moduleMetaData = getModuleMetaData(isc);
             BeanManager beanManager = cdiWebRuntime.getModuleBeanManager(moduleMetaData);

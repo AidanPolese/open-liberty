@@ -1,4 +1,4 @@
-Created-By: 1.8.0_121 (Oracle Corporation)
+Created-By: 1.8.0_131 (Oracle Corporation)
 IBM-API-Package: org.osgi.service.jndi; type="spec:osgi",
  org.apache.aries.proxy; type=internal,
  org.apache.aries.proxy.weaving; type=internal
@@ -12,7 +12,7 @@ IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature
  osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.jndi-1.0))"
 Subsystem-Content: com.ibm.websphere.appserver.osgiBundle-1.0; type="osgi.subsystem.feature",
  com.ibm.ws.eba.proxy.control; start-phase:=SERVICE; version="[1.0.0,1.0.200)",
- com.ibm.ws.org.apache.aries.proxy.1.0.2; start-phase:=CONTAINER_EARLY; version="[1.1.0,1.1.200)",
+ com.ibm.ws.org.apache.aries.proxy.1.1.1; start-phase:=CONTAINER_EARLY; version="[1.1.0,1.1.200)",
  com.ibm.ws.eba.app.runtime.services; start-phase:=SERVICE; version="[1.0.0,1.0.200)",
  com.ibm.websphere.appserver.thirdparty.eba.jndi; location:="dev/api/third-party/,lib/"; type=jar; version="[1.0.0,1.0.200)",
  com.ibm.ws.org.apache.aries.jndi.url.1.1.1; version="[1.1.0,1.1.200)"

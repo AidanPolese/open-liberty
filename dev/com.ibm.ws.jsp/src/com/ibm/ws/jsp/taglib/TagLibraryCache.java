@@ -618,7 +618,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
                 } catch (UnableToAdaptException e1) {
                     // TODO Auto-generated catch block
                     // Do you need FFDC here? Remember FFDC instrumentation and @FFDCIgnore
-                    // https://websphere.pok.ibm.com/~alpine/secure/docs/dev/API/com.ibm.ws.ras/com/ibm/ws/ffdc/annotation/FFDCIgnore.html
+                    // https://websphere.pok.ibm.com/~liberty/secure/docs/dev/API/com.ibm.ws.ras/com/ibm/ws/ffdc/annotation/FFDCIgnore.html
                     return;
                 }
                 //TODO: this could potentially be a jar represented by a directory on disk

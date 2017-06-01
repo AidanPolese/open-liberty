@@ -15,6 +15,8 @@ Private-Package:\
 -dsannotations:\
   com.ibm.ws.jbatch.security.impl.WSBatchAuthServiceImpl
 
+instrument.classesExcludes: com/ibm/ws/jbatch/security/resources/*.class
+
 -buildpath: \
 	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
 	com.ibm.websphere.appserver.spi.logging;version=latest,\

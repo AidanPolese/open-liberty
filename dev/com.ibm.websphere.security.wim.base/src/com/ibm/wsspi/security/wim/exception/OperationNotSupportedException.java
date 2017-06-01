@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class OperationNotSupportedException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -580864955880056851L;
+
     /**
      *
      */

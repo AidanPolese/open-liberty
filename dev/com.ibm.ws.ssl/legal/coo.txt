@@ -8,6 +8,6 @@ interfaces for others to use when configuring and using SSL repertoires.
 Source code origin:
 WAS 7.0
 
-Alpine contributors:
+Liberty contributors:
 Jeffrey Lee
 Davanum Srinivas

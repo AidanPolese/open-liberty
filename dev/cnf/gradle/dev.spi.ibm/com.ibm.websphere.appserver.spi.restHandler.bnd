@@ -1,5 +1,5 @@
 -include= ~../cnf/resources/bnd/bundle.props
-bVersion: 1.6
+bVersion: 2.0
 
 Bundle-Name: WebSphere REST Handler SPI
 Bundle-Description: WebSphere REST Handler SPI, version ${bVersion}
@@ -14,6 +14,5 @@ Export-Package: com.ibm.wsspi.rest.handler,com.ibm.wsspi.rest.handler.helper
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.rest.handler, \
 	com.ibm.ws.rest.handler

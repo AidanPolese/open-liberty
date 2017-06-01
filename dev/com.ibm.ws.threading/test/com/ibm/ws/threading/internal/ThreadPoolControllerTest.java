@@ -5,8 +5,8 @@
  *
  * WLP Copyright IBM Corp. 2016
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.threading.internal;
@@ -91,7 +91,14 @@ public class ThreadPoolControllerTest {
         tpc.consecutiveIdleCount = 0;
 
         assertTrue("Pre-condition failed - initial task intended to create a single thread failed", initialTaskLatch.await(10, TimeUnit.SECONDS));
-        assertEquals("Pre-condition failed - pool completed task count does not show 1 task (initial task)", 2, pool.getCompletedTaskCount());
+
+        // when the 2nd task queued to the pool releases "initialTaskLatch", the "await" call on the previous line completes and this
+        // thread continues executing, but the task that released "initialTaskLatch" didn't necessarily finish (exit its run method) yet,
+        // so let's wait up to 5 seconds for the completed task count to get updated
+        for (int waitIntervals = 100; waitIntervals > 0 && pool.getCompletedTaskCount() != 2; waitIntervals--) {
+            Thread.sleep(50);
+        }
+        assertEquals("Pre-condition failed - pool completed task count does not show that the 2 initial tasks have completed", 2, pool.getCompletedTaskCount());
 
         assertEquals("Unexpected exit from evaluateInterval()", "", tpc.evaluateInterval());
         workQueue.add(new Runnable() {

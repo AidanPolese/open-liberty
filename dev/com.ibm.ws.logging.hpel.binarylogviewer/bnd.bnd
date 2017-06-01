@@ -12,6 +12,3 @@ instrument.disabled: true
 
 publish.tool.jar=ws-binarylogviewer.jar
 publish.tool.script=binaryLog
-
--buildpath: \
-	${javac.bootclasspath.java6}

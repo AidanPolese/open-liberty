@@ -26,8 +26,8 @@ import com.ibm.ejs.container.BeanMetaData;
 import com.ibm.ejs.container.EJSContainer;
 import com.ibm.ejs.container.EJSHome;
 import com.ibm.ejs.container.HomeOfHomes;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.wsspi.injectionengine.InjectionException;
 import com.ibm.wsspi.injectionengine.InjectionUtil;
@@ -46,7 +46,7 @@ public class MBLinkObjectFactory implements ObjectFactory
 {
     private static final String CLASS_NAME = MBLinkObjectFactory.class.getName();
 
-    private static final TraceComponent tc = Tr.register(CLASS_NAME, "EJBContainer",
+    private static final TraceComponent tc = Tr.register(MBLinkObjectFactory.class, "EJBContainer",
                                                          "com.ibm.ejs.container.container");
 
     /**

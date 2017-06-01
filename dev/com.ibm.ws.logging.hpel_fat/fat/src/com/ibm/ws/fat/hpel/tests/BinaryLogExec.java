@@ -41,6 +41,8 @@ import com.ibm.ws.fat.hpel.setup.HpelSetup;
 import com.ibm.ws.fat.ras.util.CommonTasks;
 import com.ibm.ws.logging.hpel.FormatSet;
 
+import componenttest.topology.impl.JavaInfo;
+
 public class BinaryLogExec extends VerboseTestCase {
 
     private static final Logger thisLogger = Logger.getLogger(BinaryLogExec.class.getName());
@@ -148,7 +150,16 @@ public class BinaryLogExec extends VerboseTestCase {
         Date maxDate = new Date(entry2Time);
 
         DateFormat formatterISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        DateFormat formatterDefault = FormatSet.customizeDateFormat(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM));
+
+        // Java 9 has a different default date format than previous Java versions. Since ant may be running a different
+        // Java version than the server, we need to explicitly set the default date format according to which JDK the server
+        // is using. We can't just use the default for the ant JDK, it may not match that of the server.
+        DateFormat formatterDefault = null;
+        if (JavaInfo.forServer(HpelSetup.getServerUnderTest().getBackend()).majorVersion() >= 9) {
+            formatterDefault = FormatSet.customizeDateFormat(new SimpleDateFormat("yy.MM.dd, HH:mm:ss:SSS"));
+        } else {
+            formatterDefault = FormatSet.customizeDateFormat(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM));
+        }
 
         Node node = HpelSetup.getNodeUnderTest();
         rOutLog = new RemoteFile(node.getMachine(), node.getMachine().getTempDir(), outFileName);
@@ -217,7 +228,12 @@ public class BinaryLogExec extends VerboseTestCase {
             logMsg(lvPrgmOut.getStderr());
         }
 
-        Pattern p1 = Pattern.compile("\\d{1,2}/\\d{1,2}/\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}:\\d\\d\\d");
+        Pattern p1 = null;
+        if (JavaInfo.forServer(appServ.getBackend()).majorVersion() >= 9) {
+            p1 = Pattern.compile("\\d{1,2}/\\d{1,2}/\\d{1,2}, \\d{1,2}:\\d{1,2}:\\d{1,2}:\\d\\d\\d");
+        } else {
+            p1 = Pattern.compile("\\d{1,2}/\\d{1,2}/\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}:\\d\\d\\d");
+        }
         Matcher m1 = p1.matcher(lvPrgmOut.getStdout());
         assertTrue("Failed assertion that binaryLog exited with successful return code", (lvPrgmOut.getReturnCode() == 0));
         assertTrue("Failed assertion that binaryLog did produce an output file", lvPrgmOut.getStdout().contains("Some Msg goes here"));
@@ -321,7 +337,12 @@ public class BinaryLogExec extends VerboseTestCase {
             logMsg(lvPrgmOut.getStderr());
         }
 
-        Pattern p1 = Pattern.compile("\\d{1,2}/\\d{1,2}/\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}:\\d\\d\\d");
+        Pattern p1 = null;
+        if (JavaInfo.forServer(appServ.getBackend()).majorVersion() >= 9) {
+            p1 = Pattern.compile("\\d{1,2}/\\d{1,2}/\\d{1,2}, \\d{1,2}:\\d{1,2}:\\d{1,2}:\\d\\d\\d");
+        } else {
+            p1 = Pattern.compile("\\d{1,2}/\\d{1,2}/\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}:\\d\\d\\d");
+        }
         Matcher m1 = p1.matcher(lvPrgmOut.getStdout());
         assertTrue("Failed assertion that binaryLog exited with successful return code", (lvPrgmOut.getReturnCode() == 0));
         // (WI 234118) We cannot perform this check because "Instance ID" is translated, which causes the test to fail in non-English locales. There is no ID or

@@ -68,6 +68,8 @@ IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml; addIfMissing=true
 -dsannotations-inherit: true
 -dsannotations=com.ibm.ws.transport.iiop.server.security.CSIv2SubsystemFactory
 
+instrument.classesExcludes: com/ibm/ws/security/csiv2/server/internal/resources/*.class
+
 -buildpath: \
 	com.ibm.websphere.appserver.spi.logging;version=latest,\
 	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\

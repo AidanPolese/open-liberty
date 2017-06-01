@@ -421,7 +421,7 @@ public interface ConfigConstants {
     String CONFIG_PROP_INIT_POOL_SIZE = "initialSize";
     String CONFIG_PROP_MAX_POOL_SIZE = "maxSize";
     String CONFIG_PROP_PREF_POOL_SIZE = "preferredSize";
-    String CONFIG_PROP_POOL_TIME_OUT = "timeOut";
+    String CONFIG_PROP_POOL_TIME_OUT = "timeout";
     String CONFIG_PROP_POOL_WAIT_TIME = "waitTime";
 
     String CONFIG_DO_CACHE_CONFIGURATION = "cacheConfiguration";

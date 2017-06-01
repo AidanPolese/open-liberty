@@ -53,7 +53,7 @@ public class ClientEJBStubClassGeneratorImpl implements ClassGenerator, Applicat
 
     /**
      * Set of classes that should be generated with maximum RMIC compatibility.
-     * This is used to simulate tWAS, which would normally run rmic.
+     * This is used to simulate traditional WAS, which would normally run rmic.
      */
     private Set<Class<?>> rmicCompatibleClasses;
 
@@ -90,7 +90,7 @@ public class ClientEJBStubClassGeneratorImpl implements ClassGenerator, Applicat
                     // org.omg.stub prefix would be subsequently found.
                     //
                     // Alternatively, we could generate org.omg.stub classes,
-                    // but tWAS does it this way, so it's less confusing if we
+                    // but traditional WAS does it this way, so it's less confusing if we
                     // generate stubs the same way.
                     loader.loadClass(ORG_OMG_STUB_PREFIX + name);
                 } catch (ClassNotFoundException e) {

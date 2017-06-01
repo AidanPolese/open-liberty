@@ -34,7 +34,7 @@ public class EventImplTest {
     @Rule
     public final JUnitRuleMockery context = new JUnitRuleMockery();
 
-    final Topic topic = new Topic("com/ibm/alpine/test/Topic");
+    final Topic topic = new Topic("com/ibm/liberty/test/Topic");
 
     EventImpl event;
 
@@ -52,7 +52,7 @@ public class EventImplTest {
     public void testGetSetTopicData() {
         final ExecutorService executorService = Executors.newSingleThreadExecutor();
         final List<HandlerHolder> holders = new ArrayList<HandlerHolder>();
-        final TopicData topicData = new TopicData("com/ibm/alpine/Test", executorService, holders);
+        final TopicData topicData = new TopicData("com/ibm/liberty/Test", executorService, holders);
 
         assertNull(event.getTopicData());
         event.setTopicData(topicData);
@@ -312,7 +312,7 @@ public class EventImplTest {
 
     @Test
     public void testGetTopicObject() {
-        Topic topic1 = new Topic("com/ibm/alpine/test/Topic");
+        Topic topic1 = new Topic("com/ibm/liberty/test/Topic");
         EventImpl event1 = new EventImpl(topic1);
         assertSame(topic1, event1.getTopicObject());
         assertEquals(topic1.getName(), event1.getTopic());
@@ -324,7 +324,7 @@ public class EventImplTest {
     @Test
     public void testGetTopic() {
         for (int i = 0; i < 100; i++) {
-            Topic topic = new Topic("com/alpine/test/Topic" + i);
+            Topic topic = new Topic("com/liberty/test/Topic" + i);
             EventImpl event = new EventImpl(topic);
             assertEquals(topic.getName(), event.getTopic());
         }

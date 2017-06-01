@@ -1,4 +1,0 @@
-Build: d1410.01
-
-Components:
-  SERV1/ws/code/resource/src

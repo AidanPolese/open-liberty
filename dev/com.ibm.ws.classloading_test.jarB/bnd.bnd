@@ -9,6 +9,8 @@ instrument.disabled: true
 
 publish.wlp.jar.disabled: true
 
+test.project: true
+
 -buildpath.instrument:
 -buildpath.bootclasspath:
 -buildpath:

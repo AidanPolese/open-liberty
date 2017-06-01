@@ -7,6 +7,7 @@ import org.junit.runners.model.Statement;
 import com.ibm.websphere.simplicity.log.Log;
 
 import componenttest.annotation.MinimumJavaLevel;
+import componenttest.topology.impl.JavaInfo;
 
 /**
  * Deprecated: use {@link MinimumJavaLevel} instead
@@ -14,7 +15,7 @@ import componenttest.annotation.MinimumJavaLevel;
 @Deprecated
 public class OnlyRunInJava7Rule implements TestRule {
     /** This constant is exposed to any test code to use. It is <code>true</code> iff the FAT is running in Java 7 or higher. */
-    public static final boolean IS_JAVA_7_OR_HIGHER = System.getProperty("java.specification.version").matches("1\\.[789]");
+    public static final boolean IS_JAVA_7_OR_HIGHER = JavaInfo.JAVA_VERSION >= 7;
 
     @Override
     public Statement apply(final Statement statement, final Description description) {

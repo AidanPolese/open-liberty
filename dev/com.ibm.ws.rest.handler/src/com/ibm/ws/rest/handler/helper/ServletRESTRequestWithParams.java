@@ -372,6 +372,19 @@ public class ServletRESTRequestWithParams implements RESTRequest {
         return null;
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.wsspi.rest.handler.RESTRequest#getSessionId()
+     */
+    @Override
+    public String getSessionId() {
+        ServletRESTRequestImpl ret = castRequest();
+        if (ret != null)
+            return ret.getSessionId();
+        return null;
+    }
+
     public ServletRESTRequestImpl castRequest() {
         ServletRESTRequestImpl ret = null;
         if (this.request instanceof ServletRESTRequestImpl) {

@@ -3118,6 +3118,7 @@ org.jboss.weld.validation
 org.jboss.weld.validation.spi
 org.jboss.weld.ws
 org.jboss.weld.xml
+org.jboss.weldx.transaction
 org.joda.time
 org.joda.time.base
 org.joda.time.chrono

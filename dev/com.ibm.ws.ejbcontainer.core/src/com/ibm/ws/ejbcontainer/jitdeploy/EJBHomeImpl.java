@@ -53,8 +53,8 @@ import org.objectweb.asm.commons.GeneratorAdapter;
 import com.ibm.ejs.container.ContainerEJBException;
 import com.ibm.ejs.container.EJBConfigurationException;
 import com.ibm.ejs.container.util.MethodAttribUtils;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.InternalConstants;
 
 /**
@@ -62,12 +62,9 @@ import com.ibm.ws.ejbcontainer.InternalConstants;
  **/
 public final class EJBHomeImpl
 {
-    private static final String CLASS_NAME = EJBHomeImpl.class.getName();
-
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     JITUtils.JIT_TRACE_GROUP,
-                     JITUtils.JIT_RSRC_BUNDLE);
+    private static final TraceComponent tc = Tr.register(EJBHomeImpl.class,
+                                                         JITUtils.JIT_TRACE_GROUP,
+                                                         JITUtils.JIT_RSRC_BUNDLE);
 
     /**
      * Returns the local or remote Component interface class that corresponds to

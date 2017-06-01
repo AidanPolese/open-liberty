@@ -30,6 +30,8 @@ Service-Component: \
 Private-Package: com.ibm.ws.jaxws.security.internal, \
  com.ibm.ws.jaxws.security.internal.resources
 
+instrument.classesExcludes: com/ibm/ws/jaxws/security/internal/resources/*.class
+
 -buildpath: \
 	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-api-2.6.2-ibm-s20170216-1739.jar;version=file,\
 	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar;version=file,\

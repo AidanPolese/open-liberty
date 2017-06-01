@@ -230,7 +230,7 @@ public class OSGiInjectionEngineImpl
 
             // Set to the registered factory before the super call; otherwise the
             // super call will override the registered factory with a different
-            // one on Client Container, which should only occur on tWAS.
+            // one on Client Container, which should only occur on traditional WAS.
             if (compNSConfig.getMBLinkReferenceFactory() == null) {
                 compNSConfig.setMBLinkReferenceFactory(ivMBLinkRefFactory);
             }

@@ -21,10 +21,9 @@ Private-Package:\
 -dsannotations: com.ibm.ws.jaxws.cdi.component.*    
 
 -buildpath: \
-	${javac.bootclasspath.java7}, \
 	com.ibm.websphere.appserver.spi.kernel.service,\
 	com.ibm.websphere.appserver.spi.logging,\
-	com.ibm.websphere.javaee.cdi.1.0;version=latest,\
+	com.ibm.websphere.javaee.cdi.1.2;version=latest,\
 	com.ibm.websphere.org.osgi.core,\
 	com.ibm.websphere.org.osgi.service.component,\
 	com.ibm.wsspi.org.osgi.service.component.annotations;version=latest,\

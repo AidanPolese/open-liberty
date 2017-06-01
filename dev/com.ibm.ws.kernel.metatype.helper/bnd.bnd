@@ -26,7 +26,6 @@ Private-Package: com.ibm.wsspi.config.internal
 -ds-felix-extensions=true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.appserver.spi.kernel.filemonitor;version=latest,\
 	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
 	com.ibm.websphere.appserver.spi.logging;version=latest,\

@@ -11,6 +11,9 @@
 package com.ibm.wsspi.security.wim.exception;
 
 public class DuplicateLogonIdException extends WIMApplicationException {
+
+    private static final long serialVersionUID = 5846647269430489180L;
+
     /**
      *
      */

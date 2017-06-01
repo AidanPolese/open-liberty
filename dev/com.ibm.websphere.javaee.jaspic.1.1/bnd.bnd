@@ -14,6 +14,5 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/javax.security.auth.message-api-1.1.jar;version=file, \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest

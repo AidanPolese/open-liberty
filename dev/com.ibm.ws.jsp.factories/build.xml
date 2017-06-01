@@ -9,7 +9,6 @@
         <instrument.trace ffdc="${instrument.ffdc}">
             <fileset dir="${classes.dir}">
                 <include name="**/com/ibm/ws/jsp22/**/*.class" />
-                <exclude name="**/org/apache/jasper/runtime/*.class" />
             </fileset>
         </instrument.trace>
      </target>

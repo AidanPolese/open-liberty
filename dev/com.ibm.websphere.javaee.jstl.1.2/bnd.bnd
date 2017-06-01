@@ -23,5 +23,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/javax.j2ee.jstl_1.2.jar;version=file

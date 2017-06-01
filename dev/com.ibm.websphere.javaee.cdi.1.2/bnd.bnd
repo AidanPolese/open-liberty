@@ -40,6 +40,5 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	${javac.bootclasspath.java7}, \
 	lib/javax.inject.jar;version=file,\
 	lib/cdi-api-1.2.jar;version=file

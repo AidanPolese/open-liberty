@@ -20,7 +20,6 @@ Import-Package: !*
     hookconfigurators.properties=resources/hookconfigurators.properties
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.logging.core;version=latest,\
 	com.ibm.websphere.org.osgi.core;version=latest,\
 	org.eclipse.osgi;version=latest, \

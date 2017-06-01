@@ -12,12 +12,10 @@
 package wlp.lib.extract;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +27,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
-import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,15 +50,9 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.aries.util.manifest.BundleManifest;
 import org.apache.aries.util.manifest.ManifestProcessor;
@@ -74,8 +65,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 import org.osgi.framework.Version;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import test.common.SharedOutputManager;
 import wlp.lib.extract.platform.Platform;
@@ -86,9 +75,6 @@ public class JavaJarTest {
     private static final File outputUploadDir;
     private static boolean disableTestSuite;
     private static boolean runCoreTest;
-    private static final File Repo8555 = new File("jar/8.5.5.5");
-    private static final File Repo8556 = new File("jar/8.5.5.6");
-    private static final File Repo8557 = new File("jar/8.5.5.7");
 
     // ***IMPORTANT***
     // Mac and Sun builds do NOT produce the wlp-developers-8.5.0.0.zip. Until they do, we need to
@@ -152,7 +138,6 @@ public class JavaJarTest {
     private static final File samplesNdLicDir = new File("build/unittest/samplesndlictmp");
     private static final File samplesBaseLicDir = new File("build/unittest/samplesbaselictmp");
     private static final File samplesWlpDir = new File(samplesTmpDir, "wlp");
-    private static final File samplesMavenDir = new File("build/unittest/samplesmaventmp");
 
     private static final File dummySampleJar = new File("build/dummySample/output/dummySample.jar");
     private static final File dummySampleFileErrorJar = new File("build/dummySampleFileError/output/dummySampleFileError.jar");
@@ -168,7 +153,6 @@ public class JavaJarTest {
     private static final int EXIT_OK = 0;
     private static final int EXIT_BAD_INPUT = 3;
     private static final int EXIT_EXTRACT_ERROR = 4;
-    private static final int NOT_APPLICABLE_FEATURE = 5;
 
     private static final String LA_PREFIX = "wlp/lafiles/LA_";
     private static final String LI_PREFIX = "wlp/lafiles/LI_";
@@ -202,7 +186,7 @@ public class JavaJarTest {
     };
 
     enum WlpJarType {
-        CORE, CORE_LIC, EXTENDED, BASE, BASE_LIC, ND, ND_LIC, CORE_ALL, BASE_ALL, DEVELOPERS_IPLA_ALL, ND_ALL, ILAN, BASE_TRIAL, BETA, BLUEMIX, EXPRESS, ND_TRIAL, CORE_TRIAL,
+        CORE, EXTENDED, BASE, ND, CORE_ALL, BASE_ALL, DEVELOPERS_IPLA_ALL, ND_ALL, ILAN, BASE_TRIAL, BETA, BLUEMIX, EXPRESS, ND_TRIAL, CORE_TRIAL,
         CORE_ISV, DEVELOPERS_IPLA, DEVELOPERS
     };
 
@@ -234,10 +218,6 @@ public class JavaJarTest {
                 if (runCoreTest)
                     jarFilePrefix = "wlp-core-trial-runtime";
                 break;
-            case CORE_LIC:
-                if (runCoreTest)
-                    jarFilePrefix = "wlp-core-license";
-                break;
             case CORE_ISV:
                 if (runCoreTest)
                     jarFilePrefix = "wlp-core-isv-runtime";
@@ -253,9 +233,6 @@ public class JavaJarTest {
                 break;
             case BASE_TRIAL:
                 jarFilePrefix = "wlp-base-trial-runtime";
-                break;
-            case BASE_LIC:
-                jarFilePrefix = "wlp-base-license";
                 break;
             case BETA:
                 jarFilePrefix = "wlp-beta-runtime";
@@ -286,9 +263,6 @@ public class JavaJarTest {
                 break;
             case ND_TRIAL:
                 jarFilePrefix = "wlp-trial-nd-runtime";
-                break;
-            case ND_LIC:
-                jarFilePrefix = "wlp-nd-license";
                 break;
         }
         File[] files;
@@ -415,41 +389,6 @@ public class JavaJarTest {
         Assert.assertTrue("delete " + file, file.delete());
     }
 
-    private static boolean unzip(File zipFile, File outputDir) throws IOException {
-        byte[] buffer = new byte[1024];
-        try {
-            if (!outputDir.exists()) {
-                outputDir.mkdir();
-            }
-
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
-            ZipEntry ze = zis.getNextEntry();
-
-            while (ze != null) {
-                String fileName = ze.getName();
-                File newFile = new File(outputDir + File.separator + fileName);
-
-                if (ze.isDirectory()) {
-                    newFile.mkdirs();
-                } else {
-                    new File(newFile.getParent()).mkdirs();
-                    FileOutputStream fos = new FileOutputStream(newFile);
-                    int len;
-                    while ((len = zis.read(buffer)) > 0) {
-                        fos.write(buffer, 0, len);
-                    }
-                    fos.close();
-                }
-                ze = zis.getNextEntry();
-            }
-            zis.closeEntry();
-            zis.close();
-            return true;
-        } catch (IOException ex) {
-            return false;
-        }
-    }
-
     private static String getLicenseLineFragment(String prefix, Locale locale) throws IOException {
         ZipFile zipFile = new ZipFile(getWLPJar(WlpJarType.BASE, null));
         try {
@@ -489,42 +428,6 @@ public class JavaJarTest {
         }
 
         throw new AssertionError("failed to find license: " + prefix + ", " + locale);
-    }
-
-    private static boolean compareDirectory(String basepath, String deltapath) throws Exception {
-        File basedirectory = new File(basepath);
-        File deltadirectory = new File(deltapath);
-        File[] basefiles = basedirectory.listFiles();
-        File[] deltafiles = deltadirectory.listFiles();
-
-        for (int i = 0; i < deltafiles.length; i++) {
-            FileInputStream deltafis = new FileInputStream(deltafiles[i]);
-            BufferedReader deltabr = new BufferedReader(new InputStreamReader(deltafis));
-            StringBuilder deltasb = new StringBuilder();
-            String deltaline;
-            while ((deltaline = deltabr.readLine()) != null) {
-                deltasb.append(deltaline);
-            }
-
-            FileInputStream basefis = new FileInputStream(basefiles[i]);
-            BufferedReader basebr = new BufferedReader(new InputStreamReader(basefis));
-            StringBuilder basesb = new StringBuilder();
-            String baseline;
-            while ((baseline = basebr.readLine()) != null) {
-                basesb.append(baseline);
-            }
-
-            deltafis.close();
-            basefis.close();
-            deltabr.close();
-            basebr.close();
-
-            if (!deltasb.toString().equals(basesb.toString())) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     private static Collection<String> execute(File workDir, File repo, Locale locale, WlpJarType wlpJarType, Map<String, String> envvars, String[] args, int expectedExit,
@@ -642,58 +545,6 @@ public class JavaJarTest {
             }
         }
     }
-
-    private static class ListBasedExtractProgress implements ExtractProgress {
-        private List extractedFiles;
-        private List downloadedFiles;
-        private List downloadSizeMonitor;
-        private boolean canceled;
-
-        @Override
-        public void downloadingFile(URL sourceUrl, File targetFile) {
-            if (downloadedFiles != null) {
-                Map downloadInformation = new HashMap();
-                downloadInformation.put(SelfExtractUtils.DOWNLOAD_URL, sourceUrl);
-                downloadInformation.put(SelfExtractUtils.DOWNLOAD_TARGET_FILE, targetFile);
-                canceled = !!!downloadedFiles.add(downloadInformation);
-            }
-        }
-
-        @Override
-        public void dataDownloaded(int numBytes) {
-            if (downloadSizeMonitor != null) {
-                downloadSizeMonitor.add(Integer.valueOf(numBytes));
-            }
-        }
-
-        @Override
-        public void extractedFile(String f) {
-            if (extractedFiles != null) {
-                canceled = !!!extractedFiles.add(f);
-            }
-        }
-
-        @Override
-        public void setFilesToExtract(int count) {}
-
-        @Override
-        public void commandRun(List args) {}
-
-        @Override
-        public void commandsToRun(int count) {}
-
-        @Override
-        public boolean isCanceled() {
-            return canceled;
-        }
-
-        @Override
-        public void skippedFile() {
-            if (extractedFiles != null) {
-                canceled = !!!extractedFiles.add(1);
-            }
-        }
-    };
 
     private static class StreamWriter implements Runnable {
         private static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -859,144 +710,6 @@ public class JavaJarTest {
         if (serverEnvFile.exists()) {
             serverEnvFile.delete();
         }
-    }
-
-    private String getWASProperty(String property, File propertyFile) throws IOException {
-        Properties props = new Properties();
-        InputStream fis = null;
-        String wasProperty;
-
-        try {
-            fis = new FileInputStream(propertyFile);
-            props.load(fis);
-            wasProperty = props.getProperty(property);
-        } finally {
-            if (fis != null) {
-                fis.close();
-            }
-        }
-
-        return wasProperty;
-    }
-
-    private String getXMLProperty(String property, File propertyFile) throws IOException, ParserConfigurationException, SAXException {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse(propertyFile);
-        String xmlProperty = document.getElementsByTagName(property).item(0).getTextContent();
-        return xmlProperty;
-    }
-
-    private void setManifestProperty(String property, String value, File manifestFile) throws IOException {
-        InputStream fis = null;
-        OutputStream fos = null;
-        BufferedReader br = null;
-        BufferedWriter bw = null;
-        File newManifest = new File(manifestFile.getAbsolutePath() + "_new");
-        boolean propertyExists = false;
-
-        try {
-            fis = new FileInputStream(manifestFile);
-            fos = new FileOutputStream(newManifest);
-            br = new BufferedReader(new InputStreamReader(fis));
-            bw = new BufferedWriter(new OutputStreamWriter(fos));
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.contains(property)) {
-                    bw.write(property + ": " + value);
-                    bw.newLine();
-                    propertyExists = true;
-                } else {
-                    bw.write(line);
-                    bw.newLine();
-                }
-            }
-            if (!propertyExists) {
-                bw.write(property + ": " + value);
-                bw.newLine();
-            }
-        } finally {
-            if (br != null) {
-                br.close();
-            }
-            if (bw != null) {
-                bw.close();
-            }
-            if (fis != null) {
-                fis.close();
-            }
-            if (fos != null) {
-                fos.close();
-            }
-            manifestFile.delete();
-            newManifest.renameTo(manifestFile);
-        }
-
-        System.out.println("Successfully updated manfiest file " + manifestFile.getCanonicalPath());
-    }
-
-    private String getWASTag(String tag, File tagFile) throws IOException {
-        InputStream fis = null;
-        String wasTag = null;
-        Pattern pattern = Pattern.compile(String.format("<%s>(.+?)</%s>", tag, tag));
-
-        try {
-            fis = new FileInputStream(tagFile);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-            String line;
-            while ((line = br.readLine()) != null) {
-                Matcher matcher = pattern.matcher(line);
-                if (matcher.find()) {
-                    wasTag = matcher.group(1);
-                }
-            }
-            br.close();
-
-        } finally {
-            if (fis != null) {
-                fis.close();
-            }
-        }
-
-        return wasTag;
-    }
-
-    private String getWASTagCD(String attr, File tagFile) throws IOException {
-        InputStream fis = null;
-        String wasTag = null;
-        Pattern pattern = Pattern.compile(String.format(".*<.+ %s=\"(.+?)\".+>.*", attr));
-
-        try {
-            fis = new FileInputStream(tagFile);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-            String line;
-            while ((line = br.readLine()) != null) {
-                Matcher matcher = pattern.matcher(line);
-                if (matcher.find()) {
-                    wasTag = matcher.group(1);
-                }
-            }
-            br.close();
-
-        } finally {
-            if (fis != null) {
-                fis.close();
-            }
-        }
-
-        return wasTag;
-    }
-
-    /*
-     * Cuts off the fix pack number from the full version. For example, for 17.0.0.1 it will return 17.0.0.
-     */
-    private String getBaseVersionFromFullVersion(String fullVersion) {
-        String baseVersion = "";
-        Matcher m = Pattern.compile("^(.*)\\.\\d+$").matcher(fullVersion);
-        if (m.find()) {
-            baseVersion = m.group(1);
-        }
-        return baseVersion;
     }
 
     @Test
@@ -1340,9 +1053,9 @@ public class JavaJarTest {
 
         writeIFixFiles(wlpDir);
 
-        Collection<String> output = execute(tmpDir, null, null, WlpJarType.EXTENDED, null, new String[0], EXIT_OK,
-                                            input("x", "x", "1", "wlp"),
-                                            find("The following fixes must be reapplied: \\[8.5.0.1-WS-WASProd_WLPArchive-IFPM77826\\]"));
+        execute(tmpDir, null, null, WlpJarType.EXTENDED, null, new String[0], EXIT_OK,
+                input("x", "x", "1", "wlp"),
+                find("The following fixes must be reapplied: \\[8.5.0.1-WS-WASProd_WLPArchive-IFPM77826\\]"));
     }
 
     private File[] getBundles(File wlpDir, String bundleSymName) {
@@ -2082,713 +1795,6 @@ public class JavaJarTest {
                           sampleDummyLibLocation.exists());
     }
 
-    private File[] getTagFileNames(File workDir, WlpJarType jarType, String version) {
-
-        String editionSuffix = "";
-        if (jarType.equals(WlpJarType.CORE) || jarType.equals(WlpJarType.CORE_ALL) || jarType.equals(WlpJarType.CORE_LIC)) {
-            editionSuffix = "_Core";
-        } else if (jarType.equals(WlpJarType.DEVELOPERS_IPLA_ALL)) {
-            editionSuffix = "_for_Developers";
-        } else if (jarType.equals(WlpJarType.ND) || jarType.equals(WlpJarType.ND_ALL) || jarType.equals(WlpJarType.ND_LIC)) {
-            editionSuffix = "_Network_Deployment";
-        } else if (jarType.equals(WlpJarType.BASE) || jarType.equals(WlpJarType.BASE_ALL) || jarType.equals(WlpJarType.BASE_LIC)) {
-            editionSuffix = "";
-        } else {
-            return null;
-        }
-
-        File[] tagFiles = new File[2];
-        String baseversion = getBaseVersionFromFullVersion(version);
-        String tagFiles0 = "wlp/lib/versions/tags/ibm.com_WebSphere_Application_Server_Liberty" + editionSuffix + "-" + baseversion + ".swidtag";
-        String tagFiles1 = "wlp/lib/versions/tags/ibm.com_WebSphere_Application_Server_Liberty" + editionSuffix + "-" + version + ".swidtag";
-        tagFiles[0] = new File(workDir, tagFiles0);
-        tagFiles[1] = new File(workDir, tagFiles1);
-
-        Assert.assertTrue(tagFiles[0].getAbsolutePath() + "doesn't exist", tagFiles[0].exists());
-        return tagFiles;
-    }
-
-    private String getLicenseFileFolders(WlpJarType jarType) {
-        if (jarType.equals(WlpJarType.CORE) || jarType.equals(WlpJarType.CORE_ALL) || jarType.equals(WlpJarType.CORE_LIC)) {
-            return samplesCoreDir + "/wlp/lafiles";
-        } else if (jarType.equals(WlpJarType.DEVELOPERS_IPLA_ALL)) {
-            return samplesNdLicDir + "/wlp/lafiles";
-        } else if (jarType.equals(WlpJarType.ND) || jarType.equals(WlpJarType.ND_ALL) || jarType.equals(WlpJarType.ND_LIC)) {
-            return samplesNdLicDir + "/wlp/lafiles";
-        } else if (jarType.equals(WlpJarType.BASE) || jarType.equals(WlpJarType.BASE_ALL) || jarType.equals(WlpJarType.BASE_LIC)) {
-            return samplesBaseDir + "/wlp/lafiles";
-        } else
-            return samplesTmpDir + "/wlp/lafiles";
-    }
-
-    private void testLegalUpgradeEditionHelper(WlpJarType installationJar, WlpJarType licenseJar, String originalEdition, String targetEdition) throws Exception {
-
-        if (disableTestSuite) {
-            return;
-        }
-        if (samplesLicenseUpgradeDir.exists() && samplesLicenseUpgradeDir.listFiles().length > 0)
-            deleteDir(samplesLicenseUpgradeDir);
-        Assert.assertTrue("mkdir -p " + samplesLicenseUpgradeDir.getAbsolutePath(), samplesLicenseUpgradeDir.mkdirs() || samplesLicenseUpgradeDir.isDirectory());
-        extractEditionJar(installationJar, samplesLicenseUpgradeDir);
-        //Check if Properties file is BASE edition
-        File installedProperties = new File(samplesLicenseUpgradeDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(installedProperties.getAbsolutePath(), installedProperties.exists());
-        String edition_before = getWASProperty("com.ibm.websphere.productEdition", installedProperties);
-        Assert.assertEquals("Expected edition should be " + originalEdition, originalEdition, edition_before);
-        File featuresDir = new File(samplesLicenseUpgradeDir, "wlp/lib/features");
-        File[] manifestFiles = featuresDir.listFiles(createManifestFilter());
-        Arrays.sort(manifestFiles); // Need to sort in order to have reliable behaviour across all platforms
-        String version = getWASProperty("com.ibm.websphere.productVersion", installedProperties);
-
-        // Continue the test if the manifest versions are consistent with the version in WebSphereApplicationServer.properties.
-        File[] tagFiles = getTagFileNames(samplesLicenseUpgradeDir, installationJar, version);
-        if (tagFiles != null) {
-            // Check if fixpack tags are the base version
-            File originalSwTag = tagFiles[0];
-            File originalFxTag = tagFiles[1];
-
-            String fixVersionBefore = getWASTagCD("version", originalFxTag);
-            String revisionBefore = getWASTagCD("revision", originalFxTag);
-            Assert.assertEquals("revision and version should report the same version number", revisionBefore, fixVersionBefore);
-            // Check if license files are the base version
-            Assert.assertTrue(compareDirectory(samplesLicenseUpgradeDir + "/wlp/lafiles", getLicenseFileFolders(installationJar)));
-            // Attempt to perform the license upgrade
-            execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
-                    input("x", "x", "1", samplesLicenseUpgradeDir.getAbsolutePath() + "/wlp"));
-            // Check if fixpack tags have been updated, including changing the fixpack number
-            File[] tagFilesNew = getTagFileNames(samplesLicenseUpgradeDir, licenseJar, version);
-            File newSwtag = tagFilesNew[0];
-            File newfxTag = tagFilesNew[1];
-            Assert.assertTrue(newSwtag.getAbsolutePath(), newSwtag.exists());
-            Assert.assertTrue(newfxTag.getAbsolutePath(), newfxTag.exists());
-            String fixVersionAfter = getWASTagCD("version", newfxTag);
-            String revisionAfter = getWASTagCD("revision", newfxTag);
-            System.out.println("Fix Verson After:" + fixVersionAfter);
-            System.out.println("Revision After:" + revisionAfter);
-            Assert.assertEquals("The fixpack number is different from the original installation", fixVersionAfter, fixVersionBefore);
-            Assert.assertEquals("revision and FixVersion should report the same version number after", revisionAfter, fixVersionAfter);
-            Assert.assertFalse("Original Edition fixpack tag still exists", originalFxTag.exists());
-            Assert.assertFalse("Original Edition software tag still exists", originalSwTag.exists());
-        } else {
-            // Check if license files are the base version
-            Assert.assertTrue(compareDirectory(samplesLicenseUpgradeDir + "/wlp/lafiles", getLicenseFileFolders(installationJar)));
-            // Attempt to perform the license upgrade
-            execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
-                    input("x", "x", "1", samplesLicenseUpgradeDir.getAbsolutePath() + "/wlp"));
-            // Check if fixpack tags have been updated, including changing the fixpack number
-            File[] tagFilesNew = getTagFileNames(samplesLicenseUpgradeDir, licenseJar, version);
-            File newSwtag = tagFilesNew[0];
-            File newfxTag = tagFilesNew[1];
-            Assert.assertTrue(newSwtag.getAbsolutePath(), newSwtag.exists());
-            Assert.assertTrue(newfxTag.getAbsolutePath(), newfxTag.exists());
-        }
-
-        /*
-         * Keep this piece of code for future debugging purpose.
-         * Attributes attrs = new Attributes();
-         * attrs.putValue("Applies-To", "com.ibm.websphere.appserver; productVersion=16.0.0; productInstallType=Archive;");
-         * attrs.putValue("Archive-Root", "wlp/");
-         * attrs.putValue("Main-Class", "wlp.lib.extract.SelfExtract");
-         * attrs.putValue("Archive-Content-Type", "license");
-         * attrs.putValue("License-Agreement", "wlp/lafiles/LA");
-         * attrs.putValue("License-Information", "wlp/lafiles/LI");
-         * attrs.putValue("Main-Class", "wlp.lib.extract.SelfExtract");
-         *
-         * JarFile ndLicenseJar = new JarFile(getWLPJar(WlpJarType.ND_LIC));
-         * Constructor<LicenseSelfExtractor> constructor = LicenseSelfExtractor.class.getDeclaredConstructor(JarFile.class, LicenseProvider.class, Attributes.class);
-         * LicenseSelfExtractor extractor = constructor.newInstance(ndLicenseJar, null, attrs);
-         * ListBasedExtractProgress monitor = new ListBasedExtractProgress();
-         * ReturnCode returnCode = extractor.extract(new File(samplesBaseUpgradeDir.getAbsolutePath() + "/wlp"), monitor);
-         */
-
-        // Check if Properties files is upgraded to ND edition
-        // Point to new file
-        File upgradedProperties = new File(samplesLicenseUpgradeDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(upgradedProperties.getAbsolutePath(), upgradedProperties.exists());
-        String edition_after = getWASProperty("com.ibm.websphere.productEdition", upgradedProperties);
-        Assert.assertEquals("Expected edition should be ND", targetEdition, edition_after);
-        // Check if license files have been replaced
-        Assert.assertTrue(compareDirectory(samplesLicenseUpgradeDir + "/wlp/lafiles", getLicenseFileFolders(licenseJar)));
-        deleteDir(samplesLicenseUpgradeDir);
-    }
-
-    @Test
-    public void testLegalUpgradeEdition() throws Exception {
-        testLegalUpgradeEditionHelper(WlpJarType.BASE, WlpJarType.ND_LIC, "BASE", "ND");
-        testLegalUpgradeEditionHelper(WlpJarType.BASE_ALL, WlpJarType.ND_LIC, "BASE", "ND");
-        if (runCoreTest) {
-            testLegalUpgradeEditionHelper(WlpJarType.CORE, WlpJarType.ND_LIC, "LIBERTY_CORE", "ND");
-            testLegalUpgradeEditionHelper(WlpJarType.CORE, WlpJarType.BASE_LIC, "LIBERTY_CORE", "BASE");
-            testLegalUpgradeEditionHelper(WlpJarType.CORE_ALL, WlpJarType.ND_LIC, "LIBERTY_CORE", "ND");
-            testLegalUpgradeEditionHelper(WlpJarType.CORE_ALL, WlpJarType.BASE_LIC, "LIBERTY_CORE", "BASE");
-        }
-    }
-
-    @Test
-    public void testIllegalUpgradeEditionWithFeatures() throws Exception {
-        if (disableTestSuite) {
-            return;
-        }
-
-        File featuresDir = new File(samplesBaseUpgradeWithFeatureDir + "/wlp/lib/features");
-        File[] manifestFiles = featuresDir.listFiles(createManifestFilter());
-        Arrays.sort(manifestFiles); // Need to sort in order to have reliable behaviour across all platforms
-        File manifestToUpdate = manifestFiles[0];
-
-        File propertiesFile = new File(samplesNdLicDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        String version = getWASProperty("com.ibm.websphere.productVersion", propertiesFile);
-        // Continue the test if the manifest versions are consistent with the version in WebSphereApplicationServer.properties.
-        if (!checkManifestIBMAppliesToVersion(manifestFiles, version)) {
-            return;
-        }
-
-        // Modify the IBM-AppliesTo property of a feature so that it applies to a different edition than the upgrade
-        setManifestProperty("IBM-AppliesTo",
-                            "com.ibm.websphere.appserver; productVersion=" + version + "; productInstallType=Archive; productEdition=\"LIBERTY_CORE,BASE,BASE_ILAN\"",
-                            manifestToUpdate);
-
-        // Test that the upgrade is blocked
-        execute(null, null, null, WlpJarType.ND_LIC, null, new String[0], NOT_APPLICABLE_FEATURE,
-                input("x", "x", "1", samplesBaseUpgradeWithFeatureDir.getAbsolutePath() + "/wlp"));
-
-        // Modify the IBM-AppliesTo property of a feature so that it applies to a different version than the upgrade
-        setManifestProperty("IBM-AppliesTo", "com.ibm.websphere.appserver; productVersion=8.1.1.1; productInstallType=Archive; productEdition=\"LIBERTY_CORE,BASE,BASE_ILAN,ND\"",
-                            manifestToUpdate);
-
-        // Test that the upgrade should not be blocked since the upgrade jar is now version insensitive.
-        execute(null, null, null, WlpJarType.ND_LIC, null, new String[0], EXIT_OK,
-                input("x", "x", "1", samplesBaseUpgradeWithFeatureDir.getAbsolutePath() + "/wlp"));
-    }
-
-    @Test
-    public void testWebProfile7LegalUpgradeEdition() throws Exception {
-        if (disableTestSuite) {
-            return;
-        }
-
-        String v = System.getProperty("version", "");
-        File f = new File("../build.image/wlp/lib/versions/WebSphereApplicationServer.properties");
-        if (f.exists()) {
-            Properties props = new Properties();
-            try {
-                props.load(new FileReader(f));
-                v = props.getProperty("com.ibm.websphere.productVersion");
-            } catch (IOException e) {
-            }
-        }
-
-        // Extract webProfile7 zip and create wlp/lafiles and wlp/lib/versions/tags directories
-        File zipfile = null;
-        File[] files = outputUploadDir.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                String name = file.getName();
-                if (file.isFile() && name.startsWith("wlp-webProfile7-" + v) && name.endsWith(".zip")) {
-                    zipfile = file;
-                }
-            }
-        }
-
-        Assert.assertTrue("Failed to extract webProfile 7 zip", unzip(zipfile, samplesWP7UpgradeDir));
-        File lafilesDir = new File(samplesWP7UpgradeDir + "/wlp/lafiles");
-        File tagsDir = new File(samplesWP7UpgradeDir + "/wlp/lib/versions/tags");
-
-        if (!lafilesDir.exists()) {
-            lafilesDir.mkdir();
-        }
-        if (!tagsDir.exists()) {
-            tagsDir.mkdir();
-        }
-
-        //Check if Properties file is webProfile7 edition
-        File propertiesWP7Edition = new File(samplesWP7UpgradeDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(propertiesWP7Edition.getAbsolutePath(), propertiesWP7Edition.exists());
-
-        String edition_before = getWASProperty("com.ibm.websphere.productEdition", propertiesWP7Edition);
-        Assert.assertEquals("Expected edition should be BASE_ILAN", "BASE_ILAN", edition_before);
-
-        File featuresDir = new File(samplesWP7UpgradeDir, "wlp/lib/features");
-        File[] manifestFiles = featuresDir.listFiles(createManifestFilter());
-        Arrays.sort(manifestFiles); // Need to sort in order to have reliable behaviour across all platforms
-
-        String version = getWASProperty("com.ibm.websphere.productVersion", propertiesWP7Edition);
-        String baseVersion = getBaseVersionFromFullVersion(version);
-        // Continue the test if the manifest versions are consistent with the version in WebSphereApplicationServer.properties.
-        if (!checkManifestIBMAppliesToVersion(manifestFiles, version)) {
-            return;
-        }
-
-        // Attempt to perform the license upgrade
-        execute(null, null, null, WlpJarType.BASE_LIC, null, new String[0], EXIT_OK,
-                input("x", "x", "1", samplesWP7UpgradeDir.getAbsolutePath() + "/wlp"));
-
-        // Check if Properties files is changed to base edition
-        // Point to new file
-        File propertiesBaseEdition = new File(samplesWP7UpgradeDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(propertiesBaseEdition.getAbsolutePath(), propertiesBaseEdition.exists());
-
-        String edition_after = getWASProperty("com.ibm.websphere.productEdition", propertiesBaseEdition);
-        Assert.assertEquals("Expected edition should be BASE", "BASE", edition_after);
-
-        // Check if fixpack tags have been extracted
-        File swtagBaseEdition = new File(samplesWP7UpgradeDir, String.format("wlp/lib/versions/tags/ibm.com_WebSphere_Application_Server_Liberty-%s.swidtag", baseVersion));
-        File fxtagBaseEdition = new File(samplesWP7UpgradeDir, String.format("wlp/lib/versions/tags/ibm.com_WebSphere_Application_Server_Liberty-%s.swidtag", version));
-
-        Assert.assertTrue(swtagBaseEdition.getAbsolutePath(), swtagBaseEdition.exists());
-        Assert.assertTrue(fxtagBaseEdition.getAbsolutePath(), fxtagBaseEdition.exists());
-
-        // Check if license files have been extracted
-        Assert.assertTrue(compareDirectory(samplesBaseDir + "/wlp/lafiles", samplesWP7UpgradeDir + "/wlp/lafiles"));
-
-    }
-
-    @Test
-    public void testLegalUpgradeEditionWithFeatures() throws Exception {
-        if (disableTestSuite) {
-            return;
-        }
-
-        File featuresDir = new File(samplesBaseUpgradeWithFeatureDir + "/wlp/lib/features");
-        File[] manifestFiles = featuresDir.listFiles(createManifestFilter());
-        Arrays.sort(manifestFiles); // Need to sort in order to have reliable behaviour across all platforms
-        File manifestToUpdate = manifestFiles[0];
-
-        File propertiesFile = new File(samplesNdLicDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        String version = getWASProperty("com.ibm.websphere.productVersion", propertiesFile);
-        // Continue the test if the manifest versions are consistent with the version in WebSphereApplicationServer.properties.
-        if (!checkManifestIBMAppliesToVersion(manifestFiles, version)) {
-            return;
-        }
-
-        System.out.println("Loaded version from wlp/lib/versions/WebSphereApplicationServer.properties: " + version);
-
-        // Modify the IBM-AppliesTo property of a feature so that it applies to the version/edition we are trying to upgrade to
-        setManifestProperty("IBM-AppliesTo", "com.ibm.websphere.appserver; productVersion=" + version
-                                             + "; productInstallType=Archive; productEdition=\"LIBERTY_CORE,BASE,BASE_ILAN,ND\"",
-                            manifestToUpdate);
-
-        // Test that the upgrade goes through
-        execute(null, null, null, WlpJarType.ND_LIC, null, new String[0], EXIT_OK,
-                input("x", "x", "1", samplesBaseUpgradeWithFeatureDir.getAbsolutePath() + "/wlp"));
-    }
-
-    private void testLegalDowngradeEditionHelper(WlpJarType installationJar, WlpJarType licenseJar, String originalEdition, String targetEdition,
-                                                 int expectedExit) throws Exception {
-
-        if (disableTestSuite) {
-            return;
-        }
-        if (samplesLicenseDowngradeDir.exists() && samplesLicenseDowngradeDir.listFiles().length > 0)
-            deleteDir(samplesLicenseDowngradeDir);
-        Assert.assertTrue("mkdir -p " + samplesLicenseDowngradeDir.getAbsolutePath(), samplesLicenseDowngradeDir.mkdirs() || samplesLicenseDowngradeDir.isDirectory());
-        extractEditionJar(installationJar, samplesLicenseDowngradeDir);
-        //Check if Properties file is original edition
-        File installedProperties = new File(samplesLicenseDowngradeDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(installedProperties.getAbsolutePath(), installedProperties.exists());
-        String edition_before = getWASProperty("com.ibm.websphere.productEdition", installedProperties);
-        Assert.assertEquals("Expected edition should be " + originalEdition, originalEdition, edition_before);
-        File featuresDir = new File(samplesLicenseDowngradeDir, "wlp/lib/features");
-        File[] manifestFiles = featuresDir.listFiles(createManifestFilter());
-        Arrays.sort(manifestFiles); // Need to sort in order to have reliable behaviour across all platforms
-        String version = getWASProperty("com.ibm.websphere.productVersion", installedProperties);
-        if (!checkManifestIBMAppliesToVersion(manifestFiles, version)) {
-            return;
-        }
-        // Continue the test if the manifest versions are consistent with the version in WebSphereApplicationServer.properties.
-        File[] tagFiles = getTagFileNames(samplesLicenseDowngradeDir, installationJar, version);
-
-        // Check if fixpack tags are the base version
-        File originalSwTag = tagFiles[0];
-        File originalFxTag = tagFiles[1];
-
-        String fixVersionBefore = getWASTagCD("version", originalFxTag);
-        String revisionBefore = getWASTagCD("revision", originalFxTag);
-        Assert.assertEquals("revision and version should report the same version number", revisionBefore, fixVersionBefore);
-        // Check if license files are the base version
-        Assert.assertTrue(compareDirectory(samplesLicenseDowngradeDir + "/wlp/lafiles", getLicenseFileFolders(installationJar)));
-        // Attempt to perform the license upgrade
-        if (expectedExit == EXIT_OK) {
-            execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
-                    input("x", "x", "1", samplesLicenseDowngradeDir.getAbsolutePath() + "/wlp"));
-            File[] tagFilesNew = getTagFileNames(samplesLicenseDowngradeDir, licenseJar, version);
-            File newSwtag = tagFilesNew[0];
-            File newfxTag = tagFilesNew[1];
-            Assert.assertTrue(newSwtag.getAbsolutePath(), newSwtag.exists());
-            Assert.assertTrue(newfxTag.getAbsolutePath(), newfxTag.exists());
-            String fixVersionAfter = getWASTagCD("version", newfxTag);
-            String revisionAfter = getWASTagCD("revision", newfxTag);
-            System.out.println("Fix Verson After:" + fixVersionAfter);
-            System.out.println("Revision After:" + revisionAfter);
-            Assert.assertEquals("The fixpack number is different from the original installation", fixVersionAfter, fixVersionBefore);
-            Assert.assertEquals("revision and FixVersion should report the same version number after", revisionAfter, fixVersionAfter);
-            Assert.assertFalse("Original Edition fixpack tag still exists", originalFxTag.exists());
-            Assert.assertFalse("Original Edition software tag still exists", originalSwTag.exists());
-            return;
-        } else if (expectedExit == NOT_APPLICABLE_FEATURE) {
-            Collection<String> output = execute(null, null, null, licenseJar, null, new String[0], NOT_APPLICABLE_FEATURE,
-                                                input("x", "x", "1", samplesLicenseDowngradeDir.getAbsolutePath() + "/wlp"));
-            File toolsEdition = new File(samplesLicenseDowngradeDir, "wlp/bin/tools");
-            File toolsinstallUtility = new File(samplesLicenseDowngradeDir, "wlp/bin/tools/ws-installUtility.jar");
-
-            String out = "";
-            for (String s : output) {
-                out += s + " ";
-            }
-            Assert.assertTrue("doesn't contain the command, output: " + out, out.contains("Use the following command to uninstall these features before applying the license"));
-            int startpoint = out.lastIndexOf("uninstall");
-            int endpoint = out.lastIndexOf("\"");
-            System.out.println(out);
-            if (!((startpoint >= 0) && (startpoint < out.length()) && (startpoint < endpoint) && (endpoint >= 0) && (endpoint < out.length()))) {
-                Assert.fail("start point or end point not valid: startpoint = " + startpoint + "endpoint = " + endpoint + " output: " + out);
-            }
-            String command = out.substring(startpoint + "uninstall".length(), endpoint);
-            command = "uninstall" + command;
-            String[] commands = command.split(" ");
-            execute(toolsEdition, null, null,
-                    commands,
-                    EXIT_OK, toolsinstallUtility, input("\n"));
-            execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
-                    input("x", "x", "1", samplesLicenseDowngradeDir.getAbsolutePath() + "/wlp"));
-            return;
-        }
-    }
-
-    private void testLegalDowngradeZipHelper(String zip, WlpJarType licenseJar, String originalEdition, String targetEdition, int expectedExit) throws Exception {
-        // Extract ILAN zip
-        if (samplesILANDowngradeDir.exists() && samplesILANDowngradeDir.listFiles().length > 0)
-            deleteDir(samplesILANDowngradeDir);
-        Assert.assertTrue("mkdir -p " + samplesILANDowngradeDir.getAbsolutePath(), samplesILANDowngradeDir.mkdirs() || samplesILANDowngradeDir.isDirectory());
-
-        File zipfile = null;
-        File[] files = outputUploadDir.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                String name = file.getName();
-                if (file.isFile() && name.startsWith(zip) && name.endsWith(".zip")) {
-                    zipfile = file;
-                }
-            }
-        }
-        Assert.assertTrue("Failed to extract ILAN zip", unzip(zipfile, samplesILANDowngradeDir));
-
-        //Check if Properties file is webProfile7 edition
-        File propertiesEdition = new File(samplesILANDowngradeDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(propertiesEdition.getAbsolutePath(), propertiesEdition.exists());
-
-        String edition_before = getWASProperty("com.ibm.websphere.productEdition", propertiesEdition);
-        Assert.assertEquals("Expected edition should be" + originalEdition, originalEdition, edition_before);
-
-        File featuresDir = new File(samplesILANDowngradeDir, "wlp/lib/features");
-        File[] manifestFiles = featuresDir.listFiles(createManifestFilter());
-        Arrays.sort(manifestFiles); // Need to sort in order to have reliable behavior across all platforms
-
-        String version = getWASProperty("com.ibm.websphere.productVersion", propertiesEdition);
-
-        // Continue the test if the manifest versions are consistent with the version in WebSphereApplicationServer.properties.
-        if (!checkManifestIBMAppliesToVersion(manifestFiles, version)) {
-            return;
-        }
-        if (expectedExit == EXIT_OK) {
-            execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
-                    input("x", "x", "1", samplesILANDowngradeDir.getAbsolutePath() + "/wlp"));
-        } else if (expectedExit == NOT_APPLICABLE_FEATURE) {
-            Collection<String> output = execute(null, null, null, licenseJar, null, new String[0], NOT_APPLICABLE_FEATURE,
-                                                input("x", "x", "1", samplesILANDowngradeDir.getAbsolutePath() + "/wlp"));
-            File toolsEdition = new File(samplesILANDowngradeDir, "wlp/bin/tools");
-            File toolsinstallUtility = new File(samplesILANDowngradeDir, "wlp/bin/tools/ws-installUtility.jar");
-            String out = "";
-            for (String s : output) {
-                out += s + " ";
-            }
-            Assert.assertTrue("doesn't contain the command, output: " + out, out.contains("Use the following command to uninstall these features before applying the license"));
-            int startpoint = out.lastIndexOf("uninstall");
-            int endpoint = out.lastIndexOf("\"");
-            if (startpoint == -1 || endpoint == -1 || startpoint > endpoint) {
-                Assert.fail("start point or end point not valid: startpoint = " + startpoint + "endpoint = " + endpoint + " output: " + out);
-            }
-            String command = out.substring(startpoint + "uninstall".length(), endpoint);
-            command = "uninstall" + command;
-            String[] commands = command.split(" ");
-            execute(toolsEdition, null, null,
-                    commands,
-                    EXIT_OK, toolsinstallUtility, input("\n"));
-            execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
-                    input("x", "x", "1", samplesILANDowngradeDir.getAbsolutePath() + "/wlp"));
-
-        }
-        deleteDir(samplesILANDowngradeDir);
-        return;
-    }
-
-    @Test
-    public void testDowngradeEdition() throws Exception {
-        testLegalDowngradeEditionHelper(WlpJarType.ND, WlpJarType.BASE_LIC, "ND", "BASE", NOT_APPLICABLE_FEATURE);
-        if (runCoreTest) {
-            testLegalDowngradeEditionHelper(WlpJarType.ND, WlpJarType.CORE_LIC, "ND", "LIBERTY_CORE", NOT_APPLICABLE_FEATURE);
-            testLegalDowngradeEditionHelper(WlpJarType.BASE, WlpJarType.CORE_LIC, "BASE", "LIBERTY_CORE", EXIT_OK);
-            testLegalDowngradeZipHelper("wlp-javaee7-", WlpJarType.CORE_LIC, "BASE_ILAN", "LIBERTY_CORE", NOT_APPLICABLE_FEATURE);
-            testLegalDowngradeZipHelper("wlp-webProfile7-", WlpJarType.CORE_LIC, "BASE_ILAN", "LIBERTY_CORE", EXIT_OK);
-        }
-
-    }
-
-    @Test
-    public void testIllegalDowngrdeEditionWithFeatures() throws Exception {
-        if (disableTestSuite) {
-            return;
-        }
-
-        File featuresDir = new File(samplesNdDowngradeWithFeatureDir + "/wlp/lib/features");
-        File[] manifestFiles = featuresDir.listFiles(createManifestFilter());
-        Arrays.sort(manifestFiles); // Need to sort in order to have reliable behaviour across all platforms
-        File manifestToUpdate = manifestFiles[0];
-
-        File propertiesFile = new File(samplesBaseLicDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        String version = getWASProperty("com.ibm.websphere.productVersion", propertiesFile);
-        // Continue the test if the manifest versions are consistent with the version in WebSphereApplicationServer.properties.
-        if (!checkManifestIBMAppliesToVersion(manifestFiles, version)) {
-            return;
-        }
-
-        // Modify the IBM-AppliesTo property of a feature so that it applies to a different edition than the upgrade
-        setManifestProperty("IBM-AppliesTo",
-                            "com.ibm.websphere.appserver; productVersion=" + version + "; productInstallType=Archive; productEdition=\"LIBERTY_CORE,BASE_ILAN,ND\"",
-                            manifestToUpdate);
-
-        // Test that the downgrade is blocked
-        execute(null, null, null, WlpJarType.BASE_LIC, null, new String[0], NOT_APPLICABLE_FEATURE,
-                input("x", "x", "1", samplesNdDowngradeWithFeatureDir.getAbsolutePath() + "/wlp"), find("Use the following command to uninstall these features"));
-
-        if (manifestFiles != null) {
-            for (File file : manifestFiles) {
-                // Modify the IBM-AppliesTo property of a feature so that it applies to a different edition than the upgrade
-                setManifestProperty("IBM-AppliesTo",
-                                    "com.ibm.websphere.appserver; productVersion=" + version + "; productInstallType=Archive; productEdition=\"LIBERTY_CORE,BASE,BASE_ILAN,ND\"",
-                                    file);
-            }
-        }
-
-        // Test that the downgrade should not be blocked since the upgrade jar is now version insensitive.
-        execute(null, null, null, WlpJarType.BASE_LIC, null, new String[0], EXIT_OK,
-                input("x", "x", "1", samplesNdDowngradeWithFeatureDir.getAbsolutePath() + "/wlp"));
-    }
-
-    private void testDowngradeWithBundleHelper(WlpJarType installationJar, WlpJarType licenseJar, String originalEdition, String targetEdition, int expectedExit) throws Exception {
-        if (samplesBundleDowngradeDir.exists() && samplesBundleDowngradeDir.listFiles().length > 0)
-            deleteDir(samplesBundleDowngradeDir);
-        Assert.assertTrue("mkdir -p " + samplesBundleDowngradeDir.getAbsolutePath(), samplesBundleDowngradeDir.mkdirs() || samplesBundleDowngradeDir.isDirectory());
-        extractEditionJar(installationJar, samplesBundleDowngradeDir);
-        //Check if Properties file is BASE edition
-        File installedProperties = new File(samplesBundleDowngradeDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(installedProperties.getAbsolutePath(), installedProperties.exists());
-        String edition_before = getWASProperty("com.ibm.websphere.productEdition", installedProperties);
-        Assert.assertEquals("Expected edition should be " + originalEdition, originalEdition, edition_before);
-
-        File featuresDir = new File(samplesBundleDowngradeDir, "wlp/lib/features");
-        File[] manifestFiles = featuresDir.listFiles(createManifestFilter());
-        Arrays.sort(manifestFiles); // Need to sort in order to have reliable behavior across all platforms
-
-        String version = getWASProperty("com.ibm.websphere.productVersion", installedProperties);
-
-        // Continue the test if the manifest versions are consistent with the version in WebSphereApplicationServer.properties.
-        if (!checkManifestIBMAppliesToVersion(manifestFiles, version)) {
-            return;
-        }
-
-        //install the bundle to the installation jar
-        File toolsBundleEdition = new File(samplesBundleDowngradeDir, "wlp/bin/tools");
-        File toolsinstallUtility = new File(samplesBundleDowngradeDir, "wlp/bin/tools/ws-installUtility.jar");
-        String bundlename = originalEdition.toLowerCase() + "Bundle";
-        if (originalEdition == "ND") {
-            bundlename = "ndControllerBundle";
-        } else if (originalEdition == "LIBERTY_CORE") {
-            bundlename = "libertyCoreBundle";
-        }
-        Collection<String> output_1 = execute(toolsBundleEdition, null, null,
-                                              new String[] { "install", bundlename, "--from=" + outputUploadDir + "/wlp-featureRepo-" + version + ".zip", "--acceptLicense" },
-                                              EXIT_OK, toolsinstallUtility);
-        String out_1 = "";
-        for (String s : output_1) {
-            out_1 += s + " ";
-        }
-        Assert.assertTrue("doesn't contain the command, output: " + out_1, out_1.contains("All assets were successfully installed."));
-        // Attempt to perform the license downgrade
-        if (expectedExit == EXIT_OK) {
-            execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
-                    input("x", "x", "1", samplesBundleDowngradeDir.getAbsolutePath() + "/wlp"));
-        } else if (expectedExit == NOT_APPLICABLE_FEATURE) {
-            String bundle_name = "";
-            if (originalEdition == "ND") {
-                bundle_name = "ndControllerBundle";
-            } else if (originalEdition == "BASE") {
-                bundle_name = "baseBundle";
-            }
-            Collection<String> output = execute(null, null, null, licenseJar, null, new String[0], NOT_APPLICABLE_FEATURE,
-                                                input("x", "x", "1", samplesBundleDowngradeDir.getAbsolutePath() + "/wlp"));
-            File toolsEdition = new File(samplesBundleDowngradeDir, "wlp/bin/tools");
-            String out = "";
-            for (String s : output) {
-                out += s + " ";
-            }
-            Assert.assertTrue("doesn't contain the command, output: " + out, out.contains("Use the following command to uninstall these features before applying the license"));
-            Assert.assertTrue("doesn't contain the bundle" + bundle_name + "output:" + out, out.contains(bundle_name));
-            int startpoint = out.lastIndexOf("uninstall");
-            int endpoint = out.lastIndexOf("\"");
-            if (startpoint == -1 || endpoint == -1 || startpoint > endpoint) {
-                Assert.fail("start point or end point not valid: startpoint = " + startpoint + "endpoint = " + endpoint + " output: " + out);
-            }
-            String command = out.substring(startpoint + "uninstall".length(), endpoint);
-            command = "uninstall" + command;
-            String[] commands = command.split(" ");
-            execute(toolsEdition, null, null,
-                    commands,
-                    EXIT_OK, toolsinstallUtility, input("\n"));
-            execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
-                    input("x", "x", "1", samplesBundleDowngradeDir.getAbsolutePath() + "/wlp"));
-        }
-
-        // Check if Properties files is changed to base edition
-        // Point to new file
-        File propertiesBaseEdition = new File(samplesBundleDowngradeDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(propertiesBaseEdition.getAbsolutePath(), propertiesBaseEdition.exists());
-
-        String edition_after = getWASProperty("com.ibm.websphere.productEdition", propertiesBaseEdition);
-        Assert.assertEquals("Expected edition should be" + targetEdition, targetEdition, edition_after);
-
-        deleteDir(samplesBundleDowngradeDir);
-
-    }
-
-    @Test
-    public void testDowngrdeEditionWithBundle() throws Exception {
-        if (!runCoreTest || disableTestSuite) {
-            return;
-        }
-        testDowngradeWithBundleHelper(WlpJarType.ND, WlpJarType.BASE_LIC, "ND", "BASE", NOT_APPLICABLE_FEATURE);
-        testDowngradeWithBundleHelper(WlpJarType.ND, WlpJarType.CORE_LIC, "ND", "LIBERTY_CORE", NOT_APPLICABLE_FEATURE);
-        testDowngradeWithBundleHelper(WlpJarType.BASE, WlpJarType.CORE_LIC, "BASE", "LIBERTY_CORE", NOT_APPLICABLE_FEATURE);
-    }
-
-    private void testOldVersionDowngradeHelper(WlpJarType installationJar, WlpJarType licenseJar, String originalEdition, String targetEdition, File repo) throws Exception {
-        if (samplesOldVersionDowngradeDir.exists() && samplesOldVersionDowngradeDir.listFiles().length > 0)
-            deleteDir(samplesOldVersionDowngradeDir);
-        Assert.assertTrue("mkdir -p " + samplesOldVersionDowngradeDir.getAbsolutePath(), samplesOldVersionDowngradeDir.mkdirs() || samplesOldVersionDowngradeDir.isDirectory());
-        //extractEditionJar(installationJar, samplesOldVersionDowngradeDir);
-        execute(null, repo, null, installationJar, null, new String[0], EXIT_OK,
-                input("x", "x", "1", samplesOldVersionDowngradeDir.getAbsolutePath()));
-        //Check if Properties file is original edition
-        File installedProperties = new File(samplesOldVersionDowngradeDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(installedProperties.getAbsolutePath(), installedProperties.exists());
-        String edition_before = getWASProperty("com.ibm.websphere.productEdition", installedProperties);
-        Assert.assertEquals("Expected edition should be " + originalEdition, originalEdition, edition_before);
-
-        File featuresDir = new File(samplesOldVersionDowngradeDir, "wlp/lib/features");
-        File[] manifestFiles = featuresDir.listFiles(createManifestFilter());
-        Arrays.sort(manifestFiles); // Need to sort in order to have reliable behavior across all platforms
-
-        String version = getWASProperty("com.ibm.websphere.productVersion", installedProperties);
-
-        // Continue the test if the manifest versions are consistent with the version in WebSphereApplicationServer.properties.
-        if (!checkManifestIBMAppliesToVersion(manifestFiles, version)) {
-            return;
-        }
-
-        // Attempt to perform the license downgrade with latest license jar
-        execute(null, null, null, licenseJar, null, new String[0], EXIT_EXTRACT_ERROR,
-                input("x", "x", "1", samplesOldVersionDowngradeDir.getAbsolutePath() + "/wlp"),
-                find("This license can only be applied to installation at 8.5.5.8 or above."));
-
-        // Check if Properties files is changed to original edition
-        // Point to new file
-        File propertiesBaseEdition = new File(samplesOldVersionDowngradeDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(propertiesBaseEdition.getAbsolutePath(), propertiesBaseEdition.exists());
-
-        String edition_after = getWASProperty("com.ibm.websphere.productEdition", propertiesBaseEdition);
-        Assert.assertEquals("Expected edition should be" + originalEdition, originalEdition, edition_after);
-
-        deleteDir(samplesOldVersionDowngradeDir);
-
-    }
-
-    @Test
-    public void testOldVersionDowngrade() throws Exception {
-        if (disableTestSuite) {
-            return;
-        }
-        testOldVersionDowngradeHelper(WlpJarType.ND, WlpJarType.BASE_LIC, "ND", "BASE", Repo8555);
-        if (runCoreTest) {
-            testOldVersionDowngradeHelper(WlpJarType.BASE, WlpJarType.CORE_LIC, "BASE", "LIBERTY_CORE", Repo8556);
-            testOldVersionDowngradeHelper(WlpJarType.ND, WlpJarType.CORE_LIC, "ND", "LIBERTY_CORE", Repo8557);
-        }
-    }
-
-    private void testUpgradeWithBundleHelper(WlpJarType installationJar, WlpJarType licenseJar, String originalEdition, String targetEdition) throws Exception {
-        if (samplesBundleUpgradeDir.exists() && samplesBundleUpgradeDir.listFiles().length > 0)
-            deleteDir(samplesBundleUpgradeDir);
-        Assert.assertTrue("mkdir -p " + samplesBundleUpgradeDir.getAbsolutePath(), samplesBundleUpgradeDir.mkdirs() || samplesBundleUpgradeDir.isDirectory());
-        extractEditionJar(installationJar, samplesBundleUpgradeDir);
-        //Check if Properties file is BASE edition
-        File installedProperties = new File(samplesBundleUpgradeDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(installedProperties.getAbsolutePath(), installedProperties.exists());
-        String edition_before = getWASProperty("com.ibm.websphere.productEdition", installedProperties);
-        String bundlename = originalEdition.toLowerCase() + "Bundle";
-        if (originalEdition == "ND") {
-            bundlename = "ndControllerBundle";
-        } else if (originalEdition == "LIBERTY_CORE") {
-            bundlename = "libertyCoreBundle";
-        }
-        Assert.assertEquals("Expected edition should be " + originalEdition, originalEdition, edition_before);
-
-        File featuresDir = new File(samplesBundleUpgradeDir, "wlp/lib/features");
-        File[] manifestFiles = featuresDir.listFiles(createManifestFilter());
-        Arrays.sort(manifestFiles); // Need to sort in order to have reliable behavior across all platforms
-
-        String version = getWASProperty("com.ibm.websphere.productVersion", installedProperties);
-
-        // Continue the test if the manifest versions are consistent with the version in WebSphereApplicationServer.properties.
-        if (!checkManifestIBMAppliesToVersion(manifestFiles, version)) {
-            return;
-        }
-
-        //install the bundle to the installation jar
-        File toolsBundleEdition = new File(samplesBundleUpgradeDir, "wlp/bin/tools");
-        File toolsinstallUtility = new File(samplesBundleUpgradeDir, "wlp/bin/tools/ws-installUtility.jar");
-        Collection<String> output = execute(toolsBundleEdition, null, null,
-                                            new String[] { "install", bundlename, "--from=" + outputUploadDir + "/wlp-featureRepo-" + version + ".zip", "--acceptLicense" },
-                                            EXIT_OK, toolsinstallUtility);
-        String out = "";
-        for (String s : output) {
-            out += s + " ";
-        }
-        Assert.assertTrue("doesn't contain All assets were successfully installed. out: " + out, out.contains("All assets were successfully installed."));
-
-        // Attempt to perform the license upgrade
-        execute(null, null, null, licenseJar, null, new String[0], EXIT_OK,
-                input("x", "x", "1", samplesBundleUpgradeDir.getAbsolutePath() + "/wlp"));
-
-        // Check if Properties files is changed to base edition
-        // Point to new file
-        File propertiesBaseEdition = new File(samplesBundleUpgradeDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(propertiesBaseEdition.getAbsolutePath(), propertiesBaseEdition.exists());
-
-        String edition_after = getWASProperty("com.ibm.websphere.productEdition", propertiesBaseEdition);
-        Assert.assertEquals("Expected edition should be" + targetEdition, targetEdition, edition_after);
-
-        deleteDir(samplesBundleUpgradeDir);
-
-    }
-
-    @Test
-    public void testUpgrdeEditionWithBundle() throws Exception {
-        if (!runCoreTest || disableTestSuite) {
-            return;
-        }
-        testUpgradeWithBundleHelper(WlpJarType.CORE, WlpJarType.BASE_LIC, "LIBERTY_CORE", "BASE");
-        testUpgradeWithBundleHelper(WlpJarType.CORE, WlpJarType.ND_LIC, "LIBERTY_CORE", "ND");
-        testUpgradeWithBundleHelper(WlpJarType.BASE, WlpJarType.ND_LIC, "BASE", "ND");
-        testUpgradeWithBundleHelper(WlpJarType.ND, WlpJarType.ND_LIC, "ND", "ND");
-    }
-
     private void executeAllInstaller(WlpJarType type, File tmpDir) throws IOException, InterruptedException, TimeoutException {
         File allJar = null;
         try {
@@ -2831,90 +1837,6 @@ public class JavaJarTest {
         }
     }
 
-    @Test
-    public void testUpgradeEditionRollback() throws Exception {
-        if (disableTestSuite) {
-            return;
-        }
-        // Check that properties file, tag files, and license files are all base edition
-        File propertiesBaseEdition = new File(samplesBaseRollbackDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(propertiesBaseEdition.getAbsolutePath(), propertiesBaseEdition.exists());
-
-        String edition_before = getWASProperty("com.ibm.websphere.productEdition", propertiesBaseEdition);
-        Assert.assertEquals("Expected edition should be BASE", "BASE", edition_before);
-
-        File featuresDir = new File(samplesBaseRollbackDir, "wlp/lib/features");
-        File[] manifestFiles = featuresDir.listFiles(createManifestFilter());
-        Arrays.sort(manifestFiles); // Need to sort in order to have reliable behaviour across all platforms
-
-        String version = getWASProperty("com.ibm.websphere.productVersion", propertiesBaseEdition);
-        String baseVersion = getBaseVersionFromFullVersion(version);
-        // Continue the test if the manifest versions are consistent with the version in WebSphereApplicationServer.properties.
-        if (!checkManifestIBMAppliesToVersion(manifestFiles, version)) {
-            return;
-        }
-
-        // Check if fixpack tags are the base version
-        File swtagBaseEdition = new File(samplesBaseRollbackDir, String.format("wlp/lib/versions/tags/ibm.com_WebSphere_Application_Server_Liberty-%s.swidtag", baseVersion));
-        File fxtagBaseEdition = new File(samplesBaseRollbackDir, String.format("wlp/lib/versions/tags/ibm.com_WebSphere_Application_Server_Liberty-%s.swidtag", version));
-        boolean isCdOffering = swtagBaseEdition.exists();
-
-        Assert.assertTrue(swtagBaseEdition.getAbsolutePath(), swtagBaseEdition.exists());
-        Assert.assertTrue(fxtagBaseEdition.getAbsolutePath(), fxtagBaseEdition.exists());
-
-        String fixVersionBefore = isCdOffering ? getWASTagCD("version", fxtagBaseEdition) : getWASTag("version", fxtagBaseEdition);
-        String revisionBefore = isCdOffering ? getWASTagCD("revision", fxtagBaseEdition) : getWASTag("revision", fxtagBaseEdition);
-        Assert.assertEquals("Revision and FixVersion should report the same version number", revisionBefore, fixVersionBefore);
-
-        Assert.assertTrue(compareDirectory(samplesBaseRollbackDir + "/wlp/lafiles", samplesBaseDir + "/wlp/lafiles"));
-
-        // Lock one of the license files so that an exception is thrown when attempting to delete it
-        // java.nio.channels.FileLock is platform dependent and will not work on UNIX. Just set the file to be unreadable in this case
-        File lockedfile = new File(samplesBaseRollbackDir, "wlp/lafiles/lockedfile");
-        Assert.assertFalse("The locked file should not already exist", lockedfile.exists());
-
-        if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            FileOutputStream fos = new FileOutputStream(lockedfile);
-            java.nio.channels.FileLock lock = fos.getChannel().lock();
-            try {
-                execute(null, null, null, WlpJarType.ND_LIC, null, new String[0], EXIT_EXTRACT_ERROR,
-                        input("x", "x", "1", samplesBaseRollbackDir.getAbsolutePath() + "/wlp"));
-            } finally {
-                lock.release();
-                fos.close();
-            }
-        } else {
-            Assert.assertTrue(lockedfile.createNewFile());
-            lockedfile.setReadable(false);
-
-            if ("root".equals(System.getProperty("user.name"))) {
-                // The super-user can't set a file not readable to itself, so just return
-                return;
-            }
-
-            execute(null, null, null, WlpJarType.ND_LIC, null, new String[0], EXIT_EXTRACT_ERROR,
-                    input("x", "x", "1", samplesBaseRollbackDir.getAbsolutePath() + "/wlp"));
-        }
-
-        // Need to remove the locked file for the directory compare to work
-        Assert.assertTrue("The locked file was not deleted", lockedfile.delete());
-
-        // Check that properties file, tag files, and license files have been rolled back
-
-        // Disable the following until Defect 168476 is fixed
-        // String edition_after = getWASProperty("com.ibm.websphere.productEdition", propertiesBaseEdition);
-        // Assert.assertEquals("Expected edition should be BASE", "BASE", edition_after);
-        // Assert.assertTrue(compareDirectory(samplesBaseRollbackDir + "/wlp/lafiles", samplesBaseDir + "/wlp/lafiles"));
-
-        Assert.assertTrue(swtagBaseEdition.getAbsolutePath(), swtagBaseEdition.exists());
-
-        Assert.assertTrue(fxtagBaseEdition.getAbsolutePath(), fxtagBaseEdition.exists());
-
-        String fixVersionAfter = isCdOffering ? getWASTagCD("version", fxtagBaseEdition) : getWASTag("version", fxtagBaseEdition);
-        String revisionAfter = isCdOffering ? getWASTagCD("revision", fxtagBaseEdition) : getWASTag("revision", fxtagBaseEdition);
-        Assert.assertEquals("Revision and FixVersion should report the same version number", revisionAfter, fixVersionAfter);
-    }
-
     protected static FilenameFilter createManifestFilter() {
         return new FilenameFilter() {
             @Override
@@ -2952,73 +1874,6 @@ public class JavaJarTest {
             }
         }
         return true;
-    }
-
-    public void maventestHelper(WlpJarType installationJar, String nameprefix) throws Exception {
-
-        if (disableTestSuite) {
-            return;
-        }
-        if (samplesMavenDir.exists() && samplesMavenDir.listFiles().length > 0)
-            deleteDir(samplesMavenDir);
-        Assert.assertTrue("mkdir -p " + samplesMavenDir.getAbsolutePath(), samplesMavenDir.mkdirs() || samplesMavenDir.isDirectory());
-
-        File zipfile = null;
-        File[] files = outputUploadDir.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                String name = file.getName();
-                if (file.isFile() && name.startsWith(nameprefix) && name.endsWith(".jar")) {
-                    zipfile = file;
-                }
-            }
-        }
-        Assert.assertTrue("Failed to extract the jar license file", unzip(zipfile, samplesMavenDir));
-
-        // Check the existence of the files in the META-INF directory
-        File propertyFile = new File(samplesMavenDir, "META-INF/maven/com.ibm.websphere.appserver.license/" + nameprefix + "/pom.properties");
-        Assert.assertTrue("The " + propertyFile.getAbsolutePath() + " file does not exist", propertyFile.exists());
-        File xmlFile = new File(samplesMavenDir, "META-INF/maven/com.ibm.websphere.appserver.license/" + nameprefix + "/pom.xml");
-        Assert.assertTrue("The " + xmlFile.getAbsolutePath() + " file does not exist", xmlFile.exists());
-
-        //check the content of the pom.properties file
-        File wlpproperties = new File(samplesMavenDir, "wlp/lib/versions/WebSphereApplicationServer.properties");
-        Assert.assertTrue(wlpproperties.getAbsolutePath() + "doesn't exist", wlpproperties.exists());
-
-        String version_wlp = getWASProperty("com.ibm.websphere.productVersion", wlpproperties);
-        String version_meta = getWASProperty("version", propertyFile);
-
-        Assert.assertEquals("The version in wlp is:" + version_wlp + " , in META is:" + version_meta + " , doesn't match", version_wlp, version_meta);
-        Assert.assertEquals("groupID is not correct", getWASProperty("groupId", propertyFile), "com.ibm.websphere.appserver.license");
-        Assert.assertEquals("artifactID is not correct", getWASProperty("artifactId", propertyFile), nameprefix);
-
-        //check the content of the pom.xml file
-        Assert.assertEquals("groupID is not correct in xml file", getXMLProperty("groupId", xmlFile),
-                            "com.ibm.websphere.appserver.license");
-        Assert.assertEquals("artifactID is not correct in xml file", getXMLProperty("artifactId", xmlFile), nameprefix);
-        Assert.assertEquals("version is not correct in xml file", getXMLProperty("version", xmlFile), version_wlp);
-
-        if (nameprefix == "wlp-base-license") {
-            Assert.assertEquals("description is not correct in xml file", getXMLProperty("description", xmlFile),
-                                "WebSphere Application Server Liberty " + version_wlp + " License");
-        } else if (nameprefix == "wlp-nd-license") {
-            Assert.assertEquals("description is not correct in xml file", getXMLProperty("description", xmlFile),
-                                "WebSphere Application Server Liberty Network Deployment " + version_wlp + " License");
-        } else if (nameprefix == "wlp-core-license") {
-            Assert.assertEquals("description is not correct in xml file", getXMLProperty("description", xmlFile),
-                                "WebSphere Application Server Liberty Core " + version_wlp + " License");
-        }
-        deleteDir(samplesMavenDir);
-        return;
-    }
-
-    @Test
-    public void maventest() throws Exception {
-        maventestHelper(WlpJarType.BASE_LIC, "wlp-base-license");
-        maventestHelper(WlpJarType.ND_LIC, "wlp-nd-license");
-        if (runCoreTest) {
-            maventestHelper(WlpJarType.CORE_LIC, "wlp-core-license");
-        }
     }
 
     /**

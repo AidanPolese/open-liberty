@@ -18,6 +18,3 @@ Include-Resource: \
 instrument.disabled: true
 
 publish.wlp.jar.suffix: dev/api/spec
-
--buildpath: \
-	${javac.bootclasspath.java7}

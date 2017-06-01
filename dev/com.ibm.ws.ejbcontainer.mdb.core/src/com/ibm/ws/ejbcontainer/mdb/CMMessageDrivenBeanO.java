@@ -18,8 +18,8 @@ import javax.transaction.UserTransaction;
 import com.ibm.ejs.container.EJSContainer;
 import com.ibm.ejs.container.EJSHome;
 import com.ibm.ejs.container.MessageDrivenBeanO;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * CMMessageDrivenBeanO manages the lifecycle of a
@@ -33,11 +33,9 @@ public class CMMessageDrivenBeanO
 {
     private static final long serialVersionUID = -5840982304444508479L;
 
-    private static final String CLASS_NAME = CMMessageDrivenBeanO.class.getName();
-    private static final TraceComponent tc =
-                    Tr.register(CLASS_NAME,
-                                "EJBContainer",
-                                "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(CMMessageDrivenBeanO.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     /**
      * Create new <code>CMMessageDrivenBeanO</code>. <p>

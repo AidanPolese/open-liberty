@@ -24,7 +24,7 @@
 				<attribute name="Can-Redefine-Classes" value="false" />
 				<attribute name="Can-Retransform-Classes" value="true" />
 				<attribute name="Main-Class" value="com.ibm.ws.ras.instrument.internal.main.StaticTraceInstrumentation" />
-				<attribute name="Premain-Class" value="com.ibm.ws.ras.instrument.internal.main.UnitTestAlpineRuntimeTransformer" />
+				<attribute name="Premain-Class" value="com.ibm.ws.ras.instrument.internal.main.UnitTestLibertyRuntimeTransformer" />
 			</manifest>
 		</jar>
 

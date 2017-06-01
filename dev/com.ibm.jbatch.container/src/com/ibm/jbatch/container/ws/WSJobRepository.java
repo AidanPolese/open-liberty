@@ -22,33 +22,35 @@ import javax.batch.operations.NoSuchJobExecutionException;
 import javax.batch.operations.NoSuchJobInstanceException;
 import javax.batch.runtime.BatchStatus;
 
+import com.ibm.jbatch.container.services.IJPAQueryHelper;
+
 /**
  * This interface is a relatively thin layer around the persistence service.
- * 
+ *
  * However, that interface has exploded with so many methods it's hard to get a
  * handle on, so the idea is that we have this WSJobRepository interface as a much-more
  * restricted window into the persistence service.
- * 
+ *
  * In exporting this interface, but not the IPersistenceManagerService interface, we have
  * a simpler view of what the interactions from the WAS-specific remote layer really are.
- * 
+ *
  * Note there is some overlap here between this class and the read-only, view methods of
  * JobOperator. It is expected that WAS-specific code will use this class rather than
  * JobOperator as its interface into accessing job execution data in the persistent store.
- * 
+ *
  * Note the presence of <code>isTopLevelJobInstance</code> and <code>isTopLevelJobExecution</code>
  * methods. The reason this approach was chosen as an alternative to shutting off non-top-level ids from
  * all users of this class is that we lack methods for viewing "subjob" (i.e. partition & split-flow)
  * execution data. Since this might be useful, we leave the door open to individual methods to
  * decide whether and how to expose the subjob data to its callers.
- * 
+ *
  * @see JobOperator
  */
 public interface WSJobRepository {
 
     /**
      * Get job instance associated with the job execution identified by <code>executionId</code>
-     * 
+     *
      * @param executionId
      * @return associated JobInstance
      * @throws NoSuchJobExecutionException
@@ -58,7 +60,7 @@ public interface WSJobRepository {
 
     /**
      * Get job instance identified by <code>instanceId</code>
-     * 
+     *
      * @param instanceId
      * @return associated JobInstance
      * @throws NoSuchJobExecutionException
@@ -70,7 +72,7 @@ public interface WSJobRepository {
      * Returns full list of JobExecution(s) associated with this job instance.
      * The list order is from most-recent execution to least-recent.
      * The repository keeps its own order and does not depend on execution id or creation time to order these.
-     * 
+     *
      * @param instanceId
      * @return full list of JobExecution(s) associated with this job instance, from most-recent to least-recent execution
      * @throws NoSuchJobInstanceException
@@ -84,7 +86,7 @@ public interface WSJobRepository {
 
     /**
      * This is "most recent" in terms of execution id, not any kind of timestamp.
-     * 
+     *
      * @param instanceId
      * @return the JobExecution with the highest execution id, associated with the job instance
      *         identified by <code>instanceId</code>
@@ -97,7 +99,7 @@ public interface WSJobRepository {
 
     /**
      * Creates new job execution.
-     * 
+     *
      * @param jobInstanceId
      * @param jobParameters
      * @param create time
@@ -107,7 +109,7 @@ public interface WSJobRepository {
 
     /**
      * Note list order is not defined
-     * 
+     *
      * @param jobExecutionId
      * @return list of step execution aggregates associated with job execution
      *         identified by <code>jobExecutionId</code>. The list is ordered by start time, earliest to latest,
@@ -132,7 +134,7 @@ public interface WSJobRepository {
     /**
      * @param page the page of rows to get (starts at 0)
      * @param pageSize the number of rows in a page
-     * 
+     *
      * @return the list of job instances (top-level job instances only)
      */
     public abstract List<WSJobInstance> getJobInstances(int page, int pageSize);
@@ -141,14 +143,14 @@ public interface WSJobRepository {
 
     /**
      * Returns top-level job names only, not internal names associated with "subjobs".
-     * 
+     *
      * @return full set of top-level job names (note: not JSL names).
      */
     public abstract Set<String> getJobNames();
 
     /**
      * Returns true if the job instance is in a purgeable state (not STARTING, STARTED or STOPPING).
-     * 
+     *
      * @param jobInstanceId
      * @return
      */
@@ -156,7 +158,7 @@ public interface WSJobRepository {
 
     /**
      * Update the instanceState of this job instance
-     * 
+     *
      * @param instanceId
      * @param state
      */
@@ -164,7 +166,7 @@ public interface WSJobRepository {
 
     /**
      * Update the instanceState of this job instance if state is currently STOPPED or FAILED
-     * 
+     *
      * @param instanceId
      * @param state
      */
@@ -172,7 +174,7 @@ public interface WSJobRepository {
 
     /**
      * Update the instanceState and batch status of this job instance
-     * 
+     *
      * @param instanceId
      * @param state
      * @param batchStatus
@@ -182,7 +184,7 @@ public interface WSJobRepository {
 
     /**
      * Update the instanceState and batch status of this job instance and associated execution
-     * 
+     *
      * @param instance
      * @param executionId
      * @param state
@@ -194,7 +196,7 @@ public interface WSJobRepository {
 
     /**
      * Update the batch status of this job execution and instance
-     * 
+     *
      * @param executionId
      * @param batchStatus
      * @param date
@@ -204,7 +206,7 @@ public interface WSJobRepository {
 
     /**
      * Update the batch status of this job execution and instance
-     * 
+     *
      * @param executionId
      * @param batchStatus
      * @param date
@@ -214,7 +216,7 @@ public interface WSJobRepository {
 
     /**
      * Gets the StepExecutionAggregate using the JobExecutionNumber and StepName
-     * 
+     *
      * @param jobInstanceId
      * @param jobExecNum
      * @param stepName
@@ -228,7 +230,7 @@ public interface WSJobRepository {
 
     /**
      * Gets the JobExecution using the JobExecution Number
-     * 
+     *
      * @param instanceId
      * @param jobExecNum
      * @return
@@ -239,17 +241,17 @@ public interface WSJobRepository {
 
     /**
      * Gets the Job Instances with parameters extracted from the pre-purge search URL
-     * 
-     * @param wsso
+     *
+     * @param queryHelper
      * @return
      * @throws NoSuchJobExecutionException
      * @throws JobSecurityException
      */
-    public abstract List<WSJobInstance> getJobInstances(WSSearchObject wsso, int page, int pageSize) throws NoSuchJobExecutionException, JobSecurityException;
+    public abstract List<WSJobInstance> getJobInstances(IJPAQueryHelper queryHelper, int page, int pageSize) throws NoSuchJobExecutionException, JobSecurityException;
 
     /**
      * Creates an entry for this remote partition in the RemotablePartition table
-     * 
+     *
      * @param jobExecutionId the id for the top level job execution that this partition is associated with
      * @param stepName the name of the step
      * @param internalState the state of the partition that is being dispatched
@@ -261,7 +263,7 @@ public interface WSJobRepository {
     /**
      * Updates an entry for this remote partition in the RemotablePartition table with the given internalStatus
      * If the remotable partition is not found, then it just returns
-     * 
+     *
      * @param jobExecutionId the id for the top level job execution that this partition is associated with
      * @param stepName the name of the step
      * @param internalState the state of the partition that is being dispatched
@@ -274,7 +276,7 @@ public interface WSJobRepository {
      * Check the version of the job execution table in the job repository.
      */
     int getJobExecutionTableVersion() throws Exception;
-    
+
     /**
      * Check the version of the job instance table in the job repository.
      */

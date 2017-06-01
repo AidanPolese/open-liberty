@@ -5,8 +5,8 @@
  *
  * WLP Copyright IBM Corp. 2014
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.jaxrs20.ejb;
@@ -55,10 +55,8 @@ import com.ibm.ws.jaxrs20.utils.JaxRsUtils;
 import com.ibm.wsspi.adaptable.module.UnableToAdaptException;
 
 @Component(name = "com.ibm.ws.jaxrs20.ejb.JaxRsFactoryEJBBeanCustomizer", immediate = true, property = { "service.vendor=IBM" })
-public class JaxRsFactoryBeanEJBCustomizer implements
-                JaxRsFactoryBeanCustomizer {
-    private final TraceComponent tc = Tr
-                    .register(JaxRsFactoryBeanEJBCustomizer.class);
+public class JaxRsFactoryBeanEJBCustomizer implements JaxRsFactoryBeanCustomizer {
+    private final TraceComponent tc = Tr.register(JaxRsFactoryBeanEJBCustomizer.class);
     private CXFJaxRsProviderResourceHolder cxfPRHolder;
 
     //private final Set<Class<ExceptionMapper<?>>> exceptionMappers = new HashSet<Class<ExceptionMapper<?>>>();
@@ -85,7 +83,7 @@ public class JaxRsFactoryBeanEJBCustomizer implements
     }
 
     @Override
-    public void onPrepareProviderResource(BeanCustomizerContext context) {
+    public synchronized void onPrepareProviderResource(BeanCustomizerContext context) {
         EndpointInfo endpointInfo = context.getEndpointInfo();
         String ejbModuleName = null;
 
@@ -96,14 +94,10 @@ public class JaxRsFactoryBeanEJBCustomizer implements
         JaxRsModuleMetaData moduleMetaData = context.getModuleMetaData();
         //A map from EJB class to method-JNDI map
         Map<String, EJBInfo> ejbInfos = new HashMap<String, EJBInfo>();
-        Set<ProviderResourceInfo> perRequestProviderAndPathInfos = endpointInfo
-                        .getPerRequestProviderAndPathInfos();
-        Set<ProviderResourceInfo> singletonProviderAndPathInfos = endpointInfo
-                        .getSingletonProviderAndPathInfos();
-        Iterator<ProviderResourceInfo> perRequestIterator = perRequestProviderAndPathInfos
-                        .iterator();
-        Iterator<ProviderResourceInfo> singletonIterator = singletonProviderAndPathInfos
-                        .iterator();
+        Set<ProviderResourceInfo> perRequestProviderAndPathInfos = endpointInfo.getPerRequestProviderAndPathInfos();
+        Set<ProviderResourceInfo> singletonProviderAndPathInfos = endpointInfo.getSingletonProviderAndPathInfos();
+        Iterator<ProviderResourceInfo> perRequestIterator = perRequestProviderAndPathInfos.iterator();
+        Iterator<ProviderResourceInfo> singletonIterator = singletonProviderAndPathInfos.iterator();
         try {
             EJBEndpoints ejbEndpoints = moduleMetaData.getModuleContainer().adapt(EJBEndpoints.class);
             List<EJBEndpoint> ejbEndpointList = new ArrayList<EJBEndpoint>();
@@ -117,7 +111,7 @@ public class JaxRsFactoryBeanEJBCustomizer implements
                 List<String> localInterfaceNameList = ejbEndpoint.getLocalBusinessInterfaceNames();
                 EJBInfo ejbInfo = new EJBInfo(ejbClassName, ejbName, ejbEndpoint.getEJBType(), methodToJNDI, ejbCache, localInterfaceNameList, ejbModuleName);
                 ejbInfos.put(ejbClassName, ejbInfo);
-                //if the impl bean doesn't implements any inerface, then add the jndi for mehtod of this imp bean 
+                //if the impl bean doesn't implements any inerface, then add the jndi for mehtod of this imp bean
                 if (localInterfaceNameList.size() == 0) {
                     Method[] methods = Thread.currentThread().getContextClassLoader().loadClass(ejbClassName).getMethods();
                     String jndiName = getJNDIName(ejbEndpoint, null, ejbModuleName);
@@ -167,20 +161,17 @@ public class JaxRsFactoryBeanEJBCustomizer implements
      */
     private void handleAbstractClassInterface(JaxRsModuleMetaData moduleMetaData, List<EJBEndpoint> ejbEndpointList, List<String> abstractClassInterfaceList,
                                               Set<ProviderResourceInfo> perRequestProviderAndPathInfos, Set<ProviderResourceInfo> singletonProviderAndPathInfos,
-                                              String ejbModuleName
-                    ) {
+                                              String ejbModuleName) {
         for (String abstractClassInterfaceName : abstractClassInterfaceList) {
             for (int i = 0; i < ejbEndpointList.size(); i++) {
                 EJBEndpoint ejbEndpoint = ejbEndpointList.get(i);
                 EJBType ejbType = ejbEndpoint.getEJBType();
-                if (!(ejbType.equals(EJBType.SINGLETON_SESSION) || ejbType
-                                .equals(EJBType.STATELESS_SESSION)))
+                if (!(ejbType.equals(EJBType.SINGLETON_SESSION) || ejbType.equals(EJBType.STATELESS_SESSION)))
                     // jaxrs only handle singleton session bean or stateless
                     // session bean
                     continue;
                 String ejbClassName = ejbEndpoint.getClassName();
-                List<String> interfaceNames = ejbEndpoint
-                                .getLocalBusinessInterfaceNames();
+                List<String> interfaceNames = ejbEndpoint.getLocalBusinessInterfaceNames();
                 if (interfaceNames.contains(abstractClassInterfaceName)) {
                     String jndiName = getJNDIName(ejbEndpoint, abstractClassInterfaceName, ejbModuleName);
                     addResourceProvider(moduleMetaData, jndiName, cxfPRHolder, ejbType, abstractClassInterfaceName, ejbClassName, perRequestProviderAndPathInfos,
@@ -226,7 +217,8 @@ public class JaxRsFactoryBeanEJBCustomizer implements
         String ejbName = ejbInfo.getEjbName();
         String ejbModuleName = ejbInfo.getEjbModuleName();
         List<String> ejbLocalInterfaces = ejbInfo.getLocalInterfaceNameList();
-        EjbProviderProxy providerProxy = new EjbProviderProxy(ServerProviderFactory.getInstance(m).createExceptionMapper(EJBException.class, m) != null, ejbName, ejbLocalInterfaces, ejbModuleName);
+        EjbProviderProxy providerProxy = new EjbProviderProxy(ServerProviderFactory.getInstance(m).createExceptionMapper(EJBException.class,
+                                                                                                                         m) != null, ejbName, ejbLocalInterfaces, ejbModuleName);
         Object returnedObj = providerProxy.createEjbProviderObject(provider);
         if (ejbInfo.getEjbType().equals(EJBType.STATELESS_SESSION)) {
             Tr.warning(tc,
@@ -254,14 +246,13 @@ public class JaxRsFactoryBeanEJBCustomizer implements
 
     @Override
     public Object serviceInvoke(Object serviceObject, Method m,
-                                Object[] params, boolean isSingleton, Object context, Message inMessage)
-                    throws Exception {
+                                Object[] params, boolean isSingleton, Object context, Message inMessage) throws Exception {
 
         Map<String, EJBInfo> ejbInfos = (Map<String, EJBInfo>) (context);
         EJBInfo ejbInfo = ejbInfos.get(serviceObject.getClass().getName());
         if (ejbInfo == null) {
             return serviceObject;
-        };
+        } ;
         String jndiKey = EJBUtils.methodToString(m);
         String jndiName = ejbInfo.getMethodToJNDI().get(jndiKey);
         if (jndiName == null)
@@ -289,9 +280,9 @@ public class JaxRsFactoryBeanEJBCustomizer implements
                     Tr.debug(
                              tc,
                              "Couldn't get instance for "
-                                             + serviceObject.getClass().getName()
-                                             + " through JNDI: " + jndiName
-                                             + ", will use JAX-RS instance.");
+                                 + serviceObject.getClass().getName()
+                                 + " through JNDI: " + jndiName
+                                 + ", will use JAX-RS instance.");
                 return null;
             }
         }
@@ -314,7 +305,7 @@ public class JaxRsFactoryBeanEJBCustomizer implements
                         return method.invoke(clazzInerface.cast(ejbServiceObject), params);
                     } catch (Exception e) {
                         List<Class<?>> exceptionTypes = Arrays.asList(m.getExceptionTypes());
-                        boolean ejbExceptionMapped = ServerProviderFactory.getInstance(inMessage).createExceptionMapper(EJBException.class, inMessage) != null;//this.exceptionMappers.contains(javax.ejb.EJBException.class);                        
+                        boolean ejbExceptionMapped = ServerProviderFactory.getInstance(inMessage).createExceptionMapper(EJBException.class, inMessage) != null;//this.exceptionMappers.contains(javax.ejb.EJBException.class);
                         Throwable causeException = e.getCause();
                         Class<? extends Throwable> exceptionClass = causeException.getClass();
                         if (ejbExceptionMapped) {
@@ -335,17 +326,15 @@ public class JaxRsFactoryBeanEJBCustomizer implements
                         else
                             throw e;
                     }
-                }
-                else
+                } else
                     return null;
-            }
-            else {
+            } else {
                 try {
                     //EJB instance does't implement any interface. Invoke the original method with the ejbObject
                     return m.invoke(ejbServiceObject, params);
                 } catch (Exception e) {
                     List<Class<?>> exceptionTypes = Arrays.asList(m.getExceptionTypes());
-                    boolean ejbExceptionMapped = ServerProviderFactory.getInstance(inMessage).createExceptionMapper(EJBException.class, inMessage) != null;//this.exceptionMappers.contains(javax.ejb.EJBException.class);                        
+                    boolean ejbExceptionMapped = ServerProviderFactory.getInstance(inMessage).createExceptionMapper(EJBException.class, inMessage) != null;//this.exceptionMappers.contains(javax.ejb.EJBException.class);
                     Throwable causeException = e.getCause();
                     Class<? extends Throwable> exceptionClass = causeException.getClass();
                     if (ejbExceptionMapped) {
@@ -387,8 +376,8 @@ public class JaxRsFactoryBeanEJBCustomizer implements
          * 2)EJB jaxrs in ejb jar: JNDI lookup format is java:app/<ejbmodulename>/<beanName>[!<interface>]
          */
         String beanName = ejbEndpoint.getName();
-        StringBuffer jndiName = (ejbModuleName == null) ? new StringBuffer("java:module/")
-                        .append(beanName) : new StringBuffer("java:app/").append(ejbModuleName + "/").append(beanName);
+        StringBuffer jndiName = (ejbModuleName == null) ? new StringBuffer("java:module/").append(beanName) : new StringBuffer("java:app/").append(ejbModuleName
+                                                                                                                                                   + "/").append(beanName);
         if ((interfaceName != null) && (!(interfaceName.trim().equals(""))))
             jndiName.append("!").append(interfaceName);
 
@@ -402,24 +391,21 @@ public class JaxRsFactoryBeanEJBCustomizer implements
                               Iterator<ProviderResourceInfo> providerResourceInfoIterator,
                               Boolean perRequest) {
         while (providerResourceInfoIterator.hasNext()) {
-            ProviderResourceInfo providerResourceInfo = providerResourceInfoIterator
-                            .next();
+            ProviderResourceInfo providerResourceInfo = providerResourceInfoIterator.next();
             if (providerResourceInfo.getRuntimeType() != RuntimeType.POJO)
-                // RuntimeType is POJO, means we need to handle as ejb, othewise, it has already been 
+                // RuntimeType is POJO, means we need to handle as ejb, othewise, it has already been
                 // handled by CDI
                 continue;
             String className = providerResourceInfo.getClassName();
             for (int i = 0; i < ejbEndpointList.size(); i++) {
                 EJBEndpoint ejbEndpoint = ejbEndpointList.get(i);
                 EJBType ejbType = ejbEndpoint.getEJBType();
-                if (!(ejbType.equals(EJBType.SINGLETON_SESSION) || ejbType
-                                .equals(EJBType.STATELESS_SESSION)))
+                if (!(ejbType.equals(EJBType.SINGLETON_SESSION) || ejbType.equals(EJBType.STATELESS_SESSION)))
                     // jaxrs only handle singleton session bean or stateless
                     // session bean
                     continue;
                 String ejbClassName = ejbEndpoint.getClassName();
-                List<String> interfaceNames = ejbEndpoint
-                                .getLocalBusinessInterfaceNames();
+                List<String> interfaceNames = ejbEndpoint.getLocalBusinessInterfaceNames();
                 if (ejbClassName.equals(className)) {
                     providerResourceInfo.setRuntimeType(RuntimeType.EJB);
                     providerResourceInfo.putCustomizedProperty(JaxRsEJBConstants.EJB_TYPE, ejbType);
@@ -439,8 +425,7 @@ public class JaxRsFactoryBeanEJBCustomizer implements
     public Application onApplicationInit(Application app,
                                          JaxRsModuleMetaData metaData) {
         String appClassName = app.getClass().getName();
-        if (appClassName
-                        .equals(JaxRsServerConstants.APPLICATION_ROOT_CLASS_NAME))
+        if (appClassName.equals(JaxRsServerConstants.APPLICATION_ROOT_CLASS_NAME))
             return app;
         //if an Application class implemments any interface, then it will not be replaced no matter if it's ejb bean.
         if (app.getClass().getInterfaces().length > 0)
@@ -479,8 +464,7 @@ public class JaxRsFactoryBeanEJBCustomizer implements
                 String jndiName = null;
                 if (appClassName.equals(ejbClassName)) {
                     jndiName = getJNDIName(ejbEndpoint, null, ejbModuleName);
-                    ejbInstance = (Application) (new InitialContext()
-                                    .lookup(jndiName));
+                    ejbInstance = (Application) (new InitialContext().lookup(jndiName));
                     break;
                 }
 
@@ -497,10 +481,8 @@ public class JaxRsFactoryBeanEJBCustomizer implements
     private void resetCXFHolder(ProviderResourceInfo providerResourceInfo, CXFJaxRsProviderResourceHolder cxfPRHolder,
                                 Boolean perRequest,
                                 EJBType ejbType,
-                                String className)
-    {
-        if (!providerResourceInfo.isJaxRsProvider())
-        {
+                                String className) {
+        if (!providerResourceInfo.isJaxRsProvider()) {
             if (ejbType.equals(EJBType.SINGLETON_SESSION) && perRequest) //this means EJB is singleton, we need to modidy CXFPRHolder
             {
                 try {
@@ -515,7 +497,7 @@ public class JaxRsFactoryBeanEJBCustomizer implements
                                providerResourceInfo.getProviderResourceClass().getName());
                     providerResourceInfo.setRuntimeType(RuntimeType.POJO);
                     providerResourceInfo.removeCustomizedProperty(
-                                    JaxRsEJBConstants.EJB_TYPE);
+                                                                  JaxRsEJBConstants.EJB_TYPE);
 
                 } catch (InstantiationException e) {
                     Tr.warning(tc,
@@ -523,7 +505,7 @@ public class JaxRsFactoryBeanEJBCustomizer implements
                                providerResourceInfo.getProviderResourceClass().getName());
                     providerResourceInfo.setRuntimeType(RuntimeType.POJO);
                     providerResourceInfo.removeCustomizedProperty(
-                                    JaxRsEJBConstants.EJB_TYPE);
+                                                                  JaxRsEJBConstants.EJB_TYPE);
                 }
             }
             if (ejbType.equals(EJBType.STATELESS_SESSION) && !perRequest) // this means EJB is per-request, we need to modify CXFPRHolder as well
@@ -628,7 +610,7 @@ public class JaxRsFactoryBeanEJBCustomizer implements
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.jaxrs20.api.JaxRsFactoryBeanCustomizer#destroyApplicationScopeResources(com.ibm.ws.jaxrs20.metadata.JaxRsModuleMetaData)
      */
     @Override

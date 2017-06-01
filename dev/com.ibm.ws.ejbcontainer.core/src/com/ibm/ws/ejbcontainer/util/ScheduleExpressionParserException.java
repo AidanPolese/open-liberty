@@ -11,8 +11,8 @@
  */
 package com.ibm.ws.ejbcontainer.util;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Indicates that an error has occurred while parsing a schedule expression.
@@ -22,9 +22,7 @@ public class ScheduleExpressionParserException
 {
     private static final long serialVersionUID = -5763492536412342693L;
 
-    private static final String CLASS_NAME = ScheduleExpressionParserException.class.getName();
-
-    private static final TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(ScheduleExpressionParserException.class,
                                                          "EJBContainer",
                                                          "com.ibm.ejs.container.container");
 

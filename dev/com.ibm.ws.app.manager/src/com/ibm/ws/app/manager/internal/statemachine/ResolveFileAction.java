@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2012, 2014
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.app.manager.internal.statemachine;
@@ -33,6 +33,7 @@ import com.ibm.wsspi.adaptable.module.Container;
 import com.ibm.wsspi.application.handler.ApplicationHandler;
 import com.ibm.wsspi.kernel.filemonitor.FileMonitor;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
+import com.ibm.wsspi.kernel.service.utils.FrameworkState;
 
 /**
  *
@@ -170,7 +171,10 @@ class ResolveFileAction implements Action, FileMonitor {
             _mon.register(_ctx, FileMonitor.class, this);
             if (_container.get() == null) {
                 if (_file.get() == null) {
-                    AppMessageHelper.get(_handler.get()).warning("APPLICATION_NOT_FOUND", _name, _location);
+                    if (!FrameworkState.isStopping()) {
+                        // Don't issue this message if the server is stopping
+                        AppMessageHelper.get(_handler.get()).warning("APPLICATION_NOT_FOUND", _name, _location);
+                    }
                 }
             }
         }

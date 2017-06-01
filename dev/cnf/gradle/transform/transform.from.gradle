@@ -1,0 +1,138 @@
+
+defaultTasks 'transform'
+
+import org.apache.tools.ant.filters.ReplaceTokens
+import org.apache.tools.ant.DirectoryScanner
+
+DirectoryScanner.removeDefaultExclude("**/.gitignore")
+DirectoryScanner.removeDefaultExclude("**/.gitattributes")
+
+task transform {
+    File folderCDOpenDev = new File('.')
+    folderCDOpenDev = file(folderCDOpenDev.absolutePath)
+    while (!folderCDOpenDev.name.equals('dev')) {
+        folderCDOpenDev = file(folderCDOpenDev.getParent())
+    }
+    println "folderCDOpenDev " + folderCDOpenDev
+    File folderCDOpenBuildImageWlp = new File(folderCDOpenDev, 'build.image/wlp')
+    if (folderCDOpenBuildImageWlp.exists()) {
+        throw new GradleException("Just to be safe, " + folderCDOpenBuildImageWlp + " should not exist before this task is executed")
+    }
+    println "folderCDOpenBuildImageWlp " + folderCDOpenBuildImageWlp
+    File folderCDOpenCnfGradleTransport = new File(folderCDOpenDev, 'cnf/gradle/transform')
+    if (!folderCDOpenCnfGradleTransport.exists()) {
+        throw new GradleException("The folder " + folderCDOpenCnfGradleTransport + " does not exist")
+    }
+    println "folderCDOpenCnfGradleTransport " + folderCDOpenCnfGradleTransport
+    if (!project.hasProperty('OpenLibertyDevFolder')) {
+        throw new GradleException("You must define OpenLibertyDevFolder to use this gradle task, e.g.\n\t./gradlew -POpenLibertyDevFolder=/git/libertyGit/open-liberty/dev -b transform.to.gradle transform")
+    }
+    if (!file("${OpenLibertyDevFolder}").exists()) {
+        throw new GradleException("The folder " + OpenLibertyDevFolder + " does not exist")
+    }
+    File folderOpenLibertyDev = new File(file("${OpenLibertyDevFolder}").absolutePath)
+    println "folderOpenLibertyDev " + folderOpenLibertyDev
+    File folderOpenLibertyBuildImageWlp = new File(folderOpenLibertyDev, 'build.image/wlp')
+    if (!folderOpenLibertyBuildImageWlp.exists()) {
+        throw new GradleException("The folder " + folderOpenLibertyBuildImageWlp + " does not exist")
+    }
+    println "folderOpenLibertyBuildImageWlp " + folderOpenLibertyBuildImageWlp
+    File folderOpenLibertyCnfLocalDev = new File(folderOpenLibertyDev, 'cnf/local/dev/')
+    if (!folderOpenLibertyCnfLocalDev.exists()) {
+        throw new GradleException("The folder " + folderOpenLibertyCnfLocalDev + " does not exist")
+    }
+    println "folderOpenLibertyCnfLocalDev " + folderOpenLibertyCnfLocalDev
+    doLast {
+        Properties projectToType = new Properties()
+        new File(folderCDOpenDev, 'cnf/gradle/transform/transform.properties').withReader {
+            projectToType.load(it)
+        }
+        Properties bsnToProject = new Properties()
+        new File(folderCDOpenDev, 'cnf/gradle/transform/bsn-project-map.properties').withReader {
+            bsnToProject.load(it)
+        }
+        File folderPublishedLib = new File(folderCDOpenDev, 'prereq.published/lib')
+        folderPublishedLib.mkdir()
+        File templateDir = new File(folderCDOpenDev, 'cnf/gradle/projects.for.ivy.ant')
+        //File internalFeatureFolder = new File(folderCDOpenDev, 'com.ibm.websphere.features.internal.laos')
+        File tempProjectFolder = new File(folderCDOpenCnfGradleTransport, '.tmp/projects')
+        tempProjectFolder.mkdirs()
+        //File tempFeatureFolder = new File(folderCDOpenCnfGradleTransport, '.tmp/features')
+        //tempFeatureFolder.mkdirs()
+        String classpathEntries = ""
+        bsnToProject.keys().sort().each { bsn ->
+            String projectName = bsnToProject.getProperty(bsn)
+            File folderCDOpenDevProject = new File(folderCDOpenDev, projectName)
+            if (folderCDOpenDevProject.exists()) {
+                String projectType = projectToType.getProperty(projectName)
+                if (projectType == null) {
+                    throw new GradleException("Unknown projectType for folder " + folderCDOpenDevProject)
+                }
+                String artifact = null
+                String artifactParent = null
+                fileTree(folderOpenLibertyCnfLocalDev).include(bsn + '/**').visit { element ->
+                    if (!element.isDirectory() && element.file.name.endsWith('.jar')) {
+                        artifact = element.file.name
+                        artifactParent = element.file.getParent()
+                        copy {
+                            from artifactParent
+                            into folderPublishedLib
+                            include artifact
+                        }
+                    }
+                }
+                if (artifact == null) {
+                    println 'No artifact was found for project ' + projectName + ', skipping...'
+                } else {
+                if (projectName.equals('com.ibm.ws.org.apache.cxf.jaxws')) {
+                    classpathEntries = classpathEntries + '	<classpathentry exported="true" kind="lib" path="/prereq.published/lib/' + artifact + '"/>\n'
+                }
+                File projectTemp = new File(tempProjectFolder, projectName)
+                if (!projectTemp.exists()) {
+                    java.nio.file.Files.move(folderCDOpenDevProject.toPath(), projectTemp.toPath())
+                    folderCDOpenDevProject = new File(folderCDOpenDev, projectName)
+                    folderCDOpenDevProject.mkdir()
+                    copy {
+                        from templateDir
+                        into folderCDOpenDevProject
+                        include '*.template'
+                        rename { String fileName ->
+                            fileName.replace('.template', '')
+                        }
+                        filter(ReplaceTokens, tokens: [PROJECT_NAME: projectName, MAVEN_ARTIFACT: artifact])
+                    }
+                }
+                }
+            //} else {
+            //    File internalFeature = new File(internalFeatureFolder, projectName + '.feature')
+            //    if (!internalFeature.exists()) {
+            //        throw new GradleException("The folder " + internalFeature + " does not exist")
+            //    }
+            //    File internalFeatureTemp = new File(tempFeatureFolder, projectName + '.feature')
+            //    java.nio.file.Files.move(internalFeature.toPath(), internalFeatureTemp.toPath())
+            }
+        }
+        File classpathFile = new File(folderCDOpenDev, 'com.ibm.ws.org.apache.cxf.jaxws/.classpath')
+        classpathFile.delete()
+        classpathFile.createNewFile()
+        classpathFile.text = """<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+$classpathEntries</classpath>
+"""
+        Set<String> projectTypeSet = ['LAOSTestMerged', 'KernelTestMerged']
+        projectToType.keys().sort().each { projectName ->
+            String projectType = projectToType.getProperty(projectName)
+            if (projectTypeSet.contains(projectType) && !projectName.equals('com.ibm.ws.httpservice_test')) {
+                File folderCDOpenDevProject = new File(folderCDOpenDev, projectName)
+                if (folderCDOpenDevProject.exists()) {
+                    File projectTemp = new File(tempProjectFolder, projectName)
+                    java.nio.file.Files.move(folderCDOpenDevProject.toPath(), projectTemp.toPath())
+                }
+            }
+        }
+        copy {
+            from folderOpenLibertyBuildImageWlp
+            into folderCDOpenBuildImageWlp
+        }
+    }
+}

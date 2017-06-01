@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class EntityNotInRealmScopeException extends WIMApplicationException {
 
+    private static final long serialVersionUID = 983212132862120524L;
+
     /**
      *
      */

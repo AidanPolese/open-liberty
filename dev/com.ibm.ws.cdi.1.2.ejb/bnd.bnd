@@ -22,6 +22,8 @@ Private-Package: \
   
 WS-TraceGroup: JCDI
 
+instrument.classesExcludes: com/ibm/ws/cdi/ejb/impl/resources/*.class
+
 -buildpath: \
 	com.ibm.ws.cdi.1.2.weld.impl;version=latest,\
 	com.ibm.ws.adaptable.module;version=latest,\

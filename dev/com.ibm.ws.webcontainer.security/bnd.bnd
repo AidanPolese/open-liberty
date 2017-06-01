@@ -10,13 +10,13 @@ Export-Package: \
   com.ibm.websphere.security.web, \
   com.ibm.ws.webcontainer.security, \
   com.ibm.ws.webcontainer.security.context, \
+  com.ibm.ws.webcontainer.security.internal, \
   com.ibm.ws.webcontainer.security.metadata, \
   com.ibm.ws.webcontainer.security.util
 
-Import-Package: com.ibm.ws.common.internal.encoder, !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
+Import-Package: com.ibm.ws.common.internal.encoder, !com.ibm.ws.kernel.boot.cmdline, *
 
 Private-Package: \
-  com.ibm.ws.webcontainer.security.internal.*, \
   com.ibm.ws.webcontainer.security.jacc, \
   com.ibm.ws.webcontainer.security.resources
 
@@ -39,6 +39,8 @@ Service-Component: \
     dynamic:='tokenService';\
     properties:="service.vendor=IBM"
 
+-dsannotations: com.ibm.ws.webcontainer.security.internal.WebAuthenticatorFactoryImpl
+
 instrument.classesExcludes: com/ibm/ws/webcontainer/security/resources/*.class
 
 -buildpath: \
@@ -46,6 +48,7 @@ instrument.classesExcludes: com/ibm/ws/webcontainer/security/resources/*.class
 	com.ibm.websphere.appserver.spi.logging,\
 	com.ibm.websphere.org.osgi.core,\
 	com.ibm.websphere.org.osgi.service.component,\
+	com.ibm.wsspi.org.osgi.service.component.annotations;version=latest,\
 	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
 	com.ibm.ws.security;version=latest,\
 	com.ibm.ws.security.authentication;version=latest,\
@@ -69,7 +72,8 @@ instrument.classesExcludes: com/ibm/ws/webcontainer/security/resources/*.class
 	com.ibm.ws.transport.http;version=latest,\
 	com.ibm.ws.logging;version=latest,\
 	com.ibm.ws.security.audit.utils;version=latest, \
-	com.ibm.ws.org.osgi.annotation.versioning;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest, \
+	com.ibm.wsspi.org.osgi.service.component.annotations;version=latest
 
 -testpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \

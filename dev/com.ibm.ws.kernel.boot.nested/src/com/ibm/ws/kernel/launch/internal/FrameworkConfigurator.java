@@ -39,7 +39,7 @@ public class FrameworkConfigurator {
      * like establishing the appropriate properties for the osgi remote console,
      * and call the abstract {@link #customize(BootstrapConfig)} method, to
      * allow sub-classes to further massage framework initialization properties.
-     * 
+     *
      * @param config
      *            BootstrapConfig object containing the active set of properties
      *            that will be used to initialize the framework.
@@ -104,7 +104,7 @@ public class FrameworkConfigurator {
         // resolution to automatically start bundles.
         config.put("osgi.compatibility.eagerStart.LazyActivation", "false");
 
-        // We need to allow badly formed bundles to provide osgi.ee and osgi.native 
+        // We need to allow badly formed bundles to provide osgi.ee and osgi.native
         // capabilities in order to keep zero migration.
         config.put("osgi.equinox.allow.restricted.provides", "true");
 
@@ -168,7 +168,7 @@ public class FrameworkConfigurator {
      * <p>
      * The monitoring code depends on this delegation for proxy generation.
      * </p>
-     * 
+     *
      * @param config the framework properties
      */
     private static void extraBootDelegationPackages(BootstrapConfig config) {
@@ -177,7 +177,7 @@ public class FrameworkConfigurator {
         final String defaultDelegation = "com.ibm.ws.kernel.boot.jmx.internal," +
                                          "sun.*,com.sun.*,com.ibm.ws.boot.delegated.*,org.apache.xml.*,org.apache.xerces.*," +
                                          "com.ibm.xylem.*,com.ibm.xml.*,com.ibm.xtq.*,com.ibm.net.ssl.*," +
-                                         "com.ibm.crypto.*,com.ibm.security.*";
+                                         "com.ibm.crypto.*,com.ibm.security.*,jdk.*";
 
         String osgiDelegationPackages = config.get(org.osgi.framework.Constants.FRAMEWORK_BOOTDELEGATION);
         if (osgiDelegationPackages == null)
@@ -202,7 +202,7 @@ public class FrameworkConfigurator {
      * is found on the classpath, it is read for the first non-comment line
      * containing a classname. That factory is then used as the service class
      * for creating a FrameworkFactory instance.
-     * 
+     *
      * @return non-null instance of the framework factory.
      * @throws LaunchException
      *             if Factory can not be found or instantiated.

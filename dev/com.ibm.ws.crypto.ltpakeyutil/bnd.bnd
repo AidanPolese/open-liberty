@@ -13,7 +13,6 @@ Import-Package: com.ibm.ws.common.internal.encoder, !*.internal.*, !com.ibm.ws.k
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.common.encoder;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest
 

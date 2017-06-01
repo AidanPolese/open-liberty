@@ -28,6 +28,8 @@ import com.ibm.ws.security.authentication.cache.AuthCacheService;
 import com.ibm.ws.security.authentication.tai.TAIService;
 import com.ibm.ws.webcontainer.security.UnprotectedResourceService;
 import com.ibm.ws.webcontainer.security.WebAuthenticator;
+import com.ibm.ws.webcontainer.security.WebAuthenticatorFactory;
+import com.ibm.ws.webcontainer.security.internal.WebAuthenticatorFactoryImpl;
 import com.ibm.wsspi.security.tai.TrustAssociationInterceptor;
 
 /**
@@ -57,6 +59,7 @@ public class FeatureWebSecurityCollaboratorImplTest {
     private final UnprotectedResourceService unprotectedService = mock.mock(UnprotectedResourceService.class);
 
     private FeatureWebSecurityCollaboratorImpl featureCollab;
+    private final WebAuthenticatorFactory authenticatorFactory = new WebAuthenticatorFactoryImpl();
 
     @Before
     public void setUp() {
@@ -111,6 +114,7 @@ public class FeatureWebSecurityCollaboratorImplTest {
         });
         featureCollab = new FeatureWebSecurityCollaboratorImpl();
 
+        featureCollab.setAuthenticatorFactory(authenticatorFactory);
         featureCollab.setSecurityService(securityServiceRef);
         featureCollab.setTaiService(taiServiceRef);
         featureCollab.setInterceptorService(interceptorServiceRef);
@@ -121,6 +125,7 @@ public class FeatureWebSecurityCollaboratorImplTest {
 
     @After
     public void tearDown() {
+        featureCollab.unsetAuthenticatorFactory(authenticatorFactory);
         featureCollab.unsetSecurityService(securityServiceRef);
         featureCollab.unsetTaiService(taiServiceRef);
         featureCollab.unsetInterceptorService(interceptorServiceRef);

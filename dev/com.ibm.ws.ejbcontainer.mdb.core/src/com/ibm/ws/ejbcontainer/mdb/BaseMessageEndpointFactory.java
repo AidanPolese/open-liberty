@@ -29,8 +29,8 @@ import com.ibm.ejs.container.EJSContainer;
 import com.ibm.ejs.container.EJSHome;
 import com.ibm.ejs.container.MDBInternalHome;
 import com.ibm.ejs.container.util.MethodAttribUtils;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.EJBTransactionAttribute;
 import com.ibm.ws.ejbcontainer.runtime.EJBApplicationEventListener;
 import com.ibm.ws.ejbcontainer.util.Pool;
@@ -297,8 +297,8 @@ public abstract class BaseMessageEndpointFactory extends EJSHome
                         {
                             // CNTR0082E: Can not enlist XAResource since recovery ID for
                             // resource adapter {0} for MDB {1} is not known.
-                            Tr.error(tc, "ENDPOINT_RECOVERY_ID_UNKNOWN_CNTR0082E"
-                                     , new Object[] { ivRAKey, beanMetaData.j2eeName });
+                            Tr.error(tc, "ENDPOINT_RECOVERY_ID_UNKNOWN_CNTR0082E",
+                                     ivRAKey, beanMetaData.j2eeName);
                             throw new UnavailableException("setRecoveryId must be called prior to createEndpoint");
                         }
                     }
@@ -622,8 +622,8 @@ public abstract class BaseMessageEndpointFactory extends EJSHome
             }
 
             // CNTR0085E: MDB {0} must implement method {1} of interface {2}.
-            Tr.error(tc, "NO_SUCH_MDB_METHOD_CNTR0085E"
-                     , new Object[] { bmd.j2eeName, method.getName(), bmd.localInterfaceClass });
+            Tr.error(tc, "NO_SUCH_MDB_METHOD_CNTR0085E",
+                     bmd.j2eeName, method.getName(), bmd.localInterfaceClass);
 
             throw new NoSuchMethodException(bmd.enterpriseBeanName + "." + method.getName()
                                             + " not found");
@@ -665,8 +665,8 @@ public abstract class BaseMessageEndpointFactory extends EJSHome
             // with invalid deployment for transaction attributes.
 
             // CNTR0084E: Method {0} of MDB {1} is deployed with an incorrect transaction attribute.
-            Tr.error(tc, "INVALID_MDB_TX_ATTR_CNTR0084E"
-                     , new Object[] { method.getName(), bmd.j2eeName });
+            Tr.error(tc, "INVALID_MDB_TX_ATTR_CNTR0084E",
+                     method.getName(), bmd.j2eeName);
 
             ResourceException r;
             r = new ApplicationServerInternalException(
@@ -886,8 +886,8 @@ public abstract class BaseMessageEndpointFactory extends EJSHome
                 if (ivEnlistNotNeededMessageLogged == false)
                 {
                     // CNTR0087E: Resource adapter {0} is not allowed to pass a non null XAResource to createEndpoint method for MDB {1}.
-                    Tr.error(tc, "RA_DOES_NOT_SUPPORT_XATRANSACTIONS_CNTR0087E"
-                             , new Object[] { ivRAKey, beanMetaData.j2eeName });
+                    Tr.error(tc, "RA_DOES_NOT_SUPPORT_XATRANSACTIONS_CNTR0087E",
+                             ivRAKey, beanMetaData.j2eeName);
                 }
                 ex = new UnavailableException("Transaction recovery not setup for this RA since RA does not support XA transactions");
                 break;
@@ -897,8 +897,8 @@ public abstract class BaseMessageEndpointFactory extends EJSHome
                 if (ivEnlistNotNeededMessageLogged == false)
                 {
                     // CNTR0086E: Transaction recovery setup error occurred for resource adapter {0}, MDB {1}.
-                    Tr.error(tc, "ERROR_DURING_TRAN_RECOVERY_SETUP_CNTR0086E"
-                             , new Object[] { ivRAKey, beanMetaData.j2eeName });
+                    Tr.error(tc, "ERROR_DURING_TRAN_RECOVERY_SETUP_CNTR0086E",
+                             ivRAKey, beanMetaData.j2eeName);
                 }
                 ex = new UnavailableException("Error occured during transaction recovery setup for this Resource Adapter");
                 break;

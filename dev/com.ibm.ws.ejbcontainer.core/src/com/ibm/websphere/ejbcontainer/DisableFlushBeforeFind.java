@@ -19,7 +19,7 @@ package com.ibm.websphere.ejbcontainer;
  * <b>Note: Enabling this option results in behavior not compliant with the
  * official EJB specification.</b> <p>
  * 
- * For entity beans packaged in a J2EE 1.3 or later module, prior to the
+ * For entity beans packaged in a Java EE 1.3 or later module, prior to the
  * execution of any application-specific "custom" finder methods (that is,
  * any finder method other than
  * findByPrimaryKey), the EJB Container automatically
@@ -51,7 +51,7 @@ package com.ibm.websphere.ejbcontainer;
  * 
  * Note: the DisableFlushBeforeFind interface may be used for entity beans
  * with either container managed or bean managed persistence; however, it has no
- * effect on entity beans packaged in a J2EE 1.2 or earlier module. <p>
+ * effect on entity beans packaged in a Java EE 1.2 or earlier module. <p>
  * 
  * @since WAS 6.0.2
  * @see EJBContextExtension

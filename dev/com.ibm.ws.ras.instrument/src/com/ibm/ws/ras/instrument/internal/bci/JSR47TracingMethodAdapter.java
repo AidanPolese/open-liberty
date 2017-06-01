@@ -174,7 +174,7 @@ public class JSR47TracingMethodAdapter extends AbstractRasMethodAdapter<Abstract
                         "(Ljava/lang/String;)Ljava/util/logging/Logger;");
         visitSetTraceObjectField();
 
-        // Alpine doesn't currently have the WsLogger or LoggerHelper implementations
+        // Liberty doesn't currently have the WsLogger or LoggerHelper implementations
         // List<String> traceGroups = getClassAdapter().getTraceOptionsData().getTraceGroups();
         // String traceGroupName = traceGroups.isEmpty() ? null : traceGroups.get(0);
         // if (traceGroupName != null) {

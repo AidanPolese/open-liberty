@@ -26,10 +26,10 @@ import javax.rmi.PortableRemoteObject;
 
 import org.omg.CORBA.portable.ObjectImpl;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
 import com.ibm.websphere.ejbcontainer.AmbiguousEJBReferenceException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejb.injection.annotation.EJBImpl;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.javaee.dd.common.EJBRef;

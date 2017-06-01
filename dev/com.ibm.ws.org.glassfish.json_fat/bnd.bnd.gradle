@@ -6,8 +6,9 @@ src: \
 
 publish.wlp.jar.disabled: true
 
+test.project: true
+
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
 	com.ibm.ws.componenttest;version=latest, \
 	fattest.simplicity;version=latest, \

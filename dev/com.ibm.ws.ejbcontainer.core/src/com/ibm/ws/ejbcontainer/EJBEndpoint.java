@@ -23,7 +23,7 @@ import com.ibm.websphere.csi.J2EEName;
 public interface EJBEndpoint {
 
     /**
-     * @return the J2EE name for the EJB; unique within the server
+     * @return the Java EE name for the EJB; unique within the server
      */
     J2EEName getJ2EEName();
 

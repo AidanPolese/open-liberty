@@ -4,6 +4,16 @@ bVersion=1.0
 -includeresource: \
 	@${repo;com.ibm.ws.ejbcontainer.remote.portable.core}
 
+publish.wlp.jar.disabled: true
+
 -buildpath: \
 	com.ibm.websphere.javaee.ejb.3.1;version=latest, \
 	com.ibm.ws.ejbcontainer.remote.portable.core;version=latest
+
+publish.wlp.jar.suffix: clients
+
+-outputmask: ejbRemotePortable.jar
+
+publish.wlp.jar.include: ejbRemotePortable.jar
+
+publish.wlp.jar.rename: false

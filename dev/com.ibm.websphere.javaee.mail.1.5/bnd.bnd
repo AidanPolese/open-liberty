@@ -19,5 +19,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/javax.mail-api-1.5.0.jar;version=file

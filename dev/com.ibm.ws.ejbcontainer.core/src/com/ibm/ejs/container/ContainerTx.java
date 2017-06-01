@@ -25,8 +25,6 @@ import com.ibm.ejs.container.lock.Locker;
 import com.ibm.ejs.container.util.ExceptionUtil;
 import com.ibm.ejs.container.util.MethodAttribUtils;
 import com.ibm.ejs.csi.UOWControl;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.tx.jta.embeddable.LocalTransactionSettings;
 import com.ibm.websphere.cpi.CPIException;
 import com.ibm.websphere.csi.BeanInstanceInfo;
@@ -34,6 +32,8 @@ import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.CSITransactionRolledbackException;
 import com.ibm.websphere.csi.TransactionListener;
 import com.ibm.websphere.csi.TxContextChange;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.LocalTransaction.ContainerSynchronization;
 import com.ibm.ws.LocalTransaction.LocalTransactionCoordinator;
 import com.ibm.ws.ejbcontainer.InternalConstants;
@@ -1087,7 +1087,7 @@ public class ContainerTx
     {
         // This method is overridden in WASContainerTx to allow for Persistence
         // Manager logic to be moved out of shared logic and into specific
-        // tWAS logic.
+        // traditional WAS logic.
     }
 
     // begin F743-425.1
@@ -1542,7 +1542,7 @@ public class ContainerTx
     {
         // This method is overridden in WASContainerTx to allow for Persistence
         // Manager logic to be moved out of shared logic and into specific
-        // tWAS logic.
+        // traditional WAS logic.
     } // flush
 
     /**
@@ -1852,7 +1852,7 @@ public class ContainerTx
     {
         // This method is overridden in WASContainerTx to allow for AccessIntent
         // logic to be moved out of shared logic and into specific
-        // tWAS logic.
+        // traditional WAS logic.
     }
 
     // d165585 Begins

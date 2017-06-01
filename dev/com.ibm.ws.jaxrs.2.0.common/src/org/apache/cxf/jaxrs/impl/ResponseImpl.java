@@ -279,24 +279,19 @@ public final class ResponseImpl extends Response {
 
     private Date doGetDate(String dateHeader) {
         Object value = metadata.getFirst(dateHeader);
-        return value == null || value instanceof Date ? (Date) value
-                        : HttpUtils.getHttpDate(value.toString());
+        return value == null || value instanceof Date ? (Date) value : HttpUtils.getHttpDate(value.toString());
     }
 
     @Override
     public EntityTag getEntityTag() {
         Object header = metadata.getFirst(HttpHeaders.ETAG);
-        return header == null || header instanceof EntityTag ? (EntityTag) header
-                        : EntityTag.valueOf(header.toString());
+        return header == null || header instanceof EntityTag ? (EntityTag) header : EntityTag.valueOf(header.toString());
     }
 
     @Override
     public Locale getLanguage() {
-        //defect 212483, webcontainer will set HttpHeaders.CONTENT_LANGUAGE automatically,
-        //so we use another header.
-        Object header = metadata.getFirst(ResponseBuilderImpl.CONTENT_LANGUAGE_CXF);
-        return header == null || header instanceof Locale ? (Locale) header
-                        : HttpUtils.getLocale(header.toString());
+        Object header = metadata.getFirst(HttpHeaders.CONTENT_LANGUAGE);
+        return header == null || header instanceof Locale ? (Locale) header : HttpUtils.getLocale(header.toString());
     }
 
     @Override
@@ -313,15 +308,13 @@ public final class ResponseImpl extends Response {
     @Override
     public URI getLocation() {
         Object header = metadata.getFirst(HttpHeaders.LOCATION);
-        return header == null || header instanceof URI ? (URI) header
-                        : URI.create(header.toString());
+        return header == null || header instanceof URI ? (URI) header : URI.create(header.toString());
     }
 
     @Override
     public MediaType getMediaType() {
         Object header = metadata.getFirst(HttpHeaders.CONTENT_TYPE);
-        return header == null || header instanceof MediaType ? (MediaType) header
-                        : (MediaType) JAXRSUtils.toMediaType(header.toString());
+        return header == null || header instanceof MediaType ? (MediaType) header : (MediaType) JAXRSUtils.toMediaType(header.toString());
     }
 
     @Override
@@ -338,69 +331,33 @@ public final class ResponseImpl extends Response {
         return false;
     }
 
-    //Liberty Change start
-//    public Link getLink(String relation) {
-//        Set<Map.Entry<String, Link>> entries = getAllLinks().entrySet();
-//        for (Map.Entry<String, Link> entry : entries) {
-//            if (entry.getKey().contains(relation)) {
-//                return entry.getValue();
-//            }
-//        }
-//        return null;
-//    }
-
     @Override
     public Link getLink(String relation) {
-        for (Link link : getLinks())
-        {
-            String rel = link.getRel();
-            if (rel != null && rel.contains(relation))
-            {
+        Set<Link> links = getAllLinks();
+        for (Link link : links) {
+            if (link.getRel() != null && link.getRel().equals(relation)) {
                 return link;
             }
-
         }
         return null;
-
     }
 
-    // Liberty Change end
     @Override
     public Link.Builder getLinkBuilder(String relation) {
         Link link = getLink(relation);
         return link == null ? null : Link.fromLink(link);
     }
 
-    //Liberty Change start
-//    @Override
-//    public Set<Link> getLinks() {
-//        return new HashSet<Link>(getAllLinks().values());
-//    }
-//
-//    private Map<String, Link> getAllLinks() {
-//        List<Object> linkValues = metadata.get(HttpHeaders.LINK);
-//        if (linkValues == null) {
-//            return Collections.emptyMap();
-//        } else {
-//            Map<String, Link> links = new LinkedHashMap<String, Link>();
-//            for (Object o : linkValues) {
-//                Link link = o instanceof Link ? (Link) o : Link.valueOf(o.toString());
-//                if (!link.getUri().isAbsolute()) {
-//                    URI requestURI = URI.create((String) outMessage.get(Message.REQUEST_URI));
-//                    link = Link.fromLink(link).baseUri(requestURI).build();
-//                }
-//                links.put(link.getRel(), link);
-//            }
-//            return links;
-//        }
-//    }
     @Override
     public Set<Link> getLinks() {
+        return new HashSet<>(getAllLinks());
+    }
+
+    private Set<Link> getAllLinks() {
         List<Object> linkValues = metadata.get(HttpHeaders.LINK);
         if (linkValues == null) {
             return Collections.emptySet();
         } else {
-//            Map<String, Link> links = new LinkedHashMap<String, Link>();
             Set<Link> links = new LinkedHashSet<Link>();
             for (Object o : linkValues) {
                 Link link = o instanceof Link ? (Link) o : Link.valueOf(o.toString());
@@ -409,13 +366,11 @@ public final class ResponseImpl extends Response {
                     link = Link.fromLink(link).baseUri(requestURI).build();
                 }
                 links.add(link);
-
             }
             return links;
         }
     }
 
-    //Liberty Change end
     @Override
     public <T> T readEntity(Class<T> cls) throws ProcessingException, IllegalStateException {
         return readEntity(cls, new Annotation[] {});
@@ -427,31 +382,27 @@ public final class ResponseImpl extends Response {
     }
 
     @Override
-    public <T> T readEntity(Class<T> cls, Annotation[] anns) throws ProcessingException,
-                    IllegalStateException {
+    public <T> T readEntity(Class<T> cls, Annotation[] anns) throws ProcessingException, IllegalStateException {
         //defect 211445
         return doReadEntity(cls, cls, anns, true);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T readEntity(GenericType<T> genType, Annotation[] anns) throws ProcessingException,
-                    IllegalStateException {
+    public <T> T readEntity(GenericType<T> genType, Annotation[] anns) throws ProcessingException, IllegalStateException {
         //defect 211445
         return doReadEntity((Class<T>) genType.getRawType(),
                             genType.getType(), anns, true);
     }
 
     // convenience method for classes that have not been overwritten with liberty-specific changes
-    public <T> T doReadEntity(Class<T> cls, Type t, Annotation[] anns) throws ProcessingException,
-                    IllegalStateException {
+    public <T> T doReadEntity(Class<T> cls, Type t, Annotation[] anns) throws ProcessingException, IllegalStateException {
         return doReadEntity(cls, t, anns, false);
     }
 
     //defect 211445, add a argument to differ if the call is from readEntity or handleResponse
     @FFDCIgnore({ NoContentException.class, Exception.class })
-    public <T> T doReadEntity(Class<T> cls, Type t, Annotation[] anns, boolean closeAfterRead) throws ProcessingException,
-                    IllegalStateException {
+    public <T> T doReadEntity(Class<T> cls, Type t, Annotation[] anns, boolean closeAfterRead) throws ProcessingException, IllegalStateException {
 
         checkEntityIsClosed();
         //defect 211445, according to javadoc, should close when is not buffered.
@@ -467,7 +418,7 @@ public final class ResponseImpl extends Response {
             mediaType = MediaType.WILDCARD_TYPE;
         }
 
-        // the stream is available if entity is IS or 
+        // the stream is available if entity is IS or
         // message contains XMLStreamReader or Reader
         boolean entityStreamAvailable = entityStreamAvailable();
         InputStream entityStream = null;
@@ -480,8 +431,9 @@ public final class ResponseImpl extends Response {
         }
 
         // we need to check for readers even if no IS is set - the readers may still do it
-        List<ReaderInterceptor> readers = outMessage == null ? null : ProviderFactory.getInstance(outMessage)
-                        .createMessageBodyReaderInterceptor(cls, t, anns, mediaType, outMessage, entityStreamAvailable, null);
+        List<ReaderInterceptor> readers = outMessage == null ? null : ProviderFactory.getInstance(outMessage).createMessageBodyReaderInterceptor(cls, t, anns, mediaType,
+                                                                                                                                                 outMessage, entityStreamAvailable,
+                                                                                                                                                 null);
 
         if (readers != null) {
             try {
@@ -555,7 +507,7 @@ public final class ResponseImpl extends Response {
         if (entity == null) {
             Message inMessage = getResponseMessage();
             return inMessage != null && (inMessage.getContent(XMLStreamReader.class) != null
-                   || inMessage.getContent(Reader.class) != null);
+                                         || inMessage.getContent(Reader.class) != null);
         } else {
             return entity instanceof InputStream;
         }
@@ -575,7 +527,7 @@ public final class ResponseImpl extends Response {
     }
 
     protected void autoClose(Class<?> cls, boolean exception) {
-        if (!entityBufferred && cls != InputStream.class
+        if (!entityBufferred && !JAXRSUtils.isStreamingOutType(cls)
             && (exception || MessageUtils.isTrue(outMessage.getContextualProperty("response.stream.auto.close")))) {
             close();
         }
@@ -651,7 +603,7 @@ public final class ResponseImpl extends Response {
         }
     }
 
-    private static boolean isBasicType(Class type) {
+    private static boolean isBasicType(Class<?> type) {
         if (PrimitiveTypes.forType(type) != null) {
             return true;
         }

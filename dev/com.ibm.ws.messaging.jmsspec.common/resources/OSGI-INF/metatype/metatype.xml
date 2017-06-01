@@ -44,6 +44,7 @@
  <OCD id="com.ibm.ws.jca.jmsConnectionFactory" ibm:alias="jmsConnectionFactory" ibm:any="1" ibm:extends="com.ibm.ws.jca.connectionFactory.supertype" ibm:supportExtensions="true" name="%jmsConnectionFactory" description="%jmsConnectionFactory.desc">
   <AD id="creates.objectClass"                type="String"  default="javax.jms.ConnectionFactory" cardinality="1" ibm:final="true" name="internal" description="internal use only"/>
   <AD id="properties"                      type="String"  required="false" cardinality="1" ibm:type="pid" ibm:reference="com.ibm.ws.jca.jmsConnectionFactory.properties" ibm:flat="true" name="internal" description="internal use only"/>
+  <AD id="javaCompDefaultName"             type="String"  required="false" name="internal" description="internal use only" /> 
  </OCD>
 
  <!-- JMS Connection Factory Properties (generic supertype) -->

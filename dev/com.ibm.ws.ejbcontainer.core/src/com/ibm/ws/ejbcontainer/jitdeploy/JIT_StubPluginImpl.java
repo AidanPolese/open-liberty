@@ -12,7 +12,7 @@
 package com.ibm.ws.ejbcontainer.jitdeploy;
 
 /**
- * Override JIT_StubPluginImpl as provided by tWAS. Liberty doesn't support
+ * Override JIT_StubPluginImpl as provided by traditional WAS. Liberty doesn't support
  * plugin stubs.
  */
 public final class JIT_StubPluginImpl {

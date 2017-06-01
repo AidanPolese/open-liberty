@@ -50,9 +50,6 @@ public class ResponseBuilderImpl extends ResponseBuilder implements Cloneable {
     private final MultivaluedMap<String, Object> metadata = new MetadataMap<String, Object>();
     private Annotation[] annotations;
 
-    //Liberty-specific string
-    public static final String CONTENT_LANGUAGE_CXF = "Content-Language-Cxf";
-
     public ResponseBuilderImpl() {}
 
     private ResponseBuilderImpl(ResponseBuilderImpl copy) {
@@ -68,8 +65,7 @@ public class ResponseBuilderImpl extends ResponseBuilder implements Cloneable {
             status = 204;
         }
         ResponseImpl r = new ResponseImpl(status);
-        MetadataMap<String, Object> m =
-                        new MetadataMap<String, Object>(metadata, false, true);
+        MetadataMap<String, Object> m = new MetadataMap<String, Object>(metadata, false, true);
         r.addMetadata(m);
         r.setEntity(entity, annotations);
         reset();
@@ -104,17 +100,11 @@ public class ResponseBuilderImpl extends ResponseBuilder implements Cloneable {
 
     @Override
     public ResponseBuilder language(Locale locale) {
-        //Liberty defect 212483, webcontainer will set HttpHeaders.CONTENT_LANGUAGE automatically,
-        //so we use another header.
-        setHeader(ResponseBuilderImpl.CONTENT_LANGUAGE_CXF, locale);
         return setHeader(HttpHeaders.CONTENT_LANGUAGE, locale);
     }
 
     @Override
     public ResponseBuilder language(String language) {
-        //Liberty defect 212483, webcontainer will set HttpHeaders.CONTENT_LANGUAGE automatically,
-        //so we use another header.
-        setHeader(ResponseBuilderImpl.CONTENT_LANGUAGE_CXF, language);
         return setHeader(HttpHeaders.CONTENT_LANGUAGE, language);
     }
 
@@ -125,10 +115,7 @@ public class ResponseBuilderImpl extends ResponseBuilder implements Cloneable {
             if (currentMessage != null) {
 
                 UriInfo ui = new UriInfoImpl(currentMessage.getExchange().getInMessage(), null);
-                loc = ui.getBaseUriBuilder()
-                                .path(loc.getRawPath())
-                                .replaceQuery(loc.getRawQuery())
-                                .fragment(loc.getRawFragment()).buildFromEncoded();
+                loc = ui.getBaseUriBuilder().path(loc.getRawPath()).replaceQuery(loc.getRawQuery()).fragment(loc.getRawFragment()).buildFromEncoded();
             }
         }
         return setHeader(HttpHeaders.LOCATION, loc);

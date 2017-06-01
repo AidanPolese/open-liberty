@@ -32,6 +32,8 @@ Service-Component:\
     lookupDelegate=com.ibm.ws.jpa.JPALookupDelegate?;\
     properties:="service.vendor=IBM"
 
+instrument.classesExcludes: com/ibm/ws/ejbcontainer/jpa/resources/*.class
+
 -buildpath: \
 	com.ibm.ws.container.service;version=latest,\
 	com.ibm.ws.ejbcontainer;version=latest,\

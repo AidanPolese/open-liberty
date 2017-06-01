@@ -31,10 +31,10 @@ import javax.ejb.TimerHandle;
 
 import com.ibm.ejs.container.passivator.PassivatorSerializable;
 import com.ibm.ejs.container.passivator.PassivatorSerializableHandle;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.util.ParsedScheduleExpression;
 
 /**

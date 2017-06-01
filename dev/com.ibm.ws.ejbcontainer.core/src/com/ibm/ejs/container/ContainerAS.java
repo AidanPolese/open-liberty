@@ -17,12 +17,12 @@ import java.util.Iterator;
 
 import javax.transaction.Synchronization;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.cpi.CPIException;
 import com.ibm.websphere.csi.CSIException;
 import com.ibm.websphere.csi.CSITransactionRolledbackException;
 import com.ibm.websphere.csi.EJBKey;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.LocalTransaction.ContainerSynchronization;
 
@@ -46,10 +46,9 @@ public class ContainerAS
 {
     private static final String CLASS_NAME = ContainerAS.class.getName();
 
-    private static final TraceComponent tc =
-                    Tr.register(CLASS_NAME,
-                                "EJBContainer",
-                                "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(ContainerAS.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     /**
      * Various states for ContainerAS

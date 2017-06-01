@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="wlp.lib.extract_fat" default="buildandrun" basedir=".">
-  <mkdir dir="publish/servers/dependencyHostServer/apps" />
+        <mkdir dir="publish/servers/dependencyHostServer/apps" />
 	<import file="../ant_build/public_imports/fat_imports.xml" />
 
 	<!-- Add jar files not built by this project that are needed by the client code -->
@@ -12,28 +12,9 @@
 	     Note any files under publish/files are already published and do not need
 	     to be added here. -->
 	<target name="addRequiredFiles">
-    <available file="../wlp.lib.extract/build/classes" property="extract.src.exists" />
-    <iff>
-        <istrue value="${extract.src.exists}"/>
-        <then>
-          <!-- use src project to get classes -->
-          <zip destfile="${required.files.dir}/wlp.lib.extract.zip">
-            <fileset dir="../wlp.lib.extract/build/classes" />
-          </zip>
-        </then>
-        <else>
-          <!-- use ivy resolved jar for classes -->
-          <path id="wlp.lib.extract.path">
-            <fileset dir="../prereq.published/lib" includes="wlp.lib.extract-*.jar"/>
-          </path>
-          <property name="wlp.lib.extract.jar" refid="wlp.lib.extract.path"/>
-
-          <zip destfile="${required.files.dir}/wlp.lib.extract.zip">
-            <zipfileset src="${wlp.lib.extract.jar}" includes="**/*.class" />
-          </zip>
-        </else>
-    </iff>
-
+		<zip destfile="${required.files.dir}/wlp.lib.extract.zip">
+			<zipfileset src="../build.image/wlp/lib/com.ibm.ws.kernel.feature_1.0.${micro.version}.jar" includes="wlp/**/*.class"/>
+		</zip>
 		<copyfile dest="${required.files.dir}/productSampleServer.xml" src="publish/files/sampleServer.xml"/>
 	</target>
 

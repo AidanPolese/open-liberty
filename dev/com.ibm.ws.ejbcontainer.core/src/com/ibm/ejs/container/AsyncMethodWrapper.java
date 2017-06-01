@@ -18,8 +18,8 @@ import java.util.concurrent.Future;
 
 import javax.ejb.Timer;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.EJBPMICollaborator;
 import com.ibm.ws.ffdc.FFDCFilter;
 

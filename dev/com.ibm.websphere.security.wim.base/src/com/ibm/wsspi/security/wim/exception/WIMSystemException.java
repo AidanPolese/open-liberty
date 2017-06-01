@@ -17,6 +17,8 @@ package com.ibm.wsspi.security.wim.exception;
  **/
 public class WIMSystemException extends WIMException {
 
+    private static final long serialVersionUID = -9080586676695903077L;
+
     /**
      * Creates the virtual member manager system level exception.
      */
@@ -26,7 +28,7 @@ public class WIMSystemException extends WIMException {
 
     /**
      * Creates the WIMSystemException.
-     * 
+     *
      * @param message The message or message key of the exception.
      **/
     public WIMSystemException(String key, String message) {
@@ -35,7 +37,7 @@ public class WIMSystemException extends WIMException {
 
     /**
      * Creates the WIMSystemException.
-     * 
+     *
      * @param cause The cause of the exception.
      **/
     public WIMSystemException(Throwable cause) {
@@ -44,7 +46,7 @@ public class WIMSystemException extends WIMException {
 
     /**
      * Creates the WIMSystemException.
-     * 
+     *
      * @param cause The cause of the exception.
      **/
     public WIMSystemException(String key, String message, Throwable cause) {

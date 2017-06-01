@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2013, 2014
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 
@@ -24,9 +24,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ibm.websphere.simplicity.log.Log;
+
 import componenttest.annotation.AllowedFFDC;
 import componenttest.custom.junit.runner.Mode;
 import componenttest.custom.junit.runner.Mode.TestMode;
+import componenttest.topology.impl.JavaInfo;
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.impl.LibertyServerFactory;
 
@@ -57,7 +59,7 @@ public class FeatureTest {
 
     /**
      * Copy the necessary features and bundles to the liberty server directories
-     * 
+     *
      * @throws Exception
      */
     @BeforeClass
@@ -85,7 +87,7 @@ public class FeatureTest {
 
     /**
      * This method removes all the testing artifacts from the server directories.
-     * 
+     *
      * @throws Exception
      */
     @AfterClass
@@ -130,19 +132,19 @@ public class FeatureTest {
      * This test ensures that the name of the .mf file does not matter and that the features
      * listed under Subsystem-Content are also installed.
      * The test ensures that this happens during server update.
-     * 
+     *
      * The feature structure is as follows:
-     * 
+     *
      * featureX, featureY, featureZ are all normal features.
-     * 
+     *
      * featureX is defined in featureXx.mf by IBM-ShortName: featureX-1.0
      * featureY is defined in featureYy.mf by IBM-ShortName: featureY-1.0
      * featureZ is defined in featureZz.mf by IBM-ShortName: featureZ-1.0
-     * 
+     *
      * featureX is a feature that has featureY listed under Subsystem-Content.
      * featureY is a feature that has featureZ listed under Subsystem-Content.
      * featureZ is a feature that has no other features listed under Subsystem-Content.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -196,6 +198,9 @@ public class FeatureTest {
     @Test
     public void testFeatureJavaVersionDependencyCheck() throws Exception {
         final String METHOD_NAME = "testFeatureJavaVersionDependencyCheck";
+
+        if (JavaInfo.forServer(server).majorVersion() > 8)
+            return;
 
         Log.entering(c, METHOD_NAME);
 
@@ -255,17 +260,17 @@ public class FeatureTest {
      * Subsystem-Content feature's .mf file is not in lib/features when the
      * server is started and added later before server.xml is updated.
      * The test ensures that this happens during server update.
-     * 
+     *
      * The feature structure is as follows:
-     * 
+     *
      * featureV, featureW are normal features.
-     * 
+     *
      * featureV is defined in featureVv.mf by IBM-ShortName: featureV-1.0
      * featureW is defined in featureWw.mf by IBM-ShortName: featureW-1.0
-     * 
+     *
      * featureV is a feature that has featureW listed under Subsystem-Content.
      * featureW is a feature that has no other features listed under Subsystem-Content.
-     * 
+     *
      * @throws Exception
      */
     @Mode(TestMode.FULL)
@@ -324,21 +329,21 @@ public class FeatureTest {
      * listed under Subsystem-Content are not installed because it's manifest file
      * does not exist in lib/features.
      * The test ensures that this happens during server update.
-     * 
+     *
      * expected messages
      * CWWKF0001E: A feature definition could not be found for com.ibm.websphere.appserver.featureW-1.0
      * CWWKF0012I: The server installed the following features: [featureV-1.0].
-     * 
+     *
      * The feature structure is as follows:
-     * 
+     *
      * featureV, featureW are normal features.
-     * 
+     *
      * featureV is defined in featureVv.mf by IBM-ShortName: featureV-1.0
      * featureW is defined in featureWw.mf by IBM-ShortName: featureW-1.0
-     * 
+     *
      * featureV is a feature that has featureW listed under Subsystem-Content.
      * featureW is a feature that has no other features listed under Subsystem-Content.
-     * 
+     *
      * @throws Exception
      */
     @Mode(TestMode.FULL)
@@ -397,11 +402,11 @@ public class FeatureTest {
      * This test ensures that a .mf file added to lib/features after the server is
      * up and running will be found and installed when the feature is specified in server.xml.
      * The test ensures that this happens during server update.
-     * 
+     *
      * The feature structure is as follows:
-     * 
+     *
      * featureA is defined in featureA.mf by IBM-ShortName: featureA-1.0
-     * 
+     *
      * @throws Exception
      */
     @Mode(TestMode.FULL)
@@ -454,11 +459,11 @@ public class FeatureTest {
      * will be found and installed when the feature is specified in server.xml
      * as FEATUREA-1.0. 850 was not case specific. 855 needs to also
      * not be case specific.
-     * 
+     *
      * The feature structure is as follows:
-     * 
+     *
      * featureA is defined in featureA.mf by IBM-ShortName: featureA-1.0
-     * 
+     *
      * @throws Exception
      */
     @Mode(TestMode.FULL)
@@ -512,11 +517,11 @@ public class FeatureTest {
      * will be found and installed when the feature is specified in server.xml
      * as featurea-1.0. 850 was not case specific. 855 needs to also
      * not be case specific.
-     * 
+     *
      * The feature structure is as follows:
-     * 
+     *
      * featureA is defined in featureA.mf by IBM-ShortName: featureA-1.0
-     * 
+     *
      * @throws Exception
      */
     @Mode(TestMode.FULL)
@@ -534,7 +539,7 @@ public class FeatureTest {
         server.copyFileToLibertyInstallRoot("lib", "bundle1_1.0.0.jar");
         server.startServer(METHOD_NAME + ".log");
 
-        // Now move the server xml with featurea-1.0 
+        // Now move the server xml with featurea-1.0
         // 850 was not case specific. 855 needs to be that way as well.
         TestUtils.makeConfigUpdateSetMark(server, "server_add_feature_all_lower_a.xml");
         // Get the install feature message for the initial set up of updated features
@@ -566,19 +571,19 @@ public class FeatureTest {
     /**
      * TestDescription:
      * This test ensures that the CWWKF0012I message is present in initial provisioning
-     * 
+     *
      * The feature structure is as follows:
-     * 
+     *
      * featureX, featureY, featureZ are all normal features.
-     * 
+     *
      * featureX is defined in featureXx.mf by IBM-ShortName: featureX-1.0
      * featureY is defined in featureYy.mf by IBM-ShortName: featureY-1.0
      * featureZ is defined in featureZz.mf by IBM-ShortName: featureZ-1.0
-     * 
+     *
      * featureX is a feature that has featureY listed under Subsystem-Content.
      * featureY is a feature that has featureZ listed under Subsystem-Content.
      * featureZ is a feature that has no other features listed under Subsystem-Content.
-     * 
+     *
      * @throws Exception
      */
     @Test

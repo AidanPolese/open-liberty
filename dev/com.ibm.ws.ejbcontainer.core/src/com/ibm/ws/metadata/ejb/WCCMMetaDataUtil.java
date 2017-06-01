@@ -21,9 +21,9 @@ import java.util.TreeSet;
 
 import com.ibm.ejs.container.BeanMetaData;
 import com.ibm.ejs.container.EJBConfigurationException;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.InternalConstants;
 import com.ibm.ws.javaee.dd.ejb.ComponentViewableBean;
 import com.ibm.ws.javaee.dd.ejb.EJBJar;
@@ -35,8 +35,7 @@ import com.ibm.ws.javaee.dd.ejb.Session;
  */
 public class WCCMMetaDataUtil
 {
-    private static final String CLASS_NAME = WCCMMetaDataUtil.class.getName();
-    private static final TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(WCCMMetaDataUtil.class,
                                                          "EJBContainer",
                                                          "com.ibm.ejs.container.container");
     private static final String MERGE = "     Merged DD ";

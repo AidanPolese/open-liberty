@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class SortControlException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -7663429466730544935L;
+
     /**
      *
      */

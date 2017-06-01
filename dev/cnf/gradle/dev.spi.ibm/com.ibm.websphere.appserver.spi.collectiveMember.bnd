@@ -14,5 +14,4 @@ Export-Package: com.ibm.wsspi.collective.repository,com.ibm.wsspi.collective.rep
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.collective;version=latest

@@ -15,7 +15,6 @@ import java.io.Writer;
 import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -67,13 +66,13 @@ import com.ibm.jbatch.container.persistence.jpa.StepThreadInstanceKey;
 import com.ibm.jbatch.container.persistence.jpa.TopLevelStepExecutionEntity;
 import com.ibm.jbatch.container.persistence.jpa.TopLevelStepInstanceEntity;
 import com.ibm.jbatch.container.persistence.jpa.TopLevelStepInstanceKey;
+import com.ibm.jbatch.container.services.IJPAQueryHelper;
 import com.ibm.jbatch.container.services.IPersistenceManagerService;
 import com.ibm.jbatch.container.util.WSStepThreadExecutionAggregateImpl;
 import com.ibm.jbatch.container.ws.BatchLocationService;
 import com.ibm.jbatch.container.ws.InstanceState;
 import com.ibm.jbatch.container.ws.RemotablePartitionState;
 import com.ibm.jbatch.container.ws.WSPartitionStepThreadExecution;
-import com.ibm.jbatch.container.ws.WSSearchObject;
 import com.ibm.jbatch.container.ws.WSStepThreadExecutionAggregate;
 import com.ibm.jbatch.container.ws.impl.WSStartupRecoveryServiceImpl;
 import com.ibm.jbatch.spi.services.IBatchConfig;
@@ -483,21 +482,19 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
     }
 
     @Override
-    public List<JobInstanceEntity> getJobInstances(WSSearchObject wsso, int page, int pageSize) {
+    public List<JobInstanceEntity> getJobInstances(IJPAQueryHelper queryHelper, int page, int pageSize) {
         ArrayList<JobInstanceEntity> result = new ArrayList<JobInstanceEntity>();
         List<JobInstanceEntity> jobList;
         EntityManager em = getPsu().createEntityManager();
         try {
 
-            JPAQueryHelper jpaHelper = new JPAQueryHelper(wsso);
-
             // Obtain the JPA query from the Helper
-            String jpaQueryString = jpaHelper.getQuery();
+            String jpaQueryString = queryHelper.getQuery();
 
             // Build and populate the parameters of the JPA query
             TypedQuery<JobInstanceEntity> query = em.createQuery(jpaQueryString, JobInstanceEntity.class);
 
-            jpaHelper.setQueryParameters(query);
+            queryHelper.setQueryParameters(query);
 
             jobList = query.setFirstResult(page * pageSize).setMaxResults(pageSize).getResultList();
 
@@ -972,23 +969,23 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
                     try {
                         verifyStatusTransitionIsValid(exec, finalBatchStatus);
 
-                    exec.setBatchStatus(finalBatchStatus);
-                    exec.getJobInstance().setBatchStatus(finalBatchStatus);
-                    exec.setExitStatus(finalExitStatus);
-                    exec.getJobInstance().setExitStatus(finalExitStatus);
-                    exec.getJobInstance().setLastUpdatedTime(endTime);
-                    // set the state to be the same value as the batchstatus
-                    // Note: we only want to do this is if the batchStatus is one of the "done" statuses.
-                    if (FINAL_STATUS_SET.contains(finalBatchStatus)) {
-                        InstanceState newInstanceState = InstanceState.valueOf(finalBatchStatus.toString());
+                        exec.setBatchStatus(finalBatchStatus);
+                        exec.getJobInstance().setBatchStatus(finalBatchStatus);
+                        exec.setExitStatus(finalExitStatus);
+                        exec.getJobInstance().setExitStatus(finalExitStatus);
+                        exec.getJobInstance().setLastUpdatedTime(endTime);
+                        // set the state to be the same value as the batchstatus
+                        // Note: we only want to do this is if the batchStatus is one of the "done" statuses.
+                        if (FINAL_STATUS_SET.contains(finalBatchStatus)) {
+                            InstanceState newInstanceState = InstanceState.valueOf(finalBatchStatus.toString());
 
                             verifyStateTransitionIsValid(exec.getJobInstance(), newInstanceState);
 
-                        exec.getJobInstance().setInstanceState(newInstanceState);
-                    }
-                    exec.setLastUpdatedTime(endTime);
-                    exec.setEndTime(endTime);
-                    return exec;
+                            exec.getJobInstance().setInstanceState(newInstanceState);
+                        }
+                        exec.setLastUpdatedTime(endTime);
+                        exec.setEndTime(endTime);
+                        return exec;
                     } catch (BatchIllegalJobStatusTransitionException e) {
                         throw new PersistenceException(e);
                     }
@@ -2487,13 +2484,9 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
         EntityManager em = psu.createEntityManager();
         try {
             // Verify that JOBPARAMETER exists by running a query against it.
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("", "");
-            WSSearchObject wsso = new WSSearchObject(null, null, null, null, null, null, params);
-            JPAQueryHelper jpaHelper = new JPAQueryHelper(wsso);
-            TypedQuery<JobInstanceEntity> query = em.createQuery(jpaHelper.getQuery(), JobInstanceEntity.class);
-            jpaHelper.setQueryParameters(query);
-            query.getResultList();
+            String queryString = "SELECT COUNT(e.jobParameterElements) FROM JobExecutionEntityV2 e";
+            TypedQuery<Long> query = em.createQuery(queryString, Long.class);
+            query.getSingleResult();
             logger.fine("The JOBPARAMETER table exists, job execution table version = 2");
             executionVersion = 2;
             return executionVersion;
@@ -2535,11 +2528,9 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
         EntityManager em = psu.createEntityManager();
         try {
             // Verify that UPDATETIME column exists by running a query against it.
-            WSSearchObject wsso = new WSSearchObject(null, null, null, null, null, null, null);
-            JPAQueryHelper jpaHelper = new JPAQueryHelper(wsso);
-            TypedQuery<JobInstanceEntity> query = em.createQuery(jpaHelper.getQuery(), JobInstanceEntity.class);
-            jpaHelper.setQueryParameters(query);
-            query.getResultList();
+            String queryString = "SELECT COUNT(x.lastUpdatedTime) FROM JobInstanceEntityV2 x";
+            TypedQuery<Long> query = em.createQuery(queryString, Long.class);
+            query.getSingleResult();
             logger.fine("The UPDATETIME column exists, job instance table version = 2");
             instanceVersion = 2;
             return instanceVersion;

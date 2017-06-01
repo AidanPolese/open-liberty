@@ -14,5 +14,4 @@ Export-Package: com.ibm.wsspi.classloading,com.ibm.wsspi.library
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.classloading

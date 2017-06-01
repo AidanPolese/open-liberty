@@ -25,9 +25,9 @@ import javax.naming.NamingException;
 import javax.naming.NoInitialContextException;
 import javax.rmi.PortableRemoteObject;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.J2EEName;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 //
 //     ***** Obsolete ****

@@ -46,7 +46,11 @@ public class AuditEvent {
     public final static String OBSERVER_HOST_AGENT = "observer.host.agent";
 
     public final static String TARGET = "target";
+    public final static String TARGET_ACTION = "target.action";
     public final static String TARGET_ID = "target.id";
+    public final static String TARGET_UNIQUENAME = "target.uniqueName";
+    public final static String TARGET_ENTITY_TYPE = "target.entityType";
+    public final static String TARGET_EXTENDED_PROPERTIES = "target.extendedProperties";
     public final static String TARGET_METHOD = "target.method";
     public final static String TARGET_NAME = "target.name";
     public final static String TARGET_APPNAME = "target.appname";
@@ -56,6 +60,7 @@ public class AuditEvent {
     public final static String TARGET_HOST_AGENT = "target.host.agent";
     public final static String TARGET_CREDENTIAL_TYPE = "target.credential.type";
     public final static String TARGET_CREDENTIAL_TOKEN = "target.credential.token";
+    public final static String TARGET_REPOSITORY_ID = "target.repositoryId";
     public static final String TARGET_SESSION = "target.session";
     public static final String TARGET_DELEGATION_USERS = "target.delegation.users";
     public static final String TARGET_ORIGINAL_AUTH_TYPE = "target.authtype.original";
@@ -105,6 +110,16 @@ public class AuditEvent {
     public static final String REASON_TYPE_EJB_PERMITALL = "EJB Permit All";
     public static final String REASON_TYPE_EJB_NO_ROLES = "EBJ No Roles";
     public static final String REASON_TYPE_EJB_NO_AUTHZ_SERVICE = "EJB No Authorization Service Found";
+
+    public static final String REASON_TYPE_MISSING_ENTITY_DATA_OBJECT = "Missing entity data object"; // 201
+    public static final String REASON_TYPE_ACTION_MULTIPLE_ENTITIES_SPECIFIED = "Multiple entities specified"; // 202
+    public static final String REASON_TYPE_ENTITY_IDENTIFIER_NOT_SPECIFIED = "Entity identifier not specified"; // 203
+    public static final String REASON_TYPE_ENTITY_NOT_IN_REALM_SCOPE = "Entity not in the scope of the realm"; // 204
+    public static final String REASON_TYPE_INVALID_PARENT_UNIQUE_ID = "Invalid parent uniqueId"; // 205
+    public static final String REASON_TYPE_DEFAULT_PARENT_NOT_FOUND = "Default parent not found"; // 206
+    public static final String REASON_TYPE_MISSING_REPOSITORIES_FOR_GROUPS_CONFIGURATION = "Repository for groups is missing or indicates groups are in cross repositories"; // 207
+    public static final String REASON_TYPE_ENTITY_TYPE_NOT_SUPPORTED = "Entity type not supported"; // 208
+    public static final String REASON_TYPE_CANNOT_WRITE_TO_READ_ONLY_REPOSITORY = "Cannot write to read only repository"; // 209
 
     /**
      * Outcomes

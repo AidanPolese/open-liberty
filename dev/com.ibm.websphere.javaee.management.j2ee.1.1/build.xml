@@ -11,8 +11,23 @@
     <target name="publishToImage" depends="spec.publishToImage" />
 
 	<target name="post-compile">
-  		<rmic classname="javax.management.j2ee.Management" base="${classes.dir}" classpathref="project.class.path" iiop="true"/>
-  		<rmic classname="javax.management.j2ee.ManagementHome" base="${classes.dir}" classpathref="project.class.path" iiop="true"/>
+      <condition property="rmic.target" value="${java.home}/bin/rmic" else="${java.home}/../bin/rmic">
+        <istrue value="${is.java9}"/>
+      </condition>
+      
+      <chmod file="${rmic.target}" perm="a+rx"/>
+<!--   		<rmic classname="javax.management.j2ee.Management" compiler="forking" base="${classes.dir}" classpathref="project.class.path" iiop="true"/> -->
+<!--   		<rmic classname="javax.management.j2ee.ManagementHome" compiler="forking" base="${classes.dir}" classpathref="project.class.path" iiop="true"/> -->
+      <property name="project.class.path.prop" refid="project.class.path"/>
+      <exec executable="${rmic.target}" dir="${basedir}" resolveexecutable="true" failonerror="true">
+        <arg value="-iiop"/>
+        <arg value="-d"/>
+        <arg value="${classes.dir}"/>
+        <arg value="-classpath"/>
+        <arg value="${project.class.path.prop}${path.separator}${basedir}/build/classes/"/>
+        <arg value="javax.management.j2ee.Management"/>
+        <arg value="javax.management.j2ee.ManagementHome"/>
+      </exec>
     </target>	
     
 </project>

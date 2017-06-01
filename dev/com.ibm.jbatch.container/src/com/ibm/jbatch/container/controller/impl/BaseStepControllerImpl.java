@@ -391,6 +391,7 @@ public abstract class BaseStepControllerImpl implements IExecutionElementControl
         updateStepBatchStatus(BatchStatus.STOPPED);
         defaultExitStatusIfNecessary();
         persistStepExecutionOnEnd();
+        stepThreadHelper.sendFinalPartitionReplyMsg();
     }
 
     protected void persistStepExecutionOnEnd() {
@@ -807,14 +808,20 @@ public abstract class BaseStepControllerImpl implements IExecutionElementControl
                 runtimeStepExecution.getBatchStatus() == BatchStatus.STOPPED) {
                 ZosJBatchSMFLogging smflogger = getJBatchSMFLoggingService();
                 if (smflogger != null) {
-                    byte[] timeUsedAfter = smflogger.getTimeUsedData(); // end cpu time for partition
-                    int rc = smflogger.buildAndWritePartitionEndRecord(getRuntimePartitionExecution(),
-                                                                       stepThreadExecution.getTopLevelStepExecution().getJobExecution(),
-                                                                       runtimeStepExecution,
-                                                                       getPersistenceManagerService().getPersistenceType(),
-                                                                       getPersistenceManagerService().getDisplayId(),
-                                                                       timeUsedBefore,
-                                                                       timeUsedAfter);
+                    if (timeUsedBefore != null) {
+                        byte[] timeUsedAfter = smflogger.getTimeUsedData(); // end cpu time for partition
+                        int rc = smflogger.buildAndWritePartitionEndRecord(getRuntimePartitionExecution(),
+                                                                           stepThreadExecution.getTopLevelStepExecution().getJobExecution(),
+                                                                           runtimeStepExecution,
+                                                                           getPersistenceManagerService().getPersistenceType(),
+                                                                           getPersistenceManagerService().getDisplayId(),
+                                                                           timeUsedBefore,
+                                                                           timeUsedAfter);
+                    } else {
+                        if (logger.isLoggable(Level.FINE)) {
+                            logger.fine("Won't log SMF record since before time was never captured.  Probably step was stopped before execution.");
+                        }
+                    }
                 }
             }
 

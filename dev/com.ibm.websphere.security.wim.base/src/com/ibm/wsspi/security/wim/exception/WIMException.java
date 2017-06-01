@@ -12,9 +12,12 @@ package com.ibm.wsspi.security.wim.exception;
 /**
  * Base class representing a virtual member manager exception. This can be extended to create
  * component specific exceptions.
- * 
+ *
  **/
 public class WIMException extends Exception {
+
+    private static final long serialVersionUID = 2213794407328217976L;
+
     private String messageKey = null;
 
     /**
@@ -26,7 +29,7 @@ public class WIMException extends Exception {
 
     /**
      * Creates the WIMException.
-     * 
+     *
      * @param message The message or message key of the exception.
      **/
     public WIMException(String key, String message) {
@@ -40,7 +43,7 @@ public class WIMException extends Exception {
 
     /**
      * Creates the WIMException.
-     * 
+     *
      * @param cause The cause of the exception.
      **/
     public WIMException(Throwable cause) {
@@ -49,7 +52,7 @@ public class WIMException extends Exception {
 
     /**
      * Creates the WIMException.
-     * 
+     *
      * @param message The error message.
      * @param cause The cause of the exception.
      **/

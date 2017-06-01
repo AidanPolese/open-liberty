@@ -42,7 +42,7 @@ import com.ibm.wsspi.security.token.SingleSignonToken;
 public class SSOCookieHelperImpl implements SSOCookieHelper {
     private static final TraceComponent tc = Tr.register(SSOCookieHelperImpl.class);
 
-    private static ConcurrentMap<ByteArray, String> cookieByteStringCache = new ConcurrentHashMap<ByteArray, String>(20);
+    protected static final ConcurrentMap<ByteArray, String> cookieByteStringCache = new ConcurrentHashMap<ByteArray, String>(20);
     private static int MAX_COOKIE_STRING_ENTRIES = 100;
     private String cookieName = null;
 
@@ -162,7 +162,7 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
      * @param cookieBytes
      * @param cookieByteString
      */
-    private synchronized void updateCookieCache(ByteArray cookieBytes, String cookieByteString) {
+    protected synchronized void updateCookieCache(ByteArray cookieBytes, String cookieByteString) {
         if (cookieByteStringCache.size() > MAX_COOKIE_STRING_ENTRIES)
             cookieByteStringCache.clear();
         if (cookieByteString != null)
@@ -196,7 +196,7 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
      * 1) If we found the cookie associate with the cookie name, we will use the cookie name
      * 2) If we can not find the cookie associate with the cookie name, we will use the default cookie name LTPAToken2 if isUseOnlyCustomCookieName is false
      */
-    private String resolveCookieName(Cookie[] cookies) {
+    protected String resolveCookieName(Cookie[] cookies) {
         boolean foundCookie = false;
         String ssoCookieName = this.getSSOCookiename();
         if (cookies != null) {
@@ -213,9 +213,9 @@ public class SSOCookieHelperImpl implements SSOCookieHelper {
             return ssoCookieName;
     }
 
-    private void addLogoutCookieToList(HttpServletRequest req,
-                                       String cookieName,
-                                       java.util.ArrayList<Cookie> cookieList) {
+    protected void addLogoutCookieToList(HttpServletRequest req,
+                                         String cookieName,
+                                         java.util.ArrayList<Cookie> cookieList) {
         Cookie c = new Cookie(cookieName, "");
         c.setMaxAge(0);
         c.setPath("/");

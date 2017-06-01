@@ -11,6 +11,5 @@ instrument.disabled: true
 publish.wlp.jar.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java7}, \
 	com.ibm.ws.filetransfer.routing.archiveExpander.common;version=latest,\
 	com.ibm.ws.org.apache.commons.compress.1.10;version=latest

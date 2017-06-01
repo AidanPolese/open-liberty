@@ -10,6 +10,5 @@ instrument.disabled: true
 publish.wlp.jar.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	lib/ant-1.9.6.jar;version=file, \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest

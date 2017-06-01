@@ -10,6 +10,8 @@
  */
 package com.ibm.ws.security.wim.adapter.ldap;
 
+import static com.ibm.ws.security.wim.util.UniqueNameHelper.unescapeSpaces;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.security.cert.X509Certificate;
@@ -205,37 +207,6 @@ public class LdapHelper {
                 DN = searchRoot;
         return DN;
 
-    }
-
-    /**
-     * Replace any unnecessary escaped spaces from the input DN.
-     *
-     * @param in The input DN.
-     * @return The DN without unnecessary escaped spaces.
-     */
-    private static String unescapeSpaces(String in) {
-        char[] chars = in.toCharArray();
-        int end = chars.length;
-        StringBuffer out = new StringBuffer(in.length());
-        for (int i = 0; i < end; i++) {
-
-            /*
-             * Remove any backslashes that precede spaces.
-             */
-            boolean isSlashSpace = (chars[i] == '\\') && (i + 1 < end) && (chars[i + 1] == ' ');
-            if (isSlashSpace) {
-                boolean isStart = (i > 0) && (chars[i - 1] == '=');
-                boolean isEnd = (i + 2 >= end) || ((i + 2 < end) && (chars[i + 2] == ','));
-
-                if (!isStart && !isEnd) {
-                    ++i;
-                }
-            }
-
-            out.append(chars[i]);
-        }
-
-        return new String(out);
     }
 
     public static String unescapeDoubleBackslash(String in) {

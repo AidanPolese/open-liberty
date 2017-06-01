@@ -17,6 +17,8 @@ package com.ibm.wsspi.security.wim.exception;
  */
 public class ValidationFailException extends WIMApplicationException {
 
+    private static final long serialVersionUID = 3080618528019111415L;
+
     /**
      * Creates the Validation Fail Exception
      */
@@ -26,7 +28,7 @@ public class ValidationFailException extends WIMApplicationException {
 
     /**
      * Creates the Validation Fail Exception
-     * 
+     *
      * @param message The message or message key of the exception.
      */
     public ValidationFailException(String key, String message) {
@@ -35,7 +37,7 @@ public class ValidationFailException extends WIMApplicationException {
 
     /**
      * Creates the Validation Fail Exception
-     * 
+     *
      * @param message The message or message key of the exception.
      * @param cause The cause of the exception.
      */
@@ -45,7 +47,7 @@ public class ValidationFailException extends WIMApplicationException {
 
     /**
      * Creates the Validation Fail Exception
-     * 
+     *
      * @param cause The cause of the exception.
      */
     public ValidationFailException(Throwable cause) {

@@ -26,7 +26,6 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.cdi.web.interfaces.CDIWebRuntime;
 import com.ibm.ws.cdi.web.interfaces.PostEventListenerProvider;
 import com.ibm.ws.webcontainer.async.AsyncContextImpl;
-import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.webcontainer.servlet.IServletContext;
 
 /**
@@ -37,31 +36,13 @@ public abstract class AbstractTerminalListenerRegistration implements PostEventL
 // because we use a package-info.java for trace options, just need this to register our group and message file
     private static final TraceComponent tc = Tr.register(AbstractTerminalListenerRegistration.class);
 
-    private final AtomicServiceReference<CDIWebRuntime> cdiWebRuntimeRef = new AtomicServiceReference<CDIWebRuntime>(
-                    "cdiWebRuntime");
-
-    protected void activate(ComponentContext context) {
-        cdiWebRuntimeRef.activate(context);
-    }
-
-    protected void deactivate(ComponentContext context) {
-        cdiWebRuntimeRef.deactivate(context);
-    }
-
-    @Reference(name = "cdiWebRuntime", service = CDIWebRuntime.class)
-    protected void setCdiWebRuntime(ServiceReference<CDIWebRuntime> ref) {
-        cdiWebRuntimeRef.setReference(ref);
-    }
-
-    protected void unsetCdiWebRuntime(ServiceReference<CDIWebRuntime> ref) {
-        cdiWebRuntimeRef.unsetReference(ref);
-    }
+    protected abstract CDIWebRuntime getCDIWebRuntime();
 
     /** {@inheritDoc} */
     @Override
     public void registerListener(IServletContext isc) {
 
-        CDIWebRuntime cdiWebRuntime = cdiWebRuntimeRef.getService();
+        CDIWebRuntime cdiWebRuntime = getCDIWebRuntime();
         if (cdiWebRuntime != null && cdiWebRuntime.isCdiEnabled(isc)) {
 
             BeanManager beanManager = cdiWebRuntime.getCurrentBeanManager();

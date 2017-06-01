@@ -1,8 +1,8 @@
 -include= ~../cnf/resources/bnd/liberty-release.props
 
--nobundles: true
+-nobundles=true
 
-publish.wlp.jar.disabled: true
+test.project: true
 
 -testpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \

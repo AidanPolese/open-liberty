@@ -21,8 +21,8 @@ import javax.xml.bind.JAXBException;
 
 import com.ibm.ejs.container.BeanId;
 import com.ibm.ejs.container.BeanMetaData;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.util.ParsedScheduleExpression;
 import com.ibm.ws.ejbcontainer.util.ScheduleExpressionParser;
 import com.ibm.ws.ejbcontainer.util.ScheduleExpressionParserException;

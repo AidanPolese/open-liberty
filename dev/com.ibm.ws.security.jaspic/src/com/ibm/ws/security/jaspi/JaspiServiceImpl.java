@@ -633,7 +633,7 @@ public class JaspiServiceImpl implements JaspiService, WebAuthenticator {
                     String originalURL = req.getRequestURL().append(query != null ? "?" + query : "").toString();
                     authResult = new AuthenticationResult(AuthResult.REDIRECT, loginURL);
                     pretty = "REDIRECT";
-                    ReferrerURLCookieHandler referrerURLHandler = new ReferrerURLCookieHandler(WebConfigUtils.getWebAppSecurityConfig());
+                    ReferrerURLCookieHandler referrerURLHandler = WebConfigUtils.getWebAppSecurityConfig().createReferrerURLCookieHandler();
                     referrerURLHandler.setReferrerURLCookie(req, authResult, originalURL);
                     break;
 

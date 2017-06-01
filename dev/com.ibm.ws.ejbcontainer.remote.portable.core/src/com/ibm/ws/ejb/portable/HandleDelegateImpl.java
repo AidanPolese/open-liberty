@@ -62,7 +62,7 @@ public class HandleDelegateImpl implements HandleDelegate {
         // (our class loader), which won't have visibility to the application
         // stub subclass.
         //
-        // Historically, tWAS used ORB internals to determine if the output
+        // Historically, traditional WAS used ORB internals to determine if the output
         // stream was an ORB stream.  If so, the stub was written directly,
         // but if not, object_to_string is used to write and string_to_object
         // is used to read.  However, when string_to_object is used to read,
@@ -70,7 +70,7 @@ public class HandleDelegateImpl implements HandleDelegate {
         // the wrong ORB, which means the object_to_string/string_to_object is
         // not reliable unless the ORB output stream can be reliably detected.
         //
-        // For efficiency, we continue to write the stub directly on tWAS
+        // For efficiency, we continue to write the stub directly on traditional WAS
         // where we continue to use ORB internals.  On Liberty where we don't
         // want to rely on ORB internals to detect the ORB output stream, we
         // switch to _Remote_Stub, which will maintain the ORB context when

@@ -74,6 +74,8 @@ public class LibertyJaxRsServerFactoryBean extends JAXRSServerFactoryBean {
     private ServletConfig servletConfig;
     private JaxRsProviderFactoryService providerFactoryService;
 
+    private final static Integer lockObject = new Integer(0);
+
     /**
      * @param jaxRsModuleMetaData
      * @param endpointInfo
@@ -171,7 +173,11 @@ public class LibertyJaxRsServerFactoryBean extends JAXRSServerFactoryBean {
         /**
          * step 3: gather the provider & resources which belong to one application
          */
-        updateEndpointInfo(endpointInfo, app, moduleMetadata, cxfPRHolder);
+        // With the change to have servlet initialization occur in the background we are seeing intermittent FAT failures where resources go missing
+        // Adding sync here to prevent the adding of resource classes at the same time in different threads
+        synchronized (lockObject) {
+            updateEndpointInfo(endpointInfo, app, moduleMetadata, cxfPRHolder);
+        }
 
         /**
          * step 4: set properties to Application object

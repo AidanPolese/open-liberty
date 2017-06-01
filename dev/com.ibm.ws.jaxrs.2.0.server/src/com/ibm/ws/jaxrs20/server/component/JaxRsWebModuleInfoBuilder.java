@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2012, 2013
+ * Copyright IBM Corp. 2012, 2017
  *
  * The source code for this program is not published or otherwise divested
  * of its trade secrets, irrespective of what has been deposited with the
@@ -235,6 +235,7 @@ public class JaxRsWebModuleInfoBuilder extends AbstractJaxRsModuleInfoBuilder im
                         appClassName = sconfig.getInitParameter(JaxRsServerConstants.JAXRS_APPLICATION_PARAM);
                         if (appClassName == null) {
                             // No valid init-param defined. Skip this servlet configuration.
+                            Tr.warning(tc, "warn.servlet.specified.without.application", new Object[] { moduleMetaData.getName(), servletName, servletClassName });
 
                             continue;
                         }
@@ -255,7 +256,7 @@ public class JaxRsWebModuleInfoBuilder extends AbstractJaxRsModuleInfoBuilder im
                             }
                         } else {
                             // Not really sub-class of javax.ws.rs.core.Application, skip this servlet configuration
-                            // TODO: we might want to report FFDC here
+                            Tr.warning(tc, "warn.servlet.specified.with.invalid.application", new Object[] { moduleMetaData.getName(), servletName, appClassName });
                             continue;
                         }
                     } else {

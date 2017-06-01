@@ -11,7 +11,7 @@
  */
 package com.ibm.ejs.container;
 
-import com.ibm.ejs.ras.Untraceable; //d123812 d136527
+import com.ibm.websphere.ras.annotation.Sensitive;
 import com.ibm.ws.ejbcontainer.EJBPMICollaborator;
 
 /**
@@ -32,7 +32,8 @@ import com.ibm.ws.ejbcontainer.EJBPMICollaborator;
  * there would be a potential conflict between the methods on
  * the bean's remote interface and those on EJSWrapper.
  */
-public abstract class EJSWrapperBase implements Untraceable //d123812 d136527
+@Sensitive
+public abstract class EJSWrapperBase
 { // d111687
     /**
      * Container this wrapper lives in

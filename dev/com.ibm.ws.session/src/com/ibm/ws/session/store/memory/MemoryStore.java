@@ -14,7 +14,7 @@
  *   OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE
  *   OR PERFORMANCE OF THIS SOFTWARE.
  *
- *  @(#) 1.12 WEB/ws/code/web.session.store/src/com/ibm/ws/session/store/memory/MemoryStore.java, WASCC.web.session, CC70.WEB, cf010844.02 7/7/08 08:22:48 [11/12/08 19:20:21]
+ *  @(#) 1.23 SERV1/ws/code/web.session.store/src/com/ibm/ws/session/store/memory/MemoryStore.java, WASCC.web.session, WAS90.SERV1 9/24/15 10:12:55 [5/1/17 13:32:16]
  *
  * @(#)file   MemoryStore.java
  * @(#)version   1.12
@@ -898,7 +898,7 @@ public class MemoryStore implements IStore {
         if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && LoggingUtil.SESSION_LOGGER_CORE.isLoggable(Level.FINE)) {
             LoggingUtil.SESSION_LOGGER_CORE.entering(methodClassName, "updateSessionId", oldId);
         }
-        _sessions.remove(oldId);
+        removeSession(oldId);
         _sessions.put(newSession.getId(),  newSession);
         if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && LoggingUtil.SESSION_LOGGER_CORE.isLoggable(Level.FINE)) {
             LoggingUtil.SESSION_LOGGER_CORE.exiting(methodClassName, "updateSessionId", newSession.getId());

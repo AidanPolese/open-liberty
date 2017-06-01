@@ -11,7 +11,7 @@
 #
 #CMVCPATHNAME com.ibm.ws.kernel.feature/resources/com/ibm/ws/kernel/feature/internal/resources/ProvisionerMessages.nlsprops
 #COMPONENTPREFIX CWWKF
-#COMPONENTNAMEFOR CWWKF Alpine Feature Manager
+#COMPONENTNAMEFOR CWWKF Liberty Feature Manager
 #ISMESSAGEFILE TRUE
 #NLS_ENCODING=UNICODE
 #

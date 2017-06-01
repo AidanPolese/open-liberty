@@ -7,9 +7,11 @@ Bundle-SymbolicName: com.ibm.ws.messaging_test.fw
 
 publish.wlp.jar.disabled: true
 
+test.project: true
+
 -buildpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
-	com.ibm.websphere.javaee.jms.2.0;version=latest,\
+	com.ibm.websphere.javaee.jms.1.1;version=latest,\
 	com.ibm.ws.messaging.utils;version=latest,\
 	com.ibm.ws.container.service;version=latest,\
 	com.ibm.ws.logging;version=latest,\

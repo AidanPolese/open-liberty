@@ -66,14 +66,14 @@ public interface EJBContextExtension
      * entity EJB instances within the current transaction are reflected
      * in the query results. <p>
      * 
-     * For EJBs packaged in a J2EE 1.3 or later module, the EJB Container will
+     * For EJBs packaged in a Java EE 1.3 or later module, the EJB Container will
      * automatically flush the persistent state prior to executing any "custom" finder
      * method (that is, any finder method other than findByPrimaryKey), so typically
      * the application would not need to invoke this method. (Unless the EJB
      * has explicitly disabled the flush behavior; see below.)<p>
      * 
      * However, some applications may wish to manually invoke the flush behavior
-     * for those EJBs packaged in J2EE 1.2 or earlier
+     * for those EJBs packaged in Java EE 1.2 or earlier
      * modules, or for EJBs that implement the {@link DisableFlushBeforeFind} interface. <p>
      * 
      * Although this method is an extension, its use by applications is compliant with

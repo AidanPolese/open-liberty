@@ -6,8 +6,8 @@
             license-type="Apachev2"
             contact="neil_richards@uk.ibm.com"
             encryption="no">
-      <download location="https://github.ibm.com/was-liberty-iiop/geronimo-yoko/commit/c00a8a2b90321c7fa9dab853f2148a6bda25e348">
-         <file basename="org.apache.yoko.rmi.spec-1.5.SNAPSHOT.jar" checksum="c101d5e1cc3240c6367314e23745b14e"/>
+      <download location="https://github.ibm.com/was-liberty-iiop/geronimo-yoko/commit/99e679ba071767a5b5bcd80029ccfe7c78ea0fec">
+         <file basename="org.apache.yoko.rmi.spec-1.5.SNAPSHOT.jar" checksum="2cd2c3ff4c47dd3c88104f7faf269081"/>
       </download>
    </project>
 

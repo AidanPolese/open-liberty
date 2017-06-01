@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class MissingMandatoryPropertyException extends WIMApplicationException {
 
+    private static final long serialVersionUID = 2303458165211630911L;
+
     /**
      *
      */

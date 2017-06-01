@@ -11,21 +11,19 @@
  */
 package com.ibm.ws.traceinfo.ejbcontainer;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.container.EJSDeployedSupport;
 import com.ibm.ejs.container.EJSWrapperBase;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Processor to write out and read in a EJB method invocation record.
  */
 public class TEEJBInvocationInfo extends TEEJBInvocationInfoBase
 {
-    private static final String CLASS_NAME = TEEJBInvocationInfo.class.getName();
-    private static final TraceComponent tc =
-                    Tr.register(CLASS_NAME,
-                                "TEExplorer",
-                                "com.ibm.ws.traceinfo.ejbcontainer");
+    private static final TraceComponent tc = Tr.register(TEEJBInvocationInfo.class,
+                                                         "TEExplorer",
+                                                         "com.ibm.ws.traceinfo.ejbcontainer");
 
     /**
      * This is called by the EJB container server code to write a

@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class ChangeControlException extends WIMApplicationException {
 
+    private static final long serialVersionUID = 3843615929049817327L;
+
     /**
      *
      */

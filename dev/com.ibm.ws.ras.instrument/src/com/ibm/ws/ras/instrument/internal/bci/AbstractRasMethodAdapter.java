@@ -13,8 +13,8 @@ package com.ibm.ws.ras.instrument.internal.bci;
 
 import static com.ibm.ws.ras.instrument.internal.bci.AbstractRasClassAdapter.SENSITIVE_TYPE;
 import static com.ibm.ws.ras.instrument.internal.bci.AbstractRasClassAdapter.TRIVIAL_TYPE;
-import static com.ibm.ws.ras.instrument.internal.main.AlpineTracePreprocessInstrumentation.INJECTED_TRACE_TYPE;
-import static com.ibm.ws.ras.instrument.internal.main.AlpineTracePreprocessInstrumentation.MANUAL_TRACE_TYPE;
+import static com.ibm.ws.ras.instrument.internal.main.LibertyTracePreprocessInstrumentation.INJECTED_TRACE_TYPE;
+import static com.ibm.ws.ras.instrument.internal.main.LibertyTracePreprocessInstrumentation.MANUAL_TRACE_TYPE;
 
 import java.util.ArrayList;
 import java.util.HashMap;

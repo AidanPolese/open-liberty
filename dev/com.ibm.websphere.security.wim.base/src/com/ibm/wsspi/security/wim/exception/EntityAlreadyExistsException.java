@@ -11,6 +11,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class EntityAlreadyExistsException extends WIMApplicationException {
 
+    private static final long serialVersionUID = 454023319370639664L;
+
     /**
      *
      */

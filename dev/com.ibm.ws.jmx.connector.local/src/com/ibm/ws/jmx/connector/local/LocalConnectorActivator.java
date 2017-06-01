@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2012
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.jmx.connector.local;
@@ -56,20 +56,32 @@ public final class LocalConnectorActivator {
                 @Override
                 public String run() {
                     try {
-                        // If the RMI hostname property has not been set yet, set it to 
+                        // If the RMI hostname property has not been set yet, set it to
                         // the loopback address. See RTC defect 91188 for more information.
                         if (System.getProperty(RMI_SERVER_HOSTNAME_PROPERTY) == null) {
                             System.setProperty(RMI_SERVER_HOSTNAME_PROPERTY, LOOPBACK_ADDRESS);
                         }
 
                         // Start the JMX agent and retrieve the local connector address.
+                        // TODO: Find a proper way to get the JMX agent's local connector address
+                        //       for now we need to depend on JDK internal APIs
                         ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
-                        Class<?> clazz1 = Class.forName("sun.management.Agent", true, systemClassLoader);
+                        Class<?> clazz1 = null;
+                        try {
+                            clazz1 = Class.forName("sun.management.Agent", true, systemClassLoader);
+                        } catch (ClassNotFoundException e) {
+                            clazz1 = Class.forName("jdk.internal.agent.Agent", true, systemClassLoader);
+                        }
                         Method m1 = clazz1.getMethod("agentmain", String.class);
                         m1.invoke(null, (Object) null);
                         String localConnectorAddress = System.getProperty(LOCAL_CONNECTOR_ADDRESS_PROPERTY);
                         if (localConnectorAddress == null) {
-                            Class<?> clazz2 = Class.forName("sun.misc.VMSupport", true, systemClassLoader);
+                            Class<?> clazz2 = null;
+                            try {
+                                clazz2 = Class.forName("sun.misc.VMSupport", true, systemClassLoader);
+                            } catch (ClassNotFoundException e) {
+                                clazz2 = Class.forName("jdk.internal.vm.VMSupport", true, systemClassLoader);
+                            }
                             Method m2 = clazz2.getMethod("getAgentProperties");
                             Properties props = (Properties) m2.invoke(null);
                             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -83,7 +95,7 @@ public final class LocalConnectorActivator {
                         }
 
                         if (localConnectorAddress == null) {
-                            //Call FFDC because we won't be able to make the connector address file                       
+                            //Call FFDC because we won't be able to make the connector address file
                             FFDCFilter.processException(new RuntimeException("Received a null connector address."), getClass().getName(), "localConnectorInitNull");
                         }
 

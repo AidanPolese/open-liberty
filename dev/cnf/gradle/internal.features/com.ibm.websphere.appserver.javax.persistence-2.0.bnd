@@ -1,8 +1,8 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.javax.persistence-2.0
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: com.ibm.websphere.javaee.persistence.2.0;version=latest
+-dependson: \
+	com.ibm.websphere.javaee.persistence.2.0;version=latest

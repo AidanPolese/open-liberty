@@ -20,9 +20,9 @@ import javax.naming.RefAddr;
 import javax.naming.Reference;
 import javax.naming.spi.ObjectFactory;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.ejbcontainer.AmbiguousEJBReferenceException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * This JNDI object factory throws an AmbiguousEJBReferenceException
@@ -66,10 +66,9 @@ public class AmbiguousEJBRefObjectFactory implements ObjectFactory
 {
     private static final String CLASS_NAME = AmbiguousEJBRefObjectFactory.class.getName();
 
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     "EJBContainer",
-                     "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(AmbiguousEJBRefObjectFactory.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     static final String ADDR_TYPE = "AmbiguousEJBReference";
 

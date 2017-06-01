@@ -14,9 +14,6 @@ package com.ibm.ejs.util.cache;
 import java.util.Enumeration;
 
 import com.ibm.ejs.container.util.locking.LockTable; // PK04804
-import com.ibm.ejs.ras.Dumpable;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.MathUtil;
 import com.ibm.websphere.csi.CacheElement;
 import com.ibm.websphere.csi.DiscardException;
@@ -24,6 +21,8 @@ import com.ibm.websphere.csi.DiscardStrategy;
 import com.ibm.websphere.csi.EJBCache;
 import com.ibm.websphere.csi.FaultException;
 import com.ibm.websphere.csi.FaultStrategy;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.diagnostics.IntrospectionWriter;
 import com.ibm.ws.ejbcontainer.diagnostics.TrDumpWriter;
 import com.ibm.ws.ffdc.FFDCFilter;
@@ -88,10 +87,7 @@ import com.ibm.ws.util.cache.DiscardWithLockStrategy; // PK04804
  * @see com.ibm.ejs.container.WrapperManager
  **/
 
-public final class Cache
-                implements EJBCache,
-                Dumpable
-{
+public final class Cache implements EJBCache {
     //
     // Construction
     //
@@ -117,8 +113,6 @@ public final class Cache
         this.numBuckets = numBuckets;
         this.wrappers = wrappers;
         buckets = new Bucket[numBuckets];
-
-        Tr.registerDumpable(tc, this);
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
             Tr.exit(tc, "<init> (" + name + ", numBuckets = " + this.numBuckets + ")");
@@ -1154,7 +1148,6 @@ public final class Cache
      * 
      * For more information, see {@link Dumpable#dump}. <p>
      **/
-    @Override
     public void dump()
     {
         if (dumped) {
@@ -1196,7 +1189,6 @@ public final class Cache
      * 
      * For more information, see {@link Dumpable#resetDump}. <p>
      **/
-    @Override
     public void resetDump()
     {
         dumped = false;

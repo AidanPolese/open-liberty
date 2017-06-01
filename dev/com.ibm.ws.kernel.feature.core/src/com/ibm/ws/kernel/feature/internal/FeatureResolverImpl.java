@@ -81,6 +81,17 @@ public class FeatureResolverImpl implements FeatureResolver {
      * 
      * @see com.ibm.ws.kernel.feature.resolver.FeatureResolver#resolveFeatures(com.ibm.ws.kernel.feature.resolver.FeatureResolver.Repository, java.util.Collection, java.util.Set)
      */
+    public Result resolveFeatures(FeatureResolver.Repository repository, Collection<String> rootFeatures, Set<String> preResolved, boolean allowMultipleVersions) {
+        // Note that when no process type is passed we support all process types.
+        return resolveFeatures(repository, Collections.<ProvisioningFeatureDefinition>emptySet(), rootFeatures, preResolved, allowMultipleVersions, EnumSet.allOf(ProcessType.class));
+    }
+    
+    @Override
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.ibm.ws.kernel.feature.resolver.FeatureResolver#resolveFeatures(com.ibm.ws.kernel.feature.resolver.FeatureResolver.Repository, java.util.Collection, java.util.Collection, java.util.Set)
+     */
     public Result resolveFeatures(FeatureResolver.Repository repository, Collection<ProvisioningFeatureDefinition> kernelFeatures, Collection<String> rootFeatures, Set<String> preResolved, boolean allowMultipleVersions) {
         // Note that when no process type is passed we support all process types.
         return resolveFeatures(repository, kernelFeatures, rootFeatures, preResolved, allowMultipleVersions, EnumSet.allOf(ProcessType.class));
@@ -89,7 +100,7 @@ public class FeatureResolverImpl implements FeatureResolver {
     /*
      * (non-Javadoc)
      * 
-     * @see com.ibm.ws.kernel.feature.resolver.FeatureResolver#resolveFeatures(com.ibm.ws.kernel.feature.resolver.FeatureResolver.Repository, java.util.Collection, java.util.Set,
+     * @see com.ibm.ws.kernel.feature.resolver.FeatureResolver#resolveFeatures(com.ibm.ws.kernel.feature.resolver.FeatureResolver.Repository, java.util.Collection, java.util.Collection, java.util.Set,
      * boolean, java.util.EnumSet)
      * Here are the steps this uses to resolve:
      * 1) Primes the selected features with the pre-resolved and the root features (conflicts are reported, but no permutations for backtracking)

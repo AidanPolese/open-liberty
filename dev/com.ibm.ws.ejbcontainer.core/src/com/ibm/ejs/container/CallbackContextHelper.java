@@ -16,10 +16,10 @@ import java.util.Map;
 import javax.transaction.Status;
 import javax.transaction.TransactionRolledbackException;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.tx.jta.embeddable.EmbeddableTransactionManagerFactory;
 import com.ibm.websphere.csi.CSIException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.LocalTransaction.LocalTransactionCoordinator;
 import com.ibm.ws.LocalTransaction.LocalTransactionCurrent;
 import com.ibm.ws.Transaction.UOWCoordinator;

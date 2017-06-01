@@ -32,12 +32,12 @@ import com.ibm.ejs.container.BeanMetaData;
 import com.ibm.ejs.container.EJBConfigurationException;
 import com.ibm.ejs.container.EJBMethodInfoImpl;
 import com.ibm.ejs.csi.ActivitySessionMethod;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.csi.ActivitySessionAttribute;
 import com.ibm.websphere.csi.J2EEName;
 import com.ibm.websphere.csi.MethodInterface;
 import com.ibm.websphere.csi.TransactionAttribute;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.InternalConstants;
 import com.ibm.ws.javaee.dd.ejb.AsyncMethod;
 import com.ibm.ws.javaee.dd.ejb.ConcurrentMethod;
@@ -60,8 +60,8 @@ public class MethodAttribUtils
     private static final String CLASS_NAME = MethodAttribUtils.class.getName();
     private static TraceComponent tc = Tr.register(MethodAttribUtils.class, "MetaData", "com.ibm.ejs.container.container");
 
-    @SuppressWarnings("deprecation")
     private static TraceComponent tcDebug = Tr.register(CLASS_NAME + "_Validation ",
+                                                        MethodAttribUtils.class,
                                                         "MetaDataValidation",
                                                         "com.ibm.ejs.container.container"); // F743-1752.1
 
@@ -1204,7 +1204,7 @@ public class MethodAttribUtils
     {
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
         if (isTraceOn && tc.isEntryEnabled())
-            Tr.entry(tc, "getActivitySessions", asAttrs);
+            Tr.entry(tc, "getActivitySessions", (Object[])asAttrs);
 
         if (!usesBeanManagedAS) { // d127328
 
@@ -1536,7 +1536,7 @@ public class MethodAttribUtils
         /*
          * This method converts a Java-internal format argument signature to a Java language signature.
          * Such conversion is necessary because of the difference in how Array argument types are
-         * represented internally in the JVM vs. their natural Java language encoding (used in J2EE
+         * represented internally in the JVM vs. their natural Java language encoding (used in Java EE
          * deployment descriptors).
          * 
          * The following text is from the documentation for the Class.getName() method:

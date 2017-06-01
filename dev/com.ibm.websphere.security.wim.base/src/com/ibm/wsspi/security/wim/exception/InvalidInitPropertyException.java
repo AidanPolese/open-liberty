@@ -10,8 +10,9 @@
  */
 package com.ibm.wsspi.security.wim.exception;
 
-@SuppressWarnings("serial")
 public class InvalidInitPropertyException extends WIMApplicationException {
+
+    private static final long serialVersionUID = 7520481823714145286L;
 
     /**
      *

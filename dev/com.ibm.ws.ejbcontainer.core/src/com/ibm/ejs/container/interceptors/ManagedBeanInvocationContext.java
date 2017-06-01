@@ -14,8 +14,8 @@ package com.ibm.ejs.container.interceptors;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 /**
  * Provides a ManagedBean specific implementation of the InvocationContext

@@ -263,7 +263,7 @@ public class EventEngineImpl implements EventEngine, org.osgi.service.event.Even
      * interest in the event topic.
      *
      * @param event
-     *            the Alpine <code>Event</code> to deliver
+     *            the Liberty <code>Event</code> to deliver
      * @param async
      *            <code>true</code> if the event delivery can be done asynchronously
      * @return EventImpl

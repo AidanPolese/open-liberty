@@ -2,9 +2,9 @@ This document contains information required by the Release Services team to
 prepare a 'Certificate of Originality' document for this project.
 
 Source code origin:
-WAS 7.0 and Alpine
+WAS 7.0 and Liberty
 
-Alpine contributors:
+Liberty contributors:
 Alex Mulholland
 Erin Schnabel
 Matt Sykes

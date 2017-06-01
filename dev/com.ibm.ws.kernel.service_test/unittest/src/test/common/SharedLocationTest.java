@@ -113,13 +113,13 @@ public class SharedLocationTest {
 
             File serversDir = serverDir.getParentFile();
             File usrDir = serversDir.getParentFile();
-            File alpineDir = usrDir.getParentFile();
+            File libertyDir = usrDir.getParentFile();
 
             assertEquals("bootstrap.properties parent should be the test profile", "com.ibm.ws.kernel.service_test", bootProps.getParentFile().getName());
             assertEquals("parent of bootstrap.properties should be server directory", serverDir, bootProps.getParentFile());
             assertEquals("server parent should be servers", "servers", serversDir.getName());
             assertEquals("parent of servers dir should be usr", "usr", usrDir.getName());
-            assertEquals("parent of usr dir should be '" + installDir + "'", installDir, alpineDir.getName());
+            assertEquals("parent of usr dir should be '" + installDir + "'", installDir, libertyDir.getName());
         } catch (Throwable t) {
             outputMgr.failWithThrowable(m, t);
         }

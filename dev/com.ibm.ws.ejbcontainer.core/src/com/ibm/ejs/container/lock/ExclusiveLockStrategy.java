@@ -13,8 +13,8 @@ package com.ibm.ejs.container.lock;
 
 import com.ibm.ejs.container.ContainerTx;
 import com.ibm.ejs.container.EJSContainer;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 /**

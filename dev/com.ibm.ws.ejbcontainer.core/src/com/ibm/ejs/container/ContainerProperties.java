@@ -60,8 +60,8 @@ import static com.ibm.ejs.container.ContainerConfigConstants.wlmAllowOptionARead
 import java.util.ArrayList;
 
 import com.ibm.ejs.container.util.DeploymentUtil;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.diagnostics.IntrospectionWriter;
 import com.ibm.ws.ejbcontainer.diagnostics.TrDumpWriter;
 import com.ibm.wsspi.ejbcontainer.JITDeploy;

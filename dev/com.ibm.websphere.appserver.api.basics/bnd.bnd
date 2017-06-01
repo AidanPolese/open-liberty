@@ -14,7 +14,6 @@ Export-Package: com.ibm.websphere.application,com.ibm.websphere.filemonitor,com.
 publish.wlp.jar.suffix: dev/api/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.security;version=latest,\
 	com.ibm.ws.kernel.filemonitor,\
 	com.ibm.ws.runtime.update,\

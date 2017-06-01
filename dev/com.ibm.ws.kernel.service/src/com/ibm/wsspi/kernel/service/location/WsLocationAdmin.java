@@ -219,7 +219,7 @@ public interface WsLocationAdmin {
     WsResource resolveResource(String resourceURI);
 
     /**
-     * Resolve the given resource URI (either an absolute URI, or an alpine
+     * Resolve the given resource URI (either an absolute URI, or an liberty
      * repository URI containing symbolics), and return an <code>WsResource</code>.
      * <ul>
      * <li>file://blah

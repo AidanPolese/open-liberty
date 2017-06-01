@@ -22,6 +22,7 @@ package org.apache.cxf.jaxrs.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -46,10 +47,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Produces;
@@ -72,6 +69,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.MessageBodyReader;
@@ -102,8 +100,6 @@ import org.apache.cxf.jaxrs.impl.AsyncResponseImpl;
 import org.apache.cxf.jaxrs.impl.ContainerRequestContextImpl;
 import org.apache.cxf.jaxrs.impl.ContainerResponseContextImpl;
 import org.apache.cxf.jaxrs.impl.HttpHeadersImpl;
-import org.apache.cxf.jaxrs.impl.HttpServletRequestFilter;
-import org.apache.cxf.jaxrs.impl.HttpServletResponseFilter;
 import org.apache.cxf.jaxrs.impl.MediaTypeHeaderProvider;
 import org.apache.cxf.jaxrs.impl.MetadataMap;
 import org.apache.cxf.jaxrs.impl.PathSegmentImpl;
@@ -140,7 +136,6 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageUtils;
 import org.apache.cxf.phase.PhaseInterceptorChain;
 import org.apache.cxf.service.Service;
-import org.apache.cxf.transport.http.AbstractHTTPDestination;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
@@ -155,7 +150,8 @@ public final class JAXRSUtils {
     public static final String ROOT_PROVIDER = "service.root.provider";
     public static final String EXCEPTION_FROM_MAPPER = "exception.from.mapper";
     public static final String SECOND_JAXRS_EXCEPTION = "second.jaxrs.exception";
-    public static final String PARTIAL_HIERARCHICAL_MEDIA_SUBTYPE_CHECK = "media.subtype.partial.check";
+    public static final String PARTIAL_HIERARCHICAL_MEDIA_SUBTYPE_CHECK = 
+        "media.subtype.partial.check"; 
     public static final String DOC_LOCATION = "wadl.location";
     public static final String MEDIA_TYPE_Q_PARAM = "q";
     public static final String MEDIA_TYPE_QS_PARAM = "qs";
@@ -172,9 +168,14 @@ public final class JAXRSUtils {
     private static final String NO_CONTENT_EXCEPTION = "javax.ws.rs.core.NoContentException";
     private static final String HTTP_CHARSET_PARAM = "charset";
     private static final Annotation[] EMPTY_ANNOTATIONS = new Annotation[0];
+    private static final Set<Class<?>> STREAMING_OUT_TYPES = new HashSet<Class<?>>(
+        Arrays.asList(InputStream.class, Reader.class, StreamingOutput.class));
 
-    private JAXRSUtils() {}
-
+    private JAXRSUtils() {        
+    }
+    public static boolean isStreamingOutType(Class<?> type) {
+        return STREAMING_OUT_TYPES.contains(type);
+    }
     public static List<PathSegment> getPathSegments(String thePath, boolean decode) {
         return getPathSegments(thePath, decode, true);
     }
@@ -206,7 +207,8 @@ public final class JAXRSUtils {
                 types = ((AbstractConfigurableProvider) provider).getProduceMediaTypes();
             }
             if (types != null) {
-                values = types.size() > 0 ? types.toArray(new String[types.size()]) : new String[] { "*/*" };
+                values = types.size() > 0 ? types.toArray(new String[types.size()])
+                                           : new String[]{"*/*"};
             }
         }
         return values;
@@ -258,7 +260,8 @@ public final class JAXRSUtils {
             }
         }
         // Param methods
-        MultivaluedMap<String, String> values = (MultivaluedMap<String, String>) message.get(URITemplate.TEMPLATE_PARAMETERS);
+        MultivaluedMap<String, String> values = 
+            (MultivaluedMap<String, String>)message.get(URITemplate.TEMPLATE_PARAMETERS);
         for (Method m : bri.getParameterMethods()) {
             Parameter p = ResourceUtils.getParameter(0, m.getAnnotations(),
                                                      m.getParameterTypes()[0]);
@@ -314,10 +317,13 @@ public final class JAXRSUtils {
 
         if (resources.size() == 1) {
             MultivaluedMap<String, String> values = new MetadataMap<String, String>();
-            return resources.get(0).getURITemplate().match(path, values) ? Collections.singletonMap(resources.get(0), values) : null;
+            return resources.get(0).getURITemplate().match(path, values)
+                   ? Collections.singletonMap(resources.get(0), values) : null;
         }
 
-        SortedMap<ClassResourceInfo, MultivaluedMap<String, String>> candidateList = new TreeMap<ClassResourceInfo, MultivaluedMap<String, String>>(new ClassResourceInfoComparator(message));
+        SortedMap<ClassResourceInfo, MultivaluedMap<String, String>> candidateList = 
+            new TreeMap<ClassResourceInfo, MultivaluedMap<String, String>>(
+                new ClassResourceInfoComparator(message));
 
         for (ClassResourceInfo cri : resources) {
             MultivaluedMap<String, String> map = new MetadataMap<String, String>();
@@ -333,7 +339,8 @@ public final class JAXRSUtils {
         }
 
         if (!candidateList.isEmpty()) {
-            Map<ClassResourceInfo, MultivaluedMap<String, String>> cris = new LinkedHashMap<ClassResourceInfo, MultivaluedMap<String, String>>(candidateList.size());
+            Map<ClassResourceInfo, MultivaluedMap<String, String>> cris = 
+                new LinkedHashMap<ClassResourceInfo, MultivaluedMap<String, String>>(candidateList.size());
             ClassResourceInfo firstCri = null;
             for (Map.Entry<ClassResourceInfo, MultivaluedMap<String, String>> entry : candidateList.entrySet()) {
                 ClassResourceInfo cri = entry.getKey();
@@ -385,7 +392,10 @@ public final class JAXRSUtils {
             throw ExceptionUtils.toNotSupportedException(ex, null);
         }
 
-        SortedMap<OperationResourceInfo, MultivaluedMap<String, String>> candidateList = new TreeMap<OperationResourceInfo, MultivaluedMap<String, String>>(new OperationResourceInfoComparator(message, httpMethod, getMethod, requestType, acceptContentTypes));
+        SortedMap<OperationResourceInfo, MultivaluedMap<String, String>> candidateList = 
+            new TreeMap<OperationResourceInfo, MultivaluedMap<String, String>>(
+                new OperationResourceInfoComparator(message, httpMethod, 
+                                                    getMethod, requestType, acceptContentTypes));
 
         int pathMatched = 0;
         int methodMatched = 0;
@@ -399,7 +409,10 @@ public final class JAXRSUtils {
 
             String path = getCurrentPath(values);
             if (isFineLevelLoggable) {
-                org.apache.cxf.common.i18n.Message msg = new org.apache.cxf.common.i18n.Message("START_OPER_MATCH", BUNDLE, resource.getServiceClass().getName());
+                org.apache.cxf.common.i18n.Message msg = 
+                    new org.apache.cxf.common.i18n.Message("START_OPER_MATCH", 
+                                                           BUNDLE,
+                                                           resource.getServiceClass().getName());
                 Tr.debug(tc, msg.toString());
 
             }
@@ -507,13 +520,22 @@ public final class JAXRSUtils {
             // Not a single Produces match
             status = 406;
         }
-        Map.Entry<ClassResourceInfo, MultivaluedMap<String, String>> firstCri = matchedResources.entrySet().iterator().next();
+        Map.Entry<ClassResourceInfo, MultivaluedMap<String, String>> firstCri = 
+            matchedResources.entrySet().iterator().next();
         String name = firstCri.getKey().isRoot() ? "NO_OP_EXC" : "NO_SUBRESOURCE_METHOD_FOUND";
-        org.apache.cxf.common.i18n.Message errorMsg = new org.apache.cxf.common.i18n.Message(name, BUNDLE, message.get(Message.REQUEST_URI), getCurrentPath(firstCri.getValue()), httpMethod, mediaTypeToString(requestType), convertTypesToString(acceptContentTypes));
+        org.apache.cxf.common.i18n.Message errorMsg = 
+            new org.apache.cxf.common.i18n.Message(name, 
+                                                   BUNDLE,
+                                                   message.get(Message.REQUEST_URI),
+                                                   getCurrentPath(firstCri.getValue()),
+                                                   httpMethod,
+                                                   mediaTypeToString(requestType),
+                                                   convertTypesToString(acceptContentTypes));
         if (!"OPTIONS".equalsIgnoreCase(httpMethod)) {
             Tr.warning(tc, errorMsg.toString());
         }
-        Response response = createResponse(getRootResources(message), message, errorMsg.toString(), status, methodMatched == 0);
+        Response response = 
+            createResponse(getRootResources(message), message, errorMsg.toString(), status, methodMatched == 0);
         throw ExceptionUtils.toHttpException(null, response);
 
     }
@@ -569,7 +591,18 @@ public final class JAXRSUtils {
 
     private static void logNoMatchMessage(OperationResourceInfo ori,
                                           String path, String httpMethod, MediaType requestType, List<MediaType> acceptContentTypes) {
-        org.apache.cxf.common.i18n.Message errorMsg = new org.apache.cxf.common.i18n.Message("OPER_NO_MATCH", BUNDLE, ori.getMethodToInvoke().getName(), path, ori.getURITemplate().getValue(), httpMethod, ori.getHttpMethod(), requestType.toString(), convertTypesToString(ori.getConsumeTypes()), convertTypesToString(acceptContentTypes), convertTypesToString(ori.getProduceTypes()));
+        org.apache.cxf.common.i18n.Message errorMsg = 
+            new org.apache.cxf.common.i18n.Message("OPER_NO_MATCH", 
+                                                   BUNDLE,
+                                                   ori.getMethodToInvoke().getName(),
+                                                   path,
+                                                   ori.getURITemplate().getValue(),
+                                                   httpMethod,
+                                                   ori.getHttpMethod(),
+                                                   requestType.toString(),
+                                                   convertTypesToString(ori.getConsumeTypes()),
+                                                   convertTypesToString(acceptContentTypes),
+                                                   convertTypesToString(ori.getProduceTypes()));
         Tr.debug(tc, errorMsg.toString());
     }
 
@@ -618,11 +651,13 @@ public final class JAXRSUtils {
     }
 
     public static List<MediaType> getConsumeTypes(Consumes cm) {
-        return cm == null ? Collections.singletonList(ALL_TYPES) : getMediaTypes(cm.value());
+        return cm == null ? Collections.singletonList(ALL_TYPES)
+                          : getMediaTypes(cm.value());
     }
 
     public static List<MediaType> getProduceTypes(Produces pm) {
-        return pm == null ? Collections.singletonList(ALL_TYPES) : getMediaTypes(pm.value());
+        return pm == null ? Collections.singletonList(ALL_TYPES)
+                          : getMediaTypes(pm.value());
     }
 
     //Liberty CXF change https://issues.apache.org/jira/browse/CXF-6357
@@ -754,7 +789,8 @@ public final class JAXRSUtils {
     //Message contains following information: PATH, HTTP_REQUEST_METHOD, CONTENT_TYPE, InputStream.
     public static List<Object> processParameters(OperationResourceInfo ori,
                                                  MultivaluedMap<String, String> values,
-                                                 Message message) throws IOException, WebApplicationException {
+                                                 Message message)
+        throws IOException, WebApplicationException {
 
         Class<?>[] parameterTypes = ori.getInParameterTypes();
         List<Parameter> paramsInfo = ori.getParameters();
@@ -802,7 +838,8 @@ public final class JAXRSUtils {
                                            Parameter parameter,
                                            MultivaluedMap<String, String> values,
                                            Message message,
-                                           OperationResourceInfo ori) throws IOException, WebApplicationException {
+                                           OperationResourceInfo ori) 
+        throws IOException, WebApplicationException {
         InputStream is = message.getContent(InputStream.class);
 
         if (parameter.getType() == ParameterType.REQUEST_BODY) {
@@ -934,7 +971,8 @@ public final class JAXRSUtils {
         MediaType mt = mc.getHttpHeaders().getMediaType();
 
         @SuppressWarnings("unchecked")
-        MultivaluedMap<String, String> params = (MultivaluedMap<String, String>) m.get(FormUtils.FORM_PARAM_MAP);
+        MultivaluedMap<String, String> params = 
+            (MultivaluedMap<String, String>)m.get(FormUtils.FORM_PARAM_MAP); 
 
         if (params == null) {
             params = new MetadataMap<String, String>();
@@ -943,15 +981,17 @@ public final class JAXRSUtils {
             if (mt == null || mt.isCompatible(MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
                 String enc = HttpUtils.getEncoding(mt, StandardCharsets.UTF_8.name());
                 String body = FormUtils.readBody(m.getContent(InputStream.class), enc);
-                HttpServletRequest request = (HttpServletRequest) m.get(AbstractHTTPDestination.HTTP_REQUEST);
-                FormUtils.populateMapFromString(params, m, body, enc, decode, request);
+                FormUtils.populateMapFromStringOrHttpRequest(params, m, body, enc, decode);
             } else {
                 if ("multipart".equalsIgnoreCase(mt.getType())
                     && MediaType.MULTIPART_FORM_DATA_TYPE.isCompatible(mt)) {
                     MultipartBody body = AttachmentUtils.getMultipartBody(mc);
                     FormUtils.populateMapFromMultipart(params, body, m, decode);
                 } else {
-                    org.apache.cxf.common.i18n.Message errorMsg = new org.apache.cxf.common.i18n.Message("WRONG_FORM_MEDIA_TYPE", BUNDLE, mt.toString());
+                    org.apache.cxf.common.i18n.Message errorMsg = 
+                        new org.apache.cxf.common.i18n.Message("WRONG_FORM_MEDIA_TYPE", 
+                                                               BUNDLE, 
+                                                               mt.toString());
                     Tr.warning(tc, errorMsg.toString());
                     throw ExceptionUtils.toNotSupportedException(null, null);
                 }
@@ -977,7 +1017,8 @@ public final class JAXRSUtils {
 
     public static MultivaluedMap<String, String> getMatrixParams(String path, boolean decode) {
         int index = path.indexOf(';');
-        return index == -1 ? new MetadataMap<String, String>() : JAXRSUtils.getStructuredParams(path.substring(index + 1), ";", decode, false);
+        return index == -1 ? new MetadataMap<String, String>()
+                           : JAXRSUtils.getStructuredParams(path.substring(index + 1), ";", decode, false);
     }
 
     private static Object processHeaderParam(Message m,
@@ -1018,7 +1059,8 @@ public final class JAXRSUtils {
             return c;
         }
         String value = InjectionUtils.isSupportedCollectionOrArray(pClass)
-                       && InjectionUtils.getActualType(genericType) == Cookie.class ? c.toString() : c.getValue();
+            && InjectionUtils.getActualType(genericType) == Cookie.class
+            ? c.toString() : c.getValue();
         return InjectionUtils.createParameterObject(Collections.singletonList(value),
                                                     pClass,
                                                     genericType,
@@ -1091,16 +1133,18 @@ public final class JAXRSUtils {
         } else if (Configuration.class.isAssignableFrom(clazz)) {
             o = ProviderFactory.getInstance(contextMessage).getConfiguration(contextMessage);
         } else if (Application.class.isAssignableFrom(clazz)) {
-            ProviderInfo<?> providerInfo = (ProviderInfo<?>) contextMessage.getExchange().getEndpoint().get(Application.class.getName());
+            ProviderInfo<?> providerInfo = 
+                (ProviderInfo<?>)contextMessage.getExchange().getEndpoint().get(Application.class.getName());
             o = providerInfo == null ? null : providerInfo.getProvider();
         } else if (contextMessage != null) {
-            ContextProvider<?> provider = ProviderFactory.getInstance(contextMessage).createContextProvider(clazz, contextMessage);
+            ContextProvider<?> provider = 
+                ProviderFactory.getInstance(contextMessage).createContextProvider(clazz, contextMessage);
             if (provider != null) {
                 o = provider.createContext(contextMessage);
             }
         }
         if (o == null && contextMessage != null && !MessageUtils.isRequestor(contextMessage)) {
-            o = createServletResourceValue(contextMessage, clazz);
+            o = HttpUtils.createServletResourceValue(contextMessage, clazz);
         }
         return clazz.cast(o);
     }
@@ -1110,7 +1154,8 @@ public final class JAXRSUtils {
         if (MessageUtils.isRequestor(m)) {
             m = m.getExchange() != null ? m.getExchange().getOutMessage() : m;
         }
-        MultivaluedMap<String, String> templateParams = (MultivaluedMap<String, String>) m.get(URITemplate.TEMPLATE_PARAMETERS);
+        MultivaluedMap<String, String> templateParams =
+            (MultivaluedMap<String, String>)m.get(URITemplate.TEMPLATE_PARAMETERS);
         return new UriInfoImpl(m, templateParams);
     }
 
@@ -1118,7 +1163,8 @@ public final class JAXRSUtils {
         if (MessageUtils.isRequestor(m)) {
             m = m.getExchange() != null ? m.getExchange().getOutMessage() : m;
         }
-        return HttpHeaders.class.isAssignableFrom(ctxClass) ? new HttpHeadersImpl(m) : new ProtocolHeadersImpl(m);
+        return HttpHeaders.class.isAssignableFrom(ctxClass) ? new HttpHeadersImpl(m)
+            : new ProtocolHeadersImpl(m);
     }
 
     public static ContextResolver<?> createContextResolver(Type genericType, Message m) {
@@ -1137,25 +1183,6 @@ public final class JAXRSUtils {
         // lets assume we're aware of servlet types only that can be @Resource-annotated
         return createContextValue(m, genericType, clazz);
     }
-
-    public static <T> T createServletResourceValue(Message m, Class<T> clazz) {
-
-        Object value = null;
-        if (clazz == HttpServletRequest.class) {
-            HttpServletRequest request = (HttpServletRequest) m.get(AbstractHTTPDestination.HTTP_REQUEST);
-            value = request != null ? new HttpServletRequestFilter(request, m) : null;
-        } else if (clazz == HttpServletResponse.class) {
-            HttpServletResponse response = (HttpServletResponse) m.get(AbstractHTTPDestination.HTTP_RESPONSE);
-            value = response != null ? new HttpServletResponseFilter(response, m) : null;
-        } else if (clazz == ServletContext.class) {
-            value = m.get(AbstractHTTPDestination.HTTP_CONTEXT);
-        } else if (clazz == ServletConfig.class) {
-            value = m.get(AbstractHTTPDestination.HTTP_CONFIG);
-        }
-
-        return clazz.cast(value);
-    }
-
     //CHECKSTYLE:OFF
     private static Object readFromUriParam(Message m,
                                            String parameterName,
@@ -1215,7 +1242,8 @@ public final class JAXRSUtils {
                                                                      String sep,
                                                                      boolean decode,
                                                                      boolean decodePlus) {
-        MultivaluedMap<String, String> map = new MetadataMap<String, String>(new LinkedHashMap<String, List<String>>());
+        MultivaluedMap<String, String> map = 
+            new MetadataMap<String, String>(new LinkedHashMap<String, List<String>>());
 
         getStructuredParams(map, query, sep, decode, decodePlus);
 
@@ -1271,7 +1299,8 @@ public final class JAXRSUtils {
             value = value.replace('+', ' ');
         }
         if (decode) {
-            value = (";".equals(sep)) ? HttpUtils.pathDecode(value) : HttpUtils.urlDecode(value);
+            value = (";".equals(sep))
+                ? HttpUtils.pathDecode(value) : HttpUtils.urlDecode(value); 
         }
 
         queries.add(HttpUtils.urlDecode(name), value);
@@ -1338,8 +1367,12 @@ public final class JAXRSUtils {
         // Verbose but avoids an extra context instantiation for the typical path
         if (readers.size() > 1) {
             ReaderInterceptor first = readers.remove(0);
-            ReaderInterceptorContext context = new ReaderInterceptorContextImpl(targetTypeClass, parameterType, parameterAnnotations, is, m, readers);
-
+            ReaderInterceptorContext context = new ReaderInterceptorContextImpl(targetTypeClass, 
+                                                                            parameterType, 
+                                                                            parameterAnnotations, 
+                                                                            is,
+                                                                            m,
+                                                                            readers);
             return first.aroundReadFrom(context);
         } else {
             final MessageBodyReader<?> provider = ((ReaderInterceptorMBR) readers.get(0)).getMBR();
@@ -1379,8 +1412,14 @@ public final class JAXRSUtils {
         final OutputStream entityStream = message.getContent(OutputStream.class);
         if (writers.size() > 1) {
             WriterInterceptor first = writers.remove(0);
-            WriterInterceptorContext context = new WriterInterceptorContextImpl(entity, type, genericType, annotations, entityStream, message, writers);
-
+            WriterInterceptorContext context = new WriterInterceptorContextImpl(entity,
+                                                                                type, 
+                                                                            genericType, 
+                                                                            annotations,
+                                                                            entityStream,
+                                                                            message,
+                                                                            writers);
+            
             first.aroundWriteTo(context);
         } else {
             final MessageBodyWriter<Object> writer = ((WriterInterceptorMBW) writers.get(0)).getMBW();
@@ -1431,11 +1470,8 @@ public final class JAXRSUtils {
                                          MediaType acceptContentType,
                                          OperationResourceInfo ori) {
 
-        if (intersectMimeTypes(ori.getConsumeTypes(), requestContentType).size() != 0
-            && intersectMimeTypes(ori.getProduceTypes(), acceptContentType).size() != 0) {
-            return true;
-        }
-        return false;
+        return intersectMimeTypes(ori.getConsumeTypes(), requestContentType).size() != 0
+            && intersectMimeTypes(ori.getProduceTypes(), acceptContentType).size() != 0;
     }
 
     public static List<MediaType> parseMediaTypes(String types) {
@@ -1713,8 +1749,13 @@ public final class JAXRSUtils {
 
         List<ProviderInfo<ContainerResponseFilter>> containerFilters = pf.getContainerResponseFilters(names);
         if (!containerFilters.isEmpty()) {
-            ContainerRequestContext requestContext = new ContainerRequestContextImpl(m.getExchange().getInMessage(), false, true);
-            ContainerResponseContext responseContext = new ContainerResponseContextImpl(r, m, ori == null ? null : ori.getClassResourceInfo().getServiceClass(), invoked);
+            ContainerRequestContext requestContext = 
+                new ContainerRequestContextImpl(m.getExchange().getInMessage(), 
+                                               false,
+                                               true);
+            ContainerResponseContext responseContext = 
+                new ContainerResponseContextImpl(r, m, 
+                    ori == null ? null : ori.getClassResourceInfo().getServiceClass(), invoked);
             for (ProviderInfo<ContainerResponseFilter> filter : containerFilters) {
                 InjectionUtils.injectContexts(filter.getProvider(), filter, m);
                 filter.getProvider().filter(requestContext, responseContext);
@@ -1723,7 +1764,8 @@ public final class JAXRSUtils {
     }
 
     public static String mediaTypeToString(MediaType mt, String... ignoreParams) {
-        List<String> list = ignoreParams == null || ignoreParams.length == 0 ? null : Arrays.asList(ignoreParams);
+        List<String> list = ignoreParams == null || ignoreParams.length == 0 ? null 
+            : Arrays.asList(ignoreParams);
 
         return MediaTypeHeaderProvider.typeToString(mt, list);
     }
@@ -1772,7 +1814,8 @@ public final class JAXRSUtils {
                 Class<?> declClass = f.getType();
                 if (declClass == Annotation[].class) {
                     try {
-                        Annotation[] fieldAnnotations = ReflectionUtil.accessDeclaredField(f, response, Annotation[].class);
+                        Annotation[] fieldAnnotations = 
+                            ReflectionUtil.accessDeclaredField(f, response, Annotation[].class);
                         ((ResponseImpl) r).setEntityAnnotations(fieldAnnotations);
                     } catch (Throwable ex) {
                         Tr.warning(tc, "Custom annotations if any can not be copied");
@@ -1823,7 +1866,8 @@ public final class JAXRSUtils {
     }
 
     public static String logMessageHandlerProblem(String name, Class<?> cls, MediaType ct) {
-        org.apache.cxf.common.i18n.Message errorMsg = new org.apache.cxf.common.i18n.Message(name, BUNDLE, cls.getName(), mediaTypeToString(ct));
+        org.apache.cxf.common.i18n.Message errorMsg = 
+            new org.apache.cxf.common.i18n.Message(name, BUNDLE, cls.getName(), mediaTypeToString(ct));
         String errorMessage = errorMsg.toString();
         Tr.error(tc, errorMessage);
         return errorMessage;

@@ -253,4 +253,11 @@
     <Method name="close" signature="()Ljava/lang/Void;"/>
     <Bug pattern="WA_NOT_IN_LOOP"/>
   </Match>
+  
+   <Match>
+    <Class name="com.ibm.ws.webcontainer31.async.AsyncContext31Impl"/>
+    <Field name="readListenerRunning"/>
+    <Bug pattern="IS2_INCONSISTENT_SYNC"/>
+  </Match>
+  
 </FindBugsFilter>

@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class InvalidRepositoryIdException extends WIMApplicationException {
 
+    private static final long serialVersionUID = 5420375774875841005L;
+
     /**
      *
      */

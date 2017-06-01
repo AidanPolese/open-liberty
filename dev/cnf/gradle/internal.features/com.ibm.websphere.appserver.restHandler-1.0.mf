@@ -1,4 +1,4 @@
-Created-By: 1.8.0_121 (Oracle Corporation)
+Created-By: 1.8.0_131 (Oracle Corporation)
 IBM-App-ForceRestart: uninstall,
  install
 IBM-AppliesTo: com.ibm.websphere.appserver;${mfProductVersion}
@@ -16,7 +16,7 @@ Subsystem-Content: com.ibm.websphere.appserver.spi.restHandler_2.0-javadoc.zip; 
  com.ibm.websphere.appserver.httptransport-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.json-1.0; type="osgi.subsystem.feature",
  com.ibm.wsspi.appserver.webBundle-1.0; type="osgi.subsystem.feature",
- com.ibm.websphere.appserver.spi.restHandler; location:="dev/spi/ibm/,lib/"; type=jar; version="[1.6.0,1.6.200)",
+ com.ibm.websphere.appserver.spi.restHandler; location:="dev/spi/ibm/,lib/"; type=jar; version="[2.0.0,2.0.200)",
  com.ibm.ws.org.joda.time.1.6.2; version="[1.0.0,1.0.200)",
  com.ibm.websphere.jsonsupport; version="[1.0.0,1.0.200)",
  com.ibm.ws.rest.handler; version="[1.0.0,1.0.200)",

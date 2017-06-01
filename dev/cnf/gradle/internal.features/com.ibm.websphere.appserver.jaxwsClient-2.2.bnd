@@ -1,11 +1,10 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.jaxwsClient-2.2
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: \
+-dependson: \
 	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-transports-http-2.6.2-ibm-s20170216-1739.jar;version=file,\
 	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar;version=file,\
 	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-bindings-soap-2.6.2-ibm-s20170216-1739.jar;version=file,\

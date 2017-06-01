@@ -240,27 +240,8 @@ public final class LogUtils {
     protected static Logger createLogger(final Class<?> cls,
                                          String name,
                                          String loggerName) {
-
-        ClassLoader orig = null;
-        ClassLoader n = null;
-        try {
-            orig = AccessController
-                            .doPrivileged(new PrivilegedExceptionAction<ClassLoader>() {
-                                @Override
-                                public ClassLoader run() throws Exception {
-                                    return Thread.currentThread().getContextClassLoader();
-                                }
-                            });
-            n = AccessController
-                            .doPrivileged(new PrivilegedExceptionAction<ClassLoader>() {
-                                @Override
-                                public ClassLoader run() throws Exception {
-                                    return cls.getClassLoader();
-                                }
-                            });
-        } catch (PrivilegedActionException e) {
-            e.printStackTrace();
-        }
+        ClassLoader orig = getContextClassLoader();
+        ClassLoader n = getClassLoader(cls);
         if (n != null) {
             setContextClassLoader(n);
         }
@@ -337,15 +318,43 @@ public final class LogUtils {
     }
 
     private static void setContextClassLoader(final ClassLoader classLoader) {
-        AccessController.doPrivileged(new PrivilegedAction<Object>() {
-            @Override
-            public Object run() {
-                Thread.currentThread().setContextClassLoader(classLoader);
-                return null;
-            }
-        });
+        final SecurityManager sm = System.getSecurityManager();
+        if (sm != null) {
+            AccessController.doPrivileged(new PrivilegedAction<Object>() {
+               @Override
+                public Object run() {
+                    Thread.currentThread().setContextClassLoader(classLoader);
+                    return null;
+                }
+            });
+        } else {
+            Thread.currentThread().setContextClassLoader(classLoader);
+        }
     }
 
+    private static ClassLoader getContextClassLoader() {
+        final SecurityManager sm = System.getSecurityManager();
+        if (sm != null) {
+            return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+                public ClassLoader run() {
+                    return Thread.currentThread().getContextClassLoader();
+                }
+            });
+        }
+        return Thread.currentThread().getContextClassLoader();
+    }
+
+    private static ClassLoader getClassLoader(final Class<?> clazz) {
+        final SecurityManager sm = System.getSecurityManager();
+        if (sm != null) {
+            return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+                public ClassLoader run() {
+                    return clazz.getClassLoader();
+                }
+            });
+        }
+        return clazz.getClassLoader();
+    }
     /**
      * Allows both parameter substitution and a typed Throwable to be logged.
      * 

@@ -22,8 +22,6 @@ import com.ibm.ejs.container.BeanMetaData;
 import com.ibm.ejs.container.EJBMethodInfoImpl;
 import com.ibm.ejs.container.EJSContainer;
 import com.ibm.ejs.container.EJSDeployedSupport;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.tx.jta.embeddable.EmbeddableTransactionManagerFactory;
 import com.ibm.tx.jta.embeddable.LocalTransactionSettings;
 import com.ibm.websphere.csi.CSIException;
@@ -32,6 +30,8 @@ import com.ibm.websphere.csi.CSITransactionRolledbackException;
 import com.ibm.websphere.csi.EJBKey;
 import com.ibm.websphere.csi.ExceptionType;
 import com.ibm.websphere.csi.MethodInterface;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.uow.UOWSynchronizationRegistry;
 import com.ibm.ws.LocalTransaction.LocalTransactionCoordinator;
 import com.ibm.ws.LocalTransaction.LocalTransactionCurrent;
@@ -61,10 +61,9 @@ abstract class TranStrategy
 {
     private static final String CLASS_NAME = TranStrategy.class.getName();
 
-    private static final TraceComponent tc = Tr.register
-                    (CLASS_NAME,
-                     "EJBContainer",
-                     "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(TranStrategy.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     //d458031: UOWSynch is used to set the JPA task name.
     private static final UOWSynchronizationRegistry svUOWSynchReg =

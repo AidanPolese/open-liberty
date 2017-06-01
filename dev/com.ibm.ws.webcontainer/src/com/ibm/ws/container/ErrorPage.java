@@ -54,7 +54,7 @@ public class ErrorPage {
     this.errorParam = error;
   }
 
-  // Alpine 3386 - support incremental field assignment during xml parsing
+  // Liberty 3386 - support incremental field assignment during xml parsing
   public ErrorPage() {
     // do nothing
   }

@@ -28,12 +28,12 @@ import java.util.Date;
 import javax.ejb.EJBException;
 
 import com.ibm.ejs.container.util.ExceptionUtil;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.Util;
 import com.ibm.ejs.util.dopriv.GetContextClassLoaderPrivileged;
 import com.ibm.websphere.csi.J2EEName;
 import com.ibm.websphere.csi.TransactionAttribute;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejb.portable.Constants;
 import com.ibm.ws.ejbcontainer.runtime.EJBRuntime;
 import com.ibm.ws.ejbcontainer.util.ParsedScheduleExpression;
@@ -554,7 +554,7 @@ public abstract class PersistentTimerTaskHandler implements Runnable, Serializab
     }
 
     /**
-     * Returns the unique J2EE name of the Timer bean that is the target
+     * Returns the unique Java EE name of the Timer bean that is the target
      * of the corresponding scheduled task (EJB Timer). <p>
      *
      * @return the unique J2EE name of the Timer bean.

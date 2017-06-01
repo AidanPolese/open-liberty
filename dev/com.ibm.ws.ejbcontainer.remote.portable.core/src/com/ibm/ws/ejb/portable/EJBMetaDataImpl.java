@@ -29,7 +29,7 @@ import javax.rmi.PortableRemoteObject;
  * instance returned by getEJBMetaData on EJS homes. By portable, we mean the
  * class can be serialized and returned to a vendor other than websphere. This
  * means we have to be careful on which classes/interfaces this class uses
- * (e.g. can not use com.ibm.ejs.ras package since it does not exist in other
+ * (e.g. can not use com.ibm.websphere.ras package since it does not exist in other
  * vendors implementation).
  */
 public class EJBMetaDataImpl implements EJBMetaData, Serializable

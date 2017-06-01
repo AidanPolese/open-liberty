@@ -5,8 +5,8 @@
  *
  * WLP Copyright IBM Corp. 2013
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.kernel.feature.fat;
@@ -34,6 +34,7 @@ import com.ibm.websphere.simplicity.OperatingSystem;
 import com.ibm.websphere.simplicity.ProgramOutput;
 import com.ibm.websphere.simplicity.RemoteFile;
 import com.ibm.websphere.simplicity.log.Log;
+
 import componenttest.common.apiservices.Bootstrap;
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.impl.LibertyServer.IncludeArg;
@@ -70,7 +71,7 @@ import componenttest.topology.impl.LibertyServerFactory;
  * &nbsp;&nbsp;minifyUtils.tearDown();<br/>
  * }<br/>
  * </code>
- * 
+ *
  */
 public class MinifiedServerTestUtils {
     LibertyServer server;
@@ -90,7 +91,7 @@ public class MinifiedServerTestUtils {
 
     /**
      * This sets up the class ready to be used but does not create the minified server.
-     * 
+     *
      * @param className The name of the test class
      * @param serverName The name of the server being used
      * @param lserver The server to be minified
@@ -116,7 +117,7 @@ public class MinifiedServerTestUtils {
 
     /**
      * This minifies a server and then extracts the minified server and starts it.
-     * 
+     *
      * @param className The name of the test class
      * @param serverName The name of the server being used
      * @param lserver The server to be minified
@@ -128,7 +129,7 @@ public class MinifiedServerTestUtils {
         //sadly the tricks performed below would likely not work well on zOS..
         // a) the default extension for an archive on zos is not .zip
         // b) if we forced the extension to .zip, the permissions on the sub install would be incorrect, and it's not clear how to correct them
-        // c) if we allowed the extension to be .pax, we'd need a way to extract the pax archive. 
+        // c) if we allowed the extension to be .pax, we'd need a way to extract the pax archive.
         //when we resolve these issues, we can implement the zOS case correctly.
         if (server.getMachine().getOperatingSystem().compareTo(OperatingSystem.ZOS) == 0) {
             Log.info(MinifiedServerTestUtils.class, "setup", "Tests for minify are not active currently on zOS");
@@ -143,6 +144,7 @@ public class MinifiedServerTestUtils {
             RemoteFile fatTestCommon = server.getMachine().getFile(server.getServerRoot() + "/../fatTestCommon.xml");
             RemoteFile fatTestPorts = server.getMachine().getFile(server.getServerRoot() + "/../fatTestPorts.xml");
             RemoteFile testPortsProps = server.getMachine().getFile(server.getServerRoot() + "/../testports.properties");
+            RemoteFile serverEnv = server.getMachine().getFile(server.getInstallRoot() + "/etc/server.env");
 
             useMinifiedServer(packageZip);
 
@@ -150,6 +152,8 @@ public class MinifiedServerTestUtils {
             fatTestCommon.copyToDest(new RemoteFile(server.getMachine(), server.getServerRoot() + "/../fatTestCommon.xml"));
             fatTestPorts.copyToDest(new RemoteFile(server.getMachine(), server.getServerRoot() + "/../fatTestPorts.xml"));
             testPortsProps.copyToDest(new RemoteFile(server.getMachine(), server.getServerRoot() + "/../testports.properties"));
+            if (serverEnv.exists())
+                serverEnv.copyToDest(new RemoteFile(server.getMachine(), server.getInstallRoot() + "/etc/server.env"));
 
             Log.info(MinifiedServerTestUtils.class, "setup", "minified Install Root : " + server.getInstallRoot());
             Log.info(MinifiedServerTestUtils.class, "setup", "minified  Server Root : " + server.getServerRoot());
@@ -162,8 +166,8 @@ public class MinifiedServerTestUtils {
 
     /**
      * This method will extract a minified server and swap this instance to use it as it's server
-     * 
-     * 
+     *
+     *
      * @param packageZip
      * @return returns the minified server
      * @throws Exception
@@ -182,7 +186,7 @@ public class MinifiedServerTestUtils {
 
     /**
      * Minifies the current server and returns a remote file to the minified server zip.
-     * 
+     *
      * @return The minified server or <code>null</code> if on z/os
      * @throws Exception
      * @throws IOException
@@ -192,10 +196,10 @@ public class MinifiedServerTestUtils {
             return null;
         }
 
-        //get the image into a state where it can be minified.. 
+        //get the image into a state where it can be minified..
         prepareForMinify();
 
-        // run minify against our server: DO NOT CLEAN START.. let's try to reuse the cache files so these 
+        // run minify against our server: DO NOT CLEAN START.. let's try to reuse the cache files so these
         // tests don't take forever.
         server.packageServer(IncludeArg.MINIFY, null);
         RemoteFile packageZip = server.getMachine().getFile(server.getServerRoot() + "/" + server.getServerName() + ".zip");
@@ -226,7 +230,7 @@ public class MinifiedServerTestUtils {
             }
         }
 
-        //verify that server created a logs dir where we expected 
+        //verify that server created a logs dir where we expected
         //minify is using the embedded api to launch, which led to 96988, this test checks that doesn't happen again.
         RemoteFile logDir = server.getMachine().getFile(server.getServerRoot() + "/logs");
         if (!logDir.exists()) {
@@ -240,7 +244,7 @@ public class MinifiedServerTestUtils {
      */
     private void swapToMinifiedServer() throws Exception {
         //before we can get a new server, we need to tidy up the one we minified, as it shares the same name..
-        //and if we request the same name again, it'll give us the cached one. tidyAllKnownServer should remove 
+        //and if we request the same name again, it'll give us the cached one. tidyAllKnownServer should remove
         //the old server from the cache, and let us build a new one with our special bootstrap
         //we use the testClassName, as it was the class that originally obtained the server..
         LibertyServerFactory.tidyAllKnownServers(testClassName);
@@ -252,7 +256,7 @@ public class MinifiedServerTestUtils {
     }
 
     private Bootstrap createMinifiedBootstrapForFramework() throws Exception {
-        //now we need to carefully obtain a new server instance over our new expanded dir.. 
+        //now we need to carefully obtain a new server instance over our new expanded dir..
         Bootstrap b = Bootstrap.getInstance();
         File bootStrapFile = b.getFile();
         Log.info(MinifiedServerTestUtils.class, "setup", "Bootstrap path : " + bootStrapFile.getAbsolutePath());
@@ -294,14 +298,14 @@ public class MinifiedServerTestUtils {
                                   + unzipPackagedServerOutput.getStderr() + "'");
         }
 
-        //fudge the permissions on the wlp/bin/server script.. 
+        //fudge the permissions on the wlp/bin/server script..
         if (server.getMachine().getOperatingSystem().compareTo(OperatingSystem.WINDOWS) != 0) {
-            //try to exec this on all non windows platforms.. 
-            server.getMachine().execute("/bin/chmod", //POSIX says chmod lives here... 
+            //try to exec this on all non windows platforms..
+            server.getMachine().execute("/bin/chmod", //POSIX says chmod lives here...
                                         new String[] { "755", server.getServerRoot() + File.separator + "wlp" + File.separator + "bin" + File.separator + "server" });
-            server.getMachine().execute("/bin/chmod", //POSIX says chmod lives here... 
+            server.getMachine().execute("/bin/chmod", //POSIX says chmod lives here...
                                         new String[] { "755", server.getServerRoot() + File.separator + "wlp" + File.separator + "bin" + File.separator + "featureManager" });
-            server.getMachine().execute("/bin/chmod", //POSIX says chmod lives here... 
+            server.getMachine().execute("/bin/chmod", //POSIX says chmod lives here...
                                         new String[] { "755", server.getServerRoot() + File.separator + "wlp" + File.separator + "bin" + File.separator + "productInfo" });
         }
     }
@@ -373,14 +377,14 @@ public class MinifiedServerTestUtils {
 
         Log.info(MinifiedServerTestUtils.class, "tearDown", "tidying up our server at " + server.getInstallRoot());
         //also tidy up our servers, the nature of our tests, and the arrangement of our classes
-        //doesnt work well with the way the framework expects it.. 
+        //doesnt work well with the way the framework expects it..
         LibertyServerFactory.tidyAllKnownServers(testClassName);
         LibertyServerFactory.tidyAllKnownServers(MinifiedServerTestUtils.class.getName());
     }
 
     /**
      * This deletes the nested server if one was created by extracting a minified server. Also sets the active server back to the parent server.
-     * 
+     *
      * @return <code>true</code> if the nested server is deleted
      * @throws Exception
      */
@@ -433,7 +437,7 @@ public class MinifiedServerTestUtils {
 
             boolean foundPass = false;
 
-            //Pass criteria: 
+            //Pass criteria:
             // - No FAIL: lines
             // - at least one PASS line
             for (String msg : lines) {

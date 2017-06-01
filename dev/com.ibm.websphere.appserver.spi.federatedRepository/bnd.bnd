@@ -14,5 +14,4 @@ Export-Package: com.ibm.wsspi.security.wim,com.ibm.wsspi.security.wim.exception,
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.websphere.security.wim.base

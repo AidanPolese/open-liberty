@@ -13,8 +13,8 @@ package com.ibm.ws.traceinfo.ejbcontainer;
 
 import com.ibm.ejs.container.BeanMetaData;
 import com.ibm.ejs.container.EJBMethodInfoImpl;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ejbcontainer.InternalConstants;
 import com.ibm.ws.resource.ResourceRefConfig;
 import com.ibm.ws.resource.ResourceRefConfigList;
@@ -24,8 +24,7 @@ import com.ibm.ws.resource.ResourceRefConfigList;
  */
 public class TEBeanMetaDataInfo implements TEInfoConstants
 {
-    private static final String CLASS_NAME = TEBeanMetaDataInfo.class.getName();
-    private static final TraceComponent tc = Tr.register(CLASS_NAME,
+    private static final TraceComponent tc = Tr.register(TEBeanMetaDataInfo.class,
                                                          "TEExplorer",
                                                          "com.ibm.ws.traceinfo.ejbcontainer");
 

@@ -24,6 +24,5 @@ Service-Component: \
     properties:="service.vendor=IBM"
 
 -buildpath: \
-	${javac.bootclasspath.java7}, \
 	com.ibm.websphere.javaee.websocket.1.1;version=latest,\
 	com.ibm.ws.wsoc;version=latest

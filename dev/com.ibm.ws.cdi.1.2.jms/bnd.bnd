@@ -18,6 +18,8 @@ Include-Resource: \
     
 -dsannotations: com.ibm.ws.cdi.jms.JMSContextInjectionExtension
 
+instrument.classesExcludes: com/ibm/ws/cdi/jms/resources/*.class
+
 -buildpath: \
 	com.ibm.websphere.appserver.spi.logging;version=latest,\
 	com.ibm.wsspi.org.osgi.service.component.annotations;version=latest,\

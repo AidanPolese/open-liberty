@@ -51,7 +51,7 @@ public class ActivitySessionAttribute {
 
     // --------------------------------------------------------------        
     // AS_UNKNOWN is used to indicate that the application has not
-    // specified any activity session policies (e.g. a plain J2EE
+    // specified any activity session policies (e.g. a plain Java EE
     // application which does not use any WebSphere programming model
     // extensions).   
     // --------------------------------------------------------------

@@ -50,9 +50,6 @@ import com.ibm.ejs.container.util.EJSPlatformHelper;
 import com.ibm.ejs.container.util.ExceptionUtil;
 import com.ibm.ejs.container.util.MethodAttribUtils;
 import com.ibm.ejs.csi.UOWControl;
-import com.ibm.ejs.ras.Dumpable;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.FastHashtable;
 import com.ibm.ejs.util.Util;
 import com.ibm.websphere.cpi.PersisterFactory;
@@ -71,6 +68,8 @@ import com.ibm.websphere.csi.StatefulSessionHandleFactory;
 import com.ibm.websphere.csi.StatefulSessionKeyFactory;
 import com.ibm.websphere.csi.TransactionAttribute;
 import com.ibm.websphere.ejbcontainer.EJBStoppedException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.uow.UOWSynchronizationRegistry;
 import com.ibm.ws.csi.DispatchEventListener;
 import com.ibm.ws.csi.DispatchEventListenerCookie;
@@ -106,17 +105,15 @@ import com.ibm.wsspi.ejbcontainer.WSEJBEndpointManager;
  * Container for both entity and session EJBs. <p>
  */
 
-public class EJSContainer implements Dumpable,
-                ORBDispatchInterceptor, // F743-13024
-                FFDCSelfIntrospectable // 619922
+public class EJSContainer implements ORBDispatchInterceptor, FFDCSelfIntrospectable
 {
     private static final String CLASS_NAME = EJSContainer.class.getName();
     private static final TraceComponent tc = Tr.register(EJSContainer.class, "EJBContainer", "com.ibm.ejs.container.container");
 
-    @SuppressWarnings("deprecation")
-    private static final TraceComponent tcClntInfo = Tr.register
-                    ("WAS.clientinfopluslogging", "WAS.clientinfopluslogging"
-                     , "com.ibm.ejs.container.container"); // d191679.1 //LIDB3294-41
+    private static final TraceComponent tcClntInfo = Tr.register("WAS.clientinfopluslogging",
+                                                                 EJSContainer.class,
+                                                                 "WAS.clientinfopluslogging",
+                                                                 "com.ibm.ejs.container.container");
 
     /**
      * Special Method id for internal method which requires pre/post invocation
@@ -463,7 +460,6 @@ public class EJSContainer implements Dumpable,
 
         initialized = true;
         defaultContainer = this; // f111627.1
-        Tr.registerDumpable(tc, this);
 
         if (isTraceOn && tc.isEntryEnabled())
             Tr.exit(tc, "initialize");
@@ -670,7 +666,7 @@ public class EJSContainer implements Dumpable,
                     endpointMethods = provider.getMethods();
 
                     if (isTraceOn && tc.isDebugEnabled())
-                        Tr.debug(tc, "provider methods : ", endpointMethods);
+                        Tr.debug(tc, "provider methods : ", (Object[])endpointMethods);
                 }
 
                 // Resolve the Web Service Endpoint methods.  This will make sure that
@@ -1045,7 +1041,7 @@ public class EJSContainer implements Dumpable,
     }
 
     /**
-     * Return the J2EE name factory instance owned by this container. <p>
+     * Return the Java EE name factory instance owned by this container. <p>
      */
     //89554
     protected J2EENameFactory getJ2EENameFactory()
@@ -4808,7 +4804,6 @@ public class EJSContainer implements Dumpable,
      * Dump the internal state of this container instance to the
      * trace stream. <p>
      */
-    @Override
     public void dump()
     {
         if (!tc.isDumpEnabled() || dumped) {
@@ -4827,7 +4822,6 @@ public class EJSContainer implements Dumpable,
     /**
      * Reset dumped state of this container instance. <p>
      */
-    @Override
     public void resetDump()
     {
         dumped = false;

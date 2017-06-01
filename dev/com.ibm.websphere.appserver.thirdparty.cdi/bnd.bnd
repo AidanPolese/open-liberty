@@ -14,5 +14,4 @@ Import-Package:*
 publish.wlp.jar.suffix: dev/api/third-party
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.org.jboss.weld.2.4.3;version=latest

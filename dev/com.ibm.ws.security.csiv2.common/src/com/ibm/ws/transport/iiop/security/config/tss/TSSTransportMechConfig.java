@@ -3,10 +3,10 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2015
+ * Copyright IBM Corp. 2015, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 /*
@@ -14,22 +14,20 @@
  */
 package com.ibm.ws.transport.iiop.security.config.tss;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.net.ssl.SSLSession;
-import javax.security.auth.Subject;
-
+import com.ibm.websphere.ras.annotation.Trivial;
+import com.ibm.ws.transport.iiop.security.SASException;
+import com.ibm.wsspi.security.csiv2.TrustedIDEvaluator;
 import org.omg.CSIIOP.TAG_NULL_TAG;
 import org.omg.CSIIOP.TAG_SECIOP_SEC_TRANS;
 import org.omg.CSIIOP.TAG_TLS_SEC_TRANS;
 import org.omg.IOP.Codec;
 import org.omg.IOP.TaggedComponent;
 
-import com.ibm.websphere.ras.annotation.Trivial;
-import com.ibm.ws.transport.iiop.security.SASException;
-import com.ibm.wsspi.security.csiv2.TrustedIDEvaluator;
+import javax.net.ssl.SSLSession;
+import javax.security.auth.Subject;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @version $Rev: 503274 $ $Date: 2007-02-03 10:19:18 -0800 (Sat, 03 Feb 2007) $
@@ -85,7 +83,12 @@ public abstract class TSSTransportMechConfig implements Serializable {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        toString("", buf);
+        try {
+            toString("", buf);
+        } catch (Exception e) {
+            // will FFDC
+            buf.append("TSSTransportMechConfig.toString() threw ").append(e);
+        }
         return buf.toString();
     }
 

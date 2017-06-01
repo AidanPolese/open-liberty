@@ -27,7 +27,7 @@ import javax.ejb.EJB;
  * and it should not be obtained after
  * the {@link com.ibm.ws.container.service.state.ModuleStateListener#moduleStarting} event.
  *
- * On Classic, an instance can be obtained
+ * On traditional WAS, an instance can be obtained
  * via {@link com.ibm.ws.runtime.service.EJBContainer#getEJBEndpoints}.
  */
 public interface EJBEndpoints {

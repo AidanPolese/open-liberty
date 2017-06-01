@@ -9,7 +9,7 @@ which is available.
 Source code origin:
 WAS V7.0
 
-Alpine contributors:
+Liberty contributors:
 Jeffrey Lee
 Seth Peterson
 

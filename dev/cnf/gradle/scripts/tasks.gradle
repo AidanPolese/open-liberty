@@ -3,6 +3,37 @@ defaultTasks 'clean', 'build'
 subprojects {
 
   plugins.apply 'java'
+  plugins.apply 'maven-publish'
+
+  project.version = bnd('Bundle-Version', '1.0') + '.' + branchName + (true ? '-SNAPSHOT' : '')
+
+  publishing {
+    repositories {
+
+      if (System.env.PUBLISH_REPO == 'Artifactory') {
+        // Remote
+        maven {
+          if(project.version.endsWith('-SNAPSHOT')) {
+              url "${artifactorySnapshotUrl}${matrixParams}"
+          } else {
+              url "${artifactoryReleaseUrl}${matrixParams}"
+          }
+          credentials {
+            username "erfritz@us.ibm.com"
+            password "AP7T7yNPzRSGhhpUbEf44WcuJ29"
+          }
+        }
+      } else {
+        // Local
+        maven {
+           url uri("${rootDir}/cnf/${mavenLocalPath}")
+        }
+      }
+
+    }
+  }
+
+  release.dependsOn publish
 
   task publishWLPJars {
     dependsOn jar
@@ -256,132 +287,6 @@ subprojects {
     dependsOn zipProjectFVT
   }
 
-  /*publishing {
-    enabled new File("${projectDir}/fat").exists()
-    publications {
-      maven(MavenPublication) {
-        artifactId project.name
-        version bnd('Bundle-Version', '1.0') + '.' + branchName + (!'master'.equals(branchName) ? '-SNAPSHOT' : '')
-        artifact zipProjectFVT
-      }
-    }
-  }*/
-
-  task generateToolBinScripts {
-    enabled !bnd('publish.tool.jar', '').empty
-    doLast {
-      if (!bnd('publish.tool.script', '').empty) {
-        copy {
-          from "${rootDir}/cnf/resources/bin"
-          into "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/bin"
-          rename 'tool(.*)', bnd('publish.tool.script') + '$1'
-          filter(org.apache.tools.ant.filters.ReplaceTokens,
-                 tokens: [TOOL_JAR: 'tools/' + bnd('publish.tool.jar'), TOOL_SCRIPT: bnd('publish.tool.script'),
-                          TOOL_SCRIPT_DIR_LENGTH: '5', TOOL_SCRIPT_RELATIVE: ''])
-        }
-      }
-    }
-  }
-
-  task generateFeatureResources {
-    enabled !bnd('publish.feature.resources', '').empty
-    inputs.files(fileTree( dir: "${projectDir}/resources", include: bnd('publish.feature.resources', '') )).skipWhenEmpty()
-    outputs.dir "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/features"
-    doLast {
-      copy {
-        from "${projectDir}/resources"
-        into "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/features"
-        include bnd('publish.feature.resources')
-      }
-    }
-  }
-
-  task generatePlatformManifests {
-    inputs.files(fileTree( dir: "${projectDir}/publish/platform" )).skipWhenEmpty()
-    outputs.dir "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/platform"
-    doLast {
-      copy {
-        from "${projectDir}/publish/platform"
-        into "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/platform"
-        exclude '*.mf'
-      }
-      copy {
-        from "${projectDir}/publish/platform"
-        into "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/platform"
-        include '*.mf'
-        filter(org.apache.tools.ant.filters.ConcatFilter,
-          append: file( "${rootDir}/cnf/resources/IBM-ProductID.txt" ))
-      }
-    }
-  }
-
-  task generateTemplates {
-    inputs.files(fileTree( dir: "${projectDir}/publish/templates")).skipWhenEmpty()
-    outputs.dir "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/templates"
-    doLast {
-      copy {
-        from "${projectDir}/publish/templates"
-        into "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/templates"
-      }
-    }
-  }
-
-  task generateBinScripts {
-    inputs.files(fileTree( dir: "${projectDir}/publish/bin")).skipWhenEmpty()
-    outputs.dir "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/bin"
-    doLast {
-      copy {
-        from "${projectDir}/publish/bin"
-        into "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/bin"
-        fileMode 0755
-      }
-    }
-  }
-
-  task generateClientScripts {
-    inputs.files(fileTree( dir: "${projectDir}/publish/clients")).skipWhenEmpty()
-    outputs.dir "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/clients"
-    doLast {
-      copy {
-        from "${projectDir}/publish/clients"
-        into "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/clients"
-      }
-    }
-  }
-
-  task generateLibNative {
-    inputs.files(fileTree( dir: "${projectDir}/lib/native")).skipWhenEmpty()
-    outputs.dir "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/native"
-    doLast {
-      copy {
-        from "${projectDir}/lib/native"
-        into "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/native"
-      }
-    }
-  }
-
-  task generateVersionsProperties {
-    inputs.files(fileTree( dir: "${projectDir}/versions")).skipWhenEmpty()
-    outputs.dir "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/versions"
-    doLast {
-      copy {
-        from "${projectDir}/versions"
-        into "${rootDir}/com.ibm.websphere.appserver.kernel-1.0/generated/content/versions"
-      }
-    }
-  }
-
-  jar {
-    dependsOn generateToolBinScripts
-    dependsOn generateFeatureResources
-    dependsOn generatePlatformManifests
-    dependsOn generateTemplates
-    dependsOn generateBinScripts
-    dependsOn generateClientScripts
-    dependsOn generateLibNative
-    dependsOn generateVersionsProperties
-  }
-
   compileJava {
     if (!parseBoolean(bnd('instrument.disabled', 'false'))) {
       def instrument = fileTree( dir: compileJava.destinationDir, include: bnd('instrument.classesIncludes'), exclude: bnd('instrument.classesExcludes') )
@@ -488,6 +393,14 @@ subprojects {
       jvmArgs ant.jvmargPorts.tokenize()
     }
   }
+
+}
+
+task zipOpenLiberty(type: Zip) {
+    dependsOn subprojects.assemble
+    baseName 'openliberty'
+    from 'build.image/wlp'
+    destinationDir file('build.image/generated/distributions')
 }
 
 private boolean parseBoolean(String value) {

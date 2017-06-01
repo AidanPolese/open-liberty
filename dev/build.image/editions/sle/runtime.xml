@@ -132,5 +132,6 @@
     <!-- Liberty 17002 / SLE 9008 additions -->
     <feature>jpaContainer-2.1</feature>
     <feature>jdbc-4.2</feature>
+    <feature>socialLogin-1.0</feature>
   </featureManager>
 </server>

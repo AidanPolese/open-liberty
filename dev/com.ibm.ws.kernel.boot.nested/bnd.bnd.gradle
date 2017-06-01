@@ -13,7 +13,6 @@ instrument.classesIncludes: com/ibm/ws/kernel/launch/internal/*.class
 publish.wlp.jar.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.kernel.boot.core;version=latest,\
 	com.ibm.ws.logging.core;version=latest,\
 	com.ibm.ws.kernel.security.thread;version=latest,\

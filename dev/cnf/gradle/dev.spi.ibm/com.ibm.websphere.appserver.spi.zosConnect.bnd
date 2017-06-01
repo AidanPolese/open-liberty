@@ -14,5 +14,4 @@ Export-Package: com.ibm.wsspi.zos.connect
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.zos.connect

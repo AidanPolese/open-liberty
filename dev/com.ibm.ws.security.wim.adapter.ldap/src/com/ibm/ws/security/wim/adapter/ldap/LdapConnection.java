@@ -132,10 +132,13 @@ public class LdapConnection {
     private int iSearchResultsCacheSize = 2000;
 
     /**
-     * Default search results cache timeout
+     * Default search results cache timeout in milliseconds
+     * If you see the history, this was changed from 1200 to 1200000
+     * to correctly be milliseconds. WAS used 1200 seconds to setup
+     * the cache, but Liberty cache impl is set directly in ms.
+     * PI81954
      */
-    private long iSearchResultsCacheTimeOut = 600;
-
+    private long iSearchResultsCacheTimeOut = 1200000;
     /**
      * default search results cache size limit
      */
@@ -163,9 +166,13 @@ public class LdapConnection {
     private int iAttrsCacheSize = 4000;
 
     /**
-     * Default attributes cache timeout
+     * Default attributes cache timeout in milliseconds
+     * If you see the history, this was changed from 1200 to 1200000
+     * to correctly be milliseconds. WAS used 1200 seconds to setup
+     * the cache, but Liberty cache impl is set directly in ms.
+     * PI81954
      */
-    private long iAttrsCacheTimeOut = 1200;
+    private long iAttrsCacheTimeOut = 1200000;
 
     /**
      * default attributes cache size limit
@@ -238,22 +245,28 @@ public class LdapConnection {
     private int iLiveContexts = 0;
 
     /**
-     * The Maximum pool size for the DirContext pool. Defaults to 1.
+     * The Maximum pool size for the DirContext pool. Defaults to 0, no max size.
+     * If you see the history, this was changed from 1 to 0 to match our published
+     * defaults. We were not matching our metatype defaults, resulting in different
+     * defaults in different scenarios. PI81923
      */
-    private int iMaxPoolSize = 1;
+    private int iMaxPoolSize = 0;
 
     /**
-     * The Preferred pool size. Defaults to 1.
+     * The Preferred pool size. Defaults to 3.
+     * If you see the history, this was changed from 1 to 3 to match our published
+     * defaults. We were not matching our metatype defaults, resulting in different
+     * defaults in different scenarios. PI81923
      */
-    private int iPrefPoolSize = 1;
+    private int iPrefPoolSize = 3;
 
     /**
-     * The Pool wait time. Defaults to 3 secs.
+     * The Pool wait time. Defaults to 3 seconds.
      */
-    private long iPoolWaitTime = 3000;
+    private long iPoolWaitTime = 3000; // milliseconds
 
     /**
-     * The pool timeout. Defaults to infinite.
+     * The pool timeout. Defaults to infinite (zero).
      */
     private long iPoolTimeOut = 0;
 
@@ -993,6 +1006,7 @@ public class LdapConnection {
                         strBuf.append(" \nSearch Results Cache: ").append(iSearchResultsCacheName).append(" is enabled:\n");
                         strBuf.append("\tCacheSize: ").append(iSearchResultsCacheSize).append("\n");
                         strBuf.append("\tCacheTimeOut: ").append(iSearchResultsCacheTimeOut).append("\n");
+                        strBuf.append("\tCacheResultSizeLimit: ").append(iSearchResultSizeLmit).append("\n");
                         Tr.debug(tc, strBuf.toString());
                     }
                 }
@@ -1015,6 +1029,8 @@ public class LdapConnection {
                         strBuf.append(" \nAttributes Cache: ").append(iAttrsCacheName).append(" is enabled:\n");
                         strBuf.append("\tCacheSize: ").append(iAttrsCacheSize).append("\n");
                         strBuf.append("\tCacheTimeOut: ").append(iAttrsCacheTimeOut).append("\n");
+                        strBuf.append("\tCacheSizeLimit: ").append(iAttrsSizeLmit).append("\n");
+                        strBuf.append("\tCacheTTLAttr: ").append(iServerTTLAttr).append("\n");
                         Tr.debug(tc, strBuf.toString());
                     }
                 }

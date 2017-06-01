@@ -1,11 +1,12 @@
--include= ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
--nobundles: true
+-nobundles=true
 
 -dependson: \
 	com.ibm.ws.classloading_test.jarA, \
 	com.ibm.ws.classloading_test.jarB
+
+test.project: true
 
 -testpath: \
 	com.ibm.websphere.org.osgi.core;version=latest,\

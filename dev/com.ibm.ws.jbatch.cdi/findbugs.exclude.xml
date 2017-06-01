@@ -19,6 +19,13 @@
       <Class name="com.ibm.ws.jbatch.cdi.internal.CDIBatchArtifactFactoryImpl" />
       <Method name="getBeanForClassName"/>
    </Match>
+   
+   <!-- Logger is statically and finally initialized -->
+   <Match> 
+      <Bug pattern="NP_GUARANTEED_DEREF" />
+      <Class name="com.ibm.ws.jbatch.cdi.internal.CDIBatchArtifactFactoryImpl" />
+      <Method name="findUniqueBeanForClass"/>
+   </Match>
 
     
 </FindBugsFilter>

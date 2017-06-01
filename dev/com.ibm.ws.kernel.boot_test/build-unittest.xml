@@ -22,7 +22,7 @@
     <property name="bnd.target" value="build/unittest/test data/lib/" />
     <property name="unittest.kernel.boot.version" value="1.0.4"/>
     <!-- get the kernel boot jar file name -->
-    <fileset id="unittest.kernel.boot.jar" dir="../com.ibm.ws.kernel.boot/build/lib" includes="com.ibm.ws.kernel.boot_*.jar"/>
+    <fileset id="unittest.kernel.boot.jar" dir="../build.image/wlp/lib" includes="com.ibm.ws.kernel.boot_*.jar"/>
     <!-- use pathconvert to get the kernel boot jar file name in a property for use in simple.bnd -->
     <pathconvert property="unittest.kernel.boot.jar.name" refid="unittest.kernel.boot.jar" setonempty="false"/> 
     <!-- need a special classpath for simple.bnd because it needs to package the same

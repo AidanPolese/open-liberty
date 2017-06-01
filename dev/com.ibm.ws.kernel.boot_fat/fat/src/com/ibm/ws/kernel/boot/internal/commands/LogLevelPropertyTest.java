@@ -25,6 +25,7 @@ import com.ibm.websphere.simplicity.Machine;
 import com.ibm.websphere.simplicity.ProgramOutput;
 import com.ibm.websphere.simplicity.log.Log;
 
+import componenttest.topology.impl.JavaInfo;
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.impl.LibertyServerFactory;
 
@@ -73,9 +74,13 @@ public class LogLevelPropertyTest {
                 if (server.waitForStringInLog("objc.*", 0, server.getConsoleLogFile()) == null) {
                     assertEquals("Console log file was not empty.", 0, server.getConsoleLogFile().length());
                 }
-            } else if (server.isJavaVersion8()) {
+            } else if (JavaInfo.forServer(server).majorVersion() == 8) {
                 // On Oracle JDK and OpenJDK 8, the JVM will complain about the MaxPermSize option
                 if (server.waitForStringInLog(".*MaxPermSize", 0, server.getConsoleLogFile()) == null) {
+                    assertEquals("Console log file was not empty.", 0, server.getConsoleLogFile().length());
+                }
+            } else if (JavaInfo.forServer(server).majorVersion() == 9) {
+                if (server.waitForStringInLog("java\\.version is now: 1\\.9", 0, server.getConsoleLogFile()) == null) {
                     assertEquals("Console log file was not empty.", 0, server.getConsoleLogFile().length());
                 }
             } else {

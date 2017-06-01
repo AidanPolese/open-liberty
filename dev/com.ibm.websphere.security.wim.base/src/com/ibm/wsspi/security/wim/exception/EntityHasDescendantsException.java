@@ -12,6 +12,8 @@ package com.ibm.wsspi.security.wim.exception;
 
 public class EntityHasDescendantsException extends WIMApplicationException {
 
+    private static final long serialVersionUID = -4407138116448494730L;
+
     /**
      *
      */

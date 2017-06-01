@@ -24,8 +24,6 @@ import com.ibm.ws.webcontainer.osgi.webapp.WebAppConfiguration;
 import com.ibm.ws.webcontainer.security.PostParameterHelper;
 import com.ibm.ws.webcontainer.security.WebAppSecurityCollaboratorImpl;
 import com.ibm.ws.webcontainer.security.WebAppSecurityConfig;
-import com.ibm.ws.webcontainer.security.WebAuthenticatorProxy;
-import com.ibm.ws.webcontainer.security.WebProviderAuthenticatorProxy;
 import com.ibm.wsspi.webcontainer.webapp.WebAppConfig;
 
 public class FeatureWebSecurityCollaboratorImpl extends WebAppSecurityCollaboratorImpl implements FeatureAuthorizationTableService {
@@ -45,15 +43,15 @@ public class FeatureWebSecurityCollaboratorImpl extends WebAppSecurityCollaborat
 
     @Override
     protected void activate(ComponentContext cc, Map<String, Object> props) {
-        securityServiceRef.activate(cc);
-        taiServiceRef.activate(cc);
-        interceptorServiceRef.activate(cc);
-        webAuthenticatorRef.activate(cc);
-        unprotectedResourceServiceRef.activate(cc);
+        super.activate(cc, props);
+    }
+
+    @Override
+    protected void activateComponents() {
         webAppSecConfig = featureSecConfig;
         postParameterHelper = new PostParameterHelper(webAppSecConfig);
-        providerAuthenticatorProxy = new WebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig, webAuthenticatorRef);
-        authenticatorProxy = new WebAuthenticatorProxy(webAppSecConfig, postParameterHelper, securityServiceRef, providerAuthenticatorProxy);
+        providerAuthenticatorProxy = authenticatorFactory.createWebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig, webAuthenticatorRef);
+        authenticatorProxy = authenticatorFactory.createWebAuthenticatorProxy(webAppSecConfig, postParameterHelper, securityServiceRef, providerAuthenticatorProxy);
     }
 
     @Override

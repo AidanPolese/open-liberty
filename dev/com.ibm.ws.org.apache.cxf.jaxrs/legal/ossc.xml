@@ -2,22 +2,22 @@
 <ossc>
    <project project="Apache CXF" 
             projectURL="http://cxf.apache.org" 
-            version="3.1.8" revision="Preview" 
+            version="3.1.11" revision="Preview" 
             license-type="Apachev2" 
             contact="bjliliz@cn.ibm.com" 
             encryption="no">
-      <download location="http://archive.apache.org/dist/cxf/3.1.8/apache-cxf-3.1.8.zip">   
-         <file basename="cxf-core-3.1.8.jar"                        checksum="59f70d0e72a9af8200cac8a44ae20a8a"/>
-         <file basename="cxf-rt-frontend-jaxrs-3.1.8.jar"           checksum="4d436853a8a1b20e1432fe0cf44057f7"/>
-         <file basename="cxf-rt-rs-client-3.1.8.jar"                checksum="94285f195e5eb9173bc162089c82d126"/>
-         <file basename="cxf-rt-rs-service-description-3.1.8.jar"   checksum="1e29c9ec9c05281d32d19817e99df371"/>
-         <file basename="cxf-rt-transports-http-3.1.8.jar"          checksum="dca42ed30aaf893f49f97d9c9e711973"/>
-         <file basename="cxf-tools-common-3.1.8.jar"                checksum="2734b0d8f1a23aa2e6bb350ab0b8d2f6"/>
-         <file basename="cxf-tools-wadlto-jaxrs-3.1.8.jar"          checksum="b7c2af9512cee16749ec999264c0a33e"/>
+      <download location="http://archive.apache.org/dist/cxf/3.1.11/apache-cxf-3.1.11.zip">   
+         <file basename="cxf-core-3.1.11.jar"                        checksum="59f70d0e72a9af8200cac8a44ae20a8a"/>
+         <file basename="cxf-rt-frontend-jaxrs-3.1.11.jar"           checksum="4d436853a8a1b20e1432fe0cf44057f7"/>
+         <file basename="cxf-rt-rs-client-3.1.11.jar"                checksum="94285f195e5eb9173bc162089c82d126"/>
+         <file basename="cxf-rt-rs-service-description-3.1.11.jar"   checksum="1e29c9ec9c05281d32d19817e99df371"/>
+         <file basename="cxf-rt-transports-http-3.1.11.jar"          checksum="dca42ed30aaf893f49f97d9c9e711973"/>
+         <file basename="cxf-tools-common-3.1.11.jar"                checksum="2734b0d8f1a23aa2e6bb350ab0b8d2f6"/>
+         <file basename="cxf-tools-wadlto-jaxrs-3.1.11.jar"          checksum="b7c2af9512cee16749ec999264c0a33e"/>
          
       </download>
-      <download location="http://archive.apache.org/dist/cxf/3.1.8">
-         <file basename="apache-cxf-3.1.8-src.zip"                  checksum="79723ac5e14aa3c94131f9180315b4d2"/>
+      <download location="http://archive.apache.org/dist/cxf/3.1.11">
+         <file basename="apache-cxf-3.1.11-src.zip"                  checksum="79723ac5e14aa3c94131f9180315b4d2"/>
       </download>
    </project>
    <clearencehistory/>

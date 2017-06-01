@@ -17,8 +17,8 @@ import java.io.Serializable;
 
 import com.ibm.ejs.container.passivator.PassivatorSerializableHandle;
 import com.ibm.ejs.container.util.ByteArray;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 
 import com.ibm.ws.ejb.portable.Constants;
 

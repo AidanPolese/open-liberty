@@ -1,11 +1,10 @@
--include ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
 
-Bundle-SymbolicName: com.ibm.websphere.appserver.imf-1.0
+-nobundles=true
 
 publish.feature.resources: *.mf
 
--buildpath: \
+-dependson: \
 	com.ibm.websphere.appserver.json-1.0;version=latest,\
 	com.ibm.ws.imf;version=latest,\
 	com.ibm.ws.imf.autoScaling;version=latest

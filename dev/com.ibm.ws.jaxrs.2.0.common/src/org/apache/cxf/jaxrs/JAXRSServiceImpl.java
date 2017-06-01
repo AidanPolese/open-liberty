@@ -159,7 +159,8 @@ public class JAXRSServiceImpl extends AbstractAttributedInterceptorProvider impl
         if (InjectionUtils.isPrimitive(type) || Response.class == type) {
             return;
         }
-        QName mName = new QName(qname.getNamespaceURI(), (input ? "in" : "out") + m.getName());
+        QName mName = new QName(qname.getNamespaceURI(), 
+                                (input ? "in" : "out") + m.getName());
         MessageInfo ms = oi.createMessage(mName,
                                           input ? MessageInfo.Type.INPUT : MessageInfo.Type.OUTPUT);
         if (input) {

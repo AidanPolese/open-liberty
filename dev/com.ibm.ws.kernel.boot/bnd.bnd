@@ -80,7 +80,6 @@ Private-Package: \
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.kernel.boot.cmdline;version=latest,\
 	com.ibm.ws.kernel.boot.common;version=latest,\
 	com.ibm.ws.kernel.boot.core;version=latest,\

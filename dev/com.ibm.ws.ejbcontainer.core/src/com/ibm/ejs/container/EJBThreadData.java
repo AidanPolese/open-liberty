@@ -17,11 +17,11 @@ import java.util.Map;
 
 import com.ibm.ejs.container.CallbackContextHelper.Tx;
 import com.ibm.ejs.j2c.HandleListInterface;
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.ejs.util.FastStack;
 import com.ibm.ejs.util.Util;
 import com.ibm.websphere.csi.CSIException;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.runtime.metadata.ComponentMetaData;
 import com.ibm.ws.threadContext.ComponentMetaDataAccessorImpl;
 import com.ibm.ws.threadContext.ConnectionHandleAccessorImpl;

@@ -5,8 +5,8 @@
   <notes>
 ***INFO
 
-In Alpine the session code was split from the WebContainer and componentised so that other components wishing to extend or use would have a common code base.
-For Alpine the WebContainer and the HTTPService were both using the common session bundle.
+In Liberty the session code was split from the WebContainer and componentised so that other components wishing to extend or use would have a common code base.
+For Liberty the WebContainer and the HTTPService were both using the common session bundle.
 In Liberty the HTTPService no longer uses the common session bundle.  It now has it's own stripped down implementation.
 Even though it is just the webcontainer that continues to use the common session bundle I have tried to keep the two separate so that 
 it would be available in the future for other components to use.  This was difficult as webcontainer and session updates in WAS keep the two tightly coupled.

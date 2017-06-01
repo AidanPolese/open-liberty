@@ -29,7 +29,7 @@ import javax.rmi.PortableRemoteObject;
  * HomeHandleImpl provides a concrete implementation of a HomeHandle
  * for EJBHome objects living in an EJS server.
  * <p>
- * Note: J2EE 1.3 requires interoperability between different vendor's
+ * Note: Java EE 1.3 requires interoperability between different vendor's
  * container implementation. Therefore, this class can not use any
  * proprietary interfaces (e.g. do not use Tr method calls).
  */

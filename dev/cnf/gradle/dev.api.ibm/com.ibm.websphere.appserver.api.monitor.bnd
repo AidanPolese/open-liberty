@@ -16,5 +16,4 @@ publish.wlp.jar.suffix: dev/api/ibm
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.monitor

@@ -278,11 +278,14 @@ public class ConfigManager {
 
     public String getDefaultRealmName() {
         String defaultRealmName = null;
-        for (RealmConfig realmCfg : realmNameToRealmConfigMap.values()) {
-            if (realmCfg.isDefaultRealm()) {
-                defaultRealmName = realmCfg.getName();
-                break;
+        if (realmNameToRealmConfigMap != null) {
+            for (RealmConfig realmCfg : realmNameToRealmConfigMap.values()) {
+                if (realmCfg.isDefaultRealm()) {
+                    defaultRealmName = realmCfg.getName();
+                    break;
+                }
             }
+
         }
 
         return defaultRealmName;

@@ -316,4 +316,4 @@ LICENSE_replace_invalidEditonFeatures=Nast\u0119puj\u0105ce sk\u0142adniki nie m
 \n\
 U\u017cyj nast\u0119puj\u0105cej komendy, aby zdeinstalowa\u0107 te sk\u0142adniki przed zastosowaniem licencji dla edycji {2}: {3}
 
-LICENSE_downgrade_block_8557_low=T\u0119 licencj\u0119 mo\u017cna zastosowa\u0107 tylko do instalacji w wersji {0} lub nowszej. Aktualnie zainstalowana wersja to {1}. Pobierz i zaktualizuj do najnowszej wersji, a nast\u0119pnie ponownie zastosuj licencj\u0119.
+LICENSE_downgrade_block_8557_low=T\u0119 licencj\u0119 mo\u017cna zastosowa\u0107 tylko do instalacji w wersji {0} lub nowszej. Aktualnie zainstalowana wersja to {1}. Pobierz najnowsz\u0105 wersj\u0119 i przeprowad\u017a aktualizacj\u0119, a nast\u0119pnie ponownie zastosuj licencj\u0119.

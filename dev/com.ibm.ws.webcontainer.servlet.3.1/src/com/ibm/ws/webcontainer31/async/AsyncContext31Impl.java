@@ -51,6 +51,8 @@ public class AsyncContext31Impl extends AsyncContextImpl implements AsyncContext
                                                          WebContainerConstants.NLS_PROPS );   
     private static final String CLASS_NAME = "com.ibm.ws.webcontainer.async.AsyncContext31Impl";
     
+    private boolean readListenerRunning = false;
+    
     public AsyncContext31Impl(IExtendedRequest iExtendedRequest, IExtendedResponse iExtendedResponse, IWebAppDispatcherContext webAppDispatcherContext) {
         super(iExtendedRequest,iExtendedResponse,webAppDispatcherContext);
     }
@@ -167,6 +169,37 @@ public class AsyncContext31Impl extends AsyncContextImpl implements AsyncContext
     @Override
     public boolean transferContext() {
         return true;
+    }
+
+    /**
+     * @param b
+     */
+    public synchronized void setReadListenerRunning(boolean b) {
+        
+        if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && logger.isLoggable(Level.FINEST)) {                  
+            logger.logp(Level.FINE,CLASS_NAME, "setReadListenerRunning","Current value = " + readListenerRunning + ", newValue = " + b);
+        }
+        readListenerRunning = b;
+        if (!readListenerRunning && this.isCompletePending() && !this.isDispatching()) {
+            if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && logger.isLoggable(Level.FINEST)) {                  
+                logger.logp(Level.FINE,CLASS_NAME, "setReadListenerRunning","Start complete processing");
+            }
+           executeNextRunnable();   
+        }
+    }
+    
+    public boolean isReadListenerRunning() {
+        return readListenerRunning;
+    }
+    
+    
+    @Override
+    public boolean runComplete() {
+        if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && logger.isLoggable(Level.FINEST)) {                  
+            logger.logp(Level.FINE,CLASS_NAME, "runComplete","readListenerRunning = " + readListenerRunning);
+        }        
+        return !readListenerRunning;
+       
     }
 
 }

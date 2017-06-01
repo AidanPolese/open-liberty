@@ -16,16 +16,15 @@
  */
 package com.ibm.jbatch.container.cdi;
 
-
 /**
  * CDI-based Batch artifact factory.
  */
-public interface CDIBatchArtifactFactory  {
+public interface CDIBatchArtifactFactory {
 
     /**
-     * @param batchId The value of a @ref attribute in a JSL element, e.g. 'batchlet' 
-     * 
-     * @return An object instance of the artifact. 
+     * @param batchId The value of a @ref attribute in a JSL element, e.g. 'batchlet'
+     *
+     * @return An object instance of the artifact.
      */
     public Object load(String batchId);
 }

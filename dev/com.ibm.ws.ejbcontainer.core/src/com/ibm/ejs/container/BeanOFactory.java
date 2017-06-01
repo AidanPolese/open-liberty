@@ -14,8 +14,9 @@ package com.ibm.ejs.container;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+
 
 /**
  * A <code>BeanOFactory</code> creates BeanO instances. <p>
@@ -30,11 +31,9 @@ import com.ibm.ejs.ras.TraceComponent;
  */
 public abstract class BeanOFactory
 {
-    private static final String CLASS_NAME = BeanOFactory.class.getName();
-    private static final TraceComponent tc =
-                    Tr.register(CLASS_NAME,
-                                "EJBContainer",
-                                "com.ibm.ejs.container.container");
+    private static final TraceComponent tc = Tr.register(BeanOFactory.class,
+                                                         "EJBContainer",
+                                                         "com.ibm.ejs.container.container");
 
     public enum BeanOFactoryType
     {

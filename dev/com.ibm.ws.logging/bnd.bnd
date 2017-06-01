@@ -35,7 +35,6 @@ Import-Package: !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
 instrument.disabled: true
 
 -buildpath: \
-	${javac.bootclasspath.java6}, \
 	com.ibm.ws.kernel.boot.logging;version=latest,\
 	com.ibm.ws.logging.core;version=latest,\
 	com.ibm.ws.kernel.security.thread;version=latest,\
