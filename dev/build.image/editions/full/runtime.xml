@@ -22,11 +22,13 @@
   <!-- Features being prototyped or under development that aren't ready for beta
        When the feature is included in a beta or GA image, remove it from this list -->
   <featureManager>
+    <feature>jsonb-1.0</feature>
     <feature>jdbc-4.2</feature>
     <feature>mqtt-3.1</feature>
     <feature>osgiAppConsole-1.0</feature>
     <feature>persistentExecutor-1.0</feature>
     <feature>requestInterrupt-1.0</feature>
     <feature>servlet-4.0</feature>
+    <feature>jsonp-1.1</feature>
   </featureManager>
 </server>

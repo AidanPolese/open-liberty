@@ -53,6 +53,8 @@ import com.ibm.ws.cdi.CDIException;
 import com.ibm.ws.cdi.CDIRuntimeException;
 import com.ibm.ws.cdi.impl.weld.WebSphereBeanDeploymentArchive;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.util.ThreadContextAccessor;
+
 
 /**
  * Common constants and utility methods
@@ -127,9 +129,9 @@ public class CDIUtils {
 
     /*
      * WARNING!
-     * 
+     *
      * Setting this property to true violates the J2EE specification.
-     * 
+     *
      * This property exists to allow users to use spring to drive injection in their applications
      * without it, liberty will crash the application before spring is given a chance to do
      * injection.
@@ -154,7 +156,7 @@ public class CDIUtils {
      * All Classes will be loaded unconditionally, as long as the classloader can access them.
      * <p>
      * If a class name cannot be found, it is ignored.
-     * 
+     *
      * @param classLoader the classLoader
      * @param classNames classes to load
      * @return the map of loaded Class objects
@@ -191,7 +193,7 @@ public class CDIUtils {
 
     /**
      * Read the file META-INF/services/javax.enterprise.inject.spi.Extension and return the extension class names
-     * 
+     *
      * @param metaInfServicesEntry
      * @return
      */
@@ -244,7 +246,7 @@ public class CDIUtils {
 
     /**
      * Create the extension and return a metadata for the extension
-     * 
+     *
      * @param extensionClass extension class name
      * @param classloader the class loader that loads the extension
      * @return
@@ -263,7 +265,7 @@ public class CDIUtils {
 
     /**
      * load the class and then casts to the specified sub class
-     * 
+     *
      * @param expectedType the expected return class
      * @param serviceClassName the service class name
      * @param classloader the class loader that loads the service class
@@ -296,7 +298,7 @@ public class CDIUtils {
 
     /**
      * Creates an object of the service class
-     * 
+     *
      * @param serviceClass the service class
      * @return the serviceClass object
      */
@@ -372,28 +374,46 @@ public class CDIUtils {
         }
         return false;
     }
-    
+
     @Trivial
     public static Version getOSGIVersionWithoutQualifier(Version version) {
         return new Version(version.getMajor(), version.getMinor(), version.getMicro());
     }
-    
+
     //If BND names are different CDI failover will assume it's looking at two different applications and refuse to perform failover.
     //Since BND names include version numbers we strip them down, this method provides a central location to control how version numbers
-    //are included in BND names. 
+    //are included in BND names.
     @Trivial
     public static String getOSGIVersionForBndName(Version version) {
         return String.valueOf(version.getMajor());
     }
-    
+
     //This method looks for bnd symbolic names that end with the string <number>.<number>.<number>
-    //And removes the last ".<number.<number>" 
+    //And removes the last ".<number.<number>"
     @Trivial
     public static String getSymbolicNameWithoutMinorOrMicroVersionPart(String symbolicName) {
-        if (symbolicName.matches(".*\\d+\\.\\d+\\.\\d+$")){
+        if (symbolicName.matches(".*\\d+\\.\\d+\\.\\d+$")) {
             return symbolicName.replaceAll("\\.\\d+\\.\\d+$", "");
         } else {
             return symbolicName;
+        }
+    }
+
+    /**
+     * This method sets the thread context classloader, and returns whatever was the TCCL before it was updated.
+     *
+     * @param newCL the classloader to put on the thread context.
+     * @return the classloader that was origonally on the thread context.
+     * @throws SecurityException if <code>RuntimePermission("getClassLoader")</code> or <code>RuntimePermission("setContextClassLoader")</code> is not granted.
+     */
+    public static ClassLoader getAndSetLoader(ClassLoader newCL) {
+        ThreadContextAccessor tca = ThreadContextAccessor.getThreadContextAccessor();
+        //This could be a ClassLoader or the special type UNCHANGED. 
+        Object maybeOldCL = tca.pushContextClassLoaderForUnprivileged(newCL);
+        if (maybeOldCL instanceof ClassLoader) {
+            return (ClassLoader) maybeOldCL;
+        } else {
+            return newCL;
         }
     }
 }

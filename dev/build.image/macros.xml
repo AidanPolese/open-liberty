@@ -1579,7 +1579,7 @@ ${li.header}
         <equals arg1="@{exclude.license.name}" arg2="false"/>
       </condition>
       <copy file="${basedir}/../com.ibm.ws.jpa/containers/com.ibm.ws.jpa.thinclient_8.5.0.jar" todir="build/tmp/extras"/>
-      <copy file="${basedir}/../com.ibm.ws.ejbcontainer/containers/com.ibm.ws.ejb.embeddableContainer_nls_8.5.0.jar" todir="build/tmp/extras"/>
+      <copy file="${basedir}/../com.ibm.ws.ejbcontainer.twas.embeddable/containers/com.ibm.ws.ejb.embeddableContainer_nls_8.5.0.jar" todir="build/tmp/extras"/>
 
       <echo file="extract-@{license.name}.bnd">
 -include= ~build-install-extras.bnd

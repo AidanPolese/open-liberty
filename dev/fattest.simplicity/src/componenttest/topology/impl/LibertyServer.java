@@ -1092,6 +1092,16 @@ public class LibertyServer implements LogMonitorClient {
             JVM_ARGS += Java9Helper.JAVA_9_ARGS;
         }
 
+        // Debug for a Java 8 problem on IBM JVMs. See defect 181046 for details.
+        // Unfortunately, this problem does not seem to happen when we enable this dump trace. We also can't proceed without getting
+        // a system dump, so our only option is to enable this and hope the timing eventually works out. Note that defect 181046 may
+        // currently be in canceled state because we can't keep defects for the java team open indefinitely. If the history of that
+        // defect indicates that we have come up with an actual resolution, this can be removed.
+        if (info.VENDOR == Vendor.IBM && info.majorVersion() == 8) {
+            JVM_ARGS += " -Xdump:system+java+snap:events=throw+systhrow,filter=\"java/lang/ClassCastException#ServiceFactoryUse.<init>*\"";
+            JVM_ARGS += " -Xdump:system+java+snap:events=throw+systhrow,filter=\"java/lang/ClassCastException#org/eclipse/osgi/internal/serviceregistry/ServiceFactoryUse.<init>*\"";
+        }
+
         // Add JaCoCo java agent to generate code coverage for FAT test run
         if (DO_COVERAGE) {
             JVM_ARGS += " " + JAVA_AGENT_FOR_JACOCO;

@@ -30,6 +30,7 @@
   <AD id="cacheProvider.target"               name="internal"                    description="internal use only"            required="false" type="String"  default="(name=${cacheProviderName})" ibm:final="true" />
   <AD id="libraryRef"                         name="%libraryRef"                 description="%libraryRef.desc"             required="false" type="String"  ibm:type="pid"  ibm:reference="com.ibm.ws.classloading.sharedlibrary" />            
   <AD id="sharedLib.target"                   name="internal"                    description="internal use only"            required="false" type="String"  default="(service.pid=${libraryRef})" ibm:final="true" />       
+  <AD id="createCacheAtServerStartup"         name="internal"                    description="internal use only"            required="false" type="String" />
 </OCD>
  
 <Designate factoryPid="com.ibm.ws.cache.disk">

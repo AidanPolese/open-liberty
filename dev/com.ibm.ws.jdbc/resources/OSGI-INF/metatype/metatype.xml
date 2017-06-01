@@ -69,6 +69,7 @@
   </AD>
   <AD id="statementCacheSize"                     name="%stmtCacheSz"  description="%stmtCacheSz.desc"  required="false" type="Integer" default="10" min="0"/>
   <AD id="transactional"                          name="%transactnl"   description="%transactnl.desc"   required="false" type="Boolean" default="true"/>
+  <AD id="javaCompDefaultName"                    name="internal"      description="internal use only"  required="false" type="String" /> 
   <!-- Advanced properties for dataSource -->
   <AD id="beginTranForResultSetScrollingAPIs"     name="%beginTxScrol" description="%beginTxScrol.desc" ibmui:group="Advanced" required="false" type="Boolean" default="true"/>
   <AD id="beginTranForVendorAPIs"                 name="%beginTxVndr"  description="%beginTxVndr.desc"  ibmui:group="Advanced" required="false" type="Boolean" default="true"/>

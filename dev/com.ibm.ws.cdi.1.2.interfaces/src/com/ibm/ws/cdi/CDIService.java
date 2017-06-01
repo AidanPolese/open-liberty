@@ -22,6 +22,9 @@ public interface CDIService {
      * Gets the bean manager for the calling class (obtained by walking the stack looking for a class which is in a BDA) or
      * for the current module ({@link #getCurrentModuleBeanManager()}) if there are no BDA classes on the stack.
      *
+     * In most cases getCurrentBeanManager should be used instead of ({@link #getCurrentModuleBeanManager()}) and all calls
+     * to getCurrentBeanManager should be cached. 
+     *
      * @return the current bean manager
      */
     public BeanManager getCurrentBeanManager();

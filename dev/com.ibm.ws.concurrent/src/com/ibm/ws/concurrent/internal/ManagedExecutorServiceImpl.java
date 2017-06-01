@@ -95,6 +95,9 @@ interface FullManagedExecutorServiceConfig extends BaseManagedExecutorServiceCon
 
     @AttributeDefinition(required = false, name = Ext.INTERNAL, description = Ext.INTERNAL_DESC, defaultValue = "-1000")
     int service_ranking();
+
+    @AttributeDefinition(required = false, name = Ext.INTERNAL, description = Ext.INTERNAL_DESC)
+    String javaCompDefaultName();
 }
 
 @ObjectClassDefinition(factoryPid = "com.ibm.ws.concurrent.managedExecutorService", name = "%managedExecutorService", description = "%managedExecutorService.desc",
@@ -104,7 +107,7 @@ interface FullManagedExecutorServiceConfig extends BaseManagedExecutorServiceCon
 interface ManagedExecutorServiceConfig extends FullManagedExecutorServiceConfig {}
 
 @Component(configurationPid = "com.ibm.ws.concurrent.managedExecutorService", configurationPolicy = ConfigurationPolicy.REQUIRE,
-           reference = @Reference(name = ManagedExecutorServiceImpl.APP_RECYCLE_SERVICE, service = ApplicationRecycleCoordinator.class) ,
+           reference = @Reference(name = ManagedExecutorServiceImpl.APP_RECYCLE_SERVICE, service = ApplicationRecycleCoordinator.class),
            property = { "creates.objectClass=java.util.concurrent.ExecutorService",
                         "creates.objectClass=javax.enterprise.concurrent.ManagedExecutorService" })
 @DSExt.ConfigureWithInterfaces

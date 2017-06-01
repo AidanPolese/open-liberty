@@ -21,6 +21,7 @@
    <Option value="WARN"   label="%onError.WARN"/>
   </AD>
   <AD id="service.ranking"                   type="Integer" default="0" name="internal" description="internal use only"/>
+  <AD id="javaCompDefaultName"               type="String"  required="false" name="internal" description="internal use only" /> 
  </OCD>
 
  <!-- managedExecutorService generated-->
@@ -40,6 +41,7 @@
   <AD id="jndiName"                           type="String"  required="false" ibm:unique="jndiName" name="%jndiName" description="%jndiName.desc"/>
   <AD id="maxPriority"                        type="Integer" required="false" max="10" min="1" name="%maxPriority" description="%maxPriority.desc"/>
   <AD id="service.ranking"                    type="Integer" default="-1000" name="internal" description="internal use only"/>
+  <AD id="javaCompDefaultName"                type="String"  required="false" name="internal" description="internal use only" />  
  </OCD>
 
 </metatype:MetaData>
