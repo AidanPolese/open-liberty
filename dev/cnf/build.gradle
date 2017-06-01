@@ -27,9 +27,6 @@ task createIvyXml {
                             bsn.contains('_fat') ||
                             excludeProjects.contains(bsn)) {
                             (org, name) = ['test', bsn]
-                        } else if (bsn.startsWith('com.ibm.websphere.appserver.api') ||
-                                   bsn.startsWith('com.ibm.websphere.appserver.spi')) {
-                            (org, name) = [bsn.substring(0,31), bsn]
                         } else {
                             (org, name) = ['dev', bsn]
                         }
