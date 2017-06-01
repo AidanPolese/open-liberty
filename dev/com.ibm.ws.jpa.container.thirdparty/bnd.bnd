@@ -13,7 +13,7 @@ Export-Package: com.ibm.ws.jpa.container.thirdparty
 
 -buildpath: \
 	com.ibm.websphere.appserver.spi.logging;version=latest,\
-	com.ibm.websphere.javaee.persistence.2.0;version=latest,\
+	com.ibm.websphere.javaee.persistence.2.1;version=latest,\
 	com.ibm.websphere.org.osgi.core;version=latest,\
 	com.ibm.websphere.org.osgi.service.component;version=latest,\
 	com.ibm.wsspi.org.osgi.service.component.annotations;version=latest,\

@@ -72,7 +72,6 @@ instrument.classesExcludes: com/ibm/ws/jmx/connector/server/internal/resources/*
 	com.ibm.wsspi.org.osgi.service.component.annotations;version=latest,\
 	com.ibm.websphere.appserver.api.json;version=latest,\
 	com.ibm.ws.logging;version=latest,\
-	com.ibm.websphere.javaee.jaxrs.1.1;version=latest,\
 	com.ibm.websphere.appserver.spi.httptransport;version=latest,\
 	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
 	com.ibm.websphere.appserver.spi.ssl;version=latest,\

@@ -49,7 +49,7 @@ instrument.classesExcludes: com/ibm/ws/security/authorization/jacc/internal/reso
 	com.ibm.ws.kernel.boot;version=latest,\
 	com.ibm.websphere.appserver.spi.servlet;version=latest,\
 	com.ibm.websphere.javaee.ejb.3.2;version=latest,\
-	com.ibm.websphere.javaee.servlet.3.1;version=latest,\
+	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
 	com.ibm.ws.adaptable.module;version=latest,\
 	com.ibm.ws.classloading;version=latest,\
 	com.ibm.ws.webcontainer.security;version=latest

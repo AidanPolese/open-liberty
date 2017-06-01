@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+    <project  project="Unknown" 
+      projectURL="Unknown" 
+      version="1.1" revision="" 
+      license-type="Apachev2" 
+      contact="not@us.ibm.com" 
+      encryption="no">
+      <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.dev_tools/prereqs/prereq.jms/7.0.0/1.1/download.zip">
+         <file basename="com.ibm.ws.javax.jms_1.1.jar" checksum="594ce083ee2ed4475ddd31775faf8a33"/>
+      </download>
+    </project>
+   <notes>
+   The download location is the location where it is downloaded from for the WAS build process
+   </notes>
+   
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and has been cleared previously by WAS v8.5
+   </clearencehistory>
+</ossc>

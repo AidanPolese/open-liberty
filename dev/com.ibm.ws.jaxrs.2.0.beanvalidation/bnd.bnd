@@ -54,6 +54,4 @@ Private-Package:\
 	com.ibm.ws.kernel.service;version=latest,\
 	com.ibm.ws.logging.core;version=latest,\
 	com.ibm.websphere.javaee.validation.1.1;version=latest,\
-	com.ibm.websphere.javaee.validation.1.0;version=latest,\
-	com.ibm.ws.beanvalidation.core;version=latest,\
-	com.ibm.wsspi.org.osgi.service.component.annotations
+	com.ibm.ws.beanvalidation.core;version=latest
