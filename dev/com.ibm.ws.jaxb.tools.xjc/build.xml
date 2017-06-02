@@ -1,0 +1,16 @@
+<project name="com.ibm.ws.jaxb.tools.xjc" default="build">
+  <property name="instrument.ffdc" value="true" />
+  <property name="no.trace.instrumentation" value="true" />
+  <import file="../ant_build/public_imports/rejar_imports.xml" />
+
+  <property name="publish.tools" value="jaxb/xjc=ws-xjc.jar"/>
+
+  <target name="package">
+    <!-- Use bnd rather than bndPackage here because these are tools jars and our jar naming rules don't apply -->
+    <bnd eclipse="false"
+         failok="false"
+         exceptions="true"
+         output="${lib.dir}/ws-xjc.jar"
+         files="bnd.bnd.gradle" />
+  </target>
+</project>

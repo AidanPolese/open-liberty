@@ -1,0 +1,14 @@
+<project name="com.ibm.ws.jaxrs.2.0.tools.wadl2java" default="build">
+	<property name="instrument.ffdc" value="true" />
+	<property name="no.trace.instrumentation" value="true" />
+	<property name="build.with.java.level" value="1.6"/>	   
+
+	<import file="../ant_build/public_imports/standard_imports.xml" />
+
+	<property name="publish.tools" value="jaxrs/wadl2java=wadl2java.jar" />
+
+	<target name="package" depends="package.package">
+		<bnd eclipse="false" failok="false" exceptions="true" output="${lib.dir}/wadl2java.jar" files="bnd.bnd.gradle" />
+	</target>
+
+</project>
