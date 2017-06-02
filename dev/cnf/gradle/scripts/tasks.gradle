@@ -52,6 +52,34 @@ subprojects {
     }
   }
 
+  task publishDevApiIBMJavadoc {
+    dependsOn jar
+    inputs.files(fileTree( dir: "${projectDir}", include: 'com.ibm.websphere.appserver.api.*.javadoc.zip' )).skipWhenEmpty()
+    outputs.dir "${rootDir}/build.image/wlp/dev/api/ibm/javadoc"
+    doLast {
+      copy {
+        from "${projectDir}"
+        into "${rootDir}/build.image/wlp/dev/api/ibm/javadoc"
+        include 'com.ibm.websphere.appserver.api.*.javadoc.zip'
+        rename '.javadoc.zip', "_${bnd.bVersion}-javadoc.zip"
+      }
+    }
+  }
+
+  task publishDevSpiIBMJavadoc {
+    dependsOn jar
+    inputs.files(fileTree( dir: "${projectDir}", include: 'com.ibm.websphere.appserver.spi.*.javadoc.zip' )).skipWhenEmpty()
+    outputs.dir "${rootDir}/build.image/wlp/dev/spi/ibm/javadoc"
+    doLast {
+      copy {
+        from "${projectDir}"
+        into "${rootDir}/build.image/wlp/dev/spi/ibm/javadoc"
+        include 'com.ibm.websphere.appserver.spi.*.javadoc.zip'
+        rename '.javadoc.zip', "_${bnd.bVersion}-javadoc.zip"
+      }
+    }
+  }
+
   task publishToolJars {
     dependsOn jar
     enabled !bnd('publish.tool.jar', '').empty
@@ -61,7 +89,7 @@ subprojects {
       if (!bnd('publish.tool.script', '').empty) {
         copy {
           from "${rootDir}/cnf/resources/bin"
-          into "${rootDir}/build.image/wlp/bin"
+          into "${rootDir}/build.image/wlp/bin" + bnd('publish.tool.subfolder', '')
           rename 'tool(.*)', bnd('publish.tool.script') + '$1'
           filter(org.apache.tools.ant.filters.ReplaceTokens,
                  tokens: [TOOL_JAR: 'tools/' + bnd('publish.tool.jar'), TOOL_SCRIPT: bnd('publish.tool.script'),
@@ -70,8 +98,20 @@ subprojects {
       }
       copy {
         from "${buildDir}"
-        into "${rootDir}/build.image/wlp/bin/tools"
+        into "${rootDir}/build.image/wlp/bin" + bnd('publish.tool.subfolder', '') + "/tools"
         include bnd('publish.tool.jar')
+      }
+    }
+  }
+
+  task publishSchemaResources {
+    dependsOn jar
+    inputs.files(fileTree( dir: "${projectDir}/resources/schemas")).skipWhenEmpty()
+    outputs.dir "${rootDir}/build.image/wlp/dev/api/ibm/schema"
+    doLast {
+      copy {
+        from "${projectDir}/resources/schemas"
+        into "${rootDir}/build.image/wlp/dev/api/ibm/schema"
       }
     }
   }
@@ -277,7 +317,10 @@ subprojects {
 
   assemble {
     dependsOn publishWLPJars
+    dependsOn publishDevApiIBMJavadoc
+    dependsOn publishDevSpiIBMJavadoc
     dependsOn publishToolJars
+    dependsOn publishSchemaResources
     dependsOn publishFeatureResources
     dependsOn publishPlatformManifests
     dependsOn publishTemplates

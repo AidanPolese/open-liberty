@@ -206,6 +206,7 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
             if (props == null || projectTypeSet.contains(props.getProperty(newFolderName))) {
             String bndFileName = bndFile.name
             String pomFileName = bndFile.name.replace('.bnd', '.pom')
+            String docFileName = bndFile.name.replace('.bnd', '.javadoc.zip')
             File newDir = new File(targetRootDir, newFolderName)
             newDir.deleteDir()
             newDir.mkdirs()
@@ -224,6 +225,7 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
                 into newDir
                 include pomFileName
                 include bndFileName
+                include docFileName
                 rename { String fileName ->
                     fileName.replace(bndFileName, 'bnd.bnd')
                 }
@@ -242,6 +244,7 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
             if (props == null || projectTypeSet.contains(props.getProperty(newFolderName))) {
             String bndFileName = bndFile.name
             String pomFileName = bndFile.name.replace('.bnd', '.pom')
+            String docFileName = bndFile.name.replace('.bnd', '.javadoc.zip')
             File newDir = new File(targetRootDir, newFolderName)
             newDir.deleteDir()
             newDir.mkdirs()
@@ -260,6 +263,7 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
                 into newDir
                 include pomFileName
                 include bndFileName
+                include docFileName
                 rename { String fileName ->
                     fileName.replace(bndFileName, 'bnd.bnd')
                 }
