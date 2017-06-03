@@ -700,31 +700,25 @@ public class WSKeyStore extends Properties {
                         File kFile = new File(keyStoreLocation).getAbsoluteFile();
 
                         if (kFile.exists()) {
-                            // CMS key stores are load and store differently so let's check
-                            // the key store type.
-                            if (type != null && type.equals(Constants.KEYSTORE_TYPE_CMS)) {
-                                ks1 = CMSKeyStoreUtility.loadCMSKeyStore(kFile, keyStoreLocation, password, type, provider, createStash);
-                            } else {
-                                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                                    Tr.debug(tc, "Loading keyStore (filebased)");
+                            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                                Tr.debug(tc, "Loading keyStore (filebased)");
 
-                                JSSEProvider jsseProvider = JSSEProviderFactory.getInstance();
-                                ks1 = jsseProvider.getKeyStoreInstance(type, provider);
+                            JSSEProvider jsseProvider = JSSEProviderFactory.getInstance();
+                            ks1 = jsseProvider.getKeyStoreInstance(type, provider);
 
-                                is = new URL("file:" + kFile.getCanonicalPath()).openStream();
-                                // is = openKeyStore(keyStoreLocation);
+                            is = new URL("file:" + kFile.getCanonicalPath()).openStream();
+                            // is = openKeyStore(keyStoreLocation);
 
-                                // load the keystore
-                                if (password.isEmpty() && (type.equalsIgnoreCase(Constants.KEYSTORE_TYPE_JCEKS) || type.equalsIgnoreCase(Constants.KEYSTORE_TYPE_JKS)))
-                                    ks1.load(is, null);
-                                else
-                                    ks1.load(is, password.toCharArray());
+                            // load the keystore
+                            if (password.isEmpty() && (type.equalsIgnoreCase(Constants.KEYSTORE_TYPE_JCEKS) || type.equalsIgnoreCase(Constants.KEYSTORE_TYPE_JKS)))
+                                ks1.load(is, null);
+                            else
+                                ks1.load(is, password.toCharArray());
 
-                                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                                    Enumeration<String> e = ks1.aliases();
-                                    while (e.hasMoreElements()) {
-                                        Tr.debug(tc, "alias: " + e.nextElement());
-                                    }
+                            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                                Enumeration<String> e = ks1.aliases();
+                                while (e.hasMoreElements()) {
+                                    Tr.debug(tc, "alias: " + e.nextElement());
                                 }
                             }
                             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
@@ -732,11 +726,7 @@ public class WSKeyStore extends Properties {
                             return ks1;
                         } // end-storefile-exists
 
-                        // CMS key store are loaded and stored differently so let's check
-                        // the key store type.
-                        if (type != null && type.equals(Constants.KEYSTORE_TYPE_CMS)) {
-                            ks1 = CMSKeyStoreUtility.loadCMSKeyStore(null, keyStoreLocation, password, type, provider, createStash);
-                        } else if (create || name.endsWith(LibertyConstants.DEFAULT_KEY_STORE_FILE)) {
+                        if (create || name.endsWith(LibertyConstants.DEFAULT_KEY_STORE_FILE)) {
 
                             long start = System.currentTimeMillis();
                             Tr.info(tc, "ssl.create.certificate.start");
@@ -885,13 +875,7 @@ public class WSKeyStore extends Properties {
             KeyStore ks = getKeyStore(false, false);
 
             if (ks != null && !readOnly) {
-                // CMS key store are loaded and stored differently so let's
-                // check the key store type.
-                if (SSLKeyStoreType != null && fileBased && SSLKeyStoreType.equalsIgnoreCase(Constants.KEYSTORE_TYPE_CMS)) {
-                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                        Tr.debug(tc, "Storing filebased keystore type " + SSLKeyStoreType);
-                    CMSKeyStoreUtility.storeCMSKeyStore(ks, SSLKeyFile, SSLKeyPassword, SSLKeyStoreType, SSLKeyStoreStash);
-                } else if (fileBased) {
+                if (fileBased) {
                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                         Tr.debug(tc, "Storing filebased keystore type " + SSLKeyStoreType);
                     String keyStoreLocation = SSLKeyFile;

@@ -6,6 +6,10 @@ task initialize {
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
+import org.apache.tools.ant.DirectoryScanner
+
+DirectoryScanner.removeDefaultExclude("**/.gitignore")
+DirectoryScanner.removeDefaultExclude("**/.gitattributes")
 
 task createIvyXml {
     doLast {
@@ -18,6 +22,7 @@ task createIvyXml {
                     String artifact = ""
                     def excludeProjects = ["com.ibm.ws.componenttest",
                                         "com.ibm.ws.httpservice",
+                                        "com.ibm.ws.security.wim.adapter.file",
                                         "fattest.simplicity"]
                     for (String bsn : bndProject.getBsns()) {
                         def org = ""
@@ -54,16 +59,56 @@ task createGeneratedReplacementProjects {
             if (element.isDirectory()) {
                 String relativePath = "$element.relativePath"
                 def bndProject = bndWorkspace.getProject(relativePath)
+                if (bndProject == null) {
+                    return
+                }
                 def excludeProjects = ["com.ibm.ws.componenttest",
                                         "com.ibm.ws.httpservice",
+                                        "com.ibm.ws.security.wim.adapter.file",
                                         "fattest.simplicity",
                                         "com.ibm.ws.org.apache.ant"]
                 if (relativePath.contains('_test') ||
                     relativePath.contains('_bvt') ||
                     relativePath.contains('_fat') ||
-                    excludeProjects.contains(relativePath))
-                    return;
-                if (bndProject != null && !bndProject.isNoBundles()) {
+                    excludeProjects.contains(relativePath)) {
+                    return
+                }
+                List bsns = bndProject.getBsns()
+                int bsnCount = bndProject.isNoBundles() ? 0 : bndProject.getBsns().size()
+                if (bsnCount == 0) {
+                    if (!relativePath.equals('com.ibm.ws.org.apache.cxf.jaxrs')) {
+                        return
+                    }
+                    File targetDir = new File(buildDir, 'replacements/' + relativePath)
+                    targetDir.mkdirs()
+                    copy {
+                        from templateDir
+                        into targetDir
+                        include '*.template'
+                        rename { String fileName ->
+                            fileName.replace('.template', '')
+                        }
+                        filter(ReplaceTokens, tokens: [PROJECT_NAME: relativePath, MAVEN_ARTIFACT: ''])
+                    }
+                    targetDir = new File(buildDir, 'replacements/' + relativePath + '/lib')
+                    targetDir.mkdirs()
+                    copy {
+                        from "${rootDir}/com.ibm.ws.org.apache.cxf.jaxrs/lib"
+                        into targetDir
+                        include 'cxf*.jar'
+                    }
+                    String classpathEntries = ""
+                    fileTree(dir: "${rootDir}/com.ibm.ws.org.apache.cxf.jaxrs/lib", include: 'cxf*.jar').visit { jarfile ->
+                        classpathEntries = '	<classpathentry exported="true" kind="lib" path="lib/' + jarfile.relativePath + '"/>\n' + classpathEntries
+                    }
+                    File classpathFile = new File(buildDir, "replacements/${relativePath}/.classpath")
+                    classpathFile.delete()
+                    classpathFile.createNewFile()
+                    classpathFile.text = """<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+$classpathEntries</classpath>
+"""
+                } else if (bsnCount == 1) {
                     String firstBsn = bndProject.getBsns()[0]
                     String artifact = firstBsn + '-' + bndProject.getVersion(firstBsn) + '.jar'
                     //println "projectName=" + relativePath + ", artifact=" + artifact
@@ -83,7 +128,7 @@ task createGeneratedReplacementProjects {
                         //println bndProject.getBsns()
                         for (String bsn : bndProject.getBsns()) {
                             artifact = bsn + '-' + bndProject.getVersion(bsn) + '.jar'
-                            classpathEntries = '    <classpathentry exported="true" kind="lib" path="/prereq.published/lib/' + artifact + '"/>\n' + classpathEntries
+                            classpathEntries = '	<classpathentry exported="true" kind="lib" path="/prereq.published/lib/' + artifact + '"/>\n' + classpathEntries
                         }
                         File classpathFile = new File(buildDir, "replacements/${relativePath}/.classpath")
                         classpathFile.delete()
@@ -92,6 +137,15 @@ task createGeneratedReplacementProjects {
 <classpath>
 $classpathEntries</classpath>
 """
+                    }
+                    if (relativePath.equals('com.ibm.ws.org.codehaus.jackson')) {
+                        targetDir = new File(buildDir, 'replacements/' + relativePath + '/lib')
+                        targetDir.mkdirs()
+                        copy {
+                            from "${rootDir}/com.ibm.ws.org.codehaus.jackson/lib"
+                            into targetDir
+                            include 'jackson*.jar'
+                        }
                     }
                 }
             }

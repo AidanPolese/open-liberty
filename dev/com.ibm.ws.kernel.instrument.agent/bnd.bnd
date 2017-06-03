@@ -7,7 +7,7 @@ instrument.disabled: true
 
 publish.wlp.jar.disabled: true
 
--removeheaders=Bnd-LastModified, Bundle-ManifestVersion, Bundle-Name, Bundle-Version, Private-Package, Require-Capability, Tool
+-removeheaders=Bnd-LastModified, Bundle-ManifestVersion, Bundle-Name, Private-Package, Require-Capability, Tool
 
 -buildpath: \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest

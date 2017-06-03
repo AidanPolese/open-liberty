@@ -62,30 +62,31 @@ task transform {
         String classpathEntries = ""
         bsnToProject.keys().sort().each { bsn ->
             String projectName = bsnToProject.getProperty(bsn)
+            String artifact = null
+            String artifactParent = null
+            fileTree(folderOpenLibertyCnfLocalDev).include(bsn + '/**').visit { element ->
+                if (!element.isDirectory() && element.file.name.endsWith('.jar')) {
+                    artifact = element.file.name
+                    artifactParent = element.file.getParent()
+                    copy {
+                        from artifactParent
+                        into folderPublishedLib
+                        include artifact
+                    }
+                }
+            }
+            if (artifact == null) {
+                println 'No artifact was found for project ' + projectName + ', skipping...'
+            }
             File folderCDOpenDevProject = new File(folderCDOpenDev, projectName)
             if (folderCDOpenDevProject.exists()) {
                 String projectType = projectToType.getProperty(projectName)
                 if (projectType == null) {
                     throw new GradleException("Unknown projectType for folder " + folderCDOpenDevProject)
                 }
-                String artifact = null
-                String artifactParent = null
-                fileTree(folderOpenLibertyCnfLocalDev).include(bsn + '/**').visit { element ->
-                    if (!element.isDirectory() && element.file.name.endsWith('.jar')) {
-                        artifact = element.file.name
-                        artifactParent = element.file.getParent()
-                        copy {
-                            from artifactParent
-                            into folderPublishedLib
-                            include artifact
-                        }
-                    }
-                }
-                if (artifact == null) {
-                    println 'No artifact was found for project ' + projectName + ', skipping...'
-                } else {
+                if (artifact != null) {
                 if (projectName.equals('com.ibm.ws.org.apache.cxf.jaxws')) {
-                    classpathEntries = classpathEntries + '	<classpathentry exported="true" kind="lib" path="/prereq.published/lib/' + artifact + '"/>\n'
+                    classpathEntries = '	<classpathentry exported="true" kind="lib" path="/prereq.published/lib/' + artifact + '"/>\n' + classpathEntries
                 }
                 File projectTemp = new File(tempProjectFolder, projectName)
                 if (!projectTemp.exists()) {
@@ -103,7 +104,21 @@ task transform {
                     }
                 }
                 }
-            //} else {
+            } else {
+                if (artifact != null) {
+                    println 'Creating new project ' + projectName
+                    folderCDOpenDevProject = new File(folderCDOpenDev, projectName)
+                    folderCDOpenDevProject.mkdir()
+                    copy {
+                        from templateDir
+                        into folderCDOpenDevProject
+                        include '*.template'
+                        rename { String fileName ->
+                            fileName.replace('.template', '')
+                        }
+                        filter(ReplaceTokens, tokens: [PROJECT_NAME: projectName, MAVEN_ARTIFACT: artifact])
+                    }
+                }
             //    File internalFeature = new File(internalFeatureFolder, projectName + '.feature')
             //    if (!internalFeature.exists()) {
             //        throw new GradleException("The folder " + internalFeature + " does not exist")
