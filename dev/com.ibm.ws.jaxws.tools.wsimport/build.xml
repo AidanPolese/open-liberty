@@ -1,0 +1,16 @@
+<project name="com.ibm.ws.jaxws.tools.wsimport" default="build">
+  <property name="instrument.ffdc" value="true" />
+  <property name="no.trace.instrumentation" value="true" />
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+
+  <property name="publish.tools" value="jaxws/wsimport=ws-wsimport.jar"/>
+
+  <target name="package" depends="package.package">
+		<bnd eclipse="false"
+			 failok="false"
+			 exceptions="true"
+			 output="${lib.dir}/ws-wsimport.jar"
+			 files="bnd.bnd.gradle"
+		     />
+  </target>
+</project>

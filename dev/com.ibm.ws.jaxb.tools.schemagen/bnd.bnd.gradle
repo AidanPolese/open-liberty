@@ -1,17 +1,24 @@
--include= ~../cnf/resources/bnd/cmdline.props
+-include= ~../cnf/resources/bnd/cmdline-subdir.props
 bVersion=1.0
+
 
 Bundle-Name: IBM JAXB SchemaGen Tool
 Bundle-SymbolicName: com.ibm.ws.jaxb.tools.schemagen
+
+Require-Compiler: true
+
 Require-Bundle: com.ibm.ws.jaxb.tools.2.2.10; version="[1,1.0.100)", \
  com.ibm.websphere.javaee.jaxb.2.2; version="[1,1.0.100)"; location="dev/api/spec/", \
  com.ibm.ws.logging; version="[1,1.0.100)"
+ 
 Command-Class: com.ibm.ws.jaxb.tools.SchemaGen
 
 -outputmask: ws-schemagen.jar
 
 instrument.disabled: true
 
-publish.tool.subfolder=/jaxb
+publish.tool.script.subdir=jaxb/
+publish.tool.script.relative=..
+publish.tool.script.dir.length=10
 publish.tool.jar=ws-schemagen.jar
 publish.tool.script=schemagen

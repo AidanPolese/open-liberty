@@ -3,8 +3,6 @@
   <property name="no.trace.instrumentation" value="true" />
   <import file="../ant_build/public_imports/rejar_imports.xml" />
 
-  <property name="publish.tools" value="jaxb/xjc=ws-xjc.jar,jaxb/schemagen=ws-schemagen.jar"/>
-
   <!-- Only the jaxb bundle goes into the lib folder -->
   <patternset id="publish.bundles">
     <include name="*jaxb*" />
@@ -15,17 +13,5 @@
                 version="1.0" 
                 original.jar.name="jaxb.tools"
                 original.jar.version="2.2.10" />
-    
-    <!-- Use bnd rather than bndPackage here because these are tools jars and our jar naming rules don't apply -->
-    <bnd eclipse="false"
-         failok="false"
-         exceptions="true"
-         output="${lib.dir}/ws-xjc.jar"
-         files="jaxb_xjc.bnd" />
-    <bnd eclipse="false"
-         failok="false"
-         exceptions="true"
-         output="${lib.dir}/ws-schemagen.jar"
-         files="jaxb_schemagen.bnd" />
   </target>
 </project>

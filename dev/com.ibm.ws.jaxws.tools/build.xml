@@ -5,24 +5,5 @@
   <property name="original.jar.version" value="2.2.10"/>
 
   <import file="../ant_build/public_imports/standard_imports.xml"/>
-  
-  <property name="publish.tools" value="jaxws/wsimport=ws-wsimport.jar,jaxws/wsgen=ws-wsgen.jar"/>
-
-  <target name="package" depends="package.package">
-		<bnd eclipse="false"
-			 failok="false"
-			 exceptions="true"
-			 output="${lib.dir}/ws-wsgen.jar"
-			 files="wsgen.bnd"
-		     />
-  	
-		<bnd eclipse="false"
-			 failok="false"
-			 exceptions="true"
-			 output="${lib.dir}/ws-wsimport.jar"
-			 files="wsimport.bnd"
-		     />  	
-
-  </target>
 
 </project>
