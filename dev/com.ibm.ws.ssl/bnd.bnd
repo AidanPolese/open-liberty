@@ -49,7 +49,6 @@ Include-Resource: \
 instrument.disabled: true
 
 -buildpath: \
-    lib/ibmcmsprovider.jar;version=file,\
 	com.ibm.ws.logging;version=latest,\
 	com.ibm.websphere.security;version=latest,\
 	com.ibm.websphere.org.osgi.core;version=latest,\

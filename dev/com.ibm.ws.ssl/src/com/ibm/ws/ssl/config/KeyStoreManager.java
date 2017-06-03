@@ -308,7 +308,6 @@ public class KeyStoreManager {
 
         // Loop until flag indicates a key store was found or failure occured.
         while (not_finished) {
-            boolean isCMS = Constants.KEYSTORE_TYPE_CMS.equals(type);
             // Get a base instance of the keystore based on the type and or the
             // provider.
             if (Constants.KEYSTORE_TYPE_JCERACFKS.equals(type) || Constants.KEYSTORE_TYPE_JCECCARACFKS.equals(type) || Constants.KEYSTORE_TYPE_JCEHYBRIDRACFKS.equals(type))
@@ -319,12 +318,10 @@ public class KeyStoreManager {
             // Get a base instance of the keystore based on the type and or the
             // provider.
             char[] passphrase = null;
-            if (!isCMS) {
-                keyStore = KeyStore.getInstance(type);
-                // Convert the key store password into a char array.
-                if (password != null) {
-                    passphrase = WSKeyStore.decodePassword(password).toCharArray();
-                }
+            keyStore = KeyStore.getInstance(type);
+            // Convert the key store password into a char array.
+            if (password != null) {
+                passphrase = WSKeyStore.decodePassword(password).toCharArray();
             }
 
             // Open the file specified by the input parms as the keystore file.
@@ -340,13 +337,8 @@ public class KeyStoreManager {
                         not_finished = false;
                     }
                 } else if (null == fileName) {
-                    if (isCMS) {
-                        keyStore = CMSKeyStoreUtility.loadCMSKeyStore(null, null, password, type, provider, "true");
-                        not_finished = false;
-                    } else {
-                        keyStore.load(null, passphrase);
-                        not_finished = false;
-                    }
+                    keyStore.load(null, passphrase);
+                    not_finished = false;
                 } else {
                     File f = new File(fileName);
 
@@ -357,28 +349,16 @@ public class KeyStoreManager {
                         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                             Tr.debug(tc, "getKeyStore created new KeyStore: " + fileName);
                         }
-                        // CMS key stores are load and store differently so let's check the
-                        // key store type.
-                        if (isCMS) {
-                            keyStore = CMSKeyStoreUtility.loadCMSKeyStore(null, fileName, password, type, provider, "true");
-                            not_finished = false;
-                        } else {
-                            keyStore.load(null, passphrase);
-                            not_finished = false;
-                        }
+                        keyStore.load(null, passphrase);
+                        not_finished = false;
                     } else {
                         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                             Tr.debug(tc, "getKeyStore created a new inputStream: " + fileName);
                         }
-                        if (isCMS) {
-                            keyStore = CMSKeyStoreUtility.loadCMSKeyStore(f, fileName, password, type, provider, "true");
-                            not_finished = false;
-                        } else {
-                            // Access the keystore input stream from a File or URL
-                            inputStream = getInputStream(fileName, create);
-                            keyStore.load(inputStream, passphrase);
-                            not_finished = false;
-                        }
+                        // Access the keystore input stream from a File or URL
+                        inputStream = getInputStream(fileName, create);
+                        keyStore.load(inputStream, passphrase);
+                        not_finished = false;
                     }
                 }
             } catch (IOException e) {

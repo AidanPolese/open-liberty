@@ -13,9 +13,11 @@ Private-Package: \
 Include-Resource: \
   OSGI-INF=resources/OSGI-INF
 
--dsannotations: com.ibm.ws.security.wim.adapter.file.FileAdapter    
+-dsannotations: com.ibm.ws.security.wim.adapter.file.FileAdapter
 
 publish.wlp.jar.disabled: true
+
+test.project: true
 
 -buildpath: \
 	../com.ibm.ws.jaxb.tools/lib/jaxb-xjc.jar;version=file, \

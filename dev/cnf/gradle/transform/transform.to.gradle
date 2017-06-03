@@ -138,9 +138,6 @@ void transformProjects(File sourceRootDir, File targetRootDir, Properties props,
             String mfFileName = featureFileName.replace('.feature', '.mf')
             File newDir = new File(targetRootDir, featureName)
             File resourcesDir = new File(newDir, 'resources')
-            if (filesToRemove != null) {
-                filesToRemove.append(parentFolder + '/' + featureFileName + ':LAOSRemoveFile' + nl)
-            }
             newDir.deleteDir()
             resourcesDir.mkdirs()
             copy {
