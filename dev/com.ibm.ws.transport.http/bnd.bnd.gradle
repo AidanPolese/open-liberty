@@ -27,7 +27,8 @@ Export-Package: \
     com.ibm.ws.transport.access*;provide:=true, \
     com.ibm.ws.genericbnf, \
     com.ibm.ws.http.dispatcher.classify, \
-    com.ibm.ws.http.channel.outstream
+    com.ibm.ws.http.channel.outstream, \
+    com.ibm.ws.http.channel.inputstream
     
 Private-Package: \
     com.ibm.ws.http.*, \
