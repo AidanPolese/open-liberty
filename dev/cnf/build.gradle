@@ -108,7 +108,7 @@ task createGeneratedReplacementProjects {
 <classpath>
 $classpathEntries</classpath>
 """
-                } else if (bsnCount == 1) {
+                } else {
                     String firstBsn = bndProject.getBsns()[0]
                     String artifact = firstBsn + '-' + bndProject.getVersion(firstBsn) + '.jar'
                     //println "projectName=" + relativePath + ", artifact=" + artifact
