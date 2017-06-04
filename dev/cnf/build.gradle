@@ -123,6 +123,17 @@ $classpathEntries</classpath>
                         }
                         filter(ReplaceTokens, tokens: [PROJECT_NAME: relativePath, MAVEN_ARTIFACT: artifact])
                     }
+                    if (relativePath.equals('com.ibm.ws.logging')) {
+                        String classpathEntries = '	<classpathentry exported="true" kind="lib" path="/prereq.published/lib/' + artifact + '"/>\n' +
+                                                  '	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.ibm.ws.kernel.boot"/>\n'
+                        File classpathFile = new File(buildDir, "replacements/${relativePath}/.classpath")
+                        classpathFile.delete()
+                        classpathFile.createNewFile()
+                        classpathFile.text = """<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+$classpathEntries</classpath>
+"""
+                    }
                     if (bndProject.getBsns().size() > 1) {
                         String classpathEntries = ""
                         //println bndProject.getBsns()
