@@ -288,7 +288,7 @@ public class WCCustomProperties {
     public static boolean DECODE_PARAM_VIA_REQ_ENCODING ;
     public static boolean PRINT_BYTEVALUE_AND_CHARPARAMDATA;
     public static boolean DENY_DUPLICATE_FILTER_IN_CHAIN ; //PM93069
-    public static boolean VALIDATE_LOCALE_VALUES; //PM93944
+    public static boolean VALIDATE_LOCALE_VALUES; 
     public static String  DISABLE_STATIC_MAPPING_CACHE;      //PM84305
     
     //Start 8.5.5.2
@@ -406,7 +406,7 @@ public class WCCustomProperties {
         WCCustomProperties.FullyQualifiedPropertiesMap.put("decodeparamviareqencoding","com.ibm.ws.webcontainer.decodeparamviareqencoding"); //PM92940
         WCCustomProperties.FullyQualifiedPropertiesMap.put("printbytevalueandcharparamdata","com.ibm.ws.webcontainer.printbytevalueandcharparamdata"); //PM92940 , debugging property
         WCCustomProperties.FullyQualifiedPropertiesMap.put("denyduplicatefilterinchain","com.ibm.ws.webcontainer.denyduplicatefilterinchain"); //PM93069
-        WCCustomProperties.FullyQualifiedPropertiesMap.put("validatelocalevalues","com.ibm.ws.webcontainer.validatelocalevalues"); //PM93944
+        WCCustomProperties.FullyQualifiedPropertiesMap.put("validatelocalevalues","com.ibm.ws.webcontainer.validatelocalevalues"); 
         WCCustomProperties.FullyQualifiedPropertiesMap.put("disablestaticmappingcache", "com.ibm.ws.webcontainer.disablestaticmappingcache"); //PM84305
         WCCustomProperties.FullyQualifiedPropertiesMap.put("transfercontextinasyncservletrequest","com.ibm.ws.webcontainer.transfercontextinasyncservletrequest"); //PM90834
         WCCustomProperties.FullyQualifiedPropertiesMap.put("destroyservletonserviceunavailableexception","com.ibm.ws.webcontainer.destroyservletonserviceunavailableexception"); //PM98245
@@ -750,7 +750,7 @@ public class WCCustomProperties {
         DECODE_PARAM_VIA_REQ_ENCODING = Boolean.valueOf( WebContainer.getWebContainerProperties().getProperty("com.ibm.ws.webcontainer.decodeparamviareqencoding")).booleanValue(); //PM92940
         PRINT_BYTEVALUE_AND_CHARPARAMDATA = Boolean.valueOf( WebContainer.getWebContainerProperties().getProperty("com.ibm.ws.webcontainer.printbytevalueandcharparamdata")).booleanValue(); //PM92940, debugging property
         DENY_DUPLICATE_FILTER_IN_CHAIN =  Boolean.valueOf(WebContainer.getWebContainerProperties().getProperty("com.ibm.ws.webcontainer.denyduplicatefilterinchain", "false")).booleanValue(); //PM93069
-        VALIDATE_LOCALE_VALUES =  Boolean.valueOf(WebContainer.getWebContainerProperties().getProperty("com.ibm.ws.webcontainer.validatelocalevalues", "true")).booleanValue(); //PM93944
+        VALIDATE_LOCALE_VALUES =  Boolean.valueOf(WebContainer.getWebContainerProperties().getProperty("com.ibm.ws.webcontainer.validatelocalevalues", "true")).booleanValue(); 
         DISABLE_STATIC_MAPPING_CACHE = customProps.getProperty("com.ibm.ws.webcontainer.disablestaticmappingcache");     //PM84305
         
         // Start 8.5.5.2

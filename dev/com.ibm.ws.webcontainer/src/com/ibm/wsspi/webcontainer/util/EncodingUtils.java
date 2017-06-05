@@ -11,7 +11,6 @@
 //       PK13492        11/28/05        todkap          CP943C ENCODING NOT WORKING PROPERLY ON HP    WAS.webcontainer    
 //       PK18236        02/21/06        todkap          UNSUPPORTEDENCODINGEXCEPTION:JISAUTODETECT    WAS.webcontainer    
 //       PK75844        12/10/08        mmulholl        Move init of _localeMap and _converterMap into synchronized block 
-//       PM93944        08/23/13        anupag          Validate locale values , 750237(PM93944 , tWAS)
 //
 
 
@@ -32,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import com.ibm.wsspi.webcontainer.logging.LoggerFactory;
-import com.ibm.wsspi.webcontainer.WCCustomProperties; //PM93944
+import com.ibm.wsspi.webcontainer.WCCustomProperties; 
 import com.ibm.wsspi.webcontainer.WebContainer;
 import com.ibm.wsspi.webcontainer.WebContainerConstants;
 
@@ -230,7 +229,7 @@ public class EncodingUtils {
         }
 
         // Short circuit with an empty enumeration if null header
-        if ((acceptLanguage == null)|| (acceptLanguage.trim().length() ==0)) { //PM93944
+        if ((acceptLanguage == null)|| (acceptLanguage.trim().length() ==0)) { 
             Vector def = new Vector();
             def.addElement(Locale.getDefault());
             if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {
@@ -246,13 +245,13 @@ public class EncodingUtils {
         if (langList == null) {
             // Create and add to cache
             langList = processAcceptLanguage(acceptLanguage);
-            //PM93944 Start
+          
             if(WCCustomProperties.VALIDATE_LOCALE_VALUES){
                 langList = extractLocales(langList , true);
             }
             else
                 langList = extractLocales(langList , false);
-            //PM93944 End
+            
             localesCache.put(acceptLanguage, langList);
         }
 
@@ -342,7 +341,7 @@ public class EncodingUtils {
     }
         
     /** 
-     * This method will validate the values. PM93944 .
+     * This method will validate the values.
      * 
      * Validate language and country values as alphanumeric.
      * Validate variant value as alphanumeric , '_' ,and  '-'
@@ -378,7 +377,7 @@ public class EncodingUtils {
                         country = country.substring(0, variantIndex).trim();
                     }
 
-                } //PM93944 Start
+                } 
                 if(secure){
                     if ((country.trim().length()!= 0 && !isValueAlphaNumeric(country, "country")) ||
                                     (language.trim().length()!= 0 && !isValueAlphaNumeric(language, "language"))) {
@@ -389,7 +388,7 @@ public class EncodingUtils {
                     if (variant.trim().length()!= 0 && !isValueAlphaNumeric(variant, "variant")) {
                         variant = "";
                     }
-                }//PM93944 End
+                }
 
                 l.addElement(new Locale(language, country, variant));
             }
