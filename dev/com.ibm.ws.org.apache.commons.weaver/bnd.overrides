@@ -14,3 +14,5 @@ Export-Package: \
 Include-Resource: \
   @lib/commons-weaver-privilizer-1.1.jar!/META-INF/LICENSE.txt, \
   @lib/commons-weaver-privilizer-1.1.jar!/META-INF/NOTICE.txt
+
+Import-Package: !org.apache.commons.io, *
