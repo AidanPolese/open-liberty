@@ -656,6 +656,10 @@ info.envProductExtension=CWWKE0940I: The {0} product extension has a product ide
 info.envProductExtension.explanation= The WLP_PRODUCT_EXT_DIR environment variable points to the location of the product extension. The server found and is using the product extension.
 info.envProductExtension.useraction=No action is required.
 
+warning.variable.invalid=CWWKE0941W: The variable declaration {0} specified in server.env is invalid because it contains non-alphanumeric characters in the variable name. The value will not be used.  
+warning.variable.invalid.explanation=Only alphanumeric characters are allowed in variable names specified in the server.env file.
+warning.variable.invalid.useraction=Either modify the variable name to only use alphanumeric characters or move the definition of the variable to the bootstrap.properties file.
+
 info.serverStarting=Starting server {0}.
 info.serverStarted=Server {0} started.
 info.serverStartedWithPID=Server {0} started with process ID {1}.

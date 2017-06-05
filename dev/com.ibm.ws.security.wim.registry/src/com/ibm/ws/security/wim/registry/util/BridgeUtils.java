@@ -414,7 +414,7 @@ public class BridgeUtils implements WIMUserRegistryDefines {
      * @param inputAttrValue Input attribute value
      * @param outputAttrName Ouptut attribute name
      * @param mapUtils Bridge utility instance
-     * @return Entity or null if the input attribute is not an identifier type
+     * @return Entity or null if the input attribute is not an identifier type or if there are no entities
      */
     protected Root getEntityByIdentifier(Root root, String inputAttrName, String inputAttrValue, String outputAttrName, BridgeUtils mapUtils) throws WIMException {
 
@@ -454,6 +454,10 @@ public class BridgeUtils implements WIMUserRegistryDefines {
 
             // invoke ProfileService.get with the input root DataGraph
             returnValue = mapUtils.getWimService().get(root);
+
+            if (returnValue != null && returnValue.getEntities().isEmpty()) {
+                returnValue = null;
+            }
         }
 
         return returnValue;
