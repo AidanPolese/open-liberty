@@ -22,7 +22,7 @@
 		  </then>
 		  <else>
 			<copy todir="${required.lib.dir}">
-				<fileset dir="${basedir}/../prereq.published/lib/" includes="com.ibm.ws.org.apache.commons.compress.1.10-1.0.${micro.version}-SNAPSHOT.jar" />
+				<fileset dir="${basedir}/../prereq.published/lib/" includes="com.ibm.ws.org.apache.commons.compress.1.10-*.jar" />
 			</copy>
 		  </else>
 		</iff>

@@ -735,9 +735,13 @@ readServerEnv()
       \#*);;
       *=*)
         # Only accept alphanumeric variable names to avoid eval complexities.
-        if var=`safeEcho "$line" | sed -e 's/^\([a-zA-Z0-9_][a-zA-Z0-9_]*\)=.*/\1/'`; then
-          extractValueAndEscapeForEval "${line}"
-          eval "${var}=${escapeForEvalResult}; export ${var}"
+        if var=`safeEcho "$line" | sed -e 's/^\([a-zA-Z0-9_][a-zA-Z0-9_]*\)=.*/\1/'`; then 
+           if [[ ${var} == *"="* ]]; then
+               SERVER_ENV_SETUP_FAILURE="${var} ${SERVER_ENV_SETUP_FAILURE}"
+           else
+              extractValueAndEscapeForEval "${line}"
+              eval "${var}=${escapeForEvalResult}; export ${var}"
+           fi
         fi
       esac
     done
@@ -825,6 +829,26 @@ javaCmd()
 }
 
 ##
+## Issue a translated warning message. The java command will use the same options as javaCmd, 
+## but will ignore debug settings and will not exit after running the command when 'run'
+## or 'debug' is used
+##
+##     "$@"
+##       All arguments passed to the java command
+##
+issueMessage()
+{
+  # Set all the parameters for the java command.  We use eval so that each line
+  # in jvm.options is treated as a distinct argument.
+  eval "set -- ${JAVA_AGENT_QUOTED} ${JVM_OPTIONS_QUOTED} ${JVM_ARGS} -jar ${WLP_INSTALL_DIR_QUOTED}/bin/tools/ws-server.jar "'"$@"'
+  ARGS="$@"
+
+  "${JAVA_CMD}" "$@"
+}
+
+
+
+##
 ## serverCmdOS400: Launch a server process using the OS400 native launcher.
 ##
 ##   backgroundLogFile
@@ -881,6 +905,18 @@ serverCmdOS400()
 ##
 serverCmd()
 {
+
+   ## If one or more variables in server.env contains non-alphanumeric characters 
+   ## SERVER_ENV_SETUP_FAILURE will contain the invalid entries. We have to
+   ## temporarily set ACTION to 'start' so that the process will not exit after
+   ## the error message when ACTION is 'run' or 'debug'
+   if [ -n "${SERVER_ENV_SETUP_FAILURE}" ];
+   then
+	for i in ${SERVER_ENV_SETUP_FAILURE}; do
+            issueMessage --message:warning.variable.invalid "$i"
+	done
+   fi
+  
   SERVER_CMD_BACKGROUND_LOG=$1
   shift
 

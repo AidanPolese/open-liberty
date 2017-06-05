@@ -30,6 +30,7 @@ import javax.naming.directory.InitialDirContext;
 
 import com.ibm.websphere.simplicity.RemoteFile;
 import com.ibm.websphere.simplicity.log.Log;
+
 import componenttest.topology.impl.LibertyServer;
 
 /**
@@ -38,20 +39,19 @@ import componenttest.topology.impl.LibertyServer;
 public class LDAPUtils {
 
     private static final Class<?> c = LDAPUtils.class;
-    public static boolean USE_LOCAL_LDAP_SERVER =
-                    AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
-                        @Override
-                        public Boolean run() {
-                            String useInMemoryLdapString = System.getProperty("fat.test.really.use.local.ldap");
-                            boolean inMemoryLdap = false;
-                            if (useInMemoryLdapString != null) {
-                                Log.info(c, "<clinit>", "fat.test.really.use.local.ldap=" + useInMemoryLdapString);
-                                inMemoryLdap = Boolean.parseBoolean(useInMemoryLdapString);
-                            }
-                            Log.info(c, "<clinit>", "USE_LOCAL_LDAP_SERVER=" + inMemoryLdap);
-                            return inMemoryLdap;
-                        }
-                    });
+    public static boolean USE_LOCAL_LDAP_SERVER = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+        @Override
+        public Boolean run() {
+            String useInMemoryLdapString = System.getProperty("fat.test.really.use.local.ldap");
+            boolean inMemoryLdap = false;
+            if (useInMemoryLdapString != null) {
+                Log.info(c, "<clinit>", "fat.test.really.use.local.ldap=" + useInMemoryLdapString);
+                inMemoryLdap = Boolean.parseBoolean(useInMemoryLdapString);
+            }
+            Log.info(c, "<clinit>", "USE_LOCAL_LDAP_SERVER=" + inMemoryLdap);
+            return inMemoryLdap;
+        }
+    });
 
     public static String LDAP_SERVER_1_NAME = "ctldap2.rtp.raleigh.ibm.com"; // Old server : "ralwang.rtp.raleigh.ibm.com"
     public static String LDAP_SERVER_2_NAME = "adsrv.rtp.raleigh.ibm.com"; // smpc100 was primary server, but as it down, we are using adsrv as primary AD server now.
@@ -62,7 +62,7 @@ public class LDAPUtils {
     public static String LDAP_SERVER_7_NAME = "cc004-w2k8.rtp.raleigh.ibm.com"; // Old server : "ccwin94.austin.ibm.com";
     public static String LDAP_SERVER_8_NAME = "nc135007.tivlab.austin.ibm.com";
     public static String LDAP_SERVER_9_NAME = "svtwin006.austin.ibm.com";
-    public static String LDAP_SERVER_10_NAME = "nc135024.tivlab.austin.ibm.com";
+    public static String LDAP_SERVER_10_NAME = "oidcldap1.rtp.raleigh.ibm.com"; // Old server: nc135024.tivlab.austin.ibm.com
     public static String LDAP_SERVER_11_NAME = "nc135025.tivlab.austin.ibm.com";
     public static String LDAP_SERVER_12_NAME = "nc049244.tivlab.raleigh.ibm.com";
     public static String LDAP_SERVER_13_NAME = "oraldap.rtp.raleigh.ibm.com"; // Newly setup Sun LDAP
@@ -137,9 +137,9 @@ public class LDAPUtils {
      * <li>ldap.server.12.port - the port of the twelfth LDAP server, if {@link #USE_LOCAL_LDAP_SERVER} is false, this will be 389(TDS)
      * <li>ldap.server.13.name - the host of the thirteen LDAP server, if {@link #USE_LOCAL_LDAP_SERVER} is false, this will be oraldap.rtp.raleigh.ibm.com(SUNONE)
      * <li>ldap.server.13.port - the port of the thirteen LDAP server, if {@link #USE_LOCAL_LDAP_SERVER} is false, this will be 389(SUNONE)
-     * 
+     *
      * </ul>
-     * 
+     *
      * @param server
      *            server for which bootstrap properties file needs updating with LDAP server host/ports
      * @throws Exception
@@ -150,7 +150,7 @@ public class LDAPUtils {
 
     /**
      * Adds LDAP variables for various servers and ports to the bootstrap.properties file for use in server.xml.
-     * 
+     *
      * @param server
      * @param isInMemoryAllowed If false, physical LDAP servers and ports will be used as the property values.
      * @throws Exception
@@ -159,55 +159,49 @@ public class LDAPUtils {
         String method = "addLDAPVariables";
         Log.entering(c, method);
         // Read LDAP ports from system properties
-        final String LDAP_1_PORT =
-                        AccessController.doPrivileged(new PrivilegedAction<String>() {
-                            @Override
-                            public String run() {
-                                Log.info(c, "<clinit>", "LDAP_1_PORT=" + System.getProperty("ldap.1.port"));
-                                return System.getProperty("ldap.1.port");
-                            }
-                        });
-        final String LDAP_2_PORT =
-                        AccessController.doPrivileged(new PrivilegedAction<String>() {
-                            @Override
-                            public String run() {
-                                Log.info(c, "<clinit>", "LDAP_2_PORT=" + System.getProperty("ldap.2.port"));
-                                return System.getProperty("ldap.2.port");
-                            }
-                        });
-        final String LDAP_3_PORT =
-                        AccessController.doPrivileged(new PrivilegedAction<String>() {
-                            @Override
-                            public String run() {
-                                Log.info(c, "<clinit>", "LDAP_3_PORT=" + System.getProperty("ldap.3.port"));
-                                return System.getProperty("ldap.3.port");
-                            }
-                        });
+        final String LDAP_1_PORT = AccessController.doPrivileged(new PrivilegedAction<String>() {
+            @Override
+            public String run() {
+                Log.info(c, "<clinit>", "LDAP_1_PORT=" + System.getProperty("ldap.1.port"));
+                return System.getProperty("ldap.1.port");
+            }
+        });
+        final String LDAP_2_PORT = AccessController.doPrivileged(new PrivilegedAction<String>() {
+            @Override
+            public String run() {
+                Log.info(c, "<clinit>", "LDAP_2_PORT=" + System.getProperty("ldap.2.port"));
+                return System.getProperty("ldap.2.port");
+            }
+        });
+        final String LDAP_3_PORT = AccessController.doPrivileged(new PrivilegedAction<String>() {
+            @Override
+            public String run() {
+                Log.info(c, "<clinit>", "LDAP_3_PORT=" + System.getProperty("ldap.3.port"));
+                return System.getProperty("ldap.3.port");
+            }
+        });
 
-        final String LDAP_1_SSL_PORT =
-                        AccessController.doPrivileged(new PrivilegedAction<String>() {
-                            @Override
-                            public String run() {
-                                Log.info(c, "<clinit>", "LDAP_1_SSL_PORT=" + System.getProperty("ldap.1.ssl.port"));
-                                return System.getProperty("ldap.1.ssl.port");
-                            }
-                        });
-        final String LDAP_2_SSL_PORT =
-                        AccessController.doPrivileged(new PrivilegedAction<String>() {
-                            @Override
-                            public String run() {
-                                Log.info(c, "<clinit>", "LDAP_2_SSL_PORT=" + System.getProperty("ldap.2.ssl.port"));
-                                return System.getProperty("ldap.2.ssl.port");
-                            }
-                        });
-        final String LDAP_3_SSL_PORT =
-                        AccessController.doPrivileged(new PrivilegedAction<String>() {
-                            @Override
-                            public String run() {
-                                Log.info(c, "<clinit>", "LDAP_3_SSL_PORT=" + System.getProperty("ldap.3.ssl.port"));
-                                return System.getProperty("ldap.3.ssl.port");
-                            }
-                        });
+        final String LDAP_1_SSL_PORT = AccessController.doPrivileged(new PrivilegedAction<String>() {
+            @Override
+            public String run() {
+                Log.info(c, "<clinit>", "LDAP_1_SSL_PORT=" + System.getProperty("ldap.1.ssl.port"));
+                return System.getProperty("ldap.1.ssl.port");
+            }
+        });
+        final String LDAP_2_SSL_PORT = AccessController.doPrivileged(new PrivilegedAction<String>() {
+            @Override
+            public String run() {
+                Log.info(c, "<clinit>", "LDAP_2_SSL_PORT=" + System.getProperty("ldap.2.ssl.port"));
+                return System.getProperty("ldap.2.ssl.port");
+            }
+        });
+        final String LDAP_3_SSL_PORT = AccessController.doPrivileged(new PrivilegedAction<String>() {
+            @Override
+            public String run() {
+                Log.info(c, "<clinit>", "LDAP_3_SSL_PORT=" + System.getProperty("ldap.3.ssl.port"));
+                return System.getProperty("ldap.3.ssl.port");
+            }
+        });
 
         Properties props = new Properties();
 

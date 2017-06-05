@@ -18,8 +18,8 @@
  * ============================================================================
  */
 /**
- * @version 3.0.0
+ * @version 4.0.0
  */
-@org.osgi.annotation.versioning.Version("3.0.0")
+@org.osgi.annotation.versioning.Version("4.0.0")
 package com.ibm.websphere.csi;
 

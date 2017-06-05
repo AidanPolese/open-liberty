@@ -52,14 +52,14 @@ import com.ibm.websphere.ras.annotation.Trivial;
  * <p>
  * If there are no virtual hosts configured, there will be one VirtualHostDiscriminator
  * created per listening port, and that discriminator will always return the default_host.
- * 
- * 
+ *
+ *
  * @see VirtualHostDiscriminator
  * @see VirtualHostDiscriminator#addVirtualHost(String, VirtualHostImpl)
  * @see VirtualHostDiscriminator#removeVirtualHost(String, VirtualHostImpl)
  * @see VirtualHostDiscriminator#addEndpoint(HttpEndpointImpl, String, boolean)
  * @see VirtualHostDiscriminator#removeEndpoint(HttpEndpointImpl, String, boolean)
- * 
+ *
  */
 public class VirtualHostMap {
     static final TraceComponent tc = Tr.register(VirtualHostMap.class);
@@ -82,10 +82,10 @@ public class VirtualHostMap {
      * Add (or update) a virtual host: If the virtual host was previously registered,
      * oldConfig will be non-null, and will contain the attributes the host was previously
      * registered/added with.
-     * 
+     *
      * @param oldConfig Snapshot of previous config for a virtual host
      * @param newConfig Snapshot of new config for a virtual host
-     * 
+     *
      * @see VirtualHostImpl#modified
      */
     public synchronized static void addVirtualHost(VirtualHostConfig oldConfig, VirtualHostConfig newConfig) {
@@ -129,9 +129,9 @@ public class VirtualHostMap {
 
     /**
      * Remove a virtual host: called if a virtual host is deactivated or disabled
-     * 
+     *
      * @param config Virtual host configuration to remove
-     * 
+     *
      * @see VirtualHostImpl#modified(Map)
      * @see VirtualHostImpl#deactivate(org.osgi.service.component.ComponentContext, int)
      */
@@ -162,7 +162,7 @@ public class VirtualHostMap {
 
     /**
      * Add an endpoint that has started listening, and notify associated virtual hosts
-     * 
+     *
      * @param endpoint The HttpEndpointImpl that owns the started chain/listener
      * @param resolvedHostName A hostname that can be used in messages (based on endpoint configuration, something other than *)
      * @param port The port the endpoint is listening on
@@ -184,7 +184,7 @@ public class VirtualHostMap {
     /**
      * Remove a port associated with an endpoint that has stopped listening,
      * and notify associated virtual hosts.
-     * 
+     *
      * @param endpoint The HttpEndpointImpl that owns the stopped chain/listener
      * @param resolvedHostName A hostname that can be used in messages (based on endpoint configuration, something other than *)
      * @param port The port the endpoint has stopped listening on
@@ -206,16 +206,16 @@ public class VirtualHostMap {
 
     /**
      * Find the virtual host that should be used for the given host/port..
-     * 
+     *
      * @param endpointPid The endpoint the request came in on
      * @param helper a RequestHelper allows deferred processing of request header information.
-     * 
+     *
      * @return the VirtualHostImpl that should service the request
      */
     public static VirtualHostImpl findVirtualHost(String endpointPid,
                                                   RequestHelper helper) {
-        // defer retrieval of headers until we need them: 
-        // if we don't have virtual hosts to select from, we don't care what the 
+        // defer retrieval of headers until we need them:
+        // if we don't have virtual hosts to select from, we don't care what the
         // headers are, there is only one answer.
         AlternateHostSelector selector = alternateHostSelector;
         if (selector == null) {
@@ -226,7 +226,7 @@ public class VirtualHostMap {
         }
 
         // Now that we know we have virtual hosts to choose from, do the evaluation of http headers
-        // to figure out what the requested host/port were.. 
+        // to figure out what the requested host/port were..
         return selector.findVirtualHost(endpointPid, helper.getRequestedHost(), helper.getRequestedPort());
     }
 
@@ -263,11 +263,11 @@ public class VirtualHostMap {
 
         /**
          * Find the right virtual host to process a given request
-         * 
+         *
          * @param endpointPid The endpoint/origin of the request
          * @param hostName The requested hostname, from the Host header..
          * @param port The requested port, from the Host header..
-         * 
+         *
          * @return the virtual host that should handle the request, or null
          *         if there was no match.
          */
@@ -282,7 +282,7 @@ public class VirtualHostMap {
                 target = defaultHost;
             }
 
-            // Make sure the target is ready to accept request from the selected endpoint.. 
+            // Make sure the target is ready to accept request from the selected endpoint..
             if (target != null && target.acceptFromEndpoint(endpointPid))
                 return target.getVirtualHost();
 
@@ -291,21 +291,21 @@ public class VirtualHostMap {
 
         /**
          * Synchronous caller...
-         * 
+         *
          * @param endpoint
          * @param hostName
          * @param port
          * @param isHttps
          */
         void alternateNotifyStarted(HttpEndpointImpl endpoint, String hostName, int port, boolean isHttps) {
-            // will not return null: a new discriminator will be created if it doesn't exist already.. 
+            // will not return null: a new discriminator will be created if it doesn't exist already..
             VirtualHostDiscriminator d = findOrCreateDiscriminator(port);
             d.addEndpoint(endpoint, hostName, isHttps);
         }
 
         /**
          * Synchronous caller...
-         * 
+         *
          * @param endpoint
          * @param hostName
          * @param port
@@ -322,7 +322,7 @@ public class VirtualHostMap {
 
         /**
          * Synchronous caller...
-         * 
+         *
          * @param endpoint
          * @param hostName
          * @param port
@@ -343,9 +343,9 @@ public class VirtualHostMap {
 
         /**
          * Synchronous caller...
-         * 
+         *
          * @param config
-         * 
+         *
          * @param endpoint
          * @param hostName
          * @param port
@@ -366,7 +366,7 @@ public class VirtualHostMap {
 
         /**
          * Synchronous caller...
-         * 
+         *
          * @param endpoint
          * @param hostName
          * @param port
@@ -390,7 +390,7 @@ public class VirtualHostMap {
 
         /**
          * Synchronous caller...
-         * 
+         *
          * @param endpoint
          * @param hostName
          * @param port
@@ -426,7 +426,7 @@ public class VirtualHostMap {
 
     /**
      * Provide a thread-safe view for vhost lookup
-     * 
+     *
      * @see VirtualHostDiscriminator#addEndpoint(HttpEndpointImpl, String, boolean)
      * @see VirtualHostDiscriminator#addVirtualHost(String, VirtualHostImpl)
      * @see VirtualHostDiscriminator#selectVirtualHost(String)
@@ -471,10 +471,10 @@ public class VirtualHostMap {
          * These are changed together: there is a map of hostnames to VirtualHost, a wildcard-catching VirtualHost,
          * and a boolean indicator summing up whether or not there are any VirtualHosts
          * assigned.
-         * 
+         *
          * Use of the tuple is important because while the add/remove methods are synchronized, {@link #selectVirtualHost(String)} is
          * not, and that path is very performance sensitive, as it is in the main-line request path.
-         * 
+         *
          * @see #selectVirtualHost(String)
          */
         volatile HostTuple currentHosts = new HostTuple(null, defaultHost);
@@ -487,14 +487,14 @@ public class VirtualHostMap {
         /**
          * Synchronized caller...
          * Add a virtual host to the discriminator.
-         * 
+         *
          * Change the tuple all at once: any threads doing lookups will see
          * the most current tuple, rather than partial changes.
-         * 
+         *
          * @param hostName host portion of the alias: * or somehost.whatever
          * @param vhost
          * @param newDefaultHost - is this the default/catch-all host
-         * 
+         *
          * @see #selectVirtualHost(String)
          */
         void addVirtualHost(String hostName, VirtualHostConfig config) {
@@ -502,14 +502,14 @@ public class VirtualHostMap {
 
             if (HttpServiceConstants.WILDCARD.equals(hostName)) {
                 if (snapshot.wildcardHost != null) {
-                    // If there is a previously set wildcardHost, we should check for 
-                    // a duplicate alias. 
+                    // If there is a previously set wildcardHost, we should check for
+                    // a duplicate alias.
                     if (snapshot.wildcardHost.isSameVirtualHost(config)) {
                         // Config update for the same virtual host: notifications should go
                         // to make sure the endpoint is correctly associated with the vhost
                     } else if (snapshot.wildcardHost.isDefaultHost()) {
-                        // If the old wildcard host is the default host, we need to remove 
-                        // the default host... 
+                        // If the old wildcard host is the default host, we need to remove
+                        // the default host...
                         removeVirtualHost(hostName, snapshot.wildcardHost);
                     } else {
                         // This is a duplicate alias
@@ -520,7 +520,7 @@ public class VirtualHostMap {
                     }
                 }
 
-                // Create a new host tuple with the new virtual host as the wildcard host.. 
+                // Create a new host tuple with the new virtual host as the wildcard host..
                 currentHosts = new HostTuple(snapshot.otherHosts, config);
 
                 if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
@@ -556,10 +556,10 @@ public class VirtualHostMap {
         /**
          * Synchronized caller...
          * Remove a virtual host from the discriminator.
-         * 
+         *
          * Change the tuple all at once: any threads doing lookups will see
          * the most current tuple, rather than partial changes.
-         * 
+         *
          * @param hostName host portion of the alias: * or somehost.whatever
          * @param vhost VirtualHost to remove
          * @param oldDefaultHost - was this the default/catch-all host
@@ -570,14 +570,14 @@ public class VirtualHostMap {
 
             if (HttpServiceConstants.WILDCARD.equals(hostName)) {
                 if (vhosts.wildcardHost.isSameVirtualHost(config)) {
-                    // If the wildcard host is the host we're removing, update the tuple 
+                    // If the wildcard host is the host we're removing, update the tuple
                     currentHosts = new HostTuple(vhosts.otherHosts, null);
 
                     if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
                         Tr.event(tc, "Removed {0} as wildcard virtual host on port {1}: {2}", config.getName(), portString, this);
 
                     // if we're removing a non-default host, and there is a default host around.. add the default host
-                    // as the catch-all for this alias 
+                    // as the catch-all for this alias
                     if (!config.isDefaultHost() && defaultHost != null) {
                         addVirtualHost(hostName, defaultHost);
                     }
@@ -602,9 +602,9 @@ public class VirtualHostMap {
 
         /**
          * Synchronized caller..
-         * 
+         *
          * Notify the indicated virtual host of existing endpoints
-         * 
+         *
          * @param targetVHost VirtualHost to notify
          * @param added true if listening/started endpoints should be added (new virtual host arrived),
          *            false if they should be removed (virtual host removal).
@@ -627,7 +627,7 @@ public class VirtualHostMap {
                             msgHostName = e.getResolvedHostName();
 
                         // If the port for this discriminator matches the secure listening port
-                        // of the endpoint, then this is an https listener.. 
+                        // of the endpoint, then this is an https listener..
                         boolean isHttps = port == e.getListeningSecureHttpPort();
 
                         if (added)
@@ -653,7 +653,7 @@ public class VirtualHostMap {
 
                 ePort = e.getListeningSecureHttpPort();
                 if (ePort == port) {
-                    addEndpoint(e, e.getResolvedHostName(), false);
+                    addEndpoint(e, e.getResolvedHostName(), true);
                 }
             }
         }
@@ -661,7 +661,7 @@ public class VirtualHostMap {
         /**
          * Synchronized caller...
          * Notify virtual hosts that an endpoint is listening on this port..
-         * 
+         *
          * @param endpoint
          * @param resolvedHostName Hostname suitable for use in a message (a real hostname, not *)
          * @param isHttps true if this is an https port.
@@ -676,7 +676,7 @@ public class VirtualHostMap {
                 }
 
                 if (currentHosts.otherHosts != null) {
-                    // Look at non-wildcard hosts: check for aliases that are reachable by this new listener.. 
+                    // Look at non-wildcard hosts: check for aliases that are reachable by this new listener..
                     for (Map.Entry<String, VirtualHostConfig> entry : currentHosts.otherHosts.entrySet()) {
                         String host = entry.getKey();
                         VirtualHostConfig config = entry.getValue();
@@ -692,7 +692,7 @@ public class VirtualHostMap {
                     }
                 }
 
-                // Notify the wildcardHost (which might be the default host) 
+                // Notify the wildcardHost (which might be the default host)
                 // using the endpoint's resolved host name
                 VirtualHostConfig wildcard = currentHosts.wildcardHost;
                 if (wildcard != null) {
@@ -706,7 +706,7 @@ public class VirtualHostMap {
         /**
          * Synchronized caller...
          * Notify virtual hosts that an endpoint has stopped listening on this port..
-         * 
+         *
          * @param endpoint
          * @param resolvedHostName Hostname suitable for use in a message (a real hostname, not *)
          * @param isHttps
@@ -727,7 +727,7 @@ public class VirtualHostMap {
                     }
                 }
 
-                // Notify the wildcardHost (which might be the default host) 
+                // Notify the wildcardHost (which might be the default host)
                 VirtualHostConfig wildcard = currentHosts.wildcardHost;
                 if (wildcard != null) {
                     wildcard.listenerStopped(endpoint, resolvedHostName, port, isHttps);
@@ -739,7 +739,7 @@ public class VirtualHostMap {
 
         /**
          * Synchronized caller...
-         * 
+         *
          * @return true if this element should be cleaned up.
          */
         boolean cleanup() {
@@ -760,20 +760,20 @@ public class VirtualHostMap {
          * <li> check for a wildcard: e.g. *:80
          * <li> use default_host
          * <ol>
-         * 
+         *
          * Most of the time, there will be no virtual hosts configured, in which case,
          * all discriminators would use the same emptyInstance tuple, which would skip
          * host checking so the default_host is returned.
-         * 
+         *
          * @param hostName The hostname used by the client to connect to the server
          * @return The virtual host that should handle the request. May be null during shutdown.
          */
         VirtualHostConfig selectVirtualHost(String hostName) {
-            // we are not synchronized here, and don't want to be. 
-            // store the current hostList as local var.. 
+            // we are not synchronized here, and don't want to be.
+            // store the current hostList as local var..
             HostTuple tuple = currentHosts;
 
-            // Streamline for no virtual hosts defined. Simple check.. 
+            // Streamline for no virtual hosts defined. Simple check..
             if (tuple.hasMoreHosts) {
                 // Check specific hosts first
                 if (tuple.otherHosts != null) {
@@ -805,7 +805,7 @@ public class VirtualHostMap {
     }
 
     /**
-     * 
+     *
      */
     protected synchronized static void dump(PrintStream ps) {
         ps.println("Default host: " + defaultHost);

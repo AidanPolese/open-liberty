@@ -54,7 +54,7 @@ final class TestUtil {
         A, B
     }
 
-    static final String SERVLET_JAR_LOCATION = "servlet.jar.location";
+    static final String SERVLET_JAR_LOCATION = "../build.image/wlp/dev/api/spec/";
 
     static final Container buildMockContainer(final String name, final URL url) {
         return new MockContainer(name, url);
@@ -217,7 +217,17 @@ final class TestUtil {
     }
 
     public static URL getServletJarURL() throws MalformedURLException, FileNotFoundException {
-        File servletJar = new File(System.getProperty(SERVLET_JAR_LOCATION));
+        File servletJar = new File("servlet.jar.location");
+        File[] specJars = new File(System.getProperty(SERVLET_JAR_LOCATION)).listFiles();
+
+        for (int i = 0; i < specJars.length; i++) {
+            if (specJars[i].isFile()) {
+                String targetFile = specJars[i].getName();
+                if (targetFile.startsWith("com.ibm.websphere.javaee.servlet.3.1"))
+                    servletJar = new File(SERVLET_JAR_LOCATION + targetFile);
+            }
+        }
+
         // check it exists!
         if (!!!servletJar.exists()) {
             String absolutePath = servletJar.getAbsolutePath();

@@ -21,7 +21,7 @@ Export-Package: \
    com.ibm.ejs.util, \
    com.ibm.ejs.util.dopriv, \
    com.ibm.jtc.adapter;provide:=true, \
-   com.ibm.websphere.csi, \
+   com.ibm.websphere.csi;-split-package:=merge-last, \
    com.ibm.ws.container.service.annotations; provide:=true, \
    com.ibm.ws.container.service.app.deploy; provide:=true, \
    com.ibm.ws.container.service.app.deploy.extended; provide:=true, \
