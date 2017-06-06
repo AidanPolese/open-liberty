@@ -24,7 +24,9 @@ import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
+
 import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
@@ -41,6 +43,12 @@ public class ScheduledExecutorImplTest {
     private static final String cName = c.getCanonicalName();
     private static Logger logger = Logger.getLogger(cName);
 
+	@After
+    public void tearDown() throws Exception {
+        // Clear the output generated after each method invocation
+        outputMgr.resetStreams();
+    }
+	
     ScheduledExecutorImpl m_scheduledExecutor;
 
     {
