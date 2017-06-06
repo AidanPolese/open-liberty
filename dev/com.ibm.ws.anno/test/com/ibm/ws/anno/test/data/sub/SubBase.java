@@ -34,7 +34,7 @@ public class SubBase {
     String package1 = "SubBase";
     String package2 = "SubBase";
 
-    @Test(timeout = 1)
+    @Test(timeout = 10000)
     public void publicMethod() {}
 
     public Number publicMethod(int n) {
