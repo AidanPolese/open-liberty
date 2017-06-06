@@ -200,7 +200,7 @@ public class InfoStoreTest {
         Assert.assertEquals(1, annos.size());
         Assert.assertTrue(method.isAnnotationPresent("org.junit.Test"));
         AnnotationInfo annoInfo = method.getAnnotation(Test.class);
-        Assert.assertEquals(1, annoInfo.getValue("timeout").getIntValue());
+        Assert.assertEquals(10000, annoInfo.getValue("timeout").getIntValue());
 
         info = infoStore.getDelayableClassInfo(BClass.class.getCanonicalName());
         methods = getMethods(info.getMethods(), "publicMethod");
