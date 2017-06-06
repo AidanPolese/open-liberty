@@ -114,28 +114,45 @@ public class PasswordCipherUtilTest {
     @Test
     public void testListCustom() throws UnsupportedConfigurationException, ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
         final String expected = "[{\"name\":\"custom\",\"featurename\":\"usr:simpleCustomEncryption-1.0\",\"description\":\"simpleCustomEncryption default resource\"}]";
-        assertNull("If no custom encryption, listCustom should return null", PasswordCipherUtil.listCustom());
 
-        String dir = System.getProperty("user.dir");
-        String currentDir = System.setProperty(KEY_PROP_INSTALL_DIR, dir + VALUE_PROP_INSTALL_DIR);
-        String currentCP = System.setProperty(KEY_JAVA_CLASS_PATH, dir + VALUE_PROP_INSTALL_DIR + VALUE_JAVA_CLASS_PATH);
+        String currentDir = System.clearProperty(KEY_PROP_INSTALL_DIR);
         PasswordCipherUtil.initialize();
         if (currentDir != null) {
             System.setProperty(KEY_PROP_INSTALL_DIR, currentDir);
+        } else {
+            System.clearProperty(KEY_PROP_INSTALL_DIR);
+        }
+        assertNull("If no custom encryption, listCustom should return null", PasswordCipherUtil.listCustom());
+        String dir = System.getProperty("user.dir");
+        currentDir = System.setProperty(KEY_PROP_INSTALL_DIR, dir + VALUE_PROP_INSTALL_DIR);
+        String currentCP = System.setProperty(KEY_JAVA_CLASS_PATH, dir + VALUE_PROP_INSTALL_DIR + VALUE_JAVA_CLASS_PATH);
+        PasswordCipherUtil.initialize();
+        // put the values back to the original.
+        if (currentDir != null) {
+            System.setProperty(KEY_PROP_INSTALL_DIR, currentDir);
+        } else {
+            System.clearProperty(KEY_PROP_INSTALL_DIR);
         }
         if (currentCP != null) {
             System.setProperty(KEY_JAVA_CLASS_PATH, currentCP);
+        } else {
+            System.clearProperty(KEY_JAVA_CLASS_PATH);
         }
         assertEquals("If there is a custom encryption, listCustom should return the correct value", expected, PasswordCipherUtil.listCustom());
 
         currentDir = System.setProperty(KEY_PROP_INSTALL_DIR, dir + VALUE_PROP_INSTALL_DIR_MULTIPLE);
         currentCP = System.setProperty(KEY_JAVA_CLASS_PATH, dir + VALUE_PROP_INSTALL_DIR + VALUE_JAVA_CLASS_PATH);
         PasswordCipherUtil.initialize();
+        // put the values back to the original.
         if (currentDir != null) {
             System.setProperty(KEY_PROP_INSTALL_DIR, currentDir);
+        } else {
+            System.clearProperty(KEY_PROP_INSTALL_DIR);
         }
         if (currentCP != null) {
             System.setProperty(KEY_JAVA_CLASS_PATH, currentCP);
+        } else {
+            System.clearProperty(KEY_JAVA_CLASS_PATH);
         }
         try {
             PasswordCipherUtil.listCustom();

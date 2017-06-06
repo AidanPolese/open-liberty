@@ -12,15 +12,26 @@
 package com.ibm.ws.kernel.boot.cmdline;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.osgi.framework.Version;
@@ -65,8 +76,9 @@ public class UtilityMain {
      * @throws InstantiationException
      * @throws InvocationTargetException
      * @throws IllegalArgumentException
+     * @throws PrivilegedActionException 
      */
-    public static void internal_main(String[] args) throws IOException, ClassNotFoundException, SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public static void internal_main(String[] args) throws IOException, ClassNotFoundException, SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, PrivilegedActionException {
         // The sole element of the classpath should be the jar that was launched..
         String jarName = System.getProperty("java.class.path");
 
@@ -126,6 +138,13 @@ public class UtilityMain {
             }
         }
 
+        //support for embedded libraries in bundle
+        List<URL> embeddedLibUrls = new LinkedList<URL>();
+        for (URL jarFileUrl : urls) {
+            embeddedLibUrls.addAll(getBundleEmbeddedLibs(jarFileUrl));
+        }
+        urls.addAll(embeddedLibUrls);
+
         // if the Require-Compiler is true, ensure that a compiler is available
         if (compilerTools) {
             File toolsFile = Utils.getJavaTools();
@@ -165,6 +184,97 @@ public class UtilityMain {
 
     private static void error(String key, Object... args) {
         System.err.println(format(key, args));
+    }
+
+    /**
+     * Support for embedded libs in a bundle.
+     * 
+     * @param jarFileUrl
+     * @return
+     * @throws IOException
+     * @throws PrivilegedActionException
+     */
+    private static List<URL> getBundleEmbeddedLibs(final URL jarFileUrl) throws IOException, PrivilegedActionException {
+        return AccessController.doPrivileged(new PrivilegedExceptionAction<List<URL>>() {
+            @Override
+            public List<URL> run() throws Exception {
+
+                JarFile jarFile = new JarFile(URLDecoder.decode(jarFileUrl.getFile(), "utf-8"));
+                List<URL> libs = new LinkedList<URL>();
+                Attributes manifest = jarFile.getManifest().getMainAttributes();
+
+                String rawBundleClasspath = manifest.getValue("Bundle-ClassPath");
+                if (rawBundleClasspath != null) {
+
+                    Set<String> allValidBundleClassPaths = new HashSet<String>();
+
+                    String[] bundleClassPaths = rawBundleClasspath.split(",");
+                    for (String bundleClassPath : bundleClassPaths) {
+                        bundleClassPath = bundleClassPath.trim();
+                        if (!bundleClassPath.equals(".") && bundleClassPath.endsWith(".jar")) {
+                            allValidBundleClassPaths.add(bundleClassPath);
+                        }
+                    }
+
+                    Enumeration<JarEntry> entries = jarFile.entries();
+                    File tempDir = createTempDir("was-cmdline");
+                    tempDir.deleteOnExit();
+
+                    int MAX_READ_SIZE = 512;
+                    int offset = 0, read = 0;
+                    byte[] buff = new byte[MAX_READ_SIZE];
+
+                    while (entries.hasMoreElements()) {
+                        JarEntry jarEntry = entries.nextElement();
+                        String entryName = jarEntry.getName();
+
+                        if (allValidBundleClassPaths.contains(entryName)) {
+                            String fileName = entryName;
+
+                            int index;
+                            while ((index = fileName.indexOf("/")) != -1) {
+                                fileName = fileName.substring(index + 1);
+                            }
+
+                            InputStream stream = jarFile.getInputStream(jarEntry);
+                            File file = new File(tempDir, fileName);
+                            file.deleteOnExit();
+
+                            FileOutputStream fileStream = new FileOutputStream(file);
+                            while ((read = stream.read(buff, offset, MAX_READ_SIZE)) > 0) {
+                                fileStream.write(buff, 0, read);
+                            }
+
+                            fileStream.flush();
+                            fileStream.close();
+                            stream.close();
+
+                            libs.add(file.toURI().toURL());
+                        }
+                    }
+                }
+                jarFile.close();
+
+                return libs;
+            }
+        });
+
+    }
+
+    //Re-write createTempDir since nio is not supported in JDK6.
+    public static File createTempDir(String baseName) {
+        File baseDir = new File(System.getProperty("java.io.tmpdir"));
+        baseName = baseName + System.currentTimeMillis() + "-";
+
+        for (int counter = 0; counter < 1000; counter++) {
+            File tempDir = new File(baseDir, baseName + counter);
+            if (tempDir.mkdir()) {
+                return tempDir;
+            }
+        }
+        throw new IllegalStateException("Failed to create directory within "
+                                        + 1000 + " attempts (tried "
+                                        + baseName + "0 to " + baseName + (1000 - 1) + ')');
     }
 
     private static boolean isValidJavaSpecVersion(LaunchManifest.RequiredBundle rb) {
