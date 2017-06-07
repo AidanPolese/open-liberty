@@ -1179,7 +1179,7 @@ public class WebAppFilterManager implements com.ibm.wsspi.webcontainer.filter.We
                             && ioe.getMessage().contains("SRVE0918E")){
                 throw ioe;
             }
-            // ALPINE: TODO send error when not include or forward
+            // LIBERTY: TODO send error when not include or forward
             ServletErrorReport errorReport = WebAppErrorReport.constructErrorReport(ioe, requestProcessor);
             dispatchContext.pushException(ioe);
             //61464 don't log a FFDC for a FileNotFound IOException
@@ -1218,7 +1218,7 @@ public class WebAppFilterManager implements com.ibm.wsspi.webcontainer.filter.We
             }
             ServletErrorReport errorReport = WebAppErrorReport.constructErrorReport(se, requestProcessor);
             dispatchContext.pushException(se);
-            // ALPINE: TODO send error when not include or forward
+            // LIBERTY: TODO send error when not include or forward
             Throwable causedBy = se.getCause();
             if (causedBy!=null && causedBy instanceof FileNotFoundException) {
                 //don't log a FFDC
@@ -1292,7 +1292,7 @@ public class WebAppFilterManager implements com.ibm.wsspi.webcontainer.filter.We
             }
 
             com.ibm.ws.ffdc.FFDCFilter.processException(th2, "com.ibm.ws.webcontainer.filter.WebAppFilterManager.invokeFilters", "1111", this);
-            // ALPINE: TODO send error when not include or forward
+            // LIBERTY: TODO send error when not include or forward
             ServletErrorReport errorReport = WebAppErrorReport.constructErrorReport(th2, requestProcessor);
             dispatchContext.pushException(th2);
             throw errorReport;

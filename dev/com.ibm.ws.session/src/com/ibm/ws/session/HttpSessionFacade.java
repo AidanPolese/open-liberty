@@ -222,14 +222,14 @@ public class HttpSessionFacade implements IBMSession, IBMSessionExt { // cmd 196
         _session.readExternal(pIn);
     }
 
-    // ALPINE implemented in webcontainer class IHttpSessionFacadeImpl
+    // LIBERTY implemented in webcontainer class IHttpSessionFacadeImpl
     /*
      * public Object getSecurityInfo() {
      * return ((IHttpSessionImpl)_session).getSecurityInfo();
      * }
      */
 
-    // ALPINE implemented in webcontainer class IHttpSessionFacadeImpl
+    // LIBERTY implemented in webcontainer class IHttpSessionFacadeImpl
     /*
      * public void putSecurityInfo(Object pValue) {
      * ((IHttpSessionImpl)_session).putSecurityInfo(pValue);

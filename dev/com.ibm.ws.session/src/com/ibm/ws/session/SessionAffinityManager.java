@@ -103,14 +103,14 @@ public class SessionAffinityManager implements ISessionAffinityManager {
             LoggingUtil.SESSION_LOGGER_CORE.entering(methodClassName, methodNames[GET_REQUESTED_SESSION_ID_FROM_URL]);
         }
         String sessionID = null;
-        // ALPINE Cannot reach IExtendedRequest from here anymore
+        // LIBERTY Cannot reach IExtendedRequest from here anymore
         // overridden in SessionAffinityManagerImpl
         return null;
     }
 
     @Override
     public List getAllCookieValues(ServletRequest request) {
-        // ALPINE Cannot reach IExtendedRequest from here
+        // LIBERTY Cannot reach IExtendedRequest from here
         // overridden in SessionAffinityManagerImpl
         return null;
     }
@@ -125,7 +125,7 @@ public class SessionAffinityManager implements ISessionAffinityManager {
      */
     @Override
     public SessionAffinityContext analyzeRequest(ServletRequest request) {
-        // ALPINE Cannot reach IExtendedRequest from here.
+        // LIBERTY Cannot reach IExtendedRequest from here.
         // overridden in SessionAffinityManagerImpl
         if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && LoggingUtil.SESSION_LOGGER_CORE.isLoggable(Level.FINE)) {
             LoggingUtil.SESSION_LOGGER_CORE.logp(Level.FINE, methodClassName, methodNames[ANALYZE_REQUEST], "");
@@ -366,7 +366,7 @@ public class SessionAffinityManager implements ISessionAffinityManager {
 
     @Override
     public void setCookie(ServletRequest request, ServletResponse response, SessionAffinityContext affinityContext, Object session) {
-        // ALPINE IExtendedResponse is unreachable from here now.
+        // LIBERTY IExtendedResponse is unreachable from here now.
         // overridden in SessionAffinityManagerImpl
         if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && LoggingUtil.SESSION_LOGGER_CORE.isLoggable(Level.FINE)) {
             LoggingUtil.SESSION_LOGGER_CORE.logp(Level.FINE, methodClassName, methodNames[SET_COOKIE], "");
@@ -375,7 +375,7 @@ public class SessionAffinityManager implements ISessionAffinityManager {
 
     // setTheSipApplicationSessionCookie
     public void setSIPCookie(ServletRequest request, ServletResponse response, String sipCookieString) {
-        // ALPINE Cannot reach IExtendedResponse from here.
+        // LIBERTY Cannot reach IExtendedResponse from here.
         // overridden in SessionAffinityManagerImpl
         if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && LoggingUtil.SESSION_LOGGER_CORE.isLoggable(Level.FINE)) {
             LoggingUtil.SESSION_LOGGER_CORE.logp(Level.FINE, methodClassName, methodNames[SET_SIP_COOKIE], "");

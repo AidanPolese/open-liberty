@@ -1342,7 +1342,7 @@ public abstract class WebContainer extends BaseContainer {
         if (!appInstallBegun)
             extensionFactories.add(factory);
         else {
-            // ALPINE: add to existing apps now?
+            // LIBERTY: add to existing apps now?
             Iterator<VirtualHost> vhosts = getVirtualHosts();
             while (vhosts.hasNext()) {
                 com.ibm.ws.webcontainer.osgi.DynamicVirtualHost vhost = (com.ibm.ws.webcontainer.osgi.DynamicVirtualHost) vhosts.next();
@@ -1352,13 +1352,13 @@ public abstract class WebContainer extends BaseContainer {
                     webApp.addExtensionFactory(factory);
                 }
             }
-            // ALPINE synchronized(extensionFactories){
-            // ALPINE if (postInitExtensionFactories==null){
-            // ALPINE postInitExtensionFactories = Collections.synchronizedList(new
+            // LIBERTY synchronized(extensionFactories){
+            // LIBERTY if (postInitExtensionFactories==null){
+            // LIBERTY postInitExtensionFactories = Collections.synchronizedList(new
             // ArrayList<ExtensionFactory>());
-            // ALPINE }
-            // ALPINE }
-            // ALPINE postInitExtensionFactories.add(factory);
+            // LIBERTY }
+            // LIBERTY }
+            // LIBERTY postInitExtensionFactories.add(factory);
         }
     }
 

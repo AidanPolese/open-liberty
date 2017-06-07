@@ -256,7 +256,7 @@ public class SessionData extends HttpSessionImpl implements IBMSessionExt {
         super.invalidate();
     }
 
-    // ALPINE Moved to webcontainer
+    // LIBERTY Moved to webcontainer
     // /*
     // * For security to store away special hidden value in the session
     // * @see
@@ -439,7 +439,7 @@ public class SessionData extends HttpSessionImpl implements IBMSessionExt {
     public void setSIPCookieInfo(HttpServletRequest _request) {
         String sipLogicalServerName = null;
         // only handle 1 ibmappid cookie
-        // ALPINE TODO: Disabled sip cookie because it uses IExtendedRequest
+        // LIBERTY TODO: Disabled sip cookie because it uses IExtendedRequest
         byte[] byteSipLogicalServerName = null;// ((IExtendedRequest)_request).getCookieValueAsBytes(SessionManagerConfig.sipSessionCookieName);
         if (byteSipLogicalServerName != null) {
             sipLogicalServerName = new String(byteSipLogicalServerName);

@@ -65,8 +65,8 @@ public class LibertyTracePreprocessInstrumentation extends AbstractInstrumentati
     public final static Type TRIVIAL_TYPE = Type.getType(com.ibm.websphere.ras.annotation.Trivial.class);
     public final static Type TRACE_OPTIONS_TYPE = Type.getType(com.ibm.websphere.ras.annotation.TraceOptions.class);
 
-    public final static Type ALPINE_TR_TYPE = LibertyTracingClassAdapter.TR_TYPE;
-    public final static Type ALPINE_TRACE_COMPONENT_TYPE = LibertyTracingClassAdapter.TRACE_COMPONENT_TYPE;
+    public final static Type LIBERTY_TR_TYPE = LibertyTracingClassAdapter.TR_TYPE;
+    public final static Type LIBERTY_TRACE_COMPONENT_TYPE = LibertyTracingClassAdapter.TRACE_COMPONENT_TYPE;
 
     public final static Type WEBSPHERE_TR_TYPE = WebSphereTrTracingClassAdapter.TR_TYPE;
     public final static Type WEBSPHERE_TRACE_COMPONENT_TYPE = WebSphereTrTracingClassAdapter.TRACE_COMPONENT_TYPE;
@@ -80,7 +80,7 @@ public class LibertyTracePreprocessInstrumentation extends AbstractInstrumentati
     private boolean addFfdc = false;
     private boolean injectStatic = false;
 
-    private TraceType defaultTraceType = TraceType.ALPINE;
+    private TraceType defaultTraceType = TraceType.LIBERTY;
 
     /**
      * Transient class that collects class information needed during
@@ -268,7 +268,7 @@ public class LibertyTracePreprocessInstrumentation extends AbstractInstrumentati
      */
     @SuppressWarnings("unchecked")
     private void processLibertyTraceComponentDiscovery(ClassTraceInfo info) {
-        List<FieldNode> traceComponentFields = getFieldsByDesc(ALPINE_TRACE_COMPONENT_TYPE.getDescriptor(), info.classNode.fields);
+        List<FieldNode> traceComponentFields = getFieldsByDesc(LIBERTY_TRACE_COMPONENT_TYPE.getDescriptor(), info.classNode.fields);
         if (!traceComponentFields.isEmpty()) {
             // Remove references to non-static TraceComponents
             for (int i = traceComponentFields.size() - 1; i >= 0; i--) {
@@ -422,10 +422,10 @@ public class LibertyTracePreprocessInstrumentation extends AbstractInstrumentati
             info.warnings.add(sb.toString());
             info.traceStateField = info.loggerFieldNode;
             info.traceStateFieldAlreadyInitialized = info.loggerFieldAlreadyInitialized;
-        } else if (defaultTraceType == TraceType.ALPINE) {
+        } else if (defaultTraceType == TraceType.LIBERTY) {
             // TODO: Check for an outer class and a declared field
             int access = (Opcodes.ACC_PRIVATE | Opcodes.ACC_FINAL | Opcodes.ACC_STATIC | Opcodes.ACC_SYNTHETIC);
-            info.traceStateField = (FieldNode) info.classNode.visitField(access, "$$$tc$$$", ALPINE_TRACE_COMPONENT_TYPE.getDescriptor(), null, null);
+            info.traceStateField = (FieldNode) info.classNode.visitField(access, "$$$tc$$$", LIBERTY_TRACE_COMPONENT_TYPE.getDescriptor(), null, null);
         }
 
         // Add the class annotation with the field name and descriptor
@@ -630,7 +630,7 @@ public class LibertyTracePreprocessInstrumentation extends AbstractInstrumentati
                     String methodName = methodInsn.name;
                     if (methodInsn.owner.equals(LOGGER_TYPE.getInternalName())) {
                         manuallyTraced = (methodName.equals("entering") || methodName.equals("exiting"));
-                    } else if (methodInsn.owner.equals(ALPINE_TR_TYPE.getInternalName())) {
+                    } else if (methodInsn.owner.equals(LIBERTY_TR_TYPE.getInternalName())) {
                         manuallyTraced = (methodName.equals("entry") || methodName.equals("exit"));
                     } else if (methodInsn.owner.equals(WEBSPHERE_TR_TYPE.getInternalName())) {
                         manuallyTraced = (methodName.equals("entry") || methodName.equals("exit"));
@@ -745,7 +745,7 @@ public class LibertyTracePreprocessInstrumentation extends AbstractInstrumentati
         // If requested, inject tracing at invocation by chaining.
         // Static injection for JSR47 or WebSphere is always done our of
         // the pre-process class adpater.
-        if (injectStatic && ALPINE_TRACE_COMPONENT_TYPE.getDescriptor().equals(info.traceStateField.desc)) {
+        if (injectStatic && LIBERTY_TRACE_COMPONENT_TYPE.getDescriptor().equals(info.traceStateField.desc)) {
             cv = new LibertyTracingClassAdapter(cv, true);
         }
 
@@ -789,7 +789,7 @@ public class LibertyTracePreprocessInstrumentation extends AbstractInstrumentati
             } else if (args[i].equalsIgnoreCase("--static")) {
                 injectStatic = true;
             } else if (args[i].equalsIgnoreCase("--liberty")) {
-                defaultTraceType = TraceType.ALPINE;
+                defaultTraceType = TraceType.LIBERTY;
             } else if (args[i].equalsIgnoreCase("--tr")) {
                 defaultTraceType = TraceType.TR;
             } else if (args[i].equalsIgnoreCase("--java-logging")) {

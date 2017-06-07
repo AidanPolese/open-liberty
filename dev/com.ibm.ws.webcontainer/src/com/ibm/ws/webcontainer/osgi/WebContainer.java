@@ -202,7 +202,7 @@ public class WebContainer extends com.ibm.ws.webcontainer.WebContainer implement
 
     private Map<WebModuleInfo, DeployedModule> deployedModuleMap = new ConcurrentHashMap<WebModuleInfo, DeployedModule>();
 
-    // ALPINE
+    // LIBERTY
     private SRTConnectionContextPool connContextPool;
 
     private final static String DEFAULT_PORT = "*";
@@ -806,7 +806,7 @@ public class WebContainer extends com.ibm.ws.webcontainer.WebContainer implement
         return connContextPool.get();
     }
 
-// ALPINE - NEW METHOD
+// LIBERTY - NEW METHOD
     /**
      * This will create the metadata for a web module in the web container
      */
@@ -855,7 +855,7 @@ public class WebContainer extends com.ibm.ws.webcontainer.WebContainer implement
         return webApp;
     }
 
- // ALPINE - NEW METHOD
+ // LIBERTY - NEW METHOD
     /**
      * This will start a web module in the web container
      */
@@ -1127,7 +1127,7 @@ public class WebContainer extends com.ibm.ws.webcontainer.WebContainer implement
         return false;
     }
 
- // ALPINE - NEW METHOD
+ // LIBERTY - NEW METHOD
     /**
      * This will stop a web module in the web container
      */

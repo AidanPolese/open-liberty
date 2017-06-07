@@ -40,7 +40,7 @@ public class VirtualHostMapper {
 
     public VirtualHostMapper() {
         // System.out.println("New Map");
-        // ALPINE - switch to concurrent map
+        // LIBERTY - switch to concurrent map
         vHostTable = /* new HashMap(); */new ConcurrentHashMap();
     }
 
