@@ -1,5 +1,8 @@
--include= ~../cnf/resources/bnd/bundle.props
-bVersion=1.0
+-include= ~../cnf/resources/bnd/liberty-release.props
+
+-nobundles=true
+
+test.project: true
 
 -testpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
