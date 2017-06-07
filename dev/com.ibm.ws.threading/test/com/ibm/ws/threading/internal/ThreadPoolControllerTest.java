@@ -19,8 +19,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import test.common.SharedOutputManager;
@@ -29,7 +29,8 @@ import test.common.SharedOutputManager;
  * Tests functionally in the ThreadPoolController
  */
 public class ThreadPoolControllerTest {
-    SharedOutputManager outputMgr = SharedOutputManager.getInstance();
+    @Rule
+    public SharedOutputManager outputMgr = SharedOutputManager.getInstance();
 
     private final ControlledAccessBlockingQueue workQueue = new ControlledAccessBlockingQueue(5);
     ThreadPoolExecutor pool = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, workQueue);
@@ -37,9 +38,6 @@ public class ThreadPoolControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        //outputMgr.
-        outputMgr.captureStreams();
-        //outputMgr.resetStreams();
         initialTaskLatch = new CountDownLatch(2);
         pool.execute(new Runnable() {
 
@@ -61,12 +59,6 @@ public class ThreadPoolControllerTest {
         System.out.println("have not yet allowed access");
         workQueue.allowAccess();
         System.out.println("allowed access");
-    }
-
-    @After
-    public void tearDown() {
-        outputMgr.resetStreams();
-        outputMgr.copySystemStreams();
     }
 
     /**
