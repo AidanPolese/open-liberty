@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.junit.Ignore;
 
 import com.ibm.websphere.ras.TrConfigurator;
 import com.ibm.ws.logging.internal.hpel.CommonUtils;
@@ -27,6 +28,7 @@ import com.ibm.ws.logging.internal.hpel.HpelTraceServiceConfig;
 /**
  *
  */
+ @Ignore
 public class HpelConfiguratorTest {
 
     /**
