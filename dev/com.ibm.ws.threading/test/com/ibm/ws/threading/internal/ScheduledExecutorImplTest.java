@@ -27,10 +27,12 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.rules.TestRule;
 
 import test.common.SharedOutputManager;
 
+@Ignore
 public class ScheduledExecutorImplTest {
     static final DateFormat tsFormatZone = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSSSSS (zz)");
 
