@@ -58,7 +58,6 @@ public class PackageDefinitionsTest {
     /**
      * Test to make sure that the package is defined after calling loadClass when there is a transformer defined when using a class in a directory
      */
-    @Ignore
     @Test
     public void testPackageDefinitionWithTransformOnDir() throws Exception {
         AppClassLoader loader = createAppClassloader(this.getClass().getName() + ".dir-loader", getTestClassesURL(), true);
@@ -82,6 +81,7 @@ public class PackageDefinitionsTest {
     /**
      * This test makes sure that when shadowing a directory the package is correctly defined by having any properties set on it from the manifest
      */
+    @Ignore
     @Test
     public void testPackageDefinitionsFromShadowLoaderOnJar() throws Exception {
         AppClassLoader loader = createAppClassloader(this.getClass().getName() + ".shadowed-jar", getTestJarURL(), true);
