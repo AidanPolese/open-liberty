@@ -24,6 +24,7 @@ import static org.junit.Assert.assertTrue;
 import java.lang.instrument.ClassFileTransformer;
 import java.security.ProtectionDomain;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -36,6 +37,7 @@ public class PackageDefinitionsTest {
     /**
      * Test to make sure that the package is defined after calling loadClass when there is no transformer registered
      */
+    @Ignore
     @Test
     public void testPackageDeclaration() throws Exception {
         AppClassLoader loader = createAppClassloader(this.getClass().getName() + ".jar-loader", getTestJarURL(), true);
@@ -45,6 +47,7 @@ public class PackageDefinitionsTest {
     /**
      * Test to make sure that the package is defined after calling loadClass when there is a transformer defined when using a class in a jar
      */
+    @Ignore
     @Test
     public void testPackageDeclarationWithTransformerOnJar() throws Exception {
         AppClassLoader loader = createAppClassloader(this.getClass().getName() + ".jar-loader-transform", getTestJarURL(), true);
@@ -55,6 +58,7 @@ public class PackageDefinitionsTest {
     /**
      * Test to make sure that the package is defined after calling loadClass when there is a transformer defined when using a class in a directory
      */
+    @Ignore
     @Test
     public void testPackageDefinitionWithTransformOnDir() throws Exception {
         AppClassLoader loader = createAppClassloader(this.getClass().getName() + ".dir-loader", getTestClassesURL(), true);
