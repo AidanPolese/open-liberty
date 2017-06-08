@@ -183,11 +183,9 @@ public class ThreadContextClassLoader extends UnifiedClassLoader implements Keye
                         if (metaInfSvc != null)
                             entry.setValue(c = metaInfSvc.getClass());
                     }
-                    if (!Void.class.equals(c)) {
-                        URL url = c.getClassLoader().getResource(name);
-                        if (url != null)
-                            urls.add(url);
-                    }
+                    if (!Void.class.equals(c))
+                        for (Enumeration<URL> u = c.getClassLoader().getResources(name); u.hasMoreElements(); )
+                            urls.add(u.nextElement());
                 }
             }
             urlEnum = Collections.enumeration(urls);
