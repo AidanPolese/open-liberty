@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2010, 2016
+ * Copyright IBM Corp. 2010, 2017
  *
  * The source code for this program is not published or other-
  * wise divested of its trade secrets, irrespective of what has
@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -42,6 +43,9 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.Constants;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
@@ -88,7 +92,7 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
     private static final int TCCL_LOCK_WAIT = Integer.getInteger("com.ibm.ws.classloading.tcclLockWaitTimeMillis", 15000);
     static final String REFERENCE_GENERATORS = "generators";
 
-    private BundleContext bundleContext;
+    BundleContext bundleContext;
     private CanonicalStore<ClassLoaderIdentity, AppClassLoader> aclStore;
     private CanonicalStore<String, ThreadContextClassLoader> tcclStore;
     private final ReentrantLock tcclStoreLock = new ReentrantLock();
@@ -121,12 +125,22 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
     private Map<String, ProtectionDomain> protectionDomainMap = null;
 
     /**
+     * Mapping from META-INF service file names made available by bells to the corresponding service provider implementation class name.
+     */
+    final ConcurrentHashMap<String, ConcurrentLinkedQueue<String>> bellMetaInfServiceProviders = new ConcurrentHashMap<String, ConcurrentLinkedQueue<String>>();
+
+    /**
+     * Mapping from class names made available by bells to the corresponding service references and lazily populated instances.
+     */
+    final ConcurrentHashMap<String, ConcurrentHashMap<ServiceReference<?>, Class<?>>> bellMetaInfServices = new ConcurrentHashMap<String, ConcurrentHashMap<ServiceReference<?>, Class<?>>>();
+
+    /**
      * For converting type/app/module/comp to a metadata ID under getClassLoaderIdentifier.
      */
     protected MetaDataIdentifierService metadataIdentifierService;
 
     @Activate
-    protected void activate(ComponentContext cCtx, Map<String, Object> properties) {
+    protected void activate(ComponentContext cCtx, Map<String, Object> properties) throws InvalidSyntaxException {
         generatorRefs.activate(cCtx);
         this.bundleContext = cCtx.getBundleContext();
         this.aclStore = new CanonicalStore<ClassLoaderIdentity, AppClassLoader>();
@@ -135,6 +149,35 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
         Bundle systemBundle = this.bundleContext.getBundle(Constants.SYSTEM_BUNDLE_LOCATION);
         BundleContext systemContext = systemBundle.getBundleContext();
         systemContext.addBundleListener(listener);
+
+        // Services found by bells in META-INF/services are registered in service registry.
+        // We would use declarative services to inject them, but the objectClass varies, so we must look/listen for them programmatically.
+        // For now, only look for the JSON-B and JSON-P providers, but we could choose to make this generic.
+        String filter = "(&(exported.from=*)(|(objectClass=javax.json.bind.spi.JsonbProvider)(objectClass=javax.json.spi.JsonProvider)))";
+
+        // ServiceListener will notify us of future matches...
+        bundleContext.addServiceListener(new ServiceListener() {
+            @Override
+            public void serviceChanged(ServiceEvent event) {
+                ServiceReference<?> ref = event.getServiceReference();
+                switch (event.getType()) {
+                    case ServiceEvent.REGISTERED:
+                        metaInfServicesProviderRegistered(ref);
+                        break;
+                    case ServiceEvent.UNREGISTERING:
+                        metaInfServicesProviderUnregistering(ref);
+                        break;
+                    default: // for FindBugs
+                }
+            }
+        }, filter);
+
+        // A query of the service registry will tell us what was already registered.
+        // Overlap (possible due to timing) will be ignored.
+        ServiceReference<?>[] refs = bundleContext.getServiceReferences((String) null, filter);
+        if (refs != null)
+            for (ServiceReference<?> ref : refs)
+                metaInfServicesProviderRegistered(ref);
     }
 
     @Deactivate
@@ -147,6 +190,8 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
         this.cleanupRememberedBundles();
         this.aclStore = null;
         this.resourceProviders.clear();
+        this.bellMetaInfServiceProviders.clear();
+        this.bellMetaInfServices.clear();
     }
 
     @Reference(name = REFERENCE_GENERATORS, service = ClassGenerator.class, cardinality = MULTIPLE, policy = DYNAMIC)
@@ -515,9 +560,9 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
 
         ThreadContextClassLoader tccl;
         if (cl instanceof BundleReference) {
-            tccl = new ThreadContextClassLoaderForBundles(aug, cl, key);
+            tccl = new ThreadContextClassLoaderForBundles(aug, cl, key, this);
         } else {
-            tccl = new ThreadContextClassLoader(aug, cl, key);
+            tccl = new ThreadContextClassLoader(aug, cl, key, this);
         }
 
         return tccl;
@@ -633,7 +678,43 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
         return cl instanceof ThreadContextClassLoader;
     }
 
-    /*
+    /**
+     * Invoked when a service is registered for a bell that includes META-INF/services/{full.package.InterfaceName}
+     * 
+     * @param ref reference to service provided for the bell.
+     */
+    private void metaInfServicesProviderRegistered(ServiceReference<?> ref) {
+        String className = (String) ref.getProperty("implementation.class");
+        String fileName = "META-INF/services/" + ((String[]) ref.getProperty("objectClass"))[0]; // example: META-INF/services/javax.json.bind.spi.JsonbProvider
+
+        ConcurrentHashMap<ServiceReference<?>, Class<?>> newlyRegistered = new ConcurrentHashMap<ServiceReference<?>, Class<?>>();
+        ConcurrentHashMap<ServiceReference<?>, Class<?>> alreadyRegistered = bellMetaInfServices.putIfAbsent(className, newlyRegistered);
+        (alreadyRegistered == null ? newlyRegistered : alreadyRegistered).put(ref, Void.class); // value will lazily initialize when needed
+
+        ConcurrentLinkedQueue<String> newList = new ConcurrentLinkedQueue<String>();
+        ConcurrentLinkedQueue<String> oldList = bellMetaInfServiceProviders.putIfAbsent(fileName, newList);
+        (oldList == null ? newList : oldList).add(className);
+    }
+
+    /**
+     * Invoked when a service is unregistered for a bell that includes META-INF/services/{full.package.InterfaceName}
+     * 
+     * @param ref reference to service provided for the bell.
+     */
+    private void metaInfServicesProviderUnregistering(ServiceReference<?> ref) {
+        String className = (String) ref.getProperty("implementation.class");
+        String fileName = "META-INF/services/" + ((String[]) ref.getProperty("objectClass"))[0]; // example: META-INF/services/javax.json.bind.spi.JsonbProvider
+
+        ConcurrentLinkedQueue<String> list = bellMetaInfServiceProviders.get(fileName);
+        if (list != null)
+            list.remove(className);
+
+        ConcurrentHashMap<ServiceReference<?>, Class<?>> registered = bellMetaInfServices.get(className);
+        if (registered != null)
+            registered.remove(ref);
+    }
+
+    /* 
      * (non-Javadoc)
      * 
      * @see com.ibm.wsspi.classloading.ClassLoadingService#setSharedLibraryProtectionDomains(java.util.Map)
