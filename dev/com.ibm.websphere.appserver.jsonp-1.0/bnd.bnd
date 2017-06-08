@@ -6,4 +6,4 @@ publish.feature.resources: **
 
 -dependson: \
 	com.ibm.websphere.javaee.jsonp.1.0;version=latest, \
-	com.ibm.ws.org.glassfish.json.1.0;version=latest
+	com.ibm.ws.org.glassfish.json;version=latest

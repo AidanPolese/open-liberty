@@ -6,11 +6,11 @@ publish.feature.resources: *.mf
 
 -dependson: \
 	com.ibm.websphere.appserver.channelfw-1.0;version=latest, \
-	com.ibm.ws.org.apache.yoko.corba.spec.1.5;version=latest, \
-	com.ibm.ws.org.apache.yoko.osgi.1.5;version=latest, \
-	com.ibm.ws.org.apache.servicemix.bundles.bcel.5.2;version=latest, \
-	com.ibm.ws.org.apache.yoko.rmi.impl.1.5;version=latest, \
-	com.ibm.ws.org.apache.yoko.core.1.5;version=latest, \
-	com.ibm.ws.org.apache.yoko.util.1.5;version=latest, \
+	com.ibm.ws.org.apache.yoko.corba.spec;version=latest, \
+	com.ibm.ws.org.apache.yoko.osgi;version=latest, \
+	com.ibm.ws.org.apache.servicemix.bundles.bcel;version=latest, \
+	com.ibm.ws.org.apache.yoko.rmi.impl;version=latest, \
+	com.ibm.ws.org.apache.yoko.core;version=latest, \
+	com.ibm.ws.org.apache.yoko.util;version=latest, \
 	com.ibm.ws.transport.iiop;version=latest, \
-	com.ibm.ws.org.apache.yoko.rmi.spec.1.5;version=latest
+	com.ibm.ws.org.apache.yoko.rmi.spec;version=latest
