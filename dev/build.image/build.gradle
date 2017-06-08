@@ -50,6 +50,10 @@ assemble {
     dependsOn copyGeneratedToCnfLib
 }
 
+clean.doLast {
+    file('wlp').deleteDir()
+}
+
 publishing {
   publications {
     maven(MavenPublication) {

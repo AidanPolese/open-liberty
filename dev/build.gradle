@@ -22,6 +22,7 @@ ext.bndWorkspace = new Workspace(rootDir, bnd_cnf).setOffline(gradle.startParame
 
 ext.cnf = rootProject.project(bnd_cnf)
 
+/* Set git branch name */
 def gitBranch() {
     def branch = ""
     def proc = "git rev-parse --abbrev-ref HEAD".execute()
@@ -31,22 +32,30 @@ def gitBranch() {
     branch
 }
 
-/* Property for git branch */
-Properties props = new Properties()
 ext.branchName = System.env.BRANCH_NAME ?: gitBranch()
 if (branchName == '' || branchName == 'HEAD') {
-  // default to master if something went wrong
-  branchName = 'master'
+	// Default to master if something went wrong
+	branchName = 'master'
 }
-props.setProperty('bGitBranch', branchName)
 
-/* Property for Artifactory matrix parameters */
-ext.matrixParams = ";GIT_BRANCH=master;GIT_FEATURE_BRANCH=${branchName}"
-props.setProperty('matrixParams', matrixParams)
+/* Fail when cnf:initialize was not run on the current git branch */
+def taskNames = project.gradle.startParameter.taskNames
 
-/* Write generated properties file */
-File propsFile = new File('generated.properties')
-props.store(propsFile.newWriter(), null)
+// Only fail when task isn't cnf:initialize
+if (!taskNames[0].contains("initialize")) {
+
+	// Git branch name when cnf:initialize was last run
+	def props = new Properties()
+	if (!file("generated.properties").exists()) {
+		ant.fail("'generated.properties' does not exist.\nRun ./gradlew cnf:initialize to create the file.")
+	}
+	file("generated.properties").withInputStream { props.load(it) }
+	def initBranch = props.getProperty("bGitBranch")
+
+	if (branchName != initBranch) {
+	  ant.fail("Git branch is '${branchName}' and cnf:initialize was run when git branch was '${initBranch}'.\nRun ./gradlew cnf:initialize to clean the local maven repository.")
+	}
+}
 
 /* Configure the subprojects */
 subprojects {
