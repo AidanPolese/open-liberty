@@ -22,7 +22,7 @@ import com.ibm.ws.http.channel.inputstream.HttpInputStreamObserver;
 import com.ibm.wsspi.webcontainer.logging.LoggerFactory;
 import com.ibm.wsspi.webcontainer.util.WSServletInputStream;
 
-//ALPINE - Switched from HttpInputStream to SRTInputStream to avoid IP issues
+//LIBERTY - Switched from HttpInputStream to SRTInputStream to avoid IP issues
 
 public class SRTInputStream extends WSServletInputStream
 {

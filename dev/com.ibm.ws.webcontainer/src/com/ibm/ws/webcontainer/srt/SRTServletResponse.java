@@ -134,11 +134,11 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
     protected boolean writerClosed = false;
     // 104771 - end
     protected SRTOutputStream _rawOut = new SRTOutputStream();
-    // ALPINE protected ResponseBuffer _responseBuffer = null;
+    // LIBERTY protected ResponseBuffer _responseBuffer = null;
     // protected BufferedServletOutputStream _bufferedOut = new
     // BufferedServletOutputStream(DEFAULT_BUFFER_SIZE);
 
-    // ALPINE protected WSServletOutputStream _bufferedOut;
+    // LIBERTY protected WSServletOutputStream _bufferedOut;
     protected ServletOutputStream _bufferedOut;
 
     protected BufferedWriter _bufferedWriter = new BufferedWriter(DEFAULT_BUFFER_SIZE);
@@ -192,11 +192,11 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
      */
     public SRTServletResponse() {
         super();
-        // ALPINE Moving this call to create the output stream to the
+        // LIBERTY Moving this call to create the output stream to the
         // initForNextResponse method
-        // ALPINE this._bufferedOut = createOutputStream(DEFAULT_BUFFER_SIZE);
+        // LIBERTY this._bufferedOut = createOutputStream(DEFAULT_BUFFER_SIZE);
         _bufferedWriter.setObserver(this);
-        // ALPINE _bufferedOut.setObserver(this);
+        // LIBERTY _bufferedOut.setObserver(this);
         if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE)) {  //306998.15
             logger.logp(Level.FINE, CLASS_NAME,"SRTServletResponse", "outputstream is of type --> " + this._bufferedOut);
         }
@@ -308,9 +308,9 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
             // _response.clearHeaders();
             
             cleanupFromFinish();
-            // ALPINE _bufferedOut.reset();
+            // LIBERTY _bufferedOut.reset();
             _bufferedWriter.reset();
-            // ALPINE this._responseBuffer = null;
+            // LIBERTY this._responseBuffer = null;
         }
 
         resetState();
@@ -324,7 +324,7 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
         _response = null;
         _bufferSize = DEFAULT_BUFFER_SIZE;
         _encoding = null;
-        // ALPINE _responseBuffer = null;
+        // LIBERTY _responseBuffer = null;
         // _outWriterEncoding = null;
         _gotOutputStream = false;
         _gotWriter = false;
@@ -456,15 +456,15 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
         //is committed check done in underlying layer in tWAS
         if (isCommitted())
             throw new IllegalStateException();
-        // ALPINE
+        // LIBERTY
         if (_gotOutputStream)
         {
             _response.resetBuffer();
         }
 
-        // ALPINE if (_responseBuffer != null) {
-        // ALPINE _responseBuffer.clearBuffer();
-        // ALPINE }
+        // LIBERTY if (_responseBuffer != null) {
+        // LIBERTY _responseBuffer.clearBuffer();
+        // LIBERTY }
 
         // begin 156186
         if (_bufferedWriter != null) {
@@ -624,12 +624,12 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
             logger.entering(CLASS_NAME,"setBufferSize ", String.valueOf(size) +" ["+this+"]");
         _bufferSize = size;
 
-        // ALPINE if (_responseBuffer != null) {
+        // LIBERTY if (_responseBuffer != null) {
         if (_gotOutputStream || _gotWriter)
         {
             if (!_firstWrite)
             {
-                // ALPINE _responseBuffer.setBufferSize(size);
+                // LIBERTY _responseBuffer.setBufferSize(size);
                 _response.setBufferSize(size);
                 if (_gotWriter) {
                     _bufferedWriter.setBufferSize(size);
@@ -651,7 +651,7 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
 
     public int getBufferSize()
     {
-        // ALPINE if (_responseBuffer == null) {
+        // LIBERTY if (_responseBuffer == null) {
         if (!_gotOutputStream)
         {
             if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))  //306998.15
@@ -664,7 +664,7 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
             if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))  //306998.15
                 logger.logp(Level.FINE, CLASS_NAME,"getBufferSize", "getBufferSize --> " + _response.getBufferSize(),"["+this+"]");
 
-            // ALPINE return _responseBuffer.getBufferSize();
+            // LIBERTY return _responseBuffer.getBufferSize();
             return _response.getBufferSize();
         }
     }
@@ -696,7 +696,7 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
 
                 if (_gotOutputStream)
                 {
-                    // ALPINE _responseBuffer.flushBuffer();
+                    // LIBERTY _responseBuffer.flushBuffer();
                     // !!MJS-Flush _response.flushBuffer();
                     //if (!_response.isCommitted()) {
                     //    _response.flushBuffer();
@@ -750,15 +750,15 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
         }
         // 182383
 
-        // ALPINE if (_gotWriter || _gotOutputStream) {
+        // LIBERTY if (_gotWriter || _gotOutputStream) {
         if (_gotOutputStream)
         {
-            // ALPINE if (_responseBuffer == null)
-            // ALPINE return false;
+            // LIBERTY if (_responseBuffer == null)
+            // LIBERTY return false;
             if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&&logger.isLoggable (Level.FINE))
                 logger.logp(Level.FINE, CLASS_NAME, "isCommitted" , "responseBuffer isCommitted="+_response.isCommitted(),"["+this+"]");
 
-            // ALPINE return _responseBuffer.isCommitted();
+            // LIBERTY return _responseBuffer.isCommitted();
             return _response.isCommitted();
         }
         if (_gotWriter && _bufferedWriter != null)
@@ -814,10 +814,10 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
         {
             _gotOutputStream = true;
 
-            // ALPINE _bufferedOut.init(_rawOut, getBufferSize());
-            // ALPINE _bufferedOut.setLimit(_contentLength);
-            // ALPINE _bufferedOut.setResponse(_response);
-            // ALPINE _responseBuffer = _bufferedOut;
+            // LIBERTY _bufferedOut.init(_rawOut, getBufferSize());
+            // LIBERTY _bufferedOut.setLimit(_contentLength);
+            // LIBERTY _bufferedOut.setResponse(_response);
+            // LIBERTY _responseBuffer = _bufferedOut;
         } //PK89810 End
         this.fireOutputStreamRetrievedEvent(_bufferedOut);
 
@@ -888,7 +888,7 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
             _bufferedWriter.setResponse(_response);
 
             _pwriter = new PrintWriter(_bufferedWriter, false);
-            // ALPINE _responseBuffer = _bufferedWriter;
+            // LIBERTY _responseBuffer = _bufferedWriter;
             _gotWriter = true;
 
             writerClosed = false;
@@ -980,7 +980,7 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
             addLocaleHeader();
 
             // PQ59244 - disallow content length header if content is encoded
-            // ALPINE
+            // LIBERTY
             if (containsHeader(HEADER_CONTENT_ENCODING_BYTES) && containsHeader(HEADER_CONTENT_LENGTH_BYTES)) {
 
                 if (keepContentLength){
@@ -1183,12 +1183,12 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
         _response.setReason(REASON_OK);
         _response.setStatusCode(200);
 
-        // ALPINE if (_responseBuffer != null) {
+        // LIBERTY if (_responseBuffer != null) {
         // begin 156186
         // _responseBuffer = null;
-        // ALPINE _responseBuffer.clearBuffer();
+        // LIBERTY _responseBuffer.clearBuffer();
         // end 156186
-        // ALPINE }
+        // LIBERTY }
 
         // begin 156186
         if (_bufferedWriter != null) {
@@ -1462,7 +1462,7 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
                 }
             }
             _contentLength = len;
-            // ALPINE _bufferedOut.setLimit(_contentLength = len);
+            // LIBERTY _bufferedOut.setLimit(_contentLength = len);
             _bufferedWriter.setLimitLong(_contentLength);
             //still want to try to set the header even if the response is committed to throw the warning
             setIntHeader(HEADER_CONTENT_LENGTH, len);
@@ -2349,12 +2349,12 @@ public class SRTServletResponse implements HttpServletResponse, IResponseOutput,
         catch (IOException e) {
             logger.logp(Level.SEVERE, CLASS_NAME,"initForNextResponse", "error.initializing.output.stream", e);  /*@283348.1*/
         }
-        // ALPINE _bufferedOut.reset();
+        // LIBERTY _bufferedOut.reset();
         _bufferedWriter.reset();
-        // ALPINE _responseBuffer = null;
+        // LIBERTY _responseBuffer = null;
         // PK53885 start
         _bufferSize = DEFAULT_BUFFER_SIZE;       
-        this._bufferedOut = createOutputStream(DEFAULT_BUFFER_SIZE); // ALPINE
+        this._bufferedOut = createOutputStream(DEFAULT_BUFFER_SIZE); // LIBERTY
         if(this._bufferedOut instanceof WCOutputStream){
             (((WCOutputStream) this._bufferedOut).getOutput()).setObserver(this);
          }

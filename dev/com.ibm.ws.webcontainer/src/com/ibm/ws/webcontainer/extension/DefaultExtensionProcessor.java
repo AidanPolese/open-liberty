@@ -379,7 +379,7 @@ private ICollaboratorHelper collabHelper;
 		dispatchContext = (WebAppDispatcherContext)wasreq.getWebAppDispatcherContext();
 			
         
-            //ALPINE: Talk to Namespace
+            //LIBERTY: Talk to Namespace
                 //webAppNameSpaceCollab.preInvoke(cmd);
 			
             //remove since the preInvoke is done in WebAppFilterManager

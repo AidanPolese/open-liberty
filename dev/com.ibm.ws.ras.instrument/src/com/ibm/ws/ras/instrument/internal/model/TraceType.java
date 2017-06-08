@@ -18,5 +18,5 @@ public enum TraceType {
     NONE,
     TR,
     JAVA_LOGGING,
-    ALPINE
+    LIBERTY
 }

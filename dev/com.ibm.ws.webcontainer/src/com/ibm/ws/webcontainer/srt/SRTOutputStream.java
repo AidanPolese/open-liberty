@@ -149,11 +149,11 @@ public class SRTOutputStream extends javax.servlet.ServletOutputStream implement
 
   // END ZHJ
 
-  // ALPINE WI #3179 BEGIN
+  // LIBERTY WI #3179 BEGIN
   public void write(FileChannel fileChannel) throws java.io.IOException
   {
     ((HttpOutputStream) _conn).writeFile(fileChannel);
   }
-  // ALPINE WI #3179 END
+  // LIBERTY WI #3179 END
 
 }

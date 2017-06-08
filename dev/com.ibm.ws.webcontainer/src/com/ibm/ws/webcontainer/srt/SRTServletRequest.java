@@ -3381,7 +3381,7 @@ public class SRTServletRequest implements HttpServletRequest, IExtendedRequest, 
         if (WCCustomProperties.CHECK_REQUEST_OBJECT_IN_USE){
             checkRequestObjectInUse();
         }
-        // ALPINE - Switched from HttpInputStream to SRTInputStream because of Sun
+        // LIBERTY - Switched from HttpInputStream to SRTInputStream because of Sun
         // code.
         return new SRTInputStream();
         // return new HttpInputStream();

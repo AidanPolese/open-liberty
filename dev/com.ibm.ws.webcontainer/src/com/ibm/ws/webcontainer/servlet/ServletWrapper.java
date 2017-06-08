@@ -147,7 +147,7 @@ public abstract class ServletWrapper extends GenericServlet implements RequestPr
 
     // number of threads currently executing the service method
     // this is primarily used for the check before the destroy() is called
-    // ALPINE Changed to an AtomicInteger
+    // LIBERTY Changed to an AtomicInteger
     private AtomicInteger nServicing = new AtomicInteger(0);
 
     private long lastAccessTime = 0;
@@ -1263,11 +1263,11 @@ public abstract class ServletWrapper extends GenericServlet implements RequestPr
                 if (notify)
                     evtSource.onServletStartService(evt);
             } catch (Throwable th) {
-                // ALPINE
+                // LIBERTY
                 nServicing.getAndIncrement();
                 throw th;
             }
-            // ALPINE
+            // LIBERTY
             nServicing.getAndIncrement();
 
             if (notify) {
@@ -1387,7 +1387,7 @@ public abstract class ServletWrapper extends GenericServlet implements RequestPr
 
             throw new ServletErrorReport(e);
         } finally {
-            // ALPINE
+            // LIBERTY
             nServicing.getAndDecrement();
             if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && logger.isLoggable(Level.FINE)) // 306998.15
                 logger.exiting(CLASS_NAME, "service"); // 569469

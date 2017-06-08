@@ -60,6 +60,6 @@ public class ExtensionFactoryServiceListener implements ServiceListener
   private void unregisterExtensionFactory(ServiceReference sr)
   {
     this.context.ungetService(sr);
-    // TODO ALPINE not sure what we need to cleanup.
+    // TODO LIBERTY not sure what we need to cleanup.
   }
 }

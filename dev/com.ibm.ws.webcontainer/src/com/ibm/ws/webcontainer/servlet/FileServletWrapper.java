@@ -894,7 +894,7 @@ public abstract class FileServletWrapper implements IServletWrapper, IServletWra
 
     protected void writeResponseToClient(HttpServletRequest request, HttpServletResponse resp, IExtendedRequest wasreq) throws ServletException,
             IOException {
-    // ALPINE InputStream in = null;
+    // LIBERTY InputStream in = null;
     boolean isWritten = false;
     boolean rethrowIOException = false;
         try {
@@ -955,7 +955,7 @@ public abstract class FileServletWrapper implements IServletWrapper, IServletWra
                 logger.logp(Level.FINE, CLASS_NAME, "writeResponseToClient", "writing using File Channel Byte Buffer Wrapper");
               }
               isWritten = true;
-              // ALPINE WI #3179 BEGIN
+              // LIBERTY WI #3179 BEGIN
               ((SRTOutputStream) os).write(channel);
               // WsByteBuffer[] wsBufArray = new WsByteBuffer[1];
               //
@@ -964,7 +964,7 @@ public abstract class FileServletWrapper implements IServletWrapper, IServletWra
               // ChannelFrameworkFactory.getBufferManager().allocateFileChannelBuffer(channel)
               // ;
               // ((ByteBufferWriter) os).writeByteBuffer(wsBufArray);
-              // ALPINE WI #3179 END
+              // LIBERTY WI #3179 END
 
             }
           }
