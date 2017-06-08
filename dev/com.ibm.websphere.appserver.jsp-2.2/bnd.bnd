@@ -10,7 +10,7 @@ publish.feature.resources: **
 	com.ibm.websphere.appserver.javax.el-2.2;version=latest, \
 	com.ibm.websphere.appserver.servlet-3.1;version=latest, \
 	com.ibm.websphere.appserver.javaeeCompatible-6.0;version=latest, \
-	com.ibm.ws.org.eclipse.jdt.core.3.10.2.v20160712-0000;version=latest, \
+	com.ibm.ws.org.eclipse.jdt.core;version=latest, \
 	com.ibm.ws.jsp.factories;version=latest, \
 	com.ibm.websphere.javaee.jstl.1.2;version=latest, \
 	com.ibm.ws.jsp.jasper;version=latest, \

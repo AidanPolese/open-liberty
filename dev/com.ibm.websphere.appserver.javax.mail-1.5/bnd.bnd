@@ -5,4 +5,4 @@
 publish.feature.resources: *.mf
 
 -dependson: \
-	com.ibm.ws.com.sun.mail.javax.mail.1.5;version=latest
+	com.ibm.ws.com.sun.mail.javax.mail;version=latest

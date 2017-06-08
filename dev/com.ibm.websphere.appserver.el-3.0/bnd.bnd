@@ -6,4 +6,4 @@ publish.feature.resources: **
 
 -dependson: \
 	com.ibm.websphere.appserver.javax.el-3.0;version=latest, \
-	com.ibm.ws.org.apache.jasper.el.3.0;version=latest
+	com.ibm.ws.org.apache.jasper.el;version=latest
