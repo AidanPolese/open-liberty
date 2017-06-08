@@ -736,12 +736,13 @@ readServerEnv()
       *=*)
         # Only accept alphanumeric variable names to avoid eval complexities.
         if var=`safeEcho "$line" | sed -e 's/^\([a-zA-Z0-9_][a-zA-Z0-9_]*\)=.*/\1/'`; then 
-           if [[ ${var} == *"="* ]]; then
-               SERVER_ENV_SETUP_FAILURE="${var} ${SERVER_ENV_SETUP_FAILURE}"
-           else
+           case $var in
+	   *=*)
+               SERVER_ENV_SETUP_FAILURE="${var} ${SERVER_ENV_SETUP_FAILURE}" ;;
+           *)
               extractValueAndEscapeForEval "${line}"
-              eval "${var}=${escapeForEvalResult}; export ${var}"
-           fi
+              eval "${var}=${escapeForEvalResult}; export ${var}" ;;
+	   esac
         fi
       esac
     done
