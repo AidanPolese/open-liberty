@@ -8,4 +8,6 @@ publish.feature.resources: **
 	com.ibm.websphere.appserver.classloading-1.0;version=latest, \
 	com.ibm.websphere.javaee.jaxb.2.2;version=latest, \
 	com.ibm.ws.org.apache.geronimo.osgi.registry;version=latest, \
-	com.ibm.ws.jaxb.tools;version=latest
+	com.ibm.ws.jaxb.tools;version=latest, \
+	com.ibm.ws.jaxb.tools.schemagen;version=latest, \
+	com.ibm.ws.jaxb.tools.xjc;version=latest

@@ -13,4 +13,5 @@ publish.feature.resources: *.mf
 	com.ibm.websphere.appserver.javax.interceptor-1.2;version=latest, \
 	com.ibm.ws.ejbcontainer.remote.client;version=latest, \
 	com.ibm.ws.ejbcontainer.v32;version=latest, \
-	com.ibm.ws.ejbcontainer.remote;version=latest
+	com.ibm.ws.ejbcontainer.remote;version=latest, \
+	com.ibm.ws.ejbcontainer.remote.portable;version=latest

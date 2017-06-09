@@ -22,6 +22,7 @@ publish.feature.resources: **
 	com.ibm.websphere.security;version=latest, \
 	com.ibm.ws.org.apache.commons.fileupload;version=latest, \
 	com.ibm.ws.webcontainer.servlet.3.1;version=latest, \
+	com.ibm.ws.webcontainer.servlet.3.1.factories;version=latest, \
 	com.ibm.ws.session;version=latest, \
 	com.ibm.ws.webcontainer;version=latest, \
 	com.ibm.ws.webcontainer.cors;version=latest, \

@@ -21,6 +21,7 @@ publish.feature.resources: *.mf
 	com.ibm.ws.org.apache.ws.xmlschema.core;version=latest, \
 	com.ibm.websphere.javaee.jaxrs.2.0;version=latest, \
 	com.ibm.ws.jaxrs.2.0.tools;version=latest, \
+	com.ibm.ws.jaxrs.2.0.tools.wadl2java;version=latest, \
 	com.ibm.ws.jaxrs.2.0.web;version=latest, \
 	com.ibm.ws.jaxrs.2.0.server;version=latest, \
 	com.ibm.ws.jaxrs.2.0.client;version=latest
