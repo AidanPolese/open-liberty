@@ -1,9 +1,0 @@
--include= jar:${fileuri;lib/org.eclipse.equinox.region_1.3.2.v20170118-1930.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--nouses=true
-
--includeresource: \
-    @lib/org.eclipse.equinox.region_1.3.2.v20170118-1930.jar
-
--buildpath: \
-	lib/org.eclipse.equinox.region_1.3.2.v20170118-1930.jar;version=file

@@ -1,3 +1,0 @@
--include= jar:${fileuri;lib/joda-time-1.6.2.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--buildpath: lib/joda-time-1.6.2.jar;version=file

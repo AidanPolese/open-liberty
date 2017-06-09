@@ -1,6 +1,0 @@
--include= jar:${fileuri;lib/slf4j-jdk14-1.7.7.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-   @lib/slf4j-jdk14-1.7.7.jar!/!META-INF/MANIFEST.MF|META-INF/maven/*
-
--buildpath: lib/slf4j-jdk14-1.7.7.jar;version=file

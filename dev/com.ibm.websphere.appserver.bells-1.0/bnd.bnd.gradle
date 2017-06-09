@@ -1,9 +1,0 @@
--include= ~../cnf/resources/bnd/liberty-release.props
-
--nobundles=true
-
-publish.feature.resources: **
-
--dependson: \
-	com.ibm.websphere.appserver.classloading-1.0;version=latest,\
-	com.ibm.ws.classloading.bells;version=latest

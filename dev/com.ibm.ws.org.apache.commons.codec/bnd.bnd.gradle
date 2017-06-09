@@ -1,6 +1,0 @@
--include= jar:${fileuri;lib/com.ibm.ws.prereq.commons-codec.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-   @lib/com.ibm.ws.prereq.commons-codec.jar!/!META-INF/maven/*
-
--buildpath: lib/com.ibm.ws.prereq.commons-codec.jar;version=file

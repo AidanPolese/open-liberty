@@ -1,8 +1,0 @@
-# this needs to be replaced with a repo reference to a build artifact
--include= jar:${fileuri;lib/org.apache.aries.jmx.core.whiteboard-1.1.6-ibm-s20170508-0700.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-    @lib/org.apache.aries.jmx.core.whiteboard-1.1.6-ibm-s20170508-0700.jar!/!META-INF/maven/*
-
--buildpath: \
-	lib/org.apache.aries.jmx.core.whiteboard-1.1.6-ibm-s20170508-0700.jar;version=file

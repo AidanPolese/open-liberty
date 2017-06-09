@@ -1,6 +1,0 @@
--include= jar:${fileuri;lib/org.apache.yoko.corba.spec-1.5.SNAPSHOT.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-   @lib/org.apache.yoko.corba.spec-1.5.SNAPSHOT.jar!/!META-INF/maven/*
-
--buildpath: lib/org.apache.yoko.corba.spec-1.5.SNAPSHOT.jar;version=file

@@ -1,3 +1,0 @@
--include= jar:${fileuri;lib/jdeparser-1.0.0.Final.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--buildpath: lib/jdeparser-1.0.0.Final.jar;version=file

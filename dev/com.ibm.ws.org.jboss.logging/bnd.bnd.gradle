@@ -1,3 +1,0 @@
--include= jar:${fileuri;lib/jboss-logging-3.3.0.Final.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--buildpath: lib/jboss-logging-3.3.0.Final.jar;version=file

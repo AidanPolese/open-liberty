@@ -1,8 +1,0 @@
--include= jar:${fileuri;lib/org.apache.felix.scr-2.0.8.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-   OSGI-INF=resources/OSGI-INF, \
-   @lib/org.apache.felix.scr-2.0.8.jar!/!META-INF/maven/*
-
--buildpath: \
-	lib/org.apache.felix.scr-2.0.8.jar;version=file

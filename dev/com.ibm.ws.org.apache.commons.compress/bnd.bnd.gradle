@@ -1,8 +1,0 @@
--include= jar:${fileuri;lib/org.apache.commons.compress-1.10.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-    @lib/org.apache.commons.compress-1.10.jar!/!META-INF/maven/*
-
-publish.wlp.jar.disabled: true
-
--buildpath: lib/org.apache.commons.compress-1.10.jar;version=file

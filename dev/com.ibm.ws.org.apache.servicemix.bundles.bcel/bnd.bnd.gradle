@@ -1,6 +1,0 @@
--include= jar:${fileuri;lib/org.apache.servicemix.bundles.bcel-5.2_3.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-   @lib/org.apache.servicemix.bundles.bcel-5.2_3.jar!/!META-INF/maven/*
-
--buildpath: lib/org.apache.servicemix.bundles.bcel-5.2_3.jar;version=file

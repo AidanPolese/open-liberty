@@ -1,6 +1,0 @@
--include= jar:${fileuri;lib/commons-discovery.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-   @lib/commons-discovery.jar!/!META-INF/*
-
--buildpath: lib/commons-discovery.jar;version=file

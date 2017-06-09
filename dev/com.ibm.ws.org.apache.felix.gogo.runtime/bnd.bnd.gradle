@@ -1,9 +1,0 @@
--include= jar:${fileuri;lib/org.apache.felix.gogo.runtime-0.16.2.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-   @lib/org.apache.felix.gogo.runtime-0.16.2.jar!/!META-INF/maven/*
-
-instrument.disabled: true
-
--buildpath: \
-	lib/org.apache.felix.gogo.runtime-0.16.2.jar;version=file
