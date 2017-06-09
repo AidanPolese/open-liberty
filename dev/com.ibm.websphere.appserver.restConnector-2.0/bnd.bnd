@@ -10,6 +10,7 @@ publish.feature.resources: **
 	com.ibm.ws.filetransfer.routing.archiveExpander;version=latest, \
 	com.ibm.ws.jmx.connector.server.rest;version=latest, \
 	com.ibm.ws.jmx.connector.client.rest;version=latest, \
+	com.ibm.ws.jmx.connector.client.restConnector;version=latest, \
 	com.ibm.ws.filetransfer;version=latest, \
 	com.ibm.websphere.filetransfer;version=latest, \
 	com.ibm.ws.jmx.request;version=latest, \

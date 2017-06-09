@@ -20,4 +20,6 @@ publish.feature.resources: *.mf
 	com.ibm.websphere.javaee.wsdl4j.1.2;version=latest, \
 	com.ibm.ws.prereq.wsdl4j;version=latest, \
 	com.ibm.ws.org.apache.ws.xmlschema.core;version=latest, \
-	com.ibm.ws.jaxws.tools;version=latest
+	com.ibm.ws.jaxws.tools;version=latest, \
+	com.ibm.ws.jaxws.tools.wsgen;version=latest, \
+	com.ibm.ws.jaxws.tools.wsimport;version=latest

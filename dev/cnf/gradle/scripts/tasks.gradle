@@ -120,21 +120,63 @@ subprojects {
 
   task publishFeatureResources {
     dependsOn jar
-    enabled !bnd('publish.feature.resources', '').empty
-    inputs.files(fileTree( dir: "${projectDir}/resources", include: bnd('publish.feature.resources', '') )).skipWhenEmpty()
+    inputs.files(fileTree(dir: "${projectDir}", include: '*.feature')).skipWhenEmpty()
     outputs.dir "${rootDir}/build.image/wlp/lib/features"
     doLast {
-      copy {
-        from "${projectDir}/resources"
-        into "${rootDir}/build.image/wlp/lib/features"
-        include bnd('publish.feature.resources')
-        exclude '*.mf'
+      ant.taskdef(resource: 'com/ibm/ws/wlp/feature/tasks/default.properties') {
+        classpath {
+          fileset(dir: "${rootDir}/cnf/lib/") {
+            include(name: "infra.buildtasks-core_4.0*.jar")
+            include(name: "asm-all-5.0.3.jar")
+            include(name: "org.apache.aries.util-*.jar")
+            include(name: "osgi.core.jar")
+            include(name: "jackson*.jar")
+            include(name: "wlp-*.jar")
+            include(name: "jsoup-*.jar")
+            include(name: "biz.aQute.bnd-3.3.0.jar")
+          }
+        }
+      }
+      new File("${rootDir}/build.image/wlp/lib/features").mkdirs()
+      fileTree(dir: "${projectDir}", include: '*.feature').visit { featureFile ->
+        if (featureFile.isDirectory()) { 
+          return
+        }
+        ant.featureBnd(bnd: featureFile.name,
+                       createESA: "false",
+                       dir: "${rootDir}/build.image/wlp",
+                       esaDir: "${buildDir}/repo",
+                       createFor: "beta",
+                       buildType: "beta",
+                       junit: "${buildDir}/report/featureChecks.xml") {
+          defaultEdition(licenseURL: "http://www.ibm.com/licenses/wlp-featureterms-v1",
+                         licensePath: "${rootDir}/image.common/lafiles/featureTerms",
+                         version: "2017.6.0.0",
+                         licenseType: "UNSPECIFIED",
+                         displayVersion: "v9 beta")
+          edition(baseEdition: "beta")
+          edition(baseEdition: "core",
+                  validEditions: "")
+          edition(baseEdition: "base",
+                  validEditions: "BASE,BASE_ILAN,DEVELOPERS,EXPRESS,ND,zOS")
+          edition(baseEdition: "nd",
+                  validEditions: "BASE_ILAN,DEVELOPERS,ND,zOS",
+                  licenseURL: "http://www.ibm.com/licenses/wlp-featureterms-restricted-v1",
+                  licensePath: "${rootDir}/image.common/lafiles/featureTerms-restricted")
+          edition(baseEdition: "zos",
+                  validEditions: "zOS")
+          edition(baseEdition: "bluemix",
+                  validEditions: "BLUEMIX")
+          edition(baseEdition: "full")
+          edition(baseEdition: "unsupported",
+                  licenseURL: "http://www.ibm.com/licenses/L-SWIS-A9SRXB",
+                  licensePath: "${rootDir}/image.common/lafiles/unsupported/developers",
+                  licenseType: "ILAN")
+        }
       }
       copy {
-        from "${projectDir}/resources"
-        into "${rootDir}/build.image/wlp/lib/features"
-        include '*.mf'
-        expand(mfProductEdition: bnd('mfProductEdition'), mfProductVersion: bnd('mfProductVersion'))
+        from "${projectDir}/resources/l10n"
+        into "${rootDir}/build.image/wlp/lib/features/l10n"
       }
     }
   }
