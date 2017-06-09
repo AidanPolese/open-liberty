@@ -3,26 +3,34 @@
  *
  * OCO Source Materials
  *
- * WLP Copyright IBM Corp. 2013, 2016
+ * WLP Copyright IBM Corp. 2013, 2017
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.classloading.internal;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceReference;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.websphere.ras.annotation.Trivial;
+import com.ibm.ws.classloading.MetaInfServicesProvider;
 import com.ibm.ws.classloading.internal.util.Keyed;
+import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 
 /**
  * A specific type of UnifiedClassLoader: ThreadContextClassLoader
@@ -33,13 +41,14 @@ public class ThreadContextClassLoader extends UnifiedClassLoader implements Keye
     protected final String key;
     private final AtomicInteger refCount = new AtomicInteger(0);
     private final ClassLoader appLoader;
+    private final ClassLoadingServiceImpl clSvc;
 
-    public ThreadContextClassLoader(GatewayClassLoader augLoader, ClassLoader appLoader, String key) {
-        super(appLoader instanceof ParentLastClassLoader ? appLoader : augLoader,
-              appLoader instanceof ParentLastClassLoader ? augLoader : appLoader);
+    public ThreadContextClassLoader(GatewayClassLoader augLoader, ClassLoader appLoader, String key, ClassLoadingServiceImpl clSvc) {
+        super(appLoader instanceof ParentLastClassLoader ? appLoader : augLoader, appLoader instanceof ParentLastClassLoader ? augLoader : appLoader);
         bundle.set(augLoader.getBundle());
         this.key = key;
         this.appLoader = appLoader;
+        this.clSvc = clSvc;
     }
 
     /**
@@ -66,7 +75,7 @@ public class ThreadContextClassLoader extends UnifiedClassLoader implements Keye
      * destroyThreadContextClassLoader method is called. Each call to destroyTCCL
      * should decrement this ref counter. When there are no more references to this
      * TCCL, it will be cleaned up, which effectively invalidates it.
-     * 
+     *
      * Users of the ClassLoadingService should understand that:<ol>
      * <li>They are responsible for destroying every instance of a TCCL that they
      * create via the CLS.createTCCL method, and,
@@ -74,7 +83,7 @@ public class ThreadContextClassLoader extends UnifiedClassLoader implements Keye
      * instances they created, they will be holding on to a stale (leaked) classloader,
      * which can result in OOM situations.</li>
      * </ol>
-     * 
+     *
      * @return the new current count of references to this TCCL instance
      */
     int decrementRefCount() {
@@ -97,11 +106,27 @@ public class ThreadContextClassLoader extends UnifiedClassLoader implements Keye
      * createThreadContextClassLoader method is called, both for new and pre-existing
      * instances. Each call to createTCCL should increment this ref counter - likewise,
      * each call to destroy should call decrementRefCount();
-     * 
+     *
      * @return the new current count of references to this TCCL instance
      */
     int incrementRefCount() {
         return refCount.incrementAndGet();
+    }
+
+    @Override
+    @FFDCIgnore(ClassNotFoundException.class)
+    @Trivial
+    protected Class<?> findClass(String className) throws ClassNotFoundException {
+        try {
+            return super.findClass(className);
+        } catch (ClassNotFoundException x) {
+            // Special case to find and load META-INF/services provider classes
+            MetaInfServicesProvider metaInfServices = clSvc.metaInfServicesRefs.getService(className);
+            Class<?> c = metaInfServices == null ? null : metaInfServices.getProviderImplClass();
+            if (c != null)
+                return c;
+            throw x;
+        }
     }
 
     /*********************************************************************************/
@@ -113,13 +138,43 @@ public class ThreadContextClassLoader extends UnifiedClassLoader implements Keye
     }
 
     @Override
-    protected URL findResource(String arg0) {
-        return super.findResource(arg0);
+    protected URL findResource(String name) {
+        URL url = super.findResource(name);
+        if (url == null) {
+            ConcurrentLinkedQueue<String> providerNames = clSvc.metaInfServicesProviders.get(name);
+            if (providerNames != null)
+                for (String providerImplClassName : providerNames) {
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                        Tr.debug(this, tc, providerImplClassName);
+                    ServiceReference<MetaInfServicesProvider> ref = clSvc.metaInfServicesRefs.getReference(providerImplClassName);
+                    if (ref != null) {
+                        url = (URL) ref.getProperty("file.url");
+                        break;
+                    }
+                }
+        }
+        return url;
     }
 
     @Override
-    protected Enumeration<URL> findResources(String arg0) throws IOException {
-        return super.findResources(arg0);
+    protected Enumeration<URL> findResources(String name) throws IOException {
+        Enumeration<URL> urlEnum = super.findResources(name);
+        ConcurrentLinkedQueue<String> providerNames = clSvc.metaInfServicesProviders.get(name);
+        if (providerNames != null && !providerNames.isEmpty()) {
+            Set<URL> urls = new LinkedHashSet<URL>();
+            while (urlEnum.hasMoreElements())
+                urls.add(urlEnum.nextElement());
+            for (String providerImplClassName : providerNames) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                    Tr.debug(this, tc, providerImplClassName);
+                ServiceReference<MetaInfServicesProvider> ref = clSvc.metaInfServicesRefs.getReference(providerImplClassName);
+                if (ref != null) {
+                    urls.add((URL) ref.getProperty("file.url"));
+                }
+            }
+            urlEnum = Collections.enumeration(urls);
+        }
+        return urlEnum;
     }
 
     @Override

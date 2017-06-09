@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * Copyright IBM Corp. 2010, 2016
+ * Copyright IBM Corp. 2010, 2017
  *
  * The source code for this program is not published or other-
  * wise divested of its trade secrets, irrespective of what has
@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -57,6 +58,7 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.classloading.ClassGenerator;
 import com.ibm.ws.classloading.ClassLoaderIdentifierService;
 import com.ibm.ws.classloading.LibertyClassLoadingService;
+import com.ibm.ws.classloading.MetaInfServicesProvider;
 import com.ibm.ws.classloading.internal.ClassLoaderFactory.PostCreateAction;
 import com.ibm.ws.classloading.internal.providers.WeakLibraryListener;
 import com.ibm.ws.classloading.internal.util.CanonicalStore;
@@ -76,6 +78,7 @@ import com.ibm.wsspi.classloading.ClassTransformer;
 import com.ibm.wsspi.classloading.GatewayConfiguration;
 import com.ibm.wsspi.classloading.ResourceProvider;
 import com.ibm.wsspi.config.Fileset;
+import com.ibm.wsspi.kernel.service.utils.ConcurrentServiceReferenceMap;
 import com.ibm.wsspi.kernel.service.utils.ConcurrentServiceReferenceSet;
 import com.ibm.wsspi.library.Library;
 
@@ -118,6 +121,16 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
     private final ConcurrentServiceReferenceSet<ClassGenerator> generatorRefs = new ConcurrentServiceReferenceSet<ClassGenerator>(REFERENCE_GENERATORS);
     private final ClassGeneratorManager generatorManager = new ClassGeneratorManager(generatorRefs);
 
+    /**
+     * Mapping from META-INF services file names to the corresponding service provider implementation class name.
+     */
+    final ConcurrentHashMap<String, ConcurrentLinkedQueue<String>> metaInfServicesProviders = new ConcurrentHashMap<String, ConcurrentLinkedQueue<String>>();
+
+    /**
+     * Mapping from META-INF services provider implementation names to the corresponding registered service.
+     */
+    final ConcurrentServiceReferenceMap<String, MetaInfServicesProvider> metaInfServicesRefs = new ConcurrentServiceReferenceMap<String, MetaInfServicesProvider>("MetaInfServicesProvider");
+
     private Map<String, ProtectionDomain> protectionDomainMap = null;
 
     /**
@@ -128,6 +141,7 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
     @Activate
     protected void activate(ComponentContext cCtx, Map<String, Object> properties) {
         generatorRefs.activate(cCtx);
+        metaInfServicesRefs.activate(cCtx);
         this.bundleContext = cCtx.getBundleContext();
         this.aclStore = new CanonicalStore<ClassLoaderIdentity, AppClassLoader>();
         this.tcclStore = new CanonicalStore<String, ThreadContextClassLoader>();
@@ -140,6 +154,7 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
     @Deactivate
     protected void deactivate(ComponentContext cCtx) {
         generatorRefs.deactivate(cCtx);
+        metaInfServicesRefs.deactivate(cCtx);
         Bundle systemBundle = this.bundleContext.getBundle(Constants.SYSTEM_BUNDLE_LOCATION);
         BundleContext systemContext = systemBundle.getBundleContext();
         systemContext.removeBundleListener(listener);
@@ -156,6 +171,29 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
 
     protected void removeGenerator(ServiceReference<ClassGenerator> ref) {
         generatorRefs.removeReference(ref);
+    }
+
+    @Reference(service = MetaInfServicesProvider.class, cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
+    protected void addMetaInfServicesProvider(ServiceReference<MetaInfServicesProvider> ref) {
+        String path = (String) ref.getProperty("file.path");
+        String implClassName = (String) ref.getProperty("implementation.class");
+
+        metaInfServicesRefs.putReference(implClassName, ref);
+
+        ConcurrentLinkedQueue<String> newList = new ConcurrentLinkedQueue<String>();
+        ConcurrentLinkedQueue<String> oldList = metaInfServicesProviders.putIfAbsent(path, newList);
+        (oldList == null ? newList : oldList).add(implClassName);
+    }
+
+    protected void removeMetaInfServicesProvider(ServiceReference<MetaInfServicesProvider> ref) {
+        String path = (String) ref.getProperty("file.path");
+        String implClassName = (String) ref.getProperty("implementation.class");
+
+        ConcurrentLinkedQueue<String> list = metaInfServicesProviders.get(path);
+        if (list != null)
+            list.remove(implClassName);
+
+        metaInfServicesRefs.removeReference(implClassName, ref);
     }
 
     @Reference(cardinality = MULTIPLE,
@@ -515,9 +553,9 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
 
         ThreadContextClassLoader tccl;
         if (cl instanceof BundleReference) {
-            tccl = new ThreadContextClassLoaderForBundles(aug, cl, key);
+            tccl = new ThreadContextClassLoaderForBundles(aug, cl, key, this);
         } else {
-            tccl = new ThreadContextClassLoader(aug, cl, key);
+            tccl = new ThreadContextClassLoader(aug, cl, key, this);
         }
 
         return tccl;

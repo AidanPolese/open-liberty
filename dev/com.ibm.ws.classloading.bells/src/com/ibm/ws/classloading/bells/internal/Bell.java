@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.osgi.framework.Bundle;
@@ -48,6 +49,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.classloading.MetaInfServicesProvider;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.wsspi.artifact.ArtifactContainer;
 import com.ibm.wsspi.artifact.ArtifactEntry;
@@ -373,6 +375,29 @@ public class Bell implements LibraryChangeListener {
                 Tr.info(tc, "bell.service.name", library.id(), fileUrl, serviceInfo.implClass);
             }
             registeredServices.add(reg);
+
+            // Register interface for collaboration with classloading service to make META-INF/services
+            // providers available on thread context class loader for ServiceLoader.
+            MetaInfServicesProvider provider = new MetaInfServicesProvider() {
+                private final AtomicReference<Class<?>> implClassRef = new AtomicReference<Class<?>>();
+
+                @Override
+                public Class<?> getProviderImplClass() {
+                    Class<?> implClass = implClassRef.get();
+                    if (implClass == null) {
+                        Object service = context.getService(reg.getReference());
+                        if (service != null)
+                            implClassRef.set(implClass = service.getClass());
+                    }
+                    return implClass;
+                }
+            };
+            Dictionary<String, Object> metaInfProps = new Hashtable<String, Object>();
+            metaInfProps.put("implementation.class", serviceInfo.implClass);
+            metaInfProps.put("file.path", serviceInfo.providerConfigFile.getPath().substring(1)); // exclude initial / of /META-INF/services/...
+            metaInfProps.put("file.url", fileUrl);
+            ServiceRegistration<MetaInfServicesProvider> metaInfReg = context.registerService(MetaInfServicesProvider.class, provider, metaInfProps);
+            registeredServices.add(metaInfReg);
         }
 
         return registeredServices;
