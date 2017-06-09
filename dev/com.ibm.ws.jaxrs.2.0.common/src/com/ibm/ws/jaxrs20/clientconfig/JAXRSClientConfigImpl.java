@@ -57,6 +57,9 @@ public class JAXRSClientConfigImpl implements JAXRSClientConfig {
         propsToTranslate.put("proxyhost", JAXRSClientConstants.PROXY_HOST);
         propsToTranslate.put("proxyport", JAXRSClientConstants.PROXY_PORT);
         propsToTranslate.put("proxytype", JAXRSClientConstants.PROXY_TYPE);
+        propsToTranslate.put("proxyauthtype", JAXRSClientConstants.PROXY_AUTH_TYPE);
+        propsToTranslate.put("proxyusername", JAXRSClientConstants.PROXY_USERNAME);
+        propsToTranslate.put("proxypassword", JAXRSClientConstants.PROXY_PASSWORD);
         propsToTranslate.put("receivetimeout", JAXRSClientConstants.RECEIVE_TIMEOUT);
         propsToTranslate.put("sslconfig", JAXRSClientConstants.SSL_REFKEY);
 
@@ -182,16 +185,16 @@ public class JAXRSClientConfigImpl implements JAXRSClientConfig {
     protected void setResourceProvider(com.ibm.wsspi.classloading.ResourceProvider rp) {
         //no-op
     }
-    
+
     protected void unsetResourceProvider(com.ibm.wsspi.classloading.ResourceProvider rp) {
         //no-op
     }
-    
+
     @Reference
     protected void setJaxRsServiceActivator(JaxRsServiceActivator jrsa) {
         //no-op
     }
-    
+
     protected void unsetJaxRsServiceActivator(JaxRsServiceActivator jrsa) {
         //no-op
     }

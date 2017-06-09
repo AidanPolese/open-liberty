@@ -24,6 +24,8 @@
         <AD id="proxyHost" name="%proxyHost" description="%proxyHost.desc" required="false" type="String"/>
         <AD id="proxyPort" name="%proxyPort" description="%proxyPort.desc" required="false" type="Integer"/>
         <AD id="proxyType" name="%proxyType" description="%proxyPort.desc" required="false" type="String"/>
+        <AD id="proxyUsername" name="%proxyUsername" description="%proxyUsername.desc" required="false" type="String"/>
+        <AD id="proxyPassword" name="%proxyPassword" description="%proxyPassword.desc" required="false" type="String" ibm:type="password"/>
         <AD id="disableCNCheck"   name="%disableCNCheck"   description="%disableCNCheck.desc"   required="false" type="Boolean"/> 
         <AD id="authnToken" name="%authnToken" description="%authnToken.desc" required="false" type="String" /> 
         <AD id="sslConfig" name="%sslConfig" description="%sslConfig.desc" required="false" type="String" />

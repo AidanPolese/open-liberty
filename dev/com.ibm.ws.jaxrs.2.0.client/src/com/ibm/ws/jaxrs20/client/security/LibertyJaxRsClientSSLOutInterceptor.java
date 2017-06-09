@@ -69,8 +69,10 @@ public class LibertyJaxRsClientSSLOutInterceptor extends AbstractPhaseIntercepto
         if (isSecured && JaxRsAppSecurity.getSSLSocketFactory(sslRef, null) != null) {
 
             boolean disableCNCheck = false;
-            if ((disableCNCheckObj instanceof Boolean)) {
+            if (disableCNCheckObj instanceof Boolean) {
                 disableCNCheck = ((Boolean) disableCNCheckObj).booleanValue();
+            } else if (disableCNCheckObj instanceof String) {
+                disableCNCheck = Boolean.parseBoolean((String) disableCNCheckObj);
             }
 
             Conduit cd = message.getExchange().getConduit(message);
