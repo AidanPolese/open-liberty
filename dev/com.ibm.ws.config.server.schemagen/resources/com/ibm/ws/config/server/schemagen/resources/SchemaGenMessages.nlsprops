@@ -81,3 +81,7 @@ exception.catch=CWWKG3010E: An exception was thrown by the server schema generat
 exception.catch.explanation=An unexpected exception was thrown by the server schema generation command. The exception stack trace is printed to the stderr log file. The utility will stop processing.
 exception.catch.useraction=If the problem persists, see the problem determination information on the WebSphere Application Server Support Web page: http://www.ibm.com/software/webservers/appserv/was/support.
 
+server.output.logs.dir.not.found=CWWKG3011E: The logs directory for the server named {0} was not found. It was expected to be at the following location: {1}. The value of the logs directory is computed using the WLP_OUTPUT_DIR variable. 
+server.output.logs.dir.not.found.explanation=The logs directory must be available for the command to be able to locate the server's JMX connection information. This error may occur if the value of the WLP_OUTPUT_DIR variable in the current environment is not the same as the value used by the server. 
+server.output.logs.dir.not.found.useraction=Ensure that the value of the WLP_OUTPUT_DIR variable matches the value used by the server and ensure that the logs directory exists. 
+

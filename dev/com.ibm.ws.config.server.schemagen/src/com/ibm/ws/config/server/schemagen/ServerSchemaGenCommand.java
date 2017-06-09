@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2015
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.config.server.schemagen;
@@ -53,7 +53,6 @@ public class ServerSchemaGenCommand {
      * Return code for invalid option or argument, as defined in this WIKI on January 13th, 2015. This must remain 20.
      * http://was.pok.ibm.com/xwiki/bin/view/Liberty/CommandLineUtilities
      */
-    @SuppressWarnings("unused")
     private static final int RC_INVALID_OPTION = 20;
 
     /**
@@ -71,6 +70,12 @@ public class ServerSchemaGenCommand {
     /** Return code indicating the MBean reported a bad result. Caller should check the server's log for exceptions. */
     private static final int RC_MBEAN_INVALID_RESULT = 24;
 
+    /**
+     * Return code indicating that the WLP_OUTPUT_DIR/logs directory couldn't be found, likely because the environment value is set to
+     * something other than what the server is using.
+     */
+    private static final int RC_SERVER_OUTPUT_NOT_FOUND = 25;
+
     /** Return code for unexpected errors. The message printed should be used to figure out what happened. */
     private static final int RC_UNEXPECTED_ERROR = 255;
 
@@ -78,8 +83,7 @@ public class ServerSchemaGenCommand {
      * CTOR.
      */
     protected ServerSchemaGenCommand() {
-        this(System.out,
-             System.err);
+        this(System.out, System.err);
     }
 
     /**
@@ -100,7 +104,7 @@ public class ServerSchemaGenCommand {
 
     /**
      * Get the location of com.ibm.ws.config.server.schemagen.jar which is under the lib directory
-     * 
+     *
      * @return File of com.ibm.ws.config.server.schemagen.jar
      */
     private File getServerSchemaGenJar() {
@@ -194,7 +198,7 @@ public class ServerSchemaGenCommand {
 
     /**
      * Drive the logic of the program.
-     * 
+     *
      * @param args
      */
     protected int generateServerSchema(String[] args) {
@@ -255,6 +259,13 @@ public class ServerSchemaGenCommand {
     }
 
     private int invokeSchemaGen(String serverName, String[] mbeanParams) {
+        // Check the output dir.. If the value isn't the same as the value the server is using we won't find the logs directory
+        File logsDir = new File(getOutputDir() + serverName + File.separator + "logs");
+        if (!logsDir.exists()) {
+            stderr.println(getMessage("server.output.logs.dir.not.found", serverName, logsDir.getAbsolutePath()));
+            return RC_SERVER_OUTPUT_NOT_FOUND;
+        }
+
         // The file containing the local connector URL is always in the
         // server's output directory.  Note that the output directory may be
         // different than the user directory, where the server config is.
@@ -357,7 +368,7 @@ public class ServerSchemaGenCommand {
     /**
      * Main method, which wraps the instance logic and registers
      * the known tasks.
-     * 
+     *
      * @param args
      */
     public static void main(String[] args) {

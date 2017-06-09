@@ -70,6 +70,12 @@ public class DDLGenerationUtility {
     /** Return code indicating the MBean reported a bad result. Caller should check the server's log for exceptions. */
     private static final int RC_MBEAN_INVALID_RESULT = 24;
 
+    /**
+     * Return code indicating that the WLP_OUTPUT_DIR/logs directory couldn't be found, likely because the environment value is set to
+     * something other than what the server is using.
+     */
+    private static final int RC_SERVER_OUTPUT_NOT_FOUND = 25;
+
     /** Return code for unexpected errors. The message printed should be used to figure out what happened. */
     private static final int RC_UNEXPECTED_ERROR = 255;
 
@@ -245,6 +251,13 @@ public class DDLGenerationUtility {
             stderr.println(getMessage("server.not.found", serverName, serverDirectory.getAbsolutePath()));
             stdout.println(getScriptUsage());
             return RC_SERVER_NOT_FOUND;
+        }
+
+        // Check the output dir.. If the value isn't the same as the value the server is using we won't find the logs directory
+        File logsDir = new File(getOutputDir() + serverName + File.separator + "logs");
+        if (!logsDir.exists()) {
+            stderr.println(getMessage("server.output.logs.dir.not.found", serverName, logsDir.getAbsolutePath()));
+            return RC_SERVER_OUTPUT_NOT_FOUND;
         }
 
         // The file containing the local connector URL is always in the
