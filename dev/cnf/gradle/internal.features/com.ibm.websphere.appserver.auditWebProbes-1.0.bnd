@@ -1,9 +1,0 @@
--include= ~../cnf/resources/bnd/liberty-release.props
-
--nobundles=true
-
-publish.feature.resources: *.mf
-
--dependson: \
-	com.ibm.websphere.appserver.requestProbes-1.0;version=latest, \
-	com.ibm.ws.request.probe.audit.servlet;version=latest

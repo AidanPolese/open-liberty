@@ -1,6 +1,0 @@
--include= jar:${fileuri;lib/org.apache.neethi-3.0.2.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-   @lib/org.apache.neethi-3.0.2.jar!/!META-INF/maven/*
-
--buildpath: lib/org.apache.neethi-3.0.2.jar;version=file

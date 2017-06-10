@@ -1,6 +1,0 @@
--include= jar:${fileuri;lib/geronimo-osgi-registry-1.1.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-   @lib/geronimo-osgi-registry-1.1.jar!/!META-INF/maven/*
-
--buildpath: lib/geronimo-osgi-registry-1.1.jar;version=file

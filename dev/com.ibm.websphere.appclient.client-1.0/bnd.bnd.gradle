@@ -1,9 +1,0 @@
--include= ~../cnf/resources/bnd/liberty-release.props
-
--nobundles=true
-
-publish.feature.resources: **
-
--dependson: \
-	com.ibm.ws.appclient.boot;version=latest,\
-	com.ibm.ws.kernel.boot;version=latest

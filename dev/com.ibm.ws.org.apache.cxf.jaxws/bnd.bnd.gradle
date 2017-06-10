@@ -1,5 +1,0 @@
--include= ~../cnf/resources/bnd/liberty-release.props
-
--sub: *.bnd
-
-globalize.disabled: true

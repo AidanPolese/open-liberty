@@ -1,9 +1,0 @@
--include= ~../cnf/resources/bnd/liberty-release.props
-
--nobundles=true
-
-publish.feature.resources: *.mf
-
--dependson: \
-	com.ibm.websphere.appserver.iiopcommon-1.0;version=latest, \
-	com.ibm.ws.transport.iiop.server;version=latest

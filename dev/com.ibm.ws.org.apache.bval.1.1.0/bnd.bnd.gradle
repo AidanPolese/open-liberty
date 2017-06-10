@@ -1,5 +1,0 @@
--include= jar:${fileuri;lib/org.apache.bval.bundle-1.1.0-alpha-SNAPSHOT.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--buildpath: \
-	lib/org.apache.bval.bundle-1.1.0-alpha-SNAPSHOT.jar;version=file,\
-	com.ibm.websphere.javaee.validation.1.1;version=latest

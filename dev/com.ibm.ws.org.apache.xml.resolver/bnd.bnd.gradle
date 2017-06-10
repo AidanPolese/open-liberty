@@ -1,6 +1,0 @@
--include= jar:${fileuri;lib/xml-resolver-1.2.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-   @lib/xml-resolver-1.2.jar!/!META-INF/*
-
--buildpath: lib/xml-resolver-1.2.jar;version=file

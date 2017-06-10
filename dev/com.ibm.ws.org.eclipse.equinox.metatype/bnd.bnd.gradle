@@ -1,9 +1,0 @@
--include= jar:${fileuri;lib/org.eclipse.equinox.metatype_1.4.200.v20160324-1850.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-   @lib/org.eclipse.equinox.metatype_1.4.200.v20160324-1850.jar!/org/eclipse/equinox/metatype/*,\
-   @${repo;com.ibm.wsspi.org.osgi.service.metatype}!/org/osgi/service/metatype/*
-
--buildpath: \
-	lib/org.eclipse.equinox.metatype_1.4.200.v20160324-1850.jar;version=file,\
-	com.ibm.wsspi.org.osgi.service.metatype;version=latest

@@ -1,6 +1,0 @@
--include= jar:${fileuri;lib/org.apache.commons.collections_3.2.1.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--includeresource: \
-    @lib/org.apache.commons.collections_3.2.1.jar!/!META-INF/maven/*
-
--buildpath: lib/org.apache.commons.collections_3.2.1.jar;version=file

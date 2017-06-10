@@ -1,8 +1,0 @@
--include= ~../cnf/resources/bnd/liberty-release.props
-
--nobundles=true
-
-publish.feature.resources: *.mf
-
--dependson: \
-	com.ibm.ws.cdi.1.2.ejb;version=latest

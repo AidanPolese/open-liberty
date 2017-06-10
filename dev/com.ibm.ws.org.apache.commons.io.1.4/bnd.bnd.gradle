@@ -1,4 +1,0 @@
--include= jar:${fileuri;lib/org.apache.commons.io-1.4.jar}!/META-INF/MANIFEST.MF,bnd.overrides
-
--buildpath: \
-	lib/org.apache.commons.io-1.4.jar;version=file
