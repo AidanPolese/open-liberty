@@ -281,13 +281,21 @@ public class DistributedObjectCacheAdapter extends DistributedObjectCache implem
      */
     @Override
     public int size(boolean includeDiskCache) {
+    	int mappings = 0;
+    	
+    	mappings = cache.getNumberCacheEntries();
+    	
         if (includeDiskCache) {
-            return cache.getNumberCacheEntries() + cache.getIdsSizeDisk();
-        } else {
-            return cache.getNumberCacheEntries();
+        	if (cache instanceof CacheProviderWrapper) {
+        		CacheProviderWrapper cpw = (CacheProviderWrapper) cache;
+        		if (cpw.featureSupport.isDiskCacheSupported())    		
+        	         mappings = mappings + cache.getIdsSizeDisk();
+        	} else {
+        		mappings = mappings + cache.getIdsSizeDisk();
+        	}
         }
+        return mappings;
     }
-
     //--------------------------------------------------------------
     // Common public method - not extended/implemented by sub-classes
     //--------------------------------------------------------------
@@ -313,12 +321,34 @@ public class DistributedObjectCacheAdapter extends DistributedObjectCache implem
      */
     @Override
     public boolean isEmpty(boolean includeDiskCache) {
-        if (includeDiskCache) {
-            return (cache.getNumberCacheEntries() + cache.getIdsSizeDisk()) == 0;
-        } else {
-            return cache.getNumberCacheEntries() == 0;
-        }
+
+    	boolean isCacheEmpty = false;
+    	
+    	/*
+    	 * Check if the memory cache has entries
+    	 */
+    	isCacheEmpty = cache.getNumberCacheEntries () == 0;
+    	
+    	/*
+    	 * If the memory cache is not empty then we don't need to check the disk cache.
+    	 * If the cache is an instanceof CacheProviderWrapper then we know it's not dynacache so
+    	 * we need to check if it supports disk caching.   If it doesn't then we don't need to check 
+    	 * if the disk cache is empty.  
+    	 */    	
+    	if (includeDiskCache && isCacheEmpty) {
+    		if (cache instanceof CacheProviderWrapper) {
+    			if (((CacheProviderWrapper) cache).featureSupport.isDiskCacheSupported()) {
+    				isCacheEmpty =  cache.getIdsSizeDisk() == 0;
+    			} 
+    		} else {
+    			// Not an instanceof CacheProviderWrapper so we know it's dynacache and we know
+    			// getIdsSizeDisk is implemented. 
+    			isCacheEmpty = cache.getIdsSizeDisk() == 0;
+    		}
+    	}  
+    	return isCacheEmpty;
     }
+
 
     //--------------------------------------------------------------
     // Common public method - not extended/implemented by sub-classes
@@ -1283,7 +1313,15 @@ public class DistributedObjectCacheAdapter extends DistributedObjectCache implem
     // Used by subclasses 
     protected Set common_keySet(boolean includeDiskCache) {
         Set cacheIds = cache.getCacheIds();
-
+    	
+    	/*
+    	 * If the cache is an instanceof CacheProviderWrapper then we know it's not dynacache so
+    	 * we need to check if it supports disk caching.  If it doesn't then we don't need incude keys 
+    	 * from the disk cache.  
+    	 */
+    	if (cache instanceof CacheProviderWrapper)
+    		includeDiskCache = ((CacheProviderWrapper) cache).featureSupport.isDiskCacheSupported();
+    	
         if (includeDiskCache && cache.getIdsSizeDisk() > 0) {
             int index = 0;
             boolean more = true;
@@ -1622,3 +1660,4 @@ public class DistributedObjectCacheAdapter extends DistributedObjectCache implem
     }
 
 }
+
