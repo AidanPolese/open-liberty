@@ -16,6 +16,7 @@ import java.util.HashMap;
 import com.ibm.websphere.jca.pmi.JCAPMIHelper;
 import com.ibm.websphere.monitor.annotation.Monitor;
 import com.ibm.websphere.monitor.annotation.ProbeAtEntry;
+import com.ibm.websphere.monitor.annotation.ProbeAtExceptionExit;
 import com.ibm.websphere.monitor.annotation.ProbeAtReturn;
 import com.ibm.websphere.monitor.annotation.ProbeSite;
 import com.ibm.websphere.monitor.annotation.PublishedMetric;
@@ -147,6 +148,7 @@ public class ConnectionPoolMonitor extends StatisticActions {
      *            HookPoints=MCWrapper.destroy.
      */
     @ProbeAtReturn
+    @ProbeAtExceptionExit
     @ProbeSite(clazz = "com.ibm.ejs.j2c.MCWrapper", method = "destroy")
     public void incDestroyCount(@This Object ob) {
         try {
@@ -303,6 +305,7 @@ public class ConnectionPoolMonitor extends StatisticActions {
      *            Code which gets value from ThreadLocal and calculates the time spent in queueRequest which will give the wait time.
      */
     @ProbeAtReturn
+    @ProbeAtExceptionExit
     @ProbeSite(clazz = "com.ibm.ejs.j2c.FreePool", method = "queueRequest")
     public void waitTimeExit(@This Object wtobj) {
         if (tc.isEntryEnabled()) {
