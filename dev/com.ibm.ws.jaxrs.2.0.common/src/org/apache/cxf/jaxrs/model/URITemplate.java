@@ -45,7 +45,7 @@ public final class URITemplate {
     public static final String FINAL_MATCH_GROUP = "FINAL_MATCH_GROUP";
     private static final String DEFAULT_PATH_VARIABLE_REGEX = "([^/]+?)";
     private static final Pattern INTEGER_PATH_VARIABLE_REGEX_PATTERN = Pattern.compile("\\-?[0-9]+"); // Liberty change
-    private static final Pattern DECIMAL_PATH_VARIABLE_REGEX_PATTERN = Pattern.compile("\\-?[0-9]+.?[0-9]*"); // Liberty change
+    private static final Pattern DECIMAL_PATH_VARIABLE_REGEX_PATTERN = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?"); // Liberty change
     private static final String CHARACTERS_TO_ESCAPE = ".*+$()";
     private static final String SLASH = "/";
     private static final String SLASH_QUOTE = "/;";
