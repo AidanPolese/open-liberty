@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+// PI82893   embreijo   JAVAX.FACES.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL VALUE AFFECTS DISPLAY BEHAVIOR FOR REQUIRED FIELDS
 package javax.faces.component;
 
 import org.apache.myfaces.buildtools.maven2.plugin.builder.annotation.JSFComponent;
@@ -86,6 +87,19 @@ public class UIInput extends UIOutput implements EditableValueHolder
     @JSFWebConfigParam(defaultValue="false", expectedValues="true, false", since="2.0", group="validation")
     private static final String EMPTY_VALUES_AS_NULL_PARAM_NAME
             = "javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL";
+    
+    // PI82893
+    /** 
+     * When INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL is enabled, clear required input fields when empty strings 
+     * are submitted on them
+     *
+     * <p>Note this param is only applicable when INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL is enabled.  This 
+     * property addresses an issue wherein values that had previously been populated by the model are re-displayed on 
+     * input fields after empty strings are submitted on those fields.</p>
+     **/
+    @JSFWebConfigParam(defaultValue="false", expectedValues="true, false", since="2.2.13", group="validation")
+    private static final String EMPTY_VALUES_AS_NULL_CLEAR_INPUT_PARAM_NAME
+            = "org.apache.myfaces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL_CLEAR_INPUT";
 
     // our own, cached key
     private static final String MYFACES_EMPTY_VALUES_AS_NULL_PARAM_NAME =
@@ -549,6 +563,28 @@ public class UIInput extends UIOutput implements EditableValueHolder
 
         return validateEmptyFields;
     }
+    
+   // PI82893 start
+   /**
+    * Get the value of context parameter
+    * org.apache.myfaces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL_CLEAR_INPUT from the web.xml
+    * 
+    * @return the value of the context parameter
+    */
+   private boolean shouldInterpretEmptyStringSubmittedValuesAsNullClearInput(FacesContext context)
+   {
+       ExternalContext ec = context.getExternalContext();
+      
+       // parses the web.xml to get the
+       // "org.apache.myfaces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL_CLEAR_INPUT" value
+       String param = ec.getInitParameter(EMPTY_VALUES_AS_NULL_CLEAR_INPUT_PARAM_NAME);
+       
+       // evaluate the param
+       Boolean interpretEmptyStringAsNullClearInput = "true".equalsIgnoreCase(param);
+       
+       return interpretEmptyStringAsNullClearInput;
+   }
+   // PI82893 end
 
     /**
      * Determine whether the new value is valid, and queue a ValueChangeEvent if necessary.
@@ -591,6 +627,13 @@ public class UIInput extends UIOutput implements EditableValueHolder
             // https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=671
             setSubmittedValue(null);
             submittedValue = null;
+            
+            // PI82893 start
+            if(shouldInterpretEmptyStringSubmittedValuesAsNullClearInput(context))
+            {
+                setValue(null);
+            }
+            // PI82893 end
         }
         // End new JSF 2.0 requirement (INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL)
 
