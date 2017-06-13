@@ -3,7 +3,7 @@
  *
  * OCO Source Materials
  *
- * WLP Copyright IBM Corp. 2013
+ * WLP Copyright IBM Corp. 2013,2017
  *
  * The source code for this program is not published or otherwise divested 
  * of its trade secrets, irrespective of what has been deposited with the 
@@ -25,8 +25,8 @@ import org.osgi.framework.BundleReference;
 public class ThreadContextClassLoaderForBundles extends ThreadContextClassLoader implements BundleReference
 {
 
-    public ThreadContextClassLoaderForBundles(GatewayClassLoader augLoader, ClassLoader appLoader, String key) {
-        super(augLoader, appLoader, key);
+    public ThreadContextClassLoaderForBundles(GatewayClassLoader augLoader, ClassLoader appLoader, String key, ClassLoadingServiceImpl clSvc) {
+        super(augLoader, appLoader, key, clSvc);
         _bundleClassLoader = (BundleReference) appLoader;
     }
 
