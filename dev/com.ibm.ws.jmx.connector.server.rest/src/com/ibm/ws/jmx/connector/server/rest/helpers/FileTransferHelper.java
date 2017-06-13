@@ -292,7 +292,7 @@ public class FileTransferHelper {
     /**
      * Check if the specified path is open for read/write access
      */
-    private boolean checkAccess(String path, boolean readOnly) {
+    public boolean checkAccess(String path, boolean readOnly) {
         final FileServiceMXBean fileService = getFileService();
         if (readOnly) {
             //we can read from both the read and write list
