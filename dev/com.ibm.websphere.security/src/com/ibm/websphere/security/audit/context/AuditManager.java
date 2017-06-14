@@ -73,6 +73,54 @@ public class AuditManager {
     }
 
     /**
+     * Sets the JMS conversation on the thread
+     */
+    public void setJMSConversationMetaData(Object conversationMetaData) {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        auditThreadContext.setJMSConversationMetaData(conversationMetaData);
+    }
+
+    /**
+     * Gets the REST request on the thread
+     */
+    public Object getJMSConversationMetaData() {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        return auditThreadContext.getJMSConversationMetaData();
+    }
+
+    /**
+     * Sets the JMS bus name on the thread
+     */
+    public void setJMSBusName(String busName) {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        auditThreadContext.setJMSBusName(busName);
+    }
+
+    /**
+     * Gets the JMS bus name on the thread
+     */
+    public String getJMSBusName() {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        return auditThreadContext.getJMSBusName();
+    }
+
+    /**
+     * Sets the JMS messaging engine on the thread
+     */
+    public void setJMSMessagingEngine(String me) {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        auditThreadContext.setJMSMessagingEngine(me);
+    }
+
+    /**
+     * Gets the JMS messaging engine on the thread
+     */
+    public String getJMSMessagingEngine() {
+        AuditThreadContext auditThreadContext = getAuditThreadContext();
+        return auditThreadContext.getJMSMessagingEngine();
+    }
+
+    /**
      * Sets the REST request on the thread
      */
     public void setRESTRequest(Object request) {

@@ -23,6 +23,7 @@ import javax.security.auth.Subject;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.websphere.security.audit.context.AuditManager;
 import com.ibm.ws.messaging.security.MSTraceConstants;
 import com.ibm.ws.messaging.security.MessagingSecurityConstants;
 import com.ibm.ws.messaging.security.MessagingSecurityException;
@@ -31,8 +32,10 @@ import com.ibm.ws.messaging.security.authentication.MessagingAuthenticationServi
 import com.ibm.ws.messaging.security.authentication.actions.MessagingLoginAction;
 import com.ibm.ws.messaging.security.internal.MessagingSecurityServiceImpl;
 import com.ibm.ws.messaging.security.utility.MessagingSecurityUtility;
+import com.ibm.ws.security.audit.Audit;
 import com.ibm.ws.security.authentication.AuthenticationData;
 import com.ibm.ws.security.authentication.WSAuthenticationData;
+import com.ibm.ws.sib.jfapchannel.ConversationMetaData;
 import com.ibm.ws.sib.utils.ras.SibTr;
 
 /*
@@ -63,6 +66,8 @@ public class MessagingAuthenticationServiceImpl implements
 
     private final AuthenticationData authenticationDataForSubject = new WSAuthenticationData();
 
+    private final AuditManager auditManager = new AuditManager();
+
     /**
      * Constructor
      * 
@@ -81,9 +86,20 @@ public class MessagingAuthenticationServiceImpl implements
 
     @Override
     public Subject login(Subject subj) throws MessagingAuthenticationException {
+        String busName = null;
+        String messagingEngine = null;
+        String credType = "User subject";
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             SibTr.entry(tc, CLASS_NAME + "login", subj);
         }
+
+        if (auditManager != null) {
+            if (auditManager.getJMSBusName() != null)
+                busName = auditManager.getJMSBusName();
+            if (auditManager.getJMSMessagingEngine() != null)
+                messagingEngine = auditManager.getJMSMessagingEngine();
+        }
+
         Subject result = null;
         result = AccessController.doPrivileged(new MessagingLoginAction(
                         authenticationDataForSubject, MessagingSecurityConstants.SUBJECT, _messagingSecurityService.getSecurityService(), subj));
@@ -95,16 +111,43 @@ public class MessagingAuthenticationServiceImpl implements
             } catch (MessagingSecurityException e) {
                 //No FFDC Code Needed
             }
+            if (auditManager != null && auditManager.getJMSConversationMetaData() != null) {
+                ConversationMetaData cmd = (ConversationMetaData) auditManager.getJMSConversationMetaData();
+                Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, userName, cmd.getRemoteAddress().getHostAddress(), new Integer(cmd.getRemotePort()).toString(),
+                            cmd.getChainName(), busName, messagingEngine, credType, Integer.valueOf("201"));
+            } else {
+                Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, userName, null, null, null, busName, messagingEngine, credType, Integer.valueOf("201"));
+            }
             throwAuthenticationException(userName);//114580
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             SibTr.exit(tc, CLASS_NAME + "login", result);
         }
+        if (auditManager != null && auditManager.getJMSConversationMetaData() != null) {
+            ConversationMetaData cmd = (ConversationMetaData) auditManager.getJMSConversationMetaData();
+            Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, subj.getPrincipals().iterator().next().getName(),
+                        cmd.getRemoteAddress().getHostAddress(), new Integer(cmd.getRemotePort()).toString(),
+                        cmd.getChainName(), busName, messagingEngine, credType, Integer.valueOf("200"));
+        } else {
+            Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, subj.getPrincipals().iterator().next().getName(), null, null, null, busName, messagingEngine, credType,
+                        Integer.valueOf("200"));
+        }
+
         return result;
     }
 
     @Override
     public Subject login(String userName, String password) throws MessagingAuthenticationException {
+        String busName = null;
+        String messagingEngine = null;
+        String credType = "Userid+Password";
+        if (auditManager != null) {
+            if (auditManager.getJMSBusName() != null)
+                busName = auditManager.getJMSBusName();
+            if (auditManager.getJMSMessagingEngine() != null)
+                messagingEngine = auditManager.getJMSMessagingEngine();
+        }
+
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             SibTr.entry(tc, CLASS_NAME + "login", new Object[] { userName, "Password Not Traced" });
         }
@@ -114,11 +157,29 @@ public class MessagingAuthenticationServiceImpl implements
         result = AccessController.doPrivileged(new MessagingLoginAction(
                         authData, MessagingSecurityConstants.USERID, _messagingSecurityService.getSecurityService()));
         if (result == null) {
+            if (auditManager != null && auditManager.getJMSConversationMetaData() != null) {
+                ConversationMetaData cmd = (ConversationMetaData) auditManager.getJMSConversationMetaData();
+
+                Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, userName, cmd.getRemoteAddress().getHostAddress(), new Integer(cmd.getRemotePort()).toString(),
+                            cmd.getChainName(), busName, messagingEngine, credType, Integer.valueOf("201"));
+            } else {
+                Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, userName, null, null, null, busName, messagingEngine, credType, Integer.valueOf("201"));
+            }
+
             throwAuthenticationException(userName);//114580
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             SibTr.exit(tc, CLASS_NAME + "login", result);
         }
+        if (auditManager != null && auditManager.getJMSConversationMetaData() != null) {
+            ConversationMetaData cmd = (ConversationMetaData) auditManager.getJMSConversationMetaData();
+
+            Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, userName, cmd.getRemoteAddress().getHostAddress(), new Integer(cmd.getRemotePort()).toString(),
+                        cmd.getChainName(), busName, messagingEngine, credType, Integer.valueOf("200"));
+        } else {
+            Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, userName, null, null, null, busName, messagingEngine, credType, Integer.valueOf("200"));
+        }
+
         return result;
     }
 
@@ -127,6 +188,15 @@ public class MessagingAuthenticationServiceImpl implements
                          String securityTokenType) throws MessagingAuthenticationException {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             SibTr.entry(tc, CLASS_NAME + "login", new Object[] { securityToken, securityTokenType });
+        }
+        String busName = null;
+        String messagingEngine = null;
+        String credType = "Token";
+        if (auditManager != null) {
+            if (auditManager.getJMSBusName() != null)
+                busName = auditManager.getJMSBusName();
+            if (auditManager.getJMSMessagingEngine() != null)
+                messagingEngine = auditManager.getJMSMessagingEngine();
         }
         Subject result = null;
         boolean doLogin = SUPPORTED_TOKEN_TYPE.equals(securityTokenType);
@@ -143,16 +213,38 @@ public class MessagingAuthenticationServiceImpl implements
                 } catch (MessagingSecurityException e) {
                     //No FFDC Code Needed
                 }
+                if (auditManager != null && auditManager.getJMSConversationMetaData() != null) {
+                    ConversationMetaData cmd = (ConversationMetaData) auditManager.getJMSConversationMetaData();
+
+                    Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, messagingEngine, cmd.getRemoteAddress().getHostAddress(), new Integer(cmd.getRemotePort()).toString(),
+                                cmd.getChainName(), userName, busName, credType,
+                                Integer.valueOf("201"));
+                } else {
+                    Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, messagingEngine, null, null, null, userName, busName, credType, Integer.valueOf("201"));
+                }
+
                 throwAuthenticationException(userName);//114580
             }
         } else {
             SibTr.error(tc, "SECURITY_TOKEN_TYPE_NOT_SUPPORTED_MSE1002", securityTokenType);
             result = null;
+            Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, new String(securityToken), auditManager.getJMSConversationMetaData(), busName, messagingEngine, credType,
+                        Integer.valueOf("201"));
             throw new MessagingAuthenticationException(Tr.formatMessage(tc, "SECURITY_TOKEN_TYPE_NOT_SUPPORTED_MSE1002"));
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             SibTr.exit(tc, CLASS_NAME + "login", result);
         }
+        if (auditManager != null && auditManager.getJMSConversationMetaData() != null) {
+            ConversationMetaData cmd = (ConversationMetaData) auditManager.getJMSConversationMetaData();
+
+            Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, new String(securityToken), cmd.getRemoteAddress().getHostAddress(), new Integer(cmd.getRemotePort()).toString(),
+                        cmd.getChainName(), busName, messagingEngine, credType,
+                        Integer.valueOf("200"));
+        } else {
+            Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, new String(securityToken), null, null, null, busName, messagingEngine, credType, Integer.valueOf("200"));
+        }
+
         return result;
     }
 
@@ -160,6 +252,15 @@ public class MessagingAuthenticationServiceImpl implements
     public Subject login(String userName) throws MessagingAuthenticationException {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             SibTr.entry(tc, CLASS_NAME + "login", userName);
+        }
+        String busName = null;
+        String messagingEngine = null;
+        String credType = "UserId";
+        if (auditManager != null) {
+            if (auditManager.getJMSBusName() != null)
+                busName = auditManager.getJMSBusName();
+            if (auditManager.getJMSMessagingEngine() != null)
+                messagingEngine = auditManager.getJMSMessagingEngine();
         }
         Subject result = null;
         AuthenticationData authData = MessagingSecurityUtility
@@ -169,11 +270,29 @@ public class MessagingAuthenticationServiceImpl implements
                                         MessagingSecurityConstants.IDASSERTION, _messagingSecurityService.getSecurityService()));
         if (result == null) {
             //114580
+            if (auditManager != null && auditManager.getJMSConversationMetaData() != null) {
+                ConversationMetaData cmd = (ConversationMetaData) auditManager.getJMSConversationMetaData();
+
+                Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, messagingEngine, cmd.getRemoteAddress().getHostAddress(), new Integer(cmd.getRemotePort()).toString(),
+                            cmd.getChainName(), userName, busName, credType, Integer.valueOf("201"));
+            } else {
+                Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, messagingEngine, null, null, null, userName, busName, credType, Integer.valueOf("201"));
+            }
+
             throwAuthenticationException(userName);//114580
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             SibTr.exit(tc, CLASS_NAME + "login", result);
         }
+        if (auditManager != null && auditManager.getJMSConversationMetaData() != null) {
+            ConversationMetaData cmd = (ConversationMetaData) auditManager.getJMSConversationMetaData();
+
+            Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, userName, cmd.getRemoteAddress().getHostAddress(), new Integer(cmd.getRemotePort()).toString(),
+                        cmd.getChainName(), busName, messagingEngine, credType, Integer.valueOf("200"));
+        } else {
+            Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, userName, null, busName, messagingEngine, credType, Integer.valueOf("200"));
+        }
+
         return result;
     }
 
@@ -181,6 +300,15 @@ public class MessagingAuthenticationServiceImpl implements
     public Subject login(Certificate[] certificates) throws MessagingAuthenticationException {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             SibTr.entry(tc, CLASS_NAME + "login", certificates);
+        }
+        String busName = null;
+        String messagingEngine = null;
+        String credType = "Certificates";
+        if (auditManager != null) {
+            if (auditManager.getJMSBusName() != null)
+                busName = auditManager.getJMSBusName();
+            if (auditManager.getJMSMessagingEngine() != null)
+                messagingEngine = auditManager.getJMSMessagingEngine();
         }
         Subject result = null;
         if (certificates == null) {
@@ -198,17 +326,39 @@ public class MessagingAuthenticationServiceImpl implements
                 } catch (MessagingSecurityException e) {
                     //No FFDC Code Needed
                 }
+                if (auditManager != null && auditManager.getJMSConversationMetaData() != null) {
+                    ConversationMetaData cmd = (ConversationMetaData) auditManager.getJMSConversationMetaData();
+
+                    Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, messagingEngine, cmd.getRemoteAddress().getHostAddress(), new Integer(cmd.getRemotePort()).toString(),
+                                cmd.getChainName(), userName, busName, credType,
+                                Integer.valueOf("201"));
+                } else {
+                    Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, messagingEngine, null, null, null, userName, busName, credType, Integer.valueOf("201"));
+                }
+
                 throwAuthenticationException(userName);//114580
             }
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             SibTr.exit(tc, CLASS_NAME + "login", result);
         }
+        if (auditManager != null && auditManager.getJMSConversationMetaData() != null) {
+            ConversationMetaData cmd = (ConversationMetaData) auditManager.getJMSConversationMetaData();
+
+            Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, certificates.toString(), cmd.getRemoteAddress().getHostAddress(), new Integer(cmd.getRemotePort()).toString(),
+                        cmd.getChainName(), busName, messagingEngine, credType, Integer.valueOf("200"));
+        } else {
+            Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_01, certificates.toString(), null, busName, messagingEngine, credType, Integer.valueOf("200"));
+        }
+
         return result;
     }
 
     @Override
     public void logout(Subject subj) {
+
+        Audit.audit(Audit.EventID.SECURITY_JMS_AUTHN_TERMINATE_01, subj, Integer.valueOf("200"));
+
         /*
          * What should we do when we logout? In tWAS it is just executing some
          * Auditing features which are not supported in Liberty
