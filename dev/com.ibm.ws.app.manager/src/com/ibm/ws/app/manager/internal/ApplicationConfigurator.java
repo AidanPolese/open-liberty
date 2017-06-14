@@ -24,6 +24,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -768,7 +769,34 @@ public class ApplicationConfigurator implements ManagedServiceFactory, Introspec
                             Tr.event(_tc, "unsetAppRecycleComponent: component context was not previously set");
                         }
                     }
+                } else {
+                    // It's possible to have orphan contexts that block episodes from ever completing. If the context is null, we need to
+                    // remove all instances of this component from contexts in the appRecycleMap
+                    if (_tc.isDebugEnabled()) {
+                        Tr.debug(_tc, "unsetAppRecycleComponent: no context for component.");
+                    }
+
+                    Iterator<Entry<ApplicationRecycleContext, ApplicationRecycleContextState>> iter = _appRecycleMap.entrySet().iterator();
+                    while (iter.hasNext()) {
+                        Entry<ApplicationRecycleContext, ApplicationRecycleContextState> entry = iter.next();
+                        ApplicationRecycleContextState state = entry.getValue();
+                        if (state.components.remove(appRecycleComponent)) {
+                            if (_tc.isDebugEnabled()) {
+                                Tr.debug(_tc, "Removing component " + appRecycleComponent + " from appState map for context " + entry.getKey());
+                            }
+                            if (state.isEmpty()) {
+                                if (_tc.isDebugEnabled()) {
+                                    Tr.debug(_tc, "No components left for context " + entry.getKey() + ", removing from app recycle map.");
+                                }
+                                iter.remove();
+                                episode.dropContextReference(entry.getKey());
+                            }
+
+                        }
+                    }
+
                 }
+
                 Collection<NamedApplication> apps = getNamedApps(dependentApplications);
                 if (apps != null && !apps.isEmpty()) {
                     episode.recycleApps(apps);
