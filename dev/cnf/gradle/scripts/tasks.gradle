@@ -342,6 +342,13 @@ subprojects {
         exclude 'files'
         into "${projectDir}/generated/autoFVT/publish"
       }
+
+	  // Copy the logging libraries over for use while running FATs
+      copy {
+        from "${rootDir}/com.ibm.ws.logging.core/generated"
+        include 'com.ibm.ws.logging.core.jar'
+        into "${projectDir}/generated/autoFVT/lib"
+      }
     }
   }
 
@@ -349,14 +356,15 @@ subprojects {
     dependsOn autoFVT
     from "${projectDir}/generated/autoFVT"
     into 'autoFVT'
-    baseName 'autoFVT'
+    archiveName 'autoFVT.zip'
   }
 
   task zipProjectFVT(type: Zip) {
     dependsOn zipAutoFVT
     baseName project.name
-    from 'build-test.xml'
-    into 'build/lib', {from 'generated/distributions/autoFVT.zip'}
+    into project.name + '/build/lib', {from 'generated/distributions/autoFVT.zip'}
+
+    into project.name, {from 'build-test.xml'}
   }
 
   assemble {
