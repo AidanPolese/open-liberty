@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
- for modules to register and for
+ /*for modules to register and for
  * clients to retrieve data and change instrumentation level.
  * The data are organized in modules. Within a server, the generic module hierarchy
  * is:		module
