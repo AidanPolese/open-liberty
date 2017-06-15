@@ -1,59 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.47 SIB/ws/code/sib.jfapchannel.client.common.impl/src/com/ibm/ws/sib/jfapchannel/impl/ClientConnectionManagerImpl.java, SIB.comms, WASX.SIB, uu1215.01 10/03/25 07:08:04 [4/12/12 22:14:13]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2003, 2010
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2003, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030424 prestona Original
- * F166959         030521 prestona Rebase on non-prototype CF + TCP Channel
- * F167363         030523 prestona Rebase on LIBD_1891_2255 CF + TCP Channel
- * D168105         030626 prestona Enable daemon thread usage in TCP Channel
- * F171173         030707 prestona Add capacity reporting interfaces.
- * F173069         030730 prestona Update CF + TCP Channel to M3 CVS head.
- * F174602         030819 prestona Switch to using SICommsException.
- * F175658         030902 prestona Add support for heartbeating.
- * F177053         030917 prestona Rebase JFAP Channel on pre-M4 CF + TCP
- * F178022         030929 prestona Discover CF + TCP Channel as services
- * D178719         031008 prestona Launchclient hanging at end of running RTS
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * F182479         031127 prestona New ConnectionProperties varient required.
- * F184828         031204 prestona Update CF + TCP prereqs to MS 5.1 level
- * d184626         040109 mattheg  Update location of buffer pool manager
- * F189000         030130 prestona Expose WLM endpoints through CF
- * F189351         040203 prestona CF admin support
- * D189676         040205 prestona CF NullPointer during startup
- * D192817         040302 prestona com.ibm.wsspi.channel.WSChannelFactory
- * F196678.10      040426 prestona JS Client Administration
- * D223632         040812 prestona Defend against errors during initialisiation
- * D223265         040906 prestona Incorrect conversation type being set
- * D229522         040906 prestona Remove programatic chain creation
- * F244595         041129 prestona z/OS: TCP Proxy Bridge Support
- * D311987         051101 prestona Delay "no SSL properties file" error until SSL chain usage
- * D321398         051107 mattheg  Expose active conversations in JVM
- * D330649         051209 prestona Supply an outbound protocol
- * D377648         060714 mattheg  Move BufferPoolManagerReference into sib.utils
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * D406076         061116 prestona Add unit tests for sib.jfapchannel.client.common.impl
- * SIB0100.wmq.3   070813 mleming  Allow WMQRA to use TCP Proxy Bridge
- * 464663          070905 sibcopyr Automatic update of trace guards
- * PM07974         100223 timmccor Add getActiveOutboundConversationsForFfdc()
- * F002074         091022 mleming  MEP support FIS
- * 95897           041613 Chetan   Comms Outbound Chain revamp
- * ============================================================================ 
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.impl;
 
 import java.net.InetSocketAddress;

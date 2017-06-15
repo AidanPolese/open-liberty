@@ -1,26 +1,15 @@
 package com.ibm.tx.jta.embeddable.impl;
 
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2004, 2008 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* @(#) 1.5.1.1 SERV1/ws/code/was.transaction.impl/src/com/ibm/ws/Transaction/wstx/JTAAsyncResourceBase.java, WAS.transactions, WAS855.SERV1, cf061521.02 4/4/08 11:26:00 [6/12/15 06:28:23]                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  Date      Programmer    Defect       Description                                 */
-/*  --------  ----------    ------       -----------                                 */
-/*  04/04/23  dmatthew      LI1922       creation                                    */
-/*  04/09/28  johawkes      235214       Fix trace group and imports                 */
-/*  04/10/18  awilkins      235214.1     Servicability - improve trace               */
-/*  05/11/10  johawkes      322622       Decrement semaphore count before force      */
-/*  08/04/04  hursdlg       509776       Heuristics support                          */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.Serializable;
 

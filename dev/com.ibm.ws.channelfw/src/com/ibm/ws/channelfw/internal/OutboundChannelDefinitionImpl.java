@@ -1,11 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 2003, 2004
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-// 
-//@(#) 1.5 SERV1/ws/code/channelfw.service/src/com/ibm/ws/channel/framework/impl/OutboundChannelDefinitionImpl.java, WAS.channelfw.service, WASX.SERV1 9/21/04 08:58:16 [1/4/05 10:09:22]
-
+/*******************************************************************************
+ * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.channelfw.internal;
 
 import java.util.HashMap;

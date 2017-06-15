@@ -1,13 +1,13 @@
-//IBM Confidential OCO Source Material
-//	5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//	The source code for this program is not published or otherwise divested
-//	of its trade secrets, irrespective of what has been deposited with the
-//	U.S. Copyright Office.
-//  Feature LIDB4293-2 - "In-memory translation/compilation of JSPs" 2006/11/11 Scott Johnson
-//
-//Changes
-//PK76503 sartoris    12/17/2008  Threading issue when simultaneous requests call the getRealPath method and are using an extendedDocumentRoot
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.inmemory.context;
 
 import java.util.Set;

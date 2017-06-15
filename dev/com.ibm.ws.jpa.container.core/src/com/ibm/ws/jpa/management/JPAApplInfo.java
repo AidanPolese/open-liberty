@@ -1,33 +1,13 @@
-// IBM Confidential OCO Source Material
-// Copyright IBM Corp. 2006, 2013
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d392996   EJB3      20060930 leealber : Initial Release
-// d392996.3 EJB3      20060930 leealber : Minor bugs/typos
-// d406994.2 EJB3      20061120 leealber : CI: exception handling rework
-// d406994.4 EJB3      20061120 leealber : CI: miscellanious clean up
-// d408412   EJB3      20061129 leealber : Make PUs in ear scope visible to modules by default
-// d416151.3.7 EJB3    20070501 leealber : Add isAnyTraceEnabled() test
-// d416151.3.3 EJB3    20070507 leealber : Messages/FFDC clean up.
-// d416151.3.8 EJB3    20070510 leealber : Replace StringBuffer with StringBuilder.
-// d440322   EJB3      20070510 leealber : Enable Loose Config
-// d456716   EJB3      20070906 tkb      : use correct message prefix CWWJP
-// PK59717   61FEP     20080227 hthomann : Remove pu's when an app is stopped.
-// PK62950   WAS70     20080407 jckrueg  : support <jar-file> in loose config
-// F743-16027 WAS80    20091029 andymc   : Decoupling from DeployedApplication/Module code for embeddable
-// F743-18776
-//           WAS80     20100122 bkail    : Use JPAModuleInfo
-// F743-27658.1
-//           WAS80     20100610 bkail    : Minimize throws clauses
-// RTC113511 RWAS90    20131009 bkail    : Move processModulePUs to SharedJPAComponentImpl
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2006, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import static com.ibm.ws.jpa.management.JPAConstants.EAR_SCOPE_MODULE_NAME;

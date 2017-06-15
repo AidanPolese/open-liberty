@@ -1,34 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.19 SIB/ws/code/sib.jfapchannel.client.common.impl/src/com/ibm/ws/sib/jfapchannel/impl/JFapUtils.java, SIB.comms, WASX.SIB, uu1215.01 08/07/28 09:34:38 [4/12/12 22:14:14]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2004, 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * D185831         040109 prestona Scaling performance of persistent queues
- * F181603.2       040119 prestona JFAP Segmentation
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * D199145         040812 prestona Fix Javadoc
- * D224570         040818 prestona JFap trace needs improving
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * D380228         070604 mleming  Add extra info on debugSummaryMessage
- * 516687          080509 vaughton Add SIBJFapSummary trace group
- * 466186          080527 mleming  Provide more information for filtering on JFAPSUMMARY
- * 538413          080724 djvines  Also have a SIBMessageTraceJFAP group
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.impl;
 
 import com.ibm.websphere.ras.TraceComponent;

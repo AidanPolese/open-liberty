@@ -1,18 +1,13 @@
-/*
- * @(#) 1.1 SERV1/ws/code/runtime.fw/src/com/ibm/ws/exception/WsRuntimeFwExceptionUtil.java, WAS.runtime.fw, WAS80.SERV1, kk1041.02 3/13/08 12:59:49 [10/22/10 00:56:57]
+/*******************************************************************************
+ * Copyright (c) 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2008
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * CHANGE HISTORY:
- *
- * Reason         Version Date         User id   Description
- * ----------------------------------------------------------------------------
- * 420403.1       7.0     13-Mar-2008  bkail     New
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.exception;
 

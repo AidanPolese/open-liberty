@@ -1,48 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5639-D57,5630-A36,5630-A37,5724-D18 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//  CHANGE HISTORY
-//Defect        Date        Modified By         Description
-//--------------------------------------------------------------------------------------
-//296440        08/05/05    todkap              cleanup ServletWrapper loadServlet call    WASCC.web.webcontainer    
-//298927        08/17/05    todkap              improve filter handling for core    WASCC.web.webcontainer    
-//299508        08/22/05    todkap              onServletStartService should be before onFilterStartDoFilter    WAS.webcontainer
-//307739        09/23/05    todkap              excessive logging for errors during servlet.service    WASCC.web.webcontainer    
-//324991        11/21/05    mmolden             61FVT: NullPtrExpn when logging out after admin console addNode
-//329118        12/05/05    todkap              IServletWrapper use of com.ibm.ws.webcontainer.servlet.ServletC    WASCC.web.webcontainer    
-//331617        12/12/05    todkap              61FVT: local/remote session IDs do not always match using RRD    WAS.httpsession    
-//331802        12/15/05    mmolden             Destroy not called after UnavailableException
-//306998.15     01/06/06    ekoonce             PERF: WAS tracing performance improvement 
-//PK26183       08/21/06    mmulholl            ENSURE correct classloader is used to desearialize a class
-//PK27620       08/23/06    cjhoward            SERVLET FILTER IS NOT CALLED IN V6 FOR URL RESOURCES WHEN THESE ARE NOT FOUND.  IN V5, THE FILTER IS ALWAYS CALLED
-//399878        10/23/06    mmolden             70FVT: ExampleTestGroup.testPermanentUnavailableJsp() fails                                                                                                                                                    
-//437503        06/07/07    mmolden             70FVT: Regression J2ee
-//PK54805       10/25/07    ekoonce             USERWORKAREA SERVICE FAILS IN A SERVLET FORWARD SCENARIO
-//PK50133       12/05/07    mmolden             JSPExtensionClassLoader objects causing OOM
-//489973        12/31/07    mmolden             70FVT:ServletRequestListener not firing when registered in tld
-//LIDB4293-1    01/07/08    ekoonce             Lightweight test environment
-//511670        04/09/08    mmolden             70FVT: servlet destroy is not called                                                                                        
-//PK64290       05/20/08    mmolden             SESSION LOSS WHEN USING ONLY URLREWRITING
-//531478        06/20/08    mmolden             Null checks for Rahul in ServletWrapper
-//521677.2      06/23/08    mmolden             70FVT: MyFaces: PreDestroy not called in TestBean
-//PK66012       05/22/08    mmulholl            On destroy wait for a request to finish for ServletWrapper.destroyWaitTime 
-//PK74129       11/18/08    jebergma            REQUESTDISPATCHER FORWARD TO STATIC FILE SERVING SERVLET DOES
-//PK76117       12/10/08    mmulholl            Don't make servlet unavailable if UnavialableException is from a disptached resource
-//569469        01/04/08    pmdinh              Add entry and exit trace to V7
-//PK80340       02/35/09    mmulholl            Add isDefaultServlet() method
-//PK82657	03/17/09    mconcini		JSPClassLoaderLimit does not include forwards and includes
-//PK83258       06/09/09    mmulholl            Set attribute for security if default head or trace is about to be called.
-//721610        11/02/11    anupag              PM51389:: set the correct value of javax.servlet.request.key_size
-//PM50111       12/12/11    anupag              Only flush after service if filters are invoked and response not committed.
-//PM79934       01/17/13    anupag              Add option to suppress RuntimeException if thrown during servlet service.
-//PM92496       07/24/13    anupag              Provide method to add request SSL Attributes //PM83905
-//104336        11/20/13    wdw                 avoid multiple "already committed" warnings in the log
-//141092        01/07/15    pmdinh              Improve error message when async servlet/filter is not supported
-//760368        03/02/15    zaroman             Print the state as a string instead of a number in the traces
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.servlet;
 
 import java.beans.Beans;

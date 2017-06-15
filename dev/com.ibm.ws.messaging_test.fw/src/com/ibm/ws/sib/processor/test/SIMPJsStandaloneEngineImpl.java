@@ -1,63 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * SIB0002.mp.1     210605 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.mp.1     210605 tevans   PEV Prototype
- * LIDB3472-0.7     150705 brauneis J2SE 5 Prep
- * SIB0002.mp.7     180705 tevans   PEV Runtime Control
- * 295990           040805 tpm      Link deletion cause startup problems
- * SIB0002.mp.19    230805 tevans   MQ Destination definition and config updates
- * SIB0003.adm.1.2  250805 tpm      New methods
- * SIB0002.adm.4.5  250805 tpm      getMQServerBusMemberSet
- * SIB0002.mp.20    300805 tpm      unit test cleanup
- * SIB0041.mp.1     300805 cwilkin  Total Message Ordering
- * SIB0002.mp.20    310805 tpm      PEV unit test framework
- * 302286           010905 tpm      unit test tran fixes
- * 307225           220905 nottinga Added new JsBus methods.
- * 309080           290905 tpm      Changes for admin methods
- * 310012           031005 tpm      note on defect
- * 286195           041005 gatfora  Check that message store has started before continuing
- * 298905           051005 gatfora  Increase object manager size for unit tests
- *                                  Make unit tests able to choose filestore or cloudscape
- * 324383           171105 cwilkin  Durable subscriptions to aliases
- * 325617           211105 gatfora  Alias destination check should ensure in properties file
- * 329483           151205 matrober JUNIT: 7 failures and 23 errors (linux)
- * 339990           260106 tevans   Unittest enhancements
- * 371055           080606 tevans   Fix problems with backlevel MQ client versions
- * 372565           120606 tevans   Only add mqServers to mqServerSet
- * SIB0153a.adm     091106 nottinga Added new getEngineComponent methods.
- * 406709           201106 tevans   Allow the MessageStore to be started independently
- * 409469           050107 tevans   Fix RMQ unittests
- * SIB0125.adm.2    090107 leonarda Change busReloaded() args
- * 409469           090107 tevans   Fix RMQ unittests
- * SIB0125.adm.3    190107 leonarda RCS setConfig()
- * 418673           080207 tevans   Tidy up standalone me
- * SIB0211.mp.1     260207 nyoung   Dynamic Link Configuration.
- * 427432           200307 djvines  Add getTRMComponent()
- * SIB0105.mp.8     050707 cwilkin  Link Exception Destinations
- * 461013           210807 gatfora  Start WS-RM components.
- * SIB0201b.sec.3   070907 smithk6  Added bus security to the available engine components.
- * 499849           170308 cwilkin  Support foreignBus sendAllowed for pubsub
- * 510063.1         290508 leonarda Add getSIBDestinationByUuid()
- * 460662           230608 nyoung   70FVT: Link transmitter status wrong for MQLinks
- * 88032            051212 urwashi  Added methods for mbean support added in interface    
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.test;
 

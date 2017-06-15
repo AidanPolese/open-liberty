@@ -1,41 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * SIB0002.mp.1     210605 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.mp.1     210605 tevans   PEV Prototype
- * SIB0002.mp.4.1   290605 tpm      PEV Stats
- * SIB0002.tran.2   050805 tevans   New Transactions interfaces
- * SIB0002.mp.15    170805 tevans   Transactional PEV Producers and Consumers
- * SIB0041.mp.1     300805 cwilkin  Total Message Ordering
- * 309487           300905 gatfora  Incorrect FFDC statement
- * 306998.22        050106 gatfora  Trace performance improvements
- * 379771           040906 cwilkin  IgnoreInDoubts Ordering Support
- * 404608           050107 tevans   Remove Unused code, locals and imports
- * 464794           171007 cwilkin  Fix ordered nls failure
- * 486100           291107 cwilkin  Disregard referenceStreams on pubsub threshold
- * SIB0115.mp.3     290108 dware    Mark the whole ItemStream as blocked for blockedRetryTimeout
- * 492029           260608 dware    Improve MsgStore XML text
- * 515543           180708 cwilkin  Handle MessageStoreRuntimeExceptions on msgstore interface
- * 510343           010908 dware    Initialise the message depth interval watermarks
- * PK69943          101008 ajw      Only display CWSIP0671E messages when ordering is required
- * F001338-55330    111111 chetbhat MultiThreading for reconstitution
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl.store.itemstreams;
 
 import java.io.IOException;

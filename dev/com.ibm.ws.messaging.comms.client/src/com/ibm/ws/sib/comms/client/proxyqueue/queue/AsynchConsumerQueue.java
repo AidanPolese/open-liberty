@@ -1,47 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.44 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/proxyqueue/queue/AsynchConsumerQueue.java, SIB.comms, WASX.SIB, uu1215.01 09/10/20 10:39:37 [4/12/12 22:14:06]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2009
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030702 prestona Original
- * D171917         030718 prestona Stopping proxy queue can cause hang.
- * F174602         030819 prestona Switch to using SICommsException
- * F188491         040128 prestona Migrate to M6 CF + TCP Channel
- * f192215         040224 mattheg  Proxy queue enhancements
- * d192012         040226 mattheg  Remove use of SibTr.error
- * f200337         040429 mattheg  Message order context implementation
- * D209401         040615 mattheg  toString() enhancements
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D249096         050129 prestona Fix proxy queue synchronization
- * D328562         051207 mattheg  Ensure unlockAll does not clear the queue (leave that to purge())
- * D333217         051216 mattheg  Extra trace
- * D377648         060719 mattheg  Use CommsByteBuffer
- * SIB0112c.com.1  070125 mattheg  Memory management: Parse message in chunks
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * D384279         070601 prestona Message ordering test failure
- * 480204          071106 prestona Deadlock in deliver messages
- * 486559          071130 sibcopyr Automatic update of trace guards
- * 487063          071203 prestona Unlocking a message inside consumeMessages failed
- * 487999          071210 prestona Messages locked and not delivered using a remote connection
- * 487999.3        080806 vaughton Fix up waitUntilEmpty + requestNextMessageBatch
- * PK98587         091020 pbroad   Change ordering of performInCallbackActions/unlockAll to prevent deadlocks
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.comms.client.proxyqueue.queue;
 

@@ -1,15 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2005
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-// 
-// @(#) 1.2 SERV1/ws/code/security.crypto/src/com/ibm/websphere/crypto/KeyException.java, WAS.security.crypto, WASX.SERV1, pp0919.25 1/4/06 09:51:13 [5/15/09 18:04:30]
-//
-// Date         Defect      CMVC ID    Description
-//
-// 06/19/05     LIDB3557    pbirk      Used for generic KeySet/KeySetGroup exceptions
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.crypto;
 
 /**

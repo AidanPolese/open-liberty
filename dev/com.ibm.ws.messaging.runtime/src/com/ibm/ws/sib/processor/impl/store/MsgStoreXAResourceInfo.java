@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ===========================================================================
- * IBM Confidential OCO Source Material
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ===========================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * SIB0002.mp.16    180805 tpm      hasRMQResources flag
- * 309940           031005 gatfora  Missing trace statements
- * 318614.1         071105 tevans   Support remote transaction recovery from PEV
- * 381317           271106 cwilkin  Correct RMName in MsgStoreXAResourceInfo
- * 516346           290408 djvines  Implement hashCode
- * 520288           130508 sibcopyr Automatic update of trace guards 
- * =================================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl.store;
 
 import com.ibm.websphere.ras.TraceComponent;

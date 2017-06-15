@@ -1,28 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70
-// (C) COPYRIGHT International Business Machines Corp. 1997, 2014
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// CHANGE HISTORY
-// Defect       Date        Modified By (Original By)   Description
-//--------------------------------------------------------------------------------------
-// 341303       01/25/06    mmolden                     Change WebContainer APIs to allow modification of ServletConfig
-// 442812       06/07/06    mmolden                     allowed to access servlet by classname
-// LIDB3518-1.2 06/26/07    mmolden                     ARD
-// 465095       09/06/07    ekoonce                     add isServlet2_5 method
-// 465675       09/09/07    ekoonce                     web apps fail to start with trace enabled
-// LIDB4336-35  09/25/07    mmolden                     Remove mime filtering
-// PK52168      10/24/07    mmolden (pmdinh)            Error Page doesn't handle subclass exception correctly.
-// PK54499      10/24/07    mmolden (srpeters)          WEBCONTAINER OPTION TO OVERRIDE FILESERVINGENABLED="TRUE"
-// PK52059      10/24/07    mmolden (srpeters)          POTENTIAL SECURITY EXPOSURE WITH SERVESERVLETSBYCLASSNAMEENABLE
-// PK66137      05/19/08    mmolden (jebergma)          GLOBAL LISTENERS ARE NOT INVOKED
-// PM84305      07/10/13    pmdinh                      Prevent OOM which may occur due to application design
-// 131004       09/29/14    bitonti                     Unconditionally enable default error page in Servlet 3.1
-// 148426       10/06/14    bitonti                     Give extension default error page precedence in Servlet 3.0
-// PI67942      10/21/16    zaroman                     encode URI after dispatch
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.webapp;
 
 import java.net.URL;

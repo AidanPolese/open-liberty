@@ -1,40 +1,13 @@
-// IBM Confidential OCO Source Material
-// Copyright IBM Corp. 2006, 2013
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d392996   EJB3      20060930 leealber : Initial Release
-// d408321   EJB3      20061128 leealber : Safe-guarding substring results exception
-// d413031   EJB3      20070104 leealber : add comment on possible rootURL forms
-// d416151.3 EJB3      20070306 leealber : Extend-scoped support
-// d416151.3.7 EJB3    20070501 leealber : Add isAnyTraceEnabled() test
-// d416151.3.3 EJB3    20070506 leealber : Messages/FFDC clean up.
-// d440322   EJB3      20070510 leealber : Enable Loose Config
-// d456716   EJB3      20070906 tkb      : use correct message prefix CWWJP
-// d473432.1 EJB3      20071011 leealber : Fix getArchiveName for p.xml URL not in supported package
-// d502635   WAS70     20080306 jckrueg  : Decode persistence.xml URL string
-// d534924   WAS70     20080708 tkb      : Reduce WCCM overhead, ask mod for scope
-// d536681   WAS70     20080715 tkb      : fix 534924 - ask correct mod for scope
-// d537753   WAS70     20080722 jckrueg  : Support application editions for XD
-// F743-16027 WAS80    20091029 andymc   : Decoupling DeployedApplication/Module for embeddable
-// F743-18776
-//           WAS80     20100122 bkail    : Use JPAModuleInfo; move puScope logic to WASJPAModuleInfo
-// F743-26137
-//           WAS80     20100511 bkail    : Embeddable module names now have extensions
-// d654520   WAS80     20100527 bkail    : Revert F743-26137 changes
-// F743-29629
-//           WAS80     20100621 bkail    : Embeddable module names have extensions (again)
-// d668837   WAS70     20100908 jckrueg  : Support OSGI FP module names
-// d699472   WAS80     20110328 bkail    : Fix embeddable directory-based modules
-// d727932.1 WAS85     20120215 tkb      : refactor schema creation for Liberty
-// RTC113511 RWAS90    20131009 bkail    : Move logic to SharedJPAComponentImpl
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2006, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_RESOURCE_BUNDLE_NAME;

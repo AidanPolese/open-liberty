@@ -1,31 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- *                  210605 tevans   Reset Change history - previous WAS602.SIB
- *                  210605 tevans   Renamed original 602 file to DispatchableConsumerPoint
- * SIB0002.mp.1     210605 tevans   PEV Prototype
- * 355323           220306 tevans   RMQSessionDroppedException handling
- * 358344           280306 tpm      Comments for new exception handling
- * 520472           220508 cwilkin  Gathering reattaching
- * 496144           180608 cwilkin  Forward port PK58940
- * 558352           281008 cwilkin  Retry failed attach to avoid deadlock
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl.interfaces;
 
 import com.ibm.websphere.sib.exception.SIErrorException;

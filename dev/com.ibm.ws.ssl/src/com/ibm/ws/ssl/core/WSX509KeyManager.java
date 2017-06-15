@@ -1,15 +1,13 @@
-/*
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2005, 2015 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2005, 2008, 2015
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * @(#) 1.11 SERV1/ws/code/security.crypto/src/com/ibm/ws/ssl/core/WSX509KeyManager.java, WAS.security.crypto, WASX.SERV1, pp0919.25 5/20/08 14:22:57 [5/15/09 18:04:36]
- *
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.ssl.core;
 

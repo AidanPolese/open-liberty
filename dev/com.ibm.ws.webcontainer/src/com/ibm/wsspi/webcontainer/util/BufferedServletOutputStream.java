@@ -1,39 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5655-N01, 5733-W61. (C) COPYRIGHT International Business Machines Corp. 1997-2006
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//CHANGE HISTORY
-//Defect        Date        Modified By         Description
-//--------------------------------------------------------------------------------------
-//382943        08/09/06    todkap             remove SUN dependencies from core webcontainer
-//PK34562       01/12/07    mmulholl           change flushBytes() to use response.flushBufferedContent();
-//392654.3      02/20/07    mmolden             FVT4: response not received from web container on oneway call
-//433960        04/20/07    mmolden             Using print for an outputstream does not flush  
-//PK89810        07/29/09    anupag             send the last buffers and close the connection when close()
-//PM44112       08/09/11    anupag              print goes in infinite loop if response buffer size is set to 0.
-//
-/*
- * @(#)HttpOutputStream.java	1.35 98/03/06
- * 
- * Copyright (c) 1995-1997 Sun Microsystems, Inc. All Rights Reserved.
- * 
- * This software is the confidential and proprietary information of Sun
- * Microsystems, Inc. ("Confidential Information").  You shall not
- * disclose such Confidential Information and shall use it only in
- * accordance with the terms of the license agreement you entered into
- * with Sun.
- * 
- * SUN MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
- * SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
- * PURPOSE, OR NON-INFRINGEMENT. SUN SHALL NOT BE LIABLE FOR ANY DAMAGES
- * SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
- * THIS SOFTWARE OR ITS DERIVATIVES.
- * 
- * CopyrightVersion 1.0
- */
+/*******************************************************************************
+ * Copyright (c) 1997, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.webcontainer.util;
 import java.io.IOException;
 import java.io.OutputStream;

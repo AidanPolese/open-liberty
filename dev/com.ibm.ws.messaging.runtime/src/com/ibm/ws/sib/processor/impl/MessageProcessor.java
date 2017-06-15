@@ -1,31 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- *
- * Change activity:
- *
- * Reason          Date       Origin   Description
- * --------------- ------     -------- --------------------------------------------
- *                                 Version X copied from CMVC
- * Added MBean support  05/12/12 
- * 88516           21-01-13   Sharath  Liberty: Checking for authentication in case of Pooled connections
- * 88311           06-02-13   Venu     Liberty: separating closing of connections
- * 92566           05-02-13   kavitha  PMI code removal
- * 94563           25-02-13   Sharath  Moving the info message which gets logged at startup to debug
- * 95909           18-03-13   Sharath  Changes related to new Messaging Security Story
- * 99006           16-04-13   senthven Forward Porting of TWAS defect(PM72328.dev) to Liberty
- * 99921           30-04-13   Chetan   Fixing the closing of inprocess connection when comms refreshes the connection
- * 107291          07-08-13   romehla1 Avoiding NPE die to processor stop when jmsServer feature is removed
- * 114580          06-11-13   balgirid Fixing username not displayed in FFDC for unsuccessful login
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.impl;
 

@@ -1,65 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.62.1.1 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/CATMainConsumer.java, SIB.comms, WASX.SIB, aa1225.01 12/05/08 01:35:13 [7/2/12 05:58:59]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030604 clarkep  Original
- * f169884         030618 mattheg  Add full synchronous support to server
- * d170527         030625 mattheg  Tidy and change to SibTr
- * f169604.1       030702 schmittm continued asynch work
- * f171177         030707 schmittm Add asynchronous readAhead support
- * f169897.2       030708 mattheg  Update to Core API 0.6
- * f171400         030714 mattheg  Implement Core API 0.6
- * f172297         030722 mattheg  Complete Core API 0.6 implementation
- * F171893         030728 prestona Add support for BrowserSession.
- * d174443         030815 mattheg  Allow saving of the start / stop state of the consumer
- * f174317         030827 mattheg  Add local transaction support
- * d172528         030903 mattheg  Update comment in getLowestPriority()
- * d176012         030908 mattheg  Allow a synchronous consumer to become asynchronous
- * f173765.2       030926 mattheg  Core API M4 update
- * f177889         030930 mattheg  Core API M4 completion
- * f187521.2.1     040126 mattheg  Unrecoverable reliability -- part 2
- * f191114         040218 mattheg  Multicast support
- * f196076         040405 mattheg  Multicast support -- phase 2
- * f200337         040428 mattheg  Message order context implementation
- * f176658.4.2.2   040504 mattheg  deliverImeediately flag change
- * D209401         040615 mattheg  toString() enhancements
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * D223998         040813 mattheg  Bad use of Reliability.toInt()
- * D199177         040816 mattheg  JavaDoc
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D307265         050922 prestona Support for optimized transactions
- * D329823         051207 mattheg  Trace improvements
- * D347591         060217 mattheg  Add support for exchanged starts
- * D350111.1       060302 mattheg  Use send listener for start()
- * D384259         060815 prestona Remove multicast support
- * PK33011         061016 mattheg  Fix for MDB Listener not being told about ME failure
- * D430289         070503 prestona Failure registering async. consumer for readahead session with maxActiveMsgs != 0
- * D438276         070529 mleming  Deal with SIException in setAsynchConsumerCallback
- * SIB0115d.comms  071001 vaughton Stoppable Async Consumer Callback
- * 472317          071005 sibcopyr Automatic update of trace guards
- * 471642          071016 vaughton Unable to deregister stoppable async consumer
- * SIB0115.comms.2 080131 vaughton Update registerStoppableAsynchConsumerCallback
- * PK73713         081016 ajw      Allow messageset to be unlocked and not increased lock count
- * 605093          090824 mleming  Provide single isRecoverable implementation
- * 623498          091027 slaterpa Ensure we always post to start semaphore after wait
- * F013661         200412 chetbhat unlockAll(incrementUnlockCount) support
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import com.ibm.websphere.ras.TraceComponent;

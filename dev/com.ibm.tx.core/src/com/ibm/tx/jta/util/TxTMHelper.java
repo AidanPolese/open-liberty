@@ -1,44 +1,15 @@
 package com.ibm.tx.jta.util;
 
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2011 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* @(#) 1.42 SERV1/ws/code/transaction.impl/src/com/ibm/tx/jta/util/TxTMHelper.java, WAS.transactions, WAS85.SERV1 12/28/11 10:05:42 [4/26/12 20:51:00]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer    Defect   Description                                                         */
-/*  --------  ----------    ------   -----------                                                         */
-/*  07/10/17  johawkes      468105   Report resync failure                                               */
-/*  07/10/31  johawkes      479553   Static analysis                                                     */
-/*  07/12/01  irobins       486857   Non-WAS-server: Explicitly init trace level after config loaded     */
-/*  08/03/09  elisa         501311   Add new method runAsSystemOrSpecified                               */
-/*  08/04/24  johawkes      514000   Put back removeShutdownHook                                         */
-/*  08/04/24  mallam        510808   Add shutdown hook in default c'tor                                  */
-/*  14/01/09  irobins       569929.1 Clear cached objects when TM recycled                               */
-/*  02/06/09  mallam        596067   package move                                                        */
-/*  09/07/03  johawkes      599407   Removed disableIsSameRM from core                                   */
-/*  09-08-19  mallam        602532.3 ltc bundle                                                          */
-/*  09-08-19  mallam        602532.6 ltc bundle                                                          */
-/*  09-11-09  johawkes      F743-305.1 EJB 3.1                                                           */
-/*  09-12-22  mallam        633225   Further changes to support Aries/Liberty osgi services               */
-/*  10-02-24  johawkes      640599   Use UserTransactionImpl.instance()                                  */
-/*  11-08-11  johawkes      711992   Allow shutdown to tolerate having configmanager ripped out          */
-/*  11-09-28  johawkes      711992.1 Provide shutdown method for liberty                                 */
-/*  11-10-10  johawkes      719396   UOWEventListener support                                            */
-/*  11-10-18  johawkes      719671   UOWEventListener support                                            */
-/*  11-12-28  johawkes      725030   Liberty 57863                                                       */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.security.AccessController;
 import java.security.PrivilegedActionException;

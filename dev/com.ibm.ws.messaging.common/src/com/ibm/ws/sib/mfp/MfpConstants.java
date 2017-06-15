@@ -1,51 +1,13 @@
-/*
- * 
- * 
- * ===========================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ===========================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 158444          030207 susana   Original
- * 158589          030303 susana   Make Factory class names package level
- * 164548          030509 susana   Fix package of message bundle as moved
- * 172633.1        031027 susana   Add Priority & TimeToLive max & min values
- * 181801.6        031217 vaughton Switch to utils trace group
- * 172521.1        040105 baldwint Schema propagation
- * 186446          040217 susana   JMSXAppId compact representation
- * 172024          040401 baldwint Add FFDC diagnostic support
- * 193066          040405 susana   SIMessage property support
- * 189574          040426 baldwint Dump unassembled JMF messages
- * 195445.26       040514 susana   Change message prefix from SIFP to CWSIF
- * 193585.5        040520 susana   Move to SIRCMessages to api
- * 203652          040526 susana   Add flag values for message constructors
- * 205905          040527 susana   Change SIRCMessages to CWSIKMessages
- * 218660.1        040818 susana   Add MESSAGE_HANDLE_SEPARATOR
- * 233061.1        040920 susana   Further SystemContext Handler support
- * 339872          060131 susana   Remove redundant field setting on inbound MQ messages
- * SIB0112c.mfp.1  060817 susana   MemMgmt: Add ability to dump a List of DataSlices
- * 394186          061109 mphillip JMF Schema name added
- * SIB0121.mfp.1   061211 mphillip add UDF constants for updateDataFields
- * 436884          070514 susana   Initialize inbound MQ Broker messages more lazily
- * 452462.7        070824 susana   Add SDO_GROUP to separate out mfp.sdo trace
- * 497803          080213 susana   Add UDF constants for toVerboseString()
- * 499947.1        080303 susana   Potential for OutOfMemory if dump or trace huge message
- * 542981          080812 susana   Add Mime
- * 499947.2        081229 susana   Remove BUFFER_MAX as superseded by custom property
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 /**
  *   This class just contains component-wide constants.
  *   It does not include any constants used by other components.

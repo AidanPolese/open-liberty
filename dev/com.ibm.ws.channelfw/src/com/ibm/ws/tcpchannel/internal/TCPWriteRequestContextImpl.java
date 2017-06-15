@@ -1,36 +1,13 @@
-//* ===========================================================================
-//*
-//* IBM SDK, Java(tm) 2 Technology Edition, v5.0
-//* (C) Copyright IBM Corp. 2005, 2006
-//*
-//* The source code for this program is not published or otherwise divested of
-//* its trade secrets, irrespective of what has been deposited with the U.S.
-//* Copyright office.
-//*
-//* ===========================================================================
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 09/21/04 gilgen      233448          Add copyright statement and change history.
-// 09/27/04 trg         234899          Added logic for sync work queue manager
-// 09/27/04 gilgen      235046          Added changeTimeout support
-// 09/29/04 wigger      235756          Added immediate timeout support
-// 04/15/05 gilgen      LIDB3618-2      Add AIO support, ake base TCPChannel extendable
-// 04/28/05 wigger      271613          Nio class break out changes
-// 05/09/05 wigger      271613          AIO Non-direct buffer support
-// 06/15/05 gilgen      287777          Enable AIO from WebSphere
-// 07/29/05 gilgen      294806          make methods needed by AIO code public
-// 08/25/05 wigger      298587          return right after 1 buffer shadow direct buffer parm update
-// 11/10/05 wigger      314917.1        reject writes with buffer lengths of 0
-// 12/17/05 gilgen      333647          Call incrementNumWrites correctly, trace corrections
-// 01/04/06 gilgen      335588          add performance statistics
-// 08/13/07 wigger      451669          where possible use NonSafe methods for optomization
-// 04/24/08 wigger      515681          Add FileChannel buffer support
-// 04/30/08 wigger      515681.1        FileChannel buffer code review changes
-// 05/12/08 wigger      515681.2        FileChannel write segments at 4 Meg
-// 06/17/08 wigger      527006          fix NPE in checkForError because of FC change
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.tcpchannel.internal;
 
 import java.io.IOException;

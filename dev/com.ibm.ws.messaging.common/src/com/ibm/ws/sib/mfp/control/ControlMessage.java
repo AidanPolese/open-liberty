@@ -1,35 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 171889          030722 susana   Original
- * 174700          030909 susana   Remove setControlMessageType from interface
- * 175492          030912 baldwint New fields for guaranteed delivery stream resolution
- * 178364          031107 susana   New/changed fields for remoteGet & remoteBrowse
- * 182771          031124 susana   Remove unnecessary methods
- * 181718.6        031219 susana   Remove SIBUuid import
- * 178364.2        031231 susana   Tidy up imports
- * 215177          040420 susana   Change Control Messages to single part messages
- * 185656          040902 susana   Tidy up imports etc
- * 348294          060816 susana   Fix encodeFast properly
- * 408810.1        061130 susana   Rename CommonMessageHeaders to AbstractMessage & common up more methods
- * 451831          070921 susana   Remove unused import
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.mfp.control;
 
 import com.ibm.websphere.sib.Reliability;

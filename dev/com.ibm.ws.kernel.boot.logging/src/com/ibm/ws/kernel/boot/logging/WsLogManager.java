@@ -1,28 +1,13 @@
-/*
- * COMPONENT_NAME: WAS.ras
+/*******************************************************************************
+ * Copyright (c) 1998, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * ORIGINS: 27         (used for IBM originated files)
- *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 1998,2008
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * Change History:
- *
- * Reason        Date        User id   Description
- * ------------  ----------  -------   ----------------------------------------------
- * LIDB1241.2.1  03/25/2004  tomasz    JVM Logging Changes
- * D226682.2     09/07/2004  tomasz    Added a flag for disabling reset method
- * D373917       10/25/2006  andymc    Loading Tr in getLogger to ensure RAS is initted before client logging code
- * PK35603       12/07/2006  andymc    LOGMANAGER.GETLOGGER() CREATING UNWANTED INSTANCES OF LOGMANGER
- * 414407        01/11/2007  andymc    Adding switch to enable PK35603
- * PK49534       07/24/2007  andymc    New property to enable super.readConfiguration() in server mode
- * 496825        02/13/2008  andymc    Refactored system property logic
- * PK62221       03/05/2008  spaungam  check to make sure Tr hasn't already been loaded
- * 512212        05/21/2008  mcasile   Privilege wrap the classloader retrieval
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.kernel.boot.logging;
 
 import java.io.IOException;

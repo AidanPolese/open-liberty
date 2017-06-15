@@ -1,21 +1,13 @@
-//* ===========================================================================
-//*
-//* IBM SDK, Java(tm) 2 Technology Edition, v5.0
-//* (C) Copyright IBM Corp. 2005, 2006
-//*
-//* The source code for this program is not published or otherwise divested of
-//* its trade secrets, irrespective of what has been deposited with the U.S.
-//* Copyright office.
-//*
-//* ===========================================================================
-//
-//@(#) 1.5 CF/ws/code/channelfw/src/com/ibm/wsspi/channel/Channel.java, WAS.channelfw, CCX.CF 12/7/04 07:22:00 [5/11/05 12:46:17]
-//
-//Change History:
-//Date     UserId      Defect          Description
-//--------------------------------------------------------------------------------
-//12/03/04 clanzen    244723           Javadoc update to support destroy, then init
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.channelfw;
 
 import com.ibm.websphere.channelfw.ChannelData;

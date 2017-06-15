@@ -1,22 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N01, 5733-W60 (C) COPYRIGHT International Business Machines Corp. 1997, 2005
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-
-/** 
- * History: 
- * CMVC 86523: create the file - wenjian
- * 
- * An object of the class is created to keep the aggregate data and server as the
- * module and submodule objects in the pre-defined module hiearchy: 
- *      module 
- *			-> instance
- *				-> submodule
- *					-> subinstance 
- * 
- * Note: the value of an aggregate data is the sum of its enabled members.
- */
+/*******************************************************************************
+ * Copyright (c) 1997, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.pmi.server;
 
 import com.ibm.websphere.pmi.*;

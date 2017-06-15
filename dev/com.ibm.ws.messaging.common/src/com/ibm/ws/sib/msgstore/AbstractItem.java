@@ -1,52 +1,15 @@
 package com.ibm.ws.sib.msgstore;
 
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 03/02/03 drphill  Original
- * 168080          23/07/03 gareth   LocalTransaction Support (Local Clients)
- * 175362          29/08/03 corrigk  Expirable implementation
- * 181602          31/10/03 corrigk  Remove DEFAULT_MAXIMUM_TIME_IN_STORE
- * 179365.3        01/12/03 corrigk  Expiry callback needs transaction
- * 223996          25/08/04 corrigk  Remove tick count
- * 223636.2        26/08/04 corrigk  Consolidate dump
- * 240266          20/10/04 schofiel Make membership lock non-static
- * 247453          15/12/04 drphill  Test - no functional change
- * 247513          14/01/05 schofiel Improve spilling performance
- * 272110          10/05/05 schofiel 602:SVT: Malformed messages bring down the AppServer
- * 288073          13/07/05 schofiel Dump consolidation
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * 294722          08/08/05 schofiel Added incrementUnlockCountIfNonpersistent to unlock
- * 321391          07/11/05 schofiel Remove STRICT_ENFORCED_IN_MESSAGESTORE
- * 295531          07/11/05 schofiel Redundant return value for eventPrecommitAdd
- * 334152          20/12/05 schofiel Remove redundant _cachedId to save memory
- * 306998.19       09/01/06 gareth   Add new guard condition to trace statements
- * SIB0112b.ms.1   07/08/06 gareth   Large message support.
- * SIB0112le.ms.1  07/02/07 gareth   Add restoreData() method to Item
- * 445621          23/07/07 gareth   Use Boolean.valueOf() in trace statements
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * 538096          21/07/08 susana   Use getInMemorySize for spilling/dispatching instead of persistentSize
- * 668676.1        11/11/10 skavitha restoreIfMsgAvailable() method added
- * F1332-51592     28/09/11 vmadhuka Persist redelivery count to FILESTORE
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

@@ -1,20 +1,13 @@
-//* ===========================================================================
-//*
-//* IBM SDK, Java(tm) 2 Technology Edition, v5.0
-//* (C) Copyright IBM Corp. 2005, 2006
-//*
-//* The source code for this program is not published or otherwise divested of
-//* its trade secrets, irrespective of what has been deposited with the U.S.
-//* Copyright office.
-//*
-//* ===========================================================================
-//
-//Change History:
-//Date     UserId      Defect          Description
-//--------------------------------------------------------------------------------
-//05/21/05 bgower      LI3187          Break AccessLists into its own class
-//07/08/05 wigger      289540          fix logic in AccessDenied
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.tcpchannel.internal;
 
 import java.net.Inet6Address;

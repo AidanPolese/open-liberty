@@ -1,31 +1,13 @@
-//* ===========================================================================
-//*
-//* IBM SDK, Java(tm) 2 Technology Edition, v5.0
-//* (C) Copyright IBM Corp. 2005, 2008
-//*
-//* The source code for this program is not published or otherwise divested of
-//* its trade secrets, irrespective of what has been deposited with the U.S.
-//* Copyright office.
-//*
-//* ===========================================================================
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 09/21/04 gilgen      233448          Add copyright statement and change history.
-// 09/30/04 gilgen      233025          Try re-open if port is in closing state
-// 10/08/04 gilgen      235345.1        Do bind at init time instead of start time.
-// 06/29/05 gilgen      287777          Support AIO extensions in WAS
-// 04/08/06 clanzen     358818          Add remote address to vc statemap for ssl channel on Z/CRA
-// 11/27/06 wigger      410109          store connection info in VC
-// 01/17/07 leeja       PK37541         Socket re-use flag custom property
-// 02/22/07 wigger      LIDB4463-8      store connection info in VC
-// 03/08/07 leeja       PK40743         handle unresolvable localhost
-// 06/15/07 wigger      LIDB4301-17     look for and use early bind objects
-// 11/26/07 wigger      457142          Performance: don't access InetAddress methods until necessary
-// 02/20/08 leeja       PK60924         Stop listening port on first quiesce pass
-// 04/24/08 wigger      515681          Add FileChannel buffer support
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.tcpchannel.internal;
 
 import java.io.IOException;

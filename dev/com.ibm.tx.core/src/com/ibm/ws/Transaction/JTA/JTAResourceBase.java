@@ -1,50 +1,14 @@
 package com.ibm.ws.Transaction.JTA;
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/*  ORIGINS: 27                                                                      */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2013 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  DESCRIPTION:                                                                     */
-/*                                                                                   */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  Date      Programmer    Defect    Description                                    */
-/*  --------  ----------    ------    -----------                                    */
-/*  05/09/02  gareth        ------    Move to JTA implementation                     */
-/*  23/09/02  hursdlg       145638    Trace XAException errorCode                    */
-/*  11/10/02  awilkins      1452      XAException handling                           */
-/*  14/10/02  hursdlg       1454      Change start/end tran requirements             */
-/*  18/10/02  hursdlg       1433      Remove excess synchronization                  */
-/*  25/11/02  awilkins      1513      Repackage ejs.jts -> ws.Transaction            */
-/*  05/12/02  hursdlg       1530      Ignore end once rolledback                     */
-/*  20/01/03  gareth      LIDB1673.1  Add JTA2 messages                              */
-/*  05/03/03  hursdlg      1759733    Handle XA_RB errors when TMFAIL                */
-/*  01/04/03  mallam        162354    no exception for XA_RB/TMFAIL                  */
-/*  01/09/03  beavenj       175242    Implement ResourceSupportsOnePhaseCommit       */
-/*  28/08/03  johawkes      173214    Replace RegisteredResource vectors             */
-/*  28/08/03  johawkes      174516    Distribute all ends before prepares            */
-/*  18/09/03  johawkes      169114    Improve diags for prep/cmplt XA errors         */
-/*  10/02/04  hursdlg       190239    Update JTAResource states                      */
-/*  15/06/04  johawkes      209345    Remove unnecessary code                        */
-/*  06/01/06  johawkes      306998.12 Use TraceComponent.isAnyTracingEnabled()       */
-/*  02/08/06  maples        373006    WESB performance isSameRM optimization         */
-/*  20/06/07  hursdlg       LI3968-1.2 Commit priority getter                        */
-/*  23/01/08  hursdlg       470302    Update diagnostics support for isSameRM case   */
-/*  01/07/08  hursdlg       530797    Allow setState to be overridden                */
-/*  17/07/08  johawkes      536926    Remove JET dependencies on org.omg classes     */
-/*  23/12/09  tranteam      F923-4350 Option to indicate tight branch coupling       */
-/*  15/02/11  hursdlg       690084    Update branch coupling support                 */
-/*  10/08/13  slaterpa      752004    TRANSUMMARY trace                              */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2002, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import javax.transaction.SystemException;
 import javax.transaction.xa.XAException;

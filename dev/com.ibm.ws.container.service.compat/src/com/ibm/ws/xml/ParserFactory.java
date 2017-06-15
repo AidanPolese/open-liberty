@@ -1,27 +1,13 @@
-/*
- * @(#) 1.5.1.4 SERV1/ws/code/utils/src/com/ibm/ws/xml/ParserFactory.java, WAS.runtime.fw, WAS80.SERV1 11/18/09 17:37:27 [6/16/11 11:00:16]
+/*******************************************************************************
+ * Copyright (c) 2002, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 2002, 2009
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * Change History:
- *
- * Reason       Version     Date     User id   Description
- * ----------------------------------------------------------------------------
- * D198795        5.0x   06-11-2003   ericvn   Add newSAXParser method
- * D170319        5.1.X  06-24-2003   jaredj   fixed createXMLREader to  
- *                                             properly jaxp retrieve XML Reader.
- * 173287         5.1.X  08-01-2003   jaredj   Fixed a bad merge-in from PQ76707
- * D190462        5.1    02-17-2004   lauyiuch Add parseDocument for file and
- *                                             fix all methods to enable Java2
- *                                             security
- * PK95911        7.0    11-17-2009   pwwong   New method for creating a 
- *                                             SAXParser with options.
- * ----------------------------------------------------------------------------
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.xml;
 

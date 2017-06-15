@@ -1,25 +1,13 @@
-/*
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012, 2013
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- *                                 Version X copied from CMVC
- * 95225           140313 chetbhat MDB connection retry
- * 96715           180313 chetbhat NLS changes for MDB startup
- * 97591           270313 chetbhat Deactivate before connection retry
- * 97097           100413 Sharath  Add appropriate error message to show the exception
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 /**
  * This class contains the common code between the Scalable and Colocating endpoint activations classes.

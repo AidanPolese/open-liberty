@@ -1,35 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin       Description
- * --------------- ------ --------     --------------------------------------------
- *                 030203 van Leersum  Original
- * d170072         062603 kschloss     Altered printStack trace to print nextException()
- *                                     for nested SQLExceptions
- * 175771          091003 pradine      Set trowable.initCause() for nested SQLExceptions
- * 182068.5        200104 schofiel     Add constructor to ease use of externalised text messages
- * 191800          240204 pradine      Add NLS support to the persistence layer
- * 235386          061004 pradine      Fix message store retry behaviour
- * 238453          111004 pradine      Check for existing cause
- * LIDB3706-5.241  190105  gareth      Add Serialization support
- * 260055          240305 pradine      Rationalize retry logic
- * 296993          100805 pradine      Need to support new StaleConnectionException mappings
- * 353911          310306 pradine      SVT:SVC: Better msg when ME can't connect to datasource
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.msgstore;
 
 import java.sql.SQLException;

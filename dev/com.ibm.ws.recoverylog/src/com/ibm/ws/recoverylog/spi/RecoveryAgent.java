@@ -1,37 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997, 2007 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/* DESCRIPTION:                                                                      */
-/*                                                                                   */
-/* Change History:                                                                   */
-/*                                                                                   */
-/* Date      Programmer    Defect      Description                                   */
-/* --------  ----------    ------      -----------                                   */
-/* 06/06/03  beavenj       LIDB2472.2  Create                                        */
-/* 11/07/03  beavenj       171515      Extend exception model                        */
-/* 13/04/04  beavenj       LIDB1578.1  Initial supprort for ha-recovery              */
-/* 15/04/04  beavenj       LIDB1578.3  Termination support for ha-recovery           */
-/* 18/05/04  beavenj       LIDB1578.5  Connect up with HA framework                  */
-/* 15/06/04  beavenj       216563      Code review changes                           */
-/* 26-07-04  beavenj       209636      Add Client Version Support                    */
-/* 22/09/04  beavenj       232643      File Locking Support                          */
-/* 29/09/04  beavenj       235642      Modify "lock not granted" behaviour           */
-/* 01/11/04  beavenj       238410.1    Locking control flags                         */
-/* 04/01/05  mdobbie       LIDB3603    Provide isSnapshotSafe method                 */
-/* 26/07/07  mallam        453651      logWarning method                             */
-/* switch to RTC                                                                     */
-/* 27/05/14  slaterpa      136208      switch from logWarning to payloadAdded        */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 1997, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.recoverylog.spi;
 

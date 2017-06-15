@@ -1,45 +1,13 @@
-// 1.7, 12/18/05
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2005
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office. 
-/**************************************************************************
- * This Java code implements a quick fit persistent DSA.  An example of how to
- * use it is contained in the main function.  More specifically,
+/*******************************************************************************
+ * Copyright (c) 1997, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *   public FileManager(String fname, boolean coalesce_blocks)
- * is used to create an instance of the DSA.  The first parameter is the file
- * name for storing the data.  If the file exists, the DSA tries to read in
- * the information already contained in the file.  If the file exists, the
- * second parameter is used to indicate whether existing free blocks should all
- * be coalesced during initialization (which could be expensive).
- *
- *     public long allocate(int request_size)
- * is used to allocate a block of request_size bytes.  The offset in the file
- * corresponding to the first usable word is returned.
- *
- *   public void deallocate(long block)
- * is used to deallocate a block returned by allocate.
- * 
- *     public void cache_free_storage_info()
- * should be called just before shutting down the system.  If stores important
- * parameters in a contiguous block of memory.  This block allows the system
- * to be restarted quickly.  If cache_free_storage_info() is not invoked, the
- * system can still be restarted, but restart might take considerably longer.
- * 
- *    public void coalesce()
- * coalesces all adjacent free blocks in memory.
- *
- *    public void dump_memory()
- * outputs the state of in-memory data structures.
- * 
- *     public void dump_disk_memory(String fname)
- * outputs the state of disk data structures.
- * 
- *     public String dump_stats()
- * return toString() display of statistics.
- *************************************************************************/
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.cache.persistent.filemgr;
 import java.io.ByteArrayInputStream;

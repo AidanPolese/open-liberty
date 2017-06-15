@@ -1,63 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.55 SIB/ws/code/sib.jfapchannel.client.common.impl/src/com/ibm/ws/sib/jfapchannel/impl/octracker/ConnectionDataGroup.java, SIB.comms, WASX.SIB, uu1215.01 10/03/26 04:38:24 [4/12/12 22:14:15]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2010
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * F191566         040301 prestona Created
- * D195942         040325 mattheg  Fix NPE on failed connect
- * F193388         040406 mattheg  Comms needs to call prepareEndPoint()
- * F196678.10      040426 prestona JS Client Administration
- * D212672         040628 mattheg  Fix problems with pooling / reusing sockets
- * D219752         040728 prestona SSL channel properties not picked up correctly.
- * D223333         040811 prestona Better resolution of SSL information to use.
- * D197042         040811 prestona FFDC entries
- * D199145         040812 prestona Fix Javadoc
- * D226223         040823 prestona Uses new messages
- * D232743         040920 prestona Invalid trust file name of null.
- * D233787         040929 prestona interbus connection fails startup after NullPointer
- * D232185         041007 mattheg  Serviceability improvements
- * D238678         041015 mattheg  Fix NPE if connect fails with no remote address
- * F244595         041129 prestona z/OS: TCP Proxy Bridge Support
- * D242769         050107 mattheg  Code formatting problem
- * D249096.1       050131 prestona Use non-default threadpool for cfendpoint based connections
- * LIDB3706-5.209  040211 prestona serialization compatibility for sib.jfapchannel.impl
- * D287731         051031 prestona deadlock handling large numbers of concurrent redirects
- * D321398         051107 mattheg  Expose conversation data
- * D328299         051205 mattheg  Fix null returned from connect(CFEndPoint)
- * D330649         051209 prestona Supply an outbound protocol
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * D391840         060920 prestona Sockets stay in CLOSE_WAIT state
- * D424462         070503 prestona Output better message for failure to establish cross-memory connection
- * SIB0100.wmq.3   070813 mleming  Allow WMQRA to use TCP Proxy Bridge
- * D464663         070905 sibcopyr Automatic update of trace guards
- * D538089         080728 mleming  Fix ConnectionDataGroup deadlock when FFDCing.
- * D545284         080820 mleming  Create copy of CFEndPoint
- * D590189         090617 djvines  Remove deadlock (by imposing lock hierarchy)
- * D590189         090617 djvines  Also need to increment the use count as soon as we find a ConnectionData to use
- * D605290         090810 mleming  Allow a null JFapAddress in connectOverNetwork
- * PK91199         090714 pbroad   Correct invalidation logic to ensure physical close occurs
- * 613387          091005 mleming  Pass in correct NetworkConnectionFactoryHolder in connectOverNetwork
- * 619291          091014 mleming  Ensure that more than one thread can't be in doConnect at a time
- * D635295         100215 pbroad   Allow purging of a connection already closed by peer
- * F002074         091022 mleming  MEP support FIS
- * 95897           041613 Chetan   Comms Outbound Chain revamp
- * 99283           220413 Chetan   Dynamic update of ssl feature leads to NPE
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.impl.octracker;
 
 import java.net.InetAddress;

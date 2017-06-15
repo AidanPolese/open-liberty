@@ -1,33 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 186484.2         150304 tevans   Some intial controllable interfaces
- * 186484.4         050404 tevans   Continued controllable interfaces
- * 186484.6         220404 tevans   Re-write of destination lookups to enable runtime admin
- * 186484.10        170504 tevans   MBean Registration
- * 196675.1.7.1     030604 tevans   MBean Registration enhancements#
- * 186484.12        110604 ajw      Finish off runtime controllable interfaces
- * 195809.4         170604 prmf     Queue Depth Limits - new attributes
- * 186484.16        220604 tevans   Xmit Queue runtime control
- * 224010           130804 gatfora  Remove getMaxMsgs and setMaxMsgs.
- * 233063           200904 prmf     Remove receiveAllowed from localization
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.runtime;
 
 import com.ibm.ws.sib.utils.SIBUuid12;

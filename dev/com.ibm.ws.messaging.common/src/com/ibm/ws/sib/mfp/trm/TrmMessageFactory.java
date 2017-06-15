@@ -1,37 +1,13 @@
-/*
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 164548          030506 susana   Original
- * 166493          030515 susana   Move factory creation to clinit
- * 166631          030519 susana   Add MessageEncodeFailed & MessageDecodeFailed Exceptions
- * 172028          030718 susana   Add ME FirstContact messages
- * 174699          030820 vaughton Add Trm control messages
- * 167577          030922 susana   Change Tr calls to SibTr
- * 177927          031002 baldwint Add offset parameter to inbound message creation
- * 177927.2        031007 vaughton Remove deprecated methods
- * 179461.1        031010 vaughton Add new request/reply bridge fcm
- * 183236          031118 vaughton Add ClientAttachRequest2
- * 189857          040206 susana   Add 'No FFDC code needed' comment
- * 192295          040226 vaughton Add Me Bridge Bootstrap Request/Reply
- * 195445.26       040514 susana   Change message prefix from SIFP to CWSIF
- * 240085          051018 kgoodson FFDC on class init failure
- * 442933          070601 susana   Add trace guard
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.mfp.trm;
 

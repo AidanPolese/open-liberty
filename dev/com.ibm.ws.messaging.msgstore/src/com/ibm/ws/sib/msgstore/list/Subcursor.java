@@ -1,32 +1,14 @@
 package com.ibm.ws.sib.msgstore.list;                       
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 11/11/05 schofiel Original
- * 278082          20/12/05 schofiel Rework link position in lists and cursor availability
- * 278082.2        05/01/06 schofiel Remove disableJumpback()
- * 306998.20       09/01/06 gareth   Add new guard condition to trace statements
- * 445623          23/07/07 gareth   Use Boolean.valueOf() in trace statements
- * PK67998         30/06/08 ajw      Cursor becomes orphanned when link is incorectly unlinked
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * 673411          24/02/11 urwashi  Added two new overloaded methods for next(boolean available,int fromIndex) and next(long lockid,int fromindex)
- * ===============================================================================================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.ws.sib.msgstore.AbstractItem;
 import com.ibm.ws.sib.msgstore.Filter;

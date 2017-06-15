@@ -1,43 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Material
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- *  
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- * 170807.7          220803 amardeep Original, adapted from JmsConnFactory
- * 174896            030903 matrober JavaDoc public interfaces
- * 170807.9          050803 amardeep Expose isManaged() method
- * 166829.6.2        180903 matrober JMS Durable Subs (readAhead and subscriptionHome)
- * 176645.1          190903 kingdon  Update admin object properties to DC's spec
- * 178705            081003 matrober remove javadoc warnings due to incorrect @see tag
- * 188482            060204 jhumber  Add TemporaryQueuePrefix|TopicNamePrefix
- * 184390.7          180204 kingdon  Add persistentMapping
- * 197250            130404 jhumber  Increase visibility of CF getter methods
- * 192474            130404 matrober Support for cloned environments
- * 199163            200404 matrober javadoc problems
- * 197921.1          040504 jhumber  New Javadoc tags 
- * 206397.4          220604 kingdon  Change CF properties.
- * 224714.4          070904 kingdon  Change CF properties for remoteProtocol -> targetTransportChain
- * 251000            210105 kingdon  Remove getPassword().
- * 247845.6          040305 kingdon  Add multicast props multicastInterface and subscriptionProtocol
- * 253167            100505 kingdon  Fix javadoc for isManaged.
- * 338734            180105 holdeni  Fix JavaDoc warnings
- * 371899            110706 holdeni  Encode &lt; and &gt; in javadoc comments
- * SIB0121.jms.1     291206 jamessid Adding support for new performance enhancing properties
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.websphere.sib.api.jms;
 

@@ -1,30 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997-2007 
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//Revisions:
-//Defect 227400  2004/08/30  SVT:SVC: NPE when tld references class with nonstatic methods
-//Defect 245645.1  2004/12/06 Custom Tags using default namespace don't work
-//Defect 358784  2006/04/03 BT61: SRVE0068E No function mapped to the name fn:length
-//feature LIDB4147-9 "Integrate Unified Expression Language"  2006/08/14  Scott Johnson; move many methods
-//                    into ELValidator. 
-//Defect PK29373 Provide backward compatibility with v5(Page scope variables )
-//393421 - CTS:jsp translation error not occuring for wrong  <jsp:output> 2006/09/27 Scott Johnson
-// jsp2.1work
-// defect 408915 -  Problem coercing converter attribute of the JSF inputText tag.
-//  defect 409810 "deferred" expression fails if <jsp-version> less than 2.0  2006/12/5 Scott Johnson
-// defect 395182.2  70FVT: make servlet 2.3 compatible with JSP 2.1 for migration 2007/02/07 Scott Johnson
-// defect 420617  70FVT: NPE thrown by test case in JSF 1.2 TCK    2007/02/13
-//Defect PK41783 2007/05/14 Dependency on java hashcode is removed
-//Defect PK44873 2007/07/18 NPE thrown on visitJspBodyStart when the tag info is null
-//Defect PK47368 2007/08/03 Cannot resolve 'request' when calls to request is embedded inside a <jsp:expression>
-//Defect PK62934 2008/06/10 problems with expressions inside <jsp:attribute>
-//Defect PK79754 2009/02/17 A 2.3 or 2.4 webapp cannot handle deferred expressions.   Jay Sartoris
-//Defect PM23092 2010/10/19 More than two tags with the same name causes error.
-//Defect PM23597 2010/10/28 Variable type NESTED issue with duplicate var
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.validator;
 
 import java.util.ArrayList;

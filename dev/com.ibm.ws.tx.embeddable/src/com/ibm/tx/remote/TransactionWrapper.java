@@ -1,57 +1,15 @@
 package com.ibm.tx.remote;
 
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2003, 2007 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* @(#) 1.40 SERV1/ws/code/was.transaction.impl/src/com/ibm/ws/Transaction/JTS/TransactionWrapper.java, WAS.transactions, WAS855.SERV1, cf061521.02 9/25/13 09:58:52 [6/12/15 06:30:58]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer    Defect   Description                                                         */
-/*  --------  ----------    ------   -----------                                                         */
-/*  17/01/03  awilkins      1673.9   Subordinate registration optimizations                              */
-/*  22/01/03  gareth      LIDB1673.1 Add JTA2 messages                                                   */
-/*  31/01/03  awilkins    157953     Distributed transaction timeout fixes                               */
-/*  05/02/03  hursdlg     158255     Destroy if forget in bad state                                      */
-/*  14/02/03  awilkins    158466     Destroy / tx completion timing                                      */
-/*  17/02/03  hursdlg     LIDB1673.9.4 Destroy on timeout rollback                                       */
-/*  17/02/03  hursdlg     LIDB1673.9.3 Prolong finish support part 1                                     */
-/*  25/02/03  mallam      LIDB1673.2  Prolong resolution                                                 */
-/*  19/03/03   mallam      161125    Propagate heuristicRollback                                         */
-/*  21/03/03   hursdlg     161127    Update tran state to none on finish                                 */
-/*  31/03/03   hursdlg     161441    Update comments                                                     */
-/*  15/14/03   mallam       184757     Propagate rollback_only to superior                               */
-/*  30/01/04  johawkes     187239    Handle HeuristicHazard responses                                    */
-/*  05/02/04  hursdlg      189567    Handle Heuristic on prepare                                         */
-/*  05/02/04  mallam        LIDB2775 Remove waitForCommitOutcome                                         */
-/*  23/02/04  johawkes     190337    Preserve heuristic outcome                                          */
-/*  14/04/04  johawkes     197414    Correct typo in message key                                         */
-/*  05/05/04   mallam    LIDB2775-103 supsend before afterCompletion                                     */
-/*  02/06/04  johawkes     203903    Propagate heuristic commit properly                                 */
-/*  16/06/04  johawkes     209345    Remove unnecessary code                                             */
-/*  27/07/04  johawkes     218403    Fix removal from heuristic list                                     */
-/*  13/09/04  mallam       231085    Heuristics on prepare                                               */
-/*  27/07/05  hursdlg      292064    NPE on destroy                                                      */
-/*  28/09/05  johawkes     307993    Don't retry rollback after RMFAIL                                   */
-/*  20/10/05  hursdlg      315507    Fix bad FFDC                                                        */
-/*  03/11/05  johawkes     319724    Remove hard-coded retry timeout                                     */
-/*  29/03/06  pault1       PK20881   Remove synchronized keyword from destroy() to prevent deadlocks     */
-/*  29/11/06  maples       402670    LI4119-19 code review changes                                       */
-/*  08/05/07  hursdlg      396035    Throw transient during recovery and add other state checks          */
-/*  06/06/07  johawkes     443467    Repackaaging                                                        */
-/*  16/08/07  johawkes     451213    Moved LPS back into JTM                                             */
-/*  17/04/13  jstidder     PM83253   Prevent tx silent rollback after client inactivity timeout          */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2003, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.util.Hashtable;
 

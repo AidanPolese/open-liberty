@@ -1,41 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// 1.13 SERV1/ws/code/ecutils/src/com/ibm/ws/util/JPAJndiLookupObjectFactory.java, WAS.ejbcontainer, WASX.SERV1 7/14/11 12:52:22
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2006, 2011
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  JPAJndiLookupObjectFactory.java
-//
-// Source File Description:
-//
-//      Factory to create the EntityManagerFactory and EntityManager objects from JNDI
-//      lookup for @PersistenceUnit and @PersistenceContext annotations respectively.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d392996   EJB3      20060930 leealber : Initial Release
-// d416151.2 EJB3      20070220 leealber : Container managed persistence context part 2
-// d424494   EJB3      20070305 leealber : NPE in FFDC when invalid PU in @PersistenceContext
-// d416151.3 EJB3      20070405 leealber : collect properties from annotation/xml
-// d416151.3.5 EJB3    20070501 leealber : Rename JPAService to JPAComponent
-// d416151.3.1 EJB3    20070510 leealber : Inject provider EMF for SLSB
-// d510184   WAS70     20080424 tkb      : Create seperate EMF for each java:comp
-// F743-16027 WAS80    20091029 andymc   : Remove svJPAComponent variable - cannot cache since container restart will create a new JPAComponentImpl
-// d658638   WAS80     20100628 tkb      : support EJBs in WARs
-// F743-30682
-//           WAS80     20100820 bkail    : Improve SFSB validation
-// d673962   WAS80     20101018 timoward : Support delegation for non Java EE containers
-// d706751   WAS80     20110609 bkail    : Pass getEmfWrapper=true by default
-// F46994.1  WAS85     20110712 tkb      : remove tWAS Naming dependencies
-// d152713   RTC       20150126 jgrassel : Support @PersistenceContext Tx-Sync Feature
-// --------- --------- -------- --------- -----------------------------------------
-
+/*******************************************************************************
+ * Copyright (c) 2006, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.container.osgi.jndi;
 
 import static com.ibm.ws.jpa.container.osgi.jndi.JPAJndiLookupInfoRefAddr.Addr_Type;

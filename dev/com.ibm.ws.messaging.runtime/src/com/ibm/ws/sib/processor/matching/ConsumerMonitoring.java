@@ -1,28 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * SIB0009.mp.02    220805 nyoung   Add support for Consumer Count monitoring
- * SIB0009.mp.02a   060905 nyoung   Consumer Count monitoring conn close and threading.
- * SIB0009.mp.02b   290905 nyoung   Consumer Count messaging. 
- * 309940           031005 gatfora  Missing trace statements
- * F011127          280611 chetbhat registerConsumerSetMonitor support
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.matching;
 
 import java.util.ArrayList;

@@ -1,48 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2011, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2011,2013
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * F191566         040301 prestona Created
- * F196678.10      040426 prestona JS Client Administration
- * D197042         040811 prestona FFDC entries
- * D199145         040812 prestona Fix Javadoc
- * D226223         040823 prestona Uses new messages
- * D240362         041029 mattheg  CFEndPointDescriptor .equals() and .hashcode() re-writes
- * F244595         041129 prestona z/OS: TCP Proxy Bridge Support
- * D251021         050120 prestona z/OS Add endpoint to group.
- * D259087         050303 prestona z/OS: hang on connection close
- * D258248         050412 mattheg  Change default number of conversations per connection
- * D287731         051031 prestona deadlock handling large numbers of concurrent redirects
- * D321398         051107 mattheg  Expose active outbound conversations
- * D330649         051209 prestona Supply an outbound protocol
- * D344736         060214 prestona Client hangs when closing connections under stress conditions
- * D363586         060421 mattheg  Ensure EndpointDescriptor's know what conversation type they are
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * D451825         070730 mleming  Port of 451809
- * D458453         070810 sibcopyr Automatic update of trace guards
- * SIB0100.wmq.3   070813 mleming  Allow WMQRA to use TCP Proxy Bridge
- * D465794         070917 mleming  Forward port 460737
- * D522407         080520 djvines  Make inner classes static
- * D538089         080728 mleming  Fix ConnectionDataGroup deadlock when FFDCing.
- * D590189         090616 djvines  Ensure we handle CWSIJ0064E nicely
- * D635295         100215 pbroad   Allow purging of a connection already closed by peer
- * PM07974         100223 timmccor Add a way to get a dirty list of conversations, avoiding deadlocks
- * F002074         091022 mleming  MEP support FIS
- * D644761         100424 Venu     FFDC entry
- * 95897           041613 Chetan   Comms Outbound Chain revamp
- * 99283           220413 chetbhat Dynamic update of ssl feature leads to NPE
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.impl.octracker;
 
 import java.net.InetSocketAddress;

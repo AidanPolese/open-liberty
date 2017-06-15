@@ -1,20 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//Revisions:
-//Defect 212433  2004/07/20  Stepping into _jspService lands at a unexpected location
-//Defect 227804  2004/08/31  Strange stepping behaviour against the enclosed JSP file
-//Defect 231143  2004/09/13  Incorrect SMAP file for HitCount.jsp
-//Defect 231613  2004/09/14  Incorrect SMAP for user defined method in decl.jsp
-//Defect 232818 2004/9/22 Strange behaviour when step over JSP taglib lines
-//Defect 245645.1  2004/12/06 Custom Tags using default namespace don't work
-//Defect 258459   2005/03/01 Smap fails when compiling JSP examples
-//Defect 260728  2005/03/11  SMAP Generation is incorrect for scriplets and declarations
-//APAR PM12658 2010/04/20  add methods to keep track of doTag method line number for debug mode
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.smap;
 
 import java.io.BufferedReader;

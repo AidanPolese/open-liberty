@@ -1,29 +1,13 @@
-//%Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2011
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason           Version        Date       User id     Description
- * ----------------------------------------------------------------------------
- * 642471             8.0        03/10/2010   spaungam    HPEL formatter refactoring
- * 642550             8.0        04/16/2010   spaungam    more CBE format cleanup
- * 650311             8.0        04/29/2010   spaungam    localizable EDE needs to support default value
- * 650188             8.0        04/29/2010   spaungam    msgID needs to be based on localized message  
- * 650538             8.0        05/14/2010   spaungam    Correct the CBE location value
- * 652681             8.0        05/15/2010   spaungam    Correct the Guid level being used
- * F017049-27489      8.0        06/16/2010    belyi      Remove references to WAS versions.
- * 660484             8.0        07/14/2010   mcasile     Avoid system.getProperties and enable "null" for values not found. Also, optimize stringBuffer usage
- * 663081             8.0        09/09/2010    belyi      Add method to append unused parameters
- * 670295             8.0        09/30/2010    belyi      don't print empty extensions, print msgCatalogId even without msgId, and use lineSeparator
- * F1340-52795        8.0        10/10/2011    belyi      Fix extension key used for thread name
- * 714313.1           8.0        10/20/2011   shighbar    HPEL CBE format does not correctly identify IBM4.4.1 msgIDType
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.logging.hpel.reader;
 
 import java.text.MessageFormat;

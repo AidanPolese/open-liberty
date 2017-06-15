@@ -1,33 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030426 prestona Original
- * d165465         030508 schmittm Update TRM/comms interfaces
- * d171174         030707 Niall    Pre fix impending build break caused by Core API version 6
- * F174602         030819 prestona Switch to using SICommsException.
- * d175811         030922 mattheg  Make exchange() throw NotAuthroised exception
- * d177418         030922 mattheg  Allow connect() to throw NotAuthorised exception
- * d177434         030922 mattheg  Change NotAuthorisedException to SIAuthenticationException
- * d177495         030923 mattheg  Change NotAuthorisedException to SIAuthenticationException in exchange() too
- * f172521.2       030923 mattheg  Support MFP Schema Propogation
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms;
 
 import com.ibm.websphere.sib.exception.SIResourceException;

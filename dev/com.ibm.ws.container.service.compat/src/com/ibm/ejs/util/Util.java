@@ -1,39 +1,13 @@
-// COMPONENT_NAME: WAS.utils
-//@(#) 1.8 SERV1/ws/code/utils/src/com/ibm/ejs/util/Util.java, WAS.utils, WAS80.SERV1, h1116.09 11/9/07 07:35:57 [4/23/11 20:13:09]
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1999, 2007
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//
-// Change History:
-//
-// yy-mm-dd  Developer  Defect    Description
-// --------  ---------  --------  ----------------------------------------------------------------------
-// 06-01-30  awilkins   340726.7  Update copyright information
-// 06-15-06  kjlaw      366845.3  correct errors where JDK 1.5 target is used for utils.
-//                                break link with WASX.SERV1 so that only used in 6.1 EJB3
-//                                feature pack.  relink once pyxis is open for 1.5 use in utils.
-// 07-11-07  mcasile    477704    Switch to new FFDC Facade API
-// -----------------------------------------------------------------------------------------------------
-
-/*
- * HISTORY
- * $TALog: Util.java,v $
- * Revision 1.2  1999/04/22  18:35:36  ben
- * Update copyrights for Encina 1.2.
- * [from r1.1 by delta ben-00000-update-copyrights-for-WS3.0, r1.1]
+/*******************************************************************************
+ * Copyright (c) 1999, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Revision 1.1  1998/12/30  19:01:01  chriss
- * Renamed trace package to com.ibm.ejs.ras.
- * [added by delta chriss-00000-jmon-package-reorg-phase3, r1.1]
- *
- * Revision 1.2 2004/03/03 tmusta
- * Identified as an IBM SPI; re-formatted to make more readable.
- *
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ejs.util;
 

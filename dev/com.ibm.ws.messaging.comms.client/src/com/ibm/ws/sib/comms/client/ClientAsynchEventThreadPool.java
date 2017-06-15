@@ -1,38 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.23 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/ClientAsynchEventThreadPool.java, SIB.comms, WASX.SIB, uu1215.01 11/09/15 07:54:59 [4/12/12 22:14:06]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2011
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        040923 mattheg  Original
- * D249096         050129 prestona Fix proxy queue synchronization
- * D276260         050516 mattheg  Add hashcode to trace (not change flagged)
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * D381608         061002 mattheg  Avoid NPE when invoking callbacks on connections with no state
- * PK32451         061016 mattheg  Continuation of D381608 (ensure any exceptions are caught)
- * D400132         061025 mattheg  Fix FFDC Warnings
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * D424200         070426 prestona Readahead consumers hang in receiveWithWait if connection dies
- * D483123         071114 mleming  Call DestinationListeners/StoppableAsynchConsumerCallbacks on a separate thread
- * PK60700         080208 ajw      Rework AsynchEvent Thread so it is not set to grow as needed
- * 492764          080415 vaughton Synchronise async callbacks
- * 514374          080421 sibcopyr Automatic update of trace guards
- * 571615          090223 vaughton ME termination event not being passed to call back
- * F011127         280611 chetbhat Adding registerConsumerSetMonitor 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import com.ibm.websphere.ras.TraceComponent;

@@ -1,32 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.16 SIB/ws/code/sib.jfapchannel.client.common.impl/src/com/ibm/ws/sib/jfapchannel/impl/octracker/IdleConnectionPool.java, SIB.comms, WASX.SIB, uu1215.01 10/05/07 05:24:02 [4/12/12 22:14:15]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2004, 2010
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * F191566         040301 prestona Created
- * D197042         040811 prestona FFDC entries
- * D354565         060320 prestona ClassCastException thrown during failover
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * SIB0048b.cli.6  061109 mattheg  Decouple from WAS Alarm manager
- * D522407         080520 djvines  Make AlarmValid a static class
- * 523964          080526 sibcopyr Automatic update of trace guards 
- * PK83641         090331 ajw      reset LinkLevelState when returning from pool
- * 651364          100507 mleming  Guard against a null LinkLevelState
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.jfapchannel.impl.octracker;
 

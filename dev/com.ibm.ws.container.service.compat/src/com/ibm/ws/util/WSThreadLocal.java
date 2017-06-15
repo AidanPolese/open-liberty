@@ -1,20 +1,13 @@
-//@(#) 1.10 SERV1/ws/code/utils/src/com/ibm/ws/util/WSThreadLocal.java, WAS.utils, WAS80.SERV1, kk1041.02 6/9/10 14:46:31 [10/22/10 00:47:01]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1998, 2010
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 1998, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 1.7, 10/17/06
- *
- * D247418   dzavala   12jan2005   Add misusage diagnostics  (PQ98539)
- * D252781   dzavala   16feb2005   Modify frequency of diagnostic D247418
- * D398396   djvines   17oct2006   Genericize and comply with Java 1.5
- * D477704   mcasile   07nov2007   Switch to new FFDC Facade API
- * D529674   djvines   16jun2008   Need to lock on this class
- * D655858   bkail     09jun2010   Fix stale array store in get()
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.util;
 

@@ -1,32 +1,14 @@
 package com.ibm.ws.sib.msgstore.cache.ref;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 10/02/05 drphill  Original
- * 270103          03/05/05 schofiel sib.msgstore.OutOfCacheSpace exceptions before mediation
- * 288073          13/07/05 schofiel Dump consolidation
- * 306998.20       09/01/06 gareth   Add new guard condition to trace statements
- * 454303          26/07/07 gareth   Various FINDBUGS changes
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * 538096          25/07/08 susana   Use getInMemorySize for spilling and persistence
- * 601995          05/08/09 gareth   PD: Misc improvements in SIB.msgstore
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.IOException;
 

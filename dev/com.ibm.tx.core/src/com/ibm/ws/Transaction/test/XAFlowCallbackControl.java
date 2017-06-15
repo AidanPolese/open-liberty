@@ -1,29 +1,15 @@
 package com.ibm.ws.Transaction.test;
 
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-I63, 5724-H88, 5655-N01, 5733-W60 (C) COPYRIGHT International Business Machines Corp. 2003, 2005 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer    Defect    Description                                                        */
-/*  --------  ----------    ------    -----------                                                        */
-/*  24/02/03    gareth      159659     Creation                                                          */
-/*  14/02/03    hursdlg     163336     Trap class not found exception                                    */
-/*  03-08-08    irobins     173645     use system property; suppress trc exc                             */
-/*  25/07/05    hursdlg     291789     Componentization changes                                          */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.tx.util.logging.FFDCFilter;
 import com.ibm.tx.util.logging.Tr;

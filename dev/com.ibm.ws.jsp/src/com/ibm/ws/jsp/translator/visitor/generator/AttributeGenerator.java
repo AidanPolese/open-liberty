@@ -1,14 +1,13 @@
-//IBM Confidential OCO Source Material
-//  5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004
-//	The source code for this program is not published or otherwise divested
-//	of its trade secrets, irrespective of what has been deposited with the
-//	U.S. Copyright Office.
-//Defect 232157  2004/09/16  jsp fragment trims whitespace around el variable
-//Defect 232157.1  2004/09/22  jsp fragment trims whitespace around el variable
-//Defect PK34107  2006/12/12  NPE thrown if a jsp:attribute tag contains a nested jsp tag
-//Defect PK68493  2008/07/03  jsp:attribute with whitespace as the value fails to compile
-//Defect PK65013  2008/07/07  Need ability to customize pageContext variable.
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.generator;
 
 import java.util.ArrayList;

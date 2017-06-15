@@ -1,36 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * SIB0136a.msp.1   021106 nyoung   Stage 1 implementation of XPath Selector support. 
- * SIB0136.mp.2     091106 nyoung   Add unit tests for XPath Selector support in MP. 
- * 399452           161106 nyoung   FFDC instrumentation complaints. 
- * SIB0136b.msp.1   080207 nyoung   Stage 2 implementation of XPath Selector support.
- * SIB0136b.msp.2   220207 nyoung   More meaningful trace for XPath Selector support.
- * 430211           030407 ajw      XPath10ParserImpl not available
- * 504438           180308 nyoung   XPath support does not handle namespace prefixes       
- * 509852           030408 sibcopyr Automatic update of trace guards
- * 511016           080408 nyoung   Buildbreak due to reference to incorrect TraceComponent
- * 510916           080408 nyoung   FINDBUGS: Make XPathNamespaceContext a static inner class  
- * 499911           080408 nyoung   FINDBUGS: posSeparator does not need to be set.
- * 519202           130508 nyoung   Multi level wildcards are mishandled
- * 519202.1         220508 nyoung   Minor errors in ANDed/Ored predicates     
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.matchspace.selector.impl;
 
 import java.util.ArrayList;

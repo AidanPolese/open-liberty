@@ -1,86 +1,15 @@
 package com.ibm.tx.jta.impl;
 
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/*  ORIGINS: 27                                                                      */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2016 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  DESCRIPTION:                                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  Date      Programmer    Defect   Description                                     */
-/*  --------  ----------    ------   -----------                                     */
-/*  05/09/02   gareth       ------   Move to JTA implementation                      */
-/*  01/10/02   hursdlg      ------   Only calculate globalTID when needed            */
-/*  03/10/02   gareth       1443     Initialise state to active                      */
-/*  03/10/02   gareth       1441     Update state table values                       */
-/*  10/10/02   hursdlg      1432     Log globalId                                    */
-/*  10/10/02   hursdlg      1426     Update to latest recovery.log spec              */
-/*  15/10/02   hursdlg      1455     Log state as value only                         */
-/*  17/10/02   awilkins     1467     New heurstic states and 1PC changes             */
-/*  21/10/02   awilkins     1465     Handling of heuristics                          */
-/*  01/11/02   hursdlg      1476     Use logged epoch                                */
-/*  01/11/02   hursdlg      1478     Use logsection write/force                      */
-/*  06/11/02   gareth       1449     Tidy up messages and exceptions                 */
-/*  14/11/02   gareth       1481     Implement LPS Basic                             */
-/*  18/11/02   beavenj      1502     Handle new recovery.log exceptios               */
-/*  25/11/02   hursdlg      1503     Move local/globaldTID for factory create        */
-/*  07/01/03   hursdlg    LIDB1673.9 Support JTA2 private interop protocol           */
-/*  22/01/03   gareth     LIDB1673.1 Add JTA2 messages                               */
-/*  23/01/03   awilkins   157617     Propagate exception in setState to caller       */
-/*  28/01/03   hursdlg    LIDB1673.9.1 Update partner log support                    */
-/*  31/01/03   hursdlg    LIDB1673.9.1 Reset log section after exception             */
-/*  21/02/03   gareth     LIDB1673.19  Make any unextended code final                */
-/*  25/02/03   mallam     LIDB1673.9.2 Correct state table                           */
-/*  20/03/03   hursdlg    161127     Reset state on transaction finish               */
-/*  02/04/03   hursdlg    162470     LogCursor.close() changes                       */
-/*  03/04/03   hursdlg    LIDB1673.22 Catch throwable on LogCursor code              */
-/*  09/07/03   hursdlg    169606     Better log failure handling                     */
-/*  18/07/03   johawkes   LIDB2110.12 JCA 1.5                                        */
-/*  18/07/03   hursdlg    172027     Log  full message                               */
-/*  31/07/03   hursdlg    173100     Use lastData on RecoverableUnitSection          */
-/*  15/08/03   johawkes   174435     Stop logging when rolling back in a subor       */
-/*  20/08/03   hursdlg    174690     Force all sections on LPS logging               */
-/*  09/09/03   hursdlg    176243     Log rolling_back after LPS                      */
-/*  18/09/03   hursdlg    177194     Migrate to 8 byte recovery ids                  */
-/*  26/09/03   johawkes   177885     Force log for RA transactions                   */
-/*  01/10/03   johawkes   178208.1   Use log generated recovery ids                  */
-/*  28/10/03   johawkes   181147     Make XATerminators specific to RA               */
-/*  29/10/03   johawkes   181331     Flag recovered imported txns subordinate        */
-/*  23/11/03   hursdlg    182220     Ensure WSCoordinator ready for recovery         */
-/*  27/11/03   johawkes   178502     Start an RA during XA recovery                  */
-/*  05/12/03   johawkes   184903     Refactor PartnerLogTable                        */
-/*  06/01/04   hursdlg    LIDB2775   zOS/distributed merge                           */
-/*  05/02/04   mallam     LIDB2775   Rename XID to XidImpl                           */
-/*  04/03/04   johawkes   191316     Log resources when setting LPS state            */
-/*  13/04/04   beavenj    LIDB1578.1 Initial support for ha-recovery                 */
-/*  22/04/04   awilkins   198904.1   getXid changes                                  */
-/*  23/04/04   dmatthew   LIDB1922   Initial WSAT support                            */
-/*  27/07/04   johawkes   219412     Fix shutdown for JCA imported transactions      */
-/*  30/07/04   dmatthew   217373     Temporary State patch - politics                */
-/*  11/01/05   hursdlg    249308     Log JCA Xid for later recovery                  */
-/*  06/01/06   johawkes   306998.12  Use TraceComponent.isAnyTracingEnabled()        */
-/*  16/10/06   mezarin    397825     Add committing_one_phase state                  */
-// 07/04/12 johawkes LIDB4171-35    Componentization
-// 07/04/12 johawkes 430278         Further componentization
-// 07/06/06 johawkes 443467         Moved
-// 07/08/06 johawkes 451213.1       JCARecoveryData moved into JTM
-// 07/08/29 johawkes 461798         Allow transition active to committed
-// 08/05/20 hursdlg  522409         Rework defect 397825                   
-// 09/05/01 brailsfo PK84994        Handle missing TransactionState rus in recovery 
-// 19/05/09 brailsfo 591144         Correct PK84994 NPE
-// 02/06/09 mallam   596067         package move
-// 15/12/02 dmatthew PI45254        Enhance serviceability when logs markFailed
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2002, 2016 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import javax.transaction.SystemException;
 

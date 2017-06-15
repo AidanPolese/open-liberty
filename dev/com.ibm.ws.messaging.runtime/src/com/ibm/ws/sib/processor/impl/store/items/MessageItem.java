@@ -1,89 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * SIB0002.mp.1     210605 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.mp.1     210605 tevans   PEV Prototype
- * 288073.1         190705 gatfora  xmlWriteOn update to include newLine()
- * SIB0002.mp.10    250705 tevans   RMQ Sessions
- * SIB0002.tran.2   050805 tevans   New Transactions interfaces
- * SIB0002.mp.14    150805 tevans   RMQ Session Management
- * SIB0041.mp.1     300805 cwilkin  Total Message Ordering
- * 284252           031005 gatfora  Update message trace to log correct dest type
- * 291517           201005 cwilkin  Implement FRP max depth
- * 284629           281005 gatfora  Don't user trace System messages
- * 327356           301105 gatfora  Don't trace System messages on commit
- * 306998.22        050106 gatfora  Trace performance improvements
- * 252277.6         240106 gatfora  Catch UnsupportedEncodingException in toString
- * 345318.1         220206 cwilkin  Provide eventPreUnlocked callback
- * 371665           070606 cwilkin  Register for events on restore only
- * 365984           070606 cwilkin  fix nullpointer in toString
- * 365688           070606 cwilkin  Reduce trace on unsupported ccsids
- * 369624           070606 cwilkin  Remove redundant getSpillData/unspill methods
- * SIB0112b.mp.1    090806 gareth   Large message support
- * 409469           281206 tevans   Refactor LME
- * SIB0112le.mp.1   130207 ajw      Large Message surport
- * SIB0113.mp.1     220207 tevans   Add preferLocal option for producers
- * PK38602          050307 cwilkin  reset pre_unlocked events
- * 430302           190407 ajw      clone DataSlices
- * SIB0115.mp.1     260407 ajw      Support pausing/resuming of a messaging endpoint
- * SIB0115.mp.2     060607 ajw      Code review updates for SIB0115
- * SIB0105.mp.6     210607 nyoung   MQLink Controllable changes
- * 442467           250607 gatfora  Remove unused fields.
- * SIB0113a.mp.1    240707 cwilkin  Gathered Consumer foundation
- * SIB0113a.mp.5    090807 vaughton Gathered consumers (add more trace)
- * 455462           210807 cwilkin  FINDBUGS tidy up
- * SIB0113b.mp.1    040907 dware    Initial support for SIB0113b function
- * SIB0113b.mp.2    311007 dware    Remove set/isTransacted() to simplify things
- * SIB0163.mp.4     081107 nyoung   Support the driving of Message Events.
- * SIB0113a.mp.9    091107 cwilkin  Gathering Consumers
- * SIB0163.mp.5     221107 nyoung   Exploit new MFP MessageControlClassification property
- * SIB0163.mp.6     291107 nyoung   Implement changes described in buddy check of SIB0163.mp.5
- * SIB0113a.mp.12   211207 cwilkin  Gathering Recovery
- * SIB0115.mp.3     230108 nyoung   Hidden message expiry and pending_retry support
- * 488314           240108 gatfora  Correct FindBugs issues
- * 514425           080508 cwilkin  fix trace
- * 488794           100608 cwilkin  Flow redelivery count from RME to DME
- * PK54812.1        190608 dware    Ensure message store details are dumped if a corrupt message is encountered
- * 492029           260608 dware    Improve toString and MsgStore XML text
- * 536156           160708 nyoung   Allow 3 concurrent UNLOCK message event listeners.
- * 515543           180708 cwilkin  Handle MessageStoreRuntimeExceptions on msgstore interface
- * PK69180          180708 ajw      recall initialiseNonPersistent if restore was called before MP started
- * 524133           220708 pbroad   Pass transaction ID for insert in CWSJU0010 messages
- * 538096           250708 susana   Use getInMemorySize for spilling & persistence
- * 539788           290708 dware    Prevent concurrent JsMessage property setting and encoding
- * 542075           070808 cwilkin  Dont generate ffdc on msgStoreException in getPersistentData
- * 541867           130808 dware    Change the order of the unlock events (make the ConsumerDispatcher last)
- * 510343           090908 dware    Improve xml data
- * 492029.1         120208 dware    Improve xlm display of API MsgId
- * PM22690          230910 pbroad   Don't attempt to lookup ME names by UUID for UserTrace
- * 668676           291010 skavitha method to get the message from store if only available
- * 677807           091110 skavitha No FFDC comment added
- * 668676.1         111110 skavitha restoreInternal and restoreIfMsgAvailable added
- * 691237           190311 skavitha setRegisterForPostEvents and getRegisterForPostEvents methods added
- * PM38052          030511 ajw      Release references to JsMessage in afterCompletion
- * F1332-51592      280911 vmadhuka Persist redelivery count to FILESTORE
- * 724676           261211 chetbhat ME fails to START after WAS80 to WASX Migration
- * 726258           270111 chetbhat RDC feature not working for migration test
- * 725146           100212 venugopv Update Redelivery count to MFP
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl.store.items;
 
 import java.io.IOException;

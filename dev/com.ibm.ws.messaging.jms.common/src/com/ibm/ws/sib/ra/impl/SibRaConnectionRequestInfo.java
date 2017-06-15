@@ -1,30 +1,13 @@
-/**
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * --------------- ------    -------- ---------------------------------------
- * 183467          23-Jan-04 dcurrie  Original
- * 238960.3        14-Oct-04 dcurrie  Use subjectToString
- * 351253          28-Mar-06 ajw      fix PK12300
- * 520460          13-May-07 djvines  Use Integer.valueOf
- * 521440          16-May-08 sibcopyr Automatic update of trace guards
- * 604938          12-Aug-09 djvines  Prevent password from being seen in log
- * PM31826         04-Feb-11 slaterpa implement Cloneable
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.ra.impl;
 

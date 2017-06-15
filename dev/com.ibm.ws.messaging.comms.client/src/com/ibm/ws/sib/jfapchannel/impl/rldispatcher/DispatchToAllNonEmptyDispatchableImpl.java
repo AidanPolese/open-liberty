@@ -1,36 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.21 SIB/ws/code/sib.jfapchannel.client.common.impl/src/com/ibm/ws/sib/jfapchannel/impl/rldispatcher/DispatchToAllNonEmptyDispatchableImpl.java, SIB.comms, WASX.SIB, uu1215.01 11/10/06 05:48:04 [4/12/12 22:14:15]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2011
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        040701 mattheg  Original
- * D242116         041028 mattheg  Use different RLD for ME-ME connections
- * F248849         050201 prestona Improve receive listener dispatcher performance
- * D262285         050321 mattheg  errorOccurred() not always invoked
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * PK65014         080424 eveleigh Add tuning parameter to allow JMS close calls to have the same priority as other JMS calls
- * 518030          080505 sibcopyr Automatic update of trace guards
- * 522407          080521 djvines  Make DispatchToAllDispatchQueues a static class
- * D500366         080527 mleming  Fix synchronization issues raised by findbugs
- * 515551          080709 vaughton ME-ME performance
- * 541870          080807 vaughton deadlock
- * PM19834         100805 pbroad   Excessive serialization when a large number of closes come in concurrently
- * PM48958         110929 ajw      Excessive serialization when a large number of stops/unlockAlls come in concurrently
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.impl.rldispatcher;
 
 import com.ibm.websphere.ras.TraceComponent;

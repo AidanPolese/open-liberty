@@ -1,32 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * D196678.10.1    040521 prestona Add connection metadata method.
- * D199148         040812 mattheg  JavaDoc
- * F224759.1       040818 prestona z/OS: isConnectionTrusted() method
- * F247975         050202 prestona Add requiresNonJavaBootstap method
- * F206161.5       050217 prestona Events for system management products
- * SIB0153a.com    061030 mattheg  Add getSSLSession() method
- * SIB201a.com.1    070627 prestona Add getRemotePortNumber() method.
- * 469880          071109 prestona Need to be able to get FAP level from comms
- * SIB0163.comms.3 071227 mleming  Provide information on the location that client is running in
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms;
 
 import java.net.InetAddress;

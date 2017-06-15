@@ -1,59 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.50 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/StaticCATBrowser.java, SIB.comms, WASX.SIB, aa1225.01 09/07/23 03:14:03 [7/2/12 05:59:00]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2009
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030711 mattheg  Original
- * 171893          030728 prestona Add support for BrowserSession.
- * F174602         030820 prestona Switch to using SICommsException
- * D175672         030902 Niall    Fix Memory Leaks
- * f173765.2       030926 mattheg  Core API M4 update
- * d180309         031020 mattheg  Need to catch more exceptions on browser create
- * F183828         031204 prestona Update CF + TCP prereqs to MS 5.1 level
- * f179519.1       031209 mattheg  Add SIDestinationWrongTypeException handling
- * f181007         031211 mattheg  Add boolean 'exchange' flag
- * f179339.4       031222 mattheg  Forward and reverse routing support
- * d186970         040116 mattheg  Overhaul the way we send exceptions to client
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * d175222         040219 mattheg  Ensure SICommsException is reported correctly and not sent to client
- * d187252         040302 mattheg  Ensure session destination information is only returned if it changes
- * d192293         040308 mattheg  NLS file changes
- * f192759.2       040311 mattheg  M7 Core SPI changes
- * f195758.2       040415 mattheg  M7.5 Core SPI changes
- * f193585.3.2     040503 mattheg  Remove destination filter
- * F195720.3       040616 prestona WAS Request Metrics in Jetstream
- * F207007.2       040617 mattheg  Core SPI Update of message selector parameters
- * F195720.3.1     040629 prestona WAS Request Metrics in Jetstream
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D210259.1       040819 mattheg  Move deserialization methods to CommsUtils
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D235891         040930 mattheg  Runtime property standards
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D254870         050214 mattheg  Optimize connection close
- * D258697         050302 mattheg  Ensure queue is pre-loaded to correct value
- * D342106         060130 mattheg  Don't FFDC on SINotAuthorisedException
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * D441183         072307 mleming  Don't FFDC when calling terminated ME
- * SIB0113.comms.1 070920 vaughton Core SPI changes
- * 494335          080128 mleming  Flow localOnly information on the wire
- * 592503          090722 mleming  ObjectStoreFullException -> ConversationStateFullException
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 

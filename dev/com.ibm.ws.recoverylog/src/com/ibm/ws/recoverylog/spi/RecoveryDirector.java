@@ -1,36 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 1997, 2006, 2009 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/* DESCRIPTION:                                                                      */
-/*                                                                                   */
-/* Change History:                                                                   */
-/*                                                                                   */
-/* Date      Programmer    Defect      Description                                   */
-/* --------  ----------    ------      -----------                                   */
-/* 06/06/03  beavenj       LIDB2472.2  Create                                        */
-/* 13/04/04  beavenj       LIDB1578.1  Initial supprort for ha-recovery              */
-/* 15/04/04  beavenj       LIDB1578.3  Termination support for ha-recovery           */
-/* 27/04/04  beavenj       LIDB1578.5  Connect up with HA framwork                   */
-/* 19/05/04  beavenj       LIDB1578.6  Connect up with WLM cluster framework         */
-/* 17/03/04  sykesm        MD19638     Recovery Event Listener                       */
-/* 20/03/04  beavenj       215907      Make enableHA accessible to clients           */
-/* 20/06/04  beavenj       216563      Code review changes                           */
-/* 29/09/04  beavenj       235642      Modify "lock not granted" behaviour           */
-/* 01/11/06  maples        LIDB4119-19 Load config using RCS rather than WCCM        */
-/* 07/01/05  dmatthew      PK37117     Fix HA                                        */
-/* 21/07/09  johawkes      602532      Remove WAS dependency                         */
-/*                                                                                   */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 1997, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.recoverylog.spi;
 

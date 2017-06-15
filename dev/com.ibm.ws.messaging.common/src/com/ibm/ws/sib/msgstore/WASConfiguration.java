@@ -1,32 +1,14 @@
 package com.ibm.ws.sib.msgstore;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date     Origin     Description
- * --------------- -------- ---------- ----------------------------------------
- *                 13/04/03 kschloss   Original
- * 169421.1.1      30/09/03 pradine    Add support for new configuration model
- * 180763.2        07/10/03 pradine    Refactor MS configuration code
- * 191800          24/02/04 pradine    Add NLS support to the persistence layer
- * 190379          12/04/04 pradine    Tighten up stopping behaviour
- * 230745          10/09/04 pradine    Should not throw an exception during start
- * SIB0003.ms.14   18/08/05 schofiel   File store - admin integration
- * 306998.19       09/01/06 gareth     Add new guard condition to trace statements
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.sib.msgstore.MessageStoreConstants;

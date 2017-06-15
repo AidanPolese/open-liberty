@@ -1,36 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.21 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/OrderingContextProxy.java, SIB.comms, WASX.SIB, uu1215.01 08/10/02 07:58:01 [4/12/12 22:14:06]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        040427 mattheg  Original
- * D199177         040816 mattheg  JavaDoc
- * D241156         041026 mattheg  Allow for ordering contexts to be destroyed
- * D249096         050129 prestona Fix proxy queue synchronization
- * D271521         050504 mattheg  Flow close at correct priority
- * D276260         050516 mattheg  Add hashcode to trace (not change flagged)
- * D289992         051114 prestona Reduce Semaphore creation
- * D341593         060130 mattheg  Remove un-used locals
- * D377648         060719 mattheg  Use of CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * 509271          080401 vaughton Cloned connection/session optimisations
- * 510754          080407 sibcopyr Automatic update of trace guards
- * 534314          081002 vaughton ObjectStoreFullException
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import com.ibm.websphere.ras.TraceComponent;

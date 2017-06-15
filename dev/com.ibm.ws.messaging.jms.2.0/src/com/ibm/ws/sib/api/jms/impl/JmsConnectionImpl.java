@@ -1,99 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2015 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2015
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- *                   090203 matrober Original
- * 163014            090403 matrober SetExceptionListener not implemented for Connection
- * 162922.1          140403 amardeep getMetaData() defers to JMSFactoryFactory
- * 162922.3          160403 matrober Update JMS to coreAPI v0.3
- * 162922.4          230403 matrober Update JMS to coreAPI v0.4
- * 165050            060503 matrober IndexOutOfBoundsExc in a multi-threaded env
- * 164776            080503 matrober JMS acknowledge modes
- * 165821            150503 matrober Update JMS to core API v0.4b
- * 165989.05         210503 matrober Use get/setReliability instead of get/setDeliveryMode
- * 167916            300503 matrober Ignore ackMode for transacted sessions
- * 168217            030603 matrober Inconsistency with <session>.getAcknowledgeMode()
- * 166828.3          110603 matrober Local MP Flow rewrite updates for JMS
- * 169639            160603 matrober Temp fix for pubSub
- * 170067            200603 matrober Refactor JMS interfaces (com.ibm.websphere)
- * 170747            290603 amardeep Call getJsDestName()
- * 170829            020703 amardeep Delete confirmDestinationProperties()
- * 169897.4          040703 matrober Update JMS layer to use new Core API
- * 170807.2          090703 kingdon  JCA integration work.
- * 170807.5          310703 amardeep JCA integration work, renamed cf method
- * 173661            070803 matrober CTS: Closed object exceptions
- * 174321            140803 matrober BVT: calls to closed QueueSenders etc succeeded
- * 170807.6          220803 amardeep New UTEHelperFactory changes
- * 174719            220803 amardeep Store cf non per mapping and client id
- * 175102            290803 matrober Call coreConn.close as part of JmsConnImpl.close
- * 174896            030903 matrober JavaDoc public interfaces
- * 170807.9          050803 amardeep Improve connection construction
- * 170807.10         110903 amardeep Create session ack modes, transacted flag
- * 166829.6          100903 matrober JMS Support for Durable Subscriptions
- * 176104            160903 amardeep instantiateSession() method created
- * 177189            180903 amardeep close() does nothing if already closed
- * 177904            260903 kingdon  non-permitted methods in managed environments.
- * 181796.5          051103 matrober Core SPI move to com.ibm.wsspi.sib.core
- * 184280            011203 matrober Finish SibTr trace work
- * 189711            110204 jhumber  Missing FFDC entries reported in ffdclogs dir
- * 191319            190204 matrober BVT: Null pointer exception from JmsSessionImpl
- * 191790.1          270204 matrober NLS: JMS msg review (MR)
- * 193208            040304 matrober setClientId throws IllegalStateException.
- * 187361.2          050304 kingdon  Support connection listeners
- * 194101            120304 kingdon  Connection listeners work better if you register them
- *                                   with the core API.
- * 192474            130404 matrober Support for cloned environments
- * 189711.5          150404 matrober Missing FFDC entries reported in ffdclogs dir
- * 199169            210404 matrober javadoc problems
- * 195445.5          230404 jhumber  Change NLS message prefix
- * 196297            200504 kingdon  Support for Async Beans
- * 192502.1          250504 kingdon  Updated ASF methods to throw exceptions.
- * 215550            120704 kingdon  Remove unnecessary public interfaces
- * 201972.3          280704 kingdon  Core SPI exception update
- * 229130.1          070904 matrober ClientID not set after setExceptionListener
- * 222942            131204 kingdon  Review use of ExceptionReceived message.
- * 238447            240105 kingdon  Review FFDC generation.
- * 248030.3          240205 kingdon  Expose connected ME name to applications.
- * 260707            100305 kingdon  Fix memory leak in connection.close
- * 257585            190405 kingdon  Memory leak - temporaryDests added but not removed.
- * 294591            040805 kingdon  Deadlock. Connection.start vs Session.createTemporaryQueue.
- *                                   Fixed by synchronizing on the tempDest List instead of stateLock, so
- *                                   decoupling the two actions.
- * 339081            180106 holdeni  Only start connection once to avoid multi-thread
- *                                   problems if app starts conn while creating consumers.
- * 354537            140306 holdeni  rework synchronizatoion to avoid deadlock closing connection
- *                                   while still consuming messages that throw exceptions
- * 353701            150806 matrober Warn application writers they may be leaking JMS resources
- * 509271.1          010408 vaughton Performance optimisation work
- * 511433            090408 sibcopyr Automatic update of trace guards
- * 493388            240408 susana   Fix findbugs whinges
- * PK59962.1         080508 djvines  Forward port of PK59962 (always call exception listener on its own thread)
- * 519597            120509 dkvines  Catch blocks not instrumented
- * 520285            080513 sibcopyr Automatic update of trace guards
- * 498115            130508 susana   Move DEFAULT_DUPS_THRESHOLD to JmsSessionImpl
- * 521382            220508 susana   close() should not close coreConnection, as jcaConnection.close() does so
- * 479100            030709 djvines  Remove the processThrowable method from JmsErrorUtils
- * PK60857           180308 pnickoll close jcaConnection when other exception is thrown during close
- * PK85404           290409 pbroad   No need to hold stateLock while calling onException (since PK59962)
- * PK99026           221009 pbroad   Re-use ordering contexts to prevent comms leak
- * PM38672         08-Jun-11 ajw      Ensure that any new coreConnection is set in the JmsJcaConnection also
- * 110338            251013  romehla1 providing default durable subscription home as ME name 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.api.jms.impl;
 

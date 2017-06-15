@@ -1,28 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2006, 2007 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  DESCRIPTION:                                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  YY-MM-DD  Developer  Defect    Description                                       */
-/*  --------  ---------  ------    -----------                                       */
-/*  06-08-09  awilkins   LIDB4244  Creation                                          */
-/*  06-09-13  awilkins   385391    Document all cases when ISE may be thrown         */
-/*  07-04-16  awilkins   415521    Add getUOWName() method per design review comment */
-/*  07-06-14  awilkins   445363    Javadoc tag as IBM API                            */
-/*                                                                                   */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2006, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.websphere.uow;
 

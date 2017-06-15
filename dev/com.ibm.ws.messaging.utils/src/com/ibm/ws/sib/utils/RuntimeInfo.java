@@ -1,39 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * LIDB2117        031124 vaughton Original
- * LIDB3418-56     210405 nottinga Updated for componentization
- * 328282          051213 vaughton sib.config.properties
- * 341625          060126 djvines  Resolve unused imports
- * SIB0048b.uti.1  060922 mattheg  Add isFatClient() / reimplement isThinClient()
- * 400794          061129 mnuttall Prevent static block throwing NoClassDefFoundError
- *                                 when _isThinClient. Fix (c) block. Add _underscores
- *                                 to class member variables.
- * PK58698         080102 vaughton Fix loading of sib.properties file
- * 493023          080118 sibcopyr Automatic update of trace guards
- * PK60008         170408 pbroad   Provide access to the default thread pool
- * 516215          280408 sibcopyr Automatic update of trace guards
- * 516268          280408 vaughton Suppress msg when property from sib.config.properties
- * 624993          180810 venugopv Fixing probable leak of InputStream in getProperty()
- * 71830           290712 kavitha  Code modified for Liberty
- * 91142           160413 urwashi  Remove getDefaultServerThreadpool method
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.utils;
 

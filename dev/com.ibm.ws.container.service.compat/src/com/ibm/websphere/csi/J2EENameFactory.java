@@ -1,27 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// %Z% %I% %W% %G% %U% [%H% %T%]
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2000, 2012
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  J2EENameFactory.java
-//
-// Source File Description:
-//
-//     J2EENameFactory is used to create J2EEName instances from a byte array.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// f118829   ASV50     20020307 tkb      : New copyright/prologue
-// D363517.1 6.1       20060421 ericvn   : Add to websphere-apis.jar   
-// F71191    WAS90     20120723 daboshe  : Add javadoc      
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2000, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.csi;
 
 /**

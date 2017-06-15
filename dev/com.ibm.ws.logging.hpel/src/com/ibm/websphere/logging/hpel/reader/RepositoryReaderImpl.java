@@ -1,31 +1,13 @@
-//%Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2011
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason           Version        Date       User id     Description
- * ----------------------------------------------------------------------------
- * F001340-15950.1    8.0        09/04/2009   belyi       Initial HPEL code
- * F017049-18796.1    8.0        12/22/2009   spaungam    Add support for z/OS HPEL according to new file structure
- * 637177             8.0        02/02/2010   belyi       Empty trace directory results in NPE
- * F017049-18504      8.0        02/25/2010   spaungam    Add support for subprocess reading
- * 653791             8.0        05/25/2010   belyi       Make sure header is not 'null' for empty result.
- * 662627             8.0        07/27/2010   belyi       Adjust merge for the case when referenced timestamp is earlier than first log record in one of the repositories.
- * 669809             8.0        09/20/2010   belyi       Add methods to find out log and trace directories used by this reader.
- * 683078             8.0        12/21/2010   belyi       Adjust implementation to take advantage of time range provided in LogQueryBean
- * 686580             8.0        01/24/2011   belyi       Introduce 'switched' field to keep information where cache came from and where it needs to be applied.
- * 687486             8.0        01/28/2011   belyi       In getLogLists method if start time resulted in no instances search for first one
- * 681015             8.0        02/25/2011   belyi       Add implementation for getStartTime() method.
- * 696303             8.0        03/23/2011   belyi       Add initialization with a file or with an instance directory.
- * F017049-43800      8.1        06/29/2011   belyi       Add handling of GenericFile implementations including handling of ZIP files.
- * 199592             8.5.5      04/20/2016   sudhirk     The systemout messages are always printed AFTER trace, not together.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.logging.hpel.reader;
 
 import java.io.File;

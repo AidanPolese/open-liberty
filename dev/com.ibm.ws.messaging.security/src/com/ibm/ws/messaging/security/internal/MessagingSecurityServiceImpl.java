@@ -1,24 +1,13 @@
-/*
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012, 2013
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * 
- * Change activity:
- * ---------------  --------  --------  ------------------------------------------
- * Reason           Date      Origin    Description
- * ---------------  --------  --------  ------------------------------------------
- * 89260            07/01/13  Sharath   Null Pointer Exception in checkIfRolesAreUnique method
- * 92676            05/02/13  Sharath   Query User Registry when the checking for isUnauthenticated method
- * 89261            21/02/13  Sharath   Make sure that the warning gets printed irrespective of trace settings
- * 95690            05/03/13  Sharath   Null Pointer Exception while Permission tag is removed from the server.xml
- * 95909            18/03/13  Sharath   Changes related to new Messaging Security Story
- * 95788            18/03/13  Sharath   Throw the actual exception which will be caught by the calling function which wraps it under proper exception
- * 97244            25/03/13  Sharath   Making the destination permission maps to ConcurrentHashMap which might have caused threading issue
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.messaging.security.internal;
 

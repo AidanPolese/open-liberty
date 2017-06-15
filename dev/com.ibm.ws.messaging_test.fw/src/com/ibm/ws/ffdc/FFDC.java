@@ -1,29 +1,13 @@
-/* **************************************************************************
- * COMPONENT_NAME: sib.unittest.ffdc
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *  ORIGINS: 27
- *
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- *
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason         Date        Origin   Description
- * -------------- ----------- -------- -------------------------------------
- * d284571        20-Jul-2005 djvines  Creation - taken from WAS.ffdc
- * d412803        02-Jan-2007 djvines  Support invocation of diagnostic modules
- * **************************************************************************
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.ffdc;
 
 import java.util.HashMap;

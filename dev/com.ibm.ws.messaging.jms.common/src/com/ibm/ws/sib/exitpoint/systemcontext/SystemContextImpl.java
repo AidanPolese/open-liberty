@@ -1,34 +1,13 @@
-/*
- * COMPONENT_NAME: sib.exitpoint.systemcontext.impl
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *  ORIGINS: 27
- *
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date        Origin   Description
- * --------------- ----------- -------- ----------------------------------------
- * d233061         20-Sep-2004 nottinga Initial Code Drop.
- * f182745.9.3     04-Oct-2004 nottinga Updated for zSeries SOAP/JMS support.
- * d237290         06-Oct-2004 nottinga Added isReverseRoutingPathEmpty method.
- * fSIB0006.ep.1   22-Sep-2005 nottinga Moving interfaces to SERV1.
- * d435248         27-Apr-2007 nottinga Fix findbugs problems.
- * d542891         12-Aug-2008 nottinga Mangle the format field to add the contentType.
- * d542891.2       17-Aug-2008 nottinga Backout 542891 which broke all SOAP/JMS on z/OS, but SwA.
- * d604938         13-Aug-2009 djvines  Hide from trace properties called password
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.exitpoint.systemcontext;
 
 import java.io.IOException;

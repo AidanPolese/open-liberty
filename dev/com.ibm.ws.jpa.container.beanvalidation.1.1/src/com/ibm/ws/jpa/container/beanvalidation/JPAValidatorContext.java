@@ -1,25 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// %I% %W% %G% %U%
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2010, 2016
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  JPAValidatorContext.java
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// F743-30405 WAS80    20100715 darveaux : Defer actual bean validation work as long as possible
-// d727932   WAS85     20120208 xuhaih   : refactor for bean validation access
-// RTC200353  WAS90    20160107 nmittles : Adding placeholder methods to support bval 1.1 API updates
-// RTC202465  WAS90    20160126 njr      : Implement bean validation 1.1 methods
-// --------- --------- -------- --------- -----------------------------------------
-
+/*******************************************************************************
+ * Copyright (c) 2010, 2016 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.container.beanvalidation;
 
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_RESOURCE_BUNDLE_NAME;

@@ -1,3 +1,13 @@
+<!--
+    Copyright (c) 2017 IBM Corporation and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+   
+    Contributors:
+        IBM Corporation - initial API and implementation
+ -->
 <!--  THIS FILE SHOULD NEVER CHANGE. 
 The contents of the core and extended archives is locked to what it was at 8.5.5.2.
 All new features should be delivered via the repository. -->

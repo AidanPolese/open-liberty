@@ -1,29 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.13 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/IdToObjectMap.java, SIB.comms, WASX.SIB, aa1225.01 07/10/03 05:19:30 [7/2/12 05:58:58]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-I63, 5724-H88, 5655-N01, 5733-W60          (C) Copyright IBM Corp. 2003, 2007
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030811 prestona Original
- * f174317         030828 mattheg  Fix trace statements and add iterator() method
- * D214655         040811 mattheg  Performace optimize by removing containsKey() checks
- * D256974         050222 mattheg  NLS
- * D297060         050821 prestona IdToTransactionTable memory leak
- * 471664          071003 vaughton Findbugs tidy up
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server;
 
 import java.util.Collection;

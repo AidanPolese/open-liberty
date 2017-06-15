@@ -1,87 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70
-// (C) COPYRIGHT International Business Machines Corp. 1997, 2017
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//
-//  CHANGE HISTORY
-// Defect       Date        Modified By     Description
-//--------------------------------------------------------------------------------------
-//PK15276       01/03/06    mmolden         INCORRECT FILTER MAPPING: WAS 6.0.2 VIOLATES THE SERVLET    WAS.webcontainer
-//PK16370       01/04/06    mmolden         Log error statements when there is a failure to load listeners
-//PK16542       01/05/06    mmolden         SERVLET ERROR - AXIXSERVLET WHEN RUNNING DIFFERENT AXIS VERSION
-//337819        01/12/06    todkap          static request not invoking Dynacache when policy is defined    WAS.webcontainer
-//340680        01/24/06    mmolden         content type fails when static resource has path element
-//341303        01/25/06    mmolden         Change WebContainer APIs to allow modification of ServletConfig
-//PK17371       02/03/06    ekoonce         CLASSLOADER REFERENCE OBTAINED FROM THE WEBMODULE IS NOT NULLED
-//PK19394       02/28/06    todkap          WEBAPP DOES NOT RELEASE SESSION CONTEXT AFTER WEBAPP DESTROY.    WAS.webcontainer
-//PK18713       03/17/06    ekoonce         STARTED THE APPLICATION AND I SEE THE FOLLOWING ERROR MESSAGE
-//PK18917       04/13/06    ekoonce         CHANGE OUTPUT LEVEL FOR ADDDYNAMICSERVLET MESSAGES
-//PK21127       04/17/06    mmolden         response.sendError(404) call after request.setCharacterEncoding causes UnsupportedEncodingException: JISAutoDetect
-//PK23428       04/19/06    ekoonce         sendError() throws IllegalStateException
-//370167        06/23/06    mmolden         61FVT:Unable to active Mbean, InstanceAlreadyExistsException    WAS.webcontainer
-//PK27660       07/14/06    ekoonce         SERVLETCONTEXTLISTENER.CONTEXTDESTROYED(SERVLETCONTEXTEVENT)
-//377689.1      07/19/06    mmolden         6101FVT: ServletConfigGetServletContextTest failing in watchDog
-//PK27974       08/21/06    cjhoward        WAS V6 HAS DIFFERENT BEHAVIOUR FOR TRAILING "/" IN URI
-//PK27620       08/21/06    cjhoward        SERVLET FILTER IS NOT CALLED IN V6 FOR URL RESOURCES WHEN THESE ARE NOT FOUND.  IN V5, THE FILTER IS ALWAYS CALLED
-//PK27027       08/22/06    ekoonce         ConcurrentModificationException thrown from attributes HashMap
-// 390332       09/14/06    mmolden         CTS:<jsp-property-gruop> tag not resolved for a particular URL
-//398349        10/17/06    ekoonce         CTS: Incorrect Minor Version returned by server
-//PK34418       11/30/06    goff1           THE HTTPSESSIONATTRIBUTELISTENER CLASS DOES NOT LOAD WHEN THE
-//406426        12/04/06    ekoonce         untranslated error message logging in to admin console
-//PK33511       01/11/07    mmolden         Upgrade error message info in intializeTargetMappings
-//LIDB3292-32.2 03/20/2007  cjhoward        WASX injection engine integration
-//428887        03/27/07    cjhoward        Need to create some ext. procs. before populateJavaNameSpace()
-//430016        04/09/07    cjhoward        BVT:RTF: AdminConsoleSSL --  500 Internal Error
-//PK31450       04/20/07    mmolden         WHEN THERE ARE MULTIPLE SERVANT REGIONS PER CONTROL REGION
-//PK37449       04/26/07    ekoonce         A THREAD DEADLOCK MAY OCCUR
-//PK37608       04/27/07    mmolden         Suppress/Include $WSEP header in error reposne based on custom property and header in request
-//434577        05/04/07    cjhoward        70FVT: PostConstruct and PreDestroy methods not called
-//LIDB4336-35   09/25/07    mmolden         Remove mime filtering
-// 461383       09/28/07    mmolden         70FVT: Async should still work when ARD is disabled
-//PK50133       10/05/07    sartoris        JSPExtensionClassLoader objects causing OOM
-//486204        12/07/07    mmolden         Check version number before executing new getSession path
-//PK55149       12/07/07    mmolden         Add custom property to allow error exception-type preceding status-code
-//PK55330       12/07/07    mmolden         SOAP ADDRESS LOCATION ATTRIBUTE OF THE WSDL FOR THE PARTICULAR
-//501767        02/29/08    mmolden         FVT70:Static objects are not getting cached codelevl: DD808.25
-//505048        03/17/08    cjhoward        70FVT RTFb: Destroy not happening for RI
-//519410        05/14/08    mmolden         SVT:unexpected InvalidPortletWindowIdentifierException
-//PK63920       05/19/08    mmolden(srpeters)        SRVE0058E SEEN WHEN CUSTOMER TRIES TO STOP PORTLET APPLICATION
-//PK64290       05/20/08    mmolden         SESSION LOSS WHEN USING ONLY URLREWRITING
-//521208        05/27/08    cjhoward        PERF: Optimizations to notifyServlet methods in WebAppImpl
-//PK64421       05/28/08    mmolden         MESSAGES SRVE0180I/SRVE0181I WITH STACK TRACES SHOULD NOT APPEA
-//PK67022       06/09/08    mmulholl        Suppress stack from message added by PK57136
-//PK74092       11/10/08    mmolden         LOAD-ON-STARTUP INDICATION FOR SIPLETS IS NOT LOADING THE
-//PK76142       12/05/08    mmulholl        getMimeType throws StringIndexOutOfBoundsException if passed empty string
-//PK77421       12/12/08    anupag          Add "!" to SUPPRESS_HTML_RECURSIVE_ERROR_OUTPUT custom property
-//PK79894       03/18/09    anupag          Add path elements(servletPath and pathInfo) to j_security_check and ibm_security_logout
-// 569469       03/19.09    mmulholl        Improve trace
-//PK79143       02/25/09    mmulholl        sendRedirect always causes chunked response
-//PK82657       03/25/09    mconcini        JSPClassLoaderLimit does not include forwards and includes
-//PK83345       04/19/09    anupag          Load-on-startup for servlet cause NPE on injected objects
-//PK97815       10/06/09    anupag          Do not put Servlet,Filter in Service After Null Injection, defect 596191
-//PM03788       01/12/10    anupag          Provide option for sending HTML formatted message in sendError.
-//PM18512       11/02/10    mmulholl(anupag) Encode the servletName while prinitng Error info.
-//
-//F011107       05/18/11    pmdinh          FIS not "always" trigger login process for URL that contains j_security_check
-//PM58908       02/23/12    pnicoluc        JSCOOKMENU DOES NOT RENDER - getMimeType StringIndexOutOfBoundsException
-//PM70296       08/07/12    anupag          Call destroy when servlet mapping not available
-//PM71991       01/14/13    anupag          Attribute should be removed if null object is passed to setAttribute // PM79917
-//PM79980       01/18/13    anupag          Add Namespace collaborator to j_security_check URI , PM78898 trad
-//PI09474       02/03/14    lmoppenh        Display a default error page
-//PI09896       02/27/14    lmoppenh        removed call to chown in getTempDirectory
-//PI20514       08/15/14    zaroman         Fix Servlet init during loadOnStartup()
-//131004        09/29/14    bitonti         Unconditionally enable default error page in servlet 3.1
-//148139(CD)/   10/17/14    bitonti         Security annotation processing not checking metadata-complete
-//150253(CD-STAB)
-//PI26908       12/01/14    zaroman         Run notiyServletRequestDestroyed() if it was deferred and no error page is defined
-//PI60797       05/02/16    pmdinh          Option to disable all methods but POST for /j_security_check
-//PI58875       06/06/16    pmdinh          Option to stop app from startup when there is exception in listener.  Also fix classLoader memo leak when app fails to start
-//224732        09/21/16    sartoris        threads blocking during heavy load in lookupMethod
-//238764        04/04/17    ttorres         Add doPrivileged for System.getProperty("com.ibm.servlet.engine.disableServletAuditLogging")
-//
+/*******************************************************************************
+ * Copyright (c) 1997, 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.webapp;
 
 import java.io.File;

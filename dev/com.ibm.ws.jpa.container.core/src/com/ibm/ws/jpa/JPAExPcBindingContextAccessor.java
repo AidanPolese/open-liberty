@@ -1,28 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// %I% %W% %G% %U%
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2008, 2012
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  JPAExPcBindingContextAccessor.java
-//
-// Source File Description:
-//
-//     Extend-scoped persistence context binding context accessor interface.
-//
-// Source File Description:
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d515803   WAS70     20080606 tkb      : Perf: Remove JPA hooks in pre/postInvoke
-// d741678   WAS855    20121116 tkb      : Remove dependency on EJBException
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa;
 
 /**

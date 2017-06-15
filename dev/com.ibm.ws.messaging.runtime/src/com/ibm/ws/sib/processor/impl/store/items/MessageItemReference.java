@@ -1,57 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- *  
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * SIB0002.tran.2   050805 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.tran.2   050805 tevans   New Transactions interfaces
- * SIB0041.mp.1     300805 cwilkin  Total Message Ordering
- * 302341           301105 cwilkin  Durable stats across restarts
- * 306998.22        050106 gatfora  Trace performance improvements
- * 345318.1         220206 cwilkin  Provide eventPreUnlocked callback
- * SIB0112b.mp.1    090806 gareth   Large message support
- * 409469           281206 tevans   Refactor LME
- * SIB0112le.mp.1   130207 ajw      Large Message surport
- * PK38602          050307 cwilkin  reset pre_unlocked events
- * SIB0113a.mp.1    240707 cwilkin  Gathered Consumer foundation
- * 455462           210807 cwilkin  FINDBUGS tidy up
- * SIB0113b.mp.1    040907 dware    Initial support for SIB0113b function
- * SIB0163.mp.4     081107 nyoung   Support the driving of Message Events.
- * SIB0113a.mp.9    091107 cwilkin  Gathering Consumers
- * SIB0163.mp.5     221107 nyoung   Exploit new MFP MessageControlClassification property
- * SIB0115.mp.3     230108 nyoung   Hidden message expiry and pending_retry support
- * 508655           010508 dware    Reverse order of event callbacks to match MessageItems
- * 5200453          130508 dware    Fix the JsMessage release logic to only release this reference's handle
- * 488794           100608 cwilkin  Flow redelivery count from RME to DME
- * 492029           260608 dware    Improve toString
- * 536156           160708 nyoung   Allow 3 concurrent UNLOCK message event listeners.
- * 515543           180708 cwilkin  Handle MessageStoreRuntimeExceptions on msgstore interface
- * PK69180          180708 ajw      recall initialiseNonPersistent if restore was called before MP started
- * 541867           130808 dware    Change the order of the unlock events (make the ConsumerDispatcher last)
- * 510343           090908 dware    Handle NotInStore exception in toString() and improve xml data
- * 668676           291010 skavitha method to get the message from store if available
- * 691237           190311 skavitha register for post events if required
- * PM38052          030511 ajw      Release references to JsMessage in afterCompletion
- * F1332-51593      280911 vmadhuka Persist redelivery count to FILESTORE
- * 724676           261211 chetbhat ME fails to START after WAS80 to WASX Migration
- * 726258           270111 chetbhat RDC feature not working for migration test
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.impl.store.items;
 

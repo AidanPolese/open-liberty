@@ -1,34 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// 1.13 SERV1/ws/code/utils/src/com/ibm/ejs/util/FastHashtable.java, WAS.utils, WASX.SERV1, aa1225.01 10/11/10 10:25:00
-//
-// IBM Confidential OCO Source Material
-//
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2010
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  FastHashtable.java
-//
-// Source File Description:
-//
-//     Provides an optimized Hashtable implementation.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d173022.12 ASV51X   20020814 leealber : Close The Gap - add new get/put with no
-//                                         bucket synchronization
-// LIDB2775-23.3 ASV60 20031215 pdykes   : Unity - integrate zOS specific changes
-// d218838   WAS60     20040818 tkb      : PERF: redesigned for performance/size
-// d366845.3 EJB3      20060615 kjlaw    : add generics for EJB3 usage.
-// d477704   WAS70     20071107 mcasile  : Switch to new FFDC Facade API
-// F743-33394
-//           WAS80     20101011 bkail    : Don't precreate buckets
-// --------- --------- -------- --------- -----------------------------------------
-
+/*******************************************************************************
+ * Copyright (c) 2002, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ejs.util;
 
 import java.util.Dictionary;

@@ -1,52 +1,13 @@
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/* ORIGINS: 27                                                                                           */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2004,2012 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  YY-MM-DD  Programmer  Defect    Description                                                          */
-/*  --------  ----------  ------    -----------                                                          */
-/*  04-05-07  awilkins    200172    Creation                                                             */
-/*  04-05-14  awilkins    202175    UOWScopeCallback registration                                        */
-/*  04-05-25  awilkins    202175.1  Provide accessor to current UOWScope                                 */
-/*  04-06-22  mdobbie     202452    Replace ASManager JNDI lookup with method call                       */
-/*  04-06-24  awilkins    210577    AS is UOWScope if LTC is enlisted as resource                        */
-/*  05-07-25  hursdlg     292139    Added ltc.isContainerResolved                                        */
-/*  06-10-13  johawkes    LIDB4548-1.1 Implement SPI                                                     */
-/*  06-10-18  johawkes    398810    Begin trans with WebSphereUserTransaction                            */
-/*  07-01-05  johawkes    413254    Handle case with no UOW on thread                                    */
-/*  07-01-16  johawkes    414406    Handle RuntimeException from UOWAction properly                      */
-/*  07-01-20  johawkes    415931    Fix fake ComponentMetaData                                           */
-/*  07-01-25  awilkins    416505    Handle RuntimeException from UOWAction.run() properly when join=true */
-/*  07-02-07  awilkins    419093    Don't throw RolledbackException in cleanup if setRBO from app        */
-/*  07-04-16  awilkins    415521    Add implementation of getUOWName()                                   */
-/*  07-07-18  awilkins    PK49179   RuntimeExceptions from UOWAction.run() should be re-thrown as-is     */
-/*  07-08-24  awilkins    454111    Run under LTC = bean method scoped and application resolved LTC      */
-/*  08-02-25  johawkes    497818    Use ActivitySessionService.isStarted()                               */
-/*  08-03-05  mallam      501513    No LocalTransactions in client                                       */
-/*  08/03/28  mallam      498639    add activity context to token                                        */
-/*  08-06-10  mallam      522891    No ActivitySessionManager in client                                  */
-/*  09-06-29  brailsfo    PK89517   NPE when ActivitySession not started on server                       */
-/*  09-12-17  johawkes    631894    Make overridden methods protected                                    */
-/*  09-12-21  johawkes    631894.1  Remove unnecessary reference to LocalTranCoordImpl                   */
-/*  09-12-21  johawkes    633515    Make callback manager fields protected                               */
-/*  10-07-10  amurray2    PM18033   FFDC incorrectly shows Global transaction timed out after 0 seconds  */
-/*  11-06-21  johawkes    F010627   Add getUOWExpiration                                                 */
-/*  11-11-24  johawkes    723423    repackaging                                                          */
-/*  12-06-13  nyoung      735525    resumeAll() needs to be reworked                                     */
-/*  13-04-17  jstidder    PM83253   Prevent tx silently rollback after client inactivity timeout         */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2004, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.uow.embeddable;
 

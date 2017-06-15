@@ -1,16 +1,13 @@
-//IBM Confidential OCO Source Material
-//5630-A36 (C) COPYRIGHT International Business Machines Corp. 1997-2010
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-
-//Code added as part of LIDB 2283-4
-//  CHANGE HISTORY
-//  Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//  PM06111       02/08/2010    mmulholl            Add methods for a scalable ClauseTable to support use of String keys 
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.util;
 
 import java.util.ArrayList;

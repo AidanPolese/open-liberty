@@ -1,29 +1,13 @@
-//%Z% %I% %W% %G% %U% [%H% %T%]
-
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2012
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Provide interface for remote access to High Performance Extensible Logs through implicit use of MBeans
- *
- * Change History:
- *
- * Reason            Version    Date        User id     Description
- * ----------------------------------------------------------------------------
- * F017049-16882.1    8.0      01-27-2010   belyi       Part created.
- * F017049-18504      8.0      02/25/2010   spaungam    Add support for subprocess reading
- * 647314             8.0      04/09/2010   belyi       Use specified locale to request log record translation.
- * F017049-18504.1    8.0      03/07/2010   spaungam    Update javadoc
- * 647124             8.0      04/20/2010   belyi       Throw exceptions on errors
- * F017049-22352      8.0      08/05/2010   belyi       Add handling result cache.
- * 665629             8.0      12/07/2010   belyi       Remove reference to removed size() method.
- * 686580             8.0      01/24/2011   belyi       Introduce field for record limit per request.
- * 681015             8.0      02/25/2011   belyi       Add implementation for getStartTime() method.
- * 731658             8.0      04/24/2012   belyi       Fix how thread id is converted to a string.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.logging.hpel.reader;
 
 import java.util.AbstractMap;

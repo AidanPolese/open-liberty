@@ -1,63 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012, 2015 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012, 2015
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- *                   230403 kingdon  Original, copied from MQJMS j000.
- * 164777            010503 matrober Remove exception from inbound constructor
- * 164776            080503 matrober JMS acknowledge modes
- * 166631.01         210503 matrober Need to cater for MessageCreateFailedException
- * 168323            120603 amardeep Constructor that takes a bytes message
- * 170067            200603 matrober Refactor JMS interfaces (com.ibm.websphere)
- * 174818            220803 kingdon  Ensured that checkBodyWriteable calls were made from
- *                                   all write* methods, so that error message contain
- *                                   correct method name. Some double checking could be
- *                                   optimised out in future releases.
- * 175063            260803 kingdon  CTS requires getBodyLength to throw MessageNotReadableException
- * 175231            270803 amardeep use correct classname registering trace
- * 181084            291003 matrober javax.jms.Message.toString() needs improvement
- * 184280            011203 matrober Finish SibTr trace work
- * 169412            050204 kingdon  Support JMS_IBM_Encoding and JMS_IBM_Character_Set
- * 189711            110204 jhumber  Missing FFDC entries reported in ffdclogs dir
- * 191790.4          250204 jhumber  NLS: JMS message review
- * 191790.1          270204 matrober NLS: JMS msg review (MR)
- * 192499            040304 jhumber  Provide default call to super in equals()
- * 191838            100304 kingdon  Assign serialVersionUID
- * 192355            100304 kingdon  Reset encoding and characterSet during clearBody
- * 199169            210404 matrober javadoc problems
- * 195445.5          230404 jhumber  Change NLS message prefix
- * 228074            310804 matrober JmsBytesMessageImpl constructor fails with null body
- * 222942            081204 kingdon  Review use of exception received message
- * 238447            110105 kingdon  Review generation of FFDCs
- * LIDB3706-5.188    270105 kingdon  serialization compatibility
- * d268037           190405 kingdon  Performance: lazy init for incoming messages.
- * d271802           280405 kingdon  getBodyLength needed check for lazy init.
- * d252032           100505 kingdon  Problems with encoding and toString.
- *                                   Encoding wasn't working correctly for multiple sends of the
- *                                   same message, and to toString was behaving inconsistently wrt
- *                                   non-default encoded data on the sent and received messages.
- * 285462            170805 kingdon  Msg serialization fails on received messages
- * 341592            300106 holdeni  remove unused locals
- * SIB0121.jms.3     220107 jamessid Adding exception handling related to performance changes
- * SIB0121.jms.4     260207 jamessid Remove 'guarantee' prop value, add forwarder flag to ActSpec
- * 438229            160507 matrober PERF: MQRequestReplyUtils.configureIncomingMessageData
- * 493388            220408 susana   Fix findbugs whinges
- * 497488            290709 djvines  Move HexString to utils
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.api.jms.impl;
 
 import java.io.ByteArrayInputStream;

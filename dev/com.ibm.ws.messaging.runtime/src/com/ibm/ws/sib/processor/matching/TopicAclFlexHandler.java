@@ -1,28 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 184185.1.2       190204 nyoung   Add basic MatchSpace ACL support.
- * 184185.1.6       270404 nyoung   Enable delivery time discriminator access checks.
- * 218436           220704 nyoung   Synchronization defects in MessageProcessorSearchResults.
- * SIB0163.mp.2     171007 nyoung   Code Review Improvements.
- * 480930           061107 sibcopyr Automatic update of trace guards 
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.matching;
 

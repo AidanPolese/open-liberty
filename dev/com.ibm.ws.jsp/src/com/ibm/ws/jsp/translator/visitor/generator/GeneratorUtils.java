@@ -1,24 +1,13 @@
-//IBM Confidential OCO Source Material
-//  5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//  The source code for this program is not published or otherwise divested
-//  of its trade secrets, irrespective of what has been deposited with the
-//  U.S. Copyright Office.
-//
-//  Revisions:
-//  Defect 213290  2004/06/30  Allow tagfile attributes to be specified as "[L<classname>;"
-//  Defect PK03712 2005/05/20  URLEncoded object not converted to String
-//  feature LIDB4147-9 "Integrate Unified Expression Language"  2006/08/14  Scott Johnson
-//  jsp2.1work
-//  Defect 395182.2  70FVT: make servlet 2.3 compatible with JSP 2.1 for migration 2007/02/07 Scott Johnson
-//  Feature 4147-24 "JSP 2.1 upgrade: Incorporate resource injection engine"  2007/03/30 Curtiss Howard
-//  Feature LIDB3292-43 "Integrate AMM with webcontainer" 2007/10/12 cjhoward
-//  Defect PK65013 2008/07/07  Need ability to customize pageContext variable.
-//  Defect  PK81147 2009/02/25  fix NPE when customer is using jsp page attribute "extends"
-//  Defect PM06063 2010/01/26 pmdinh    Add a flag to disable Feature 4147-24 "JSP 2.1 upgrade: Incorporate resource injection engine"
-//  Defect  PM21395 09/02/2010  pmdinh      Decode double quote in the attribute of a tag script
-//  Defect PM81674 07/14/2014   hmpadill    Evaluate expressions when preceded by a double backslash (tWAS PM70967)
-//  Defect PI59436 03/22/2015   hmpadill    EL expressions returning null in EL 3.0 could produce NPE
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.generator;
 
 import java.io.CharArrayWriter;

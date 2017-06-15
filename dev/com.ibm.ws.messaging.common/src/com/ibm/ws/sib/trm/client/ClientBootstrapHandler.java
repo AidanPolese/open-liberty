@@ -1,29 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.46 SIB/ws/code/sib.trm.client.impl/src/com/ibm/ws/sib/trm/client/ClientBootstrapHandler.java, SIB.trm, WASX.SIB, aa1225.01 08/02/25 21:39:04 [7/2/12 05:58:42]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * LIDB2117        030509 vaughton Original
- * LIDB3645        050124 vaughton Recovery mode
- * 281683.1        050926 gelderd  SVC: Improved diagnostic on bus connect failure - part 1
- * 290290.3        051101 gelderd  Improved entry/exit trace for sib.trm.client.impl
- * 499831          080222 djvines  Use autoboxing for trace
- * 500546          080226 sibcopyr Automatic update of trace guards 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.trm.client;
 

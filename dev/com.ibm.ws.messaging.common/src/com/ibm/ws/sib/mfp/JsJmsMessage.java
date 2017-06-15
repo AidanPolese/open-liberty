@@ -1,51 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 158444          030207 susana   Original
- * 158574          030210 susana   Rename make methods to clarify usage & fix setRedelivered
- * 158852          030213 susana   Scaffold implementation part 1
- * 159110          030218 susana   Scaffold implementation part 2
- * 159294          030303 susana   Tidy up message header fields - part 1
- * 164825          030502 susana   More header field refinements
- * 174700          030909 susana   Remove setBodyType
- * 177553          031113 susana   Add getJmsxDeliveryCount
- * 180540          031210 susana   Add uncheckedSetXxxxx
- * 179339.1        031216 susana   Add uncheckedSet for Forward and Reverse Routing Path
- * 180540.1.8      040113 susana   Allow nulls in uncheckedSetReplyXxxx
- * 186986          040119 susana   JmsDestination & JmsReplyTo to byte arrays
- * 182191.1        040120 markesc  Add pub-sub bridge support
- * 186446          040217 susana   JMSXAppId compact representation
- * 190322          040305 susana   Resolve JMS Property anomalies
- * 184157.4        040312 baldwint Preserve true message format information
- * 190322.3        040323 susana   Delete deprecated getPropertyNames
- * 182191.25.1     040415 markesc  Move get/setMQPublicationInfo up to JsApiMessage
- * 199144          040419 susana   Fix javadoc
- * 193066.5        040429 susana   Make setNonNullProperty public & remove redundant sets
- * 185656          040902 susana   Tidy up imports etc
- * 325186.1        051124 susana   Move remaining special property processing from api.jms.impl
- * 384726          060816 susana   Remove Java 5 unchecked warnings
- * 407670.1        070706 susana   Add alreadySent()
- * 572757          090210 susana   Fix generics whinge for getPropertyNameSet
- * 577272.1        090227 susana   Allow JMS API to get JMSXGroupSeq without fluffing up map/lists unnecessarily
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.mfp;
 
 import java.util.List;

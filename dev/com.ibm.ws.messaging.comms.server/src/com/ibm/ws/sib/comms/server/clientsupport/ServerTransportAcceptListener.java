@@ -1,40 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.25 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/ServerTransportAcceptListener.java, SIB.comms, WASX.SIB, aa1225.01 10/03/25 10:06:23 [7/2/12 05:59:00]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2004, 2010
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030325 schmittm Original
- * f166313         030506 schmittm add TRM support + cleanup
- * f166959         030520 schmittm WsByteBuffer and TCPChannel rework
- * d170527         030625 mattheg  Tidy and change to SibTr
- * d173544         030805 mattheg  Take out the call to setConversation()
- * F193735.3       040607 prestona PMI
- * D219803         040810 mattheg  Access on getInstance()
- * D199177         040816 mattheg  JavaDoc
- * D321398         051107 mattheg  Add support for conversation tracking
- * D361638         060410 mattheg  Improve connection cleanup
- * D364053         060421 mattheg  Clean up connection from Map when no Conversations remain
- * SIB0100.wmq.3   070815 mleming  Allow ConversationCloseListener chaining
- * 464663          070905 sibcopyr Automatic update of trace guards
- * 471664          071003 vaughton Findbugs tidy up
- * PK53356         071008 prestona Deadlock between MP close connection and removeAllConversations
- * PK83641         310309 ajw      reset LinkLevelState when returning from pool
- * F002074         091022 mleming  MEP support FIS
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import java.util.ArrayList;

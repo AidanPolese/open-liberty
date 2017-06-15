@@ -1,45 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.34 SIB/ws/code/sib.jfapchannel.server/src/com/ibm/ws/sib/jfapchannel/ServerConnectionManager.java, SIB.comms, WASX.SIB, aa1225.01 09/04/22 11:34:10 [7/2/12 05:59:06]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2003, 2009
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030424 prestona Original
- * F166959         030521 prestona Rebase on non-prototype CF + TCP Channel
- * F171173         030707 prestona Add capacity reporting interfaces.
- * F174602         030819 prestona Switch to using SICommsException
- * F175658         030902 prestona Add support for heartbeating.
- * F178499         031002 prestona CF not being started in Client Container workaround.
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * F182479         031127 prestona New ConnectionProperties varient required.
- * F184828         031204 prestona Update CF + TCP prereqs to MS 5.1 level
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * F189000         030130 prestona Expose WLM endpoints through CF
- * F189351         040203 prestona CF admin support
- * F196678.10      040426 prestona JS Client Administration
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199145         040812 prestona Fix Javadoc
- * D249068.1       050413 mattheg  Unwrap InvocationTargetException on init
- * D377648         060714 mattheg  Remove getBufferPoolManager() method
- * SIB0100.wmq.3   070816 mleming  Allow WMQRA to make use of TCP Proxy Bridge
- * 464663          070805 sibcopyr Automatic update of trace guards
- * 462062          080520 mleming  Improve diagnostics
- * 581917          090415 mleming  Start up chains when bus added dynamically
- * 581917          090422 djvines  Refacor the preceding change
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.server;
 
 import java.lang.reflect.Constructor;

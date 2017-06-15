@@ -1,50 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5639-D57,5630-A36,5630-A37,5724-D18 (C) COPYRIGHT International Business Machines Corp. 2002, 2014 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/* DESCRIPTION:                                                                      */
-/*                                                                                   */
-/* Change History:                                                                   */
-/*                                                                                   */
-/* Date      Programmer  Defect         Description                                  */
-/* --------  ----------  ------         -----------                                  */
-/* 06/06/03  beavenj     LIDB2472.2     Create                                       */
-/* 01/07/03  beavenj     170101         Support for expanding log file               */
-/* 11/07/03  beavenj     171515         Extend exception model                       */
-/* 15/07/03  beavenj     172166         Add 'this' to trace points                   */
-/* 28/07/03  beavenj     171616         Throw correct exception if write fail        */
-/* 03-08-01  irobins     171437.26      AccessController package change              */
-/* 03-09-29  awilkins                                                                */
-/*           beavenj     175817         Changes for CScope logging (NIO)             */
-/* 03-10-30  beavenj     181324         Ensure header FRSN written on keypoint       */
-/* 03-11-18  awilkins    181729         Output message before expanding file         */
-/* 04-01-09  awilkins    LIDB2775-53.5  z/OS code merge                              */
-/* 04-03-24  awilkins  LIDB2775.53.5.1  Exception chaining & non-mapped files        */
-/* 26-07-04  beavenj     209636         Add Client Version Support                   */
-/* 26-08-04  beavenj     227136         Prevent potential log collision              */
-/* 28-09-04  hursdlg     231874         Handle invalid header on restart             */
-/* 01-10-04  beavenj     227515         Messages                                     */
-/* 21/01/04  beavenj     238410         NFS 4 Tolleration                            */
-/* 10/02/05  mdobbie     LI3603         Use RecoveryLogMsgs message bundle           */
-/* 03/03/05  hursdlg     254326         More failure diagnostics                     */
-/* 04/03/05  hursdlg     255605         Shared file descriptors                      */
-/* 05/01/06  mdobbie     333870         Catch IOException from file buffer force()   */
-/* 06/15/06  mezarin     355721         Do not log exception if failed to map log    */
-/* 25/07/07  mallam      453651         move conditions for leaveGroup/terminate     */
-/* 12/10/07  hursdlg     466150         Disable mapped file usage on HA/Windows      */
-/* 25/05/12  amurray2    PM14310        Reset file Channel position after Exception  */
-/* 21/03/12  nyoung      731093         Default noMemoryMappedFiles to true on z/OS  */
-/* 22/05/14  slaterpa    PI18414        Add byte by byte scanning support            */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2002, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.recoverylog.spi;
 
 import java.io.File;

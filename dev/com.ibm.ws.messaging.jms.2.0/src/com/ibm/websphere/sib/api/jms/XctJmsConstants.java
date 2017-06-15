@@ -1,30 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- * F1344-55234.2     011211 skavitha Original   
- * F1344-55237       021211 skavitha PubSub annotation strings added
- * 724314            061211 skavitha New XCT strings added
- * F1344-55548       071211 skavitha New XCT strings added
- * F1344-55985       161211 skavitha New XCT strings added
- * F1344-55545       191211 skavitha New XCT strings added
- * F1344-59478       090212 skavitha Constants for data capture added
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.websphere.sib.api.jms;
 

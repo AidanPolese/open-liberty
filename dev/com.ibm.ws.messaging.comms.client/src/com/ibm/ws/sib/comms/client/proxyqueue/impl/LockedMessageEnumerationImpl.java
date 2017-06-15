@@ -1,59 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.53 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/proxyqueue/impl/LockedMessageEnumerationImpl.java, SIB.comms, WASX.SIB, uu1215.01 09/08/24 08:17:28 [4/12/12 22:14:07]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2009
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030702 prestona Original
- * d169897.2       030707 schmittm Provide remote client implementation of new Core API as defined
- * f174317         030827 mattheg  Add local transaction support
- * d172528         030808 mattheg  Implement getRemainingMessageCount() and resetCursor()
- * f173765.2       030925 mattheg  Core API M4 update
- * f177889         031001 mattheg  Core API M4 completion
- * d178368         031008 mattheg  Ensure delete set gets flowed at the correct priority
- * f181927         031111 mattheg  Allow global transations to be exposed
- * d181719         040109 mattheg  Transaction synchronisation support
- * f184390.3       040123 mattheg  Revised Qos
- * f187521.2.1     040126 mattheg  Unrecoverable reliability -- part 2
- * f191114         040218 mattheg  Multicast support
- * f192215         040220 mattheg  Proxy queue enhancements
- * d177816.1       040227 mattheg  Update for new Core API exceptions
- * f200337         040428 mattheg  Message order context implementation
- * D202977         040524 mattheg  getRemainingMessageCount re-write
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D218666         040811 mattheg  Ensure getRemainingMessageCount() is always accurate
- * D218666.1       040812 mattheg  Add unlockUnseen() method
- * D223998         040813 mattheg  Bad use of Reliability.toInt()
- * D199177         040816 mattheg  JavaDoc
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D233768         040924 mattheg  Re-write to fix incorrect message counts (not change-flagged)
- * D249096         050129 prestona Fix proxy queue synchronization
- * D247845         050202 mattheg  Multicast enablement
- * D307265         050918 prestona Support for optimized transactions
- * D333217         051216 mattheg  Extra trace
- * D341593         060130 mattheg  Remove un-used locals
- * D365952         060523 mattheg  Add support for SIMessageNotLockedException
- * D384259         060815 prestona Remove multicast support
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * D492528         080118 mleming  Fix up trace
- * PK86574         090528 pbroad   Allow strict message redelivery ordering
- * D570189         090721 mleming  Compact array in unlockUnseen
- * D605093         090824 mleming  Provide single isRecoverable implementation
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client.proxyqueue.impl;
 
 import com.ibm.websphere.ras.TraceComponent;

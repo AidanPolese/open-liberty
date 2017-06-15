@@ -1,41 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2005, 2007
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 08/31/05 gilgen      LIDB3618-2      M2/M3 drops
-// 09/01/05 gilgen      302453          M3 code updates
-// 09/05/05 gilgen      302453          M3 code cleanup/perf improvements
-// 09/07/05 gilgen      303495          Add JIT support for ByteBuffers
-// 09/22/05 gilgen      307313          Code cleanup/improvements
-// 10/02/05 gilgen      308856          Code review comments
-// 10/02/05 gilgen      308856.1        Code review comments
-// 10/12/05 gilgen      310885          Reduce synchronization
-// 10/24/05 wigger      314917          implement permisssion logic
-// 10/26/05 gilgen      317392          Translate error codes, improve tracing
-// 11/10/05 wigger      314917.1        fix sync permission
-// 12/07/05 gilgen      329710          fix NPE on outbound failed connection
-// 12/12/05 wigger      331203          don't send error caused by cancel to the user
-// 01/04/06 wigger      335589          complete cancel when requested
-// 01/09/06 gilgen      336533          allow > 10 buffers
-// 01/12/06 gilgen      336062          new threading model
-// 01/24/06 wigger      340632          dont check permission on sync read/write
-// 01/25/06 gilgen      341342          improve tracing
-// 01/26/06 wigger      340571          add cancel2 for AIX and Sun
-// 02/01/06 wigger      342415          return null if Async and finish read/write perm denied
-// 03/01/06 wigger      350577.1        add cancel2 for HP
-// 03/01/06 wigger      352251          do cancels on close if permission logic is being used
-// 03/15/06 gilgen      354499          improve tracing
-// 04/04/06 wigger      359931          don't allow closes till after multiIO3
-// 10/17/06 wigger      397750          add privileged logic when setting addrField
-// 10/31/06 gilgen      402392          improve tracing
-// 09/10/07 gilgen      439025          use cached IOExceptions
-// 03/24/16 Ginnick     195204          Added z/OS hooks for AsyncIO
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.io.async;
 
 import java.io.IOException;

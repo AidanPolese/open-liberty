@@ -1,40 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// %I% %W% %G% %U%
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2006, 2012
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  JPAPUnitInjectionBinding.java
-//
-// Source File Description:
-//
-//     PersistentUnit specific Injection Binding.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d432816   EJB3      20070614 schmittm : new part
-// d447863   EJB3      20070712 schmittm : update merge to allow xml override
-// d460065   EJB3      20070907 tkb      : added isAnyTracingEnabled()
-// d608847   WAS80     20090827 tkb      : make tc static
-// d658856   WAS80     20100629 tkb      : merge PUs from XML
-// F743-30682
-//           WAS80     20100820 bkail    : Extend AbstractJPAInjectionBinding
-// d681743   WAS80     20110108 bkail    : Implement mergeSaved
-// d662814   WAS80     20110115 tkb      : merge must detect conflicts
-// d696076   WAS80     20110311 bkail    : Move puId to AbstractJPAInjectionBinding;
-//                                         don't use J2EEName for error messages
-// F46946.1  WAS85     20110719 bkail    : Use javaee.dd.common
-// F50309.1  WAS85     20110829 bkail    : Refine injection API
-// F50309.3  WAS85     20110914 bkail    : Update merge signature
-// d730349   WAS85     20120310 bkail    : Support merging of completed bindings
-// --------- --------- -------- --------- -----------------------------------------
-
+/*******************************************************************************
+ * Copyright (c) 2006, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_RESOURCE_BUNDLE_NAME;

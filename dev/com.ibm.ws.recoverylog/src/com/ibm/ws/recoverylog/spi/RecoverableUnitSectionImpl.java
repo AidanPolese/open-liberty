@@ -1,40 +1,13 @@
-/* ************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                           */
-/*                                                                            */
-/* ORIGINS: 27                                                                */
-/*                                                                            */
-/* IBM Confidential OCO Source Material                                       */
-/* 5630-A36 (C) COPYRIGHT International Business Machines Corp. 2003, 2004    */
-/* The source code for this program is not published or otherwise divested    */
-/* of its trade secrets, irrespective of what has been deposited with the     */
-/* U.S. Copyright Office.                                                     */
-/*                                                                            */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                              */
-/*                                                                            */
-/* DESCRIPTION:                                                               */
-/*                                                                            */
-/* Change History:                                                            */
-/*                                                                            */
-/* Date      Programmer  Defect         Description                           */
-/* --------  ----------  ------         -----------                           */
-/* 06/06/03  beavenj     LIDB2472.2     Create                                */
-/* 01/07/03  beavenj     170101         Support for expanding log file        */
-/* 08/07/03  beavenj     171212         Write record type in 'write' method   */
-/* 11/07/03  beavenj     171515         Extend exception model                */
-/* 15/07/03  beavenj     172166         Add 'this' to trace points            */
-/* 30/07/03  beavenj     170907         New accessor for last data item       */
-/* 14/08/03  beavenj     173663         Reposition addData getSharedLock call */
-/* 03-09-29  awilkins                                                         */
-/*           beavenj     175817         Changes for CScope logging (NIO)      */
-/* 04-01-09  awilkins    LIDB2775-53.5  z/OS code merge                       */
-/* 04-03-24  awilkins  LIDB2775.53.5.1  Exception chaining                    */
-/* 04-04-07  kaczyns     MD19484        Issue message when log marked failed  */
-/* 04-04-24  kaczyns     MD19480        Replace data on recover               */
-/* 04-05-12  kaczyns     MD19994        Replace add() with set() from MD19840 */
-/* 29/07/04  beavenj     220096         Improve trace for HA debugging        */
-/* 29/12/09  mallam      630844     performance - delay _traceId construction */
-/*                                                                            */
-/* ************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.recoverylog.spi; 
 

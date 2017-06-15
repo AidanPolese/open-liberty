@@ -1,31 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 169897.0        240603 jroots   Updates for Milestone 3 Core API
- * 171399          110703 tevans   Add int values with getter methods
- * 173284          010803 tevans   getDestinationType should be static
- * 181796.0        041103 jroots   Move to com.ibm.wsspi
- * 192759          090304 jroots   Milestone 7 Core SPI changes
- * 195758.0        050404 jroots   Milestone 7.5 Core SPI changes
- * 241350          251104 gatfora  Creation of an Unknown destination type for Foreign Bus.
- * 276259           130505 dware    Improve security related javadoc
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
  
 package com.ibm.wsspi.sib.core;
 

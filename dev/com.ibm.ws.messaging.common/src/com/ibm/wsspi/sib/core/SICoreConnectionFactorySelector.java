@@ -1,33 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date        Origin   Description
- * --------------- ----------- -------- ----------------------------------------
- * f179630.1       04-Nov-2003 nottinga Initial Code Drop
- * f181801.4       17-Dec-2003 vaughton Trace group picked up from sib.utils.
- * f183467.3       03-Mar-2004 nottinga Updated for RA_CONNECTION type
- * d207364         04-Jun-2004 nottinga Fixed trace errors
- * d211369         22-Jun-2004 nottinga Updated javadoc
- * d215963         14-Jul-2004 nottinga Updated message keys.
- * f201972.11      27-Jul-2004 nottinga Updated for Core SPI updates.
- * d235967         01-Oct-2004 nottinga Removed wrapper function.
- * d580582         20-Mar-2009 djvines  Don't use duplicate probe ids
- * 583976          07-Apr-2009 sibcopyr Automatic update of trace guards 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.wsspi.sib.core;
 

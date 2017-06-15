@@ -1,101 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.105 SIB/ws/code/sib.jfapchannel.client.common.impl/src/com/ibm/ws/sib/jfapchannel/impl/ConversationImpl.java, SIB.comms, WASX.SIB, uu1215.01 10/05/28 04:39:10 [4/12/12 22:14:14]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2003, 2010
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030424 prestona Original
- * F166959         030521 prestona Rebase on non-prototype CF + TCP Channel
- * F168604.3       030707 prestona Exploit asynchronous API from client.
- * F171173         030707 prestona Add capacity reporting interfaces.
- * F172937         030729 prestona JFAP Channel supports for quiesce flows.
- * F173152         030731 prestona Bring JFAP inline with documentation.
- * F173772         030807 prestona Implement Clone Connection in JFAP Channel
- * F174602         030819 prestona Switch to using SICommsException
- * F174678         030820 prestona Switch to using Semaphore from SIB.utils
- * F174776         030822 prestona Allow chaining of receive listeners.
- * F174772         030826 prestona Make JFAP Channel support close.
- * F175658         030902 prestona Add support for heartbeating.
- * F176003         030908 prestona Misc. JFAP Channel reliability fixes
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * f181007         031211 mattheg  Add boolean 'exchange' flag on dataReceived()
- * d184626         040109 mattheg  Ensure we are not directly referencing ServerConnectionManager
- * D185831         040109 prestona Scaling performance of persistent queues
- * F181603.2       040119 prestona JFAP Segmentation
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * D181493         040206 prestona createQueueConnection is not thread safe.
- * D196125         040402 prestona ConversationTable.remove not in table
- * F196678.10      040426 prestona JS Client Administration
- * F201521         040505 mattheg  Make class implement Dispatchable
- * D203646         040517 prestona Close does not work correctly.
- * D196678.10.1    040525 prestona Insufficient chain information passed to TRM
- * F193735.3       040607 prestona PMI
- * D209401         040615 mattheg  Add isClosed() method
- * D210978         040621 mattheg  Add support for a connection closed listener
- * D221433         040811 prestona Add handshakeFailed
- * D199145         040812 prestona Fix Javadoc
- * D224570         040818 prestona JFap trace needs improving
- * D226223         040823 prestona Uses new messages
- * D235639         030930 prestona MPIO deadlock
- * D242116         041028 mattheg  Use different RLD for ME-ME connections
- * D242366         041206 mattheg  Fix typo
- * D262285         050321 mattheg  Extra trace
- * D262663         050406 prestona Deadlock running jetstream cases EC3 413004
- * D269145         050420 mattheg  Ensure logical close requests / responses are sent in the right order
- * D274606         050520 prestona zSIBUS:SVT Failure of multi-threaded client against cluster
- * D273932         050525 prestona zSVT: CRA/Servant went down due to timeout
- * D273932.1       050525 prestona Code review suggesions for D273932.
- * D320083         051103 mattheg  Enhance error messages
- * D321398         051107 mattheg  Add more messages to EventRecorder
- * D289992         051114 prestona Reduce Semaphore creation
- * D331155         051212 mattheg  Marks buffers as read only when they are given to the JFap channel
- * D335337         060105 mattheg  Remove connection closed check on handshakeCompleted() / handshakeFailed()
- * D351826         060303 mattheg  Fix SCS tags
- * D352654         060306 prestona Memory Leak: Capacity Listeners
- * D354565         060320 prestona ClassCastException thrown during failover
- * D358323         060330 mattheg  Improve trace
- * D361638         060411 mattheg  Expose a ref to the Connection
- * D363463         060421 prestona ME-ME heartbeat timeout
- * D354053         060425 mattheg  Expose ConnectionClosedListener
- * D369245         060612 mattheg  Synchronize on isClosed()
- * D377648         060713 mattheg  Modify the send() and exchange() sigs to take JFapByteBuffer's
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * D386169         060823 prestona Make send() cap priority level values, rather than throw exception
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * D406076         061116 prestona Add unit tests for sib.jfapchannel.client.common.impl
- * D381838         070130 mattheg  ConversationImpl.toString() should print less unless we need it to
- * D407770.1       070302 prestona Forward port WAS602.SIB defects 407770 and 349219
- * D386169.1       070503 prestona Remove cap on priority levels.
- * SIB0100.wmq.3   070815 mleming  Allow multiple ConversationCloseListeners
- * D464663         070905 sibcopyr Automatic update of trace guards
- * D492528         080118 mleming  Fix typo in method name
- * 509697          080402 vaughton Performance optimisation
- * 511981          080411 vaughton Performance - removal of trace statements
- * 514229          080422 mleming  Make WMQRA work on z
- * 508603          080509 susana   Store SchemaSet in JFAP connection rather than WeakHashMap
- * 516687          080509 vaughton Add SIBJFapSummary trace group
- * 420222          080530 mleming  Suppress exception on wakeupAllWithException
- * 535832          080721 vaughton Connnection failure issues
- * 537955          080728 vaughton null schema set returned after invalidate
- * 542573          080808 djvines  Forward port PK48027, return ConnectionInterface from getConnectionReference
- * F002074         091022 mleming  MEP support FIS
- * PM14752         100519 timmccor Add a method to check inuse request IDs
- * PM11871         100519 slaterpa Add new FFDCs
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.impl;
 
 import java.net.InetAddress;

@@ -1,52 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 165989          030512 susana   Original
- * 168206          030611 susana   Interface changes for Core API rewrite
- * 169601          030616 susana   Add toSIMediationMessage() method
- * 169602.1        030731 susana   Remove toSIMediationMessage() as no longer required
- * 172633.2.1      030925 susana   Move 3 set methods from here to SIBusWdoMessage & JsMessage
- * 179760          031104 susana   Change package name
- * 181611          031104 susana   Move Reliability to com.ibm.websphere.sib
- * 175207.2        031117 susana   Exception Destination fields support
- * 180540.1.2      031205 susana   Add get/setReplyXxxxxx & Discriminator
- * 179339.1        031211 susana   Forward and Reverse Routing Path support
- * 179365.1        040105 susana   Add Report message support
- * 180540.7        040108 susana   Return null from getReplyXxxxxx methods
- * 180540.1.8      040113 susana   Add clearReplyFields()
- * 180540.1.5      040114 susana   Remove deprecated setTopic method
- * 180540.1.5.1    040119 susana   Remove deprecated getTopic method
- * 168373          040212 susana   Add unique system message id
- * 194081          040422 susana   Add get/setRemainingTimeToLive
- * 204525          040601 susana   Add validation code to javadoc for setXxxDiscriminator
- * 218660.1        040817 susana   Add getMessageHandle
- * 218660.1.1      040913 susana   Remove ShortId
- * 249140.1        050112 eveleigh Extend java.io.Serializable
- * 246220.1        050119 susana   Add getExceptionProblemDestination
- * 255355          050217 susana   Feedback options should be Integers
- * 384726          060816 susana   Remove Java 5 unchecked warnings
- * SIB0112h.mfp    071107 susana   Add clearExceptionData()
- * F001333.14611.1 090807 djvines  Add getExceptionProblemSubscription
- * F1344-55234     111121 skavitha Add get/setXctCorrelationID
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.sib.core;
 
 import java.io.Serializable;

@@ -1,26 +1,13 @@
-/*
- * /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
- * 1.9 SERV1/ws/code/j2c.impl/src/com/ibm/ejs/j2c/work/security/J2CSecurityHelper.java, WAS.j2c, WASX.SERV1, mm1302.03 12/16/10 01:52:12
- * ===========================================================================
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2010
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ===========================================================================
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 1997, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason       Date    Origin   Description
- * -------      ------  -------- ---------------------------------------------------
- *              mmddyy
- * F743-30991   072610  mageorge   Inbound security support for users in the container's realm.
- * 665049       082410  mageorge   Inbound security message catalog changes and defects.
- * 669627       091010  mageorge   Fix CustomRegistryException for LDAP registries.
- * 673415       100810  mageorge   Accept authenticated Subject with principal in App domain.
- * 675924       041110  mageorge   Fix CTS defect, only log error on bad password and do not throw an Exception.
- * 675157       081210  mageorge   Support the inflow of trusted authenticated subject ids
- * ===========================================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jca.security.internal;
 
 import java.rmi.RemoteException;

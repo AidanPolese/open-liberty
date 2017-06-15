@@ -1,30 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * 186484.6         220404 tevans   Re-write of destination lookups to enable runtime admin
- * 199921           060504 tpm      Check for corrupt WCCM on reconsitute
- * 186484.10        170504 tevans   MBean Registration
- * 190632.0.19      150604 caseyj   Get MessageHandlers to report corrupt status
- * 229494           070904 millwood Uncommitted destination creates are active in the index
- * 272109           290405 gatfora  Removal of the PROBE class 
- * PK54812.1        190608 dware    Allow any state to move to a CORRUPT state
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl.indexes.statemodel;
 
 import com.ibm.websphere.ras.TraceComponent;

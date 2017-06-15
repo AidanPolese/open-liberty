@@ -1,34 +1,15 @@
 package com.ibm.ws.objectManager;
 
-/*
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2013
+/*******************************************************************************
+ * Copyright (c) 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- *
- *
- * Change activity:
- *
- *  Reason           Date    Origin     Description
- * --------------- -------- -------- ------------------------------------------
- *  251161          07/04/05 gareth    Add ObjectManager code to CMVC
- *  343689          04/04/06 gareth    Modify trace output cont.
- *  496893          28/02/08 gareth    Improve filestore robustness
- *  PK64110         09/04/08 ajw       shutdown hangs due to shutdownFast within shutdown
- *  530647          18/06/08 abanks    Add ObjectStoreFileNotFoundException
- *  PK73292         06/10/08 gareth    Change nio classloading in custom readObject
- *  PK73292.1       09/10/08 gareth    Disable object store migration by default
- *  607710          21/08/09 gareth    Add isAnyTracingEnabled() check around trace
- *  657719          24/06/10 abanks    Fix reserved space miscalculation
- *  724046/PM54465  20/12/11 slaterpa  Reset transaction checkpoint thresholds after checkpoint
- *                                     and avoid double checkpoint
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.ws.objectManager.utils.FileLock;
 import com.ibm.ws.objectManager.utils.Trace;

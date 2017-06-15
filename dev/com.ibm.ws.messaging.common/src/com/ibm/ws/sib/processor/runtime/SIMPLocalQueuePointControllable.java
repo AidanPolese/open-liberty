@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ===========================================================================
- * IBM Confidential OCO Source Material
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ===========================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 279076           290905 tevans   Reset Change history - previous WAS602.SIB
- * 279076           290905 tevans   Add deleteAllQueuedMessages
- * SIB0105.mp.1     071106 cwilkin  Link Transmission Controllables
- * SIB0113a.mp.10   231107 cwilkin  Message Gathering controllables
- * 515543           180708 cwilkin  Handle MessageStoreRuntimeExceptions on msgstore interface
- * 673411           240211 urwashi  Added new overloaded method getQueuedMessageIterator(fromIndex,toIndex,totalMessages)
- * ======================================================================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.runtime;
 
 import com.ibm.ws.sib.processor.exceptions.*;

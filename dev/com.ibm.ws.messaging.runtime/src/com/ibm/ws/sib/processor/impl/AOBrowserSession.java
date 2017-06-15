@@ -1,38 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- --------------------------------------------
- * 180483.3         161003 sbhola   initial implementation
- * 181718.4         221203 gatfora  Move to the new UUID classes
- * 180483.4         070104 sbhola   improvements
- * 184035.1         110204 tevans   New MP Alarm Manager interface
- * 195445.13.3      140404 gatfora  Correction of message exceptions part2
- * 195445.13.5      250504 gatfora  Message content updates
- * 209977           080704 gatfora  Removal of AnycastConstansts file.
- * 215613           120704 sbhola   removed remoteMEName field
- * 216685           180704 ajw      cleanup anycast runtime admin impl
- * SIB0002.mp.3     270605 tpm      RMQ Browser Session support
- * 309940           031005 gatfora  Missing trace statements
- * 355323           220306 tevans   RMQSessionDroppedException handling
- * 419906           080307 cwilkin  Remove Cellules
- * 424497.2         300407 vaughton Restructure custom properties
- * SIB0113a.mp.8    200607 cwilkin  Gathering infrastructure in remote get
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.impl;
 

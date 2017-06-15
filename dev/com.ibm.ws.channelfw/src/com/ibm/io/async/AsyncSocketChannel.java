@@ -1,31 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 2005, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 08/31/05 gilgen      LIDB3618-2      M2/M3 drops 
-// 08/30/05 wigger      300955          handle security for connects
-// 09/01/05 gilgen      302453          M3 code updates
-// 09/16/05 gilgen      305892          handle security for getDeclaredField
-// 09/22/05 gilgen      307313          Code cleanup/improvements
-// 10/02/05 gilgen      308856          Code review comments
-// 10/02/05 gilgen      308856.1        Code review comments
-// 11/03/05 gilgen      320175          make accept and connect common with base TCP
-// 11/04/05 wigger      320175          make connect common with base TCP
-// 12/07/05 gilgen      329710          fix NPE on outbound failed connection
-// 01/09/06 gilgen      336533          allow > 10 buffers
-// 01/10/06 wigger      306998.3        use isAnyTracingEnabled
-// 01/12/06 gilgen      336062          new threading model 
-// 02/13/06 gilgen      345836          add more tracing
-// 03/01/06 gilgen      331238.1        use NIOUtils class to get fds if available
-// 03/01/06 wigger      352251          do cancels on close if permission logic is being used
-// 04/17/06 wigger      363238          remove timeout entries on close
-// 06/27/07 wigger      448505          pool completion keys for better performance
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.io.async;
 
 import java.io.IOException;

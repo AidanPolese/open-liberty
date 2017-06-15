@@ -1,56 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.51 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/proxyqueue/impl/ReadAheadProxyQueueImpl.java, SIB.comms, WASX.SIB, uu1215.01 08/04/16 21:38:29 [4/12/12 22:14:07]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030702 prestona Original
- * d169897.2       030707 schmittm Provide remote client implementation of new Core API as defined
- * f172297         030722 schmittm continue to provide remote client implementation of new Core API as defined
- * F174602         030819 prestona Switch to using SICommsException
- * f174317         030829 mattheg  Add local transaction support
- * d172528         030905 mattheg  Add deliverException() method
- * f173765.2       030926 mattheg  Core API M4 update
- * f177889         030929 mattheg  Core API M4 completion
- * d178368         031008 mattheg  Ensure delete set is flowed at the correct priority
- * f181927         031111 mattheg  Allow global transations to be exposed
- * f187521.2.1     040126 mattheg  Unrecoverable reliability -- part 2
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * f191114         040218 mattheg  Multicast support (complete file restructure)
- * d192134         040226 mattheg  Ensure queue is created by subclasses, not by this class
- * d192293         040308 mattheg  NLS file changes
- * f192829         040407 mattheg  Client tuning parameters
- * f200337         040428 mattheg  Message order context implementation
- * f176658.4.2.2   040504 mattheg  deliveryImmediately flag change
- * D210212         040617 mattheg  Ensure order context is flowed during registerAsynchConsumer()
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D217654         040813 mattheg  Remove un-needed locks
- * D199177         040816 mattheg  JavaDoc
- * D218324         040818 mattheg  Stop receiveWithWait on stopped session spinning
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D235891         040930 mattheg  Runtime property standards
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D249096         050129 prestona Fix proxy queue synchronization
- * F247845         050203 mattheg  Multicast enablement
- * D264771         050412 mattheg  FFDC compliance
- * D341593         060130 mattheg  Remove un-used locals
- * D384259         060815 prestona Remove multicast support
- * D424200         070426 prestona Readahead consumers hang in receiveWithWait if connection dies
- * 487006          080414 vaughton Refactor, tidyup & fix locking
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client.proxyqueue.impl;
 
 import com.ibm.ejs.ras.TraceNLS;

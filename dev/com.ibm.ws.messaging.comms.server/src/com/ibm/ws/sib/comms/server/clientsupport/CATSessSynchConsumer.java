@@ -1,61 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.55 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/CATSessSynchConsumer.java, SIB.comms, WASX.SIB, aa1225.01 08/01/18 03:28:45 [7/2/12 05:59:00]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030604 clarkep  Original
- * f169884         030623 mattheg  Add non-blocking sync support
- * d170516         030625 mattheg  Change asnc method call in line with modified core API
- * d170639         030630 mattheg  NLS all the messages
- * f169897.2       030708 mattheg  Convert to Core API 0.6
- * f171400         030714 mattheg  Implement the Core API 0.6
- * f172297         030724 mattheg  Complete Core API 0.6 implementation
- * d174443         030815 mattheg  Ensure receive's honour session state
- * f174317         030827 mattheg  Add local transaction support
- * d176012         030908 mattheg  Allow a synchronous consumer to become asynchronous
- * f173765.2       030926 mattheg  Core API M4 update
- * f177889         030930 mattheg  Core API M4 completion
- * d186970         040116 mattheg  Overhaul the way we send exceptions to client
- * f187521.2.1     040126 mattheg  Unrecoverable reliability -- part 2
- * f192654         040301 mattheg  Allow inlined callback through a config param
- * f192759.10      040323 clarkep  Fix deprecated AlarmManager call to nonDeferred.
- * f191118.1       040423 mattheg  Internal MP interface change
- * f200337         040428 mattheg  Message order context implementation
- * f176658.4.2.2   040504 mattheg  deliverImmediately flag change
- * D202636         040512 mattheg  Missing deliverImmediately flag on start()
- * D209401         040615 mattheg  toString() enhancements
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D235891         040930 mattheg  Runtime property standards
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D307265         050922 prestona Support for optimized transactions
- * D281779         051011 prestona ReceiveWithWait hang on client
- * D329823         051207 mattheg  Trace improvements
- * D347591         060217 mattheg  Add support for exchanged starts
- * D350111.1       060302 mattheg  Use send listener for start()
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * PK33011         061016 mattheg  Fix for MDB Listener not being told about ME failure
- * D441183         072307 mleming  Don't FFDC when calling terminated ME
- * 471664          071003 vaughton Findbugs tidy up
- * 492551          080117 mleming  Only register SICoreConnectionListener when required
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import com.ibm.websphere.ras.TraceComponent;

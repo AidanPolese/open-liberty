@@ -1,25 +1,13 @@
-// %Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009, 2011
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason           Version        Date       User id     Description
- * ----------------------------------------------------------------------------
- * F001340-15950.1    8.0        09/04/2009   belyi       Initial HPEL code
- * F017049-18504      8.0        03/07/2010   spaungam    Add support for subprocess reading
- * F017049-18504.1    8.0        03/07/2010   spaungam    Update javadoc
- * 650538             8.0        05/14/2010   spaungam    Correct the CBE location value
- * F017049-22352      8.0        08/23/2010   belyi       Update javadoc for range() method 
- * 669339             8.0        09/07/2010   mcasile     A little more javaDoc focused on getChildren
- * 665629             8.0        12/07/2010   belyi       Remove unnecessary size() method.
- * 681015             8.0        02/25/2011   belyi       Add getStartTime() method to the interface
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.logging.hpel.reader;
 
 import java.util.Date;

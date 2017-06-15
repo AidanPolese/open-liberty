@@ -1,34 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 1997, 2008, 2009
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//@(#) 1.44.1.9 SERV1/ws/code/ssl.channel.impl/src/com/ibm/ws/ssl/channel/impl/SSLChannel.java, WAS.channel.ssl, WASX.SERV1, pp0919.25 3/12/09 21:49:26 [5/15/09 18:21:26]
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 05/16/05 gilgen      276285          Remove references to old jsse classes.
-// 082905   clanzen     LIDB3557-8      Flexible configuration support.
-// 111405   leeja       PK13349         Engine leak during discrimination
-// 11/16/05 clanzen     311968          Update exception text to be translated.
-// 12/19/05 clanzen     334023          JSSEHelper to core & client cert mapping
-// 01/03/06 clanzen     335187          New access to cipher suites
-// 01/04/06 leeja       PK16095         Control/monitor SSLSession cache
-// 01/13/06 leeja       337872          Fix Java2 sec permissions for PK16095
-// 01/25/06 clanzen     337227          Eliminate inbound client cert map code from outbound
-// 01/22/07 leeja       414447.1        Only queue off handshake once and only in CR
-// 03/06/07 leeja       419282/PK40641  handle channel props that do not need JSSEHelper
-// 04/04/07 leeja       LIDB2924-15     Remove JSSE2 usage
-// 05/22/07 leeja       436290          Check for ssl props on the thread
-// 12/10/07 leeja       PK57957         Fix leak of channel instances in factory
-// 02/14/08 leeja       441627.1        Fix config related items
-// 02/28/08 leeja       500756          Don't permanently store the on-thread props
-// 03/27/08 leeja       508264          Don't store non-string prop value
-// 04/04/08 leeja       509688          Fix lost cipher suite prop
-// 04/07/08 leeja       510690          Fix class loading error on z/OS
-// 03/11/09 elisa       PK72447         Set the endpoint name on the thread
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.channel.ssl.internal;
 
 import java.net.InetSocketAddress;

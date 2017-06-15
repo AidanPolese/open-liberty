@@ -1,41 +1,13 @@
-// %Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2012
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * In the past, each repository (logdata and tracedata) had a flat list of files of the form <timestamp>_<pid>.wbl
- * Now there will be a directory created in the repository for each serverInstance of the form:
- *  <timestamp>_<pid/stoken>_<label>   and inside that directory will be files w/name format:  <timestamp>.wbl
- * If there is a subProcess paradign (ie: z/OS servants), then inside the directory for the logical parent process, there
- *  will be a subDirectory per process of the form:  <pid/stoken>_<label>  and files inside that of the form:  <timestamp>.wbl
- *  so a servant logFile will be in:  logdata/<timestamp>_<controllerStoken>_<controllerLabel>/<servantStoken>_<servantLabel>/<timestamp>.wbl
- * Label is set by "user" in the case where the user is WAS z/OS, it is jobname_startedTaskID.  WAS distributed uses serverName
- *
- * Change History:
- *
- * Reason           Version        Date       User id     Description
- * ----------------------------------------------------------------------------
- * F001340-15950.1    8.0        09/04/2009   belyi       Initial HPEL code
- * F017049-16879.1    8.0        10/15/2009   spaungam    Add support for z/OS to HPEL
- * F017049-16879.3    8.0        11/23/2009   mcasile     Changes to support exploiter naming
- * F017049-18796.1    8.0        12/17/2009   spaungam    Add support for z/OS HPEL according to new file structure
- * 634600             8.0        01/13/2010   spaungam    refactor code to allow for write manager to use for retention purposes
- * 637177             8.0        02/02/2010   belyi       Empty trace directory results in NPE
- * F017049-18504      8.0        03/22/2010   belyi       Add support for subprocess reading
- * 646359             8.0        04-02-2010   belyi       Fix timestamp HPEL uses on server instance directories
- * F017049-22453      8.0        04-06-2010   mcasile     Add in agent set/get for comm between parent and child processes
- * F004324            8.0        04-21-2010   mcasile     Add in Notifier set/get for notification agent
- * 664406             8.0        08-11-2010   belyi       Use AccessHelper.listFiles instead of File.listFiles in makeLogDirectory() method
- * 682032             8.0        12-11-2010   mcasile     Only allow this if also the envVar com.ibm.ws.logging.hpel.debug=true
- * 696303             8.0        03/23/2011   belyi       Introduce different character to separate labels
- * 699970             8.0        03/30/2011   mcasile     More control over hpel tracing
- * 708117             8.0        09/21/2011   spaungam    PID on iSeries contains invalid file_name characters
- * 740343             8.5        10/10/2012   belyi       Add Version2 of the serializer into KNOWN_FORMATTERS list.
- * PM99024	          8.0	     11/05/2013   rishim	  Fixing instance Dir creation if someone deletes .lock file from tracedata
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.logging.hpel.impl;
 
 import java.io.File;

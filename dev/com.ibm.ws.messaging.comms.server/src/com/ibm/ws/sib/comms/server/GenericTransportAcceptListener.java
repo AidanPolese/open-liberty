@@ -1,28 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.12 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/GenericTransportAcceptListener.java, SIB.comms, WASX.SIB, aa1225.01 08/06/11 06:37:02 [7/2/12 06:01:49]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  (C) Copyright IBM Corp. 2003, 2008
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2003, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030724 niall    Original
- * F193735.3       040607 prestona PMI
- * D209401         040615 matthg   Comms service utility
- * D199177         040816 mattheg  JavaDoc
- * SIB0048b.com.1  060901 mattheg  Remove CommsServiceUtility hooks
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server;
 
 import com.ibm.websphere.ras.TraceComponent;

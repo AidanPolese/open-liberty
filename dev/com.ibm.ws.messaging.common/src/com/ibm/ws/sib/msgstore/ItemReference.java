@@ -1,32 +1,14 @@
 package com.ibm.ws.sib.msgstore;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 21/03/03 drphill  Original
- * 272110          10/05/05 schofiel 602:SVT: Malformed messages bring down the AppServer
- * 321391          07/11/05 schofiel Remove STRICT_ENFORCED_IN_MESSAGESTORE
- * 321394          07/11/05 schofiel Remove unused imports in MS
- * 306998.19       09/01/06 gareth   Add new guard condition to trace statements
- * SIB0112b.ms.1   07/08/06 gareth   Large message support.
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * PK57207.1       12/08/08 susana   Add jdbcSpillSizeMsgRefsByMsgSize support
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.util.List;
 

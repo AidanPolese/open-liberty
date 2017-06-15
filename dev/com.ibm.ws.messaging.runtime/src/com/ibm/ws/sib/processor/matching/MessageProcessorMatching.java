@@ -1,51 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * SIB0002.mp.1     210605 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.mp.1     210605 tevans   PEV Prototype
- * SIB0009.mp.01    210705 rjnorris Add support for multiple selectionCriteria on DurableSub
- * SIB0009.mp.02    220805 nyoung   Add support for Consumer Count monitoring
- * SIB0009.mp.02a   060905 nyoung   Consumer Count monitoring conn close and threading.
- * 309940           031005 gatfora  Missing trace statements
- * 355556           220306 tpm      Trace
- * SIB0155.mp.1     061106 nyoung   Support for XPath1.0 SelectorDomain.
- * SIB0136.mp.2     091106 nyoung   Add unit tests for XPath Selector support in MP.
- * 414365           220107 nyoung   70FVT: Failures when mixing WSN and JMS subscriptions
- * SIB0136b.msp.1   080207 nyoung   Stage 2 implementation of XPath Selector support.
- * SIB0136b.mp.1    130307 nyoung   Custom Property to allow disabling of XPath Optimization
- * 430211           030407 ajw      XPath10ParserImpl not available
- * 432107           200407 nyoung   Performance Regression in sib/mfp with java/util classes
- * 417084           260407 nyoung   70FVT: ArrayIndexOutOfBoundsException
- * SIB0137.mp.1     230507 nyoung   addDestinationListener destination Name pattern matching
- * 445656           250607 gatfora  Move to using Boolean.valueOf and cleanup trace
- * SIB0113a.mp.1    240707 cwilkin  Gathered Consumer foundation
- * SIB0113a.mp.3    010807 vaughton Class rename
- * SIB0163.mp.1     190907 nyoung   XD Integration.
- * 473551           181007 cwilkin  findbugs perf improvements
- * SIB0163.mp.2     171007 nyoung   Code Review Improvements.
- * 486043           041207 nyoung   MatchSpace not constraining consumerKey search to ConsumerDispatcher
- * 504438.2         270308 nyoung   Flow XPath namespace info through Core and MP
- * 443568           220408 nyoung   Failure to reconcile durable subs when topicspace deleted
- * 504438.5         220408 nyoung   Demote SelectionCriteria Core SPI change to MP
- * 516346           300408 djvines  No need to nullcheck localConsumers/remoteconsumers (would have already NPE'ed)
- * F011127          280611 chetbhat registerConsumerSetMonitor support
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.matching;
 
 import java.util.ArrayList;

@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 180483.3         102903 isilval  Initial implementation
- * 184035.1         110204 tevans   New MP Alarm Manager interface
- * 185691           190204 tevans   Redesign/Rework LinkedMap and LockedMessageEnumeration
- * 217101           160704 sbhola   change to use SimpleLinkedList
- * 184035           231104 tevans   New MPAlarmManager for z/OS
- * 529626           160608 dware    Add cancel method to allow those interested to be told when cancelled
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.utils.am;
 
 import com.ibm.ws.sib.processor.utils.am.BatchedTimeoutManager.LinkedListEntry;

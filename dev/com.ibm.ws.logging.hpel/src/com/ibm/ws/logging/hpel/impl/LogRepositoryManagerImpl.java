@@ -1,35 +1,13 @@
-// %Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009, 2013
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason           Version        Date       User id     Description
- * ----------------------------------------------------------------------------
- * F001340-15950.1    8.0        09/04/2009   belyi       Initial HPEL code
- * F017049-18055.1    8.0        12-18-2009   mcasile     Major mods to support z/OS servants
- * F017049-18796.1    8.0        12/22/2009   spaungam    Add support for z/OS HPEL according to new file structure
- * 633565             8.0        01/05/2010   mcasile     Handle slight ManagerImpl constructor change
- * 646359             8.0        04-02-2010   belyi       Fix timestamp HPEL uses on server instance directories
- * F017049-22453      8.0        04-06-2010   mcasile     filelist maintained here, add in controller side impl (and servant?)
- * 646359.1           8.0        04-16-2010   belyi       Don't setup subdiretory structures when it is not requested.
- * F004324            8.0        04-21-2010   mcasile     Handle notificationagent for log events
- * 677252             8.0        11/04/2010   spaungam    HPEL enabled server does not start on iSeries
- * 688583             8.0        01/30/2011   belyi       Ensure configuration is not set if there's a problem with specified values
- * 694351             8.0        03/02/2011   mcasile     Call the alert to update space utilization info so it can warn if fs issues loom
- * 699970             8.0        03-30-2011   mcasile     Refine hpel debug trace
- * 702533             8.0.02     08-22-2011   olteamh     Remove empty instance directories
- * 727908             8.5        02/10/2012   belyi       Change RuntimeException to IllegalArgumentException in constructor for consistency behavior between Java6 and Java7
- * PM62402            8.5        04/19/2012   belyi       Don't create a new file if it will have the same name as currently active one.
- * RTC88845           8.5.5      02/13/2013   rishim      checkSpaceConstrain() to accept maxLogFileSize to avoid HPEL Text LogSize Retention errors.
- * RTC98078		      8.5.5      04/05/2013   rishim	  Changing action , when retention time = 0 in configure method
- * PM99024	          8.0	     11/05/2013   rishim	  Fixing instance Dir creation if someone deletes .lock file from tracedata
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.logging.hpel.impl;
 
 import java.io.File;

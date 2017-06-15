@@ -1,25 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2012, 2013
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * 88661            071212 chetbhat Modifying the nls based on review
- * 89424            121212 chetbhat Simplifying metatype.xml for messaging
- * 91146            210113 sharath  Liberty: Chaging the filestore error message
- * 95341            280213 Romil    Liberty: Changing code for filestore error message 
- * 95493            060313 Romil    Liberty: Changing code for fileSotre and logfile sizes calculation
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.admin.internal;
 
 import com.ibm.ejs.ras.TraceNLS;

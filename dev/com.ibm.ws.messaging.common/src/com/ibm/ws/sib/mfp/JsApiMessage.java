@@ -1,35 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 158444          030207 susana   Original
- * 158574          030210 susana   Rename make methods to clarify usage
- * 158852          030213 susana   Scaffold implementation part 1
- * 159110          030218 susana   Scaffold implementation part 2
- * 159294          030303 susana   Tidy up message header fields - part 1
- * 164825          030502 susana   More header field refinements
- * 175194          031022 susana   Enhance messageId and corelationId
- * 179365.1        040105 susana   Add Report message support
- * 182191.25.1     040415 markesc  Move get/setMQPublicationInfo up to JsApiMessage
- * 233061.1        040920 susana   Further SystemContext Handler support
- * 194870          041230 susana   Move to Broker classes to mqcontrol sub-package
- * SIB0163.mfp.1   071114 susana   Add get/setMessageControlClassification
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.mfp;
 
 import java.io.IOException;

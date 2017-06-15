@@ -1,23 +1,13 @@
-// %Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2011
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason           Version   Date       User id     Description
- * ----------------------------------------------------------------------------
- * F001340-15950.1    8.0     09/04/2009  belyi       Initial HPEL code
- * 639559             8.0     04/03/2010  spaungam    removed RAS references from HpelRasHeader and HpelRasHelper
- * 663081             8.0     09/09/2010  belyi       Use LogRecordWrapper for record serialization
- * 671059             8.0     11/05/2010  mcasile     On publish (when lock on Handler is released, handle any ORB actions if this is a servant
- * 684056             8.0     01/11/2011  mcasile     Allow header info to be passed in for custom implementations
- * 724465             8.0     12/07/2011  shighbar    Update publish method to resolve possible null pointer reference found via static analysis.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.logging.hpel.handlers;
 
 import java.io.ByteArrayOutputStream;

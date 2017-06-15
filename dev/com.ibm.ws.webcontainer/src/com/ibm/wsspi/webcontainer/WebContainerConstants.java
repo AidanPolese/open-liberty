@@ -1,20 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//
-//CHANGE HISTORY
-//Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//        338876          01/17/06    todkap              61FVT:RRD-error request attrs not set    WAS.webcontainer 
-//        353794          03/09/06    ekoonce             XD: revert acceptor id for channel chains to v6 name   
-//        PK27620         08/24/06    cjhoward            SERVLET FILTER IS NOT CALLED IN V6 FOR URL RESOURCES WHEN THESE ARE NOT FOUND.  IN V5, THE FILTER IS ALWAYS CALLED
-//        415593          01/19/07    mmolden             70FVT: Error page test fail in web container bucket
-//        506208          03/28/08    mmolden             BT70: Struts application migration problem with http headers
-//        519410          05/14/08    mmolden             SVT:unexpected InvalidPortletWindowIdentifierException
-//
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.webcontainer;
 
 import com.ibm.ws.webcontainer.webapp.WebApp;

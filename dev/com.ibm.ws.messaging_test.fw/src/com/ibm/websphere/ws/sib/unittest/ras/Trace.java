@@ -1,37 +1,13 @@
-/*
- * COMPONENT_NAME: sib.unittest.ras
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *  ORIGINS: 27
- *
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * 
- *
- * Change activity:
- *
- * Reason          Date        Origin   Description
- * --------------- ----------- -------- ----------------------------------------
- * LIDB3418-56.1   21-Apr-2005 nottinga Initial Code Drop
- * SIB0014.sec.5   07-Oct-2005 nottinga Updated for assertion support.
- * d328546         17-Jan-2006 djvines  Add System.out, System.Err support
- * d352992         07-Mar-2006 djvines  Spot the trace specs that mean disable!
- * d385263         20-Oct-2006 djvines  Use the SibMessage listener support
- * d405087         29-Nov-2006 djvines  Support setting trace via property
- * d411867         15-Dec-2006 djvines  OK, OK, actually indicate trace is on!
- * d412471         21-Dec-2006 djvines  Correctly nest the trace and provide a resetTrace call
- * d424424         06-Mar-2007 djvines  If emma enabled, reset should reset to emma state
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.ws.sib.unittest.ras;
 
 import java.io.File;

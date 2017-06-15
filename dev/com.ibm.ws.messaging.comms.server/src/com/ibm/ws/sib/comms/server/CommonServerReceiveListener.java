@@ -1,36 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.19 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/CommonServerReceiveListener.java, SIB.comms, WASX.SIB, aa1225.01 10/03/25 10:23:45 [7/2/12 05:58:58]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2003, 2010
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * D335337         060401 mattheg  Consolidate ME / Client handshaking
- * D350111.1       060302 mattheg  Update for when no supported FAP's are sent
- * D354565         060320 prestona ClassCastException thrown during failover
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * SIB0048b.com.1  060901 mattheg  Use different byte buffer impl on server
- * D387596         061005 mattheg  Remove typo that can cause class loading deadlock
- * D434315         070423 prestona FINDBUGS: changed visibility of SUPPORTED_FAP_VERSIONS[]
- * SIB0100.wmq.3   070813 mleming  Allow WMQRA to use TCP Proxy Bridge
- * 471664          071003 vaughton Findbugs tidy up
- * SIB0163.comms.3 072712 mleming  Provide information on the location that client is running in
- * 514229          080422 mleming  Make WMQRA work on z
- * F002074         091022 mleming  MEP support FIS
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server;
 
 import com.ibm.ejs.ras.TraceNLS;

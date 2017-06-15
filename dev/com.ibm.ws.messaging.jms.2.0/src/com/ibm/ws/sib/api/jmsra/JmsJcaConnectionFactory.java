@@ -1,41 +1,13 @@
-/**
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Material
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * --------------- --------- -------- --------------------------------------------
- *                 06-Jul-03 pnickoll Original
- * 169897.5        07-Jul-03 pnickoll Updated to encompass the core API changes
- * 169897.10.1     31-Jul-03 pnickoll Changes to connection factory properties
- * 174531          18-Aug-03 djhoward Added Referenceable to interface
- * 176645.2        16-Sep-03 djhoward Changes to properties
- * 181796.6        05-Nov-03 djhoward Core SPI move to com.ibm.wsspi.sib.core
- * 188479.2        05-Feb-04 dcurrie  Remove TempQueue|TopicModelName
- * 188482.2        05-Feb-04 dcurrie  Add TemporaryQueue|TopicNamePrefix
- * 184390.8        19-Feb-04 kingdon  Add getPersistentMapping
- * 197250.1        13-Apr-04 pnickoll Added getters for various properties
- * 192474.1        14-Apr-04 pnickoll Added sharedDurableSubscriptions property
- * 203656          17-May-04 dcurrie  Code cleanup
- * 206397.5.1      07-Jul-04 pnickoll Add Target, TargetType and TargetSignificance properties
- * 201972.4        28-Jul-04 pnickoll Update core SPI exceptions
- * 206397.5.2      06-Aug-04 pnickoll Removed old remoteTargetGroup and remoteTargetType properties
- * 224794          06-Sep-04 dcurrie  Rename RemoteProtocol to TargetTransportChain
- * 247845.4        10-Feb-05 pnickoll Added multicast interface and subscription protocol properties
- * SIB0121.jms.1   28-Dec-06 jamessid Added getter for performance enhancing property
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.api.jmsra;
 
 import java.io.Serializable;

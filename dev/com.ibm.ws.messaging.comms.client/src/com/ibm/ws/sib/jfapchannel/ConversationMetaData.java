@@ -1,29 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.11 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/ConversationMetaData.java, SIB.comms, WASX.SIB, uu1215.01 06/10/31 02:44:20 [4/12/12 22:14:12]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5724-J08  (C) Copyright IBM Corp. 2004, 2006 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * D196678.10.1    040521 prestona Add conversation metadata method.
- * D199145         040812 prestona Fix Javadoc
- * F224759.1       040818 prestona z/OS: isConnectionTrusted() method
- * F206161.5       050217 prestona Events for system management products
- * D320083         051103 mattheg  Expose remote port
- * SIB0153a.com    061030 mattheg  Add getSSLSession() method
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel;
 
 import java.net.InetAddress;

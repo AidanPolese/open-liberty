@@ -1,29 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.9 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/common/ClientCommsDiagnosticModule.java, SIB.comms, WASX.SIB, uu1215.01 10/02/23 08:53:41 [4/12/12 22:14:21]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2003, 2010
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2003, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        061005 mattheg  Allow FFDC diagnostics in the client
- * D381838         070130 mattheg  Use Converstion.getFullSummary() instead of toString()
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * D462062         080520 mleming  Improve diagnostics
- * D522647         080523 mleming  Fix method names
- * PM07974         100223 timmccor Read conversations via a special method, to avoid deadlock.
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.common;
 
 import java.util.HashMap;

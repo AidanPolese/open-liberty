@@ -1,30 +1,13 @@
-// %Z% %I% %W% %G% %U% [%H% %T%]
-/**
- * COMPONENT_NAME: WAS.ras
+/*******************************************************************************
+ * Copyright (c) 2004, 2015 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2004, 2006, 2010, 2015
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * DESCRIPTION:
- *
- * Change History:
- *
- * Reason      Version   Date        User id     Description
- * ----------------------------------------------------------------------------
- * LIDB2667        6.0   06-11-2004  dbourne     CBE
- * D225693         6.0   09-09-2004  vratnala    CBE Code Review Changes
- * D247062       6.0.1   12-10-2004  dbourne     Add missing mappings
- * LIDB1793-24     7.0   06-03-2005  dbourne     Detach from runtime and make public 
- * 311563	   6.1   04-04-2006  tomasz 	 Updated the message id list
- * D362412	   6.1   04-12-2006  andymc      Added method determineMsgType
- * F017049-27489   8.0   06-16-2010  belyi       Remove references to WAS.
- * 714313          8.0   08-25-2011  belyi       Add back the recognition of IBM4.4.1 message IDs.
- * RTCD51304       8.5    01-16-2011 olteamh     Move to a different package
- * 193542          8.5    11-10-2015 rishim      adding support for alphanumeric messageIDs
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.logging.hpel.impl;
 
 /**

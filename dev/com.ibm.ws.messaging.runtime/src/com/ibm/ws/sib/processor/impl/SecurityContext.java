@@ -1,31 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 184185.1.9       170504 nyoung   Detach Access Checking from connections
- * 184185.1.10      250504 nyoung   Implement FRP Security.
- * 219101.1.1       130804 nyoung   Latent MP changes for ALTERNATE_USER support
- * 231083           120904 nyoung   Improve MP security messaging.
- * 216191           150904 nyoung   Discriminator check support for SIBServerSubject.
- * 216193           300904 nyoung   Write audit record if discriminator access fails.
- * 238960.2         151004 nyoung   Trace flooded by Java 2 security warnings.
- * 569778           040209 cwilkin  Remove optimisation which introduced regression
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl;
 
 import javax.security.auth.Subject;

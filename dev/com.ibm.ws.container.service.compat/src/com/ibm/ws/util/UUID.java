@@ -1,54 +1,13 @@
-/* ************************************************************************** */
-/* COMPONENT_NAME: WAS.compensation                                           */
-/*                                                                            */
-/*  ORIGINS: 27                                                               */
-/*                                                                            */
-/* IBM Confidential                                                           */
-/*                                                                            */
-/* OCO Source Materials                                                       */
-/*                                                                            */
-/* Copyright IBM Corp. 1999, 2016                                             */
-/*                                                                            */
-/* The source code for this program is not published or otherwise divested    */
-/* of its trade secrets, irrespective of what has been deposited with the     */
-/* U.S. Copyright Office.                                                     */
-/*                                                                            */
-/*  @(#) 1.9 ws/code/utils/src/com/ibm/ws/util/UUID.java, WAS.utils, ASV 3/5/04 11:40:54 [9/7/12 10:20:04]                                             */
-/*                                                                            */
-/*  DESCRIPTION:                                                              */
-/*  A universally unique id                                                   */
-/*                                                                            */
-/*  Change History:                                                           */
-/*                                                                            */
-/*  Date      Programmer   Defect  Description                                */
-/*  --------  ----------   ------  -----------                                */
-/*  09/17/99  dvines@uk.   000000  Creation                                   */
-/*  02/10/00  dvines@uk.   000000  Add toByteArray                            */
-/*  02/11/00  dvines@uk.   000000  Add _cachedString (and allow for wrapping) */
-/*  05/09/00  dvines@uk.   000000  UtilityBase has moved                      */
-/*  05/11/00  dvines@uk.   000028  Move to runtime                            */
-/*  06/29/00  dvines@uk.   000026  Move to runtime.common                     */
-/*  07/26/00  mchessel@uk. 000173  Rebase on com.ibm.bpb.base.UtilityBase     */
-/*  04/19/01  dvines@uk.   000885  Implement Comparable                       */
-/*  11/06/01  dvines@uk.   000885  Make the _cachedString transient           */
-/*  21/03/02  dvines@uk.   122313  Copy into compensation package             */
-/*  08/18/02  dvines@uk.   142091  Fix Jtest observations (except javadoc)    */
-/*  02/05/03  dvines@uk. LIDB2528  Add version checks                         */
-/*  05/02/03  dvines@uk. LIDB2472  cache byte[], add isEqual and refactor     */
-/*  06/04/03  awilkins   LIDB2472  Migrate to WAS.utils                       */
-/*  24/07/03  awilkins   170306.1  Tolerate unexpected UUID formats           */
-/*  28/07/03  awilkins     172763  Perf - cache IP address                    */
-/*  15/07/03  beavenj      174368  Make short to int PID cast safe            */
-/*  01/10/03  awilkins   172764.1  Increment version number                   */
-/*  20/10/03  awilkins     180292  Cope with 'negative' IP address values     */
-/*  18-11-03  awilkins     183191  Only calc hashcode once for unexp format   */
-/*  01-02-04  awilkins     188969  Get current time when holding lock         */
-/*  03-03-05  awilkins     191629  Wait for new time slice when clockSeq=8192 */
-/*                                                                            */
-/* Defect numbers less than 100000 are bpb defect numbers, 100000 and higher  */
-/* are botp defect numbers                                                    */
-/*                                                                            */
-/* ************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 1999, 2016 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.util;
 
 import java.net.UnknownHostException;

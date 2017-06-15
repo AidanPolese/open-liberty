@@ -1,39 +1,13 @@
-/*
- * 
- * 
- * ===========================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ===========================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * SIB0002.mp.1     210605 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.mp.1     210605 tevans   PEV Prototype
- * SIB0002.mp.2     240605 tpm      Further PEV changes
- * SIB0002.mp.5.1   060705 tpm      PEV dynamic config
- * SIB0002.mp.15    170805 tevans   Transactional PEV Producers and Consumers
- * 309940           031005 gatfora  Missing trace statements
- * 306998.22        050106 gatfora  Trace performance improvements
- * 404304           141106 tevans   Thread Deadlock when destination high limit reached
- * 415040           230207 cwilkin  RQP Reallocation to exception destinations
- * 516346           280408 djvines  Make constant final
- * 515543           180708 cwilkin  Handle MessageStoreRuntimeExceptions on msgstore interface
- * 510343           010908 dware    Write event messages to the log when enabled
- * 521930           201109 dware    Handle deleted foreign buses
- * 114553           061113 balgirid Fixing message threshold not shown in messages.log
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.impl.store.itemstreams;
 

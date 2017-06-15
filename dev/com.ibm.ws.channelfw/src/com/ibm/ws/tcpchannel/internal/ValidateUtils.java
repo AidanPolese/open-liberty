@@ -1,28 +1,13 @@
-//* ===========================================================================
-//*
-//* IBM SDK, Java(tm) 2 Technology Edition, v5.0
-//* (C) Copyright IBM Corp. 2005, 2006
-//*
-//* The source code for this program is not published or otherwise divested of
-//* its trade secrets, irrespective of what has been deposited with the U.S.
-//* Copyright office.
-//*
-//* ===========================================================================
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 09/21/04 gilgen      233448          Add copyright statement and change history.
-// 09/27/04 wdw         236042          update single thread selector logic
-// 04/14/05 wigger      267048          let SelectorIdleTimeout be in msecs
-// 04/14/05 wigger      267048          make more custom properties available to change
-// 04/20/05 wigger      269768          allow Audit trace level to be changed
-// 04/21/05 wigger      LIDB3618-2      Aio Support changes
-// 10/18/05 wigger      314429          Make methods public for broader access
-// 01/04/06 gilgen      335588          add performance statistics
-// 02/23/06 wigger      327980.1        make constants accessible to outside code
-// 06/15/07 wigger      LIDB4301-17     new key value for early binds
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.tcpchannel.internal;
 
 import com.ibm.wsspi.tcpchannel.TCPConfigConstants;

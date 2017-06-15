@@ -1,48 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.35 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/BifurcatedConsumerSessionProxy.java, SIB.comms, WASX.SIB, uu1215.01 11/06/29 06:57:33 [4/12/12 22:14:06]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2011
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        040422 mattheg  Original
- * F186248.1.3     040505 prestona Remove EnvelopeType
- * D215181         040709 mattheg  Ensure we flip buffers on receipt
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * D225797         040820 mattheg  Fix up possible NPE when connection is lost on exchange
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D244119         050131 prestona Delete two statements that repool buffer while its contents are still in use.
- * D262663         050406 prestona Deadlock running jetstream cases EC3 413004
- * D276260         050516 mattheg  Add hashcode to trace (not change flagged)
- * D307265         050922 prestona Support for optimized transactions
- * D289992         051114 prestona Reduce Semaphore creation
- * D369224         060523 mattheg  Send SEG_DELETE_SET_NOREPLY at correct priority
- * D365952         060523 mattheg  Add support for SIMessageNotLockedException
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * D405776         061116 mattheg  Check that transactions are valid before using them
- * D415321         070208 mattheg  Ensure we do not re-pool buffers on readSet() and readAndDeleteSet()
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * D538413         080724 djvines  trace improvements to follow message flow
- * PK73713         161008 ajw      Allow messageset to be unlocked and not increased lock count
- * 568951          081215 mleming  Code review adjustments to PK73713
- * PM42438         280611 ajw      Use Reentrant write/read lock rather than a non reentrant write/read lock
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;

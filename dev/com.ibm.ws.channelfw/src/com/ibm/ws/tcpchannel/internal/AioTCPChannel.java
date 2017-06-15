@@ -1,35 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 2005, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-
-// 04/05/05 gilgen      LIDB3618-2      Created new file
-// 04/21/05 wigger      LIDB3618-2      Aio Support Changes
-// 06/29/05 gilgen      287777          Support for WAS extensions of base 
-// 07/21/05 gilgen      219300          Only create 1 AsyncChannelGroup   
-// 08/01/05 wigger      294806          pass back null termination object
-// 08/21/05 gilgen      298587          eliminate AioThreadPools
-// 09/01/05 gilgen      302453          M3 code cleanup
-// 09/27/05 gilgen      307313          Code cleanup/improvements
-// 10/02/05 gilgen      308856          Code review comments
-// 10/02/05 gilgen      308856.1        Code review comments
-// 10/24/05 wigger      316352          Don't use native JIT with non-Direct JIT
-// 11/04/05 wigger      320175          make connect common with base TCP
-// 11/29/05 wigger      327358          create a connection manager per channel
-// 01/10/06 wigger      306998.3        use isAnyTracingEnabled
-// 01/17/06 gilgen      306062          dump more statistics
-// 02/02/06 gilgen      343082          eliminate FFDC when AIO not usable
-// 02/13/06 gilgen      345836          add more tracing
-// 02/24/06 wigger      327980.1        better connection info debug
-// 03/31/06 wigger      358208          prevent security excpetions
-// 04/12/06 gilgen      363238          shutdown AIO library if all channels are destroyed
-// 03/06/07 wigger      422106          don't shutdown AIO till Channel Factory is destroyed
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.tcpchannel.internal;
 
 import java.io.IOException;

@@ -1,31 +1,13 @@
-//* ===========================================================================
-//*
-//* IBM SDK, Java(tm) 2 Technology Edition, v5.0
-//* (C) Copyright IBM Corp. 2005, 2006
-//*
-//* The source code for this program is not published or otherwise divested of
-//* its trade secrets, irrespective of what has been deposited with the U.S.
-//* Copyright office.
-//*
-//* ===========================================================================
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 09/21/04 gilgen      233448          Add copyright statement and change history.
-// 04/05/05 gilgen      LIDB3618-2      Added Aio support
-// 04/21/05 wigger      LIDB3618-2      Aio support Changes
-// 04/28/05 wigger      271613          Nio class break out changes
-// 07/26/05 wigger      293682          fix logic error for blocking channel path
-// 07/26/05 wigger      293682          don't bind with a null local address
-// 08/30/05 wigger      300955          do connect with privileged thread
-// 11/03/05 gilgen      320175          make accept and connect common
-// 03/07/06 gilgen      352197          set SocketIOChannel in connlink as soon as its obtained
-// 03/14/06 gilgen      354499          improve trace
-// 11/27/06 wigger      410109          store connection info in VC
-// 02/22/07 wigger      LIDB4463-8      store connection info in VC
-// 11/26/07 wigger      457142          Performance: don't access InetAddress methods until necessary                                                                                                                                                                                                   
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.tcpchannel.internal;
 
 import java.io.IOException;

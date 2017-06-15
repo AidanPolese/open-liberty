@@ -1,46 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 181801          031217 vaughton Original
- * 181801.7        031217 susana   Added entry for MFP API/SPI classes
- * 182639          040112 dcurrie  Added entry for SIB.ra
- * 186991          040113 kalus    Changed "Login" to "Security"
- * 180765.1        040607 gatfora  Added a Message Trace group
- * 184299.6        040608 eveleigh Added entry for SIB.SdoRepository
- * 209736          040616 djvines  Added entry for SIB.exitpoint
- * 182745.8        040907 dwc1     Added entry for WLM Classifier
- * 231247          040914 nottinga Added entry for SIB.dispatcher
- * 280486.1        050613 kgoodson Added entry for JMF
- * 284293          050701 gareth   Added entry for SIB.objectmanager
- * SIB0009.wsn.03  050727 mattheg  Added entry for WSN
- * 302621          050928 nottinga Added entry for componentization
- * 310866          051031 djvines  Added entry for "MESSAGETRACECONTENTSMEDIATION"
- * 339187          060118 vaughton Added entry for Clients
- * 277610          060127 matrober SIBMigrationUtil missing from TraceGroups
- * SIB0117a.2      070322 mleming  Added entry for MQLink fap flows
- * 456176          070801 pnickoll Altered TRGRP_RA to be SIBJmsRaCommon (was SIBRa before)
- * 452462.7        070824 susana   Add TRGRP_MFPSDO to separate out mfp.sdo trace
- * 516687          080509 vaughton Add TRGRP_JFAPSUMMARY trace group
- * 538413          080724 djvines  Move JFAPSUMMARY to MESSAGETRACEJFAP, add MESSAGETRACECOMMS
- * 596315          090626 djvines  Add TRGRP_MFPMQ
- * 599149          010709 pbroad   Add minimal ME<->ME comms trace 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.utils;
 

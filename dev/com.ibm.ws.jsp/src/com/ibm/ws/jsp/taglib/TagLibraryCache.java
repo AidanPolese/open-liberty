@@ -1,17 +1,13 @@
-//IBM Confidential OCO Source Material
-//  5724-I63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004
-//  The source code for this program is not published or otherwise divested
-//  of its trade secrets, irrespective of what has been deposited with the
-//  U.S. Copyright Office.
-//  defect 396002 CTS: no jsp fatal translation error for  taglib after actions Scott Johnson 10/17/2006
-// jsp2.1work
-//415289 70FVT:useinmemory: Error received when hitting non-existent jsp    2007/01/17 09:32:07  Scott Johnson
-// Defect PK68590 2008/08/28 sartoris   Unable to locate tld files that are in the loose lib dir (and not in a jar).
-// Defect PK69220 2008/10/10 sartoris   Add a flag to be able turn off tld searching through an application.
-// Defect PM03123 2010/01/19 pmdinh		Continue from PK68590 to support tld files that are in a jar for a loose lib config.
-// Defect PM07608 2010/04/02 pmdinh     NPE when URI element is missing in TLD which deployed in RAD loose library env.
-//        PM99163 2014/09/02 pmdinh     Tag file not found in loose configuration
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.taglib;
 
 import java.io.File;

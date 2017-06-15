@@ -1,29 +1,13 @@
-/*
- * COMPONENT_NAME: sib.unittest.security
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *  ORIGINS: 27
- *
- * 
- * 
- * ===========================================================================
- * IBM Confidential OCO Source Material
- *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ===========================================================================
- * 
- *
- * 
- *
- * Change activity:
- *
- * Reason          Date        Origin   Description
- * --------------- ----------- -------- ----------------------------------------
- * d461380         22-Aug-2007 nottinga Initial Code Drop
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.unittest.security;
 
 import java.lang.annotation.ElementType;

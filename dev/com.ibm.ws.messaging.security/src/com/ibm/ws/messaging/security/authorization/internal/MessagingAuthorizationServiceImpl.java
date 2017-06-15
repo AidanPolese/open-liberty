@@ -1,24 +1,13 @@
-/*
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012, 2013
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * 
- * Change activity:
- * ---------------  --------  --------  ------------------------------------------
- * Reason           Date      Origin    Description
- * ---------------  --------  --------  ------------------------------------------
- * 95461            06-04-13  Sharath   Changing the Messaging in the exception
- * 95504            13-03-13  Sharath   Add the warning message inside this class which was navigated to parent earlier
- * 95909            18-03-13  Sharath   Changes related to new Messaging Security Story
- * 95788            18-03-13  Sharath   Remove the hard coded message and move it to nls file
- * 97097            28-03-13  Sharath   Convert the warning messages to debug since we do these warnings should be actually part of auditing
- * 99082            16-04-13  Sharath   Wrong destination name seen for alias destination authorization failure
- * 99083            17-04-13  Sharath   Alias Destination Permission for TopicSpace
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.messaging.security.authorization.internal;
 

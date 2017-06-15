@@ -1,24 +1,13 @@
-//IBM Confidential OCO Source Material
-//  5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//	The source code for this program is not published or otherwise divested
-//	of its trade secrets, irrespective of what has been deposited with the
-//	U.S. Copyright Office.
-//
-//	Revisions:
-//	Defect 203702  2004/05/17  Fix code gen for imports for better error messaging
-//  Defect 213290  2004/06/30  Allow tagfile attributes to be specified as "[L<classname>;"
-//  Defect 232818  2004/09/22  Strange behaviour when step over JSP taglib lines
-//  Defect 247815  2004/12/16  Fix large finally block when using tag pooling for large JSPs
-//  Defect PK17173 2006/01/18  DOCTYPE output generated in java even when omitted from jsp:output
-//  Defect 386311  2006/08/23  Fix regression in tag files- EL not interpreted correctly
-//  jsp2.1work
-//  Defect 395182.2  70FVT: make servlet 2.3 compatible with JSP 2.1 for migration 2007/02/07 Scott Johnson
-//  Defect PK65013 2008/07/07  Need ability to customize pageContext variable.
-//  Defect PM06063 2010/01/26  pmdinh    Add a flag to disable Feature 4147-24 "JSP 2.1 upgrade: Incorporate resource injection engine"
-//  APAR PM12658 2010/04/20  add methods to keep track of doTag method line number for debug mode
-// APAR    PM70267  Convert a tag file name that contains a hyphen     10/05/2012   sartoris
-
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.generator;
 
 import java.util.HashMap;

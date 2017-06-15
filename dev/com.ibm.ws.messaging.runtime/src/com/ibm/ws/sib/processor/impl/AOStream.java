@@ -1,63 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- --------------------------------------------
- * SIB0002.mp.1     210605 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.mp.1     210605 tevans   PEV Prototype
- * LIDB3472-0.7     150705 brauneis J2SE 5 Prep
- * SIB0002.tran.2   050805 tevans   New Transactions interfaces
- * SIB0002.mp.15    170805 tevans   Transactional PEV Producers and Consumers
- * SIB0041.mp.1     300805 cwilkin  Total Message Ordering
- * 344280           080206 tpm      NPE in processNotFlushed
- * 345318.1         220206 cwilkin  Provide eventPreUnlocked callback
- * 350261           270306 tpm      Disable inactivity timeout for shared durable subscriptions
- * 370748           121006 cwilkin  Set arrival time to not be 0
- * PK38602          120207 cwilkin  AsyncUpdateWithRetry should not run out of retries
- * SIB0112le.mp.1   130207 ajw      Large Message surport
- * 419906           080307 cwilkin  Remove Cellules
- * 426894           160307 cwilkin  Infinite retries on asyncUpdates
- * 424497.1         260407 vaughton Restructure custom properties
- * 424497.2         300407 vaughton Restructure custom properties
- * SIB0113a.mp.1    240707 cwilkin  Gathered Consumer foundation
- * SIB0113a.mp.3    010807 vaughton Class rename
- * SIB0113a.mp.8    200607 cwilkin  Gathering infrastructure in remote get
- * SIB0163.mp.1     190907 nyoung   XD Integration.
- * SIB0113a.mp.9    261007 cwilkin  Remote Gathering
- * SIB0113a.mp.10   231107 cwilkin  Message Gathering controllables
- * SIB0113a.mp.11   131207 cwilkin  Message Gathering IME Recovery
- * SIB0113a.mp.12   211207 cwilkin  Gathering Recovery
- * 499350           210208 cwilkin  Synchronize on remoteConsumerPoint in processRequest
- * 516346           280408 djvines  Synchronize on the outer this in inner classes
- * 516583           060508 nyoung   Initialise idletimeout parameter to zero in findOrCreateJSRemoteConsumerPoint.
- * 520453           150508 dware    Improve trace of arrays
- * 520472           220508 cwilkin  Gathering reattaching
- * 488794           100608 cwilkin  Flow redelivery count from RME to DME
- * 527099           110608 cwilkin  Use reentrant locking on rcp
- * 533586           010708 dware    Fix findbugs defect
- * 515543           180708 cwilkin  Handle MessageStoreRuntimeExceptions on msgstore interface
- * 537973           220708 cwilkin  Remove printStackTrace
- * PK67067          040808 pbroad   Handle cases where message for AOValue is not in store
- * 528148.3         040908 cwilkin  Attempt a transitionToFlused on receing a requestFlush
- * 565308           191108 dware    Handle an empty array of redelivery counts on a reject message
- * 587632           280409 cwilkin  Clean up AOValues as part of cancelMessageRequest
- * 589686           190509 dware    Cleanup failed work under a transaction
- * F001333-14578.1  120809 dware    Unlock counts don't exactly work - see TODOs
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.impl;
 

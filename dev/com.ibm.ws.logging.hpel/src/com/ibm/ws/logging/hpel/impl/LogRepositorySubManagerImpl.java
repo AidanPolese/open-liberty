@@ -1,28 +1,13 @@
-// %Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 2009,2011
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason            Version    Date        User id     Description
- * ----------------------------------------------------------------------------
- * F017049-18055.1     8.0      12-18-2009  mcasile   W/Igor's assistance create subManager for dependent processes
- * 646359              8.0      04-02-2010   belyi    Fix timestamp HPEL uses on server instance directories
- * F017049-22453       8.0      04-06-2010  mcasile   Add in code to use RMI to talk to parent process
- * F004324             8.0      04-14-2010  mcasile   Due to BaseImpl chg, no notification work here, just used new LoggerPrepped work
- * 671059              8.0      11-05-2010  mcasile   Do ORB calls only after LogRecordHandler released (separate queues)
- * 688583              8.0      01-30-2011   belyi    Add verification that specified location can be written into.
- * 682033              8.0      02-01-2011  mcasile   StopGap on growth during high trace vol, make sure this servant has
- * 													  not put more than max repository size
- * 699970              8.0      03-30-2011  mcasile   Refine hpel debug trace
- * 724465              8.0      12-08-2011  shighbar  Switch from CopyOnWriteArraySet to HashSet to ensure thread safety and better
- *                                                    performance. 
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.logging.hpel.impl;
 
 import java.io.File;

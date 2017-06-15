@@ -1,34 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// 1.13 SERV1/ws/code/utils/src/com/ibm/ejs/util/ByteArray.java, WAS.ejbcontainer, WASX.SERV1 8/14/12 10:46:04
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1998, 2012
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  ByteArray.java
-//
-// Source File Description:
-//
-//     Provides hashcode and equals function for byte arrays.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d119287   ASV40X    20020220 tkb      : Fix hashcode - provide better hashing
-// d120577   ASV40X    20020228 tkb      : Improve equals() - start at the end
-// d181754   ASV60TD   20031103 tkb      : Support hashcode as part of ByteArray
-// LIDB2775-23.2 ASV60 20031212 leealber : z/OS merge to distribute base
-// d195605   ASV60     20040324 tkb      : Provide type specific equals()
-// d211567   WAS60     20040622 kjlaw    : fix equals to return false if wrong type.
-// d273615   WAS602    20050505 tkb      : Fix NullPointerException in equals
-// d477704   WAS70     20071107 mcasile  : New FFDC Facade API
-// F73338    WAS852    20120814 tkb      : remove unnecessary catch/ffdc
-// --------- --------- -------- --------- -----------------------------------------
-
+/*******************************************************************************
+ * Copyright (c) 1998, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ejs.util;
 
 import java.util.Arrays;

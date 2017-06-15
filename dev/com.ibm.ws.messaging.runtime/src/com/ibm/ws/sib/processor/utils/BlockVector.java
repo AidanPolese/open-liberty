@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- --------------------------------------------
- * 171905.1         170703 gatfora  Initial implementation
- * 172296           220703 gatfora  Repackaging utility classes
- * 199212           210404 gatfora  Fixing javadoc
- * 199574           050405 gatfora  Remove use of ArrayLists.
- * 208958           110604 gatfora  Refactor LinkedList/ArrayList use
- * LIDB3706-5.247  180105 gatfora  Include a serialVersionUid for all serializable objects
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.utils;
 

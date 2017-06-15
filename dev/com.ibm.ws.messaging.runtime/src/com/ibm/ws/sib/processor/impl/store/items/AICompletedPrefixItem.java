@@ -1,33 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 180483.3         111403 isilval  Initial implementation
- * 185688           161203 gatfora  Package restructure for items and itemstreams
- * 180483.4         080104 isilval  More functionally complete Remote Get
- * 190631.2         200204 caseyj   Implement persistent version no for SIMPItem
- * 189332.3         240304 gatfora  Correct Trace entry/exit
- * 225785           230804 gatfora  Persistent version checking
- * 234985           290904 gatfora  getPersistentData should throw SIErrorException
- * 248145           201204 gatfora  Remove code that is not used
- * 272109           290405 gatfora  Removal of the PROBE class 
- * 492029           260608 dware    Improve toString and MsgStore XML text
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl.store.items;
 
 import java.io.IOException;

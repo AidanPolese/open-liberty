@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- *  
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- * 188189            260104 matrober Configurable option to inhibit URI dest in message
- * 192303            270204 matrober BVT: inhibitJMSDestination not in JmsQueueImpl
- * 199166            210404 matrober javadoc problems
- * 197921.1          040504 jhumber  New Javadoc tags
- * 200200            050504 jhumber  Add Blocked Destination methods
- * 225815            200804 matrober ibm-spi tags in internal files
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.api.jms;
 
 /**

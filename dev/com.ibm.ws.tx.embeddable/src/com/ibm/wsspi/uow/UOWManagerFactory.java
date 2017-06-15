@@ -1,19 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2006, 2007
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// %Z% %I% %W% %G% %U% [%H% %T%]
-//
-// Change History:
-//
-// YY/MM/DD Developer CMVC ID      Description
-// -------- --------- -------      -----------
-// 06/10/03 johawkes  LIDB4548-1.1 Created
-// 07-06-14 awilkins  445363       Javadoc tag as IBM SPI
-// 11-11-24 johawkes  723423       Repackaging
-//
+/*******************************************************************************
+ * Copyright (c) 2006, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.uow;
 
 import com.ibm.tx.TranConstants;

@@ -1,29 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5639-D57,5630-A36,5630-A37,5724-D18 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//CHANGE HISTORY
-//Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//       309663.2        10/10/05      todkap              309663 pathInfo problem exists for InvokerExtensionProcessor
-//       PK15276         01/03/06      mmolden             INCORRECT FILTER MAPPING: WAS 6.0.2 VIOLATES THE SERVLET    WAS.webcontainer
-//       PK17095         01/04/06      todkap              WEBAPPDISPATCHERCONTEXT CORRUPTION DUE TO MULTITHREAD USAGE OF    WAS.webcontainer
-//       340684          01/24/06      mmolden             relative includes fail if current URI has path elements
-//       PK18815         02/21/06      todkap              NULLPOINTEREXCEPTION WITH CLONED REQUEST AND STORED RESPONSE    WAS.webcontainer
-//       LIDB4408-1      02/22/06      todkap              LIDB4408-1 web container changes to limit pooling
-//       348603.1        03/03/06      todkap              Changes in security SPI affect webcontainer    WASCC.web.webcontainer
-//       PK23779	 06/08/06      mmolden             PathInfo is omitted while redirecting using response.sendRedirect.
-//       455092          08/03/07      mmolden             70FVT : InsertFragmentBlocking hangs after a regular includ
-//       PK39337         06/28/07      mmolden             ServletPath and PathInfo not returning proper values based on mapping
-//       489973          12/31/07      mmolden             70FVT:ServletRequestListener not firing when registered in tld
-//       PK67895         08/28/08      mmulholl            Allow for newPath to be null in getRequestDispatcher()
-//       PK79143         03/23/09      mmulholl            sendRedirect always causes chunked response
-//       PI08569         01/10/14      pmdinh              getContextPath() returns wrong value intermittently in WPS+WCM env.
-//       PI22830         15/11/14      zaroman             convertRelativeURIToURL() returns wrong value when a request to context root is made without a trailing slash
-//       PI67942         10/21/16      zaroman             encode URI after dispatch
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.webapp;
 
 import java.io.IOException;

@@ -1,19 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5724-J08 (C) COPYRIGHT International Business Machines Corp. 1997, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-
-
-//  CHANGE HISTORY
-//  Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//          324991          11/21/05    mmolden             61FVT: NullPtrExpn when logging out after admin console addNode
-//          351214          03/02/06    mmolden             SVT:Restart Application under client load, get null pointers
-//          366965          06/22/06    mmolden             Reduce number of lines enclosed in synchronized in    WASCC.web.webcontainer
-//          541113          08/06/08    mmolden             PERF: Use StringBuilder instead of StringBuffer in WebContainer
-
-//Code added as part of LIDB 2283-4
+/*******************************************************************************
+ * Copyright (c) 1997, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.servlet;
 
 import javax.servlet.ServletRequest;

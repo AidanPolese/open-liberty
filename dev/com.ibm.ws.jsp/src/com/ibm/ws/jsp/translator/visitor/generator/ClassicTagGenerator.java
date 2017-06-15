@@ -1,19 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-I63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//Defect 247815 2004/12/16 Fix large finally block when using tag pooling for large JSPs
-//Defect 315723 2005/10/20 array being created unneccessarily in generate .java source.
-//Defect PK31135 2006/10/10 Change in Iteration eval in v6 causes infinite loops in certain scenarios
-//Feature 4147-24 "JSP 2.1 upgrade: Incorporate resource injection engine"  2007/03/30 Curtiss Howard
-//Feature LIDB3292-43 "Integrate AMM with webcontainer" 2007/10/12 cjhoward
-//PK65013   sartoris    07/07/2008  Need ability to customize pageContext variable.
-//Defect PM06063 2010/01/26 pmdinh    Add a flag to disable Feature 4147-24 "JSP 2.1 upgrade: Incorporate resource injection engine"
-//PM26777 pnicoluc  11/16/2010 JSP ATTRIBUTE USETHREADTAGPOOL=TRUE CAUSES COMPILATION ERROR
-//PM48052 pnicoluc  09/19/2011 JSPWRITER HANDLED INCORRECTLY IN CASE OF TAG NESTING.
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.generator;
 
 import java.util.Map;

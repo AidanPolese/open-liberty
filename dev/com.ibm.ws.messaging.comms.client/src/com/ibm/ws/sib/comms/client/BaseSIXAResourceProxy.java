@@ -1,39 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.22 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/BaseSIXAResourceProxy.java, SIB.comms, WASX.SIB, uu1215.01 10/05/27 09:18:29 [4/12/12 22:14:05]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2010 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        050922 prestona Original
- * D318614         051031 prestona Support MSSIXAResourceProvider interface
- * D289992         051114 prestona Reduce Semaphore creation
- * D350111.1       060302 mattheg  Move to FAP 5
- * D354565         060320 prestona ClassCastException thrown during failover
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * D384259         060815 prestona Remove multicast support
- * D399147.3       061023 mattheg  Return RMFAIL instead of RMERR
- * SIB0048c.com.1  070109 mattheg  Implement TMSUSPEND / TMRESUME
- * D373006.2       070115 mattheg  1pc Optimisation
- * D418458         070207 mattheg  Allow joined resources to be ended in any order
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * SIB0121a.com.1  070706 prestona Propagate exception reason and inserts.
- * D399147.4       070726 mleming  Replace XAER_RMERR with XAER_RMFAIL in javadoc
- * PM11871         100519 slaterpa Invalidate conversation on exception
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import java.util.ArrayList;

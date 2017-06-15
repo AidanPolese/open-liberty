@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 186484.5         210404 ajw      Further Continued controllable interfaces
- * 186484.9         040504 tevans   Yet another runtime control point feature
- * 186484.9         060504 tevans   Extended runtime control implementation
- * 186484.10        170504 tevans   MBean Registration
- * 216945           160704 gatfora  getNumberOfQueuedMessages returns long
- * 216685           160704 ajw      cleanup anycast runtime control impl
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.runtime;
 
 import com.ibm.ws.sib.processor.exceptions.*;

@@ -1,23 +1,13 @@
-/* ============================================================================
- * @(#) 1.6 SERV1/ws/code/runtime.fw/src/com/ibm/ws/exception/ConfigurationWarning.java, WAS.runtime.fw, WAS80.SERV1, kk1041.02 3/29/07 15:02:56 [10/22/10 00:56:32]
+/*******************************************************************************
+ * Copyright (c) 1997, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2007
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- *
- * Change activity:
- *
- * Reason          Date     userid    Description
- * -------         ------   --------  -----------------------------------------
- * LIDB3133-2.2.1  040301   tmusta    Adding SPI tags
- * LIDB1966        040310   tmusta    Improve Server Startup
- * LIDB3706-6      050214   dzavala   Add SUID 
- * LIDB3491-1      070328   ericvn    Provide supported interfaces
- * ============================================================================ */
-
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.exception;
 
 /**

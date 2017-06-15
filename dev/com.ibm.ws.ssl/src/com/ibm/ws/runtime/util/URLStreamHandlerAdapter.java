@@ -1,24 +1,13 @@
-/*
- * @(#) 1.7 SERV1/ws/code/runtime.fw/src/com/ibm/ws/runtime/util/URLStreamHandlerAdapter.java, WAS.runtime.fw, WASX.SERV1, pp0919.25 4/1/08 12:19:31 [5/15/09 17:32:56]
- * 
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2005, 2008
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * 
- * 
- * Change History:
- * 
- * Reason        Version     Date         User id   Description
- * -----------   ---------   ----------   --------  ------------------------------
- * LIDB3418      7.0         04-10-2005   tmusta    Componentization
- * D345733       6.1         02-09-2006   ericvn    Support null or invalid classnames
- * D347115       6.1         02-14-2006   ericvn    Remove FFDC messages during startup        
- * PK39922       6.1         02-26-2007   bkail     Revert 345733
- * D477704.2     7.0         11-07-2007   mcasile   Move to new FFDC Facade API
- * D477704.2.1   7.0         04-01-2008   bkail     Fix Ffdc.log source ID and probe ID
- */
+/*******************************************************************************
+ * Copyright (c) 2005, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.runtime.util;
 

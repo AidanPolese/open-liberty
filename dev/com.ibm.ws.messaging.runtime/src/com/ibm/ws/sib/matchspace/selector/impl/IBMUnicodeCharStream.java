@@ -1,35 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * TBD              260303 astley   First version
- * 166318.4         160603 nyoung   Move to com.ibm.ws.sib.processor.matchspace.selector.impl
- * 171415           100703 gatfora  Removal of complile time warnings.
- * 174606           190803 gatfora  Removal of compile warnings.
- * 175640           010903 gatfora  FFDC handling.
- * 166318.10        230903 nyoung   Move to matchspace.impl component
- * 186091           050104 auerbach Remove FFDC call at end-of-selector (routine) Exception (normal)
- * 199185           220404 gatfora  Fix Javadoc.
- * 236016           051004 nyoung   Add new exception to support selector stream EOF.
- * 236016.1         101004 nyoung   Thow selector stream EOF exc if stream closed.
- * SIB0155.mspac.1  120606 nyoung   Repackage MatchSpace RAS.
- * 393755           280906 nyoung   Catch block FFDC handling.
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.matchspace.selector.impl;
 
 import com.ibm.ws.sib.matchspace.utils.FFDC;

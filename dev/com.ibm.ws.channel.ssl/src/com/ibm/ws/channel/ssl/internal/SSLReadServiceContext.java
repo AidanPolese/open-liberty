@@ -1,29 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 2003, 2008
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//@(#) 1.42 SERV1/ws/code/ssl.channel.impl/src/com/ibm/ws/ssl/channel/impl/SSLReadServiceContext.java, WAS.channel.ssl, WASX.SERV1, pp0919.25 5/27/08 12:25:13 [5/15/09 18:21:25]
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 061605   gilgen      LIDB3618-2      Use wsspi ThreadPool from JDK
-// 102405   clanzen     316607          Need to honor JIT allocation size.
-// 121505   clanzen     332079          Handle left over data when it isn't enough for the request.
-// 010306   clanzen     334550          Ensure limit unchanged in user buffer after read.
-// 030206   leeja       PK20416         Handle >1 read on allocated buffer
-// 031706   leeja       PK21690         Handle HS_NEED_WRAP after unwrap() call
-// 041806   clanzen     363584          Async read with quick response shouldn't use callback.
-// 101206   leeja       PK32916         Protect against the 0 byte sync read
-// 040407   leeja       LIDB2924-15     Remove JSSE2 usage
-// 040907   leeja       431269          Fix IllegalArg on certain read paths
-// 042007   leeja       431922          Fix dec buffer problem on iseries
-// 083007   wigger      463620          Read after sync read of 0 fails
-// 022108   leeja       499653          Fix double release of decnetbuffers
-// 032608   leeja       507617          Fix sync read return code
-// 052708   leeja       523423          Fix buffer space on secondary sync reads
-
+/*******************************************************************************
+ * Copyright (c) 2003, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.channel.ssl.internal;
 
 import java.io.IOException;

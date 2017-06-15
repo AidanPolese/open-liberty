@@ -1,15 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-I63, 5724-H88, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 2005, 2006
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//Change History:
-//Date     UserId      Defect          Description
-//--------------------------------------------------------------------------------
-// 11/16/05 gilgen      324433         Eliminate uniqueID 
-// 11/21/05 wigger      325773         add re-use count for race condition detection
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.io.async;
 
 /**

@@ -1,30 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * --------         ------ -------- --------------------------------------------------
- * 166318.14        011203 auerbach Created file
- * 194466.2         060404 nyoung   Rationalise topic wildcards to industry standard.
- * 213845           060704 nyoung   Allow use of '.' in topic name.
- * 307231           211005 nyoung   Allow '//./' in topic expression.
- * 332762           151205 nyoung   Allow '/.' in topic expression.
- * SIB0155.mspac.2  150605 nyoung   Alternate topic syntax checkers
- * 421869           210207 nyoung   Multiple multi-level wildcard failure  
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.matchspace.selector.impl;
 

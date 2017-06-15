@@ -1,17 +1,13 @@
-//IBM Confidential OCO Source Material
-//	5724-I63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//	The source code for this program is not published or otherwise divested
-//	of its trade secrets, irrespective of what has been deposited with the
-//	U.S. Copyright Office.
-//
-//	Revisions:
-//	Defect 203702  2004/05/17  Fix code gen for imports for better error messaging
-//  Defect 215691  2004/07/12  "add support for javaEncoding"  Scott Johnson
-//  Defect 232818  2004/09/22  Strange behaviour when step over JSP taglib lines
-//  Defect 245645.1  2004/12/06 Custom Tags using default namespace don't work
-//  defect PK34989 Supercedes PK26679 (Provides an optional flag to trim text before creating CDATA section) 2007/02/13
-//  Defect PK94316	Add check for isTrimDirectiveWhitespaces at the same place we check for useCDataTrim.	sartoris	2009/09/24
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.generator;
 
 import java.io.FileNotFoundException;

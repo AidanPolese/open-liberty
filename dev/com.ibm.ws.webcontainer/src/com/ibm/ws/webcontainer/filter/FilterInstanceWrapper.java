@@ -1,19 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5724-J08 (C) COPYRIGHT International Business Machines Corp. 1997, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//CHANGE HISTORY
-//Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//    LIDB-3598       		      todkap              Modified FilterInstanceWrapper to enable Listener support.
-//	  292460		      todkap              resolve issues concerning LIDB-3598			
-//	  299280.1    	08/22/05      todkap		  cannot add FilterInvocationListener in some case    WAS.webcontainer 
-//	  301121    	08/26/05      todkap		  WebApp fails to handle wsspi implementation of IFilterConfig    WASCC.web.webcontainer
-//        140014        09/01/14      zaroman             Do not throw the FFDC if the filter has been destroyed
-//        141092        01/07/15      pmdinh              Improve error message when async servlet/filter is not supported
-//        174668        05/20/15      pmdinh              Fix for CTS tests (see servlet spec 3.1, section 9.5 and 10.9.2)
+/*******************************************************************************
+ * Copyright (c) 1997, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.filter;
 
 import java.io.FileNotFoundException;

@@ -1,38 +1,15 @@
 package com.ibm.ws.sib.msgstore;
 
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 03/02/03 drphill  Original
- * 220454          02/08/04 corrigk  NPE in newLockingItemCursor et al. 
- * 224000          16/08/04 corrigk  Checked exceptions in getUniqueXxx
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * 290610          09/08/05 schofiel Statistics enhancements
- * 321391          07/11/05 schofiel Remove STRICT_ENFORCED_IN_MESSAGESTORE
- * 278082          03/01/06 schofiel Parameter on factory method to disable cursor jumpback
- * 306998.19       09/01/06 gareth   Add new guard condition to trace statements
- * 445621          23/07/07 gareth   Use Boolean.valueOf() in trace statements
- * 489210          15/02/08 gareth   Change exception thrown in findById()
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.sib.msgstore.transactions.Transaction;

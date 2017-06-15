@@ -1,31 +1,15 @@
 package com.ibm.tx.jta.embeddable.impl;
 
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/*  ORIGINS: 27                                                                      */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2007,2009 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* @(#) 1.7 SERV1/ws/code/was.transaction.impl/src/com/ibm/ws/tx/jta/TimeoutManager.java, WAS.transactions, WAS855.SERV1, cf061521.02 3/24/10 08:26:53 [6/12/15 06:58:57]                                                     */
-/*                                                                                   */
-/*  DESCRIPTION:                                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  Date      Programmer    Defect   Description                                     */
-/*  --------  ----------    ------   -----------                                     */
-/*  16/08/07  johawkes      451213   Created                                         */
-/*  21/11/07  awilkins      481738   Output stack of thread when tx times out        */
-/*  01/07/08  johawkes      532639.3 Trace changes                                   */
-/*  15/06/09  mallam        596067   package moves                                   */
-/*  06/18/09  mezarin       PK90497  Add SRTermination                               */
-/*  23/03/10  johawkes      640174.1 Remove TimeoutInfo map                          */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2007, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

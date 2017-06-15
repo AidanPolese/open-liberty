@@ -1,31 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 2003, 2008
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//%Z% %I% %W% %G% %U% [%H% %T%]
-//HISTORY
-//~~~~~~~
-//
-//Change ID    Author    Abstract
-//---------    --------  ---------------------------------------------------
-//d240206      clanzen   Enable use of vhost in the CFEndPoint selection.
-//f247975.3    leeja     Added API to serialize to XML
-//d259223.2    clanzen   Enable chain modification before building chains for CFEndPoints.
-//309735       clanzen   Fix class cast exception
-//316078       clanzen   Allow app channels to disallow CFEndPoints for their chains.
-//342528       clanzen   Allow multiple vhosts per endPoint.
-//336535.2     clanzen   Clean up the toString method to prevent NPE
-//PK22694      leeja     Allow variables in the hostnames
-//361316       clanzen   Prevent caching destroyed VCFs
-//362006       clanzen   Update the VCF ref count when returning an existing VCF.
-//428274       wigger    race conditions in createOutboundChain(), so sync
-//483736       leeja     Fix NPE on deserialized 6.0 endpoint (PK57053)
-//522651       leeja     Fix deprecated usage and warnings
-//549498       wigger    add a "don't include endpoint" option, mainly for xmem in the SR. 
-//======================================================================== */
-
+/*******************************************************************************
+ * Copyright (c) 2003, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.channelfw.internal;
 
 import java.io.NotSerializableException;

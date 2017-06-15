@@ -1,43 +1,14 @@
 package com.ibm.tx.jta.impl;
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002,2010 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer    Defect   Description                                                         */
-/*  --------  ----------    ------   -----------                                                         */
-/*  02-07-24   awilkins              Creation for JTS2                                                   */
-/*  05/09/02   gareth       ------   Move to JTA implementation                                          */
-/*  02-10-03   awilkins     1444     Thread safety - add synchronization                                 */
-/*  21/02/03   gareth   LIDB1673.19  Make any unextended code final                                      */
-/*  09/07/03   hursdlg      169606   Base on LongObjectHashMap utility                                   */ 
-/*  20/08/03   hursdlg      174685   General performance of getLocalTID                                  */ 
-/*  01/10/03   johawkes     178208.1 Use log generated recovery ids                                      */
-/*  26/07/04   hursdlg      219483   Add reserver back for zOS                                           */
-/*  27/07/05   hursdlg      292064   Add lookupTransaction                                               */
-/*  06/01/06   johawkes    306998.12 Use TraceComponent.isAnyTracingEnabled()                            */
-/*  17/05/07   johawkes     438575   Further componentization                                            */
-/*  06/06/07   johawkes     443467   Moved                                                               */
-/*  29/06/07   johawkes     446894.1 Added clear()                                                       */
-/*  24/06/08   johawkes     531265   Base on ConcurrentHashMap (possibly over synchronized now)          */
-/*  02/06/09   mallam       596067   package move                                                        */
-/*  01/06/10   johawkes     654731   Change suggested by perf team                                       */
-/*  23/09/10   johawkes     663227   Another change suggested by perf team                               */
-/*  13/10/10   johawkes     673797   Backing out the last perf change which has a bug in                 */
-/*  21/10/10   johawkes     663227.1 Yet another change suggested by perf team                           */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 

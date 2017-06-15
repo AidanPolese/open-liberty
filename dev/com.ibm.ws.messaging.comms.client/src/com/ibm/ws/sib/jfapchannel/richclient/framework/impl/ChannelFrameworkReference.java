@@ -1,76 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.56.1.13 SIB/ws/code/sib.jfapchannel.client.rich.impl/src/com/ibm/ws/sib/jfapchannel/framework/impl/ChannelFrameworkReference.java, SIB.comms, WASX.SIB, uu1215.01 09/08/14 10:19:33 [4/12/12 22:14:17]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2003, 2009
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * F177053         030922 prestona Rebase JFAP Channel on pre-M4 CF + TCP
- * F178002         030929 prestona Discover CF + TCP Channel as services
- * F178499         031002 prestona CF not being started in Client Container workaround.
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * F189351         040203 prestona CF admin support
- * F196678.10      040413 prestona JS Client Administration
- * D202512         040511 prestona EXCP_DURING_INIT_SICJ0002 at client connect
- * D200811         040608 mattheg  Use WsChannelFrameworkImpl instead of ChannelFrameworkImpl
- * D219752         040728 prestona SSL channel properties not picked up correctly.
- * D221079         040803 prestona Find service using services namespace.
- * D197042         040811 prestona FFDC entries
- * D223632         040812 prestona Defend against errors during initialisiation
- * D224844         040817 mattheg  Ensure thread pool name is added correctly to property bag
- * D226214         040823 prestona Retry listen on initial bind failure.
- * D229522         040906 prestona Remove programatic chain creation
- * D232185         041007 mattheg  Serviceability improvements
- * D243616         041109 prestona Z4FVT: TCP Channel SIB_TCP_JFAP initialization failed
- * D244677         041122 prestona ZOS: Client applications cannot find messaging engine.
- * F244595         041129 prestona z/OS: TCP Proxy Bridge Support
- * D247547         041214 prestona z/OS: Attempted to create outbound bridge chains before CF lookup
- * D249911         050113 prestona z/OS: Wrong insert in (wrong) message output.
- * D255410         050217 prestona z/OS: TCP Proxy Bridge Support needs additional time to start
- * D256624         050220 mattheg  z/OS: Start right chain in z/OS startup thread.
- * F255130         050225 prestona Allow SSL properties to be overridden.
- * LIDB3187-28     050610 prestona Switched over the threadpool implementation used.
- * D249918         050721 mattheg  Add new NLS messages
- * D303323         050907 prestona SSL channel changes in SERV1
- * D311987         051101 prestona Delay "no SSL properties file" error until SSL chain usage
- * D244448         051114 prestona Allow client container to run without access to server JNDI
- * D323350         051114 prestona Failure loading properties when Java 2 security enabled
- * D329817         051207 mattheg  FFDC Failures
- * D336816         060127 prestona Distinguish between thin client and client container on z/OS
- * D350007         060228 prestona Application client doesn't pick up SSL properties
- * D360048         060404 mattheg  Use ThreadPoolRepository to create SIBFapThreadPool
- * D363760         060419 mattheg  Add trace suppression to the SSL property file missing warning
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * SIB0048b.uti.1  060922 mattheg  Modifications to isThinClient()
- * SIB0134.com.1   070302 prestona Security tidy-up (start only permitted chains)
- * D435006         070502 prestona Handle encoded passwords
- * D453961         070725 mleming  Throw an SIErrorException if we fail to locate CFW in client
- * SIB0100.comms.1 070801 mleming  Allow TCP Proxy Bridge Service to be started separately
- * D458453         070810 sibcopyr Automatic update of trace guards
- * SIB0100.wmq.3   070816 mleming  Allow WMQRA to make use of TCP Proxy Bridge
- * 488180          071208 prestona SSL configuration not properly loaded in client container.
- * PK62789         080318 pbroad   Use ChannelFrameworkFactory.getChannelFramework() in standalone environment
- * 513302          080418 mleming  Pass in the correct alias key to SSLChannel
- * 500584.1        080418 vaughton Start/Stop channels when channel policy changes
- * 528455          080610 djvines  Fix up FFDC calls
- * 531881          080625 mleming  Retry starting chains on retryable failures
- * 581917          090415 mleming  Start up chains when bus added dynamically
- * 604938          090812 djvines  Don't add passwords to trace (or ffdc)
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.richclient.framework.impl;
 
 import java.security.AccessController;

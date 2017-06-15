@@ -1,96 +1,15 @@
 package com.ibm.tx.jta.impl;
 
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002,2013 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer    Defect    Description                                                        */
-/*  --------  ----------    ------    -----------                                                        */
-/*  02-02-25  hursdlg       111021.1  create resource recovery logs                                      */
-/*  27-02-02  beavenj       LIDB1220.151.1 Code instrumented for FFDC work                               */
-/*  02-02-28  hursdlg       LI1169.1  track recovery actions                                             */
-/*  02-03-02  hursdlg       LI1169    complete shutdown logic                                            */
-/*  02-03-08  hursdlg       120732    cleanup classpath handling                                         */
-/*  02-04-11  hursdlg       124938    improve recovery diagnostics                                       */
-/*  02-04-15  hursdlg       125255    fix recoveryId allocation after restart                            */
-/*  02-05-13  awilkins      126658    Perform logging at prepare time                                    */
-/*  05/09/02   gareth       ------    Move to JTA implementation                                         */
-/*  23/09/02  hursdlg       ------    Add partner log support                                            */
-/*  03/10/02  hursdlg       ------    Change behaviour of recoveryCompleted()                            */
-/*  09/10/02  hursdlg       1453      Tidy up recover call                                               */
-/*  10/10/02  hursdlg       1426      Update to latest recovery.log spec                                 */
-/*  18/10/02  hursdlg       1433      Fix FFDC                                                           */
-/*  05/11/02   gareth       1449      Tidy up messages and exceptions                                    */
-/*  25/11/02  awilkins      1513      Repackage ejs.jts -> ws.Transaction                                */
-/*  13-12-02  awilkins    LIDB1673.17 Embedded RAR recovery                                              */
-/*  21/01/03   gareth     LIDB1673.1  Add JTA2 messages                                                  */
-/*  28/01/03  hursdlg     LIDB1673.9.1 Use PartnerLogData base class                                     */
-/*  21/02/03   gareth     LIDB1673.19 Make any unextended code final                                     */
-/*  04/04/03  hursdlg     LIDB1673.22 Pass thru server specific recover bqual                            */
-/*  22/04/03  hursdlg       163130    Add comments for serialize/deserialize                             */
-/*  28/05/03  hursdlg       167373    Make XARecoveryWrapper match Aquila                                */
-/*  11/06/03  hursdlg       169107    Remove redundant include                                           */
-/*  10/07/03  hursdlg       169606    Improve recovery log failure                                       */
-/*  25/07/03  hursdlg       172471    Reject log when terminating                                        */
-/*  13/08/03  hursdlg       174113    Reorder recovery                                                   */
-/*  20/08/03  hursdlg       165981.1  Validate serialization on register                                 */
-/*  22/08/03  hursdlg       174849    Temporarily disable deserialize errors                             */
-/*  08/09/03  hursdlg       174849.1  Fix deserialize class loader                                       */
-/*  18/09/03  hursdlg       177194    Migrate to 8 byte recovery ids                                     */
-/*  19/09/03  hursdlg       177276    Bypass iterator for recover                                        */
-/*  22/09/03  hursdlg       174209    Update classpath on new register                                   */
-/*  01/10/03  johawkes      178208.1  Use log generated recovery ids                                     */
-/*  20/11/03  johawkes      182862    Remove static partner log dependencies                             */
-/*  27/11/03  johawkes      178502    Start an RA during XA recovery                                     */
-/*  05/12/03  johawkes      184903    Refactor PartnerLogTable                                           */
-/*  06/01/04  hursdlg       LIDB2775  zOS/distributed merge                                              */
-/*  07/01/04  johawkes      LIDB2110  RA Uninstall                                                       */
-/*  04/02/04  johawkes      189497    Warn when RA is uninstalled                                        */
-/*  24/03/04   mallam       LIDB2775  ws390 code drop                                                    */
-/*  29/03/04  hursdlg       196258    Incorporate XARminst code                                          */
-/*  31/03/04  johawkes      196310    Handle null from getXAResource()                                   */
-/*  04/04/04  johawkes      196588    Set recovery classloader on thread                                 */
-/*  13/04/04  beavenj       LIDB1578.1 Initial supprort for ha-recovery                                  */
-/*  22/04/04  beavenj       LIDB1578.4 Early logging support for CScopes                                 */
-/*  29/04/04  johawkes      200859    Handle UnsatisfiedLinkError                                        */
-/*  21/05/04  beavenj       LIDB1578.7  FFDC                                                             */
-/*  08/06/04  johawkes      207717    Properly look for txRecoveryUtils.jar                              */
-/*  25/06/04  johawkes      199785    Fix partner log corruption on shutdown                             */
-/*  06/07/04  johawkes      213406    Increase initial HashSet size for classpaths                       */
-/*  19/08/04  johawkes      224215    Detect uninstalled providers better                                */
-/*  26/09/04  hursdlg       234516    Pass FailureScopeController to PartnerLogData                      */
-/*  28/09/04  mallam        235569    Use recover for zOS rollbackUnknownTx                              */
-/*  08/10/04  mezarin       LIDB1578-22 z/OS HA Manager support                                          */
-/*  17/01/05  mallam     LIDB3645     Recovery-mode restart                                              */
-/*  15/03/05  mallam        261246    LIDB3645 code review                                               */
-/*  14/06/05  hursdlg       283253    Componentization changes for recovery                              */
-/*  08/12/05  johawkes      329403    Don't recover with embedded RAs until apps are loaded              */
-/*  30/01/06  hursdlg       340103    Run isProviderInstalled with server subject                        */
-/*  03/02/06  hursdlg       343233    Reduce output of WTRN0005 during recovery                          */
-/*  05/12/06  mezarin       369064.2  Add getRecoveryClassLoader                                         */
-/*  02/08/06  maples        373006    WESB performance isSameRM optimization                             */
-/*  01/05/07  johawkes      434414    Remove WAS dependencies                                            */
-/*  18/05/07  johawkes      438575    Further componentization                                           */
-/*  05/06/07  johawkes      443467    Move XAResourceInfo                                                */
-/*  17/06/07  johawkes      444613    Repackaging                                                        */
-/*  20/06/07  hursdlg       LI3968-1.2 Support resource priority                                         */
-/*  16/08/07  johawkes      451213    Move LPS back into JTM                                             */
-/*  02/06/09  mallam        596067    package move                                                       */
-/*  17/03/10  hursdlg       PM07874   Recovery audit logging                                             */
-/*  13/05/10  hursdlg       649934    More PM07874 changes                                               */
-/*  07-09-11  nyoung        715979    Liberty: share XAResourceFactory info through Bundle Registry      */
-/*  07/02/12  johawkes      727586    Don't complain if we can't lookup XAResourceFactory yet            */
-/*  20/05/13  johawkes      F099608   XAResource.setTransactionTimeout                                   */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 import java.io.File;
 import java.io.Serializable;
 import java.security.AccessController;

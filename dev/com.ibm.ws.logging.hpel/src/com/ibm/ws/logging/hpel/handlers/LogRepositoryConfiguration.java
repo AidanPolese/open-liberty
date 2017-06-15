@@ -1,23 +1,13 @@
-// %Z% %I% %W% %G% %U% [%H% %T%]
-
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2001,2009
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2001, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason            Version    Date        User id     Description
- * ----------------------------------------------------------------------------
- * 666241              8.0      08-27-2010  mcasile   To enable reinstating of handler, needed to move data Store from MBean to this new bean
- * F017049-32988       8.0      09-21-2010  mcasile   Add in boolean for rawTraceFilterEnabled
- * 688583              8.0      01-30-2011   belyi    Update configuration values only after successful application to runtime
- * 688984              8.0      02-03-2011  mcasile     With logRepositoryConfig, updateRuntime parm on MBeans not needed
- * 689474              8.0      02-04-2011   belyi    Use default values on String arguments and use clone() in "big" sets instead of creating new instance.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.logging.hpel.handlers;
 

@@ -1,32 +1,13 @@
-/*
- * @(#) 1.13 SERV1/ws/code/runtime.fw/src/com/ibm/ws/runtime/util/StreamHandlerUtils.java, WAS.runtime.fw, WASX.SERV1, pp0919.25 2/26/07 17:30:04 [5/15/09 17:32:50]
+/*******************************************************************************
+ * Copyright (c) 1997, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * IBM Confidential OCO Source Material
- * 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5724-J08 (C) COPYRIGHT International Business Machines Corp. 1997, 2007
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * DESCRIPTION:
- *  Security needs a class to anchor a URL Stream Handler Factory.
- *  The Stream Handler Factory contains stream handlers for https,
- *  RACF software keyrings and RACF Hardware keyrings.  Java allows
- *  only 1 Stream Handler Factory per instance of a JVM.
- * 
- * Change History:
- * 
- * Reason Version Date User id Description
- * ----------------------------------------------------------------------------
- * LIDB2775-99.5 6.0     02-10-2004   ericvn   Created
- * 03/10/2004  MD19429      PDGK       update with V51 changes
- * LIDB2775-130.1 6.0    03-25-2004   ericvn   z/OS merge 
- * pok_MD20337    6.0.1  12-02-2004   ericvn   Malformed URL fix
- * LIDB3418       7.0    04-10-2005   tmusta   Componentization
- * D300747        7.0    08-25-2005   tmusta   Java2 Security Exceptions
- * LIDB4119-50.3 7.0 08-14-2006 bkail Runtime interface changes for RCS
- * LIDB4119-9     7.0    10-23-2006   bkail    Use CT models
- * PK39922        6.1    02-26-2007   bkail    Don't register stream handlers with invalid class names
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.runtime.util;
 
 import java.io.File;

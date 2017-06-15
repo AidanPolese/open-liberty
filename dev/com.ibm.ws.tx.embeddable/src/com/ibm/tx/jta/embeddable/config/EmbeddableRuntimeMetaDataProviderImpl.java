@@ -1,26 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/*  ORIGINS: 27                                                                      */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2010,2011 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  DESCRIPTION:                                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  yy-mm-dd  Developer  Defect  Description                                         */
-/*  --------  ---------  ------  -----------                                         */
-/*  10-01-28  johawkes   F743-3356.1 Rudimentary initial implementation              */
-/*  10-03-15  johawkes   643417  Use container-wide LPS switch                       */
-/*  11-11-24  johawkes   723423  Repackaging                                         */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2010, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.tx.jta.embeddable.config;
 

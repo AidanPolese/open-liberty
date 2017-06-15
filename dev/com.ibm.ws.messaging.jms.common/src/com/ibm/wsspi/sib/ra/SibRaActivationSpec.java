@@ -1,43 +1,13 @@
-/**
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * --------------- --------- -------- ---------------------------------------
- * 184174          08-Mar-04 dcurrie  Original
- * 199164          20-Mar-04 pnickoll Corrected javadoc
- * 192474.3        22-Apr-04 pnickoll Changed supportClones field to
- *                                    shareDurableSubscriptions
- * 197921.10       28-Apr-04 dcurrie  Add SPI Javadoc tags
- * 195461.3        29-Apr-04 dcurrie  Update Javadoc for dynamic destination support
- * 181851.7.4      20-May-04 dcurrie  Remove remote properties
- * 226508          28-Apr-04 dcurrie  Remove SPI Javadoc tags
- * 224794.3        06-Sep-04 dcurrie  Rename AsCluster to InCluster
- * SIB0002.ra.1    26-Aug-05 pnickoll Added target, targetType and targetSignificance
- * SIB0034.ra      01-Sep-05 pnickoll Added useServerSubject field
- * SIB0130.ra      15-Aug-06 pnickoll Added providerEndpoints getters and setters
- * 388685          06-Sep-06 pnickoll Added targetTransportChain getters and setters
- * SIB0115a.ra.1   16-Nov-06 ajw      Improve Administration of MDBs
- * SIB0102.ra      27-Mar-07 pnickoll Added the activateAllMDBs and retryInterval property.
- * 433278          18-Apr-07 pnickoll Changed the retryInterval and maxSequentialFailures properties to be Integers rather than ints
- * 434699          25-Apr-07 vaughton Add new String (not Integer) methods
- * SIB0137.ra.2    19-Jun-07 pnickoll Add the usesDestinationWildcard property.
- * SIB0115.ra.3    01-Feb-07 pnickoll Add the failingMessageDelay property
- * SIB0115.ra.4    14-Feb-07 pnickoll Add the autoStopSequentialMessageFailure property
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.wsspi.sib.ra;
 

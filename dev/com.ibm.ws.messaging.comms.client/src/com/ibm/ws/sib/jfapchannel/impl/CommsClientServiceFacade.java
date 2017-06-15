@@ -1,25 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2011, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2011,2013
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- * Change activity:
- *
- * Reason        Date     Origin   Description
- * ------------- ------ -------- --------------------------------------------
- *                                 Version 1.66 copied from CMVC
- *  88311      02/06/2013  Venu    Fixed NLS messages loading and some refactoring
- *  93606      04/03/2013  Venu    Multiple ssl/tcp options support for Outbound
- *  95897      04/02/2013  Venu    Dynamic modify support and not using ChanelUtils.startConfig
- * =============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.impl;
 
 import java.util.Map;

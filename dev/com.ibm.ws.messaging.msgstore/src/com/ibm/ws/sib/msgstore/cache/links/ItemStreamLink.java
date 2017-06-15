@@ -1,47 +1,14 @@
 package com.ibm.ws.sib.msgstore.cache.links;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 26/06/03 drphill  Original
- * 180053          03/11/03 gareth   Remove deprecated methods/interfaces
- * 180763.3        13/11/03 pradine  Add support for new tables
- * 179365.3        01/12/03 corrigk  Expiry callback needs transaction
- * 188010          22/01/04 pradine  Clean up of persistence layer interfaces
- * 180763.7        10/02/04 pradine  Add support for mutiple item tables
- * 220952          09/08/04 corrigk  Reorder cmdAdd and registerLink in add()
- * 222225          10/08/04 corrigk  Spilling only occurs for STORE_MAYBE
- * 224000          16/08/04 corrigk  Checked exceptions on getUniqueXxx
- * 225627          24/08/04 corrigk  Use storageStrategy in getUniqueLockId()
- * 223636.2        26/08/04 corrigk  Consolidate dump
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * 290610          09/08/05 schofiel Statistics enhancements
- * 291186          09/11/05 schofiel Refactor lists to improve CPU utilisation
- * 278082          03/01/06 schofiel Parameter on factory method to disable cursor jumpback
- * 306998.20       09/01/06 gareth   Add new guard condition to trace statements
- * 410652          12/04/07 gareth   Check Transactions ME at add time
- * SIB0112d.ms.2   28/06/07 gareth   MemMgmt: SpillDispatcher improvements - datastore
- * 463642          04/09/07 gareth   Revert to using spill limits
- * 474728          14/11/07 gareth   Improve information on delete non-empty stream message
- * 484799          28/01/08 gareth   Take byte size into account in spill limits
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * 601995          05/08/09 gareth   PD: Misc improvements in SIB.msgstore
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.IOException;
 import java.util.ArrayList;

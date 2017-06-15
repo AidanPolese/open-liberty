@@ -1,37 +1,15 @@
 package com.ibm.websphere.exception;
 
-//===================================================================================
-// @(#) 1.5 SERV1/ws/code/distexcep/src/com/ibm/websphere/exception/DistributedExceptionEnabled.java, WAS.distexcep, WASX.SERV1, qq1230.02 5/28/04 09:43:19 [7/25/12 20:25:34]
-//
-// IBM Confidential OCO Source Material
-// 5630-A36 (C) COPYRIGHT International Business Machines Corp. 2004, 2014
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//===================================================================================
-
-/**
- * Enables an exception to be treated as a distributed exception..
- * This interface should be used by an exception that is not a
- * subclass of DistributedException.
- * <p>
- * In addition to implementing the required methods, the
- * implementing class should create an attribute, a
- * DistributedExceptionInfo
- * object, in each constructor, after it has done it's other work.
- * This object will do most of the work for the methods. For all
- * of the examples in the Javadoc of the methods, it is assumed
- * that the name of this attribute is <b>distributedExceptionInfo</b>.
- * </p>
- * <p>
- * Typically, the implementor of this interface will have multiple
- * constructors. See com.ibm.websphere.DistributedException for examples.
- * </p>
- * 
- * @see com.ibm.websphere.DistributedException
- * @see com.ibm.websphere.DistributedExceptionInfo
- * @ibm-api
- */
+/*******************************************************************************
+ * Copyright (c) 2004, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 public interface DistributedExceptionEnabled {
     /**
      * Get a specific exception in a possible chain of exceptions.
