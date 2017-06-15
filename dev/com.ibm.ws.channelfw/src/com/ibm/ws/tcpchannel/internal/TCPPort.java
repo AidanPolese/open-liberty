@@ -67,7 +67,7 @@ public class TCPPort {
 
     /**
      * Constructor.
-     * 
+     *
      * @param _tcpChannel
      * @param _vcf
      */
@@ -85,7 +85,7 @@ public class TCPPort {
 
     /**
      * Returns the server socket associated with this end point.
-     * 
+     *
      * @return ServerSocket
      */
     protected synchronized ServerSocket getServerSocket() {
@@ -95,7 +95,7 @@ public class TCPPort {
     /**
      * Attempt a socket bind to the input address with the given re-use option
      * flag.
-     * 
+     *
      * @param address
      * @param reuseflag
      * @throws IOException
@@ -143,7 +143,7 @@ public class TCPPort {
 
     /**
      * Initializes the server socket associated with this end point.
-     * 
+     *
      * @return ServerSocket
      * @throws IOException
      * @throws RetryableChannelException
@@ -263,7 +263,7 @@ public class TCPPort {
                 Tr.error(tc, TCPChannelMessageConstants.LOCAL_HOST_UNRESOLVED,
                          new Object[] { channelConfig.getChannelData().getExternalName(), displayableHostName, String.valueOf(channelConfig.getPort()) });
 
-                throw (new IOException("local address unresolved"));
+                throw new RetryableChannelException(new IOException("local address unresolved"));
             }
 
         } else {
@@ -304,7 +304,7 @@ public class TCPPort {
 
     /**
      * Open the listening server socket.
-     * 
+     *
      * @return ServerSocket
      * @throws IOException
      */
@@ -344,7 +344,7 @@ public class TCPPort {
 
     /**
      * Returns the channel associated with this port.
-     * 
+     *
      * @return TCPChannel
      */
     protected TCPChannel getTCPChannel() {
@@ -353,7 +353,7 @@ public class TCPPort {
 
     /**
      * Processes a new connection by scheduling initial read.
-     * 
+     *
      * @param socket
      */
     public void processNewConnection(SocketIOChannel socket) {
@@ -409,7 +409,7 @@ public class TCPPort {
 
     /**
      * Query the listening port number.
-     * 
+     *
      * @return int
      */
     protected int getListenPort() {
