@@ -1,57 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.47 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/Conversation.java, SIB.comms, WASX.SIB, uu1215.01 10/05/19 08:11:15 [4/12/12 22:14:12]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2003, 2010
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030424 prestona Original
- * F166959         030521 prestona Rebase on non-prototype CF + TCP Channel
- * F168604.3       030707 prestona Exploit asynchronous API on client.
- * F171173         030707 prestona Add capacity reporting interfaces.
- * F172937         030729 prestona JFAP Channel support for quiesce flows
- * F173772         030807 prestona Implement Clone Connection in JFAP Channel
- * F174602         030819 prestona Switch to using SICommsException
- * F174317         030829 mattheg  Add message priorities
- * F174772         030901 prestona Make JFAP Channel support close
- * F175658         030902 prestona Add support for heartbeating.
- * F181603.2       040119 prestona JFAP Segmentation
- * F196678.10.1    040526 prestona Insufficient chain data provided to TRM
- * F193735.3       040607 prestona PMI
- * D209401         040615 mattheg  Add isClosed() method
- * D210978         040621 mattheg  Add support for a connection closed listener
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D221433         040811 prestona Add handshake complete method.
- * D199145         040812 prestona Fix Javadoc
- * D235639         030930 prestona MPIO deadlock
- * D335337         060105 mattheg  Remove exceptions on handshakeCompleted() / handshakeFailed()
- * D354565         060320 prestona ClassCastException thrown during failover
- * D361638         060411 mattheg  Expose the connection reference
- * D364053         060425 mattheg  Expose the connection closed listener
- * D377648         060713 mattheg  Modify the send() and exchange() sigs to take JFapByteBuffer's
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * D381838         070130 mattheg  ConversationImpl.toString() should print less unless we need it to
- * SIB0100.wmq.3   070815 mleming  Allow ConversationCloseListener chaining
- * 509697          080403 vaughton Performance optimisations
- * 514229          080422 mleming  Make WMQRA work on z
- * 508603          080509 susana   Store SchemaSet in JFAP connection rather than WeakHashMap
- * 537955          080728 vaughton null schema set returned after invalidate
- * 542573          080808 djvines  Forward port PK48027, return ConnectionInterface from getConnectionReference
- * F002074         091022 mleming  MEP support FIS
- * PM14752         100519 timmccor Add a method to check inuse request IDs
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel;
 
 import com.ibm.websphere.sib.exception.SIResourceException;

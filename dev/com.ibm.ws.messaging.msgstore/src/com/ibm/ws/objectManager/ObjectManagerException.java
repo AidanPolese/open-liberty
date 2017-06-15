@@ -4,27 +4,16 @@ import com.ibm.ws.objectManager.utils.Trace;
 import com.ibm.ws.objectManager.utils.Tracing;
 import com.ibm.ws.objectManager.utils.UtilsException;
 
-/*
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2013
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
+/*******************************************************************************
+ * Copyright (c) 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change activity:
- *
- *  Reason           Date    Origin     Description
- * --------------- -------- -------- ------------------------------------------
- *  251161         07/04/05 gareth    Add ObjectManager code to CMVC
- *  343689         04/04/06 gareth    Modify trace output cont.
- *  607710         21/08/09 gareth    Add isAnyTracingEnabled() check around trace
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 /**
  * A subclass of ObjectManagerException is thrown whenever an ObjectManager error occurs.

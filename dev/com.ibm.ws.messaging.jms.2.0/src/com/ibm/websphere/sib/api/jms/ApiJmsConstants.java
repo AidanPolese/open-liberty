@@ -1,75 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- *                          matrober Original (Created on 19-Feb-03)
- * 165358            090503 amardeep Add bus name, me names, bootstrap eps
- * 170067            200603 matrober Refactor JMS interfaces (com.ibm.websphere)
- * 170747            290603 amardeep Add DEST_JS_DISCRIM, remove DEST_JMS_NAME
- * 170807.5          310703 amardeep ConnectionFactory properties changes
- * 169435            220803 kingdon  Define the set of JMS_IBM_* properties
- * 174896            030903 matrober JavaDoc public interfaces
- * 174896.1          110903 kingdon  Javadoc JMS_IBM props
- * 176611            170903 kingdon  New constants for per,pri,ttl override values.
- * 166829.6.2        180903 matrober JMS Durable Subs (readAhead and subscriptionHome)
- * 178705            081003 matrober remove javadoc warnings due to incorrect @see tag
- * 179498            151003 kingdon  Problems with very long timeToLive values. Impose limit.
- * 172633.1.1        291003 matrober Remove parameter checking for setting Priority & TimeToLive
- * 182115            071103 matrober Tag @see: can't find MAX_TIME_TO_LIVE
- * 181801.20         050104 matrober Switch trace groups to utils
- * 179365.5          190104 jhumber  API support for Report Messages MQRO constants
- * 179365.9          020204 jhumber  API support for Feedback MQFB constants
- * 175207.1          030204 jhumber  Exception Destination Error Codes
- * 169412            040204 kingdon  Added constants for JMS_IBM_Encoding
- * 184390.7          120204 kingdon  Updated constants for QOS
- * 193368            050304 jhumber  Removal of deprecated Reliability constants
- * 190322.1          150304 kingdon  Reordering to bring the JMS_IBMs back together
- * 192474            130404 matrober Support for cloned environments
- * 190809            190404 kingdon  Remove deprecated constants for non-persistent mapping
- * 199163            200404 matrober javadoc problems
- * 195445.5          230404 jhumber  Change NLS message prefix
- * 193066.5          290404 jhumber  Update constants to match SIProperties
- * 197921.1          040504 jhumber  New Javadoc tags
- * 201902            060504 matrober Improve exception info in test environment
- * 199554.2          190504 kingdon  Add support for JMS_IBM_System_MessageID
- * 206390            010604 vaughton Rename TARGET_GROUP & TARGET_TYPE
- * 206390.2          020604 vaughton Remove REMOTE_ from TARGET_GROUP & TARGET_TYPE
- * 206397.4          220604 kingdon  Changes to CF props.
- * 213847            020704 kingdon  Typos in javadoc for Reliability constants.
- * 206397.4          090704 kingdon  Changes to CF props (continued).
- * 224714.4          070904 kingdon  Rename JMS ConnectionFactory properties.
- * 230627            100904 kingdon  Update javadoc to reflect 224714.4
- * 246220.3          200105 kingdon  Provide additional exception information
- *                                   (add constant EXCEPTION_PROBLEM_DESTINATION).
- * 256740            230205 kingdon  Added constants for msgType request and datagram.
- * 247845.6          070305 kingdon  Multicast support. Make new constants visible (from SibTrmConstants)
- * 254045            210305 kingdon  MQMD_Feedback - add constants to match those available in MA88.
- * 253167            100505 kingdon  Update for missing Javadoc
- * SIB0121.jms.1     291206 jamessid Support performance enhancements for large object messages
- * 380569.1          080207 matrober Support JMS_TOG_ARM_Correlator and JMS_IBM_ArmCorrelator
- * SIB0121.jms.4     260207 jamessid Remove 'guarantee' prop value, add forwarder flag to ActSpec
- * SIB0111c.mfp.1    201107 susana   Add JMS_IBM_MQMD_ properties
- * SIB0113.jms.1     101207 matrober Add JMS support for SIB0113 function
- * 490670            010208 susana   Add ON and OFF constants to ensure correct spelling
- * PK59962.1         080508 djvines  Forward port of PK59962 (call exception listener on its own thread)
- * F001333.14611.1   090810 djvines  Add JMS_IBM_EXCEPTION_PROBLEM_SUBSCRIPTION
- * 731739            280312 chetbhat Accessibility 508 compliance issue for Javadocs in v85
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.sib.api.jms;
 
 import com.ibm.ws.sib.mfp.MfpConstants;

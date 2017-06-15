@@ -1,23 +1,13 @@
-// IBM Confidential OCO Source Material
-// Copyright IBM Corp. 2009, 2013
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  JaxbUnmarshaller.java
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// F1879-16302
-//           WAS80     20091112 tkb      : support 2.0 and 1.0 xml separately
-// d656864   WAS80     20100730 bkail    : Avoid unmarshalling twice
-// d727932.1 WAS85     20120215 tkb      : refactor schema creation for Liberty
-// d86387    WASX      20121107 mhornun  : Remove use of MetaDataException
-// RTC113511 RWAS90    20131009 bkail    : Use JPAPXml.getApplInfo/.getArchiveName
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2009, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_RESOURCE_BUNDLE_NAME;

@@ -1,35 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 164548          030502 susana   Original
- * 183236          031118 vaughton Change fields
- * 183786          031124 vaughton Rename remotePreference field
- * 191625          040220 vaughton Add bootstrap protocol field
- * 195309          040322 vaughton Add userid/password fields
- * 199144          040419 susana   Fix javadoc
- * 206397          040601 vaughton Add target significance
- * 224794.1.2      040817 vaughton Protocol -> Transport Chain
- * 224759          040818 vaughton Add credential type
- * 224794.1.4      040825 vaughton Rename remoteProtocol
- * 185656          040902 susana   Tidy up imports etc
- * 250606.1.1      050125 vaughton Recovery mode
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.mfp.trm;
 
 /**

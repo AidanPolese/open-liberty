@@ -1,27 +1,13 @@
-// %Z% %I% %W% %G% %U% [%H% %T%]
-/**
- * COMPONENT_NAME: WAS.ras
+/*******************************************************************************
+ * Copyright (c) 2009, 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * ORIGINS: 27         (used for IBM originated files)
- *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2017
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * DESCRIPTION:
- *
- * Change History:
- *
- * Reason      Version   Date        User id     Description
- * ----------------------------------------------------------------------------
- * LIDB1241     6.0      02-04-2003  stopyro     Part created for Java logging
- * PK13288 		6.0	     01-23-2006  betancom	 Fixed potential timezone exploit.
- * PK42263      7.0      03-30-2007  andymc      Make FormatSet date formatter a static variable
- * 637740       8.0      03/02/2010  spaungam    Correct date format to be locale-based
- * rtc235241    17.0     01/02/2017  frankji     add iso-8601 date time format support to binaryLog
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.logging.hpel;
 

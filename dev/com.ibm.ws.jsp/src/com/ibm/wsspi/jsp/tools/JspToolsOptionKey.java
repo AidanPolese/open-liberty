@@ -1,37 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-
-/*
-* Created on Nov 24, 2003
-*
-* To change the template for this generated file go to
-* Window>Preferences>Java>Code Generation>Code and Comments
-*/
-
-/*
-* Change history:
-* defect 215691 "add support for javaEncoding"  2004/07/12  Scott Johnson
-* Defect PK26741 - RepeatTag index does not accept "int"
-* Defect PK29373  Provide backward compatibility with v5(Page scope variables )
-* defect 393421 - CTS:jsp translation error not occuring for wrong  <jsp:output> 2006/09/27 Scott Johnson
-* defect 396002 CTS: no jsp fatal translation error for  taglib after actions Scott Johnson 10/17/2006
-* "Unmatched end tags" exception not to be thrown in v6 10/18/2006
-* defect 402921(PK31135) Change in Iteration eval in v6 causes infinite loops in certain scenarios
-* defect PK34989 Supercedes PK26679 (Provides an optional flag to trim text before creating CDATA section) 2007/02/13
-* defect PK47738 v6 does not allow page authors to encode params within params tag(spec compliant) maintain backward compatibility with v5 which allows encoding of params. 2007/09/05 Anuradha Natarajan
-* defect PK65013 Need ability to customize pageContext variable.                2008/07/07  sartoris
-* defect PK72039 Add ability to continue to compile the rest of the JSPs during a batch compile failure  2008/11/15  Jay Sartoris
-* defect 650003 Supplemental enhancement for PM06063 (prereq) to support Lotus Expedite team		04/20/10	pmdinh
-* defect PM21395 09/02/2010 pmdinh	Decode double quote in the attribute's value of a tag
-*  Defect PM41476 07/28/2011 sartoris    Tags have the xmlns attribute when rendered.
-* Defect PM94792 07/30/2014 hmpadill    Disable escaping CR, LF, and Tab within an expression
-* defect PI12939 07/31/2014 hmpadill    Add ability to delete .class file before compile
-* Defect PI30519 11/25/2014 hmpadill    Allow multiple attribute values in tags
-* defect PI37304 03/17/2015 hmpadill    Enable appropriate translation of JSP expressions with at least one constant string
-*/
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.jsp.tools;
 
 /**

@@ -1,47 +1,14 @@
 package com.ibm.ws.sib.msgstore.cache.links;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- *  Reason         Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 26/06/03 drphill  Original
- * 176779          12/09/03 pradine  Adapted to new Tuple interface
- * 176788          17/09/03 pradine  Added getCanExpireSilently()
- * 180053          03/11/03 gareth   Remove deprecated methods/interfaces
- * 188010          22/01/04 pradine  Clean up of persistence layer interfaces
- * 180763.7        10/02/04 pradine  Add support for mutiple item tables
- * 187223.4        05/03/04 pradine  Non-cache expirer support
- * 196685          31/03/04 pradine  Changes to spill behaviour
- * 201684.1        25/06/04 pradine  Misleading method names
- * 214830.2        12/07/04 pradine  MessageStore CacheLoader Implementation
- * 223636.2        26/08/03 corrigk  Consolidate dump
- * 247511          05/01/05 drphill  remove call to setter for parentStatistics
- * 270103          27/04/05 schofiel sib.msgstore.OutOfCacheSpace exceptions before mediation
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * 291186          08/11/05 schofiel Refactor lists to improve CPU utilisation
- * 306998.20       09/01/06 gareth   Add new guard condition to trace statements
- * 410652          12/04/07 gareth   Check Transactions ME at add time
- * SIB0112d.ms.2   28/06/07 gareth   MemMgmt: SpillDispatcher improvements - datastore
- * 454303          26/07/07 gareth   Various FINDBUGS changes
- * 463642          04/09/07 gareth   Revert to using spill limits
- * 484799          28/01/08 gareth   Take byte size into account in spill limits
- * 520772          14/05/08 djvines  Synchronize _nextItemStreamSequenceToIssue in _buildStreamTree
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,34 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.17 SIB/ws/code/sib.jfapchannel.client.rich.impl/src/com/ibm/ws/sib/jfapchannel/impl/JFapChannelOutbound.java, SIB.comms, WASX.SIB, uu1215.01 05/02/11 07:27:23 [4/12/12 22:14:17]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-I63, 5724-H88, 5655-N01, 5733-W60          (C) Copyright IBM Corp. 2003, 2005
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030521 prestona Original
- * F167363			 030523 prestona Rebase on LIBD_1891_2255 CF + TCP Channel
- * F177053         030917 prestona Rebase JFAP Channel on pre-M4 CF + TCP
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * F184828         031204 prestona Update CF + TCP prereqs to MS 5.1 level
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * F189000         030130 prestona Expose WLM endpoints through CF
- * D194678         040317 mattheg  Migrate to M7 CF + TCP Channel
- * D196678.10.1    040525 prestona Insufficient chain data passed to TRM
- * D199145         040812 prestona Fix Javadoc
- * LIDB3706-5.209  040211 prestona serialization compatibility for sib.jfapchannel.impl
- * ============================================================================ 
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
  
 // NOTE: D181601 is not changed flagged as it modifies every line of trace and FFDC.
 

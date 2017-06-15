@@ -1,38 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 2005, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 04/05/05 gilgen      LIDB3618-2      Created file
-// 04/28/05 wigger      271613          Nio class break out changes
-// 05/09/05 wigger      271613          AIO Non-direct buffer support
-// 06/30/05 gilgen      287777          Improve debug
-// 08/01/05 wigger      294806          don't call _tcpChannel.incrementConnectionCount(); from here
-// 09/07/05 gilgen      303495          Add JIT support for ByteBuffers
-// 09/22/05 gilgen      307313          Code cleanup/improvements
-// 10/02/05 gilgen      308856          Code review comments
-// 10/02/05 gilgen      308856.1        Code review comments
-// 10/25/05 gilgen      314917          Add support for permission logic
-// 10/27/05 wigger      317856          fix WRITE_ALL_DATA to write all data
-// 11/03/05 gilgen      320175          cleanup
-// 11/04/05 wigger      320175          make connect common with base TCP
-// 11/10/05 wigger      314917.1        fix sync permission
-// 12/01/05 gilgen      328131          improve exception messages
-// 12/01/05 gilgen      328382          don't set jit buffer flag if buffer already used, adjust counts
-// 12/07/05 gilgen      329710          improve tracing
-// 01/04/06 gilgen      335588          add performance statistics
-// 01/10/06 wigger      306998.3        use isAnyTracingEnabled
-// 02/01/06 wigger      342415          handle null if Async and finish read/write perm denied
-// 02/01/06 gilgen      343257          update timeout values on partial reads, add more perf stats
-// 02/24/06 wigger      327980.1        add more FFDC, clean up let connectActions throw IOException
-// 03/07/06 gilgen      352197          make sure super.close() is called when close() is called
-// 03/22/06 gilgen      355205          don't reset timeout if NO_TIMEOUT specified
-// 06/27/07 wigger      448755          can't JIT Allocate of nonDirect buffers at native layer
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.tcpchannel.internal;
 
 import java.io.IOException;

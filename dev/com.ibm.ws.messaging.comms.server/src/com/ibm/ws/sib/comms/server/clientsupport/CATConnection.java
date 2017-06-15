@@ -1,27 +1,13 @@
-/* 
- * @start_prolog@ 
- * Version: @(#) 1.5 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/CATConnection.java, SIB.comms, WASX.SIB, aa1225.01 08/05/21 09:40:19 [7/2/12 05:58:59]
- * ============================================================================ 
- * IBM Confidential OCO Source Materials 
- *  
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2003, 2008
- *  
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office. 
- * ============================================================================ 
- * @end_prolog@ 
- * 
- * Change activity: 
- * 
- * Reason          Date   Origin   Description 
- * --------------- ------ -------- -------------------------------------------- 
- * Creation        050214 mattheg  Original
- * D267722         050412 mattheg  Ensure synchronized access to tranIds
- * D321471         051109 prestona Optimized transaction related problems
- * D462062         080520 mleming  Improve diagnostics
- * ============================================================================ 
- */
+/*******************************************************************************
+ * Copyright (c) 2003, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import java.util.LinkedList;

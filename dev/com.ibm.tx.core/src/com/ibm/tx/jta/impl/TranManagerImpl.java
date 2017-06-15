@@ -1,87 +1,15 @@
 package com.ibm.tx.jta.impl;
 
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002,2013 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  DESCRIPTION:                                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  Date      Programmer  Defect       Description                                   */
-/*  --------  ----------  ------       -----------                                   */
-/*  05/09/02  awilkins    ------       Move to JTA implementation                    */
-/*  14/10/02  mallam      1447         rm suspend/resume from TransactionImpl        */
-/*  14/10/02  hursdlg     1454         Treat 1PC/2PC enlist separately               */
-/*  28/10/02  awilkins    1474         Embedded RAR recovery interface changes       */
-/*  21/11/02  awilkins    1507         JTS -> JTA. Thread local restructuring        */
-/*  21/11/02  gareth      1481         Basic LPS implementation                      */
-/*  25/11/02  awilkins    1513         Repackage ejs.jts -> ws.Transaction           */
-/*  02/12/02  awilkins    1526         setRollbackOnly; no SystemException           */
-/*  05/12/02  mallam      1528         default timeout to infinity                   */
-/*  05/12/02  hursdlg     1529         Check completed txn on resume                 */
-/*  02-12-08  irobins     LIDB1673.2   Added completeTxTimeout                       */
-/*  10/12/02  gareth      LIDB1673.3   Explicit RAS for API/SPI's                    */
-/*  13/12/02  mallam      LIDB1673.18  Synchronous completion for usertrans          */
-/*  17/12/02  mallam      LIDB1673.xx  Further changes for passive timeout           */
-/*  17/01/03  awilkins    1673.9       Tidy-up exception handling                    */
-/*  21/01/03  gareth      LIDB1673.1   Add JTA2 messages                             */
-/*  03/02/03  awilkins    157377       Allow resume(null)                            */
-/*  21/02/03  gareth      LIDB1673.19  Make any unextended code final                */
-/*  11/03/03  mallam      160280       CompleteTxTimeout - no exceptions rbonly      */
-/*  17/03/03  mallam      157629       Use correct totalTranTimeout                  */
-/*  03/04/03  mallam      162554       No rollbackResources on setRBOnly             */
-/*  06/01/04  hursdlg     LIDB2775     zOS/distributed merge                         */
-/*  07/01/04  johawkes    LIDB2110     RA Uninstall                                  */
-/*  19/01/04  mallam      174478       CompleteTxTimeout performance                 */
-/*  05/02/04  mallam      LIDB2775     Remove synchronous completion                 */
-/*  18/03/04  johawkes    187274       Streamline trace                              */
-/*  18/03/04  johawkes    197318.1     Make setTransactionTimeout(0) use config      */
-/*  04/05/04  mallam      LIDB1673-13  Component transaction timeout                 */
-/*  14/05/04  awilkins    202175       UOWScopeCallback work                         */
-/*  01/06/04  mallam      LIDB2775     Add in native context                         */
-/*  12/07/04  mallam      LIDB2775     zOS c++ callbacks                             */
-/*  26/07/04  hursdlg     219483       Pass native context to TransactionImpl        */
-/*  28/07/04  mallam      219481       cleanup tx in afterCompletion                 */
-/*  29/07/04  hursdlg     LIDB2775     zOS c++ callbacks                             */
-/*  19/11/04  hursdlg     LIDB1922     zOS wsat callbacks                            */
-/*  31/01/05  hursdlg     252496       Suspend immediately after wsat before_compln  */
-/*  31/01/05  dmatthew    253503       fix WSAT recovery                             */
-/*  01/03/05  mallam      256983       null xid for interop contexts                 */
-/*  19/07/05  mezarin     LI3187       Make before and afterCompletion public        */
-/*  27/10/05  johawkes    316435.1     getGlobalGlobalID                             */
-/*  02/11/05  hursdlg     LI3187-3.3   Stub out z/OS iiop interceptor support        */
-/*  09/11/05  hursdlg     322268       Remove WSAT specific beforeCompletion code    */
-/*  06/01/06  johawkes    306998.12    Use TraceComponent.isAnyTracingEnabled()      */
-/*  06/03/20  hursdlg     354545       Remove old z/os iiop code                     */
-/*  06/11/29  maples      402670       LI4119-19 code review changes                 */
-/*  07/04/13  johawkes    LIDB4171-35  Componentization                              */
-/*  07/05/16  johawkes    438575       Further componentization                      */
-/*  07/06/06  johawkes    443467       Moved                                         */
-/*  07/06/17  johawkes    444613       Repackaging                                   */
-/*  07/08/16  hursdlg     447459       Timeout changes                               */
-/*  07/08/20  johawkes    459952       Move completeTxTimeout out of JTM             */
-/*  07/08/31  johawkes    463941       Defer some initialization                     */
-/*  07/10/08  hursdlg     468542       Backout 447459                                */
-/*  07/11/21  awilkins    481738       Output stack of thread when tx times out      */
-/*  08/01/16  johawkes    491573       Most recent thread stuff broke resume(null)   */
-/*  08/02/15  kaczyns     512190       Handle SystemException on begin               */
-/*  09/06/02  mallam      596067       package move                                  */
-/*  09-08-19  mallam      602532.3     ltc bundle                                    */
-/*  11-10-18  johawkes    719671       UOWEventListener support                      */
-/*  11-11-15  johawkes    723305       Revert change to beginUserTran                */
-/*  12-01-11  nyoung      725678       call event listener from beginUserTran        */
-/*  13/02/25  johawkes    744928       Add begin(timeout)                            */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2002, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.util.HashSet;
 import java.util.Set;

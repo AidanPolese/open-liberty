@@ -1,52 +1,13 @@
-/*
- * 
- * 
- * ===========================================================================
- * IBM Confidential OCO Source Material
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012,2013
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ===========================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * SIB0002.mp.1     210605 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.mp.1     210605 tevans   PEV Prototype
- * 291517           251005 cwilkin  Max frp depth
- * 316556           251005 gatfora  Should use exported processor package for State Strings
- * 305036           091105 cwilkin  Set put time of message is requested
- * 345318.1         200206 cwilkin  Set default blockedRetryTimeout to 5 seconds
- * 367199           090506 cwilkin  Remove anycast batch size
- * 370748           121006 cwilkin  Introduce max timeout on remote get wait
- * SIB0105.mp.3     071106 cwilkin  Link Transmission Controllables
- * 381317           271106 cwilkin  Correct RMName in MsgStoreXAResourceInfo
- * PK38602          120207 cwilkin  Correct batchTimeout/Size
- * SIB0112le.mp.1   130207 ajw      Large Message surport
- * PK40556          060307 tevans   Add PEV override
- * 424497.1         260407 vaughton Restructure custom properties
- * 424497.2         300407 vaughton Restructure custom properties
- * SIB0105.mp.7     250607 cwilkin  Link Publication Point Controls
- * SIB0113a.mp.8    200607 cwilkin  Gathering infrastructure in remote get
- * SIB0163.mp.7     040108 nyoung   Use connectionProperties from TRM to assign a consumer
- * SIB0115.mp.3     230108 nyoung   Hidden message expiry and pending_retry support
- * SIB0115.mp.3     290108 dware    Add BLOCKED state to queued messages MBeans
- * 522345           200508 dware    Add new lock states
- * 512636           010608 cwilkin  Batch reallocations
- * 535484           100708 dware    Make GD batch sizes/times customizable
- * 368006           110708 dware    Disable the AsyncUpdateThread alarm
- * 510343           010908 dware    Add servicability constants
- * 558352           281008 cwilkin  Retry failed attach to avoid deadlock
- * PK74905          041108 pbroad   Improve evenness of message distribution for short-lived produers
- * 599149           010709 pbroad   Add minimal ME<->ME comms trace 
- * 88311            060213 venugopv Liberty: Added types of connections
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 /*
  * Note: Only put STATIC FINAL constants in this class, variables set from custom properties have

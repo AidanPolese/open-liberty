@@ -1,20 +1,13 @@
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * 
- * @(#) 1.5 SERV1/ws/code/security.crypto/src/com/ibm/ws/ssl/config/ThreadContext.java, WAS.security.crypto, WASX.SERV1, pp0919.25 2/13/09 22:16:01 [5/15/09 18:04:44]
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Date         Defect        CMVC ID    Description
- *
- * 08/19/05     LIDB3557-1.1  pbirk      3557 Initial Code Drop
- * 12/15/05     LIDB3187-56   ttorres    3187-56 Cert Mapping
- * 01/06/06     333344        pbirk      Added methods for signer acceptance without storage.
- * 06/21/06     368562        danmorris  Added methods get/setOutboundConnectionInfo
- * 02/13/09     PK76448       yammer     Added methods get/setOutboundConnectionInfoInternal
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.ssl.config;
 

@@ -1,30 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * SIB0113a.mp.1    240707 cwilkin  Gathered Consumer foundation
- * SIB0113a.mp.5    080807 vaughton Gathered Consumers
- * SIB0163.mp.1     190907 nyoung   XD Integration.
- * SIB0163.mp.3     021107 nyoung   MaxConcurrency of 1 on ConsumerSet causes dithering.
- * 467999           141107 dware    Rework maxActiveMessages for performance, ConsumerSets and correctness
- * 520472           220508 cwilkin  Gathering reattaching
- * 512943.1         300608 cwilkin  Gathering Synchronisation and Threshold
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl.interfaces;
 
 import com.ibm.websphere.sib.exception.SINotPossibleInCurrentConfigurationException;

@@ -1,43 +1,13 @@
-/* @(#) 1.9 SERV1/ws/code/security.crypto/src/com/ibm/ISecurityUtilityImpl/PasswordUtil.java, WAS.security.crypto, WASX.SERV1, pp0919.25 11/12/07 09:16:29 [5/15/09 17:40:37]
+/*******************************************************************************
+ * Copyright (c) 1997, 2016 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *  COMPONENT_NAME: security
- *
- *  MODULE_NAME: PasswordUtil.java
- *
- *  ORIGINS: 27
- *
- *  IBM Confidential OCO Source Material
- *  5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2005, 2006, 2007, 2016
- *
- *  The source code for this program is not published or otherwise divested
- *  of its trade secrets, irrespective of what has been deposited with the
- *  U.S. Copyright Office.
- *
- *  THIS PRODUCT CONTAINS RESTRICTED MATERIALS OF IBM
- *  All Rights Reserved *  Licensed Materials - Property of IBM
- *
- *  DESCRIPTION:
- *
- *    This module contains the JAVA implementation of
- *    com.ibm.ISecurityUtilityImpl.PasswordUtil.java.
- *
- *    Note: This file is not generated from an IDL file.
- *
- *  CHANGE HISTORY:
- *
- *    Date      Programmer     Defect        Description
- *    --------  -------------  ------------  -----------------------------------
- *    01/11/01  dbscheer       d90016.2      duplicate PasswordUtil function in com.ibm.ISecurityUtilityImpl
- *    01/19/01  dbscheer       d91412.2      fix empty cryptoAlgorithmTag {} handling as per d90016.3
- *    01/23/01  dbscheer       d90016.5      change crypto algorithm tag start/stop to String
- *    02/02/01  dbscheer       d92598.1      add passwordEncode() and passwordDecode() methods
- *    03/07/01  dbscheer       d92992        enable additional crypto algorithms
- *    05/13/02  leou           d129767       Add FFDC instrumentation
- *    09/06/04  srinivas       d225881       Changes to accomodate iseries
- *    05/12/05  pbirk          fLIDB4135.2   Changes for custom password encryption plug point.
- *    07/13/06  emilyt         376893        Add isEncrypted() method
- *    11/09/07  mcasile        477704        New FFDC API
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.websphere.crypto;
 

@@ -1,38 +1,15 @@
 package com.ibm.tx.jta.embeddable.impl;
 
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2004, 2013 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* @(#) 1.14 SERV1/ws/code/was.transaction.impl/src/com/ibm/ws/Transaction/wstx/WSATParticipantWrapper.java, WAS.transactions, WAS855.SERV1, cf061521.02 8/13/13 06:48:34 [6/12/15 06:28:20]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date(YYMMDD) Programmer    Defect       Description                                                  */
-/*  -----------  ----------    ------       -----------                                                  */
-/*  04/03/28     dmatthew      LI1922       creation                                                     */
-/*  04/08/20     dmatthew      220510       WSAT HA code drop                                            */
-/*  04/09/13     hursdlg       229947       Update async state on recovery                               */
-/*  04/09/28     johawkes      235214       Fix trace group and imports                                  */
-/*  04/10/18     awilkins      235214.1     Servicability - improve trace                                */
-/*  04/12/12     dmatthew      LIDB1922-5   WSAT - zOS                                                   */
-/*  05/03/03     dmatthew      257583       WSAT log raw mapping data not serialized java objects        */
-/*  05/04/20     hursdlg       265487       Return heurmix as we dont really know the type of heuristic  */
-/*  07/06/20     hursdlg       LI3968-1.2   Commit Priority getter                                       */
-/*  08/04/04     hursdlg       509776       Heuristics support                                           */
-/*  08/05/14     hursdlg       414814       Unique ref param for WSAT                                    */
-/*  08/12/31     johawkes      547740       Add toString                                                 */
-/*  13/08/10     slaterpa      752004       TRANSUMMARY trace
- /* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2004, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.Serializable;
 import java.rmi.RemoteException;

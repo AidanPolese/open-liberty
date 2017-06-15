@@ -1,85 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.87 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/ProxyReceiveListener.java, SIB.comms, WASX.SIB, uu1215.01 11/09/15 07:55:19 [4/12/12 22:14:06]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2011
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030325 niall    Original
- * F166959         030521 niall    Rebase on non-prototype CF + TCP Channel
- * f168604         030610 mattheg  Add Async support
- * d169745         030617 mattheg  Allow proxy group to be saved with conversation
- * d170527         030625 mattheg  Tidy and change to SibTr
- * f168604.1       030625 schmittm add a flip on processMessage()
- * d170639         030630 mattheg  NLS all the messages
- * f171177         030707 schmittm Add asynchronous readAhead support
- * f171400         030710 schmittm Implement Core API 0.6 changes in client and server code
- * f172297         030722 mattheg  Core API 0.6 final changes
- * F171893         030729 prestona Add BrowserSession support on client.
- * F174602         030819 prestona Switch to using SICommsException
- * F174776         030828 Niall    Chained Receive Listener Support
- * d172528         030909 mattheg  Added async exception handling and tidied tracing
- * f174318         030911 mattheg  Fault tolerance
- * d176932         030916 mattheg  Move null checks on serious error case
- * f177497         030923 mattheg  Receive inital connection information here to remove get connection line turnaround and fix memory leak
- * d177744         030925 mattheg  Fix memory leak fix
- * f173765.2       030925 mattheg  Core API M4 update
- * f178690         031003 mattheg  Remove need for line turnaround on first createUniqueId call
- * f179464         031010 mattheg  Implement meTeminated() handling and removed badEyeCatcherReceived()
- * f181007         031211 mattheg  Add boolean 'exchange' flag on dataReceived()
- * f172521.2       030923 Niall    Support MFP Schema Propogation
- * d186970         040116 mattheg  Overhaul the way we send exceptions
- * f182639.1.3     040119 mattheg  Provide support for SICoreConnection.getMeUuid()
- * f187850         040121 Niall    Support MFP Schema Propogation Phase #2
- * F188491         040128 prestona Migrate to M6 CF + TCP Channel
- * d189716         040218 mattheg  FFDC Instrumentation
- * d192022         040226 mattheg  Fix improper use of SibTr.error
- * d192293         040309 mattheg  NLS file changes
- * f192759.2       040311 mattheg  Use correct length for message size
- * f179465.1       040315 mattheg  Access to resolved user Id
- * F201521         040506 mattheg  Add getThreadContext() method
- * D204058         040519 mattheg  Remove un-guarded debug
- * D211250         040622 mattheg  Remove closeReceived() method
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D221834         040806 mattheg  Allow linked exceptions to be sent from the server
- * D199177         040816 mattheg  JavaDoc
- * D231594         040923 mattheg  Allow async events to executed on a seperate thread
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D265532         050412 mattheg  More information when unexpected data received
- * D335337         060106 mattheg  Source ME name moved out of handshake properties
- * D338016         060127 prestona Make comms return MSSIXAResourceProvider connection implementation
- * D341593         060130 mattheg  Remove un-used locals
- * D350111.1       060302 mattheg  Move to FAP 5
- * D354565         060320 prestona ClassCastException thrown during failover
- * D377648         060719 mattheg  Use CommsByteBuffer
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * SIB0112c.com.1  070125 mattheg  Memory management: Parse message in chunks
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * D424200         070426 prestona Readahead consumers hang in receiveWithWait if connection dies
- * SIB0121a.com.1  070706 prestona Propagate exception reason and inserts.
- * D449413         070726 mleming  Don't use Short.valueof on a short.
- * SIB0137.comms.3 070926 vaughton addDestinationListener
- * SIB0115d.comms  070928 vaughton StoppableAsynchConsumerCallback
- * D483123         071114 mleming  Call DestinationListeners/StoppableAsynchConsumerCallbacks on a separate thread
- * 494335          080128 mleming  Flow localOnly information on the wire
- * 516687          080506 vaughton Correct trace
- * 522647          080523 mleming  Fix method names
- * 487999.3        080815 vaughton Fix trace statements
- * F011127         280611 chetbhat Adding registerConsumerSetMonitor 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import com.ibm.websphere.ras.TraceComponent;

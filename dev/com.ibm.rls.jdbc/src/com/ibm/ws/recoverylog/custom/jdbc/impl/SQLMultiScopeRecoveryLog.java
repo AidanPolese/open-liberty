@@ -1,39 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5639-D57, 5630-A36, 5630-A37, 5724-D18 (C) COPYRIGHT International Business Machines Corp. 2012, 2016 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/* DESCRIPTION:                                                                      */
-/*                                                                                   */
-/* Change History:                                                                   */
-/*                                                                                   */
-/* Date       Programmer  Defect         Description                                 */
-/* --------   ----------  ------         -----------                                 */
-/* 2012/06/14 nyoung      735581         SQL/DB2 Transaction logging                 */
-/* 2012/08/13 nyoung      735581.2       Add keypointing to closeLog                 */
-/* 2012/08/13 nyoung      735581.2       Add keypointing to closeLog                 */
-/* 2012/10/10 nyoung      735581.4       Repackage lib support and allow DB2 config  */
-/* 2012/11/14 nyoung      735581.5       Refactor SQLMultiScopeRecoveryLog           */
-/* 2012/12/04 nyoung      735581.8       Prevent Table creation race                 */
-/* 2012/12/21 nyoung      742649         WAS:SVT:Server failed to start with NPE     */
-/* 2013/01/11 nyoung      735581.10      Ensure DB support works in HA config        */
-/* 2013/02/05 nyoung      735581.11      I'face change to support Liberty Integration*/
-/* 2013/03/21 nyoung      745382         SVT:Exception during tran log write op      */
-/* 2013/03/26 nyoung      735581.12      Oracle LONG RAW to BLOB                     */
-/* 2014/02/05 nyoung      F114950        FIS: Support HA DB Failover, logs in DB     */
-/* 2015/04/09 dmatthew    PI38387        Exception on ds.getConnection doesn't fail logs */
-/* 2015/12/02 dmatthew    PI45254        Enhance serviceability on markFailed        */
-/* 2016/06/30 dmatthew    PI65127        Locking doesn't work - wrong servername used*/
-/* 2016/11/11 dmatthew    PI72136        fix PI65127 Oracle doesn't support RR       */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2012, 2016 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.recoverylog.custom.jdbc.impl;
 

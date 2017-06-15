@@ -1,41 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- ------------------------------------------
- * 424497.2         300407 vaughton Restructure custom properties
- * 442452           300507 vaughton Findbugs tidy up
- * SIB0111b.rmq     020707 nyoung   Change queue manager version restrictions
- * SIB0113a.mp.5    080807 vaughton Gathered Consumers
- * SIB0113a.mp.12   211207 cwilkin  Gathering Recoverys
- * SIB0115.mp.3     230108 nyoung   Hidden message expiry and pending_retry support
- * 502412           190308 cwilkin  Change default value of inactivityTimeout
- * 529626           160608 dware    Make AIH flush timeouts tunable
- * 512943.1         290608 cwilkin  Synchronisation + Refilling for gathering
- * 535484           100708 dware    Modify sendWindow and GD batch sizes/times
- * 368006           110708 dware    Disable the AsyncUpdateThread alarm
- * 528148.1         150708 cwilkin  Retry connect on gather reattach
- * 510343           010908 dware    Add servicability custom properties
- * F001731          070409 dware    Add ability to issue warnings when maxActiveMessages is reached
- * 552379           280709 mayur    Fix setting of PEV custom properties
- * 556101           050809 mayur    Add a custom property to toggle PEV debug utility
- * F001338-55330    111111 chetbhat MultiThreading for reconstitution
- * 725081           271211 venugopv make number of threads equal to number of cores
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl;
 
 import java.util.Hashtable;

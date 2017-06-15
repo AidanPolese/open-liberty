@@ -1,25 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * 
- * This class is mainly used to deal with basic authentication:
- * @DenyAll
- * @PermitAll
- * @RolesAllowed
- * You need to define roles in server.xml and map it in web.xml
- * Annotated constraints are additional to any configured security constraints. 
- * The JAX-RS runtime environment checks for annotated constraints after 
- * the web container runtime environment has checked for security constraints that are configured in the web.xml file.
- * Details in: 
- * http://www-01.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.nd.doc/ae/twbs_jaxrs_impl_securejaxrs_annotations.html?cp=SSAW57_8.5.5%2F1-3-0-40-4-0&lang=en
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jaxrs20.security;
 
 import java.lang.reflect.Method;

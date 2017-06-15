@@ -1,34 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2012, 2013
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * 88661            071212 chetbhat Modifying the nls based on review
- * 89424            121212 chetbhat Simplifying metatype.xml for messaging
- * 91294            210113 sharath  Changing maxQueueDepth property to maxMessageDepth
- * 91384            230113 sharath  Warning for alias destination duplication
- * 91796            230113 sharath  Restricting alias to override sendAllowed from false to true
- * 86900            230113 sharath  Create proper directory structure under <server>/messaging when relative path is given
- * 90904            28/01/13 urwashi Registering MBeans as services 
- * 91914            240113 sharath  Make exceptionDestination point to System Exception destination when given an empty string
- * 91934            240113 sharath  Changing the default value for RedeliveryInterval
- * 91911            300113 Sharath  Changing the functionality of the DISCARD which was having duplicate functionality as KEEP_TRYING
- * 92315            080213 chetbhat Nls changes
- * 94563            250213 Sharath Moving the info message which gets logged at startup to debug
- * 114449           251013 senthven Removing code which logs messages about ME ID change.
- * 115413           111113 senthven No message in the logs to figure out if ME name change is honored or not at runtime
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.messaging.service;
 
 import java.io.File;

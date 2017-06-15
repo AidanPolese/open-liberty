@@ -1,27 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 2005, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 08/31/05 gilgen      LIDB3618-2      M2/M3 drops 
-// 09/01/05 gilgen      302453          M3 code updates
-// 09/22/05 gilgen      307313          Code cleanup/improvements
-// 10/02/05 gilgen      308856.1        Code review comments
-// 10/12/05 gilgen      310885          Reduce synchronization
-// 10/18/05 wigger      314555          new timeout changes
-// 10/26/05 gilgen      317392          improve tracing
-// 11/01/05 wigger      317392          performance changes, fix race conditions
-// 11/03/05 gilgen      320175          make accept and connect common with base TCP/cleanup
-// 12/12/05 wigger      331203          don't send error caused by timeout-cancel to the user
-// 01/10/06 wigger      306998.3        use isAnyTracingEnabled
-// 01/19/06 gilgen      336062          new threading model 
-// 01/25/06 gilgen      341342          add additional tracing
-// 10/30/06 gilgen      402392          invoke callback on pooled thread when timeout occurs
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.io.async;
 
 import java.io.IOException;

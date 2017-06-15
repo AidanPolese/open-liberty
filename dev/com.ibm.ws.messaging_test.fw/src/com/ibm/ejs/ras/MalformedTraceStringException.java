@@ -1,21 +1,13 @@
-/*
- * IBM Confidential OCO Source Material
- * Copyright IBM Corp. 2012
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * DESCRIPTION:
- *
- * Change History:
- *
- * Reason    Version  Date        User id    Description
- * ----------------------------------------------------------------------------
- * D110679     4.0.2  09-10-2001  jhanders   Part created.
- * LIDB799.100 5.0    10-10-2001  jhanders   Changed permissions.
- * LIDB799.100 5.0    10-11-2001  stopyro    Use WsException
- *
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ejs.ras;
 

@@ -1,41 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.30 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/proxyqueue/impl/ConversationHelper.java, SIB.comms, WASX.SIB, uu1215.01 08/01/31 05:31:31 [4/12/12 22:14:07]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030702 prestona Original
- * F171893         030721 prestona Add BrowserSession support on client.
- * F174602         030819 prestona Switch to using SICommsException
- * f174317         030827 mattheg  Add local transaction support
- * f173765.2       030925 mattheg  Core API M4 update
- * f177889         030929 mattheg  Core API M4 completion
- * d178368         031008 mattheg  Ensure delete set is flowed at the correct priority
- * f187521.2.1     040126 mattheg  Unrecoverable reliability -- part 2
- * f200337         040428 mattheg  Message order context implementation
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D268606         050415 mattheg  Add method to expose comms connection
- * D307265         050918 prestona Support for optimized transactions
- * D365952         060523 mattheg  Add support for SIMessageNotLockedException
- * SIB0115d.comms  070928 vaughton StoppableAsynchConsumerCallback
- * 472879          071008 vaughton StoppableAsynchConsumerCallback confusion
- * SIB0115.comms.2 080131 vaughton Update registerStoppableAsynchConsumerCallback
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.comms.client.proxyqueue.impl;
 

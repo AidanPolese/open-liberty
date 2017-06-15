@@ -1,26 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.5 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/ServerCommsDiagnosticModule.java, SIB.comms, WASX.SIB, aa1225.01 08/05/21 09:40:37 [7/2/12 05:59:14]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2003, 2008 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2003, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        061005 mattheg  Allow FFDC diagnostics in the client
- * D381838         070130 mattheg  Use Converstion.getFullSummary() instead of toString()
- * D462062         080520 mleming  Improve diagnostics
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server;
  
 import java.util.HashMap;

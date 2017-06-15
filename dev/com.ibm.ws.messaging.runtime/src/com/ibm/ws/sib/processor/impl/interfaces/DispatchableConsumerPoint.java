@@ -1,36 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- *                  210605 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.mp.1     210605 tevans   Renamed original 602 file from ConsumerPoint
- *                                    to DispatchableConsumerPoint
- * SIB0002.mp.1     210605 tevans   PEV Prototype
- * SIB0041.mp.1     300805 cwilkin  Total Message Ordering
- * 379771           040906 cwilkin  IgnoreInDoubts Ordering Support
- * 467999           141107 dware    Rework maxActiveMessages for performance, ConsumerSets and correctness
- * SIB0115.mp.3     290108 dware    Add new suspend type
- * 520472           220508 cwilkin  Gathering reattaching
- * 520690           290508 ajw      Don't suspend or setup blockedretry timer when already suspended
- * 528148           160608 cwilkin  Reissue Get after restarted DME for async consumers
- * 496144           180608 cwilkin  Forward port PK58940
- * 520690.1         270608 ajw      Don't suspend or setup blockedretry timer when already suspended
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl.interfaces;
 
 import java.util.concurrent.locks.Lock;

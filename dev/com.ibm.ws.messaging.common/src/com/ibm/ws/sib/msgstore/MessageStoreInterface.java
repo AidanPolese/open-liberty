@@ -1,39 +1,15 @@
 package com.ibm.ws.sib.msgstore;
 
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 27/10/03 drphill  Original
- * 186549.1        01/06/04 corrigk  Added methods for MBean
- * 224000          16/08/04 corrigk  Checked exceptions on getUniqueXxx
- * 225627          24/08/04 corrigk  Add storageStrategy to getUniqueLockId()
- * 223636.2        26/08/04 corrigk  Consolidate dump
- * 288073          13/07/05 schofiel Dump consolidation
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * 492055          27/05/08 susana   Allow dump to dump internal & persisted data
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * 572575          28/01/09 gareth   Allow data store lock to be disabled
- * F008622         14/12/11 urwashi  Added new method to support the new recovery command to intialize recovery ME
- * 90454           30/01/13 sanjay   Fix for enabling listPeparedTransactions 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.IOException;
 

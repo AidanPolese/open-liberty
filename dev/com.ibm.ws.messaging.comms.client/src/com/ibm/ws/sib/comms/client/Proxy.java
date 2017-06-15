@@ -1,36 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.20 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/Proxy.java, SIB.comms, WASX.SIB, uu1215.01 08/04/29 21:36:49 [4/12/12 22:14:06]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030325 niall    Original
- * F166959         030521 niall    Rebase on non-prototype CF + TCP Channel
- * d168211         030605 mattheg  Allow checking of closed sessions / connections
- * d170527         030625 mattheg  Tidy and change to SibTr
- * F168604.2       030601 prestona Exploit asynchronous client API.
- * f173559         030807 mattheg  Move location of JFAPCommunicator
- * F174602         030819 prestona Switch to using SICommsException
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D276260         050516 mattheg  Add hashcode to trace (not change flagged)
- * SIB0048b.com.1  060901 mattheg  Use seperate JFAP Communicators for client / server
- * 514462          080421 vaughton Further performance optimisation
- * 516882          080430 sibcopyr Automatic update of trace guards 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import com.ibm.websphere.ras.TraceComponent;

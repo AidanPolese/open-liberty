@@ -1,32 +1,13 @@
-// %Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2001,2012
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2001, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason            Version    Date        User id     Description
- * ----------------------------------------------------------------------------
- * F017049-18055.1     8.0      12-16-2009  mcasile   Create subManager, and change manager constructors
- * F001340-16890	   8.0      12-18-2009  mcasile   Rmv SystemOutInc, SystemErrInc, and MinLevel, add TraceInc
- * F017049-18796.1     8.0      12/22/2009  spaungam  Add support for z/OS HPEL according to new file structure
- * 633565              8.0      01/05/2010  mcasile   Handle slight ManagerImpl constructor change
- * 646359              8.0      04-02-2010   belyi    Fix timestamp HPEL uses on server instance directories
- * F017049-22453       8.0      04-06-2010  mcasile   Add methods enabling outsider to notify manager of file creations, request removals, et al
- * 646359.1            8.0      04-16-2010   belyi    Don't write TextLog in children processes.
- * F004324             8.0      04-21-2010  mcasile   Log File Event Notification
- * 688583              8.0      01-30-2011   belyi    Ensure that current values are not change if there's a problem with new values
- * 694351              8.0      03-02-2011  mcasile   Stop the fileSystem Alarm thread when hpel is stopped
- * 691649              8.0      03-18-2011   belyi    Ensure that writers are closed instead of simply forgotten
- * PM48157             8.0      10-04-2011  shighbar  HPEL TextLog retention policy does not remove previous server instances logs.
- * 724465              8.0      12-07-2011  shighbar  Add synchronization to getBinaryHandler to avoid lazy init found in static analysis.
- * 727908              8.5      02-10-2012   belyi    Write header for Text destination earlier to verify that it can be written to.
- * 735356              8.5      12-06-2012  vishalc   server hang related to hpel textlog
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.logging.hpel.handlers;
 

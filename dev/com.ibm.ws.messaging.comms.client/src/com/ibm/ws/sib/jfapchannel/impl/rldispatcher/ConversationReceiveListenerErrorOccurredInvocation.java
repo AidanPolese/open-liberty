@@ -1,33 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.16 SIB/ws/code/sib.jfapchannel.client.common.impl/src/com/ibm/ws/sib/jfapchannel/impl/rldispatcher/ConversationReceiveListenerErrorOccurredInvocation.java, SIB.comms, WASX.SIB, uu1215.01 08/05/27 15:58:13 [4/12/12 22:14:15]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2004, 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * F185831         040106 prestona Original
- * F181603.2       040119 prestona JFAP Segmentation
- * F201521         040505 mattheg  getThreadContext implementation
- * D199145         040812 prestona Fix Javadoc
- * D224570         040818 prestona JFap trace needs improving
- * F248849         050201 prestona Improve receive listener dispatcher performance
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * D494112         080218 mleming  Fix synchronization issues
- * 500219          080225 sibcopyr Automatic update of trace guards 
- * D500366         080527 mleming  Fix synchronization issues raised by findbugs
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.impl.rldispatcher;
 
 import com.ibm.websphere.ras.TraceComponent;

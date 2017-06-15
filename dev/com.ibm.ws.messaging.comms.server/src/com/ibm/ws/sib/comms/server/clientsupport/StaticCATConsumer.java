@@ -1,90 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.89.1.1 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/StaticCATConsumer.java, SIB.comms, WASX.SIB, aa1225.01 12/05/08 01:35:39 [7/2/12 05:59:00]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2014
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030604 clarkep  Original
- * mattheg         030630 mattheg  NLS all the messages (and convert to SibTr)
- * mattheg         030704 mattheg  Ensure the discriminator is retrieved correctly
- * f171177         030707 schmittm Add asynchronous readAhead support
- * f169897.2       030708 mattheg  Convert to Core API 0.6
- * f171400         030710 mattheg  Implement Core API 0.6
- * f172297         030725 mattheg  Complete Core API 0.6 implementation
- * f173559         030808 mattheg  Add checks for invalid flags
- * F174602         030820 prestona Switch to using SICommsException
- * f174317         030827 mattheg  Add support for local transactions
- * D175672         030902 Niall    Fix Memory Leaks
- * D177227         030919 prestona Client doesn't tollerate nolocal flag
- * f173765.2       030926 mattheg  Core API M4 update
- * f177889         030929 mattheg  Core API M4 completion
- * d179459         031010 mattheg  Ensure flags are passed and checked correctly and fix spellin'
- * F183828         031204 prestona Update CF + TCP prereqs to MS 5.1 level
- * f179519.1       031209 mattheg  Add SIDestinationWrongTypeException handling
- * f181007         031211 mattheg  Add boolean 'exchange' flag
- * f179339.4       031222 mattheg  Forward and reverse routing support
- * d186970         040116 mattheg  Overhaul the way we send exceptions to client
- * f187521.2.1     040126 mattheg  Unrecoverable reliability -- part 2
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * f176658.3.6.2   040211 mattheg  Add createConsumerSession() method that takes SIDestinationAddress
- * f191114         040218 mattheg  Multicast support
- * d187252         040302 mattheg  Ensure session destination information is only returned if it changes
- * f196076         040407 mattheg  Multicast support -- phase 2
- * f195748.2       040415 mattheg  Core SPI 7.5 updates
- * f199593         040422 mattheg  Complete M7.5 Core SPI updates
- * d200152         040426 mattheg  Ensure correct exceptions for bifurcated sessions
- * f193585.3.2     040503 mattheg  Remove destination filter
- * f176658.4.2.2   040504 mattheg  deliverImmediately flag change
- * F195720.3       040616 prestona WAS Request Metrics in Jetstream
- * F207007.2       040617 mattheg  Core SPI Update of message selector parameters
- * F195720.3.1     040629 prestona WAS Request Metrics in Jetstream
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * D210259.1       040819 mattheg  Move deserialization methods to CommsUtils
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D235891         040930 mattheg  Runtime property standards
- * D237047         041005 mattheg  Handle incorrect flags correctly
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * F247845         050201 mattheg  Multicast support
- * D254870         050214 mattheg  Optimize connection close
- * D237663         050422 mattheg  Inline async callbacks on start()
- * D307265         050922 prestona Support for optimized transactions
- * D342106         060130 mattheg  Don't FFDC on SINotAuthorisedException
- * D347591         060217 mattheg  Add support for exchanged starts
- * D350111.1       060302 mattheg  Use send listener for start()
- * D351339.comms   060302 mattheg  Implement ignoreInitialIndoubts createConsumerSession() method
- * D357343         060323 prestona Build break caused by clash between 351339 and 354565
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D384259         060815 prestona Remove multicast support
- * SIB0048b.com.1  060901 mattheg  Use different byte buffer impl on server
- * D441183         072307 mleming  Don't FFDC when calling terminated ME
- * SIB0113.comms.1 070920 vaughton Core SPI changes
- * 471642          071016 vaughton Unable to deregister stoppable async consumer
- * SIB0163.comms.1 071022 vaughton XD extensions
- * SIB0163.comms.2 071029 vaughton XD extensions (Part 2)
- * 494335          080128 mleming  Flow localOnly information on the wire
- * SIB0115.comms.2 080131 vaughton Update registerStoppableAsynchConsumerCallback
- * 498362          080304 vaughton Check FAP level before hauling out a properties map
- * PK73713         161008 ajw      Allow messageset to be unlocked and not increased lock count
- * 568951          081215 mleming  Code review adjustments to PK73713
- * PK83641         090331 ajw      reset LinkLevelState when returning from pool;
- * 592503          090722 mleming  ObjectStoreFullException -> ConversationStateFullException
- * F013661         200412 chetbhat unlockAll(incrementUnlockCount) support
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import java.util.Map;

@@ -1,33 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.22 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/IdToTransactionTable.java, SIB.comms, WASX.SIB, aa1225.01 10/10/06 07:02:43 [7/2/12 05:58:59]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  (C) Copyright IBM Corp. 2003, 2010
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030827 mattheg  Original
- * D199177         040816 mattheg  JavaDoc
- * D254870         050214 mattheg  Optimize transaction removal
- * D297060         050821 prestona IdToTransactionTable memory leak
- * D307265         050918 prestona Added helper functions for optimized transactions
- * D314255         051102 mattheg  Fix FFDC errors
- * D321471         051109 prestona Optimized transaction related problems
- * D359021         060330 mattheg  Clean up dispatchable map on connection failure
- * 471664          071003 vaughton Findbugs tidy up
- * PM23837         101006 pbroad   Actuall mark transaction rollback only when end fails
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server;
 
 import java.util.HashMap;

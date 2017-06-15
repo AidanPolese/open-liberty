@@ -1,20 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-I63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 2003, 2005
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//HISTORY
-//~~~~~~~
-//
-//Change ID    Author    Abstract
-//---------    --------  ---------------------------------------------------
-//d240206      clanzen   Enable use of vhost in the CFEndPoint selection.
-//f247975.3    leeja     Added API for serializing to XML format
-//342528       clanzen   Allow multiple vhosts per endPoint.
-//
-//======================================================================== */
-
+/*******************************************************************************
+ * Copyright (c) 2003, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.channelfw;
 
 import java.io.NotSerializableException;

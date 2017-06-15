@@ -1,27 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 2005, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 08/31/05 gilgen      LIDB3618-2      M2/M3 drops
-// 09/01/05 gilgen      302453          M3 code updates
-// 09/07/05 gilgen      303495          Add JIT support for ByteBuffers
-// 09/22/05 gilgen      307313          Code cleanup/improvements
-// 10/02/05 gilgen      308856          Code review comments
-// 10/18/05 wigger      314555          new timeout changes
-// 10/24/05 wigger      314917          implement permisssion logic
-// 10/25/05 gilgen      317392          Add configurable system parms
-// 11/04/05 gilgen      320175          Create static exception at runtime instead of init time
-// 11/10/05 wigger      314917.1        fix sync permission
-// 11/21/05 wigger      325773          add re-use count for race condition detection
-// 12/12/05 wigger      331203          don't send error caused by timeout-cancel to the user
-// 02/01/06 wigger      342415          return null if Async and finish read/write perm denied
-// 05/07/07 wigger      450128          initialize Timer inside a privileged block
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.io.async;
 
 import java.nio.ByteBuffer;

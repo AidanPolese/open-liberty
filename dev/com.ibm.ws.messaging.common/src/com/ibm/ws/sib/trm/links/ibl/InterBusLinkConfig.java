@@ -1,31 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * LIDB2117        041103 vaughton Original
- * 290290.1        051101 gelderd  Improved entry/exit trace for sib.trm
- * SIB0211.ibl.2   070420 jamessid Adding accessor methods for admin
- * 479479          071107 nottinga Stop tracing password
- * 499369          080220 djvines  Use autoboxing for trace
- * d484114.1       090608 timoward Get J2C Auth Aliases from the correct domain
- *                                 and use secure, traceable password class
- * d604938         090909 djvines  Move Password to utils
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.trm.links.ibl;
 

@@ -1,26 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.18 SIB/ws/code/sib.trm.client.impl/src/com/ibm/ws/sib/trm/client/ClientHandler.java, SIB.trm, WASX.SIB, aa1225.01 05/11/02 03:20:56 [7/2/12 05:58:42]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-I63, 5724-H88, 5655-N02, 5733-W70  (C) Copyright IBM Corp. 2004, 2005
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * LIDB2117        030509 vaughton Original
- * 281683.1        050926 gelderd  SVC: Improved diagnostic on bus connect failure - part 1
- * 290290.3        051101 gelderd  Improved entry/exit trace for sib.trm.client.impl
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 /*
  * Provides an abstract implementation of the Comms ClientComponentHandshake

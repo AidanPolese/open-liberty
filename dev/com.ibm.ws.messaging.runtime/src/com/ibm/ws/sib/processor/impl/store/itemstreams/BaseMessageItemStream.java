@@ -1,35 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * SIB0002.mp.1     210605 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.mp.1     210605 tevans   PEV Prototype
- * 306998.22        050106 gatfora  Trace performance improvements
- * 404304           141106 tevans   Thread Deadlock when destination high limit reached
- * 424497.1         260407 vaughton Restructure custom properties
- * 424497.2         300407 vaughton Restructure custom properties
- * SIB0105.mp.5     040607 cwilkin  Link Transmission Health States
- * 486100           291107 cwilkin  Disregard referenceStreams on pubsub threshold
- * 515543           180708 cwilkin  Handle MessageStoreRuntimeExceptions on msgstore interface
- * 464463.2         250708 nyoung   Messages coming off a link are incorrectly exceptioned - pt 3
- * 510343           010908 dware    Support message depth interval checking
- * 114553           061113 balgirid Fixing message threshold not shown in messages.log
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.impl.store.itemstreams;
 

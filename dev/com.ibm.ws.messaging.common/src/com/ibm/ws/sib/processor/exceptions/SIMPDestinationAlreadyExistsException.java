@@ -1,31 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 161135           170303 tevans   Original
- * 162915           080403 tevans   Make the Core API code look like the model
- * 166828           060603 tevans   Core MP rewrite
- * 169897.0         240603 jroots   Updates for Milestone 3 Core API
- * 181796.0         041103 jroots   Move to com.ibm.wsspi
- * 222183           120804 cwilkin  Add exception reasons/inserts
- * 248145           201204 gatfora  Remove code that is not used
- * LIDB3706-5.248   180105 gatfora  Include a serialVersionUid for all serializable objects
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.exceptions;
 

@@ -1,66 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.58 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/proxyqueue/impl/ConversationHelperImpl.java, SIB.comms, WASX.SIB, uu1215.01 09/01/08 02:47:41 [4/12/12 22:14:07]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2004, 2009
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030702 prestona Original
- * d169897.2       030707 schmittm Provide remote client implementation of new Core API as defined
- * f171400         030710 schmittm Implement Core API 0.6 changes in client and server code
- * F171893         030721 prestona Add BrowseSession support on client.
- * f173559         030807 mattheg  Move location of JFAPCommunicator
- * F174602         030819 prestona Switch to using SICommsException.
- * f174317         030827 mattheg  Add local transaction support
- * f173765.2       030925 mattheg  Core API M4 update
- * f177889         030929 mattheg  Core API M4 completion
- * d178368         031008 mattheg  Ensure delete set is flowed at correct priority
- * D184767         031205 prestona Flow correct segment for unlockAll
- * d186970         040116 mattheg  Overhaul the way we send exceptions
- * f187521.2.1     040126 mattheg  Unrecoverable reliability -- part 2
- * F188491         040128 prestona Migrate to M6 CF + TCP Channel
- * f192022         040226 mattheg  Correct use of SibTr.error
- * d192217         040227 mattheg  Flow correct segment for unlockAll (again)
- * f199593         040422 mattheg  Complete M7.5 Core SPI changes
- * f200337         040428 mattheg  Message order context implementation
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D218041         040806 mattheg  Make sure we delete set no reply only when transacted
- * D199177         040816 mattheg  JavaDoc
- * D225797         040820 mattheg  Fix up possible NPE when connection is lost on exchange
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D234369         040927 prestona Deadlock in Comms
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * F247845         050204 mattheg  Ensure unlockAll() throws exceptions on failure
- * D268606         050415 mattheg  Implement getCommsConnection()
- * D307265         050918 prestona Support for optimized transactions
- * D289992         051114 prestona Reduce Semaphore creation
- * D365952         060523 mattheg  Add support for SIMessageNotLockedException
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * SIB0048b.com.1  060901 mattheg  Use separate JFAP Communicators for client / server
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * SIB0115d.comms  070928 vaughton StoppableAsynchConsumerCallback
- * 472879          071008 vaughton StoppableAsynchConsumerCallback confusion
- * 471642          071016 vaughton Unable to deregister stoppable async consumer
- * SIB0115.comms.2 080131 vaughton Update registerStoppableAsynchConsumerCallback
- * 531180          080702 vaughton Correct trace
- * 538413          080725 djvines  Trace improvements to follow message flow
- * 487999.3        080815 vaughton More trace improvements
- * 568951          081215 mleming  Code review adjustments to PK73713
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client.proxyqueue.impl;
 
 import com.ibm.websphere.ras.TraceComponent;

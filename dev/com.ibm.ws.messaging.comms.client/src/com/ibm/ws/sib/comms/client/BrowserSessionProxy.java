@@ -1,38 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.25 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/BrowserSessionProxy.java, SIB.comms, WASX.SIB, uu1215.01 11/06/29 06:57:35 [4/12/12 22:14:05]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5655-N01, 5733-W61  (C) Copyright IBM Corp. 2004, 2011 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2004, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030702 prestona Original
- * d169897.2       030707 schmittm Provide remote client implementation of new Core API as defined
- * F171893         030718 prestona Add BrowserSession support on client.
- * d174326         030814 mattheg  Organise imports to fix compile warnings.
- * F174602         030819 prestona Switch to using SICommsException
- * f173765.2       030925 mattheg  Core API M4 update
- * f179339.4       031222 mattheg  Forward and reverse routing support
- * F188491         040128 prestona Migrate to M6 CF + TCP Channel
- * d189716         040218 mattheg  FFDC Instrumentation
- * d187252         040302 mattheg  Ensure session destination information is only returned if it changes
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D276260         050516 mattheg  Add hashcode to trace (not change flagged)
- * D377648         060719 mattheg  Use CommsByteBuffer
- * PM42438         280611 ajw      Use Reentrant write/read lock rather than a non reentrant write/read lock
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
  
 package com.ibm.ws.sib.comms.client;
 

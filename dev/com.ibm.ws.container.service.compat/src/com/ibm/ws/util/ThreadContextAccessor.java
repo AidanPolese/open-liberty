@@ -1,26 +1,13 @@
-/*
- * @(#) 1.6 SERV1/ws/code/utils/src/com/ibm/ws/util/ThreadContextAccessor.java, WAS.runtime.fw, WASX.SERV1, uu1209.05 2/12/12 22:50:12 [3/2/12 20:58:33]
+/*******************************************************************************
+ * Copyright (c) 2007, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2007, 2012
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * CHANGE HISTORY:
- *
- * Reason         Version Date         User id   Description
- * ----------------------------------------------------------------------------
- * 369927         6.1     20-Mar-2007  bkail     New
- * 432182         6.1     16-Apr-2007  bkail     Use old initCause
- * 511027         7.0     08-Apr-2008  bkail     Avoid reflection overhead if
- *                                                 security is disabled
- * 658409         8.0     25-Jun-2010  andymc    Disable optimzation if debugging
- *                                                 Thread.setContextClassLoader()
- * F48603.11      8.5     07-Sep-2011  bkail     Add get/setContextClassLoaderForUnprivileged
- * F61004.2       8.5     12-Feb-2012  bkail     Add push/popContextClassLoader/ForUnprivileged
- *                                                 and getPrivilegedAction
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.util;
 

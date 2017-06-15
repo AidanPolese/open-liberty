@@ -1,33 +1,15 @@
 package com.ibm.ws.objectManager;
 
-/*
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2013
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
+/*******************************************************************************
+ * Copyright (c) 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change activity:
- *
- *  Reason           Date    Origin     Description
- * --------------- -------- -------- ------------------------------------------
- *  251161         07/04/05 gareth    Add ObjectManager code to CMVC
- *  343689         04/04/06 gareth    Modify trace output cont.
- *  492129         18/01/08 nottinga  Updated to build against Java 1.4
- *  530647         18/06/08 abanks    Add ObjectStoreFileNotFoundException
- *  PK79872        04/02/09 pbroad    Modify freespace maintenance algorithm
- *  PK92941        03/08/09 pbroad    Remove long->int cast from LengthComparator
- *  607710         21/08/09 gareth    Add isAnyTracingEnabled() check around trace
- *  573905         16/10/09 gareth    Move newFreeSpace.clear to the end of flush
- *  PM10591        24/03/10 slaterpa  Check freeSpaceMap for space in allocationAllowed()
- *  PM15053        24/05/10 slaterpa  Use separate file handle to resize store file
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.ws.objectManager.utils.Trace;
 import com.ibm.ws.objectManager.utils.Tracing;

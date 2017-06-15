@@ -1,34 +1,13 @@
-/*
- * 
- * 
- * ===========================================================================
- * IBM Confidential OCO Source Material
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ===========================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 186484.3         220304 tevans   Further controllable interfaces
- * 186484.5         220404 ajw      Further Continued controllable interfaces
- * 186484.7         270404 tevans   More runtime control interfaces and implementation
- * 186484.7         290404 tevans   More runtime control interfaces and implementation
- * 186484.10        170504 tevans   MBean Registration
- * 196675.1.7.1     030604 tevans   MBean Registration enhancements
- * 316556           251005 gatfora  Should use exported processor package for State Strings
- * SIB0105.mp.1     071106 cwilkin  Link Transmission Controllables
- * SIB0115.mp.3     230108 nyoung   Hidden message expiry and pending_retry support
- * SIB0115.mp.3     290108 dware    Add BLOCKED state to queued messages
- * 522345           200508 dware    Add new locked states
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.runtime;
 
 import com.ibm.ws.sib.mfp.JsMessage;

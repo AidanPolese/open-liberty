@@ -1,17 +1,13 @@
-/*
- * IBM Confidential OCO Source Material
- * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2013
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U. S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * --------------- ------    -------- --------------------------------------------
- * 92566           05/02/13  Kavitha PMI code removal 
- * 89792           07/03/13  Romil   Giving meaningful ffdc exception for producerSessions exceeding out of limit
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.comms.server.clientsupport;
 

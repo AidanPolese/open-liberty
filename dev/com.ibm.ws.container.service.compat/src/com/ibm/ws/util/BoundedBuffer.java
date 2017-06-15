@@ -1,43 +1,13 @@
-/* ========================================================================
- * 
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2010
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * 
- * @(#) 1.23 SERV1/ws/code/utils/src/com/ibm/ws/util/BoundedBuffer.java, WAS.runtime.fw, WAS80.SERV1, kk1041.02 3/26/10 09:59:11 [10/22/10 00:56:39]
- * 
- * ========================================================================
- * 
- * HISTORY
- * ~~~~~~~
- * 
- * Change ID    Author    Abstract
- * ---------    --------  ---------------------------------------------------
- * D186845      tmusta    Remove Thread.interrupted() checks
- * LIDB2117-74  awilkins  Implement expand logic
- * D198819.1    awilkins  Put with maximum capacity. Tidy up synchronization
- * D198819.2    mortonmj  Moving file back to the 1.4 version
- * D226974      awilkins  Put with maximum capacity again
- * D220640      tmusta    Performance Tuning for Channel FW
- * D269135      awilkins  Use new easily-identified type for locking
- * D312598      ericvn    Performance improvements
- * D334194      ericvn    Move back to JDK 1.4.2 
- * D366843      suryadu   Synchronized the get method in the JDK 1.4.2 AtomicInteger Emulation
- * D371967      lauyiuch  Use new easily-identified type for locking and misc. performance tuning
- * PK53203      bkail     Fix use of stale counters in expand()
- * PK53203.1    bkail     Fix putIndex update in expand() when buffer is empty
- * D497382      suryadu   Minimize pause times in the async workloads
- * PK77809      pwwong    Fix new thread creation
- * F743-11444   ericvn    Add ThreadPool.cancel(Runnable) for Async EJB
- * F743-12896   ericvn    Implement ThreadPool.cancel(Runnable) for Async EJB
- * D610567      ericvn    cancel() doesn't find task in front of buffer when wrapped.
- * D615053      ericvn    cancel() needs to decrement numberOfUsedSlots.
- * D638088      andymc    Perf updates from Aaron Quirk - see RTC task 23491
- * D638088.1    andymc    Rename inner AtomicInteger class - make numberOfUsedSlots final
- * ======================================================================== */
-// NOTE: reformatted via D186845
+/*******************************************************************************
+ * Copyright (c) 1997, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.util;
 
 import java.util.concurrent.atomic.AtomicInteger;

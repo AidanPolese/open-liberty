@@ -1,23 +1,13 @@
-//%Z% %I% %W% %G% %U% [%H% %T%]
-/**
+/*******************************************************************************
+ * Copyright (c) 2002, 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * IBM Confidential OCO Source Material
- * 5639-D57 (C) COPYRIGHT International Business Machines Corp. 2002, 2017
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- *
- * DESCRIPTION:
- *
- * Change History:
- *
- * Reason  		 Version	Date        User id     Description
- * ----------------------------------------------------------------------------
- * 95263                8.5.5           06/13/2013   sumam      Fixed the test case for binaryLog utility command
- * rtc240434            17.0            05/01/2017   gkwan      Added test case for binaryLog view at servers dir
- *
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.fat.hpel.tests;
 

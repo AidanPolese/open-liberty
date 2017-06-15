@@ -1,26 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.9 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/common/DirectConnectionImpl.java, SIB.comms, WASX.SIB, uu1215.01 05/09/28 10:35:45 [4/12/12 22:14:09]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-I63, 5724-H88, 5655-N02, 5733-W70  (C) Copyright IBM Corp. 2004, 2005
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        031128 mattheg  Original
- * f184933         031208 mattheg  Removed subnet property
- * SIB0014.comm.1  050906 prestona Add getMetaData method
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.common;
 
 import com.ibm.ws.sib.comms.ConnectionMetaData;

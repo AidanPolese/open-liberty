@@ -1,28 +1,13 @@
-/**
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * --------------- ------    -------- ---------------------------------------
- * 183467          26-Jan-04 dcurrie  Original
- * 197921.10       28-Apr-04 dcurrie  Add SPI JavaDoc tags
- * 201972.6        28-Jul-04 pnickoll Update core SPI exceptions
- * 226508          28-Apr-04 dcurrie  Remove SPI Javadoc tags
- * LIDB3706-5.252  04-Feb-05 kingdon  Add serial version UID
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.wsspi.sib.ra;
 

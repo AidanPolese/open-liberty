@@ -1,28 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 169602          030811 susana   Original
- * 172633.5        031029 susana   Change package name to ....wsspi...
- * 172633.5.0      031030 susana   Change ...extensions... to ...spi...
- * 179760          031104 susana   Change package name for Core SPI MFP classes
- * 245265          041217 susana   Reorganise com.ibm.wsspi.mfp.spi out of existence
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.sib.core;
 
 import com.ibm.websphere.sib.SIMessage;

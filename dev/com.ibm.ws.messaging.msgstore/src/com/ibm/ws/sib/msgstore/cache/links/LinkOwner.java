@@ -1,30 +1,14 @@
 package com.ibm.ws.sib.msgstore.cache.links;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 11/02/04 drphill  Original
- * 245531          17/02/05 drphill  Cached MessageStoreRef as performance enh.
- * SIB0112d.ms.2   28/06/07 gareth   MemMgmt: SpillDispatcher improvements - datastore
- * 463642          04/09/07 gareth   Revert to using spill limits
- * 484799          28/01/08 gareth   Take byte size into account in spill limits
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.ws.sib.msgstore.AbstractItem;
 import com.ibm.ws.sib.msgstore.OutOfCacheSpace;

@@ -1,15 +1,13 @@
-//IBM Confidential OCO Source Material
-//5639-D57,5630-A36,5630-A37,5724-D18 (C) COPYRIGHT International Business Machines Corp. 1997-2005 
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//Changes
-//PK70031   sartoris    09/10/2008  Plus signs cause problems in expressions (e.g. <% "x" + i++ %>)
-//PM54544   sartoris    12/20/2011  Square brackets are not recognized as an array when in an expression and causes a problem when it contains a plus sign (e.g. <%= testArray[i+1] + "test2" %> )
-//PM97353   hmpadill    10/10/2013  Expressions containing pre-increment characters fail to compile (e.g. <%= "test" + ++id %>)
-//PI37304   hmpadill    03/17/2015  Enable appropriate translation of JSP expressions with at least one constant string
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.generator;
 
 import org.w3c.dom.CDATASection;

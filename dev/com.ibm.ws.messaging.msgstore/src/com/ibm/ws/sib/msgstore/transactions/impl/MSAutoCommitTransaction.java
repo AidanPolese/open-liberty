@@ -1,58 +1,14 @@
 package com.ibm.ws.sib.msgstore.transactions.impl;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 03/02/03 drphill  Original
- * 164655          01/05/03 gareth   Initial Transaction code drop
- * 168092          02/06/03 gareth   AutoCommit unittest changes
- * 168464          06/06/03 gareth   Add preCommit call in beforeCompletion
- * 169765          17/06/03 gareth   Add preCommit call to AutoCommit
- * 169889          18/06/03 gareth   Add getId method to Transaction
- * 168080          18/07/03 gareth   LocalTransaction Support (Local Clients)
- * 170652          28/07/03 gareth   Move Transactions code to use SibTr
- * 174550          18/08/03 gareth   Add SITransaction and DelegatingResource
- * 168081          17/09/03 gareth   GlobalTransaction Support (Local Clients)
- * 178563          09/10/03 gareth   Add callback and MS get/setter
- * 182347          10/11/03 gareth   Add Persistent Transaction ID
- * 181930          12/11/03 gareth   XA Recovery Support
- * 184788          04/12/03 gareth   Add Transaction state model
- * 188494          27/01/04 gareth   Tie transactions to individual ME
- * 189573          05/02/04 gareth   Add NLS support to transaction code
- * 188050.4        06/04/04 pradine  SpecJAppServer2003 optimization
- * 184806.3.2      15/04/04 gareth   Move getPersistentTranId()
- * 186657.1        24/05/04 gareth   Per-work-item error checking.
- * 199334.1        27/05/04 gareth   Add transaction size counter
- * 186657.4        11/06/04 gareth   Add isAlive() method
- * 216527          15/07/04 gareth   Handle SeverePersistenceException
- * 219825          28/07/04 schofiel Reused auto-commit transactions use the same tranid
- * 222613          09/08/04 gareth   Standardize tranid generation
- * 229186          03/09/04 pradine  Cache the batching context inside a transaction
- * 229486          07/05/04 gareth   Improve javadoc
- * 237695          13/10/04 gareth   Better cleanup in afterCompletion
- * 262580          30/03/05 gareth   Make tran id more unique
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources (incl. rename)
- * 306998.20       09/01/06 gareth   Add new guard condition to trace statements
- * 316887          03/02/06 gareth   Modify exception handling
- * 410652          12/04/07 gareth   Check Transactions ME at add time
- * 520772          14/05/08 djvines  Use an AtomicReference for _state and _workList to ensure visibility
- * PK70809         28/08/08 ajw      Make the callbacks list synchronized
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.util.ArrayList;
 import java.util.Collections;

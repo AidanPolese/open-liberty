@@ -1,30 +1,13 @@
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2007
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * 
- * @(#) 1.20.1.4 SERV1/ws/code/security.crypto/src/com/ibm/ws/ssl/config/SSLConfig.java, WAS.security.crypto, WASX.SERV1, pp0919.25 12/5/07 11:16:23 [5/15/09 18:04:33]
+/*******************************************************************************
+ * Copyright (c) 1997, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Date         Defect        CMVC ID    Description
- *
- * 08/19/05     LIDB3557-1.1  pbirk      3557 Initial Code Drop
- * 12/07/05     326193        pbirk      Allow system property override for clients
- * 12/12/05     329678        pbirk      Resolve some migration issues.
- * 12/21/05     326193.1      pbirk      System property override - take 2.
- * 01/06/06     332765        pbirk      Check if message about default keystore password has been printed.
- * 01/17/06     338779        pbirk      Make sure the .equals method works correctly.
- * 03/09/06     353244        riddlemo   Correct problem with \\uxxxx parsing when it appears as the last character in the string
- * 04/07/06     361307        pbirk      Remove escape character from \\= in encoded password.
- * 04/14/06     362458        pbirk      Configure fileBased correctly based on keystore type.
- * 04/23/06     364720        pbirk      Resolve NPE when keyStoreType is not specified.
- * 04/28/06     365811        emilyt     Remove escape character from \\: 
- * 07/10/06     376784        pbirk      Don't print passwords in trace during equals comparison.
- * 05/13/07     438314        danmorris  Do not call Properties constructor with a properties object, use putAll to add properties
- * 11/10/07     477704        mcasile    New FFDC API
- * 12/05/07     483444(PK56888) pbirk(yammer) Added empty string check in requiredPropertiesArePresent() method.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.websphere.ssl;
 

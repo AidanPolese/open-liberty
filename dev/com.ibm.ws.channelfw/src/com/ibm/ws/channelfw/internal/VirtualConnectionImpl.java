@@ -1,26 +1,13 @@
-//* ===========================================================================
-//*
-//* IBM SDK, Java(tm) 2 Technology Edition, v5.0
-//* (C) Copyright IBM Corp. 2005, 2006
-//*
-//* The source code for this program is not published or otherwise divested of
-//* its trade secrets, irrespective of what has been deposited with the U.S.
-//* Copyright office.
-//*
-//* ===========================================================================
-//
-
-//Change History:
-//Date     UserId      Defect          Description
-//--------------------------------------------------------------------------------
-//11/17/04 wigger      243448        add debug for permission logic
-//12/17/05 gilgen      333647        fix return value on trace statement
-//03/08/06 wigger      352251        add read/write outstanding methods
-//11/27/06 wigger      410409        store connection info in VC
-//02/22/07 wigger      LIDB4463-8    store connection info in VC
-//04/24/08 wigger      515681        Add FileChannel buffer support                     
-//04/30/08 wigger      515681.1      FileChannel buffer code review changes
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.channelfw.internal;
 
 import java.util.HashMap;

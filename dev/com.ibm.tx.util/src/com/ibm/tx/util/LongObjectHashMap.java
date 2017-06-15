@@ -1,23 +1,13 @@
-/* **************************************************************************** */
-/* COMPONENT_NAME: WAS.utils                                                    */
-/*                                                                              */
-/* IBM Confidential OCO Source Material                                         */
-/* 5724-I63, 5724-H88, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2003, 2006 */
-/* The source code for this program is not published or otherwise divested      */
-/* of its trade secrets, irrespective of what has been deposited with the       */
-/* U.S. Copyright Office.                                                       */
-/*                                                                              */
-/* @(#) 1.3 SERV1/ws/code/utils/src/com/ibm/ws/util/LongObjectHashMap.java, WAS.utils, WASX.SERV1, vv0702.13 1/17/06 08:07:40 [1/17/07 20:04:12]                                                */
-/*                                                                              */
-/*  Change History:                                                             */
-/*                                                                              */
-/*  Date      Developer  Defect     Description                                 */
-/*  --------  ---------  ------     -----------                                 */
-/*  03-05-24  awilkins   LIDB2472   Creation                                    */
-/*  03-07-01  awilkins   170306     Code review changes                         */
-/*  06-01-17  awilkins   306998.13  Perf - protect RAS w/ isAnyTracingEnabled   */
-/*                                                                              */
-/* **************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2003, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.tx.util;
 

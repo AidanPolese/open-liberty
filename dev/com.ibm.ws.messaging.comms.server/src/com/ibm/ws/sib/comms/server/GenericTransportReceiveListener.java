@@ -1,45 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.33 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/GenericTransportReceiveListener.java, SIB.comms, WASX.SIB, aa1225.01 09/04/01 07:23:34 [7/2/12 06:01:49]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5724-J08  Copyright IBM Corp. 2003, 2007
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030725 Niall    Original
- * Dxxxxxx         030807 Niall    Modify behaviour of secondary conversations
- * F174602         030820 prestona Switch to using SICommsException
- * F174776         030828 Niall    Chained Receive Listener Support
- * F176003         030912 prestona Misc JFAP Channel reliability fixes.
- * d175811         030919 mattheg  Make handshake obey spec
- * f181007         031211 mattheg  Add boolean 'exchange' flag on dataReceived()
- * d186970         040116 mattheg  Overhaul the way we send exceptions to client
- * F188491         040128 prestona Migrate to M6 CF + TCP Channel
- * d192002         040226 mattheg  Use NLS text when calling SibTr.error
- * d192293         040308 mattheg  NLS file changes
- * d195714         040419 mattheg  Add NLS messages to closeReceived
- * F201521         040506 mattheg  Add getThreadContext() method
- * F193735.3       040607 prestona PMI
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * D381838         070130 mattheg  Use Converstion.getFullSummary() instead of toString()
- * 471664          071003 vaughton Findbugs tidy up
- * PK83641         310309 ajw      reset LinkLevelState when returning from pool;
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server;
 
 import com.ibm.ejs.ras.TraceNLS;

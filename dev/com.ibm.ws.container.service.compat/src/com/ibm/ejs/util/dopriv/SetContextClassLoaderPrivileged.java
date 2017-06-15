@@ -1,28 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// 1.5 SERV1/ws/code/utils/src/com/ibm/ejs/util/dopriv/SetContextClassLoaderPrivileged.java, WAS.ejbcontainer, WASX.SERV1 4/30/09 10:17:10
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2009
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  SetContextClassLoaderPrivileged.java
-//
-// Source File Description:
-//
-//     Sets the context classloader while in privileged mode.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// 140003.3            20020814 rschnier : Initial impl
-// 146034.6            20021015 rschnier : Set new only if new != current
-// d171437.1 ASV51     20030711 jckrueg  : organize imports
-// 369927    WAS61     20070320 bkail    : Use ThreadContextAccessor
-// PK83186   WAS70     20090427 hthomann : Fix ClassLoader leak
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2002, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ejs.util.dopriv;
 
 import java.security.AccessController;

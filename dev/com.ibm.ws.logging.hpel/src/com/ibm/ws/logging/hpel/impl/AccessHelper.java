@@ -1,27 +1,13 @@
-// %Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2012
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason           Version        Date       User id     Description
- * ----------------------------------------------------------------------------
- * F001340-15950.1    8.0        09/04/2009   belyi       Initial HPEL code
- * 664406             8.0        08/11/2010   belyi       Add method to create Timer instance
- * 688583             8.0        01/30/2011   belyi       Add verification that specified location can be written into.
- * 694865             8.0        03/08/2011   belyi       Add failure details to canMakeDirectories() method
- * 694351             8.0        03/03/2011   mcasile     Support listRoots (which may NOT be used soon)
- * 691649             8.0        03/18/2011   mcasile     Change timers to daemon threads to avoid controller shutdown issue
- * 702411             8.0        04/14/2011   belyi       Introduce createInputFileStream in place of openRandomAccessFile method.
- * 723863             8.0.0.3    12/14/2011   olteamh     Catch InvocationTargetException
- * 727908             8.5        02/10/2012   belyi       Throw InvocationTargetException.getCause() when possible
- * 739832             8.5.5      09/28/2012   belyi       Check for GenericOutputFile interface when creating FileOutputStream
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.logging.hpel.impl;
 
 import java.io.File;

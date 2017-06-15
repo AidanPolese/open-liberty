@@ -1,31 +1,15 @@
 package com.ibm.ws.objectManager;
 
-/*
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2013
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
+/*******************************************************************************
+ * Copyright (c) 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 
- * Change activity:
- *
- * Reason           Date    Origin   Description
- * --------------- -------- -------- ------------------------------------------
- * PK64110         09/04/08 ajw       shutdown hangs due to shutdownFast within shutdown
- * 607710          21/08/09 gareth    Add isAnyTracingEnabled() check around trace
- * 661770/PM19290  27/07/10 slaterpa  FlushHelper consumes all CPU with no priority boost
- * PM35902         31/03/11 slaterpa  Log becomes corrupt when cycling log and buffer, and
- *                                    buffer has been resized.
- * 724046/PM54465  17/12/11 slaterpa  Log becomes corrupt because checkpoint not triggered
- * 725052/PM54465  23/12/11 slaterpa  Improve padding space target calculation
- * PM65308         24/05/12 slaterpa  Shutdown hangs waiting for FlushHelper
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.ws.objectManager.utils.Trace;
 import com.ibm.ws.objectManager.utils.Tracing;

@@ -1,24 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//
-//  CHANGE HISTORY
-// Defect       Date        Modified By     Description
-//-------------------------------------------------------------------------------------- 
-// 293696       07/27/05    mmolden         ServletRequest.getPathInfo() fails
-// 340680       01/24/06    mmolden         content type fails when static resource has path element
-// PK25527      7/25/06     cjhoward        ARRAYINDEXOUTOFBOUNDSEXCEPTION IS THROWN WHEN A REQUEST TO AN
-// 428887       03/27/07    cjhoward        Need to create some ext. procs. before populateJavaNameSpace()
-// 430016       04/09/07    cjhoward        BVT:RTF: AdminConsoleSSL --  500 Internal Error
-// 427355       03/22/07    sartoris        removing extra call to destroy() to avoid NPE
-// PK37449      04/26/07    ekoonce         A THREAD DEADLOCK MAY OCCUR
-// PK40127      04/26/07    ekoonce         GetContext() returns null on context initialzation
-//PK74092       11/10/08    mmolden         LOAD-ON-STARTUP INDICATION FOR SIPLETS IS NOT LOADING THE
-//  569469      03/26/09    pmdinh          Improve trace
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.webapp;
 
 import java.util.ArrayList;

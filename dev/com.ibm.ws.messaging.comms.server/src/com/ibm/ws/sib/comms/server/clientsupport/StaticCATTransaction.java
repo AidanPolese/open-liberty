@@ -1,59 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.50 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/StaticCATTransaction.java, SIB.comms, WASX.SIB, aa1225.01 09/04/01 07:23:46 [7/2/12 05:59:01]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2004, 2007
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030604 clarkep  Original
- * d170527         030625 mattheg  Tidy and change to SibTr
- * d170639         030627 mattheg  NLS all the messages
- * f169897.2       030708 mattheg  Convert to Core API 0.6
- * f171400         030711 mattheg  Implement Core API 0.6
- * f172297         030724 mattheg  Complete Core API 0.6 implementation
- * F174602         030820 prestona Switch to using SICommsException
- * f174317         030827 mattheg  Add local transaction support (complete overhaul)
- * F183828         031204 prestona Update CF + TCP prereqs to MS 5.1 level
- * f181007         031211 mattheg  Add boolean 'exchange' flag
- * d186970         040116 mattheg  Overhaul the way we send exceptions to client
- * d187347         040119 mattheg  Send back the first exception when transaction marked as error
- * F188491         040128 prestona Migrate to M6 CF + TCP Channel
- * d175222         040219 mattheg  Ensure SICommsException is reported correctly and not sent to client
- * d192293         040308 mattheg  NLS file changes
- * D202636         040511 mattheg  Modify transaction creation semantics
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * D218040         040726 mattheg  Ensure that when a transaction fails to be created the error is logged
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D254870         050214 mattheg  Optimize connection close
- * D275383         050516 mattheg  Ensure linked exception is passed back on error
- * D297060         050821 prestona IdToTransactionTable memory leak
- * D307265         050922 prestona Support for optimized transactions
- * D313337.1       051027 prestona overload createUncoordinatedTransaction method
- * D321471         051109 prestona Optimized transaction related problems
- * D341593         060130 mattheg  Remove un-used locals
- * D350111.1       060302 mattheg  Move to FAP 5
- * D354565         060320 prestona ClassCastException thrown during failover
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * D441183         072307 mleming  Don't FFDC when calling terminated ME
- * D441898         070730 mleming  Fix failures found by unit tests
- * 471664          071003 vaughton Findbugs tidy up
- * PK83641         310309 ajw      reset LinkLevelState when returning from pool;
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import com.ibm.websphere.ras.TraceComponent;

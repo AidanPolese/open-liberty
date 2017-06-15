@@ -1,23 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5630-A36 (C) COPYRIGHT International Business Machines Corp. 1997, 2002
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-
-/** 
- * History:
- * CMVC 86523: create the file - wenjian, 09/18/2000
- * 
- * The class implements SpdData interface. It is a base class for all other SpdData classes.
- * In this base class, it has members like dataId, createTime, snapshotTime, and enabled
- * that are common to all the data types. 
- * 
- * Note: createTime is not passed to client for this first version. However, we might need
- * to pass createTime to client in the future because a data may be reset and client has no
- * way to know if a data is reset without createTime. On the other hand, since createTime is 
- * seldom to be changed, we do not want to pass it for every data retrieve. 
- *  
- */
+/*******************************************************************************
+ * Copyright (c) 1997, 2002 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.pmi.server.data;
 

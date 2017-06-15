@@ -1,30 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- --------------------------------------------
- * SIB0002.mp.15    170805 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.mp.15    170805 tevans   Transactional PEV Producers and Consumers
- * 367199           090506 cwilkin  Close thread if exceptions occur
- * PK38602          120207 cwilkin  Use same executionthread for multiple units
- * 516346           290408 djvines  Make synchronization usage consistent
- * 520288           130508 sibcopyr Automatic update of trace guards 
- * 520453           140508 dware    Increase trace info
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.impl.store;
 

@@ -1,25 +1,14 @@
 package com.ibm.ws.Transaction.JTA;
-/* ************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                           */
-/*                                                                            */
-/* IBM Confidential OCO Source Material                                       */
-/* 5630-A36 (C) COPYRIGHT International Business Machines Corp. 1997, 2004    */
-/* The source code for this program is not published or otherwise divested    */
-/* of its trade secrets, irrespective of what has been deposited with the     */
-/* U.S. Copyright Office.                                                     */
-/*                                                                            */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                              */
-/*                                                                            */
-/*  Change History:                                                           */
-/*                                                                            */
-/*  Date      Programmer    Defect    Description                             */
-/*  --------  ----------    ------    -----------                             */
-/*  DD/MM/YY                                                                  */
-/*  28/08/03   johawkes     173214    Replace RegisteredResource vectors      */
-/*  30/01/04   johawkes     187239    Handle HeuristicHazard responses        */
-/*  23/02/04   johawkes     190337    Preserve heuristic outcome              */
-/*  18/05/07   johawkes     438575    Further componentization                */
-/* ************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 public interface StatefulResource
 {

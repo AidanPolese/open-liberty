@@ -1,46 +1,15 @@
 package com.ibm.tx.jta.impl;
 
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/*  ORIGINS: 27                                                                      */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2010 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  DESCRIPTION:                                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  Date      Programmer    Defect   Description                                     */
-/*  --------  ----------    ------   -----------                                     */
-/*  05/09/02   gareth       ------   Move to JTA implementation                      */
-/*  18/10/02   mallam       1470     Rework to use AlarmManager mechanism            */
-/*  07/11/02   hursdlg      1473     Restore in-doubt transaction code               */
-/*  19/11/02   hursdlg      1503     Fix message                                     */
-/*  17/12/02   mallam    LIDB1673.xx Further changes for passive timeout             */
-/*  21/01/03   gareth     LIDB1673.1 Add JTA2 messages                               */
-/*  29/01/03   hursdlg   LIDB1673.9.1 Fix trace                                      */
-/*  30/01/03   mallam    LIDB1673.24 Inactivity timer                                */
-/*  21/02/03   gareth    LIDB1673.19  Make any unextended code final                 */
-/*  14/03/03  mallam    160995      New message for inactivity timeout               */
-/*  06/01/04  hursdlg    LIDB2775   zOS/distributed merge                            */
-/*  16/03/04  hursdlg    194662     Use merged alarm manager                         */
-/*  15/06/04  johawkes   209345     Remove unnecessary code                          */
-/*  06/01/06   johawkes  306998.12   Use TraceComponent.isAnyTracingEnabled()        */
-/*  09/28/06   mezarin   PK32141     Tran should always schedule NonDeferrable alarms*/
-/*  06/06/07  johawkes   443467     Moved                                            */
-/*  29/08/07  johawkes   461798     Minor perf changes                               */
-/*  21/11/07  awilkins   481738     Output stack of thread when tx times out         */
-/*  02/06/09  mallam     596067     package move                                     */
-/*  06/31/09  mezarin    PK90497    z/OS Terminate SR timeout type                   */
-/*  23/03/10  johawkes   640174.1   Remove TimeoutInfo map                           */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2002, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.util.ArrayList;
 

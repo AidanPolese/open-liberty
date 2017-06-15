@@ -1,27 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// 1.5 SERV1/ws/code/utils/src/com/ibm/ejs/util/FastStack.java, WAS.utils, WAS80.SERV1, h1116.09 5/20/10 09:51:13
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2010
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  FastStack.java
-//
-// Source File Description:
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d101420   ASV       20010508 rathnam  : New
-// d117293   ASV       20020105 jmcgee   : Rename
-// d146239.4 ASV       20021004 asisin   : Null array elements when removing
-// d646139.1 WAS80     20100519 bkail    : Generify
-// --------- --------- -------- --------- -----------------------------------------
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ejs.util;
 
 public class FastStack<T> {

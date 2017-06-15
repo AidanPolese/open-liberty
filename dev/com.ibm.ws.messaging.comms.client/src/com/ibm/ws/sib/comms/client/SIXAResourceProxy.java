@@ -1,51 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.41 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/SIXAResourceProxy.java, SIB.comms, WASX.SIB, uu1215.01 10/05/27 09:19:30 [4/12/12 22:14:06]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2010
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        031029 mattheg  Original
- * f181927         031111 mattheg  Make this class inherit from Transaction and fix priorities and other bugs
- * f185564         031212 mattheg  Fix commit bug
- * d186970         040116 mattheg  Overhaul the way we send exceptions
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * f191114         040218 mattheg  Multicast support
- * d189716         040218 mattheg  FFDC Instrumentation
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * D225797         040820 mattheg  Fix up possible NPE when connection is lost on exchange
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D242628         050114 mattheg  Ensure xa_end goes at session lowest priority
- * D257768         050302 mattheg  Ensure XA reason code is propagated correctly
- * D276260         050516 mattheg  Add hashcode to trace (not change flagged)
- * D307265         050918 prestona Support for optimized transactions
- * D318614         051031 prestona Support MSSIXAResourceProvider interface
- * D289992         051114 prestona Reduce Semaphore creation
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * SIB0048c.com.1  070109 mattheg  Implement TMSUSPEND / TMRESUME
- * D373006.2       070111 mattheg  1pc Optimisation
- * D418458         070207 mattheg  Allow joined resources to be ended in any order
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * SIB0121a.com.1  070706 prestona Propagate exception reason and inserts.
- * D399147.4       070726 mleming  Replace XAER_RMERR with XAER_RMFAIL
- * D538413         080725 djvines  Trace improvements to follow message flow
- * PM11871         270510 slaterpa Change INVAL to PROTO on end when still enlisted
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import java.util.HashMap;

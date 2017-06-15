@@ -1,44 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 166318.3         090603 nyoung   Create
- * 166318.4         160603 nyoung   Move to com.ibm.ws.sib.processor.matchspace.impl
- * 166318.5         190603 nyoung   Integrate MatchSpace with MP.
- * 171415           100703 gatfora  Removal of complile time warnings.
- * 166318.9         160903 nyoung   Restructure mspace interfaces
- * 166318.10        230903 nyoung   Move to matching package
- * 166833.12        201003 gatfora  Addition of the NeighbourFlexHandler
- * 171905.36        251103 tevans   remote pubsub tidy up
- * 166318.14        011203 auerbach Optimized LIKE processing and generalized TOPIC
- * 184185.1.2       190204 nyoung   Add basic MatchSpace ACL support.
- * 184185.1.6       270404 nyoung   Enable delivery time discriminator access checks.
- * 215164           090704 nyoung   Discriminator access checks need to be
- *                                  sensitive to destination type
- * 218436           220704 nyoung   Synchronization defects in MessageProcessorSearchResults.
- * 240115           211004 nyoung   Attempting to store multiple instances of PSOH in mspace.
- * 257841           280205 nyoung   Subscribers may receive duplicate publications.
- * SIB0009.mp.01    210705 rjnorris Add support for multiple selectionCriteria on DurableSub
- * 306998.22        050106 gatfora  Trace performance improvements
- * SIB0163.mp.1     190907 nyoung   XD Integration.
- * SIB0163.mp.2     171007 nyoung   Code Review Improvements.
- * 516346           300408 djvines  Use Arrays.toString
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 /**
  * @author nyoung

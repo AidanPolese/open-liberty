@@ -1,31 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 164548          030502 susana   Original
- * 172028          030718 susana   Add ME messages
- * 174700          030909 susana   Reduce visibility of setMessageType
- * 179461.1        031010 vaughton Add new request/reply bridge fcm
- * 183236          031118 vaughton Add ClientAttachRequest2
- * 172521.1        040105 baldwint Schema propagation
- * 192295          040226 vaughton Add Me Bridge Bootstrap Request/Reply
- * 172521.5        040322 baldwint Remove deprecated encode methods
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.mfp.trm;
 
 import com.ibm.ws.sib.mfp.MessageEncodeFailedException;

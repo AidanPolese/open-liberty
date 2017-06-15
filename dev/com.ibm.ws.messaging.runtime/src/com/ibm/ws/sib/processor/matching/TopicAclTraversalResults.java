@@ -1,30 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.12 SIB/ws/code/sib.processor.impl/src/com/ibm/ws/sib/processor/matching/TopicAclTraversalResults.java, SIB.processor, WASX.SIB, ff1246.02 05/10/19 03:47:27 [11/16/12 22:51:54]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-I63, 5724-H88, 5655-N02, 5733-W70          (C) Copyright IBM Corp. 2004, 2005
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 184185.1.2       190204 nyoung   Add basic MatchSpace ACL support.
- * 184185.1.6       270404 nyoung   Enable delivery time discriminator access checks.
- * 199574.1         040504 gatfora  Remove usage of ArrayLists and use LinkedList instead.
- * 208958           110604 gatfora  Refactor LinkedList/ArrayList use
- * 228819           070904 nyoung   Support setting of default security policy.
- * 246746           081204 gatfora  Removal of unused code.
- * 315038           191005 nottinga Removed usage of AuthConstants.
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.matching;
 

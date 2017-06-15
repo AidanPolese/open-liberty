@@ -1,19 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2005, 2007
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 06/01/07 wigger      442178          check validity of completion port before using
-// 06/27/07 wigger      448755          easier thread determination debug
-// 0725/07 gilgen       439110.2        reduce locking by using AtomicIntegers
-// 08/13/07 wigger      451669          where possible use NonSafe methods for optomization
-// 09/10/07 gilgen      439025          use cached IOExceptions
-// 03/24/16 Ginnick     195204          Support performance changes to CompletionKey for native calls
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.io.async;
 
 import java.io.IOException;

@@ -1,22 +1,15 @@
 package com.ibm.websphere.exception;
 
-//===================================================================================
-// @(#) 1.7 SERV1/ws/code/distexcep/src/com/ibm/websphere/exception/DistributedException.java, WAS.distexcep, WASX.SERV1, qq1230.02 2/27/05 09:17:54 [7/25/12 20:25:34]
-//
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N01, 5733-W60 (C) COPYRIGHT International Business Machines Corp. 2000,2005
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Feature/
-// Defect      Vers   Date      Userid   Description
-// -----------------------------------------------------
-// d128068     5.0    07/08/02  wdlee    Add printStackTrace(PrintStream ps) methods, 
-//                                       chg printStackTrace() to System.err 
-//
-//===================================================================================
-
+/*******************************************************************************
+ * Copyright (c) 2000, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 import java.io.*;
 
 /**

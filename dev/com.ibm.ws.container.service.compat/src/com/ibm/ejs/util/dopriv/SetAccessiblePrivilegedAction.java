@@ -1,24 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// 1.2 SERV1/ws/code/utils/src/com/ibm/ejs/util/dopriv/SetAccessiblePrivilegedAction.java, WAS.utils, WAS80.SERV1 7/26/06 14:31:58
-//
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  SetAccessiblePrivilegedAction.java
-//
-// Source File Description:
-//
-//     See class description.
-//
-// Change Activity:
-//
-// Reason     Version    Date        Userid    Change Description
-// ---------  ---------  --------    --------- -----------------------------------------
-// d367572.2  WASX.SERV1 Jul 26, 2006 kjlaw   : New copyright/prologue
-// ---------  ---------  --------    --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ejs.util.dopriv;
 
 import java.lang.reflect.AccessibleObject;

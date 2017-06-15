@@ -1,29 +1,13 @@
-//%Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2017
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason           Version        Date       User id     Description
- * ----------------------------------------------------------------------------
- * F001340-15950.1    8.0        09/04/2009   shighbar    Initial HPEL code
- * 637740             8.0        03/02/2010   spaungam    Correct date format to be locale-based
- * 642471             8.0        03/10/2010   spaungam    HPEL formatter refactoring
- * 647314             8.0        04/09/2010    belyi      Move translation code into separate method.
- * F017049-27489      8.0        06/16/2010    belyi      Remove conversation capability from the formatter and add custom level capabilities
- * 659005             8.0        06/30/2010    belyi      Don't localize messages unless it is explicitly set.
- * 660484             8.0        07/14/2010   mcasile     Don't do System.getProperties and allow nulls for some key vals
- * 663081             8.0        09/09/2010    belyi      Add method to append unused parameters
- * 675302             8.0        11/03/2010    belyi      Fix implementation of customer levels avoiding extra dependencies.
- * 687488             8.0        01/28/2011    belyi      Add verification support for custom time zones.
- * 101162             9.0        10/25/2013    sudhir     Javadoc Accessibility violation in HpelFormatter
- * 191910             8.5.5      10/20/2015    rishim     Add new json format option to binarylog command
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.logging.hpel.reader;
 
 import java.security.AccessController;

@@ -1,121 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.137 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/ConsumerSessionProxy.java, SIB.comms, WASX.SIB, uu1215.01 11/12/20 01:40:38 [4/12/12 22:14:05]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2011
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030325 niall    Original
- * f166313         030506 niall    add TRM support + cleanup
- * F166959         030521 niall    Rebase on non-prototype CF + TCP Channel
- * D168189         030603 mattheg  Fix the hang when no message available on receiveWithWait()
- * d168211         030605 mattheg  Allow checking of closed sessions / connections
- * f168604         030606 mattheg  Adding Async client support
- * F166828.4       030611 schmittm update message processor packages + new core api
- * d169892.1       030618 schmittm registerAsynchConsumerCallback
- * d170639         030630 mattheg  NLS all the messages
- * f168604.1       030630 prestona Update regAsynchConsumer methods sig.
- * f168604.2       030704 prestona Exploit asynchronous API from client
- * f171177         030707 schmittm Add asynchronous readAhead support
- * d169897.2       030707 schmittm Provide remote client implementation of new Core API as defined
- * f171400         030710 schmittm Implement Core API 0.6 changes in client and server code
- * f172297         030723 schmittm continued implementation of Core API 0.6 changes in client and server code
- * d174443         030815 mattheg  Allow close to occur even if session is stopped
- * F174602         030819 prestona Switch to using SICommsException
- * f174317         030827 mattheg  Add local transaction support
- * d175685         030903 mattheg  Make activateAsynchConsumer throw an SICommsException exception
- * f173765.2       030925 mattheg  Core API M4 update
- * f177889         030929 mattheg  Core API M4 completion
- * f179319         031111 mattheg  Ensure we do not copy JMO on send
- * f181927         031111 mattheg  Allow global transaction support to be exposed
- * f179339.4       031222 mattheg  Forward and reverse routing support
- * d181719         040108 mattheg  Transaction synchronisation support
- * d186970         040116 mattheg  Overhaul the way we send exceptions
- * f187521.2       040122 mattheg  Add new method signatures for unrecoverable reliability
- * f187521.2.1     040126 mattheg  Unrecoverable reliability -- part 2
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * f191114         040218 mattheg  Multicast support
- * d189716         040218 mattheg  FFDC Instrumentation
- * f192215         040226 mattheg  Add extra constructor for unit test
- * d187252         040302 mattheg  Ensure session destination information is only returned if it changes
- * d192293         040308 mattheg  NLS file changes
- * f192759.2       040311 mattheg  Use correct length for message size
- * f195758.2       040416 mattheg  M7.5 Core SPI updates
- * f199593         040422 mattheg  Complete Core SPI 7.5 changes
- * f200337         040427 mattheg  Message order context implementation
- * f176658.4.2.2   040504 mattheg  deliveryImmediately flag change
- * F186248.1.3     040505 prestona Remove EnvelopeType
- * D204636         040524 mattheg  NPE on deliverException()
- * F195720.3       040616 prestona WAS Request Metrics in Jetstream
- * D210212         040617 mattheg  Ensure order context is flowed during registerAsynchConsumer()
- * F195720.3.1     040629 prestona WAS Request Metrics in Jetstream
- * D213014         040705 mattheg  Allow re-registration of async consumers with / without ordering
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * D225797         040820 mattheg  Fix up possible NPE when connection is lost on exchange
- * F219476.2       040906 prestona Z3 Core SPI changes
- * F226510.1       040906 prestona MDB support on non-bus member servers
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D241156         041026 mattheg  Make use of order context use counts
- * D239798.2       041027 mattheg  Expose stateChangedLock
- * D249096         050129 prestona Fix proxy queue synchronization
- * D255516         050218 mattheg  deleteSet() and unlockSet() should not blow if session stopped
- * D259811         050308 prestona Make stop return if receiveWithWait in progress
- * D268066         050415 mattheg  executingReceiveWithWait not updated / no exception on receive when async
- * D276260         050516 mattheg  Add hashcode to trace (not change flagged)
- * D270373         050721 mattheg  Messages for SIIncorrectCallException's
- * SIB0025.comm    050903 prestona PMI RM improvements
- * D307265         050922 prestona Support for optimized transactions
- * D315210         241005 ajw      Add reqScope param to send/recieve calls
- * D272899         051109 mattheg  Ensure we check if conversation is closed before calling encode()
- * D289992         051114 prestona Reduce Semaphore creation
- * D327759         051214 mattheg  Take asynch lock on start()
- * D341593         060130 mattheg  Remove un-used locals
- * D347591         060217 mattheg  Exchange start() for sync sessions
- * D350111.1       060302 mattheg  Add exchanged start support in FAP 3
- * D354565         060320 prestona ClassCastException thrown during failover
- * D360111         060404 mattheg  Fix defect 272899 properly
- * D365952         060523 mattheg  Add support for SIMessageNotLockedException
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * D384259         060815 prestona Remove multicast support
- * SIB0112c.com.1  070125 mattheg  Memory management: Parse message in chunks
- * D425070         070308 prestona Deadlock in start() method.
- * D430256         070417 mleming  Fix inconsistent trace in constructor
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * SIB0115.comms.1 070426 prestona Add (de)registerStoppableAsynchConsumerCallback() methods
- * SIB0115d.comms  070928 vaughton StoppableAsynchConsumerCallback
- * 472317          071005 sibcopyr Automatic update of trace guards
- * 472879          071008 vaughton StoppableAsynchConsumerCallback confusion
- * 471642          071016 vaughton Unable to deregister stoppable async consumer
- * 480204          071106 prestona Deadlock in deliver messages
- * 487999          071210 prestona Messages locked and not delivered using a remote connection
- * SIB0115.comms.2 080131 vaughton Update registerStoppableAsynchConsumerCallback
- * 511866          080429 vaughton Deadlock during stop
- * 522647          080523 mleming  Fix method names
- * 532562          080626 vaughton Sort of callback thread & non-callback thread sync regression
- * 538413          080725 djvines  Trace improvements to follow message flow
- * 487999.3        080813 vaughton Deadlock waiting for proxy queue to be drained
- * PK73713         081016 ajw      Allow messageset to be unlocked and not increased lock count
- * 568951          081215 mleming  Code review adjustments to PK73713
- * PK86574         090528 pbroad   Allow for strict message redelivery order
- * 630186          091130 mleming  Remove risk of NPE in executingOnCallbackThread  
- * F1344-55895     111216 skavitha Add records if XCT enabled
- * F1344-55545.1   111220 skavitha Add destination name as annotation
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import java.util.ArrayList;

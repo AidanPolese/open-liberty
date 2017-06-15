@@ -1,25 +1,13 @@
-//-------------------------------------------------------------------------------
-// %Z% %I% %W% %G% %U% [%H% %T%]
-//
-// COMPONENT_NAME: WAS.sca.ras
-//
-// IBM Confidential OCO Source Materials
-// 5724-I63, 5724-H88, 5655-N02, 5733-W70 ((C) COPYRIGHT International Business Machines Corp. 2006, 2007
-// The source code for this program is not published or otherwise
-// divested of its trade secrets, irrespective of what has been
-// deposited with the U.S. Copyright Office.
-//
-// Change History:
-//
-// Defect/Feature  Date      CMVC ID   Description
-// --------------  --------  --------  --------------------------
-// 395481          20060929  sykesm    Initial implementation
-// 401246          20061027  sykesm    Appropriately chain SUUID adapter
-// 403695          20061121  sykesm    Restore jar on failed instrumentation
-// 405764          20061121  sykesm    Update usage message per code review
-// 445049          20070611  sykesm    Cleanup imports
-// 410408          20070919  sykesm    Add options config file, trace type, ffdc
-//-------------------------------------------------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2006, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.ras.instrument.internal.main;
 
 import java.io.ByteArrayInputStream;

@@ -1,26 +1,13 @@
-/*
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012, 2013
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- ------   -------- --------------------------------------------
- *                                   Version X copied from CMVC
- * 88032           05/12/12 urwashi  Added MBean support in liberty
- * 89424           12/12/12 chetbhat Simplifying metatype.xml for messaging  
- * 90904           28/01/13 urwashi  Registering MBeans as services
- * 92786           05/02/13 urwashi  Adding feature to ObjectName of MBean
- * 97787           04/03/13 Sharath  Changing the MBean names to follow Liberty naming conventions                          
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.admin.internal;
 
 import java.util.ArrayList;

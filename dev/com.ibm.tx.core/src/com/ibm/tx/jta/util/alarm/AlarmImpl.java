@@ -1,27 +1,13 @@
-//
-// COMPONENT_NAME: WAS.transactions
-//
-// ORIGINS: 27
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2007, 2009
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// %Z% %I% %W% %G% %U% [%H% %T%]
-//
-// DESCRIPTION:
-//
-// Change History:
-//
-//
-// Date      Programmer    Defect   Description
-// --------  ----------    ------   -----------
-// 07/08/16  awilkins      459938   Purge executor to clear cancelled alarms
-// 07/08/29  johawkes      461798   Minor perfomance improvement
-// 09/06/02  mallam        596067   package move
-
+/*******************************************************************************
+ * Copyright (c) 2007, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.tx.jta.util.alarm;
 
 import java.util.concurrent.ScheduledFuture;

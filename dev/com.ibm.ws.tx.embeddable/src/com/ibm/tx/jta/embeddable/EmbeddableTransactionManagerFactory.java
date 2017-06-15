@@ -1,30 +1,15 @@
 package com.ibm.tx.jta.embeddable;
 
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2010 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* @(#) 1.6 SERV1/ws/code/tx.embeddable/src/com/ibm/tx/jta/EmbeddableTransactionManagerFactory.java, WAS.transactions, WASX.SERV1 5/12/10 08:45:39 [6/27/11 12:14:30]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Developer  Defect         Description                                                      */
-/*  --------  ---------  ------         -----------                                                      */
-/*  09-11-03  johawkes   F743-305.1     Creation                                                         */
-/*  09-11-09  johawkes   F743-305.1     EJB 3.1                                                          */
-/*  09-12-08  johawkes   631451         Use loadClassFromKey                                             */
-/*  10-01-06  johawkes   632997         Try to do the right thing in a client                            */
-/*  10-05-12  johawkes   587993         Fix trace                                                        */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2009, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 //import static com.ibm.tx.jta.TransactionManagerFactory._tranManager;
 

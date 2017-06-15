@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 171889          030722 susana   Original
- * 174111          030814 susana   Change method/field names to be less daft
- * 178364          031107 susana   New/changed fields for remoteGet & remoteBrowse
- * 178364.2        031231 susana   Tidy up javadoc
- * 488794.1        080320 susana   Add get/setRMEUnlockCount
- * 488794.3        080605 djvines  Change get/setRMEUnlockCount to long[]
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.mfp.control;
 
 /**

@@ -1,46 +1,14 @@
 package com.ibm.tx.jta.impl;
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/*  ORIGINS: 27                                                                      */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2013 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  DESCRIPTION:                                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  Date      Programmer    Defect   Description                                     */
-/*  --------  ----------    ------   -----------                                     */
-/*  05/09/02   gareth       ------   Move to JTA implementation                      */
-/*  11/10/02   awilkins     1452     XAException handling                            */
-/*  14/10/02   hursdlg      1454     Remove otid_t requirement                       */
-/*  18/10/02   hursdlg      1433     Remove excess synchronizations                  */
-/*  25/11/02   awilkins     1513     Repackage ejs.jts -> ws.Transaction             */
-/*  20/01/03   gareth     LIDB1673.1 Add JTA2 messages                               */
-/*  21/02/03   gareth    LIDB1673.19 Make any unextended code final                  */
-/*  15/07/03   mallam       171151    Rollback using TMSUCCESS (TMFAIL on t/o)       */
-/*  28/08/03   johawkes     174516   Distribute all ends before prepares             */
-/*  18/09/03   johawkes     169114   Improve diags for prep/cmplt XA errors          */
-/*  05/02/04   mallam       LIDB2775  Rename XID to XidImpl                          */
-/*  18/02/04   hursdlg      LIDB2775  Update ctor                                    */
-/*  19/04/04   johawkes     193919.1 New methods for adminconsole                    */
-/*  15/06/04   johawkes     209345   Remove unnecessary code                         */
-/*  20/09/04   hursdlg      233078   Log more information                            */
-/*  14/08/07   johawkes     451213   Moved into JTM                                  */
-/*  05/10/-5   awilkins     463184   Override hashCode                               */
-/*  26/10/07   johawkes     463185   Static analysis                                 */
-/*  04/06/08   hursdlg      515603   Allow forget as c1p may return heuristic        */
-/*  17/07/08   johawkes     536926   Remove JET dependencies on org.omg classes      */
-/*  02/06/09   mallam       596067   package move                                    */
-/*  10/08/13   slaterpa     752004   TRANSUMMARY trace
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2002, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;

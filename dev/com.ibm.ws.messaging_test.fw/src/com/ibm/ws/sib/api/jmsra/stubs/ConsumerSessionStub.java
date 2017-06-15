@@ -1,43 +1,13 @@
-/**
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * --------------- ------    -------- ---------------------------------------
- * 174369.1        11-Sep-03 dcurrie  Original
- * 173765.6        25-Sep-03 djhoward Add additional inherited methods 
- *                                    based on 173765 core changes.
- * 179038          07-Oct-03 djhoward Fix registerAsynchConsumerCallback to 
- *                                    properly hold onto callback.
- * 181796.6        05-Nov-03 djhoward Core SPI move to com.ibm.wsspi.sib.core
- * 186193          23-Dec-03 dcurrie  Add new ConsumerSessionMethods
- * 188161          23-Jan-04 dcurrie  Add new methods without Reliability
- * 188358          26-Jan-04 sambo    The unrecoverableReliability parameter has been moved
- * 195758.4        08-Apr-04 pnickoll Updated with new interface
- * 199220          20-Apr-04 pnickoll Removed methods that are no longer in the interface and corrected javadoc
- * 192474.1        20-Apr-04 pnickoll Removed extra methods methods
- * 176658.4.2.3    28-Apr-04 pnickoll Updated with core SPI changes.
- * 209436.3        22-Jun-04 pnickoll Milestone 8 Core SPI updates
- * 201972.4        28-Jul-04 pnickoll Update core SPI exceptions
- * 219476.4        31-Aug-04 dcurrie  Z3 core SPI updates
- * 436549          04-May-07 ajw      Support Pause/Resume of MDB
- * 496719          07-Feb-08 timoward BuildBreak, add a parameter to registerStoppableAsynchConsumerCallback
- * PK73713         16-Sep-08 ajw      Allow messageset to be unlocked and not increased lock count
- * F013661         20-Apr-12 chetbhat unlockAll(incrementUnlockCount) support
- * ============================================================================ 
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.api.jmsra.stubs;
 
 import java.util.HashSet;

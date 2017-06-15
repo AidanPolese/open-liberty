@@ -1,69 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.67.1.1 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/CATConsumer.java, SIB.comms, WASX.SIB, aa1225.01 12/05/08 01:35:08 [7/2/12 05:58:59]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030604 clarkep  Original
- * d169755         030617 mattheg  Fix the client hang on close()
- * d170527         030625 mattheg  Tidy and change to SibTr
- * d170639         030630 mattheg  NLS all the messages
- * f171177         030707 schmittm Add asynchronous readAhead support
- * f169897.2       030708 mattheg  Update to Core API 0.6
- * f171400         030711 mattheg  Implement Core API 0.6
- * f172297         030724 mattheg  Finish Core API 0.6 Implementation
- * F171893         030728 prestona Add support for BrowserSession
- * F174602         030820 prestona Switch to using SICommsException
- * f174317         030827 mattheg  Add local transaction support
- * d172582         030903 mattheg  Use message priorities correctly
- * f173765.2       030926 mattheg  Core API M4 update
- * f177889         030930 mattheg  Core API M4 completion
- * F183828         031204 prestona Update CF + TCP prereqs to MS 5.1 level
- * d186970         040116 mattheg  Overhaul the way we send exceptions to client
- * f187521.2.1     040126 mattheg  Unrecoverable reliabilty -- part 2
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * f191114         040218 mattheg  Multicast support
- * d175222         040219 mattheg  Ensure SICommsException is reported correctly and not sent to client
- * d192293         040308 mattheg  NLS file changes
- * f199593         040422 mattheg  Complete M7.5 Core SPI changes
- * f200337         040428 mattheg  Message order context implementation
- * f176658.4.2.2   040504 mattheg  deliverImmediately flag change
- * D209401         040615 mattheg  toString() enhancements
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * F247845         050202 mattheg  Ensure unexpected exceptions are sent back to the client
- * D307265         050922 prestona Support for optimized transactions
- * D329823         051207 mattheg  Trace improvements
- * D347591         060217 mattheg  Add support for exchanged starts
- * D350111.1       060302 mattheg  Use send listener for start()
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * SIB0048b.com.1  060901 mattheg  Use different byte buffer impl on server
- * D441183         072307 mleming  Don't FFDC when calling terminated ME
- * SIB0115d.comms  071001 vaughton Stoppable Async Consumer Callback
- * SIB0115.comms.2 080131 vaughton Update registerStoppableAsynchConsumerCallback
- * 506425          080319 vaughton Hang caused by incorrect setting of started flag
- * PK73713         161008 ajw      Allow messageset to be unlocked and not increased lock count
- * 568951          081215 mleming  Code review adjustments to PK73713
- * 623498          091111 slaterpa call errorOccurred on listener if send fails
- * F013661         200412 chetbhat unlockAll(incrementUnlockCount) support
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import com.ibm.websphere.ras.TraceComponent;

@@ -1,21 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997, 2005
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-
-//Defect 227804  2004/08/31  Strange stepping behaviour against the enclosed JSP file
-//Defect 232157  2004/09/16  jsp fragment trims whitespace around el variable
-//Defect PK01920 2005/03/14  character following % not handled properly, problem with using ${ and } within el expressions
-//Defect PK25893 2006/07/17  Embedded quotes in ELexpressions does not work
-// modified for jsp2.1ELwork
-//PK65013   sartoris    07/07/2008  Need ability to customize pageContext variable.
-//PK73104   mconcini	2008/10/01	Update generateChunk to treat single quotes as regular text when already within a quoted string
-//PK76583	mconcini	2009/02/04	Fix extra escape characters being appended in EL expressions.
-//PM94792   hmpadill    2014/07/30  Disable escaping CR, LF, and Tab within an expression
-//PI67257   hmpadill    2016/08/16  Escaped EL expressions after an escaped dollar sign are executed
-//PI79800   hmpadill    2017/04/11  EL expressions preceded by large character data block might be escaped
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.generator;
 
 import java.util.ArrayList;

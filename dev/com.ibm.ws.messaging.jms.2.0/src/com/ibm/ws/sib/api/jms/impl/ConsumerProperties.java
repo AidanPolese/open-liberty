@@ -1,32 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- *  
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- * 166829.6          100903 matrober JMS Support for Durable Subscriptions
- * 166829.6.1        150903 matrober JMS DurableSubs (ctd)
- * 166829.6.2        180903 matrober JMS Durable Subs (readAhead and subscriptionHome)
- * 181796.5          051103 matrober Core SPI move to com.ibm.wsspi.sib.core
- * 188046.5          080304 matrober Codepath analysis for critical path
- * 195758.3          070404 matrober Core SPI changes for Milestone 7.5
- * 193585.3.3        290404 matrober Remove DestinationFilter from the Core SPI
- * 201900            060504 matrober Logic error in ConsumerProperties
- * SIB0113.jms.1     101207 matrober Add JMS support for SIB0113 function
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.api.jms.impl;
 
 import javax.jms.Queue;

@@ -1,20 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5724-J08 (C) COPYRIGHT International Business Machines Corp. 1997, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-
-//  CHANGE HISTORY
-// Defect       Date        Modified By     Description
-//--------------------------------------------------------------------------------------
-// PK75617      02/11/09    pmdinh          Add custom prop to suppress IllegalArgumentException for invalid query string
-// PM35450      04/25/11    anupag          Provide an option to allow query parameter with no "="
-// PM53950      12/08/11    anupag          sec/int defect 724365, add limit to parameters
-// PM58495      02/25/12    anupag          provide limit to duplicate hash if unique keys (728397)
-// PM57418      02/27/12    anupag          Translate messages added by PM53930 and PM58495 (724365.4)
-// PM92940      07/24/13    anupag          ISO-8859 vs UTF-8 decoding issue of ñ character , PM84811 tWAS
-//
+/*******************************************************************************
+ * Copyright (c) 1997, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.webcontainer.util;
 
 import java.io.UnsupportedEncodingException;

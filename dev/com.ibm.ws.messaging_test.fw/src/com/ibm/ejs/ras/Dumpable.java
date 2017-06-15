@@ -1,24 +1,13 @@
-// @(#) 1.2 SERV1/ws/code/ras/src/com/ibm/ejs/ras/Dumpable.java, WAS.ras, WAS60.SERV1, o0445.04 4/2/02 13:34:49 [11/9/04 20:50:47]
-/**
- * COMPONENT_NAME: WAS.ras
+/*******************************************************************************
+ * Copyright (c) 2000, 2002 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * ORIGINS: 27         (used for IBM originated files)
- *
- * IBM Confidential OCO Source Material
- * 5648-C83, 5648-C84, 5639-D57 (C) COPYRIGHT International Business Machines Corp. 2000,2001,2002
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * DESCRIPTION:
- *
- * Change History:
- *
- * Reason    Version  Date        Userid    Description
- * ----------------------------------------------------------------------------
- * d114018     5.0    04-01-2002  jhanders  Small performance changes.
- *
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ejs.ras;
 

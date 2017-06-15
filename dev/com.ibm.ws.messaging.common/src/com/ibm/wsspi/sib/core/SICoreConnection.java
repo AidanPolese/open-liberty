@@ -1,78 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * 159093           070303 jroots   Original
- * 161403           200303 tevans   Modify to cope with merged Synch & Asych Sessions
- * 162915           110403 tevans   Upgrade to 0.3a model
- * 163636           110403 tevans   Upgrade to 0.4 model
- * 166828           060603 tevans   Core MP rewrite
- * 169897.0         240603 jroots   Update for Milestone 3 Core API
- * 173765.0         080803 jroots   Added getApiMajor/MinorVersion methods
- * 173765.0         110803 jroots   Added matching exceptions
- * 173765.0         110803 jroots   Added missing params to createDurableSub
- * 173765.0         130803 jroots   Added SIObjectClosedException to cloneConnection
- * 173765.0         210803 jroots   Removal of recoverableExpress option
- * 173765.0         030903 jroots   Added createUniqueId
- * 173765.0         030903 jroots   Corrected Javadoc of close wrt exceptions
- * 173765.0         030903 jroots   Corrections to connectionListener methods
- * 177817           141003 jroots   Minor javadoc corrections
- * 179742           141003 jroots   Corrected deleteDurableSubscription sig
- * 179519           031103 jroots   Added SIDestinationWrongTypeException
- * 181796.0         041103 jroots   Move to com.ibm.wsspi
- * 179629.2.1       241103 jroots   Added getDestinationConfiguration
- * 180540.0         111203 jroots   Added support for SIDestinationAddress
- * 184433.1         171203 cwilkin  document invalid noLocal/cloned combination
- * 181718.4.1       221203 jroots   createUniqueId returns 12 bytes not 16
- * 182639.1         190104 gatfora  Adding getMeUuid method.
- * 187521           200104 dware    Move unrecoverableReliability to createConsumerSession
- * 188197           070204 mcobbett Added details of how to validate destination prefixes
- * 176658.3.6       110204 jroots   Added destination address version of createConsumerSession
- * 192759           090304 jroots   Milestone 7 Core SPI changes
- * 195758.0         050404 jroots   Milestone 7.5 Core SPI changes
- * 193585.3         220404 jroots   Remove DestinationFilter from the Core SPI
- * 184312.4         270404 jroots   Add sendToExceptionDestination method
- * 201476           040504 jroots   Fix sendToExceptionDestination method
- * 209436.0         150604 jroots   Milestone 8+ Core SPI changes
- * 201972.0         050704 jroots   Core SPI Exceptions rewrite
- * 223986           170804 gatfora  Removal of SIErrorExceptions from method throws declarations
- * 199140           180804 gatfora  Cleanup javadoc
- * 219476.0         240804 jroots   Consolidated Z3 Core SPI changes
- * LIDB3684.11.1.1  210305 dware    Add checkMessagingRequired() method
- * 276259           130505 dware    Improve security related javadoc
- * SIB0009.core.01  150805 rjnorris Add invokeCommand() to CoreConnection
- * 299430           230805 nyoung   Change security javadoc on checkMessagingRequired
- * 305051           140905 dware    Improve security javadoc for createConsumerSessionForDurableSubscription
- * 296067.1         190905 nyoung   Remove reply dest receive security check for checkMessagingRequired.
- * 313337           131005 tevans   overload createUncoordinatedTransaction
- * 351339           010305 dware    Add ignoreInitialIndoubts option
- * 377093           110706 tpm      Transactional invokeCommand method
- * SIB0137.core.1   230507 nyoung   addDestinationListener promoted to Core SPI
- * SIB0113.core.1   240907 dware    Add SIB0113 methods for message control within a clustered destination
- * SIB0137.comms.2  250907 vaughton Add comms exceptions to addDestinationListener
- * SIB0163.core.1   241007 nyoung   Add new parameter to createConsumerSession for Message Control
- * 467999           141107 dware    Improve javadoc
- * 477450           231107 dware    Correct javadoc
- * SIB0163.mp.7     040108 nyoung   Reserve new Msg Control createConsumerSession parameter for future use
- * 569303           181208 dware    Fix javadoc for V7 common criteria
- * PM39926          310511 anil5498 Provide mechanism to force close connection and avoid resetting (during connection destroy) 
- * F011127          280611 chetbhat Adding registerConsumerSetMonitor 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.wsspi.sib.core;
 

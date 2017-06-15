@@ -1,15 +1,13 @@
-/*
- * Licensed Materials - Property of IBM
+/*******************************************************************************
+ * Copyright (c) 2005, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2005, 2012
- * Copyright IBM Corp. 2006, 2007 All Rights Reserved.
- *
- * US Government Users Restricted Rights - Use, duplication or
- * disclosure restricted by GSA ADP Schedule Contract with
- * IBM Corp.
- *
- *
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.ssl;
 
 import java.util.ArrayList;

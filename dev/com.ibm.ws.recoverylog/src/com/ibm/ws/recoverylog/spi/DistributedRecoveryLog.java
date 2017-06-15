@@ -1,28 +1,13 @@
-/* ************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                           */
-/*                                                                            */
-/* ORIGINS: 27                                                                */
-/*                                                                            */
-/* IBM Confidential OCO Source Material                                       */
-/* 5639-D57, 5630-A36, 5630-A37, 5724-D18 (C) COPYRIGHT International Business Machines Corp. 2002, 2016 */
-/* The source code for this program is not published or otherwise divested    */
-/* of its trade secrets, irrespective of what has been deposited with the     */
-/* U.S. Copyright Office.                                                     */
-/*                                                                            */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                              */
-/*                                                                            */
-/* DESCRIPTION:                                                               */
-/*                                                                            */
-/* Change History:                                                            */
-/*                                                                            */
-/* Date      Programmer    Defect      Description                            */
-/* --------  ----------    ------      -----------                            */
-/* 06/06/03  beavenj       LIDB2472.2  Create                                 */
-/* 10/08/04  beavenj       221931      Fix cleanup logic for recovery logs    */
-/* 26-08-04  beavenj       227136      Prevent potential log collision        */
-/* 28/09/04  beavenj       227911      Clean shutdown after openLog failure   */
-/* 02/12/15  dmatthew      PI45254     Enhance serviceability on markFailed   */
-/* ************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2016 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.recoverylog.spi;
 

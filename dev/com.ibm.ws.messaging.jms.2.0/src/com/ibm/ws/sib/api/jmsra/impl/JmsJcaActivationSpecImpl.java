@@ -1,28 +1,13 @@
-/**
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012, 2015 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012,2015
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * --------------- ------    -------- ---------------------------------------
- *                                    Version 1.73 copied from cmvc
- * 94126           20-02-2013 Sanjay  Changes to rename the connectionName                                    
- * 94268           200213    chetbhat Topic support for MDB
- * 95797           150313    chetbhat Exposing share durable subscription
- * 90371           130413    sanjay   changing the concurrent mdbs to 5
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.api.jmsra.impl;
 
 import java.beans.IntrospectionException;

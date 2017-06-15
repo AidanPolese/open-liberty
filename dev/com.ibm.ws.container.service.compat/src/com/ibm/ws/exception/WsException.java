@@ -1,29 +1,13 @@
-/*
- * @(#) 1.5 SERV1/ws/code/wsexception/src/com/ibm/ws/exception/WsException.java, WAS.wsexception, WASX.SERV1, kk0826.07 3/29/07 15:02:59 [6/30/08 14:25:29]
- *  
- * COMPONENT_NAME: WAS.wsexception
+/*******************************************************************************
+ * Copyright (c) 2001, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * ORIGINS: 27         (used for IBM originated files)
- *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2001, 2007
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * DESCRIPTION:
- *
- * Change History:
- *
- * Reason    Version  Date        User id     Description
- * ----------------------------------------------------------------------------
- * LIDB799.1  5.0    10-09-2001   stopyro    Part created.
- * D200273.1  6.0    06-08-2004   ericvn     We are using now using JDK 1.4   
- * D217143    6.0    07-19-2004   ericvn     Add back to support cross-release
- * D363517.6  6.1    04-21-2006   ericvn     Add to websphere-apis.jar        
- * LIDB3491-1 7.0    03-27-2007   ericvn     Provide supported interfaces
- *
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.exception;
 
 /**

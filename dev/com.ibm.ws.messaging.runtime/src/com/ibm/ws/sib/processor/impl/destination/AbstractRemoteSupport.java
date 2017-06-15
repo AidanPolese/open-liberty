@@ -1,41 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- ------------------------------------------
- * 282812           100605 nyoung   create - Restructure BDH for WAS7 
- * SIB0002.tran.2   050805 tevans   New Transactions interfaces
- * SIB0002.mp.15    170805 tevans   Transactional PEV Producers and Consumers
- * SIB0041.mp.1     300805 cwilkin  Total Message Ordering
- * SIB0041.adm.4    130905 cwilkin  Message order override attributes
- * 282841           241105 tpm      Remote durable flush problems
- * 346112           220206 gatfora  Fix FFDC
- * 359054           030406 cwilkin  Add streams to map after tran commit in createAIHandRCD
- * 363747           190406 gatfora  Before creating AIH - check if the destination has been deleted.
- * SIB0113a.mp.8    200607 cwilkin  Gathering infrastructure in remote get
- * SIB0113a.mp.9    261007 cwilkin  Remote Gathering
- * SIB0113a.mp.10   231107 cwilkin  Message Gathering controllables
- * SIB0113a.mp.12   211207 cwilkin  Gathering Recovery
- * 497819           200208 cwilkin  scope getRemoteConsumerReceiver controllable to a remote ME
- * 421276           260208 cwilkin  Expose request count on RQP
- * 520472           220508 cwilkin  Gathering reattaching
- * 524796           290508 dware    Split the Anycast RME reconciliation to handle gathering links    
- * 559096           241108 nyoung   Incorrect threshold messages.       
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
  
 package com.ibm.ws.sib.processor.impl.destination;
 

@@ -1,30 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// 1.8 SERV1/ws/code/utils/src/com/ibm/ws/threadContext/ThreadContextImpl.java, WAS.utils, WAS80.SERV1, h1116.09 5/20/10 09:51:17
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997 - 2010     
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  ThreadContextImpl.java
-//
-// Source File Description:
-//
-//     Extends ThreadLocal to be a stack.  
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d121610   ASV50     20020319 kjlaw     : push DefaultComponentMetaData as initialValue.
-// d122727   ASV       20020325 kjlaw     : undo 121610 and provide new CTOR to meet
-//                                          requirements for 121610.
-// d133207.2 ASV50     20020613 kjlaw    : performance improvement.
-// 206479    WASX      20040601 cheng1   : provide getContextIndex() method 
-// d646139.1 WAS80     20100519 bkail    : Generify; add FastStackThreadContextAdapter
-// --------- --------- -------- --------- -----------------------------------------
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.threadContext;
 
 import com.ibm.ejs.util.FastStack;

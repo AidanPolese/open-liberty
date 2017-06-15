@@ -1,106 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2015 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2015
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 158445          030207 susana   Original
- * 158574          030210 susana   Rename make methods to clarify usage
- * 158852          030213 susana   Scaffold implementation part 1
- * 159110          030218 susana   Scaffold implementation part 2
- * 159294          030303 susana   Tidy up message header fields - part 1
- * 164540          030428 susana   More header field refinements
- * 164825          030502 susana   More header field refinements
- * 165654          030508 susana   Provide efficient serialization for JMS
- * 165674          030508 baldwint Underpin with JMF
- * 166631          030519 susana   Add MessageDecodeFailed Exceptions
- * 167541          030527 susana   Set all header fields to default values
- * 170706          030627 baldwint Automatically generate JMF Accessor constants
- * 173701          030915 susana   Add no parameter constructor for createNew
- * 167577          030922 susana   Change Tr calls to SibTr
- * 175194          031022 susana   Enhance messageId and corelationId
- * 172633.1        031027 susana   Police Priority, Reliability & TimeToLive
- * 181611          031104 susana   Move Reliability to com.ibm.websphere.api
- * 176233          031105 baldwint Future schema compatibility problems
- * 180893          031117 susana   Merge Message properties & JMS Properties
- * 180540          031209 susana   Add get/setReplyXxxxxx & Discriminator
- * 179339.1.2      031216 susana   Police Forward and Reverse Routing Path support
- * 179365.1        040105 susana   Add Report message support
- * 180540.7        040108 susana   Make replyXxxxxx fields variants
- * 180540.1.8      040113 susana   Add clearReplyFields()
- * 186984          040113 susana   Clear report fields if null passed in
- * 182191.1        040120 markesc  Initialize psc, pscr fields in constructor
- * 189874          040216 susana   get/setXxxxIdAsBytes take/return copies
- * 190531          040223 susana   Tidy up NLS messages
- * 186446.2        040220 markesc  Initialize properties fields directly in constructor
- * 192890          040309 susana   Move from WDO to SDO
- * 192467          040316 baldwint Add getApproximateLength
- * 193066          040329 susana   SIMessage property support
- * 191963.1        040408 susana   SystemContext support
- * 182191.25.1     040415 markesc  Move get/setMQPublicationInfo up to JsApiMessage
- * 199554          040421 susana   Add JMS_IBM_ & SI_ SystemMessageID
- * 186248.1.6      040520 susana   Remove EnvelopeType part 2
- * 202720          040524 susana   Move Report COD, COA & Expiry fields to JsHdrs
- * 193066.7        040623 baldwint Correct handling of SI_ properties in JMS messages
- * 208022          040629 baldwint Store JMSXUserId as Api Userid field
- * 193066.7.1      040706 susana   Tidy ups for property matching
- * 193066.7.2      040707 susana   Matchspace doesn't strip user. from properties
- * 216351          040806 susana   Split header into two seperate schemas for performance
- * 222719          040809 susana   Copy JMSDestination & JMSReplyTo on getMessageProperty
- * 227368          040901 susana   Add Trace entry/exit to more methods
- * 185656          040902 susana   Tidy up imports etc
- * 233061.1        040920 susana   Further SystemContext Handler support
- * 234033          040923 susana   getUserProperty needs to check for null name
- * 233393          041005 susana   Support for MQ passthru of other properties
- * 239237          041014 susana   Allow JMSType to be set through SIMessage
- * 194870          041230 susana   Move Broker classes to mqcontrol sub-package
- * 246220.1        050119 susana   Add further ExceptionXxxx properties
- * 255355          050217 susana   Feedback options should be Integers
- * 254045.1        050301 kgoodson Handle full set of feedback values
- * 306998.18       060105 susana   WAS Tracing performance improvement
- * 317373.1        060201 susana   Perf: Don't write back map if not really changed
- * 384726          060816 susana   Remove Java 5 unchecked warnings
- * 392521          060928 susana   MQ JMS fails if property names with . in <usr> folder
- * 395685          061025 susana   JMS_IBM_Character_Set & Encoding not honoured
- * SIB0136a.mfp.1  061102 susana   WSN XPath Selectors support part 1
- * 382250.1        061204 susana   Change algorithm for delivery selectors
- * 382250.2        061205 susana   Change algorithm for delivery selectors again
- * SIB0212.mfp.1   070103 mphillip add int parameter to updateDataFields
- * 411903.1        070111 mphillip add this to trace statements
- * 380569          070205 susana   Add JMS_IBM_ArmCorrelator & JMS_TOG_ARM_Correlator
- * SIB0136b.mfp.1  070209 susana   WSN XPath Selectors support part 2
- * 411903.2        070328 susana   Fix Findbugs whinges
- * SIB0121.mfp.5   070629 susana   updateDataFields doesn't need to throw an Exception
- * 451831          070921 susana   Remove unused import
- * SIB0111c.mfp.1  071126 susana   Support JMS_IBM_MQMD_ properties (includes moving SPI methods)
- * 479449.1        080221 susana   Add getInMemorySize() to JsMessage
- * 493804          080512 susana   Add trace of output value
- * 499582          080711 susana   Improvements to getApproximateLength & getInMemorySize
- * 540680          080804 susana   Add trace to get/setMQPublicationInfo
- * 541759          080805 susana   Test for hasMqMdPropertiesSet isn't good enough
- * 551323          081223 susana   Don't use Arrays.copyOf as it doesn't exist in Java 1.5
- * 575050          090213 susana   Don't fluff API & body JSMessageImpls for getInMemorySize
- * 577272.1        090228 susana   Don't get EMPTY lists for getApproximateLength
- * 577848          090305 susana   Fluffed size calculations overestimate for 32-bit
- * F001333.14611.1 090807 djvines  Add ExceptionProblemSubscription
- * 604938          090817 djvines  Don't trace user properties with a name of password (or similar)
- * 96392           130313 chetbhat Using DeserializationObjectInputStream
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.mfp.impl;
 
 import java.io.ByteArrayInputStream;

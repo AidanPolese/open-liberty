@@ -1,28 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5639-D57, 5630-A36, 5630-A37, Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 175637.2.27      250304 millwood  SIMPNoLocalisationsException creation.
- * 222183           120804 cwilkin  Add exception reasons/inserts
- * 248145           201204 gatfora  Remove code that is not used
- * LIDB3706-5.248   180105 gatfora  Include a serialVersionUid for all serializable objects
- * SIB0113b.mp.1    040907 dware    Initial support for SIB0113b function (moved)
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.exceptions;
 
 

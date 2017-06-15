@@ -1,32 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 166318.9         160903 nyoung   First version - Restructure mspace interfaces
- * 166318.10        230903 nyoung   Move to matchspace component
- * 182884           141103 gatfora  Publication Topics can't contain wildcards
- * 166318.14        011203 auerbach Optimized LIKE processing and generalized TOPIC
- * 194466.2         060404 nyoung   Rationalise topic wildcards to industry standard.
- * SIB0155.mspac.2  150605 nyoung   Alternate topic syntax checkers
- * SIB0136b.msp.1   080207 nyoung   Stage 2 implementation of XPath Selector support.
- * 432107           200407 nyoung   Performance Regression in sib/mfp with java/util classes
- * 504438.7         030408 nyoung   MatchSpace UT failure after name space support changes          
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.matchspace;
 
 // Import required classes

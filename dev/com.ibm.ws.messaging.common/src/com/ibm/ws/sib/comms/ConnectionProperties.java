@@ -1,37 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030426 prestona Original
- * F182479         031127 prestona New ConnectionProperties varient required.
- * F189000         030130 prestona Expose WLM endpoints through CF
- * D189754         040106 prestona Change deprecation of APIs
- * F191798         040227 prestona Use proper chain names
- * F184185.7.2     040323 mattheg  Remove user names and password
- * F196678.10      040426 prestona JS Client Administration
- * D199148         040812 mattheg  JavaDoc
- * F244595         041116 prestona z/OS: TCP Proxy Bridge Support
- * F247845         050131 mattheg  Multicast support
- * D70632          050422 mattheg  Defend against nulls
- * D270373         050721 mattheg  Remove temporary NLS messages
- * d274452         050823 gelderd  Merge TrmEndPoint and EndPoint classes
- * SIB0048b.com.6  060918 mattheg  Remove references to CFEndPoint
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms;
 
 import java.util.Map;

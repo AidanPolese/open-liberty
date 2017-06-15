@@ -1,23 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.4 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/AsyncCallbackSynchronizer.java, SIB.comms, WASX.SIB, uu1215.01 08/04/21 21:36:30 [4/12/12 22:13:39]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 492764          080415 vaughton Created
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import com.ibm.websphere.ras.TraceComponent;

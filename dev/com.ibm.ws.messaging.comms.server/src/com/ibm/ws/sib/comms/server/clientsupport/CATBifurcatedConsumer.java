@@ -1,44 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.28 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/CATBifurcatedConsumer.java, SIB.comms, WASX.SIB, aa1225.01 09/04/01 07:21:52 [7/2/12 05:58:59]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        040422 mattheg  Original
- * D215181         040709 mattheg  Incorrect request number on replies
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * F247975         050204 prestona Use altertnative messaging encoding routine
- * D266169.1       050516 mattheg  Make use of new encodeFast() routine
- * D307265         050922 prestona Support for optimized transactions
- * D329823         051207 mattheg  Trace improvements
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * SIB0048b.com.1  060901 mattheg  Use different byte buffer impl on server
- * D348294.2       060921 mattheg  Remove use of deprecated encode() method
- * D406366         070601 prestona Async exceptions not handled for BifurcatedConsumers
- * D441183         072307 mleming  Don't FFDC when calling terminated ME
- * 471664          071003 vaughton Findbugs tidy up
- * PK73713         161008 ajw      Allow messageset to be unlocked and not increased lock count
- * 568951          081215 mleming  Code review adjustments to PK73713
- * PK83641         310309 ajw      reset LinkLevelState when returning from pool;
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import com.ibm.websphere.ras.TraceComponent;

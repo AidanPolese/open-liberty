@@ -1,27 +1,14 @@
 package com.ibm.ws.sib.msgstore.list;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date     Origin    Description
- * --------------- -------- --------  ----------------------------------------
- *                 11/11/05 schofiel  Original
- * 278082          20/12/05 schofiel  Rework link position in lists and cursor availability
- * 306998.20       09/01/06 gareth    Add new guard condition to trace statements
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.ws.sib.msgstore.cache.links.AbstractItemLink;
 

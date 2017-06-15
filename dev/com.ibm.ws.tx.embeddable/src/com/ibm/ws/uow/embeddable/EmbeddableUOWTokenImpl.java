@@ -1,26 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2004, 2011 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* @(#) 1.3 SERV1/ws/code/was.transaction.impl/src/com/ibm/ws/uow/UOWTokenImpl.java, WAS.transactions, WASX.SERV1, xx0940.06 5/24/08 06:02:45 [10/7/09 16:55:10]                                                     */
-/*                                                                                   */
-/*  DESCRIPTION:                                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  YY-MM-DD  Programmer  Defect  Description                                        */
-/*  --------  ----------  ------  -----------                                        */
-/*  04-05-07  awilkins    200172  Creation                                           */
-/*  08-05-24  johawkes    522569  Perf trace                                         */
-/*  11-11-24  johawkes    723423  Repackaging                                        */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2004, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.uow.embeddable;
 

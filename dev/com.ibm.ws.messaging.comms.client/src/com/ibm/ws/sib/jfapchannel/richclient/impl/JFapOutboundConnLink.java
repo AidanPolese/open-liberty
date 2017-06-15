@@ -1,36 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.21 SIB/ws/code/sib.jfapchannel.client.rich.impl/src/com/ibm/ws/sib/jfapchannel/impl/JFapOutboundConnLink.java, SIB.comms, WASX.SIB, uu1215.01 06/09/14 10:09:05 [4/12/12 22:14:17]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5655-N01, 5733-W61  (C) Copyright IBM Corp. 2003, 2006 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2003, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030521 prestona Original
- * F167363         030523 prestona Rebase on LIBD_1891_2255 CF + TCP Channel
- * D169104         030611 prestona Build against ASV level of CF + TCP Channel
- * F176003         030910 prestona Misc. JFAP Channel reliability fixes.
- * F177053         030917 prestona Rebase JFAP Channel on pre-M4 CF + TCP
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * D196678.10.1    040525 prestona Insufficient chain data provided to TRM
- * D199145         040812 prestona Fix Javadoc
- * F206161.5       050217 prestona Events for system management products
- * D330649         051209 prestona Supply an outbound protocol
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * ============================================================================ 
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.richclient.impl;
 
 import com.ibm.websphere.channelfw.ChainData;

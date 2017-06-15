@@ -1,17 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2007
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-
-//CHANGE HISTORY
-//Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//       PK18815         02/21/06      todkap              NULLPOINTEREXCEPTION WITH CLONED REQUEST AND STORED RESPONSE    WAS.webcontainer
-//       LIDB4408-1      02/22/06      todkap              LIDB4408-1 web container changes to limit pooling
-//       454430          08/19/07      mmolden             Clear obj refs from pooled objs before returning back to pool
-//       473341          10/22/07      mmolden			   SVT: NPE SRTRequestContext.java:105
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.srt;
 
 import java.util.Enumeration;

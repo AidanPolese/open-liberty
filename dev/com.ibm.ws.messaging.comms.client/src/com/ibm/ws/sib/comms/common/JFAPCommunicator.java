@@ -1,92 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.86 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/common/JFAPCommunicator.java, SIB.comms, WASX.SIB, uu1215.01 10/05/27 09:20:00 [4/12/12 22:17:28]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2010 
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * f166313         030506 niall    add TRM support + cleanup (Creation)
- * F166959         030521 niall    Rebase on non-prototype CF + TCP Channel
- * f168604         030611 mattheg  Added JFAPSend method
- * d170527         030625 mattheg  Tidy and change to SibTr
- * d170639         030627 mattheg  NLS all the messages
- * d169897.2       030707 schmittm Provide remote client implementation of new Core API as defined
- * f171400         030710 schmittm Implement Core API 0.6 changes in client and server code
- * f172397         030804 Niall    Add support for running in the Server as well as Client
- * f173559         030807 mattheg  Remove default constructor and add extra tracing and create Link level state
- * f173660         030808 schmittm Add setSICoreConnection method
- * D174140         030818 prestona Intermittent comms failure
- * F174692         030819 prestona Switch to using SICommsException
- * D174891         030822 Niall    Remove Exception Feedback mechanism
- * d172528         030805 mattheg  Make getExceptionDetails() method public
- * f176954         030918 mattheg  Move the initiateCommsHandshaking method into this class
- * d175811         030919 mattheg  Ensure security credentials passed up correctly
- * d177434         030922 mattheg  Throw an SIAuthenticationException instead of SINotAuthorised in handshake
- * f178530         031002 mattheg  Ensure we send / save product versions correctly
- * f178698         031003 mattheg  Add product id paramter to handshake
- * d179030         031007 mattheg  Add break to end of product id handshake
- * d179338         031009 mattheg  Rename the handshake constants to something more generic
- * d179459         031010 mattheg  Fix storing max transmission size
- * F183828         031204 prestona Update CF + TCP prereqs to MS 5.1 level
- * f172521.2       030923 Niall    Support MFP Schema Propogation
- * d186970         040116 mattheg  Overhaul the way we send exceptions
- * d187347         040119 mattheg  Ensure XAExceptions are recreated properly
- * f188585         040128 mattheg  Ensure JFAPSend does not use a request number
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * d189716         040218 mattheg  FFDC Instrumentation
- * d192293         040308 mattheg  NLS file changes
- * d194950         040318 mattheg  New exceptions
- * f184185.7.2     040323 mattheg  Move authentication into TRM
- * d196159         040331 mattheg  Ensure request number uniqueness over ME-ME
- * d199206         040420 mattheg  Fix buffer overflow
- * D205964         040614 mattheg  Ensure conversation type is returned on handshake
- * D216168         040715 mattheg  Missing exceptions in getException()
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D221834         040805 mattheg  Allow reconstructing of linked exceptions
- * D199177         040816 mattheg  JavaDoc
- * D225797         040820 mattheg  Fix up possible NPE when connection is lost on exchange
- * D234369         040927 prestona Deadlock in Comms
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D245450         041206 mattheg  Fix exception checking
- * LIDB3684.11.1.3 050330 mattheg  Move the JFap Version 2
- * D276260         050516 mattheg  Add hashcode to trace (not change flagged)
- * SIB0009.comms.1 050818 mattheg  Support for invokeCommand() method
- * D289992         051114 prestona Reduce Semaphore creation
- * d328287         051216 vaughton Configurable capabilities support
- * D335337         060104 mattheg  Send heartbeats over handshake properly
- * D341593         060130 mattheg  Remove un-used locals
- * D348277         060217 mattheg  Ensure exceptions with no message do not display 'null'
- * D350111.1       060302 mattheg  Move to FAP 5
- * D354565         060320 prestona ClassCastException thrown during failover
- * D365952         060523 mattheg  Handling of SIMessageNotLockedException
- * D377648         060717 mattheg  Move to use of CommsByteBuffer and move all exception handling
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * SIB0048b.com.1  060901 mattheg  Use separate JFAP Communicators for client / server
- * SIB0048b.com.2  060918 mattheg  Split capabilities SIB property
- * D381838         070130 mattheg  Use Converstion.getFullSummary() instead of toString()
- * D418509         070207 mattheg  Fix bitwise logic in getClientCapabilities()
- * D434315         070423 prestona FINDBUGS: changed visibility of SUPPORTED_FAP_VERSIONS[]
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * SIB0121a.com.1  070706 prestona Propagate exception reason and inserts.
- * SIB0100.wmq.3   070813 mleming  Allow WMQRA to use TCP Proxy Bridge
- * SIB0163.comms.3 071227 mleming  Provide information on the location that client is running in
- * PK60857         080721 pnickoll Add exit trace to JFAPExchange in exception cases 
- * F002074         091022 mleming  MEP support FIS
- * PM11871         270510 slaterpa Provide utility method to invalidate Connection
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.common;
 
 import com.ibm.ejs.ras.TraceNLS;

@@ -1,27 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// 1.4 SERV1/ws/code/ejbportable/src/com/ibm/websphere/csi/CSIException.java, WAS.ejbcontainer, WASX.SERV1, qq1230.02 1/28/05 13:13:43
-//
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1998, 2005
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  CSIException.java
-//
-// Source File Description:
-//
-//     The base exception type for all exceptions thrown by the
-//     container-server interface.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// LI3706-7  WAS602    20050128 tkb      : Added serialVersionUID
-// --------- --------- -------- --------- -----------------------------------------
-
+/*******************************************************************************
+ * Copyright (c) 1998, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.csi;
 
 import java.io.PrintWriter;

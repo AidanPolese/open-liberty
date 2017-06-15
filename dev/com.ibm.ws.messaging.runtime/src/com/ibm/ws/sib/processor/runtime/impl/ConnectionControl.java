@@ -1,32 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 186484.4         050404 tevans   Continued controllable interfaces
- * 186484.5         210404 ajw      Further Continued controllable interfaces
- * 186484.7         270404 tevans   More runtime control interfaces and implementation
- * 186484.9         060504 tevans   Extended runtime control implementation
- * 202387           100504 gatfora  getID should be getId.
- * 186484.10        170504 tevans   MBean Registration
- * 196675.1.7.1     030604 tevans   MBean Registration enhancements
- * 201972.1.1       110804 gatfora  Exception text updates for Core SPI Exceptions
- * 452517           210807 cwilkin  Remove formatState
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.runtime.impl;
 
 import com.ibm.ejs.ras.TraceNLS;

@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason   Date   Origin   Description
- * -------- ------ -------- --------------------------------------------------
- * 162584   030328 auerbach Original
- * 163400   030414 auerbach JMF improvements
- * 181755   031103 auerbach Better support for XSD types
- * 181810   031111 baldwint Remove NumericValue and BooleanValue classes
- * 190535   040220 baldwint Add byte8 and byte12 data types
- * 214906   040816 mlovett  Add in QName support
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.mfp.jmf;
 

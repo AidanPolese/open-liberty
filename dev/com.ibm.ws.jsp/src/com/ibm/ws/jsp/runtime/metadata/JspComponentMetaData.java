@@ -1,13 +1,13 @@
-//IBM Confidential OCO Source Material
-//  5630-A36 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//  The source code for this program is not published or otherwise divested
-//  of its trade secrets, irrespective of what has been deposited with the
-//  U.S. Copyright Office.
-//
-//
-//  Changes for defect 198932 "Support v5 JSP reload logic for v5 apps in 6.0"
-//      added variables servlet2_2, servletEngineReloadEnabled, 
-//          servletEngineReloadInterval, applicationDisplayName
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.runtime.metadata;
 
 import java.util.Map;

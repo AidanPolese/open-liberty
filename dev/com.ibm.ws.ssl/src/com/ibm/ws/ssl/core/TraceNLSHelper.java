@@ -1,21 +1,13 @@
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2007
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * 
- * @(#) 1.3 SERV1/ws/code/security.crypto/src/com/ibm/ws/ssl/core/TraceNLSHelper.java, WAS.security.crypto, WASX.SERV1, pp0919.25 11/12/07 16:56:26 [5/15/09 18:04:35]
+/*******************************************************************************
+ * Copyright (c) 1997, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Date         Defect        CMVC ID    Description
- *
- * 08/19/05     LIDB3557-1.1  pbirk      3557 Initial Code Drop
- *
- * <p>
- *  Purpose of TraceNLSHelper is to load the ssl bundle once for the component to
- *  use for exception messages, etc.
- * </p>
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.ssl.core;
 

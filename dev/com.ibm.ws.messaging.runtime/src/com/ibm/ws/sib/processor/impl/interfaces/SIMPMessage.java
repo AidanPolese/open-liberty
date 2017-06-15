@@ -1,39 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- ------------------------------------------
- * SIB0002.tran.2   050805 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.tran.2   050805 tevans   New Transactions interfaces
- * 294722           180805 gatfora  unlockCurrent should not increment MQ backout count
- * 345318.1         220206 cwilkin  Provide eventPreUnlocked callback
- * 351877           060306 tevans   make SIMPMessage extend TransactionCallback
- * 357308           230306 cwilkin  Drive internalPut on postRollbackRemove of unlocked msg
- * 409469           281206 tevans   Refactor LME
- * SIB0112le.mp.1   130207 ajw      Large Message surport
- * SIB0115.mp.2     110607 ajw      Code review updates for SIB0115
- * SIB0113a.mp.1    240707 cwilkin  Gathered Consumer foundation
- * SIB0113b.mp.1    040907 dware    Initial support for SIB0113b function
- * SIB0163.mp.5     221107 nyoung   Exploit new MFP MessageControlClassification property
- * SIB0115.mp.3     230108 nyoung   Hidden message expiry and pending_retry support
- * 488794           100608 cwilkin  Flow redelivery count from RME to DME
- * 515543           180708 cwilkin  Handle MessageStoreRuntimeExceptions on msgstore interface
- * 668676           291010 skavitha getMessageIfAvailable added ,getMessageControlClassification changed
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.impl.interfaces;
 

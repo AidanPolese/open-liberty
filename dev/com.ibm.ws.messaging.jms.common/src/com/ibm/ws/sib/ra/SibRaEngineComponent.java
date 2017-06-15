@@ -1,34 +1,13 @@
-/**
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * --------------- ------    -------- ---------------------------------------
- * 195461.3        28-Apr-04 dcurrie  Original
- * 195445.24.1     02-Jun-04 pnickoll Changing messaging filename
- * 209645          15-Jun-04 pnickoll Added new methods from JsEngineComponent
- * 213585          01-Jul-04 pnickoll Added new methods from JsEngineComponent
- * 182745.10.1     14-Jul-04 dcurrie  Added getActiveMessagingEngines
- * 213666          30-Jul-04 dcurrie  Implement busReloaded and engineReloaded
- * 215608.7        06-Aug-04 pnickoll Start method now takes an int parameter (mode)
- * 230028          10-Sep-04 dcurrie  Added isServerStopping
- * SIB0125.adm.2   09-Jan-07 leonarda Change busReloaded() args
- * SIB0125.adm.3   19-Jan-07 leonarda RCS setConfig()
- * 429961          30-Mar-07 pnickoll Added custom group information
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.ra;
 

@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * 179339           211203 jroots   Forward/reverse routing paths
- * 201972.0         050704 jroots   Core SPI Exceptions rewrite          
- * 223986           170804 gatfora  Removal of SIErrorExceptions from method throws declarations
- * 191835           260804 jroots   Modified Javadoc for close() method
- * 276259           130505 dware    Improve security related javadoc
- * 232270           021105 rjnorris Fix Javadoc for ConsumerSession.close
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.wsspi.sib.core;
 

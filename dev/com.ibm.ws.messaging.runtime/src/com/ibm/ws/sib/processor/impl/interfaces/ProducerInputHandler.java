@@ -1,32 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5639-D57, 5630-A36, 5630-A37, Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * SIB0002.tran.2   050805 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.mp.4.1   290605 tpm      PEV Stats
- * SIB0002.mp.5.1   060705 tpm      PEV dynamic config
- * SIB0002.tran.2   050805 tevans   New Transactions interfaces
- * SIB0002.tran.2   050805 tevans   New Transactions interfaces
- * 368547.1         010606 tevans   Missing exceptions
- * SIB0113.mp.1     220207 tevans   Add preferLocal option for producers
- * 419906           080307 cwilkin  Remove Cellules
- * SIB0113b.mp.1    040907 dware    Initial support for SIB0113b function
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl.interfaces;
 
 // Import required classes.

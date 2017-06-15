@@ -1,39 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.28 SIB/ws/code/sib.jfapchannel.client.common.impl/src/com/ibm/ws/sib/jfapchannel/impl/ExchangeReceiveListener.java, SIB.comms, WASX.SIB, uu1215.01 08/05/28 21:41:42 [4/12/12 22:14:13]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2003, 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030424 prestona Original
- * F166959         030521 prestona Rebase on non-prototype CF + TCP Channel
- * F174602         030819 prestona Switch to using SICommsException
- * F174678         030820 prestona Switch to using Semaphore from SIB.utils
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * f181007         031211 mattheg  Add boolean 'exchange' flag on dataReceived()
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * D226223         040823 prestona Uses new messages
- * D289992         051114 prestona Reduce Semaphore creation
- * D329817         051207 mattheg  FFDC Failures
- * D343603         060202 prestona IllegalMonitorStateException in errorOccured
- * D377648         060714 mattheg  Move BufferPoolManagerReference into sib.utils / Use JFapByteBuffer
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * 516687          080506 vaughton Add trace & sort out threading
- * 524762          080529 sibcopyr Automatic update of trace guards 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.impl;
 
 import com.ibm.websphere.ras.TraceComponent;

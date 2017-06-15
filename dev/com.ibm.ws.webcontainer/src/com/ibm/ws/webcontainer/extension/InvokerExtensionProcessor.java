@@ -1,22 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70(C) COPYRIGHT International Business Machines Corp. 1997, 2008
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-
-//Code added as part of LIDB 2283-4
-
-//  CHANGE HISTORY
-// Defect       Date        Modified By         Description
-//--------------------------------------------------------------------------------------
-// 325429       11/30/05    ekoonce             port PK12809 from v602
-// PK16467      03/01/06    mmolden             Avoid Multiple servlet intializations when servlet are served by classname
-// 351214       03/02/06    mmolden             SVT:Restart Application under client load, get null pointers 
-// PK26924      06/22/06    cjhoward            IF SERVLET SERVING BY CLASS IS ENABLED ACCESS TO SERVLET WILL
-// PK42055      04/26/07    ekoonce             If class not found, remove it from servletInfo when servlets are served by classname
-// PK52059      10/24/07    mmolden (srpeters)  POTENTIAL SECURITY EXPOSURE WITH SERVESERVLETSBYCLASSNAMEENABLE
-// 511569       04/09/08    mmolden             Consolidate custom properties
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.extension;
 
 import java.text.MessageFormat;

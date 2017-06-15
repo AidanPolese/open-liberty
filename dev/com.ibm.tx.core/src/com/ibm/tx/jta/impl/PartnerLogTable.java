@@ -1,59 +1,15 @@
 package com.ibm.tx.jta.impl;
 
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2010 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer    Defect    Description                                                        */
-/*  --------  ----------    ------    -----------                                                        */
-/*  03-10-02  johawkes      178208.1  Extracted from PartnerLogData                                      */
-/*  03-10-09  hursdlg       178219.1  Enable serialize checks                                            */
-/*  03-10-20  johawkes      180144    Disable serialize checks for ASWrappers                            */
-/*  03-10-22  johawkes      180487    Avoid new recovery class loader if poss                            */
-/*  20/11/03  johawkes      182862    Remove static partner log dependencies                             */
-/*  27/11/03  johawkes      178502    Start an RA during XA recovery                                     */
-/*  05/12/03  johawkes      184903    Refactor PartnerLogTable                                           */
-/*  06/01/04  hursdlg       LIDB2775  zOS/distributed merge                                              */
-/*  12/01/04  kaczyns       MD18134   z/OS logging                                                       */
-/*  24/03/04   mallam       LIDB2775  ws390 code drop                                                    */
-/*  24/03/04  johawkes      195803    Remove synchronization in recover()                                */
-/*  26/03/04  hursdlg       196258    Fix findEntry(wrapper) loop                                        */
-/*  13/04/04  beavenj       LIDB1578.1 Initial supprort for ha-recovery                                  */
-/*  15/04/04  beavenj       LIDB1578.3 Termination support for ha-recovery                               */
-/*  06/05/04  hursdlg       202183    RecoveryLog may be null in ctor                                    */
-/*  19/05/04  beavenj     LIDB1578.6  Connect up with WLM cluster framework                              */
-/*  21/05/04  beavenj     LIDB1578.7  FFDC                                                               */
-/*  10/06/04  hursdlg       209073    Illuma code anaysis                                                */
-/*  21/06/04  johawkes      199785    Fix partner log corruption on shutdown                             */
-/*  10-08-04  beavenj       221931    Fix cleanup logic for recovery logs                                */
-/*  19/08/04  johawkes      224765    Make recovery indices appear to start at 1                         */
-/*  27-08-04  beavenj       227386    Add cleanup logic for recovery processing                          */
-/*  03-11/04  beavenj       243010    Don't drive cleanup logic if termination occurs during recover     */
-/*  10/11/04  beavenj       243535.1  Fix cleanup logic for partners                                     */
-/*  14/06/05  hursdlg       283253    Componentization changes for recovery/retry                        */
-/*  14/07/05  kaczyns       PK08452   Don't deserialize entry on log lookup                              */
-/*  25/07/05  hursdlg       293279    XARecoveryData interface change from 283253                        */
-/*  06/01/06  johawkes      306998.12 Use TraceComponent.isAnyTracingEnabled()                           */
-/*  25/04/06  hursdlg       360413    Dont keypoint log if no partners deleted                           */
-// 07/04/12 johawkes LIDB4171-35    Componentization
-// 07/04/12 johawkes 430278         Further componentization
-// 07/05/01 johawkes 434414         Remove WAS dependencies
-// 07/05/25 johawkes 441229         Fix ClassCastException on zOS
-// 07/06/06 johawkes 443467         Moved
-// 07/06/27 hursdlg  448506         Check for open log
-// 09/06/02 mallam   596067         package move
-// 10/06/29 johawkes 658629         Replace synchronized blocks with read/write lock
-// 14/02/20 jstidder PI12449        Check for duplicate WSCoordinators during merge()
-
+/*******************************************************************************
+ * Copyright (c) 2002, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;

@@ -1,40 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 2003, 2016 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/* DESCRIPTION:                                                                      */
-/*                                                                                   */
-/* Change History:                                                                   */
-/*                                                                                   */
-/* Date      Programmer  Defect           Description                                */
-/* --------  ----------  ------           -----------                                */
-/* 06/06/03  beavenj     LIDB2472.2       Create                                     */
-/* 20/06/03  beavenj     169802           Throw UnsupportedOp. in removeSection      */
-/* 01/07/03  beavenj     170101           Support for expanding log file             */
-/* 11/07/03  beavenj     171515           Extend exception model                     */
-/* 16/07/03  beavenj                      Extend trace model                         */
-/* 13/08/03  beavenj     174214           Mark recovered units as 'written'          */
-/* 01/09/03  beavenj     175254           Clear out all RUs when target deleted      */
-/* 03-09-29  awilkins                                                                */
-/*           beavenj     175817           Changes for CScope logging (NIO)           */
-/* 14-11-03  beavenj     182748           Fix remove window                          */
-/* 04-01-09  awilkins    LIDB2775-53.5    z/OS code merge                            */
-/* 04-03-24  awilkins    LIDB2775.53.5.1  Exception chaining                         */
-/* 04-05-06  awilkins    201764           Overlapping FailureScopes - isContainedBy  */
-/* 07-04-04  kaczyns     MD19484          Issue message when log marked failed       */
-/* 29/07/04  beavenj     220096           Improve trace support for HA debugging     */
-/* 29/12/09  mallam      630844         performance - delay _traceId construction    */
-/* 07/09/16  dmatthew    PI68664        RUs that are deleted on log read still counted in totalDataSize of log */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2003, 2016 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.recoverylog.spi;
 

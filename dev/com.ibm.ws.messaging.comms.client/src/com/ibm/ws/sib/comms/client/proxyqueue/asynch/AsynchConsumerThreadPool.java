@@ -1,37 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.28 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/proxyqueue/asynch/AsynchConsumerThreadPool.java, SIB.comms, WASX.SIB, uu1215.01 10/05/11 10:39:07 [4/12/12 22:14:06]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2009
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * f192215         040225 mattheg  Complete re-write
- * D199177         040816 mattheg  JavaDoc
- * D235891         040930 mattheg  Runtime property standards
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D249096         050129 prestona Fix proxy queue synchronization (not change flagged)
- * D257554         050225 prestona ArrayIndexOutOfBounds pushing to stack.
- * D333217         051216 mattheg  More trace
- * D341593         060130 mattheg  Remove un-used locals
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * D496907         080222 mleming  Forward port PK50005
- * 501486          080530 vaughton Threading
- * PK96150         090918 ajw      ensure scheduleQueue created per consumer
- * PM12356         100511 sherring add try/catch to run method in ScheduleQueue
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client.proxyqueue.asynch;
 
 import java.util.Collections;

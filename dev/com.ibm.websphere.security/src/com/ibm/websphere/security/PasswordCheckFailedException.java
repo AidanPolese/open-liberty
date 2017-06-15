@@ -1,7 +1,13 @@
-//  @(#) 1.6 SERV1/ws/code/security.sas/src/com/ibm/websphere/security/PasswordCheckFailedException.java, WAS.security.sas, WASX.SERV1, nn1148.03 2/18/05 16:41:27 [12/4/11 15:43:06]
-// 5724-I63, 5724-H88, 5655-N01, 5733-W60 (C) COPYRIGHT International Business Machines Corp. 1997, 2005
-// All Rights Reserved * Licensed Materials - Property of IBM
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.security;
 
 /**

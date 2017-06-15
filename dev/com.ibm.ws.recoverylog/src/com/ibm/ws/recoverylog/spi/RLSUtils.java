@@ -1,37 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 1997, 2006 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/* DESCRIPTION:                                                                      */
-/*                                                                                   */
-/* Change History:                                                                   */
-/*                                                                                   */
-/* Date      Programmer    Defect      Description                                   */
-/* --------  ----------    ------      -----------                                   */
-/* 06/06/03  beavenj       LIDB2472.2  Create                                        */
-/* 01/07/03  beavenj       170101      Support for expanding log file                */
-/* 16/07/03  beavenj                   Reduce MAX_DISPLAY_BYTES                      */
-/* 03-09-29  awilkins                                                                */
-/*           beavenj       175817      Changes for CScope logging (NIO)              */
-/* 04-03-26  awilkins  LIDB2775-53.5.2 z/OS code merge changes                       */
-/* 13/04/04  beavenj       LIDB1578.1  Initial supprort for ha-recovery              */
-/* 18/05/04  beavenj       LIDB1578.5  Connect to HA framework                       */ 
-/* 15/06/04  beavenj       216563      Code Review Changes                           */
-/* 22/09/04  beavenj       232643      File Locking Support                          */
-/* 28/09/04  beavenj       227911      Clean shutdown after openLog failure          */
-/* 16/03/06  mallam      354884         Use common createDirectoryPath method        */
-/* 12/12/06  brailsfo      PK35957     Allow UNC file names                          */
-/*                                                                                   */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 1997, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.recoverylog.spi;
 

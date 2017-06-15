@@ -1,46 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.40 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/proxyqueue/AsynchConsumerProxyQueue.java, SIB.comms, WASX.SIB, uu1215.01 09/06/16 09:43:11 [4/12/12 22:14:05]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2009
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030612 prestona Original
- * d169897.2       030707 schmittm Provide remote client implementation of new Core API as defined
- * F174602         030819 prestona Switch to SICommsException
- * d712528         030905 mattheg  Add deliverException() method
- * f177889         030929 mattheg  Core API M4 completion
- * f187521.2.1     040126 mattheg  Unrecoverable reliability -- part 2
- * f200337         040428 mattheg  Message order context implementation
- * f176658.4.2.2   040504 mattheg  deliveryImmediately flag change
- * D210212         040617 mattheg  Flow order context on registerAsynchConsumer()
- * D213014         040705 mattheg  Provide destroy() and getCurrentBatchNumber() methods
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D249096         050129 prestona Fix proxy queue synchronization
- * SIB0115d.comms  070928 vaughton StoppableAsynchConsumerCallback
- * 472879          071008 vaughton StoppableAsynchConsumerCallback confusion
- * 471642          071016 vaughton Unable to deregister stoppable async consumer
- * 480204          071106 prestona Deadlock in deliver messages
- * 485851          071129 mleming  Asyncconsumer Session limit in comms
- * 487999          071210 prestona Messages locked and not delivered using a remote connection
- * SIB0115.comms.2 080131 vaughton Update registerStoppableAsynchConsumerCallback
- * 487999.3        080815 vaughton Add isStopping
- * PK86574         090528 pbroad   Allow strict message redelivery ordering
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 // Change for defect D249096 are not changed flaged as they are too numerous.
 
 package com.ibm.ws.sib.comms.client.proxyqueue;

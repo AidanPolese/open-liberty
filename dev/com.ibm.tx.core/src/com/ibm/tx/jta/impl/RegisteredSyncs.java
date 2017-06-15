@@ -1,58 +1,14 @@
 package com.ibm.tx.jta.impl;
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2009 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*                                                                                                       */
-/*  Date      Programmer    Defect   Description                                                         */
-/*  --------  ----------    ------   -----------                                                         */
-/*  05/09/02   gareth       ------   Move to JTA implementation                                          */
-/*  21/10/02   hursdlg      1468     Allow public access to syncs for JTS                                */
-/*  21/10/02   gareth       1449     Tidy up messages and exceptions                                     */
-/*  17/12/02   awilkins  LIDB1673.12 Implement hooks into LI850 code                                     */
-/*  22/01/03   gareth     LIDB1673.1 Add JTA2 messages                                                   */
-/*  21/02/03   gareth    LIDB1673.19  Make any unextended code final                                     */
-/*  28/02/03   hursdlg   LIDB1673.19.1 Use ArrayList instead of Vector                                   */
-/*  01/04/03   mallam      162354    Call syncs added during distributeBefore                            */
-/*  24/11/03   awilkins    183479    Synchronization tiers                                               */
-/*  12/03/04   hursdlg     194240    NPE check and RRS order                                             */
-/*  27/04/04   johawkes    196302    Implement sync levels                                               */
-/*  26/04/04   dmatthew    LIDB1922  Initial WSAT support                                                */
-/*  28/05/04   dmatthew    206203    WSAT synchronization                                                */
-/*  03/08/04   dmatthew    201906    WSAT code review                                                    */
-/*  21/06/05   johawkes    284612    Call extended JTA transaction syncs earlier                         */
-/*  29/06/05   johawkes    266145.3  Move custom properties into WCCM                                    */
-/*  07/07/05   johawkes    289186    Put back PK05365                                                    */
-/*  12/07/05   hursdlg     281425    AfterCompletion status of unknown                                   */
-/*  06/09/05   hursdlg     287100    Add back recursion checks as in v5                                  */
-/*  06/01/06   johawkes    306998.12 Use TraceComponent.isAnyTracingEnabled()                            */
-/*  16/03/06   brailsfo    PK19059   Pass back original exception                                        */
-/*  24/04/06   johawkes    364694    Integer.getInteger() needs wrapping in doPrivileged apparently      */
-/*  01/06/06   kaczyns     367977    Syncs can access DB2 therefore need threadSwitch call during them   */
-/*  06/11/29   maples      402670    LI4119-19 code review changes                                       */
-/*  19/04/07  mallam      432276      Migrate PK41846 to WASX                                            */
-// 01/05/07   johawkes    434414    Remove WAS dependencies
-// 06/06/07   johawkes    443467     Moved
-// 17/06/07   johawkes    444613     Repackaging
-// 26/06/07   johawkes    446894     Fix JTM shutdown delay
-// 16/08/07   johawkes    451213     Move LPS back into JTM
-// 08-07-14   mallam      523634     EJB3 exception behaviour on compensateOnly  
-// 09-06-02   mallam      596067     package move
-// 09-11-16   johawkes    F743-305.1 EJB 3.1
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 1997, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.security.AccessController;
 import java.security.PrivilegedActionException;

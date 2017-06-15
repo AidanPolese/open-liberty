@@ -1,33 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 215177          040424 susana   Original (for Control Messages rework)
- * 225835.1        040901 susana   Add guaranteedTargetMessagingEngineUUID
- * 232556          040917 susana   Deprecate routing sources and targets
- * 230288.2        040923 susana   Remove get/setRoutingSources/Targets
- * 408810.1        061130 susana   Rename to AbstractMessage & add methods
- * 422411          070327 susana   Add toVerboseString
- * SIB0113.mfp.1   070920 susana   Add get/setGuaranteedConsumerSetUUID
- * SIB0113.mfp.1.1 070926 susana   Rename GuaranteedConsumerSetUUID to GuaranteedGatheringTargetDestinationUUID
- * 599149          090701 pbroad   Add minimal ME<->ME comms trace 
- * 605141          090825 pbroad   Use StringBuilder instead of StringBuffer
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.mfp;
 

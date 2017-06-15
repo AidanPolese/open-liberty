@@ -1,67 +1,13 @@
-/*
- * 
- * ============================================================================
- * IBM Confidential OCO Source Material
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012, 2013
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- * @end_prolog@
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * f166313         030506 schmittm add TRM support + cleanup (Orignal)
- * f166959         030520 schmittm WsByteBuffer and TCPChannel rework
- * d170527         030625 mattheg  Tidy and change to SibTr
- * d170639         030627 mattheg  NLS all the messages
- * f169897.2       030708 mattheg  Convert to Core API 0.6
- * f174602         030820 prestona Switch to using SICommsException
- * f172521.2       030923 Niall    Support MFP Schema Propogation
- * f187850         040121 Niall    Support MFP Schema Propogation Phase #2
- * d188335         040126 mattheg  Ensure we do not use private copy of Conversation
- * F188491         040128 prestona Migrate to M6 CF + TCP Channel
- * d192293         040309 mattheg  NLS file changes
- * d195714         040419 mattheg  SibTr.error bug
- * D196678.10.1    040525 prestona Insufficient chain informaiton passed to TRM
- * D210978         040622 mattheg  Ensure MFP is informed of connection closure at correct time
- * D211277         040622 mattheg  Register connection closed listener
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * D234369         040927 prestona Deadlock in Comms
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * F247845         050131 mattheg  Multicast enablement
- * F247975         050203 prestona Add arguments to ConnectionMetaData constructor
- * F206161.5       050217 prestona Events for system management products
- * D261781         050321 mayur    Client connection stop reason should be client shutdown
- * D263441         050331 nyoung   Enable javadoc and rejig package name.
- * D265532         050412 mattheg  Null check for conn on emitNotification()
- * D268152         050414 mattheg  Build break
- * LIDB3472-0.7    150705 brauneis J2SE Prep
- * D321398         051107 mattheg  Add information for FFDC module
- * D354565         060320 prestona ClassCastException thrown during failover
- * D361638         060412 mattheg  Ensure connection info is cleaned up when socket terminates
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * SIB0048b.com.1  060901 mattheg  Use seperate JFAP Communicators for client / server
- * SIB0100.wmq.3   070815 mleming  Allow ConversationCloseListener chaining
- * D457551         070904 prestona Don't remove conversation in failed() as we are using it within removeAllConnections (forward port of PK48680)
- * 464663          070905 sibcopyr Automatic update of trace guards
- * 509697          080403 vaughton Performance optimisation
- * 514462          080421 vaughton Further performance optimisation
- * 508603          080430 vaughton PD improvements
- * 508603          080509 susana   Store SchemaSet in JFAP connection rather than WeakHashMap
- * 537955          080728 vaughton null schema set returned after invalidate
- * PK83641         310309 ajw      reset LinkLevelState when returning from pool
- * F002074         091022 mleming  MEP support FIS
- * 100214          130516 chetbhat NPE when server is stopping
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import java.net.InetAddress;

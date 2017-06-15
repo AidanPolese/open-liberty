@@ -1,59 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2016 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/* DESCRIPTION:                                                                      */
-/*                                                                                   */
-/* Change History:                                                                   */
-/*                                                                                   */
-/* Date      Programmer  Defect         Description                                  */
-/* --------  ----------  ------         -----------                                  */
-/* 06/06/03  beavenj     LIDB2472.2     Create                                       */
-/* 16/06/03  beavenj     169611         Fix null pointer exp on removeRecUnit        */
-/* 01/07/03  beavenj     170101         Support for expanding log file               */
-/* 11/07/03  beavenj     171515         Extend exception model                       */
-/* 16/07/03  beavenj     172166         Add 'this' to trace entry                    */
-/* 25/07/03  beavenj     172311         Add extra synch blocks                       */
-/* 06/07/03  beavenj     173663         Drop exclusive lock in keypoint()            */
-/* 03-09-29  awilkins                                                                */
-/*           beavenj     175817         Changes for CScope logging (NIO)             */
-/* 03-09-30  awilkins    178208         Internal allocation of rec unit ids          */
-/* 04-01-09  awilkins    LIDB2775-53.5  z/OS code merge                              */
-/* 04-03-24  awilkins  LIDB2775.53.5.1  Exception chaining                           */
-/* 04-03-26  awilkins  LIDB2775-53.5.2  More z/OS code merge changes                 */
-/* 13/04/04  beavenj     LIDB1578.1     Initial supprort for ha-recovery             */
-/* 04-05-06  awilkins    201764         Overlapping FailureScopes - isContainedBy    */
-/* 04-05-08  hursdlg     202183         Enable general failurescope on ctor for zOS  */
-/* 04/07/04  kaczyns     MD19484        Issue message when log marked failed         */
-/* 03/23/04  mezarin     MD19706        Synchronize filteredRecoverableUnits         */
-/* 03/31/04  kaczyns     MD19753        Calculate max size on keypoint broken        */
-/* 07/14/04  hursdlg     215979         Complete MD19484/MD19649                     */
-/* 15/06/04  beavenj     216563         Code Review Changes                          */
-/* 26-07-04  beavenj     209636         Add Client Version Support                   */
-/* 29/07/04  beavenj     220096         Improve trace support for HA debugging       */
-/* 03/08/04  beavenj     220808         Fix manual peer recovery logic               */
-/* 10-08-04  beavenj     221931         Fix cleanup logic for recovery logs          */
-/* 26-08-04  beavenj     227136         Prevent potential log collision              */
-/* 28/09/04  beavenj     227911         Clean shutdown after openLog failure         */
-/* 29/09/04  hursdlg     231874         LogFileHeader interface changes              */
-/* 21/10/04  beavenj     238410         NFS 4 Tolleration                            */
-/* 22/10/04  awilkins    240127         Atomic updates to total/unwritten DataSize   */
-/* 16/03/06  mallam      354884         Use common createDirectoryPath method        */
-/* 27/06/08  johawkes    532697         Just some type parameterization and debug    */
-/* 29/12/09  mallam      630844         performance - delay _traceId construction    */
-/* 08/03/10  mallam      642260         Custom logs                                  */
-/* 22/06/15  dmatthew    PI43413        Deadlock between findEntry and keypoint      */
-/* 02/12/15  dmatthew    PI45254        Enhance serviceability on markFailed         */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 1997, 2016 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.recoverylog.spi;
 

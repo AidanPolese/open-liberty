@@ -1,28 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin     Description
- * --------------- ------ --------   --------------------------------------------
- *                 131103 pradine    Original
- * 185331.1        080104 pradine    Continued work to deprecate the Recoverable Interface
- * 191800          240204 pradine    Add NLS support to the persistence layer
- * 188052          100304 pradine    Changes to the garbage collector
- * 213328          300604 pradine    Perform synchronous delete during 2PC processing
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.msgstore.persistence;
 
 import com.ibm.ejs.ras.TraceNLS;

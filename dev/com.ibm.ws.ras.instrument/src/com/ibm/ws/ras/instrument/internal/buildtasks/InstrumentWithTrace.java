@@ -1,22 +1,13 @@
-//-------------------------------------------------------------------------------
-//%Z% %I% %W% %G% %U% [%H% %T%]
-
-//COMPONENT_NAME: WAS.sca.ras
-
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 2006, 2007
-//The source code for this program is not published or otherwise
-//divested of its trade secrets, irrespective of what has been
-//deposited with the U.S. Copyright Office.
-
-//Change History:
-
-//Defect/Feature  Date      CMVC ID   Description
-//--------------  --------  --------  --------------------------
-//395481         20060929  sykesm    Initial implementation
-//401246         20061027  sykesm    Fix compiler warning
-//444684         20070607  sykesm    Fix support for single file
-//-------------------------------------------------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2006, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.ras.instrument.internal.buildtasks;
 
 import org.apache.tools.ant.types.Commandline;

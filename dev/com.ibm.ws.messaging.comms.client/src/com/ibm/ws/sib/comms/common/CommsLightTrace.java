@@ -1,25 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.3 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/common/CommsLightTrace.java, SIB.comms, WASX.SIB, uu1215.01 08/07/29 03:56:34 [4/12/12 22:24:05]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- * 
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        230708 pbroad   Original
- * 538413          250708 djvines  Adjust for WASX changes
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.common;
 
 import javax.transaction.xa.XAException;

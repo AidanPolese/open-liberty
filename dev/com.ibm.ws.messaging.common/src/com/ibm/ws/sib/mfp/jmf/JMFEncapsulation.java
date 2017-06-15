@@ -1,30 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason     Date   Origin   Description
- * ---------- ------ -------- -------------------------------------------------
- * 162584     030328 auerbach Original
- * 163400     030414 auerbach JMF improvements
- * 166989     030617 baldwint Implement efficient message copying
- * 177749.1.2 031013 baldwint More encapsulation support in JMFI motivated by WDO
- * 189561.2   040217 baldwint Add getContainingMessageData() method
- * 247975.1   050118 tevans   Add exceptions to transcribe()
- * 424474     070312 susana   Use of master needs to take account of compatible messages
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.mfp.jmf;
 

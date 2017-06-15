@@ -1,59 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- *                          matrober TestCase Original - 25 March 03
- * 166846            190503 matrober Improve exception filtering
- * 162922.2          280503 matrober JMS Testcase enhancements
- * 169473            130603 matrober Log Throwables in LTC
- * 169931            180603 matrober Refactor JMS FV tests
- * 174780            210803 kingdon  Added check for errorCode to assertMessage
- * 175703            020903 matrober Add assertEquals(String, byte[], byte[]) to LTC
- * 175778            030903 matrober LoggingTestCase modifications for log files
- * 177289            190903 matrober Delete/create dest problem in unit test
- * 185110            091203 matrober Run BasicJMSBehaviour over client
- * 188621            290104 matrober Add assertEquals(List,List) to LoggingTestCase
- * 189711            110204 jhumber  Missing FFDC entries reported in ffdclogs dir
- * 191847            270204 matrober Update Administration unittest for multiple todos.
- * 188046.4          120304 matrober Efficient dest encoding for msg
- * 201902            060504 matrober Fix for assertMessage and CWSI prefix.
- * 203973            250504 kingdon  assertMessage: check errorCode more rigorously.
- * 224434            170804 kingdon  Fix assertType so that it acts more like instanceof
- *                                   (i.e. sub-classes count as the same type). Also added
- *                                   assertType(class, object) for ease of use.
- * 250974            200105 matrober Improve FV tests
- * LIDB3706-5.263    310105 kingdon  Update serial version UID
- * 312398            111005 matrober Enable ObjectStore FFDC writing
- * 312398.1          121005 djvines  Use reflection to enable ObjecStore FFDC
- * 325174            181105 matrober Enabled ObjectManager FFDC from separate FE
- * 332260            141205 matrober Integrate UT RAS and LoggingTestCase
- * 250402.1          090106 kingdon  Support for advanced trace (moved from the
- *                                   JMS component).
- * 347957            160206 matrober Autonomic core dump for JUnit timeouts
- * 356927            220306 matrober Add time tracking to unit test logging
- * 396762            241006 matrober junit_full mantis task failing due to no junit.timeout property
- * 409448            051206 djvines  Override assertNull (well to a degree...)
- * 411184            121206 matrober LoggingTestCase should also check for unittest.timeout
- * 427952            220307 gareth   Change method for setting ObjectManager PrintWriter
- * 429124            290307 susana   assertEquals(byte[], byte[]) should cope with nulls
- * 429288            160507 djvines  assertEquals((byte[], byte[]) should be a lot more helpful
- * 443808            060607 djvines  Multiple dumps
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.js.test;
 
 import static java.util.concurrent.TimeUnit.SECONDS;

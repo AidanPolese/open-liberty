@@ -1,49 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Material
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- * 170807.7          220803 amardeep Original, adapted from JmsConnFactory
- * 174896            030903 matrober JavaDoc public interfaces
- * 166829.6.2        180903 matrober JMS Durable Subs (readAhead and subscriptionHome)
- * 176645.1          190903 kingdon  Update properties to match DC's spec.
- * 178705            081003 matrober remove javadoc warnings due to incorrect @see tag
- * 181802.2          200104 jhumber  Changes to JMS Connection Factory properties
- * 189191            050204 jhumber  Remove deprecated host/port properties
- * 188479            050204 jhumber  Remove queue/topic model name from JMS CFs
- * 188482            060204 jhumber  Add TemporaryQueuePrefix|TopicNamePrefix
- * 184390.7          180204 kingdon  Support for persistent mapping
- * 191315            190204 jhumber  Provider Endpoints now defaults to null
- * 190964.4          200204 vaughton Rename proximity Process to Server
- * 196103            260304 matrober Enforce use of durableSubscriptionHome
- * 197250            130404 jhumber  Increase visibility of CF getter methods
- * 192474            130404 matrober Support for cloned environments
- * 199163            200404 matrober javadoc problems
- * 197921.1          040504 jhumber  New Javadoc tags
- * 204538            210504 matrober Define default for CF props in Javadoc
- * 206397.4          220604 kingdon  Changes to CF properties.
- *                                   Added @see tags for setTarget* methods
- * 228338            010904 matrober Javadoc in this file is causing error on Windows IBASE build.
- * 224794.4          070904 kingdon  Changes to CF properties, setRemoteProtocol -> setTargetTransportChain
- * 230627            100904 kingdon  Update javadoc to reflect 224714.4
- * 247845.6          040305 kingdon  Add multicast props multicastInterface and subscriptionProtocol
- * 371899            070706 matrober Error in JmsConnectionFactory.java comment for javadoc
- * SIB0121.jms.1     291206 jamessid Support performance enhancement related properties
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.websphere.sib.api.jms;
 

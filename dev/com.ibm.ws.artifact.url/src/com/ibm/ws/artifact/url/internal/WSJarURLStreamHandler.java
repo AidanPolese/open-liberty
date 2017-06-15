@@ -1,28 +1,13 @@
-// @(#) 1.19 SERV1/ws/code/classloader/src/com/ibm/ws/classloader/Handler.java, WAS.classloader, WASX.SERV1, cln1239.03 6/30/10 13:46:04 [9/26/12 17:50:59]
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2010
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// History:
-//
-// Reference  MM/DD/YY  Author  Abstract
-// ---------  --------  ------  -------------------------------------------
-// D179856    10/16/03  tmusta  Struts 1.1 Apps Don't Run on WAS
-// LIDB3418   04/07/05  tmusta  Support for OSGi Stream Handler Service
-// PK12862    10/04/05  dzavala Define ClassloaderURLConnection.getContentType()
-// 412642     01/12/07  bkail   Canonicalize entry paths
-// 408408.2   01/18/07  bkail   Ensure ZipFile is closed when InputStream is closed
-// PK45088    05/14/07  bkail   Add register()
-// 531229.1   08/01/08  bkail   Close ZipFile.getInputStream and ZipFile
-// PK72252    10/23/08  bkail   Use ZipFile cache; always close zip input stream
-// 578280     03/04/09  pwwong  Corrected behavior on multiple closes on ZipEntryInputStream
-// PK84650    04/14/09  pwwong  Corrected ClassLoaderURLConnection.getLastModified()
-// PM17321    06/28/10  tjblank Fix to allow resources to reside on UNC mapped remote file systems.
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.artifact.url.internal;
 
 import java.io.BufferedInputStream;

@@ -1,63 +1,14 @@
 package com.ibm.ws.sib.msgstore.transactions.impl;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- *  Reason         Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- * 164655          06/05/03 gareth   Initial Transaction code drop
- * 168464          06/06/03 gareth   Add preCommit call in beforeCompletion
- * 169889          18/06/03 gareth   Add getId method to Transaction
- * 168080          18/07/03 gareth   LocalTransaction Support (Local Clients)
- * 168081          18/07/03 gareth   GlobalTransaction Support (Local Clients)
- * 178563          09/10/03 gareth   Add callback and MS get/setter
- * 181339          29/10/03 gareth   Change XAResource to single-threaded
- * 182347          10/11/03 gareth   Add Persistent Transaction ID
- * 181930          13/11/03 gareth   XA Recovery Support
- * 183471          04/12/03 gareth   Remove old PersistenceManager interfaces
- * 182068.3        19/12/03 schofiel Fast'n'loose - initial drop of CachedPersistentDispatcher    
- * 186559          07/01/04 gareth   Add COMMITTING_2PC state
- * 189573          05/02/04 gareth   Add NLS support to transaction code
- * 188054.1        16/03/04 gareth   Enhanced JDBC Exception handling
- * 188050.4        06/04/04 pradine  SpecJAppServer2003 optimization
- * 184806.3.2      15/04/04 gareth   Move getPersistentTranId()
- * 186657.1        24/05/04 gareth   Per-work-item error checking.
- * 199334.1        27/05/04 gareth   Add transaction size counter
- * 186657.4        11/06/04 gareth   Add isAlive() method
- * 213328          30/06/04 pradine  Perform synchronous delete during 2PC processing
- * 216527          15/07/04 gareth   Handle SeverePersistenceException
- * 229186          03/09/04 pradine  Cache the batching context inside a transaction
- * 229486          07/05/04 gareth   Improve javadoc
- * 234146          24/09/04 schofiel Change tran state for one-phase commit after callbacks issued
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * 301480          31/10/05 gareth   Never vote read only on prepare.
- * 306998.20       09/01/06 gareth   Add new guard condition to trace statements
- * 316887          03/02/06 gareth   Modify exception handling 
- * 398385          24/10/06 gareth   Improve handling of 2PC commit retries
- * 410652          12/04/07 gareth   Check Transactions ME at add time
- * PK54548         04/12/07 gareth   Better handle retry of rollback
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * PK70809         28/08/08 ajw      Make the callbacks list synchronized
- * 572430          13/02/09 gareth   Cleanup tran table for incomplete async persistence
- * PK81848         05/03/09 pbroad   Cope with asynchronous rollbacks during a slow prepare
- * 590648          20/05/09 pbroad   Back-out PK81848
- * PK81848.1       18/06/09 pbroad   Re-fix PK81848 taking into account additional requirements from 590648
- * PK81848.2       08/07/09 gareth   Allow deferred rollback processing to take place
- * PM31431         02/02/11 slaterpa Prevent unresolved indoubts
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.util.ArrayList;
 import java.util.Collections;

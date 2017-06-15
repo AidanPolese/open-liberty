@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * 179629.2.1       241103 jroots   Original
- * 195758.0         050404 jroots   Milestone 7.5 Core SPI changes
- * 199556           260404 jroots   Remove getRetryCount
- * 210259           190804 gatfora  Added getDefaultForwardRoutingPath and getReplyDestination
- * 276259           130505 dware    Improve security related javadoc
- * 310870           131005 cwilkin  Add strict ordering attribute
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.sib.core;
 
 import java.util.Map;

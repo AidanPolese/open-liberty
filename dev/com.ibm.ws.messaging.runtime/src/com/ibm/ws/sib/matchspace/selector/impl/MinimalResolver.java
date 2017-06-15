@@ -1,31 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 166318.3         090603 nyoung   First Version
- * 166318.4         160603 nyoung   Move to com.ibm.ws.sib.processor.matchspace.selector.impl
- * 166318.8         300603 nyoung   Implement PositionAssigner class
- * 171415           100703 gatfora  Removal of complile time warnings.
- * 174606           190803 gatfora  Removal of compile warnings.
- * 166318.9         160903 nyoung   Restructure mspace interfaces
- * 166318.10        230903 nyoung   Move to matchspace.impl component
- * 166318.13        201103 auerbach Remove obsolete/unused list support
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.matchspace.selector.impl;
 
 import com.ibm.ws.sib.matchspace.Identifier;

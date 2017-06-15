@@ -1,32 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.18 SIB/ws/code/sib.jfapchannel.client.common.impl/src/com/ibm/ws/sib/jfapchannel/impl/ConversationTable.java, SIB.comms, WASX.SIB, uu1215.01 06/08/15 03:47:01 [4/12/12 22:14:13]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5655-N01, 5733-W61  (C) Copyright IBM Corp. 2003, 2006 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2003, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030424 prestona Original
- * F166959         030521 prestona Rebase on non-prototype CF + TCP Channel
- * F175658         030903 prestona Add support for heartbeating
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * D181493         040206 prestona createQueueConnection is not thread safe.
- * D226223         040823 prestona Uses new messages
- * D223276         051117 prestona Various small performance improvements
- * D313822         051118 prestona FFDC taken for duplicate remove of table entry
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * ============================================================================ 
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 // NOTE: D181601 is not changed flagged as it modifies every line of trace and FFDC.
  

@@ -1,31 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date  Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 166833.3         120603 gatfora  Original
- * 172296           220703 gatfora  Repackaging utility classes
- * 180643           221003 gatfora  Corrected FFDC handling
- * 190627           130204 gatfora  Add LockManager unit test.
- * 195445.13.3      140404 gatfora  Correction of message exceptions part2
- * 186484.10        170504 tevans   MBean Registration
- * 195445.13.5      250504 gatfora  Message content updates
- * 224413           180804 gatfora  Need to ensure batch handler unlocked
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.utils;
 
 // Import required classes.

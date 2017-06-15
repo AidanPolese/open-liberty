@@ -1,33 +1,14 @@
 package com.ibm.tx.jta.impl;
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2009 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer    Defect   Description                                                         */
-/*  --------  ----------    ------   -----------                                                         */
-/*  27/11/03  johawkes      178502   Start an RA during XA recovery                                      */
-/*  05/12/03  johawkes      184903   Refactor PartnerLogTable                                            */
-/*  13/04/04  beavenj       LIDB1578.1 Initial supprort for ha-recovery                                  */
-/*  14/06/04  johawkes      209345   Remove unused code                                                  */
-/*  26/09/04  hursdlg       234516   Pass FailureScopeController to PartnerLogData                       */
-/*  14/06/05  hursdlg       283253   Componentization changes for recovery                               */
-/*  06/06/05  johawkes      443467   Repackaging                                                         */
-/*  06/08/07  johawkes      451213.1 Moved into JTM                                                      */
-/*  02/06/09  mallam        596067   package move                                                        */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 //
 // JCARecoveryData is a specialization of PartnerLogData

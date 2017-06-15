@@ -1,45 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 166318.2         220503 nyoung   Create
- * 166318.3         090603 nyoung   Remove WMQI-related stuff
- * 166318.4         160603 nyoung   Move to com.ibm.ws.sib.processor.matchspace.impl
- * 171415           100703 gatfora  Removal of complile time warnings.
- * 166318.9         160903 nyoung   Restructure mspace interfaces
- * 166318.10        230903 nyoung   Move to matching package
- * 179880           151003 gatfora  Remove compile time warnings
- * 184185.1.5       270404 nyoung   Enable delivery time discriminator access checks.
- * 200568           280404 nyoung   Wrapper security calls with check for security enablement.
- * 199574.1         040504 gatfora  Remove usage of ArrayLists and use LinkedList instead.
- * 208958           110604 gatfora  Refactor LinkedList/ArrayList use
- * 215164           090704 nyoung   Discriminator access checks need to be
- *                                  sensitive to destination type
- * 218436           220704 nyoung   Synchronization defects in MessageProcessorSearchResults.
- * 226980           310804 nyoung   Need wrapped ConsumerDispatcher in MatchSpace.
- * 216191           150904 nyoung   Discriminator check support for SIBServerSubject.
- * 243187           221204 gatfora  Use cached version of isBusSecure
- * 257841           280205 nyoung   Subscribers may receive duplicate publications.
- * SIB0201b.mp.2    300807 nyoung   Make topic space name available to TopicAuthorization
- * SIB0163.mp.2     171007 nyoung   Code Review Improvements.
- * 482749           141107 nyoung   FINDBUGS: Performance suggestions for .processor.matching.
- * 516346           010508 djvines  Use Arrays.toString
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.matching;
 

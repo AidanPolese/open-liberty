@@ -1,41 +1,14 @@
 package com.ibm.ws.sib.msgstore.task;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 07/10/03 drphill  Original
- * 180053          03/11/03 gareth   Remove deprecated methods/interfaces
- * 180763.5        21/11/03 pradine  Add support for new PersistenceManager Interface
- * 184125          12/12/03 schofiel Spill enhancements
- * 180763.7        10/02/04 pradine  Add support for mutiple item tables
- * 184390.1.2      18/02/04 schofiel Revised Reliability Qualities of Service - MS - Task changes 
- * 188052.1        16/03/04 schofiel Remove deprecated persist() method
- * 201701.1        21/05/04 pradine  Optimise use of collection classes
- * 186657.1        24/05/04 gareth   Per-work-item error checking.
- * 214205          06/07/04 schofiel Clean up size calculations for tasks
- * 247513          24/01/05 schofiel Improve spilling performance
- * 258179          06/04/05 schofiel Indoubt transaction reference counts
- * 272110          10/05/05 schofiel 602:SVT: Malformed messages bring down the AppServer
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * 306998.20       09/01/06 gareth   Add new guard condition to trace statements
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * F1332-51592     28/09/11 vmadhuka Persist redelivery count to FILESTORE
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.ws.sib.msgstore.AbstractItem;
 import com.ibm.ws.sib.msgstore.MessageStoreConstants;

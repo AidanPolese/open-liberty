@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 418673           080207 tevans   Tidy up standalone me
- * SIB0211.mp.1     260207 nyoung   Dynamic Link Configuration.  
- * SIB0165.adm.4    060907 nottinga Add isBootstrapAllowed method.
- * 490996           080108 timoward BuildBreak: 2 compile failures in sib.unittest.standalone_me
- * 491983           140108 cwilkin  Synchronization problems
- * 492178           150108 nottinga Added new methods from JsBus.
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.test.utils;
 
 import java.util.ArrayList;

@@ -1,31 +1,13 @@
-/* ************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                           */
-/*                                                                            */
-/*  ORIGINS: 27                                                               */
-/*                                                                            */
-/* IBM Confidential OCO Source Material                                       */
-/* 5630-A36 (C) COPYRIGHT International Business Machines Corp. 2002, 2004    */
-/* The source code for this program is not published or otherwise divested    */
-/* of its trade secrets, irrespective of what has been deposited with the     */
-/* U.S. Copyright Office.                                                     */
-/*                                                                            */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                              */
-/*                                                                            */
-/*  DESCRIPTION:                                                              */
-/*                                                                            */
-/*  Change History:                                                           */
-/*                                                                            */
-/*  Date      Programmer    Defect      Description                           */
-/*  --------  ----------    ------      -----------                           */
-/* 06/06/03   beavenj       LIDB2472.2  Create                                */
-/* 23/06/03   beavenj       170169      Constructor now correctly records size*/
-/* 01/07/03   beavenj       170101      Support for expanding log file        */
-/* 15/07/03   beavenj                   Add trace                             */
-/* 04-03-02   awilkins   LIDB2775-53.5  z/OS code merge                       */
-/* 04-05-08   hursdlg       MD19584     Make maxLogFileSize public            */
-/* 31/03/04   mezarin       MD19650     Add equals and hashCode methods       */
-/* 30/07/09   johawkes      602532      Remove WAS dependency                 */
-/* ************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.recoverylog.spi;
 
 import com.ibm.tx.util.logging.Tr;

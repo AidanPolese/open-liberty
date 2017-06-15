@@ -1,33 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- ------------------------------------------
- * SIB0002.adm.4    220605 tpm      PEV destination support
- * SIB0002.adm.4.2  010805 tevans   Add SSL properties
- * SIB0002.mp.17    190805 tevans   Modify SSL properties 
- * SIB0002.mp.19    230805 tevans   Add security and message properties
- * 305715           220905 geraint  Added method getMQHostName(). Also, tidied
- *                                  up and corrected the method comments.
- * 308868           280905 geraint  Implemented method setMQHostName().
- * 363563           190406 leonarda Add enableBindingsTransportMode.
- * SIB0111.adm.1    220607 leonarda Add new attributes
- * SIB0111.adm.4    080108 leonarda Add virtualQueueManagerName
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.admin;
 

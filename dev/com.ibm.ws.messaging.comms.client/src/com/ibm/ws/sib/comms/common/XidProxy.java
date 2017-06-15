@@ -1,33 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.20 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/common/XidProxy.java, SIB.comms, WASX.SIB, uu1215.01 07/07/04 13:10:24 [4/12/12 22:14:08]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2007 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        031029 mattheg  Original
- * f181927         031111 mattheg  Improve tracing on construction
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * D199177         040816 mattheg  JavaDoc
- * D257768         050301 mattheg  Add equals() method
- * D307265         050918 prestona Support for optimized transactions
- * D321471         051109 prestona Optimized transaction related problems
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * D414570         070627 mleming  Swap round bqual and gtid in second constructor
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.common;
 
 import java.util.Arrays;

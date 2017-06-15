@@ -1,43 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5639-D57,5630-A36,5630-A37,5724-D18 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//  CHANGE HISTORY
-//Defect        Date        Modified By     Description
-//--------------------------------------------------------------------------------------
-//296658        08/07/05    todkap          allow FilterConfig to override the default classloader used
-//298927        08/17/05    todkap          improve filter handling for core    WASCC.web.webcontainer
-//299498        08/19/05    todkap          implement concept of internal servlets and filters    WASCC.web.webcontainer    
-//299280.1      08/22/05    todkap          cannot add FilterInvocationListener in some case    WAS.webcontainer
-//301121        08/26/05    todkap          WebApp fails to handle wsspi implementation of IFilterConfig    WASCC.web.webcontainer
-//302106        08/31/05    todkap          servlet mapped filters throw NPE when servlet not found    WASCC.web.webcontainer    
-//308220        09/27/05    mmolden         NOt checking if we are named dispatch in WebAppFilterManager	WASCC.web.webcontainer
-//306998.15     01/06/06    ekoonce         PERF: WAS tracing performance impovement
-//364982        04/24/06    todkap          java.lang.ClassNotFoundException when trying to browse webpages
-//PK23915       06/07/06    todkap          WHEN USING FILTERS IF THERE IS NOT A SERVLET MAPPING DEFINED 
-//366965        06/22/06    mmolden         Reduce number of lines enclosed in synchronized in    WASCC.web.webcontainer
-//PK27620       08/23/06    cjhoward        SERVLET FILTER IS NOT CALLED IN V6 FOR URL RESOURCES WHEN THESE ARE NOT FOUND.  IN V5, THE FILTER IS ALWAYS CALLED
-//LIDB4317-1    10/17/06    mmolden         Servlet 2.5 changes
-//398084        10/18/06    ekoonce         CTS:Test failed due to java.lang.Runtime.Permission.getClassLdr
-//LIDB3292-32.2 03/20/2007  cjhoward        WASX injection engine integration
-//PK42868       07/25/07    ekoonce         WEBCONTAINER INVOKES PREINVOKE() METHOD IN THE SECURITY CODE TWICE
-//PK45107       08/30/07    mmolden         EXCEPTION FROM SERVLET FILTER IS NOT PROPAGATED TO CLIENT
-//486204        12/07/07    mmolden         Check version number before executing new getSession path
-//519410        05/14/08    mmolden         SVT:unexpected InvalidPortletWindowIdentifierException
-//PK64290       05/16/08    mmolden(mmulholl)        Call session pre & postInvoke from invoke filters
-//PK76656       12/11/08    mmulholl        add support for com.ibm.ws.webcontainer.assumefiltersuccessonsecurityerror
-//PK77465       1/16/09     mmulholl        remove support for com.ibm.ws.webcontainer.disablesecuritypreinvokeonfilters
-//587230	4/27/09	    anupag	    Add {} for the if (dispatchContext!=null)
-//PK97815       10/06/09    anupag          Do not put Servlet, Filter in Service after Null Injection. (defect 596191)
-//PM01682       01/26/10    anupag          Filter gets intialized more then once.   
-//PM50111       12/12/11    anupag          Check if filter is invoked for the request 
-//PM92496       07/24/13    anupag          Provide method to add request SSL Attributes //PM83905
-//140014        09/01/14    zaroman         Do not throw the FFDC if the webapp has been destroyed (use warning instead)
-//PI08268       09/30/14    pmdinh          Disable TRACE, HEAD... methods for JSP and static files
-//PI26908       12/01/14    zaroman         Add attribute to reqState when there is an exception in invokeFilters
-//
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.filter;
 
 import java.beans.Beans;

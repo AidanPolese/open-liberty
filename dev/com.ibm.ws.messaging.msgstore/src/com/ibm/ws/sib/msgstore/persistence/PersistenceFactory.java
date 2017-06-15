@@ -1,33 +1,14 @@
 package com.ibm.ws.sib.msgstore.persistence;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 09/08/03 kschloss Original
- * 180763.2        07/10/03 pradine  Refactor MS configuration code
- * 190379          12/04/04 pradine  Tighten up stopping behaviour
- * 206674          02/06/04 schofiel Enable pluggable persistence layer in Message Store
- * 205363          28/07/04 pradine  Redesign unique key generators
- * 251161          13/04/05 gareth   Add ObjectManager code to CMVC
- * SIB0003.ms.14   18/08/05 schofiel File store - admin integration
- * 321394          07/11/05 schofiel Remove unused imports in MS
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.ws.sib.msgstore.Configuration;
 import com.ibm.ws.sib.msgstore.MessageStoreConstants;

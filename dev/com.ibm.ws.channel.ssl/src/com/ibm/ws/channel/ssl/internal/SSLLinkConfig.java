@@ -1,16 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 2004, 2008, 2009
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//@(#) 1.2 SERV1/ws/code/ssl.channel.impl/src/com/ibm/ws/ssl/channel/impl/SSLLinkConfig.java, WAS.channel.ssl, WASX.SERV1, pp0919.25 3/12/09 21:49:58 [5/15/09 18:26:48]
-//Change History:
-//Date     UserId      Defect          Description
-//--------------------------------------------------------------------------------
-//080404   leeja       509688          Fix lost cipher suite prop
-//090311   elisa       PK72447         Add method getProperties
-
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.channel.ssl.internal;
 
 import java.util.Properties;

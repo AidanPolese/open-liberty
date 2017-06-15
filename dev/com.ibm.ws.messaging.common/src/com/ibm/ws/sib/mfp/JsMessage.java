@@ -1,121 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 158444          030207 susana   Original
- * 158574          030210 susana   Rename make methods to clarify usage
- * 158852          030213 susana   Scaffold implementation part 1
- * 159110          030218 susana   Scaffold implementation part 2
- * 159294          030303 susana   Tidy up message header fields - part 1
- * 160138          030304 susana   Scaffold implementation part 5 - getSent/Received
- * 161321          030320 susana   Scaffolding for protoype 2
- * 160418          030331 susana   Forward & Reverse Routing Paths
- * 164540          030428 susana   More header field refinements
- * 164825          030502 susana   More header field refinements
- * 165406          030506 susana   Flatten/restore message improvements - part 1
- * 165989          030513 susana   Extend sib.common.SIBusMessage
- * 165989.03       030513 susana   Provide get/setReliability
- * 165989          030602 susana   Remove deprecated get/setDeliveryMode methods
- * 168606          030606 susana   Add support for DDD messages
- * 168206          030611 susana   Interface changes for Core API rewrite
- * 168263          030612 susana   Add support for Subscription Propagation messages
- * 170062          030717 susana   Remove redundant setTopic method
- * 171889          030722 susana   Add support for MP Control messages
- * 173700          030807 susana   Add get/setPointToPointRoutingData for TRM
- * 173918          030814 susana   makeInboundJmsMessage should throw IncorrectMessageTypeException
- * 174111          030814 susana   Add Guaranteed Delivery variants to JsMessage
- * 169602          030821 susana   Add support for SIMessage (JsWdoMessage)
- * 174524          030828 susana   Remove deprecated setDestination method
- * 174699          030820 vaughton Add support for Trm Messages
- * 174700          030909 susana   Remove 2 set methods from interface
- * 175492          030912 baldwint New fields for guaranteed delivery stream resolution
- * 175495          030916 vaughton New MP/TRM interface
- * 172633.2.1      030925 susana   Move 3 set methods from SIBusMessage to here
- * 179760          031104 susana   Change package name of SIBusMessage
- * 178364.1        031111 susana   New/changed fields for remote get and browse
- * 182699          031111 susana   Remove DDD message support
- * 175207.2        031117 susana   Exception Destination fields support
- * 178364.4        031118 susana   Clean up deprecated GuaranteedValue methods
- * 173276.7.1      031124 markesc  Added getMQEncoder method
- * 183733          031124 markesc  Changed getMQEncoder method to return Object
- * 182771          031124 susana   Add Subnet, remove Producer Id and Tick
- * 184273.2        031202 susana   Externalise getEncodedLength
- * 180540.1.2      031205 susana   Remove setTopic
- * 179339.1        031211 susana   Remove setForward/ReverseRoutingPath
- * 181718.6        031219 susana   SIBUuid changes
- * 179365.1        040105 susana   Add Report message support
- * 172521.1        040105 baldwint Schema propagation
- * 175004.1        040114 baldwint Schema persistence api changes
- * 186967.1        040121 susana   Add RoutingDestination
- * 168373          040212 susana   Add unique system message id
- * 189874          040216 susana   Javadoc for get/setXxxxIdAsBytes take/return copies
- * 192890          040309 susana   Move from WDO to SDO
- * 186967.1.3      040315 susana   Add guaranteed delivery fields for cross-bus routing
- * 192505          040315 susana   Add isSecurityUseridSentBySystem
- * 192467          040316 baldwint Add getApproximateLength
- * 172521.5        040322 baldwint Remove deprecated encode methods
- * 193269          040325 baldwint Remove unwanted client dependencies
- * 176658.11.1     040326 susana   Add Mediated flag
- * 195928          040313 baldwint Rename get/setSubnet to get/setBus
- * 199144          040419 susana   Fix javadoc
- * 175637.6        040429 susana   Add is/setMQRFH2Allowed
- * 186248.1        040504 susana   Remove EnvelopeType
- * 180483.14.1     040520 susana   Add clearGuaranteedRemoteBrowse & Get methods
- * 203920          040520 susana   Deprecate/remove redundant Guaranteed methods
- * 193585.5        040525 susana   Move ProtocolType to mfp
- * 203920.2        040527 susana   Remove deprecated Guaranteed methods
- * 205894          040528 baldwint Add encode/decode support for web client
- * 195720.2        040609 baldwint Add WAS request metrics
- * 206247.1        040610 baldwint Add methods to find out if the ttl has been changed
- * 195136          040628 markesc  Add target queue parameters to getMQEncoder method
- * 208022          040629 baldwint Provide access to API userid field
- * 216645          040715 markesc  Replace target queue parameters to getMQEncoder method
- * 212389          040716 susana   Add isForward/ReverseRoutingPathEmpty methods
- * 216645.2        040721 markesc  Make getMQEncoder return Object again
- * 223307          040816 susana   Add connectionUuid field
- * 225817          040820 susana   Add GuaranteedProtocolVersion
- * 215177          040820 susana   Change Control Messages to single part messages
- * 185656          040902 susana   Tidy up imports etc
- * 218660.1.1      040913 susana   Remove ShortId
- * 225920.3        041008 eveleigh Add Q and QMgr to getMQEncoder method signature
- * 194870          050104 susana   Move MQJsMessageEncoder to main MFP package
- * 246220.1        050119 susana   Add setExceptionProblemDestination
- * 247975.1        050124 tevans   Add transcribeToJmf
- * 266169          050505 ajw      added encodeFast method
- * 284629.1        051021 kgoodson add isApiMessage method
- * 252277.2        060112 susana   transcribeToJmf percolate UnsupportedEncodingException back to the caller
- * 284629.1.2      060213 kgoodson Fix javadoc while changing implementation
- * SIB0112b.mfp.2  060807 susana   MemMgmt: flatten/restore operate on List<DataSlice>
- * 348294          060815 susana   Fix encodeFast properly
- * 408810.1        061130 susana   Rename CommonMessageHeaders to AbstractMessage & common up more methods
- * 382250.1        061204 susana   Add setDeliveryCount()
- * SIB0212.mfp.1   061211 mphillip MessageFieldUpdateFailedException on makeInboundSdoMessage
- * 409879          061220 mphillip remove redundant isGuaranteed methods
- * 438222          070523 susana   Improve interface between MQFap & MQJsMessageEncoder
- * SIB0121.mfp.7   070629 susana   MessageFieldUpdateFailedException no longer exists
- * SIB0201b.mfp    070810 susana   Add auditSessionId to message
- * 477072          071105 susana   Remove getEncodedLength()
- * SIB0111c.mfp.1  071127 susana   Support JMS_IBM_MQMD_ properties
- * SIB0111d.mfp.1  080115 susana   Add Fingerprint support for loop detection
- * 493401          080123 susana   Remove deprecated getSent()
- * 479449.1        080221 susana   Add getInMemorySize()
- * F001333.14611.1 090807 djvines  Add setExceptionProblemSubscription
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.mfp;
 

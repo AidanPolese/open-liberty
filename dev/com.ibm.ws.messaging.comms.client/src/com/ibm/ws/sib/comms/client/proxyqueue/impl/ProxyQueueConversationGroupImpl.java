@@ -1,54 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.50 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/proxyqueue/impl/ProxyQueueConversationGroupImpl.java, SIB.comms, WASX.SIB, uu1215.01 08/05/23 10:03:58 [4/12/12 22:14:07]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2008 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030702 prestona Original
- * d169897.2       030707 schmittm Provide remote client implementation of new Core API as defined
- * F171893         030721 prestona Add BroswerSession support on client.
- * F174692         030819 prestona Switch to using SICommsException
- * D177231         030923 prestona Closing sessions after connections results in baddness.
- * f173765.2       030926 mattheg  Core API M4 update
- * D179183         031008 prestona Various deadlocks in comms
- * d180495         031028 mattheg  Provide a bury() method that will sweep away a half created proxy queue
- * f187521.2.1     040126 mattheg  Unrecoverable reliability -- part 2
- * f191114         040218 mattheg  Multicast support
- * d189716         040218 mattheg  FFDC Instrumentation
- * d189716.3       040226 mattheg  FFDC Instrumentation - again
- * d192293         040308 mattheg  NLS file changes
- * f196076         040329 mattheg  Multicast support -- phase 2
- * f200337         040427 mattheg  Message order context implementation
- * D209401         040611 mattheg  Comms service utility
- * D213014         040705 mattheg  Allow asynch proxy queues to be created with options
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * D224685.2       040830 prestona SIIncorrectCallException does not have NLS
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D249096         050129 prestona Fix proxy queue synchronization
- * F247845         050201 mattheg  Multicast enablement
- * D270373         050721 mattheg  Remove use of temporary NLS message
- * D223276         051117 prestona Various small performance improvements
- * D384259         060815 prestona Remove multicast support
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * D424200         070426 prestona Readahead consumers hang in receiveWithWait if connection dies
- * D485851         071129 mleming  Asyncconsumer Session limit in comms
- * 486948          071203 sibcopyr Automatic update of trace guards 
- * 522647          080523 mleming  Fix trace
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.comms.client.proxyqueue.impl;
 

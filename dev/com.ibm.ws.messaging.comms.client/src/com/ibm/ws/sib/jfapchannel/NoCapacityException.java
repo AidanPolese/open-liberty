@@ -1,28 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.14 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/NoCapacityException.java, SIB.comms, WASX.SIB, uu1215.01 06/08/15 03:38:39 [4/12/12 22:14:11]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5655-N01, 5733-W61  (C) Copyright IBM Corp. 2003, 2006 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2003, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030707 prestona Original
- * D226223         040823 prestona Uses new messages
- * LIDB3706-5.211  050211 prestona serialization compatibility for sib.jfapchannel
- * D274182         050518 mattheg  Modify serialVersionUID to correct value
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * ============================================================================ 
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel;
 
 import com.ibm.websphere.sib.exception.SIResourceException;

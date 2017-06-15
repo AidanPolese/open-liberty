@@ -1,12 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//PK27099 SDJ 2006/07/17 Do not log the exception stack trace if parser could not load the tei-class instead raise a warning
-// modified for jsp2.1ELwork
-// defect 420617  70FVT: NPE thrown by test case in JSF 1.2 TCK    2007/02/13                                                                      
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.taglib;
 
 import java.io.IOException;

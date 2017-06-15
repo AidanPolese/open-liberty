@@ -1,28 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date        Origin   Description
- * --------------- ----------- -------- ----------------------------------------
- * f179630.1       04-Nov-2003 nottinga Initial Code Drop
- * f201972.0       05-Jul-2004 jroots   Core SPI Exceptions rewrite
- * f201972.11      27-Jul-2004 nottinga Moved to exception package.
- * LIDB3706-5.201   220205 gatfora  Add missing serialVersionUID 
- * PK67950.1       25-Jul-2008 egglestn Remove the initCause override (which disabled it)
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.wsspi.sib.core.exception;
 

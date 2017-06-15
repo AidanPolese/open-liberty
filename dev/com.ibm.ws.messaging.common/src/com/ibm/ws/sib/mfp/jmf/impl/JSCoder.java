@@ -1,36 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason     Date   Origin   Description
- * ---------- ------ -------- -------------------------------------------------
- * 162584     030328 auerbach Original
- * 163400     030414 auerbach JMF improvements
- * 165674     030508 baldwint Correction to CHAR coder's decode return type
- * 166989     030617 baldwint Implement efficient message copying
- * 177749.1.1 030926 auerbach Better encapsulation support in JMFI motivated by WDO
- * 177749.1.2 031013 baldwint More encapsulation support in JMFI motivated by WDO
- * 181810     031111 baldwint Remove NumericValue and BooleanValue classes
- * 424474     070312 susana   Use of master needs to take account of compatible messages
- * 423333     070323 susana   Use more efficient Number constructors
- * 499852     080222 susana   Add estimateUnassembledSize()
- * 499582     080715 susana   Improve accuracy of estimateUnassembledSize()
- * 577848     090304 susana   OBJECT_OVERHEAD is incorrect for 32-bit
- * 572032     100830 skavitha guessFluffedSize & estimateFieldValueSize underestimate 64-bit
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.mfp.jmf.impl;
 

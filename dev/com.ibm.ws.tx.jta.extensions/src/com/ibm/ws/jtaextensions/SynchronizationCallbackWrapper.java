@@ -1,30 +1,15 @@
 package com.ibm.ws.jtaextensions;
 
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/*  ORIGINS: 27                                                                      */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2004, 2008 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  DESCRIPTION:                                                                     */
-/*                                                                                   */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  Date      Programmer    Defect    Description                                    */
-/*  --------  ----------    ------    -----------                                    */
-/*  25-03-04  mdobbie   LIDB3133-23   Created                                        */
-/*  23-04-04  mdobbie     199929      Minor code review updates                      */
-/*  14-06-04  johawkes      209345    Organise imports                               */
-/*  24-05-08  johawkes      522569    Perf trace ports                               */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2002, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import javax.transaction.Status;
 import javax.transaction.Synchronization;

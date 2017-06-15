@@ -1,23 +1,13 @@
-/* ============================================================================
- * 
- * @(#) 1.4 SERV1/ws/code/runtime.fw/src/com/ibm/ws/runtime/metadata/MetaData.java, WAS.runtime.fw, WAS80.SERV1, h1116.09 7/24/08 13:25:30 [4/23/11 20:12:43]
+/*******************************************************************************
+ * Copyright (c) 2002, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002,2008
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- *
- * Change activity:
- *
- * Reason          Date        userid    Description
- * -------         ------      --------  -----------------------------------------
- * LIDB3133-2.2.1  040301      tmusta    Adding SPI tags
- * D495464.1       07/19/2008  frowe     Update javadoc to reflect new behavior
- * 
- * ============================================================================ */
-
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.runtime.metadata;
 
 /**

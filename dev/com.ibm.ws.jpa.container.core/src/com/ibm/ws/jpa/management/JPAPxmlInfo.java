@@ -1,54 +1,13 @@
-// IBM Confidential OCO Source Material
-// Copyright IBM Corp. 2006, 2013
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d392996   EJB3      20060930 leealber : Initial Release
-// d392996.4 EJB3      20061102 leealber : Process invalid persistence.xml parsing exception.
-// d403070   EJB3      20061108 leealber : Temporary add PU property variable expansion for RESOURCE-LOCAL limitation.
-// d406735   EJB3      20061120 leealber : Correct <exclude-unlisted-classes> semantics interpretation.
-// d406994   EJB3      20071122 leealber : CI:change package to com.ibm.ws.jpa.pxml10
-// d406994.2 EJB3      20061120 leealber : CI: exception handling rework
-// d412944   EJB3      20070103 leealber : Enable JPA in TEExplorer
-// d408408   EJB3      20070123 mikedd   : Close inputStream after parsing persistence,xml
-// d416151   EJB3      20070122 leealber : Container managed persistence context part I
-// d429219   EJB3      20070328 leealber : Temporarily disable java:comp/env data source support.
-// d416151.3 EJB3      20070306 leealber : Extend-scoped support
-// d416151.3.7 EJB3    20070501 leealber : Add isAnyTraceEnabled() test
-// d416151.3.11 EJB3   20070504 leealber : Code review clean up.
-// d416151.3.8 EJB3    20070510 leealber : Replace StringBuffer with StringBuilder.
-// d441029   EJB3      20070522 leealber : Correct pu search in EAR scope persistence archive.
-// d458689   EJB3      20070831 kjlaw    : Pass archive name to CTOR of JPAPUnitInfo.
-// d456716   EJB3      20070906 tkb      : use correct message prefix CWWJP
-// d460065   EJB3      20070907 tkb      : improve message replacement parameters
-// d473432.1 EJB3      20071011 leealber : Add provider version/revision information in toString.
-// d481950   WAS70     20080128 tkb      : move close() to finally block
-// d496032   WAS70     20080212 jckrueg  : Put exception out instead of NPE for property syntax error.
-// d496032.1 WAS70     20080220 jckrueg  : Fix error message
-// d500811   WAS70     20080307 jckrueg  : Validate persistence.xml
-// d507361   WAS70     20080324 leealber : Incorrect debug root url text in debug string for loose config
-// PK62950   WAS70     20080407 jckrueg  : support <jar-file> in loose config
-// d510184   WAS70     20080505 tkb      : Create separate EMF for each java:comp
-// F743-954.1 WASX     20090330 leealber : Add additional JPA 2.0 APIs
-// F743-8064 WAS80     20090414 jckrueg  : Support 2.0 schema
-// F743-8705 WAS80     20090530 leealber : Support caching and validationMode
-// d595912   WAS80     20090610 tkb      : do not validate until schema is known
-// d600097   WAS80     20090713 leealber : Move up to EA4 level of API definition
-// d602618   WASX      20090722 leealber : Update to JPA 2.0 API to EA5 level and temporary
-// d618559   WASX      20091014 leealber : Update to JPA 2.0 API to EA9 level - Final Draft
-// F743-16027 WAS80    20091029 andymc   : Handling schema file inside embeddable container jar
-// F1879-16302
-//           WAS80     20091112 tkb      : support 2.0 and 1.0 xml separately
-// d681393   WAS80     20101209 tkb      : remove plugin from parent classloader
-// d689596   WAS80     20110204 bkail    : Create JPAPUnitInfo with archive JPAPuId
-// RTC113511 RWAS90    20131009 bkail    : Use JPAApplInfo.createJPAPUnitInfo
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2006, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_RESOURCE_BUNDLE_NAME;

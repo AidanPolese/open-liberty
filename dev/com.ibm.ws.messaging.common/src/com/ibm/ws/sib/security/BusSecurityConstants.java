@@ -1,32 +1,13 @@
-/*
- * COMPONENT_NAME: sib.security.impl
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *  ORIGINS: 27
- *
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * 
- *
- * Change activity:
- *
- * Reason          Date        Origin   Description
- * --------------- ----------- -------- ----------------------------------------
- * fSIB0014.sec.5  03-Oct-2005 nottinga Initial Code Drop.
- * fSIB0014.sec.4  17-Oct-2005 nottinga Moved SIB Subject constants across.
- * d341622         26-Jan-2006 nottinga Moved security context constants.
- * 522793          22-May-2008 timoward Use Constant for Global Security Domain name
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.security;
 
 

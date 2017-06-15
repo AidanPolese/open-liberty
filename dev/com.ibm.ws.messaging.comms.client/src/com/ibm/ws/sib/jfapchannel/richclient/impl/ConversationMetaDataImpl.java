@@ -1,34 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.17 SIB/ws/code/sib.jfapchannel.client.rich.impl/src/com/ibm/ws/sib/jfapchannel/impl/ConversationMetaDataImpl.java, SIB.comms, WASX.SIB, uu1215.01 09/07/21 03:43:06 [4/12/12 22:14:21]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2004, 2009
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * D196678.10.1    040525 prestona Add conversation metadata method.
- * D197042         040811 prestona FFDC entries
- * F224759.1       040818 prestona z/OS: isConnectionTrusted() method
- * D229536         040906 prestona Make isTrusted a channel custom property
- * F244595         041129 prestona z/OS: TCP Proxy Bridge Support
- * F206161.5       050217 prestona Events for system management products
- * D320083         051103 mattheg  Expose remote port
- * D345065         060209 prestona Avoid spooking users by tracing class not found for TCP proxy
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * SIB0153a.com    061030 mattheg  Add getSSLSession() method
- * D590533         090720 mleming  Don't try and load TCPProxy code on z/OS
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.richclient.impl;
 
 import java.net.InetAddress;

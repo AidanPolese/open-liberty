@@ -1,18 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 1997-2005,2009
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//Code added as part of LIDB 2283-4
-//
-//CHANGE HISTORY
-//Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//       PK81387    	 02/03/2009   mmulholl		 modified copy of com.ibm.ws.util.FileSystem for PK81387 for use by jsp and webcontainer
-//       PK87049         05/22/2006   mmmulhol           add support for tolerating symbolic links
-//	 PM10362 	 04/27/2010   anupag 		 Provide option for tolerateLocaleMismatchForServingFiles in PK81387 code 
-//
+/*******************************************************************************
+ * Copyright (c) 1997, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.webcontainer.util;
 
 import java.io.File;

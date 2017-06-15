@@ -1,34 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2003, 2014 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/* DESCRIPTION:                                                                      */
-/*                                                                                   */
-/* Change History:                                                                   */
-/*                                                                                   */
-/* Date      Programmer  Defect           Description                                */
-/* --------  ----------  ------           -----------                                */
-/* 06/06/03  beavenj     LIDB2472.2       Create                                     */
-/* 01/07/03  beavenj     170101           Support for expanding log file             */
-/* 15/07/03  beavenj                      Add 'this' to trace points                 */
-/* 30-10-03  beavenj     181324           Ensure header FRSN written on keypoint     */
-/* 04-01-09  awilkins    LIDB2775-53.5    z/OS code merge                            */
-/* 04-03-24  awilkins    LIDB2775.53.5.1  Exception chaining & non-mapped files      */
-/* 04-06-21  awilkins    210981           HEADER_SIZE shouldn't include length field */
-/* 26-07-04  beavenj     209636           Add Client Version Support                 */
-/* 26-08-04  beavenj     227136         Prevent potential log collision              */
-/* 28-09-04  hursdlg     231874         Handle invalid header on restart             */
-/* 22/05/14  slaterpa    PI18414        Add byte by byte scanning support            */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2003, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.recoverylog.spi;
 

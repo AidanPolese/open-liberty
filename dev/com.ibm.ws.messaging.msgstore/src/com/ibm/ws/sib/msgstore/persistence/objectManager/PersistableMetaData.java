@@ -1,36 +1,15 @@
 package com.ibm.ws.sib.msgstore.persistence.objectManager;
 
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- *  Reason         Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- * 251161          14/04/05 gareth   Add ObjectManager code to CMVC
- * SIB0003.ms.1    20/05/05 gareth   Turn on SpillDispatcher
- * 292187          21/07/05 gareth   Improve toString() for trace
- * 321392          05/12/05 schofiel Complete removal of tick value
- * 306998.20       09/01/06 gareth   Add new guard condition to trace statements
- * 454302          25/07/07 gareth   Use SimplifiedSerialization
- * 520772          14/05/08 djvines  Use Arrays.toString
- * 542362          07/08/08 gareth   Handle rollback of addToStore()
- * F1332-51592     28/09/11 vmadhuka Persist redelivery count to FILESTORE
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

@@ -1,33 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason   Date   Origin   Description
- * -------- ------ -------- --------------------------------------------------
- * 162584   030328 auerbach Original
- * 163400   030414 auerbach JMF improvements
- * 167779   030603 baldwint Add JMFSchemaIdException if schema ids clash
- * 166788   030604 baldwint Allow JMFRegistry.decode to throw JMF exceptions
- * 177749.1 030925 auerbach Add support for WDO over JMF
- * 181755   031103 auerbach Improved support for XSD types
- * 172521.1 040105 baldwint Schema propagation
- * 247975.1 050118 tevans   Add exceptions to copy()
- * 247845.3 050202 tevans   Add checkSchemata method
- * 277612   070126 susana   Make it obvious JMF_ENCODING_VERSION is final
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.mfp.jmf;
 

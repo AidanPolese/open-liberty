@@ -1,26 +1,13 @@
-/**
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * --------------- --------- -------- ---------------------------------------
- * SIB0102.ra      27-Mar-07 pnickoll Original version  
- * 433462          20-Apr-07 pnickoll Corrected trace in constructor
- * 443856          05-Jun-07 pnickoll If we are not using "always activate all MDBs" then, to retain 6.1 compatibility, only connect to local MEs if there are any
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 /**
  * This class is designed to allow MDB to cross attach to remote MEs if the local MEs are not currently running

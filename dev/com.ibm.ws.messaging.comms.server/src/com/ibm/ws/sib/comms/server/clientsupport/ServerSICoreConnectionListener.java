@@ -1,43 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.31 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/ServerSICoreConnectionListener.java, SIB.comms, WASX.SIB, aa1225.01 07/07/24 07:28:32 [7/2/12 05:59:00]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2004, 2007
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030725 mattheg  Original
- * F174602         030820 prestona Switch to using SICommsException
- * f173765.2       030926 mattheg  Core API M4 update
- * f179464         031010 mattheg  Implement meTerminated handling
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * d175222         040219 mattheg  Ensure SICommsException is reported correctly and not sent to client
- * d192146         040227 mattheg  Ensure we use Me Uuid rather than name to distinguish ME's
- * d192293         040308 mattheg  NLS file changes
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * PK33011         061016 mattheg  Fix for MDB Listener not being told about ME failure
- * D400132         061025 mattheg  Fix FFDC warnings
- * D417618         070130 mattheg  Ensure async exceptions are only sent if session id != 0
- * SIB0121a.com.1  070706 prestona Propagate exception reason and inserts.
- * D441183         072307 mleming  Don't FFDC when calling terminated ME
- * 96739           031813 Venu     Dont block for ME Terminate/Quiesce
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import java.util.Hashtable;

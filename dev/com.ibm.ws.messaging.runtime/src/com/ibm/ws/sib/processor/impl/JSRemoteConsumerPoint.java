@@ -1,49 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- --------------------------------------------
- * SIB0002.mp.1     210605 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.mp.1     210605 tevans   PEV Prototype
- * SIB0002.mp.2     240605 tpm      Further PEV changes
- * SIB0041.mp.1     300805 cwilkin  Total Message Ordering
- * 345318.1         220206 cwilkin  Provide eventPreUnlocked callback
- * 355323           220306 tevans   RMQSessionDroppedException handling
- * 379771           040906 cwilkin  IgnoreInDoubts Ordering Support
- * SIB0113a.mp.1    240707 cwilkin  Gathered Consumer foundation
- * SIB0113a.mp.3    010807 vaughton Class rename
- * SIB0163.mp.1     190907 nyoung   XD Integration.   
- * SIB0113a.mp.9    261007 cwilkin  Remote Gathering
- * SIB0113a.mp.11   131207 cwilkin  Message Gathering IME Recovery
- * 520453           130508 dware    Hold AOStream lock while satisfying a request 
- * 520472           220508 cwilkin  Gathering reattaching
- * 520690           290508 ajw      Don't suspend or setup blockedretry timer when already suspended
- * 488794           130608 cwilkin  Suspend/Resume for remote consumers
- * 528148           160608 cwilkin  Reissue Get after restarted DME for async consumers
- * 496144           180608 cwilkin  Forward port PK58940
- * 532349           250608 cwilkin  Propogate correct timeout to gathering DMEs
- * 520690.1         270608 ajw      Don't suspend or setup blockedretry timer when already suspended
- * 512943.1         300608 cwilkin  Gathering Synchronisation and Threshold
- * 515543           180708 cwilkin  Handle MessageStoreRuntimeExceptions on msgstore interface
- * 543635           040908 cwilkin  Fix bug in processQueuedMsgs
- * 558352           281008 cwilkin  Retry failed attach to avoid deadlock
- * 572817           180209 dware    Convert timeouts between SIMP and LCP formats
- * 611686           090909 dware    Prevent the consumer being closed under the feet of a new request
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.impl;
 

@@ -1,13 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-I63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//Revisions:
-//Defect 245645.1  2004/12/06 Custom Tags using default namespace don't work
-//  defect 396002 CTS: no jsp fatal translation error for  taglib after actions Scott Johnson 10/17/2006
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.tagfiledep;
 
 import java.util.ArrayList;

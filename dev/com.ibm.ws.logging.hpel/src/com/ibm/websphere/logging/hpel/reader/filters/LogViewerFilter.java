@@ -1,24 +1,13 @@
-//%Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2013
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason           Version        Date       User id     Description
- * ----------------------------------------------------------------------------
- * F001340-15950.1    8.0        09/04/2009   belyi       Initial HPEL code
- * 639482             8.0        04/03/2010   belyi       Strip spaces of 'in' and 'ex' loggers.
- * F017049-16935      8.0        07/30/2010   spaungam    addition of message option
- * F1340-50771        8.0        10/07/2011   belyi       Add filtering on extensions
- * 740037             8.5        01/08/2013   rishim      Correction of filtering for 'message'
- * RTC92174           8.5.5      02/25/2013   dbourne     make logViewer for Liberty follow Liberty command conventions
- * RTC117684          8.5.5      01/31/2014   reddvenk    NPE from Liberty binaryLog command 
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.logging.hpel.reader.filters;
 
 import java.util.ArrayList;

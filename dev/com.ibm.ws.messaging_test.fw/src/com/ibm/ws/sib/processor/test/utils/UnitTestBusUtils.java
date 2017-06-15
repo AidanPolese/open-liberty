@@ -1,30 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- ------------------------------------------
- * 190632.0.21      230604 caseyj   Link handler corruption reset
- * 190632.0.23      010704 caseyj   Corrupt dursubs not signalled before del ts 
- * 255137           180205 gatfora  Speed improvements in the unittests
- * 267686           120405 tpm      Null propogation of TSMapping
- * SIB0009.mp.03    020905 gatfora  Extend unit test framework to enable restarts of ME
- * SIB0211.mp.1     260207 nyoung   Dynamic Link Configuration.
- * 460662           230608 nyoung   70FVT: Link transmitter status wrong for MQLinks   
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.test.utils;
 
 import com.ibm.ws.sib.admin.DestinationDefinition;

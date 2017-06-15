@@ -1,34 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.15.1.2 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/ServerLinkLevelState.java, SIB.comms, WASX.SIB, aa1225.01 09/04/06 08:17:59 [7/2/12 05:59:34]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-I63, 5724-H88, 5655-N02, 5733-W70  (C) Copyright IBM Corp. 2003, 2006 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2003, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * CORE API 0.6 Implementation
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030725 mattheg  Original
- * D173761         030807 Niall    Add store of type of connection initiator
- * F173772         030807 prestona Implement Clone Connection in JFAP Channel
- * D174684         030820 Niall    Change location of CatHandshakeGroup
- * f174317         030827 mattheg  Add support for local transactions
- * f176954         030918 mattheg  Change location of the handshake properties
- * D297060         050821 prestona IdToTransactionTable memory leak
- * D354565         060320 prestona ClassCastException thrown during failover
- * PK83641         310309 ajw      Rename to ServerLinkLevelState and implement reset() 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server;
 
 import com.ibm.ws.sib.comms.server.clientsupport.*;

@@ -1,53 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 161403           200303 tevans   Original - merge Synch and Asynch
- * 162915           080403 tevans   Make the Core API code look like the model
- * 163636           160403 tevans   Upgrade to 0.4 model
- * 166828           060603 tevans   Core MP rewrite
- * 169892           170603 tevans   Fix various defects with the core rewrite
- * 169897.0         240603 jroots   Updates for Milestone 3 Core API
- * 171362           100703 jroots   Add SIStoreException to unlock* methods
- * 173765.0         210803 jroots   Added unrecoverableReliability parameter
- * 173765.0         030903 jroots   Clarification that close unlocks locked msgs
- * 181796.0         041103 jroots   Move to com.ibm.wsspi
- * 179505.1         171103 jroots   Clarification of Javadoc w.r.t. discriminators
- * 179339.0         211203 jroots   Forward/reverse routing paths
- * 187521           200104 dware    Move unrecoverableReliability to createConsumerSession
- * 184162           060204 mcobbett Added dest. locked exception to rcv calls
- * 192759           090304 jroots   Milestone 7 Core SPI changes
- * 195758.0         050404 jroots   Milestone 7.5 Core SPI changes
- * 176658.4.2       260404 jroots   Changes for multi-threading mediations
- * 201972.0         050704 jroots   Core SPI Exceptions rewrite
- * 223986           170804 gatfora  Removal of SIErrorExceptions from method throws declarations
- * 199140           180804 gatfora  Cleanup javadoc
- * 219476.0         240804 jroots   Consolidated Z3 Core SPI changes
- * 251799           250405 rjnorris Added javadoc to deregisterAsynchConsumerCallback
- * 276259           130505 dware    Improve security related javadoc
- * 295746           260106 gatfora  Max active messages only take effect when bifuracatable
- * 413262           020307 vaughton Correct javdoc
- * SIB0115.core.1   250407 ajw      Support pausing/resuming messaging endpoints
- * 467999           141107 dware    Improve javadoc
- * SIB0115.core.2   280108 dware    Add delay property to stoppable callback method
- * 569303           181208 dware    Fix javadoc for V7 common criteria
- * F013661          200412 chetbhat unlockAll(incrementUnlockCount) support
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.wsspi.sib.core;
 
