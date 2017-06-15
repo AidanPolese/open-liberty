@@ -1148,11 +1148,13 @@ public class WebAppRequestDispatcher implements RequestDispatcher, WebContainerC
                 if (reqState!=null&&reqState.getAttribute("com.ibm.ws.webcontainer.invokeListenerRequest") != null)
                     reqState.removeAttribute("com.ibm.ws.webcontainer.invokeListenerRequest");
 
-                firedServletRequestCreated = webapp.notifyServletRequestCreated (request);
-                //firedServletRequestCreated = true;
-                if (firedServletRequestCreated && com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&& logger.isLoggable (Level.FINE))
-                    logger.logp(Level.FINE, CLASS_NAME, "forward" , "Listener request created --> "+ firedServletRequestCreated);
-                //PK91120 End
+                if (!webapp.getWebAppConfig().isJCDIEnabled()){
+                    firedServletRequestCreated = webapp.notifyServletRequestCreated (request);
+                    //firedServletRequestCreated = true;
+                    if (firedServletRequestCreated && com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&& logger.isLoggable (Level.FINE))
+                        logger.logp(Level.FINE, CLASS_NAME, "dispatch" , "Listener request created --> "+ firedServletRequestCreated);
+                    //PK91120 End
+                }
             }
 
             dispatchContext.initForNextDispatch(wasReq);
