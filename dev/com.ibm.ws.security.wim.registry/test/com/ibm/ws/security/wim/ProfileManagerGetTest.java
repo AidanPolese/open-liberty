@@ -46,8 +46,6 @@ import test.common.SharedOutputManager;
 
 /**
  * This class tests the ProfileManager get call.
- *
- * @author Rohan Z
  */
 public class ProfileManagerGetTest {
 

@@ -49,8 +49,6 @@ import test.common.SharedOutputManager;
 /**
  * This class tests the ProfileManager search call. It does not test the paging functionality.
  * TODO:: Add paging related test cases.
- *
- * @author Rohan Z
  */
 public class ProfileManagerSearchTest {
     private static final SharedOutputManager outputMgr = SharedOutputManager.getInstance();

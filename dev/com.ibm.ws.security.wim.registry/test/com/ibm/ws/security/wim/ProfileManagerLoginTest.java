@@ -44,8 +44,6 @@ import test.common.SharedOutputManager;
  *
  * TODO:: Certificate Login related test cases
  * TODO:: Multiple Principal Found related test cases
- *
- * @author Rohan Z
  */
 public class ProfileManagerLoginTest {
     private static final SharedOutputManager outputMgr = SharedOutputManager.getInstance();
