@@ -342,6 +342,65 @@ public class WIMTraceHelper {
         return result.toString();
     }
 
+    public static String printPrimitiveArray(Object obj) {
+        if (obj == null)
+            return null;
+
+        Object[] oArray = null;
+
+        if (obj instanceof byte[]) {
+            byte[] pArray = (byte[]) obj;
+            oArray = new Byte[pArray.length];
+            for (int idx = 0; idx < pArray.length; idx++) {
+                oArray[idx] = pArray[idx];
+            }
+        } else if (obj instanceof char[]) {
+            char[] pArray = (char[]) obj;
+            oArray = new Character[pArray.length];
+            for (int idx = 0; idx < pArray.length; idx++) {
+                oArray[idx] = pArray[idx];
+            }
+        } else if (obj instanceof double[]) {
+            double[] pArray = (double[]) obj;
+            oArray = new Double[pArray.length];
+            for (int idx = 0; idx < pArray.length; idx++) {
+                oArray[idx] = pArray[idx];
+            }
+        } else if (obj instanceof float[]) {
+            float[] pArray = (float[]) obj;
+            oArray = new Float[pArray.length];
+            for (int idx = 0; idx < pArray.length; idx++) {
+                oArray[idx] = pArray[idx];
+            }
+        } else if (obj instanceof int[]) {
+            int[] pArray = (int[]) obj;
+            oArray = new Integer[pArray.length];
+            for (int idx = 0; idx < pArray.length; idx++) {
+                oArray[idx] = pArray[idx];
+            }
+        } else if (obj instanceof short[]) {
+            short[] pArray = (short[]) obj;
+            oArray = new Short[pArray.length];
+            for (int idx = 0; idx < pArray.length; idx++) {
+                oArray[idx] = pArray[idx];
+            }
+        } else if (obj instanceof long[]) {
+            long[] pArray = (long[]) obj;
+            oArray = new Long[pArray.length];
+            for (int idx = 0; idx < pArray.length; idx++) {
+                oArray[idx] = pArray[idx];
+            }
+        } else if (obj instanceof boolean[]) {
+            boolean[] pArray = (boolean[]) obj;
+            oArray = new Boolean[pArray.length];
+            for (int idx = 0; idx < pArray.length; idx++) {
+                oArray[idx] = pArray[idx];
+            }
+        }
+
+        return printObjectArray(oArray);
+    }
+
     /**
      * Return a string format of the map. If any of the key is a password type field(contains "password") then
      * the value is masked.

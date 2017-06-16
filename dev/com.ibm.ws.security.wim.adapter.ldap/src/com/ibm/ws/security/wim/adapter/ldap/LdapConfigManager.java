@@ -545,8 +545,8 @@ public class LdapConfigManager {
             }
             strBuf.append("\r\nGroupMemberAttrs: ").append(iMbrAttrMap).append("memberAttrs: ").append(
                                                                                                        WIMTraceHelper.printObjectArray(iMbrAttrs)).append("scopes: ").append(
-                                                                                                                                                                             iMbrAttrScope[0]).append(
-                                                                                                                                                                                                      "\n");
+                                                                                                                                                                             WIMTraceHelper.printPrimitiveArray(iMbrAttrScope)).append(
+                                                                                                                                                                                                                                       "\n");
             strBuf.append("GroupMemberFilter: ").append(iGrpMbrFilter).append("\n");
             strBuf.append("GroupDynaMemberAttrs: ").append(iDynaMbrAttrMap).append("\n");
             strBuf.append("DynaGroupFilter: ").append(iDynaGrpFilter).append("\n");
