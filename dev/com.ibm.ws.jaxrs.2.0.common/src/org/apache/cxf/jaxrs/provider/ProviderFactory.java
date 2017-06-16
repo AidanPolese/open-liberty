@@ -331,10 +331,10 @@ public abstract class ProviderFactory {
     public <T> ContextResolver<T> createContextResolver(Type contextType,
                                                         Message m) {
         boolean isRequestor = MessageUtils.isRequestor(m);
-        Message requestMessage = isRequestor ? m.getExchange().getOutMessage() 
+        Message requestMessage = isRequestor ? m.getExchange().getOutMessage()
                                              : m.getExchange().getInMessage();
 
-        Message responseMessage = isRequestor ? m.getExchange().getInMessage() 
+        Message responseMessage = isRequestor ? m.getExchange().getInMessage()
                                               : m.getExchange().getOutMessage();
         Object ctProperty = null;
         if (responseMessage != null) {
@@ -663,7 +663,7 @@ public abstract class ProviderFactory {
         }
 
         boolean checkAll = providerCache != null && providerCache.isCheckAllCandidates();
-        List<ProviderInfo<MessageBodyReader<?>>> allCandidates = 
+        List<ProviderInfo<MessageBodyReader<?>>> allCandidates =
             checkAll ? new LinkedList<ProviderInfo<MessageBodyReader<?>>>() : null;
 
         MessageBodyReader<T> selectedReader = null;
@@ -713,7 +713,7 @@ public abstract class ProviderFactory {
 
         // The cache, if enabled, may have been configured to keep the top candidate only
         boolean checkAll = providerCache != null && providerCache.isCheckAllCandidates();
-        List<ProviderInfo<MessageBodyWriter<?>>> allCandidates = 
+        List<ProviderInfo<MessageBodyWriter<?>>> allCandidates =
             checkAll ? new LinkedList<ProviderInfo<MessageBodyWriter<?>>>() : null;
 
         MessageBodyWriter<T> selectedWriter = null;
@@ -774,9 +774,9 @@ public abstract class ProviderFactory {
 
     @SuppressWarnings("unchecked")
     protected void setCommonProviders(List<ProviderInfo<? extends Object>> theProviders) {
-        List<ProviderInfo<ReaderInterceptor>> readInts = 
+        List<ProviderInfo<ReaderInterceptor>> readInts =
             new LinkedList<ProviderInfo<ReaderInterceptor>>();
-        List<ProviderInfo<WriterInterceptor>> writeInts = 
+        List<ProviderInfo<WriterInterceptor>> writeInts =
             new LinkedList<ProviderInfo<WriterInterceptor>>();
         for (ProviderInfo<? extends Object> provider : theProviders) {
             Class<?> providerCls = ClassHelper.getRealClass(bus, provider.getProvider());
@@ -928,12 +928,12 @@ public abstract class ProviderFactory {
         Type type = ((ParameterizedType)providerComparator.getClass()
             .getGenericInterfaces()[0]).getActualTypeArguments()[0];
         if (type == Object.class) {
-            theProviderComparator = 
-                (Comparator<?>)(new ProviderInfoClassComparator((Comparator<Object>)theProviderComparator));
+            theProviderComparator =
+                (new ProviderInfoClassComparator((Comparator<Object>)theProviderComparator));
         }
         List<T> theProviders = (List<T>) listOfProviders;
         Comparator<? super T> theComparator = (Comparator<? super T>) theProviderComparator;
-        Collections.sort((List<T>)theProviders, theComparator);
+        Collections.sort(theProviders, theComparator);
     }
 
     private void sortContextResolvers() {
@@ -964,7 +964,7 @@ public abstract class ProviderFactory {
         MessageBodyReader<?> ep = pi.getProvider();
         List<MediaType> supportedMediaTypes = JAXRSUtils.getProviderConsumeTypes(ep);
 
-        List<MediaType> availableMimeTypes = 
+        List<MediaType> availableMimeTypes =
             JAXRSUtils.intersectMimeTypes(Collections.singletonList(mediaType), supportedMediaTypes, false);
 
         return availableMimeTypes.size() != 0;
@@ -1007,7 +1007,7 @@ public abstract class ProviderFactory {
         MessageBodyWriter<?> ep = pi.getProvider();
         List<MediaType> supportedMediaTypes = JAXRSUtils.getProviderProduceTypes(ep);
 
-        List<MediaType> availableMimeTypes = 
+        List<MediaType> availableMimeTypes =
             JAXRSUtils.intersectMimeTypes(Collections.singletonList(mediaType),
                                                                            supportedMediaTypes, false);
 
@@ -1103,9 +1103,9 @@ public abstract class ProviderFactory {
                 return result;
             }
             List<MediaType> types1 =
-                JAXRSUtils.sortMediaTypes(JAXRSUtils.getProviderProduceTypes(e1), JAXRSUtils.MEDIA_TYPE_QS_PARAM);
+                            JAXRSUtils.sortMediaTypes(getProviderProduceTypes(e1, cache), JAXRSUtils.MEDIA_TYPE_QS_PARAM);
             List<MediaType> types2 =
-                JAXRSUtils.sortMediaTypes(JAXRSUtils.getProviderProduceTypes(e2), JAXRSUtils.MEDIA_TYPE_QS_PARAM);
+                            JAXRSUtils.sortMediaTypes(getProviderProduceTypes(e2, cache), JAXRSUtils.MEDIA_TYPE_QS_PARAM);
 
             result = JAXRSUtils.compareSortedMediaTypes(types1, types2, JAXRSUtils.MEDIA_TYPE_QS_PARAM);
             if (result != 0) {
@@ -1127,7 +1127,7 @@ public abstract class ProviderFactory {
         return result;
     }
 
-    private static class ContextResolverComparator 
+    private static class ContextResolverComparator
         implements Comparator<ProviderInfo<ContextResolver<?>>> {
         @Override
         public int compare(ProviderInfo<ContextResolver<?>> p1,
@@ -1206,7 +1206,7 @@ public abstract class ProviderFactory {
         }
         names = names == null ? Collections.<String> emptySet() : names;
 
-        MultivaluedMap<ProviderInfo<T>, String> map = 
+        MultivaluedMap<ProviderInfo<T>, String> map =
             new MetadataMap<ProviderInfo<T>, String>();
         for (Map.Entry<NameKey, ProviderInfo<T>> entry : boundFilters.entrySet()) {
             String entryName = entry.getKey().getName();
@@ -1251,7 +1251,7 @@ public abstract class ProviderFactory {
         return set;
     }
 
-    public static class ClassComparator implements 
+    public static class ClassComparator implements
         Comparator<Object> {
         private Class<?> expectedCls;
         public ClassComparator() {
@@ -1426,8 +1426,8 @@ public abstract class ProviderFactory {
                                                                                boolean checkContexts,
                                                                                boolean custom) {
 
-        
-        Map<Class<?>, Map<Class<?>, ThreadLocalProxy<?>>> proxiesMap = 
+
+        Map<Class<?>, Map<Class<?>, ThreadLocalProxy<?>>> proxiesMap =
             CastUtils.cast((Map<?, ?>)theBus.getProperty(AbstractResourceInfo.CONSTRUCTOR_PROXY_MAP));
         Map<Class<?>, ThreadLocalProxy<?>> existingProxies = null;
         if (proxiesMap != null) {
@@ -1449,7 +1449,7 @@ public abstract class ProviderFactory {
             throw new RuntimeException("Resource or provider class " + c.getDeclaringClass().getName()
                                        + " can not be instantiated");
         }
-        Map<Class<?>, ThreadLocalProxy<?>> proxies = 
+        Map<Class<?>, ThreadLocalProxy<?>> proxies =
             new LinkedHashMap<Class<?>, ThreadLocalProxy<?>>();
         for (int i = 0; i < paramTypes.length; i++) {
             if (cArgs[i] instanceof ThreadLocalProxy) {
@@ -1594,7 +1594,7 @@ public abstract class ProviderFactory {
                                                                     boolean busGlobal,
                                                                     Object[] providers,
                                                                     ProviderInfo<Application> application) {
-        List<ProviderInfo<? extends Object>> theProviders = 
+        List<ProviderInfo<? extends Object>> theProviders =
             new ArrayList<ProviderInfo<? extends Object>>(providers.length);
         @SuppressWarnings("unchecked")
         Map<String, Object> beanCustomizerContexts = (Map<String, Object>) getBus().getProperty(JaxRsConstants.ENDPOINT_BEANCUSTOMIZER_CONTEXTOBJ);
