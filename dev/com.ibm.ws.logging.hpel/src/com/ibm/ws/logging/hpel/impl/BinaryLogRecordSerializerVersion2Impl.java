@@ -1,25 +1,13 @@
-//%Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009, 2012
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason           Version        Date       User id     Description
- * ----------------------------------------------------------------------------
- * F001340-15950.1    8.0        09/04/2009   belyi       Initial HPEL code
- * 635993             8.0        01/26/2010   belyi       Ensure internal sequence number is parsed in deserializeLogTime() 
- * 637774             8.0        02/05/2010   belyi       Don't store special extensions with other extensions
- * 646477             8.0        04/03/2010   belyi       Always store message locale, store Locale.getDefault() if it's 'null' for a record.
- * 650188             8.0        04/28/2010   spaungam    msgID needs to be based on localized message
- * F017049-27489      8.0        06/15/2010   belyi       Use HpelHelper in place of the removed FormatHelper
- * 663081             8.0        09/09/2010   belyi       Remove LogRecord and WsLogRecord specific methods.
- * 740343             8.5        10/10/2012   belyi       Refactor into new class supporting smaller HPEL format.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.logging.hpel.impl;
 
 import java.io.DataInput;

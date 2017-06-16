@@ -1,29 +1,14 @@
 package com.ibm.ws.sib.msgstore.transactions.impl;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason        Date     Origin       Description
- * ------------- -------- ------------ ------------------------------------------
- * 168081        01/09/03  gareth      GlobalTransaction Support (Local Clients)
- * 181930        12/11/03  gareth      XA Recovery Support
- * 188054.1      16/03/04  gareth      Enhanced JDBC Exception handling
- * 229486        07/05/04  gareth      Improve javadoc
- * PM31431       02/02/11  slaterpa    Prevent unresolved indoubts
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
                            
 import com.ibm.ws.sib.msgstore.*;
 

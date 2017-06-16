@@ -1,41 +1,14 @@
 package com.ibm.ws.Transaction.JTA;
-/* ************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                           */
-/*                                                                            */
-/*  ORIGINS: 27                                                               */
-/*                                                                            */
-/* IBM Confidential OCO Source Material                                       */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 2001, 2013 */
-/* The source code for this program is not published or otherwise divested    */
-/* of its trade secrets, irrespective of what has been deposited with the     */
-/* U.S. Copyright Office.                                                     */
-/*                                                                            */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                              */
-/*                                                                            */
-/*  DESCRIPTION:                                                              */
-/*                                                                            */
-/*                                                                            */
-/*==========================================================================  */
-/*                                                                            */
-/* Change History:                                                            */
-/*                                                                            */
-/* Date     Programmer  D/F            Description                            */
-/* -------- ---------   -----          --------------------------------       */
-/* 27-02-02 beavenj     LIDB1220.151.1 Code instrumented for FFDC work        */
-/* 12-04-02 dmatthew    d118273        Add Heuristic info to activity log     */
-/* 05/09/02 gareth      ------         Move to JTA implementation             */
-/* 09/10/02 hursdlg     1453           Use GlobalTID rather than otid         */
-/* 14/10/02 hursdlg     1454           Remove incorrect printState method     */
-/* 21/11/02 awilkins    1507           JTS -> JTA. Thread local restructuring */
-/* 04/12/02 hursdlg     1518           Remove unused methods                  */
-/* 21/02/03 gareth      LIDB1673.19    Make any unextended code final         */
-/* 21/12/03 hursdlg     LIDB2775-53    Add ws390 support functions            */
-/* 04/02/04 hursdlg     189567         Fix printFlag                          */
-/* 16/08/07 johawkes    451213         Stole stuff from WAS to reduce JTM footprint */
-/* 28/10/07 hursdlg     472672         Convert double byte to string function */
-/* 17/07/08 johawkes    536926         Remove JET dependency on org.omg       */
-/* 10/08/13 slaterpa    752004         TRANSUMMARY trace                      */
-/* ************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2001, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

@@ -1,93 +1,15 @@
 package com.ibm.tx.jta.impl;
 
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70(C) COPYRIGHT International Business Machines Corp. 1997, 2013 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer        Defect    Description                                                    */
-/*  --------  ----------        ------    -----------                                                    */
-/*  02-02-06  awilkins          115601-2  extend WSResourceImplBase                                      */
-/*  02-02-07  hursdlg           111021    reduce log record size                                         */
-/*  25/02/02  beavenj           LI1436.01 RAS Updates                                                    */
-/*  02-02-25  hursdlg           111021.1  log resource recovery data                                     */
-/*  27-02-02  beavenj           LIDB1220.151.1 Code instrumented for FFDC work                           */
-/*  02-02-28  hursdlg           LI1169.1  trace recovery actions                                         */
-/*  04-03-02  beavenj           LIDB1220.151 Add state access methods                                    */
-/*  18-03-02  mallam            116917     Improve diagnostics for XAException                           */
-/*  02-05-08  awilkins          126224    Unreg res after RMFAIL from rollback                           */
-/*  02-05-13  awilkins          126658    Don't log until prepare time                                   */
-/*  02-05-27  awilkins          131059    Improve XAException handling                                   */
-/*  02-07-02  hursdlg           137510    Correct XAException from reconnect                             */
-/*  05/09/02   gareth           ------    Move to JTA implementation                                     */
-/*  23/09/02  hursdlg           ------    Partner log support                                            */
-/*  11/10/02  awilkins          1452      XAException handling                                           */
-/*  14/10/02  hursdlg           1454      XAException handling                                           */
-/*  18/10/02  hursdlg           1433      Exception from getXAResource fix                               */
-/*  25/11/02  awilkins          1513      Repackage ejs.jts -> ws.Transaction                            */
-/*  27/01/03  hursdlg        LIDB1673.9.1 XARecoveryData changes                                         */
-/*  21/02/03  gareth         LIDB1673.19  Make any unextended code final                                 */
-/*  14/04/03  hursdlg          163130     Correct message                                                */
-/*  22/04/03  hursdlg          163130     Throw non-RB exception on prepare                              */
-/*  30/06/03  hursdlg          170434     Log partner XA data at enlist time                             */
-/*  15/07/03   mallam       171151    Rollback using TMSUCCESS (TMFAIL on t/o)                           */
-/*  13/08/03  hursdlg       174113    Reorder recovery                                                   */
-/*  28/08/03  johawkes      174516    Distribute all ends before prepares                                */
-/*  15/09/03  hursdlg       176247    XAResourceManager only used in recovery                            */
-/*  18/09/03  hursdlg       177194    Migrate to 8 byte recovery ids                                     */
-/*  18/09/03  johawkes      169114    Improve diags for prep/cmplt XA errors                             */
-/*  20/11/03  johawkes      182862    Remove static partner log dependencies                             */
-/*  30/12/03  hursdlg       LIDB2775  Utility functions                                                  */
-/*  07/01/04  johawkes      LIDB2110  RA Uninstall                                                       */
-/*  10/02/04  hursdlg       190239    Update JTAResource states                                          */
-/*  10/02/04  hursdlg       LIDB2775  Use zOS bqual format                                               */
-/*  04/03/04  johawkes      191316    Log resources when setting LPS state                               */
-/*  25/03/04  hursdlg       196258    Make recovery get new connection                                   */
-/*  31/03/04  johawkes      196310    Handle null from getXAResource()                                   */
-/*  04/04/04  johawkes      196588    Set recovery classloader on thread                                 */
-/*  13/04/04  beavenj       LIDB1578.1 Initial supprort for ha-recovery                                  */
-/*  19/04/04  johawkes      193919.1  New methods for adminconsole                                       */
-/*  22/04/04  awilkins      198904.1  getXid changes                                                     */
-/*  22/04/04  hursdlg       199500    Remove excess debugging                                            */
-/*  22/04/04  beavenj       LIDB1578.4 Early logging support for CScopes                                 */
-/*  21/05/04  beavenj       LIDB1578.7 FFDC                                                              */
-/*  27/05/04  johawkes      204546    Add getXAResourceInfo() method                                     */
-/*  28/05/04  johawkes      204553    Check for null resource on forget()                                */
-/*  15/06/04  johawkes      209345    Remove unnecessary code                                            */
-/*  25/06/04  johawkes      199785    Fix partner log corruption on shutdown                             */
-/*  01/07/04  hursdlg       213889    Interface changes                                                  */
-/*  19/08/04  johawkes      224215    Detect uninstalled providers better                                */
-/*  20/09/04  hursdlg       233078    Log more information                                               */
-/*  14/06/05  hursdlg       283253    Componentization changes for recovery/retry                        */
-/*  06/01/06  johawkes      306998.12 Use TraceComponent.isAnyTracingEnabled()                           */
-/*  24/11/06  johawkes      396115    Fix inefficient error path on XAER_RMFAIL                          */
-/*  01/05/07  johawkes      434414    Remove WAS dependencies                                            */
-/*  09/05/07  hursdlg       419307    Reconnect resource after failure before issuing forget             */
-/*  30/05/07  hursdlg       396035    Set vote on recovery and set RCs for FFDC                          */
-/*  05/06/07  johawkes      443467    Move XAResourceInfo                                                */
-/*  20/06/07  hursdlg       LI3968-1.2 Resource commit priority                                          */
-/*  13/07/07  hursdlg       451941    Set priority for lastInCommitPhase cases                           */
-/*  16/08/07  johawkes      451213    Move LPS back into JTM                                             */
-/*  28/01/08  kaczyns       493829    Stop logging recovery ID in z/OS XID bqual                         */
-/*  17/07/08  johawkes      536926    Remove JET dependencies on org.omg classes                         */
-/*  02/06/09  mallam        596067    package move                                                       */
-/*  09/06/09  brailsfo      PK87126   Handle exception in reconnectRM                                    */
-/*  17/03/10  hursdlg       PM07874   Audit recovery information                                         */
-/*  09/06/10  hursdlg       656080    Revisit PK87126 exception handling                                 */
-/*  10/08/13  slaterpa      752004    TRANSUMMARY trace                                                  */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 1997, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.Serializable;
 

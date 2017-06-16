@@ -1,34 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * SIB0002.mp.1     210605 tevans   PEV Prototype
- * SIB0002.tran.2   050805 tevans   New Transactions interfaces
- * 355323           220306 tevans   RMQSessionDroppedException handling
- * 358344           280306 tpm      Comments for new exception handling
- * 409469           281206 tevans   Refactor LME
- * SIB0115.mp.1     260407 ajw      Support pausing/resuming of a messaging endpoint
- * SIB0163.mp.4     081107 nyoung   Support the driving of Message Events.
- * SIB0115.mp.3     290108 dware    Add hiddenMesasgeDelay to stoppable callback registration
- * 496144           180608 cwilkin  Forward port PK58940
- * PK73713          161008 ajw      Allow messageset to be unlocked and not increased lock count
- * F013661          200412 chetbhat unlockAll(incrementUnlockCount) support
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl.interfaces;
 
 import com.ibm.websphere.sib.Reliability;

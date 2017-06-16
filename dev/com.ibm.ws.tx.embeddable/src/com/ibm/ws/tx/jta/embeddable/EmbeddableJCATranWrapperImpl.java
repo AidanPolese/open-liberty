@@ -1,31 +1,15 @@
 package com.ibm.ws.tx.jta.embeddable;
 
-//
-// COMPONENT_NAME: WAS.transactions
-//
-// ORIGINS: 27
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2007, 2009
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// %Z% %I% %W% %G% %U% [%H% %T%]
-//
-// DESCRIPTION:
-//
-// Change History:
-//
-// Date      Programmer    Defect   Description
-// --------  ----------    ------   -----------
-// 07/08/01  johawkes      451213.1 Creation
-// 07/08/30  johawkes      463313   Override TransactionImpl creation in WAS
-// 07/09/03  awilkins      464243   Fix ClassCastException in suspend
-// 08/02/15  kaczyns       512190   Handle SystemException on begin
-// 09/06/15  mallam        596067   package moves
-// 11/11/24  johawkes      723423   Repackaging tx.embeddable
-
+/*******************************************************************************
+ * Copyright (c) 2007, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 import javax.transaction.Transaction;
 import javax.transaction.xa.Xid;
 

@@ -1,28 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2007
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//CHANGE HISTORY
-//Defect        Date        Modified By         Description
-//--------------------------------------------------------------------------------------
-//PK07351       07/27/05    todkap              6021Request dispatcher could not be reused as it was in V5.  / changed constructor to not use WebAppDispatcherContext  
-//299508        08/22/05    todkap              onServletStartService should be before onFilterStartDoFilter    WAS.webcontainer
-//302134        08/30/05    mmolden             Create WebContainerConstants wsspi class so we can expose to RRD
-//310092        10/05/05    mmolden             61FVT:RequestDispatcher doesnt retain parameters:second include
-//PK17095       01/04/06    todkap              WEBAPPDISPATCHERCONTEXT CORRUPTION DUE TO MULTITHREAD USAGE OF    WAS.webcontainer
-//306998.15     01/09/06    ekoonce             PERF: WAS tracing performance improvement
-//PK19888       03/20/06.   mmolden             Set the resolved relative uri on dispatcherContext in include() and forward(). 
-//PK34536       04/26/07.   ekoonce             500 ERROR AND NULL POINTER EXCEPTION DURING INCLUDE() PROCESSING
-//LIDB3518-1.1  06-23-07    mmolden             ARD
-// 461383       09/28/07    mmolden             70FVT: Async should still work when ARD is disabled  
-// 489973       12/31/07    mmolden             70FVT:ServletRequestListener not firing when registered in tld
-// 569469       03/25/09    pmdinh              Improve trace
-// PM22919      09/29/10    pmdinh              Rethrow exception back to the dispatch caller when JSP fails to compile at runtime (enhancement fix for PK79464)
-// F011107      05/18/11    pmdinh              FIS: not "always" trigger login process for URL that contains j_security_check
-// PI67942      08/23/16    zaroman             Return encoded requestURI after dispatch
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.webapp;
 
 import java.io.IOException;
@@ -1163,11 +1148,13 @@ public class WebAppRequestDispatcher implements RequestDispatcher, WebContainerC
                 if (reqState!=null&&reqState.getAttribute("com.ibm.ws.webcontainer.invokeListenerRequest") != null)
                     reqState.removeAttribute("com.ibm.ws.webcontainer.invokeListenerRequest");
 
-                firedServletRequestCreated = webapp.notifyServletRequestCreated (request);
-                //firedServletRequestCreated = true;
-                if (firedServletRequestCreated && com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&& logger.isLoggable (Level.FINE))
-                    logger.logp(Level.FINE, CLASS_NAME, "forward" , "Listener request created --> "+ firedServletRequestCreated);
-                //PK91120 End
+                if (!webapp.getWebAppConfig().isJCDIEnabled()){
+                    firedServletRequestCreated = webapp.notifyServletRequestCreated (request);
+                    //firedServletRequestCreated = true;
+                    if (firedServletRequestCreated && com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled()&& logger.isLoggable (Level.FINE))
+                        logger.logp(Level.FINE, CLASS_NAME, "dispatch" , "Listener request created --> "+ firedServletRequestCreated);
+                    //PK91120 End
+                }
             }
 
             dispatchContext.initForNextDispatch(wasReq);

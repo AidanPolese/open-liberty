@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * -------         ------ -------- --------------------------------------------
- * 187000.4        040310 baldwint New remote durable message types
- * 207007.3        040610 baldwint Add selectorDomain attribute
- * 215177          040824 susana   Add get/setSecurityUserid
- * 231523          040915 susana   Add securityUseridSentBySystem
- * 259036.1        050315 kgoodson Add isLocal and isCloned
- * 504438.1        080327 susana   Add get/setDurableSelectorNamespaceMap to ControlCreateDurable
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.mfp.control;
 
 import java.util.Map;

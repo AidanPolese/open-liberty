@@ -1,27 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date        Origin   Description
- * --------------- ----------- -------- ----------------------------------------
- * f195758.0       05-Apr-2004 jroots   Milestone 7.5 Core SPI changes
- * f209436.0       22-Jun-2004 gatfora  Milestone 8+ Core SPI Changes
- * f219476.0       24-Aug-2004 gatfora  Consolidated Z3 Core SPI changes
- * d276637         16-May-2005 nottinga Added inquire type.
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
  
 package com.ibm.ws.sib.security.auth;
 

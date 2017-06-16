@@ -1,35 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// 1.14 SERV1/ws/code/ecutils/src/com/ibm/ws/threadContext/ComponentMetaDataAccessorImpl.java, WAS.ejbcontainer, WAS80.SERV1, h1116.09 5/20/10 09:50:40
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2001,2013
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  ComponentMetaDataAccessorImpl.java
-//
-// Source File Description:
-//
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-//LIDB1181.2.1 ASV     20011005 rajeshk  : new for Feature LI1181
-//LIDB549.20 ASV       20020222 jimvo    : Eliminate JavaNameSpaceAccessor dependency
-// d122727   ASV       20020325 kjlaw    : use DefaultComponentMetaData object
-//                                         as initial value for ThreadContext.
-// p125735   ASV50     20020416 jimvo    : provide begin and end context methods as
-//                                         a precusor to removing getThreadContext
-// d143991   ASV50     20020827 leealber : Tr.Misuse fix-up
-// LIDB3133-8  WASX    20030507 rschnier : Added ibm-private tag
-// 206479    WASX      20040601 cheng1   : Added getComponentMetaDataIndex()
-// LI3795-56 WAS61     20050815 tkb      : Perf: Make class final
-// d306998.5 WAS61     20060110 tkb      : PERF: improve trace performance
-// d646139.1 WAS80     20100519 bkail    : Generify ThreadContext
-// --------- --------- -------- --------- -------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2001, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.threadContext;
 
 //import com.ibm.ejs.csi.DefaultComponentMetaData; //122727

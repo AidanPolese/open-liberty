@@ -1,64 +1,13 @@
-/**
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012,2014
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * -------------   ------    -------- ----------------------------------------
- * 169626.5        18-Jul-03 dcurrie  Creation 
- * 169626.6        21-Jul-03 pnickoll Updated test due to use properties on 
- *                                    core connection
- * 169626.6        21-Jul-03 dcurrie  Implemented cloneConnection and isEquivalent
- * 174369.1        11-Sep-03 dcurrie  Create ConsumerSession
- * 173765.6        25-Sep-03 djhoward Add additional inherited methods 
- *                                    based on 173765 core changes.
- * 174369.8        07-Oct-03 djhoward Remove APILevel call as part of unit testing
- * 174369.10       21-Oct-03 djhoward Continue MDB testing, getSIXAResource now 
- *                                    returns a new SIXAResourceStub instance.
- * 181796.6        05-Nov-03 djhoward Core SPI move to com.ibm.wsspi.sib.core
- * 184117          28-Nov-03 pnickoll Added the getDestinationConfiguration method
- *                                    from the SICoreConnection interface
- * 186193          23-Dec-03 dcurrie  Added new SICoreConnection methods
- * 182639          20-Jan-04 dcurrie  Added getMeUuid
- * 188161          23-Jan-04 dcurrie  Add new methods with Reliability
- * 188358          26-Jan-04 sambo    The unrecoverableReliability parameter has been moved
- * 190483          12-Feb-04 dcurrie  Added new createConsumerSession method
- * 192759.4        12-Mar-04 djhoward Added new methods from interface
- * 192759.7        15-Mar-04 djhoward Updated new methods to return stub objects
- * 188050.2        05-Apr-04 dcurrie  Add Synchronization support
- * 195758.4        08-Apr-04 pnickoll Updated with new interface
- * 199336          20-Apr-04 pnickoll Updated with new interface (removed getDestinationConfiguration method)
- * 199220          20-Apr-04 pnickoll Removed methods that are no longer in the interface and corrected javadoc
- * 192474.1        20-Apr-04 pnickoll Removed extra methods methods
- * 193585.3.4      28-Apr-04 pnickoll Change DestinationFilter's back to use DestinationType's instead
- * 184312.4.3      28-Apr-04 pnickoll Add method sendToExceptionDestination
- * 201476.3        06-May-04 pnickoll Changed sendToExceptionDestination signature
- * 209436.3        22-Jun-04 pnickoll Milestone 8 Core SPI updates
- * 201972.4        28-Jul-04 pnickoll Update core SPI exceptions
- * 219476.4        31-Aug-04 dcurrie  Z3 core SPI updates
- * LIDB3684.11.1.4 30-Mar-05 pnickoll Added checkMessagingRequired method
- * SIB0009.ra.01   17-Aug-05 pnickoll Added invokeCommand
- * 313337.2        20-Oct-05 pnickoll Added overridden createUncoordinatedTransaction method
- * 352706          06-Mar-06 ajw      Added new createConsumerSession method
- * 377093.3        12-Jul-06 pnickoll Added new overridden invokeCommand method 
- * SIB0137.ut.1    23-May-07 nyoung   addDestinationListener promoted to Core SPI       
- * SIB0113.ra.1    26-Sep-07 jamessid SICoreConnection interface has changed; updating stub accordingly
- * SIB0163.ra.1    29-Oct-07 nyoung   Add new parameter on createConsumerSession for Message Control
- * PM39926         31-May-11 anil5498 Provide mechanism to force close connection and avoid resetting (during connection destroy)
- * F011127            280611 chetbhat registerConsumerSetMonitor support
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.api.jmsra.stubs;
 

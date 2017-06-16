@@ -1,26 +1,13 @@
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * @(#) 1.12 SERV1/ws/code/security.crypto/src/com/ibm/ws/ssl/core/WSPKCSInKeyStore.java, WAS.security.crypto, WASX.SERV1, pp0919.25 8/26/08 11:14:43 [5/15/09 18:04:35]
- *
- * Date         Defect        CMVC ID    Description
- *
- * 08/19/05     LIDB3557-1.1  pbirk      3557 Initial Code Drop
- * 09/30/05     LIDB3919-23.1 aruna      method to return HW crypto provider instance
- * 10/07/05     LIDB3919-23.2 aruna      changes to support HW crypto provider instance pooling
- * 10/27/05     313879        aruna      use hardware crypto config file
- * 12/06/05     328799        aruna      keystore.load() change
- * 01/20/06     324958.4      aruna      changes to support pure acceleration
- * 04/25/06     360534        aruna      add IBMPKCSImpl provider before IBMJCE for jsse to work with hardware crypto keystores
- * 05/10/06     366197        aruna      undo the above change as it effects other crypto code
- * 11/10/07     477704        mcasile    New FFDC API
- * 08/26/08     525695        acree      changes for ibmpkcs11's new multithreading model in JVM 6.0
- *
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.ssl.core;
 
 import java.io.BufferedReader;

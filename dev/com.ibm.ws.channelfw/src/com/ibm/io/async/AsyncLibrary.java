@@ -1,38 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2005, 2007
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 08/31/05 gilgen      LIDB3618-2      M2/M3 drops 
-// 09/01/05 gilgen      302453          M3 code updates
-// 09/07/05 gilgen      303495          Add JIT support for ByteBuffers
-// 09/15/05 wigger      302453          Add error code/text method
-// 09/22/05 gilgen      307313          Code cleanup/improvements
-// 10/04/05 wigger      308856          Add doPriv block where needed.
-// 10/02/05 gilgen      308856.1        Code review comments
-// 10/04/05 wigger      314555          getInstance calls createInstance if necessary
-// 10/26/05 gilgen      317392          improve tracing
-// 12/07/05 wigger      329877          print error code with possible error string
-// 01/04/06 wigger      335589          complete cancel when requested
-// 01/10/06 wigger      306998.3        use isAnyTracingEnabled
-// 01/20/06 amra        335761          i5/OS must load library via load()
-// 03/13/06 wigger      351108          process multiple reads/writes from native code
-// 03/17/06 gilgen      354308          use privileged thread to load native lib
-// 03/23/06 gilgen      354542          add trace to show name of native library loaded
-// 04/12/06 gilgen      363238          let using app control AIO library shutdown
-// 07/10/06 wigger      PK27301         remove use of thread interrupt logic
-// 10/02/06 wigger      PK31544         prevent shutdown during cancel2 and other methods
-// 03/06/07 wigger      422106          re-init AIO after shutdown if restarted
-// 06/01/07 wigger      442178          check validity of completion port before using       
-// 06/27/07 wigger      448505          pool completion keys for better performance
-// 09/10/07 gilgen      439025          use cached IOExceptions
-// 01/09/08 wigger      439110.4        don't call native init/termIOCB on unix platforms
-// 03/24/16 Ginnick     195204          Added z/OS hooks for AsyncIO
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.io.async;
 
 import java.io.IOException;

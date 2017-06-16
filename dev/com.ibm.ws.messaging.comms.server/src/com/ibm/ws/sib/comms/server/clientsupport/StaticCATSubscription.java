@@ -1,67 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.59 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/StaticCATSubscription.java, SIB.comms, WASX.SIB, aa1225.01 09/07/23 03:14:19 [7/2/12 05:59:01]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2009
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030722 mattheg  Original
- * f172297         030722 schmittm Final Core API 0.6 changes
- * f173559         030808 mattheg  Add check for invalid flags
- * F174602         030820 prestona Switch to using new SICommsException
- * f173765.2       030926 mattheg  Core API M4 update
- * f177889         030929 mattheg  Core API M4 completion
- * d179459         031010 mattheg  Ensure flag checking is correct
- * F183828         031204 prestona Update CF + TCP prereqs to MS 5.1 level
- * f179519.1       031210 mattheg  Add SIDestinationWrongTypeException handling
- * f181007         031211 mattheg  Add boolean 'exchange' flag
- * d187056         040115 mattheg  Add read ahead fix as per 181146
- * d186970         040116 mattheg  Overhaul the way we send exceptions to client
- * f187521.2.1     040126 mattheg  Unrecoverable reliability -- part 2
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * f191114         040218 mattheg  Multicast support
- * d175222         040219 mattheg  Ensure SICommsException is reported correctly and not sent to client
- * d187252         040302 mattheg  Ensure session destination information is only returned if it changes
- * d192293         040308 mattheg  NLS file changes
- * f192759.2       040311 mattheg  M7 Core SPI changes
- * d194950         040318 mattheg  Ensure Durable subscriptions work
- * f195758.2       040415 mattheg  M7.5 Core SPI updates
- * f200337         040428 mattheg  Message order context implemenation
- * f176658.4.2.2   040504 mattheg  deliverImmediately flag change
- * F195720.3       040616 prestona WAS Request Metrics in Jetstream
- * F207007.2       040617 mattheg  Core SPI Update of message selector parameters
- * F195720.3.1     040629 prestona WAS Request Metrics in Jetstream
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D210259.1       040819 mattheg  Move deserialization methods to CommsUtils
- * F219476.2       040906 prestona Z3 Core SPI changes
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D254870         050214 mattheg  Optimize connection close
- * D327083         051130 mattheg  Ensure we don't FFDC when durable subscription is not found
- * D342106         060130 mattheg  Don't FFDC on SINotAuthorisedException
- * D347591         060217 mattheg  Add support for exchanged starts
- * D350111.1       060302 mattheg  Use send listener for start()
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * D384259         060815 prestona Remove multicast support
- * D441183         072307 mleming  Don't FFDC when calling terminated ME
- * 471664          071003 vaughton Findbugs tidy up
- * 494335          080128 mleming  Flow localOnly information on the wire
- * 522463          080521 vaughton Incorrect consumer flags ffdc
- * 592503          090722 mleming  ObjectStoreFullException -> ConversationStateFullException
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import com.ibm.websphere.ras.TraceComponent;

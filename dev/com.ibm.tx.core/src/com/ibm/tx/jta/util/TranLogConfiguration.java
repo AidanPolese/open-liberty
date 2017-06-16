@@ -1,30 +1,15 @@
 package com.ibm.tx.jta.util;
 
-/* ************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                           */
-/*                                                                            */
-/*  ORIGINS: 27                                                               */
-/*                                                                            */
-/* IBM Confidential OCO Source Material                                       */
-/* 5639-D57, 5630-A36, 5630-A37, 5724-D18 (C) COPYRIGHT International Business Machines Corp. 2002, 2016 */
-/* The source code for this program is not published or otherwise divested    */
-/* of its trade secrets, irrespective of what has been deposited with the     */
-/* U.S. Copyright Office.                                                     */
-/*                                                                            */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                              */
-/*                                                                            */
-/*  DESCRIPTION:                                                              */
-/*                                                                            */
-/*  Change History:                                                           */
-/*                                                                            */
-/*  Date      Programmer    Defect     Description                            */
-/*  --------  ----------    ------     -----------                            */
-/*  13/04/04  beavenj       LIDB1578.1 Initial supprort for ha-recovery       */
-/*  06/06/07  johawkes      443467     Moved                                  */
-/*  02/06/09  mallam        596067     package move                           */
-/*  14/06/12  nyoung        735581     Support custom Transaction logging     */
-/*  26/04/16  dmatthew      PI61057    EmbeddedEJBContainer allow disable logs*/
-/* ************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2016 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.util.Properties;
 

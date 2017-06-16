@@ -1,57 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.44 SIB/ws/code/sib.jfapchannel.client.common.impl/src/com/ibm/ws/sib/jfapchannel/impl/OutboundConnection.java, SIB.comms, WASX.SIB, uu1215.01 11/09/22 03:41:21 [4/12/12 22:14:14]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2003, 2011
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030521 prestona Original
- * F171173         030707 prestona Add capacity reporting interfaces (class renamed)
- * F174772         030826 prestona Make JFAP Channel support close.
- * F175658         030902 prestona Add support for heartbeating.
- * F176003         030912 prestona Misc. JFAP Channel reliability fixes.
- * F177053         030917 prestona Rebase JFAP Channel on pre-M4 CF + TCP
- * D179183         031008 prestona Various deadlocks in comms
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * D181493         040206 prestona createQueueConnection is not thread safe.
- * F191566         040220 prestona Improve outbound connection tracking.
- * D196678.10.1    040525 prestona Insufficient chain data passed to TRM
- * D212672         040628 mattheg  Allow the connection data to be reset
- * D221433         040811 prestona Add handshakeFailed
- * D197042         040811 prestona FFDC entries
- * D199145         040812 prestona Fix Javadoc
- * D223637         040812 prestona Fix handshakeFailed
- * D224570         040818 prestona JFap trace needs improving
- * D226223         040823 prestona Uses new messages
- * D230746         040911 mayur    Get connection context
- * D320083         051103 mattheg  Improve error messages
- * D321398         051107 mattheg  Implement toString()
- * D363463         060421 prestona ME-ME heartbeat timeout
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * SIB0048b.com.4  060905 mattheg  Re-packaging into client / server
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * SIB0100.wmq.3   070813 mleming  Allow WMQRA to use TCP Proxy Bridge
- * D464663         070905 sibcopyr Automatic update of trace guards
- * 494863          080213 mleming  Prevent NPE if TCP/IP connection goes while establishing connection
- * 516687          080509 vaughton Add SIBJFapSummary trace group
- * 466186          080527 mleming  Provide more information for filtering on JFAPSUMMARY
- * 635295          100215 pbroad   Added connectionClosedByPeer method
- * PM44272         110921 slaterpa Prevent deadlock when handshake fails
- * 99283           220413 chetbhat Dynamic update of ssl feature leads to NPE
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.impl;
 
 import com.ibm.ejs.ras.TraceNLS;

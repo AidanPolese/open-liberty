@@ -1,44 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * LIDB2117        040818 vaughton Original
- * 229438          040906 matrober Password shown in trace
- * LIDB3818-56     210405 nottinga Updated for componentization
- * SIB0034.trm     050831 tmitchel Added Server Subject/OAT code.
- * sib0034.trm     090905 tmitchel Amend getOpaqueAuthorisationToken method.
- * 290290.3        051101 gelderd  Improved entry/exit trace for sib.trm.client.impl
- * 322231          051109 tmitchel Fixed CREDENTIAL_USER_SUBJECT code in constructor.
- * 321780          051110 nyoung   Support for cross server SIB Server Subject
- * 322231          051118 tmitchel Fixed CREDENTIAL_USER_SUBJECT code in constructor.
- * 364435          060425 nottinga Updated to use OAT for SIB server subject.
- * 374671          060628 nottinga Updated to send empty Subject as in 6.0.2.
- * 374671.1        060629 nottinga Updated to cope with null Subject.
- * 374671.3        060711 matrober SVT:CWSIA0004E on mixed release cluster
- * 377708          060713 matrober Suppress CNFE for AuthUtilsFactory
- * 379782          060815 matrober Non-vargs call of varargs method warning
- * 409598          061207 mnuttall Extend 377708 to underlying ClassResolver/ClassUtil
- * 499831          080222 djvines  Use autoboxing for trace
- * 500546          080226 sibcopyr Automatic update of trace guards
- * 533600          080724 nottinga Update to use SecurityUtils.
- * 604938          090813 djvines  Don't allow FFDC to see the password
- * 609077          091009 mleming  Prevent issues with trace and java 2 security
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.trm.client;
 

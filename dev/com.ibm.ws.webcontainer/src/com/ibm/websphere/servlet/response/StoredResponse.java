@@ -1,21 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5724-J08 (C) COPYRIGHT International Business Machines Corp. 1997, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//
-//CHANGE HISTORY
-//Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//        PK11772        11/29/05      todkap             STOREDRESPONSE CLASS FAILS WITH MESSAGE SRV.8.2: RESPONSEWRAPPE    WAS.webcontainer
-//        LIDB4408-1     02/22/06      todkap             LIDB4408-1 web container changes to limit pooling
-//        PK35128        01/15/07      mmolden            Check for null pointers in setBufferSize
-//        400921         01/16/07      mmolden            Limit to one class per java file
-//        LIDB3518-1.1   06-23-07      mmolden            ARD
-// 461383       09/28/07    mmolden             70FVT: Async should still work when ARD is disabled  
-//        557339         10/16/08      mmolden            FP7001FVT: Server timeout FFDC after 5 mins, reply intermittent
-//
+/*******************************************************************************
+ * Copyright (c) 1997, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.servlet.response;
 
 import java.io.IOException;

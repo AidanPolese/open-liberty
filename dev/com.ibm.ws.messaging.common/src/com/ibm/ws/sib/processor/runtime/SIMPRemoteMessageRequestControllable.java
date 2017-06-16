@@ -1,30 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * 186484.5         210404 ajw      Further Continued controllable interfaces
- * 186484.17        050704 ajw      anycast runtime admin impl
- * 215547           120704 ajw      Cleanup remote runtime admin control impl
- * 216685           160704 ajw      Cleanup anycast runtime control impl
- * 217348           190704 ajw      added State completed
- * 248030.1         170105 tpm      MBean extensions
- * 316556           251005 gatfora  Should use exported processor package for State Strings
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.runtime;
 
 import com.ibm.ws.sib.processor.SIMPConstants;

@@ -1,32 +1,14 @@
 package com.ibm.ws.sib.msgstore;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 26/03/03 drphill  Original
- * 223996          25/08/04 corrigk  Remove tick count
- * 223636.2        26/08/04 corrigk  Consolidate dump
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * 294722          08/08/05 schofiel Added incrementUnlockCountIfNonpersistent to unlock
- * SIB0112le.ms.1  07/02/07 gareth   Add restoreData() method to Item
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * F1332-51592     28/09/11 vmadhuka Persist redelivery count to FILESTORE
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.IOException;
 import java.util.List;

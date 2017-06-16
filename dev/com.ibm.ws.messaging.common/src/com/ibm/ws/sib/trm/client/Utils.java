@@ -1,25 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.27 SIB/ws/code/sib.trm.client.impl/src/com/ibm/ws/sib/trm/client/Utils.java, SIB.trm, WASX.SIB, aa1225.01 05/11/02 03:25:12 [7/2/12 05:58:42]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-I63, 5724-H88, 5655-N02, 5733-W70  (C) Copyright IBM Corp. 2004, 2005
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * LIDB2117        030609 vaughton Original
- * 290290          051028 gelderd  Additional trace required in TRM
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 /*
  * Client attach utility methods

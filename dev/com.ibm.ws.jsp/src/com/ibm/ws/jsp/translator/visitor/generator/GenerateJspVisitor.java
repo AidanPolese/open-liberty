@@ -1,22 +1,13 @@
-//IBM Confidential OCO Source Material
-//	5724-I63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//	The source code for this program is not published or otherwise divested
-//	of its trade secrets, irrespective of what has been deposited with the
-//	U.S. Copyright Office.
-//
-//  Revisions:
-//	Defect 203702  2004/05/17  Fix code gen for imports for better error messaging
-//  Defect 212433  2004/07/20  Stepping into _jspService lands at a unexpected location
-//  Defect 232818  2004/09/22  Strange behaviour when step over JSP taglib lines
-//  Defect 247815  2004/12/16  Fix large finally block when using tag pooling for large JSPs
-//	Defect 248722  2005/01/04  JSP 2.0 spec violation for pages w/out charset specified
-//  Defect PK17173 2006/01/18  Doctype generated in java even when omitted from jsp:output
-//  jsp2.1work
-//  Defect 395182.2  70FVT: make servlet 2.3 compatible with JSP 2.1 for migration 2007/02/07 Scott Johnson
-//  Feature 4147-24 "JSP 2.1 upgrade: Incorporate resource injection engine"  2007/03/30 Curtiss Howard
-//  Defect  PK81147 2009/02/25  fix NPE when customer is using jsp page attribute "extends"
-//  Defect PM06063 2010/01/26 pmdinh    Add a flag to disable Feature 4147-24 "JSP 2.1 upgrade: Incorporate resource injection engine"
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.generator;
 
 import java.util.ArrayList;

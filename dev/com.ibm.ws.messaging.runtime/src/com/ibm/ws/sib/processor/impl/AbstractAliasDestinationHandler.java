@@ -1,18 +1,13 @@
-/*
- * IBM Confidential OCO Source Material
- * 5724-H88, 5724-J08, 5724-I63, 5655-W65, 5724-H89, 5722-WE2   Copyright IBM Corp., 2012, 2014
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U. S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * --------------- ------    -------- --------------------------------------------
- * 92570           31/01/13 Sharath UUID is generated at a later stage for alias destination, so removing the code from trace since it may be null at that time.
- * 92566           05/02/13  Kavitha PMI code removal 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl;
 
 import java.util.HashMap;

@@ -1,28 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- *  
- 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- * 194466.1.1        070404 matrober Original
- * 194466.1.1        160404 jhumber  Complete getInstance() method
- * 199707            220404 jhumber  Build break - take out JMSException
- * 205180.1          270504 matrober Add validator for SIB topics
- * 341625            260106 djvines  Resolve unused imports
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.utils;
 

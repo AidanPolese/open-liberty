@@ -1,42 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- *  
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- * 174896            030903 matrober JavaDoc public interfaces
- * 175799            040903 matrober Rename jsDestDiscrim/Name to DestDiscim/Name
- * 166829.6.2        180903 matrober JMS Durable Subs (readAhead and subscriptionHome)
- * 181084            291003 matrober javax.jms.Message.toString() needs improvement
- * 179339.7          120104 matrober Forward and reverse routing paths
- * 181626.6          230104 kingdon  Interaction of session close and onMessage.
- *                                   Add the CLOSING state.
- * 188189            260104 matrober Configurable option to inhibit URI dest in message
- * 181626.6          270104 kingdon  Interaction of session close and onMessage.
- *                                   Took the CLOSING state back out again.
- * 192689            050304 matrober Remove unneeded constants from JmsInternalConstants.
- * 189318            300304 jhumber  Change the value of the TIME_TO_LIVE constant
- * 184904.1.1        310304 matrober Remove references to Producer/Consumer Mediations
- * 186967.5          080404 jhumber  API support for Inter-Bus support
- * 192474            130404 matrober Support for cloned environments
- * 197921.1          040504 jhumber  New Javadoc tags
- * 200200            050504 jhumber  Blocked Destination constants
- * 225815            200804 matrober ibm-spi tags in internal files
- * SIB0113.jms.1     101207 matrober Add JMS support for SIB0113 function
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.api.jms;
 
 /**

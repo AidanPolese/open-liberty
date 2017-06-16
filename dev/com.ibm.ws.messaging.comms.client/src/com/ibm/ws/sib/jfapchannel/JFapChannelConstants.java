@@ -1,109 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.108.1.4 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/JFapChannelConstants.java, SIB.comms, WASX.SIB, aa1225.01 12/05/08 10:19:51 [7/2/12 05:59:07]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2003, 2014
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030424 prestona Original
- * F166959         030521 prestona Rebase on non-prototype CF + TCP Channel
- * F174772         030826 prestona Make JFAP Channel support close.
- * F175658         030902 prestona Add support for heartbeating.
- * F177889         030930 mattheg  Re-order low level segments
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * F181801.12      031217 vaughton Switch trace groups to utils
- * D185831         040111 prestona Scaling performance of persistent queues
- * F181603.2       040119 prestona JFAP Segmentation
- * F189000         030130 prestona Expose WLM endpoints through CF
- * F191798         040227 prestona Use proper chain names.
- * F195445.11      040407 mattheg  Update message prefix
- * F196678         040413 prestona JS Client Administration
- * F196678.10      040426 prestona JS Client Administration
- * F201521         040506 mattheg  Receive listener dispatcher enhancements
- * D202625         040511 mattheg  FFDC for getThreadContext
- * D196678.10.1    040525 prestona Insufficient chain information passed to TRM
- * D210978         040621 mattheg  Add support for a connection closed listener
- * D213108         040701 mattheg  Allow an invocation to be queued onto more than one dispatch queue
- * D213929         040702 prestona Correct bootstrap chain names
- * D192359         040809 prestona Rewrite priority queue
- * D217340         040719 mattheg  Rename message prefix -- again
- * D217372         040719 mattheg  Comms constants re-organisation
- * D221079         040803 prestona Find service using services namespace.
- * D197042         040811 prestona FFDC entries
- * D199145         040812 prestona Fix Javadoc
- * D221868         040812 prestona Spurious FFDC
- * D229536         040906 prestona Make isTrusted a channel custom property
- * D232185         041007 mattheg  Serviceability improvements
- * D241156         041026 mattheg  Add close order context segment
- * F244595         041129 prestona z/OS: TCP Proxy Bridge Support
- * D240096.1       050131 prestona FFDC constants for threadpool fix.
- * F247845         050131 mattheg  Multicast enablement
- * F247975         050203 prestona Add constant for fap level 2.
- * D255410         050217 prestona z/OS: TCP Proxy Bridge Support needs additional time to start
- * LIDB3684.11.1.3 050329 mattheg  checkMessagingRequired() Core SPI change
- * D258248         050412 mattheg  Addition of DEFAULT_CONVERSATIONS_PER_CONN constant
- * D273932.1       050526 prestona Code review changes per D273932.
- * SIB0009.comms.1 050818 mattheg  Add new FAP level and invokeCommand segment
- * D307265         050922 prestona Support for optimized transactions
- * D284617         051114 prestona OutOfMemoryException has to wait for heartbeat to cleanup
- * D254324         051117 prestona THREAD_DISPATCH_FAILED caused by default for max client threads being too low
- * D344736         060214 prestona Client hangs when closing connections under stress conditions
- * D347591         060217 mattheg  Add SEG_START_R
- * D350111.1       060302 mattheg  Move to FAP 5
- * D360048         060404 mattheg  Add constant for thread pool creation failed
- * D363463         060421 prestona ME-ME heartbeat timeout
- * D377093.1       060711 mattheg  Move to FAP 6
- * D381898         060803 prestona Tidy up exception handling in InboundTransmissionParser
- * D381591         060809 prestona Tidy up exception handling
- * SIB0048b.com.4  060905 mattheg  Re-packaging into client / server
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * D391840         060920 prestona Sockets stay in CLOSE_WAIT state
- * SIB0048b.cli.6  061109 mattheg  Decouple WAS alarm manager
- * SIB0125.com.1   061113 prestona RCS changes for channel code
- * SIB0112c.com.1  070125 mattheg  Memory management: Parse message in chunks
- * SIB0048b.com.7  070215 mattheg  Allow JFap thin client SSL properties to be picked up from sib SSL file
- * 423645          070228 vaughton Add System Property for sib.client.ssl.properties
- * SIB0134.com.1   070302 prestona Security tidy-up (start only permitted chains)
- * SIB0116.com.1   070510 mnuttall Reduce DEFAULT_CONVERSATIONS_PER_CONN from 20 to 5, fix (c) statement
- * SIB0100.comms.1 070801 mleming  Add a FFDC probe id
- * SIB0100.wmq.3   070813 mleming  Allow WMQRA to use TCP Proxy Bridge
- * SIB0137.comms.2 070925 vaughton addDestinationListener implementation
- * SIB0137.comms.3 070925 vaughton addDestinationListener implementation Part 2
- * SIB0115d.comms  071003 vaughton Stoppable Async Consumer Callback
- * 473519          071010 vaughton getSegmentName should consider SEGMENT_
- * 471642          071016 vaughton Unable to deregister stoppable async consumer
- * PK58698         080102 vaughton Connect timeout
- * 494863          080213 mleming  Prevent NPE if TCP/IP connection goes while establishing connection
- * PK62789         080318 pbroad   Add FFDC probeid
- * 500584.1        080418 vaughton Start/Stop channels when channel policy changes
- * PK65014         080424 eveleigh Add tuning parameter to allow JMS close calls to have the same priority as other JMS calls
- * 484128.11       080425 mleming  Allow configuration of RLD thread pool
- * 499845          080611 mleming  Change default size of client side thread pool to 1
- * 543693          080813 mleming  Change DEFAULT_INCREASE_CLOSE_PRIORITY to true
- * 545284          080820 mleming  Create copy of CFEndPoint
- * 568951          081215 mleming  Code review adjustments to PK73713
- * 573184          090203 vaughton Add thin client TCP_NODELAY property
- * 590189          090617 djvines  Add probe for OutboundConnectionTracker
- * F002074         091022 mleming  MEP support FIS
- * PM11871         250510 slaterpa Add new FFDC probeids
- * PM19834         040810 pbroad   Add ALWAYS_DISPATCH_CLOSE option
- * F011127         280611 chetbhat registerConsumerSetMonitor support
- * PM48958         110929 ajw      Add ALWAYS_DISPATCH_STOP, ALWAYS_DISPATCH_UNLOCKALL option
- * PM51216.dev     260412 bsharath Modified getSegmentName in order to improve performance by adding the constants to hashmap 
- * F013661         200412 chetbhat unlockAll(incrementUnlockCount) support
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel;
 
 import java.lang.reflect.Field;

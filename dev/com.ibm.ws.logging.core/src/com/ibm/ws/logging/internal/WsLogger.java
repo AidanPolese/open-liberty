@@ -1,27 +1,13 @@
-/*
- * COMPONENT_NAME: WAS.ras
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * DESCRIPTION:
- *
- * Change History:
- *
- * Reason      Version   Date        User id     Description
- * ----------------------------------------------------------------------------
- * LIDB1241     6.0      12-29-2003  dbourne     JSR47
- * D207146      6.0      06-15-2004  tomasz      Added doPriviledged blocks aroung setLevel calls*
- * D212124      6.0      07-14-2004  dbourne     Incorrect name inferred by getSourceClassName
- * D225693      6.0      09-09-2004  vratnala    CBE Code Review Changes
- * D308697      6.x      01-26-2006  tomasz      Removed resource bundle lookup when logging traces
- * D355840      6.x      03-27-2006  andymc      Added null checks
- * PK58972      7.0      01-09-2008  andymc      logic for filters
- * 496825       7.0      02-18-2008  andymc      Skip level initialization if loading from logging.properties file
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.logging.internal;
 

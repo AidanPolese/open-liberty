@@ -1,33 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * TBD              260303 astley   First version
- * 166318.3         090603 nyoung   Replace Gryphon utilities with JDK Equivalents 
- * 166318.4         160603 nyoung   Move to com.ibm.ws.sib.processor.matchspace.selector.impl
- * 171415           100703 gatfora  Removal of complile time warnings.
- * 166318.9         160903 nyoung   Restructure mspace interfaces
- * 166318.10        230903 nyoung   Move to matchspace.impl component
- * 166318.13        201103 auerbach Remove obsolete/unused list support
- * 166318.14        011203 auerbach Optimized LIKE processing and generalized TOPIC
- * 199185           220404 gatfora  Fix Javadoc.
- * SIB0136b.msp.1   080207 nyoung   Stage 2 implementation of XPath Selector support.
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.matchspace.selector.impl;
 
 import java.io.IOException;

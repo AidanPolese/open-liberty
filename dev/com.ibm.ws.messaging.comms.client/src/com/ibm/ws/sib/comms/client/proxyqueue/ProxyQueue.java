@@ -1,33 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.22 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/proxyqueue/ProxyQueue.java, SIB.comms, WASX.SIB, uu1215.01 07/04/26 12:33:22 [4/12/12 22:14:05]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2007 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2004, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030612 prestona Original
- * d169897.2       030707 schmittm Provide remote client implementation of new Core API as defined
- * F174602         030819 prestona Switch to using SICommsException.
- * f173765.2       030926 mattheg  Core API M4 update
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D249096         050129 prestona Fix proxy queue synchronization
- * D377648         060719 mattheg  Use CommsByteBuffer
- * SIB0112c.com.1  070125 mattheg  Memory management: Parse message in chunks
- * D424200         070426 prestona Readahead consumers hang in receiveWithWait if connection dies
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client.proxyqueue;
 
 import com.ibm.ws.sib.comms.client.DestinationSessionProxy;

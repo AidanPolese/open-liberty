@@ -1,35 +1,14 @@
 package com.ibm.ws.sib.msgstore.task;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 12/03/04 drphill  Original
- * 188052.1        16/03/04 schofiel Remove deprecated persist() method
- * 213328          30/06/04 pradine  Perform synchronous delete during 2PC processing
- * 214205          06/07/04 schofiel Clean up size calculations for tasks
- * 225118          13/08/04 drphill  Move code from tasks to stub (simplification)
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * 306998.20       09/01/06 gareth   Add new guard condition to trace statements
- * 445623          23/07/07 gareth   Use Boolean.valueOf() in trace statements
- * 463942          03/09/07 gareth   Change size reported to dispatchers
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * 538096          23/07/08 susana   Use getInMemorySize for spilling & persistence
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.ws.sib.msgstore.AbstractItem;
 import com.ibm.ws.sib.msgstore.MessageStoreConstants;

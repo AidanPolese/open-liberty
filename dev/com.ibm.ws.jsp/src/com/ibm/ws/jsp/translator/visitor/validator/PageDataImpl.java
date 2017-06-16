@@ -1,11 +1,13 @@
-//IBM Confidential OCO Source Material
-//	5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//	The source code for this program is not published or otherwise divested
-//	of its trade secrets, irrespective of what has been deposited with the
-//	U.S. Copyright Office.
-//Defect PK26233 2006/07/11 ClassCastException seen when foreign jars are used
-// defect 414623 FVT:Default JSP version should be 2.0 not 2.1 2007/01/12 10:15:37 Scott Johnson                                                                                        
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.validator;
 
 import java.io.ByteArrayInputStream;

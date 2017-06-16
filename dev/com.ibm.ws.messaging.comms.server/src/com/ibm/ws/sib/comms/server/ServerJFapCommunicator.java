@@ -1,25 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.3 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/ServerJFapCommunicator.java, SIB.comms, WASX.SIB, aa1225.01 09/04/01 07:23:37 [7/2/12 05:59:06]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5655-N01, 5733-W61  (C) Copyright IBM Corp. 2003, 2006 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2003, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * SIB0048b.com.1  060901 mattheg  Use separate JFAP Communicators for client / server
- * PK83641         310309 ajw      reset LinkLevelState when returning from pool;
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server;
 
 import com.ibm.websphere.ras.TraceComponent;

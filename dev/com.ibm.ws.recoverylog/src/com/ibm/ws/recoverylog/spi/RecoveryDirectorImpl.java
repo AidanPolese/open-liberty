@@ -1,54 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2010*/
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/* DESCRIPTION:                                                                      */
-/*                                                                                   */
-/* Change History:                                                                   */
-/*                                                                                   */
-/* Date      Programmer  Defect         Description                                  */
-/* --------  ----------  ------         -----------                                  */
-/* 06/06/03  beavenj     LIDB2472.2     Create                                       */
-/* 03/07/03  beavenj     170562         Remove currentFailureScope block             */
-/* 11/07/03  beavenj     171515         Extend exception model                       */
-/* 03-09-29  awilkins                                                                */
-/*           beavenj     175817         Changes for CScope logging (NIO)             */
-/* 04-01-09  awilkins    LIDB2775-53.5  z/OS code merge                              */
-/* 04-03-24  awilkins  LIDB2775.53.5.1  Exception chaining                           */
-/* 04-03-26  awilkins  LIDB2775-53.5.2  More z/OS code merge changes                 */
-/* 04-04-13  beavenj     LIDB1578.1     Initial supprort for ha-recovery             */
-/* 04-04-22  beavenj     LIDB1578.3     Termination support for ha-recovery          */
-/* 27/04/04  beavenj     LIDB1578.5     Connect up with HA framework                 */
-/* 19/05/04  beavenj     LIDB1578.6     Connect up with WLM cluster framework        */
-/* 21/05/04  beavenj     LIDB1578.7     FFDC                                         */
-/* 04-03-17  sykesm      MD19638        Recovery event notifications                 */
-/* 05-07-04  beavenj     214161         Fix callback timings                         */
-/* 20/03/04  beavenj     215907         Make enableHA accessible to clients          */
-/* 20/06/04  beavenj     216563         Code Review Changes                          */
-/* 29/07/04  beavenj     220096         Improve trace support for HA debugging       */
-/* 26-08-04  beavenj     227136         Prevent potential log collision              */
-/* 22/09/04  beavenj     232643         File Locking Support                         */
-/* 29/09/04  beavenj     235642         Modify "lock not granted" behaviour          */
-/* 27/10/04  kaczyns     LI1578-22      Add z/OS hook to call peer recovery          */
-/* 05/01/05  mdobbie     LIDB3603       Set isSnapshotSafe flag in Configuration     */
-/* 30/10/05  johawkes    LIDB3642-37.TX WSAddressing HA changes                      */
-/* 11/11/05  johawkes    319188         Output less info messages                    */
-/* 25/04/06  hursdlg     360413         Access clusterIdentity before recovery       */
-/* 01/11/06  maples      LIDB4119-19    Load config using RCS rather than WCCM       */
-/* 07/01/05  dmatthew    PK37117        Fix HA                                       */
-/* 08/05/07  johawkes    436180         Add reset method                             */
-/* 21/07/09  johawkes    602532         Remove WAS dependancy                        */
-/* 08/03/10  mallam      642260         Custom logs                                  */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 1997, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.recoverylog.spi;
 
 import java.util.ArrayList;

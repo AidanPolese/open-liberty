@@ -1,51 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.38 SIB/ws/code/sib.jfapchannel.server.impl/src/com/ibm/ws/sib/jfapchannel/impl/JFapInboundConnLink.java, SIB.comms, WASX.SIB, aa1225.01 10/11/09 01:04:33 [7/2/12 05:59:07]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2003, 2010
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030521 prestona Original
- * F171173         030707 prestona Add capacity reporting interfaces.
- * F174772         030826 prestona Make JFAP Channel support close.
- * F175658         030902 prestona Add support for heartbeating.
- * F176003         030908 prestona Misc. JFAP Channel reliability fixes.
- * F177053         030917 prestona Rebase JFAP Channel on pre-M4 CF + TCP
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * f181007         031211 mattheg  Add boolean 'exchange' flag on dataReceived()
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * F189351         040203 prestona CF admin support
- * D196125         040402 prestona ConversationTable.remove not in table
- * F196678.10      040426 prestona JS Client Administration
- * F201521         040505 mattheg  getThreadContext() method on ConversationReceiveListener
- * D196678.10.1    040525 prestona Insufficient chain information passed to TRM
- * D211250         040622 mattheg  Remove closeReceived() method
- * D197042         040811 prestona FFDC entries
- * D199145         040812 prestona Fix Javadoc
- * D224570         040818 prestona JFap trace needs improving
- * D232185         041007 mattheg  Serviceability improvements
- * F206161.5       050217 prestona Events for system management products
- * D284617         051114 prestona OutOfMemoryException has to wait for heartbeat to cleanup
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * D492528         080118 mayur    Fix typo in method name
- * D493744         082301 sibcopyr Automatic update of trace guards
- * 494863          080213 mleming  Prevent NPE if TCP/IP connection goes while establishing connection
- * 522407          080521 djvines  Resolve dead local store and make inner class static
- * 669424          101109 venugopv Use Runtime.getPropertyWithMsg for heartbeat timeout properties
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 // NOTE: D181601 is not changed flagged as it modifies every line of trace and FFDC.
 

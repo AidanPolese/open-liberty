@@ -1,27 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//@(#) 1.35 SERV1/ws/code/ssl.channel.impl/src/com/ibm/ws/ssl/channel/impl/SSLConnectionLink.java, WAS.channel.ssl, WASX.SERV1, pp0919.25 4/4/08 13:19:23 [5/15/09 18:21:27]
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 061605   gilgen      LIDB3618-2      Use wsspi ThreadPool from JDK
-// 082905   clanzen     LIDB3557-8      Flexible configuration support.
-// 101305   leeja       PK13349         Engine leak during sync connects
-// 121905   clanzen     334023          JSSEHelper to core
-// 010306   clanzen     335187          New access to cipher suites
-// 010406   leeja       PK16095         Control/monitor SSLSession cache
-// 012806   clanzen     337227          Extra trace
-// 022606   clanzen     350452          Handle null decnetbuf in read error.
-// 012207   leeja       414447.1        Only queue off handshake once and only in CR
-// 040407   leeja       LIDB2924-15     Remove JSSE2 usage
-// 053007   leeja       PK46069         Try to re-use ssl session ids
-// 022108   leeja       499653          Fix double release of decnetbuffers
-// 040408   leeja       509688          Fix lost cipher suite prop
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.channel.ssl.internal;
 
 import java.io.IOException;

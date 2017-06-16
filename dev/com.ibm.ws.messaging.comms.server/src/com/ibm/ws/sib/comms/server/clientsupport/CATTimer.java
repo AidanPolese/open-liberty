@@ -1,39 +1,13 @@
-/*
-* @start_prolog@
-* Version: @(#) 1.27 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/CATTimer.java, SIB.comms, WASX.SIB, aa1225.01 08/01/18 03:28:52 [7/2/12 05:59:00]
-* ============================================================================
-* IBM Confidential OCO Source Materials
-* 
-* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2008
-* 
-* The source code for this program is not published or otherwise divested
-* of its trade secrets, irrespective of what has been deposited with the
-* U.S. Copyright Office.
-* ============================================================================
-* @end_prolog@
-* 
-* Change activity:
-*
-* Reason          Date   Origin   Description
-* --------------- ------ -------- --------------------------------------------
-* Creation        030618 mattheg  Original
-* d170639         030627 mattheg  Add NLS to all messages
-* f169897.2       030708 mattheg  Convert to Core API 0.6
-* f172297         030724 mattheg  Complete Core API 0.6 implementation
-* F183828         031204 prestona Update CF + TCP prereqs to MS 5.1 level
-* d186970         040116 mattheg  Overhaul the way we send exceptions to client
-* F188491         030128 prestona Migrate to M6 CF + TCP Channel
-* D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
-* F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
-* D199177         040816 mattheg  JavaDoc
-* D225856         041006 mattheg  Update FFDC class name (not change flagged)
-* D329823         051207 mattheg  Trace improvements
-* D361676         060412 mattheg  Supress FFDC's on SessionUnavailable when the timer pops
-* D377648         060719 mattheg  Use CommsByteBuffer
-* D441183         072307 mleming  Don't FFDC when calling terminated ME
-* 492551          080117 mleming  Only register SICoreConnectionListener when required
-* ============================================================================
-*/
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import com.ibm.websphere.ras.TraceComponent;

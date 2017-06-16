@@ -1,47 +1,13 @@
-//IBM Confidential OCO Source Material
-//	5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//	The source code for this program is not published or otherwise divested
-//	of its trade secrets, irrespective of what has been deposited with the
-//	U.S. Copyright Office.
-//
-//
-//  Changes for defect 198932 "Support v5 JSP reload logic for v5 apps in 6.0"
-//		added variables reloadEnabledSet, servlet2_2, servletEngineReloadEnabled, 
-//			servletEngineReloadInterval
-//  defect 215691 "add support for javaEncoding"  2004/07/12  Scott Johnson
-//	defect 221843: "add support for autoResponseEncoding"
-//  defect 223085 "Replace tsx:repeat optimized tag with taglib version"  2004/08/10 Scott Johnson
-//	defect 247772 syncToOsThread changes, removed setSyncToThread and isSyncToThread, added isZOS 2005/01/14 Maxim Moldenhauer
-//  defect PK13492 "CP943C ENCODING NOT WORKING PROPERLY ON HP"  2006/01/12 Scott Johnson
-//  defect PK20187 Property 'useStringCast' (Adds implicit string cast for included resources) 2006/04/24 SDJ
-//  defect PK28029 ieClassId has no effect on JSP plugin tag 
-//  defect PK26741 RepeatTags do not accept 'index' to be 'int'
-//  Defect PK29373 Provide backward compatibility with v5(Page scope variables)
-//  defect 393421 - CTS:jsp translation error not occuring for wrong  <jsp:output> 2006/09/27 Scott Johnson
-//  defect 393421.1 - CTS: default for fixing 393421 needs to be changed    2006/10/05Scott Johnson
-//  defect 396002 CTS: no jsp fatal translation error for  taglib after actions Scott Johnson 10/17/2006
-//  "Unmatched end tags" exception not to be thrown in v6 10/18/2006
-//  defect 400645 "Batchcompiler needs to get webcon custom props"  2004/10/25 Scott Johnson
-//  defect PK31135 "Change in Iteration eval in v6 causes infinite loops in certain scenarios"
-//  Feature LIDB4293-2 - "In-memory translation/compilation of JSPs" 2006/11/11 Scott Johnson
-//  defect PK34989 Supercedes PK26679 (Provides an optional flag to trim text before creating CDATA section) 2007/02/13
-//  Defect PK47738 v6 does not allow page authors to encode params within params tag(spec compliant) maintain backward compatibility with v5 which allows encoding of params.
-//  Defect PK65013 2008/07/07 Need ability to customize pageContext variable.   sartoris
-//  Defect PK69220 2008/10/10 sartoris   Add a flag to be able turn off tld searching through an application.
-//  Defect PK72039 Add ability to continue to compile the rest of the JSPs during a batch compile failure  2008/10/21  Jay Sartoris
-//  Defect PM04610 Need option to specify version 1.6 for the jdkSourceLevel attribute  2010/02/03  Jay Sartoris
-//  Defect PM06063 2010/01/26 pmdinh    Add a flag to disable Feature 4147-24 "JSP 2.1 upgrade: Incorporate resource injection engine"
-//  Defect 655818 Spec clarification - do not reuse property group configuration on included files (is-xml & page-encoding)
-//  Defect PM21395 09/02/2010 pmdinh    Decode double quote in the attribute's value of a tag
-//  Defect PM41476 07/28/2011 sartoris    Tags have the xmlns attribute when rendered.
-//  Defect PM58513 04/12/2012 sartoris    looseLibMap and jspCompileClasspath get a Invalid unicode exception if the value contains backslash u and keepgenerated is true.
-//  Defect PM94792 07/30/2014 hmpadill    Disable escaping CR, LF, and Tab within an expression
-//  Defect PI12939 07/31/2014 hmpadill    Add ability to delete .class file before compile
-//  Defect 126902 07/31/2014 hmpadill    Add Oracle JDK 1.8 as a valid option for running Liberty
-//  Defect 152472 10/28/2014 hmpadill    Log in the SystemOut the value of the JSP attribute jdkSourceLevel or the corresponding jspEngine attribute jdkSourceLevel
-//  Defect PI30519 11/25/2014 hmpadill    Allow multiple attribute values in tags
-//  Defect PI37304 03/17/2015 hmpadill    Enable appropriate translation of JSP expressions with at least one constant string
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp;
 
 import java.io.File;

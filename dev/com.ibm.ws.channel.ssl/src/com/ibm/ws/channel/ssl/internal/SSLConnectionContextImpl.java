@@ -1,15 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 2003, 2007
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//@(#) 1.6 SERV1/ws/code/ssl.channel.impl/src/com/ibm/ws/ssl/channel/impl/SSLConnectionContextImpl.java, WAS.channel.ssl, WASX.SERV1, pp0919.25 4/6/07 09:35:04 [5/15/09 18:21:27]
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 070404   leeja       LIDB2924-15     Remove JSSE2 usage
-
+/*******************************************************************************
+ * Copyright (c) 2003, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.channel.ssl.internal;
 
 import javax.net.ssl.SSLException;

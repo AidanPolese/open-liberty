@@ -1,33 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030426 prestona Original
- * 270362          050422 mattheg  Add toString() method
- * 274452          050823 gelderd  Merge TrmEndPoint and EndPoint classes
- * 326401          051129 gelderd  Modify inserts to error message on client connection
- * 372567          060612 mleming  Remove CCE risk from equals
- * 434315          070423 prestona FINDBUGS: added hashCode() method
- * 440208          080530 djvines  Move to sib.utils
- * 527100          080609 djvines  Fix findbugs observation
- * 526214          090930 djvines  Treat InboundBasicMessaging as BootstrapBasicMessaging (and similar)
- * 92933          090930 venugopv  Dont give default value to ProviderEndPoint if the value is null
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.utils.comms;
 
 import java.security.AccessControlException;

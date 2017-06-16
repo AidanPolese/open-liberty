@@ -1,31 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// %I% %W% %G% %U%
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2007, 2012
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  GenericConnection.java
-//
-// Source File Description:
-//
-//     Provides a 'generic' Connection implementation for datasources configured
-//     in the component context (java:comp/env).
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d463444   EJB3      20070910 jckrueg  : New Part
-// d467801.1 EJB3      20070921 jckrueg  : (temp fix) Hack getMetaData()
-// LI3294-25 EJB3      20070926 tkb      : Added new SQL methods
-// d508455   WAS70     20080331 tkb      : java:comp/env support in JPA
-// d510184   WAS70     20080505 tkb      : Create seperate EMF for each java:comp
-// F58744    WAS85     20120116 bkail    : Implement JDBC 4.1 methods
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2007, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_RESOURCE_BUNDLE_NAME;

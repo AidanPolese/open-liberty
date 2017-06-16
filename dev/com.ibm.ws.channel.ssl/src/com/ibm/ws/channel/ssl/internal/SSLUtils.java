@@ -1,33 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 2003, 2008, 2009
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//@(#) 1.35 SERV1/ws/code/ssl.channel.impl/src/com/ibm/ws/ssl/channel/impl/SSLUtils.java, WAS.channel.ssl, WASX.SERV1 3/16/09 14:48:53 [4/22/09 10:47:11]
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-//          clanzen     295893          Handle JSSE wrap call returning buffer with zero limit
-//          clanzen     319783          Handle small initial buffer during handshakes.
-//          clanzen     334023          Client cert mapping: clean up thread state.
-//          clanzen     335187          New access to cipher suites
-//          clanzen     335445          Add support for client auth (setWant)
-//          clanzen     334954          Get handshakes off special CR threads.
-//          leeja       403052          Outbound SSL connect in CR fails.
-//          leeja       414447.1        Only queue off handshake once and only in CR
-//          leeja       414447.2        Reset queue flag after successfull queue
-//          leeja       LIDB2924-15     Remove JSSE2 usage
-//          leeja       441634          Fix localhttp handshake error on jdk1.6
-// 070530   leeja       PK46069         Try to re-use ssl session ids
-// 080122   leeja       473137/PK59711  Fix handshake problem
-// 080221   leeja       499653          Fix double release of decnetbuffers
-// 080404   leeja       509688          Fix lost cipher suite prop
-// 090310   elisa       PK72447         Require client auth for web when MutualAuthCbindCheck flag is enabled
-// 090423   wigger      576358.1        generate FFDC on handleHandshake read error
-// 090504   elisa       587870          Fix NPE
-// 090506   wigger      587835          don't thrash CPU on SSL shutdown on buffer overflow condition
-
+/*******************************************************************************
+ * Copyright (c) 2003, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.channel.ssl.internal;
 
 import java.io.IOException;

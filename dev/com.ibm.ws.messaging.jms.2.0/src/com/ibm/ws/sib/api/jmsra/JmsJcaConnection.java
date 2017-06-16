@@ -1,30 +1,13 @@
-/**
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * --------------- --------- -------- --------------------------------------------
- *                 06-May-03 pnickoll Original
- * 169897.5        07-Jul-03 pnickoll Updated to encompass the core API changes
- * 169626.6        21-Jul-03 pnickoll Updates from code review
- * 181796.6        05-Nov-03 djhoward Core SPI move to com.ibm.wsspi.sib.core
- * 203656          17-May-04 dcurrie  Code cleanup
- * 201972.4        28-Jul-04 pnickoll Update core SPI exceptions
- * 201972.4.1      05-Aug-04 pnickoll Add more coreSPI exceptions
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.api.jmsra;
 
 //Sanjay Liberty Changes

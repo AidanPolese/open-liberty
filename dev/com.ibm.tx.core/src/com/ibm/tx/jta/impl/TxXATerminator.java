@@ -1,46 +1,14 @@
 package com.ibm.tx.jta.impl;
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2009 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  YY-MM-DD   Programmer  Defect      Description                                   */
-/*  ---------  ----------  ------      -----------                                   */
-/*  03-05-16   ehadley     -           Creation                                      */
-/*  03-07-18   johawkes    LIDB2110.12 JCA 1.5                                       */
-/*  03-07-28   johawkes    LIDB2110.12 Validate Xids                                 */
-/*  03-08-18   johawkes    174376      Add isValid(Xid) for context handler          */
-/*  03-08-19   johawkes    174593      Resume local tran on dissociate               */
-/*  03-08-22   johawkes    174726      Allow null Xid on associate                   */
-/*  03-09-25   johawkes    177245      Allow commit_one_phase during recovery        */
-/*  03-09-25   johawkes    177208      Rename TransactionWrapper                     */
-/*  03-09-30   johawkes    178038      Use local association methods                 */
-/*  03-10-28   johawkes    181147      Make XATerminators specific to RA             */
-/*  03-11-07   johawkes    182128      throw WCE when already associated             */
-/*  27/11/03   johawkes    178502      Start an RA during XA recovery                */
-/*  05/12/03   johawkes    184903      Refactor PartnerLogTable                      */
-/*  07/01/04   johawkes    LIDB2110    RA Uninstall                                  */
-/*  04/02/04   johawkes    189497      Pass recovery data on prepare                 */
-/*  04/03/04   johawkes    191316      Log resources when setting LPS state          */
-/*  17/03/04   johawkes    192653      Cancel timeouts on RA uninstall               */
-/*  03/06/04   johawkes    207033      Delay registerJCAProvider                     */
-/*  27/07/04   johawkes    219412      Fix shutdown for JCA imported transactions    */
-/*  10/08/04   kaczyns     LIDB2110    z/OS JCA 1.5 support                          */
-/*  11/01/05   hursdlg     249308      Allow zos formatids                           */
-/*  02/02/05   mezarin     250302      z/OS check gtrid length when validating XID   */
-/*  06/08/07   johawkes    451213.1    Moved into JTM                                */
-/*  26/10/07   johawkes    463185      Static analysis                               */
-/*  02/06/09   mallam      596067      package move                                  */
-/*  10/30/09   mezarin     623196      Fix z/OS JCA recovery issues                  */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2002, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 
 import java.util.HashMap;

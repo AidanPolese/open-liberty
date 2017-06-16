@@ -1,28 +1,13 @@
-//%Z% %I% %W% %G% %U% [%H% %T%]
-
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2010, 2011
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2010, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Provide interface for remote access to High Performance Extensible Logs through implicit use of MBeans
- *
- * Change History:
- *
- * Reason            Version    Date        User id     Description
- * ----------------------------------------------------------------------------
- * F017049-16882.1       8.0    01-27-2010    belyi     Part created.
- * F017049-18504         8.0    03/23/2010    belyi     Add support for subprocess reading
- * 647314                8.0    04/09/2010    belyi     Translate record messages into locale specified by the caller.
- * 647124                8.0    04/20/2010    belyi     Throw exceptions on errors
- * 653791                8.0    05/27/2010    belyi     Add instance to the result if it has kids even if it has no its own records.
- * F017049-22352         8.0    08/05/2010    belyi     Add cache manipulation logic
- * 665629                8.0    12/07/2010    belyi     Remove reference to removed size() method.
- * 686580                8.0    01/24/2011    belyi     Start using cache for requests containing pointer as well
- * 681015                8.0    02/25/2011    belyi     Use getStartTime() method for an instance start time.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.logging.hpel.reader;
 
 import java.util.HashSet;

@@ -1,35 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- --------------------------------------------
- * 180483.3         201003 sbhola   initial implementation
- * 184035.1         110204 tevans   New MP Alarm Manager interface
- * 185691           190204 tevans   Redesign/Rework LinkedMap and LockedMessageEnumeration
- * 199655           210404 sbhola   improved handling for 0 timeout, i.e., for NO_WAIT
- * 180483.14        010604 sbhola   now extends Entry to reduce object creation
- * 209977           080704 gatfora  Removal of AnycastConstansts file.
- * 248145           201204 gatfora  Remove code that is not used
- * SIB0113a.mp.3    010807 vaughton Class rename
- * 458890           130807 sibcopyr Automatic update of trace guards 
- * SIB0113a.mp.9    261007 cwilkin  Remote Gathering
- * 499849           170308 cwilkin  Fix trace
- * 532349           260608 cwilkin  Forward requests to DME correctly
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.impl;
 

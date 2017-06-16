@@ -1,42 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason   Date   Origin   Description
- * -------- ------ -------- --------------------------------------------------
- * 162584   030328 auerbach Original
- * 163400   030414 auerbach JMF improvements
- * 171493   030715 baldwint Allow multiChoice code to extend beyond 64 bits
- * 177749.1 030925 auerbach Support WDO over JMF
- * 189773   040206 baldwint Missing FFDC code
- * 229456   040910 mlovett  Avoid NPE in format(JMFSchema)
- * 238632   041012 susana   If format fails, return what we have
- * 244158   041202 susana   FFDC support for getEncodedLength() failure
- * 264772   050331 mlovett  More FFDC handling
- * 270114   050601 mlovett  Better printing of corrupted messages
- * 280486.1 050621 kgoodson Suspend JMF tracing on thread while formatting
- * 290330   051004 kgoodson Don't trace fields with name "password" +- case
- * 341610   060127 susana   Remove unused imports/vars/etc
- * 430808   070529 susana   Include object identityHashcode for JMF parts
- * 449952   070704 susana   Take traceguards off calls to JmrTr.setTracing()
- * 451831   070921 susana   Remove unused import
- * 482120   071112 susana   Format Date fields in GMT always & remove unused Calendar
- * 490871   080211 susana   Optionally do not trace user data
- * 499947.1 080303 susana   Potential for OutOfMemory if trace huge message
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.mfp.jmf.tools;
 

@@ -1,47 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//CHANGE HISTORY
-//Defect       Date        Modified By         Description
-//--------------------------------------------------------------------------------------
-//293696       07/27/05    mmolden             ServletRequest.getPathInfo() fails
-//283348.1     07/28/05    ekoonce             Fix Tr.* statements
-//296368       08/05/05    todkap              Nested exceptions lost for problems during application startup
-//297383       08/10/05    todkap              clean up WebContainer and urlEncoding handling
-//PK09940.1    08/12/05    todkap              HTTP CLIENT CLASS SENDING REQUESTS WITH AN EMPTY HOST HEADER
-//LIDB3816     08/22/05    ekoonce             Expose cached servlet names.
-//301485       08/29/05    todkap              provide access method for extension factories
-//316624       10/31/05    ekoonce             Fail safe issue with Iterators
-//323294       11/11/05    todkap              allow virtual hosts to use same host/port combinations    WAS.webcontainer
-//PK12758      11/17/05    todkap              VULNERABILITY NOTE VU#560659    WAS.webcontainer
-//324991       11/21/05    mmolden             61FVT: NullPtrExpn when logging out after admin console addNode
-//325429       11/29/05    ekoonce             port PK12809, 325429 from v602
-//334196       12/22/05    mmolden             61FVT: only listener specified first in order is being loaded    WAS.webcontainer
-//306998.15     01/06/06    ekoonce             PERF: WAS tracing performance improvement
-//LIDB4408-1    02/22/06    todkap              LIDB4408-1 web container changes to limit pooling
-//351214        03/02/06    mmolden             SVT:Restart Application under client load, get null pointers
-//352042        03/02/06    todkap              Code Review: Fix getObject for connection pooling    WAS.webcontainer
-//PK23481       04/24/06    todkap              DECODED URI PATH ELEMENTS SHOULD NOT CONSIDER "+" TO BE A       SPECIAL CHARACTER. (ONLY IN QUERY STRINGS)
-//LIDB3518-1.1  06-23-07    mmolden             ARD
-//455108        08/01/07    mmolden             Webcontainer incorrectly maps context roots to apps
-//LIDB4293-1    01/08/08    ekoonce             Ultralight test environment
-//515571        04/29/08    mmolden             70FVT: encoding problem
-//530193        06/19/08    mmolden        -     SVT:NPE while making a ARD/RRD call
-//531038        06/19/08    mmolden             PERF: Reduce duplicate method calls in Web Container classes
-//541113        08/06/08    mmolden             PERF: Use StringBuilder instead of StringBuffer in WebContainer
-//PK80333       05/06/09    mmulholl            503 SERVLET TEMPORARILY UNAVAILABLE
-//582053	05/05/09    anupag              Add webcontainer stop check before increment requests, PK85953.
-//721610        11/02/11    anupag              PM51389:: set the correct value of javax.servlet.request.key_size
-//PM76167       01/06/13    anupag              The second request to a context root without a leading slash causes getPathInfo() to return null. PM71654
-//PI19621       06/10/14    anupag              Fix the translated messages.
-//760370        05/12/15    pmdinh              serviceability - add com.ibm.ws.webcontainer.suppressloggingwebgroupvhostnotfound
-//PI51122       10/26/15    zaroman             Do not try to get the path info if servlet path is / (default servlet)
-//PI67093       08/15/16    pmdinh              Remove sensitive keywords from response.
-//PI68061       08/26/16    pmdinh              Option to display customized text for server exceptions.
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer;
 
 import java.io.File;

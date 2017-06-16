@@ -1,19 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//  CHANGE HISTORY
-//  Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//          283348         07/19/05     ekoonce             Remove printStackTrace calls
-//	    292130	   07/20/05	mmolden		    Cleanup CustomPMI and include case failure
-//          283348.1       07/26/05     ekoonce             Fix Tr.* statements
-//      PK64697            05/16/08     mmolden             DECREASE IN THROUGHPUT OVER TIME WHEN PMI IS ACTIVATED
-//          PK71856        09/23/08     mmolden(mmulholl)   Create uriData hash map within a synchronized block
-//
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.monitor;
 
 import java.util.HashMap;

@@ -1,41 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// %I% %W% %G% %U%
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2006, 2013
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  JPAEntityManager.java
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d392996   EJB3      20060930 leealber : Initial Release
-// d392996.3 EJB3      20060930 leealber : Add implementation to conform to spec.
-// d416151   EJB3      20070120 leealber : Container manager persistence context part 1
-// d416151.2 EJB3      20070220 leealber : Container managed persistence context part 2
-// d416151.3 EJB3      20070306 leealber : Extend-scoped support
-// d416151.3.7 EJB3    20070501 leealber : Add isAnyTraceEnabled() test
-// d416151.3.3 EJB3    20070506 leealber : Messages/FFDC clean up.
-// d439442.1 EJB3      20070601 leealber : Add required doPrivileged()
-// d428266   EJB3      20070614 leealber : Enhance debug trace information.
-// d456716   EJB3      20070906 tkb      : use correct message prefix CWWJP
-// d460065   EJB3      20070907 tkb      : improve message replacement parameters
-// d472866.1 EJB3      20071015 tkb      : register non-transactional with local tran
-// d510184   WAS70     20080505 tkb      : Create seperate EMF for each java:comp
-// d572594   WAS70     20090207 jckrueg  : Fix non-tx EM pooling issue
-// F743-954  WAS80     20090226 leealber : Add JPA 2.0 APIs
-// F743-954.1 WASX     20090330 leealber : Add additional JPA 2.0 APIs
-// d597764   WASX      20090625 leealber : Upgrade JPA 2.0 API to Geronimo EA3 level
-// d618559   WASX      20091014 leealber : Update to JPA 2.0 API to EA9 level - Final Draft
-// d683375   WAS80     20110115 bkail    : Remove getCurrentTxKey and getUOWRegistry 
-// RTC112113 WAS90     20131023 leealber : Add new JPA 2.1 APIs
-// d152713   RTC       20150126 jgrassel : Support @PersistenceContext Tx-Sync Feature
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2006, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_RESOURCE_BUNDLE_NAME;

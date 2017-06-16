@@ -1,40 +1,13 @@
-//IBM Confidential OCO Source Material
-//  5724-I63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004
-//  The source code for this program is not published or otherwise divested
-//  of its trade secrets, irrespective of what has been deposited with the
-//  U.S. Copyright Office.
-/*
- * Change history:
- * defect 215691 "add support for javaEncoding"  2004/07/12  Scott Johnson
- * defect 216949 "JSP Batch compiler doesn't support debug mode"  2004/07/16  Scott Johnson
- * defect 220584 "JSP Batchcompiler: Log case where webmodule contains no JSPs."  2004/07/30  Scott Johnson
- * defect 238852.2 "use constructor for JSP compiler to disable resource reloading in ReloadableClassLoader." 10-18-2004 Scott Johnson
- * defect 241285 "601: PERF: speed up batch compiler when full pkg names are used." 11-29-2004 Scott Johnson
- * defect PK26741 - RepeatTag index does not accept "int"
- * defect PK29373  Provide backward compatibility with v5(Page scope variables )
- * defect 393421 - CTS:jsp translation error not occuring for wrong  <jsp:output> 2006/09/27 Scott Johnson
- * defect 396002 CTS: no jsp fatal translation error for  taglib after actions Scott Johnson 10/17/2006
- * "Unmatched end tags" exception not to be thrown in v6 10/18/2006
- * defect 400645 "Batchcompiler needs to get webcon custom props"  2004/10/25 Scott Johnson
- * defect 402921(PK31135) Change in Iteration eval in v6 causes infinite loops in certain scenarios 2006/11/03 Anuradha Natarajan
- * Feature LIDB4293-2 - "In-memory translation/compilation of JSPs" 2006/11/11 Scott Johnson
- * defect 395182.2  70FVT: make servlet 2.3 compatible with JSP 2.1 for migration 2007/02/07 Scott Johnson
- * defect PK34989 Supercedes PK26679 (Provides an optional flag to trim text before creating CDATA section) 2007/02/13
- * defect PK50519 JSP batch compiler stops translation if an exception occurs in a jsp....should continue on to next jsp. 2007/08/08 Jay Sartoris
- * defect PK47738 v6 does not allow page authors to encode params within params tag(spec compliant) maintain backward compatibility with v5 which allows encoding of params. 2007/09/05 Anuradha Natarajan
- * defect PK65013 Need ability to customize pageContext variable.                  2008/07/07  sartoris
- * defect PK72039 Add ability to continue to compile the rest of the JSPs during a batch compile failure  2008/11/15  Jay Sartoris
- * Feature F003834 Add ability to use WebSphere Variables in the extendedDocumentRoot path      07/30/09        sartoris
- * defect PM04610 Need option to specify version 1.6 for the jdkSourceLevel attribute  2010/02/03  Jay Sartoris
- * defect PM06503 Enhance additional.classpath to work with -ear.path  03/11/10  pmdinh  
- * defect 650003 Supplemental enhancement for PM06063 (prereq) to support Lotus Expedite team       04/20/10    pmdinh
- * defect PM21395 09/02/2010 pmdinh Decode double quote in the attribute's value of a tag
- * defect PM41476 07/28/2011 sartoris    Tags have the xmlns attribute when rendered.
- * defect PM94792 07/30/2014 hmpadill    Disable escaping CR, LF, Tab within an expression
- * defect PI12939 07/31/2014 hmpadill   Add ability to delete .class file before compile
- * defect 126902 07/31/2014 hmpadill    Add Oracle JDK 1.8 as a valid option for running Liberty
-*/
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.tools;
 
 import java.io.BufferedWriter;

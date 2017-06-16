@@ -1,35 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * 187521           200104 dware    Original
- * 191153           180204 dware    Implement inLine
- * 191118           130404 dware    Add ordering context locking
- * 199152           200404 gatfora  Correct javadoc.
- * 201972.1         270704 gatfora  Core SPI Exception rework
- * 222638           100804 dware    Implement ConnSess.relockMessageUnderAsynchCursor()
- * 219476.1         260804 dware    Implement latest Core SPI changes
- * SIB0009.mp.01    210705 rjnorris Add support for multiple selectionCriteria on DurableSub
- * 323644           251105 dware    Support avoiding redeliveryCount bumping on BifCon close
- * 373054           080207 tevans   Change getSubscription doc to be durable only
- * 471722           121007 vaughton Add registerStoppableAsynchConsumerCallback with options
- * SIB0115.mp.3     290108 dware    Add hiddenMessageDelay to stoppable callback registration
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor;
 

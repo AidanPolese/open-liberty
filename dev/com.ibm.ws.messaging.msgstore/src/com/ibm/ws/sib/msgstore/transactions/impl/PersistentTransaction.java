@@ -1,34 +1,14 @@
 package com.ibm.ws.sib.msgstore.transactions.impl;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *                                  
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- * 164655          06/05/03 gareth   Initial Transaction code drop
- * 182347          11/11/03 gareth   Add Persistent Transaction ID
- * 183471          04/12/03 gareth   Remove old PersistenceManager interfaces
- * 186559          07/01/04 gareth   Add COMMITTING_2PC state
- * 184806.3.2      15/04/04 gareth   Move getPersistentTranId()
- * 229186          03/09/04 pradine  Cache the batching context inside a transaction
- * 229486          07/05/04 gareth   Improve javadoc
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * 326643.1        29/11/05 gareth   Use singleton objects for transaction state
- * 410652          12/04/07 gareth   Check Transactions ME at add time
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.ws.sib.msgstore.MessageStore;
 import com.ibm.ws.sib.msgstore.ProtocolException;

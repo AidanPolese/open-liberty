@@ -1,15 +1,14 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-
-/**
+/*******************************************************************************
+ * Copyright (c) 1997, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * History:
- * This class is the main class for performance module organization and data
- * retrieval in PMI. It provides static methods
- for modules to register and for
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
+ /*for modules to register and for
  * clients to retrieve data and change instrumentation level.
  * The data are organized in modules. Within a server, the generic module hierarchy
  * is:		module

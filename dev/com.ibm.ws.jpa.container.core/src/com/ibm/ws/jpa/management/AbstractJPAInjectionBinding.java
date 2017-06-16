@@ -1,30 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// %I% %W% %G% %U%
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2010, 2011
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  AbstractJPAInjectionBinding.java
-//
-// Source File Description:
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// F743-30682
-//           WAS80     20100820 bkail    : New
-// d696076   WAS80     20110311 bkail    : Disallow java:global; use J2EEName for JPAPuId
-// d704467   WAS80     20110516 bkail    : Fix java:global error message
-// d662814.2 WAS80     20110606 bkail    : Add ivMultipleComponents
-// d709313   WAS80     20110721 bkail    : Backout d662814.2
-// d687082.1 WAS80     20110801 bkail    : Restore d662814.2
-// --------- --------- -------- --------- -----------------------------------------
-
+/*******************************************************************************
+ * Copyright (c) 2010, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import java.lang.annotation.Annotation;

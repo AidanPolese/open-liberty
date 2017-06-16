@@ -1,30 +1,13 @@
-/*
- * IBM Confidential OCO Source Material
- * 5724-I63, 5724-H88, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2006
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * 
- * @(#) 1.19 SERV1/ws/code/security.crypto/src/com/ibm/ws/ssl/JSSEProviderFactory.java, WAS.security.crypto, WASX.SERV1, pp0919.25 3/8/06 15:29:06 [5/15/09 18:04:37]
+/*******************************************************************************
+ * Copyright (c) 1997, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Date         Defect        CMVC ID    Description
- *
- * 08/20/03     LIDB2905.21   pbirk      Dynamic JSSE provider selection
- * 08/27/03     175262        pbirk      Additionally cache provider to contextProvider string
- * 09/04/03     175898        pbirk      Allowing no context provider to select the correct one from java.security.
- * 09/05/04     220956        pbirk      Support dynamic loading of IBMJSSE2 provider.
- * 09/23/04     232119        pbirk      Change default provider to IBMJSSE2.
- * 10/04/04     236815        pbirk      Changes to support FIPS in v6
- * 01/28/05     252314        alaine     Add Security Object properties for FIPS
- * 02/10/05     253306        alaine     JCE Provider isnot being retrieve correctly
- * 06/13/05     282521        pbirk      Change the way IBMJCEFIPS gets added to ensure it is first.
- * 08/19/05     LIDB3557-1.1  pbirk      3557 Initial Code Drop
- * 10/19/05     310871.1      pbirk      Read provider from list to determine default for pluggable client.
- * 11/09/05     320945        pbirk      Resolve old providers passed in to use new IBMJSSE2 provider
- * 01/06/06     336041        pbirk      Resolve issue with server not starting in FIPS mode.
- * 03/08/06     349727        bchiu      Catching error when failing to load IBMJCEFIPS provider
- *
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.ssl;
 

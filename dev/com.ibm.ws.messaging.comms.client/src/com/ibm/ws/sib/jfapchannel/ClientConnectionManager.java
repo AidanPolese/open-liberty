@@ -1,47 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.36 SIB/ws/code/sib.jfapchannel.client/src/com/ibm/ws/sib/jfapchannel/ClientConnectionManager.java, SIB.comms, WASX.SIB, uu1215.01 10/03/25 05:19:36 [4/12/12 22:14:11]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2003, 2010
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2003, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030424 prestona Original
- * F166959         030521 prestona Rebase on non-prototype CF + TCP Channel
- * F174602         030819 prestona Switch to using SICommsException
- * F175658         030902 prestona Add support for heartbeating.
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * F182479         031127 prestona New ConnectionProperties varient required.
- * F184828         031204 prestona Update CF + TCP prereqs to MS 5.1 level
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * F189000         030130 prestona Expose WLM endpoints through CF
- * F191798         030227 prestona Use proper chain names
- * F196678.10      040426 prestona JS Client Administration
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199145         040812 prestona Fix Javadoc
- * D223632         040812 prestona Defend against errors during initialisiation
- * F244595         041129 prestona z/OS: TCP Proxy Bridge Support
- * D321398         051107 mattheg  Expose a list of active outbound connections
- * D377648         060714 mattheg  Remove getBufferPoolManager() method
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * SIB0100.wmq.3   070813 mleming  Allow WMQRA to use TCP Proxy Bridge
- * D453961.1       070904 mleming  Rethrow any exception caught on initialise
- * D464663         070905 sibcopyright Automatic update of trace guards
- * PM07974         100223 timmccor Add getActiveOutboundConversationsForFfdc()
- * F002074         091022 mleming  MEP support FIS
- * 95897           041613 Chetan   Comms Outbound Chain revamp
- * ============================================================================  
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel;
 
 import java.lang.reflect.Constructor;

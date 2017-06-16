@@ -1,26 +1,13 @@
-//%Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2011
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason           Version        Date       User id     Description
- * ----------------------------------------------------------------------------
- * F001340-15950.1    8.0        09/04/2009   belyi       Initial HPEL code
- * F017049-18504      8.0        03/22/2010   belyi       Add support for subprocess reading
- * 653791             8.0        05/25/2010   belyi       Retrieved parsed header information if there's no log files in either of the repositories
- * 662041             8.0        07/22/2010   belyi       Use one file at a time search in the merged result.
- * F017049-22352      8.0        08/04/2010   belyi       Add helper methods for file statistics use in remote reading.
- * 665629             8.0        12/07/2010   belyi       Remove reference to removed size() method.
- * 686580             8.0        01/24/2011   belyi       Introduce 'switched' field to keep information where cache came from and where it needs to be applied.
- * 681015             8.0        02/25/2011   belyi       Add implementation for getStartTime() method.
- * 704089             8.0        04/28/2011   belyi       Ensure that correct cache is checked for being 'null'
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.logging.hpel.impl;
 
 import java.util.Date;

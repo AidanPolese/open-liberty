@@ -1,25 +1,13 @@
-// %Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009, 2012
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason           Version        Date       User id     Description
- * ----------------------------------------------------------------------------
- * F001340-15950.1    8.0        09/04/2009   belyi       Initial HPEL code
- * D624929            8.0        11/01/2009   spaungam    Handle logging during writer creation
- * D631482            8.0        12/8/2009    spaungam    fix enableFileSwitch
- * D671059            8.0        10/05/2010   spaungam    HPEL with verbose trace enabled causes a loop on z/OS
- * D694351            8.0        03/03/2011   mcasile     stopServer driver System.exit and allows signals to be caught
- * 691649             8.0        03/18/2011   belyi       Ensure timer is stopped in stop() method. 
- * 727908             8.5        02/10/2012   belyi       Make creation of the first file public
- * PM99024	          8.0	     11/05/2013   rishim	  Fixing instance Dir creation if someone deletes .lock file from tracedata
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.logging.hpel.impl;
 
 import java.io.File;

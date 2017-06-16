@@ -1,36 +1,14 @@
 package com.ibm.ws.sib.msgstore.persistence;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 18/11/03 pradine  Original
- * 180763.7        10/02/04 pradine  Add support for mutiple item tables
- * 188052          10/03/04 pradine  Changes to the garbage collector
- * 188052.1        16/03/04 schofiel Remove deprecated persist() method
- * 188050.4        06/04/04 pradine  SpecJAppServer2003 optimization
- * 201701.1        21/05/04 pradine  Optimise use of collection classes
- * 213328          30/06/04 pradine  Perform synchronous delete during 2PC processing
- * 214205          06/07/04 schofiel Clean up size calculations for tasks
- * 247513          14/01/05 schofiel Improve spilling performance
- * 272110          10/05/05 schofiel 602:SVT: Malformed messages bring down the AppServer
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * 538096          23/07/08 susana   Use getInMemorySize for spilling & persistence
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.ws.sib.msgstore.PersistenceException;
 import com.ibm.ws.sib.msgstore.SevereMessageStoreException;

@@ -1,31 +1,13 @@
-/* ************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                           */
-/*                                                                            */
-/* ORIGINS: 27                                                                */
-/*                                                                            */
-/* IBM Confidential OCO Source Material                                       */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2007, 2009    */
-/* The source code for this program is not published or otherwise divested    */
-/* of its trade secrets, irrespective of what has been deposited with the     */
-/* U.S. Copyright Office.                                                     */
-/*                                                                            */
-/* @(#) 1.11 SERV1/ws/code/recovery.log/src/com/ibm/ws/recoverylog/spi/RecoveryDirectorFactory.java, WAS.transactions, WASX.SERV1, qq1230.02 7/21/09 10:02:45 [7/25/12 20:18:36]                                              */
-/*                                                                            */
-/* DESCRIPTION:                                                               */
-/*                                                                            */
-/* Change History:                                                            */
-/*                                                                            */
-/* Date      Programmer    Defect      Description                            */
-/* --------  ----------    ------      -----------                            */
-/* 06/06/03  beavenj       LIDB2472.2  Create                                 */
-/*  03-08-01   irobins       171437.26 AccessController package change        */
-/* 28/08/03  kaczyns       LIDB2561.1  390 recovery director                  */
-/* 11/11/03  hursdlg       LIDB2775    Merge zOS and distributed code         */
-/* 04-03-23  awilkins      195493      Temporarily disable use of z/OS log    */
-/* 04-03-24  awilkins LIDB2775.53.5.1  Exception chaining                     */
-/* 04-05-14  hursdlg       195493.1    Enable use of z/OS log                 */
-/* 09-07-21  johawkes      602532      Remove WAS dependency                  */
-/* ************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.recoverylog.spi;
 

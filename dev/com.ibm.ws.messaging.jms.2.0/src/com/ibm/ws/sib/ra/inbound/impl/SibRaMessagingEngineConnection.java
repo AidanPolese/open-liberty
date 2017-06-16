@@ -1,26 +1,13 @@
-/*
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012, 2013
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 91748           110213 chetbhat NPE while stopping server with MDB installed.
- * 94187           190213 chetbhat Exception when jmsServer is removed when MDB is still running
- * 95225           140313 chetbhat MDB connection retry
- * 96380           150313 kavitha  Incorrect exception thrown
- * 91142           160413 urwashi  Remove threadpool reference
- * 99761           221013 senthven Error Message Correction
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.ra.inbound.impl;
 
 import java.util.Collections;

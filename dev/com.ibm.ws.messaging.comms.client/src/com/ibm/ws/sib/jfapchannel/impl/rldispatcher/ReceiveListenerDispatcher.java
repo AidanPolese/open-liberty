@@ -1,44 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.31 SIB/ws/code/sib.jfapchannel.client.common.impl/src/com/ibm/ws/sib/jfapchannel/impl/rldispatcher/ReceiveListenerDispatcher.java, SIB.comms, WASX.SIB, uu1215.01 08/07/23 08:47:51 [4/12/12 22:14:15]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2004, 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * F185831         040106 prestona Original
- * F181603.2       040119 prestona JFAP Segmentation
- * F188491         040128 prestona Migrate to M6 CF + TCP Channel
- * F201521         040505 mattheg  Allow receive listener to influence dispatch queue
- * F202636         040511 mattheg  Add check to abort on getThreadContext error
- * D213108         040701 mattheg  Allow an invocation to be queued onto more than one dispatch queue
- * D221432         040804 prestona Fix typo in threadpool name.
- * D197042         040811 prestona FFDC entries
- * D217401         040812 prestona ArrayList performs poorly if used as FIFO queue
- * D240062         041018 mattheg  Pace the receive listener queues
- * D242116         041028 mattheg  Provide a further thread pool for ME-ME connections
- * F248849         050201 prestona Improve receive listener dispatcher performance
- * D262285         050321 mattheg  Ensure access to total oustanding count is synchronized
- * D341600         060810 prestona Fix Java 5 compiler warnings
- * D487998         071210 prestona Deadlock when publishing
- * D492528         080118 mleming  Fix up trace
- * D493744         082301 sibcopyr Automatic update of trace guards
- * D484128.11      080425 mleming  Allow configuration of RLD thread pool
- * D499845         080611 mleming  Change default size of client side thread pool to 1
- * 515551          080709 vaughton ME-ME performance
- * 538065          080722 mleming  Tidy up of a couple of threading issues
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.jfapchannel.impl.rldispatcher;
 

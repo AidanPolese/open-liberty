@@ -1,66 +1,15 @@
 package com.ibm.tx.jta.impl;
 
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/*  ORIGINS: 27                                                                      */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 20090 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  DESCRIPTION:                                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  Date      Programmer    Defect     Description                                   */
-/*  --------  ----------    ------     -----------                                   */
-/*  13/04/04  beavenj       LIDB1578.1 Initial supprort for ha-recovery              */
-/*  15/04/04  beavenj       LIDB1578.3 Termination support for ha-recovery           */
-/*  22/04/04  beavenj       LIDB1578.4 Early logging support for CScopes             */
-/*  29/04/04  hursdlg       LIDB2775   Check for JTA2 private interop support        */
-/*  08/05/04  hursdlg       202183     Enable zOS recovery manager                   */
-/*  27/04/04  beavenj       LIDB1578.5 Connect up with HA framework                  */
-/*  19/05/04  beavenj       LIDB1578.6 Connect up with WLM cluster framework         */
-/*  21/05/04  beavenj       LIDB1578.7 FFDC                                          */
-/*  21/06/04  johawkes      199785     Fix partner log corruption on shutdown        */
-/*  22/06/04  mallam        209935.1   Issue clean shutdown message                  */
-/*  01/07/04  hursdlg       210818.1   RecoveryManager interface changes             */
-/*  08-07-04  dmatthew      210276.1   WSAddressing HA changes                       */
-/*  10-08-04  beavenj       221931     Fix cleanup logic for recovery logs           */
-/*  26-08-04  beavenj       227136     Prevent potential log collision               */
-/*  26-08-04  dmatthew      227192     Fix call to registerWSATServices              */
-/*  08-09-04  hursdlg       230066     Cleanup FFDC                                  */
-/*  17/09/04  johawkes      232512     Fix NPE in shutdown                           */
-/*  20/09/04  hursdlg       233078     Check all cases on shutdown even 1 resource   */
-/*  23/09/04  hursdlg       234158     Check recoveryManager on deregisterTransaction*/
-/*  28/09/04  beavenj       227911     Clean shutdown after openLog failure          */
-/*  26/10/04  mezarin       LI1578-22  z/OS HA Recovery support                      */
-/*  18/01/05  johawkes      249940.1   Refactor WSATControlSet                       */
-/*  16/09/05  johawkes      LIDB3462-3.NS7 Set namespace date on EPRs                */
-/*  08/07/05  kaczyns       LI3187     Add ServantManager for Coordinator            */
-/*  30/10/05  johawkes      LIDB3462-37.TX WSAddressing HA changes                   */
-/*  02/11/05  mezarin       LI3187-29.2 Register z/OS's Jca Recovery Coordinator.    */
-/*  06/01/06  johawkes      306998.12  Use TraceComponent.isAnyTracingEnabled()      */
-/*  25/04/06  hursdlg       360413     Recovery retry and HA changes                 */
-/*  09/06/06  hursdlg       370671     HA enablement on z/OS                         */
-/*  12/10/06   pault1       PK31789    Transaction logs get in a bad state after     */
-/*                                     errors when using failed over file system     */
-/*  07/01/05   dmatthew     PK37117    Fix HA                                        */
-// 07/04/12 johawkes LIDB4171-35    Componentization
-// 07/04/12 johawkes 430278         Further componentization
-// 07/05/30 hursdlg  396035         Only merge PLTs after transaction checks
-// 07/06/06 johawkes 443467         TranLogConfiguration moved
-// 07/08/08 johawkes 451213.1       Move JCA stuff back into JTM
-// 07/08/16 johawkes 451213         Move LPS stuff back into JTM
-// 07/12/19 hursdlg  489664         Move tran shutdown logic to TransactionImpl
-// 09/06/02 mallam   596067         package move
-// 10/09/23 johawkes 663227         Change suggested by perf team
-
+/*******************************************************************************
+ * Copyright (c) 2002, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Set;

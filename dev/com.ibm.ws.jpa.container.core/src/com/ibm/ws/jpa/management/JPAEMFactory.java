@@ -1,39 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// %I% %W% %G% %U%
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2007, 2011
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  JPAEMFactory.java
-//
-// Source File Description:
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d416151   EJB3      20070122 leealber : Initial Release
-// d416151.2 EJB3      20070220 leealber : Container managed persistence context part 2
-// d416151.3 EJB3      20070306 leealber : Extend-scoped support
-// d433963   EJB3      20070420 leealber : Fix NPE in toString.
-// d416151.3.5 EJB3    20070501 leealber : Rename JPAService to JPAComponent
-// d416151.3.7 EJB3    20070501 leealber : Add isAnyTraceEnabled() test
-// d446013   EJB3      20070618 leealber : Injected same instance of JPA?mEntityManager
-// d510184   WAS70     20080505 tkb      : Create seperate EMF for each java:comp
-// F743-954  WAS80     20090226 leealber : Add JPA 2.0 APIs
-// F743-954.1 WASX     20090330 leealber : Add additional JPA 2.0 APIs
-// d602618   WASX      20090722 leealber : Update to JPA 2.0 API to EA5 level and temporary 
-// d618559   WASX      20091014 leealber : Update to JPA 2.0 API to EA9 level - Final Draft
-// F743-16027 WAS80    20091029 andymc   : Removed caching of JPAComponent 
-// F743-18776
-//           WAS80     20100122 bkail    : Use AbstractJPAComponent, not JPAComponentImpl
-// d706751   WAS80     20110609 bkail    : Add wrap; support WSJPAEMFactory and OpenJPAEMFactory
-// RTC112113 WAS90     20131023 leealber : Add new JPA 2.1 APIs
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2007, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_RESOURCE_BUNDLE_NAME;

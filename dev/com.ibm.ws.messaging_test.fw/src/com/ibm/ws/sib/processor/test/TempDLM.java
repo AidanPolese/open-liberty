@@ -1,37 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- * 1862901.1         050104 gatfora  Added isInitialized method
- * 186334            050104 matrober Standalone ME coding
- * 176658.3.1        090304 vaughton Changes in TRM interface
- * 176658.11         300304 tpm      Make extensible & change member access
- * 196277.5          060404 millwood Mediations support
- * 200351.1          040504 vaughton Remove unused TRM methods
- * 197614            010604 millwood Set whether message is 'WLM guess'
- * 206398            010604 cwilkin  Fix sourceStreamReallocation test
- * 206673            020604 gatfora  Temporary destinations shouldn't update WLM
- * 204506            030604 cwilkin  add transmitQ reallocation
- * 204277.6          110604 millwood get enable/disable for dynamic config
- * 234915            221204 vaughton x3 cluster reduction
- * 456805            030807 matrober BuildBreak: 2 compile failures in sib.unittest.standalone_me
- * SIB0113a.mp.6    080307 cwilkin  Gathering consumers
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.test;
 

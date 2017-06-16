@@ -1,30 +1,14 @@
 package com.ibm.ws.sib.msgstore.transactions.impl;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Material
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason        Date     Origin     Description
- * ------------- -------- ---------- ------------------------------------------
- * 188494        27/01/04  gareth    Tie transactions to individual ME
- * 199334.1      27/05/04  gareth    Add transaction size counter
- * 216527        15/07/04  gareth    Handle SeverePersistenceException
- * SIB0002.ms.1  28/07/05  schofiel  Changes for remote MQ subordinate resources
- * SIB0003.ms.13 26/08/05  schofiel  1PC optimisation only works for data store not file store           
- * 306998.20     09/01/06  gareth    Add new guard condition to trace statements
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.sib.msgstore.MessageStoreConstants;

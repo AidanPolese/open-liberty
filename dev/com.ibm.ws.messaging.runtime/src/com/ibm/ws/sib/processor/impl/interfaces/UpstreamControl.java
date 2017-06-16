@@ -1,37 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * 180483.1         271003 tevans   Interface changes to facilitate remoteGet
- * 171905.28        031103 tevans   Pubsub GD/ME-ME target flows
- * 181796.1         051103 gatfora  New MS5 Core API
- * 171905.34        191103 astley   unicast flush and stream IDs
- * 171905.44        171203 astley   Stream IDs for pub/sub.
- * 181718.4         221203 gatfora  Move to the new UUID classes
- * 186256.1         301203 tevans   Refactor GD/stream/flush code
- * 171905.47        140104 rjnorris Add support for sendWindow
- * 194131           110304 rjnorris Changes for foreign bus support   
- * 198550           140404 rjnorris Add remoteBus and remoteDestUuid
- * 186484.19.2      050704 tevans   PtoP Request flush at source
- * 201972.1         270704 gatfora  Core SPI Exception rework
- * 419906           080307 cwilkin  Remove Cellules
- * PM56596.DEV      032012 chetbhat Managing conflicting ticks
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl.interfaces;
 
 // Import required classes.

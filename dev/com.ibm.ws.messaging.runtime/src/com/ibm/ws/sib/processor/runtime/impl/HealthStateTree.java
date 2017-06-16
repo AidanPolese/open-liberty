@@ -1,31 +1,13 @@
-/*
- * 
- * 
- * ===========================================================================
- * IBM Confidential OCO Source Material
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ===========================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * SIB0105.mp.5     071106 cwilkin  Original
- * SIB0105.mp.7     250607 cwilkin  Link Publication Point Controls
- * 442467           250607 gatfora  Remove unused fields and cleanup trace.
- * SIB0105.mp.8     030707 cwilkin  Implement getHealthReason
- * 451207           200807 cwilkin  Iterate over values, not entries
- * 536566           060708 dware    Add prioritisation to reasons, improve trace, remove state caching
- * 535791           290708 dware    Support inserts in reason text
- * 537995           300708 djvines  Fix findbugs observations
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.runtime.impl;
 
 import java.util.Arrays;

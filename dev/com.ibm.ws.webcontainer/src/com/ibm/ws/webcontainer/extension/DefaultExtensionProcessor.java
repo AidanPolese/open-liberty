@@ -1,50 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//
-//  CHANGE HISTORY
-//  Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//	    298927    	    08/17/05	todkap		    improve filter handling for core    WASCC.web.webcontainer
-//          PK10057         09/14/05    todkap              WSAS 6.0.2 WEB APPLICATION WELCOME PAGES NOT SECURED.    WAS.webcontainer
-//	    PK10057.1       10/03/05    todkap              WSAS 6.0.2 WEB APPLICATION WELCOME PAGES NOT SECURED.    WAS.webcontainer
-//	    309663          10/04/05    todkap              V61FVT: getWebConstraints has intermittent failures    WAS.webcontainer
-//          309663.1        10/07/05    todkap              309663 needed to skip cache on forwards and includes   WAS.webcontainer
-//          PK13570         01/03/06    mmolden             WITH SYNCTOOSTHREAD ENABLED, SIMPLE FILES (.GIF, .HTML, ETC...)    WAS.webcontainer
-//          PK15276         01/03/06    mmolden             INCORRECT FILTER MAPPING: WAS 6.0.2 VIOLATES THE SERVLET    WAS.webcontainer
-//          336082          01/10/05    mmolden             61FVT:RTF: All the images cannot display if security enabled
-//          338876          01/17/06    todkap              61FVT:RRD-error request attrs not set    WAS.webcontainer    
-//          PK22928         04/25/06    cjhoward            SOURCE CODE OF JSP MIGHT BE DISPLAYED FOR SOME SPECIAL URI
-//	    364580	    04/28/06	todkap		    SSC: SVT:NMSV0308W: javaURLContextFactory cannot create
-//          PK25868         06/14/06    mmolden             WHEN CLIENT USES SERVLET FILTER FUNCTION THEY ARE RECEIVING AN
-//          PK23475	    06/26/06	ekoonce             Add checking of request allowability for extended document root files 
-//          PK24615	    05/26/06    mmulholl            Only reject requests which start with "WEB-INF/" or "META-INF/"
-//          PK27620         08/23/06    cjhoward            SERVLET FILTER IS NOT CALLED IN V6 FOR URL RESOURCES WHEN THESE ARE NOT FOUND.  IN V5, THE FILTER IS ALWAYS CALLED
-//	    395087          10/24/06    mmulholl            Improve Trace  
-//          PK36447         01/15/07    ekoonce             Source exposure of files under WEB-INF & META-INF on dispatch
-//          PK31377         04/13/07    sartoris            Servlet filter is not called for URL resources
-//          PK45107         08/30/07    mmolden            EXCEPTION FROM SERVLET FILTER IS NOT PROPAGATED TO CLIENT
-//       489973          12/31/07      mmolden             70FVT:ServletRequestListener not firing when registered in tld
-//       508566          04/09/08      mmolden             PERF: File Serving Performance improvement
-//       PK64290         05/20/08      mmolden             SESSION LOSS WHEN USING ONLY URLREWRITING
-//          PK64302        04/28/08     mmulholl            Return 403 in prefernce to 404 for forbidden requests.
-//          PK65408        08/01/08     mmolden             ABSTRACT: "SRVE0190E: FILE NOT FOUND:" FROM A JSP WHICH USES
-//          542155         08/07/08     mmolden              Modify PK6430 - 404 to 403 only if directory is traversed.                                                                                                                                                                                                                
-//	    PK78371         01/13/09    pmdinh              Option to append queryString when forwarding to Welcome File
-//	    PK85015	    05/07/09	anupag		    commit response if less then 4096 bytes
-//          PM17845         07/13/10    mmulholl            allow for a request to a directory in an extended document root to be a partial URL
-//
-//          PM36303         04/19/11    pmdinh              404 returns for webcome_file after 7.0.0.13 with synToOSThread enabled.
-//          PM79476         01/15/13    anupag              Get pathInfo and servletPath from dispatchContext not request , PM71901 trad
-//          PM83452         04/01/13    anupag              PM82876, Allow serving files which have dots in the filename.
-//          PM84305         07/10/13    pmdinh              Prevent OOM which may occur due to application design
-
-
-
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.extension;
 
 import java.io.File;

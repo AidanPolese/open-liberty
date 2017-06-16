@@ -1,92 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.104 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/ClientSideConnection.java, SIB.comms, WASX.SIB, uu1215.01 12/01/30 03:56:20 [4/12/12 22:15:08]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2003, 2011
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030501 niall    Original
- * F166959         030521 niall    Rebase on non-prototype CF + TCP Channel
- * D167574         030528 niall    Fix TRM Data transport
- * d170527         030625 mattheg  Tidy and change to SibTr
- * d170639         030626 mattheg  NLS all the messages
- * d169897.2       030707 schmittm Provide remote client implementation of new Core API as defined
- * f171400         030710 schmittm Implement Core API 0.6 changes in client and server code
- * f172297         030723 schmittm continued implementation of Core API 0.6 changes in client and server code
- * f173559         030807 mattheg  Move location of JFAPCommunicator and use CommsString pool and get handshake from Link level state
- * F174602         030819 prestona Switch to using SICommsException
- * f176954         030916 mattheg  Allow heartbeat values to be negotiated and inform JFAP
- * d175811         030919 mattheg  Allow user identities to be passed up every API level connection
- * d177418         030922 mattheg  Allow connect throw NotAuthorised and ensure we check rc of connect
- * d177434         030922 mattheg  Throw an SIAuthenticationException instead of SINotAuthorised
- * d177495         030923 mattheg  Throw an SIAuthenticationException instead of SINotAuthorised in TRM handshake too
- * f177497         030923 mattheg  Remove line turnaround for get connection
- * f177899         030929 mattheg  Core API M4 completion
- * f178548         031002 mattheg  Make user identity flow have the same foramt as the handshake
- * f178690         031003 mattheg  Get rid of need for line turnaround for first createUniqueId
- * d179338         031009 mattheg  Rename the handshake constants to something more generic
- * d179741         031014 mattheg  Add extra connection debug code
- * F182479         031127 prestona New ConnectionProperties varient required.
- * f172521.2       030923 Niall    Support MFP Schema Propogation
- * d184626         040115 mattheg  Implement close()
- * f187850         040121 Niall    Support MFP Schema Propogation Phase #2
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * F189000         030130 prestona Expose WLM endpoints through CF
- * d189716         040218 mattheg  FFDC Instrumentation
- * d192293         040308 mattheg  NLS file changess
- * d193661         040312 mattheg  Ensure we do call handshakeComplete() even on error
- * f184185.7.2     040323 mattheg  Move authentication into TRM
- * D196678.10.1    040521 prestona Add connection metadata method
- * D209401         040614 mattheg  Comms service utility
- * D210978         040621 mattheg  Ensure MFP is informed of connection closure at correct time
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D223615         040812 mattheg  Ensure we called handshakeFailed() when the handshake fails
- * D199177         040816 mattheg  JavaDoc
- * D210259.1       040819 mattheg  Ensure we initialise CommsUtils
- * D225797         040820 mattheg  Fix up possible NPE when connection is lost on exchange
- * D234369         040927 prestona Deadlock in Comms
- * D235891         040930 mattheg  Runtime property standards
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D247547         041215 prestona IllegalArgumentException in getWLMEndPointData
- * D249887         050113 prestona Fix NPE caused by trivial lack of assignment
- * F247845         050131 mattheg  Multicast enablement
- * F247975         050203 prestona Add arguments to ConnectionMetaData constructor
- * D270362         050422 mattheg  Add more trace on connect()
- * D273578         050505 mattheg  Ensure conversation is closed on failed connect
- * D276260         050516 mattheg  Add hashcode to trace (not change flagged)
- * D321398         051107 mattheg  Initialise the FFDC module
- * D289992         051114 prestona Reduce Semaphore creation
- * D335337         060105 mattheg  Fix hang on failed handshake
- * D354565         060320 prestona ClassCastException thrown during failover
- * D358323         060330 mattheg  Improve trace
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * D384259         060815 prestona Remove multicast support
- * SIB0048b.com.1  060901 mattheg  Remove CommsServiceUtility and CommsDiagnosticModule hooks
- * SIB0048b.com.6  060918 mattheg  Remove references to CFEndPoint
- * D395634         061005 mattheg  Add support for diagnostic module
- * SIB0100.wmq.3   070813 mleming  Allow WMQRA to use TCP Proxy Bridge
- * 464663          070905 sibcopyr Automatic update of trace guards
- * 508603          080509 susana   Store SchemaSet in JFAP connection rather than WeakHashMap
- * 534889          080710 vaughton Don't FFDC on connection failure
- * 537955          080728 vaughton null schema set returned after invalidate
- * F002074         091026 mleming  MEP support FIS
- * PM44272         110921 slaterpa Prevent deadlock when handshake fails
- * 724257          300112 bsharath Undocumented SIBus message text is WAS Log
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import java.net.InetSocketAddress;

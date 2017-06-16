@@ -1,32 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.16 SIB/ws/code/sib.jfapchannel.server.impl/src/com/ibm/ws/sib/jfapchannel/impl/JFapDiscriminator.java, SIB.comms, WASX.SIB, aa1225.01 06/09/14 10:15:16 [7/2/12 05:59:07]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5655-N01, 5733-W61  (C) Copyright IBM Corp. 2003, 2006 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2003, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030424 prestona Original
- * F166959         030521 prestona Rebase on non-prototype CF + TCP Channel
- * D181601         031031 prestona Improve quality of JFAP Channel RAS
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * D218910         040728 prestona java.lang.ClassCastException on discriminate
- * D199145         040812 prestona Fix Javadoc
- * D234423         040924 prestona Channels do not handle timeout prior to discrimination 
- * D377648         060714 mattheg  Move BufferPoolManagerReference into sib.utils
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * ============================================================================ 
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.jfapchannel.server.impl;
 
 import java.util.Map;

@@ -1,25 +1,13 @@
-// @(#) 1.3 SERV1/ws/code/ras/src/com/ibm/ejs/ras/Untraceable.java, WAS.ras, WASX.SERV1, uu0827.36 4/17/06 11:20:50 [7/9/08 14:47:27]
-/*
- * COMPONENT_NAME: WAS.ras
+/*******************************************************************************
+ * Copyright (c) 2000, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * ORIGINS: 27         (used for IBM originated files)
- *
- * IBM Confidential OCO Source Material
- * 5724-I63, 5724-H88, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 2000,2006
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * DESCRIPTION:
- *
- * Change History:
- *
- * Reason    Version  Date        Userid    Description
- * ----------------------------------------------------------------------------
- * d136906     5.0    06-26-2002  stopyro   Part Created.
- * d360116     6.1    04-05-2006  tomasz    Added ibm api tag to the javadoc
- * d360116.2   6.1    04-17-2006  tomasz    Removed ibm api tag from the javadoc
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ejs.ras;
 

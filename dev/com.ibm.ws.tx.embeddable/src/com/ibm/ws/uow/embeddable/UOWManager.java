@@ -1,30 +1,13 @@
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* ORIGINS: 27                                                                       */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  COPYRIGHT International Business Machines Corp. 2004,2011  */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  DESCRIPTION:                                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  YY-MM-DD  Programmer  Defect    Description                                      */
-/*  --------  ----------  ------    -----------                                      */
-/*  04-05-07  awilkins    200172    Creation                                         */
-/*  04-05-12  awilkins    202175    UOWScope and UOWScopeCallback                    */
-/*  04-05-25  awilkins    202175.1  Provide accessor to current UOWScope             */
-/*  04-06-24  awilkins    210577    Correct javadoc for getUOWScope()                */
-/*  06-10-13  johawkes    LIDB4548-1.1 Extend SPI                                    */
-/*  08-04-02  mallam      498639    provide suspendAll/resumeAll methods             */
-/*  11-11-24  johawkes    723423    Repackaging                                      */
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2004, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.uow.embeddable;
 

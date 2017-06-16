@@ -1,20 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5655-N01, 5733-W61(C) COPYRIGHT International Business Machines Corp. 1997-2010
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//
-//Code added as part of LIDB 2283-4
-//
-//  CHANGE HISTORY
-// Defect       Date        Modified By     Description
-// ----------------------------------------------------------------------------
-// 316624       10/31/05    ekoonce         Fail safe issue with Iterators
-// 324991       11/21/05    mmolden         61FVT: NullPtrExpn when logging out after admin console addNode
-// 390332       09/14/06    mmolden         CTS:<jsp-property-gruop> tag not resolved for a particular URL
-// PM06111      02/08/10    mmulholl        Add support for URI Matching with string keys     
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.util;
 
 import java.io.BufferedReader;

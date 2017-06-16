@@ -1,54 +1,14 @@
 package com.ibm.ws.sib.msgstore.transactions.impl;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012,2013
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- --------------------------------------------
- * 168081          01/09/03 gareth   GlobalTransaction Support (Local Clients)
- * 181339          29/10/03 gareth   Change XAResource to single-threaded
- * 182347          11/11/03 gareth   Add Persistent Transaction ID
- * 181930          12/11/03 gareth   XA Recovery Support
- * 184032          27/11/03 gareth   Change indoubt Xid storage method
- * 185332          15/12/03 gareth   Track runtime in-doubt Xids
- * 188010          22/01/04 pradine  Clean up of persistence layer interfaces
- * 188494          27/01/04 gareth   Tie transactions to individual ME
- * 189573          05/02/04 gareth   Add NLS support to transaction code
- * 187601          18/02/04 gareth   PERF: Use synchronized collection
- * 188054.1        16/03/04 gareth   Enhanced JDBC Exception handling
- * 211924          28/06/04 gareth   List non-local-TM coordinated Xids
- * 213328          30/06/04 pradine  Perform synchronous delete during 2PC processing
- * 216527          15/07/04 gareth   Handle SeverePersistenceException
- * 229486          07/05/04 gareth   Improve javadoc
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * 280151          26/09/05 gareth   PERF: Improve use of Hashtables
- * 306998.20       09/01/06 gareth   Add new guard condition to trace statements
- * 373927          03/07/06 gareth   Add check for 1PC around indoubtXids in commit
- * 398385          18/10/06 gareth   Improve handling of commit retries
- * 373006.3        23/01/07 gareth   TMJOIN 1PC Optimization
- * 420778          21/02/07 gareth   Revert to using Hashtable for tran lists
- * SIB0048c.ms.1   08/03/07 gareth   Make MS XAResource JTA compliant
- * PK47681         26/06/07 ajw      Improve handling of rollback retries
- * 455354          20/08/07 gareth   Tighten up Xid checking at start() time
- * 520772          14/05/08 djvines  Use Arrays.toString
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * 560281.1        06/11/08 gareth   Change lock objects to specific class
- * PM31431         02/02/11 slaterpa Prevent unresolved indoubts
- * 90454           30/01/13 sanjay   Fix for enabling listPeparedTransactions
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.util.Arrays;
 import java.util.Enumeration;

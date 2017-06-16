@@ -1,23 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//
-//  CHANGE HISTORY
-// Defect       Date        Modified By     Description
-//--------------------------------------------------------------------------------------
-// 283348.1     07/26/05    ekoonce         Fix Tr.* statements
-// 293696       07/27/05    mmolden         ServletRequest.getPathInfo() fails
-// 296368       08/05/05    todkap          Nested exceptions lost for problems during application startup
-// 323294       11/11/05    todkap          allow virtual hosts to use same host/port combinations    WAS.webcontainer
-// 340680       01/24/06    mmolden         content type fails when static resource has path element
-// PK37449      04/26/07    ekoonce         A THREAD DEADLOCK MAY OCCUR
-// PK67698      09/02/08    mmolden         NULL POINTER EXCEPTION IN THE WEBCONTAINER CODE
-//PK74092       11/10/08    mmolden         LOAD-ON-STARTUP INDICATION FOR SIPLETS IS NOT LOADING THE
-// PI58875      06/06/16    pmdinh          Option to stop app from startup when there is exception in listener.  Also fix classLoader memo leak when app fails to start
-//
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer;
 
 import java.util.ArrayList;

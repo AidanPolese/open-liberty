@@ -1,28 +1,13 @@
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2012 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Developer  Defect         Description                                                      */
-/*  --------  ---------  ------         -----------                                                      */
-/*  09-08-19  mallam     602532.3   ltc bundle                                                           */
-/*  12-01-11  nyoung     725678     POST_BEGIN and POST_END support                                      */
-/*  08-02-12  nyoung     727684     POST_END support on ltc error paths                                  */    
-/*  12-02-20  johawkes   728559         Call interposed syncs in embeddable                              */
-/*  12-11-27  johawkes   741956     LTCCallbacks move to embeddable                                      */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.tx.ltc.impl;
 

@@ -1,40 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * 180483.1         271003 tevans   Interface changes to facilitate remoteGet
- * 181796.1         051103 gatfora  New MS5 Core API
- * 171905.35        201103 rjnorris Remote to Remote PubSub
- * 185688           161203 gatfora  Package restructure for items and itemstreams
- * 171905.44        171203 astley   Stream IDs for pub/sub.
- * 186256.1         301203 tevans   Refactor GD/stream/flush code
- * 171905.49        260104 rjnorris Improve batch handling   
- * 199574           050405 gatfora  Remove use of ArrayLists.
- * 186484.19.3      060704 tevans   Flush at target improvements
- * 201972.1         270704 gatfora  Core SPI Exception rework
- * 244425           151204 tpm      isDestinationFull
- * 244425.1         130105 tpm      forcePut & isDestFull optimisations
- * 266451           080405 tpm      Interbus dest full use routing dest
- * 464463           070708 nyoung   Messages coming off a link are incorrectly exceptioned
- * 464463.1         210708 nyoung   Messages coming off a link are incorrectly exceptioned - pt 2
- * 464463.2         250708 nyoung   Messages coming off a link are incorrectly exceptioned - pt 3
- * 510343           010908 dware    Add methods for issuing servicability messages
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl.interfaces;
 
 // Import required classes.

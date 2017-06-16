@@ -1,36 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.18 SIB/ws/code/sib.processor.impl/src/com/ibm/ws/sib/processor/matching/MPPrincipal.java, SIB.processor, WASX.SIB, ff1246.02 09/05/28 05:46:29 [11/16/12 22:51:53]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2009 
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 184185.1.4       210404 nyoung   Introduce discriminator access checking.
- * 184185.1.6       270404 nyoung   Enable delivery time discriminator access checks.
- * 202405           170504 gatfora  Missing FFDC's
- * 184185.1.10      250504 nyoung   Implement FRP Security.
- * 207008.2         010704 nyoung   Fold user and group names to lower case.
- * 213918           020704 nyoung   Fix NPE due to groups list not being initialised.
- * 238960.2         151004 nyoung   Trace flooded by Java 2 security warnings.
- * 246746           081204 gatfora  Removal of unused code.
- * SIB0165.mp.1     260907 nottinga Stopped using AuthUtils.getGroupsForUser.
- * 471043           011007 sibcopyr Automatic update of trace guards
- * 516346           010508 djvines  equals to check class is the same
- * 585899           210409 jhumber  Call getUserUsingUniqueName in constructors
- * 585899.1         280509 gatfora  Security checks should be case insensitive.
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.matching;
 
 import java.security.Principal;

@@ -1,67 +1,14 @@
 package com.ibm.tx.jta.impl;
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2004, 2009 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  YY-MM-DD   Programmer  Defect      Description                                                       */
-/*  ---------  ----------  ------      -----------                                                       */
-/*  03-05-16   ehadley     -           Creation                                                          */
-/*  03-07-18   johawkes    LIDB2110.12 JCA 1.5                                                           */
-/*  03-08-06   johawkes    173643      Use Strings to key txnTable                                       */
-/*  03-08-18   johawkes    174376      Validate execution context on associate                           */
-/*  03-08-19   johawkes    174593      Resume local tran on dissociate                                   */
-/*  03-08-22   johawkes    174726      Allow null Xid on associate                                       */
-/*  03-09-25   johawkes    177245      Allow commit_one_phase during recovery                            */
-/*  03-09-25   johawkes    177208      Add trace                                                         */
-/*  03-09-30   johawkes    178038      Use local association methods                                     */
-/*  03-11-07   johawkes    182128      throw WCE when already associated                                 */
-/*  20/11/03   johawkes    182862      Remove static partner log dependencies                            */
-/*  27/11/03   johawkes    178502      Start an RA during XA recovery                                    */
-/*  05/12/03   johawkes    184903      Refactor PartnerLogTable                                          */
-/*  08/12/03   johawkes    184992      Correct error code for concurrent work                            */
-/*  12/12/03   johawkes    185481      Suppress some WTRN0091 error messages                             */
-/*  06/01/04   hursdlg     LIDB2775    zOS/distributed merge                                             */
-/*  07/01/04   johawkes    LIDB2110    RA Uninstall                                                      */
-/*  04/02/04   johawkes    189497      Improve comments per code review                                  */
-/*  05/02/04   mallam      LIDB2775    Rename XID to XidImpl                                             */
-/*  04/03/04   johawkes    191316      Log resources when setting LPS state                              */
-/*  17/03/04   johawkes    192653      Cancel timeouts on RA uninstall                                   */
-/*  25/03/04   johawkes    195344.1    Stop logging JCAProvider on registerAS                            */
-/*  22/04/04   awilkins    198904.1    getXid changes                                                    */
-/*  27/04/04   mallam      197039    Prolong finish for heuristic on recovery                            */
-/*  27/05/04   johawkes    204546      stoppingProvider rollback behaviour                               */
-/*  28/05/04   johawkes    204553      Now uses isJCAImportedAndPrepared()                               */
-/*  16/06/04   johawkes    209345      Remove unnecessary code                                           */
-/*  06/07/04   johawkes    213406      Allow completion during quiesce                                   */
-/*  27/07/04   johawkes    219412      Fix shutdown for JCA imported transactions                        */
-/*  04/08/05   kaczyns     LIDB2110    Use JCATranWrapper iface                                          */
-/*  19/08/04   johawkes    224215      Detect uninstalled providers better                               */
-/*  09/12/04   hursdlg     240298      Suspend LTC prior to creating global txn                          */
-/*  11/01/05   hursdlg     249308      recover to return only CR based xids                              */
-/*  31/01/05   hursdlg     248457.1    Check for tran after dissociate                                   */
-/*  15/03/05   mallam      260064      undo 248457.1                                                     */
-/*  05/07/05   johawkes    252569      Process Faults                                                    */
-/*  05/11/01   mezarin     LI3187-29.2 Modify the recover call for z/OS                                  */
-/*  06/06/12   hursdlg     371109      Check for null on recover                                         */
-// 07/04/12 johawkes LIDB4171-35    Componentization
-// 07/04/12 johawkes 430278         Further componentization
-// 07/05/16 johawkes 438575         Further componentization
-// 07/06/06 johawkes 443467         Repackaging
-// 07/08/06 johawkes 451213.1       Moved into JTM
-// 07/08/30 johawkes 463313         Override TransactionImpl creation in WAS
-// 08/02/15 kaczyns  512190         Handle exceptions on tranwrapper create
-// 08/04/25 johawkes 514000         Log JCA provider entry
-// 09/06/02 mallam   596067         package move
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,18 +1,13 @@
-/*
- * @(#) 1.3 SERV1/ws/code/utils/src/com/ibm/websphere/security/WebSphereSecurityPermission.java, WAS.security, WAS80.SERV1, h1116.09 2/3/05 16:12:43 [4/23/11 20:13:10]
- * 
- * IBM Confidential OCO Source Material
- * 5724-I63, 5724-H88, 5655-N01, 5733-W60 (C) COPYRIGHT International Business Machines Corp. 1997, 2005
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * 
- * Change History:
- * Tag          Person   Defect/Feature      Comments
- * ----------   ------   --------------      --------------------------------------------------
- * $c1          cyc      LIDB2355            Initial Version
- * @vj1         vijaylax  LIDB3706-5.154     Added SUID 
- */
+/*******************************************************************************
+ * Copyright (c) 1997, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.websphere.security;
 

@@ -1,16 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5724-J08 (C) COPYRIGHT International Business Machines Corp. 1997, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//CHANGE HISTORY
-//Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//        304662         09/13/05     ekoonce             add pmi get and set methods
-//        304662.1       09/19/05     ekoonce             Change 'pmi' in method names to 'statistics'
-//        341303         01/25/06     mmolden             Change WebContainer APIs to allow modification of ServletConfig
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.webcontainer.servlet;
 
 import java.io.File;

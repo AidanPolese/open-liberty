@@ -1,51 +1,14 @@
 package com.ibm.tx.jta.impl;
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2009 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  YY-MM-DD   Programmer  Defect      Description                                   */
-/*  ---------  ----------  ------      -----------                                   */
-/*  03-05-16   ehadley     -           Creation                                      */
-/*  03-07-18   johawkes    LIDB2110.12 JCA 1.5                                       */
-/*  03-08-19   johawkes    174593      Resume local tran on dissociate               */
-/*  03-09-25   johawkes    177245      Allow commit_one_phase during recovery        */
-/*  03-09-25   johawkes    177208      Renamed                                       */
-/*  03-09-26   johawkes    177834      Rollback should call internalRollback()       */
-/*  03-09-30   johawkes    178038      Use local association methods                 */
-/*  03-11-06   johawkes    182046      Suspend imported tx on prepare failure        */
-/*  05/12/03   johawkes    184903      Refactor PartnerLogTable                      */
-/*  07/01/04   johawkes    LIDB2110    RA Uninstall                                  */
-/*  30/01/04   johawkes    187239      Handle HeuristicHazard responses              */
-/*  04/02/04   johawkes    187497      Pass recovery data on prepare                 */
-/*  05/02/04  mallam     LIDB2775     remove waitForCommitOutcome                    */
-/*  23/02/04   johawkes    190337      Preserve heuristic outcome                    */
-/*  04/03/04   johawkes    191316      Log resources when setting LPS state          */
-/*  17/03/04   johawkes    192653      Cancel timeouts on RA uninstall               */
-/*  03/06/04   johawkes    207033      Delay registerJCAProvider                     */
-/*  14/06/04   johawkes    209345      Remove unused code                            */
-/*  06/07/04   johawkes    213406      Allow completion during quiesce               */
-/*  27/07/04   johawkes    218403      Fix removal from heuristic list               */
-/*  27/07/04   johawkes    219412      Fix shutdown for JCA imported transactions    */
-/*  04/08/05   kaczyns     LIDB2110    Break apart iface/impl                        */
-/*  13/09/04   mallam      231085      Heuristics on prepare                         */
-/*  17/09/04   johawkes    232559      Don't addHeuristic if we're swallowing it     */
-/*  16/11/04   hursdlg     244432      Match commit_one_phase to JTS behaviour       */
-/*  09/12/04   hursdlg     240298      Suspend LTC prior to creating global txn      */
-/*  27/02/06   johawkes    349539      Resume global tran if suspended               */
-/*  06/08/07   johawkes    451213.1    Moved into JTM                                */
-/*  30/08/07   johawkes    463313      Override TransactionImpl creation in WAS      */
-/*  02/06/09   mallam      596067      package move                                  */
-/*  02/11/11   jstidder    PM50360     Ensure alarms are cancel during rollback      */ 
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2002, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import javax.transaction.HeuristicCommitException;
 import javax.transaction.HeuristicMixedException;

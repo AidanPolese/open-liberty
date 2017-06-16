@@ -1,31 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.12 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/CommsServerByteBuffer.java, SIB.comms, WASX.SIB, aa1225.01 09/04/01 07:21:37 [7/2/12 05:59:05]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2003, 2008
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * SIB0048b.com.1  060901 mattheg  Allow better client / server code seperation
- * SIB0048b.com.5  060913 mattheg  JFap channel for Portly client rework
- * D348294.2       060921 mattheg  Remove use of deprecated encode() method
- * D408810         061130 tevans   Clean up MP-Comms interfaces
- * SIB0112c.com.1  070125 mattheg  Memory management: Parse message in chunks
- * 471664          071003 vaughton Findbugs tidy up
- * 538413          080725 djvines  Trace improvements to follow message flow
- * PK83641         310309 ajw      reset LinkLevelState when returning from pool;
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server;
 
 import java.io.UnsupportedEncodingException;

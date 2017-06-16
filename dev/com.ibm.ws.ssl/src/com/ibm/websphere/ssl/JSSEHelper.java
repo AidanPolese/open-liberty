@@ -1,18 +1,13 @@
-/*
- * IBM Confidential OCO Source Material
- * 5639-D57, 5630-A36, 5630-A37, 5724-D18
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * (C) COPYRIGHT International Business Machines Corp. 2005 - 2014
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * @(#) 1.18.2.9 SERV1/ws/code/security.crypto/src/com/ibm/websphere/ssl/JSSEHelper.java, WAS.security.crypto, WASX.SERV1, pp0919.25 9/8/08 13:32:59 [5/15/09 18:04:31]
- *
- * Date         Defect      CMVC ID    Description
- *
- **/
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.websphere.ssl;
 

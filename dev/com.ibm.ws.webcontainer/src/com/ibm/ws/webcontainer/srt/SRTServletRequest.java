@@ -1,55 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//CHANGE HISTORY
-//Defect        Date        Modified By         Description
-//--------------------------------------------------------------------------------------
-//268366                                        PERF: 3% regression in PingServlet, create paramStack only one since parameters are popped off after usage
-//269932                                        WebAppRequestDispatcher cleanup changes
-//293696        07/27/05    mmolden             ServletRequest.getPathInfo() fails
-//PK09940       08/11/05    todkap              HTTP CLIENT CLASS SENDING REQUESTS WITH AN EMPTY HOST HEADER
-//309663.2      10/10/05    todkap              309663 pathInfo problem exists for InvokerExtensionProcessor
-//321485        11/07/05    ekoonce             Improve trace
-//306736.4      11/28/05    todkap              handle duplicate JSESSIONID in the request    WASCC.web.webcontainer    
-//PK17095       01/04/06    todkap              WEBAPPDISPATCHERCONTEXT CORRUPTION DUE TO MULTITHREAD USAGE OF    WAS.webcontainer
-//306998.15     01/09/06    ekoonce             PERF: WAS tracing performance improvement
-//PK18815       02/21/06    todkap              NULLPOINTEREXCEPTION WITH CLONED REQUEST AND STORED RESPONSE    WAS.webcontainer
-//LIDB4408-1    02/22/06    todkap              LIDB4408-1 web container changes to limit pooling
-//346539        02/10/06    mmolden             61FVT:Access Control Exception in SRTServletRequest
-//348603.1      03/03/06    todkap              Changes in security SPI affect webcontainer    WASCC.web.webcontainer
-//353142        03/07/06    todkap              CodeReview: discarding of pooled objects and WCCRequest channel    WASCC.web.webcontainer
-//PK22688       04/18/06    cjhoward            getRequestURL does not return the jsessionid along with the url.
-//262147        04/25/06    mmolden             POST PARAMETERS NOT PRESERVED IN FORM LOGION    WAS.security
-//382943        08/09/06    todkap              remove SUN dependencies from core webcontainer
-//PK28078       08/14/06    ekoonce             getPathInfo returns empty string when url rewriting is enabled
-//LIDB4395-1    10/13/06    dettlaff            added get/setSessionAffinityContext
-//LIDB4317-1    10/17/06    mmolden             Servlet 2.5 changes
-//454430        08/19/07    mmolden             Clear obj refs from pooled objs before returning back to pool
-//461383       09/28/07    mmolden             70FVT: Async should still work when ARD is disabled  
-//506430        03/19/08    mmolden             UTF-8 encoding issues with admin console
-//PK57679       04/14/08    mmolden (mmulholl)  add support for getInputStreamData() and setInputStreamData()
-//519995        05/14/08    mmolden             SRTServletRequest getCharacterEncoding issues    
-//531038        06/19/08    mmolden             PERF: Reduce duplicate method calls in Web Container classes
-//516233        07/09/08    jebergma (mmulholl) update PK57679 to allow for empty post dat
-//PK80362       03/19/09 	anupag          	Suppress headers provided in the custom property list from the request to the application
-//F1179-17167.9 11/03/09    utle          	Add removePrivateAttribute() method
-//PM35450       04/25/11    anupag              Provide an option to allow query parameter with no "="
-//724365        12/12/11    anupag              PM53950, Add limit to multipart-parameters
-//724365.2      2/2/12      anupag              PM53930, Add limit.
-//PM58495       02/27/12    anupag              add limit on duplicate hash parameters , 728397
-//PM57418       02/28/12    anupag              Translate messages added by PM53930 and PM58495 (724365.4)
-//PM59297       03/29/12    pmdinh              StringIndexOutOfBound if request with ;jessionID to a default servlet
-//PM71991       01/14/13    anupag              Attribute should be removed if null object is passed to setAttribute //PM79917
-//PM92496       07/24/13    anupag              Provide method to add request SSL Attributes //PM83905
-//PI20210       08/13/14    pmdinh              Preserve the request parameter values which may be altered by the application.
-//141092        01/07/15    pmdinh              Improve error message when async servlet/filter is not supported
-//PI43752       07/24/15    zaroman             AsyncContext.dispatch() is using the wrong URI when the AsyncContext is init using ServletRequest.startAsync()
-//PI58920       03/10/16    pmdinh              Dispatcher type is not updated accordingly after dispatched.
-
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.srt;
 
 import java.io.BufferedReader;

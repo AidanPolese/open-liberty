@@ -1,28 +1,13 @@
-/*
- * ============================================================================
- * @start_prolog@
- * Version: @(#) 1.3 SERV1/ws/code/ras.lite/src/com/ibm/ejs/ras/RasHelper.java, WAS.ras.lite, WAS80.SERV1, kk1041.02 07/08/30 15:32:50 [10/22/10 01:28:54]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5724-J08  (C) Copyright IBM Corp. 2006
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 334159          051219 vaughton Original
- * SIB0048b.cli.1  060922 mnuttall Updated for WAS70.SIB
- *                 061031 vaughton Prep SERV1 version
- * 462724          070830 vaughton Add logger support
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ejs.ras;
 

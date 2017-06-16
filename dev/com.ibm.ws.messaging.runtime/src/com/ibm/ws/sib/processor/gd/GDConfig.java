@@ -1,30 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- --------------------------------------------
- * 171905.2         170703 rjnorris Initial implementation
- * 171905.14        050903 rjnorris Rename  AckExpected threshold 
- * 171905.32        141103 tevans   PubSub AckExpected/Nack 
- * 224817           170804 rjnorris Added a Max value for increasing AckExp interval 
- * 215177.3         250804 rjnorris Add ProtocolVersion
- * SIB0105.mp.5     040607 cwilkin  Link Transmission Health States
- * 510343           020908 dware    Move GD_GAP_CURIOSITY_THRESHOLD to CustomProperties
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.gd;
 
 // Import required classes.

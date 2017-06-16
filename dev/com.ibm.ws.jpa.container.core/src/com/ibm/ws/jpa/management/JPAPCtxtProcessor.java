@@ -1,50 +1,13 @@
-// IBM Confidential OCO Source Material
-// Copyright IBM Corp. 2006, 2015
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d392996   EJB3      20060930 leealber : Initial Release
-// d367834.12 EJB3     20061031 schmittm  changed class to fit InjectionProcessor format
-// d403140   EJB3      20061107 schmittm : Fix annotationCollection
-// d405016   EJB3      20061113 leealber : Initialize appl/jar name in cookie, create em in resolve()
-// d404167   EJB3      20061115 schmittm : Make Annotation Processors singletons
-// d406994.2 EJB3      20061120 leealber : CI: exception handling rework
-// d410616   EJB3      20061208 leealber : replace calling DeployedModuleImpl.getJarName() hack with getName()
-// d367834.14 EJB3     20070123 schmittm : rename beanInstance to classInstance
-// d416151   EJB3      20070122 leealber : Container managed persistence context part I
-// d416151.2 EJB3      20070220 leealber : Container managed persistence context part 2
-// d424494   EJB3      20070305 leealber : NPE in FFDC when invalid PU in @PersistenceContext
-// d367834.15 EJB3     20070316 schmittm : Refactor new injection engine Pyxis changes
-// d427858   EJB3      20070321 schmittm : make class public for reflection newInstance() call
-// d428680   EJB3      20070324 tkb      : use CompNameSpaceConfig for parameters
-// d426211   EJB3      20070329 schmittm : move extractAnnotationsFromDD() processing to InjectionEngine
-// d428309   EJB3      20070402 schmittm : remove context references and extra methods
-// d430982   EJB3      20070405 leealber : add instanceClass for addCookie call in extractAnnotationsFromDD
-// d416151.3 EJB3      20070306 leealber : Extend-scoped support
-// d416151.3.5 EJB3    20070501 leealber : Rename JPAService to JPAComponent
-// d416151.3.7 EJB3    20070501 leealber : Add isAnyTraceEnabled() test
-// d416151.3.4 EJB3    20070502 leealber : Clean up resolve error handling
-// d416151.3.3 EJB3    20070506 leealber : Messages/FFDC clean up.
-// d432816   EJB3      20070614 tkb      : Support multiple injection targets
-// d446013   EJB3      20070618 leealber : Injected same instance of JPA?mEntityManager
-//LIDB3294-35.1 WASX   20071212 schmittm : manual override of default processor
-// d510184   WAS70     20080505 tkb      : Create separate EMF for each java:comp
-// d658638   WAS80     20100628 tkb      : support EJBs in WARs
-// d658856   WAS80     20100629 tkb      : merge PCs from XML
-// F743-30682
-//           WAS80     20100820 bkail    : Call AbstractJPAInjectionBinding.addRefComponents
-// d662814   WAS80     20110115 tkb      : merge must detect conflicts
-// F46946.1  WAS85     20110719 bkail    : Use javaee.dd.common
-// F50309.1  WAS85     20110829 bkail    : Refine injection API
-// RTC113511 RWAS90    20131009 bkail    : Use AbstractJPAComponent.createPersistenceContextReference
-// d152713   RTC       20150126 jgrassel : Support @PersistenceContext Tx-Sync Feature
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2006, 2015 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_RESOURCE_BUNDLE_NAME;

@@ -1,11 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 2003, 2004
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-// 
-//@(#) 1.2 SERV1/ws/code/ssl.channel.impl/src/com/ibm/ws/ssl/channel/exception/ReadNeededInternalException.java, WAS.channel.ssl, WASX.SERV1 5/10/04 22:31:33 [1/4/05 10:36:36]
-
+/*******************************************************************************
+ * Copyright (c) 2003, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.channel.ssl.internal.exception;
 
 import com.ibm.wsspi.channelfw.exception.ChannelException;

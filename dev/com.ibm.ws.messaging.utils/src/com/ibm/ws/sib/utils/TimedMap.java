@@ -1,33 +1,13 @@
-/*
- * COMPONENT_NAME: sib.security.impl
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *  ORIGINS: 27
- *
- * 
- * 
- * ===========================================================================
- * IBM Confidential OCO Source Material
- *
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ===========================================================================
- * 
- *
- * 
- *
- * Change activity:
- *
- * Reason          Date        Origin   Description
- * --------------- ----------- -------- ----------------------------------------
- * d309333         08-Nov-2005 nottinga Initial Code Drop.
- * fSIB0129a.sec   14-Nov-2006 nottinga Updated to use Generics.
- * d405429         28-Nov-2006 djvines  Throw UOE for entrySet, values and keySet
- * fSIB0134.sec.3  30-Mar-2007 smithk6  Added getTimeout and setTimeout methods
- * fSIB0121a.utl.1 10-Apr-2007 djvines  Findbugs - use more efficient valueOf 
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.utils;
 
 import java.util.Collection;

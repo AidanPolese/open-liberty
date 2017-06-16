@@ -1,54 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.48 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/ConversationState.java, SIB.comms, WASX.SIB, aa1225.01 11/09/15 07:55:34 [7/2/12 05:58:59]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2003, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2003, 2011
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030325 rajam    Original
- * f169884         030623 mattheg  Added cached destination and added SibTr
- * f171400         030710 matthg   Add a CommsString and List cache
- * F174327         030814 Niall    ME - ME Connection Support stage 2
- * D174684         030820 Niall    Change location of CatHandshakeGroup
- * d175811         030919 mattheg  Improved authentication
- * d184027         040107 mattheg  Fix cached session bug with connection receives
- * f172521.2       030923 Niall    Support MFP Schema Propogation
- * f191114         040218 mattheg  Multicast support
- * f173276.11.1    040220 clarkep  Add version support to objectstore
- * f185184.7.2     040323 mattheg  Move authentication to TRM
- * d196159         040331 mattheg  Ensure exchange request numbers are unique
- * f196076         040405 mattheg  Multicast support -- phase 2
- * D219803         040810 mattheg  Access on constants
- * D199177         040816 mattheg  JavaDoc
- * D241156         041026 mattheg  Update max table size and neaten trace / remove unused methods
- * D256709         050221 mattheg  Support for dumping the last 100 objects when store full
- * D338523         060208 mattheg  Remove caching of CommsString and improve trace
- * D363790         060420 mattheg  Allow removeObject() to return an Object
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D384259         060815 prestona Remove multicast support
- * SIB0112c.com.1  070125 mattheg  Memory management: Parse message in chunks
- * D441183         072307 mleming  Don't FFDC when calling terminated ME
- * 458888          130807 sibcopyr Automatic update of trace guards
- * SIB0137.comms.2 070925 vaughton addDestinationListener
- * 471365          071002 sibcopyr Automatic update of trace guards
- * 521597          080519 vaugthon ObjectStoreFullException (cf 514462)
- * 537966          080722 mleming  Don't write to System.out/in
- * 592503          090722 mleming  ObjectStoreFullException -> ConversationStateFullException
- * F011127         280611 chetbhat registerConsumerSetMonitor support
- * 89792           070313 Romil   Giving meaningful ffdc exception for producerSessions exceeding out of limit removing indexOutOFBound exception
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server;
 
 import java.util.ArrayList;

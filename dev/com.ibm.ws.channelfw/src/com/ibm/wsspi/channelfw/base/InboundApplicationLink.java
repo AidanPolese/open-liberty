@@ -1,25 +1,13 @@
-//* ===========================================================================
-//*
-//* IBM SDK, Java(tm) 2 Technology Edition, v5.0
-//* (C) Copyright IBM Corp. 2005, 2006
-//*
-//* The source code for this program is not published or otherwise divested of
-//* its trade secrets, irrespective of what has been deposited with the U.S.
-//* Copyright office.
-//*
-//* ===========================================================================
-//
-//@(#) 1.4 CF/ws/code/channelfw/src/com/ibm/wsspi/channel/base/InboundApplicationLink.java, WAS.channelfw, CCX.CF 5/3/05 14:58:33 [5/11/05 12:46:05]
-// 
-//HISTORY
-//~~~~~~~
-// 
-//Change ID    Date      Author    Abstract
-//---------    --------  --------  ---------------------------------------------------
-//272200       05/03/05  clanzen   Prevent NPE on redundant close.
-//457362       08/08/07  wigger    private static final to TraceComponent to help performance 
-//======================================================================== */
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.channelfw.base;
 
 import com.ibm.websphere.ras.Tr;

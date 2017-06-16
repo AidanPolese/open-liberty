@@ -1,28 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-/*
- * Change history:
- * defect 216949 "JSP Batch compiler doesn't support debug mode"  2004/07/16  Scott Johnson
- * Defect 227804  2004/08/31  Strange stepping behaviour against the enclosed JSP file
- * Defect 358784  2006/04/03 BT61: SRVE0068E No function mapped to the name fn:length
- * feature LIDB4147-9 "Integrate Unified Expression Language"  2006/08/14  Scott Johnson
- * defect 396002 CTS: no jsp fatal translation error for  taglib after actions Scott Johnson 10/17/2006
- * Feature LIDB4293-2 - "In-memory translation/compilation of JSPs" 2006/11/11 Scott Johnson
- * jsp2.1work
- * defect 395182.2  70FVT: make servlet 2.3 compatible with JSP 2.1 for migration 2007/02/07 Scott Johnson
- * Defect PK31450 2007/05/08 Jsp compiled classes in the temp dir are lost when the server suspends especially when there are multiple servant regions
- * Defect PK31450 includes changes for 448201, 453382, 453730
- * Defect PK69410 2008/08/28 NPE in z/OS Multiple Servants - pmdinh
- * Defect PK76810 2008/12/11 ClassNotFoundException on z/OS - pmdinh
- * Defect PM12828 2010/05/06 NPE when translation JSP with custom tag - sartoris
- * Defect PM81674 2014/07/14 Expressions preceded by two backslashes are not evaluated - hmpadill
- * Defect PM96163 2014/07/16 NPE on Liberty when translation of the tag resources - hmpadill
- * Defect PI12939 2014/07/31 Add ability to delete .class file before compile - hmpadill
-*/
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.utils;
 
 import java.io.File;

@@ -1,31 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Material
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- *  
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- * 174369.2          110903 matrober Interfaces for JMS message and subscription name creation
- * 181796.5          051103 matrober Core SPI move to com.ibm.wsspi.sib.core
- * 197921.1          040504 jhumber  New Javadoc tags
- * 215550            120704 kingdon  Remove unnecessary public interfaces
- * 225815            200804 matrober ibm-spi tags in internal files
- * 255355.1          210205 kingdon  MQMD.Feedback support. Provide methods to convert between
- *                                     Jetstream and MQ values of feedback.
- * SIB0121.jms.2     170107 jamessid Supporting performance enhancements for large objects
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.api.jms;
 
 import java.util.Map;

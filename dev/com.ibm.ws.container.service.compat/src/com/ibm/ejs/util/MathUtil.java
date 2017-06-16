@@ -1,26 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// 1.1 SERV1/ws/code/utils/src/com/ibm/ejs/util/MathUtil.java, WAS.ejbcontainer, WASX.SERV1, aa1225.01 3/21/02 12:32:28
-//
-// IBM Confidential OCO Source Material
-// 5639-D57 (C) COPYRIGHT International Business Machines Corp. 2002
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  MathUtil.java
-//
-// Source File Description:
-//
-//     Provides various math utility functions to EJB Container runtime.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d122324   ASV40X    20020320 tkb      : Created
-// --------- --------- -------- --------- -----------------------------------------
-
+/*******************************************************************************
+ * Copyright (c) 2002 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ejs.util;
 
 /**

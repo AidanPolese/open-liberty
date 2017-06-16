@@ -1,37 +1,14 @@
 package com.ibm.ws.Transaction.JTA;
-/* ************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                           */
-/*                                                                            */
-/*  ORIGINS: 27                                                               */
-/*                                                                            */
-/* IBM Confidential OCO Source Material                                       */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2007 */
-/* The source code for this program is not published or otherwise divested    */
-/* of its trade secrets, irrespective of what has been deposited with the     */
-/* U.S. Copyright Office.                                                     */
-/*                                                                            */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                              */
-/*                                                                            */
-/*  DESCRIPTION:                                                              */
-/*                                                                            */
-/*                                                                            */
-/*  Change History:                                                           */
-/*                                                                            */
-/*  Date      Programmer    Defect    Description                             */
-/*  --------  ----------    ------    -----------                             */
-/*  05/09/02  gareth        ------    Move to JTA implementation              */
-/*  11/10/02  awilkins      1452      XAException handling                    */
-/*  25/11/02  awilkins      1513      Repackage ejs.jts -> ws.Transaction     */
-/*  07/03/03  hursdlg       159733    Handle logging at resource level        */
-/*  15/07/03   mallam       171151    Rollback using TMSUCCESS (TMFAIL on t/o)*/
-/*  28/08/03  johawkes      173214    Replace RegisteredResource vectors      */
-/*  28/08/03  johawkes      174516    Distribute all ends before prepares     */
-/*  10/02/04  hursdlg       190239    Update JTAResource states               */
-/*  19/04/04  johawkes      193919.1  New methods for adminconsole            */
-/*  04/08/06  maples        373006    WESB performance isSameRM optimization  */
-/*  20/06/07  hursdlg       LI3968-1.2 Add commit priority getter             */
-/*  17/07/08  johawkes      536926    Remove JET dependencies on org.omg      */
-/* ************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;

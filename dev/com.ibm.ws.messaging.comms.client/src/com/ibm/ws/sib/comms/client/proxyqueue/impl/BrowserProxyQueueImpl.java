@@ -1,40 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.29 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/proxyqueue/impl/BrowserProxyQueueImpl.java, SIB.comms, WASX.SIB, uu1215.01 07/07/03 06:32:20 [4/12/12 22:14:07]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2007 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2004, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030702 prestona Original
- * F171893         030721 prestona Add BrowserSession support on client.
- * F174602         030819 prestona Switch to using SICommsException.
- * d176016         030915 mattheg  Ensure queue can only be closed once
- * f173765.2       030926 mattheg  Core API M4 update
- * f177889         030929 mattheg  Core API M4 completion
- * F188491         040128 prestona Migrate to M6 CF + TCP Channel
- * f200337         040429 mattheg  Message order context implementation
- * D209401         040615 mattheg  toString() enhancements
- * D217654         040813 mattheg  Remove un-needed locks
- * D199177         040816 mattheg  JavaDoc
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D249096         050129 prestona Fix proxy queue synchronization
- * D377648         060719 mattheg  Use CommsByteBuffer
- * SIB0112c.com.1  070125 mattheg  Memory management: Parse message in chunks
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * D424200         070426 prestona Readahead consumers hang in receiveWithWait if connection dies
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client.proxyqueue.impl;
 
 import com.ibm.websphere.ras.TraceComponent;

@@ -1,16 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 2003, 2008
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//@(#) 1.3 SERV1/ws/code/ssl.channel.impl/src/com/ibm/ws/ssl/channel/impl/SSLHandshakeErrorTracker.java, WAS.channel.ssl, WASX.SERV1, pp0919.25 3/27/08 09:15:27 [5/15/09 18:21:29]
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 022108   leeja       499653          Fix double release of decnetbuffers
-// 032608   leeja       507617          Fix sync read return code
-
+/*******************************************************************************
+ * Copyright (c) 2003, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.channel.ssl.internal;
 
 import com.ibm.websphere.ras.Tr;

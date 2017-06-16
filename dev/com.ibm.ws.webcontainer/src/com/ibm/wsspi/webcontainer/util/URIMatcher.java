@@ -1,21 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//CHANGE HISTORY
-//Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//        340018         01/20/06     mmolden             java.lang.StringIndexOutOfBoundsException in webcontainer
-//        PK35828        04/18/07     pmdinh              Inconsistent behavior for URI with trailing '/' character
-//        PK47397        06/21/07     pmdinh              Incorrect pathInfo if multi servlet mappings with similar URI's
-//        PK39337        06/28/07     sartoris            ServletPath and PathInfo not returning proper values based on mapping
-//        498796         02/29/07     mmolden             70FVT i7 SIP encode http URI                                                                                        
-//        PK80340        02/25/09     mmulholl            Set path element correctly for a default servlet mapping.
-//        PM06111        02/08/10     mmulholl            Add support for URI Matching with string keys  
-
-//Code added as part of LIDB 2283-4
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.webcontainer.util;
 
 import java.util.logging.Level;

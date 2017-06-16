@@ -1,31 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.12.1.4 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/ClientLinkLevelState.java, SIB.comms, WASX.SIB, uu1215.01 09/04/06 08:16:43 [4/12/12 22:14:06]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5724-J08  Copyright IBM Corp. 2004, 2007 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030808 mattheg  Original
- * f174317         030827 mattheg  Add local transaction support
- * f176954         030918 mattheg  Move location of handshake params
- * f181927         031111 mattheg  Allow transaction IDs to be used by global and local transactions
- * D276260         050516 mattheg  Add hashcode to trace (not change flagged)
- * D354565         060320 prestona ClassCastException thrown during failover
- * D373006.2       070111 mattheg  1pc Optimisation
- * PK83641         310309 ajw      reset LinkLevelState when returning from pool;
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import java.util.HashMap;

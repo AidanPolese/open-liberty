@@ -1,27 +1,13 @@
-// %Z% %I% %W% %G% %U% [%H% %T%]
-/**
+/*******************************************************************************
+ * Copyright (c) 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2012
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- *
- * Change History:
- *
- * Reason    Version  Date        User id     Description
- * ----------------------------------------------------------------------------
- * 634744      8.0    01/14/2010  spaungam    Correct the header information
- * 639559      8.0    04/03/2010  spaungam    removed RAS references from HpelRasHeader and HpelRasHelper
- * 651402      8.0    05/10/2010  spaungam    Change header redirection to be before configuring any hpel handler
- * F017049-27489 8.0  06/18/2010   belyi      Remove references to LogHeader, add custom header formatter
- * 684056      8.0    01/04/2011  mcasile     Allow custom props to supercede or subcede locally generated
- * 727216      8.5    02/17/2012   belyi      Add method to verify file ownership using a separate ownership file
- * 725321      8.5    03/21/2012   belyi      Add methods handling different thread id types and methods to pass them
- * PM64393     8.5    06/04/2012   belyi      Add extra try/catch blocks in printStackTrace() method
- * 131536      8.5    24/04/2014  reddvenk    package javax.ejb does not exist
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ejs.ras.hpel;
 
 import java.io.File;

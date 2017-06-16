@@ -1,52 +1,15 @@
 package com.ibm.ws.jtaextensions;
 
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2009 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* @(#) 1.31 SERV1/ws/code/was.transaction.impl/src/com/ibm/ws/jtaextensions/ExtendedJTATransactionImpl.java, WAS.transactions, WASX.SERV1 6/15/0
- /*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer    Defect    Description                                                        */
-/*  --------  ----------    ------    -----------                                                        */
-/*  02-02-14  awilkins      LIDB850   Creation                                                           */
-/*  27-02-02  beavenj       LIDB1220.151.1 Code instrumented for FFDC work                               */
-/*  15-04-02  mallam        125321    null pointer exception                                             */
-/*  09/09/02   gareth       ------    Move to JTA implementation                                         */
-/*  02-11-21  awilkins        1507    JTS -> JTA. Thread local restructuring                             */
-/*  02-12-17  awilkins    LIDB1673.12 Reworking for efficiency with JTA2                                 */
-/*  17/01/03   awilkins       1673.9  Tidy-up exception handling                                         */
-/*  21/02/03   gareth     LIDB1673.19 Make any unextended code final                                     */
-/*  25/04/03   ihodges    16264  5    getLocalId should return 0 when no Tx                              */
-/*  06/01/04   hursdlg    LIDB2775    zOS/distributed merge                                              */
-/*  07/01/04  johawkes    LIDB2110    RA Uninstall                                                       */
-/*  08/03/04  hursdlg     193574      Check for null sync on registration                                */
-/*  10/03/04  mallam      193798      Wrapper afterCompletion's  in try/catch                            */
-/*  25-03-04  mdobbie     LIDB3133-23 Added registerCallbackForCurrentTran mth                           */
-/*  02-04-04  mdobbie     197035      Null SyncCallback param check added                                */
-/*  23-04-04  mdobbie     199929      Minor code review updates                                          */
-/*  27-04-04  johawkes    196302      Implement sync levels                                              */
-/*  24/05/04  mallam      204225      exceptions on beforeCompletion                                     */
-/*  12/07/05  hursdlg     281425      AfterCompletion status of unknown                                  */
-/*  06/01/06  johawkes    306998.12   Use TraceComponent.isAnyTracingEnabled()                           */
-/*  19/04/07  mallam      432276      Migrate PK41846 to WASX                                            */
-/*  06/06/07  johawkes    443467      Repackaging                                                        */
-/*  17/06/07  johawkes    444613      Repackaging                                                        */
-/*  26/06/07  johawkes    446894      Fix JTM shutdown delay                                             */
-/*  24/05/08  johawkes    522569      Perf trace                                                         */
-/*  15/06/09  mallam      596067      package moves                                                      */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.util.ArrayList;
 

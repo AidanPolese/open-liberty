@@ -1,32 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// %I% %W% %G% %U%
-//
-// IBM Confidential OCO Source Material
-// 5639-D57,5630-A36,5630-A37,5724-D18 (C) COPYRIGHT International Business Machines Corp. 2008, 2013
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  JPAEMPool.java
-//
-// Source File Description:
-//
-//     Provides a bounded thread-safe pool of EntityManager instances based
-//     on linked nodes.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d510184   WAS70     20080505 tkb      : Create seperate EMF for each java:comp
-// d638095.1 WAS70BE   20100308 jckrueg  : Call providers prepareForPooling() when possible.
-// F61057    WAS85     20120224 bkail    : Use JPAEMPoolHelper
-// d731877   WAS8501   20120518 jrbauer  : Enable pool access to WsJpa provider via lightweight EMF wrapper
-// d743325   WAS855    20130121 jrbauer  : store jpa component reference in the pool
-// RTC112113 WAS90     20131023 leealber : Add new JPA 2.1 APIs
-// d152713   RTC       20150126 jgrassel : Support @PersistenceContext Tx-Sync Feature
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2008, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_RESOURCE_BUNDLE_NAME;

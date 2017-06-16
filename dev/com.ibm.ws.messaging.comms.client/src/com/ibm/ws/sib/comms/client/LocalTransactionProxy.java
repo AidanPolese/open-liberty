@@ -1,50 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.40 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/LocalTransactionProxy.java, SIB.comms, WASX.SIB, uu1215.01 09/06/16 09:43:36 [4/12/12 22:14:06]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  (C) Copyright IBM Corp. 2004, 2009
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030325 niall    Original
- * f166313         030506 niall    add TRM support + cleanup
- * F166959         030521 niall    Rebase on non-prototype CF + TCP Channel
- * d170527         030625 mattheg  Tidy and change to SibTr
- * d170639         030627 mattheg  NLS all the messages
- * d169897.2       030707 schmittm Provide remote client implementation of new Core API as defined
- * f171400         030710 schmittm Implement Core API 0.6 changes in client and server code
- * d174326         030814 mattheg  Organise imports to fix compile warnings.
- * F174602         030819 prestona Switch to using SICommsException
- * f174317         030827 mattheg  Add local transaction support (complete overhaul of file)
- * d178368         031008 mattheg  Expose the lowest priority for this transaction
- * f181927         031111 mattheg  Make this inherit from Transaction
- * d181719         040108 mattheg  Add synchronisation
- * d186970         040116 mattheg  Overhaul the way we send exceptions
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * f191114         040218 mattheg  Multicast support
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * D225797         040820 mattheg  Fix up possible NPE when connection is lost on exchange
- * D276260         050516 mattheg  Add hashcode to trace (not change flagged)
- * D289992         051114 prestona Reduce Semaphore creation
- * D377648         060719 mattheg  Use of CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * D384259         060815 prestona Remove multicast support
- * PK60857         080721 pnickoll Handle connection failures during rollback to allow tx completion
- * PK86574         090528 pbroad   Allow strict message redelivery ordering
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import com.ibm.websphere.ras.TraceComponent;

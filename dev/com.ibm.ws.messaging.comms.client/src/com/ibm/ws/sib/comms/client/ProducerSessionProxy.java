@@ -1,79 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.80 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/ProducerSessionProxy.java, SIB.comms, WASX.SIB, uu1215.01 11/12/16 12:21:53 [4/12/12 22:14:05]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2011 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
+/*******************************************************************************
+ * Copyright (c) 2004, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030325 niall    Original
- * F166959         030521 niall    Rebase on non-prototype CF + TCP Channel
- * F166631.02      030522 prestona Add MessageEncode exception handler 
- * D168072         030602 prestona Use get/setReliability
- * d168211         030605 mattheg  Allow checking of closed sessions / connections
- * d170527         030625 mattheg  Tidy and change to SibTr
- * d170639         030627 mattheg  NLS all the messages
- * f168604.2       030704 prestona Exploit asynchronous API from client
- * d169897.2       030707 schmittm Provide remote client implementation of new Core API as defined
- * f171400         030710 schmittm Implement Core API 0.6 changes in client and server code
- * d173559         030805 mattheg  Ensure an express send uses sendNoReply
- * F174602         030819 prestona Switch to using SICommsException
- * f174317         030827 mattheg  Add local transaction support
- * f173765.2       030925 mattheg  Core API M4 update
- * f177889         030929 mattheg  Core API M4 completion
- * f181927         031111 mattheg  Allow global transaction support to be exposed
- * f179339.4       031222 mattheg  Forward and reverse routing support
- * d181719         040108 mattheg  Transaction synchronisation support
- * d186970         040116 mattheg  Overhaul the way we send exceptions
- * f184390.3       040123 mattheg  Revised Qos
- * f187521.2.1     040127 mattheg  Use constants rather than hardcoded values
- * f188585         040128 mattheg  MFP Schema propogation -- part 2
- * F188491         030128 prestona Migrate to M6 CF + TCP Channel
- * d189716         040218 mattheg  FFDC Instrumentation
- * d187252         040302 mattheg  Ensure session destination information is only returned if it changes
- * f192759.2       040311 mattheg  Use correct length for message size
- * f192829         040407 mattheg  Client tuning parameters
- * F195720.3       040616 prestona WAS Request Metrics in Jetstream
- * F195720.3.1     040629 prestona WAS Request Metrics in Jetstream
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D199177         040816 mattheg  JavaDoc
- * D225797         040820 mattheg  Fix up possible NPE when connection is lost on exchange
- * D235891         040930 mattheg  Runtime property standards
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D241156         041026 mattheg  Make use of order context use counts
- * F247975         050204 prestona Use altertnative messaging encoding routine
- * D262663         050406 prestona Deadlock running jetstream cases EC3 413004
- * SIB0025.comm    050903 prestona PMI RM improvements
- * D307265         050918 prestona Support for optimized transactions
- * D315210         241005 ajw      Add reqScope param to send/recieve calls
- * D318108         051031 prestona Fix problem where low QOS messages get exchanged rather than sent.
- * D320185         051104 mattheg  send() doesn't throw the right exceptions
- * D272899         051109 mattheg  Ensure we check if conversation is closed before calling encode()
- * D289992         051114 prestona Reduce Semaphore creation
- * D346111         060404 mattheg  Fix defect 272899 properly
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * D348294.2       060921 mattheg  putMessage() method signature update
- * SIB0112c.com.1  070125 mattheg  Memory management: Parse message in chunks
- * D434395         070424 prestona FINBUGS: fix findbug warnings in sib.comms.client.impl
- * 504113          080404 mleming  Only get constants once
- * 511071          080408 sibcopyr Automatic update of trace guards
- * 538413          080725 djvines  Trace improvements to follow message flow
- * PM42438         280611 ajw      Use Reentrant write/read lock rather than a non reentrant write/read lock
- * F1344-55985     161211 skavitha Add records if XCT enabled
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import java.util.List;

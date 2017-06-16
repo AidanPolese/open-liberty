@@ -1,35 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * SIB0002.tran.2   050805 tevans   Reset Change history - previous WAS602.SIB
- * SIB0002.tran.2   050805 tevans   New Transactions interfaces
- * SIB0002.mp.15    170805 tevans   Transactional PEV Producers and Consumers
- * SIB0002.mp.16    180805 tpm      hasRMQResources flag
- * SIB0002.mp.20    300805 tpm      unit test cleanup
- * 277326.1         051005 tpm      XAResourceFactory refactor
- * 318614.1         071105 tevans   Support remote transaction recovery from PEV
- * 334076           211205 tevans   Fix subordinate transaction error checking
- * 306998.22        050106 gatfora  Trace performance improvements
- * 364681           260406 tevans   Memory leak in PEV (transaction callbacks)
- * 369973.2         060706 tevans   Synchronized access to transaction common
- * PK40556          060307 tevans   Make createLocalTransactionWithSubordinates private
- * =================================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.impl.store;
 

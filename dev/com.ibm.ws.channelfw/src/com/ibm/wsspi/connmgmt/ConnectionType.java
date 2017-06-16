@@ -1,21 +1,13 @@
-/* /Z/ /I/ /G/ /U/ /W/   <-- CMVC Keywords, replace / with %
- * @(#) 1.2 3/20/07 18:49:20 SERV1/ws/code/channelfw.extensions/src/com/ibm/ws/connmgmt/ConnectionType.java, WAS.channelfw.extensions, WASX.SERV1, pp0919.25
+/*******************************************************************************
+ * Copyright (c) 2005, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * ORIGINS: 27
- *
- * IBM Confidential OCO Source Material
- * 5724-I63, 5724-H88, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2005, 2007
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * Reason           Date     Userid    Change Description
- * --------------- -------- --------- -------------------------------------------
- * LIDB3187-27     20051024  ehaaser   Refactoring for "plan4"
- * 341746          20060204  ehaaser   Remove confusing connection type
- * 359434.1        20060321  ehaaser   connection handle/connection type for security
- * LIDB4463-18     20070228  spewak    Async writes
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.connmgmt;
 
 import java.util.Map;

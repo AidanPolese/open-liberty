@@ -1,29 +1,14 @@
 package com.ibm.ws.sib.msgstore.transactions.impl;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- *  Reason           Date    Origin     Description
- * --------------- -------- ---------- ----------------------------------------
- *  326643.1       29/11/05   gareth    Use singleton objects for transaction state
- *  PK81848        09/03/09   pbroad    Add deferred rollback state
- *  590648         20/05/09   pbroad    Back-out PK81848
- *  PK81848.1      18/06/09   pbroad    Re-fix PK81848 taking into account additional requirements from 590648
- *  PM31431        02/02/11   slaterpa  Add rollback expected state
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
  
 /**

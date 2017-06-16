@@ -1,29 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- *  
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- *                          matrober Original (Created on 17-Feb-03)
- * 170067            200603 matrober Refactor JMS interfaces (com.ibm.websphere)
- * 174896            220803 matrober JavaDoc public interfaces
- * 197921.1          040504 jhumber  New Javadoc tags 
- * 260689            103005 kingdon  Update javadoc for common criteria
- * 253167            100505 kingdon  Add missing javadoc
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.sib.api.jms;
 
 import javax.jms.*;

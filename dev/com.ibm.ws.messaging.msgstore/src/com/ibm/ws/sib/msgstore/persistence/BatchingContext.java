@@ -1,32 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date    Origin     Description
- * --------------- ------  --------   --------------------------------------------
- *                 181103  pradine    Original
- * 184259          011203  pradine    Update XID with logical delete flag
- * 180763.7        100204  pradine    Add support for mutiple item tables
- * 191800          240204  pradine    Add NLS support to the persistence layer
- * 188052.2        160304  pradine    Changes to the garbage collector (continued)
- * 188050.4        060404  pradine    SpecJAppServer2003 optimization
- * 213328          300604  pradine    Perform synchronous delete during 2PC processing
- * 214937          080704  pradine    Avoid resizing of lists if batching contexts are cached
- * 223996.1        010904  pradine    Remove tick count and max depth
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.msgstore.persistence;
 
 import com.ibm.ws.sib.msgstore.PersistenceException;

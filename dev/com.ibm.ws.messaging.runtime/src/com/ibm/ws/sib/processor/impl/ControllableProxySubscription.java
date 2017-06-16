@@ -1,34 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 186484.8         300404 tevans   Runtime Subscription Administration
- * 186484.10        170504 tevans   MBean Registration
- * 186484.21        010704 cwilkin  Proxy subscription controls
- * 240115           211004 nyoung   Attempting to store multiple instances of PSOH in mspace.
- * 248145           201204 gatfora  Remove code that is not used
- * 248333           221204 nyoung   Support proxy sub discriminator access checks.
- * 248333.1         170105 nyoung   Ensure proxy sub security parameters are updated.
- * 264795           310105 gatfora  Code restlye
- *                                  Adapter registered twice for Remote Topicspaces
- * SIB0009.mp.02    220805 nyoung   Add support for Consumer Count monitoring
- * 418140           270307 nyoung   java.lang.ClassCastException observed in equals() method  
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.processor.impl;
 

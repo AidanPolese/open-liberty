@@ -1,51 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-
-//CHANGE HISTORY
-//Defect        Date        Modified By         Description
-//--------------------------------------------------------------------------------------
-//283348.1      07/26/05    ekoonce             Fix Tr.* statements
-//311717        10/07/05    ekoonce             Improve trace
-//321485        11/29/05    ekoonce             add null check
-//306998.15     01/09/06    ekoonce             PERF: WAS tracing performance improvement
-//LIDB4408-1    02/22/06    todkap              LIDB4408-1 web container changes to limit pooling
-//PK21127       04/17/06    mmolden             response.sendError(404) call after request.setCharacterEncoding causes UnsupportedEncodingException: JISAutoDetect
-//PK26765       06/21/06    mmolden             ENCODING OF O UMLAUT IS NOT WORKING PROPERLY FOR UTF-8 ON 
-//PK27527       07/10/06    mmolden             DEFAULT CONTENT-TYPE SETTING ON WEBSPHERE V6.0.X IS "TEXT/PLAN"
-//PK29451       08/09/06    mmulholl            Remove call to _response.clearHeaders() from finish()
-//382943        08/09/06    todkap              remove SUN dependencies from core webcontainer
-//390377        09/19/06    mmolden             CTS:setContentType() is not behaving as per specification  
-//LIDB4317-1    10/17/06    mmolden             Servlet 2.5 changes
-//410251        12/13/06    mmolden             70FVTJapanese/Special Characters are not displayed in JSPs
-//PK33871       01/16/07    ekoonce             PRINTWRITER CLASS APPENDS THE CHARSET INTO CONTENT-TYPE HEADER
-//415593        01/19/07    mmolden             70FVT: Error page test fail in web container bucket
-//392654.3      02/20/07    mmolden             FVT4: response not received from web container on oneway call
-//422740        03/01/07    mmolden             FVT4: updates for  392654.3 flushHeaders
-//421712.1      03/22/07    mmolden             FVT4: BBOS1S restart repeatedly with wrong mtom SOAPMessage
-//444146        06/06/07    mmolden             70FVT: Session Id never set in Header
-//LIDB3518-1.1  06-23-07    mmolden             ARD
-//PK53885       10/02/07    ekoonce             Exception from commit() in finish() results in some settings not being reset.
-//486204        12/07/07    mmolden         Check version number before executing new getSession path
-//495452        01/31/08    mmolden             Check in new Date Header generation code   
-//506208.1      03/28/08    mmolden             RTFb: BT70: Struts application migration prob with http headers 
-//509446        04/01/08    mmolden             CTS: Failed to add/set date in servlet by user
-//523028        05/28/08    mmolden             Finish setContentType performance improvements                                                                            
-//PK63328       06/18/08    cjhoward (pmdinh)   Response is chunked by PK22392
-//531872        06/26/08    mmolden             SVT:REGD:Exception in finishBufferAsynch on admin console save
-//539987        07/28/08    mmolden             CTS: getContentType() did not return a null                                                                                                                                                                                                                
-//557339        10/16/08    mmolden             FP7001FVT: Server timeout FFDC after 5 mins, reply intermittent
-//569469        03/19/09    mmulholl            Improve trace
-//PK79143       03/23/09    mmulholl            sendRedirect always causes chunked response
-//PM04383       01/14/09    mmulholl                    do not force unchunked response is sendredirect is illegally called from an included servelt. 
-//PM18453       08/17/10    mmulholl           do not call setLastBuffer in closeResponseOutput unless a custom property is set.
-//PM25931       11/12/10    anupag              Fix Date creation,it should be based on English locale not JVM locale
-//PM50313       11/21/11    pmdinh              return if call setContentType(NULL) to avoid NPE.
-//113901        10/10/13    wdw                 move resetState up in initForNextResponse to avoid spurious Response Already Committed warning
-//PI70184       10/18/16    pmdinh              webSocket not working if application flush without obtaining any outputStream or writer.
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.srt;
 
 import java.io.IOException;

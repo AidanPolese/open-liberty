@@ -1,23 +1,13 @@
-//IBM Confidential OCO Source Material
-//  5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997-2007 
-//	The source code for this program is not published or otherwise divested
-//	of its trade secrets, irrespective of what has been deposited with the
-//	U.S. Copyright Office.
-//  Defect 230956  SVT:NPE on jsp invoke custom tag -  doTag()
-//  Defect PK26741 - RepeatTag index does not accept "int"
-//  Defect PK29373 Provide backward compatibility with v5(Page scope variables )
-//  Defect PK31208 NUMBERFORMATEXCEPTION IS THROWN WHEN THE VARIABLE REFERENCE IS  PASSED INSTEAD OF THE VALUE
-// jsp2.1work
-
-//  PK40417 - Java5 generics used inside struts tags not interpreted properly
-//  PK65013  sartoris   07/07/2008  Need ability to customize pageContext variable.
-//  PM21395	 pmdinh 	09/02/2010	Decode double quote in the attribute of a tag script
-//  PM24787  pnicoluc	11/02/2010  NESTED JSP TAGS DO NOT RETAIN PARENT ATTRIBUTE
-//  PM43852  sartoris   08/18/2011  JSF IDs are generated differently across cluster members
-//  PI05359  sartoris   12/11/2013  Performance issue with attributes and an expected return type of Object, we create a String object on each access.
-//  PI30519  hmpadill   11/25/2014  Allow multiple attribute values in tags
-//  PI43036  hmpadill   07/02/2015  Internal representation of XML document does not declare XML namespaces correctly.
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.generator;
 
 import java.util.ArrayList;

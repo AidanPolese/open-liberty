@@ -1,15 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-// Change history
-// Defect 216829  "JSPs are not compiled with -g in WAS60"  2004/07/15  Scott Johnson
-// Defect PM04610 Need option to specify version 1.6 for the jdkSourceLevel attribute  2010/02/03  Jay Sartoris
-// Defect 126902 07/31/2014 hmpadill    Add Oracle JDK 1.8 as a valid option for running Liberty
-// Defect 152470 Print the JDK source level in the traces after a compilation error   2014/10/28 Harold Padilla
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.compiler;
 
 import java.io.BufferedReader;

@@ -1,29 +1,13 @@
-//* ===========================================================================
-//*
-//* IBM SDK, Java(tm) 2 Technology Edition, v5.0
-//* (C) Copyright IBM Corp. 2005, 2006
-//*
-//* The source code for this program is not published or otherwise divested of
-//* its trade secrets, irrespective of what has been deposited with the U.S.
-//* Copyright office.
-//*
-//* ===========================================================================
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 09/21/04 gilgen      233448          Add copyright statement and change history.
-// 09/27/04 trg         234899          Added logic for sync work queue manager.
-// 09/27/04 gilgen      235046          Added changeTimeout support
-// 09/29/04 wdw         235756          Added immediate timeout support
-// 04/15/05 gilgen      LIDB3618-2      Add AIO support, ake base TCPChannel extendable
-// 04/28/05 wigger      271613          Nio class break out changes, file created from TCPReadRequestContextImpl
-// 06/15/05 gilgen      287777          Enable AIO from WebSphere
-// 07/29/05 wigger      294806          clean up comments.
-// 12/17/05 gilgen      333647          Fix socketIOChannel reference, don't increment numReads 
-// 04/05/06 wigger      359362          null JIT read context buffer on failed IO
-// 08/13/07 wigger      451669          where possible use NonSafe methods for optomization
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.tcpchannel.internal;
 
 import java.io.IOException;

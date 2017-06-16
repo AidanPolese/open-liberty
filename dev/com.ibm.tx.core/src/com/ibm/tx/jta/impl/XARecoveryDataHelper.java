@@ -1,24 +1,14 @@
 package com.ibm.tx.jta.impl;
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2011, 2012 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer    Defect    Description                                                        */
-/*  --------  ----------    ------    -----------                                                        */
-/*  07-09-11  johawkes      715979    Liberty: share XAResourceFactory info through Bundle Registry      */
-/*  13-01-12  nyoung        726178    Liberty: 58809 Null results in XARecoveryDataHelper                */
-/*  23-01-12  nyoung        726454    Liberty: 59461 Find XAResourceFactory using filter                 */
-/*  01-02-12  johawkes      727155    Don't need ffdc if filter isn't valid                              */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2011, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;

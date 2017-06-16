@@ -1,14 +1,13 @@
-//  @(#) 1.6 SERV1/ws/code/security.sas/src/com/ibm/websphere/security/Result.java, WAS.security.sas, WASX.SERV1, nn1148.03 2/14/05 10:16:04 [12/4/11 15:43:06]
-//  5724-I63, 5724-H88, 5655-N01, 5733-W60 (C) COPYRIGHT International Business Machines Corp. 1997, 2005
-//  All Rights Reserved * Licensed Materials - Property of IBM
-//
-//  DESCRIPTION:
-//
-//    This module is used by User Registries in WebSphere when calling the
-//    getUsers and getGroups method. The user registries should use this
-//    to set the list of users/groups and to indicate if there are more 
-//    users/groups in the registry than requested
-//
+/*******************************************************************************
+ * Copyright (c) 1997, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.security;
 
 import java.util.List;

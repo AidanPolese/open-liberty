@@ -1,23 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997-2007
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//Revisions:
-//Defect 212433  2004/07/20  Stepping into _jspService lands at a unexpected location
-//Defect 217758  2005/07/20  trackDependencies should require reloadEnabled to be true
-//APAR   PK01617 2005/03/11  JspConfiguration object being cached within the JSPExtensionServletWrapper class causing problems - slm
-//Defect 268176.1  2005/05/20  Welcome file wrappers are not checked for resource existence
-//Defect 315405  2005/10/21  jsp container fails to call JSPErrorReport.setTargetServletName
-//APAR   PK27620 2006/08/24  SERVLET FILTER IS NOT CALLED IN V6 FOR URL RESOURCES WHEN THESE ARE NOT FOUND.  IN V5, THE FILTER IS ALWAYS CALLED
-//APAR   PK31377 2007/04/13  Servlet filter is not called for URL resources - Jay Sartoris
-//APAR   PK45107 2007/08/07  EXCEPTION FROM SERVLET FILTER IS NOT PROPAGATED TO CLIENT - Maxim Moldenhauer
-//Defect 651265  2010/05/12  Trace Entry and Exit improvement - Anup Aggarwal 
-//APAR   PM22919 09/29/10    Rethrow exception back to the dispatch caller when dispatched JSP failed to compile  - Phu Dinh
-//APAR   PM96140 08/30/13    A JSP's jspInit method if the JSP file is configured to load on startup in the web.xml file  - sartoris
-//APAR   PI09596 08/19/14    Log debug in catch block when we can't load a JSP - Harold Padilla
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.webcontainerext;
 
 import java.io.File;

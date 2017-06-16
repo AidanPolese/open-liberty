@@ -1,20 +1,13 @@
-//
-// @(#) 1.1 SERV1/ws/code/websvcs/src/com/ibm/ws/websvcs/naming/ser/Utils.java, WAS.websvcs, WASX.SERV1, aa1217.02 10/10/10 12:26:02 [4/27/12 16:00:07]
-//
-// IBM Confidential OCO Source Materials
-//
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2010
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change History:
-// Date     UserId      Defect          Description
-// ---------------------------------------------------------------------------------------
-// 10/11/10 padams      F743-34244      Initial version.
-//
-
+/*******************************************************************************
+ * Copyright (c) 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jaxws.metadata;
 
 import java.util.List;

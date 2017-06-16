@@ -1,28 +1,14 @@
 package com.ibm.ws.sib.msgstore.persistence.dispatcher;
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date     Origin  Description
- * --------------- -------- -------- ------------------------------------------
- * 184390.1.3      03/03/03 schofiel Creation
- * 306998.20       09/01/06 gareth   Add new guard condition to trace statements
- * 345250          15/02/06 gareth   Improve serviceability for dispatcher problems
- * SIB0112d.ms.2   28/06/07 gareth   MemMgmt: SpillDispatcher improvements - datastore
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.sib.msgstore.MessageStoreConstants;

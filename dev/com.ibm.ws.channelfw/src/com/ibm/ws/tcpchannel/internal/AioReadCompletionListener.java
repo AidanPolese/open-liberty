@@ -1,32 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 2005, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 04/05/05 gilgen      LIDB3618-2      Created file
-// 05/09/05 wigger      271613          AIO Non-direct buffer support
-// 06/30/05 gilgen      287777          Enable AIO from WebSphere
-// 09/07/05 gilgen      303495          Add JIT support for ByteBuffers
-// 10/02/05 gilgen      308856          Code review comments
-// 10/18/05 wigger      314555          new timeout algorithm
-// 10/24/05 wigger      314917          implement permisssion logic
-// 11/10/05 wigger      314917.1        fix completed race condition
-// 12/01/05 gilgen      328131          remove references to deleted class
-// 12/01/05 gilgen      328382          don't set complete before all data has arrived
-// 12/06/05 gilgen      324954          improve tracing 
-// 12/17/05 gilgen      333647          add trace event when exception returned
-// 01/10/06 wigger      306998.3        use isAnyTracingEnabled
-// 01/30/06 wigger      342415          better connClosedException initialization
-// 02/01/06 gilgen      343257          update timeout values on partial reads, add more perf stats
-// 02/15/06 gilgen      347777          use public JDK methods to get to dumpStatsInterval
-// 03/22/06 gilgen      355205          don't reset timeout if NO_TIMEOUT specified 
-// 04/05/06 wigger      359362          null JIT read context buffer on failed IO
-// 10/02/06 wigger      402392          return right away if vc is null
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.tcpchannel.internal;
 
 import java.io.IOException;

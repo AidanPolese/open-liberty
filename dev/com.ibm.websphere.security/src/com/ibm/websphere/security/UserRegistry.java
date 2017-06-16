@@ -1,18 +1,13 @@
-// @(#) 1.16 SERV1/ws/code/security.sas/src/com/ibm/websphere/security/UserRegistry.java, WAS.security.sas, WASX.SERV1, nn1148.03 1/7/11 15:30:06 [12/4/11 15:46:05]
-// 5724-I63, 5724-H88, 5655-N01, 5733-W60 (C) COPYRIGHT International Business Machines Corp. 1997, 2003, 2005, 2010
-// All Rights Reserved * Licensed Materials - Property of IBM 
-//
-// IBM Confidential OCO Source Material
-// The source code for this program is not published or otherwise divested of its
-// trade secrets, irrespective of what has been deposited with the U.S. Copyright 
-// Office.
-//
-// DESCRIPTION:
-//
-//    This is the UserRegistry interface that Custom Registries in WebSphere
-//    should implement to enable WebSphere Security to use the Custom Registry.
-//
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.security;
 
 import java.rmi.RemoteException;

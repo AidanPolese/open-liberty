@@ -1,18 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5724-J08 (C) COPYRIGHT International Business Machines Corp. 1997, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-
-//  CHANGE HISTORY
-//Defect        Date        Modified By     Description
-//--------------------------------------------------------------------------------------
-//298927        08/17/05    todkap          improve filter handling for core    WASCC.web.webcontainer
-//306998.15     01/06/06    ekoonce         PERF: WAS tracing performance improvement
-//PK64290       05/20/08    mmolden         SESSION LOSS WHEN USING ONLY URLREWRITING
-//140014        09/01/14    zaroman         Do not throw the FFDC if the webapp has been destroyed
-
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.filter;
 
 import java.io.FileNotFoundException;

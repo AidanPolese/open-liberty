@@ -1,28 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// 1.3 SERV1/ws/code/ecutils/src/com/ibm/ws/util/InvocationToken.java, WAS.ejbcontainer, WASX.SERV1, aa1225.01 4/28/05 10:09:34 
-//
-// IBM Confidential OCO Source Material
-// 5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 2004
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  InvocationToken.java
-//
-// Source File Description:
-//
-//     An abstract token which represents an instance of a request 
-//     upon a J2EE component. 
-//
-// Change Activity:
-//
-// Reason     Version   Date     Userid    Change Description
-// ---------  --------- -------- --------- -----------------------------------------
-// d194342.1.1 ASV60    20040513 kjlaw     : New copyright/prologue 
-// d206479     WASX     20040603 cheng1    : Design changed
-// d270126     WAS602   20050428 hthomann  : Added ASYNCHBEANS type of 3
-// ---------  --------- -------- --------- -----------------------------------------
-
+/*******************************************************************************
+ * Copyright (c) 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.util;
 
 import com.ibm.ws.runtime.metadata.ComponentMetaData;

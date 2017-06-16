@@ -1,25 +1,13 @@
-/// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 2005, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 08/31/05 gilgen      LIDB3618-2      M2/M3 drops 
-// 09/01/05 gilgen      302453          M3 code updates
-// 10/25/05 gilgen      317392          Add configurable system parms
-// 11/16/05 gilgen      324433          Change defaults for performance 
-// 01/20/06 amra        335761          i5/OS library name correction
-// 01/27/06 amra        341831          invalidate name to fail on load instead on init()
-// 03/13/06 amra        353980          i5/OS library name correction - use correct name
-// 03/23/06 gilgen      354542          let native debug be specified by system property
-// 04/17/06 wigger      363238          increase timeout timer sleep to be out of phase with approx timer interval
-// 06/27/07 wigger      448505          define variables for the completion key pool
-// 11/30/07 wigger      486523          put System.getProperty inside privileged block
-// 03/24/16 Ginnick     195204          Add AIOMaxBatchedCompletedEvents to set batch limit
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.io.async;
 
 import java.security.AccessController;

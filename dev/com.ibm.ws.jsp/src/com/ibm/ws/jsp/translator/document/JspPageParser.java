@@ -1,35 +1,13 @@
-//IBM Confidential OCO Source Material
-//	5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//	The source code for this program is not published or otherwise divested
-//	of its trade secrets, irrespective of what has been deposited with the
-//	U.S. Copyright Office.
-
-//  defect PQ98664 "ON JAPANESE LOCALE MACHINES JSPTRANSLATE TRANSLATES THE YEN"  2004/12/21 Richard Backhouse
-//  defect 248567  SVT:JSP compiler error for included taglib.
-//  defect PK03308 CDATA Sections in JSPs are not interpreted properly
-//  defect PK07606  Less than << Symbol is not interpreted correctly
-//  defect PK16731  SDJ  pageEncoding not getting converted to equivalent java code set when encoding is also specified using config tag
-//  defect PK16574  SDJ  '<' symbol in javascripts not being interpreted properly
-//  defect PK11883  SDJ   CDATA Sections in JSP scriptlets are not interpreted properly
-//  defect PK18890  SDJ  Java comments in scriptlets are getting processed
-//  defect PK26679  "\r\n\t" being inserted while a CDATA section is being created
-//  PK26679-rework  ANU PK26679 to be reworked
-//  383041 --- rework of PK26679 Scott Johnson 8/10/2006
-//  defect 396002 CTS: no jsp fatal translation error for  taglib after actions Scott Johnson 10/17/2006
-//  "Unmatched end tags" exception not to be thrown in v6 10/18/2006
-// jsp2.1work
-// defect 414623 FVT:Default JSP version should be 2.0 not 2.1 2007/01/12 10:15:37 Scott Johnson
-//  PK43599  ANU  space/tab/newline/carriage return before the end tag causes erroneous output
-//  PK63250  sartoris	04/21/2008	PK43599 causes problems by removing spaces/tabs/newline/carriage returns.
-//  PK73789  sartoris	12/04/2008	a carriage return without a newline causes problems with parsing a custom tag.
-//  PK86095  mconcini	05/14/2009	Fix for nested single quotes inside of double quotes in a tag attribute directive
-//  PM22082  pmdinh     09/08/2010  Empty list of <include-prelude> and/or <include-coda> add extra static data in the response.
-//  PM81674  hmpadill   07/14/2014  Expressions preceded by two backslashes are not evaluated (tWAS PM70967)
-//  PI30519  hmpadill   11/25/2014  Allow multiple attribute values in tags
-//  PI37485  hmpadill   03/20/2015  The comparison between page encodings should be case-insensitive
-//  PI43036  hmpadill   07/02/2015  Internal representation of XML document does not declare XML namespaces correctly.
-//  PI73022  hmpadill   30/11/2016  A StringIndexOutOfBoundsException is thrown if there is a %> and jspCommentText has length less than 3.
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.document;
 
 import java.io.File;

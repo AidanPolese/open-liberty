@@ -1,60 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.55 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/clientsupport/StaticCATXATransaction.java, SIB.comms, WASX.SIB, aa1225.01 10/10/01 08:52:44 [7/2/12 05:59:01]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2010
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        031029 mattheg  Original
- * f181927         031111 mattheg  Slight change to flows, XAOPEN and where resource is stashed
- * F183828         031204 prestona Update CF + TCP prereqs to MS 5.1 level
- * f181007         031211 mattheg  Add boolean 'exchange' flag
- * d186970         040116 mattheg  Overhaul the way we send exceptions to client
- * d187347         040119 mattheg  Check if the transaction is marked as error on prepare and commit
- * F188491         040128 prestona Migrate to M6 CF + TCP Channel
- * d192293         040308 mattheg  NLS file changes
- * d201671         040505 mattheg  BufferUnderFlow exceptions
- * D202636         040511 mattheg  Modify transaction creation semantics
- * D217372         040719 mattheg  Move JFap constants -> JFapChannelConstants (not change-flagged)
- * F201972.2       040727 mattheg  Core SPI Exceptions rework (not change flagged)
- * D225856         041006 mattheg  Update FFDC class name (not change flagged)
- * D254870         050214 mattheg  Optimize connection close
- * D257768         050301 mattheg  Ensure XA trans are cleaned up on connection failure
- * D275383         050516 mattheg  Ensure linked exception is passed back on error
- * D297060         050821 prestona IdToTransactionTable memory leak
- * D307265         050922 prestona Support for optimized transactions
- * D318614         051031 prestona Support MSSIXAResourceProvider interface
- * D321471         051109 prestona Optimized transaction related problems
- * D348277         060217 mattheg  Throw exception on commit invalid TX
- * D350111.1       060302 mattheg  Move to FAP 5
- * D354565         060320 prestona ClassCastException thrown during failover
- * D350130         060331 mattheg  Do not rollback on prepare or commit rbonly cases
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D378229         060808 prestona Avoid synchronizing on ME-ME send()
- * D397117         061011 mattheg  Buffer corruption reading the XA end flags
- * D401657         061030 mattheg  Ensure transaction branch is always removed from table even on failure
- * D441183         072307 mleming  Don't FFDC when calling terminated ME
- * D471664         071003 vaughton Findbugs tidy up
- * PK59276         080114 pbroad   Rollback when throwing XA_RBOTHER XAExceptions (as per XA spec)
- * PK61176         010408 pbroad   Handle XA_RBXXXX XAExceptions correctly in xa_prepare
- * D517821         080507 mleming  Sort out 'missing' FFDC
- * D539393         080730 djvines  Need to clean the dispatchable table as well when prepare fails 
- * PK83641         310309 ajw      reset LinkLevelState when returning from pool;
- * PM09716         120310 ajw      Catch SIErrorException from removeGlobalTransactionBranch
- * PM23626         011010 pbroad   Handle XA_RDONLY return codes correctly in xa_prepare
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server.clientsupport;
 
 import javax.transaction.xa.XAException;

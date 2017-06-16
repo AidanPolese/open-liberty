@@ -1,25 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5655-N01, 5733-W61 (C) COPYRIGHT International Business Machines Corp. 2005, 2006
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change History:
-// Date     UserId      Defect          Description
-// --------------------------------------------------------------------------------
-// 04/05/05 gilgen      LIDB3618-2      Created file
-// 04/28/05 wigger      271613          Nio class break out changes
-// 06/29/05 gilgen      287777          Enable AIO in WAS 
-// 09/22/05 gilgen      307313          Code cleanup/improvements
-// 10/02/05 gilgen      308856          Code review comments
-// 10/27/05 wigger      317856          fix WRITE_ALL_DATA to write all data
-// 12/01/05 gilgen      328131          remove references to deleted class
-// 12/06/05 gilgen      324954          improve trace readability
-// 12/17/05 gilgen      333647          get socketIOChannel from connlink instead of req
-// 01/10/06 wigger      306998.3        use isAnyTracingEnabled
-// 02/01/06 gilgen      343257          update timeout values on partial writes, add more perf stats 
-// 06/27/07 wigger      448755          protect event tracing from NPEs
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.tcpchannel.internal;
 
 import java.io.IOException;

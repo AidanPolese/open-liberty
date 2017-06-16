@@ -1,42 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------------
- * 166828           060603 tevans   Core MP rewrite
- * 169891           180603 gatfora  Addition of trace
- * 170424           240603 tevans   Additional comments
- * 169897.1         300603 tevans   Updates for Milestone 3 Core API
- * 174624.2         260803 gatfora  Refactoring public/private/protected methods 
- * 175097           280803 dware    Know when a callback is running
- * 175640           010902 gatfora  FFDC handling.
- * 180135           201003 gatfora  PROBE ID Refactoring.
- * 181796.1         051103 gatfora  New MS5 Core API
- * 187361.3         050204 tpm      Connection Listeners
- * 196826           080404 gatfora  Connection listener exception should have linked exception
- * 191118           080404 dware    Add ordering context locking
- * 195445.13.5      250504 gatfora  Message content updates
- * 193906.4         260504 prmf     Receive Allowed Async Consumers
- * 217733           220704 gatfora  Improve trace logging.
- * 350261           270306 tpm      Remove deadlock
- * SIB0115.mp.1     260407 ajw      Support pausing/resuming of a messaging endpoint
- * SIB0115.mp.2     060607 ajw      Code review updates for SIB0115
- * 481351           211107 dware    Improve trace around callback calls
- * ===========================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.impl;
 
 import com.ibm.websphere.ras.TraceComponent;

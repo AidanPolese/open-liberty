@@ -1,25 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// 1.1 SERV1/ws/code/ecutils/src/com/ibm/ws/util/InvocationCallback.java, WAS.ejbcontainer, WASX.SERV1, aa1225.01 5/14/04 09:56:28 
-//
-// IBM Confidential OCO Source Material
-// 5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 2004
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  InvocationCallback.java
-//
-// Source File Description:
-//
-//   short description.  
-//
-// Change Activity:
-//
-// Reason       Version   Date      Userid    Change Description
-//---------    ---------  --------  --------- -----------------------------------------
-// d194342.1.1  ASV60     20040513  kjlaw     : New copyright/prologue 
-//---------    ---------  --------  --------- -----------------------------------------
-
+/*******************************************************************************
+ * Copyright (c) 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.util;
 
 /**

@@ -1,20 +1,13 @@
-/* /Z/ /I/ /G/ /U/ /W/   <-- CMVC Keywords, replace / with %
- * @(#) 1.3 5/21/08 15:11:15 SERV1/ws/code/channelfw.service/src/com/ibm/ws/channel/common/ChannelUtilsBase.java, WAS.channelfw.service, WASX.SERV1, nn0834.20
+/*******************************************************************************
+ * Copyright (c) 2005, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * ORIGINS: 27
- *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 2005, 2008
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * Reason           Date     Userid    Change Description
- * --------------- -------- --------- -------------------------------------------
- * 323622          20051108 ehaaser   Refactor, leave this as original, and regroup for use with logger
- * 351430          20060311 ehaaser   Integrate changes from additional unit testing
- * 522651          20080521 leeja     Fix compile warnings
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.channelfw.internal;
 
 import java.util.Arrays;

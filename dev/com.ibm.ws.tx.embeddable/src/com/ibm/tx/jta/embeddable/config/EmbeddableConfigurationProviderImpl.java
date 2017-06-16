@@ -1,31 +1,15 @@
 package com.ibm.tx.jta.embeddable.config;
 
-/* **************************************************************************** */
-/* COMPONENT_NAME: WAS.activity                                                 */
-/*                                                                              */
-/* IBM Confidential OCO Source Material                                         */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2010,2013 */
-/* The source code for this program is not published or otherwise divested      */
-/* of its trade secrets, irrespective of what has been deposited with the       */
-/* U.S. Copyright Office.                                                       */
-/*                                                                              */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                */
-/*                                                                              */
-/* Change History:                                                              */
-/*                                                                              */
-/* yy-mm-dd  Developer  Defect       Description                                */
-/* --------  ---------  ----------   ------------------------------------------ */
-/* 10-01-28  johawkes   F743-3356.1  Initial implementation                     */
-/* 10-03-15  johawkes   643417       Use container-wide LPS switch              */
-/* 10-03-17  hursdlg    PM07874      Enable recovery logging                    */
-/* 11-11-24  johawkes   723423       Repackaging                                */
-/* 11-12-22  johawkes   725030       Liberty 57863                              */
-/* 12-02-21  nyoung     728684       Tran Log Size isn't configurable           */
-/* 13-01-31  nyoung     735581.11    I'face change to support Liberty Integration*/
-/* 13-05-21  johawkes   F099608      XAResource.setTransactionTimeout           */
-/* 14-01-14  slaterpa   PM99381      Add wsatPrepareOrder                       */
-/* ---------------------------------------------------------------------------- */
-
+/*******************************************************************************
+ * Copyright (c) 2010, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 import java.util.Map;
 import java.util.logging.Level;
 

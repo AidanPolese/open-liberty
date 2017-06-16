@@ -1,14 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2011, 2016 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2011, 2016
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.kernel.service.utils;
 
 import java.security.AccessController;
@@ -32,7 +31,7 @@ class ConcurrentServiceReferenceElement<T> implements Comparable<ConcurrentServi
      * In its current use, all input parameters are guarded by the
      * ConcurrentServiceReferenceMap / Set. Null is not supported for
      * any of these parameters.
-     * 
+     *
      * @param referenceName ServiceReference for the target service. Service references are
      *            equal if they point to the same service registration, and are ordered by
      *            increasing service.ranking and decreasing service.id. ServiceReferences hold
@@ -55,25 +54,27 @@ class ConcurrentServiceReferenceElement<T> implements Comparable<ConcurrentServi
         return serviceRanking;
     }
 
-    @SuppressWarnings("unchecked")
-    synchronized T getService(ComponentContext context) {
-        T svc = locatedService;
-        if (svc == null) {
-            SecurityManager sm = System.getSecurityManager();
-            if (sm != null) {
-                final ComponentContext finalContext = context;
-                svc = AccessController.doPrivileged(new PrivilegedAction<T>() {
+    T getService(ComponentContext context) {
+        if (locatedService == null) {
+            synchronized (this) {
+                if (locatedService == null) {
+                    SecurityManager sm = System.getSecurityManager();
+                    if (sm != null) {
+                        final ComponentContext finalContext = context;
+                        locatedService = AccessController.doPrivileged(new PrivilegedAction<T>() {
 
-                    @Override
-                    public T run() {
-                        return finalContext.locateService(referenceName, serviceRef);
+                            @Override
+                            public T run() {
+                                return finalContext.locateService(referenceName, serviceRef);
+                            }
+                        });
+                    } else {
+                        locatedService = context.locateService(referenceName, serviceRef);
                     }
-                });
-            } else {
-                svc = locatedService = context.locateService(referenceName, serviceRef);
+                }
             }
         }
-        return svc;
+        return locatedService;
     }
 
     @Override

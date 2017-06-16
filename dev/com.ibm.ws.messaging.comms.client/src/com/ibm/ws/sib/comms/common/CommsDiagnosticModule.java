@@ -1,28 +1,13 @@
-/*
- * @start_prolog@                                                    
- * Version: @(#) 1.6 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/common/CommsDiagnosticModule.java, SIB.comms, WASX.SIB, uu1215.01 06/10/05 05:52:20 [4/12/12 22:14:21]
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * 5724-I63, 5724-H88, 5655-N02, 5733-W70 (C) Copyright IBM Corp. 2005, 2006 
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- * Creation          051107 mattheg  Extra information in FFDC's
- * D336596           060109 mattheg  Clone lists before iterating over them
- * D363463           060421 prestona ME-ME heartbeat timeout
- * SIB0048b.com.1    060901 mattheg  Move into server package
- * D395634           061005 mattheg  Re-introduce FFDC module back into client
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.common;
 
 

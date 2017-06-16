@@ -1,30 +1,13 @@
-/*
- * ============================================================================
- * @start_prolog@
- * Version: @(#) 1.7 SERV1/ws/code/ras.lite/unittest/ras/lite/TrTest.java, WAS.ras.lite, WASX.SERV1, kk0826.07 08/06/19 03:27:11 [6/30/08 15:02:52]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2007
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- *                 061031 vaughton Prep SERV1 version
- * SIB0119.cli.11  070215 vaughton Change message prefix
- * 455868          070731 vaughton Add isMessageIdConversionEnabled method
- * 484111          071126 vaughton NPE inside toString method
- * 485562          071126 vaughton Initialise new FFDC implementation
- * 530532          080618 djvines  Test Untraceable and Traceable
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package ras.lite;
 

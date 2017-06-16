@@ -1,53 +1,15 @@
 package com.ibm.ws.Transaction.JTS;
 
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2004, 2009 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer  Defect         Description                                                     */
-/*  --------  ----------  ------         -----------                                                     */
-/*  05/09/02   gareth     ------         Move to JTA implementation                                      */
-/*  17/09/02   gareth     ------         Add partner log support                                         */
-/*  21/10/02   gareth     1449           Tidy up messages and exceptions                                 */
-/*  01/11/02   hursdlg    1478           Add epoch support                                               */
-/*  20/01/03   gareth     LIDB1673.1     Add JTA2 messages                                               */
-/*  30/01/03   mallam     LIDB1673.24    Inactivity timer                                                */
-/*  21/02/03   gareth     LIDB1673.19    Make any unextended code final                                  */
-/*  28/02/03   hursdlg    LIDB1673.19.1  Remove redundant code                                           */
-/*  17/03/03   mallam     157629         use correct total timeout                                       */
-/*  04/04/03   hursdlg    LIDB1673.22    Save ExtClassLoader                                             */
-/*  11/06/03   hursdlg    169107         Update recoverylog interfaces                                   */
-/*  22/09/03   hursdlg    174209         Migrate logs                                                    */
-/*  20/10/03   mallam     LIDB1673-13    New WCCM attributes                                             */
-/*  20/11/03   johawkes   182862         Remove static partner log dependencies                          */
-/*  13/04/04   beavenj    LIDB1578.1     Initial support for ha-recovery                                 */
-/*  21/05/04   beavenj    LIDB1578.7     FFDC                                                            */
-/*  14/06/04   johawkes   209345         Organise imports                                                */
-/*  28/09/04   awilkins   227752.2       Add getter/setter for TxServiceImpl                             */
-/*  14/06/05   johawkes   266145.3       Move custom properties to WCCM                                  */
-/*  27/07/05   hursdlg    292064         Add support for ClusterMemberService ready for LI3187-25        */
-/*  06/01/06   johawkes   306998.12      Use TraceComponent.isAnyTracingEnabled()                        */
-/*  29/11/06   maples     402670         LI4119-19 code review changes                                   */
-// 07/04/12 johawkes LIDB4171-35    Componentization
-// 07/04/12 johawkes 430278         Further componentization
-// 07/05/01 johawkes 434414         Remove WAS dependencies
-// 07/06/06 johawkes 443467         Repackaging
-// 07/08/16 johawkes 451213         Moved LPS back into JTM
-// 09/06/02 mallam   596067         package moves for Aries/osgi
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import javax.transaction.SystemException;
 

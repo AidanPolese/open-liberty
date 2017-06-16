@@ -1,22 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5724-J08 (C) COPYRIGHT International Business Machines Corp. 1997, 2016
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-
-//CHANGE HISTORY
-//Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//        293789         07/26/05     todkap              add ability for components to register ServletContextFactories
-//        295191         08/01/05     mmolden             Code Review Changes for LIDB3477-17
-//        299498         08/19/05     todkap              implement concept of internal servlets and filters    WASCC.web.webcontainer
-//        304662         09/13/05     ekoonce             Implement additional IServletConfig methods
-//        304662.1       09/19/05     ekoonce             Change 'pmi' in method names to 'statistics'
-//        PK03770        11/30/05     todkap              IN V5 OF WSAD/SSTK THE LOAD ORDER IS DEFAULT=-1 WHEN THE LOAD O    WAS.webcontainer    
-//        709390         08/30/11     pmdinh              Programmatically adding a servlet and mapping it to / does not work.
-//        PI23529        08/14/14     zaroman             ServletConfig returns null on empty mappings
-
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2016 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.servlet;
 
 import com.ibm.ws.ffdc.FFDCFilter;

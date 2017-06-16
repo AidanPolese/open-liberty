@@ -1,61 +1,13 @@
-//%Z% %I% %W% %G% %U% [%H% %T%]
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009,2017
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2009, 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *
- * Change History:
- *
- * Reason           Version        Date       User id     Description
- * ----------------------------------------------------------------------------
- * F001340-15950.1    8.0        09/04/2009   shighbar     Initial HPEL code
- * 642471             8.0        03/10/2010   spaungam     HPEL formatter refactoring
- * 639499             8.0        04/10/2010   spaungam     Update logviewer message to handle nonexistent repository
- * 645936             8.0        04/13/2010   spaungam     Correct message ID from CWTRA0009I to CWTRA0009E
- * F017049-19301.1    8.0        05/10/2010   spaungam     expose LogViewer to subprocesses
- * 653791             8.0        05/24/2010   spaungam     NPE when header is missing
- * 653330             8.0        05/24/2010   spaungam     Server selection message not resolved
- * 653905             8.0        05/27/2010   spaungam     listInstances is not supposed to have filter applied
- * 654509             8.0        05/27/2010   spaungam     tail option isn't refreshing after F19301 changes
- * F017049-27489      8.0        06/10/2010    belyi       Move LogViewer into hpel component.
- * F017049-21608      8.0        06/24/2010   spaungam     LogViewer option for getting current server
- * 659005             8.0        06/30/2010    belyi       Don't use header information about runtime locale.
- * 659615             8.0        07/06/2010    belyi       Handle missing or incorrect timezone in header
- * F017049-29117      8.0        07/22/2010   spaungam     z/OS parent ID of instanceID as a timestamp
- * F017049-16916      8.0        08/18/2010    belyi       Adjust code due to 'finish' method being renamed into 'close' in RepositoryExporter interface.
- * 656338			  8.0		 08/20/2010	  shighbar	   LogViewer prints too many headers in some cases when using filters.
- * F017049-16935      8.0        07/30/2010   spaungam     addition of message option
- * 656335             8.0        08/30/2010   spaungam     date filter does not work with instance parm
- * 666702             8.0        09/10/2010   mcasile      Modify to look in props for possible repository location
- * 									   Side affect is you can call script from anywhere and still get dflt repository loc
- * 669809             8.0        09/20/2010    belyi       Modify the way -tail command prints records to ensure trace is shown when dumped from memory buffer.
- * 654541             8.0        09/21/2010   spaungam     Update LogViewer resource bundle with help and instance date format
- * 669806.1           8.0        11/18/2010   spaungam     Update LogViewer resource bundle with help and instance date format
- * 681449             8.0        01/14/2011    belyi       Honor -instance and -latestInstance options when used with a -tail option.
- * 681015             8.0        02/25/2011    belyi       Use getStartTime() for instanceID verification.
- * 696717             8.0        03/14/2011   spaungam	   create messageids for date formats that need translation
- * 696303             8.0        03/24/2011    belyi       Allow WBL file to be used as an input repository
- * 699356             8.0        03/28/2011   spaungam     remove tail and update monitor help description
- * 710421             8.0        07/15/2011    belyi       In adjusting requested process for monitor operation take into account missing WBL files.
- * F1340-50771        8.0        10/04/2011    belyi       Add option to filter on log record extensions
- * PM47306            8.0        12/02/2011    belyi       Add option for file encoding.
- * 724667             8.0        12/12/2011    belyi       Handle empty string value in -includeExtensions option
- * 724062             8.0        01/08/2012   spaungam     ensure subprocesses are factored in when using -monitor option
- * 727908             8.5        02/08/2012    belyi       Throw IllegalArgumentException if outputLogFile can't be used instead of switching to System.out
- * 725551             8.5        02/12/2012    belyi       Reread log and trace location on every wake up iteration of -monitor option
- * 729991             8.5        04/23/2012    belyi       Don't unset logReader and traceReader when silrlLog and silrlTrace are 'null'.
- * 733495             8.5        07/12/2012   arulobo1     Disallow invalid date values in startDate and stopDate parameters
- * RTC87637           8.5.5      11/21/2012    belyi       Adjust the way level, header are specified and repositories are looked for.
- * 733497             8.5        08/08/2012   kechandr     D-TYPE:logViewer tool does not report invalid dates
- * RTC92174           8.5.5      02/05/2013   dbourne      make logViewer for Liberty follow Liberty command conventions
- * 747773             8.5.5      25/04/2013   dbourne      log output shows Z instead of A for type
- * 746608		    8.0        07/05/2013   rishim       Removing duplicate checking of date format
- * 133308             8.5.5      03/07/2013   sumamk       make binaryLog treat backslash followed by comma as literal comma instead of list separator for options that take multiple values
- * rtc235241         17.0.0      01/02/2017   frankji      add iso-8601 date time format support to binaryLog
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.logging.hpel.viewer;
 
 import java.io.BufferedOutputStream;

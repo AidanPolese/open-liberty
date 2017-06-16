@@ -1,46 +1,15 @@
 package com.ibm.ws.sib.msgstore.persistence.impl;
 
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- * 190181          10/02/04 schofiel Creation
- * 191575          20/02/04 pradine  Add support for MAXDEPTH column in the Item Table
- * 188051          29/03/04 pradine  Add support for temporary tables
- * 206970          03/06/04 schofiel Sort out to-dos in SpillDispatcher
- * 215986          13/07/04 pradine  Split the Persistable interface
- * 223636.2        26/08/04 corrigk  Consolidate dump
- * 223996.1        01/09/04 pradine  Remove tick count and max depth
- * 229746          07/09/04 pradine  Display state during trace
- * 229942          08/09/04 pradine  Remove obsolete code
- * 247513          14/01/05 schofiel Improve spilling performance
- * 272110          10/05/05 schofiel 602:SVT: Malformed messages bring down the AppServer
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * SIB0112b.ms.1   07/08/06 gareth   Large message support.
- * SIB0112d.ms.2   28/06/07 gareth   MemMgmt: SpillDispatcher improvements - datastore
- * 463642          04/09/07 gareth   Revert to using spill limits
- * 496154          22/04/07 gareth   Improve spilling performance
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * 538096          23/07/08 susana   Use getInMemorySize
- * F1332-51592     28/09/11 vmadhuka Persist redelivery count to FILESTORE
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.IOException;
 import java.util.List;

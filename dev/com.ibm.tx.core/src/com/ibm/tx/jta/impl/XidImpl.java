@@ -1,61 +1,15 @@
 package com.ibm.tx.jta.impl;
 
-/* ********************************************************************************* */
-/* COMPONENT_NAME: WAS.transactions                                                  */
-/*                                                                                   */
-/* IBM Confidential OCO Source Material                                              */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2014 */
-/* The source code for this program is not published or otherwise divested           */
-/* of its trade secrets, irrespective of what has been deposited with the            */
-/* U.S. Copyright Office.                                                            */
-/*                                                                                   */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                     */
-/*                                                                                   */
-/*  Change History:                                                                  */
-/*                                                                                   */
-/*  Date      Programmer    Defect    Description                                    */
-/*  --------  ----------    ------    -----------                                    */
-/*  17/09/02  hursdlg       139691    Use WAS distributed format id                  */
-/*  09/10/02  hursdlg       1453      Tidy up XID bqual usage                        */
-/*  14/10/02  hursdlg       1432      Remove redundant code                          */
-/*  14/10/02  hursdlg       1454      Define 1PC XID FID here                        */
-/*  25/11/02  hursdlg       1503      Define 2PC XID FID here                        */
-/*  21/02/03   gareth    LIDB1673.19  Make any unextended code final                 */
-/*  31/03/03  hursdlg    LIDB1673.22  Improve equals/hash performance                */
-/*  20/05/03  hursdlg       166939    Fix ArrayBounds error                          */
-/*  18/08/03  hursdlg       174113    Initialize statics                             */
-/*  18/09/03  hursdlg       177194    Migrate to 8 byte recovery ids                 */
-/*  05/02/04  mallam        LIDB2775 rename XID to XidImpl                           */
-/*  26/02/04  hursdlg       LIDB2775  remove redundant code/merge                    */
-/*  26/02/04  hursdlg       196258    Make bqual length public for recovery          */
-/*  13/04/04  beavenj       LIDB1578.1 Initial supprort for ha-recovery              */
-/*  16/04/04  johawkes      198909    Use TxPrimaryKey                               */
-/*  22/04/04  awilkins      198904.1  getXid changes                                 */
-/*  22/04/04  beavenj       LIDB1578.4 Early logging support for CScopes             */
-/*  29/04/04  mallam        197039    NPE Util.toHexString for null bqual            */
-/*  04/05/04  hursdlg       LIDB2775  Make gtrids more common                        */
-/*  16/06/04  johawkes      209345    Remove unnecessary code                        */
-/*  20/07/04  hursdlg       217667    Improve RRA equal checks                       */
-/*  08/02/05  dmatthew      253503    fix WSAT recovery                              */
-/*  01/08/05  kaczyns       LI3187    New branch XID constructor                     */
-/*  18/10/05  hursdlg       LI3187-3  Public accessor                                */
-/*  06/01/06  johawkes      306998.12 Use TraceComponent.isAnyTracingEnabled()       */
-// 07/04/12 johawkes LIDB4171-35   Componentization
-// 07/04/12 johawkes 430278        Further componentization
-// 07/04/12 johawkes 436180        Make serializable for testing purposes
-// 07/06/06 johawkes 443467        Moved
-// 07/06/06 johawkes 451213        Moved LPS back into JTM
-// 08/01/28 kaczyns  493829        Stop logging recovery ID in Xid on z/OS
-// 08/02/20 johawkes 494697.1      Make setSequenceNumber and setStoken protected
-// 08/04/30 hursdlg  516757        Revisit stoken processing
-// 08/05/10 mezarin  484128.15     Make ZOS_FID_CBLT public
-// 09/06/02 mallam   596067        package move
-// 09/07/02 hursdlg  444705        Make GTRID_JTA_GTRID_LENGTH public
-// 10/03/17 hursdlg  PM07874       Add printOtid          
-// 10/05/13 hursdlg  649934        Further PM07874 changes
-/*  14/03/19  dmatthew      PI12571   Fix multithreading XID issue                   */
-/*  14/07/31  dmatthew      759941    Z/OS regression due to PI12571 - wrong formatID*/
-/* ********************************************************************************* */
+/*******************************************************************************
+ * Copyright (c) 2002, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.Serializable;
 import java.security.PrivilegedAction;

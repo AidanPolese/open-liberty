@@ -1,12 +1,13 @@
-//IBM Confidential OCO Source Material
-//  5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004
-//	The source code for this program is not published or otherwise divested
-//	of its trade secrets, irrespective of what has been deposited with the
-//	U.S. Copyright Office.
-//Defect 227804  2004/08/31  Strange stepping behaviour against the enclosed JSP file
-//Defect 232157  2004/09/16  jsp fragment trims whitespace around el variable
-//APAR   PI79800 2017/04/11  EL expressions preceded by large character data block might be escaped. hmpadill
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.translator.visitor.generator;
 
 import java.util.ArrayList;

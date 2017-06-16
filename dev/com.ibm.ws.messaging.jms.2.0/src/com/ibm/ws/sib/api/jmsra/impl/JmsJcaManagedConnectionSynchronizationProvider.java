@@ -1,31 +1,13 @@
-/**
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Change activity:
- *
- * Reason          Date      Origin   Description
- * --------------- --------- -------- -----------------------------------------
- * 188050.2        05-Apr-04 dcurrie  Original
- * 203656          17-May-04 dcurrie  Code cleanup
- * 195445.28       26-May-04 pnickoll Changing messaging prefix
- * 201972.4        28-Jul-04 pnickoll Update core SPI exceptions
- * 221976          05-Aug-04 pnickoll Type in exit trace for getSynchronization
- * 226576          25-Aug-04 dcurrie  Additional exceptions on constructor
- * 238960.3        14-Oct-04 dcurrie  Use subjectToString
- * 313337.2        13-Oct-05 pnickoll Change createUncoordinatedTransaction call so we now pass false as parameter 
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.api.jmsra.impl;
 
 //Sanjay Liberty Changes

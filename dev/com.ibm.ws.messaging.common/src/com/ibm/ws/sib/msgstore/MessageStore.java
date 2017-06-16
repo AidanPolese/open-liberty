@@ -1,43 +1,15 @@
 package com.ibm.ws.sib.msgstore;
 
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2012,2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 03/02/03 drphill  Original
- * 188494          27/01/04 gareth   Tie Transactions to individual ME
- * 193248.5        04/05/04 pradine  Support changes to JsEngineComponent
- * 181851.11.1     07/05/04 gareth   JsMonitoredComponent Implementation
- * 223636.2        26/08/04 corrigk  Consolidate dump
- * SIB0002.ms.1    28/07/05 schofiel Changes for remote MQ subordinate resources
- * 335528          04/01/06 schofiel Items not cached following restore
- * 306998.19       09/01/06 gareth   Add new guard condition to trace statements
- * 337421.1        23/03/06 gareth   Support reloading of config
- * 465809          18/09/07 gareth   Allow access to startup exceptions
- * 492055          27/05/08 susana   Allow dump to dump internal & full persisted data
- * 515543.2        08/07/08 gareth   Change runtime exceptions to caught exception
- * 724676          26/12/11 chetbhat ME fails to START after WAS80 to WASX Migration
- * 726258          27/01/11 chetbhat RDC feature not working for migration test
- * 725644          09/02/12 urwashi  Adding implementation in the non functional method serverStopping(), to check for WAS server stopping notification.
- * 91633           21/01/13 bsharath Liberty: Multiple FFDC and Server Hang when wrong drive path in filestore
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

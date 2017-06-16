@@ -1,31 +1,14 @@
 package com.ibm.tx.ltc.embeddable.impl;
-/* ************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                           */
-/*                                                                            */
-/*  ORIGINS: 27                                                               */
-/*                                                                            */
-/* IBM Confidential OCO Source Material                                       */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70. (C) COPYRIGHT International Business Machines Corp. 2002, 2007, 2008   */
-/* The source code for this program is not published or otherwise divested    */
-/* of its trade secrets, irrespective of what has been deposited with the     */
-/* U.S. Copyright Office.                                                     */
-/*                                                                            */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                              */
-/*                                                                            */
-/*  DESCRIPTION:                                                              */
-/*                                                                            */
-/*  Change History:                                                           */
-/*                                                                            */
-/*  Date      Develoepr  Defect       Description                             */
-/*  --------  ---------   ------      -----------                             */
-/*  21/05/02  gareth     130321       Initial Creation                        */
-/*  09/09/02  gareth     ------       Move to JTA implementation              */
-/*  19/11/02  awilkins   1507         JTS -> JTA. Thread local restructuring  */
-/*  21/02/03  gareth     LIDB1673.19  Make any unextended code final          */
-/*  30/11/03  hursdlg    LIDB2775     z/OS distributed merge                  */
-/*  07-04-27  awilkins   416102       LTC_NLS_FILE constant is WAS-specific   */  
-/*  24/05/08  johawkes   522569       Perf trace                              */
-/* ************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.util.ArrayList;
 

@@ -1,60 +1,14 @@
 package com.ibm.tx.jta.impl;
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2010 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer    Defect    Description                                                        */
-/*  --------  ----------    ------    -----------                                                        */
-/*  03-01-27  hursdlg       LIDB1673.9.1 Create from XARecoveryData                                      */
-/*  03-06-11  hursdlg       169107    Update recoverylog interfaces                                      */
-/*  03-07-10  hursdlg       169606    Improve recovery log failures                                      */
-/*  03-07-18  johawkes      LIDR2110.12    JCA 1.5                                                       */
-/*  03-07-25  hursdlg       172471    Termination of entries                                             */
-/*  03-08-18  hursdlg       174113    Reorder recovery                                                   */
-/*  03-08-20  hursdlg       165981.1  Flag logged to disk                                                */
-/*  03-09-18  hursdlg       177194    Migrate to 8 byte recovery ids                                     */
-/*  03-09-19  hursdlg       177276    Access table by subclasses                                         */
-/*  03-09-22  hursdlg       174209    Include initialization                                             */
-/*  01/10/03  johawkes      178208.1  Use log generated recovery ids                                     */
-/*  05/12/03  johawkes      184903    Refactor PartnerLogTable                                           */
-/*  06/01/04  hursdlg       LIDB2775  zOS/distributed merge                                              */
-/*  07/01/04  johawkes      LIDB2110  RA Uninstall                                                       */
-/*  26/03/04  hursdlg       196258    Extend recovery counts                                             */
-/*  13/04/04  beavenj       LIDB1578.1 Initial supprort for ha-recovery                                  */
-/*  22/04/04  beavenj       LIDB1578.4 Early logging support for CScopes                                 */
-/*  26/04/04  hursdlg       LIDB2775  zOS/distributed merge                                              */
-/*  19/05/04  beavenj       LIDB1578.6 Connect up with WLM cluster framework                             */
-/*  21/05/04  beavenj       LIDB1578.7 FFDC                                                              */
-/*  10/06/04  hursdlg       209073     Illuma code anaysis                                               */
-/*  15/06/04  johawkes      209345     Organise imports                                                  */
-/*  25/06/04  johawkes      199785     Fix partner log corruption on shutdown                            */
-/*  01/07/04  johawkes      213634     Fix InvalidRecoverableException on shutdown                       */
-/*  03/08/04  beavenj       220808     Fix manual peer recovery logic                                    */
-/*  10-08-04  beavenj       221931     Fix cleanup logic for recovery logs                               */
-/*  08-09-04  hursdlg       229934     Allow for cleanup called more than once                           */
-/*  08-09-04  hursdlg       230066     Cleanup message                                                   */
-/*  26-09-04  hursdlg       234516     Get RecoveryLog from FailureScopeController                       */
-/*  14/06/05  hursdlg       283253     Componentization changes for recovery                             */
-/*  06/01/06  johawkes      306998.12  Use TraceComponent.isAnyTracingEnabled()                          */
-/*  01/05/07  johawkes      434414    Remove WAS dependencies                                            */
-/*  06/06/07  johawkes      443467     Moved                                                             */
-/*  26/06/07  johawkes      446894     Fix JTM shutdown delay                                            */
-/*  30/06/07  hursdlg       LI3868-1.2 PostLogData call                                                  */
-/*  16/08/07  johawkes      451213     Move LPS back into JTM                                            */
-/*  28/01/08  kaczyns       493829     Remove 4-byte recovery ID restriction on z/OS                     */
-/*  02/06/09  mallam        596067     package move                                                      */
-/*  29-01-10  brailsfo      PM04949    Handle null pointer in logData                                    */
-/*  17-03-10  hursdlg       PM07874    Provider failurescopecontroller setter                            */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.NotSerializableException;
 import javax.transaction.xa.Xid;

@@ -1,50 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- *                          matrober Original (Created on 17-Feb-03)
- * 163425            220503 matrober Null & empty str for name and JsDestName
- * 170067            200603 matrober Refactor JMS interfaces (com.ibm.websphere)
- * 170747            290603 amardeep get/setJSDestDiscrim add, get/setName del
- * 172574            250703 amardeep get/set prod, cons, browse mediations
- * 170807.5          310703 amardeep get/set properties revised
- * 174328            150803 matrober Caching for destination.encode (Perf)
- * 174896            220803 matrober JavaDoc public interfaces
- * 175799            040903 matrober Rename jsDestDiscrim/Name to DestDiscim/Name
- * 176611            160903 kingdon  Add support for ttl,pri,delivMode overrides.
- * 166829.6.2        180903 matrober JMS Durable Subs (readAhead and subscriptionHome)
- * 177912            290903 kingdon  Initial work to reduce the visibility of get/set
- *                                   destName & destDescrim.
- * 177912.1          031003 kingdon  Drop the vibility of destName & destDescrim to package.
- * 179498            151003 kingdon  Impose max value for timeToLive.
- * 179339.7          120104 matrober Forward and reverse routing paths
- * 179339.7.1        210104 matrober Forward/Reverse routing paths (part 2)
- * 186967.2          220104 jhumber  JMS support for MQLink in Milestone 6
- * 184390.7          170204 kingdon  deprecate the npm methods
- * 184904.1          150304 matrober Remove references to Producer/Consumer Mediations for JS1
- * 186967.5          080404 jhumber  API support for Inter-Bus support
- * 190809            190404 kingdon  Remove deprecated non-persistent mapping methods
- * 200218            270404 jhumber  Remove M6RoutingData property
- * 197921.1          040504 jhumber  New Javadoc tags
- * 228338            020904 matrober Javadoc in this file is causing error on Windows IBASE build
- * 338734            180105 holdeni  Fix JavaDoc warnings
- * 497304            150208 susana   Remove commented out methods
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.websphere.sib.api.jms;
 

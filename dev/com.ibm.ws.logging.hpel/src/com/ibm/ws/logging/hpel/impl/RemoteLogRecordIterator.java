@@ -1,25 +1,13 @@
-//%Z% %I% %W% %G% %U% [%H% %T%]
-
-/*
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2010,2011
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 2010, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Provide interface for remote access to High Performance Extensible Logs through implicit use of MBeans
- *
- * Change History:
- *
- * Reason            Version    Date        User id     Description
- * ----------------------------------------------------------------------------
- * F017049-16882.1       8.0    01-27-2010    belyi     Part created.
- * 647314                8.0    04/09/2010    belyi     Accept locale of the caller when returning log records.
- * 647124                8.0    04/20/2010    belyi     Throw unchecked exception in next()
- * F017049-22352         8.0    08/05/2010    belyi     Add handling result cache.
- * 669061                8.0    09/03/2010    belyi     Correctly handle negative offset bigger than repository size.
- * 686580                8.0    01/24/2011    belyi     Use record limit set on AbstractRemoteRepositoryReader implementation.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.logging.hpel.impl;
 
 import java.util.ArrayList;

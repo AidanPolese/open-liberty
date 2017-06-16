@@ -1,38 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * 158444          030207 susana   Original
- * 165989          030513 susana   Move IntAble to sib.common
- * 168606          030606 susana   Add support for DDD messages
- * 169263          030612 susana   Add support for MP Subscription Propagation msgs
- * 169602          030820 susana   Add support for messages with WDO payloads
- * 167577          030922 susana   Change Tr calls to SibTr
- * 182699          031111 susana   Remove DDD message support
- * 182191.1        040120 markesc  Add pub-sub bridge support
- * 192890          040309 susana   Move from WDO to SDO
- * 190838          040312 markesc  Add BROKER_ADMIN message type
- * 195123          040323 susana   Move IntAble back to sib.mfp
- * 186248          040812 susana   Store Enums as bytes
- * 215177          040423 susana   Change Control Messages to single part messages
- * 306998.18       060105 susana   WAS Tracing performance improvement
- * 346936          061118 susana   Remove unnecessary MessageType.API
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.mfp;
 
 import com.ibm.ws.sib.utils.ras.SibTr;

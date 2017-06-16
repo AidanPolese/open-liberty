@@ -1,35 +1,13 @@
-//IBM Confidential OCO Source Material
-// 5639-D57,5630-A36,5630-A37,5724-D18 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//CHANGE HISTORY
-//Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//	298927    	08/17/05	todkap		  improve filter handling for core    WASCC.web.webcontainer
-//	299508    	08/22/05	todkap		  onServletStartService should be before onFilterStartDoFilter    WAS.webcontainer
-//      PK27620         08/23/06        cjhoward          SERVLET FILTER IS NOT CALLED IN V6 FOR URL RESOURCES WHEN THESE ARE NOT FOUND.  IN V5, THE FILTER IS ALWAYS CALLED
-//  415593     01/19/07    mmolden      70FVT: Error page test fail in web container bucket
-//       489973          12/31/07      mmolden            70FVT:ServletRequestListener not firing when registered in tld
-//       508566          04/09/08      mmolden            PERF: File Serving Performance improvement
-//      PK55965          04/14/08      mmolden (pmdinh)   SMF data generated less in V6.x 
-//       519701          05/14/08      cjhoward           CTS: JSP positiveIncludeCtxRelativeHtmlTest failed
-//       PK64290         05/20/08      mmolden             SESSION LOSS WHEN USING ONLY URLREWRITING
-//       PK70152         08/07/08      mmolden(pmdinh)     Static content (.html, .gifs) shows up after PK55965 but stats are showing zero.
-//		 569469			 01/04/08	   pmdinh              Add entry and exit trace
-//       PK80333         05/06/08      mmulholl            503 SERVLET TEMPORARILY UNAVAILABLE
-//       PK99400         01/06/10      pmdinh              Option to display SMF record for static files with less detail (i.e 5.1's behavior)
-//
-//       PM36341         04/19/11      anupag              Add case for IfModifiedSince Newer Than FileModified TimeStamp
-//       709533          09/19/11      pmdinh              Portal migration to V8. fails
-//       PM79476         01/15/13      anupag              Get pathInfo and servletPath from dispatchContext not request, PM71901
-//       PM92496         07/24/13      anupag              Provide method to add request SSL Attributes //PM83905
-//       104336          11/20/13      wdw                 avoid multiple "already committed" warnings in the log
-//       PM92967         12/17/13      bowitten(anupag)    ISSUES WITH DOWNLOAD OF FILES GREATER THAN 8GB.
-//       PI38116         05/07/15      lmoppenh            Provide option to not flush unwrapped response objects.
-//       PI63793         05/27/16      zaroman             Provide option to not flush wrapped response objects after service.
-//
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.webcontainer.servlet;
 
 import java.io.FileInputStream;

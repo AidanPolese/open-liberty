@@ -1,66 +1,13 @@
-/* ========================================================================
- * @(#) 1.58.1.26 SERV1/ws/code/utils/src/com/ibm/ws/util/ThreadPool.java, WAS.runtime.fw, WAS80.SERV1, kk1041.02 8/26/10 13:06:01 [10/22/10 00:56:39]
+/*******************************************************************************
+ * Copyright (c) 1997, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2009, 2010
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- *
- * ========================================================================
- *
- * HISTORY
- * ~~~~~~~
- *
- * Change ID    Author    Abstract
- * ---------    --------  ---------------------------------------------------
- * d185248      tjblank   Provide switch to allow performance optimized behavior of Runnable's
- * d170374      tjblank   Provide mechanism for defining RequestBufferSize via System Property
- * LIDB3275     tmusta    Thread hang detection
- * D186668      tmusta    Adding support for non-blocking dispatches.
- * D189357.2    tmusta    Adding inhibit mechanisms for thread hangs.
- * LIDB2255-28  tmusta    ThreadPool Modifications for Performance
- * LIDB2117-74  awilkins  Add support for dispathes that expand the request queue
- * D201932      tmusta    Missing doPriv Wrapper Around Property Access
- * d204471      tjblank   Add Synchronization blocks to eliminate thread contention in HungThread detection logic
- * d185137      tjblank   Eliminate requirement for users of execute() to do in a doPriv() block.
- * d209497      tjblank   Plug JVM implementation hole, Synchronize access to volatile long attributes
- * d212112      tjblank   Use common RAS thread number
- * d211700      tjblank   Correct default values
- * d185137.2    tjblank   add doPriv to executeOnDaemon method
- * D222794      tmusta    ConcurrentModificationExceptions in Hung Thread Check
- * D198819.1    awilkins  Use different capacity limits for expansion and waiting
- * D198819.2    mortonmj  Backout changes made under 198819.1
- * D226974      awilkins  Use different capacity limits for expansion and waiting again (reinstate 198819.1)
- * D220640      tmusta    ChannelFW Performance Tuning
- * LIDB3275.1,  midinges  Thread Hang detect work
- * LIDB3706-5.175 maples  serialVersionUID changes
- * 291300       awilkins  SPI updates: thread waiting
- * 303404       awilkins  Worker threads must implement com.ibm.wsspi.runtime.ThreadPool.WorkerThread
- * 301536       awilkins  Reject requests once the pool's been shutdown
- * 302746       awilkins  Change default buffer size to maximum pool size
- * 331761       hursdlg   z/OS function for CFW thread switch support
- * 343257       gilgen    Reset hung thread state when threadWaiting reset
- * 364828       awilkins  Update expansion limit when request buffer's size is set
- * PK25446      bkail     Only call monitorPlugin.checkThread if not isHung
- * PK27301      jstidder  Handle InterruptedException correctly
- * 379236       bkail     Fix and clean up thread hang detection code
- * 394200       bkail     Fix thread stats if OutOfMemoryError is thrown starting a thread
- * PK47789      bkail     Fix race between offer() and expand()
- * D477704.2    mcasile   Move to new FFDC Facade API
- * D497853      bkail     Change MonitorPlugin to pass Thread objects instead of thread names
- * D527355.3    bkail     Set context class loader after creating threads
- * PK77809      pwwong    Fix new thread creation
- * F743-11444   ericvn    Reformat - Add ThreadPool.cancel(Runnable) for Async EJB
- * D610567      ericvn    cancel() doesn't find task in front of buffer when wrapped.
- * F743-24122   jaridk    Add message when blocking due to full request buffer.
- * D652960      andymc    Use PlatformAdapter for clearing java.lang.ThreadLocals
- * PM16525      andymc    Using java.security.AccessController instead of com.ibm.ws... see note below
- * PM13147      jaridk    Add messages when thread pool expands
- * 660363       gpicher   Change z/OS worker thread names
- * ======================================================================== */
-
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.util;
 
 //Alex import static com.ibm.ffdc.Manager.Ffdc;

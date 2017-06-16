@@ -1,32 +1,14 @@
 package com.ibm.tx.jta.embeddable.impl;
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2009, 2012 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Developer  Defect         Description                                                      */
-/*  --------  ---------  ------         -----------                                                      */
-/*  09-11-03  johawkes   F743-305.1     Creation                                                         */
-/*  09-12-08  johawkes   631451         Cleanup instantiation                                            */
-/*  09-12-15  johawkes   F743-305.3     Move in more stuff from WAS                                      */
-/*  09-12-23  tranteam   F923-4350      Tight branch coupling support                                    */
-/*  11-02-15  hursdlg    690084         Update branch coupling support                                   */
-/*  11-10-31  johawkes   719671         UOWEventListener support                                         */  
-/*  11-11-24  johawkes   723423         Repackaging                                                      */  
-/*  12-11-27  johawkes   741956         LTCCallbacks move to embeddable                                  */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import javax.transaction.RollbackException;
 import javax.transaction.Synchronization;

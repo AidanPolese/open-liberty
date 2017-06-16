@@ -1,36 +1,13 @@
-/*
- * COMPONENT_NAME: mm.logger
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *  ORIGINS: 27
- *
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * 
- *
- * Change activity:
- *
- * Reason          Date        Origin   Description
- * --------------- ----------- -------- ----------------------------------------
- * f1728           09-Mar-2005 nottinga Initial Code Drop
- * d1729           09-Mar-2005 nottinga Updated to cope with null parameters.
- * d314217         17-Oct-2005 prestona Fix several small problems
- * d335277         05-Jan-2006 djvines  Don't format entry, debug and event records
- * d328574         18-Jan-2006 djvines  OK, format entry, exit records!
- * d328546         18-Jan-2006 djvines  Use shortname for timezone
- * d339553         19-Jan-2006 djvines  Sort out formatting
- * d379779         11-Aug-2006 djvines  Sort out varargs warning
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.unittest.ras;
 
 import java.text.MessageFormat;

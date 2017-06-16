@@ -1,41 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.29 SIB/ws/code/sib.comms.client.impl/src/com/ibm/ws/sib/comms/client/ClientConversationState.java, SIB.comms, WASX.SIB, uu1215.01 11/09/15 07:55:02 [4/12/12 22:15:08]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2004, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70  Copyright IBM Corp. 2004, 2011
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * Creation        030507 niall    Original
- * F166959         030521 niall    Rebase on non-prototype CF + TCP Channel
- * f168604         030610 mattheg  Adding Async support
- * d169745         030617 mattheg  Allow proxy group to be saved with conversation
- * d170527         030625 mattheg  Tidy and change to SibTr
- * f172297         030723 schmittm continued implementation of Core API 0.6 changes in client and server code
- * f173559         030807 mattheg  Save a CommsString pool with state and move handshake params to Link Level state
- * f172521.2       030923 Niall    Support MFP Schema Propogation
- * d191832         040228 mattheg  Wrap request numbers at Short.MAX_VALUE
- * d195195         040322 mattheg  Thread safety on unique request numbers
- * D199177         040816 mattheg  JavaDoc
- * F247845         050204 mattheg  Multicast enablement
- * D276260         050516 mattheg  Add hashcode to trace (not change flagged)
- * D377648         060719 mattheg  Use CommsByteBuffer
- * D384259         060815 prestona Remove multicast support
- * SIB0137.comms.2 070924 vaughton addDestinationListener implementation
- * 471365          071002 sibcopyr Automatic update of trace guards 
- * 522647          080523 mleming  Make proxyGroup volatile
- * F011127         280611 chetbhat registerConsumerSetMonitor support
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.client;
 
 import com.ibm.websphere.ras.TraceComponent;

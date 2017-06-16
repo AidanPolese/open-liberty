@@ -1,50 +1,14 @@
 package com.ibm.tx.jta.impl;
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2010 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer    Defect   Description                                                         */
-/*  --------  ----------    ------   -----------                                                         */
-/*  05/09/02  gareth        ------   Move to JTA implementation                                          */
-/*  25/11/02  awilkins      1513     Repackage ejs.jts -> ws.Transaction                                 */
-/*  13/12/02  awilkins  LIDB1673.17  Embedded RAR recovery                                               */
-/*  21/02/03  gareth    LIDB1673.19  Make any unextended code final                                      */
-/*  28/05/03  hursdlg       167373   Make XARecoveryWrapper match Aquila                                 */
-/*  28/07/03  hursdlg       172471   Fix toString for classpath array                                    */
-/*  12/08/03  hursdlg       174113   Add SUID                                                            */
-/*  08/09/03  hursdlg       174849.1 Fix classpath array in equals                                       */
-/*  05/12/03  johawkes      184903   Refactor PartnerLogTable                                            */
-/*  07/01/04  johawkes      LIDB2110 RA Uninstall                                                        */
-/*  30/01/04  johawkes      187668   Improve deserialization failure logging                             */
-/*  24/02/04  hursdlg       LIDB2775 Restore getXAResourceFactoryClasspath                               */
-/*  13/04/04  beavenj       LIDB1578.1 Initial supprort for ha-recovery                                  */     
-/*  07/05/04  hursdlg       202183     Fix FFDC and trace                                                */     
-/*  16/06/04  johawkes      209345   Remove unnecessary code                                             */
-/*  09/07/04  johawkes      214709   Canonicalise incoming paths                                         */
-/*  05/01/13  kaczyns       249345   Add private to SUUID as per serialscan target                       */
-/*  14/06/05  hursdlg       283253   Componentization changes for deserialization                        */
-/*  01/05/07  johawkes      434414   Remove WAS dependencies                                             */
-/*  29/05/07  johawkes      441229   Silence FindBugs                                                    */
-/*  05/06/07  johawkes      443467   Move XAResourceInfo                                                 */
-/*  20/06/07  hursdlg       LI3968-1.2 Support Xa resource priority                                      */
-/*  24/02/08  johawkes      498265   Run getCanonicalPath in a doPriv                                    */
-/*  27/05/08  hursdlg       522469   Enable 6.1/7.0 compatibility                                        */
-/*  02/06/09  mallam        596067   package move                                                        */
-/*  09/06/10  hursdlg       656080   Check path exists in canonicalise as in ResourceMgr                 */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 2002, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

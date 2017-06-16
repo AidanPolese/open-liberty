@@ -1,29 +1,13 @@
-// /I/ /W/ /G/ /U/   <-- CMVC Keywords, replace / with %
-// %I% %W% %G% %U%
-//
-// IBM Confidential OCO Source Material
-// 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2008,2009
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Module  :  JPACompPUnitInfo.java
-//
-// Source File Description:
-//
-//     Java EE Component specific implementation of a PersistenceUnitInfo.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d510184   WAS70     20080424 tkb      : Create seperate EMF for each java:comp
-// F743-954.1 WASX     20090330 leealber : Add additional JPA 2.0 APIs
-// d602618    WASX     20090722 leealber : Update to JPA 2.0 API to EA5 level
-// d603827    WASX     20090803 leealber : Update to JPA 2.0 API to EA6 level
-// d618559    WASX      20091014 leealber : Update to JPA 2.0 API to EA9 level - Final Draft 
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2008, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_RESOURCE_BUNDLE_NAME;

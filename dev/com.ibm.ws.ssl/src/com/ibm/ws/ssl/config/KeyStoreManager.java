@@ -1,83 +1,13 @@
-/*
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2005, 2009 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2005, 2009
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * 
- *  @(#) 1.77 SERV1/ws/code/security.crypto/src/com/ibm/ws/ssl/config/KeyStoreManager.java, WAS.security.crypto, WASX.SERV1, pp0919.25 3/17/09 13:08:27 [5/15/09 18:04:34]
- *
- * Date         Defect        CMVC ID    Description
- *
- * 08/19/05     LIDB3557-1.1  pbirk      3557 Initial Code Drop
- * 09/20/05     LIDB3557-1.7  pbirk      3557 Code Drop #2
- * 09/30/05     LIDB3919-23.1 aruna      HW crypto changes
- * 10/12/05     311587        riddlemo   Correcting version comments.
- * 10/27/05     313879        aruna      use hw crypto card configuration file to initialize hw provider
- * 11/07/05     318812        pbirk      Moved JDK 5 APIs out of here into a CommandTask that needed it.
- * 11/16/05     324361        pbirk      KeyStores not filtering by scope in runtime.
- * 11/16/05     324405        pbirk      The getOutputStream throws unnecessary exception when keystore is empty.
- * 12/13/05     329678        pbirk      Resolve some migration issues.
- * 12/16/05     LIDB3187-63.1 pbirk      SSSL toleration
- * 01/20/06     324958.4      aruna      changes to support pure hw crypto acceleration
- * 01/26/06     334186.1      pbirk      In exchangeSigners, load keystores directly.
- * 01/31/06     342592        pbirk      Changes to handle SSSL correctly.
- * 02/03/06     344070        pbirk      File.exists should be in a dopriv
- * 02/20/06     348784        pbirk      WASKeyRing must use password="password";
- * 03/03/06     352305        pbirk      Resolve NPE due to keyring fixup.
- * 03/01/06     349527        riddlemo   KEYSTORE_TYPE_RACFCRYPTO and KEYSTORE_TYPE_JAVACRYPTO should always be read only and are not file based
- * 03/07/06     352868        pbirk      Catch NoClassDefFound for digest method on PAC.
- * 03/23/06     347474        alaine     make read only if RACF key store type
- * 03/27/06     353834        alaine     make read only and not file based if RACF key store type
- * 04/05/06     359647        alaine     change expand to handle ${CONFIG_ROOT} and ${WORKSPACE_ROOT}
- * 04/07/06     361207        pbirk      Expand ${USER_INSTALL_ROOT} on pure client for migration.
- * 04/07/06     361167        alaine     Fix so that client side can expand ${CONFIG_ROOT} and ${WORKSPACE_ROOT}
- * 04/12/06     346507        leou       Do not attempt to create keystore or self-signed cert in pluggable clients
- * 04/13/06     362663        elisa      Changed property name to SSLPROP_KEY_STORE_NAME that is set when creating keystore 
- * 04/14/06     362458        pbirk      Configure fileBased correctly based on keystore type.
- * 04/15/06     359841        pbirk      Expand CONFIG_ROOT using other options beside was.repository.root.
- * 04/18/06     363330        alaine     Change call to getKeyStore
- * 04/25/06     364383        pbirk      Decode system properties.
- * 08/03/06     379561        alaine     Added code to make getKeyStore load CMS key stores correctly.
- * 11/03/06     400749        pbirk      Remove the java keystore from WSKeyStore during signerExchange from addNode.
- * 11/08/06     387997        alaine     Change the lifespan on the certificate.
- * 11/17/06     LIDB4119-33   paulben    RCS changes
- * 12/06/06     409252        danmorris  add cast to (Map.Entry) in clearJavaKeyStoresFromKeyStoreMap
- * 02/13/07     419375        paulben    Must explicitly decode passwords with RCS
- * 02/20/07     LIDB2112-24.3 alaine     Add description parameter to keyStoreInfo create
- * 02/28/07     423300        alaine     add check for was.install.root in expand
- * 03/26/07     LIDB4134-62.2 danmorris  Modify exchangeSigners to exchange the root cert in the cert chain
- * 04/02/07     428875        danmorris  Handle CMS keystores in checkIfClientKeyStoreAndTrustStoreExistsAndCreateIfNot
- * 04/16/07     432337        danmorris  Do not force non-z/os client keystores to be writable
- * 05/03/07     PK43266       lisarich   Expand ${hostname} 
- * 05/29/07     436619        pbirk      Changes that help SSL acceleration work.
- * 06/28/07     LIDB2112-22.1 danmorris  Update self-signed certificate creation to use chained certificates
- * 07/11/07     LI4119.80     paulben    RCS var expansion
- * 08/07/07     457211        danmorris  Modified call to chainedCertificateCreate to match root key store changes
- * 08/30/07     459104        pbirk      Support for AdminAgent configuration.
- * 09/04/07     464499        danmorris  Remove issued keystore implementation
- * 09/14/07     464970        danmorris  Cap the size of expandMap at 50 to avoid mem leaks
- * 09/28/07     LIDB2112-26.1 danmorris  Writable SAF keyring support
- * 10/01/07     LIDB4134-91.09 pbirk     FileTransferServlet security for Job Manager.
- * 10/18/07     475457        pbirk      Make the clearJavaKeyStoreCache public to be called from WSX509TrustManager
- * 10/28/07     LIDB4194-79.1 pbirk      Include JobManager process type.
- * 11/09/07     481831        alaine     add key store scope to getKeyStore()
- * 11/12/07     477704        mcasile    New FFDC API
- * 02/05/08     495916        pbirk      Make sure the default keystore name considers the type of keystore for dmgr.
- * 05/08/08     519012        danmorris  Publicize methods added in 459104
- * 06/01/08     523668        danmorris  Add yet another getKeyStore method to get an RCS object (will load based on uuid context)
- * 06/06/08     527623.2      mcthomps   Clean up from static analysis
- * 06/09/08     521668.1      danmorris  Change getKeyStore to use SecurityConfig.getSCO to handle profile context lookup's
- * 06/24/08     521245        danmorris  Add additional checks for RSA KeyStore types
- * 07/28/08     539053        danmorris  Get passwords types with getUnexpandedString
- * 08/19/08     544007        alaine     add a method for migration to clear out the keystore cache
- * 09/25/08     552038        mcthomps   getKeyStore(String) handles AdminAgent subsystem case
- * 10/22/08     557444        paulben    Back out 552038. It turns out that RSA is dependent on this class NOT being thread context aware
- * 02/18/09     pk69062       alaine     Add getJavaKeyStore for web services team
- * 01/08/08     PK77884       ttorres    Use system properties for keystore and truststore if available instead of default values
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.ssl.config;
 

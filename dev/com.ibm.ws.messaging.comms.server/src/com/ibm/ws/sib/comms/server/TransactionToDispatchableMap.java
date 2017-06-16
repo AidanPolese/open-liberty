@@ -1,28 +1,13 @@
-/*
- * @start_prolog@
- * Version: @(#) 1.8 SIB/ws/code/sib.comms.server.impl/src/com/ibm/ws/sib/comms/server/TransactionToDispatchableMap.java, SIB.comms, WASX.SIB, aa1225.01 07/10/03 05:10:33 [7/2/12 05:58:59]
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2005, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-I63, 5724-H88, 5655-N01, 5733-W61  (C) Copyright IBM Corp. 2005, 2006
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- *
- * Change activity:
- *
- * Reason          Date   Origin   Description
- * --------------- ------ -------- --------------------------------------------
- * D297060         050821 prestona IdToTransactionTable memory leak
- * D307265         050918 prestona Added helper functions for optimized transactions
- * D321471         051109 prestona Optimized transaction related problems
- * D359021         060330 mattheg  Provide support for transaction clean-up
- * 471664          071003 vaughton Findbugs tidy up
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.comms.server;
 
 import java.util.HashSet;

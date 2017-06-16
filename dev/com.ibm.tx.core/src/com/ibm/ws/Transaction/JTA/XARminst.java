@@ -1,61 +1,14 @@
 package com.ibm.ws.Transaction.JTA;
-/* ***************************************************************************************************** */
-/* COMPONENT_NAME: WAS.transactions                                                                      */
-/*                                                                                                       */
-/*  ORIGINS: 27                                                                                          */
-/*                                                                                                       */
-/* IBM Confidential OCO Source Material                                                                  */
-/* 5639-D57,5630-A36,5630-A37,5724-D18 (C) COPYRIGHT International Business Machines Corp. 1999, 2007, 2008 */
-/* The source code for this program is not published or otherwise divested                               */
-/* of its trade secrets, irrespective of what has been deposited with the                                */
-/* U.S. Copyright Office.                                                                                */
-/*                                                                                                       */
-/* %Z% %I% %W% %G% %U% [%H% %T%]                                                                         */
-/*                                                                                                       */
-/*  DESCRIPTION:                                                                                         */
-/*                                                                                                       */
-/*  Change History:                                                                                      */
-/*                                                                                                       */
-/*  Date      Programmer    Defect    Description                                                        */
-/*  --------  ----------    ------    -----------                                                        */
-/*  02-01-23    hursdlg    PQ56777   Handle oracle/sybase xa_recover specials                            */
-/*  02-02-06   awilkins   115601-2 Start/end code moved to WSResourceImplBase                            */
-/*  02-02-07    hursdlg    111021    Reduce transaction log record size                                  */
-/*  25/02/02    beavenj    LI1436.01 RAS Updates                                                         */
-/*  02-02-25    hursdlg    111021.1  Add recovery log file support                                       */
-/*  27-02-02  beavenj      LIDB1220.151.1 Code instrumented for FFDC work                                */
-/*  02-02-28    hursdlg    LI1169.1  Track recovery behaviour                                            */
-/*  02-03-08    hursdlg    120732    Add oracle recovery exception check                                 */
-/*  02-04-03    hursdlg    123880    Remove tran Util dependency                                         */
-/*  02-04-11    hursdlg    124938    Improve recovery diagnostics                                        */
-/*  02-05-20    awilkins   130833    Perform recover() without scanning                                  */
-/*  05/09/02    gareth     ------    Move to JTA implementation                                          */
-/*  23/09/02    mallam     144733    Duplicate resourceLog entries                                       */
-/*  23/09/02    mallam     145638    Trace errorCode on XAException                                      */
-/*  03/10/02    hursdlg    ------    JTA2 XAResourceListener support                                     */
-/*  09/10/02    hursdlg    1453      Tidy up recover and XID bqual format                                */
-/*  25/11/02   awilkins    1513      Repackage ejs.jts -> ws.Transaction                                 */
-/*  10/12/02    hursdlg    1673.2.3  Migrate fix 154587                                                  */
-/*  21/01/03    gareth   LIDB1673.1  Add JTA2 messages                                                   */
-/*  21/02/03    gareth   LIDB1673.19 Make any unextended code final                                      */
-/*  04/04/03    hursdlg  LIDB1673.22 Migrate Xid specific to XID                                         */
-/*  28/05/03    hursdlg    167373    z/OS extend this class                                              */
-/*  13/08/03    hursdlg    174113    Reorder recovery                                                    */
-/*  02/09/03    hursdlg    175486    Handle heuristic on rollback                                        */
-/*  08/09/03    hursdlg    174849.1  Match recoverId checks                                              */
-/*  12/09/03    hursdlg    176664    Fix heuristic errorcode check                                       */
-/*  18/09/03    hursdlg    177194    Migrate to 8 byte recovery ids                                      */
-/*  20/11/03    johawkes   182862    Remove static partner log dependencies                              */
-/*  06/01/04    hursdlg    LIDB2775  zOS/distributed merge                                               */
-/*  05/02/04  mallam        LIDB2775 rename XID to XidImpl                                               */
-/*  25/03/04  hursdlg      196258    Move function to XARecoveryData                                     */
-/*  30/03/04    johawkes   196434    Catch throwable on closeConnection                                  */
-/*  04/05/04    hursdlg    LIDB2775  Add getXaResource                                                   */
-/*  01/05/04    hursdlg    MD19882   Informix hack for recover                                           */
-/*  14/06/05    hursdlg    283253    Componentization changes for recovery                               */
-/*  05/06/07    johawkes   443467    Move XAResourceInfo                                                 */
-/*  09/09/08    johawkes   546427    Don't destroy null XAResources                                      */
-/* ***************************************************************************************************** */
+/*******************************************************************************
+ * Copyright (c) 1999, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.lang.reflect.Method;
 

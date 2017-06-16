@@ -1,60 +1,13 @@
-// IBM Confidential OCO Source Material
-// 5639-D57,5630-A36,5630-A37,5724-D18 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-//
-//CHANGE HISTORY
-//Flag    Defect         Date         Modified By         Description
-//--------------------------------------------------------------------------------------
-//        PK57843        03/12/08     srpeters            THE JSP:INCLUDE TAG DOES NOT THROW EXCEPTION WHEN THE FILE IT
-//        PK76117        12/11/08     mmulholl            Add com.ibm.ws.webcontainer.discernunavailableservlet
-//        PK76656        12/11/08     mmulholl            Add com.ibm.ws.webcontainer.assumefiltersuccessonsecurityerror
-//        PK75617        02/11/09     pmdinh              Add com.ibm.ws.webcontainer.ignoreinvalidquerystring
-//        PK78371        01/13/09     pmdinh              Add com.ibm.ws.webcontainer.provideqstringtowelcomefile
-//        PK80362      	 03/04/09     anupag          	  Add com.ibm.ws.webcontainer.suppressheadersinrequest property
-//        PK80340        02/25/09     mmulholl            Add com.ibm.ws.webcontainer.enabledefaultservletrequestpathelements
-//        PK81452        05/18/09     mmolden             Add com.ibm.ws.webcontainer.copyattributeskeyset
-//        PK83258        06/17/09     mmulholl            Add com.ibm.ws.webcontainer.defaulttracerequestbehavior & com.ibm.ws.webcontainer.defaultheadrequestbehavior
-//        PK90190        06/21/09     sartoris            Add com.ibm.ws.jsp.getwriteronemptybuffer
-//        PK95332        09/09/09     pmdinh              Add com.ibm.ws.jsp.limitbuffer
-//        F003449        11/18/09     mmulholl            Add com.ibm.ws.webcontainer.enablemultireadofpostdata
-//        PM03788        01/12/10     anupag              Add com.ibm.ws.webcontainer.setunencodedhtmlinsenderror
-//        PK99400        01/06/10     pmdinh              Add com.ibm.ws.webcontainer.filewrappereventslessdetail
-//        PM03928        01/15/10     pmdinh              Add com.ibm.ws.webcontainer.disablesetcharacterencodingafterparametersread
-//        PM22082        09/08/10     pmdinh              Add com.ibm.ws.jsp.allowdirectoryinclude
-//        PM22919        09/29/10     pmdinh              Add com.ibm.ws.webcontainer.dispatcherrethrowserror
-//
-//        PM25931        11/12/10     anupag              Add com.ibm.ws.webcontainer.localedependentdateformatter
-//        F011107        05/18/11     pmdinh              Add com.ibm.ws.webcontainer.enableexactmatchjsecuritycheck
-//        PM47487        10/24/11     pmdinh              Add com.ibm.ws.webcontainer.returndefaultcontextpath
-//        PM47661        11/16/11     pnicoluc            Add com.ibm.ws.jsp.expressionreturnemptystring
-//        PM51151        11/28/11     pmdinh              Add com.ibm.ws.webcontainer.asyncmaxsizetaskpool and com.ibm.ws.webcontainer.asyncpurgeinterval
-//        PM63754        06/14/12     pmdinh              Add com.ibm.ws.webcontainer.throwpostconstructexception
-//        PM70260        08/07/12     smcclem             Webcontainer not honoring certain custom properties
-//        PM71666        08/29/12     pmdinh              Add setcontentlengthonclose
-//        PM84305        07/10/13     pmdinh              Add com.ibm.ws.webcontainer.disablestaticmappingcache   
-//        PM90834        07/25/13     bowitten            Add com.ibm.ws.webcontainer.transfercontextinasyncservletrequest
-//        PI09474        02/03/14     lmoppenh            Add com.ibm.ws.webcontainer.displaytextwhennoerrorpagedefined
-//        PM81674        07/14/14     hmpadill            Add com.ibm.ws.jsp.evalexpressionfollowingtwobackslashes (tWAS APAR PM70967)
-//        PI05845        08/21/14     sartoris            Add com.ibm.ws.webcontainer.allowdefaulterrorpage (tWAS APAR PM94199)
-//        PI20210        08/13/14     pmdinh              Add com.ibm.ws.webcontainer.preserverequestparametervalues
-//        PM99163        09/02/14     pmdinh              Add com.ibm.ws.webcontainer.appendmetainfresourcesinlooselib
-//        PI23529        09/09/14     zaroman             Add com.ibm.ws.webcontainer.emptyservletmappings
-//        PI26908        12/01/14     zaroman             Add com.ibm.ws.webcontainer.deferservletrequestlistenerdestroyonerror
-//        PI31922        12/19/14     hwibell             Add com.ibm.ws.jsp.allowexpressionfactoryperapp
-//        PI31447        02/10/15     zaroman             Add com.ibm.ws.webcontainer.ignoresemicolononredirecttowelcomepage
-//        PI31292        02/10/15     zaroman             Add com.ibm.ws.webcontainer.usesemicolonasdelimiterinuri
-//        160846         03/13/15     lmoppenh            Add com.ibm.ws.webcontainer.initializeclassinhandlestypesstartup
-//        PI38116        05/07/15     lmoppenh            Add com.ibm.ws.webcontainer.invokeflushafterserviceforstaticfile
-//        PI60797        05/02/16     pmdinh              Add com.ibm.ws.webcontainer.enablepostonlyjsecuritycheck (default is false)
-//        PI58875        06/15/16     pmdinh              Add com.ibm.ws.webcontainer.stopappstartuponlistenerexception
-//        PI63193        05/27/16     zaroman             Add com.ibm.ws.webcontainer.invokeflushafterserviceforstaticfileresponsewrapper
-//        PI68061        08/26/16     pmdinh              Add com.ibm.ws.webcontainer.displaycustomizedexceptiontext    
-//        PI67942        10/21/16     zaroman             Add com.ibm.ws.webcontainer.encodedispatchedrequesturi
-//
-
+/*******************************************************************************
+ * Copyright (c) 1997, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.webcontainer;
 
 import java.util.HashMap;

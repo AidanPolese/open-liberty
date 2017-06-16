@@ -1,14 +1,13 @@
-//IBM Confidential OCO Source Material
-//5724-i63, 5724-H88 (C) COPYRIGHT International Business Machines Corp. 1997-2004 
-//The source code for this program is not published or otherwise divested
-//of its trade secrets, irrespective of what has been deposited with the
-//U.S. Copyright Office.
-//
-//Change history:
-//Defect 219290 "PERF-ST: Taglib init suggestions for improved startup perf"  2004/07/27 Scott Johnson/Todd Kaplinger
-//Defect PK04091 "PROVIDE A CONFIGURABLE PROPERTY FOR DETERMINING BUFFER SIZE."  2006/02/20 Scott Johnson
-//Defect 651265  "Trace Entry and Exit improvement" 05/12/2010 Anup Aggarwal 
-//
+/*******************************************************************************
+ * Copyright (c) 1997, 2004 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.webcontainerext;
 
 import java.util.ArrayList;

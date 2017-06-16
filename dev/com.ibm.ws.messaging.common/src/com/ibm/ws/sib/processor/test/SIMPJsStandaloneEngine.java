@@ -1,36 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- *  
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason           Date   Origin   Description
- * ---------------  ------ -------- -------------------------------------------
- * 185792                  matrober Created on 16-Dec-2003
- * 181718.4         221203 gatfora  Move to the new UUID classes
- * 186445.3         200104 millwood Move to admin destination definition
- * 186445.4         230104 millwood Move to new JsMessagingEngine interfac
- * 193399           050304 gatfora  Updates to the JsMessageEngine interface
- * 186967.7.1       120304 millwood Add new ForeignBusDefinition and VirtualLinkDef.. support
- * 186967.7.7       300304 millwood Use new TRM LinkManager interface
- * 199152           200404 gatfora  Correct javadoc.
- * 181851.11.2.1    060504 caseyj   Report global error on MP startup corruption
- * 215608.4         040804 millwood Change to start() method of JsEngineComponent
- * 236261           140105 gatfora  DynamicConfig concurency enablement for Mediations
- * 406709           201106 tevans   Allow the MessageStore to be started independently
- * SIB0125.adm.3    190107 leonarda RCS setConfig()
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.sib.processor.test;
 
 

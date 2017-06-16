@@ -1,28 +1,13 @@
-/*
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012, 2013
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- * Change activity:
- *
- * Reason          Date     Origin    Description
- * --------------- ------   --------  --------------------------------------------
- *                                    Version X copied from CMVC
- * 87323          27/11/12  skavitha  UnlimitedPermanentStoreSize and UnlimitedTemporaryStoreSize 
- *                                    values are set      
- * 88032          05/12/12  urwashi   Added MBean support in liberty
- * 91400          21/01/13  sharath   MBean code clean up
- * 91800          22-01-13  Sharath  Remove the StateExtended property since it does not make any sense in Liberty Messaging
- * 90454          30/01/13  sanjay   Fix for enabling listPeparedTransactions
- * 93354          08/02/13  Sharath  Setting the Dump Directory path
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.sib.admin.internal;
 
