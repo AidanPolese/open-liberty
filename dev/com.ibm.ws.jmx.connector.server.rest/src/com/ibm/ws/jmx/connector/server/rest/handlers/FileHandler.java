@@ -152,6 +152,7 @@ public class FileHandler implements RESTHandler {
                 originPackagePath = req.getParam("originPackagePath");
                 if ("liberty".equalsIgnoreCase(deployService)) {
                     expand = "true";
+                    actionHeader = req.getParam("action");
                     try {
                         filePath = URLDecoder.decode(filePath, "UTF8");
                         if (tc.isDebugEnabled()) {
@@ -211,14 +212,6 @@ public class FileHandler implements RESTHandler {
         //UPLOAD also supports multiple routing
         if (RESTHelper.containsMultipleRoutingContext(request)) {
             try {
-//                if (isMultipartRequest && "liberty".equalsIgnoreCase(deployService) && req != null) {
-//                    if (tc.isDebugEnabled()) {
-//                        Tr.debug(tc, "This is a Liberty Multipart request, passing the cunstom request object req.");
-//                    }
-//                    uploadResults = getMultipleRoutingHelper().multipleUploadInternal(req, filePath, expansion, localFile);
-//                }
-//
-//                else
                 uploadResults = getMultipleRoutingHelper().multipleUploadInternal(request, filePath, expansion, localFile);
             } catch (IOException e) {
                 throw ErrorHelper.createRESTHandlerJsonException(e, null, APIConstants.STATUS_INTERNAL_SERVER_ERROR);
@@ -236,7 +229,6 @@ public class FileHandler implements RESTHandler {
             uploadResults = null;
         }
         if (deploymentAPICall) {
-            //  if (ConnectorSettings.POST_TRANSFER_ACTION_FIND_SERVER_NAME.equals(actionHeader)) {
             ServletRESTResponseWithWriter customResponse = (ServletRESTResponseWithWriter) response;
             try {
                 Writer wr = customResponse.geStringtWriter();
