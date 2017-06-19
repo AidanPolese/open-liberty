@@ -419,6 +419,7 @@ public class ChunkStepControllerImpl extends SingleThreadedStepControllerImpl {
                 processListenerProxy.afterProcess(itemRead, processedItem);
             }
         } catch (Exception e) {
+            runtimeStepExecution.setException(e);
             for (ItemProcessListenerProxy processListenerProxy : itemProcessListeners) {
                 processListenerProxy.onProcessError(itemRead, e);
             }
