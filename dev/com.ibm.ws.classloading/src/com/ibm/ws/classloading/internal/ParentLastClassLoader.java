@@ -79,7 +79,13 @@ class ParentLastClassLoader extends AppClassLoader {
                     // first check our classpath
                     rc = findClass(className);
                 } catch (ClassNotFoundException cnfe) {
-                    // ignore this since we'll try the parent next
+                    // See if we can generate the class here before
+                    // checking the parent:
+                    Class<?> generatedClass = generateClass(className);
+                    if (generatedClass != null)
+                        return generatedClass;
+
+                    // no luck? try the parent next
                 }
             }
         }
