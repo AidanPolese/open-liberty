@@ -267,7 +267,7 @@ public class JAXRSInInterceptor extends AbstractPhaseInterceptor<Message> {
             message.getExchange().put(Message.PROPOGATE_EXCEPTION,
                                       ExceptionUtils.propogateException(message));
             throw ex instanceof RuntimeException ? (RuntimeException) ex
-                            : ExceptionUtils.toInternalServerErrorException(ex, null);
+                            : JAXRSUtils.toJaxRsRuntimeException(ex);
         }
         message.getExchange().put(Response.class, excResponse);
         message.getExchange().put(Throwable.class, ex);

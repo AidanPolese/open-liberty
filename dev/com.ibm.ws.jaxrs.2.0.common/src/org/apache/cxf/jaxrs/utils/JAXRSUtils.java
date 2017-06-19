@@ -140,6 +140,7 @@ import org.apache.cxf.service.Service;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.jaxrs20.JaxRsRuntimeException;
 
 public final class JAXRSUtils {
 
@@ -1871,6 +1872,10 @@ public final class JAXRSUtils {
         String errorMessage = errorMsg.toString();
         Tr.error(tc, errorMessage);
         return errorMessage;
+    }
+
+    public static JaxRsRuntimeException toJaxRsRuntimeException(Throwable ex) {
+        return new JaxRsRuntimeException(ex);
     }
 
 }

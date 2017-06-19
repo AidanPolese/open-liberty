@@ -25,6 +25,7 @@ import org.apache.cxf.transport.servlet.BaseUrlHelper;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.jaxrs20.JaxRsRuntimeException;
 import com.ibm.ws.jaxrs20.api.JaxRsProviderFactoryService;
 import com.ibm.ws.jaxrs20.metadata.EndpointInfo;
 import com.ibm.ws.jaxrs20.metadata.JaxRsModuleMetaData;
@@ -133,7 +134,10 @@ public abstract class AbstractJaxRsWebEndpoint implements JaxRsWebEndpoint {
             destination.invoke(servletConfig, servletConfig.getServletContext(), request, response);
         } catch (IOException e) {
             throw new ServletException(e);
+        } catch (JaxRsRuntimeException ex) {
+            throw new ServletException(ex.getCause());
         }
+
     }
 
 //    @SuppressWarnings("rawtypes")
