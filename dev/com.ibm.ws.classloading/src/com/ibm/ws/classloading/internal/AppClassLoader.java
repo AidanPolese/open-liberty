@@ -156,7 +156,7 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
      * Search order:
      * 1. This classloader.
      * 2. The common library classloaders.
-     * 
+     *
      * Note: the method is marked 'final' so that derived classes (such as ParentLastClassLoader)
      * don't override this method and lose the common library classloader support.
      * For finding directories in jar: scheme URLs we need to add a / to the end of the name passed
@@ -181,7 +181,7 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
      * Search order:
      * 1. This classloader.
      * 2. The common library classloaders.
-     * 
+     *
      * Note: For finding directories in jar: scheme URLs we need to add a / to the end of the name passed
      * and strip the / from the resulting URL. We also need to handle duplicates.
      * We need to use a resourceMap with string keys as hashcode and equals of URL are expensive.
@@ -214,8 +214,7 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
             final String f_name = name;
             final ClassLoader f_parent = parent;
 
-            Enumeration<URL> eURL = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<Enumeration<URL>>()
-            {
+            Enumeration<URL> eURL = AccessController.doPrivileged(new java.security.PrivilegedExceptionAction<Enumeration<URL>>() {
                 @Override
                 public Enumeration<URL> run() throws Exception {
                     return f_parent.getResources(f_name);
@@ -232,11 +231,7 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
     /** Returns the Bundle of the Top Level class loader */
     @Override
     public Bundle getBundle() {
-        return parent instanceof GatewayClassLoader
-                        ? ((GatewayClassLoader) parent).getBundle()
-                        : parent instanceof LibertyLoader
-                                        ? ((LibertyLoader) parent).getBundle()
-                                        : null;
+        return parent instanceof GatewayClassLoader ? ((GatewayClassLoader) parent).getBundle() : parent instanceof LibertyLoader ? ((LibertyLoader) parent).getBundle() : null;
     }
 
     boolean removeTransformer(ClassFileTransformer transformer) {
@@ -249,11 +244,11 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
 
     /**
      * @{inheritDoc
-     * 
+     *
      *              Search order:
      *              1. This classloader.
      *              2. The common library classloaders.
-     * 
+     *
      *              Note: the method is marked 'final' so that derived classes (such as ParentLastClassLoader)
      *              don't override this method and lose the common library classloader support.
      */
@@ -399,7 +394,7 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
     /**
      * This method will define the package using the byteResourceInformation for a class to get the URL for this package to try to load a manifest. If a manifest can't be loaded
      * from the URL it will create the package with no package versioning or sealing information.
-     * 
+     *
      * @param byteResourceInformation The information about the class file
      * @param packageName The name of the package to create
      */
@@ -449,18 +444,29 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
         } catch (ClassNotFoundException e) {
             // The class could not be found on the local class path or by
             // delegating to parent/library class loaders.  Try to generate it.
-            if (generator != null) {
-                byte[] bytes = generator.generateClass(name, this);
-                if (bytes != null) {
-                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                        Tr.debug(tc, "defining generated class " + name);
-                    return defineClass(name, bytes, 0, bytes.length, config.getProtectionDomain());
-                }
-            }
+            Class<?> generatedClass = generateClass(name);
+            if (generatedClass != null)
+                return generatedClass;
+
+            // could not generate class - throw CNFE
             throw e;
         } finally {
             ThreadIdentityManager.reset(token);
         }
+    }
+
+    @Trivial
+    Class<?> generateClass(String name) throws ClassNotFoundException {
+        Class<?> generatedClass = null;
+        if (generator != null) {
+            byte[] bytes = generator.generateClass(name, this);
+            if (bytes != null) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                    Tr.debug(tc, "defining generated class " + name);
+                generatedClass = defineClass(name, bytes, 0, bytes.length, config.getProtectionDomain());
+            }
+        }
+        return generatedClass;
     }
 
     /**
@@ -478,11 +484,11 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
 
     /**
      * Search for the class using the common library classloaders.
-     * 
+     *
      * @param name The class name.
-     * 
+     *
      * @return The class, if found.
-     * 
+     *
      * @throws ClassNotFoundException if the class isn't found.
      */
     @FFDCIgnore(ClassNotFoundException.class)
@@ -500,9 +506,9 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
 
     /**
      * Search for the resource using the common library classloaders.
-     * 
+     *
      * @param name The resource name.
-     * 
+     *
      * @return The resource, if found. Otherwise null.
      */
     private URL findResourceCommonLibraryClassLoaders(String name) {
@@ -518,15 +524,14 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
 
     /**
      * Search for the resources using the common library classloaders.
-     * 
+     *
      * @param name The resource name.
      * @param enumerations A CompositeEnumeration<URL>, which is populated by this method.
-     * 
+     *
      * @return The enumerations parameter is populated by this method and returned. It contains
      *         all the resources found under all the common library classloaders.
      */
-    private CompositeEnumeration<URL> findResourcesCommonLibraryClassLoaders(String name, CompositeEnumeration<URL> enumerations)
-                    throws IOException {
+    private CompositeEnumeration<URL> findResourcesCommonLibraryClassLoaders(String name, CompositeEnumeration<URL> enumerations) throws IOException {
         for (LibertyLoader cl : delegateLoaders) {
             enumerations.add(cl.findResources(name));
         }
@@ -546,7 +551,7 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
     /**
      * Takes the Files and Folders from the Library
      * and adds them to the various classloader classpaths
-     * 
+     *
      * @param library
      */
     private void copyLibraryElementsToClasspath(Library library) {
@@ -569,9 +574,9 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
 
     /**
      * Determine if it's a windows library file name (ends with ".dll").
-     * 
+     *
      * @param basename The file name.
-     * 
+     *
      * @return true if it's a windows library name (ends with ".dll").
      */
     private static boolean isWindows(String basename) {
@@ -580,22 +585,20 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
 
     /**
      * Check if the given file's name matches the given library basename.
-     * 
+     *
      * @param f The file to check.
      * @param basename The basename to compare the file against.
-     * 
+     *
      * @return true if the file exists and its name matches the given basename.
      *         false otherwise.
      */
     private static boolean checkLib(final File f, String basename) {
-        boolean fExists = System.getSecurityManager() == null ?
-                        f.exists() :
-                        AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
-                            @Override
-                            public Boolean run() {
-                                return f.exists();
-                            }
-                        });
+        boolean fExists = System.getSecurityManager() == null ? f.exists() : AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+            @Override
+            public Boolean run() {
+                return f.exists();
+            }
+        });
         return fExists &&
                (f.getName().equals(basename) || (isWindows(basename) && f.getName().equalsIgnoreCase(basename)));
     }
