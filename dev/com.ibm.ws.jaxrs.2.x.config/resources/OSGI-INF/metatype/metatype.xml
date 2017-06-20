@@ -16,8 +16,8 @@
 
  
     <!-- id gets mapped to configuration class impl in Designate element below --> 
-    <OCD id="com.ibm.ws.jaxrs21.common.clientConfig.metatype" name="%clientConfig" description="%clientConfig.desc"
-         ibm:alias="webTarget21" >
+    <OCD id="com.ibm.ws.jaxrs20.common.clientConfig.metatype" name="%clientConfig" description="%clientConfig.desc"
+         ibm:alias="webTarget" >
          
          <!-- the following lines will define defaults and variable types for these parameters.
               Also drives the documentation for them based on metatype.properties 
@@ -43,8 +43,8 @@
     </OCD>
 
     <!-- factoryPid allows multiple instances in server.xml, activate will be called multiple times --> 
-    <Designate factoryPid="com.ibm.ws.jaxrs21.common.clientConfig">       <!-- matches pid in java file -->                        
-        <Object ocdref="com.ibm.ws.jaxrs21.common.clientConfig.metatype" /> <!-- matches id of ocd above --> 
+    <Designate factoryPid="com.ibm.ws.jaxrs20.common.clientConfig">       <!-- matches pid in java file -->                        
+        <Object ocdref="com.ibm.ws.jaxrs20.common.clientConfig.metatype" /> <!-- matches id of ocd above --> 
     </Designate>
 
 

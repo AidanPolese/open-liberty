@@ -45,14 +45,14 @@ public final class URITemplate {
     public static final String FINAL_MATCH_GROUP = "FINAL_MATCH_GROUP";
     private static final String DEFAULT_PATH_VARIABLE_REGEX = "([^/]+?)";
     private static final Pattern INTEGER_PATH_VARIABLE_REGEX_PATTERN = Pattern.compile("\\-?[0-9]+"); // Liberty change
-    private static final Pattern DECIMAL_PATH_VARIABLE_REGEX_PATTERN = Pattern.compile("\\-?[0-9]+.?[0-9]*"); // Liberty change
+    private static final Pattern DECIMAL_PATH_VARIABLE_REGEX_PATTERN = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?"); // Liberty change
     private static final String CHARACTERS_TO_ESCAPE = ".*+$()";
     private static final String SLASH = "/";
     private static final String SLASH_QUOTE = "/;";
 
     private final String template;
-    private final List<String> variables = new ArrayList<>();
-    private final List<String> customVariables = new ArrayList<>();
+    private final List<String> variables = new ArrayList<String>();
+    private final List<String> customVariables = new ArrayList<String>();
     private final Pattern templateRegexPattern;
     private final String literals;
     private final List<UriChunk> uriChunks;
@@ -66,7 +66,7 @@ public final class URITemplate {
         StringBuilder literalChars = new StringBuilder();
         StringBuilder patternBuilder = new StringBuilder();
         CurlyBraceTokenizer tok = new CurlyBraceTokenizer(template);
-        uriChunks = new ArrayList<>();
+        uriChunks = new ArrayList<UriChunk>();
         while (tok.hasNext()) {
             String templatePart = tok.next();
             UriChunk chunk = UriChunk.createUriChunk(templatePart, params);
@@ -400,7 +400,7 @@ public final class URITemplate {
          * @return If param has variable form then {@link Variable} instance is created, otherwise chunk is
          *         treated as {@link Literal}.
          */
-        public static UriChunk createUriChunk(String uriChunk, List<Parameter> params) { // Liberty change
+        public static UriChunk createUriChunk(String uriChunk, List<Parameter> params) {
             if (uriChunk == null || "".equals(uriChunk)) {
                 throw new IllegalArgumentException("uriChunk is empty");
             }
@@ -545,7 +545,7 @@ public final class URITemplate {
      */
     static class CurlyBraceTokenizer {
 
-        private final List<String> tokens = new ArrayList<>();
+        private final List<String> tokens = new ArrayList<String>();
         private int tokenIdx;
 
         CurlyBraceTokenizer(String string) {
