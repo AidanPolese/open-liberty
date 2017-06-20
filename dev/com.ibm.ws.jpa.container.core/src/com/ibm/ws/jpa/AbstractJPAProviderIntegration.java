@@ -13,6 +13,7 @@ package com.ibm.ws.jpa;
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_RESOURCE_BUNDLE_NAME;
 import static com.ibm.ws.jpa.management.JPAConstants.JPA_TRACE_GROUP;
 
+import java.lang.reflect.Proxy;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
@@ -27,6 +28,7 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.container.service.app.deploy.ModuleInfo;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.jpa.hibernate.LibertyJtaPlatform;
 
 /**
  * Common JPAProviderIntegration implementation that provides general integration required for known
@@ -143,6 +145,18 @@ public abstract class AbstractJPAProviderIntegration implements JPAProviderInteg
             props.put("eclipselink.target-server", "WebSphere_Liberty");
             if (puInfo instanceof com.ibm.ws.jpa.management.JPAPUnitInfo)
                 props.put("eclipselink.application-id", ((com.ibm.ws.jpa.management.JPAPUnitInfo) puInfo).getApplName());
+        } else if (PROVIDER_HIBERNATE.equals(providerName)) {
+            try {
+                // Hibernate has vastly outdated built-in knowledge of WebSphere API, so tell Hibernate to use
+                // a proxy implementation of JtaPlatform that we will provide based on the WAS transaction manager
+                ClassLoader loader = puInfo.getClassLoader();
+                Class<?> JtaPlatform = loadClass(loader, "org.hibernate.engine.transaction.jta.platform.spi.JtaPlatform");
+                Object libertyJtaPlatform = Proxy.newProxyInstance(loader, new Class[] { JtaPlatform }, new LibertyJtaPlatform());
+                props.put("hibernate.transaction.jta.platform", libertyJtaPlatform);
+            } catch (ClassNotFoundException x) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                    Tr.debug(this, tc, "Unable to provide JtaPlatform for Liberty TransactionManager to Hibernate", x);
+            }
         }
 
         // Log third party provider name and version info once per provider
