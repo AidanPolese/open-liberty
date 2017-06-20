@@ -9,15 +9,15 @@
     Contributors:
         IBM Corporation - initial API and implementation
  -->
-
+ 
 <metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.1.0"  
                    xmlns:ibm="http://www.ibm.com/xmlns/appservers/osgi/metatype/v1.0.0"
                    localization="OSGI-INF/l10n/metatype">
 
  
     <!-- id gets mapped to configuration class impl in Designate element below --> 
-    <OCD id="com.ibm.ws.jaxrs20.common.clientConfig.metatype" name="%clientConfig" description="%clientConfig.desc"
-         ibm:alias="webTarget" >
+    <OCD id="com.ibm.ws.jaxrs21.common.clientConfig.metatype" name="%clientConfig" description="%clientConfig.desc"
+         ibm:alias="webTarget21" >
          
          <!-- the following lines will define defaults and variable types for these parameters.
               Also drives the documentation for them based on metatype.properties 
@@ -35,8 +35,6 @@
         <AD id="proxyHost" name="%proxyHost" description="%proxyHost.desc" required="false" type="String"/>
         <AD id="proxyPort" name="%proxyPort" description="%proxyPort.desc" required="false" type="Integer"/>
         <AD id="proxyType" name="%proxyType" description="%proxyPort.desc" required="false" type="String"/>
-        <AD id="proxyUsername" name="%proxyUsername" description="%proxyUsername.desc" required="false" type="String"/>
-        <AD id="proxyPassword" name="%proxyPassword" description="%proxyPassword.desc" required="false" type="String" ibm:type="password"/>
         <AD id="disableCNCheck"   name="%disableCNCheck"   description="%disableCNCheck.desc"   required="false" type="Boolean"/> 
         <AD id="authnToken" name="%authnToken" description="%authnToken.desc" required="false" type="String" /> 
         <AD id="sslConfig" name="%sslConfig" description="%sslConfig.desc" required="false" type="String" />
@@ -45,8 +43,8 @@
     </OCD>
 
     <!-- factoryPid allows multiple instances in server.xml, activate will be called multiple times --> 
-    <Designate factoryPid="com.ibm.ws.jaxrs20.common.clientConfig">       <!-- matches pid in java file -->                        
-        <Object ocdref="com.ibm.ws.jaxrs20.common.clientConfig.metatype" /> <!-- matches id of ocd above --> 
+    <Designate factoryPid="com.ibm.ws.jaxrs21.common.clientConfig">       <!-- matches pid in java file -->                        
+        <Object ocdref="com.ibm.ws.jaxrs21.common.clientConfig.metatype" /> <!-- matches id of ocd above --> 
     </Designate>
 
 

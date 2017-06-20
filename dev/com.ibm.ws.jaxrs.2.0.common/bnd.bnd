@@ -194,4 +194,5 @@ instrument.classesExcludes: com/ibm/ws/jaxrs20/internal/resources/*.class
 	com.ibm.ws.kernel.feature,\
 	com.ibm.ws.kernel.service,\
 	com.ibm.websphere.appserver.spi.threading, \
-	com.ibm.ws.org.osgi.annotation.versioning;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest, \
+	com.ibm.ws.jaxrs.2.x.config;version=latest

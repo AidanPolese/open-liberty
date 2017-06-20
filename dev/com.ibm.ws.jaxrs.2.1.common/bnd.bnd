@@ -126,8 +126,6 @@ Private-Package:\
    com.ibm.ws.jaxrs20.*, \
 
 Include-Resource: \
- OSGI-INF=resources/OSGI-INF, \
-  OSGI-INF/metatype/metatype.xml=../com.ibm.ws.jaxrs.2.0.common/resources/OSGI-INF/metatype/metatype.xml, \
   lib/cxf-core-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-core-3.2.0-SNAPSHOT.jar, \
   lib/cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar, \
   lib/cxf-rt-rs-client-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-rs-client-3.2.0-SNAPSHOT.jar, \
@@ -183,4 +181,5 @@ instrument.classesExcludes: com/ibm/ws/jaxrs20/internal/resources/*.class
 	com.ibm.ws.kernel.feature,\
 	com.ibm.ws.kernel.service,\
 	com.ibm.websphere.appserver.spi.threading, \
-	com.ibm.ws.org.osgi.annotation.versioning;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest, \
+	com.ibm.ws.jaxrs.2.x.config;version=latest
