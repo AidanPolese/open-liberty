@@ -40,8 +40,6 @@ import test.common.SharedOutputManager;
 
 /**
  * Test the create call
- *
- * @author Rohan Z
  */
 public class ProfileManagerDeleteTest {
 
