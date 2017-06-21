@@ -6,7 +6,6 @@ IBM-Feature-Version: 2
 IBM-InstallTo: full
 IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
-IBM-SPI-Package: com.ibm.wsspi.webservices.handler
 Subsystem-Content: com.ibm.websphere.appserver.api.jaxrs20_1.0-javadoc.zip; type=file; location:="dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.jaxrs20_1.0-javadoc.zip",
  wadl2java; type=file; location:="bin/jaxrs/wadl2java",
  wadl2java.bat; type=file; location:="bin/jaxrs/wadl2java.bat",

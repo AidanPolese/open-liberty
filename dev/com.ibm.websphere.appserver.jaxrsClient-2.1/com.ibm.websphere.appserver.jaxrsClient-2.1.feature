@@ -8,6 +8,7 @@ IBM-API-Package: javax.ws.rs; type="spec", \
  javax.ws.rs.ext; type="spec", \
  com.ibm.websphere.jaxrs20.multipart; type="ibm-api", \
  com.ibm.websphere.jaxrs.providers.json4j; type="ibm-api"
+IBM-SPI-Package: com.ibm.wsspi.webservices.handler
 IBM-App-ForceRestart: uninstall, \
  install
 IBM-ShortName: jaxrsClient-2.1

@@ -3,7 +3,6 @@ symbolicName=com.ibm.websphere.appserver.jaxrs.common-2.1
 visibility=private
 IBM-App-ForceRestart: uninstall, \
  install
-IBM-SPI-Package: com.ibm.wsspi.webservices.handler
 -features=com.ibm.websphere.appserver.injection-1.0, \
  com.ibm.websphere.appserver.containerServices-1.0, \
  com.ibm.websphere.appserver.servlet-3.1, \
