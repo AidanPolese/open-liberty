@@ -30,14 +30,14 @@
             required="false" type="String" ibm:type="password" /> 
         <AD id="ldapType" name="%ldapType" description="%ldapType.desc"
             required="true" type="String">
-            <Option label="actived" value="Microsoft Active Directory"/>
-            <Option label="custom" value="Custom"/>
-            <Option label="domino50" value="IBM Lotus Domino"/>
-            <Option label="edirectory" value="Novell eDirectory"/>
-            <Option label="ibm_dir_server" value="IBM Tivoli Directory Server"/>
-            <Option label="iplanet" value="Sun Java System Directory Server"/>
-            <Option label="netscape" value="Netscape Directory Server"/>
-            <Option label="secureway" value="IBM SecureWay Directory Server"/>
+            <Option label="%ldapType.actived" value="Microsoft Active Directory"/>
+            <Option label="%ldapType.custom" value="Custom"/>
+            <Option label="%ldapType.domino" value="IBM Lotus Domino"/>
+            <Option label="%ldapType.edirectory" value="Novell eDirectory"/>
+            <Option label="%ldapType.ibm_dir_server" value="IBM Tivoli Directory Server"/>
+            <Option label="%ldapType.iplanet" value="Sun Java System Directory Server"/>
+            <Option label="%ldapType.netscape" value="Netscape Directory Server"/>
+            <Option label="%ldapType.secureway" value="IBM SecureWay Directory Server"/>
         </AD>                   
         <AD id="ignoreCase" name="%ignoreCase" description="%ignoreCase.desc"
             required="false" type="Boolean" default="true"/>
@@ -66,8 +66,8 @@
             required="false" type="String" cardinality="2147483647" />
         <AD id="certificateMapMode" name="%certificateMapMode" description="%certificateMapMode.desc"
         	required="false" type="String">
-        	<Option label="exactDN" value="EXACT_DN"/>
-            <Option label="certFilter" value="CERTIFICATE_FILTER"/>
+        	<Option label="%certificateMapMode.exact_dn" value="EXACT_DN"/>
+            <Option label="%certificateMapMode.certificate_filter" value="CERTIFICATE_FILTER"/>
         </AD>
         <AD id="certificateFilter" name="%certificateFilter" description="%certificateFilter.desc"
             required="false" type="String"/>
@@ -121,11 +121,22 @@
 		<!--  AD id="connectionTimeout" name="connectionTimeout" description="%connectionTimeout.desc"
 			required="false" type="duration" default="20sec"-->
 			
+		<!-- 
+			How to handle LDAP referrals. Support "referal" as well since we instructed customers to use
+			it while it was misspelled prior to exposing "referral" publicly.
+		 -->
+		<AD id="referral" name="%referral" description="%referral.desc" required="false" type="String" default="ignore">
+			<Option label="%referral.ignore" value="ignore"/>
+			<Option label="%referral.follow" value="follow"/>
+		</AD>
+		<AD id="referal" name="internal" description="internal use only" required="false" type="String">
+			<Option label="internal use only" value="ignore"/>
+			<Option label="internal use only" value="follow"/>
+		</AD>
+
 		<!-- Made the plural derefAliases to derefAlias for consumability -->	
 		<AD id="derefAlias" name="internal" description="internal use only"
 			required="false" type="Boolean" default="false"/>
-		<AD id="referal" name="internal" description="internal use only"
-			required="false" type="String" default="ignore"/>
 		<AD id="primaryServerQueryTimeInterval" name="internal" description="internal use only"
 			required="false" type="Integer" default="15"/>
 		<AD id="returnToPrimaryServer" name="%returnToPrimaryServer" description="%returnToPrimaryServer.desc"
