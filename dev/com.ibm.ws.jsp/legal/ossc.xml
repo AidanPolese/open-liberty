@@ -32,7 +32,7 @@
       encryption="no">
       
       <download location="???">
-         <file basename="standard.jar" checksum="0a09deda02a326285e1881ada445800b"/>
+         <file basename="standard.jar" checksum="1200fbc42e53972de43b80df56ecb756"/>
          <file basename="standardtld.jar" checksum="3351257fe8f3df50efd6eaf6835c8fff"/>
          <file basename="web.jsp.jar"  checksum="24b8ea126c2d11a863eddf69c3b86d5f"/>
       </download>
