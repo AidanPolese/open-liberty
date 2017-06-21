@@ -49,7 +49,7 @@ import com.ibm.wsspi.kernel.service.utils.PathUtils;
  * The monitor holder wraps a registered FileMonitor service:
  * it manages the ScheduledFuture used to perform the resource scan requested/described
  * by the FileMonitor.
- * 
+ *
  * When a FileMonitor is registered/bound to the core service, a new MonitorHolder is
  * created. If a service reference changes (because its properties changed),
  * it will be re-bound: in that case, {@link #update} is called to consume the
@@ -66,7 +66,7 @@ public abstract class MonitorHolder implements Runnable {
     private final static Pattern INTERVAL_STRING = Pattern.compile("(\\d+)(\\w+)");
 
     // These are used to hold unnotified/unrequested filesystem
-    // changes, so they can be used on subsequent calls 
+    // changes, so they can be used on subsequent calls
     // to the externalScan
     Set<File> unnotifiedFileCreates = new HashSet<File>();
     Set<File> unnotifiedFileDeletes = new HashSet<File>();
@@ -104,34 +104,34 @@ public abstract class MonitorHolder implements Runnable {
 
     /**
      * If true, any monitored directories will be scanned recursively
-     * 
+     *
      * @see FileMonitor#MONITOR_RECURSE
      */
     private boolean monitorRecurse;
 
     /**
      * If true, any monitored directories will also monitor themselves, not just their content.
-     * 
+     *
      * @see FileMonitor#MONITOR_INCLUDE_SELF;
      */
     private boolean monitorSelf;
 
     /**
      * Filter used to restrict notification of modified resources
-     * 
+     *
      * @see FileMonitor#MONITOR_FILTER
      */
     protected String monitorFilter;
 
     /**
      * Scan interval
-     * 
+     *
      * @see FileMonitor#MONITOR_INTERVAL
      */
     private long monitorInterval;
     /**
      * Scan interval time unit
-     * 
+     *
      * @see FileMonitor#MONITOR_INTERVAL
      */
     private TimeUnit monitorTimeUnit;
@@ -145,7 +145,7 @@ public abstract class MonitorHolder implements Runnable {
     /**
      * {@link ScheduledFuture} created when the recurring task is scheduled
      * with the {@link ScheduledExecutorService}.
-     * 
+     *
      * @see ScheduledExecutorService#scheduleAtFixedRate(Runnable, long, long, TimeUnit)
      */
     private ScheduledFuture<?> scheduledFuture = null;
@@ -251,7 +251,7 @@ public abstract class MonitorHolder implements Runnable {
      * Deferred initialization: this is called when/while the core service is active. Services
      * registered before core service registration have only the constructor called, when
      * the core service is later activated, init will be called on those services.
-     * 
+     *
      * Just to be safe (and to make the core service code simpler), this method should
      * tolerate being called twice.
      */
@@ -395,7 +395,7 @@ public abstract class MonitorHolder implements Runnable {
             }
 
             if (monitor != null && FrameworkState.isValid()) {
-                // Notify (new) registered FileMonitor of the initial set of files that 
+                // Notify (new) registered FileMonitor of the initial set of files that
                 // match their configuration. For "refreshes" the new resources will show
                 // up in the next scan (as add/remove/delete)
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
@@ -433,7 +433,7 @@ public abstract class MonitorHolder implements Runnable {
 
     /**
      * Method to refresh/update the monitor properties after its already been initialized before.
-     * 
+     *
      * @param cacheRoot
      */
     public synchronized void refresh(File cacheRoot) {
@@ -493,7 +493,7 @@ public abstract class MonitorHolder implements Runnable {
      * bundle that created/registered the ServiceReference is stopping
      * (unless the framework itself is also stopping, in which
      * case {@link #stop()} will be called instead.
-     * 
+     *
      * Resources should be cleaned up, future cancelled, etc.
      */
     public void destroy() {
@@ -510,7 +510,7 @@ public abstract class MonitorHolder implements Runnable {
     }
 
     /**
-     * Really destroy
+     * Will actually destroy the monitors if and only if the monitor state has already been set to DESTROY.
      */
     private boolean doDestroy() {
         // Try to obtain the scan lock to destroy all associated monitors
@@ -529,7 +529,7 @@ public abstract class MonitorHolder implements Runnable {
                     }
                     updateMonitors.clear();
                     // Clear any unnotified file changes, these will become invalid
-                    // as the monitors are destroyed. 
+                    // as the monitors are destroyed.
                     unnotifiedFileCreates.clear();
                     unnotifiedFileDeletes.clear();
                     unnotifiedFileModifies.clear();
@@ -563,7 +563,7 @@ public abstract class MonitorHolder implements Runnable {
     @FFDCIgnore(InterruptedException.class)
     void scheduledScan() {
         // 152229: Changed this code to get the monitor type locally.  That is, now we save the monitor type in the constructor.
-        // We used to get the monitor type here by monitorRef.getProperty(FileMonitor.MONITOR_TYPE)). That caused a 
+        // We used to get the monitor type here by monitorRef.getProperty(FileMonitor.MONITOR_TYPE)). That caused a
         // ConcurrentModificationException because of interference from the JMocked FileMonitor in the unit test code.
         // Don't do anything if this is an external monitor
         if (FileMonitor.MONITOR_TYPE_EXTERNAL.equals(monitorRef.getProperty(FileMonitor.MONITOR_TYPE))) {
@@ -574,7 +574,7 @@ public abstract class MonitorHolder implements Runnable {
         }
 
         // Don't do anything if the framework is stopping. Allow normal component cleanup
-        // to deactivate/clean up the scheduled tasks, but make this a no-op if the 
+        // to deactivate/clean up the scheduled tasks, but make this a no-op if the
         // server is shutting down.
         if (FrameworkState.isStopping()) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -612,7 +612,7 @@ public abstract class MonitorHolder implements Runnable {
 
                         if (!created.isEmpty() || !modified.isEmpty() || !deleted.isEmpty()) {
                             // Check again, make sure there have been no further changes since the scan we just
-                            // ran (we don't want to read the files until any updates are complete, files may be 
+                            // ran (we don't want to read the files until any updates are complete, files may be
                             // in process of being copied).
                             // what seems to be the vogue is to do this check to make sure nothing moved twice.
                             // i.e. keep the re-check interval at 100ms, but require two clean go-rounds before
@@ -626,13 +626,13 @@ public abstract class MonitorHolder implements Runnable {
 
                             do {
                                 // Wait for 100 ms before checking again to give files time to finish
-                                // copying if they are mid copy. Note this may not work for copying 
+                                // copying if they are mid copy. Note this may not work for copying
                                 // large files via programs like FTP where the copy may pause or
                                 // if an OS creates the file and sets the size/last modified before
                                 // the copy completes, but it should fix it for smaller files or for the
                                 // test environment where some files are streamed over rather than copied.
                                 try {
-                                    // Only used once and not sure it needs to be configurable so didn't create a 
+                                    // Only used once and not sure it needs to be configurable so didn't create a
                                     // constant for the delay period.
                                     Thread.sleep(TIME_TO_WAIT_FOR_COPY_TO_COMPLETE);
                                 } catch (InterruptedException ex) {
@@ -659,7 +659,7 @@ public abstract class MonitorHolder implements Runnable {
                                     oneClean = false; // bummer.
                                 }
 
-                                // Keep going until we have two 100ms intervals with no changes 
+                                // Keep going until we have two 100ms intervals with no changes
                                 // (AND the runtime/framework is still happy)
                             } while (!twoClean && FrameworkState.isValid());
                         }
@@ -694,7 +694,7 @@ public abstract class MonitorHolder implements Runnable {
                             // If the monitor handled the call cleanly, reset our exception count
                             exceptionCount = 0;
                         } catch (RuntimeException e) {
-                            // FFDC instrumentation will go here 
+                            // FFDC instrumentation will go here
                             // Catch the exception so it doesn't kill the whole scheduler
 
                             exceptionCount++;
@@ -703,7 +703,7 @@ public abstract class MonitorHolder implements Runnable {
                                 Tr.debug(this, tc, "scheduledScan - exceptionCount=" + exceptionCount);
                             }
 
-                            // If the monitor has thrown exceptions a few times in a row abandon 
+                            // If the monitor has thrown exceptions a few times in a row abandon
                             // monitoring for it
                             if (exceptionCount >= NUMBER_OF_EXCEPTIONS_BEFORE_DISABLING_MONITOR) {
                                 Tr.warning(tc, "fileMonitorDisabled", NUMBER_OF_EXCEPTIONS_BEFORE_DISABLING_MONITOR, monitor.getClass());
@@ -736,8 +736,12 @@ public abstract class MonitorHolder implements Runnable {
      * any file changes because all the relevant changes have already
      * happened before this method has been called (e.g by the tooling
      * via an MBean)</li>
+     * <li>This method will wait for the scanLock rather than exiting out if another thread
+     * holds the lock. scheduledScan can short circuit out because the lock holding thread
+     * will pick up the changes. Here, each call to the method may have different arguments
+     * so we need to make sure each call is handled.</li>
      * </ul>
-     * 
+     *
      * @param notifiedCreated the canonical paths of any created files
      * @param notifiedDeleted the canonical paths of any deleted files
      * @param notifiedModified the canonical paths of any modified files
@@ -751,101 +755,101 @@ public abstract class MonitorHolder implements Runnable {
         // (This is most likely to affect unit test behaviour rather than mbean invocations, but be safe)
         Thread.yield();
 
-        // Use the concurrency guards since this can be invoked on arbitrary threads.
-        if (scanLock.tryLock()) {
-            try {
-                // Always try destroy when we obtain the lock: it will return true if this is in destroy or destroyed state
-                // Also (after we have tried doDestroy) ensure that we are in active state
-                if (!doDestroy() && (monitorState.get() == MonitorState.ACTIVE.ordinal())) {
-                    if (coreService.isDetailedScanTraceEnabled() && TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                        Tr.debug(this, tc, "File monitor scan: begin", updateMonitors);
-                    }
-
-                    List<File> actualCreated = new ArrayList<File>();
-                    List<File> actualDeleted = new ArrayList<File>();
-                    List<File> actualModified = new ArrayList<File>();
-
-                    scanForUpdates(actualCreated, actualDeleted, actualModified);
-
-                    // use the correct case forms of the files we found in our internal scan
-                    Set<File> created = PathUtils.fixPathFiles(actualCreated);
-                    Set<File> deleted = PathUtils.fixPathFiles(actualDeleted);
-                    Set<File> modified = PathUtils.fixPathFiles(actualModified);
-
-                    // SPI PathUtils.fixpathFiles returns an empty collection if the file
-                    // list is empty, create an actual set so we can add to it later if needed
-                    if (created == Collections.EMPTY_SET)
-                        created = new HashSet<File>();
-                    if (deleted == Collections.EMPTY_SET)
-                        deleted = new HashSet<File>();
-                    if (modified == Collections.EMPTY_SET)
-                        modified = new HashSet<File>();
-
-                    // Take the previously unnotified/unrequested changes
-                    // and resolve them against the result of the latest
-                    // filesystem scan to make sure they are still 
-                    // valid 
-                    resolveChangesForExternalScan(unnotifiedFileCreates,
-                                                  unnotifiedFileDeletes,
-                                                  unnotifiedFileModifies,
-                                                  created,
-                                                  deleted,
-                                                  modified);
-
-                    // Now merge the result of the current filesystem scan with
-                    // previous unnotified changes. This represents the complete 
-                    // set of valid/current choices they can now notify about
-                    created.addAll(unnotifiedFileCreates);
-                    deleted.addAll(unnotifiedFileDeletes);
-                    modified.addAll(unnotifiedFileModifies);
-
-                    // We are going to rebuild these lists from anything left over in the next block
-                    unnotifiedFileCreates.clear();
-                    unnotifiedFileDeletes.clear();
-                    unnotifiedFileModifies.clear();
-
-                    // Now take the notified changes and compare it against all the possible
-                    // valid choices, unrequested changes are placed into the unnotified set
-                    // so they can be used by the caller on subsequent calls
-                    filterSets(created, notifiedCreated, unnotifiedFileCreates);
-                    filterSets(deleted, notifiedDeleted, unnotifiedFileDeletes);
-                    filterSets(modified, notifiedModified, unnotifiedFileModifies);
-
-                    if (!created.isEmpty() || !modified.isEmpty() || !deleted.isEmpty()) {
-                        // changes were discovered: trace & call the registered file monitor
-                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                            Tr.debug(this, tc, "File monitor scan: end; resources changed",
-                                     created.size() + " created",
-                                     modified.size() + " modified",
-                                     deleted.size() + " deleted");
-                        }
-
-                        if (monitor != null) {
-                            try {
-
-                                monitor.onChange(created, modified, deleted);
-                            } catch (RuntimeException e) {
-                                // FFDC instrumentation will go here 
-                                // Catch the exception so we can FFDC it
-                                // Don't increment the exception counter since this is externally triggered
-                                Tr.warning(tc, "fileMonitorException", created, modified, deleted, monitor.getClass(), e.getLocalizedMessage());
-                            }
-                        }
-                    } else if (coreService.isDetailedScanTraceEnabled() && TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                        // If super detailed trace is enabled, we trace the begin/end of all file scans
-                        Tr.debug(this, tc, "File monitor scan: end; no changes");
-                    }
+        // Multiple threads can call the FileNotificationMBean simultaneously so we need to lock
+        scanLock.lock();
+        try {
+            // Always try destroy when we obtain the lock: it will return true if this is in destroy or destroyed state
+            // Also (after we have tried doDestroy) ensure that we are in active state
+            if (!doDestroy() && (monitorState.get() == MonitorState.ACTIVE.ordinal())) {
+                if (coreService.isDetailedScanTraceEnabled() && TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(this, tc, "File monitor scan: begin", updateMonitors);
                 }
-            } catch (RuntimeException e) {
-                // TODO: MUST CATCH exceptions here (to at least get FFDC)... ick
-            } finally {
-                try {
-                    doDestroy(); // always attempt destroy while we hold the lock
-                } finally {
-                    scanLock.unlock();
+
+                List<File> actualCreated = new ArrayList<File>();
+                List<File> actualDeleted = new ArrayList<File>();
+                List<File> actualModified = new ArrayList<File>();
+
+                scanForUpdates(actualCreated, actualDeleted, actualModified);
+
+                // use the correct case forms of the files we found in our internal scan
+                Set<File> created = PathUtils.fixPathFiles(actualCreated);
+                Set<File> deleted = PathUtils.fixPathFiles(actualDeleted);
+                Set<File> modified = PathUtils.fixPathFiles(actualModified);
+
+                // SPI PathUtils.fixpathFiles returns an empty collection if the file
+                // list is empty, create an actual set so we can add to it later if needed
+                if (created == Collections.EMPTY_SET)
+                    created = new HashSet<File>();
+                if (deleted == Collections.EMPTY_SET)
+                    deleted = new HashSet<File>();
+                if (modified == Collections.EMPTY_SET)
+                    modified = new HashSet<File>();
+
+                // Take the previously unnotified/unrequested changes
+                // and resolve them against the result of the latest
+                // filesystem scan to make sure they are still
+                // valid
+                resolveChangesForExternalScan(unnotifiedFileCreates,
+                                              unnotifiedFileDeletes,
+                                              unnotifiedFileModifies,
+                                              created,
+                                              deleted,
+                                              modified);
+
+                // Now merge the result of the current filesystem scan with
+                // previous unnotified changes. This represents the complete
+                // set of valid/current choices they can now notify about
+                created.addAll(unnotifiedFileCreates);
+                deleted.addAll(unnotifiedFileDeletes);
+                modified.addAll(unnotifiedFileModifies);
+
+                // We are going to rebuild these lists from anything left over in the next block
+                unnotifiedFileCreates.clear();
+                unnotifiedFileDeletes.clear();
+                unnotifiedFileModifies.clear();
+
+                // Now take the notified changes and compare it against all the possible
+                // valid choices, unrequested changes are placed into the unnotified set
+                // so they can be used by the caller on subsequent calls
+                filterSets(created, notifiedCreated, unnotifiedFileCreates);
+                filterSets(deleted, notifiedDeleted, unnotifiedFileDeletes);
+                filterSets(modified, notifiedModified, unnotifiedFileModifies);
+
+                if (!created.isEmpty() || !modified.isEmpty() || !deleted.isEmpty()) {
+                    // changes were discovered: trace & call the registered file monitor
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                        Tr.debug(this, tc, "File monitor scan: end; resources changed",
+                                 created.size() + " created",
+                                 modified.size() + " modified",
+                                 deleted.size() + " deleted");
+                    }
+
+                    if (monitor != null) {
+                        try {
+
+                            monitor.onChange(created, modified, deleted);
+                        } catch (RuntimeException e) {
+                            // FFDC instrumentation will go here
+                            // Catch the exception so we can FFDC it
+                            // Don't increment the exception counter since this is externally triggered
+                            Tr.warning(tc, "fileMonitorException", created, modified, deleted, monitor.getClass(), e.getLocalizedMessage());
+                        }
+                    }
+                } else if (coreService.isDetailedScanTraceEnabled() && TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    // If super detailed trace is enabled, we trace the begin/end of all file scans
+                    Tr.debug(this, tc, "File monitor scan: end; no changes");
                 }
             }
+        } catch (RuntimeException e) {
+            // TODO: MUST CATCH exceptions here (to at least get FFDC)... ick
+        } finally {
+            try {
+                doDestroy(); // always attempt destroy while we hold the lock
+            } finally {
+                scanLock.unlock();
+            }
         }
+
     }
 
     /**
@@ -856,7 +860,8 @@ public abstract class MonitorHolder implements Runnable {
      * @param deletedCheck
      * @param modifiedCheck
      */
-    private void resolveChangesForScheduledScan(Set<File> created, Set<File> deleted, Set<File> modified, List<File> createdCheck, List<File> deletedCheck, List<File> modifiedCheck) {
+    private void resolveChangesForScheduledScan(Set<File> created, Set<File> deleted, Set<File> modified, List<File> createdCheck, List<File> deletedCheck,
+                                                List<File> modifiedCheck) {
 
         // Note any change to the way state is handled in this code must also be
         // updated in resolveChangesForExternalScan
@@ -881,9 +886,9 @@ public abstract class MonitorHolder implements Runnable {
         // If a file has been deleted then remove it from created / modified
         // list (if they exist - null op if they don't). It can't already
         // exist in deleted (can't delete it twice in a row). If the file
-        // was in the create step then deleting it moves it back to the 
-        // "empty" state, it won't exist in any list. If the file was in the 
-        // modified state or not in any state, then it did exist before so 
+        // was in the create step then deleting it moves it back to the
+        // "empty" state, it won't exist in any list. If the file was in the
+        // modified state or not in any state, then it did exist before so
         // should now be put into the delete state and removed from the modified
         // state.
 
@@ -907,7 +912,7 @@ public abstract class MonitorHolder implements Runnable {
             }
         }
 
-        // If a file has just been modified then check if it had been created just before, 
+        // If a file has just been modified then check if it had been created just before,
         // if this is the case do nothing (i.e. leave it in created list only). If not
         // then add it to the modified list if it doesn't already exist in there.
         for (File f : modifiedCheck) {
@@ -919,11 +924,11 @@ public abstract class MonitorHolder implements Runnable {
     }
 
     /**
-     * 
+     *
      * This method takes previously unnotified/unrequested changes (creates, deletes, modifies) and
      * compares it against the latest filesystem scan. Both the current scan results and the
      * unnotified changes are then corrected so that only currently valid choices remain.
-     * 
+     *
      * @param unnotifiedFileCreates
      * @param unnotifiedFileDeletes
      * @param unnotifiedFileModifies
@@ -931,7 +936,10 @@ public abstract class MonitorHolder implements Runnable {
      * @param deleted
      * @param modified
      */
-    private void resolveChangesForExternalScan(Set<File> unnotifiedFileCreates, Set<File> unnotifiedFileDeletes, Set<File> unnotifiedFileModifies, Set<File> created,
+    private void resolveChangesForExternalScan(Set<File> unnotifiedFileCreates,
+                                               Set<File> unnotifiedFileDeletes,
+                                               Set<File> unnotifiedFileModifies,
+                                               Set<File> created,
                                                Set<File> deleted,
                                                Set<File> modified) {
 
@@ -955,7 +963,7 @@ public abstract class MonitorHolder implements Runnable {
         // MD = D
         // MM = M
 
-        // Use Iterator so we can safely remove elements from Set during iteration 
+        // Use Iterator so we can safely remove elements from Set during iteration
         for (Iterator<File> i = unnotifiedFileCreates.iterator(); i.hasNext();) {
             File file = i.next();
             if (deleted.contains(file)) {
@@ -970,7 +978,7 @@ public abstract class MonitorHolder implements Runnable {
             }
         }
 
-        // Use Iterator so we can safely remove elements from Set during iteration 
+        // Use Iterator so we can safely remove elements from Set during iteration
         for (Iterator<File> i = unnotifiedFileModifies.iterator(); i.hasNext();) {
             File file = i.next();
             if (deleted.contains(file)) {
@@ -981,7 +989,7 @@ public abstract class MonitorHolder implements Runnable {
             }
         }
 
-        // Use Iterator so we can safely remove elements from Set during iteration 
+        // Use Iterator so we can safely remove elements from Set during iteration
         for (Iterator<File> i = unnotifiedFileDeletes.iterator(); i.hasNext();) {
             File file = i.next();
             if (created.contains(file)) {
@@ -994,18 +1002,18 @@ public abstract class MonitorHolder implements Runnable {
     }
 
     /**
-     * 
+     *
      * This method takes the set of all available filesystem changes that have occurred
      * and then filters the set down to only the notified/requested changes and the parents
      * of the notified/requested changes.
-     * 
+     *
      * @param availableChanges
      * @param notifiedChanges
      * @param unnotifiedChanges
      */
     private void filterSets(Set<File> availableChanges, Set<File> notifiedChanges, Set<File> unnotifiedChanges) {
 
-        // Use Iterator so we can safely remove elements from Set during iteration 
+        // Use Iterator so we can safely remove elements from Set during iteration
         for (Iterator<File> i = availableChanges.iterator(); i.hasNext();) {
             File fileChange = i.next();
             if ((!!!notifiedChanges.contains(fileChange) && !!!isParentFile(notifiedChanges, fileChange))) {
@@ -1024,7 +1032,7 @@ public abstract class MonitorHolder implements Runnable {
 
         for (File thisUpdate : notifiedChanges) {
             try {
-                //only directories can be parents of notifications, but deletions will be gone, so we can't determine if they were.. 
+                //only directories can be parents of notifications, but deletions will be gone, so we can't determine if they were..
                 if (fileChange.isDirectory() || !fileChange.exists()) {
                     //get the path of the directory, and slash terminate it if not already done.
                     String testFilePath = fileChange.getCanonicalPath();
@@ -1037,7 +1045,7 @@ public abstract class MonitorHolder implements Runnable {
                     }
                 }
             } catch (IOException e) {
-                // getCanonicalPath failed.. 
+                // getCanonicalPath failed..
                 // do not add the file to the parents list.
             }
         }
@@ -1048,7 +1056,7 @@ public abstract class MonitorHolder implements Runnable {
      * Find changes to monitored resources.
      * Not thread safe: please ensure you're calling this only from
      * one thread (i.e. within the scanLock)
-     * 
+     *
      * @param created the list to which created files will be added
      * @param deleted the list to which deleted files will be added
      * @param modified the list to which modified files will be added
