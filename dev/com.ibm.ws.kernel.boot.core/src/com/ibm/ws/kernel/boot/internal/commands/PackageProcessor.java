@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * Copyright (c) 2012, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -67,10 +68,15 @@ public class PackageProcessor implements ArchiveProcessor {
 
     private final Set<String> processContent;
 
+    final File installRoot;
+    final String wlpProperty = "/lib/versions/WebSphereApplicationServer.properties";
+    final String wlpPropertyBackup = "WebSphereApplicationServer.properties.bak";
+
     public PackageProcessor(String processName, File packageFile, BootstrapConfig bootProps, List<Pair<PackageOption, String>> options, Set<String> processContent) {
         this.processName = processName;
         this.packageFile = packageFile;
         this.bootProps = bootProps;
+        this.installRoot = bootProps.getInstallRoot();
         this.options = options;
 
         this.wlpUserDir = bootProps.getUserRoot();
@@ -104,12 +110,12 @@ public class PackageProcessor implements ArchiveProcessor {
     /**
      * Create a proper manifest file for the --include=usr option. The manifest is a copy
      * of the given installation manifest, with the following edits:
-     * 
+     *
      * Removed: License-Agreement
      * Removed: License-Information
      * Added: Applies-To: com.ibm.websphere.appserver
      * Added: Extract-Installer: false
-     * 
+     *
      * @return the manifest file
      */
     protected File buildManifestForIncludeEqualsUsr(File installationManifest) throws IOException {
@@ -153,7 +159,7 @@ public class PackageProcessor implements ArchiveProcessor {
     /**
      * Create a proper manifest file for the --include=execute option. The manifest is a copy
      * of the given installation manifest, with the following edits:
-     * 
+     *
      * Change
      * from:
      * Main-Class: wlp.lib.extract.SelfExtract
@@ -161,7 +167,7 @@ public class PackageProcessor implements ArchiveProcessor {
      * Main-Class: wlp.lib.extract.SelfExtractRun
      * add:
      * Server-Name: <processName>
-     * 
+     *
      * @return the manifest file
      */
     protected File buildManifestForIncludeHasRunnable(File installationManifest) throws IOException {
@@ -181,6 +187,10 @@ public class PackageProcessor implements ArchiveProcessor {
 
     public ReturnCode execute(boolean runtimeOnly) {
         Archive archive = null;
+        ReturnCode rc = backupWebSphereApplicationServerProperty(installRoot);
+        if (!rc.equals(ReturnCode.OK)) {
+            return rc;
+        }
         try {
             // Create the default archive
             archive = ArchiveFactory.create(packageFile);
@@ -188,7 +198,7 @@ public class PackageProcessor implements ArchiveProcessor {
             if (packageFile.getName().endsWith(".jar")) {
                 File manifest = new File(bootProps.getInstallRoot(), "lib/extract/META-INF/MANIFEST.MF");
                 if (!manifest.exists()) {
-                    //maybe user didnt extract file with jar -jar, but unzipped.. 
+                    //maybe user didnt extract file with jar -jar, but unzipped..
                     manifest = new File(bootProps.getInstallRoot().getParentFile(), "META-INF/MANIFEST.MF");
                 }
                 if (!manifest.exists()) {
@@ -239,6 +249,7 @@ public class PackageProcessor implements ArchiveProcessor {
         } finally {
             // must close the archive so that the create can complete
             Utils.tryToClose(archive);
+            restoreWebSphereApplicationServerProperty(installRoot);
             // clean temporary files
             FileUtils.recursiveClean(workAreaTmpDir);
         }
@@ -251,20 +262,17 @@ public class PackageProcessor implements ArchiveProcessor {
      * include=all
      * include=runnable
      * include=all,runnable
-     * 
+     *
      * Otherwise return false.
      */
     private boolean includeAllorRunnable(String val) {
         if (IncludeOption.ALL.getValue().equals(val)) {
             return true;
-        }
-        else if (IncludeOption.RUNNABLE.getValue().equals(val)) {
+        } else if (IncludeOption.RUNNABLE.getValue().equals(val)) {
             return true;
-        }
-        else if (IncludeOption.ALLRUNNABLE.getValue().equals(val)) {
+        } else if (IncludeOption.ALLRUNNABLE.getValue().equals(val)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -273,17 +281,15 @@ public class PackageProcessor implements ArchiveProcessor {
      * Return true for include values of:
      * include=minify
      * include=minify,runnable
-     * 
+     *
      * Otherwise return false.
      */
     private boolean includeMinifyorMinifyRunnable(String val) {
         if (IncludeOption.MINIFY.getValue().equals(val)) {
             return true;
-        }
-        else if (IncludeOption.MINIFYRUNNABLE.getValue().equals(val)) {
+        } else if (IncludeOption.MINIFYRUNNABLE.getValue().equals(val)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -291,14 +297,13 @@ public class PackageProcessor implements ArchiveProcessor {
     /*
      * Return true for include value of:
      * include=usr
-     * 
+     *
      * Otherwise return false.
      */
     private boolean includeUsr(String val) {
         if (IncludeOption.USR.getValue().equals(val)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -307,8 +312,8 @@ public class PackageProcessor implements ArchiveProcessor {
         List<ArchiveEntryConfig> entryConfigs = new ArrayList<ArchiveEntryConfig>();
         File metaInf = new File(bootProps.getInstallRoot(), "lib/extract/META-INF");
         if (!metaInf.exists()) {
-            //maybe user didnt extract file with jar -jar, but unzipped.. 
-            //so look for META-INF above WLP Root !! 
+            //maybe user didnt extract file with jar -jar, but unzipped..
+            //so look for META-INF above WLP Root !!
             File aboveRoot = bootProps.getInstallRoot().getParentFile();
             metaInf = new File(aboveRoot, "META-INF");
         }
@@ -456,8 +461,7 @@ public class PackageProcessor implements ArchiveProcessor {
         // Add product extensions
         File prodExtDir = ProcessorUtils.getFileFromDirectory(wlpUserDir.getParentFile(), "/etc/extensions");
         if (prodExtDir.exists()) {
-            DirEntryConfig prodExtDirConfig = new DirEntryConfig(PACKAGE_ARCHIVE_ENTRY_PREFIX + "etc/extensions",
-                            prodExtDir, true, PatternStrategy.IncludePreference);
+            DirEntryConfig prodExtDirConfig = new DirEntryConfig(PACKAGE_ARCHIVE_ENTRY_PREFIX + "etc/extensions", prodExtDir, true, PatternStrategy.IncludePreference);
             entryConfigs.add(prodExtDirConfig);
         }
         for (ProductExtensionInfo info : ProductExtension.getProductExtensions()) {
@@ -492,8 +496,7 @@ public class PackageProcessor implements ArchiveProcessor {
         DirEntryConfig processConfigDirConfig = new DirEntryConfig(PACKAGE_ARCHIVE_ENTRY_PREFIX
                                                                    + BootstrapConstants.LOC_AREA_NAME_USR + "/"
                                                                    + locAreaName + "/"
-                                                                   + processName + "/",
-                        processConfigDir, true, PatternStrategy.IncludePreference);
+                                                                   + processName + "/", processConfigDir, true, PatternStrategy.IncludePreference);
         entryConfigs.add(processConfigDirConfig);
         // avoid any special characters in processName when construct patterns
         String regexProcessName = Pattern.quote(processName);
@@ -532,8 +535,7 @@ public class PackageProcessor implements ArchiveProcessor {
         if (sharedDir.exists()) {
             DirEntryConfig serverSharedDirConfig = new DirEntryConfig(PACKAGE_ARCHIVE_ENTRY_PREFIX
                                                                       + BootstrapConstants.LOC_AREA_NAME_USR + "/"
-                                                                      + BootstrapConstants.LOC_AREA_NAME_SHARED + "/",
-                            sharedDir, true, PatternStrategy.IncludePreference);
+                                                                      + BootstrapConstants.LOC_AREA_NAME_SHARED + "/", sharedDir, true, PatternStrategy.IncludePreference);
             entryConfigs.add(serverSharedDirConfig);
             // exclude security sensitive files
             serverSharedDirConfig.exclude(Pattern.compile(REGEX_SEPARATOR + "resources" + REGEX_SEPARATOR + "security" + REGEX_SEPARATOR + "key.jks"));
@@ -557,8 +559,8 @@ public class PackageProcessor implements ArchiveProcessor {
             if (extensionDir.exists()) {
                 DirEntryConfig serverExtensionDirConfig = new DirEntryConfig(PACKAGE_ARCHIVE_ENTRY_PREFIX
                                                                              + BootstrapConstants.LOC_AREA_NAME_USR + "/"
-                                                                             + BootstrapConstants.LOC_AREA_NAME_EXTENSION + "/",
-                                extensionDir, true, PatternStrategy.IncludePreference);
+                                                                             + BootstrapConstants.LOC_AREA_NAME_EXTENSION
+                                                                             + "/", extensionDir, true, PatternStrategy.IncludePreference);
                 entryConfigs.add(serverExtensionDirConfig);
             }
 
@@ -575,8 +577,7 @@ public class PackageProcessor implements ArchiveProcessor {
         // Include the package_<timestamp>.txt that generated in server output dir, and must be move into lib/versions
         DirEntryConfig processPkgInfoConfig = new DirEntryConfig(PACKAGE_ARCHIVE_ENTRY_PREFIX
                                                                  + BootstrapConstants.LOC_AREA_NAME_LIB + "/"
-                                                                 + "versions" + "/",
-                        bootProps.getOutputFile(null), false, PatternStrategy.IncludePreference);
+                                                                 + "versions" + "/", bootProps.getOutputFile(null), false, PatternStrategy.IncludePreference);
         entryConfigs.add(processPkgInfoConfig);
 
         processPkgInfoConfig.include(Pattern.compile(REGEX_SEPARATOR + regexProcessName + REGEX_SEPARATOR + "package_" + REGEX_TIMESTAMP + "\\.txt"));
@@ -620,6 +621,97 @@ public class PackageProcessor implements ArchiveProcessor {
             }
         }
 
+    }
+
+    private ReturnCode restoreWebSphereApplicationServerProperty(File wlpRoot) {
+        File propertyBackupFile = new File(workAreaTmpDir, wlpPropertyBackup);
+        File propertyFile = new File(wlpRoot, wlpProperty);
+        if (propertyBackupFile != null && propertyBackupFile.exists() && propertyFile != null && propertyFile.exists()) {
+            Properties wlpProp = new Properties();
+            FileInputStream fio = null;
+            FileOutputStream propertyOutput = null;
+            try {
+                fio = new FileInputStream(propertyBackupFile);
+                wlpProp.load(fio);
+                propertyOutput = new FileOutputStream(propertyFile);
+                wlpProp.store(propertyOutput, null);
+            } catch (Exception e) {
+                Debug.printStackTrace(e);
+                return ReturnCode.RUNTIME_EXCEPTION;
+            } finally {
+                if (fio != null) {
+                    try {
+                        fio.close();
+                    } catch (IOException e) {
+                        Debug.printStackTrace(e);
+                        return ReturnCode.RUNTIME_EXCEPTION;
+                    }
+                }
+                if (propertyOutput != null) {
+                    try {
+                        propertyOutput.close();
+                    } catch (IOException e) {
+                        Debug.printStackTrace(e);
+                        return ReturnCode.RUNTIME_EXCEPTION;
+                    }
+                }
+                propertyBackupFile.delete();
+            }
+        }
+        return ReturnCode.OK;
+    }
+
+    private ReturnCode backupWebSphereApplicationServerProperty(File wlpRoot) {
+        File propertyFile = new File(wlpRoot, wlpProperty);
+        if (propertyFile != null && propertyFile.exists()) {
+            File propertyBackupFile = new File(workAreaTmpDir, wlpPropertyBackup);
+            Properties wlpProp = new Properties();
+            FileInputStream fio = null;
+            FileOutputStream propertyOutput = null;
+            FileOutputStream propertyBackupFileOutput = null;
+            try {
+                fio = new FileInputStream(propertyFile);
+                wlpProp.load(fio);
+                if (wlpProp.getProperty("com.ibm.websphere.productInstallType").equals("Archive")) {
+                    return ReturnCode.OK;
+                }
+                propertyOutput = new FileOutputStream(propertyFile);
+                propertyBackupFileOutput = new FileOutputStream(propertyBackupFile);
+                wlpProp.store(propertyBackupFileOutput, null);
+                wlpProp.setProperty("com.ibm.websphere.productInstallType", "Archive");
+                wlpProp.store(propertyOutput, "com.ibm.websphere.productInstallType=InstallationManager");
+
+            } catch (Exception e) {
+                Debug.printStackTrace(e);
+                return ReturnCode.RUNTIME_EXCEPTION;
+            } finally {
+                if (fio != null) {
+                    try {
+                        fio.close();
+                    } catch (IOException e) {
+                        Debug.printStackTrace(e);
+                        return ReturnCode.RUNTIME_EXCEPTION;
+                    }
+                }
+                if (propertyOutput != null) {
+                    try {
+                        propertyOutput.close();
+                    } catch (IOException e) {
+                        Debug.printStackTrace(e);
+                        return ReturnCode.RUNTIME_EXCEPTION;
+                    }
+                }
+                if (propertyBackupFileOutput != null) {
+                    try {
+                        propertyBackupFileOutput.close();
+                    } catch (IOException e) {
+                        Debug.printStackTrace(e);
+                        return ReturnCode.RUNTIME_EXCEPTION;
+                    }
+                }
+            }
+        }
+        return ReturnCode.OK;
     }
 
     public enum PackageOption {
