@@ -689,7 +689,7 @@ public class WCCustomProperties {
         ENABLE_TRACE_REQUESTS = Boolean.valueOf(WebContainer.getWebContainerProperties().getProperty("enableTraceRequests", "false")).booleanValue();  //71479
                 
         //Start 8.5.0.2
-        REMOVE_ATTRIBUTE_FOR_NULL_OBJECT = Boolean.valueOf(WebContainer.getWebContainerProperties().getProperty("com.ibm.ws.webcontainer.removeattributefornullobject")).booleanValue(); //PM71991    
+        REMOVE_ATTRIBUTE_FOR_NULL_OBJECT = Boolean.valueOf(WebContainer.getWebContainerProperties().getProperty("com.ibm.ws.webcontainer.removeattributefornullobject", "true")).booleanValue(); //PM71991    
         SUPPRESS_LOGGING_SERVICE_RUNTIME_EXCEP = Boolean.valueOf( WebContainer.getWebContainerProperties().getProperty("com.ibm.ws.webcontainer.suppressloggingserviceruntimeexcep", "false")).booleanValue(); //739806 , PM79934
         STRICT_SERVLET_MAPPING =  Boolean.valueOf(WebContainer.getWebContainerProperties().getProperty("com.ibm.ws.webcontainer.strictservletmapping", "true")).booleanValue(); //add to revert 86353
         SET_CONTENT_LENGTH_ON_CLOSE = Boolean.valueOf(WebContainer.getWebContainerProperties().getProperty("setcontentlengthonclose", "true")).booleanValue();  //PM71666

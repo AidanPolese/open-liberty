@@ -384,8 +384,12 @@ public abstract class WebApp extends BaseContainer implements ServletContext, IS
             logger.entering(CLASS_NAME, "<init> [ " + this + " ] with name -> [ " + name + " ] and parent [ " + parent + " ]");
         // PK63920 End
         this.requestMapper = new URIMapper(true);
-        // attributes = new HashMap(); //PK27027
-        this.attributes = Collections.synchronizedMap(new HashMap()); // PK27027
+        
+        if (WCCustomProperties.REMOVE_ATTRIBUTE_FOR_NULL_OBJECT) {
+            this.attributes = new ConcurrentHashMap();
+        } else {
+            this.attributes = Collections.synchronizedMap(new HashMap()); // PK27027
+        }
 
         if (useMetaInfCache) {
             //prevent rehash of the map by making initial capacity one greater than maximum size
