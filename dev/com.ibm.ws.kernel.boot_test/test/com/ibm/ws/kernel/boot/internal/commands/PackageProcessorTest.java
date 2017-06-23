@@ -27,11 +27,11 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 
-import test.shared.Constants;
-import test.shared.TestUtils;
-
 import com.ibm.ws.kernel.boot.BootstrapConfig;
 import com.ibm.ws.kernel.boot.internal.BootstrapConstants;
+
+import test.shared.Constants;
+import test.shared.TestUtils;
 
 /**
  *
@@ -90,7 +90,7 @@ public class PackageProcessorTest {
     }
 
     /**
-     * 
+     *
      */
     @Test
     public void testBuildManifestForIncludeEqualsUsr() throws Exception {
@@ -100,6 +100,9 @@ public class PackageProcessorTest {
         // Methods called on BootstratpConfig from PackageProcessor.CTOR.
         mockery.checking(new Expectations() {
             {
+                allowing(mockBootConfig).getInstallRoot();
+                will(returnValue(Constants.TEST_TMP_ROOT_FILE));
+
                 allowing(mockBootConfig).getUserRoot();
                 will(returnValue(Constants.TEST_TMP_ROOT_FILE));
 
@@ -115,8 +118,7 @@ public class PackageProcessorTest {
         });
 
         // Run the code under test.
-        File newManiFile = new PackageProcessor(null, null, mockBootConfig, null, null)
-                        .buildManifestForIncludeEqualsUsr(createTestManifestFile());
+        File newManiFile = new PackageProcessor(null, null, mockBootConfig, null, null).buildManifestForIncludeEqualsUsr(createTestManifestFile());
         newManiFile.deleteOnExit();
 
         // Verify content of new manifest file

@@ -107,6 +107,9 @@ public class PackageProcessorTest {
         // Methods called on BootstratpConfig from PackageProcessor.CTOR.
         mockery.checking(new Expectations() {
             {
+                allowing(mockBootConfig).getInstallRoot();
+                will(returnValue(TEST_TMP_ROOT_FILE));
+
                 allowing(mockBootConfig).getUserRoot();
                 will(returnValue(TEST_TMP_ROOT_FILE));
 
