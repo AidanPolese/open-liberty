@@ -38,8 +38,6 @@ import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import test.common.SharedOutputManager;
-
 import com.ibm.websphere.channelfw.CFEndPoint;
 import com.ibm.websphere.channelfw.CFEndPointCriteria;
 import com.ibm.websphere.channelfw.ChainData;
@@ -47,6 +45,7 @@ import com.ibm.websphere.channelfw.EndPointInfo;
 import com.ibm.websphere.channelfw.EndPointMgr;
 import com.ibm.websphere.channelfw.FlowType;
 import com.ibm.websphere.channelfw.OutboundChannelDefinition;
+import com.ibm.ws.channelfw.internal.chains.EndPointInfoImpl;
 import com.ibm.ws.channelfw.internal.chains.EndPointMgrImpl;
 import com.ibm.ws.channelfw.testsuite.channels.protocol.PassThruFactory;
 import com.ibm.ws.channelfw.testsuite.channels.protocol.ProtocolDummyContext;
@@ -59,6 +58,8 @@ import com.ibm.wsspi.channelfw.ChannelFrameworkFactory;
 import com.ibm.wsspi.channelfw.VirtualConnectionFactory;
 import com.ibm.wsspi.tcpchannel.TCPConnectionContext;
 import com.ibm.wsspi.udpchannel.UDPContext;
+
+import test.common.SharedOutputManager;
 
 /**
  * Unit tests for the CFEndPoint logic.
@@ -80,7 +81,7 @@ public class CFEndPointTest {
 
     /**
      * Capture stdout/stderr output to the manager.
-     * 
+     *
      * @throws Exception
      */
     @BeforeClass
@@ -91,7 +92,7 @@ public class CFEndPointTest {
 
     /**
      * Final teardown work when class is exiting.
-     * 
+     *
      * @throws Exception
      */
     @AfterClass
@@ -102,7 +103,7 @@ public class CFEndPointTest {
 
     /**
      * Individual teardown after each test.
-     * 
+     *
      * @throws Exception
      */
     @After
@@ -115,7 +116,7 @@ public class CFEndPointTest {
     public void testEndPointInfoSuccess() throws Exception {
         String endpointName = "testEndpoint";
         String endpointHost = "testHost";
-        EndPointInfo endpoint = new EndPointInfo(endpointName, endpointHost, endpointPort);
+        EndPointInfo endpoint = new EndPointInfoImpl(endpointName, endpointHost, endpointPort);
 
         assertTrue("Endpoint Name was \"" + endpoint.getName() + "\", but expected \"" + endpointName + "\".", endpoint.getName().equals(endpointName));
         assertTrue("Endpoint Host was \"" + endpoint.getHost() + "\", but expected \"" + endpointHost + "\".", endpoint.getHost().equals(endpointHost));
@@ -126,62 +127,62 @@ public class CFEndPointTest {
 
     /**
      * Test to make sure a IllegalArgumentException is thrown when creating endpoint with a null name
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = IllegalArgumentException.class)
     public void testEndPointInfoNullName() throws Exception {
         String endpointName = null;
         String endpointHost = "testHost";
-        EndPointInfo endpoint = new EndPointInfo(endpointName, endpointHost, endpointPort);
+        EndPointInfo endpoint = new EndPointInfoImpl(endpointName, endpointHost, endpointPort);
 
         assertTrue("An exception should have been thrown before reaching this.", false);
     }
 
     /**
      * Test to make sure a IllegalArgumentException is thrown when creating endpoint with an empty name
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = IllegalArgumentException.class)
     public void testEndPointInfoEmptyName() throws Exception {
         String endpointName = "";
         String endpointHost = "testHost";
-        EndPointInfo endpoint = new EndPointInfo(endpointName, endpointHost, endpointPort);
+        EndPointInfo endpoint = new EndPointInfoImpl(endpointName, endpointHost, endpointPort);
 
         assertTrue("An exception should have been thrown before reaching this.", false);
     }
 
     /**
      * Test to make sure a IllegalArgumentException is thrown when creating endpoint with a null host
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = IllegalArgumentException.class)
     public void testEndPointInfoNullHost() throws Exception {
         String endpointName = "testEndpoint";
         String endpointHost = null;
-        EndPointInfo endpoint = new EndPointInfo(endpointName, endpointHost, endpointPort);
+        EndPointInfo endpoint = new EndPointInfoImpl(endpointName, endpointHost, endpointPort);
 
         assertTrue("An exception should have been thrown before reaching this.", false);
     }
 
     /**
      * Test to make sure a IllegalArgumentException is thrown when creating endpoint with an empty host
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = IllegalArgumentException.class)
     public void testEndPointInfoEmptyHost() throws Exception {
         String endpointName = "testEndpoint";
         String endpointHost = "";
-        EndPointInfo endpoint = new EndPointInfo(endpointName, endpointHost, endpointPort);
+        EndPointInfo endpoint = new EndPointInfoImpl(endpointName, endpointHost, endpointPort);
 
         assertTrue("An exception should have been thrown before reaching this.", false);
     }
 
     /**
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -224,7 +225,7 @@ public class CFEndPointTest {
 
     /**
      * Test endpoints.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -233,11 +234,11 @@ public class CFEndPointTest {
         final int port2 = Integer.parseInt(System.getProperty("CFEndPointTest.port2", "11552"));
         final int port3 = Integer.parseInt(System.getProperty("CFEndPointTest.port3", "11553"));
         ChannelFramework cf = ChannelFrameworkFactory.getChannelFramework();
-        final EndPointInfo EPTest = new EndPointInfo("LocalEP1", "localhost", port1);
+        final EndPointInfo EPTest = new EndPointInfoImpl("LocalEP1", "localhost", port1);
         final List<EndPointInfo> EP1List = new ArrayList<EndPointInfo>();
         EP1List.add(EPTest);
 
-        final EndPointInfo EPTest3 = new EndPointInfo("LocalEP3", "localhost", port3);
+        final EndPointInfo EPTest3 = new EndPointInfoImpl("LocalEP3", "localhost", port3);
         final List<EndPointInfo> EP3List = new ArrayList<EndPointInfo>();
         EP3List.add(EPTest3);
 

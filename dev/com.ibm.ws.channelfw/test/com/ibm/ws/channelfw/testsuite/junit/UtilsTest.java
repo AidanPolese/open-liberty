@@ -29,8 +29,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
-import test.common.SharedOutputManager;
-
 import com.ibm.websphere.channelfw.ChainData;
 import com.ibm.websphere.channelfw.ChainGroupData;
 import com.ibm.websphere.channelfw.ChannelFactoryData;
@@ -39,6 +37,7 @@ import com.ibm.websphere.channelfw.EndPointInfo;
 import com.ibm.websphere.channelfw.EndPointMgr;
 import com.ibm.websphere.channelfw.FlowType;
 import com.ibm.ws.channelfw.internal.ChannelFrameworkImpl;
+import com.ibm.ws.channelfw.internal.chains.EndPointInfoImpl;
 import com.ibm.ws.channelfw.internal.chains.EndPointMgrImpl;
 import com.ibm.ws.channelfw.testsuite.channels.outbound.OutboundDummyFactory;
 import com.ibm.ws.channelfw.testsuite.channels.protocol.ProtocolDummyFactory;
@@ -47,6 +46,8 @@ import com.ibm.ws.channelfw.testsuite.channels.server.WebDummyFactory;
 import com.ibm.ws.tcpchannel.internal.TCPChannelFactory;
 import com.ibm.wsspi.channelfw.ChainEventListener;
 import com.ibm.wsspi.channelfw.ChannelFrameworkFactory;
+
+import test.common.SharedOutputManager;
 
 /**
  * Testcase for the ChannelUtils class.
@@ -94,8 +95,8 @@ public class UtilsTest {
             String port = System.getProperty("UtilsTest.testConfigUtils", "9080");
             // test some channels
             String[] tcpprops = new String[] { "type=TCPInboundChannel",
-                                              "hostname=*",
-                                              "port=" + port };
+                                               "hostname=*",
+                                               "port=" + port };
             String[] protoprops = new String[] { "type=ProtocolDummy" };
             props.put(ChannelUtils.CHANNEL_PREFIX + "TCP", tcpprops);
             props.put(ChannelUtils.CHANNEL_PREFIX + "PROTO", protoprops);
@@ -128,9 +129,9 @@ public class UtilsTest {
             String[] outprops = new String[] { "type=OutboundDummy" };
             String[] appprops = new String[] { "type=AppDummy" };
             String[] inchain1props = new String[] {
-                                                   "enable=true", "flow=inbound", "channels=TCP, PROTO, APP" };
+                                                    "enable=true", "flow=inbound", "channels=TCP, PROTO, APP" };
             String[] outchainprops = new String[] {
-                                                   "enable=false", "flow=outbound", "channels=OUTD" };
+                                                    "enable=false", "flow=outbound", "channels=OUTD" };
             props.put(ChannelUtils.CHANNEL_PREFIX + "TCP", tcpprops);
             props.put(ChannelUtils.CHANNEL_PREFIX + "PROTO", protoprops);
             props.put(ChannelUtils.CHANNEL_PREFIX + "APP", appprops);
@@ -169,7 +170,7 @@ public class UtilsTest {
             // test adding groups
             String[] webprops = new String[] { "type=WebDummy" };
             String[] inchain2props = new String[] {
-                                                   "enable=true", "flow=inbound", "channels=TCP, PROTO, WEB" };
+                                                    "enable=true", "flow=inbound", "channels=TCP, PROTO, WEB" };
             props.put(ChannelUtils.CHANNEL_PREFIX + "TCP", tcpprops);
             props.put(ChannelUtils.CHANNEL_PREFIX + "PROTO", protoprops);
             props.put(ChannelUtils.CHANNEL_PREFIX + "APP", appprops);
@@ -244,8 +245,8 @@ public class UtilsTest {
     public void testStartConfig() throws Exception {
         final int port = Integer.parseInt(System.getProperty("UtilsTest.testStartConfig", "8000"));
         final Sequence removalSeq = mock.sequence("removal");
-        final EndPointInfo EPTest = new EndPointInfo("EPTest", "*", 0);
-        final EndPointInfo EPTest2 = new EndPointInfo("EP2", "*", port);
+        final EndPointInfo EPTest = new EndPointInfoImpl("EPTest", "*", 0);
+        final EndPointInfo EPTest2 = new EndPointInfoImpl("EP2", "*", port);
         mock.checking(new Expectations() {
             {
                 allowing(mgrMock).defineEndPoint("EPTest", "*", 0);
@@ -286,7 +287,7 @@ public class UtilsTest {
 
             HashMap<String, Object> props = new HashMap<String, Object>();
             String[] tcpprops = new String[] {
-                                              "type=TCPInboundChannel", "endpoint=EPTest" };
+                                               "type=TCPInboundChannel", "endpoint=EPTest" };
             String[] protoprops = new String[] { "type=ProtocolDummy" };
             String[] webprops = new String[] { "type=WebDummy" };
             String[] epprops = new String[] { "host=*", "port=0" };
@@ -340,7 +341,7 @@ public class UtilsTest {
             props = new HashMap<String, Object>();
             props.putAll(oldprops);
             props.put(ChannelUtils.ENDPOINT_PREFIX + "EP2", new String[] { "host=*",
-                                                                          "port=" + port });
+                                                                           "port=" + port });
             rc = ChannelUtils.startConfig(oldprops, props);
             assertNotNull(rc);
             assertEquals(1, rc.get("chain").size());
