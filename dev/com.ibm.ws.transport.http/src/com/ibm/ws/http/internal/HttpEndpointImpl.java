@@ -248,7 +248,8 @@ public class HttpEndpointImpl implements RuntimeUpdateListener, PauseableCompone
         endpointState.set(DEACTIVATED);
 
         // Try to get the activity off of the scr deactivate thread
-        performAction(stopAction);
+        // but do not add it to the action queue - schedule independently
+        performAction(stopAction, false);
 
         executorService.deactivate(ctx);
         sslFactoryProvider.deactivate(ctx);
@@ -685,6 +686,18 @@ public class HttpEndpointImpl implements RuntimeUpdateListener, PauseableCompone
      */
     @Trivial
     private void performAction(Runnable action) {
+        performAction(action, true);
+    }
+
+    /**
+     * Schedule an activity to run off the SCR action thread,
+     * if the ExecutorService is available
+     *
+     * @param action Runnable action to execute
+     * @param addToQueue Set to false if the action should be scheduled independently of the actionQueue
+     */
+    @Trivial
+    private void performAction(Runnable action, boolean addToQueue) {
         ExecutorService exec = executorService.getService();
 
         if (exec == null) {
@@ -705,11 +718,16 @@ public class HttpEndpointImpl implements RuntimeUpdateListener, PauseableCompone
             //
             // Long story short, it prevents us from kicking off multiple executors which could run in
             // random order.
-            synchronized (actionQueue) {
-                actionQueue.add(action);
-                if ((actionFuture == null) && (configFuture == null)) {
-                    actionFuture = exec.submit(actionsRunner);
+            if (addToQueue) {
+                synchronized (actionQueue) {
+                    actionQueue.add(action);
+                    if ((actionFuture == null) && (configFuture == null)) {
+                        actionFuture = exec.submit(actionsRunner);
+                    }
                 }
+            } else {
+                // Schedule immediately
+                exec.submit(action);
             }
         }
     }

@@ -202,6 +202,10 @@ public class HttpChain implements ChainEventListener {
             Tr.event(this, tc, "stop chain " + this);
         }
 
+        // When the chain is being stopped, remove the previously
+        // registered EndPoint created in update
+        endpointMgr.removeEndPoint(endpointName);
+
         // We don't have to check enabled/disabled here: chains are always allowed to stop.
         if (currentConfig == null || chainState.get() <= ChainState.QUIESCED.val)
             return;
@@ -353,10 +357,8 @@ public class HttpChain implements ChainEventListener {
                 // save the new/changed configuration before we start setting up the new chain
                 currentConfig = newConfig;
 
-                // Endpoint
-                // defineEndPoint() is a simple replace of the old value known to the endpointMgr
-                EndPointInfo ep = endpointMgr.getEndPoint(endpointName);
-                ep = endpointMgr.defineEndPoint(endpointName, newConfig.configHost, newConfig.configPort);
+                // Define and register an EndPoint to represent this chain
+                EndPointInfo ep = endpointMgr.defineEndPoint(endpointName, newConfig.configHost, newConfig.configPort);
 
                 // TCP Channel
                 ChannelData tcpChannel = cfw.getChannel(tcpName);

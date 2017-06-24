@@ -116,7 +116,6 @@ public class EndPointMgrImpl implements EndPointMgr {
      */
     private ServiceRegistration<DynamicMBean> registerMBeanAsService(String name, EndPointInfoImpl endpoint) {
         return bundleContext.registerService(DynamicMBean.class, endpoint, createMBeanServiceProperties(name, endpoint));
-
     }
 
     /**
@@ -144,7 +143,6 @@ public class EndPointMgrImpl implements EndPointMgr {
         for (Map.Entry<String, ServiceRegistration<DynamicMBean>> mbean : endpointMBeans.entrySet()) {
             String mbeanName = mbean.getKey();
             endpointMBeans.remove(mbeanName);
-
             mbean.getValue().unregister();
         }
     }
@@ -196,17 +194,14 @@ public class EndPointMgrImpl implements EndPointMgr {
     }
 
     /**
-     * If the MBean was registered, unpublish and unregister, and finally
-     * remove it from the map of registered MBeans.
+     * Unregister the MBean and remove it from the map of registered MBeans.
      *
      * @param name endpoint name of the mbean to be unregistered
      */
     private void unregisterMBeanInService(String name) {
-        if (endpointMBeans.containsKey(name)) {
-            // unregister the existing mbean
-            ServiceRegistration<DynamicMBean> existingMBean = endpointMBeans.get(name);
+        ServiceRegistration<DynamicMBean> existingMBean = endpointMBeans.remove(name);
+        if (existingMBean != null) {
             existingMBean.unregister();
-            endpointMBeans.remove(name);
         }
     }
 
@@ -220,6 +215,7 @@ public class EndPointMgrImpl implements EndPointMgr {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "Deleting endpoint: " + name);
         }
+
         synchronized (this.endpoints) {
             if (this.endpoints.remove(name) != null) {
                 unregisterMBeanInService(name);
