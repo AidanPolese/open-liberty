@@ -109,3 +109,7 @@ resource.producer.validation.error.CWOWB1007E.useraction=Ensure that the correct
 no.injection.target.CWOWB1008E=CWOWB1008E: The member {0} of class {1} cannot be injected as class {1} is not in a bean archive.
 no.injection.target.CWOWB1008E.explanation=The injection is not successful as the bean manager of the archive that the class belongs to is null.
 no.injection.target.CWOWB1008E.useraction=Ensure that the archive the class belongs to is a bean archive. Refer to the CDI specification on how to make an archive a bean archive.
+
+implicit.bean.validation.disabled.CWOWB1009W: Implicit bean archives are disabled.
+implicit.bean.validation.disabled.CWOWB1009W.explanation=Archives will not be scanned for CDI beans unless they have a beans.xml file.
+implicit.bean.validation.disabled.CWOWB1009W.useraction=Ensure that every archive which makes use of CDI has a beans.xml file, or re-enable implicit beans scanning in your server.xml file.

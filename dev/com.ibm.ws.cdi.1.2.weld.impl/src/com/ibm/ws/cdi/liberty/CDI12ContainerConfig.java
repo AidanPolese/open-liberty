@@ -75,6 +75,8 @@ public class CDI12ContainerConfig {
 
     private final Map<String, Object> properties = new HashMap<String, Object>();
 
+    private boolean hasLoggedNoImplicitMsg = false;
+
     /**
      * DS method to activate this component
      *
@@ -138,6 +140,12 @@ public class CDI12ContainerConfig {
      */
     public boolean isImplicitBeanArchivesScanningDisabled() {
         boolean enableImplicitBeanArchivesValue = (Boolean) this.properties.get("enableImplicitBeanArchives");
+
+        if (tc.isWarningEnabled() && ! hasLoggedNoImplicitMsg && ! enableImplicitBeanArchivesValue) {
+            hasLoggedNoImplicitMsg = true;
+            Tr.warning(tc, "implicit.bean.validation.disabled.CWOWB1009W");
+        }
+
         return !enableImplicitBeanArchivesValue;
     }
 }
