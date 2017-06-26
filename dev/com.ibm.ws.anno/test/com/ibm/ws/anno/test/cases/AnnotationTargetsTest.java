@@ -15,14 +15,10 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.persistence.Id;
 
-import junit.framework.Assert;
-
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
-
-import test.common.SharedOutputManager;
 
 import com.ibm.ws.anno.classsource.internal.ClassSourceImpl_Factory;
 import com.ibm.ws.anno.service.internal.AnnotationServiceImpl_Service;
@@ -39,6 +35,9 @@ import com.ibm.wsspi.anno.classsource.ClassSource_Aggregate.ScanPolicy;
 import com.ibm.wsspi.anno.classsource.ClassSource_Exception;
 import com.ibm.wsspi.anno.targets.AnnotationTargets_Exception;
 import com.ibm.wsspi.anno.targets.AnnotationTargets_Factory;
+
+import junit.framework.Assert;
+import test.common.SharedOutputManager;
 
 /**
  *
@@ -127,7 +126,7 @@ public class AnnotationTargetsTest {
         String resourceAnno = Resource.class.getName();
 
         Set<String> classes = targets.getClassesWithMethodAnnotation(testAnno);
-        Assert.assertEquals(toString(classes), 33, classes.size());
+        Assert.assertEquals(toString(classes), 31, classes.size());
         Assert.assertTrue(classes.contains(subClassName));
 
         classes = targets.getClassesWithMethodAnnotation(resourceAnno);
