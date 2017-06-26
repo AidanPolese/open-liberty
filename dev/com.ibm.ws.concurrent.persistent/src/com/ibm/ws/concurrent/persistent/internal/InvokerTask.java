@@ -602,12 +602,8 @@ public class InvokerTask implements Runnable, Synchronization {
                 if (failure != null)
                     failure = x;
 
-                // Retry the task if an error occurred on commit or rollback or on reporting the number of task failures
-                if (nextFailureCount == 1 || config.retryInterval == 0L)
-                    persistentExecutor.scheduledExecutor.submit(this);
-                else {
-                    persistentExecutor.scheduledExecutor.schedule(this, config.retryInterval, TimeUnit.MILLISECONDS);
-                }
+                // Retry the task if an error occurred
+                processRetryableTaskFailure(failure, loader, nextFailureCount, config, taskName);
             }
         }
 
