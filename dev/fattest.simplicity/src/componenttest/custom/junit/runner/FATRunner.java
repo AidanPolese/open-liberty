@@ -720,6 +720,9 @@ public class FATRunner extends BlockJUnit4ClassRunner {
     private static void compareDirectorySnapshots(String path, Map<String, Long> before, Map<String, Long> after) {
         final String method = "compareDirectorySnapshots";
 
+        if (!ENABLE_TMP_DIR_CHECKING)
+            return;
+
         if (before.isEmpty() || after.isEmpty()) {
             Log.info(c, method, "Unable to calculate directories for " + path);
             return;
