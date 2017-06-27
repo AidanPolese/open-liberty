@@ -1,6 +1,12 @@
 
 import org.apache.tools.ant.filters.ReplaceTokens
 
+// Set the generated zip version to the buildID
+// I am not sure why the tasks.gradle file where this task is
+// defined can't see the bnd property, but it can't and this
+// at least works (even if it feels hacky)
+parent.zipOpenLiberty.setProperty("version", bnd.buildID)
+
 task copyPropertiesToBuildImage (type:Copy) {
     dependsOn jar
     from "${projectDir}/publish/gradle"
