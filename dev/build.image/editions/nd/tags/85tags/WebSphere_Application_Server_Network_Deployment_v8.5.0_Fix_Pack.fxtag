@@ -1,7 +1,0 @@
-<Fix InventoryTagVersion="1.0">
-<FixType>Fix Pack</FixType>
-<FixName>WebSphere Application Server Network Deployment v8.5.5 Fix Pack 9</FixName>
-<FixVersion>8.5.5.9</FixVersion>
-<FixID>wlp-nd-runtime-8.5.5.9</FixID>
-<SWGFMIDX>HWASND855</SWGFMIDX>
-</Fix>

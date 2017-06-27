@@ -9,8 +9,8 @@ parent.zipOpenLiberty.setProperty("version", bnd.buildID)
 
 task copyPropertiesToBuildImage (type:Copy) {
     dependsOn jar
-    from "${projectDir}/publish/gradle"
-    into "${projectDir}/wlp/lib/versions"
+    from "${projectDir}/publish/"
+    into "${projectDir}/wlp/lib/versions/"
     include '*.properties'
     filter(ReplaceTokens,
            tokens: [PRODUCT_VERSION: bnd.libertyRelease, PRODUCT_EDITION: bnd.productEdition, PRODUCT_LICENSE_TYPE: bnd.productLicenseType])
@@ -18,24 +18,17 @@ task copyPropertiesToBuildImage (type:Copy) {
 
 task copyReadmeToBuildImage (type:Copy) {
     dependsOn jar
-    from "${projectDir}/publish/gradle"
-    into "${rootDir}/build.image/wlp"
+    from "${projectDir}/publish/"
+    into "${projectDir}/wlp/"
     include 'README.TXT'
     filter(ReplaceTokens,
            tokens: [BUILD_ID: bnd.buildID, LIBERTY_VERSION: bnd.libertyRelease])
 }
-/*
-task copyCopyrightToBuildImage (type:Copy) {
-    dependsOn jar
-    from "${projectDir}"
-    into "${rootDir}/build.image/wlp"
-    include 'Copyright.txt'
-}
-*/
+
 task copyGeneratedToBuildImageBinTools (type:Copy) {
     dependsOn jar
-    from "${projectDir}/wlp/lib"
-    into "${projectDir}/wlp/bin/tools"
+    from "${projectDir}/wlp/lib/"
+    into "${projectDir}/wlp/bin/tools/"
     include 'bootstrap-agent.jar'
     rename 'bootstrap-agent.jar', 'ws-javaagent.jar'
 }
@@ -43,7 +36,7 @@ task copyGeneratedToBuildImageBinTools (type:Copy) {
 task copyGeneratedToCnfLib (type:Copy) {
     dependsOn jar
     from "${projectDir}/wlp/dev/api/spec/"
-    into "${rootDir}/${bnd_cnf}/lib"
+    into "${rootDir}/${bnd_cnf}/lib/"
     include 'com.ibm.ws.org.osgi.core.6.0.0_*.jar'
     rename '.*.jar', 'osgi.core.jar'
 }
@@ -51,7 +44,6 @@ task copyGeneratedToCnfLib (type:Copy) {
 assemble {
     dependsOn copyPropertiesToBuildImage
     dependsOn copyReadmeToBuildImage
-    //dependsOn copyCopyrightToBuildImage
     dependsOn copyGeneratedToBuildImageBinTools
     dependsOn copyGeneratedToCnfLib
 }
