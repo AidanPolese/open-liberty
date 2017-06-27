@@ -39,13 +39,14 @@ Service-Component: \
     securityService=com.ibm.ws.security.SecurityService; \
     taiService=com.ibm.ws.security.authentication.tai.TAIService; \
     interceptorService='com.ibm.wsspi.security.tai.TrustAssociationInterceptor(id=*)'; \
+    webAuthenticator=com.ibm.ws.webcontainer.security.WebAuthenticator; \
     locationAdmin=com.ibm.wsspi.kernel.service.location.WsLocationAdmin; \
     authenticatorFactory=com.ibm.ws.webcontainer.security.WebAuthenticatorFactory; \
     unauthenticatedSubjectService=com.ibm.ws.security.authentication.UnauthenticatedSubjectService; \
-    multiple:='interceptorService'; \
-    greedy:='interceptorService,authenticatorFactory'; \
-    optional:='taiService,interceptorService'; \
-    dynamic:='securityService,taiService,interceptorService,authenticatorFactory'; \
+    multiple:='interceptorService,webAuthenticator'; \
+    greedy:='interceptorService,webAuthenticator,authenticatorFactory'; \
+    optional:='taiService,interceptorService,webAuthenticator'; \
+    dynamic:='securityService,taiService,interceptorService,webAuthenticator,authenticatorFactory'; \
     properties:="service.vendor=IBM,com.ibm.ws.security.type=com.ibm.ws.feature"
 
 instrument.classesExcludes: com/ibm/ws/webcontainer/security/feature/resources/*.class
