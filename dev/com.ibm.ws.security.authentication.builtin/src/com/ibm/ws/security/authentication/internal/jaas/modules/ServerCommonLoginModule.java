@@ -86,7 +86,7 @@ public abstract class ServerCommonLoginModule extends CommonLoginModule implemen
 
     /**
      * Common method called by all login modules that use the UserRegistry (UsernameAndPasswordLoginModule,
-     * CertificateLoginModule, and HashtableLoginModule). Determines the securityName to use
+     * CertificateLoginModule, HashtableLoginModule and TokenLoginModule). Determines the securityName to use
      * for the login.
      *
      * @param loginName The username passed to the login
@@ -99,14 +99,7 @@ public abstract class ServerCommonLoginModule extends CommonLoginModule implemen
      */
     protected String getSecurityName(String loginName, String urAuthenticatedId) throws EntryNotFoundException, RegistryException {
 
-        //Existing documentation:
-        // If LDAP registry, call getUserDisplayName
-        // ------
-        // it's highyly unlikely that the above "documentation" has anything to do with the behavior, and exposing it this way is worse
-        // than ludicrous.
-        //TODO implement something vaguely plausible.
         UserRegistry ur = getUserRegistry();
-        //TODO note carefully the use of == rather than .equals.
         if (ur != null && ur.getType() != "CUSTOM") { // Preserve the existing behavior for CUSTOM user registries
             String securityName = ur.getUserSecurityName(urAuthenticatedId);
             if (securityName != null) {
@@ -120,11 +113,6 @@ public abstract class ServerCommonLoginModule extends CommonLoginModule implemen
         }
 
         if (ur != null) {
-            // If no loginName was provided, then this must be a certificate login.
-            // Call getUserSecurityName to get the securityName.
-            //
-            // Note: This callback is primarily here to allow SAF to strip off the SafCredTokenKey
-            //       from the urAuthenticatedId returned from mapCertificate.
             return ur.getUserSecurityName(urAuthenticatedId);
         } else {
             throw new NullPointerException("No user registry");
