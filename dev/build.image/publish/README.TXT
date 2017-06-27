@@ -1,4 +1,4 @@
-WebSphere Application Server Version $LIBERTY_VERSION$ Liberty - ($BUILD_ID$)
+WebSphere Application Server Version @LIBERTY_VERSION@ Liberty - (@BUILD_ID@)
 
 
 I. CONTROLLING WEBSPHERE APPLICATION SERVER LIBERTY
