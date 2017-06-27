@@ -1780,16 +1780,6 @@ public class LibertyClient {
         return clientRoot + "/../../shared/";
     }
 
-    /**
-     * Get the collective dir under the client resources dir. For instance,
-     * this is where the collective trust stores are located.
-     *
-     * @return the path
-     */
-    public String getCollectiveResourcesPath() {
-        return clientRoot + "/resources/collective/";
-    }
-
     public void setClientRoot(String clientRoot) {
         this.clientRoot = clientRoot;
     }
@@ -3188,11 +3178,11 @@ public class LibertyClient {
                     } else
                         // Remove the corresponding regexp from the watchFor list
                         for (Iterator<String> it = watchFor.iterator(); it.hasNext();) {
-                        String regexp = it.next();
-                        if (Pattern.compile(regexp).matcher(line).find()) {
-                        it.remove();
-                        break;
-                        }
+                            String regexp = it.next();
+                            if (Pattern.compile(regexp).matcher(line).find()) {
+                                it.remove();
+                                break;
+                            }
                         }
                 }
             }

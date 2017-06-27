@@ -10,7 +10,7 @@ public class Java9Helper {
                                              " --add-exports java.base/jdk.internal.vm=ALL-UNNAMED" + // for JMX VMSupport in LocalConnectorActivator
                                              " --add-exports java.base/sun.security.action=ALL-UNNAMED" + // for com.ibm.crypto.ibmkeycert.jar
                                              " --add-exports java.naming/com.sun.jndi.ldap=ALL-UNNAMED" + // for com.ibm.ws.jndi.internal.WASInitialContextFactoryBuilder
-                                             " --add-exports jdk.attach/sun.tools.attach=ALL-UNNAMED" + // for collective controller dump action: com.ibm.ws.kernel.boot.internal.commands.HotSpotJavaDumperImpl$VirtualMachine.remoteDataDump(HotSpotJavaDumperImpl.java:342)
+                                             " --add-exports jdk.attach/sun.tools.attach=ALL-UNNAMED" + // for dump action: com.ibm.ws.kernel.boot.internal.commands.HotSpotJavaDumperImpl$VirtualMachine.remoteDataDump(HotSpotJavaDumperImpl.java:342)
                                              // Reads
                                              " --add-reads java.base=ALL-UNNAMED" +
                                              " --add-reads java.logging=ALL-UNNAMED" +

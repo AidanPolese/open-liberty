@@ -29,7 +29,7 @@ public class ParseLoginAddress{
 	static final String MISSING_PORT_VALUE_MESSAGE = "missingPortValue"; //=Missing value for [port] in argument.
 	static final String MISSING_HOSTPORT_VALUE_MESSAGE = "missingHostorPortValue"; //=Missing value for [host or port] in argument.
 
-	// these part of address provided to collective or server
+	// these part of address provided to connection
 
 	String userName= null;
 	String password= null;
@@ -56,7 +56,7 @@ public class ParseLoginAddress{
 	 * First ":" before last "@" delimits the user name and password.
 	 * Last @ delimits user name and password from host and port.  @ is not a valid character for a host or port so that is good.
 	 * 
-	 * @param collectives
+	 * @param option
 	 */
 	public void parseLoginAddressValue(String option) throws IllegalArgumentException {
 

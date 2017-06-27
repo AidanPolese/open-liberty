@@ -50,7 +50,7 @@ public class WebServerPluginUtility {
 
     /**
      * @param taskName desired task name
-     * @return corresponding CollectiveUtilityTask, or null if
+     * @return corresponding CommandTask, or null if
      *         no match is found
      */
     private CommandTask getTask(String taskName) {     

@@ -131,7 +131,7 @@ public class ServerSchemaGenCommand {
 
     /**
      * Attempts to get the install directory for Liberty.
-     * The logic here is based on the logic used by the collective script.
+     * The logic here is common in many of the utility scripts.
      */
     private String getInstallDir() {
         String installDir = System.getenv("WLP_INSTALL_DIR");
@@ -154,7 +154,7 @@ public class ServerSchemaGenCommand {
 
     /**
      * Attempts to get the user directory for Liberty.
-     * The logic here is based on the logic used by the collective script.
+     * The logic here is common in many of the utility scripts.
      */
     private String getUserDir() {
         String usrDir = System.getenv("WLP_USER_DIR");
@@ -172,7 +172,7 @@ public class ServerSchemaGenCommand {
 
     /**
      * Attempts to get the output directory for Liberty.
-     * The logic here is based on the logic used by the collective script.
+     * The logic here is common in many of the utility scripts.
      */
     private String getOutputDir() {
         String outputDir = System.getenv("WLP_OUTPUT_DIR");

@@ -29,16 +29,11 @@ import com.ibm.wsspi.kernel.service.location.VariableRegistry;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.location.WsLocationConstants;
 
-/**
- * Because this exposes information that is already contained in the collective
- * repository, this MBean is not published to the collective.
- */
 @Component(service = { ServerInfoMBean.class, DynamicMBean.class },
            immediate = true,
            configurationPolicy = ConfigurationPolicy.IGNORE,
            property = { "service.vendor=IBM",
-                        "jmx.objectname=" + ServerInfoMBean.OBJECT_NAME,
-                        "publishAttributesToCollectiveController=false" })
+                        "jmx.objectname=" + ServerInfoMBean.OBJECT_NAME })
 public class ServerInfoMBeanImpl extends StandardMBean implements ServerInfoMBean {
     static final String VAR_DEFAULTHOSTNAME = "${defaultHostName}";
 

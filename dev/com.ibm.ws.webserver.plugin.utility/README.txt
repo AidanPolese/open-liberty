@@ -1,7 +1,7 @@
 Last update: 2014/12/1
 
 This project (com.ibm.ws.webserver.plugin.utility) implements the bin/pluginUtility
-command-line utility. It it based on the com.ibm.ws.collective.utility project.
+command-line utility.
 Currently the exposed tasks are: generate merge DynamicRouting help
 
 

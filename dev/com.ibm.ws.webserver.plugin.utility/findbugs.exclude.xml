@@ -34,13 +34,6 @@
     <Bug pattern="DJV_CONSTRUCT_INSIDE_DO_PRIVILEGED"/>
   </Match>  
 
-  <!-- Pre-existing (i.e. before we starting using fb 2.0.2) problem -->
-  <Match>
-    <Bug pattern="DM_DEFAULT_ENCODING"/>
-    <Class name="com.ibm.ws.collective.utility.utils.FileUtility"/>
-    <Method name="writeToFile"/>
-  </Match>
-  
    <!-- Not an issue -->
   <Match>
     <Bug pattern="EI_EXPOSE_REP2"/>
