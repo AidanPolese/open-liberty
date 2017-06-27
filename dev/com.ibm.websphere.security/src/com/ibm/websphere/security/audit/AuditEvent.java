@@ -52,6 +52,15 @@ public class AuditEvent {
     public final static String TARGET_EXTENDED_PROPERTIES = "target.extendedProperties";
     public final static String TARGET_METHOD = "target.method";
     public final static String TARGET_NAME = "target.name";
+
+    public final static String TARGET_MESSAGING_BUSNAME = "target.messaging.busname";
+    public final static String TARGET_MESSAGING_ENGINE = "target.messaging.engine";
+    public final static String TARGET_MESSAGING_LOGIN_TYPE = "target.messaging.loginType";
+    public final static String TARGET_MESSAGING_REMOTE_CHAIN_NAME = "target.messaging.remote.chainName";
+    public final static String TARGET_MESSAGING_USER_NAME = "target.messaging.userName";
+    public final static String TARGET_MESSAGING_DESTINATION = "target.messaging.destination";
+    public final static String TARGET_MESSAGING_OPERATIONTYPE = "target.messaging.operationType";
+
     public final static String TARGET_APPNAME = "target.appname";
     public final static String TARGET_PARAMS = "target.params";
     public final static String TARGET_TYPEURI = "target.typeURI";

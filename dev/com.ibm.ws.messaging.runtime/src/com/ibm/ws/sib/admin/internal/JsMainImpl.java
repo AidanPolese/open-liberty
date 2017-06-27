@@ -25,6 +25,7 @@ import org.osgi.framework.ServiceRegistration;
 import com.ibm.ejs.ras.TraceNLS;
 import com.ibm.websphere.messaging.mbean.MessagingEngineMBean;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.websphere.security.audit.context.AuditManager;
 import com.ibm.websphere.sib.exception.SINotSupportedException;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.sib.admin.AliasDestination;
@@ -659,6 +660,10 @@ public class JsMainImpl implements JsMain {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             SibTr.entry(tc, thisMethodName, new Object[] { busName, engine });
         }
+
+        AuditManager auditManager = new AuditManager();
+        auditManager.setJMSBusName(busName);
+        auditManager.setJMSMessagingEngine(engine);
 
         Enumeration vEnum = _messagingEngines.elements();
         JsMessagingEngine foundMessagingEngine = null;

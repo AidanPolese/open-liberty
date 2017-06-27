@@ -17,6 +17,7 @@ import javax.transaction.xa.Xid;
 
 import com.ibm.ejs.ras.TraceNLS;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.websphere.security.audit.context.AuditManager;
 import com.ibm.websphere.sib.exception.SIErrorException;
 import com.ibm.websphere.sib.exception.SIException;
 import com.ibm.websphere.sib.exception.SIResourceException;
@@ -132,6 +133,9 @@ public class ServerTransportReceiveListener extends CommonServerReceiveListener 
                                                     Conversation conversation) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
             SibTr.entry(this, tc, "dataReceived");
+
+        AuditManager auditManager = new AuditManager();
+        auditManager.setJMSConversationMetaData(conversation.getMetaData());
 
         // Get a CommsServerByteBuffer to wrap the data
         CommsServerByteBuffer buffer = poolManager.allocate();
