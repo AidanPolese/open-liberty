@@ -617,8 +617,9 @@ public class TagLibraryCache extends Hashtable<String, Object> {
                     // https://websphere.pok.ibm.com/~liberty/secure/docs/dev/API/com.ibm.ws.ras/com/ibm/ws/ffdc/annotation/FFDCIgnore.html
                     return;
                 }
-                //TODO: this could potentially be a jar represented by a directory on disk
-                if (subEntryContainer!=null && entry.getSize()==0) { //a directory
+                
+                //Process if it's a directory. If webInfPath is a jar, it was already processed by loadTldsFromJar
+                if (subEntryContainer!=null && entry.getSize()==0 && !webInfPath.endsWith(".jar")) { //PI83486
                     directory = true;
     
                     for (Entry subEntry:subEntryContainer) {
