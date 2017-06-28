@@ -1,0 +1,9 @@
+<project name="com.ibm.ws.org.apache.cxf.3.2.jaxrs">
+  <!-- This project doesn't need to actually build anything.  It is a binary prereq.
+       At some point, we may want to overlay source here - so at that point, we will
+       need to actually do some work on this build.xml, but for now, we are only
+       using empty targets to satisfy the build requirements. -->
+  <target name="chkpii" />
+  <target name="clean" />
+  <target name="findbugs" />
+</project>

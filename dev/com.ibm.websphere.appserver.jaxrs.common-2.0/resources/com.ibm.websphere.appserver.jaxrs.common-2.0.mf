@@ -30,6 +30,7 @@ Subsystem-Content: com.ibm.websphere.appserver.api.jaxrs20_1.0-javadoc.zip; type
  com.ibm.ws.org.apache.xml.resolver.1.2; version="[1.0.0,1.0.200)",
  com.ibm.ws.org.apache.neethi.3.0.2; version="[1.0.0,1.0.200)",
  com.ibm.ws.jaxrs.2.0.common; version="[1.0.0,1.0.200)",
+ com.ibm.ws.jaxrs.2.x.config; version="[1.0.0,1.0.200)",
  com.ibm.ws.org.apache.ws.xmlschema.core.2.0.3; version="[1.0.0,1.0.200)",
  com.ibm.websphere.javaee.jaxrs.2.0; location:="dev/api/spec/,lib/"; version="[1.0.0,1.0.200)",
  com.ibm.ws.jaxrs.2.0.tools; version="[1.0.0,1.0.200)"

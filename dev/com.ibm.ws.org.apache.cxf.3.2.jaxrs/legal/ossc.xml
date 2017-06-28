@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Apache CXF" 
+            projectURL="http://cxf.apache.org" 
+            version="3.2.0" revision="Preview" 
+            license-type="Apachev2" 
+            contact="andymc@us.ibm.com" 
+            encryption="no">
+      <download location="http://repository.apache.org/snapshots/org/apache/cxf/apache-cxf/3.2.0-SNAPSHOT/apache-cxf-3.2.0-20170529.191531-391.zip">   
+         <file basename="cxf-core-3.2.0-SNAPSHOT.jar"                      checksum="4f410a62c7a8bd28d03536e1d316bf3d"/>
+         <file basename="cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar"         checksum="4ca89e63552aa87e5604393442abd392"/>
+         <file basename="cxf-rt-rs-client-3.2.0-SNAPSHOT.jar"              checksum="8dbfdc495a92c4fa933c73ea8038b7cb"/>
+         <file basename="cxf-rt-rs-service-description-3.2.0-SNAPSHOT.jar" checksum="49892c03f5ef725014aed2e15afc80c6"/>
+         <file basename="cxf-rt-transports-http-3.2.0-SNAPSHOT.jar"        checksum="a0915982cd5b8ff0fc3fc8ebbdd0f7bb"/>
+         <file basename="cxf-tools-common-3.2.0-SNAPSHOT.jar"              checksum="23ff238de81f50a5615d8b50e960fb69"/>
+         <file basename="cxf-tools-wadlto-jaxrs-3.2.0-SNAPSHOT.jar"        checksum="adc2ebc560873c771ba64e0e60dd0e36"/>
+         
+      </download>
+      <download location="http://repository.apache.org/snapshots/org/apache/cxf/apache-cxf/3.2.0-SNAPSHOT/">
+         <file basename="apache-cxf-3.2.0-20170529.191531-391-src.zip"     checksum="b1e6da367ef12ec768210bfb6783db75"/>
+      </download>
+   </project>
+   <clearencehistory/>
+   <notes/>
+</ossc>

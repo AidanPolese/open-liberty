@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+   <project project="Oracle RI" 
+            projectURL="https://maven.java.net" 
+            version="1.0" revision="" 
+            license-type="CDDL" 
+            contact="andymc@us.ibm.com" 
+            encryption="no">
+      <!-- <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.build/botp/WA80.SERV1/test/cf021143.02.linux/linux/zipper/fe.zip">-->
+      <download location="https://maven.java.net/content/repositories/releases/javax/ws/rs/javax.ws.rs-api/2.0/javax.ws.rs-api-2.0.jar">
+         <file basename="javax.ws.rs-api-2.1-m07.jar" checksum="3ee28a0d29ffec34b54c31514b8688a1"/>
+      </download>
+      <download location="https://maven.java.net/content/repositories/releases/javax/ws/rs/javax.ws.rs-api/2.0/javax.ws.rs-api-2.0-javadoc.jar">
+         <file basename="javax.ws.rs-api-2.1-m07-javadoc.jar" checksum="77453f43885422b5b2ac3ff32b25c0ea"/>
+      </download>
+   </project>
+   
+   <notes>
+   Copy of j2ee.ejb.bundle/build/javax.j2ee.ejb.jar
+   </notes>
+   
+   <clearencehistory>
+   As implied by the download location, this comes from WAS v8 and v8.5 and has been cleared previously by WAS.
+   </clearencehistory>
+</ossc>
