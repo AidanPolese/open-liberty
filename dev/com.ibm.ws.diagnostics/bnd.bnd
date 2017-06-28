@@ -28,7 +28,8 @@ DynamicImport-Package: \
   org.osgi.service.blueprint.reflect;version="[1.0.0,2.0.0)"
     
 -dsannotations=com.ibm.ws.diagnostics.osgi.BlueprintIntrospector,\
-  com.ibm.ws.diagnostics.osgi.ComponentInfoIntrospection
+  com.ibm.ws.diagnostics.osgi.ComponentInfoIntrospection,\
+  com.ibm.ws.diagnostics.osgi.RegionIntrospection
 
 Service-Component: \
   com.ibm.ws.diagnostics.java.EnvironmentVariables; \
@@ -84,4 +85,5 @@ Service-Component: \
 	com.ibm.websphere.org.osgi.service.cm;version=latest,\
 	com.ibm.wsspi.org.osgi.service.component.annotations;version=latest,\
 	com.ibm.websphere.appserver.spi.logging;version=latest, \
-	com.ibm.ws.org.osgi.annotation.versioning;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest,\
+	com.ibm.ws.org.eclipse.equinox.region;version=latest
