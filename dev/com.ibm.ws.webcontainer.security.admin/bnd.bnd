@@ -30,13 +30,14 @@ Service-Component: \
     securityService='com.ibm.ws.security.SecurityService(Authentication=*)'; \
     taiService=com.ibm.ws.security.authentication.tai.TAIService; \
     interceptorService='com.ibm.wsspi.security.tai.TrustAssociationInterceptor(id=*)'; \
+	webAuthenticator=com.ibm.ws.webcontainer.security.WebAuthenticator; \
     locationAdmin=com.ibm.wsspi.kernel.service.location.WsLocationAdmin; \
     authenticatorFactory=com.ibm.ws.webcontainer.security.WebAuthenticatorFactory; \
     unauthenticatedSubjectService=com.ibm.ws.security.authentication.UnauthenticatedSubjectService; \
-    multiple:='interceptorService'; \
-    greedy:='authenticatorFactory'; \
-    optional:='taiService,interceptorService'; \
-    dynamic:='taiService,interceptorService,authenticatorFactory'; \
+    multiple:='interceptorService,webAuthenticator'; \
+    greedy:='interceptorService,webAuthenticator,authenticatorFactory'; \
+    optional:='taiService,interceptorService,webAuthenticator'; \
+    dynamic:='taiService,interceptorService,webAuthenticator,authenticatorFactory'; \
     properties:="service.vendor=IBM,com.ibm.ws.security.type=com.ibm.ws.management"
 
 -buildpath: \
