@@ -26,10 +26,10 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.channelfw.internal.ChannelFrameworkConstants;
 
 /**
- * Temporary version of the WAS runtime EndPointMgr version.
- * EndPointInfo is a dynamically updatable MBean.
- * The host binding and port value can be changed dynamically.
- * The name of the EndPointInfo is unique and can not be changed dynamically.
+ * EndPointInfo is a dynamically updated MBean.
+ * - The host binding and port value can be changed dynamically.
+ * - The name of the EndPointInfo is unique and can not be changed dynamically.
+ *
  * If the backing configuration for this EndPointInfo changes its
  * name, a new EndPointInfo object must be created.
  */
