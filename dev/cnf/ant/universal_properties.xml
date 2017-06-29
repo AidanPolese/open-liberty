@@ -216,11 +216,5 @@ build_liberty* tasks and project-level build scripts should be defined here. -->
 	<!-- URL pointing to the location on DHE where our repository content is hosted -->
 	<property name="dhe.repo.base.url" value="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/wlp" />
 
-	<!-- Fix List generation locations and values -->
-	<property name="fixlist.dir" location="${basedir}/fixlist" />
-	<property name="liberty.image.common.dir" location="${basedir}/../image.common" />
-	<property name="liberty.build.im.offering.dir" location="${basedir}/../build.im.zip.offering" />
-	<property name="fixlist.archive.aparlist.dir" location="${liberty.image.common.dir}/aparlists" />
-	<property name="fixlist.build.projects.file" value="${fixlist.dir}/FixList-BuildProjects.txt" />
 </project>
 
