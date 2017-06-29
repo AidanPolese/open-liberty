@@ -153,8 +153,8 @@ public class SessionManagerMBeanImpl extends StandardEmitterMBean implements Ses
         publishToRepository(ATTRIBUTE_NAME_CLONE_ID, "java.lang.String", oldCloneID, newCloneID);        
     }
 
-    /*
-     * Retrieve keys that need to be published to atlas repository
+    /**
+     * Reduce the map to the set of expected keys
      */
     private Map<String, Object> filterUnexpectedKeys(Map<String, Object> inputProps) {
         Map<String, Object> outputProps = new HashMap<String, Object>();
@@ -169,8 +169,8 @@ public class SessionManagerMBeanImpl extends StandardEmitterMBean implements Ses
         return outputProps;
     }
 
-    /*
-     * Publish to atlas repository
+    /**
+     * Send attribute change notification
      */
     private void publishToRepository(String attributeName, String attributeType, Object oldValue, Object newValue) {
         super.sendNotification(new AttributeChangeNotification(
