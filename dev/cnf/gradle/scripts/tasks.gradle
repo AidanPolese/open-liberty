@@ -156,32 +156,27 @@ subprojects {
                        createESA: "false",
                        dir: "${rootDir}/build.image/wlp",
                        esaDir: "${buildDir}/repo",
-                       createFor: "beta",
-                       buildType: "beta",
+                       createFor: "${bnd.gaOrBeta}",
+                       buildType: "${bnd.gaOrBeta}",
                        junit: "${buildDir}/report/featureChecks.xml") {
-          defaultEdition(licenseURL: "http://www.ibm.com/licenses/wlp-featureterms-v1",
-                         licensePath: "${rootDir}/image.common/lafiles/featureTerms",
-                         version: "2017.6.0.0",
-                         licenseType: "UNSPECIFIED",
-                         displayVersion: "v9 beta")
+          defaultEdition(licenseURL: "https://www.eclipse.org/legal/epl-v10.html",
+                         licensePath: "${rootDir}", // Must be a real path, does not need to have contents
+                         version: "${bnd.libertyRelease}",
+                         licenseType: "EPL",
+                         displayVersion: "OpenLiberty")
           edition(baseEdition: "beta")
           edition(baseEdition: "core",
                   validEditions: "")
           edition(baseEdition: "base",
                   validEditions: "BASE,BASE_ILAN,DEVELOPERS,EXPRESS,ND,zOS")
           edition(baseEdition: "nd",
-                  validEditions: "BASE_ILAN,DEVELOPERS,ND,zOS",
-                  licenseURL: "http://www.ibm.com/licenses/wlp-featureterms-restricted-v1",
-                  licensePath: "${rootDir}/image.common/lafiles/featureTerms-restricted")
+                  validEditions: "BASE_ILAN,DEVELOPERS,ND,zOS")
           edition(baseEdition: "zos",
                   validEditions: "zOS")
           edition(baseEdition: "bluemix",
                   validEditions: "BLUEMIX")
           edition(baseEdition: "full")
-          edition(baseEdition: "unsupported",
-                  licenseURL: "http://www.ibm.com/licenses/L-SWIS-A9SRXB",
-                  licensePath: "${rootDir}/image.common/lafiles/unsupported/developers",
-                  licenseType: "ILAN")
+          edition(baseEdition: "unsupported")
         }
       }
       copy {
