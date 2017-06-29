@@ -50,6 +50,7 @@ assemble {
 
 clean.doLast {
     file('wlp').deleteDir()
+    file('build').deleteDir()
 }
 
 publishing {
