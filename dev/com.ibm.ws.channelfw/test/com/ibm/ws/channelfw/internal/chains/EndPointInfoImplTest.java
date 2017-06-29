@@ -41,6 +41,8 @@ public class EndPointInfoImplTest {
     }
 
     /**
+     * Test to make sure a IllegalArgumentException is thrown when creating endpoint with a null name
+     * <p/>
      * Test method for {@link com.ibm.ws.channelfw.internal.chains.EndPointInfoImpl#EndPointInfoImpl(java.lang.String, java.lang.String, int)}.
      */
     @Test(expected = IllegalArgumentException.class)
@@ -52,6 +54,8 @@ public class EndPointInfoImplTest {
     }
 
     /**
+     * Test to make sure a IllegalArgumentException is thrown when creating endpoint with an empty name
+     * <p/>
      * Test method for {@link com.ibm.ws.channelfw.internal.chains.EndPointInfoImpl#EndPointInfoImpl(java.lang.String, java.lang.String, int)}.
      */
     @Test(expected = IllegalArgumentException.class)
@@ -63,6 +67,8 @@ public class EndPointInfoImplTest {
     }
 
     /**
+     * Test to make sure a IllegalArgumentException is thrown when creating endpoint with a null host
+     * <p/>
      * Test method for {@link com.ibm.ws.channelfw.internal.chains.EndPointInfoImpl#EndPointInfoImpl(java.lang.String, java.lang.String, int)}.
      */
     @Test(expected = IllegalArgumentException.class)
@@ -71,6 +77,8 @@ public class EndPointInfoImplTest {
     }
 
     /**
+     * Test to make sure a IllegalArgumentException is thrown when creating endpoint with an empty host
+     * <p/>
      * Test method for {@link com.ibm.ws.channelfw.internal.chains.EndPointInfoImpl#EndPointInfoImpl(java.lang.String, java.lang.String, int)}.
      */
     @Test(expected = IllegalArgumentException.class)

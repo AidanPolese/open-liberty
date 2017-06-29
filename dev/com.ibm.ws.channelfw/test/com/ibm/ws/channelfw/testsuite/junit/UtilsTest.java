@@ -37,7 +37,6 @@ import com.ibm.websphere.channelfw.EndPointInfo;
 import com.ibm.websphere.channelfw.EndPointMgr;
 import com.ibm.websphere.channelfw.FlowType;
 import com.ibm.ws.channelfw.internal.ChannelFrameworkImpl;
-import com.ibm.ws.channelfw.internal.chains.EndPointInfoImpl;
 import com.ibm.ws.channelfw.internal.chains.EndPointMgrImpl;
 import com.ibm.ws.channelfw.testsuite.channels.outbound.OutboundDummyFactory;
 import com.ibm.ws.channelfw.testsuite.channels.protocol.ProtocolDummyFactory;
@@ -245,10 +244,24 @@ public class UtilsTest {
     public void testStartConfig() throws Exception {
         final int port = Integer.parseInt(System.getProperty("UtilsTest.testStartConfig", "8000"));
         final Sequence removalSeq = mock.sequence("removal");
-        final EndPointInfo EPTest = new EndPointInfoImpl("EPTest", "*", 0);
-        final EndPointInfo EPTest2 = new EndPointInfoImpl("EP2", "*", port);
+        final EndPointInfo EPTest = mock.mock(EndPointInfo.class, "EPTest");
+        final EndPointInfo EPTest2 = mock.mock(EndPointInfo.class, "EPTest2");
         mock.checking(new Expectations() {
             {
+                allowing(EPTest).getName();
+                will(returnValue("EPTest"));
+                allowing(EPTest).getHost();
+                will(returnValue("*"));
+                allowing(EPTest).getPort();
+                will(returnValue(0));
+
+                allowing(EPTest2).getName();
+                will(returnValue("EP2"));
+                allowing(EPTest2).getHost();
+                will(returnValue("*"));
+                allowing(EPTest2).getHost();
+                will(returnValue(port));
+
                 allowing(mgrMock).defineEndPoint("EPTest", "*", 0);
                 will(returnValue(EPTest));
 

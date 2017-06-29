@@ -14,6 +14,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.management.AttributeChangeNotification;
+import javax.management.MBeanAttributeInfo;
+import javax.management.MBeanInfo;
 import javax.management.MBeanNotificationInfo;
 import javax.management.NotCompliantMBeanException;
 import javax.management.NotificationBroadcasterSupport;
@@ -66,14 +68,16 @@ public class EndPointInfoImpl extends StandardEmitterMBean implements EndPointIn
 
     /**
      * Constructor.
+     * Package proteced to avoid expoinsg the constructor in the MBean
+     * interface and to enforce creation through {@link EndPointMgrImpl#defineEndPoint(String, String, int)}
      *
      * @param name
      * @param host
      * @param port
      * @throws IllegalArgumentException if name or host is empty
      */
-    public EndPointInfoImpl(String name, String host, int port) throws NotCompliantMBeanException {
-        super(EndPointInfoMBean.class, false, new NotificationBroadcasterSupport((Executor) null, new MBeanNotificationInfo(new String[] { AttributeChangeNotification.ATTRIBUTE_CHANGE }, AttributeChangeNotification.class.getName(), "")));
+    EndPointInfoImpl(String name, String host, int port) throws NotCompliantMBeanException {
+        super(EndPointInfoMBean.class, true, new NotificationBroadcasterSupport((Executor) null, new MBeanNotificationInfo(new String[] { AttributeChangeNotification.ATTRIBUTE_CHANGE }, AttributeChangeNotification.class.getName(), "")));
 
         if (null == name || name.isEmpty()) {
             throw new IllegalArgumentException("Invalid name: " + name);
@@ -88,21 +92,13 @@ public class EndPointInfoImpl extends StandardEmitterMBean implements EndPointIn
         }
     }
 
-    /**
-     * Query the name of this endpoint.
-     *
-     * @return String
-     */
+    /** {@inheritDoc} */
     @Override
     public String getName() {
         return this.name;
     }
 
-    /**
-     * Query the host assigned to this endpoint.
-     *
-     * @return String
-     */
+    /** {@inheritDoc} */
     @Override
     public String getHost() {
         return this.host;
@@ -110,7 +106,9 @@ public class EndPointInfoImpl extends StandardEmitterMBean implements EndPointIn
 
     /**
      * Update the host value for this end point.
+     * Will emit an AttributeChangeNotification if the value changed.
      *
+     * @param newHost The new (or current) host name value. If no change, no notification is sent.
      * @return String The previous host value
      */
     public String updateHost(final String newHost) {
@@ -127,11 +125,7 @@ public class EndPointInfoImpl extends StandardEmitterMBean implements EndPointIn
         return oldHost;
     }
 
-    /**
-     * Query the port assigned to this endpoint.
-     *
-     * @return int
-     */
+    /** {@inheritDoc} */
     @Override
     public int getPort() {
         return this.port;
@@ -139,7 +133,9 @@ public class EndPointInfoImpl extends StandardEmitterMBean implements EndPointIn
 
     /**
      * Update the port value for this end point.
+     * Will emit an AttributeChangeNotification if the value changed.
      *
+     * @param newPort The new (or current) port value. If no change, no notification is sent.
      * @return int The previous port value
      */
     public int updatePort(final int newPort) {
@@ -152,6 +148,33 @@ public class EndPointInfoImpl extends StandardEmitterMBean implements EndPointIn
         }
 
         return oldPort;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected final String getDescription(MBeanInfo info) {
+        return "Informational MBean representing an active endpoint.";
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected final String getDescription(MBeanAttributeInfo info) {
+        String description = "Unknown attribute";
+
+        if (info != null) {
+            String operationName = info.getName();
+            if (operationName != null) {
+                if (operationName.equals("Name")) {
+                    description = "Return the name of the endpoint.";
+                } else if (operationName.equals("Host")) {
+                    description = "Return the listening host name of the endpoint. A value of '*' means it is listening on all available host names.";
+                } else if (operationName.equals("Port")) {
+                    description = "Return the listening port of the endpoint.";
+                }
+            }
+        }
+
+        return description;
     }
 
     /** {@inheritDoc} */

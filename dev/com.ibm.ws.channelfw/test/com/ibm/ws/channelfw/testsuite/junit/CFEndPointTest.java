@@ -45,7 +45,6 @@ import com.ibm.websphere.channelfw.EndPointInfo;
 import com.ibm.websphere.channelfw.EndPointMgr;
 import com.ibm.websphere.channelfw.FlowType;
 import com.ibm.websphere.channelfw.OutboundChannelDefinition;
-import com.ibm.ws.channelfw.internal.chains.EndPointInfoImpl;
 import com.ibm.ws.channelfw.internal.chains.EndPointMgrImpl;
 import com.ibm.ws.channelfw.testsuite.channels.protocol.PassThruFactory;
 import com.ibm.ws.channelfw.testsuite.channels.protocol.ProtocolDummyContext;
@@ -112,75 +111,6 @@ public class CFEndPointTest {
         outputMgr.resetStreams();
     }
 
-    @Test
-    public void testEndPointInfoSuccess() throws Exception {
-        String endpointName = "testEndpoint";
-        String endpointHost = "testHost";
-        EndPointInfo endpoint = new EndPointInfoImpl(endpointName, endpointHost, endpointPort);
-
-        assertTrue("Endpoint Name was \"" + endpoint.getName() + "\", but expected \"" + endpointName + "\".", endpoint.getName().equals(endpointName));
-        assertTrue("Endpoint Host was \"" + endpoint.getHost() + "\", but expected \"" + endpointHost + "\".", endpoint.getHost().equals(endpointHost));
-        assertTrue("Endpoint Port was \"" + endpoint.getPort() + "\", but expected \"" + endpointPort + "\".", endpoint.getPort() == endpointPort);
-        assertTrue("Endpoint toString() was \"" + endpoint.toString() + "\", but expected \"EndPoint testEndpoint=testHost:" + endpointPort + "\"",
-                   endpoint.toString().equals("EndPoint testEndpoint=testHost:" + endpointPort + ""));
-    }
-
-    /**
-     * Test to make sure a IllegalArgumentException is thrown when creating endpoint with a null name
-     *
-     * @throws Exception
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testEndPointInfoNullName() throws Exception {
-        String endpointName = null;
-        String endpointHost = "testHost";
-        EndPointInfo endpoint = new EndPointInfoImpl(endpointName, endpointHost, endpointPort);
-
-        assertTrue("An exception should have been thrown before reaching this.", false);
-    }
-
-    /**
-     * Test to make sure a IllegalArgumentException is thrown when creating endpoint with an empty name
-     *
-     * @throws Exception
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testEndPointInfoEmptyName() throws Exception {
-        String endpointName = "";
-        String endpointHost = "testHost";
-        EndPointInfo endpoint = new EndPointInfoImpl(endpointName, endpointHost, endpointPort);
-
-        assertTrue("An exception should have been thrown before reaching this.", false);
-    }
-
-    /**
-     * Test to make sure a IllegalArgumentException is thrown when creating endpoint with a null host
-     *
-     * @throws Exception
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testEndPointInfoNullHost() throws Exception {
-        String endpointName = "testEndpoint";
-        String endpointHost = null;
-        EndPointInfo endpoint = new EndPointInfoImpl(endpointName, endpointHost, endpointPort);
-
-        assertTrue("An exception should have been thrown before reaching this.", false);
-    }
-
-    /**
-     * Test to make sure a IllegalArgumentException is thrown when creating endpoint with an empty host
-     *
-     * @throws Exception
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testEndPointInfoEmptyHost() throws Exception {
-        String endpointName = "testEndpoint";
-        String endpointHost = "";
-        EndPointInfo endpoint = new EndPointInfoImpl(endpointName, endpointHost, endpointPort);
-
-        assertTrue("An exception should have been thrown before reaching this.", false);
-    }
-
     /**
      *
      * @throws Exception
@@ -234,16 +164,31 @@ public class CFEndPointTest {
         final int port2 = Integer.parseInt(System.getProperty("CFEndPointTest.port2", "11552"));
         final int port3 = Integer.parseInt(System.getProperty("CFEndPointTest.port3", "11553"));
         ChannelFramework cf = ChannelFrameworkFactory.getChannelFramework();
-        final EndPointInfo EPTest = new EndPointInfoImpl("LocalEP1", "localhost", port1);
+
+        final EndPointInfo EPTest = mock.mock(EndPointInfo.class, "EPTest");
         final List<EndPointInfo> EP1List = new ArrayList<EndPointInfo>();
         EP1List.add(EPTest);
 
-        final EndPointInfo EPTest3 = new EndPointInfoImpl("LocalEP3", "localhost", port3);
+        final EndPointInfo EPTest3 = mock.mock(EndPointInfo.class, "EPTest3");
         final List<EndPointInfo> EP3List = new ArrayList<EndPointInfo>();
         EP3List.add(EPTest3);
 
         mock.checking(new Expectations() {
             {
+                allowing(EPTest).getName();
+                will(returnValue("LocalEP1"));
+                allowing(EPTest).getHost();
+                will(returnValue("localhost"));
+                allowing(EPTest).getPort();
+                will(returnValue(port1));
+
+                allowing(EPTest3).getName();
+                will(returnValue("LocalEP3"));
+                allowing(EPTest3).getHost();
+                will(returnValue("localhost"));
+                allowing(EPTest3).getHost();
+                will(returnValue(port3));
+
                 allowing(mgrMock).defineEndPoint("LocalEP1", "localhost", port1);
                 will(returnValue(EPTest));
 

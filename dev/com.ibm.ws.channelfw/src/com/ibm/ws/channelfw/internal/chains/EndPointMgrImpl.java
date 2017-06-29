@@ -128,12 +128,17 @@ public class EndPointMgrImpl implements EndPointMgr {
     }
 
     /**
-     * Unregister and register the endpoint MBean and publish it.
+     * Update an existing endpoint MBean, which will emit change notifications.
+     *
+     * @param name The name of the EndPoint which was updated
+     * @param host The current host value (may or may not have changed)
+     * @param port The current port value (may or may not have changed)
      */
-    private void updateEndpointMBean(String name, EndPointInfoImpl ep) {
-        unregisterMBeanInService(name);
-        registerEndpointMBean(name, ep);
-        this.endpoints.put(name, ep);
+    private EndPointInfoImpl updateEndpointMBean(String name, String host, int port) {
+        EndPointInfoImpl existingEP = endpoints.get(name);
+        existingEP.updateHost(host);
+        existingEP.updatePort(port);
+        return existingEP;
     }
 
     /**
@@ -164,16 +169,16 @@ public class EndPointMgrImpl implements EndPointMgr {
         try {
             EndPointInfoImpl ep;
             synchronized (this.endpoints) {
-                ep = new EndPointInfoImpl(name, host, port);
                 // if the endpoint with the same name already exists,
                 // update it
                 if (this.endpoints.containsKey(name)) {
                     if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
                         Tr.event(tc, "The new endpoint " + name + "already exists. Update the properties of the registered service");
                     }
-                    updateEndpointMBean(name, ep);
+                    ep = updateEndpointMBean(name, host, port);
                 } else {
-                    // register the end point
+                    // create and register the end point
+                    ep = new EndPointInfoImpl(name, host, port);
                     registerEndpointMBean(name, ep);
                     this.endpoints.put(name, ep);
                 }
@@ -194,7 +199,7 @@ public class EndPointMgrImpl implements EndPointMgr {
     }
 
     /**
-     * Unregister the MBean and remove it from the map of registered MBeans.
+     * Remove the MBean from the map of registered MBeans and unregister it.
      *
      * @param name endpoint name of the mbean to be unregistered
      */
