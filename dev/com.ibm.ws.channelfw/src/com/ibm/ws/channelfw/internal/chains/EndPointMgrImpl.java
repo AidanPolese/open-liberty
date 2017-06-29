@@ -64,7 +64,7 @@ public class EndPointMgrImpl implements EndPointMgr {
     private final BundleContext bundleContext;
 
     /** Map of defined endpoints */
-    private final Map<String, EndPointInfo> endpoints;
+    private final Map<String, EndPointInfoImpl> endpoints;
 
     /** Map of registered mbeans */
     private final ConcurrentMap<String, ServiceRegistration<DynamicMBean>> endpointMBeans;
@@ -74,7 +74,7 @@ public class EndPointMgrImpl implements EndPointMgr {
      */
     public EndPointMgrImpl(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
-        this.endpoints = new HashMap<String, EndPointInfo>();
+        this.endpoints = new HashMap<String, EndPointInfoImpl>();
         this.endpointMBeans = new ConcurrentHashMap<String, ServiceRegistration<DynamicMBean>>();
     }
 
@@ -114,7 +114,7 @@ public class EndPointMgrImpl implements EndPointMgr {
      * @param name endpoint name of the mbean to be registered
      * @param endpoint instance of an EndPointInfo containing the endpoint info
      */
-    private ServiceRegistration<DynamicMBean> registerMBeanAsService(String name, EndPointInfo endpoint) {
+    private ServiceRegistration<DynamicMBean> registerMBeanAsService(String name, EndPointInfoImpl endpoint) {
         return bundleContext.registerService(DynamicMBean.class, endpoint, createMBeanServiceProperties(name, endpoint));
 
     }
@@ -124,16 +124,14 @@ public class EndPointMgrImpl implements EndPointMgr {
      *
      * @param endpoint
      */
-    private void registerEndpointMBean(String name, EndPointInfo ep) {
+    private void registerEndpointMBean(String name, EndPointInfoImpl ep) {
         endpointMBeans.put(name, registerMBeanAsService(name, ep));
     }
 
     /**
      * Unregister and register the endpoint MBean and publish it.
-     *
-     * @param endpoint
      */
-    private void updateEndpointMBean(String name, EndPointInfo ep) {
+    private void updateEndpointMBean(String name, EndPointInfoImpl ep) {
         unregisterMBeanInService(name);
         registerEndpointMBean(name, ep);
         this.endpoints.put(name, ep);
@@ -166,18 +164,18 @@ public class EndPointMgrImpl implements EndPointMgr {
     @Override
     public EndPointInfo defineEndPoint(String name, String host, int port) {
         try {
-            EndPointInfo ep = new EndPointInfo(name, host, port);
+            EndPointInfoImpl ep;
             synchronized (this.endpoints) {
+                ep = new EndPointInfoImpl(name, host, port);
                 // if the endpoint with the same name already exists,
-                //    - unregister the mbean from service registry
-                //    - delete the mbean from Atlas
+                // update it
                 if (this.endpoints.containsKey(name)) {
                     if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
                         Tr.event(tc, "The new endpoint " + name + "already exists. Update the properties of the registered service");
                     }
                     updateEndpointMBean(name, ep);
                 } else {
-                    // register the end point and publish it to Atlas
+                    // register the end point
                     registerEndpointMBean(name, ep);
                     this.endpoints.put(name, ep);
                 }
@@ -208,7 +206,7 @@ public class EndPointMgrImpl implements EndPointMgr {
             // unregister the existing mbean
             ServiceRegistration<DynamicMBean> existingMBean = endpointMBeans.get(name);
             existingMBean.unregister();
-            this.endpointMBeans.remove(name);
+            endpointMBeans.remove(name);
         }
     }
 
