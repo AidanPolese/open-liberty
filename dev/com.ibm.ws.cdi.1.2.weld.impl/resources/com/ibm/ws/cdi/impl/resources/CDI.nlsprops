@@ -112,4 +112,4 @@ no.injection.target.CWOWB1008E.useraction=Ensure that the archive the class belo
 
 implicit.bean.validation.disabled.CWOWB1009W: Implicit bean archives are disabled.
 implicit.bean.validation.disabled.CWOWB1009W.explanation=Archives are not scanned for CDI beans unless they have a beans.xml file.
-implicit.bean.validation.disabled.CWOWB1009W.useraction=Ensure that every archive that uses CDI has a beans.xml file, or re-enable implicit beans scanning in your server.xml file.
+implicit.bean.validation.disabled.CWOWB1009W.useraction=Ensure that every archive that uses CDI has a beans.xml file or re-enable implicit beans scanning in your server.xml file.
