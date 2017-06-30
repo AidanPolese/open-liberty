@@ -16,6 +16,7 @@ import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
 import static org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
@@ -28,6 +29,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -63,6 +65,7 @@ import com.ibm.ws.classloading.internal.providers.WeakLibraryListener;
 import com.ibm.ws.classloading.internal.util.CanonicalStore;
 import com.ibm.ws.classloading.internal.util.ClassRedefiner;
 import com.ibm.ws.classloading.internal.util.Factory;
+import com.ibm.ws.classloading.internal.util.MultiMap;
 import com.ibm.ws.classloading.serializable.ClassLoaderIdentityImpl;
 import com.ibm.ws.container.service.metadata.extended.MetaDataIdentifierService;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
@@ -80,13 +83,16 @@ import com.ibm.wsspi.config.Fileset;
 import com.ibm.wsspi.kernel.service.utils.ConcurrentServiceReferenceMap;
 import com.ibm.wsspi.kernel.service.utils.ConcurrentServiceReferenceSet;
 import com.ibm.wsspi.library.Library;
+import com.ibm.wsspi.logging.Introspector;
 
-@Component(service = { ClassLoadingService.class, LibertyClassLoadingService.class, ClassLoaderIdentifierService.class },
+@Component(service = { ClassLoadingService.class, LibertyClassLoadingService.class, ClassLoaderIdentifierService.class, Introspector.class },
            immediate = true,
            configurationPolicy = ConfigurationPolicy.IGNORE,
            property = "service.vendor=IBM")
-public class ClassLoadingServiceImpl implements LibertyClassLoadingService, ClassLoaderIdentifierService {
+public class ClassLoadingServiceImpl implements LibertyClassLoadingService, ClassLoaderIdentifierService, Introspector {
     static final TraceComponent tc = Tr.register(ClassLoadingServiceImpl.class);
+    private final Map<ClassLoader, StackTraceElement[]> leakDetectionMap = new HashMap<ClassLoader, StackTraceElement[]>();
+
     private static final int TCCL_LOCK_WAIT = Integer.getInteger("com.ibm.ws.classloading.tcclLockWaitTimeMillis", 15000);
     static final String REFERENCE_GENERATORS = "generators";
 
@@ -224,7 +230,7 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
 
     /**
      * Declarative Services method for setting the metadata identifier service.
-     * 
+     *
      * @param svc the service
      */
     @Reference(service = MetaDataIdentifierService.class, name = "metadataIdentifierService")
@@ -234,7 +240,7 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
 
     /**
      * Declarative Services method for unsetting the metadata identifier service.
-     * 
+     *
      * @param svc the service
      */
     protected void unsetMetadataIdentifierService(MetaDataIdentifierService svc) {
@@ -251,11 +257,7 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
 
     @Override
     public AppClassLoader createTopLevelClassLoader(List<Container> classPath, GatewayConfiguration gwConfig, ClassLoaderConfiguration clConfig) {
-        AppClassLoader result = new ClassLoaderFactory(bundleContext, digraph, classloaders, aclStore, resourceProviders, redefiner, generatorManager)
-                        .setClassPath(classPath)
-                        .configure(gwConfig)
-                        .configure(clConfig)
-                        .create();
+        AppClassLoader result = new ClassLoaderFactory(bundleContext, digraph, classloaders, aclStore, resourceProviders, redefiner, generatorManager).setClassPath(classPath).configure(gwConfig).configure(clConfig).create();
 
         this.rememberBundle(result.getBundle());
         return result;
@@ -263,20 +265,12 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
 
     @Override
     public AppClassLoader createBundleAddOnClassLoader(List<File> classPath, ClassLoader gwClassLoader, ClassLoaderConfiguration clConfig) {
-        return new ClassLoaderFactory(bundleContext, digraph, classloaders, aclStore, resourceProviders, redefiner, generatorManager)
-                        .setSharedLibPath(classPath)
-                        .configure(createGatewayConfiguration())
-                        .useBundleAddOnLoader(gwClassLoader)
-                        .configure(clConfig)
-                        .create();
+        return new ClassLoaderFactory(bundleContext, digraph, classloaders, aclStore, resourceProviders, redefiner, generatorManager).setSharedLibPath(classPath).configure(createGatewayConfiguration()).useBundleAddOnLoader(gwClassLoader).configure(clConfig).create();
     }
 
     @Override
     public AppClassLoader createChildClassLoader(List<Container> classPath, ClassLoaderConfiguration config) {
-        return new ClassLoaderFactory(bundleContext, digraph, classloaders, aclStore, resourceProviders, redefiner, generatorManager)
-                        .setClassPath(classPath)
-                        .configure(config)
-                        .create();
+        return new ClassLoaderFactory(bundleContext, digraph, classloaders, aclStore, resourceProviders, redefiner, generatorManager).setClassPath(classPath).configure(config).create();
     }
 
     @Override
@@ -374,14 +368,9 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
             }
         }
 
-        AppClassLoader result = new ClassLoaderFactory(bundleContext, digraph, classloaders, aclStore, resourceProviders, redefiner, generatorManager)
-                        .configure(createGatewayConfiguration()
-                                        .setApplicationName(SHARED_LIBRARY_DOMAIN + ": " + lib.id())
-                                        .setDynamicImportPackage("*")
-                                        .setApiTypeVisibility(apiTypeVisibility))
-                        .configure(clsCfg)
-                        .onCreate(listenForLibraryChanges(lib.id()))
-                        .getCanonical();
+        AppClassLoader result = new ClassLoaderFactory(bundleContext, digraph, classloaders, aclStore, resourceProviders, redefiner, generatorManager).configure(createGatewayConfiguration().setApplicationName(SHARED_LIBRARY_DOMAIN
+                                                                                                                                                                                                                 + ": "
+                                                                                                                                                                                                                 + lib.id()).setDynamicImportPackage("*").setApiTypeVisibility(apiTypeVisibility)).configure(clsCfg).onCreate(listenForLibraryChanges(lib.id())).getCanonical();
 
         this.rememberBundle(result.getBundle());
         return result;
@@ -440,8 +429,7 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
             if (codebase.endsWith("-")) {
                 if (path.startsWith(codebase.substring(0, codebase.indexOf('-'))))
                     return codebase;
-            }
-            else if (codebase.endsWith("*")) {
+            } else if (codebase.endsWith("*")) {
                 String temp = codebase.substring(0, codebase.indexOf('*') - 1);
                 File jarFile = new File(path);
                 String pathParent = jarFile.getParent().replace("\\", "/");;
@@ -521,6 +509,9 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
                 } while (result == null);
 
                 result.incrementRefCount();
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    leakDetectionMap.put(result, Thread.currentThread().getStackTrace());
+                }
             } else {
                 // could not acquire the tcclStoreLock
                 throw new IllegalStateException("Unable to acquire TCCL store lock");
@@ -541,12 +532,8 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
          * Always create a new TCCL to handle features being added/removed
          */
 
-        GatewayConfiguration gwConfig = this.createGatewayConfiguration()
-                        .setApplicationName("ThreadContextClassLoader")
-                        .setDynamicImportPackage("*;thread-context=\"true\"")
-                        .setDelegateToSystem(false);
-        ClassLoaderConfiguration clConfig = this.createClassLoaderConfiguration()
-                        .setId(createIdentity("Thread Context", key));
+        GatewayConfiguration gwConfig = this.createGatewayConfiguration().setApplicationName("ThreadContextClassLoader").setDynamicImportPackage("*;thread-context=\"true\"").setDelegateToSystem(false);
+        ClassLoaderConfiguration clConfig = this.createClassLoaderConfiguration().setId(createIdentity("Thread Context", key));
         GatewayBundleFactory gatewayBundleFactory = new GatewayBundleFactory(bundleContext, digraph, classloaders);
         GatewayClassLoader aug = gatewayBundleFactory.createGatewayBundleClassLoader(gwConfig, clConfig, resourceProviders);
 
@@ -608,6 +595,7 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
                 ThreadContextClassLoader tccl = (ThreadContextClassLoader) loader;
                 if (tccl.decrementRefCount() <= 0) {
                     this.tcclStore.remove(tccl);
+                    leakDetectionMap.remove(tccl);
                 }
             } finally {
                 tcclStoreLock.unlock();
@@ -617,7 +605,7 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.classloading.ClassLoaderIdentityService#getClassLoaderIdentity(java.lang.ClassLoader)
      */
     @Override
@@ -633,7 +621,7 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.classloading.ClassLoaderIdentityService#getClassLoader(com.ibm.wsspi.classloading.ClassLoaderIdentity)
      */
     @Override
@@ -672,11 +660,73 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.wsspi.classloading.ClassLoadingService#setSharedLibraryProtectionDomains(java.util.Map)
      */
     @Override
     public void setSharedLibraryProtectionDomains(Map<String, ProtectionDomain> protectionDomainMap) {
         this.protectionDomainMap = protectionDomainMap;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.wsspi.logging.Introspector#getIntrospectorName()
+     */
+    @Override
+    public String getIntrospectorName() {
+        return "ClassLoadingServiceIntrospector";
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.wsspi.logging.Introspector#getIntrospectorDescription()
+     */
+    @Override
+    public String getIntrospectorDescription() {
+        return "ClassLoadingService diagnostics - leaked/active TCCLs, active resource providers, etc.";
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.wsspi.logging.Introspector#introspect(java.io.PrintWriter)
+     */
+    @Override
+    public void introspect(PrintWriter out) throws Exception {
+
+        out.println("Resource Providers:");
+        MultiMap<String, ResourceProvider> resourceProviderMap = resourceProviders.getProviderMap();
+        for (String resName : resourceProviderMap.keys()) {
+            out.println("  " + resName + " provided by:");
+            for (ResourceProvider rp : resourceProviderMap.get(resName)) {
+                out.println("    " + rp);
+            }
+        }
+
+        out.println();
+        out.println();
+
+        out.println("Gateway Loaders:");
+        for (Entry<Bundle, Set<GatewayClassLoader>> entry : classloaders.entrySet()) {
+            Bundle b = entry.getKey();
+            out.println("  " + b.getSymbolicName());
+            for (GatewayClassLoader gcl : entry.getValue()) {
+                out.println("    " + gcl.getBundle().getSymbolicName() + " " + gcl.getApiTypeVisibility());
+            }
+        }
+
+        out.println();
+        out.println();
+        out.println("Leaked (or active) TCCLs - note that tracing must be enabled to see these stacks:");
+        for (Map.Entry<ClassLoader, StackTraceElement[]> entry : leakDetectionMap.entrySet()) {
+            ClassLoader cl = entry.getKey();
+            StackTraceElement[] stes = entry.getValue();
+            out.println("  " + cl + " created via");
+            for (StackTraceElement ste : stes) {
+                out.println("    " + ste.toString());
+            }
+        }
     }
 }

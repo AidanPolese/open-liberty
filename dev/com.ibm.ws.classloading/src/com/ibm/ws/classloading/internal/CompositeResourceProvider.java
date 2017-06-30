@@ -80,11 +80,18 @@ class CompositeResourceProvider {
     }
 
     /**
-     * 
+     *
      * @see com.ibm.ws.classloading.internal.util.MultiMap#clear()
      */
     void clear() {
         providerMap.clear();
+    }
+
+    /**
+     * Used for diagnostics in the CLSIntrospector
+     */
+    MultiMap<String, ResourceProvider> getProviderMap() {
+        return providerMap;
     }
 
 }
