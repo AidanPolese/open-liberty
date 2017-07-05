@@ -20,6 +20,7 @@ import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Properties;
 
 import javax.crypto.SecretKey;
 
@@ -32,6 +33,8 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Sensitive;
+import com.ibm.websphere.ssl.Constants;
+import com.ibm.websphere.ssl.JSSEHelper;
 import com.ibm.websphere.ssl.SSLException;
 import com.ibm.ws.ssl.KeyStoreService;
 import com.ibm.ws.ssl.config.KeyStoreManager;
@@ -332,5 +335,32 @@ public class KeyStoreServiceImpl implements KeyStoreService {
         } catch (Exception e) {
             throw new KeyStoreException("Unexpected error while loading the requested secret key for alias [" + alias + "] from keystore: " + keyStoreName, e);
         }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public X509Certificate getClientKeyCert(String sslConfigAlias) throws KeyStoreException, CertificateException, SSLException {
+        JSSEHelper jsseHelper = JSSEHelper.getInstance();
+        Properties sslProps = jsseHelper.getProperties(sslConfigAlias);
+
+        return getClientKeyCert(sslProps);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public X509Certificate getClientKeyCert(Properties sslProps) throws KeyStoreException, CertificateException {
+
+        if (sslProps != null && !sslProps.isEmpty()) {
+            String keyStoreName = sslProps.getProperty(Constants.SSLPROP_KEY_STORE_NAME);
+
+            String certAlias = sslProps.getProperty(Constants.SSLPROP_KEY_STORE_CLIENT_ALIAS);
+            if (certAlias != null) {
+                // client alias is in properties so get the certificate from the keystore
+                return getX509CertificateFromKeyStore(keyStoreName, certAlias);
+            } else {
+                return getX509CertificateFromKeyStore(keyStoreName);
+            }
+        }
+        return null;
     }
 }

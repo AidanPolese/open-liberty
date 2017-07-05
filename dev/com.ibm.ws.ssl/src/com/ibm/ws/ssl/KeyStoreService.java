@@ -16,8 +16,11 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
+import java.util.Properties;
 
 import javax.crypto.SecretKey;
+
+import com.ibm.websphere.ssl.SSLException;
 
 /**
  * Provides an interface into the contents of the configured keystores
@@ -128,5 +131,28 @@ public interface KeyStoreService {
      * @throws CertificateException
      */
     SecretKey getSecretKeyFromKeyStore(String keyStoreName, String alias, String keyPassword) throws KeyStoreException, CertificateException;
+
+    /**
+     * Returns the client certificate which will either be the only key in the keystore
+     * file or the key specified by the clientKeyAlias property from the ssl configuration.
+     *
+     * @param sslConfigAlias
+     * @return
+     * @throws KeyStoreException
+     * @throws CertificateException
+     * @throws SSLException
+     */
+    X509Certificate getClientKeyCert(String sslConfigAlias) throws KeyStoreException, CertificateException, SSLException;
+
+    /**
+     * Returns the client certificate which will either be the only key in the keystore
+     * file or the key specified by the clientKeyAlias property from the ssl configuration.
+     *
+     * @param sslConfigAlias
+     * @return
+     * @throws KeyStoreException
+     * @throws CertificateException
+     */
+    X509Certificate getClientKeyCert(Properties sslProps) throws KeyStoreException, CertificateException;
 
 }
