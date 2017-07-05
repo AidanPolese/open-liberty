@@ -61,12 +61,9 @@ IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml
 
 instrument.classesExcludes: com/ibm/ws/jaxws/webcontainer/internal/resources/*.class
 
--buildpath.bootclasspath: \
-	com.ibm.websphere.javaee.jaxb.2.2;version=latest;boot=true,\
-	com.ibm.websphere.javaee.jaxws.2.2;version=latest;boot=true,\
-	${javac.bootclasspath.${javac.source}}
-
 -buildpath: \
+	com.ibm.websphere.javaee.jaxb.2.2;version=latest,\
+	com.ibm.websphere.javaee.jaxws.2.2;version=latest,\
 	com.ibm.websphere.appserver.spi.kernel.service,\
 	com.ibm.websphere.appserver.spi.logging,\
 	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
