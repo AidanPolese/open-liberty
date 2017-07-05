@@ -57,8 +57,8 @@ import com.ibm.ws.jaxrs20.clientconfig.JAXRSClientConfigHolder;
  * This class overrides the same "pure" Apache class found in the libs of com.ibm.ws.org.apache.cxf.jaxrs
  */
 public class ClientImpl implements Client {
-    private static final String HTTP_CONNECTION_TIMEOUT_PROP = "http.connection.timeout";
-    private static final String HTTP_RECEIVE_TIMEOUT_PROP = "http.receive.timeout";
+    static final String HTTP_CONNECTION_TIMEOUT_PROP = "http.connection.timeout";
+    static final String HTTP_RECEIVE_TIMEOUT_PROP = "http.receive.timeout";
     private static final String HTTP_PROXY_SERVER_PROP = "http.proxy.server.uri";
     private static final String HTTP_PROXY_SERVER_PORT_PROP = "http.proxy.server.port";
     private static final String HTTP_AUTOREDIRECT_PROP = "http.autoredirect";
@@ -69,16 +69,16 @@ public class ClientImpl implements Client {
     private static final Boolean DEFAULT_THREAD_SAFETY_CLIENT_STATUS;
     private static final Integer THREAD_SAFE_CLIENT_STATE_CLEANUP_PERIOD;
     static {
-        DEFAULT_THREAD_SAFETY_CLIENT_STATUS = 
+        DEFAULT_THREAD_SAFETY_CLIENT_STATUS =
             Boolean.parseBoolean(SystemPropertyAction.getPropertyOrNull(THREAD_SAFE_CLIENT_PROP));
-        THREAD_SAFE_CLIENT_STATE_CLEANUP_PERIOD = 
+        THREAD_SAFE_CLIENT_STATE_CLEANUP_PERIOD =
             getIntValue(SystemPropertyAction.getPropertyOrNull(THREAD_SAFE_CLIENT_STATE_CLEANUP_PROP));
     }
 
     private final Configurable<Client> configImpl;
     private final TLSConfiguration secConfig;
     private boolean closed;
-    private Set<WebClient> baseClients = 
+    private Set<WebClient> baseClients =
         Collections.newSetFromMap(new WeakHashMap<WebClient, Boolean>());
     public ClientImpl(Configuration config,
                       TLSConfiguration secConfig) {
@@ -579,8 +579,8 @@ public class ClientImpl implements Client {
         }
     }
     private static Long getLongValue(Object o) {
-        return o instanceof Long ? (Long)o 
-            : o instanceof String ? Long.valueOf(o.toString()) 
+        return o instanceof Long ? (Long)o
+            : o instanceof String ? Long.valueOf(o.toString())
             : o instanceof Integer ? ((Integer)o).longValue() : null;
     }
     private static Integer getIntValue(Object o) {
