@@ -76,4 +76,8 @@ public class ResourceProvider {
         return resourceNames;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + " (" + bundleID + ")";
+    }
 }
