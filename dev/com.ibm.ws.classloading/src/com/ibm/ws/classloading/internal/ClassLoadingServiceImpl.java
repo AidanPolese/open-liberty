@@ -701,7 +701,7 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
         for (String resName : resourceProviderMap.keys()) {
             out.println("  " + resName + " provided by:");
             for (ResourceProvider rp : resourceProviderMap.get(resName)) {
-                out.println("    " + rp);
+                out.println("    " + rp); //TODO: print bundle info from rp reflectively
             }
         }
 

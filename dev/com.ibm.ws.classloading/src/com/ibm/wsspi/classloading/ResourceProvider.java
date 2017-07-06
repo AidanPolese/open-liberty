@@ -75,9 +75,4 @@ public class ResourceProvider {
     public Collection<String> getResourceNames() {
         return resourceNames;
     }
-
-    @Override
-    public String toString() {
-        return super.toString() + " (" + bundleID + ")";
-    }
 }
