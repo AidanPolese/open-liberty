@@ -7,11 +7,11 @@
             contact="andymc@us.ibm.com" 
             encryption="no">
       <!-- <download location="https://ausgsa.ibm.com/gsa/ausgsa/projects/w/was.build/botp/WA80.SERV1/test/cf021143.02.linux/linux/zipper/fe.zip">-->
-      <download location="https://maven.java.net/content/repositories/releases/javax/ws/rs/javax.ws.rs-api/2.0/javax.ws.rs-api-2.0.jar">
-         <file basename="javax.ws.rs-api-2.1-m07.jar" checksum="3ee28a0d29ffec34b54c31514b8688a1"/>
+      <download location="https://maven.java.net/content/repositories/releases/javax/ws/rs/javax.ws.rs-api">
+         <file basename="javax.ws.rs-api-2.1-m09.jar" checksum="567c87f9312b0cc990463d951e61c2fd"/>
       </download>
-      <download location="https://maven.java.net/content/repositories/releases/javax/ws/rs/javax.ws.rs-api/2.0/javax.ws.rs-api-2.0-javadoc.jar">
-         <file basename="javax.ws.rs-api-2.1-m07-javadoc.jar" checksum="77453f43885422b5b2ac3ff32b25c0ea"/>
+      <download location="https://maven.java.net/content/repositories/releases/javax/ws/rs/javax.ws.rs-api">
+         <file basename="javax.ws.rs-api-2.1-m09-javadoc.jar" checksum="c05a62ceb2e570d8bcca220c9c3f9269"/>
       </download>
    </project>
    
