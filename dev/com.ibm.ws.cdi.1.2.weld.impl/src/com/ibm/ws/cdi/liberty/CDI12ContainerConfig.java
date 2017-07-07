@@ -143,7 +143,7 @@ public class CDI12ContainerConfig {
 
         if (tc.isWarningEnabled() && ! hasLoggedNoImplicitMsg && ! enableImplicitBeanArchivesValue) {
             hasLoggedNoImplicitMsg = true;
-            Tr.warning(tc, "implicit.bean.validation.disabled.CWOWB1009W");
+            Tr.warning(tc, "implicit.bean.scanning.disabled.CWOWB1009W");
         }
 
         return !enableImplicitBeanArchivesValue;
