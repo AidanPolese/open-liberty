@@ -11,24 +11,6 @@
 
 task initialize {
     doLast {
-        // Clean local maven repositories
-        ant.delete { fileset ( dir : 'release' , includes : '**/*' , excludes : '.gitignore') }
-        file('release.mvn').delete()
-        ant.delete { fileset ( dir : 'local' , includes : '**/*' , excludes : '.gitignore') }
-        file('local.mvn').delete()
-
-        /* Property for git branch */
-        Properties props = new Properties()
-        props.setProperty('bGitBranch', branchName)
-
-        /* Property for Artifactory matrix parameters */
-        ext.matrixParams = ";GIT_BRANCH=master;GIT_FEATURE_BRANCH=${branchName}"
-        props.setProperty('matrixParams', matrixParams)
-
-        /* Write generated properties file */
-        File propsFile = new File('generated.properties')
-        props.store(propsFile.newWriter(), null)
-
         println "Gradle Initialized"
     }
 }

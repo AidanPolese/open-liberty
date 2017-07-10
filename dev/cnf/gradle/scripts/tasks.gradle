@@ -132,6 +132,7 @@ subprojects {
     dependsOn jar
     inputs.files(fileTree(dir: "${projectDir}", include: '*.feature')).skipWhenEmpty()
     outputs.dir "${rootDir}/build.image/wlp/lib/features"
+    outputs.dir "${buildDir}/repo"
     doLast {
       ant.taskdef(resource: 'com/ibm/ws/wlp/feature/tasks/default.properties') {
         classpath {
@@ -148,19 +149,21 @@ subprojects {
         }
       }
       new File("${rootDir}/build.image/wlp/lib/features").mkdirs()
+      new File("${buildDir}/repo").mkdirs()
       fileTree(dir: "${projectDir}", include: '*.feature').visit { featureFile ->
         if (featureFile.isDirectory()) { 
           return
         }
+
         ant.featureBnd(bnd: featureFile.name,
-                       createESA: "false",
+                       createESA: "true",
                        dir: "${rootDir}/build.image/wlp",
                        esaDir: "${buildDir}/repo",
                        createFor: "${bnd.gaOrBeta}",
                        buildType: "${bnd.gaOrBeta}",
                        junit: "${buildDir}/report/featureChecks.xml") {
           defaultEdition(licenseURL: "https://www.eclipse.org/legal/epl-v10.html",
-                         licensePath: "${rootDir}", // Must be a real path, does not need to have contents
+                         licensePath: "${rootDir}/build.image/license",
                          version: "${bnd.libertyRelease}",
                          licenseType: "EPL",
                          displayVersion: "OpenLiberty")
@@ -491,6 +494,21 @@ subprojects {
       }
       ant.portSelector(engineName: "${bnd.buildEngineName}", location: "${projectDir}/bin_test/unittestports.properties", jvmarg: 'jvmargPorts')
       jvmArgs ant.jvmargPorts.tokenize()
+    }
+  }
+
+  publishing {
+    publications {
+      // Publish each feature ESA
+      fileTree(dir: "${buildDir}/repo", include: '*.esa').visit { esa ->
+        if (esa.isDirectory()) return
+        def featureName = esa.name.substring(0, esa.name.size()-4);
+        maven(MavenPublication) {
+          artifactId featureName
+          version project.version
+          artifact "${buildDir}/repo/${featureName}" + ".esa"
+        }
+      }
     }
   }
 
