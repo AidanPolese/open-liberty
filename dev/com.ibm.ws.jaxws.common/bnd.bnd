@@ -174,9 +174,11 @@ Include-Resource: \
 
 instrument.classesExcludes: com/ibm/ws/jaxws/internal/resources/*.class
 
--buildpath: \
+-buildpath.bootclasspath: \
 	com.ibm.websphere.javaee.jaxb.2.2;version=latest,\
-	com.ibm.websphere.javaee.jaxws.2.2;version=latest,\
+	com.ibm.websphere.javaee.jaxws.2.2;version=latest
+
+-buildpath: \
 	com.ibm.websphere.appserver.spi.logging;version=latest,\
 	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
 	com.ibm.websphere.appserver.api.kernel.service;version=latest,\
