@@ -260,7 +260,7 @@ public final class ResourceUtils {
                 if (resources.containsKey(rClassName)) {
                     ClassResourceInfo subCri = rClassName.equals(model.getName()) ? cri
                         : createServiceClassResourceInfo(resources, resources.get(rClassName),
-                                                                                                                         actualMethod.getReturnType(), false, enableStatic, bus);
+                                                         actualMethod.getReturnType(), false, enableStatic, bus);
                     if (subCri != null) {
                         cri.addSubClassResourceInfo(subCri);
                         md.bind(ori, actualMethod);
@@ -330,6 +330,9 @@ public final class ResourceUtils {
                 if (httpMethod == null) {
                     // subresource locator
                     Class<?> subClass = m.getReturnType();
+                    if (subClass == Class.class) {
+                        subClass = InjectionUtils.getActualType(m.getGenericReturnType());
+                    }
                     if (enableStatic) {
                         ClassResourceInfo subCri = cri.findResource(subClass, subClass);
                         if (subCri == null) {
