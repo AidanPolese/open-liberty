@@ -5,7 +5,7 @@ Bundle-SymbolicName: com.ibm.websphere.org.eclipse.microprofile.health.1.0; sing
 
 Import-Package: *
 
-Export-Package: org.eclipse.microprofile.health
+Export-Package: org.eclipse.microprofile.health;version=1.0
 
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version>=1.8))"
 
