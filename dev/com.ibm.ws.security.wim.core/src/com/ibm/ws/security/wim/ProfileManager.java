@@ -2638,13 +2638,22 @@ public class ProfileManager implements ProfileServiceLite {
 
         AuditManager auditManager = new AuditManager();
 
+        // for audit reporting purposes, only if we have one repository configured, else we have to rely on a valid parentDN to get to the
+        // correct repositoryId
+        if (repositoryManager.getNumberOfRepositories() == 1) {
+            targetReposId = repositoryManager.getRepoIds().get(0);
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.debug(tc, "targetRepostID = ", targetReposId);
+        }
+
         if (entities.size() == 0) {
-            Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, getRealmName(root), created, Integer.valueOf("201"));
+            Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, getRealmName(root), root, Integer.valueOf("201"));
 
             throw new EntityNotFoundException(WIMMessageKey.MISSING_ENTITY_DATA_OBJECT, Tr.formatMessage(tc, WIMMessageKey.MISSING_ENTITY_DATA_OBJECT,
                                                                                                          WIMMessageHelper.generateMsgParms(RepositoryManager.ACTION_CREATE)));
         } else if (entities.size() > 1) {
-            Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, getRealmName(root), created, Integer.valueOf("202"));
+            Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, getRealmName(root), root, Integer.valueOf("202"));
 
             throw new OperationNotSupportedException(WIMMessageKey.ACTION_MULTIPLE_ENTITIES_SPECIFIED, Tr.formatMessage(tc, WIMMessageKey.ACTION_MULTIPLE_ENTITIES_SPECIFIED,
                                                                                                                         WIMMessageHelper.generateMsgParms(RepositoryManager.ACTION_CREATE)));
@@ -2677,25 +2686,34 @@ public class ProfileManager implements ProfileServiceLite {
                         // get parent unique name
                         parentDN = getUniqueNameByUniqueId(parentID, false, null);
                         if (parentDN == null || parentDN.length() == 0) {
-                            if (entity != null && entity.getIdentifier() != null)
+                            if (entity != null && entity.getIdentifier() != null) {
+                                if (tc.isDebugEnabled())
+                                    Tr.debug(tc, "entity not null, parentDN null");
                                 Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, entity.getIdentifier().getUniqueName(),
-                                            realmName, created,
+                                            realmName, root,
                                             Integer.valueOf("205"));
-                            else
-                                Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, created,
+                            } else {
+                                if (tc.isDebugEnabled())
+                                    Tr.debug(tc, "entity null, parentDN null");
+                                Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, root,
                                             Integer.valueOf("205"));
+                            }
                             throw new InvalidUniqueIdException(WIMMessageKey.INVALID_PARENT_UNIQUE_ID, Tr.formatMessage(tc, WIMMessageKey.INVALID_PARENT_UNIQUE_ID,
                                                                                                                         WIMMessageHelper.generateMsgParms(parentID)));
                         }
                     }
                 }
             } else {
-                if (entity != null && entity.getIdentifier() != null)
+                if (entity != null && entity.getIdentifier() != null) {
+                    if (tc.isDebugEnabled())
+                        Tr.debug(tc, "parent.isSetIdentifier null, entity not null");
                     Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, entity.getIdentifier().getUniqueName(), realmName,
-                                created, Integer.valueOf("205"));
-                else
-                    Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, created, Integer.valueOf("205"));
-
+                                root, Integer.valueOf("205"));
+                } else {
+                    if (tc.isDebugEnabled())
+                        Tr.debug(tc, "parent.isSetIdentifier null, entity null");
+                    Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, root, Integer.valueOf("205"));
+                }
                 throw new InvalidUniqueIdException(WIMMessageKey.INVALID_PARENT_UNIQUE_ID, Tr.formatMessage(tc, WIMMessageKey.INVALID_PARENT_UNIQUE_ID,
                                                                                                             WIMMessageHelper.generateMsgParms(null)));
             }
@@ -2719,9 +2737,9 @@ public class ProfileManager implements ProfileServiceLite {
         if (parentDN == null) {
             if (entity != null && entity.getIdentifier() != null)
                 Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, entity.getIdentifier().getUniqueName(), realmName,
-                            created, Integer.valueOf("206"));
+                            root, Integer.valueOf("206"));
             else
-                Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, created, Integer.valueOf("206"));
+                Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, root, Integer.valueOf("206"));
 
             throw new DefaultParentNotFoundException(WIMMessageKey.DEFAULT_PARENT_NOT_FOUND, Tr.formatMessage(tc, WIMMessageKey.DEFAULT_PARENT_NOT_FOUND,
                                                                                                               WIMMessageHelper.generateMsgParms(qualifiedEntityType, realmName)));
@@ -2730,9 +2748,9 @@ public class ProfileManager implements ProfileServiceLite {
         if (!getConfigManager().isUniqueNameInRealm(parentDN, realmName)) {
             if (entity != null && entity.getIdentifier() != null)
                 Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, entity.getIdentifier().getUniqueName(), realmName,
-                            created, Integer.valueOf("204"));
+                            root, Integer.valueOf("204"));
             else
-                Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, created, Integer.valueOf("204"));
+                Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, root, Integer.valueOf("204"));
 
             throw new EntityNotInRealmScopeException(WIMMessageKey.ENTITY_NOT_IN_REALM_SCOPE, Tr.formatMessage(tc, WIMMessageKey.ENTITY_NOT_IN_REALM_SCOPE,
                                                                                                                WIMMessageHelper.generateMsgParms(parentDN, realmName)));
@@ -2753,8 +2771,10 @@ public class ProfileManager implements ProfileServiceLite {
             if (entityUniqueName != null && parentDN != null) {
                 if (entityUniqueName.length() < parentDN.length()
                     || !entityUniqueName.endsWith(parentDN)) {
+                    if (tc.isDebugEnabled())
+                        Tr.debug(tc, "entity not being created under the right parent");
                     Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, entity.getIdentifier().getUniqueName(), realmName,
-                                created, Integer.valueOf("205"));
+                                root, Integer.valueOf("205"));
 
                     throw new InvalidUniqueIdException(WIMMessageKey.INVALID_PARENT_UNIQUE_ID, Tr.formatMessage(tc, WIMMessageKey.INVALID_PARENT_UNIQUE_ID,
                                                                                                                 WIMMessageHelper.generateMsgParms(parentDN)));
@@ -2790,7 +2810,7 @@ public class ProfileManager implements ProfileServiceLite {
                         boolean crossRepos = repositoryManager.canGroupAcceptMember(targetReposId, reposId);
                         if (!(crossRepos || targetReposId.equalsIgnoreCase(reposId))) {
                             Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, entity.getIdentifier().getUniqueName(),
-                                        realmName, created,
+                                        realmName, root,
                                         Integer.valueOf("207"));
                             throw new OperationNotSupportedException(WIMMessageKey.MISSING_REPOSITORIES_FOR_GROUPS_CONFIGURATION, Tr.formatMessage(tc,
                                                                                                                                                    WIMMessageKey.MISSING_REPOSITORIES_FOR_GROUPS_CONFIGURATION,
@@ -2833,9 +2853,9 @@ public class ProfileManager implements ProfileServiceLite {
         if (!SchemaConstants.DO_PERSON_ACCOUNT.equalsIgnoreCase(qualifiedEntityType) && !SchemaConstants.DO_GROUP.equalsIgnoreCase(qualifiedEntityType)) {
             if (entity != null && entity.getIdentifier() != null)
                 Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, entity.getIdentifier().getUniqueName(), realmName,
-                            created, Integer.valueOf("208"));
+                            root, Integer.valueOf("208"));
             else
-                Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, created, Integer.valueOf("208"));
+                Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, root, Integer.valueOf("208"));
 
             throw new EntityTypeNotSupportedException(WIMMessageKey.ENTITY_TYPE_NOT_SUPPORTED, Tr.formatMessage(tc, WIMMessageKey.ENTITY_TYPE_NOT_SUPPORTED,
                                                                                                                 WIMMessageHelper.generateMsgParms(qualifiedEntityType)));
@@ -2844,9 +2864,9 @@ public class ProfileManager implements ProfileServiceLite {
         if (entity.getIdentifier() == null || entity.getIdentifier().getUniqueName() == null) {
             if (entity != null && entity.getIdentifier() != null)
                 Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, entity.getIdentifier().getUniqueName(), realmName,
-                            created, Integer.valueOf("203"));
+                            root, Integer.valueOf("203"));
             else
-                Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, created, Integer.valueOf("203"));
+                Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, root, Integer.valueOf("203"));
             throw new EntityIdentifierNotSpecifiedException(WIMMessageKey.ENTITY_IDENTIFIER_NOT_SPECIFIED, Tr.formatMessage(tc, WIMMessageKey.ENTITY_IDENTIFIER_NOT_SPECIFIED));
         }
 
