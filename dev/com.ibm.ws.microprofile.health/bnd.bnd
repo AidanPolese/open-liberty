@@ -1,0 +1,36 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+javac.source: 1.8
+javac.target: 1.8
+
+Bundle-Name: com.ibm.ws.microprofile.health
+Bundle-SymbolicName: com.ibm.ws.microprofile.health
+
+Bundle-Description:MicroProfile Health 1.0 impl, version ${bVersion}
+
+WS-TraceGroup: HEALTH
+
+-dsannotations-inherit: true
+
+Import-Package: *
+
+Private-Package: \
+    com.ibm.ws.microprofile.health.resources, \
+    com.ibm.ws.microprofile.health.impl
+
+Include-Resource: \
+  
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+
+-buildpath: \
+        ${javac.bootclasspath.java8}, \
+        com.ibm.ws.logging;version=latest, \
+        org.eclipse.osgi;version=latest, \
+        com.ibm.websphere.org.osgi.core;version=latest, \
+        com.ibm.websphere.org.osgi.service.component;version=latest, \
+        com.ibm.wsspi.org.osgi.service.component.annotations;version=latest, \
+        com.ibm.websphere.org.eclipse.microprofile.health.1.0;version=latest, \
+        com.ibm.ws.kernel.service;version=latest, \
+        com.ibm.websphere.javaee.annotation.1.2;version=latest, \
+        com.ibm.ws.org.osgi.annotation.versioning;version=latest

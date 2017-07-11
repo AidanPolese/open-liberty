@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="fat/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/ant_build/lib/junit.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/fattest.simplicity"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.websphere.javaee.servlet.3.1"/>
+	<classpathentry kind="src" path="/com.ibm.websphere.org.eclipse.microprofile.health.1.0"/>
+	<classpathentry kind="src" path="/com.ibm.websphere.javaee.ejb.3.2"/>
+	<classpathentry kind="src" path="/com.ibm.websphere.javaee.annotation.1.2"/>
+	<classpathentry kind="src" path="/com.ibm.ws.security"/>
+	<classpathentry kind="src" path="/com.ibm.websphere.security"/>
+	<classpathentry kind="src" path="/com.ibm.websphere.javaee.concurrent.1.0"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.websphere.javaee.cdi.1.2"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
