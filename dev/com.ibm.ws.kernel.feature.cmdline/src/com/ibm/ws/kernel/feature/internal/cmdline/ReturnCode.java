@@ -18,6 +18,7 @@ import com.ibm.ws.kernel.boot.cmdline.ExitCode;
 public enum ReturnCode implements ExitCode {
     OK(0),
     // Jump a few numbers for error return codes
+    USER_FEATURE_REPO_TYPE_INVALID(36),
     BAD_ARGUMENT(20),
     RUNTIME_EXCEPTION(21),
     ALREADY_EXISTS(22),
@@ -27,8 +28,7 @@ public enum ReturnCode implements ExitCode {
     PRODUCT_EXT_NOT_FOUND(26),
     PRODUCT_EXT_NOT_DEFINED(27),
     PRODUCT_EXT_NO_FEATURES_FOUND(28),
-    NOT_VALID_FOR_CURRENT_PRODUCT(29),
-    USER_FEATURE_REPO_TYPE_INVALID(36);
+    NOT_VALID_FOR_CURRENT_PRODUCT(29);
 
     final int val;
 
