@@ -1,0 +1,9 @@
+-include ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.appserver.mpHealth-1.0
+
+-buildpath: \
+	com.ibm.websphere.org.eclipse.microprofile.health.1.0;version=latest, \
+	com.ibm.ws.microprofile.health;version=latest
+
