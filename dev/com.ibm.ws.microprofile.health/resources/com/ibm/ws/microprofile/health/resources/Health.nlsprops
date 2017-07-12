@@ -74,6 +74,6 @@
 #-----------------------------------------------------------------------------------------------------------------------------
 
 # A Health API error has occurred: {0}
-temporary.CWMH9999E=CWMH9999E: A Health API error has occurred: {0}
+temporary.CWMH9999E=CWMH9999E: The following Health API error has occurred: {0}
 temporary.CWMH9999E.explanation=A Health API error has occurred that prevents normal operation.
 temporary.CWMH9999E.useraction=Review the FFDC logs and exception text to identify the problem.
