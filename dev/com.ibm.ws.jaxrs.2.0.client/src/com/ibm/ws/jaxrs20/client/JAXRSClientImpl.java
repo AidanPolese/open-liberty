@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.UriBuilder;
@@ -28,6 +29,8 @@ import org.apache.cxf.jaxrs.client.spec.ClientImpl;
 import org.apache.cxf.jaxrs.client.spec.TLSConfiguration;
 import org.apache.cxf.phase.Phase;
 
+import com.ibm.websphere.ras.ProtectedString;
+import com.ibm.websphere.ras.annotation.Sensitive;
 import com.ibm.ws.jaxrs20.bus.LibertyApplicationBus;
 import com.ibm.ws.jaxrs20.client.bus.LibertyJAXRSClientBusFactory;
 import com.ibm.ws.jaxrs20.client.configuration.LibertyJaxRsClientProxyInterceptor;
@@ -92,13 +95,13 @@ public class JAXRSClientImpl extends ClientImpl {
         //add Liberty Jax-RS Client Proxy Interceptor to configure the proxy
         ccfg.getOutInterceptors().add(new LibertyJaxRsClientProxyInterceptor(Phase.PRE_LOGICAL));
 
-        //add Liberty Ltpa handler Interceptor to check if is using ltpa token for sso 
+        //add Liberty Ltpa handler Interceptor to check if is using ltpa token for sso
         ccfg.getOutInterceptors().add(new LibertyJaxRsClientLtpaInterceptor());
 
-        //add Liberty Jax-RS OAuth Interceptor to check whether it has to propagate OAuth/access token  
+        //add Liberty Jax-RS OAuth Interceptor to check whether it has to propagate OAuth/access token
         ccfg.getOutInterceptors().add(new LibertyJaxRsClientOAuthInterceptor());
 
-        //add  Interceptor to check whether it has to propagate SAML token for sso 
+        //add  Interceptor to check whether it has to propagate SAML token for sso
         ccfg.getOutInterceptors().add(new PropagationHandler());
 
         /**
@@ -174,5 +177,15 @@ public class JAXRSClientImpl extends ClientImpl {
      */
     public Map<String, LibertyApplicationBus> getBusCache() {
         return busCache;
+    }
+
+    @Override
+    public Client property(String name, @Sensitive Object value) {
+        // need to convert proxy password to ProtectedString
+        if (JAXRSClientConstants.PROXY_PASSWORD.equals(name) && value != null &&
+            !(value instanceof ProtectedString)) {
+            return super.property(name, new ProtectedString(value.toString().toCharArray()));
+        }
+        return super.property(name, value);
     }
 }

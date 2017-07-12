@@ -50,8 +50,11 @@ import org.apache.cxf.jaxrs.model.FilterProviderInfo;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.https.SSLUtils;
 
+import com.ibm.websphere.ras.ProtectedString;
+import com.ibm.websphere.ras.annotation.Sensitive;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.jaxrs20.clientconfig.JAXRSClientConfigHolder;
+import com.ibm.ws.jaxrs20.clientconfig.JAXRSClientConstants;
 
 /*
  * This class overrides the same "pure" Apache class found in the libs of com.ibm.ws.org.apache.cxf.jaxrs
@@ -182,8 +185,13 @@ public class ClientImpl implements Client {
     }
 
     @Override
-    public Client property(String name, Object value) {
+    public Client property(String name, @Sensitive Object value) {
         checkClosed();
+        // Liberty change start need to convert proxy password to ProtectedString
+        if (JAXRSClientConstants.PROXY_PASSWORD.equals(name) && value != null &&
+            !(value instanceof ProtectedString)) {
+            return configImpl.property(name, new ProtectedString(value.toString().toCharArray()));
+        } // Liberty change end
         return configImpl.property(name, value);
     }
 
@@ -512,8 +520,13 @@ public class ClientImpl implements Client {
         }
 
         @Override
-        public WebTarget property(String name, Object value) {
+        public WebTarget property(String name, @Sensitive Object value) {
             checkClosed();
+            // need to convert proxy password to ProtectedString - Liberty change start
+            if (JAXRSClientConstants.PROXY_PASSWORD.equals(name) && value != null &&
+                !(value instanceof ProtectedString)) {
+                return configImpl.property(name, new ProtectedString(value.toString().toCharArray()));
+            } // Liberty change end
             return configImpl.property(name, value);
         }
 
