@@ -7,17 +7,18 @@
             contact="andymc@us.ibm.com" 
             encryption="no">
       <download location="http://repository.apache.org/snapshots/org/apache/cxf/apache-cxf/3.2.0-SNAPSHOT/apache-cxf-3.2.0-20170630.112935-442.zip">   
-         <file basename="cxf-core-3.2.0-SNAPSHOT.jar"                      checksum="7adffb426f1dfa45f2ce04399ba32bb9"/>
-         <file basename="cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar"         checksum="cd91b79967473113eac10e97eba9a0ef"/>
-         <file basename="cxf-rt-rs-client-3.2.0-SNAPSHOT.jar"              checksum="da236336a8339c13e854544395692e92"/>
-         <file basename="cxf-rt-rs-service-description-3.2.0-SNAPSHOT.jar" checksum="36ddfef22b5c1cb2471a506d64780986"/>
-         <file basename="cxf-rt-transports-http-3.2.0-SNAPSHOT.jar"        checksum="0e03001b1c68ef39f9f7ae7e560f8ffa"/>
-         <file basename="cxf-tools-common-3.2.0-SNAPSHOT.jar"              checksum="a101ede71ef4e03f9816cf6e694d8829"/>
-         <file basename="cxf-tools-wadlto-jaxrs-3.2.0-SNAPSHOT.jar"        checksum="c064b32ad021632f5e9bf48e52861f73"/>
+         <file basename="cxf-core-3.2.0-SNAPSHOT.jar"                      checksum="7761cbfa29c46d0c92b56e53fa793d7d"/>
+         <file basename="cxf-rt-features-clustering-3.2.0-SNAPSHOT.jar"    checksum="78b89b7e69e2d111d318388bc565feab"/>
+         <file basename="cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar"         checksum="b3a56d11b24136874e920a5ddbd92829"/>
+         <file basename="cxf-rt-rs-client-3.2.0-SNAPSHOT.jar"              checksum="c5b26fe0fc143029ebd229748c4bc9cb"/>
+         <file basename="cxf-rt-rs-service-description-3.2.0-SNAPSHOT.jar" checksum="d84c597048f88623eddb871218c1565b"/>
+         <file basename="cxf-rt-transports-http-3.2.0-SNAPSHOT.jar"        checksum="08d050e5f927f3fd2dd44db6d5041b59"/>
+         <file basename="cxf-tools-common-3.2.0-SNAPSHOT.jar"              checksum="cef755bdb7719d76b7eb3c2f52dc9e63"/>
+         <file basename="cxf-tools-wadlto-jaxrs-3.2.0-SNAPSHOT.jar"        checksum="7527ecb201f13aae5f5c9077c3ecbb27"/>
          
       </download>
       <download location="http://repository.apache.org/snapshots/org/apache/cxf/apache-cxf/3.2.0-SNAPSHOT/">
-         <file basename="apache-cxf-3.2.0-20170630.112935-442-src.zip"     checksum="60d6027311a0a1e1c30b4e697292e7ea"/>
+         <file basename="apache-cxf-3.2.0-20170630.112935-442-src.zip"     checksum="b014e6e75b7ab148e082ef06b9b864bc"/>
       </download>
    </project>
    <clearencehistory/>

@@ -339,7 +339,8 @@ public class ClientImpl implements Client {
                 cxfFeature.initialize(clientCfg, clientCfg.getBus());
             }
             // Start building the invocation
-            return new InvocationBuilderImpl(WebClient.fromClient(targetClient));
+            return new InvocationBuilderImpl(WebClient.fromClient(targetClient),
+                                             getConfiguration());
         }
 
         private void setConnectionProperties(Map<String, Object> configProps, ClientConfiguration clientCfg) {
@@ -380,7 +381,7 @@ public class ClientImpl implements Client {
                 }
                 bean.setThreadSafe(threadSafe);
                 if (threadSafe) {
-                    Integer cleanupPeriod = getIntValue(configProps.get(THREAD_SAFE_CLIENT_PROP));
+                    Integer cleanupPeriod = getIntValue(configProps.get(THREAD_SAFE_CLIENT_STATE_CLEANUP_PROP));
                     if (cleanupPeriod == null) {
                         cleanupPeriod = THREAD_SAFE_CLIENT_STATE_CLEANUP_PERIOD;
                     }

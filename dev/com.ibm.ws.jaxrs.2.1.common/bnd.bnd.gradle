@@ -12,8 +12,6 @@ Bundle-ClassPath:  ., lib/cxf-core-3.2.0-SNAPSHOT.jar, lib/cxf-rt-frontend-jaxrs
 # jaxrs-2.1 is part of EE7 and therefore requires java 1.8
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
 
-# IBM-Default-Config: OSGI-INF/wlp/defaultInstances.xml
-
 WS-TraceGroup: JAXRS
 
 -nouses: false
@@ -22,7 +20,7 @@ WS-TraceGroup: JAXRS
    !org.apache.cxf.jaxrs.validation, \
    !org.apache.cxf.databinding;version=3.2.0-SNAPSHOT, \
    org.apache.cxf.*;version=3.2.0-SNAPSHOT, \
-
+   
 Export-Package: \
    META-INF.cxf, \
    com.ibm.ws.jaxrs20, \
@@ -107,6 +105,7 @@ Import-Package: \
  com.ibm.json.xml, \
  com.ibm.json.java, \
  !org.osgi.service.http.*, \
+ org.qi4j.*;resolution:=optional, \
  *
 
 # Use dynamicImport-Package for JAXB APIs, with this, Equonix will have a chance to wire
@@ -128,15 +127,13 @@ Private-Package:\
    com.ibm.ws.jaxrs20.*, \
 
 Include-Resource: \
- OSGI-INF=resources/OSGI-INF, \
- OSGI-INF/metatype/metatype.xml=../com.ibm.ws.jaxrs.2.0.common/resources/OSGI-INF/metatype/metatype.xml, \
-  lib/cxf-core-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.2.0-SNAPSHOT.jar, \
-  lib/cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar, \
-  lib/cxf-rt-rs-client-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-client-3.2.0-SNAPSHOT.jar, \
-  lib/cxf-rt-transports-http-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-transports-http-3.2.0-SNAPSHOT.jar, \
-  lib/cxf-tools-common-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-common-3.2.0-SNAPSHOT.jar, \
-  lib/cxf-tools-wadlto-jaxrs-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-wadlto-jaxrs-3.2.0-SNAPSHOT.jar, \
-  lib/cxf-rt-rs-service-description-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-service-description-3.2.0-SNAPSHOT.jar, \
+  lib/cxf-core-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-core-3.2.0-SNAPSHOT.jar, \
+  lib/cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar, \
+  lib/cxf-rt-rs-client-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-rs-client-3.2.0-SNAPSHOT.jar, \
+  lib/cxf-rt-transports-http-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-transports-http-3.2.0-SNAPSHOT.jar, \
+  lib/cxf-tools-common-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-tools-common-3.2.0-SNAPSHOT.jar, \
+  lib/cxf-tools-wadlto-jaxrs-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-tools-wadlto-jaxrs-3.2.0-SNAPSHOT.jar, \
+  lib/cxf-rt-rs-service-description-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-rs-service-description-3.2.0-SNAPSHOT.jar, \
   lib/jackson-core-asl-1.6.2.jar=../com.ibm.ws.org.codehaus.jackson/lib/jackson-core-asl-1.6.2.jar, \
   lib/jackson-jaxrs-1.6.2.jar=../com.ibm.ws.org.codehaus.jackson/lib/jackson-jaxrs-1.6.2.jar, \
   lib/jackson-mapper-asl-1.6.2.jar=../com.ibm.ws.org.codehaus.jackson/lib/jackson-mapper-asl-1.6.2.jar, \
@@ -185,4 +182,5 @@ instrument.classesExcludes: com/ibm/ws/jaxrs20/internal/resources/*.class
 	com.ibm.ws.kernel.feature,\
 	com.ibm.ws.kernel.service,\
 	com.ibm.websphere.appserver.spi.threading, \
-	com.ibm.ws.org.osgi.annotation.versioning;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest, \
+	com.ibm.ws.jaxrs.2.x.config;version=latest
