@@ -463,6 +463,7 @@ public class URBridge implements Repository {
     public Root get(Root root) throws WIMException {
         Root returnRoot = new Root();
         String uniqueName = null;
+        AuditManager auditManager = new AuditManager();
         try {
             List<String> attrList = null;
             List<String> grpMbrAttrs = null;
@@ -531,12 +532,18 @@ public class URBridge implements Repository {
                 }
             }
         } catch (EntityNotFoundException e) {
+            Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "get", reposId, uniqueName, userRegistry.getRealm(), returnRoot,
+                        Integer.valueOf("212"));
+
             throw e;
         } catch (Exception e) {
             throw new WIMException(e);
         }
 
         setReturnContext(root, returnRoot);
+
+        Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "get", reposId, uniqueName, userRegistry.getRealm(), returnRoot, Integer.valueOf("200"));
+
         return returnRoot;
     }
 
@@ -804,7 +811,16 @@ public class URBridge implements Repository {
     @Override
     public Root search(Root root) throws WIMException {
         final String METHODNAME = "search";
+        String uniqueName = null;
         Root returnRoot = new Root();
+
+        AuditManager auditManager = new AuditManager();
+
+        List<Entity> entitys = root.getEntities();
+        Entity entitee = entitys.get(0);
+        IdentifierType identifier = entitee.getIdentifier();
+        if (identifier != null)
+            uniqueName = identifier.getUniqueName();
 
         try {
             int countLimit = 0;
@@ -818,6 +834,8 @@ public class URBridge implements Repository {
 
             String expression = searchControl.getExpression();
             if (expression == null || expression.length() == 0) {
+                Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "search", reposId, uniqueName, userRegistry.getRealm(), returnRoot,
+                            Integer.valueOf("217"));
                 throw new SearchControlException(WIMMessageKey.MISSING_SEARCH_EXPRESSION, Tr.formatMessage(tc, WIMMessageKey.MISSING_SEARCH_EXPRESSION));
             }
 
@@ -947,9 +965,13 @@ public class URBridge implements Repository {
         } catch (WIMException we) {
             throw we;
         } catch (Exception e) {
+            Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "search", reposId, uniqueName, userRegistry.getRealm(), returnRoot,
+                        Integer.valueOf("221"));
             throw new WIMApplicationException(WIMMessageKey.ENTITY_SEARCH_FAILED, Tr.formatMessage(tc, WIMMessageKey.ENTITY_SEARCH_FAILED,
                                                                                                    WIMMessageHelper.generateMsgParms(e.toString())));
         }
+        Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "search", reposId, uniqueName, userRegistry.getRealm(), returnRoot,
+                    Integer.valueOf("200"));
 
         return returnRoot;
     }
@@ -1315,7 +1337,7 @@ public class URBridge implements Repository {
     public Root delete(Root root) throws WIMException {
         AuditManager auditManager = new AuditManager();
         Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "delete", auditManager.getRepositoryId(), auditManager.getRepositoryUniqueName(),
-                    auditManager.getRepositoryRealm(), root, Integer.valueOf("209"));
+                    userRegistry.getRealm(), root, Integer.valueOf("209"));
 
         throw new WIMApplicationException(WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY, Tr.formatMessage(tc, WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY,
                                                                                                                WIMMessageHelper.generateMsgParms(reposId)));
@@ -1325,7 +1347,7 @@ public class URBridge implements Repository {
     public Root create(Root root) throws WIMException {
         AuditManager auditManager = new AuditManager();
         Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", auditManager.getRepositoryId(), auditManager.getRepositoryUniqueName(),
-                    auditManager.getRepositoryRealm(), root, Integer.valueOf("209"));
+                    userRegistry.getRealm(), root, Integer.valueOf("209"));
 
         throw new WIMApplicationException(WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY, Tr.formatMessage(tc, WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY,
                                                                                                                WIMMessageHelper.generateMsgParms(reposId)));
@@ -1335,7 +1357,7 @@ public class URBridge implements Repository {
     public Root update(Root root) throws WIMException {
         AuditManager auditManager = new AuditManager();
         Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "update", auditManager.getRepositoryId(), auditManager.getRepositoryUniqueName(),
-                    auditManager.getRepositoryRealm(), root, Integer.valueOf("209"));
+                    userRegistry.getRealm(), root, Integer.valueOf("209"));
 
         throw new WIMApplicationException(WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY, Tr.formatMessage(tc, WIMMessageKey.CANNOT_WRITE_TO_READ_ONLY_REPOSITORY,
                                                                                                                WIMMessageHelper.generateMsgParms(reposId)));

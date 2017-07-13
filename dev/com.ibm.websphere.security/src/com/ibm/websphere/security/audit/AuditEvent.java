@@ -128,6 +128,18 @@ public class AuditEvent {
     public static final String REASON_TYPE_MISSING_REPOSITORIES_FOR_GROUPS_CONFIGURATION = "Repository for groups is missing or indicates groups are in cross repositories"; // 207
     public static final String REASON_TYPE_ENTITY_TYPE_NOT_SUPPORTED = "Entity type not supported"; // 208
     public static final String REASON_TYPE_CANNOT_WRITE_TO_READ_ONLY_REPOSITORY = "Cannot write to read only repository"; // 209
+    public static final String REASON_TYPE_EXTERNAL_NAME_CONTROL_NOT_FOUND = ""; // 210
+    public static final String REASON_TYPE_INVALID_IDENTIFIER = "Invalid identifier"; // 211
+    public static final String REASON_TYPE_ENTITY_NOT_FOUND = "Entity not found"; // 212
+    public static final String REASON_TYPE_MISSING_SORT_KEY = "Missing sort key"; // 213
+    public static final String REASON_TYPE_MISSING_SEARCH_CONTROL = "Missing search control"; // 214
+    public static final String REASON_TYPE_INCORRECT_SEARCH_LIMIT = "Incorrect search limit"; // 215
+    public static final String REASON_TYPE_CANNOT_SPECIFY_COUNT_LIMIT = "Cannot specify count limit"; // 216
+    public static final String REASON_TYPE_MISSING_SEARCH_EXPRESSION = "Missing search expression"; // 217
+    public static final String REASON_TYPE_SEARCH_EXPRESSION_ERROR = "Search expression error"; // 218
+    public static final String REASON_TYPE_INVALID_SEARCH_EXPRESSION = "Invalid search expression"; // 219
+    public static final String REASON_TYPE_EXCEED_MAX_TOTAL_SEARCH_LIMIT = "Exceeding max total search limit"; // 220
+    public static final String REASON_TYPE_ENTITY_SEARCH_FAILED = "Entity search failed"; // 221
 
     /**
      * Outcomes
