@@ -8,7 +8,8 @@ Export-Package: \
 	javax.ws.rs.client,\
 	javax.ws.rs.container,\
 	javax.ws.rs.core,\
-	javax.ws.rs.ext
+	javax.ws.rs.ext,\
+	javax.ws.rs.sse
 
 Import-Package: \
  com.ibm.ws.jaxrs20.client; resolution:=optional, \
