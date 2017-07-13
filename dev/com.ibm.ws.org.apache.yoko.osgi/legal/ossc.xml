@@ -17,7 +17,7 @@
             license-type="Apachev2"
             contact="neil_richards@uk.ibm.com"
             encryption="no">
-      <download location="https://github.ibm.com/was-liberty-iiop/geronimo-yoko/commit/99e679ba071767a5b5bcd80029ccfe7c78ea0fec">
+      <download location="https://github.ibm.com/was-liberty-iiop/geronimo-yoko/commit/83593ba658653da15c81c444f7d400dc5630fdf2">
          <file basename="org.apache.yoko.osgi-1.5.SNAPSHOT.jar" checksum="14b95e2f3aff07ed82cad3b2d86263b1"/>
       </download>
    </project>
