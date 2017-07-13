@@ -23,6 +23,9 @@ import javax.ws.rs.client.ClientBuilder;
 import org.apache.cxf.jaxrs.client.spec.ClientBuilderImpl;
 import org.apache.cxf.jaxrs.client.spec.TLSConfiguration;
 
+import com.ibm.websphere.ras.ProtectedString;
+import com.ibm.websphere.ras.annotation.Sensitive;
+
 /**
  *
  */
@@ -81,5 +84,15 @@ public class JAXRSClientBuilderImpl extends ClientBuilderImpl {
         }
 
         return this;
+    }
+
+    @Override
+    public ClientBuilder property(String name, @Sensitive Object value) {
+        // need to convert proxy password to ProtectedString
+        if (JAXRSClientConstants.PROXY_PASSWORD.equals(name) && value != null &&
+            !(value instanceof ProtectedString)) {
+            return super.property(name, new ProtectedString(value.toString().toCharArray()));
+        }
+        return super.property(name, value);
     }
 }

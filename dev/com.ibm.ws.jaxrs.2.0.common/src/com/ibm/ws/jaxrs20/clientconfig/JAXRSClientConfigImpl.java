@@ -21,6 +21,7 @@ import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 
+import com.ibm.websphere.ras.ProtectedString;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 
@@ -78,6 +79,17 @@ public class JAXRSClientConfigImpl implements JAXRSClientConfig {
 
         while (it.hasNext()) {
             String key = it.next();
+            // special case for passwords - must be done before tracing
+            if (JAXRSClientConstants.PROXY_PASSWORD.equals(key) ||
+                "proxypassword".equalsIgnoreCase(key)) {
+                // convert String to ProtectedString
+                Object unprotectedPassword = props.get(key);
+                if (unprotectedPassword != null && !(unprotectedPassword instanceof ProtectedString)) {
+                    ProtectedString protectedPassword = new ProtectedString(unprotectedPassword.toString().toCharArray());
+                    props.put(key, protectedPassword);
+                }
+            }
+
             String newKey = null;
             if (debug) {
                 Tr.debug(tc, "key: " + key + " value: " + props.get(key));
@@ -109,6 +121,7 @@ public class JAXRSClientConfigImpl implements JAXRSClientConfig {
                     filteredProps.remove(newKey); // invalid token type, back it out.
                 }
             }
+
         }
         return filteredProps;
     }

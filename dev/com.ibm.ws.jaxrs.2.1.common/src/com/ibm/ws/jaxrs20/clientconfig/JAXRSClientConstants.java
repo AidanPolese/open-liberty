@@ -25,6 +25,10 @@ public class JAXRSClientConstants {
     public final static String PROXY_HOST = "com.ibm.ws.jaxrs.client.proxy.host";
     public final static String PROXY_PORT = "com.ibm.ws.jaxrs.client.proxy.port";
     public final static String PROXY_TYPE = "com.ibm.ws.jaxrs.client.proxy.type";
+    public final static String PROXY_AUTH_TYPE = "com.ibm.ws.jaxrs.client.proxy.authType";
+    public final static String PROXY_AUTH_TYPE_DEFAULT = "Basic";
+    public final static String PROXY_USERNAME = "com.ibm.ws.jaxrs.client.proxy.username";
+    public final static String PROXY_PASSWORD = "com.ibm.ws.jaxrs.client.proxy.password";
     public final static int PROXY_PORT_DEFAULT = 80;
     public final static String LTPA_HANDLER = "com.ibm.ws.jaxrs.client.ltpa.handler";
     public static final String OAUTH_HANDLER = "com.ibm.ws.jaxrs.client.oauth.sendToken";

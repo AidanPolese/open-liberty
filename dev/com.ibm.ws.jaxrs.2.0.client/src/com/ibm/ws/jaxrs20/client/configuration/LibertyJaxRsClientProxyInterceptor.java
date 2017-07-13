@@ -24,6 +24,7 @@ import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.apache.cxf.transports.http.configuration.ProxyServerType;
 
+import com.ibm.websphere.ras.ProtectedString;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
@@ -97,7 +98,7 @@ public class LibertyJaxRsClientProxyInterceptor extends AbstractPhaseInterceptor
         String type = toString(message.get(JAXRSClientConstants.PROXY_TYPE));
         String proxyAuthType = toString(message.get(JAXRSClientConstants.PROXY_AUTH_TYPE));
         String proxyAuthUser = toString(message.get(JAXRSClientConstants.PROXY_USERNAME));
-        String proxyAuthPW = toString(message.get(JAXRSClientConstants.PROXY_PASSWORD));
+        ProtectedString proxyAuthPW = (ProtectedString) message.get(JAXRSClientConstants.PROXY_PASSWORD);
 
         Conduit conduit = message.getExchange().getConduit(message);
 
@@ -113,7 +114,7 @@ public class LibertyJaxRsClientProxyInterceptor extends AbstractPhaseInterceptor
     }
 
     private void configClientProxy(HTTPConduit httpConduit, String host, String port, String type, String proxyAuthType,
-                                   String proxyAuthUser, String proxyAuthPW) {
+                                   String proxyAuthUser, ProtectedString proxyAuthPW) {
 
         int iPort = JAXRSClientConstants.PROXY_PORT_DEFAULT;
         if (port != null) {
@@ -174,7 +175,7 @@ public class LibertyJaxRsClientProxyInterceptor extends AbstractPhaseInterceptor
             }
 
             if (authPolicy != null && proxyAuthPW != null) {
-                authPolicy.setPassword(proxyAuthPW);
+                authPolicy.setPassword(new String(proxyAuthPW.getChars()));
             } else if (proxyAuthPW == null) {
                 //TODO: make warning
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
