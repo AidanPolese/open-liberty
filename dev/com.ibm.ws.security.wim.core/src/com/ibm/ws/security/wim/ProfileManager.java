@@ -2698,6 +2698,7 @@ public class ProfileManager implements ProfileServiceLite {
 
     public Root createImpl(Root root) throws WIMException {
         Root created = null;
+        Root inRoot = root;
         String targetReposId = null;
 
         String realmName = getRealmName(root);
@@ -2779,11 +2780,11 @@ public class ProfileManager implements ProfileServiceLite {
                     if (tc.isDebugEnabled())
                         Tr.debug(tc, "parent.isSetIdentifier null, entity not null");
                     Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, entity.getIdentifier().getUniqueName(), realmName,
-                                root, Integer.valueOf("205"));
+                                inRoot, Integer.valueOf("205"));
                 } else {
                     if (tc.isDebugEnabled())
                         Tr.debug(tc, "parent.isSetIdentifier null, entity null");
-                    Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, root, Integer.valueOf("205"));
+                    Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, null, realmName, inRoot, Integer.valueOf("205"));
                 }
                 throw new InvalidUniqueIdException(WIMMessageKey.INVALID_PARENT_UNIQUE_ID, Tr.formatMessage(tc, WIMMessageKey.INVALID_PARENT_UNIQUE_ID,
                                                                                                             WIMMessageHelper.generateMsgParms(null)));
@@ -2845,7 +2846,7 @@ public class ProfileManager implements ProfileServiceLite {
                     if (tc.isDebugEnabled())
                         Tr.debug(tc, "entity not being created under the right parent");
                     Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "create", targetReposId, entity.getIdentifier().getUniqueName(), realmName,
-                                root, Integer.valueOf("205"));
+                                inRoot, Integer.valueOf("205"));
 
                     throw new InvalidUniqueIdException(WIMMessageKey.INVALID_PARENT_UNIQUE_ID, Tr.formatMessage(tc, WIMMessageKey.INVALID_PARENT_UNIQUE_ID,
                                                                                                                 WIMMessageHelper.generateMsgParms(parentDN)));
