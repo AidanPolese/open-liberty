@@ -668,10 +668,14 @@ public class ProfileManager implements ProfileServiceLite {
         }
 
         List<Entity> entitys = inRoot.getEntities();
-        Entity entitee = entitys.get(0);
-        IdentifierType identifier = entitee.getIdentifier();
-        if (identifier != null)
-            uniqueName = identifier.getUniqueName();
+        if (entitys != null && !entitys.isEmpty()) {
+            Entity entitee = entitys.get(0);
+            if (entitee != null) {
+                IdentifierType identifier = entitee.getIdentifier();
+                if (identifier != null)
+                    uniqueName = identifier.getUniqueName();
+            }
+        }
 
         String realmName = getRealmName(inRoot);
 
@@ -2699,6 +2703,11 @@ public class ProfileManager implements ProfileServiceLite {
     public Root createImpl(Root root) throws WIMException {
         Root created = null;
         Root inRoot = root;
+        if (root == null) {
+            if (tc.isDebugEnabled())
+                Tr.debug(tc, "createImpl, root is null");
+        }
+
         String targetReposId = null;
 
         String realmName = getRealmName(root);
