@@ -95,7 +95,7 @@ public class AppClassLoader extends ContainerClassLoader implements SpringLoader
     private final DeclaredApiAccess apiAccess;
     private final ClassGenerator generator;
     private final ConcurrentHashMap<String, ProtectionDomain> protectionDomains = new ConcurrentHashMap<String, ProtectionDomain>();
-    private final ClassLoader parent;
+    protected final ClassLoader parent;
 
     AppClassLoader(ClassLoader parent, ClassLoaderConfiguration config, List<Container> containers, DeclaredApiAccess access, ClassRedefiner redefiner, ClassGenerator generator) {
         super(containers, parent, redefiner);
