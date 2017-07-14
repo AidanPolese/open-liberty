@@ -54,6 +54,22 @@ if (repoCleanNeeded()) {
   props.store(propsFile.newWriter(), null)
 }
 
+def loadBuildProps() {
+  
+  if (System.properties['build.properties.path']!=null) {
+    def props = new Properties()
+	println "Loading properties from: " + System.properties['build.properties.path'] + " ["
+	file(System.properties['build.properties.path']).withInputStream { props.load(it) }
+	props.each { 
+	  println "Key: " +it.key + " Value: " + it.value
+	  gradle.ext.set(it.key, it.value) 
+    }
+	println "]"
+  }
+}
+
+loadBuildProps()
+
 def repoCleanNeeded() {
   if (!file("generated.properties").exists()) {
     return true
