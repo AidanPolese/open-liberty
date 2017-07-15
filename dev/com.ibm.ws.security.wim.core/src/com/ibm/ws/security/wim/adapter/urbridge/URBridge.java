@@ -826,10 +826,14 @@ public class URBridge implements Repository {
             restRequest = false;
 
         List<Entity> entitys = root.getEntities();
-        Entity entitee = entitys.get(0);
-        IdentifierType identifier = entitee.getIdentifier();
-        if (identifier != null)
-            uniqueName = identifier.getUniqueName();
+        if (entitys != null && !entitys.isEmpty()) {
+            Entity entitee = entitys.get(0);
+            if (entitee != null) {
+                IdentifierType identifier = entitee.getIdentifier();
+                if (identifier != null)
+                    uniqueName = identifier.getUniqueName();
+            }
+        }
 
         try {
             int countLimit = 0;
