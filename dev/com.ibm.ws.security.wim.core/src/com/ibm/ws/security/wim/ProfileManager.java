@@ -1189,8 +1189,18 @@ public class ProfileManager implements ProfileServiceLite {
             context.setValue("true");
             retRootDO.getContexts().add(context);
         }
+
+        if (uniqueName == null) {
+            List<Context> ctxs = inRoot.getContexts();
+            for (Context c : ctxs) {
+                if (c.getKey() == "useUserFilterForSearch" || c.getKey() == "useGroupFilterForSearch") {
+                    uniqueName = (String) c.getValue();
+                }
+            }
+        }
+
         if (restRequest)
-            Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "search", targetReposId, context.get("value"), realmName, retRootDO,
+            Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "search", targetReposId, uniqueName, realmName, retRootDO,
                         Integer.valueOf("200"));
 
         return retRootDO;
