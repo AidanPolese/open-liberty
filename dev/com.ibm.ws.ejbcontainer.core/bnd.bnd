@@ -15,10 +15,10 @@ instrument.disabled: true
 
 publish.wlp.jar.disabled: true
 
--buildpath.bootclasspath: ${javac.bootclasspath.1.7}
+-buildpath.bootclasspath: \
+	com.ibm.websphere.javaee.ejb.3.1;version=latest
 
 -buildpath: \
-	com.ibm.websphere.javaee.ejb.3.1;version=latest,\
 	com.ibm.ws.logging.core,\
 	com.ibm.ws.ejbcontainer.remote.portable.core;version=latest,\
 	com.ibm.ws.injection;version=latest,\

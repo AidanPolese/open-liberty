@@ -58,9 +58,8 @@ Private-Package:\
 instrument.classesExcludes: com/ibm/ws/jaxws/web/internal/resources/*.class
 
 -buildpath.bootclasspath: \
-	com.ibm.websphere.javaee.jaxb.2.2;version=latest;boot=true,\
-	com.ibm.websphere.javaee.jaxws.2.2;version=latest;boot=true,\
-	${javac.bootclasspath.${javac.source}}
+	com.ibm.websphere.javaee.jaxb.2.2;version=latest,\
+	com.ibm.websphere.javaee.jaxws.2.2;version=latest
 
 -buildpath: \
 	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-api-2.6.2-ibm-s20170216-1739.jar;version=file,\

@@ -16,8 +16,7 @@ instrument.disabled: true
 publish.wlp.jar.disabled: true
 
 -buildpath.bootclasspath: \
-	com.ibm.websphere.javaee.annotation.1.1;version=latest;boot=true,\
-	${javac.bootclasspath.${javac.source}}
+	com.ibm.websphere.javaee.annotation.1.1;version=latest
 
 -buildpath: \
 	com.ibm.ws.container.service;version=latest,\
