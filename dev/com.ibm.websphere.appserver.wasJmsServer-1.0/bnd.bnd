@@ -24,4 +24,5 @@ publish.feature.resources: **
 	com.ibm.ws.messaging.security.common;version=latest, \
 	com.ibm.ws.messaging.runtime;version=latest, \
 	com.ibm.ws.messaging.comms.client;version=latest, \
+	com.ibm.websphere.security;version=latest, \
 	com.ibm.websphere.appserver.api.messaging;version=latest
