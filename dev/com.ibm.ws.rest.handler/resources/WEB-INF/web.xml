@@ -19,8 +19,8 @@
     <servlet-name>RESTProxyServlet</servlet-name>
     <servlet-class>com.ibm.ws.rest.handler.internal.servlet.RESTProxyServlet</servlet-class>
     <multipart-config>
-        <max-file-size>200000000</max-file-size>
-        <max-request-size>512000000</max-request-size>
+        <max-file-size>1000000000</max-file-size>
+        <max-request-size>1000000000</max-request-size>
         <file-size-threshold>0</file-size-threshold>
     </multipart-config>
   </servlet>
