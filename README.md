@@ -1,42 +1,36 @@
+**logo goes here - should have this by end of week 7/21**
 # OpenLiberty
-[![Build Status](https://travis.ibm.com/was-liberty/open-liberty.svg?token=PsNAEgmnTFbhywLCP5JB&branch=integration)](https://travis.innovate.ibm.com/was-liberty/open-liberty)
+
+[![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/OpenLibertyAS)
+![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
 [![License](https://img.shields.io/badge/License-EPL%201.0-green.svg)](https://opensource.org/licenses/EPL-1.0)
-[![Chat](https://img.shields.io/badge/chat-on%20slack-brightgreen.svg)](https://ibm-cloud.slack.com/messages/was-openliberty/)
 
-OpenLiberty is a highly composable, fast to start, dynamic application server runtime environment. **More of a description goes here**.
+# Summary
+Open Liberty is a highly composable, fast to start, dynamic application server runtime environment. **More of a description goes here**.
 
-* [Quick Start](https://github.ibm.com/was-liberty/open-liberty#quick-start)
-* [Contribute](https://github.ibm.com/was-liberty/open-liberty#contribute)
-* [Engage](https://github.ibm.com/was-liberty/open-liberty#engage)
-* [Explore](https://github.ibm.com/was-liberty/open-liberty#explore)
-* [License](https://github.ibm.com/was-liberty/open-liberty#license)
+# Table of Contents
+* [Getting Started](https://github.ibm.com/was-liberty/open-liberty#getting-started)
+* [Contribute to open liberty](https://github.ibm.com/was-liberty/open-liberty#contribute-to-open-liberty)
+* [Community](https://github.ibm.com/was-liberty/open-liberty#community)
 
+## Getting Started
+Visit the [WASdev Community](https://developer.ibm.com/wasdev/) for documentation, tutorials, and API reference documentation.
 
-## Quick Start
-1. Install Git LFS.  See setup [Git Large File Storage](https://github.ibm.com/was-liberty/open-liberty#git-large-file-storage)
-2. After forking the main Open Liberty repo on GitHub, you can then clone the main repo to your system:
+## Contribute to Open Liberty
+1. Clone the repository to your system.
 
     ```git clone git@github.ibm.com:was-liberty/open-liberty.git```
 
-    ```cd open-liberty```
+2. Run a gradle build.
 
-3. Run a [gradle build](https://github.ibm.com/was-liberty/open-liberty/wiki/Gradle-Build-Setup)
-4. Run gradle command to execute automated tests.
+    ```cd open-liberty/dev```
 
-## Contribute
-1. [Open issues](https://github.ibm.com/was-liberty/open-liberty/issues)
-2. [Review existing contributions](https://github.ibm.com/was-liberty/open-liberty/pulls)
-3. [Submit a fix](https://github.ibm.com/was-liberty/open-liberty/blob/master/CONTRIBUTING.md)
+    ```./gradlew build```
 
-## Engage
-1. [Open-Liberty Google group]()
-2. [Stack Overflow]()
-3. [Slack](https://ibm-cloud.slack.com/messages/was-open-liberty/)
-3. [Join our mailing list!]()
+3. **Add an app in here that the user can execute to see something run in liberty**
+4. After that you can [Open issues](https://github.ibm.com/was-liberty/open-liberty/issues), [Review existing contributions](https://github.ibm.com/was-liberty/open-liberty/pulls), or [Submit fixes](https://github.ibm.com/was-liberty/open-liberty/blob/master/CONTRIBUTING.md).
 
-## Explore
-1. Documentation
-2. Downloads
-
-## License
-[Eclipse Public License - v 1.0](https://github.ibm.com/was-liberty/open-liberty/blob/integration/LICENSE)
+## Community
+1. [Open Liberty group.io](https://groups.io/g/openliberty)
+2. [OpenLibertyAS on Twitter](https://twitter.com/OpenLibertyAS)
+3. stackoverflow
