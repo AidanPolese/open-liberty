@@ -10,4 +10,4 @@ Private-Package: \
     org.apache.aries.jndi.tracker
 
 -includeresource: \
-    @lib/org.apache.aries.jndi.core-1.0.3-ibm-s20170508-0700.jar!/!META-INF/maven/*|org/*
+    @lib/org.apache.aries.jndi.core-1.0.3-ibm-s20170710-0926.jar!/!META-INF/maven/*|org/*

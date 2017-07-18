@@ -13,18 +13,18 @@
 <ossc>
    <project project="Apache Aries" 
             projectURL="http://aries.apache.org" 
-            version="" revision="1794106"
+            version="" revision="1801418"
             license-type="Apachev2" 
             contact="not@uk.ibm.com" 
             encryption="no">
-      <download location="https://hurgsa.ibm.com/projects/o/orca.build/ws/apache.aries/0.4/s20170508-0700/apache-aries-ibm-s20170508-0700.zip">
-         <file basename="org.apache.aries.jmx.core.whiteboard-1.1.6-ibm-s20170508-0700.jar" checksum="2ce85b1f5eee4b2b146513cbfc586042"/>
+      <download location="https://hurgsa.ibm.com/projects/o/orca.build/ws/apache.aries/0.4/s20170710-0926/apache-aries-ibm-s20170710-0926.zip">
+         <file basename="org.apache.aries.jmx.core.whiteboard-1.1.6-ibm-s20170710-0926.jar" checksum="734c684ce6898e0e4c337a2f9fa989e5"/>
       </download>
    </project>
    
    <clearencehistory/>
    <notes>
    The source code in this project is from the Apache Aries repository https://svn.apache.org/repos/asf/aries/java6support,
-   checked out revision 1794106.
+   checked out revision 1801418.
    </notes>
 </ossc>
