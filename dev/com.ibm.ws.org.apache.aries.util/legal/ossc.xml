@@ -13,12 +13,12 @@
 <ossc>
    <project project="Apache Aries" 
             projectURL="http://aries.apache.org" 
-            version="" revision="1794106"
+            version="" revision="1801418"
             license-type="Apachev2" 
             contact="not@uk.ibm.com" 
             encryption="no">
-      <download location="https://hurgsa.ibm.com/projects/o/orca.build/ws/apache.aries/0.4/s20170508-0700/apache-aries-ibm-s20170508-0700.zip">
-         <file basename="org.apache.aries.util-1.1.2-ibm-s20170508-0700.jar"     checksum="8766af62837c185cb7e4e7683f2b73a5"/>
+      <download location="https://hurgsa.ibm.com/projects/o/orca.build/ws/apache.aries/0.4/s20170710-0926/apache-aries-ibm-s20170710-0926.zip">
+         <file basename="org.apache.aries.util-1.1.2-ibm-s20170710-0926.jar"     checksum="dbdb88978976f2f6e902a9e9384415a0"/>
       </download>
    </project>
    
@@ -26,6 +26,6 @@
    
    <notes>
    The source code in this project is from the Apache Aries repository https://svn.apache.org/repos/asf/aries/java6support,
-   checked out revision 1794106.
+   checked out revision 1801418.
    </notes>
 </ossc>
