@@ -11,7 +11,10 @@
 package com.ibm.ws.kernel.service.util;
 
 import java.io.File;
+import java.io.StringReader;
 import java.net.URL;
+import java.util.Properties;
+import java.util.Scanner;
 
 import com.ibm.wsspi.kernel.service.utils.PathUtils;
 
@@ -66,6 +69,23 @@ public class UtilityTemplate {
      */
     public String getOutputDir(String serverName) {
         String outputDir = System.getenv("WLP_OUTPUT_DIR");
+
+        // The default tool script isn't aware of server installs and therefore not able to read
+        // ${server.config.dir}/server.env for us, so we must do so here
+        File serverEnv = new File(getUserDir() + "servers" + File.separator + serverName + File.separator + "server.env");
+        if (serverName != null && serverEnv.exists() && serverEnv.canRead()) {
+            try {
+                Properties props = new Properties();
+                // The '\\Z' delimiter is the end of string anchor, which allows the entire file
+                // to be scanned in as a single string
+                Scanner s = new Scanner(serverEnv);
+                String serverEnvStr = s.useDelimiter("\\Z").next();
+                s.close();
+                props.load(new StringReader(serverEnvStr.replace("\\", "\\\\")));
+                outputDir = props.getProperty("WLP_OUTPUT_DIR");
+            } catch (Exception ignore) {
+            }
+        }
 
         if (outputDir == null) {
             outputDir = getUserDir() + "servers" + File.separator;
