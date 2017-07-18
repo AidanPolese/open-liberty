@@ -55,14 +55,14 @@ class ParentLastClassLoader extends AppClassLoader {
     public URL getResource(String resName) {
         // search order: 1) my class path 2) parent loader
         URL result = findResource(resName);
-        return result == null ? this.getParent().getResource(resName) : result;
+        return result == null ? this.parent.getResource(resName) : result;
     }
 
     @Override
     @Trivial
     public Enumeration<URL> getResources(String resName) throws IOException {
         // search order: 1) my class path 2) parent loader
-        return super.findResources(resName).add(getParent().getResources(resName));
+        return super.findResources(resName).add(this.parent.getResources(resName));
     }
 
     @FFDCIgnore(ClassNotFoundException.class)
@@ -89,7 +89,7 @@ class ParentLastClassLoader extends AppClassLoader {
                 }
             }
         }
-        return rc == null ? this.getParent().loadClass(className) : rc;
+        return rc == null ? this.parent.loadClass(className) : rc;
     }
 
 }
