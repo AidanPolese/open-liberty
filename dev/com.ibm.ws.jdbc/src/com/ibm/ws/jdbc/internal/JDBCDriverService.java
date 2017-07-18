@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 IBM Corporation and others.
+ * Copyright (c) 2011, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -100,7 +100,8 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
     private static final List<String> PROPS_NOT_SET_ON_DRIVER = Arrays.asList("isolationLevelSwitchingSupport");
 
     /**
-     * Class loader instance.
+     * Class loader instance. If null, JDBC driver classes should be loaded from the
+     * application's thread context class loader.
      */
     private ClassLoader classloader;
 
@@ -110,7 +111,8 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
     private ConnectorService connectorSvc;
 
     /**
-     * Derby Embedded only - List Derby Embedded class loaders used by jdbcDrivers.
+     * Derby Embedded only - List Derby Embedded class loaders used by jdbcDrivers
+     * with a library defined in server configuration.
      * A class loader instance can appear multiple times in the list,
      * which serves as a reference count.
      * When the reference count reaches 0, the Derby system can be shut down.
@@ -128,6 +130,11 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
      * Indicates if the JDBC driver is Derby Embedded.
      */
     private final AtomicBoolean isDerbyEmbedded = new AtomicBoolean();
+
+    /**
+     * Indicates if initialization has been performed on this instance.
+     */
+    private boolean isInitialized;
 
     /**
      * Lock for reading and updating JDBC driver configuration.
@@ -213,7 +220,7 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
         if (className == null)
             throw classNotFound(null);
 
-        if (className.startsWith("org.apache.derby.jdbc.Embedded") && isDerbyEmbedded.compareAndSet(false, true)) {
+        if (classloader != null && className.startsWith("org.apache.derby.jdbc.Embedded") && isDerbyEmbedded.compareAndSet(false, true)) {
             embDerbyRefCount.add(classloader);
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(this, tc, "ref count for shutdown", classloader, embDerbyRefCount);
@@ -223,72 +230,72 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
         if (trace && tc.isEntryEnabled())
             Tr.entry(tc, "create", type, className, classloader, PropertyService.hidePasswords(props));
         try {
-            T ds = AccessController.doPrivileged(new PrivilegedExceptionAction<T>()
-            {
-                public T run() throws Exception
-                {
-                    if (trace && tc.isDebugEnabled())
-                        Tr.debug(tc, "impl class: " + className);
-
-                    ClassLoader origTCCL = Thread.currentThread().getContextClassLoader();
+            T ds = AccessController.doPrivileged(new PrivilegedExceptionAction<T>() {
+                public T run() throws Exception {
+                    ClassLoader loader, origTCCL = Thread.currentThread().getContextClassLoader();
                     try {
-                        Thread.currentThread().setContextClassLoader(classloader);
-                    @SuppressWarnings("unchecked")
-                    Class<T> dsClass = (Class<T>) classloader.loadClass(className);
-                    introspectedClasses.add(dsClass);
-                    T ds = dsClass.newInstance();
+                        if (classloader == null)
+                            loader = origTCCL; // Use thread context class loader of appliaction in absence of server configured library
+                        else
+                            Thread.currentThread().setContextClassLoader(loader = classloader);
 
-                    // Set all of the JDBC vendor properties
-                    Hashtable<?, ?> p = (Hashtable<?, ?>) props.clone();
-                    for (PropertyDescriptor descriptor : Introspector.getBeanInfo(dsClass).getPropertyDescriptors()) {
-                        String name = descriptor.getName();
-                        Object value = p.remove(name);
+                        @SuppressWarnings("unchecked")
+                        Class<T> dsClass = (Class<T>) loader.loadClass(className);
+                        introspectedClasses.add(dsClass);
+                        T ds = dsClass.newInstance();
 
-                        // handle osgi vs non-osgi URL property
-                        if (value == null && name.equals("url")) {
-                            value = p.remove("URL");
+                        // Set all of the JDBC vendor properties
+                        Hashtable<?, ?> p = (Hashtable<?, ?>) props.clone();
+                        for (PropertyDescriptor descriptor : Introspector.getBeanInfo(dsClass).getPropertyDescriptors()) {
+                            String name = descriptor.getName();
+                            Object value = p.remove(name);
+
+                            // handle osgi vs non-osgi URL property
+                            if (value == null && name.equals("url")) {
+                                value = p.remove("URL");
+                            }
+
+                            boolean isPassword = PropertyService.isPassword(name);
+
+                            if (value != null)
+                                try {
+                                    if (value instanceof String) {
+                                        String str = (String) value;
+                                        // Decode passwords
+                                        if (isPassword)
+                                            str = PasswordUtil.getCryptoAlgorithm(str) == null ? str : PasswordUtil.decode(str);
+                                        setProperty(ds, descriptor, str, !isPassword);
+                                    } else {
+                                        // Property already has correct non-String type
+                                        if (trace && tc.isDebugEnabled())
+                                            Tr.debug(tc, "set " + name + " = " + value);
+                                        descriptor.getWriteMethod().invoke(ds, value);
+                                    }
+                                } catch (Throwable x) {
+                                    if (x instanceof InvocationTargetException)
+                                        x = x.getCause();
+                                    FFDCFilter.processException(x, getClass().getName(), "217", this, new Object[] { className, name, value });
+                                    SQLException failure = connectorSvc.ignoreWarnOrFail(tc, x, SQLException.class, "PROP_SET_ERROR", name,
+                                                                                                     "=" + (isPassword ? "******" : value), AdapterUtil.stackTraceToString(x));
+                                    if (failure != null)
+                                        throw failure;
+                                }
                         }
 
-                        boolean isPassword = PropertyService.isPassword(name);
-
-                        if (value != null)
-                            try {
-                                if (value instanceof String) {
-                                    String str = (String) value;
-                                    // Decode passwords
-                                    if (isPassword)
-                                        str = PasswordUtil.getCryptoAlgorithm(str) == null ? str : PasswordUtil.decode(str);
-                                    setProperty(ds, descriptor, str, !isPassword);
-                                } else {
-                                    // Property already has correct non-String type
-                                    if (trace && tc.isDebugEnabled())
-                                        Tr.debug(tc, "set " + name + " = " + value);
-                                    descriptor.getWriteMethod().invoke(ds, value);
+                        // Are there any properties remaining for which we couldn't find setters?
+                        if (!p.isEmpty())
+                            for (Object propertyName : p.keySet())
+                                // Filter out properties that only apply to XA or that shouldn't be set on the driver
+                                if ((!PROPS_FOR_XA_ONLY.contains(propertyName) || ds instanceof XADataSource) && !PROPS_NOT_SET_ON_DRIVER.contains(propertyName) ) {
+                                    SQLException failure = connectorSvc.ignoreWarnOrFail(tc, null, SQLException.class, "PROP_NOT_FOUND", className, propertyName);
+                                    if (failure != null)
+                                        throw failure;
                                 }
-                            } catch (Throwable x) {
-                                if (x instanceof InvocationTargetException)
-                                    x = x.getCause();
-                                FFDCFilter.processException(x, getClass().getName(), "217", this, new Object[] { className, name, value });
-                                SQLException failure = connectorSvc.ignoreWarnOrFail(tc, x, SQLException.class, "PROP_SET_ERROR", name,
-                                                                                                 "=" + (isPassword ? "******" : value), AdapterUtil.stackTraceToString(x));
-                                if (failure != null)
-                                    throw failure;
-                            }
-                    }
 
-                    // Are there any properties remaining for which we couldn't find setters?
-                    if (!p.isEmpty())
-                        for (Object propertyName : p.keySet())
-                            // Filter out properties that only apply to XA or that shouldn't be set on the driver
-                            if ((!PROPS_FOR_XA_ONLY.contains(propertyName) || ds instanceof XADataSource) && !PROPS_NOT_SET_ON_DRIVER.contains(propertyName) ) {
-                                SQLException failure = connectorSvc.ignoreWarnOrFail(tc, null, SQLException.class, "PROP_NOT_FOUND", className, propertyName);
-                                if (failure != null)
-                                    throw failure;
-                            }
-
-                    return ds;
+                        return ds;
                     } finally {
-                        Thread.currentThread().setContextClassLoader(origTCCL);
+                        if (classloader != null)
+                            Thread.currentThread().setContextClassLoader(origTCCL);
                     }
                 }
             });
@@ -322,15 +329,19 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
     public CommonDataSource createAnyDataSource(Properties props) throws SQLException {
         lock.readLock().lock();
         try {
-            if (classloader == null)
+            if (!isInitialized)
                 try {
                     // Switch to write lock for lazy initialization
                     lock.readLock().unlock();
                     lock.writeLock().lock();
                     
-                    if (classloader == null)
-                        classloader = AdapterUtil.getClassLoaderWithPriv(sharedLib);
-
+                    if (!isInitialized) {
+                        if (// TODO sharedLib != null
+                                   !Boolean.parseBoolean((String) properties.get("ibm.internal.nonship.function"))
+                                || !"ibm.internal.simulate.no.library.do.not.ship".equals(sharedLib.id()))
+                            classloader = AdapterUtil.getClassLoaderWithPriv(sharedLib);
+                        isInitialized = true;
+                    }
                 } finally {
                     // Downgrade to read lock for rest of method
                     lock.readLock().lock();
@@ -377,14 +388,19 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
     public CommonDataSource createDefaultDataSource(Properties props) throws SQLException {
         lock.readLock().lock();
         try {
-            if (classloader == null)
+            if (!isInitialized)
                 try {
                     // Switch to write lock for lazy initialization
                     lock.readLock().unlock();
                     lock.writeLock().lock();
 
-                    if (classloader == null)
-                        classloader = AdapterUtil.getClassLoaderWithPriv(sharedLib);
+                    if (!isInitialized) {
+                        if (// TODO sharedLib != null
+                                   !Boolean.parseBoolean((String) properties.get("ibm.internal.nonship.function"))
+                                || !"ibm.internal.simulate.no.library.do.not.ship".equals(sharedLib.id()))
+                            classloader = AdapterUtil.getClassLoaderWithPriv(sharedLib);
+                        isInitialized = true;
+                    }
                 } finally {
                     // Downgrade to read lock for rest of method
                     lock.readLock().lock();
@@ -425,15 +441,19 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
     public ConnectionPoolDataSource createConnectionPoolDataSource(Properties props) throws SQLException {
         lock.readLock().lock();
         try {
-            if (classloader == null)
+            if (!isInitialized)
                 try {
                     // Switch to write lock for lazy initialization
                     lock.readLock().unlock();
                     lock.writeLock().lock();
 
-                    if (classloader == null) 
-                        classloader = AdapterUtil.getClassLoaderWithPriv(sharedLib);
- 
+                    if (!isInitialized) {
+                        if (// TODO sharedLib != null
+                                   !Boolean.parseBoolean((String) properties.get("ibm.internal.nonship.function"))
+                                || !"ibm.internal.simulate.no.library.do.not.ship".equals(sharedLib.id()))
+                            classloader = AdapterUtil.getClassLoaderWithPriv(sharedLib);
+                        isInitialized = true;
+                    }
                 } finally {
                     // Downgrade to read lock for rest of method
                     lock.readLock().lock();
@@ -464,14 +484,19 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
     public DataSource createDataSource(Properties props) throws SQLException {
         lock.readLock().lock();
         try {
-            if (classloader == null)
+            if (!isInitialized)
                 try {
                     // Switch to write lock for lazy initialization
                     lock.readLock().unlock();
                     lock.writeLock().lock();
 
-                    if (classloader == null)
-                        classloader = AdapterUtil.getClassLoaderWithPriv(sharedLib);
+                    if (!isInitialized) {
+                        if (// TODO sharedLib != null
+                                   !Boolean.parseBoolean((String) properties.get("ibm.internal.nonship.function"))
+                                || !"ibm.internal.simulate.no.library.do.not.ship".equals(sharedLib.id()))
+                            classloader = AdapterUtil.getClassLoaderWithPriv(sharedLib);
+                        isInitialized = true;
+                    }
                 } finally {
                     // Downgrade to read lock for rest of method
                     lock.readLock().lock();
@@ -502,14 +527,19 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
     public XADataSource createXADataSource(Properties props) throws SQLException {
         lock.readLock().lock();
         try {
-            if (classloader == null)
+            if (!isInitialized)
                 try {
                     // Switch to write lock for lazy initialization
                     lock.readLock().unlock();
                     lock.writeLock().lock();
 
-                    if (classloader == null)
-                        classloader = AdapterUtil.getClassLoaderWithPriv(sharedLib);
+                    if (!isInitialized) {
+                        if (// TODO sharedLib != null
+                                   !Boolean.parseBoolean((String) properties.get("ibm.internal.nonship.function"))
+                                || !"ibm.internal.simulate.no.library.do.not.ship".equals(sharedLib.id()))
+                            classloader = AdapterUtil.getClassLoaderWithPriv(sharedLib);
+                        isInitialized = true;
+                    }
                 } finally {
                     // Downgrade to read lock for rest of method
                     lock.readLock().lock();
@@ -543,15 +573,16 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
 
         lock.writeLock().lock();
         try {
-            // Null classloader means we haven't been initialized
-            if (classloader != null) {
-                if (isDerbyEmbedded.get())
-                    shutdownDerbyEmbedded();
+            if (isInitialized) {
+                if (classloader != null) {
+                    if (isDerbyEmbedded.get())
+                        shutdownDerbyEmbedded();
+                    classloader = null;
+                }
                 for (Iterator<Class<? extends CommonDataSource>> it = introspectedClasses.iterator(); it.hasNext(); it.remove())
                     Introspector.flushFromCaches(it.next());
-                classloader = null;
+                isInitialized = false;
             }
-
         } finally {
             lock.writeLock().unlock();
         }
@@ -622,15 +653,17 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
         boolean replaced = false;
         lock.writeLock().lock();
         try {
-            // Null classloader means we haven't been initialized
-            if (classloader != null) {
-                if (isDerbyEmbedded.compareAndSet(true, false)) // assume false for any future usage until shown otherwise
-                    shutdownDerbyEmbedded();
+            if (isInitialized) {
+                if (classloader != null) {
+                    if (isDerbyEmbedded.compareAndSet(true, false)) // assume false for any future usage until shown otherwise
+                        shutdownDerbyEmbedded();
+                    classloader = null;
+                }
                 for (Iterator<Class<? extends CommonDataSource>> it = introspectedClasses.iterator(); it.hasNext(); it.remove())
                     Introspector.flushFromCaches(it.next());
-                classloader = null;
 
                 replaced = true;
+                isInitialized = false;
             }
 
             if (newProperties != null)
