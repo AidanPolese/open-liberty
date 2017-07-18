@@ -722,19 +722,25 @@ public class DataSourceService extends AbstractConnectionFactoryService implemen
 
         if (embDerbyRefCount.remove(dbName) && !embDerbyRefCount.contains(dbName))
             try {
-                Class<?> EmbDS = AdapterUtil.forNameWithPriv("org.apache.derby.jdbc.EmbeddedDataSource40", true, cfg.classloader);
-                DataSource ds = (DataSource) EmbDS.newInstance();
+                ClassLoader jdbcDriverLoader = jdbcDriverSvc.getClassLoaderForLibraryRef();
+                if (jdbcDriverLoader != null) {
+                    if (trace && tc.isDebugEnabled())
+                        Tr.debug(this, tc, "using classloader", jdbcDriverLoader);
 
-                EmbDS.getMethod("setDatabaseName", String.class).invoke(ds, dbName);
-                EmbDS.getMethod("setShutdownDatabase", String.class).invoke(ds, "shutdown");
-                String user = (String) vProps.get(DataSourceDef.user.name());
-                if (user != null)
-                    EmbDS.getMethod("setUser", String.class).invoke(ds, user);
-                String pwd = (String) vProps.get(DataSourceDef.password.name());
-                if (pwd != null)
-                    EmbDS.getMethod("setPassword", String.class).invoke(ds, pwd);
+                    Class<?> EmbDS = AdapterUtil.forNameWithPriv("org.apache.derby.jdbc.EmbeddedDataSource40", true, jdbcDriverLoader);
+                    DataSource ds = (DataSource) EmbDS.newInstance();
 
-                ds.getConnection().close();
+                    EmbDS.getMethod("setDatabaseName", String.class).invoke(ds, dbName);
+                    EmbDS.getMethod("setShutdownDatabase", String.class).invoke(ds, "shutdown");
+                    String user = (String) vProps.get(DataSourceDef.user.name());
+                    if (user != null)
+                        EmbDS.getMethod("setUser", String.class).invoke(ds, user);
+                    String pwd = (String) vProps.get(DataSourceDef.password.name());
+                    if (pwd != null)
+                        EmbDS.getMethod("setPassword", String.class).invoke(ds, pwd);
+
+                    ds.getConnection().close();
+                }
                 if (trace && tc.isEntryEnabled())
                     Tr.exit(this, tc, "shutdownDerbyEmbedded");
             } catch (SQLException x) {
