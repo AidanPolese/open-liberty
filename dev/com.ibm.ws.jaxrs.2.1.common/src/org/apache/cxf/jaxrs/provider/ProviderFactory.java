@@ -653,6 +653,10 @@ public abstract class ProviderFactory {
                                                             MediaType mediaType,
                                                             Message m) {
 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "createMessageBodyWriter ",  new Object[]{type, genericType, annotations, mediaType, m});
+        }
+        
         // Step1: check the cache.
         if (providerCache != null) {
             for (ProviderInfo<MessageBodyWriter<?>> ep : providerCache.getWriters(type, mediaType)) {
@@ -957,6 +961,9 @@ public abstract class ProviderFactory {
 
     private <T> boolean matchesWriterMediaTypes(ProviderInfo<MessageBodyWriter<?>> pi,
                                                 MediaType mediaType) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "matchesWriterMediaTypes ",  new Object[]{pi, mediaType});
+        }
         MessageBodyWriter<?> ep = pi.getProvider();
         List<MediaType> supportedMediaTypes = JAXRSUtils.getProviderProduceTypes(ep);
 
