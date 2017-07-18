@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+\ * Copyright (c) 2010 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,6 +16,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.security.cert.Certificate;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -68,13 +71,22 @@ public class JarResourceEntry implements ResourceEntry {
         JarFile jarFile = handler.getJarFile();
         String name = jarFile.getName() + "!/" + jarEntry.getName();
         try {
-            JarEntryURLStreamHandler handler = new JarEntryURLStreamHandler(jarFile, jarEntry);
-            URL url = new URL("jarentry", "", -1, name, handler);
-            handler.setExpectedURL(url);
+            final JarEntryURLStreamHandler handler = new JarEntryURLStreamHandler(jarFile, jarEntry);
+            final URL url = new URL("jarentry", "", -1, name, handler);
+            AccessController.doPrivileged(new PrivilegedExceptionAction<Void>() {
+
+                @Override
+                public Void run() throws Exception {
+                    handler.setExpectedURL(url);
+                    return null;
+                }
+            });
             return url;
         } catch (MalformedURLException e) {
             // this is very unexpected
             throw new Error(e);
+        } catch (PrivilegedActionException e) {
+            throw new Error(e.getCause());
         }
     }
 
