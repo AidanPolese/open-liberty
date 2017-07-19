@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 1997, 2015 IBM Corporation and others.
+ * Copyright (c) 1997, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,16 +11,12 @@
 package com.ibm.ejs.j2c;
 
 import java.sql.SQLFeatureNotSupportedException;
-import java.util.BitSet;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.resource.ResourceException;
-import javax.resource.cci.Connection;
 import javax.resource.spi.ConnectionEvent;
 import javax.resource.spi.ConnectionRequestInfo;
 import javax.resource.spi.DissociatableManagedConnection;
@@ -42,7 +38,6 @@ import com.ibm.ws.Transaction.UOWCurrent;
 import com.ibm.ws.j2c.TranWrapper;
 import com.ibm.ws.jca.adapter.WSManagedConnection;
 import com.ibm.ws.jca.adapter.WSManagedConnectionFactory;
-import com.ibm.ws.tx.embeddable.RecoverableXAResourceAccessor;
 import com.ibm.ws.tx.rrs.RRSXAResourceFactory;
 
 /**
@@ -142,15 +137,15 @@ import com.ibm.ws.tx.rrs.RRSXAResourceFactory;
  * </tr>
  * </table>
  */
-public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper { 
+public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
-    protected final HashMap<Object, HandleList> mcwHandleList = new HashMap<Object, HandleList>(); 
+    protected final HashMap<Object, HandleList> mcwHandleList = new HashMap<Object, HandleList>();
 
-    private int fatalErrorValue; 
+    private int fatalErrorValue;
 
-    private boolean connectionSynchronizationProvider; 
+    private boolean connectionSynchronizationProvider;
 
-    private ManagedConnectionFactory _managedConnectionFactory = null; 
+    private ManagedConnectionFactory _managedConnectionFactory = null;
 
     static final long serialVersionUID = -861999777608926414L;
 
@@ -265,18 +260,18 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     private NoTransactionWrapper noTranWrapper = null;
     private RRSGlobalTransactionWrapper rrsGlobalTranWrapper = null;
     private RRSLocalTransactionWrapper rrsLocalTranWrapper = null;
-    private UOWCoordinator uowCoord = null; 
-    protected transient PoolManager pm = null; 
-    private boolean _supportsReAuth = false; 
+    private UOWCoordinator uowCoord = null;
+    protected transient PoolManager pm = null;
+    private boolean _supportsReAuth = false;
     private int hashMapBucket = 0;
-    private Object sharedPoolCoordinator = null; 
+    private Object sharedPoolCoordinator = null;
     private Object mcWrapperList = null;
 
-    private Object currentSharedPool = null; 
-    private boolean isParkedWrapper = false; 
-    private int _hashMapBucketReAuth = 0; 
-    private Subject _subject = null; 
-    private ConnectionRequestInfo _cri = null; 
+    private Object currentSharedPool = null;
+    private boolean isParkedWrapper = false;
+    private int _hashMapBucketReAuth = 0;
+    private Subject _subject = null;
+    private ConnectionRequestInfo _cri = null;
 
     // ConnectionManager Reference.
     private transient ConnectionManager cm = null;
@@ -288,7 +283,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     /**
      * Combined Subject and CRI hash code
      */
-    private int subjectCRIHashCode = 0; 
+    private int subjectCRIHashCode = 0;
 
     /**
      * This will indicate where the connection is in the pool
@@ -301,7 +296,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * 3 = In unshared pool
      * 4 = In waiter pool
      */
-    private final AtomicInteger poolState = new AtomicInteger(0); 
+    private final AtomicInteger poolState = new AtomicInteger(0);
 
     /**
      * While afterCompletion (transaction end) is being processed, a resource adapter can use connection
@@ -330,7 +325,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * destoryed when returned to the free pool. In addition, ANY connection pool requests
      * for this connection will result in a ResourceException.
      */
-    private boolean destroyState = false; 
+    private boolean destroyState = false;
 
     private boolean purgeState = false;
 
@@ -340,16 +335,16 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     //  another pool purge, and 2) if this connection is being released back to the pool, it
     //  should be destroyed instead of being put back into the free pool.
     private boolean stale = false;
-    //  private int dbrequestMonitorPoolID = -1; 
+    //  private int dbrequestMonitorPoolID = -1;
     /*
-     *  - When a resource adapter incorrectly uses connectionErrorOccurred during a
+     * - When a resource adapter incorrectly uses connectionErrorOccurred during a
      * createManagedConnection, matchManagedConnection or getConnection
      * we can not reuse the mcw. Reuse of the mcw may results in duplicate
      * entries in the MCWrapperListPool. To be safe, all mcw connectionErrorOccurred
      * events will be marked not to be reused.
      */
-    protected boolean do_not_reuse_mcw = false; 
-    private boolean inSharedPool = false; 
+    protected boolean do_not_reuse_mcw = false;
+    private boolean inSharedPool = false;
 
     /**
      * There is one recoveryToken needed per ManagedConnectionFactory and thus one per PoolManager.
@@ -363,40 +358,38 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
     private static final TraceComponent tc = Tr.register(MCWrapper.class,
                                                          J2CConstants.traceSpec,
-                                                         J2CConstants.messageFile); 
+                                                         J2CConstants.messageFile);
 
-    private final String nl = CommonFunction.nl; 
+    private final String nl = CommonFunction.nl;
     private Throwable initialRequestStackTrace = null;
-    private String threadId; 
-    private long lastAllocationTime; 
-    private String threadName; 
+    private String threadId;
+    private long lastAllocationTime;
+    private String threadName;
     /*
      * The spec does specify that we can call cleanup many times, but
      * this was added so we don't waste a call to cleanup if we have
      * already called cleanup.
      */
-    //  private boolean cleanupAllReadyCalled = false; 
+    //  private boolean cleanupAllReadyCalled = false;
 
     /*
      * This value is used to determing whether we need
      * to call the setLogWriter method on the mc.
      */
-    private boolean logWriterSet = false; 
-
-    private transient boolean recoverableXAResource = false; 
+    private boolean logWriterSet = false;
 
     private transient boolean _transactionErrorOccurred = false;
 
-    private long holdTimeStart = 0; 
+    private long holdTimeStart = 0;
 
-    protected J2CGlobalConfigProperties gConfigProps; 
+    protected J2CGlobalConfigProperties gConfigProps;
 
     protected long currentUseStartTime = 0;
-    protected boolean useStartTimeSet = false; 
-    protected boolean holdStartTimeSet = false; 
+    protected boolean useStartTimeSet = false;
+    protected boolean holdStartTimeSet = false;
     protected long totalUseTime = 0;
-    protected long totalHoldTime = 0; 
-    private boolean pretestThisConnection = false; 
+    protected long totalHoldTime = 0;
+    private boolean pretestThisConnection = false;
     private boolean aborted = false;
 
     /**
@@ -408,21 +401,21 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * @param J2CPerf
      *
      */
-    protected MCWrapper(PoolManager _pm, J2CGlobalConfigProperties _gConfigProps) { 
+    protected MCWrapper(PoolManager _pm, J2CGlobalConfigProperties _gConfigProps) {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "<init>");
         }
 
         // PoolManager is set once for the life of the MCWrapper since there is a 1-to-1 relationship
         //  between a given PM instance and the MCWrapper pool.
         pm = _pm;
-        this.gConfigProps = _gConfigProps; 
+        this.gConfigProps = _gConfigProps;
         mcWrapperObject_hexString = Integer.toHexString(this.hashCode());
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "<init>");
         }
 
@@ -508,7 +501,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * Get the string representation of this MCWrapper's current state
      */
     @Override
-    public String getStateString() { 
+    public String getStateString() {
         return STATESTRINGS[state];
     }
 
@@ -542,12 +535,12 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * Get the free pool bucket
      */
     @Override
-    public Object getSharedPool() { 
+    public Object getSharedPool() {
         return currentSharedPool;
     }
 
     @Override
-    public void setSharedPool(Object sharedPool) { 
+    public void setSharedPool(Object sharedPool) {
         currentSharedPool = sharedPool;
     }
 
@@ -556,7 +549,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      *
      * @return
      */
-    public ConnectionEventListener getConnectionEventListener() { 
+    public ConnectionEventListener getConnectionEventListener() {
         return eventListener;
     }
 
@@ -569,7 +562,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * @param userDataPending
      */
     @Override
-    public void setSupportsReAuth(boolean supportsReauth) { 
+    public void setSupportsReAuth(boolean supportsReauth) {
         _supportsReAuth = supportsReauth;
     }
 
@@ -577,7 +570,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * Get the MCWrapperList
      */
     @Override
-    public Object getMCWrapperList() { 
+    public Object getMCWrapperList() {
         return mcWrapperList;
     }
 
@@ -585,7 +578,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * Set the MCWrapperList
      */
     @Override
-    public void setMCWrapperList(Object mcWrapperList) { 
+    public void setMCWrapperList(Object mcWrapperList) {
         this.mcWrapperList = mcWrapperList;
     }
 
@@ -599,14 +592,14 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     /**
      * Get the integer representation of the MCWrapper's current TranWrapper usage
      */
-    protected final int getTranWrapperId() { 
+    protected final int getTranWrapperId() {
         return tranWrapperInUse;
     }
 
     /**
      * Get MCWrapper's current state
      */
-    protected int getState() { 
+    protected int getState() {
         return state;
     }
 
@@ -624,9 +617,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     @Override
     public void setManagedConnection(ManagedConnection newMC) {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "setManagedConnection");
         }
 
@@ -637,41 +630,40 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             unusedTimeStamp = createdTimeStamp;
             eventListener = new com.ibm.ejs.j2c.ConnectionEventListener(this);
             mc.addConnectionEventListener(eventListener);
-            recoverableXAResource = pm.isSelfXARecoverable();
 
-            if (isTracingEnabled && tc.isDebugEnabled()) { 
-                Tr.debug(this, tc, "Connection created time " + createdTimeStamp + " for mcw " + this.toString()); 
-            } 
+            if (isTracingEnabled && tc.isDebugEnabled()) {
+                Tr.debug(this, tc, "Connection created time " + createdTimeStamp + " for mcw " + this.toString());
+            }
 
             /*
              * Put the mc and mcw in the hash map
              */
-            if (isTracingEnabled && tc.isDebugEnabled()) { 
+            if (isTracingEnabled && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "Adding mc and mcw to hashMap " + mc + " in pool manager " + pm.hashCode());
             }
 
-            pm.putMcToMCWMap(mc, this); //  moved here from MCWrapperPool.java 
+            pm.putMcToMCWMap(mc, this); //  moved here from MCWrapperPool.java
 
         } else {
             IllegalStateException e = new IllegalStateException("setManagedConnection: illegal state exception. State = " + getStateString() + " MCW = "
-                                                                + mcWrapperObject_hexString); 
+                                                                + mcWrapperObject_hexString);
             Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", "setManagedConnection", e);
             throw e;
         }
 
         state = MCWrapper.STATE_ACTIVE_FREE;
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "setManagedConnection");
         }
 
     }
-    
+
     /**
      * Return the managed connection without checking the state.
      */
     @Override
-    public ManagedConnection getManagedConnectionWithoutStateCheck() { 
+    public ManagedConnection getManagedConnectionWithoutStateCheck() {
         return mc;
     }
 
@@ -682,7 +674,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             return mc;
         } else {
             IllegalStateException e = new IllegalStateException("getManagedConnection: illegal state exception. State = " + getStateString() + " MCW = "
-                                                                + mcWrapperObject_hexString); 
+                                                                + mcWrapperObject_hexString);
             Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", "getManagedConnection", e);
             throw e;
         }
@@ -695,23 +687,23 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     @Override
     public void markInUse() {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "markInUse");
         }
 
         if (state != STATE_ACTIVE_FREE) {
-            IllegalStateException e = new IllegalStateException("markInUse: illegal state exception. State = " + getStateString() + " MCW = " + mcWrapperObject_hexString); 
+            IllegalStateException e = new IllegalStateException("markInUse: illegal state exception. State = " + getStateString() + " MCW = " + mcWrapperObject_hexString);
             Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", "markInUse", e);
             throw e;
         }
 
         state = MCWrapper.STATE_ACTIVE_INUSE;
-        holdTimeStart = System.currentTimeMillis(); 
-        holdStartTimeSet = true; 
+        holdTimeStart = System.currentTimeMillis();
+        holdStartTimeSet = true;
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "markInUse");
         }
 
@@ -753,20 +745,14 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
         if (cm != null) {
             return cm;
         } else {
-            IllegalStateException e = new IllegalStateException("ConnectionManager is null"); 
+            IllegalStateException e = new IllegalStateException("ConnectionManager is null");
             Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", "getConnectionManager", e);
             throw e;
         }
     }
 
     protected int getRecoveryToken() throws ResourceException {
-
-        if (recoverableXAResource == true) {
-            return RecoverableXAResourceAccessor.getXARecoveryToken(getManagedConnectionWithoutStateCheck().getXAResource());
-        } else {
-            return recoveryToken;
-        }
-
+        return recoveryToken;
     }
 
     public PoolManager getPoolManager() {
@@ -788,7 +774,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * Sets its <code>UOWCoordinator</code> instance..
      * This will need to be set back to null at the completion of the current UOW.
      */
-    protected void setUOWCoordinator(UOWCoordinator uowCoordinator) { 
+    protected void setUOWCoordinator(UOWCoordinator uowCoordinator) {
         uowCoord = uowCoordinator;
     }
 
@@ -800,11 +786,11 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      *
      * @return UOWCoordinator
      */
-    protected UOWCoordinator updateUOWCoordinator() { 
+    protected UOWCoordinator updateUOWCoordinator() {
 
         UOWCurrent uowCurrent = (UOWCurrent) pm.connectorSvc.transactionManager;
-        uowCoord = uowCurrent == null ? null : uowCurrent.getUOWCoord(); 
-        return uowCoord; 
+        uowCoord = uowCurrent == null ? null : uowCurrent.getUOWCoord();
+        return uowCoord;
 
     }
 
@@ -813,9 +799,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      */
     protected XATransactionWrapper getXATransactionWrapper() throws ResourceException {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "getXATransactionWrapper");
         }
 
@@ -848,7 +834,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
         } else { // state not STATE_ACTIVE_INUSE
             if (state != STATE_TRAN_WRAPPER_INUSE) {
                 IllegalStateException e = new IllegalStateException("getXATransactionWrapper: illegal state exception. State = " + getStateString() + " MCW = "
-                                                                    + mcWrapperObject_hexString); 
+                                                                    + mcWrapperObject_hexString);
                 Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", "getXATransactionWrapper", e);
                 throw e;
             } else { // state is STATE_TRAN_WRAPPER_INUSE
@@ -866,7 +852,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             }
         }
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "getXATransactionWrapper");
         }
 
@@ -883,19 +869,18 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
     }
 
-
     /**
      * Retrieves a <code>LocalTransactionWrapper</code> for use. This includes creating a
      * new instance if one has not already been associated with this <code>MCWrapper</code>.
      *
      * @param rrsTransactional Indicates whether RRS transactions are to be supported xxxx
      */
-    protected LocalTransactionWrapper getLocalTransactionWrapper(boolean rrsTransactional) throws ResourceException { 
+    protected LocalTransactionWrapper getLocalTransactionWrapper(boolean rrsTransactional) throws ResourceException {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
-            Tr.entry(this, tc, "getLocalTransactionWrapper", rrsTransactional); 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
+            Tr.entry(this, tc, "getLocalTransactionWrapper", rrsTransactional);
         }
 
         if (localTranWrapper == null) {
@@ -909,11 +894,11 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
         // for an existing localTransaction as the first thing in initialize().
         //
         localTranWrapper.initialize();
-        localTranWrapper.setRRSTransactional(rrsTransactional); 
+        localTranWrapper.setRRSTransactional(rrsTransactional);
         tranWrapperInUse = LOCALTXWRAPPER;
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
-            Tr.exit(this, tc, "getLocalTransactionWrapper"); 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
+            Tr.exit(this, tc, "getLocalTransactionWrapper");
         }
 
         return localTranWrapper;
@@ -926,9 +911,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      */
     protected void markLocalTransactionWrapperInUse() throws ResourceException {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "markLocalTransactionWrapperInUse");
         }
 
@@ -941,7 +926,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
              * be needed. The non-normal condition is when a user starts a user thread and
              * gets a connection then starts a transaction.
              */
-            if (!(isInSharedPool() || this.getPoolState() == MCWrapper.ConnectionState_sharedTLSPool)) { 
+            if (!(isInSharedPool() || this.getPoolState() == MCWrapper.ConnectionState_sharedTLSPool)) {
                 if (cm.shareable()) {
                     pm.moveMCWrapperFromUnSharedToShared(this, uowCoord);
                 }
@@ -949,7 +934,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
         } else { // state not STATE_ACTIVE_INUSE
             if (state != STATE_TRAN_WRAPPER_INUSE) {
                 IllegalStateException e = new IllegalStateException("markLocalTransactionWrapperInUse: illegal state exception. State = " + getStateString() + " MCW = "
-                                                                    + mcWrapperObject_hexString); 
+                                                                    + mcWrapperObject_hexString);
                 Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", "markLocalTransactionWrapperInUse", e);
                 throw e;
             } else { // state is STATE_TRAN_WRAPPER_INUSE
@@ -968,7 +953,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             }
         }
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "markLocalTransactionWrapperInUse");
         }
 
@@ -982,9 +967,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      */
     protected NoTransactionWrapper getNoTransactionWrapper() {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "getNoTransactionWrapper");
         }
 
@@ -994,11 +979,11 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
         if (state == STATE_ACTIVE_INUSE) {
             state = STATE_TRAN_WRAPPER_INUSE;
-            tranWrapperInUse = NOTXWRAPPER; 
+            tranWrapperInUse = NOTXWRAPPER;
         } else { // state not STATE_ACTIVE_INUSE
             if (state != STATE_TRAN_WRAPPER_INUSE) {
                 IllegalStateException e = new IllegalStateException("getNoTransactionWrapper: illegal state exception. State = " + getStateString() + " MCW = "
-                                                                    + mcWrapperObject_hexString); 
+                                                                    + mcWrapperObject_hexString);
                 Object[] parms = new Object[] { "getNoTransactionWrapper", e };
                 Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", parms);
                 throw e;
@@ -1018,7 +1003,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             }
         }
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "getNoTransactionWrapper");
         }
 
@@ -1031,9 +1016,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      */
     protected RRSGlobalTransactionWrapper getRRSGlobalTransactionWrapper() throws ResourceException {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "getRRSGlobalTransactionWrapper");
         }
 
@@ -1048,7 +1033,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
             if (state != STATE_TRAN_WRAPPER_INUSE) {
                 IllegalStateException e = new IllegalStateException("getRRSGlobalTransactionWrapper: illegal state exception. State = " + getStateString() + " MCW = "
-                                                                    + mcWrapperObject_hexString); 
+                                                                    + mcWrapperObject_hexString);
                 Object[] parms = new Object[] { "getRRSGlobalTransactionWrapper", e };
                 Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", parms);
                 throw e;
@@ -1069,7 +1054,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
         }
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "getRRSGlobalTransactionWrapper");
         }
 
@@ -1082,9 +1067,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      */
     protected RRSLocalTransactionWrapper getRRSLocalTransactionWrapper() throws ResourceException {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "getRRSLocalTransactionWrapper");
         }
 
@@ -1092,10 +1077,10 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             rrsLocalTranWrapper = new RRSLocalTransactionWrapper(this);
         }
 
-        tranWrapperInUse = RRSLOCALTXWRAPPER; 
+        tranWrapperInUse = RRSLOCALTXWRAPPER;
 
-        // Deleted code to set the current state.               
-        // Hold off on setting the state until we register sync 
+        // Deleted code to set the current state.
+        // Hold off on setting the state until we register sync
 
         if (isTracingEnabled && tc.isEntryEnabled())
             Tr.exit(this, tc, "getRRSLocalTransactionWrapper", rrsLocalTranWrapper);
@@ -1110,9 +1095,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      */
     protected void markRRSLocalTransactionWrapperInUse() throws ResourceException {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "markRRSLocalTransactionWrapperInUse");
         }
 
@@ -1123,7 +1108,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
             if (state != STATE_TRAN_WRAPPER_INUSE) {
                 IllegalStateException e = new IllegalStateException("getRRSLocalTransactionWrapper: illegal state exception. State = " + getStateString() + " MCW = "
-                                                                    + mcWrapperObject_hexString); 
+                                                                    + mcWrapperObject_hexString);
                 Object[] parms = new Object[] { "getRRSLocalTransactionWrapper", e };
                 Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", parms);
                 throw e;
@@ -1144,7 +1129,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
         }
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "markRRSLocalTransactionWrapperInUse");
         }
 
@@ -1152,16 +1137,15 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
     }
 
-
     /**
      * Retrieves the current <code>TranWrapper</code> in use. This includes creating a
      * new instance if one has not already been associated with this <code>MCWrapper</code>.
      */
     protected TranWrapper getCurrentTranWrapper() throws ResourceException {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "getCurrentTranWrapper");
         }
 
@@ -1171,7 +1155,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
         // This was a special fix that was put in for JMS Managed Sessions, but it
         // could apply to other internal connection types that might require this support.
         if ((state == STATE_ACTIVE_INUSE) && (gConfigProps.isDynamicEnlistmentSupported())) {
-            if (isTracingEnabled && tc.isDebugEnabled()) { 
+            if (isTracingEnabled && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "State is STATE_ACTIVE_INUSE, calling initializeForUOW()...");
             }
             cm.initializeForUOW(this, true); // second parm indicates source of call is deferred enlistment.
@@ -1179,7 +1163,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
         if ((state != STATE_TRAN_WRAPPER_INUSE) && (state != STATE_ACTIVE_INUSE)) {
             IllegalStateException e = new IllegalStateException("getCurrentTranWrapper: illegal state exception. State = " + getStateString() + " MCW = "
-                                                                + mcWrapperObject_hexString); 
+                                                                + mcWrapperObject_hexString);
             Object[] parms = new Object[] { "getCurrentTranWrapper", e };
             Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", parms);
             throw e;
@@ -1211,7 +1195,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                 throw e;
         }
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "getCurrentTranWrapper", getTranWrapperString());
         }
 
@@ -1225,7 +1209,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
         if (state != STATE_TRAN_WRAPPER_INUSE) {
             IllegalStateException e = new IllegalStateException("transactionComplete: illegal state exception. State = " + getStateString() + " MCW = "
-                                                                + mcWrapperObject_hexString); 
+                                                                + mcWrapperObject_hexString);
             Object[] parms = new Object[] { "transactionComplete", e };
             Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", parms);
             throw e;
@@ -1245,18 +1229,18 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      */
     protected boolean involvedInTransaction() {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
         if (state == STATE_TRAN_WRAPPER_INUSE) {
 
-            if (isTracingEnabled && tc.isDebugEnabled()) { 
+            if (isTracingEnabled && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "involvedInTransaction: true");
             }
 
             return true;
         } else {
 
-            if (isTracingEnabled && tc.isDebugEnabled()) { 
+            if (isTracingEnabled && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "involvedInTransaction: false");
             }
 
@@ -1272,26 +1256,26 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * For connection thread local storage, we do not want to call mc.cleanup() and several lines
      * of code around this area does not make sense to use.
      */
-    public void tlsCleanup() throws ResourceException { 
+    public void tlsCleanup() throws ResourceException {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "tlsCleanup");
         }
 
         this.initialRequestStackTrace = null;
-        this.clearHandleList(); 
+        this.clearHandleList();
 
-        // ease state checks for error cleanup code.    if ((state != STATE_ACTIVE_INUSE) && (state != STATE_ACTIVE_FREE)) { 
-        if ((state == STATE_NEW) || (state == STATE_INACTIVE)) { 
-            IllegalStateException e = new IllegalStateException("cleanup: illegal state exception. State = " + getStateString() + " MCW = " + mcWrapperObject_hexString); 
+        // ease state checks for error cleanup code.    if ((state != STATE_ACTIVE_INUSE) && (state != STATE_ACTIVE_FREE)) {
+        if ((state == STATE_NEW) || (state == STATE_INACTIVE)) {
+            IllegalStateException e = new IllegalStateException("cleanup: illegal state exception. State = " + getStateString() + " MCW = " + mcWrapperObject_hexString);
             Object[] parms = new Object[] { "cleanup", e };
             Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", parms);
             throw e;
         }
 
-        try { 
+        try {
             /*
              * DissociateConnection needs to be called before cleanup.
              *
@@ -1321,25 +1305,24 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             } else if (tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "mc is null, or mc is aborted, mc.cleanup() not called.", (mc == null));
             }
-        }
-        catch (ResourceException e) {
+        } catch (ResourceException e) {
 
-            String localMessage = e.getLocalizedMessage(); 
-            if ((localMessage != null) && localMessage.equals("Skip logging for this failing connection")) { 
+            String localMessage = e.getLocalizedMessage();
+            if ((localMessage != null) && localMessage.equals("Skip logging for this failing connection")) {
                 /*
                  * If the resource adapter throws a resource exception with the skip logging text,
                  * log this path only when debug is enabled.
                  *
                  * The resource apdater does not want normal logging of this failed managed connection.
                  */
-                if (tc.isDebugEnabled()) { 
-                    Tr.debug(this, tc, "Connection failed, resource adapter requested skipping failure logging"); 
-                } 
-                throw e; 
-            } else { 
+                if (tc.isDebugEnabled()) {
+                    Tr.debug(this, tc, "Connection failed, resource adapter requested skipping failure logging");
+                }
+                throw e;
+            } else {
                 com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.cleanup", "706", this);
                 /*
-                 *  We are here means there is an error occured during MC cleanup.
+                 * We are here means there is an error occured during MC cleanup.
                  * Lets not log a error message, when we clearly know we are attempting to
                  * cleanup a bad connection. At this stage the error message could be misleading.
                  */
@@ -1347,11 +1330,11 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                     Object[] parms = new Object[] { "cleanup", "cleanup", mc, e, gConfigProps.cfName };
                     Tr.error(tc, "MCERROR_J2CA0081", parms);
                 } else {
-                    if (isTracingEnabled && tc.isDebugEnabled()) 
+                    if (isTracingEnabled && tc.isDebugEnabled())
                         Tr.debug(this, tc, "got a SCE when doing cleanup on the mc, { mc, e, pmiName}; is:", new Object[] { mc, e, gConfigProps.cfName });
-                } 
+                }
                 throw e;
-            } 
+            }
 
         } catch (Exception e) {
 
@@ -1361,12 +1344,12 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                 Object[] parms = new Object[] { "cleanup", "cleanup", mc, e, gConfigProps.cfName };
                 Tr.error(tc, "MCERROR_J2CA0081", parms);
             } else {
-                if (isTracingEnabled && tc.isDebugEnabled()) { 
+                if (isTracingEnabled && tc.isDebugEnabled()) {
                     Tr.debug(this, tc, "got a SCE when doing cleanup on the mc, { mc, e, pmiName}; is:", new Object[] { mc, e, gConfigProps.cfName });
                 }
             }
             re = new ResourceException("cleanup: Exception caught");
-            re.initCause(e); 
+            re.initCause(e);
             throw re;
 
         } finally {
@@ -1383,7 +1366,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             // we must unconditionally reset unusedTimeStamp here.
 
             unusedTimeStamp = java.lang.System.currentTimeMillis();
-            switch (tranWrapperInUse) { 
+            switch (tranWrapperInUse) {
                 /*
                  * Cleanup on the tran wrapper. This is not cleanup for
                  * the mc.
@@ -1414,7 +1397,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             }
 
             mcConnectionCount = 0;
-            cm = null; 
+            cm = null;
 
             boolean isAlreadyFreeActive = false;
             if (state == STATE_ACTIVE_FREE) {
@@ -1422,22 +1405,22 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             }
 
             state = STATE_ACTIVE_FREE;
-            tranWrapperInUse = NONE; 
-            uowCoord = null; 
-            holdTimeStart = 0; 
-            holdStartTimeSet = false; 
+            tranWrapperInUse = NONE;
+            uowCoord = null;
+            holdTimeStart = 0;
+            holdStartTimeSet = false;
             // threadId = null; //  keep the thead info for tls connections
             // threadName = null; //  keep the thread name info for tls connections
             totalUseTime = 0;
             currentUseStartTime = 0;
-            useStartTimeSet = false; 
+            useStartTimeSet = false;
             totalHoldTime = 0;
             if (!isAlreadyFreeActive) {
                 isNotAlreadyFreeActive();
             }
-        } 
+        }
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "tlsCleanup");
         }
 
@@ -1460,18 +1443,18 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     @Override
     public void cleanup() throws ResourceException {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "cleanup");
         }
 
         this.initialRequestStackTrace = null;
-        this.clearHandleList(); 
+        this.clearHandleList();
 
-        // ease state checks for error cleanup code.    if ((state != STATE_ACTIVE_INUSE) && (state != STATE_ACTIVE_FREE)) { 
-        if ((state == STATE_NEW) || (state == STATE_INACTIVE)) { 
-            IllegalStateException e = new IllegalStateException("cleanup: illegal state exception. State = " + getStateString() + " MCW = " + mcWrapperObject_hexString); 
+        // ease state checks for error cleanup code.    if ((state != STATE_ACTIVE_INUSE) && (state != STATE_ACTIVE_FREE)) {
+        if ((state == STATE_NEW) || (state == STATE_INACTIVE)) {
+            IllegalStateException e = new IllegalStateException("cleanup: illegal state exception. State = " + getStateString() + " MCW = " + mcWrapperObject_hexString);
             Object[] parms = new Object[] { "cleanup", e };
             Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", parms);
             throw e;
@@ -1504,7 +1487,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                     Tr.debug(this, tc, "Returned from mc.dissociateConnections()");
 
             }
-            //     if(!cleanupAllReadyCalled) { 
+            //     if(!cleanupAllReadyCalled) {
             if (mc != null) {
                 mc.cleanup();
             } else if (tc.isDebugEnabled()) {
@@ -1513,22 +1496,22 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
         } catch (ResourceException e) {
 
-            String localMessage = e.getLocalizedMessage(); 
-            if ((localMessage != null) && localMessage.equals("Skip logging for this failing connection")) { 
+            String localMessage = e.getLocalizedMessage();
+            if ((localMessage != null) && localMessage.equals("Skip logging for this failing connection")) {
                 /*
                  * If the resource adapter throws a resource exception with the skip logging text,
                  * log this path only when debug is enabled.
                  *
                  * The resource apdater does not want normal logging of this failed managed connection.
                  */
-                if (tc.isDebugEnabled()) { 
-                    Tr.debug(this, tc, "Connection failed, resource adapter requested skipping failure logging"); 
-                } 
-                throw e; 
-            } else { 
+                if (tc.isDebugEnabled()) {
+                    Tr.debug(this, tc, "Connection failed, resource adapter requested skipping failure logging");
+                }
+                throw e;
+            } else {
                 com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.cleanup", "706", this);
                 /*
-                 *  We are here means there is an error occured during MC cleanup.
+                 * We are here means there is an error occured during MC cleanup.
                  * Lets not log a error message, when we clearly know we are attempting to
                  * cleanup a bad connection. At this stage the error message could be misleading.
                  */
@@ -1536,11 +1519,11 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                     Object[] parms = new Object[] { "cleanup", "cleanup", mc, e, gConfigProps.cfName };
                     Tr.error(tc, "MCERROR_J2CA0081", parms);
                 } else {
-                    if (isTracingEnabled && tc.isDebugEnabled()) 
+                    if (isTracingEnabled && tc.isDebugEnabled())
                         Tr.debug(this, tc, "got a SCE when doing cleanup on the mc, { mc, e, pmiName}; is:", new Object[] { mc, e, gConfigProps.cfName });
-                } 
+                }
                 throw e;
-            } 
+            }
 
         } catch (Exception e) {
 
@@ -1550,12 +1533,12 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                 Object[] parms = new Object[] { "cleanup", "cleanup", mc, e, gConfigProps.cfName };
                 Tr.error(tc, "MCERROR_J2CA0081", parms);
             } else {
-                if (isTracingEnabled && tc.isDebugEnabled()) { 
+                if (isTracingEnabled && tc.isDebugEnabled()) {
                     Tr.debug(this, tc, "got a SCE when doing cleanup on the mc, { mc, e, pmiName}; is:", new Object[] { mc, e, gConfigProps.cfName });
                 }
             }
             re = new ResourceException("cleanup: Exception caught");
-            re.initCause(e); 
+            re.initCause(e);
             throw re;
 
         } finally {
@@ -1572,7 +1555,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             // we must unconditionally reset unusedTimeStamp here.
 
             unusedTimeStamp = java.lang.System.currentTimeMillis();
-            switch (tranWrapperInUse) { 
+            switch (tranWrapperInUse) {
                 /*
                  * Cleanup on the tran wrapper. This is not cleanup for
                  * the mc.
@@ -1603,7 +1586,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             }
 
             mcConnectionCount = 0;
-            cm = null; 
+            cm = null;
 
             boolean isAlreadyFreeActive = false;
             if (state == STATE_ACTIVE_FREE) {
@@ -1611,15 +1594,15 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             }
 
             state = STATE_ACTIVE_FREE;
-            tranWrapperInUse = NONE; 
-            uowCoord = null; 
-            holdTimeStart = 0; 
-            holdStartTimeSet = false; 
-            threadId = null; 
-            threadName = null; 
+            tranWrapperInUse = NONE;
+            uowCoord = null;
+            holdTimeStart = 0;
+            holdStartTimeSet = false;
+            threadId = null;
+            threadName = null;
             totalUseTime = 0;
             currentUseStartTime = 0;
-            useStartTimeSet = false; 
+            useStartTimeSet = false;
             totalHoldTime = 0;
             purgeState = false;
             if (!isAlreadyFreeActive) {
@@ -1627,7 +1610,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             }
         }
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "cleanup");
         }
 
@@ -1640,15 +1623,14 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     /**
     *
     */
-    void processUseAndHoldTime() { 
+    void processUseAndHoldTime() {
 
-        if (holdStartTimeSet == true) { 
+        if (holdStartTimeSet == true) {
             long currentTime = System.currentTimeMillis();
             totalHoldTime = currentTime - holdTimeStart;
         }
 
     }
-
 
     /**
      * Calls <code>destroy()</code> on the wrappered <code>ManagedConnection<code>.
@@ -1665,16 +1647,16 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     @Override
     public void destroy() throws ResourceException {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "destroy");
         }
 
         if (state != STATE_ACTIVE_FREE) { // && state != STATE_ACTIVE_INUSE) {
-            //IllegalStateException e = new IllegalStateException("destroy: illegal state exception. State = " + getStateString() + " MCW = " + mcWrapperObject_hexString); 
+            //IllegalStateException e = new IllegalStateException("destroy: illegal state exception. State = " + getStateString() + " MCW = " + mcWrapperObject_hexString);
             //- add pmiName to message
-            String pmiName = "No longer available"; 
+            String pmiName = "No longer available";
             if (cm != null) {
                 pmiName = gConfigProps.cfName;
             }
@@ -1701,11 +1683,11 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                 Tr.error(tc, "MCERROR_J2CA0081", parms);
             } else {
 
-                if (isTracingEnabled && tc.isDebugEnabled()) { 
+                if (isTracingEnabled && tc.isDebugEnabled()) {
                     Tr.debug(this, tc, "got a SCE when doing removeConnectionEventListener on the mc, { mc, e, pmiName}; is:", new Object[] { mc, e, pmiName });
                 }
 
-            } 
+            }
         }
 
         try {
@@ -1716,7 +1698,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             }
         } catch (ResourceException e) {
             com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.destroy", "791", this);
-            String pmiName = "No longer available"; 
+            String pmiName = "No longer available";
             if (cm != null) {
                 pmiName = gConfigProps.cfName;
             }
@@ -1725,18 +1707,18 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                 Tr.error(tc, "MCERROR_J2CA0081", parms);
             } else {
 
-                if (isTracingEnabled && tc.isDebugEnabled()) { 
+                if (isTracingEnabled && tc.isDebugEnabled()) {
                     Tr.debug(this, tc, "got a SCE when doing destroy on the mc, { mc, e, pmiName}; is:", new Object[] { mc, e, pmiName });
                 }
 
-            } 
+            }
 
             throw e;
         } catch (Exception e) {
 
             com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.destroy", "797", this);
             ResourceException re = null;
-            String pmiName = "No longer available"; 
+            String pmiName = "No longer available";
             if (cm != null) {
                 pmiName = gConfigProps.cfName;
             }
@@ -1745,13 +1727,13 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                 Tr.error(tc, "MCERROR_J2CA0081", parms);
             } else {
 
-                if (isTracingEnabled && tc.isDebugEnabled()) { 
+                if (isTracingEnabled && tc.isDebugEnabled()) {
                     Tr.debug(this, tc, "got a SCE when doing destroy on the mc, { mc, e, pmiName}; is:", new Object[] { mc, e, pmiName });
                 }
 
             }
             re = new ResourceException("destroy: Exception caught");
-            re.initCause(e); 
+            re.initCause(e);
             throw re;
 
         } finally {
@@ -1784,8 +1766,8 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
                     case XATXWRAPPER:
                         com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.destroy", "814", this);
-                        if (isTracingEnabled && tc.isDebugEnabled()) { 
-                            String pmiName = "No longer available"; 
+                        if (isTracingEnabled && tc.isDebugEnabled()) {
+                            String pmiName = "No longer available";
                             if (cm != null) {
                                 pmiName = gConfigProps.cfName;
                             }
@@ -1795,8 +1777,8 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
                     case LOCALTXWRAPPER:
                         com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.destroy", "823", this);
-                        if (isTracingEnabled && tc.isDebugEnabled()) { 
-                            String pmiName = "No longer available"; 
+                        if (isTracingEnabled && tc.isDebugEnabled()) {
+                            String pmiName = "No longer available";
                             if (cm != null) {
                                 pmiName = gConfigProps.cfName;
                             }
@@ -1806,8 +1788,8 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
                     case NOTXWRAPPER:
                         com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.destroy", "832", this);
-                        if (isTracingEnabled && tc.isDebugEnabled()) { 
-                            String pmiName = "No longer available"; 
+                        if (isTracingEnabled && tc.isDebugEnabled()) {
+                            String pmiName = "No longer available";
                             if (cm != null) {
                                 pmiName = gConfigProps.cfName;
                             }
@@ -1817,8 +1799,8 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
                     case RRSGLOBALTXWRAPPER:
                         com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.destroy", "825", this);
-                        if (isTracingEnabled && tc.isDebugEnabled()) { 
-                            String pmiName = "No longer available"; 
+                        if (isTracingEnabled && tc.isDebugEnabled()) {
+                            String pmiName = "No longer available";
                             if (cm != null) {
                                 pmiName = gConfigProps.cfName;
                             }
@@ -1828,8 +1810,8 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
                     case RRSLOCALTXWRAPPER:
                         com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.destroy", "827", this);
-                        if (isTracingEnabled && tc.isDebugEnabled()) { 
-                            String pmiName = "No longer available"; 
+                        if (isTracingEnabled && tc.isDebugEnabled()) {
+                            String pmiName = "No longer available";
                             if (cm != null) {
                                 pmiName = gConfigProps.cfName;
                             }
@@ -1844,20 +1826,20 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
             }
 
-            if (isTracingEnabled && tc.isDebugEnabled()) { 
-                Tr.debug(this, tc, "Resetting stale, tranFailed, and _transactionErrorOccurred flags"); 
-            } 
+            if (isTracingEnabled && tc.isDebugEnabled()) {
+                Tr.debug(this, tc, "Resetting stale, tranFailed, and _transactionErrorOccurred flags");
+            }
 
-            stale = false; 
-            _transactionErrorOccurred = false; 
+            stale = false;
+            _transactionErrorOccurred = false;
 
             state = STATE_INACTIVE;
-            destroyState = false; 
+            destroyState = false;
             purgeState = false;
 
         }
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "destroy");
         }
 
@@ -1875,9 +1857,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      */
     protected java.lang.Object getConnection(Subject subj, ConnectionRequestInfo cri) throws ResourceException {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "getConnection");
         }
 
@@ -1887,7 +1869,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
         // number of open connections for this ManagedConnection.
         try {
             connection = mc.getConnection(subj, cri);
-            if (_supportsReAuth) { 
+            if (_supportsReAuth) {
                 /*
                  * If we have a userDataPending userData, we need
                  * to set the current userData to the userDataPending
@@ -1901,14 +1883,13 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                  * to recover corrently with the current userData values
                  * in the PoolManager code.
                  */
-                _subject = subj; 
-                _cri = cri; 
-                hashMapBucket = _hashMapBucketReAuth; 
+                _subject = subj;
+                _cri = cri;
+                hashMapBucket = _hashMapBucketReAuth;
             }
             incrementHandleCount();
             // Need PMI Call here.
-        }
-        catch (SharingViolationException e) {
+        } catch (SharingViolationException e) {
             // If there is a sharing violation, it means that there is already at LEAST one connection
             // handle out.  Therefore we can't release the ManagedConnection yet.  Just log and rethrow.
             com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.getConnection", "1677", this);
@@ -1918,10 +1899,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             }
             Tr.error(tc, "FAILED_CONNECTION_J2CA0021", new Object[] { e, cfName });
             throw e;
-        }
-        catch (ResourceException e) {
+        } catch (ResourceException e) {
             com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.getConnection", "873", this);
-            String cfName = "No longer available"; 
+            String cfName = "No longer available";
             if (cm != null) {
                 cfName = gConfigProps.cfName;
             }
@@ -1937,7 +1917,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
              * the aftercompletion call on the tran wrapper.
              */
             /*
-             * if ((uowCoord == null) && (mcConnectionCount == 0)) { 
+             * if ((uowCoord == null) && (mcConnectionCount == 0)) {
              * try {
              * pm.release(this, uowCoord);
              * }
@@ -1951,7 +1931,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             throw e;
         } catch (Exception e) {
             com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.getConnection", "901", this);
-            String cfName = "No longer available"; 
+            String cfName = "No longer available";
             if (cm != null) {
                 cfName = gConfigProps.cfName;
             }
@@ -1967,7 +1947,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
              * the aftercompletion call on the tran wrapper.
              */
             /*
-             * if ((uowCoord == null) && (mcConnectionCount == 0)) { 
+             * if ((uowCoord == null) && (mcConnectionCount == 0)) {
              * try {
              * pm.release(this, uowCoord);
              * }
@@ -1989,19 +1969,19 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                     remsg = "Component-managed authentication alias " + originalAlias +
                             " for connection factory or datasource " + cfName +
                             " is invalid.  It may be necessary to re-start the server(s) for " +
-                            " previous configuration changes to take effect."; 
+                            " previous configuration changes to take effect.";
 
                 } // end originalAlias not null or blank
 
             } // end pmiName != null
 
-            ResourceException re = new ResourceException(remsg); 
-            re.initCause(e); 
+            ResourceException re = new ResourceException(remsg);
+            re.initCause(e);
             throw re;
 
         } // end catch Exception e
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "getConnection", connection);
         }
 
@@ -2029,28 +2009,28 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      */
     protected void associateConnection(Object handle, MCWrapper fromWrapper) throws ResourceException {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "associateConnection");
         }
 
         try {
             mc.associateConnection(handle);
-            if (fromWrapper != null) { 
+            if (fromWrapper != null) {
                 fromWrapper.decrementHandleCount();
             }
             incrementHandleCount();
         } catch (ResourceException e) {
 
             com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.associateConnection", "965", this);
-            String pmiName = "No longer available"; 
+            String pmiName = "No longer available";
             if (cm != null) {
                 pmiName = gConfigProps.cfName;
             }
             Tr.error(tc, "FAILED_TO_ASSOCIATE_CONNECTION_J2CA0058", new Object[] { handle, mc, e, pmiName });
 
-            if (isTracingEnabled && tc.isEntryEnabled()) { 
+            if (isTracingEnabled && tc.isEntryEnabled()) {
                 Tr.exit(this, tc, "associateConnection", "Caught a ResourceException exception from mc.associateConnection()");
             }
 
@@ -2059,38 +2039,38 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
         } catch (Exception e) {
 
             com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.MCWrapper.associateConnection", "972", this);
-            if (isTracingEnabled && tc.isDebugEnabled()) { 
+            if (isTracingEnabled && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "associateConnection: Caught a Non resource exception from mc.associateConnection()");
             }
-            String cfName = "No longer available"; 
+            String cfName = "No longer available";
             if (cm != null) {
                 cfName = gConfigProps.cfName;
             }
             Tr.error(tc, "FAILED_CONNECTION_J2CA0021", new Object[] { e, cfName });
             ResourceException re = new ResourceException("associateConnection: Failed to associate connection. Exception caught.");
-            re.initCause(re); 
+            re.initCause(re);
             throw re;
 
         }
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "associateConnection");
         }
 
     }
-    
+
     /**
      * Releases itself to the <code>PoolManager</code>.
      * Since this object already knows it's PM it can release itself.
      */
-    protected void releaseToPoolManager() throws ResourceException { 
+    protected void releaseToPoolManager() throws ResourceException {
 
-        if (inSharedPool) { 
+        if (inSharedPool) {
             pm.release(this, uowCoord);
-        } else { 
-                 // Non-shareable connections are Always reserved with a null coordinator,
-                 //  and thus must be release with one regardless of whether or not the
-                 //  current uowCoord is non-null.
+        } else {
+            // Non-shareable connections are Always reserved with a null coordinator,
+            //  and thus must be release with one regardless of whether or not the
+            //  current uowCoord is non-null.
             pm.release(this, null);
         }
 
@@ -2110,12 +2090,12 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
         if (tc.isEntryEnabled()) {
             Tr.exit(this, tc, "connectionErrorOccurred");
         }
-    } 
+    }
 
     protected void connectionErrorOccurred(ConnectionEvent connectionEvent) {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
-        if (poolState.get() == 50) { 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
+        if (poolState.get() == 50) {
             /*
              * When a resource adapter uses connectionErrorOccurred during a
              * createManagedConnection, matchManagedConnection or getConnection
@@ -2129,16 +2109,16 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                 Tr.debug(this, tc, "A connection error occurred is being called during matchManagedConnection for mcw " + this + " " +
                                    "Attempting to cleanup and destroy this connection cleanly");
             }
-            do_not_reuse_mcw = true; 
+            do_not_reuse_mcw = true;
 
-        } else { 
+        } else {
             /*
              * We remove all trace of this ManagedConnection and its associated transaction
              * (if any) here. If the transaction gets completed the afterCompletion processing
              * won't find anything to do because of the cleanup performed here.
              */
 
-            //if (involvedInTransaction()) { 
+            //if (involvedInTransaction()) {
             try {
                 // Q:  Why aren't we checking for NULL_COORDINATOR before calling this method???
                 // A:  Because PoolManager needs to check find it where ever it is.  A NULL_COORDINATOR
@@ -2152,18 +2132,18 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                  * connection to be destroyed.
                  */
                 if (!stale) { // Check for stale in case we have already been here before.
-                    if (connectionEvent.getId() != com.ibm.websphere.j2c.ConnectionEvent.SINGLE_CONNECTION_ERROR_OCCURRED) { 
-                        pm.fatalErrorNotification(_managedConnectionFactory, this, uowCoord); 
-                    } else { 
-                             // Need to set stale since we skipped fatal error code.
-                        this.markStale(); 
-                    } 
+                    if (connectionEvent.getId() != com.ibm.websphere.j2c.ConnectionEvent.SINGLE_CONNECTION_ERROR_OCCURRED) {
+                        pm.fatalErrorNotification(_managedConnectionFactory, this, uowCoord);
+                    } else {
+                        // Need to set stale since we skipped fatal error code.
+                        this.markStale();
+                    }
                 }
             } catch (Exception e) {
                 // Nothing to do here. PoolManager has already logged it.
                 // Since we're in the cleanup stage, there is no reason to surface a Runtime exception to the Resource Adapter.
-                if (isTracingEnabled && tc.isDebugEnabled()) { 
-                    String pmiName = "No longer available"; 
+                if (isTracingEnabled && tc.isDebugEnabled()) {
+                    String pmiName = "No longer available";
                     if (cm != null) {
                         pmiName = gConfigProps.cfName;
                     }
@@ -2176,14 +2156,14 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
             /*
              * Added the following code to handle NOTXWRAPPER connection
-             * or RRSLOCALTXWRAPPER connection 
+             * or RRSLOCALTXWRAPPER connection
              * that need to be cleaned up now because there afterConpletion
              * will not be called.
              *
-             *  We can cleanup the connection if it has never been used in a transaction,
+             * We can cleanup the connection if it has never been used in a transaction,
              * wrapperId == MCWrapper.NONE. This can only happen if the connection has been accessed from
              * a user created thread, and this is a common occurance for JMS so we have enabled this optimization.
-             *  if a connection error occurs before the tran wrapper is used, then we need
+             * if a connection error occurs before the tran wrapper is used, then we need
              * to cleanup the connection right away, we'll never be notified by the transaction service.
              * So, if the state is not TRAN_WRAPPER_INUSE or INACTIVE the connection will be cleaned up. (there
              * should be no way for an inactive connection to encounter a connection error)
@@ -2194,14 +2174,14 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
              */
             if ((this.getTranWrapperId() == MCWrapper.NOTXWRAPPER) ||
                 (this.getTranWrapperId() == MCWrapper.RRSLOCALTXWRAPPER) ||
-                (this.getTranWrapperId() == MCWrapper.NONE) || 
-                (state != STATE_TRAN_WRAPPER_INUSE && state != STATE_INACTIVE)) { 
+                (this.getTranWrapperId() == MCWrapper.NONE) ||
+                (state != STATE_TRAN_WRAPPER_INUSE && state != STATE_INACTIVE)) {
 
-                if (this.getTranWrapperId() == MCWrapper.NOTXWRAPPER || 
-                    this.getTranWrapperId() == MCWrapper.RRSLOCALTXWRAPPER) { 
+                if (this.getTranWrapperId() == MCWrapper.NOTXWRAPPER ||
+                    this.getTranWrapperId() == MCWrapper.RRSLOCALTXWRAPPER) {
 
-                    if (isTracingEnabled && tc.isDebugEnabled()) { 
-                        Tr.debug(this, tc, "Calling transactionComplete tranWrapperID = " + getTranWrapperString()); 
+                    if (isTracingEnabled && tc.isDebugEnabled()) {
+                        Tr.debug(this, tc, "Calling transactionComplete tranWrapperID = " + getTranWrapperString());
                     }
 
                     this.transactionComplete();
@@ -2209,17 +2189,17 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                 }
 
                 //  ConnectionHandleManager mychm = ConnectionHandleManager.getConnectionHandleManager();
-                //  mychm.removeHandles(this,connectionEvent.getConnectionHandle()); 
+                //  mychm.removeHandles(this,connectionEvent.getConnectionHandle());
 
-                this.clearHandleList(); 
+                this.clearHandleList();
                 try {
-                    this.releaseToPoolManager(); 
+                    this.releaseToPoolManager();
                 } catch (Exception ex) {
                     // Nothing to do here. PoolManager has already logged it.
                     // Since we are in cleanup mode, we will not surface a Runtime exception to the ResourceAdapter
                     com.ibm.ws.ffdc.FFDCFilter.processException(ex, "com.ibm.ejs.j2c.MCWrapper.connectionErrorOccurred", "197", this);
 
-                    if (isTracingEnabled && tc.isDebugEnabled()) { 
+                    if (isTracingEnabled && tc.isDebugEnabled()) {
                         Tr.debug(this, tc,
                                  "connectionClosed: Closing connection in pool "
                                            + gConfigProps.cfName
@@ -2227,13 +2207,12 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                                  ex);
                     }
                 }
-            }
-            else {
-                if (isTracingEnabled && tc.isDebugEnabled()) { 
+            } else {
+                if (isTracingEnabled && tc.isDebugEnabled()) {
                     Tr.debug(this, tc, "Cannot release MCWrapper to the pool, waiting for transaction to complete");
                 }
             }
-        } 
+        }
     }
 
     /**
@@ -2248,11 +2227,11 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     @Override
     public void markStale() {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
-            Tr.entry(this, tc, "markStale"); 
-        } 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
+            Tr.entry(this, tc, "markStale");
+        }
 
         // This update must be thread safe.  I'm assuming here that a boolean assignment
         //  is atomic.  If that's incorrect, then we'll need to add a synchronize(stale)
@@ -2260,9 +2239,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
         stale = true;
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
-            Tr.exit(this, tc, "markStale"); 
-        } 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
+            Tr.exit(this, tc, "markStale");
+        }
 
     }
 
@@ -2292,9 +2271,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * notification value will be cleaned up and destroyed
      */
     @Override
-    public boolean hasFatalErrorNotificationOccurred(int fatalErrorNotificationTime) { 
+    public boolean hasFatalErrorNotificationOccurred(int fatalErrorNotificationTime) {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
         /*
          * I have changed this from using a long based on a currentTimeMillis
@@ -2303,12 +2282,12 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
          * By using an int we will perform better and synchronization is
          * not required.
          */
-        if (fatalErrorValue > fatalErrorNotificationTime) { 
+        if (fatalErrorValue > fatalErrorNotificationTime) {
             return false;
         } else {
 
-            if (isTracingEnabled && tc.isDebugEnabled()) { 
-                Tr.debug(this, tc, "hasFatalErrorNotificationOccurred is true"); 
+            if (isTracingEnabled && tc.isDebugEnabled()) {
+                Tr.debug(this, tc, "hasFatalErrorNotificationOccurred is true");
             }
 
             return true;
@@ -2333,9 +2312,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      *
      */
     @Override
-    public boolean hasAgedTimedOut(long timeoutValue) { 
+    public boolean hasAgedTimedOut(long timeoutValue) {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
         boolean booleanValue = false;
         long currentTime = java.lang.System.currentTimeMillis();
@@ -2343,12 +2322,12 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
         if (timeDifference > timeoutValue) {
             booleanValue = true;
         }
-        if (booleanValue) { 
+        if (booleanValue) {
 
-            if (isTracingEnabled && tc.isDebugEnabled()) { 
-                Tr.debug(this, tc, "hasAgedTimedOut is " + booleanValue); 
-                Tr.debug(this, tc, "The created time was " + new Date(createdTimeStamp) + " and the current time is " + new Date(currentTime)); 
-                Tr.debug(this, tc, "Time difference " + timeDifference + " is greate then the aged timeout " + timeoutValue); 
+            if (isTracingEnabled && tc.isDebugEnabled()) {
+                Tr.debug(this, tc, "hasAgedTimedOut is " + booleanValue);
+                Tr.debug(this, tc, "The created time was " + new Date(createdTimeStamp) + " and the current time is " + new Date(currentTime));
+                Tr.debug(this, tc, "Time difference " + timeDifference + " is greate then the aged timeout " + timeoutValue);
             }
 
         }
@@ -2384,9 +2363,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      *
      */
     @Override
-    public boolean hasIdleTimedOut(long timeoutValue) { 
+    public boolean hasIdleTimedOut(long timeoutValue) {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
         boolean booleanValue = false;
         long currentTime = java.lang.System.currentTimeMillis();
@@ -2394,8 +2373,8 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
         if (timeDifference > timeoutValue) {
             booleanValue = true;
 
-            if (isTracingEnabled && tc.isDebugEnabled()) { 
-                Tr.debug(this, tc, "hasIdleTimedOut is " + booleanValue); 
+            if (isTracingEnabled && tc.isDebugEnabled()) {
+                Tr.debug(this, tc, "hasIdleTimedOut is " + booleanValue);
             }
 
         }
@@ -2422,12 +2401,12 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     @Override
     public void clearMCWrapper() {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
         pm = null;
 
-        if (isTracingEnabled && tc.isDebugEnabled()) { 
-            Tr.debug(this, tc, "ConnectionManager nulled PM ref"); 
+        if (isTracingEnabled && tc.isDebugEnabled()) {
+            Tr.debug(this, tc, "ConnectionManager nulled PM ref");
         }
 
     }
@@ -2441,13 +2420,12 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      *
      * super.finalize();
      *
-     * if ( com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled() ) { 
+     * if ( com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled() ) {
      * Tr.debug(this, tc, "MCWrapper garbage collected");
      * }
      *
      * }
      */
-
 
     @Override
     public String toString() {
@@ -2468,14 +2446,14 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
         buf.append(mc);
         buf.append("  State:");
         buf.append(getStateString());
-        if (threadId != null) { 
-            buf.append(" Thread Id: "); 
-            buf.append(threadId); 
-            buf.append(" Thread Name: "); 
-            buf.append(threadName); 
+        if (threadId != null) {
+            buf.append(" Thread Id: ");
+            buf.append(threadId);
+            buf.append(" Thread Name: ");
+            buf.append(threadName);
             buf.append(" Connections being held ");
-            buf.append(mcConnectionCount); 
-        } 
+            buf.append(mcConnectionCount);
+        }
         buf.append(nl);
 
         return buf.toString();
@@ -2487,7 +2465,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     }
 
     @Override
-    public boolean isParkedWrapper() { 
+    public boolean isParkedWrapper() {
         return isParkedWrapper;
     }
 
@@ -2571,7 +2549,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      */
     @Override
     public int getPoolState() {
-        return poolState.get(); 
+        return poolState.get();
     }
 
     /**
@@ -2583,14 +2561,14 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * 2 = In shared pool
      * 3 = In unshared pool
      * 4 = In waiter pool
-     * 9 = parked connection 
+     * 9 = parked connection
      *
      * @param i
      */
     @Override
     public void setPoolState(int i) {
         if (pm.gConfigProps.callResourceAdapterStatMethods) {
-            if (poolState.get() == 0) { 
+            if (poolState.get() == 0) {
                 /*
                  * If current state is 0, we are a new connection, or we are in
                  * transition to one of the pools.
@@ -2627,7 +2605,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                     //++pm.gConfigProps.numberOfInuseConnections;
                 }
             }
-            if (poolState.get() == 1) { 
+            if (poolState.get() == 1) {
                 /*
                  * We are in the free pool, moving to inuse.
                  */
@@ -2673,7 +2651,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                 }
 
             }
-            if (poolState.get() == 2) { 
+            if (poolState.get() == 2) {
                 /*
                  * We are in the shared pool, moving to free/transition.
                  */
@@ -2716,7 +2694,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                 }
 
             }
-            if (poolState.get() == 3) { 
+            if (poolState.get() == 3) {
                 /*
                  * We are in the unshared pool, moving to free/transition.
                  */
@@ -2759,7 +2737,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
                 }
 
             }
-            if (poolState.get() == 4) { 
+            if (poolState.get() == 4) {
                 /*
                  * We are in the waiter pool, moving to free/transition.
                  */
@@ -2802,9 +2780,8 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
             }
 
         }
-        poolState.set(i); 
+        poolState.set(i);
     }
-
 
     /**
      * LI3162-5 - setInitialRequestStackTrace(Throwable t)
@@ -2867,15 +2844,15 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     @Override
     public void setDestroyConnectionOnReturn() {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "setDestroyConnectionOnReturn");
         }
 
         --fatalErrorValue;
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
-            Tr.exit(this, tc, "setDestroyConnectionOnReturn",fatalErrorValue);
+        if (isTracingEnabled && tc.isEntryEnabled()) {
+            Tr.exit(this, tc, "setDestroyConnectionOnReturn", fatalErrorValue);
         }
 
     }
@@ -2905,9 +2882,9 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      */
     public void resetCoordinator() {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isDebugEnabled()) { 
+        if (isTracingEnabled && tc.isDebugEnabled()) {
             Tr.debug(this, tc, "Resetting uow coordinator to null");
         }
 
@@ -2965,51 +2942,50 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      * @return Returns the isEnlistmentDisabled.
      */
     public boolean isEnlistmentDisabled() {
-        return mc instanceof WSManagedConnection ? !((WSManagedConnection) mc).isTransactional() : false; // RRA is the only resource adapter that supports enlistment disabled  
+        return mc instanceof WSManagedConnection ? !((WSManagedConnection) mc).isTransactional() : false; // RRA is the only resource adapter that supports enlistment disabled
     }
 
     /**
      * @param ivThreadId
      */
-    public void setThreadID(String ivThreadId) { 
-        threadId = ivThreadId; 
+    public void setThreadID(String ivThreadId) {
+        threadId = ivThreadId;
     }
 
     /**
      * @return Returns threadId
      */
-    public String getThreadID() { 
-        return this.threadId; 
+    public String getThreadID() {
+        return this.threadId;
     }
 
     /**
      * @param l
      */
-    public void setLastAllocationTime(long l) { 
-        lastAllocationTime = l; 
+    public void setLastAllocationTime(long l) {
+        lastAllocationTime = l;
     }
 
     /**
      * @param l
      */
-    public long getLastAllocationTime() { 
-        return lastAllocationTime; 
+    public long getLastAllocationTime() {
+        return lastAllocationTime;
     }
 
     /**
      * @param tname
      */
-    public void setThreadName(String tname) { 
-        threadName = tname; 
+    public void setThreadName(String tname) {
+        threadName = tname;
     }
 
     /**
      * @param tname
      */
-    public String getThreadName() { 
-        return threadName; 
+    public String getThreadName() {
+        return threadName;
     }
-
 
     /**
      * Indicates that an error has occurred from the transaction service. At which point
@@ -3022,16 +2998,15 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
      */
     public void markTransactionError() {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isDebugEnabled()) { 
+        if (isTracingEnabled && tc.isDebugEnabled()) {
             Tr.debug(this, tc, "TransactionError occurred on MCWrapper:" + toString());
         }
 
         _transactionErrorOccurred = true;
 
     }
-
 
     /**
      * ShouldBeDestroyed is used by the free pool when a connection is returned to
@@ -3048,8 +3023,8 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     /**
      * @return Returns the holdTimeStart.
      */
-    public long getHoldTimeStart() { 
-        return holdTimeStart; 
+    public long getHoldTimeStart() {
+        return holdTimeStart;
     }
 
     /**
@@ -3070,14 +3045,14 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     /**
      * @param handle and its handlelist
      */
-    public void addToHandleList(Object h, HandleList HL) { 
+    public void addToHandleList(Object h, HandleList HL) {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
         if (HL != null) {
 
-            mcwHandleList.put(h, HL); 
-            if (isTracingEnabled && tc.isDebugEnabled()) { 
+            mcwHandleList.put(h, HL);
+            if (isTracingEnabled && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "Adding Connection handle: " + h +
                                    "and its handle list object: " + HL +
                                    " to the MCWrapper connection Handle to HandeList map "
@@ -3086,7 +3061,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
 
         } else {
 
-            if (isTracingEnabled && tc.isDebugEnabled()) { 
+            if (isTracingEnabled && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "The Handle List is null for connection handle: " + h +
                                    " This is a thread with no context so so this handle will only " +
                                    " be stored in the handlelist no_context_handle_list object.");
@@ -3099,13 +3074,13 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     /**
      * @param handle and its handlelist
      */
-    public HandleList removeFromHandleList(Object h) { 
+    public HandleList removeFromHandleList(Object h) {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        HandleList hl = mcwHandleList.remove(h); 
+        HandleList hl = mcwHandleList.remove(h);
 
-        if (isTracingEnabled && tc.isDebugEnabled()) { 
+        if (isTracingEnabled && tc.isDebugEnabled()) {
             Tr.debug(this, tc, "Removing Connection handle: " + h +
                                " from the MCWrapper connection Handle to HandeList map "
                                + "MCwrapper Handlelist size : " + mcwHandleList.size());
@@ -3117,11 +3092,11 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
     /**
      * clear the handle list
      */
-    public void clearHandleList() { 
+    public void clearHandleList() {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isDebugEnabled()) { 
+        if (isTracingEnabled && tc.isDebugEnabled()) {
             Tr.debug(this, tc, "Clear the McWrapper handlelist for  the following MCWrapper: " + this);
         }
 
@@ -3133,7 +3108,7 @@ public final class MCWrapper implements com.ibm.ws.j2c.MCWrapper, JCAPMIHelper {
         // Liberty doesn't have real HandleList so don't need to remove anything
         //
 
-        mcwHandleList.clear(); 
+        mcwHandleList.clear();
 
     }
 

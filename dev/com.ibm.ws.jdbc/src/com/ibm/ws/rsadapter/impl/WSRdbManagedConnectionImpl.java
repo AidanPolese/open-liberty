@@ -458,7 +458,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
         DSConfig config = dsConfig.get();
         threadID = config.enableMultithreadedAccessDetection ? Thread.currentThread() : threadID; 
 
-        rrsTransactional = mcf1.getRRSTransactional(); 
+        rrsTransactional = helper.getRRSTransactional(); 
 
         //  - set defaultHoldability value
 

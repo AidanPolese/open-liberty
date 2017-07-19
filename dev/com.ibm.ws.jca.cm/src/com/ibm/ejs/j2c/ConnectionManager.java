@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 1997, 2016 IBM Corporation and others.
+ * Copyright (c) 1997, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,7 +22,6 @@ import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.resource.ResourceException;
@@ -54,7 +53,6 @@ import com.ibm.ws.jca.cm.AbstractConnectionFactoryService;
 import com.ibm.ws.jca.cm.AppDefinedResource;
 import com.ibm.ws.resource.ResourceRefInfo;
 import com.ibm.ws.runtime.metadata.ComponentMetaData;
-import com.ibm.ws.threadContext.ComponentMetaDataAccessorImpl;
 import com.ibm.ws.tx.embeddable.EmbeddableWebSphereTransactionManager;
 import com.ibm.ws.tx.rrs.RRSXAResourceFactory;
 import com.ibm.wsspi.kernel.service.utils.FilterUtils;
@@ -80,30 +78,30 @@ import com.ibm.wsspi.resource.ResourceFactory;
  *
  * See {@link com.ibm.ejs.j2c.CMConfigDataImpl#getCFDetailsKey}
  */
-public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager, com.ibm.ws.jca.adapter.WSConnectionManager, PropertyChangeListener, VetoableChangeListener, java.io.Serializable { 
+public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager, com.ibm.ws.jca.adapter.WSConnectionManager, PropertyChangeListener, VetoableChangeListener, java.io.Serializable {
 
-    private static final long serialVersionUID = -3078170792213348926L; 
+    private static final long serialVersionUID = -3078170792213348926L;
 
     /**
      * The ResourceAdapterDD and ConnectorPoolProperties are per deployed resource adapter
      * and hence per ManagedConnectionFactory (MCF).
      */
-    private static final TraceComponent tc = Tr.register(ConnectionManager.class, J2CConstants.traceSpec, J2CConstants.messageFile); 
+    private static final TraceComponent tc = Tr.register(ConnectionManager.class, J2CConstants.traceSpec, J2CConstants.messageFile);
 
     private final AbstractConnectionFactoryService connectionFactorySvc;
 
-    private static final AtomicLong numberOfCMinstancesEverCreated = new AtomicLong(0); 
+    private static final AtomicLong numberOfCMinstancesEverCreated = new AtomicLong(0);
 
     private String cfDetailsKey = "NameNotSet";
-    protected CMConfigData cmConfig = null; 
+    protected CMConfigData cmConfig = null;
     private boolean shareable = false;
 
-    private int recoveryToken; 
+    private int recoveryToken;
 
-    protected transient SecurityHelper securityHelper = null; 
-    protected transient boolean websphereMCF = false; 
-    private transient int commitPriority = 0; 
-    private boolean localTranSupportSet = false; 
+    protected transient SecurityHelper securityHelper = null;
+    private final boolean isJDBC;
+    private transient int commitPriority = 0;
+    private boolean localTranSupportSet = false;
 
     /**
      * The following is a variable which will tell us whether or not
@@ -116,10 +114,10 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
      * <br><br> A value of "2" indicates it supports 2PC.
      */
 
-    protected transient PrivilegedExceptionAction<Boolean> _getADP = null; 
-    protected boolean containerManagedAuth = false; 
+    protected transient PrivilegedExceptionAction<Boolean> _getADP = null;
+    protected boolean containerManagedAuth = false;
     protected HashMap<Object, String> handleToThreadMap = null;
-    protected HashMap<Object, ComponentMetaData> handleToCMDMap = null; 
+    protected HashMap<Object, ComponentMetaData> handleToCMDMap = null;
 
     // The following are either set when the CM constructor runs, or in response
     // to a propertyChangeEvent.  Property changes are copied to these local
@@ -127,58 +125,55 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
     protected boolean connThreadInfoEnabled = false; // Dynamically Updateable
 
     protected transient PoolManager _pm = null;
-    protected ManagedConnectionFactory _mcf = null;
     protected J2CGlobalConfigProperties gConfigProps = null;
 
     /**
      * @param cfSvc connection factory service
      * @param mcfXProps MCFExtendedProperties
-     * @param pm pool manager supplied by the lightweight server. Otherwise null. 
+     * @param pm pool manager supplied by the lightweight server. Otherwise null.
      * @param jxri J2CXAResourceInfo
      *
      * @pre jxri != null
      */
     ConnectionManager(AbstractConnectionFactoryService cfSvc,
-                      PoolManager pm, 
-                      J2CGlobalConfigProperties gconfigProps, 
-                      CommonXAResourceInfo jxri, 
-                      SecurityHelper securityHelper 
-    ) {
+                      PoolManager pm,
+                      J2CGlobalConfigProperties gconfigProps,
+                      CommonXAResourceInfo jxri,
+                      SecurityHelper securityHelper) {
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "<init>");
         }
 
         this.connectionFactorySvc = cfSvc;
         this._pm = pm;
         this.gConfigProps = gconfigProps;
-        this.cmConfig = jxri.getCmConfig(); 
+        this.cmConfig = jxri.getCmConfig();
         cfDetailsKey = cmConfig.getCFDetailsKey();
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(this, tc, "cfDetailsKey = " + cfDetailsKey + "   for PmiName = " + gConfigProps.cfName);
         }
 
         shareable = cmConfig.getSharingScope() == ResourceRef.SHARING_SCOPE_SHAREABLE;
-        this._mcf = cfSvc.getManagedConnectionFactory(); 
 
-        websphereMCF = _mcf instanceof WSManagedConnectionFactory;
+        isJDBC = cfSvc.getClass().getName().startsWith("com.ibm.ws.jdbc.");
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
 
-            Tr.debug(this, tc, " globalConfigProps " + gConfigProps); 
-            Tr.debug(this, tc, " jxri      " + jxri); 
-            Tr.debug(this, tc, " securityHelper " + securityHelper); 
+            Tr.debug(this, tc, " globalConfigProps " + gConfigProps);
+            Tr.debug(this, tc, " jxri      " + jxri);
+            Tr.debug(this, tc, " securityHelper " + securityHelper);
         }
 
-        this.securityHelper = securityHelper; 
+        this.securityHelper = securityHelper;
 
-        containerManagedAuth = (cmConfig.getAuth() == J2CConstants.AUTHENTICATION_CONTAINER); 
+        containerManagedAuth = (cmConfig.getAuth() == J2CConstants.AUTHENTICATION_CONTAINER);
 
-        commitPriority = cmConfig.getCommitPriority(); 
+        commitPriority = cmConfig.getCommitPriority();
 
-        // Create and register a J2C XAResource only if the      
-        // transaction support is not RRSTransactional.          
+        // Create and register a J2C XAResource only if the
+        // transaction support is not RRSTransactional.
 
         // Get the TransactionManager and if not null, register
         // the XAResource. If the TransactionManager is null then
@@ -190,51 +185,48 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
         EmbeddableWebSphereTransactionManager tm = pm.connectorSvc.transactionManager;
         if (tm != null) {
-            if (!gConfigProps.selfXARecoverable) { 
-                if (!gConfigProps.rrsTransactional) {
-                    recoveryToken = registerXAResourceInfo(tm, jxri, commitPriority);
-                } else 
-                {
-                    if (!TransactionSupportLevel.NoTransaction.equals(gconfigProps.transactionSupport)) {
-                        RRSXAResourceFactory xaFactory = (RRSXAResourceFactory) _pm.connectorSvc.rrsXAResFactorySvcRef.getService();
+            if (!gConfigProps.rrsTransactional) {
+                recoveryToken = registerXAResourceInfo(tm, jxri, commitPriority);
+            } else {
+                if (!TransactionSupportLevel.NoTransaction.equals(gconfigProps.transactionSupport)) {
+                    RRSXAResourceFactory xaFactory = (RRSXAResourceFactory) _pm.connectorSvc.rrsXAResFactorySvcRef.getService();
 
-                        // Make sure that the bundle is active.
-                        if (xaFactory == null) {
-                            throw new IllegalStateException("Native service for RRS transactional support is not active or available. Resource registration is rejected.");
-                        }
-
-                        UOWCurrent currentUOW = (UOWCurrent) tm;
-                        UOWCoordinator uowCoord = currentUOW.getUOWCoord();
-                        Xid xid = (uowCoord != null) ? uowCoord.getXid() : null;
-
-                        // Create a filter for the transaction manager to be able to find the native
-                        // transaction factory in the service registry during recovery.
-                        String filter = FilterUtils.createPropertyFilter("native.xa.factory", (xaFactory.getClass().getCanonicalName()));
-
-                        // NOTE: At this point in time, the transaction manager does not support logging
-                        // XAResourceInfo type objects; However, they do allow generic serializable objects such as a String
-                        // to be logged and retrieved during recovery. So, a String is what is currently passed as resource info to
-                        // the registerResourceInfo call.
-                        Serializable xaResInfo = xaFactory.getXAResourceInfo(xid);
-                        recoveryToken = tm.registerResourceInfo(filter, xaResInfo, commitPriority);
+                    // Make sure that the bundle is active.
+                    if (xaFactory == null) {
+                        throw new IllegalStateException("Native service for RRS transactional support is not active or available. Resource registration is rejected.");
                     }
+
+                    UOWCurrent currentUOW = (UOWCurrent) tm;
+                    UOWCoordinator uowCoord = currentUOW.getUOWCoord();
+                    Xid xid = (uowCoord != null) ? uowCoord.getXid() : null;
+
+                    // Create a filter for the transaction manager to be able to find the native
+                    // transaction factory in the service registry during recovery.
+                    String filter = FilterUtils.createPropertyFilter("native.xa.factory", (xaFactory.getClass().getCanonicalName()));
+
+                    // NOTE: At this point in time, the transaction manager does not support logging
+                    // XAResourceInfo type objects; However, they do allow generic serializable objects such as a String
+                    // to be logged and retrieved during recovery. So, a String is what is currently passed as resource info to
+                    // the registerResourceInfo call.
+                    Serializable xaResInfo = xaFactory.getXAResourceInfo(xid);
+                    recoveryToken = tm.registerResourceInfo(filter, xaResInfo, commitPriority);
                 }
             }
-        } else if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) { 
+        } else if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(this, tc, "<constructor>, TransactionManager is null");
         }
 
-        //  end !rrsTransactional  
+        //  end !rrsTransactional
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             numberOfCMinstancesEverCreated.incrementAndGet();
-            Tr.debug(this, tc, "This brings the total no. of CM instances to " + numberOfCMinstancesEverCreated.get()); 
+            Tr.debug(this, tc, "This brings the total no. of CM instances to " + numberOfCMinstancesEverCreated.get());
         }
 
-        gConfigProps.addPropertyChangeListener(this); 
-        gConfigProps.addVetoableChangeListener(this); 
+        gConfigProps.addPropertyChangeListener(this);
+        gConfigProps.addVetoableChangeListener(this);
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "<init>", this.toString());
         }
     }
@@ -253,7 +245,6 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
         return cmConfig;
     }
 
-
     /**
      * This method is called by a resource adapter ConnectionFactory to obtain a Connection each
      * time the application calls getConnection() on the resource adapter ConnectionFactory.
@@ -265,13 +256,13 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
      */
     @Override
     public Object allocateConnection(ManagedConnectionFactory factory, ConnectionRequestInfo requestInfo) throws ResourceException {
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
-            Tr.entry(this, tc, "allocateConnection"); 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.entry(this, tc, "allocateConnection");
         }
 
         if (_pm == null) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
-                Tr.debug(this, tc, "This should not happen!  pm was null for cf name " + cmConfig.getCfKey()); 
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(this, tc, "This should not happen!  pm was null for cf name " + cmConfig.getCfKey());
             }
             String formattedMessage = CommonFunction.getNLSMessage("POOL_MANAGER_NOT_FOUND_J2CA0695",
                                                                    new Object[] { cmConfig.getJNDIName() == null ? cmConfig.getCfKey() : cmConfig.getJNDIName() });
@@ -281,18 +272,17 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
         }
 
         UOWCurrent uowCurrent = (UOWCurrent) _pm.connectorSvc.transactionManager;
-        UOWCoordinator uowCoord = uowCurrent == null ? null : uowCurrent.getUOWCoord(); 
+        UOWCoordinator uowCoord = uowCurrent == null ? null : uowCurrent.getUOWCoord();
 
-        Subject subj = getFinalSubject(requestInfo, factory, this); 
+        Subject subj = getFinalSubject(requestInfo, factory, this);
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
-            Tr.debug(this, tc, "This CM is " + this.toString()); 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(this, tc, "This CM is " + this.toString());
             Tr.debug(this, tc, "Input MCF is     " + factory);
-            Tr.debug(this, tc, "This CM's MCF is " + _pm.getManagedConnectionFactory());
         }
 
-        if (!started) { 
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+        if (!started) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "CF is not started.  Throwing ResourceException");
             }
             throw new ResourceException("CF is not started.");
@@ -300,15 +290,15 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
         Object rVal = null;
 
-        Object credTokenObj = null; 
+        Object credTokenObj = null;
         MCWrapper mcWrapper = null;
-        try { // Begin processing to get connection                
+        try { // Begin processing to get connection
 
-            // Perform any security setup that may be needed         
-            // before we proceed to get a connection.                
+            // Perform any security setup that may be needed
+            // before we proceed to get a connection.
 
-            credTokenObj = securityHelper.beforeGettingConnection(subj, requestInfo); 
-            mcWrapper = allocateMCWrapper(factory, requestInfo, subj, uowCoord); 
+            credTokenObj = securityHelper.beforeGettingConnection(subj, requestInfo);
+            mcWrapper = allocateMCWrapper(factory, requestInfo, subj, uowCoord);
 
             involveMCInTran(mcWrapper, uowCoord, this);
 
@@ -316,16 +306,16 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
              * Get the a Connection from the ManagedConnection to return to our caller.
              */
 
-            int poolState = mcWrapper.getPoolState(); 
+            int poolState = mcWrapper.getPoolState();
             try {
-                mcWrapper.setPoolState(50); 
+                mcWrapper.setPoolState(50);
 
                 rVal = mcWrapper.getConnection(subj, requestInfo);
-                mcWrapper.setPoolState(poolState); 
-                if (mcWrapper.do_not_reuse_mcw) { 
-                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
-                        Tr.debug(this, tc, "Connection error occurred for this mcw " + mcWrapper + ", mcw will not be reuse"); 
-                    } 
+                mcWrapper.setPoolState(poolState);
+                if (mcWrapper.do_not_reuse_mcw) {
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                        Tr.debug(this, tc, "Connection error occurred for this mcw " + mcWrapper + ", mcw will not be reuse");
+                    }
                     mcWrapper.markStale();
                     ResourceException e = new ResourceException("Resource adatepr called connection error event during getConnection " +
                                                                 "processing and did not throw a resource exception.  The reason for " +
@@ -334,7 +324,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                     throw e;
                 }
             } catch (ResourceException e) {
-                mcWrapper.setPoolState(poolState); 
+                mcWrapper.setPoolState(poolState);
                 com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.ConnectionManager.allocateConnection", "344", this);
                 Tr.error(tc, "FAILED_CONNECTION_J2CA0021", new Object[] { e, _pm.gConfigProps.cfName });
 
@@ -351,12 +341,12 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                  * for resource adapter that support NOTXWRAPPER, if an error occurs, we can move them from the inuse
                  * pool, to the free pool, assuming the managed connection is good.
                  * This managed connection can be in a transaction (uowCoord != null) but it still should be ok to release it to the free pool
-                 * 
+                 *
                  * if resource failover is enabled and we are in current mode 102, since we are now using the alternate
                  * resource adapter, instead of considering this connection ok, lets remove it. When the pool fails back we
                  * do not what to risk having pooled bad connections.
                  */
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
 
                     if (uowCoord != null) {
                         Tr.debug(this, tc, "getConnection failed for using uow is " + uowCoord +
@@ -394,25 +384,25 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                     }
                 }
 
-                if ((uowCoord == null || (mcWrapper.getTranWrapperId() == MCWrapper.NOTXWRAPPER)) && mcWrapper.getHandleCount() == 0) { 
+                if ((uowCoord == null || (mcWrapper.getTranWrapperId() == MCWrapper.NOTXWRAPPER)) && mcWrapper.getHandleCount() == 0) {
 
                     try {
-                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                             Tr.debug(this, tc,
-                                     "Connection error occurred during getConnection to resource adapter.  The managed connection should be good, moving it to free pool."); 
+                                     "Connection error occurred during getConnection to resource adapter.  The managed connection should be good, moving it to free pool.");
                         }
-                        mcWrapper.releaseToPoolManager(); 
+                        mcWrapper.releaseToPoolManager();
                     } catch (Exception exp) { // don't rethrow, already on exception path
                         com.ibm.ws.ffdc.FFDCFilter.processException(exp, "com.ibm.ejs.j2c.ConnectionManager.allocateConnection", "364", this);
                         Tr.error(tc, "FAILED_CONNECTION_RELEASE_J2CA0022", new Object[] { exp, _pm.gConfigProps.cfName });
                     }
                 }
-                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
-                    Tr.exit(this, tc, "allocateConnection"); 
-                } 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+                    Tr.exit(this, tc, "allocateConnection");
+                }
                 throw e;
             } catch (java.lang.Exception e) {
-                mcWrapper.setPoolState(poolState); 
+                mcWrapper.setPoolState(poolState);
                 com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.ConnectionManager.allocateConnection", "372", this);
                 Tr.error(tc, "FAILED_CONNECTION_J2CA0021", new Object[] { e, _pm.gConfigProps.cfName });
 
@@ -426,12 +416,12 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                  * If we are in a transaction, just throw the exception. Assume we will cleanup during
                  * the aftercompletion call on the tran wrapper.
                  *
-                 *  - for resource adapter that support NOTXWRAPPER, if an error occurs, we can move them from the inuse
+                 * - for resource adapter that support NOTXWRAPPER, if an error occurs, we can move them from the inuse
                  * pool, to the free pool, assuming the managed connection is good.
                  * This managed connection can be in a transaction (uowCoord != null) but it still should be ok to release it to the free pool
                  */
 
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
 
                     if (uowCoord != null) {
                         Tr.debug(this, tc, "getConnection failed for using uow is " + uowCoord +
@@ -445,14 +435,14 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
                 }
 
-                if ((uowCoord == null || (mcWrapper.getTranWrapperId() == MCWrapper.NOTXWRAPPER)) && mcWrapper.getHandleCount() == 0) { 
+                if ((uowCoord == null || (mcWrapper.getTranWrapperId() == MCWrapper.NOTXWRAPPER)) && mcWrapper.getHandleCount() == 0) {
 
                     try {
-                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                             Tr.debug(this, tc,
-                                     "Connection error occurred during getConnection to resource adapter.  The managed connection should be good, moving it to free pool."); 
+                                     "Connection error occurred during getConnection to resource adapter.  The managed connection should be good, moving it to free pool.");
                         }
-                        mcWrapper.releaseToPoolManager(); 
+                        mcWrapper.releaseToPoolManager();
                     } catch (Exception exp) { // don't rethrow, already on exception path
                         com.ibm.ws.ffdc.FFDCFilter.processException(exp, "com.ibm.ejs.j2c.ConnectionManager.allocateConnection", "392", this);
                         Tr.error(tc, "FAILED_CONNECTION_RELEASE_J2CA0022", new Object[] { exp, _pm.gConfigProps.cfName });
@@ -462,7 +452,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                 }
 
                 ResourceException re = new ResourceException("allocateConnection: caught Exception");
-                re.initCause(e); 
+                re.initCause(e);
                 throw re;
 
             }
@@ -484,7 +474,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
             }
 
-            if (_pm != null && (_pm.maxNumberOfMCsAllowableInThread > 0)) { 
+            if (_pm != null && (_pm.maxNumberOfMCsAllowableInThread > 0)) {
 
                 /*
                  * Before getting the stack trace, lets check to see if we already have it. This
@@ -496,7 +486,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                  * perform better for application designed long running
                  * inuse connections.
                  */
-                if (mcWrapper.getInitialRequestStackTrace() == null) { 
+                if (mcWrapper.getInitialRequestStackTrace() == null) {
                     /*
                      * Get the stack for this connection request.
                      */
@@ -510,32 +500,32 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                 // Ras does not use the hex value in trace for thread id , so we are
                 // using the same thread id Ras does so we can match .
 
-                String ivThreadId = RasHelper.getThreadId(); 
+                String ivThreadId = RasHelper.getThreadId();
                 mcWrapper.setThreadID(ivThreadId);
                 mcWrapper.setThreadName(myThread.getName());
                 mcWrapper.setLastAllocationTime(System.currentTimeMillis());
 
             }
 
-        } // end try block                                      
-          // NOTE: Only a "finally" clause is implemented.        
-          //       No catch is done, because prior processing     
-          //       is already covered by catch clauses in         
-          //       either Connection Manager or other services    
-          //       which will record the error and then           
-          //       percolate up to the finally clause. The        
-          //       "finally" processing MUST be done to ensure    
-          //       any thread identity pushed to the OS           
-          //       thread is removed and the original identity    
-          //       is restored.                                   
-        finally { 
-            if (credTokenObj != null) { 
-                securityHelper.afterGettingConnection(subj, requestInfo, credTokenObj); 
-            } 
-        } 
+        } // end try block
+          // NOTE: Only a "finally" clause is implemented.
+          //       No catch is done, because prior processing
+          //       is already covered by catch clauses in
+          //       either Connection Manager or other services
+          //       which will record the error and then
+          //       percolate up to the finally clause. The
+          //       "finally" processing MUST be done to ensure
+          //       any thread identity pushed to the OS
+          //       thread is removed and the original identity
+          //       is restored.
+        finally {
+            if (credTokenObj != null) {
+                securityHelper.afterGettingConnection(subj, requestInfo, credTokenObj);
+            }
+        }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
-            Tr.exit(this, tc, "allocateConnection", Integer.toHexString(rVal.hashCode())); 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.exit(this, tc, "allocateConnection", Integer.toHexString(rVal.hashCode()));
         }
 
         return rVal;
@@ -554,12 +544,12 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
      *         as appropriate with the UOW.
      */
 
-    private MCWrapper allocateMCWrapper(ManagedConnectionFactory managedConnectionFactory, 
-                                        ConnectionRequestInfo requestInfo, 
+    private MCWrapper allocateMCWrapper(ManagedConnectionFactory managedConnectionFactory,
+                                        ConnectionRequestInfo requestInfo,
                                         Subject subj,
                                         UOWCoordinator uowCoord) throws ResourceException {
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "allocateMCWrapper");
         }
 
@@ -569,9 +559,9 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
          * Allocate ManagedConnection using PoolManager, passing the Tx as the affinityId
          */
 
-        //  try { 
+        //  try {
         boolean enforceSerialReuse = false;
-        if (shareable && uowCoord != null) { // true sharing detection   
+        if (shareable && uowCoord != null) { // true sharing detection
             // In 5.0, we're no longer supporting true connection sharing within an LTC.  This was
             // done to be consistent with the JCA spec (connection sharing requires a global
             // transaction) and to prevent "surprises" by sharing when it is not expected.  So,
@@ -580,47 +570,45 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
             // Post 5.0, when (if) the JCA spec is updated, we will throw an exception. The
             // exception will be thrown within the SharedPool code.
-            if (!uowCoord.isGlobal()) { 
+            if (!uowCoord.isGlobal()) {
                 // We are in a LTC Scope
-                boolean container_at_boundary = ((LocalTransactionCoordinator) uowCoord).isContainerResolved(); 
-                if (!container_at_boundary) { 
+                boolean container_at_boundary = ((LocalTransactionCoordinator) uowCoord).isContainerResolved();
+                if (!container_at_boundary) {
                     // The LTC is resolved by the application
                     enforceSerialReuse = true;
                 }
             } // end not isGlobal
-        } // end if (shareable...)   
+        } // end if (shareable...)
 
         // Now that we are using the real null value for the uowCoord, we don't need separate
         //  reserve() invocations for the different "types" of coordinators.  Just call it with the
         //  appropriate parameters and let the reserve() do the right thing.  The reserve() method
         //  requires both a non-null coordinator and the shareable flag set to true to allocate
         //  a connection from the shared pool.
-        try { 
+        try {
             mcWrapper = (com.ibm.ejs.j2c.MCWrapper) _pm.reserve(// factory
-                                                                managedConnectionFactory, 
-                                                                subj, 
+                                                                managedConnectionFactory,
+                                                                subj,
                                                                 requestInfo,
-                                                                uowCoord, 
-                                                                shareable, 
+                                                                uowCoord,
+                                                                shareable,
                                                                 enforceSerialReuse,
-                                                                cmConfig.getCommitPriority(), 
-                                                                cmConfig.getBranchCoupling() 
-            );
+                                                                cmConfig.getCommitPriority(),
+                                                                cmConfig.getBranchCoupling());
 
         } catch (ResourceException r) {
 
-            if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
                 Tr.exit(this, tc, "allocateMCWrapper");
             }
             throw r;
         }
 
-
         if (mcWrapper == null) {
             Tr.error(tc, "NULL_MANAGED_CONNECTION_J2CA0015", _pm.gConfigProps.cfName);
             throw new ResourceException("PoolManager returned null ManagedConnection");
         } else {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "Using MCWrapper@" + Integer.toHexString(mcWrapper.hashCode()));
             }
         }
@@ -638,21 +626,21 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
         //    This is basically a promise that a transaction will be involved
         //    later when it is actually needed, so not having a transaction
         //    is not a problem at this time.
-        if (uowCoord == null) { 
+        if (uowCoord == null) {
 
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "Transaction context does NOT exist");
             }
 
-            if (!_pm.gConfigProps.isDynamicEnlistmentSupported()) { 
+            if (!_pm.gConfigProps.isDynamicEnlistmentSupported()) {
 
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
-                    Tr.debug(this, tc, "Not marked for dynamic transaction enlistment"); 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(this, tc, "Not marked for dynamic transaction enlistment");
                 }
 
                 // Only log warnings or throw exception for LocalTransaction, XATransaction, and RRSTransactional RAs
                 if (_pm.gConfigProps.transactionSupport != TransactionSupportLevel.NoTransaction) {
-                    // deleted check for RRSTransactional support    
+                    // deleted check for RRSTransactional support
                     // If the property, logMissingTranContext is not set to false in the j2c.properties file
                     //    (which is the default)
                     //   this is NOT JMS accessing a J2EE resource (such as a JDBC datasource) via
@@ -660,16 +648,16 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                     // then we want to issue a warning that the transaction context is missing.
                     // So basically, we want to issue a warning except for this earlier case where
                     // not having a transaction context was allowed.
-                    if (_pm.gConfigProps.logMissingTranContext) { 
-                        Tr.warning(tc, "MISSING_TRANSACTION_CONTEXT_J2CA0075", "allocateMCWrapper"); 
-                    } 
-                      // Remove check for whether connector runtime supports no transaction mode
-                } 
-            } 
+                    if (_pm.gConfigProps.logMissingTranContext) {
+                        Tr.warning(tc, "MISSING_TRANSACTION_CONTEXT_J2CA0075", "allocateMCWrapper");
+                    }
+                    // Remove check for whether connector runtime supports no transaction mode
+                }
+            }
         } // end uowCoord == null
           // end of moved code for defect
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "allocateMCWrapper");
         }
 
@@ -684,42 +672,42 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
      * @param mcWrapper The managed connection wrapper to involve.
      */
 
-    private void involveMCInTran(MCWrapper mcWrapper, UOWCoordinator uowCoord, com.ibm.ejs.j2c.ConnectionManager inUseCM) throws ResourceException { 
+    private void involveMCInTran(MCWrapper mcWrapper, UOWCoordinator uowCoord, com.ibm.ejs.j2c.ConnectionManager inUseCM) throws ResourceException {
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
-            Tr.entry(this, tc, "involveMCInTran", inUseCM.toString()); 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.entry(this, tc, "involveMCInTran", inUseCM.toString());
         }
 
         if (!mcWrapper.involvedInTransaction()) { // this whole first part of the if statement is new.
 
             // Not involved in transaction, need to get involved in transaction.
             // Set a Reference to this CM instance into the McWrapper
-            mcWrapper.setConnectionManager(inUseCM); 
+            mcWrapper.setConnectionManager(inUseCM);
 
             /*
              * If isEnlistmentDisabled is true, log a message and return.
              */
-            if (mcWrapper.isEnlistmentDisabled()) { 
+            if (mcWrapper.isEnlistmentDisabled()) {
 
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(this, tc, "Managed connection isEnlistmentDisabled is true.");
                     Tr.debug(this, tc, "Returning without calling method initializeForUOW.");
                 }
-                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
                     Tr.exit(this, tc, "involveMCInTran");
                 }
 
                 return;
 
             }
-            mcWrapper.setUOWCoordinator(uowCoord); 
+            mcWrapper.setUOWCoordinator(uowCoord);
 
             // Do the transactional setup if required.
-            initializeForUOW(mcWrapper, false); 
+            initializeForUOW(mcWrapper, false);
 
         }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "involveMCInTran");
         }
 
@@ -735,48 +723,48 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
     public void initializeForUOW(MCWrapper mcWrapper, boolean originIsDeferred) throws ResourceException {
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "initializeForUOW");
         }
 
         boolean registeredForSync = false;
         boolean enlisted = false;
 
-        UOWCoordinator uowCoord = mcWrapper.getUOWCoordinator(); 
+        UOWCoordinator uowCoord = mcWrapper.getUOWCoordinator();
 
         // See allocateMCWrapper for a discussion on the checks being done here
-        if (uowCoord == null) { 
+        if (uowCoord == null) {
 
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "Transaction context does NOT exist");
             }
 
-            if (!mcWrapper.gConfigProps.isDynamicEnlistmentSupported()) { 
+            if (!mcWrapper.gConfigProps.isDynamicEnlistmentSupported()) {
 
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
-                    Tr.debug(this, tc, "Not marked for dynamic transaction enlistment"); 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(this, tc, "Not marked for dynamic transaction enlistment");
                 }
 
                 // Only log warnings or throw exception for LocalTransaction and XATransaction RAs...
                 if ((mcWrapper.gConfigProps.transactionSupport == TransactionSupport.TransactionSupportLevel.LocalTransaction) ||
-                    (mcWrapper.gConfigProps.transactionSupport == TransactionSupport.TransactionSupportLevel.XATransaction)) { // 144070 WS14620.01  
+                    (mcWrapper.gConfigProps.transactionSupport == TransactionSupport.TransactionSupportLevel.XATransaction)) { // 144070 WS14620.01
 
-                    // deleted check for RRSTransactional support    
-                    if (mcWrapper.gConfigProps.logMissingTranContext) { 
-                        Tr.warning(tc, "MISSING_TRANSACTION_CONTEXT_J2CA0075", "initializeForUOW"); 
-                    } 
-                      // Remove check for whether connector runtime supports no transaction mode
+                    // deleted check for RRSTransactional support
+                    if (mcWrapper.gConfigProps.logMissingTranContext) {
+                        Tr.warning(tc, "MISSING_TRANSACTION_CONTEXT_J2CA0075", "initializeForUOW");
+                    }
+                    // Remove check for whether connector runtime supports no transaction mode
 
-                } 
+                }
 
-            } 
+            }
 
         } else {
 
             // If there is an UOWCoordinator context then consider this ManagedConnection
             // for association with this transaction
 
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "Transaction context exists");
             }
 
@@ -793,9 +781,9 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
             // Note:  in future this logic for determining which kind of tran wrapper to create
             // Can be reorganized (see truth table)
-            if (mcWrapper.isEnlistmentDisabled()) { 
+            if (mcWrapper.isEnlistmentDisabled()) {
 
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(this, tc, "Creating NoTransactionWrapper, since this a a non-transactional datasource");
                 }
 
@@ -803,58 +791,58 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
             } else { // transactional datasource
 
-                // When the adapter is RRSTransactional, if     
-                // possible, perform standard J2EE local tran   
-                // processing under the RRS Local tran. If not, 
-                // use an RRSLocalTranactionWrapper to handle   
-                // transaction processing.                      
-                // To determine if standard J2EE local tran     
-                // processing can be performed, check if the    
-                // level of J2EE transaction support defined    
-                // by the adapter is one of the following:      
+                // When the adapter is RRSTransactional, if
+                // possible, perform standard J2EE local tran
+                // processing under the RRS Local tran. If not,
+                // use an RRSLocalTranactionWrapper to handle
+                // transaction processing.
+                // To determine if standard J2EE local tran
+                // processing can be performed, check if the
+                // level of J2EE transaction support defined
+                // by the adapter is one of the following:
                 // TransactionSupport.TransactionSupportLevel.LocalTransaction
                 // TransactionSupport.TransactionSupportLevel.XATransaction
-                // If not, then perform RRSLocalTransaction     
-                // processing. On the other hand, if it is      
-                // one of these and is not the CICS ECI         
-                // resource adapter, perform J2EE Local         
-                // transaction processing.                      
+                // If not, then perform RRSLocalTransaction
+                // processing. On the other hand, if it is
+                // one of these and is not the CICS ECI
+                // resource adapter, perform J2EE Local
+                // transaction processing.
                 // In the case of the CICS ECI resource adapter,
-                // even though it indicates that it             
-                // SupportsLocalTransactions, WAS z/OS cannot   
-                // currently use the CICS resource adapter SPI  
-                // Local Transaction Support when the adapter   
-                // is running as an RRSTransactional adapter.   
-                // This is because CICS attempts to establish a 
-                // private transaction context with RRS and     
-                // this fails because an authorized transaction 
-                // context (created by WAS) already exists.     
-                // To allow for the possibility that CICS could 
-                // change it's support in the future, a check   
-                // will be made to see if the CICS adapter      
-                // supports CCI Local Transaction processing.   
-                // When CICS does change it's SPI J2EE Local    
-                // transaction support, it has agreed that they 
-                // will also support CCI Local Transaction      
-                // support at that time. Thus, if the adapter   
-                // supports CCI Local Transaction processing,   
-                // then it will be assumed that the SPI         
-                // Local Transaction processing will now also   
-                // work OK under WAS z/OS.                      
+                // even though it indicates that it
+                // SupportsLocalTransactions, WAS z/OS cannot
+                // currently use the CICS resource adapter SPI
+                // Local Transaction Support when the adapter
+                // is running as an RRSTransactional adapter.
+                // This is because CICS attempts to establish a
+                // private transaction context with RRS and
+                // this fails because an authorized transaction
+                // context (created by WAS) already exists.
+                // To allow for the possibility that CICS could
+                // change it's support in the future, a check
+                // will be made to see if the CICS adapter
+                // supports CCI Local Transaction processing.
+                // When CICS does change it's SPI J2EE Local
+                // transaction support, it has agreed that they
+                // will also support CCI Local Transaction
+                // support at that time. Thus, if the adapter
+                // supports CCI Local Transaction processing,
+                // then it will be assumed that the SPI
+                // Local Transaction processing will now also
+                // work OK under WAS z/OS.
 
-                switch (mcWrapper.gConfigProps.transactionSupport) { 
+                switch (mcWrapper.gConfigProps.transactionSupport) {
 
                     // resource adapter supports neither resource manager nor JTA transactions
                     case NoTransaction:
 
                         if (!mcWrapper.gConfigProps.rrsTransactional) { // No RRS-coordinated transaction support
-                            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
-                                if (uowCoord.isGlobal()) { 
+                            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                                if (uowCoord.isGlobal()) {
                                     Tr.debug(this, tc, "Creating NoTransactionWrapper for use in Global Transaction. RA supports No Transaction.");
-                                } else { 
+                                } else {
                                     Tr.debug(this, tc, "Creating NoTransactionWrapper for use in Local Transaction. RA supports No Transaction.");
                                 }
-                            } 
+                            }
 
                             wrapper = mcWrapper.getNoTransactionWrapper();
                         } else { // RRS-coordinated transaction support
@@ -869,12 +857,11 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                                     localTranSupportSet = true;
                                 }
                                 if (mcWrapper.gConfigProps.cciLocalTranSupported) { // CICS ECI resource adapter
-                                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
-                                        Tr.debug(this, tc, "Creating LocalTransactionWrapper for use in Local Transaction under RRSTransactional adapter."); 
-                                    } 
+                                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                                        Tr.debug(this, tc, "Creating LocalTransactionWrapper for use in Local Transaction under RRSTransactional adapter.");
+                                    }
                                     wrapper = mcWrapper.getLocalTransactionWrapper(mcWrapper.gConfigProps.rrsTransactional);
-                                } 
-                                else { // not CICS ECI resource adapter
+                                } else { // not CICS ECI resource adapter
                                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                                         Tr.debug(this, tc, "Creating RRSLocalTransactionWrapper for use in Local Transaction under RRSTransactional adapter.");
                                     }
@@ -889,19 +876,19 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                     case LocalTransaction:
 
                         if (!mcWrapper.gConfigProps.rrsTransactional) { // No RRS-coordinated transaction support
-                            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                                 if (uowCoord.isGlobal()) { // global transaction scope
                                     Tr.debug(this, tc, "Creating LocalTransactionWrapper for use in Global Transaction. RA supports Local Transaction.");
-                                } else { // local transaction scope 
+                                } else { // local transaction scope
                                     Tr.debug(this, tc, "Creating LocalTransactionWrapper for use in Local Transaction. RA supports Local Transaction.");
                                 }
-                            } // end if (TraceComponent.isAnyTracingEnabled()  && tc.isDebugEnabled()) 
+                            } // end if (TraceComponent.isAnyTracingEnabled()  && tc.isDebugEnabled())
                             wrapper = mcWrapper.getLocalTransactionWrapper();
                         } else { // RRS-coordinated transaction support
                             if (uowCoord.isGlobal()) { // global transaction scope
-                                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                                     Tr.debug(this, tc, "Creating RRSGlobalTransactionWrapper for use in Global Transaction. RA supports RRS Coordinated Transactions.");
-                                } 
+                                }
                                 wrapper = mcWrapper.getRRSGlobalTransactionWrapper();
                             } else { // local transaction scope
                                 if (!localTranSupportSet) {
@@ -913,13 +900,12 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                                     }
                                 }
 
-                                if (mcWrapper.gConfigProps.cciLocalTranSupported) { // CICS ECI resource adapter 
-                                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
-                                        Tr.debug(this, tc, "Creating LocalTransactionWrapper for use in Local Transaction under RRSTransactional adapter."); 
-                                    } 
+                                if (mcWrapper.gConfigProps.cciLocalTranSupported) { // CICS ECI resource adapter
+                                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                                        Tr.debug(this, tc, "Creating LocalTransactionWrapper for use in Local Transaction under RRSTransactional adapter.");
+                                    }
                                     wrapper = mcWrapper.getLocalTransactionWrapper(mcWrapper.gConfigProps.rrsTransactional);
-                                } 
-                                else { // not CICS ECI resource adapter
+                                } else { // not CICS ECI resource adapter
                                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                                         Tr.debug(this, tc, "Creating RRSLocalTransactionWrapper for use in Local Transaction under RRSTransactional adapter.");
                                     }
@@ -934,28 +920,28 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                     case XATransaction:
 
                         if (!mcWrapper.gConfigProps.rrsTransactional) { // No RRS-coordinated transaction support
-                            if (uowCoord.isGlobal()) { // global transaction scope 
-                                if (websphereMCF && mcWrapper.getManagedConnection().getXAResource() instanceof com.ibm.tx.jta.OnePhaseXAResource) { 
-                                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                            if (uowCoord.isGlobal()) { // global transaction scope
+                                if (isJDBC && mcWrapper.getManagedConnection().getXAResource() instanceof com.ibm.tx.jta.OnePhaseXAResource) {
+                                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                                         Tr.debug(this, tc, "Creating LocalTransactionWrapper for use in Global Transaction.  The resource adapter supports XA Transaction");
                                     }
                                     wrapper = mcWrapper.getLocalTransactionWrapper();
                                 } else { // xaResource is two-phase
-                                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                                         Tr.debug(this, tc, "Creating XATransactionWrapper for use in Global Transaction.  The resource adapter supports XA Transaction");
                                     }
                                     wrapper = mcWrapper.getXATransactionWrapper();
                                 }
                             } // end of global transaction scope
                             else { // local transaction scope
-                                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                                     Tr.debug(this, tc, "Creating LocalTransactionWrapper for use in Local Transaction. The resource adapter supports XA Transaction.");
                                 }
                                 wrapper = mcWrapper.getLocalTransactionWrapper();
                             }
                         } else { // RRS-coordinated transaction support
                             if (uowCoord.isGlobal()) { // global transaction scope
-                                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                                     Tr.debug(this, tc, "Creating RRSGlobalTransactionWrapper for use in Global Transaction. RA supports RRS Coordinated Transactions.");
                                 }
                                 wrapper = mcWrapper.getRRSGlobalTransactionWrapper();
@@ -968,12 +954,11 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                                     }
                                 }
                                 if (mcWrapper.gConfigProps.cciLocalTranSupported) { // CICS ECI resource adapter
-                                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
-                                        Tr.debug(this, tc, "Creating LocalTransactionWrapper for use in Local Transaction under RRSTransactional adapter."); 
-                                    } 
+                                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                                        Tr.debug(this, tc, "Creating LocalTransactionWrapper for use in Local Transaction under RRSTransactional adapter.");
+                                    }
                                     wrapper = mcWrapper.getLocalTransactionWrapper(mcWrapper.gConfigProps.rrsTransactional);
-                                } 
-                                else { // Not CICS ECI resource adapter
+                                } else { // Not CICS ECI resource adapter
                                     wrapper = mcWrapper.getRRSLocalTransactionWrapper();
                                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                                         Tr.debug(this, tc, "Created RRSLocalTransactionWrapper for use in Local Transaction under RRSTransactional adapter.");
@@ -984,10 +969,10 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
                         break;
                     default:
-                } // end of switch 
+                } // end of switch
             } // end else transactional datasource
 
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "Created transaction wrapper@" + Integer.toHexString(wrapper.hashCode()));
             }
 
@@ -1003,15 +988,15 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                 // synchronization in an LTC or a global transaction.  Is that what we want?
                 // We're waiting for some data from JetStream or Transactions to determine
                 // the proper course of action.
-                if (mcWrapper.isConnectionSynchronizationProvider()) { 
+                if (mcWrapper.isConnectionSynchronizationProvider()) {
                     /*
                      * If this is a connection synchronization provider, they are
                      * resposible for all of the remaining transactions work.
                      */
-                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                         Tr.debug(this, tc, "This managed connection is a synchronization provider.");
                     }
-                    if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
                         Tr.exit(this, tc, "initializeForUOW");
                     }
                     return;
@@ -1022,10 +1007,10 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                 // Note: the wrapper handles all the appropriate logging of the exception.
                 //  We catch it here so that we can do the appropriate cleanup.
                 com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.ConnectionManager.initializeForUOW", "730", this);
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                     Tr.debug(this, tc, "Exception:" + e);
                 try {
-                    mcWrapper.releaseToPoolManager(); 
+                    mcWrapper.releaseToPoolManager();
                 } catch (Exception ex) { // ignore.
                 }
                 throw e;
@@ -1039,9 +1024,9 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
             try {
 
-                if (uowCoord != null) { 
+                if (uowCoord != null) {
 
-                    if (uowCoord.isGlobal()) { 
+                    if (uowCoord.isGlobal()) {
 
                         // In global tran.
 
@@ -1049,11 +1034,11 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                         // will happen in the interactionPending() method of the ConnectionEventListener.
                         // Otherwise, enlist here.
                         //
-                        // RRS Global Trans will opt out of deferred enlistment because in some cases it will be  
-                        //  necessary to track states via the enlistment, and this needs to be done as soon as    
-                        //  the connection is obtained                                
+                        // RRS Global Trans will opt out of deferred enlistment because in some cases it will be
+                        //  necessary to track states via the enlistment, and this needs to be done as soon as
+                        //  the connection is obtained
 
-                        if (!mcWrapper.gConfigProps.isDynamicEnlistmentSupported() || mcWrapper.gConfigProps.rrsTransactional) { 
+                        if (!mcWrapper.gConfigProps.isDynamicEnlistmentSupported() || mcWrapper.gConfigProps.rrsTransactional) {
 
                             wrapper.enlist();
                             enlisted = true;
@@ -1062,13 +1047,12 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
                     } else {
 
-                        // delete check for rrsTransactional    
-                        if (J2CUtilityClass.isContainerAtBoundary(mcWrapper.pm.connectorSvc.transactionManager)) 
-                        {
-                          // LTC with resolution of ContainerAtBoundary. Agressively enlist in the transaction.
-                            wrapper.enlist(); 
+                        // delete check for rrsTransactional
+                        if (J2CUtilityClass.isContainerAtBoundary(mcWrapper.pm.connectorSvc.transactionManager)) {
+                            // LTC with resolution of ContainerAtBoundary. Agressively enlist in the transaction.
+                            wrapper.enlist();
                             enlisted = true;
-                        } 
+                        }
 
                     }
                 }
@@ -1085,9 +1069,9 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                 // Only mark stale and throw exception at this time since we've already registered
                 // for synchronization.  Allow the transaction to be rolled back to clean this up.
                 // mcWrapper.markStale(); 154675 - already marked stale
-                // mcWrapper.releaseToPoolManager(); 
+                // mcWrapper.releaseToPoolManager();
 
-                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
                     Tr.exit(this, tc, "initializeForUOW", "completed cleanup due to exception.");
                 }
                 throw e;
@@ -1103,7 +1087,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
             mcWrapper.setUOWCoordinator(null);
         }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "initializeForUOW");
         }
 
@@ -1123,9 +1107,9 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
      * this method. CEL.interactionPending() is deprecated starting in v6.0.
      */
     @Override
-    public void lazyEnlist(ManagedConnection mc) throws ResourceException { 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
-            Tr.entry(this, tc, "lazyEnlist"); 
+    public void lazyEnlist(ManagedConnection mc) throws ResourceException {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.entry(this, tc, "lazyEnlist");
         }
 
         /*
@@ -1137,28 +1121,28 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
             mcWrapper = (MCWrapper) _pm.getMCWFromMctoMCWMap(mc);
 
             if (mcWrapper == null) {
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     String errorString = "The " + mc + " could not be matched with a mcWrapper for pool manager " + _pm.hashCode() + " Dumping the mc to mcWrapper table "
-                                         + _pm.getMCtoMCWMapToString(); 
-                    Tr.debug(this, tc, errorString); 
+                                         + _pm.getMCtoMCWMapToString();
+                    Tr.debug(this, tc, errorString);
                 }
-                String errorString = "The ManagedConnection from resource " + _pm.gConfigProps.cfName + " could not be enlisted with the current transaction."; 
-                Tr.error(tc, "FAILED_TO_ASSOCIATE_CONNECTION_J2CA0292", _pm.gConfigProps.cfName); 
-                ResourceException e = new ResourceException(errorString); 
-                throw e; 
+                String errorString = "The ManagedConnection from resource " + _pm.gConfigProps.cfName + " could not be enlisted with the current transaction.";
+                Tr.error(tc, "FAILED_TO_ASSOCIATE_CONNECTION_J2CA0292", _pm.gConfigProps.cfName);
+                ResourceException e = new ResourceException(errorString);
+                throw e;
             }
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "Used mc " + mc + " to find mcWrapper " + mcWrapper);
             }
-        } else { 
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
-                String errorString = "The managed connection is null, we can not find the matching managed connection wrapper in connection pool " + _pm.hashCode(); 
-                Tr.debug(this, tc, errorString); 
+        } else {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                String errorString = "The managed connection is null, we can not find the matching managed connection wrapper in connection pool " + _pm.hashCode();
+                Tr.debug(this, tc, errorString);
             }
-            String errorString = "The Connection Manager lazyEnlist method requires a non-null ManagedConnection parameter."; 
-            Tr.error(tc, "FAILED_TO_ENLIST_CONNECTION_J2CA0293", _pm.gConfigProps.cfName); 
-            ResourceException e = new ResourceException(errorString); 
-            throw e; 
+            String errorString = "The Connection Manager lazyEnlist method requires a non-null ManagedConnection parameter.";
+            Tr.error(tc, "FAILED_TO_ENLIST_CONNECTION_J2CA0293", _pm.gConfigProps.cfName);
+            ResourceException e = new ResourceException(errorString);
+            throw e;
         }
 
         /*
@@ -1166,8 +1150,8 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
          * Removed the call to interactionPending.
          */
 
-        if (!_pm.gConfigProps.isDynamicEnlistmentSupported()) { 
-            if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (!_pm.gConfigProps.isDynamicEnlistmentSupported()) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
                 Tr.exit(this, tc, "lazyEnlist", "lazyEnlist Not Supported.  Nothing to do. Returning.");
             }
             return;
@@ -1200,23 +1184,22 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
         //  which should be consistent with the expected result.
         //
 
-        UOWCoordinator uowCoord = mcWrapper.getUOWCoordinator(); 
-        boolean uowCoordNotSet = false; 
+        UOWCoordinator uowCoord = mcWrapper.getUOWCoordinator();
+        boolean uowCoordNotSet = false;
         if (uowCoord == null) {
-            uowCoordNotSet = true; 
-            uowCoord = mcWrapper.updateUOWCoordinator(); 
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+            uowCoordNotSet = true;
+            uowCoord = mcWrapper.updateUOWCoordinator();
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "uowCoord was null, updating it to current coordinator");
             }
         }
 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(this, tc, "Coordinator in effect: " + uowCoord);
+        }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
-            Tr.debug(this, tc, "Coordinator in effect: " + uowCoord); 
-        } 
-
-        if (uowCoord != null) { 
-            if (uowCoord.isGlobal()) { 
+        if (uowCoord != null) {
+            if (uowCoord.isGlobal()) {
                 //NOTE: global transactions will be enlisted here only if the RA supports deferred enlistment.
                 //  Local trans will be enlisted during the localTransactionStarted event on the
                 //  connectionEventListner.
@@ -1229,27 +1212,27 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                     if (wrapper == null) {
                         Tr.error(tc, "NULL_TRAN_WRAPPER_J2CA0057");
                         // Bad state.  Throw a Runtime exception.
-                        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+                        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
                             Tr.exit(this, tc, "lazyEnlist", "No TranWrapper found.");
                         }
-                        RuntimeException rte = new IllegalStateException("lazyEnlist: No TranWrapper found."); 
-                        throw rte; 
+                        RuntimeException rte = new IllegalStateException("lazyEnlist: No TranWrapper found.");
+                        throw rte;
                     }
                 } catch (Exception e) {
                     // clean everything up!
                     com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.ConnectionManager.lazyEnlist", "1307", this);
                     Tr.error(tc, "ENLIST_FAILED_J2CA0074", new Object[] { "lazyEnlist", e, _pm.gConfigProps.cfName });
                     try {
-                        mcWrapper.markStale(); 
-                        mcWrapper.releaseToPoolManager(); 
+                        mcWrapper.markStale();
+                        mcWrapper.releaseToPoolManager();
                     } catch (Exception e2) {
                         com.ibm.ws.ffdc.FFDCFilter.processException(e2, "com.ibm.ejs.j2c.ConnectionManager.lazyEnlist", "1316", this);
                     }
                     // Note that the enlist call will set RollbackOnly as appropriate.
                     // Throw a ResourceException to indicate enlistment failure to the ResourceAdapter
-                    ResourceException re = new ResourceException(e.getMessage()); 
-                    re.initCause(e); 
-                    throw re; 
+                    ResourceException re = new ResourceException(e.getMessage());
+                    re.initCause(e);
+                    throw re;
                 }
 
                 wrapper.enlist();
@@ -1259,41 +1242,41 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                  * For a local transaction, if the uowCoord was not already set,
                  * we need to set it to null in the mcWrapper.
                  */
-                if (uowCoordNotSet) { 
-                    mcWrapper.resetCoordinator(); 
+                if (uowCoordNotSet) {
+                    mcWrapper.resetCoordinator();
                 }
             }
-        } else { 
-                 // No transaction context.
-                 //
-                 // Now that we are requiring a transaction context to execute, we will go ahead with logging an
-                 //   error message and throwing an exception in this case.  There is no "cleanup" to do on the
-                 //   connection since that was taken care of by other processing (probably during the transaction
-                 //   timeout processing).
-                 //
-                 // If we get to this point (missing transaction context even after attempting to update the
-                 //  transaction context above), then this is an error whether we are supporting
-                 //  "no transaction mode" or not.  The RA is asking for us to enlist in a transaction.  If there
-                 //  is none, then we should log the message and throw the exception regardless.
-                 //
-                 //   We decided to loosen the requirement for a transaction context when lazyEnlist is
-                 //   invoked.  We will now enlist, if a transaction context exists.  Otherwise, we will
-                 //   conditionally log a message and just return.  This processing will now be consistent
-                 //   with non-deferred enlistment processing.
-                 //
-                 //   The conditional can be triggered by setting the logMissingTranContext property on
-                 //   an individual datasource or connection factory basis.  The other half of the conditional
-                 //   allows for non-transactional access to resources for JMS access from EJB 1.1
-                 //   modules.
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+        } else {
+            // No transaction context.
+            //
+            // Now that we are requiring a transaction context to execute, we will go ahead with logging an
+            //   error message and throwing an exception in this case.  There is no "cleanup" to do on the
+            //   connection since that was taken care of by other processing (probably during the transaction
+            //   timeout processing).
+            //
+            // If we get to this point (missing transaction context even after attempting to update the
+            //  transaction context above), then this is an error whether we are supporting
+            //  "no transaction mode" or not.  The RA is asking for us to enlist in a transaction.  If there
+            //  is none, then we should log the message and throw the exception regardless.
+            //
+            //   We decided to loosen the requirement for a transaction context when lazyEnlist is
+            //   invoked.  We will now enlist, if a transaction context exists.  Otherwise, we will
+            //   conditionally log a message and just return.  This processing will now be consistent
+            //   with non-deferred enlistment processing.
+            //
+            //   The conditional can be triggered by setting the logMissingTranContext property on
+            //   an individual datasource or connection factory basis.  The other half of the conditional
+            //   allows for non-transactional access to resources for JMS access from EJB 1.1
+            //   modules.
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "Transaction context does NOT exist");
             }
-            if (_pm.gConfigProps.logMissingTranContext) { 
-                Tr.warning(tc, "MISSING_TRANSACTION_CONTEXT_J2CA0075", "lazyEnlist"); 
+            if (_pm.gConfigProps.logMissingTranContext) {
+                Tr.warning(tc, "MISSING_TRANSACTION_CONTEXT_J2CA0075", "lazyEnlist");
             }
         }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "lazyEnlist");
         }
     }
@@ -1305,24 +1288,24 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
     public void associateConnection(
                                     Object connection,
                                     ManagedConnectionFactory mcf,
-                                    ConnectionRequestInfo cri) throws ResourceException { 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+                                    ConnectionRequestInfo cri) throws ResourceException {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "associateConnection");
         }
         /*
          * Get the subject information
          */
-        Subject subject = (containerManagedAuth ? getFinalSubject(cri, mcf, this) : null); 
-        // Give the security helper a chance to finalize what subject  
-        // should be used. When ThreadIdentitySupport = NOTALLOWED the 
-        // original subject will be unchanged.                         
+        Subject subject = (containerManagedAuth ? getFinalSubject(cri, mcf, this) : null);
+        // Give the security helper a chance to finalize what subject
+        // should be used. When ThreadIdentitySupport = NOTALLOWED the
+        // original subject will be unchanged.
 
-        //subject = securityHelper.finalizeSubject(subject, cri, inuseCM.cmConfig); 
+        //subject = securityHelper.finalizeSubject(subject, cri, inuseCM.cmConfig);
         /*
          * Call associate connection
          */
         associateConnection(mcf, subject, cri, connection);
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "associateConnection");
         }
     }
@@ -1334,37 +1317,37 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                                      ConnectionRequestInfo cri,
                                      Object connection) throws ResourceException {
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
             Tr.entry(this, tc, "associateConnection");
 
         UOWCurrent uowCurrent = (UOWCurrent) _pm.connectorSvc.transactionManager;
-        UOWCoordinator uowCoord = uowCurrent == null ? null : uowCurrent.getUOWCoord(); 
-        MCWrapper mcWrapper = null; 
-        Object credTokenObj = null; 
-        try { // Begin processing to get connection             
+        UOWCoordinator uowCoord = uowCurrent == null ? null : uowCurrent.getUOWCoord();
+        MCWrapper mcWrapper = null;
+        Object credTokenObj = null;
+        try { // Begin processing to get connection
 
-            // Perform any security setup that may be needed      
-            // before we proceed to get a connection.             
+            // Perform any security setup that may be needed
+            // before we proceed to get a connection.
 
-            credTokenObj = securityHelper.beforeGettingConnection(subject, cri); 
+            credTokenObj = securityHelper.beforeGettingConnection(subject, cri);
 
             // Get an appropriate wrappered ManangedConnection.
-            mcWrapper = allocateMCWrapper(mcf, cri, 
+            mcWrapper = allocateMCWrapper(mcf, cri,
                                           subject,
-                                          uowCoord); 
+                                          uowCoord);
 
-        } // end try block                                      
-        finally { 
-            // A "finally" clause is implemented to ensure        
-            // any thread identity pushed to the OS               
-            // thread is removed and the original identity        
-            // is restored.                                       
-            if (credTokenObj != null) { 
-                securityHelper.afterGettingConnection(subject, cri, credTokenObj); 
-            } 
-        } 
+        } // end try block
+        finally {
+            // A "finally" clause is implemented to ensure
+            // any thread identity pushed to the OS
+            // thread is removed and the original identity
+            // is restored.
+            if (credTokenObj != null) {
+                securityHelper.afterGettingConnection(subject, cri, credTokenObj);
+            }
+        }
 
-        involveMCInTran(mcWrapper, uowCoord, this); 
+        involveMCInTran(mcWrapper, uowCoord, this);
 
         // Reassociate the handle which was passed in with the ManagedConnection (via MCWrapper).
         // Note: since associateConnection is called to reassociate a smart handle which is
@@ -1372,7 +1355,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
         //  be null.
         reassociateConnectionHandle(connection, null, mcWrapper, uowCoord);
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
             Tr.exit(this, tc, "associateConnection");
 
     }
@@ -1384,7 +1367,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                                              MCWrapper toMCWrapper,
                                              UOWCoordinator uowCoord) throws ResourceException {
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
             Tr.entry(this, tc, "reassociateConnectionHandle");
 
         try {
@@ -1403,12 +1386,12 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
              */
 
             com.ibm.ws.ffdc.FFDCFilter.processException(e, "com.ibm.ejs.j2c.ConnectionManager.reassociateConnectionHandle", "479", this);
-            if (uowCoord == null && toMCWrapper.getHandleCount() == 0) { 
+            if (uowCoord == null && toMCWrapper.getHandleCount() == 0) {
                 try {
-                    toMCWrapper.releaseToPoolManager(); 
+                    toMCWrapper.releaseToPoolManager();
                 } catch (Exception exp) { // don't rethrow, already on exception path
                     com.ibm.ws.ffdc.FFDCFilter.processException(exp, "com.ibm.ejs.j2c.ConnectionManager.reassociateConnectionHandle", "487", this);
-                    //if (TraceComponent.isAnyTracingEnabled()  && tc.isDebugEnabled()) 
+                    //if (TraceComponent.isAnyTracingEnabled()  && tc.isDebugEnabled())
                     Tr.error(tc, "FAILED_CONNECTION_RELEASE_J2CA0022", new Object[] { exp, toMCWrapper.gConfigProps.cfName });
                 }
             }
@@ -1417,7 +1400,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
             com.ibm.ws.ffdc.FFDCFilter.processException(e,
                                                         "com.ibm.ejs.j2c.ConnectionManager.reassociateConnectionHandle",
                                                         "495", this);
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "reassociateConnectionHandle: Caught a Non resource exception from mc.associateConnection()");
             }
             Tr.error(tc, "FAILED_CONNECTION_J2CA0021", new Object[] { e, toMCWrapper.gConfigProps.cfName });
@@ -1432,27 +1415,27 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
              * the aftercompletion call on the tran wrapper.
              */
 
-            if (uowCoord == null && toMCWrapper.getHandleCount() == 0) { 
+            if (uowCoord == null && toMCWrapper.getHandleCount() == 0) {
                 try {
-                    toMCWrapper.releaseToPoolManager(); 
+                    toMCWrapper.releaseToPoolManager();
                 } catch (Exception exp) { // don't rethrow, already on exception path
                     com.ibm.ws.ffdc.FFDCFilter.processException(exp,
                                                                 "com.ibm.ejs.j2c.ConnectionManager.reassociateConnectionHandle",
                                                                 "518", this);
-                    //if (TraceComponent.isAnyTracingEnabled()  && tc.isDebugEnabled()) 
+                    //if (TraceComponent.isAnyTracingEnabled()  && tc.isDebugEnabled())
                     Tr.error(tc, "FAILED_CONNECTION_RELEASE_J2CA0022", new Object[] { exp, toMCWrapper.gConfigProps.cfName });
                 }
             }
             ResourceException re = new ResourceException("reassociateConnectionHandle: caught Exception");
-            re.initCause(e); 
+            re.initCause(e);
             throw re;
         }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled())
             Tr.exit(this, tc, "reassociateConnectionHandle");
 
     }
-    
+
     /**
      * This method is called by resource adapters that support lazy associable
      * connections in order to notify the connection manager that it moved the
@@ -1497,8 +1480,8 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
     }
 
     @Override
-    public String toString() { 
-        final String nl = CommonFunction.nl; 
+    public String toString() {
+        final String nl = CommonFunction.nl;
         StringBuffer buf = new StringBuffer(256);
         buf.append("[ConnectionManager]@");
         buf.append(Integer.toHexString(this.hashCode()));
@@ -1528,7 +1511,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
      *
      * protected void finalize() {
      *
-     * if ( TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled() ) { 
+     * if ( TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled() ) {
      * Tr.debug(this, tc, "ConnectionManager garbage collected");
      * }
      *
@@ -1542,30 +1525,30 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
      *
      *
      */
-    private boolean raSupportsCCILocalTran(ManagedConnectionFactory mcf) throws ResourceException { 
+    private boolean raSupportsCCILocalTran(ManagedConnectionFactory mcf) throws ResourceException {
 
-        ConnectionFactory cf; 
-        ResourceAdapterMetaData raMetaData; 
-        boolean cciLocalTranSupported = false; 
+        ConnectionFactory cf;
+        ResourceAdapterMetaData raMetaData;
+        boolean cciLocalTranSupported = false;
 
         if (TraceComponent.isAnyTracingEnabled()
             && tc.isEntryEnabled())
-            Tr.entry(this, tc, "raSupportsCCILocalTran"); 
+            Tr.entry(this, tc, "raSupportsCCILocalTran");
 
         if (gConfigProps.transactionSupport == TransactionSupportLevel.XATransaction
-            || gConfigProps.transactionSupport == TransactionSupportLevel.LocalTransaction) { 
-            cf = (ConnectionFactory) mcf.createConnectionFactory(this); 
-            raMetaData = cf.getMetaData(); 
-            if (raMetaData != null) 
-                cciLocalTranSupported = raMetaData.supportsLocalTransactionDemarcation(); 
-        } 
+            || gConfigProps.transactionSupport == TransactionSupportLevel.LocalTransaction) {
+            cf = (ConnectionFactory) mcf.createConnectionFactory(this);
+            raMetaData = cf.getMetaData();
+            if (raMetaData != null)
+                cciLocalTranSupported = raMetaData.supportsLocalTransactionDemarcation();
+        }
 
         if (TraceComponent.isAnyTracingEnabled()
             && tc.isEntryEnabled())
-            Tr.exit(this, tc, "raSupportsCCILocalTran " + cciLocalTranSupported); 
+            Tr.exit(this, tc, "raSupportsCCILocalTran " + cciLocalTranSupported);
 
-        return cciLocalTranSupported; 
-    } 
+        return cciLocalTranSupported;
+    }
 
     /**
      * Overrides the default deserialization for reading this object
@@ -1579,7 +1562,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
         String propName = event.getPropertyName();
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "propertyChange", propName);
         }
 
@@ -1589,7 +1572,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
             connThreadInfoEnabled = ((Boolean) event.getNewValue()).booleanValue();
         }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "propertyChange");
         }
     }
@@ -1598,10 +1581,10 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
     public void vetoableChange(PropertyChangeEvent event) throws PropertyVetoException {
 
         String propName = event.getPropertyName();
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "vetoableChange", propName);
         }
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "vetoableChange");
         }
     }
@@ -1621,19 +1604,17 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
         }
     }
 
-
     // Method to check if the mcf supports the requested branch coupling type and obtains the appropriate XA start flag
     // Used by XATransactionWrapper.enlist()
     // Only called if couplingType indicates LOOSE or TIGHT
-    protected int supportsBranchCoupling(int couplingType, ManagedConnectionFactory managedConnectionFactory) 
-    {
+    protected int supportsBranchCoupling(int couplingType, ManagedConnectionFactory managedConnectionFactory) {
         int startFlag;
-        if (websphereMCF) {
-            startFlag = ((WSManagedConnectionFactory) managedConnectionFactory).getXAStartFlagForBranchCoupling(couplingType); 
+        if (isJDBC) {
+            startFlag = ((WSManagedConnectionFactory) managedConnectionFactory).getXAStartFlagForBranchCoupling(couplingType);
         } else {
             String bcInfo = "branch-coupling=LOOSE";
             if (couplingType == ResourceRefInfo.BRANCH_COUPLING_TIGHT)
-                bcInfo = "branch-coupling=TIGHT"; 
+                bcInfo = "branch-coupling=TIGHT";
 
             Tr.warning(tc, "IGNORE_FEATURE_J2CA0240", new Object[] { bcInfo, gConfigProps.cfName });
             startFlag = XAResource.TMNOFLAGS; // take default
@@ -1647,10 +1628,9 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
     // Method to check if the two branch coupling options are compatible for a match for the MCF
     // Used by SharedPool.getSharedConnection()
     // May be called if couplingType indicates LOOSE or TIGHT or is UNSET
-    protected boolean matchBranchCoupling(int couplingType1, int couplingType2, ManagedConnectionFactory managedConnectionFactory) 
-    {
+    protected boolean matchBranchCoupling(int couplingType1, int couplingType2, ManagedConnectionFactory managedConnectionFactory) {
         boolean matched = true;
-        if (websphereMCF && couplingType1 != couplingType2) {
+        if (isJDBC && couplingType1 != couplingType2) {
             // ResourceRefInfo.BRANCH_COUPLING_UNSET can default to BRANCH_COUPLING_TIGHT or BRANCH_COUPLING_LOOSE
             if (couplingType1 == ResourceRefInfo.BRANCH_COUPLING_UNSET)
                 couplingType1 = ((WSManagedConnectionFactory) managedConnectionFactory).getDefaultBranchCoupling();
@@ -1706,22 +1686,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                 }
             }
 
-            /*
-             * Give the security helper a chance to finalize what subject
-             * should be used. When ThreadIdentitySupport = NOTALLOWED the
-             * original subject will be unchanged.
-             */
-            Subject preFinalizedSubject = subj;
             subj = this.securityHelper.finalizeSubject(subj, requestInfo, this.cmConfig);
-            boolean threadIdentityBeingUsed = (preFinalizedSubject == subj) ? false : true;
-
-            /*
-             * TrustedContext : this will populate the CRI with some information from the
-             * Subject in some cases. See DefaultSecurityHelper.finalizeCriForRRA for more details.
-             */
-            if (this.websphereMCF && !threadIdentityBeingUsed) {
-                this.securityHelper.finalizeCriForRRA(subj, requestInfo, mangedConnectionFactory);
-            }
         } else {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(this, tc, "Subject is", subj);

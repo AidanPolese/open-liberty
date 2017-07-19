@@ -198,7 +198,7 @@ public class DB2Helper extends DatabaseHelper {
      * @return an indicator of the DataSource is RRS-enabled.
      */
     @Override
-    public Boolean getRRSTransactional() {
+    public boolean getRRSTransactional() {
         return isRRSTransaction; 
     }
 
@@ -221,7 +221,7 @@ public class DB2Helper extends DatabaseHelper {
      *         java Subject on the native OS thread.
      */
     @Override
-    public Boolean getThreadSecurity() {
+    public boolean getThreadSecurity() {
         return threadSecurity; 
     }
 

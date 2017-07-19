@@ -36,35 +36,6 @@ public abstract class WSManagedConnectionFactory implements ManagedConnectionFac
     }
 
     /**
-     * Indicates whether or not this managed connection factory is RRS-enabled.
-     *
-     * @return true if RRS-enabled, otherwise false.
-     */
-    public boolean getRRSTransactional() {
-        return false;
-    }
-
-    /**
-     * Indicates whether or not this managed connection factory supports thread identity.
-     *
-     * @return Thread Identity Support: Either "ALLOWED", "REQUIRED", or "NOTALLOWED"
-     */
-    public String getThreadIdentitySupport() {
-        return "NOTALLOWED";
-    }
-
-    /**
-     * Indicates whether or not we should "synch to thread" for the
-     * allocateConnection, i.e., push an ACEE corresponding to the current java
-     * Subject on the native OS thread.
-     *
-     * @return true if we should "synch to thread", otherwise false.
-     */
-    public boolean getThreadSecurity() {
-        return false;
-    }
-
-    /**
      * Returns the xa.start flags (if any) to include for the specified branch coupling.
      * XAResource.TMNOFLAGS should be returned if the specified branch coupling is default.
      * -1 should be returned if the specified branch coupling is not supported.

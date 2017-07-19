@@ -23,7 +23,7 @@ public abstract class WSManagedConnection implements ManagedConnection {
     /**
      * Invoke to abort a connection that may be stuck waiting for a net work response or
      * the database to respond.
-     * 
+     *
      * @throws SQLFeatureNotSupportedException
      */
     public void abort(Executor e) throws SQLFeatureNotSupportedException {}
@@ -47,14 +47,14 @@ public abstract class WSManagedConnection implements ManagedConnection {
 
     /**
      * Returns ConnectionRequestInfo reflecting the current state of this connection.
-     * 
+     *
      * @return ConnectionRequestInfo reflecting the current state of this connection.
      */
     public abstract ConnectionRequestInfo getConnectionRequestInfo();
 
     /**
      * Indicates whether or not this managed connection should enlist in application server managed transactions.
-     * 
+     *
      * @return true if this connection should be enlisted. False if it should not be enlisted.
      */
     public boolean isTransactional() {

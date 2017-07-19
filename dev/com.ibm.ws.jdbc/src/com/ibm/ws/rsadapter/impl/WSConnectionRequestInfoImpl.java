@@ -15,16 +15,14 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.security.auth.Subject;
+import javax.resource.spi.ConnectionRequestInfo;
 
 import org.ietf.jgss.GSSCredential;
 import org.ietf.jgss.GSSName;
 
-import javax.resource.ResourceException;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCSelfIntrospectable;
-import com.ibm.ws.jca.adapter.WSConnectionRequestInfo;
 import com.ibm.ws.rsadapter.AdapterUtil;
 
 /**
@@ -60,7 +58,7 @@ import com.ibm.ws.rsadapter.AdapterUtil;
  * and typeMap, may change during normal use of the ManagedConnection. In this case, they
  * will be updated on the ConnectionRequestInfo using the provided setter methods.</p>
  */
-public class WSConnectionRequestInfoImpl extends WSConnectionRequestInfo implements FFDCSelfIntrospectable {
+public class WSConnectionRequestInfoImpl implements ConnectionRequestInfo, FFDCSelfIntrospectable {
     private static final TraceComponent tc = Tr.register(WSConnectionRequestInfoImpl.class, AdapterUtil.TRACE_GROUP, AdapterUtil.NLS_FILE);
 
     /**
@@ -638,17 +636,6 @@ public class WSConnectionRequestInfoImpl extends WSConnectionRequestInfo impleme
         if (isTraceOn && tc.isEntryEnabled())
             Tr.exit(tc, "matchTypeMap", match);
         return match;
-    }
-
-    /**
-     * Populates the connection request with information from the Subject (for example, for trusted context).
-     * 
-     * @param sub the subject
-     * @throws ResourceException if an error occurs
-     */
-    @Override
-    public void populateWithIdentity(Subject sub) throws ResourceException {
-        // TODO add implementation once we add support for kerberos or trusted context    
     }
 
     /**

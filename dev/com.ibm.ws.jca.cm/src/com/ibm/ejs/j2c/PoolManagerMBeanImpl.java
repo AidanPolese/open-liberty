@@ -31,7 +31,6 @@ import org.osgi.framework.Version;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
-import com.ibm.ws.jca.adapter.WSManagedConnectionFactory;
 import com.ibm.ws.jca.cm.mbean.ConnectionManagerMBean;
 import com.ibm.ws.kernel.service.util.PrivHelper;
 
@@ -39,6 +38,7 @@ public class PoolManagerMBeanImpl extends StandardMBean implements ConnectionMan
     private static final TraceComponent tc = Tr.register(PoolManagerMBeanImpl.class, J2CConstants.traceSpec, J2CConstants.messageFile);
 
     private transient PoolManager _pm = null;
+    private transient Version jdbcRuntimeVersion;
     private transient ObjectName obn = null;
     private transient ServiceRegistration<?> reg = null;
     private final String nl = CommonFunction.nl;
@@ -49,10 +49,11 @@ public class PoolManagerMBeanImpl extends StandardMBean implements ConnectionMan
      *
      * @throws MalformedObjectNameException The ObjectName obtained by the PoolManager is invalid.
      */
-    public PoolManagerMBeanImpl(PoolManager pm) throws MalformedObjectNameException {
+    public PoolManagerMBeanImpl(PoolManager pm, Version jdbcRuntimeVersion) throws MalformedObjectNameException {
         super(ConnectionManagerMBean.class, false);
 
         _pm = pm;
+        this.jdbcRuntimeVersion = jdbcRuntimeVersion;
 
         /* Build the ObjectName for the MBean */
         StringBuilder obnSb = new StringBuilder("WebSphere:type=" + ConnectionManagerMBean.class.getCanonicalName());
@@ -354,9 +355,7 @@ public class PoolManagerMBeanImpl extends StandardMBean implements ConnectionMan
     }
 
     private boolean atLeastJDBCVersion(Version v) {
-        javax.resource.spi.ManagedConnectionFactory mcf = _pm.getManagedConnectionFactory();
-        return (mcf != null && mcf instanceof WSManagedConnectionFactory
-                && ((WSManagedConnectionFactory) mcf).getJDBCRuntimeVersion().compareTo(v) >= 0);
+        return jdbcRuntimeVersion != null && jdbcRuntimeVersion.compareTo(v) >= 0;
     }
 
     @Override

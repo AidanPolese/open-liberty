@@ -291,8 +291,8 @@ public class DatabaseHelper {
     /**
      * @return FALSE, assuming a generic DataSource is not RRS-enabled.
      */
-    public Boolean getRRSTransactional() {
-        return Boolean.FALSE;
+    public boolean getRRSTransactional() {
+        return false;
     }
 
     /**
@@ -308,8 +308,8 @@ public class DatabaseHelper {
      *         for the allocateConnection, i.e., push an ACEE corresponding to the current
      *         java Subject on the native OS thread.
      */
-    public Boolean getThreadSecurity() {
-        return Boolean.FALSE;
+    public boolean getThreadSecurity() {
+        return false;
     }
 
     /**
