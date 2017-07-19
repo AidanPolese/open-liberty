@@ -4,4 +4,5 @@
 /generated/
 /connection-settings.xml
 /maven-local/
+/mavenlibs/
 /*.mvn

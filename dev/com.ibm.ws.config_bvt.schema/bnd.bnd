@@ -21,7 +21,7 @@ test.project: true
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
 	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
 	fattest.simplicity;version=latest, \
-	../fattest.simplicity/lib/public.api.jar;version=file, \
+	com.ibm.ws.componenttest:public.api;version=1.0.0, \
 	com.ibm.websphere.filetransfer;version=latest, \
 	com.ibm.ws.jmx.connector.client.rest;version=latest, \
 	com.ibm.ws.kernel.service;version=latest, \

@@ -16,6 +16,29 @@ subprojects {
   plugins.apply 'maven-publish'
 
   project.version = bnd('Bundle-Version', '1.0') + '.' + branchName + (true ? '-SNAPSHOT' : '')
+  
+  repositories {
+	  maven {
+		 credentials {
+			 username "cbridgha@us.ibm.com"
+			 password "AP7EpH6Vu5tERuDRmJMuPMRJiYx"
+		 }
+		 url "https://na.artifactory.swg-devops.com/artifactory/wasliberty-open-liberty"
+	  }
+}
+configurations {
+	binaries
+}
+dependencies {
+	binaries "com.ibm.ws.componenttest:mantis-collections:2.5.0"
+	binaries "com.ibm.ws.componenttest:mantis-nls-standalone:2.5.0"
+	binaries "com.ibm.ws.componenttest:infra.buildtasks-core:4.0.0"
+}
+
+task copyMavenLibs(type: Copy) {
+	into "${rootDir}/cnf/mavenlibs"
+	from configurations.binaries
+}
 
   publishing {
     repositories {
@@ -130,6 +153,7 @@ subprojects {
 
   task publishFeatureResources {
     dependsOn jar
+	dependsOn copyMavenLibs
     inputs.files(fileTree(dir: "${projectDir}", include: '*.feature')).skipWhenEmpty()
     outputs.dir "${rootDir}/build.image/wlp/lib/features"
     outputs.dir "${buildDir}/repo"
@@ -137,7 +161,6 @@ subprojects {
       ant.taskdef(resource: 'com/ibm/ws/wlp/feature/tasks/default.properties') {
         classpath {
           fileset(dir: "${rootDir}/cnf/lib/") {
-            include(name: "infra.buildtasks-core_4.0*.jar")
             include(name: "asm-all-5.0.3.jar")
             include(name: "org.apache.aries.util-*.jar")
             include(name: "osgi.core.jar")
@@ -146,6 +169,7 @@ subprojects {
             include(name: "jsoup-*.jar")
             include(name: "biz.aQute.bnd-3.3.0.jar")
           }
+		  fileset(dir: "${rootDir}/cnf/mavenlibs", includes: "infra.buildtasks*.jar")
         }
       }
       new File("${rootDir}/build.image/wlp/lib/features").mkdirs()
@@ -261,6 +285,7 @@ subprojects {
 
   task autoFVT {
     dependsOn jar
+	dependsOn copyMavenLibs
     enabled new File("${projectDir}/fat").exists()
 
     // For now we are just forcing the autoFVT create every time, this will be fixed
@@ -277,7 +302,6 @@ subprojects {
       copy {
         from "${rootDir}/cnf/lib"
         into "${projectDir}/generated/autoFVT/build/lib"
-        include 'infra.buildtasks-core_4.0*.jar'
         include 'asm-all-5.0.3.jar'
         include 'org.apache.aries.util-*.jar'
         include 'osgi.core.jar'
@@ -289,6 +313,13 @@ subprojects {
         from "${rootDir}/build.sharedResources/lib/ws-junit/ws-junit.jar"
         into "${projectDir}/generated/autoFVT/build/lib"
       }
+	  
+	  // Copy the infra jar
+	  copy {
+		from "${rootDir}/cnf/mavenlibs/infra.buildtasks-core-4.0.0.jar"
+		into "${projectDir}/generated/autoFVT/build/lib"
+	  }
+	  
 
       // Copy the bundle jar
       copy {
@@ -411,6 +442,7 @@ subprojects {
   }
 
   task globalize {
+    dependsOn copyMavenLibs
     enabled !parseBoolean(bnd('globalize.disabled', 'false'))
       ext.destinationDir = new File(buildDir, "src/${name}/java")
       inputs.files(fileTree(dir: "${projectDir}/resources", include: '**/*.nlsprops')).skipWhenEmpty()
@@ -423,7 +455,8 @@ subprojects {
         }
         ant.taskdef(resource: 'com/ibm/mantis/nls/antlib.xml') {
           classpath {
-              fileset(dir: "${rootDir}/cnf/lib", includes: "mantis-*.jar,commons-*.jar")
+              fileset(dir: "${rootDir}/cnf/lib", includes: "commons-*.jar")
+              fileset(dir: "${rootDir}/cnf/mavenlibs", includes: "mantis-*.jar")
           }
         }
         ant.validate() {
@@ -486,13 +519,14 @@ subprojects {
   }
 
   test {
+	dependsOn copyMavenLibs
     def testports = fileTree(dir: "${projectDir}/bin_test", include: 'unittestports.properties')
     doFirst {
       if (testports.isEmpty())
         return
       ant.taskdef(name: 'portSelector', classname: 'com.ibm.aries.buildtasks.PortSelector') {
         classpath {
-          fileset(dir: "${rootDir}/cnf/lib", includes: 'infra.buildtasks-core_4.0.jar')
+          fileset(dir: "${rootDir}/cnf/mavenlibs", includes: "infra.buildtasks*.jar")
         }
       }
       ant.portSelector(engineName: "${bnd.buildEngineName}", location: "${projectDir}/bin_test/unittestports.properties", jvmarg: 'jvmargPorts')

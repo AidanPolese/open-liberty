@@ -8,11 +8,11 @@
 # Contributors:
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
--include= jar:${fileuri;lib/org.osgi.service.resolver-1.0.1.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;${repo;org.osgi:org.osgi.service.resolver;1.0.1}}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -includeresource: \
-   @lib/org.osgi.service.resolver-1.0.1.jar!/!(OSGI-OPT/src|META-INF/maven)/*
+   @${repo;org.osgi:org.osgi.service.resolver;1.0.1}!/!(OSGI-OPT/src|META-INF/maven)/*
 
 publish.wlp.jar.disabled: true
 
--buildpath: lib/org.osgi.service.resolver-1.0.1.jar;version=file
+-buildpath: org.osgi:org.osgi.service.resolver;version=1.0.1

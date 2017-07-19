@@ -31,11 +31,11 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.ejb-api-3.2.jar;version=file
+	javax.ejb:javax.ejb-api;version=3.2
 
 -testpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
 	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
-	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
-	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
-	../build.sharedResources/lib/jmock/old/jmock.jar;version=file
+	com.thoughtworks.qdox:qdox;version=1.12, \
+	org.jmock:jmock-junit4;version=2.5.1, \
+	org.jmock:jmock;version=2.5.1

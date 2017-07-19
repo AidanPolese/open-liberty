@@ -30,7 +30,7 @@ publish.wlp.jar.disabled: true
 test.project: true
 
 -buildpath: \
-	../com.ibm.ws.jaxb.tools/lib/jaxb-xjc.jar;version=file, \
+	com.sun.xml.bind:jaxb-xjc;version=2.2.10, \
 	com.ibm.websphere.appserver.spi.logging;version=latest,\
 	com.ibm.websphere.org.osgi.core;version=latest,\
 	com.ibm.websphere.org.osgi.service.component;version=latest,\

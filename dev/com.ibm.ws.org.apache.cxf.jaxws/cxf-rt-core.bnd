@@ -43,15 +43,15 @@ Import-Package: \
 DynamicImport-Package: com.ctc.wstx.*
 
 Include-Resource:\
- @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/cxf/**, \
- @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/services/**, \
- @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/schemas/**, \
- @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/spring.handlers, \
- @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/spring.schemas, \
- @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/DEPENDENCIES, \
- @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/LICENSE, \
- @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/META-INF/NOTICE, \
- @lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar!/org/apache/cxf/**
+ @${repo;org.apache.cxf:cxf-rt-core;2.6.2}!/META-INF/cxf/**, \
+ @${repo;org.apache.cxf:cxf-rt-core;2.6.2}!/META-INF/services/**, \
+ @${repo;org.apache.cxf:cxf-rt-core;2.6.2}!/schemas/**, \
+ @${repo;org.apache.cxf:cxf-rt-core;2.6.2}!/META-INF/spring.handlers, \
+ @${repo;org.apache.cxf:cxf-rt-core;2.6.2}!/META-INF/spring.schemas, \
+ @${repo;org.apache.cxf:cxf-rt-core;2.6.2}!/META-INF/DEPENDENCIES, \
+ @${repo;org.apache.cxf:cxf-rt-core;2.6.2}!/META-INF/LICENSE, \
+ @${repo;org.apache.cxf:cxf-rt-core;2.6.2}!/META-INF/NOTICE, \
+ @${repo;org.apache.cxf:cxf-rt-core;2.6.2}!/org/apache/cxf/**
  
  
 # Remove the resources (blueprint/metadata configuration files) in the OSGI-INF directory

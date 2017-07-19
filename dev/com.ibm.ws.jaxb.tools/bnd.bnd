@@ -47,10 +47,10 @@ Export-Package: \
 
 
 Include-Resource: \
-  @lib/jaxb-core.jar!/!META-INF/maven/*, \
-  @lib/jaxb-impl.jar!/!META-INF/maven/*, \
-  @lib/jaxb-xjc.jar!/!META-INF/maven/*, \
-  @lib/jaxb-jxc.jar!/!META-INF/maven/*
+  @${repo;com.sun.xml.bind:jaxb-core;2.2.10}!/!META-INF/maven/*, \
+  @${repo;com.sun.xml.bind:jaxb-impl;2.2.10}!/!META-INF/maven/*, \
+  @${repo;com.sun.xml.bind:jaxb-xjc;2.2.10}!/!META-INF/maven/*, \
+  @${repo;com.sun.xml.bind:jaxb-jxc;2.2.10}!/!META-INF/maven/*
 
 Private-Package:\
    com.ibm.ws.jaxb.tools.*
@@ -58,8 +58,8 @@ Private-Package:\
 instrument.disabled: true
 
 -buildpath: \
-	lib/jaxb-core.jar;version=file,\
-	lib/jaxb-impl.jar;version=file,\
-	lib/jaxb-xjc.jar;version=file,\
-	lib/jaxb-jxc.jar;version=file,\
+	com.sun.xml.bind:jaxb-core;version=2.2.10,\
+	com.sun.xml.bind:jaxb-impl;version=2.2.10,\
+	com.sun.xml.bind:jaxb-xjc;version=2.2.10,\
+	com.sun.xml.bind:jaxb-jxc;version=2.2.10,\
 	com.ibm.ws.org.apache.ant;version=latest

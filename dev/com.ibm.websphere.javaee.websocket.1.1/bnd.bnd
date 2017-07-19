@@ -18,12 +18,12 @@ Export-Package: \
 	javax.websocket.server; version="1.1.0"
 
 Include-Resource: \
-  @lib/javax.websocket-api-1.1.jar!/META-INF/LICENSE, \
-  @lib/javax.websocket-api-1.1.jar!/META-INF/NOTICE
+  @${repo;javax.websocket:javax.websocket-api;1.1}!/META-INF/LICENSE, \
+  @${repo;javax.websocket:javax.websocket-api;1.1}!/META-INF/NOTICE
 
 instrument.disabled: true
 
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.websocket-api-1.1.jar;version=file
+	javax.websocket:javax.websocket-api;version=1.1

@@ -8,10 +8,10 @@
 # Contributors:
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
--include= jar:${fileuri;lib/javax.json-1.0.4.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;${repo;org.glassfish:javax.json;1.0.4}}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -includeresource: \
-   @lib/javax.json-1.0.4.jar!/org/glassfish/json/*
+   @${repo;org.glassfish:javax.json;1.0.4}!/org/glassfish/json/*
 
 -buildpath: \
-	lib/javax.json-1.0.4.jar;version=file
+	org.glassfish:javax.json;version=1.0.4

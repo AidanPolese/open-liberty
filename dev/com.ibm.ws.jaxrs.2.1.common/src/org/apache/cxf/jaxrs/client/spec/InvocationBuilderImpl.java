@@ -58,7 +58,7 @@ public class InvocationBuilderImpl implements Invocation.Builder {
 
     private final WebClient webClient;
     private final SyncInvoker sync;
-    private Configuration config;
+    private final Configuration config;
 
     public InvocationBuilderImpl(WebClient webClient,
                                  Configuration config) {

@@ -16,11 +16,11 @@ Bundle-SymbolicName: com.ibm.websphere.javaee.concurrent.1.0; singleton:=true
 Export-Package: javax.enterprise.concurrent
 
 Include-Resource: \
-  @lib/javax.enterprise.concurrent-api-1.0.jar!/META-INF/NOTICE
+  @${repo;javax.enterprise.concurrent:javax.enterprise.concurrent-api;1.0}!/META-INF/NOTICE
 
 instrument.disabled: true
 
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.enterprise.concurrent-api-1.0.jar;version=file
+	javax.enterprise.concurrent:javax.enterprise.concurrent-api;version=1.0

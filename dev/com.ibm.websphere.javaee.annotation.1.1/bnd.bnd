@@ -19,11 +19,11 @@ Export-Package: \
 	javax.annotation.sql
 
 Include-Resource: \
-  @lib/javax.j2ee.annotation_1.1.jar!/META-INF/NOTICE
+  @${repo;org.apache.geronimo.specs:geronimo-annotation_1.1_spec;1.0.1}!/META-INF/NOTICE
 
 instrument.disabled: true
 
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.j2ee.annotation_1.1.jar;version=file
+	org.apache.geronimo.specs:geronimo-annotation_1.1_spec;version=1.0.1

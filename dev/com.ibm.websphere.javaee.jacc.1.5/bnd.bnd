@@ -22,4 +22,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.security.jacc-api-1.5.jar;version=file
+	javax.security.jacc:javax.security.jacc-api;version=1.5

@@ -11,8 +11,8 @@
 # Configure Repositories
 -include ${workspace}/gradle.properties, ${workspace}/generated.properties
 
-# Artifactory repository credentials
--connection-settings: ${.}/connection-settings.xml
+# Maven repository credentials
+-connection-settings: ${if;${artifactory.download.token};server;-dummy};id=https://${artifactory.download.server};username=${artifactory.download.user};password=${artifactory.download.token}, -bnd
 
 # Logging for repository connection when debugging
 #-connection-log: ${.}/connection-log.txt
@@ -41,6 +41,13 @@ bGitBranch=master
         releaseUrl="${artifactoryReleaseUrl}${matrixParams}" ; \
         snapshotUrl="${artifactorySnapshotUrl}${matrixParams}" ; \
         name = "Artifactory";
+
+-plugin.6.Artifactory2 = \
+	aQute.bnd.repository.maven.provider.MavenBndRepository; \
+		releaseUrl=https://${artifactory.download.server}/artifactory/wasliberty-open-liberty ; \
+		snapshotUrl=https://${artifactory.download.server}/artifactory/wasliberty-open-liberty ; \
+		index=${build}/oss_dependencies.maven; \
+		name = "Artifactory2";
 
 # Don't upload sources or javadoc unless bundle overrides
 -maven-release: ${if;${is;${env;PUBLISH_REPO;Release};Artifactory};remote;local}, sources;path=NONE, javadoc;path=NONE

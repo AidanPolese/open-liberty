@@ -140,7 +140,7 @@ instrument.classesExcludes: \
     **/org/**
 
 -buildpath: \
-	../com.ibm.websphere.javaee.jsf.2.2/lib/myfaces-builder-annotations-1.0.9.jar;version=file,\
+	org.apache.myfaces.buildtools:myfaces-builder-annotations;version=1.0.9,\
 	com.ibm.websphere.javaee.jsf.2.2;version=latest,\
 	com.ibm.websphere.javaee.jstl.1.2;version=latest,\
 	com.ibm.websphere.javaee.persistence.2.1;version=latest,\

@@ -40,8 +40,8 @@ Import-Package:  javax.el; version="[3.0.0,4.0.0)", \
  javax.interceptor;version="1.2"
 
 Include-Resource: \
-  @lib/cdi-api-1.2.jar!/beans_1_0.xsd, \
-  @lib/cdi-api-1.2.jar!/beans_1_1.xsd
+  @${repo;javax.enterprise:cdi-api;1.2}!/beans_1_0.xsd, \
+  @${repo;javax.enterprise:cdi-api;1.2}!/beans_1_1.xsd
 
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
 
@@ -50,5 +50,6 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.inject.jar;version=file,\
-	lib/cdi-api-1.2.jar;version=file
+	javax.inject:javax.inject;version=1,\
+	javax.enterprise:cdi-api;version=1.2
+	

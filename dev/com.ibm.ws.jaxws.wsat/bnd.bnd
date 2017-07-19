@@ -48,10 +48,10 @@ Service-Component: \
      properties:="service.vendor=IBM"
 
 -buildpath: \
-	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-api-2.6.2-ibm-s20170216-1739.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-core-2.6.2-ibm-s20170216-1739.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-bindings-soap-2.6.2-ibm-s20170216-1739.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxws/lib/cxf-rt-ws-policy-2.6.2-ibm-s20170216-1739.jar;version=file,\
+	org.apache.cxf:cxf-api;version=2.6.2,\
+	org.apache.cxf:cxf-rt-core;version=2.6.2,\
+	org.apache.cxf:cxf-rt-bindings-soap;version=2.6.2,\
+	org.apache.cxf:cxf-rt-ws-policy;version=2.6.2,\
 	com.ibm.websphere.appserver.spi.logging;version=latest,\
 	com.ibm.websphere.appserver.spi.kernel.service;version=latest,\
 	com.ibm.ws.jaxws.common;version=latest,\
