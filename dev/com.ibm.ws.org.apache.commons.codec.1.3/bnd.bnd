@@ -18,4 +18,4 @@ Bundle-Description: Apache commons codec, version 1.3
 Export-Package: org.apache.commons.codec.*;version="1.3"
 
 Include-Resource: \
-    @${repo;commons-codec:commons-codec;1.3}
+    @${repo;commons-codec:commons-codec;1.3;EXACT}
