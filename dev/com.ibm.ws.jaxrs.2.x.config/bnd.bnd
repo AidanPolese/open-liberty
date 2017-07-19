@@ -1,9 +1,6 @@
 -include= ~../cnf/resources/bnd/bundle.props
 bVersion=1.0
 
-javac.source: 1.7
-javac.target: 1.7
-
 Bundle-Name: JAX-RS 2.X Configuration
 Bundle-SymbolicName: com.ibm.ws.jaxrs.2.x.config
 Bundle-Description: IBM JAX-RS 2.x configuration; version=${bVersion}

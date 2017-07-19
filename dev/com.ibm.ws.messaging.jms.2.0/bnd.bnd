@@ -12,9 +12,6 @@
 
 bVersion= 2.0
 
-javac.source: 1.7
-javac.target: 1.7
-
 Bundle-Name: JMS Client for WebSphere Embedded Messaging
 
 Bundle-SymbolicName: com.ibm.ws.messaging.jms.2.0

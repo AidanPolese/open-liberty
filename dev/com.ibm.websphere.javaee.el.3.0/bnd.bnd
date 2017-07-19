@@ -11,9 +11,6 @@
 -include= ~../cnf/resources/bnd/bundle.props
 bVersion=1.0
 
-javac.source: 1.7
-javac.target: 1.7
-
 Bundle-Name: WS_J2EE_el
 Bundle-SymbolicName: com.ibm.websphere.javaee.el.3.0; singleton:=true
 Bundle-Description: WS_J2EE_el, version 3.0

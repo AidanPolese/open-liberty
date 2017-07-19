@@ -13,9 +13,6 @@
 bVersion=1.0
 bSymbolicName=com.ibm.ws.wsoc
 
-javac.source: 1.7
-javac.target: 1.7
-
 Bundle-Name: WebSocket
 Bundle-SymbolicName:com.ibm.ws.wsoc; singleton:=true
 Bundle-Description: WebSocket, version ${bVersion}
