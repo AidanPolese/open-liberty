@@ -405,16 +405,15 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
 
         is2Phase = poolConn1 instanceof javax.sql.XAConnection; 
 
-        DSConfig config = dsConfig.get();
         if (poolConn1 == null)
         {
             if (isTraceOn && tc.isDebugEnabled()) 
             {
-                if (!DataSource.class.equals(config.type) && !config.isUCP)
+                if (!DataSource.class.equals(mcf.dataSourceInterface) && !mcf.isUCP)
                     Tr.debug(this, tc, "##### poolConn is null which will cause is2Phase to always be false and that will cause XA to break");
             }
         }
-        else if (!DataSource.class.equals(config.type) && !config.isUCP)
+        else if (!DataSource.class.equals(mcf.dataSourceInterface) && !mcf.isUCP)
         {
             poolConn1.addConnectionEventListener(this); 
 
@@ -456,7 +455,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
         //logWriter = mcf.getLogWriter();
 
         // Record the current thread id, for use in multithreaded access detection. 
-
+        DSConfig config = dsConfig.get();
         threadID = config.enableMultithreadedAccessDetection ? Thread.currentThread() : threadID; 
 
         rrsTransactional = mcf1.getRRSTransactional(); 
@@ -2452,7 +2451,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
         // from the JDBC driver, this also make it possible for us to determine--if we
         // ever do see a connection-closed event--that it's an unexpected close from the
         // JDBC driver rather than one we requested.
-        if (poolConn != null && !dsConfig.get().isUCP)
+        if (poolConn != null && !mcf.isUCP)
         {
             poolConn.removeConnectionEventListener(this);
 

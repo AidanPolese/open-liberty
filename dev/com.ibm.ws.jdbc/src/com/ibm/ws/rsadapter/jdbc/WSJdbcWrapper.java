@@ -171,7 +171,7 @@ public abstract class WSJdbcWrapper implements InvocationHandler, Wrapper
 
         // Invoke on the main wrapper if it has the method.
         DSConfig config = dsConfig.get(); 
-        Set<Method> vendorMethods = config.getManagedConnectionFactory().vendorMethods; 
+        Set<Method> vendorMethods = mcf.vendorMethods; 
 
         if (!vendorMethods.contains(method))
             try 
