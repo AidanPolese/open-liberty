@@ -26,6 +26,7 @@ import java.sql.SQLException;
 import java.sql.SQLNonTransientConnectionException;
 import java.sql.Statement;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong; 
 import java.util.concurrent.atomic.AtomicReference; 
 import java.util.Arrays;
@@ -78,30 +79,12 @@ import com.ibm.ws.rsadapter.jdbc.WSJdbcTracer;
 
 /**
  * This class implements the javax.resource.spi.ManagedConnectionFactory interface. The instance
- * is a factory of both ManagedConnection and ConnectionFactory instances. Refers to the J2C spec
+ * is a factory of both ManagedConnection and ConnectionFactory instances. Refer to the JCA spec
  * for detailed requirements of this class.
  * <p>
- * The instance of ManagedConnectionFactory is created by the SM when an EJB bean is loaded.
- * SM sets the specific properties into the MangedConnectionFactory based on the configuration data.
- * The properties include:
- * <ul>
- * <li>DataSource properties: a properties object containing all of the DataSource properties required
- * to create a DataSource. This may include such things as databaseName = "myDB".
- * In addition, the properties object must also contain the dataSource class name
- * to create. For example, to create a DB2 one-phase commit capable datasource, the
- * dataSourceClassName = "COM.ibm.db2.jdbc.DB2ConnectionPoolDataSource".</li>
- * <li>ConnectionFactoryType: the type of the ConnectionFactory class returned by
- * this ManagedConnectionFactory instance. There are currently two different acceptable
- * types:
- * 1) ConnectionFactoryRefBuilder.FACTORY_WSJdbcDataSource which indicates
- * a WSJdbcDataSource is the connection factory type
- * 2) ConnectionFactoryRefBuilder.FACTORY_WSRdbConnectionFactory which indicates
- * a WSRdbConnectionFactoryImpl is the connection factory type</li>
- * </ul> <p>
  * It is REQUIRED that immediately after creating the ManagedConnectionFactory, the setDataSourceProperties
  * method is called. This method is required as it creates the underlying DataSource needed for
- * Relational access. Note, this method is only required to be first if you are using relational
- * access.
+ * relational access.
  * <p>
  * This class also provides a piece of the connection pooling mechanism. The matchManagedConnections()
  * method matches a candidate set of connections using the ConnectionRequestInfo and/or Subject as the
@@ -114,20 +97,15 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
     private static final long serialVersionUID = -56589160441993572L;
 
     /**
+     * Count of initialized instances of this class.
+     * 
+     */
+    private static final AtomicInteger NUM_INITIALIZED = new AtomicInteger();
+
+    /**
      * Utility class with access to various core services.
      */
     public final ConnectorService connectorSvc;
-
-    /**
-     * Implementation that depends on the JDBC version
-     */
-    public final JDBCRuntimeVersion jdbcRuntime;
-
-    /**
-     * The JDBC major and minor version, where the minor version is kept in the final digit.
-     * For example: 42 means JDBC 4.2, 30 means JDBC 3.0, 20 means JDBC 2.0
-     */
-    public int jdbcDriverSpecVersion;
 
     /**
      * A mapping of supported client information properties to their default values.
@@ -142,8 +120,38 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
     transient private CommonDataSource dataSource;
 
     transient Class<?> dataSourceImplClass;
+    /**
+     * The type of data source (for example javax.sql.XADataSource) that this managed connection factory creates.
+     */
+    final Class<? extends CommonDataSource> dataSourceInterface;
 
     transient DatabaseHelper helper;
+
+    /**
+     * Unique identifier for this instance, which is used to match connection requests.
+     */
+    public final int instanceID;
+
+    /**
+     * Indicates if the data source is Oracle Universal Connection Pooling.
+     */
+    public final boolean isUCP;
+
+    /**
+     * Class loader that is capable of loading JDBC driver classes.
+     */
+    final ClassLoader jdbcDriverLoader;
+
+    /**
+     * The JDBC major and minor version, where the minor version is kept in the final digit.
+     * For example: 42 means JDBC 4.2, 30 means JDBC 3.0, 20 means JDBC 2.0
+     */
+    public int jdbcDriverSpecVersion;
+
+    /**
+     * Implementation that depends on the JDBC version
+     */
+    public final JDBCRuntimeVersion jdbcRuntime;
 
     transient PrintWriter logWriter; 
 
@@ -295,13 +303,23 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
         if (trace && tc.isEntryEnabled())
             Tr.entry(this, tc, "<init>", ifc, wProps, vProps, jdbcRuntime);
 
-        DSConfig config = new DSConfig(null, id, jndi, ifc, wProps, vProps, ds.getClass(), connectorSvc, this);
-        (dsConfig = dsConfigRef).set(config);
-
         this.connectorSvc = connectorSvc;
         this.jdbcRuntime = jdbcRuntime;
-        supportsGetNetworkTimeout = supportsGetSchema = atLeastJDBCVersion(JDBCRuntimeVersion.VERSION_4_1);
+        instanceID = NUM_INITIALIZED.incrementAndGet();
         dataSourceImplClass = ds.getClass();
+        dataSourceInterface = ifc;
+        jdbcDriverLoader = PrivHelper.getClassLoader(dataSourceImplClass);
+        supportsGetNetworkTimeout = supportsGetSchema = atLeastJDBCVersion(JDBCRuntimeVersion.VERSION_4_1);
+
+        String dataSourceImplClassName = dataSourceImplClass.getName();
+        isUCP = dataSourceImplClassName.charAt(0) == 'o' &&
+                        ("oracle.ucp.jdbc.PoolDataSourceImpl".equals(dataSourceImplClassName)
+                                        || "oracle.ucp.jdbc.PoolXADataSourceImpl".equals(dataSourceImplClassName));
+        if (isUCP)
+            Tr.info(tc, "WAS_CONNECTION_POOLING_DISABLED_INFO");
+
+        DSConfig config = new DSConfig(id, jndi, wProps, vProps, ds.getClass(), connectorSvc, this);
+        (dsConfig = dsConfigRef).set(config);
 
         createDatabaseHelper(vProps instanceof PropertyService ? ((PropertyService) vProps).getFactoryPID() : PropertyService.FACTORY_PID);
 
@@ -733,7 +751,6 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
 
         ConnectionResults results;
         Connection conn;
-        DSConfig config = dsConfig.get();
 
         // Some JDBC drivers support propagation of GSS credential for kerberos via Subject.doAs
         if (useKerb && helper.supportsSubjectDoAsForKerberos())
@@ -782,15 +799,15 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
                     // shouldn't ever happen
                     throw new DataStoreAdapterException("GENERAL_EXCEPTION", null, getClass(), x.getMessage());
             }
-        else if (DataSource.class.equals(config.type) || config.isUCP)
+        else if (DataSource.class.equals(dataSourceInterface) || isUCP)
         {
             if (trace && tc.isDebugEnabled())
-                Tr.debug(this, tc, "Getting a connection using Datasource. Is UCP? " + config.isUCP);
+                Tr.debug(this, tc, "Getting a connection using Datasource. Is UCP? " + isUCP);
             conn = getConnectionUsingDS(userName, password, cri);
             results = new ConnectionResults(null, conn);
         } else {
             try {
-                results = helper.getPooledConnection(dataSource, userName, password, XADataSource.class.equals(config.type), cri, useKerb, credential);
+                results = helper.getPooledConnection(dataSource, userName, password, XADataSource.class.equals(dataSourceInterface), cri, useKerb, credential);
             } catch (DataStoreAdapterException dae) {
                 throw (ResourceException) AdapterUtil.mapException(dae, null, this, false); // error can't be fired as we don't have an mc
             }
@@ -836,14 +853,12 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
                             final Object ods = WSJdbcTracer.getImpl(dataSource);
                             Class<?> dsClass = null;
                             if(System.getSecurityManager() == null) {
-                                ClassLoader loader = ods.getClass().getClassLoader();
-                                dsClass = loader.loadClass("oracle.jdbc.pool.OracleDataSource");
+                                dsClass = jdbcDriverLoader.loadClass("oracle.jdbc.pool.OracleDataSource");
                             } else 
                                 dsClass = AccessController.doPrivileged(new PrivilegedExceptionAction<Class<?>>() {
                                     @Override
                                     public Class<?> run() throws ClassNotFoundException {
-                                        ClassLoader loader = ods.getClass().getClassLoader();
-                                        return loader.loadClass("oracle.jdbc.pool.OracleDataSource");
+                                        return jdbcDriverLoader.loadClass("oracle.jdbc.pool.OracleDataSource");
                                     }
                                 }); 
                             Method method = dsClass.getMethod("getConnection", Properties.class);
@@ -971,15 +986,13 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
      * @throws ResourceException if an error occurs obtaining the print writer.
      */
     private Object getTraceableDataSource(Object ds) throws ResourceException {
-        Class<? extends CommonDataSource> ifc = dsConfig.get().type;
-
-        WSJdbcTracer tracer = new WSJdbcTracer(helper.getTracer(), helper.getPrintWriter(), ds, ifc, null, true);
+        WSJdbcTracer tracer = new WSJdbcTracer(helper.getTracer(), helper.getPrintWriter(), ds, dataSourceInterface, null, true);
 
         Set<Class<?>> classes = new HashSet<Class<?>>();
         for (Class<?> cl = ds.getClass(); cl != null; cl = cl.getSuperclass())
             classes.addAll(Arrays.asList(cl.getInterfaces()));
         
-        return Proxy.newProxyInstance(PrivHelper.getClassLoader(ds.getClass()),
+        return Proxy.newProxyInstance(jdbcDriverLoader,
                                       classes.toArray(new Class[classes.size()]),
                                       tracer);
     }
@@ -1260,7 +1273,9 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
             info.append("Multithreaded access was detected?", detectedMultithreadedAccess);
 
         info.append("DataSource Implementation Class:", dataSourceImplClass);
+        info.append("DataSource interface:", dataSourceInterface);
         info.append("Underlying DataSource Object: " + AdapterUtil.toString(dataSource), dataSource);
+        info.append("Instance id:", instanceID);
         info.append("Log Writer:", logWriter);
         info.append("Counter of fatal connection errors on ManagedConnections created by this MCF:",
                     fatalErrorCount); 

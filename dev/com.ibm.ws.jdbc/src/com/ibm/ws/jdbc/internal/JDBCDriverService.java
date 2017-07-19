@@ -592,6 +592,21 @@ public class JDBCDriverService extends Observable implements LibraryChangeListen
     }
 
     /**
+     * Returns the class loader for a jdbcDriver with a libraryRef or nested library.
+     * 
+     * @return the class loader for a jdbcDriver with a libraryRef or nested library.
+     *         Null if uninitialized or if configured to load from the application.
+     */
+    public ClassLoader getClassLoaderForLibraryRef() {
+        lock.readLock().lock();
+        try {
+            return classloader;
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    /**
      * Returns a list of file names for the specified library.
      * 
      * @param sharedLib library

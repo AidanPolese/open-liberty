@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 IBM Corporation and others.
+ * Copyright (c) 2011, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,9 +19,6 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger; 
-
-import javax.sql.CommonDataSource;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
@@ -29,7 +26,6 @@ import com.ibm.ws.ffdc.FFDCSelfIntrospectable;
 import com.ibm.ws.jca.cm.ConnectorService;
 import com.ibm.ws.jdbc.internal.DataSourceDef;
 import com.ibm.ws.jdbc.internal.PropertyService;
-import com.ibm.ws.kernel.service.util.PrivHelper;
 import com.ibm.ws.rsadapter.impl.WSManagedConnectionFactoryImpl;
 import com.ibm.wsspi.kernel.service.utils.MetatypeUtils;
 import com.ibm.wsspi.resource.ResourceFactory;
@@ -86,17 +82,6 @@ public class DSConfig implements FFDCSelfIntrospectable {
                                                                ));
 
     /**
-     * Count of initialized instances of this class. For the lightweight server only.
-     * 
-     */
-    private static final AtomicInteger NUM_INITIALIZED = new AtomicInteger();
-
-    // Data source implementation class names
-    public static final String
-                    ORACLE_UCP_DATASOURCE_CP_IMPL = "oracle.ucp.jdbc.PoolDataSourceImpl",
-                    ORACLE_UCP_DATASOURCE_XA_IMPL = "oracle.ucp.jdbc.PoolXADataSourceImpl";
-
-    /**
      * Determines whether or not to enlist in a transaction for methods that scroll a result set.
      */
     public final boolean beginTranForResultSetScrollingAPIs;
@@ -108,11 +93,6 @@ public class DSConfig implements FFDCSelfIntrospectable {
     public final boolean beginTranForVendorAPIs;
 
     /**
-     * Class loader of the data source class.
-     */
-    public final ClassLoader classloader;
-
-    /**
      * COMMIT_OR_ROLLBACK_ON_CLEANUP indicates whether we will rollback or commit on cleanup.
      * 
      * If the DB supports UOW detection this property will only be applied when we are in a DB UOW.
@@ -122,11 +102,6 @@ public class DSConfig implements FFDCSelfIntrospectable {
      * undetected implicit transactions must be dealt with by the application.
      */
     public final CommitOrRollbackOnCleanup commitOrRollbackOnCleanup;
-
-    /**
-     * Internal identifier for this configuration, which is used to match connection requests.
-     */
-    private final int configID;
 
     /**
      * Determines how connections are matched for sharing.
@@ -149,11 +124,6 @@ public class DSConfig implements FFDCSelfIntrospectable {
     public final boolean enableMultithreadedAccessDetection;
 
     /**
-     * Indicates if WAS connection pooling is enabled.
-     */
-    public final boolean enableWASConnectionPooling;
-
-    /**
      * Iterator over data source properties. For use by constructor only.
      */
     private NavigableMap<String, Object> entries;
@@ -172,11 +142,6 @@ public class DSConfig implements FFDCSelfIntrospectable {
      * Default isolation level for new connections.
      */
     public final int isolationLevel;
-
-    /**
-     * Indicates if the data source class is oracle.ucp.jdbc.PoolDataSourceImpl or oracle.ucp.jdbc.PoolXADataSourceImpl
-     */
-    public final boolean isUCP; 
 
     /**
      * JNDI name.
@@ -226,11 +191,6 @@ public class DSConfig implements FFDCSelfIntrospectable {
      * Used for timing out connection from the pool which are being validated.
      */
     public final int validationTimeout;
-    
-    /**
-     * The type of data source (interface class).
-     */
-    public final Class<? extends CommonDataSource> type;
 
     /**
      * JDBC driver vendor data source properties.
@@ -245,17 +205,15 @@ public class DSConfig implements FFDCSelfIntrospectable {
      * @throws Exception if an error occurs.
      */
     public DSConfig(DSConfig source, NavigableMap<String, Object> wProps) throws Exception {
-        this(source.configID, source.id, source.jndiName, source.type, wProps, source.vendorProps,
+        this(source.id, source.jndiName, wProps, source.vendorProps,
              source.mcf.getDataSourceClass(), source.connectorSvc, source.mcf);
     }
 
     /**
      * Constructor for new configuration.
      * 
-     * @param configID unique number identifying this configuration, null to generate one.
      * @param id the id of the data source.
      * @param jndi the JNDI name of the data source.
-     * @param ifc the type of data source.
      * @param wProps WebSphere data source properties
      * @param vProps JDBC driver vendor data source properties
      * @param dsImplClass JDBC driver vendor class that provides the data source implementation
@@ -263,7 +221,7 @@ public class DSConfig implements FFDCSelfIntrospectable {
      * @param mcf managed connection factory
      * @throws Exception if an error occurs
      */
-    public DSConfig(Integer configID, String id, String jndi, Class<? extends CommonDataSource> ifc,
+    public DSConfig(String id, String jndi,
                     NavigableMap<String, Object> wProps, Properties vProps,
                     Class<?> dsImplClass, ConnectorService connectorSvc,
                     WSManagedConnectionFactoryImpl mcf) throws Exception {
@@ -271,21 +229,11 @@ public class DSConfig implements FFDCSelfIntrospectable {
         if (trace && tc.isEntryEnabled())
             Tr.entry(tc, getClass().getSimpleName(), new Object[] { jndi, wProps });
 
-        classloader = PrivHelper.getClassLoader(dsImplClass);
-        this.configID = configID == null ? NUM_INITIALIZED.incrementAndGet() : configID;
         this.connectorSvc = connectorSvc;
         this.id = id;
         jndiName = jndi;
         this.mcf = mcf;
-        type = ifc;
         vendorProps = vProps;
-
-        String dsImplClassName = dsImplClass.getName();
-        isUCP = ORACLE_UCP_DATASOURCE_CP_IMPL.equals(dsImplClassName)
-                        || ORACLE_UCP_DATASOURCE_XA_IMPL.equals(dsImplClassName);
-        enableWASConnectionPooling = !isUCP;
-        if (!enableWASConnectionPooling)
-            Tr.info(tc, "WAS_CONNECTION_POOLING_DISABLED_INFO");
 
         entries = wProps;
         entry = entries.pollFirstEntry();
@@ -299,7 +247,7 @@ public class DSConfig implements FFDCSelfIntrospectable {
         isolationLevel = remove(DataSourceDef.isolationLevel.name(), -1, -1, null, -1, 0, 1, 2, 4, 8, 16, 4096);
         onConnect = remove(ON_CONNECT, (String[]) null);
         queryTimeout = remove(QUERY_TIMEOUT, (Integer) null, 0, TimeUnit.SECONDS);
-        statementCacheSize = remove(STATEMENT_CACHE_SIZE, enableWASConnectionPooling ? 10 : 0, 0, null);
+        statementCacheSize = remove(STATEMENT_CACHE_SIZE, mcf.isUCP ? 0 : 10, 0, null);
         supplementalJDBCTrace = remove(SUPPLEMENTAL_JDBC_TRACE, (Boolean) null);
         syncQueryTimeoutWithTransactionTimeout = remove(SYNC_QUERY_TIMEOUT_WITH_TRAN_TIMEOUT, false);
         transactional = remove(DataSourceDef.transactional.name(), true);
@@ -322,16 +270,6 @@ public class DSConfig implements FFDCSelfIntrospectable {
 
         if (trace && tc.isEntryEnabled())
             Tr.exit(tc, getClass().getSimpleName(), this);
-    }
-
-    /**
-     * Returns an identifier for this configuration, which can be used to match connection requests.
-     * This value is only non-zero in the lightweight server.
-     * 
-     * @return an identifier for this configuration.
-     */
-    public final int getConfigID() {
-        return configID;
     }
 
     /**
@@ -365,16 +303,9 @@ public class DSConfig implements FFDCSelfIntrospectable {
                                                SYNC_QUERY_TIMEOUT_WITH_TRAN_TIMEOUT, syncQueryTimeoutWithTransactionTimeout,
                                                DataSourceDef.transactional.name(), transactional
                                                );
-        List<?> valuesOnly = Arrays.asList(
-                                           classloader,
-                                           enableWASConnectionPooling,
-                                           isUCP,
-                                           type
-                                           );
         return new String[] {
                              toString(),
                              nameValuePairs.toString(),
-                             valuesOnly.toString(),
                              PropertyService.hidePasswords(vendorProps).toString() };
     }
 

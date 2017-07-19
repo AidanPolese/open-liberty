@@ -54,38 +54,10 @@ public class WSJdbcDataSource extends WSJdbcWrapper implements DataSource, FFDCS
     private WSConnectionManager cm;
     private ResourceRefInfo resRefInfo;
 
-    /** ID number representing the current configuration of this DataSource. [LIDB2282.10] */
-    int configID;
-
     /**
      * Cached list of interfaces implemented by the JDBC vendor connection implementation. Null means the list is not initialized yet.
      */
     private final transient AtomicReference<Class<?>[]> vendorConnectionInterfaces = new AtomicReference<Class<?>[]>();
-
-    /**
-     * List of commonly used CRI instances, which include only the isolation level. In the
-     * JDBC layer, isolation level is the only value that will ever be used when the
-     * getConnection (with no parameters) is specified. Because CRI objects cannot be changed
-     * once created, these same instances may be used for concurrent getConnection requests
-     */
-    private static final WSConnectionRequestInfoImpl[] defaultCRIs;
-    private static final WSConnectionRequestInfoImpl[] defaultCRIsWithSwitch;
-    static {
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-            Tr.debug(tc, "Creating default, reusable ConnectionRequestInfo instances.");
-        defaultCRIs = new WSConnectionRequestInfoImpl[9];
-        defaultCRIs[0] = new WSConnectionRequestInfoImpl(0);
-        defaultCRIs[1] = new WSConnectionRequestInfoImpl(1);
-        defaultCRIs[2] = new WSConnectionRequestInfoImpl(2);
-        defaultCRIs[4] = new WSConnectionRequestInfoImpl(4);
-        defaultCRIs[8] = new WSConnectionRequestInfoImpl(8);
-        defaultCRIsWithSwitch = new WSConnectionRequestInfoImpl[9];
-        defaultCRIsWithSwitch[0] = new WSConnectionRequestInfoImpl(0, true);
-        defaultCRIsWithSwitch[1] = new WSConnectionRequestInfoImpl(1, true);
-        defaultCRIsWithSwitch[2] = new WSConnectionRequestInfoImpl(2, true);
-        defaultCRIsWithSwitch[4] = new WSConnectionRequestInfoImpl(4, true);
-        defaultCRIsWithSwitch[8] = new WSConnectionRequestInfoImpl(8, true);
-    }
 
     /**
      * Create a WebSphere DataSource wrapper. This constructor is called by the Managed
@@ -111,7 +83,6 @@ public class WSJdbcDataSource extends WSJdbcWrapper implements DataSource, FFDCS
         cm = connMgr;
         resRefInfo = cm.getResourceRefInfo(); 
         dsConfig = mcf.dsConfig; 
-        configID = dsConfig.get().getConfigID(); // value will be 0 unless in the liberty profile 
 
         if (resRefInfo != null) {
             ComponentMetaDataAccessorImpl cmpMDAccessor = ComponentMetaDataAccessorImpl.getComponentMetaDataAccessor();
@@ -139,23 +110,10 @@ public class WSJdbcDataSource extends WSJdbcWrapper implements DataSource, FFDCS
         // configured isolationLevel value, otherwise use a default that we choose for the database.
         int isolationLevelForCRI = getDefaultIsolationLevel(); 
 
-        WSConnectionRequestInfoImpl criHolder = null; 
-
         final boolean supportIsolvlSwitching = mcf.getHelper().isIsolationLevelSwitchingSupport(); 
 
-        if (configID == 0) {
-            if (!supportIsolvlSwitching)
-                criHolder = isolationLevelForCRI < defaultCRIs.length ?
-                                defaultCRIs[isolationLevelForCRI] : 
-                                new WSConnectionRequestInfoImpl(isolationLevelForCRI);
-            else // supports isolevel switching
-                criHolder = isolationLevelForCRI < defaultCRIsWithSwitch.length ?
-                                defaultCRIsWithSwitch[isolationLevelForCRI] : 
-                                new WSConnectionRequestInfoImpl(isolationLevelForCRI, true);
-        } else {
-            criHolder = new WSConnectionRequestInfoImpl(null, null, isolationLevelForCRI, configID, supportIsolvlSwitching);
-        }
-        return getConnection(criHolder);
+        WSConnectionRequestInfoImpl cri = new WSConnectionRequestInfoImpl(null, null, isolationLevelForCRI, mcf.instanceID, supportIsolvlSwitching);
+        return getConnection(cri);
     }
 
     /**
@@ -236,7 +194,7 @@ public class WSJdbcDataSource extends WSJdbcWrapper implements DataSource, FFDCS
                         user,
                         pwd,
                         isolationLevelForCRI,
-                        configID,
+                        mcf.instanceID,
                         mcf.getHelper().isIsolationLevelSwitchingSupport());
 
         _connInf.markAsChangable(); // this cri can be changed later if needed
@@ -320,7 +278,6 @@ public class WSJdbcDataSource extends WSJdbcWrapper implements DataSource, FFDCS
         // Introspect on the connection manager. 
 
         info.append("ResourceRefInfo:", resRefInfo);
-        info.append("Current Configuration ID: " + configID); 
         info.introspect("Connection Manager:", cm); 
         info.introspect("ManagedConnectionFactory:", mcf);
         return info.toStringArray();
