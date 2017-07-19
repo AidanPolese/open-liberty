@@ -96,9 +96,7 @@ error.secPermission=CWWKE0016E: The bootstrap JAR file requires the AllPermissio
 error.secPermission.explanation=The Java 2 Security permissions are insufficient for the bootstrap JAR file to launch the runtime environment and the OSGi framework.
 error.secPermission.useraction=Ensure that the bootstrap JAR file has been granted AllPermission privileges in the Java 2 Security policy file.
 
-error.badBitmode=CWWKE0017E: The process detected a 31-bit JVM which is not supported. The runtime environment requires 64-bit Java 6 or higher.
-error.badBitmode.explanation=The JAVA_HOME system variable is set to point to a version of Java that is 31-bit.
-error.badBitmode.useraction=Adjust the JAVA_HOME system variable to point to 64-bit Java 6 or higher.
+# CWWKE0017E removed because it's only used in com.ibm.ws.kernel.boot.cmdline. Do not reuse.
 
 error.unknownException=CWWKE0018E: An exception occurred while launching the runtime environment: {0}
 error.unknownException.explanation=The exception prevented the launch of the server.
@@ -194,9 +192,7 @@ info.frameworkRestart=CWWKE0041I: The platform cache is out of sync. Restarting 
 info.frameworkRestart.explanation=The framework has been restarted because the platform cache was out of sync.
 info.frameworkRestart.useraction=No action is required.
 
-error.badVersion=CWWKE0042E: The correct Java version is not running. The runtime environment requires Java 6 or higher.
-error.badVersion.explanation=Either an unsupported Java version is running, or the JAVA_HOME system variable is set to point to an older version of Java.
-error.badVersion.useraction= Upgrade the Java version to Java 6, or adjust the JAVA_HOME system variable to point to Java 6.
+# CWWKE0042E removed because it's only used in com.ibm.ws.kernel.boot.cmdline - Do not reuse.
 
 error.unsupportedLaunch=CWWKE0043E: The launch location is not a local file. ({0})
 error.unsupportedLaunch.explanation=The runtime environment must be launched from a local file, for example a JAR file.
@@ -460,9 +456,8 @@ info.addProductExtension=CWWKE0108I: The product extension {0} was programmatica
 info.addProductExtension.explanation= This message is for informational purposes only. The product extension was added by a call to the com.ibm.wsspi.kernel.embeddable.ServerBuilder.addProductExtension SPI.
 info.addProductExtension.useraction=No action is required.
 
-warning.javase6.endofservice=CWWKE0109W: Support for Java SE 6 with WebSphere Application Server Liberty ends in September 2017. To stay current and reduce the risk of security exposures, update to Java SE 8.
-warning.javase6.endofservice.explanation=IBM will discontinue support for Java SE 6 with WebSphere Application Server Liberty after September 2017. Continuing to use Java SE 6 after its end of support might expose your applications to security risks.
-warning.javase6.endofservice.useraction=IBM highly recommends that you use the latest Java SE version, Java SE 8. 
+# CWWKE0109W removed because it's no longer used - do not reuse
+ 
 
 #
 # W A R N I N G:   Do not use CWWKE0100 - CCWKE0199 they are reserved in ServiceMessages.nlsprops

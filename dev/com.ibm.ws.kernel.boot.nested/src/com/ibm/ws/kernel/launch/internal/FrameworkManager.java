@@ -203,10 +203,6 @@ public class FrameworkManager {
                 Tr.audit(tc, "audit.launchTime", config.getProcessName());
             }
 
-            if (isJava6()) {
-                Tr.warning(tc, "warning.javase6.endofservice");
-            }
-
             outputLicenseRestrictionMessage();
 
             outputEmbeddedProductExtensions();
