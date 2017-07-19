@@ -338,7 +338,7 @@ public class DB2JCCHelper extends DB2Helper {
         try {
             Method m = methRef.get();
             if (m == null) {
-                Class<?> c = PrivHelper.loadClass(mcf.dsConfig.get().classloader,"com.ibm.db2.jcc.DB2Connection");
+                Class<?> c = PrivHelper.loadClass(mcf.jdbcDriverLoader, "com.ibm.db2.jcc.DB2Connection");
                 methRef.set(m = c.getMethod(methName, paramTypes));
             }
 
