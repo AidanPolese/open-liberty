@@ -59,11 +59,11 @@ javax.websocket:javax.websocket-api:1.1
 javax.ws.rs:javax.ws.rs-api:2.0
 javax.xml.bind:jaxb-api:2.2.12-b140109.1041
 joda-time:joda-time:1.6.2
-org.apache.aries.jmx:org.apache.aries.jmx.api:1.1.6-ibm-s20170508-0700
-org.apache.aries.jmx:org.apache.aries.jmx.core.whiteboard:1.1.6-ibm-s20170508-0700
-org.apache.aries.jndi:org.apache.aries.jndi.api:1.1.1-ibm-s20170508-0700
-org.apache.aries.jndi:org.apache.aries.jndi.core:1.0.3-ibm-s20170508-0700
-org.apache.aries:org.apache.aries.util:1.1.2-ibm-s20170508-0700
+org.apache.aries.jmx:org.apache.aries.jmx.api:1.1.6-ibm-s20170710-0926
+org.apache.aries.jmx:org.apache.aries.jmx.core.whiteboard:1.1.6-ibm-s20170710-0926
+org.apache.aries.jndi:org.apache.aries.jndi.api:1.1.1-ibm-s20170710-0926
+org.apache.aries.jndi:org.apache.aries.jndi.core:1.0.3-ibm-s20170710-0926
+org.apache.aries:org.apache.aries.util:1.1.2-ibm-s20170710-0926
 org.apache.bval:bval-core:1.1.0
 org.apache.commons:commons-compress:1.10
 org.apache.commons:commons-lang3:3.5

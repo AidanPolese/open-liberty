@@ -9,10 +9,10 @@
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
 # this needs to be replaced with a repo reference to a build artifact
--include= jar:${fileuri;lib/org.apache.aries.jmx.api-1.1.6-ibm-s20170710-0926.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;${repo;org.apache.aries.jmx:org.apache.aries.jmx.api;1.1.6.ibm-s20170508-0700}}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -includeresource: \
-    @lib/org.apache.aries.jmx.api-1.1.6-ibm-s20170710-0926.jar!/!META-INF/maven/*
+    @${repo;org.apache.aries.jmx:org.apache.aries.jmx.api;1.1.6.ibm-s20170508-0700}!/!META-INF/maven/*
 
 -buildpath: \
-	lib/org.apache.aries.jmx.api-1.1.6-ibm-s20170710-0926.jar;version=file
+	org.apache.aries.jmx:org.apache.aries.jmx.api;version=1.1.6.ibm-s20170508-0700
