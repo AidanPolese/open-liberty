@@ -1,4 +1,5 @@
-**logo goes here - should have this by end of week 7/21**
+![](https://github.ibm.com/was-liberty/open-liberty/blob/master/logos/logo_stacked_navy.png)
+
 # OpenLiberty
 
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/OpenLibertyAS)
