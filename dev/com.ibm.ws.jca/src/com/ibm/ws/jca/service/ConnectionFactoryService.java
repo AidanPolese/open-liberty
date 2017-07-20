@@ -32,6 +32,7 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
 import com.ibm.ws.ffdc.FFDCFilter;
+import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.jca.cm.AbstractConnectionFactoryService;
 import com.ibm.ws.jca.cm.ConnectionManagerService;
 import com.ibm.ws.jca.cm.ConnectorService;
@@ -287,6 +288,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
     }
 
     @Override
+    @FFDCIgnore(NoSuchMethodException.class)
     public boolean getRRSTransactional() {
         try {
             return (Boolean) mcf.getClass().getMethod("getRRSTransactional").invoke(mcf);
