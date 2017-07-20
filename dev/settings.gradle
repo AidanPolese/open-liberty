@@ -47,25 +47,19 @@ def loadBuildProps() {
   
   File usrHomeProps = file(System.properties['user.home'] + '/gradle.startup.properties') 
   if (usrHomeProps.exists()) {    
-	  println "Loading properties from: " + usrHomeProps.getPath() + " ["    
 	  usrHomeProps.withInputStream { props.load(it) }    
 	  props.each {      
-		  println "Key: " +it.key + " Value: " + it.value      
 		  props.setProperty(it.key, it.value)      
-		  }    
-	  println "]"    
+      }    
 	  // generated.properties is used to pass build-time variables from Gradle -> Bnd in cnf/build.bnd    
 	  File propsFile = new File('generated.properties')    
 	  props.store(propsFile.newWriter(), null)       
   } 
   else if (System.properties['build.properties.path']!=null) {
-	  println "Loading properties from: " + System.properties['build.properties.path'] + " ["
 	  file(System.properties['build.properties.path']).withInputStream { props.load(it) }
 	  props.each { 
-	    println "Key: " +it.key + " Value: " + it.value
 	    props.setProperty(it.key, it.value) 
 	    }
-	  println "]"
 	  // generated.properties is used to pass build-time variables from Gradle -> Bnd in cnf/build.bnd
 	  File propsFile = new File('generated.properties')
 	  props.store(propsFile.newWriter(), null)
