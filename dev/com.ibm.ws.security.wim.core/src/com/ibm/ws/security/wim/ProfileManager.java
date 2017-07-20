@@ -630,7 +630,8 @@ public class ProfileManager implements ProfileServiceLite {
         }
 
         if (restRequest)
-            Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "get", targetReposId, uniqueName, realmName, retRoot, Integer.valueOf("200"));
+            Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "get", targetReposId, uniqueName,
+                        realmName = (realmName != null) ? realmName : auditManager.getRealm(), retRoot, Integer.valueOf("200"));
 
         return retRoot;
     }
@@ -1200,7 +1201,8 @@ public class ProfileManager implements ProfileServiceLite {
         }
 
         if (restRequest)
-            Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "search", targetReposId, uniqueName, realmName, retRootDO,
+            Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "search", targetReposId, uniqueName,
+                        realmName = (realmName != null) ? realmName : auditManager.getRealm(), retRootDO,
                         Integer.valueOf("200"));
 
         return retRootDO;
