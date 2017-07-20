@@ -1,29 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    Copyright (c) 2017 IBM Corporation and others.
-    All rights reserved. This program and the accompanying materials
-    are made available under the terms of the Eclipse Public License v1.0
-    which accompanies this distribution, and is available at
-    http://www.eclipse.org/legal/epl-v10.html
-   
-    Contributors:
-        IBM Corporation - initial API and implementation
- -->
-
 <ossc>
   <project project="EclipseLink"
     projectURL="https://www.eclipse.org/eclipselink/"
-    version="2.6.3_WAS" revision="2.6.3.WAS-v20170504-7d42382"
+    version="2.6.3_WAS" revision="2.6.3.WAS-v20170706-04d37b5"
     license-type="EPLv1"
     contact="sutter@us.ibm.com"
     encryption="no">
-    <download location="ftp://rchgsa.ibm.com//projects/j/jpabuild/SNAPSHOT">
+    <download location="ftp://rchgsa.ibm.com/projects/j/jpabuild/SNAPSHOT">
         <file basename="org.eclipse.persistence.antlr.WAS.jar" checksum="fbff890f1913157445e092fb3aa63d94"/>
         <file basename="org.eclipse.persistence.asm.WAS.jar" checksum="4134f84bf557326f7cb42177c3128e89"/>
-        <file basename="org.eclipse.persistence.core.WAS.jar" checksum="d7f32b4bf3ee09e0633f17c370b356a1"/>
-        <file basename="org.eclipse.persistence.jpa.WAS.jar" checksum="7dddbb37e4a31b2627b910e6d392c6d7"/>
-        <file basename="org.eclipse.persistence.jpa.jpql.WAS.jar" checksum="9c4773fe63afe13a909fb019b89965f2"/>
-        <file basename="org.eclipse.persistence.jpa.modelgen.WAS.jar" checksum="6b6972a3266fe08b45a27b2ef2b2f7bc"/>
+        <file basename="org.eclipse.persistence.core.WAS.jar" checksum="51f0e99889d77bbf33558e5549fcc0c2"/>
+        <file basename="org.eclipse.persistence.jpa.WAS.jar" checksum="6eadee4f06b9f7ea153993581c64bd41"/>
+        <file basename="org.eclipse.persistence.jpa.jpql.WAS.jar" checksum="aa6c464516eca8e7ee3a53b755dcd3f2"/>
+        <file basename="org.eclipse.persistence.jpa.modelgen.WAS.jar" checksum="4bed2287486e114d24c439ec23c7f940"/>
       </download>
   </project>
   <clearencehistory/>

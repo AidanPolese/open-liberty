@@ -12,8 +12,47 @@
 
 <!--Downloads binaries, checks nls props for updates, and builds the ossc file-->
 <project name="EclipseLink Setup" default="build">
-    <import file="../ant_build/public_imports/internal_imports/buildtasks.xml" />
-    <import file="../ant_build/public_imports/internal_imports/standard_macros.xml" />
+
+    <macrodef name="remoteGet">
+        <attribute name="failOnError" default="true"/>
+        <!-- These attributes should normally never need to be specified, but are included for completeness -->
+        <attribute name="server" default="${ftp.server}"/>
+        <attribute name="userid" default="${ftpid}" />
+        <attribute name="password" default="${ftppw}"/>
+        <!-- We always use a different id for key-pair authentication so that there's no risk of locking 
+             it out if some part of the build goes down an ftp path. -->
+        <attribute name="keyuserid" default="${ftpscpuserid}"/>
+        <attribute name="keyfile" default="${server.path}/${ftpkeyfile}"/>
+        <attribute name="passphrase" default="${ftpscppassphrase}"/>
+        <attribute name="remotedir" />
+        <attribute name="useScp" default="${use.scp}"/>
+        <attribute name="dir" default="${basedir}"/>
+        <!-- Path relative to the remote directory. Can include wildcards -->
+        <attribute name="name"/>
+
+        <sequential>
+            <echo>FTP from @{server}: GET @{remotedir}/@{name} using @{userid} to @{dir}</echo>
+                <!-- Check whether the remote directory exists -->
+                <!-- (This will pass even if the directory doesn't exist) -->
+                <!-- Because ftp filesets are just weird, the includes
+                     on the fileset needs to use the same separator as
+                     the remote system, so we can either convert the
+                     slashes in the @{remoteDir} to always be
+                     linux-style or tell the task to use windows-style
+                     separators on windows.  Otherwise the FTP task
+                     fails with an NPE. -->
+                <ftp server="@{server}"
+                    userid="@{userid}"
+                    password="@{password}"
+                    action="get"
+                    passive="yes" 
+                    remotedir="@{remotedir}/"
+                    binary="true"
+                    skipFailedTransfers="${skipErrors}">
+                    <fileset dir="@{dir}" includes="@{name}"/>
+                </ftp>
+        </sequential>
+    </macrodef>
 
     <!-- Basic build structure properties and eclipselink binary version to download -->
     <property file="build.properties" />
