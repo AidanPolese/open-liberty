@@ -8,14 +8,14 @@
 # Contributors:
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
--include= jar:${fileuri;lib/org.osgi.service.http-1.2.1.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;${repo;org.osgi:org.osgi.service.http;1.2.1}}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -includeresource: \
-   @lib/org.osgi.service.http-1.2.1.jar!/!(OSGI-OPT/src|META-INF/maven)/*
+   @${repo;org.osgi:org.osgi.service.http;1.2.1}!/!(OSGI-OPT/src|META-INF/maven)/*
 
 publish.wlp.jar.suffix: dev/api/spec
 
 instrument.disabled: true
 
 -buildpath: \
-	lib/org.osgi.service.http-1.2.1.jar;version=file
+	org.osgi:org.osgi.service.http;version=1.2.1

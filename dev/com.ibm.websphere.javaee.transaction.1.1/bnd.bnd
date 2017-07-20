@@ -8,12 +8,12 @@ Export-Package: \
 	javax.transaction.xa
 
 -includeresource: \
-  @lib/geronimo-jta_1.1_spec-1.1.1.jar!/META-INF/NOTICE
+  @${repo;org.apache.geronimo.specs:geronimo-jta_1.1_spec;1.1.1}!/META-INF/NOTICE
 
 # this pulls in the partial javax.transaction and javax.transaction.xa packages from the jre
 # and lets us export them.
 Require-Bundle: system.bundle
-   
+
 Copyright: Licensed Materials - Property of IBM 5724-J08, 5724-I63, 57\
 24-H88, 5724-H89, 5655-W65, 5733-W70 Copyright IBM Corp. 1998, 2011 A\
 ll Rights Reserved. US Government Users Restricted Rights - Use, dupl\
@@ -25,4 +25,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/geronimo-jta_1.1_spec-1.1.1.jar;version=file
+	org.apache.geronimo.specs:geronimo-jta_1.1_spec;version=1.1.1

@@ -12,7 +12,7 @@ Export-Package: \
   org.apache.commons.weaver.utils.*
 
 Include-Resource: \
-  @lib/commons-weaver-privilizer-1.1.jar!/META-INF/LICENSE.txt, \
-  @lib/commons-weaver-privilizer-1.1.jar!/META-INF/NOTICE.txt
+  @${repo;org.apache.commons:commons-weaver-privilizer;1.1}!/META-INF/LICENSE.txt, \
+  @${repo;org.apache.commons:commons-weaver-privilizer;1.1}!/META-INF/NOTICE.txt
 
 Import-Package: !org.apache.commons.io, *

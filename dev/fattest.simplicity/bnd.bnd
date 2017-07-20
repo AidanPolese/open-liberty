@@ -44,21 +44,23 @@ test.project: true
 
 -buildpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file,\
-	lib/com.ibm.componenttest.common.jar;version=file,\
-	lib/com.ibm.ws.topology.helper.jar;version=file,\
-	lib/commons-httpclient-3.1.jar;version=file,\
+	commons-httpclient:commons-httpclient;version=3.1,\
+	com.ibm.ws.componenttest:com.ibm.componenttest.common;version=1.0.0,\
+    com.ibm.ws.componenttest:com.ibm.ws.topology.helper;version=1.0.0,\
+    com.ibm.ws.componenttest:jlanclient;version=1.0.0,\
+    com.ibm.ws.componenttest:provider.api;version=1.0.0,\
+    com.ibm.ws.componenttest:public.api;version=1.0.0,\
+    com.ibm.ws.componenttest:remoteaccess;version=2.3.0.1,\
+    com.ibm.ws.componenttest:ssh;version=2.3.0.1,\
+    com.ibm.ws.componenttest:fat.util;version=1.0.0,\
 	lib/httpunit.jar;version=file,\
 	lib/jtidy-r938.jar;version=file,\
-	lib/provider.api.jar;version=file,\
-	lib/public.api.jar;version=file,\
-	lib/remoteaccess.jar;version=file,\
 	lib/shrinkwrap-api-1.2.3.jar;version=file,\
 	lib/shrinkwrap-impl-base-1.2.3.jar;version=file,\
 	lib/shrinkwrap-spi-1.2.3.jar;version=file,\
-	autoFVT-defaults/lib/fat.util.jar;version=file,\
-	jdbc/derby/derbynet.jar;version=file,\
-	../build.sharedResources/lib/jmock/old/jmock.jar;version=file,\
-	../build.sharedResources/lib/hamcrest-all.jar;version=file,\
+	org.apache.derby:derbynet;version=10.11.1.1,\
+	org.jmock:jmock;version=2.5.1,\
+	com.thoughtworks.qdox:qdox;version=1.12,\
 	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file,\
 	com.ibm.websphere.javaee.jsonp.1.0;version=latest,\
 	com.ibm.websphere.javaee.servlet.3.0;version=latest,\

@@ -29,4 +29,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.mail-api-1.5.0.jar;version=file
+	javax.mail:javax.mail-api;version=1.5.0

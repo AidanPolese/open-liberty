@@ -139,17 +139,17 @@ Private-Package:\
 
 Include-Resource: \
  OSGI-INF=resources/OSGI-INF, \
-  lib/cxf-core-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.1.11.jar, \
-  lib/cxf-rt-frontend-jaxrs-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-frontend-jaxrs-3.1.11.jar, \
-  lib/cxf-rt-rs-client-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-client-3.1.11.jar, \
-  lib/cxf-rt-transports-http-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-transports-http-3.1.11.jar, \
-  lib/cxf-tools-common-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-common-3.1.11.jar, \
-  lib/cxf-tools-wadlto-jaxrs-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-wadlto-jaxrs-3.1.11.jar, \
-  lib/cxf-rt-rs-service-description-3.1.11.jar=../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-service-description-3.1.11.jar, \
-  lib/jackson-core-asl-1.6.2.jar=../com.ibm.ws.org.codehaus.jackson/lib/jackson-core-asl-1.6.2.jar, \
-  lib/jackson-jaxrs-1.6.2.jar=../com.ibm.ws.org.codehaus.jackson/lib/jackson-jaxrs-1.6.2.jar, \
-  lib/jackson-mapper-asl-1.6.2.jar=../com.ibm.ws.org.codehaus.jackson/lib/jackson-mapper-asl-1.6.2.jar, \
-  lib/jackson-xc-1.6.2.jar=../com.ibm.ws.org.codehaus.jackson/lib/jackson-xc-1.6.2.jar, \
+  lib/cxf-core-3.1.11.jar=${repo;org.apache.cxf:cxf-core;3.1.11}, \
+  lib/cxf-rt-frontend-jaxrs-3.1.11.jar=${repo;org.apache.cxf:cxf-rt-frontend-jaxrs;3.1.11}, \
+  lib/cxf-rt-rs-client-3.1.11.jar=${repo;org.apache.cxf:cxf-rt-rs-client;3.1.11}, \
+  lib/cxf-rt-transports-http-3.1.11.jar=${repo;org.apache.cxf:cxf-rt-transports-http;3.1.11}, \
+  lib/cxf-tools-common-3.1.11.jar=${repo;org.apache.cxf:cxf-tools-common;3.1.11}, \
+  lib/cxf-tools-wadlto-jaxrs-3.1.11.jar=${repo;org.apache.cxf:cxf-tools-wadlto-jaxrs;3.1.11}, \
+  lib/cxf-rt-rs-service-description-3.1.11.jar=${repo;org.apache.cxf:cxf-rt-rs-service-description;3.1.11}, \
+  lib/jackson-core-asl-1.6.2.jar=${repo;org.codehaus.jackson:jackson-core-asl;1.6.2}, \
+  lib/jackson-jaxrs-1.6.2.jar=${repo;org.codehaus.jackson:jackson-jaxrs;1.6.2}, \
+  lib/jackson-mapper-asl-1.6.2.jar=${repo;org.codehaus.jackson:jackson-mapper-asl;1.6.2}, \
+  lib/jackson-xc-1.6.2.jar=${repo;org.codehaus.jackson:jackson-xc;1.6.2}, \
   org/apache/cxf=bin/org/apache/cxf, \
   org/codehaus/jackson=bin/org/codehaus/jackson
 
@@ -161,17 +161,17 @@ Include-Resource: \
 instrument.classesExcludes: com/ibm/ws/jaxrs20/internal/resources/*.class
 
 -buildpath: \
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.1.11.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-frontend-jaxrs-3.1.11.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-client-3.1.11.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-transports-http-3.1.11.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-common-3.1.11.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-tools-wadlto-jaxrs-3.1.11.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-service-description-3.1.11.jar;version=file,\
-	../com.ibm.ws.org.codehaus.jackson/lib/jackson-core-asl-1.6.2.jar;version=file, \
-	../com.ibm.ws.org.codehaus.jackson/lib/jackson-jaxrs-1.6.2.jar;version=file, \
-	../com.ibm.ws.org.codehaus.jackson/lib/jackson-mapper-asl-1.6.2.jar;version=file, \
-	../com.ibm.ws.org.codehaus.jackson/lib/jackson-xc-1.6.2.jar;version=file, \
+	org.apache.cxf:cxf-core;version=3.1.11,\
+	org.apache.cxf:cxf-rt-frontend-jaxrs;version=3.1.11,\
+	org.apache.cxf:cxf-rt-rs-client;version=3.1.11,\
+	org.apache.cxf:cxf-rt-transports-http;version=3.1.11,\
+	org.apache.cxf:cxf-tools-common;version=3.1.11,\
+	org.apache.cxf:cxf-tools-wadlto-jaxrs;version=3.1.11,\
+	org.apache.cxf:cxf-rt-rs-service-description;version=3.1.11,\
+	org.codehaus.jackson:jackson-core-asl;version=1.6.2, \
+	org.codehaus.jackson:jackson-jaxrs;version=1.6.2, \
+	org.codehaus.jackson:jackson-mapper-asl;version=1.6.2, \
+	org.codehaus.jackson:jackson-xc;version=1.6.2, \
 	com.ibm.ws.adaptable.module;version=latest,\
 	com.ibm.ws.anno;version=latest,\
 	com.ibm.ws.artifact;version=latest,\

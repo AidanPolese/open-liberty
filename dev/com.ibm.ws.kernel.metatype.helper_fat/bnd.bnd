@@ -21,5 +21,5 @@ test.project: true
 -buildpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
 	fattest.simplicity;version=latest, \
-	../fattest.simplicity/lib/public.api.jar;version=file, \
+	com.ibm.ws.componenttest:public.api;version=1.0.0, \
 	com.ibm.ws.kernel.metatype.helper;version=latest

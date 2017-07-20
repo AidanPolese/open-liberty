@@ -28,7 +28,7 @@ Private-Package: \
 instrument.disabled: true
 
 -buildpath: \
-	lib/org.apache.commons.compress-1.10.jar;version=file, \
+	org.apache.commons:commons-compress;version=1.10, \
 	com.ibm.ws.logging;version=latest, \
 	com.ibm.ws.kernel.boot.common;version=latest, \
 	com.ibm.ws.kernel.boot;version=latest, \

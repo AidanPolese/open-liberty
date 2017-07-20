@@ -15,3 +15,4 @@ instrument.disabled: true
 
 -buildpath: \
     lib/org.apache.aries.jndi.api-1.1.1-ibm-s20170710-0926.jar;version=file
+

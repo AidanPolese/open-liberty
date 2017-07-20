@@ -22,11 +22,11 @@ Export-Package: \
 	javax.resource.spi.work
 
 Include-Resource: \
-  @lib/javax.resource-api-1.7.jar!/META-INF/NOTICE
+  @${repo;javax.resource:javax.resource-api;1.7}!/META-INF/NOTICE
 
 instrument.disabled: true
 
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.resource-api-1.7.jar;version=file
+	javax.resource:javax.resource-api;version=1.7

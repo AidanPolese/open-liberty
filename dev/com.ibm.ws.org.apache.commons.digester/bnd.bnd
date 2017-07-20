@@ -8,9 +8,9 @@
 # Contributors:
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
--include= jar:${fileuri;lib/commons-digester-1.8.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;${repo;commons-digester:commons-digester;1.8}}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -includeresource: \
-   @lib/commons-digester-1.8.jar
+   @${repo;commons-digester:commons-digester;1.8}
 
--buildpath: lib/commons-digester-1.8.jar;version=file
+-buildpath: commons-digester:commons-digester;version=1.8

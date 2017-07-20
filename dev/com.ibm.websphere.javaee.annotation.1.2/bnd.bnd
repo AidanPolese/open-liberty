@@ -19,11 +19,11 @@ Export-Package: \
 	javax.annotation.sql
 
 Include-Resource: \
-  @lib/javax.annotation-api-1.2.jar!/META-INF/NOTICE
+  @${repo;javax.annotation:javax.annotation-api;1.2}!/META-INF/NOTICE
 
 instrument.disabled: true
 
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.annotation-api-1.2.jar;version=file
+	javax.annotation:javax.annotation-api;version=1.2

@@ -59,10 +59,11 @@ publish.wlp.jar.disabled: true
 test.project: true
 
 -buildpath: \
-	lib/org.apache.felix.http.api-2.2.0.jar;version=file,\
-	lib/org.apache.felix.http.base-2.2.0.jar;version=file,\
-	../com.ibm.websphere.javaee.servlet.3.1/lib/javax.servlet-api-3.1.0.jar;version=file,\
+	org.apache.felix:org.apache.felix.http.api;version=2.2.0,\
+	org.apache.felix:org.apache.felix.http.base;version=2.2.0,\
+	javax.servlet:javax.servlet-api;version=3.1.0,\
 	com.ibm.websphere.appserver.spi.logging;version=latest, \
+	com.ibm.ws.logging;version=latest, \
 	com.ibm.websphere.org.osgi.core;version=latest,\
 	com.ibm.websphere.org.osgi.service.component;version=latest,\
 	com.ibm.websphere.org.osgi.service.http;version=latest,\
@@ -73,7 +74,7 @@ test.project: true
 -testpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
 	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
-	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
-	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
-	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	com.thoughtworks.qdox:qdox;version=1.12, \
+	org.jmock:jmock-junit4;version=2.5.1, \
+	org.jmock:jmock;version=2.5.1, \
 	com.ibm.ws.logging;version=latest

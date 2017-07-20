@@ -8,9 +8,9 @@
 # Contributors:
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
--include= jar:${fileuri;lib/commons-lang3-3.5.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;${repo;org.apache.commons:commons-lang3;3.5}}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -includeresource: \
-   @lib/commons-lang3-3.5.jar!/!META-INF/maven/*
+   @${repo;org.apache.commons:commons-lang3;3.5}!/!META-INF/maven/*
 
--buildpath: lib/commons-lang3-3.5.jar;version=file
+-buildpath: org.apache.commons:commons-lang3;version=3.5

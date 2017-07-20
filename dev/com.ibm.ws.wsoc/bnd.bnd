@@ -112,5 +112,5 @@ instrument.classesExcludes: com.ibm.ws.wsoc.Utils.class,com/ibm/ws/wsoc/internal
 -testpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
 	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
-	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
+	com.thoughtworks.qdox:qdox;version=1.12, \
 	com.ibm.ws.kernel.boot;version=latest

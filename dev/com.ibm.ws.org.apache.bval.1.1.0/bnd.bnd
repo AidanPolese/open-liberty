@@ -8,8 +8,8 @@
 # Contributors:
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
--include= jar:${fileuri;lib/org.apache.bval.bundle-1.1.0-alpha-SNAPSHOT.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;${repo;org.apache.bval:bval-core;1.1.0}}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -buildpath: \
-	lib/org.apache.bval.bundle-1.1.0-alpha-SNAPSHOT.jar;version=file,\
+	org.apache.bval:bval-core;version=1.1.0,\
 	com.ibm.websphere.javaee.validation.1.1;version=latest

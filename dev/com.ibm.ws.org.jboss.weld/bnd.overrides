@@ -72,6 +72,6 @@ Service-Component: \
         |org.jboss.weld.util.bean"
 
 Include-Resource: \
-  @lib/weld-osgi-bundle-2.4.3.Final.jar!/!META-INF/maven/*
+  @${repo;org.jboss.weld.probe:weld-probe-core;2.4.3.Final}!/!META-INF/maven/*
 
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"

@@ -22,9 +22,9 @@ test.project: true
 -buildpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
 	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
-	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
-	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
-	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	com.thoughtworks.qdox:qdox;version=1.12, \
+	org.jmock:jmock-junit4;version=2.5.1, \
+	org.jmock:jmock;version=2.5.1, \
 	com.ibm.websphere.appserver.spi.logging;version=latest,\
 	com.ibm.ws.kernel.service.location;version=latest,\
 	com.ibm.ws.kernel.service;version=latest

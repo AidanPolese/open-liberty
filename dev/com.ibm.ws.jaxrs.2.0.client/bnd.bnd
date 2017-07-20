@@ -49,10 +49,10 @@ Service-Component: \
 instrument.classesExcludes: com/ibm/ws/jaxrs20/client/internal/resources/*.class
     
 -buildpath: \
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-core-3.1.11.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-frontend-jaxrs-3.1.11.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-rs-client-3.1.11.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.jaxrs/lib/cxf-rt-transports-http-3.1.11.jar;version=file,\
+	org.apache.cxf:cxf-core;version=3.1.11,\
+	org.apache.cxf:cxf-rt-frontend-jaxrs;version=3.1.11,\
+	org.apache.cxf:cxf-rt-rs-client;version=3.1.11,\
+	org.apache.cxf:cxf-rt-transports-http;version=3.1.11,\
 	com.ibm.ws.jaxrs.2.0.common;version=latest,\
 	com.ibm.ws.adaptable.module;version=latest,\
 	com.ibm.ws.artifact;version=latest,\
