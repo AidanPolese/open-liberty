@@ -1324,6 +1324,13 @@ public class Cache extends DCacheBase implements com.ibm.websphere.cache.CacheLo
             ce.finish();
         } else
             oldValue = null;
+        
+        if ( ce != null )
+        	if (ce.timeLimit > 0 || ce.inactivity > 0 ) {
+        		if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) 
+        			Tr.debug(tc, methodName + " cacheName=" + this.cacheName + " id=" + ce.id + " timeLimit=" + ce.timeLimit + " inactivity=" + ce.inactivity );
+        		timeLimitDaemon.valueWasRemoved(this, ce.id);
+        	}
 
         if (ei.isSharedPull() || (cacheConfig.propogateInvalidationsNotShared && ei.isNotShared())) {
             // fix DRS message ordering problem by skipping the removal cache id from peer server's PushPullTable
