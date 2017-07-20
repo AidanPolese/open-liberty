@@ -425,8 +425,6 @@ task copyMavenLibs(type: Copy) {
   }
 
   compileJava {
-
-  
     if (!parseBoolean(bnd('instrument.disabled', 'false'))) {
       def instrument = fileTree( dir: compileJava.destinationDir, include: bnd('instrument.classesIncludes'), exclude: bnd('instrument.classesExcludes') )
       doLast {
@@ -512,7 +510,6 @@ task copyMavenLibs(type: Copy) {
     dependsOn globalize
     options.warnings = false
     options.fork = true
-	options.compilerArgs = ["-Xbootclasspath/p:"+bnd('buildpath.bootclasspath')]
   }
 
   test {
