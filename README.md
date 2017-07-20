@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/License-EPL%201.0-green.svg)](https://opensource.org/licenses/EPL-1.0)
 
 # Summary
-Open Liberty is a highly composable, fast to start, dynamic application server runtime environment. **More of a description goes here**.
+Open Liberty is a highly composable, fast to start, dynamic application server runtime environment.
 
 # Table of Contents
 * [Getting Started](https://github.ibm.com/was-liberty/open-liberty#getting-started)
@@ -24,11 +24,13 @@ Visit the [WASdev Community](https://developer.ibm.com/wasdev/) for documentatio
 2. Run a gradle build.
 
     ```cd open-liberty/dev```
+    
+    ```./gradlew cnf:initialize```
 
     ```./gradlew build```
 
-3. **Add an app in here that the user can execute to see something run in liberty**
-4. After that you can [Open issues](https://github.ibm.com/was-liberty/open-liberty/issues), [Review existing contributions](https://github.ibm.com/was-liberty/open-liberty/pulls), or [Submit fixes](https://github.ibm.com/was-liberty/open-liberty/blob/master/CONTRIBUTING.md).
+3. **Add an app in here that the user can execute to see something run in liberty.  Point to petstore app on website?**
+4. Go [Open issues](https://github.ibm.com/was-liberty/open-liberty/issues), [Review existing contributions](https://github.ibm.com/was-liberty/open-liberty/pulls), or [Submit fixes](https://github.ibm.com/was-liberty/open-liberty/blob/master/CONTRIBUTING.md).
 
 ## Community
 1. [Open Liberty group.io](https://groups.io/g/openliberty)
