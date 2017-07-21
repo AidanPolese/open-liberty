@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +43,9 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.cdi.CDIService;
+import com.ibm.ws.container.service.app.deploy.ApplicationInfo;
+import com.ibm.ws.container.service.state.ApplicationStateListener;
+import com.ibm.ws.container.service.state.StateChangeException;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.jaxrs20.JaxRsConstants;
 import com.ibm.ws.jaxrs20.api.JaxRsFactoryBeanCustomizer;
@@ -67,7 +71,7 @@ import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
  * Priority is higher than EJB by default
  */
 @Component(name = "com.ibm.ws.jaxrs20.cdi.component.JaxRsFactoryImplicitBeanCDICustomizer", immediate = true, property = { "service.vendor=IBM" })
-public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCustomizer {
+public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCustomizer, ApplicationStateListener {
 
     private static final TraceComponent tc = Tr.register(JaxRsFactoryImplicitBeanCDICustomizer.class);
     Container containerContext;
@@ -660,6 +664,22 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
     @Override
     public void destroyApplicationScopeResources(JaxRsModuleMetaData jaxRsModuleMetaData) {
 
+        for (ModuleMetaData mmd : jaxRsModuleMetaData.getEnclosingModuleMetaDatas()) {
+            Iterator<ComponentMetaData> iter = beanManagers.keySet().iterator();
+            while (iter.hasNext()) {
+                ComponentMetaData cmd = iter.next();
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "destroyApplicationScopeResources - is " + cmd + " a child of " + mmd + "?");
+                }
+
+                if (mmd.equals(cmd.getModuleMetaData())) {
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                        Tr.debug(tc, "destroyApplicationScopeResources - yes");
+                    }
+                    iter.remove();
+                }
+            }
+        }
         Bus bus = jaxRsModuleMetaData.getServerMetaData().getServerBus();
 
         @SuppressWarnings("unchecked")
@@ -685,5 +705,50 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
         if (appObject != null) {
             appObject.release();
         }
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.ws.container.service.state.ApplicationStateListener#applicationStarting(com.ibm.ws.container.service.app.deploy.ApplicationInfo)
+     */
+    @Override
+    public void applicationStarting(ApplicationInfo appInfo) throws StateChangeException {
+        // TODO Auto-generated method stub
+
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.ws.container.service.state.ApplicationStateListener#applicationStarted(com.ibm.ws.container.service.app.deploy.ApplicationInfo)
+     */
+    @Override
+    public void applicationStarted(ApplicationInfo appInfo) throws StateChangeException {
+        // TODO Auto-generated method stub
+
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.ws.container.service.state.ApplicationStateListener#applicationStopping(com.ibm.ws.container.service.app.deploy.ApplicationInfo)
+     */
+    @Override
+    public void applicationStopping(ApplicationInfo appInfo) {
+        // TODO Auto-generated method stub
+
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.ws.container.service.state.ApplicationStateListener#applicationStopped(com.ibm.ws.container.service.app.deploy.ApplicationInfo)
+     */
+    @Override
+    public void applicationStopped(ApplicationInfo appInfo) {
+        // clear out bean managers cache on app shutdown to avoid memory leak
+        beanManagers.clear();
+
     }
 }

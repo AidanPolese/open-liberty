@@ -20,7 +20,7 @@ import com.ibm.ws.jaxrs20.cache.LibertyJaxRsResourceMethodCache;
  */
 public class JaxRsServerMetaData {
 
-    private final LibertyApplicationBus applicationBus;
+    private LibertyApplicationBus applicationBus;
 
     private final JaxRsModuleMetaData moduleMetaData;
 
@@ -42,6 +42,7 @@ public class JaxRsServerMetaData {
     public void destroy() {
         if (applicationBus != null)
             applicationBus.shutdown(false);
+        applicationBus = null;
 
         //destroy provider cache
         this.providerCache.destroy();
@@ -62,40 +63,4 @@ public class JaxRsServerMetaData {
     public JaxRsModuleMetaData getModuleMetaData() {
         return moduleMetaData;
     }
-
-//    /**
-//     * Add the Endpoint portLink and J2EEName pair
-//     * 
-//     * @param endpointName
-//     * @param j2eeName
-//     */
-//    public void putEndpointNameAndJ2EENameEntry(String endpointName, J2EEName j2eeName) {
-//        endpointNameJ2EENameMap.put(endpointName, j2eeName);
-//    }
-//
-//    /**
-//     * Get the J2EEName by endpointName
-//     * 
-//     * @param endpointName
-//     * @return
-//     */
-//    public J2EEName getEndpointJ2EEName(String endpointName) {
-//        return endpointNameJ2EENameMap.get(endpointName);
-//    }
-//
-//    /**
-//     * Get the endpoint name by j2eeName
-//     * 
-//     * @param j2eeName
-//     * @return
-//     */
-//    public String retrieveEndpointName(J2EEName j2eeName) {
-//        for (Entry<String, J2EEName> entry : endpointNameJ2EENameMap.entrySet()) {
-//            if (entry.getValue().equals(j2eeName)) {
-//                return entry.getKey();
-//            }
-//        }
-//        return null;
-//    }
-
 }
