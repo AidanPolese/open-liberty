@@ -16,5 +16,6 @@ package com.ibm.ws.security.wim.util;
 public interface SchemaConstantsInternal {
 
     static final String IS_URBRIDGE_RESULT = "isURBridgeResult";
-
+    static final String PROP_DISPLAY_BRIDGE_PRINCIPAL_NAME = "displayBridgePrincipalName";
+    static final String PROP_DISPLAY_BRIDGE_CN = "displayBridgeCN";
 }
