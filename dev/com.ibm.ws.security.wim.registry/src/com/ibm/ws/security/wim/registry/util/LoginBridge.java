@@ -61,11 +61,6 @@ public class LoginBridge {
         propertyMap = new TypeMappings(mappingUtil);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#checkPassword(java.lang.String, java.lang.String)
-     */
     @FFDCIgnore(WIMException.class)
     public String checkPassword(String inputUser, @Sensitive String inputPassword) throws RegistryException {
 
@@ -94,9 +89,9 @@ public class LoginBridge {
 
             // add MAP(userSecurityName) to the return list of properties
             // f113366
-            if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
-                this.mappingUtils.createLoginControlDataObject(root,
-                                                               this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()));
+            String outputAttrName = this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm());
+            if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                this.mappingUtils.createLoginControlDataObject(root, outputAttrName);
             } else {
                 LoginControl ctrl = new LoginControl();
                 ctrl.setCountLimit(this.mappingUtils.getCoreConfiguration().getMaxSearchResults() + 1);
@@ -135,11 +130,11 @@ public class LoginBridge {
                 Entity entity = returnList.get(0);
                 // f113366
                 // add MAP(userSecurityName) to the return list of properties
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
-                    returnValue.append(entity.get(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm())));
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    returnValue.append(entity.get(outputAttrName));
                 } else {
                     // d113681
-                    returnValue.append(entity.getIdentifier().get(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm())));
+                    returnValue.append(entity.getIdentifier().get(outputAttrName));
                 }
             }
             // if realm is defined
@@ -178,11 +173,6 @@ public class LoginBridge {
         return returnValue.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#mapCertificate(java.security.cert.X509Certificate)
-     */
     @FFDCIgnore(WIMException.class)
     public String mapCertificate(X509Certificate inputCertificate) throws CertificateMapNotSupportedException, CertificateMapFailedException, RegistryException {
 
@@ -198,9 +188,9 @@ public class LoginBridge {
             Root root = this.mappingUtils.getWimService().createRootObject();
             // add MAP(userSecurityName) to the return list of properties
             // f113366
-            if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
-                this.mappingUtils.createLoginControlDataObject(root,
-                                                               this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()));
+            String outputAttrName = this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm());
+            if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                this.mappingUtils.createLoginControlDataObject(root, outputAttrName);
             }
             // use the root DataGraph to create a LoginAccount DataGraph
             List<Entity> entities = root.getEntities();
@@ -215,7 +205,7 @@ public class LoginBridge {
             // invoke ProfileService.login with the input root DataGraph
             root = this.mappingUtils.getWimService().login(root);
             // set the user to the value of MAP(userUniqueId) from the output DataGraph
-            List returnList = root.getEntities();
+            List<Entity> returnList = root.getEntities();
             // the user was not authenticated
             if (returnList.isEmpty()) {
                 throw new com.ibm.wsspi.security.wim.exception.CertificateMapFailedException();
@@ -223,12 +213,12 @@ public class LoginBridge {
             // the user was authenticated
             else {
                 // ff113366
-                Entity entity = (Entity) returnList.get(0);
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
-                    returnValue.append(entity.get(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm())));
+                Entity entity = returnList.get(0);
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    returnValue.append(entity.get(outputAttrName));
                 } else {
                     // d113681
-                    returnValue.append(entity.getIdentifier().get(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm())));
+                    returnValue.append(entity.getIdentifier().get(outputAttrName));
                 }
             }
             // if realm is defined

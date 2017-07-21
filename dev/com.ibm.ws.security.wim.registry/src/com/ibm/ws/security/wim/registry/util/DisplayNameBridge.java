@@ -61,11 +61,6 @@ public class DisplayNameBridge {
         propertyMap = new TypeMappings(mappingUtil);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#getUserDisplayName(java.lang.String)
-     */
     @FFDCIgnore(WIMException.class)
     public String getUserDisplayName(String inputUserSecurityName) throws EntryNotFoundException, RegistryException {
         // initialize the return value
@@ -97,6 +92,7 @@ public class DisplayNameBridge {
             String inputAttrName = this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm());
             inputAttrName = this.mappingUtils.getRealInputAttrName(inputAttrName, id, true);
             String outputAttrName = this.propertyMap.getOutputUserDisplayName(idAndRealm.getRealm());
+            String outputAttrNameMod = outputAttrName;
 
             //PM55588 Read the custom property from BridgeUtils
             boolean allowDNAsPrincipalName = this.mappingUtils.allowDNAsPrincipalName;
@@ -125,12 +121,12 @@ public class DisplayNameBridge {
 
             try {
                 // New:: Change to Input/Output property
-                if (outputAttrName != null && outputAttrName.equalsIgnoreCase(Service.PROP_PRINCIPAL_NAME))
-                    outputAttrName = "displayBridgePrincipalName";
+                if (outputAttrNameMod != null && outputAttrNameMod.equalsIgnoreCase(Service.PROP_PRINCIPAL_NAME))
+                    outputAttrNameMod = SchemaConstantsInternal.PROP_DISPLAY_BRIDGE_PRINCIPAL_NAME;
 
                 // get the entity if the input parameter is an identifier type
                 resultRoot = this.mappingUtils.getEntityByIdentifier(root, inputAttrName,
-                                                                     id, outputAttrName, this.mappingUtils);
+                                                                     id, outputAttrNameMod, this.mappingUtils);
             } catch (WIMException e) {
                 if (!allowDNAsPrincipalName)
                     throw e;
@@ -166,17 +162,9 @@ public class DisplayNameBridge {
 
                 // if MAP(userDisplayName) is not an IdentifierType property
                 // d112199
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserDisplayName(idAndRealm.getRealm()))) {
-                    srchCtrl.getProperties().add(this.propertyMap.getOutputUserDisplayName(idAndRealm.getRealm()));
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    srchCtrl.getProperties().add(outputAttrName);
                 }
-                // set the "expression" string to "type=LoginAccount and MAP(userSecurityName)="user""
-                /*
-                 * String quote = "'";
-                 * String id = idAndRealm.getId();
-                 * if (id.indexOf("'") != -1) {
-                 * quote = "\"";
-                 * }
-                 */
 
                 // d112199
 
@@ -222,25 +210,26 @@ public class DisplayNameBridge {
             else {
                 PersonAccount loginAccount = (PersonAccount) returnList.get(0);
                 // f113366
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserDisplayName(idAndRealm.getRealm()))) {
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
                     //returnValue = loginAccount.getString(this.propertyMap.getOutputUserDisplayName(idAndRealm.getRealm()));
-                    String mappedProp = this.propertyMap.getOutputUserDisplayName(idAndRealm.getRealm());
+                    String mappedProp = outputAttrName;
                     if (mappedProp.equals("displayName")) {
                         if (loginAccount.getDisplayName().size() == 0)
                             returnValue = "";
                         else
                             returnValue = loginAccount.getDisplayName().get(0);
-                    } else if (mappedProp.equals("principalName") && foundInURBridge) {
-                        if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()))) {
-                            returnValue = (String) loginAccount.get(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
+                    } else if (mappedProp.equals(SchemaConstants.PROP_PRINCIPAL_NAME) && foundInURBridge) {
+                        String outputUserPrincipalAttr = this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm());
+                        if (!this.mappingUtils.isIdentifierTypeProperty(outputUserPrincipalAttr)) {
+                            returnValue = (String) loginAccount.get(outputUserPrincipalAttr);
                         } else {
-                            returnValue = (String) loginAccount.getIdentifier().get(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
+                            returnValue = (String) loginAccount.getIdentifier().get(outputUserPrincipalAttr);
                         }
                     } else {
                         returnValue = (String) loginAccount.get(mappedProp);
                     }
                 } else {
-                    returnValue = (String) loginAccount.getIdentifier().get(this.propertyMap.getOutputUserDisplayName(idAndRealm.getRealm()));
+                    returnValue = (String) loginAccount.getIdentifier().get(outputAttrName);
                 }
             }
         } catch (WIMException toCatch) {
@@ -262,11 +251,6 @@ public class DisplayNameBridge {
         return returnValue;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#getGroupDisplayName(java.lang.String)
-     */
     @FFDCIgnore(WIMException.class)
     public String getGroupDisplayName(String inputGroupSecurityName) throws EntryNotFoundException, RegistryException {
         // initialize the return value
@@ -296,14 +280,15 @@ public class DisplayNameBridge {
             String inputAttrName = this.propertyMap.getInputGroupSecurityName(idAndRealm.getRealm());
             inputAttrName = this.mappingUtils.getRealInputAttrName(inputAttrName, id, false);
             String outputAttrName = this.propertyMap.getOutputGroupDisplayName(idAndRealm.getRealm());
+            String outputAttrNameMod = outputAttrName;
 
             // New:: Change to Input/Output property
-            if (outputAttrName != null && outputAttrName.equalsIgnoreCase("cn"))
-                outputAttrName = "displayBridgeCN";
+            if (outputAttrNameMod != null && outputAttrNameMod.equalsIgnoreCase("cn"))
+                outputAttrNameMod = SchemaConstantsInternal.PROP_DISPLAY_BRIDGE_CN;
 
             // get the entity if the input parameter is an identifier type
             Root resultRoot = this.mappingUtils.getEntityByIdentifier(root, inputAttrName,
-                                                                      id, outputAttrName, this.mappingUtils);
+                                                                      id, outputAttrNameMod, this.mappingUtils);
             if (resultRoot != null) {
                 root = resultRoot;
             } else {
@@ -315,18 +300,10 @@ public class DisplayNameBridge {
                 }
                 // if MAP(groupDisplayName) is not an IdentifierType property
                 // d112199
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputGroupDisplayName(idAndRealm.getRealm()))) {
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
                     // add MAP(groupDisplayName) to the return list of properties
-                    searchControl.getProperties().add(this.propertyMap.getOutputGroupDisplayName(idAndRealm.getRealm()));
+                    searchControl.getProperties().add(outputAttrName);
                 }
-                // set the "expression" string to "type=Group and MAP(groupSecurityName)="group""
-                /*
-                 * String quote = "'";
-                 * String id = idAndRealm.getId();
-                 * if (id.indexOf("'") != -1) {
-                 * quote = "\"";
-                 * }
-                 */
 
                 // d115907
                 searchControl.setExpression("//" + Service.DO_ENTITIES + "[@xsi:type='"
@@ -368,9 +345,9 @@ public class DisplayNameBridge {
             else {
                 Group group = (Group) returnList.get(0);
                 // f113366
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputGroupDisplayName(idAndRealm.getRealm()))) {
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
                     // get the property to return
-                    Object value = group.get(this.propertyMap.getOutputGroupDisplayName(idAndRealm.getRealm()));
+                    Object value = group.get(outputAttrName);
 
                     if (value instanceof String)
                         returnValue = (String) value;
@@ -378,7 +355,7 @@ public class DisplayNameBridge {
                         returnValue = String.valueOf(((List<?>) value).get(0));
                 } else {
                     // get the identifier to return
-                    returnValue = (String) group.getIdentifier().get(this.propertyMap.getOutputGroupDisplayName(idAndRealm.getRealm()));
+                    returnValue = (String) group.getIdentifier().get(outputAttrName);
                 }
             }
         } catch (WIMException toCatch) {
@@ -386,9 +363,6 @@ public class DisplayNameBridge {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, toCatch.getMessage(), toCatch);
             }
-            // if (tc.isErrorEnabled()) {
-            //     Tr.error(tc, toCatch.getMessage());
-            // }
             // the group was not found
             if (toCatch instanceof EntityNotFoundException || toCatch instanceof InvalidIdentifierException) {
                 throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
