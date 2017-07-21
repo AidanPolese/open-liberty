@@ -546,7 +546,8 @@ public class URBridge implements Repository {
         }
 
         setReturnContext(root, returnRoot);
-        if (restRequest)
+        auditManager.setRealm(userRegistry.getRealm());
+        if (isURBridgeResult(returnRoot) && restRequest)
             Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "get", reposId, uniqueName, userRegistry.getRealm(), returnRoot,
                         Integer.valueOf("200"));
 
@@ -985,7 +986,9 @@ public class URBridge implements Repository {
             throw new WIMApplicationException(WIMMessageKey.ENTITY_SEARCH_FAILED, Tr.formatMessage(tc, WIMMessageKey.ENTITY_SEARCH_FAILED,
                                                                                                    WIMMessageHelper.generateMsgParms(e.toString())));
         }
-        if (restRequest)
+
+        auditManager.setRealm(userRegistry.getRealm());
+        if (isURBridgeResult(returnRoot) && restRequest)
             Audit.audit(Audit.EventID.SECURITY_MEMBER_MGMT_01, auditManager.getRESTRequest(), "search", reposId, uniqueName, userRegistry.getRealm(), returnRoot,
                         Integer.valueOf("200"));
 
@@ -1399,6 +1402,26 @@ public class URBridge implements Repository {
             iGroupUniqueIdCache.stopEvictionTask();
         if (iGroupDispNameCache != null)
             iGroupDispNameCache.stopEvictionTask();
+    }
+
+    /**
+     * @param returnRoot
+     */
+    private boolean isURBridgeResult(Root returnRoot) {
+        // Check if there is a valid response
+        if (returnRoot != null && !returnRoot.getEntities().isEmpty()) {
+            // Determine if the return object to check if the context was set.
+            List<Context> contexts = returnRoot.getContexts();
+            for (Context context : contexts) {
+                String key = context.getKey();
+
+                if (key != null && SchemaConstantsInternal.IS_URBRIDGE_RESULT.equals(key)) {
+                    if ("true".equalsIgnoreCase((String) context.getValue()))
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 
 /*
