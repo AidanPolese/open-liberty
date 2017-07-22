@@ -312,9 +312,7 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
         supportsGetNetworkTimeout = supportsGetSchema = atLeastJDBCVersion(JDBCRuntimeVersion.VERSION_4_1);
 
         String dataSourceImplClassName = dataSourceImplClass.getName();
-        isUCP = dataSourceImplClassName.charAt(0) == 'o' &&
-                        ("oracle.ucp.jdbc.PoolDataSourceImpl".equals(dataSourceImplClassName)
-                                        || "oracle.ucp.jdbc.PoolXADataSourceImpl".equals(dataSourceImplClassName));
+        isUCP = dataSourceImplClassName.charAt(0) == 'o' && dataSourceImplClassName.startsWith("oracle.ucp.jdbc.");
         if (isUCP)
             Tr.info(tc, "WAS_CONNECTION_POOLING_DISABLED_INFO");
 
@@ -522,7 +520,7 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
             // checks for Basic Password Credential and for Kerberos  
             // will be skipped.                                       
 
-            String threadIdentitySupport = getThreadIdentitySupport();
+            String threadIdentitySupport = helper.getThreadIdentitySupport();
             boolean subjectHasUtokenCred = false; 
 
             if ((threadIdentitySupport.equals("ALLOWED")) || 
@@ -949,32 +947,6 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
         if (isTraceOn && tc.isEntryEnabled())
             Tr.exit(this, tc, "getInvalidConnections", badSet); 
         return badSet;
-    }
-
-    /**
-     * 
-     * @return Flag indicating whether or not this is an RRS-enabled DataSource
-     */
-    public final boolean getRRSTransactional() {
-        return helper.getRRSTransactional();
-    }
-
-    /**
-     * 
-     * @return Thread Identity Support: Either "ALLOWED", "REQUIRED", or "NOTALLOWED"
-     */
-    public final String getThreadIdentitySupport() {
-        return helper.getThreadIdentitySupport();
-    }
-
-    /**
-     * 
-     * @return Flag indicating whether or not we should "synch to thread" for the
-     *         allocateConnection, i.e., push an ACEE corresponding to the current java
-     *         Subject on the native OS thread.
-     */
-    public final boolean getThreadSecurity() {
-        return helper.getThreadSecurity();
     }
 
     /**

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 IBM Corporation and others.
+ * Copyright (c) 2011, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -35,6 +35,7 @@ import javax.sql.XADataSource;
 import javax.resource.ResourceException;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 import org.osgi.service.component.ComponentContext;
 
 import com.ibm.websphere.crypto.PasswordUtil;
@@ -52,6 +53,7 @@ import com.ibm.ws.jdbc.osgi.JDBCRuntimeVersion;
 import com.ibm.ws.kernel.service.util.PrivHelper;
 import com.ibm.ws.rsadapter.AdapterUtil;
 import com.ibm.ws.rsadapter.DSConfig;
+import com.ibm.ws.rsadapter.impl.DatabaseHelper;
 import com.ibm.ws.rsadapter.impl.WSManagedConnectionFactoryImpl;
 import com.ibm.wsspi.application.lifecycle.ApplicationRecycleComponent;
 import com.ibm.wsspi.application.lifecycle.ApplicationRecycleContext;
@@ -148,6 +150,11 @@ public class DataSourceService extends AbstractConnectionFactoryService implemen
     private final AtomicReference<DSConfig> dsConfigRef = new AtomicReference<DSConfig>();
 
     /**
+     * Data source implementation class name. Only rely on this value when initialized.
+     */
+    private String dsImplClassName;
+
+    /**
      * Indicates that we deferred the destroying that would normally happen because of configuration changes.
      * This happens, for example, when vendor properties are updated, if it isn't Derby Embedded,
      * which needs the immediate destroy to free up the database for other class loaders.
@@ -185,6 +192,24 @@ public class DataSourceService extends AbstractConnectionFactoryService implemen
      * Service properties
      */
     private Map<String, Object> properties;
+
+    /**
+     * Indicates whether or not this is an RRS enabled data source. Only rely on this value when initialized.
+     */
+    private boolean rrsTransactional;
+
+    /**
+     * Thread Identity Support: Either "ALLOWED", "REQUIRED", or "NOTALLOWED". Only rely on this value when initialized.
+     */
+    private String threadIdentitySupport;
+
+    /**
+     * Flag indicating whether or not we should "synch to thread" for the
+     * allocateConnection, i.e., push an ACEE corresponding to the current java
+     * Subject on the native OS thread.
+     * Only rely on this value when initialized.
+     */
+    private boolean threadSecurity;
 
     /**
      * Declarative Services method to activate this component.
@@ -339,6 +364,10 @@ public class DataSourceService extends AbstractConnectionFactoryService implemen
         return connectorSvc;
     }
 
+    public Version getFeatureVersion() {
+        return jdbcRuntime.getVersion();
+    }
+
     /**
      * Returns the unique identifier for this connection factory configuration.
      *
@@ -366,7 +395,7 @@ public class DataSourceService extends AbstractConnectionFactoryService implemen
      */
     @Override
     public final ManagedConnectionFactory getManagedConnectionFactory() {
-        return dsConfigRef.get().getManagedConnectionFactory();
+        return dsConfigRef.get().getManagedConnectionFactory(); // TODO cache mcf on DataSourceService if JDBC driver loaded from libraryRef. Otherwise, get instance based on classloader identifier.
     }
 
     /**
@@ -383,10 +412,30 @@ public class DataSourceService extends AbstractConnectionFactoryService implemen
         return false;
     }
 
+    @Override
+    public boolean getRRSTransactional() {
+        return rrsTransactional;
+    }
+
+    @Override
+    public String getThreadIdentitySupport() {
+        return threadIdentitySupport;
+    }
+
+    @Override
+    public boolean getThreadSecurity() {
+        return threadSecurity;
+    }
+
     /** {@inheritDoc} */
     @Override
     public TransactionSupportLevel getTransactionSupport() {
         return dsConfigRef.get().transactional ? TransactionSupportLevel.XATransaction : TransactionSupportLevel.NoTransaction;
+    }
+
+    @Override
+    public boolean getValidatingManagedConnectionFactorySupport() {
+        return true;
     }
 
     /**
@@ -461,10 +510,11 @@ public class DataSourceService extends AbstractConnectionFactoryService implemen
                 throw new SQLNonTransientException(ConnectorService.getMessage("MISSING_RESOURCE_J2CA8030", DSConfig.TYPE, type, DATASOURCE, jndiName == null ? id : jndiName));
 
             // Convert isolationLevel constant name to integer
-            parseIsolationLevel(wProps, ds.getClass().getName());
+            dsImplClassName = ds.getClass().getName();
+            parseIsolationLevel(wProps, dsImplClassName);
 
             // Derby Embedded needs a reference count so that we can shutdown databases when no longer used.
-            isDerbyEmbedded = ds.getClass().getName().startsWith("org.apache.derby.jdbc.Embedded");
+            isDerbyEmbedded = dsImplClassName.startsWith("org.apache.derby.jdbc.Embedded");
             if (isDerbyEmbedded) {
                 String dbName = (String) vProps.get(DataSourceDef.databaseName.name());
                 if (dbName != null) {
@@ -477,7 +527,13 @@ public class DataSourceService extends AbstractConnectionFactoryService implemen
                 }
             }
 
-            new WSManagedConnectionFactoryImpl(dsConfigRef, id, jndiName, ifc, wProps, vProps, ds, connectorSvc, jdbcRuntime);
+            WSManagedConnectionFactoryImpl mcf = new WSManagedConnectionFactoryImpl(
+                dsConfigRef, id, jndiName, ifc, wProps, vProps, ds, connectorSvc, jdbcRuntime);
+
+            DatabaseHelper helper = mcf.getHelper();
+            rrsTransactional = helper.getRRSTransactional();
+            threadIdentitySupport = helper.getThreadIdentitySupport();
+            threadSecurity = helper.getThreadSecurity();
 
             isInitialized.set(true);
         } catch (Exception x) {
@@ -557,7 +613,7 @@ public class DataSourceService extends AbstractConnectionFactoryService implemen
                     // to issue a shutdown of the Derby database in order to free it up for other class loaders.
                     destroyConnectionFactories(isDerbyEmbedded);
                 } else {
-                    parseIsolationLevel(wProps, config.getManagedConnectionFactory().getDataSourceClass().getName());
+                    parseIsolationLevel(wProps, dsImplClassName);
 
                     // Swap the reference to the configuration - the WAS data source will start honoring it
                     dsConfigRef.set(new DSConfig(config, wProps));

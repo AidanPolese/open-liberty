@@ -10,10 +10,6 @@
  *******************************************************************************/
 package com.ibm.ejs.j2c;
 
-import java.io.IOException;
-import java.io.NotSerializableException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
@@ -23,20 +19,18 @@ import java.util.Set;
 
 import javax.resource.ResourceException;
 import javax.resource.spi.ConnectionRequestInfo;
-import javax.resource.spi.ManagedConnectionFactory;
 import javax.resource.spi.security.GenericCredential;
 import javax.security.auth.Subject;
 
-import com.ibm.ejs.ras.Tr;
-import com.ibm.ejs.ras.TraceComponent;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.j2c.SecurityHelper;
-import com.ibm.ws.jca.adapter.WSManagedConnectionFactory;
 import com.ibm.ws.kernel.security.thread.ThreadIdentityException;
 import com.ibm.ws.kernel.security.thread.ThreadIdentityManager;
 
 /**
- * 
+ *
  * =====================================================================*
  * *
  * The tables below, begining with Table 1., decribe how the z/OS *
@@ -70,154 +64,125 @@ import com.ibm.ws.kernel.security.thread.ThreadIdentityManager;
  * management. *
  * *
  * =====================================================================*
- * 
- * 
- *=====================================================================*
- * Table 1. Security State                                             *
- *=====================================================================*
- *                          Security Enabled?                          *
- *---------------------------------------------------------------------*
- *              YES                 |               NO                 *
- *----------------------------------|----------------------------------*
- *          Goto Table 2            |          Goto Table 3            *
- *=====================================================================*
- * 
  *
- *=====================================================================*
- * Table 2. Security is Enabled                                        *
- *=====================================================================*
- *                   Container-Manged Alias Specified?                 *
- *---------------------------------------------------------------------*
- *               NO                 |               YES                *
- *----------------------------------|----------------------------------*
- * Connector ALLOWS or REQUIRES     |  Connector REQUIRES Thread       *
- * Thread Identity to be used when  |  Identity to be used when        *
- * getting a connection?            |  getting a connection?           *
- *----------------------------------|----------------------------------*
- *          |                       |          |                       *
- *   NO     |          YES          |   NO     |          YES          *
- *----------|-----------------------|----------|-----------------------*
- *          | Connector requires    |          | Connector requires    *
- *          | OS Thread Security?   |          | OS Thread Security?   *
- *          |-----------------------|          |-----------------------*
- *          | NO  |      YES        |          | NO  |      YES        *
- *connector |-----|-----------------| Use the  |-----|-----------------*
- *processing|     | is the Server   | specified|     | is the Server   *
- *dependent:|     | Sync-To-Thread  | alias    |     | Sync-To-Thread  *
- *          |Use  | Enabled?        |          |Use  | Enabled?        *
- *-may throw|RunAs|-----------------|          |RunAs|-----------------*
- * exception|user | NO |    YES     |          |user | NO |    YES     *
- *          |ident|----|------------|          |ident|----|------------*
- *-may use  |assoc|    |            |          |assoc|    |            *
- * userid & |with |    |            |          |with |    |            *
- * password |cur  |Use | Use RunAs  |          |cur  |Use | Use RunAs  *
- * saved in |thrd |Srvr| identity   |          |thrd |Srvr| identity   *
- * MCF or   |     |user| associated |          |     |user| associated *
- * Datasource     |id  | with the   |          |     |id  | with the   *
- *          |     |    | current    |          |     |    | current    *
- *          |     |    | thread     |          |     |    | thread     *
- *          |     |    |            |          |     |    |            *
- *          |     |    |            |          |     |    |            *
- *=====================================================================*
  *
- *=====================================================================*
- * Table 3. Security is Not Enabled                                    *
- *=====================================================================*
- *                   Container-Manged Alias Specified?                 *
- *---------------------------------------------------------------------*
- *               NO                 |               YES                *
- *----------------------------------|----------------------------------*
- * Connector ALLOWS or REQUIRES     |  Connector REQUIRES Thread       *
- * Thread Identity to be used when  |  Identity to be used when        *
- * getting a connection?            |  getting a connection?           *
- *----------------------------------|----------------------------------*
- *          |                       |          |                       *
- *   NO     |          YES          |   NO     |          YES          *
- *----------|-----------------------|----------|-----------------------*
- *          |                       |          |                       *
- *connector |  Use Server Identity  | Use the  |  Use Server Identity  *
- *processing|                       | specified|                       *
- *dependent:|                       | alias    |                       *
- *          |                       |          |                       *
- *-may throw|                       |          |                       *
- * exception|                       |          |                       *
- *          |                       |          |                       *
- *-may use  |                       |          |                       *
- * userid & |                       |          |                       *
- * password |                       |          |                       *
- * saved in |                       |          |                       *
- * MCF or   |                       |          |                       *
- * Datasource                       |          |                       *
- *          |                       |          |                       *
- *=====================================================================*
+ * =====================================================================*
+ * Table 1. Security State *
+ * =====================================================================*
+ * Security Enabled? *
+ * ---------------------------------------------------------------------*
+ * YES | NO *
+ * ----------------------------------|----------------------------------*
+ * Goto Table 2 | Goto Table 3 *
+ * =====================================================================*
+ *
+ *
+ * =====================================================================*
+ * Table 2. Security is Enabled *
+ * =====================================================================*
+ * Container-Manged Alias Specified? *
+ * ---------------------------------------------------------------------*
+ * NO | YES *
+ * ----------------------------------|----------------------------------*
+ * Connector ALLOWS or REQUIRES | Connector REQUIRES Thread *
+ * Thread Identity to be used when | Identity to be used when *
+ * getting a connection? | getting a connection? *
+ * ----------------------------------|----------------------------------*
+ * | | | *
+ * NO | YES | NO | YES *
+ * ----------|-----------------------|----------|-----------------------*
+ * | Connector requires | | Connector requires *
+ * | OS Thread Security? | | OS Thread Security? *
+ * |-----------------------| |-----------------------*
+ * | NO | YES | | NO | YES *
+ * connector |-----|-----------------| Use the |-----|-----------------*
+ * processing| | is the Server | specified| | is the Server *
+ * dependent:| | Sync-To-Thread | alias | | Sync-To-Thread *
+ * |Use | Enabled? | |Use | Enabled? *
+ * -may throw|RunAs|-----------------| |RunAs|-----------------*
+ * exception|user | NO | YES | |user | NO | YES *
+ * |ident|----|------------| |ident|----|------------*
+ * -may use |assoc| | | |assoc| | *
+ * userid & |with | | | |with | | *
+ * password |cur |Use | Use RunAs | |cur |Use | Use RunAs *
+ * saved in |thrd |Srvr| identity | |thrd |Srvr| identity *
+ * MCF or | |user| associated | | |user| associated *
+ * Datasource |id | with the | | |id | with the *
+ * | | | current | | | | current *
+ * | | | thread | | | | thread *
+ * | | | | | | | *
+ * | | | | | | | *
+ * =====================================================================*
+ *
+ * =====================================================================*
+ * Table 3. Security is Not Enabled *
+ * =====================================================================*
+ * Container-Manged Alias Specified? *
+ * ---------------------------------------------------------------------*
+ * NO | YES *
+ * ----------------------------------|----------------------------------*
+ * Connector ALLOWS or REQUIRES | Connector REQUIRES Thread *
+ * Thread Identity to be used when | Identity to be used when *
+ * getting a connection? | getting a connection? *
+ * ----------------------------------|----------------------------------*
+ * | | | *
+ * NO | YES | NO | YES *
+ * ----------|-----------------------|----------|-----------------------*
+ * | | | *
+ * connector | Use Server Identity | Use the | Use Server Identity *
+ * processing| | specified| *
+ * dependent:| | alias | *
+ * | | | *
+ * -may throw| | | *
+ * exception| | | *
+ * | | | *
+ * -may use | | | *
+ * userid & | | | *
+ * password | | | *
+ * saved in | | | *
+ * MCF or | | | *
+ * Datasource | | *
+ * | | | *
+ * =====================================================================*
  * Packaging: Not in j2cClient.jar. Note that an instance of this class
  * is created by the createSecurityHelper of J2CUtilityClass, which is not
  * in the client jar.
  * =====================================================================*
- * 
- * 
+ *
+ *
  * <P> The ThreadIdentitySecurityHelper is used when
  * ThreadIdentitySupport is "ALLOWED" or "REQUIRED" by the
  * resource adapter.
- * 
+ *
  */
 public class ThreadIdentitySecurityHelper implements SecurityHelper {
-
-    private static final long serialVersionUID = 71L;
-
-    private WSManagedConnectionFactory mcf = null;
     private final boolean m_ThreadSecurity;
     private String m_ThreadIdentitySupport = null;
-    private final boolean m_GlobalSecurityEnabled = true;
 
     private static TraceComponent tc = Tr.register(ThreadIdentitySecurityHelper.class,
                                                    J2CConstants.traceSpec,
                                                    J2CConstants.messageFile);
 
     /**
-     * Serialization of this class is not expected.
-     * 
-     * @throws NotSerializableException
-     */
-    private void writeObject(ObjectOutputStream s) throws IOException {
-        throw new NotSerializableException(ThreadIdentitySecurityHelper.class.getName());
-    }
-
-    /**
-     * Serialization of this class is not expected.
-     * 
-     * @throws NotSerializableException
-     */
-    private void readObject(ObjectInputStream s) throws IOException {
-        throw new NotSerializableException(ThreadIdentitySecurityHelper.class.getName());
-    }
-
-    /**
      * Constructor for ThreadIdentitySecurityHelper
-     * 
+     *
      * @param WSManagedConnectionFactory
      */
-    public ThreadIdentitySecurityHelper(WSManagedConnectionFactory mcf)
-        throws ResourceException {
+    public ThreadIdentitySecurityHelper(String threadIdentitySupport, boolean threadSecurity) throws ResourceException {
 
-        if (tc.isEntryEnabled()) {
-            Tr.entry(tc, "<init>", new Object[] { this, mcf });
-        }
+        if (tc.isEntryEnabled())
+            Tr.entry(this, tc, "<init>", threadIdentitySupport, threadSecurity);
 
-        this.mcf = mcf;
+        m_ThreadIdentitySupport = threadIdentitySupport;
+        m_ThreadSecurity = threadSecurity;
 
-        m_ThreadIdentitySupport = mcf.getThreadIdentitySupport();
-        m_ThreadSecurity = mcf.getThreadSecurity();
-
-        if (tc.isEntryEnabled()) {
-            Tr.exit(tc, "<init>");
-        }
-
+        if (tc.isEntryEnabled())
+            Tr.exit(this, tc, "<init>");
     }
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * The afterGettingConnection() method is used to allow special
      * special security processing to be performed after calling
      * a resource adapter to get a connection. If the passed input
@@ -226,35 +191,34 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
      * is a credential token that can be used to restore the thread
      * identity. In this case, restore the thread identity to what it
      * was originally.
-     * 
+     *
      * @param Subject subject
      * @param ConnectionRequestInfo reqInfo
      * @param Object credentialToken
      * @return void
      * @exception ResourceException
-     * 
+     *
      */
     @Override
     public void afterGettingConnection(Subject subject, ConnectionRequestInfo reqInfo, Object credentialToken) throws ResourceException {
 
         final Object credToken = credentialToken;
 
-        if (tc.isEntryEnabled()) {
-            Tr.entry(tc, "afterGettingConnection", new Object[] { this, getSubjectString(subject), reqInfo, credentialToken }); //@MD19566C
-        }
+        if (tc.isEntryEnabled())
+            Tr.entry(this, tc, "afterGettingConnection", getSubjectString(subject), reqInfo, credentialToken);
 
         if (credToken != null) {
 
             try {
                 if (System.getSecurityManager() != null) {
                     AccessController.doPrivileged(
-                                    new PrivilegedExceptionAction() {
-                                        @Override
-                                        public Object run() throws Exception {
-                                            ThreadIdentityManager.resetChecked(credToken);
-                                            return null;
-                                        }
-                                    });
+                                                  new PrivilegedExceptionAction() {
+                                                      @Override
+                                                      public Object run() throws Exception {
+                                                          ThreadIdentityManager.resetChecked(credToken);
+                                                          return null;
+                                                      }
+                                                  });
                 } else {
                     ThreadIdentityManager.resetChecked(credToken);
                 }
@@ -286,14 +250,13 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
             }
         }
 
-        if (tc.isEntryEnabled()) {
-            Tr.exit(tc, "afterGettingConnection");
-        }
+        if (tc.isEntryEnabled())
+            Tr.exit(this, tc, "afterGettingConnection");
     }
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * The beforeGettingConnection() method is used to allow
      * special security processing to be performed prior to calling
      * a resource adapter to get a connection. If ThreadIdentitySupport
@@ -306,7 +269,7 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
      * SyncToThread is not enabled, the connector by default will
      * get Server identity since no user identity will have been
      * pushed to the OS thread.
-     * 
+     *
      * In the case, where the input Subject is null (i.e.,
      * res-auth=Application or Servlet) and the resource adapter
      * requires OS ThreadSecurity when a getConnection is issued without
@@ -315,7 +278,7 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
      * to be sync'd to thread. If SyncToThread is not allowed, the
      * connector by default will get Server identity since no user
      * identity will have been pushed to the current OS thread.
-     * 
+     *
      * @param Subject subject
      * @param ConnectionRequestInfo reqInfo
      * @return Object if non-null, the user identity defined by the
@@ -325,13 +288,12 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
      *         will be used to restore the thread identity
      *         back to what it was.
      * @exception ResourceException
-     * 
+     *
      */
     @Override
     public Object beforeGettingConnection(Subject subject, ConnectionRequestInfo reqInfo) throws ResourceException {
-        if (tc.isEntryEnabled()) {
-            Tr.entry(tc, "beforeGettingConnection", new Object[] { this, getSubjectString(subject), reqInfo }); //@MD19566C
-        }
+        if (tc.isEntryEnabled())
+            Tr.entry(this, tc, "beforeGettingConnection", getSubjectString(subject), reqInfo);
 
         Object retObject = null;
         final Subject subj = subject;
@@ -466,7 +428,7 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
                     }
 
                 } else {
-                    // resauth = APPLICATION 
+                    // resauth = APPLICATION
 
                     // When resauth is Application and the current
                     // connector is one that supports using ThreadSecurity (i.e,
@@ -519,45 +481,14 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
             // server identity.
         }
 
-        if (tc.isEntryEnabled()) {
-            Tr.exit(tc, "beforeGettingConnection", new Object[] { retObject });
-        }
-
+        if (tc.isEntryEnabled())
+            Tr.exit(this, tc, "beforeGettingConnection", retObject);
         return retObject;
     }
 
     /**
      * {@inheritDoc}
-     * 
-     * Call the RRA's finalizeCriForRRA method to set data in the CRI
-     * for use in matching connections.
-     * Note that the ThreadIdentitySecurityHelper does not make this
-     * call, since ThreadIdentity take precedence over trusted context.
-     * 
-     * @param subject
-     * @param reqInfo
-     * @param mcf
-     * @return
-     * @throws ResourceException
-     */
-    @Override
-    public void finalizeCriForRRA(Subject subject, ConnectionRequestInfo reqInfo, ManagedConnectionFactory mcf) throws ResourceException {
-        if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { // 337238.1
-            Tr.entry(tc, "finalizeCriForRRA");
-        }
-
-        if (subject != null) { // only call if subject is not null
-            // blindly cast to WSManagedConnectionFactory since we know that its RRA
-            // TODO: this code is gone: ((WSManagedConnectionFactory) mcf).finalizeCriForRRA(subject, reqInfo);
-        }
-
-        if (tc.isEntryEnabled())
-            Tr.exit(tc, "finalizeCriForRRA");
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
+     *
      * When (1) the ThreadIdentitySupport for the ManagedConnectionFactory
      * is "REQUIRED" OR (2) when the ThreadIdentitySupport is "ALLOWED
      * and the input Subject has no private credentials because no
@@ -566,24 +497,22 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
      * containing the current user identity will be created with a UTOKEN
      * Generic Credential and passed back for use while getting a
      * connection.
-     * 
-     * 
+     *
+     *
      * The primary intent of this method is to allow the Subject to be
      * defaulted.
-     * 
+     *
      * @param Subject subject
      * @param ConnectionRequestInfo reqInfo
      * @param cmConfigData to determine whether to call getJ2CInvocationSubject
      * @return Subject
      * @exception ResourceException
-     * 
+     *
      */
     @Override
     public Subject finalizeSubject(Subject subject, ConnectionRequestInfo reqInfo, CMConfigData cmConfigData) throws ResourceException {
-
-        if (tc.isEntryEnabled()) {
-            Tr.entry(tc, "finalizeSubject", new Object[] { this, getSubjectString(subject), reqInfo });
-        }
+        if (tc.isEntryEnabled())
+            Tr.entry(this, tc, "finalizeSubject", getSubjectString(subject), reqInfo);
 
         Subject helperSubject = subject; // To start, default helper subject to the input subject
 
@@ -648,10 +577,8 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
             }
         }
 
-        if (tc.isEntryEnabled()) {
-            Tr.exit(tc, "finalizeSubject", new Object[] { getSubjectString(helperSubject) });
-        }
-
+        if (tc.isEntryEnabled())
+            Tr.exit(this, tc, "finalizeSubject", getSubjectString(helperSubject));
         return helperSubject;
     }
 
@@ -666,7 +593,7 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
      * so as not to interrupt the flow of the calling method. If
      * a null Subject is passed as an argument, a value of null
      * is returned.
-     * 
+     *
      * @param Subject subject
      * @return String
      */
@@ -743,14 +670,14 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
     /**
      * Retrieve the invocation subject on the thread and J2C-ize it (which means fit it
      * with a GenericCredential representing the user's native UTOKEN on z/OS).
-     * 
+     *
      * The J2C invocation subject is used on the subsequent call to beforeGettingConnection.
-     * 
+     *
      * Basically this method is just a wrapper around ThreadIdentityManager.getJ2CInvocationSubject
      * with Java 2 SecurityManager handling.
-     * 
+     *
      * @return Subject the J2C invocation subject
-     * 
+     *
      * @throws ResourceException
      */
     private Subject getJ2CInvocationSubject() throws ResourceException {
@@ -760,12 +687,12 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
         if (System.getSecurityManager() != null) {
             try {
                 j2cSubject = (Subject) AccessController.doPrivileged(
-                                new PrivilegedExceptionAction() {
-                                    @Override
-                                    public Object run() throws Exception {
-                                        return ThreadIdentityManager.getJ2CInvocationSubject();
-                                    }
-                                });
+                                                                     new PrivilegedExceptionAction() {
+                                                                         @Override
+                                                                         public Object run() throws Exception {
+                                                                             return ThreadIdentityManager.getJ2CInvocationSubject();
+                                                                         }
+                                                                     });
             } catch (PrivilegedActionException pae) {
                 FFDCFilter.processException(pae, "com.ibm.ejs.j2c.ThreadIdentitySecurityHelper.finalizeSubject", "826", this);
                 Tr.error(tc, "FAILED_DOPRIVILEGED_J2CA0060", pae);
@@ -793,9 +720,9 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
      * Search for a GenericCredential representing a native z/OS UTOKEN in the
      * Subject's set of private credentials. It would have been put there by
      * a previous call to finalizeSubject.
-     * 
+     *
      * @return true if the subject contains a UTOKEN; false otherwise.
-     * 
+     *
      */
     private boolean doesSubjectContainUTOKEN(Subject subj) throws ResourceException {
 
@@ -838,10 +765,10 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
     /**
      * Return the set of private credentials of type GenericCredential from the
      * given subject.
-     * 
+     *
      * Basically this method is a wrapper around Subject.getPrivateCredentials
      * with Java 2 Security handling.
-     * 
+     *
      */
     private Set getPrivateGenericCredentials(final Subject subj) throws ResourceException {
 
@@ -850,12 +777,12 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
         if (System.getSecurityManager() != null) {
             try {
                 privateGenericCredentials = (Set) AccessController.doPrivileged(
-                                new PrivilegedExceptionAction() {
-                                    @Override
-                                    public Object run() throws Exception {
-                                        return subj.getPrivateCredentials(GenericCredential.class);
-                                    }
-                                });
+                                                                                new PrivilegedExceptionAction() {
+                                                                                    @Override
+                                                                                    public Object run() throws Exception {
+                                                                                        return subj.getPrivateCredentials(GenericCredential.class);
+                                                                                    }
+                                                                                });
             } catch (PrivilegedActionException pae) {
                 FFDCFilter.processException(pae, "com.ibm.ejs.j2c.ThreadIdentitySecurityHelper.beforeGettingConnection", "18", this);
                 Tr.error(tc, "FAILED_DOPRIVILEGED_J2CA0060", pae);
@@ -874,7 +801,7 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
 
     /**
      * Apply the given subject's identity to the thread.
-     * 
+     *
      * @return The identity token that must be supplied on the subsequent call to reset
      *         the thread identity.
      */
@@ -885,12 +812,12 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
         try {
             if (System.getSecurityManager() != null) {
                 retObject = AccessController.doPrivileged(
-                                new PrivilegedExceptionAction() {
-                                    @Override
-                                    public Object run() throws Exception {
-                                        return ThreadIdentityManager.setJ2CThreadIdentity(subj);
-                                    }
-                                });
+                                                          new PrivilegedExceptionAction() {
+                                                              @Override
+                                                              public Object run() throws Exception {
+                                                                  return ThreadIdentityManager.setJ2CThreadIdentity(subj);
+                                                              }
+                                                          });
             } else {
                 retObject = ThreadIdentityManager.setJ2CThreadIdentity(subj);
             }
@@ -920,7 +847,7 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
 
     /**
      * Check for an unexpected condition when a UTOKEN is not found in the Subject.
-     * 
+     *
      * @throws ResourceException if the condition is unexpected.
      */
     private void checkForUTOKENNotFoundError(Subject subj) throws ResourceException {
@@ -955,8 +882,7 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
             //
 
             try {
-                IllegalStateException e =
-                                new IllegalStateException("ThreadIdentitySecurityHelper.beforeGettingConnection() detected Subject not setup for using thread identity, but the connector requires thread identity be used.");
+                IllegalStateException e = new IllegalStateException("ThreadIdentitySecurityHelper.beforeGettingConnection() detected Subject not setup for using thread identity, but the connector requires thread identity be used.");
                 Object[] parms = new Object[] { "ThreadIdentitySecurityHelper.beforeGettingConnection()", e };
                 Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", parms);
                 throw e;
@@ -983,8 +909,7 @@ public class ThreadIdentitySecurityHelper implements SecurityHelper {
             //
 
             try {
-                IllegalStateException e =
-                                new IllegalStateException("ThreadIdentitySecurityHelper.beforeGettingConnection() detected Subject with no credentials.");
+                IllegalStateException e = new IllegalStateException("ThreadIdentitySecurityHelper.beforeGettingConnection() detected Subject with no credentials.");
                 Object[] parms = new Object[] { "ThreadIdentitySecurityHelper.beforeGettingConnection()", e };
                 Tr.error(tc, "ILLEGAL_STATE_EXCEPTION_J2CA0079", parms);
                 throw e;

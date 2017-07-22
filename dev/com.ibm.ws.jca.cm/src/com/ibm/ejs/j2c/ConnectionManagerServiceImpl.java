@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 IBM Corporation and others.
+ * Copyright (c) 2011, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -25,7 +25,6 @@ import javax.management.InstanceNotFoundException;
 import javax.management.MBeanRegistrationException;
 import javax.management.MalformedObjectNameException;
 import javax.resource.ResourceException;
-import javax.resource.spi.ManagedConnectionFactory;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -38,7 +37,6 @@ import com.ibm.ws.j2c.SecurityHelper;
 import com.ibm.ws.j2c.poolmanager.ConnectionPoolProperties;
 import com.ibm.ws.javaee.dd.common.ResourceRef;
 import com.ibm.ws.jca.adapter.PurgePolicy;
-import com.ibm.ws.jca.adapter.WSManagedConnectionFactory;
 import com.ibm.ws.jca.cm.AbstractConnectionFactoryService;
 import com.ibm.ws.jca.cm.ConnectionManagerService;
 import com.ibm.ws.jca.cm.ConnectorService;
@@ -232,7 +230,7 @@ public class ConnectionManagerServiceImpl extends ConnectionManagerService {
             bndCtx = PrivHelper.getBundleContext(FrameworkUtil.getBundle(getClass()));
 
         try {
-            pmMBean = new PoolManagerMBeanImpl(pm);
+            pmMBean = new PoolManagerMBeanImpl(pm, svc.getFeatureVersion());
             pmMBean.register(bndCtx);
         } catch (MalformedObjectNameException e) {
             pmMBean = null;
@@ -426,7 +424,7 @@ public class ConnectionManagerServiceImpl extends ConnectionManagerService {
 
     /**
      * Creates a new instance of DefaultSecurityHelper or ThreadIdentitySecurityHelper,
-     * based on the config of the ManagedConnectionFactory.
+     * based on the config of the connection factory.
      *
      * @param cfSvc the connection factory service.
      * @return If thread identity is enabled, a ThreadIdentitySecurityHelper; otherwise a DefaultSecurityHelper.
@@ -435,16 +433,10 @@ public class ConnectionManagerServiceImpl extends ConnectionManagerService {
     private SecurityHelper createSecurityHelper(AbstractConnectionFactoryService cfSvc) throws ResourceException {
 
         if (ThreadIdentityManager.isThreadIdentityEnabled()) {
-            ManagedConnectionFactory mcf = cfSvc.getManagedConnectionFactory();
-            if (mcf instanceof WSManagedConnectionFactory) {
-
-                WSManagedConnectionFactory wsmc = (WSManagedConnectionFactory) mcf;
-                String threadIdentitySupport = wsmc.getThreadIdentitySupport();
-
-                if (threadIdentitySupport.equals(J2CGlobalConfigProperties.THREADIDENTITY_ALLOWED)
-                    || threadIdentitySupport.equals(J2CGlobalConfigProperties.THREADIDENTITY_REQUIRED)) {
-                    return new ThreadIdentitySecurityHelper(wsmc);
-                }
+            String threadIdentitySupport = cfSvc.getThreadIdentitySupport();
+            if (threadIdentitySupport.equals(J2CGlobalConfigProperties.THREADIDENTITY_ALLOWED)
+                || threadIdentitySupport.equals(J2CGlobalConfigProperties.THREADIDENTITY_REQUIRED)) {
+                return new ThreadIdentitySecurityHelper(threadIdentitySupport, cfSvc.getThreadSecurity());
             }
         }
 

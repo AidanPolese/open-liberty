@@ -34,6 +34,7 @@ import javax.security.auth.Subject;
 import javax.transaction.xa.XAResource;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 
 import com.ibm.ejs.j2c.CommonFunction;
 import com.ibm.ejs.j2c.ConnectorServiceImpl;
@@ -112,7 +113,7 @@ public abstract class AbstractConnectionFactoryService implements Observer, Reso
 
     /**
      * Create a connection factory.
-     * 
+     *
      * @param resInfo resource reference. Null if no resource reference.
      * @return the connection factory.
      * @throws Exception if an error occurs.
@@ -176,7 +177,7 @@ public abstract class AbstractConnectionFactoryService implements Observer, Reso
      * Destroy the XAResource object. Internally, the XAResource provider
      * should cleanup resources used by XAResource object. For example, JTA
      * should close XAConnection.
-     * 
+     *
      * @param xa resource to destroy.
      * @throws DestroyXAResourceException if an error occurs.
      */
@@ -203,7 +204,7 @@ public abstract class AbstractConnectionFactoryService implements Observer, Reso
     /**
      * Returns the name of the config element used to configure this type of connection factory.
      * For example, dataSource or jmsConnectionFactory
-     * 
+     *
      * @return the name of the config element used to configure this type of connection factory.
      */
     public abstract String getConfigElementName();
@@ -212,7 +213,7 @@ public abstract class AbstractConnectionFactoryService implements Observer, Reso
 
     /**
      * Returns the id of the authData element for the default container managed auth alias (if any).
-     * 
+     *
      * @return the id of the authData element for the default container managed auth alias (if any).
      */
     public String getContainerAuthDataID() {
@@ -236,34 +237,44 @@ public abstract class AbstractConnectionFactoryService implements Observer, Reso
         return authDataID;
     }
 
+    /**
+     * Returns the version of the enabled feature that provides this connection factory.
+     * For example, 4.2 from jdbc-4.2.
+     *
+     * @return version if a jdbc feature. Currently null in the case of jca features.
+     */
+    public Version getFeatureVersion() {
+        return null;
+    }
+
     public String getJaasLoginContextEntryName() {
         return jaasLoginContextEntryName;
     }
 
     /**
      * Returns the unique identifier for this connection factory configuration.
-     * 
+     *
      * @return the unique identifier for this connection factory configuration.
      */
     public abstract String getID();
 
     /**
      * Returns the JNDI name.
-     * 
+     *
      * @return the JNDI name.
      */
     public abstract String getJNDIName();
 
     /**
      * Returns the managed connection factory.
-     * 
+     *
      * @return the managed connection factory.
      */
     public abstract ManagedConnectionFactory getManagedConnectionFactory();
 
     /**
      * Indicates whether or not reauthentication of connections is enabled.
-     * 
+     *
      * @return true if reauthentication of connections is enabled. Otherwise false.
      */
     public abstract boolean getReauthenticationSupport();
@@ -271,7 +282,7 @@ public abstract class AbstractConnectionFactoryService implements Observer, Reso
     /**
      * Obtain a subject to use for recovery.
      * Precondition: the invoker must have a read lock on this connection factory service instance.
-     * 
+     *
      * @param mcf the managed connection factory
      * @param xaresinfo serialized ArrayList<Byte> for the CMConfigData
      * @return subject to use for recovery. Null if the default user/password of the connection factory should be used.
@@ -327,20 +338,55 @@ public abstract class AbstractConnectionFactoryService implements Observer, Reso
     }
 
     /**
+     * Indicates whether or not this managed connection factory is RRS-enabled.
+     * Prerequisite: invoker must ensure this instance has been initialized when this method is invoked.
+     *
+     * @return true if RRS-enabled, otherwise false.
+     */
+    public abstract boolean getRRSTransactional();
+
+    /**
+     * Indicates whether or not this managed connection factory supports thread identity.
+     * Prerequisite: invoker must ensure this instance has been initialized when this method is invoked.
+     *
+     * @return Thread Identity Support: Either "ALLOWED", "REQUIRED", or "NOTALLOWED"
+     */
+    public String getThreadIdentitySupport() {
+        return "NOTALLOWED";
+    }
+
+    /**
+     * Indicates whether or not we should "synch to thread" for the
+     * allocateConnection, i.e., push an ACEE corresponding to the current java
+     * Subject on the native OS thread.
+     * Prerequisite: invoker must ensure this instance has been initialized when this method is invoked.
+     *
+     * @return true if we should "synch to thread", otherwise false.
+     */
+    public boolean getThreadSecurity() {
+        return false;
+    }
+
+    /**
      * Indicates the level of transaction support.
-     * 
+     *
      * @return constant indicating the transaction support of the resource adapter.
      */
     public abstract TransactionSupportLevel getTransactionSupport();
 
     /**
+     * @return true if ManagedConnectionFactory instances created by this service implement ValidatingManagedConnectionFactory, otherwise false.
+     */
+    public abstract boolean getValidatingManagedConnectionFactorySupport();
+
+    /**
      * Given XAResourceInfo, the XAResourceFactory produces a XAResource object.
-     * 
+     *
      * getXAResource may also be invoked during normal server running if a RM returns XAER_RMFAIL
      * on a completion method. The TM will attempt to retry the completion method after obtaining
      * a new XAResource. This retry processing will continue until either the retry limits are
      * exceeded, the resource manager allows completion to occur or a permanent error is reported.
-     * 
+     *
      * @param xaresinfo information about the XA resource.
      * @throws XAResourceNotAvailableException to indicate that the resource manager is not available
      *             and recovery may not complete. Any other exception raised by getXAResource will be
@@ -424,7 +470,7 @@ public abstract class AbstractConnectionFactoryService implements Observer, Reso
     /**
      * Lazy initialization.
      * Precondition: invoker must have write lock on this ConnectionFactoryService
-     * 
+     *
      * @throws Exception if an error occurs
      */
     protected abstract void init() throws Exception;
@@ -432,14 +478,14 @@ public abstract class AbstractConnectionFactoryService implements Observer, Reso
     /**
      * Checks whether the connection factory is accessible from the application
      * looking it up.
-     * 
+     *
      * @throws ResourceException if its not accessible
      */
     protected abstract void checkAccess() throws ResourceException;
 
     /**
      * Declarative Services method for setting the service reference for the default container auth data
-     * 
+     *
      * @param ref reference to the service
      */
     protected void setContainerAuthData(ServiceReference<?> ref) { // com.ibm.websphere.security.auth.data.AuthData
@@ -455,7 +501,7 @@ public abstract class AbstractConnectionFactoryService implements Observer, Reso
 
     /**
      * Declarative Services method for setting the recovery auth data service reference
-     * 
+     *
      * @param ref reference to the service
      */
     protected void setRecoveryAuthData(ServiceReference<?> ref) { // com.ibm.websphere.security.auth.data.AuthData
@@ -471,7 +517,7 @@ public abstract class AbstractConnectionFactoryService implements Observer, Reso
 
     /**
      * Declarative Services method for unsetting the service reference for the default container auth data
-     * 
+     *
      * @param ref reference to the service
      */
     protected void unsetContainerAuthData(ServiceReference<?> ref) { // com.ibm.websphere.security.auth.data.AuthData
@@ -488,7 +534,7 @@ public abstract class AbstractConnectionFactoryService implements Observer, Reso
 
     /**
      * Declarative Services method for unsetting the recovery auth data service reference
-     * 
+     *
      * @param ref reference to the service
      */
     protected void unsetRecoveryAuthData(ServiceReference<?> ref) { // com.ibm.websphere.security.auth.data.AuthData

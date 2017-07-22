@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2013 IBM Corporation and others.
+ * Copyright (c) 2003, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,11 +10,8 @@
  *******************************************************************************/
 package com.ibm.ws.j2c;
 
-import java.io.Serializable;
-
 import javax.resource.ResourceException;
 import javax.resource.spi.ConnectionRequestInfo;
-import javax.resource.spi.ManagedConnectionFactory;
 import javax.security.auth.Subject;
 
 import com.ibm.ejs.j2c.CMConfigData;
@@ -30,18 +27,18 @@ import com.ibm.ejs.j2c.CMConfigData;
  * the ConnectionManager to allow the opportunity for special
  * J2C security processing to be performed with respect to the Subject
  * without awareness of the underlying platform implementation.
- * 
+ *
  */
 
-public interface SecurityHelper extends Serializable {
+public interface SecurityHelper {
 
     /**
      * The finalizeSubject method is used to set what the final Subject
      * will be for processing.
-     * 
+     *
      * The primary intent of this method is to allow the Subject to be
      * defaulted when the passed Subject contains no credentials.
-     * 
+     *
      * @param subject
      * @param reqInfo
      * @param cmConfigData - for TISH to determine whether to call getLocalOSInvocationSubject
@@ -54,7 +51,7 @@ public interface SecurityHelper extends Serializable {
      * The beforeGettingConnection() method is used to allow
      * special security processing to be performed prior to calling
      * a resource adapter to get a connection.
-     * 
+     *
      * @param subject
      * @param reqInfo
      * @return Object if non-null, the user identity defined by the
@@ -71,7 +68,7 @@ public interface SecurityHelper extends Serializable {
      * The afterGettingConnection() method is used to allow
      * special security processing to be performed after calling
      * a resource adapter to get a connection.
-     * 
+     *
      * @param subject
      * @param reqInfo
      * @param credentialToken
@@ -79,15 +76,4 @@ public interface SecurityHelper extends Serializable {
      * @exception ResourceException
      */
     void afterGettingConnection(Subject subject, ConnectionRequestInfo reqInfo, Object credentialToken) throws ResourceException;
-
-    /**
-     * 
-     * @param subject
-     * @param reqInfo
-     * @param mcf
-     * @return void
-     * @throws ResourceException
-     */
-    public void finalizeCriForRRA(Subject subject, ConnectionRequestInfo reqInfo, ManagedConnectionFactory mcf) throws ResourceException;
-
 }
