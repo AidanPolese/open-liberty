@@ -16,6 +16,8 @@ com.ibm.ws.componenttest:provider.api:1.0.0
 com.ibm.ws.componenttest:public.api:1.0.0
 com.ibm.ws.componenttest:remoteaccess:2.3.0.1
 com.ibm.ws.componenttest:ssh:2.3.0.1
+com.netflix.archaius:archaius2-api:2.1.10
+com.netflix.archaius:archaius2-core:2.1.10
 com.openpojo:openpojo:0.8.4
 com.sun.mail:javax.mail:1.5.0
 com.sun.xml.bind:jaxb-core:2.2.10
@@ -59,6 +61,7 @@ javax.websocket:javax.websocket-api:1.1
 javax.ws.rs:javax.ws.rs-api:2.0
 javax.xml.bind:jaxb-api:2.2.12-b140109.1041
 joda-time:joda-time:1.6.2
+net.jodah:failsafe:1.0.4
 org.apache.aries.jmx:org.apache.aries.jmx.api:1.1.6-ibm-s20170710-0926
 org.apache.aries.jmx:org.apache.aries.jmx.core.whiteboard:1.1.6-ibm-s20170710-0926
 org.apache.aries.jndi:org.apache.aries.jndi.api:1.1.1-ibm-s20170710-0926

@@ -1,0 +1,8 @@
+
+task copyResourcesToBuildImage (type:Copy) {
+    from "${projectDir}/resources"
+    into "${rootDir}/build.image/wlp/lib/features"
+}
+
+assemble.dependsOn copyResourcesToBuildImage
+copyResourcesToBuildImage.dependsOn jar
