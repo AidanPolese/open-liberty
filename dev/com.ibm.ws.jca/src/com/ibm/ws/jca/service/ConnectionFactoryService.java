@@ -23,6 +23,7 @@ import javax.resource.spi.Connector;
 import javax.resource.spi.ManagedConnectionFactory;
 import javax.resource.spi.TransactionSupport;
 import javax.resource.spi.TransactionSupport.TransactionSupportLevel;
+import javax.resource.spi.ValidatingManagedConnectionFactory;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -30,6 +31,8 @@ import org.osgi.service.component.ComponentContext;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
+import com.ibm.ws.ffdc.FFDCFilter;
+import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.jca.cm.AbstractConnectionFactoryService;
 import com.ibm.ws.jca.cm.ConnectionManagerService;
 import com.ibm.ws.jca.cm.ConnectorService;
@@ -132,7 +135,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
     /**
      * DS method to activate this component.
      * Best practice: this should be a protected method, not public or private
-     * 
+     *
      * @param context DeclarativeService defined/populated component context
      */
     @Trivial
@@ -175,7 +178,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
     /**
      * DS method to deactivate this component.
      * Best practice: this should be a protected method, not public or private
-     * 
+     *
      * @param context DeclarativeService defined/populated component context
      */
     protected void deactivate(ComponentContext context) {
@@ -206,7 +209,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
 
     /**
      * Utility method to destroy connection factory instances.
-     * 
+     *
      * @param destroyImmediately indicates to immediately destroy instead of deferring to later.
      */
     private void destroyConnectionFactories(boolean destroyImmediately) {
@@ -231,7 +234,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
     /**
      * Returns the name of the config element used to configure this type of connection factory.
      * For example, jmsConnectionFactory or jmsTopicConnectionFactory
-     * 
+     *
      * @return the name of the config element used to configure this type of connection factory.
      */
     @Override
@@ -242,7 +245,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
 
     /**
      * Returns the unique identifier for this connection factory configuration.
-     * 
+     *
      * @return the unique identifier for this connection factory configuration.
      */
     @Override
@@ -253,7 +256,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
 
     /**
      * Returns the JNDI name.
-     * 
+     *
      * @return the JNDI name.
      */
     @Override
@@ -264,7 +267,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
 
     /**
      * Returns the managed connection factory.
-     * 
+     *
      * @return the managed connection factory.
      */
     @Override
@@ -275,7 +278,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
 
     /**
      * Indicates whether or not reauthentication of connections is enabled.
-     * 
+     *
      * @return true if reauthentication of connections is enabled. Otherwise false.
      */
     @Override
@@ -284,9 +287,22 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
         return Boolean.TRUE.equals(bootstrapContextRef.getReference().getProperty(REAUTHENTICATION_SUPPORT));
     }
 
+    @Override
+    @FFDCIgnore(NoSuchMethodException.class)
+    public boolean getRRSTransactional() {
+        try {
+            return (Boolean) mcf.getClass().getMethod("getRRSTransactional").invoke(mcf);
+        } catch (NoSuchMethodException x) {
+            return false;
+        } catch (Exception x) {
+            FFDCFilter.processException(x, getClass().getName(), "296", new Object[] { mcf.getClass() });
+            return false;
+        }
+    }
+
     /**
      * Indicates the level of transaction support.
-     * 
+     *
      * @return constant indicating the transaction support of the resource adapter.
      */
     @Override
@@ -317,10 +333,15 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
         return transactionSupport == null ? TransactionSupportLevel.NoTransaction : transactionSupport;
     }
 
+    @Override
+    public boolean getValidatingManagedConnectionFactorySupport() {
+        return mcf instanceof ValidatingManagedConnectionFactory;
+    }
+
     /**
      * Lazy initialization.
      * Precondition: invoker must have write lock on this ConnectionFactoryService
-     * 
+     *
      * @throws Exception if an error occurs
      */
     @Override
@@ -346,7 +367,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
 
     /**
      * Declarative Services method for setting the BootstrapContext reference
-     * 
+     *
      * @param ref reference to the service
      */
     protected void setBootstrapContext(ServiceReference<BootstrapContextImpl> ref) {
@@ -355,7 +376,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
 
     /**
      * Declarative Services method for setting the ConnectionManagerService reference
-     * 
+     *
      * @param ref reference to the service
      */
     protected void setConnectionManager(ServiceReference<ConnectionManagerService> ref) {
@@ -364,14 +385,14 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
 
     /**
      * Declarative Services method for setting the SSLConfig reference
-     * 
+     *
      * @param ref reference to the service
      */
     protected void setSslConfig(ServiceReference<?> ref) {}
 
     /**
      * Declarative Services method for unsetting the BootstrapContext reference
-     * 
+     *
      * @param ref reference to the service
      */
     protected void unsetBootstrapContext(ServiceReference<BootstrapContextImpl> ref) {
@@ -380,7 +401,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
 
     /**
      * Declarative Services method for unsetting the ConnectionManagerService reference
-     * 
+     *
      * @param ref reference to the service
      */
     protected void unsetConnectionManager(ServiceReference<ConnectionManagerService> ref) {
@@ -389,7 +410,7 @@ public class ConnectionFactoryService extends AbstractConnectionFactoryService i
 
     /**
      * Declarative Services method for unsetting the SSLConfig reference
-     * 
+     *
      * @param ref reference to the service
      */
     protected void unsetSslConfig(ServiceReference<?> ref) {}

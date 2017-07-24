@@ -11,10 +11,7 @@
 
 package com.ibm.ws.security.wim;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,20 +25,14 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.security.wim.ras.WIMMessageHelper;
 import com.ibm.websphere.security.wim.ras.WIMMessageKey;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
-import com.ibm.ws.security.registry.CustomRegistryException;
 import com.ibm.ws.security.registry.SearchResult;
 import com.ibm.ws.security.registry.UserRegistry;
-import com.ibm.ws.security.wim.adapter.urbridge.URBridge;
-import com.ibm.ws.security.wim.util.StringUtil;
 import com.ibm.ws.security.wim.util.UniqueNameHelper;
 import com.ibm.wsspi.security.wim.CustomRepository;
 import com.ibm.wsspi.security.wim.SchemaConstants;
 import com.ibm.wsspi.security.wim.exception.InitializationException;
 import com.ibm.wsspi.security.wim.exception.InvalidUniqueNameException;
 import com.ibm.wsspi.security.wim.exception.WIMException;
-import com.ibm.wsspi.security.wim.model.Entity;
-import com.ibm.wsspi.security.wim.model.IdentifierType;
-import com.ibm.wsspi.security.wim.model.Root;
 
 /**
  * Single point of contact for core to interact with different repositories
@@ -56,400 +47,27 @@ public class RepositoryManager {
 
     private static final TraceComponent tc = Tr.register(RepositoryManager.class);
 
-    private static final String KEY_REGISTRY = "userRegistry";
-
-    private static final String BASE_ENTRY = "registryBaseEntry";
-
     private final VMMService vmmService;
 
-//    private final HashMap<String, Repository> cachedRepository = new HashMap<String, Repository>();
-
-    interface RepositoryHolder {
-
-        Repository getRepository() throws WIMException;
-
-        void clear();
-
-        Map<String, String> getRepositoryBaseEntries();
-
-        Set<String> getRepositoryGroups();
-
-        int isUniqueNameForRepository(String uniqueName, boolean isDn) throws WIMException;
-    }
-
-    static class URBridgeHolder implements RepositoryHolder {
-
-        private final String baseEntry;
-        private final UserRegistry ur;
-        private URBridge urBridge;
-        private final Map<String, String> baseEntries;
-
-        public URBridgeHolder(UserRegistry ur, ConfigManager configManager) throws InitializationException {
-            String realm = ur.getRealm();
-            this.baseEntry = "o=" + realm;
-            this.ur = ur;
-            Map<String, Object> properties = new HashMap<String, Object>();
-            properties.put(KEY_REGISTRY, ur);
-            properties.put(VMMService.KEY_ID, realm);
-            properties.put(BASE_ENTRY, baseEntry);
-            baseEntries = Collections.singletonMap(baseEntry, realm);
-
-            urBridge = new URBridge(properties, ur, configManager);
-
-        }
-
-        @Override
-        public Repository getRepository() {
-            return urBridge;
-        }
-
-        @Override
-        public void clear() {
-            if (urBridge != null) {
-                urBridge.stopCacheThreads();
-            }
-            urBridge = null; ///???????
-        }
-
-        @Override
-        public Map<String, String> getRepositoryBaseEntries() {
-            //TODO not clear what value should be????
-            return baseEntries;
-        }
-
-        @Override
-        public Set<String> getRepositoryGroups() {
-            return Collections.singleton(urBridge.getRealm());
-        }
-
-        @Override
-        public int isUniqueNameForRepository(String uniqueName, boolean isDn) {
-            if (baseEntry.equals(uniqueName))
-                return Integer.MAX_VALUE;
-            if (isUserInRealm(uniqueName))
-                return 0;
-            return -1;
-        }
-
-        @FFDCIgnore(Exception.class)
-        private boolean isUserInRealm(String uniqueName) {
-            try {
-                SearchResult result = ur.getUsers(uniqueName, 1);
-                if (result != null && result.getList().size() > 0)
-                    return true;
-            } catch (Exception e) {
-            }
-
-            try {
-                SearchResult result = ur.getGroups(uniqueName, 1);
-                if (result != null && result.getList().size() > 0)
-                    return true;
-            } catch (Exception e) {
-            }
-            return false;
-
-        }
-
-    }
-
-    abstract static class AbstractRepositoryHolder implements RepositoryHolder {
-
-        private final String repositoryId;
-
-        public AbstractRepositoryHolder(String repositoryId) {
-            this.repositoryId = repositoryId;
-        }
-
-        @Override
-        public Repository getRepository() throws WIMException {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        abstract protected RepositoryConfig getRepositoryConfig();
-
-        @Override
-        public void clear() {}
-
-        @Override
-        public Map<String, String> getRepositoryBaseEntries() {
-            return getRepositoryConfig().getRepositoryBaseEntries();
-        }
-
-        @Override
-        public Set<String> getRepositoryGroups() {
-            String[] repositoriesForGroups = getRepositoryConfig().getRepositoriesForGroups();
-            if (repositoriesForGroups != null && repositoriesForGroups.length > 0) {
-                return new HashSet<String>(Arrays.asList(repositoriesForGroups));
-            }
-            return Collections.emptySet();
-        }
-
-        @Override
-        public int isUniqueNameForRepository(String uniqueName, boolean isDn) throws WIMException {
-            int repo = -1;
-            if (isDn) {
-                Collection<String> baseEntryList = getRepositoryBaseEntries().keySet();
-                if (baseEntryList.size() == 0) {
-                    throw new WIMException(WIMMessageKey.MISSING_BASE_ENTRY, Tr.formatMessage(
-                                                                                              tc,
-                                                                                              WIMMessageKey.MISSING_BASE_ENTRY,
-                                                                                              WIMMessageHelper.generateMsgParms(repositoryId)));
-                }
-                int uLength = uniqueName.length();
-                for (String baseEntry : baseEntryList) {
-                    int baseEntryLength = baseEntry.length();
-                    if (baseEntryLength == 0 && repo == -1) {
-                        //Previously we matched the root to everything, but now we are looking for a better match
-                        repo = 0;
-                    } else if ((uLength == baseEntryLength) && uniqueName.equalsIgnoreCase(baseEntry)) {
-                        //We found an exact match so return with highest priority
-                        return Integer.MAX_VALUE;
-                    } else if ((uLength > baseEntryLength) && (StringUtil.endsWithIgnoreCase(uniqueName, "," + baseEntry))) {
-                        //We found a match, but we need to check if it is better than our currently best match
-                        if (repo < baseEntryLength) {
-                            repo = baseEntryLength;
-                        }
-                    }
-                }
-            }
-            return repo;
-        }
-
-    }
-
-    static class ConfiguredRepositoryHolder extends AbstractRepositoryHolder {
-
-        private final ConfiguredRepository configuredRepository;
-
-        /**
-         * @param repositoryId TODO
-         * @param repositoryConfiguration
-         * @param repositoryFactory
-         */
-        public ConfiguredRepositoryHolder(String repositoryId, ConfiguredRepository configuredRepository) {
-            super(repositoryId);
-            this.configuredRepository = configuredRepository;
-        }
-
-        @Override
-        public Repository getRepository() {
-            return configuredRepository;
-        }
-
-        @Override
-        protected RepositoryConfig getRepositoryConfig() {
-            return configuredRepository;
-        }
-
-    }
-
-    static class CustomRepositoryHolder extends AbstractRepositoryHolder {
-
-        private static class CustomRepositoryAdapter implements Repository, RepositoryConfig {
-            private final String repositoryId;
-            private final CustomRepository customRepository;
-
-            /**
-             * @param customRepository
-             */
-            public CustomRepositoryAdapter(String repositoryId, CustomRepository customRepository) {
-                this.repositoryId = repositoryId;
-                this.customRepository = customRepository;
-            }
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see com.ibm.ws.security.wim.RepositoryConfig#isReadOnly()
-             */
-            @Override
-            public boolean isReadOnly() {
-                return false;
-//                TODO:
-//                return customRepository.isReadOnly();
-            }
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see com.ibm.ws.security.wim.RepositoryConfig#resetConfig()
-             */
-            @Override
-            public void resetConfig() {
-                //TODO:
-//                customRepository.resetConfig();
-            }
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see com.ibm.ws.security.wim.RepositoryConfig#getReposId()
-             */
-            @Override
-            public String getReposId() {
-                return repositoryId;
-            }
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see com.ibm.ws.security.wim.RepositoryConfig#getRepositoryBaseEntries()
-             */
-            @Override
-            public Map<String, String> getRepositoryBaseEntries() {
-                return customRepository.getRepositoryBaseEntries();
-            }
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see com.ibm.ws.security.wim.RepositoryConfig#getRepositoriesForGroups()
-             */
-            //TODO WHAT IS THIS SUPPOSED TO MEAN?
-            @Override
-            public String[] getRepositoriesForGroups() {
-                String[] repos = customRepository.getRepositoriesForGroups();
-                if (repos == null) {
-                    repos = new String[] { repositoryId };
-                }
-                return repos;
-            }
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see com.ibm.ws.security.wim.Repository#get(com.ibm.wsspi.security.wim.model.Root)
-             */
-            @Override
-            public Root get(Root root) throws WIMException {
-                return setRepositoryId(customRepository.get(root));
-            }
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see com.ibm.ws.security.wim.Repository#search(com.ibm.wsspi.security.wim.model.Root)
-             */
-            @Override
-            public Root search(Root root) throws WIMException {
-                return setRepositoryId(customRepository.search(root));
-            }
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see com.ibm.ws.security.wim.Repository#login(com.ibm.wsspi.security.wim.model.Root)
-             */
-            @Override
-            public Root login(Root root) throws WIMException {
-                return setRepositoryId(customRepository.login(root));
-            }
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see com.ibm.ws.security.wim.Repository#getRealm()
-             */
-            @Override
-            public String getRealm() {
-                return customRepository.getRealm();
-            }
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see com.ibm.ws.security.wim.Repository#delete(com.ibm.wsspi.security.wim.model.Root)
-             */
-            @Override
-            public Root delete(Root root) throws WIMException {
-                return setRepositoryId(customRepository.delete(root));
-            }
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see com.ibm.ws.security.wim.Repository#create(com.ibm.wsspi.security.wim.model.Root)
-             */
-            @Override
-            public Root create(Root root) throws WIMException {
-                return setRepositoryId(customRepository.create(root));
-            }
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see com.ibm.ws.security.wim.Repository#update(com.ibm.wsspi.security.wim.model.Root)
-             */
-            @Override
-            public Root update(Root root) throws WIMException {
-                return setRepositoryId(customRepository.update(root));
-            }
-
-            /**
-             * @param root
-             * @return
-             */
-            private Root setRepositoryId(Root root) {
-                for (Entity entity : root.getEntities()) {
-                    IdentifierType identifier = entity.getIdentifier();
-                    if (identifier != null) {
-                        identifier.setRepositoryId(repositoryId);
-                    }
-                }
-                return root;
-            }
-
-        }
-
-        private final CustomRepositoryAdapter repository;
-
-        /**
-         * @param repositoryId TODO
-         * @param repositoryConfiguration
-         * @param repositoryFactory
-         */
-        public CustomRepositoryHolder(String repositoryId, CustomRepository customRepository) {
-            super(repositoryId);
-            this.repository = new CustomRepositoryAdapter(repositoryId, customRepository);
-        }
-
-        @Override
-        public Repository getRepository() {
-            return repository;
-        }
-
-        /*
-         * (non-Javadoc)
-         *
-         * @see com.ibm.ws.security.wim.RepositoryManager.AbstractRepositoryHolder#getRepositoryConfig()
-         */
-        @Override
-        protected RepositoryConfig getRepositoryConfig() {
-            return repository;
-        }
-
-    }
-
-    private final Map<String, RepositoryHolder> repositories = new ConcurrentHashMap<String, RepositoryHolder>();
+    private final Map<String, RepositoryWrapper> repositories = new ConcurrentHashMap<String, RepositoryWrapper>();
 
     public RepositoryManager(VMMService service) {
         vmmService = service;
     }
 
     void addConfiguredRepository(String repositoryId, ConfiguredRepository configuredRepository) {
-        RepositoryHolder repositoryHolder = new ConfiguredRepositoryHolder(repositoryId, configuredRepository);
+        RepositoryWrapper repositoryHolder = new ConfiguredRepositoryWrapper(repositoryId, configuredRepository);
         repositories.put(repositoryId, repositoryHolder);
     }
 
     void addCustomRepository(String repositoryId, CustomRepository customRepository) {
-        RepositoryHolder repositoryHolder = new CustomRepositoryHolder(repositoryId, customRepository);
+        RepositoryWrapper repositoryHolder = new CustomRepositoryWrapper(repositoryId, customRepository);
         repositories.put(repositoryId, repositoryHolder);
     }
 
     void addUserRegistry(UserRegistry userRegistry) {
         try {
-            URBridgeHolder repositoryHolder = new URBridgeHolder(userRegistry, vmmService.getConfigManager());
+            UserRegistryWrapper repositoryHolder = new UserRegistryWrapper(userRegistry, vmmService.getConfigManager());
             repositories.put(userRegistry.getRealm(), repositoryHolder);
         } catch (InitializationException e) {
             //TODO will occur on lookup when this is made lazy.
@@ -457,7 +75,7 @@ public class RepositoryManager {
     }
 
     void removeRepositoryHolder(String id) {
-        RepositoryHolder repositoryHolder = repositories.remove(id);
+        RepositoryWrapper repositoryHolder = repositories.remove(id);
         if (repositoryHolder != null) {
             repositoryHolder.clear();
         }
@@ -469,7 +87,7 @@ public class RepositoryManager {
      * data for the RepositoryService for this lookup.
      */
     public Repository getRepository(String instanceId) throws WIMException {
-        RepositoryHolder repositoryHolder = repositories.get(instanceId);
+        RepositoryWrapper repositoryHolder = repositories.get(instanceId);
         if (repositoryHolder != null) {
             return repositoryHolder.getRepository();
         }
@@ -517,19 +135,6 @@ public class RepositoryManager {
 //        return null;
     }
 
-    /**
-     * @param ur
-     * @return
-     * @throws RemoteException
-     * @throws CustomRegistryException
-     */
-    private String getRealm(Object ur) {
-        if (ur instanceof com.ibm.ws.security.registry.UserRegistry)
-            return ((com.ibm.ws.security.registry.UserRegistry) ur).getRealm();
-        else
-            return null;
-    }
-
     public Repository getTargetRepository(String uniqueName) throws WIMException {
         String reposId = getRepositoryIdByUniqueName(uniqueName);
         Repository repos = getRepository(reposId);
@@ -555,7 +160,7 @@ public class RepositoryManager {
         int repoMatch = -1;
         int bestMatch = -1;
 
-        for (Map.Entry<String, RepositoryHolder> entry : repositories.entrySet()) {
+        for (Map.Entry<String, RepositoryWrapper> entry : repositories.entrySet()) {
             repoMatch = entry.getValue().isUniqueNameForRepository(uniqueName, isDn);
             if (repoMatch == Integer.MAX_VALUE) {
                 return entry.getKey();
@@ -577,7 +182,7 @@ public class RepositoryManager {
     public Map<String, List<String>> getRepositoriesBaseEntries() {
         Map<String, List<String>> reposNodesMap = new HashMap<String, List<String>>();
 
-        for (Map.Entry<String, RepositoryHolder> entry : repositories.entrySet()) {
+        for (Map.Entry<String, RepositoryWrapper> entry : repositories.entrySet()) {
             reposNodesMap.put(entry.getKey(), new ArrayList<String>(entry.getValue().getRepositoryBaseEntries().keySet()));
         }
         return reposNodesMap;
@@ -618,7 +223,7 @@ public class RepositoryManager {
     }
 
     public Map<String, String> getRepositoryBaseEntries(String reposId) throws WIMException {
-        RepositoryHolder repositoryHolder = repositories.get(reposId);
+        RepositoryWrapper repositoryHolder = repositories.get(reposId);
         if (repositoryHolder != null) {
             return repositoryHolder.getRepositoryBaseEntries();
         }
@@ -755,7 +360,7 @@ public class RepositoryManager {
         //Perhaps the map needs to be inverted?
         //On the other hand getRepositoriesForGroupMembers seems to return the inverted map.
         Map<String, Set<String>> repositoriesForGroup = new HashMap<String, Set<String>>();
-        for (Map.Entry<String, RepositoryHolder> entry : repositories.entrySet()) {
+        for (Map.Entry<String, RepositoryWrapper> entry : repositories.entrySet()) {
             repositoriesForGroup.put(entry.getKey(), entry.getValue().getRepositoryGroups());
         }
         return repositoriesForGroup;
@@ -820,7 +425,7 @@ public class RepositoryManager {
 
     //TODO not tested.
     public Set<String> getRepositoriesForGroupMembership(String repositoryId) throws WIMException {
-        RepositoryHolder repositoryHolder = repositories.get(repositoryId);
+        RepositoryWrapper repositoryHolder = repositories.get(repositoryId);
         if (repositoryHolder != null) {
             return repositoryHolder.getRepositoryGroups();
         }
@@ -831,7 +436,7 @@ public class RepositoryManager {
     private Map<String, Set<String>> getRepositoriesForGroupMembers() {
         Map<String, Set<String>> groupToRepositoryId = new HashMap<String, Set<String>>();
 
-        for (Map.Entry<String, RepositoryHolder> entry : repositories.entrySet()) {
+        for (Map.Entry<String, RepositoryWrapper> entry : repositories.entrySet()) {
             String repositoryid = entry.getKey();
             Set<String> groups = entry.getValue().getRepositoryGroups();
             for (String group : groups) {
@@ -888,7 +493,7 @@ public class RepositoryManager {
      *
      */
     public void clearAllCachedURRepositories() {
-        for (RepositoryHolder repositoryHolder : repositories.values()) {
+        for (RepositoryWrapper repositoryHolder : repositories.values()) {
             repositoryHolder.clear();
         }
     }
@@ -899,9 +504,9 @@ public class RepositoryManager {
      */
     @FFDCIgnore(Exception.class)
     public List<String> getFederationUREntityType(String data) {
-        for (RepositoryHolder rh : repositories.values()) {
-            if (rh instanceof URBridgeHolder) {
-                UserRegistry ur = ((URBridgeHolder) rh).ur;
+        for (RepositoryWrapper rh : repositories.values()) {
+            if (rh instanceof UserRegistryWrapper) {
+                UserRegistry ur = ((UserRegistryWrapper) rh).getUserRegistry();
 
                 try {
                     SearchResult result = ur.getUsers(data, 1);
@@ -950,5 +555,4 @@ public class RepositoryManager {
         }
         return null;
     }
-
 }

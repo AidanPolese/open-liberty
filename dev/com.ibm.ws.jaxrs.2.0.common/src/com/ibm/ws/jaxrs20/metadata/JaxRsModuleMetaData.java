@@ -44,7 +44,7 @@ public class JaxRsModuleMetaData {
 
     private final Map<Class<?>, ReferenceContext> referenceContextMap;
 
-    private final JaxRsInstanceManager jaxRsInstanceManager;
+    private JaxRsInstanceManager jaxRsInstanceManager;
 
     private Object managedAppRef;
 
@@ -174,7 +174,7 @@ public class JaxRsModuleMetaData {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public List<ModuleMetaData> getEnclosingModuleMetaDatas() {
@@ -188,6 +188,8 @@ public class JaxRsModuleMetaData {
         if (clientMetaData != null) {
             clientMetaData.destroy();
         }
+
+        jaxRsInstanceManager = null;
     }
 
 }

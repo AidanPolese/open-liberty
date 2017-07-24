@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 1997, 2016 IBM Corporation and others.
+ * Copyright (c) 1997, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -104,8 +104,6 @@ public final class PoolManager implements Runnable, PropertyChangeListener, Veto
     private boolean connectionPoolShutDown = false;
     protected final Integer poolManagerTestConnectionLock = new Integer(0);
 
-    private ManagedConnectionFactory _managedConnectionFactory = null;
-
     private int collectorCount = 0;
     private final ArrayList<MCWrapper> mcWrappersToDestroy = new ArrayList<MCWrapper>(50);
 
@@ -192,8 +190,6 @@ public final class PoolManager implements Runnable, PropertyChangeListener, Veto
         enableInuseConnectionDestroy = true;
 
         logSerialReuseMessage = true;
-
-        _managedConnectionFactory = cfSvc.getManagedConnectionFactory();
 
         this.connectionTimeout = gConfigProps.getConnectionTimeout();
         this.maxConnections = gConfigProps.getMaxConnections();
@@ -294,7 +290,6 @@ public final class PoolManager implements Runnable, PropertyChangeListener, Veto
             Tr.debug(this, tc, "Aged Timeout                            = " + agedTimeout + " (seconds)");
             Tr.debug(this, tc, "Free Pool Distribution Table Size       = " + maxFreePoolHashSize);
             Tr.debug(this, tc, "Number Of Shared Pool Partitions        = " + maxSharedBuckets);
-            Tr.debug(this, tc, "Managed connection factory              = " + _managedConnectionFactory);
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "<init>");
@@ -1519,8 +1514,8 @@ public final class PoolManager implements Runnable, PropertyChangeListener, Veto
 
             // if the mcWrapper is null, the following code will not be executed.
             ManagedConnection mc = mcWrapper.getManagedConnection();
-            if (((_managedConnectionFactory instanceof WSManagedConnectionFactory &&
-                  ((WSManagedConnectionFactory) _managedConnectionFactory).isPooledConnectionValidationEnabled())
+            if (((managedConnectionFactory instanceof WSManagedConnectionFactory &&
+                  ((WSManagedConnectionFactory) managedConnectionFactory).isPooledConnectionValidationEnabled())
                  || ((com.ibm.ejs.j2c.MCWrapper) mcWrapper).isPretestThisConnection())
                 && gConfigProps.validatingMCFSupported) {
                 /*
@@ -1536,7 +1531,7 @@ public final class PoolManager implements Runnable, PropertyChangeListener, Veto
                  */
                 int poolState = mcWrapper.getPoolState();
                 mcWrapper.setPoolState(50);
-                ValidatingManagedConnectionFactory validatingMCF = ((ValidatingManagedConnectionFactory) _managedConnectionFactory);
+                ValidatingManagedConnectionFactory validatingMCF = ((ValidatingManagedConnectionFactory) managedConnectionFactory);
                 Set<?> invalid = validatingMCF.getInvalidConnections(Collections.singleton(mc));
                 if (invalid.isEmpty())
                     mcWrapper.setPoolState(poolState);
@@ -3187,63 +3182,6 @@ public final class PoolManager implements Runnable, PropertyChangeListener, Veto
     }
 
     /**
-     * Execute test connection task
-     *
-     * @param userData
-     * @param mcWrapperPool
-     * @concurrency concurrent
-     */
-    public void executeTestConnectionTask(Subject subject, ConnectionRequestInfo cri, int hashMapBucket_in) {
-        /*
-         * This code will run until we successfully get a connection.
-         */
-        synchronized (poolManagerTestConnectionLock) {
-            if (allowConnectionRequests) {
-                /*
-                 * The only way this can be true is for the else to
-                 * this if has set it to true. This means that all
-                 * we need to do is return. This threads should be
-                 * ending
-                 */
-                return;
-            } else {
-                /*
-                 * Do some real work
-                 */
-                MCWrapper mcWrapper = null;
-                try {
-                    int hashCode = computeHashCode(subject, cri);
-                    mcWrapper = freePool[0].createManagedConnectionWithMCWrapper(_managedConnectionFactory, subject, cri, false, hashCode);
-                } catch (ResourceAllocationException re) {
-                    /*
-                     * Log message and continue running.
-                     *
-                     */
-                    Object[] parms = new Object[] { "executeTestConnectionTask", CommonFunction.exceptionList(re), "ResourceAllocationException", gConfigProps.cfName };
-                    Tr.error(tc, "POOL_MANAGER_EXCP_CCF2_0002_J2CA0046", parms);
-                }
-                if (mcWrapper != null) {
-                    /*
-                     * The following code will put the newly created connection
-                     * in the free pool, update the necessary information
-                     * on the mcWrapper and increment the total connection
-                     * count.
-                     * hashMapBucket
-                     */
-                    int hashMapBucket = hashMapBucket_in;
-                    mcWrapper.setHashMapBucket(hashMapBucket);
-                    freePool[hashMapBucket].returnToFreePool(mcWrapper);
-                    synchronized (this.pmCounterLock) {
-                        this.totalConnectionCount.incrementAndGet();
-                    }
-
-                    allowConnectionRequests = true;
-                }
-            }
-        }
-    }
-
-    /**
      * This calls reclaimConnections to remove unusedTimeout and
      * agedTimeout connections.
      * This will get executed every reapTime seconds.
@@ -3822,13 +3760,6 @@ public final class PoolManager implements Runnable, PropertyChangeListener, Veto
 
     protected void endingAccessToTLSPool() {
         activeTLSRequest.decrementAndGet();
-    }
-
-    /**
-     * @return boolean which states whether or not this MCF supports the SelfXARecoverable interface.
-     */
-    public boolean isSelfXARecoverable() {
-        return gConfigProps.selfXARecoverable;
     }
 
     public void moveMCWrapperFromUnSharedToShared(Object value1, Object affinity) {
@@ -4692,13 +4623,6 @@ public final class PoolManager implements Runnable, PropertyChangeListener, Veto
 
     public final J2CGlobalConfigProperties getGConfigProps() {
         return gConfigProps;
-    }
-
-    /**
-     * This method gets the poolmanagers MCF
-     */
-    public ManagedConnectionFactory getManagedConnectionFactory() {
-        return this._managedConnectionFactory;
     }
 
     protected static void logLTCSerialReuseInfo(Object affinity, String pmiName, MCWrapper mcWrapperTemp, PoolManager pm) {

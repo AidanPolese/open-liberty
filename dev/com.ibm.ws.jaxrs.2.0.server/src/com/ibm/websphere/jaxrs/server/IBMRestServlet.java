@@ -30,7 +30,7 @@ import com.ibm.ws.threadContext.ComponentMetaDataAccessorImpl;
 import com.ibm.wsspi.webcontainer.collaborator.IWebAppNameSpaceCollaborator;
 
 /**
- * 
+ *
  */
 public class IBMRestServlet extends HttpServlet {
 
@@ -40,7 +40,7 @@ public class IBMRestServlet extends HttpServlet {
 
     private static final String HTML_CONTENT_TYPE = "text/html";
 
-    private final transient JaxRsWebEndpoint endpoint;
+    private transient JaxRsWebEndpoint endpoint;
 
     private final transient IWebAppNameSpaceCollaborator collaborator;
 
@@ -62,8 +62,7 @@ public class IBMRestServlet extends HttpServlet {
         super.init(servletConfig);
         if (endpoint != null) {
             endpoint.init(servletConfig, providerFactoryService);
-        }
-        else {
+        } else {
             // TODO: Get endpoint from some place and then init
             if (endpoint == null) {
                 throw new ServletException("Coult not find endpoint information.");
@@ -76,8 +75,7 @@ public class IBMRestServlet extends HttpServlet {
      * will be routed to handleRequest method.
      */
     @Override
-    public void service(ServletRequest req, ServletResponse res)
-                    throws ServletException, IOException {
+    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
 
         HttpServletRequest request;
         HttpServletResponse response;
@@ -117,7 +115,7 @@ public class IBMRestServlet extends HttpServlet {
 
 //    /**
 //     * Prints a welcome message for the endpoint
-//     * 
+//     *
 //     * @param resquest
 //     * @param response
 //     */
@@ -165,6 +163,7 @@ public class IBMRestServlet extends HttpServlet {
         if (endpoint != null) {
             endpoint.destroy();
         }
+        endpoint = null;
         super.destroy();
     }
 }

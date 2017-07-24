@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 1997, 2013 IBM Corporation and others.
+ * Copyright (c) 1997, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,16 +19,11 @@ import java.beans.VetoableChangeSupport;
 import java.io.Serializable;
 import java.util.Properties;
 
-import javax.resource.spi.ManagedConnectionFactory;
 import javax.resource.spi.TransactionSupport;
-import javax.resource.spi.ValidatingManagedConnectionFactory;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.ws.ffdc.FFDCFilter;
-import com.ibm.ws.j2c.SelfXARecoverable;
 import com.ibm.ws.jca.adapter.PurgePolicy;
-import com.ibm.ws.jca.adapter.WSManagedConnectionFactory;
 import com.ibm.ws.jca.cm.AbstractConnectionFactoryService;
 import com.ibm.ws.jca.cm.AppDefinedResource;
 
@@ -103,7 +98,6 @@ public final class J2CGlobalConfigProperties implements PropertyChangeListener, 
     protected final String threadIdentitySupport;
     protected final boolean logMissingTranContext;
 
-    protected final boolean selfXARecoverable;
     protected final boolean validatingMCFSupported;
 
     /*
@@ -416,9 +410,6 @@ public final class J2CGlobalConfigProperties implements PropertyChangeListener, 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "<init>", "Full Constructor");
         }
-        ManagedConnectionFactory mcf = cfSvc.getManagedConnectionFactory();
-        WSManagedConnectionFactory wmcf = mcf instanceof WSManagedConnectionFactory ? (WSManagedConnectionFactory) mcf : null;
-
         this.XpathId = _xpathId;
         this.jndiName = cfSvc.getJNDIName();
         if (jndiName != null)
@@ -437,9 +428,9 @@ public final class J2CGlobalConfigProperties implements PropertyChangeListener, 
 
         dynamicEnlistmentSupported = false; // Will become true later if managed connection implements LazyEnlistableManagedConnection
         this.manageCachedHandles = _manageCachedHandles;
-        this.rrsTransactional = wmcf == null ? isRRSTransactional(mcf) : wmcf.getRRSTransactional();
-        this.threadSecurity = wmcf != null && wmcf.getThreadSecurity();
-        this.threadIdentitySupport = wmcf == null ? "NOTALLOWED" : wmcf.getThreadIdentitySupport();
+        this.rrsTransactional = cfSvc.getRRSTransactional();
+        this.threadSecurity = cfSvc.getThreadSecurity();
+        this.threadIdentitySupport = cfSvc.getThreadIdentitySupport();
         this.logMissingTranContext = _logMissingTranContext;
         this.transactionSupport = cfSvc.getTransactionSupport();
         this.smartHandleSupport = false; // Will become true later if managed connection implements DissociatableManagedConnection
@@ -461,31 +452,14 @@ public final class J2CGlobalConfigProperties implements PropertyChangeListener, 
         this.maxNumberOfMCsAllowableInThread = maxNumberOfMCsAllowableInThread;
         this.throwExceptionOnMCThreadCheck = throwExceptionOnMCThreadCheck;
 
-        if ((mcf != null) && (mcf instanceof SelfXARecoverable)) {
-            selfXARecoverable = true;
-        } else {
-            selfXARecoverable = false;
-        }
-
         /*
-         * We will check the mcf to see if it support
-         * ValidatingManagedConnectionFactory function. If it does, set
-         * ValidatingMCFSupported to true.
-         *
          * This value will be checked in the fatelErrorNotification code. We
          * will attempt to cleanup and destroy the connections returned by the
          * method getInvalidConnections().
          *
          * If the connection is active, it will be marked stale.
          */
-        if ((mcf != null) && (mcf instanceof ValidatingManagedConnectionFactory)) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(this, tc, "Managed connection factory " + mcf + " supports validating managed connections.");
-            }
-            validatingMCFSupported = true;
-        } else {
-            validatingMCFSupported = false;
-        }
+        validatingMCFSupported = cfSvc.getValidatingManagedConnectionFactorySupport();
 
         cciLocalTranSupported = true;
 
@@ -920,7 +894,6 @@ public final class J2CGlobalConfigProperties implements PropertyChangeListener, 
         buf.append("  cciLocalTranSupported           : " + cciLocalTranSupported + nl);
         buf.append("  logMissingTranContext           : " + logMissingTranContext + nl);
         buf.append("  embeddedRa                      : " + embeddedRa + nl);
-        buf.append("  selfXARecoverable               : " + selfXARecoverable + nl);
         buf.append("  validatingMCFSupported          : " + validatingMCFSupported + nl);
         buf.append("  cciLocalTranSupported           : " + cciLocalTranSupported + nl);
         buf.append("  sendClaimedVictomToGetConnection: " + sendClaimedVictomToGetConnection + nl);
@@ -1030,22 +1003,5 @@ public final class J2CGlobalConfigProperties implements PropertyChangeListener, 
                                               Boolean throwExceptionOnMCThreadCheck) {
         changeSupport.firePropertyChange("throwExceptionOnMCThreadCheck", this.throwExceptionOnMCThreadCheck, throwExceptionOnMCThreadCheck);
         this.throwExceptionOnMCThreadCheck = throwExceptionOnMCThreadCheck;
-    }
-
-    /**
-     * Determines whether or not a managed connection factory is RRS transactional.
-     *
-     * @param mcf managed connection factory
-     * @return true if the managed connection factory is RRS transactional. False if not.
-     */
-    private static boolean isRRSTransactional(ManagedConnectionFactory mcf) {
-        try {
-            return (Boolean) mcf.getClass().getMethod("getRRSTransactional").invoke(mcf);
-        } catch (NoSuchMethodException x) {
-            return false;
-        } catch (Exception x) {
-            FFDCFilter.processException(x, J2CGlobalConfigProperties.class.getName(), "2270", new Object[] { mcf.getClass() });
-            return false;
-        }
     }
 }

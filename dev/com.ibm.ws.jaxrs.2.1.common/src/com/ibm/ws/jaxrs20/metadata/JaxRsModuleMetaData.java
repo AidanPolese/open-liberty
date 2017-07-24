@@ -5,8 +5,8 @@
  *
  * Copyright IBM Corp. 2012
  *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
  * U.S. Copyright Office.
  */
 package com.ibm.ws.jaxrs20.metadata;
@@ -45,7 +45,7 @@ public class JaxRsModuleMetaData {
 
     private final Map<Class<?>, ReferenceContext> referenceContextMap;
 
-    private final JaxRsInstanceManager jaxRsInstanceManager;
+    private JaxRsInstanceManager jaxRsInstanceManager;
 
     private Object managedAppRef;
 
@@ -175,7 +175,7 @@ public class JaxRsModuleMetaData {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public List<ModuleMetaData> getEnclosingModuleMetaDatas() {
@@ -189,6 +189,8 @@ public class JaxRsModuleMetaData {
         if (clientMetaData != null) {
             clientMetaData.destroy();
         }
+
+        jaxRsInstanceManager = null;
     }
 
 }

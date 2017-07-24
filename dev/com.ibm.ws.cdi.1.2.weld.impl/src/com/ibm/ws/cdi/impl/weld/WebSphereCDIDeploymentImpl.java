@@ -451,19 +451,35 @@ public class WebSphereCDIDeploymentImpl implements WebSphereCDIDeployment {
     public Iterable<Metadata<Extension>> getExtensions() {
         if (extensions == null) {
             Set<Metadata<Extension>> extensionSet = new HashSet<Metadata<Extension>>();
-            for (ClassLoader classLoader : extensionClassLoaders) {
-                Iterable<Metadata<Extension>> extensionIt = bootstrap.loadExtensions(classLoader);
-                if (extensionIt != null) {
-                    for (Metadata<Extension> extension : extensionIt) {
-                        //check whether the extension is in any archive. If not, remove it as it won't be started by Weld
-                        Class<?> extClass = extension.getValue().getClass();
-                        WebSphereBeanDeploymentArchive bda = getBeanDeploymentArchive(extClass);
-                        if (bda != null) {
-                            extensionSet.add(extension);
-                            extensionBDAs.put(bda.getId(), bda);
-                        }
+            ClassLoader oldCL = null;
+
+            try {
+                for (ClassLoader classLoader : extensionClassLoaders) {
+                    //This ensures that oldCL will be set to the TCCL from before the first itteration of the loop
+                    if (oldCL != null){
+                        CDIUtils.getAndSetLoader(classLoader);
+                    } else {
+                        oldCL = CDIUtils.getAndSetLoader(classLoader);
                     }
 
+                    Iterable<Metadata<Extension>> extensionIt = bootstrap.loadExtensions(classLoader);
+                    if (extensionIt != null) {
+                        for (Metadata<Extension> extension : extensionIt) {
+                            //check whether the extension is in any archive. If not, remove it as it won't be started by Weld
+                            Class<?> extClass = extension.getValue().getClass();
+                            WebSphereBeanDeploymentArchive bda = getBeanDeploymentArchive(extClass);
+                            if (bda != null) {
+                                extensionSet.add(extension);
+                                extensionBDAs.put(bda.getId(), bda);
+                            }
+                        }
+
+                    }
+
+                }
+            } finally{
+                if (oldCL != null){
+                    CDIUtils.getAndSetLoader(oldCL);
                 }
             }
             //if the probe is enabled, add the probe extension
@@ -533,7 +549,7 @@ public class WebSphereCDIDeploymentImpl implements WebSphereCDIDeployment {
         extensionClassLoaders.add(bda.getClassLoader());
         ArchiveType type = bda.getType();
         if (type != ArchiveType.SHARED_LIB &&
-            type != ArchiveType.RUNTIME_EXTENSION) {
+                        type != ArchiveType.RUNTIME_EXTENSION) {
             applicationBDAs.add(bda);
             appBdaClassLoaders.add(bda.getClassLoader());
         }

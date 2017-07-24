@@ -140,9 +140,6 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
     /** AutoCommit value, now tracked at all times. */
     protected boolean autoCommit; 
 
-    /** Indicates whether this Connection handle is associated with an RRS transactional mcf */
-    private boolean rrsTransactional; 
-
     /** ID of the thread which may access this handle, or null if detection is disabled. */
     protected Object threadID; 
 
@@ -193,7 +190,6 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
         mcf = managedConn.getManagedConnectionFactory();
         supportIsolvlSwitching = mcf.getHelper().isIsolationLevelSwitchingSupport(); 
         dsConfig = mcf.dsConfig; 
-        rrsTransactional = mcf.getRRSTransactional(); 
         freeResourcesOnClose = false; // To enable this, read a configured value from dsConfig
 
         // Initialize AutoCommit from the ManagedConnection.
@@ -1313,7 +1309,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
         // for this reason, it is appropriate to return an autoCommit value
         // of false any time that an RRS Global Transaction is active, even
         // if SQL has not yet been issued on the Connection
-        if (rrsTransactional) 
+        if (mcf.getHelper().getRRSTransactional()) 
         {
         	if (isTraceOn && tc.isDebugEnabled()) 
             {
