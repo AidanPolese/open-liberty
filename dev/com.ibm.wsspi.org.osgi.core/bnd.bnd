@@ -8,12 +8,12 @@
 # Contributors:
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
--include= jar:${fileuri;../com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;${repo;org.osgi:org.osgi.core;6.0.0}}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -includeresource: \
-   @../com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar!/!(OSGI-OPT/src|META-INF/maven)/*
+   @${repo;org.osgi:org.osgi.core;6.0.0}!/!(OSGI-OPT/src|META-INF/maven)/*
 
 publish.wlp.jar.suffix: dev/spi/spec
 
 -buildpath: \
-	../com.ibm.websphere.org.osgi.core/lib/org.osgi.core-6.0.0.jar;version=file
+	org.osgi:org.osgi.core;version=6.0.0
