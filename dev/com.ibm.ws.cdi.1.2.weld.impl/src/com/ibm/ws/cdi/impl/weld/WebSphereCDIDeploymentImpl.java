@@ -455,7 +455,7 @@ public class WebSphereCDIDeploymentImpl implements WebSphereCDIDeployment {
 
             try {
                 for (ClassLoader classLoader : extensionClassLoaders) {
-
+                    //This ensures that oldCL will be set to the TCCL from before the first itteration of the loop
                     if (oldCL != null){
                         CDIUtils.getAndSetLoader(classLoader);
                     } else {
