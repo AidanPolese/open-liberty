@@ -105,13 +105,17 @@ javac.bootclasspath.1.6: \
 javac.bootclasspath.1.7: \
     ${workspace}/prereq.java.1.7/lib/ibmcertpathfw.jar;version=file;boot=true, \
     ${workspace}/prereq.java.1.7/lib/ibmjcefw.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.7/lib/ibmorbapi.jar;version=file;boot=true, \
+	${workspace}/prereq.java.1.8/lib/ibmjgssfw.jar;version=file;boot=true, \
+	${workspace}/prereq.java.1.8/lib/ibmjgssprovider.jar;version=file;boot=true, \
+    ${workspace}/prereq.java.1.8/lib/ibmjssefw.jar;version=file;boot=true, \
+	${workspace}/prereq.java.1.7/lib/ibmorbapi.jar;version=file;boot=true, \
     ${workspace}/prereq.java.1.7/lib/ibmpkcs.jar;version=file;boot=true, \
     ${workspace}/prereq.java.1.7/lib/jlm.jar;version=file;boot=true, \
     ${workspace}/prereq.java.1.7/lib/math.jar;version=file;boot=true, \
     ${workspace}/prereq.java.1.7/lib/rt.jar;version=file;boot=true, \
     ${workspace}/prereq.java.1.7/lib/vm.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.7/lib/xml.jar;version=file;boot=true
+    ${workspace}/prereq.java.1.7/lib/xml.jar;version=file;boot=true, \
+	${workspace}/prereq.java.1.8/lib/xmldsigfw.jar;version=file;boot=true
 
 javac.bootclasspath.1.8: \
     ${workspace}/prereq.java.1.8/lib/ibmcertpathfw.jar;version=file;boot=true, \
