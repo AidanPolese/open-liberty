@@ -36,4 +36,4 @@ Visit the [WASdev Community](https://developer.ibm.com/wasdev/) for documentatio
 ## Community
 1. [Open Liberty group.io](https://groups.io/g/openliberty)
 2. [OpenLibertyAS on Twitter](https://twitter.com/OpenLibertyAS)
-3. stackoverflow
+3. [was-liberty tag on stackoverflow](https://stackoverflow.com/questions/tagged/websphere-liberty)
