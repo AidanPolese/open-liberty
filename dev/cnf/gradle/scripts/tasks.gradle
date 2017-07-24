@@ -17,13 +17,16 @@ subprojects {
 
   project.version = bnd('Bundle-Version', '1.0') + '.' + branchName + (true ? '-SNAPSHOT' : '')
   
+  def props = new Properties()
+  file("../generated.properties").withInputStream { props.load(it) }
+
   repositories {
 	  maven {
 		 credentials {
-			 username "cbridgha@us.ibm.com"
-			 password "AP7EpH6Vu5tERuDRmJMuPMRJiYx"
+			 username props.getProperty("artifactory.download.user")
+			 password props.getProperty("artifactory.download.token")
 		 }
-		 url "https://na.artifactory.swg-devops.com/artifactory/wasliberty-open-liberty"
+		 url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
 	  }
 }
 configurations {
@@ -47,13 +50,13 @@ task copyMavenLibs(type: Copy) {
         // Remote
         maven {
           if(project.version.endsWith('-SNAPSHOT')) {
-              url "${artifactorySnapshotUrl}${matrixParams}"
+             url "${artifactorySnapshotUrl}${matrixParams}"
           } else {
               url "${artifactoryReleaseUrl}${matrixParams}"
           }
           credentials {
-            username "erfritz@us.ibm.com"
-            password "AP7T7yNPzRSGhhpUbEf44WcuJ29"
+            username props.getProperty("artifactory.download.user")
+            password props.getProperty("artifactory.download.token")
           }
         }
       } else {
