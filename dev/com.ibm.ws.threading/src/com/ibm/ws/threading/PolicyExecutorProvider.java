@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Reference;
  * executor = policyExecutorProvider.builder().maxConcurrency(3).maxQueueSize(20).build();
  * </code>
  */
-@Component(configurationPolicy = ConfigurationPolicy.IGNORE)
+@Component(configurationPolicy = ConfigurationPolicy.IGNORE, service = { PolicyExecutorProvider.class })
 public class PolicyExecutorProvider {
     @Reference(target = "(component.name=com.ibm.ws.threading)")
     private ExecutorService globalExecutor;
