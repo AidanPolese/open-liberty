@@ -10,8 +10,6 @@
  *******************************************************************************/
 package com.ibm.ws.threading.internal;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -26,9 +24,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
@@ -42,15 +37,6 @@ public class PolicyExecutorImpl implements ExecutorService {
     private static final TraceComponent tc = Tr.register(PolicyExecutorImpl.class);
 
     private final boolean allowLifeCycleOperations;
-
-    private static final PrivilegedAction<ExecutorService> getGlobalExecutor = new PrivilegedAction<ExecutorService>() {
-        @Override
-        @Trivial
-        public ExecutorService run() {
-            BundleContext bc = FrameworkUtil.getBundle(getClass()).getBundleContext();
-            return bc.getService(bc.getServiceReference(ExecutorService.class));
-        }
-    };
 
     private ExecutorService globalExecutor;
 
@@ -74,9 +60,9 @@ public class PolicyExecutorImpl implements ExecutorService {
      * @param maxConcurrency maximum number of tasks that can be running
      * @param maxQueueSize maximum size of task queue
      */
-    public PolicyExecutorImpl(int maxConcurrency, int maxQueueSize) {
+    public PolicyExecutorImpl(ExecutorService globalExecutor, int maxConcurrency, int maxQueueSize) {
         allowLifeCycleOperations = true;
-        globalExecutor = System.getSecurityManager() == null ? getGlobalExecutor.run() : AccessController.doPrivileged(getGlobalExecutor);
+        this.globalExecutor = globalExecutor;
         this.maxConcurrency = maxConcurrency;
         queue = new LinkedBlockingQueue<FutureTask<?>>(maxQueueSize);
     }

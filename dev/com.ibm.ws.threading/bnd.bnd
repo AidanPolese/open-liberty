@@ -19,8 +19,7 @@ Bundle-SymbolicName: com.ibm.ws.threading; singleton:=true
 # file, and place an @version javadoc tag in package-level javadoc. 
 # Append ";provide:=true" if this bundle also provides an implementation
 # for the exported API.
-Export-Package: com.ibm.websphere.threading;provide:=true, \
-                com.ibm.ws.threading;provide:=true, \
+Export-Package: com.ibm.ws.threading;provide:=true, \
                 com.ibm.wsspi.threading;provide:=true, \
                 com.ibm.ws.threading.listeners
 
@@ -49,7 +48,8 @@ Service-Component=com.ibm.ws.threading.internal.DeferrableScheduledExecutorImpl;
     OSGI-INF/metatype=resources/OSGI-INF/metatype, \
     OSGI-INF=resources/OSGI-INF
 
--dsannotations: com.ibm.ws.threading.internal.ExecutorServiceImpl, \
+-dsannotations: com.ibm.ws.threading.PolicyExecutorProvider,\
+    com.ibm.ws.threading.internal.ExecutorServiceImpl, \
     com.ibm.ws.threading.internal.ThreadingIntrospector
 
 instrument.classesExcludes: com/ibm/ws/threading/internal/resources/*.class

@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.websphere.threading;
+package com.ibm.ws.threading;
 
 import java.util.concurrent.ExecutorService;
 
@@ -25,11 +25,21 @@ import com.ibm.ws.threading.internal.PolicyExecutorImpl;
  * </code>
  */
 public class PolicyExecutorBuilder {
+    private final ExecutorService globalExecutor;
     private int maxConcurrency = 10; // TODO what should the defaults be? And then include in JavaDoc.
-    private int maxQueueSize = 30;
+    private int maxQueueSize = -1; // if unspecified, will be computed from maxConcurrency
+
+    /**
+     * Construct a new builder.
+     *
+     * @param globalExecutor the Liberty global executor, which was obtained by the invoker via declarative services.
+     */
+    PolicyExecutorBuilder(ExecutorService globalExecutor) {
+        this.globalExecutor = globalExecutor;
+    }
 
     public ExecutorService build() {
-        return new PolicyExecutorImpl(maxConcurrency, maxQueueSize);
+        return new PolicyExecutorImpl(globalExecutor, maxConcurrency, maxQueueSize);
     }
 
     /**
@@ -48,8 +58,8 @@ public class PolicyExecutorBuilder {
 
     /**
      * Specifies the maximum number of tasks that can queue up at any given
-     * point in time. Tasks queue up before starting, so ensure the maximum
-     * queue size is at least as large as the maximum concurrency.
+     * point in time. Tasks queue up before starting, so it is often the case
+     * that maximum queue size should be at least as large as the maximum concurrency.
      *
      * @param max maximum number of queued tasks.
      * @return the builder.
