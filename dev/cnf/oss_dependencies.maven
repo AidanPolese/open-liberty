@@ -153,3 +153,6 @@ org.osgi:org.osgi.service.subsystem:1.1.0
 org.powermock:powermock-core:1.5
 org.slf4j:slf4j-api:1.7.7
 org.slf4j:slf4j-jdk14:1.7.7
+org.osgi:org.osgi.core:6.0.0
+com.google.inject:guice:2.0
+com.sun.org.apache.xml.internal:resolver:20050927

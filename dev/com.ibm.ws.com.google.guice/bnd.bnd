@@ -9,6 +9,6 @@
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
 # ${repo;com.google.inject}
--include= jar:${fileuri;lib/guice-2.0.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;${repo;com.google.inject:guice;2.0}}!/META-INF/MANIFEST.MF,bnd.overrides
 
--buildpath: lib/guice-2.0.jar;version=file
+-buildpath: com.google.inject:guice;version=2.0
