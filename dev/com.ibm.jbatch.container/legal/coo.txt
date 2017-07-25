@@ -1,9 +1,0 @@
-Both of these projects were originally forked from IBM's 'jbatch' JSR 352 Reference Implementation of the Java Batch 1.0 standard.
-
-For more complete description of the history, rationale, intentions and details of our code reuse, please see the AWSOM proposal governing this product inclusion:
-SWG115920141022
-
-Source Code Origin:
-
-jbatch - https://github.com/WASdev/standards.jsr352.jbatch - 99+% WebSphere code, which has been since opened for non-IBM contributions
-BatchEE - https://git-wip-us.apache.org/repos/asf/incubator-batchee.git version 0.2
