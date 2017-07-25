@@ -1,3 +1,0 @@
-dependencies {
-   compile files(org.gradle.internal.jvm.Jvm.current().toolsJar)
-}
