@@ -37,6 +37,9 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.framework.wiring.BundleRevision;
@@ -91,6 +94,7 @@ public class ProvisionerTest {
 
     final Bundle mockBundle = context.mock(Bundle.class);
     final BundleContext mockBundleContext = context.mock(BundleContext.class);
+    final Filter mockFilter = context.mock(Filter.class);
     final TestBundleRevision mockBundleRevision = context.mock(TestBundleRevision.class);
     final TestBundleStartLevel mockBundleStartLevel = context.mock(TestBundleStartLevel.class);
     final TestFrameworkStartLevel mockFrameworkStartLevel = context.mock(TestFrameworkStartLevel.class);
@@ -109,6 +113,13 @@ public class ProvisionerTest {
                 will(returnValue(mockFrameworkStartLevel));
 
                 one(mockFrameworkStartLevel).setInitialBundleStartLevel(KernelStartLevel.ACTIVE.getLevel());
+
+                allowing(mockBundleContext).createFilter(with(any(String.class)));
+                will(returnValue(mockFilter));
+
+                allowing(mockBundleContext).addServiceListener(with(any(ServiceListener.class)), with(any(String.class)));
+                allowing(mockBundleContext).getServiceReferences("com.ibm.ws.kernel.provisioning.LibertyBootRuntime", null);
+                will(returnValue(new ServiceReference[0]));
             }
         });
     }

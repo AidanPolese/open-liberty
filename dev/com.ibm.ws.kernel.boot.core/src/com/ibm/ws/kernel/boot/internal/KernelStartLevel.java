@@ -18,7 +18,9 @@ public enum KernelStartLevel {
     KERNEL(4),
     KERNEL_LATE(6),
     FEATURE_PREPARE(7),
-    ACTIVE(20);
+    ACTIVE(20),
+    // LIBERTY_BOOT is a special start-level used as internal marker for boot jars
+    LIBERTY_BOOT(123456789);
 
     final int startLevel;
 

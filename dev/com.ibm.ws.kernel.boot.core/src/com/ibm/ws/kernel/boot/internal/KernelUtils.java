@@ -30,28 +30,28 @@ import com.ibm.ws.kernel.boot.cmdline.Utils;
 public class KernelUtils {
     /**
      * File representing the launch location.
-     * 
+     *
      * @see {@link #getBootstrapJar()}
      */
     private static File launchHome = null;
 
     /**
      * URL representing the launch location.
-     * 
+     *
      * @see {@link #getBootstrapJar()}
      */
     private static URL launchURL = null;
 
     /**
      * File representing the fixed lib directory.
-     * 
+     *
      * @see {@link #getBootstrapJar()}
      */
     private static File libDir = null;
 
     /**
      * The location of the launch jar is only obtained once.
-     * 
+     *
      * @return a File representing the location of the launching jar
      */
     public static File getBootstrapJar() {
@@ -77,8 +77,8 @@ public class KernelUtils {
         }
         URL home = source.getLocation();
         if (!home.getProtocol().equals("file"))
-            throw new LaunchException("Launch location is not a local file (launch location=" + launchHome + ")",
-                            MessageFormat.format(BootstrapConstants.messages.getString("error.unsupportedLaunch"), launchHome));
+            throw new LaunchException("Launch location is not a local file (launch location=" + home + ")",
+                            MessageFormat.format(BootstrapConstants.messages.getString("error.unsupportedLaunch"), home));
         return home;
     }
 
@@ -91,7 +91,7 @@ public class KernelUtils {
 
     /**
      * The lib dir is the parent of the bootstrap jar
-     * 
+     *
      * @return a File representing the location of the launching jar
      */
     public static File getBootstrapLibDir() {
@@ -101,6 +101,12 @@ public class KernelUtils {
         return libDir;
     }
 
+    public static void setBootStrapLibDir(File libDir) {
+        // For liberty boot we need to be able to set the lib dir
+        // explicitly because the boot jar will not be located in lib
+        KernelUtils.libDir = libDir;
+    }
+
     public static void cleanStart(File workareaFile) {
         cleanDirectory(workareaFile, "workarea");
     }
@@ -108,7 +114,7 @@ public class KernelUtils {
     /**
      * Read properties from input stream. Will close the input stream before
      * returning.
-     * 
+     *
      * @param is
      *            InputStream to read properties from
      * @return Properties object; will be empty if InputStream is null or empty.
@@ -161,7 +167,7 @@ public class KernelUtils {
     /**
      * Read a service class from the given line. Must ignore whitespace, and
      * skip comment lines, or end of line comments.
-     * 
+     *
      * @param line
      * @return class name (first text on a line not starting with #) or null for
      *         empty/comment lines
@@ -184,7 +190,7 @@ public class KernelUtils {
 
     /**
      * This
-     * 
+     *
      * @param stateDir
      */
     public static void cleanDirectory(File dir, String dirType) {
