@@ -102,10 +102,10 @@ class ServerXMLConfiguration {
      * bundle's default configurations(i.e. bundle.cfg).
      * <P>
      * Generally, this should be only done once at the beginning before any of the bundle's default configurations are processed.
-     * 
+     *
      * @throws ConfigValidationException
      * @throws ConfigParserException
-     * 
+     *
      */
 
     @FFDCIgnore(ConfigParserTolerableException.class)
@@ -115,10 +115,10 @@ class ServerXMLConfiguration {
             try {
                 serverConfiguration = loadServerConfiguration();
                 if (serverConfiguration == null) {
-                    // This only happens if there is a parser error and onError has been set to IGNORE or WARN. 
+                    // This only happens if there is a parser error and onError has been set to IGNORE or WARN.
                     // We're just avoiding an NPE here. The user will see the server start up with a warning
                     // that nothing has been configured. This is less than ideal in the case of IGNORE, but it's
-                    // the behavior the user has asked for. 
+                    // the behavior the user has asked for.
                     serverConfiguration = new ServerConfiguration();
                 }
             } catch (ConfigParserTolerableException ex) {
@@ -136,7 +136,7 @@ class ServerXMLConfiguration {
         try {
             variableRegistry.updateSystemVariables(getVariables());
         } catch (ConfigMergeException e) {
-            // Rethrow if onError=FAIL. An error message has already been issued otherwise. 
+            // Rethrow if onError=FAIL. An error message has already been issued otherwise.
             if (ErrorHandler.INSTANCE.fail()) {
                 throw new ConfigParserTolerableException(e);
             }
@@ -238,7 +238,7 @@ class ServerXMLConfiguration {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
          */
         @Override
@@ -275,7 +275,7 @@ class ServerXMLConfiguration {
                 throw ex;
             } catch (ConfigParserException cpe) {
                 // Wait a short period of time and retry. This is to attempt to handle the case where we
-                // parse the configuration in the middle of a file update. 
+                // parse the configuration in the middle of a file update.
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -295,7 +295,7 @@ class ServerXMLConfiguration {
             parser.handleParseError(ex, null);
 
             if (ErrorHandler.INSTANCE.fail()) {
-                // if onError=FAIL, bubble the exception up the stack                
+                // if onError=FAIL, bubble the exception up the stack
                 throw ex;
             } else if (ex instanceof ConfigParserTolerableException) {
                 // Mark the last update for the configuration so that we don't try to load it again
@@ -336,6 +336,14 @@ class ServerXMLConfiguration {
             for (int i = 0; i < defaultFiles.length; i++) {
                 File file = defaultFiles[i];
                 WsResource defaultFile = directory.getChild(file.getName());
+                if (defaultFile == null) {
+                    // This should never happen, but it's conceivable that someone could remove a file
+                    // after listFiles and before getChild
+                    if (tc.isDebugEnabled()) {
+                        Tr.debug(tc, file.getName() + " was not found in directory " + directory.getName() + ". Ignoring. ");
+                    }
+                    continue;
+                }
                 Tr.audit(tc, "audit.dropin.being.processed", defaultFile.asFile());
                 try {
                     parser.parseServerConfiguration(defaultFile, configuration);
@@ -343,7 +351,7 @@ class ServerXMLConfiguration {
                     parser.handleParseError(ex, null);
 
                     if (ErrorHandler.INSTANCE.fail()) {
-                        // if onError=FAIL, bubble the exception up the stack                
+                        // if onError=FAIL, bubble the exception up the stack
                         throw ex;
                     } else {
                         // Mark the last update for the configuration so that we don't try to load it again
