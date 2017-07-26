@@ -340,7 +340,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      * @throws AuthenticationException if no cached subject was found
      */
     private Subject findSubjectByTokenContents(AuthCacheService authCacheService, String token, byte[] ssoTokenBytes,
-                                               AuthenticationData authenticaitonData) throws AuthenticationException {
+                                               AuthenticationData authenticationData) throws AuthenticationException {
         Subject subject = null;
         if (token != null) {
             subject = authCacheService.getSubject(token);
@@ -356,7 +356,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 throw new AuthenticationException("Invalid LTPA Token");
             }
 
-            String customCacheKey = CustomCacheKeyProvider.getCustomCacheKey(authCacheService, ssoTokenBytes, null);
+            String customCacheKey = CustomCacheKeyProvider.getCustomCacheKey(authCacheService, ssoTokenBytes, authenticationData);
             if (customCacheKey != null) {
                 subject = authCacheService.getSubject(customCacheKey);
                 if (subject == null) {
