@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashSet;
@@ -64,8 +65,7 @@ import com.ibm.ws.jaxrs20.multipart.impl.MultipartBodyImpl;
 @Provider
 @Consumes({ "multipart/related", "multipart/mixed", "multipart/alternative", "multipart/form-data" })
 @Produces({ "multipart/related", "multipart/mixed", "multipart/alternative", "multipart/form-data" })
-public class IBMMultipartProvider extends AbstractConfigurableProvider
-                implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
+public class IBMMultipartProvider extends AbstractConfigurableProvider implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
 
     private final MultipartProvider multipartProvider = new MultipartProvider();
     private static final Set<Class<?>> WELL_KNOWN_MULTIPART_CLASSES;
@@ -213,15 +213,14 @@ public class IBMMultipartProvider extends AbstractConfigurableProvider
      */
     @Override
     public Object readFrom(Class<Object> c, Type t, Annotation[] anns, MediaType mt,
-                           MultivaluedMap<String, String> headers, InputStream is)
-                    throws IOException, WebApplicationException {
+                           MultivaluedMap<String, String> headers, InputStream is) throws IOException, WebApplicationException {
         // TODO Auto-generated method stub
         //if Type t contains IAttachment, IMutibody, convert to Attachment, Mutibody to adapt CXF MultipartProvider.readFrom
         multipartProvider.setMessageContext(mc);
-        IBMParameterizedTypeImpl origType = null;
+        ParameterizedType origType = null;
         Type[] actualType = null;
-        if (IBMParameterizedTypeImpl.class.isAssignableFrom(t.getClass())) {
-            origType = (IBMParameterizedTypeImpl) t;
+        if (ParameterizedType.class.isAssignableFrom(t.getClass())) {
+            origType = (ParameterizedType) t;
             actualType = origType.getActualTypeArguments();
             for (int i = 0; i < actualType.length; i++) {
                 if (actualType[i].equals(IAttachment.class)) {

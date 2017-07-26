@@ -55,7 +55,6 @@ import com.ibm.ws.jsp.translator.visitor.JspVisitorInputMap;
 import com.ibm.ws.jsp.translator.visitor.tagfilescan.TagFileScanResult;
 import com.ibm.ws.webcontainer.webapp.WebAppConfiguration;
 import com.ibm.wsspi.adaptable.module.Container;
-//import com.ibm.wsspi.adaptable.module.Entry;
 import com.ibm.wsspi.adaptable.module.NonPersistentCache;
 import com.ibm.wsspi.adaptable.module.UnableToAdaptException;
 import com.ibm.wsspi.jsp.context.translation.JspTranslationContext;
