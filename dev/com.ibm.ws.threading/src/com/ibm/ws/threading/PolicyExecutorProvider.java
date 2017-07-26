@@ -16,15 +16,25 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 
+import com.ibm.ws.threading.internal.PolicyExecutorImpl;
+
 /**
- * <p>Provider class which can programmatically build policy executors.
- * Policy executors are backed by the Liberty global thread pool,
+ * <p>Provider class which can programmatically create policy executors.
+ * The ability to create programmatically is provided for server components
+ * which do not have any way of using a policyExecutor from server configuration.
+ * Components with server configuration should instead rely on policyExecutor
+ * instances from server config, which is the preferred approach, rather than
+ * using PolicyExecutorProvider.</p>
+ *
+ * <p>Policy executors are backed by the Liberty global thread pool,
  * but allow concurrency constraints and various queue attributes
- * to be controlled independently of the global thread pool.
- * For example, to build a policy executor that allows at most 3 tasks to
+ * to be controlled independently of the global thread pool.</p>
+ *
+ * <p>For example, to create a policy executor that allows at most 3 tasks to
  * be active at any given point and can queue up to 20 tasks,</p>
+ *
  * <code>
- * executor = policyExecutorProvider.builder().maxConcurrency(3).maxQueueSize(20).build();
+ * executor = PolicyExecutorProvider.create("AtMost3ConcurrentPolicy").maxConcurrency(3).maxQueueSize(20);
  * </code>
  */
 @Component(configurationPolicy = ConfigurationPolicy.IGNORE, service = { PolicyExecutorProvider.class })
@@ -33,11 +43,12 @@ public class PolicyExecutorProvider {
     private ExecutorService globalExecutor;
 
     /**
-     * Creates a new builder instance.
+     * Creates a new policy executor instance.
      *
-     * @return a new builder instance.
+     * @param identifier unique identifier for this instance, to be used for monitoring and problem determination.
+     * @return a new policy executor instance.
      */
-    public PolicyExecutorBuilder builder() {
-        return new PolicyExecutorBuilder(globalExecutor);
+    public PolicyExecutor create(String identifier) {
+        return new PolicyExecutorImpl(globalExecutor, identifier);
     }
 }

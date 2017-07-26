@@ -27,20 +27,23 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
+import com.ibm.ws.threading.PolicyExecutor;
 
 /**
  * Policy executors are backed by the Liberty global thread pool,
  * but allow concurrency constraints and various queue attributes
  * to be controlled independently of the global thread pool.
  */
-public class PolicyExecutorImpl implements ExecutorService {
+public class PolicyExecutorImpl implements PolicyExecutor {
     private static final TraceComponent tc = Tr.register(PolicyExecutorImpl.class);
-
-    private final boolean allowLifeCycleOperations;
 
     private ExecutorService globalExecutor;
 
-    private int maxConcurrency;
+    private String identifier;
+
+    private final boolean isServerConfigured;
+
+    private final AtomicInteger maxConcurrency = new AtomicInteger(Integer.MAX_VALUE);
 
     final AtomicInteger numTasksOnGlobal = new AtomicInteger();
 
@@ -51,20 +54,19 @@ public class PolicyExecutorImpl implements ExecutorService {
      * The majority of initialization logic should be performed in the activate method, not here.
      */
     public PolicyExecutorImpl() {
-        allowLifeCycleOperations = false;
+        isServerConfigured = true;
     }
 
     /**
-     * Constructor for PolicyExecutorBuilder.
+     * This constructor is used by PolicyExecutorProvider.
      *
-     * @param maxConcurrency maximum number of tasks that can be running
-     * @param maxQueueSize maximum size of task queue
+     * @param globalExecutor the Liberty global executor, which was obtained by the PolicyExecutorProvider via declarative services.
+     * @param identifier unique identifier for this instance, to be used for monitoring and problem determination.
      */
-    public PolicyExecutorImpl(ExecutorService globalExecutor, int maxConcurrency, int maxQueueSize) {
-        allowLifeCycleOperations = true;
+    public PolicyExecutorImpl(ExecutorService globalExecutor, String identifier) {
+        isServerConfigured = false;
         this.globalExecutor = globalExecutor;
-        this.maxConcurrency = maxConcurrency;
-        queue = new LinkedBlockingQueue<FutureTask<?>>(maxQueueSize);
+        this.identifier = "PolicyExecutorProvider-" + identifier;
     }
 
     @Override
@@ -119,7 +121,8 @@ public class PolicyExecutorImpl implements ExecutorService {
      * @return true if incremented, otherwise false.
      */
     private boolean incrementNumTasksOnGlobal() {
-        for (int n = numTasksOnGlobal.get(); n < maxConcurrency; n = numTasksOnGlobal.get())
+        int max = maxConcurrency.get();
+        for (int n = numTasksOnGlobal.get(); n < max; n = numTasksOnGlobal.get())
             if (numTasksOnGlobal.compareAndSet(n, n + 1))
                 return true;
         return false;
@@ -153,6 +156,39 @@ public class PolicyExecutorImpl implements ExecutorService {
     @Override
     public boolean isTerminated() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public PolicyExecutor maxConcurrency(int max) {
+        if (isServerConfigured)
+            throw new UnsupportedOperationException();
+
+        if (max < 1)
+            throw new IllegalArgumentException(Integer.toString(max));
+        else if (max == -1)
+            max = Integer.MAX_VALUE;
+
+        maxConcurrency.set(max);
+
+        return this;
+    }
+
+    @Override
+    public PolicyExecutor maxQueueSize(int max) {
+        if (isServerConfigured)
+            throw new UnsupportedOperationException();
+
+        // TODO unbounded queue should be pre-created, and semaphore should be adjusted per the maxQueueSize constraint
+        if (queue == null) {
+            if (max < 1)
+                throw new IllegalArgumentException(Integer.toString(max));
+            else if (max == -1)
+                max = Integer.MAX_VALUE;
+            queue = new LinkedBlockingQueue<FutureTask<?>>(max);
+        } else
+            throw new IllegalStateException();
+
+        return this;
     }
 
     @Override
