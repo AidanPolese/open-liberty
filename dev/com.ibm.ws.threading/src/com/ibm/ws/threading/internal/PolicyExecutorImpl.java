@@ -12,14 +12,14 @@ package com.ibm.ws.threading.internal;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -45,9 +45,25 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     private final AtomicInteger maxConcurrency = new AtomicInteger(Integer.MAX_VALUE);
 
+    private int maxQueueSize;
+
+    final ReduceableSemaphore maxQueueSizeConstraint = new ReduceableSemaphore();
+
     final AtomicInteger numTasksOnGlobal = new AtomicInteger();
 
-    BlockingQueue<FutureTask<?>> queue;
+    final ConcurrentLinkedQueue<FutureTask<?>> queue = new ConcurrentLinkedQueue<FutureTask<?>>();
+
+    @SuppressWarnings("serial") // never serialized
+    static class ReduceableSemaphore extends Semaphore {
+        private ReduceableSemaphore() {
+            super(0);
+        }
+
+        @Override // to make visible
+        public void reducePermits(int reduction) {
+            super.reducePermits(reduction);
+        }
+    }
 
     /**
      * Constructor for declarative services.
@@ -67,6 +83,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         isServerConfigured = false;
         this.globalExecutor = globalExecutor;
         this.identifier = "PolicyExecutorProvider-" + identifier;
+        maxQueueSizeConstraint.release(maxQueueSize = Integer.MAX_VALUE);
     }
 
     @Override
@@ -86,7 +103,8 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     @Trivial // because invoker is traced
     private void enqueue(FutureTask<?> futureTask) {
         try {
-            if (queue.offer(futureTask)) { // TODO apply maxWaitForEnqueue if configured
+            if (maxQueueSizeConstraint.tryAcquire()) { // TODO apply maxWaitForEnqueue if configured
+                queue.offer(futureTask);
                 if (incrementNumTasksOnGlobal()) {
                     Future<?> policyTaskFuture = null;
                     try {
@@ -178,15 +196,17 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         if (isServerConfigured)
             throw new UnsupportedOperationException();
 
-        // TODO unbounded queue should be pre-created, and semaphore should be adjusted per the maxQueueSize constraint
-        if (queue == null) {
-            if (max < 1)
-                throw new IllegalArgumentException(Integer.toString(max));
-            else if (max == -1)
-                max = Integer.MAX_VALUE;
-            queue = new LinkedBlockingQueue<FutureTask<?>>(max);
-        } else
-            throw new IllegalStateException();
+        if (max < 1)
+            throw new IllegalArgumentException(Integer.toString(max));
+        else if (max == -1)
+            max = Integer.MAX_VALUE;
+
+        int increase = max - maxQueueSize;
+        if (increase > 0)
+            maxQueueSizeConstraint.release(increase);
+        else if (increase < 0)
+            maxQueueSizeConstraint.reducePermits(-increase);
+        maxQueueSize = max;
 
         return this;
     }
