@@ -78,7 +78,6 @@ import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 import javax.naming.ldap.Control;
-import javax.naming.ldap.LdapContext;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.PagedResultsControl;
 import javax.naming.ldap.PagedResultsResponseControl;
@@ -130,11 +129,6 @@ public class LdapConnection {
      * The key to extract the id of the configuration. The value returned by this is used as the repository id.
      */
     private static final String KEY_ID = "config.id";
-
-    /**
-     * Constant for JNDI_CALL trace
-     */
-    public static final String JNDI_CALL = "JNDI_CALL ";
 
     /**
      * Semaphore for locking.
@@ -263,7 +257,7 @@ public class LdapConnection {
     /**
      * List that acts as a storage for the Pool of Directory contexts.
      */
-    private List<DirContext> iContexts = null;
+    private List<TimedDirContext> iContexts = null;
 
     /**
      * The initial pool size for the DirContext pool. Defaults to 1.
@@ -515,7 +509,7 @@ public class LdapConnection {
     public NameParser getNameParser() throws WIMException {
         final String METHODNAME = "getNameParser()";
         if (iNameParser == null) {
-            DirContext ctx = getDirContext();
+            TimedDirContext ctx = getDirContext();
             try {
                 try {
                     iNameParser = ctx.getNameParser("");
@@ -1238,30 +1232,23 @@ public class LdapConnection {
         if (iAttrRangeStep > 0) {
             attributes = getRangeAttributes(name, attrIds);
         } else {
-            DirContext ctx = getDirContext();
+            TimedDirContext ctx = getDirContext();
             try {
                 try {
-                    if (tc.isDebugEnabled()) {
-                        Tr.debug(tc, JNDI_CALL + METHODNAME, WIMMessageHelper.generateMsgParms(name, WIMTraceHelper.printObjectArray(attrIds)));
-                    }
-                    if (attrIds.length > 0)
+                    if (attrIds.length > 0) {
                         attributes = ctx.getAttributes(new LdapName(name), attrIds);
-                    else
+                    } else {
                         attributes = new BasicAttributes();
-                    if (tc.isDebugEnabled()) {
-                        Tr.debug(tc, JNDI_CALL + METHODNAME, attributes.toString());
                     }
                 } catch (NamingException e) {
                     if (!isConnectionException(e, METHODNAME)) {
                         throw e;
                     }
                     ctx = reCreateDirContext(ctx, e.toString());
-                    if (attrIds.length > 0)
+                    if (attrIds.length > 0) {
                         attributes = ctx.getAttributes(new LdapName(name), attrIds);
-                    else
+                    } else {
                         attributes = new BasicAttributes();
-                    if (tc.isDebugEnabled()) {
-                        Tr.debug(tc, JNDI_CALL + METHODNAME, attributes.toString());
                     }
                 }
             } catch (NameNotFoundException e) {
@@ -1284,21 +1271,12 @@ public class LdapConnection {
     @FFDCIgnore({ NameNotFoundException.class, NamingException.class })
     private Attributes getRangeAttributes(String name, String[] attrIds) throws WIMException {
         final String METHODNAME = "getRangeAttributes";
-        final String JNDIMETHODNAME = JNDI_CALL + "getRangeAttributes(String, String[])";
 
         Attributes attributes = null;
-        DirContext ctx = getDirContext();
+        TimedDirContext ctx = getDirContext();
         try {
             try {
-                if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, JNDIMETHODNAME, WIMMessageHelper.generateMsgParms(name,
-                                                                                   WIMTraceHelper.printObjectArray(attrIds)));
-                }
                 attributes = ctx.getAttributes(new LdapName(name), attrIds);
-                if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, JNDIMETHODNAME, attributes.toString());
-                }
-
             } catch (NamingException e) {
                 if (!isConnectionException(e, METHODNAME)) {
                     throw e;
@@ -1390,14 +1368,31 @@ public class LdapConnection {
         }
     }
 
-    private void updateAttributesCache(String key, String dn, Attributes newAttrs, String[] attrIds) {
+    /**
+     * Update the attributes cache by adding a mapping of the unique name to distinguished name
+     * and mapping the distinguished name to the updated attributes.
+     *
+     * @param uniqueNameKey The unique name to map the distinguished name to.
+     * @param dn The distinguished name to map to the unique name. This will also be used to map
+     *            the attributes to.
+     * @param newAttrs The new attributes.
+     * @param attrIds The attribute IDs.
+     */
+    private void updateAttributesCache(String uniqueNameKey, String dn, Attributes newAttrs, String[] attrIds) {
         final String METHODNAME = "updateAttributesCache(key,dn,newAttrs)";
-        // Add uniqueName to DN mapping to cache
-        getAttributesCache().put(key, dn, 1, iAttrsCacheTimeOut, 0, null);
-        if (tc.isDebugEnabled())
-            Tr.debug(tc, METHODNAME + " Update " + iAttrsCacheName + "(size: "
-                         + getAttributesCache().size() + ")\n" + key + ": " + dn);
 
+        /*
+         * Add uniqueName to DN mapping to cache
+         */
+        getAttributesCache().put(uniqueNameKey, dn, 1, iAttrsCacheTimeOut, 0, null);
+        if (tc.isDebugEnabled()) {
+            Tr.debug(tc, METHODNAME + " Update " + iAttrsCacheName + "(size: "
+                         + getAttributesCache().size() + ")\n" + uniqueNameKey + ": " + dn);
+        }
+
+        /*
+         * Add the DN to Attributes mapping to the cache.
+         */
         String dnKey = toKey(dn);
         Object cached = getAttributesCache().get(dnKey);
         Attributes cachedAttrs = null;
@@ -1407,8 +1402,17 @@ public class LdapConnection {
         updateAttributesCache(dnKey, newAttrs, cachedAttrs, attrIds);
     }
 
+    /**
+     * Update the cached attributes for the specified key. Only attribute IDs that are in the
+     * "missAttrIds" array will be added into the cached attributes.
+     *
+     * @param key The key for the cached attributes. This is usually the distinguished name.
+     * @param missAttrs The missing/new attributes.
+     * @param cachedAttrs The cached attributes.
+     * @param missAttrIds The missing/new attribute IDs.
+     */
     private void updateAttributesCache(String key, Attributes missAttrs, Attributes cachedAttrs, String[] missAttrIds) {
-        final String METHODNAME = "updateAttributeCache";
+        final String METHODNAME = "updateAttributesCache(key,missAttrs,cachedAttrs,missAttrIds)";
         if (missAttrIds != null) {
             if (missAttrIds.length > 0) {
                 if (cachedAttrs != null) {
@@ -1459,6 +1463,13 @@ public class LdapConnection {
         }
     }
 
+    /**
+     * Update the attributes cache for the specified key.
+     *
+     * @param key The key for the cached attributes. This is usually the distinguished name.
+     * @param missAttrs The missing/new attributes.
+     * @param cachedAttrs The cached attributes.
+     */
     private void updateAttributesCache(String key, Attributes missAttrs, Attributes cachedAttrs) {
         final String METHODNAME = "updateAttributeCache(key,missAttrs,cachedAttrs)";
         if (missAttrs.size() > 0) {
@@ -1556,7 +1567,7 @@ public class LdapConnection {
                         }
                     }
                 } catch (NamingException e) {
-                    e.getMessage();
+                    /* Ignore. */
                 }
             }
         }
@@ -1605,12 +1616,8 @@ public class LdapConnection {
                                                    SearchControls cons, Control requestControls[]) throws WIMException {
         final String METHODNAME = "search(String, String, Object[], SearchControls)";
 
-        if (tc.isDebugEnabled()) {
-            Tr.debug(tc, JNDI_CALL + METHODNAME + LdapHelper.printSearchControls(cons));
-        }
-
         if (iPageSize == 0) {
-            DirContext ctx = getDirContext();
+            TimedDirContext ctx = getDirContext();
             NamingEnumeration<SearchResult> neu = null;
             try {
                 try {
@@ -1646,7 +1653,7 @@ public class LdapConnection {
 
             return neu;
         } else {
-            LdapContext ctx = (LdapContext) getDirContext();
+            TimedDirContext ctx = getDirContext();
             try {
                 if (requestControls != null) {
                     ctx.setRequestControls(new Control[] { requestControls[0], new PagedResultsControl(iPageSize, false) });
@@ -1671,7 +1678,7 @@ public class LdapConnection {
                         }
                     } catch (NamingException e) {
                         if ((e instanceof CommunicationException) || (e instanceof ServiceUnavailableException)) {
-                            ctx = (LdapContext) reCreateDirContext(ctx, e.toString());
+                            ctx = reCreateDirContext(ctx, e.toString());
 
                             if (requestControls != null) {
                                 ctx.setRequestControls(new Control[] { requestControls[0], new PagedResultsControl(iPageSize, false) });
@@ -1731,6 +1738,16 @@ public class LdapConnection {
         }
     }
 
+    /**
+     * Get the attributes for the entity with the specified unique name. This method will make
+     * use of the attribute cache when possible.
+     *
+     * @param uniqueName The unique name to get the attributes for.
+     * @param attrIds The attribute IDs to retrieve.
+     * @param entityTypes The entity types to consider. This includes all sub-types.
+     * @return The entities.
+     * @throws WIMException If there was an issue calling the LDAP server to get the attributes.
+     */
     public Attributes getAttributesByUniqueName(String uniqueName, String[] attrIds, List<String> entityTypes) throws WIMException {
         final String METHODNAME = "getAttributesByUniqueName";
 
@@ -1758,36 +1775,44 @@ public class LdapConnection {
         }
 
         boolean readFromCache = false;
-        Object cached = null;
-        String key = toKey(uniqueName);
+        String uniqueNameKey = "UNIQUENAME::" + toKey(uniqueName);
         if (getAttributesCache() != null) {
             readFromCache = true;
-            cached = getAttributesCache().get(key);
-        }
-        if (cached != null && cached instanceof String) {
-            DN = (String) cached;
-            try {
-                attributes = checkAttributesCache(DN, attrIds);
-                attributes.put(LDAP_DN, DN);
-                return attributes;
+            Object cached = getAttributesCache().get(uniqueNameKey);
 
-            } catch (EntityNotFoundException e) {
-                // Name not found, invalidate this entry and continue doing search
-                getAttributesCache().invalidate(key);
+            if (cached != null) {
+                if (cached instanceof String) {
+                    /*
+                     * This may be a uniqueName to distinguished name mapping entry. Use the distinguished
+                     * name to look up the attributes.
+                     */
+                    DN = (String) cached;
+                    try {
+                        attributes = checkAttributesCache(DN, attrIds);
+                        attributes.put(LDAP_DN, DN);
+                        return attributes;
+
+                    } catch (EntityNotFoundException e) {
+                        // Name not found, invalidate this entry and continue doing search
+                        getAttributesCache().invalidate(uniqueNameKey);
+                    }
+                }
             }
         }
+
+        /*
+         * We didn't find any cached attributes, so search for the entity and it's attributes.
+         */
         String filter = iLdapConfigMgr.getLdapRDNFilter(null, LdapHelper.getRDN(uniqueName));
         String parent = LdapHelper.getParentDN(uniqueName);
         SearchControls controls = new SearchControls();
         controls.setTimeLimit(iTimeLimit);
         controls.setCountLimit(iCountLimit);
-        //controls.setSearchScope(SearchControls.OBJECT_SCOPE);
         controls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
-        // Only retrieve request attributes
-        controls.setReturningAttributes(attrIds);
+        controls.setReturningAttributes(attrIds); // Only retrieve requested attributes
         controls.setReturningObjFlag(false);
 
-        DirContext ctx = getDirContext();
+        TimedDirContext ctx = getDirContext();
         NamingEnumeration<SearchResult> neu = null;
         try {
             try {
@@ -1811,29 +1836,23 @@ public class LdapConnection {
             }
 
         } catch (NameNotFoundException e) {
-            throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, Tr.formatMessage(
-                                                                                               tc,
-                                                                                               WIMMessageKey.ENTITY_NOT_FOUND,
-                                                                                               WIMMessageHelper.generateMsgParms(parent)));
+            String msg = Tr.formatMessage(tc, WIMMessageKey.ENTITY_NOT_FOUND, WIMMessageHelper.generateMsgParms(parent));
+            throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, msg);
         } catch (NamingException e) {
-            throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION, Tr.formatMessage(
-                                                                                          tc,
-                                                                                          WIMMessageKey.NAMING_EXCEPTION,
-                                                                                          WIMMessageHelper.generateMsgParms(e.toString(true))));
+            String msg = Tr.formatMessage(tc, WIMMessageKey.NAMING_EXCEPTION, WIMMessageHelper.generateMsgParms(e.toString(true)));
+            throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION, msg);
         } finally {
             releaseDirContext(ctx);
         }
 
         if (attributes != null) {
             if (readFromCache) {
-                updateAttributesCache(key, DN, attributes, attrIds);
+                updateAttributesCache(uniqueNameKey, DN, attributes, attrIds);
             }
             attributes.put(LDAP_DN, DN);
         } else {
-            throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, Tr.formatMessage(
-                                                                                               tc,
-                                                                                               WIMMessageKey.ENTITY_NOT_FOUND,
-                                                                                               WIMMessageHelper.generateMsgParms(uniqueName)));
+            String msg = Tr.formatMessage(tc, WIMMessageKey.ENTITY_NOT_FOUND, WIMMessageHelper.generateMsgParms(uniqueName));
+            throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, msg);
         }
 
         return attributes;
@@ -2040,10 +2059,9 @@ public class LdapConnection {
     }
 
     @FFDCIgnore({ NumberFormatException.class, NamingException.class })
-    private void supportRangeAttributes(Attributes attributes, String dn, DirContext ctx) throws WIMException, NamingException {
+    private void supportRangeAttributes(Attributes attributes, String dn, TimedDirContext ctx) throws WIMException, NamingException {
 
         final String METHODNAME = "supportRangeAttributes";
-        final String JNDIMETHODNAME = JNDI_CALL + "getAttributes(String, String[])";
 
         // Deal with range attributes
         for (NamingEnumeration<?> anu = attributes.getAll(); anu.hasMoreElements();) {
@@ -2089,14 +2107,7 @@ public class LdapConnection {
                                           attributeWithRange
                     };
                     try {
-                        if (tc.isDebugEnabled()) {
-                            Tr.debug(tc, JNDIMETHODNAME, WIMMessageHelper.generateMsgParms(dn, WIMTraceHelper.printObjectArray(rAttrIds)));
-                        }
-
                         results = ctx.getAttributes(new LdapName(dn), rAttrIds);
-                        if (tc.isDebugEnabled()) {
-                            Tr.debug(tc, JNDIMETHODNAME, results.toString());
-                        }
                     } catch (NamingException e) {
                         if ((e instanceof CommunicationException) || (e instanceof ServiceUnavailableException)) {
                             ctx = reCreateDirContext(ctx, e.toString());
@@ -2136,9 +2147,9 @@ public class LdapConnection {
     }
 
     @FFDCIgnore({ InterruptedException.class, NamingException.class })
-    private DirContext getDirContext() throws WIMSystemException {
+    private TimedDirContext getDirContext() throws WIMSystemException {
         final String METHODNAME = "getDirContext";
-        DirContext ctx = null;
+        TimedDirContext ctx = null;
         long currentTime = System.currentTimeMillis() / 1000;
         // String sDomainName = DomainManagerUtils.getDomainName();
 
@@ -2171,11 +2182,11 @@ public class LdapConnection {
                         continue;
                     }
                 }
-                DirContext oldCtx = null;
+                TimedDirContext oldCtx = null;
                 if (ctx != null) {
                     // If iPoolTimeOut > 0, check if the DirContex expires or not.
                     // If iPoolTimeOut = 0, the DirContext will be used forever until it is staled.
-                    if (iPoolTimeOut > 0 && (currentTime - ((TimedDirContext) ctx).getPoolTimestamp()) > iPoolTimeOut) {
+                    if (iPoolTimeOut > 0 && (currentTime - ctx.getPoolTimestamp()) > iPoolTimeOut) {
                         if (tc.isDebugEnabled()) {
                             Tr.debug(tc, METHODNAME + " ContextPool: context is time out.");
                         }
@@ -2211,7 +2222,7 @@ public class LdapConnection {
                                     if (tc.isDebugEnabled()) {
                                         Tr.debug(tc, METHODNAME + " Ping primary server '" + primaryURL + "'...");
                                     }
-                                    DirContext testCtx = createDirContext(env);
+                                    TimedDirContext testCtx = createDirContext(env);
                                     if (tc.isDebugEnabled()) {
                                         Tr.debug(tc, METHODNAME + " Ping primary server '" + primaryURL + "': success");
                                     }
@@ -2221,7 +2232,7 @@ public class LdapConnection {
                                         Tr.debug(tc, WIMMessageKey.CURRENT_LDAP_SERVER, WIMMessageHelper.generateMsgParms(getActiveURL()));
 
                                     primaryOK = true;
-                                    DirContext tempCtx = ctx;
+                                    TimedDirContext tempCtx = ctx;
                                     try {
                                         tempCtx.close();
                                     } catch (NamingException e) {
@@ -2243,7 +2254,7 @@ public class LdapConnection {
                                     synchronized (lock) {
                                         if (!getActiveURL().equalsIgnoreCase(primaryURL)) {
                                             createContextPool(iLiveContexts - 1, primaryURL);
-                                            ((TimedDirContext) ctx).setCreateTimestamp(iPoolCreateTimestamp);
+                                            ctx.setCreateTimestamp(iPoolCreateTimestamp);
                                         }
                                     }
                                 }
@@ -2321,7 +2332,7 @@ public class LdapConnection {
      * @return
      * @throws WIMSystemException
      */
-    public DirContext reCreateDirContext(DirContext oldCtx, String errorMessage) throws WIMSystemException {
+    public TimedDirContext reCreateDirContext(TimedDirContext oldCtx, String errorMessage) throws WIMSystemException {
         final String METHODNAME = "DirContext reCreateDirContext(String errorMessage)";
         if (tc.isDebugEnabled()) {
             Tr.debug(tc, METHODNAME + " Communication exception occurs: " + errorMessage + " Creating a new connection.");
@@ -2329,14 +2340,14 @@ public class LdapConnection {
 
         try {
             String oldURL = getProviderURL(oldCtx);
-            DirContext ctx = createDirContext(getEnvironment(URLTYPE_SEQUENCE, getNextURL(oldURL)));
+            TimedDirContext ctx = createDirContext(getEnvironment(URLTYPE_SEQUENCE, getNextURL(oldURL)));
             String newURL = getProviderURL(ctx);
 
             synchronized (lock) {
                 // Refresh context pool if another thread hasn't already done so
-                if (((TimedDirContext) oldCtx).getCreateTimestamp() >= iPoolCreateTimestamp) {
+                if (oldCtx.getCreateTimestamp() >= iPoolCreateTimestamp) {
                     createContextPool(iLiveContexts - 1, newURL);
-                    ((TimedDirContext) ctx).setCreateTimestamp(iPoolCreateTimestamp);
+                    ctx.setCreateTimestamp(iPoolCreateTimestamp);
                 }
             }
 
@@ -2363,7 +2374,7 @@ public class LdapConnection {
      */
     @SuppressWarnings("unchecked")
     @FFDCIgnore(NamingException.class)
-    public DirContext createDirContext(String principal, byte[] credential) throws javax.naming.NamingException {
+    public TimedDirContext createDirContext(String principal, byte[] credential) throws javax.naming.NamingException {
         final String METHODNAME = "createDirContext(String, byte[])";
 
         String activeURL = getActiveURL();
@@ -2388,7 +2399,7 @@ public class LdapConnection {
             ClassLoader origCL = thread.getContextClassLoader();
             thread.setContextClassLoader(getClass().getClassLoader());
             try {
-                DirContext ctx = null;
+                TimedDirContext ctx = null;
                 try {
                     ctx = new TimedDirContext(environment, getConnectionRequestControls());
                 } catch (NamingException e) {
@@ -2413,7 +2424,7 @@ public class LdapConnection {
                         // Refresh context pool if another thread hasnt already done so
                         if (creationTimeMillisec > iPoolCreateTimestampMillisec) {
                             createContextPool(iLiveContexts, newURL);
-                            ((TimedDirContext) ctx).setCreateTimestamp(iPoolCreateTimestamp);
+                            ctx.setCreateTimestamp(iPoolCreateTimestamp);
                         }
                     }
                 }
@@ -2433,7 +2444,7 @@ public class LdapConnection {
      * @return
      * @throws NamingException
      */
-    public DirContext createDirContext(Hashtable<?, ?> env) throws NamingException {
+    public TimedDirContext createDirContext(Hashtable<?, ?> env) throws NamingException {
         return createDirContext(env, System.currentTimeMillis() / 1000);
     }
 
@@ -2444,7 +2455,7 @@ public class LdapConnection {
      * @return
      * @throws NamingException
      */
-    public DirContext createDirContext(Hashtable<?, ?> env, long createTimestamp) throws NamingException {
+    public TimedDirContext createDirContext(Hashtable<?, ?> env, long createTimestamp) throws NamingException {
         Object o = env.get(Context.SECURITY_CREDENTIALS);
         // Check if the credential is a protected string. It will be unprotected if this is an
         // anonymous bind
@@ -2471,7 +2482,7 @@ public class LdapConnection {
             ClassLoader origCL = thread.getContextClassLoader();
             thread.setContextClassLoader(getClass().getClassLoader());
             try {
-                DirContext ctx = new TimedDirContext(env, getConnectionRequestControls(), createTimestamp);
+                TimedDirContext ctx = new TimedDirContext(env, getConnectionRequestControls(), createTimestamp);
                 String newURL = getProviderURL(ctx);
                 // Set the active URL if context pool is disabled,
                 // otherwise active URL will be set when pool is refreshed
@@ -2552,7 +2563,7 @@ public class LdapConnection {
      */
     @Trivial
     @FFDCIgnore(NamingException.class)
-    private String getProviderURL(DirContext ctx) {
+    private String getProviderURL(TimedDirContext ctx) {
         try {
             return (String) ctx.getEnvironment().get(Context.PROVIDER_URL);
         } catch (NamingException e) {
@@ -2588,13 +2599,13 @@ public class LdapConnection {
             // Don't purge the pool more than once per second
             // This prevents multiple threads from purging the pool
             if (currentTimeMillisec - iPoolCreateTimestampMillisec > 1000) {
-                List<DirContext> contexts = new Vector<DirContext>(poolSize);
+                List<TimedDirContext> contexts = new Vector<TimedDirContext>(poolSize);
                 Hashtable<?, ?> env = getEnvironment(URLTYPE_SEQUENCE, providerURL);
 
                 String currentURL = null;
                 try {
                     for (int i = 0; i < poolSize; i++) {
-                        DirContext ctx = createDirContext(env, currentTime);
+                        TimedDirContext ctx = createDirContext(env, currentTime);
                         currentURL = getProviderURL(ctx);
                         if (!providerURL.equalsIgnoreCase(currentURL)) {
                             env = getEnvironment(URLTYPE_SEQUENCE, currentURL);
@@ -2612,7 +2623,7 @@ public class LdapConnection {
                     }
                     for (int j = 0; j < contexts.size(); j++) {
                         try {
-                            DirContext ctx = contexts.get(j);
+                            TimedDirContext ctx = contexts.get(j);
                             ctx.close();
                         } catch (Exception ee) {
                         }
@@ -2624,7 +2635,7 @@ public class LdapConnection {
                 // set active URL
                 setActiveURL(providerURL);
 
-                List<DirContext> oldCtxs = iContexts;
+                List<TimedDirContext> oldCtxs = iContexts;
                 iContexts = contexts;
                 iPoolCreateTimestamp = currentTime;
                 iPoolCreateTimestampMillisec = currentTimeMillisec;
@@ -2641,14 +2652,14 @@ public class LdapConnection {
     }
 
     @FFDCIgnore(NamingException.class)
-    private void closeContextPool(List<DirContext> contexts) {
+    private void closeContextPool(List<TimedDirContext> contexts) {
         final String METHODNAME = "closeContextPool";
         if (contexts != null) {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, METHODNAME + " Context pool being closed by " + Thread.currentThread() + ", Context pool size=" + contexts.size());
             }
             for (int i = 0; i < contexts.size(); i++) {
-                DirContext context = contexts.get(i);
+                TimedDirContext context = contexts.get(i);
                 try {
                     context.close();
                     iLiveContexts--;
@@ -2680,7 +2691,7 @@ public class LdapConnection {
      * @throws WIMException
      */
     @FFDCIgnore(NamingException.class)
-    public void releaseDirContext(DirContext ctx) throws WIMException {
+    public void releaseDirContext(TimedDirContext ctx) throws WIMException {
         final String METHODNAME = "releaseDirContext";
         if (iEnableContextPool) {
 
@@ -2690,7 +2701,7 @@ public class LdapConnection {
                 // If the size of the pool is larger than minimum size or total dirContextes larger than max size
                 // If context URL no longer matches active URL, then discard
                 if (iContexts.size() >= iPrefPoolSize || (iMaxPoolSize != 0 && iLiveContexts > iMaxPoolSize)
-                    || ((TimedDirContext) ctx).getCreateTimestamp() < iPoolCreateTimestamp
+                    || ctx.getCreateTimestamp() < iPoolCreateTimestamp
                     || !getProviderURL(ctx).equalsIgnoreCase(getActiveURL())) {
                     try {
                         ctx.close();
@@ -2714,7 +2725,7 @@ public class LdapConnection {
                         if (iContexts != null)
                             iContexts.add(ctx);
                         if (iPoolTimeOut > 0) {
-                            ((TimedDirContext) ctx).setPoolTimeStamp(System.currentTimeMillis() / 1000);
+                            ctx.setPoolTimeStamp(System.currentTimeMillis() / 1000);
                         }
 
                         if (tc.isDebugEnabled()) {
@@ -2819,7 +2830,7 @@ public class LdapConnection {
      */
     public void destroySubcontext(String name) throws WIMException {
         final String METHODNAME = "destroySubcontext";
-        DirContext ctx = getDirContext();
+        TimedDirContext ctx = getDirContext();
         // checkWritePermission(ctx);
         try {
             try {
@@ -2855,7 +2866,7 @@ public class LdapConnection {
      */
     public void modifyAttributes(String name, ModificationItem[] mods) throws NamingException, WIMException {
         final String METHODNAME = "modifyAttributes(Name name, ModificationItem[] mods)";
-        DirContext ctx = getDirContext();
+        TimedDirContext ctx = getDirContext();
         // checkWritePermission(ctx);
         try {
             try {
@@ -2880,7 +2891,7 @@ public class LdapConnection {
     public void modifyAttributes(String name, int mod_op, Attributes attrs) throws NamingException, WIMException {
         final String METHODNAME = "modifyAttributes(Name, int, Attributes)";
 
-        DirContext ctx = getDirContext();
+        TimedDirContext ctx = getDirContext();
         checkWritePermission(ctx);
         try {
             try {
@@ -2907,7 +2918,7 @@ public class LdapConnection {
     public DirContext createSubcontext(String name, Attributes attrs) throws WIMException {
         final String METHODNAME = "createSubcontext";
         DirContext dirContext = null;
-        DirContext ctx = getDirContext();
+        TimedDirContext ctx = getDirContext();
         checkWritePermission(ctx);
         try {
             try {
@@ -2975,7 +2986,7 @@ public class LdapConnection {
         }
     }
 
-    private void checkWritePermission(DirContext ctx) throws OperationNotSupportedException {
+    private void checkWritePermission(TimedDirContext ctx) throws OperationNotSupportedException {
         if (!iWriteToSecondary) {
             String providerURL = getProviderURL(ctx);
             if (!getPrimaryURL().equalsIgnoreCase(providerURL)) {
@@ -2994,7 +3005,7 @@ public class LdapConnection {
      */
     public void rename(String dn, String newDn) throws WIMException {
         final String METHODNAME = "rename";
-        DirContext ctx = getDirContext();
+        TimedDirContext ctx = getDirContext();
         checkWritePermission(ctx);
         try {
             try {
