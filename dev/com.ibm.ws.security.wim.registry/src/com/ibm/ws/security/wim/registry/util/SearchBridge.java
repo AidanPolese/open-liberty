@@ -84,11 +84,6 @@ public class SearchBridge {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#getUsers(java.lang.String, int)
-     */
     @FFDCIgnore(WIMException.class)
     public SearchResult getUsers(String inputPattern, int inputLimit) throws RegistryException {
         String methodName = "getUsers";
@@ -112,7 +107,8 @@ public class SearchBridge {
             String inputAttrName = this.propertyMap.getInputUserSecurityName(idAndRealm.getRealm());
             boolean isInputAttrIdentifier = this.mappingUtils.isIdentifierTypeProperty(inputAttrName);
             if (isInputAttrIdentifier)
-                inputAttrName = "principalName";
+                inputAttrName = SchemaConstants.PROP_PRINCIPAL_NAME;
+            String outputAttrName = this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm());
 
             // use the root DataGraph to create a SearchControl DataGraph
             List<Control> controls = root.getControls();
@@ -121,9 +117,8 @@ public class SearchBridge {
                 controls.add(searchControl);
             }
             // d115256
-            if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
-                searchControl.getProperties().add(
-                                                  this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()));
+            if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                searchControl.getProperties().add(outputAttrName);
             }
             // set the "expression" string to "type=LoginAccount and MAP(userSecurityName)="userPattern""
             String quote = "'";
@@ -154,7 +149,7 @@ public class SearchBridge {
             List<Entity> returnedList = root.getEntities();
             if (!returnedList.isEmpty()) {
                 // add the MAP(userSecurityName)s to the Result list while count < limit
-                ArrayList people = new ArrayList();
+                ArrayList<String> people = new ArrayList<String>();
                 for (int count = 0; count < returnedList.size(); count++) {
                     // d122142
                     if ((inputLimit > 0) && (count == inputLimit)) {
@@ -164,22 +159,27 @@ public class SearchBridge {
                     }
                     PersonAccount loginAccount = (PersonAccount) returnedList.get(count);
                     // d115256
-                    if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
-                        people.add(loginAccount.get(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm())));
+                    if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                        Object value = loginAccount.get(outputAttrName);
+                        if (value instanceof String) {
+                            people.add((String) value);
+                        } else {
+                            people.add(String.valueOf(((List<?>) value).get(0)));
+                        }
                     } else {
-                        people.add(loginAccount.getIdentifier().get(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm())));
+                        people.add((String) loginAccount.getIdentifier().get(outputAttrName));
                     }
                 }
                 returnValue = new SearchResult(people, true);
             } else {
-                returnValue = new SearchResult(new ArrayList(), false);
+                returnValue = new SearchResult(new ArrayList<String>(), false);
             }
         }
         // other cases
         catch (WIMException toCatch) {
             // f113366
             if (toCatch instanceof EntityNotFoundException) {
-                returnValue = new SearchResult(new ArrayList(), false);
+                returnValue = new SearchResult(new ArrayList<String>(), false);
             }
             // log the Exception
             else {
@@ -195,11 +195,6 @@ public class SearchBridge {
         return returnValue;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#getGroups(java.lang.String, int)
-     */
     @FFDCIgnore({ WIMException.class, InvalidNameException.class })
     public SearchResult getGroups(String inputPattern, int inputLimit) throws RegistryException {
         // initialize the method name
@@ -222,9 +217,12 @@ public class SearchBridge {
 
             // search on the group RDN if the input attribute is an identifier type
             String inputAttrName = this.propertyMap.getInputGroupSecurityName(idAndRealm.getRealm());
+            String groupSecNameAttr = inputAttrName;
             boolean isInputAttrIdentifier = this.mappingUtils.isIdentifierTypeProperty(inputAttrName);
             if (isInputAttrIdentifier)
                 inputAttrName = groupRDN;
+            String outputAttrName = this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm());
+
             String quote = "'";
             String id = idAndRealm.getId();
             if (id.indexOf("'") != -1) {
@@ -233,7 +231,6 @@ public class SearchBridge {
 
             // PM37404 call isDN method to find out if the input to the method is DN
             boolean callGetAPI = false;
-            String groupSecNameAttr = this.propertyMap.getInputGroupSecurityName(idAndRealm.getRealm());
 
             if (UniqueNameHelper.isDN(id) != null && groupSecNameAttr.equals(Service.PROP_UNIQUE_NAME)) {
                 if (tc.isEventEnabled()) {
@@ -262,18 +259,9 @@ public class SearchBridge {
                 }
                 // add MAP(groupSecurityName) to the return list of properties
                 // d115913
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()))) {
-                    searchControl.getProperties().add(
-                                                      this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()));
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    searchControl.getProperties().add(outputAttrName);
                 }
-                // set the "expression" string to "type=Group and MAP(groupSecurityName)="groupPattern""
-                /*
-                 * String quote = "'";
-                 * String id = idAndRealm.getId();
-                 * if (id.indexOf("'") != -1) {
-                 * quote = "\"";
-                 * }
-                 */
 
                 // d112199
                 LdapName dnName = null;
@@ -321,7 +309,7 @@ public class SearchBridge {
             List<Entity> returnedList = root.getEntities();
             if (!returnedList.isEmpty()) {
                 // add the MAP(groupSecurityName)s to the Result list while count < limit
-                ArrayList groups = new ArrayList();
+                ArrayList<String> groups = new ArrayList<String>();
                 for (int count = 0; count < returnedList.size(); count++) {
                     // d122142
                     if ((inputLimit > 0) && (count == inputLimit)) {
@@ -343,10 +331,15 @@ public class SearchBridge {
                     }
                     // d113801
                     if (isEntityTypeGrp) {
-                        if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()))) {
-                            groups.add(group.get(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm())));
+                        if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                            Object value = group.get(outputAttrName);
+                            if (value instanceof String) {
+                                groups.add((String) value);
+                            } else {
+                                groups.add(String.valueOf(((List<?>) value).get(0)));
+                            }
                         } else {
-                            groups.add(group.getIdentifier().get(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm())));
+                            groups.add((String) group.getIdentifier().get(outputAttrName));
                         }
                     } else {
                         if (tc.isEventEnabled()) {
@@ -358,7 +351,7 @@ public class SearchBridge {
                 returnValue = new SearchResult(groups, true);
 
             } else {
-                returnValue = new SearchResult(new ArrayList(), false);
+                returnValue = new SearchResult(new ArrayList<String>(), false);
             }
         }
         // other cases
@@ -366,7 +359,7 @@ public class SearchBridge {
             // f113366
             // PM37404 Catch the invalid uniqueName exception for get() API
             if (toCatch instanceof EntityNotFoundException || toCatch instanceof InvalidUniqueNameException) {
-                returnValue = new SearchResult(new ArrayList(), false);
+                returnValue = new SearchResult(new ArrayList<String>(), false);
             }
             // log the Exception
             else {
