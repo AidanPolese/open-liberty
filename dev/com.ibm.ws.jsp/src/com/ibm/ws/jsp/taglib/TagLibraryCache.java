@@ -55,7 +55,6 @@ import com.ibm.ws.jsp.translator.visitor.JspVisitorInputMap;
 import com.ibm.ws.jsp.translator.visitor.tagfilescan.TagFileScanResult;
 import com.ibm.ws.webcontainer.webapp.WebAppConfiguration;
 import com.ibm.wsspi.adaptable.module.Container;
-import com.ibm.wsspi.adaptable.module.Entry;
 import com.ibm.wsspi.adaptable.module.NonPersistentCache;
 import com.ibm.wsspi.adaptable.module.UnableToAdaptException;
 import com.ibm.wsspi.jsp.context.translation.JspTranslationContext;
@@ -328,7 +327,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
     }
 
     private void loadLibJarMapRecursivelyForContainer(List loadedLocations, Container container) throws UnableToAdaptException {
-        for (Entry subEntry : container) {
+        for (com.ibm.wsspi.adaptable.module.Entry subEntry : container) {
             Container subEntryContainer = subEntry.adapt(Container.class);
             //TODO: this could potentially be a jar represented by a directory on disk
             if (subEntryContainer!=null && (WCCustomProperties.APPEND_METAINF_RESOURCES_IN_LOOSE_LIB ? (subEntry.getSize()==0) : (subEntryContainer.isRoot() == false))) { //PM99163 a directory
@@ -344,7 +343,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
     
     private void loadLibJarMap(List loadedLocations) {
         if (container!=null) {
-            Entry libDir = container.getEntry("/WEB-INF/lib");
+            com.ibm.wsspi.adaptable.module.Entry libDir = container.getEntry("/WEB-INF/lib");
             if (libDir!=null) {
                 try {
                     Container libDirContainer = libDir.adapt(Container.class);
@@ -487,7 +486,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
         }
         
         try {
-            Entry entry = jarContainer.adapt(Entry.class);
+            com.ibm.wsspi.adaptable.module.Entry entry = jarContainer.adapt(com.ibm.wsspi.adaptable.module.Entry.class);
             String originatorId = entry != null ? entry.getName() : jarPath;
             int jarIndex = originatorId.indexOf(".jar");
             if (jarIndex>-1) {
@@ -497,7 +496,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
                 originatorId = originatorId.substring(originatorId.lastIndexOf('/')+1);
             originatorId = NameMangler.mangleString(originatorId);
 
-            Entry metaInfEntry = jarContainer.getEntry("/META-INF/");
+            com.ibm.wsspi.adaptable.module.Entry metaInfEntry = jarContainer.getEntry("/META-INF/");
             Container metaInfContainer;
             if(metaInfEntry != null){
                 metaInfContainer = metaInfEntry.adapt(Container.class);
@@ -519,7 +518,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
         String name = null;
         
         try {
-            for (Entry entry : dirContainer) {
+            for (com.ibm.wsspi.adaptable.module.Entry entry : dirContainer) {
                 // Recurse into sub-directories
                 Container subEntryContainer = entry.adapt(Container.class);
                 //TODO: this could potentially be a jar represented by a directory on disk
@@ -606,7 +605,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
             }
         } else {
             boolean directory = false;
-            Entry entry = container.getEntry(webInfPath);
+            com.ibm.wsspi.adaptable.module.Entry entry = container.getEntry(webInfPath);
             if (entry!=null) {
                 Container subEntryContainer;
                 try {
@@ -622,7 +621,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
                 if (subEntryContainer!=null && entry.getSize()==0 && !webInfPath.endsWith(".jar")) { //PI83486
                     directory = true;
     
-                    for (Entry subEntry:subEntryContainer) {
+                    for (com.ibm.wsspi.adaptable.module.Entry subEntry:subEntryContainer) {
                         loadWebInfMap(subEntry.getPath(), loadedLocations);
                     }
                 }
@@ -679,7 +678,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
     
     private void getFilesFromContainer(Set<String> libSet, Container container) {
         if (container!=null) {
-            for (Entry subEntry : container) {
+            for (com.ibm.wsspi.adaptable.module.Entry subEntry : container) {
                         libSet.add(subEntry.getPath());
             }
         }
@@ -696,7 +695,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
         //Add the files root to this directory to libset
         if (c!=null) {
             libSet = new HashSet<String>();
-            Entry e = c.getEntry(tagsDir);
+            com.ibm.wsspi.adaptable.module.Entry e = c.getEntry(tagsDir);
             if (e!=null) {
                 try {
                     getFilesFromContainer(libSet, e.adapt(Container.class)); //Get the fires in this folder (NOT recursive)
@@ -718,7 +717,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
                 if (c==null && (resourcePath.endsWith("/"))) { // null container && directory
                     loadWebInfTagFiles(resourcePath.substring(0, resourcePath.lastIndexOf('/')));
                 } else { //container exists, could still be a directory 
-                    Entry thisEntry = container.getEntry(resourcePath); 
+                    com.ibm.wsspi.adaptable.module.Entry thisEntry = container.getEntry(resourcePath); 
                     Container thisEntryContainer;
                     try {
                         thisEntryContainer = thisEntry.adapt(Container.class);
@@ -848,9 +847,9 @@ public class TagLibraryCache extends Hashtable<String, Object> {
         else {
             InputStream stream = null;
             try {
-                Entry jarEntry = container.getEntry(uri);
+                com.ibm.wsspi.adaptable.module.Entry jarEntry = container.getEntry(uri);
                 Container jarContainer = jarEntry.adapt(Container.class);
-                Entry metaInfTldEntry = jarContainer.getEntry("META-INF/taglib.tld");
+                com.ibm.wsspi.adaptable.module.Entry metaInfTldEntry = jarContainer.getEntry("META-INF/taglib.tld");
                 if (metaInfTldEntry != null) {
                     stream = metaInfTldEntry.adapt(InputStream.class);
                     String originatorId = jarEntry.getName();
@@ -1290,7 +1289,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
                 TagLibraryInfoImpl tli = null;
                 
                 if (pair.getValue().getEntry() != null) {
-                    newInputStream = ((Entry) pair.getValue().getEntry()).adapt(InputStream.class);
+                    newInputStream = ((com.ibm.wsspi.adaptable.module.Entry) pair.getValue().getEntry()).adapt(InputStream.class);
                     tli = tldParser.parseTLD(pair.getKey(), newInputStream, (String) pair.getValue().getOriginatorId());
                     
                 } else
@@ -1330,10 +1329,10 @@ public class TagLibraryCache extends Hashtable<String, Object> {
     }
 
     private class CachedLocationsWrapper {
-        private Entry entry = null;
+        private com.ibm.wsspi.adaptable.module.Entry entry = null;
         private String originatorId = null;
         
-        CachedLocationsWrapper(Entry entry, String originatorId) {
+        CachedLocationsWrapper(com.ibm.wsspi.adaptable.module.Entry entry, String originatorId) {
             this.entry = entry;
             this.originatorId = originatorId;
         }
@@ -1342,7 +1341,7 @@ public class TagLibraryCache extends Hashtable<String, Object> {
             this.originatorId = originatorId;
         }
         
-        public Entry getEntry() {
+        public com.ibm.wsspi.adaptable.module.Entry getEntry() {
             return entry;
         }
 

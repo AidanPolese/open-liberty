@@ -57,18 +57,9 @@ public class UniqueIdBridge {
      */
     private BridgeUtils mappingUtils = null;
 
-    /**
-     * RDN property for a group.
-     */
-    private String groupRDN = "cn";
-
     public UniqueIdBridge(BridgeUtils mappingUtil) {
         this.mappingUtils = mappingUtil;
         propertyMap = new TypeMappings(mappingUtils);
-        // Get the group RDN property
-        String[] groupRDNList = this.mappingUtils.getCoreConfiguration().getRDNProperties(Service.DO_GROUP);
-        if (groupRDNList != null && groupRDNList.length > 0)
-            groupRDN = groupRDNList[0];
     }
 
     @FFDCIgnore(InvalidNameException.class)
@@ -84,11 +75,6 @@ public class UniqueIdBridge {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#getUniqueUserId(java.lang.String)
-     */
     @FFDCIgnore({ WIMException.class, InvalidNameException.class })
     public HashMap<String, String> getUniqueUserId(String inputUserSecurityName) throws EntryNotFoundException, RegistryException {
         String methodName = "getUniqueUserId";
@@ -181,7 +167,7 @@ public class UniqueIdBridge {
                 root = resultRoot;
             } else {
                 if (allowDNAsPrincipalName)
-                    inputAttrName = "principalName";
+                    inputAttrName = SchemaConstants.PROP_PRINCIPAL_NAME;
 
                 // use the root DataGraph to create a SearchControl DataGraph
                 List<Control> controls = root.getControls();
@@ -191,17 +177,9 @@ public class UniqueIdBridge {
                 }
                 // if MAP(uniqueUserId) is not an IdentifierType property
                 // d112199
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUniqueUserId(idAndRealm.getRealm()))) {
-                    searchControl.getProperties().add(
-                                                      this.propertyMap.getOutputUniqueUserId(idAndRealm.getRealm()));
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    searchControl.getProperties().add(outputAttrName);
                 }
-                /*
-                 * String quote = "'";
-                 * String id = idAndRealm.getId();
-                 * if (id.indexOf("'") != -1) {
-                 * quote = "\"";
-                 * }
-                 */
 
                 // set the "expression" string to "type=LoginAccount and MAP(userSecurityName)="user""
                 // d112199
@@ -247,10 +225,10 @@ public class UniqueIdBridge {
                 if (entity instanceof LoginAccount) {
                     // d113801
                     LoginAccount loginAccount = (LoginAccount) entity;
-                    if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUniqueUserId(idAndRealm.getRealm()))) {
-                        returnValue = (String) loginAccount.get(this.propertyMap.getOutputUniqueUserId(idAndRealm.getRealm()));
+                    if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                        returnValue = (String) loginAccount.get(outputAttrName);
                     } else {
-                        returnValue = (String) loginAccount.getIdentifier().get(this.propertyMap.getOutputUniqueUserId(idAndRealm.getRealm()));
+                        returnValue = (String) loginAccount.getIdentifier().get(outputAttrName);
                     }
                     // PM50390
                     if (mappingUtils.returnRealmInfoInUniqueUserId && idAndRealm.isRealmDefined()
@@ -258,10 +236,10 @@ public class UniqueIdBridge {
                         returnValue += idAndRealm.getDelimiter() + idAndRealm.getRealm();
                     }
                 } else if (entity != null) {
-                    if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUniqueUserId(idAndRealm.getRealm()))) {
-                        returnValue = (String) entity.get(this.propertyMap.getOutputUniqueUserId(idAndRealm.getRealm()));
+                    if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                        returnValue = (String) entity.get(outputAttrName);
                     } else {
-                        returnValue = (String) entity.getIdentifier().get(this.propertyMap.getOutputUniqueUserId(idAndRealm.getRealm()));
+                        returnValue = (String) entity.getIdentifier().get(outputAttrName);
                     }
                     if (mappingUtils.returnRealmInfoInUniqueUserId && idAndRealm.isRealmDefined()
                         || (idAndRealm.isRealmDefined() && (!this.mappingUtils.getDefaultRealmName().equals(idAndRealm.getRealm())))) {
@@ -270,7 +248,7 @@ public class UniqueIdBridge {
                 }
 
                 // if return attribute is uniqueName and returnValue is not in DN format, default to uniqueId (as this is potentially a customRegistry data)
-                if (SchemaConstants.PROP_UNIQUE_NAME.equalsIgnoreCase(this.propertyMap.getOutputUniqueUserId(idAndRealm.getRealm()))) {
+                if (SchemaConstants.PROP_UNIQUE_NAME.equalsIgnoreCase(outputAttrName)) {
                     try {
                         new LdapName(returnValue);
                     } catch (InvalidNameException e) {
@@ -285,9 +263,7 @@ public class UniqueIdBridge {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
             }
-            // if (tc.isErrorEnabled()) {
-            //     Tr.error(tc, toCatch.getMessage());
-            // }
+
             // the user was not found
             if (toCatch instanceof EntityNotFoundException || toCatch instanceof InvalidIdentifierException) {
                 throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
@@ -318,11 +294,6 @@ public class UniqueIdBridge {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#getUniqueGroupId(java.lang.String)
-     */
     @FFDCIgnore({ WIMException.class, InvalidNameException.class })
     public String getUniqueGroupId(String inputGroupSecurityName) throws EntryNotFoundException, RegistryException {
 
@@ -373,18 +344,9 @@ public class UniqueIdBridge {
                 }
                 // if MAP(uniqueGroupId) is not an IdentifierType property
                 // d112199
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUniqueGroupId(idAndRealm.getRealm()))) {
-                    searchControl.getProperties().add(
-                                                      this.propertyMap.getOutputUniqueGroupId(idAndRealm.getRealm()));
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    searchControl.getProperties().add(outputAttrName);
                 }
-
-                /*
-                 * String quote = "'";
-                 * String id = idAndRealm.getId();
-                 * if (id.indexOf("'") != -1) {
-                 * quote = "\"";
-                 * }
-                 */
 
                 // set the "expression" string to "type=Group and MAP(groupSecurityName)="group""
                 // d112199
@@ -403,7 +365,8 @@ public class UniqueIdBridge {
             }
 
             // return the value of MAP(uniqueGroupId) from the output DataGraph
-            List returnList = root.getEntities();
+            List<Entity> returnList = root.getEntities();
+
             // the group was not found or more than one group was found
             // d125249
             if (returnList.isEmpty()) {
@@ -427,14 +390,14 @@ public class UniqueIdBridge {
             else {
                 Group group = (Group) returnList.get(0);
                 // d113801
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUniqueGroupId(idAndRealm.getRealm()))) {
-                    returnValue = (String) group.get(this.propertyMap.getOutputUniqueGroupId(idAndRealm.getRealm()));
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    returnValue = (String) group.get(outputAttrName);
                 } else {
-                    returnValue = (String) group.getIdentifier().get(this.propertyMap.getOutputUniqueGroupId(idAndRealm.getRealm()));
+                    returnValue = (String) group.getIdentifier().get(outputAttrName);
                 }
 
                 // if return attribute is uniqueName and returnValue is not in DN format, default to uniqueId (as this is potentially a customRegistry data)
-                if (SchemaConstants.PROP_UNIQUE_NAME.equalsIgnoreCase(this.propertyMap.getOutputUniqueUserId(idAndRealm.getRealm()))) {
+                if (SchemaConstants.PROP_UNIQUE_NAME.equalsIgnoreCase(outputAttrName)) {
                     try {
                         new LdapName(returnValue);
                     } catch (InvalidNameException e) {
@@ -449,9 +412,7 @@ public class UniqueIdBridge {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
             }
-            // if (tc.isErrorEnabled()) {
-            //     Tr.error(tc, toCatch.getMessage());
-            // }
+
             // the group was not found
             if (toCatch instanceof EntityNotFoundException || toCatch instanceof InvalidIdentifierException) {
                 throw new EntryNotFoundException(toCatch.getMessage(), toCatch);

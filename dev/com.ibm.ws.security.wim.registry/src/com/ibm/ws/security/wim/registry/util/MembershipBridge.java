@@ -69,17 +69,11 @@ public class MembershipBridge {
      * @param mappingUtil
      */
     public MembershipBridge(BridgeUtils mappingUtil) {
-
         this.mappingUtils = mappingUtil;
         propertyMap = new TypeMappings(mappingUtil);
-
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#getGroupsForUser(java.lang.String)
-     */
+    @SuppressWarnings("unchecked")
     @FFDCIgnore(WIMException.class)
     public List<String> getGroupsForUser(String inputUserSecurityName) throws EntryNotFoundException, RegistryException {
         // initialize the method name
@@ -148,14 +142,6 @@ public class MembershipBridge {
                 if (controls != null) {
                     controls.add(srchCtrl);
                 }
-                // set the "expression" string to "type=LoginAccount and MAP(userSecurityName)="user""
-                /*
-                 * String quote = "'";
-                 * String id = idAndRealm.getId();
-                 * if (id.indexOf("'") != -1) {
-                 * quote = "\"";
-                 * }
-                 */
 
                 // f112199
                 srchCtrl.setExpression("//" + Service.DO_ENTITIES + "[@xsi:type='"
@@ -214,9 +200,8 @@ public class MembershipBridge {
             }
             // add MAP(groupSecurityName) to the return list of properties
             // d115913
-            if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()))) {
-                grpMbrShipCtrl.getProperties().add(
-                                                   this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()));
+            if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                grpMbrShipCtrl.getProperties().add(outputAttrName);
             }
             // set the "level" property
             grpMbrShipCtrl.setLevel((this.mappingUtils.getGroupDepth()));
@@ -250,7 +235,7 @@ public class MembershipBridge {
             // if the output DataGraph contains MAP(groupSecurityName)s
             if (!groupList.isEmpty()) {
                 // add the MAP(groupSecurityName)s to the List
-                String grpAttrName = this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm());
+                String grpAttrName = outputAttrName;
                 boolean isIdentifier = this.mappingUtils.isIdentifierTypeProperty(grpAttrName);
                 if (tc.isDebugEnabled()) {
                     Tr.debug(tc, methodName + " " + "grpAttrName=" + grpAttrName +
@@ -278,9 +263,6 @@ public class MembershipBridge {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, toCatch.getMessage(), toCatch);
             }
-            // if (tc.isErrorEnabled()) {
-            //     Tr.error(tc, toCatch.getMessage());
-            // }
             // the user was not found
             if (toCatch instanceof EntityNotFoundException || toCatch instanceof InvalidIdentifierException) {
                 throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
@@ -293,11 +275,6 @@ public class MembershipBridge {
         return returnValue;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#getUsersForGroup(java.lang.String, int)
-     */
     @FFDCIgnore(WIMException.class)
     public SearchResult getUsersForGroup(String inputGroupSecurityName, int inputLimit) throws EntryNotFoundException, RegistryException {
         // initialize the method name
@@ -343,14 +320,6 @@ public class MembershipBridge {
                 if (controls != null) {
                     controls.add(srchCtrl);
                 }
-                // set the "expression" string to "type=Group and MAP(groupSecurityName)="group""
-                /*
-                 * String quote = "'";
-                 * String id = idAndRealm.getId();
-                 * if (id.indexOf("'") != -1) {
-                 * quote = "\"";
-                 * }
-                 */
 
                 // f112199
                 srchCtrl.setExpression("//" + Service.DO_ENTITIES + "[@xsi:type='"
@@ -412,9 +381,9 @@ public class MembershipBridge {
             groupMemberControl.setLevel(this.mappingUtils.getGroupDepth());
             // add MAP(userSecurityName) to the return list of properties
             // d115256
-            if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
-                groupMemberControl.getProperties().add(
-                                                       this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()));
+            String outputUserSecurityNameAttr = this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm());
+            if (!this.mappingUtils.isIdentifierTypeProperty(outputUserSecurityNameAttr)) {
+                groupMemberControl.getProperties().add(outputUserSecurityNameAttr);
             }
             // set the count limit to limit + 1
             if (inputLimit != 0) {
@@ -448,11 +417,11 @@ public class MembershipBridge {
                                                                                                    WIMMessageHelper.generateMsgParms(inputGroupSecurityName)));
             }
             Group entity = (Group) entityList.get(0);
-            List memberList = entity.getMembers();
+            List<Entity> memberList = entity.getMembers();
             // if the output DataGraph contains MAP(userSecurityName)s
             if (!memberList.isEmpty()) {
                 // add the MAP(userSecurityName)s to the Result list while count < limit
-                String userAttrName = this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm());
+                String userAttrName = outputUserSecurityNameAttr;
                 boolean isIdentifier = this.mappingUtils.isIdentifierTypeProperty(userAttrName);
                 if (tc.isDebugEnabled()) {
                     Tr.debug(tc, methodName + " " + "userAttrName=" + userAttrName +
@@ -460,37 +429,31 @@ public class MembershipBridge {
                              methodName);
                 }
 
-                ArrayList users = new ArrayList();
+                ArrayList<String> users = new ArrayList<String>();
                 for (int count = 0; count < memberList.size(); count++) {
                     if ((inputLimit != 0) && (count == inputLimit)) {
                         // set the Result boolean to true
                         //returnValue.setHasMore();
                         break;
                     }
-                    Entity member = (Entity) memberList.get(count);
+                    Entity member = memberList.get(count);
                     // d115256
                     if (!isIdentifier) {
-                        users.add(member.get(userAttrName));
+                        users.add((String) member.get(userAttrName));
                     } else {
-                        users.add(member.getIdentifier().get(userAttrName));
+                        users.add((String) member.getIdentifier().get(userAttrName));
                     }
                 }
-                //returnValue.setList(users);
                 returnValue = new SearchResult(users, true);
 
             } else {
-                //returnValue.setList(new ArrayList());
-                returnValue = new SearchResult(new ArrayList(), false);
-
+                returnValue = new SearchResult(new ArrayList<String>(), false);
             }
         } catch (WIMException toCatch) {
             // log the Exception
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, toCatch.getMessage(), toCatch);
             }
-            // if (tc.isErrorEnabled()) {
-            //     Tr.error(tc, toCatch.getMessage());
-            // }
             // the user was not found
             if (toCatch instanceof EntityNotFoundException || toCatch instanceof InvalidIdentifierException) {
                 throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
@@ -503,11 +466,6 @@ public class MembershipBridge {
         return returnValue;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#getUniqueGroupIds(java.lang.String)
-     */
     @FFDCIgnore({ WIMException.class, InvalidNameException.class })
     public List<String> getUniqueGroupIds(String inputUniqueUserId) throws EntryNotFoundException, RegistryException {
         // initialize the method name
@@ -591,12 +549,13 @@ public class MembershipBridge {
                     ctx.setValue(Boolean.valueOf(this.mappingUtils.getCoreConfiguration().isAllowOpIfRepoDown(idAndRealm.getRealm())));
                     contexts.add(ctx);
                 }
+                String inputAttrNameMod = inputAttrName;
                 if (allowDNAsPrincipalName)
-                    inputAttrName = "principalName";
+                    inputAttrNameMod = "principalName";
 
                 searchControl.setExpression("//" + Service.DO_ENTITIES + "[@xsi:type='"
                                             + Service.DO_LOGIN_ACCOUNT + "' and "
-                                            + inputAttrName
+                                            + inputAttrNameMod
                                             + "=" + quote + id + quote + "]");
 
                 // Set context to use userFilter if applicable
@@ -656,10 +615,9 @@ public class MembershipBridge {
             }
             // if MAP(groupUniqueId) is not an IdentifierType property
             // f112199
-            if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUniqueGroupId(idAndRealm.getRealm()))) {
+            if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
                 // add MAP(groupUniqueId) to the return list of properties
-                groupMembershipControl.getProperties().add(
-                                                           this.propertyMap.getOutputUniqueGroupId(idAndRealm.getRealm()));
+                groupMembershipControl.getProperties().add(outputAttrName);
             }
             // set the "level" property
             groupMembershipControl.setLevel((this.mappingUtils.getGroupDepth()));
@@ -676,16 +634,17 @@ public class MembershipBridge {
             // if MAP(userUniqueId) is not an IdentifierType property
             // f112199
             IdentifierType actIdfType = new IdentifierType();
-            if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm()))) {
+            inputAttrName = this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm());
+            if (!this.mappingUtils.isIdentifierTypeProperty(inputAttrName)) {
 
                 actIdfType.setUniqueName(idAndRealm.getId());
                 loginAccount.setIdentifier(actIdfType);
             } else {
-                actIdfType.set(this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm()), idAndRealm.getId());
+                actIdfType.set(inputAttrName, idAndRealm.getId());
                 loginAccount.setIdentifier(actIdfType);
 
                 // Create an external name control if the external identifier is being used
-                if (this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm()).equals(Service.PROP_EXTERNAL_NAME)) {
+                if (inputAttrName.equals(Service.PROP_EXTERNAL_NAME)) {
                     List<Control> extCtrls = root.getControls();
                     if (extCtrls != null) {
                         extCtrls.add(new ExternalNameControl());
@@ -709,7 +668,7 @@ public class MembershipBridge {
             // if the output DataGraph contains MAP(groupUniqueId)s
             if (!groupList.isEmpty()) {
                 // add the MAP(groupUniqueId)s to the List
-                String grpAttrName = this.propertyMap.getOutputUniqueGroupId(idAndRealm.getRealm());
+                String grpAttrName = outputAttrName;
                 boolean isIdentifier = this.mappingUtils.isIdentifierTypeProperty(grpAttrName);
                 if (tc.isDebugEnabled()) {
                     Tr.debug(tc, methodName + " " + "grpAttrName=" + grpAttrName +
@@ -744,9 +703,6 @@ public class MembershipBridge {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
             }
-            // if (tc.isErrorEnabled()) {
-            //     Tr.error(tc, toCatch.getMessage());
-            // }
             // the group was not found
             if (toCatch instanceof EntityNotFoundException) {
                 throw new EntryNotFoundException(toCatch.getMessage(), toCatch);

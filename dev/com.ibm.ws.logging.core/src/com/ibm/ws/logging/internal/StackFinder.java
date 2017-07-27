@@ -53,7 +53,7 @@ public class StackFinder extends SecurityManager {
         // Walk the stack backwards to find the calling class: don't
         // want to use Class.forName, because we want the class as loaded
         // by it's original classloader
-        Class<Object> stack[] = this.getClassContext();
+        Class<Object> stack[] = (Class<Object>[]) this.getClassContext();
         for (Class<Object> bClass : stack) {
             // Find the first class in the stack that _isn't_ Tr or StackFinder,
             // etc. Use the name rather than the class instance (to also work across
@@ -103,7 +103,7 @@ public class StackFinder extends SecurityManager {
         // Walk the stack backwards to find the calling class: don't
         // want to use Class.forName, because we want the class as loaded
         // by it's original classloader
-        Class<Object> stack[] = this.getClassContext();
+        Class<Object> stack[] = (Class<Object>[]) this.getClassContext();
         for (Class<Object> bClass : stack) {
             // See if any class in the stack contains the following string
             if (bClass.getName().equals(className))
@@ -124,7 +124,7 @@ public class StackFinder extends SecurityManager {
         // Walk the stack backwards to find the calling class: don't
         // want to use Class.forName, because we want the class as loaded
         // by it's original classloader
-        Class<Object> stack[] = this.getClassContext();
+        Class<Object> stack[] = (Class<Object>[]) this.getClassContext();
         for (Class<?> bClass : stack) {
             // See if any class in the stack contains the following string
             if (bClass.getName().contains(fragment))
@@ -141,7 +141,7 @@ public class StackFinder extends SecurityManager {
      */
     public Bundle getTopBundleFromCallStack() {
         // Walk the stack backwards to find the calling class
-        Class<Object> stack[] = this.getClassContext();
+        Class<Object> stack[] = (Class<Object>[]) this.getClassContext();
         for (Class<?> bClass : stack) {
             // See if any class in the stack contains the following string
             Bundle bundle = FrameworkUtil.getBundle(bClass);

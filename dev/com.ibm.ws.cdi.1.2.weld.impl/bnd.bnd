@@ -62,7 +62,8 @@ Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
 instrument.classesExcludes: com/ibm/ws/cdi/impl/resources/*.class
 
 -buildpath.bootclasspath: \
-	com.ibm.websphere.javaee.annotation.1.2;version=latest
+	com.ibm.websphere.javaee.annotation.1.2;version=latest;boot=true,\
+	${javac.bootclasspath.${javac.source}}
 
 -buildpath: \
 	com.ibm.websphere.javaee.cdi.1.2;version=latest,\

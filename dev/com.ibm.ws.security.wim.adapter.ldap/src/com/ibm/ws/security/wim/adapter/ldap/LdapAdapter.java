@@ -360,7 +360,7 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
                             try {
                                 ldapEntry.getAttributes().put(attEnum.next());
                             } catch (NamingException e) {
-                                e.getMessage();
+                                /* Ignore. */
                             }
                         }
                     }
@@ -386,7 +386,7 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
                             try {
                                 ldapEntry.getAttributes().put(attEnum.next());
                             } catch (NamingException e) {
-                                e.getMessage();
+                                /* Ignore. */
                             }
                         }
                     }
@@ -3024,7 +3024,7 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
     @FFDCIgnore(javax.naming.AuthenticationException.class)
     private void authenticateWithPassword(String dn, byte[] pwd, String principalName) throws WIMException {
         try {
-            DirContext ctx = null;
+            TimedDirContext ctx = null;
             // Check if user wants to bind to LDAP server with input principal name. If not, default
             // behavior is to bind using user DN.
             if (iLdapConfigMgr.isSetUsePrincipalNameForLogin())

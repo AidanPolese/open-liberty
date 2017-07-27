@@ -123,13 +123,13 @@ public abstract class ProviderFactory {
     protected Map<NameKey, ProviderInfo<ReaderInterceptor>> readerInterceptors = new NameKeyMap<ProviderInfo<ReaderInterceptor>>(true);
     protected Map<NameKey, ProviderInfo<WriterInterceptor>> writerInterceptors = new NameKeyMap<ProviderInfo<WriterInterceptor>>(true);
 
-    private List<ProviderInfo<MessageBodyReader<?>>> messageReaders =
+    private final List<ProviderInfo<MessageBodyReader<?>>> messageReaders =
         new CopyOnWriteArrayList<ProviderInfo<MessageBodyReader<?>>>();
-    private List<ProviderInfo<MessageBodyWriter<?>>> messageWriters =
+    private final List<ProviderInfo<MessageBodyWriter<?>>> messageWriters =
         new CopyOnWriteArrayList<ProviderInfo<MessageBodyWriter<?>>>();
-    private List<ProviderInfo<ContextResolver<?>>> contextResolvers =
+    private final List<ProviderInfo<ContextResolver<?>>> contextResolvers =
         new CopyOnWriteArrayList<ProviderInfo<ContextResolver<?>>>();
-    private List<ProviderInfo<ContextProvider<?>>> contextProviders =
+    private final List<ProviderInfo<ContextProvider<?>>> contextProviders =
         new CopyOnWriteArrayList<ProviderInfo<ContextProvider<?>>>();
 
     private final List<ProviderInfo<ParamConverterProvider>> paramConverters = new ArrayList<ProviderInfo<ParamConverterProvider>>(1);
@@ -885,11 +885,11 @@ public abstract class ProviderFactory {
             .getGenericInterfaces()[0]).getActualTypeArguments()[0];
         if (type == Object.class) {
             theProviderComparator =
-                (Comparator<?>)(new ProviderInfoClassComparator((Comparator<Object>)theProviderComparator));
+                (new ProviderInfoClassComparator((Comparator<Object>)theProviderComparator));
         }
         List<T> theProviders = (List<T>) listOfProviders;
         Comparator<? super T> theComparator = (Comparator<? super T>) theProviderComparator;
-        Collections.sort((List<T>)theProviders, theComparator);
+        Collections.sort(theProviders, theComparator);
     }
 
     private void sortContextResolvers() {
@@ -1632,6 +1632,8 @@ class ClassPair {
         int result = 1;
         result = prime * result + ((firstClass == null) ? 0 : firstClass.hashCode());
         result = prime * result + ((secondClass == null) ? 0 : secondClass.hashCode());
+        result = prime * result + ((firstClassLoader == null) ? 0 : firstClassLoader.hashCode());
+        result = prime * result + ((secondClassLoader == null) ? 0 : secondClassLoader.hashCode());
         return result;
     }
 
@@ -1654,15 +1656,42 @@ class ClassPair {
                 return false;
         } else if (!secondClass.equals(other.secondClass))
             return false;
+
+        if (firstClassLoader == null) {
+            if (other.firstClassLoader != null)
+                return false;
+        } else if (!firstClassLoader.equals(other.firstClassLoader))
+            return false;
+        if (secondClassLoader == null) {
+            if (other.secondClassLoader != null)
+                return false;
+        } else if (!secondClassLoader.equals(other.secondClassLoader))
+            return false;
+
         return true;
     }
 
-    private final Class<?> firstClass;
-    private final Class<?> secondClass;
+    private String getClassLoaderString(final Class<?> cls) {
+        return cls == null ? null : AccessController.doPrivileged(new PrivilegedAction<String>() {
 
-    public ClassPair(Class<?> firstClass, Class<?> secondCLass) {
-        this.firstClass = firstClass;
-        this.secondClass = secondCLass;
+            @Override
+            public String run() {
+                ClassLoader cl = cls.getClassLoader();
+                return cl == null ? null : cl.getClass().getName() + "." + cl.hashCode();
+            }
+        });
+    }
+
+    private final String firstClass;
+    private final String secondClass;
+    private final String firstClassLoader;
+    private final String secondClassLoader;
+
+    public ClassPair(Class<?> firstClass, Class<?> secondClass) {
+        this.firstClass = firstClass == null ? null : firstClass.getName();
+        this.secondClass = secondClass == null ? null : secondClass.getName();
+        this.firstClassLoader = getClassLoaderString(firstClass);
+        this.secondClassLoader = getClassLoaderString(secondClass);
     }
 }
 //Liberty code change end

@@ -1678,6 +1678,8 @@ class ClassPair {
         int result = 1;
         result = prime * result + ((firstClass == null) ? 0 : firstClass.hashCode());
         result = prime * result + ((secondClass == null) ? 0 : secondClass.hashCode());
+        result = prime * result + ((firstClassLoader == null) ? 0 : firstClassLoader.hashCode());
+        result = prime * result + ((secondClassLoader == null) ? 0 : secondClassLoader.hashCode());
         return result;
     }
 
@@ -1700,15 +1702,42 @@ class ClassPair {
                 return false;
         } else if (!secondClass.equals(other.secondClass))
             return false;
+
+        if (firstClassLoader == null) {
+            if (other.firstClassLoader != null)
+                return false;
+        } else if (!firstClassLoader.equals(other.firstClassLoader))
+            return false;
+        if (secondClassLoader == null) {
+            if (other.secondClassLoader != null)
+                return false;
+        } else if (!secondClassLoader.equals(other.secondClassLoader))
+            return false;
+
         return true;
     }
 
-    private final Class<?> firstClass;
-    private final Class<?> secondClass;
+    private String getClassLoaderString(final Class<?> cls) {
+        return cls == null ? null : AccessController.doPrivileged(new PrivilegedAction<String>() {
 
-    public ClassPair(Class<?> firstClass, Class<?> secondCLass) {
-        this.firstClass = firstClass;
-        this.secondClass = secondCLass;
+            @Override
+            public String run() {
+                ClassLoader cl = cls.getClassLoader();
+                return cl == null ? null : cl.getClass().getName() + "." + cl.hashCode();
+            }
+        });
+    }
+
+    private final String firstClass;
+    private final String secondClass;
+    private final String firstClassLoader;
+    private final String secondClassLoader;
+
+    public ClassPair(Class<?> firstClass, Class<?> secondClass) {
+        this.firstClass = firstClass == null ? null : firstClass.getName();
+        this.secondClass = secondClass == null ? null : secondClass.getName();
+        this.firstClassLoader = getClassLoaderString(firstClass);
+        this.secondClassLoader = getClassLoaderString(secondClass);
     }
 }
 //Liberty code change end

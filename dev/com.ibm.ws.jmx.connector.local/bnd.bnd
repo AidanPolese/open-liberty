@@ -33,4 +33,5 @@ Service-Component: \
 -buildpath: \
 	com.ibm.websphere.appserver.spi.kernel.service,\
 	com.ibm.websphere.appserver.spi.logging,\
-	com.ibm.websphere.org.osgi.service.component
+	com.ibm.websphere.org.osgi.service.component,\
+	com.ibm.ws.kernel.service

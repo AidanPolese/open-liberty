@@ -23,6 +23,7 @@ import com.ibm.wsspi.security.wim.SchemaConstants;
 import com.ibm.wsspi.security.wim.exception.WIMException;
 import com.ibm.wsspi.security.wim.model.Context;
 import com.ibm.wsspi.security.wim.model.Control;
+import com.ibm.wsspi.security.wim.model.Entity;
 import com.ibm.wsspi.security.wim.model.Root;
 import com.ibm.wsspi.security.wim.model.SearchControl;
 
@@ -49,11 +50,6 @@ public class ValidBridge {
         propertyMap = new TypeMappings(mappingUtil);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#isValidUser(java.lang.String)
-     */
     @FFDCIgnore(WIMException.class)
     public boolean isValidUser(String inputUserSecurityName) throws RegistryException {
         String methodName = "isValidUser";
@@ -98,23 +94,15 @@ public class ValidBridge {
                 }
                 // add MAP(userSecurityName) to the return list of properties
                 // d115256
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()))) {
-                    searchControl.getProperties().add(
-                                                      this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm()));
+                outputAttrName = this.propertyMap.getOutputUserSecurityName(idAndRealm.getRealm());
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    searchControl.getProperties().add(outputAttrName);
                 }
-                // set the "expression" string to "type=LoginAccount and MAP(userSecurityName)="user""
-                /*
-                 * String quote = "'";
-                 * String id = idAndRealm.getId();
-                 * if (id.indexOf("'") != -1) {
-                 * quote = "\"";
-                 * }
-                 */
 
                 // d112199
                 searchControl.setExpression("//" + Service.DO_ENTITIES + "[@xsi:type='"
                                             + Service.DO_LOGIN_ACCOUNT + "' and "
-                                            + this.propertyMap.getInputUserSecurityName(idAndRealm.getRealm())
+                                            + inputAttrName
                                             + "=" + quote + id + quote + "]");
 
                 // Set context to use userFilter if applicable
@@ -128,7 +116,7 @@ public class ValidBridge {
             }
 
             // if the output DataGraph contains MAP(userSecurityName)
-            List returnList = root.getEntities();
+            List<Entity> returnList = root.getEntities();
             // f113366
             if (returnList.size() == 1) {
                 // set the boolean to true
@@ -146,11 +134,6 @@ public class ValidBridge {
         return returnValue;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#isValidGroup(java.lang.String)
-     */
     @FFDCIgnore(WIMException.class)
     public boolean isValidGroup(String inputGroupSecurityName) throws RegistryException {
         String methodName = "isValidGroup";
@@ -195,22 +178,14 @@ public class ValidBridge {
                 }
                 // add MAP(groupSecurityName) to the return list of properties
                 // d115913
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()))) {
-                    searchControl.getProperties().add(
-                                                      this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()));
+                outputAttrName = this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm());
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    searchControl.getProperties().add(outputAttrName);
                 }
-                // set the "expression" string to "type=Group and MAP(groupSecurityName)="group""
-                /*
-                 * String quote = "'";
-                 * String id = idAndRealm.getId();
-                 * if (id.indexOf("'") != -1) {
-                 * quote = "\"";
-                 * }
-                 */
 
                 // d115913
                 searchControl.setExpression("//" + Service.DO_ENTITIES + "[@xsi:type='"
-                                            + Service.DO_GROUP + "' and " + this.propertyMap.getInputGroupSecurityName(idAndRealm.getRealm())
+                                            + Service.DO_GROUP + "' and " + inputAttrName
                                             + "=" + quote + id + quote + "]");
 
                 // Set context to use groupFilter if applicable
@@ -224,7 +199,7 @@ public class ValidBridge {
             }
 
             // if the output DataGraph contains MAP(groupSecurityName)
-            List returnList = root.getEntities();
+            List<Entity> returnList = root.getEntities();
             // f113366
             if (returnList.size() == 1) {
                 // set the boolean to true

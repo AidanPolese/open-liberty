@@ -67,11 +67,6 @@ public class SecurityNameBridge {
         // initialize the method name
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#getUserSecurityName(java.lang.String)
-     */
     @FFDCIgnore(WIMException.class)
     public String getUserSecurityName(String inputUniqueUserId) throws EntryNotFoundException, RegistryException {
         // initialize the method name
@@ -117,7 +112,9 @@ public class SecurityNameBridge {
             // d112199
 
             //PM55588 Change the order, first call search API
-            if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm())) || allowDNAsPrincipalName) {
+            String inputAttrName = this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm());
+            String outputAttrName = this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm());
+            if (!this.mappingUtils.isIdentifierTypeProperty(inputAttrName) || allowDNAsPrincipalName) {
                 List<Control> controls = root.getControls();
                 SearchControl searchControl = new SearchControl();
                 if (controls != null) {
@@ -125,9 +122,8 @@ public class SecurityNameBridge {
                 }
                 // add MAP(userSecurityName) to the return list of properties
                 // d115256
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()))) {
-                    searchControl.getProperties().add(
-                                                      this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    searchControl.getProperties().add(outputAttrName);
                 }
                 // set the "expression" string to "type=LoginAccount and MAP(uniqueUserId)="user""
                 String quote = "'";
@@ -140,9 +136,9 @@ public class SecurityNameBridge {
 
                 String inputName = null;
                 if (allowDNAsPrincipalName) {
-                    inputName = "principalName";
+                    inputName = SchemaConstants.PROP_PRINCIPAL_NAME;
                 } else {
-                    inputName = this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm());
+                    inputName = inputAttrName;
                 }
                 searchControl.setExpression("//" + Service.DO_ENTITIES + "[@xsi:type='"
                                             + Service.DO_LOGIN_ACCOUNT + "' and "
@@ -160,12 +156,11 @@ public class SecurityNameBridge {
             }
             List<Entity> returnList = root.getEntities();
 
-            if (this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm())) && (returnList == null || returnList.size() == 0)) {
+            if (this.mappingUtils.isIdentifierTypeProperty(inputAttrName) && (returnList == null || returnList.size() == 0)) {
                 // add MAP(userSecurityName) to the return list of properties
                 // d115256
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()))) {
-                    this.mappingUtils.createPropertyControlDataObject(root,
-                                                                      this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    this.mappingUtils.createPropertyControlDataObject(root, outputAttrName);
                 }
                 // use the root DataGraph to create a LoginAccount DataObject
                 List<Entity> entities = root.getEntities();
@@ -176,11 +171,11 @@ public class SecurityNameBridge {
                 // set the MAP(uniqueUserId) to user
                 // d112199
                 IdentifierType idfType = new IdentifierType();
-                idfType.set(this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm()), idAndRealm.getId());
+                idfType.set(inputAttrName, idAndRealm.getId());
                 loginAccount.setIdentifier(idfType);
 
                 // Create an external name control if the external identifier is being used
-                if (this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm()).equals(Service.PROP_EXTERNAL_NAME)) {
+                if (inputAttrName.equals(Service.PROP_EXTERNAL_NAME)) {
                     List<Control> extCtrls = root.getControls();
                     if (extCtrls != null) {
                         extCtrls.add(new ExternalNameControl());
@@ -218,16 +213,16 @@ public class SecurityNameBridge {
                     LoginAccount loginAct = (LoginAccount) entity;
 
                     // d115256
-                    if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()))) {
-                        returnValue = (String) loginAct.get(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
+                    if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                        returnValue = (String) loginAct.get(outputAttrName);
                     } else {
-                        returnValue = (String) loginAct.getIdentifier().get(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
+                        returnValue = (String) loginAct.getIdentifier().get(outputAttrName);
                     }
                 } else if (entity != null) {
-                    if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()))) {
-                        returnValue = (String) entity.get(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
+                    if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                        returnValue = (String) entity.get(outputAttrName);
                     } else {
-                        returnValue = (String) entity.getIdentifier().get(this.propertyMap.getOutputUserPrincipal(idAndRealm.getRealm()));
+                        returnValue = (String) entity.getIdentifier().get(outputAttrName);
                     }
                 }
             }
@@ -261,11 +256,6 @@ public class SecurityNameBridge {
         return returnValue;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.ibm.ws.security.registry.UserRegistry#getGroupSecurityName(java.lang.String)
-     */
     @FFDCIgnore(WIMException.class)
     public String getGroupSecurityName(String inputUniqueGroupId) throws EntryNotFoundException, RegistryException {
         // initialize the method name
@@ -287,12 +277,13 @@ public class SecurityNameBridge {
             }
             // if MAP(uniqueGroupId) is an IdentifierType property
             // d112199
-            if (this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getInputUniqueGroupId(idAndRealm.getRealm()))) {
+            String inputAttrName = this.propertyMap.getInputUniqueGroupId(idAndRealm.getRealm());
+            String outputAttrName = this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm());
+            if (this.mappingUtils.isIdentifierTypeProperty(inputAttrName)) {
                 // use the root DataGraph to create a PropertyControl DataGraph
                 // d115913
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()))) {
-                    this.mappingUtils.createPropertyControlDataObject(root,
-                                                                      this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()));
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    this.mappingUtils.createPropertyControlDataObject(root, outputAttrName);
                 }
                 // use the root DataGraph to create a Group DataObject
                 List<Entity> entities = root.getEntities();
@@ -304,12 +295,12 @@ public class SecurityNameBridge {
                 // set MAP(uniqueGroupId) to group
                 // d112199
                 IdentifierType grpIdfType = new IdentifierType();
-                grpIdfType.set(this.propertyMap.getInputUniqueGroupId(idAndRealm.getRealm()), idAndRealm.getId());
+                grpIdfType.set(inputAttrName, idAndRealm.getId());
                 if (group != null) {
                     group.setIdentifier(grpIdfType);
                 }
                 // Create an external name control if the external identifier is being used
-                if (this.propertyMap.getInputUniqueGroupId(idAndRealm.getRealm()).equals(Service.PROP_EXTERNAL_NAME)) {
+                if (inputAttrName.equals(Service.PROP_EXTERNAL_NAME)) {
                     List<Control> extCtrls = root.getControls();
                     if (extCtrls != null) {
                         extCtrls.add(new ExternalNameControl());
@@ -326,9 +317,8 @@ public class SecurityNameBridge {
                 }
                 // add MAP(groupSecurityName) to the return list of properties
                 // d115913
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()))) {
-                    searchControl.getProperties().add(
-                                                      this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()));
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    searchControl.getProperties().add(outputAttrName);
                 }
                 // set the "expression" string to "type=Group and MAP(uniqueGroupId)="group""
                 String quote = "'";
@@ -339,7 +329,7 @@ public class SecurityNameBridge {
 
                 // d112199
                 searchControl.setExpression("//" + Service.DO_ENTITIES + "[@xsi:type='"
-                                            + Service.DO_GROUP + "' and " + this.propertyMap.getInputUniqueGroupId(idAndRealm.getRealm())
+                                            + Service.DO_GROUP + "' and " + inputAttrName
                                             + "=" + quote + id + quote + "]");
 
                 // Set context to use groupFilter if applicable
@@ -352,7 +342,7 @@ public class SecurityNameBridge {
                 root = this.mappingUtils.getWimService().search(root);
             }
             // return the value of MAP(groupSecurityName) from the output DataGraph
-            List returnList = root.getEntities();
+            List<Entity> returnList = root.getEntities();
             // the group was not found or more than one group was found
             // d125249
             if (returnList.isEmpty()) {
@@ -376,8 +366,8 @@ public class SecurityNameBridge {
             else {
                 Group group = (Group) returnList.get(0);
                 // d115913
-                if (!this.mappingUtils.isIdentifierTypeProperty(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()))) {
-                    Object value = group.get(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()));
+                if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
+                    Object value = group.get(outputAttrName);
 
                     if (value instanceof String)
                         returnValue = (String) value;
@@ -385,7 +375,7 @@ public class SecurityNameBridge {
                         returnValue = String.valueOf(((List<?>) value).get(0));
 
                 } else {
-                    returnValue = (String) group.getIdentifier().get(this.propertyMap.getOutputGroupSecurityName(idAndRealm.getRealm()));
+                    returnValue = (String) group.getIdentifier().get(outputAttrName);
                 }
             }
         } catch (WIMException toCatch) {

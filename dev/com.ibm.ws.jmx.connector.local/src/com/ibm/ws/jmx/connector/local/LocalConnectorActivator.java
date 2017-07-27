@@ -22,6 +22,7 @@ import org.osgi.service.component.ComponentContext;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
+import com.ibm.ws.kernel.service.util.JavaInfo;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.location.WsLocationConstants;
 import com.ibm.wsspi.kernel.service.location.WsResource;
@@ -65,22 +66,16 @@ public final class LocalConnectorActivator {
                         // TODO: Find a proper way to get the JMX agent's local connector address
                         //       for now we need to depend on JDK internal APIs
                         ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
-                        Class<?> clazz1 = null;
-                        try {
-                            clazz1 = Class.forName("sun.management.Agent", true, systemClassLoader);
-                        } catch (ClassNotFoundException e) {
-                            clazz1 = Class.forName("jdk.internal.agent.Agent", true, systemClassLoader);
-                        }
+                        Class<?> clazz1 = JavaInfo.majorVersion() < 9 
+							? Class.forName("sun.management.Agent", true, systemClassLoader) 
+							: Class.forName("jdk.internal.agent.Agent", true, systemClassLoader);
                         Method m1 = clazz1.getMethod("agentmain", String.class);
                         m1.invoke(null, (Object) null);
                         String localConnectorAddress = System.getProperty(LOCAL_CONNECTOR_ADDRESS_PROPERTY);
                         if (localConnectorAddress == null) {
-                            Class<?> clazz2 = null;
-                            try {
-                                clazz2 = Class.forName("sun.misc.VMSupport", true, systemClassLoader);
-                            } catch (ClassNotFoundException e) {
-                                clazz2 = Class.forName("jdk.internal.vm.VMSupport", true, systemClassLoader);
-                            }
+                            Class<?> clazz2 = JavaInfo.majorVersion() < 9 
+								? Class.forName("sun.misc.VMSupport", true, systemClassLoader) 
+								: Class.forName("jdk.internal.vm.VMSupport", true, systemClassLoader);
                             Method m2 = clazz2.getMethod("getAgentProperties");
                             Properties props = (Properties) m2.invoke(null);
                             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {

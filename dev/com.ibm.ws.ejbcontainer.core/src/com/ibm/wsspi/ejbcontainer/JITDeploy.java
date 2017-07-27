@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2014 IBM Corporation and others.
+ * Copyright (c) 2008, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,7 +22,7 @@ import com.ibm.ws.ejbcontainer.jitdeploy.JIT_StubPluginImpl;
 /**
  * Provides access to Just-In-Time deployment of EJB artifacts to WebSphere
  * tooling providers. <p>
- * 
+ *
  * @author IBM Corp.
  * @since WAS 7.0
  * @ibm-spi
@@ -35,6 +35,9 @@ public final class JITDeploy
 
     public static final String rmicCompatible = "com.ibm.websphere.ejbcontainer.rmicCompatible";
     public static final int RMICCompatible = parseRMICCompatible(System.getProperty(rmicCompatible));
+
+    public static final String throwRemoteFromEjb3Stub = "com.ibm.websphere.ejbcontainer.ejb3StubThrowsRemote";
+    public static final boolean ThrowRemoteFromEjb3Stub = Boolean.getBoolean((throwRemoteFromEjb3Stub));
 
     private static final int RMIC_COMPATIBLE_DEFAULT = 0;
     private static final int RMIC_COMPATIBLE_VALUES = 1 << 0;
@@ -56,7 +59,7 @@ public final class JITDeploy
 
     /**
      * The list of options accepted by {@link #parseRMICCompatible}.
-     * 
+     *
      * @return the list of RMIC compatibility options
      */
     // PM94096
@@ -72,7 +75,7 @@ public final class JITDeploy
 
     /**
      * Parse an rmic compatibility options string.
-     * 
+     *
      * @param options the options string
      * @return the compatibility flags
      * @see #isRMICCompatibleValues
@@ -125,7 +128,7 @@ public final class JITDeploy
     /**
      * Returns true if the flags returned from {@link #parseRMICCompatible} indicate that read_value/write_value should be used for compatibility
      * with rmic.
-     * 
+     *
      * @param flags rmic compatibility flags
      */
     public static boolean isRMICCompatibleValues(int flags) // PM46698
@@ -136,7 +139,7 @@ public final class JITDeploy
     /**
      * Returns true if the flags returned from {@link #parseRMICCompatible} indicate that exception names should be mangled for compatibility with
      * rmic.
-     * 
+     *
      * @param flags rmic compatibility flags
      */
     public static boolean isRMICCompatibleExceptions(int flags) // PM94096
@@ -147,14 +150,14 @@ public final class JITDeploy
     /**
      * Returns the name of the Stub class that needs to be loaded for the
      * specified remote interface class. <p>
-     * 
+     *
      * Basically, the name of the Stub class for any remote interface is
      * the simple name of the remote interface class, with an '_' prepended,
      * and '_Stub' appended. The package of the returned Stub class name
      * will be the same as the package of the remote interface. <p>
-     * 
+     *
      * @param remoteInterface remote interface class.
-     * 
+     *
      * @return the name of the Stub class that needs to be loaded for the
      *         specified remote interface class. <p>
      **/
@@ -175,15 +178,15 @@ public final class JITDeploy
     /**
      * Generates the class bytes for the Stub class corresponding to the
      * specified remote interface class. <p>
-     * 
+     *
      * The corresponding method, getStubClassName(), provides the name
      * of the generated stub class. <p>
-     * 
+     *
      * Intended for use by WebSphere tooling providers. <p>
-     * 
+     *
      * @param remoteInterface Interface implemented by the generated Stub;
      *            not required to implement java.rmi.Remote.
-     * 
+     *
      * @return the class bytes for the Stub class corresponding to the
      *         specified remote interface class.
      **/
@@ -196,16 +199,16 @@ public final class JITDeploy
     /**
      * Generates the class bytes for the Stub class with rmic compatibility
      * corresponding to the specified remote interface class. <p>
-     * 
+     *
      * The corresponding method, getStubClassName(), provides the name
      * of the generated stub class. <p>
-     * 
+     *
      * Intended for use by WebSphere tooling providers. <p>
-     * 
+     *
      * @param remoteInterface Interface implemented by the generated Stub;
      *            not required to implement java.rmi.Remote.
      * @param rmicCompatible The rmic compatibility to use as returned by {@link #parseRMICCompatible}.
-     * 
+     *
      * @return the class bytes for the Stub class corresponding to the
      *         specified remote interface class.
      **/
@@ -229,22 +232,22 @@ public final class JITDeploy
     /**
      * Registers a Just-In-Time Stub Class plugin with the specified
      * ClassLoader. <p>
-     * 
+     *
      * The specified ClassLoader must be an instance of CompoundClassLoader,
      * or an IllegalArgumentException will occur. <p>
-     * 
+     *
      * If a JIT_StubClassPlugin has already been registered with the specified
      * ClassLoader, then this method will have no effect. <p>
-     * 
+     *
      * The JIT_StubClassPlugin will be invoked to define _Stub classes
      * for each class with a name ending with '_Stub', that cannot be
      * found in the classpath. The parent ClassLoader will be invoked
      * prior to invoking the JIT_StubClassPlugin regardless of the
      * delegation model for this ClassLoader. <p>
-     * 
+     *
      * @param classloader the ClassLoader to plugin the new Just-In-Time Stub
      *            Class Plugin
-     * 
+     *
      * @throws IllegalArgumentException if the specified ClassLoader does not
      *             support the JIT_StubClassPlugin.
      **/
