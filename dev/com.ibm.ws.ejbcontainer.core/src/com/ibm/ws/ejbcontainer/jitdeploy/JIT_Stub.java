@@ -94,9 +94,6 @@ public final class JIT_Stub {
                                                          JITUtils.JIT_TRACE_GROUP,
                                                          JITUtils.JIT_RSRC_BUNDLE);
 
-    private static final String throwRemoteFromEjb3Stub = "com.ibm.websphere.ejbcontainer.ejb3StubThrowsRemote";
-    private static final boolean ThrowRemoteFromEjb3Stub = Boolean.getBoolean((throwRemoteFromEjb3Stub));
-
     private static final Type TYPE_RemoteException = Type.getType("Ljava/rmi/RemoteException;");
     private static final Type TYPE_TransactionRolledbackException = Type.getType("Ljavax/transaction/TransactionRolledbackException;");
 
@@ -537,7 +534,7 @@ public final class JIT_Stub {
         // If the interface extends Remote, the property is enabled to allow
         // remote exceptions, or any of the thrown exceptions are remote exceptions,
         // then allow remote exceptions to be thrown from the stub methods.
-        boolean throwsRemoteEx = isRmiRemote || ThrowRemoteFromEjb3Stub;
+        boolean throwsRemoteEx = isRmiRemote || JITDeploy.ThrowRemoteFromEjb3Stub;
         if (!throwsRemoteEx) {
             for (Class<?> exClass : methodExceptions) {
                 if (RemoteException.class.isAssignableFrom(exClass)) {
