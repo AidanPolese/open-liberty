@@ -500,6 +500,22 @@ task copyMavenLibs(type: Copy) {
       }
   }
 
+  task copyPiiFiles {
+    enabled !parseBoolean(bnd('copy.pii.disabled', 'false'))
+    ext.destinationDir = new File(rootDir, "build.pii.package/nlssrc/${project.name}")
+    inputs.files(fileTree(dir: "${projectDir}/resources", includes: ['**/*.nlsprops', 'OSGI-INF/l10n/*.properties', 'l10n/*.properties'])).skipWhenEmpty()
+    outputs.dir destinationDir
+    doLast {
+      copy {
+        from "${projectDir}/resources"
+        into destinationDir
+        include '**/*.nlsprops'
+        include 'OSGI-INF/l10n/*.properties'
+        include 'l10n/*.properties'
+      }
+    }
+  }
+
   sourceSets {
     main {
       java.srcDir globalize.destinationDir
@@ -556,6 +572,13 @@ task zipOpenLiberty(type: Zip) {
     baseName 'openliberty'
     from 'build.image/wlp'
     destinationDir file('build.image/generated/distributions')
+}
+
+task zipMessageFiles(type: Zip) {
+    dependsOn subprojects.copyPiiFiles
+    baseName 'openPII'
+    from 'build.pii.package/nlssrc'
+    destinationDir file('build.pii.package/generated/distributions')
 }
 
 private boolean parseBoolean(String value) {
