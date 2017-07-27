@@ -23,6 +23,8 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
@@ -49,9 +51,13 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     final ReduceableSemaphore maxQueueSizeConstraint = new ReduceableSemaphore();
 
+    private final AtomicLong maxWaitForEnqueue = new AtomicLong();
+
     final AtomicInteger numTasksOnGlobal = new AtomicInteger();
 
     final ConcurrentLinkedQueue<FutureTask<?>> queue = new ConcurrentLinkedQueue<FutureTask<?>>();
+
+    private final AtomicReference<QueueFullAction> queueFullAction = new AtomicReference<QueueFullAction>();
 
     @SuppressWarnings("serial") // never serialized
     static class ReduceableSemaphore extends Semaphore {
@@ -103,19 +109,17 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     @Trivial // because invoker is traced
     private void enqueue(FutureTask<?> futureTask) {
         try {
-            if (maxQueueSizeConstraint.tryAcquire()) { // TODO apply maxWaitForEnqueue if configured
+            long wait = maxWaitForEnqueue.get();
+            if (wait == 0 ? maxQueueSizeConstraint.tryAcquire() : maxQueueSizeConstraint.tryAcquire(wait, TimeUnit.MILLISECONDS)) {
                 queue.offer(futureTask);
-                if (incrementNumTasksOnGlobal()) {
-                    Future<?> policyTaskFuture = null;
-                    try {
-                        policyTaskFuture = globalExecutor.submit(new PolicyTask(this));
-                    } finally {
-                        if (policyTaskFuture == null)
-                            numTasksOnGlobal.decrementAndGet();
-                    }
-                }
-            } else // TODO reject or callerRuns
+                if (incrementNumTasksOnGlobal())
+                    enqueueGlobal(new PolicyTask(this));
+            } else // TODO Reject, CallerRuns, or
                 throw new RejectedExecutionException();
+        } catch (InterruptedException x) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                Tr.debug(this, tc, "enqueue", x);
+            throw new RejectedExecutionException(x);
         } catch (RuntimeException x) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(this, tc, "enqueue", x);
@@ -125,6 +129,29 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                 Tr.debug(this, tc, "enqueue", x);
             throw x;
         }
+    }
+
+    /**
+     * Queue a policy task to the global executor.
+     * Prereq: numTasksOnGlobal must already reflect the task being queued to global.
+     * If unsuccessful in queueing to global, this method decrements numTasksOnGlobal.
+     *
+     * @param policyTask task that can execute tasks that are queued to the policy executor.
+     * @return Future for the tasks queued to global. Null if not queued to global.
+     */
+    Future<?> enqueueGlobal(PolicyTask policyTask) {
+        Future<?> future = null;
+        try {
+            future = globalExecutor.submit(policyTask);
+        } finally {
+            if (future == null) {
+                int numPolicyTasks = numTasksOnGlobal.decrementAndGet();
+
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                    Tr.debug(this, tc, "Policy tasks for " + this + " reduced to " + numPolicyTasks);
+            }
+        }
+        return future;
     }
 
     @Override
@@ -138,7 +165,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
      *
      * @return true if incremented, otherwise false.
      */
-    private boolean incrementNumTasksOnGlobal() {
+    boolean incrementNumTasksOnGlobal() {
         int max = maxConcurrency.get();
         for (int n = numTasksOnGlobal.get(); n < max; n = numTasksOnGlobal.get())
             if (numTasksOnGlobal.compareAndSet(n, n + 1))
@@ -207,6 +234,29 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         else if (increase < 0)
             maxQueueSizeConstraint.reducePermits(-increase);
         maxQueueSize = max;
+
+        return this;
+    }
+
+    @Override
+    public PolicyExecutor maxWaitForEnqueue(long ms) {
+        if (isServerConfigured)
+            throw new UnsupportedOperationException();
+
+        if (ms < 0)
+            throw new IllegalArgumentException(Long.toString(ms));
+
+        maxWaitForEnqueue.set(ms);
+
+        return this;
+    }
+
+    @Override
+    public PolicyExecutor queueFullAction(QueueFullAction action) {
+        if (isServerConfigured)
+            throw new UnsupportedOperationException();
+
+        queueFullAction.set(action);
 
         return this;
     }
