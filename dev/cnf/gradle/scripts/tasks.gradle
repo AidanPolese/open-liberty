@@ -500,6 +500,22 @@ task copyMavenLibs(type: Copy) {
       }
   }
 
+  task copyPiiFiles {
+    enabled !parseBoolean(bnd('copy.pii.disabled', 'false'))
+    ext.destinationDir = new File(rootDir, "build.pii.package/nlssrc/${project.name}")
+    inputs.files(fileTree(dir: "${projectDir}/resources", includes: ['**/*.nlsprops', 'OSGI-INF/l10n/*.properties', 'l10n/*.properties'])).skipWhenEmpty()
+    outputs.dir destinationDir
+    doLast {
+      copy {
+        from "${projectDir}/resources"
+        into destinationDir
+        include '**/*.nlsprops'
+        include 'OSGI-INF/l10n/*.properties'
+        include 'l10n/*.properties'
+      }
+    }
+  }
+
   sourceSets {
     main {
       java.srcDir globalize.destinationDir
