@@ -252,6 +252,9 @@ public class FeatureManagerTest {
                     will(returnValue(featureBundlesProcessed));
                     allowing(featureBundlesProcessed).waitForCompletion();
                     allowing(featureUpdatesCompleted).setResult(with(any(Boolean.class)));
+
+                    allowing(mockBundleContext).getProperty("wlp.liberty.boot");
+                    will(returnValue(null));
                 }
             });
             fm.activate(mockComponentContext, new HashMap<String, Object>());

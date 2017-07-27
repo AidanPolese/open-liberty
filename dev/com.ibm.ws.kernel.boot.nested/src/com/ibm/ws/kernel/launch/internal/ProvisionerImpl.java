@@ -23,6 +23,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.util.tracker.ServiceTracker;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
@@ -35,6 +36,7 @@ import com.ibm.ws.kernel.boot.internal.KernelResolver.KernelBundleElement;
 import com.ibm.ws.kernel.boot.internal.KernelStartLevel;
 import com.ibm.ws.kernel.provisioning.BundleRepositoryRegistry;
 import com.ibm.ws.kernel.provisioning.ContentBasedLocalBundleRepository;
+import com.ibm.ws.kernel.provisioning.LibertyBootRuntime;
 import com.ibm.ws.kernel.provisioning.VersionUtility;
 
 /**
@@ -47,6 +49,8 @@ import com.ibm.ws.kernel.provisioning.VersionUtility;
 public class ProvisionerImpl implements Provisioner {
     private static final String ME = ProvisionerImpl.class.getName();
     private static final TraceComponent tc = Tr.register(ProvisionerImpl.class);
+    private static final String BUNDLE_LOC_KERNEL_TAG = "kernel@";
+    private ServiceTracker<LibertyBootRuntime, LibertyBootRuntime> serviceTracker;
 
     /**
      * Reference to a bundle context (could be the system bundle or the kernel
@@ -74,7 +78,6 @@ public class ProvisionerImpl implements Provisioner {
 
         // Obtain/initialize provisioner-related services and resources
         getServices(systemBundleCtx);
-
         try {
 
             // Install the platform bundles (default start level of kernel,
@@ -160,6 +163,9 @@ public class ProvisionerImpl implements Provisioner {
         // behavior that is fundamentally a part of the framework
         frameworkStartLevel = bundleCtx.getBundle(Constants.SYSTEM_BUNDLE_LOCATION).adapt(FrameworkStartLevel.class);
         frameworkStartLevel.setInitialBundleStartLevel(KernelStartLevel.ACTIVE.getLevel());
+
+        serviceTracker = new ServiceTracker<LibertyBootRuntime, LibertyBootRuntime>(context, LibertyBootRuntime.class, null);
+        serviceTracker.open();
     }
 
     /**
@@ -221,77 +227,137 @@ public class ProvisionerImpl implements Provisioner {
         if (bundleList == null || bundleList.size() <= 0)
             return installStatus;
 
+        boolean libertyBoot = Boolean.parseBoolean(config.get(BootstrapConstants.LIBERTY_BOOT_PROPERTY));
         for (final KernelBundleElement element : bundleList) {
-            // First, check/use previously stored Bundle path..
-            File bundleFile = element.getCachedBestMatch();
-            if (bundleFile == null || !bundleFile.exists()) {
-                // If we didn't have a previous path, or it's no good, we need to look
-                // for the bundle in the repository
-                bundleFile = repo.selectBundle(element.getLocation(), element.getSymbolicName(),
-                                               VersionUtility.stringToVersionRange(element.getRangeString()));
-                element.setBestMatch(bundleFile);
-            }
-
-            if (bundleFile == null || !bundleFile.exists()) {
-                // make note of bundle that could not be found
-                installStatus.addMissingBundle(element.toNameVersionString());
+            if (libertyBoot) {
+                // For boot bundles the LibertyBootRuntime must be used to install the bundles
+                installLibertBootBundle(element, installStatus);
             } else {
-                // attempt to install bundle resource
-                Bundle bundle;
-
-                try {
-                    // Get URL from resource
-                    URL resourceURL = bundleFile.toURI().toURL();
-                    String urlString = resourceURL.toString();
-
-                    // Install this bundle as a "reference"-- this means that
-                    // the framework will not copy this bundle into it's private cache, it
-                    // will run from the actual jar (wherever it is).
-                    urlString = "reference:" + urlString;
-
-                    //Defect 44222: We were using the stored bundleID to check
-                    //for a previously-installed bundle matching that ID and throwing
-                    //an error if another bundle was found at that ID.  This restriction
-                    //has been relaxed and now we just install the bundle.
-                    bundle = context.installBundle("kernel@" + urlString, new URL(urlString).openStream());
-
-                    int startLevel = 0;
-
-                    BundleRevision bRev = bundle.adapt(BundleRevision.class);
-
-                    // Add non-fragment bundles to the list of bundles to be
-                    // started and set startLevel
-                    if ((bRev.getTypes() & BundleRevision.TYPE_FRAGMENT) != BundleRevision.TYPE_FRAGMENT) {
-                        installStatus.addBundleToStart(bundle);
-                        BundleStartLevel bStartLevel = bundle.adapt(BundleStartLevel.class);
-
-                        startLevel = element.getStartLevel();
-                        int currentLevel = bStartLevel.getStartLevel();
-
-                        // Change the start level if necessary
-                        if (currentLevel != startLevel) {
-
-                            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                                Tr.debug(this, tc, "Changing the start level of bundle {0} from {1} to the current level of {2}", bundle, currentLevel, startLevel);
-
-                            bStartLevel.setStartLevel(startLevel);
-
-                        }
-                    }
-                } catch (IllegalStateException e) {
-                    // The framework is stopping: this is an expected but not ideal occurrence.
-                    e.getCause();
-                    throw new InvalidBundleContextException();
-                } catch (Throwable e) {
-                    // We encountered an error installing a bundle, add it to
-                    // the status, and continue. The caller will handle as
-                    // appropriate
-                    installStatus.addInstallException(element.toNameVersionString(), e);
-                }
+                installKernelBundle(element, installStatus, repo);
             }
-        } // end for each key in bundle list
+        }
 
         return installStatus;
+    }
+
+    private void installKernelBundle(KernelBundleElement element, BundleInstallStatus installStatus, ContentBasedLocalBundleRepository repo) throws InvalidBundleContextException {
+        // First, check/use previously stored Bundle path..
+        File bundleFile = element.getCachedBestMatch();
+        if (bundleFile == null || !bundleFile.exists()) {
+            // If we didn't have a previous path, or it's no good, we need to look
+            // for the bundle in the repository
+            bundleFile = repo.selectBundle(element.getLocation(), element.getSymbolicName(),
+                                           VersionUtility.stringToVersionRange(element.getRangeString()));
+            element.setBestMatch(bundleFile);
+        }
+
+        if (bundleFile == null || !bundleFile.exists()) {
+            // make note of bundle that could not be found
+            installStatus.addMissingBundle(element.toNameVersionString());
+        } else {
+            // attempt to install bundle resource
+            Bundle bundle;
+
+            try {
+                // Get URL from resource
+                URL resourceURL = bundleFile.toURI().toURL();
+                String urlString = resourceURL.toString();
+
+                // Install this bundle as a "reference"-- this means that
+                // the framework will not copy this bundle into it's private cache, it
+                // will run from the actual jar (wherever it is).
+                urlString = "reference:" + urlString;
+
+                //Defect 44222: We were using the stored bundleID to check
+                //for a previously-installed bundle matching that ID and throwing
+                //an error if another bundle was found at that ID.  This restriction
+                //has been relaxed and now we just install the bundle.
+                bundle = context.installBundle(BUNDLE_LOC_KERNEL_TAG + urlString, new URL(urlString).openStream());
+
+                setStartLevel(bundle, element, installStatus);
+            } catch (IllegalStateException e) {
+                // The framework is stopping: this is an expected but not ideal occurrence.
+                e.getCause();
+                throw (InvalidBundleContextException) new InvalidBundleContextException().initCause(e);
+            } catch (Throwable e) {
+                // We encountered an error installing a bundle, add it to
+                // the status, and continue. The caller will handle as
+                // appropriate
+                installStatus.addInstallException(element.toNameVersionString(), e);
+            }
+        }
+    }
+
+    private void setStartLevel(Bundle bundle, KernelBundleElement element, BundleInstallStatus installStatus) throws InvalidBundleContextException {
+        try {
+            BundleRevision bRev = bundle.adapt(BundleRevision.class);
+            // Add non-fragment bundles to the list of bundles to be
+            // started and set startLevel
+            if ((bRev.getTypes() & BundleRevision.TYPE_FRAGMENT) != BundleRevision.TYPE_FRAGMENT) {
+                installStatus.addBundleToStart(bundle);
+                BundleStartLevel bStartLevel = bundle.adapt(BundleStartLevel.class);
+
+                int startLevel = element.getStartLevel();
+                int currentLevel = bStartLevel.getStartLevel();
+
+                // Change the start level if necessary
+                if (currentLevel != startLevel) {
+
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                        Tr.debug(this, tc, "Changing the start level of bundle {0} from {1} to the current level of {2}", bundle, currentLevel, startLevel);
+
+                    bStartLevel.setStartLevel(startLevel);
+                }
+            }
+        } catch (IllegalStateException e) {
+            // The framework is stopping: this is an expected but not ideal occurrence.
+            e.getCause();
+            throw (InvalidBundleContextException) new InvalidBundleContextException().initCause(e);
+        } catch (Throwable e) {
+            // We encountered an error installing a bundle, add it to
+            // the status, and continue. The caller will handle as
+            // appropriate
+            installStatus.addInstallException(element.toNameVersionString(), e);
+        }
+    }
+
+    /**
+     * @param element
+     * @param installStatus
+     * @throws InvalidBundleContextException
+     */
+    private void installLibertBootBundle(KernelBundleElement kernelBundle, BundleInstallStatus installStatus) throws InvalidBundleContextException {
+
+        if (kernelBundle.getStartLevel() == KernelStartLevel.LIBERTY_BOOT.getLevel()) {
+            // Ignore boot.jar bundles
+            return;
+        }
+
+        //getting the LibertyBootRuntime service and installing boot bundle
+        LibertyBootRuntime rt = serviceTracker.getService();
+        if (rt == null) {
+            throw new IllegalStateException("No LibertyBootRuntime service found!");
+        }
+
+        Bundle b = null;
+        try {
+            b = rt.installBootBundle(kernelBundle.getSymbolicName(), VersionUtility.stringToVersionRange(kernelBundle.getRangeString()), BUNDLE_LOC_KERNEL_TAG);
+        } catch (IllegalStateException e) {
+            // The framework is stopping: this is an expected but not ideal occurrence.
+            e.getCause();
+            throw (InvalidBundleContextException) new InvalidBundleContextException().initCause(e);
+        } catch (Throwable e) {
+            // We encountered an error installing a bundle, add it to
+            // the status, and continue. The caller will handle as
+            // appropriate
+            installStatus.addInstallException(kernelBundle.toNameVersionString(), e);
+        }
+        if (b == null) {
+            installStatus.addMissingBundle(kernelBundle.toNameVersionString());
+        } else if (b.getBundleId() != 0) {
+            setStartLevel(b, kernelBundle, installStatus);
+        }
+
     }
 
     /**

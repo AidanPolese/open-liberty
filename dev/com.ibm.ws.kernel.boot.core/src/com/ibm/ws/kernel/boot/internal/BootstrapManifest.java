@@ -12,6 +12,9 @@ package com.ibm.ws.kernel.boot.internal;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +42,7 @@ import com.ibm.ws.kernel.boot.cmdline.Utils;
 public class BootstrapManifest {
 
     static final String BUNDLE_VERSION = "Bundle-Version";
+    static final String JAR_PROTOCOL = "jar";
 
     /** Manifest header for the default kernel version */
     static final String MANIFEST_KERNEL = "WebSphere-DefaultKernel";
@@ -73,11 +77,12 @@ public class BootstrapManifest {
     private static BootstrapManifest instance = null;
 
     private final Attributes manifestAttributes;
+    private final boolean libertyBoot;
 
-    public static BootstrapManifest readBootstrapManifest() throws IOException {
+    public static BootstrapManifest readBootstrapManifest(boolean libertyBoot) throws IOException {
         BootstrapManifest manifest = instance;
         if (manifest == null) {
-            manifest = instance = new BootstrapManifest();
+            manifest = instance = new BootstrapManifest(libertyBoot);
         }
         return manifest;
     }
@@ -87,16 +92,28 @@ public class BootstrapManifest {
         instance = null;
     }
 
-    /**
-     * @throws IOException
-     */
     protected BootstrapManifest() throws IOException {
+        this(false);
+    }
+
+    /**
+     * In the case of liberty boot the manifest is discovered
+     * by looking up the jar URL for this class.
+     *
+     * @param libertyBoot enables liberty boot
+     * @throws IOException if here is an error reading the manifest
+     */
+    protected BootstrapManifest(boolean libertyBoot) throws IOException {
+        this.libertyBoot = libertyBoot;
+        manifestAttributes = libertyBoot ? getLibertyBootAttributes() : getAttributesFromBootstrapJar();
+    }
+
+    private static Attributes getAttributesFromBootstrapJar() throws IOException {
         JarFile jf = null;
         try {
             jf = new JarFile(KernelUtils.getBootstrapJar());
             Manifest mf = jf.getManifest();
-
-            manifestAttributes = mf.getMainAttributes();
+            return mf.getMainAttributes();
         } catch (IOException e) {
             throw e;
         } finally {
@@ -104,11 +121,52 @@ public class BootstrapManifest {
         }
     }
 
+    private static Attributes getLibertyBootAttributes() {
+        JarFile jf = getLibertBootJarFile();
+        Manifest mf;
+        try {
+            mf = jf.getManifest();
+            return mf.getMainAttributes();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        } finally {
+            Utils.tryToClose(jf);
+        }
+    }
+
+    private static JarFile getLibertBootJarFile() {
+        // here we assume we can lookup our own .class resource to find the JarFile
+        return getJarFile(BootstrapManifest.class.getResource(BootstrapManifest.class.getSimpleName() + ".class"));
+    }
+
+    private static JarFile getJarFile(URL url) {
+        if (JAR_PROTOCOL.equals(url.getProtocol())) {
+            try {
+                URLConnection conn = url.openConnection();
+                if (conn instanceof JarURLConnection) {
+                    return ((JarURLConnection) conn).getJarFile();
+                }
+            } catch (IOException e) {
+                throw new IllegalStateException("No jar file found: " + url, e);
+            }
+        }
+        throw new IllegalArgumentException("Not a jar URL: " + url);
+    }
+
+    /**
+     * @return
+     * @throws IOException
+     */
+    private JarFile getBootJar() throws IOException {
+        // For liberty boot don't try to find the bootstrap jar.
+        return libertyBoot ? getLibertBootJarFile() : new JarFile(KernelUtils.getBootstrapJar());
+    }
+
     /**
      * Find and return the name of the core/kernel feature. Look in
      * bootstrap properties first, if not explicitly defined there, get
      * the default from the manifest.
-     * 
+     *
      * @return the selected kernel version
      */
     public String getKernelDefinition(BootstrapConfig bootProps) {
@@ -127,7 +185,7 @@ public class BootstrapManifest {
      * Find and return the name of the log provider. Look in
      * bootstrap properties first, if not explicitly defined there, get
      * the default from the manifest.
-     * 
+     *
      * @return the selected log provider
      */
     public String getLogProviderDefinition(BootstrapConfig bootProps) {
@@ -146,7 +204,7 @@ public class BootstrapManifest {
      * Find and return the name of the os extension. Look in
      * bootstrap properties first, if not explicitly defined there, get
      * the default from the manifest.
-     * 
+     *
      * @return the selected log provider
      */
     public String getOSExtensionDefinition(BootstrapConfig bootProps) {
@@ -191,13 +249,13 @@ public class BootstrapManifest {
                 bootProps.put(BootstrapConstants.INITPROP_OSGI_EXTRA_PACKAGE, packages);
         }
 
-        // system packages are replaced, not appended 
+        // system packages are replaced, not appended
         // so we only go look for our list of system packages if it hasn't already been set in bootProps
         // (that's the difference, re: system packages vs. "Extra" packages.. )
         if (syspackages == null) {
             // Look for system packages property file in the jar
             String javaVersion = System.getProperty("java.version", "1.6.0");
-            // the java version may have an update modifier in the version string so we need to remove it. 
+            // the java version may have an update modifier in the version string so we need to remove it.
             int index = javaVersion.indexOf('_');
             index = (index == -1) ? javaVersion.indexOf('-') : index;
             javaVersion = (index == -1) ? javaVersion : javaVersion.substring(0, index);
@@ -205,7 +263,7 @@ public class BootstrapManifest {
 
             JarFile jarFile = null;
             try {
-                jarFile = new JarFile(KernelUtils.getBootstrapJar());
+                jarFile = getBootJar();
 
                 List<String> systemPackageFileNames = new ArrayList<String>();
 
@@ -261,7 +319,7 @@ public class BootstrapManifest {
 
                 syspackages = getMergedSystemProperties(jarFile, systemPackageFileNames);
 
-                // save new system packages 
+                // save new system packages
                 if (syspackages != null)
                     bootProps.put(BootstrapConstants.INITPROP_OSGI_SYSTEM_PACKAGES, syspackages);
 
@@ -303,7 +361,7 @@ public class BootstrapManifest {
      * Normalize the value associated with the &quot;os.name&quot; system
      * property by putting it in lower case and removing characters that
      * cannot be used with {@link java.util.jar.Attributes.Name}.
-     * 
+     *
      * @return the normalized OS name
      */
     static String getNormalizedOperatingSystemName(final String osName) {

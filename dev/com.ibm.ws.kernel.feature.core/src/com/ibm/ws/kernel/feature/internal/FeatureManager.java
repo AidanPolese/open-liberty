@@ -57,6 +57,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 
@@ -84,6 +87,7 @@ import com.ibm.ws.kernel.launch.service.FrameworkReady;
 import com.ibm.ws.kernel.launch.service.ProductExtensionServiceFingerprint;
 import com.ibm.ws.kernel.provisioning.BundleRepositoryRegistry;
 import com.ibm.ws.kernel.provisioning.BundleRepositoryRegistry.BundleRepositoryHolder;
+import com.ibm.ws.kernel.provisioning.LibertyBootRuntime;
 import com.ibm.ws.kernel.provisioning.ProductExtension;
 import com.ibm.ws.kernel.provisioning.ProductExtensionInfo;
 import com.ibm.ws.runtime.update.RuntimeUpdateManager;
@@ -257,6 +261,8 @@ public class FeatureManager implements FeatureProvisioner, FrameworkReady, Manag
      * but executed after.
      */
     private volatile boolean deactivated;
+
+    private volatile LibertyBootRuntime libertyBoot;
 
     /**
      * FeatureManager is instantiated by declarative services.
@@ -451,6 +457,21 @@ public class FeatureManager implements FeatureProvisioner, FrameworkReady, Manag
     @Reference(name = "runtimeUpdateManager", service = RuntimeUpdateManager.class)
     protected void setRuntimeUpdateManager(RuntimeUpdateManager runtimeUpdateManager) {
         this.runtimeUpdateManager = runtimeUpdateManager;
+    }
+
+    @Reference(cardinality=ReferenceCardinality.OPTIONAL, policy=ReferencePolicy.DYNAMIC, policyOption=ReferencePolicyOption.GREEDY)
+    protected void setLibertyBoot(LibertyBootRuntime libertyBoot) {
+        this.libertyBoot = libertyBoot;
+    }
+    
+    public LibertyBootRuntime getLibertyBoot(){
+        return libertyBoot;
+    }
+
+    protected void unsetLibertyBoot(LibertyBootRuntime libertyBoot) {
+        if (this.libertyBoot == libertyBoot) {
+            this.libertyBoot = null;
+        }
     }
 
     /**
@@ -1153,6 +1174,7 @@ public class FeatureManager implements FeatureProvisioner, FrameworkReady, Manag
                     packageInspector.populateSPIInfo(bundleContext, this);
                     regionsToRemove = provisioner.createAndUpdateProductRegions();
                 }
+
                 // always do the install bundle operation becuase it associates bundles with refeature resources
                 // TODO would be good if we could avoid this when features have not changed.
                 provisioner.installBundles(bundleContext,

@@ -11,9 +11,14 @@
 package com.ibm.ws.kernel.feature.internal;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -58,6 +63,7 @@ import org.osgi.resource.Capability;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.kernel.boot.internal.BootstrapConstants;
 import com.ibm.ws.kernel.feature.ApiRegion;
 import com.ibm.ws.kernel.feature.internal.BundleList.FeatureResourceHandler;
 import com.ibm.ws.kernel.feature.internal.subsystem.FeatureDefinitionUtils;
@@ -65,6 +71,7 @@ import com.ibm.ws.kernel.feature.provisioning.FeatureResource;
 import com.ibm.ws.kernel.feature.provisioning.ProvisioningFeatureDefinition;
 import com.ibm.ws.kernel.provisioning.BundleRepositoryRegistry.BundleRepositoryHolder;
 import com.ibm.ws.kernel.provisioning.ContentBasedLocalBundleRepository;
+import com.ibm.ws.kernel.provisioning.LibertyBootRuntime;
 import com.ibm.ws.kernel.provisioning.packages.SharedPackageInspector.PackageType;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.location.WsResource;
@@ -158,6 +165,8 @@ public class Provisioner {
 
     private final Field dynamicMissRefField;
 
+    private final boolean libertyBoot;
+
     public Provisioner(FeatureManager mgr, Set<String> apiPackagesToIgnore) {
         featureManager = mgr;
         kernelRegion = mgr.getDigraph().getRegion(mgr.bundleContext.getBundle());
@@ -174,6 +183,8 @@ public class Provisioner {
             throw new RuntimeException(e);
         }
         this.dynamicMissRefField = tmpField;
+        
+        libertyBoot = Boolean.parseBoolean(mgr.bundleContext.getProperty(BootstrapConstants.LIBERTY_BOOT_PROPERTY));
     }
 
     /**
@@ -202,7 +213,8 @@ public class Provisioner {
 
         if (bundleList == null || bundleList.isEmpty())
             return;
-
+        final FrameworkWiring fwkWiring = featureManager.bundleContext.getBundle(Constants.SYSTEM_BUNDLE_LOCATION).adapt(FrameworkWiring.class);
+        final File bootFile = getBootJar();
         bundleList.foreach(new BundleList.FeatureResourceHandler() {
             @Override
             @FFDCIgnore({ IllegalStateException.class, Exception.class })
@@ -225,50 +237,13 @@ public class Provisioner {
                     // Get the product name for which the bundles are being installed.
                     String productName = bundleRepositoryHolder.getFeatureType();
 
-                    bundle = fetchInstalledBundle(urlString, productName);
-                    File bundleFile;
-                    if (bundle == null) {
-                        ContentBasedLocalBundleRepository lbr = bundleRepositoryHolder.getBundleRepository();
-                        // Try to find the file, hopefully using the cached path
-                        bundleFile = lbr.selectBundle(urlString, fr.getSymbolicName(), fr.getVersionRange());
-
-                        if (bundleFile == null) {
-                            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                                Tr.debug(tc, "Bundle not matched", lbr, fr);
-                            }
-                            Tr.error(tc, "UPDATE_MISSING_BUNDLE_ERROR", fr.getMatchString());
-                            installStatus.addMissingBundle(fr);
-                            return true;
-                        }
-
-                        // Get URL from filename
-                        URI uri = bundleFile.toURI();
-                        urlString = uri.toURL().toString();
-
-                        urlString = PathUtils.normalize(urlString);
-
-                        // Install this bundle as a "reference"-- this means that the
-                        // framework will not copy this bundle into it's private cache, 
-                        // it will run from the actual jar (wherever it is).
-                        urlString = BUNDLE_LOC_REFERENCE_TAG + urlString;
-
-                        // Get the bundle location.
-                        // The location format being returned must match the format in SchemaBundle and BundleList.
-                        String location = getBundleLocation(urlString, productName);
-
-                        Region productRegion = getProductRegion(productName);
-                        // Bundle will just be returned if something from this location exists already.
-                        bundle = productRegion.installBundleAtLocation(location, new URL(urlString).openStream());
+                    if (libertyBoot) {
+                        bundle = installLibertyBootBundle(productName, fr, fwkWiring);
                     } else {
-                        // make sure we have a File for the bundle that is already
-                        // installed. Get this by processing the location. We
-                        // need to get past the reference:file: part of the URL.
-                        String location = bundle.getLocation();
-                        int index = location.indexOf(BUNDLE_LOC_REFERENCE_TAG);
-                        location = location.substring(index + BUNDLE_LOC_REFERENCE_TAG.length());
-                        // This file path is URL form, convert it back to a valid system File path
-                        bundleFile = new File(URI.create(location));
-
+                        bundle = installFeatureBundle(urlString, productName, bundleRepositoryHolder, fr);
+                    }
+                    if (bundle == null) {
+                        return true;
                     }
 
                     BundleStartLevel bsl = bundle.adapt(BundleStartLevel.class);
@@ -303,6 +278,7 @@ public class Provisioner {
                     // need to get a resource for the bundle list createAssociation
                     // call, if we end up with a null resource then bad things
                     // happen, like we fail to uninstall bundles when we should
+                    File bundleFile = getBundleFile(bundle);
                     resource = locSvc.asResource(bundleFile, bundleFile.isFile());
 
                     // Update bundle list with resolved information
@@ -319,6 +295,80 @@ public class Provisioner {
                 return true;
             }
 
+            private File getBundleFile(Bundle bundle) {
+                if (libertyBoot) {
+                    return bootFile;
+                }
+                // make sure we have a File for the bundle that is already
+                // installed. Get this by processing the location. We
+                // need to get past the reference:file: part of the URL.
+                String location = bundle.getLocation();
+                int index = location.indexOf(BUNDLE_LOC_REFERENCE_TAG);
+                location = location.substring(index + BUNDLE_LOC_REFERENCE_TAG.length());
+                // This file path is URL form, convert it back to a valid system File path
+                return new File(URI.create(location));
+            }
+
+            private Bundle installLibertyBootBundle(String productName, FeatureResource fr, FrameworkWiring fwkWiring) throws BundleException, IOException {
+                //getting the LibertyBootRuntime instance and installing the boot bundle
+                LibertyBootRuntime libertyBoot = featureManager.getLibertyBoot();
+                if (libertyBoot == null) {
+                    throw new IllegalStateException("No LibertBootRuntime service available!");
+                }
+
+                Bundle bundle = libertyBoot.installBootBundle(fr.getSymbolicName(), fr.getVersionRange(), BUNDLE_LOC_FEATURE_TAG); 
+                if(bundle == null){
+                    installStatus.addMissingBundle(fr);
+                    return null;
+                }
+
+                Region productRegion = getProductRegion(productName);
+                Region current = featureManager.getDigraph().getRegion(bundle);
+                if (!productRegion.equals(current)) {
+                    current.removeBundle(bundle);
+                    productRegion.addBundle(bundle);
+                }
+                return bundle;
+            }
+
+            private Bundle installFeatureBundle(String urlString, String productName, BundleRepositoryHolder bundleRepositoryHolder, FeatureResource fr) throws BundleException, IOException {
+                Bundle bundle = fetchInstalledBundle(urlString, productName);
+                if (bundle == null) {
+                    ContentBasedLocalBundleRepository lbr = bundleRepositoryHolder.getBundleRepository();
+                    // Try to find the file, hopefully using the cached path
+                    File bundleFile = lbr.selectBundle(urlString, fr.getSymbolicName(), fr.getVersionRange());
+
+                    if (bundleFile == null) {
+                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                            Tr.debug(tc, "Bundle not matched", lbr, fr);
+                        }
+                        Tr.error(tc, "UPDATE_MISSING_BUNDLE_ERROR", fr.getMatchString());
+                        installStatus.addMissingBundle(fr);
+                        return null;
+                    }
+
+                    // Get URL from filename
+                    URI uri = bundleFile.toURI();
+                    urlString = uri.toURL().toString();
+
+                    urlString = PathUtils.normalize(urlString);
+
+                    // Install this bundle as a "reference"-- this means that the
+                    // framework will not copy this bundle into it's private cache, 
+                    // it will run from the actual jar (wherever it is).
+                    urlString = BUNDLE_LOC_REFERENCE_TAG + urlString;
+
+                    // Get the bundle location.
+                    // The location format being returned must match the format in SchemaBundle and BundleList.
+                    String location = getBundleLocation(urlString, productName);
+
+                    Region productRegion = getProductRegion(productName);
+                    // Bundle will just be returned if something from this location exists already.
+                    bundle = productRegion.installBundleAtLocation(location, new URL(urlString).openStream());
+                }
+                return bundle;
+            }
+
             private Bundle fetchInstalledBundle(String urlString, String productName) {
                 // We install bundles as references so we need to ensure that we add reference: to the file url.
                 String location = getBundleLocation(BUNDLE_LOC_REFERENCE_TAG + urlString, productName);
@@ -331,6 +381,71 @@ public class Provisioner {
                 return b;
             }
         });
+    }
+
+    private File getBootJar() {
+        if (!libertyBoot) {
+            return null;
+        }
+        ProtectionDomain pd = getClass().getProtectionDomain();
+        if (pd == null) {
+            throw new IllegalStateException("No protection domain for boot jar.");
+        }
+        CodeSource cs = pd.getCodeSource();
+        if (cs == null) {
+            throw new IllegalStateException("No code source for boot jar.");
+        }
+        URL loc = cs.getLocation();
+        String spec = loc.toExternalForm();
+        if ("jar".equals(loc.getProtocol())) {
+            int bangSlash;
+            while ((bangSlash = spec.lastIndexOf("!/")) != -1) {
+                spec = spec.substring(0, bangSlash);
+            }
+            spec = spec.substring(4); // jar: length
+        }
+        if (!spec.startsWith("file:")) {
+            throw new IllegalStateException("The code source for the boot jar does not come from a file:" + loc);
+        }
+        try {
+            return new File(new URI(spec));
+        } catch (URISyntaxException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    static File getFile(URL url) {
+        String path;
+        try {
+            // The URL for a UNC path is file:////server/path, but the
+            // deprecated File.toURL() as used by java -jar/-cp incorrectly
+            // returns file://server/path/, which has an invalid authority
+            // component.  Rewrite any URLs with an authority ala
+            // http://wiki.eclipse.org/Eclipse/UNC_Paths
+            if (url.getAuthority() != null) {
+                url = new URL("file://" + url.toString().substring("file:".length()));
+            }
+
+            path = new File(url.toURI()).getPath();
+        } catch (MalformedURLException e) {
+            path = null;
+        } catch (URISyntaxException e) {
+            path = null;
+        }
+
+        if (path == null) {
+            // If something failed, assume the path is good enough.
+            path = url.getPath();
+        }
+
+        return new File(normalizePathDrive(path));
+    }
+
+    static String normalizePathDrive(String path) {
+        if (File.separatorChar == '\\' && path.length() > 1 && path.charAt(1) == ':' && path.charAt(0) >= 'a' && path.charAt(0) <= 'z') {
+            path = Character.toUpperCase(path.charAt(0)) + path.substring(1);
+        }
+        return path;
     }
 
     /**

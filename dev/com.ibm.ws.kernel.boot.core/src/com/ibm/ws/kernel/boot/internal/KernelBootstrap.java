@@ -67,12 +67,15 @@ public class KernelBootstrap {
     /** File used to determine if JVM exited gracefully or not */
     protected File serverRunning = null;
 
+    protected final boolean libertyBoot;
+
     /**
      * @param bootProps BootstrapProperties carry forward all of the parameters and
      *            options used to launch the kernel.
      */
     public KernelBootstrap(BootstrapConfig bootProps) {
         this.bootProps = bootProps;
+        libertyBoot = Boolean.parseBoolean(bootProps.get(BootstrapConstants.LIBERTY_BOOT_PROPERTY));
 
         // Use initialized bootstrap configuration to create the server lock.
         // This ensures the server and nested workarea directory exist and are writable
@@ -93,7 +96,7 @@ public class KernelBootstrap {
             // obtaining a lock for the server (with timeout)
             serverLock.obtainServerLock();
 
-            // IFF we can obtain the server lock.... 
+            // IFF we can obtain the server lock....
 
             // Ensure that the server state directory has been cleared prior to start
             clearServerStateDir();
@@ -116,13 +119,13 @@ public class KernelBootstrap {
             // Read the bootstrap manifest (kernel, log provider, os extensions)
             BootstrapManifest bootManifest = null;
             try {
-                bootManifest = BootstrapManifest.readBootstrapManifest();
+                bootManifest = BootstrapManifest.readBootstrapManifest(libertyBoot);
             } catch (IOException e) {
                 throw new LaunchException("Could not read the jar manifest",
                                 BootstrapConstants.messages.getString("error.unknown.kernel.version"), e);
             }
 
-            // handle system packages & system.packages.extra -- MAY THROW if 
+            // handle system packages & system.packages.extra -- MAY THROW if
             // required system.packages list can't be read from the jar
             bootManifest.prepSystemPackages(bootProps);
 
@@ -136,7 +139,8 @@ public class KernelBootstrap {
                             bootProps.getWorkareaFile(KernelResolver.CACHE_FILE),
                             bootManifest.getKernelDefinition(bootProps),
                             bootManifest.getLogProviderDefinition(bootProps),
-                            bootManifest.getOSExtensionDefinition(bootProps));
+                            bootManifest.getOSExtensionDefinition(bootProps),
+                            libertyBoot);
 
             // ISSUE LAUNCH FEEDBACK TO THE CONSOLE -- we've done the cursory validation at least.
             String logLevel = bootProps.get("com.ibm.ws.logging.console.log.level");
@@ -170,12 +174,14 @@ public class KernelBootstrap {
             ClassLoader loader;
             List<URL> urlList = new ArrayList<URL>();
 
-            // Add bootstrap jar(s)
-            bootProps.addBootstrapJarURLs(urlList);
+            // for liberty boot all the jars are already on the classpath
+            if (!libertyBoot) {
+                // Add bootstrap jar(s)
+                bootProps.addBootstrapJarURLs(urlList);
 
-            // Add OSGi framework, log provider, and/or os extension "boot.jar" elements
-            resolver.addBootJars(urlList);
-
+                // Add OSGi framework, log provider, and/or os extension "boot.jar" elements
+                resolver.addBootJars(urlList);
+            }
             // Build our new shiny nested classloader
             loader = buildClassLoader(urlList, bootProps.get("verifyJarSignature"));
 
@@ -213,7 +219,7 @@ public class KernelBootstrap {
     }
 
     /**
-     * 
+     *
      */
     private void clearServerStateDir() {
         File stateDir = bootProps.getOutputFile("logs/state");
@@ -265,7 +271,7 @@ public class KernelBootstrap {
      * Stop the server. This emulates the path that the server stop action takes:
      * it calls shutdown on the LauncherDelegate, and then waits until it can obtain
      * the server lock to ensure the server has stopped.
-     * 
+     *
      * @throws InterruptedException
      */
     public ReturnCode shutdown() throws InterruptedException {
@@ -273,7 +279,7 @@ public class KernelBootstrap {
         // If we have a delegate, call shutdown to stop the server
         if (launcherDelegate != null && launcherDelegate.shutdown()) {
             // if shutdown stopped the server, we need to wait until we can obtain
-            // the server lock (the serverLock is released in the finally block of 
+            // the server lock (the serverLock is released in the finally block of
             // the go() method.. )
             return serverLock.waitForStop();
         }
@@ -319,7 +325,7 @@ public class KernelBootstrap {
 
     /**
      * Check for clean start: clear entire work area if set
-     * 
+     *
      * @param bootProps
      */
     protected void cleanStart() {
@@ -332,8 +338,8 @@ public class KernelBootstrap {
             ServiceFingerprint.clear();
             KernelUtils.cleanStart(workareaFile);
 
-            // clean up / remove various "clean" parameters 
-            // storage area has already been wiped.. 
+            // clean up / remove various "clean" parameters
+            // storage area has already been wiped..
             bootProps.remove(BootstrapConstants.INITPROP_OSGI_CLEAN);
             bootProps.remove(BootstrapConstants.OSGI_CLEAN);
 
@@ -342,7 +348,7 @@ public class KernelBootstrap {
 
     /**
      * Trivial method: keep, as this is overridden for test.
-     * 
+     *
      * @return the launcher delegate class
      */
     protected Class<? extends LauncherDelegate> getLauncherDelegateClass(ClassLoader loader) throws ClassNotFoundException {
@@ -357,15 +363,24 @@ public class KernelBootstrap {
 
     /**
      * Build the nested classloader containing the OSGi framework, and the log provider.
-     * 
+     *
      * @param urlList
      * @param verifyJarProperty
      * @return
      */
     protected ClassLoader buildClassLoader(final List<URL> urlList, String verifyJarProperty) {
+        if (libertyBoot) {
+            // for liberty boot we just use the class loader that loaded this class
+            return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+                @Override
+                public ClassLoader run() {
+                    return getClass().getClassLoader();
+                }
+            });
+        }
         final boolean verifyJar;
         if (System.getSecurityManager() == null) {
-            // do not perform verification if SecurityManager is not installed 
+            // do not perform verification if SecurityManager is not installed
             // unless explicitly enabled.
             verifyJar = "true".equalsIgnoreCase(verifyJarProperty);
         } else {
@@ -386,7 +401,7 @@ public class KernelBootstrap {
                     try {
                         return new BootstrapChildFirstJarClassloader(urls, parent);
                     } catch (RuntimeException e) {
-                        // fall back to URLClassLoader in case something went wrong 
+                        // fall back to URLClassLoader in case something went wrong
                         return new BootstrapChildFirstURLClassloader(urls, parent);
                     }
                 }
@@ -410,7 +425,7 @@ public class KernelBootstrap {
                 throw new LaunchException("Could not find bundle for " + "com.ibm.ws.org.eclipse.equinox.region" + ".",
                                 BootstrapConstants.messages.getString("error.missingBundleException"));
             } else {
-                // Add to the list of boot jars... 
+                // Add to the list of boot jars...
                 try {
                     urlList.add(bestMatchFile.toURI().toURL());
                 } catch (MalformedURLException e) {
@@ -433,7 +448,7 @@ public class KernelBootstrap {
     public static void showVersion(BootstrapConfig bootProps) {
         BootstrapManifest bootManifest;
         try {
-            bootManifest = BootstrapManifest.readBootstrapManifest();
+            bootManifest = BootstrapManifest.readBootstrapManifest(Boolean.parseBoolean(bootProps.get(BootstrapConstants.LIBERTY_BOOT_PROPERTY)));
             String kernelVersion = bootManifest.getBundleVersion();
             String productInfo = getProductInfoDisplayName();
 
@@ -445,10 +460,10 @@ public class KernelBootstrap {
     }
 
     private static void processVersion(BootstrapConfig bootProps, String msgKey, String kernelVersion, String productInfo, boolean printVersion) {
-        // Two keys, mostly the same parameters (3rd is ignored in one case): 
+        // Two keys, mostly the same parameters (3rd is ignored in one case):
         // info.serverLaunch=Launching {3} ({0}) on {1}, version {2}
         // info.serverVersion={0} on {1}, version {2}
-        // 0 : productInfo/wlp-version OR productInfo (wlp-version) 
+        // 0 : productInfo/wlp-version OR productInfo (wlp-version)
         // 1 : java.vm.name
         // 2 : java.runtime.version (maybe with locale)
         // 3 : serverName
@@ -513,7 +528,7 @@ public class KernelBootstrap {
     /**
      * Fetch the BootstrapAgent instrumentation instance from the BootstrapAgent
      * in the system classloader.
-     * 
+     *
      * @return Instrumentation instance initialized by the Launcher, may be
      *         null.
      */

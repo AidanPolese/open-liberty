@@ -25,9 +25,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -88,18 +91,33 @@ public class KernelResolver {
     private final File osExtensionMf;
     private final boolean forceCleanStart;
 
+    private final boolean libertyBoot;
+    private final String BUNDLE_SYMBOLICNAME = "Bundle-SymbolicName";
+
     /**
      * @param kernelDefName
      * @param logProviderName
      * @param osExtensionName
      */
     public KernelResolver(File installRoot, File cacheFile, String kernelDefName, String logProviderName, String osExtensionName) {
+        this(installRoot, cacheFile, kernelDefName, logProviderName, osExtensionName, false);
+    }
 
+    /**
+     * @param installRoot
+     * @param workareaFile
+     * @param kernelDefinition
+     * @param logProviderDefinition
+     * @param osExtensionDefinition
+     * @param libertyBoot
+     */
+    public KernelResolver(File installRoot, File cacheFile, String kernelDefName, String logProviderName, String osExtensionName, boolean libertyBoot) {
+        this.libertyBoot = libertyBoot;
         boolean cacheAvailable = cacheFile != null && cacheFile.exists();
         boolean cleanStart = false;
 
         // Try to load the cache file, if we can't, it isn't a dire event.
-        cache = new ResolverCache(cacheFile);
+        cache = new ResolverCache(cacheFile, libertyBoot);
         cache.load();
 
         List<String> kernelFeatures = new ArrayList<String>();
@@ -109,7 +127,7 @@ public class KernelResolver {
             kernelFeatures.add(osExtensionName);
 
         // If the cache was populated, and something in the specified kernel features has changed,
-        // we need to force a clean start.. 
+        // we need to force a clean start..
         if (kernelFeaturesHaveChanged(cache.featuresInUse, kernelFeatures)) {
             // clean what we've read previously so we start over
             cache.dispose();
@@ -181,12 +199,12 @@ public class KernelResolver {
      */
     private boolean kernelFeaturesHaveChanged(List<String> featuresInUse, List<String> kernelFeatures) {
         // If the list from the cache is empty, then the cache was empty, so we don't have to start clean
-        // as we likely already are... 
+        // as we likely already are...
         if (featuresInUse.isEmpty())
             return false;
 
         if (featuresInUse.size() == kernelFeatures.size()) {
-            // return true if the contents of the list do not match, not paying attention to order.. 
+            // return true if the contents of the list do not match, not paying attention to order..
             return !featuresInUse.containsAll(kernelFeatures);
         }
         return true;
@@ -214,7 +232,7 @@ public class KernelResolver {
 
     /**
      * Add any boot.jar resources specified by the kernel, log provider, or os extension definition files
-     * 
+     *
      * @param urlList target list for additional URLs.
      * @see ResolverCache#getJarFiles(File)
      */
@@ -228,7 +246,7 @@ public class KernelResolver {
 
     /**
      * Given the list of files, add the URL for each file to the list of URLs
-     * 
+     *
      * @param jarFiles List of Files (source)
      * @param urlList List of URLs (target)
      */
@@ -242,13 +260,71 @@ public class KernelResolver {
         }
     }
 
-    public String appendExtraSystemPackages(String packages) {
-        packages = appendExtraSystemPackages(cache.getJarFiles(kernelMf), packages);
-        packages = appendExtraSystemPackages(cache.getJarFiles(logProviderMf), packages);
-        if (osExtensionMf != null)
-            packages = appendExtraSystemPackages(cache.getJarFiles(osExtensionMf), packages);
-
+    public String appendExtraSystemPackages(String packages) throws IOException {
+        if (libertyBoot) {
+            // for liberty boot we do not have real boot jars on disk to read
+            packages = appendLibertyBootJarPackages(packages);
+        } else {
+            packages = appendExtraSystemPackages(cache.getJarFiles(kernelMf), packages);
+            packages = appendExtraSystemPackages(cache.getJarFiles(logProviderMf), packages);
+            if (osExtensionMf != null)
+                packages = appendExtraSystemPackages(cache.getJarFiles(osExtensionMf), packages);
+        }
         return packages;
+    }
+
+    private String appendLibertyBootJarPackages(String packages) throws IOException {
+        for (ManifestCacheElement element : cache.getManifestElements()) {
+            Set<String> libertyBootSymbolicNames = new HashSet<String>();
+            for (KernelBundleElement b : element.getBundleElements()) {
+                // For boot.jar types liberty boot uses the LIBERTY_BOOT startlevel
+                if (b.getStartLevel() == KernelStartLevel.LIBERTY_BOOT.getLevel()) {
+                    libertyBootSymbolicNames.add(b.getSymbolicName());
+                }
+            }
+            Collection<URL> bootManifestURLs = getLibertyBootManifests(libertyBootSymbolicNames);
+            for (URL bootManifestURL : bootManifestURLs) {
+                try {
+                    Manifest manifest = new Manifest(bootManifestURL.openStream());
+                    // Look for exported packages in manifest: append to value
+                    String mPackages = manifest.getMainAttributes().getValue(MANIFEST_EXPORT_PACKAGE);
+                    if (mPackages != null && !mPackages.isEmpty()) {
+                        packages = (packages == null) ? mPackages : packages + "," + mPackages;
+                    }
+                } catch (IOException e) {
+                    throw new LaunchException("Exception loading log provider jar " + (bootManifestURL) + ", "
+                                              + e, MessageFormat.format(BootstrapConstants.messages.getString("error.rasProviderResolve"),
+                                                                        bootManifestURL.toString()), e);
+                }
+            }
+        }
+        return packages;
+    }
+
+    /**
+     * @param libertyBootSymbolicNames
+     * @return
+     * @throws IOException
+     */
+    private Collection<URL> getLibertyBootManifests(Set<String> libertyBootSymbolicNames) throws IOException {
+        Collection<URL> result = new ArrayList<URL>();
+        ClassLoader cl = KernelResolver.class.getClassLoader();
+        Enumeration<URL> classpathManifests = cl.getResources("META-INF/MANIFEST.MF");
+        while (classpathManifests.hasMoreElements()) {
+            URL manifestURL = classpathManifests.nextElement();
+            Manifest manifest = new Manifest(manifestURL.openStream());
+            Attributes attr = manifest.getMainAttributes();
+            String bsn = attr.getValue(BUNDLE_SYMBOLICNAME);
+            if (bsn != null) {
+                String[] bsnElements = bsn.split(";");
+                if (libertyBootSymbolicNames.contains(bsnElements[0])) {
+                    result.add(manifestURL);
+                }
+            }
+        }
+
+        return result;
+
     }
 
     private String appendExtraSystemPackages(List<File> files, String packages) {
@@ -311,12 +387,14 @@ public class KernelResolver {
     private static class ResolverCache {
         private final Map<String, ManifestCacheElement> cacheEntries = new LinkedHashMap<String, ManifestCacheElement>();
         private final File cacheFile;
+        private final boolean libertyBoot;
 
         private List<String> featuresInUse = Collections.emptyList();
         private boolean isDirty = false;
 
-        ResolverCache(File cacheFile) {
+        ResolverCache(File cacheFile, boolean libertyBoot) {
             this.cacheFile = cacheFile;
+            this.libertyBoot = libertyBoot;
         }
 
         /**
@@ -330,10 +408,10 @@ public class KernelResolver {
                     ManifestCacheElement currentEntry = null;
 
                     // loop through each line of the file... The cache file should contain
-                    // something like: 
+                    // something like:
                     //   kernelManifest-1.0=kernel;manifest;information
-                    //   --|kernelManifest-1.0|bundle.symbolic.name.... 
-                    // It is expected that the manifest line will precede the lines with the bundle.. 
+                    //   --|kernelManifest-1.0|bundle.symbolic.name....
+                    // It is expected that the manifest line will precede the lines with the bundle..
                     reader = new BufferedReader(new InputStreamReader(new FileInputStream(cacheFile), "UTF-8"));
                     while ((line = reader.readLine()) != null) {
                         if (line.startsWith(BUNDLE_LINE)) {
@@ -341,13 +419,13 @@ public class KernelResolver {
                             if (currentEntry == null) {
                                 throw new IOException("Cache file contents corrupted");
                             } else {
-                                // --|kernelCore-1.0|.... 
+                                // --|kernelCore-1.0|....
                                 line = line.substring(BUNDLE_LINE.length()); // skip --|
                                 if (line.startsWith(currentEntry.mfSymbolicName)) {
                                     // skip kernelCore-1.0|
                                     line = line.substring(currentEntry.mfSymbolicName.length() + 1);
 
-                                    // The rest of the line is a bundle entry.. 
+                                    // The rest of the line is a bundle entry..
                                     BundleCacheElement bEntry = new BundleCacheElement(this, line);
                                     currentEntry.addBundleEntry(bEntry.getSymbolicName(), bEntry);
                                 } else {
@@ -441,7 +519,7 @@ public class KernelResolver {
          * parser because we need one that isn't sensitive to the traditional
          * manifest's line-wrapping constraints, and we are about to bootstrap an
          * environment that has a plethora of them.
-         * 
+         *
          * @param mfFile *.mf file to retrieve boot.jar files from. The returned
          *            list will include any elements provided by an included *.mf file.
          */
@@ -472,10 +550,10 @@ public class KernelResolver {
                             if (line.length() > LOG_PROVIDER.length() + 1) {
                                 logProvider = line.substring(LOG_PROVIDER.length() + 1).trim();
                             }
-                            continue; // ONWARDS TO NEXT LINE... 
+                            continue; // ONWARDS TO NEXT LINE...
                         } else if (line.startsWith(SUBSYSTEM_CONTENT)) {
                             // If this line starts with the SubsystemContent header, trim it
-                            // off and fall down into the next sections.. 
+                            // off and fall down into the next sections..
                             line = line.substring(SUBSYSTEM_CONTENT.length() + 1).trim();
                             inSubsystemContent = true;
                         } else {
@@ -488,22 +566,37 @@ public class KernelResolver {
                             }
 
                             if (line.contains(BOOT_JAR_TYPE)) {
-                                // com.ibm.ws.logging; version="[1,1.0.100)"; type="boot.jar"
-                                SubsystemContentElement element = new SubsystemContentElement(line);
 
-                                // Now we do the work to find the right jar given the version range. 
-                                // We're very very low-level here, so we're using a straight-up naming 
-                                // convention to find the jars we have to choose from. Using a 
-                                // ContentBasedLocalBundleRepository comes in the next layer, when
-                                // we're finding the kernel bundles.
-                                File bestMatchFile = repo.selectBundle(element.symbolicName,
-                                                                       VersionUtility.stringToVersionRange(element.vrangeString));
-                                if (bestMatchFile == null) {
-                                    throw new LaunchException("Could not find bundle for " + element + ".",
-                                                    BootstrapConstants.messages.getString("error.missingBundleException"));
+                                if (libertyBoot) {
+                                    // Marking these as start-phase LIBERTY_BOOT to indicate that they are not really bundles
+                                    // com.ibm.ws.logging; version="[1,1.0.100)"; type="boot.jar"; start-phase:=LIBERTY_BOOT
+                                    SubsystemContentElement element = new SubsystemContentElement(line + "; start-phase:=LIBERTY_BOOT");
+
+                                    // this might throw an IllegalArgumentException (unknown start phase)
+                                    BundleCacheElement cacheElement = new BundleCacheElement(this, element);
+
+                                    // Use the symbolic name as a key for the new element
+                                    bundleEntries.put(element.symbolicName, cacheElement);
+
                                 } else {
-                                    // Add to the list of boot jars... 
-                                    jarList.add(bestMatchFile);
+
+                                    // com.ibm.ws.logging; version="[1,1.0.100)"; type="boot.jar"
+                                    SubsystemContentElement element = new SubsystemContentElement(line);
+
+                                    // Now we do the work to find the right jar given the version range.
+                                    // We're very very low-level here, so we're using a straight-up naming
+                                    // convention to find the jars we have to choose from. Using a
+                                    // ContentBasedLocalBundleRepository comes in the next layer, when
+                                    // we're finding the kernel bundles.
+                                    File bestMatchFile = repo.selectBundle(element.symbolicName,
+                                                                           VersionUtility.stringToVersionRange(element.vrangeString));
+                                    if (bestMatchFile == null) {
+                                        throw new LaunchException("Could not find bundle for " + element + ".",
+                                                        BootstrapConstants.messages.getString("error.missingBundleException"));
+                                    } else {
+                                        // Add to the list of boot jars...
+                                        jarList.add(bestMatchFile);
+                                    }
                                 }
                             } else if (followIncludes && line.contains(INCLUDED_FILE)) {
                                 // com.ibm.websphere.appserver.logging-1.0; location="lib/platform/defaultLogging-1.0.mf"; type="osgi.subsystem.feature"
@@ -528,10 +621,10 @@ public class KernelResolver {
                                         fileList.addAll(included.includedFileList);
                                 }
                             } else if (line.contains(BUNDLE_TYPE) || !line.contains(TYPE)) {
-                                // the default subsystem content type is "osgi.bundle".. so if we don't have a type, 
+                                // the default subsystem content type is "osgi.bundle".. so if we don't have a type,
                                 // we assume it's one of these.
 
-                                // com.ibm.ws.org.objectweb.asm.all.4.0; version="[1,1.0.100)"; start-phase=BOOTSTRAP,
+                                // com.ibm.ws.org.objectweb.asm.all.4.0; version="[1,1.0.100)"; start-phase:=BOOTSTRAP,
                                 SubsystemContentElement element = new SubsystemContentElement(line);
 
                                 // this might throw an IllegalArgumentException (unknown start phase)
@@ -543,10 +636,10 @@ public class KernelResolver {
                         }
                     }
 
-                    // Create the new manifest cache entry with what we've read... 
+                    // Create the new manifest cache entry with what we've read...
                     entry = new ManifestCacheElement(mfFile, jarList, fileList, logProvider, bundleEntries);
 
-                    // Add the information we've gathered to the cache 
+                    // Add the information we've gathered to the cache
                     cacheEntries.put(mfFile.getName(), entry);
                     return entry;
                 } catch (IOException e) {
@@ -676,7 +769,7 @@ public class KernelResolver {
         /**
          * If this file includes other files.. check to make sure they are
          * still usable as well.
-         * 
+         *
          * @return true if we can use what we know...
          */
         private boolean usableIncludes(ResolverCache cache) {
@@ -866,9 +959,9 @@ public class KernelResolver {
          * Parse a subsystem content element. Assumes leading/trailing spaces have been trimmed
          * <pre>
          * org.apache.aries.util; version="[1,1.0.100)"; type="boot.jar"
-         * com.ibm.wsspi.org.osgi.cmpn; location="dev/spi/spec/"; version="[5.0, 5.1)"; start-phase=BOOTSTRAP
+         * com.ibm.wsspi.org.osgi.cmpn; location="dev/spi/spec/"; version="[5.0, 5.1)"; start-phase:=BOOTSTRAP
          * </pre>
-         * 
+         *
          * @param line
          */
         SubsystemContentElement(String line) {
@@ -908,7 +1001,7 @@ public class KernelResolver {
 
         /**
          * Strip the quotes from around attributes. Given "boot.jar" will return boot.jar.
-         * 
+         *
          * @param in
          * @return
          */

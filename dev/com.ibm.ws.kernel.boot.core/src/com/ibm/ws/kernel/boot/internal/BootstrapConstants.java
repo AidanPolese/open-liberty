@@ -243,4 +243,11 @@ public final class BootstrapConstants {
 
     /** The key for the SSL client command-line option "--autoAcceptSigner" **/
     public static final String AUTO_ACCEPT_SIGNER = "autoAcceptSignerCertificate";
+
+    /**
+     * The boot strap config key used to enable liberty boot mode.
+     * The value of this key must set to the string 'true' to enable
+     * liberty boot mode.
+     */
+    public static final String LIBERTY_BOOT_PROPERTY = "wlp.liberty.boot";
 }
