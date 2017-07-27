@@ -14,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintStream;
-import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.Map;
@@ -29,7 +28,7 @@ import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
 import com.ibm.websphere.config.mbeans.ServerSchemaGenerator;
-import com.ibm.wsspi.kernel.service.utils.PathUtils;
+import com.ibm.ws.kernel.service.util.UtilityTemplate;
 
 /**
  * The basic outline of the flow is as follows:
@@ -39,7 +38,7 @@ import com.ibm.wsspi.kernel.service.utils.PathUtils;
  * <li>All other cases, invoke task.</li>
  * </ol>
  */
-public class ServerSchemaGenCommand {
+public class ServerSchemaGenCommand extends UtilityTemplate {
 
     static private final String SCRIPT_NAME = "serverSchemaGen";
     static private final ResourceBundle messages = ResourceBundle.getBundle("com.ibm.ws.config.server.schemagen.resources.SchemaGenMessages");
@@ -99,93 +98,6 @@ public class ServerSchemaGenCommand {
     private String getMessage(String key, Object... args) {
         String message = messages.getString(key);
         return (args.length == 0) ? message : MessageFormat.format(message, args);
-    }
-
-    /**
-     * Get the location of com.ibm.ws.config.server.schemagen.jar which is under the lib directory
-     *
-     * @return File of com.ibm.ws.config.server.schemagen.jar
-     */
-    private File getServerSchemaGenJar() {
-        File launchHome = null;
-
-        // The ServerSchemaGenCommand is located in com.ibm.ws.config.server.schemagen.jar so
-        // we are using reflection to get the right invocation of where this class
-        // is loaded from.
-        Class<?> clazz = null;
-        try {
-            clazz = Class.forName("com.ibm.ws.config.server.schemagen.ServerSchemaGenCommand");
-        } catch (Exception e) {
-            return null;
-        }
-        URL home = clazz.getProtectionDomain().getCodeSource().getLocation();
-
-        if (!home.getProtocol().equals("file")) {
-            return null;
-        }
-        String path = PathUtils.normalize(home.getPath());
-        launchHome = new File(path);
-
-        return launchHome;
-    }
-
-    /**
-     * Attempts to get the install directory for Liberty.
-     * The logic here is common in many of the utility scripts.
-     */
-    private String getInstallDir() {
-        String installDir = System.getenv("WLP_INSTALL_DIR");
-        if (installDir == null) {
-            File serverSchemaGenJarFile = getServerSchemaGenJar();
-
-            if (serverSchemaGenJarFile == null) {
-                installDir = System.getProperty("user.dir") + File.separator;
-            } else {
-                installDir = serverSchemaGenJarFile.getParentFile().getParentFile().getAbsolutePath() + File.separator;
-            }
-        } else {
-            if (!(installDir.endsWith("/") || installDir.endsWith("\\"))) {
-                installDir = installDir + File.separator;
-            }
-        }
-
-        return installDir;
-    }
-
-    /**
-     * Attempts to get the user directory for Liberty.
-     * The logic here is common in many of the utility scripts.
-     */
-    private String getUserDir() {
-        String usrDir = System.getenv("WLP_USER_DIR");
-
-        if (usrDir == null) {
-            usrDir = getInstallDir() + "usr" + File.separator;
-        } else {
-            if (!(usrDir.endsWith("/") || usrDir.endsWith("\\"))) {
-                usrDir = usrDir + File.separator;
-            }
-        }
-
-        return usrDir;
-    }
-
-    /**
-     * Attempts to get the output directory for Liberty.
-     * The logic here is common in many of the utility scripts.
-     */
-    private String getOutputDir() {
-        String outputDir = System.getenv("WLP_OUTPUT_DIR");
-
-        if (outputDir == null) {
-            outputDir = getUserDir() + "servers" + File.separator;
-        } else {
-            if (!(outputDir.endsWith("/") || outputDir.endsWith("\\"))) {
-                outputDir = outputDir + File.separator;
-            }
-        }
-
-        return outputDir;
     }
 
     /**
@@ -259,7 +171,7 @@ public class ServerSchemaGenCommand {
 
     private int invokeSchemaGen(String serverName, String[] mbeanParams) {
         // Check the output dir.. If the value isn't the same as the value the server is using we won't find the logs directory
-        File logsDir = new File(getOutputDir() + serverName + File.separator + "logs");
+        File logsDir = new File(getOutputDir(serverName) + serverName + File.separator + "logs");
         if (!logsDir.exists()) {
             stderr.println(getMessage("server.output.logs.dir.not.found", serverName, logsDir.getAbsolutePath()));
             return RC_SERVER_OUTPUT_NOT_FOUND;
@@ -268,7 +180,7 @@ public class ServerSchemaGenCommand {
         // The file containing the local connector URL is always in the
         // server's output directory.  Note that the output directory may be
         // different than the user directory, where the server config is.
-        File jmxLocalConnectorUrlFile = new File(getOutputDir() + serverName + File.separator + "logs"
+        File jmxLocalConnectorUrlFile = new File(getOutputDir(serverName) + serverName + File.separator + "logs"
                                                  + File.separator + "state" + File.separator
                                                  + "/com.ibm.ws.jmx.local.address");
         if (jmxLocalConnectorUrlFile.exists() == false) {

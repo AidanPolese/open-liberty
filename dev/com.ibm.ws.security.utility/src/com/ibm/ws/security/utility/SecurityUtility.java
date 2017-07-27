@@ -18,6 +18,7 @@ import com.ibm.ws.crypto.certificateutil.DefaultSSLCertificateCreator;
 import com.ibm.ws.crypto.certificateutil.DefaultSSLCertificateFactory;
 import com.ibm.ws.crypto.ltpakeyutil.LTPAKeyFileUtility;
 import com.ibm.ws.crypto.ltpakeyutil.LTPAKeyFileUtilityImpl;
+import com.ibm.ws.kernel.service.util.UtilityTemplate;
 import com.ibm.ws.security.utility.tasks.CreateLTPAKeysTask;
 import com.ibm.ws.security.utility.tasks.CreateSSLCertificateTask;
 import com.ibm.ws.security.utility.tasks.EncodeTask;
@@ -37,7 +38,7 @@ import com.ibm.ws.security.utility.utils.FileUtility;
  * <li>All other cases, invoke task.</li>
  * </ol>
  */
-public class SecurityUtility {
+public class SecurityUtility extends UtilityTemplate {
 
     // TODO: figure out how to get the script name (without hard-coding!)
     static final String SCRIPT_NAME = "securityUtility";
@@ -153,11 +154,11 @@ public class SecurityUtility {
 
         // Create / obtain the collaborators
         DefaultSSLCertificateCreator certCreator = DefaultSSLCertificateFactory.getDefaultSSLCertificateCreator();
-        IFileUtility fileUtil = new FileUtility(System.getenv("WLP_USER_DIR"), System.getenv("WLP_OUTPUT_DIR"));
         LTPAKeyFileUtility ltpaKeyFileCreator = new LTPAKeyFileUtilityImpl();
 
         // Create the SecurityUtility and register tasks
         SecurityUtility util = new SecurityUtility(console, System.out, System.err);
+        IFileUtility fileUtil = new FileUtility(util.getUserDir(), util.getOutputDir(null));
         util.registerTask(new EncodeTask(SCRIPT_NAME));
         util.registerTask(new CreateSSLCertificateTask(certCreator, fileUtil, SCRIPT_NAME));
         util.registerTask(new CreateLTPAKeysTask(ltpaKeyFileCreator, fileUtil, SCRIPT_NAME));
