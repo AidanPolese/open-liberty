@@ -1,10 +1,6 @@
 package wlp.lib.extract;
 
-import com.sun.tools.attach.VirtualMachine;
-import com.sun.tools.attach.VirtualMachineDescriptor;
-
 import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 
 /**
  * Created by nottinga on 1/20/17.
@@ -19,9 +15,13 @@ public class AgentAttach {
         }
 
         try {
-            VirtualMachine vm = VirtualMachine.attach(jvmName);
-            vm.loadAgent(agent);
-            vm.detach();
+            Class<?> VirtualMachine = Class.forName("com.sun.tools.attach.VirtualMachine");
+            //VirtualMachine vm = VirtualMachine.attach(jvmName);
+            Object vm = VirtualMachine.getMethod("attach", String.class).invoke(null, jvmName);
+            //vm.loadAgent(agent);
+            vm.getClass().getMethod("loadAgent", String.class).invoke(vm, agent);
+            //vm.detach();
+            vm.getClass().getMethod("detach").invoke(vm);
         } catch (Exception e) {
             return e;
         }

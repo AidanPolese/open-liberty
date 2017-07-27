@@ -9,17 +9,15 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-task rmic(dependsOn: compileJava) {
-  doLast {
-    String rmicClasspath = compileJava.destinationDir
+task rmic(type: Exec, dependsOn: compileJava) {
+	String rmicClasspath = compileJava.destinationDir
     sourceSets.main.compileClasspath.each {
-      rmicClasspath += ':' + it
-    }
-    println "ant.rmic(classname: 'javax.management.j2ee.Management', base: " + compileJava.destinationDir + ", classpath: " + rmicClasspath + ", iiop: 'true')"
-    ant.rmic(classname: 'javax.management.j2ee.Management', base: compileJava.destinationDir, classpath: rmicClasspath, iiop: 'true')
-    println "ant.rmic(classname: 'javax.management.j2ee.ManagementHome', base: " + compileJava.destinationDir + ", classpath: " + rmicClasspath + ", iiop: 'true')"
-    ant.rmic(classname: 'javax.management.j2ee.ManagementHome', base: compileJava.destinationDir, classpath: rmicClasspath, iiop: 'true')
-  }
+      rmicClasspath += System.properties['path.separator'] + it
+    }  
+    println "-d " + compileJava.destinationDir
+    println "-cp " + rmicClasspath
+	executable "rmic"
+	args "-iiop",  "-d", compileJava.destinationDir, "-classpath", rmicClasspath, "javax.management.j2ee.Management", "javax.management.j2ee.ManagementHome"
 }
 
 jar {

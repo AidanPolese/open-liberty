@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashSet;
@@ -56,8 +57,6 @@ import org.apache.cxf.jaxrs.utils.AnnotationUtils;
 import org.apache.cxf.jaxrs.utils.InjectionUtils;
 import org.apache.cxf.message.MessageUtils;
 
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
-
 import com.ibm.websphere.jaxrs20.multipart.IAttachment;
 import com.ibm.websphere.jaxrs20.multipart.IMultipartBody;
 import com.ibm.ws.jaxrs20.multipart.impl.AttachmentImpl;
@@ -66,8 +65,7 @@ import com.ibm.ws.jaxrs20.multipart.impl.MultipartBodyImpl;
 @Provider
 @Consumes({ "multipart/related", "multipart/mixed", "multipart/alternative", "multipart/form-data" })
 @Produces({ "multipart/related", "multipart/mixed", "multipart/alternative", "multipart/form-data" })
-public class IBMMultipartProvider extends AbstractConfigurableProvider
-                implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
+public class IBMMultipartProvider extends AbstractConfigurableProvider implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
 
     private final MultipartProvider multipartProvider = new MultipartProvider();
     private static final Set<Class<?>> WELL_KNOWN_MULTIPART_CLASSES;
@@ -98,7 +96,7 @@ public class IBMMultipartProvider extends AbstractConfigurableProvider
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.ws.rs.ext.MessageBodyWriter#getSize(java.lang.Object, java.lang.Class, java.lang.reflect.Type, java.lang.annotation.Annotation[], javax.ws.rs.core.MediaType)
      */
     @Override
@@ -109,7 +107,7 @@ public class IBMMultipartProvider extends AbstractConfigurableProvider
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.ws.rs.ext.MessageBodyWriter#isWriteable(java.lang.Class, java.lang.reflect.Type, java.lang.annotation.Annotation[], javax.ws.rs.core.MediaType)
      */
     @Override
@@ -120,7 +118,7 @@ public class IBMMultipartProvider extends AbstractConfigurableProvider
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.ws.rs.ext.MessageBodyWriter#writeTo(java.lang.Object, java.lang.Class, java.lang.reflect.Type, java.lang.annotation.Annotation[], javax.ws.rs.core.MediaType,
      * javax.ws.rs.core.MultivaluedMap, java.io.OutputStream)
      */
@@ -169,7 +167,7 @@ public class IBMMultipartProvider extends AbstractConfigurableProvider
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.ws.rs.ext.MessageBodyReader#isReadable(java.lang.Class, java.lang.reflect.Type, java.lang.annotation.Annotation[], javax.ws.rs.core.MediaType)
      */
     @Override
@@ -209,21 +207,20 @@ public class IBMMultipartProvider extends AbstractConfigurableProvider
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.ws.rs.ext.MessageBodyReader#readFrom(java.lang.Class, java.lang.reflect.Type, java.lang.annotation.Annotation[], javax.ws.rs.core.MediaType,
      * javax.ws.rs.core.MultivaluedMap, java.io.InputStream)
      */
     @Override
     public Object readFrom(Class<Object> c, Type t, Annotation[] anns, MediaType mt,
-                           MultivaluedMap<String, String> headers, InputStream is)
-                    throws IOException, WebApplicationException {
+                           MultivaluedMap<String, String> headers, InputStream is) throws IOException, WebApplicationException {
         // TODO Auto-generated method stub
         //if Type t contains IAttachment, IMutibody, convert to Attachment, Mutibody to adapt CXF MultipartProvider.readFrom
         multipartProvider.setMessageContext(mc);
-        ParameterizedTypeImpl origType = null;
+        ParameterizedType origType = null;
         Type[] actualType = null;
-        if (ParameterizedTypeImpl.class.isAssignableFrom(t.getClass())) {
-            origType = (ParameterizedTypeImpl) t;
+        if (ParameterizedType.class.isAssignableFrom(t.getClass())) {
+            origType = (ParameterizedType) t;
             actualType = origType.getActualTypeArguments();
             for (int i = 0; i < actualType.length; i++) {
                 if (actualType[i].equals(IAttachment.class)) {
@@ -234,7 +231,7 @@ public class IBMMultipartProvider extends AbstractConfigurableProvider
             }
 
             if (actualType != null && origType != null) {
-                t = ParameterizedTypeImpl.make(origType.getRawType(), actualType, origType.getOwnerType());
+                t = IBMParameterizedTypeImpl.make(origType.getRawType().getClass(), actualType, origType.getOwnerType());
             }
         } else if (IMultipartBody.class.isAssignableFrom(getActualType(t, 0))) {
             t = MultipartBody.class;
