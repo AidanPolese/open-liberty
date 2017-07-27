@@ -35,15 +35,17 @@ public class PolicyTask implements Runnable {
     @Override
     public void run() {
         // TODO trace each execution, including
-        // TODO poll with timeout if keepAlive configured
-        for (FutureTask<?> nextTask = policyExecutor.queue.poll(); nextTask != null; nextTask = policyExecutor.queue.poll())
+        FutureTask<?> nextTask = policyExecutor.queue.poll();
+        if (nextTask != null)
             try {
+                policyExecutor.maxQueueSizeConstraint.release();
                 nextTask.run();
             } catch (Throwable x) {
                 // TODO can this even happen?
             } finally {
-                // TODO for tracking purposes, notify global executor that a task has completed
-                // TODO additional processing to reset thread state
+                // TODO If we run multiple tasks in sequence on this thread,
+                // * for tracking purposes, notify global executor that a task has completed
+                // * additional processing to reset thread state
             }
 
         int numPolicyTasks = policyExecutor.numTasksOnGlobal.decrementAndGet();
