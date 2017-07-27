@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2002, 2016 IBM Corporation and others.
+ * Copyright (c) 2002, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,8 +16,7 @@ import com.ibm.wsspi.ejbcontainer.JITDeploy;
 /**
  * Holds the configuration and property constants for the WebSphere Container.
  **/
-public class ContainerConfigConstants
-{
+public class ContainerConfigConstants {
     /**
      * Property used to specify the min. and max. pool sizes for the EJB Container.<p>
      * <B>Value:</B>
@@ -596,7 +595,7 @@ public class ContainerConfigConstants
      * automatic timers will fail with an error during initialization.
      */
     public static final String disableTimers = "com.ibm.ws.ejbcontainer.disableTimers"; // F743-13022
-    
+
     /**
      * Internal property that allows the user to disable EJB persistent timers.
      * <B>Value:</B>
@@ -613,7 +612,7 @@ public class ContainerConfigConstants
      * If this property is set to true, then the EJB Timer Service Scheduler will not be created which
      * disables persistent timer creation, retrieval, and timeout
      */
-    public static final String disablePersistentTimers = "com.ibm.websphere.ejbcontainer.disablePersistentTimers"; 
+    public static final String disablePersistentTimers = "com.ibm.websphere.ejbcontainer.disablePersistentTimers";
 
     /**
      * Internal property that allows the user to disable asynchronous methods.
@@ -724,10 +723,9 @@ public class ContainerConfigConstants
     /**
      * The operations that require TimerTaskHandler.
      */
-    public static final int ALLOW_CACHED_TIMER_OPS_USING_TASK_HANDLER =
-                    ALLOW_CACHED_TIMER_GET_INFO |
-                                    ALLOW_CACHED_TIMER_GET_SCHEDULE |
-                                    ALLOW_CACHED_TIMER_IS_CALENDAR_TIMER;
+    public static final int ALLOW_CACHED_TIMER_OPS_USING_TASK_HANDLER = ALLOW_CACHED_TIMER_GET_INFO |
+                                                                        ALLOW_CACHED_TIMER_GET_SCHEDULE |
+                                                                        ALLOW_CACHED_TIMER_IS_CALENDAR_TIMER;
 
     /**
      * Internal property that allows the user to disable remote interfaces.
@@ -945,6 +943,21 @@ public class ContainerConfigConstants
      * </ul>
      */
     public static final String rmicCompatible = JITDeploy.rmicCompatible; // PM46698
+
+    /**
+     * Property that allows the user to revert the way EJB stubs are generated
+     * for EJB 3.x API beans to exhibit earlier behavior where a RemoteException
+     * may be thrown even though RemoteException is not on the throws clause. <p>
+     *
+     * <b>Property values:</b>
+     * <ul>
+     * <li> "false" (default) - RemoteException will not be thrown if
+     * the method signature does not contain 'throws RemoteException'.
+     * <li> "true" - RemoteException may be thrown by the remote method
+     * even though RemoteException is not on the throws clause.
+     * </ul>
+     */
+    public static final String throwRemoteFromEjb3Stub = JITDeploy.throwRemoteFromEjb3Stub;
 
     /**
      * Property that allows the user to disable retries for remote Future.get.

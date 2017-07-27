@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2016 IBM Corporation and others.
+ * Copyright (c) 2003, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -253,7 +253,7 @@ public final class ContainerProperties
      * should be disabled.
      */
     public static final boolean DisablePersistentTimers; // PI50798
-    
+
     /**
      * Property that indicates whether or not container behavior should be
      * compatible with EE5 (EJB 3) rather than later releases (EJB 3.1+). This
@@ -457,6 +457,13 @@ public final class ContainerProperties
     public static final boolean TimerQOSAtLeastOnceForRequired; // RTC116312
 
     /**
+     * Property that allows the user to revert the way EJB stubs are generated
+     * for EJB 3.x API beans to exhibit earlier behavior where a RemoteException
+     * may be thrown even though RemoteException is not on the throws clause.
+     */
+    public static final boolean ThrowRemoteFromEjb3Stub = JITDeploy.ThrowRemoteFromEjb3Stub;
+
+    /**
      * Property that allows the user to specify (server wide) the singleton
      * beans to use fair locking policy.
      * The value is specified as true or false (default false).
@@ -566,7 +573,7 @@ public final class ContainerProperties
 
         DisableTimers = System.getProperty
                         (disableTimers, "false").equalsIgnoreCase("true"); // F743-13022
-        
+
         DisablePersistentTimers = System.getProperty
                         (disablePersistentTimers, "false").equalsIgnoreCase("true"); // PI50798
 
@@ -776,6 +783,7 @@ public final class ContainerProperties
         writer.println("Property: StrictMaxCacheSize      = " + StrictMaxCacheSize);
         writer.println("Property: TimerCancelTimeout      = " + TimerCancelTimeout);
         writer.println("Property: TimerQOSAtLeastOnceForRequired = " + TimerQOSAtLeastOnceForRequired);
+        writer.println("Property: ThrowRemoteFromEjb3Stub = " + ThrowRemoteFromEjb3Stub);
         writer.println("Property: UseFairSingletonLockingPolicy = " + UseFairSingletonLockingPolicy); // F743-9002
         writer.println("Property: UserInstallRoot         = " + UserInstallRoot);
         writer.println("Property: WLMAllowOptionAReadOnly = " + WLMAllowOptionAReadOnly);
