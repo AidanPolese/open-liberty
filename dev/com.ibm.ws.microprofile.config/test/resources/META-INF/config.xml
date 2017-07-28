@@ -1,0 +1,7 @@
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Dinosaurs</comment>  
+        <entry key="Styracosaurus">spikey</entry>
+        <entry key="Ankylosaurus">knobbly</entry>
+        <entry key="Mouse">furry</entry>
+</properties>
