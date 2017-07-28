@@ -83,7 +83,7 @@ public interface PolicyExecutor extends ExecutorService {
      * The default maxWaitForEnqueue is 0.
      * TODO: update with discussion of how dynamic config update is handled once supported
      *
-     * @param ms maximum number of milliseconds to wait when attempting to qeueue a submitted task.
+     * @param ms maximum number of milliseconds to wait when attempting to queue a submitted task.
      * @return the executor.
      * @throws IllegalArgumentException if value is negative.
      * @throws IllegalStateException if the executor has been shut down.

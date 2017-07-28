@@ -34,24 +34,38 @@ public class PolicyTask implements Runnable {
 
     @Override
     public void run() {
-        // TODO trace each execution, including
-        FutureTask<?> nextTask = policyExecutor.queue.poll();
+        boolean trace = TraceComponent.isAnyTracingEnabled();
+
+        FutureTask<?> nextTask;
+        do {
+            nextTask = policyExecutor.queue.poll();
+            if (nextTask == null)
+                break;
+            else // TODO do this earlier for cancel-from-queue and only do here if we will actually run the task
+                policyExecutor.maxQueueSizeConstraint.release();
+        } while (nextTask.isCancelled());
+
         if (nextTask != null)
             try {
-                policyExecutor.maxQueueSizeConstraint.release();
+                if (trace && tc.isDebugEnabled())
+                    Tr.debug(this, tc, "starting " + nextTask);
+
                 nextTask.run();
+
+                if (trace && tc.isDebugEnabled())
+                    Tr.debug(this, tc, "completed " + nextTask);
             } catch (Throwable x) {
-                // TODO can this even happen?
-            } finally {
-                // TODO If we run multiple tasks in sequence on this thread,
-                // 1) for tracking purposes, notify global executor that a task has completed
-                // 2) additional processing to reset thread state
+                if (trace && tc.isDebugEnabled())
+                    Tr.debug(this, tc, "completed " + nextTask, x);
             }
+        // TODO If we run multiple tasks in sequence on this thread,
+        // 1) for tracking purposes, notify global executor that a task has completed
+        // 2) additional processing to reset thread state
 
         // TODO Should write a more efficient/optimal/accurate mechanism for rescheduling.
 
         // Resubmit if tasks remain. Otherwise decrement the count against maxConcurrency
-        if (policyExecutor.queue.isEmpty()) {
+        if (nextTask == null || policyExecutor.queue.isEmpty()) {
             int numPolicyTasks = policyExecutor.numTasksOnGlobal.decrementAndGet();
 
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
