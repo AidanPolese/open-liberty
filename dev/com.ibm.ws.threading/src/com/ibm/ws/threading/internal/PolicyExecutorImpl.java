@@ -51,6 +51,11 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     final ReduceableSemaphore maxQueueSizeConstraint = new ReduceableSemaphore();
 
+    /**
+     * This lock is for making a consistent update to both maxQueueSize and maxQueueSizeConstraint
+     */
+    private final Integer maxQueueSizeLock = new Integer(0); // new instance required to avoid sharing
+
     private final AtomicLong maxWaitForEnqueue = new AtomicLong();
 
     final AtomicInteger numTasksOnGlobal = new AtomicInteger();
@@ -69,6 +74,15 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         public void reducePermits(int reduction) {
             super.reducePermits(reduction);
         }
+    }
+
+    private final AtomicReference<State> state = new AtomicReference<State>(State.ACTIVE);
+
+    private static enum State {
+        ACTIVE, // task submit/start/run all possible
+        STOPPING, // task submit disallowed, start/run still possible
+        TERMINATING, // task submit/start disallowed, interrupts sent to running tasks, waiting for all tasks to end
+        TERMINATED // task submit/start/run all disallowed
     }
 
     /**
@@ -110,12 +124,15 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     private void enqueue(FutureTask<?> futureTask) {
         try {
             long wait = maxWaitForEnqueue.get();
-            if (wait == 0 ? maxQueueSizeConstraint.tryAcquire() : maxQueueSizeConstraint.tryAcquire(wait, TimeUnit.MILLISECONDS)) {
+            if (wait <= 0 ? maxQueueSizeConstraint.tryAcquire() : maxQueueSizeConstraint.tryAcquire(wait, TimeUnit.MILLISECONDS)) {
                 queue.offer(futureTask);
                 if (incrementNumTasksOnGlobal())
                     enqueueGlobal(new PolicyTask(this));
-            } else // TODO Reject, CallerRuns, or
+            } else if (state.get() == State.ACTIVE) {
+                // TODO Reject, CallerRuns, or
                 throw new RejectedExecutionException();
+            } else
+                throw new RejectedExecutionException(getStateMessage());
         } catch (InterruptedException x) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(this, tc, "enqueue", x);
@@ -159,6 +176,10 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         enqueue(new FutureTask<Void>(command, null));
     }
 
+    private String getStateMessage() {
+        return state.toString(); // TODO NLS message
+    }
+
     /**
      * Increment our counter of tasks submitted to the global executor if doing so
      * does not exceed maximum concurrency.
@@ -195,12 +216,18 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public boolean isShutdown() {
-        throw new UnsupportedOperationException();
+        if (isServerConfigured)
+            throw new UnsupportedOperationException();
+        else
+            return state.get() != State.ACTIVE;
     }
 
     @Override
     public boolean isTerminated() {
-        throw new UnsupportedOperationException();
+        if (isServerConfigured)
+            throw new UnsupportedOperationException();
+        else
+            return state.get() == State.TERMINATED;
     }
 
     @Override
@@ -208,10 +235,10 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         if (isServerConfigured)
             throw new UnsupportedOperationException();
 
-        if (max < 1)
-            throw new IllegalArgumentException(Integer.toString(max));
-        else if (max == -1)
+        if (max == -1)
             max = Integer.MAX_VALUE;
+        else if (max < 1)
+            throw new IllegalArgumentException(Integer.toString(max));
 
         maxConcurrency.set(max);
 
@@ -223,17 +250,19 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         if (isServerConfigured)
             throw new UnsupportedOperationException();
 
-        if (max < 1)
-            throw new IllegalArgumentException(Integer.toString(max));
-        else if (max == -1)
+        if (max == -1)
             max = Integer.MAX_VALUE;
+        else if (max < 1)
+            throw new IllegalArgumentException(Integer.toString(max));
 
-        int increase = max - maxQueueSize;
-        if (increase > 0)
-            maxQueueSizeConstraint.release(increase);
-        else if (increase < 0)
-            maxQueueSizeConstraint.reducePermits(-increase);
-        maxQueueSize = max;
+        synchronized (maxQueueSizeLock) {
+            int increase = max - maxQueueSize;
+            if (increase > 0)
+                maxQueueSizeConstraint.release(increase);
+            else if (increase < 0)
+                maxQueueSizeConstraint.reducePermits(-increase);
+            maxQueueSize = max;
+        }
 
         return this;
     }
@@ -246,9 +275,11 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         if (ms < 0)
             throw new IllegalArgumentException(Long.toString(ms));
 
-        maxWaitForEnqueue.set(ms);
+        for (long current = maxWaitForEnqueue.get(); current != -1; current = maxWaitForEnqueue.get())
+            if (maxWaitForEnqueue.compareAndSet(current, ms))
+                return this;
 
-        return this;
+        throw new IllegalStateException(getStateMessage());
     }
 
     @Override
@@ -263,12 +294,32 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public void shutdown() {
-        throw new UnsupportedOperationException();
+        if (isServerConfigured)
+            throw new UnsupportedOperationException();
+
+        if (state.compareAndSet(State.ACTIVE, State.STOPPING)) {
+            stopAcceptingSubmits();
+            // TODO transition past STOPPING state as tasks complete
+        }
     }
 
     @Override
     public List<Runnable> shutdownNow() {
         throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Common implementation between shutdown and shutdownNow to permanently
+     * update our configuration such that no more task submits are accepted.
+     */
+    private void stopAcceptingSubmits() {
+        maxWaitForEnqueue.set(-1); // make attempted task submissions fail immediately
+
+        synchronized (maxQueueSizeLock) {
+            maxQueueSize = 0;
+            maxQueueSizeConstraint.drainPermits();
+            maxQueueSizeConstraint.reducePermits(Integer.MAX_VALUE);
+        }
     }
 
     @Override
