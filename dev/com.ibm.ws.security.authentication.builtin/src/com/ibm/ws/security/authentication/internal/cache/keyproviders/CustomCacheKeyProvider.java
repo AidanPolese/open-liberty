@@ -91,7 +91,6 @@ public class CustomCacheKeyProvider implements CacheKeyProvider {
             if (accessTokens != null && accessTokens.length > 0) {
                 HttpServletRequest req = (HttpServletRequest) authenticationData.get(AuthenticationData.HTTP_SERVLET_REQUEST);
                 req.setAttribute(OIDC_ACCESS_TOKEN, accessTokens[0]);
-                authenticationData.set(AuthenticationData.HTTP_SERVLET_REQUEST, req);
             }
 
         } catch (InvalidTokenException e) {
