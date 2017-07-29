@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc>
+  <project project="Failsafe" 
+            projectURL="https://github.com/jhalterman/failsafe" 
+            version="1.0.4"  
+            license-type="Apachev2" 
+            contact="emijiang@uk.ibm.com" 
+            encryption="no">
+      <download location="http://central.maven.org/maven2/net/jodah/failsafe/1.0.4/failsafe-1.0.4.jar">
+         <file basename="failsafe-1.0.4.jar" checksum="a0fbe830686e0bb328a7c5bd8e5e07f7"/>
+      </download>
+   </project>
+   
+   <clearencehistory/>
+   
+   <notes>
+   Source are taken from https://github.com/jhalterman/failsafe
+   </notes>
+</ossc> 
