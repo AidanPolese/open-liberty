@@ -574,6 +574,13 @@ task zipOpenLiberty(type: Zip) {
     destinationDir file('build.image/generated/distributions')
 }
 
+task zipMessageFiles(type: Zip) {
+    dependsOn subprojects.copyPiiFiles
+    baseName 'openPII'
+    from 'build.pii.package/nlssrc'
+    destinationDir file('build.pii.package/generated/distributions')
+}
+
 private boolean parseBoolean(String value) {
     return 'on'.equalsIgnoreCase(value) || 'true'.equalsIgnoreCase(value)
 }
