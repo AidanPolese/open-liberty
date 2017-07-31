@@ -86,9 +86,10 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     @Trivial
     private static enum State {
         ACTIVE, // task submit/start/run all possible
-        QUIESCING, // task submit disallowed, start/run still possible
-        STOPPING, // task submit/start disallowed, queued and running tasks are being canceled
-        TERMINATING, // task submit/start disallowed, waiting for all tasks to end
+        QUEUE_STOPPING, // queue is being disabled, submit might be possible, start/run still possible
+        QUEUE_STOPPED, // task submit disallowed, start/run still possible
+        TASKS_CANCELING, // task submit disallowed, start/run might be possible, queued and running tasks are being canceled
+        TASKS_CANCELED, // task submit/start disallowed, waiting for all tasks to end
         TERMINATED // task submit/start/run all disallowed
     }
 
@@ -116,7 +117,49 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
-        throw new UnsupportedOperationException();
+        if (isServerConfigured)
+            throw new UnsupportedOperationException();
+
+        // This method is optimized for the scenario where the user first invokes shutdownNow.
+        // Absent that, polling will be used to wait for TASKS_CANCELED state to be reached
+        // or QUEUE_STOPPED state to be reached with an empty queue, after which we can attempt
+        // to obtain all of the maxConcurrency permits and transition to TERMINATED state.
+        final long pollInterval = TimeUnit.MILLISECONDS.toNanos(500);
+
+        timeout = unit.toNanos(timeout);
+
+        for (long start = System.nanoTime(), waitTime = 0, remaining = timeout; //
+                        waitTime == 0 || (remaining = timeout - waitTime) > 0; //
+                        waitTime = System.nanoTime() - start) {
+            State currentState = state.get();
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                Tr.debug(this, tc, "awaitTermination", remaining, currentState);
+            switch (currentState) {
+                case TERMINATED:
+                    return true;
+                case QUEUE_STOPPED:
+                case TASKS_CANCELING:
+                case TASKS_CANCELED:
+                    // Transition to TERMINATED state if no tasks in the queue and no policy tasks on global executor.
+                    // TODO How do we avoid waiting for the entire timeout if the state transitions to TERMINATED right before we start waiting?
+                    if (queue.isEmpty()) {
+                        if (remaining > 0 ? maxConcurrencyConstraint.tryAcquire(maxConcurrency, remaining, unit) //
+                                        : maxConcurrencyConstraint.tryAcquire(maxConcurrency)) {
+                            State previous = state.getAndSet(State.TERMINATED);
+                            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
+                                Tr.event(this, tc, "state: " + previous + " --> TERMINATED");
+                            return true;
+                        } else
+                            return state.get() == State.TERMINATED; // one final chance
+                    } else
+                        TimeUnit.NANOSECONDS.sleep(remaining < pollInterval ? remaining : pollInterval);
+                    continue;
+                default:
+                    TimeUnit.NANOSECONDS.sleep(remaining < pollInterval ? remaining : pollInterval);
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -137,7 +180,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                 if (maxConcurrencyConstraint.tryAcquire())
                     enqueueGlobal(new PolicyTask(this));
             } else if (state.get() == State.ACTIVE) {
-                // TODO Reject, CallerRuns, or
+                // TODO Reject, CallerRuns, or CallerRunsIfSameExecutor
                 throw new RejectedExecutionException();
             } else
                 throw new RejectedExecutionException(getStateMessage());
@@ -225,16 +268,15 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         switch (currentState) {
             case TERMINATED:
                 return true;
-            case QUIESCING:
-            case TERMINATING:
+            case QUEUE_STOPPED:
+            case TASKS_CANCELING:
+            case TASKS_CANCELED:
                 // Transition to TERMINATED state if no tasks in the queue and no policy tasks on global executor
-                if (queue.isEmpty() && maxConcurrencyConstraint.availablePermits() == maxConcurrency) {
-                    if (state.compareAndSet(currentState, State.TERMINATED)) {
-                        if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
-                            Tr.event(this, tc, "state: " + currentState + " --> TERMINATED");
-                        return true;
-                    }
-                    return isTerminated(); // try again if couldn't set state
+                if (queue.isEmpty() && maxConcurrencyConstraint.tryAcquire(maxConcurrency)) {
+                    State previous = state.getAndSet(State.TERMINATED);
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
+                        Tr.event(this, tc, "state: " + previous + " --> TERMINATED");
+                    return true;
                 } else
                     return false;
             default:
@@ -343,18 +385,26 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             throw new UnsupportedOperationException();
 
         // Permanently update our configuration such that no more task submits are accepted
-        if (state.compareAndSet(State.ACTIVE, State.QUIESCING)) {
+        if (state.compareAndSet(State.ACTIVE, State.QUEUE_STOPPING)) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
-                Tr.event(this, tc, "state: ACTIVE --> QUIESCING");
+                Tr.event(this, tc, "state: ACTIVE --> QUEUE_STOPPING");
 
             maxWaitForEnqueue.set(-1); // make attempted task submissions fail immediately
 
             synchronized (configLock) {
                 maxQueueSize = 0;
-                maxQueueSizeConstraint.reducePermits(maxQueueSizeConstraint.availablePermits()); // TODO drainPermits?
+                maxQueueSizeConstraint.drainPermits();
                 maxQueueSizeConstraint.reducePermits(Integer.MAX_VALUE);
             }
-        }
+
+            if (state.compareAndSet(State.QUEUE_STOPPING, State.QUEUE_STOPPED))
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
+                    Tr.event(this, tc, "state: QUEUE_STOPPING --> QUEUE_STOPPED");
+        } else
+            while (state.get() == State.QUEUE_STOPPING) {
+                // Await completion of other thread that concurrently invokes shutdown.
+                Thread.yield();
+            }
     }
 
     @Override
@@ -363,9 +413,9 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
         LinkedList<Runnable> queuedTasks = new LinkedList<Runnable>();
 
-        if (state.compareAndSet(State.QUIESCING, State.STOPPING)) {
+        if (state.compareAndSet(State.QUEUE_STOPPED, State.TASKS_CANCELING)) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
-                Tr.event(this, tc, "state: QUIESCING --> STOPPING");
+                Tr.event(this, tc, "state: QUEUE_STOPPED --> TASKS_CANCELING");
 
             // Remove all queued tasks. The maxQueueSizeConstraint should prevent queueing more,
             // apart from a timing window where a task is being scheduled during shutdown. TODO
@@ -375,9 +425,14 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             // Cancel in-progress tasks
             // TODO track in-progress tasks so that we can cancel
 
-            state.set(State.TERMINATING);
-            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
-                Tr.event(this, tc, "state: STOPPING --> TERMINATING");
+            if (state.compareAndSet(State.TASKS_CANCELING, State.TASKS_CANCELED))
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
+                    Tr.event(this, tc, "state: TASKS_CANCELING --> TASKS_CANCELED");
+        } else {
+            // Await completion of other thread that concurrently invokes shutdownNow.
+            // TODO removing all queued tasks and canceling all policy tasks is not trivial, should a better mechanism be used to wait?
+            while (state.get() == State.TASKS_CANCELING)
+                Thread.yield();
         }
 
         return queuedTasks;
