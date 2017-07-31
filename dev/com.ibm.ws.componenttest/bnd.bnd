@@ -37,9 +37,11 @@ DynamicImport-Package: \
   javax.servlet, \
   javax.servlet.http
 
-publish.wlp.jar.disabled: true
+instrument.disabled: true
 
-test.project: true
+# publish.wlp.jar.disabled: true
+
+# test.project: true
 
 -buildpath: \
     ../build.sharedResources/lib/junit/old/junit.jar;version=file,\
