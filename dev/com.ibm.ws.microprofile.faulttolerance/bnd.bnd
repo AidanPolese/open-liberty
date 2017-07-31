@@ -1,0 +1,59 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+javac.source: 1.8
+javac.target: 1.8
+
+Bundle-Name: com.ibm.ws.microprofile.faulttolerance
+Bundle-SymbolicName: com.ibm.ws.microprofile.faulttolerance
+
+Bundle-Description:MicroProfile Fault Tolerance 1.0 impl, version ${bVersion}
+
+WS-TraceGroup: FAULTTOLERANCE
+
+-dsannotations-inherit: true
+-dsannotations: com.ibm.ws.microprofile.faulttolerance.spi.impl.ProviderResolverImpl
+
+Import-Package: *
+
+Export-Package: \
+        com.ibm.ws.microprofile.faulttolerance.spi.impl;version=1.0
+
+Private-Package: \
+    com.ibm.ws.microprofile.faulttolerance.resources, \
+    com.ibm.ws.microprofile.faulttolerance.spi.impl.policy
+
+Include-Resource: \
+  META-INF/services=resources/META-INF/services
+
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+
+-buildpath: \
+        com.ibm.ws.net.jodah.failsafe.1.0.4;version=latest, \
+        com.ibm.ws.logging;version=latest, \
+        org.eclipse.osgi;version=latest, \
+        com.ibm.websphere.org.osgi.core;version=latest, \
+        com.ibm.websphere.org.osgi.service.component;version=latest, \
+        com.ibm.wsspi.org.osgi.service.component.annotations;version=latest, \
+        com.ibm.websphere.org.eclipse.microprofile.faulttolerance.1.0;version=latest, \
+        com.ibm.ws.microprofile.faulttolerance.spi;version=latest, \
+        com.ibm.ws.kernel.service;version=latest, \
+        com.ibm.ws.context;version=latest, \
+        com.ibm.websphere.security;version=latest, \
+        com.ibm.websphere.javaee.annotation.1.2;version=latest, \
+        com.ibm.websphere.javaee.concurrent.1.0;version=latest, \
+        com.ibm.ws.org.osgi.annotation.versioning;version=latest
+
+-testpath: \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	com.thoughtworks.qdox:qdox;version=1.12, \
+	org.jmock:jmock-junit4;version=2.5.1, \
+	org.jmock:jmock;version=2.5.1, \
+        org.glassfish:javax.json;version=1.0.4, \
+        org.slf4j:slf4j-api;version=1.7.7, \
+        org.slf4j:slf4j-jdk14;version=1.7.7, \
+        com.ibm.websphere.javaee.jsonp.1.0;version=latest, \
+        org.apache.commons:commons-lang3;version=3.5, \
+        ./resources/;version=file
+
