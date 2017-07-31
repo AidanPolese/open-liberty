@@ -11,6 +11,7 @@
 package com.ibm.ws.threading.internal;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -22,7 +23,6 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,13 +39,21 @@ import com.ibm.ws.threading.PolicyExecutor;
 public class PolicyExecutorImpl implements PolicyExecutor {
     private static final TraceComponent tc = Tr.register(PolicyExecutorImpl.class);
 
+    /**
+     * Use this lock to make a consistent update to both maxConcurrency and maxConcurrencyConstraint,
+     * and to maxQueueSize and maxQueueSizeConstraint.
+     */
+    private final Integer configLock = new Integer(0); // new instance required to avoid sharing
+
     private ExecutorService globalExecutor;
 
     private String identifier;
 
     private final boolean isServerConfigured;
 
-    private final AtomicInteger maxConcurrency = new AtomicInteger(Integer.MAX_VALUE);
+    private int maxConcurrency;
+
+    private final ReduceableSemaphore maxConcurrencyConstraint = new ReduceableSemaphore();
 
     private int maxQueueSize;
 
@@ -53,14 +61,13 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     private final AtomicLong maxWaitForEnqueue = new AtomicLong();
 
-    final AtomicInteger numTasksOnGlobal = new AtomicInteger();
-
     final ConcurrentLinkedQueue<FutureTask<?>> queue = new ConcurrentLinkedQueue<FutureTask<?>>();
 
     private final AtomicReference<QueueFullAction> queueFullAction = new AtomicReference<QueueFullAction>();
 
     @SuppressWarnings("serial") // never serialized
     static class ReduceableSemaphore extends Semaphore {
+        @Trivial
         private ReduceableSemaphore() {
             super(0);
         }
@@ -69,6 +76,20 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         public void reducePermits(int reduction) {
             super.reducePermits(reduction);
         }
+    }
+
+    /**
+     * Policy executor state, which transitions in one direction only. See constants for possible states.
+     */
+    private final AtomicReference<State> state = new AtomicReference<State>(State.ACTIVE);
+
+    @Trivial
+    private static enum State {
+        ACTIVE, // task submit/start/run all possible
+        QUIESCING, // task submit disallowed, start/run still possible
+        STOPPING, // task submit/start disallowed, queued and running tasks are being canceled
+        TERMINATING, // task submit/start disallowed, waiting for all tasks to end
+        TERMINATED // task submit/start/run all disallowed
     }
 
     /**
@@ -89,6 +110,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         isServerConfigured = false;
         this.globalExecutor = globalExecutor;
         this.identifier = "PolicyExecutorProvider-" + identifier;
+        maxConcurrencyConstraint.release(maxConcurrency = Integer.MAX_VALUE);
         maxQueueSizeConstraint.release(maxQueueSize = Integer.MAX_VALUE);
     }
 
@@ -110,12 +132,15 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     private void enqueue(FutureTask<?> futureTask) {
         try {
             long wait = maxWaitForEnqueue.get();
-            if (wait == 0 ? maxQueueSizeConstraint.tryAcquire() : maxQueueSizeConstraint.tryAcquire(wait, TimeUnit.MILLISECONDS)) {
+            if (wait <= 0 ? maxQueueSizeConstraint.tryAcquire() : maxQueueSizeConstraint.tryAcquire(wait, TimeUnit.MILLISECONDS)) {
                 queue.offer(futureTask);
-                if (incrementNumTasksOnGlobal())
+                if (maxConcurrencyConstraint.tryAcquire())
                     enqueueGlobal(new PolicyTask(this));
-            } else // TODO Reject, CallerRuns, or
+            } else if (state.get() == State.ACTIVE) {
+                // TODO Reject, CallerRuns, or
                 throw new RejectedExecutionException();
+            } else
+                throw new RejectedExecutionException(getStateMessage());
         } catch (InterruptedException x) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(this, tc, "enqueue", x);
@@ -145,10 +170,10 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             future = globalExecutor.submit(policyTask);
         } finally {
             if (future == null) {
-                int numPolicyTasks = numTasksOnGlobal.decrementAndGet();
+                maxConcurrencyConstraint.release();
 
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "Policy tasks for " + this + " reduced to " + numPolicyTasks);
+                    Tr.debug(this, tc, "maxConcurrency permits available: " + maxConcurrencyConstraint.availablePermits());
             }
         }
         return future;
@@ -159,18 +184,8 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         enqueue(new FutureTask<Void>(command, null));
     }
 
-    /**
-     * Increment our counter of tasks submitted to the global executor if doing so
-     * does not exceed maximum concurrency.
-     *
-     * @return true if incremented, otherwise false.
-     */
-    boolean incrementNumTasksOnGlobal() {
-        int max = maxConcurrency.get();
-        for (int n = numTasksOnGlobal.get(); n < max; n = numTasksOnGlobal.get())
-            if (numTasksOnGlobal.compareAndSet(n, n + 1))
-                return true;
-        return false;
+    private String getStateMessage() {
+        return state.toString(); // TODO NLS message
     }
 
     @Override
@@ -195,12 +210,36 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public boolean isShutdown() {
-        throw new UnsupportedOperationException();
+        if (isServerConfigured)
+            throw new UnsupportedOperationException();
+        else
+            return state.get() != State.ACTIVE;
     }
 
     @Override
     public boolean isTerminated() {
-        throw new UnsupportedOperationException();
+        if (isServerConfigured)
+            throw new UnsupportedOperationException();
+
+        State currentState = state.get();
+        switch (currentState) {
+            case TERMINATED:
+                return true;
+            case QUIESCING:
+            case TERMINATING:
+                // Transition to TERMINATED state if no tasks in the queue and no policy tasks on global executor
+                if (queue.isEmpty() && maxConcurrencyConstraint.availablePermits() == maxConcurrency) {
+                    if (state.compareAndSet(currentState, State.TERMINATED)) {
+                        if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
+                            Tr.event(this, tc, "state: " + currentState + " --> TERMINATED");
+                        return true;
+                    }
+                    return isTerminated(); // try again if couldn't set state
+                } else
+                    return false;
+            default:
+                return false;
+        }
     }
 
     @Override
@@ -208,12 +247,19 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         if (isServerConfigured)
             throw new UnsupportedOperationException();
 
-        if (max < 1)
-            throw new IllegalArgumentException(Integer.toString(max));
-        else if (max == -1)
+        if (max == -1)
             max = Integer.MAX_VALUE;
+        else if (max < 1)
+            throw new IllegalArgumentException(Integer.toString(max));
 
-        maxConcurrency.set(max);
+        synchronized (configLock) {
+            int increase = max - maxConcurrency;
+            if (increase > 0)
+                maxConcurrencyConstraint.release(increase);
+            else if (increase < 0)
+                maxConcurrencyConstraint.reducePermits(-increase);
+            maxConcurrency = max;
+        }
 
         return this;
     }
@@ -223,17 +269,19 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         if (isServerConfigured)
             throw new UnsupportedOperationException();
 
-        if (max < 1)
-            throw new IllegalArgumentException(Integer.toString(max));
-        else if (max == -1)
+        if (max == -1)
             max = Integer.MAX_VALUE;
+        else if (max < 1)
+            throw new IllegalArgumentException(Integer.toString(max));
 
-        int increase = max - maxQueueSize;
-        if (increase > 0)
-            maxQueueSizeConstraint.release(increase);
-        else if (increase < 0)
-            maxQueueSizeConstraint.reducePermits(-increase);
-        maxQueueSize = max;
+        synchronized (configLock) {
+            int increase = max - maxQueueSize;
+            if (increase > 0)
+                maxQueueSizeConstraint.release(increase);
+            else if (increase < 0)
+                maxQueueSizeConstraint.reducePermits(-increase);
+            maxQueueSize = max;
+        }
 
         return this;
     }
@@ -246,9 +294,11 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         if (ms < 0)
             throw new IllegalArgumentException(Long.toString(ms));
 
-        maxWaitForEnqueue.set(ms);
+        for (long current = maxWaitForEnqueue.get(); current != -1; current = maxWaitForEnqueue.get())
+            if (maxWaitForEnqueue.compareAndSet(current, ms))
+                return this;
 
-        return this;
+        throw new IllegalStateException(getStateMessage());
     }
 
     @Override
@@ -261,14 +311,76 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         return this;
     }
 
+    /**
+     * Resubmit a policy task if any queued tasks remain.
+     * Otherwise decrement the count against maxConcurrency.
+     * TODO Should write a more efficient/optimal/accurate mechanism for rescheduling.
+     *
+     * @param policyTask policy executor task to resubmit.
+     * @param executeTaskOnPolicyThread indicates if the policy thread ran a queued task,
+     *            as opposed to finding nothing in the queue.
+     */
+    void resubmit(PolicyTask policyTask, boolean executedTaskOnPolicyThread) {
+        if (executedTaskOnPolicyThread && !queue.isEmpty())
+            enqueueGlobal(policyTask);
+        else {
+            maxConcurrencyConstraint.release();
+            int available = maxConcurrencyConstraint.availablePermits();
+
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                Tr.debug(this, tc, "maxConcurrency permits available: " + available);
+
+            // If this was the only policy task left, check once again to ensure there are still no items left in the queue.
+            // Otherwise a race condition could leave a task unexecuted.
+            if (maxConcurrency == available && !queue.isEmpty() && maxConcurrencyConstraint.tryAcquire())
+                enqueueGlobal(policyTask);
+        }
+    }
+
     @Override
     public void shutdown() {
-        throw new UnsupportedOperationException();
+        if (isServerConfigured)
+            throw new UnsupportedOperationException();
+
+        // Permanently update our configuration such that no more task submits are accepted
+        if (state.compareAndSet(State.ACTIVE, State.QUIESCING)) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
+                Tr.event(this, tc, "state: ACTIVE --> QUIESCING");
+
+            maxWaitForEnqueue.set(-1); // make attempted task submissions fail immediately
+
+            synchronized (configLock) {
+                maxQueueSize = 0;
+                maxQueueSizeConstraint.reducePermits(maxQueueSizeConstraint.availablePermits()); // TODO drainPermits?
+                maxQueueSizeConstraint.reducePermits(Integer.MAX_VALUE);
+            }
+        }
     }
 
     @Override
     public List<Runnable> shutdownNow() {
-        throw new UnsupportedOperationException();
+        shutdown();
+
+        LinkedList<Runnable> queuedTasks = new LinkedList<Runnable>();
+
+        if (state.compareAndSet(State.QUIESCING, State.STOPPING)) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
+                Tr.event(this, tc, "state: QUIESCING --> STOPPING");
+
+            // Remove all queued tasks. The maxQueueSizeConstraint should prevent queueing more,
+            // apart from a timing window where a task is being scheduled during shutdown. TODO
+            for (FutureTask<?> t = queue.poll(); t != null; t = queue.poll())
+                queuedTasks.add(t); // TODO get the actual Runnable/Callable, not FutureTask
+
+            // Cancel in-progress tasks
+            // TODO track in-progress tasks so that we can cancel
+
+            state.set(State.TERMINATING);
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
+                Tr.event(this, tc, "state: STOPPING --> TERMINATING");
+        }
+
+        return queuedTasks;
     }
 
     @Override

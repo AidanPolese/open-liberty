@@ -37,7 +37,7 @@ public interface PolicyExecutor extends ExecutorService {
         CallerRuns,
 
         /**
-         * If the thread on which submit (or executor or invoke*) is invoked can be identified
+         * If the thread on which submit (or execute/invokeAll/invokeAny) is invoked can be identified
          * as already running a task that was submitted to the same policy executor, then
          * it attempts to run the task before returning control.
          * Otherwise, submission of the task is rejected.
@@ -61,7 +61,7 @@ public interface PolicyExecutor extends ExecutorService {
     /**
      * Specifies the maximum number of submitted tasks that can be queued for execution.
      * As tasks are started or canceled, they are removed from the queue. When the queue is
-     * at capacity and another task is submitted, the rejectAction is applied.
+     * at capacity and another task is submitted, the queueFullAction is applied.
      * Applications that submit many tasks over a short period of time might want to use
      * a maximum queue size that is at least as large as the maximum concurrency.
      * The default maxQueueSize is Integer.MAX_VALUE.
@@ -76,14 +76,14 @@ public interface PolicyExecutor extends ExecutorService {
     PolicyExecutor maxQueueSize(int max);
 
     /**
-     * Specifies the maximum number of milliseconds to wait for queueing a submitted task.
-     * If unable to queue the task within this interval, the task submission is subject to
+     * Specifies the maximum number of milliseconds to wait for enqueueing a submitted task.
+     * If unable to enqueue the task within this interval, the task submission is subject to
      * the queueFullAction. A value of 0 indicates to not wait at all, in which case, if there
      * is not a queue position available, the queueFullAction is immediately applied.
      * The default maxWaitForEnqueue is 0.
      * TODO: update with discussion of how dynamic config update is handled once supported
      *
-     * @param ms maximum number of milliseconds to wait when attempting to qeueue a submitted task.
+     * @param ms maximum number of milliseconds to wait when attempting to queue a submitted task.
      * @return the executor.
      * @throws IllegalArgumentException if value is negative.
      * @throws IllegalStateException if the executor has been shut down.
@@ -93,7 +93,8 @@ public interface PolicyExecutor extends ExecutorService {
 
     /**
      * Specifies the action to take when a task is submitted but there are no queue positions
-     * available. Refer to the descriptions of the values possible in the QueueFullAction enumeration.
+     * available after having exceeded the maxWaitForEnqueue.
+     * Refer to the descriptions of the values possible in the QueueFullAction enumeration.
      * The default queueFullAction depends on the maxConcurrency.
      * If maxConcurrency is a positive integer less than Integer.MAX_VALUE, then the default is CallerRunsIfSameExecutor? or Abort? TODO
      * Otherwise, the default is CallerRuns? TODO
