@@ -267,8 +267,8 @@ public class CertificateLoginModule extends ServerCommonLoginModule implements L
         X509Certificate cert = certChain[0];
 
         UserRegistry userRegistry = getUserRegistry();
-        authenticatedId = userRegistry.mapCertificate(cert);
-        username = getSecurityName(null, authenticatedId);
+        username = userRegistry.mapCertificate(cert);
+        authenticatedId = userRegistry.getUniqueUserId(username);
         setUpTemporarySubject();
     }
 
@@ -287,7 +287,7 @@ public class CertificateLoginModule extends ServerCommonLoginModule implements L
         UserRegistry ur = getUserRegistry();
         String accessId = AccessIdUtil.createAccessId(AccessIdUtil.TYPE_USER,
                                                       ur.getRealm(),
-                                                      ur.getUniqueUserId(authenticatedId));
+                                                      ur.getUniqueUserId(username));
         setPrincipalAndCredentials(temporarySubject, username, authenticatedId, accessId, WSPrincipal.AUTH_METHOD_CERTIFICATE);
 
     }
