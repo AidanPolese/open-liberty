@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<project name="Test.Build" default="execute" basedir=".">
-	
-	<target name="execute">
-		<echo message="@AGG hellO"/>
-	</target>
-		
-</project>

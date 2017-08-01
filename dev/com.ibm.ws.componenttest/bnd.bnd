@@ -39,9 +39,7 @@ DynamicImport-Package: \
 
 instrument.disabled: true
 
-# publish.wlp.jar.disabled: true
-
-# test.project: true
+test.project: true
 
 -buildpath: \
     ../build.sharedResources/lib/junit/old/junit.jar;version=file,\

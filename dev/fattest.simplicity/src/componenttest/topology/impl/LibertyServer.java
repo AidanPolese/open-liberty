@@ -72,7 +72,6 @@ import javax.net.ssl.TrustManagerFactory;
 
 import org.junit.Assert;
 
-import com.ibm.websphere.jmx.connector.rest.ConnectorSettings;
 import com.ibm.websphere.simplicity.LocalFile;
 import com.ibm.websphere.simplicity.Machine;
 import com.ibm.websphere.simplicity.OperatingSystem;
@@ -87,7 +86,6 @@ import com.ibm.websphere.simplicity.exception.ApplicationNotInstalledException;
 import com.ibm.websphere.simplicity.log.Log;
 import com.ibm.websphere.soe_reporting.SOEHttpPostUtil;
 import com.ibm.ws.fat.util.ACEScanner;
-import com.ibm.ws.jmx.connector.client.rest.ClientProvider;
 
 import componenttest.common.apiservices.Bootstrap;
 import componenttest.common.apiservices.LocalMachine;
@@ -4739,11 +4737,11 @@ public class LibertyServer implements LogMonitorClient {
                     } else
                         // Remove the corresponding regexp from the watchFor list
                         for (Iterator<String> it = watchFor.iterator(); it.hasNext();) {
-                            String regexp = it.next();
-                            if (Pattern.compile(regexp).matcher(line).find()) {
-                                it.remove();
-                                break;
-                            }
+                        String regexp = it.next();
+                        if (Pattern.compile(regexp).matcher(line).find()) {
+                        it.remove();
+                        break;
+                        }
                         }
                 }
             }
@@ -5615,8 +5613,8 @@ public class LibertyServer implements LogMonitorClient {
         Map<String, Object> environment = new HashMap<String, Object>();
         environment.put("jmx.remote.protocol.provider.pkgs", "com.ibm.ws.jmx.connector.client");
         environment.put(JMXConnector.CREDENTIALS, new String[] { userName, password });
-        environment.put(ClientProvider.DISABLE_HOSTNAME_VERIFICATION, true);
-        environment.put(ClientProvider.READ_TIMEOUT, 2 * 60 * 1000);
+        environment.put("com.ibm.ws.jmx.connector.client.disableURLHostnameVerification", true);
+        environment.put("com.ibm.ws.jmx.connector.client.readTimeout", 2 * 60 * 1000);
 
         // Load the keystore file from the file system.
         KeyStore keyStore = KeyStore.getInstance("JKS");
@@ -5645,7 +5643,7 @@ public class LibertyServer implements LogMonitorClient {
         trustManagerFactory.init(keyStore);
         SSLContext sslContext = SSLContext.getInstance("TLS");
         sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
-        environment.put(ConnectorSettings.CUSTOM_SSLSOCKETFACTORY, sslContext.getSocketFactory());
+        environment.put("com.ibm.ws.jmx.connector.client.CUSTOM_SSLSOCKETFACTORY", sslContext.getSocketFactory());
 
         JMXServiceURL url = new JMXServiceURL("REST", getHostname(), getHttpDefaultSecurePort(), "/IBMJMXConnectorREST");
 

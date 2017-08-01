@@ -1,2 +1,12 @@
-// TODO: construct a bootstrapping.properties file from a template
-//       and stick it into autoFVT-defaults/bootstrapping.properties
+import org.apache.tools.ant.filters.ReplaceTokens
+
+task assembleBootstrap(type: Copy) {
+	def javaHome = System.properties.('java.home').replace("\\", "\\\\").replace(":", "\\:")
+    from "${projectDir}/autoFVT-templates/bootstrapping.properties"
+    into "${projectDir}/autoFVT-defaults/"
+    filter(ReplaceTokens, tokens: [JAVA_HOME: javaHome])
+}
+
+assemble {
+	dependsOn assembleBootstrap
+}
