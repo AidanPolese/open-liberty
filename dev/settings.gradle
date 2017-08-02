@@ -44,26 +44,29 @@ def loadBuildProps() {
   ext.matrixParams = ";GIT_BRANCH=master;GIT_FEATURE_BRANCH=${branchName}"
   props.setProperty('matrixParams', matrixParams)
   
-  
   File usrHomeProps = file(System.properties['user.home'] + '/gradle.startup.properties') 
-  if (usrHomeProps.exists()) {    
+  if (!usrHomeProps.exists()) {
+    if (System.properties['build.properties.path']!=null) {
+	  usrHomeProps = file(System.properties['build.properties.path']);
+	}
+  }
+  
+  def fetchRepo = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl=https://repo.maven.apache.org/maven2/; index=${build}/oss_dependencies.maven; name = "Central";')
+  
+  if (!props.getProperty('artifactory.force.external.repo') && usrHomeProps.exists()) {    
 	  usrHomeProps.withInputStream { props.load(it) }    
 	  props.each {      
 		  props.setProperty(it.key, it.value)      
-      }    
-	  // generated.properties is used to pass build-time variables from Gradle -> Bnd in cnf/build.bnd    
-	  File propsFile = new File('generated.properties')    
-	  props.store(propsFile.newWriter(), null)       
+      }
+	  def repoURL = ('https://' + props.getProperty('artifactory.download.server') + '/artifactory/wasliberty-open-liberty')
+	  fetchRepo = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl= ' + repoURL + ' ; snapshotUrl= ' + repoURL + ' ; index=${build}/oss_dependencies.maven; name = "Artifactory";')
   } 
-  else if (System.properties['build.properties.path']!=null) {
-	  file(System.properties['build.properties.path']).withInputStream { props.load(it) }
-	  props.each { 
-	    props.setProperty(it.key, it.value) 
-	    }
-	  // generated.properties is used to pass build-time variables from Gradle -> Bnd in cnf/build.bnd
-	  File propsFile = new File('generated.properties')
-	  props.store(propsFile.newWriter(), null)
-  }
+  
+  props.setProperty('fetch.repository', fetchRepo)
+    
+  // generated.properties is used to pass build-time variables from Gradle -> Bnd in cnf/build.bnd    
+  File propsFile = new File('generated.properties')    
+  props.store(propsFile.newWriter(), null)
 }
 
 loadBuildProps()
