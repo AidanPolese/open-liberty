@@ -11,9 +11,13 @@
 package com.ibm.ws.threading.internal;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -79,6 +83,14 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     }
 
     /**
+     * Tasks that are running on policy executor threads.
+     * This is only populated & used for policy executors that are programmatically created,
+     * because it is needed only for the life cycle methods which are unavailable to
+     * server-configured policy executors.
+     */
+    private final Set<FutureTask<?>> running = Collections.newSetFromMap(new ConcurrentHashMap<FutureTask<?>, Boolean>());
+
+    /**
      * Policy executor state, which transitions in one direction only. See constants for possible states.
      */
     private final AtomicReference<State> state = new AtomicReference<State>(State.ACTIVE);
@@ -86,8 +98,8 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     @Trivial
     private static enum State {
         ACTIVE, // task submit/start/run all possible
-        QUEUE_STOPPING, // queue is being disabled, submit might be possible, start/run still possible
-        QUEUE_STOPPED, // task submit disallowed, start/run still possible
+        ENQUEUE_STOPPING, // enqueue is being disabled, submit might be possible, start/run still possible
+        ENQUEUE_STOPPED, // task submit disallowed, start/run still possible
         TASKS_CANCELING, // task submit disallowed, start/run might be possible, queued and running tasks are being canceled
         TASKS_CANCELED, // task submit/start disallowed, waiting for all tasks to end
         TERMINATED // task submit/start/run all disallowed
@@ -137,7 +149,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             switch (currentState) {
                 case TERMINATED:
                     return true;
-                case QUEUE_STOPPED:
+                case ENQUEUE_STOPPED:
                 case TASKS_CANCELING:
                 case TASKS_CANCELED:
                     // Transition to TERMINATED state if no tasks in the queue and no policy tasks on global executor.
@@ -183,6 +195,10 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                 // TODO Reject, CallerRuns, or CallerRunsIfSameExecutor
                 throw new RejectedExecutionException();
             } else
+                throw new RejectedExecutionException(getStateMessage());
+
+            // Check if shutdown occurred since acquiring the permit to enqueue, and if so, try to remove the queued task
+            if (state.get() != State.ACTIVE && queue.remove(futureTask))
                 throw new RejectedExecutionException(getStateMessage());
         } catch (InterruptedException x) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
@@ -268,7 +284,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         switch (currentState) {
             case TERMINATED:
                 return true;
-            case QUEUE_STOPPED:
+            case ENQUEUE_STOPPED:
             case TASKS_CANCELING:
             case TASKS_CANCELED:
                 // Transition to TERMINATED state if no tasks in the queue and no policy tasks on global executor
@@ -379,13 +395,48 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         }
     }
 
+    /**
+     * Invoked by the policy executor thread to run a task.
+     *
+     * @param task the task.
+     */
+    @Trivial // do the tracing ourselves to ensure exception is included
+    void runTask(FutureTask<?> task) {
+        final boolean trace = TraceComponent.isAnyTracingEnabled();
+        if (trace && tc.isEntryEnabled())
+            Tr.entry(this, tc, "runTask", task);
+
+        Throwable failure = null;
+        try {
+            if (!isServerConfigured)
+                running.add(task); // intentionally done before checking state to avoid missing cancels on shutdownNow
+
+            State currentState = state.get();
+            if (currentState == State.ACTIVE || currentState == State.ENQUEUE_STOPPING || currentState == State.ENQUEUE_STOPPED)
+                task.run();
+            else {
+                if (trace && tc.isDebugEnabled())
+                    Tr.debug(this, tc, "Cancel task due to policy executor state " + currentState);
+                task.cancel(false);
+            }
+        } catch (Throwable x) {
+            failure = x;
+        } finally {
+            if (!isServerConfigured)
+                running.remove(task);
+        }
+
+        if (trace && tc.isEntryEnabled())
+            Tr.exit(this, tc, "runTask", failure);
+    }
+
     @Override
     public void shutdown() {
         if (isServerConfigured)
             throw new UnsupportedOperationException();
 
         // Permanently update our configuration such that no more task submits are accepted
-        if (state.compareAndSet(State.ACTIVE, State.QUEUE_STOPPING)) {
+        if (state.compareAndSet(State.ACTIVE, State.ENQUEUE_STOPPING)) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
                 Tr.event(this, tc, "state: ACTIVE --> QUEUE_STOPPING");
 
@@ -397,11 +448,11 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                 maxQueueSizeConstraint.reducePermits(Integer.MAX_VALUE);
             }
 
-            if (state.compareAndSet(State.QUEUE_STOPPING, State.QUEUE_STOPPED))
+            if (state.compareAndSet(State.ENQUEUE_STOPPING, State.ENQUEUE_STOPPED))
                 if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
                     Tr.event(this, tc, "state: QUEUE_STOPPING --> QUEUE_STOPPED");
         } else
-            while (state.get() == State.QUEUE_STOPPING) {
+            while (state.get() == State.ENQUEUE_STOPPING) {
                 // Await completion of other thread that concurrently invokes shutdown.
                 Thread.yield();
             }
@@ -409,24 +460,31 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public List<Runnable> shutdownNow() {
+        final boolean trace = TraceComponent.isAnyTracingEnabled();
+
         shutdown();
 
         LinkedList<Runnable> queuedTasks = new LinkedList<Runnable>();
 
-        if (state.compareAndSet(State.QUEUE_STOPPED, State.TASKS_CANCELING)) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
+        if (state.compareAndSet(State.ENQUEUE_STOPPED, State.TASKS_CANCELING)) {
+            if (trace && tc.isEventEnabled())
                 Tr.event(this, tc, "state: QUEUE_STOPPED --> TASKS_CANCELING");
 
-            // Remove all queued tasks. The maxQueueSizeConstraint should prevent queueing more,
+            // Remove and cancel all queued tasks. The maxQueueSizeConstraint should prevent queueing more,
             // apart from a timing window where a task is being scheduled during shutdown. TODO
             for (FutureTask<?> t = queue.poll(); t != null; t = queue.poll())
                 queuedTasks.add(t); // TODO get the actual Runnable/Callable, not FutureTask
 
-            // Cancel in-progress tasks
-            // TODO track in-progress tasks so that we can cancel
+            // Cancel tasks that are running
+            for (Iterator<FutureTask<?>> it = running.iterator(); it.hasNext();) {
+                FutureTask<?> t = it.next();
+                boolean canceled = t.cancel(true);
+                if (trace && tc.isDebugEnabled())
+                    Tr.debug(this, tc, "canceled?", t, canceled);
+            }
 
             if (state.compareAndSet(State.TASKS_CANCELING, State.TASKS_CANCELED))
-                if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
+                if (trace && tc.isEventEnabled())
                     Tr.event(this, tc, "state: TASKS_CANCELING --> TASKS_CANCELED");
         } else {
             // Await completion of other thread that concurrently invokes shutdownNow.

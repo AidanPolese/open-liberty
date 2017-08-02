@@ -12,16 +12,12 @@ package com.ibm.ws.threading.internal;
 
 import java.util.concurrent.FutureTask;
 
-import com.ibm.websphere.ras.Tr;
-import com.ibm.websphere.ras.TraceComponent;
-
+// TODO consider fully collapsing this class into PolicyExecutorImpl
 /**
  * Policy executor tasks run on the global thread pool.
  * Their role is to run tasks that are queued up on the policy executor.
  */
 public class PolicyTask implements Runnable {
-    private static final TraceComponent tc = Tr.register(PolicyTask.class);
-
     private final PolicyExecutorImpl policyExecutor;
 
     /**
@@ -34,8 +30,6 @@ public class PolicyTask implements Runnable {
 
     @Override
     public void run() {
-        boolean trace = TraceComponent.isAnyTracingEnabled();
-
         FutureTask<?> nextTask;
         do {
             nextTask = policyExecutor.queue.poll();
@@ -47,18 +41,8 @@ public class PolicyTask implements Runnable {
         } while (nextTask.isCancelled());
 
         if (nextTask != null)
-            try {
-                if (trace && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "starting " + nextTask);
+            policyExecutor.runTask(nextTask);
 
-                nextTask.run();
-
-                if (trace && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "completed " + nextTask);
-            } catch (Throwable x) {
-                if (trace && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "completed " + nextTask, x);
-            }
         // TODO If we run multiple tasks in sequence on this thread,
         // 1) for tracking purposes, notify global executor that a task has completed
         // 2) additional processing to reset thread state
