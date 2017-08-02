@@ -101,7 +101,7 @@ public class JAXRSInInterceptor extends AbstractPhaseInterceptor<Message> {
         }
     }
 
-    @FFDCIgnore(value = { WebApplicationException.class })
+    @FFDCIgnore(value = { WebApplicationException.class, IOException.class })
     private void processRequest(Message message, Exchange exchange) {
 
         ServerProviderFactory providerFactory = ServerProviderFactory.getInstance(message);
@@ -296,7 +296,7 @@ public class JAXRSInInterceptor extends AbstractPhaseInterceptor<Message> {
         }
         ResourceProvider rp = cri.getResourceProvider();
         if (rp instanceof SingletonResourceProvider) {
-            //cri.isSingleton is not guaranteed to indicate we have a 'pure' singleton 
+            //cri.isSingleton is not guaranteed to indicate we have a 'pure' singleton
             exchange.put(Message.SERVICE_OBJECT, rp.getInstance(message));
         }
     }
