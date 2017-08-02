@@ -110,6 +110,6 @@ no.injection.target.CWOWB1008E=CWOWB1008E: The member {0} of class {1} cannot be
 no.injection.target.CWOWB1008E.explanation=The injection is not successful as the bean manager of the archive that the class belongs to is null.
 no.injection.target.CWOWB1008E.useraction=Ensure that the archive the class belongs to is a bean archive. Refer to the CDI specification on how to make an archive a bean archive.
 
-implicit.bean.scanning.disabled.CWOWB1009W: Implicit bean archives are disabled.
+implicit.bean.scanning.disabled.CWOWB1009W=CWOWB1009W: Implicit bean archives are disabled.
 implicit.bean.scanning.disabled.CWOWB1009W.explanation=Archives are not scanned for CDI beans unless they have a beans.xml file.
 implicit.bean.scanning.disabled.CWOWB1009W.useraction=Ensure that every archive that uses CDI has a beans.xml file or re-enable implicit beans scanning in your server.xml file.
