@@ -147,6 +147,7 @@ import com.ibm.ws.webcontainer.util.UnsynchronizedStack;
 import com.ibm.wsspi.adaptable.module.Entry;
 import com.ibm.wsspi.adaptable.module.UnableToAdaptException;
 import com.ibm.wsspi.anno.targets.AnnotationTargets_Targets;
+import com.ibm.wsspi.http.HttpInboundConnection;
 import com.ibm.wsspi.injectionengine.InjectionException;
 import com.ibm.wsspi.webcontainer.ClosedConnectionException;
 import com.ibm.wsspi.webcontainer.RequestProcessor;
@@ -349,6 +350,14 @@ public abstract class WebApp extends BaseContainer implements ServletContext, IS
     
     private final AnnotatedMethods postConstructMethods = new AnnotatedMethods(ANNOT_TYPE.POST_CONSTRUCT);
     private final AnnotatedMethods preDestroyMethods = new AnnotatedMethods(ANNOT_TYPE.PRE_DESTROY);
+    private boolean upgraded = false;
+    
+    public void setUpgraded() {
+        upgraded = true;
+    }
+    public boolean isUpgraded() {
+        return upgraded;
+    }
     
     private static Object[] OBJ_EMPTY = new Object[] {};
     private static Class<?>[] CLASS_EMPTY = new Class<?>[] {};
@@ -1022,6 +1031,7 @@ public abstract class WebApp extends BaseContainer implements ServletContext, IS
             // errors because the bundle associated with the thread context classloader may have been uninstalled, 
             // resulting in us being unable to load a resource bundle for AnnotationHelperManager. 
             AnnotationHelperManager.verifyClassIsLoaded();
+            
         } finally {
             if (origClassLoader != null) // NEVER INVOKED BY WEBSPHERE
             // APPLICATION SERVER (Common Component
@@ -4679,6 +4689,10 @@ public abstract class WebApp extends BaseContainer implements ServletContext, IS
      *      IWCCResponse)
      */
     public void handleRequest(ServletRequest request, ServletResponse response) throws Exception {
+        handleRequest(request, response, null);
+    }
+    
+    public void handleRequest(ServletRequest request, ServletResponse response, HttpInboundConnection httpInboundConnection) throws Exception {
         if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && logger.isLoggable(Level.FINE))
             logger.entering(CLASS_NAME, "handleRequest");
 
@@ -4806,7 +4820,7 @@ public abstract class WebApp extends BaseContainer implements ServletContext, IS
                         if (isFiltersDefined()) {
                             EnumSet<CollaboratorInvocationEnum> filterCollabEnum = EnumSet.of(CollaboratorInvocationEnum.NAMESPACE, CollaboratorInvocationEnum.CLASSLOADER, CollaboratorInvocationEnum.SESSION, CollaboratorInvocationEnum.EXCEPTION);
                             // PM79980 , adding CollaboratorInvocationEnum.NAMESPACE , filter can do a resource lookup.
-                            filterManager.invokeFilters((HttpServletRequest) req, (HttpServletResponse) res, this, p, filterCollabEnum);
+                            filterManager.invokeFilters((HttpServletRequest) req, (HttpServletResponse) res, this, p, filterCollabEnum, httpInboundConnection);
                         } else {
                             p.handleRequest(req, res);
                         }
@@ -4921,7 +4935,7 @@ public abstract class WebApp extends BaseContainer implements ServletContext, IS
                 }
             }
 
-            filterManager.invokeFilters((HttpServletRequest) req, (HttpServletResponse) res, this, requestProcessor, CollaboratorHelper.allCollabEnum);
+            filterManager.invokeFilters((HttpServletRequest) req, (HttpServletResponse) res, this, requestProcessor, CollaboratorHelper.allCollabEnum, httpInboundConnection);
 
             if (requestProcessor != null) {
                 if (requestProcessor instanceof IServletWrapper) {

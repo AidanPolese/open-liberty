@@ -16,6 +16,7 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.genericbnf.internal.GenericUtils;
+import com.ibm.ws.http.channel.h2internal.H2HttpInboundLinkWrap;
 import com.ibm.ws.http.channel.internal.CallbackIDs;
 import com.ibm.ws.http.channel.internal.HttpBaseMessageImpl;
 import com.ibm.ws.http.channel.internal.HttpChannelConfig;
@@ -51,6 +52,7 @@ import com.ibm.wsspi.http.channel.values.HttpHeaderKeys;
 import com.ibm.wsspi.http.channel.values.MethodValues;
 import com.ibm.wsspi.http.channel.values.StatusCodes;
 import com.ibm.wsspi.http.channel.values.TransferEncodingValues;
+import com.ibm.wsspi.http.channel.values.VersionValues;
 import com.ibm.wsspi.http.logging.DebugLog;
 import com.ibm.wsspi.tcpchannel.TCPConnectionContext;
 
@@ -107,10 +109,25 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
         super.init(tsc, hcc);
         setBodyRC(HttpISCBodyReadCallback.getRef());
         this.myLink = (HttpInboundLink) link;
+        if (link instanceof H2HttpInboundLinkWrap) {
+            super.setH2Connection(true);
+            super.setPushPromise(((H2HttpInboundLinkWrap) link).isPushPromise());
+        }
         setVC(vc);
         vc.getStateMap().put(CallbackIDs.CALLBACK_HTTPISC, this);
         // during discrimination, this is skipped so do it now
         getRequestImpl().initScheme();
+    }
+
+    public void reinit(TCPConnectionContext tcc, VirtualConnection vc, HttpInboundLink wrapper) {
+        setVC(vc);
+        vc.getStateMap().put(CallbackIDs.CALLBACK_HTTPISC, this);
+        this.myLink = wrapper;
+        if (wrapper instanceof H2HttpInboundLinkWrap) {
+            super.setH2Connection(true);
+            super.setPushPromise(((H2HttpInboundLinkWrap) wrapper).isPushPromise());
+        }
+        super.reinit(tcc);
     }
 
     /*
@@ -754,6 +771,31 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
             }
             setPartialBody(true);
         }
+
+        //Check if it's HTTP/2
+        //Wrap the body buffers in a Frame
+        //Continue sending
+
+//        System.out.println("sendingResponseBody : " + this.getLink());
+//        if (this.getLink() instanceof H2HttpInboundLinkWrap) {
+//            H2HttpInboundLinkWrap link = (H2HttpInboundLinkWrap) this.getLink();
+//
+//            byte[] frameToWrite = link.prepareBody(WsByteBufferUtils.asByteArray(body));
+//            WsByteBuffer buffer = this.allocateBuffer(frameToWrite.length);
+//            buffer.put(frameToWrite);
+//            buffer.flip();
+//
+//            for (WsByteBuffer wsbb : body) {
+//                if (wsbb != null) {
+//                    wsbb.release();
+//                }
+//            }
+//            for (int i = 0; i < body.length; i++) {
+//                body[i] = null;
+//            }
+//
+//            body[0] = buffer;
+//        }
         sendOutgoing(body, getResponseImpl());
     }
 
@@ -1937,4 +1979,65 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
             }
         }
     }
+
+    /**
+     * Send a HTTP/1.1 101 Switching Protocols in response to a http/2 upgrade request.  The following headers will be added:
+     *
+     * connection: Upgrade, HTTP2-Settings
+     * upgrade: h2c
+     */
+    public boolean send101SwitchingProtocol(String protocol) {
+        // if the channel stopped while we parsed this Expect request, we want
+        // to send an error to close the connection and avoid the body transfer
+        // PK12235, check for a full stop only
+        if (this.myLink.getChannel().isStopped()) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Channel stopped, sending error instead of 100-continue");
+            }
+            try {
+                sendError(StatusCodes.UNAVAILABLE.getHttpError());
+            } catch (Throwable t) {
+                FFDCFilter.processException(t, CLASS_NAME + ".check100Continue", "1206");
+            }
+            return false;
+        }
+        // if we're running on the SR for z/OS, never send the 100-continue
+        // response no matter what the request says
+        if (getHttpConfig().isServantRegion()) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "100 continue not sent on SR");
+            }
+            return true;
+        }
+
+        // send the 101 response synchronously since it should not
+        // take that long to dump a single buffer out
+        HttpResponseMessageImpl msg = getResponseImpl();
+        msg.setStatusCode(StatusCodes.SWITCHING_PROTOCOLS);
+
+        msg.setHeader(HttpHeaderKeys.HDR_UPGRADE, protocol);
+        msg.setSpecialHeader(HttpHeaderKeys.HDR_CONNECTION, "Upgrade");
+
+        msg.setContentLength(0);
+        VirtualConnection vc = sendHeaders(msg, Http100ContWriteCallback.getRef());
+        if (null == vc) {
+            // writing async
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Async write of 100 continue still going");
+            }
+            return false;
+        }
+        // reset the values on the response message
+        resetMsgSentState();
+        msg.setStatusCode(StatusCodes.OK);
+        msg.setVersion(VersionValues.V20);
+        // 366388
+        msg.removeHeader(HttpHeaderKeys.HDR_CONTENT_LENGTH);
+
+        // this msg will be re-used after the connection is upgraded, so we need to remove these two headers
+        msg.removeHeader(HttpHeaderKeys.HDR_UPGRADE);
+        msg.removeHeader(HttpHeaderKeys.HDR_CONNECTION);
+        return true;
+    }
+
 }

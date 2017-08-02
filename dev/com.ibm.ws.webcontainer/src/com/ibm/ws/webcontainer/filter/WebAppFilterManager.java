@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -40,12 +41,14 @@ import javax.servlet.http.HttpServletResponse;
 import com.ibm.ejs.ras.TraceNLS;
 import com.ibm.websphere.servlet.error.ServletErrorReport;
 import com.ibm.websphere.servlet.event.FilterListenerImpl;
+import com.ibm.ws.http.channel.h2internal.H2UpgradeHandler;
 import com.ibm.ws.managedobject.ManagedObject;
 import com.ibm.ws.webcontainer.WebContainer;
 import com.ibm.ws.webcontainer.collaborator.CollaboratorMetaDataImpl;
 import com.ibm.ws.webcontainer.extension.DefaultExtensionProcessor;
 import com.ibm.ws.webcontainer.osgi.interceptor.RegisterRequestInterceptor;
 import com.ibm.ws.webcontainer.servlet.FileServletWrapper;
+import com.ibm.ws.webcontainer.servlet.H2Handler;
 import com.ibm.ws.webcontainer.servlet.ServletWrapper;
 import com.ibm.ws.webcontainer.servlet.WsocHandler;
 import com.ibm.ws.webcontainer.srt.SRTServletRequest;
@@ -56,6 +59,7 @@ import com.ibm.ws.webcontainer.webapp.WebAppDispatcherContext;
 import com.ibm.ws.webcontainer.webapp.WebAppErrorReport;
 import com.ibm.ws.webcontainer.webapp.WebAppEventSource;
 import com.ibm.ws.webcontainer.webapp.WebAppRequestDispatcher;
+import com.ibm.wsspi.http.HttpInboundConnection;
 import com.ibm.wsspi.injectionengine.InjectionException;
 import com.ibm.wsspi.webcontainer.RequestProcessor;
 import com.ibm.wsspi.webcontainer.WCCustomProperties;
@@ -80,6 +84,7 @@ import com.ibm.wsspi.webcontainer.servlet.IServletContext;
 import com.ibm.wsspi.webcontainer.servlet.IServletWrapper;
 import com.ibm.wsspi.webcontainer.util.ServletUtil;
 import com.ibm.wsspi.webcontainer.util.ThreadContextHelper;
+
 
 // PM92496
 
@@ -997,6 +1002,13 @@ public class WebAppFilterManager implements com.ibm.wsspi.webcontainer.filter.We
 
     public boolean invokeFilters(ServletRequest request, ServletResponse response, IServletContext context,
                                  RequestProcessor requestProcessor, EnumSet<CollaboratorInvocationEnum> colEnum) throws ServletException, IOException {
+        return invokeFilters(request, response, context, requestProcessor, colEnum, null);
+        
+    }
+
+    public boolean invokeFilters(ServletRequest request, ServletResponse response, IServletContext context,
+                             RequestProcessor requestProcessor, EnumSet<CollaboratorInvocationEnum> colEnum,
+                             HttpInboundConnection httpInboundConnection) throws ServletException, IOException {
         final boolean isTraceOn = com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled();
         if (isTraceOn && logger.isLoggable(Level.FINE)) {
             logger.entering(CLASS_NAME, "invokeFilters", "request->" + request + ", response->" + response + ", requestProcessor->"
@@ -1128,6 +1140,19 @@ public class WebAppFilterManager implements com.ibm.wsspi.webcontainer.filter.We
                             }
                         }
                         else {
+                            // Check if this is an HTTP2 upgrade request
+                            if (httpInboundConnection != null && request instanceof HttpServletRequest) {
+                                H2Handler h2Handler = ((com.ibm.ws.webcontainer.osgi.webapp.WebApp) webApp).getH2Handler();
+                                if (h2Handler != null) {
+                                    if (h2Handler.isH2Request(httpInboundConnection, request)) {
+                                        HttpServletRequest httpRequest = (HttpServletRequest) ServletUtil.unwrapRequest(request, HttpServletRequest.class);                                
+                                        HttpServletResponse httpResponse = (HttpServletResponse) ServletUtil.unwrapResponse(response, HttpServletResponse.class);
+                                        h2Handler.handleRequest(httpInboundConnection, httpRequest, httpResponse);
+                                        
+                                        webApp.setUpgraded();
+                                    }
+                                }
+                            }
                             requestProcessor.handleRequest(request, response);
                         }
                     }

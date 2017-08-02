@@ -13,6 +13,7 @@ package com.ibm.ws.http.channel.internal;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,6 +22,13 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.genericbnf.internal.GenericConstants;
 import com.ibm.ws.genericbnf.internal.GenericUtils;
 import com.ibm.ws.genericbnf.internal.HeaderHandler;
+import com.ibm.ws.http.channel.h2internal.H2HttpInboundLinkWrap;
+import com.ibm.ws.http.channel.h2internal.hpack.H2HeaderField;
+import com.ibm.ws.http.channel.h2internal.hpack.H2HeaderTable;
+import com.ibm.ws.http.channel.h2internal.hpack.H2Headers;
+import com.ibm.ws.http.channel.h2internal.hpack.HpackConstants;
+import com.ibm.ws.http.channel.h2internal.hpack.HpackConstants.LiteralIndexType;
+import com.ibm.ws.http.channel.internal.inbound.HttpInboundServiceContextImpl;
 import com.ibm.ws.http.dispatcher.internal.HttpDispatcher;
 import com.ibm.wsspi.bytebuffer.WsByteBuffer;
 import com.ibm.wsspi.genericbnf.BNFHeaders;
@@ -300,6 +308,51 @@ public class HttpResponseMessageImpl extends HttpBaseMessageImpl implements Http
     }
 
     /**
+     * Set the Version and Status for a HTTP/2.0 response.
+     *
+     * @param pseudoHeader
+     */
+    @Override
+    protected void setPseudoHeaders(HashMap<String, String> pseudoHeaders) throws Exception {
+        //Only defined pseudo-header for a response is :status.
+
+        setStatusCode(Integer.getInteger(pseudoHeaders.get(HpackConstants.STATUS)));
+
+    }
+
+    @Override
+    protected H2HeaderTable getH2HeaderTable() {
+        //Currently, Only inbound connections are supported, return null if we are
+        //not inbound.
+        if (getServiceContext() instanceof HttpInboundServiceContextImpl) {
+            HttpInboundServiceContextImpl context = (HttpInboundServiceContextImpl) getServiceContext();
+            return ((H2HttpInboundLinkWrap) context.getLink()).getWriteTable();
+        }
+        return null;
+    }
+
+    @Override
+    protected boolean isValidPseudoHeader(H2HeaderField pseudoHeader) {
+        //If the H2HeaderField being evaluated has an empty value, it is not a valid
+        //pseudo-header.
+        if (!pseudoHeader.getValue().isEmpty()) {
+            //Evaluate if input is a valid response pseudo-header by comparing to the
+            //status pseudo-header hash.
+            int hash = pseudoHeader.getNameHash();
+            return (hash == HpackConstants.STATUS_HASH);
+        }
+
+        return false;
+    }
+
+    @Override
+    protected boolean checkMandatoryPseudoHeaders(HashMap<String, String> pseudoHeaders) {
+        //All HTTP/2.0 responses MUST include one valid value for
+        //':status'.
+        return (pseudoHeaders.get(HpackConstants.STATUS) != null);
+    }
+
+    /**
      * Set the response line first token.
      * 
      * @param token
@@ -485,6 +538,54 @@ public class HttpResponseMessageImpl extends HttpBaseMessageImpl implements Http
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             Tr.event(tc, "Marshalling first line: " + getVersion() + " " + getStatusCodeAsInt() + " " + getReasonPhrase());
         }
+        return firstLine;
+    }
+
+    @Override
+    public WsByteBuffer[] encodePseudoHeaders() {
+
+        WsByteBuffer[] firstLine = new WsByteBuffer[1];
+        firstLine[0] = allocateBuffer(getOutgoingBufferSize());
+
+        LiteralIndexType indexType = LiteralIndexType.NOINDEXING;
+        //For the time being, there will be no indexing on the responses to guarantee
+        //the write context is concurrent to the remote endpoint's read context. Remote
+        //intermediaries could index if they so desire, so setting NoIndexing (as
+        //opposed to NeverIndexing).
+        //TODO: investigate how streams and priority can work together with indexing on
+        //responses.
+        //LiteralIndexType indexType = isPushPromise ? LiteralIndexType.NOINDEXING : LiteralIndexType.INDEX;
+        //Corresponding dynamic table
+
+        H2HeaderTable table = this.getH2HeaderTable();
+        //Current encoded pseudo-header
+        byte[] encodedHeader = null;
+
+        //Encode the Status
+        try {
+            encodedHeader = H2Headers.encodeHeader(table, HpackConstants.STATUS, getStatusCodeAsInt() + "", indexType);
+            firstLine = putBytes(encodedHeader, firstLine);
+
+            // don't flip the last buffer as headers get tacked on the end
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+                Tr.event(tc, "Encoding first line status pseudoheader: " + HpackConstants.STATUS + " :" + getStatusCodeAsInt());
+            }
+        } catch (Exception e) {
+            // Three possible scenarios -
+            // 1.) unsupported encoding used when converting string to bytes on
+            // Hpack encoding. This should never happen as it is set to always use
+            // US-ASCII.
+            // 2.) Decompression exception for invalid Hpack decode scenario
+            // Show error and return null, so caller can invalidate the table
+            // and close the stream.
+            // 3.) IOException for not being able to write into Byte Array stream
+            Tr.error(tc, e.getMessage());
+
+            // Release the buffer that was just allocated.
+            firstLine[0].release();
+            firstLine = null;
+        }
+
         return firstLine;
     }
 

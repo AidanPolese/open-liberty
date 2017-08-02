@@ -46,6 +46,7 @@ import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
 
 import com.ibm.websphere.csi.J2EEName;
 import com.ibm.websphere.csi.J2EENameFactory;
@@ -55,6 +56,7 @@ import com.ibm.ws.container.service.annotations.WebAnnotations;
 import com.ibm.ws.container.service.metadata.MetaDataException;
 import com.ibm.ws.container.service.metadata.MetaDataService;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.http.channel.h2internal.H2UpgradeHandler;
 import com.ibm.ws.managedobject.ManagedObject;
 import com.ibm.ws.managedobject.ManagedObjectException;
 import com.ibm.ws.managedobject.ManagedObjectFactory;
@@ -68,6 +70,7 @@ import com.ibm.ws.webcontainer.osgi.managed.WCManagedObjectImpl;
 import com.ibm.ws.webcontainer.osgi.mbeans.GeneratePluginConfigMBean;
 import com.ibm.ws.webcontainer.osgi.metadata.WebComponentMetaDataImpl;
 import com.ibm.ws.webcontainer.servlet.DirectoryBrowsingServlet;
+import com.ibm.ws.webcontainer.servlet.H2Handler;
 import com.ibm.ws.webcontainer.servlet.ServletConfig;
 import com.ibm.ws.webcontainer.servlet.WsocHandler;
 import com.ibm.ws.webcontainer.util.DocumentRootUtils;
@@ -1573,4 +1576,11 @@ public class WebApp extends com.ibm.ws.webcontainer.webapp.WebApp implements Com
       return null;
   }
   
+  /**
+   * Get an http2 handler
+   */
+  public H2Handler getH2Handler() {
+      //NO-OP
+      return null;
+  }   
 }

@@ -13,10 +13,13 @@ package com.ibm.wsspi.http.channel;
 import java.util.Enumeration;
 import java.util.Map;
 
+import com.ibm.ws.http.channel.h2internal.exceptions.ProtocolException;
 import com.ibm.wsspi.genericbnf.exception.UnsupportedMethodException;
 import com.ibm.wsspi.genericbnf.exception.UnsupportedSchemeException;
 import com.ibm.wsspi.http.channel.values.MethodValues;
 import com.ibm.wsspi.http.channel.values.SchemeValues;
+import com.ibm.wsspi.http.ee8.Http2PushBuilder;
+import com.ibm.wsspi.http.ee8.Http2PushException;
 
 /**
  * Interface extending the basic HTTP message with Request
@@ -309,5 +312,11 @@ public interface HttpRequestMessage extends HttpBaseMessage {
      * @return HttpRequestMessage
      */
     HttpRequestMessage duplicate();
+
+    /**
+     * @param pushBuilder
+     * @throws Http2PushException
+     */
+    void pushNewRequest(Http2PushBuilder pushBuilder) throws Http2PushException, ProtocolException;
 
 }

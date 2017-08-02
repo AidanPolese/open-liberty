@@ -17,6 +17,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
@@ -27,7 +28,10 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.http.channel.h2internal.H2InboundLink;
 import com.ibm.ws.http.channel.internal.HttpChannelConfig;
+import com.ibm.ws.http.channel.internal.inbound.HttpInboundChannel;
+import com.ibm.ws.http.channel.internal.inbound.HttpInboundLink;
 import com.ibm.ws.http.channel.internal.inbound.HttpInboundServiceContextImpl;
 import com.ibm.ws.http.dispatcher.classify.DecoratedExecutorThread;
 import com.ibm.ws.http.dispatcher.internal.HttpDispatcher;
@@ -233,8 +237,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
                                     Tr.debug(tc, "Failed to close WebConnection {0}", webConnectionCloseException);
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                                 Tr.debug(tc, "call application destroy if not done yet");
                             }
@@ -890,12 +893,10 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
             String webconn = (String) (this.vc.getStateMap().get(TransportConstants.CLOSE_NON_UPGRADED_STREAMS));
             if (webconn != null && webconn.equalsIgnoreCase("CLOSED_NON_UPGRADED_STREAMS")) {
                 vc.getStateMap().put(TransportConstants.CLOSE_NON_UPGRADED_STREAMS, "null");
-            }
-            else {
+            } else {
                 error = closeStreams();
             }
-        }
-        else {
+        } else {
             error = closeStreams();
         }
 
@@ -1007,4 +1008,45 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
         }
         return null;
     }
+
+    // Determine if a request is an http2 upgrade request
+    @Override
+    public boolean isHTTP2UpgradeRequest(Map<String, String> headers) {
+        if (isc != null) {
+            HttpInboundLink link = isc.getLink();
+            if (link != null) {
+                return link.isHTTP2UpgradeRequest(headers);
+            }
+        }
+        return false;
+    }
+
+    // Determine if a map of headers contains an http2 upgrade header
+    @Override
+    public void handleHTTP2UpgradeRequest(Map<String, String> headers) {
+        HttpInboundLink link = isc.getLink();
+        HttpInboundChannel channel = link.getChannel();
+        VirtualConnection vc = link.getVirtualConnection();
+        H2InboundLink h2Link = new H2InboundLink(channel, vc, getTCPConnectionContext());
+
+        boolean upgraded = h2Link.handleHTTP2UpgradeRequest(headers, link);
+        if (upgraded) {
+            h2Link.startAsyncRead(true);
+        } else {
+            // TODO: signal that this connection initialization has failed. RuntimeException is likely wrong.
+            h2Link.connection_init_failed = true;
+            h2Link.triggerLinkClose(vc, new RuntimeException("Http2 connection failed to initialize correctly"));
+        }
+        //getHttpInboundLink2().handleHTTP2UpgradeRequest(hsrq, hsrp);
+        // System.out.println("HttpDispatcherLink.handleHTTP2UpgradeRequest doing nothing right now");
+        return;
+    }
+
+    public HttpInboundLink getHttpInboundLink2() {
+        if (isc != null) {
+            return isc.getLink();
+        }
+        return null;
+    }
+
 }

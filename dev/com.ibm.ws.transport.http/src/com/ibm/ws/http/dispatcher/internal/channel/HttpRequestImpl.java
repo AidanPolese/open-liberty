@@ -21,6 +21,8 @@ import com.ibm.wsspi.http.HttpRequest;
 import com.ibm.wsspi.http.channel.HttpRequestMessage;
 import com.ibm.wsspi.http.channel.inbound.HttpInboundServiceContext;
 import com.ibm.wsspi.http.ee7.HttpInputStreamEE7;
+import com.ibm.wsspi.http.ee8.Http2PushBuilder;
+import com.ibm.wsspi.http.ee8.Http2PushException;
 
 /**
  * Implementation of an HTTP request message provided by the HTTP dispatcher to
@@ -199,4 +201,15 @@ public class HttpRequestImpl implements HttpRequest {
     public String toString() {
         return this.getClass().getSimpleName() + "[message=" + message + "]";
     }
+
+    /**
+     * Initiate a Push request
+     *
+     * @return
+     */
+    @Override
+    public void pushNewRequest(Http2PushBuilder pushBuilder) throws Http2PushException {
+
+    }
+
 }

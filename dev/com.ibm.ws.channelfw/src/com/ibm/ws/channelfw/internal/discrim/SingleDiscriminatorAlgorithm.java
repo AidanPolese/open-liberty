@@ -17,6 +17,7 @@ import com.ibm.ws.channelfw.internal.InboundVirtualConnection;
 import com.ibm.wsspi.channelfw.Channel;
 import com.ibm.wsspi.channelfw.ConnectionLink;
 import com.ibm.wsspi.channelfw.DiscriminationProcess;
+import com.ibm.wsspi.channelfw.VirtualConnection;
 
 /**
  * This is the single discriminator algorithm that will handle the required
@@ -51,8 +52,22 @@ public class SingleDiscriminatorAlgorithm implements DiscriminationAlgorithm {
     }
 
     /**
+     * Use a VirtualConnection rather than a InboundVirtualConnection for discrimination
+     */
+    public int discriminate(VirtualConnection vc, Object discrimData, ConnectionLink prevChannelLink) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "discriminate: " + vc);
+        }
+        ConnectionLink nextChannelLink = nextChannel.getConnectionLink(vc);
+        prevChannelLink.setApplicationCallback(nextChannelLink);
+        nextChannelLink.setDeviceLink(prevChannelLink);
+        return DiscriminationProcess.SUCCESS;
+    }
+
+    /**
      * @see com.ibm.ws.channelfw.internal.discrim.DiscriminationAlgorithm#discriminate(InboundVirtualConnection, Object, ConnectionLink)
      */
+    @Override
     public int discriminate(InboundVirtualConnection vc, Object discrimData, ConnectionLink prevChannelLink) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "discriminate: " + vc);

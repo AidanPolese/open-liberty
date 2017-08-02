@@ -12,6 +12,9 @@ package com.ibm.wsspi.http;
 
 import java.util.List;
 
+import com.ibm.wsspi.http.ee8.Http2PushBuilder;
+import com.ibm.wsspi.http.ee8.Http2PushException;
+
 /**
  * Representation of an HTTP request message provided by the dispatcher to any
  * HTTP container.
@@ -146,4 +149,12 @@ public interface HttpRequest {
      * @return HttpInputStream
      */
     HttpInputStream getBody();
+
+    /**
+     * Initiate a Push request
+     *
+     * @return
+     */
+    void pushNewRequest(Http2PushBuilder pushBuilder) throws Http2PushException;
+
 }

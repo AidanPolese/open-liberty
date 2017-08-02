@@ -71,6 +71,8 @@ public class DynamicVirtualHost extends com.ibm.ws.webcontainer.VirtualHost impl
     private static boolean normalizeRequestURI = WCCustomProperties.NORMALIZE_REQUEST_URI; //PI05525
 
     interface Bridge extends RequestProcessor, Runnable {};
+    
+    HttpInboundConnection httpInboundConnection = null;
 
     /**
      * @param name
@@ -209,7 +211,7 @@ public class DynamicVirtualHost extends com.ibm.ws.webcontainer.VirtualHost impl
      *   the SIP container invokes this method directly */
     public Runnable createRunnableHandler(final IRequest ireq ,final IResponse ires,final HttpInboundConnection inboundConnection) {
 
-
+        httpInboundConnection = inboundConnection;
         String requestUri = ireq.getRequestURI();
         
         //PI05525
@@ -311,7 +313,7 @@ public class DynamicVirtualHost extends com.ibm.ws.webcontainer.VirtualHost impl
 
                 addSecureRedirect(req, hostAlias);
 
-                webApp.handleRequest(req, res);
+                webApp.handleRequest(req, res,  httpInboundConnection);
             }
 
             @Override

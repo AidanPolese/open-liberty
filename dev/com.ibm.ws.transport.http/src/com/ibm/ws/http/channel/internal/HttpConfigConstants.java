@@ -330,6 +330,10 @@ public class HttpConfigConstants {
     // PI11176 - Attempt to Flush the data at the end of the request
     public static final String PROPNAME_PURGE_DATA_DURING_CLOSE = "PurgeDataDuringClose";
 
+    public static final String PROPNAME_H2_CONN_CLOSE_TIMEOUT = "H2ConnCloseTimeout";
+
+    public static final String PROPNAME_H2_CONN_READ_WINDOW_SIZE = "H2ConnReadWindowSize";
+
     /** Minimum setting on the persistent requests (-1 is unlimited) */
     public static final int MIN_PERSIST_REQ = -1;
     /** Minimum allowed size for the byte cache */

@@ -11,6 +11,7 @@
 package com.ibm.wsspi.http;
 
 import java.net.InetAddress;
+import java.util.Map;
 
 /**
  * Representation of an inbound HTTP connection that the dispatcher will provide
@@ -158,5 +159,15 @@ public interface HttpInboundConnection {
      * where the client connection was accepted on.
      */
     int getRequestedPort();
+
+    /**
+     * Determine if a request is an http2 upgrade request
+     */
+    boolean isHTTP2UpgradeRequest(Map<String, String> map);
+
+    /**
+     * Determine if a map of headers contains an http2 upgrade header
+     */
+    void handleHTTP2UpgradeRequest(Map<String, String> map);
 
 }
