@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2017 Contributors to the Eclipse Foundation
+ *******************************************************************************
+ * Copyright (c) 2016-2017 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -15,30 +16,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-package com.ibm.ws.microprofile.faulttolerance.spi;
-
-import java.time.Duration;
+ *******************************************************************************/
 
 /**
- * Wrap the execution and invoke it, limiting the number of threads used.
+ * <p>Exceptions for Microprofile Fault Tolerance
+ *
+ * @version 1.0
  */
-public interface BulkheadPolicy {
-    /**
-     * The maximum number of threads which may execute the method at any one time.
-     *
-     * @return the maximum number of threads to use.
-     *
-     */
-    public int getMaxThreads();
+package org.eclipse.microprofile.faulttolerance.exceptions;
 
-    public void setMaxThreads(int maxThreads);
-
-    public int getMaxQueue();
-
-    public void setMaxQueue(int maxQueue);
-
-    public Duration getTimeout();
-
-    public void setTimeout(Duration timeout);
-}
