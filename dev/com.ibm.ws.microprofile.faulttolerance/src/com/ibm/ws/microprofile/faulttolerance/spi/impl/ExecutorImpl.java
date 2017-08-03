@@ -14,6 +14,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadFactory;
 
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException;
 import org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException;
 
@@ -31,9 +32,9 @@ import net.jodah.failsafe.SyncFailsafe;
 /**
  *
  */
-public class ExecutorImpl<T, R> implements Executor<T, R> {
+public class ExecutorImpl<R> implements Executor<R> {
 
-    private final FallbackPolicy<T, R> fallbackPolicy;
+    private final FallbackPolicy<R> fallbackPolicy;
     private net.jodah.failsafe.CircuitBreaker circuitBreaker;
     private InternalExecutor<Callable<R>, R> internalExecutor;
     private final BulkheadPolicy bulkheadPolicy;
@@ -46,7 +47,7 @@ public class ExecutorImpl<T, R> implements Executor<T, R> {
                         CircuitBreakerPolicy circuitBreakerPolicy,
                         TimeoutPolicy timeoutPolicy,
                         BulkheadPolicy bulkheadPolicy,
-                        FallbackPolicy<T, R> fallbackPolicy) {
+                        FallbackPolicy<R> fallbackPolicy) {
 
         this.fallbackPolicy = fallbackPolicy;
         this.bulkheadPolicy = bulkheadPolicy;
@@ -85,7 +86,7 @@ public class ExecutorImpl<T, R> implements Executor<T, R> {
     /** {@inheritDoc} */
     @Override
     @FFDCIgnore({ net.jodah.failsafe.CircuitBreakerOpenException.class, net.jodah.failsafe.FailsafeException.class })
-    public R execute(Callable<R> callable, T context) {
+    public R execute(Callable<R> callable, ExecutionContext context) {
 
         RetryImpl retry = new RetryImpl(this.retryPolicy);
 

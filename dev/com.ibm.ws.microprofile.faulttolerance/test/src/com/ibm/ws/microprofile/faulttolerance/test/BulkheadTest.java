@@ -22,6 +22,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.exceptions.BulkheadException;
 import org.junit.Test;
 
@@ -30,6 +31,7 @@ import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.test.util.AsyncTestFunction;
+import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestTask;
 
 /**
@@ -45,7 +47,7 @@ public class BulkheadTest {
 
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setBulkheadPolicy(bulkhead);
-        Executor<String, String> executor = builder.build();
+        Executor<String> executor = builder.build();
 
         ExecutorService executorService = Executors.newFixedThreadPool(5);
 
@@ -79,12 +81,12 @@ public class BulkheadTest {
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setBulkheadPolicy(bulkhead);
 
-        Executor<String, Future<String>> executor = builder.buildAsync();
+        Executor<Future<String>> executor = builder.buildAsync();
 
         Future<String>[] futures = new Future[10];
         for (int i = 0; i < 10; i++) {
             AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(2000), "testAsyncBulkhead" + i);
-            Future<String> future = executor.execute(callable, "testAsyncBulkhead");
+            Future<String> future = executor.execute(callable, new ExecutionContextImpl(null, "testAsyncBulkhead"));
             assertFalse(future.isDone());
             futures[i] = future;
         }
@@ -104,22 +106,24 @@ public class BulkheadTest {
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setBulkheadPolicy(bulkhead);
 
-        Executor<String, Future<String>> executor = builder.buildAsync();
+        Executor<Future<String>> executor = builder.buildAsync();
 
         for (int i = 0; i < 4; i++) {
-            String context = "testAsyncBulkheadQueueFull" + i;
-            AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(2000), context);
+            String contextData = "testAsyncBulkheadQueueFull" + i;
+            ExecutionContext context = new ExecutionContextImpl(null, contextData);
+            AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(2000), contextData);
             Future<String> future = executor.execute(callable, context);
             System.out.println(System.currentTimeMillis() + " Test " + context + " - submitted");
             assertFalse(future.isDone());
             Thread.sleep(100);
         }
 
-        String context = "testAsyncBulkheadQueueFull4";
-        AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(2000), context);
+        String contextData = "testAsyncBulkheadQueueFull4";
+        ExecutionContext context = new ExecutionContextImpl(null, contextData);
+        AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(2000), contextData);
         try {
             executor.execute(callable, context);
-            System.out.println(System.currentTimeMillis() + " Test " + context + " - submitted");
+            System.out.println(System.currentTimeMillis() + " Test " + contextData + " - submitted");
             fail("Exception not thrown");
         } catch (BulkheadException e) {
             //expected

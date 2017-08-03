@@ -18,6 +18,7 @@ import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
+import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestFallback;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestFunction;
 
@@ -28,18 +29,18 @@ public class FallbackTest {
 
     @Test
     public void testFallback() {
-        FallbackPolicy<String, String> fallback = FaultToleranceProvider.newFallbackPolicy();
+        FallbackPolicy<String> fallback = FaultToleranceProvider.newFallbackPolicy();
         TestFallback fallbackCallable = new TestFallback();
         fallback.setFallback(fallbackCallable);
 
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setFallbackPolicy(fallback);
-        Executor<String, String> executor = builder.build();
+        Executor<String> executor = builder.build();
 
         TestFunction callable = new TestFunction(-1, "testFallback");
 
         //callable is set to always throw an exception but the fallback should be run instead
-        String executions = executor.execute(callable, "testFallback");
+        String executions = executor.execute(callable, new ExecutionContextImpl("testFallback"));
         assertEquals("Fallback: testFallback", executions);
     }
 

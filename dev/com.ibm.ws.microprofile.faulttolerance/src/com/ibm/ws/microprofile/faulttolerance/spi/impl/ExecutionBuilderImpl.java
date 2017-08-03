@@ -26,9 +26,9 @@ public class ExecutionBuilderImpl<T, R> implements ExecutionBuilder<T, R> {
     private CircuitBreakerPolicy circuitBreakerPolicy = null;
     private RetryPolicy retryPolicy = null;
     private BulkheadPolicy bulkheadPolicy = null;
-    private FallbackPolicy<T, R> fallbackPolicy = null;
+    private FallbackPolicy<R> fallbackPolicy = null;
     private TimeoutPolicy timeoutPolicy = null;
-    private FallbackPolicy<T, Future<R>> asyncFallbackPolicy;
+    private FallbackPolicy<Future<R>> asyncFallbackPolicy;
     private final WSContextService contextService;
 
     public ExecutionBuilderImpl(WSContextService contextService) {
@@ -58,14 +58,14 @@ public class ExecutionBuilderImpl<T, R> implements ExecutionBuilder<T, R> {
 
     /** {@inheritDoc} */
     @Override
-    public ExecutionBuilder<T, R> setFallbackPolicy(FallbackPolicy<T, R> fallback) {
+    public ExecutionBuilder<T, R> setFallbackPolicy(FallbackPolicy<R> fallback) {
         this.fallbackPolicy = fallback;
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public ExecutionBuilder<T, R> setAsyncFallbackPolicy(FallbackPolicy<T, Future<R>> fallback) {
+    public ExecutionBuilder<T, R> setAsyncFallbackPolicy(FallbackPolicy<Future<R>> fallback) {
         this.asyncFallbackPolicy = fallback;
         return this;
     }
@@ -79,16 +79,16 @@ public class ExecutionBuilderImpl<T, R> implements ExecutionBuilder<T, R> {
 
     /** {@inheritDoc} */
     @Override
-    public Executor<T, R> build() {
-        Executor<T, R> executor = new ExecutorImpl<T, R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy);
+    public Executor<R> build() {
+        Executor<R> executor = new ExecutorImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy);
 
         return executor;
     }
 
     /** {@inheritDoc} */
     @Override
-    public Executor<T, Future<R>> buildAsync() {
-        Executor<T, Future<R>> executor = new AsyncExecutorImpl<T, R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.asyncFallbackPolicy, this.contextService);
+    public Executor<Future<R>> buildAsync() {
+        Executor<Future<R>> executor = new AsyncExecutorImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.asyncFallbackPolicy, this.contextService);
 
         return executor;
     }
