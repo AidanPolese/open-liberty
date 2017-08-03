@@ -311,3 +311,7 @@ tool.classpath.create.fail=CWWKF1029E: The {0} output file could not be created.
 tool.classpath.create.fail.explanation=An error occurred while creating the output file.
 tool.classpath.create.fail.useraction=Review the error message, correct the problem, and run the command again. 
 
+tool.userfeature.install.location.invalid=CWWKF1030E: The {0} user feature cannot be installed to core.
+too.userfeature.install.location.invalid.explanation= The user feature is not a core feature therefore cannot be installed to core.
+too.userfeature.install.location.invalid.useraction= Install the user feature to usr. 
+
