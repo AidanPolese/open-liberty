@@ -36,7 +36,7 @@ public class ThreadPoolExecutor<R> implements InternalExecutor<Callable<Future<R
         int queueSize = 1000;
         if (bulkheadPolicy != null) {
             maxThreads = bulkheadPolicy.getMaxThreads();
-            queueSize = maxThreads;
+            queueSize = bulkheadPolicy.getMaxQueue();
         }
         ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(queueSize, true);
         this.executorService = new java.util.concurrent.ThreadPoolExecutor(maxThreads, maxThreads, 0l, TimeUnit.MILLISECONDS, queue, threadFactory);

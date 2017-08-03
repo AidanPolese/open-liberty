@@ -24,6 +24,7 @@ import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 public class BulkheadPolicyImpl implements BulkheadPolicy {
 
     private int maxThreads;
+    private int maxQueue;
     private Duration timeout;
 
     /**
@@ -31,7 +32,8 @@ public class BulkheadPolicyImpl implements BulkheadPolicy {
      */
     public BulkheadPolicyImpl() {
         try {
-            maxThreads = (int) Bulkhead.class.getMethod("maxThreads").getDefaultValue();
+            maxThreads = (int) Bulkhead.class.getMethod("value").getDefaultValue();
+            maxQueue = (int) Bulkhead.class.getMethod("waitingTaskQueue").getDefaultValue();
         } catch (NoSuchMethodException | SecurityException e) {
             throw new FaultToleranceException(e);
         }
@@ -47,6 +49,18 @@ public class BulkheadPolicyImpl implements BulkheadPolicy {
     @Override
     public void setMaxThreads(int maxThreads) {
         this.maxThreads = maxThreads;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getMaxQueue() {
+        return maxQueue;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setMaxQueue(int maxQueue) {
+        this.maxQueue = maxQueue;
     }
 
     /** {@inheritDoc} */
