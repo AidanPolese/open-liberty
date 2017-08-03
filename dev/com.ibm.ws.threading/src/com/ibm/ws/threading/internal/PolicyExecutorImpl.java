@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
+import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.threading.PolicyExecutor;
 
 /**
@@ -218,6 +219,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             this.callable = callable;
         }
 
+        @FFDCIgnore(value = { Exception.class, RuntimeException.class })
         @Override
         public void run() {
             try {
@@ -315,14 +317,17 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                 if (maxConcurrencyConstraint.tryAcquire())
                     enqueueGlobal(new PollingTask());
             } else if (state.get() == State.ACTIVE) {
-                // TODO Reject, CallerRuns, or CallerRunsIfSameExecutor
-                throw new RejectedExecutionException();
+                QueueFullAction action = queueFullAction.get();
+                if (action == QueueFullAction.Abort)
+                    throw new RejectedExecutionException(Tr.formatMessage(tc, "CWWKE1201.queue.full.abort", identifier, maxQueueSize, wait));
+                else
+                    throw new UnsupportedOperationException("queueFullAction=" + action); // TODO CallerRuns, CallerRunsIfSameExecutor, and null (which defaults based on maxConcurrency)
             } else
-                throw new RejectedExecutionException(getStateMessage());
+                throw new RejectedExecutionException(Tr.formatMessage(tc, "CWWKE1202.submit.after.shutdown", identifier));
 
             // Check if shutdown occurred since acquiring the permit to enqueue, and if so, try to remove the queued task
             if (state.get() != State.ACTIVE && queue.remove(policyTaskFuture))
-                throw new RejectedExecutionException(getStateMessage());
+                throw new RejectedExecutionException(Tr.formatMessage(tc, "CWWKE1202.submit.after.shutdown", identifier));
         } catch (InterruptedException x) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(this, tc, "enqueue", x);
@@ -364,11 +369,6 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     @Override
     public void execute(Runnable command) {
         enqueue(new PolicyTaskFuture<Void>(command, null));
-    }
-
-    @Trivial
-    private String getStateMessage() {
-        return state.toString(); // TODO NLS message
     }
 
     @Override
@@ -435,6 +435,9 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             throw new IllegalArgumentException(Integer.toString(max));
 
         synchronized (configLock) {
+            if (state.get() != State.ACTIVE)
+                throw new IllegalStateException(Tr.formatMessage(tc, "CWWKE1203.config.update.after.shutdown", "maxConcurrency", identifier));
+
             int increase = max - maxConcurrency;
             if (increase > 0)
                 maxConcurrencyConstraint.release(increase);
@@ -457,6 +460,9 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             throw new IllegalArgumentException(Integer.toString(max));
 
         synchronized (configLock) {
+            if (state.get() != State.ACTIVE)
+                throw new IllegalStateException(Tr.formatMessage(tc, "CWWKE1203.config.update.after.shutdown", "maxQueueSize", identifier));
+
             int increase = max - maxQueueSize;
             if (increase > 0)
                 maxQueueSizeConstraint.release(increase);
@@ -480,13 +486,16 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             if (maxWaitForEnqueue.compareAndSet(current, ms))
                 return this;
 
-        throw new IllegalStateException(getStateMessage());
+        throw new IllegalStateException(Tr.formatMessage(tc, "CWWKE1203.config.update.after.shutdown", "maxWaitForEnqueue", identifier));
     }
 
     @Override
     public PolicyExecutor queueFullAction(QueueFullAction action) {
         if (isServerConfigured)
             throw new UnsupportedOperationException();
+
+        if (state.get() != State.ACTIVE)
+            throw new IllegalStateException(Tr.formatMessage(tc, "CWWKE1203.config.update.after.shutdown", "queueFullAction", identifier));
 
         queueFullAction.set(action);
 
