@@ -41,7 +41,7 @@ public class FaultToleranceInterceptor {
     BeanManager beanManager;
 
     private final ConcurrentHashMap<Method, AggregatedFTPolicy> policyCache = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<AggregatedFTPolicy, Executor<ExecutionContext, ?>> execCache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<AggregatedFTPolicy, Executor<?>> execCache = new ConcurrentHashMap<>();
 
     @AroundInvoke
     public Object executeFT(InvocationContext context) throws Throwable {
@@ -74,7 +74,7 @@ public class FaultToleranceInterceptor {
     @FFDCIgnore({ org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException.class })
     private Object execute(InvocationContext invocationContext, AggregatedFTPolicy policies) throws Throwable {
 
-        Executor<ExecutionContext, ?> executor = execCache.get(policies);
+        Executor<?> executor = execCache.get(policies);
         if (executor == null) {
 
             ExecutionBuilder<ExecutionContext, ?> builder = FTAnnotationUtils.newBuilder(policies);
@@ -85,7 +85,7 @@ public class FaultToleranceInterceptor {
                 executor = builder.build();
             }
 
-            Executor<ExecutionContext, ?> previous = execCache.putIfAbsent(policies, executor);
+            Executor<?> previous = execCache.putIfAbsent(policies, executor);
             if (previous != null) {
                 executor = previous;
             }
@@ -102,7 +102,7 @@ public class FaultToleranceInterceptor {
                     return (Future<Object>) invocationContext.proceed();
                 };
 
-                Executor<ExecutionContext, Future<Object>> async = (Executor<ExecutionContext, Future<Object>>) executor;
+                Executor<Future<Object>> async = (Executor<Future<Object>>) executor;
                 result = async.execute(callable, executionContext);
             } else {
 
@@ -110,7 +110,7 @@ public class FaultToleranceInterceptor {
                     return invocationContext.proceed();
                 };
 
-                Executor<ExecutionContext, Object> sync = (Executor<ExecutionContext, Object>) executor;
+                Executor<Object> sync = (Executor<Object>) executor;
                 try {
                     result = sync.execute(callable, executionContext);
                 } catch (org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException e) {

@@ -10,22 +10,24 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance.spi.impl.policy;
 
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
+
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceFunction;
 
-public class FallbackPolicyImpl<T, R> implements FallbackPolicy<T, R> {
+public class FallbackPolicyImpl<R> implements FallbackPolicy<R> {
 
-    private FaultToleranceFunction<T, R> fallback;
+    private FaultToleranceFunction<ExecutionContext, R> fallback;
 
     /** {@inheritDoc} */
     @Override
-    public FaultToleranceFunction<T, R> getFallback() {
+    public FaultToleranceFunction<ExecutionContext, R> getFallback() {
         return fallback;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setFallback(FaultToleranceFunction<T, R> fallback) {
+    public void setFallback(FaultToleranceFunction<ExecutionContext, R> fallback) {
         this.fallback = fallback;
     }
 

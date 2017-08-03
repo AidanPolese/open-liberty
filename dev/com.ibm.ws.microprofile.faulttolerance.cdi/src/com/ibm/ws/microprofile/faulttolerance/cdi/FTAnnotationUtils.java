@@ -41,6 +41,7 @@ import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
+import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceFunction;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
@@ -140,6 +141,57 @@ public class FTAnnotationUtils {
         return bulkheadPolicy;
     }
 
+    static FallbackPolicy<?> processFallbackAnnotation(Fallback fallback, InvocationContext context, BeanManager beanManager) {
+        FallbackPolicy<?> fallbackPolicy = null;
+        Class<? extends FallbackHandler<?>> fallbackClass = fallback.value();
+        if (fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) {
+            String fallbackMethodName = fallback.fallbackMethod();
+            Object beanInstance = context.getTarget();
+            Method originalMethod = context.getMethod();
+            Class<?>[] paramTypes = originalMethod.getParameterTypes();
+            try {
+                Method fallbackMethod = beanInstance.getClass().getMethod(fallbackMethodName, paramTypes);
+                Class<?> originalReturn = originalMethod.getReturnType();
+                Class<?> fallbackReturn = fallbackMethod.getReturnType();
+                if (originalReturn.isAssignableFrom(fallbackReturn)) {
+                    fallbackPolicy = newFallbackPolicy(beanInstance, fallbackMethod, fallbackReturn);
+                } else {
+                    throw new FaultToleranceException("Fallback return type must match that of the annotated method");
+                }
+            } catch (NoSuchMethodException e) {
+                throw new FaultToleranceException("Fallback method not found", e);
+            } catch (SecurityException e) {
+                throw new FaultToleranceException(e);
+            }
+        } else {
+            FallbackHandler<?> fallbackHandler = newNonContextual(fallbackClass, beanManager);
+            fallbackPolicy = newFallbackPolicy(fallbackHandler);
+        }
+        return fallbackPolicy;
+    }
+
+    /**
+     * @param <R>
+     * @param beanInstance
+     * @param fallbackMethod
+     * @param params
+     * @param fallbackReturn
+     * @return
+     */
+    private static <R> FallbackPolicy<R> newFallbackPolicy(Object beanInstance, Method fallbackMethod, Class<R> fallbackReturn) {
+        FaultToleranceFunction<ExecutionContext, R> fallbackFunction = new FaultToleranceFunction<ExecutionContext, R>() {
+            @Override
+            public R execute(ExecutionContext context) throws Exception {
+                @SuppressWarnings("unchecked")
+                R result = (R) fallbackMethod.invoke(beanInstance, context.getParameters());
+                return result;
+            }
+        };
+
+        FallbackPolicy<R> fallbackPolicy = newFallbackPolicy(fallbackFunction);
+        return fallbackPolicy;
+    }
+
     /**
      * @param context
      * @return
@@ -225,7 +277,7 @@ public class FTAnnotationUtils {
         if (fallback != null) {
             Class<? extends FallbackHandler<?>> fallbackClass = fallback.value();
             FallbackHandler<?> fallbackHandler = newNonContextual(fallbackClass, beanManager);
-            FallbackPolicy<ExecutionContext, ?> fallbackPolicy = newFallbackPolicy(fallbackHandler);
+            FallbackPolicy<?> fallbackPolicy = newFallbackPolicy(fallbackHandler);
             policy.setFallbackPolicy(fallbackPolicy);
         }
 
@@ -248,10 +300,15 @@ public class FTAnnotationUtils {
         return instance;
     }
 
-    private static <R> FallbackPolicy<ExecutionContext, R> newFallbackPolicy(FallbackHandler<R> fallbackHandler) {
+    private static <R> FallbackPolicy<R> newFallbackPolicy(FallbackHandler<R> fallbackHandler) {
         FallbackFunction<R> fallbackCallable = new FallbackFunction<>(fallbackHandler);
-        FallbackPolicy<ExecutionContext, R> fallbackPolicy = FaultToleranceProvider.newFallbackPolicy();
-        fallbackPolicy.setFallback(fallbackCallable);
+        FallbackPolicy<R> fallbackPolicy = newFallbackPolicy(fallbackCallable);
+        return fallbackPolicy;
+    }
+
+    private static <R> FallbackPolicy<R> newFallbackPolicy(FaultToleranceFunction<ExecutionContext, R> fallbackFunction) {
+        FallbackPolicy<R> fallbackPolicy = FaultToleranceProvider.newFallbackPolicy();
+        fallbackPolicy.setFallback(fallbackFunction);
         return fallbackPolicy;
     }
 
@@ -283,7 +340,7 @@ public class FTAnnotationUtils {
         TimeoutPolicy timeoutPolicy = policies.getTimeoutPolicy();
         CircuitBreakerPolicy circuitBreakerPolicy = policies.getCircuitBreakerPolicy();
         RetryPolicy retryPolicy = policies.getRetryPolicy();
-        FallbackPolicy<ExecutionContext, R> fallbackPolicy = (FallbackPolicy<ExecutionContext, R>) policies.getFallbackPolicy();
+        FallbackPolicy<R> fallbackPolicy = (FallbackPolicy<R>) policies.getFallbackPolicy();
         BulkheadPolicy bulkheadPolicy = policies.getBulkheadPolicy();
 
         if (timeoutPolicy != null) {

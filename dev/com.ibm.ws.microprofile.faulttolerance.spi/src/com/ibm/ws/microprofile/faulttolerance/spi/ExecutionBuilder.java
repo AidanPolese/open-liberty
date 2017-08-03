@@ -28,13 +28,13 @@ public interface ExecutionBuilder<T, R> {
 
     public ExecutionBuilder<T, R> setBulkheadPolicy(BulkheadPolicy bulkhead);
 
-    public ExecutionBuilder<T, R> setFallbackPolicy(FallbackPolicy<T, R> fallback);
+    public ExecutionBuilder<T, R> setFallbackPolicy(FallbackPolicy<R> fallback);
 
-    public ExecutionBuilder<T, R> setAsyncFallbackPolicy(FallbackPolicy<T, Future<R>> fallback);
+    public ExecutionBuilder<T, R> setAsyncFallbackPolicy(FallbackPolicy<Future<R>> fallback);
 
     public ExecutionBuilder<T, R> setTimeoutPolicy(TimeoutPolicy timeout);
 
-    public Executor<T, R> build();
+    public Executor<R> build();
 
-    public Executor<T, Future<R>> buildAsync();
+    public Executor<Future<R>> buildAsync();
 }

@@ -101,8 +101,8 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
     }
 
     @Override
-    public <T, R> FallbackPolicy<T, R> newFallbackPolicy() {
-        FallbackPolicyImpl<T, R> fallback = new FallbackPolicyImpl<T, R>();
+    public <R> FallbackPolicy<R> newFallbackPolicy() {
+        FallbackPolicyImpl<R> fallback = new FallbackPolicyImpl<R>();
         return fallback;
     }
 

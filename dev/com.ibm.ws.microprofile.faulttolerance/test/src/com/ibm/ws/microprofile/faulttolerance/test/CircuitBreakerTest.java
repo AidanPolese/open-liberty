@@ -22,6 +22,7 @@ import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
+import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestException;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestFunction;
 
@@ -38,27 +39,27 @@ public class CircuitBreakerTest {
 
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setCircuitBreakerPolicy(circuitBreaker);
-        Executor<String, String> executor = builder.build();
+        Executor<String> executor = builder.build();
 
         TestFunction callable = new TestFunction(-1, "testCircuitBreaker");
 
         String executions = "NOT_RUN";
         try {
-            executions = executor.execute(callable, "testCircuitBreaker1");
+            executions = executor.execute(callable, new ExecutionContextImpl("testCircuitBreaker1"));
             fail("Exception not thrown");
         } catch (FaultToleranceException t) {
             //expected
             assertTrue(t.getCause() instanceof TestException);
         }
         try {
-            executions = executor.execute(callable, "testCircuitBreaker2");
+            executions = executor.execute(callable, new ExecutionContextImpl("testCircuitBreaker2"));
             fail("Exception not thrown");
         } catch (FaultToleranceException t) {
             //expected
             assertTrue(t.getCause() instanceof TestException);
         }
         try {
-            executions = executor.execute(callable, "testCircuitBreaker3");
+            executions = executor.execute(callable, new ExecutionContextImpl("testCircuitBreaker3"));
             fail("Exception not thrown");
         } catch (CircuitBreakerOpenException t) {
             //expected
