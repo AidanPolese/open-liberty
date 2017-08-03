@@ -23,7 +23,7 @@ import com.ibm.wsspi.threadcontext.WSContextService;
 /**
  *
  */
-public class AsyncExecutorImpl<T, R> extends ExecutorImpl<T, Future<R>> {
+public class AsyncExecutorImpl<R> extends ExecutorImpl<Future<R>> {
 
     private InternalExecutor<Callable<Future<R>>, Future<R>> internalExecutor;
     private final WSContextService contextService;
@@ -32,7 +32,7 @@ public class AsyncExecutorImpl<T, R> extends ExecutorImpl<T, Future<R>> {
                              CircuitBreakerPolicy circuitBreakerPolicy,
                              TimeoutPolicy timeoutPolicy,
                              BulkheadPolicy bulkheadPolicy,
-                             FallbackPolicy<T, Future<R>> fallbackPolicy,
+                             FallbackPolicy<Future<R>> fallbackPolicy,
                              WSContextService contextService) {
 
         super(retryPolicy, circuitBreakerPolicy, timeoutPolicy, bulkheadPolicy, fallbackPolicy);

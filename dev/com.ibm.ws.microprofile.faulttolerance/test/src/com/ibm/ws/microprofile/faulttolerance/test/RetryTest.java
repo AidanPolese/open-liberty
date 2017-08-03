@@ -18,6 +18,7 @@ import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
+import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestFunction;
 
 /**
@@ -32,11 +33,11 @@ public class RetryTest {
 
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setRetryPolicy(retry);
-        Executor<String, String> executor = builder.build();
+        Executor<String> executor = builder.build();
 
         TestFunction callable = new TestFunction(2, "testRetry");//first two executions will throw an exception
 
-        executor.execute(callable, "testRetry");
+        executor.execute(callable, new ExecutionContextImpl("testRetry"));
         assertEquals(3, callable.getExecutions());
     }
 

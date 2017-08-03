@@ -18,14 +18,16 @@
  */
 package com.ibm.ws.microprofile.faulttolerance.spi;
 
-public interface FallbackPolicy<T, R> {
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
+
+public interface FallbackPolicy<R> {
 
     /**
      * Specify the fallback to be used.
      *
      * @return the fallback callable
      */
-    public FaultToleranceFunction<T, R> getFallback();
+    public FaultToleranceFunction<ExecutionContext, R> getFallback();
 
-    public void setFallback(FaultToleranceFunction<T, R> fallback);
+    public void setFallback(FaultToleranceFunction<ExecutionContext, R> fallback);
 }
