@@ -34,6 +34,7 @@ import javax.batch.runtime.JobExecution;
 import javax.batch.runtime.JobInstance;
 import javax.batch.runtime.StepExecution;
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.NotSupportedException;
@@ -51,6 +52,7 @@ import org.osgi.service.component.annotations.Reference;
 import com.ibm.jbatch.container.RASConstants;
 import com.ibm.jbatch.container.exception.BatchIllegalIDPersistedException;
 import com.ibm.jbatch.container.exception.BatchIllegalJobStatusTransitionException;
+import com.ibm.jbatch.container.exception.InvalidJobExecutionStateException;
 import com.ibm.jbatch.container.exception.PersistenceException;
 import com.ibm.jbatch.container.execution.impl.RuntimeStepExecution;
 import com.ibm.jbatch.container.persistence.jpa.JobExecutionEntity;
@@ -879,22 +881,20 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
     }
 
     @Override
-    public JobExecution updateJobExecutionAndInstanceOnStop(final long jobExecutionId, final Date updateTime) throws NoSuchJobExecutionException {
+    public JobExecution updateJobExecutionAndInstanceOnStop(final long jobExecutionId,
+                                                            final Date updateTime) throws NoSuchJobExecutionException, InvalidJobExecutionStateException {
         EntityManager em = getPsu().createEntityManager();
-        final String BASE_UPDATE = "UPDATE JobExecutionEntity x SET x.batchStatus = :batchStatus, x.lastUpdatedTime = :lastUpdatedTime";
-        StringBuilder query = new StringBuilder().append(BASE_UPDATE);
-        StringBuilder whereClause = new StringBuilder();
 
-        whereClause.append("x.jobExecId = :jobExecId");
-        whereClause.append(" AND x.serverId IS NULL");
-
-        query.append(" WHERE " + whereClause);
-        final String FINAL_UPDATE = query.toString();
+        final TypedQuery<JobExecutionEntity> query = em.createNamedQuery(JobExecutionEntity.UPDATE_JOB_EXECUTION_AND_INSTANCE_ON_STOP,
+                                                                         JobExecutionEntity.class);
+        query.setParameter("batchStatus", BatchStatus.STOPPED);
+        query.setParameter("jobExecId", jobExecutionId);
+        query.setParameter("lastUpdatedTime", updateTime);
         try {
             return new TranRequest<JobExecution>(em) {
                 @Override
-                public JobExecution call() {
-                    JobExecutionEntity execution = entityMgr.find(JobExecutionEntity.class, jobExecutionId);
+                public JobExecution call() throws InvalidJobExecutionStateException {
+                    JobExecutionEntity execution = entityMgr.find(JobExecutionEntity.class, jobExecutionId, LockModeType.PESSIMISTIC_WRITE);
                     if (execution == null) {
                         throw new NoSuchJobExecutionException("No job execution found for id = " + jobExecutionId);
                     }
@@ -914,18 +914,13 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
                     instance.setInstanceState(InstanceState.STOPPED);
                     instance.setLastUpdatedTime(updateTime);
 
-                    Query jpaQuery = entityMgr.createQuery(FINAL_UPDATE);
-                    jpaQuery.setParameter("batchStatus", BatchStatus.STOPPED);
-                    jpaQuery.setParameter("jobExecId", jobExecutionId);
-                    jpaQuery.setParameter("lastUpdatedTime", updateTime);
-
-                    int count = jpaQuery.executeUpdate();
+                    int count = query.executeUpdate();
                     if (count > 0) {
                         // Need to refresh to pick up changes made to the database
                         entityMgr.refresh(execution);
                     } else {
-                        String msg = "No job execution found for id = " + jobExecutionId + " and serverId = \"\"";
-                        throw new NoSuchJobExecutionException(msg);
+                        String msg = "Job execution " + jobExecutionId + " is in an invalid state";
+                        throw new InvalidJobExecutionStateException(msg);
                     }
                     return execution;
                 }
@@ -1205,36 +1200,30 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
     @Override
     public JobExecutionEntity updateJobExecutionServerIdAndRestUrl(final long jobExecutionId) {
         EntityManager em = getPsu().createEntityManager();
-        final String BASE_UPDATE = "UPDATE JobExecutionEntity x SET x.serverId = :serverId, x.restUrl = :restUrl";
-        StringBuilder query = new StringBuilder().append(BASE_UPDATE);
-        StringBuilder whereClause = new StringBuilder();
 
-        whereClause.append("x.jobExecId = :jobExecId");
-        whereClause.append(" AND x.batchStatus = :batchStatus");
+        final TypedQuery<JobExecutionEntity> query = em.createNamedQuery(JobExecutionEntity.UPDATE_JOB_EXECUTION_SERVERID_AND_RESTURL,
+                                                                         JobExecutionEntity.class);
 
-        query.append(" WHERE " + whereClause);
-        final String FINAL_UPDATE = query.toString();
+        query.setParameter("serverId", batchLocationService.getServerId());
+        query.setParameter("restUrl", batchLocationService.getBatchRestUrl());
+        query.setParameter("batchStatus", BatchStatus.STARTING);
+        query.setParameter("jobExecId", jobExecutionId);
         try {
             return new TranRequest<JobExecutionEntity>(em) {
                 @Override
-                public JobExecutionEntity call() {
-                    JobExecutionEntity execution = entityMgr.find(JobExecutionEntity.class, jobExecutionId);
+                public JobExecutionEntity call() throws InvalidJobExecutionStateException {
+                    JobExecutionEntity execution = entityMgr.find(JobExecutionEntity.class, jobExecutionId, LockModeType.PESSIMISTIC_WRITE);
                     if (execution == null) {
                         throw new NoSuchJobExecutionException("No job execution found for id = " + jobExecutionId);
                     }
-                    Query jpaQuery = entityMgr.createQuery(FINAL_UPDATE);
-                    jpaQuery.setParameter("batchStatus", BatchStatus.STARTING);
-                    jpaQuery.setParameter("jobExecId", jobExecutionId);
-                    jpaQuery.setParameter("serverId", batchLocationService.getServerId());
-                    jpaQuery.setParameter("restUrl", batchLocationService.getBatchRestUrl());
 
-                    int count = jpaQuery.executeUpdate();
+                    int count = query.executeUpdate();
                     if (count > 0) {
                         // Need to refresh to pick up changes made to the database
                         entityMgr.refresh(execution);
                     } else {
                         String msg = "No job execution found for id = " + jobExecutionId + " and status = STARTING";
-                        throw new NoSuchJobExecutionException(msg);
+                        throw new InvalidJobExecutionStateException(msg);
                     }
                     return execution;
                 }
@@ -2340,7 +2329,7 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
             return retVal;
         }
 
-        public abstract T call();
+        public abstract T call() throws InvalidJobExecutionStateException;
 
         /**
          * Begin a new transaction, if one isn't currently active (nested transactions not supported).

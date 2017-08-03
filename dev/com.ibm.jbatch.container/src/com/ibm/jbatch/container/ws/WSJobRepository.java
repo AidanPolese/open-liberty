@@ -21,6 +21,7 @@ import javax.batch.operations.NoSuchJobExecutionException;
 import javax.batch.operations.NoSuchJobInstanceException;
 import javax.batch.runtime.BatchStatus;
 
+import com.ibm.jbatch.container.exception.InvalidJobExecutionStateException;
 import com.ibm.jbatch.container.services.IJPAQueryHelper;
 
 /**
@@ -200,8 +201,9 @@ public interface WSJobRepository {
      * @param batchStatus
      * @param date
      * @return
+     * @throws InvalidJobExecutionStateException
      */
-    public abstract WSJobExecution updateJobExecutionAndInstanceOnStop(long executionId, Date date);
+    public abstract WSJobExecution updateJobExecutionAndInstanceOnStop(long executionId, Date date) throws InvalidJobExecutionStateException;
 
     /**
      * Update the batch status of this job execution and instance

@@ -28,6 +28,7 @@ import javax.batch.runtime.JobExecution;
 import javax.batch.runtime.JobInstance;
 import javax.batch.runtime.StepExecution;
 
+import com.ibm.jbatch.container.exception.InvalidJobExecutionStateException;
 import com.ibm.jbatch.container.execution.impl.RuntimePartitionExecution;
 import com.ibm.jbatch.container.execution.impl.RuntimeSplitFlowExecution;
 import com.ibm.jbatch.container.execution.impl.RuntimeStepExecution;
@@ -223,7 +224,7 @@ public interface IPersistenceManagerService extends IBatchServiceBase {
 
     public JobExecution updateJobExecutionAndInstanceOnStatusChange(long jobExecutionId, BatchStatus newBatchStatus, Date updateTime) throws NoSuchJobExecutionException;
 
-    public JobExecution updateJobExecutionAndInstanceOnStop(long jobExecutionId, Date updateTime) throws NoSuchJobExecutionException;
+    public JobExecution updateJobExecutionAndInstanceOnStop(long jobExecutionId, Date updateTime) throws NoSuchJobExecutionException, InvalidJobExecutionStateException;
 
     public JobExecution updateJobExecutionAndInstanceOnEnd(long jobExecutionId, BatchStatus finalBatchStatus, String finalExitStatus,
                                                            Date endTime) throws NoSuchJobExecutionException;
@@ -304,9 +305,10 @@ public interface IPersistenceManagerService extends IBatchServiceBase {
      * Sets the server id and rest url for the given job execution.
      *
      * @param execId
+     * @throws InvalidJobExecutionStateException
      *
      */
-    public JobExecutionEntity updateJobExecutionServerIdAndRestUrl(long jobExecutionId) throws NoSuchJobExecutionException;
+    public JobExecutionEntity updateJobExecutionServerIdAndRestUrl(long jobExecutionId) throws NoSuchJobExecutionException, InvalidJobExecutionStateException;
 
     // STEP THREAD
 

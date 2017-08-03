@@ -36,6 +36,10 @@ import org.eclipse.persistence.annotations.ClassExtractor;
 import com.ibm.jbatch.container.ws.WSJobExecution;
 
 @NamedQueries({
+                @NamedQuery(name = JobExecutionEntity.UPDATE_JOB_EXECUTION_AND_INSTANCE_ON_STOP, query = "UPDATE JobExecutionEntity x SET x.batchStatus = :batchStatus, x.lastUpdatedTime = :lastUpdatedTime WHERE x.jobExecId = :jobExecId AND x.serverId IS NULL"),
+
+                @NamedQuery(name = JobExecutionEntity.UPDATE_JOB_EXECUTION_SERVERID_AND_RESTURL, query = "UPDATE JobExecutionEntity x SET x.serverId = :serverId, x.restUrl = :restUrl WHERE x.jobExecId = :jobExecId AND x.batchStatus = :batchStatus"),
+
                 @NamedQuery(name = JobExecutionEntity.GET_JOB_EXECUTIONS_MOST_TO_LEAST_RECENT_BY_INSTANCE, query = "SELECT e FROM JobExecutionEntity e WHERE e.jobInstance.instanceId = :instanceId ORDER BY e.executionNumberForThisInstance DESC"),
                 /*
                  * A single result query that could be used for finding the single most recent execution #
@@ -56,6 +60,8 @@ import com.ibm.jbatch.container.ws.WSJobExecution;
 @ClassExtractor(JobExecutionEntityExtractor.class)
 public class JobExecutionEntity extends JobThreadExecutionBase implements JobExecution, WSJobExecution {
 
+    public static final String UPDATE_JOB_EXECUTION_AND_INSTANCE_ON_STOP = "JobExecutionEntity.updateJobExecutionAndInstanceOnStopQuery";
+    public static final String UPDATE_JOB_EXECUTION_SERVERID_AND_RESTURL = "JobExecutionEntity.updateJobExecutionServerIdAndRestUrlQuery";
     public static final String GET_JOB_EXECUTIONIDS_BY_NAME_AND_STATUSES_QUERY = "JobExecutionEntity.getJobExecutionsByNameAndStatusesQuery";
     public static final String GET_JOB_EXECUTIONS_BY_SERVERID_AND_STATUSES_QUERY = "JobExecutionEntity.getJobExecutionsByServerIdAndStatusesQuery";
     public static final String GET_JOB_EXECUTIONS_MOST_TO_LEAST_RECENT_BY_INSTANCE = "JobExecutionEntity.getJobExecutionsMostToLeastRecentByInstanceQuery";
