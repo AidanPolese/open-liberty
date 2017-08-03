@@ -27,8 +27,8 @@ import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
-import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
 
 @FaultTolerance
 @Interceptor
@@ -75,6 +75,7 @@ public class FaultToleranceInterceptor {
     private Object execute(InvocationContext invocationContext, AggregatedFTPolicy policies) throws Throwable {
 
         Execution<?> executor = execCache.get(policies);
+
         if (executor == null) {
 
             ExecutionBuilder<ExecutionContext, ?> builder = FTAnnotationUtils.newBuilder(policies);
@@ -111,6 +112,7 @@ public class FaultToleranceInterceptor {
                 };
 
                 Execution<Object> sync = (Execution<Object>) executor;
+
                 try {
                     result = sync.execute(callable, executionContext);
                 } catch (org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException e) {
