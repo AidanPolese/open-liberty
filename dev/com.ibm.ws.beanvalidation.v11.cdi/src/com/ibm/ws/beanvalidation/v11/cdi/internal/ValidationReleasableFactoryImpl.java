@@ -10,6 +10,9 @@
  *******************************************************************************/
 package com.ibm.ws.beanvalidation.v11.cdi.internal;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import javax.enterprise.inject.spi.BeanManager;
 import javax.validation.ConstraintValidatorFactory;
 
@@ -29,6 +32,7 @@ import com.ibm.ws.managedobject.ManagedObject;
 import com.ibm.ws.managedobject.ManagedObjectException;
 import com.ibm.ws.managedobject.ManagedObjectFactory;
 import com.ibm.ws.managedobject.ManagedObjectService;
+import com.ibm.ws.runtime.metadata.ComponentMetaData;
 import com.ibm.ws.runtime.metadata.ModuleMetaData;
 import com.ibm.ws.threadContext.ComponentMetaDataAccessorImpl;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
@@ -42,9 +46,9 @@ public class ValidationReleasableFactoryImpl implements ValidationReleasableFact
     private static final String REFERENCE_CDI_SERVICE = "cdiService";
     private static final String REFERENCE_MANAGED_OBJECT_SERVICE = "managedObjectService";
 
-    private final AtomicServiceReference<CDIService> cdiService =
-                    new AtomicServiceReference<CDIService>(REFERENCE_CDI_SERVICE);
+    private final AtomicServiceReference<CDIService> cdiService = new AtomicServiceReference<CDIService>(REFERENCE_CDI_SERVICE);
     private final AtomicServiceReference<ManagedObjectService> managedObjectServiceRef = new AtomicServiceReference<ManagedObjectService>(REFERENCE_MANAGED_OBJECT_SERVICE);
+    private final Map<ComponentMetaData, BeanManager> beanManagers = new WeakHashMap<ComponentMetaData, BeanManager>();
 
     @Override
     public <T> ManagedObject<T> createValidationReleasable(Class<T> clazz) {
@@ -75,7 +79,13 @@ public class ValidationReleasableFactoryImpl implements ValidationReleasableFact
     }
 
     private BeanManager getCurrentBeanManager() {
-        return cdiService.getServiceWithException().getCurrentBeanManager();
+        ComponentMetaData cmd = ComponentMetaDataAccessorImpl.getComponentMetaDataAccessor().getComponentMetaData();
+        BeanManager beanMgr = beanManagers.get(cmd);
+        if (beanMgr == null) {
+            beanMgr = cdiService.getServiceWithException().getCurrentBeanManager();
+            beanManagers.put(cmd, beanMgr);
+        }
+        return beanMgr;
     }
 
     private <T> ManagedObjectFactory<T> getManagedBeanManagedObjectFactory(Class<T> clazz) {

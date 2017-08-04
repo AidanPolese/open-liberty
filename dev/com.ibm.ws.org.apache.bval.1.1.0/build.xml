@@ -10,7 +10,7 @@
  -->
 <project name="com.ibm.ws.org.apache.bval.1.1.0" default="build">
     <property name="original.jar.name" value="org.apache.bval"/>
-    <property name="original.jar.version" value="1.1.0"/>
+    <property name="original.jar.version" value="1.1.2"/>
     
     <import file="../ant_build/public_imports/rejar_imports.xml" />
 	
