@@ -1,0 +1,17 @@
+
+task printCP {
+    doLast {
+    	// Generate a .classpath file based on the current bnd classpath:
+    	println "@AGG current classpath is:"
+    	def cpString = ""
+    	sourceSets.main.runtimeClasspath.each { 
+    		println it
+    		cpString += it + '\n'
+    	}
+    	def cpFile = new File("${projectDir}/generated/generated.classpath")
+    	cpFile.delete()
+    	cpFile.createNewFile()
+    	cpFile.text = cpString
+    }
+}
+	  

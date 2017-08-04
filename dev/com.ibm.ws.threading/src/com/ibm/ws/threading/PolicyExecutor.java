@@ -48,7 +48,9 @@ public interface PolicyExecutor extends ExecutorService {
     /**
      * Specifies the maximum number of tasks from this policy executor that can be running
      * at any given point in time. The default maxConcurrency is Integer.MAX_VALUE.
-     * TODO: update with discussion of how dynamic config update is handled once supported
+     * Maximum concurrency can be updated while tasks are in progress. If the maximum concurrency
+     * is reduced below the number of concurrently executing tasks, the update goes into effect
+     * gradually, as in-progress tasks complete rather than causing them to be canceled.
      *
      * @param max maximum concurrency.
      * @return the executor.
@@ -61,11 +63,16 @@ public interface PolicyExecutor extends ExecutorService {
     /**
      * Specifies the maximum number of submitted tasks that can be queued for execution.
      * As tasks are started or canceled, they are removed from the queue. When the queue is
-     * at capacity and another task is submitted, the queueFullAction is applied.
+     * at capacity and another task is submitted, the policy executor waits for up to the
+     * maxWaitForEnqueue for a queue position to become available, after which, if the queue
+     * is still at capacity, the queueFullAction is applied.
      * Applications that submit many tasks over a short period of time might want to use
      * a maximum queue size that is at least as large as the maximum concurrency.
      * The default maxQueueSize is Integer.MAX_VALUE.
-     * TODO: update with discussion of how dynamic config update is handled once supported
+     * Maximum queue size can be updated while tasks are in progress and/or queued for execution.
+     * If the maximum queue size is reduced below the current number of queued tasks,
+     * the update goes into effect gradually, queued tasks execute naturally or are canceled
+     * by the user, rather than automatically canceling the excess queued tasks.
      *
      * @param max capacity of the task queue.
      * @return the executor.
@@ -81,7 +88,9 @@ public interface PolicyExecutor extends ExecutorService {
      * the queueFullAction. A value of 0 indicates to not wait at all, in which case, if there
      * is not a queue position available, the queueFullAction is immediately applied.
      * The default maxWaitForEnqueue is 0.
-     * TODO: update with discussion of how dynamic config update is handled once supported
+     * When maximum wait for enqueue is updated, the update applies to task submits that occur
+     * after that point. Submits that were already waiting continue to wait per the previously
+     * configured value.
      *
      * @param ms maximum number of milliseconds to wait when attempting to queue a submitted task.
      * @return the executor.
@@ -98,7 +107,8 @@ public interface PolicyExecutor extends ExecutorService {
      * The default queueFullAction depends on the maxConcurrency.
      * If maxConcurrency is a positive integer less than Integer.MAX_VALUE, then the default is CallerRunsIfSameExecutor? or Abort? TODO
      * Otherwise, the default is CallerRuns? TODO
-     * TODO: update with discussion of how dynamic config update is handled once supported
+     * When the queue full action is updated, it applies to the next submit attempt which is
+     * unable to obtain a queue position.
      *
      * @param action the action to take.
      * @return the executor.

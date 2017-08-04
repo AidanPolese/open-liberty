@@ -36,18 +36,7 @@ bGitBranch=master
         noupdateOnRelease = true; \
         local = ${env;LOCAL_REPO_PATH;${build}/release};
 
--plugin.3.Artifactory = \
-    aQute.bnd.repository.maven.provider.MavenBndRepository; \
-        releaseUrl="${artifactoryReleaseUrl}${matrixParams}" ; \
-        snapshotUrl="${artifactorySnapshotUrl}${matrixParams}" ; \
-        name = "Artifactory";
-
--plugin.6.Artifactory2 = \
-	aQute.bnd.repository.maven.provider.MavenBndRepository; \
-		releaseUrl=https://${artifactory.download.server}/artifactory/wasliberty-open-liberty ; \
-		snapshotUrl=https://${artifactory.download.server}/artifactory/wasliberty-open-liberty ; \
-		index=${build}/oss_dependencies.maven; \
-		name = "Artifactory2";
+-plugin.3.Remote = ${fetch.repository}
 
 # Don't upload sources or javadoc unless bundle overrides
 -maven-release: ${if;${is;${env;PUBLISH_REPO;Release};Artifactory};remote;local}, sources;path=NONE, javadoc;path=NONE

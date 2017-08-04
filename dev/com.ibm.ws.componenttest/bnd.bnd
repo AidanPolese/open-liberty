@@ -37,7 +37,7 @@ DynamicImport-Package: \
   javax.servlet, \
   javax.servlet.http
 
-publish.wlp.jar.disabled: true
+instrument.disabled: true
 
 test.project: true
 

@@ -141,7 +141,7 @@ task copyMavenLibs(type: Copy) {
       }
     }
   }
-
+  
   task publishSchemaResources {
     dependsOn jar
     inputs.files(fileTree( dir: "${projectDir}/resources/schemas")).skipWhenEmpty()
@@ -391,6 +391,26 @@ task copyMavenLibs(type: Copy) {
         include 'com.ibm.ws.logging.core.jar'
         into "${projectDir}/generated/autoFVT/lib"
       }
+      
+      // Copy all non-java app resourecs, such as *.html or *.jsp
+	  copy {
+		  includeEmptyDirs = false
+		  from "${projectDir}"
+		  into "${projectDir}/generated/autoFVT/"
+		  include 'test-applications/**', 'test-bundles/**', 'test-resourceadapters/**'
+		  exclude '**/*.java'
+	  }
+	  
+	  // Generate a .classpath file based on the current bnd classpath:
+      def cpString = ""
+      sourceSets.main.runtimeClasspath.each { 
+  	    cpString += it.getAbsolutePath() + "\n"
+      }
+      println "Generated FAT classpath: " + cpString
+      def cpFile = new File("${projectDir}/generated/autoFVT/generated.classpath")
+      cpFile.delete()
+      cpFile.createNewFile()
+      cpFile.text = cpString
     }
   }
 
@@ -564,7 +584,7 @@ task copyMavenLibs(type: Copy) {
       }
     }
   }
-
+  
 }
 
 task zipOpenLiberty(type: Zip) {

@@ -476,7 +476,8 @@ public class ConcurrentLinkedList
                 // sequence number.
                 newEntry = list.addEntry(token,
                                          transaction,
-                                         usableTailSequenceNumber);
+                                         usableTailSequenceNumber,
+                                         this);
             } finally {
                 if (tailSequenceNumberLock.isHeldByCurrentThread())
                     tailSequenceNumberLock.unlock();
@@ -526,7 +527,8 @@ public class ConcurrentLinkedList
                 // sequence number.
                 newEntry = list.addEntry(token,
                                          transaction,
-                                         usableTailSequenceNumber);
+                                         usableTailSequenceNumber,
+                                         this);
             } finally {
                 if (tailSequenceNumberLock.isHeldByCurrentThread())
                     tailSequenceNumberLock.unlock();
@@ -574,7 +576,8 @@ public class ConcurrentLinkedList
             try {
                 newLink = list.addEntry(token,
                                         transaction,
-                                        sequenceNumber);
+                                        sequenceNumber,
+                                        this);
             } finally {
                 if (tailSequenceNumberLock.isHeldByCurrentThread())
                     tailSequenceNumberLock.unlock();

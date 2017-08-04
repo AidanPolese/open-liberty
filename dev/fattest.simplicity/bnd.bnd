@@ -37,6 +37,9 @@ Export-Package: \
 	componenttest.topology.ldap;version=1.0.16,\
 	componenttest.topology.utils;version=1.0.16,\
 	componenttest.vulnerability;version=1.0.16
+	
+Private-Package: \
+	componenttest.annotation.processor
 
 publish.wlp.jar.disabled: true
 
@@ -63,8 +66,4 @@ test.project: true
 	com.thoughtworks.qdox:qdox;version=1.12,\
 	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file,\
 	com.ibm.websphere.javaee.jsonp.1.0;version=latest,\
-	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
-	com.ibm.websphere.org.osgi.core;version=latest,\
-	com.ibm.websphere.org.osgi.service.component;version=latest,\
-	com.ibm.wsspi.org.osgi.service.component.annotations;version=latest,\
-	com.ibm.ws.jmx.connector.client.rest;version=latest
+	com.ibm.websphere.javaee.servlet.3.0;version=latest
