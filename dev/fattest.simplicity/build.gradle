@@ -7,6 +7,23 @@ task assembleBootstrap(type: Copy) {
     filter(ReplaceTokens, tokens: [JAVA_HOME: javaHome])
 }
 
+task assembleBinaryDependencies() {
+	doLast {
+		// Copy maven dependencies of this project into a directory that can be included by the junit
+		// task of every FAT bucket, effectively making all of fattest.simplicty's dependencies transitive
+	    sourceSets.main.runtimeClasspath.each {
+			def path = it.getAbsolutePath()
+	    	if(path.contains(".m2") && !(file("${buildDir}/lib/" + it.getName()).exists())) {
+	    		copy {
+	    			from path
+	    			into "${buildDir}/lib/"
+	    		}
+	    	}
+	    }		
+	}
+}
+
 assemble {
 	dependsOn assembleBootstrap
+	dependsOn assembleBinaryDependencies
 }
