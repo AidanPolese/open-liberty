@@ -22,7 +22,6 @@ package org.eclipse.microprofile.faulttolerance;
  * instance created using the CDI SPI. The instance exists to service a single invocation only.
  * The type parameter of the handler instance must be assignable to the return type of the method, 
  * where the {@link Fallback} is specified. The container must ensure this type safety. 
- * Otherwise, {@link IllegalArgumentException} should be thrown. 
  * <h3>Usage</h3>
  * <pre>
  * public class MyService {
@@ -54,9 +53,7 @@ public interface FallbackHandler<T>{
     /**
      * Handle the previous calling failure and then call alternative methods
      * or perform any alternative operations.
-     * 
-     * @param context the execution context
-     * @return the result of the fallback 
+     * @param context the execution context 
      */
     T handle(ExecutionContext context);
 

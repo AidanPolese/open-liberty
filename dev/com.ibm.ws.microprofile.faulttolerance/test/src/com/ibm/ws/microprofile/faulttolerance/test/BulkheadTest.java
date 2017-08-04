@@ -42,7 +42,6 @@ public class BulkheadTest {
     public void testBulkhead() throws InterruptedException, ExecutionException, TimeoutException {
         BulkheadPolicy bulkhead = FaultToleranceProvider.newBulkheadPolicy();
         bulkhead.setMaxThreads(2);
-        bulkhead.setMaxQueue(2);
 
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setBulkheadPolicy(bulkhead);
@@ -75,7 +74,6 @@ public class BulkheadTest {
     public void testAsyncBulkhead() throws InterruptedException, ExecutionException, TimeoutException {
         BulkheadPolicy bulkhead = FaultToleranceProvider.newBulkheadPolicy();
         bulkhead.setMaxThreads(20);
-        bulkhead.setMaxQueue(20);
 
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setBulkheadPolicy(bulkhead);
@@ -100,7 +98,6 @@ public class BulkheadTest {
     public void testAsyncBulkheadQueueFull() throws InterruptedException, ExecutionException, TimeoutException {
         BulkheadPolicy bulkhead = FaultToleranceProvider.newBulkheadPolicy();
         bulkhead.setMaxThreads(2);
-        bulkhead.setMaxQueue(2);
 
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setBulkheadPolicy(bulkhead);

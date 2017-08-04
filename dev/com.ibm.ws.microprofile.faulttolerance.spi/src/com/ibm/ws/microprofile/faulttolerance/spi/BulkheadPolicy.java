@@ -34,10 +34,6 @@ public interface BulkheadPolicy {
 
     public void setMaxThreads(int maxThreads);
 
-    public int getMaxQueue();
-
-    public void setMaxQueue(int maxQueue);
-
     public Duration getTimeout();
 
     public void setTimeout(Duration timeout);

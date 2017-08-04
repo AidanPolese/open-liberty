@@ -25,8 +25,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.interceptor.InterceptorBinding;
-
 /**
  * Wrap the execution and invoke it asynchronously.
  * Any methods marked with this annotation must return {@link java.util.concurrent.Future}.
@@ -43,7 +41,6 @@ import javax.interceptor.InterceptorBinding;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD, ElementType.TYPE })
-@InterceptorBinding
 @Inherited
 public @interface Asynchronous {
 }
