@@ -136,20 +136,22 @@ class ConcurrentSubList extends LinkedList
      * @param token to add.
      * @param transaction controling the update.
      * @param sequenceNumber of the link we are adding.
+     * @param parentList owning this SubList.
      * @return List.Entry added or null.
      * @throws ObjectManagerException
      */
     protected Link addEntry(Token token,
                             Transaction transaction,
-                            long sequenceNumber)
+                            long sequenceNumber,
+                            ConcurrentLinkedList parentList)
                     throws ObjectManagerException
     {
         final String methodName = "addEntry";
         if (Tracing.isAnyTracingEnabled() && trace.isEntryEnabled())
             trace.entry(this, cclass, methodName, new Object[] { token,
                                                                 transaction,
-                                                                new Long(sequenceNumber) });
-
+                                                                new Long(sequenceNumber),
+                                                                parentList});
         Link newLink;
         synchronized (this) {
             // Prevent other transactions using the list until its creation is commited.
@@ -223,9 +225,10 @@ class ConcurrentSubList extends LinkedList
                 managedObjectsToReplace.add(nextLink);
             } // if (nextToken == null).
 
-            ConcurrentLinkedList concurrentLinkedList = (ConcurrentLinkedList) concurrentListToken.getManagedObject();
-            concurrentLinkedList.tailSequenceNumberLock.unlock();
-
+            // clone(Transaction transaction, ObjectStore objectStore) does not lock the cloned list.
+            if ( parentList.tailSequenceNumberLock.isHeldByCurrentThread())
+              parentList.tailSequenceNumberLock.unlock();
+      
             incrementSize(); // Adjust list length assuming we will commit.
             managedObjectsToReplace.add(this); // The anchor for the list.
 
@@ -302,6 +305,8 @@ class ConcurrentSubList extends LinkedList
         ConcurrentSubList clonedList = new ConcurrentSubList(concurrentListToken,
                                                              transaction,
                                                              objectStore);
+        ConcurrentLinkedList concurrentLinkedList = (ConcurrentLinkedList)concurrentListToken.getManagedObject();   
+    
         synchronized (transaction.internalTransaction) {
             // Capture the point at which the clone is made.
             long unlockPoint = getTransactionUnlockSequence();
@@ -313,7 +318,8 @@ class ConcurrentSubList extends LinkedList
             while (nextLink != null) {
                 clonedList.addEntry(nextLink.data,
                                     transaction,
-                                    0);
+                                    0,
+                                    concurrentLinkedList);
                 nextLink = (ConcurrentSubList.Link) nextLink(nextLink,
                                                              transaction,
                                                              unlockPoint);
