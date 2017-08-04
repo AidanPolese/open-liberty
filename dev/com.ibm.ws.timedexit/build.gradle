@@ -8,6 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
+
 // Special publish feature task since this is a test feature
 publishFeatureResources {
     dependsOn jar
