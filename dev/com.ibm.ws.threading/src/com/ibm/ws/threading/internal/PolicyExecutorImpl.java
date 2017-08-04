@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -90,6 +91,16 @@ public class PolicyExecutorImpl implements PolicyExecutor {
      * server-configured policy executors.
      */
     private final Set<PolicyTaskFuture<?>> running = Collections.newSetFromMap(new ConcurrentHashMap<PolicyTaskFuture<?>, Boolean>());
+
+    /**
+     * Latch that awaits the shutdown method progressing to ENQUEUE_STOPPED state.
+     */
+    private final CountDownLatch shutdownLatch = new CountDownLatch(1);
+
+    /**
+     * Latch that awaits the shutdownNow method progressing to TASKS_CANCELED state.
+     */
+    private final CountDownLatch shutdownNowLatch = new CountDownLatch(1);
 
     /**
      * Policy executor state, which transitions in one direction only. See constants for possible states.
@@ -260,16 +271,34 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             throw new UnsupportedOperationException();
 
         // This method is optimized for the scenario where the user first invokes shutdownNow.
-        // Absent that, polling will be used to wait for TASKS_CANCELED state to be reached
-        // or ENQUEUE_STOPPED state to be reached with an empty queue, after which we can attempt
-        // to obtain all of the maxConcurrency permits and transition to TERMINATED state.
+        // Absent that, we can progress to at least ENQUEUE_STOPPED, after which we can poll
+        // for an empty queue and attempt to obtain all of the maxConcurrency permits
+        // and then transition to TERMINATED state.
+        final long start = System.nanoTime();
+
+        // Progress the state at least to ENQUEUE_STOPPED (possibly TASKS_CANCELED)
+        switch (state.get()) {
+            case TASKS_CANCELING:
+                if (!shutdownNowLatch.await(timeout, unit))
+                    return false;
+                break;
+            case ACTIVE:
+            case ENQUEUE_STOPPING:
+                if (!shutdownLatch.await(timeout, unit))
+                    return false;
+                break;
+            default:
+        }
+
         final long pollInterval = TimeUnit.MILLISECONDS.toNanos(500);
-
         timeout = unit.toNanos(timeout);
+        boolean firstTime = true;
 
-        for (long start = System.nanoTime(), waitTime = 0, remaining = timeout; //
-                        waitTime == 0 || (remaining = timeout - waitTime) > 0; //
+        for (long waitTime = System.nanoTime() - start, remaining = timeout; //
+                        (remaining = timeout - waitTime) > 0 || firstTime; //
                         waitTime = System.nanoTime() - start) {
+            if (firstTime)
+                firstTime = false;
             State currentState = state.get();
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(this, tc, "awaitTermination", remaining, currentState);
@@ -288,11 +317,11 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                                 Tr.event(this, tc, "state: " + previous + " --> TERMINATED");
                             return true;
                         }
-                    } else
+                    } else if (remaining > 0)
                         TimeUnit.NANOSECONDS.sleep(remaining < pollInterval ? remaining : pollInterval);
                     continue;
                 default:
-                    TimeUnit.NANOSECONDS.sleep(remaining < pollInterval ? remaining : pollInterval);
+                    // unreachable
             }
         }
 
@@ -558,11 +587,14 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             if (state.compareAndSet(State.ENQUEUE_STOPPING, State.ENQUEUE_STOPPED))
                 if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
                     Tr.event(this, tc, "state: ENQUEUE_STOPPING --> ENQUEUE_STOPPED");
+
+            shutdownLatch.countDown();
         } else
-            while (state.get() == State.ENQUEUE_STOPPING) {
-                // Await completion of other thread that concurrently invokes shutdown.
-                Thread.yield();
-            }
+            while (state.get() == State.ENQUEUE_STOPPING)
+                try { // Await completion of other thread that concurrently invokes shutdown.
+                    shutdownLatch.await();
+                } catch (InterruptedException x) {
+                }
     }
 
     @Override
@@ -600,12 +632,14 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             if (state.compareAndSet(State.TASKS_CANCELING, State.TASKS_CANCELED))
                 if (trace && tc.isEventEnabled())
                     Tr.event(this, tc, "state: TASKS_CANCELING --> TASKS_CANCELED");
-        } else {
-            // Await completion of other thread that concurrently invokes shutdownNow.
-            // TODO removing all queued tasks and canceling all running tasks is not trivial, should a better mechanism be used to wait?
+
+            shutdownNowLatch.countDown();
+        } else
             while (state.get() == State.TASKS_CANCELING)
-                Thread.yield();
-        }
+                try { // Await completion of other thread that concurrently invokes shutdownNow.
+                    shutdownNowLatch.await();
+                } catch (InterruptedException x) {
+                }
 
         return queuedTasks;
     }
