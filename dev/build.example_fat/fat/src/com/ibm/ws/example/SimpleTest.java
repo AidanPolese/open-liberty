@@ -21,7 +21,6 @@ import org.junit.runner.RunWith;
 import com.ibm.websphere.simplicity.ShrinkHelper;
 
 import app1.web.TestServletA;
-import componenttest.annotation.MinimumJavaLevel;
 import componenttest.annotation.Server;
 import componenttest.annotation.TestServlet;
 import componenttest.custom.junit.runner.FATRunner;
@@ -42,11 +41,12 @@ import componenttest.topology.utils.FATServletClient;
  * servlet referenced by the annotation, and will be run whenever this test class runs.
  */
 @RunWith(FATRunner.class)
-@MinimumJavaLevel(javaLevel = 1.7)
 public class SimpleTest extends FATServletClient {
+	
+	public static final String APP_NAME = "app1";
 
     @Server("FATServer")
-    @TestServlet(servlet = TestServletA.class, path = "app1/TestServletA")
+    @TestServlet(servlet = TestServletA.class, path = APP_NAME + "/TestServletA")
     public static LibertyServer server1;
 
     @BeforeClass
@@ -54,9 +54,9 @@ public class SimpleTest extends FATServletClient {
         // Create a WebArchive that will have the file name 'app1.war' once it's written to a file
         // Include the 'app1.web' package and all of it's java classes and sub-packages
         // Include a simple index.jsp static file in the root of the WebArchive
-        WebArchive app1 = ShrinkWrap.create(WebArchive.class, "app1.war")//
-                        .addPackages(true, "app1.web")//
-                        .addAsWebInfResource(new File("test-applications/app1/resources/index.jsp"));
+        WebArchive app1 = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
+                        .addPackages(true, "app1.web")
+                        .addAsWebInfResource(new File("test-applications/" + APP_NAME + "/resources/index.jsp"));
         // Write the WebArchive to 'publish/servers/FATServer/apps/app1.war' and print the contents
         ShrinkHelper.exportAppToServer(server1, app1);
 

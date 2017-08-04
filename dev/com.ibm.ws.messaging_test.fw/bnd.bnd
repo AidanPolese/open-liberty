@@ -15,8 +15,6 @@ Bundle-Name: Messaging test framework
 Bundle-Description: Messaging test framework, version ${bVersion}
 Bundle-SymbolicName: com.ibm.ws.messaging_test.fw
 
-publish.wlp.jar.disabled: true
-
 test.project: true
 
 -buildpath: \
