@@ -130,13 +130,11 @@ public class FTAnnotationUtils {
     }
 
     static BulkheadPolicy processBulkheadAnnotation(Bulkhead bulkhead, Duration timeoutDuration) {
-        int maxThreads = bulkhead.value();
-        int maxQueue = bulkhead.waitingTaskQueue();
+        int maxThreads = bulkhead.maxThreads();
 
         BulkheadPolicy bulkheadPolicy = FaultToleranceProvider.newBulkheadPolicy();
 
         bulkheadPolicy.setMaxThreads(maxThreads);
-        bulkheadPolicy.setMaxQueue(maxQueue);
         if (timeoutDuration != null) {
             bulkheadPolicy.setTimeout(timeoutDuration);
         }

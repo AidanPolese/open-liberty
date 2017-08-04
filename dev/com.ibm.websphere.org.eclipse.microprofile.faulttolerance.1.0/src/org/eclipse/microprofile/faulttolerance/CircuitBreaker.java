@@ -26,8 +26,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.time.temporal.ChronoUnit;
 
-import javax.interceptor.InterceptorBinding;
-
 /**
  * Define the Circuit Breaker policy
  * @author <a href="mailto:emijiang@uk.ibm.com">Emily Jiang</a>
@@ -36,7 +34,6 @@ import javax.interceptor.InterceptorBinding;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@InterceptorBinding
 @Target({ ElementType.METHOD, ElementType.TYPE })
 public @interface CircuitBreaker {
 

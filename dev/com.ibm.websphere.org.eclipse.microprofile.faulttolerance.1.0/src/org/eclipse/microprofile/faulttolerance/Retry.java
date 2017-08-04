@@ -26,8 +26,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.time.temporal.ChronoUnit;
 
-import javax.interceptor.InterceptorBinding;
-
 /**
  * The Retry annotation to define the number of the retries and the fallback method on reaching the
  * retry counts.
@@ -38,7 +36,6 @@ import javax.interceptor.InterceptorBinding;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD, ElementType.TYPE})
-@InterceptorBinding
 public @interface Retry {
 
     /**
