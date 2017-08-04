@@ -41,7 +41,7 @@ import com.ibm.ws.security.authentication.principals.WSPrincipal;
 import com.ibm.ws.security.credentials.CredentialsService;
 import com.ibm.ws.security.credentials.wscred.WSCredentialImpl;
 import com.ibm.ws.security.jaas.common.JAASConfigurationFactory;
-import com.ibm.ws.security.jaas.common.callback.TokenCallback;
+import com.ibm.websphere.security.auth.callback.WSCredTokenCallbackImpl;
 import com.ibm.ws.security.registry.UserRegistry;
 import com.ibm.ws.security.registry.UserRegistryService;
 import com.ibm.ws.security.token.TokenManager;
@@ -156,7 +156,7 @@ public class TokenLoginModuleTest extends LoginModuleTester {
         /** {@inheritDoc} */
         @Override
         public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-            ((TokenCallback) callbacks[0]).setToken(ssoTokenBytes);
+            ((WSCredTokenCallbackImpl) callbacks[0]).setCredToken(ssoTokenBytes);
         }
 
     }
