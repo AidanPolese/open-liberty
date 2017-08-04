@@ -9,10 +9,10 @@
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
 # this needs to be replaced with a repo reference to a build artifact
--include= jar:${fileuri;${repo;org.apache.aries.jndi:org.apache.aries.jndi.api;1.1.1.ibm-s20170710-0926}}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;${repo;org.apache.aries.jndi:org.apache.aries.jndi.api;1.1.0}}!/META-INF/MANIFEST.MF,bnd.overrides
 
 instrument.disabled: true
 
 -buildpath: \
-    org.apache.aries.jndi:org.apache.aries.jndi.api;version=1.1.1.ibm-s20170710-0926
+    org.apache.aries.jndi:org.apache.aries.jndi.api;version=1.1.0
 
