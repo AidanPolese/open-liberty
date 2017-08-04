@@ -47,6 +47,7 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.config.admin.ConfigID;
 import com.ibm.ws.config.admin.ExtendedConfiguration;
+import com.ibm.ws.config.xml.internal.MetaTypeRegistry.PidReference;
 import com.ibm.ws.config.xml.internal.MetaTypeRegistry.RegistryEntry;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.runtime.update.RuntimeUpdateListener;
@@ -523,7 +524,18 @@ class BundleProcessor implements SynchronousBundleListener, EventHandler, Runtim
         }
 
         void processRegistryEntries(Set<RegistryEntry> entries) throws ConfigUpdateException {
+            Set<RegistryEntry> allEntriesToProcess = new HashSet<RegistryEntry>();
+            // Add all referring entries to the list of entries to process. This ensures that references are
+            // evaluated when new metatype arrives.
             for (RegistryEntry entry : entries) {
+                allEntriesToProcess.add(entry);
+                List<PidReference> pids = entry.getReferencingEntries();
+                for (PidReference pid : pids) {
+                    allEntriesToProcess.add(pid.getReferencingEntry());
+                }
+            }
+
+            for (RegistryEntry entry : allEntriesToProcess) {
                 if (entry.isSingleton()) {
                     processSingletonPid(entry);
                 } else {
