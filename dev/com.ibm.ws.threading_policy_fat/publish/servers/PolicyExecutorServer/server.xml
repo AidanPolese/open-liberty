@@ -1,0 +1,13 @@
+<server description="new server">
+
+	<featureManager>
+		<feature>servlet-3.1</feature>
+	    <feature>componenttest-1.0</feature>
+	    <feature>policyExecutorUser-1.0</feature>
+    </featureManager>
+    
+    <include location="../fatTestPorts.xml"/>
+    
+    <application location="basicfat.war" />
+    
+</server>
