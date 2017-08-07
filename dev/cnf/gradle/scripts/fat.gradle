@@ -23,33 +23,46 @@ publishing {
 }
 
 task addRequiredLibraries {
-       def props = new Properties()
+    def props = new Properties()
     file("../generated.properties").withInputStream { props.load(it) }
     repositories {
-         maven {
-                credentials {
-                        username props.getProperty("artifactory.download.user")
-                        password props.getProperty("artifactory.download.token")
-                }
-                url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
-         }
+        maven {
+            credentials {
+                username props.getProperty("artifactory.download.user")
+                password props.getProperty("artifactory.download.token")
+            }
+            url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
+        }
+    }
+}
+
+task cleanfat() {
+    doLast {
+       delete autoFvtDir + "/output/", autoFvtDir + "/results"
     }
 }
 
 task runfat(type: Exec) {
-       shouldRunAfter releaseNeeded
-       def autoFVT = "${projectDir}/generated/autoFVT"
-       delete autoFVT + "/output/", autoFVT + "/results"
-       if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-               executable "cmd"
-               args '/c', 'ant', "-f", autoFVT + "/TestBuild.xml"
-       } else {
-               executable "ant"
-               args "-f", autoFVT + "/TestBuild.xml"
-       }
+    dependsOn cleanfat
+    shouldRunAfter releaseNeeded
+    shouldRunAfter cleanfat
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        executable "cmd"
+        args '/c', 'ant', "-f", autoFvtDir + "/TestBuild.xml"
+    } else {
+        executable "ant"
+        args "-f", autoFvtDir + "/TestBuild.xml"
+    }
+    doLast {
+    	// We can have this here because this task only ever runs locally, and thus is OK to unconditionally fail
+    	// the build. If we ever run FATs in remote builds, we should also gate this on a property like 
+    	// 'is.running.remote.build' so we don't fail the entire build whenever a testcase fails
+        if(file(autoFvtDir + "/output/fail.log").exists())
+            throw new GradleException("The FAT bucket has test failures! See the logs and results for details.")
+    }
 }
 
 task buildandrun {
-       dependsOn releaseNeeded
-       dependsOn runfat
+    dependsOn releaseNeeded
+    dependsOn runfat
 }
