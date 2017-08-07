@@ -27,7 +27,7 @@ public class PolicyExecutorTest extends FATServletClient {
     @BeforeClass
     public static void setUp() throws Exception {
         server1.copyFileToLibertyInstallRoot("lib/features/", "features/policyExecutorUser-1.0.mf");
-        server1.copyFileToLibertyInstallRoot("lib/", "bundles/test.policyexecutor.bundle.jar");
+        server1.copyFileToLibertyInstallRoot("lib/", "bundles/test.policyexecutor.bundle_fat.jar");
 
         WebArchive app = ShrinkWrap.create(WebArchive.class, "basicfat.war")//
                         .addPackages(true, "web")//
@@ -41,6 +41,6 @@ public class PolicyExecutorTest extends FATServletClient {
     public static void tearDown() throws Exception {
         server1.stopServer();
         server1.deleteFileFromLibertyInstallRoot("lib/features/policyExecutorUser-1.0.mf");
-        server1.deleteFileFromLibertyInstallRoot("lib/test.policyexecutor.bundle.jar");
+        server1.deleteFileFromLibertyInstallRoot("lib/test.policyexecutor.bundle_fat.jar");
     }
 }

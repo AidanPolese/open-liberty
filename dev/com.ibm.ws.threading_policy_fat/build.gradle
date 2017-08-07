@@ -8,7 +8,6 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-import aQute.bnd.gradle.Bundle
 publishing {
   publications {
     maven(MavenPublication) {
@@ -22,7 +21,7 @@ publishing {
 task copyFeatureBundle {
   doLast {
     copy {
-      from "${projectDir}/generated/test.policyexecutor.bundle.jar"
+      from "${projectDir}/generated/test.policyexecutor.bundle_fat.jar"
       into "${projectDir}/publish/files/bundles"
     }
   }

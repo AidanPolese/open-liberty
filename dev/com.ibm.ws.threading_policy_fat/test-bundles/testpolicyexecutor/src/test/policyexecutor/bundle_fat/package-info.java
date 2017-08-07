@@ -12,4 +12,4 @@
  * @version 1.0
  */
 @org.osgi.annotation.versioning.Version("1.0")
-package test.policyexecutor.bundle;
+package test.policyexecutor.bundle_fat;

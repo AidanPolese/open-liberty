@@ -1,4 +1,4 @@
-package test.policyexecutor.bundle;
+package test.policyexecutor.bundle_fat;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
