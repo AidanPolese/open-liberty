@@ -1,0 +1,55 @@
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
+// Global vars
+def autoFvtDir = "${projectDir}/generated/autoFVT"
+def publishDir = autoFvtDir + "/publish"
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      artifactId project.name
+      version project.version
+      artifact zipProjectFVT
+    }
+  }
+}
+
+task addRequiredLibraries {
+       def props = new Properties()
+    file("../generated.properties").withInputStream { props.load(it) }
+    repositories {
+         maven {
+                credentials {
+                        username props.getProperty("artifactory.download.user")
+                        password props.getProperty("artifactory.download.token")
+                }
+                url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
+         }
+    }
+}
+
+task runfat(type: Exec) {
+       shouldRunAfter releaseNeeded
+       def autoFVT = "${projectDir}/generated/autoFVT"
+       delete autoFVT + "/output/", autoFVT + "/results"
+       if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+               executable "cmd"
+               args '/c', 'ant', "-f", autoFVT + "/TestBuild.xml"
+       } else {
+               executable "ant"
+               args "-f", autoFVT + "/TestBuild.xml"
+       }
+}
+
+task buildandrun {
+       dependsOn releaseNeeded
+       dependsOn runfat
+}
