@@ -55,7 +55,7 @@ public class PolicyExecutorServlet extends FATServlet {
                 .maxConcurrency(3).maxQueueSize(3).queueFullAction(QueueFullAction.Abort);
 
         ExecutorService executor2 = provider.create("testAwaitTerminationWhileActiveThenShutdown-2")
-                .maxConcurrency(2).maxQueueSize(2).maxWaitForEnqueue(TimeUnit.SECONDS.toMillis(1));
+                .maxConcurrency(2).maxQueueSize(2).maxWaitForEnqueue(TimeUnit.SECONDS.toMillis(1)).queueFullAction(QueueFullAction.Abort);
 
         Future<Boolean> terminationFuture = executor1.submit(new TerminationAwaitTask(executor2, TimeUnit.MINUTES.toNanos(5)));
         assertFalse(terminationFuture.isDone());
