@@ -18,7 +18,6 @@ import com.ibm.ws.http.channel.h2internal.H2ConnectionSettings;
 import com.ibm.ws.http.channel.h2internal.exceptions.FrameSizeException;
 import com.ibm.ws.http.channel.h2internal.exceptions.Http2Exception;
 import com.ibm.ws.http.channel.internal.HttpMessages;
-import com.ibm.ws.http.channel.internal.HttpServiceContextImpl;
 
 /**
  *
@@ -26,7 +25,7 @@ import com.ibm.ws.http.channel.internal.HttpServiceContextImpl;
 public abstract class Frame {
 
     /** RAS tracing variable */
-    protected static final TraceComponent tc = Tr.register(HttpServiceContextImpl.class, HttpMessages.HTTP_TRACE_NAME, HttpMessages.HTTP_BUNDLE);
+    protected static final TraceComponent tc = Tr.register(Frame.class, HttpMessages.HTTP_TRACE_NAME, HttpMessages.HTTP_BUNDLE);
 
     protected int streamId;
     protected int payloadLength;

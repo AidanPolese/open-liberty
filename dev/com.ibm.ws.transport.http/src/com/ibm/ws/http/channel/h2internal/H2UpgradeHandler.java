@@ -22,7 +22,7 @@ import com.ibm.ws.transport.access.TransportConnectionUpgrade;
 public class H2UpgradeHandler implements TransportConnectionUpgrade {
 
     /** RAS tracing variable */
-    private static final TraceComponent tc = Tr.register(H2StreamProcessor.class, HttpMessages.HTTP_TRACE_NAME, HttpMessages.HTTP_BUNDLE);
+    private static final TraceComponent tc = Tr.register(H2UpgradeHandler.class, HttpMessages.HTTP_TRACE_NAME, HttpMessages.HTTP_BUNDLE);
 
     /**
      * HttpUpgradeHandler method

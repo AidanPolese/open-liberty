@@ -18,6 +18,8 @@ import java.util.Iterator;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.Constants.Direction;
+import com.ibm.ws.http.channel.h2internal.exceptions.Http2Exception;
+import com.ibm.ws.http.channel.h2internal.exceptions.ProtocolException;
 import com.ibm.ws.http.channel.h2internal.frames.Frame;
 import com.ibm.ws.http.channel.h2internal.frames.FrameContinuation;
 import com.ibm.ws.http.channel.h2internal.frames.FrameData;
@@ -317,6 +319,19 @@ public class H2HttpInboundLinkWrap extends HttpInboundLink {
 
             try {
                 streamProcessor.processNextFrame(currentFrame, Direction.WRITING_OUT);
+            } catch (Http2Exception e) {
+                //  send out a connection error.
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "processRead an error occurred processing a frame: " + e.getErrorString());
+                }
+                try {
+
+                    muxLink.getStreamProcessor(0).sendGOAWAYFrame(e);
+
+                } catch (ProtocolException x) {
+                    // nothing to do here, since we can't even send the GOAWAY frame.
+                }
+
             } catch (Exception e) {
                 if (bTrace && tc.isDebugEnabled()) {
                     Tr.debug(tc, "writeFramesSync, Exception occurred while writing the data : " + e);
