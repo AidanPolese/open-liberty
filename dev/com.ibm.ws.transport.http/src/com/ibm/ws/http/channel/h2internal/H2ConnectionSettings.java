@@ -10,7 +10,7 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.h2internal;
 
-import java.util.Base64;
+import javax.xml.bind.DatatypeConverter;
 
 import com.ibm.ws.http.channel.h2internal.exceptions.ProtocolException;
 import com.ibm.ws.http.channel.h2internal.frames.Frame.FrameDirection;
@@ -29,18 +29,25 @@ public class H2ConnectionSettings {
     public int maxFrameSize = 16384;
     public int maxHeaderListSize = -1;
 
+    /**
+     * A settings frame can be encoded as a base-64 string and passed as a header on the initial upgrade request.
+     * This method decodes that base-64 string and applies the encoded settings to this http2 connection.
+     */
     protected void processUpgradeHeaderSettings(String settings) throws ProtocolException {
 
         if (settings != null) {
-            // This introduces a java 8 dependency.  Should be fine, but just in case we hit an issue..
-            byte[] decoded = Base64.getDecoder().decode(settings);
-
-            FrameSettings settingsFrame = new FrameSettings(0, decoded.length, (byte) 0x0, false, FrameDirection.READ);
-            settingsFrame.processPayload(decoded);
-            updateSettings(settingsFrame);
+            byte[] decoded = DatatypeConverter.parseBase64Binary(settings);
+            if (decoded != null) {
+                FrameSettings settingsFrame = new FrameSettings(0, decoded.length, (byte) 0x0, false, FrameDirection.READ);
+                settingsFrame.processPayload(decoded);
+                updateSettings(settingsFrame);
+            }
         }
     }
 
+    /**
+     * Apply the http2 connection settings contained in a settings frame to this http2 connection
+     */
     public void updateSettings(FrameSettings settings) {
         if (settings.getHeaderTableSize() != -1) {
             headerTableSize = settings.getHeaderTableSize();
