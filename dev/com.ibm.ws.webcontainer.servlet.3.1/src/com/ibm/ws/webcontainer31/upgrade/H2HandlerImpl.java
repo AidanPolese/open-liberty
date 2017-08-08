@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -24,6 +26,8 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.H2UpgradeHandler;
 import com.ibm.ws.webcontainer.servlet.H2Handler;
+import com.ibm.wsspi.channelfw.VirtualConnection;
+import com.ibm.wsspi.http.Http2InboundConnection;
 import com.ibm.wsspi.http.HttpInboundConnection;
 
 /**
@@ -48,8 +52,7 @@ public class H2HandlerImpl implements H2Handler {
             String value = hsrt.getHeader(key);
             headers.put(key, value);
         }
-
-        return hic.isHTTP2UpgradeRequest(headers);
+        return ((Http2InboundConnection)hic).isHTTP2UpgradeRequest(headers);
     }
 
     /**
@@ -57,6 +60,7 @@ public class H2HandlerImpl implements H2Handler {
      */
     @Override
     public void handleRequest(HttpInboundConnection hic, HttpServletRequest request, HttpServletResponse response) {
+        Http2InboundConnection h2ic = (Http2InboundConnection) hic;
         H2UpgradeHandlerWrapper h2uh = null;
         try {
             h2uh = request.upgrade(H2UpgradeHandlerWrapper.class);
@@ -88,7 +92,7 @@ public class H2HandlerImpl implements H2Handler {
             String value = hsrt.getHeader(key);
             headers.put(key, value);
         }
-        hic.handleHTTP2UpgradeRequest(headers);
+        h2ic.handleHTTP2UpgradeRequest(headers);
     }
 
 }

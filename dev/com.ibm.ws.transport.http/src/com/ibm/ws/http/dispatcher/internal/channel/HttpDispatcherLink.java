@@ -45,6 +45,7 @@ import com.ibm.wsspi.channelfw.ConnectionLink;
 import com.ibm.wsspi.channelfw.VirtualConnection;
 import com.ibm.wsspi.channelfw.base.InboundApplicationLink;
 import com.ibm.wsspi.http.EncodingUtils;
+import com.ibm.wsspi.http.Http2InboundConnection;
 import com.ibm.wsspi.http.HttpDateFormat;
 import com.ibm.wsspi.http.HttpOutputStream;
 import com.ibm.wsspi.http.HttpRequest;
@@ -63,7 +64,7 @@ import com.ibm.wsspi.tcpchannel.TCPConnectionContext;
  * Connection link object that the HTTP dispatcher provides to CHFW
  * for an individual connection.
  */
-public class HttpDispatcherLink extends InboundApplicationLink implements HttpInboundConnectionExtended, RequestHelper {
+public class HttpDispatcherLink extends InboundApplicationLink implements HttpInboundConnectionExtended, RequestHelper, Http2InboundConnection {
     /** trace variable */
     private static final TraceComponent tc = Tr.register(HttpDispatcherLink.class);
 

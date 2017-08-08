@@ -41,7 +41,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.ibm.ejs.ras.TraceNLS;
 import com.ibm.websphere.servlet.error.ServletErrorReport;
 import com.ibm.websphere.servlet.event.FilterListenerImpl;
-import com.ibm.ws.http.channel.h2internal.H2UpgradeHandler;
 import com.ibm.ws.managedobject.ManagedObject;
 import com.ibm.ws.webcontainer.WebContainer;
 import com.ibm.ws.webcontainer.collaborator.CollaboratorMetaDataImpl;
@@ -1148,7 +1147,6 @@ public class WebAppFilterManager implements com.ibm.wsspi.webcontainer.filter.We
                                         HttpServletRequest httpRequest = (HttpServletRequest) ServletUtil.unwrapRequest(request, HttpServletRequest.class);                                
                                         HttpServletResponse httpResponse = (HttpServletResponse) ServletUtil.unwrapResponse(response, HttpServletResponse.class);
                                         h2Handler.handleRequest(httpInboundConnection, httpRequest, httpResponse);
-                                        
                                         webApp.setUpgraded();
                                     }
                                 }
