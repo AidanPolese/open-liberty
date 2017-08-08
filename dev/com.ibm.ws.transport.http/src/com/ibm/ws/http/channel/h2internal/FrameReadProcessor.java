@@ -77,11 +77,10 @@ public class FrameReadProcessor {
         // call the stream processor to process this stream. For now, don't return from here until the
         // frame has been fully processed.
         int streamId = currentFrame.getStreamId();
-        if (muxLink.goAwayRcvd && streamId > muxLink.lastStreamToProcess) {
+        if (muxLink.isGoAwayInProgress() && streamId > muxLink.getLastStreamToProcess()) {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, "GOAWAY previously received and the stream ID for the current frame is greater than the ID indicated in the GOAWAY frame");
             }
-//            muxLink.goAway(muxLink.lastStreamToProcess);
             throw new ProtocolException("Stream ID for current frame is greater than the ID indicated in GOAWAY frame");
         }
 
@@ -90,17 +89,14 @@ public class FrameReadProcessor {
         H2StreamProcessor stream = muxLink.getStream(streamId);
 
         if (stream != null && stream.isStreamClosed() && muxLink.significantlyPastCloseTime(streamId)) {
-            //CMM : TODO
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, "Stream found, but it was closed and significantly past the close time");
             }
-            muxLink.lastStreamToProcess = muxLink.highestClientStreamId;
-//            muxLink.goAway(muxLink.highestClientStreamId);
+            muxLink.startProcessingGoAway();
             throw new ProtocolException("Stream significantly past close time");
         }
-        if (stream == null && streamId < muxLink.highestClientStreamId) {
-            muxLink.lastStreamToProcess = muxLink.highestClientStreamId;
-//            muxLink.goAway(muxLink.highestClientStreamId);
+        if (stream == null && streamId < muxLink.getHighestClientStreamId()) {
+            muxLink.startProcessingGoAway();
             throw new ProtocolException("Cannot initialize a stream with an ID lower than one previously created");
         }
 

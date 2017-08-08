@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.h2internal.frames;
 
+import java.util.Arrays;
+
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.FrameReadProcessor;
@@ -132,7 +134,7 @@ public class FramePing extends Frame {
         if (!super.equals(framePingToCompare))
             return false;
 
-        if (this.getPayload() != framePingToCompare.getPayload()) {
+        if (!Arrays.equals(getPayload(), framePingToCompare.getPayload())) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "Payload = opaque data. this.getPayload() = " + this.getPayload()
                              + " framePingToCompare.getPayload() = " + framePingToCompare.getPayload());

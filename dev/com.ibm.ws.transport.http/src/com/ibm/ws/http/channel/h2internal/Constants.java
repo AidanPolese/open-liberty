@@ -57,4 +57,6 @@ public class Constants {
 
     public static final int BIGGEST_31BIT_SIGNED = 0x7FFFFFFF;
     public static final long LONG_31BIT_FILTER = 0xFFFFFFFF80000000L;
+
+    public static final long INITIAL_CLOSE_TIME = 0;
 }

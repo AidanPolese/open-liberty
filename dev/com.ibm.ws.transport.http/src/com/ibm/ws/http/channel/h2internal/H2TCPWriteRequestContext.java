@@ -57,30 +57,20 @@ public class H2TCPWriteRequestContext implements TCPWriteRequestContext {
     @Override
     public long write(long numBytes, int timeout) throws IOException {
 
-        H2StreamProcessor p;
-        p = muxLink.getStreamProcessor(streamID);
-        // WTL: what frame type should write out in this default case?
-        if (p != null)
-            p.writeSync(buffers, numBytes, timeout);
-
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "H2TCPWriteRequestContext.write(long numBytes, int timeout) unexpectedly called, returning 0");
+        }
         return 0;
     }
 
     @Override
     public VirtualConnection write(long numBytes, TCPWriteCompletedCallback callback, boolean forceQueue, int timeout) {
 
-        VirtualConnection vc = null;
-        // assume for now that we don't have to behave in a forceQueue = true way.  So just make this a sync call for now
-
-        try {
-            vc = h2TcpConnectionContext.getVC();
-            write(numBytes, timeout);
-        } catch (IOException x) {
-            callback.error(vc, this, x);
-            return null;
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "H2TCPWriteRequestContext.write(long numBytes, TCPWriteCompletedCallback callback, ...) unexpectedly called, returning null");
         }
 
-        return vc;
+        return null;
 
     }
 
@@ -219,5 +209,35 @@ public class H2TCPWriteRequestContext implements TCPWriteRequestContext {
         }
 
     }
+
+    // Old code, this is not how we do writes to the H2 stream code
+//    @Override
+//    public long write(long numBytes, int timeout) throws IOException {
+//
+//        H2StreamProcessor p;
+//        p = muxLink.getStreamProcessor(streamID);
+//        if (p != null)
+//            p.writeSync(buffers, numBytes, timeout);
+//
+//        return 0;
+//    }
+//
+//    @Override
+//    public VirtualConnection write(long numBytes, TCPWriteCompletedCallback callback, boolean forceQueue, int timeout) {
+//
+//        VirtualConnection vc = null;
+//        // assume for now that we don't have to behave in a forceQueue = true way.  So just make this a sync call for now
+//
+//        try {
+//            vc = h2TcpConnectionContext.getVC();
+//            write(numBytes, timeout);
+//        } catch (IOException x) {
+//            callback.error(vc, this, x);
+//            return null;
+//        }
+//
+//        return vc;
+//
+//    }
 
 }

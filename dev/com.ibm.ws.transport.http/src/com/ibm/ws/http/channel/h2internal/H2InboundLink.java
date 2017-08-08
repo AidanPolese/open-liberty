@@ -11,7 +11,6 @@
 package com.ibm.ws.http.channel.h2internal;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -52,7 +51,7 @@ public class H2InboundLink extends HttpInboundLink {
     private static final TraceComponent tc = Tr.register(H2InboundLink.class, HttpMessages.HTTP_TRACE_NAME, HttpMessages.HTTP_BUNDLE);
 
     public static enum LINK_STATUS {
-        INIT, OPEN, CLOSING, CLOSED, HALF_CLOSED_LOCAL, HALF_CLOSED_REMOTE
+        INIT, OPEN, GOAWAY_IN_PROGRESS, CLOSING, CLOSED
     };
 
     public static enum READ_LINK_STATUS {
@@ -68,12 +67,12 @@ public class H2InboundLink extends HttpInboundLink {
     WRITE_LINK_STATUS writeLinkStatus = WRITE_LINK_STATUS.NOT_WRITING;
     Object linkStatusSync = new Object() {};
 
-    public boolean goAwayRcvd = false;
-    public int lastStreamToProcess = -1; // the last stream we should handle in the event of a GOAWAY
+    private boolean processGoAway = false;
+    private int lastStreamToProcess = -1; // the last stream we should handle in the event of a GOAWAY
 
     // keep track of the highest IDs processed to ensure that stream IDs only increase
-    int highestClientStreamId = 0;
-    int highestLocalStreamId = 0;
+    private int highestClientStreamId = 0;
+    private int highestLocalStreamId = 0;
 
     boolean connection_preface_sent = false; // empty SETTINGS frame has been sent
     boolean connection_preface_string_rcvd = false; // MAGIC string has been received
@@ -100,7 +99,8 @@ public class H2InboundLink extends HttpInboundLink {
 
     ConcurrentHashMap<Integer, H2StreamProcessor> streamTable = new ConcurrentHashMap<Integer, H2StreamProcessor>();
 
-    HashMap<Integer, H2StreamProcessor> closeTable = new HashMap<Integer, H2StreamProcessor>();
+    ConcurrentHashMap<Integer, H2StreamProcessor> closeTable = new ConcurrentHashMap<Integer, H2StreamProcessor>();
+    private static long CLOSE_TABLE_PURGE_TIME = 30 * 1000 * 1000; // 30 seconds converted to nano-seconds
 
     HttpInboundLink initialHttpInboundLink = null;
     VirtualConnection initialVC = null;
@@ -123,6 +123,16 @@ public class H2InboundLink extends HttpInboundLink {
 
     private int readStackDepthCount = 0;
     private final static int READ_STACK_DEPTH_LIMIT = 64;
+
+    private boolean continuationFrameExpected = false;
+
+    public boolean isContinuationExpected() {
+        return continuationFrameExpected;
+    }
+
+    public void setContinuationExpected(boolean expected) {
+        this.continuationFrameExpected = expected;
+    }
 
     public H2InboundLink(HttpInboundChannel channel, VirtualConnection vc, TCPConnectionContext tcc) {
         super(channel, vc);
@@ -159,7 +169,6 @@ public class H2InboundLink extends HttpInboundLink {
         return initialWindowSize;
     }
 
-    // TODO - need to add parent stream ID as input, also priority and exclusive (?)
     public H2StreamProcessor createNewInboundLink(Integer streamID) {
         if ((streamID & 1) == 0) { // even number, server-initialized stream
             if (streamID > highestLocalStreamId) {
@@ -277,10 +286,6 @@ public class H2InboundLink extends HttpInboundLink {
         return true;
     }
 
-    public Object getLinkStateSync() {
-        return linkStatusSync;
-    }
-
     public void startAsyncRead(boolean newFrame) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "startAsyncRead entry; newframe = " + newFrame);
@@ -354,7 +359,7 @@ public class H2InboundLink extends HttpInboundLink {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(tc, "caught a Throwable. log and leave: " + t);
                 }
-                // TODO: handle this better
+                // ASYNC: handle this better
             }
         }
     }
@@ -377,6 +382,7 @@ public class H2InboundLink extends HttpInboundLink {
             }
         }
 
+        // WDW - TODO probably a race condition here with the future timer going off.
         if (closeFuture != null) {
             boolean result = closeFuture.cancel(false);
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -421,8 +427,12 @@ public class H2InboundLink extends HttpInboundLink {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "processRead an error occurred processing a frame: " + e.getErrorString());
             }
-            getStreamProcessor(0).sendGOAWAYFrame(e);
-            goAway(lastStreamToProcess);
+            try {
+                getStreamProcessor(0).sendGOAWAYFrame(e);
+            } catch (ProtocolException x) {
+                // nothing to do here, since we can't even send the GOAWAY frame.
+            }
+
         } finally {
             // we are done processing this read
             synchronized (linkStatusSync) {
@@ -435,42 +445,6 @@ public class H2InboundLink extends HttpInboundLink {
                     // read for a new frame
                     startAsyncRead(readForNewFrame);
 
-                }
-            }
-        }
-    }
-
-    public void processReadError(VirtualConnection vc, TCPReadRequestContext rrc, IOException ioe) {
-
-        boolean readForNewFrame = true;
-
-        // see if we can process it at this time
-        synchronized (linkStatusSync) {
-            if ((writeLinkStatus == WRITE_LINK_STATUS.NOT_WRITING)
-                && (linkStatus != LINK_STATUS.CLOSED)
-                && (linkStatus != LINK_STATUS.CLOSING)) {
-
-                readLinkStatus = READ_LINK_STATUS.PROCESSING_READ;
-            } else {
-                // mark that the write will need to complete this read processing once the write is done
-                readWaitingForCompletion.setReadError(vc, rrc, ioe);
-                return;
-            }
-        }
-
-        try {
-            // TODO: Process Read Error
-        } finally {
-            // we are done processing this read
-            synchronized (linkStatusSync) {
-                readWaitingForCompletion.reset();
-
-                if ((linkStatus != LINK_STATUS.CLOSED)
-                    && (linkStatus != LINK_STATUS.CLOSING)) {
-
-                    readLinkStatus = READ_LINK_STATUS.READ_OUTSTANDING;
-                    // read for a new frame
-                    startAsyncRead(readForNewFrame);
                 }
             }
         }
@@ -675,22 +649,38 @@ public class H2InboundLink extends HttpInboundLink {
     }
 
     public void goAway(int lastStreamId) {
-        goAwayRcvd = true;
+
+        synchronized (linkStatusSync) {
+            linkStatus = LINK_STATUS.GOAWAY_IN_PROGRESS;
+        }
+
         lastStreamToProcess = lastStreamId;
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "goAway received : " + closeFuture + ", last stream to process : " + lastStreamToProcess);
+            Tr.debug(tc, "goAway received : H2InboundLink hc: " + this.hashCode() + " last stream to process : " + lastStreamToProcess);
         }
 
         if (closeFuture != null) {
             boolean isDone = closeFuture.isDone();
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "H2InboundLink goAway cancel done : " + isDone);
+                Tr.debug(tc, "H2InboundLink goAway closeFuture hc: " + closeFuture.hashCode() + " cancel done : " + isDone);
             }
             if (isDone) {
                 triggerLinkClose(connTimeout.vc, connTimeout.e);
             }
+        } else {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "H2InboundLink goAway closeFuture is null");
+            }
         }
+    }
+
+    public boolean isGoAwayInProgress() {
+
+        if (linkStatus == LINK_STATUS.GOAWAY_IN_PROGRESS) {
+            return true;
+        }
+        return false;
     }
 
     /*
@@ -709,7 +699,9 @@ public class H2InboundLink extends HttpInboundLink {
         //If so, look to see if the GoAway frame has been sent
         //If not, trigger a timer and wait to send the GOAWAY frame
         //If so, call close on the TCP Channel
-        boolean shouldClose = true;
+
+        boolean shouldClose = false;
+
         H2StreamProcessor stream;
         for (Integer i : streamTable.keySet()) {
             stream = streamTable.get(i);
@@ -719,52 +711,56 @@ public class H2InboundLink extends HttpInboundLink {
             }
 
             if (stream.myID != 0 && !stream.isHalfClosed() && !stream.isStreamClosed()) {
-                if (lastStreamToProcess > -1 && stream.myID > lastStreamToProcess)
+                if (lastStreamToProcess > -1 && stream.myID > lastStreamToProcess) {
                     continue;
-                shouldClose = false;
-                break;
+                } else {
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                        Tr.debug(tc, "close: Nothing to close at the moment");
+                    }
+                    return;
+                }
             }
         }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "close : " + shouldClose);
-        }
-        if (shouldClose) {
-            if (goAwayRcvd) {
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "close : calling device link close");
-                }
-                //All streams are either closed or in half closed, and we received a GOAWAY frame
-                ConnectionLink deviceLink = getDeviceLink();
-                if (deviceLink != null) {
-                    getDeviceLink().close(initialVC, e);
-                } else {
-                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                        Tr.debug(tc, "close : device link was null, cannot close");
-                    }
-                }
+        // if we have already processed the GOAWAY sequence, then close down the link.  If not, then set a timer that will cause
+        // us to send a GOAWAY after a delay.
+        synchronized (linkStatusSync) {
+            if (linkStatus == LINK_STATUS.GOAWAY_IN_PROGRESS) {
+                shouldClose = true;
+
             } else {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(tc, "close : triggering the wait to close");
                 }
+
                 //All streams are either closed or in half closed, and a GOAWAY frame needs to be sent
                 //Wait the timeout time and then send the GOAWAY frame with the last good stream
 
                 ScheduledExecutorService scheduler = CHFWBundle.getScheduledExecutorService();
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "close : scheduler : " + scheduler + ", timeout : " + config.getH2ConnCloseTimeout());
+                    Tr.debug(tc, "close : scheduler : " + scheduler + " config : " + config);
                 }
                 connTimeout = new H2ConnectionTimeout(inVC, e);
 
                 //Save the future so we can cancel it later on
                 closeFuture = scheduler.schedule(connTimeout, config.getH2ConnCloseTimeout(), TimeUnit.SECONDS);
+            }
+        }
 
+        // do this outside the sync block
+        if (shouldClose) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "close : calling device link close");
+            }
+            //All streams are either closed or in half closed, and we received a GOAWAY frame
+            ConnectionLink deviceLink = getDeviceLink();
+            if (deviceLink != null) {
+                getDeviceLink().close(initialVC, e);
+            } else {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "close : scheduler : " + scheduler + ", timeout : " + config.getH2ConnCloseTimeout());
+                    Tr.debug(tc, "close : device link was null, cannot close");
                 }
             }
-        } else if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "close: Nothing to close at the moment");
         }
 
     }
@@ -824,11 +820,12 @@ public class H2InboundLink extends HttpInboundLink {
 
         if (closeTable.size() >= 512) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "triggerStreamClose : close table size greater than or equal to 512, clearing the table");
+                Tr.debug(tc, "triggerStreamClose : close table size greater than or equal to 512, purge the table of old entries");
             }
-            closeTable.clear();
+            purgeCloseTable();
         }
 
+        streamProcessor.setCloseTime(System.nanoTime());
         closeTable.put(streamProcessor.myID, streamProcessor);
         streamTable.remove(streamProcessor.myID);
     }
@@ -845,18 +842,59 @@ public class H2InboundLink extends HttpInboundLink {
     }
 
     public boolean significantlyPastCloseTime(int streamID) {
-
         if (streamTable.contains(streamID))
             return false;
         if (closeTable.containsKey(streamID)) {
             H2StreamProcessor streamProcessor = closeTable.get(streamID);
-            if (streamProcessor.closeTime + 30000 > System.currentTimeMillis())
-                return true;
-            else
+            if (streamProcessor.getCloseTime() != Constants.INITIAL_CLOSE_TIME) {
+                if (streamProcessor.getCloseTime() + CLOSE_TABLE_PURGE_TIME < System.nanoTime()) {
+                    if (tc.isDebugEnabled()) {
+                        Tr.debug(tc, "Stream ID: " + streamID + " closed and significantly past the close time, close time: " + streamProcessor.getCloseTime()
+                                     + " now: " + System.nanoTime());
+                    }
+                    closeTable.remove(streamID);
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
                 return false;
+            }
         }
 
+        if (tc.isDebugEnabled()) {
+            Tr.debug(tc, "Stream ID: " + streamID + " not in stream or close table");
+        }
         return true;
     }
 
+    public void purgeCloseTable() {
+        long now = System.nanoTime();
+        for (Map.Entry<Integer, H2StreamProcessor> entry : closeTable.entrySet()) {
+            if (entry.getValue().getCloseTime() + CLOSE_TABLE_PURGE_TIME < now) {
+                // old closed stream, so remove
+                closeTable.remove(entry.getKey());
+            }
+        }
+    }
+
+    public int getLastStreamToProcess() {
+        return lastStreamToProcess;
+    }
+
+    public void setLastStreamToProcess(int x) {
+        lastStreamToProcess = x;
+    }
+
+    public int getHighestClientStreamId() {
+        return highestClientStreamId;
+    }
+
+    public void startProcessingGoAway() {
+        processGoAway = true;
+    }
+
+    public boolean isProcessingGoAway() {
+        return processGoAway;
+    }
 }
