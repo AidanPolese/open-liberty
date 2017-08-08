@@ -58,7 +58,7 @@ import com.ibm.wsspi.tcpchannel.TCPConnectionContext;
 
 /**
  * Service context specific to an inbound HTTP message.
- * 
+ *
  */
 public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implements HttpInboundServiceContext {
     /** RAS tracing variable */
@@ -83,7 +83,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
 
     /**
      * Constructor for an HTTP inbound service context object.
-     * 
+     *
      * @param tsc
      * @param link
      * @param vc
@@ -96,7 +96,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
 
     /**
      * Initialize this object.
-     * 
+     *
      * @param tsc
      * @param link
      * @param vc
@@ -193,7 +193,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * When a body is not allowed to be sent on an outgoing message, certain
      * headers need modification -- except for an outgoing Response to a HEAD
      * request.
-     * 
+     *
      * @param msg
      */
     protected void updateBodyLengthHeaders(HttpBaseMessage msg) {
@@ -215,7 +215,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * Skip whitespace found in the input data starting at the given index. It
      * will return an index value that points to the first non-space byte found
      * or end of data if it ran out.
-     * 
+     *
      * @param data
      * @param start
      * @return int
@@ -230,7 +230,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
 
     /**
      * Parse the qvalue out from a stream of data.
-     * 
+     *
      * @param data
      * @param start
      * @return ReturnCodes
@@ -525,7 +525,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
 
     /**
      * Gets the request message associated with this service context.
-     * 
+     *
      * @return HttpRequestMessage
      */
     @Override
@@ -535,7 +535,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
 
     /**
      * Get access to the request message impl for internal use.
-     * 
+     *
      * @return HttpRequestMessageImpl
      */
     protected HttpRequestMessageImpl getRequestImpl() {
@@ -549,7 +549,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
 
     /**
      * Gets the response message associated with this service context.
-     * 
+     *
      * @return HttpResponseMessage
      */
     @Override
@@ -559,7 +559,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
 
     /**
      * Get access to the response message imp for internal usage.
-     * 
+     *
      * @return HttpResponseMessageImpl
      */
     final protected HttpResponseMessageImpl getResponseImpl() {
@@ -571,7 +571,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
 
     /**
      * Set the response object in the service context for usage.
-     * 
+     *
      * @param msg
      * @throws IllegalResponseObjectException
      */
@@ -626,7 +626,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
 
     /**
      * Send the headers for the outgoing response synchronously.
-     * 
+     *
      * @throws IOException -- if a socket exception occurs
      * @throws MessageSentException -- if a finishMessage API was already used
      */
@@ -675,7 +675,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * The boolean bForce parameter allows the caller to force the asynchronous
      * action even if it could be handled immediately. The return
      * code will always be null and the callback always used.
-     * 
+     *
      * @param callback
      * @param bForce
      * @return VirtualConnection
@@ -735,7 +735,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * <p>
      * Note: if headers have not already been sent, then the first call to this
      * method will send the headers.
-     * 
+     *
      * @param body
      * @throws IOException
      *             -- if a socket exception occurs
@@ -772,30 +772,6 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
             setPartialBody(true);
         }
 
-        //Check if it's HTTP/2
-        //Wrap the body buffers in a Frame
-        //Continue sending
-
-//        System.out.println("sendingResponseBody : " + this.getLink());
-//        if (this.getLink() instanceof H2HttpInboundLinkWrap) {
-//            H2HttpInboundLinkWrap link = (H2HttpInboundLinkWrap) this.getLink();
-//
-//            byte[] frameToWrite = link.prepareBody(WsByteBufferUtils.asByteArray(body));
-//            WsByteBuffer buffer = this.allocateBuffer(frameToWrite.length);
-//            buffer.put(frameToWrite);
-//            buffer.flip();
-//
-//            for (WsByteBuffer wsbb : body) {
-//                if (wsbb != null) {
-//                    wsbb.release();
-//                }
-//            }
-//            for (int i = 0; i < body.length; i++) {
-//                body[i] = null;
-//            }
-//
-//            body[0] = buffer;
-//        }
         sendOutgoing(body, getResponseImpl());
     }
 
@@ -817,7 +793,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * The boolean bForce parameter allows the caller to force the asynchronous
      * action even if it could be handled immediately. The return code will always
      * be null and the callback always used.
-     * 
+     *
      * @param body
      * @param callback
      * @param bForce
@@ -865,7 +841,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
     /**
      * Send an array of raw body buffers out synchronously. This method will
      * avoid any body modifications, such as compression or chunked-encoding.
-     * 
+     *
      * @param body
      * @throws IOException
      *             -- if a socket error occurs
@@ -895,7 +871,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * <p>
      * The force parameter allows the caller to force the asynchronous call and to
      * always have the callback used, thus the return code will always be null.
-     * 
+     *
      * @param body
      * @param callback
      * @param bForce
@@ -921,7 +897,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * for correctness. This will return null if the response was valid,
      * otherwise it will return the HttpInvalidMessageException that should be
      * handed off to the application channel above.
-     * 
+     *
      * @return HttpInvalidMessageException (null if valid)
      */
     protected HttpInvalidMessageException checkResponseValidity() {
@@ -948,12 +924,12 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
     /**
      * Method to consolidate the access logging message into one spot. This
      * pulls all the pieces together for the appropriate line to save.
-     * 
+     *
      * Note if the signature of this method is changed, the signature in
      * HttpInboundServiceContextImplLogFinalResponseTransformDescriptor.java
      * needs to be updated. Passed as a parameter to avoid needing to reference
      * the class in getContextInfo.
-     * 
+     *
      */
     protected void logFinalResponse(long numBytesWritten) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -983,7 +959,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * Note: if headers have not already been sent, then the first call to this
      * method will send the headers. If this was a chunked encoded message, then
      * the zero-length chunk is automatically appended.
-     * 
+     *
      * @param body
      *            (last set of buffers to send, null if no body data)
      * @throws IOException
@@ -1061,7 +1037,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * The boolean bForce parameter allows the caller to force the asynchronous
      * action even if it could be handled immediately. The return code will always
      * be null and the callback always used.
-     * 
+     *
      * @param body
      *            (last set of body data, null if no body information)
      * @param callback
@@ -1128,7 +1104,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * method will avoid any body modification, such as compression or chunked
      * encoding and simply send the buffers as-is. If the headers have not
      * been sent yet, then they will be prepended to the input data.
-     * 
+     *
      * @param body
      *            -- null if there is no body data
      * @throws IOException
@@ -1161,7 +1137,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * <p>
      * The force flag allows the caller to force the asynchronous communication
      * such that the callback is always used.
-     * 
+     *
      * @param body
      *            -- null if there is no more body data
      * @param cb
@@ -1186,7 +1162,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
     /**
      * Sends an error code and page back to the client asynchronously and
      * closes the connection.
-     * 
+     *
      * @param error
      * @throws MessageSentException
      */
@@ -1243,7 +1219,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
     /**
      * Finish the send error path by closing the connection with the exception
      * from the HttpError. This is used by the callbacks.
-     * 
+     *
      */
     protected void finishSendError() {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -1266,7 +1242,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
     /**
      * Finish the send error path by closing the connection with the exception
      * from the HttpError.
-     * 
+     *
      * @param e
      */
     protected void finishSendError(Exception e) {
@@ -1287,7 +1263,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * send back an automatic 100 Continue response. Once done, clean up the
      * response message for the application channel above to send the "final"
      * response.
-     * 
+     *
      * @return boolean -- false means an async write is taking place and the
      *         caller cannot continue until that callback is used.
      */
@@ -1351,7 +1327,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * this method should be called once the entire body is successfully read.
      * This will discard those body buffers and then restart the close process
      * now that we're ready to read the next inbound request.
-     * 
+     *
      * @param callClose
      *            (should this method call the close API itself)
      */
@@ -1380,7 +1356,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * <p>
      * Once given a buffer, we keep no record of that buffer. It is the users
      * responsibility to release it.
-     * 
+     *
      * @return WsByteBuffer[]
      * @throws IOException
      *             -- if a socket exceptions happens
@@ -1452,7 +1428,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * <p>
      * Once given a buffer, we keep no record of that buffer. It is the users
      * responsibility to release it.
-     * 
+     *
      * @param callback
      * @param bForce
      * @return VirtualConnection (null if an async read is in progress,
@@ -1545,7 +1521,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * <p>
      * Once given a buffer, we keep no record of that buffer. It is the users
      * responsibility to release it.
-     * 
+     *
      * @return WsByteBuffer
      * @throws IOException
      *             -- if a socket exceptions happens
@@ -1617,7 +1593,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * <p>
      * Once given a buffer, we keep no record of that buffer. It is the users
      * responsibility to release it.
-     * 
+     *
      * @param callback
      * @param bForce
      * @return VirtualConnection (null if an async read is in progress,
@@ -1711,7 +1687,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * <p>
      * The caller is responsible for releasing these buffers when complete as the
      * HTTP Channel does not keep track of them.
-     * 
+     *
      * @return WsByteBuffer
      * @throws IOException
      *             -- if a socket exceptions happens
@@ -1742,7 +1718,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * <p>
      * The caller is responsible for releasing these buffers when complete as the
      * HTTP Channel does not keep track of them.
-     * 
+     *
      * @return WsByteBuffer[]
      * @throws IOException
      *             -- if a socket exceptions happens
@@ -1777,7 +1753,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * <p>
      * The caller is responsible for releasing these buffers when finished with
      * them as the HTTP Channel keeps no reference to them.
-     * 
+     *
      * @param cb
      * @param bForce
      * @return VirtualConnection
@@ -1810,7 +1786,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
      * <p>
      * The caller is responsible for releasing these buffers when finished with
      * them as the HTTP Channel keeps no reference to them.
-     * 
+     *
      * @param cb
      * @param bForce
      * @return VirtualConnection
@@ -1868,7 +1844,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
     /**
      * Query whether or not this particular connection has a "large" message
      * that is over the standard message size limit.
-     * 
+     *
      * @return boolean (false if under the standard limit or if not limited at
      *         all)
      */
@@ -1900,7 +1876,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
 
     /**
      * Query the channel connection link for this service context.
-     * 
+     *
      * @return HttpInboundLink
      */
     final public HttpInboundLink getLink() {
@@ -1981,7 +1957,7 @@ public class HttpInboundServiceContextImpl extends HttpServiceContextImpl implem
     }
 
     /**
-     * Send a HTTP/1.1 101 Switching Protocols in response to a http/2 upgrade request.  The following headers will be added:
+     * Send a HTTP/1.1 101 Switching Protocols in response to a http/2 upgrade request. The following headers will be added:
      *
      * connection: Upgrade, HTTP2-Settings
      * upgrade: h2c

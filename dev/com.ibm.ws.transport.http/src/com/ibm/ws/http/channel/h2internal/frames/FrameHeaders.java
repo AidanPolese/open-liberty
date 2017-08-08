@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.h2internal.frames;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.Constants;
 import com.ibm.ws.http.channel.h2internal.FrameReadProcessor;
 import com.ibm.ws.http.channel.h2internal.FrameTypes;
@@ -343,9 +345,9 @@ public class FrameHeaders extends Frame {
                 retArray[0] = (byte) (0x80 | retArray[0]);
             }
 
-            System.out.println("Indexed Header built array: ");
-            utils.printArray(retArray);
-
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Indexed header built array: " + utils.printArray(retArray));
+            }
             return retArray;
         }
 
@@ -390,8 +392,9 @@ public class FrameHeaders extends Frame {
             System.arraycopy(hArrayLength, 0, retArray, idxArray.length, hArrayLength.length);
             System.arraycopy(hArrayValue, 0, retArray, idxArray.length + hArrayLength.length, hArrayValue.length);
 
-            System.out.println("Literal Header Field with Incremental Indexing built array: ");
-            utils.printArray(retArray);
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Literal Header Field with Incremental Indexing built array: " + utils.printArray(retArray));
+            }
             return retArray;
 
         }
@@ -427,8 +430,10 @@ public class FrameHeaders extends Frame {
             System.arraycopy(hValueLength, 0, retArray, 1 + hNameLength.length + hName.length, hValueLength.length);
             System.arraycopy(hValue, 0, retArray, 1 + hNameLength.length + hName.length + hValueLength.length, hValue.length);
 
-            System.out.println("Literal Header Field without Indexing - New Name  built array: ");
-            utils.printArray(retArray);
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Literal Header Field without Indexing - new Name built array: "
+                             + utils.printArray(retArray));
+            }
             return retArray;
         }
 

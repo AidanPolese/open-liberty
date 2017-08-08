@@ -72,7 +72,7 @@ import com.ibm.wsspi.tcpchannel.TCPWriteRequestContext;
 /**
  * Common code shared between both the Inbound and Outbound HTTP service
  * context classes.
- * 
+ *
  */
 public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDCSelfIntrospectable {
 
@@ -85,7 +85,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     private static final int NO_MORE_DATA = -1;
     /** HEX character list */
     private static final byte[] HEX_BYTES = { (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4', (byte) '5', (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) 'a',
-                                             (byte) 'b', (byte) 'c', (byte) 'd', (byte) 'e', (byte) 'f' };
+                                              (byte) 'b', (byte) 'c', (byte) 'd', (byte) 'e', (byte) 'f' };
     /** Data that gets placed in the chunk trailers */
     protected static final byte[] CHUNK_TRAILER_DATA = { BNFHeaders.CR, BNFHeaders.LF, '0', BNFHeaders.CR, BNFHeaders.LF, BNFHeaders.CR, BNFHeaders.LF };
     /** starting size of the pending buffer array */
@@ -260,7 +260,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Reset the variable on the outoing message sent state to be the default.
-     * 
+     *
      */
     final public void resetMsgSentState() {
         this.msgSentState = STATE_NONE;
@@ -268,7 +268,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Reset the variable on the incoming message parsed state to the default
-     * 
+     *
      */
     final public void resetMsgParsedState() {
         this.msgParsedState = STATE_NONE;
@@ -276,7 +276,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether or not the body has been completed read yet.
-     * 
+     *
      * @return boolean
      */
     final protected boolean isBodyComplete() {
@@ -285,7 +285,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the body complete flag to true when we've finished reading it.
-     * 
+     *
      */
     private void setBodyComplete() {
         this.msgParsedState = STATE_FULL_MESSAGE;
@@ -293,7 +293,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether we're in the middle of sending the message body.
-     * 
+     *
      * @return boolean
      */
     final public boolean isPartialBodySendState() {
@@ -302,7 +302,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether or not the entire outgoing message has been sent already.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -312,7 +312,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the flag to true that indicates this message has been fully sent.
-     * 
+     *
      */
     final protected void setMessageSent() {
         this.msgSentState = STATE_FULL_MESSAGE;
@@ -321,7 +321,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query whether the entire incoming message (headers and body) has
      * been completely read yet.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -352,7 +352,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Returns whether or not the outgoing headers have been sent on this
      * connection.
-     * 
+     *
      * @return boolean
      */
     final public boolean headersSent() {
@@ -361,7 +361,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether the current write call is writing headers.
-     * 
+     *
      * @return boolean
      */
     public boolean writingHeaders() {
@@ -370,7 +370,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the flag that we've sent the entire outgoing headers.
-     * 
+     *
      */
     final protected void setHeadersSent() {
         this.msgSentState = STATE_FULL_HEADERS;
@@ -378,7 +378,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether we've only sent just the headers (no body data).
-     * 
+     *
      * @return boolean
      */
     final public boolean isHeadersSentState() {
@@ -387,7 +387,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether or not the incoming headers have been parsed completely.
-     * 
+     *
      * @return boolean
      */
     final public boolean headersParsed() {
@@ -396,7 +396,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the flag that we've parsed the entire incoming headers.
-     * 
+     *
      */
     final public void setHeadersParsed() {
         this.msgParsedState = STATE_FULL_HEADERS;
@@ -404,7 +404,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Is a buffer ready to get (for async).
-     * 
+     *
      * @return boolean
      */
     protected boolean incomingBuffersReady() {
@@ -413,7 +413,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the readcallback to the one designated by the subclass.
-     * 
+     *
      * @param rc
      */
     final protected void setBodyRC(TCPReadCompletedCallback rc) {
@@ -422,7 +422,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the body read callback.
-     * 
+     *
      * @return TCPReadCompletedCallback
      */
     private TCPReadCompletedCallback getBodyRC() {
@@ -438,7 +438,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * wants to be possibly). Returns false if connection header equals
      * CLOSE and true otherwise. Use the getConnection() or getHeader()
      * APIs for more specific information.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -448,7 +448,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Setter for subclasses to control persistence.
-     * 
+     *
      * @param flag
      */
     final public void setPersistent(boolean flag) {
@@ -457,7 +457,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether this is part of a secure connection or not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -468,7 +468,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Utility method to check whether this service context is part of an
      * inbound connection or not.
-     * 
+     *
      * @return boolean
      */
     abstract public boolean isInboundConnection();
@@ -477,7 +477,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Set the information about the incoming message for the auto-applied
      * decompression algorithm. That this should be set to IDENTITIY if no
      * change will be applied.
-     * 
+     *
      * @param val
      */
     private void setIncomingMsgEncoding(ContentEncodingValues val) {
@@ -491,7 +491,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Set the information about the outgoing message for the auto-applied
      * compression algorithm. This should be set to IDENTITIY if no
      * change will be applied.
-     * 
+     *
      * @param val
      */
     private void setOutgoingMsgEncoding(ContentEncodingValues val) {
@@ -504,7 +504,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query whether or not the outgoing message has an encoding that should be
      * automatically applied to body buffers.
-     * 
+     *
      * @return boolean
      */
     private boolean isOutgoingMsgEncoded() {
@@ -518,7 +518,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * will call the compression methods to encode them. If this is false,
      * which is the default, then the body buffers will be sent out as-is with
      * no compression applied.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -535,7 +535,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * by the caller and apply the zlib compression to them prior to sending
      * them out. It will verify the Content-Encoding header is correctly set
      * to match the encoding.
-     * 
+     *
      * @param flag
      * @return boolean -- true means zlib compression was successfully enabled
      *         and false means it was not (i.e. it is not supported)
@@ -559,7 +559,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Query whether this service context supports the automatic compression
      * of outgoing buffers using the zlib encoding format. If this returns
      * false, then any call to setZlibEncoded() will also return false.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -574,7 +574,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * will call the compression methods to encode them. If this is false,
      * which is the default, then the body buffers will be sent out as-is with
      * no compression applied.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -591,7 +591,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * by the caller and apply the gzip compression to them prior to sending
      * them out. It will verify the Content-Encoding header is correctly set
      * to match the encoding.
-     * 
+     *
      * @param flag
      * @return boolean -- true means gzip compression was successfully enabled
      *         and false means it was not (i.e. it is not supported)
@@ -615,7 +615,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Query whether this service context supports the automatic compression
      * of outgoing buffers using the gzip encoding format. If this returns
      * false, then any call to setGZipEncoded() will also return false.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -630,7 +630,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * will call the compression methods to encode them. If this is false,
      * which is the default, then the body buffers will be sent out as-is with
      * no compression applied.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -647,7 +647,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * by the caller and apply the x-gzip compression to them prior to sending
      * them out. It will verify the Content-Encoding header is correctly set
      * to match the encoding.
-     * 
+     *
      * @param flag
      * @return boolean -- true means x-gzip compression was successfully enabled
      *         and false means it was not (i.e. it is not supported)
@@ -671,7 +671,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Query whether this service context supports the automatic compression
      * of outgoing buffers using the x-gzip encoding format. If this returns
      * false, then any call to setXGZipEncoded() will also return false.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -682,7 +682,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Check whether the current body request was for the raw data or the
      * modified (uncompressed, etc) data.
-     * 
+     *
      * @return boolean
      */
     final protected boolean isRawBody() {
@@ -692,7 +692,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Set the flag on whether the current request is for the raw unedited
      * body data.
-     * 
+     *
      * @param flag
      */
     final protected void setRawBody(boolean flag) {
@@ -701,7 +701,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Check whether the outgoing body is being sent in pieces (chunked).
-     * 
+     *
      * @return boolean
      */
     final public boolean isPartialBody() {
@@ -710,7 +710,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Setter for subclasses to set the partial body flag.
-     * 
+     *
      * @param flag
      */
     final protected void setPartialBody(boolean flag) {
@@ -719,7 +719,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether an outgoing body is valid for this particular message.
-     * 
+     *
      * @return boolean
      */
     final protected boolean isOutgoingBodyValid() {
@@ -728,7 +728,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the flag on whether a body is allowed with the outgoing message.
-     * 
+     *
      * @param flag
      */
     private void setOutgoingBodyValid(boolean flag) {
@@ -737,7 +737,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether this particular read/write is a forced async call.
-     * 
+     *
      * @return boolean
      */
     final protected boolean isForceAsync() {
@@ -746,7 +746,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the flag on whether the next read/write should be forced async.
-     * 
+     *
      * @param flag
      */
     final protected void setForceAsync(boolean flag) {
@@ -756,7 +756,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query whether this service context owns the response message in the
      * connection.
-     * 
+     *
      * @return boolean
      */
     final protected boolean isResponseOwner() {
@@ -766,7 +766,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Set the flag on whether this service context owns the response message
      * or not.
-     * 
+     *
      * @param flag
      */
     final protected void setResponseOwner(boolean flag) {
@@ -775,7 +775,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the local response object value to the input message.
-     * 
+     *
      * @param msg
      */
     final protected void setMyResponse(HttpResponseMessageImpl msg) {
@@ -784,7 +784,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the local response object value.
-     * 
+     *
      * @return HttpResponseMessageImpl
      */
     final protected HttpResponseMessageImpl getMyResponse() {
@@ -794,7 +794,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query whether this service context owns the request message in the
      * connection.
-     * 
+     *
      * @return boolean
      */
     final protected boolean isRequestOwner() {
@@ -804,7 +804,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Set the flag on whether this service context owns the request message
      * or not.
-     * 
+     *
      * @param flag
      */
     final protected void setRequestOwner(boolean flag) {
@@ -813,7 +813,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the local request object value to the input message.
-     * 
+     *
      * @param msg
      */
     final protected void setMyRequest(HttpRequestMessageImpl msg) {
@@ -822,7 +822,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the local request object value.
-     * 
+     *
      * @return HttpRequestMessageImpl
      */
     final protected HttpRequestMessageImpl getMyRequest() {
@@ -858,7 +858,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query the current parsing state variable for reading chunked encoding
      * lengths.
-     * 
+     *
      * @return int
      */
     private int getChunkLengthParsingState() {
@@ -867,7 +867,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the chunk length parsing state variable to the input value.
-     * 
+     *
      * @param val
      */
     private void setChunkLengthParsingState(int val) {
@@ -880,7 +880,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Initialize local variables.
-     * 
+     *
      * @param tsc
      * @param hcc
      */
@@ -924,13 +924,15 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
         try {
             parsingComplete();
         } catch (Exception e) {
-            System.out.println("Exception caught while reinit : " + e);
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Exception caught during reinit: " + e);
+            }
         }
     }
 
     /**
      * Perform necessary cleanup on this object when it is no longer needed.
-     * 
+     *
      */
     public void destroy() {
 
@@ -974,7 +976,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Clear this service context for re-use.
-     * 
+     *
      */
     @Override
     public void clear() {
@@ -1062,7 +1064,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the stored value of the request version of this service context.
-     * 
+     *
      * @return VersionValues
      */
     public VersionValues getRequestVersion() {
@@ -1074,7 +1076,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Get the start time of response in milliseconds
-     * 
+     *
      * @return long
      */
     public long getResponseStartTime() {
@@ -1083,7 +1085,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the stored request version.
-     * 
+     *
      * @param val
      */
     final public void setRequestVersion(VersionValues val) {
@@ -1092,7 +1094,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the stored request method value.
-     * 
+     *
      * @return MethodValues
      */
     public MethodValues getRequestMethod() {
@@ -1104,7 +1106,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Store the request method information.
-     * 
+     *
      * @param val
      */
     final public void setRequestMethod(MethodValues val) {
@@ -1118,7 +1120,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * connection is closed.
      * <p>
      * Input time is expected to be in milliseconds.
-     * 
+     *
      * @param time
      *            (must not be less than HttpChannelConfig.MIN_TIMEOUT)
      * @throws IllegalArgumentException
@@ -1140,7 +1142,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * connection is closed.
      * <p>
      * Input time is expected to be in milliseconds.
-     * 
+     *
      * @param time
      *            (must not be less than HttpChannelConfig.MIN_TIMEOUT)
      * @throws IllegalArgumentException
@@ -1158,7 +1160,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query the current value of the read timeout for incoming message data.
      * The integer returned is the timeout in milliseconds.
-     * 
+     *
      * @return int
      */
     @Override
@@ -1169,7 +1171,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query the current value of the write timeout for outgoing message data.
      * The integer returned is the timeout in milliseconds.
-     * 
+     *
      * @return int
      */
     @Override
@@ -1180,7 +1182,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query the given message to determine how it affects the connection's
      * persistence flag.
-     * 
+     *
      * @param msg
      */
     protected void updatePersistence(HttpBaseMessageImpl msg) {
@@ -1256,7 +1258,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Update the "content-length" vs "chunked encoding" flags for the inbound
      * message by querying the given message headers.
-     * 
+     *
      * @param msg
      */
     private void updateBodyFlags(HttpBaseMessageImpl msg) {
@@ -1311,7 +1313,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * When a body is not allowed to be sent on an outgoing message, certain
      * headers need modification -- except for an outgoing Response to a HEAD
      * request.
-     * 
+     *
      * @param msg
      */
     protected void updateBodyLengthHeaders(HttpBaseMessageImpl msg) {
@@ -1341,13 +1343,13 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
                     Tr.debug(tc, "Status code 1xx or 204 found, not sending content-length");
                 }
             }
-        } //End PI35277      
+        } //End PI35277
     }
 
     /**
      * When the incoming message headers have been fully parsed, we need to
      * figure out if any content encoding is set.
-     * 
+     *
      * @param msg
      */
     private void updateIncomingEncodingFlags(HttpBaseMessageImpl msg) {
@@ -1370,7 +1372,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query whether the incoming message has the chunked transfer-encoding
      * header set.
-     * 
+     *
      * @return boolean
      */
     public boolean isChunkedEncoding() {
@@ -1381,7 +1383,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Set the flag on whether the incoming message body is chunked encoded
      * or not.
-     * 
+     *
      * @param flag
      */
     private void setIsChunkedEncoding(boolean flag) {
@@ -1390,7 +1392,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether the incoming message has the content-length header set.
-     * 
+     *
      * @return boolean
      */
     public boolean isContentLength() {
@@ -1400,7 +1402,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the content-length value for the incoming message.
-     * 
+     *
      * @return int
      */
     final protected long getContentLength() {
@@ -1409,7 +1411,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the local content-length value to the input.
-     * 
+     *
      * @param length
      */
     private void setContentLength(long length) {
@@ -1419,7 +1421,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query whether or not the incoming message could have a body on it as
      * well.
-     * 
+     *
      * @return boolean
      */
     final protected boolean isIncomingBodyValid() {
@@ -1430,7 +1432,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Query whether the incoming message is expected to have a body. This is
      * not quite the same as whether one is allowed, but rather whether one
      * seems to be present.
-     * 
+     *
      * @return boolean
      */
     final protected boolean isIncomingBodyExpected() {
@@ -1440,7 +1442,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Method to grab any existing buffers from the device channel below us
      * and set up for the next access of those buffers.
-     * 
+     *
      * @return boolean (true means buffers were loaded)
      */
     private boolean loadReadBuffers() {
@@ -1462,7 +1464,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Get access to the next read buffer from the device channel. This will
      * return null if no buffer is available.
-     * 
+     *
      * @return WsByteBuffer
      */
     protected WsByteBuffer getNextReadBuffer() {
@@ -1502,7 +1504,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether or not there is ready data available to parse.
-     * 
+     *
      * @return true
      */
     public boolean isReadDataAvailable() {
@@ -1534,7 +1536,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * When about to start a read, check to see whether we have data available
      * or empty space in the current buffer.
-     * 
+     *
      * @param size
      * @return boolean
      */
@@ -1573,7 +1575,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Get access to the current read buffer, but do not increment past it yet.
-     * 
+     *
      * @return WsByteBuffer, null if no buffer is ready
      */
     public WsByteBuffer getReadBuffer() {
@@ -1582,7 +1584,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the current read buffer to the input one.
-     * 
+     *
      * @param buffer
      */
     public void setReadBuffer(WsByteBuffer buffer) {
@@ -1593,7 +1595,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * After a read has completed into the given buffer, this method is used to
      * prepare it for handling of the new data. It will set positions and limits
      * according to the scenario currently running.
-     * 
+     *
      * @param buffer
      */
     public void configurePostReadBuffer(WsByteBuffer buffer) {
@@ -1614,7 +1616,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Using the given buffer, this will configure the service context to pick
      * up with the buffer once the read has finished.
-     * 
+     *
      * @param buffer
      */
     public void configurePreReadBuffer(WsByteBuffer buffer) {
@@ -1641,7 +1643,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether the last read done was a JIT one.
-     * 
+     *
      * @return boolean
      */
     final public boolean isJITRead() {
@@ -1650,7 +1652,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set up the environment for a JIT read of the input size.
-     * 
+     *
      * @param size
      */
     public void setupJITRead(int size) {
@@ -1689,7 +1691,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Clear the array of pending byte buffers.
-     * 
+     *
      */
     private void clearPendingByteBuffers() {
 
@@ -1702,7 +1704,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Get access to the pending buffer list.
-     * 
+     *
      * @return WsByteBuffer[]
      */
     final protected WsByteBuffer[] getPendingBuffers() {
@@ -1711,7 +1713,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the pending buffer list to the input.
-     * 
+     *
      * @param list
      */
     final protected void setPendingBuffers(WsByteBuffer[] list) {
@@ -1720,7 +1722,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the index in the outgoing buffers of the starting position.
-     * 
+     *
      * @return int
      */
     final protected int getPendingStart() {
@@ -1729,7 +1731,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the start point in the outgoing buffers to the input index.
-     * 
+     *
      * @param start
      */
     final protected void setPendingStart(int start) {
@@ -1738,7 +1740,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the index in the outgoing buffers for the "next" empty spot.
-     * 
+     *
      * @return int
      */
     final protected int getPendingStop() {
@@ -1747,7 +1749,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the stop position in the outgoing buffers to the input value.
-     * 
+     *
      * @param stop
      */
     final protected void setPendingStop(int stop) {
@@ -1765,7 +1767,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Add the input number to the running counter of the number of bytes
      * written out on this message.
-     * 
+     *
      * @param num
      */
     final protected void addBytesWritten(long num) {
@@ -1774,7 +1776,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Reset the counter keeping track of the number of bytes written out.
-     * 
+     *
      */
     final protected void resetBytesWritten() {
         this.numBytesWritten = 0;
@@ -1785,7 +1787,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * include any headers parsed so far, plus any knowledge of the body at this
      * time (i.e a Content-Length header was parsed so we know it now, or a
      * chunk block length has been read, etc).
-     * 
+     *
      * @return long
      */
     protected long queryIncomingMsgSize() {
@@ -1795,7 +1797,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Add the specified size to the ongoing counter of number bytes read for
      * the incoming message.
-     * 
+     *
      * @param num
      */
     protected void addToIncomingMsgSize(long num) {
@@ -1805,7 +1807,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Once we've added the input additional bytes to the size of the message,
      * perform any checks necessary.
-     * 
+     *
      * @param addition
      * @throws MessageTooLargeException
      */
@@ -1816,7 +1818,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Grow and copy the existing the pending output list of buffers to the new
      * input size.
-     * 
+     *
      * @param size
      */
     private void growPendingArray(int size) {
@@ -1830,7 +1832,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Add this buffer to the pending byte buffer array.
-     * 
+     *
      * @param wsbb
      */
     private void addToPendingByteBuffer(WsByteBuffer wsbb) {
@@ -1845,7 +1847,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Add the list of outgoing buffers, stopping at the input length of
      * that list.
-     * 
+     *
      * @param list
      * @param length
      */
@@ -1864,7 +1866,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Adds body buffers to the queue to be written...inserts chunk length
      * markers if appropriate.
-     * 
+     *
      * @param wsbb
      * @param msg
      */
@@ -1974,7 +1976,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Format the headers for this object. This adds the header buffers to
      * the list to be written.
-     * 
+     *
      * @param msg
      * @throws IOException
      */
@@ -2130,7 +2132,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Prepare and send just the headers.
-     * 
+     *
      * @param msg
      * @throws IOException
      */
@@ -2148,12 +2150,12 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Prepare and send just the headers.
-     * 
+     *
      * If the write can be done immediately, the VirtualConnection will be
      * returned and the callback will not be used. The caller is responsible
      * for handling that situation in their code. A null return code means
      * that the async write is in progress.
-     * 
+     *
      * @param msg
      * @param wc
      * @return VirtualConnection
@@ -2179,7 +2181,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Query whether the outgoing message body is allowed to be compressed.
      * Default behavior is to allow this; however, subclasses should override
      * this with more detailed logic if required.
-     * 
+     *
      * @return boolean
      */
     protected boolean isCompressionAllowed() {
@@ -2189,7 +2191,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Method to check on whether autocompression is requested for this outgoing
      * message.
-     * 
+     *
      * @param msg
      * @return boolean
      */
@@ -2239,10 +2241,10 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Prepares an outgoing http object and associated buffers for writing.
-     * 
+     *
      * First, it calls the correct methods to add the headers and then the
      * body to the queues to be written.
-     * 
+     *
      * @param wsbb
      * @param msg
      * @throws IOException
@@ -2315,7 +2317,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Prepares the outgoing buffers and possibly the headers and writes them
      * out on the connection synchronously.
-     * 
+     *
      * @param wsbb
      * @param msg
      * @throws IOException
@@ -2331,7 +2333,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * the write can be done immediately, the VirtualConnection will be returned
      * and the callback will not be used. A null return code means that the
      * async write is in progress.
-     * 
+     *
      * @param wsbb
      * @param msg
      * @param wc
@@ -2351,7 +2353,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Send a full message out. If headers have not already been sent, they will
      * be queued in front of the given body buffers, plus the "zero chunk" will
      * be tacked on the end if this is chunked encoding.
-     * 
+     *
      * @param wsbb
      * @param msg
      * @throws IOException
@@ -2359,41 +2361,31 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     final protected void sendFullOutgoing(WsByteBuffer[] wsbb, HttpBaseMessageImpl msg) throws IOException {
         this.isFinalWrite = true;
         prepareOutgoing(wsbb, msg);
-
-        System.out.println("sendFullOutgoing : " + isOutgoingBodyValid() + ", " + wsbb + ", " + this);
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "sendFullOutgoing : " + isOutgoingBodyValid() + ", " + wsbb + ", " + this);
+        }
         if (isOutgoingBodyValid()) {
             HttpInboundServiceContextImpl hisc = null;
             if (wsbb == null && this instanceof HttpInboundServiceContextImpl) {
                 hisc = (HttpInboundServiceContextImpl) this;
             }
-            System.out.println("sendFullOutgoing : " + hisc + ", " + hisc != null ? hisc.getLink() : null);
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "sendFullOutgoing : " + hisc + ", " + hisc != null ? hisc.getLink().toString() : null);
+            }
             if (hisc != null && hisc.getLink() instanceof H2HttpInboundLinkWrap) {
                 H2HttpInboundLinkWrap h2Link = (H2HttpInboundLinkWrap) hisc.getLink();
 
-                System.out.println("sendFullOutgoing : preparing the final write");
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "sendFullOutgoing : preparing the final write");
+                }
 
                 ArrayList<Frame> frameToWrite = h2Link.prepareBody(null, this.isFinalWrite);
 
-                System.out.println("sendFullOutgoing : final write prepared : " + frameToWrite);
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "sendFullOutgoing : final write prepared : " + frameToWrite);
+                }
 
                 framesToWrite.addAll(frameToWrite);
-//                WsByteBuffer buffer = this.allocateBuffer(frameToWrite.length);
-//                buffer.put(frameToWrite);
-//                buffer.flip();
-//                wsbb = new WsByteBuffer[1];
-//                wsbb[0] = buffer;
-//
-//                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-//                    Tr.debug(tc, "formatBody: Adding " + 1 + " app buffers to write queue");
-//                }
-//                addToPendingByteBuffer(wsbb, 1);
-//
-//                // save the amount of data written inside actual body
-////                addBytesWritten(length);
-//
-//                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-//                    Tr.debug(tc, "formatBody: total bytes now : " + getNumBytesWritten());
-//                }
             } else if (msg.isChunkedEncodingSet()) {
                 createEndOfBodyChunk();
             }
@@ -2405,12 +2397,12 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Send the full outgoing asynch with this body, possibly headers, and end
      * of body.
-     * 
+     *
      * If the write can be done immediately, the VirtualConnection will be
      * returned and the callback will not be used. The caller is responsible
      * for handling that situation in their code. A null return code means
      * that the async write is in progress.
-     * 
+     *
      * @param wsbb
      * @param msg
      * @param wc
@@ -2419,7 +2411,9 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      */
     final protected VirtualConnection sendFullOutgoing(WsByteBuffer[] wsbb, HttpBaseMessageImpl msg, TCPWriteCompletedCallback wc) {
         this.isFinalWrite = true;
-        System.out.println("sendFullOutgoing : " + wsbb + ", " + this);
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "sendFullOutgoing : " + wsbb + ", " + this);
+        }
 
         try {
             prepareOutgoing(wsbb, msg);
@@ -2466,7 +2460,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Create and fill in the chunk length header with the given length value.
-     * 
+     *
      * @param length
      * @return WsByteBuffer
      */
@@ -2488,7 +2482,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Create and populate the buffer that is used for the trailing CRLF after
      * a chunk as well as the final 0 chunk marking the end of the message.
-     * 
+     *
      * @return WsByteBuffer
      */
     protected WsByteBuffer createChunkTrailer() {
@@ -2509,7 +2503,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Create the last chunk of the body (the "0" chunk) and add any trailer
      * header information that might be present.
-     * 
+     *
      */
     private void createEndOfBodyChunk() {
 
@@ -2572,7 +2566,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Convert the outgoing trailers, if any exist, to one or more <code>WsByteBuffer</code> objects.
-     * 
+     *
      * @return the trailers as an array of <code>WsByteBuffer</code> objects. NULL
      *         will be returned if no trailers exist and/or
      *         need to be marshalled.
@@ -2610,7 +2604,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * the immediate write situation. If the write is actually being
      * performed asynchronously, then null will be returned and the
      * callback will be called when the write is complete.
-     * 
+     *
      * @param callback
      * @return VirtualConnection - actual VC if write was performed
      *         synchronously, null if it is being done asynchronously
@@ -2642,7 +2636,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Write out all the buffers synchronously.
-     * 
+     *
      * @throws IOException
      */
     private void synchWrite() throws IOException {
@@ -2698,7 +2692,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Log the z/os legacy error message if appropriate.
-     * 
+     *
      */
     public void logLegacyMessage() {
         // 366860 - nothing in the base class
@@ -2706,7 +2700,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Collect all the buffers that need to be written out this call.
-     * 
+     *
      * @return WsByteBuffer[] (null if there are no buffers)
      */
     protected WsByteBuffer[] getBuffList() {
@@ -2724,7 +2718,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query whether the conn link object allows a reconnect and rewrite of
      * data if a socket exception happens.
-     * 
+     *
      * @return boolean
      */
     protected abstract boolean reconnectAllowed();
@@ -2733,14 +2727,14 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Provide the message currently being parsed. This is so that the base
      * servicecontext can have generic parsing code, since it does not know
      * whether it is the request or response being parsed.
-     * 
+     *
      * @return HttpBaseMessageImpl
      */
     protected abstract HttpBaseMessageImpl getMessageBeingParsed();
 
     /**
      * Query the message that is being sent out in this connection.
-     * 
+     *
      * @return HttpBaseMessageImpl
      */
     protected abstract HttpBaseMessageImpl getMessageBeingSent();
@@ -2753,7 +2747,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * then save any remaining buffers back onto the TCP read SC for any
      * later reads against the message body. The buffer where the headers end
      * is now the currentReadBB so do not put that back on the SC.
-     * 
+     *
      * @return boolean (true means complete, false if need more data)
      * @throws Exception
      */
@@ -2819,7 +2813,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Once the parsing of the incoming message headers has completed, this
      * method is used to implement any special case logic at that point.
-     * 
+     *
      * @throws Exception
      */
     protected void parsingComplete() throws Exception {
@@ -2829,7 +2823,6 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
         updatePersistence(msg);
         updateBodyFlags(msg);
         updateIncomingEncodingFlags(msg);
-        // getMessageBeingParsed().resetBuffersIndex();
         if (getHttpConfig().getDebugLog().isEnabled(DebugLog.Level.DEBUG)) {
             getHttpConfig().getDebugLog().log(DebugLog.Level.DEBUG, HttpMessages.MSG_PARSE_FINISHED, this);
         }
@@ -2838,7 +2831,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Method to consolidate the read buffer handling when starting reads for
      * a response message.
-     * 
+     *
      * @param size
      * @param bAllocate
      * @return boolean (is data available right now)
@@ -2881,7 +2874,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Reset variables related to parsing an incoming message.
-     * 
+     *
      */
     public void resetRead() {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -2907,7 +2900,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Dumps the debug information needed to determine the cause of
      * the failure.
-     * 
+     *
      * @return String: The FFDC dump information used for diagnostics/debugging
      */
     @Override
@@ -2941,7 +2934,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the application side callback value.
-     * 
+     *
      * @return InterChannelCallback
      */
     final public InterChannelCallback getAppWriteCallback() {
@@ -2950,7 +2943,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the application side read callback.
-     * 
+     *
      * @return InterChannelCallback
      */
     final public InterChannelCallback getAppReadCallback() {
@@ -2959,7 +2952,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the application side write callback.
-     * 
+     *
      * @param cb
      */
     final protected void setAppWriteCallback(InterChannelCallback cb) {
@@ -2968,7 +2961,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the application side read callback.
-     * 
+     *
      * @param cb
      */
     final protected void setAppReadCallback(InterChannelCallback cb) {
@@ -2977,14 +2970,14 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the HTTP object factory.
-     * 
+     *
      * @return HttpObjectFactory
      */
     public abstract HttpObjectFactory getObjectFactory();
 
     /**
      * Set the channel configuration object to the input value.
-     * 
+     *
      * @param hcc
      */
     final public void setHttpConfig(HttpChannelConfig hcc) {
@@ -2993,7 +2986,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the channel config object.
-     * 
+     *
      * @return HttpChannelConfig
      */
     final public HttpChannelConfig getHttpConfig() {
@@ -3002,7 +2995,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the TCP service context value.
-     * 
+     *
      * @return TCPConnectionContext
      */
     final public TCPConnectionContext getTSC() {
@@ -3011,7 +3004,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Provide access to the VirtualConnection object on this connection.
-     * 
+     *
      * @return VirtualConnectcion
      */
     final public VirtualConnection getVC() {
@@ -3020,7 +3013,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the VirtualConnection for this connection to the input object.
-     * 
+     *
      * @param vc
      */
     final protected void setVC(VirtualConnection vc) {
@@ -3030,7 +3023,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Get a byte array representation of a chunked length...as stolen from the
      * old internal http transport.
-     * 
+     *
      * @param length
      * @return byte[] -- representation of the chunk length in bytes
      */
@@ -3059,7 +3052,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Allocate a new buffer based on the configuration. This buffer is
      * not stored immediately on the "free later" list, the caller is
      * expected to handle the buffer release.
-     * 
+     *
      * @param size
      * @return WsByteBuffer
      */
@@ -3070,7 +3063,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Allocate a buffer according to the requested input size.
-     * 
+     *
      * @param size
      * @return WsByteBuffer
      */
@@ -3082,7 +3075,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the length of data that we need to read to the input value.
-     * 
+     *
      * @param len
      */
     private void setDataLength(long len) {
@@ -3091,7 +3084,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query the remaining data length to read.
-     * 
+     *
      * @return int (0 if done, -1 if not yet set)
      */
     private long getDataLength() {
@@ -3101,7 +3094,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Utility method to determine if trailer headers are in this buffer and
      * need to be parsed out.
-     * 
+     *
      * @return boolean
      * @throws IllegalHttpBodyException
      */
@@ -3163,7 +3156,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Parse past the CRLF trailing after a single chunk from the HTTP body.
-     * 
+     *
      * @param excess
      * @throws IllegalHttpBodyException
      *             (if the CRLF is invalid or missing)
@@ -3202,7 +3195,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Configure the global target body length marker based on the incoming
      * message body type.
-     * 
+     *
      * @param msg
      * @param async
      * @return boolean (true means async read in progress)
@@ -3298,7 +3291,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Method to read the chunk length for a raw buffer.
-     * 
+     *
      * @param msg
      * @param async
      * @return boolean (whether async read is going on in the background)
@@ -3381,7 +3374,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Method to read a buffer's worth of raw chunked encoded data.
-     * 
+     *
      * @param msg
      * @param async
      * @return boolean (whether an async read is going on)
@@ -3524,7 +3517,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Method to read a single buffer of data from the body of the incoming
      * message. This handles both chunked-encoding and content-length bodies.
-     * 
+     *
      * @param msg
      * @param async
      * @return boolean (true means an async read is in progress)
@@ -3641,7 +3634,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * boolean flag, with true meaning that an asynch read is in progress
      * (come back later) or false otherwise (we have a buffer in storage or
      * there was nothing to read).
-     * 
+     *
      * @param msg
      * @param async
      * @return boolean (true if asynch read in progress, false otherwise)
@@ -3713,7 +3706,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Method to actually start the read of the buffers based on identifiers
      * such as content-length, chunked encoding, etc.
-     * 
+     *
      * @param msg
      * @param async
      * @return boolean (whether an async read is in progress or not)
@@ -3782,7 +3775,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * should send the HTTP 400 "Bad Request" error back. When reading the
      * response however, the body can be delimited by the socket closing
      * thus the Outbound ServiceContext must override this method.
-     * 
+     *
      * @param async
      * @return boolean (is there more data to read?)
      * @throws IllegalHttpBodyException
@@ -3804,7 +3797,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Move the buffers from temporary storage over to main return storage. It
      * will unencode buffers if necessary.
-     * 
+     *
      * @return boolean - is there output to return to app channels?
      * @throws IllegalHttpBodyException
      *             if decryption fails
@@ -3875,7 +3868,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Read an entire content-length delimited body. This will stop early if
      * an asynchronous read is being done in the background though.
-     * 
+     *
      * @param msg
      * @param async
      * @return boolean (true means async read in progress)
@@ -3908,7 +3901,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Method to read the entire body when the body end is marked by the socket
      * closing. This will strip any encoding as well.
-     * 
+     *
      * @param async
      * @return boolean
      * @throws IllegalHttpBodyException
@@ -3937,7 +3930,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Method to read one single chunk from a body. It will gather all the
      * buffers, decode them if there is encoding, and place them in storage.
-     * 
+     *
      * @param msg
      * @param async
      * @return boolean
@@ -3983,7 +3976,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * When reading the zero chunk marking the end of the chunked body,
      * this method is then called to parse the trailer headers.
-     * 
+     *
      * @param msg
      * @param async
      * @return boolean (whether an async read is in progress)
@@ -4038,7 +4031,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Take the given character value and add it to the current "length" being
      * calculated.
-     * 
+     *
      * @param ch
      * @param inLen
      * @return int
@@ -4074,7 +4067,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query what the current value is for the saved chunk length.
-     * 
+     *
      * @return int
      */
     private int getSavedChunkLength() {
@@ -4083,7 +4076,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the saved chunk length value to the input number.
-     * 
+     *
      * @param length
      */
     private void setSavedChunkLength(int length) {
@@ -4094,7 +4087,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Read and parse the chunk length marker from the input WsByteBuffer. If
      * the buffer runs out of data, then this will save the "currently parsed"
      * length and build on that the next time through.
-     * 
+     *
      * @param buff
      * @return int (NOT_ENOUGH_DATA if we ran out of data)
      * @throws IllegalHttpBodyException
@@ -4187,7 +4180,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
         //PI33453 Begin
         if (HttpInternalConstants.PARSING_END_OF_MESSAGE == getChunkLengthParsingState()) {
-            // see if there are additional bytes available. We've already hit one CRLF 
+            // see if there are additional bytes available. We've already hit one CRLF
             // sequence after the 0 byte chunk, so we're just looking to see if there is
             // any more data available.
             if (position < limit) {
@@ -4195,7 +4188,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
                 setSavedChunkLength(HeaderStorage.NOTSET);
                 return length;
             }
-            // if data is not available then go to the layer below us to see if 
+            // if data is not available then go to the layer below us to see if
             // anything new has been provided
 
         }
@@ -4211,7 +4204,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query what the stored limit value is.
-     * 
+     *
      * @return int
      */
     final public int getOldLimit() {
@@ -4220,7 +4213,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the stored limit value to the input number.
-     * 
+     *
      * @param limit
      */
     final public void setOldLimit(int limit) {
@@ -4229,7 +4222,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query how much data was requested to be read.
-     * 
+     *
      * @return int
      */
     private int getAmountBeingRead() {
@@ -4238,7 +4231,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the global variable of the amount requested to be read.
-     * 
+     *
      * @param amount
      */
     private void setAmountBeingRead(int amount) {
@@ -4249,7 +4242,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * When a read is necessary, this method will read into the current
      * read bytebuffer if there is space, or it will allocate a new buffer
      * and read into that.
-     * 
+     *
      * @param amount
      * @param async
      * @param throwException
@@ -4373,7 +4366,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Empty out the array of buffers in storage.
-     * 
+     *
      */
     protected void clearStorage() {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -4390,7 +4383,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Empty out the array of temporary buffers in storage.
-     * 
+     *
      */
     protected void clearTempStorage() {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -4407,7 +4400,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Print out the storage buffers for debugging.
-     * 
+     *
      * @param buffers
      */
     final protected void debugPrintStorage(WsByteBuffer[] buffers) {
@@ -4422,7 +4415,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Method to pull all the non-null buffers out of storage and return them
      * in a clean array.
-     * 
+     *
      * @return WsByteBuffer[] (null if no buffers ready)
      */
     protected WsByteBuffer[] getAllStorageBuffers() {
@@ -4439,7 +4432,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Method to access all the non-null buffers in storage and return them
      * in a clean array. This does not remove them from storage like the
      * get API version does.
-     * 
+     *
      * @return WsByteBuffer[] (null if no buffers ready)
      */
     protected WsByteBuffer[] queryAllStorageBuffers() {
@@ -4477,7 +4470,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Setup the compression handler for the outgoing body if one is required.
-     * 
+     *
      * @param msg
      */
     private void setupCompressionHandler(HttpBaseMessageImpl msg) {
@@ -4539,7 +4532,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * to returning one single buffer). The buffer array storage handles
      * keeping those possibilities contained. Any buffer present in this
      * storage has been parsed and already unencoded if necessary.
-     * 
+     *
      * @return WsByteBuffer (null if no buffer ready)
      */
     protected WsByteBuffer getNextBuffer() {
@@ -4555,7 +4548,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * temporary array storage. This is used when the array of buffers must
      * be decoded prior to returning any of them to callers of the
      * getBodyBuffer(s) methods.
-     * 
+     *
      * @param buffer
      */
     protected void storeTempBuffer(WsByteBuffer buffer) {
@@ -4571,7 +4564,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Store a single buffer into main return storage.
-     * 
+     *
      * @param buffer
      */
     private void storeBuffer(WsByteBuffer buffer) {
@@ -4582,7 +4575,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * For asynchronous reads, we need some way of knowing whether we're
      * doing a read for multiple buffers (getBodyBuffersAsynch) or just
      * one single buffer (getBodyBufferAsynch).
-     * 
+     *
      * @param bRead
      */
     final protected void setMultiRead(boolean bRead) {
@@ -4591,7 +4584,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Query whether we're doing an asynch read for one or multiple buffers.
-     * 
+     *
      * @return boolean (true=multiple buffer read)
      */
     private boolean isMultiRead() {
@@ -4601,7 +4594,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * This continues the body processing code after an asynchronous read
      * has completed.
-     * 
+     *
      */
     final public void continueRead() {
 
@@ -4651,7 +4644,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query the SSL context information. This returns null if there is no
      * SSL information.
-     * 
+     *
      * @return SSLConnectionContext
      */
     @Override
@@ -4739,7 +4732,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Access the read cancel wrapper object.
-     * 
+     *
      * @return CancelIOWrapper
      */
     public CancelIOWrapper getReadCancel() {
@@ -4751,7 +4744,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Access the write cancel wrapper object.
-     * 
+     *
      * @return CancelIOWrapper
      */
     public CancelIOWrapper getWriteCancel() {
@@ -4764,7 +4757,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Try to set the read-cancel attempt to success. This may fail if it is
      * being attempted too late (already completed for example)
-     * 
+     *
      * @return boolean on whether the state change worked
      */
     public boolean markReadCancelSuccess() {
@@ -4785,7 +4778,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Try to set the write-cancel attempt to success. This may fail if it is
      * being attempted too late (already completed for example).
-     * 
+     *
      * @return boolean on whether the state change worked
      */
     public boolean markWriteCancelSuccess() {
@@ -4810,7 +4803,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Load any appropriate body for this HTTP error scenario.
-     * 
+     *
      * @param error
      * @param request
      * @param response
@@ -4862,7 +4855,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Returns the address of the remote client that created this inbound
      * request.
-     * 
+     *
      * @return InetAddress
      */
     @Override
@@ -4872,7 +4865,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the remote address value.
-     * 
+     *
      * @param addr
      */
     final public void setRemoteAddr(InetAddress addr) {
@@ -4883,7 +4876,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
      * Returns the local address that is the target of the request. This will
      * come from the Host header if present, otherwise from the requested URL if
      * present, or from the TCP socket itself if nothing else exists.
-     * 
+     *
      * @return InetAddress
      */
     @Override
@@ -4893,7 +4886,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the local address variable.
-     * 
+     *
      * @param addr
      */
     final public void setLocalAddr(InetAddress addr) {
@@ -4903,7 +4896,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Query the value of the port at the remote end of the connection, relative
      * to this server.
-     * 
+     *
      * @return int
      */
     @Override
@@ -4913,7 +4906,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the remote port variable.
-     * 
+     *
      * @param port
      */
     final public void setRemotePort(int port) {
@@ -4923,7 +4916,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Returns the local server port (9080, etc) that was the target of the
      * request.
-     * 
+     *
      * @return int
      */
     @Override
@@ -4933,7 +4926,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Set the local port variable.
-     * 
+     *
      * @param port
      */
     final public void setLocalPort(int port) {
@@ -4943,7 +4936,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     /**
      * Take the last allocated buffer off of the "free later" list and give it
      * to the caller.
-     * 
+     *
      * @return WsByteBuffer (null if there is no buffer)
      */
     public WsByteBuffer returnLastBuffer() {
@@ -4968,7 +4961,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Check if the last buffer contains headers. If not, then it can be released.
-     * 
+     *
      * @return boolean - true if last buffer contains headers
      */
     protected boolean lastBufferContainsHeaders() {
@@ -4979,7 +4972,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Store this buffer on the allocated list to free later.
-     * 
+     *
      * @param buffer
      */
     public void storeAllocatedBuffer(WsByteBuffer buffer) {
@@ -4988,7 +4981,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
     /**
      * Store a list of new buffers onto the allocated list to free later.
-     * 
+     *
      * @param list
      */
     public void storeAllocatedBuffers(WsByteBuffer[] list) {

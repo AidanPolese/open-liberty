@@ -12,6 +12,8 @@ package com.ibm.ws.http.channel.h2internal.frames;
 
 import java.util.Arrays;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.FrameReadProcessor;
 import com.ibm.ws.http.channel.h2internal.FrameTypes;
 import com.ibm.ws.http.channel.h2internal.H2ConnectionSettings;
@@ -93,7 +95,9 @@ public class FrameData extends Frame {
                 // The padded field is present; set the paddedLength to represent the actual size of the data we want
                 paddedLength -= frp.grabNextByte();
                 payloadIndex++;
-                System.out.println("PADDED_FLAG ON. paddedLength = " + paddedLength);
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "PADDED_FLAG on. paddedLength = " + paddedLength);
+                }
             }
 
             // grab all the buffered data

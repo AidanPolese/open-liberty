@@ -10,16 +10,23 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.h2internal.frames;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.FrameReadProcessor;
 import com.ibm.ws.http.channel.h2internal.FrameTypes;
 import com.ibm.ws.http.channel.h2internal.H2ConnectionSettings;
 import com.ibm.ws.http.channel.h2internal.exceptions.FrameSizeException;
 import com.ibm.ws.http.channel.h2internal.exceptions.Http2Exception;
+import com.ibm.ws.http.channel.internal.HttpMessages;
+import com.ibm.ws.http.channel.internal.HttpServiceContextImpl;
 
 /**
  *
  */
 public abstract class Frame {
+
+    /** RAS tracing variable */
+    protected static final TraceComponent tc = Tr.register(HttpServiceContextImpl.class, HttpMessages.HTTP_TRACE_NAME, HttpMessages.HTTP_BUNDLE);
 
     protected int streamId;
     protected int payloadLength;
@@ -188,45 +195,58 @@ public abstract class Frame {
 
         Frame frameToCompare = (Frame) object;
 
-        //getFlags does not work when you set flags in the object... I will be checking each flag individually too avoid that issue
-//        if (this.getFrameFlags() != frameToCompare.getFrameFlags()) {
-//            System.out.println("this.getFrameFlags() = " + this.getFrameFlags() + " frameToCompare.getFrameFlags() = " + frameToCompare.getFrameFlags());
-//            return false;
-//        }
         if (this.flagAckSet() != frameToCompare.flagAckSet()) {
-            System.out.println("this.flagAckSet() = " + this.flagAckSet() + " frameToCompare.flagAckSet() = " + frameToCompare.flagAckSet());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.flagAckSet() = " + this.flagAckSet() + " frameToCompare.flagAckSet() = " + frameToCompare.flagAckSet());
+            }
             return false;
         }
         if (this.flagPrioritySet() != frameToCompare.flagPrioritySet()) {
-            System.out.println("this.flagPrioritySet() = " + this.flagPrioritySet() + " frameToCompare.flagPrioritySet() = " + frameToCompare.flagPrioritySet());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.flagPrioritySet() = " + this.flagPrioritySet() + " frameToCompare.flagPrioritySet() = " + frameToCompare.flagPrioritySet());
+            }
             return false;
         }
         if (this.flagEndStreamSet() != frameToCompare.flagEndStreamSet()) {
-            System.out.println("this.flagEndStreamSet() = " + this.flagEndStreamSet() + " frameToCompare.flagEndStreamSet() = " + frameToCompare.flagEndStreamSet());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.flagEndStreamSet() = " + this.flagEndStreamSet() + " frameToCompare.flagEndStreamSet() = " + frameToCompare.flagEndStreamSet());
+            }
             return false;
         }
         if (this.flagEndHeadersSet() != frameToCompare.flagEndHeadersSet()) {
-            System.out.println("this.flagEndHeadersSet() = " + this.flagEndHeadersSet() + " frameToCompare.flagEndHeadersSet() = " + frameToCompare.flagEndHeadersSet());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.flagEndHeadersSet() = " + this.flagEndHeadersSet() + " frameToCompare.flagEndHeadersSet() = " + frameToCompare.flagEndHeadersSet());
+            }
             return false;
         }
         if (this.flagPaddedSet() != frameToCompare.flagPaddedSet()) {
-            System.out.println("this.flagPaddedSet() = " + this.flagPaddedSet() + " frameToCompare.flagPaddedSet() = " + frameToCompare.flagPaddedSet());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.flagPaddedSet() = " + this.flagPaddedSet() + " frameToCompare.flagPaddedSet() = " + frameToCompare.flagPaddedSet());
+            }
             return false;
         }
         if (this.getFrameType() != frameToCompare.getFrameType()) {
-            System.out.println("getFrameType is false");
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "getFrameType is false");
+            }
             return false;
         }
         if (this.getFrameReserveBit() != frameToCompare.getFrameReserveBit()) {
-            System.out.println("getFrameReserveBit is false");
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "getFrameReserveBit is false");
+            }
             return false;
         }
         if (this.getPayloadLength() != frameToCompare.getPayloadLength()) {
-            System.out.println("getPayloadLength is false");
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "getPayloadLength is false");
+            }
             return false;
         }
         if (this.getStreamId() != frameToCompare.getStreamId()) {
-            System.out.println("getStreamId is false");
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "getStreamId is false");
+            }
             return false;
         }
 

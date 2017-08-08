@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.h2internal.frames;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.FrameReadProcessor;
 import com.ibm.ws.http.channel.h2internal.FrameTypes;
 import com.ibm.ws.http.channel.h2internal.H2ConnectionSettings;
@@ -119,7 +121,9 @@ public class FramePing extends Frame {
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof FramePing)) {
-            System.out.println("Object is not FrameSettings");
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Object is not a FramePing");
+            }
             return false;
         }
 
@@ -129,7 +133,10 @@ public class FramePing extends Frame {
             return false;
 
         if (this.getPayload() != framePingToCompare.getPayload()) {
-            System.out.println("Payload = opaque data. this.getPayload() = " + this.getPayload() + " framePingToCompare.getPayload() = " + framePingToCompare.getPayload());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Payload = opaque data. this.getPayload() = " + this.getPayload()
+                             + " framePingToCompare.getPayload() = " + framePingToCompare.getPayload());
+            }
             return false;
         }
 

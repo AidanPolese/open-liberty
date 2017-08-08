@@ -29,6 +29,7 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.http.channel.h2internal.H2InboundLink;
+import com.ibm.ws.http.channel.h2internal.exceptions.ProtocolException;
 import com.ibm.ws.http.channel.internal.HttpChannelConfig;
 import com.ibm.ws.http.channel.internal.inbound.HttpInboundChannel;
 import com.ibm.ws.http.channel.internal.inbound.HttpInboundLink;
@@ -115,7 +116,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
 
     /**
      * Constructor.
-     * 
+     *
      */
     public HttpDispatcherLink() {
         // nothing
@@ -123,7 +124,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
 
     /**
      * Initialize this link with the input information.
-     * 
+     *
      * @param inVC
      * @param channel
      */
@@ -172,7 +173,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
 
                 synchronized (this) {
                     //This sync block prevents both closes from happening, if they are happening at the same time.
-                    //This will check the new variable we have added to the VC during the WebConnection close. 
+                    //This will check the new variable we have added to the VC during the WebConnection close.
                     //If both the WebConnection and WebContainer close happen at the same time then only one will happen.
                     //The first one will come in, check this new variable, then set it to false. The false will cause
                     //the other close to not happen.
@@ -192,8 +193,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
                     return;
                 }
             }
-        }
-        else {
+        } else {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "Connection must be already closed since vc is null");
             }
@@ -285,7 +285,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
         // Initialize the request body / get the message
         this.request.init(this.isc);
 
-        // Try to find a virtual host for the requested host/port.. 
+        // Try to find a virtual host for the requested host/port..
         VirtualHostImpl vhost = VirtualHostMap.findVirtualHost(this.myChannel.getEndpointPid(),
                                                                this);
         if (vhost == null) {
@@ -346,7 +346,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
         if (workClassifier != null) {
             // Obtain the Executor from the WorkClassifier
             // TODO: the WLM classifier uses getVirtualHost and getVirtualPort, which may have
-            // a different answer than what was used to find the virtual host (based on plugin headers, 
+            // a different answer than what was used to find the virtual host (based on plugin headers,
             // and whether or not the Host header, etc. should be used)
             // Does it matter?
             Executor classifyExecutor = workClassifier.classify(this.request, this);
@@ -395,7 +395,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.wsspi.http.HttpInboundConnection#getHttpInboundLink()
      */
     @Override
@@ -522,7 +522,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
 
     /**
      * Send the given error status code on the connection and close the socket.
-     * 
+     *
      * @param code
      * @param failure
      */
@@ -532,7 +532,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
 
     /**
      * Send the given error status code on the connection and close the socket.
-     * 
+     *
      * @param code
      * @param failure
      * @param message/body
@@ -558,16 +558,16 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
 
         HttpOutputStream body = finalResponse.getBody();
 
-        // Only create this default/bare-bones page if there is no buffered content already.. 
+        // Only create this default/bare-bones page if there is no buffered content already..
         if (code.isBodyAllowed() && !body.hasBufferedContent()) {
             try {
                 final byte bits[][] = new byte[][] { "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">".getBytes(),
-                                                    "<html><head><title>".getBytes(),
-                                                    "</title></head><body><h1>".getBytes(),
-                                                    "</h1><p>".getBytes(),
-                                                    "</p><hr /><address>".getBytes(),
-                                                    "</address></body></html>".getBytes(),
-                                                    "</p></body></html>".getBytes() };
+                                                     "<html><head><title>".getBytes(),
+                                                     "</title></head><body><h1>".getBytes(),
+                                                     "</h1><p>".getBytes(),
+                                                     "</p><hr /><address>".getBytes(),
+                                                     "</address></body></html>".getBytes(),
+                                                     "</p></body></html>".getBytes() };
 
                 final byte[] at = " at ".getBytes();
                 final byte[] port = " port ".getBytes();
@@ -583,7 +583,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
 
                 msg = code.getDefaultPhraseBytes();
                 body.write(msg); // - status phrase as header
-                body.write(bits[3]); // h1, p 
+                body.write(bits[3]); // h1, p
 
                 if (detail != null) {
                     msg = detail.getBytes();
@@ -591,19 +591,19 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
                 }
 
                 if (addAddress) {
-                    body.write(bits[4]); // p, address 
+                    body.write(bits[4]); // p, address
 
                     HttpChannelConfig cfg = finalSc.getHttpConfig();
                     // Only fill in the name of this server if configured to do so (true by default)
                     byte[] name = cfg.getServerHeaderValue();
-                    if (!cfg.removeServerHeader() && name != null) { //PM87031 , servername is null by default                        
+                    if (!cfg.removeServerHeader() && name != null) { //PM87031 , servername is null by default
                         body.write(name);
                         body.write(at);
                     }
                     // show the host & port that were requested (potentially based on Host header)
-                    // if the resource is not found, given that some translation may happen based on 
-                    // interjection of proxy headers, there has to be some way of showing what 
-                    // ended up being requested.. 
+                    // if the resource is not found, given that some translation may happen based on
+                    // interjection of proxy headers, there has to be some way of showing what
+                    // ended up being requested..
                     msg = getRequestedHost().getBytes();
                     body.write(msg);
                     body.write(port);
@@ -621,7 +621,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
 
     /**
      * Set the HTTP response properties.
-     * 
+     *
      * @param rMsg The HttpResponseMessage to set.
      * @param code The StatusCode to return.
      */
@@ -639,16 +639,16 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
      * Returns the host name of the server to which the request was sent.
      * It is the value of the part before ":" in the Host header value, if any,
      * or the resolved server name, or the server IP address.
-     * 
+     *
      * @param request the inbound request
      * @param remoteHostAddr the requesting client IP address
      */
     @Override
     public String getRequestedHost() {
-        // Get the requested host: this takes into consideration whether or not we should trust the 
-        // contents of Host and $WS* headers.. 
+        // Get the requested host: this takes into consideration whether or not we should trust the
+        // contents of Host and $WS* headers..
         if (useTrustedHeaders()) {
-            // If the plugin provided a header, prefer that.. 
+            // If the plugin provided a header, prefer that..
             String pluginHost = request.getHeader(HttpHeaderKeys.HDR_$WSSN.getName());
             if (pluginHost != null)
                 return pluginHost;
@@ -665,20 +665,20 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
 
     /**
      * Get the requested port based on the Host and/or private headers.
-     * 
+     *
      * per Servlet spec, this is similar to getServerPort:
      * Returns the port number to which the request was sent. It is the value of
      * the part after ":" in the Host header value, if any, or the server port
      * where the client connection was accepted on.
-     * 
+     *
      * @param request the inbound request
      * @param localPort the server port where the client connection was accepted on.
      * @param remoteHostAddr the requesting client IP address
      */
     @Override
     public int getRequestedPort() {
-        // Get the requested port: this takes into consideration whether or not we should trust the 
-        // contents of Host and $WS* headers.. 
+        // Get the requested port: this takes into consideration whether or not we should trust the
+        // contents of Host and $WS* headers..
         if (useTrustedHeaders()) {
             String pluginPort = request.getHeader(HttpHeaderKeys.HDR_$WSSP.getName());
             if (pluginPort != null)
@@ -690,7 +690,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
         if (port > 0) {
             return port;
         } else if (request.getHeader(HttpHeaderKeys.HDR_HOST.getName()) != null) {
-            // There was a host header, but it had no port: infer it.. 
+            // There was a host header, but it had no port: infer it..
             String scheme = request.getScheme();
             if ("http".equals(scheme)) {
                 return 80;
@@ -779,7 +779,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
     /**
      * Return the remote address, either from a trusted header,
      * or based on the inbound connection.
-     * 
+     *
      * @see com.ibm.websphere.http.HttpInboundConnection#getRemoteAddress()
      */
     @Override
@@ -814,7 +814,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
     /**
      * Return the remote host name, either from a trusted header,
      * or based on the inbound connection.
-     * 
+     *
      * @see com.ibm.websphere.http.HttpInboundConnection#getRemoteHostName()
      */
     @Override
@@ -1009,7 +1009,9 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
         return null;
     }
 
-    // Determine if a request is an http2 upgrade request
+    /**
+     * Determine if a request is an http2 upgrade request
+     */
     @Override
     public boolean isHTTP2UpgradeRequest(Map<String, String> headers) {
         if (isc != null) {
@@ -1021,7 +1023,9 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
         return false;
     }
 
-    // Determine if a map of headers contains an http2 upgrade header
+    /**
+     * Determine if a map of headers contains an http2 upgrade header
+     */
     @Override
     public void handleHTTP2UpgradeRequest(Map<String, String> headers) {
         HttpInboundLink link = isc.getLink();
@@ -1033,12 +1037,9 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
         if (upgraded) {
             h2Link.startAsyncRead(true);
         } else {
-            // TODO: signal that this connection initialization has failed. RuntimeException is likely wrong.
             h2Link.connection_init_failed = true;
-            h2Link.triggerLinkClose(vc, new RuntimeException("Http2 connection failed to initialize correctly"));
+            h2Link.triggerLinkClose(vc, new ProtocolException("Http2 connection failed to initialize correctly"));
         }
-        //getHttpInboundLink2().handleHTTP2UpgradeRequest(hsrq, hsrp);
-        // System.out.println("HttpDispatcherLink.handleHTTP2UpgradeRequest doing nothing right now");
         return;
     }
 

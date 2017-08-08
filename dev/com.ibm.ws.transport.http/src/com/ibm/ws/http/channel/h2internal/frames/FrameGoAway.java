@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.h2internal.frames;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.Constants;
 import com.ibm.ws.http.channel.h2internal.FrameReadProcessor;
 import com.ibm.ws.http.channel.h2internal.FrameTypes;
@@ -174,7 +176,9 @@ public class FrameGoAway extends Frame {
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof FrameGoAway)) {
-            System.out.println("Object is not FrameSettings");
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "equals: object is not a FrameGoAway");
+            }
             return false;
         }
 
@@ -184,12 +188,17 @@ public class FrameGoAway extends Frame {
             return false;
 
         if (this.getLastStreamId() != frameGoAwayToCompare.getLastStreamId()) {
-            System.out.println("this.getLastStreamId() = " + this.getLastStreamId() + " frameGoAwayToCompare.getLastStreamId() = " + frameGoAwayToCompare.getLastStreamId());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.getLastStreamId() = " + this.getLastStreamId() + " frameGoAwayToCompare.getLastStreamId() = "
+                             + frameGoAwayToCompare.getLastStreamId());
+            }
             return false;
         }
         if (this.getErrorCode() != frameGoAwayToCompare.getErrorCode()) {
-            System.out.println("this.getErrorCode() = " + this.getErrorCode() + " frameGoAwayToCompare.getErrorCode() = "
-                               + frameGoAwayToCompare.getErrorCode());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.getErrorCode() = " + this.getErrorCode() + " frameGoAwayToCompare.getErrorCode() = "
+                             + frameGoAwayToCompare.getErrorCode());
+            }
             return false;
         }
 

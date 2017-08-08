@@ -10,23 +10,37 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.h2internal;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.http.channel.internal.HttpMessages;
 import com.ibm.ws.transport.access.TransportConnectionAccess;
 import com.ibm.ws.transport.access.TransportConnectionUpgrade;
 
 /**
- *
+ * HTTP/2 specific upgrade handler
  */
 public class H2UpgradeHandler implements TransportConnectionUpgrade {
 
-    // HttpUpgradeHandler method
+    /** RAS tracing variable */
+    private static final TraceComponent tc = Tr.register(H2StreamProcessor.class, HttpMessages.HTTP_TRACE_NAME, HttpMessages.HTTP_BUNDLE);
+
+    /**
+     * HttpUpgradeHandler method
+     */
     public void destroy() {
-        System.out.println("H2UpgradeHandler: inside destroy");
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "H2UpgradeHandler destroy entry");
+        }
     }
 
     @Override
-    // TransportConnectionUpgrade method
+    /**
+     * TransportConnectionUpgrade method
+     */
     public void init(TransportConnectionAccess x) {
-        System.out.println("H2UpgradeHandler: inside init(TransportConnectionAccess x)");
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "H2UpgradeHandler init entry");
+        }
     }
 
 }

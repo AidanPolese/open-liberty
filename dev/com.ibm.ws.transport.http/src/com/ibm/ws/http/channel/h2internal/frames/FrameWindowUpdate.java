@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.h2internal.frames;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.Constants;
 import com.ibm.ws.http.channel.h2internal.FrameReadProcessor;
 import com.ibm.ws.http.channel.h2internal.FrameTypes;
@@ -120,7 +122,9 @@ public class FrameWindowUpdate extends Frame {
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof FrameWindowUpdate)) {
-            System.out.println("Object is not FrameWindowUpdate");
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "equals: object is not a FrameSettings");
+            }
             return false;
         }
 
@@ -130,8 +134,10 @@ public class FrameWindowUpdate extends Frame {
             return false;
 
         if (this.getWindowSizeIncrement() != frameWindowUpdateToCompare.getWindowSizeIncrement()) {
-            System.out.println("this.getWindowSizeIncrement() = " + this.getWindowSizeIncrement() + " frameWindowUpdateToCompare.getWindowSizeIncrement() = "
-                               + frameWindowUpdateToCompare.getWindowSizeIncrement());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.getWindowSizeIncrement() = " + this.getWindowSizeIncrement() + " frameWindowUpdateToCompare.getWindowSizeIncrement() = "
+                             + frameWindowUpdateToCompare.getWindowSizeIncrement());
+            }
             return false;
         }
 

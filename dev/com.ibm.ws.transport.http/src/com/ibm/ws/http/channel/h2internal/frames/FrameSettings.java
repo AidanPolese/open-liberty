@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.h2internal.frames;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.FrameReadProcessor;
 import com.ibm.ws.http.channel.h2internal.FrameTypes;
 import com.ibm.ws.http.channel.h2internal.H2ConnectionSettings;
@@ -277,7 +279,9 @@ public class FrameSettings extends Frame {
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof FrameSettings)) {
-            System.out.println("Object is not FrameSettings");
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Object is not FrameSettings");
+            }
             return false;
         }
 
@@ -287,32 +291,44 @@ public class FrameSettings extends Frame {
             return false;
 
         if (this.getEnablePush() != frameSettingsToCompare.getEnablePush()) {
-            System.out.println("this.getEnablePush() = " + this.getEnablePush() + " frameSettingsToCompare.getEnablePush() = " + frameSettingsToCompare.getEnablePush());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.getEnablePush() = " + this.getEnablePush() + " frameSettingsToCompare.getEnablePush() = " + frameSettingsToCompare.getEnablePush());
+            }
             return false;
         }
         if (this.getHeaderTableSize() != frameSettingsToCompare.getHeaderTableSize()) {
-            System.out.println("this.getHeaderTableSize() = " + this.getHeaderTableSize() + " frameSettingsToCompare.getHeaderTableSize() = "
-                               + frameSettingsToCompare.getHeaderTableSize());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.getHeaderTableSize() = " + this.getHeaderTableSize() + " frameSettingsToCompare.getHeaderTableSize() = "
+                             + frameSettingsToCompare.getHeaderTableSize());
+            }
             return false;
         }
         if (this.getInitialWindowSize() != frameSettingsToCompare.getInitialWindowSize()) {
-            System.out.println("this.getInitialWindowSize() = " + this.getInitialWindowSize() + " frameSettingsToCompare.getInitialWindowSize() = "
-                               + frameSettingsToCompare.getInitialWindowSize());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.getInitialWindowSize() = " + this.getInitialWindowSize() + " frameSettingsToCompare.getInitialWindowSize() = "
+                             + frameSettingsToCompare.getInitialWindowSize());
+            }
             return false;
         }
         if (this.getMaxConcurrentStreams() != frameSettingsToCompare.getMaxConcurrentStreams()) {
-            System.out.println("this.getMaxConcurrentStreams() = " + this.getMaxConcurrentStreams() + " frameSettingsToCompare.getMaxConcurrentStreams() = "
-                               + frameSettingsToCompare.getMaxConcurrentStreams());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.getMaxConcurrentStreams() = " + this.getMaxConcurrentStreams() + " frameSettingsToCompare.getMaxConcurrentStreams() = "
+                             + frameSettingsToCompare.getMaxConcurrentStreams());
+            }
 
             return false;
         }
         if (this.getMaxFrameSize() != frameSettingsToCompare.getMaxFrameSize()) {
-            System.out.println("this.getMaxFrameSize() = " + this.getMaxFrameSize() + " frameSettingsToCompare.getMaxFrameSize() = " + frameSettingsToCompare.getMaxFrameSize());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.getMaxFrameSize() = " + this.getMaxFrameSize() + " frameSettingsToCompare.getMaxFrameSize() = " + frameSettingsToCompare.getMaxFrameSize());
+            }
             return false;
         }
         if (this.getMaxHeaderListSize() != frameSettingsToCompare.getMaxHeaderListSize()) {
-            System.out.println("this.getMaxHeaderListSize() = " + this.getMaxHeaderListSize() + " frameSettingsToCompare.getMaxHeaderListSize() = "
-                               + frameSettingsToCompare.getMaxHeaderListSize());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.getMaxHeaderListSize() = " + this.getMaxHeaderListSize() + " frameSettingsToCompare.getMaxHeaderListSize() = "
+                             + frameSettingsToCompare.getMaxHeaderListSize());
+            }
             return false;
         }
 

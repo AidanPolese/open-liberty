@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.h2internal.frames;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.FrameReadProcessor;
 import com.ibm.ws.http.channel.h2internal.FrameTypes;
 import com.ibm.ws.http.channel.h2internal.H2ConnectionSettings;
@@ -96,7 +98,9 @@ public class FrameRstStream extends Frame {
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof FrameRstStream)) {
-            System.out.println("Object is not frameRstStreamToCompare");
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "equals: object is not a FrameRstStream");
+            }
             return false;
         }
 
@@ -106,7 +110,10 @@ public class FrameRstStream extends Frame {
             return false;
 
         if (this.getErrorCode() != frameRstStreamToCompare.getErrorCode()) {
-            System.out.println("this.getErrorCode() = " + this.getErrorCode() + " frameRstStreamToCompare.getErrorCode() = " + frameRstStreamToCompare.getErrorCode());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.getErrorCode() = " + this.getErrorCode() + " frameRstStreamToCompare.getErrorCode() = "
+                             + frameRstStreamToCompare.getErrorCode());
+            }
             return false;
         }
 

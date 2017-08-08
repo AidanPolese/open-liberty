@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.h2internal.frames;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.Constants;
 import com.ibm.ws.http.channel.h2internal.FrameReadProcessor;
 import com.ibm.ws.http.channel.h2internal.FrameTypes;
@@ -133,7 +135,9 @@ public class FramePriority extends Frame {
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof FramePriority)) {
-            System.out.println("Object is not FramePriority");
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "equals: object is not a FramePriority");
+            }
             return false;
         }
 
@@ -143,16 +147,22 @@ public class FramePriority extends Frame {
             return false;
 
         if (this.isExclusive() != framePriorityToCompare.isExclusive()) {
-            System.out.println("this.isExclusive() = " + this.isExclusive() + " framePriorityToCompare.isExclusive() = " + framePriorityToCompare.isExclusive());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.isExclusive() = " + this.isExclusive() + " framePriorityToCompare.isExclusive() = " + framePriorityToCompare.isExclusive());
+            }
             return false;
         }
         if (this.getStreamDependency() != framePriorityToCompare.getStreamDependency()) {
-            System.out.println("this.getStreamDependency() = " + this.getStreamDependency() + " framePriorityToCompare.getStreamDependency() = "
-                               + framePriorityToCompare.getStreamDependency());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.getStreamDependency() = " + this.getStreamDependency() + " framePriorityToCompare.getStreamDependency() = "
+                             + framePriorityToCompare.getStreamDependency());
+            }
             return false;
         }
         if (this.getWeight() != framePriorityToCompare.getWeight()) {
-            System.out.println("this.getWeight() = " + this.getWeight() + " framePriorityToCompare.getWeight() = " + framePriorityToCompare.getWeight());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "this.getWeight() = " + this.getWeight() + " framePriorityToCompare.getWeight() = " + framePriorityToCompare.getWeight());
+            }
             return false;
         }
 

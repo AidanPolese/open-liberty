@@ -314,93 +314,97 @@ public class utils {
         return -1;
     }
 
-    public static void printArray(byte[] x) {
+    public static String printArray(byte[] x) {
+        StringBuffer buf = new StringBuffer();
         for (int i = 1; i <= x.length; i++) {
             if ((i % 16) == 0) {
-                System.out.println(String.format("0x%02X", x[i - 1]) + " ");
+                buf.append(String.format("0x%02X", x[i - 1]) + " ");
             } else {
-                System.out.print(String.format("0x%02X", x[i - 1]) + " ");
+                buf.append(String.format("0x%02X", x[i - 1]) + " ");
             }
         }
+        return buf.toString();
     }
 
-    public static void printCharArrayWithHex(char[] x, int length) {
+    public static String printCharArrayWithHex(char[] x, int length) {
         char c;
         byte b;
         int count = 0;
+        StringBuffer buf = new StringBuffer();
         for (int i = 0; i < length; i++) {
             count++;
             c = x[i];
             b = (byte) c;
             if (((count % 64) == 0) && (b != 0x0A)) {
                 if (b == 0x0D) {
-                    System.out.println("<CR>");
+                    buf.append("<CR>\n");
                     count = 0;
                 } else if ((b > 0) && (b < 127)) {
-                    System.out.println(c);
+                    buf.append(c + "\n");
                     count = 0;
                 } else {
-                    System.out.println(String.format("<0x%02X>", b) + " ");
+                    buf.append(String.format("<0x%02X>", b) + " \n");
                     count = 0;
                 }
             } else {
                 if (b == 0x0A) {
-                    System.out.print("\n<LF>");
+                    buf.append("\n<LF>");
                     count = 0;
                 } else if (b == 0x0D) {
-                    System.out.print("<CR>");
+                    buf.append("<CR>");
                 } else if ((b > 0) && (b < 127)) {
-                    System.out.print(c);
+                    buf.append(c);
                 } else {
-                    System.out.print(String.format("<0x%02X>", b) + " ");
+                    buf.append(String.format("<0x%02X>", b) + " ");
                 }
             }
         }
+        return buf.toString();
     }
 
-    public static void printByteArrayWithHex(byte[] x, int length) {
+    public static String printByteArrayWithHex(byte[] x, int length) {
         char c;
         byte b;
         int count = 0;
+        StringBuffer buf = new StringBuffer();
         for (int i = 0; i < length; i++) {
             count++;
             b = x[i];
             if (((count % 64) == 0) && (b != 0x0A)) {
                 if (b == 0x0D) {
-                    System.out.println("<CR>");
+                    buf.append("<CR>\n");
                     count = 0;
                 } else if ((b > 0) && (b < 127)) {
                     c = (char) b;
-                    System.out.println(c);
+                    buf.append(c + "\n");
                     count = 0;
                 } else {
-                    System.out.println(String.format("<0x%02X>", b) + " ");
+                    buf.append(String.format("<0x%02X>", b) + " \n");
                     count = 0;
                 }
             } else {
                 if (b == 0x0A) {
-                    System.out.print("\n<LF>");
+                    buf.append("\n<LF>");
                     count = 0;
                 } else if (b == 0x0D) {
-                    System.out.print("<CR>");
+                    buf.append("<CR>");
                 } else if ((b > 0) && (b < 127)) {
                     c = (char) b;
-                    System.out.print(c);
+                    buf.append(c);
                 } else {
-                    System.out.print(String.format("<0x%02X>", b) + " ");
+                    buf.append(String.format("<0x%02X>", b) + " ");
                 }
             }
         }
+        return buf.toString();
     }
 
-    // WTL TODO: verify this works
     public static boolean getFlag(byte flags, int position) {
         byte[] bytes = new byte[1];
         bytes[0] = flags;
         return ((bytes[position / 8] & (1 << (position % 8))) != 0);
     }
 
-    // WTL TODO: verify this works
     public static boolean getReservedBit(byte input) {
         return ((input & Constants.MASK_80) == 1) ? true : false;
     }
