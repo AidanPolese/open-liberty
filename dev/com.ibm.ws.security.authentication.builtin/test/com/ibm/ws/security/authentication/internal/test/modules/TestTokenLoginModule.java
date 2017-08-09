@@ -20,7 +20,7 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 
-import com.ibm.ws.security.jaas.common.callback.TokenCallback;
+import com.ibm.websphere.security.auth.callback.WSCredTokenCallbackImpl;
 
 /**
  *
@@ -43,7 +43,7 @@ public class TestTokenLoginModule implements LoginModule {
         Callback[] callbacks;
         try {
             callbacks = getCallbacks(callbackHandler);
-            byte[] token = ((TokenCallback) callbacks[0]).getToken();
+            byte[] token = ((WSCredTokenCallbackImpl) callbacks[0]).getCredToken();
             String username = new String(token);
             if ("testuser".equalsIgnoreCase(username)) {
                 succeeded = true;
@@ -77,7 +77,7 @@ public class TestTokenLoginModule implements LoginModule {
 
     private Callback[] getCallbacks(CallbackHandler callbackHandler) throws IOException, UnsupportedCallbackException {
         Callback[] callbacks = new Callback[1];
-        callbacks[0] = new TokenCallback();
+        callbacks[0] = new WSCredTokenCallbackImpl("Credential Token");
 
         callbackHandler.handle(callbacks);
         return callbacks;
