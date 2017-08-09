@@ -2369,8 +2369,8 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
             if (wsbb == null && this instanceof HttpInboundServiceContextImpl) {
                 hisc = (HttpInboundServiceContextImpl) this;
             }
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "sendFullOutgoing : " + hisc + ", " + hisc != null ? hisc.getLink().toString() : null);
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled() && hisc != null && hisc.getLink() != null) {
+                Tr.debug(tc, "sendFullOutgoing : " + hisc + ", " + hisc.getLink().toString());
             }
             if (hisc != null && hisc.getLink() instanceof H2HttpInboundLinkWrap) {
                 H2HttpInboundLinkWrap h2Link = (H2HttpInboundLinkWrap) hisc.getLink();
