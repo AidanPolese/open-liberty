@@ -116,7 +116,7 @@ Import-Package: \
 Include-Resource: \
    @lib/bsf.jar, \
    @lib/standard.jar, \
-   @lib/xalan.jar, \
+   @lib/xalan.jar!/!META-INF/*, \
    standard.jar=lib/standardtld.jar, \
    ard.jar=lib/ard.jar, \
    OSGI-INF=resources/OSGI-INF, \
