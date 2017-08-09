@@ -15,12 +15,6 @@ src: \
 	fat/src,\
 	test-applications/app1/src
 
-# TODO: key this off of test.project=true
-publish.wlp.jar.disabled: true
-
-# TODO: key this off of test.project=true
-instrument.disabled: true
-
 test.project: true
 
 -buildpath: \

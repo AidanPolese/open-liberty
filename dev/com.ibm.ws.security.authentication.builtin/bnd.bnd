@@ -101,6 +101,7 @@ instrument.classesExcludes: com/ibm/ws/security/authentication/internal/resource
 -buildpath: \
 	com.ibm.ws.security.authentication;version=latest,\
 	com.ibm.websphere.security;version=latest,\
+	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
 	com.ibm.websphere.appserver.spi.logging,\
 	com.ibm.websphere.org.osgi.core,\
 	com.ibm.websphere.org.osgi.service.component,\

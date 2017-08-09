@@ -41,8 +41,6 @@ Export-Package: \
 Private-Package: \
 	componenttest.annotation.processor
 
-publish.wlp.jar.disabled: true
-
 test.project: true
 
 -buildpath: \

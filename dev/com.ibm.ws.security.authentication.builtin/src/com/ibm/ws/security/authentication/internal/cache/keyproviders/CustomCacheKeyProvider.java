@@ -16,6 +16,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -23,6 +24,7 @@ import org.osgi.service.component.ComponentContext;
 import com.ibm.websphere.security.auth.InvalidTokenException;
 import com.ibm.websphere.security.auth.TokenExpiredException;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.security.authentication.AuthenticationData;
 import com.ibm.ws.security.authentication.AuthenticationException;
 import com.ibm.ws.security.authentication.cache.AuthCacheService;
 import com.ibm.ws.security.authentication.cache.CacheContext;
@@ -42,6 +44,7 @@ public class CustomCacheKeyProvider implements CacheKeyProvider {
     private static final String[] hashtableProperties = { AttributeNameConstants.WSCREDENTIAL_CACHE_KEY };
     private static final AtomicServiceReference<TokenManager> tokenManager = new AtomicServiceReference<TokenManager>("tokenManager");
     private final SubjectHelper subjectHelper = new SubjectHelper();
+    private final static String OIDC_ACCESS_TOKEN = "oidc_access_token";
 
     protected void setTokenManager(ServiceReference<TokenManager> ref) {
         tokenManager.setReference(ref);
@@ -68,11 +71,12 @@ public class CustomCacheKeyProvider implements CacheKeyProvider {
     /**
      * @param authCacheService
      * @param ssoTokenBytes
+     * @param authenticationData TODO
      * @return
      * @throws AuthenticationException
      */
     @FFDCIgnore({ InvalidTokenException.class, TokenExpiredException.class })
-    public static String getCustomCacheKey(AuthCacheService authCacheService, byte[] ssoTokenBytes) throws AuthenticationException {
+    public static String getCustomCacheKey(AuthCacheService authCacheService, byte[] ssoTokenBytes, AuthenticationData authenticationData) throws AuthenticationException {
         String customCacheKey = null;
         TokenManager tokenManager = CustomCacheKeyProvider.tokenManager.getService();
         if (tokenManager == null)
@@ -83,6 +87,12 @@ public class CustomCacheKeyProvider implements CacheKeyProvider {
             if (attrs != null && attrs.length > 0) {
                 customCacheKey = attrs[0];
             }
+            String[] accessTokens = recreatedToken.getAttributes(OIDC_ACCESS_TOKEN);
+            if (accessTokens != null && accessTokens.length > 0) {
+                HttpServletRequest req = (HttpServletRequest) authenticationData.get(AuthenticationData.HTTP_SERVLET_REQUEST);
+                req.setAttribute(OIDC_ACCESS_TOKEN, accessTokens[0]);
+            }
+
         } catch (InvalidTokenException e) {
             throw new AuthenticationException(e.getMessage());
         } catch (TokenExpiredException e) {

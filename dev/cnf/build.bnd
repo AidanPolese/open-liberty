@@ -71,7 +71,7 @@ mockito: org.mockito.mockito-core;version="[1.9,2)",\
 
 test.project: false
 
-instrument.disabled: false
+instrument.disabled: ${if;${test.project};true;false}
 instrument.classesIncludes: **/*.class
 instrument.classesExcludes: 
 instrument.ffdc: true

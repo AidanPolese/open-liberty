@@ -21,33 +21,32 @@ import org.apache.tools.ant.DirectoryScanner
 DirectoryScanner.removeDefaultExclude("**/.gitignore")
 DirectoryScanner.removeDefaultExclude("**/.gitattributes")
 
+/**
+ * Writes two ivy.xml files:
+ *  ivy.xml grabs specific versions so that local devs can switch which branches are consumed from, and
+ *  ivy-latest.xml grabs latest.integration so most recent versions are downloaded.
+ */
 task createIvyXml {
     doLast {
         String depsList = ""
+        String depsListLatest = ""
         fileTree(dir: "${rootDir}", include: '*').visit { element ->
             if (element.isDirectory()) {
                 String relativePath = "$element.relativePath"
                 def bndProject = bndWorkspace.getProject(relativePath)
                 if (bndProject != null && !bndProject.isNoBundles()) {
                     String artifact = ""
-                    def excludeProjects = ["com.ibm.ws.componenttest",
-                                        "com.ibm.ws.httpservice",
-                                        "com.ibm.ws.security.wim.adapter.file",
-                                        "fattest.simplicity"]
                     for (String bsn : bndProject.getBsns()) {
                         def org = ""
                         def name = ""
-                        if (bsn.contains('_test') ||
-                            bsn.contains('_bvt') ||
-                            bsn.contains('_fat') ||
-                            excludeProjects.contains(bsn)) {
+                        if ('true'.equals(bndProject.get('test.project', 'false'))) {
                             (org, name) = ['test', bsn]
                         } else {
                             (org, name) = ['dev', bsn]
                         }
-                        depsList = depsList + '        <dependency org="' + org + '" name="' + name + '" rev="latest.integration"/>\n'
-                        //println "org=" + org + ", name=" + name
-                        }
+                        depsList = depsList + '        <dependency org="' + org + '" name="' + name + '" rev="' + bndProject.getVersion(bsn) + '"/>\n'
+                        depsListLatest = depsListLatest + '        <dependency org="' + org + '" name="' + name + '" rev="latest.integration"/>\n'
+                    }
                 }
             }
         }
@@ -57,6 +56,14 @@ task createIvyXml {
   <info organisation="dev" module="prereq.published"/>
   <dependencies>
 $depsList  </dependencies>
+</ivy-module>
+"""
+        File ivyXmlLatest = new File("${buildDir}/ivy-latest.xml")
+        ivyXmlLatest.createNewFile()
+        ivyXmlLatest.text = """<ivy-module version="2.0">
+  <info organisation="dev" module="prereq.published"/>
+  <dependencies>
+$depsListLatest  </dependencies>
 </ivy-module>
 """
     }
@@ -72,17 +79,11 @@ task createGeneratedReplacementProjects {
                 if (bndProject == null) {
                     return
                 }
-                def excludeProjects = ["com.ibm.ws.componenttest",
-                                        "com.ibm.ws.httpservice",
-                                        "com.ibm.ws.security.wim.adapter.file",
-                                        "fattest.simplicity",
-                                        "com.ibm.ws.org.apache.ant"]
-                if (relativePath.contains('_test') ||
-                    relativePath.contains('_bvt') ||
-                    relativePath.contains('_fat') ||
-                    excludeProjects.contains(relativePath)) {
+                def excludeProjects = ["com.ibm.ws.org.apache.ant"]
+                if ('true'.equals(bndProject.get('test.project', 'false')) || excludeProjects.contains(relativePath)) {
                     return
                 }
+
                 List bsns = bndProject.getBsns()
                 int bsnCount = bndProject.isNoBundles() ? 0 : bndProject.getBsns().size()
                 if (bsnCount == 0) {
@@ -178,7 +179,7 @@ task zipIvyBootstrap(type: Zip) {
     dependsOn createIvyXml
     dependsOn createGeneratedReplacementProjects
     baseName 'ivy-bootstrap'
-    into 'prereq.published', {from 'generated/ivy.xml'}
+    into 'prereq.published', {from 'generated/ivy.xml', 'generated/ivy-latest.xml'}
     from 'generated/replacements'
 }
 

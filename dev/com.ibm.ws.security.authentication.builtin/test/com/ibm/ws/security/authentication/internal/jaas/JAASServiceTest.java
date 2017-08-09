@@ -69,12 +69,12 @@ import com.ibm.ws.security.jaas.common.JAASConfiguration;
 import com.ibm.ws.security.jaas.common.JAASConfigurationFactory;
 import com.ibm.ws.security.jaas.common.JAASLoginContextEntry;
 import com.ibm.ws.security.jaas.common.JAASLoginModuleConfig;
-import com.ibm.ws.security.jaas.common.callback.TokenCallback;
 import com.ibm.ws.security.jaas.common.internal.JAASSecurityConfiguration;
 import com.ibm.ws.security.token.TokenManager;
 import com.ibm.wsspi.kernel.service.utils.ConcurrentServiceReferenceMap;
 import com.ibm.wsspi.library.Library;
 import com.ibm.wsspi.security.auth.callback.WSX509CertificateChainCallback;
+import com.ibm.websphere.security.auth.callback.WSCredTokenCallbackImpl;
 
 import test.common.SharedOutputManager;
 
@@ -1032,8 +1032,8 @@ public class JAASServiceTest {
             @Override
             public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
                 for (Callback callback : callbacks) {
-                    if (callback instanceof TokenCallback) {
-                        ((TokenCallback) callback).setToken(token);
+                    if (callback instanceof WSCredTokenCallbackImpl) {
+                        ((WSCredTokenCallbackImpl) callback).setCredToken(token);
                     }
                 }
             }

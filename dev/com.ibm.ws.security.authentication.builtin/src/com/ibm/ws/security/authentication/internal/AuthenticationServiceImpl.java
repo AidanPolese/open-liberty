@@ -312,11 +312,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (authCacheService != null && authenticationData != null) {
             String ssoToken = (String) authenticationData.get(AuthenticationData.TOKEN64);
             if (ssoToken != null) {
-                subject = findSubjectByTokenContents(authCacheService, ssoToken, null);
+                subject = findSubjectByTokenContents(authCacheService, ssoToken, null, authenticationData);
             } else {
                 byte[] ssoTokenBytes = (byte[]) authenticationData.get(AuthenticationData.TOKEN);
                 if (ssoTokenBytes != null) {
-                    subject = findSubjectByTokenContents(authCacheService, null, ssoTokenBytes);
+                    subject = findSubjectByTokenContents(authCacheService, null, ssoTokenBytes, authenticationData);
                 } else {
                     String userid = (String) authenticationData.get(AuthenticationData.USERNAME);
                     String password = getPassword((char[]) authenticationData.get(AuthenticationData.PASSWORD));
@@ -335,10 +335,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      * @param authCacheService An authentication cache service
      * @param token The cache key, can be either a byte[] (SSO Token) or String (SSO Token Base64 encoded)
      * @param ssoTokenBytes Optional SSO token as byte[], if null, it will be constructed from the token
+     * @param authenticaitonData TODO
      * @return the cached subject
      * @throws AuthenticationException if no cached subject was found
      */
-    private Subject findSubjectByTokenContents(AuthCacheService authCacheService, String token, byte[] ssoTokenBytes) throws AuthenticationException {
+    private Subject findSubjectByTokenContents(AuthCacheService authCacheService, String token, byte[] ssoTokenBytes,
+                                               AuthenticationData authenticationData) throws AuthenticationException {
         Subject subject = null;
         if (token != null) {
             subject = authCacheService.getSubject(token);
@@ -354,7 +356,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 throw new AuthenticationException("Invalid LTPA Token");
             }
 
-            String customCacheKey = CustomCacheKeyProvider.getCustomCacheKey(authCacheService, ssoTokenBytes);
+            String customCacheKey = CustomCacheKeyProvider.getCustomCacheKey(authCacheService, ssoTokenBytes, authenticationData);
             if (customCacheKey != null) {
                 subject = authCacheService.getSubject(customCacheKey);
                 if (subject == null) {

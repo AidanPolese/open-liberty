@@ -37,7 +37,7 @@ DynamicImport-Package: \
   javax.servlet, \
   javax.servlet.http
 
-instrument.disabled: true
+publish.wlp.jar.disabled: false
 
 test.project: true
 
@@ -63,6 +63,7 @@ test.project: true
     com.ibm.ws.componenttest:ssh;version=2.3.0.1,\
     com.ibm.ws.componenttest:fat.util;version=1.0.0,\
     ../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file,\
+	../build.sharedResources/lib/hamcrest-all.jar;version=file,\
     com.ibm.websphere.javaee.servlet.3.0;version=latest,\
     com.ibm.websphere.org.osgi.core;version=latest,\
     com.ibm.websphere.org.osgi.service.component;version=latest,\

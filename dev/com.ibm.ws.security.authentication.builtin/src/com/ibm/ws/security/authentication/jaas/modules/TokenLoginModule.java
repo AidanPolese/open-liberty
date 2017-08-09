@@ -23,13 +23,13 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.security.auth.InvalidTokenException;
 import com.ibm.websphere.security.auth.TokenExpiredException;
+import com.ibm.websphere.security.auth.callback.WSCredTokenCallbackImpl;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.security.AccessIdUtil;
 import com.ibm.ws.security.authentication.AuthenticationException;
 import com.ibm.ws.security.authentication.internal.jaas.modules.ServerCommonLoginModule;
 import com.ibm.ws.security.authentication.principals.WSPrincipal;
 import com.ibm.ws.security.jaas.common.callback.AuthenticationHelper;
-import com.ibm.ws.security.jaas.common.callback.TokenCallback;
 import com.ibm.ws.security.registry.UserRegistry;
 import com.ibm.ws.security.token.TokenManager;
 import com.ibm.wsspi.security.ltpa.Token;
@@ -56,7 +56,7 @@ public class TokenLoginModule extends ServerCommonLoginModule implements LoginMo
 
         try {
             Callback[] callbacks = getRequiredCallbacks(callbackHandler);
-            byte[] token = ((TokenCallback) callbacks[0]).getToken();
+            byte[] token = ((WSCredTokenCallbackImpl) callbacks[0]).getCredToken();
 
             // If we have insufficient data, abstain.
             if (token == null) {
@@ -96,7 +96,7 @@ public class TokenLoginModule extends ServerCommonLoginModule implements LoginMo
     @Override
     public Callback[] getRequiredCallbacks(CallbackHandler callbackHandler) throws IOException, UnsupportedCallbackException {
         Callback[] callbacks = new Callback[1];
-        callbacks[0] = new TokenCallback();
+        callbacks[0] = new WSCredTokenCallbackImpl("Credential Token");
         callbackHandler.handle(callbacks);
         return callbacks;
     }

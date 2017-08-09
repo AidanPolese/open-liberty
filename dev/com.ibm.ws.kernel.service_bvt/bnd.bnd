@@ -15,8 +15,6 @@
 src: \
 	bvt/src
 
-instrument.disabled: true
-
 test.project: true
 
 -buildpath: \
