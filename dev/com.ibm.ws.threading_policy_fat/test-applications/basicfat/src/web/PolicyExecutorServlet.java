@@ -13,11 +13,13 @@ package web;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import static org.junit.Assert.fail;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -26,6 +28,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Resource;
 import javax.servlet.annotation.WebServlet;
@@ -404,6 +407,69 @@ public class PolicyExecutorServlet extends FATServlet {
 
         assertTrue(executor.isShutdown());
         assertTrue(executor.isTerminated());
+    }
+
+    // Interrupt an attempt to submit a task. Verify that RejectedExecutionException with chained InterruptedException is raised.
+    // Also interrupt a running task which rethrows the InterruptedException and verify that the exception is raised when attempting Future.get,
+    // and that a queued task that was blocked waiting for a thread is able to subsequently run.
+    @ExpectedFFDC("java.lang.InterruptedException")
+    @Test
+    public void testInterruptSubmitAndRun() throws Exception {
+        ExecutorService executorThatInterrupts = provider.create("testInterruptSubmitAndRun-interrupter")
+                .maxConcurrency(1).maxQueueSize(4);
+
+        ExecutorService executor = provider.create("testInterruptSubmitAndRun-submitter")
+                .maxConcurrency(1).maxQueueSize(1).maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(4));
+        CountDownLatch beginLatch = new CountDownLatch(1);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+        CountDownTask task1 = new CountDownTask(beginLatch, continueLatch, TimeUnit.HOURS.toNanos(4));
+
+        // Submit a task and wait for it to start
+        Future<Boolean> future1 = executor.submit(task1);
+        assertTrue(beginLatch.await(TIMEOUT_NS, TimeUnit.MILLISECONDS));
+
+        // Submit a task which will be stuck in the queue waiting for the first task before it can get a thread to run on
+        AtomicInteger count = new AtomicInteger();
+        Future<?> future2 = executor.submit((Runnable) new SharedIncrementTask(count));
+
+        // Using the other executor, submit a task that can interrupt the current thread
+        executorThatInterrupts.execute(new InterrupterTask(Thread.currentThread(), 1, TimeUnit.SECONDS));
+
+        try {
+            Future<Integer> future3 = executor.submit((Callable<Integer>) new SharedIncrementTask(count));
+            fail("Task submit should be interrupted while awaiting a queue position. " + future3);
+        } catch (RejectedExecutionException x) {
+            if (!(x.getCause() instanceof InterruptedException))
+                throw x;
+        }
+
+        assertFalse(Thread.currentThread().isInterrupted()); // should have been reset when InterruptedException was raised
+
+        assertFalse(future1.isCancelled());
+        assertFalse(future2.isCancelled());
+        assertFalse(future1.isDone());
+        assertFalse(future2.isDone());
+
+        // Also interrupt the executing task
+        Thread executionThread = task1.executionThreads.poll(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        assertNotNull(executionThread);
+        executionThread.interrupt();
+
+        // Interruption of task1 should allow the queued task to run
+        assertNull(future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertEquals(1, count.get());
+        assertFalse(future2.isCancelled());
+        assertTrue(future2.isDone());
+
+        // Task1 should be completed with exception, but not canceled
+        assertFalse(future1.isCancelled());
+        assertTrue(future1.isDone());
+        try {
+            fail("Interrupted task that rethrows exception should not return result: " + future1.get(1, TimeUnit.NANOSECONDS));
+        } catch (ExecutionException x) {
+            if (!(x.getCause() instanceof InterruptedException))
+                throw x;
+        }
     }
 
     //Ensure that a policy executor can be obtained from the injected provider

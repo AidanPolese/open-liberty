@@ -12,6 +12,7 @@ package web;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,6 +23,7 @@ public class CountDownTask implements Callable<Boolean> {
     private final long awaitContinueNanos;
     private final CountDownLatch beginLatch; 
     private final CountDownLatch continueLatch;
+    final LinkedBlockingQueue<Thread> executionThreads = new LinkedBlockingQueue<Thread>();
 
     public CountDownTask(CountDownLatch beginLatch, CountDownLatch continueLatch, long awaitContinueNanos) {
         this.awaitContinueNanos = awaitContinueNanos;
@@ -32,6 +34,7 @@ public class CountDownTask implements Callable<Boolean> {
     @Override
     public Boolean call() throws InterruptedException {
         System.out.println("> call " + toString());
+        executionThreads.add(Thread.currentThread());
         beginLatch.countDown();
         try {
             boolean awaited = continueLatch.await(awaitContinueNanos, TimeUnit.NANOSECONDS);
@@ -40,6 +43,8 @@ public class CountDownTask implements Callable<Boolean> {
         } catch (InterruptedException x) {
             System.out.println("< call " + toString() + " " + x);
             throw x;
+        } finally {
+            executionThreads.remove(Thread.currentThread());
         }
     }
 }
