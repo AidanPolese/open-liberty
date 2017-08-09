@@ -1,0 +1,8 @@
+-include ~../cnf/resources/bnd/liberty-release.props
+
+nobundles=true
+
+public.feature.resources: **
+
+-dependson: \
+    com.ibm.websphere.org.eclipse.microprofile.health-1.0;version=latest
