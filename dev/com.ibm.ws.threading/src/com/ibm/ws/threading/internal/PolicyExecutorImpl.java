@@ -127,18 +127,15 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     private class PolicyTaskFuture<T> implements Future<T> {
         private final FutureTask<T> futureTask;
         private final Object task;
-        private final int hash;
 
         public PolicyTaskFuture(Callable<T> task) {
             this.futureTask = new FutureTask(task);
             this.task = task;
-            this.hash = task.hashCode();
         }
 
         public PolicyTaskFuture(Runnable task, T result) {
             this.futureTask = new FutureTask(task, result);
             this.task = task;
-            this.hash = task.hashCode();
         }
 
         @Override
@@ -159,12 +156,6 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             return futureTask.get(timeout, unit);
         }
 
-        @Trivial
-        @Override
-        public int hashCode() {
-            return hash;
-        }
-
         @Override
         public boolean isCancelled() {
             return futureTask.isCancelled();
@@ -178,7 +169,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         @Trivial
         @Override
         public String toString() {
-            return new StringBuilder("PolicyTaskFuture@").append(Integer.toHexString(hash)).append(' ').append(task).append(" on ").append(identifier).toString();
+            return new StringBuilder(super.toString()).append(" for ").append(task).append(" on ").append(identifier).toString();
         }
     }
 
@@ -610,8 +601,13 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                 Tr.event(this, tc, "state: ENQUEUE_STOPPED --> TASKS_CANCELING");
 
             // Remove and cancel all queued tasks. The maxQueueSizeConstraint should prevent queueing more,
-            // apart from a timing window where a task is being scheduled during shutdown. TODO
+            // apart from a timing window where a task is being scheduled during shutdown, which is
+            // covered by checking the state before returning from submit.
             for (PolicyTaskFuture<?> f = queue.poll(); f != null; f = queue.poll()) {
+                boolean canceled = f.cancel(false);
+                if (trace && tc.isDebugEnabled())
+                    Tr.debug(this, tc, "canceled queued task?", canceled);
+
                 // It would be wrong to return FutureTask as the Runnable.
                 // Presumably the list of tasks that didn't run is being returned so that the invoker can decide what to do
                 // with them, which includes having the option to run them, which is not an option for a canceled FutureTask.
@@ -626,7 +622,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                 PolicyTaskFuture<?> f = it.next();
                 boolean canceled = f.cancel(true);
                 if (trace && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "canceled?", f, f.task, canceled);
+                    Tr.debug(this, tc, "canceled running task?", f, f.task, canceled);
             }
 
             if (state.compareAndSet(State.TASKS_CANCELING, State.TASKS_CANCELED))
