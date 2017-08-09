@@ -13,6 +13,7 @@ package web;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
@@ -29,12 +31,24 @@ import javax.servlet.annotation.WebServlet;
 
 import org.junit.Test;
 
+
 import com.ibm.ws.threading.PolicyExecutor.QueueFullAction;
 import com.ibm.ws.threading.PolicyExecutorProvider;
 
 import componenttest.annotation.ExpectedFFDC;
+
 import componenttest.app.FATServlet;
 
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 @SuppressWarnings("serial")
 @WebServlet(urlPatterns = "/PolicyExecutorServlet")
 public class PolicyExecutorServlet extends FATServlet {
@@ -43,6 +57,7 @@ public class PolicyExecutorServlet extends FATServlet {
 
     @Resource(lookup = "test/TestPolicyExecutorProvider")
     private PolicyExecutorProvider provider;
+
 
     // Await termination of a policy executor before asking it to shut down.
     // Submit 6 tasks such that, at the time of shutdown, 2 are running, 2 are queued, and 2 are awaiting queue positions.

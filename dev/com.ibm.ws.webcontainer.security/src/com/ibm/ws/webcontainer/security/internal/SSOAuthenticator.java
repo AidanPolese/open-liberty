@@ -84,7 +84,7 @@ public class SSOAuthenticator implements WebAuthenticator {
         return authResult;
     }
 
-    //TODO Need a new design to improve performance when we have multiple cookie with the same name.  
+    //TODO Need a new design to improve performance when we have multiple cookie with the same name.
     /**
      * @param req
      * @param res
@@ -126,11 +126,7 @@ public class SSOAuthenticator implements WebAuthenticator {
                     AuthenticationData authenticationData = createAuthenticationData(req, res, ltpa64);
                     try {
                         Subject authenticatedSubject = authenticationService.authenticate(JaasLoginConfigConstants.SYSTEM_WEB_INBOUND, authenticationData, null);
-                        authResult = new AuthenticationResult(AuthResult.SUCCESS,
-                                        authenticatedSubject,
-                                        ssoCookieHelper.getSSOCookiename(),
-                                        null,
-                                        AuditEvent.OUTCOME_SUCCESS);
+                        authResult = new AuthenticationResult(AuthResult.SUCCESS, authenticatedSubject, ssoCookieHelper.getSSOCookiename(), null, AuditEvent.OUTCOME_SUCCESS);
                         return authResult;
                     } catch (AuthenticationException e) {
                         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -148,7 +144,7 @@ public class SSOAuthenticator implements WebAuthenticator {
 
     /**
      * Check to see if the token has been logged out.
-     * 
+     *
      * @param ltpaToken
      */
     private boolean isTokenLoggedOut(String ltpaToken) {
@@ -162,15 +158,14 @@ public class SSOAuthenticator implements WebAuthenticator {
     /*
      * simple logout needed to clean up session and sso cookie
      */
-    private void cleanupLoggedOutToken(HttpServletRequest req, HttpServletResponse res)
-    {
+    private void cleanupLoggedOutToken(HttpServletRequest req, HttpServletResponse res) {
         AuthenticateApi aa = new AuthenticateApi(ssoCookieHelper, authenticationService);
         aa.simpleLogout(req, res);
     }
 
     /**
      * Create an authentication data for ltpaToken
-     * 
+     *
      * @param ssoToken
      * @return authenticationData
      */
