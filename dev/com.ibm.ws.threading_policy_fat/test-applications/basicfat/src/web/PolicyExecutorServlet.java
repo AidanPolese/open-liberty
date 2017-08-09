@@ -16,6 +16,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.List;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -107,7 +108,7 @@ public class PolicyExecutorServlet extends FATServlet {
         assertTrue(terminationFuture.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
         assertTrue(executor2.isShutdown());
         assertTrue(executor2.isTerminated());
-        assertTrue(terminationFuture.isDone()); // still blocked on the continueLatch
+        assertTrue(terminationFuture.isDone());
 
         assertTrue(future1.isDone());
         assertTrue(future2.isDone());
@@ -125,6 +126,99 @@ public class PolicyExecutorServlet extends FATServlet {
         assertTrue(future4.get());
 
         executor1.shutdown();
+    }
+
+    // Await termination of a policy executor before asking it to shut down now.
+    // Submit 6 tasks such that, at the time of shutdownNow, 2 are running, 2 are queued, and 2 are awaiting queue positions.
+    // Verify that it reports successful termination after (but not before) shutdownNow is requested
+    // and that the running tasks are canceled and interrupted, the 2 queued tasks are canceled, and the 2 tasks awaiting queue positions are rejected.
+    @ExpectedFFDC("java.util.concurrent.RejectedExecutionException")
+    @Test
+    public void testAwaitTerminationWhileActiveThenShutdownNow() throws Exception {
+        // A thread from executor1 is used to await executor2 
+        ExecutorService executor1 = provider.create("testAwaitTerminationWhileActiveThenShutdownNow-1")
+                .maxConcurrency(3).maxQueueSize(3).queueFullAction(QueueFullAction.Abort);
+
+        ExecutorService executor2 = provider.create("testAwaitTerminationWhileActiveThenShutdownNow-2")
+                .maxConcurrency(2).maxQueueSize(2).maxWaitForEnqueue(TimeUnit.SECONDS.toMillis(1)).queueFullAction(QueueFullAction.Abort);
+
+        Future<Boolean> terminationFuture = executor1.submit(new TerminationAwaitTask(executor2, TimeUnit.MINUTES.toNanos(6)));
+        assertFalse(terminationFuture.isDone());
+
+        CountDownLatch beginLatch = new CountDownLatch(2);
+        CountDownLatch continueLatch = new CountDownLatch(1000); // this latch will never reach 0, awaits on it will be blocked until interrupted
+        CountDownTask task = new CountDownTask(beginLatch, continueLatch, TimeUnit.HOURS.toNanos(2));
+
+        Future<Boolean> future1 = executor2.submit(task); // should start, decrement the beginLatch, and block on continueLatch
+        Future<Boolean> future2 = executor2.submit(task); // should start, decrement the beginLatch, and block on continueLatch
+        assertTrue(beginLatch.await(TIMEOUT_NS, TimeUnit.MILLISECONDS));
+
+        Future<Boolean> future3 = executor2.submit(task); // should be queued
+        Future<Boolean> future4 = executor2.submit(task); // should be queued
+
+        Future<Future<Boolean>> future5 = executor1.submit(new SubmitterTask<Boolean>(executor2, task)); // should wait for queue position
+        Future<Future<Boolean>> future6 = executor1.submit(new SubmitterTask<Boolean>(executor2, task)); // should wait for queue position
+
+        assertFalse(executor2.isShutdown());
+        assertFalse(executor2.isTerminated());
+        assertFalse(terminationFuture.isDone());
+
+        executor2.shutdownNow();
+
+        try {
+            fail("Task [3] should not complete successfully after shutdownNow: " + future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        try {
+            fail("Task [4] should not complete successfully after shutdownNow: " + future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        try {
+            fail("Should not be able to complete submission of task [5] after shutdownNow: " + future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (ExecutionException x) {
+            if (!(x.getCause() instanceof RejectedExecutionException))
+                throw x;
+        }
+
+        try {
+            fail("Should not be able to complete submission of task [6] after shutdownNow: " + future6.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (ExecutionException x) {
+            if (!(x.getCause() instanceof RejectedExecutionException))
+                throw x;
+        }
+
+        try {
+            fail("Should not be able submit new task after shutdownNow: " + executor2.submit(new SharedIncrementTask(), "Should not be able to submit this"));
+        } catch (RejectedExecutionException x) {} // pass
+
+        assertTrue(executor2.isShutdown());
+
+        // await termination
+        assertTrue(terminationFuture.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+
+        assertTrue(executor2.isShutdown());
+        assertTrue(executor2.isTerminated());
+        assertTrue(terminationFuture.isDone());
+
+        assertTrue(future1.isDone());
+        assertTrue(future2.isDone());
+        assertTrue(future3.isDone());
+        assertTrue(future4.isDone());
+
+        assertTrue(future1.isCancelled());
+        assertTrue(future2.isCancelled());
+        assertTrue(future3.isCancelled());
+        assertTrue(future4.isCancelled());
+
+        try {
+            fail("Task [1] should not complete successfully after shutdownNow: " + future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        try {
+            fail("Task [2] should not complete successfully after shutdownNow: " + future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        executor1.shutdownNow();
     }
 
     // Cover basic life cycle of a policy executor service: use it to run a task, shut it down, and await termination.
