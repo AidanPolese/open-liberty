@@ -130,6 +130,7 @@ instrument.classesExcludes: com/ibm/ws/ejbcontainer/osgi/internal/resources/*.cl
 	com.ibm.ws.javaee.dd.common;version=latest,\
 	com.ibm.ws.javaee.dd.ejb;version=latest,\
 	com.ibm.ws.logging;version=latest,\
+ 	com.ibm.ws.kernel.feature;version=latest,\
 	com.ibm.ws.kernel.service;version=latest,\
 	com.ibm.ws.injection;version=latest,\
 	com.ibm.ws.javaee.dd;version=latest,\
