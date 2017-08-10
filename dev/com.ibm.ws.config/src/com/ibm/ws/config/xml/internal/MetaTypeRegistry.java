@@ -371,7 +371,9 @@ final class MetaTypeRegistry {
                 if (ad.getReferencePid() != null) {
                     RegistryEntry other = getRegistryEntry(ad.getReferencePid());
                     if (other != null) {
-                        other.addReferencingEntry(new PidReference(other, pidEntry, ad.getID(), true));
+                        PidReference ref = new PidReference(other, pidEntry, ad.getID(), true);
+                        other.addReferencingEntry(ref);
+                        pidEntry.addReferencedEntry(ref);
                     }
                 } else if (ad.getService() != null) {
                     addServiceUse(ad.getService(), pidEntry);
@@ -417,6 +419,13 @@ final class MetaTypeRegistry {
         }
         serviceUsers.add(entry);
 
+    }
+
+    private void removeServiceUse(String service, RegistryEntry entry) {
+        List<RegistryEntry> serviceUsers = serviceToServicesMap.get(service);
+        if (serviceUsers != null) {
+            serviceUsers.remove(entry);
+        }
     }
 
     protected static class PidReference {
@@ -608,10 +617,24 @@ final class MetaTypeRegistry {
     MetaTypeInformation removeMetaType(Bundle bundle) {
         MetaTypeInformation information = bundleMap.remove(bundle);
         if (information != null) {
-            removeMetaTypeDefinitions(information, information.getPids());
-            removeMetaTypeDefinitions(information, information.getFactoryPids());
+            Set<RegistryEntry> removed = removeMetaTypeDefinitions(information, information.getPids());
+            removed.addAll(removeMetaTypeDefinitions(information, information.getFactoryPids()));
+
+            for (RegistryEntry entry : removed) {
+                // Go through and remove all PidReference entries from types that reference this type
+
+                for (PidReference ref : entry.getReferencedEntries()) {
+                    RegistryEntry other = ref.getReferencedEntry();
+                    if (other != null) {
+                        other.removeReferencingEntry(ref);
+                    }
+                }
+                entry.removeAllReferences();
+
+            }
         }
         return information;
+
     }
 
     synchronized Set<RegistryEntry> removeMetaTypeDefinitions(MetaTypeInformation information, String[] pids) {
@@ -728,6 +751,11 @@ final class MetaTypeRegistry {
          * list of pids that have an reference attribute pointing here (or to a supertype) or the parentPid of this entry or a supertype.
          */
         private List<PidReference> referencingPids;
+
+        /**
+         * PidReferences where this entry is the origin -- used to help clean up PidReferences on metatype removal
+         */
+        private List<PidReference> referencedPids;
 
         private RegistryEntry extendedRegistryEntry;
 
@@ -900,7 +928,19 @@ final class MetaTypeRegistry {
             }
         }
 
-        //TODO call this method from appropriate spot.
+        /**
+         * @param ref
+         */
+        public void addReferencedEntry(PidReference ref) {
+            if (referencedPids == null) {
+                referencedPids = new CopyOnWriteArrayList<PidReference>();
+            }
+            if (!referencedPids.contains(ref)) {
+                referencedPids.add(ref);
+            }
+
+        }
+
         private synchronized void removeReferencingEntry(PidReference ref) {
             if (referencingPids != null) {
                 referencingPids.remove(ref);
@@ -912,6 +952,23 @@ final class MetaTypeRegistry {
                 return Collections.emptyList();
             }
             return referencingPids;
+        }
+
+        synchronized List<PidReference> getReferencedEntries() {
+            if (referencedPids == null) {
+                return Collections.emptyList();
+            }
+
+            return referencedPids;
+        }
+
+        private synchronized void removeAllReferences() {
+            if (referencedPids != null)
+                referencedPids.clear();
+
+            if (referencingPids != null)
+                referencingPids.clear();
+
         }
 
         /**
