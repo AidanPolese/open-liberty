@@ -10,7 +10,4 @@
 #*******************************************************************************
 -include= ~../cnf/resources/bnd/liberty-release.props
 
--buildpath: \
-  com.ibm.ws.json4j;version=latest
-
 -nobundles=true

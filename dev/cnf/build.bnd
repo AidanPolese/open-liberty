@@ -34,7 +34,7 @@ bGitBranch=master
     aQute.bnd.repository.maven.provider.MavenBndRepository; \
         name = Release; \
         noupdateOnRelease = true; \
-        local = ${env;LOCAL_REPO_PATH;${build}/release};
+        local = ${env;LOCAL_REPO_PATH;${build}/release}
 
 -plugin.3.Remote = ${fetch.repository}
 
@@ -55,6 +55,7 @@ javac.encoding: UTF-8
 -buildrepo: Local
 -groupid: ${if;${test.project};test;dev}
 -pom: 
+-dsannotations-options: version;minimum=1.2
 
 buildEngineName: defaultEngine
 
