@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+ * Copyright (c) 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,8 +8,21 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
+package com.ibm.wsspi.http.ee8;
+
+import com.ibm.wsspi.http.HttpRequest;
+
 /**
- * @version 1.1
+ * Representation of an HTTP 2 request message provided by the dispatcher to any
+ * HTTP container.
  */
-@org.osgi.annotation.versioning.Version("1.1")
-package com.ibm.wsspi.http;
+public interface Http2Request extends HttpRequest {
+
+    /**
+     * Initiate a Push request
+     *
+     * @return
+     */
+    void pushNewRequest(Http2PushBuilder pushBuilder) throws Http2PushException;
+
+}

@@ -8,9 +8,11 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.wsspi.http;
+package com.ibm.wsspi.http.ee8;
 
 import java.util.Map;
+
+import com.ibm.wsspi.http.HttpInboundConnection;
 
 /**
  * Representation of an inbound HTTP connection that the dispatcher will provide

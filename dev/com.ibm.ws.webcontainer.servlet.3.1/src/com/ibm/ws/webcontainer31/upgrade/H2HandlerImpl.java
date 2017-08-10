@@ -27,8 +27,8 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.H2UpgradeHandler;
 import com.ibm.ws.webcontainer.servlet.H2Handler;
 import com.ibm.wsspi.channelfw.VirtualConnection;
-import com.ibm.wsspi.http.Http2InboundConnection;
 import com.ibm.wsspi.http.HttpInboundConnection;
+import com.ibm.wsspi.http.ee8.Http2InboundConnection;
 
 /**
  * Implementation of the H2Handler interface

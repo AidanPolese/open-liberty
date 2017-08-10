@@ -45,7 +45,6 @@ import com.ibm.wsspi.channelfw.ConnectionLink;
 import com.ibm.wsspi.channelfw.VirtualConnection;
 import com.ibm.wsspi.channelfw.base.InboundApplicationLink;
 import com.ibm.wsspi.http.EncodingUtils;
-import com.ibm.wsspi.http.Http2InboundConnection;
 import com.ibm.wsspi.http.HttpDateFormat;
 import com.ibm.wsspi.http.HttpOutputStream;
 import com.ibm.wsspi.http.HttpRequest;
@@ -58,6 +57,7 @@ import com.ibm.wsspi.http.channel.values.ConnectionValues;
 import com.ibm.wsspi.http.channel.values.HttpHeaderKeys;
 import com.ibm.wsspi.http.channel.values.StatusCodes;
 import com.ibm.wsspi.http.ee7.HttpInboundConnectionExtended;
+import com.ibm.wsspi.http.ee8.Http2InboundConnection;
 import com.ibm.wsspi.tcpchannel.TCPConnectionContext;
 
 /**

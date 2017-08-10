@@ -12,9 +12,6 @@ package com.ibm.wsspi.http;
 
 import java.util.List;
 
-import com.ibm.wsspi.http.ee8.Http2PushBuilder;
-import com.ibm.wsspi.http.ee8.Http2PushException;
-
 /**
  * Representation of an HTTP request message provided by the dispatcher to any
  * HTTP container.
@@ -23,21 +20,21 @@ public interface HttpRequest {
 
     /**
      * Query the request method of this message, such as POST or GET.
-     * 
+     *
      * @return String
      */
     String getMethod();
 
     /**
      * Query the URI of this message, which is only /uri with no query string.
-     * 
+     *
      * @return String
      */
     String getURI();
 
     /**
      * Query the full URL of this message, in the form of scheme://host:port/uri&lt;?query&gt;.
-     * 
+     *
      * @return String
      */
     String getURL();
@@ -45,21 +42,21 @@ public interface HttpRequest {
     /**
      * Query the protocol version of this message. It will be in the form of
      * "HTTP/&lt;major&gt;.&lt;minor&gt;". This is never null.
-     * 
+     *
      * @return String
      */
     String getVersion();
 
     /**
      * Query the protocol scheme of this message. This will be "HTTP" or "HTTPS".
-     * 
+     *
      * @return String
      */
     String getScheme();
 
     /**
      * Query the URL query string information. This might be null if not present.
-     * 
+     *
      * @return String
      */
     String getQuery();
@@ -68,7 +65,7 @@ public interface HttpRequest {
      * Query the virtual host target of this message. It might exist in the URL
      * or the Host header, and may or may not match the actual socket target. If
      * it is not set in either of those two locations, a null is returned.
-     * 
+     *
      * @return String
      */
     String getVirtualHost();
@@ -77,7 +74,7 @@ public interface HttpRequest {
      * Query the virtual port of this request message. It might exist in the URL
      * or the Host header, and may or may not match the actual socket port. If it
      * is not set in either of those two locations, a -1 is returned.
-     * 
+     *
      * @return int
      */
     int getVirtualPort();
@@ -85,7 +82,7 @@ public interface HttpRequest {
     /**
      * Access the possible content-length header of this message. It will return
      * -1L if no header exists.
-     * 
+     *
      * @return long
      */
     long getContentLength();
@@ -93,7 +90,7 @@ public interface HttpRequest {
     /**
      * Access the first instance found for the given header name. This might be
      * null if no instance was found.
-     * 
+     *
      * @param name
      * @return String
      */
@@ -102,7 +99,7 @@ public interface HttpRequest {
     /**
      * Access a list of all header values found for the given header name. This
      * list is never null, but might be empty.
-     * 
+     *
      * @param name
      * @return List<String>
      */
@@ -111,7 +108,7 @@ public interface HttpRequest {
     /**
      * Access a list of all header names found in this message. This list is never
      * null, but might be empty.
-     * 
+     *
      * @return List<String>
      */
     List<String> getHeaderNames();
@@ -119,7 +116,7 @@ public interface HttpRequest {
     /**
      * Access the first cookie instance in the message with the provided name. This
      * might be null if no match is found.
-     * 
+     *
      * @param name
      * @return HttpCookie
      */
@@ -128,7 +125,7 @@ public interface HttpRequest {
     /**
      * Access the list of all cookies matching the provided name. This list is never
      * null, but might be empty.
-     * 
+     *
      * @param name
      * @return List<HttpCookie>
      */
@@ -137,7 +134,7 @@ public interface HttpRequest {
     /**
      * Access the list of all cookies found in this message. The list is never null,
      * but might be empty.
-     * 
+     *
      * @return List<HttpCookie>
      */
     List<HttpCookie> getCookies();
@@ -145,16 +142,8 @@ public interface HttpRequest {
     /**
      * Access the possible body of the request message. This is never null but might
      * be an empty stream.
-     * 
+     *
      * @return HttpInputStream
      */
     HttpInputStream getBody();
-
-    /**
-     * Initiate a Push request
-     *
-     * @return
-     */
-    void pushNewRequest(Http2PushBuilder pushBuilder) throws Http2PushException;
-
 }
