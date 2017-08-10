@@ -135,7 +135,9 @@ com.ibm.ws.org.codehaus.jackson:jackson-mapper-asl:1.6.2
 com.ibm.ws.org.codehaus.jackson:jackson-xc:1.6.2
 org.ow2.asm:asm-all:5.0.3
 org.eclipse.jdt.core.compiler:ecj:4.3.1
+org.eclipse:yasson:1.0.0
 org.glassfish:javax.json:1.0.4
+org.glassfish:javax.json:1.1
 org.javassist:javassist:3.17.1-GA
 org.jboss.classfilewriter:jboss-classfilewriter:1.1.2.Final
 org.jboss.jdeparser:jdeparser:1.0.0.Final
