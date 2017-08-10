@@ -32,10 +32,10 @@ import javax.sql.DataSource;
 
 /**
  * To run the demo:
- * wlp\bin>server run com.ibm.ws.concurrent.bvt.demo
- * observe which port number is being used, for example 8010,
+ * wlp\bin>server run com.ibm.ws.concurrent.fat.demo
+ * observe which port number is being used, for example 9080,
  * then browse to:
- * localhost:8010/shipestimate
+ * localhost:9080/shipestimate
  */
 @WebServlet(value = "/")
 public class ShippingEstimateServlet extends HttpServlet {
