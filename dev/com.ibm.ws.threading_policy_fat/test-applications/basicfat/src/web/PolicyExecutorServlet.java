@@ -506,9 +506,6 @@ public class PolicyExecutorServlet extends FATServlet {
             //This task should be aborted since the queue should be full, triggering a RejectedExecutionException
             future4 = executor.submit(task);
 
-            //Two of the submitted tasks will run and call countdown on beginLatch, so the
-            //latch will be at 1. Wait until the fourth is rejected
-            beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS);
             fail("The fourth task should have thrown a RejectedExecutionException when attempting to queue");
 
         } catch (RejectedExecutionException x) {
@@ -528,8 +525,9 @@ public class PolicyExecutorServlet extends FATServlet {
     //The test begins with maxConcurrency of 1 and one task is submitted and runs
     //The maxConcurrency is increased to two and another task is submitted and should run
     //Submit two more tasks, one should queue and one should abort
-    //Increase the maxConcurrency to 3 and queue size to 2, the task in the queue should remain
-    //Submit another task which should run and then decrease MaxConcurrency to 2 and queue size to 1
+    //Increase the maxConcurrency to 3 and queue size to 2
+    //Submit another task which should cause the queued task to run and then this task will queue
+    //Then decrease MaxConcurrency to 2 and queue size to 1
     //Allow the third submitted task to complete and submit another, which should abort since there are
     //two tasks running and one in the queue
     @ExpectedFFDC("java.util.concurrent.RejectedExecutionException")
@@ -546,7 +544,7 @@ public class PolicyExecutorServlet extends FATServlet {
         CountDownTask task1 = new CountDownTask(beginLatch1, continueLatch1, TimeUnit.HOURS.toNanos(1));
         CountDownLatch beginLatch2 = new CountDownLatch(1);
         CountDownLatch continueLatch2 = new CountDownLatch(1);
-        CountDownTask task2 = new CountDownTask(beginLatch1, continueLatch1, TimeUnit.HOURS.toNanos(1));
+        CountDownTask task2 = new CountDownTask(beginLatch2, continueLatch2, TimeUnit.HOURS.toNanos(1));
 
         //This task should start and block on continueLatch
         Future<Boolean> future1 = executor.submit(task1);
@@ -568,35 +566,32 @@ public class PolicyExecutorServlet extends FATServlet {
             //This task should be aborted since the queue should be full, triggering a RejectedExecutionException
             future4 = executor.submit(task1);
 
-            //Two of the submitted tasks will run and call countdown on beginLatch, so the
-            //latch will be at 1. Wait until the fourth is rejected
-            beginLatch1.await(TIMEOUT_NS, TimeUnit.NANOSECONDS);
             fail("The fourth task should have thrown a RejectedExecutionException when attempting to queue");
 
         } catch (RejectedExecutionException x) {
         } //expected
         
-        //Return maxWaitForEnqueue so don't timeout on a slow machine
+        //Return maxWaitForEnqueue to a one minute timeout so it doesn't timeout on a slow machine
         executor.maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1));
 
-        //Changing maxConcurrency to 3 should not - have to also up max queue size so that the request
-        //can first get queued before running
+        //Changing maxConcurrency to 3
         executor.maxConcurrency(3).maxQueueSize(2);
-        //Queued task should stay queued
-        assertFalse(beginLatch2.await(5000, TimeUnit.MILLISECONDS));
-
-        //This task should run
+        
+        //TODO: Update test once polling has been added to run tasks from the queue after
+        //maxConcurrency has been increased
         Future<Boolean> future5 = executor.submit(task2);
-        assertTrue(beginLatch1.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(beginLatch2.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
 
         //Setting the maxConcurrency lower than the current number of tasks running should be allowed
         //Also set the queue size back to 1 so that the queue is full again
         executor.maxConcurrency(2).maxQueueSize(1);
 
-        //Allow the third task to run
+        //Allow the third task to complete
         continueLatch2.countDown();
         
-        //Shorten maxWaitForEnqueue so we the test doesn't have to wait long for the timeout
+        assertTrue(future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+ 
+        //Shorten maxWaitForEnqueue so the test doesn't have to wait long for the timeout
         executor.maxWaitForEnqueue(200);
 
         try {
@@ -604,10 +599,7 @@ public class PolicyExecutorServlet extends FATServlet {
             //there are two tasks running, triggering a RejectedExecutionException
             future4 = executor.submit(task1);
 
-            //Two of the submitted tasks will run and call countdown on beginLatch, so the
-            //latch will be at 1. Wait until the fourth is rejected
-            beginLatch1.await(TIMEOUT_NS, TimeUnit.NANOSECONDS);
-            fail("The fourth task should have thrown a RejectedExecutionException when attempting to queue");
+            fail("The task future4 should have thrown a RejectedExecutionException when attempting to queue");
 
         } catch (RejectedExecutionException x) {
         } //expected
@@ -617,12 +609,12 @@ public class PolicyExecutorServlet extends FATServlet {
 
         assertTrue(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
         assertTrue(future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
-        assertTrue(future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
 
         executor.shutdownNow();
     }
 
-    //Test that changing the queue size of one executor does not affect a different executor
+    //Test that changing the maxConcurrency of one executor does not affect a different executor
     @ExpectedFFDC("java.util.concurrent.RejectedExecutionException")
     @Test
     public void testMaxConcurrencyMultipleExecutors() throws Exception {
@@ -660,9 +652,6 @@ public class PolicyExecutorServlet extends FATServlet {
             //This task should be aborted since the queue should be full, triggering a RejectedExecutionException
             future4 = executor2.submit(task);
 
-            //Two of the submitted tasks will run and call countdown on beginLatch, so the
-            //latch will be at 1. Wait until the fourth is rejected
-            beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS);
             fail("The third task on executor2 should have thrown a RejectedExecutionException when attempting to queue");
 
         } catch (RejectedExecutionException x) {

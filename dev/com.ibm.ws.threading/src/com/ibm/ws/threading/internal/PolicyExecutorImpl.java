@@ -204,8 +204,13 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                 // Otherwise a race condition could leave a task unexecuted.
                 if (maxConcurrency == available && !queue.isEmpty() && maxConcurrencyConstraint.tryAcquire())
                     enqueueGlobal(PollingTask.this);
-            } else // There are still tasks to run, so reschedule the polling task to the global executor
-                enqueueGlobal(PollingTask.this);
+            } else { // There are still tasks to run, so reschedule the polling task to the global executor if there is an available permit
+                //TODO: Investigate if there is a performance optimization that can be made here
+                //so that we don't need to release and re-acquire a permit each time
+                maxConcurrencyConstraint.release();
+                if (maxConcurrencyConstraint.tryAcquire())
+                    enqueueGlobal(PollingTask.this);
+            }
         }
     }
 
