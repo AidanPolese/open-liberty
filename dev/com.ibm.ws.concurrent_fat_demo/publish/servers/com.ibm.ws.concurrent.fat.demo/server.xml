@@ -1,0 +1,19 @@
+<server>
+  <featureManager>
+    <feature>jndi-1.0</feature>
+    <feature>concurrent-1.0</feature>
+    <feature>jdbc-4.1</feature>
+    <feature>servlet-3.1</feature>
+  </featureManager>
+
+  <dataSource jndiName="jdbc/testdb">
+    <jdbcDriver libraryRef="Derby"/>
+    <properties.derby.embedded createDatabase="create" databaseName="memory:testdb"/>
+  </dataSource>
+
+  <library id="Derby">
+    <fileset dir="${server.config.dir}/derby" includes="*.jar"/>
+  </library>
+
+  <include location="../fatTestPorts.xml"/>
+</server>
