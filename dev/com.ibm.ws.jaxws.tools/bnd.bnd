@@ -30,8 +30,8 @@ Private-Package:\
    com.ibm.ws.jaxws.tools.*
 
 -includeresource:\
- @${repo;com.sun.xml.ws:rt;2.2.10}!/!META-INF/maven/*, \
- @${repo;com.sun.xml.ws:wscompile;2.2.10}!/!META-INF/maven/*, \
+ @${repo;com.sun.xml.ws:jaxws-rt;2.2.10}!/!META-INF/maven/*, \
+ @${repo;com.sun.xml.ws:jaxws-tools;2.2.10}!/!META-INF/maven/*, \
  @${repo;com.sun.xml.ws:policy;2.4}!/!META-INF/maven/*, \
  @${repo;com.sun.org.apache.xml.internal:resolver;20050927}!/!META-INF/maven/*, \
  @${repo;org.jvnet.staxex:stax-ex;1.7.7}!/!META-INF/maven/*, \
@@ -40,8 +40,8 @@ Private-Package:\
 instrument.disabled: true
 
 -buildpath: \
-	com.sun.xml.ws:rt;version=2.2.10, \
-	com.sun.xml.ws:wscompile;version=2.2.10, \
+	com.sun.xml.ws:jaxws-rt;version=2.2.10, \
+	com.sun.xml.ws:jaxws-tools;version=2.2.10, \
 	com.sun.xml.ws:policy;version=2.4, \
 	com.sun.org.apache.xml.internal:resolver;version=20050927, \
 	org.jvnet.staxex:stax-ex;version=1.7.7, \

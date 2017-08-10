@@ -73,4 +73,4 @@ instrument.classesExcludes: com/ibm/ws/jndi/internal/url/contexts/resources/*.cl
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
 	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
 	org.jmock:jmock;version=2.5.1, \
-	com.thoughtworks.qdox:qdox;version=1.12
+	org.hamcrest:hamcrest-all;version=1.3
