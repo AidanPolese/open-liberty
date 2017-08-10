@@ -17,7 +17,7 @@ import com.sun.faces.application.ApplicationFactoryImpl;
 
 public class WASMojarraApplicationFactory extends ApplicationFactoryImpl {
 
-    private boolean initialized = false;
+    private volatile boolean initialized = false;
 
     @Override
     public Application getApplication() {

@@ -10,9 +10,10 @@ IBM-InstallTo: core
 IBM-License-Agreement: wlp/lafiles/LA
 IBM-ProductID: com.ibm.websphere.appserver
 IBM-ShortName: jsfContainer-2.2
-Subsystem-Content: com.ibm.websphere.appserver.javax.cdi-1.2; type="osgi.subsystem.feature",
+Subsystem-Content: com.ibm.websphere.appserver.cdi-1.2; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.servlet-3.1; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.javax.validation-1.1; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jndi-1.0; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.jsp-2.3; type="osgi.subsystem.feature",
  com.ibm.websphere.appserver.javaeeCompatible-7.0; type="osgi.subsystem.feature"
 Subsystem-Description: %description
