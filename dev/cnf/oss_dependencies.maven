@@ -19,6 +19,8 @@ com.ibm.ws.componenttest:ssh:2.3.0.1
 com.netflix.archaius:archaius2-api:2.1.10
 com.netflix.archaius:archaius2-core:2.1.10
 com.openpojo:openpojo:0.8.4
+com.sun.faces:jsf-api:2.2.14
+com.sun.faces:jsf-impl:2.2.14
 com.sun.mail:javax.mail:1.5.0
 com.sun.xml.bind:jaxb-core:2.2.10
 com.sun.xml.bind:jaxb-impl:2.2.10
