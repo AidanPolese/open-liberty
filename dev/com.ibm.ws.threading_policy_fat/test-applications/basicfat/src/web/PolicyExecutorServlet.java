@@ -39,6 +39,7 @@ import com.ibm.ws.threading.PolicyExecutor.QueueFullAction;
 import com.ibm.ws.threading.PolicyExecutorProvider;
 
 import componenttest.annotation.ExpectedFFDC;
+
 import componenttest.app.FATServlet;
 
 /*******************************************************************************
@@ -49,7 +50,7 @@ import componenttest.app.FATServlet;
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * IBM Corporation - initial API and implementation
+ *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 @SuppressWarnings("serial")
 @WebServlet(urlPatterns = "/PolicyExecutorServlet")
@@ -110,17 +111,12 @@ public class PolicyExecutorServlet extends FATServlet {
     @ExpectedFFDC("java.util.concurrent.RejectedExecutionException")
     @Test
     public void testAwaitTerminationWhileActiveThenShutdown() throws Exception {
-        // A thread from executor1 is used to await executor2
+        // A thread from executor1 is used to await executor2 
         ExecutorService executor1 = provider.create("testAwaitTerminationWhileActiveThenShutdown-1")
-                        .maxConcurrency(3)
-                        .maxQueueSize(3)
-                        .queueFullAction(QueueFullAction.Abort);
+                .maxConcurrency(3).maxQueueSize(3).queueFullAction(QueueFullAction.Abort);
 
         ExecutorService executor2 = provider.create("testAwaitTerminationWhileActiveThenShutdown-2")
-                        .maxConcurrency(2)
-                        .maxQueueSize(2)
-                        .maxWaitForEnqueue(TimeUnit.SECONDS.toMillis(1))
-                        .queueFullAction(QueueFullAction.Abort);
+                .maxConcurrency(2).maxQueueSize(2).maxWaitForEnqueue(TimeUnit.SECONDS.toMillis(1)).queueFullAction(QueueFullAction.Abort);
 
         Future<Boolean> terminationFuture = executor1.submit(new TerminationAwaitTask(executor2, TimeUnit.MINUTES.toNanos(5)));
         assertFalse(terminationFuture.isDone());
@@ -147,8 +143,7 @@ public class PolicyExecutorServlet extends FATServlet {
 
         try {
             fail("Should not be able submit new task after shutdown: " + executor2.submit(new SharedIncrementTask(), "Should not be able to submit this"));
-        } catch (RejectedExecutionException x) {
-        } // pass
+        } catch (RejectedExecutionException x) {} // pass
 
         try {
             fail("Should not be able to complete submission of task [5] after shutdown: " + future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
@@ -200,17 +195,12 @@ public class PolicyExecutorServlet extends FATServlet {
     @ExpectedFFDC("java.util.concurrent.RejectedExecutionException")
     @Test
     public void testAwaitTerminationWhileActiveThenShutdownNow() throws Exception {
-        // A thread from executor1 is used to await executor2
+        // A thread from executor1 is used to await executor2 
         ExecutorService executor1 = provider.create("testAwaitTerminationWhileActiveThenShutdownNow-1")
-                        .maxConcurrency(3)
-                        .maxQueueSize(3)
-                        .queueFullAction(QueueFullAction.Abort);
+                .maxConcurrency(3).maxQueueSize(3).queueFullAction(QueueFullAction.Abort);
 
         ExecutorService executor2 = provider.create("testAwaitTerminationWhileActiveThenShutdownNow-2")
-                        .maxConcurrency(2)
-                        .maxQueueSize(2)
-                        .maxWaitForEnqueue(TimeUnit.SECONDS.toMillis(1))
-                        .queueFullAction(QueueFullAction.Abort);
+                .maxConcurrency(2).maxQueueSize(2).maxWaitForEnqueue(TimeUnit.SECONDS.toMillis(1)).queueFullAction(QueueFullAction.Abort);
 
         Future<Boolean> terminationFuture = executor1.submit(new TerminationAwaitTask(executor2, TimeUnit.MINUTES.toNanos(6)));
         assertFalse(terminationFuture.isDone());
@@ -237,13 +227,11 @@ public class PolicyExecutorServlet extends FATServlet {
 
         try {
             fail("Task [3] should not complete successfully after shutdownNow: " + future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
-        } catch (CancellationException x) {
-        } // pass
+        } catch (CancellationException x) {} // pass
 
         try {
             fail("Task [4] should not complete successfully after shutdownNow: " + future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
-        } catch (CancellationException x) {
-        } // pass
+        } catch (CancellationException x) {} // pass
 
         try {
             fail("Should not be able to complete submission of task [5] after shutdownNow: " + future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
@@ -261,8 +249,7 @@ public class PolicyExecutorServlet extends FATServlet {
 
         try {
             fail("Should not be able submit new task after shutdownNow: " + executor2.submit(new SharedIncrementTask(), "Should not be able to submit this"));
-        } catch (RejectedExecutionException x) {
-        } // pass
+        } catch (RejectedExecutionException x) {} // pass
 
         assertTrue(executor2.isShutdown());
 
@@ -285,13 +272,11 @@ public class PolicyExecutorServlet extends FATServlet {
 
         try {
             fail("Task [1] should not complete successfully after shutdownNow: " + future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
-        } catch (CancellationException x) {
-        } // pass
+        } catch (CancellationException x) {} // pass
 
         try {
             fail("Task [2] should not complete successfully after shutdownNow: " + future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
-        } catch (CancellationException x) {
-        } // pass
+        } catch (CancellationException x) {} // pass
 
         executor1.shutdownNow();
 
@@ -491,15 +476,15 @@ public class PolicyExecutorServlet extends FATServlet {
     public void testGetPolicyExecutor() throws Exception {
         provider.create("testGetPolicyExecutor").maxConcurrency(2);
     }
-
+    
     //Ensure that two tasks are run and the third is queued when three tasks are submitted and max concurrency is 2
     @ExpectedFFDC("java.util.concurrent.RejectedExecutionException")
     @Test
     public void testMaxConcurrencyBasic() throws Exception {
-        ExecutorService executor = provider.create("testMaxConcurrencyBasic")
+        PolicyExecutor executor = provider.create("testMaxConcurrencyBasic")
                         .maxConcurrency(2)
                         .maxQueueSize(1)
-                        .maxWaitForEnqueue(1000)
+                        .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
                         .queueFullAction(QueueFullAction.Abort);
 
         CountDownLatch beginLatch = new CountDownLatch(3);
@@ -513,6 +498,9 @@ public class PolicyExecutorServlet extends FATServlet {
         //This task should be queued since we should be at max concurrency
         Future<Boolean> future3 = executor.submit(task);
         Future<Boolean> future4 = null;
+        
+        //Shorten maxWaitForEnqueue so we the test doesn't have to wait long for the timeout
+        executor.maxWaitForEnqueue(200);
 
         try {
             //This task should be aborted since the queue should be full, triggering a RejectedExecutionException
@@ -550,7 +538,7 @@ public class PolicyExecutorServlet extends FATServlet {
         PolicyExecutor executor = provider.create("testUpdateMaxConcurrency")
                         .maxConcurrency(1)
                         .maxQueueSize(1)
-                        .maxWaitForEnqueue(1000)
+                        .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
                         .queueFullAction(QueueFullAction.Abort);
 
         CountDownLatch beginLatch1 = new CountDownLatch(2);
@@ -572,6 +560,9 @@ public class PolicyExecutorServlet extends FATServlet {
         //This task should be queued since we should be at max concurrency
         Future<Boolean> future3 = executor.submit(task2);
         Future<Boolean> future4 = null;
+        
+        //Shorten maxWaitForEnqueue so we the test doesn't have to wait long for the timeout
+        executor.maxWaitForEnqueue(200);
 
         try {
             //This task should be aborted since the queue should be full, triggering a RejectedExecutionException
@@ -584,6 +575,9 @@ public class PolicyExecutorServlet extends FATServlet {
 
         } catch (RejectedExecutionException x) {
         } //expected
+        
+        //Return maxWaitForEnqueue so don't timeout on a slow machine
+        executor.maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1));
 
         //Changing maxConcurrency to 3 should not - have to also up max queue size so that the request
         //can first get queued before running
@@ -601,6 +595,9 @@ public class PolicyExecutorServlet extends FATServlet {
 
         //Allow the third task to run
         continueLatch2.countDown();
+        
+        //Shorten maxWaitForEnqueue so we the test doesn't have to wait long for the timeout
+        executor.maxWaitForEnqueue(200);
 
         try {
             //This task should be aborted since the queue should be full and
@@ -632,12 +629,12 @@ public class PolicyExecutorServlet extends FATServlet {
         PolicyExecutor executor1 = provider.create("testQueueSizeMultipleExecutors-1")
                         .maxConcurrency(1)
                         .maxQueueSize(1)
-                        .maxWaitForEnqueue(1000)
+                        .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
                         .queueFullAction(QueueFullAction.Abort);
         PolicyExecutor executor2 = provider.create("testQueueSizeMultipleExecutors-2")
                         .maxConcurrency(1)
                         .maxQueueSize(1)
-                        .maxWaitForEnqueue(1000)
+                        .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
                         .queueFullAction(QueueFullAction.Abort);
 
         CountDownLatch beginLatch = new CountDownLatch(3);
@@ -655,6 +652,9 @@ public class PolicyExecutorServlet extends FATServlet {
         //This task should be queued since we should be at max concurrency in executor 1
         Future<Boolean> future3 = executor2.submit(task);
         Future<Boolean> future4 = null;
+        
+        //Shorten maxWaitForEnqueue so the test doesn't have to wait long for the timeout
+        executor2.maxWaitForEnqueue(200);
 
         try {
             //This task should be aborted since the queue should be full, triggering a RejectedExecutionException
