@@ -585,6 +585,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                 try { // Await completion of other thread that concurrently invokes shutdown.
                     shutdownLatch.await();
                 } catch (InterruptedException x) {
+                    throw new RuntimeException(x);
                 }
     }
 
@@ -635,6 +636,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                 try { // Await completion of other thread that concurrently invokes shutdownNow.
                     shutdownNowLatch.await();
                 } catch (InterruptedException x) {
+                    throw new RuntimeException(x);
                 }
 
         return queuedTasks;
