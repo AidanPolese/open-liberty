@@ -12,8 +12,6 @@
 
 -nobundles=true
 
-publish.feature.resources: *.mf
-
 -dependson: \
 	com.ibm.websphere.appserver.javax.servlet-3.0;version=latest, \
 	com.ibm.websphere.appserver.classloading-1.0;version=latest, \

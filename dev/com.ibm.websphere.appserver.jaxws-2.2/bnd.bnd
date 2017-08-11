@@ -12,8 +12,6 @@
 
 -nobundles=true
 
-publish.feature.resources: **
-
 -dependson: \
 	com.ibm.ws.org.apache.cxf.jaxws;version=latest, \
 	com.ibm.websphere.appserver.injection-1.0;version=latest, \

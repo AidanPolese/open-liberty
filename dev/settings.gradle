@@ -63,7 +63,7 @@ def loadBuildProps() {
   if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {    
 	  def repoURL = ('https://' + props.getProperty('artifactory.download.server') + '/artifactory/wasliberty-open-liberty')
 	  fetchRepo = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl= ' + repoURL + ' ; snapshotUrl= ' + repoURL + ' ; index=${build}/oss_dependencies.maven; name = "Artifactory";')
-    fetchRepo2 = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl= ' + repoURL + ' ; snapshotUrl= ' + repoURL + ' ; index=${build}/oss_ibm.maven; name = "Artifactory_2";')
+      fetchRepo2 = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl= ' + repoURL + ' ; snapshotUrl= ' + repoURL + ' ; index=${build}/oss_ibm.maven; name = "Artifactory_2";')
   } 
   
   props.setProperty('fetch.oss.repository', fetchRepo)

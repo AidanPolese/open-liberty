@@ -8,3 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
+
+test {
+  dependsOn ':com.ibm.ws.logging.hpel.binarylogviewer:publishToolJars'
+}
