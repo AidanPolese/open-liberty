@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 IBM Corporation and others.
+ * Copyright (c) 2014,2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,12 +16,20 @@ import javax.json.spi.JsonProvider;
 import javax.json.stream.JsonParser;
 import javax.servlet.annotation.WebServlet;
 
+import org.junit.Test;
+
 import componenttest.app.FATServlet;
 import junit.framework.Assert;
 
-@WebServlet("/CustomJsonProviderServlet")
+@WebServlet("/CustomAppJSONPServlet")
 @SuppressWarnings("serial")
 public class CustomAppJSONPServlet extends FATServlet {
+
+    /**
+     * Test plugging in a custom implementation for JSON processing,
+     * where the custom implementation is packaged in the application.
+     */
+    @Test
     public void testCustomAppJsonProvider() {
         // Verify the custom JSON Provider class is being used.
         JsonProvider dummyProvider = JsonProvider.provider();

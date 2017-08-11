@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 IBM Corporation and others.
+ * Copyright (c) 2014,2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,21 +13,129 @@ package jsonp.app.web;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonWriter;
+import javax.json.stream.JsonGenerator;
+import javax.json.stream.JsonGeneratorFactory;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
 import javax.json.stream.JsonParserFactory;
+import javax.servlet.ServletContext;
+import javax.servlet.annotation.WebServlet;
 
-import junit.framework.Assert;
+import org.junit.Test;
 
 import componenttest.app.FATServlet;
+import junit.framework.Assert;
 
 @SuppressWarnings("serial")
-public abstract class AbstractJSONPServlet extends FATServlet {
+@WebServlet("/JSONPServlet")
+public class JSONPServlet extends FATServlet {
     private String jsonData = "";
+
+    @Override
+    protected void before() throws Exception {
+        jsonData = "";
+    }
+
+    /**
+     * Ensure that JsonObjectBuilder is functioning.
+     */
+    @Test
+    public void testJsonBuild() {
+        JsonObject value = Json.createObjectBuilder()
+                        .add("firstName", "Steve")
+                        .add("lastName", "Watson")
+                        .add("age", 45)
+                        .add("phoneNumber", Json.createArrayBuilder()
+                                        .add(Json.createObjectBuilder().add("type", "office").add("number", "507-253-1234"))
+                                        .add(Json.createObjectBuilder().add("type", "cell").add("number", "507-253-4321")))
+                        .build();
+        JsonParser parser = getJsonParser(value);
+        parseJson(parser);
+        checkJsonData();
+    }
+
+    /**
+     * Ensure that JsonReader is functioning.
+     */
+    @Test
+    public void testJsonRead() {
+        ServletContext context = getServletContext();
+        InputStream is = context.getResourceAsStream("/WEB-INF/json_read_test_data.js");
+        JsonReader reader = Json.createReader(is);
+        JsonObject jsonData = reader.readObject();
+        JsonParser parser = getJsonParser(jsonData);
+        parseJson(parser);
+        checkJsonData();
+    }
+
+    /**
+     * Ensure that JsonGenerator is functioning.
+     */
+    @Test
+    public void testJsonStream() {
+        String outputDir = System.getenv("X_LOG_DIR") + "/json_stream_test_data.js";
+        FileOutputStream os = createFileOutputStream(outputDir);
+        Map<String, Object> props = new HashMap<String, Object>();
+        props.put(JsonGenerator.PRETTY_PRINTING, new Object());
+        JsonGeneratorFactory factory = Json.createGeneratorFactory(props);
+        JsonGenerator generator = factory.createGenerator(os);
+        generator.writeStartObject()
+                        .write("firstName", "Steve")
+                        .write("lastName", "Watson")
+                        .write("age", 45)
+                        .writeStartArray("phoneNumber")
+                        .writeStartObject()
+                        .write("type", "office")
+                        .write("number", "507-253-1234")
+                        .writeEnd()
+                        .writeStartObject()
+                        .write("type", "cell")
+                        .write("number", "507-253-4321")
+                        .writeEnd()
+                        .writeEnd()
+                        .writeEnd();
+        generator.close();
+
+        JsonParser parser = getJsonParser(outputDir);
+        parseJson(parser);
+        checkJsonData();
+    }
+
+    /**
+     * Ensure that JsonWriter is functioning.
+     */
+    @Test
+    public void testJsonWrite() {
+        InputStream originalInputStream = getServletContext().getResourceAsStream("/WEB-INF/json_read_test_data.js");
+        JsonObject originalJsonData = readJsonFile(originalInputStream);
+
+        // Write json file
+        String outputDir = System.getenv("X_LOG_DIR") + "/json_write_test_data.js";
+        FileOutputStream os = createFileOutputStream(outputDir);
+        JsonWriter writer = Json.createWriter(os);
+        writer.writeObject(originalJsonData);
+        writer.close();
+
+        FileInputStream newInputStream = createFileInputStream(outputDir);
+        JsonObject newJsonData = readJsonFile(newInputStream);
+        JsonParser parser = getJsonParser(newJsonData);
+        parseJson(parser);
+        checkJsonData();
+    }
+
+    private JsonObject readJsonFile(InputStream is) {
+        JsonReader reader = Json.createReader(is);
+        JsonObject value = reader.readObject();
+        return value;
+    }
 
     protected JsonParser getJsonParser(String fileLocation) {
         FileInputStream fis = createFileInputStream(fileLocation);
@@ -110,7 +218,7 @@ public abstract class AbstractJSONPServlet extends FATServlet {
 
     protected void checkJsonData() {
         String expectedString = "{\"firstName\":\"Steve\",\"lastName\":\"Watson\",\"age\":45,\"phoneNumber\":[{\"type\":\"office\",\"number\":\"507-253-1234\"},{\"type\":\"cell\",\"number\":\"507-253-4321\"}]}";
-        Assert.assertTrue("DEBUG: EXPECTED <" + expectedString + "> FOUND <" + jsonData + ">", expectedString.equals(jsonData));
+        Assert.assertEquals(expectedString, jsonData);
     }
 
     protected FileOutputStream createFileOutputStream(String fileLocation) {

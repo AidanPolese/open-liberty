@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 IBM Corporation and others.
+ * Copyright (c) 2014,2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,30 +14,39 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.ibm.websphere.simplicity.ShrinkHelper;
 
-import componenttest.topology.impl.LibertyServerFactory;
+import componenttest.annotation.Server;
+import componenttest.annotation.TestServlet;
+import componenttest.custom.junit.runner.FATRunner;
+import componenttest.topology.impl.LibertyServer;
+import componenttest.topology.utils.FATServletClient;
+import jsonp.app.feature.web.CustomFeatureJSONPServlet;
 
-public class CustomFeatureJSONPTest extends AbstractTest {
+@RunWith(FATRunner.class)
+public class CustomFeatureJSONPTest extends FATServletClient {
+
+    private static final String APP_NAME = "customFeatureJSONPWAR";
     private static final String FEATURE_NAME = "customJsonpProvider-1.0.mf";
     private static final String BUNDLE_NAME = "com.ibm.ws.jsonp.feature.provider.1.0.jar";
 
+    @Server("jsonp.fat.customFeature")
+    @TestServlet(servlet = CustomFeatureJSONPServlet.class, path = APP_NAME + "/CustomFeatureJSONPServlet")
+    public static LibertyServer server;
+
     @BeforeClass
     public static void setUp() throws Exception {
-        server = LibertyServerFactory.getLibertyServer("jsonp.fat.customFeature");
-//        server.installUserFeature(FEATURE_NAME);
         server.copyFileToLibertyInstallRoot("usr/extension/lib/features/", "features/" + FEATURE_NAME);
         server.copyFileToLibertyInstallRoot("usr/extension/lib/", "bundles/" + BUNDLE_NAME);
-//        server.installUserBundle(BUNDLE_NAME);
 
-        WebArchive customFeatureJSONPWAR = ShrinkWrap.create(WebArchive.class, "customFeatureJSONPWAR.war")
+        WebArchive app = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
                         .addPackages(true, "jsonp.app.feature.web");
-        ShrinkHelper.exportToServer(server, "dropins", customFeatureJSONPWAR);
-        server.addInstalledAppForValidation("customFeatureJSONPWAR");
+        ShrinkHelper.exportToServer(server, "dropins", app);
+        server.addInstalledAppForValidation(APP_NAME);
 
-        server.startServer("customFeatureJSONPTest.log");
+        server.startServer();
     }
 
     @AfterClass
@@ -45,15 +54,5 @@ public class CustomFeatureJSONPTest extends AbstractTest {
         server.stopServer();
         server.uninstallUserBundle(BUNDLE_NAME);
         server.uninstallUserFeature(FEATURE_NAME);
-    }
-
-    /**
-     * Test plugging in a custom implementation for JSON processing,
-     * where the custom implementation is packaged in a user defined feature.
-     */
-    @Test
-    public void testCustomFeatureJsonProvider() throws Exception {
-        this.servlet = "/customFeatureJSONPWAR/CustomJsonProviderServlet";
-        runTest();
     }
 }

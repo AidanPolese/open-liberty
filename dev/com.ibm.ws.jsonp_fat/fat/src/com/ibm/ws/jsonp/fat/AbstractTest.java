@@ -1,7 +1,5 @@
-package com.ibm.ws.jsonp.fat;
-
 /*******************************************************************************
- * Copyright (c) 2014 IBM Corporation and others.
+ * Copyright (c) 2014,2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,6 +8,7 @@ package com.ibm.ws.jsonp.fat;
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
+package com.ibm.ws.jsonp.fat;
 
 import static componenttest.topology.utils.HttpUtils.getHttpConnection;
 import static org.junit.Assert.fail;

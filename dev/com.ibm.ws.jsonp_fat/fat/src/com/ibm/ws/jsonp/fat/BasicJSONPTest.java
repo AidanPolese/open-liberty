@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 IBM Corporation and others.
+ * Copyright (c) 2014,2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,18 +16,37 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.ibm.websphere.simplicity.ShrinkHelper;
 
-import componenttest.topology.impl.LibertyServerFactory;
+import componenttest.annotation.Server;
+import componenttest.annotation.TestServlet;
+import componenttest.annotation.TestServlets;
+import componenttest.custom.junit.runner.FATRunner;
+import componenttest.topology.impl.LibertyServer;
+import componenttest.topology.utils.FATServletClient;
+import jsonp.app.custom.web.CustomAppJSONPServlet;
+import jsonp.app.web.JSONPServlet;
+import jsonp.lib.web.CustomLibJSONPServlet;
 
-public class BasicJSONPTest extends AbstractTest {
+@RunWith(FATRunner.class)
+public class BasicJSONPTest extends FATServletClient {
+
+    public static final String APP_JSONP = "JSONPWAR";
+    public static final String APP_CUSTOM = "customAppJSONPWAR";
+    public static final String APP_CUSTOM_LIB = "customLibJSONPWAR";
+
+    @Server("jsonp.fat.basic")
+    @TestServlets({
+                    @TestServlet(servlet = JSONPServlet.class, path = APP_JSONP + "/JSONPServlet"),
+                    @TestServlet(servlet = CustomAppJSONPServlet.class, path = APP_CUSTOM + "/CustomAppJSONPServlet"),
+                    @TestServlet(servlet = CustomLibJSONPServlet.class, path = APP_CUSTOM_LIB + "/CustomLibJSONPServlet"),
+    })
+    public static LibertyServer server;
 
     @BeforeClass
     public static void setUp() throws Exception {
-        server = LibertyServerFactory.getLibertyServer("jsonp.fat.basic");
-
         WebArchive customAppJSONPWAR = ShrinkWrap.create(WebArchive.class, "customAppJSONPWAR.war")
                         .addAsServiceProvider(javax.json.spi.JsonProvider.class, jsonp.app.custom.provider.JsonProviderImpl.class)
                         .addPackages(true, "jsonp.app.custom");
@@ -44,68 +63,12 @@ public class BasicJSONPTest extends AbstractTest {
         ShrinkHelper.exportAppToServer(server, customLibJSONPWAR);
         server.addInstalledAppForValidation("customLibJSONPWAR");
 
-        WebArchive jsonpWar = ShrinkWrap.create(WebArchive.class, "JSONPWAR.war")
+        WebArchive jsonpWar = ShrinkWrap.create(WebArchive.class, APP_JSONP + ".war")
                         .addAsWebInfResource(new File("test-applications/JSONPWAR.war/resources/WEB-INF/json_read_test_data.js"))
                         .addPackage("jsonp.app.web");
         ShrinkHelper.exportToServer(server, "dropins", jsonpWar);
-        server.addInstalledAppForValidation("JSONPWAR");
+        server.addInstalledAppForValidation(APP_JSONP);
 
-        server.startServer("BasicJSONPTest.log");
-    }
-
-    /**
-     * Ensure that JsonObjectBuilder is functioning.
-     */
-    @Test
-    public void testJsonBuild() throws Exception {
-        this.servlet = "/JSONPWAR/BuildJSONPServlet";
-        runTest();
-    }
-
-    /**
-     * Ensure that JsonReader is functioning.
-     */
-    @Test
-    public void testJsonRead() throws Exception {
-        this.servlet = "/JSONPWAR/ReadJSONPServlet";
-        runTest();
-    }
-
-    /**
-     * Ensure that JsonWriter is functioning.
-     */
-    @Test
-    public void testJsonWrite() throws Exception {
-        this.servlet = "/JSONPWAR/WriteJSONPServlet";
-        runTest();
-    }
-
-    /**
-     * Ensure that JsonGenerator is functioning.
-     */
-    @Test
-    public void testJsonStream() throws Exception {
-        this.servlet = "/JSONPWAR/StreamJSONPServlet";
-        runTest();
-    }
-
-    /**
-     * Test plugging in a custom implementation for JSON processing,
-     * where the custom implementation is packaged in the application.
-     */
-    @Test
-    public void testCustomAppJsonProvider() throws Exception {
-        this.servlet = "/customAppJSONPWAR/CustomJsonProviderServlet";
-        runTest();
-    }
-
-    /**
-     * Test plugging in a custom implementation for JSON processing,
-     * where the custom implementation is packaged in a shared library.
-     */
-    @Test
-    public void testCustomLibJsonProvider() throws Exception {
-        this.servlet = "/customLibJSONPWAR/CustomJsonProviderServlet";
-        runTest();
+        server.startServer();
     }
 }
