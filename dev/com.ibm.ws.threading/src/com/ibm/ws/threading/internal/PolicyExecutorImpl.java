@@ -129,12 +129,12 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         private final Object task;
 
         public PolicyTaskFuture(Callable<T> task) {
-            this.futureTask = new FutureTask(task);
+            this.futureTask = new FutureTask<T>(task);
             this.task = task;
         }
 
         public PolicyTaskFuture(Runnable task, T result) {
-            this.futureTask = new FutureTask(task, result);
+            this.futureTask = new FutureTask<T>(task, result);
             this.task = task;
         }
 
@@ -198,7 +198,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                 int available = maxConcurrencyConstraint.availablePermits();
 
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "maxConcurrency permits available: " + available);
+                    Tr.debug(PolicyExecutorImpl.this, tc, "maxConcurrency permits available: " + available);
 
                 // If this was the only polling task left, check once again to ensure there are still no items left in the queue.
                 // Otherwise a race condition could leave a task unexecuted.
@@ -333,6 +333,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
      * @param policyTaskFuture submitted task and its Future.
      * @throws RejectedExecutionException if the task is rejected rather than being queued.
      */
+    @FFDCIgnore(value = { InterruptedException.class, RejectedExecutionException.class }) // these are raised directly to invoker, who decides how to handle
     @Trivial // because invoker is traced
     private void enqueue(PolicyTaskFuture<?> policyTaskFuture) {
         try {
@@ -357,6 +358,10 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(this, tc, "enqueue", x);
             throw new RejectedExecutionException(x);
+        } catch (RejectedExecutionException x) { // redundant with RuntimeException codde path, but added to allow FFDCIgnore
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                Tr.debug(this, tc, "enqueue", x);
+            throw x;
         } catch (RuntimeException x) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(this, tc, "enqueue", x);
@@ -610,26 +615,20 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             // apart from a timing window where a task is being scheduled during shutdown, which is
             // covered by checking the state before returning from submit.
             for (PolicyTaskFuture<?> f = queue.poll(); f != null; f = queue.poll()) {
-                boolean canceled = f.cancel(false);
-                if (trace && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "canceled queued task?", canceled);
-
-                // It would be wrong to return FutureTask as the Runnable.
-                // Presumably the list of tasks that didn't run is being returned so that the invoker can decide what to do
-                // with them, which includes having the option to run them, which is not an option for a canceled FutureTask.
-                if (f.task instanceof Runnable)
-                    queuedTasks.add((Runnable) f.task);
-                else
-                    queuedTasks.add(new RunnableFromCallable((Callable<?>) f.task));
+                if (f.cancel(false)) {
+                    // It would be wrong to return FutureTask as the Runnable.
+                    // Presumably the list of tasks that didn't run is being returned so that the invoker can decide what to do
+                    // with them, which includes having the option to run them, which is not an option for a canceled FutureTask.
+                    if (f.task instanceof Runnable)
+                        queuedTasks.add((Runnable) f.task);
+                    else
+                        queuedTasks.add(new RunnableFromCallable((Callable<?>) f.task));
+                }
             }
 
             // Cancel tasks that are running
-            for (Iterator<PolicyTaskFuture<?>> it = running.iterator(); it.hasNext();) {
-                PolicyTaskFuture<?> f = it.next();
-                boolean canceled = f.cancel(true);
-                if (trace && tc.isDebugEnabled())
-                    Tr.debug(this, tc, "canceled running task?", f, f.task, canceled);
-            }
+            for (Iterator<PolicyTaskFuture<?>> it = running.iterator(); it.hasNext();)
+                it.next().cancel(true);
 
             if (state.compareAndSet(State.TASKS_CANCELING, State.TASKS_CANCELED))
                 if (trace && tc.isEventEnabled())
