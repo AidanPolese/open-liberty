@@ -34,6 +34,9 @@ import org.junit.runner.RunWith;
 
 import test.utils.Utils;
 
+import test.common.SharedLocationManager;
+import test.common.SharedOutputManager;
+
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.location.WsResource;
 
@@ -78,6 +81,9 @@ public class SharedLocationTest {
     public void tearDown() throws Exception {
         SharedLocationManager.resetWsLocationAdmin();
     }
+	
+	//public static final String TEST_DATA_DIR = "bin_test/publish/servers";
+    public static final String TEST_SERVER = "com.ibm.ws.kernel.service_test";
 
     /**
      * Test method for {@link test.common.SharedLocationManager#createImageLocations(java.lang.String)} .
@@ -87,7 +93,7 @@ public class SharedLocationTest {
         final String m = "testCreateImageLocationsString";
 
         try {
-            SharedLocationManager.createImageLocations("com.ibm.ws.kernel.service.location/bin_test");
+            SharedLocationManager.createImageLocations(TEST_SERVER);
             WsLocationAdmin locSvc = (WsLocationAdmin) SharedLocationManager.getLocationInstance();
 
             String installDir = System.getProperty("install.dir");
