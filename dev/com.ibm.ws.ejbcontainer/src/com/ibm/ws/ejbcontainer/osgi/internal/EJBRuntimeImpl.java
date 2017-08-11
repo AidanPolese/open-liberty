@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2016 IBM Corporation and others.
+ * Copyright (c) 2012, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -157,6 +158,7 @@ import com.ibm.wsspi.ejbcontainer.WSEJBEndpointManager;
 import com.ibm.wsspi.ejbcontainer.WSEJBHandlerResolver;
 import com.ibm.wsspi.injectionengine.InjectionEngine;
 import com.ibm.wsspi.injectionengine.ReferenceContext;
+import com.ibm.wsspi.kernel.feature.LibertyFeature;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.kernel.service.utils.ServerQuiesceListener;
 
@@ -220,6 +222,8 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
     private final AtomicServiceReference<EJBRemoteRuntime> ejbRemoteRuntimeServiceRef = new AtomicServiceReference<EJBRemoteRuntime>(REFERENCE_EJB_REMOTE_RUNTIME);
     private final AtomicServiceReference<EJBMBeanRuntime> ejbMBeanRuntimeServiceRef = new AtomicServiceReference<EJBMBeanRuntime>(REFERENCE_EJB_MBEAN_RUNTIME);
     private final AtomicServiceReference<ManagedObjectService> managedObjectServiceRef = new AtomicServiceReference<ManagedObjectService>(REFERENCE_MANAGED_OBJECT_SERVICE);
+
+    private volatile CountDownLatch remoteFeatureLatch = null;
 
     private WSEJBHandlerResolver webServicesHandlerResolver;
     private EJBPMICollaboratorFactory ejbPMICollaboratorFactory;
@@ -323,9 +327,7 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
         File passivationDir = bc.getDataFile("passivation");
         createPassivationDirectory(passivationDir);
         FileBeanStore fileBeanStore = new FileBeanStore(passivationDir.getAbsolutePath());
-        StatefulPassivator statefulPassivator = new StatefulPassivatorImpl(fileBeanStore,
-                        container,
-                        serializationServiceRef);
+        StatefulPassivator statefulPassivator = new StatefulPassivatorImpl(fileBeanStore, container, serializationServiceRef);
         config.setStatefulPassivator(statefulPassivator);
 
         try {
@@ -753,6 +755,7 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
     @Override
     protected NameSpaceBinder<?> createNameSpaceBinder(EJBModuleMetaDataImpl mmd) {
         OSGiEJBModuleMetaDataImpl osgiMMD = getOSGiEJBModuleMetaDataImpl(mmd);
+        waitForEJBRemoteRuntime();
         if (osgiMMD.isSystemModule()) {
             // Use the NameSpaceBinder if cached (i.e. module starting), otherwise create a new one
             NameSpaceBinder<?> binder = osgiMMD.systemModuleNameSpaceBinder;
@@ -1200,6 +1203,7 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
 
     @Override
     public Object getRemoteReference(EJSRemoteWrapper remoteObject) {
+        waitForEJBRemoteRuntime();
         return ejbRemoteRuntimeServiceRef.getServiceWithException().getReference(remoteObject);
     }
 
@@ -1335,10 +1339,34 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
 
         // bind any Remote interfaces to COS Naming for beans already started
         bindAllRemoteInterfacesToContextRoot();
+
+        CountDownLatch remoteLatch = remoteFeatureLatch;
+        if (remoteLatch != null) {
+            remoteLatch.countDown();
+            remoteFeatureLatch = null;
+        }
     }
 
     protected void unsetEJBRemoteRuntime(ServiceReference<EJBRemoteRuntime> ref) {
         this.ejbRemoteRuntimeServiceRef.unsetReference(ref);
+    }
+
+    @FFDCIgnore(InterruptedException.class)
+    private void waitForEJBRemoteRuntime() {
+        // If the ejbRemote feature has been configured, but not yet started
+        // then wait for up to 30 seconds for it to come up (primarily waiting
+        // for the ORB to start.
+        CountDownLatch remoteLatch = remoteFeatureLatch;
+        if (remoteLatch != null) {
+            try {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                    Tr.debug(tc, "Waiting 30 seconds for EJBRemoteRuntime");
+                remoteLatch.await(30, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                    Tr.debug(tc, "Waiting for EJBRemoteRuntime failed: " + e);
+            }
+        }
     }
 
     @Reference(name = REFERENCE_EJB_MBEAN_RUNTIME,
@@ -1410,7 +1438,7 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
      * Returns the binding context for the currently active extended-scoped
      * persistence context for the thread of execution. Null will be returned
      * if an extended-scoped persistence context is not currently active. <p>
-     * 
+     *
      * @return binding context for currently active extended-scoped
      *         persistence context.
      */
@@ -1444,6 +1472,25 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
     protected synchronized void unsetEJBPMICollaboratorFactory(EJBPMICollaboratorFactory factory) {
         ejbPMICollaboratorFactory = null;
         container.setPMICollaboratorFactory(null);
+    }
+
+    @Reference(name = "features", cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY)
+    protected void setLibertyFeature(ServiceReference<LibertyFeature> feature) {
+        String featureName = (String) feature.getProperty("ibm.featureName");
+        if (featureName != null && featureName.startsWith("ejbRemote")) {
+            remoteFeatureLatch = new CountDownLatch(1);
+        }
+    }
+
+    protected void unsetLibertyFeature(ServiceReference<LibertyFeature> feature) {
+        String featureName = (String) feature.getProperty("ibm.featureName");
+        if (featureName != null && featureName.startsWith("ejbRemote")) {
+            CountDownLatch remoteLatch = remoteFeatureLatch;
+            if (remoteLatch != null) {
+                remoteLatch.countDown();
+                remoteFeatureLatch = null;
+            }
+        }
     }
 
     @Override
@@ -1514,8 +1561,8 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
     }
 
     @Override
-    public void checkRemoteSupported(EJSHome home, String interfaceName)
-                    throws EJBNotFoundException {
+    public void checkRemoteSupported(EJSHome home, String interfaceName) throws EJBNotFoundException {
+        waitForEJBRemoteRuntime();
         if (ejbRemoteRuntimeServiceRef.getReference() == null) {
             J2EEName j2eeName = home.getJ2EEName();
             String appName = j2eeName.getApplication();
@@ -1639,9 +1686,7 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
      */
     @Override
     public ClassLoader getClassLoader(ComponentMetaData metaData) {
-        return (metaData instanceof BeanMetaData)
-                        ? ((BeanMetaData) metaData).ivContextClassLoader
-                        : null;
+        return (metaData instanceof BeanMetaData) ? ((BeanMetaData) metaData).ivContextClassLoader : null;
     }
 
     /**
@@ -1650,15 +1695,14 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
      * framework hooks or logging performance metrics (PMI)
      */
     @Override
-    public void notifyMessageDelivered(Object proxy)
-    {
+    public void notifyMessageDelivered(Object proxy) {
         // Nothing to do by default
         // tWAS can do 'if (proxy instanceof MEH) { that logic }'
     }
 
     /**
      * Method to get the XAResource corresponding to an ActivationSpec from the RRSXAResourceFactory
-     * 
+     *
      * @param bmd The BeanMetaData object for the MDB being handled
      * @param xid Transaction branch qualifier
      * @return the XAResource
