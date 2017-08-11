@@ -28,16 +28,16 @@ public class InterrupterTask implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("> call " + toString());
+        System.out.println("> run " + toString());
         try {
             unit.sleep(timeout);
             thread.interrupt();
-            System.out.println("< call " + toString());
+            System.out.println("< run " + toString());
         } catch (InterruptedException x) {
-            System.out.println("< call " + toString() + " " + x);
+            System.out.println("< run " + toString() + " " + x);
             throw new RuntimeException(x);
         } catch (RuntimeException x) {
-            System.out.println("< call " + toString() + " " + x);
+            System.out.println("< run " + toString() + " " + x);
             throw x;
         }
     }

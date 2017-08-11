@@ -17,6 +17,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -38,6 +40,7 @@ import com.ibm.ws.threading.PolicyExecutor;
 import com.ibm.ws.threading.PolicyExecutor.QueueFullAction;
 import com.ibm.ws.threading.PolicyExecutorProvider;
 
+import componenttest.annotation.AllowedFFDC;
 import componenttest.annotation.ExpectedFFDC;
 
 import componenttest.app.FATServlet;
@@ -405,6 +408,343 @@ public class PolicyExecutorServlet extends FATServlet {
         assertTrue(executor.awaitTermination(5, TimeUnit.MINUTES));
 
         assertTrue(executor.isShutdown());
+        assertTrue(executor.isTerminated());
+    }
+
+    // Attempt to await termination from multiple threads at once after a shutdown.
+    @AllowedFFDC(value = { "java.lang.InterruptedException", "java.util.concurrent.RejectedExecutionException" })
+    @Test
+    public void testConcurrentAwaitTerminationAfterShutdown() throws Exception {
+        final int totalAwaits = 10;
+        ExecutorService executorThatAwaits = provider.create("testConcurrentAwaitTerminationAfterShutdown-awaiter")
+                .maxConcurrency(totalAwaits)
+                .maxQueueSize(totalAwaits);
+        ExecutorService executorThatTerminates = provider.create("testConcurrentAwaitTerminationAfterShutdown-terminates")
+                .maxConcurrency(1)
+                .maxQueueSize(10);
+
+        // Submit one task to use up all of the threads of the executor that we will await termination of
+        CountDownLatch continueLatch = new CountDownLatch(1);
+        CountDownTask blockingTask = new CountDownTask(new CountDownLatch(1), continueLatch, TimeUnit.MINUTES.toNanos(20));
+        Future<Boolean> blockerFuture = executorThatTerminates.submit(blockingTask);
+
+        // Submit many additional tasks to be queued
+        int numToQueue = 5;
+        List<Future<Integer>> queuedFutures = new ArrayList<Future<Integer>>(numToQueue);
+        AtomicInteger count = new AtomicInteger(0);
+        for (int i = 0; i < numToQueue; i++) {
+            System.out.println("Queuing task #" + i);
+            queuedFutures.add(executorThatTerminates.submit((Callable<Integer>) new SharedIncrementTask(count)));
+        }
+
+        List<Future<Boolean>> awaitTermFutures = new ArrayList<Future<Boolean>>(); 
+        for (int i = 0; i < totalAwaits; i++) {
+            System.out.println("Submitting awaitTermination task #" + i);
+            awaitTermFutures.add(executorThatAwaits.submit(new TerminationAwaitTask(executorThatTerminates, TimeUnit.MINUTES.toNanos(10))));
+        }
+
+        executorThatTerminates.shutdown();
+
+        // Allow the single blocking task to complete, which means that it will become possible to run queued tasks.
+        continueLatch.countDown();
+
+        long start = System.nanoTime();
+        long maxWait = TimeUnit.MINUTES.toNanos(5);
+        for (int i = 0; i < totalAwaits; i++) {
+            long remaining = maxWait - (System.nanoTime() - start);
+            assertTrue("awaitTermination Future #" + i, awaitTermFutures.get(i).get(remaining, TimeUnit.NANOSECONDS));
+        }
+
+        assertTrue(blockerFuture.get()); // Initial task completed
+
+        assertEquals(numToQueue, count.get());
+
+        for (int i = 0; i < numToQueue; i++)
+            assertTrue("previously queued Future #" + i, queuedFutures.get(i).get(0, TimeUnit.MILLISECONDS) > 0);
+
+        try {
+            executorThatTerminates.execute(new SharedIncrementTask(null));
+            fail("Submits should not be allowed after shutdown");
+        } catch (RejectedExecutionException x) {} // pass
+    }
+
+    // Attempt to await termination from multiple threads at once after a shutdownNow.
+    @AllowedFFDC(value = { "java.lang.InterruptedException", "java.util.concurrent.RejectedExecutionException" })
+    @Test
+    public void testConcurrentAwaitTerminationAfterShutdownNow() throws Exception {
+        final int totalAwaitTermination = 6;
+        final int totalAwaitEnqueue = 4;
+        final int numToQueue = 2;
+        ExecutorService executorThatAwaits = provider.create("testConcurrentAwaitTerminationAfterShutdownNow-awaiter")
+                .maxConcurrency(totalAwaitTermination + totalAwaitEnqueue)
+                .maxQueueSize(totalAwaitTermination + totalAwaitEnqueue);
+        ExecutorService executorThatTerminates = provider.create("testConcurrentAwaitTerminationAfterShutdownNow-terminates")
+                .maxConcurrency(1)
+                .maxQueueSize(numToQueue)
+                .maxWaitForEnqueue(100);
+
+        // Submit one task to use up all of the threads of the executor that we will await termination of
+        CountDownLatch continueLatch = new CountDownLatch(1);
+        CountDownTask blockingTask = new CountDownTask(new CountDownLatch(1), continueLatch, TimeUnit.MINUTES.toNanos(30));
+        Future<Boolean> blockerFuture = executorThatTerminates.submit(blockingTask);
+
+        AtomicInteger count = new AtomicInteger(0);
+
+        // Submit a couple of additional tasks to be queued
+        List<Future<Integer>> queuedFutures = new ArrayList<Future<Integer>>(numToQueue);
+        for (int i = 0; i < numToQueue; i++) {
+            System.out.println("Queuing task #" + i);
+            queuedFutures.add(executorThatTerminates.submit((Callable<Integer>) new SharedIncrementTask(count)));
+        }
+
+        // Submit tasks to wait for termination
+        List<Future<Boolean>> awaitTermFutures = new ArrayList<Future<Boolean>>(); 
+        for (int i = 0; i < totalAwaitTermination; i++) {
+            System.out.println("Submitting awaitTermination task #" + i);
+            awaitTermFutures.add(executorThatAwaits.submit(new TerminationAwaitTask(executorThatTerminates, TimeUnit.MINUTES.toNanos(10))));
+        }
+
+        // Submit several tasks to await queue positions
+        List<Future<Future<Integer>>> awaitingEnqueueFutures = new ArrayList<Future<Future<Integer>>>(totalAwaitEnqueue);
+        for (int i = 0; i < totalAwaitEnqueue; i++) {
+            System.out.println("Submitting task #" + i + " that will wait for a queue position");
+            awaitingEnqueueFutures.add(executorThatAwaits.submit(new SubmitterTask<Integer>(executorThatTerminates, new SharedIncrementTask(count))));
+        }
+
+        List<Runnable> tasksCanceledFromQueue = executorThatTerminates.shutdownNow();
+
+        long start = System.nanoTime();
+        long maxWait = TimeUnit.MINUTES.toNanos(5);
+        for (int i = 0; i < totalAwaitTermination; i++) {
+            long remaining = maxWait - (System.nanoTime() - start);
+            assertTrue("awaitTermination Future #" + i, awaitTermFutures.get(i).get(remaining, TimeUnit.NANOSECONDS));
+        }
+
+        // Initial task should be canceled
+        try {
+            fail("Running task should have been canceled due to shutdownNow. Instead: " + blockerFuture.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        for (int i = 0; i < numToQueue; i++)
+            try {
+                fail("shutdownNow should have canceled previously queued Future #" + i + ": " + queuedFutures.get(i).get(0, TimeUnit.MILLISECONDS));
+            } catch (CancellationException x) {} // pass
+
+        // shutdownNow should cancel at least as many tasks as were in the queue when it was invoked.
+        // There is a possibility of a task that was waiting to enqueue briefly entering the queue during this window and also being canceled,
+        // which is why we check for at least as many instead of an exact match.
+        assertTrue("Tasks canceled from queue by shutdownNow: " + tasksCanceledFromQueue, tasksCanceledFromQueue.size() >= numToQueue);
+
+        // Tasks for blocked enqueue
+        for (int i = 0; i < totalAwaitEnqueue; i++) {
+            Future<Future<Integer>> ff = awaitingEnqueueFutures.get(i);
+            try {
+                System.out.println("Future for blocked enqueue #" + i);
+                fail("Should not be able to submit task with full queue, even after shutdownNow: " + ff.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+            } catch (ExecutionException x) {
+                if (!(x.getCause() instanceof RejectedExecutionException))
+                    throw x;
+            }
+        }
+
+        // None of the queued or waiting-to-enqueue tasks should even attempt to start running
+        assertEquals(0, count.get());
+
+        try {
+            executorThatTerminates.execute(new SharedIncrementTask(null));
+            fail("Submits should not be allowed after shutdownNow");
+        } catch (RejectedExecutionException x) {} // pass
+    }
+
+    // Attempt shutdown and shutdownNow from multiple threads at once.
+    @AllowedFFDC(value = { "java.lang.InterruptedException", "java.util.concurrent.RejectedExecutionException" })
+    @Test
+    public void testConcurrentShutdownAndShutdownNow() throws Exception {
+        final int total = 10;
+        ExecutorService executor = provider.create("testConcurrentShutdownAndShutdownNow").maxConcurrency(total);
+        CountDownLatch beginLatch = new CountDownLatch(total);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+
+        ShutdownTask shutdownTask = new ShutdownTask(executor, false, beginLatch, continueLatch, TimeUnit.HOURS.toNanos(1));
+        ShutdownTask shutdownNowTask = new ShutdownTask(executor, true, beginLatch, continueLatch, TimeUnit.HOURS.toNanos(1));
+        ArrayList<Future<List<Runnable>>> futures = new ArrayList<Future<List<Runnable>>>();
+        for (int i = 0; i < total; i++)
+            if (i % 2 == 0) {
+                System.out.println("Submitting shutdown task #" + i);
+                futures.add(executor.submit(shutdownTask));
+            } else {
+                System.out.println("Submitting shutdownNow task #" + i);
+                futures.add(executor.submit(shutdownNowTask));                
+            }
+
+        Thread[] threads = new Thread[total]; // might not be in the same order as tasks were submitted
+
+        // Position all tasks to the point where they are about to attempt a shutdown.
+        beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+
+        for (int i = 0; i < total; i++)
+             threads[i] = shutdownTask.executionThreads.poll();
+
+        System.out.println("Execution threads for shutdown tasks: " + Arrays.toString(threads));
+
+        // Let all of the tasks attempt the shutdown
+        continueLatch.countDown();
+
+        for (int i = 0; i < total; i++)
+            try {
+                System.out.println("Attemping get for shutdown future #" + i);
+                List<Runnable> canceledQueuedTasks = futures.get(i).get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                if (i % 2 == 0)
+                    assertNull(canceledQueuedTasks);
+                else
+                    assertEquals(0, canceledQueuedTasks.size());
+                System.out.println("Successful");
+            } catch (CancellationException x) { // pass because shutdownNow will cancel running tasks
+                System.out.println("Task was canceled due to shutdownNow");
+            }
+
+        try {
+            executor.execute(new SharedIncrementTask(null));
+            fail("Submits should not be allowed after shutdown or shutdownNow");
+        } catch (RejectedExecutionException x) {} // pass
+
+        assertTrue(executor.isShutdown());
+
+        // poll for termination
+        for (long start = System.nanoTime(); !executor.isTerminated() && System.nanoTime() - start < TIMEOUT_NS; TimeUnit.MILLISECONDS.sleep(200)) ;
+
+        assertTrue(executor.isTerminated());
+    }
+
+    // Attempt shutdown from multiple threads at once. Interrupt most of them and verify that the interrupted
+    // shutdown operations fail rather than prematurely returning as successful prior to a successful shutdown.
+    @AllowedFFDC(value = { "java.lang.InterruptedException", "java.util.concurrent.RejectedExecutionException" })
+    @Test
+    public void testInterruptShutdown() throws Exception {
+        final int total = 10;
+        ExecutorService executor = provider.create("testInterruptShutdown").maxConcurrency(total);
+        CountDownLatch beginLatch = new CountDownLatch(total);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+
+        ShutdownTask shutdownTask = new ShutdownTask(executor, false, beginLatch, continueLatch, TimeUnit.HOURS.toNanos(1));
+        ArrayList<Future<List<Runnable>>> futures = new ArrayList<Future<List<Runnable>>>();
+        for (int i = 0; i < total; i++) {
+            System.out.println("Submitting shutdown task #" + i);
+            futures.add(executor.submit(shutdownTask));
+        }
+
+        Thread[] threads = new Thread[total]; // might not be in the same order as tasks were submitted
+
+        // Position all tasks to the point where they are about to attempt a shutdown.
+        beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+
+        for (int i = 0; i < total; i++)
+             threads[i] = shutdownTask.executionThreads.poll();
+
+        System.out.println("Execution threads for shutdown tasks: " + Arrays.toString(threads));
+
+        // Let all of the tasks attempt the shutdown
+        continueLatch.countDown();
+
+        // Interrupt all but the first 2 shutdown operations
+        for (int i = 2; i < total; i++)
+            threads[i].interrupt();
+
+        // Verify that all shutdown attempts either succeeded or failed as expected with a RuntimeException with cause of InterruptedException
+        int interruptCount = 0;
+        for (int i = 0; i < total; i++)
+            try {
+                System.out.println("Attemping get for shutdown future #" + i);
+                List<Runnable> result = futures.get(i).get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                assertNull(result); 
+                System.out.println("Successful");
+            } catch (ExecutionException x) {
+                System.out.println(x);
+                if (x.getCause() instanceof RuntimeException  && x.getCause().getCause() instanceof InterruptedException)
+                    interruptCount++;
+                else
+                    throw x;
+            }
+
+        assertTrue("Too many tasks interrupted: " + interruptCount, interruptCount <= 8);
+
+        try {
+            executor.execute(new SharedIncrementTask(null));
+            fail("Submits should not be allowed after shutdown");
+        } catch (RejectedExecutionException x) {} // pass
+
+        assertTrue(executor.isShutdown());
+
+        // poll for termination
+        for (long start = System.nanoTime(); !executor.isTerminated() && System.nanoTime() - start < TIMEOUT_NS; TimeUnit.MILLISECONDS.sleep(200)) ;
+
+        assertTrue(executor.isTerminated());
+    }
+
+    // Attempt shutdownNow from multiple threads at once. Interrupt most of them and verify that the interrupted
+    // shutdownNow operations fail rather than prematurely returning as successful prior to a successful shutdown.
+    @AllowedFFDC(value = { "java.lang.InterruptedException", "java.util.concurrent.RejectedExecutionException" })
+    @Test
+    public void testInterruptShutdownNow() throws Exception {
+        final int total = 10;
+        ExecutorService executor = provider.create("testInterruptShutdownNow").maxConcurrency(total);
+        CountDownLatch beginLatch = new CountDownLatch(total);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+
+        ShutdownTask shutdownNowTask = new ShutdownTask(executor, true, beginLatch, continueLatch, TimeUnit.HOURS.toNanos(1));
+        ArrayList<Future<List<Runnable>>> futures = new ArrayList<Future<List<Runnable>>>();
+        for (int i = 0; i < total; i++) {
+            System.out.println("Submitting shutdownNow task #" + i);
+            futures.add(executor.submit(shutdownNowTask));
+        }
+
+        Thread[] threads = new Thread[total]; // might not be in the same order as tasks were submitted
+
+        // Position all tasks to the point where they are about to attempt a shutdown.
+        beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+
+        for (int i = 0; i < total; i++)
+             threads[i] = shutdownNowTask.executionThreads.poll();
+
+        System.out.println("Execution threads for shutdownNow tasks: " + Arrays.toString(threads));
+
+        // Let all of the tasks attempt the shutdown
+        continueLatch.countDown();
+
+        // Interrupt all but the first 2 shutdown operations
+        for (int i = 2; i < total; i++)
+            threads[i].interrupt();
+
+        // Verify that all shutdown attempts either succeeded or failed as expected with a RuntimeException with cause of InterruptedException
+        int interruptCount = 0;
+        for (int i = 0; i < total; i++)
+            try {
+                System.out.println("Attemping get for shutdownNow future #" + i);
+                List<Runnable> canceledQueuedTasks = futures.get(i).get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                assertEquals(0, canceledQueuedTasks.size()); 
+                System.out.println("Successful");
+            } catch (ExecutionException x) {
+                System.out.println(x);
+                if (x.getCause() instanceof RuntimeException  && x.getCause().getCause() instanceof InterruptedException)
+                    interruptCount++;
+                else
+                    throw x;
+            } catch (CancellationException x) { // pass because shutdownNow will cancel running tasks
+                System.out.println("Task was canceled due to shutdownNow");
+            }
+
+        assertTrue("Too many tasks interrupted: " + interruptCount, interruptCount <= 8);
+
+        try {
+            executor.execute(new SharedIncrementTask(null));
+            fail("Submits should not be allowed after shutdownNow");
+        } catch (RejectedExecutionException x) {} // pass
+
+        assertTrue(executor.isShutdown());
+
+        // poll for termination
+        for (long start = System.nanoTime(); !executor.isTerminated() && System.nanoTime() - start < TIMEOUT_NS; TimeUnit.MILLISECONDS.sleep(200)) ;
+
         assertTrue(executor.isTerminated());
     }
 
