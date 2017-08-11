@@ -16,6 +16,8 @@ Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version>=1.8))"
 
 WS-TraceGroup: HEALTH
 
--buildpath: com.ibm.ws.org.osgi.annotation.versioning;version=latest
+-buildpath: \
+        com.ibm.websphere.javaee.cdi.1.2;version=latest, \
+        com.ibm.ws.org.osgi.annotation.versioning;version=latest
 
 instrument.disabled: true
