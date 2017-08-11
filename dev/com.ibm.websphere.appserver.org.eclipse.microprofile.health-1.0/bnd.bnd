@@ -10,9 +10,9 @@
 #*******************************************************************************
 -include ~../cnf/resources/bnd/liberty-release.props
 
-nobundles=true
+-nobundles=true
 
-public.feature.resources: **
+publish.feature.resources: **
 
 -dependson: \
     com.ibm.websphere.org.eclipse.microprofile.health-1.0;version=latest
