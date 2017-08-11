@@ -135,8 +135,13 @@ public class PackageProcessor implements BundleTrackerCustomizer<Object> {
                     SharedPackageInspector inspector = st.getService();
                     if (inspector != null) {
                         PackageType exported = inspector.getExportedPackageType(packageName);
-                        // If it's spec, it's not internal - otherwise, it is
-                        return exported == null || !exported.isSpecOrThirdPartyApi();
+                        // If it's spec, third party, or stable it's not internal - otherwise, it is
+                        if ( exported == null )
+                            return true;
+                        if ( exported.isSpecApi() || exported.isThirdPartyApi() || exported.isStableApi() ) 
+                            return false;
+                        
+                        return true;
                     }
 
                     // If we couldn't get hold of the service, assume it was internal if our bundles export it
