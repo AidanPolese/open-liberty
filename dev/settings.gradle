@@ -50,19 +50,24 @@ def loadBuildProps() {
 	  usrHomeProps = file(System.properties['build.properties.path']);
 	}
   }
+  if (usrHomeProps.exists()) {    
+    usrHomeProps.withInputStream { props.load(it) }    
+    props.each {      
+      props.setProperty(it.key, it.value)      
+      }
+    }
   
   def fetchRepo = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl=https://repo.maven.apache.org/maven2/; index=${build}/oss_dependencies.maven; name = "Central";')
+  def fetchRepo2 = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl=http://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/wasliberty-open-liberty/; index=${build}/oss_ibm.maven; name = "OSSIBM";')
   
-  if (!props.getProperty('artifactory.force.external.repo') && usrHomeProps.exists()) {    
-	  usrHomeProps.withInputStream { props.load(it) }    
-	  props.each {      
-		  props.setProperty(it.key, it.value)      
-      }
+  if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {    
 	  def repoURL = ('https://' + props.getProperty('artifactory.download.server') + '/artifactory/wasliberty-open-liberty')
 	  fetchRepo = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl= ' + repoURL + ' ; snapshotUrl= ' + repoURL + ' ; index=${build}/oss_dependencies.maven; name = "Artifactory";')
+    fetchRepo2 = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl= ' + repoURL + ' ; snapshotUrl= ' + repoURL + ' ; index=${build}/oss_ibm.maven; name = "Artifactory_2";')
   } 
   
-  props.setProperty('fetch.repository', fetchRepo)
+  props.setProperty('fetch.oss.repository', fetchRepo)
+  props.setProperty('fetch.oss.ibm.repository', fetchRepo2)
     
   // generated.properties is used to pass build-time variables from Gradle -> Bnd in cnf/build.bnd    
   File propsFile = new File('generated.properties')    
