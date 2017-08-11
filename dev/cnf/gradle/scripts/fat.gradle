@@ -66,3 +66,7 @@ task buildandrun {
     dependsOn releaseNeeded
     dependsOn runfat
 }
+
+jar {
+	dependsOn addRequiredLibraries
+}
