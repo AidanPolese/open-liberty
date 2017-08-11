@@ -8,15 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-publishing {
-  publications {
-    maven(MavenPublication) {
-      artifactId project.name
-      version project.version
-      artifact zipProjectFVT
-    }
-  }
-}
+apply from: '../cnf/gradle/scripts/fat.gradle'
 
 task copyFeatureBundle {
   doLast {

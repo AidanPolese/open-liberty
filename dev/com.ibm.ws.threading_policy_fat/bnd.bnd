@@ -16,12 +16,6 @@ src: \
 	test-applications/basicfat/src,\
 	test-bundles/testpolicyexecutor/src
 
-# TODO: key this off of test.project=true
-publish.wlp.jar.disabled: true
-
-# TODO: key this off of test.project=true
-instrument.disabled: true
-
 test.project: true
 
 -buildpath: \
