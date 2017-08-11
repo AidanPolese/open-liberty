@@ -21,6 +21,7 @@ import org.jboss.weld.el.WeldELContextListener;
 public class CDIJSFInitializerImpl {
 
     public static void initializeJSF(Application application) {
+
         //CDIService cdiService = cdiServiceRef.getService();
         //BeanManager beanManager = cdiService.getCurrentBeanManager();
         try {
