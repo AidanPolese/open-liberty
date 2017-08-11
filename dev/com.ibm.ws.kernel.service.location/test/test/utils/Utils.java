@@ -22,15 +22,15 @@ public class Utils {
      * Test data directory: note the space! always test paths with spaces. Dratted
      * windows.
      */
-    public static final String TEST_DATA_DIR = "../com.ibm.ws.kernel.service_test/unittest/test data";
+    public static final String TEST_DATA_DIR = "bin_test/test data";
 
     public static final File TEST_DATA = new File(TEST_DATA_DIR);
 
-    public static final String OUTPUT_DATA_DIR = "../com.ibm.ws.kernel.service_test/build/output data";
+    public static final String OUTPUT_DATA_DIR = "generated/output data";
 
     public static final File OUTPUT_DATA = new File(OUTPUT_DATA_DIR);
 
-    private static final File testRoot = new File("../com.ibm.ws.kernel.service_test/build/unittest/tmp");
+    private static final File testRoot = new File("generated/tmp");
 
     public static void recursiveClean(final File fileToRemove) {
         if (fileToRemove == null)
