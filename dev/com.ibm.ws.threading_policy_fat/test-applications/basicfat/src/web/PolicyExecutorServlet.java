@@ -19,17 +19,22 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Resource;
@@ -393,6 +398,103 @@ public class PolicyExecutorServlet extends FATServlet {
         assertTrue(executor.isTerminated());
     }
 
+    // When queued tasks are canceled, it should immediately free up capacity to allow tasks waiting for enqueue to be enqueued.
+    @Test
+    public void testCancelQueuedTasks() throws Exception {
+        ExecutorService executor = provider.create("testCancelQueuedTasks")
+                .maxConcurrency(1)
+                .maxQueueSize(3)
+                .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(10));
+
+        // Use up maxConcurrency
+        Future<Boolean> blockerFuture = executor.submit(new CountDownTask(new CountDownLatch(1), new CountDownLatch(1), TimeUnit.MINUTES.toNanos(30)));
+
+        // Fill the queue
+        AtomicInteger counter = new AtomicInteger();
+        Future<Integer> future1 = executor.submit((Callable<Integer>) new SharedIncrementTask(counter));
+        Future<Integer> future2 = executor.submit((Callable<Integer>) new SharedIncrementTask(counter));
+        Future<Integer> future3 = executor.submit((Callable<Integer>) new SharedIncrementTask(counter));
+
+        // From a separate thread, submit a task that must wait for a queue position
+        Future<Future<Integer>> ff4 = testThreads.submit(new SubmitterTask<Integer>(executor, new SharedIncrementTask(counter)));
+
+        try {
+            fail("Task[4] submit should remain blocked: " + ff4.get(400, TimeUnit.MILLISECONDS));
+        } catch (TimeoutException x) {} // pass
+
+        // Cancel a queued task
+        assertTrue(future2.cancel(false));
+        assertTrue(future2.isCancelled());
+        assertTrue(future2.isDone());
+
+        // Task should be queued now
+        Future<Integer> future4 = ff4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+
+        // From separate threads, submit more tasks that must wait for queue positions
+        Future<Future<Integer>> ff5 = testThreads.submit(new SubmitterTask<Integer>(executor, new SharedIncrementTask(counter)));
+        Future<Future<Integer>> ff6 = testThreads.submit(new SubmitterTask<Integer>(executor, new SharedIncrementTask(counter)));
+
+        try {
+            fail("Task[5] submit should remain blocked: " + ff5.get(400, TimeUnit.MILLISECONDS));
+        } catch (TimeoutException x) {} // pass
+
+        try {
+            fail("Task[6] submit should remain blocked: " + ff6.get(60, TimeUnit.MILLISECONDS));
+        } catch (TimeoutException x) {} // pass
+
+        // Cancel 2 queued tasks
+        assertTrue(future3.cancel(false));
+        assertTrue(future3.isCancelled());
+        assertTrue(future3.isDone());
+
+        assertTrue(future4.cancel(false));
+        assertTrue(future4.isDone());
+        assertTrue(future4.isCancelled());
+
+        // Both tasks should be queued now
+        Future<Integer> future5 = ff5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        Future<Integer> future6 = ff6.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+
+        // Cancel one of them
+        assertTrue(future5.cancel(false));
+        assertTrue(future5.isDone());
+        assertTrue(future5.isCancelled());
+
+        // Cancel the blocker task and let the two tasks remaining in the queue start and run to completion
+        assertTrue(blockerFuture.cancel(true));
+
+        int result1 = future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        int result6 = future6.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+
+        assertEquals(3, result1 + result6); // task increment logic could run in either order, with values of: 1,2
+        assertEquals(2, counter.get());
+
+        assertTrue(future1.isDone());
+        assertTrue(future6.isDone());
+        assertFalse(future1.isCancelled());
+        assertFalse(future6.isCancelled());
+
+        // Should be possible to get the result multiple times
+        assertEquals(Integer.valueOf(result1), future1.get());
+        assertEquals(Integer.valueOf(result6), future6.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+
+        try {
+            fail("get of canceled future [2] must fail: " + future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        try {
+            fail("get of canceled future [3] must fail: " + future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        try {
+            fail("get of canceled future [4] must fail: " + future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        try {
+            fail("get of canceled future [5] must fail: " + future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+    }
+
     // Attempt to await termination from multiple threads at once after a shutdown.
     @Test
     public void testConcurrentAwaitTerminationAfterShutdown() throws Exception {
@@ -528,6 +630,117 @@ public class PolicyExecutorServlet extends FATServlet {
             executor.execute(new SharedIncrementTask(null));
             fail("Submits should not be allowed after shutdownNow");
         } catch (RejectedExecutionException x) {} // pass
+    }
+
+    // Cancel the same queued tasks from multiple threads at the same time. Each task should only successfully cancel once,
+    // exactly one task waiting for enqueue should be allowed to enqueue for each successful cancel.
+    @Test
+    public void testConcurrentCancelQueuedTasks() throws Exception {
+        ExecutorService executor = provider.create("testConcurrentCancelQueuedTasks")
+                .maxConcurrency(1)
+                .maxQueueSize(4)
+                .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(12));
+
+        // Use up maxConcurrency
+        Future<Boolean> blockerFuture = executor.submit(new CountDownTask(new CountDownLatch(1), new CountDownLatch(1), TimeUnit.MINUTES.toNanos(24)));
+
+        // Fill the queue
+        AtomicInteger counter = new AtomicInteger();
+        Future<Integer> future1 = executor.submit((Callable<Integer>) new SharedIncrementTask(counter));
+        Future<Integer> future2 = executor.submit((Callable<Integer>) new SharedIncrementTask(counter));
+        Future<Integer> future3 = executor.submit((Callable<Integer>) new SharedIncrementTask(counter));
+        Future<Integer> future4 = executor.submit((Callable<Integer>) new SharedIncrementTask(counter));
+
+        // From separate threads, submit tasks that must wait for queue positions
+        CompletionService<Future<Integer>> completionSvc = new ExecutorCompletionService<Future<Integer>>(testThreads);
+        Future<Future<Integer>> ff5 = completionSvc.submit(new SubmitterTask<Integer>(executor, new SharedIncrementTask(counter)));
+        Future<Future<Integer>> ff6 = completionSvc.submit(new SubmitterTask<Integer>(executor, new SharedIncrementTask(counter)));
+        Future<Future<Integer>> ff7 = completionSvc.submit(new SubmitterTask<Integer>(executor, new SharedIncrementTask(counter)));
+
+        // Have 8 threads attempt to cancel 2 of the tasks
+        int numCancels = 8;
+        CountDownLatch beginLatch = new CountDownLatch(numCancels);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+        Callable<Boolean> cancellationTask1 = new CancellationTask(future1, false, beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(10));
+        Callable<Boolean> cancellationTask3 = new CancellationTask(future3, false, beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(13));
+        List<Future<Boolean>> cancellationFutures = new ArrayList<Future<Boolean>>(numCancels);
+        for (int i = 0; i < 8; i++)
+            cancellationFutures.add(testThreads.submit(i % 2 == 1 ? cancellationTask1 : cancellationTask3));
+
+        // Position all of the threads so that they are about to attempt cancel
+        assertTrue(beginLatch.await(TIMEOUT_NS * numCancels, TimeUnit.NANOSECONDS));
+
+        // Let them start canceling,
+        continueLatch.countDown();
+
+        // Should be able to enqueue exactly 2 more tasks
+        Future<Future<Integer>> ffA = completionSvc.poll(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        assertNotNull(ffA);
+        assertTrue(ffA.isDone());
+        Future<Integer> futureA = ffA.get();
+
+        Future<Future<Integer>> ffB = completionSvc.poll(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        assertNotNull(ffB);
+        assertTrue(ffB.isDone());
+        Future<Integer> futureB = ffB.get();
+
+        // At this point:
+        // futures 1,3 should be canceled
+        assertTrue(future1.isCancelled());
+        assertTrue(future3.isCancelled());
+
+        // future 2,4,A,B should be queued
+        assertFalse(future2.isDone());
+        assertFalse(future4.isDone());
+        assertFalse(futureA.isDone());
+        assertFalse(futureB.isDone());
+
+        // future C (one of 5,6,7) should still be waiting for a slot in the queue.
+        assertNull(completionSvc.poll());
+
+        // Set subtraction is an inefficient way to compute the remaining future, but this is only a test case
+        Set<Future<Future<Integer>>> remaining = new HashSet<Future<Future<Integer>>>(Arrays.asList(ff5, ff6, ff7));
+        assertTrue(remaining.removeAll(Arrays.asList(ffA, ffB)));
+        Future<Future<Integer>> ffC = remaining.iterator().next();
+
+        try {
+            fail("get of canceled future [1] must fail: " + future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        try {
+            fail("get of canceled future [3] must fail: " + future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        try {
+            fail(ffC + " submit should remain blocked: " + ffC.get(500, TimeUnit.MILLISECONDS));
+        } catch (TimeoutException x) {} // pass
+
+        // Having already verified that task C wasn't queued, cancel the queue attempt
+        assertTrue(ffC.cancel(true));
+
+        try {
+            fail("get of canceled future [C] must fail: " + ffC.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass 
+
+        // Cancel the blocker task and let the four tasks remaining in the queue start and run to completion
+        assertTrue(blockerFuture.cancel(true));
+
+        int result2 = future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        int result4 = future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        int resultA = futureA.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        int resultB = futureB.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+
+        assertEquals(10, result2 + result4 + resultA + resultB); // task increment logic could run in either order, with values of: 1,2,3,4
+        assertEquals(4, counter.get());
+
+        assertTrue(future2.isDone());
+        assertTrue(future4.isDone());
+        assertTrue(futureA.isDone());
+        assertTrue(futureB.isDone());
+        assertFalse(future2.isCancelled());
+        assertFalse(future4.isCancelled());
+        assertFalse(futureA.isCancelled());
+        assertFalse(futureB.isCancelled());
     }
 
     // Attempt shutdown and shutdownNow from multiple threads at once.
