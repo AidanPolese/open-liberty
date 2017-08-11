@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2015 IBM Corporation and others.
+ * Copyright (c) 2014, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -47,6 +47,7 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 import com.ibm.ejs.container.BeanMetaData;
+import com.ibm.ejs.container.EJSContainer;
 import com.ibm.ejs.container.EJSRemoteWrapper;
 import com.ibm.ejs.container.EJSWrapper;
 import com.ibm.ejs.container.RemoteAsyncResult;
@@ -94,7 +95,7 @@ public class EJBRemoteRuntimeImpl implements EJBRemoteRuntime, RemoteObjectRepla
     private final AtomicServiceReference<ORBRef> orbRefSR = new AtomicServiceReference<ORBRef>(REFERENCE_ORB);
     private final AtomicServiceReference<ServerPolicySource> serverPolicySource = new AtomicServiceReference<ServerPolicySource>(REFERENCE_POLICIES);
 
-    private POA adapter;
+    private POA ejbAdapter;
     private POA asyncResultAdapter;
     private NamingContext rootNamingContext;
 
@@ -121,12 +122,12 @@ public class EJBRemoteRuntimeImpl implements EJBRemoteRuntime, RemoteObjectRepla
 
     @Deactivate
     protected synchronized void deactivate(ComponentContext cc) {
+        if (ejbAdapter != null) {
+            ejbAdapter.destroy(false, false);
+        }
+
         orbRefSR.deactivate(cc);
         serverPolicySource.deactivate(cc);
-
-        if (adapter != null) {
-            adapter.destroy(false, false);
-        }
     }
 
     private static class BindingData {
@@ -181,23 +182,7 @@ public class EJBRemoteRuntimeImpl implements EJBRemoteRuntime, RemoteObjectRepla
 
     private synchronized void bind(BindingData bindingData, int interfaceIndex, String interfaceName, String bindingName) {
         BeanMetaData bmd = bindingData.beanMetaData;
-        if (adapter == null) {
-            ORBRef orbRef = orbRefSR.getServiceWithException();
-            ORB orb = orbRef.getORB();
-            if (orb == null) {
-                throw new IllegalStateException("The orb is not available");
-            }
-
-            try {
-                rootNamingContext = NamingContextHelper.narrow(orb.resolve_initial_references("NameService"));
-            } catch (InvalidName e) {
-                throw new IllegalStateException(e);
-            }
-
-            POA poa = orbRef.getPOA();
-            WrapperManager wrapperManager = bmd.container.getWrapperManager();
-            createPOA(poa, wrapperManager);
-        }
+        POA adapter = getEjbAdapter();
 
         NamingContext context = bindingData.contexts[bindingData.contexts.length - 1];
         if (context == null) {
@@ -290,7 +275,40 @@ public class EJBRemoteRuntimeImpl implements EJBRemoteRuntime, RemoteObjectRepla
         }
     }
 
-    private void createPOA(POA rootAdapter, WrapperManager wrapperManager) {
+    private synchronized POA getAsyncResultAdapter() {
+        if (asyncResultAdapter == null) {
+            getEjbAdapter();
+        }
+        return asyncResultAdapter;
+    }
+
+    private synchronized POA getEjbAdapter() {
+        if (ejbAdapter == null) {
+            ORBRef orbRef = orbRefSR.getServiceWithException();
+            ORB orb = orbRef.getORB();
+            if (orb == null) {
+                throw new IllegalStateException("The orb is not available");
+            }
+
+            try {
+                rootNamingContext = NamingContextHelper.narrow(orb.resolve_initial_references("NameService"));
+            } catch (InvalidName e) {
+                throw new IllegalStateException(e);
+            }
+
+            POA poa = orbRef.getPOA();
+            createPOA(poa);
+        }
+        return ejbAdapter;
+    }
+
+    private void createPOA(POA rootAdapter) {
+
+        EJSContainer container = EJSContainer.getDefaultContainer();
+        if (container == null) {
+            throw new IllegalStateException("EJBContainer not available");
+        }
+        WrapperManager wrapperManager = container.getWrapperManager();
 
         List<Policy> policies = new ArrayList<Policy>();
         try {
@@ -326,10 +344,12 @@ public class EJBRemoteRuntimeImpl implements EJBRemoteRuntime, RemoteObjectRepla
         } finally {
             if (!success) {
                 adapter.destroy(false, false);
+                adapter = null;
+                asyncResultAdapter = null;
             }
         }
 
-        this.adapter = adapter;
+        this.ejbAdapter = adapter;
         this.asyncResultAdapter = asyncResultAdapter;
     }
 
@@ -374,13 +394,13 @@ public class EJBRemoteRuntimeImpl implements EJBRemoteRuntime, RemoteObjectRepla
 
     @Override
     public Object getReference(EJSRemoteWrapper remoteObject) {
-        return EJBServantLocatorImpl.getReference(remoteObject, adapter);
+        return EJBServantLocatorImpl.getReference(remoteObject, getEjbAdapter());
     }
 
     @Override
     public byte[] activateAsyncResult(Servant servant) {
         try {
-            return asyncResultAdapter.activate_object(servant);
+            return getAsyncResultAdapter().activate_object(servant);
         } catch (ServantAlreadyActive e) {
             throw new IllegalStateException(e);
         } catch (WrongPolicy e) {
@@ -390,14 +410,14 @@ public class EJBRemoteRuntimeImpl implements EJBRemoteRuntime, RemoteObjectRepla
 
     @Override
     public RemoteAsyncResult getAsyncResultReference(byte[] oid) {
-        org.omg.CORBA.Object ref = asyncResultAdapter.create_reference_with_id(oid, ASYNC_RESULT_TYPE_ID);
+        org.omg.CORBA.Object ref = getAsyncResultAdapter().create_reference_with_id(oid, ASYNC_RESULT_TYPE_ID);
         return (RemoteAsyncResult) PortableRemoteObject.narrow(ref, RemoteAsyncResult.class);
     }
 
     @Override
     public void deactivateAsyncResult(byte[] oid) {
         try {
-            asyncResultAdapter.deactivate_object(oid);
+            getAsyncResultAdapter().deactivate_object(oid);
         } catch (ObjectNotActive e) {
             throw new IllegalStateException(e);
         } catch (WrongPolicy e) {
@@ -422,7 +442,7 @@ public class EJBRemoteRuntimeImpl implements EJBRemoteRuntime, RemoteObjectRepla
         // reference as an Object, but it's less confusing if the generated
         // homes are identical to tWAS.
         if (obj instanceof EJSWrapper) {
-            return EJBServantLocatorImpl.getReference((EJSRemoteWrapper) obj, adapter);
+            return EJBServantLocatorImpl.getReference((EJSRemoteWrapper) obj, getEjbAdapter());
         }
         return null;
     }
