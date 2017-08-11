@@ -831,7 +831,6 @@ public abstract class WebContainer extends BaseContainer {
             // end 272738    Duplicate CacheServletWrappers when url-rewriting is enabled    WAS.webcontainer: rewritten to handle jsessionid.
 
             CacheServletWrapper wrapper = getFromCache(cacheKey);
-            wrapper = null; // H2 hack: we never upgrade post-initial-request if this is cached
             if (wrapper != null) {
                 WebApp webApp = wrapper.getWebApp();// 325429
                 if (isTraceOn && logger.isLoggable(Level.FINE)) //306998.15 
