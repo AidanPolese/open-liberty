@@ -119,6 +119,9 @@ org.apache.httpcomponents:httpcore:4.1.2
 org.apache.httpcomponents:httpcore:4.3
 org.apache.httpcomponents:httpmime:4.1.2
 org.apache.httpcomponents:httpmime:4.3.1
+org.apache.johnzon:johnzon-core:1.1.0
+org.apache.johnzon:johnzon-jsonb:1.1.0
+org.apache.johnzon:johnzon-mapper:1.1.0
 org.apache.myfaces.buildtools:myfaces-builder-annotations:1.0.9
 org.apache.neethi:neethi:3.0.2
 org.apache.servicemix.bundles:org.apache.servicemix.bundles.bcel:5.2_3

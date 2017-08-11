@@ -8,10 +8,13 @@
 # Contributors:
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
--include= jar:${fileuri;${repo;org.glassfish:javax.json;1.0.4;EXACT}}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0.0
 
--includeresource: \
-   @${repo;org.glassfish:javax.json;1.0.4;EXACT}!/org/glassfish/json/*
+# Define a test bundle
+Bundle-Name: Test Bundle Using JSON-B
+Bundle-SymbolicName: test.jsonb.bundle; singleton:=true
 
--buildpath: \
-	org.glassfish:javax.json;version=1.0.4
+Export-Package: test.jsonb.bundle;version=1.0
+
+-dsannotations: test.jsonb.bundle.ServiceThatRequiresJsonb
