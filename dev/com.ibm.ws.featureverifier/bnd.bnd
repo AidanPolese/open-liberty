@@ -1,0 +1,60 @@
+# For information on bnd syntax, see http://was.pok.ibm.com/xwiki/bin/view/Liberty/UsingBnd
+
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+javac.source: 1.7
+javac.target: 1.7
+
+Bundle-Name: featureverifier
+Bundle-SymbolicName: com.ibm.ws.featureverifier.internal
+Bundle-Description: Verifies API/SPI for features.; version=${bVersion}
+
+Bundle-Activator: com.ibm.ws.featureverifier.internal.FeatureVerifier
+
+WS-TraceGroup: featureverifier
+
+Private-Package: com.ibm.ws.featureverifier.internal.*,\
+ com.ibm.aries.buildtasks.classpath.*,\
+ com.ibm.aries.buildtasks.semantic.versioning.*,\
+ com.ibm.aries.buildtasks.utils.*
+
+Import-Package: !org.osgi.service.framework,\
+ com.ibm.wsspi.kernel.service.location;version="[1.0,2)",\
+ com.sun.net.httpserver;resolution:=optional,\
+ !com.sun.*,\
+ *
+
+Include-Resource: \
+    OSGI-INF=resources/OSGI-INF,\
+    asm.jar=${repo;com.ibm.ws.org.objectweb.asm.5.0},\
+    ariesutils.jar=${repo;com.ibm.ws.org.apache.aries.util},\
+    commonslang.jar=${repo;com.ibm.ws.org.apache.commons.lang3.3.5},\
+    diffutils.jar=resources/diffutils-1.2.1.jar,\
+    xmlunit.jar=resources/xmlunit-core-2.0.0-20150223.195556-7.jar
+
+Bundle-ClassPath: asm.jar,ariesutils.jar,commonslang.jar,diffutils.jar,xmlunit.jar,.
+
+instrument.disabled: true
+publish.wlp.jar.disabled: true
+test.project: true
+
+-buildpath: \
+	resources/diffutils-1.2.1.jar;version=file, \
+	resources/xmlunit-core-2.0.0-20150223.195556-7.jar;version=file, \
+	com.ibm.websphere.org.osgi.core;version=latest, \
+	com.ibm.websphere.org.osgi.service.component;version=latest, \
+	com.ibm.wsspi.org.osgi.service.component.annotations;version=latest, \
+	com.ibm.ws.org.apache.aries.util;version=latest, \
+	com.ibm.ws.kernel.feature;version=latest, \
+	com.ibm.ws.kernel.service;version=latest, \
+	com.ibm.ws.org.objectweb.asm.5.0;version=latest, \
+	com.ibm.ws.org.apache.commons.lang3.3.5;version=latest
+
+-testpath: \
+	com.thoughtworks.qdox:qdox;version=1.12, \
+	org.jmock:jmock-junit4;version=2.5.1, \
+	org.jmock:jmock;version=2.5.1, \
+	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
+	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
+	com.ibm.ws.logging.core;version=latest

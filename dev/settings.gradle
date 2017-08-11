@@ -51,7 +51,7 @@ def loadBuildProps() {
 	}
   }
   
-  def fetchRepo = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl=https://repo.maven.apache.org/maven2/; index=${build}/oss_dependencies.maven; name = "Central";')
+  def fetchRepo = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl=https://repo.maven.apache.org/maven2/; index=${build}/oss_dependencies.maven; name = "Central"')
   
   if (!props.getProperty('artifactory.force.external.repo') && usrHomeProps.exists()) {    
 	  usrHomeProps.withInputStream { props.load(it) }    
@@ -59,7 +59,7 @@ def loadBuildProps() {
 		  props.setProperty(it.key, it.value)      
       }
 	  def repoURL = ('https://' + props.getProperty('artifactory.download.server') + '/artifactory/wasliberty-open-liberty')
-	  fetchRepo = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl= ' + repoURL + ' ; snapshotUrl= ' + repoURL + ' ; index=${build}/oss_dependencies.maven; name = "Artifactory";')
+	  fetchRepo = ('aQute.bnd.repository.maven.provider.MavenBndRepository; releaseUrl= ' + repoURL + ' ; snapshotUrl= ' + repoURL + ' ; index=${build}/oss_dependencies.maven; name = "Artifactory"')
   } 
   
   props.setProperty('fetch.repository', fetchRepo)

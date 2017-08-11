@@ -12,8 +12,6 @@
 
 -nobundles=true
 
-publish.feature.resources: *.mf
-
 -dependson: \
 	com.ibm.websphere.appserver.javaeePlatform-6.0;version=latest, \
 	com.ibm.ws.javaee.platform.defaultresource;version=latest, \
