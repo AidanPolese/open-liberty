@@ -163,3 +163,4 @@ org.slf4j:slf4j-jdk14:1.7.7
 org.osgi:org.osgi.core:6.0.0
 com.google.inject:guice:2.0
 com.sun.org.apache.xml.internal:resolver:20050927
+org.eclipse.microprofile.config:microprofile-config-api:1.0
