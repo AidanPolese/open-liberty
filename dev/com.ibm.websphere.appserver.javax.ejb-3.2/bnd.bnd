@@ -12,5 +12,7 @@
 
 -nobundles=true
 
+publish.feature.resources: *.mf
+
 -dependson: \
 	com.ibm.websphere.javaee.ejb.3.2;version=latest

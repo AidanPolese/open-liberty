@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: *.mf
+
 -dependson: \
 	com.ibm.ws.session.monitor;version=latest, \
 	com.ibm.websphere.appserver.api.sessionstats;version=latest

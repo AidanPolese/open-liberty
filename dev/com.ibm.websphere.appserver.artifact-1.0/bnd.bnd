@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: *.mf
+
 -dependson: \
 	com.ibm.ws.artifact;version=latest,\
 	com.ibm.ws.artifact.loose;version=latest,\

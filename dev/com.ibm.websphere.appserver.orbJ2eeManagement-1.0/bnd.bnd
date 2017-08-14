@@ -12,5 +12,7 @@
 
 -nobundles=true
 
+publish.feature.resources: *.mf
+
 -dependson: \
 	com.ibm.ws.transport.iiop.management.j2ee;version=latest

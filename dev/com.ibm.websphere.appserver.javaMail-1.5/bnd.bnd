@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: **
+
 -dependson: \
 	com.ibm.websphere.appserver.javax.mail-1.5;version=latest, \
 	com.ibm.ws.javamail;version=latest, \

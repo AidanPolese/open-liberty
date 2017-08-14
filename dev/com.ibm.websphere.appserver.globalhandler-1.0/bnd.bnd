@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: *.mf
+
 -dependson: \
 	com.ibm.ws.webservices.handler;version=latest, \
 	com.ibm.websphere.appserver.spi.globalhandler;version=latest

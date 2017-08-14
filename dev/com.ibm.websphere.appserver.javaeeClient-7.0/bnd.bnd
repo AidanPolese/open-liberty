@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: **
+
 -dependson: \
 	com.ibm.websphere.appserver.ejbRemoteClient-1.0;version=latest, \
 	com.ibm.websphere.appserver.cdi-1.2;version=latest, \
