@@ -12,11 +12,13 @@ package com.ibm.ws.microprofile.faulttolerance.spi;
 
 import java.util.concurrent.Callable;
 
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
+
 /**
  *
  */
-public interface Executor<T, R> {
+public interface Executor<R> {
 
-    public R execute(Callable<R> callable, T context);
+    public R execute(Callable<R> callable, ExecutionContext context);
 
 }

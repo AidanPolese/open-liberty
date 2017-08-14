@@ -10,8 +10,6 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance.cdi;
 
-import org.eclipse.microprofile.faulttolerance.ExecutionContext;
-
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
@@ -28,7 +26,7 @@ public class AggregatedFTPolicy {
     private CircuitBreakerPolicy circuitBreakerPolicy = null;
     private BulkheadPolicy bulkheadPolicy = null;
     private TimeoutPolicy timeout;
-    private FallbackPolicy<ExecutionContext, ?> fallbackPolicy;
+    private FallbackPolicy<?> fallbackPolicy;
 
     /**
      * @param asynchronous
@@ -100,11 +98,11 @@ public class AggregatedFTPolicy {
         return circuitBreakerPolicy;
     }
 
-    public void setFallbackPolicy(FallbackPolicy<ExecutionContext, ?> fallbackPolicy) {
+    public void setFallbackPolicy(FallbackPolicy<?> fallbackPolicy) {
         this.fallbackPolicy = fallbackPolicy;
     }
 
-    public FallbackPolicy<ExecutionContext, ?> getFallbackPolicy() {
+    public FallbackPolicy<?> getFallbackPolicy() {
         return this.fallbackPolicy;
     }
 

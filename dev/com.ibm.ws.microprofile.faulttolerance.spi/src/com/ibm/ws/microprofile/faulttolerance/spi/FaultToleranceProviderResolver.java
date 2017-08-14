@@ -37,7 +37,7 @@ public abstract class FaultToleranceProviderResolver {
 
     public abstract BulkheadPolicy newBulkheadPolicy();
 
-    public abstract <T, R> FallbackPolicy<T, R> newFallbackPolicy();
+    public abstract <R> FallbackPolicy<R> newFallbackPolicy();
 
     public abstract TimeoutPolicy newTimeoutPolicy();
 
