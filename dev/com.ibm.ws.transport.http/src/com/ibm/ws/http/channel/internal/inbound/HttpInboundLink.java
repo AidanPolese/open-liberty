@@ -13,12 +13,16 @@ package com.ibm.ws.http.channel.internal.inbound;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import com.ibm.websphere.event.Event;
 import com.ibm.websphere.event.EventEngine;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
+import com.ibm.ws.http.channel.h2internal.H2HttpInboundLinkWrap;
 import com.ibm.ws.http.channel.internal.CallbackIDs;
 import com.ibm.ws.http.channel.internal.HttpChannelConfig;
 import com.ibm.ws.http.channel.internal.HttpMessages;
@@ -58,21 +62,21 @@ public class HttpInboundLink extends InboundProtocolLink implements InterChannel
     private static final TraceComponent tc = Tr.register(HttpInboundLink.class, HttpMessages.HTTP_TRACE_NAME, HttpMessages.HTTP_BUNDLE);
 
     /** HTTP service context for this connection */
-    private HttpInboundServiceContextImpl myInterface = null;
+    protected HttpInboundServiceContextImpl myInterface = null;
     /** Channel owning this object */
-    private HttpInboundChannel myChannel = null;
+    protected HttpInboundChannel myChannel = null;
     /** the main TCP service context reference */
-    private TCPConnectionContext myTSC = null;
+    protected TCPConnectionContext myTSC = null;
     /** flag on whether this is a partially parsed request or not */
-    private boolean bPartialParsedRequest = false;
+    protected boolean bPartialParsedRequest = false;
     /** Number of requests processed by this connection. */
-    private int numRequestsProcessed = 0;
+    protected int numRequestsProcessed = 0;
     /** Flag on whether we should filter out exceptions during closes or not */
-    private boolean filterExceptions = false;
+    protected boolean filterExceptions = false;
     /** Flag on whether this link object is active or not */
-    private boolean bIsActive = false;
+    protected boolean bIsActive = false;
     /** List of all unique app side callbacks used for this connection */
-    private List<ConnectionReadyCallback> appSides = null;
+    protected List<ConnectionReadyCallback> appSides = null;
 
     /**
      * Constructor for an HTTP inbound link object.
@@ -82,9 +86,10 @@ public class HttpInboundLink extends InboundProtocolLink implements InterChannel
      */
     public HttpInboundLink(HttpInboundChannel channel, VirtualConnection vc) {
         init(vc, channel);
+//        if (!(this instanceof H2InboundLink) && !(this instanceof H2HttpInboundLinkWrap)) {
         // allocate an empty ISC object
-        this.myInterface = new HttpInboundServiceContextImpl(
-                        null, this, getVirtualConnection(), getChannel().getHttpConfig());
+        this.myInterface = new HttpInboundServiceContextImpl(null, this, getVirtualConnection(), getChannel().getHttpConfig());
+//        }
     }
 
     /**
@@ -103,8 +108,27 @@ public class HttpInboundLink extends InboundProtocolLink implements InterChannel
         if (null != getHTTPContext()) {
             getHTTPContext().setHttpConfig(channel.getHttpConfig());
         }
+
         getVirtualConnection().getStateMap().put(CallbackIDs.CALLBACK_HTTPICL, this);
         this.bIsActive = true;
+    }
+
+    VirtualConnection switchedVC = null;
+
+    @Override
+    public VirtualConnection getVirtualConnection() {
+        if (switchedVC != null) {
+            return switchedVC;
+        }
+        return super.getVirtualConnection();
+    }
+
+    public void reinit(TCPConnectionContext tcc, VirtualConnection vc, HttpInboundLink wrapper) {
+        myTSC = tcc;
+        switchedVC = vc;
+        getVirtualConnection().getStateMap().put(CallbackIDs.CALLBACK_HTTPICL, this);
+        this.myInterface.reinit(tcc, vc, wrapper);
+
     }
 
     /*
@@ -168,7 +192,7 @@ public class HttpInboundLink extends InboundProtocolLink implements InterChannel
      * 
      * @return HttpInboundServiceContextImpl
      */
-    protected HttpInboundServiceContextImpl getHTTPContext() {
+    public HttpInboundServiceContextImpl getHTTPContext() {
         return this.myInterface;
     }
 
@@ -177,7 +201,7 @@ public class HttpInboundLink extends InboundProtocolLink implements InterChannel
      * 
      * @return HttpInboundChannel
      */
-    protected HttpInboundChannel getChannel() {
+    public HttpInboundChannel getChannel() {
         return this.myChannel;
     }
 
@@ -645,6 +669,15 @@ public class HttpInboundLink extends InboundProtocolLink implements InterChannel
             }
         }
 
+        if (this.myInterface.getLink() instanceof H2HttpInboundLinkWrap) {
+            if (bTrace && tc.isDebugEnabled()) {
+                Tr.debug(tc, "we're H2, calling that close");
+            }
+            this.myInterface.getLink().close(inVC, e);
+
+            return;
+        }
+
         // If servlet upgrade processing is being used, then don't close the socket here
         if (inVC != null) {
             String upgraded = (String) (inVC.getStateMap().get(TransportConstants.UPGRADED_CONNECTION));
@@ -837,6 +870,81 @@ public class HttpInboundLink extends InboundProtocolLink implements InterChannel
      */
     public HttpObjectFactory getObjectFactory() {
         return getChannel().getObjectFactory();
+    }
+
+    /**
+     * Determine if a request contains http2 upgrade headers
+     *
+     * @param headers a String map of http header key and value pairs
+     * @return true if the request contains an http2 upgrade header
+     */
+    public boolean isHTTP2UpgradeRequest(Map<String, String> headers) {
+        return checkIfUpgradeHeaders(headers);
+    };
+
+    final static String CONSTANT_upgrade = new String("upgrade");
+    final static String CONSTANT_connection = new String("connection");
+    final static String CONSTANT_connection_value = new String("Upgrade, HTTP2-Settings");
+    final static String CONSTANT_h2c = new String("h2c");
+
+    /**
+     * Determine if a map of headers contains http2 upgrade headers
+     *
+     * @param headers a String map of http header key and value pairs
+     * @return true if an http2 upgrade header is found
+     */
+    private boolean checkIfUpgradeHeaders(Map<String, String> headers) {
+        // looking for two headers.
+        // connection header with a value of "upgrade"
+        // upgrade header with a value of "h2c"
+        boolean connection_upgrade = false;
+        boolean upgrade_h2c = false;
+        String headerValue = null;
+        Set<Entry<String, String>> headerEntrys = headers.entrySet();
+
+        for (Entry<String, String> header : headerEntrys) {
+            String name = header.getKey();
+            //check if it's an HTTP2 non-secure upgrade connection.
+            if (name.equalsIgnoreCase(CONSTANT_connection)) {
+                headerValue = header.getValue();
+                if (tc.isDebugEnabled()) {
+                    Tr.debug(tc, "connection header found with value: " + headerValue);
+                }
+                if (headerValue != null && headerValue.equalsIgnoreCase(CONSTANT_connection_value)) {
+                    if (connection_upgrade == true) {
+                        // should not have two of these, log debug and return false
+                        // TODO: determine if we should throw an exception here, or if this error will be dealt with in subsequent processing
+                        if (tc.isDebugEnabled()) {
+                            Tr.debug(tc, "malformed: second connection header found");
+                        }
+                        return false;
+                    }
+                    connection_upgrade = true;
+                }
+            }
+            if (name.equalsIgnoreCase(CONSTANT_upgrade)) {
+                headerValue = header.getValue();
+                if (tc.isDebugEnabled()) {
+                    Tr.debug(tc, "upgrade header found with value: " + headerValue);
+                }
+                if (headerValue != null && headerValue.equalsIgnoreCase(CONSTANT_h2c)) {
+                    if (upgrade_h2c == true) {
+                        // should not have two of these, log debug and return false
+                        // TODO: determine if we should throw an exception here, or if this error will be dealt with in subsequent processing
+                        if (tc.isDebugEnabled()) {
+                            Tr.debug(tc, "malformed: second upgrade header found");
+                        }
+                        return false;
+                    }
+                    upgrade_h2c = true;
+                }
+            }
+        }
+
+        if (connection_upgrade && upgrade_h2c) {
+            return true;
+        }
+        return false;
     }
 
 }

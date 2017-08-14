@@ -10,23 +10,43 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.internal;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.genericbnf.internal.GenericConstants;
 import com.ibm.ws.genericbnf.internal.GenericUtils;
+import com.ibm.ws.http.channel.h2internal.Constants;
+import com.ibm.ws.http.channel.h2internal.H2HttpInboundLinkWrap;
+import com.ibm.ws.http.channel.h2internal.H2StreamProcessor;
+import com.ibm.ws.http.channel.h2internal.frames.FramePushPromise;
+import com.ibm.ws.http.channel.h2internal.hpack.H2HeaderField;
+import com.ibm.ws.http.channel.h2internal.hpack.H2HeaderTable;
+import com.ibm.ws.http.channel.h2internal.hpack.H2Headers;
+import com.ibm.ws.http.channel.h2internal.hpack.HpackConstants;
+import com.ibm.ws.http.channel.h2internal.hpack.HpackConstants.LiteralIndexType;
+import com.ibm.ws.http.channel.internal.inbound.HttpInboundLink;
+import com.ibm.ws.http.channel.internal.inbound.HttpInboundServiceContextImpl;
 import com.ibm.ws.http.channel.internal.outbound.HttpOutboundServiceContextImpl;
 import com.ibm.ws.http.internal.GenericEnumWrap;
 import com.ibm.wsspi.bytebuffer.WsByteBuffer;
 import com.ibm.wsspi.genericbnf.BNFHeaders;
+import com.ibm.wsspi.genericbnf.HeaderField;
 import com.ibm.wsspi.genericbnf.HeaderStorage;
 import com.ibm.wsspi.genericbnf.exception.MalformedMessageException;
 import com.ibm.wsspi.genericbnf.exception.MessageSentException;
@@ -43,6 +63,8 @@ import com.ibm.wsspi.http.channel.values.HttpHeaderKeys;
 import com.ibm.wsspi.http.channel.values.MethodValues;
 import com.ibm.wsspi.http.channel.values.SchemeValues;
 import com.ibm.wsspi.http.channel.values.VersionValues;
+import com.ibm.wsspi.http.ee8.Http2PushBuilder;
+import com.ibm.wsspi.http.ee8.Http2PushException;
 
 /**
  * Class representing an HTTP request message. This contains the Request-Line
@@ -271,6 +293,61 @@ public class HttpRequestMessageImpl extends HttpBaseMessageImpl implements HttpR
         }
     }
 
+    @Override
+    protected H2HeaderTable getH2HeaderTable() {
+        //Currently, Only inbound connections are supported, return null if we are
+        //not inbound.
+        if (getServiceContext() instanceof HttpInboundServiceContextImpl) {
+            HttpInboundServiceContextImpl context = (HttpInboundServiceContextImpl) getServiceContext();
+            return ((H2HttpInboundLinkWrap) context.getLink()).getReadTable();
+        }
+        return null;
+    }
+
+    @Override
+    protected void setPseudoHeaders(HashMap<String, String> pseudoHeaders) throws Exception {
+        //Possible request pseudo-headers are: ':authority', ':method'
+        //':path', and ':scheme'. Validity of pseudoHeader is verified
+        //by caller of this method.
+
+        //Authority is not required to be present, check if it is.
+        if (pseudoHeaders.containsKey(HpackConstants.AUTHORITY)) {
+            this.sUrlHost = pseudoHeaders.get(HpackConstants.AUTHORITY);
+        }
+        //Set Method
+        this.setMethod(pseudoHeaders.get(HpackConstants.METHOD));
+        //Set Path
+        this.myURIString = pseudoHeaders.get(HpackConstants.PATH);
+        //Set Scheme
+        this.setScheme(pseudoHeaders.get(HpackConstants.SCHEME));
+
+    }
+
+    @Override
+    protected boolean isValidPseudoHeader(H2HeaderField pseudoHeader) {
+        //If the H2HeaderField being evaluated has an empty value, it is not a valid
+        //pseudo-header.
+        if (!pseudoHeader.getValue().isEmpty()) {
+            //Evaluate if input is a valid request pseudo-header by comparing to the
+            //four request pseudo-header hashes.
+            int hash = pseudoHeader.getNameHash();
+            return (hash == HpackConstants.AUTHORITY_HASH || hash == HpackConstants.METHOD_HASH ||
+                    hash == HpackConstants.PATH_HASH || hash == HpackConstants.SCHEME_HASH);
+        }
+
+        return false;
+    }
+
+    @Override
+    protected boolean checkMandatoryPseudoHeaders(HashMap<String, String> pseudoHeaders) {
+        //All HTTP/2.0 requests MUST include exactly one valid value for
+        //':method', ':scheme', and ':path'. Check that the map of parsed
+        //pseudo-headers contains a non-null entry for each required token.
+        return (pseudoHeaders.get(HpackConstants.METHOD) != null) &&
+               (pseudoHeaders.get(HpackConstants.PATH) != null) &&
+               (pseudoHeaders.get(HpackConstants.SCHEME) != null);
+    }
+
     /*
      * @see
      * com.ibm.ws.genericbnf.internal.GenericMessageImpl#setParsedFirstToken(byte
@@ -463,6 +540,58 @@ public class HttpRequestMessageImpl extends HttpBaseMessageImpl implements HttpR
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
             String url = GenericUtils.nullOutPasswords(getMarshalledSecondToken(), (byte) '&');
             Tr.event(tc, "Marshalling first line: " + getMethod() + " " + url + " " + getVersion());
+        }
+        return firstLine;
+    }
+
+    //If outbound requests are ever supported for HTTP/2.0, this would represent the marshalling
+    //of the first line.
+    @Override
+    public WsByteBuffer[] encodePseudoHeaders() {
+        WsByteBuffer[] firstLine = new WsByteBuffer[1];
+        firstLine[0] = allocateBuffer(getOutgoingBufferSize());
+
+        LiteralIndexType indexType = LiteralIndexType.NOINDEXING;
+        //For the time being, there will be no indexing on the responses to guarantee
+        //the write context is concurrent to the remote endpoint's read context. Remote
+        //intermediaries could index if they so desire, so setting NoIndexing (as
+        //opposed to NeverIndexing).
+        //TODO: investigate how streams and priority can work together with indexing on
+        //responses.
+        //LiteralIndexType indexType = isPushPromise ? LiteralIndexType.NOINDEXING : LiteralIndexType.INDEX;
+
+        //Corresponding dynamic table
+        H2HeaderTable table = this.getH2HeaderTable();
+        //Current encoded pseudo-header
+        byte[] encodedHeader = null;
+        try {
+            //Encode the Method
+            encodedHeader = H2Headers.encodeHeader(table, HpackConstants.METHOD, this.myMethod.toString(), indexType);
+            firstLine = putBytes(encodedHeader, firstLine);
+            //Encode Scheme
+            encodedHeader = H2Headers.encodeHeader(table, HpackConstants.SCHEME, this.myScheme.toString(), indexType);
+            this.myScheme.toString();
+            firstLine = putBytes(encodedHeader, firstLine);
+            //Encode Authority
+            if (this.sUrlHost != null) {
+                encodedHeader = H2Headers.encodeHeader(table, HpackConstants.AUTHORITY, this.sUrlHost, indexType);
+                firstLine = putBytes(encodedHeader, firstLine);
+            }
+
+            //Encode Path
+            encodedHeader = H2Headers.encodeHeader(table, HpackConstants.PATH, this.myURIString, indexType);
+            firstLine = putBytes(encodedHeader, firstLine);
+        } catch (Exception e) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+                Tr.error(tc, e.getMessage());
+            }
+            return null;
+        }
+
+        // don't flip the last buffer as headers get tacked on the end
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+            String url = GenericUtils.nullOutPasswords(getMarshalledSecondToken(), (byte) '&');
+            Tr.event(tc, "Encoding first line: " + getMethod() + " " + url + " " + getVersion());
         }
         return firstLine;
     }
@@ -1747,4 +1876,230 @@ public class HttpRequestMessageImpl extends HttpBaseMessageImpl implements HttpR
     public long getStartNanoTime() {
         return getServiceContext().getStartNanoTime();
     }
+
+    /**
+     * pushNewRequest
+     * - called by WebContainer when a servlet determines that a push-promise is needed
+     *
+     * 1. Send an HTTP2 push promise frame to the client
+     * 2. Send an HTTP 1.1 request to WebContainer
+     *
+     * @return
+     * @throws Http2PushException
+     *
+     */
+    @Override
+    public void pushNewRequest(Http2PushBuilder pushBuilder) throws Http2PushException, com.ibm.ws.http.channel.h2internal.exceptions.ProtocolException {
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): pushNewRequest() started " + this);
+        }
+
+        // Find the existing HTTP 2 connection and stream so we can use them to send the
+        // push_promise frame to the client.
+        HttpInboundServiceContext isc = (HttpInboundServiceContext) getServiceContext();
+        HttpInboundLink link = ((HttpInboundServiceContextImpl) isc).getLink();
+
+        /*
+         * 1. Send a push promise frame to the client
+         * - Error check to make sure this is an HTTP2 connection and we can find the muxlink
+         * - Don't send push-promise frame to the client if it has already said it doesn't want them
+         * - Create the push-promise frame with the encoded request headers
+         * - Send it
+         */
+
+        if (!(link instanceof H2HttpInboundLinkWrap)) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: This is not an HTTP2 connection");
+            }
+            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest(): This is not an HTTP 2 Connection.");
+        }
+
+        if ((((H2HttpInboundLinkWrap) link).muxLink == null) ||
+            (((H2HttpInboundLinkWrap) link).muxLink.getConnectionSettings() == null)) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: muxlink is null");
+            }
+            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The H2HttpInboundLinkWrap muxlink is null.");
+        }
+
+        /*
+         * TODO Change the getEnabledPush to a boolean
+         */
+        // Don't send the push-promise frame if the client doesn't want it
+        if (((H2HttpInboundLinkWrap) link).muxLink.getConnectionSettings().getEnablePush() != 1) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): The client does not want to receive push-promise frames");
+            }
+            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The client does not accept push_promise.");
+        }
+
+        // Create the new even numbered promised stream, the state is idle to start
+        int promisedStreamId = ((H2HttpInboundLinkWrap) link).muxLink.getNextPromisedStreamId();
+        H2StreamProcessor promisedSP = ((H2HttpInboundLinkWrap) link).muxLink.createNewInboundLink(promisedStreamId);
+        ((H2HttpInboundLinkWrap) link).setPushPromise(true);
+        // Update the promised stream state to Localreserved
+        promisedSP.initializePromisedStream();
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Push-promise streamId is " + promisedStreamId);
+        }
+
+        // Get the existing stream id
+        int streamId = ((H2HttpInboundLinkWrap) link).getStreamId();
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Start creating the push-promise header block fragment");
+        }
+
+        // Get the request headers from the pushBuilder, encode them, add them to the headerBlockFragment
+        H2HeaderTable h2WriteTable = ((H2HttpInboundLinkWrap) link).muxLink.getWriteTable();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Set<HeaderField> headerSet = pushBuilder.getHeaders();
+        Iterator<HeaderField> hsit = headerSet.iterator();
+        try {
+            while (hsit.hasNext()) {
+                outputStream.write(H2Headers.encodeHeader(h2WriteTable, ((HeaderField) hsit).getName(), ((HeaderField) hsit).asString(), LiteralIndexType.NOINDEXING));
+            }
+        }
+        // Either IOException from write, or CompressionException from encodeHeader
+        catch (Exception e) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: There was a problem creating the push-promise header block client");
+            }
+            // TODO Clean up the newly created SP
+            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  Cannot encode the HTTP2 headers.");
+        }
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Creating the push-promise frame");
+        }
+        // Create the push_promise frame to send to the client
+        FramePushPromise pushPromiseFrame = new FramePushPromise(streamId, outputStream.toByteArray(), promisedStreamId, 0, true, false, false);
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Sending the push-promise frame to the client on streamId " + streamId);
+        }
+
+        // Wait to send the PP frame until we know that the request for WC can be created
+
+        /*
+         * 2. Send an HTTP 1.1 request to WebContainer
+         * - Use the new promised streamProcessor created above for the reserved PP stream
+         * - Create an HTTP 1.1 request as a string
+         * - Using the new promised streamProcessor, send it up to the WC
+         * - H2 code will intercept the response from WC and package it into frames and send it to the client
+         */
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Start building the HTTP 1.1 request for WebContainer");
+        }
+
+        // Create the HTTP 1.1 request
+        HttpURLConnection request = null;
+
+        // Get the URI from the pushBuilder, add it to the request
+        String uri = pushBuilder.getURI();
+        URL requestUrl = null;
+        try {
+            requestUrl = new URL(uri);
+        } catch (MalformedURLException e) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: The URI is malformed " + uri);
+            }
+            // TODO Clean up newly created SP
+            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The URI is malformed.");
+        }
+
+        try {
+            request = (HttpURLConnection) requestUrl.openConnection();
+        } catch (IOException e) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: openConnection failed " + uri);
+            }
+            // TODO Clean up newly created SP
+            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  HttpURLConnection.openConnection failed.");
+        }
+
+        if (pushBuilder.getQueryString() == null) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: query string is null " + uri);
+            }
+            // TODO Clean up newly created SP
+            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The query string is invalid.");
+        }
+
+        // Set the request method
+        try {
+            request.setRequestMethod(pushBuilder.getQueryString());
+        } catch (ProtocolException e) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: Invalid request method ");
+            }
+            // TODO Clean up newly created SP
+            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  Invalid request method.");
+        }
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Adding the request headers to the request");
+        }
+
+        // Add request headers
+        Set<HeaderField> reqHeaderSet = pushBuilder.getHeaders();
+        Iterator<HeaderField> rhsit = reqHeaderSet.iterator();
+        while (rhsit.hasNext()) {
+            request.setRequestProperty(((HeaderField) rhsit).getName(), ((HeaderField) rhsit).asString());
+        }
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Adding the cookies to the request");
+        }
+
+        // Add cookies
+        Set<HttpCookie> cookieSet = pushBuilder.getCookies();
+        Iterator<HttpCookie> ckit = cookieSet.iterator();
+        while (ckit.hasNext()) {
+            request.setRequestProperty(((HttpCookie) ckit).getName(), ((HttpCookie) ckit).toString());
+        }
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Adding the sessionid to the request");
+        }
+
+        // Add session id
+        if (pushBuilder.getSessionId() != null) {
+            HttpCookie sessionId = new HttpCookie("JSESSIONID", pushBuilder.getSessionId());
+            request.setRequestProperty(sessionId.getName(), sessionId.getValue());
+        }
+
+        /*
+         * If we'v gotten here, we have had no errors creating the PP frame and creating a new request
+         * for WC.
+         * - send the PP frame
+         * - send the request to WC
+         */
+
+        // Get the existing stream processor and send the push_promise frame on it
+        H2StreamProcessor existingSP = ((H2HttpInboundLinkWrap) link).muxLink.getStreamProcessor(streamId);
+        if (existingSP != null)
+            existingSP.processNextFrame(pushPromiseFrame, Constants.Direction.WRITING_OUT);
+        else {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): The push-promise stream " + streamId + " has been closed.");
+            }
+            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The push-promise stream " + streamId + " has been closed.");
+        }
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Push promise frame sent on stream " + streamId);
+        }
+
+        // Change this HTTPURLRequest into a string and send it to WC
+        promisedSP.sendRequestToWc(request.toString());
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Sent pushed request to webcontainer " + request.toString());
+        }
+    }
+
 }

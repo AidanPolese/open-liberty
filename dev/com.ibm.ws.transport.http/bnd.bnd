@@ -34,11 +34,17 @@ Export-Package: \
     com.ibm.wsspi.genericbnf*;provide:=true, \
     com.ibm.wsspi.http*;provide:=true, \
     com.ibm.wsspi.http.ee7*;provide:=true, \
+    com.ibm.wsspi.http.ee8*;provide:=true, \
     com.ibm.ws.transport.access*;provide:=true, \
     com.ibm.ws.genericbnf, \
     com.ibm.ws.http.dispatcher.classify, \
     com.ibm.ws.http.channel.outstream, \
-    com.ibm.ws.http.channel.inputstream
+    com.ibm.ws.http.channel.inputstream, \
+    com.ibm.ws.http.channel.h2internal, \
+    com.ibm.ws.http.channel.h2internal.frames, \
+    com.ibm.ws.http.channel.h2internal.exceptions, \
+    com.ibm.ws.http.channel.h2internal.hpack, \
+    com.ibm.ws.http.channel.h2internal.huffman
     
 Private-Package: \
     com.ibm.ws.http.*, \
@@ -83,25 +89,15 @@ instrument.classesExcludes: \
     **/com/ibm/wsspi/http/HttpInputStream.class
 
 -buildpath: \
-	com.ibm.ws.logging,\
+	com.ibm.ws.logging.core,\
 	com.ibm.ws.channelfw;version=latest,\
 	com.ibm.ws.event,\
 	com.ibm.websphere.org.osgi.core,\
 	com.ibm.websphere.org.osgi.service.component,\
 	com.ibm.wsspi.org.osgi.service.component.annotations,\
 	com.ibm.ws.kernel.service,\
-	com.ibm.ws.kernel.boot;version=latest,\
+	com.ibm.ws.kernel.boot.nested;version=latest,\
 	com.ibm.ws.timer;version=latest,\
 	com.ibm.ws.runtime.update,\
 	com.ibm.ws.threading,\
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest
-
--testpath: \
-	com.thoughtworks.qdox:qdox;version=1.12, \
-	org.jmock:jmock-junit4;version=2.5.1, \
-	org.jmock:jmock;version=2.5.1, \
-	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
-	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
-	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \
-	../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar;version=file, \
-	org.objenesis:objenesis;version=1.0

@@ -38,6 +38,8 @@ public class VersionValues extends GenericKeys {
     public static final VersionValues V10 = new VersionValues(1, 0);
     /** Enumerated object for HTTP Version 1.1 */
     public static final VersionValues V11 = new VersionValues(1, 1);
+    /** Enumerated object for HTTP Version 2.0 */
+    public static final VersionValues V20 = new VersionValues(2, 0);
 
     /** Major version number */
     private int major = 0;

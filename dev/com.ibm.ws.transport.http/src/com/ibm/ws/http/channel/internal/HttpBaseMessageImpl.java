@@ -18,6 +18,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.ArrayList;
 import java.util.HashMap; //PI31734
 import java.util.Iterator;
 import java.util.List;
@@ -27,9 +28,15 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.genericbnf.internal.GenericMessageImpl;
 import com.ibm.ws.genericbnf.internal.GenericUtils;
+import com.ibm.ws.http.channel.h2internal.H2HttpInboundLinkWrap;
+import com.ibm.ws.http.channel.h2internal.exceptions.CompressionException;
+import com.ibm.ws.http.channel.h2internal.hpack.H2HeaderField;
+import com.ibm.ws.http.channel.h2internal.hpack.H2HeaderTable;
 import com.ibm.ws.http.channel.internal.cookies.CookieCacheData;
 import com.ibm.ws.http.channel.internal.cookies.CookieHeaderByteParser;
 import com.ibm.ws.http.channel.internal.cookies.CookieUtils;
+import com.ibm.ws.http.channel.internal.inbound.HttpInboundLink;
+import com.ibm.ws.http.channel.internal.inbound.HttpInboundServiceContextImpl;
 import com.ibm.ws.http.dispatcher.internal.HttpDispatcher;
 import com.ibm.wsspi.bytebuffer.WsByteBuffer;
 import com.ibm.wsspi.genericbnf.BNFHeaders;
@@ -1962,7 +1969,8 @@ public abstract class HttpBaseMessageImpl extends GenericMessageImpl implements 
         }
 
         try {
-            /* *
+            /*
+             * *
              * Http/1.1 Headers *
              */
             if (getVersionValue().equals(VersionValues.V11)) {
@@ -1989,7 +1997,8 @@ public abstract class HttpBaseMessageImpl extends GenericMessageImpl implements 
                     setupConnectionClose();
                 }
             }
-            /* *
+            /*
+             * *
              * Http/1.0 Headers *
              */
             else if (getVersionValue().equals(VersionValues.V10)) {
@@ -2029,7 +2038,19 @@ public abstract class HttpBaseMessageImpl extends GenericMessageImpl implements 
                 }
             }
 
-            /* *
+            else if (getVersionValue().equals(VersionValues.V20)) {
+                //If content-length is set, remove content-length header
+                if (getContentLength() != HeaderStorage.NOTSET) {
+                    setContentLength(HeaderStorage.NOTSET);
+                }
+                //If chunked-encoding is set, remove this header
+                if (isChunkedEncodingSet()) {
+                    removeTransferEncoding(TransferEncodingValues.CHUNKED);
+                }
+            }
+
+            /*
+             * *
              * Common Headers *
              */
 
@@ -2106,7 +2127,13 @@ public abstract class HttpBaseMessageImpl extends GenericMessageImpl implements 
     public boolean parseMessage(WsByteBuffer buffer, boolean bExtract) throws Exception {
 
         this.myHSC.checkIncomingMessageLimit(buffer.remaining());
-        boolean rc = this.myHSC.getHttpConfig().isBinaryTransportEnabled() ? parseBinaryMessage(buffer) : super.parseMessage(buffer, bExtract);
+        boolean rc;
+        //Check if it is an H2 Message we are parsing
+        if (this.myHSC.isH2Connection()) {
+            rc = decodeH2Message(buffer);
+        } else {
+            rc = this.myHSC.getHttpConfig().isBinaryTransportEnabled() ? parseBinaryMessage(buffer) : super.parseMessage(buffer, bExtract);
+        }
         if (rc) {
             // end of headers found, buffer position is set to where they
             // finished, so remove whatever body data might be in this buffer
@@ -2118,6 +2145,103 @@ public abstract class HttpBaseMessageImpl extends GenericMessageImpl implements 
         }
         return rc;
     }
+
+    public WsByteBuffer[] encodeH2Message() throws MessageSentException {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.entry(tc, "encodeH2Message");
+        }
+
+        preMarshallMessage();
+
+        //Start of by encoding the first line
+
+        WsByteBuffer[] encodedMessage = encodePseudoHeaders();
+
+        //If encodeHeaders returns null buffers, there was an error during the encoding
+        //of these headers. Set the dynamic table context to invalid and get ready to
+        //close down.
+        if (encodedMessage == null) {
+            getH2HeaderTable().setDynamicTableValidity(false);
+            return null;
+        }
+
+        //Remove non required HTTP/2.0 headers?
+        headerComplianceCheck();
+
+        //Encode all defined headers
+        encodedMessage = encodeHeaders(getH2HeaderTable(), encodedMessage, getServiceContext().isPushPromise());
+
+        //If encodeHeaders returns null buffers, there was an error during the encoding
+        //of these headers. Set the dynamic table context to invalid and get ready to
+        //close down.
+        if (encodedMessage == null) {
+            getH2HeaderTable().setDynamicTableValidity(false);
+            return null;
+        }
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.exit(tc, "encodeH2Message");
+        }
+        return encodedMessage;
+    }
+
+    public boolean decodeH2Message(WsByteBuffer buffer) throws Exception {
+
+        //Set HTTP version on the Message
+        setVersion(VersionValues.V20.getName());
+
+        //PI34161 - Record the start of the request at the time of parsing
+        if ((this instanceof HttpRequestMessageImpl) && ((HttpRequestMessageImpl) this).getServiceContext().getHttpConfig().isAccessLoggingEnabled()) {
+            this.startTime = System.nanoTime();
+        }
+
+        //Decode headers until we reach the end of the buffer
+        HttpInboundLink wrapper = null;
+
+        if (this.getServiceContext() instanceof HttpInboundServiceContextImpl) {
+            wrapper = ((HttpInboundServiceContextImpl) this.getServiceContext()).getLink();
+
+            HashMap<String, String> pseudoHeaders = null;
+            ArrayList<H2HeaderField> headers = null;
+
+            if (wrapper != null && wrapper instanceof H2HttpInboundLinkWrap) {
+                pseudoHeaders = ((H2HttpInboundLinkWrap) wrapper).getReadPseudoHeaders();
+                headers = ((H2HttpInboundLinkWrap) wrapper).getReadHeaders();
+            }
+
+            if (pseudoHeaders != null) {
+
+                setH2FirstLineComplete(pseudoHeaders);
+
+            }
+            if (isFirstLineComplete() && headers != null) {
+                for (H2HeaderField header : headers) {
+
+                    appendHeader(header.getName(), header.getValue());
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private void setH2FirstLineComplete(HashMap<String, String> pseudoHeaders) throws Exception {
+        if (!checkMandatoryPseudoHeaders(pseudoHeaders)) {
+            throw new CompressionException("Not all mandatory pseudo-header fields were provided.");
+        }
+        setPseudoHeaders(pseudoHeaders);
+        this.setFirstLineComplete(true);
+    }
+
+    protected abstract void setPseudoHeaders(HashMap<String, String> pseudoHeaders) throws Exception;
+
+    protected abstract boolean checkMandatoryPseudoHeaders(HashMap<String, String> pseudoHeaders);
+
+    protected abstract boolean isValidPseudoHeader(H2HeaderField pseudoHeader);
+
+    protected abstract H2HeaderTable getH2HeaderTable();
+
+    public abstract WsByteBuffer[] encodePseudoHeaders();
 
     /**
      * During discrimination, we are only attempting to parse the first line so

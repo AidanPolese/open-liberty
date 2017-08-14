@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: **
+
 -dependson: \
 	com.ibm.websphere.appserver.javaeePlatform-7.0;version=latest, \
 	com.ibm.websphere.appserver.javax.ejb-3.2;version=latest, \

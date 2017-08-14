@@ -20,6 +20,7 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.genericbnf.internal.GenericUtils;
+import com.ibm.ws.http.channel.h2internal.Constants;
 import com.ibm.ws.http.internal.HttpEndpointImpl;
 import com.ibm.ws.http.logging.internal.DisabledLogger;
 import com.ibm.wsspi.http.channel.values.VersionValues;
@@ -124,6 +125,9 @@ public class HttpChannelConfig {
     private boolean throwIOEForInboundConnections = false;
     /** 738893 - Should the HTTP Channel skip adding the quotes to the cookie's path attribute */
     private boolean skipCookiePathQuotes = false;
+    /** The amount of time the connection will be left open when HTTP/2 goes into an idle state */
+    private long h2ConnectionCloseTimeout = 30;
+    private int h2ConnectionReadWindowSize = Constants.SPEC_INITIAL_WINDOW_SIZE; // init the connection read window to the spec max
 
     /**
      * Constructor for an HTTP channel config object.
@@ -327,6 +331,14 @@ public class HttpChannelConfig {
                 props.put(HttpConfigConstants.PROPNAME_SKIP_PATH_QUOTE, value);
                 continue;
             }
+            if (key.equalsIgnoreCase(HttpConfigConstants.PROPNAME_H2_CONN_CLOSE_TIMEOUT)) {
+                props.put(HttpConfigConstants.PROPNAME_H2_CONN_CLOSE_TIMEOUT, value);
+                continue;
+            }
+            if (key.equalsIgnoreCase(HttpConfigConstants.PROPNAME_H2_CONN_READ_WINDOW_SIZE)) {
+                props.put(HttpConfigConstants.PROPNAME_H2_CONN_READ_WINDOW_SIZE, value);
+                continue;
+            }
 
             props.put(key, value);
         }
@@ -365,6 +377,8 @@ public class HttpChannelConfig {
         parseAttemptPurgeData(props); //PI11176
         parseThrowIOEForInboundConnections(props); //PI57542
         parseSkipCookiePathQuotes(props); //738893
+        parseH2ConnCloseTimeout(props);
+        parseH2ConnReadWindowSize(props);
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(tc, "parseConfig");
@@ -1148,6 +1162,49 @@ public class HttpChannelConfig {
         }
     }
 
+    private void parseH2ConnCloseTimeout(Map<?, ?> props) {
+        Object value = props.get(HttpConfigConstants.PROPNAME_H2_CONN_CLOSE_TIMEOUT);
+        if (null != value) {
+            try {
+                this.h2ConnectionCloseTimeout = convertLong(value);
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+                    Tr.event(tc, "Config: H2 Connection Close timeout is " + getH2ConnCloseTimeout());
+                }
+            } catch (NumberFormatException nfe) {
+                FFDCFilter.processException(nfe, getClass().getName() + ".parseH2ConnCloseTimeout", "1");
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+                    Tr.event(tc, "Config: Invalid H2 Connection Close Timeout of " + value);
+                }
+            }
+        }
+    }
+
+    private void parseH2ConnReadWindowSize(Map<?, ?> props) {
+        Object value = props.get(HttpConfigConstants.PROPNAME_H2_CONN_READ_WINDOW_SIZE);
+        if (null != value) {
+            try {
+                if ((Long) value > Integer.MAX_VALUE) {
+                    throw new ArithmeticException();
+                }
+                this.h2ConnectionReadWindowSize = (Integer) value;
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+                    Tr.event(tc, "Config: H2 Connection Read Window Size is " + getH2ConnReadWindowSize());
+                }
+            } catch (NumberFormatException nfe) {
+                FFDCFilter.processException(nfe, getClass().getName() + ".parseH2ConnReadWindowSize", "1");
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+                    Tr.event(tc, "Config: Invalid H2 Connection Read Window Size of " + value);
+                }
+            } catch (ArithmeticException ae) {
+                FFDCFilter.processException(ae, getClass().getName() + ".parseH2ConnReadWindowSize", "2");
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+                    Tr.event(tc, "Config: Invalid H2 Connection Read Window Size: cannot exceed 2^31 - 1.  Value was: " + value);
+                }
+            }
+        }
+
+    }
+
     /**
      * Convert a String to a boolean value. If the string does not
      * match "true", then it defaults to false.
@@ -1619,4 +1676,11 @@ public class HttpChannelConfig {
         return this.throwIOEForInboundConnections;
     }
 
+    public long getH2ConnCloseTimeout() {
+        return h2ConnectionCloseTimeout;
+    }
+
+    public int getH2ConnReadWindowSize() {
+        return h2ConnectionReadWindowSize;
+    }
 }

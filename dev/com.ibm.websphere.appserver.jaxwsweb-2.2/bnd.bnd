@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: *.mf
+
 -dependson: \
 	com.ibm.ws.jaxws.web;version=latest, \
 	com.ibm.ws.jaxws.webcontainer;version=latest

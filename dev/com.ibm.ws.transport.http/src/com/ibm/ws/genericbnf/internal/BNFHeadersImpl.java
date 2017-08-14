@@ -22,6 +22,10 @@ import java.util.List;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
+import com.ibm.ws.http.channel.h2internal.exceptions.CompressionException;
+import com.ibm.ws.http.channel.h2internal.hpack.H2HeaderTable;
+import com.ibm.ws.http.channel.h2internal.hpack.H2Headers;
+import com.ibm.ws.http.channel.h2internal.hpack.HpackConstants.LiteralIndexType;
 import com.ibm.ws.http.dispatcher.internal.HttpDispatcher;
 import com.ibm.wsspi.bytebuffer.WsByteBuffer;
 import com.ibm.wsspi.bytebuffer.WsByteBufferPoolManager;
@@ -186,6 +190,10 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     private transient int deserializationVersion = SERIALIZATION_V1;
     /** PI13987 - Did we find any trailing whitespace in the header name */
     private boolean foundTrailingWhitespace = false;
+    /** Defined if it is an HTTP/2.0 connection when encoding headers */
+    private H2HeaderTable table = null;
+    /** Defined if this is an HTTP/2.0 connection servicing a Push Promise response */
+    private boolean isPushPromise = false;
 
     /**
      * Constructor for the headers storage object.
@@ -492,6 +500,8 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
         this.headerAddCount = 0;
         this.bOverChangeLimit = false;
         this.compactHeaderFlag = false;
+        this.table = null;
+        this.isPushPromise = false;
 
         if (bTrace && tc.isEntryEnabled()) {
             Tr.exit(tc, "clear");
@@ -993,6 +1003,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     }
 
     /**
+     * @throws Exception
      * @see com.ibm.wsspi.genericbnf.BNFHeaders#marshallHeaders(WsByteBuffer[])
      */
     @Override
@@ -1004,7 +1015,10 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
 
         preMarshallHeaders();
         WsByteBuffer[] buffers = src;
-        if (HeaderStorage.NOTSET != this.parseIndex && !overHeaderChangeLimit()) {
+
+        //If table is defined, this is an HTTP/2.0 connection, so skip over and to
+        //iterate all elements and have them encoded.
+        if (HeaderStorage.NOTSET != this.parseIndex && !overHeaderChangeLimit() && this.table == null) {
             // existing parse buffers, go into the special logic marshalling
             buffers = marshallReuseHeaders(src);
         } else {
@@ -1016,10 +1030,39 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
             }
             HeaderElement elem = this.hdrSequence;
             for (; null != elem; elem = elem.nextSequence) {
-                buffers = marshallHeader(buffers, elem);
+                //If H2HeaderTable is not null, this is an H2 connection so use encodeHeader
+                //instead of marshallHeader
+                if (this.table != null) {
+                    try {
+                        buffers = encodeHeader(buffers, elem);
+                    } catch (Exception e) {
+                        // Three possible scenarios -
+                        // 1.) unsupported encoding used when converting string to bytes on
+                        // Hpack encoding. This should never happen as it is set to always use
+                        // US-ASCII.
+                        // 2.) Decompression exception for invalid Hpack decode scenario
+                        // Show error and return null, so caller can invalidate the table
+                        // and close the stream.
+                        // 3.) IOException for not being able to write into Byte Array stream
+                        Tr.error(tc, e.getMessage());
+                        // Release all allocated buffers of this message
+                        for (WsByteBuffer buffer : buffers) {
+                            buffer.release();
+                            buffer = null;
+                        }
+
+                        return null;
+                    }
+                } else {
+                    buffers = marshallHeader(buffers, elem);
+                }
             }
+
+            // only add EOL if not HTTP/2.0
             // second EOL
-            buffers = putBytes(BNFHeaders.EOL, buffers);
+            if (this.table == null) {
+                buffers = putBytes(BNFHeaders.EOL, buffers);
+            }
             buffers = flushCache(buffers);
             // flip the last buffer now that we're done
             buffers[buffers.length - 1].flip();
@@ -1403,8 +1446,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
                     break;
 
                 default:
-                    throw new MalformedMessageException(
-                                    "Invalid state in headers: " + this.binaryParsingState);
+                    throw new MalformedMessageException("Invalid state in headers: " + this.binaryParsingState);
             } // end of state-machine
         } // end of while (not done parsing)
 
@@ -1589,6 +1631,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#removeHeader(byte[])
      */
+    @Override
     public void removeHeader(byte[] header) {
         if (null == header) {
             throw new IllegalArgumentException("Null input provided");
@@ -1603,6 +1646,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#removeHeader(HeaderKeys, int)
      */
+    @Override
     public void removeHeader(HeaderKeys key, int instance) {
         if (null == key) {
             throw new IllegalArgumentException("Null input provided");
@@ -1616,6 +1660,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#removeHeader(String, int)
      */
+    @Override
     public void removeHeader(String header, int instance) {
         if (null == header) {
             throw new IllegalArgumentException("Null input provided");
@@ -1629,6 +1674,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#removeHeader(byte[], int)
      */
+    @Override
     public void removeHeader(byte[] header, int instance) {
         if (null == header) {
             throw new IllegalArgumentException("Null input provided");
@@ -1671,6 +1717,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#setHeader(String, byte[])
      */
+    @Override
     public void setHeader(String header, byte[] value) {
         if (null == header || null == value) {
             throw new IllegalArgumentException("Null input provided");
@@ -1684,6 +1731,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#setHeader(java.lang.String, byte[], int, int)
      */
+    @Override
     public void setHeader(String header, byte[] value, int offset, int length) {
         if (null == header || null == value) {
             throw new IllegalArgumentException("Null input provided");
@@ -1697,6 +1745,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#setHeader(byte[], byte[])
      */
+    @Override
     public void setHeader(byte[] header, byte[] value) {
         if (null == header || null == value) {
             throw new IllegalArgumentException("Null input provided");
@@ -1711,6 +1760,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#setHeader(byte[], byte[], int, int)
      */
+    @Override
     public void setHeader(byte[] header, byte[] value, int offset, int length) {
         if (null == header || null == value) {
             throw new IllegalArgumentException("Null input provided");
@@ -1725,6 +1775,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#setHeader(HeaderKeys, byte[])
      */
+    @Override
     public void setHeader(HeaderKeys key, byte[] value) {
         if (null == key || null == value) {
             throw new IllegalArgumentException("Null input provided");
@@ -1761,6 +1812,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#setHeader(com.ibm.wsspi.genericbnf.HeaderKeys, byte[], int, int)
      */
+    @Override
     public void setHeader(HeaderKeys key, byte[] value, int offset, int length) {
         if (null == key || null == value) {
             throw new IllegalArgumentException("Null input provided");
@@ -1800,6 +1852,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#setHeader(HeaderKeys, String)
      */
+    @Override
     public void setHeader(HeaderKeys key, String value) {
         if (null == key || null == value) {
             throw new IllegalArgumentException("Null input provided");
@@ -1869,6 +1922,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#setHeader(String, String)
      */
+    @Override
     public void setHeader(String header, String value) {
         if (null == header || null == value) {
             throw new IllegalArgumentException("Null input provided");
@@ -1882,6 +1936,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#setHeader(byte[], String)
      */
+    @Override
     public void setHeader(byte[] header, String value) {
         if (null == header || null == value) {
             throw new IllegalArgumentException("Null input provided");
@@ -2141,7 +2196,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
      * @param key
      * @param value
      */
-    protected void setSpecialHeader(HeaderKeys key, String value) {
+    public void setSpecialHeader(HeaderKeys key, String value) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "setSpecialHeader(h,s): " + key.getName());
         }
@@ -2214,6 +2269,33 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
             }
         }
 
+        return buffers;
+    }
+
+    protected WsByteBuffer[] encodeHeader(WsByteBuffer[] inBuffers, HeaderElement elem) throws CompressionException, IOException {
+
+        if (elem.wasRemoved()) {
+            return inBuffers;
+        }
+        WsByteBuffer[] buffers = inBuffers;
+        final String name = elem.getKey().getName();
+        final String value = elem.asString();
+        LiteralIndexType indexType = LiteralIndexType.NOINDEXING;
+        //For the time being, there will be no indexing on the responses to guarantee
+        //the write context is concurrent to the remote endpoint's read context. Remote
+        //intermediaries could index if they so desire, so setting NoIndexing (as
+        //opposed to NeverIndexing).
+        //TODO: investigate how streams and priority can work together with indexing on
+        //responses.
+        //LiteralIndexType indexType = isPushPromise ? LiteralIndexType.NOINDEXING : LiteralIndexType.INDEX;
+
+        if (null != value) {
+            buffers = putBytes(H2Headers.encodeHeader(table, name, value, indexType), buffers);
+        }
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
+            Tr.event(tc, "Encoding: " + elem.getKey()
+                         + " [" + elem.getDebugValue() + "]");
+        }
         return buffers;
     }
 
@@ -2315,6 +2397,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
      * 
      * @param o
      */
+    @Override
     public void setDebugContext(Object o) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "debugContext set to " + o + " for " + this);
@@ -2415,6 +2498,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /*
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#setLimitOfTokenSize(int)
      */
+    @Override
     public void setLimitOfTokenSize(int size) {
         if (0 >= size) {
             throw new IllegalArgumentException("Invalid limit on token size: " + size);
@@ -2428,6 +2512,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /*
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#getLimitOfTokenSize()
      */
+    @Override
     public int getLimitOfTokenSize() {
         return this.limitTokenSize;
     }
@@ -2471,6 +2556,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /*
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#setLimitOnNumberOfHeaders(int)
      */
+    @Override
     public void setLimitOnNumberOfHeaders(int size) {
         if (0 >= size) {
             throw new IllegalArgumentException("Invalid limit on number headers: " + size);
@@ -2484,6 +2570,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /*
      * @see com.ibm.wsspi.genericbnf.HeaderStorage#getLimitOnNumberOfHeaders()
      */
+    @Override
     public int getLimitOnNumberOfHeaders() {
         return this.limitNumHeaders;
     }
@@ -2524,7 +2611,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
                 // next char must be an LF
                 if (BNFHeaders.LF != data[i + 1]) {
                     error = "Invalid CR not followed by LF";
-                } else if (getCharacterValidation()){
+                } else if (getCharacterValidation()) {
                     data[i] = BNFHeaders.SPACE;
                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                         Tr.debug(tc, "Found a CR replacing it with a SP");
@@ -2532,9 +2619,9 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
                 }
             } else if (BNFHeaders.LF == data[i]) {
                 // if it is not followed by whitespace then this value is bad
-                if (BNFHeaders.TAB != data[i+1] && BNFHeaders.SPACE != data[i+1]) {
+                if (BNFHeaders.TAB != data[i + 1] && BNFHeaders.SPACE != data[i + 1]) {
                     error = "Invalid LF not followed by whitespace";
-                } else if (getCharacterValidation()){
+                } else if (getCharacterValidation()) {
                     data[i] = BNFHeaders.SPACE;
                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                         Tr.debug(tc, "Found a LF replacing it with a SP");
@@ -2598,7 +2685,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
                         error = "Invalid CR not followed by LF";
                     }
                 } else if (BNFHeaders.LF == c) {
-                    char x = data.charAt(i+1);
+                    char x = data.charAt(i + 1);
 
                     // if it is not followed by whitespace then this value is bad
                     if (BNFHeaders.TAB != x && BNFHeaders.SPACE != x) {
@@ -2615,14 +2702,13 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
                     Tr.debug(tc, "Found a CR or LF");
                 }
                 return false;
-            }
-            else {
+            } else {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(tc, "The Character: " + c + " is not printable");
                 }
                 final int maskedCodePoint = c & 0xFF;
                 if (maskedCodePoint == BNFHeaders.LF || maskedCodePoint == BNFHeaders.CR) {
-                	if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                         Tr.debug(tc, "Character: " + c + " unicode ends with a 0a or 0d");
                         Tr.debug(tc, "The Unicode is: " + (char) maskedCodePoint);
                     }
@@ -2644,6 +2730,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
     /**
      * Check the input header value for CRLF and non ascii char that can retult in crlfs.
      * checkHeaderCharacters
+     *
      * @param data
      * @exception IllegalArgumentException if invalid
      * @return String
@@ -2673,7 +2760,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
                         error = "Invalid CR not followed by LF";
                     }
                 } else if (BNFHeaders.LF == c) {
-                    char x = data.charAt(i+1);
+                    char x = data.charAt(i + 1);
                     // if it is not followed by whitespace then this value is bad
                     if (BNFHeaders.TAB != x && BNFHeaders.SPACE != x) {
                         error = "Invalid LF not followed by whitespace";
@@ -2687,8 +2774,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(tc, "Found a CR or LF, replacing it with SP");
                 }
-            }
-            else {
+            } else {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(tc, "The Character: " + c + " is not printable");
                 }
@@ -2699,8 +2785,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
                         Tr.debug(tc, "Character: " + c + " unicode ends with a 0a or 0d, replacing it with ?");
                         Tr.debug(tc, "The Unicode is: " + (char) maskedCodePoint);
                     }
-                }
-                else
+                } else
                     sb.append(c);
             }
         }
@@ -3538,25 +3623,25 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
         // buffer
         byte[] data;
         int length = this.parsedTokenLength;
-		
-		if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-			Tr.debug(tc, "length=" + length
-			+ " pos=" + this.bytePosition + ", cachestart=" + cachestart
-			+ ", start=" + start + ", trailingWhitespace=" + this.foundTrailingWhitespace);
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "length=" + length
+                         + " pos=" + this.bytePosition + ", cachestart=" + cachestart
+                         + ", start=" + start + ", trailingWhitespace=" + this.foundTrailingWhitespace);
         }
-		
-		//PI13987 - Added the first argument to the if statement
+
+        //PI13987 - Added the first argument to the if statement
         if (!this.foundTrailingWhitespace && null == this.parsedToken && length < this.bytePosition) {
             // it's all in the bytecache
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-				//PI13987 - Modified the message being printed as we now print the same thing above
+                //PI13987 - Modified the message being printed as we now print the same thing above
                 Tr.debug(tc, "Using bytecache");
             }
             data = this.byteCache;
             start = cachestart;
         } else {
-			if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-				//PI13987
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                //PI13987
                 Tr.debug(tc, "Using bytebuffer");
             }
             saveParsedToken(buff, start, true, LOG_FULL);
@@ -3574,7 +3659,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
         this.stateOfParsing = PARSING_VALUE;
         this.parsedToken = null;
         this.parsedTokenLength = 0;
-		this.foundTrailingWhitespace = false; //PI13987
+        this.foundTrailingWhitespace = false; //PI13987
         return true;
     }
 
@@ -3785,13 +3870,13 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
             temp = new byte[length];
         }
 
-		//PI13987 - Added the first argument
+        //PI13987 - Added the first argument
         if (!this.foundTrailingWhitespace && this.bytePosition > length) {
             // pull from the bytecache
-			if (bTrace && tc.isDebugEnabled()) {
-				//PI13987 - Print out this new trace message
-				Tr.debug(tc, "savedParsedToken - using bytecache");
-			}
+            if (bTrace && tc.isDebugEnabled()) {
+                //PI13987 - Print out this new trace message
+                Tr.debug(tc, "savedParsedToken - using bytecache");
+            }
             int cacheStart = this.bytePosition - length;
             if (delim) {
                 cacheStart--;
@@ -3799,10 +3884,10 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
             System.arraycopy(this.byteCache, cacheStart, temp, offset, length);
         } else {
             // must pull from the buffer
-			if (bTrace && tc.isDebugEnabled()) {
-				//PI13987 - Print this new trace message
-				Tr.debug(tc, "savedParsedToken - pulling from buffer");
-			}
+            if (bTrace && tc.isDebugEnabled()) {
+                //PI13987 - Print this new trace message
+                Tr.debug(tc, "savedParsedToken - pulling from buffer");
+            }
             int orig = buff.position();
             buff.position(start);
             buff.get(temp, offset, length);
@@ -3865,6 +3950,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
         /*
          * @see com.ibm.wsspi.genericbnf.HeaderField#asBytes()
          */
+        @Override
         public byte[] asBytes() {
             return null;
         }
@@ -3872,6 +3958,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
         /*
          * @see com.ibm.wsspi.genericbnf.HeaderField#asDate()
          */
+        @Override
         @SuppressWarnings("unused")
         public Date asDate() throws ParseException {
             return null;
@@ -3880,6 +3967,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
         /*
          * @see com.ibm.wsspi.genericbnf.HeaderField#asInteger()
          */
+        @Override
         public int asInteger() throws NumberFormatException {
             return 0;
         }
@@ -3887,6 +3975,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
         /*
          * @see com.ibm.wsspi.genericbnf.HeaderField#asString()
          */
+        @Override
         public String asString() {
             return null;
         }
@@ -3894,6 +3983,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
         /*
          * @see com.ibm.wsspi.genericbnf.HeaderField#asTokens(byte)
          */
+        @Override
         @SuppressWarnings("unused")
         public List<byte[]> asTokens(byte delimiter) {
             return new ArrayList<byte[]>();
@@ -3902,6 +3992,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
         /*
          * @see com.ibm.wsspi.genericbnf.HeaderField#getKey()
          */
+        @Override
         public HeaderKeys getKey() {
             return null;
         }
@@ -3909,6 +4000,7 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
         /*
          * @see com.ibm.wsspi.genericbnf.HeaderField#getName()
          */
+        @Override
         public String getName() {
             return null;
         }
@@ -3927,5 +4019,28 @@ public abstract class BNFHeadersImpl implements BNFHeaders, Externalizable {
             whitespace = localWhitespace;
         }
         return localWhitespace;
+    }
+
+    public WsByteBuffer[] encodeHeaders(H2HeaderTable table, WsByteBuffer[] encodedMessage, boolean isPushPromise) {
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.entry(tc, "encodeHeaders");
+        }
+        //Set the H2 header that will be used when encoding headers
+        this.table = table;
+        //Set a flag specifying that this context belongs to a Push Promise response.
+        //No indexing should be done if true;
+        this.isPushPromise = isPushPromise;
+
+        //Call the typical marshall header code to get all headers encoded and
+        //marshalled into the message buffers. Returns null if there was
+        //an exception encoding the headers into the buffers.
+        WsByteBuffer[] buffers = marshallHeaders(encodedMessage);
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.exit(tc, "encodeHeaders");
+        }
+        return buffers;
+
     }
 }

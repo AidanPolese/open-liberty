@@ -26,7 +26,6 @@ task copyReadmeToBuildImage (type:Copy) {
 }
 
 task copyGeneratedToBuildImageBinTools (type:Copy) {
-    dependsOn ':com.ibm.ws.kernel.instrument.check:publishWLPJars'
     dependsOn jar
     from "${projectDir}/wlp/lib/"
     into "${projectDir}/wlp/bin/tools/"

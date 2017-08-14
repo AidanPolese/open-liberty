@@ -47,13 +47,3 @@ Service-Component: \
 	com.ibm.websphere.org.osgi.core,\
 	com.ibm.websphere.org.osgi.service.component,\
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest
-
--testpath: \
-	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
-	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
-	com.thoughtworks.qdox:qdox;version=1.12, \
-	org.jmock:jmock-junit4;version=2.5.1, \
-	org.jmock:jmock;version=2.5.1, \
-	com.ibm.ws.recoverylog;version=latest, \
-	com.ibm.tx.util;version=latest, \
-	com.ibm.ws.kernel.boot;version=latest
