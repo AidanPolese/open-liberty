@@ -88,11 +88,6 @@ could.not.close.CWMCG0004E=CWMCG0004E: Unable to close the Config instance. The 
 could.not.close.CWMCG0004E.explanation=An exception occurred while trying to close a Config instance. Its resources might not have been released.
 could.not.close.CWMCG0004E.useraction=Review the server message.log and FFDC logs to identify the problem.
 
-# A Converter of type "{0}" returned null. The input string was: "{1}".
-converter.returned.null.CWMCG0005E=CWMCG0005E: A Converter of type "{0}" returned null. The input string was: "{1}".
-converter.returned.null.CWMCG0005E.explanation=A Converter cannot return null.
-converter.returned.null.CWMCG0005E.useraction=Make sure that the Converter implementation does not return null.
-
 # Unable to convert the string "{0}" to a value of type {1}.
 unable.to.convert.CWMCG0006E=CWMCG0006E: Unable to convert the string "{0}" to a value of type {1}.
 unable.to.convert.CWMCG0006E.explanation=No suitable Converter was found for the given type.

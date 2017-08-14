@@ -54,10 +54,12 @@ public class ConversionManager {
     public Object convert(String rawString, Type type) {
         Object converted = null;
 
+        boolean converterFound = false;
         if (rawString != null) {
             if (converters.containsKey(type)) {
                 Converter<?> converter = converters.get(type);
                 if (converter != null) {
+                    converterFound = true;
                     try {
                         converted = converter.convert(rawString);
                     } catch (ConversionException e) {
@@ -69,12 +71,15 @@ public class ConversionManager {
                     }
 
                     if (converted == null) {
-                        throw new ConfigException(Tr.formatMessage(tc, "converter.returned.null.CWMCG0005E", converter.getClass().getName(), rawString));
+                        if (TraceComponent.isAnyTracingEnabled()) {
+                            Tr.debug(tc, "The converted value is null. The rawString is " + rawString);
+                        }
                     }
+
                 }
             }
 
-            if (converted == null && type instanceof Class) {
+            if (!converterFound && type instanceof Class) {
                 Class<?> requestedClazz = (Class<?>) type;
 
                 //TODO array conversion works just fine but isn't in this version of the spec
@@ -84,8 +89,10 @@ public class ConversionManager {
 //                }
 
 //                if (converted == null) {
-                converted = convertCompatible(rawString, requestedClazz);
 //                }
+                ConversionStatus<?> cs = convertCompatible(rawString, requestedClazz);
+                converterFound = cs.isConverterFound();
+                converted = cs.getConverted();
 
                 //TODO string constructors (and valueOf methods) work just fine but isn't in this version of the spec
 //                if (converted == null) {
@@ -94,7 +101,7 @@ public class ConversionManager {
             }
         }
 
-        if (converted == null) {
+        if (!converterFound) {
             throw new ConverterNotFoundException(Tr.formatMessage(tc, "could.not.find.converter.CWMCG0014E", type.getTypeName()));
         }
 
@@ -107,28 +114,58 @@ public class ConversionManager {
      *
      * @param rawString
      * @param type
-     * @return
+     * @return ConversionStatus<T> whether a converter is found and the converted value
      */
     @SuppressWarnings("unchecked")
-    private <T> T convertCompatible(String rawString, Class<T> type) {
+    private <T> ConversionStatus<T> convertCompatible(String rawString, Class<T> type) {
         T converted = null;
+        ConversionStatus<T> cs = null;
+        boolean converterFound = false;
         for (Map.Entry<Type, Converter<?>> con : converters.entrySet()) {
             Type key = con.getKey();
             if (key instanceof Class) {
                 Class<?> clazz = (Class<?>) key;
                 if (type.isAssignableFrom(clazz)) {
                     converted = (T) convert(rawString, key);
+                    converterFound = true;
                     break;
                 }
             } else if (key instanceof TypeVariable) {
                 TypeVariable<?> typeVariable = (TypeVariable<?>) key;
-                converted = convertGenericClazz(rawString, type, typeVariable);
-                if (converted != null) {
+                cs = convertGenericClazz(rawString, type, typeVariable);
+                if (cs.getConverted() != null) {
+                    converterFound = cs.isConverterFound();
+                    converted = cs.getConverted();
                     break;
                 }
             }
         }
-        return converted;
+        ConversionStatus<T> csToReturn = new ConversionStatus<T>(converterFound, converted);
+        return csToReturn;
+
+    }
+
+    /**
+     * A holder to hold whether a converter is found and the converted value.
+     *
+     * @param <T>
+     */
+    class ConversionStatus<T> {
+        boolean converterFound = false;
+        T converted;
+
+        ConversionStatus(boolean foundConverter, T converted) {
+            this.converted = converted;
+            this.converterFound = foundConverter;
+        }
+
+        boolean isConverterFound() {
+            return this.converterFound;
+        }
+
+        T getConverted() {
+            return this.converted;
+        }
     }
 
     /**
@@ -137,23 +174,26 @@ public class ConversionManager {
      * @param rawString
      * @param type
      * @param typeVariable
-     * @return T converted
+     * @return ConversionStatus<T> whether a converter is found and the converted value
      */
     @SuppressWarnings("unchecked")
-    private <T> T convertGenericClazz(String rawString, Class<T> type, TypeVariable<?> typeVariable) {
+    private <T> ConversionStatus<T> convertGenericClazz(String rawString, Class<T> type, TypeVariable<?> typeVariable) {
         T converted = null;
+        boolean converterFound = false;
         AnnotatedType[] bounds = typeVariable.getAnnotatedBounds();
         for (AnnotatedType bound : bounds) {
             Type bType = bound.getType();
             if (bType instanceof Class) {
                 Class<?> bClazz = (Class<?>) bType;
                 if (bClazz.isAssignableFrom(type)) {
+                    converterFound = true;
                     converted = (T) convert(rawString, typeVariable);
                     break;
                 }
             }
         }
-        return converted;
+        ConversionStatus<T> cs = new ConversionStatus<T>(converterFound, converted);
+        return cs;
     }
 
 //    /**
