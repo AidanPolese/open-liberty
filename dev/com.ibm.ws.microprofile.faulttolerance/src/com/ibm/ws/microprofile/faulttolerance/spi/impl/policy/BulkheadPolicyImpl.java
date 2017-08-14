@@ -10,8 +10,6 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance.spi.impl.policy;
 
-import java.time.Duration;
-
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
@@ -23,14 +21,15 @@ import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 public class BulkheadPolicyImpl implements BulkheadPolicy {
 
     private int maxThreads;
-    private Duration timeout;
+    private int queueSize;
 
     /**
      *
      */
     public BulkheadPolicyImpl() {
         try {
-            maxThreads = (int) Bulkhead.class.getMethod("maxThreads").getDefaultValue();
+            maxThreads = (int) Bulkhead.class.getMethod("value").getDefaultValue();
+            maxThreads = (int) Bulkhead.class.getMethod("waitingTaskQueue").getDefaultValue();
         } catch (NoSuchMethodException | SecurityException e) {
             throw new FaultToleranceException(e);
         }
@@ -50,14 +49,14 @@ public class BulkheadPolicyImpl implements BulkheadPolicy {
 
     /** {@inheritDoc} */
     @Override
-    public Duration getTimeout() {
-        return this.timeout;
+    public int getQueueSize() {
+        return queueSize;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setTimeout(Duration timeout) {
-        this.timeout = timeout;
+    public void setQueueSize(int queueSize) {
+        this.queueSize = queueSize;
     }
 
 }

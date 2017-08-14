@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: **
+
 -dependson: \
 	com.ibm.websphere.appserver.securityInfrastructure-1.0;version=latest, \
 	com.ibm.websphere.appserver.federatedRegistry-1.0;version=latest, \

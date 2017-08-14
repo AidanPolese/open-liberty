@@ -18,8 +18,6 @@
  */
 package com.ibm.ws.microprofile.faulttolerance.spi;
 
-import java.time.Duration;
-
 /**
  * Wrap the execution and invoke it, limiting the number of threads used.
  */
@@ -34,7 +32,7 @@ public interface BulkheadPolicy {
 
     public void setMaxThreads(int maxThreads);
 
-    public Duration getTimeout();
+    public int getQueueSize();
 
-    public void setTimeout(Duration timeout);
+    public void setQueueSize(int queueSize);
 }

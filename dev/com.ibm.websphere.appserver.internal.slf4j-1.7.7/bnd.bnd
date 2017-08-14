@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: *.mf
+
 -dependson: \
 	com.ibm.ws.org.slf4j.jdk14;version=latest, \
 	com.ibm.ws.org.slf4j.api;version=latest

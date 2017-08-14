@@ -12,5 +12,7 @@
 
 -nobundles=true
 
+publish.feature.resources: *.mf
+
 -dependson: \
 	com.ibm.ws.messaging.jms.j2ee.mbeans;version=latest

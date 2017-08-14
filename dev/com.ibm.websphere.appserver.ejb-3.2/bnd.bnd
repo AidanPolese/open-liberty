@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: **
+
 -dependson: \
 	com.ibm.websphere.appserver.ejbPersistentTimer-3.2;version=latest, \
 	com.ibm.websphere.appserver.ejbHome-3.2;version=latest, \

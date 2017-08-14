@@ -12,5 +12,7 @@
 
 -nobundles=true
 
+publish.feature.resources: *.mf
+
 -dependson: \
 	com.ibm.websphere.javaee.interceptor.1.2;version=latest
