@@ -36,7 +36,9 @@ bGitBranch=master
         noupdateOnRelease = true; \
         local = ${env;LOCAL_REPO_PATH;${build}/release};
 
--plugin.3.Remote = ${fetch.repository}
+-plugin.3.RemotePublic = ${fetch.oss.repository}
+
+-plugin.4.RemoteIBM = ${fetch.oss.ibm.repository}
 
 # Don't upload sources or javadoc unless bundle overrides
 -maven-release: ${if;${is;${env;PUBLISH_REPO;Release};Artifactory};remote;local}, sources;path=NONE, javadoc;path=NONE
