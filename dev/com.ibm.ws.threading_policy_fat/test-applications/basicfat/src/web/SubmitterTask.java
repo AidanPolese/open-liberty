@@ -11,8 +11,11 @@
 package web;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Task that submits another task.
@@ -22,6 +25,9 @@ import java.util.concurrent.Future;
  * @param <T>
  */
 public class SubmitterTask<T> implements Callable<Future<T>> {
+    private long awaitContinueNanos;
+    private CountDownLatch beginLatch; 
+    private CountDownLatch continueLatch;
     private final ExecutorService executor;
     private final Callable<?> callable;
 
@@ -30,10 +36,22 @@ public class SubmitterTask<T> implements Callable<Future<T>> {
         this.callable = callable;
     }
 
+    public SubmitterTask(ExecutorService executor, Callable<T> callable, CountDownLatch beginLatch, CountDownLatch continueLatch, long awaitContinueNanos) {
+        this.awaitContinueNanos = awaitContinueNanos;
+        this.beginLatch = beginLatch;
+        this.continueLatch = continueLatch;
+        this.executor = executor;
+        this.callable = callable;
+    }
+
     @Override
-    public Future<T> call() {
+    public Future<T> call() throws InterruptedException, TimeoutException {
         System.out.println("> call " + toString());
+        if (beginLatch != null)
+            beginLatch.countDown();
         try {
+            if (continueLatch != null && !continueLatch.await(awaitContinueNanos, TimeUnit.NANOSECONDS))
+                throw new TimeoutException();
             @SuppressWarnings("unchecked")
             Future<T> future = (Future<T>) executor.submit(callable);
             System.out.println("< call " + toString() + " " + future);
