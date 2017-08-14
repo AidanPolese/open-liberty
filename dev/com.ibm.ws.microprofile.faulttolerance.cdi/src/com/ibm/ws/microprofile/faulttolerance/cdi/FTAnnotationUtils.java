@@ -128,15 +128,14 @@ public class FTAnnotationUtils {
         return circuitBreakerPolicy;
     }
 
-    static BulkheadPolicy processBulkheadAnnotation(Bulkhead bulkhead, Duration timeoutDuration) {
-        int maxThreads = bulkhead.maxThreads();
+    static BulkheadPolicy processBulkheadAnnotation(Bulkhead bulkhead) {
+        int maxThreads = bulkhead.value();
+        int queueSize = bulkhead.waitingTaskQueue();
 
         BulkheadPolicy bulkheadPolicy = FaultToleranceProvider.newBulkheadPolicy();
 
         bulkheadPolicy.setMaxThreads(maxThreads);
-        if (timeoutDuration != null) {
-            bulkheadPolicy.setTimeout(timeoutDuration);
-        }
+        bulkheadPolicy.setQueueSize(queueSize);
 
         return bulkheadPolicy;
     }
@@ -219,7 +218,7 @@ public class FTAnnotationUtils {
         }
 
         if (bulkhead != null) {
-            BulkheadPolicy bulkheadPolicy = FTAnnotationUtils.processBulkheadAnnotation(bulkhead, timeoutDuration);
+            BulkheadPolicy bulkheadPolicy = FTAnnotationUtils.processBulkheadAnnotation(bulkhead);
             policy.setBulkheadPolicy(bulkheadPolicy);
         }
 
