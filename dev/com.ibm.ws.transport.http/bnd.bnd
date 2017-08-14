@@ -89,25 +89,15 @@ instrument.classesExcludes: \
     **/com/ibm/wsspi/http/HttpInputStream.class
 
 -buildpath: \
-	com.ibm.ws.logging,\
+	com.ibm.ws.logging.core,\
 	com.ibm.ws.channelfw;version=latest,\
 	com.ibm.ws.event,\
 	com.ibm.websphere.org.osgi.core,\
 	com.ibm.websphere.org.osgi.service.component,\
 	com.ibm.wsspi.org.osgi.service.component.annotations,\
 	com.ibm.ws.kernel.service,\
-	com.ibm.ws.kernel.boot;version=latest,\
+	com.ibm.ws.kernel.boot.nested;version=latest,\
 	com.ibm.ws.timer;version=latest,\
 	com.ibm.ws.runtime.update,\
 	com.ibm.ws.threading,\
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest
-
--testpath: \
-	com.thoughtworks.qdox:qdox;version=1.12, \
-	org.jmock:jmock-junit4;version=2.5.1, \
-	org.jmock:jmock;version=2.5.1, \
-	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
-	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
-	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \
-	../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar;version=file, \
-	org.objenesis:objenesis;version=1.0

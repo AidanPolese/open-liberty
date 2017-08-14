@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: *.mf
+
 -dependson: \
 	com.ibm.websphere.appserver.javax.cdi-1.2;version=latest, \
 	com.ibm.websphere.javaee.transaction.1.2;version=latest, \

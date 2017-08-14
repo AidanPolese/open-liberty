@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: **
+
 -dependson: \
 	com.ibm.websphere.appserver.concurrent-1.0;version=latest, \
 	com.ibm.websphere.appserver.jaspic-1.1;version=latest, \

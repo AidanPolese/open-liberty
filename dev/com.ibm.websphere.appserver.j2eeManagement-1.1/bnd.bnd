@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: **
+
 -dependson: \
 	com.ibm.websphere.appserver.javax.ejb-3.2;version=latest, \
 	com.ibm.websphere.appserver.iiopcommon-1.0;version=latest, \

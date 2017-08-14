@@ -12,6 +12,8 @@
 
 -nobundles=true
 
+publish.feature.resources: **
+
 -dependson: \
 	com.ibm.websphere.appserver.iioptransport-1.0;version=latest, \
 	com.ibm.websphere.appserver.ejbLite-3.2;version=latest, \

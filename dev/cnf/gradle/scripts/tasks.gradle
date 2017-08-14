@@ -74,7 +74,9 @@ task copyMavenLibs(type: Copy) {
   task publishWLPJars {
     dependsOn jar
     def publishWlpJarDefault = parseBoolean(bnd('test.project', 'false')) ? 'true' : 'false'
-    enabled bnd('publish.tool.jar', '').empty && !parseBoolean(bnd('publish.wlp.jar.disabled', publishWlpJarDefault))
+    enabled bnd('publish.feature.resources', '').empty && 
+            bnd('publish.tool.jar', '').empty && 
+            !parseBoolean(bnd('publish.wlp.jar.disabled', publishWlpJarDefault))
     inputs.files(fileTree( dir: "${buildDir}", include: '*.jar' )).skipWhenEmpty()
     outputs.dir "${rootDir}/build.image/wlp/" + bnd('publish.wlp.jar.suffix', 'lib')
     doLast {
@@ -117,34 +119,24 @@ task copyMavenLibs(type: Copy) {
     }
   }
 
-  task publishToolScripts {
-    enabled !bnd('publish.tool.script', '').empty
-    inputs.files(fileTree( dir: "${rootDir}/cnf/resources/bin", include: 'tool.*' )).skipWhenEmpty()
-    outputs.files(fileTree( dir: "${rootDir}/build.image/wlp/bin/" + bnd('publish.tool.script.subdir', ''), include: bnd('publish.tool.script', '') ))
-    doLast {
-      copy {
-        from "${rootDir}/cnf/resources/bin"
-        into "${rootDir}/build.image/wlp/bin/" + bnd('publish.tool.script.subdir', '')
-        rename 'tool(.*)', bnd('publish.tool.script') + '$1'
-        filter(org.apache.tools.ant.filters.ReplaceTokens,
-               tokens: [TOOL_JAR: bnd('publish.tool.script.subdir', '') + 'tools/' + bnd('publish.tool.jar'),
-                        TOOL_SCRIPT: bnd('publish.tool.script.subdir', '') + bnd('publish.tool.script'),
-                        TOOL_SCRIPT_DIR_LENGTH: bnd('publish.tool.script.dir.length', '5'),
-                        TOOL_SCRIPT_RELATIVE: bnd('publish.tool.script.relative', '')])
-      }
-    }
-  }
-
-  jar {
-    dependsOn publishToolScripts
-  }
-
   task publishToolJars {
     dependsOn jar
     enabled !bnd('publish.tool.jar', '').empty
     inputs.files(fileTree( dir: "${buildDir}", include: bnd('publish.tool.jar', '') )).skipWhenEmpty()
     outputs.files(fileTree( dir: "${rootDir}/build.image/wlp/bin/" + bnd('publish.tool.script.subdir', '') + 'tools', include: bnd('publish.tool.jar', '') ))
     doLast {
+      if (!bnd('publish.tool.script', '').empty) {
+        copy {
+          from "${rootDir}/cnf/resources/bin"
+          into "${rootDir}/build.image/wlp/bin/" + bnd('publish.tool.script.subdir', '')
+          rename 'tool(.*)', bnd('publish.tool.script') + '$1'
+          filter(org.apache.tools.ant.filters.ReplaceTokens,
+                 tokens: [TOOL_JAR: bnd('publish.tool.script.subdir', '') + 'tools/' + bnd('publish.tool.jar'),
+                          TOOL_SCRIPT: bnd('publish.tool.script.subdir', '') + bnd('publish.tool.script'),
+                          TOOL_SCRIPT_DIR_LENGTH: bnd('publish.tool.script.dir.length', '5'),
+                          TOOL_SCRIPT_RELATIVE: bnd('publish.tool.script.relative', '')])
+        }
+      }
       copy {
         from "${buildDir}"
         into "${rootDir}/build.image/wlp/bin/" + bnd('publish.tool.script.subdir', '') + 'tools'
