@@ -15,13 +15,15 @@ Bundle-Name: WebSphere HTTP Transport SPI
 Bundle-Description: WebSphere HTTP Transport SPI, version ${bVersion}
 Bundle-SymbolicName: com.ibm.websphere.appserver.spi.httptransport
 
-Import-Package: com.ibm.wsspi.http
+Import-Package: com.ibm.wsspi.http, \
+com.ibm.wsspi.http.ee8
 
-Export-Package: com.ibm.wsspi.http
+Export-Package: com.ibm.wsspi.http, \
+com.ibm.wsspi.http.ee8
 
 -includeresource: {META-INF/maven/com.ibm.websphere.appserver.spi/com.ibm.websphere.appserver.spi.httptransport/pom.xml=com.ibm.websphere.appserver.spi.httptransport.pom}
 
 publish.wlp.jar.suffix: dev/spi/ibm
 
 -buildpath: \
-	com.ibm.ws.transport.http
+com.ibm.ws.transport.http

@@ -42,7 +42,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
     /**
      * the class used to discriminate
      */
-    private Class<?> discriminantClass;
+    private final Class<?> discriminantClass;
 
     /**
      * algorithm to use to call and choose discriminators
@@ -191,8 +191,13 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
      * .channelfw.VirtualConnection, java.lang.Object,
      * com.ibm.wsspi.channelfw.ConnectionLink)
      */
+    @Override
     public int discriminate(VirtualConnection vcx, Object discrimData, ConnectionLink ccl) throws DiscriminationProcessException {
-        InboundVirtualConnection vc = (InboundVirtualConnection) vcx;
+        InboundVirtualConnection vc = null;
+        if (vcx instanceof InboundVirtualConnection) {
+            vc = (InboundVirtualConnection) vcx;
+        }
+
         if (discriminationAlgorithm == null) {
             DiscriminationProcessException e = new DiscriminationProcessException("No Discriminators in this group or the group was not properly started");
             FFDCFilter.processException(e, getClass().getName() + ".discriminate", "202", this, new Object[] { vc });
@@ -208,7 +213,11 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
             }
             this.changed = false;
         }
-        return discriminationAlgorithm.discriminate(vc, discrimData, ccl);
+
+        if (vc == null && discriminationAlgorithm instanceof SingleDiscriminatorAlgorithm)
+            return ((SingleDiscriminatorAlgorithm) discriminationAlgorithm).discriminate(vcx, discrimData, ccl);
+        else
+            return discriminationAlgorithm.discriminate(vc, discrimData, ccl);
     }
 
     /*
@@ -217,6 +226,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
      * .channelfw.VirtualConnection, com.ibm.wsspi.channelfw.ConnectionLink,
      * java.lang.String)
      */
+    @Override
     public int discriminate(VirtualConnection vc, ConnectionLink currentChannel, String inputChannelName) {
         Channel channel = null;
         String channelName = null;
@@ -255,6 +265,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
      *            The discrimintor weight. Must be greater than 0.
      * @throws DiscriminationProcessException
      */
+    @Override
     public void addDiscriminator(Discriminator d, int weight) throws DiscriminationProcessException {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "addDiscriminator: " + d + " weight=" + weight);
@@ -310,6 +321,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
     /*
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(64);
         sb.append("Index: ").append(getIndex());
@@ -387,6 +399,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
      * com.ibm.ws.channelfw.internal.discrim.DiscriminationGroup#removeDiscriminator
      * (com.ibm.wsspi.channelfw.Discriminator)
      */
+    @Override
     public void removeDiscriminator(Discriminator d) throws DiscriminationProcessException {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "removeDiscriminator: " + d);
@@ -494,6 +507,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
      * com.ibm.ws.channelfw.internal.discrim.DiscriminationGroup#getDiscriminators
      * ()
      */
+    @Override
     public List<Discriminator> getDiscriminators() {
         return this.discAL;
     }
@@ -503,6 +517,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
      * com.ibm.ws.channelfw.internal.discrim.DiscriminationGroup#getDiscriminatorNodes
      * ()
      */
+    @Override
     public Object getDiscriminatorNodes() {
         return this.discriminators;
     }
@@ -511,6 +526,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
      * @seecom.ibm.ws.channelfw.internal.discrim.DiscriminationGroup#
      * getDiscriminationAlgorithm()
      */
+    @Override
     public DiscriminationAlgorithm getDiscriminationAlgorithm() {
         return this.discriminationAlgorithm;
     }
@@ -520,6 +536,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
      * setDiscriminationAlgorithm
      * (com.ibm.ws.channelfw.internal.discrim.DiscriminationAlgorithm)
      */
+    @Override
     public void setDiscriminationAlgorithm(DiscriminationAlgorithm da) {
         this.discriminationAlgorithm = da;
     }
@@ -527,6 +544,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
     /**
      * Start this DiscriminatorProcess.
      */
+    @Override
     public void start() {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "Started discriminator list " + discAL + "with size" + discAL.size());
@@ -545,6 +563,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
     /**
      * @return the channel name associated with this DiscriminationProcess.
      */
+    @Override
     public String getChannelName() {
         return this.name;
     }
@@ -573,6 +592,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
     /*
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
+    @Override
     public int compareTo(DiscriminationGroup o) {
         if (o == null || !(o instanceof DiscriminationProcessImpl)) {
             return -1;
@@ -583,6 +603,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
     /*
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -596,6 +617,7 @@ public class DiscriminationProcessImpl implements DiscriminationGroup {
     /*
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return this.myIndex;
     }

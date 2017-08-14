@@ -831,7 +831,6 @@ public abstract class WebContainer extends BaseContainer {
             // end 272738    Duplicate CacheServletWrappers when url-rewriting is enabled    WAS.webcontainer: rewritten to handle jsessionid.
 
             CacheServletWrapper wrapper = getFromCache(cacheKey);
-
             if (wrapper != null) {
                 WebApp webApp = wrapper.getWebApp();// 325429
                 if (isTraceOn && logger.isLoggable(Level.FINE)) //306998.15 
@@ -1189,6 +1188,13 @@ public abstract class WebContainer extends BaseContainer {
             if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && logger.isLoggable(Level.FINE)) //306998.15
             {
                 logger.logp(Level.FINE, CLASS_NAME, "addToCache", "cache is full");
+            }
+            return;
+        }
+        if (app.isUpgraded()) {
+            if (com.ibm.ejs.ras.TraceComponent.isAnyTracingEnabled() && logger.isLoggable(Level.FINE))
+            {
+                logger.logp(Level.FINE, CLASS_NAME, "addToCache", "will not cache upgraded WebApp");
             }
             return;
         }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.osgi.framework.ServiceReference;
@@ -85,6 +86,8 @@ public class CHFWBundle implements ServerQuiesceListener {
     private EventEngine eventService = null;
     /** Reference to the scheduler service -- required */
     private ScheduledEventService scheduler = null;
+
+    private ScheduledExecutorService scheduledExecutor = null;
     /** Reference to the executor service -- required */
     private ExecutorService executorService = null;
 
@@ -359,6 +362,38 @@ public class CHFWBundle implements ServerQuiesceListener {
         CHFWBundle c = instance.get();
         if (null != c) {
             return c.scheduler;
+        }
+        return null;
+    }
+
+    /**
+     * DS method for setting the scheduled executor service reference.
+     *
+     * @param ref
+     */
+    @Reference(service = ScheduledExecutorService.class,
+               cardinality = ReferenceCardinality.MANDATORY)
+    protected void setScheduledExecutorService(ScheduledExecutorService ref) {
+        this.scheduledExecutor = ref;
+    }
+
+    /**
+     * DS method for removing the scheduled executor service reference.
+     * This is a required reference, will be called after deactivate.
+     *
+     * @param ref
+     */
+    protected void unsetScheduledExecutorService(ScheduledExecutorService ref) {}
+
+    /**
+     * Access the scheduled executor service.
+     *
+     * @return ScheduledEventService - null if not found
+     */
+    public static ScheduledExecutorService getScheduledExecutorService() {
+        CHFWBundle c = instance.get();
+        if (null != c) {
+            return c.scheduledExecutor;
         }
         return null;
     }

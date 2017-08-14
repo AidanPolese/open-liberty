@@ -50,6 +50,7 @@ public interface BNFHeaders extends HeaderStorage {
      * @param src
      *            - existing buffers to start adding the headers into
      * @return WsByteBuffer[] of headers ready to be written.
+     * @throws Exception
      */
     WsByteBuffer[] marshallHeaders(WsByteBuffer[] src);
 

@@ -12,6 +12,7 @@
 package com.ibm.ws.webcontainer31.osgi.webapp;
 
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
@@ -28,6 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionIdListener;
 import javax.servlet.http.HttpSessionListener;
@@ -38,16 +40,20 @@ import com.ibm.websphere.csi.J2EENameFactory;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.container.service.metadata.MetaDataService;
+import com.ibm.ws.http.channel.h2internal.H2UpgradeHandler;
 import com.ibm.ws.managedobject.ManagedObject;
 import com.ibm.ws.managedobject.ManagedObjectService;
 import com.ibm.ws.threadContext.ComponentMetaDataAccessorImpl;
 import com.ibm.ws.webcontainer.osgi.WebContainer;
 import com.ibm.ws.webcontainer.osgi.webapp.WebAppConfiguration;
+import com.ibm.ws.webcontainer.servlet.H2Handler;
 import com.ibm.ws.webcontainer.servlet.WsocHandler;
 import com.ibm.ws.webcontainer31.facade.ServletContextFacade31;
 import com.ibm.ws.webcontainer31.osgi.listener.RegisterEventListenerProvider;
 import com.ibm.ws.webcontainer31.osgi.osgi.WebContainerConstants;
 import com.ibm.ws.webcontainer31.session.IHttpSessionContext31;
+import com.ibm.ws.webcontainer31.upgrade.H2HandlerImpl;
+import com.ibm.ws.webcontainer31.upgrade.H2UpgradeHandlerWrapper;
 import com.ibm.wsspi.injectionengine.InjectionException;
 import com.ibm.wsspi.injectionengine.ReferenceContext;
 
@@ -67,6 +73,7 @@ public class WebApp31 extends com.ibm.ws.webcontainer.osgi.webapp.WebApp
         javax.servlet.http.HttpSessionIdListener.class, javax.servlet.ServletContextListener.class};
 
     private WsocHandler wsocServHandler = null;
+    
     /**
      * Constructor.
      * 
@@ -532,6 +539,12 @@ public class WebApp31 extends com.ibm.ws.webcontainer.osgi.webapp.WebApp
         }
     }
 
+    /**
+     * Return an H2Handler
+     */
+    public H2Handler getH2Handler() {
+        return new H2HandlerImpl();
+    }   
   
     //register websocket handler  
     public void registerWebSocketHandler(WsocHandler wsocServHandler) {

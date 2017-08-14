@@ -34,11 +34,17 @@ Export-Package: \
     com.ibm.wsspi.genericbnf*;provide:=true, \
     com.ibm.wsspi.http*;provide:=true, \
     com.ibm.wsspi.http.ee7*;provide:=true, \
+    com.ibm.wsspi.http.ee8*;provide:=true, \
     com.ibm.ws.transport.access*;provide:=true, \
     com.ibm.ws.genericbnf, \
     com.ibm.ws.http.dispatcher.classify, \
     com.ibm.ws.http.channel.outstream, \
-    com.ibm.ws.http.channel.inputstream
+    com.ibm.ws.http.channel.inputstream, \
+    com.ibm.ws.http.channel.h2internal, \
+    com.ibm.ws.http.channel.h2internal.frames, \
+    com.ibm.ws.http.channel.h2internal.exceptions, \
+    com.ibm.ws.http.channel.h2internal.hpack, \
+    com.ibm.ws.http.channel.h2internal.huffman
     
 Private-Package: \
     com.ibm.ws.http.*, \

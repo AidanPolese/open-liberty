@@ -17,17 +17,19 @@ import com.ibm.websphere.ras.annotation.Trivial;
 import com.ibm.ws.http.channel.internal.inbound.HttpInputStreamImpl;
 import com.ibm.wsspi.genericbnf.HeaderField;
 import com.ibm.wsspi.http.HttpCookie;
-import com.ibm.wsspi.http.HttpRequest;
 import com.ibm.wsspi.http.channel.HttpRequestMessage;
 import com.ibm.wsspi.http.channel.inbound.HttpInboundServiceContext;
 import com.ibm.wsspi.http.ee7.HttpInputStreamEE7;
+import com.ibm.wsspi.http.ee8.Http2PushBuilder;
+import com.ibm.wsspi.http.ee8.Http2PushException;
+import com.ibm.wsspi.http.ee8.Http2Request;
 
 /**
  * Implementation of an HTTP request message provided by the HTTP dispatcher to
  * various containers.
  */
 @Trivial
-public class HttpRequestImpl implements HttpRequest {
+public class HttpRequestImpl implements Http2Request {
     private HttpRequestMessage message = null;
     private HttpInputStreamImpl body = null;
     private boolean useEE7Streams = false;
@@ -199,4 +201,15 @@ public class HttpRequestImpl implements HttpRequest {
     public String toString() {
         return this.getClass().getSimpleName() + "[message=" + message + "]";
     }
+
+    /**
+     * Initiate a Push request
+     *
+     * @return
+     */
+    @Override
+    public void pushNewRequest(Http2PushBuilder pushBuilder) throws Http2PushException {
+
+    }
+
 }
