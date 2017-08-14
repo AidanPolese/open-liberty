@@ -47,13 +47,10 @@ test.project: true
 	../build.sharedResources/lib/junit/old/junit.jar;version=file,\
 	commons-httpclient:commons-httpclient;version=3.1,\
 	com.ibm.ws.componenttest:com.ibm.componenttest.common;version=1.0.0,\
-    com.ibm.ws.componenttest:com.ibm.ws.topology.helper;version=1.0.0,\
-    com.ibm.ws.componenttest:jlanclient;version=1.0.0,\
-    com.ibm.ws.componenttest:provider.api;version=1.0.0,\
-    com.ibm.ws.componenttest:public.api;version=1.0.0,\
-    com.ibm.ws.componenttest:remoteaccess;version=2.3.0.1,\
-    com.ibm.ws.componenttest:ssh;version=2.3.0.1,\
-    com.ibm.ws.componenttest:fat.util;version=1.0.0,\
+	com.ibm.ws.componenttest:com.ibm.ws.topology.helper;version=1.0.0,\
+	com.ibm.ws.componenttest:provider.api;version=1.0.0,\
+	com.ibm.ws.componenttest:public.api;version=1.0.0,\
+	com.ibm.ws.componenttest:fat.util;version=1.0.0,\
 	lib/httpunit.jar;version=file,\
 	lib/jtidy-r938.jar;version=file,\
 	lib/shrinkwrap-api-1.2.3.jar;version=file,\
