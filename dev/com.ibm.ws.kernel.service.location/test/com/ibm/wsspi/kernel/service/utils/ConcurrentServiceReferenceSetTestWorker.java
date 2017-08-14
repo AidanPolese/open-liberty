@@ -1,19 +1,13 @@
-/* /I/ /G/ /U/ /W/   <-- CMVC Keywords, replace / with %
- * %I% %G% %U% %W%
+/*******************************************************************************
+ * Copyright (c) 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * ORIGINS: 27
- *
- * IBM Confidential OCO Source Material
- * 5724-J08 (C) COPYRIGHT International Business Machines Corp. 2005
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- *
- * Reason           Date     Userid    Change Description
- * --------------- -------- --------- -------------------------------------------
- * LIDB3187-27     20051110  ehaaser   Basic test case for ZIOP implementation elements
- *
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.wsspi.kernel.service.utils;
 
 import java.util.Iterator;
