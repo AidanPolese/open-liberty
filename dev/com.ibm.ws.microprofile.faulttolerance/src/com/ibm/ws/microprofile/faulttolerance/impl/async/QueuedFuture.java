@@ -29,7 +29,6 @@ import com.ibm.wsspi.threadcontext.ThreadContextDescriptor;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-
 /**
  *
  */
