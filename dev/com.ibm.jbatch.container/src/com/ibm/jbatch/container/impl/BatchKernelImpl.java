@@ -52,7 +52,7 @@ import com.ibm.jbatch.container.RASConstants;
 import com.ibm.jbatch.container.callback.IJobExecutionEndCallbackService;
 import com.ibm.jbatch.container.callback.IJobExecutionStartCallbackService;
 import com.ibm.jbatch.container.exception.BatchContainerServiceException;
-import com.ibm.jbatch.container.exception.InvalidJobExecutionStateException;
+import com.ibm.jbatch.container.exception.JobStoppedException;
 import com.ibm.jbatch.container.execution.impl.JobExecutionHelper;
 import com.ibm.jbatch.container.execution.impl.RuntimeJobExecution;
 import com.ibm.jbatch.container.execution.impl.RuntimePartitionExecution;
@@ -300,12 +300,12 @@ public class BatchKernelImpl implements IBatchKernelService, ServerQuiesceListen
 
         try {
             // Set server id and rest URL since this is now a viable execution.
-            getPersistenceManagerService().updateJobExecutionServerIdAndRestUrl(jobExecution.getTopLevelExecutionId());
+            getPersistenceManagerService().updateJobExecutionServerIdAndRestUrlForStartingJob(jobExecution.getTopLevelExecutionId());
             futureWork = executorService.executeTask(batchWork, null);
         } catch (RuntimeException e) {
             workUnitCompleted(batchWork);
             throw e;
-        } catch (InvalidJobExecutionStateException e) {
+        } catch (JobStoppedException e) {
             workUnitCompleted(batchWork);
             new RuntimeException(e.getMessage());
         }
@@ -336,13 +336,13 @@ public class BatchKernelImpl implements IBatchKernelService, ServerQuiesceListen
 
         try {
             // Set server id and rest URL since this is now a viable execution.
-            getPersistenceManagerService().updateJobExecutionServerIdAndRestUrl(jobExecution.getTopLevelExecutionId());
+            getPersistenceManagerService().updateJobExecutionServerIdAndRestUrlForStartingJob(jobExecution.getTopLevelExecutionId());
 
             futureExecution = executorService.executeTask(batchWork, null);
         } catch (RuntimeException e) {
             workUnitCompleted(batchWork);
             throw e;
-        } catch (InvalidJobExecutionStateException e) {
+        } catch (JobStoppedException e) {
             workUnitCompleted(batchWork);
             new RuntimeException(e.getMessage());
         }

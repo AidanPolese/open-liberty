@@ -28,7 +28,8 @@ import javax.batch.runtime.JobExecution;
 import javax.batch.runtime.JobInstance;
 import javax.batch.runtime.StepExecution;
 
-import com.ibm.jbatch.container.exception.InvalidJobExecutionStateException;
+import com.ibm.jbatch.container.exception.ExecutionAssignedToServerException;
+import com.ibm.jbatch.container.exception.JobStoppedException;
 import com.ibm.jbatch.container.execution.impl.RuntimePartitionExecution;
 import com.ibm.jbatch.container.execution.impl.RuntimeSplitFlowExecution;
 import com.ibm.jbatch.container.execution.impl.RuntimeStepExecution;
@@ -224,7 +225,7 @@ public interface IPersistenceManagerService extends IBatchServiceBase {
 
     public JobExecution updateJobExecutionAndInstanceOnStatusChange(long jobExecutionId, BatchStatus newBatchStatus, Date updateTime) throws NoSuchJobExecutionException;
 
-    public JobExecution updateJobExecutionAndInstanceOnStop(long jobExecutionId, Date updateTime) throws NoSuchJobExecutionException, InvalidJobExecutionStateException;
+    JobExecution updateJobExecutionAndInstanceNotSetToServerYet(long jobExecutionId, Date updateTime) throws NoSuchJobExecutionException, ExecutionAssignedToServerException;
 
     public JobExecution updateJobExecutionAndInstanceOnEnd(long jobExecutionId, BatchStatus finalBatchStatus, String finalExitStatus,
                                                            Date endTime) throws NoSuchJobExecutionException;
@@ -308,7 +309,7 @@ public interface IPersistenceManagerService extends IBatchServiceBase {
      * @throws InvalidJobExecutionStateException
      *
      */
-    public JobExecutionEntity updateJobExecutionServerIdAndRestUrl(long jobExecutionId) throws NoSuchJobExecutionException, InvalidJobExecutionStateException;
+    public JobExecutionEntity updateJobExecutionServerIdAndRestUrlForStartingJob(long topLevelExecutionId) throws NoSuchJobExecutionException, JobStoppedException;
 
     // STEP THREAD
 
@@ -535,4 +536,5 @@ public interface IPersistenceManagerService extends IBatchServiceBase {
      * @return
      */
     String getPersistenceType();
+
 }

@@ -52,7 +52,8 @@ import org.osgi.service.component.annotations.Reference;
 import com.ibm.jbatch.container.RASConstants;
 import com.ibm.jbatch.container.exception.BatchIllegalIDPersistedException;
 import com.ibm.jbatch.container.exception.BatchIllegalJobStatusTransitionException;
-import com.ibm.jbatch.container.exception.InvalidJobExecutionStateException;
+import com.ibm.jbatch.container.exception.ExecutionAssignedToServerException;
+import com.ibm.jbatch.container.exception.JobStoppedException;
 import com.ibm.jbatch.container.exception.PersistenceException;
 import com.ibm.jbatch.container.execution.impl.RuntimeStepExecution;
 import com.ibm.jbatch.container.persistence.jpa.JobExecutionEntity;
@@ -881,11 +882,11 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
     }
 
     @Override
-    public JobExecution updateJobExecutionAndInstanceOnStop(final long jobExecutionId,
-                                                            final Date updateTime) throws NoSuchJobExecutionException, InvalidJobExecutionStateException {
+    public JobExecution updateJobExecutionAndInstanceNotSetToServerYet(final long jobExecutionId,
+                                                                       final Date updateTime) throws NoSuchJobExecutionException, ExecutionAssignedToServerException {
         EntityManager em = getPsu().createEntityManager();
 
-        final TypedQuery<JobExecutionEntity> query = em.createNamedQuery(JobExecutionEntity.UPDATE_JOB_EXECUTION_AND_INSTANCE_ON_STOP,
+        final TypedQuery<JobExecutionEntity> query = em.createNamedQuery(JobExecutionEntity.UPDATE_JOB_EXECUTION_AND_INSTANCE_SERVER_NOT_SET,
                                                                          JobExecutionEntity.class);
         query.setParameter("batchStatus", BatchStatus.STOPPED);
         query.setParameter("jobExecId", jobExecutionId);
@@ -893,7 +894,7 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
         try {
             return new TranRequest<JobExecution>(em) {
                 @Override
-                public JobExecution call() throws InvalidJobExecutionStateException {
+                public JobExecution call() {
                     JobExecutionEntity execution = entityMgr.find(JobExecutionEntity.class, jobExecutionId, LockModeType.PESSIMISTIC_WRITE);
                     if (execution == null) {
                         throw new NoSuchJobExecutionException("No job execution found for id = " + jobExecutionId);
@@ -920,7 +921,7 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
                         entityMgr.refresh(execution);
                     } else {
                         String msg = "Job execution " + jobExecutionId + " is in an invalid state";
-                        throw new InvalidJobExecutionStateException(msg);
+                        throw new ExecutionAssignedToServerException(msg);
                     }
                     return execution;
                 }
@@ -1198,10 +1199,10 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
     }
 
     @Override
-    public JobExecutionEntity updateJobExecutionServerIdAndRestUrl(final long jobExecutionId) {
+    public JobExecutionEntity updateJobExecutionServerIdAndRestUrlForStartingJob(final long jobExecutionId) throws JobStoppedException {
         EntityManager em = getPsu().createEntityManager();
 
-        final TypedQuery<JobExecutionEntity> query = em.createNamedQuery(JobExecutionEntity.UPDATE_JOB_EXECUTION_SERVERID_AND_RESTURL,
+        final TypedQuery<JobExecutionEntity> query = em.createNamedQuery(JobExecutionEntity.UPDATE_JOB_EXECUTION_SERVERID_AND_RESTURL_FOR_STARTING_JOB,
                                                                          JobExecutionEntity.class);
 
         query.setParameter("serverId", batchLocationService.getServerId());
@@ -1211,7 +1212,7 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
         try {
             return new TranRequest<JobExecutionEntity>(em) {
                 @Override
-                public JobExecutionEntity call() throws InvalidJobExecutionStateException {
+                public JobExecutionEntity call() throws JobStoppedException {
                     JobExecutionEntity execution = entityMgr.find(JobExecutionEntity.class, jobExecutionId, LockModeType.PESSIMISTIC_WRITE);
                     if (execution == null) {
                         throw new NoSuchJobExecutionException("No job execution found for id = " + jobExecutionId);
@@ -1222,8 +1223,10 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
                         // Need to refresh to pick up changes made to the database
                         entityMgr.refresh(execution);
                     } else {
+                        // We're guarding here for the case that the execution has been stopped
+                        // by the time we reach this query
                         String msg = "No job execution found for id = " + jobExecutionId + " and status = STARTING";
-                        throw new InvalidJobExecutionStateException(msg);
+                        throw new JobStoppedException(msg);
                     }
                     return execution;
                 }
@@ -2329,7 +2332,7 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
             return retVal;
         }
 
-        public abstract T call() throws InvalidJobExecutionStateException;
+        public abstract T call() throws JobStoppedException;
 
         /**
          * Begin a new transaction, if one isn't currently active (nested transactions not supported).
