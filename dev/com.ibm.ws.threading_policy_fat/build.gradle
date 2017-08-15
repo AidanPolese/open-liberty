@@ -14,7 +14,7 @@ task copyFeatureBundle {
   doLast {
     copy {
       from "${projectDir}/generated/test.policyexecutor.bundle_fat.jar"
-      into "${buildDir}/autoFVT/publish/files/bundles"
+      into "${projectDir}/generated/autoFVT/lib/LibertyFATTestFiles/bundles"
     }
   }
 }
