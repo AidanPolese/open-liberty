@@ -22,7 +22,7 @@ Private-Package: com.ibm.ws.javaee.persistence.internal, \
    org.apache.geronimo.specs.jpa
 
 Include-Resource: \
-   @${repo;org.apache.geronimo.specs:geronimo-jpa_2.0_spec;1.1}!/META-INF/NOTICE
+   @${repo;com.ibm.ws.org.apache.geronimo.specs:geronimo-jpa_2.0_spec;1.1}!/META-INF/NOTICE
 
 
 Copyright: Licensed Materials - Property of IBM 5724-J08, 5724-I63, 57\
@@ -36,5 +36,5 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	org.apache.geronimo.specs:geronimo-jpa_2.0_spec;version=1.1,\
+	com.ibm.ws.org.apache.geronimo.specs:geronimo-jpa_2.0_spec;version=1.1,\
 	com.ibm.websphere.org.osgi.core
