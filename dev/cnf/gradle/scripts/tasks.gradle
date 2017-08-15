@@ -416,17 +416,6 @@ task copyMavenLibs(type: Copy) {
 		  include 'test-applications/**', 'test-bundles/**', 'test-resourceadapters/**'
 		  exclude '**/*.java'
 	  }
-//	  
-//	  // Generate a .classpath file based on the current bnd classpath:
-//      def cpString = ""
-//      sourceSets.main.runtimeClasspath.each { 
-//  	    cpString += it.getAbsolutePath() + "\n"
-//      }
-//      println "Generated FAT classpath: " + cpString
-//      def cpFile = new File("${projectDir}/generated/autoFVT/generated.classpath")
-//      cpFile.delete()
-//      cpFile.createNewFile()
-//      cpFile.text = cpString
     }
   }
 
