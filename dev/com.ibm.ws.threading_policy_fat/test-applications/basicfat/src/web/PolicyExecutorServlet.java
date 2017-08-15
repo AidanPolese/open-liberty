@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletionService;
@@ -32,6 +33,7 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 
 import java.util.concurrent.TimeUnit;
@@ -804,6 +806,90 @@ public class PolicyExecutorServlet extends FATServlet {
         assertTrue(executor.isTerminated());
     }
 
+    // Attempts submits and cancels concurrently. 3 threads submit 10 tasks each, canceling every other task submitted.
+    @Test
+    public void testConcurrentSubmitAndCancel() throws Exception {
+        final int numThreads = 3;
+        final int numIterations = 5;
+
+        final ExecutorService executor = provider.create("testConcurrentSubmitAndCancel")
+                .maxConcurrency(4)
+                .maxQueueSize(30);
+
+        final AtomicInteger counter = new AtomicInteger();
+        final BlockingQueue<Future<Integer>> futuresToCancel = new LinkedBlockingQueue<Future<Integer>>();
+        final AtomicInteger numSuccessfulCancels = new AtomicInteger();
+
+        Callable<List<Future<Integer>>> multipleSubmitAndCancelTask = new Callable<List<Future<Integer>>>() {
+            @Override
+            public List<Future<Integer>> call() throws Exception {
+                List<Future<Integer>> futures = new ArrayList<Future<Integer>>(numIterations * 2);
+                for (int i = 0; i < numIterations; i++) {
+                    Future<Integer> futureA = executor.submit((Callable<Integer>) new SharedIncrementTask(counter));
+                    futuresToCancel.add(futureA);
+                    futures.add(futureA);
+                    Future<Integer> futureB = executor.submit((Callable<Integer>) new SharedIncrementTask(counter));
+                    futures.add(futureB);
+
+                    Future<?> futureC = futuresToCancel.poll(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                    boolean interruptIfRunning = i % 2 == 0;
+                    if (futureC.cancel(interruptIfRunning))
+                        numSuccessfulCancels.incrementAndGet();
+                }
+                return futures;
+            }
+        };
+
+        List<Callable<List<Future<Integer>>>> testTasks = new ArrayList<Callable<List<Future<Integer>>>>(numThreads);
+        for (int i = 0; i < numThreads; i++)
+            testTasks.add(multipleSubmitAndCancelTask);
+
+        List<Future<Integer>> allFutures = new ArrayList<Future<Integer>>();
+        for (Future<List<Future<Integer>>> result : testThreads.invokeAll(testTasks, TIMEOUT_NS * numThreads * numIterations, TimeUnit.NANOSECONDS))
+            allFutures.addAll(result.get());
+
+        int numCanceled = 0;
+        int numCompleted = 0;
+        HashSet<Integer> resultsOfSuccessfulTasks = new HashSet<Integer>();
+        for (Future<Integer> future : allFutures) {
+            if (future.isCancelled()) {
+                numCanceled++;
+                numCompleted++;
+            } else if (future.isDone()) {
+                assertTrue(resultsOfSuccessfulTasks.add(future.get()));
+                numCompleted++;
+            } else
+                try {
+                    assertTrue(resultsOfSuccessfulTasks.add(future.get(TIMEOUT_NS, TimeUnit.NANOSECONDS)));
+                    numCompleted++;
+                } catch (CancellationException x) {
+                    numCanceled++;
+                }
+        }
+
+        int totalTasksSubmitted = numThreads * numIterations * 2;
+        int numTasksThatStartedRunning = counter.get();
+
+        System.out.println(totalTasksSubmitted + " tasks were submitted, of which " + numCompleted + " completed, of which " + numCanceled + " have canceled futures and " + numSuccessfulCancels + " reported successful cancel.");
+        System.out.println(numTasksThatStartedRunning + " tasks started running.");
+
+        assertEquals(totalTasksSubmitted, numCompleted);
+        assertEquals(numSuccessfulCancels.get(), numCanceled);
+
+        // We requested cancellation of half of the tasks, however, some might have already completed. We can only test that no extras were canceled.
+        assertTrue(numCanceled <= totalTasksSubmitted / 2);
+
+        // Some tasks might start running and later be canceled. The number that starts running must be at least half.
+        assertTrue(numTasksThatStartedRunning >= totalTasksSubmitted / 2);
+
+        // Every task that was not successfully canceled must return a unique result (per the shared counter).
+        assertEquals(totalTasksSubmitted - numSuccessfulCancels.get(), resultsOfSuccessfulTasks.size());
+
+        // Should be nothing left in the queue for the policy executor
+        List<Runnable> tasksCanceledFromQueue = executor.shutdownNow();
+        assertEquals(0, tasksCanceledFromQueue.size());
+    }
+
     // Attempt submits while concurrently shutting down. Submits should either be accepted
     // or rejected with the error that indicates the executor has been shut down.
     @Test
@@ -859,6 +945,77 @@ public class PolicyExecutorServlet extends FATServlet {
         // tasks can run in any order, so it's more convenient to validate the sum of results rather than individual results
         int expectedSum = numAccepted * (numAccepted + 1) / 2;
         assertEquals(expectedSum, sum);
+    }
+
+    // Attempt submits while concurrently shutting down via shutdownNow. Submits should either be accepted
+    // or rejected with the error that indicates the executor has been shut down. Tasks which are submitted
+    // will either be canceled from the queue, canceled while running, or will have completed successfully.
+    @Test
+    public void testConcurrentSubmitAndShutdownNow() throws Exception {
+        final int numSubmits = 10;
+
+        ExecutorService executor = provider.create("testConcurrentSubmitAndShutdownNow").maxConcurrency(numSubmits).maxQueueSize(numSubmits);
+
+        CountDownLatch beginLatch = new CountDownLatch(numSubmits);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+        AtomicInteger counter = new AtomicInteger();
+
+        List<Future<Future<Integer>>> ffs = new ArrayList<Future<Future<Integer>>>(numSubmits);
+        for (int i = 0; i < numSubmits; i++)
+            ffs.add(testThreads.submit(new SubmitterTask<Integer>(executor, new SharedIncrementTask(counter), beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(40))));
+
+        // Wait for all of the test threads to position themselves to start submitting to the policy executor
+        beginLatch.await(TIMEOUT_NS * 5, TimeUnit.NANOSECONDS);
+
+        // Let them start submitting tasks to the policy executor
+        continueLatch.countDown();
+        TimeUnit.NANOSECONDS.sleep(100);
+
+        // Shut down the policy executor
+        List<Runnable> canceledQueuedTasks = executor.shutdownNow();
+
+        assertTrue(executor.awaitTermination(TIMEOUT_NS * 5, TimeUnit.NANOSECONDS));
+        assertTrue(executor.isTerminated());
+
+        int numAccepted = 0;
+        int numAcceptedThenCanceled = 0;
+        int numRejected = 0;
+        int sum = 0;
+
+        for (Future<Future<Integer>> ff : ffs)
+            try {
+                Future<Integer> future = ff.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                assertTrue(future.isDone());
+                numAccepted++;
+                if (future.isCancelled())
+                    numAcceptedThenCanceled++;
+                else
+                    sum += future.get();
+            } catch (ExecutionException x) {
+                if (x.getCause() instanceof RejectedExecutionException) {
+                    numRejected++;
+                    if (!x.getCause().getMessage().contains("CWWKE1202E")) // rejected-due-to-shutdown message
+                        throw x;
+                } else
+                    throw x;
+            }
+
+        int numCanceledFromQueue = canceledQueuedTasks.size();
+
+        System.out.println(numAccepted + " accepted, of which " + numAcceptedThenCanceled + " were canceled due to shutdownNow, with "
+                         + numCanceledFromQueue + " canceled from the queue; " + numRejected + " rejected");
+
+        assertEquals(numSubmits, numAccepted + numRejected);
+
+        assertTrue(numCanceledFromQueue <= numAcceptedThenCanceled);
+
+        int numSuccessful = numAccepted - numAcceptedThenCanceled;
+
+        // tasks can run in any order and some might partially run, so we have little guarantee of the results
+        int expectedSumMax = numAccepted * (numAccepted + 1) / 2;
+        int expectedSumMin = numSuccessful * (numSuccessful + 1) / 2;
+        assertTrue(sum >= expectedSumMin);
+        assertTrue(sum <= expectedSumMax);
     }
 
     // Attempt shutdown from multiple threads at once. Interrupt most of them and verify that the interrupted
