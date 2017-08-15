@@ -1947,7 +1947,8 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
                 Tr.debug(tc, "Creating a chunk of length " + length);
             }
             byte[] encodedLength = asChunkedLength(length);
-            addBytesWritten(encodedLength.length + BNFHeaders.EOL.length);
+            //PI81329 - do not add chunk bytes to body byte counter
+            //addBytesWritten(encodedLength.length + BNFHeaders.EOL.length);
             addToPendingByteBuffer(createChunkHeader(encodedLength));
         }
 
@@ -1962,7 +1963,8 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
             WsByteBuffer trailer = createChunkTrailer();
             trailer.limit(BNFHeaders.EOL.length);
             addToPendingByteBuffer(trailer);
-            addBytesWritten(BNFHeaders.EOL.length);
+            //PI81329 - do not add chunk bytes to body byte counter
+            //addBytesWritten(BNFHeaders.EOL.length);
         }
 
         // save the amount of data written inside actual body
@@ -2553,14 +2555,16 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
             // add 0 chunk with trailer data
             // CRLF + 0 + CRLF
             trailer.limit(5);
-            addBytesWritten(3L);
+            //PI81329 - do not add chunk bytes to body byte counter
+            //addBytesWritten(3L);
             addToPendingByteBuffer(trailerData, trailerData.length);
 
         } else {
             // add just the 0 chunk
             // CRLF + 0 + CRLF + CRLF
             trailer.limit(7);
-            addBytesWritten(5L);
+            //PI81329 - do not add chunk bytes to body byte counter
+            //addBytesWritten(5L);
         }
     }
 

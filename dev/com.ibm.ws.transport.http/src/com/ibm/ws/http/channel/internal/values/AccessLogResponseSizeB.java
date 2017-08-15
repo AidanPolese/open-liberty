@@ -37,7 +37,7 @@ public class AccessLogResponseSizeB extends AccessLogData {
         }
 
         if (responseMessageImpl != null) {
-            if (responseSize == -1) {
+            if (responseSize == -999) {
                 responseSize = responseMessageImpl.getServiceContext().getNumBytesWritten();
             }
         }
