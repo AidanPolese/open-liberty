@@ -39,7 +39,6 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletConfig;
@@ -1300,34 +1299,16 @@ public class PolicyExecutorServlet extends FATServlet {
         final ExecutorService executor = provider.create("testSelfAwaitTermination");
 
         // Submit a task to await termination of the executor
-        Future<Boolean> future1 = executor.submit(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws InterruptedException {
-                return executor.awaitTermination(50, TimeUnit.MILLISECONDS);
-            }
-        });
-
+        Future<Boolean> future1 = executor.submit(new TerminationAwaitTask(executor, TimeUnit.MILLISECONDS.toNanos(50)));
         assertFalse(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
         assertTrue(future1.isDone());
         assertFalse(executor.isShutdown());
         assertFalse(executor.isTerminated());
 
         // Submit another task to await termination of same executor.
-        // Save the exception because it will otherwise be lost when shutdownNow cancels the task.
-        final AtomicReference<Throwable> errorOnAwaitTermination = new AtomicReference<Throwable>();
-        final CountDownLatch beginLatch = new CountDownLatch(1);
-        Future<Boolean> future2 = executor.submit(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws InterruptedException {
-                beginLatch.countDown();
-                try {
-                    return executor.awaitTermination(20, TimeUnit.MINUTES);
-                } catch (InterruptedException x) {
-                    errorOnAwaitTermination.set(x);
-                    throw x;
-                }
-            }
-        });
+        CountDownLatch beginLatch = new CountDownLatch(1);
+        TerminationAwaitTask awaitTerminationTask = new TerminationAwaitTask(executor, TimeUnit.MINUTES.toNanos(20), beginLatch, null, 0);
+        Future<Boolean> future2 = executor.submit(awaitTerminationTask);
 
         // Wait for the above task to start
         beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS);
@@ -1363,7 +1344,7 @@ public class PolicyExecutorServlet extends FATServlet {
             fail("Task awaiting termination shouldn't succeed when executor shuts down via shutdownNow: " + future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
         } catch (CancellationException x) {} // pass
 
-        Throwable x = errorOnAwaitTermination.get();
+        Throwable x = awaitTerminationTask.errorOnAwait.poll(TIMEOUT_NS, TimeUnit.NANOSECONDS);
         assertNotNull(x);
         if (!(x instanceof InterruptedException))
             throw new RuntimeException("Unexpected error from awaitTermination task after shutdownNow. See cause.", x);
