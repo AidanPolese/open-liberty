@@ -16,21 +16,21 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 
-import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
+import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
 
 /**
  *
  */
 public class TestTask implements Callable<String> {
 
-    private final Executor<String> executor;
+    private final Execution<String> executor;
     private final TestFunction testFunction;
     private final ExecutionContext context;
 
     /**
      * @param executor
      */
-    public TestTask(Executor<String> executor, Duration callLength, String contextData) {
+    public TestTask(Execution<String> executor, Duration callLength, String contextData) {
         this.executor = executor;
         this.testFunction = new TestFunction(callLength, contextData);
         this.context = new ExecutionContext() {

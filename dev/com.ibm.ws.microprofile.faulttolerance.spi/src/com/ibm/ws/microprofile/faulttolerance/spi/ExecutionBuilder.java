@@ -34,7 +34,7 @@ public interface ExecutionBuilder<T, R> {
 
     public ExecutionBuilder<T, R> setTimeoutPolicy(TimeoutPolicy timeout);
 
-    public Executor<R> build();
+    public Execution<R> build();
 
-    public Executor<Future<R>> buildAsync();
+    public Execution<Future<R>> buildAsync();
 }

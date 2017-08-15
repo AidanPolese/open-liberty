@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
-import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
+import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.test.util.AsyncTestFunction;
 import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
@@ -47,7 +47,7 @@ public class BulkheadTest {
 
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setBulkheadPolicy(bulkhead);
-        Executor<String> executor = builder.build();
+        Execution<String> executor = builder.build();
 
         ExecutorService executorService = Executors.newFixedThreadPool(5);
 
@@ -81,7 +81,7 @@ public class BulkheadTest {
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setBulkheadPolicy(bulkhead);
 
-        Executor<Future<String>> executor = builder.buildAsync();
+        Execution<Future<String>> executor = builder.buildAsync();
 
         Future<String>[] futures = new Future[10];
         for (int i = 0; i < 10; i++) {
@@ -106,7 +106,7 @@ public class BulkheadTest {
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setBulkheadPolicy(bulkhead);
 
-        Executor<Future<String>> executor = builder.buildAsync();
+        Execution<Future<String>> executor = builder.buildAsync();
 
         for (int i = 0; i < 4; i++) {
             String contextData = "testAsyncBulkheadQueueFull" + i;

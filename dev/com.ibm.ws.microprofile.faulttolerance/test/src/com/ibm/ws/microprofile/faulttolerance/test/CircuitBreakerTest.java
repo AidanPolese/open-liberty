@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
-import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
+import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestException;
@@ -39,7 +39,7 @@ public class CircuitBreakerTest {
 
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setCircuitBreakerPolicy(circuitBreaker);
-        Executor<String> executor = builder.build();
+        Execution<String> executor = builder.build();
 
         TestFunction callable = new TestFunction(-1, "testCircuitBreaker");
 
