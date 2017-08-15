@@ -21,7 +21,12 @@ import javax.enterprise.inject.spi.AnnotatedMethod;
 import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.BeanManager;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+
 public class AnnotatedTypeWrapper<T> extends AnnotatedWrapper implements AnnotatedType<T> {
+
+    private static final TraceComponent tc = Tr.register(AnnotatedTypeWrapper.class);
 
     private final AnnotatedType<T> wrapped;
     private final Set<AnnotatedMethod<? super T>> methods = new HashSet<>();
@@ -39,7 +44,7 @@ public class AnnotatedTypeWrapper<T> extends AnnotatedWrapper implements Annotat
                     this.methods.add(methodWrapper);
                     this.wrappedMethods.put(method, methodWrapper);
                 } else {
-                    throw new RuntimeException("EPIC FAIL!");
+                    throw new RuntimeException(Tr.formatMessage(tc, "internal.error.CWMFT4999E"));
                 }
             } else {
                 this.methods.add(method);
