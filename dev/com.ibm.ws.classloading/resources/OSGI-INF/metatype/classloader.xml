@@ -57,7 +57,7 @@
         id="apiTypeVisibility"
         required="false"
         type="String"
-        default="spec\,ibm-api\,api">
+        default="spec\,ibm-api\,api\,stable">
     </AD>
     
     
