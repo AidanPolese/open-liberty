@@ -46,7 +46,12 @@ import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+
 public class FTAnnotationUtils {
+
+    private static final TraceComponent tc = Tr.register(FTAnnotationUtils.class);
 
     public final static Set<Class<?>> ANNOTATIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(Asynchronous.class, CircuitBreaker.class,
                                                                                                             Retry.class, Timeout.class, Bulkhead.class, Fallback.class)));
@@ -156,12 +161,12 @@ public class FTAnnotationUtils {
                 if (originalReturn.isAssignableFrom(fallbackReturn)) {
                     fallbackPolicy = newFallbackPolicy(beanInstance, fallbackMethod, fallbackReturn);
                 } else {
-                    throw new FaultToleranceException("Fallback return type must match that of the annotated method");
+                     throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.return.type.not.match.CWMFT5002E=CWMFT5002E", fallbackMethod, originalMethod));
                 }
             } catch (NoSuchMethodException e) {
-                throw new FaultToleranceException("Fallback method not found", e);
+                throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", beanInstance.getClass(), fallbackMethodName, paramTypes));
             } catch (SecurityException e) {
-                throw new FaultToleranceException(e);
+                throw new FaultToleranceException((Tr.formatMessage(tc, "security.exception.acquiring.fallback.method.CWMFT5004E"));
             }
         } else {
             FallbackHandler<?> fallbackHandler = newNonContextual(fallbackClass, beanManager);

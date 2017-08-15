@@ -27,10 +27,15 @@ import com.ibm.ws.microprofile.faulttolerance.impl.Timeout;
 import com.ibm.wsspi.threadcontext.ThreadContext;
 import com.ibm.wsspi.threadcontext.ThreadContextDescriptor;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+
 /**
  *
  */
 public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
+
+    private static final TraceComponent tc = Tr.register(QueuedFuture.class);
 
     private final Callable<Future<R>> callable;
     private final Timeout timeout;
@@ -165,7 +170,7 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
         synchronized (this) {
             if (this.futureFuture == null) {
                 //shouldn't be possible unless the QueuedFuture was created but not started
-                throw new IllegalStateException();
+                throw new IllegalStateException(Tr.formatMessage(tc, "internal.error.CWMFT4999E"));
             }
         }
         return this.futureFuture;
