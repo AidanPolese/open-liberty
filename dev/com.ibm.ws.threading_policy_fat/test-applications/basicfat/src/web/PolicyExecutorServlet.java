@@ -39,6 +39,7 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletConfig;
@@ -1290,6 +1291,113 @@ public class PolicyExecutorServlet extends FATServlet {
 
         // awaitTermination should complete within a reasonable amount of time after isTerminated transitions the state
         assertTrue(terminationFuture.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    }
+
+    // Use a policy executor to submit tasks that await termination of itself.
+    // Also uses the executor to submit tasks that shut itself down.
+    @Test
+    public void testSelfAwaitTermination() throws Exception {
+        final ExecutorService executor = provider.create("testSelfAwaitTermination");
+
+        // Submit a task to await termination of the executor
+        Future<Boolean> future1 = executor.submit(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws InterruptedException {
+                return executor.awaitTermination(50, TimeUnit.MILLISECONDS);
+            }
+        });
+
+        assertFalse(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future1.isDone());
+        assertFalse(executor.isShutdown());
+        assertFalse(executor.isTerminated());
+
+        // Submit another task to await termination of same executor.
+        // Save the exception because it will otherwise be lost when shutdownNow cancels the task.
+        final AtomicReference<Throwable> errorOnAwaitTermination = new AtomicReference<Throwable>();
+        final CountDownLatch beginLatch = new CountDownLatch(1);
+        Future<Boolean> future2 = executor.submit(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws InterruptedException {
+                beginLatch.countDown();
+                try {
+                    return executor.awaitTermination(20, TimeUnit.MINUTES);
+                } catch (InterruptedException x) {
+                    errorOnAwaitTermination.set(x);
+                    throw x;
+                }
+            }
+        });
+
+        // Wait for the above task to start
+        beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        // and then encourage it to start awaiting termination
+        TimeUnit.MILLISECONDS.sleep(100);
+
+        // Run shutdown and shutdownNow from tasks submitted by the executor.
+        // We must submit both tasks before either issues the shutdown because shutdown prevents subsequent submits.
+        CountDownLatch shutdownLatch = new CountDownLatch(1);
+        CountDownLatch shutdownNowLatch = new CountDownLatch(1);
+        Future<List<Runnable>> shutdownFuture = executor.submit(new ShutdownTask(executor, false, beginLatch/*no-op*/, shutdownLatch, TimeUnit.MINUTES.toNanos(10)));
+        Future<List<Runnable>> shutdownNowFuture = executor.submit(new ShutdownTask(executor, true, beginLatch/*no-op*/, shutdownNowLatch, TimeUnit.MINUTES.toNanos(10)));
+
+        // let the shutdown task run
+        shutdownLatch.countDown();
+        assertNull(shutdownFuture.get());
+        assertTrue(executor.isShutdown());
+
+        try {
+            fail("Task awaiting termination shouldn't stop when executor shuts down via shutdown: " + future2.get(100, TimeUnit.NANOSECONDS));
+        } catch (TimeoutException x) {} // pass
+
+        assertFalse(executor.isTerminated());
+
+        // let the shutdownNow task run
+        shutdownNowLatch.countDown();
+        try {
+            List<Runnable> tasksCanceledFromQueue = shutdownNowFuture.get();
+            assertEquals(0, tasksCanceledFromQueue.size());
+        } catch (CancellationException x) {} // pass if cancelled due to shutdownNow
+
+        try {
+            fail("Task awaiting termination shouldn't succeed when executor shuts down via shutdownNow: " + future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        Throwable x = errorOnAwaitTermination.get();
+        assertNotNull(x);
+        if (!(x instanceof InterruptedException))
+            throw new RuntimeException("Unexpected error from awaitTermination task after shutdownNow. See cause.", x);
+
+        assertTrue(executor.awaitTermination(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(executor.isTerminated());
+    }
+
+    // Submit a task that cancels itself.
+    @Test
+    public void testSelfCancellation() throws Exception {
+        ExecutorService executor = provider.create("testSelfCancellation");
+        final LinkedBlockingQueue<Future<Void>> futures = new LinkedBlockingQueue<Future<Void>>();
+        Future<Void> future = executor.submit(new Callable<Void>() {
+            @Override
+            public Void call() throws InterruptedException {
+                Future<Void> future = futures.poll(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                assertNotNull(future);
+                assertTrue(future.cancel(true));
+
+                // Perform some operation that should be rejected due to interrupting this thread
+                TimeUnit.NANOSECONDS.sleep(TIMEOUT_NS * 2);
+                return null;
+            }
+        });
+
+        futures.add(future);
+
+        try {
+            fail("Future for self cancelling task returned " + future.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        assertTrue(future.isCancelled());
+        assertTrue(future.isDone());
     }
 
     //Ensure that a policy executor can be obtained from the injected provider
