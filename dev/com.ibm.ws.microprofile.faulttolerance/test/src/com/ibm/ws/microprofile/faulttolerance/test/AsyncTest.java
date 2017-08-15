@@ -22,7 +22,7 @@ import java.util.concurrent.TimeoutException;
 import org.junit.Test;
 
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
-import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
+import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.test.util.AsyncTestFunction;
 import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
@@ -40,7 +40,7 @@ public class AsyncTest {
     @Test
     public void testAsync() throws InterruptedException, ExecutionException, TimeoutException {
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
-        Executor<Future<String>> executor = builder.buildAsync();
+        Execution<Future<String>> executor = builder.buildAsync();
 
         Future<String>[] futures = new Future[TASKS];
         for (int i = 0; i < TASKS; i++) {

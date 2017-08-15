@@ -8,17 +8,11 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.microprofile.faulttolerance.spi;
-
-import java.util.concurrent.Callable;
-
-import org.eclipse.microprofile.faulttolerance.ExecutionContext;
-
 /**
- *
+ * @version 1.0
  */
-public interface Executor<R> {
+@org.osgi.annotation.versioning.Version("1.0")
+@TraceOptions(traceGroup = "FAULTTOLERANCE", messageBundle = "com.ibm.ws.microprofile.faulttolerance.resources.FaultTolerance")
+package com.ibm.ws.microprofile.faulttolerance.impl.sync;
 
-    public R execute(Callable<R> callable, ExecutionContext context);
-
-}
+import com.ibm.websphere.ras.annotation.TraceOptions;

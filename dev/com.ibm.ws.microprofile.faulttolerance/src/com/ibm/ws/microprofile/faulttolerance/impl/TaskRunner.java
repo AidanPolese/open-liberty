@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ibm.ws.microprofile.faulttolerance.spi.impl;
+package com.ibm.ws.microprofile.faulttolerance.impl;
 
 @FunctionalInterface
-public interface InternalExecutor<T, R> {
-    public R execute(T t, Timeout timeout) throws Exception;
+public interface TaskRunner<T, R> {
+    public R runTask(T t, Timeout timeout) throws Exception;
 }
