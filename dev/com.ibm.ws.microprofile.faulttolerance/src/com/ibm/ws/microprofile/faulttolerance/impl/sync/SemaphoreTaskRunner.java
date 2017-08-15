@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.microprofile.faulttolerance.spi.impl;
+package com.ibm.ws.microprofile.faulttolerance.impl.sync;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
@@ -17,16 +17,18 @@ import org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException;
 import org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException;
 
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
+import com.ibm.ws.microprofile.faulttolerance.impl.Timeout;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 
 /**
  *
  */
-public class SemaphoreExecutor<R> implements InternalExecutor<Callable<R>, R> {
+public class SemaphoreTaskRunner<R> implements TaskRunner<Callable<R>, R> {
 
     private final Semaphore semaphore;
 
-    public SemaphoreExecutor(BulkheadPolicy bulkheadPolicy) {
+    public SemaphoreTaskRunner(BulkheadPolicy bulkheadPolicy) {
         if (bulkheadPolicy == null) {
             this.semaphore = null;
         } else {
@@ -36,7 +38,7 @@ public class SemaphoreExecutor<R> implements InternalExecutor<Callable<R>, R> {
 
     @Override
     @FFDCIgnore({ TimeoutException.class, Exception.class })
-    public R execute(Callable<R> callable, Timeout timeout) throws InterruptedException {
+    public R runTask(Callable<R> callable, Timeout timeout) throws InterruptedException {
         R result = null;
         if (timeout != null) {
             timeout.start(Thread.currentThread());

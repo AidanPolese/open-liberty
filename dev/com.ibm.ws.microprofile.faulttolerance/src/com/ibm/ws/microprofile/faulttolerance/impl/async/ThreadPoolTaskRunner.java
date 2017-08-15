@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.microprofile.faulttolerance.spi.impl;
+package com.ibm.ws.microprofile.faulttolerance.impl.async;
 
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -18,6 +18,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
+import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
+import com.ibm.ws.microprofile.faulttolerance.impl.Timeout;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.wsspi.threadcontext.ThreadContextDescriptor;
 import com.ibm.wsspi.threadcontext.WSContextService;
@@ -25,12 +27,12 @@ import com.ibm.wsspi.threadcontext.WSContextService;
 /**
  *
  */
-public class ThreadPoolExecutor<R> implements InternalExecutor<Callable<Future<R>>, Future<R>> {
+public class ThreadPoolTaskRunner<R> implements TaskRunner<Callable<Future<R>>, Future<R>> {
 
     private final ExecutorService executorService;
     private final WSContextService contextService;
 
-    public ThreadPoolExecutor(BulkheadPolicy bulkheadPolicy, ThreadFactory threadFactory, WSContextService contextService) {
+    public ThreadPoolTaskRunner(BulkheadPolicy bulkheadPolicy, ThreadFactory threadFactory, WSContextService contextService) {
         int maxThreads = Integer.MAX_VALUE;
         int queueSize = 1000;
         if (bulkheadPolicy != null) {
@@ -42,8 +44,9 @@ public class ThreadPoolExecutor<R> implements InternalExecutor<Callable<Future<R
         this.contextService = contextService;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public QueuedFuture<R> execute(Callable<Future<R>> callable, Timeout timeout) {
+    public QueuedFuture<R> runTask(Callable<Future<R>> callable, Timeout timeout) {
         ThreadContextDescriptor threadContext = null;
         if (this.contextService != null) {
             threadContext = this.contextService.captureThreadContext(new HashMap<String, String>());

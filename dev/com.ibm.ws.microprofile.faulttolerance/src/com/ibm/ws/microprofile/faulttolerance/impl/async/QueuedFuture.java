@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.microprofile.faulttolerance.spi.impl;
+package com.ibm.ws.microprofile.faulttolerance.impl.async;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -23,6 +23,7 @@ import java.util.concurrent.TimeoutException;
 import org.eclipse.microprofile.faulttolerance.exceptions.BulkheadException;
 
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.microprofile.faulttolerance.impl.Timeout;
 import com.ibm.wsspi.threadcontext.ThreadContext;
 import com.ibm.wsspi.threadcontext.ThreadContextDescriptor;
 
