@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.microprofile.faulttolerance.spi.impl.policy;
+package com.ibm.ws.microprofile.faulttolerance.impl.policy;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;

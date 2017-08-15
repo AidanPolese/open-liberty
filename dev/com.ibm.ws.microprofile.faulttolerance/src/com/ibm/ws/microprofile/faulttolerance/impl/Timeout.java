@@ -8,13 +8,14 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.microprofile.faulttolerance.spi.impl;
+package com.ibm.ws.microprofile.faulttolerance.impl;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException;
 
+import com.ibm.ws.microprofile.faulttolerance.impl.async.QueuedFuture;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
 
 /**

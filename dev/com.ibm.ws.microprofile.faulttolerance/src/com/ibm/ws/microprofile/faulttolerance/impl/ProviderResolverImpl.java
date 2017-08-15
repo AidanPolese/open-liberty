@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.microprofile.faulttolerance.spi.impl;
+package com.ibm.ws.microprofile.faulttolerance.impl;
 
 import java.io.IOException;
 import java.security.AccessController;
@@ -20,6 +20,11 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+import com.ibm.ws.microprofile.faulttolerance.impl.policy.BulkheadPolicyImpl;
+import com.ibm.ws.microprofile.faulttolerance.impl.policy.CircuitBreakerPolicyImpl;
+import com.ibm.ws.microprofile.faulttolerance.impl.policy.FallbackPolicyImpl;
+import com.ibm.ws.microprofile.faulttolerance.impl.policy.RetryPolicyImpl;
+import com.ibm.ws.microprofile.faulttolerance.impl.policy.TimeoutPolicyImpl;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
@@ -27,21 +32,19 @@ import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProviderResolver;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
-import com.ibm.ws.microprofile.faulttolerance.spi.impl.policy.BulkheadPolicyImpl;
-import com.ibm.ws.microprofile.faulttolerance.spi.impl.policy.CircuitBreakerPolicyImpl;
-import com.ibm.ws.microprofile.faulttolerance.spi.impl.policy.FallbackPolicyImpl;
-import com.ibm.ws.microprofile.faulttolerance.spi.impl.policy.RetryPolicyImpl;
-import com.ibm.ws.microprofile.faulttolerance.spi.impl.policy.TimeoutPolicyImpl;
+import com.ibm.ws.threading.PolicyExecutorProvider;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.threadcontext.WSContextService;
 
-@Component(name = "com.ibm.ws.microprofile.faulttolerance.spi.impl.ProviderResolverImpl", service = { FaultToleranceProviderResolver.class }, property = { "service.vendor=IBM" }, immediate = true)
+@Component(name = "com.ibm.ws.microprofile.faulttolerance.impl.ProviderResolverImpl", service = { FaultToleranceProviderResolver.class }, property = { "service.vendor=IBM" }, immediate = true)
 public class ProviderResolverImpl extends FaultToleranceProviderResolver {
 
     /**
      * Reference to the context service for this managed executor service.
      */
     private final AtomicServiceReference<WSContextService> contextSvcRef = new AtomicServiceReference<WSContextService>("ContextService");
+
+    private final AtomicServiceReference<PolicyExecutorProvider> policyExecRef = new AtomicServiceReference<>("PolicyExecutorProvider");
 
     /**
      * Activate a context and set the instance
@@ -50,6 +53,7 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
      */
     public void activate(ComponentContext cc) {
         contextSvcRef.activate(cc);
+        policyExecRef.activate(cc);
         FaultToleranceProviderResolver.setInstance(this);
     }
 
@@ -60,6 +64,7 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
      */
     public void deactivate(ComponentContext cc) throws IOException {
         FaultToleranceProviderResolver.setInstance(null);
+        policyExecRef.deactivate(cc);
         contextSvcRef.deactivate(cc);
     }
 
@@ -80,6 +85,25 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
      */
     protected void unsetContextService(ServiceReference<WSContextService> ref) {
         contextSvcRef.unsetReference(ref);
+    }
+
+    /**
+     * Declarative Services method for setting the Policy Executor Provider reference
+     *
+     * @param ref reference to the service
+     */
+    @Reference(policy = ReferencePolicy.DYNAMIC)
+    protected void setPolicyExecutorProvider(ServiceReference<PolicyExecutorProvider> ref) {
+        policyExecRef.setReference(ref);
+    }
+
+    /**
+     * Declarative Services method for unsetting the Policy Executor Provider reference
+     *
+     * @param ref reference to the service
+     */
+    protected void unsetPolicyExecutorProvider(ServiceReference<PolicyExecutorProvider> ref) {
+        policyExecRef.unsetReference(ref);
     }
 
     @Override
@@ -116,7 +140,8 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
     @Override
     public <T, R> ExecutionBuilder<T, R> newExecutionBuilder() {
         WSContextService contextService = getContextService();
-        ExecutionBuilderImpl<T, R> ex = new ExecutionBuilderImpl<T, R>(contextService);
+        PolicyExecutorProvider policyExecutorProvider = getPolicyExecutorProvider();
+        ExecutionBuilderImpl<T, R> ex = new ExecutionBuilderImpl<T, R>(contextService, policyExecutorProvider);
         return ex;
     }
 
@@ -128,5 +153,15 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
             }
         });
         return contextService;
+    }
+
+    private PolicyExecutorProvider getPolicyExecutorProvider() {
+        PolicyExecutorProvider policyExecutorProvider = AccessController.doPrivileged(new PrivilegedAction<PolicyExecutorProvider>() {
+            @Override
+            public PolicyExecutorProvider run() {
+                return policyExecRef.getService();
+            }
+        });
+        return policyExecutorProvider;
     }
 }
