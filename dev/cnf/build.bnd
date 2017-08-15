@@ -69,7 +69,8 @@ mockito: org.mockito.mockito-core;version="[1.9,2)",\
 
 -pluginpath: \
     ${workspace}/cnf/lib/wlp-bndPlugins.jar,\
-    ${workspace}/cnf/mavenlibs/org.apache.aries.util-1.1.3.jar
+    ${repo;org.apache.aries:org.apache.aries.util;1.1.3}
+
 
 test.project: false
 
