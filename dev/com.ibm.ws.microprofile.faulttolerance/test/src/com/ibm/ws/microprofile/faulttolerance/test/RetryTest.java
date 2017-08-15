@@ -16,6 +16,10 @@ import org.junit.Test;
 
 import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
+<<<<<<< HEAD
+=======
+import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
+>>>>>>> Issue #475 - make use of the PolicyExecutorProvider API
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
 import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
@@ -33,7 +37,10 @@ public class RetryTest {
 
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setRetryPolicy(retry);
+<<<<<<< HEAD
 
+=======
+>>>>>>> Issue #475 - make use of the PolicyExecutorProvider API
         Execution<String> executor = builder.build();
 
         TestFunction callable = new TestFunction(2, "testRetry");//first two executions will throw an exception

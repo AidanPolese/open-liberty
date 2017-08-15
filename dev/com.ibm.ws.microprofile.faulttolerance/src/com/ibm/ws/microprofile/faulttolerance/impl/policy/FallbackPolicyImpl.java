@@ -12,8 +12,6 @@ package com.ibm.ws.microprofile.faulttolerance.impl.policy;
 
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 
-import org.eclipse.microprofile.faulttolerance.ExecutionContext;
-
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceFunction;
 
