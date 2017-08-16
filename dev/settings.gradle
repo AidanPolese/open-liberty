@@ -59,15 +59,18 @@ def loadBuildProps() {
   
   def fetchRepoPublic = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublic;releaseUrl=https://repo.maven.apache.org/maven2/;index=${build}/oss_dependencies.maven')
   def fetchRepoIBM = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemoteIBM;releaseUrl=http://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/wasliberty-open-liberty/;index=${build}/oss_ibm.maven')
+  def fetchRepoIBMJava = ('error') //Not yet supported to not have this set via gradle.startup.properties
   
   if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {    
 	  def repoURL = ('https://' + props.getProperty('artifactory.download.server') + '/artifactory/wasliberty-open-liberty')
 	  fetchRepoPublic = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublic;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/oss_dependencies.maven')
+	  fetchRepoIBMJava = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublic;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/ibm_java.maven')
       fetchRepoIBM = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemoteIBM;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/oss_ibm.maven')
   } 
   
   props.setProperty('fetch.oss.repository', fetchRepoPublic)
   props.setProperty('fetch.oss.ibm.repository', fetchRepoIBM)
+  props.setProperty('fetch.ibm.java.repository', fetchRepoIBMJava)
     
   // generated.properties is used to pass build-time variables from Gradle -> Bnd in cnf/build.bnd    
   File propsFile = new File('generated.properties')    

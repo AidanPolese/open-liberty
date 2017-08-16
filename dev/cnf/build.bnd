@@ -40,6 +40,8 @@ bGitBranch=master
 
 -plugin.4.RemoteIBM = ${fetch.oss.ibm.repository}
 
+-plugin.5.RemoteIBMJava = ${fetch.ibm.java.repository}
+
 # Don't upload sources or javadoc unless bundle overrides
 -maven-release: ${if;${is;${env;PUBLISH_REPO;Release};Artifactory};remote;local}, sources;path=NONE, javadoc;path=NONE
 
@@ -88,37 +90,37 @@ javac.bootclasspath.java7:
 javac.bootclasspath.java8:
 
 javac.bootclasspath.1.4: \
-    ${workspace}/prereq.java.1.6/lib/rt.jar;version=file;boot=true
+    com.ibm.ws.internal.prereq.java:java.rt;version=1.6.0;boot=true
 
 javac.bootclasspath.1.6: \
-    ${workspace}/prereq.java.1.6/lib/rt.jar;version=file;boot=true
+    com.ibm.ws.internal.prereq.java:java.rt;version=1.6.0;boot=true
 
 javac.bootclasspath.1.7: \
-    ${workspace}/prereq.java.1.7/lib/ibmcertpathfw.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.7/lib/ibmjcefw.jar;version=file;boot=true, \
-	${workspace}/prereq.java.1.8/lib/ibmjgssfw.jar;version=file;boot=true, \
-	${workspace}/prereq.java.1.8/lib/ibmjgssprovider.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/ibmjssefw.jar;version=file;boot=true, \
-	${workspace}/prereq.java.1.7/lib/ibmorbapi.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.7/lib/ibmpkcs.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.7/lib/jlm.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.7/lib/math.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.7/lib/rt.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.7/lib/vm.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.7/lib/xml.jar;version=file;boot=true, \
-	${workspace}/prereq.java.1.8/lib/xmldsigfw.jar;version=file;boot=true
+    com.ibm.ws.internal.prereq.java:java.ibmcertpathfw;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjcefw;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjgssfw;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjgssprovider;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjssefw;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmorbapi;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmpkcs;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.jlm;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.math;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.rt;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.vm;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.xml;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.xmldsigfw;version=1.7.0;boot=true
 
 javac.bootclasspath.1.8: \
-    ${workspace}/prereq.java.1.8/lib/ibmcertpathfw.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/ibmjcefw.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/ibmjgssfw.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/ibmjgssprovider.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/ibmjssefw.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/ibmorbapi.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/ibmpkcs.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/jlm.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/math.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/rt.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/vm.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/xml.jar;version=file;boot=true, \
-    ${workspace}/prereq.java.1.8/lib/xmldsigfw.jar;version=file;boot=true
+    com.ibm.ws.internal.prereq.java:java.ibmcertpathfw;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjcefw;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjgssfw;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjgssprovider;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjssefw;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmorbapi;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmpkcs;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.jlm;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.math;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.rt;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.vm;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.xml;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.xmldsigfw;version=1.8.0;boot=true
