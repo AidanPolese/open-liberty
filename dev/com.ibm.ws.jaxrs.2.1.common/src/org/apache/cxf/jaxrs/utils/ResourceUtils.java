@@ -374,10 +374,9 @@ public final class ResourceUtils {
                 }
                 if (m.getReturnType() == Void.TYPE || m.getReturnType() == Void.class) {
                     return true;
-                } else {
-                    reportInvalidResourceMethod(m, NO_VOID_RETURN_ASYNC_MESSAGE_ID, Level.WARNING);
-                    return true; //Liberty change - followup to CXF-7121
                 }
+                reportInvalidResourceMethod(m, NO_VOID_RETURN_ASYNC_MESSAGE_ID, Level.WARNING);
+                return true; //Liberty change - followup to CXF-7121
             }
         }
         return true;
@@ -958,11 +957,10 @@ public final class ResourceUtils {
     public static Object createProviderInstance(Class<?> cls) {
         try {
             Constructor<?> c = ResourceUtils.findResourceConstructor(cls, false);
-            if (c.getParameterTypes().length == 0) {
+            if (c != null && c.getParameterTypes().length == 0) {
                 return c.newInstance();
-            } else {
-                return c;
             }
+            return c;
         } catch (Throwable ex) {
             throw new RuntimeException("Provider " + cls.getName() + " can not be created", ex);
         }
@@ -1006,9 +1004,8 @@ public final class ResourceUtils {
             if (map.contains(s.getClass().getName())) {
                 throw new RuntimeException("More than one instance of the same singleton class "
                                            + s.getClass().getName() + " is available");
-            } else {
-                map.add(s.getClass().getName());
             }
+            map.add(s.getClass().getName());
         }
     }
 

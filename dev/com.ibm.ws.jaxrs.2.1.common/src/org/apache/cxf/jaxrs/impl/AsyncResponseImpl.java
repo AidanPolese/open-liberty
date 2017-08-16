@@ -217,11 +217,11 @@ public class AsyncResponseImpl implements AsyncResponse, ContinuationCallback {
 
     @Override
     public Collection<Class<?>> register(Class<?> callback) throws NullPointerException {
-        return register(callback, new Class<?>[] {}).get(callback);
+        return register(callback, new Class<?>[]{}).get(callback);
     }
 
     @Override
-    public Map<Class<?>, Collection<Class<?>>> register(Class<?> callback, Class<?>... callbacks) 
+    public Map<Class<?>, Collection<Class<?>>> register(Class<?> callback, Class<?>... callbacks)
         throws NullPointerException {
         try {
             Object[] extraCallbacks = new Object[callbacks.length];
@@ -239,19 +239,19 @@ public class AsyncResponseImpl implements AsyncResponse, ContinuationCallback {
 
     @Override
     public Collection<Class<?>> register(Object callback) throws NullPointerException {
-        return register(callback, new Object[] {}).get(callback.getClass());
+        return register(callback, new Object[]{}).get(callback.getClass());
     }
 
     @Override
-    public Map<Class<?>, Collection<Class<?>>> register(Object callback, Object... callbacks) 
+    public Map<Class<?>, Collection<Class<?>>> register(Object callback, Object... callbacks)
         throws NullPointerException {
-        Map<Class<?>, Collection<Class<?>>> map = 
+        Map<Class<?>, Collection<Class<?>>> map =
             new HashMap<Class<?>, Collection<Class<?>>>();
 
         Object[] allCallbacks = new Object[1 + callbacks.length];
         allCallbacks[0] = callback;
         System.arraycopy(callbacks, 0, allCallbacks, 1, callbacks.length);
-        
+
         for (int i = 0; i < allCallbacks.length; i++) {
             if (allCallbacks[i] == null) {
                 throw new NullPointerException();
@@ -352,7 +352,7 @@ public class AsyncResponseImpl implements AsyncResponse, ContinuationCallback {
     }
 
     private void initContinuation() {
-        ContinuationProvider provider = 
+        ContinuationProvider provider =
             (ContinuationProvider)inMessage.get(ContinuationProvider.class.getName());
         cont = provider.getContinuation();
         initialSuspend = true;

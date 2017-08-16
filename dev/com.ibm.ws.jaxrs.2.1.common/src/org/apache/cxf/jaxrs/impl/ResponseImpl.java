@@ -223,15 +223,14 @@ public final class ResponseImpl extends Response {
     private List<String> toListOfStrings(String headerName, List<Object> values) {
         if (values == null) {
             return null;
-        } else {
-            List<String> stringValues = new ArrayList<>(values.size());
-            HeaderDelegate<Object> hd = HttpUtils.getHeaderDelegate(values.get(0));
-            for (Object value : values) {
-                String actualValue = hd == null ? value.toString() : hd.toString(value);
-                stringValues.add(actualValue);
-            }
-            return stringValues;
         }
+        List<String> stringValues = new ArrayList<>(values.size());
+        HeaderDelegate<Object> hd = HttpUtils.getHeaderDelegate(values.get(0));
+        for (Object value : values) {
+            String actualValue = hd == null ? value.toString() : hd.toString(value);
+            stringValues.add(actualValue);
+        }
+        return stringValues;
     }
 
     @Override
@@ -239,13 +238,12 @@ public final class ResponseImpl extends Response {
         List<Object> methodValues = metadata.get(HttpHeaders.ALLOW);
         if (methodValues == null) {
             return Collections.emptySet();
-        } else {
-            Set<String> methods = new HashSet<>();
-            for (Object o : methodValues) {
-                methods.add(o.toString());
-            }
-            return methods;
         }
+        Set<String> methods = new HashSet<>();
+        for (Object o : methodValues) {
+            methods.add(o.toString());
+        }
+        return methods;
     }
 
     @Override
@@ -253,14 +251,13 @@ public final class ResponseImpl extends Response {
         List<Object> cookieValues = metadata.get(HttpHeaders.SET_COOKIE);
         if (cookieValues == null) {
             return Collections.emptyMap();
-        } else {
-            Map<String, NewCookie> cookies = new HashMap<>();
-            for (Object o : cookieValues) {
-                NewCookie newCookie = NewCookie.valueOf(o.toString());
-                cookies.put(newCookie.getName(), newCookie);
-            }
-            return cookies;
         }
+        Map<String, NewCookie> cookies = new HashMap<>();
+        for (Object o : cookieValues) {
+            NewCookie newCookie = NewCookie.valueOf(o.toString());
+            cookies.put(newCookie.getName(), newCookie);
+        }
+        return cookies;
     }
 
     @Override
@@ -348,28 +345,27 @@ public final class ResponseImpl extends Response {
         List<Object> linkValues = metadata.get(HttpHeaders.LINK);
         if (linkValues == null) {
             return Collections.emptySet();
-        } else {
-            Set<Link> links = new LinkedHashSet<Link>();
-            for (Object o : linkValues) {
-                Link link = o instanceof Link ? (Link) o : Link.valueOf(o.toString());
-                if (!link.getUri().isAbsolute()) {
-                    URI requestURI = URI.create((String) outMessage.get(Message.REQUEST_URI));
-                    link = Link.fromLink(link).baseUri(requestURI).build();
-                }
-                links.add(link);
-            }
-            return links;
         }
+        Set<Link> links = new LinkedHashSet<Link>();
+        for (Object o : linkValues) {
+            Link link = o instanceof Link ? (Link) o : Link.valueOf(o.toString());
+            if (!link.getUri().isAbsolute()) {
+                URI requestURI = URI.create((String) outMessage.get(Message.REQUEST_URI));
+                link = Link.fromLink(link).baseUri(requestURI).build();
+            }
+            links.add(link);
+        }
+        return links;
     }
 
     @Override
     public <T> T readEntity(Class<T> cls) throws ProcessingException, IllegalStateException {
-        return readEntity(cls, new Annotation[] {});
+        return readEntity(cls, new Annotation[]{});
     }
 
     @Override
     public <T> T readEntity(GenericType<T> genType) throws ProcessingException, IllegalStateException {
-        return readEntity(genType, new Annotation[] {});
+        return readEntity(genType, new Annotation[]{});
     }
 
     @Override
@@ -494,9 +490,8 @@ public final class ResponseImpl extends Response {
             } catch (Exception ex) {
                 throw new ProcessingException(ex);
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     private boolean entityStreamAvailable() {
@@ -504,9 +499,8 @@ public final class ResponseImpl extends Response {
             Message inMessage = getResponseMessage();
             return inMessage != null && (inMessage.getContent(XMLStreamReader.class) != null
                                          || inMessage.getContent(Reader.class) != null);
-        } else {
-            return entity instanceof InputStream;
         }
+        return entity instanceof InputStream;
     }
 
     private Message getResponseMessage() {
@@ -579,10 +573,9 @@ public final class ResponseImpl extends Response {
             public String getReasonPhrase() {
                 if (reasonPhrase != null) {
                     return reasonPhrase;
-                } else {
-                    Response.Status statusEnum = Response.Status.fromStatusCode(statusCode);
-                    return statusEnum != null ? statusEnum.getReasonPhrase() : "";
                 }
+                Response.Status statusEnum = Response.Status.fromStatusCode(statusCode);
+                return statusEnum != null ? statusEnum.getReasonPhrase() : "";
             }
 
             @Override
