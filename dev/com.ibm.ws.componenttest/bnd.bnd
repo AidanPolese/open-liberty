@@ -48,7 +48,7 @@ test.project: true
     com.ibm.ws.componenttest:com.ibm.componenttest.common;version=1.0.0,\
     com.ibm.ws.componenttest:com.ibm.ws.topology.helper;version=1.0.0,\
     httpunit:httpunit;version=1.5.4,\
-    net.sf.jtidy:jtidy;version=r938,\
+    net.sf.jtidy:jtidy;version=9.3.8,\
     com.ibm.ws.componenttest:provider.api;version=1.0.0,\
     com.ibm.ws.componenttest:public.api;version=1.0.0,\
     org.jboss.shrinkwrap:shrinkwrap-api;version=1.2.3,\
