@@ -1279,12 +1279,12 @@ public class PolicyExecutorServlet extends FATServlet {
     //Test that changing the maxConcurrency of one executor does not affect a different executor
     @Test
     public void testMaxConcurrencyMultipleExecutors() throws Exception {
-        PolicyExecutor executor1 = provider.create("testQueueSizeMultipleExecutors-1")
+        PolicyExecutor executor1 = provider.create("testMaxConcurrencyMultipleExecutors-1")
                         .maxConcurrency(1)
                         .maxQueueSize(1)
                         .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
                         .queueFullAction(QueueFullAction.Abort);
-        PolicyExecutor executor2 = provider.create("testQueueSizeMultipleExecutors-2")
+        PolicyExecutor executor2 = provider.create("testMaxConcurrencyMultipleExecutors-2")
                         .maxConcurrency(1)
                         .maxQueueSize(1)
                         .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
@@ -1328,6 +1328,103 @@ public class PolicyExecutorServlet extends FATServlet {
         executor1.shutdownNow();
 
         executor2.shutdownNow();
+    }
+    
+    //Concurrently submit two tasks to change the maxConcurrency.  Ensure that afterward the maxConcurrency
+    //is one of the two submitted values
+    @Test
+    public void testConcurrentUpdateMaxConcurrency() throws Exception {
+        PolicyExecutor executor = provider.create("testConcurrentUpdateMaxConcurrency")
+                .maxConcurrency(2)
+                .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
+                .queueFullAction(QueueFullAction.Abort)
+        		.maxQueueSize(1);
+        
+        CountDownLatch beginLatch = new CountDownLatch(2);
+        CountDownLatch continueLatch1 = new CountDownLatch(1);
+        
+        CountDownLatch continueLatch2 = new CountDownLatch(1);
+        
+        ConfigChangeTask configTask1 = new ConfigChangeTask(executor, beginLatch, continueLatch1, TIMEOUT_NS, "maxConcurrency", "1");
+        ConfigChangeTask configTask2 = new ConfigChangeTask(executor, beginLatch, continueLatch1, TIMEOUT_NS, "maxConcurrency", "3");
+        CountDownTask countDownTask = new CountDownTask(new CountDownLatch(0), continueLatch2, TIMEOUT_NS);
+        
+        //Submit the two tasks that will change the maxConcurrency
+        Future<Boolean> future1 = testThreads.submit(configTask1);
+        Future<Boolean> future2 = testThreads.submit(configTask2);
+        
+        //Wait for the two tasks to begin running
+        assertTrue(beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        //Allow the two tasks to change the maxConcurrency and complete
+        continueLatch1.countDown();
+        assertTrue(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        //Now we need to check that the maxConcurrency is either 1 or 3
+        
+        //This should be the first task run
+        Future<Boolean> future3 = executor.submit(countDownTask);
+        
+        //This task should queue if maxConcurrency=1, otherwise should run
+        Future<Boolean> future4 = executor.submit(countDownTask);
+        Future<Boolean> future5 = null;
+        boolean caughtException = false;
+        //Decrease to 1s so that we aren't waiting too long if maxConcurrency is 1
+        //However this can't be too short that it is hit as tasks queue and run in the case that
+        //maxConcurrency is 3 on a slow machine
+        executor.maxWaitForEnqueue(1000);
+        
+        try {
+            //This task will be aborted if maxConcurrency = 1, otherwise should run
+            future5 = executor.submit(countDownTask);
+        } catch (RejectedExecutionException x) {
+        	caughtException = true; //expected if maxConcurrency = 1
+        }
+        
+        executor.maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1));
+        Future<Boolean> future6 = null;
+        Future<Boolean> future7 = null;
+        if(caughtException == false) {
+        	//We should be at maxConcurrency of 3 here, so this should queue
+        	future6 = executor.submit(countDownTask);
+            //Decrease to 200 ms so that we aren't waiting too long for timeout
+        	executor.maxWaitForEnqueue(200);
+            try {
+                //This task will be aborted if maxConcurrency = 3
+                future7 = executor.submit(countDownTask);
+            } catch (RejectedExecutionException x) {
+            	caughtException = true; //expected if maxConcurrency = 3
+            }
+        }
+        
+        assertTrue("maxConcurrency should be either 1 or 3",caughtException);
+
+        //Let the submitted tasks complete
+        continueLatch2.countDown();
+
+        assertTrue(future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        if(future5 != null)
+        	assertTrue(future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        if(future6 != null)
+        	assertTrue(future6.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+
+        executor.shutdownNow();   
+    }
+    
+    //Test that maxConcurrency cannot be called after shutdown
+    @Test
+    public void testUpdateMaxConcurrencyAfterShutdown() {
+        PolicyExecutor executor = provider.create("updateMaxConcurrencyAfterShutdown")
+                .maxConcurrency(2);
+        
+        executor.shutdown();
+        try {
+        	executor.maxConcurrency(5);
+        	fail("Should not be allowed to change maxConcurrency after calling shutdown");
+        } catch(IllegalStateException e) { //expected
+        }
     }
 
 }
