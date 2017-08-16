@@ -435,6 +435,7 @@ task copyMavenLibs(type: Copy) {
   }
 
   assemble {
+    dependsOn copyMavenLibs
     dependsOn publishWLPJars
     dependsOn publishDevApiIBMJavadoc
     dependsOn publishDevSpiIBMJavadoc
