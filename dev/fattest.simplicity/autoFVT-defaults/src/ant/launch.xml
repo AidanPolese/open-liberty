@@ -146,24 +146,7 @@
 		<!-- by default, only add spec API to the test classpath -->
 		<property name="test.classpath.wlp.include" value="api/spec/*.jar"/>
 		
-		<iff if="is.running.automated.build">
-			<then>
-				<property name="generated.classpath" value=""/>
-			</then>
-			<else>
-				<loadfile property="generated.classpath" srcFile="${basedir}/generated.classpath">
-		          <filterchain>
-		          	  <suffixlines suffix=","/>
-		              <striplinebreaks/>
-		          </filterchain>
-		        </loadfile>
-				<echo message="generated FAT classpath: ${generated.classpath}"/>
-			</else>
-		</iff>
-		
 		<path id="test.bucket.path">
-			<filelist files="${generated.classpath}"/>
-			
 			<!-- Our tests themselves -->
 			<fileset dir="${basedir}/build/lib">
 				<include name="*.jar" />

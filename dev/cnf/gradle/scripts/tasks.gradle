@@ -309,17 +309,18 @@ task copyMavenLibs(type: Copy) {
     // For now we are just forcing the autoFVT create every time, this will be fixed
     // TODO: Be smart about when to recreate the autoFVT.zip
     doLast {
-
+      def autoFvtDir = "${buildDir}/autoFVT"
+    	  
       // Copy the compiled classes
       copy {
         from "${projectDir}/bin/"
-        into "${projectDir}/generated/autoFVT/build/classes"
+        into "${autoFvtDir}/build/classes"
       }
 
       // Copy the buildtask jars
       copy {
         from "${rootDir}/cnf/mavenlibs"
-        into "${projectDir}/generated/autoFVT/build/lib"
+        into "${autoFvtDir}/build/lib"
         include 'asm-all-5.0.3.jar'
         include 'org.apache.aries.util-*.jar'
         include 'osgi.core*.jar'
@@ -329,13 +330,13 @@ task copyMavenLibs(type: Copy) {
       // Copy the ws-junit jar
       copy {
         from "${rootDir}/build.sharedResources/lib/ws-junit/ws-junit.jar"
-        into "${projectDir}/generated/autoFVT/build/lib"
+        into "${autoFvtDir}/build/lib"
       }
 	  
 	  // Copy the infra jar
 	  copy {
 		from "${rootDir}/cnf/mavenlibs/infra.buildtasks-core-4.0.0.jar"
-		into "${projectDir}/generated/autoFVT/build/lib"
+		into "${autoFvtDir}/build/lib"
 	  }
 	  
 
@@ -343,7 +344,7 @@ task copyMavenLibs(type: Copy) {
       copy {
         from "${projectDir}/generated/"
         include '*.jar'
-        into "${projectDir}/generated/autoFVT/build/lib"
+        into "${autoFvtDir}/build/lib"
       }
 
       // Copy the DDL files
@@ -351,14 +352,14 @@ task copyMavenLibs(type: Copy) {
       copy {
         from "${projectDir}/ddl"
         include '**/*'
-        into "${projectDir}/generated/autoFVT/ddl"
+        into "${autoFvtDir}/ddl"
       }
 
       // Copy the autoFVT-defaults
       copy {
         from "${rootDir}/fattest.simplicity/autoFVT-defaults"
         include '**/*'
-        into "${projectDir}/generated/autoFVT"
+        into "${autoFvtDir}"
       }
 
       // Copy the component test libs
@@ -367,14 +368,14 @@ task copyMavenLibs(type: Copy) {
         from "${rootDir}/com.ibm.ws.componenttest/generated"
         include 'com.ibm.ws.componenttest.jar'
         rename 'com.ibm.ws.componenttest.jar', 'componenttest.app.jar'
-        into "${projectDir}/generated/autoFVT/lib"
+        into "${autoFvtDir}/lib"
       }
 
       // Copy the fattest libs
       copy {
         from "${rootDir}/fattest.simplicity/generated/"
         include 'fattest*.*'
-        into "${projectDir}/generated/autoFVT/lib"
+        into "${autoFvtDir}/lib"
       }
 
       // TODO: This is to compensate for the fact that the ant build of fattest.simplicity produced this jar but the gradle build doesn't
@@ -382,14 +383,14 @@ task copyMavenLibs(type: Copy) {
         from "${rootDir}/com.ibm.ws.common.encoder/generated"
         include 'com.ibm.ws.common.encoder.jar'
         rename 'com.ibm.ws.common.encoder.jar', 'fattest.encoder.jar'
-        into "${projectDir}/generated/autoFVT/lib"
+        into "${autoFvtDir}/lib"
       }
 
       // Copy the published files
       copy {
-        from "${projectDir}/publish/files"
+        from "${projectDir}/publish/files", "${autoFvtDir}/publish/files"
         include '**/*'
-        into "${projectDir}/generated/autoFVT/lib/LibertyFATTestFiles"
+        into "${autoFvtDir}/lib/LibertyFATTestFiles"
       }
 
       // Copy the publish directory (minus the 'files' directory)
@@ -397,35 +398,24 @@ task copyMavenLibs(type: Copy) {
         from "${projectDir}/publish"
         include '**/*'
         exclude 'files'
-        into "${projectDir}/generated/autoFVT/publish"
+        into "${autoFvtDir}/publish"
       }
 
 	  // Copy the logging libraries over for use while running FATs
       copy {
         from "${rootDir}/com.ibm.ws.logging.core/generated"
         include 'com.ibm.ws.logging.core.jar'
-        into "${projectDir}/generated/autoFVT/lib"
+        into "${autoFvtDir}/lib"
       }
       
       // Copy all non-java app resourecs, such as *.html or *.jsp
 	  copy {
 		  includeEmptyDirs = false
 		  from "${projectDir}"
-		  into "${projectDir}/generated/autoFVT/"
+		  into "${autoFvtDir}/"
 		  include 'test-applications/**', 'test-bundles/**', 'test-resourceadapters/**'
 		  exclude '**/*.java'
 	  }
-	  
-	  // Generate a .classpath file based on the current bnd classpath:
-      def cpString = ""
-      sourceSets.main.runtimeClasspath.each { 
-  	    cpString += it.getAbsolutePath() + "\n"
-      }
-      println "Generated FAT classpath: " + cpString
-      def cpFile = new File("${projectDir}/generated/autoFVT/generated.classpath")
-      cpFile.delete()
-      cpFile.createNewFile()
-      cpFile.text = cpString
     }
   }
 

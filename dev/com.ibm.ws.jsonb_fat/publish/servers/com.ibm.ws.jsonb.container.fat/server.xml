@@ -1,0 +1,20 @@
+<server>
+    <featureManager>
+      <feature>componenttest-1.0</feature>
+      <feature>jsonbContainer-1.0</feature>
+      <feature>servlet-3.1</feature>
+      <feature>usr:testFeatureUsingJsonb-1.0</feature>
+    </featureManager>
+
+	<include location="../fatTestPorts.xml"/>
+
+    <library id="johnzon">
+      <fileset dir="${server.config.dir}/johnzon" includes="*.jar"/>
+    </library>
+
+    <bell libraryRef="johnzon"/>
+
+    <application location="jsonbapp.war"/>
+
+    <variable name="onError" value="FAIL"/>
+</server>
