@@ -362,10 +362,12 @@ public class PolicyExecutorServlet extends FATServlet {
 
         // Originally submitted Callable was converted to Runnable, so we cannot directly compare.
         // However, we can run it and verify if it invokes the callable.
-        continueLatch.countDown(); // let the Callable run without blocking
-        assertEquals(1, beginLatch.getCount());
+        continueLatch.countDown(); // let the Callable that we are about to run do so without blocking
+        // We cannot assume the beginLatch count is 1. It could be 0 if we hit a timing window where the polling task removes the first task from the queue but shutdownNow cancels it before it can start.
+        long before = beginLatch.getCount(); 
         canceledFromQueue.iterator().next().run();
-        assertEquals(0, beginLatch.getCount());
+        long after = beginLatch.getCount();
+        assertEquals(before - 1, after);
     }
 
     // Cover basic life cycle of a policy executor service: use it to run a task, shut it down, and await termination.
