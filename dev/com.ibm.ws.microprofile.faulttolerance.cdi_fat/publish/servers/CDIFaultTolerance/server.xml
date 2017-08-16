@@ -3,6 +3,7 @@
     <include location="../fatTestPorts.xml"/>
     
 	<featureManager>
+	    <feature>componenttest-1.0</feature>
 		<feature>osgiconsole-1.0</feature>
 		<feature>localConnector-1.0</feature>
 		<feature>appSecurity-2.0</feature>
