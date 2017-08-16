@@ -225,6 +225,19 @@ public interface IPersistenceManagerService extends IBatchServiceBase {
 
     public JobExecution updateJobExecutionAndInstanceOnStatusChange(long jobExecutionId, BatchStatus newBatchStatus, Date updateTime) throws NoSuchJobExecutionException;
 
+    /**
+     * Called if the execution has not yet reached the endpoint.
+     *
+     * Sets the BatchStatus and InstanceState to STOPPED, and sets the lastUpdated time
+     *
+     * @param jobExecutionId
+     * @param updateTime
+     *
+     * @return the updated JobExecution
+     *
+     * @throws NoSuchJobExecutionException if the job execution is not located by the find query
+     * @throws ExecutionAssignedToServerException if the execution has been assigned to a server/endpoint (serverid set)
+     */
     JobExecution updateJobExecutionAndInstanceNotSetToServerYet(long jobExecutionId, Date updateTime) throws NoSuchJobExecutionException, ExecutionAssignedToServerException;
 
     public JobExecution updateJobExecutionAndInstanceOnEnd(long jobExecutionId, BatchStatus finalBatchStatus, String finalExitStatus,
@@ -306,8 +319,11 @@ public interface IPersistenceManagerService extends IBatchServiceBase {
      * Sets the server id and rest url for the given job execution.
      *
      * @param execId
-     * @throws InvalidJobExecutionStateException
      *
+     * @throws NoSuchJobExecutionException if this job execution is not located by the find query
+     * @throws JobStoppedException if the specified execution has been stopped at the time this update is attempted
+     *
+     * @return the updated execution
      */
     public JobExecutionEntity updateJobExecutionServerIdAndRestUrlForStartingJob(long topLevelExecutionId) throws NoSuchJobExecutionException, JobStoppedException;
 

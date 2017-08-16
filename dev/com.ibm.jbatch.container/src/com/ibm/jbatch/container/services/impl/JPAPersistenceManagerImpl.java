@@ -1199,7 +1199,7 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
     }
 
     @Override
-    public JobExecutionEntity updateJobExecutionServerIdAndRestUrlForStartingJob(final long jobExecutionId) throws JobStoppedException {
+    public JobExecutionEntity updateJobExecutionServerIdAndRestUrlForStartingJob(final long jobExecutionId) throws NoSuchJobExecutionException, JobStoppedException {
         EntityManager em = getPsu().createEntityManager();
 
         final TypedQuery<JobExecutionEntity> query = em.createNamedQuery(JobExecutionEntity.UPDATE_JOB_EXECUTION_SERVERID_AND_RESTURL_FOR_STARTING_JOB,
@@ -1207,7 +1207,6 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
 
         query.setParameter("serverId", batchLocationService.getServerId());
         query.setParameter("restUrl", batchLocationService.getBatchRestUrl());
-        query.setParameter("batchStatus", BatchStatus.STARTING);
         query.setParameter("jobExecId", jobExecutionId);
         try {
             return new TranRequest<JobExecutionEntity>(em) {
@@ -2332,7 +2331,7 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
             return retVal;
         }
 
-        public abstract T call() throws JobStoppedException;
+        public abstract T call() throws Exception;
 
         /**
          * Begin a new transaction, if one isn't currently active (nested transactions not supported).

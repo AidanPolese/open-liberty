@@ -38,7 +38,7 @@ import com.ibm.jbatch.container.ws.WSJobExecution;
 @NamedQueries({
                 @NamedQuery(name = JobExecutionEntity.UPDATE_JOB_EXECUTION_AND_INSTANCE_SERVER_NOT_SET, query = "UPDATE JobExecutionEntity x SET x.batchStatus = :batchStatus, x.lastUpdatedTime = :lastUpdatedTime WHERE x.jobExecId = :jobExecId AND x.serverId IS NULL"),
 
-                @NamedQuery(name = JobExecutionEntity.UPDATE_JOB_EXECUTION_SERVERID_AND_RESTURL_FOR_STARTING_JOB, query = "UPDATE JobExecutionEntity x SET x.batchStatus = :batchStatus, x.serverId = :serverId, x.restUrl = :restUrl WHERE x.jobExecId = :jobExecId"),
+                @NamedQuery(name = JobExecutionEntity.UPDATE_JOB_EXECUTION_SERVERID_AND_RESTURL_FOR_STARTING_JOB, query = "UPDATE JobExecutionEntity x SET x.serverId = :serverId, x.restUrl = :restUrl WHERE x.jobExecId = :jobExecId AND x.batchStatus = javax.batch.runtime.BatchStatus.STARTING"),
 
                 @NamedQuery(name = JobExecutionEntity.GET_JOB_EXECUTIONS_MOST_TO_LEAST_RECENT_BY_INSTANCE, query = "SELECT e FROM JobExecutionEntity e WHERE e.jobInstance.instanceId = :instanceId ORDER BY e.executionNumberForThisInstance DESC"),
                 /*
@@ -60,8 +60,8 @@ import com.ibm.jbatch.container.ws.WSJobExecution;
 @ClassExtractor(JobExecutionEntityExtractor.class)
 public class JobExecutionEntity extends JobThreadExecutionBase implements JobExecution, WSJobExecution {
 
-    public static final String UPDATE_JOB_EXECUTION_AND_INSTANCE_SERVER_NOT_SET = "JobExecutionEntity.updateJobExecutionAndInstanceOnStopQuery";
-    public static final String UPDATE_JOB_EXECUTION_SERVERID_AND_RESTURL_FOR_STARTING_JOB = "JobExecutionEntity.updateJobExecutionServerIdAndRestUrlQuery";
+    public static final String UPDATE_JOB_EXECUTION_AND_INSTANCE_SERVER_NOT_SET = "JobExecutionEntity.updateJobExecutionAndInstanceServerNotSet";
+    public static final String UPDATE_JOB_EXECUTION_SERVERID_AND_RESTURL_FOR_STARTING_JOB = "JobExecutionEntity.updateJobExecutionServerIdAndRestUrlForStartingJob";
     public static final String GET_JOB_EXECUTIONIDS_BY_NAME_AND_STATUSES_QUERY = "JobExecutionEntity.getJobExecutionsByNameAndStatusesQuery";
     public static final String GET_JOB_EXECUTIONS_BY_SERVERID_AND_STATUSES_QUERY = "JobExecutionEntity.getJobExecutionsByServerIdAndStatusesQuery";
     public static final String GET_JOB_EXECUTIONS_MOST_TO_LEAST_RECENT_BY_INSTANCE = "JobExecutionEntity.getJobExecutionsMostToLeastRecentByInstanceQuery";

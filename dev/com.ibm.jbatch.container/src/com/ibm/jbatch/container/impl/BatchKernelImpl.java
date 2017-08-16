@@ -51,6 +51,7 @@ import com.ibm.jbatch.container.IThreadRootController;
 import com.ibm.jbatch.container.RASConstants;
 import com.ibm.jbatch.container.callback.IJobExecutionEndCallbackService;
 import com.ibm.jbatch.container.callback.IJobExecutionStartCallbackService;
+import com.ibm.jbatch.container.exception.BatchContainerRuntimeException;
 import com.ibm.jbatch.container.exception.BatchContainerServiceException;
 import com.ibm.jbatch.container.exception.JobStoppedException;
 import com.ibm.jbatch.container.execution.impl.JobExecutionHelper;
@@ -307,7 +308,7 @@ public class BatchKernelImpl implements IBatchKernelService, ServerQuiesceListen
             throw e;
         } catch (JobStoppedException e) {
             workUnitCompleted(batchWork);
-            new RuntimeException(e.getMessage());
+            throw new BatchContainerRuntimeException(e);
         }
 
         return new AbstractMap.SimpleEntry<Long, Future<?>>(jobExecution.getTopLevelExecutionId(), futureWork);
@@ -344,7 +345,7 @@ public class BatchKernelImpl implements IBatchKernelService, ServerQuiesceListen
             throw e;
         } catch (JobStoppedException e) {
             workUnitCompleted(batchWork);
-            new RuntimeException(e.getMessage());
+            throw new BatchContainerRuntimeException(e);
         }
 
         // use the new execution instance in the restarted message.

@@ -198,7 +198,6 @@ public interface WSJobRepository {
      * Update the batch status of this job execution and instance
      *
      * @param executionId
-     * @param batchStatus
      * @param date
      * @return
      * @throws ExecutionAssignedToServerException
@@ -209,7 +208,6 @@ public interface WSJobRepository {
      * Update the batch status of this job execution and instance
      *
      * @param executionId
-     * @param batchStatus
      * @param date
      * @return
      * @throws ExecutionAssignedToServerException
