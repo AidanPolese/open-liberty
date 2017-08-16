@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.concurrent.persistent_fat_demo" default="buildandrun" basedir=".">
+	<import file="../ant_build/public_imports/fat_imports.xml" />
+
+    <!-- Remove this once persistentExecutor-1.0 becomes an externally visible feature -->
+    <property name="fat.image.type" value="use-full-image"/>
+	<property name="minimum.java.level.for.test.execution" value="1.8"/>
+    <property name="fat.server.dir" location="${basedir}/publish/servers/com.ibm.ws.concurrent.persistent.fat.demo"/>
+	<property name="unittest.endorsed" value="${basedir}/build/endorsed/lib/"/>
+
+	<target name="pre-build">
+		<path id="annotation.jar.path">
+			<fileset dir="${basedir}/../build.image/wlp/dev/api/spec" includes="com.ibm.websphere.javaee.annotation.1.1_*.jar"/>
+		</path>
+		<property name="annotation.jar" refid="annotation.jar.path"/>
+		<delete dir="${basedir}/build/endorsed/lib"/>
+		<mkdir dir="${basedir}/build/endorsed/lib"/>
+		<copy todir="${basedir}/build/endorsed/lib" file="${annotation.jar}"/>
+	</target>
+	<target name="addAutoInstallApplications" description="Automatically Install applications on LibertyServer instance creation">
+		<mkdir dir="${fat.server.dir}/dropins"/>
+		<move file="${basedir}/publish/files/persistentdemo.zip" tofile="${fat.server.dir}/dropins/persistentdemo.war"/>
+	</target>
+
+    <target name="addRequiredLibraries">
+        <echo message="copy derby"/>
+        <mkdir dir="${fat.server.dir}/derby"/>
+        <copy file="${derbyDriver}" toDir="${fat.server.dir}/derby"/>
+    </target>
+
+</project>
