@@ -12,6 +12,8 @@ package com.ibm.ws.threading.internal;
 
 import static org.junit.Assert.fail;
 
+import java.util.concurrent.TimeUnit;
+
 import org.junit.Test;
 
 import com.ibm.ws.threading.PolicyExecutor;
@@ -98,5 +100,28 @@ public class PolicyExecutorTest {
         } catch (IllegalArgumentException eae) {
             // Expected Exception.
         }
+    }
+
+    /**
+     * Test boundaries for maxWaitForEnqueue.
+     */
+    @Test
+    public void testMaxWaitForEnqueueConfiguration() {
+        try {
+            fail("should not allow negative value " + provider.create("testMaxWaitForEnqueueConfiguration-negative").maxWaitForEnqueue(-1));
+        } catch (IllegalArgumentException x) {
+        } // pass
+
+        provider.create("testMaxWaitForEnqueueConfiguration-zero").maxWaitForEnqueue(0);
+
+        provider.create("testMaxWaitForEnqueueConfiguration-max").maxWaitForEnqueue(Long.MAX_VALUE);
+
+        PolicyExecutor executor = provider.create("testMaxWaitForEnqueueConfiguration-positive").maxWaitForEnqueue(TimeUnit.SECONDS.toMillis(20));
+        executor.shutdown();
+
+        try {
+            fail("should not allow change after shutdown " + executor.maxWaitForEnqueue(TimeUnit.SECONDS.toMillis(30)));
+        } catch (IllegalStateException x) {
+        } // pass
     }
 }

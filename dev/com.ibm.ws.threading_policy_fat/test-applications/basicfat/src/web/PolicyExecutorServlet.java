@@ -1022,6 +1022,110 @@ public class PolicyExecutorServlet extends FATServlet {
     }
 
     /**
+     * Attempt concurrent updates to maxWaitForEnqueue.
+     */
+    @Test
+    public void testConcurrentUpdateMaxWaitForEnqueue() throws Exception {
+        ExecutorService executor = provider.create("testConcurrentUpdateMaxWaitForEnqueue")
+                .maxConcurrency(1)
+                .maxQueueSize(1)
+                .maxWaitForEnqueue(TimeUnit.HOURS.toMillis(1))
+                .queueFullAction(QueueFullAction.Abort);
+
+        final int numConfigTasks = 6;
+        CountDownLatch beginLatch = new CountDownLatch(numConfigTasks + 1);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+        List<Future<Boolean>> futures = new ArrayList<Future<Boolean>>(numConfigTasks);
+        for (int i = 0; i < numConfigTasks; i++)
+            futures.add(testThreads.submit(new ConfigChangeTask(executor, beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(15), "maxWaitForEnqueue", Integer.toString(i + 1))));
+
+        // Submit a task to use up the maxConcurrency and block all other tasks from running
+        CountDownLatch blockerLatch = new CountDownLatch(1);
+        CountDownTask blockerTask = new CountDownTask(beginLatch, blockerLatch, TimeUnit.MINUTES.toNanos(40));
+        Future<Boolean> blockerFuture = executor.submit(blockerTask);
+
+        // wait for all to start
+        assertTrue(beginLatch.await(TIMEOUT_NS * 3, TimeUnit.NANOSECONDS));
+
+        // let them all try to update maxWaitForEnqueue at the same time
+        continueLatch.countDown();
+
+        // submit a task to fill the single queue position
+        Future<Integer> queuedFuture = executor.submit(new SharedIncrementTask(), 1);
+
+        // wait for all of the config update tasks to finish
+        for (Future<Boolean> future : futures)
+            assertTrue(future.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+
+        // At this point, maxWaitForEnqueue could have any of various small values: 1ms, 2ms, 3ms, ...
+
+        // Attempt to submit tasks that would exceed queue capacity and verify that rejection happens in a timely manner.
+        long start = System.nanoTime();
+        try {
+            fail("Third task needs to be rejected when one uses up maxConcurrency and the other uses up the queue capacity: " + executor.submit(new SharedIncrementTask(), 3));
+        } catch (RejectedExecutionException x) {
+            long duration = System.nanoTime() - start;
+            System.out.println("Submit #3 rejected after " + duration + "ns.");
+            assertTrue(duration < TIMEOUT_NS);
+            assertTrue(x.getMessage(), x.getMessage().startsWith("CWWKE1201E"));
+        }
+
+        start = System.nanoTime();
+        try {
+            fail("Fourth task needs to be rejected when one uses up maxConcurrency and the other uses up the queue capacity: " + executor.submit(new SharedIncrementTask(), 4));
+        } catch (RejectedExecutionException x) {
+            long duration = System.nanoTime() - start;
+            System.out.println("Submit #4 rejected after " + duration + "ns.");
+            assertTrue(duration < TIMEOUT_NS);
+            assertTrue(x.getMessage(), x.getMessage().startsWith("CWWKE1201E"));
+        }
+
+        // Concurrently update config a few more times while trying submits
+        List<Future<Boolean>> configFutures = new ArrayList<Future<Boolean>>(numConfigTasks);
+        List<Future<Future<Integer>>> submitterFutures = new ArrayList<Future<Future<Integer>>>(4);
+        beginLatch = new CountDownLatch(numConfigTasks + submitterFutures.size());
+        continueLatch = new CountDownLatch(1);
+
+        for (int i = 0; i < numConfigTasks; i++)
+            configFutures.add(testThreads.submit(new ConfigChangeTask(executor, beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(20), "maxWaitForEnqueue", Integer.toString(i + 1))));
+
+        for (int i = 0; i < submitterFutures.size(); i++)
+            submitterFutures.add(testThreads.submit(new SubmitterTask<Integer>(executor, new SharedIncrementTask(), beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(25))));
+
+        // wait for all to start
+        assertTrue(beginLatch.await(TIMEOUT_NS * 5, TimeUnit.NANOSECONDS));
+
+        // let them all run at once
+        start = System.nanoTime();
+        continueLatch.countDown();
+
+        // wait for all of the submitter tasks to finish - when they run, their submit attempts should all be rejected
+        for (Future<Future<Integer>> ff : submitterFutures)
+            try {
+                System.out.println("checking submitter future " + ff);
+                fail("Submits must be rejected. Unexpectedly able to obtain result: " + ff.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+            } catch (ExecutionException x) {
+                if (!(x.getCause() instanceof RejectedExecutionException) || !x.getCause().getMessage().startsWith("CWWKE1201E"))
+                    throw x;
+            }
+        long duration = System.nanoTime() - start;
+        System.out.println("Submits all rejected after " + duration + "ns.");
+        assertTrue(duration < TIMEOUT_NS * 4);
+
+        // wait for all of the config update tasks to finish
+        for (Future<Boolean> future : configFutures)
+            assertTrue(future.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+
+        // cancel the queued task an blocker task
+        assertTrue(queuedFuture.cancel(false));
+        assertTrue(blockerFuture.cancel(true));
+
+        executor.shutdown();
+        assertTrue(executor.isShutdown());
+        assertTrue(executor.awaitTermination(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    }
+
+    /**
      * Submit multiple tasks at once, waiting for some to complete before scheduling another group of tasks, and so forth.
      */
     @Test
