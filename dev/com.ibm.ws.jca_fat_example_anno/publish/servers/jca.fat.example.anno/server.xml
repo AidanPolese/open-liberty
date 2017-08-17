@@ -1,11 +1,12 @@
 <server>
   <featureManager>
-    <feature>mdb-3.1</feature>
-    <feature>servlet-3.0</feature>
+    <feature>mdb-3.2</feature>
+    <feature>servlet-3.1</feature>
     <feature>osgiconsole-1.0</feature>
+    <feature>componentTest-1.0</feature>
   </featureManager>
 
-  <include optional="true" location="${shared.config.dir}/bvtTestPorts.xml"/>
+  <include location="../fatTestPorts.xml"/>
 
   <variable name="onError" value="FAIL"/>
 

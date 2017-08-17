@@ -1,14 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2013
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.example.jca.anno;
 
 import javax.naming.NamingException;
@@ -63,9 +62,7 @@ public class ConnectionFactoryImpl implements ConnectionFactory, RecordFactory {
         ConnectionRequestInfoImpl cri = ((ConnectionSpecImpl) conSpec).createConnectionRequestInfo();
         cri.put("tableName", mcf.getTableName());
 
-        ConnectionImpl con = cm == null
-                        ? new ConnectionImpl(null, cri)
-                        : (ConnectionImpl) cm.allocateConnection(mcf, cri);
+        ConnectionImpl con = cm == null ? new ConnectionImpl(null, cri) : (ConnectionImpl) cm.allocateConnection(mcf, cri);
         con.cf = this;
         return con;
     }

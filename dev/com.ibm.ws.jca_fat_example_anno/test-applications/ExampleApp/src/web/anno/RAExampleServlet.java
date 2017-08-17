@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package web.anno;
 
 import java.io.IOException;
@@ -13,10 +23,12 @@ import javax.resource.cci.Interaction;
 import javax.resource.cci.InteractionSpec;
 import javax.resource.cci.MappedRecord;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@WebServlet("/*")
 public class RAExampleServlet extends HttpServlet {
     private static final long serialVersionUID = 7709282314904580334L;
 
@@ -51,18 +63,15 @@ public class RAExampleServlet extends HttpServlet {
                 if (!"functionName".equalsIgnoreCase(param.getKey()))
                     input.put(param.getKey(), param.getValue()[0]);
 
-            InteractionSpec ispec = "ADD".equalsIgnoreCase(function) ? iSpec_ADD
-                            : "FIND".equalsIgnoreCase(function) ? iSpec_FIND
-                                            : "REMOVE".equalsIgnoreCase(function) ? iSpec_REMOVE :
-                                                            null;
+            InteractionSpec ispec = "ADD"
+                            .equalsIgnoreCase(function) ? iSpec_ADD : "FIND".equalsIgnoreCase(function) ? iSpec_FIND : "REMOVE".equalsIgnoreCase(function) ? iSpec_REMOVE : null;
 
             String message;
             Connection con = conFactory.getConnection(conSpec);
             try {
                 Interaction interaction = con.createInteraction();
-                message = interaction.execute(ispec, input, output)
-                                ? ("Successfully performed " + function + " with output: " + output)
-                                : ("Did not " + function + " any entries.");
+                message = interaction.execute(ispec, input,
+                                              output) ? ("Successfully performed " + function + " with output: " + output) : ("Did not " + function + " any entries.");
                 interaction.close();
             } finally {
                 con.close();
