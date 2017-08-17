@@ -55,7 +55,6 @@ import com.ibm.ws.jaxrs20.metadata.EndpointInfo;
 import com.ibm.ws.jaxrs20.metadata.JaxRsModuleMetaData;
 import com.ibm.ws.jaxrs20.metadata.ProviderResourceInfo;
 import com.ibm.ws.jaxrs20.metadata.ProviderResourceInfo.RuntimeType;
-import com.ibm.ws.jaxrs20.utils.JaxRsUtils;
 import com.ibm.ws.managedobject.ManagedObject;
 import com.ibm.ws.managedobject.ManagedObjectException;
 import com.ibm.ws.managedobject.ManagedObjectFactory;
@@ -63,7 +62,6 @@ import com.ibm.ws.managedobject.ManagedObjectService;
 import com.ibm.ws.runtime.metadata.ComponentMetaData;
 import com.ibm.ws.runtime.metadata.ModuleMetaData;
 import com.ibm.ws.threadContext.ComponentMetaDataAccessorImpl;
-import com.ibm.wsspi.adaptable.module.Container;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 
 /**
@@ -74,7 +72,6 @@ import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCustomizer, ApplicationStateListener {
 
     private static final TraceComponent tc = Tr.register(JaxRsFactoryImplicitBeanCDICustomizer.class);
-    Container containerContext;
     private final AtomicServiceReference<ManagedObjectService> managedObjectServiceRef = new AtomicServiceReference<ManagedObjectService>("managedObjectService");
 
     private CDIService cdiService;
@@ -261,7 +258,7 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
     @FFDCIgnore(value = { Exception.class })
     private ManagedObject<?> getClassFromManagedObject(Class<?> clazz) {
 
-        ManagedObjectFactory<?> managedObjectFactory = getManagedObjectFactory(clazz, containerContext);
+        ManagedObjectFactory<?> managedObjectFactory = getManagedObjectFactory(clazz);
 
         ManagedObject<?> bean = null;
         try {
@@ -316,8 +313,6 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
     @Override
     public Application onApplicationInit(Application app, JaxRsModuleMetaData metaData) {
 
-        this.containerContext = metaData.getServerMetaData().getModuleMetaData().getModuleContainer();
-
         Class<?> clazz = app.getClass();
 
         if (!shouldHandle(clazz, true)) {
@@ -356,10 +351,6 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
         Set<ProviderResourceInfo> perRequestProviderAndPathInfos = endpointInfo.getPerRequestProviderAndPathInfos();
         Set<ProviderResourceInfo> singletonProviderAndPathInfos = endpointInfo.getSingletonProviderAndPathInfos();
         Map<Class<?>, ManagedObject<?>> resourcesManagedbyCDI = new HashMap<Class<?>, ManagedObject<?>>();
-
-        if (containerContext == null) {
-            containerContext = context.getModuleMetaData().getModuleContainer();
-        }
 
         CXFJaxRsProviderResourceHolder cxfPRHolder = context.getCxfRPHolder();
         for (ProviderResourceInfo p : perRequestProviderAndPathInfos) {
@@ -596,11 +587,7 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
         return null;
     }
 
-    private ManagedObjectFactory<?> getManagedObjectFactory(Class<?> clazz, Container container) {
-
-        if (container == null) {
-            return null;
-        }
+    private ManagedObjectFactory<?> getManagedObjectFactory(Class<?> clazz) {
 
         ManagedObjectFactory<?> mof = null;
         try {
@@ -608,7 +595,7 @@ public class JaxRsFactoryImplicitBeanCDICustomizer implements JaxRsFactoryBeanCu
             if (mos == null) {
                 return null;
             }
-            ModuleMetaData mmd = JaxRsUtils.getModuleInfo(container).getMetaData();
+            ModuleMetaData mmd = ComponentMetaDataAccessorImpl.getComponentMetaDataAccessor().getComponentMetaData().getModuleMetaData();
             mof = mos.createManagedObjectFactory(mmd, clazz, true);
 
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
