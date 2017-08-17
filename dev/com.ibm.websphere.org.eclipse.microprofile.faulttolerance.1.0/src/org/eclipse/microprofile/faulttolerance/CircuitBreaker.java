@@ -26,10 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.time.temporal.ChronoUnit;
 
+import javax.enterprise.util.Nonbinding;
 import javax.interceptor.InterceptorBinding;
 
 /**
  * Define the Circuit Breaker policy
+ *
  * @author <a href="mailto:emijiang@uk.ibm.com">Emily Jiang</a>
  *
  */
@@ -42,45 +44,54 @@ public @interface CircuitBreaker {
 
     /**
      * Define the failure criteria
+     *
      * @return the failure exception
      */
-    Class<? extends Throwable>[] failOn() default Throwable.class;
+    @Nonbinding
+    Class<? extends Throwable>[] failOn() default { Throwable.class };
 
     /**
      *
      * @return The delay time after the circuit is open
      */
+    @Nonbinding
     long delay() default 5000;
 
     /**
      *
      * @return The delay unit after the circuit is open
      */
-
+    @Nonbinding
     ChronoUnit delayUnit() default ChronoUnit.MILLIS;
-
 
     /**
      * The number of consecutive requests in a rolling window
      * that will trip the circuit.
+     *
      * @return the number of the consecutive requests in a rolling window
      *
      */
+    @Nonbinding
     int requestVolumeThreshold() default 20;
+
     /**
      * The failure threshold to trigger the circuit to open.
      * e.g. if the requestVolumeThreshold is 20 and failureRation is .50,
      * more than 10 failures in 20 consecutive requests will trigger
      * the circuit to open.
+     *
      * @return The failure threshold to open the circuit
      */
+    @Nonbinding
     double failureRatio() default .50;
 
     /**
      * For an open circuit, after the delay period is reached, once the successThreshold
      * is reached, the circuit is back to close again.
+     *
      * @return The success threshold to fully close the circuit
      */
+    @Nonbinding
     int successThreshold() default 1;
 
 }
