@@ -4,7 +4,8 @@
     <!-- <feature>osgiConsole-1.0</feature> -->
     <feature>persistentExecutor-1.0</feature>
     <feature>servlet-3.1</feature>
-    <feature>jdbc-4.2</feature>
+    <!-- TODO upgrade to jdbc-4.2 -->
+    <feature>jdbc-4.1</feature>
   </featureManager>
 
   <include location="../fatTestPorts.xml"/>
@@ -18,10 +19,10 @@
     <properties.derby.embedded createDatabase="create" databaseName="${shared.resource.dir}/data/persistdemodb"/>
   </dataSource>
   <library id="FATJDBCLib">
-    <fileset dir="${server.config.dir}/derby" includes="derby.jar"/>
+    <fileset dir="${server.config.dir}/derby" includes="*.jar"/>
   </library>
 
   <variable name="onError" value="FAIL"/>
   
-  <javaPermission codebase="${server.config.dir}/derby/derby.jar" className="java.security.AllPermission"/>
+  <javaPermission codebase="${server.config.dir}/derby/derby*.jar" className="java.security.AllPermission"/>
 </server>

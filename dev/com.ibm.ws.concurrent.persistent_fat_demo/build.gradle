@@ -9,3 +9,23 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 apply from: '../cnf/gradle/scripts/fat.gradle'
+	
+addRequiredLibraries {
+	doLast {
+		configurations {
+			derbyEmbedded
+		}
+		dependencies {
+			derbyEmbedded 'org.apache.derby:derby:10.11.1'
+		}
+		copy {
+			from configurations.derbyEmbedded
+			into "${buildDir}/autoFVT/publish/servers/com.ibm.ws.concurrent.persistent.fat.demo/derby/"
+		}
+	}
+}
+
+// jar clause can be removed once PR #453 is promoted to master
+jar {
+	dependsOn addRequiredLibraries
+}

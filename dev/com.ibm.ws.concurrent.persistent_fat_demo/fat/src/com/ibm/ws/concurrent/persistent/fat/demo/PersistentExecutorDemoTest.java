@@ -1,16 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
+
 package com.ibm.ws.concurrent.persistent.fat.demo;
 
-/*
- * IBM Confidential
- *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2014
- *
- * The source code for this program is not published or other-
- * wise divested of its trade secrets, irrespective of what has
- * been deposited with the U.S. Copyright Office.
- */
 import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
@@ -19,26 +19,27 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Set;
 
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestName;
 
+import com.ibm.websphere.simplicity.ShrinkHelper;
 import com.ibm.websphere.simplicity.log.Log;
 
 import componenttest.topology.impl.LibertyServer;
+import componenttest.topology.utils.FATServletClient;
 
 /**
  * Tests using the demo app for persistent scheduled executor
  */
-public class PersistentExecutorDemoTest {
-    private static final LibertyServer server = FATSuite.server;
+public class PersistentExecutorDemoTest extends FATServletClient {
 
-    private static final Set<String> appNames = Collections.singleton("persistentdemo");
+    public static final String APP_NAME = "persistentdemo";
+
+    private static final LibertyServer server = FATSuite.server;
 
     private static final String FAILURE_OUTPUT = "web.DemoTaskException: Intentionally failed";
     private static final String SUCCESSFUL_SCHEDULE = "Successfully scheduled task ";
@@ -52,9 +53,6 @@ public class PersistentExecutorDemoTest {
      * Maximum number of milliseconds to wait for a task to finish.
      */
     private static final long TIMEOUT = 10000;
-
-    @Rule
-    public TestName testName = new TestName();
 
     /**
      * Runs a test in the servlet.
@@ -98,27 +96,18 @@ public class PersistentExecutorDemoTest {
         }
     }
 
-    /**
-     * Before running any tests, start the server
-     *
-     * @throws Exception
-     */
     @BeforeClass
     public static void setUp() throws Exception {
-        for (String name : appNames)
-            server.addInstalledAppForValidation(name);
+        WebArchive app = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
+                        .addPackage("web");
+        ShrinkHelper.exportToServer(server, "dropins", app);
+        server.addInstalledAppForValidation(APP_NAME);
         server.startServer();
     }
 
-    /**
-     * After completing all tests, stop the server.
-     *
-     * @throws Exception
-     */
     @AfterClass
     public static void tearDown() throws Exception {
-        if (server != null && server.isStarted())
-            server.stopServer("CWWKC1501W", "CWWKC1511W");
+        server.stopServer("CWWKC1501W", "CWWKC1511W");
     }
 
     /**

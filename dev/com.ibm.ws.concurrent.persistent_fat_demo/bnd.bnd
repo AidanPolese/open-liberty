@@ -25,5 +25,9 @@ test.project: true
 	../fattest.simplicity/lib/shrinkwrap-spi-1.2.3.jar;version=file,\
 	fattest.simplicity;version=latest, \
 	com.ibm.ws.componenttest:public.api;version=1.0.0,\
+	com.ibm.websphere.javaee.annotation.1.1;version=latest,\
+	com.ibm.websphere.javaee.concurrent.1.0;version=latest,\
 	com.ibm.websphere.javaee.servlet.3.1;version=latest,\
+	com.ibm.websphere.javaee.transaction.1.1;version=latest,\
+	com.ibm.ws.concurrent.persistent;version=latest,\
 	com.ibm.ws.componenttest;version=latest

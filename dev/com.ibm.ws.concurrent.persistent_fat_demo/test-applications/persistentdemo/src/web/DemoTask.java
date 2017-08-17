@@ -1,14 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package web;
 
 import java.io.Serializable;
@@ -49,20 +48,17 @@ public class DemoTask implements Callable<String>, ManagedTask, Serializable {
     }
 
     @Override
-    public String call() throws DemoTaskException, HeuristicMixedException, HeuristicRollbackException, IllegalStateException,
-                    NamingException, NotSupportedException, RollbackException, SecurityException, SQLException, SystemException {
+    public String call() throws DemoTaskException, HeuristicMixedException, HeuristicRollbackException, IllegalStateException, NamingException, NotSupportedException, RollbackException, SecurityException, SQLException, SystemException {
         numExecutions++;
         long taskId = TaskIdAccessor.get();
         System.out.println(new Date() + ": Task " + taskId + " attempting execution " + numExecutions);
 
-        UserTransaction newTran = ManagedTask.SUSPEND.equals(execProps.get(ManagedTask.TRANSACTION))
-                        ? (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction")
-                        : null;
+        UserTransaction newTran = ManagedTask.SUSPEND.equals(execProps.get(ManagedTask.TRANSACTION)) ? (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction") : null;
         if (newTran != null)
             newTran.begin();
         try {
             DataSource dataSource = (DataSource) new InitialContext().lookup(
-                            "java:comp/env/web.PersistentDemoServlet/demoDB");
+                                                                             "java:comp/env/web.PersistentDemoServlet/demoDB");
             Connection con = dataSource.getConnection();
             try {
                 Statement stmt = con.createStatement();
