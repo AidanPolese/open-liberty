@@ -326,13 +326,11 @@ public class DefaultConverters {
                     try {
                         converted = (T) converter.convert(rawString);
                     } catch (Throwable e) {
-                        //TODO NLS - see conversion.exception.CWMCG0007E
-                        throw new FaultToleranceException(e);
+                        throw new FaultToleranceException(Tr.formatMessage(tc, "conversion.error.CWMFT5006E", type, rawString, e), e);
                     }
 
                     if (converted == null) {
-                        //TODO NLS - see converter.returned.null.CWMCG0005E
-                        throw new FaultToleranceException();
+                        throw new FaultToleranceException(Tr.formatMessage(tc, "conversion.error.CWMFT5007E", type, rawString));
                     }
                 }
             }
@@ -356,8 +354,7 @@ public class DefaultConverters {
         }
 
         if (converted == null) {
-            //TODO NLS - see could.not.find.converter.CWMCG0014E
-            throw new FaultToleranceException();
+            throw new FaultToleranceException(Tr.formatMessage(tc, "conversion.error.CWMFT5007E", type, rawString));
         }
 
         return converted;
@@ -439,7 +436,7 @@ public class DefaultConverters {
             Method method = type.getMethod("valueOf", String.class);
             converted = (T) method.invoke(null, rawString);
         } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            throw new FaultToleranceException(e);
+            throw new FaultToleranceException(Tr.formatMessage(tc, "conversion.error.CWMFT5006E", type, rawString, e), e);
         }
         return converted;
     }
@@ -460,7 +457,7 @@ public class DefaultConverters {
         } catch (NoSuchMethodException e) {
             //No FFDC, just return null
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            throw new FaultToleranceException(e);
+            throw new FaultToleranceException(Tr.formatMessage(tc, "conversion.error.CWMFT5006E", type, rawString, e), e);
         }
         return converted;
     }

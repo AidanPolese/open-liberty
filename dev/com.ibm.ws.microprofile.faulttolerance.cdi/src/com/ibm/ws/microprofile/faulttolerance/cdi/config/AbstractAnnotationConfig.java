@@ -17,9 +17,13 @@ import java.util.HashMap;
 
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.microprofile.faulttolerance.cdi.FTAnnotationUtils;
+
 public class AbstractAnnotationConfig<T extends Annotation> implements Annotation {
 
-    private static final String KEY_PREFIX = "ft$";
+    private static final TraceComponent tc = Tr.register(FTAnnotationUtils.class);
 
     private final Class<T> annotationType;
     private final HashMap<String, Object> config = new HashMap<>();
@@ -44,7 +48,7 @@ public class AbstractAnnotationConfig<T extends Annotation> implements Annotatio
                 Object override = getSystemProperty(key, method.getReturnType());
 
                 if (override == null) {
-                    key = getPropertyKey(KEY_PREFIX, annotationType, methodName);
+                    key = getPropertyKey("", annotationType, methodName);
                     override = getSystemProperty(key, method.getReturnType());
                 }
 
@@ -57,8 +61,7 @@ public class AbstractAnnotationConfig<T extends Annotation> implements Annotatio
                 }
 
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                //TODO NLS (when I have merged Ben's changes in)
-                throw new FaultToleranceException();
+                throw new FaultToleranceException(Tr.formatMessage(tc, "internal.error.CWMFT5997E", e), e);
             }
         }
     }
@@ -98,15 +101,15 @@ public class AbstractAnnotationConfig<T extends Annotation> implements Annotatio
     }
 
     private static String getPropertyKeyPrefix(Method method) {
-        // ft$<classname>/methodname/......
+        // <classname>/methodname/......
         Class<?> clazz = method.getDeclaringClass();
-        String key = KEY_PREFIX + clazz.getName() + "/" + method.getName() + "/";
+        String key = clazz.getName() + "/" + method.getName() + "/";
         return key;
     }
 
     private static String getPropertyKeyPrefix(Class<?> clazz) {
-        // ft$<classname>/.......
-        String key = KEY_PREFIX + clazz.getName() + "/";
+        // <classname>/.......
+        String key = clazz.getName() + "/";
         return key;
     }
 }

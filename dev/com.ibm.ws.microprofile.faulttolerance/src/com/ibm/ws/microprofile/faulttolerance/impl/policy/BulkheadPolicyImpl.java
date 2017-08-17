@@ -13,12 +13,16 @@ package com.ibm.ws.microprofile.faulttolerance.impl.policy;
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 
 /**
  *
  */
 public class BulkheadPolicyImpl implements BulkheadPolicy {
+
+    private static final TraceComponent tc = Tr.register(BulkheadPolicyImpl.class);
 
     private int maxThreads;
     private int queueSize;
@@ -31,7 +35,7 @@ public class BulkheadPolicyImpl implements BulkheadPolicy {
             maxThreads = (int) Bulkhead.class.getMethod("value").getDefaultValue();
             maxThreads = (int) Bulkhead.class.getMethod("waitingTaskQueue").getDefaultValue();
         } catch (NoSuchMethodException | SecurityException e) {
-            throw new FaultToleranceException(e);
+            throw new FaultToleranceException(Tr.formatMessage(tc, "internal.error.CWMFT4998E", e), e);
         }
     }
 

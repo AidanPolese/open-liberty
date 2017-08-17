@@ -16,12 +16,16 @@ import java.time.temporal.ChronoUnit;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
 
 /**
  *
  */
 public class TimeoutPolicyImpl implements TimeoutPolicy {
+
+    private static final TraceComponent tc = Tr.register(TimeoutPolicyImpl.class);
 
     private Duration timeout;
 
@@ -34,7 +38,7 @@ public class TimeoutPolicyImpl implements TimeoutPolicy {
             ChronoUnit timeoutUnit = (ChronoUnit) Timeout.class.getMethod("unit").getDefaultValue();
             timeout = Duration.of(longTimeout, timeoutUnit);
         } catch (NoSuchMethodException | SecurityException e) {
-            throw new FaultToleranceException(e);
+            throw new FaultToleranceException(Tr.formatMessage(tc, "internal.error.CWMFT4998E", e), e);
         }
     }
 

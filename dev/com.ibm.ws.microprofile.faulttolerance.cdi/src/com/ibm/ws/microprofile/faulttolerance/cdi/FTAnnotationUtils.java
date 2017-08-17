@@ -12,8 +12,6 @@ package com.ibm.ws.microprofile.faulttolerance.cdi;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,6 +35,8 @@ import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.microprofile.faulttolerance.cdi.config.AsynchronousConfig;
 import com.ibm.ws.microprofile.faulttolerance.cdi.config.BulkheadConfig;
 import com.ibm.ws.microprofile.faulttolerance.cdi.config.CircuitBreakerConfig;
@@ -52,9 +52,6 @@ import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceFunction;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
-
-import com.ibm.websphere.ras.Tr;
-import com.ibm.websphere.ras.TraceComponent;
 
 public class FTAnnotationUtils {
 
@@ -168,12 +165,12 @@ public class FTAnnotationUtils {
                 if (originalReturn.isAssignableFrom(fallbackReturn)) {
                     fallbackPolicy = newFallbackPolicy(beanInstance, fallbackMethod, fallbackReturn);
                 } else {
-                     throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.return.type.not.match.CWMFT5002E=CWMFT5002E", fallbackMethod, originalMethod));
+                    throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.return.type.not.match.CWMFT5002E", fallbackMethod, originalMethod));
                 }
             } catch (NoSuchMethodException e) {
-                throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", beanInstance.getClass(), fallbackMethodName, paramTypes));
+                throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", beanInstance.getClass(), fallbackMethodName, paramTypes), e);
             } catch (SecurityException e) {
-                throw new FaultToleranceException((Tr.formatMessage(tc, "security.exception.acquiring.fallback.method.CWMFT5004E"));
+                throw new FaultToleranceException((Tr.formatMessage(tc, "security.exception.acquiring.fallback.method.CWMFT5004E")), e);
             }
         } else {
             FallbackHandlerFactory fallbackHandlerFactory = getFallbackHandlerFactory(beanManager);
@@ -333,20 +330,6 @@ public class FTAnnotationUtils {
         FallbackPolicy<R> fallbackPolicy = FaultToleranceProvider.newFallbackPolicy();
         fallbackPolicy.setFallbackFunction(fallbackFunction);
         return fallbackPolicy;
-    }
-
-    public static Method getMethod(Class<?> targetClass, String methodName, Class<?>... params) {
-        Method method = AccessController.doPrivileged(new PrivilegedAction<Method>() {
-            @Override
-            public Method run() {
-                try {
-                    return targetClass.getMethod(methodName, params);
-                } catch (NoSuchMethodException | SecurityException e) {
-                    throw new FaultToleranceException(e);
-                }
-            }
-        });
-        return method;
     }
 
     /**
