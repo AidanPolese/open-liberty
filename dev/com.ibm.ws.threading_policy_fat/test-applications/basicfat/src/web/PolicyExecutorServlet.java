@@ -1192,7 +1192,9 @@ public class PolicyExecutorServlet extends FATServlet {
 
         executor.shutdown();
 
-        // with no tasks remaining, should be immediately considered terminated
+        // poll for termination
+        for (long start = System.nanoTime(); !executor.isTerminated() && System.nanoTime() - start < TIMEOUT_NS; TimeUnit.MILLISECONDS.sleep(200)) ;
+
         assertTrue(executor.isTerminated());
     }
 
@@ -1492,9 +1494,8 @@ public class PolicyExecutorServlet extends FATServlet {
         System.out.println("Searching of minimum of " + Arrays.toString(array3));
         assertEquals(Integer.valueOf(10), executor.submit(new MinFinderTask(array3, executor)).get(TIMEOUT_NS * 5, TimeUnit.NANOSECONDS));
 
-        // expect immediate termination after shutdown with no tasks remaining
         executor.shutdown();
-        assertTrue(executor.awaitTermination(0, TimeUnit.NANOSECONDS));
+        assertTrue(executor.awaitTermination(TIMEOUT_NS, TimeUnit.NANOSECONDS));
     }
 
     // Use a policy executor to submit tasks that await termination of itself.
