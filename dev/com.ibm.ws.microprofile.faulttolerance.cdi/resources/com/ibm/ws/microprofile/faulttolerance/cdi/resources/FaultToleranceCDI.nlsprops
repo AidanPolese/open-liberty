@@ -77,3 +77,32 @@
 temporary.CWMFT5999E=CWMFT9999E: A Fault Tolerance API error has occurred: {0}
 temporary.CWMFT5999E.explanation=A Fault Tolerance API error has occurred that prevents normal operation.
 temporary.CWMFT5999E.useraction=Review the FFDC logs and exception text to identify the problem.
+
+#An asynchronous message does not return Future.
+asynchronous.class.not.returning.future.CWMFT5000E=CWMFT5000E: The asynchronous method {0} does not have a return type of Future.
+asynchronous.class.not.returning.future.CWMFT5000E.explanation=All methods in a class that is annotated with org.eclipse.microprofile.faulttolerance.Asynchronous must have a return type that is assignable from java.util.concurrent.Future.
+asynchronous.class.not.returning.future.CWMFT5000E.useraction=Update the return type.
+
+asynchronous.method.not.returning.future.CWMFT5001E=CWMFT5001E: The asynchronous method {0} does not have a return type of Future.
+asynchronous.method.not.returning.future.CWMFT5001E.explanation=All methods that are annotated with org.eclipse.microprofile.faulttolerance.Asynchronous must have a return type that is assignable from java.util.concurrent.Future.
+asynchronous.method.not.returning.future.CWMFT5001E.useraction=Update the return type.
+
+#A fallback method does not match the return type of the method that falls back to it. 
+fallback.policy.return.type.not.match.CWMFT5002E=CWMFT5002E: The fallback method {0} has the wrong return type. The return type must match the return type of the method {1}.
+fallback.policy.return.type.not.match.CWMFT5002E.explanation=A fallback method must have the same return type as the method it handles. 
+fallback.policy.return.type.not.match.CWMFT5002E.useraction=Update the return type.
+
+#A fallback method that should exist cannot be found.
+fallback.method.not.found.CWMFT5003E=CWMFT5003E: The fallback method {1} with parameters {2} was not found in class {0}.
+fallback.method.not.found.CWMFT5003E.explanation=A fallback method was declared for the method {1}. However, this method does not exist in the class {0}.
+fallback.method.not.found.CWMFT5003E.useraction=Either remove the fallback annotation or add the missing method.
+
+#A security exception was thrown while trying to create a fallback policy. 
+security.exception.acquiring.fallback.method.CWMFT5004E=CWMFT5004E: A security exception occurred when the application server tried to process fallback annotations.
+security.exception.acquiring.fallback.method.CWMFT5004E.explanation=In order to create a fallback policy, the application server requires permission to acquire and examine Java methods. 
+security.exception.acquiring.fallback.method.CWMFT5004E.useraction=Review the security policy of your application server and provide the permissions.
+
+#Generic error for internal failures. 
+internal.error.CWMFT9998E=CWMFT9998E: An internal error occurred.
+internal.error.CWMFT9998E.explanation=The application server experienced an internal error.
+internal.error.CWMFT9998E.useraction=Gather a set of traces and open a new issue against your application server.

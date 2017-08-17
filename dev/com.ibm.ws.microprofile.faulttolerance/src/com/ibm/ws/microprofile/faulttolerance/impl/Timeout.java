@@ -18,10 +18,16 @@ import org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException;
 import com.ibm.ws.microprofile.faulttolerance.impl.async.QueuedFuture;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
 
+
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 /**
  *
  */
 public class Timeout {
+
+
+    private static final TraceComponent tc = Tr.register(Timeout.class);
 
     private final TimeoutPolicy timeoutPolicy;
     private final ExecutorService executorService;
@@ -80,7 +86,7 @@ public class Timeout {
 
         synchronized (this) {
             if (this.stopped || this.future != null) {
-                throw new IllegalStateException();
+                throw new IllegalStateException(Tr.formatMessage(tc, "internal.error.CWMFT4999E"));
             }
 
             this.future = executorService.submit(task);
@@ -90,7 +96,7 @@ public class Timeout {
     public void stop() {
         synchronized (this) {
             if (this.future == null) {
-                throw new IllegalStateException();
+                throw new IllegalStateException(Tr.formatMessage(tc, "internal.error.CWMFT4999E"));
             }
             this.stopped = true;
             if (!this.future.isDone()) {
@@ -118,7 +124,7 @@ public class Timeout {
      */
     public void check() {
         if (timedout) {
-            throw new TimeoutException();
+            throw new TimeoutException(Tr.formatMessage(tc, "timeout.occurred.CWMFT0000E"));
         }
     }
 
