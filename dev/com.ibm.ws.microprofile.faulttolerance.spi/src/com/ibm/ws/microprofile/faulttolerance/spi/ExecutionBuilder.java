@@ -20,9 +20,7 @@ public interface ExecutionBuilder<T, R> {
 
     public ExecutionBuilder<T, R> setBulkheadPolicy(BulkheadPolicy bulkhead);
 
-    public ExecutionBuilder<T, R> setFallbackPolicy(FallbackPolicy<R> fallback);
-
-    public ExecutionBuilder<T, R> setAsyncFallbackPolicy(FallbackPolicy<Future<R>> fallback);
+    public ExecutionBuilder<T, R> setFallbackPolicy(FallbackPolicy fallback);
 
     public ExecutionBuilder<T, R> setTimeoutPolicy(TimeoutPolicy timeout);
 

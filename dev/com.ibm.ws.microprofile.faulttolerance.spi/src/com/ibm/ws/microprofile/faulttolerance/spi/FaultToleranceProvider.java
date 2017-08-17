@@ -33,7 +33,7 @@ public final class FaultToleranceProvider {
         return INSTANCE.newBulkheadPolicy();
     }
 
-    public static <R> FallbackPolicy<R> newFallbackPolicy() {
+    public static FallbackPolicy newFallbackPolicy() {
         return INSTANCE.newFallbackPolicy();
     }
 

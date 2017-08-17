@@ -40,7 +40,7 @@ public class AsyncExecutionImpl<R> extends SynchronousExecutionImpl<Future<R>> {
                               CircuitBreakerPolicy circuitBreakerPolicy,
                               TimeoutPolicy timeoutPolicy,
                               BulkheadPolicy bulkheadPolicy,
-                              FallbackPolicy<Future<R>> fallbackPolicy,
+                              FallbackPolicy fallbackPolicy,
                               WSContextService contextService,
                               PolicyExecutorProvider policyExecutorProvider) {
 

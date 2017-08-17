@@ -30,7 +30,7 @@ public class FallbackTest {
 
     @Test
     public void testFallbackFunction() {
-        FallbackPolicy<String> fallback = FaultToleranceProvider.newFallbackPolicy();
+        FallbackPolicy fallback = FaultToleranceProvider.newFallbackPolicy();
         TestFallback fallbackCallable = new TestFallback();
         fallback.setFallbackFunction(fallbackCallable);
 
@@ -47,7 +47,7 @@ public class FallbackTest {
 
     @Test
     public void testFallbackFactory() {
-        FallbackPolicy<String> fallback = FaultToleranceProvider.newFallbackPolicy();
+        FallbackPolicy fallback = FaultToleranceProvider.newFallbackPolicy();
         TestFallbackFactory fallbackFactory = new TestFallbackFactory();
         fallback.setFallbackHandler(TestFallback.class, fallbackFactory);
 

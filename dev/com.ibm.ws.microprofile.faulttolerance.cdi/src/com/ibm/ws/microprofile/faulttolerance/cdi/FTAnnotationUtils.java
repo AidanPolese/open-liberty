@@ -150,8 +150,8 @@ public class FTAnnotationUtils {
         return bulkheadPolicy;
     }
 
-    static FallbackPolicy<?> processFallbackAnnotation(Fallback fallback, InvocationContext context, BeanManager beanManager) {
-        FallbackPolicy<?> fallbackPolicy = null;
+    static FallbackPolicy processFallbackAnnotation(Fallback fallback, InvocationContext context, BeanManager beanManager) {
+        FallbackPolicy fallbackPolicy = null;
         Class<? extends FallbackHandler<?>> fallbackClass = fallback.value();
         if (fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) {
             String fallbackMethodName = fallback.fallbackMethod();
@@ -181,13 +181,14 @@ public class FTAnnotationUtils {
 
     /**
      * @param <R>
+     * @param <R>
      * @param beanInstance
      * @param fallbackMethod
      * @param params
      * @param fallbackReturn
      * @return
      */
-    private static <R> FallbackPolicy<R> newFallbackPolicy(Object beanInstance, Method fallbackMethod, Class<R> fallbackReturn) {
+    private static <R> FallbackPolicy newFallbackPolicy(Object beanInstance, Method fallbackMethod, Class<R> fallbackReturn) {
         FaultToleranceFunction<ExecutionContext, R> fallbackFunction = new FaultToleranceFunction<ExecutionContext, R>() {
             @Override
             public R execute(ExecutionContext context) throws Exception {
@@ -197,7 +198,7 @@ public class FTAnnotationUtils {
             }
         };
 
-        FallbackPolicy<R> fallbackPolicy = newFallbackPolicy(fallbackFunction);
+        FallbackPolicy fallbackPolicy = newFallbackPolicy(fallbackFunction);
         return fallbackPolicy;
     }
 
@@ -296,7 +297,7 @@ public class FTAnnotationUtils {
         }
 
         if (fallback != null) {
-            FallbackPolicy<?> fallbackPolicy = processFallbackAnnotation(fallback, context, beanManager);
+            FallbackPolicy fallbackPolicy = processFallbackAnnotation(fallback, context, beanManager);
             policy.setFallbackPolicy(fallbackPolicy);
         }
 
@@ -320,14 +321,14 @@ public class FTAnnotationUtils {
         return factory;
     }
 
-    private static <T extends FallbackHandler<R>, R> FallbackPolicy<R> newFallbackPolicy(Class<T> fallbackHandlerClass, FallbackHandlerFactory factory) {
-        FallbackPolicy<R> fallbackPolicy = FaultToleranceProvider.newFallbackPolicy();
+    private static FallbackPolicy newFallbackPolicy(Class<? extends FallbackHandler<?>> fallbackHandlerClass, FallbackHandlerFactory factory) {
+        FallbackPolicy fallbackPolicy = FaultToleranceProvider.newFallbackPolicy();
         fallbackPolicy.setFallbackHandler(fallbackHandlerClass, factory);
         return fallbackPolicy;
     }
 
-    private static <R> FallbackPolicy<R> newFallbackPolicy(FaultToleranceFunction<ExecutionContext, R> fallbackFunction) {
-        FallbackPolicy<R> fallbackPolicy = FaultToleranceProvider.newFallbackPolicy();
+    private static FallbackPolicy newFallbackPolicy(FaultToleranceFunction<ExecutionContext, ?> fallbackFunction) {
+        FallbackPolicy fallbackPolicy = FaultToleranceProvider.newFallbackPolicy();
         fallbackPolicy.setFallbackFunction(fallbackFunction);
         return fallbackPolicy;
     }
@@ -346,7 +347,7 @@ public class FTAnnotationUtils {
         TimeoutPolicy timeoutPolicy = policies.getTimeoutPolicy();
         CircuitBreakerPolicy circuitBreakerPolicy = policies.getCircuitBreakerPolicy();
         RetryPolicy retryPolicy = policies.getRetryPolicy();
-        FallbackPolicy<R> fallbackPolicy = (FallbackPolicy<R>) policies.getFallbackPolicy();
+        FallbackPolicy fallbackPolicy = policies.getFallbackPolicy();
         BulkheadPolicy bulkheadPolicy = policies.getBulkheadPolicy();
 
         if (timeoutPolicy != null) {
