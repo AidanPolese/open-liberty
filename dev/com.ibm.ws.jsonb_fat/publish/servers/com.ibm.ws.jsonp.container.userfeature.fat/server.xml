@@ -1,0 +1,17 @@
+<server>
+    <featureManager>
+      <feature>componenttest-1.0</feature>
+      <feature>jsonpContainer-1.1</feature>
+      <feature>usr:testFeatureUsingJsonp-1.1</feature>
+    </featureManager>
+
+	<include location="../fatTestPorts.xml"/>
+
+    <library id="json-p-johnzon">
+      <file name="${server.config.dir}/../com.ibm.ws.jsonb.container.fat/johnzon/johnzon-core-1.1.0.jar"/>
+    </library>
+
+    <bell libraryRef="json-p-johnzon"/>
+
+    <variable name="onError" value="FAIL"/>
+</server>

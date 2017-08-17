@@ -16,5 +16,3 @@ instrument.disabled: true
 
 publish.wlp.jar.disabled: true
 
--buildpath: \
-	../prereq.java.tools/lib/tools.jar;version=file

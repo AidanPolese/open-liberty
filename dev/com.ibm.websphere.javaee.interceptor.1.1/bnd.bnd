@@ -16,11 +16,11 @@ Bundle-SymbolicName: com.ibm.websphere.javaee.interceptor.1.1; singleton:=true
 Export-Package: javax.interceptor
 
 Include-Resource: \
-  @${repo;org.apache.geronimo.specs:geronimo-interceptor_1.1_spec;1.0}!/META-INF/NOTICE
+  @${repo;com.ibm.ws.org.apache.geronimo.specs:geronimo-interceptor_1.1_spec;1.0}!/META-INF/NOTICE
 
 instrument.disabled: true
 
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	org.apache.geronimo.specs:geronimo-interceptor_1.1_spec;version=1.0
+	com.ibm.ws.org.apache.geronimo.specs:geronimo-interceptor_1.1_spec;version=1.0

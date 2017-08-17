@@ -28,6 +28,7 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
+import com.ibm.jbatch.container.exception.ExecutionAssignedToServerException;
 import com.ibm.jbatch.container.persistence.jpa.JobInstanceEntity;
 import com.ibm.jbatch.container.services.IJPAQueryHelper;
 import com.ibm.jbatch.container.services.IPersistenceManagerService;
@@ -347,9 +348,15 @@ public class WSJobRepositoryImpl implements WSJobRepository {
     }
 
     @Override
+    public WSJobExecution updateJobExecutionAndInstanceNotSetToServerYet(
+                                                                         long jobExecutionId, Date date) throws ExecutionAssignedToServerException {
+        return (WSJobExecution) persistenceManagerService.updateJobExecutionAndInstanceNotSetToServerYet(jobExecutionId, date);
+    }
+
+    @Override
     public WSJobExecution updateJobExecutionAndInstanceOnStop(
-                                                              long jobExecutionId, Date date) {
-        return (WSJobExecution) persistenceManagerService.updateJobExecutionAndInstanceOnStop(jobExecutionId, date);
+                                                              long jobExecutionId, Date date) throws ExecutionAssignedToServerException {
+        return (WSJobExecution) persistenceManagerService.updateJobExecutionAndInstanceNotSetToServerYet(jobExecutionId, date);
     }
 
     @Override
@@ -366,7 +373,7 @@ public class WSJobRepositoryImpl implements WSJobRepository {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws Exception
      */
     @Override
@@ -376,7 +383,7 @@ public class WSJobRepositoryImpl implements WSJobRepository {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws Exception
      */
     @Override

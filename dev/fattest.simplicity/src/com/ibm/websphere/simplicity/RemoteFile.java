@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.ibm.websphere.simplicity.log.Log;
-import componenttest.common.apiservices.cmdline.RXAProvider;
+import componenttest.common.apiservices.cmdline.LocalProvider;
 
 /**
  * Represents a file or directory on a {@link Machine}. This file or directory
@@ -450,7 +450,7 @@ public class RemoteFile {
             } else
                 return this.localFile.delete();
         } else
-            return RXAProvider.delete(this);
+            return LocalProvider.delete(this);
     }
 
     /**
@@ -490,7 +490,7 @@ public class RemoteFile {
         if (host.isLocal())
             return this.localFile.isDirectory();
         else
-            return RXAProvider.isDirectory(this);
+            return LocalProvider.isDirectory(this);
     }
 
     /**
@@ -509,7 +509,7 @@ public class RemoteFile {
         if (host.isLocal())
             return this.localFile.isFile();
         else
-            return RXAProvider.isFile(this);
+            return LocalProvider.isFile(this);
     }
 
     /**
@@ -522,7 +522,7 @@ public class RemoteFile {
         if (host.isLocal())
             return this.localFile.exists();
         else
-            return RXAProvider.exists(this);
+            return LocalProvider.exists(this);
     }
 
     /**
@@ -566,7 +566,7 @@ public class RemoteFile {
             }
             remoteFiles = remoteFilesList.toArray(new RemoteFile[0]);
         } else {
-            String[] fileList = RXAProvider.list(this, recursive);
+            String[] fileList = LocalProvider.list(this, recursive);
             remoteFiles = new RemoteFile[fileList.length];
             for (int i = 0; i < fileList.length; ++i) {
                 remoteFiles[i] = new RemoteFile(this.host, fileList[i]);
@@ -585,7 +585,7 @@ public class RemoteFile {
         if (host.isLocal())
             return this.localFile.mkdir();
         else
-            return RXAProvider.mkdir(this);
+            return LocalProvider.mkdir(this);
     }
 
     /**
@@ -600,14 +600,14 @@ public class RemoteFile {
         if (host.isLocal())
             return this.localFile.mkdirs();
         else
-            return RXAProvider.mkdirs(this);
+            return LocalProvider.mkdirs(this);
     }
 
     public boolean rename(RemoteFile newFile) throws Exception {
         if (host.isLocal())
             return this.localFile.renameTo(new File(newFile.getAbsolutePath()));
         else
-            return RXAProvider.rename(this, newFile);
+            return LocalProvider.rename(this, newFile);
     }
 
     /**
@@ -631,14 +631,14 @@ public class RemoteFile {
         if (host.isLocal())
             return new FileInputStream(this.localFile);
         else
-            return RXAProvider.openFileForReading(this);
+            return LocalProvider.openFileForReading(this);
     }
 
     public OutputStream openForWriting(boolean append) throws Exception {
         if (host.isLocal())
             return new FileOutputStream(this.localFile, append);
         else
-            return RXAProvider.openFileForWriting(this, append);
+            return LocalProvider.openFileForWriting(this, append);
     }
 
     /**
@@ -728,7 +728,7 @@ public class RemoteFile {
             }
 
             // copy the file
-            boolean result = RXAProvider.copy(srcFile, destFile, binary);
+            boolean result = LocalProvider.copy(srcFile, destFile, binary);
             Log.exiting(c, method, result);
             return result;
         }
