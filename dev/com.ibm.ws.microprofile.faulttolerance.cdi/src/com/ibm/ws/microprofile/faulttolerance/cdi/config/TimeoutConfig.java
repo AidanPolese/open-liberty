@@ -18,11 +18,11 @@ import org.eclipse.microprofile.faulttolerance.Timeout;
 public class TimeoutConfig extends AbstractAnnotationConfig<Timeout> implements Timeout {
 
     public TimeoutConfig(Class<?> annotatedClass, Timeout annotation) {
-        super(annotatedClass, annotation);
+        super(annotatedClass, annotation, Timeout.class);
     }
 
     public TimeoutConfig(Method annotatedMethod, Timeout annotation) {
-        super(annotatedMethod, annotation);
+        super(annotatedMethod, annotation, Timeout.class);
     }
 
     /** {@inheritDoc} */

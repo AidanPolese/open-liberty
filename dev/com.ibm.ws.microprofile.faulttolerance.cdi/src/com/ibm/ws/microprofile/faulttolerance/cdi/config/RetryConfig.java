@@ -18,11 +18,11 @@ import org.eclipse.microprofile.faulttolerance.Retry;
 public class RetryConfig extends AbstractAnnotationConfig<Retry> implements Retry {
 
     public RetryConfig(Class<?> annotatedClass, Retry annotation) {
-        super(annotatedClass, annotation);
+        super(annotatedClass, annotation, Retry.class);
     }
 
     public RetryConfig(Method annotatedMethod, Retry annotation) {
-        super(annotatedMethod, annotation);
+        super(annotatedMethod, annotation, Retry.class);
     }
 
     /** {@inheritDoc} */

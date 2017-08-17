@@ -17,11 +17,11 @@ import org.eclipse.microprofile.faulttolerance.Asynchronous;
 public class AsynchronousConfig extends AbstractAnnotationConfig<Asynchronous> implements Asynchronous {
 
     public AsynchronousConfig(Class<?> annotatedClass, Asynchronous annotation) {
-        super(annotatedClass, annotation);
+        super(annotatedClass, annotation, Asynchronous.class);
     }
 
     public AsynchronousConfig(Method annotatedMethod, Asynchronous annotation) {
-        super(annotatedMethod, annotation);
+        super(annotatedMethod, annotation, Asynchronous.class);
     }
 
 }
