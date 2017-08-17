@@ -19,10 +19,15 @@ import javax.naming.NamingException;
 
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+
 /**
  *
  */
 public class ThreadUtils {
+
+    private static final TraceComponent tc = Tr.register(ThreadUtils.class);
 
     public static ExecutorService getDefaultExecutorService() {
         ExecutorService defaultExecutorService;
@@ -33,7 +38,7 @@ public class ThreadUtils {
                 //this is really intended for unittest
                 defaultExecutorService = Executors.newScheduledThreadPool(5);
             } else {
-                throw new FaultToleranceException(e);
+                throw new FaultToleranceException(Tr.formatMessage(tc, "internal.error.CWMFT4998E", e), e);
             }
         }
         return defaultExecutorService;
