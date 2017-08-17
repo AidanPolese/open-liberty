@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.zip.DataFormatException;
 
 import com.ibm.websphere.ras.Tr;
@@ -242,7 +243,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     private boolean isPushPromise = false;
     private boolean isH2Connection = false;
 
-    private final ArrayList<Frame> framesToWrite = new ArrayList<Frame>();
+    private final CopyOnWriteArrayList<Frame> framesToWrite = new CopyOnWriteArrayList<Frame>();
 
     /**
      * Constructor for this base service context class.

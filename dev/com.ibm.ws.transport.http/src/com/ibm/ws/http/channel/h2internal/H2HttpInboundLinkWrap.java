@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
@@ -294,8 +295,7 @@ public class H2HttpInboundLinkWrap extends HttpInboundLink {
      */
     @Override
     public void close(VirtualConnection inVC, Exception e) {
-        final boolean bTrace = TraceComponent.isAnyTracingEnabled();
-        if (bTrace && tc.isDebugEnabled()) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "close() called H2InboundLink: " + this + " " + inVC);
         }
 
@@ -306,19 +306,31 @@ public class H2HttpInboundLinkWrap extends HttpInboundLink {
         this.muxLink.close(inVC, e);
     }
 
-    public void writeFramesSync(ArrayList<Frame> frames) {
-        final boolean bTrace = TraceComponent.isAnyTracingEnabled();
-        if (bTrace && tc.isDebugEnabled()) {
-            Tr.debug(tc, "writeFramesSync entry, " + frames);
+    public void writeFramesSync(CopyOnWriteArrayList<Frame> frames) {
+        if (frames == null) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "writeFramesSync entry: # of frames: 0 - returning");
+            }
+            return;
         }
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "writeFramesSync entry: # of frames: " + frames.size());
+        }
+
         Iterator<Frame> i = frames.iterator();
         while (i.hasNext()) {
-            Frame currentFrame = i.next();
-
-            H2StreamProcessor streamProcessor = muxLink.getStreamProcessor(streamID);
-
             try {
+                Frame currentFrame = i.next();
+
+                H2StreamProcessor streamProcessor = muxLink.getStreamProcessor(streamID);
+
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "writeFramesSync processing frame ID: " + currentFrame.getFrameType());
+                }
+
                 streamProcessor.processNextFrame(currentFrame, Direction.WRITING_OUT);
+
             } catch (Http2Exception e) {
                 //  send out a connection error.
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -330,16 +342,19 @@ public class H2HttpInboundLinkWrap extends HttpInboundLink {
 
                 } catch (ProtocolException x) {
                     // nothing to do here, since we can't even send the GOAWAY frame.
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                        Tr.debug(tc, "writeFramesSync, ProtocolException occurred while sending a goaway frame: " + x);
+                    }
                 }
 
             } catch (Exception e) {
-                if (bTrace && tc.isDebugEnabled()) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(tc, "writeFramesSync, Exception occurred while writing the data : " + e);
                 }
             }
         }
 
-        if (bTrace && tc.isDebugEnabled()) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "writeFramesSync exit");
         }
     }
