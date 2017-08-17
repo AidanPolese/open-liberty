@@ -1,5 +1,3 @@
-package com.ibm.ws.microprofile.faulttolerance.spi;
-
 /*
  * Copyright (c) 2016,2017 Contributors to the Eclipse Foundation
  *
@@ -18,6 +16,7 @@ package com.ibm.ws.microprofile.faulttolerance.spi;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.ibm.ws.microprofile.faulttolerance.spi;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
