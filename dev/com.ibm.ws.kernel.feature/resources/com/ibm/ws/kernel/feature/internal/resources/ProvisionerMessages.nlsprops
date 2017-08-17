@@ -313,8 +313,8 @@ tool.classpath.create.fail.useraction=Review the error message, correct the prob
 
 
 tool.userfeature.install.location.invalid=CWWKF1036E: The {0} user feature cannot be installed to core.
-too.userfeature.install.location.invalid.explanation= The user feature is not a core feature therefore cannot be installed to core.
-too.userfeature.install.location.invalid.useraction= Install the user feature to usr. 
+tool.userfeature.install.location.invalid.explanation= The user feature is not a core feature therefore cannot be installed to core.
+tool.userfeature.install.location.invalid.useraction= Install the user feature to usr. 
 
 
 
