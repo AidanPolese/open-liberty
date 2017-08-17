@@ -1,0 +1,28 @@
+<project name="com.ibm.ws.security.jwt-api" default="buildApiSpi"> 
+  <!-- DO NOT CHANGE THE DEFAULT TASK FROM 'buildApiSpi'
+       Top level builds use this task explicity.  Changing the
+       default will create an incompatibility between a default
+       project build and a top level build. -->
+       
+ 
+       
+  <!-- IBM-API Required Properties -->
+  <property name="bundleName" value="WebSphere Security JWT Builder And Token API"/>
+  <property name="api.ibm.symbolic.suffix" value="jwt"/>
+  <!-- set the 'api.ibm.version' of '1.2'  -->
+  <property name="api.ibm.version" value="1.1"/>
+	
+  <property name="feature.project" value="com.ibm.websphere.appserver.jwt-1.0"/>
+	<property name="additional.javadoc.src.dirs" value=""/>
+  
+  <!-- IBM-SPI Required Properties 
+  <property name="spibndfile" value="${basedir}/build/spi.bnd"/>  
+  <property name="spi.ibm.bundleName" value="WebSphere Application Manager SPI"/>
+  <property name="spi.ibm.symbolic.suffix" value="application"/>
+  <property name="spi.ibm.version" value="1.0"/> -->
+	
+  <!-- 'api.ibm.version' and 'feature.file' are shared. -->
+
+  <import file="../ant_build/public_imports/apibnd_imports.xml"/>
+
+</project>

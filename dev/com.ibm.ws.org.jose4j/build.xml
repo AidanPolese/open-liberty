@@ -1,0 +1,7 @@
+<project name="com.ibm.ws.org.jose4j" default="build">
+    <import file="../ant_build/public_imports/rejar_imports.xml"/>
+        
+    <target name="package"> 
+        <bndPackage version="1.0" original.jar.name="org.jose4j" original.jar.version="0.5.1" bnd.classpath="lib/jose4j-0.5.1.jar" bnd.file="bnd.bnd"  />
+    </target>
+</project>

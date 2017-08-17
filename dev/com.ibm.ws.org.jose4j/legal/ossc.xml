@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ossc> 
+   <project project="org.jose4j" 
+      projectURL="https://bitbucket.org/b_c/jose4j/overview" 
+      version="0.5.1" 
+      license-type="https://bitbucket.org/b_c/jose4j/src/647088b254888a9a544433e429aa27a4479416ee/LICENSE?fileviewer=file-view-default" 
+      contact="liangch@us.ibm.com" 
+      encryption="no">
+      <download location="https://bitbucket.org/b_c/jose4j/downloads/jose4j-0.5.1.jar">
+         <file basename="jose4j-0.5.1.jar"   checksum="7bf5587b897b129bf635ec562aa47012"/>
+      </download>
+   </project>
+   <clearencehistory/>
+   <notes>
+      Downloaded at 05/16/2016 AM
+   </notes>
+</ossc>

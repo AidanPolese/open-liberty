@@ -1,0 +1,25 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2017.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security/resources/com/ibm/ws/security/common/internal/resources/SSOCommonMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Application Server Security SSO Common
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+# Message prefix block: CWWKS6101 - CWWKS6200
+SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE=CWWKS6101E: \u8ba4\u8bc1\u8bf7\u6c42\u5931\u8d25\uff0c\u56e0\u4e3a\u5df2\u8ba4\u8bc1\u7684\u7528\u6237\u4fe1\u606f\u4e2d\u7684 [{0}] \u58f0\u660e\u7684\u6570\u636e\u7c7b\u578b\u65e0\u6548\u3002\u6240\u6307\u5b9a\u7684\u58f0\u660e\u4e0e [{1}] \u914d\u7f6e\u5c5e\u6027\u76f8\u5173\u8054\u3002
+SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE.explanation=\u5df2\u8ba4\u8bc1\u7684\u7528\u6237\u4fe1\u606f\u5177\u6709\u65e0\u6548\u58f0\u660e\u6570\u636e\u7c7b\u578b\uff0c\u8fd0\u884c\u65f6\u65e0\u6cd5\u7ee7\u7eed\u6267\u884c\u8ba4\u8bc1\u8fc7\u7a0b\u3002
+SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE.useraction=\u8bf7\u9a8c\u8bc1\u793e\u4ea4\u767b\u5f55\u5ba2\u6237\u673a\u914d\u7f6e\u662f\u5426\u4e3a\u5c5e\u6027\u6307\u5b9a\u4e86\u6b63\u786e\u7684\u58f0\u660e\u540d\u79f0\u3002
+
+SUBJECT_MAPPING_MISSING_ATTR=CWWKS6102E: \u8ba4\u8bc1\u8bf7\u6c42\u5931\u8d25\uff0c\u56e0\u4e3a\u5df2\u8ba4\u8bc1\u7684\u7528\u6237\u4fe1\u606f\u4e0d\u5305\u542b [{1}] \u5c5e\u6027\u6240\u6307\u5b9a\u7684\u58f0\u660e [{0}]\u3002
+SUBJECT_MAPPING_MISSING_ATTR.explanation=\u5df2\u8ba4\u8bc1\u7684\u7528\u6237\u4fe1\u606f\u4e0d\u5305\u542b\u6240\u6307\u5b9a\u7684\u58f0\u660e\u6765\u6807\u8bc6\u6240\u6307\u5b9a\u7684\u5c5e\u6027\uff0c\u8fd0\u884c\u65f6\u65e0\u6cd5\u7ee7\u7eed\u6267\u884c\u8ba4\u8bc1\u8fc7\u7a0b\u3002
+SUBJECT_MAPPING_MISSING_ATTR.useraction=\u6267\u884c\u4e0b\u5217\u5176\u4e2d\u4e00\u9879\u64cd\u4f5c\u30021) \u68c0\u67e5\u793e\u4ea4\u767b\u5f55\u5ba2\u6237\u673a\u914d\u7f6e\u662f\u5426\u53ef\u4ee5\u4e0e\u8be5\u5c5e\u6027\u6307\u5b9a\u4e0d\u540c\u7684\u57df2) \u9a8c\u8bc1\u63d0\u4f9b\u7a0b\u5e8f\u662f\u5426\u5bf9\u6240\u6307\u5b9a\u7684\u57df\u53d1\u51fa\u5df2\u8ba4\u8bc1\u7684\u7528\u6237\u4fe1\u606f\u3002
+
+ERROR_AUTHENTICATE=CWWKS6103E: \u65e0\u6cd5\u4e3a {0} \u7528\u6237\u521b\u5efa\u5b89\u5168\u4e3b\u9898\u3002
+ERROR_AUTHENTICATE.explanation=\u672a\u80fd\u8ba4\u8bc1\u6b64\u7528\u6237\u3002
+ERROR_AUTHENTICATE.useraction=\u68c0\u67e5\u6b64\u7528\u6237\u662f\u5426\u5b58\u5728\u4e8e\u6ce8\u518c\u8868\u4e2d\uff0c\u4ee5\u53ca\u5bc6\u7801\u6216\u5176\u4ed6\u51ed\u8bc1\u662f\u5426\u6b63\u786e\u3002

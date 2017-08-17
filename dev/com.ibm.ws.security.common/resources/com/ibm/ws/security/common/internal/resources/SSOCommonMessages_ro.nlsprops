@@ -1,0 +1,25 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2017.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security/resources/com/ibm/ws/security/common/internal/resources/SSOCommonMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Application Server Security SSO Common
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+# Message prefix block: CWWKS6101 - CWWKS6200
+SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE=CWWKS6101E: Cererea de autentificare a e\u015fuat deoarece tipul de date din [{0}] revendicate \u00een informa\u0163iile utilizatorului autentificat nu este valid. Revendicarea specificat\u0103 este asociat\u0103 cu atributul de configura\u0163ie [{1}]. 
+SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE.explanation=Informa\u0163iile utilizatorului autentificat au un tip invalid de date de revendicate \u015fi rularea nu poate continua procesul de autentificare.
+SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE.useraction=Verifica\u0163i c\u0103 configura\u0163ia de logare client Social specific\u0103 numele corect al revendic\u0103rii pentru atribut.
+
+SUBJECT_MAPPING_MISSING_ATTR=CWWKS6102E: Cererea de autentificare a e\u015fuat deoarece informa\u0163iile utilizatorului autentificat nu con\u0163in revendicarea [{0}] specificat\u0103 de atributul [{1}].
+SUBJECT_MAPPING_MISSING_ATTR.explanation=Informa\u0163iile utilizatorului autentificat nu con\u0163in revendicarea specificat\u0103 pentru a identifica atributul denumit \u015fi runtime-ul nu poate continua procesul de autentificare.
+SUBJECT_MAPPING_MISSING_ATTR.useraction=Face\u0163i una din urm\u0103toarele. 1)Verifica\u0163i dac\u0103 configura\u0163ia de logare client Social poate specifica o revendicare diferit\u0103 ca atribut 2)Verifica\u0163i c\u0103 furnizorul emite informa\u0163iile utilizatorului autentificat cu revendicarea specificat\u0103.
+
+ERROR_AUTHENTICATE=CWWKS6103E: Nu poate fi creat un subiect de securitate pentru utilizatorul {0}.
+ERROR_AUTHENTICATE.explanation=Utilizatorul nu a putut fi autentificat. 
+ERROR_AUTHENTICATE.useraction=Verifica\u0163i c\u0103 utilizatorul exist\u0103 \u00een registru \u015fi c\u0103 parola sau alte acredit\u0103ri sunt corecte.
