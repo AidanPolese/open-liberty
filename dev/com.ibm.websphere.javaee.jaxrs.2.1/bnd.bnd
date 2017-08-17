@@ -30,4 +30,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.ws.rs-api-2.1-m09.jar;version=file
+	com.ibm.ws.javax.j2ee:javax.ws.rs-api;version=2.1.09

@@ -11,3 +11,16 @@ com.ibm.ws.org.apache.cxf:cxf-rt-management:2.6.2.ibm-s20170216-1739
 com.ibm.ws.org.apache.cxf:cxf-rt-transports-http:2.6.2.ibm-s20170216-1739
 com.ibm.ws.org.apache.cxf:cxf-rt-ws-addr:2.6.2.ibm-s20170216-1739
 com.ibm.ws.org.apache.cxf:cxf-rt-ws-policy:2.6.2.ibm-s20170216-1739
+com.ibm.ws.javax.j2ee:jcdi:1.0
+com.ibm.ws.javax.j2ee:connector:1.6
+com.ibm.ws.javax.j2ee:el:2.2
+com.ibm.ws.javax.j2ee:jaxrs:1.1
+com.ibm.ws.javax.j2ee:jaxws-api:2.2
+com.ibm.ws.javax.j2ee:jms:1.1
+com.ibm.ws.javax.j2ee:json.bind-api:1.0
+com.ibm.ws.javax.j2ee:json-api:1.1
+com.ibm.ws.javax.j2ee:servlet.jsp:2.2
+com.ibm.ws.javax.j2ee:servlet.jsp.resources:2.3
+com.ibm.ws.javax.j2ee:jsp.tld.standard:2.2
+com.ibm.ws.javax.j2ee:jstl:1.2
+com.ibm.ws.javax.j2ee:javax.ws.rs-api:2.1.09
