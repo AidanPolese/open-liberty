@@ -106,7 +106,7 @@ public class SynchronousExecutionImpl<R> implements Execution<R> {
 
         if (this.fallbackPolicy != null) {
             Callable<R> fallback = () -> {
-                return this.fallbackPolicy.getFallback().execute(context);
+                return this.fallbackPolicy.getFallbackFunction().execute(context);
             };
             failsafe = failsafe.withFallback(fallback);
         }

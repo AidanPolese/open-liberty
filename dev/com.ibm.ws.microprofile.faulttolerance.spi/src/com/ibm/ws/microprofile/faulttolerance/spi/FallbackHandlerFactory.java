@@ -10,13 +10,9 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance.spi;
 
-import java.util.concurrent.Callable;
-
-import org.eclipse.microprofile.faulttolerance.ExecutionContext;
+import org.eclipse.microprofile.faulttolerance.FallbackHandler;
 
 @FunctionalInterface
-public interface Execution<R> {
-
-    public R execute(Callable<R> callable, ExecutionContext context);
-
+public interface FallbackHandlerFactory {
+    <R extends FallbackHandler<?>> R newHandler(Class<R> handlerClass);
 }

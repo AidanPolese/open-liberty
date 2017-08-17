@@ -8,15 +8,20 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.microprofile.faulttolerance.spi;
+package com.ibm.ws.microprofile.faulttolerance.cdi.config;
 
-import java.util.concurrent.Callable;
+import java.lang.reflect.Method;
 
-import org.eclipse.microprofile.faulttolerance.ExecutionContext;
+import org.eclipse.microprofile.faulttolerance.Asynchronous;
 
-@FunctionalInterface
-public interface Execution<R> {
+public class AsynchronousConfig extends AbstractAnnotationConfig<Asynchronous> implements Asynchronous {
 
-    public R execute(Callable<R> callable, ExecutionContext context);
+    public AsynchronousConfig(Class<?> annotatedClass, Asynchronous annotation) {
+        super(annotatedClass, annotation);
+    }
+
+    public AsynchronousConfig(Method annotatedMethod, Asynchronous annotation) {
+        super(annotatedMethod, annotation);
+    }
 
 }
