@@ -8,7 +8,6 @@
 # Contributors:
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
-# Configure Repositories
 -include ${workspace}/gradle.properties, ${workspace}/generated.properties
 
 # Maven repository credentials
@@ -16,13 +15,6 @@
 
 # Logging for repository connection when debugging
 #-connection-log: ${.}/connection-log.txt
-
-# Default to upload artifacts with master tagged, but this should be set by
-# including generated.properties above.
-bGitBranch=master
-
-# Defines what tags to attach to artifacts uploaded on Artifactory.
-# matrixParams=\;GIT_BRANCH\=master\;GIT_FEATURE_BRANCH\=${bGitBranch}
 
 -plugin.1.Local: \
     aQute.bnd.repository.maven.provider.MavenBndRepository; \
@@ -34,13 +26,18 @@ bGitBranch=master
     aQute.bnd.repository.maven.provider.MavenBndRepository; \
         name = Release; \
         noupdateOnRelease = true; \
-        local = ${env;LOCAL_REPO_PATH;${build}/release};
+        local = ${build}/${maven.release.name};
 
 -plugin.3.RemotePublic = ${fetch.oss.repository}
 
 -plugin.4.RemoteIBM = ${fetch.oss.ibm.repository}
 
 -plugin.5.RemoteIBMJava = ${fetch.ibm.java.repository}
+
+-plugin.6.RemotePublish = ${push.ibm.repository}
+
+# Remove -SNAPSHOT for releases
+-snapshot: ${if;${is.release};;SNAPSHOT}
 
 # Don't upload sources or javadoc unless bundle overrides
 -maven-release: ${if;${is;${env;PUBLISH_REPO;Release};Artifactory};remote;local}, sources;path=NONE, javadoc;path=NONE
@@ -54,7 +51,7 @@ javac.encoding: UTF-8
 -pedantic: true
 -fixupmessages.missingexport: "Used bundle version * for exported package";is:=error
 
--releaserepo: ${env;PUBLISH_REPO;Release}
+-releaserepo: ${if;${is.remote.publishing};RemotePublish;Release}
 -baselinerepo: Release
 -buildrepo: Local
 -groupid: ${if;${test.project};test;dev}

@@ -31,20 +31,28 @@ Workspace.addGestalt(Constants.GESTALT_BATCH, null)
 ext.bndWorkspace = new Workspace(rootDir, bnd_cnf).setOffline(gradle.startParameter.offline)
 ext.cnf = rootProject.project(bnd_cnf)
 
-/* Set git branch name */
-ext.branchName = System.env.BRANCH_NAME ?: gitBranch()
-if (branchName == '' || branchName == 'HEAD') {
-  // Default to master if something went wrong
-  branchName = 'master'
-}
+/* Set extra properties extension using generated.properties
+ * generated.properties is tailored at Gradle initialization in settings.gradle
+ */
+Properties props = new Properties()
+file("${rootDir}/generated.properties").withInputStream { props.load(it) }
 
-def gitBranch() {
-    def branch = ""
-    def proc = "git rev-parse --abbrev-ref HEAD".execute()
-    proc.in.eachLine { line -> branch = line }
-    proc.err.eachLine { line -> println line }
-    proc.waitFor()
-    branch
+ext.branchName = props.getProperty("version.qualifier")
+ext.matrixParams = props.getProperty("artifactory.matrix.parameters")
+ext.isAutomatedBuild = parseBoolean(props.getProperty("is.automated.build"))
+ext.isContinuousBuild = parseBoolean(props.getProperty("is.continuous.build"))
+ext.isRelease = parseBoolean(props.getProperty('is.release'))
+ext.isRemotePublishing = parseBoolean(props.getProperty('is.remote.publishing'))
+ext.reallyPublishBintray = parseBoolean(props.getProperty('really.publish.bintray'))
+
+// Test results for this run
+ext.testCountTotal = 0
+ext.successfulTestCountTotal = 0
+ext.failedTestCountTotal = 0
+ext.skippedTestCountTotal = 0
+
+private boolean parseBoolean(String value) {
+    return 'on'.equalsIgnoreCase(value) || 'true'.equalsIgnoreCase(value)
 }
 
 /* Configure the subprojects */
