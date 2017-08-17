@@ -29,9 +29,8 @@ public class ExecutionBuilderImpl<T, R> implements ExecutionBuilder<T, R> {
     private CircuitBreakerPolicy circuitBreakerPolicy = null;
     private RetryPolicy retryPolicy = null;
     private BulkheadPolicy bulkheadPolicy = null;
-    private FallbackPolicy<R> fallbackPolicy = null;
+    private FallbackPolicy fallbackPolicy = null;
     private TimeoutPolicy timeoutPolicy = null;
-    private FallbackPolicy<Future<R>> asyncFallbackPolicy;
     private final WSContextService contextService;
     private final PolicyExecutorProvider policyExecutorProvider;
 
@@ -63,15 +62,8 @@ public class ExecutionBuilderImpl<T, R> implements ExecutionBuilder<T, R> {
 
     /** {@inheritDoc} */
     @Override
-    public ExecutionBuilder<T, R> setFallbackPolicy(FallbackPolicy<R> fallback) {
+    public ExecutionBuilder<T, R> setFallbackPolicy(FallbackPolicy fallback) {
         this.fallbackPolicy = fallback;
-        return this;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public ExecutionBuilder<T, R> setAsyncFallbackPolicy(FallbackPolicy<Future<R>> fallback) {
-        this.asyncFallbackPolicy = fallback;
         return this;
     }
 
@@ -93,7 +85,7 @@ public class ExecutionBuilderImpl<T, R> implements ExecutionBuilder<T, R> {
     /** {@inheritDoc} */
     @Override
     public Execution<Future<R>> buildAsync() {
-        Execution<Future<R>> executor = new AsyncExecutionImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.asyncFallbackPolicy, this.contextService, this.policyExecutorProvider);
+        Execution<Future<R>> executor = new AsyncExecutionImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy, this.contextService, this.policyExecutorProvider);
 
         return executor;
     }

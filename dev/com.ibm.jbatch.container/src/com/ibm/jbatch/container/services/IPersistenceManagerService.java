@@ -28,6 +28,8 @@ import javax.batch.runtime.JobExecution;
 import javax.batch.runtime.JobInstance;
 import javax.batch.runtime.StepExecution;
 
+import com.ibm.jbatch.container.exception.ExecutionAssignedToServerException;
+import com.ibm.jbatch.container.exception.JobStoppedException;
 import com.ibm.jbatch.container.execution.impl.RuntimePartitionExecution;
 import com.ibm.jbatch.container.execution.impl.RuntimeSplitFlowExecution;
 import com.ibm.jbatch.container.execution.impl.RuntimeStepExecution;
@@ -223,7 +225,20 @@ public interface IPersistenceManagerService extends IBatchServiceBase {
 
     public JobExecution updateJobExecutionAndInstanceOnStatusChange(long jobExecutionId, BatchStatus newBatchStatus, Date updateTime) throws NoSuchJobExecutionException;
 
-    public JobExecution updateJobExecutionAndInstanceOnStop(long jobExecutionId, Date updateTime) throws NoSuchJobExecutionException;
+    /**
+     * Called if the execution has not yet reached the endpoint.
+     *
+     * Sets the BatchStatus and InstanceState to STOPPED, and sets the lastUpdated time
+     *
+     * @param jobExecutionId
+     * @param updateTime
+     *
+     * @return the updated JobExecution
+     *
+     * @throws NoSuchJobExecutionException if the job execution is not located by the find query
+     * @throws ExecutionAssignedToServerException if the execution has been assigned to a server/endpoint (serverid set)
+     */
+    JobExecution updateJobExecutionAndInstanceNotSetToServerYet(long jobExecutionId, Date updateTime) throws NoSuchJobExecutionException, ExecutionAssignedToServerException;
 
     public JobExecution updateJobExecutionAndInstanceOnEnd(long jobExecutionId, BatchStatus finalBatchStatus, String finalExitStatus,
                                                            Date endTime) throws NoSuchJobExecutionException;
@@ -305,8 +320,12 @@ public interface IPersistenceManagerService extends IBatchServiceBase {
      *
      * @param execId
      *
+     * @throws NoSuchJobExecutionException if this job execution is not located by the find query
+     * @throws JobStoppedException if the specified execution has been stopped at the time this update is attempted
+     *
+     * @return the updated execution
      */
-    public JobExecutionEntity updateJobExecutionServerIdAndRestUrl(long jobExecutionId) throws NoSuchJobExecutionException;
+    public JobExecutionEntity updateJobExecutionServerIdAndRestUrlForStartingJob(long topLevelExecutionId) throws NoSuchJobExecutionException, JobStoppedException;
 
     // STEP THREAD
 
@@ -533,4 +552,5 @@ public interface IPersistenceManagerService extends IBatchServiceBase {
      * @return
      */
     String getPersistenceType();
+
 }

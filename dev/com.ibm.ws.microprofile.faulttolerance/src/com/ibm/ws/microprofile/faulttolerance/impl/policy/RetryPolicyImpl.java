@@ -16,12 +16,16 @@ import java.time.temporal.ChronoUnit;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
 
 /**
  *
  */
 public class RetryPolicyImpl implements RetryPolicy {
+
+    private static final TraceComponent tc = Tr.register(RetryPolicyImpl.class);
 
     private int maxRetries;
     private Duration delay;
@@ -54,7 +58,7 @@ public class RetryPolicyImpl implements RetryPolicy {
             retryOn = (Class<? extends Throwable>[]) Retry.class.getMethod("retryOn").getDefaultValue();
             abortOn = (Class<? extends Throwable>[]) Retry.class.getMethod("abortOn").getDefaultValue();
         } catch (NoSuchMethodException | SecurityException e) {
-            throw new FaultToleranceException(e);
+            throw new FaultToleranceException(Tr.formatMessage(tc, "internal.error.CWMFT4998E", e), e);
         }
     }
 

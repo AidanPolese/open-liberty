@@ -34,18 +34,40 @@ task addRequiredLibraries {
             url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
         }
     }
+	configurations {
+		libs
+	}
 }
 
-task cleanfat() {
+task copyFeatureBundles {
+	shouldRunAfter assemble
+	enabled file("${projectDir}/test-bundles").exists()
+	doLast {
+		file("${buildDir}/buildfiles").eachLine { String line ->
+		    if(!line.contains(project.name + ".jar")) {
+		    	copy {
+					from line
+					into "${buildDir}/autoFVT/publish/files/bundles"
+				}
+		    }
+		}
+	}
+}
+
+task cleanFat() {
+	delete autoFvtDir
+}
+
+task cleanBeforeRun() {
     doLast {
        delete autoFvtDir + "/output/", autoFvtDir + "/results"
     }
 }
 
 task runfat(type: Exec) {
-    dependsOn cleanfat
+    dependsOn cleanBeforeRun
     shouldRunAfter releaseNeeded
-    shouldRunAfter cleanfat
+    shouldRunAfter cleanBeforeRun
     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
         executable "cmd"
         args '/c', 'ant', "-f", autoFvtDir + "/TestBuild.xml"
@@ -69,4 +91,13 @@ task buildandrun {
 
 jar {
 	dependsOn addRequiredLibraries
+}
+
+compileJava {
+	dependsOn cleanFat
+}
+
+autoFVT {
+	dependsOn addRequiredLibraries
+	dependsOn copyFeatureBundles
 }

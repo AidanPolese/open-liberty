@@ -11,24 +11,55 @@
 package com.ibm.ws.microprofile.faulttolerance.impl.policy;
 
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
+import org.eclipse.microprofile.faulttolerance.FallbackHandler;
 
+import com.ibm.ws.microprofile.faulttolerance.spi.FallbackHandlerFactory;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceFunction;
 
-public class FallbackPolicyImpl<R> implements FallbackPolicy<R> {
+public class FallbackPolicyImpl implements FallbackPolicy {
 
-    private FaultToleranceFunction<ExecutionContext, R> fallback;
+    private FaultToleranceFunction<ExecutionContext, ?> fallbackFunction;
+    private Class<? extends FallbackHandler<?>> fallbackHandlerClass;
+    private FallbackHandlerFactory fallbackHandlerFactory;
 
     /** {@inheritDoc} */
     @Override
-    public FaultToleranceFunction<ExecutionContext, R> getFallback() {
-        return fallback;
+    public FaultToleranceFunction<ExecutionContext, ?> getFallbackFunction() {
+        if (this.fallbackFunction == null) {
+            if (this.fallbackHandlerFactory != null && this.fallbackHandlerClass != null) {
+                FallbackHandler<?> handler = this.fallbackHandlerFactory.newHandler(this.fallbackHandlerClass);
+                this.fallbackFunction = (t) -> {
+                    return handler.handle(t);
+                };
+            }
+        }
+        return this.fallbackFunction;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setFallback(FaultToleranceFunction<ExecutionContext, R> fallback) {
-        this.fallback = fallback;
+    public void setFallbackFunction(FaultToleranceFunction<ExecutionContext, ?> fallbackFunction) {
+        this.fallbackFunction = fallbackFunction;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Class<? extends FallbackHandler<?>> getFallbackHandler() {
+        return this.fallbackHandlerClass;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setFallbackHandler(Class<? extends FallbackHandler<?>> fallbackHandlerClass, FallbackHandlerFactory fallbackHandlerFactory) {
+        this.fallbackHandlerClass = fallbackHandlerClass;
+        this.fallbackHandlerFactory = fallbackHandlerFactory;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FallbackHandlerFactory getFallbackHandlerFactory() {
+        return this.fallbackHandlerFactory;
     }
 
 }

@@ -12,8 +12,6 @@ package com.ibm.ws.microprofile.faulttolerance.cdi;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,17 +35,23 @@ import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.microprofile.faulttolerance.cdi.config.AsynchronousConfig;
+import com.ibm.ws.microprofile.faulttolerance.cdi.config.BulkheadConfig;
+import com.ibm.ws.microprofile.faulttolerance.cdi.config.CircuitBreakerConfig;
+import com.ibm.ws.microprofile.faulttolerance.cdi.config.FallbackConfig;
+import com.ibm.ws.microprofile.faulttolerance.cdi.config.RetryConfig;
+import com.ibm.ws.microprofile.faulttolerance.cdi.config.TimeoutConfig;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
+import com.ibm.ws.microprofile.faulttolerance.spi.FallbackHandlerFactory;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceFunction;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
-
-import com.ibm.websphere.ras.Tr;
-import com.ibm.websphere.ras.TraceComponent;
 
 public class FTAnnotationUtils {
 
@@ -146,8 +150,8 @@ public class FTAnnotationUtils {
         return bulkheadPolicy;
     }
 
-    static FallbackPolicy<?> processFallbackAnnotation(Fallback fallback, InvocationContext context, BeanManager beanManager) {
-        FallbackPolicy<?> fallbackPolicy = null;
+    static FallbackPolicy processFallbackAnnotation(Fallback fallback, InvocationContext context, BeanManager beanManager) {
+        FallbackPolicy fallbackPolicy = null;
         Class<? extends FallbackHandler<?>> fallbackClass = fallback.value();
         if (fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) {
             String fallbackMethodName = fallback.fallbackMethod();
@@ -161,21 +165,22 @@ public class FTAnnotationUtils {
                 if (originalReturn.isAssignableFrom(fallbackReturn)) {
                     fallbackPolicy = newFallbackPolicy(beanInstance, fallbackMethod, fallbackReturn);
                 } else {
-                     throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.return.type.not.match.CWMFT5002E=CWMFT5002E", fallbackMethod, originalMethod));
+                    throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.return.type.not.match.CWMFT5002E", fallbackMethod, originalMethod));
                 }
             } catch (NoSuchMethodException e) {
-                throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", beanInstance.getClass(), fallbackMethodName, paramTypes));
+                throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", beanInstance.getClass(), fallbackMethodName, paramTypes), e);
             } catch (SecurityException e) {
-                throw new FaultToleranceException((Tr.formatMessage(tc, "security.exception.acquiring.fallback.method.CWMFT5004E"));
+                throw new FaultToleranceException((Tr.formatMessage(tc, "security.exception.acquiring.fallback.method.CWMFT5004E")), e);
             }
         } else {
-            FallbackHandler<?> fallbackHandler = newNonContextual(fallbackClass, beanManager);
-            fallbackPolicy = newFallbackPolicy(fallbackHandler);
+            FallbackHandlerFactory fallbackHandlerFactory = getFallbackHandlerFactory(beanManager);
+            fallbackPolicy = newFallbackPolicy(fallbackClass, fallbackHandlerFactory);
         }
         return fallbackPolicy;
     }
 
     /**
+     * @param <R>
      * @param <R>
      * @param beanInstance
      * @param fallbackMethod
@@ -183,7 +188,7 @@ public class FTAnnotationUtils {
      * @param fallbackReturn
      * @return
      */
-    private static <R> FallbackPolicy<R> newFallbackPolicy(Object beanInstance, Method fallbackMethod, Class<R> fallbackReturn) {
+    private static <R> FallbackPolicy newFallbackPolicy(Object beanInstance, Method fallbackMethod, Class<R> fallbackReturn) {
         FaultToleranceFunction<ExecutionContext, R> fallbackFunction = new FaultToleranceFunction<ExecutionContext, R>() {
             @Override
             public R execute(ExecutionContext context) throws Exception {
@@ -193,7 +198,7 @@ public class FTAnnotationUtils {
             }
         };
 
-        FallbackPolicy<R> fallbackPolicy = newFallbackPolicy(fallbackFunction);
+        FallbackPolicy fallbackPolicy = newFallbackPolicy(fallbackFunction);
         return fallbackPolicy;
     }
 
@@ -215,16 +220,22 @@ public class FTAnnotationUtils {
         for (Annotation annotation : annotations) {
             if (annotation.annotationType().equals(Asynchronous.class)) {
                 asynchronous = (Asynchronous) annotation;
+                asynchronous = new AsynchronousConfig(targetClass, asynchronous);
             } else if (annotation.annotationType().equals(Retry.class)) {
                 retry = (Retry) annotation;
+                retry = new RetryConfig(targetClass, retry);
             } else if (annotation.annotationType().equals(CircuitBreaker.class)) {
                 circuitBreaker = (CircuitBreaker) annotation;
+                circuitBreaker = new CircuitBreakerConfig(targetClass, circuitBreaker);
             } else if (annotation.annotationType().equals(Timeout.class)) {
                 timeout = (Timeout) annotation;
+                timeout = new TimeoutConfig(targetClass, timeout);
             } else if (annotation.annotationType().equals(Bulkhead.class)) {
                 bulkhead = (Bulkhead) annotation;
+                bulkhead = new BulkheadConfig(targetClass, bulkhead);
             } else if (annotation.annotationType().equals(Fallback.class)) {
                 fallback = (Fallback) annotation;
+                fallback = new FallbackConfig(targetClass, fallback);
             }
         }
 
@@ -235,16 +246,22 @@ public class FTAnnotationUtils {
         for (Annotation annotation : annotations) {
             if (annotation.annotationType().equals(Asynchronous.class)) {
                 asynchronous = (Asynchronous) annotation;
+                asynchronous = new AsynchronousConfig(method, asynchronous);
             } else if (annotation.annotationType().equals(Retry.class)) {
                 retry = (Retry) annotation;
+                retry = new RetryConfig(method, retry);
             } else if (annotation.annotationType().equals(CircuitBreaker.class)) {
                 circuitBreaker = (CircuitBreaker) annotation;
+                circuitBreaker = new CircuitBreakerConfig(method, circuitBreaker);
             } else if (annotation.annotationType().equals(Timeout.class)) {
                 timeout = (Timeout) annotation;
+                timeout = new TimeoutConfig(method, timeout);
             } else if (annotation.annotationType().equals(Bulkhead.class)) {
                 bulkhead = (Bulkhead) annotation;
+                bulkhead = new BulkheadConfig(method, bulkhead);
             } else if (annotation.annotationType().equals(Fallback.class)) {
                 fallback = (Fallback) annotation;
+                fallback = new FallbackConfig(method, fallback);
             }
         }
 
@@ -280,55 +297,40 @@ public class FTAnnotationUtils {
         }
 
         if (fallback != null) {
-            Class<? extends FallbackHandler<?>> fallbackClass = fallback.value();
-            FallbackHandler<?> fallbackHandler = newNonContextual(fallbackClass, beanManager);
-            FallbackPolicy<?> fallbackPolicy = newFallbackPolicy(fallbackHandler);
+            FallbackPolicy fallbackPolicy = processFallbackAnnotation(fallback, context, beanManager);
             policy.setFallbackPolicy(fallbackPolicy);
         }
 
         return policy;
     }
 
-    /**
-     * @param fallbackClass
-     * @param beanManager
-     * @return
-     */
-    private static <F> F newNonContextual(Class<F> fallbackClass, BeanManager beanManager) {
-        AnnotatedType<F> aType = beanManager.createAnnotatedType(fallbackClass);
-        CreationalContext<F> cc = beanManager.createCreationalContext(null);
-        InjectionTargetFactory<F> factory = beanManager.getInjectionTargetFactory(aType);
-        InjectionTarget<F> injectionTarget = factory.createInjectionTarget(null);
-        F instance = injectionTarget.produce(cc);
-        injectionTarget.inject(instance, cc);
-        injectionTarget.postConstruct(instance);
-        return instance;
-    }
-
-    private static <R> FallbackPolicy<R> newFallbackPolicy(FallbackHandler<R> fallbackHandler) {
-        FallbackFunction<R> fallbackCallable = new FallbackFunction<>(fallbackHandler);
-        FallbackPolicy<R> fallbackPolicy = newFallbackPolicy(fallbackCallable);
-        return fallbackPolicy;
-    }
-
-    private static <R> FallbackPolicy<R> newFallbackPolicy(FaultToleranceFunction<ExecutionContext, R> fallbackFunction) {
-        FallbackPolicy<R> fallbackPolicy = FaultToleranceProvider.newFallbackPolicy();
-        fallbackPolicy.setFallback(fallbackFunction);
-        return fallbackPolicy;
-    }
-
-    public static Method getMethod(Class<?> targetClass, String methodName, Class<?>... params) {
-        Method method = AccessController.doPrivileged(new PrivilegedAction<Method>() {
+    private static FallbackHandlerFactory getFallbackHandlerFactory(BeanManager beanManager) {
+        FallbackHandlerFactory factory = new FallbackHandlerFactory() {
             @Override
-            public Method run() {
-                try {
-                    return targetClass.getMethod(methodName, params);
-                } catch (NoSuchMethodException | SecurityException e) {
-                    throw new FaultToleranceException(e);
-                }
+            public <F extends FallbackHandler<?>> F newHandler(Class<F> fallbackClass) {
+                AnnotatedType<F> aType = beanManager.createAnnotatedType(fallbackClass);
+                CreationalContext<F> cc = beanManager.createCreationalContext(null);
+                InjectionTargetFactory<F> factory = beanManager.getInjectionTargetFactory(aType);
+                InjectionTarget<F> injectionTarget = factory.createInjectionTarget(null);
+                F instance = injectionTarget.produce(cc);
+                injectionTarget.inject(instance, cc);
+                injectionTarget.postConstruct(instance);
+                return instance;
             }
-        });
-        return method;
+        };
+        return factory;
+    }
+
+    private static FallbackPolicy newFallbackPolicy(Class<? extends FallbackHandler<?>> fallbackHandlerClass, FallbackHandlerFactory factory) {
+        FallbackPolicy fallbackPolicy = FaultToleranceProvider.newFallbackPolicy();
+        fallbackPolicy.setFallbackHandler(fallbackHandlerClass, factory);
+        return fallbackPolicy;
+    }
+
+    private static FallbackPolicy newFallbackPolicy(FaultToleranceFunction<ExecutionContext, ?> fallbackFunction) {
+        FallbackPolicy fallbackPolicy = FaultToleranceProvider.newFallbackPolicy();
+        fallbackPolicy.setFallbackFunction(fallbackFunction);
+        return fallbackPolicy;
     }
 
     /**
@@ -345,7 +347,7 @@ public class FTAnnotationUtils {
         TimeoutPolicy timeoutPolicy = policies.getTimeoutPolicy();
         CircuitBreakerPolicy circuitBreakerPolicy = policies.getCircuitBreakerPolicy();
         RetryPolicy retryPolicy = policies.getRetryPolicy();
-        FallbackPolicy<R> fallbackPolicy = (FallbackPolicy<R>) policies.getFallbackPolicy();
+        FallbackPolicy fallbackPolicy = policies.getFallbackPolicy();
         BulkheadPolicy bulkheadPolicy = policies.getBulkheadPolicy();
 
         if (timeoutPolicy != null) {

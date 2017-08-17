@@ -1,0 +1,25 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.jsonb.1.0
+
+Require-Capability: osgi.ee; filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+
+Export-Package: \
+   javax.json.bind, \
+   javax.json.bind.adapter, \
+   javax.json.bind.annotation, \
+   javax.json.bind.config, \
+   javax.json.bind.serializer, \
+   javax.json.bind.spi
+
+Include-Resource: \
+  @lib/javax.json.bind-api-1.0.jar!/META-INF/NOTICE
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	lib/javax.json.bind-api-1.0.jar;version=file

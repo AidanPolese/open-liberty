@@ -13,6 +13,7 @@ package web;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletionService;
@@ -31,6 +33,7 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 
 import java.util.concurrent.TimeUnit;
@@ -361,10 +364,12 @@ public class PolicyExecutorServlet extends FATServlet {
 
         // Originally submitted Callable was converted to Runnable, so we cannot directly compare.
         // However, we can run it and verify if it invokes the callable.
-        continueLatch.countDown(); // let the Callable run without blocking
-        assertEquals(1, beginLatch.getCount());
+        continueLatch.countDown(); // let the Callable that we are about to run do so without blocking
+        // We cannot assume the beginLatch count is 1. It could be 2 if we hit a timing window where the polling task removes the first task from the queue but shutdownNow cancels it before it can start.
+        long before = beginLatch.getCount(); 
         canceledFromQueue.iterator().next().run();
-        assertEquals(0, beginLatch.getCount());
+        long after = beginLatch.getCount();
+        assertEquals(before - 1, after);
     }
 
     // Cover basic life cycle of a policy executor service: use it to run a task, shut it down, and await termination.
@@ -803,6 +808,218 @@ public class PolicyExecutorServlet extends FATServlet {
         assertTrue(executor.isTerminated());
     }
 
+    // Attempts submits and cancels concurrently. 3 threads submit 10 tasks each, canceling every other task submitted.
+    @Test
+    public void testConcurrentSubmitAndCancel() throws Exception {
+        final int numThreads = 3;
+        final int numIterations = 5;
+
+        final ExecutorService executor = provider.create("testConcurrentSubmitAndCancel")
+                .maxConcurrency(4)
+                .maxQueueSize(30);
+
+        final AtomicInteger counter = new AtomicInteger();
+        final BlockingQueue<Future<Integer>> futuresToCancel = new LinkedBlockingQueue<Future<Integer>>();
+        final AtomicInteger numSuccessfulCancels = new AtomicInteger();
+
+        Callable<List<Future<Integer>>> multipleSubmitAndCancelTask = new Callable<List<Future<Integer>>>() {
+            @Override
+            public List<Future<Integer>> call() throws Exception {
+                List<Future<Integer>> futures = new ArrayList<Future<Integer>>(numIterations * 2);
+                for (int i = 0; i < numIterations; i++) {
+                    Future<Integer> futureA = executor.submit((Callable<Integer>) new SharedIncrementTask(counter));
+                    futuresToCancel.add(futureA);
+                    futures.add(futureA);
+                    Future<Integer> futureB = executor.submit((Callable<Integer>) new SharedIncrementTask(counter));
+                    futures.add(futureB);
+
+                    Future<?> futureC = futuresToCancel.poll(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                    boolean interruptIfRunning = i % 2 == 0;
+                    if (futureC.cancel(interruptIfRunning))
+                        numSuccessfulCancels.incrementAndGet();
+                }
+                return futures;
+            }
+        };
+
+        List<Callable<List<Future<Integer>>>> testTasks = new ArrayList<Callable<List<Future<Integer>>>>(numThreads);
+        for (int i = 0; i < numThreads; i++)
+            testTasks.add(multipleSubmitAndCancelTask);
+
+        List<Future<Integer>> allFutures = new ArrayList<Future<Integer>>();
+        for (Future<List<Future<Integer>>> result : testThreads.invokeAll(testTasks, TIMEOUT_NS * numThreads * numIterations, TimeUnit.NANOSECONDS))
+            allFutures.addAll(result.get());
+
+        int numCanceled = 0;
+        int numCompleted = 0;
+        HashSet<Integer> resultsOfSuccessfulTasks = new HashSet<Integer>();
+        for (Future<Integer> future : allFutures) {
+            if (future.isCancelled()) {
+                numCanceled++;
+                numCompleted++;
+            } else if (future.isDone()) {
+                assertTrue(resultsOfSuccessfulTasks.add(future.get()));
+                numCompleted++;
+            } else
+                try {
+                    assertTrue(resultsOfSuccessfulTasks.add(future.get(TIMEOUT_NS, TimeUnit.NANOSECONDS)));
+                    numCompleted++;
+                } catch (CancellationException x) {
+                    numCanceled++;
+                }
+        }
+
+        int totalTasksSubmitted = numThreads * numIterations * 2;
+        int numTasksThatStartedRunning = counter.get();
+
+        System.out.println(totalTasksSubmitted + " tasks were submitted, of which " + numCompleted + " completed, of which " + numCanceled + " have canceled futures and " + numSuccessfulCancels + " reported successful cancel.");
+        System.out.println(numTasksThatStartedRunning + " tasks started running.");
+
+        assertEquals(totalTasksSubmitted, numCompleted);
+        assertEquals(numSuccessfulCancels.get(), numCanceled);
+
+        // We requested cancellation of half of the tasks, however, some might have already completed. We can only test that no extras were canceled.
+        assertTrue(numCanceled <= totalTasksSubmitted / 2);
+
+        // Some tasks might start running and later be canceled. The number that starts running must be at least half.
+        assertTrue(numTasksThatStartedRunning >= totalTasksSubmitted / 2);
+
+        // Every task that was not successfully canceled must return a unique result (per the shared counter).
+        assertEquals(totalTasksSubmitted - numSuccessfulCancels.get(), resultsOfSuccessfulTasks.size());
+
+        // Should be nothing left in the queue for the policy executor
+        List<Runnable> tasksCanceledFromQueue = executor.shutdownNow();
+        assertEquals(0, tasksCanceledFromQueue.size());
+    }
+
+    // Attempt submits while concurrently shutting down. Submits should either be accepted
+    // or rejected with the error that indicates the executor has been shut down.
+    @Test
+    public void testConcurrentSubmitAndShutdown() throws Exception {
+        final int numSubmits = 10;
+
+        ExecutorService executor = provider.create("testConcurrentSubmitAndShutdown").maxConcurrency(numSubmits).maxQueueSize(numSubmits);
+
+        CountDownLatch beginLatch = new CountDownLatch(numSubmits);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+        AtomicInteger counter = new AtomicInteger();
+
+        List<Future<Future<Integer>>> ffs = new ArrayList<Future<Future<Integer>>>(numSubmits);
+        for (int i = 0; i < numSubmits; i++)
+            ffs.add(testThreads.submit(new SubmitterTask<Integer>(executor, new SharedIncrementTask(counter), beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(50))));
+
+        // Wait for all of the test threads to position themselves to start submitting to the policy executor
+        beginLatch.await(TIMEOUT_NS * 5, TimeUnit.NANOSECONDS);
+
+        // Let them start submitting tasks to the policy executor
+        continueLatch.countDown();
+        TimeUnit.NANOSECONDS.sleep(100);
+
+        // Shut down the policy executor
+        executor.shutdown();
+
+        assertTrue(executor.awaitTermination(TIMEOUT_NS * 5, TimeUnit.NANOSECONDS));
+        assertTrue(executor.isTerminated());
+
+        int numAccepted = 0;
+        int numRejected = 0;
+        int sum = 0;
+
+        for (Future<Future<Integer>> ff : ffs)
+            try {
+                Future<Integer> future = ff.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                numAccepted++;
+                assertFalse(future.isCancelled());
+                assertTrue(future.isDone());
+                sum += future.get();
+            } catch (ExecutionException x) {
+                if (x.getCause() instanceof RejectedExecutionException) {
+                    numRejected++;
+                    if (!x.getCause().getMessage().contains("CWWKE1202E")) // rejected-due-to-shutdown message
+                        throw x;
+                } else
+                    throw x;
+            }
+ 
+        System.out.println(numAccepted + " accepted, " + numRejected + " rejected");
+        assertEquals(numSubmits, numAccepted + numRejected);
+
+        // tasks can run in any order, so it's more convenient to validate the sum of results rather than individual results
+        int expectedSum = numAccepted * (numAccepted + 1) / 2;
+        assertEquals(expectedSum, sum);
+    }
+
+    // Attempt submits while concurrently shutting down via shutdownNow. Submits should either be accepted
+    // or rejected with the error that indicates the executor has been shut down. Tasks which are submitted
+    // will either be canceled from the queue, canceled while running, or will have completed successfully.
+    @Test
+    public void testConcurrentSubmitAndShutdownNow() throws Exception {
+        final int numSubmits = 10;
+
+        ExecutorService executor = provider.create("testConcurrentSubmitAndShutdownNow").maxConcurrency(numSubmits).maxQueueSize(numSubmits);
+
+        CountDownLatch beginLatch = new CountDownLatch(numSubmits);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+        AtomicInteger counter = new AtomicInteger();
+
+        List<Future<Future<Integer>>> ffs = new ArrayList<Future<Future<Integer>>>(numSubmits);
+        for (int i = 0; i < numSubmits; i++)
+            ffs.add(testThreads.submit(new SubmitterTask<Integer>(executor, new SharedIncrementTask(counter), beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(40))));
+
+        // Wait for all of the test threads to position themselves to start submitting to the policy executor
+        beginLatch.await(TIMEOUT_NS * 5, TimeUnit.NANOSECONDS);
+
+        // Let them start submitting tasks to the policy executor
+        continueLatch.countDown();
+        TimeUnit.NANOSECONDS.sleep(100);
+
+        // Shut down the policy executor
+        List<Runnable> canceledQueuedTasks = executor.shutdownNow();
+
+        assertTrue(executor.awaitTermination(TIMEOUT_NS * 5, TimeUnit.NANOSECONDS));
+        assertTrue(executor.isTerminated());
+
+        int numAccepted = 0;
+        int numAcceptedThenCanceled = 0;
+        int numRejected = 0;
+        int sum = 0;
+
+        for (Future<Future<Integer>> ff : ffs)
+            try {
+                Future<Integer> future = ff.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                assertTrue(future.isDone());
+                numAccepted++;
+                if (future.isCancelled())
+                    numAcceptedThenCanceled++;
+                else
+                    sum += future.get();
+            } catch (ExecutionException x) {
+                if (x.getCause() instanceof RejectedExecutionException) {
+                    numRejected++;
+                    if (!x.getCause().getMessage().contains("CWWKE1202E")) // rejected-due-to-shutdown message
+                        throw x;
+                } else
+                    throw x;
+            }
+
+        int numCanceledFromQueue = canceledQueuedTasks.size();
+
+        System.out.println(numAccepted + " accepted, of which " + numAcceptedThenCanceled + " were canceled due to shutdownNow, with "
+                         + numCanceledFromQueue + " canceled from the queue; " + numRejected + " rejected");
+
+        assertEquals(numSubmits, numAccepted + numRejected);
+
+        assertTrue(numCanceledFromQueue <= numAcceptedThenCanceled);
+
+        int numSuccessful = numAccepted - numAcceptedThenCanceled;
+
+        // tasks can run in any order and some might partially run, so we have little guarantee of the results
+        int expectedSumMax = numAccepted * (numAccepted + 1) / 2;
+        int expectedSumMin = numSuccessful * (numSuccessful + 1) / 2;
+        assertTrue(sum >= expectedSumMin);
+        assertTrue(sum <= expectedSumMax);
+    }
+
     // Attempt shutdown from multiple threads at once. Interrupt most of them and verify that the interrupted
     // shutdown operations fail rather than prematurely returning as successful prior to a successful shutdown.
     @AllowedFFDC("java.lang.InterruptedException") // when shutdown is interrupted
@@ -997,6 +1214,175 @@ public class PolicyExecutorServlet extends FATServlet {
         assertNull(interrupterFuture.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
     }
 
+    // Poll isTerminated until the executor terminates while concurrently awaiting termination from another thread.
+    // The awaitTermination operation should recognize the state transition that is triggered by invocation of the isTerminated method.
+    @Test
+    public void testIsTerminatedWhileAwaitingTermination() throws Exception {
+        ExecutorService executor = provider.create("testIsTerminatedWhileAwaitingTermination").maxConcurrency(3);
+
+        // start a thread to await termination
+        Future<Boolean> terminationFuture = testThreads.submit(new TerminationAwaitTask(executor, TIMEOUT_NS * 5));
+
+        AtomicInteger counter = new AtomicInteger();
+        final int numSubmitted = 15;
+        List<Runnable> tasks = new ArrayList<Runnable>();
+        Future<?>[] futures = new Future<?>[numSubmitted];
+
+        for (int i = 0; i < numSubmitted; i++)
+            tasks.add(new SharedIncrementTask(counter));
+
+        for (int i = 0; i < numSubmitted; i++)
+            futures[i] = executor.submit(tasks.get(i));
+
+        List<Runnable> canceledFromQueue = executor.shutdownNow();
+
+        // poll for termination
+        for (long start = System.nanoTime(); !executor.isTerminated() && System.nanoTime() - start < TIMEOUT_NS * 4; TimeUnit.MILLISECONDS.sleep(100)) ;
+
+        assertTrue(executor.isTerminated());
+
+        // awaitTermination should complete within a reasonable amount of time after isTerminated transitions the state
+        assertTrue(terminationFuture.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+
+        // verify that tasks canceled from the queue report that they are canceled
+        for (Runnable task : canceledFromQueue) {
+            int i = tasks.indexOf(task);
+            assertNotSame("unknown task reported canceled from queue: " + task, -1, i);
+            System.out.println("Task #" + i + " canceled from queue");
+
+            assertTrue("task" + i, futures[i].isCancelled());
+            assertTrue("task" + i, futures[i].isDone());
+        }
+
+        int numCanceled = 0;
+        for (int i = 0; i < numSubmitted; i++) {
+            System.out.println("Future #" + i);
+            if (futures[i].isCancelled()) {
+                numCanceled++;
+                assertTrue(futures[i].isDone());
+            }
+        }
+
+        int numCanceledFromQueue = canceledFromQueue.size();
+
+        int count = counter.get();
+        System.out.println(count + " tasks either completed successfully or were canceled during execution.");
+        System.out.println(numCanceled + " tasks were canceled, either during execution or from the queue.");
+        System.out.println(numCanceledFromQueue + " tasks were canceled from the queue.");
+
+        assertTrue(count + numCanceledFromQueue <= numSubmitted);
+        assertTrue(numCanceledFromQueue <= numCanceled);
+    }
+
+    // Poll isTerminated until the executor (which was previously unused) terminates while concurrently awaiting termination from another thread.
+    // The awaitTermination operation should recognize the state transition that is triggered by invocation of the isTerminated method.
+    @Test
+    public void testIsTerminatedWhileAwaitingTerminationOfUnusedExecutor() throws Exception {
+        ExecutorService executor = provider.create("testIsTerminatedWhileAwaitingTerminationOfUnusedExecutor");
+
+        // start a thread to await termination
+        Future<Boolean> terminationFuture = testThreads.submit(new TerminationAwaitTask(executor, TIMEOUT_NS * 2));
+
+        executor.shutdown();
+
+        // poll for termination
+        for (long start = System.nanoTime(); !executor.isTerminated() && System.nanoTime() - start < TIMEOUT_NS; TimeUnit.MILLISECONDS.sleep(100)) ;
+
+        assertTrue(executor.isTerminated());
+
+        // awaitTermination should complete within a reasonable amount of time after isTerminated transitions the state
+        assertTrue(terminationFuture.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    }
+
+    // Use a policy executor to submit tasks that await termination of itself.
+    // Also uses the executor to submit tasks that shut itself down.
+    @Test
+    public void testSelfAwaitTermination() throws Exception {
+        final ExecutorService executor = provider.create("testSelfAwaitTermination");
+
+        // Submit a task to await termination of the executor
+        Future<Boolean> future1 = executor.submit(new TerminationAwaitTask(executor, TimeUnit.MILLISECONDS.toNanos(50)));
+        assertFalse(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future1.isDone());
+        assertFalse(executor.isShutdown());
+        assertFalse(executor.isTerminated());
+
+        // Submit another task to await termination of same executor.
+        CountDownLatch beginLatch = new CountDownLatch(1);
+        TerminationAwaitTask awaitTerminationTask = new TerminationAwaitTask(executor, TimeUnit.MINUTES.toNanos(20), beginLatch, null, 0);
+        Future<Boolean> future2 = executor.submit(awaitTerminationTask);
+
+        // Wait for the above task to start
+        beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        // and then encourage it to start awaiting termination
+        TimeUnit.MILLISECONDS.sleep(100);
+
+        // Run shutdown and shutdownNow from tasks submitted by the executor.
+        // We must submit both tasks before either issues the shutdown because shutdown prevents subsequent submits.
+        CountDownLatch shutdownLatch = new CountDownLatch(1);
+        CountDownLatch shutdownNowLatch = new CountDownLatch(1);
+        Future<List<Runnable>> shutdownFuture = executor.submit(new ShutdownTask(executor, false, beginLatch/*no-op*/, shutdownLatch, TimeUnit.MINUTES.toNanos(10)));
+        Future<List<Runnable>> shutdownNowFuture = executor.submit(new ShutdownTask(executor, true, beginLatch/*no-op*/, shutdownNowLatch, TimeUnit.MINUTES.toNanos(10)));
+
+        // let the shutdown task run
+        shutdownLatch.countDown();
+        assertNull(shutdownFuture.get());
+        assertTrue(executor.isShutdown());
+
+        try {
+            fail("Task awaiting termination shouldn't stop when executor shuts down via shutdown: " + future2.get(100, TimeUnit.NANOSECONDS));
+        } catch (TimeoutException x) {} // pass
+
+        assertFalse(executor.isTerminated());
+
+        // let the shutdownNow task run
+        shutdownNowLatch.countDown();
+        try {
+            List<Runnable> tasksCanceledFromQueue = shutdownNowFuture.get();
+            assertEquals(0, tasksCanceledFromQueue.size());
+        } catch (CancellationException x) {} // pass if cancelled due to shutdownNow
+
+        try {
+            fail("Task awaiting termination shouldn't succeed when executor shuts down via shutdownNow: " + future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        Throwable x = awaitTerminationTask.errorOnAwait.poll(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        assertNotNull(x);
+        if (!(x instanceof InterruptedException))
+            throw new RuntimeException("Unexpected error from awaitTermination task after shutdownNow. See cause.", x);
+
+        assertTrue(executor.awaitTermination(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(executor.isTerminated());
+    }
+
+    // Submit a task that cancels itself.
+    @Test
+    public void testSelfCancellation() throws Exception {
+        ExecutorService executor = provider.create("testSelfCancellation");
+        final LinkedBlockingQueue<Future<Void>> futures = new LinkedBlockingQueue<Future<Void>>();
+        Future<Void> future = executor.submit(new Callable<Void>() {
+            @Override
+            public Void call() throws InterruptedException {
+                Future<Void> future = futures.poll(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                assertNotNull(future);
+                assertTrue(future.cancel(true));
+
+                // Perform some operation that should be rejected due to interrupting this thread
+                TimeUnit.NANOSECONDS.sleep(TIMEOUT_NS * 2);
+                return null;
+            }
+        });
+
+        futures.add(future);
+
+        try {
+            fail("Future for self cancelling task returned " + future.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        } catch (CancellationException x) {} // pass
+
+        assertTrue(future.isCancelled());
+        assertTrue(future.isDone());
+    }
+
     //Ensure that a policy executor can be obtained from the injected provider
     @Test
     public void testGetPolicyExecutor() throws Exception {
@@ -1141,12 +1527,12 @@ public class PolicyExecutorServlet extends FATServlet {
     //Test that changing the maxConcurrency of one executor does not affect a different executor
     @Test
     public void testMaxConcurrencyMultipleExecutors() throws Exception {
-        PolicyExecutor executor1 = provider.create("testQueueSizeMultipleExecutors-1")
+        PolicyExecutor executor1 = provider.create("testMaxConcurrencyMultipleExecutors-1")
                         .maxConcurrency(1)
                         .maxQueueSize(1)
                         .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
                         .queueFullAction(QueueFullAction.Abort);
-        PolicyExecutor executor2 = provider.create("testQueueSizeMultipleExecutors-2")
+        PolicyExecutor executor2 = provider.create("testMaxConcurrencyMultipleExecutors-2")
                         .maxConcurrency(1)
                         .maxQueueSize(1)
                         .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
@@ -1190,6 +1576,103 @@ public class PolicyExecutorServlet extends FATServlet {
         executor1.shutdownNow();
 
         executor2.shutdownNow();
+    }
+    
+    //Concurrently submit two tasks to change the maxConcurrency.  Ensure that afterward the maxConcurrency
+    //is one of the two submitted values
+    @Test
+    public void testConcurrentUpdateMaxConcurrency() throws Exception {
+        PolicyExecutor executor = provider.create("testConcurrentUpdateMaxConcurrency")
+                .maxConcurrency(2)
+                .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
+                .queueFullAction(QueueFullAction.Abort)
+        		.maxQueueSize(1);
+        
+        CountDownLatch beginLatch = new CountDownLatch(2);
+        CountDownLatch continueLatch1 = new CountDownLatch(1);
+        
+        CountDownLatch continueLatch2 = new CountDownLatch(1);
+        
+        ConfigChangeTask configTask1 = new ConfigChangeTask(executor, beginLatch, continueLatch1, TIMEOUT_NS, "maxConcurrency", "1");
+        ConfigChangeTask configTask2 = new ConfigChangeTask(executor, beginLatch, continueLatch1, TIMEOUT_NS, "maxConcurrency", "3");
+        CountDownTask countDownTask = new CountDownTask(new CountDownLatch(0), continueLatch2, TIMEOUT_NS);
+        
+        //Submit the two tasks that will change the maxConcurrency
+        Future<Boolean> future1 = testThreads.submit(configTask1);
+        Future<Boolean> future2 = testThreads.submit(configTask2);
+        
+        //Wait for the two tasks to begin running
+        assertTrue(beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        //Allow the two tasks to change the maxConcurrency and complete
+        continueLatch1.countDown();
+        assertTrue(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        //Now we need to check that the maxConcurrency is either 1 or 3
+        
+        //This should be the first task run
+        Future<Boolean> future3 = executor.submit(countDownTask);
+        
+        //This task should queue if maxConcurrency=1, otherwise should run
+        Future<Boolean> future4 = executor.submit(countDownTask);
+        Future<Boolean> future5 = null;
+        boolean caughtException = false;
+        //Decrease to 1s so that we aren't waiting too long if maxConcurrency is 1
+        //However this can't be too short that it is hit as tasks queue and run in the case that
+        //maxConcurrency is 3 on a slow machine
+        executor.maxWaitForEnqueue(1000);
+        
+        try {
+            //This task will be aborted if maxConcurrency = 1, otherwise should run
+            future5 = executor.submit(countDownTask);
+        } catch (RejectedExecutionException x) {
+        	caughtException = true; //expected if maxConcurrency = 1
+        }
+        
+        executor.maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1));
+        Future<Boolean> future6 = null;
+        Future<Boolean> future7 = null;
+        if(caughtException == false) {
+        	//We should be at maxConcurrency of 3 here, so this should queue
+        	future6 = executor.submit(countDownTask);
+            //Decrease to 200 ms so that we aren't waiting too long for timeout
+        	executor.maxWaitForEnqueue(200);
+            try {
+                //This task will be aborted if maxConcurrency = 3
+                future7 = executor.submit(countDownTask);
+            } catch (RejectedExecutionException x) {
+            	caughtException = true; //expected if maxConcurrency = 3
+            }
+        }
+        
+        assertTrue("maxConcurrency should be either 1 or 3",caughtException);
+
+        //Let the submitted tasks complete
+        continueLatch2.countDown();
+
+        assertTrue(future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        if(future5 != null)
+        	assertTrue(future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        if(future6 != null)
+        	assertTrue(future6.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+
+        executor.shutdownNow();   
+    }
+    
+    //Test that maxConcurrency cannot be called after shutdown
+    @Test
+    public void testUpdateMaxConcurrencyAfterShutdown() {
+        PolicyExecutor executor = provider.create("updateMaxConcurrencyAfterShutdown")
+                .maxConcurrency(2);
+        
+        executor.shutdown();
+        try {
+        	executor.maxConcurrency(5);
+        	fail("Should not be allowed to change maxConcurrency after calling shutdown");
+        } catch(IllegalStateException e) { //expected
+        }
     }
 
 }

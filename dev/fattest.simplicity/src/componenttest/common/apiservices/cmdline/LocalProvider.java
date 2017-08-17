@@ -27,6 +27,10 @@ public class LocalProvider {
     @SuppressWarnings("unchecked")
     private static final Class c = LocalProvider.class;
 
+    public static boolean rename(RemoteFile oldPath, RemoteFile newPath) throws Exception {
+        return new File(oldPath.toString()).renameTo(new File(newPath.getAbsolutePath()));
+    }
+
     public static boolean copy(RemoteFile sourceFile, RemoteFile destFile,
                                boolean binary) throws Exception {
         File src = new File(sourceFile.getAbsolutePath());

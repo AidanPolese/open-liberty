@@ -14,7 +14,7 @@ import com.ibm.websphere.simplicity.provider.commandline.RemoteCommandFactory;
 import com.ibm.websphere.simplicity.provider.commandline.local.LocalCommandLineProvider;
 import componenttest.common.apiservices.Bootstrap;
 import componenttest.common.apiservices.LocalMachine;
-import componenttest.common.apiservices.cmdline.RXAProvider;
+import componenttest.common.apiservices.cmdline.LocalProvider;
 
 /**
  * This class represents a physical machine. This might be a standalone machine or one that has
@@ -225,7 +225,7 @@ public class Machine {
      */
     public OperatingSystem getOperatingSystem() throws Exception {
         if (this.os == null) {
-            this.os = OperatingSystem.getOperatingSystem(RXAProvider.getOSName(this));
+            this.os = OperatingSystem.getOperatingSystem(LocalProvider.getOSName(this));
         }
         return this.os;
     }
@@ -254,7 +254,7 @@ public class Machine {
                 params = new String[] { "-c", "\"cat", "/proc/version\"" };
             }
             Log.finer(c, method, "Command to get OS version: " + cmd);
-            this.osVersion = RXAProvider.executeCommand(this, cmd, params, null, null).getStdout().trim();
+            this.osVersion = LocalProvider.executeCommand(this, cmd, params, null, null).getStdout().trim();
         }
         Log.exiting(c, method, this.osVersion);
         return this.osVersion;
@@ -278,7 +278,7 @@ public class Machine {
      */
     public String getRawOSName() throws Exception {
         if (this.rawOSName == null) {
-            this.rawOSName = RXAProvider.getOSName(this);
+            this.rawOSName = LocalProvider.getOSName(this);
         }
         return this.rawOSName;
     }
@@ -431,7 +431,7 @@ public class Machine {
         if (OperatingSystem.ISERIES.compareTo(getOperatingSystem()) == 0) {
             cmd = "qsh -c " + cmd;
         }
-        return RXAProvider.executeCommand(this, cmd, parameters, workDir, envVars, timeout);
+        return LocalProvider.executeCommand(this, cmd, parameters, workDir, envVars);
     }
 
     /**
@@ -458,8 +458,8 @@ public class Machine {
      * @return The result of the command
      * @throws ExecutionException
      */
-    public ProgramOutput executeAsync(String cmd, String[] parameters) throws Exception {
-        return RXAProvider.executeAsync(this, cmd, parameters, workDir, null);
+    public AsyncProgramOutput executeAsync(String cmd, String[] parameters) throws Exception {
+        return LocalProvider.executeCommandAsync(this, cmd, parameters, workDir, null);
     }
 
     /**
@@ -492,7 +492,7 @@ public class Machine {
      */
     public RemoteFile getTempDir() throws Exception {
         if (this.tempDir == null) {
-            this.tempDir = RXAProvider.getTempDir(this.getConnInfo());
+            this.tempDir = LocalProvider.getTempDir();
         }
         return new RemoteFile(this, this.tempDir);
     }
@@ -507,7 +507,7 @@ public class Machine {
      * @throws Exception
      */
     public void connect() throws Exception {
-        RXAProvider.connect(this.getConnInfo());
+        //LocalProvider.connect(this.getConnInfo());
     }
 
     /**
@@ -516,7 +516,7 @@ public class Machine {
      * @throws Exception
      */
     public void disconnect() throws Exception {
-        RXAProvider.disconnect(this.getConnInfo());
+        //LocalProvider.disconnect(this.getConnInfo());
     }
 
     /**
@@ -528,7 +528,7 @@ public class Machine {
      * @throws Exception
      */
     public boolean isConnected() throws Exception {
-        return RXAProvider.isConnected(this.getConnInfo());
+        return LocalProvider.isConnected();
     }
 
     /**
@@ -542,7 +542,7 @@ public class Machine {
     }
 
     private void killProcessRemote(int processID, int attemptNumber) throws Exception {
-        ProgramOutput po = RXAProvider.killProcess(this, processID);
+        ProgramOutput po = LocalProvider.killProcess(this, processID);
         Thread.sleep(1000);
         if (processStillRunning(processID)) {
             if (attemptNumber >= 3) {//so has tried 3 times
@@ -563,7 +563,7 @@ public class Machine {
      * @throws Exception
      */
     public Date getDate() throws Exception {
-        return RXAProvider.getDate(this);
+        return LocalProvider.getDate(this);
     }
 
     /**

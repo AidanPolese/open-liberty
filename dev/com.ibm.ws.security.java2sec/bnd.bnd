@@ -68,5 +68,5 @@ instrument.classesExcludes: com/ibm/ws/security/java2sec/resources/*.class
 	org.jmock:jmock-junit4;version=2.5.1, \
 	org.hamcrest:hamcrest-all;version=1.3, \
 	../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar;version=file, \
-	org.objenesis:objenesis;version=1.0, \
+	com.ibm.ws.org.objenesis:objenesis;version=1.0, \
 	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file

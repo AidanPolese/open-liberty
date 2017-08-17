@@ -16,12 +16,16 @@ import java.time.temporal.ChronoUnit;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
 
 /**
  *
  */
 public class CircuitBreakerPolicyImpl implements CircuitBreakerPolicy {
+
+    private static final TraceComponent tc = Tr.register(BulkheadPolicyImpl.class);
 
     private Class<? extends Throwable>[] failOn;
     private Duration delay;
@@ -43,7 +47,7 @@ public class CircuitBreakerPolicyImpl implements CircuitBreakerPolicy {
             failureRatio = (double) CircuitBreaker.class.getMethod("failureRatio").getDefaultValue();
             successThreshold = (int) CircuitBreaker.class.getMethod("successThreshold").getDefaultValue();
         } catch (NoSuchMethodException | SecurityException e) {
-            throw new FaultToleranceException(e);
+            throw new FaultToleranceException(Tr.formatMessage(tc, "internal.error.CWMFT4998E", e), e);
         }
     }
 

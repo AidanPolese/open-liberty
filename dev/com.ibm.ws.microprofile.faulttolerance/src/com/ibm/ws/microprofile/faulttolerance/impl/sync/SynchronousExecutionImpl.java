@@ -38,7 +38,7 @@ import net.jodah.failsafe.SyncFailsafe;
  */
 public class SynchronousExecutionImpl<R> implements Execution<R> {
 
-    private final FallbackPolicy<R> fallbackPolicy;
+    private final FallbackPolicy fallbackPolicy;
     private net.jodah.failsafe.CircuitBreaker circuitBreaker;
     private TaskRunner<Callable<R>, R> taskRunner;
     private final BulkheadPolicy bulkheadPolicy;
@@ -50,7 +50,7 @@ public class SynchronousExecutionImpl<R> implements Execution<R> {
                                     CircuitBreakerPolicy circuitBreakerPolicy,
                                     TimeoutPolicy timeoutPolicy,
                                     BulkheadPolicy bulkheadPolicy,
-                                    FallbackPolicy<R> fallbackPolicy) {
+                                    FallbackPolicy fallbackPolicy) {
 
         this.fallbackPolicy = fallbackPolicy;
         this.bulkheadPolicy = bulkheadPolicy;
@@ -106,7 +106,7 @@ public class SynchronousExecutionImpl<R> implements Execution<R> {
 
         if (this.fallbackPolicy != null) {
             Callable<R> fallback = () -> {
-                return this.fallbackPolicy.getFallback().execute(context);
+                return (R) this.fallbackPolicy.getFallbackFunction().execute(context);
             };
             failsafe = failsafe.withFallback(fallback);
         }

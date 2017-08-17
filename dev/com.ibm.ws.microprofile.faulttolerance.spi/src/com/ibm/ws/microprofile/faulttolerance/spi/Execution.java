@@ -14,9 +14,7 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 
-/**
- *
- */
+@FunctionalInterface
 public interface Execution<R> {
 
     public R execute(Callable<R> callable, ExecutionContext context);
