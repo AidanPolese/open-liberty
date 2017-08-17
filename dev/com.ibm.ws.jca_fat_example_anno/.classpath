@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.websphere.javaee.annotation.1.1"/>
+	<classpathentry kind="src" output="build/bvt/classes" path="bvt/src"/>
+	<classpathentry kind="src" output="build/bvt-resourceadapter/classes" path="bvt-resourceadapter/src"/>
+	<classpathentry kind="src" path="test-applications/ExampleApp/src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.websphere.org.osgi.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.websphere.org.osgi.service.component"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.wsspi.org.osgi.service.component.annotations"/>
+	<classpathentry kind="lib" path="/ant_build/lib/junit.jar"/>
+	<classpathentry kind="lib" path="/ant_build/lib/ws-junit.jar" sourcepath="/ant_junit"/>
+	<classpathentry kind="lib" path="/build.sharedResources/lib/hamcrest-all.jar"/>
+	<classpathentry kind="lib" path="/ant_build/lib/jmock-junit4.jar"/>
+	<classpathentry kind="lib" path="/ant_build/lib/jmock.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.websphere.javaee.servlet.3.0"/>
+	<classpathentry kind="src" path="/com.ibm.websphere.javaee.connector.1.6"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.ws.logging"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.ibm.websphere.javaee.ejb.3.1"/>
+	<classpathentry kind="output" path="build/bvt/classes"/>
+</classpath>

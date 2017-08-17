@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.ibm.ws.jca_bvt.example.anno" default="bvt">
+
+  <!-- ant project and java project names can't match -->
+  <property name="skip.validate.project" value="true" />
+
+  <!-- tell bvt build where to find the bvt application -->
+  <property name="bvt.application.dir" value="${basedir}/test-applications/ExampleApp" />
+
+  <!-- BVT test server: should match the name of the server being published: publish/servers/x -->
+  <property name="profile" value="com.ibm.ws.jca.bvt.example.anno" />
+  
+  <!-- Specify something to wait for before we start running the "client-side" JUnit tests:
+       see: http://was.pok.ibm.com/xwiki/bin/view/Liberty/Test-BVT -->
+  <!-- property name="test.url" value="/hello" / -->
+
+	<property name="unittest.endorsed" value="${basedir}/build/endorsed/lib/"/>
+
+	<target name="pre-build">
+		<path id="annotation.jar.path">
+			<fileset dir="${basedir}/../build.image/wlp/dev/api/spec" includes="com.ibm.websphere.javaee.annotation.1.1_*.jar"/>
+		</path>
+		<property name="annotation.jar" refid="annotation.jar.path"/>
+		<delete dir="${basedir}/build/endorsed/lib"/>
+		<mkdir dir="${basedir}/build/endorsed/lib"/>
+		<copy todir="${basedir}/build/endorsed/lib" file="${annotation.jar}"/>
+	</target>
+
+  <import file="../ant_build/public_imports/standard_imports.xml"/>
+  <import file="../ant_build/public_imports/bvt_imports.xml"/>
+    
+  <target name="pre-package-bvt-bundle">
+    <mkdir dir="${basedir}/build/resourceadapters"/>
+
+    <mkdir dir="${basedir}/build/resourceadapters/ExampleRA/example-ra.jar/com/ibm/example/jca/anno"/>
+    <copy todir="${basedir}/build/resourceadapters/ExampleRA/example-ra.jar/com/ibm/example/jca/anno">
+      <fileset dir="${basedir}/build/bvt-resourceadapter/classes/com/ibm/example/jca/anno">
+        <include name="**" />
+      </fileset>
+    </copy>
+
+  </target>
+  
+  <target name="prestart-server">
+    <var name="test.url" value="/ExampleApp" />
+    <var name="test.app" value="ExampleApp" />
+
+    <!-- Publish the application to the server as a webcontainer application called ExampleApp -->
+
+    <copy todir="${bvt.prop.server.root}/dropins/ExampleApp.ear/META-INF">
+      <fileset dir="${test.application.output.dir}/META-INF">
+        <include name="**" />
+      </fileset>
+    </copy>
+
+    <copy todir="${bvt.prop.server.root}/dropins/ExampleApp.ear/ExampleWeb.war">
+      <fileset dir="${test.application.output.dir}/ExampleWeb.war">
+        <include name="**" />
+      </fileset>
+    </copy>
+
+    <copy todir="${bvt.prop.server.root}/dropins/ExampleApp.ear/ExampleWeb.war/WEB-INF/classes/web/">
+      <fileset dir="${test.application.output.dir}/web">
+        <include name="**/*.class" />
+      </fileset>
+    </copy>
+
+    <!-- Copy resource adapters to server -->
+
+    <copy toDir="${bvt.prop.server.root}/dropins/ExampleRA.rar">
+      <fileset dir="${basedir}/build/resourceadapters/ExampleRA">
+        <include name="**" />
+      </fileset>
+    </copy>
+
+  </target>
+</project>
