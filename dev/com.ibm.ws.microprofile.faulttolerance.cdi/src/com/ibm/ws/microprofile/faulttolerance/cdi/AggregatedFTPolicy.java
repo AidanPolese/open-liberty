@@ -26,7 +26,7 @@ public class AggregatedFTPolicy {
     private CircuitBreakerPolicy circuitBreakerPolicy = null;
     private BulkheadPolicy bulkheadPolicy = null;
     private TimeoutPolicy timeout;
-    private FallbackPolicy<?> fallbackPolicy;
+    private FallbackPolicy fallbackPolicy;
 
     /**
      * @param asynchronous
@@ -98,11 +98,11 @@ public class AggregatedFTPolicy {
         return circuitBreakerPolicy;
     }
 
-    public void setFallbackPolicy(FallbackPolicy<?> fallbackPolicy) {
+    public void setFallbackPolicy(FallbackPolicy fallbackPolicy) {
         this.fallbackPolicy = fallbackPolicy;
     }
 
-    public FallbackPolicy<?> getFallbackPolicy() {
+    public FallbackPolicy getFallbackPolicy() {
         return this.fallbackPolicy;
     }
 

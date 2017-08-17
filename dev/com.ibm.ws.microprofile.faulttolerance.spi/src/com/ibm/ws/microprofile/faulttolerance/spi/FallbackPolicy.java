@@ -13,15 +13,15 @@ package com.ibm.ws.microprofile.faulttolerance.spi;
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.FallbackHandler;
 
-public interface FallbackPolicy<R> {
+public interface FallbackPolicy {
 
-    public FaultToleranceFunction<ExecutionContext, R> getFallbackFunction();
+    public FaultToleranceFunction<ExecutionContext, ?> getFallbackFunction();
 
-    public void setFallbackFunction(FaultToleranceFunction<ExecutionContext, R> fallback);
+    public void setFallbackFunction(FaultToleranceFunction<ExecutionContext, ?> fallback);
 
-    public Class<? extends FallbackHandler<R>> getFallbackHandler();
+    public Class<? extends FallbackHandler<?>> getFallbackHandler();
 
-    public void setFallbackHandler(Class<? extends FallbackHandler<R>> clazz, FallbackHandlerFactory factory);
+    public void setFallbackHandler(Class<? extends FallbackHandler<?>> clazz, FallbackHandlerFactory factory);
 
     public FallbackHandlerFactory getFallbackHandlerFactory();
 }
