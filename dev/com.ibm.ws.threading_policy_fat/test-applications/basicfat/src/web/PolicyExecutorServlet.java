@@ -34,6 +34,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Phaser;
 import java.util.concurrent.RejectedExecutionException;
 
 import java.util.concurrent.TimeUnit;
@@ -59,7 +60,7 @@ import componenttest.app.FATServlet;
 @WebServlet(urlPatterns = "/PolicyExecutorServlet")
 public class PolicyExecutorServlet extends FATServlet {
     // Maximum number of nanoseconds to wait for a task to complete
-    private static final long TIMEOUT_NS = TimeUnit.MINUTES.toNanos(2);
+    static final long TIMEOUT_NS = TimeUnit.MINUTES.toNanos(2);
 
     @Resource(lookup = "test/TestPolicyExecutorProvider")
     private PolicyExecutorProvider provider;
@@ -1020,6 +1021,77 @@ public class PolicyExecutorServlet extends FATServlet {
         assertTrue(sum <= expectedSumMax);
     }
 
+    /**
+     * Submit multiple tasks at once, waiting for some to complete before scheduling another group of tasks, and so forth.
+     */
+    @Test
+    public void testGroupedSubmits() throws Exception {
+        final int groupSize = 8;
+        final int nextGroupOn = 6;
+        final int numGroups = 5;
+
+        ExecutorService executor = provider.create("testGroupedSubmits")
+                .maxConcurrency(4)
+                .maxQueueSize(nextGroupOn)
+                .queueFullAction(QueueFullAction.Abort);
+
+        final CompletionService<Integer> completionSvc = new ExecutorCompletionService<Integer>(executor);
+
+        List<Future<Future<Integer>>> submitFutures = new ArrayList<Future<Future<Integer>>>(groupSize * numGroups);
+
+        AtomicInteger counter = new AtomicInteger();
+        Phaser allTasksReady = new Phaser(groupSize);
+
+        for (int g = 0; g < numGroups; g++) {
+            // launch separate threads to submit these tasks all at once (via the allTaskReady phaser)
+            for (int i = 0; i < groupSize; i++) {
+                CompletionServiceTask<Integer> completionSvcTask = new CompletionServiceTask<Integer>(completionSvc, new SharedIncrementTask(counter), allTasksReady);
+                submitFutures.add(testThreads.submit(completionSvcTask));
+            }
+
+            // Await successful completion of 'nextGroupOn' number of tasks before submitting more
+            for (int i = 0; i < nextGroupOn; i++) {
+                Future<Integer> future = completionSvc.poll(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                assertNotNull(future);
+            }
+        }
+
+        List<Future<Integer>> completedFutures = new ArrayList<Future<Integer>>(groupSize * numGroups);
+        int numRejected = 0;
+        List<Integer> results = new ArrayList<Integer>(groupSize * numGroups);
+        int sum = 0;
+
+        // Wait for all remaining tasks to finish and compute totals
+        for (Future<Future<Integer>> ff : submitFutures)
+            try {
+                Future<Integer> future = ff.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                assertNotNull(completedFutures.add(future));
+                int result = future.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+                assertTrue(results.add(result));
+                sum += result;
+            } catch (ExecutionException x) {
+                if (x.getCause() instanceof RejectedExecutionException)
+                    numRejected++;
+                else
+                    throw x;
+            }
+
+        System.out.println(completedFutures.size() + " completed successfully: " + completedFutures);
+        System.out.println(numRejected + " were rejected");
+
+        int count = counter.get();
+        assertEquals(count, results.size());
+        assertEquals(count * (count + 1) / 2, sum);
+
+        int maxRejected = (groupSize - nextGroupOn) * numGroups;
+        assertTrue("maximum of " + maxRejected + " tasks submits should be rejected", numRejected <= maxRejected);
+
+        executor.shutdown();
+
+        // with no tasks remaining, should be immediately considered terminated
+        assertTrue(executor.isTerminated());
+    }
+
     // Attempt shutdown from multiple threads at once. Interrupt most of them and verify that the interrupted
     // shutdown operations fail rather than prematurely returning as successful prior to a successful shutdown.
     @AllowedFFDC("java.lang.InterruptedException") // when shutdown is interrupted
@@ -1292,6 +1364,33 @@ public class PolicyExecutorServlet extends FATServlet {
 
         // awaitTermination should complete within a reasonable amount of time after isTerminated transitions the state
         assertTrue(terminationFuture.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    }
+
+    // Submit a task to the policy executor that breaks itself into multiple tasks that also submit to the policy executor,
+    // which in turn break themselves down and submit multiple tasks to the policy executor, and so forth.
+    @Test
+    public void testMultipleLayersOfSubmits() throws Exception {
+        // TODO add min/coreConcurrency when we have it
+        ExecutorService executor = provider.create("testMultipleLayersOfSubmits")
+                .maxConcurrency(8) // just enough to ensure we can cover a 16 element array
+                .maxQueueSize(8) // also just enough to ensure we can cover a 16 element array
+                .queueFullAction(QueueFullAction.Abort); // TODO in the future, this sort of test is a good candidate for CallerRuns
+
+        int[] array1 = new int[] { 2, 9, 3, 5, 1, 3, 6, 3, 8, 0, 4, 4, 10, 2, 1, 8 };
+        System.out.println("Searching of minimum of " + Arrays.toString(array1));
+        assertEquals(Integer.valueOf(0), executor.submit(new MinFinderTask(array1, executor)).get(TIMEOUT_NS * 5, TimeUnit.NANOSECONDS));
+
+        int[] array2 = new int[] { 5, 20, 18, 73, 64, 102, 6, 62, 12, 31 };
+        System.out.println("Searching of minimum of " + Arrays.toString(array2));
+        assertEquals(Integer.valueOf(5), executor.submit(new MinFinderTask(array2, executor)).get(TIMEOUT_NS * 5, TimeUnit.NANOSECONDS));
+
+        int[] array3 = new int[] { 80, 20, 40, 70, 30, 90, 90, 50, 10 };
+        System.out.println("Searching of minimum of " + Arrays.toString(array3));
+        assertEquals(Integer.valueOf(10), executor.submit(new MinFinderTask(array3, executor)).get(TIMEOUT_NS * 5, TimeUnit.NANOSECONDS));
+
+        // expect immediate termination after shutdown with no tasks remaining
+        executor.shutdown();
+        assertTrue(executor.awaitTermination(0, TimeUnit.NANOSECONDS));
     }
 
     // Use a policy executor to submit tasks that await termination of itself.
