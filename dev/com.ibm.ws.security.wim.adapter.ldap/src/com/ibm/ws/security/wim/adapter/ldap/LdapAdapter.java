@@ -193,6 +193,8 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
 
     private static final Object DATA_TYPE_BOOLEAN = "Boolean";
 
+    private static final Object DATA_TYPE_LONG = "Long";
+
     /**
      * Change Handler
      */
@@ -1209,6 +1211,9 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
 
         if (ldapAttr != null) {
             syntax = ldapAttr.getSyntax();
+            if (tc.isEventEnabled()) {
+                Tr.event(tc, "ldapAttr " + ldapAttr + " syntax is " + syntax);
+            }
         }
 
         try {
@@ -1343,7 +1348,25 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
                         entity.set(propName, Boolean.parseBoolean(ldapValue.toString()));
                     }
                 }
+            } else if (DATA_TYPE_LONG.equals(dataType)) { //PI05723
+                if (isMany) {
+                    for (NamingEnumeration enu = attr.getAll(); enu.hasMoreElements();) {
+                        Object ldapValue = enu.nextElement();
+                        if (ldapValue != null) {
+                            ((List) entity.get(propName)).add(new Long(ldapValue.toString()));
+                        }
+                    }
+                } else {
+                    Object ldapValue = attr.get();
+                    if (ldapValue != null) {
+                        entity.set(propName, Long.parseLong(ldapValue.toString()));
+                    }
+                }
             } else {
+                if (tc.isEventEnabled()) {
+                    Tr.event(tc, "Datatype for " + propName + " was null, process without casting");
+                }
+
                 if (isMany) {
                     for (NamingEnumeration<?> enu = attr.getAll(); enu.hasMoreElements();) {
                         Object ldapValue = enu.nextElement();
@@ -1359,14 +1382,23 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
                 }
             }
         } catch (NamingException e) {
+            if (tc.isEventEnabled()) {
+                Tr.event(tc, "Unexpected on " + propName + " with dataType " + dataType, e);
+            }
             throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION, Tr.formatMessage(
                                                                                           tc,
                                                                                           WIMMessageKey.NAMING_EXCEPTION,
                                                                                           WIMMessageHelper.generateMsgParms(e.toString(true))));
         } catch (ClassCastException ce) {
+            if (tc.isEventEnabled()) {
+                Tr.event(tc, "Failed to cast property " + propName + " to " + dataType, ce);
+            }
             if (tc.isErrorEnabled())
                 Tr.error(tc, WIMMessageKey.INVALID_PROPERTY_DATA_TYPE, WIMMessageHelper.generateMsgParms(propName));
         } catch (ArrayStoreException ae) {
+            if (tc.isEventEnabled()) {
+                Tr.event(tc, "Unexpected on " + propName + " with dataType " + dataType, ae);
+            }
             if (tc.isErrorEnabled())
                 Tr.error(tc, WIMMessageKey.INVALID_PROPERTY_DATA_TYPE, WIMMessageHelper.generateMsgParms(propName));
         }
