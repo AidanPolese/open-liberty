@@ -18,11 +18,11 @@ import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 public class CircuitBreakerConfig extends AbstractAnnotationConfig<CircuitBreaker> implements CircuitBreaker {
 
     public CircuitBreakerConfig(Class<?> annotatedClass, CircuitBreaker annotation) {
-        super(annotatedClass, annotation);
+        super(annotatedClass, annotation, CircuitBreaker.class);
     }
 
     public CircuitBreakerConfig(Method annotatedMethod, CircuitBreaker annotation) {
-        super(annotatedMethod, annotation);
+        super(annotatedMethod, annotation, CircuitBreaker.class);
     }
 
     /** {@inheritDoc} */

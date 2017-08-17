@@ -18,11 +18,11 @@ import org.eclipse.microprofile.faulttolerance.FallbackHandler;
 public class FallbackConfig extends AbstractAnnotationConfig<Fallback> implements Fallback {
 
     public FallbackConfig(Class<?> annotatedClass, Fallback annotation) {
-        super(annotatedClass, annotation);
+        super(annotatedClass, annotation, Fallback.class);
     }
 
     public FallbackConfig(Method annotatedMethod, Fallback annotation) {
-        super(annotatedMethod, annotation);
+        super(annotatedMethod, annotation, Fallback.class);
     }
 
     /** {@inheritDoc} */

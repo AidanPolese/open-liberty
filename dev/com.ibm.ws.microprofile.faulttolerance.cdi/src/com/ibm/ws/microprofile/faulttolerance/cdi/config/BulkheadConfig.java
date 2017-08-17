@@ -17,11 +17,11 @@ import org.eclipse.microprofile.faulttolerance.Bulkhead;
 public class BulkheadConfig extends AbstractAnnotationConfig<Bulkhead> implements Bulkhead {
 
     public BulkheadConfig(Class<?> annotatedClass, Bulkhead annotation) {
-        super(annotatedClass, annotation);
+        super(annotatedClass, annotation, Bulkhead.class);
     }
 
     public BulkheadConfig(Method annotatedMethod, Bulkhead annotation) {
-        super(annotatedMethod, annotation);
+        super(annotatedMethod, annotation, Bulkhead.class);
     }
 
     /** {@inheritDoc} */

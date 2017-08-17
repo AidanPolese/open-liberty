@@ -28,16 +28,16 @@ public class AbstractAnnotationConfig<T extends Annotation> implements Annotatio
     private final Class<T> annotationType;
     private final HashMap<String, Object> config = new HashMap<>();
 
-    public AbstractAnnotationConfig(Class<?> annotatedClass, T annotation) {
-        this(getPropertyKeyPrefix(annotatedClass), annotation);
+    public AbstractAnnotationConfig(Class<?> annotatedClass, T annotation, Class<T> annotationType) {
+        this(getPropertyKeyPrefix(annotatedClass), annotation, annotationType);
     }
 
-    public AbstractAnnotationConfig(Method annotatedMethod, T annotation) {
-        this(getPropertyKeyPrefix(annotatedMethod), annotation);
+    public AbstractAnnotationConfig(Method annotatedMethod, T annotation, Class<T> annotationType) {
+        this(getPropertyKeyPrefix(annotatedMethod), annotation, annotationType);
     }
 
-    private AbstractAnnotationConfig(String prefix, T annotation) {
-        this.annotationType = (Class<T>) annotation.getClass();
+    private AbstractAnnotationConfig(String prefix, T annotation, Class<T> annotationType) {
+        this.annotationType = annotationType;
 
         Method[] methods = this.annotationType.getDeclaredMethods();
         for (Method method : methods) {
