@@ -301,10 +301,10 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         }
 
         final long pollInterval = TimeUnit.MILLISECONDS.toNanos(500);
-        timeout = unit.toNanos(timeout);
+        timeout = timeout < 0 ? 0 : unit.toNanos(timeout);
         boolean firstTime = true;
 
-        for (long waitTime = System.nanoTime() - start, remaining = timeout; //
+        for (long waitTime = System.nanoTime() - start, remaining; //
                         (remaining = timeout - waitTime) > 0 || firstTime; //
                         waitTime = System.nanoTime() - start) {
             if (firstTime)
