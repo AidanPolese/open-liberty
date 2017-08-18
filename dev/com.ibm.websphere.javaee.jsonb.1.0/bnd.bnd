@@ -14,7 +14,7 @@ Export-Package: \
    javax.json.bind.spi
 
 Include-Resource: \
-  @${repo;com.ibm.ws.javax.j2ee:json.bind-api;1.0}!/META-INF/NOTICE
+  @${repo;javax.json.bind-api;0.2.99.b01}!/META-INF/NOTICE
 
 instrument.disabled: true
 
@@ -22,4 +22,4 @@ publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \
-	com.ibm.ws.javax.j2ee:json.bind-api;version=1.0
+	javax.json.bind-api;version=0.2.99.b01

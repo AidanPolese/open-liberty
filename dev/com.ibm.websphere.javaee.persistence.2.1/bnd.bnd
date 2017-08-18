@@ -31,7 +31,7 @@ Private-Package: com.ibm.ws.javaee.persistence.internal, \
    org.apache.geronimo.specs.jpa
 
 Include-Resource: \
-   @${repo;om.ibm.ws.javax.j2ee:persistence;2.1}!/about.html
+   @${repo;com.ibm.ws.javax.j2ee:persistence;2.1}!/about.html
 
 instrument.disabled: true
 
