@@ -11,6 +11,7 @@ U.S. Copyright Office.
  */
 package com.ibm.ws.jaxrs20.client.configuration;
 
+import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.List;
@@ -28,6 +29,7 @@ import com.ibm.websphere.ras.ProtectedString;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
+import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.jaxrs20.client.JAXRSClientConstants;
 
 /**
@@ -113,6 +115,7 @@ public class LibertyJaxRsClientProxyInterceptor extends AbstractPhaseInterceptor
 
     }
 
+    @FFDCIgnore({ NoSuchMethodError.class, Exception.class, Exception.class })
     private void configClientProxy(HTTPConduit httpConduit, String host, String port, String type, String proxyAuthType,
                                    String proxyAuthUser, ProtectedString proxyAuthPW) {
 
@@ -139,13 +142,38 @@ public class LibertyJaxRsClientProxyInterceptor extends AbstractPhaseInterceptor
             }
         }
 
-        httpConduit.getClient().setProxyServer(host);
-        httpConduit.getClient().setProxyServerPort(iPort);
-        httpConduit.getClient().setProxyServerType(proxyServerType);
-
         HTTPClientPolicy clientPolicy = new HTTPClientPolicy();
         clientPolicy.setProxyServer(host);
-        clientPolicy.setProxyServerPort(iPort);
+        try {
+            clientPolicy.setProxyServerPort(iPort);
+        } catch (NoSuchMethodError e) {
+            // This is a weird error seen in jaxrs-2.1 where autoboxing doesn't work -
+            // even changing iPort from int to Integer doesn't work - both result in a
+            // NoSuchMethodError.  Using reflection does seem to work.  My guess is that
+            // there is some JDK bug related to the calling source being compiled for
+            // Java 7 compliance but the called source being compiled for Java 8.
+            // In any case, until we can work out the issue with the JDK or refactor
+            // this code to exist separately in 2.0 and 2.1, we'll leave this little
+            // hack in place to ensure that we can run in both environments.
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "configClientProxy - NSME setProxyServerPort - retrying...", e);
+            }
+            Method m;
+            try {
+                m = HTTPClientPolicy.class.getMethod("setProxyServerPort", int.class);
+                m.invoke(clientPolicy, iPort);
+            } catch (Exception ex) {
+                try {
+                    m = HTTPClientPolicy.class.getMethod("setProxyServerPort", Integer.class);
+                    m.invoke(clientPolicy, new Integer(iPort));
+                } catch (Exception ex2) {
+                    Method[] methods = HTTPClientPolicy.class.getMethods();
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                        Tr.debug(tc, "configClientProxy - NSME setProxyServerPort(int OR Integer) - retrying...", new Object[] { methods, ex2 });
+                    }
+                }
+            }
+        }
         clientPolicy.setProxyServerType(proxyServerType);
         httpConduit.setClient(clientPolicy);
 
