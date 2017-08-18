@@ -1906,7 +1906,7 @@ public class PolicyExecutorServlet extends FATServlet {
     	CountDownLatch beginLatch2 = new CountDownLatch(2);
     	CountDownLatch continueLatch2 = new CountDownLatch(1);
     	CountDownTask task2 = new CountDownTask(beginLatch2, continueLatch2, TimeUnit.HOURS.toNanos(1));
-    	CountDownLatch beginLatch3 = new CountDownLatch(2);
+    	CountDownLatch beginLatch3 = new CountDownLatch(1);
     	CountDownTask task3 = new CountDownTask(beginLatch3, continueLatch2, TimeUnit.HOURS.toNanos(1));
 
     	//These tasks should start and block on continueLatch
@@ -1945,8 +1945,23 @@ public class PolicyExecutorServlet extends FATServlet {
     	
     	//change the maxConcurrency to 3- ensure that both tasks don't run since that would 
     	//be more than maxConcurrency
-    	//Waiting 1 second here- should be long enough that if both tasks were going to run, they would have done so
-    	assertFalse(beginLatch3.await(TimeUnit.SECONDS.toNanos(1),TimeUnit.NANOSECONDS));
+    	executor.maxConcurrency(3);
+    	//Wait for 1 of the tasks to start
+    	assertTrue(beginLatch3.await(TIMEOUT_NS,TimeUnit.NANOSECONDS));
+    	
+    	//Now we should have three tasks running and one queued, change maxQueueSize to 1 and test that the next
+    	//task submitted is rejected
+    	
+    	executor.maxQueueSize(1).maxWaitForEnqueue(500);
+    	
+        try {
+            //This task should be aborted since the queue should be full, triggering a RejectedExecutionException
+            executor.submit(task3);
+
+            fail("The task should have thrown a RejectedExecutionException when attempting to queue since the queue should be full");
+
+        } catch (RejectedExecutionException x) {
+        } //expected
     	
     	//Let the rest of the tasks run
     	continueLatch2.countDown();
