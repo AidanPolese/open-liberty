@@ -72,10 +72,7 @@ task createJSONForPublicArtifacts {
         file("${rootDir}/generated.properties").withInputStream { props.load(it) }
 
         // Create JSON descriptor
-        // Filename contains re-arranged buildLabel, ex: 201708101600
-        def (rl, yr, mo, d, t) = [(isRelease ? 'r' : 'n'), bnd.buildLabel.substring(0,4), bnd.buildLabel.substring(4,6), bnd.buildLabel.substring(6,8), bnd.buildLabel.substring(8)]
-        String jsonFilename = "${rl}-${yr}-${mo}-${d}-${t}.json"
-        File json = new File("${rootDir}/${jsonFilename}")
+        File json = new File("${rootDir}/info.json")
         json.createNewFile()
 
         String testsPassed = "0"
@@ -99,7 +96,7 @@ task createJSONForPublicArtifacts {
     "driver_location":"${parent.zipOpenLiberty.archiveName}"
 }"""
 
-        props.setProperty('zipopenliberty.archivename', parent.zipOpenLiberty.archiveName)
+        props.setProperty('zipopenliberty.archivename', parent.zipOpenLiberty.archivePath.toString())
         props.setProperty('bintray.json', json.toString())
 
         // Store props to file
@@ -118,25 +115,30 @@ task publishPublicArtifacts {
 
         String bintrayUser = props.getProperty("bintray.user")
         String bintrayApikey = props.getProperty("bintray.apikey")
-        String bintrayREST = "https://api.bintray.com/content/" + props.getProperty("bintray.organization") + "/" + props.getProperty("bintray.repository") + "/" + props.getProperty("bintray.package") + "/${bnd.buildLabel}/${bnd.buildLabel}/"
 
-        // Upload
+        // Re-arrange buildLabel, ex: 201708101600 to 2017-08-10_1600
+        def (yr, mo, d, t) = [bnd.buildLabel.substring(0,4), bnd.buildLabel.substring(4,6), bnd.buildLabel.substring(6,8), bnd.buildLabel.substring(8)]
+        String version = "${yr}-${mo}-${d}_${t}"
+        String packageName = (isRelease ? props.getProperty("bintray.package.release") : props.getProperty("bintray.package.nightly"))
+        String bintrayREST = "https://api.bintray.com/content/" + props.getProperty("bintray.organization") + "/" + props.getProperty("bintray.repository") + "/${packageName}/${version}/"
+
+        // Upload files using REST API https://api.bintray.com/content/:subject/:repo/:package/:version/${packageName}/${version}
         exec {
-            commandLine "curl", "-T", props.getProperty("bintray.json"), "-u${bintrayUser}:${bintrayApikey}", bintrayREST
+            commandLine "curl", "-T", props.getProperty("bintray.json"), "-u${bintrayUser}:${bintrayApikey}", bintrayREST + "${packageName}/${version}/"
         }
         exec {
-            commandLine "curl", "-T", props.getProperty("bintray.gradle.log"), "-u${bintrayUser}:${bintrayApikey}", bintrayREST
+            commandLine "curl", "-T", props.getProperty("bintray.gradle.log"), "-u${bintrayUser}:${bintrayApikey}", bintrayREST + "${packageName}/${version}/"
         }
         exec {
-            commandLine "curl", "-T", props.getProperty("junit.report.zip"), "-u${bintrayUser}:${bintrayApikey}", bintrayREST
+            commandLine "curl", "-T", props.getProperty("junit.report.zip"), "-u${bintrayUser}:${bintrayApikey}", bintrayREST + "${packageName}/${version}/"
         }
         if (isContinuousBuild) {
             exec {
-                commandLine "curl", "-T", props.getProperty("zipopenliberty.archivename"), "-u${bintrayUser}:${bintrayApikey}", bintrayREST
+                commandLine "curl", "-T", props.getProperty("zipopenliberty.archivename"), "-u${bintrayUser}:${bintrayApikey}", bintrayREST + "${packageName}/${version}/"
             }
         }
 
-        // Publish
+        // Publish using REST API https://api.bintray.com/content/:subject/:repo/:package/:version/publish
         exec {
             commandLine "curl", "-X", "POST", "-u${bintrayUser}:${bintrayApikey}", bintrayREST + "publish"
         }
