@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans;
 
 import java.util.concurrent.CompletableFuture;
@@ -8,6 +18,9 @@ import javax.enterprise.context.RequestScoped;
 
 import org.eclipse.microprofile.faulttolerance.Asynchronous;
 import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+
+import com.ibm.ws.microprofile.faulttolerance_fat.cdi.BulkheadServlet;
 
 @RequestScoped
 @Asynchronous
@@ -17,8 +30,7 @@ public class BulkheadBean {
     private final AtomicInteger connectATokens = new AtomicInteger(0);
     private final AtomicInteger connectBTokens = new AtomicInteger(0);
 
-    //disabled until api is updated
-    //@Bulkhead(value = 2, waitingTaskQueue = 2)
+    @Bulkhead(value = 2, waitingTaskQueue = 2)
     public Future<Boolean> connectA(String data) throws InterruptedException {
         System.out.println("connectA starting " + data);
         int token = connectATokens.incrementAndGet();
@@ -34,9 +46,8 @@ public class BulkheadBean {
         }
     }
 
-    @Timeout(2000)
-    //disabled until api is updated
-    //@Bulkhead(value = 2, waitingTaskQueue = 2)
+    @Timeout(BulkheadServlet.TIMEOUT)
+    @Bulkhead(value = 2, waitingTaskQueue = 2)
     public Future<Boolean> connectB(String data) throws InterruptedException {
         System.out.println("connectB starting " + data);
         int token = connectBTokens.incrementAndGet();
@@ -48,7 +59,7 @@ public class BulkheadBean {
             System.out.println("connectB counter " + counter);
             if (counter <= 2) {
                 System.out.println("connectB sleeping " + data);
-                Thread.sleep(5000);
+                Thread.sleep(BulkheadServlet.WORK_TIME);
                 return CompletableFuture.completedFuture(Boolean.FALSE);
             } else {
                 return CompletableFuture.completedFuture(Boolean.TRUE);
