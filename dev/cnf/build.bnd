@@ -98,37 +98,37 @@ javac.bootclasspath.java7:
 javac.bootclasspath.java8:
 
 javac.bootclasspath.1.4: \
-    com.ibm.ws.internal.prereq.java:java.rt;version=1.6.0;boot=true
+    com.ibm.ws.internal.prereq.java:java.rt;strategy=exact;version=1.6.0;boot=true
 
 javac.bootclasspath.1.6: \
-    com.ibm.ws.internal.prereq.java:java.rt;version=1.6.0;boot=true
+    com.ibm.ws.internal.prereq.java:java.rt;strategy=exact;version=1.6.0;boot=true
 
 javac.bootclasspath.1.7: \
-    com.ibm.ws.internal.prereq.java:java.ibmcertpathfw;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjcefw;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjgssfw;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjgssprovider;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjssefw;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmorbapi;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmpkcs;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.jlm;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.math;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.rt;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.vm;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.xml;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.xmldsigfw;version=1.7.0;boot=true
+    com.ibm.ws.internal.prereq.java:java.ibmcertpathfw;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjcefw;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjgssfw;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjgssprovider;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjssefw;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmorbapi;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmpkcs;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.jlm;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.math;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.rt;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.vm;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.xml;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.xmldsigfw;strategy=exact;version=1.7.0;boot=true
 
 javac.bootclasspath.1.8: \
-    com.ibm.ws.internal.prereq.java:java.ibmcertpathfw;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjcefw;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjgssfw;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjgssprovider;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjssefw;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmorbapi;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmpkcs;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.jlm;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.math;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.rt;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.vm;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.xml;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.xmldsigfw;version=1.8.0;boot=true
+    com.ibm.ws.internal.prereq.java:java.ibmcertpathfw;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjcefw;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjgssfw;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjgssprovider;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjssefw;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmorbapi;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmpkcs;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.jlm;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.math;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.rt;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.vm;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.xml;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.xmldsigfw;strategy=exact;version=1.8.0;boot=true
