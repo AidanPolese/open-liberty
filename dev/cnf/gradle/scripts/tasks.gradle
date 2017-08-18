@@ -15,10 +15,11 @@ subprojects {
   plugins.apply 'java'
   plugins.apply 'maven-publish'
 
-  project.version = bnd('Bundle-Version', '1.0') + '.' + branchName + (true ? '-SNAPSHOT' : '')
-  
   def props = new Properties()
-  file("../generated.properties").withInputStream { props.load(it) }
+  file("${rootDir}/generated.properties").withInputStream { props.load(it) }
+
+  /* Project artifacts are versioned by bnd Bundle-Version attribute, with the qualifier being current Git branch. */
+  project.version = bnd('Bundle-Version', '1.0' + '.' + branchName + (isRelease ? '' : '-SNAPSHOT'))
 
   repositories {
 	  maven {
@@ -49,34 +50,34 @@ dependencies {
   binaries "com.ibm.ws.javax.j2ee:servlet:3.1"
 }
 
-task copyMavenLibs(type: Copy) {
-	into "${rootDir}/cnf/mavenlibs"
-	from configurations.binaries
-}
+  task copyMavenLibs(type: Copy) {
+    into "${rootDir}/cnf/mavenlibs"
+    from configurations.binaries
+  }
 
   publishing {
     repositories {
+      if (isRemotePublishing) {
 
-      if (System.env.PUBLISH_REPO == 'Artifactory') {
-        // Remote
         maven {
           if(project.version.endsWith('-SNAPSHOT')) {
-             url "${artifactorySnapshotUrl}${matrixParams}"
+              url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty${matrixParams}")
           } else {
-              url "${artifactoryReleaseUrl}${matrixParams}"
+              url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty${matrixParams}")
           }
           credentials {
-            username props.getProperty("artifactory.download.user")
-            password props.getProperty("artifactory.download.token")
+              username props.getProperty("artifactory.download.user")
+              password props.getProperty("artifactory.download.token")
           }
         }
-      } else {
-        // Local
-        maven {
-           url uri("${rootDir}/cnf/${mavenLocalPath}")
-        }
-      }
 
+      } else {
+
+        maven {
+          url uri("${rootDir}/cnf/${mavenLocalPath}")
+        }
+
+      }
     }
   }
 
@@ -575,6 +576,14 @@ task copyMavenLibs(type: Copy) {
       ant.portSelector(engineName: "${bnd.buildEngineName}", location: "${projectDir}/bin_test/unittestports.properties", jvmarg: 'jvmargPorts')
       jvmArgs ant.jvmargPorts.tokenize()
     }
+    afterSuite { desc, result ->
+      if (!desc.parent) { // will match the outermost suite
+        testCountTotal = testCountTotal + result.testCount
+        successfulTestCountTotal = successfulTestCountTotal + result.successfulTestCount
+        failedTestCountTotal = failedTestCountTotal + result.failedTestCount
+        skippedTestCountTotal = skippedTestCountTotal + result.skippedTestCount
+      }
+    }
   }
 
   publishing {
@@ -592,6 +601,21 @@ task copyMavenLibs(type: Copy) {
     }
   }
   
+}
+
+task testResults {
+  dependsOn subprojects.test
+
+  doLast {
+    def props = new Properties()
+    file("${rootDir}/generated.properties").withInputStream { props.load(it) }
+
+    props.setProperty('tests.total.count', testCountTotal.toString())
+    props.setProperty('tests.total.successful', successfulTestCountTotal.toString())
+
+    File propsFile = new File('generated.properties')
+    props.store(propsFile.newWriter(), null)
+  }
 }
 
 task zipOpenLiberty(type: Zip) {

@@ -48,6 +48,8 @@ import org.osgi.service.component.annotations.Reference;
 
 import com.ibm.jbatch.container.RASConstants;
 import com.ibm.jbatch.container.exception.BatchIllegalJobStatusTransitionException;
+import com.ibm.jbatch.container.exception.ExecutionAssignedToServerException;
+import com.ibm.jbatch.container.exception.JobStoppedException;
 import com.ibm.jbatch.container.exception.PersistenceException;
 import com.ibm.jbatch.container.execution.impl.RuntimeStepExecution;
 import com.ibm.jbatch.container.persistence.jpa.JobExecutionEntity;
@@ -383,7 +385,8 @@ public class MemoryPersistenceManagerImpl extends AbstractPersistenceManager imp
     }
 
     @Override
-    public JobExecution updateJobExecutionAndInstanceOnStop(long jobExecutionId, Date lastUpdatedTime) throws NoSuchJobExecutionException {
+    public JobExecution updateJobExecutionAndInstanceNotSetToServerYet(long jobExecutionId,
+                                                                       Date lastUpdatedTime) throws NoSuchJobExecutionException, ExecutionAssignedToServerException {
         JobExecutionEntity exec = getJobExecution(jobExecutionId);
         if (exec.getServerId().equals("")) {
 
@@ -399,8 +402,8 @@ public class MemoryPersistenceManagerImpl extends AbstractPersistenceManager imp
             exec.getJobInstance().setLastUpdatedTime(lastUpdatedTime);
             exec.setLastUpdatedTime(lastUpdatedTime);
         } else {
-            String msg = "No job execution found for id = " + jobExecutionId + " and serverId = \"\"";
-            throw new NoSuchJobExecutionException(msg);
+            String msg = "Job execution " + jobExecutionId + " is in an invalid state";
+            throw new ExecutionAssignedToServerException(msg);
         }
         return exec;
     }
@@ -564,14 +567,14 @@ public class MemoryPersistenceManagerImpl extends AbstractPersistenceManager imp
     }
 
     @Override
-    public JobExecutionEntity updateJobExecutionServerIdAndRestUrl(long jobExecutionId) throws NoSuchJobExecutionException {
+    public JobExecutionEntity updateJobExecutionServerIdAndRestUrlForStartingJob(long jobExecutionId) throws NoSuchJobExecutionException, JobStoppedException {
         JobExecutionEntity exec = getJobExecution(jobExecutionId);
         if (exec.getBatchStatus() == BatchStatus.STARTING) {
             exec.setServerId(batchLocationService.getServerId());
             exec.setRestUrl(batchLocationService.getBatchRestUrl());
         } else {
             String msg = "No job execution found for id = " + jobExecutionId + " and status = STARTING";
-            throw new NoSuchJobExecutionException(msg);
+            throw new JobStoppedException(msg);
         }
         return exec;
     }

@@ -15,15 +15,11 @@ disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 # in specific bnd files if required
 bFullVersion=${version;==;${bVersion}}.${libertyBundleMicroVersion}
 
-# Default bGitBranch to master, but this should be determined by the gradle build
-# and included here.
-bGitBranch=master
-
 # This sets the version to the major.minor.micro of the provided bundle version,
 # and uses the RTC buildLabel for the qualifier. The "generated.build.id" file
 # (included above) will predefine the Build-Identifier header.
 Build-Identifier: SNAPSHOT-${now}
-Bundle-Version: ${bFullVersion}.${bGitBranch}-SNAPSHOT
+Bundle-Version: ${bFullVersion}.${version.qualifier}-SNAPSHOT
 
 -donotcopy      = (CVS|.svn|.+.bak|nlsbuild|~.+|.+~|.jazzignore)
 -removeheaders  = Include-Resource, Ignore-Package, TODAY, DSTAMP, TSTAMP, Bnd-LastModified

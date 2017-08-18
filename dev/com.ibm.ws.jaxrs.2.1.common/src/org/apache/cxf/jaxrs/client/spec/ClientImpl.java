@@ -42,6 +42,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.apache.cxf.common.util.SystemPropertyAction;
 import org.apache.cxf.configuration.jsse.TLSClientParameters;
+import org.apache.cxf.jaxrs.client.AbstractClient;
 import org.apache.cxf.jaxrs.client.ClientConfiguration;
 import org.apache.cxf.jaxrs.client.ClientProviderFactory;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean;
@@ -340,7 +341,11 @@ public class ClientImpl implements Client {
                 || tlsParams.getHostnameVerifier() != null) {
                 clientCfg.getHttpConduit().setTlsClientParameters(tlsParams);
             }
-
+            // Executor for the asynchronous calls
+            Object executorServiceProp = configProps.get(AbstractClient.EXECUTOR_SERVICE_PROPERTY);
+            if (executorServiceProp != null) {
+                clientCfg.getResponseContext().put(AbstractClient.EXECUTOR_SERVICE_PROPERTY, executorServiceProp);
+            }
             setConnectionProperties(configProps, clientCfg);
             // CXF Features
             for (org.apache.cxf.feature.Feature cxfFeature : cxfFeatures) {

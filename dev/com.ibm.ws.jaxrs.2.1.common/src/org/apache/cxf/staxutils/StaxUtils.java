@@ -250,7 +250,7 @@ public final class StaxUtils {
      * against the different parsers, this can be used to condition code. Note: if you've got
      * Woodstox in the class path without being the default provider, this will return
      * the wrong answer.
-     * 
+     *
      * @return true if Woodstox is in the classpath.
      */
     public static boolean isWoodstox() {
@@ -461,7 +461,7 @@ public final class StaxUtils {
     }
 
     public static boolean toNextText(DepthXMLStreamReader reader) {
-        if (reader.getEventType() == XMLStreamReader.CHARACTERS) {
+        if (reader.getEventType() == XMLStreamConstants.CHARACTERS) {
             return true;
         }
 
@@ -469,7 +469,7 @@ public final class StaxUtils {
             int depth = reader.getDepth();
             int event = reader.getEventType();
             while (reader.getDepth() >= depth && reader.hasNext()) {
-                if (event == XMLStreamReader.CHARACTERS && reader.getDepth() == depth + 1) {
+                if (event == XMLStreamConstants.CHARACTERS && reader.getDepth() == depth + 1) {
                     return true;
                 }
                 event = reader.next();
@@ -484,9 +484,9 @@ public final class StaxUtils {
         try {
             // advance to first tag.
             int x = reader.getEventType();
-            while (x != XMLStreamReader.START_ELEMENT
-                   && x != XMLStreamReader.END_ELEMENT
-                   && reader.hasNext()) {
+            while (x != XMLStreamConstants.START_ELEMENT
+                && x != XMLStreamConstants.END_ELEMENT
+                && reader.hasNext()) {
                 x = reader.next();
             }
         } catch (XMLStreamException e) {
@@ -500,7 +500,7 @@ public final class StaxUtils {
             int depth = reader.getDepth();
             int event = reader.getEventType();
             while (reader.getDepth() >= depth && reader.hasNext()) {
-                if (event == XMLStreamReader.START_ELEMENT && reader.getName().equals(endTag)
+                if (event == XMLStreamConstants.START_ELEMENT && reader.getName().equals(endTag)
                     && reader.getDepth() == depth + 1) {
                     return true;
                 }
@@ -539,8 +539,8 @@ public final class StaxUtils {
      * returned if the end of the stream is reached.
      */
     public static boolean skipToStartOfElement(XMLStreamReader in) throws XMLStreamException {
-        for (int code = in.getEventType(); code != XMLStreamReader.END_DOCUMENT; code = in.next()) {
-            if (code == XMLStreamReader.START_ELEMENT) {
+        for (int code = in.getEventType(); code != XMLStreamConstants.END_DOCUMENT; code = in.next()) {
+            if (code == XMLStreamConstants.START_ELEMENT) {
                 return true;
             }
         }
@@ -548,19 +548,19 @@ public final class StaxUtils {
     }
 
     public static boolean toNextElement(DepthXMLStreamReader dr) {
-        if (dr.getEventType() == XMLStreamReader.START_ELEMENT) {
+        if (dr.getEventType() == XMLStreamConstants.START_ELEMENT) {
             return true;
         }
-        if (dr.getEventType() == XMLStreamReader.END_ELEMENT) {
+        if (dr.getEventType() == XMLStreamConstants.END_ELEMENT) {
             return false;
         }
         try {
             int depth = dr.getDepth();
 
             for (int event = dr.getEventType(); dr.getDepth() >= depth && dr.hasNext(); event = dr.next()) {
-                if (event == XMLStreamReader.START_ELEMENT && dr.getDepth() == depth + 1) {
+                if (event == XMLStreamConstants.START_ELEMENT && dr.getDepth() == depth + 1) {
                     return true;
-                } else if (event == XMLStreamReader.END_ELEMENT) {
+                } else if (event == XMLStreamConstants.END_ELEMENT) {
                     depth--;
                 }
             }
@@ -572,8 +572,8 @@ public final class StaxUtils {
     }
 
     public static boolean skipToStartOfElement(DepthXMLStreamReader in) throws XMLStreamException {
-        for (int code = in.getEventType(); code != XMLStreamReader.END_DOCUMENT; code = in.next()) {
-            if (code == XMLStreamReader.START_ELEMENT) {
+        for (int code = in.getEventType(); code != XMLStreamConstants.END_DOCUMENT; code = in.next()) {
+            if (code == XMLStreamConstants.START_ELEMENT) {
                 return true;
             }
         }
@@ -715,9 +715,7 @@ public final class StaxUtils {
 
     /**
      * Copies the reader to the writer. The start and end document methods must
-     * be handled on the writer manually. TODO: if the namespace on the reader
-     * has been declared previously to where we are in the stream, this probably
-     * won't work.
+     * be handled on the writer manually.
      *
      * @param reader
      * @param writer
@@ -743,58 +741,58 @@ public final class StaxUtils {
 
         while (reader.hasNext()) {
             switch (event) {
-                case XMLStreamConstants.START_ELEMENT:
-                    read++;
-                    if (isThreshold) {
-                        elementCount++;
+            case XMLStreamConstants.START_ELEMENT:
+                read++;
+                if (isThreshold) {
+                    elementCount++;
 
-                        if (innerElementLevelThreshold != -1
-                            && read >= innerElementLevelThreshold) {
-                            throw new DepthExceededStaxException("reach the innerElementLevelThreshold:"
-                                                                 + innerElementLevelThreshold);
-                        }
-                        if (innerElementCountThreshold != -1
-                            && elementCount >= innerElementCountThreshold) {
-                            throw new DepthExceededStaxException("reach the innerElementCountThreshold:"
-                                                                 + innerElementCountThreshold);
-                        }
-                        countStack.push(elementCount);
-                        elementCount = 0;
+                    if (innerElementLevelThreshold != -1
+                        && read >= innerElementLevelThreshold) {
+                        throw new DepthExceededStaxException("reach the innerElementLevelThreshold:"
+                                                   + innerElementLevelThreshold);
                     }
-                    writeStartElement(reader, writer);
-                    break;
-                case XMLStreamConstants.END_ELEMENT:
-                    if (read > 0) {
-                        writer.writeEndElement();
+                    if (innerElementCountThreshold != -1
+                        && elementCount >= innerElementCountThreshold) {
+                        throw new DepthExceededStaxException("reach the innerElementCountThreshold:"
+                                                   + innerElementCountThreshold);
                     }
-                    read--;
-                    if (read < 0 && fragment) {
-                        return;
-                    }
-                    if (isThreshold && !countStack.isEmpty()) {
-                        elementCount = countStack.pop();
-                    }
-                    break;
-                case XMLStreamConstants.CHARACTERS:
-                case XMLStreamConstants.SPACE:
-                    String s = reader.getText();
-                    if (s != null) {
-                        writer.writeCharacters(s);
-                    }
-                    break;
-                case XMLStreamConstants.COMMENT:
-                    writer.writeComment(reader.getText());
-                    break;
-                case XMLStreamConstants.CDATA:
-                    writer.writeCData(reader.getText());
-                    break;
-                case XMLStreamConstants.START_DOCUMENT:
-                case XMLStreamConstants.END_DOCUMENT:
-                case XMLStreamConstants.ATTRIBUTE:
-                case XMLStreamConstants.NAMESPACE:
-                    break;
-                default:
-                    break;
+                    countStack.push(elementCount);
+                    elementCount = 0;
+                }
+                writeStartElement(reader, writer);
+                break;
+            case XMLStreamConstants.END_ELEMENT:
+                if (read > 0) {
+                    writer.writeEndElement();
+                }
+                read--;
+                if (read < 0 && fragment) {
+                    return;
+                }
+                if (isThreshold && !countStack.isEmpty()) {
+                    elementCount = countStack.pop();
+                }
+                break;
+            case XMLStreamConstants.CHARACTERS:
+            case XMLStreamConstants.SPACE:
+                String s = reader.getText();
+                if (s != null) {
+                    writer.writeCharacters(s);
+                }
+                break;
+            case XMLStreamConstants.COMMENT:
+                writer.writeComment(reader.getText());
+                break;
+            case XMLStreamConstants.CDATA:
+                writer.writeCData(reader.getText());
+                break;
+            case XMLStreamConstants.START_DOCUMENT:
+            case XMLStreamConstants.END_DOCUMENT:
+            case XMLStreamConstants.ATTRIBUTE:
+            case XMLStreamConstants.NAMESPACE:
+                break;
+            default:
+                break;
             }
             event = reader.next();
         }
@@ -1276,92 +1274,92 @@ public final class StaxUtils {
         int elementCount = 0;
         while (reader.hasNext()) {
             switch (event) {
-                case XMLStreamConstants.START_ELEMENT: {
-                    elementCount++;
-                    Element e;
-                    if (!StringUtils.isEmpty(reader.getPrefix())) {
-                        e = doc.createElementNS(reader.getNamespaceURI(),
-                                                reader.getPrefix() + ":" + reader.getLocalName());
-                    } else {
-                        e = doc.createElementNS(reader.getNamespaceURI(), reader.getLocalName());
-                    }
-                    e = (Element) parent.appendChild(e);
-                    recordLoc = addLocation(doc, e, reader, recordLoc);
-
-                    for (int ns = 0; ns < reader.getNamespaceCount(); ns++) {
-                        String uri = reader.getNamespaceURI(ns);
-                        String prefix = reader.getNamespacePrefix(ns);
-
-                        declare(e, uri, prefix);
-                    }
-
-                    for (int att = 0; att < reader.getAttributeCount(); att++) {
-                        String name = reader.getAttributeLocalName(att);
-                        String prefix = reader.getAttributePrefix(att);
-                        if (prefix != null && prefix.length() > 0) {
-                            name = prefix + ":" + name;
-                        }
-
-                        Attr attr = doc.createAttributeNS(reader.getAttributeNamespace(att), name);
-                        attr.setValue(reader.getAttributeValue(att));
-                        e.setAttributeNode(attr);
-                    }
-
-                    if (repairing && !isDeclared(e, reader.getNamespaceURI(), reader.getPrefix())) {
-                        declare(e, reader.getNamespaceURI(), reader.getPrefix());
-                    }
-                    stack.push(parent);
-                    if (isThreshold && innerElementLevelThreshold != -1
-                        && stack.size() >= innerElementLevelThreshold) {
-                        throw new DepthExceededStaxException("reach the innerElementLevelThreshold:"
-                                                             + innerElementLevelThreshold);
-                    }
-                    if (isThreshold && innerElementCountThreshold != -1
-                        && elementCount >= innerElementCountThreshold) {
-                        throw new DepthExceededStaxException("reach the innerElementCountThreshold:"
-                                                             + innerElementCountThreshold);
-                    }
-                    parent = e;
-                    break;
+            case XMLStreamConstants.START_ELEMENT: {
+                elementCount++;
+                Element e;
+                if (!StringUtils.isEmpty(reader.getPrefix())) {
+                    e = doc.createElementNS(reader.getNamespaceURI(),
+                                            reader.getPrefix() + ":" + reader.getLocalName());
+                } else {
+                    e = doc.createElementNS(reader.getNamespaceURI(), reader.getLocalName());
                 }
-                case XMLStreamConstants.END_ELEMENT:
-                    if (stack.isEmpty()) {
-                        return;
+                e = (Element)parent.appendChild(e);
+                recordLoc = addLocation(doc, e, reader, recordLoc);
+
+                for (int ns = 0; ns < reader.getNamespaceCount(); ns++) {
+                    String uri = reader.getNamespaceURI(ns);
+                    String prefix = reader.getNamespacePrefix(ns);
+
+                    declare(e, uri, prefix);
+                }
+
+                for (int att = 0; att < reader.getAttributeCount(); att++) {
+                    String name = reader.getAttributeLocalName(att);
+                    String prefix = reader.getAttributePrefix(att);
+                    if (prefix != null && prefix.length() > 0) {
+                        name = prefix + ":" + name;
                     }
-                    parent = stack.pop();
-                    if (parent instanceof Document) {
-                        return;
-                    }
-                    break;
-                case XMLStreamConstants.NAMESPACE:
-                    break;
-                case XMLStreamConstants.ATTRIBUTE:
-                    break;
-                case XMLStreamConstants.CHARACTERS:
-                    if (parent != null) {
-                        recordLoc = addLocation(doc,
-                                                parent.appendChild(doc.createTextNode(reader.getText())),
-                                                reader, recordLoc);
-                    }
-                    break;
-                case XMLStreamConstants.COMMENT:
-                    if (parent != null) {
-                        parent.appendChild(doc.createComment(reader.getText()));
-                    }
-                    break;
-                case XMLStreamConstants.CDATA:
+
+                    Attr attr = doc.createAttributeNS(reader.getAttributeNamespace(att), name);
+                    attr.setValue(reader.getAttributeValue(att));
+                    e.setAttributeNode(attr);
+                }
+
+                if (repairing && !isDeclared(e, reader.getNamespaceURI(), reader.getPrefix())) {
+                    declare(e, reader.getNamespaceURI(), reader.getPrefix());
+                }
+                stack.push(parent);
+                if (isThreshold && innerElementLevelThreshold != -1
+                    && stack.size() >= innerElementLevelThreshold) {
+                    throw new DepthExceededStaxException("reach the innerElementLevelThreshold:"
+                                               + innerElementLevelThreshold);
+                }
+                if (isThreshold && innerElementCountThreshold != -1
+                    && elementCount >= innerElementCountThreshold) {
+                    throw new DepthExceededStaxException("reach the innerElementCountThreshold:"
+                                               + innerElementCountThreshold);
+                }
+                parent = e;
+                break;
+            }
+            case XMLStreamConstants.END_ELEMENT:
+                if (stack.isEmpty()) {
+                    return;
+                }
+                parent = stack.pop();
+                if (parent instanceof Document) {
+                    return;
+                }
+                break;
+            case XMLStreamConstants.NAMESPACE:
+                break;
+            case XMLStreamConstants.ATTRIBUTE:
+                break;
+            case XMLStreamConstants.CHARACTERS:
+                if (parent != null) {
                     recordLoc = addLocation(doc,
-                                            parent.appendChild(doc.createCDATASection(reader.getText())),
+                                            parent.appendChild(doc.createTextNode(reader.getText())),
                                             reader, recordLoc);
-                    break;
-                case XMLStreamConstants.PROCESSING_INSTRUCTION:
-                    parent.appendChild(doc.createProcessingInstruction(reader.getPITarget(), reader.getPIData()));
-                    break;
-                case XMLStreamConstants.ENTITY_REFERENCE:
-                    parent.appendChild(doc.createProcessingInstruction(reader.getPITarget(), reader.getPIData()));
-                    break;
-                default:
-                    break;
+                }
+                break;
+            case XMLStreamConstants.COMMENT:
+                if (parent != null) {
+                    parent.appendChild(doc.createComment(reader.getText()));
+                }
+                break;
+            case XMLStreamConstants.CDATA:
+                recordLoc = addLocation(doc,
+                                        parent.appendChild(doc.createCDATASection(reader.getText())),
+                                        reader, recordLoc);
+                break;
+            case XMLStreamConstants.PROCESSING_INSTRUCTION:
+                parent.appendChild(doc.createProcessingInstruction(reader.getPITarget(), reader.getPIData()));
+                break;
+            case XMLStreamConstants.ENTITY_REFERENCE:
+                parent.appendChild(doc.createProcessingInstruction(reader.getPITarget(), reader.getPIData()));
+                break;
+            default:
+                break;
             }
 
             if (reader.hasNext()) {
@@ -1432,94 +1430,94 @@ public final class StaxUtils {
         int event = reader.getEventType();
         while (reader.hasNext()) {
             switch (event) {
-                case XMLStreamConstants.START_ELEMENT: {
-                    context.incrementCount();
-                    Element e;
-                    if (!StringUtils.isEmpty(reader.getPrefix())) {
-                        e = doc.createElementNS(reader.getNamespaceURI(),
-                                                reader.getPrefix() + ":" + reader.getLocalName());
-                    } else {
-                        e = doc.createElementNS(reader.getNamespaceURI(), reader.getLocalName());
-                    }
-                    e = (Element) parent.appendChild(e);
-                    if (context.isRecordLoc()) {
-                        context.setRecordLoc(addLocation(doc, e, reader.getLocation(), context.isRecordLoc()));
-                    }
-
-                    for (int ns = 0; ns < reader.getNamespaceCount(); ns++) {
-                        String uri = reader.getNamespaceURI(ns);
-                        String prefix = reader.getNamespacePrefix(ns);
-
-                        declare(e, uri, prefix);
-                    }
-
-                    for (int att = 0; att < reader.getAttributeCount(); att++) {
-                        String name = reader.getAttributeLocalName(att);
-                        String prefix = reader.getAttributePrefix(att);
-                        if (prefix != null && prefix.length() > 0) {
-                            name = prefix + ":" + name;
-                        }
-
-                        Attr attr = doc.createAttributeNS(reader.getAttributeNamespace(att), name);
-                        attr.setValue(reader.getAttributeValue(att));
-                        e.setAttributeNode(attr);
-                    }
-
-                    if (context.isRepairing() && !isDeclared(e, reader.getNamespaceURI(), reader.getPrefix())) {
-                        declare(e, reader.getNamespaceURI(), reader.getPrefix());
-                    }
-                    context.pushToStack(parent);
-                    if (context.isThreshold() && innerElementLevelThreshold != -1
-                        && context.getStackSize() >= innerElementLevelThreshold) {
-                        throw new DepthExceededStaxException("reach the innerElementLevelThreshold:"
-                                                             + innerElementLevelThreshold);
-                    }
-                    if (context.isThreshold() && innerElementCountThreshold != -1
-                        && context.getCount() >= innerElementCountThreshold) {
-                        throw new DepthExceededStaxException("reach the innerElementCountThreshold:"
-                                                             + innerElementCountThreshold);
-                    }
-                    parent = e;
-                    break;
+            case XMLStreamConstants.START_ELEMENT: {
+                context.incrementCount();
+                Element e;
+                if (!StringUtils.isEmpty(reader.getPrefix())) {
+                    e = doc.createElementNS(reader.getNamespaceURI(),
+                                            reader.getPrefix() + ":" + reader.getLocalName());
+                } else {
+                    e = doc.createElementNS(reader.getNamespaceURI(), reader.getLocalName());
                 }
-                case XMLStreamConstants.END_ELEMENT:
-                    if (context.isStackEmpty()) {
-                        return;
+                e = (Element)parent.appendChild(e);
+                if (context.isRecordLoc()) {
+                    context.setRecordLoc(addLocation(doc, e, reader.getLocation(), context.isRecordLoc()));
+                }
+
+                for (int ns = 0; ns < reader.getNamespaceCount(); ns++) {
+                    String uri = reader.getNamespaceURI(ns);
+                    String prefix = reader.getNamespacePrefix(ns);
+
+                    declare(e, uri, prefix);
+                }
+
+                for (int att = 0; att < reader.getAttributeCount(); att++) {
+                    String name = reader.getAttributeLocalName(att);
+                    String prefix = reader.getAttributePrefix(att);
+                    if (prefix != null && prefix.length() > 0) {
+                        name = prefix + ":" + name;
                     }
-                    parent = context.popFromStack();
-                    if (parent instanceof Document) {
-                        return;
-                    }
-                    break;
-                case XMLStreamConstants.NAMESPACE:
-                    break;
-                case XMLStreamConstants.ATTRIBUTE:
-                    break;
-                case XMLStreamConstants.CHARACTERS:
-                    if (parent != null) {
-                        context.setRecordLoc(addLocation(doc,
-                                                         parent.appendChild(doc.createTextNode(reader.getText())),
-                                                         reader.getLocation(), context.isRecordLoc()));
-                    }
-                    break;
-                case XMLStreamConstants.COMMENT:
-                    if (parent != null) {
-                        parent.appendChild(doc.createComment(reader.getText()));
-                    }
-                    break;
-                case XMLStreamConstants.CDATA:
+
+                    Attr attr = doc.createAttributeNS(reader.getAttributeNamespace(att), name);
+                    attr.setValue(reader.getAttributeValue(att));
+                    e.setAttributeNode(attr);
+                }
+
+                if (context.isRepairing() && !isDeclared(e, reader.getNamespaceURI(), reader.getPrefix())) {
+                    declare(e, reader.getNamespaceURI(), reader.getPrefix());
+                }
+                context.pushToStack(parent);
+                if (context.isThreshold() && innerElementLevelThreshold != -1
+                    && context.getStackSize() >= innerElementLevelThreshold) {
+                    throw new DepthExceededStaxException("reach the innerElementLevelThreshold:"
+                                               + innerElementLevelThreshold);
+                }
+                if (context.isThreshold() && innerElementCountThreshold != -1
+                    && context.getCount() >= innerElementCountThreshold) {
+                    throw new DepthExceededStaxException("reach the innerElementCountThreshold:"
+                                               + innerElementCountThreshold);
+                }
+                parent = e;
+                break;
+            }
+            case XMLStreamConstants.END_ELEMENT:
+                if (context.isStackEmpty()) {
+                    return;
+                }
+                parent = context.popFromStack();
+                if (parent instanceof Document) {
+                    return;
+                }
+                break;
+            case XMLStreamConstants.NAMESPACE:
+                break;
+            case XMLStreamConstants.ATTRIBUTE:
+                break;
+            case XMLStreamConstants.CHARACTERS:
+                if (parent != null) {
                     context.setRecordLoc(addLocation(doc,
-                                                     parent.appendChild(doc.createCDATASection(reader.getText())),
+                                                     parent.appendChild(doc.createTextNode(reader.getText())),
                                                      reader.getLocation(), context.isRecordLoc()));
-                    break;
-                case XMLStreamConstants.PROCESSING_INSTRUCTION:
-                    parent.appendChild(doc.createProcessingInstruction(reader.getPITarget(), reader.getPIData()));
-                    break;
-                case XMLStreamConstants.ENTITY_REFERENCE:
-                    parent.appendChild(doc.createProcessingInstruction(reader.getPITarget(), reader.getPIData()));
-                    break;
-                default:
-                    break;
+                }
+                break;
+            case XMLStreamConstants.COMMENT:
+                if (parent != null) {
+                    parent.appendChild(doc.createComment(reader.getText()));
+                }
+                break;
+            case XMLStreamConstants.CDATA:
+                context.setRecordLoc(addLocation(doc,
+                                        parent.appendChild(doc.createCDATASection(reader.getText())),
+                                        reader.getLocation(), context.isRecordLoc()));
+                break;
+            case XMLStreamConstants.PROCESSING_INSTRUCTION:
+                parent.appendChild(doc.createProcessingInstruction(reader.getPITarget(), reader.getPIData()));
+                break;
+            case XMLStreamConstants.ENTITY_REFERENCE:
+                parent.appendChild(doc.createProcessingInstruction(reader.getPITarget(), reader.getPIData()));
+                break;
+            default:
+                break;
             }
 
             if (reader.hasNext()) {
@@ -1528,95 +1526,96 @@ public final class StaxUtils {
         }
     }
 
-    public static Node readDocElement(Document doc, Node parent, XMLEvent ev, StreamToDOMContext context) throws XMLStreamException {
+    public static Node readDocElement(Document doc, Node parent, XMLEvent ev, StreamToDOMContext context)
+        throws XMLStreamException {
         switch (ev.getEventType()) {
-            case XMLStreamConstants.START_ELEMENT: {
-                context.incrementCount();
-                Element e;
-                StartElement startElem = ev.asStartElement();
-                QName name = startElem.getName();
-                if (!StringUtils.isEmpty(name.getPrefix())) {
-                    e = doc.createElementNS(name.getNamespaceURI(),
-                                            name.getPrefix() + ":" + name.getLocalPart());
-                } else {
-                    e = doc.createElementNS(name.getNamespaceURI(), name.getLocalPart());
-                }
-                e = (Element) parent.appendChild(e);
-                if (context.isRecordLoc()) {
-                    context.setRecordLoc(addLocation(doc, e, startElem.getLocation(), context.isRecordLoc()));
-                }
-
-                if (context.isRepairing() && !isDeclared(e, name.getNamespaceURI(), name.getPrefix())) {
-                    declare(e, name.getNamespaceURI(), name.getPrefix());
-                }
-                context.pushToStack(parent);
-                if (context.isThreshold() && innerElementLevelThreshold != -1
-                    && context.getStackSize() >= innerElementLevelThreshold) {
-                    throw new DepthExceededStaxException("reach the innerElementLevelThreshold:"
-                                                         + innerElementLevelThreshold);
-                }
-                if (context.isThreshold() && innerElementCountThreshold != -1
-                    && context.getCount() >= innerElementCountThreshold) {
-                    throw new DepthExceededStaxException("reach the innerElementCountThreshold:"
-                                                         + innerElementCountThreshold);
-                }
-                parent = e;
-                break;
+        case XMLStreamConstants.START_ELEMENT: {
+            context.incrementCount();
+            Element e;
+            StartElement startElem = ev.asStartElement();
+            QName name = startElem.getName();
+            if (!StringUtils.isEmpty(name.getPrefix())) {
+                e = doc.createElementNS(name.getNamespaceURI(),
+                                        name.getPrefix() + ":" + name.getLocalPart());
+            } else {
+                e = doc.createElementNS(name.getNamespaceURI(), name.getLocalPart());
             }
-            case XMLStreamConstants.END_ELEMENT:
-                if (context.isStackEmpty()) {
-                    return parent;
-                }
-                parent = context.popFromStack();
-                if (parent instanceof Document) {
-                    return parent;
-                }
-                break;
-            case XMLStreamConstants.NAMESPACE:
-                Namespace ns = (Namespace) ev;
-                declare((Element) parent, ns.getNamespaceURI(), ns.getPrefix());
-                break;
-            case XMLStreamConstants.ATTRIBUTE:
-                Attribute at = (Attribute) ev;
-                QName qname = at.getName();
-                String attName = qname.getLocalPart();
-                String attPrefix = qname.getPrefix();
-                if (attPrefix != null && attPrefix.length() > 0) {
-                    attName = attPrefix + ":" + attName;
-                }
-                Attr attr = doc.createAttributeNS(qname.getNamespaceURI(), attName);
-                attr.setValue(at.getValue());
-                ((Element) parent).setAttributeNode(attr);
-                break;
-            case XMLStreamConstants.CHARACTERS:
-                if (parent != null) {
-                    Characters characters = ev.asCharacters();
-                    context.setRecordLoc(addLocation(doc,
-                                                     parent.appendChild(doc.createTextNode(characters.getData())),
-                                                     characters.getLocation(), context.isRecordLoc()));
-                }
-                break;
-            case XMLStreamConstants.COMMENT:
-                if (parent != null) {
-                    parent.appendChild(doc.createComment(((javax.xml.stream.events.Comment) ev).getText()));
-                }
-                break;
-            case XMLStreamConstants.CDATA:
+            e = (Element)parent.appendChild(e);
+            if (context.isRecordLoc()) {
+                context.setRecordLoc(addLocation(doc, e, startElem.getLocation(), context.isRecordLoc()));
+            }
+
+            if (context.isRepairing() && !isDeclared(e, name.getNamespaceURI(), name.getPrefix())) {
+                declare(e, name.getNamespaceURI(), name.getPrefix());
+            }
+            context.pushToStack(parent);
+            if (context.isThreshold() && innerElementLevelThreshold != -1
+                && context.getStackSize() >= innerElementLevelThreshold) {
+                throw new DepthExceededStaxException("reach the innerElementLevelThreshold:"
+                                           + innerElementLevelThreshold);
+            }
+            if (context.isThreshold() && innerElementCountThreshold != -1
+                && context.getCount() >= innerElementCountThreshold) {
+                throw new DepthExceededStaxException("reach the innerElementCountThreshold:"
+                                           + innerElementCountThreshold);
+            }
+            parent = e;
+            break;
+        }
+        case XMLStreamConstants.END_ELEMENT:
+            if (context.isStackEmpty()) {
+                return parent;
+            }
+            parent = context.popFromStack();
+            if (parent instanceof Document) {
+                return parent;
+            }
+            break;
+        case XMLStreamConstants.NAMESPACE:
+            Namespace ns = (Namespace)ev;
+            declare((Element)parent, ns.getNamespaceURI(), ns.getPrefix());
+            break;
+        case XMLStreamConstants.ATTRIBUTE:
+            Attribute at = (Attribute)ev;
+            QName qname = at.getName();
+            String attName = qname.getLocalPart();
+            String attPrefix = qname.getPrefix();
+            if (attPrefix != null && attPrefix.length() > 0) {
+                attName = attPrefix + ":" + attName;
+            }
+            Attr attr = doc.createAttributeNS(qname.getNamespaceURI(), attName);
+            attr.setValue(at.getValue());
+            ((Element)parent).setAttributeNode(attr);
+            break;
+        case XMLStreamConstants.CHARACTERS:
+            if (parent != null) {
                 Characters characters = ev.asCharacters();
                 context.setRecordLoc(addLocation(doc,
-                                                 parent.appendChild(doc.createCDATASection(characters.getData())),
+                                                 parent.appendChild(doc.createTextNode(characters.getData())),
                                                  characters.getLocation(), context.isRecordLoc()));
-                break;
-            case XMLStreamConstants.PROCESSING_INSTRUCTION:
-                parent.appendChild(doc.createProcessingInstruction(((ProcessingInstruction) ev).getTarget(),
-                                                                   ((ProcessingInstruction) ev).getData()));
-                break;
-            case XMLStreamConstants.ENTITY_REFERENCE:
-                javax.xml.stream.events.EntityReference er = (javax.xml.stream.events.EntityReference) ev;
-                parent.appendChild(doc.createEntityReference(er.getName()));
-                break;
-            default:
-                break;
+            }
+            break;
+        case XMLStreamConstants.COMMENT:
+            if (parent != null) {
+                parent.appendChild(doc.createComment(((javax.xml.stream.events.Comment)ev).getText()));
+            }
+            break;
+        case XMLStreamConstants.CDATA:
+            Characters characters = ev.asCharacters();
+            context.setRecordLoc(addLocation(doc,
+                                             parent.appendChild(doc.createCDATASection(characters.getData())),
+                                             characters.getLocation(), context.isRecordLoc()));
+            break;
+        case XMLStreamConstants.PROCESSING_INSTRUCTION:
+            parent.appendChild(doc.createProcessingInstruction(((ProcessingInstruction)ev).getTarget(),
+                                                               ((ProcessingInstruction)ev).getData()));
+            break;
+        case XMLStreamConstants.ENTITY_REFERENCE:
+            javax.xml.stream.events.EntityReference er = (javax.xml.stream.events.EntityReference)ev;
+            parent.appendChild(doc.createEntityReference(er.getName()));
+            break;
+        default:
+            break;
         }
         return parent;
     }
@@ -1715,7 +1714,7 @@ public final class StaxUtils {
                 StreamSource ss = new StreamSource(url.openStream(), sysId);
                 ss.setPublicId(pubId);
                 return createXMLStreamReader(ss);
-            } catch (IOException e) {
+            } catch (Exception ex) {
                 //ignore - not a valid URL
             }
         }
@@ -1993,66 +1992,66 @@ public final class StaxUtils {
     public static void writeEvent(XMLEvent event, XMLStreamWriter writer) throws XMLStreamException {
 
         switch (event.getEventType()) {
-            case XMLEvent.START_ELEMENT:
-                writeStartElementEvent(event, writer);
-                break;
-            case XMLEvent.END_ELEMENT:
-                writer.writeEndElement();
-                break;
-            case XMLEvent.ATTRIBUTE:
-                writeAttributeEvent(event, writer);
-                break;
-            case XMLEvent.ENTITY_REFERENCE:
-                writer.writeEntityRef(((javax.xml.stream.events.EntityReference) event).getName());
-                break;
-            case XMLEvent.DTD:
-                writer.writeDTD(((DTD) event).getDocumentTypeDeclaration());
-                break;
-            case XMLEvent.PROCESSING_INSTRUCTION:
-                if (((javax.xml.stream.events.ProcessingInstruction) event).getData() != null) {
-                    writer.writeProcessingInstruction(
-                                                      ((javax.xml.stream.events.ProcessingInstruction) event).getTarget(),
-                                                      ((javax.xml.stream.events.ProcessingInstruction) event).getData());
-                } else {
-                    writer.writeProcessingInstruction(
-                                                      ((javax.xml.stream.events.ProcessingInstruction) event).getTarget());
-                }
-                break;
-            case XMLEvent.NAMESPACE:
-                if (((Namespace) event).isDefaultNamespaceDeclaration()) {
-                    writer.writeDefaultNamespace(((Namespace) event).getNamespaceURI());
-                    writer.setDefaultNamespace(((Namespace) event).getNamespaceURI());
-                } else {
-                    writer.writeNamespace(((Namespace) event).getPrefix(),
-                                          ((Namespace) event).getNamespaceURI());
-                    writer.setPrefix(((Namespace) event).getPrefix(),
-                                     ((Namespace) event).getNamespaceURI());
-                }
-                break;
-            case XMLEvent.COMMENT:
-                writer.writeComment(((javax.xml.stream.events.Comment) event).getText());
-                break;
-            case XMLEvent.CHARACTERS:
-            case XMLEvent.SPACE:
-                writer.writeCharacters(event.asCharacters().getData());
-                break;
-            case XMLEvent.CDATA:
-                writer.writeCData(event.asCharacters().getData());
-                break;
-            case XMLEvent.START_DOCUMENT:
-                if (((StartDocument) event).encodingSet()) {
-                    writer.writeStartDocument(((StartDocument) event).getCharacterEncodingScheme(),
-                                              ((StartDocument) event).getVersion());
+        case XMLStreamConstants.START_ELEMENT:
+            writeStartElementEvent(event, writer);
+            break;
+        case XMLStreamConstants.END_ELEMENT:
+            writer.writeEndElement();
+            break;
+        case XMLStreamConstants.ATTRIBUTE:
+            writeAttributeEvent(event, writer);
+            break;
+        case XMLStreamConstants.ENTITY_REFERENCE:
+            writer.writeEntityRef(((javax.xml.stream.events.EntityReference)event).getName());
+            break;
+        case XMLStreamConstants.DTD:
+            writer.writeDTD(((DTD)event).getDocumentTypeDeclaration());
+            break;
+        case XMLStreamConstants.PROCESSING_INSTRUCTION:
+            if (((javax.xml.stream.events.ProcessingInstruction)event).getData() != null) {
+                writer.writeProcessingInstruction(
+                    ((javax.xml.stream.events.ProcessingInstruction)event).getTarget(),
+                    ((javax.xml.stream.events.ProcessingInstruction)event).getData());
+            } else {
+                writer.writeProcessingInstruction(
+                    ((javax.xml.stream.events.ProcessingInstruction)event).getTarget());
+            }
+            break;
+        case XMLStreamConstants.NAMESPACE:
+            if (((Namespace)event).isDefaultNamespaceDeclaration()) {
+                writer.writeDefaultNamespace(((Namespace)event).getNamespaceURI());
+                writer.setDefaultNamespace(((Namespace)event).getNamespaceURI());
+            } else {
+                writer.writeNamespace(((Namespace)event).getPrefix(),
+                                      ((Namespace)event).getNamespaceURI());
+                writer.setPrefix(((Namespace)event).getPrefix(),
+                                 ((Namespace)event).getNamespaceURI());
+            }
+            break;
+        case XMLStreamConstants.COMMENT:
+            writer.writeComment(((javax.xml.stream.events.Comment)event).getText());
+            break;
+        case XMLStreamConstants.CHARACTERS:
+        case XMLStreamConstants.SPACE:
+            writer.writeCharacters(event.asCharacters().getData());
+            break;
+        case XMLStreamConstants.CDATA:
+            writer.writeCData(event.asCharacters().getData());
+            break;
+        case XMLStreamConstants.START_DOCUMENT:
+            if (((StartDocument)event).encodingSet()) {
+                writer.writeStartDocument(((StartDocument)event).getCharacterEncodingScheme(),
+                                          ((StartDocument)event).getVersion());
 
-                } else {
-                    writer.writeStartDocument(((StartDocument) event).getVersion());
-                }
-                break;
-            case XMLEvent.END_DOCUMENT:
-                writer.writeEndDocument();
-                break;
-            default:
-                //shouldn't get here
+            } else {
+                writer.writeStartDocument(((StartDocument)event).getVersion());
+            }
+            break;
+        case XMLStreamConstants.END_DOCUMENT:
+            writer.writeEndDocument();
+            break;
+        default:
+            //shouldn't get here
         }
     }
 

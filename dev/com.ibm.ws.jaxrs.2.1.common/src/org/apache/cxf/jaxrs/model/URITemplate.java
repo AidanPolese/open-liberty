@@ -51,8 +51,8 @@ public final class URITemplate {
     private static final String SLASH_QUOTE = "/;";
 
     private final String template;
-    private final List<String> variables = new ArrayList<String>();
-    private final List<String> customVariables = new ArrayList<String>();
+    private final List<String> variables = new ArrayList<>();
+    private final List<String> customVariables = new ArrayList<>();
     private final Pattern templateRegexPattern;
     private final String literals;
     private final List<UriChunk> uriChunks;
@@ -66,7 +66,7 @@ public final class URITemplate {
         StringBuilder literalChars = new StringBuilder();
         StringBuilder patternBuilder = new StringBuilder();
         CurlyBraceTokenizer tok = new CurlyBraceTokenizer(template);
-        uriChunks = new ArrayList<UriChunk>();
+        uriChunks = new ArrayList<>();
         while (tok.hasNext()) {
             String templatePart = tok.next();
             UriChunk chunk = UriChunk.createUriChunk(templatePart, params);
@@ -515,18 +515,16 @@ public final class URITemplate {
         public boolean matches(String value) {
             if (pattern == null) {
                 return true;
-            } else {
-                return pattern.matcher(value).matches();
             }
+            return pattern.matcher(value).matches();
         }
 
         @Override
         public String getValue() {
             if (pattern != null) {
                 return "{" + name + ":" + pattern + "}";
-            } else {
-                return "{" + name + "}";
             }
+            return "{" + name + "}";
         }
     }
 
@@ -545,7 +543,7 @@ public final class URITemplate {
      */
     static class CurlyBraceTokenizer {
 
-        private final List<String> tokens = new ArrayList<String>();
+        private final List<String> tokens = new ArrayList<>();
         private int tokenIdx;
 
         CurlyBraceTokenizer(String string) {
@@ -603,9 +601,8 @@ public final class URITemplate {
         public static String stripBraces(String token) {
             if (insideBraces(token)) {
                 return token.substring(1, token.length() - 1);
-            } else {
-                return token;
             }
+            return token;
         }
 
         public boolean hasNext() {
@@ -615,9 +612,8 @@ public final class URITemplate {
         public String next() {
             if (hasNext()) {
                 return tokens.get(tokenIdx++);
-            } else {
-                throw new IllegalStateException("no more elements");
             }
+            throw new IllegalStateException("no more elements");
         }
     }
 }
