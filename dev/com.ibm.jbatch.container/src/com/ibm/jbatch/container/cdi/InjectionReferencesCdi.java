@@ -27,7 +27,7 @@ import com.ibm.jbatch.jsl.model.Property;
  */
 public class InjectionReferencesCdi {
 
-    private InjectionReferences injectionReferences;
+    private final InjectionReferences injectionReferences;
     
     public InjectionReferencesCdi(InjectionReferences injectionReferences) {
         this.injectionReferences = injectionReferences;
@@ -38,15 +38,15 @@ public class InjectionReferencesCdi {
     }
 
     public List<Property> getProps() {
-        return injectionReferences.getProps();
+        return injectionReferences == null ? null : injectionReferences.getProps();
     }
 
     public JobContext getJobContext() {
-        return injectionReferences.getJobContext();
+        return injectionReferences == null ? null : injectionReferences.getJobContext();
     }
 
     public StepContext getStepContext() {
-        return injectionReferences.getStepContext();
+        return injectionReferences == null ? null : injectionReferences.getStepContext();
     }
 
 }
