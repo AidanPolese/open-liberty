@@ -153,8 +153,11 @@ public class FTAnnotationUtils {
     static FallbackPolicy processFallbackAnnotation(Fallback fallback, InvocationContext context, BeanManager beanManager) {
         FallbackPolicy fallbackPolicy = null;
         Class<? extends FallbackHandler<?>> fallbackClass = fallback.value();
+        String fallbackMethodName = fallback.fallbackMethod();
         if (fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) {
-            String fallbackMethodName = fallback.fallbackMethod();
+            FallbackHandlerFactory fallbackHandlerFactory = getFallbackHandlerFactory(beanManager);
+            fallbackPolicy = newFallbackPolicy(fallbackClass, fallbackHandlerFactory);
+        } else if (fallbackMethodName != null && !"".equals(fallbackMethodName)) {
             Object beanInstance = context.getTarget();
             Method originalMethod = context.getMethod();
             Class<?>[] paramTypes = originalMethod.getParameterTypes();
@@ -173,8 +176,8 @@ public class FTAnnotationUtils {
                 throw new FaultToleranceException((Tr.formatMessage(tc, "security.exception.acquiring.fallback.method.CWMFT5004E")), e);
             }
         } else {
-            FallbackHandlerFactory fallbackHandlerFactory = getFallbackHandlerFactory(beanManager);
-            fallbackPolicy = newFallbackPolicy(fallbackClass, fallbackHandlerFactory);
+            //shouldn't ever reach here since validation should have caught it earlier
+            throw new FaultToleranceException(Tr.formatMessage(tc, "internal.error.CWMFT5998E"));
         }
         return fallbackPolicy;
     }
