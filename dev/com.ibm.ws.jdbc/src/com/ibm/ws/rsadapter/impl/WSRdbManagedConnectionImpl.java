@@ -56,6 +56,7 @@ import com.ibm.ws.Transaction.UOWCoordinator;
 import com.ibm.ws.Transaction.UOWCurrent;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.ffdc.FFDCSelfIntrospectable;
+import com.ibm.ws.jca.adapter.WSConnectionManager;
 import com.ibm.ws.jca.adapter.WSManagedConnection;
 import com.ibm.ws.jdbc.internal.DataSourceDef;
 import com.ibm.ws.jdbc.osgi.JDBCRuntimeVersion;
@@ -4008,7 +4009,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
      * @return sqlj.runtime.ref.DefaultContext
      * @exception SQLException - failed to create SQLJ Connection Context
      **/
-    public final Object getSQLJConnectionContext(Class<?> DefaultContext) throws SQLException {
+    public final Object getSQLJConnectionContext(Class<?> DefaultContext, WSConnectionManager cm) throws SQLException {
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
 
         if (isTraceOn && tc.isEntryEnabled()) 
@@ -4017,7 +4018,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
             // get the sqljContext if necessary. let the helper handle it
             // the helper does the sqlex mapping
             try {
-                sqljContext = helper.getSQLJContext(this, DefaultContext); 
+                sqljContext = helper.getSQLJContext(this, DefaultContext, cm); 
             } catch (SQLException se) {
                 // the helper already did the sqlj error mapping and ffdc..
                 if (isTraceOn && tc.isEntryEnabled()) 
