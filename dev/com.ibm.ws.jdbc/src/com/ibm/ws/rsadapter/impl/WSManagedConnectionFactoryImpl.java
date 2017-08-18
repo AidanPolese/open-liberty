@@ -355,7 +355,7 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
             Tr.entry(this, tc, "createConnectionFactory", connMgr); 
 
         this.connMgr = (WSConnectionManager) connMgr; 
-        Object connFactory = new WSJdbcDataSource(this, this.connMgr);
+        Object connFactory = new WSJdbcDataSource(this, (WSConnectionManager)connMgr);
 
         if (isTraceOn && tc.isEntryEnabled())
             Tr.exit(this, tc, "createConnectionFactory", connFactory); 
