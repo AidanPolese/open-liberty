@@ -82,6 +82,17 @@ instrument.taskInjection: false
 
 -buildpath.bootclasspath: ${javac.bootclasspath.${javac.source}}
 
+-buildpath.testjars: ${if;${test.project};\
+    ${workspace}/build.sharedResources/lib/junit/old/junit.jar\\;version=file,\
+    ${workspace}/build.sharedResources/lib/ws-junit/ws-junit.jar\\;version=file}
+    
+# If project contains '_fat' then add FAT infrastrucutre elements to buildpath    
+-buildpath.fattestjars: ${if;${matches;${project};.*_fat.*};\
+    org.jboss.shrinkwrap:shrinkwrap-api\\;version=1.2.3,\
+    fattest.simplicity\\;version=latest,\
+    com.ibm.ws.componenttest:public.api\\;version=1.0.0,\
+    com.ibm.ws.componenttest\\;version=latest}
+
 javac.bootclasspath.java6:
 javac.bootclasspath.java7:
 javac.bootclasspath.java8:
