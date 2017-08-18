@@ -1641,7 +1641,7 @@ public class PolicyExecutorServlet extends FATServlet {
     //The maxConcurrency is increased to two and another task is submitted and should run
     //Submit two more tasks, one should queue and one should abort
     //Increase the maxConcurrency to 3 and queue size to 2
-    //Submit another task which should cause the queued task to run and then this task will queue
+    //The queued task should run and then submit another task which will queue
     //Then decrease MaxConcurrency to 2 and queue size to 1
     //Allow the third submitted task to complete and submit another, which should abort since there are
     //two tasks running and one in the queue
@@ -1691,10 +1691,9 @@ public class PolicyExecutorServlet extends FATServlet {
         //Changing maxConcurrency to 3
         executor.maxConcurrency(3).maxQueueSize(2);
         
-        //TODO: Update test once polling has been added to run tasks from the queue after
-        //maxConcurrency has been increased
-        Future<Boolean> future5 = executor.submit(task2);
+        //The queued task should run after the maxConcurrency is increased
         assertTrue(beginLatch2.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        Future<Boolean> future5 = executor.submit(task2);
 
         //Setting the maxConcurrency lower than the current number of tasks running should be allowed
         //Also set the queue size back to 1 so that the queue is full again
@@ -1792,7 +1791,9 @@ public class PolicyExecutorServlet extends FATServlet {
                 .queueFullAction(QueueFullAction.Abort)
         		.maxQueueSize(1);
         
-        CountDownLatch beginLatch = new CountDownLatch(2);
+        int numSubmitted = 8;
+        
+        CountDownLatch beginLatch = new CountDownLatch(numSubmitted);
         CountDownLatch continueLatch1 = new CountDownLatch(1);
         
         CountDownLatch continueLatch2 = new CountDownLatch(1);
@@ -1801,18 +1802,28 @@ public class PolicyExecutorServlet extends FATServlet {
         ConfigChangeTask configTask2 = new ConfigChangeTask(executor, beginLatch, continueLatch1, TIMEOUT_NS, "maxConcurrency", "3");
         CountDownTask countDownTask = new CountDownTask(new CountDownLatch(0), continueLatch2, TIMEOUT_NS);
         
-        //Submit the two tasks that will change the maxConcurrency
-        Future<Boolean> future1 = testThreads.submit(configTask1);
-        Future<Boolean> future2 = testThreads.submit(configTask2);
+        List<Future<Boolean>> futures = new ArrayList<Future<Boolean>>(); 
+
+
+        //Submit numSubmitted tasks, half with a value of 1 and half with a value of 3
+        for (int i = 0; i < numSubmitted; i++) {
+        	//alternate submitting task with a value of 1 and 3
+        	if ((i % 2) == 0)
+        		futures.add(testThreads.submit(configTask1));
+        	else
+        		futures.add(testThreads.submit(configTask2));
+        }
         
-        //Wait for the two tasks to begin running
+        //Wait for the tasks to begin running
         assertTrue(beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
         
-        //Allow the two tasks to change the maxConcurrency and complete
+        //Allow the tasks to change the maxConcurrency and complete
         continueLatch1.countDown();
-        assertTrue(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
-        assertTrue(future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
         
+        for (int i = 0; i < numSubmitted; i++) {
+        	assertTrue(futures.get(i).get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        }
+      
         //Now we need to check that the maxConcurrency is either 1 or 3
         
         //This should be the first task run
@@ -1878,5 +1889,73 @@ public class PolicyExecutorServlet extends FATServlet {
         } catch(IllegalStateException e) { //expected
         }
     }
+    
+    //Test that when maxConcurrency is increased with tasks queued that the 
+    //proper number of tasks are run and, more importantly, maxConcurrency is not violated
+    @Test
+    public void testPollingWhenMaxConcurrencyIncreased() throws Exception {
+    	PolicyExecutor executor = provider.create("testPollingWhenMaxConcurrencyIncreased")
+    			.maxConcurrency(2)
+    			.maxQueueSize(-1)
+    			.maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
+    			.queueFullAction(QueueFullAction.Abort);
 
+    	CountDownLatch beginLatch1 = new CountDownLatch(2);
+    	CountDownLatch continueLatch1 = new CountDownLatch(1);
+    	CountDownTask task1 = new CountDownTask(beginLatch1, continueLatch1, TimeUnit.HOURS.toNanos(1));
+    	CountDownLatch beginLatch2 = new CountDownLatch(2);
+    	CountDownLatch continueLatch2 = new CountDownLatch(1);
+    	CountDownTask task2 = new CountDownTask(beginLatch2, continueLatch2, TimeUnit.HOURS.toNanos(1));
+    	CountDownLatch beginLatch3 = new CountDownLatch(2);
+    	CountDownTask task3 = new CountDownTask(beginLatch3, continueLatch2, TimeUnit.HOURS.toNanos(1));
+
+    	//These tasks should start and block on continueLatch
+    	Future<Boolean> future1 = executor.submit(task1);
+    	Future<Boolean> future2 = executor.submit(task1);
+
+    	//Ensure both tasks are running
+    	assertTrue(beginLatch1.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+
+    	//These task should be queued since we should be at max concurrency
+    	Future<Boolean> future3 = executor.submit(task2);
+    	Future<Boolean> future4 = executor.submit(task2);
+    	
+    	//At this point there should be two running tasks blocked on the continueLatch1 and
+    	//two additional tasks queued
+
+    	//Changing maxConcurrency to max int
+    	executor.maxConcurrency(-1);
+
+    	//The queued tasks should run after the maxConcurrency is increased
+    	assertTrue(beginLatch2.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+
+    	//Allow the first group of tasks to complete
+    	continueLatch1.countDown();
+
+    	assertTrue(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    	assertTrue(future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    	
+    	//Set the maxConcurrency back to 2
+    	executor.maxConcurrency(2);
+    	
+    	//Submit two more tasks, which will queue 
+    	
+    	Future<Boolean> future5 = executor.submit(task3);
+    	Future<Boolean> future6 = executor.submit(task3);
+    	
+    	//change the maxConcurrency to 3- ensure that both tasks don't run since that would 
+    	//be more than maxConcurrency
+    	//Waiting 1 second here- should be long enough that if both tasks were going to run, they would have done so
+    	assertFalse(beginLatch3.await(TimeUnit.SECONDS.toNanos(1),TimeUnit.NANOSECONDS));
+    	
+    	//Let the rest of the tasks run
+    	continueLatch2.countDown();
+    	
+    	assertTrue(future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    	assertTrue(future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    	assertTrue(future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    	assertTrue(future6.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    	
+    	executor.shutdownNow();
+    }
 }
