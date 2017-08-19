@@ -29,4 +29,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/com.ibm.ws.prereq.wsdl4j.jar;version=file
+	com.ibm.ws.javax.j2ee:prereq.wsdl4j;version=1.0

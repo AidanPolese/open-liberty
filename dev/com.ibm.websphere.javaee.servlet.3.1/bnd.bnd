@@ -27,5 +27,6 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/com.ibm.ws.javaee.servlet.3.1.jar;version=file,\
-	lib/com.ibm.ws.javax.servlet.resources_3.1.jar;version=file
+	com.ibm.ws.javaee.servlet.3.1;version=1.0.10.201509101149,\
+	com.ibm.ws.javax.j2ee:servlet.resources;version=3.1
+	

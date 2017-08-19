@@ -24,4 +24,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.el_2.2.jar;version=file
+	com.ibm.ws.javax.j2ee:el;version=2.2
