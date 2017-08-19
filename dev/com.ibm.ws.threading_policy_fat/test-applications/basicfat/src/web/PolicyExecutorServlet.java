@@ -1198,6 +1198,113 @@ public class PolicyExecutorServlet extends FATServlet {
         assertTrue(executor.isTerminated());
     }
 
+    // Tests enforcement of unique identifiers. Unique identifier cannot be reused until after the executor is shut down,
+    // either by shutdown or shutdownNow.
+    @Test
+    public void testIdentifiers() throws Exception {
+        ExecutorService executor1 = provider.create("testIdentifiers")
+                .maxConcurrency(20)
+                .maxQueueSize(50)
+                .maxWaitForEnqueue(TimeUnit.SECONDS.toMillis(30));
+
+        try {
+            fail("Should not be able to reuse identifier while previous instance (even if unused) still exists " + provider.create("testIdentifiers"));
+        } catch (IllegalStateException x) {} // pass
+
+        executor1.shutdown();
+
+        // now we can reuse it
+        ExecutorService executor2 = provider.create("testIdentifiers")
+                .maxConcurrency(1)
+                .maxQueueSize(2)
+                .maxWaitForEnqueue(0)
+                .queueFullAction(QueueFullAction.Abort);
+
+        try {
+            fail("First instance should not be usable again after identifier reused " + executor1.submit(new SharedIncrementTask(), null));
+        } catch (RejectedExecutionException x) {
+            if (!x.getMessage().startsWith("CWWKE1202")) // rejected submit after shutdown
+                throw x;
+        }
+
+        // New instance should honor its own configuration, not the configuration of the previous instance
+        CountDownLatch beginLatch = new CountDownLatch(1);
+        CountDownLatch blockerLatch = new CountDownLatch(1);
+        CountDownTask blockerTask = new CountDownTask(beginLatch, blockerLatch, TimeUnit.MINUTES.toNanos(20));
+        Future<Boolean> blockerFuture = executor2.submit(blockerTask);
+
+        // Wait for the blocker task to use up the maxConcurrency of 1
+        assertTrue(beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+
+        // Fill both queue positions
+        AtomicInteger counter = new AtomicInteger();
+        Future<Integer> queuedFuture1 = executor2.submit(new SharedIncrementTask(counter), 1);
+        Future<Integer> queuedFuture2 = executor2.submit(new SharedIncrementTask(counter), 2);
+
+        // Additional submits should be rejected immediately
+        try {
+            fail("Shoud not be able to queue another task " + executor2.submit((Callable<Integer>) new SharedIncrementTask(counter)));
+        } catch (RejectedExecutionException x) {
+            if (!x.getMessage().startsWith("CWWKE1201")) // rejected due to queue at capacity
+                throw x;
+        }
+
+        try {
+            fail("Should not be able to reuse identifier while previous instance still active " + provider.create("testIdentifiers"));
+        } catch (IllegalStateException x) {} // pass
+
+        // shutdownNow implies shutdown and also makes the identifier reusable
+        List<Runnable> canceledFromQueue = executor2.shutdownNow();
+
+        ExecutorService executor3 = provider.create("testIdentifiers");
+
+        assertTrue(executor1.isShutdown());
+        assertTrue(executor2.isShutdown());
+        assertFalse(executor3.isShutdown());
+
+        assertEquals(0, counter.get()); // previous queued tasks never ran
+
+        // We can resubmit them on the new executor instance
+        assertEquals(2, canceledFromQueue.size());
+        Future<?> resubmitFuture1 = executor3.submit(canceledFromQueue.get(0));
+        Future<?> resubmitFuture2 = executor3.submit(canceledFromQueue.get(1));
+
+        assertNull(resubmitFuture1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertNull(resubmitFuture2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertEquals(2, counter.get());
+
+        // The previous futures should still indicate canceled
+        assertTrue(queuedFuture1.isCancelled());
+        assertTrue(queuedFuture2.isCancelled());
+        assertTrue(blockerFuture.isCancelled());
+
+        assertFalse(resubmitFuture1.isCancelled());
+        assertFalse(resubmitFuture2.isCancelled());
+
+        try {
+            fail("Should not be able to get result from canceled task 1: " + queuedFuture1.get(1, TimeUnit.SECONDS));
+        } catch (CancellationException x) {} // pass
+
+        try {
+            fail("Should not be able to get result from canceled task 2: " + queuedFuture1.get(2, TimeUnit.SECONDS));
+        } catch (CancellationException x) {} // pass
+
+        // Operations such as awaitTermation are still valid on the shutdown instances, even if the identifier has been reused
+        assertTrue(executor1.awaitTermination(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(executor2.awaitTermination(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(executor1.isTerminated());
+        assertTrue(executor2.isTerminated());
+
+        assertFalse(executor3.isTerminated());
+
+        executor3.shutdown();
+        executor3.shutdown(); // redundant, but not harmful
+        executor3.shutdown(); // redundant, but not harmful
+
+        assertTrue(executor3.awaitTermination(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(executor3.isTerminated());
+    }
+
     // Attempt shutdown from multiple threads at once. Interrupt most of them and verify that the interrupted
     // shutdown operations fail rather than prematurely returning as successful prior to a successful shutdown.
     @AllowedFFDC("java.lang.InterruptedException") // when shutdown is interrupted
@@ -1390,6 +1497,44 @@ public class PolicyExecutorServlet extends FATServlet {
 
         // Wait for the task that was submitted to the test's fixed thread pool to complete, if it hasn't done so already
         assertNull(interrupterFuture.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    }
+
+    // Supply invalid arguments to various ExecutorService methods and verify the behavior matches the requirements of the JavaDoc.
+    // Also supply some values as the top and bottom of the valid range.
+    @Test
+    public void testInvalidArguments() throws Exception {
+        ExecutorService executor = provider.create("testInvalidArguments");
+
+        assertFalse(executor.awaitTermination(-1, TimeUnit.MILLISECONDS));
+        assertFalse(executor.awaitTermination(Long.MIN_VALUE, TimeUnit.DAYS));
+
+        try {
+            fail("Should fail with missing unit. Instead: " + executor.awaitTermination(5, null));
+        } catch (NullPointerException x) {} // pass
+
+        try {
+            executor.execute(null);
+            fail("Execute should fail with null task.");
+        } catch (NullPointerException x) {} // pass
+
+        try {
+            fail("Should fail with null Callable. Instead: " + executor.submit((Callable<String>) null));
+        } catch (NullPointerException x) {} // pass
+
+        try {
+            fail("Should fail with null Runnable. Instead: " + executor.submit((Runnable) null));
+        } catch (NullPointerException x) {} // pass
+
+        try {
+            fail("Should fail with null Runnable & valid result. Instead: " + executor.submit(null, 1));
+        } catch (NullPointerException x) {} // pass
+
+        executor.shutdown();
+
+        long start = System.nanoTime();
+        assertTrue(executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS));
+        long duration = start - System.nanoTime();
+        assertTrue("awaitTermination took " + duration + "ns", duration < TIMEOUT_NS);
     }
 
     // Poll isTerminated until the executor terminates while concurrently awaiting termination from another thread.
