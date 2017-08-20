@@ -41,11 +41,12 @@ Import-Package: \
     com.ibm.ws.ffdc, \
     com.ibm.ws.security.common.random, \
     com.ibm.ws.security.common.structures, \
+    com.ibm.ws.security.common.time, \
     com.ibm.ws.security.common.token.propagation, \
     com.ibm.ws.security.common.web, \
     com.ibm.ws.security.common.jwk.impl, \
     com.ibm.ws.security.common.jwk.interfaces, \
-    com.ibm.json.java, \
+    com.ibm.json.java.*, \
     org.osgi.service.component.*, \
     org.osgi.framework, \
     org.osgi.util.tracker, \
@@ -93,28 +94,28 @@ Include-Resource: \
 -dsannotations-inherit = true
 
 -buildpath: \
-    com.ibm.websphere.org.osgi.core;version=latest,\
-    com.ibm.websphere.org.osgi.service.component;version=latest,\
-    com.ibm.wsspi.org.osgi.service.component.annotations;version=latest,\
-    com.ibm.ws.security;version=latest,\
-    com.ibm.ws.logging;version=latest,\
-    com.ibm.ws.kernel.service;version=latest,\
-    com.ibm.websphere.security;version=latest,\
-    com.ibm.ws.resource;version=latest,\
-    com.ibm.ws.webcontainer.security;version=latest,\
-    com.ibm.ws.crypto.passwordutil;version=latest,\
-    com.ibm.ws.org.joda.time.1.6.2;version=latest,\
-    com.ibm.ws.org.apache.commons.codec.1.4;version=latest,\
-    com.ibm.ws.config;version=latest,\
-    com.ibm.ws.org.jose4j.0.5.1;version=latest,\
-    com.ibm.ws.security.common;version=latest,\
-    com.ibm.ws.security.common.jwk;version=latest,\
+    com.ibm.websphere.org.osgi.core;version=latest, \
+    com.ibm.websphere.org.osgi.service.component;version=latest, \
+    com.ibm.wsspi.org.osgi.service.component.annotations;version=latest, \
+    com.ibm.ws.security;version=latest, \
+    com.ibm.ws.logging;version=latest, \
+    com.ibm.ws.kernel.service;version=latest, \
+    com.ibm.websphere.security;version=latest, \
+    com.ibm.ws.resource;version=latest, \
+    com.ibm.ws.webcontainer.security;version=latest, \
+    com.ibm.ws.crypto.passwordutil;version=latest, \
+    com.ibm.ws.org.joda.time.1.6.2;version=latest, \
+    com.ibm.ws.org.apache.commons.codec.1.4;version=latest, \
+    com.ibm.ws.config;version=latest, \
+    com.ibm.ws.org.jose4j.0.5.1;version=latest, \
+    com.ibm.ws.security.common;version=latest, \
+    com.ibm.ws.security.common.jwk;version=latest, \
     com.ibm.json4j;version=latest, \
-    com.ibm.websphere.security.wim.base;version=latest,\
-    com.ibm.ws.security.wim.core;version=latest,\
-    com.ibm.ws.ssl;version=latest,\
-    com.ibm.websphere.javaee.servlet.3.0;version=latest,\
-    com.ibm.websphere.javaee.jaxrs.2.0;version=latest,\
+    com.ibm.websphere.security.wim.base;version=latest, \
+    com.ibm.ws.security.wim.core;version=latest, \
+    com.ibm.ws.ssl;version=latest, \
+    com.ibm.websphere.javaee.servlet.3.0;version=latest, \
+    com.ibm.websphere.javaee.jaxrs.2.0;version=latest, \
     org.apache.httpcomponents:httpclient;version=4.3.1, \
     org.apache.httpcomponents:httpcore;version=4.3, \
     com.ibm.ws.org.osgi.annotation.versioning;version=latest
