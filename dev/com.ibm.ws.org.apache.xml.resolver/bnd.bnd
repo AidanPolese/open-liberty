@@ -11,6 +11,6 @@
 -include= jar:${fileuri;${repo;xml-resolver:xml-resolver;1.2}}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -includeresource: \
-   @lib/xml-resolver-1.2.jar!/!META-INF/*
+   @${repo;xml-resolver:xml-resolver;1.2}!/!META-INF/*
 
 -buildpath: xml-resolver:xml-resolver;version=1.2
