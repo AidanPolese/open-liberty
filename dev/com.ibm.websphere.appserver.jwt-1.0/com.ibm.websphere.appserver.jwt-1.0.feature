@@ -14,6 +14,6 @@ Subsystem-Name: Json Web Token
   com.ibm.ws.security.common.jwk, \
   com.ibm.json4j, \
   com.ibm.ws.org.apache.commons.codec.1.4, \
-  com.ibm.ws.org.jose4j.0.5.1
+  com.ibm.ws.org.jose4j
 kind=ga
 edition=core
