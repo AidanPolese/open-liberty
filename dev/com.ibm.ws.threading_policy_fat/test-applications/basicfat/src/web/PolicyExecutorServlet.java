@@ -1643,6 +1643,102 @@ public class PolicyExecutorServlet extends FATServlet {
         assertTrue(executor.awaitTermination(TIMEOUT_NS, TimeUnit.NANOSECONDS));
     }
 
+    // Use a policy executor to submit tasks that resubmit themselves to perform a recursive computation.
+    // Have one of the recursive task require greater concurrency than provided by the policy executor
+    // such that it hangs. Then interrupt it to free up a thread to enable completion.
+    @Test
+    public void testRecursiveTasks() throws Exception {
+        PolicyExecutor executor = provider.create("testRecursiveTasks")
+                .maxConcurrency(8) // TODO switch to coreConcurrency:8, maxConcurrency:10
+                .maxQueueSize(10) // just enough to cover factorials of 6, 4, and 3 without getting stuck
+                .maxWaitForEnqueue(TimeUnit.NANOSECONDS.toMillis(TIMEOUT_NS * 2));
+        Future<Long> f6 = executor.submit(new FactorialTask(6, executor));
+        Future<Long> f4 = executor.submit(new FactorialTask(4, executor));
+        Future<Long> f3 = executor.submit(new FactorialTask(3, executor));
+
+        assertEquals(Long.valueOf(720), f6.get(TIMEOUT_NS * 6, TimeUnit.NANOSECONDS));
+        assertEquals(Long.valueOf(24), f4.get(TIMEOUT_NS * 4, TimeUnit.NANOSECONDS));
+        assertEquals(Long.valueOf(6), f3.get(TIMEOUT_NS * 3, TimeUnit.NANOSECONDS));
+
+        // Decrease concurrency and submit a recursive task that will hang
+        executor.maxConcurrency(3);
+        Future<Long> f5 = executor.submit(new FactorialTask(5, executor));
+        try {
+            fail("Should not be able to complete recursive task with insufficient concurrency: " + f5.get(200, TimeUnit.MILLISECONDS));
+        } catch (TimeoutException x) {} // pass
+
+        // Interrupt the original task, which will make another thread available to complete the hung recursive invocations
+        assertTrue(f5.cancel(true));
+
+        executor.shutdown();
+        assertTrue(executor.awaitTermination(TIMEOUT_NS * 4, TimeUnit.NANOSECONDS));
+    }
+
+    // Submit a recursive task that hangs the policy executor. Resolve the hang by using shutdownNow to cancel all tasks.
+    @Test
+    public void testRecursiveTaskThatHangsPolicyExecutorThenShutdownNow() throws Exception {
+        PolicyExecutor executor = provider.create("testRecursiveTaskThatHangsPolicyExecutorThenShutdownNow")
+                .maxConcurrency(4); // intentionally not enough to run a factorial task for 6+
+
+        FactorialTask factorial8 = new FactorialTask(8, executor);
+        Future<Long> future8 = executor.submit(factorial8);
+
+        // Poll the task to find out if it has progressed sufficiently to use up all of the concurrency
+        for (long start = System.nanoTime(); factorial8.num > 4 && System.nanoTime() - start < TIMEOUT_NS; TimeUnit.MILLISECONDS.sleep(200)) ;
+        assertEquals(4, factorial8.num);
+
+        try {
+            fail("Should not be able to complete recursive task with insufficient concurrency: " + future8.get(100, TimeUnit.MILLISECONDS));
+        } catch (TimeoutException x) {} // pass
+
+        // Canceling the original future will release one thread, but it will become blocked on the next recursive task 
+        assertTrue(future8.cancel(true));
+
+        // Wait for it to use up max concurrency
+        for (long start = System.nanoTime(); factorial8.num > 3 && System.nanoTime() - start < TIMEOUT_NS; TimeUnit.MILLISECONDS.sleep(200)) ;
+        assertEquals(3, factorial8.num);
+
+        // Additional tasks will be stuck as well
+        Runnable blockedTask1 = new SharedIncrementTask();
+        Future<?> blockedFuture1 = executor.submit(blockedTask1);
+
+        Runnable blockedTask2 = new SharedIncrementTask();
+        Future<?> blockedFuture2 = executor.submit(blockedTask2);
+
+        try {
+            fail("Should not be able to complete task1 with insufficient concurrency: " + blockedFuture1.get(101, TimeUnit.MILLISECONDS));
+        } catch (TimeoutException x) {} // pass
+
+        try {
+            fail("Should not be able to complete task2 with insufficient concurrency: " + blockedFuture2.get(102, TimeUnit.MILLISECONDS));
+        } catch (TimeoutException x) {} // pass
+
+        // Shutting down the executor isn't enough
+        executor.shutdown();
+
+        try {
+            fail("Still should not be able to complete task1 with insufficient concurrency: " + blockedFuture1.get(200, TimeUnit.MILLISECONDS));
+        } catch (TimeoutException x) {} // pass
+
+        List<Runnable> canceledQueuedTasks = executor.shutdownNow();
+        assertEquals("Tasks canceled from the queue: " + canceledQueuedTasks, 3, canceledQueuedTasks.size());
+
+        assertTrue(canceledQueuedTasks.remove(blockedTask1));
+        assertTrue(canceledQueuedTasks.remove(blockedTask2));
+
+        // recursively submitted task is converted to a Runnable in the shutdownNow result, so it won't directly match
+        Runnable factorialRunnable = canceledQueuedTasks.get(0);
+        try {
+            factorialRunnable.run();
+            fail("Should not be able to run FactorialTask that references a policy executor that has been shut down.");
+        } catch (RejectedExecutionException x) {
+            if (!x.getMessage().contains("CWWKE1202E")) // rejected-due-to-shutdown message
+                throw x;
+        }
+
+        assertTrue(executor.awaitTermination(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    }
+
     // Use a policy executor to submit tasks that await termination of itself.
     // Also uses the executor to submit tasks that shut itself down.
     @Test
