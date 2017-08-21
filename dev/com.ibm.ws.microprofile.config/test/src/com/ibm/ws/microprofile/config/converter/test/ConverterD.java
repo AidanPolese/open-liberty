@@ -10,8 +10,7 @@
     IBM Corporation - initial API and implementation
 
 *******************************************************************************/
-
-package src.com.ibm.ws.microprofile.config.converter.test;
+package com.ibm.ws.microprofile.config.converter.test;
 
 import org.eclipse.microprofile.config.spi.Converter;
 

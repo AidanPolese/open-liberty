@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package src.com.ibm.ws.microprofile.config.converter.test;
+package com.ibm.ws.microprofile.config.converter.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

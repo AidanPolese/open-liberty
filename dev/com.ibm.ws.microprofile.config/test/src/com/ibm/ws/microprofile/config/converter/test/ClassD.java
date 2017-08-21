@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-package src.com.ibm.ws.microprofile.config.converter.test;
+package com.ibm.ws.microprofile.config.converter.test;
 
 /**
  * A simple Class

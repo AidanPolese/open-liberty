@@ -140,11 +140,13 @@ public class ConversionManager {
                 }
             }
         }
+        
         ConversionStatus<T> csToReturn = new ConversionStatus<T>(converterFound, converted);
         return csToReturn;
 
     }
 
+    
     /**
      * A holder to hold whether a converter is found and the converted value.
      *
@@ -192,6 +194,7 @@ public class ConversionManager {
                 }
             }
         }
+        
         ConversionStatus<T> cs = new ConversionStatus<T>(converterFound, converted);
         return cs;
     }
