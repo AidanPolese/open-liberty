@@ -2129,20 +2129,20 @@ public class PolicyExecutorServlet extends FATServlet {
         
         int numSubmitted = 6;
         
-        CountDownLatch beginLatch1 = new CountDownLatch(numSubmitted);
+        //Latch for configChangeTask and submitterTask
+        CountDownLatch beginLatch1 = new CountDownLatch(numSubmitted*2);
         CountDownLatch continueLatch1 = new CountDownLatch(1);
         ConfigChangeTask configTask = new ConfigChangeTask(executor, beginLatch1, continueLatch1, TIMEOUT_NS, "maxConcurrency", "6");
         
         CountDownLatch continueLatch2 = new CountDownLatch(1);
-        CountDownLatch beginLatch2 = new CountDownLatch(2);
+        CountDownLatch beginLatch2 = new CountDownLatch(numSubmitted);
         CountDownTask countDownTask = new CountDownTask(beginLatch2, continueLatch2, TIMEOUT_NS);
         
-        CountDownLatch beginLatch3 = new CountDownLatch(numSubmitted);
-        SubmitterTask<Boolean> submitTask = new SubmitterTask<Boolean>(executor, countDownTask, beginLatch3, continueLatch1, TIMEOUT_NS);
+        SubmitterTask<Boolean> submitTask = new SubmitterTask<Boolean>(executor, countDownTask, beginLatch1, continueLatch1, TIMEOUT_NS);
         
         List<Future<Boolean>> configFutures = new ArrayList<Future<Boolean>>();
         
-        //Submit numSubmitted tasks to change maxConcurrency to 8, which will block on continueLatch2
+        //Submit numSubmitted tasks to change maxConcurrency to 6, which will block on continueLatch2
         for (int i = 0; i < numSubmitted; i++) {
         	configFutures.add(testThreads.submit(configTask));
         }
@@ -2154,10 +2154,7 @@ public class PolicyExecutorServlet extends FATServlet {
         	submitterFutures.add(testThreads.submit(submitTask));
         }
         
-        //Ensure all the submit tasks are running
-        assertTrue(beginLatch3.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
-        
-        //Ensure the config tasks are running
+        //Ensure all the submit and config tasks are running
         assertTrue(beginLatch1.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
         
         //Allow the configtasks and submitertasks to complete, which will submit numSubmitted countDownTasks
@@ -2169,10 +2166,10 @@ public class PolicyExecutorServlet extends FATServlet {
         	assertTrue(configFutures.get(i).get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
         }
         
-        //The maxConcurrency should now be 8, so all the submitted tasks should be running
+        //The maxConcurrency should now be 6, so all the submitted tasks should be running
         assertTrue(beginLatch2.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
         
-        //Now check that maxConcurrency is actually 8
+        //Now check that maxConcurrency is actually 6
         Future<Boolean> future1 = executor.submit(countDownTask);
         Future<Boolean> future2 = executor.submit(countDownTask);
         
