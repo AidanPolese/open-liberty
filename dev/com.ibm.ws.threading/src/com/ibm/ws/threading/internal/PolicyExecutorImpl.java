@@ -200,15 +200,15 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             // Release a maxConcurrency permit and do not reschedule if there are no tasks on the queue
             if (next == null || queue.isEmpty()) {
                 maxConcurrencyConstraint.release();
-                int available = maxConcurrencyConstraint.availablePermits();
 
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                    Tr.debug(PolicyExecutorImpl.this, tc, "maxConcurrency permits available: " + available);
+                    Tr.debug(PolicyExecutorImpl.this, tc, "maxConcurrency permits available: " + maxConcurrencyConstraint.availablePermits());
 
-                // If this was the only polling task left, check once again to ensure there are still no items left in the queue.
+                // Check once again to ensure there are still no items left in the queue.
                 // Otherwise a race condition could leave a task unexecuted.
-                if (maxConcurrency == available && !queue.isEmpty() && maxConcurrencyConstraint.tryAcquire())
+                if (!queue.isEmpty() && maxConcurrencyConstraint.tryAcquire()) {
                     enqueueGlobal(PollingTask.this);
+                }
             } else { // There are still tasks to run, so reschedule the polling task to the global executor if there is an available permit
                 //TODO: Investigate if there is a performance optimization that can be made here
                 //so that we don't need to release and re-acquire a permit each time
@@ -489,6 +489,10 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                 maxConcurrencyConstraint.reducePermits(-increase);
             maxConcurrency = max;
         }
+
+        int numOnQueue = queue.size();
+        while (numOnQueue-- > 0 && maxConcurrencyConstraint.tryAcquire())
+            enqueueGlobal(new PollingTask());
 
         return this;
     }
