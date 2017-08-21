@@ -50,7 +50,7 @@ instrument.classesExcludes: com/ibm/ws/kernel/filemonitor/internal/resources/*.c
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest
 
 -testpath: \
-	org.hamcrest:hamcrest-all:1.3, \
+	org.hamcrest:hamcrest-all;version=1.3, \
 	../build.sharedResources/lib/jmock/2.6.0/jmock-junit4-2.6.0.jar;version=file, \
 	../build.sharedResources/lib/jmock/2.6.0/jmock-2.6.0.jar;version=file, \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
