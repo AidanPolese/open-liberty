@@ -18,6 +18,9 @@ Bundle-Description: Common code for security bundles; version=${bVersion}
 WS-TraceGroup: SecurityCommon
 
 Export-Package: \
+    com.ibm.ws.security.common.config, \
+    com.ibm.ws.security.common.crypto, \
+    com.ibm.ws.security.common.encoding, \
     com.ibm.ws.security.common.random, \
     com.ibm.ws.security.common.structures, \
     com.ibm.ws.security.common.time, \

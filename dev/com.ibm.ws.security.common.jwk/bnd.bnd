@@ -19,7 +19,9 @@ WS-TraceGroup: SecurityCommon
 
 Export-Package: \
     com.ibm.ws.security.common.jwk.impl,\
-    com.ibm.ws.security.common.jwk.interfaces
+    com.ibm.ws.security.common.jwk.interfaces,\
+    com.ibm.ws.security.common.jwk.subject.mapping,\
+    com.ibm.ws.security.common.jwk.utils
     
 # 238871
 Import-Package: \
