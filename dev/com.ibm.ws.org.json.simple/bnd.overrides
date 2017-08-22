@@ -10,5 +10,3 @@ WS-TraceGroup: \
 
 Export-Package: org.json.simple.*
 
-Private-Package: *
-

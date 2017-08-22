@@ -12,4 +12,3 @@ Export-Package: \
   com.google.gson.annotations;version="2.2.4", \
   com.google.gson.reflect;version="2.2.4"
 
-Private-Package: *
