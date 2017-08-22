@@ -77,7 +77,11 @@ import org.apache.cxf.jaxrs.utils.ThreadLocalProxyCopyOnWriteArraySet;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageUtils;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+
 public final class ServerProviderFactory extends ProviderFactory {
+    private static final TraceComponent tc = Tr.register(ProviderFactory.class);
     private static final Set<Class<?>> SERVER_FILTER_INTERCEPTOR_CLASSES =
                     new HashSet<Class<?>>(Arrays.<Class<?>> asList(ContainerRequestFilter.class,
                                                                    ContainerResponseFilter.class,
@@ -203,19 +207,27 @@ public final class ServerProviderFactory extends ProviderFactory {
     public <T extends Throwable> ExceptionMapper<T> createExceptionMapper(Class<?> exceptionType,
                                                                           Message m) {
         List<ProviderInfo<ExceptionMapper<?>>> candidates = new LinkedList<ProviderInfo<ExceptionMapper<?>>>();
+        // When an exceptionMapper contains dependency injection the handleMapper method will return
+        // a proxy object that cannot be sorted properly.  So we will sort the entire exceptionMapper list first.
         for (ProviderInfo<ExceptionMapper<?>> em : exceptionMappers) {
-            if (handleMapper(em, exceptionType, m, ExceptionMapper.class, true)) {
-                candidates.add(em);
-            }
-        }
-        if (candidates.size() == 0) {
-            return null;
+            candidates.add(em);
         }
         boolean makeDefaultWaeLeastSpecific =
                         MessageUtils.getContextualBoolean(m, MAKE_DEFAULT_WAE_LEAST_SPECIFIC, false);
         Collections.sort(candidates, new ExceptionProviderInfoComparator(exceptionType,
                         makeDefaultWaeLeastSpecific));
-        return (ExceptionMapper<T>) candidates.get(0).getProvider();
+
+        for (ProviderInfo<ExceptionMapper<?>> return_em : candidates) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Processing ExceptionMapper:  " + return_em);
+            }
+            if (handleMapper(return_em, exceptionType, m, ExceptionMapper.class, true)) {
+                //no need to look further since sorting has already occurred.
+                return (ExceptionMapper<T>) return_em.getProvider();
+            }
+        }
+        //no candidates found
+        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -227,11 +239,11 @@ public final class ServerProviderFactory extends ProviderFactory {
                 FeatureContext featureContext = createServerFeatureContext();
                 ((Feature)p).configure(featureContext);
                 Configuration cfg = featureContext.getConfiguration();
-                
+
                 for (Object featureProvider : cfg.getInstances()) {
                     Map<Class<?>, Integer> contracts = cfg.getContracts(featureProvider.getClass());
                     if (contracts != null && !contracts.isEmpty()) {
-                        allProviders.add(new FilterProviderInfo<Object>(featureProvider, 
+                        allProviders.add(new FilterProviderInfo<Object>(featureProvider,
                                                                         getBus(),
                                                                         contracts));
                     } else {
@@ -242,8 +254,8 @@ public final class ServerProviderFactory extends ProviderFactory {
                 allProviders.add(p);
             }
         }
-        
-        
+
+
         List<ProviderInfo<ContainerRequestFilter>> postMatchRequestFilters =
                         new LinkedList<ProviderInfo<ContainerRequestFilter>>();
         List<ProviderInfo<ContainerResponseFilter>> postMatchResponseFilters =
@@ -396,7 +408,7 @@ public final class ServerProviderFactory extends ProviderFactory {
     private void doApplyDynamicFeatures(ClassResourceInfo cri) {
         Set<OperationResourceInfo> oris = cri.getMethodDispatcher().getOperationResourceInfos();
         for (OperationResourceInfo ori : oris) {
-            String nameBinding = DEFAULT_FILTER_NAME_BINDING 
+            String nameBinding = DEFAULT_FILTER_NAME_BINDING
                 + ori.getClassResourceInfo().getServiceClass().getName()
                 + "."
                 + ori.getMethodToInvoke().toString();
@@ -407,7 +419,7 @@ public final class ServerProviderFactory extends ProviderFactory {
                 for (Object provider : cfg.getInstances()) {
                     Map<Class<?>, Integer> contracts = cfg.getContracts(provider.getClass());
                     if (contracts != null && !contracts.isEmpty()) {
-                        registerUserProvider(new FilterProviderInfo<Object>(provider, 
+                        registerUserProvider(new FilterProviderInfo<Object>(provider,
                             getBus(),
                             nameBinding,
                             true,
@@ -424,12 +436,12 @@ public final class ServerProviderFactory extends ProviderFactory {
             }
         }
     }
-    
+
     private FeatureContext createServerFeatureContext() {
         FeatureContextImpl featureContext = new FeatureContextImpl();
         ServerFeatureContextConfigurable configImpl = new ServerFeatureContextConfigurable(featureContext);
         featureContext.setConfigurable(configImpl);
-        
+
         if (application != null) {
             Map<String, Object> appProps = application.getProvider().getProperties();
             for (Map.Entry<String, Object> entry : appProps.entrySet()) {
@@ -442,13 +454,13 @@ public final class ServerProviderFactory extends ProviderFactory {
     protected static boolean isPrematching(Class<?> filterCls) {
         return AnnotationUtils.getClassAnnotation(filterCls, PreMatching.class) != null;
     }
-        
+
     private static class ServerFeatureContextConfigurable extends ConfigurableImpl<FeatureContext> {
         protected ServerFeatureContextConfigurable(FeatureContext mc) {
             super(mc, RuntimeType.SERVER, SERVER_FILTER_INTERCEPTOR_CLASSES.toArray(new Class<?>[]{}));
         }
     }
-    
+
     public static void clearThreadLocalProxies(Message message) {
         clearThreadLocalProxies(ServerProviderFactory.getInstance(message), message);
     }
