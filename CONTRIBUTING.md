@@ -7,7 +7,7 @@ There are multiple ways to contribute: report bugs, fix bugs, contribute code, i
 * [Coding Standards](https://github.ibm.com/was-liberty/open-liberty/blob/master/CONTRIBUTING.md#raising-issues)
 
 ## Contributor License Agreement
-All contributors must signoff on the [Contributor License Agreement](https://github.ibm.com/was-liberty/open-liberty/wiki/Contributor-License-Agreement) when submitting a new pull request. 
+All contributors must signoff on the [Contributor License Agreement](https://github.ibm.com/was-liberty/open-liberty/blob/integration/cla/open-liberty-cla-individual.pdf) when submitting a new pull request. Instructions how to sign and submit the agreement are here: https://github.ibm.com/was-liberty/open-liberty/blob/integration/cla/open-liberty-cla-individual.pdf.
 
 
 ## Raising issues
