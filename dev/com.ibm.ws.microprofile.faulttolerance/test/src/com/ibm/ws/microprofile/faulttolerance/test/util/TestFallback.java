@@ -10,17 +10,26 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance.test.util;
 
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
+import org.eclipse.microprofile.faulttolerance.FallbackHandler;
+
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceFunction;
 
 /**
  *
  */
-public class TestFallback implements FaultToleranceFunction<String, String> {
+public class TestFallback implements FaultToleranceFunction<ExecutionContext, String>, FallbackHandler<String> {
 
     /** {@inheritDoc} */
     @Override
-    public String execute(String context) throws Exception {
-        return "Fallback: " + context;
+    public String execute(ExecutionContext context) throws Exception {
+        return "Fallback: " + context.getParameters()[0];
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String handle(ExecutionContext context) {
+        return "Fallback: " + context.getParameters()[0];
     }
 
 }

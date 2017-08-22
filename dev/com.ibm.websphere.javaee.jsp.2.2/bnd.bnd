@@ -29,11 +29,11 @@ Import-Package: !javax.servlet.jsp.*, \
   org.xml.sax.helpers; resolution:=optional
 
 Include-Resource: \
-  @lib/javax.servlet.jsp_2.2.jar!/javax/servlet/jsp/resources/**
+  @${repo;com.ibm.ws.javax.j2ee:servlet.jsp;2.2}!/javax/servlet/jsp/resources/**
 
 instrument.disabled: true
 
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.servlet.jsp_2.2.jar;version=file
+	com.ibm.ws.javax.j2ee:servlet.jsp;version=2.2

@@ -29,8 +29,13 @@ import org.osgi.service.component.annotations.Component;
 
 import com.ibm.ws.cdi.extension.WebSphereCDIExtension;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+
 @Component(service = WebSphereCDIExtension.class, immediate = true)
 public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtension {
+
+    private static final TraceComponent tc = Tr.register(FaultToleranceCDIExtension.class);
 
     public void beforeBeanDiscovery(@Observes BeforeBeanDiscovery beforeBeanDiscovery, BeanManager beanManager) {
         //register the interceptor binding and in the interceptor itself
@@ -64,8 +69,7 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
             Class<?> returnType = method.getJavaMember().getReturnType();
             if (classLevelAsync) {
                 if (!(Future.class.isAssignableFrom(returnType))) {
-                    //TODO NLS
-                    throw new FaultToleranceException("@Asynchronous methods must return a Future: " + method);
+                    throw new FaultToleranceException(Tr.formatMessage(tc, "asynchronous.class.not.returning.future.CWMFT5000E", method));
                 }
             }
             annotations = method.getAnnotations();
@@ -73,8 +77,7 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
                 if (FTAnnotationUtils.ANNOTATIONS.contains(annotation.annotationType())) {
                     if (annotation.annotationType() == Asynchronous.class) {
                         if (!(Future.class.isAssignableFrom(returnType))) {
-                            //TODO NLS
-                            throw new FaultToleranceException("@Asynchronous methods must return a Future: " + method);
+                            throw new FaultToleranceException(Tr.formatMessage(tc, "asynchronous.method.not.returning.future.CWMFT5001E", method));
                         }
                     }
                     interceptedMethods.add(method);

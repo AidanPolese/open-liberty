@@ -75,7 +75,7 @@ def loadBuildProps() {
       def repoURL = ('https://' + props.getProperty('artifactory.download.server') + '/artifactory/wasliberty-open-liberty')
       fetchRepoPublic = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublic;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/oss_dependencies.maven')
       fetchRepoIBM = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemoteIBM;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/oss_ibm.maven')
-      fetchRepoIBMJava = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublic;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/ibm_java.maven')
+      fetchRepoIBMJava = ('aQute.bnd.repository.maven.provider.MavenBndRepository;local=~/.ibmjava/repository;name = IBMInternalJava;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/ibm_java.maven')
       pushRepoIBM =('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublish;releaseUrl='+ repoURL + matrixParams + ';snapshotUrl='+ repoURL + matrixParams + ';index=${build}/openliberty.maven')
 
       isAutomatedBuild = (props.getProperty("buildResultUUID") != null)

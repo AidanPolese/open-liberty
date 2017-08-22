@@ -55,8 +55,6 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     private String identifier;
 
-    private final boolean isServerConfigured;
-
     private int maxConcurrency;
 
     private final ReduceableSemaphore maxConcurrencyConstraint = new ReduceableSemaphore();
@@ -66,6 +64,13 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     private final ReduceableSemaphore maxQueueSizeConstraint = new ReduceableSemaphore();
 
     private final AtomicLong maxWaitForEnqueue = new AtomicLong();
+
+    /**
+     * This list is supplied to each instance that is programmatically created by PolicyExecutorProvider
+     * so that each instance can manage its own membership per its life cycle.
+     * The list is null if declarative services created this instance based on server configuration.
+     */
+    private final ConcurrentHashMap<String, PolicyExecutorImpl> providerCreated;
 
     private final ConcurrentLinkedQueue<PolicyTaskFuture<?>> queue = new ConcurrentLinkedQueue<PolicyTaskFuture<?>>();
 
@@ -195,15 +200,15 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             // Release a maxConcurrency permit and do not reschedule if there are no tasks on the queue
             if (next == null || queue.isEmpty()) {
                 maxConcurrencyConstraint.release();
-                int available = maxConcurrencyConstraint.availablePermits();
 
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                    Tr.debug(PolicyExecutorImpl.this, tc, "maxConcurrency permits available: " + available);
+                    Tr.debug(PolicyExecutorImpl.this, tc, "maxConcurrency permits available: " + maxConcurrencyConstraint.availablePermits());
 
-                // If this was the only polling task left, check once again to ensure there are still no items left in the queue.
+                // Check once again to ensure there are still no items left in the queue.
                 // Otherwise a race condition could leave a task unexecuted.
-                if (maxConcurrency == available && !queue.isEmpty() && maxConcurrencyConstraint.tryAcquire())
+                if (!queue.isEmpty() && maxConcurrencyConstraint.tryAcquire()) {
                     enqueueGlobal(PollingTask.this);
+                }
             } else { // There are still tasks to run, so reschedule the polling task to the global executor if there is an available permit
                 //TODO: Investigate if there is a performance optimization that can be made here
                 //so that we don't need to release and re-acquire a permit each time
@@ -244,7 +249,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
      * The majority of initialization logic should be performed in the activate method, not here.
      */
     public PolicyExecutorImpl() {
-        isServerConfigured = true;
+        providerCreated = null;
     }
 
     /**
@@ -252,18 +257,27 @@ public class PolicyExecutorImpl implements PolicyExecutor {
      *
      * @param globalExecutor the Liberty global executor, which was obtained by the PolicyExecutorProvider via declarative services.
      * @param identifier unique identifier for this instance, to be used for monitoring and problem determination.
+     *            Note: The prefix, PolicyExecutorProvider-, is prepended to the identifier.
+     * @param providerCreatedInstances list of instances created by the PolicyExecutorProvider.
+     *            Each instance is responsible for adding and removing itself from the list per its life cycle.
+     * @throws IllegalStateException if an instance with the specified unique identifier already exists and has not been shut down.
+     * @throws NullPointerException if the specified identifier is null
      */
-    public PolicyExecutorImpl(ExecutorService globalExecutor, String identifier) {
-        isServerConfigured = false;
+    public PolicyExecutorImpl(ExecutorService globalExecutor, String identifier, ConcurrentHashMap<String, PolicyExecutorImpl> providerCreatedInstances) {
         this.globalExecutor = globalExecutor;
         this.identifier = "PolicyExecutorProvider-" + identifier;
+        this.providerCreated = providerCreatedInstances;
+
         maxConcurrencyConstraint.release(maxConcurrency = Integer.MAX_VALUE);
         maxQueueSizeConstraint.release(maxQueueSize = Integer.MAX_VALUE);
+
+        if (providerCreated.putIfAbsent(this.identifier, this) != null)
+            throw new IllegalStateException(this.identifier);
     }
 
     @Override
     public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
-        if (isServerConfigured)
+        if (providerCreated == null)
             throw new UnsupportedOperationException();
 
         // This method is optimized for the scenario where the user first invokes shutdownNow.
@@ -287,10 +301,10 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         }
 
         final long pollInterval = TimeUnit.MILLISECONDS.toNanos(500);
-        timeout = unit.toNanos(timeout);
+        timeout = timeout < 0 ? 0 : unit.toNanos(timeout);
         boolean firstTime = true;
 
-        for (long waitTime = System.nanoTime() - start, remaining = timeout; //
+        for (long waitTime = System.nanoTime() - start, remaining; //
                         (remaining = timeout - waitTime) > 0 || firstTime; //
                         waitTime = System.nanoTime() - start) {
             if (firstTime)
@@ -423,7 +437,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public boolean isShutdown() {
-        if (isServerConfigured)
+        if (providerCreated == null)
             throw new UnsupportedOperationException();
         else
             return state.get() != State.ACTIVE;
@@ -431,7 +445,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public boolean isTerminated() {
-        if (isServerConfigured)
+        if (providerCreated == null)
             throw new UnsupportedOperationException();
 
         State currentState = state.get();
@@ -456,7 +470,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public PolicyExecutor maxConcurrency(int max) {
-        if (isServerConfigured)
+        if (providerCreated == null)
             throw new UnsupportedOperationException();
 
         if (max == -1)
@@ -476,12 +490,16 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             maxConcurrency = max;
         }
 
+        int numOnQueue = queue.size();
+        while (numOnQueue-- > 0 && maxConcurrencyConstraint.tryAcquire())
+            enqueueGlobal(new PollingTask());
+
         return this;
     }
 
     @Override
     public PolicyExecutor maxQueueSize(int max) {
-        if (isServerConfigured)
+        if (providerCreated == null)
             throw new UnsupportedOperationException();
 
         if (max == -1)
@@ -506,7 +524,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public PolicyExecutor maxWaitForEnqueue(long ms) {
-        if (isServerConfigured)
+        if (providerCreated == null)
             throw new UnsupportedOperationException();
 
         if (ms < 0)
@@ -521,7 +539,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public PolicyExecutor queueFullAction(QueueFullAction action) {
-        if (isServerConfigured)
+        if (providerCreated == null)
             throw new UnsupportedOperationException();
 
         if (state.get() != State.ACTIVE)
@@ -545,7 +563,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
         Throwable failure = null;
         try {
-            if (!isServerConfigured)
+            if (providerCreated != null) // the following code only matters when life cycle operations are permitted
                 running.add(future); // intentionally done before checking state to avoid missing cancels on shutdownNow
 
             State currentState = state.get();
@@ -559,7 +577,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         } catch (Throwable x) {
             failure = x;
         } finally {
-            if (!isServerConfigured)
+            if (providerCreated != null)
                 running.remove(future);
         }
 
@@ -569,7 +587,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public void shutdown() {
-        if (isServerConfigured)
+        if (providerCreated == null)
             throw new UnsupportedOperationException();
 
         // Permanently update our configuration such that no more task submits are accepted
@@ -590,6 +608,8 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                     Tr.event(this, tc, "state: ENQUEUE_STOPPING --> ENQUEUE_STOPPED");
 
             shutdownLatch.countDown();
+
+            providerCreated.remove(identifier); // remove tracking of this instance and allow identifier to be reused
         } else
             while (state.get() == State.ENQUEUE_STOPPING)
                 try { // Await completion of other thread that concurrently invokes shutdown.

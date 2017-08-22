@@ -26,6 +26,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.time.temporal.ChronoUnit;
 
+import javax.enterprise.util.Nonbinding;
+import javax.interceptor.InterceptorBinding;
+
 /**
  * The annotation to define a method execution timeout.
  *
@@ -34,19 +37,22 @@ import java.time.temporal.ChronoUnit;
 @Inherited
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD, ElementType.TYPE})
+@Target({ ElementType.METHOD, ElementType.TYPE })
+@InterceptorBinding
 public @interface Timeout {
 
     /**
      *
      * @return the timeout value
      */
+    @Nonbinding
     long value() default 1000;
 
     /**
      *
      * @return the timeout unit
      */
+    @Nonbinding
     ChronoUnit unit() default ChronoUnit.MILLIS;
 
 }

@@ -44,14 +44,14 @@ import com.ibm.websphere.ras.annotation.Trivial;
 public class MediaTypeHeaderProvider implements HeaderDelegate<MediaType> {
 
     private static final TraceComponent tc = Tr.register(MediaTypeHeaderProvider.class);
-    private static final String STRICT_MEDIA_TYPE_CHECK = 
+    private static final String STRICT_MEDIA_TYPE_CHECK =
         "org.apache.cxf.jaxrs.mediaTypeCheck.strict";
-    private static final Pattern COMPLEX_PARAMETERS = 
+    private static final Pattern COMPLEX_PARAMETERS =
         Pattern.compile("(([\\w-]+=\"[^\"]*\")|([\\w-]+=[\\w-/\\+]+))");
-    
+
 
     private static Map<String, MediaType> map = new ConcurrentHashMap<String, MediaType>();
-    private static final int MAX_MT_CACHE_SIZE = 
+    private static final int MAX_MT_CACHE_SIZE =
         Integer.getInteger("org.apache.cxf.jaxrs.max_mediatype_cache_size", 200);
 
     @Override
@@ -116,8 +116,8 @@ public class MediaTypeHeaderProvider implements HeaderDelegate<MediaType> {
             }
         }
 
-        return new MediaType(type.trim().toLowerCase(), 
-                             subtype.trim().toLowerCase(), 
+        return new MediaType(type.trim().toLowerCase(),
+                             subtype.trim().toLowerCase(),
                              parameters);
     }
 
@@ -180,9 +180,8 @@ public class MediaTypeHeaderProvider implements HeaderDelegate<MediaType> {
                     return new MediaType(MediaType.MEDIA_TYPE_WILDCARD,
                                          MediaType.MEDIA_TYPE_WILDCARD,
                                          parameters);
-                } else {
-                    return MediaType.WILDCARD_TYPE;
                 }
+                return MediaType.WILDCARD_TYPE;
 
             }
         }
@@ -201,9 +200,8 @@ public class MediaTypeHeaderProvider implements HeaderDelegate<MediaType> {
                 Tr.debug(tc, "Converting a malformed media type '" + mType + "' to '" + typeToString(mt) + "'");
             }
             return mt;
-        } else {
-            throw new IllegalArgumentException("Media type separator is missing");
         }
+        throw new IllegalArgumentException("Media type separator is missing");
     }
 
     //Liberty change start
