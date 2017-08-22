@@ -155,7 +155,7 @@ public class FTAnnotationUtils {
         Class<? extends FallbackHandler<?>> fallbackClass = fallback.value();
         String fallbackMethodName = fallback.fallbackMethod();
         //If both fallback method and fallback class are set, it is an illegal state.
-        if ((fallbackClass != null) && (fallbackMethodName != null && !"".equals(fallbackMethodName))) {
+        if ((fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) && (fallbackMethodName != null && !"".equals(fallbackMethodName))) {
             throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.conflicts.CWMFT5008E", context.getMethod(), fallbackClass, fallbackMethodName));
         } else if (fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) {
             FallbackHandlerFactory fallbackHandlerFactory = getFallbackHandlerFactory(beanManager);
