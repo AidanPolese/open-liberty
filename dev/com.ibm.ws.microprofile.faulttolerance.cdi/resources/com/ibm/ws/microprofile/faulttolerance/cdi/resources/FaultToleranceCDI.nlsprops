@@ -107,6 +107,11 @@ conversion.error.CWMFT5007E=CWMFT5007E: A problem occurred while converting a sy
 conversion.error.CWMFT5007E.explanation=Any configuration values provided via system properties must be convertable to the appropriate type. e.g. using Long.valueOf(String)
 conversion.error.CWMFT5007E.useraction=Check that the specified value is in the correct format for the type of the property it is overriding.
 
+#The fallback policies are conflicting.
+fallback.policy.conflicts.CWMFT5008E=CWMFT5008E: The fallback policy for the method {0} is incorrect as both Fallback handler class {1} and fallbackMethod {2} were specified. Only one of them should be specified.
+fallback.policy.conflicts.CWMFT5008E.explanation=Either fallbackMethod or value should be set, not both. 
+fallback.policy.conflicts.CWMFT5008E.useraction=Either remove the fallbackMethod or the value from the Fallback annotation.
+
 #Generic error for internal failures. 
 internal.error.CWMFT5997E=CWMFT5997E: An internal error occurred. The exception is {0}.
 internal.error.CWMFT5997E.explanation=The application server experienced an internal error.
