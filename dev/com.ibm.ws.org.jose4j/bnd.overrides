@@ -3,13 +3,7 @@ bVersion=1.0
 
 Bundle-Name: org.jose4j
 Bundle-Description: org.jose4j; version=0.5.1
-Bundle-SymbolicName: com.ibm.ws.org.jose4j
+Bundle-SymbolicName: com.ibm.ws.org.jose4j.0.5.1
 
 WS-TraceGroup: \
   OPENIDCONNECT
-
-Export-Package: \
-  !org.jose4j.*.internal.*, \
-  org.jose4j.*
-
-Private-Package: org.jose4j.*.internal.*

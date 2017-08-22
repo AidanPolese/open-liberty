@@ -12,7 +12,7 @@ Subsystem-Name: Json Web Token
 -bundles=com.ibm.ws.security.jwt, \
   com.ibm.ws.security.common, \
   com.ibm.ws.org.apache.commons.codec.1.4, \
-  com.ibm.ws.org.jose4j, \
+  com.ibm.ws.org.jose4j.0.5.1, \
   com.ibm.ws.org.json.simple.1.1.1, \
   com.ibm.ws.com.google.gson.2.2.4, \
   com.ibm.ws.org.slf4j.api.1.7.7, \
