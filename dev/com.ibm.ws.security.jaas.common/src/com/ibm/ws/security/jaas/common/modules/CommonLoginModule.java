@@ -109,19 +109,25 @@ public abstract class CommonLoginModule implements LoginModule {
     private void removeSubjectPrincipals() {
         Set<Principal> principals = subject.getPrincipals();
         principals.removeAll(temporarySubject.getPrincipals());
-        principals.remove(sharedState.get(Constants.WSPRINCIPAL_KEY));
+        Object toRemove = sharedState.get(Constants.WSPRINCIPAL_KEY);
+        if (toRemove != null)
+            principals.remove(toRemove);
     }
 
     private void removeSubjectPublicCredentials() {
         Set<Object> publicCredentials = subject.getPublicCredentials();
         publicCredentials.removeAll(temporarySubject.getPublicCredentials());
-        publicCredentials.remove(sharedState.get(Constants.WSCREDENTIAL_KEY));
+        Object toRemove = sharedState.get(Constants.WSCREDENTIAL_KEY);
+        if (toRemove != null)
+            publicCredentials.remove(toRemove);
     }
 
     private void removeSubjectPrivateCredentials() {
         Set<Object> privateCredentials = subject.getPrivateCredentials();
         privateCredentials.removeAll(temporarySubject.getPrivateCredentials());
-        privateCredentials.remove(sharedState.get(Constants.WSSSOTOKEN_KEY));
+        Object toRemove = sharedState.get(Constants.WSSSOTOKEN_KEY);
+        if (toRemove != null)
+            privateCredentials.remove(toRemove);
     }
 
     protected void setUpSubject(final Subject authSubj) throws LoginException {
