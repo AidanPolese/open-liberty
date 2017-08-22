@@ -8,4 +8,11 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
- apply from: '../cnf/gradle/scripts/fat.gradle' 
+
+/**
+ * <p>Support for Microprofile Health
+ *
+ *
+ *
+ */
+package org.eclipse.microprofile.health.spi;
