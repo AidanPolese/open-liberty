@@ -13,6 +13,7 @@ package com.ibm.ws.jca.internal;
 import static com.ibm.wsspi.classloading.ApiType.API;
 import static com.ibm.wsspi.classloading.ApiType.IBMAPI;
 import static com.ibm.wsspi.classloading.ApiType.SPEC;
+import static com.ibm.wsspi.classloading.ApiType.STABLE;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -149,7 +150,7 @@ class ConnectorModuleMetatypeBundleImpl implements ConnectorModuleMetatype {
      */
     private static final List<String> DYNAMIC_IMPORT_PACKAGE_LIST = Collections.unmodifiableList(Arrays.asList("*"));
 
-    private static final EnumSet<ApiType> DEFAULT_API_TYPES = EnumSet.of(SPEC, IBMAPI, API);
+    private static final EnumSet<ApiType> DEFAULT_API_TYPES = EnumSet.of(SPEC, IBMAPI, API, STABLE);
 
     private static String getSymbolicName(String bundleId) {
         return String.format("connector.module.metatype.bundle.ConnectorModule.%s", bundleId);
@@ -206,19 +207,12 @@ class ConnectorModuleMetatypeBundleImpl implements ConnectorModuleMetatype {
             Tr.debug(this, tc, "synthetic bundle info:",
                      bootstrapContextAlias, metadataImpl.hasConfig(), MANIFEST_DEFAULT_CONFIG_KEY + "=" + defaultConfig, defaultInstance);
 
-        metatypeBundle = new BundleFactory()
-                        .setBundleName("ConnectorModuleMetatype bundle for " + appName + "-" + moduleName)
+        metatypeBundle = new BundleFactory().setBundleName("ConnectorModuleMetatype bundle for " + appName + "-" + moduleName)
                         // TODO call setBundleVersion with some more appropriate value ?
-                        .setBundleSymbolicName(getSymbolicName(id))
-                        .dynamicallyImportPackages(DYNAMIC_IMPORT_PACKAGE_LIST)
-                        .addManifestAttribute(MANIFEST_API_TYPE_VISIBILITY_KEY, DEFAULT_API_TYPES)
-                        .addManifestAttribute(MANIFEST_DEFAULT_CONFIG_KEY, Arrays.asList(defaultConfig))
-                        .setBundleLocationPrefix(BUNDLE_LOCATION_PREFIX)
-                        .setBundleLocation("ConnectorModule:" + id)
-                        .setBundleContext(bundleContext)
-                        .setDefaultInstance(defaultInstance)
-                        .setMetatypeXML(metatypeXML)
-                        .createBundle();
+                        .setBundleSymbolicName(getSymbolicName(id)).dynamicallyImportPackages(DYNAMIC_IMPORT_PACKAGE_LIST).addManifestAttribute(MANIFEST_API_TYPE_VISIBILITY_KEY,
+                                                                                                                                                DEFAULT_API_TYPES).addManifestAttribute(MANIFEST_DEFAULT_CONFIG_KEY,
+                                                                                                                                                                                        Arrays.asList(defaultConfig)).setBundleLocationPrefix(BUNDLE_LOCATION_PREFIX).setBundleLocation("ConnectorModule:"
+                                                                                                                                                                                                                                                                                        + id).setBundleContext(bundleContext).setDefaultInstance(defaultInstance).setMetatypeXML(metatypeXML).createBundle();
 
         if (trace && tc.isDebugEnabled())
             Tr.debug(this, tc, "[" + id + "] bundle " + metatypeBundle);
@@ -236,7 +230,7 @@ class ConnectorModuleMetatypeBundleImpl implements ConnectorModuleMetatype {
         if (metadataImpl.resourceAdapterPid != null)
             dict.put("source.pid", metadataImpl.resourceAdapterPid);
         String[] providedClassNames = new String[] { ResourceAdapterService.class.getName(),
-                                                    ClassProvider.class.getName() };
+                                                     ClassProvider.class.getName() };
         registration = bundleContext.registerService(providedClassNames, service, dict);
     }
 
