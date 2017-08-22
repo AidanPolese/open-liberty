@@ -13,7 +13,7 @@ package com.ibm.jbatch.container.exception;
 /**
  *
  */
-public class ExecutionAssignedToServerException extends Exception {
+public class ExecutionAssignedToServerException extends BatchContainerRuntimeException {
 
     /**
      *

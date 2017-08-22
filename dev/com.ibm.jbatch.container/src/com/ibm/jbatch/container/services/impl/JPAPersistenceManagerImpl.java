@@ -894,7 +894,7 @@ public class JPAPersistenceManagerImpl extends AbstractPersistenceManager implem
         try {
             return new TranRequest<JobExecution>(em) {
                 @Override
-                public JobExecution call() throws ExecutionAssignedToServerException {
+                public JobExecution call() {
                     JobExecutionEntity execution = entityMgr.find(JobExecutionEntity.class, jobExecutionId, LockModeType.PESSIMISTIC_WRITE);
                     if (execution == null) {
                         throw new NoSuchJobExecutionException("No job execution found for id = " + jobExecutionId);

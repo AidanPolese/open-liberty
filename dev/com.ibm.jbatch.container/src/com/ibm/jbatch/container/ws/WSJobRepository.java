@@ -208,6 +208,16 @@ public interface WSJobRepository {
      * Update the batch status of this job execution and instance
      *
      * @param executionId
+     * @param date
+     * @return
+     * @throws ExecutionAssignedToServerException
+     */
+    public abstract WSJobExecution updateJobExecutionAndInstanceOnStop(long executionId, Date date) throws ExecutionAssignedToServerException;
+
+    /**
+     * Update the batch status of this job execution and instance
+     *
+     * @param executionId
      * @param batchStatus
      * @param date
      * @return

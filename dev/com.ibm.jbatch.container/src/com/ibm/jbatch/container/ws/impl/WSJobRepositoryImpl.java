@@ -354,6 +354,12 @@ public class WSJobRepositoryImpl implements WSJobRepository {
     }
 
     @Override
+    public WSJobExecution updateJobExecutionAndInstanceOnStop(
+                                                              long jobExecutionId, Date date) throws ExecutionAssignedToServerException {
+        return (WSJobExecution) persistenceManagerService.updateJobExecutionAndInstanceNotSetToServerYet(jobExecutionId, date);
+    }
+
+    @Override
     public WSRemotablePartitionExecution createRemotablePartition(long jobExecutionId, String stepName,
                                                                   int partitionNumber, RemotablePartitionState internalState) {
         return persistenceManagerService.createRemotablePartition(jobExecutionId, stepName, partitionNumber, internalState);
