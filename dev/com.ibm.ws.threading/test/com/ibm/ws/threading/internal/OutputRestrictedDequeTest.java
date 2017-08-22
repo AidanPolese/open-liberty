@@ -21,6 +21,7 @@ import static org.junit.Assert.fail;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -57,6 +58,100 @@ public class OutputRestrictedDequeTest {
     @BeforeClass
     public static void beforeClass() {
         testThreads = Executors.newFixedThreadPool(20);
+    }
+
+    private static class OfferTask implements Callable<Void> {
+        private final AtomicBoolean done;
+        private final OutputRestrictedDeque<Integer> q;
+        private final AtomicInteger size;
+
+        private OfferTask(OutputRestrictedDeque<Integer> q, AtomicBoolean done, AtomicInteger size) {
+            this.done = done;
+            this.q = q;
+            this.size = size;
+        }
+
+        @Override
+        public Void call() throws Exception {
+            while (!done.get()) {
+                if (q.offer((int) (Math.random() * 5.0)))
+                    size.incrementAndGet();
+            }
+            return null;
+        }
+    }
+
+    private static class PollTask implements Callable<Void> {
+        private final AtomicBoolean done;
+        private final OutputRestrictedDeque<Integer> q;
+        private final AtomicInteger size;
+        private final long timeoutMS;
+
+        private PollTask(OutputRestrictedDeque<Integer> q, AtomicBoolean done, AtomicInteger size, long timeoutMS) {
+            this.done = done;
+            this.q = q;
+            this.size = size;
+            this.timeoutMS = timeoutMS;
+        }
+
+        @Override
+        public Void call() throws Exception {
+            while (!done.get()) {
+                if (timeoutMS == 0) {
+                    if (q.poll() != null)
+                        size.decrementAndGet();
+                } else if (timeoutMS == Integer.MAX_VALUE) {
+                    q.take();
+                    size.decrementAndGet();
+                } else {
+                    if (q.poll(timeoutMS, TimeUnit.MILLISECONDS) != null)
+                        size.decrementAndGet();
+                }
+            }
+            return null;
+        }
+    }
+
+    private static class PushTask implements Callable<Void> {
+        private final AtomicBoolean done;
+        private final OutputRestrictedDeque<Integer> q;
+        private final AtomicInteger size;
+
+        private PushTask(OutputRestrictedDeque<Integer> q, AtomicBoolean done, AtomicInteger size) {
+            this.done = done;
+            this.q = q;
+            this.size = size;
+        }
+
+        @Override
+        public Void call() throws Exception {
+            while (!done.get()) {
+                q.push((int) (Math.random() * 5.0));
+                size.incrementAndGet();
+            }
+            return null;
+        }
+    }
+
+    private static class RemoveTask implements Callable<Void> {
+        private final AtomicBoolean done;
+        private final OutputRestrictedDeque<Integer> q;
+        private final AtomicInteger size;
+
+        private RemoveTask(OutputRestrictedDeque<Integer> q, AtomicBoolean done, AtomicInteger size) {
+            this.done = done;
+            this.q = q;
+            this.size = size;
+        }
+
+        @Override
+        public Void call() throws Exception {
+            while (!done.get()) {
+                if (q.remove((int) (Math.random() * 5.0)))
+                    size.decrementAndGet();
+            }
+            return null;
+        }
     }
 
     // With 1 item in the queue, concurrently offer another, and then poll 2 items, where the second poll waits if necessary.
@@ -159,6 +254,50 @@ public class OutputRestrictedDequeTest {
         assertEquals(2, q.size());
     }
 
+    // This test focuses on smaller-sized queues where items that are offered/pushed are rapidly polled/removed from the queue.
+    @Test
+    public void testManyPollsFewOffersAndPushes() throws Exception {
+        final long durationOfTestNS = TimeUnit.SECONDS.toNanos(2);
+
+        final AtomicBoolean done = new AtomicBoolean();
+        final OutputRestrictedDeque<Integer> q = new OutputRestrictedDeque<Integer>();
+        final AtomicInteger size = new AtomicInteger();
+
+        Future<?>[] f = new Future<?>[10];
+        f[0] = testThreads.submit(new OfferTask(q, done, size));
+        f[1] = testThreads.submit(new PushTask(q, done, size));
+        f[2] = testThreads.submit(new PollTask(q, done, size, 0)); // poll
+        f[3] = testThreads.submit(new PollTask(q, done, size, 500)); // poll(timeout)
+        f[4] = testThreads.submit(new PollTask(q, done, size, Integer.MAX_VALUE)); // take
+        f[5] = testThreads.submit(new RemoveTask(q, done, size));
+        f[6] = testThreads.submit(new PollTask(q, done, size, 0)); // poll
+        f[7] = testThreads.submit(new PollTask(q, done, size, 500)); // poll(timeout)
+        f[8] = testThreads.submit(new PollTask(q, done, size, Integer.MAX_VALUE)); // take
+        f[9] = testThreads.submit(new RemoveTask(q, done, size));
+
+        TimeUnit.NANOSECONDS.sleep(durationOfTestNS);
+
+        done.set(true);
+        f[4].cancel(true); // interrupt take
+        f[8].cancel(true); // interrupt take
+        for (Future<?> future : f)
+            try {
+                future.get();
+            } catch (CancellationException x) {
+            }
+
+        assertEquals(q.toString(), size.get(), q.size());
+
+        int count = 0;
+        for (Iterator<Integer> it = q.iterator(); it.hasNext();) {
+            assertTrue(it.hasNext());
+            assertNotNull(it.next());
+            count++;
+        }
+
+        assertEquals(size.get(), count);
+    }
+
     // Repeatedly have 2 threads performing offer, 2 performing push, 2 performing poll, 1 performing timed poll,
     // and one performing removal of specific items. Let the test run for a fixed duration and then compare the
     // reported size against what we think the size should be based on whether or not offers/pushes/polls/removes
@@ -170,67 +309,18 @@ public class OutputRestrictedDequeTest {
         final AtomicBoolean done = new AtomicBoolean();
         final OutputRestrictedDeque<Integer> q = new OutputRestrictedDeque<Integer>();
         final AtomicInteger size = new AtomicInteger();
-        Callable<Void> offerTask = new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                while (!done.get()) {
-                    if (q.offer((int) (Math.random() * 5.0)))
-                        size.incrementAndGet();
-                }
-                return null;
-            }
-        };
-        Callable<Void> pushTask = new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                while (!done.get()) {
-                    q.push((int) (Math.random() * 5.0));
-                    size.incrementAndGet();
-                }
-                return null;
-            }
-        };
-        Callable<Void> pollTask = new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                while (!done.get()) {
-                    if (q.poll() != null)
-                        size.decrementAndGet();
-                }
-                return null;
-            }
-        };
-        Callable<Void> pollTimedTask = new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                while (!done.get()) {
-                    if (q.poll(500, TimeUnit.MILLISECONDS) != null)
-                        size.decrementAndGet();
-                }
-                return null;
-            }
-        };
-        Callable<Void> removeTask = new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                while (!done.get()) {
-                    if (q.remove((int) (Math.random() * 5.0)))
-                        size.decrementAndGet();
-                }
-                return null;
-            }
-        };
+
         Future<?>[] f = new Future<?>[10];
-        f[0] = testThreads.submit(offerTask);
-        f[1] = testThreads.submit(pushTask);
-        f[2] = testThreads.submit(pollTask);
-        f[3] = testThreads.submit(pollTimedTask);
-        f[4] = testThreads.submit(removeTask);
-        f[5] = testThreads.submit(offerTask);
-        f[6] = testThreads.submit(pushTask);
-        f[7] = testThreads.submit(pollTask);
-        f[8] = testThreads.submit(pollTimedTask);
-        f[9] = testThreads.submit(removeTask);
+        f[0] = testThreads.submit(new OfferTask(q, done, size));
+        f[1] = testThreads.submit(new PushTask(q, done, size));
+        f[2] = testThreads.submit(new PollTask(q, done, size, 0));
+        f[3] = testThreads.submit(new PollTask(q, done, size, 500));
+        f[4] = testThreads.submit(new RemoveTask(q, done, size));
+        f[5] = testThreads.submit(new OfferTask(q, done, size));
+        f[6] = testThreads.submit(new PushTask(q, done, size));
+        f[7] = testThreads.submit(new PollTask(q, done, size, 0));
+        f[8] = testThreads.submit(new PollTask(q, done, size, 500));
+        f[9] = testThreads.submit(new RemoveTask(q, done, size));
         TimeUnit.NANOSECONDS.sleep(durationOfTestNS);
         done.set(true);
         for (Future<?> future : f)
