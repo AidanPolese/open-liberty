@@ -13,7 +13,8 @@ Import-Package: *
 Export-Package: com.ibm.ws.microprofile.faulttolerance.cdi
 
 Private-Package: \
-    com.ibm.ws.microprofile.faulttolerance.cdi.resources
+    com.ibm.ws.microprofile.faulttolerance.cdi.resources,\
+    com.ibm.ws.microprofile.faulttolerance.cdi.config
 
 Include-Resource: \
     META-INF=resources/META-INF
