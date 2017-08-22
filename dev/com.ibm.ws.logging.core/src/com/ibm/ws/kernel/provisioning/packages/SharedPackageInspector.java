@@ -36,8 +36,8 @@ public interface SharedPackageInspector {
         /** IBM-API type="third-party" only */
         boolean isThirdPartyApi();
 
-        /** IBM-API type="spec" or type="spec:osgi" or type="third-party" */
-        boolean isSpecOrThirdPartyApi();
+        /** IBM API type="stable" */        
+        boolean isStableApi();              
 
         /** IBM-API type="spec:osgi" */
         public boolean isSpecOsgiApi();

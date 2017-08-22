@@ -18,6 +18,7 @@ import static com.ibm.ws.classloading.ClassLoaderConfigHelper.Attribute.privateL
 import static com.ibm.wsspi.classloading.ApiType.API;
 import static com.ibm.wsspi.classloading.ApiType.IBMAPI;
 import static com.ibm.wsspi.classloading.ApiType.SPEC;
+import static com.ibm.wsspi.classloading.ApiType.STABLE;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +61,7 @@ import com.ibm.wsspi.library.Library;
 
 /**
  * Convenience wrapper around the server.xml configuration for class loaders.
- * 
+ *
  * The configuration processing logic in this class is duplicated in com.ibm.ws.jsp.taglib.SharedLibClassesContainerInfoAdapter
  */
 public class ClassLoaderConfigHelper {
@@ -79,7 +80,7 @@ public class ClassLoaderConfigHelper {
         }
     }
 
-    private static final EnumSet<ApiType> DEFAULT_API_TYPES = EnumSet.of(SPEC, IBMAPI, API);
+    private static final EnumSet<ApiType> DEFAULT_API_TYPES = EnumSet.of(SPEC, IBMAPI, API, STABLE);
 
     private final List<String> sharedLibraries;
     private final List<String> commonLibraries;
@@ -141,7 +142,7 @@ public class ClassLoaderConfigHelper {
     private Configuration retrieveConfig(NestedConfigHelper configHelper, ConfigurationAdmin configAdmin) throws InitWithoutConfig {
         if (configHelper == null)
             throw new InitWithoutConfig("Configuration not found");
-        // We need configAdmin to list the configurations of nested classloader elements with this application as their parent 
+        // We need configAdmin to list the configurations of nested classloader elements with this application as their parent
         if (configAdmin == null)
             throw new InitWithoutConfig("ConfigurationAdmin service not found");
 
@@ -300,15 +301,15 @@ public class ClassLoaderConfigHelper {
                                                  ClassLoaderConfiguration config,
                                                  ClassLoadingService classLoadingService,
                                                  Library globalSharedLibrary) {
-        // This method uses early returns.  
+        // This method uses early returns.
         // There is a very specific set of conditions under which we
-        // want to use a global shared library class loader as the parent 
+        // want to use a global shared library class loader as the parent
         // for a top-level classloader:
         // - There must be no explicit <classloader> configuration element.
         // - The global shared library object must exist (FFDC if not).
         // - The global shared library object must have filesets (no FFDC since this could be a valid server configuration).
         // - The global shared library filesets must have some files (no FFDC either way).
-        // Under any other circumstances we will create a top-level classloader with a 
+        // Under any other circumstances we will create a top-level classloader with a
         // gateway class loader as its parent, according to the supplied gateway configuration.
         gwConfig.setApiTypeVisibility(apiTypes);
         if (classLoaderConfigProps != null) {
