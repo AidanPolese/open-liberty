@@ -24,4 +24,6 @@ publish.feature.resources: *.mf
 	com.ibm.websphere.security;version=latest, \
 	com.ibm.ws.security.registry;version=latest, \
 	com.ibm.ws.management.security;version=latest, \
-	com.ibm.ws.security.ready.service;version=latest
+	com.ibm.ws.security.ready.service;version=latest, \
+	com.ibm.ws.security.mp.jwt.proxy;version=latest
+	
