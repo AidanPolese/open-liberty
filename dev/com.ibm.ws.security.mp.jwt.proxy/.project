@@ -1,6 +1,6 @@
    <buildSpec>
         <buildCommand>
-            <name>com.ibm.websphere.org.eclipse.microprofile.jwt</name>
+            <name>com.ibm.ws.security.mp.jwt.proxy</name>
             <name>org.eclipse.jdt.core.javabuilder</name>
             <arguments>
             </arguments>

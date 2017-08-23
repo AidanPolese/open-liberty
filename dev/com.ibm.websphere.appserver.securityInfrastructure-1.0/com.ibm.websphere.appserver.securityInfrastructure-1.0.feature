@@ -9,6 +9,7 @@ symbolicName=com.ibm.websphere.appserver.securityInfrastructure-1.0
  com.ibm.websphere.security, \
  com.ibm.ws.security.registry; start-phase:=CONTAINER_EARLY, \
  com.ibm.ws.management.security, \
- com.ibm.ws.security.ready.service
+ com.ibm.ws.security.ready.service, \
+ com.ibm.ws.security.mp.jwt.proxy
 kind=ga
 edition=core
