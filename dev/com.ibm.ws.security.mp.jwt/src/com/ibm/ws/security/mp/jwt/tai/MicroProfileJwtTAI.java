@@ -426,14 +426,16 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
                 Tr.error(tc, "USERNAME_NOT_FOUND", new Object[0]);
                 return sendToErrorPage(res, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
             }
+            String issuer = null;
             try {
                 jwtPrincipal = TAIJwtUtils.createJwtPrincipal(username, claimToPrincipalMapping.getMappedGroups(), jwtToken);
+                issuer = (String) JsonUtils.claimFromJsonObject(decodedPayload, "iss");
             } catch (JoseException e) {
                 // Tr.error(tc, "", new Object[] {});
                 return sendToErrorPage(res, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
             }
 
-            TAIResult result = populatePropertiesFromMapping(res, clientConfig, claimToPrincipalMapping, customProperties);
+            TAIResult result = populatePropertiesFromMapping(res, clientConfig, claimToPrincipalMapping, customProperties, issuer);
             if (result != null) {
                 // Error message (if any) has already been logged
                 return result;
@@ -461,9 +463,9 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
         return authnResult;
     }
 
-    TAIResult populatePropertiesFromMapping(HttpServletResponse res, MicroProfileJwtConfig clientConfig, JwtPrincipalMapping claimToPrincipalMapping, Hashtable<String, Object> customProperties) throws WebTrustAssociationFailedException {
+    TAIResult populatePropertiesFromMapping(HttpServletResponse res, MicroProfileJwtConfig clientConfig, JwtPrincipalMapping claimToPrincipalMapping, Hashtable<String, Object> customProperties, String issuer) throws WebTrustAssociationFailedException {
         //String realm = claimToPrincipalMapping.getMappedRealm();
-        String realm = "defaultRealm";
+        String realm = issuer;
         //        if (realm == null) {
         //            // runtime default
         //            realm = defaultRealm(clientConfig);
