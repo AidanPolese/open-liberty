@@ -108,13 +108,12 @@ public class ContainerRequestContextImpl extends AbstractRequestContextImpl impl
             if (!requestUriString.startsWith(baseUriString)) {
                 setRequestUri(requestUri, URI.create("/"));
                 return;
-            } else {
-                requestUriString = requestUriString.substring(baseUriString.length());
-                if (requestUriString.isEmpty()) {
-                    requestUriString = "/";
-                }
-                requestUri = URI.create(requestUriString);
             }
+            requestUriString = requestUriString.substring(baseUriString.length());
+            if (requestUriString.isEmpty()) {
+                requestUriString = "/";
+            }
+            requestUri = URI.create(requestUriString);
 
         }
         doSetRequestUri(requestUri);

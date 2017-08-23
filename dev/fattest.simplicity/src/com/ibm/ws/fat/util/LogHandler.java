@@ -10,13 +10,9 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.ibm.tivoli.remoteaccess.BaseProtocol;
-import com.ibm.tivoli.remoteaccess.log.JreLogAdapter;
-
 /**
  * <p>
- * Helper class for tracking RXA, Simplicity, and FAT trace. Loading this
- * class automatically configures RXA to start using the JRE Logger.
+ * Helper class for tracking Simplicity and FAT trace.
  * </p>
  * <p>
  * By default, the <code>enable()</code> method enables two log files: one
@@ -35,30 +31,6 @@ import com.ibm.tivoli.remoteaccess.log.JreLogAdapter;
  * @author Tim Burns
  */
 public class LogHandler {
-
-    /**
-     * Arbitrary package name used to define RXA logger. It happens to match the
-     * actual package name used in the Java implementation. This logger name
-     * should be used to control RXA log messages.
-     */
-    public static final String RXA_LOGGER_NAME = "com.ibm.tivoli.remoteaccess";
-
-    static {
-        try {
-            // RXA does not use JRE Logger by default; it must be enabled like this
-            Logger.getLogger(RXA_LOGGER_NAME); // NOTE: this line needs to be here for some reason
-            JreLogAdapter logAdapter = JreLogAdapter.getLogger(RXA_LOGGER_NAME);
-            BaseProtocol.setLogger(logAdapter);
-            BaseProtocol.startLogging();
-            // set these logging levels in logging.properties
-            //    		Logger.getLogger("com.ibm.websphere.simplicity").setLevel(Level.FINEST);
-            //    		Logger.getLogger("com.ibm.websphere.jiiws").setLevel(Level.FINE);
-            //    		Logger.getLogger(RXA_LOGGER_NAME).setLevel(Level.FINEST);
-        } catch (Throwable t) {
-            System.out.println("Failed to initialize RXA log handler!");
-            t.printStackTrace(System.out);
-        }
-    }
 
     protected Set<FileHandler> handlers;
 

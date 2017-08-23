@@ -4,10 +4,21 @@ bVersion=1.0
 javac.source: 1.8
 javac.target: 1.8
 
+# CXF files from the dev/com.ibm.ws.org.apache.cxf.3.2.jaxrs project:
+cxf-core=cxf-core-3.2.0-20170815.181006-518.jar
+cxf-rt-features-clustering=cxf-rt-features-clustering-3.2.0-20170815.120200-511.jar
+cxf-rt-frontend-jaxrs=cxf-rt-frontend-jaxrs-3.2.0-20170815.120304-511.jar
+cxf-rt-rs-client=cxf-rt-rs-client-3.2.0-20170815.120426-508.jar
+cxf-rt-rs-service-description=cxf-rt-rs-service-description-3.2.0-20170815.120746-505.jar
+cxf-rt-transports-http=cxf-rt-transports-http-3.2.0-20170815.120848-505.jar
+cxf-tools-common=cxf-tools-common-3.2.0-20170814.175354-499.jar
+cxf-tools-wadlto-jaxrs=cxf-tools-wadlto-jaxrs-3.2.0-20170814.175516-496.jar
+
+
 Bundle-Name: JAX-RS 2.1 Engine
 Bundle-SymbolicName: com.ibm.ws.jaxrs.2.1.common
 Bundle-Description: IBM JAX-RS 2.1 engine; version=${bVersion}
-Bundle-ClassPath:  ., lib/cxf-core-3.2.0-SNAPSHOT.jar, lib/cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar, lib/cxf-rt-rs-client-3.2.0-SNAPSHOT.jar,lib/cxf-rt-transports-http-3.2.0-SNAPSHOT.jar, lib/cxf-tools-common-3.2.0-SNAPSHOT.jar, lib/cxf-tools-wadlto-jaxrs-3.2.0-SNAPSHOT.jar, lib/cxf-rt-rs-service-description-3.2.0-SNAPSHOT.jar, lib/jackson-core-asl-1.6.2.jar, lib/jackson-jaxrs-1.6.2.jar, lib/jackson-mapper-asl-1.6.2.jar, lib/jackson-xc-1.6.2.jar, \
+Bundle-ClassPath:  ., lib/${cxf-core}, lib/${cxf-rt-frontend-jaxrs}, lib/${cxf-rt-rs-client},lib/${cxf-rt-transports-http}, lib/${cxf-tools-common}, lib/${cxf-tools-wadlto-jaxrs}, lib/${cxf-rt-rs-service-description}, lib/jackson-core-asl-1.6.2.jar, lib/jackson-jaxrs-1.6.2.jar, lib/jackson-mapper-asl-1.6.2.jar, lib/jackson-xc-1.6.2.jar, \
 
 # jaxrs-2.1 is part of EE7 and therefore requires java 1.8
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
@@ -127,17 +138,17 @@ Private-Package:\
    com.ibm.ws.jaxrs20.*, \
 
 Include-Resource: \
-  lib/cxf-core-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-core-3.2.0-SNAPSHOT.jar, \
-  lib/cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar, \
-  lib/cxf-rt-rs-client-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-rs-client-3.2.0-SNAPSHOT.jar, \
-  lib/cxf-rt-transports-http-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-transports-http-3.2.0-SNAPSHOT.jar, \
-  lib/cxf-tools-common-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-tools-common-3.2.0-SNAPSHOT.jar, \
-  lib/cxf-tools-wadlto-jaxrs-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-tools-wadlto-jaxrs-3.2.0-SNAPSHOT.jar, \
-  lib/cxf-rt-rs-service-description-3.2.0-SNAPSHOT.jar=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-rs-service-description-3.2.0-SNAPSHOT.jar, \
-  lib/jackson-core-asl-1.6.2.jar=${repo;org.codehaus.jackson:jackson-core-asl;1.6.2}, \
-  lib/jackson-jaxrs-1.6.2.jar=${repo;org.codehaus.jackson:jackson-jaxrs;1.6.2}, \
-  lib/jackson-mapper-asl-1.6.2.jar=${repo;org.codehaus.jackson:jackson-mapper-asl;1.6.2}, \
-  lib/jackson-xc-1.6.2.jar=${repo;org.codehaus.jackson:jackson-xc;1.6.2}, \
+  lib/${cxf-core}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-core}, \
+  lib/${cxf-rt-frontend-jaxrs}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-frontend-jaxrs}, \
+  lib/${cxf-rt-rs-client}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-rs-client}, \
+  lib/${cxf-rt-transports-http}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-transports-http}, \
+  lib/${cxf-tools-common}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-tools-common}, \
+  lib/${cxf-tools-wadlto-jaxrs}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-tools-wadlto-jaxrs}, \
+  lib/${cxf-rt-rs-service-description}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-rs-service-description}, \
+  lib/jackson-core-asl-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-core-asl;1.6.2}, \
+  lib/jackson-jaxrs-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-jaxrs;1.6.2}, \
+  lib/jackson-mapper-asl-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-mapper-asl;1.6.2}, \
+  lib/jackson-xc-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-xc;1.6.2}, \
   org/apache/cxf=bin/org/apache/cxf, \
   org/codehaus/jackson=bin/org/codehaus/jackson
 
@@ -149,17 +160,17 @@ Include-Resource: \
 instrument.classesExcludes: com/ibm/ws/jaxrs20/internal/resources/*.class
 
 -buildpath: \
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-core-3.2.0-SNAPSHOT.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-frontend-jaxrs-3.2.0-SNAPSHOT.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-rs-client-3.2.0-SNAPSHOT.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-transports-http-3.2.0-SNAPSHOT.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-tools-common-3.2.0-SNAPSHOT.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-tools-wadlto-jaxrs-3.2.0-SNAPSHOT.jar;version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/cxf-rt-rs-service-description-3.2.0-SNAPSHOT.jar;version=file,\
-	org.codehaus.jackson:jackson-core-asl;version=1.6.2, \
-	org.codehaus.jackson:jackson-jaxrs;version=1.6.2, \
-	org.codehaus.jackson:jackson-mapper-asl;version=1.6.2, \
-	org.codehaus.jackson:jackson-xc;version=1.6.2, \
+	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-core};version=file,\
+	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-frontend-jaxrs};version=file,\
+	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-rs-client};version=file,\
+	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-transports-http};version=file,\
+	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-tools-common};version=file,\
+	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-tools-wadlto-jaxrs};version=file,\
+	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-rs-service-description};version=file,\
+	com.ibm.ws.org.codehaus.jackson:jackson-core-asl;version=1.6.2, \
+	com.ibm.ws.org.codehaus.jackson:jackson-jaxrs;version=1.6.2, \
+	com.ibm.ws.org.codehaus.jackson:jackson-mapper-asl;version=1.6.2, \
+	com.ibm.ws.org.codehaus.jackson:jackson-xc;version=1.6.2, \
 	com.ibm.ws.adaptable.module;version=latest,\
 	com.ibm.ws.anno;version=latest,\
 	com.ibm.ws.artifact;version=latest,\

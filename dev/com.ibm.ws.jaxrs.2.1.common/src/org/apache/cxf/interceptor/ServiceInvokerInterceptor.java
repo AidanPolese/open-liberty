@@ -143,9 +143,8 @@ public class ServiceInvokerInterceptor extends AbstractPhaseInterceptor<Message>
             } catch (ExecutionException e) {
                 if (e.getCause() instanceof RuntimeException) {
                     throw (RuntimeException) e.getCause();
-                } else {
-                    throw new Fault(e.getCause());
                 }
+                throw new Fault(e.getCause());
             }
         }
     }
@@ -160,7 +159,6 @@ public class ServiceInvokerInterceptor extends AbstractPhaseInterceptor<Message>
 
     /**
      * Get the Executor for this invocation.
-     * 
      * @param endpoint
      */
     private Executor getExecutor(final Endpoint endpoint) {

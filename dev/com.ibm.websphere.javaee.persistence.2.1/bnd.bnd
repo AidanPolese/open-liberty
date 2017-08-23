@@ -31,12 +31,12 @@ Private-Package: com.ibm.ws.javaee.persistence.internal, \
    org.apache.geronimo.specs.jpa
 
 Include-Resource: \
-   @lib/javax.persistence_2.1.jar!/about.html
+   @${repo;com.ibm.ws.javax.j2ee:persistence;2.1}!/about.html
 
 instrument.disabled: true
 
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.persistence_2.1.jar;version=file,\
+	com.ibm.ws.javax.j2ee:persistence;version=2.1,\
 	com.ibm.websphere.javaee.persistence.2.0

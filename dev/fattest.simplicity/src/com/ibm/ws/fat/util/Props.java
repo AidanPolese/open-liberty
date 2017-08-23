@@ -19,7 +19,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.ibm.tivoli.remoteaccess.BaseProtocol;
 import com.ibm.websphere.simplicity.Topology;
 
 /**
@@ -268,8 +267,6 @@ public class Props {
         }
         properties.put("simplicity.version", Topology.SIMPLICITY_VERSION);
         //        properties.put("jiiws.version", SessionManager.getVersion());
-        properties.put("rxa.version", BaseProtocol.getRXAVersion());
-        properties.put("rxa.build", BaseProtocol.getRXABuild());
         try {
             properties.put("host.address", InetAddress.getLocalHost().getHostAddress());
             properties.put("host.name", InetAddress.getLocalHost().getHostName());

@@ -220,9 +220,8 @@ public class JAXRSInInterceptor extends AbstractPhaseInterceptor<Message> {
                     Response response = JAXRSUtils.createResponse(resources, null, null, 200, true);
                     exchange.put(Response.class, response);
                     return;
-                } else {
-                    throw ex;
                 }
+                throw ex;
             }
 
             if (LOG != null && LOG.isLoggable(Level.FINE)) {

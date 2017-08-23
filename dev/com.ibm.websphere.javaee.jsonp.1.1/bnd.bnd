@@ -1,0 +1,27 @@
+-include= ~../cnf/resources/bnd/bundle.props
+bVersion=1.0
+
+Bundle-SymbolicName: com.ibm.websphere.javaee.jsonp.1.1
+
+Require-Capability: osgi.ee; filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+
+# Optionally import glassfish RI because spec jar does Class.forName() of it as a fallback option
+Import-Package: \
+   org.glassfish.json;resolution:=optional, \
+   *
+
+Export-Package: \
+   javax.json;thread-context=true;version=1.1, \
+   javax.json.spi;version=1.1, \
+   javax.json.stream;version=1.1
+   
+Include-Resource: \
+  @${repo;com.ibm.ws.javax.j2ee:json-api;1.1}!/!module-info.class
+
+instrument.disabled: true
+
+publish.wlp.jar.suffix: dev/api/spec
+
+-buildpath: \
+	${javac.bootclasspath.java6}, \
+	com.ibm.ws.javax.j2ee:json-api;version=1.1

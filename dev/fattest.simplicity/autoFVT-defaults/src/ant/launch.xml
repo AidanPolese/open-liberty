@@ -146,24 +146,7 @@
 		<!-- by default, only add spec API to the test classpath -->
 		<property name="test.classpath.wlp.include" value="api/spec/*.jar"/>
 		
-		<iff if="is.running.automated.build">
-			<then>
-				<property name="generated.classpath" value=""/>
-			</then>
-			<else>
-				<loadfile property="generated.classpath" srcFile="${basedir}/generated.classpath">
-		          <filterchain>
-		          	  <suffixlines suffix=","/>
-		              <striplinebreaks/>
-		          </filterchain>
-		        </loadfile>
-				<echo message="generated FAT classpath: ${generated.classpath}"/>
-			</else>
-		</iff>
-		
 		<path id="test.bucket.path">
-			<filelist files="${generated.classpath}"/>
-			
 			<!-- Our tests themselves -->
 			<fileset dir="${basedir}/build/lib">
 				<include name="*.jar" />
@@ -180,9 +163,9 @@
  			</fileset>
 			
 			<!-- java libraries for secure SSH authentication -->
-			<fileset dir="${local.java}/lib/">
+			<fileset dir="${local.java}/lib/" erroronmissingdir="false">
 				<include name="*.jar" />
-			</fileset>
+			</fileset> 
 			
 			<!-- The maven dependencies of fattest.simplicity -->
 			<fileset dir="${local.java}/generated/lib" erroronmissingdir="false">

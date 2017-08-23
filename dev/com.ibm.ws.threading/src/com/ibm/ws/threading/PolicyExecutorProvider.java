@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.ibm.ws.threading;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
 import org.osgi.service.component.annotations.Component;
@@ -43,12 +44,22 @@ public class PolicyExecutorProvider {
     private ExecutorService globalExecutor;
 
     /**
+     * Programmatically created instances (via PolicyExecutorProvider) which have not yet been shut down.
+     * Instances of PolicyExecutorImpl manage their own membership in this list, adding themselves
+     * upon construction, and removing themselves upon completion of shutdown.
+     */
+    private final ConcurrentHashMap<String, PolicyExecutorImpl> policyExecutors = new ConcurrentHashMap<String, PolicyExecutorImpl>();
+
+    /**
      * Creates a new policy executor instance.
      *
-     * @param identifier unique identifier for this instance, to be used for monitoring and problem determination.
+     * @param identifier unique identifier for the new instance, to be used for monitoring and problem determination.
+     *            Note: The prefix, PolicyExecutorProvider-, is prepended to the identifier.
      * @return a new policy executor instance.
+     * @throws IllegalStateException if an instance with the specified unique identifier already exists and has not been shut down.
+     * @throws NullPointerException if the specified identifier is null
      */
     public PolicyExecutor create(String identifier) {
-        return new PolicyExecutorImpl(globalExecutor, identifier);
+        return new PolicyExecutorImpl(globalExecutor, identifier, policyExecutors);
     }
 }
