@@ -47,6 +47,8 @@ public class AbstractAnnotationConfig<T extends Annotation> implements Annotatio
                 String key = getPropertyKey(prefix, annotationType, methodName);
                 Object override = getSystemProperty(key, method.getReturnType());
 
+                System.out.println("key=" + key + "override=" + override);
+
                 if (override == null) {
                     key = getPropertyKey("", annotationType, methodName);
                     override = getSystemProperty(key, method.getReturnType());

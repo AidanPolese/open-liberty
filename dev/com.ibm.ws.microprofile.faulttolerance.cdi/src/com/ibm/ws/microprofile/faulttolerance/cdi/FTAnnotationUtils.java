@@ -58,7 +58,10 @@ public class FTAnnotationUtils {
     private static final TraceComponent tc = Tr.register(FTAnnotationUtils.class);
 
     public final static Set<Class<?>> ANNOTATIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(Asynchronous.class, CircuitBreaker.class,
+
                                                                                                             Retry.class, Timeout.class, Bulkhead.class, Fallback.class)));
+
+    public final static String FALLBACKHANDLE_METHOD_NAME = "handle";
 
     static RetryPolicy processRetryAnnotation(Retry retry) {
         int maxRetries = retry.maxRetries();
@@ -156,6 +159,7 @@ public class FTAnnotationUtils {
         String fallbackMethodName = fallback.fallbackMethod();
         //If both fallback method and fallback class are set, it is an illegal state.
         if ((fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) && (fallbackMethodName != null && !"".equals(fallbackMethodName))) {
+            System.out.println("EJ: Invalid tests");
             throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.conflicts.CWMFT5008E", context.getMethod(), fallbackClass, fallbackMethodName));
         } else if (fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) {
             FallbackHandlerFactory fallbackHandlerFactory = getFallbackHandlerFactory(beanManager);
@@ -310,7 +314,7 @@ public class FTAnnotationUtils {
         return policy;
     }
 
-    private static FallbackHandlerFactory getFallbackHandlerFactory(BeanManager beanManager) {
+    public static FallbackHandlerFactory getFallbackHandlerFactory(BeanManager beanManager) {
         FallbackHandlerFactory factory = new FallbackHandlerFactory() {
             @Override
             public <F extends FallbackHandler<?>> F newHandler(Class<F> fallbackClass) {
