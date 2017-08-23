@@ -1713,7 +1713,7 @@ public class PolicyExecutorServlet extends FATServlet {
             fail("Should not be able to complete task2 with insufficient concurrency: " + blockedFuture2.get(102, TimeUnit.MILLISECONDS));
         } catch (TimeoutException x) {} // pass
 
-        // Shutting down the executor isn't enough
+        // Shutting down the executor isn't enough to unblock the tasks
         executor.shutdown();
 
         try {
@@ -1721,21 +1721,20 @@ public class PolicyExecutorServlet extends FATServlet {
         } catch (TimeoutException x) {} // pass
 
         List<Runnable> canceledQueuedTasks = executor.shutdownNow();
-        // TODO enable or correct test once intermittent failure is debugged and fixed
-        // TODO assertEquals("Tasks canceled from the queue: " + canceledQueuedTasks, 3, canceledQueuedTasks.size());
+        assertEquals("Tasks canceled from the queue: " + canceledQueuedTasks, 3, canceledQueuedTasks.size());
 
-        // TODO assertTrue(canceledQueuedTasks.remove(blockedTask1));
-        // TODO assertTrue(canceledQueuedTasks.remove(blockedTask2));
+        assertTrue(canceledQueuedTasks.remove(blockedTask1));
+        assertTrue(canceledQueuedTasks.remove(blockedTask2));
 
-        // TODO recursively submitted task is converted to a Runnable in the shutdownNow result, so it won't directly match
-        //Runnable factorialRunnable = canceledQueuedTasks.get(0);
-        //try {
-        //    factorialRunnable.run();
-        //    fail("Should not be able to run FactorialTask that references a policy executor that has been shut down.");
-        //} catch (RejectedExecutionException x) {
-        //    if (!x.getMessage().contains("CWWKE1202E")) // rejected-due-to-shutdown message
-        //        throw x;
-        //}
+        // recursively submitted task is converted to a Runnable in the shutdownNow result, so it won't directly match
+        Runnable factorialRunnable = canceledQueuedTasks.get(0);
+        try {
+            factorialRunnable.run();
+            fail("Should not be able to run FactorialTask that references a policy executor that has been shut down.");
+        } catch (RejectedExecutionException x) {
+            if (!x.getMessage().contains("CWWKE1202E")) // rejected-due-to-shutdown message
+                throw x;
+        }
 
         assertTrue(executor.awaitTermination(TIMEOUT_NS, TimeUnit.NANOSECONDS));
     }
