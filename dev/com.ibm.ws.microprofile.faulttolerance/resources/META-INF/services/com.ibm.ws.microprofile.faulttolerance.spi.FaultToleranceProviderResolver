@@ -1,1 +1,1 @@
-com.ibm.ws.microprofile.faulttolerance.spi.impl.ProviderResolverImpl
+com.ibm.ws.microprofile.faulttolerance.impl.ProviderResolverImpl

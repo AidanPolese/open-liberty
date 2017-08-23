@@ -54,7 +54,7 @@ cls.fileset.missing.useraction=Check the server configuration for the library el
 # {1} - application classloader allowedApiTypes
 # {2} - library identifier
 # {3} - library allowedApiTypes
-cls.class.space.conflict=CWWKL0008E: Application [{0}] cannot use the common class loader for library [{2}] because they have inconsistent API visibility configurations. Library [{2}] is configured with [{3}] and application [{0}] is configured with [{1}].
+cls.class.space.conflict=CWWKL0008W: Application [{0}] is incompatible with the common class loader for library [{2}] because they have inconsistent API visibility configurations. Library [{2}] is configured with [{3}] and application [{0}] is configured with [{1}].
 cls.class.space.conflict.explanation=An application references a library through a common class loader and will therefore need to share class instances; however, they have been configured to see different API sets. The application and the library must be configured to see exactly the same set of APIs in order to ensure consistent application behavior.
 cls.class.space.conflict.useraction=Either update the configuration so the application and the library can see the same API set, or configure the application to use the library privately.
 
@@ -128,7 +128,7 @@ cls.provider.loader.unknown.useraction=See the problem determination information
 # {1} - class loader api types
 # {2} - provider id
 # {3} - provider api types
-cls.provider.class.space.conflict=CWWKL0033E: The class loader [{0}] cannot use the class provider [{2}] because their API visibility configurations are inconsistent. The class loader is configured with [{1}] and the class provider is configured with [{3}].
+cls.provider.class.space.conflict=CWWKL0033W: The class loader [{0}] is incompatible with the class provider [{2}] because their API visibility configurations are inconsistent. The class loader is configured with [{1}] and the class provider is configured with [{3}].
 cls.provider.class.space.conflict.explanation=A class loader has been configured to delegate to a specified class provider and will share class instances. However, they have been configured to see different API sets. The delegating class loader and the class provider must be configured to see the same set of APIs in order to have consistent application behavior.
 cls.provider.class.space.conflict.useraction=Update the configuration so the delegating class loader and the class provider can see the same API set.
 

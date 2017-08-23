@@ -1,0 +1,12 @@
+-include= ~../cnf/resources/bnd/rejar.props
+bVersion=1.0
+
+Bundle-Name: org.json.simple
+Bundle-Description: org.json.simple; version=1.1.1
+Bundle-SymbolicName: com.ibm.ws.org.json.simple.1.1.1
+
+WS-TraceGroup: \
+  OPENIDCONNECT
+
+Export-Package: org.json.simple.*
+

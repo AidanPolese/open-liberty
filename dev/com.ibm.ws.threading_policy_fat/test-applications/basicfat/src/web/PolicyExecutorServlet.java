@@ -2118,4 +2118,80 @@ public class PolicyExecutorServlet extends FATServlet {
     	
     	executor.shutdownNow();
     }
+    
+    @Test
+    public void testConcurrentUpdateMaxConcurrencyAndSubmit() throws Exception {
+        PolicyExecutor executor = provider.create("testConcurrentUpdateMaxConcurrencyAndSubmit")
+                .maxConcurrency(4)
+                .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
+                .queueFullAction(QueueFullAction.Abort)
+        		.maxQueueSize(2);
+        
+        int numSubmitted = 6;
+        
+        //Latch for configChangeTask and submitterTask
+        CountDownLatch beginLatch1 = new CountDownLatch(numSubmitted*2);
+        CountDownLatch continueLatch1 = new CountDownLatch(1);
+        ConfigChangeTask configTask = new ConfigChangeTask(executor, beginLatch1, continueLatch1, TIMEOUT_NS, "maxConcurrency", "6");
+        
+        CountDownLatch continueLatch2 = new CountDownLatch(1);
+        CountDownLatch beginLatch2 = new CountDownLatch(numSubmitted);
+        CountDownTask countDownTask = new CountDownTask(beginLatch2, continueLatch2, TIMEOUT_NS);
+        
+        SubmitterTask<Boolean> submitTask = new SubmitterTask<Boolean>(executor, countDownTask, beginLatch1, continueLatch1, TIMEOUT_NS);
+        
+        List<Future<Boolean>> configFutures = new ArrayList<Future<Boolean>>();
+        
+        //Submit numSubmitted tasks to change maxConcurrency to 6, which will block on continueLatch2
+        for (int i = 0; i < numSubmitted; i++) {
+        	configFutures.add(testThreads.submit(configTask));
+        }
+        
+        List<Future<Future<Boolean>>> submitterFutures = new ArrayList<Future<Future<Boolean>>>(); 
+        
+        //Submit numSubmitted submit tasks, which will block on continueLatch2
+        for (int i = 0; i < numSubmitted; i++) {
+        	submitterFutures.add(testThreads.submit(submitTask));
+        }
+        
+        //Ensure all the submit and config tasks are running
+        assertTrue(beginLatch1.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        //Allow the configtasks and submitertasks to complete, which will submit numSubmitted countDownTasks
+        //and concurrently change the maxConcurrency 
+        continueLatch1.countDown();
+        
+        //Ensure the configTasks have completed
+        for (int i = 0; i < numSubmitted; i++) {
+        	assertTrue(configFutures.get(i).get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        }
+        
+        //The maxConcurrency should now be 6, so all the submitted tasks should be running
+        assertTrue(beginLatch2.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        //Now check that maxConcurrency is actually 6
+        Future<Boolean> future1 = executor.submit(countDownTask);
+        Future<Boolean> future2 = executor.submit(countDownTask);
+        
+        //The queue should now be full - try to add one more, it should be rejected      
+        executor.maxWaitForEnqueue(200);       
+        try {
+            //This task will be aborted if maxConcurrency = 1, otherwise should run
+        	executor.submit(countDownTask);
+        } catch (RejectedExecutionException x) {} //expected
+        
+        //Allow all the tasks to complete
+        
+        continueLatch2.countDown();
+        
+        //Ensure the submitted countdown tasks have completed
+        for (int i = 0; i < numSubmitted; i++) {
+        	assertTrue(submitterFutures.get(i).get(TIMEOUT_NS, TimeUnit.NANOSECONDS).get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        }
+        
+        assertTrue(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        executor.shutdownNow();   
+    }
 }

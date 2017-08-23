@@ -21,10 +21,11 @@ import java.util.concurrent.TimeoutException;
 
 import org.junit.Test;
 
+import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
-import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.test.util.AsyncTestFunction;
+import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
 
 /**
  *
@@ -39,12 +40,12 @@ public class AsyncTest {
     @Test
     public void testAsync() throws InterruptedException, ExecutionException, TimeoutException {
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
-        Executor<String, Future<String>> executor = builder.buildAsync();
+        Execution<Future<String>> executor = builder.buildAsync();
 
         Future<String>[] futures = new Future[TASKS];
         for (int i = 0; i < TASKS; i++) {
             AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(TASK_DURATION), "testAsync" + i);
-            Future<String> future = executor.execute(callable, "testAsync");
+            Future<String> future = executor.execute(callable, new ExecutionContextImpl(null, "testAsync"));
             assertFalse(future.isDone());
             futures[i] = future;
         }

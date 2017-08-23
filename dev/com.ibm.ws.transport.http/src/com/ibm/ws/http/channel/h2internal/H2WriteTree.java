@@ -338,7 +338,7 @@ public class H2WriteTree implements H2WorkQInterface {
 
                 // wait for the mux write callback to be processed, which will also update that Q status
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "sync - wait for write to complete");
+                    Tr.debug(tc, "writeEntry - WRITE_TYPE.SYNC - call entry.waitWriteCompleteLatch");
                 }
 
                 e.waitWriteCompleteLatch();
@@ -361,7 +361,7 @@ public class H2WriteTree implements H2WorkQInterface {
                     // queue service thread needs to wait for async write to complete before performing next write (can not have two writes
                     // outstanding on the TCP Channel)
                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                        Tr.debug(tc, "async - wait for write to complete");
+                        Tr.debug(tc, "writeEntry - WRITE_TYPE.ASYNC - call entry.waitWriteCompleteLatch");
                     }
                     e.waitWriteCompleteLatch();
                     return WRITE_ACTION.COMPLETED;

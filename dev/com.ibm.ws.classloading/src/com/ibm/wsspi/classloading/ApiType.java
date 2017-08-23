@@ -30,8 +30,11 @@ public enum ApiType {
     /** Proprietary APIs provided by non-IBM features. */
     API("api"),
     /** Proprietary APIs from third-party libraries which can be used in conjunction with features, e.g. the Wink APIs for use with Liberty's JAX-RS support. */
-    THIRDPARTY("third-party");
-    // OSGi APIs are marked spec:api, which is obviously not in this enum. 
+    THIRDPARTY("third-party"),
+    /** Stable APIs -- These are third party APIs we have enough confidence in to expose by default, but are not fully spec APIs */
+    STABLE("stable");
+
+    // OSGi APIs are marked spec:api, which is obviously not in this enum.
     // This means that OSGi application API will not be visible to EE applications.
 
     private final String attributeName;

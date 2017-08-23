@@ -18,10 +18,11 @@ import java.time.Duration;
 import org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException;
 import org.junit.Test;
 
+import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
-import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
+import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestFunction;
 
 /**
@@ -36,13 +37,14 @@ public class TimeoutTest {
 
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setTimeoutPolicy(timeout);
-        Executor<String, String> executor = builder.build();
+
+        Execution<String> executor = builder.build();
 
         TestFunction callable = new TestFunction(Duration.ofMillis(1000), "testTimeout");
 
         String executions = "NOT_RUN";
         try {
-            executions = executor.execute(callable, "testTimeout");
+            executions = executor.execute(callable, new ExecutionContextImpl("testTimeout"));
             fail("Exception not thrown");
         } catch (TimeoutException t) {
             //expected

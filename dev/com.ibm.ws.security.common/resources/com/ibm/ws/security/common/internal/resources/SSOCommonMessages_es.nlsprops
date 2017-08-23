@@ -1,0 +1,25 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2017.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security/resources/com/ibm/ws/security/common/internal/resources/SSOCommonMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Application Server Security SSO Common
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+# Message prefix block: CWWKS6101 - CWWKS6200
+SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE=CWWKS6101E: La solicitud de autenticaci\u00f3n ha fallado porque el tipo de datos de la reclamaci\u00f3n [{0}] en la informaci\u00f3n del usuario autenticado no es v\u00e1lida. La reclamaci\u00f3n especificada est\u00e1 asociada al atributo de configuraci\u00f3n [{1}]. 
+SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE.explanation=La informaci\u00f3n del usuario autenticado tiene un tipo de datos de reclamaci\u00f3n no v\u00e1lido y el tiempo de ejecuci\u00f3n no puede continuar con el proceso de autenticaci\u00f3n.
+SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE.useraction=Verifique que la configuraci\u00f3n de cliente de Social Login especifica el nombre de reclamaci\u00f3n correcto para el atributo.
+
+SUBJECT_MAPPING_MISSING_ATTR=CWWKS6102E: La solicitud de autenticaci\u00f3n ha fallado porque la informaci\u00f3n del usuario autenticado no contiene la reclamaci\u00f3n [{0}] especificada por el atributo [{1}].
+SUBJECT_MAPPING_MISSING_ATTR.explanation=La informaci\u00f3n del usuario autenticado no contiene la reclamaci\u00f3n especificada para identificar el atributo indicado y el tiempo de ejecuci\u00f3n no puede continuar con el proceso de autenticaci\u00f3n.
+SUBJECT_MAPPING_MISSING_ATTR.useraction=Haga lo siguiente. 1)Compruebe si la configuraci\u00f3n de cliente de Social Login puede especificar otra reclamaci\u00f3n como el atributo 2)Verifique que el proveedor emite la informaci\u00f3n del usuario autenticado con la reclamaci\u00f3n especificada.
+
+ERROR_AUTHENTICATE=CWWKS6103E: Se puede crear un asunto de seguridad para el usuario {0}.
+ERROR_AUTHENTICATE.explanation=El usuario no se ha podido autenticar.  
+ERROR_AUTHENTICATE.useraction=Compruebe que el usuario existe en el registro y que la contrase\u00f1a u otras credenciales son correctas.
