@@ -23,11 +23,16 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
+import javax.enterprise.inject.spi.WithAnnotations;
 
 import org.eclipse.microprofile.faulttolerance.Asynchronous;
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.FallbackHandler;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 import org.osgi.service.component.annotations.Component;
 
@@ -48,7 +53,9 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
         beforeBeanDiscovery.addAnnotatedType(interceptorType);
     }
 
-    public <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> processAnnotatedType, BeanManager beanManager) {
+    public <T> void processAnnotatedType(@Observes @WithAnnotations({ Asynchronous.class, Fallback.class, Timeout.class, CircuitBreaker.class, Retry.class,
+                                                                      Bulkhead.class }) ProcessAnnotatedType<T> processAnnotatedType,
+                                         BeanManager beanManager) {
 
         //validate Asynchronous
         //validate fallback
