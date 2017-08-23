@@ -11,6 +11,7 @@
 package com.ibm.ws.microprofile.config.converter.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -41,9 +42,10 @@ import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.ibm.ws.microprofile.config.dynamic.test.TestDynamicConfigSource;
 import com.ibm.ws.microprofile.config.interfaces.ConfigConstants;
 import com.ibm.ws.microprofile.config.interfaces.DefaultConverters;
+
+import src.com.ibm.ws.microprofile.config.dynamic.test.TestDynamicConfigSource;
 
 public class ConversionTest {
 
@@ -375,6 +377,23 @@ public class ConversionTest {
         assertEquals(new Integer(3), key1[2]);
         assertEquals(new Integer(4), key1[3]);
 
+    }
+
+    //Test to verify a null is a permitted return value from a converter
+    @Test
+    public void testNullAllowed() {
+        System.setProperty(ConfigConstants.DYNAMIC_REFRESH_INTERVAL_PROP_NAME, "" + 0);
+        SimpleConfigSource source = new SimpleConfigSource();
+        source.put("key1", "");
+
+        ConfigBuilder builder = ConfigProviderResolver.instance().getBuilder();
+        builder.addDiscoveredConverters();
+        builder.withSources(source);
+        builder.withConverters(new ConverterD());
+        Config config = builder.build();
+
+        ClassD value = config.getValue("key1", ClassD.class);
+        assertNull("The converted value should be null", value);
     }
 
     @Test
