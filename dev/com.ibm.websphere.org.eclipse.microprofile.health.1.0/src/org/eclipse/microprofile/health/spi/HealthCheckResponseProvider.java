@@ -1,4 +1,4 @@
-   /*
+/*
  * Copyright (c) 2017 Contributors to the Eclipse Foundation
  *
  * See the NOTICES file(s) distributed with this work for additional
@@ -20,30 +20,15 @@
  *
  */
 
-package org.eclipse.microprofile.health;
+package org.eclipse.microprofile.health.spi;
+
+import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 
 /**
- * A builder to construct a health procedure response.
- *
- * <p>
- * The ResponseBuilder class is reserved for an extension by implementation providers.
- * </p>
+ * Created by hbraun on 07.07.17.
  */
-public abstract class ResponseBuilder {
+public interface HealthCheckResponseProvider {
 
-    public abstract ResponseBuilder name(String name);
+    HealthCheckResponseBuilder createResponseBuilder();
 
-    public abstract ResponseBuilder withAttribute(String key, String value);
-
-    public abstract ResponseBuilder withAttribute(String key, long value);
-
-    public abstract ResponseBuilder withAttribute(String key, boolean value);
-
-    public abstract Response up();
-
-    public abstract Response down();
-
-    public abstract Response state(boolean up);
-
-
-}
+} 
