@@ -1,0 +1,25 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2017.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security/resources/com/ibm/ws/security/common/internal/resources/SSOCommonMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Application Server Security SSO Common
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+# Message prefix block: CWWKS6101 - CWWKS6200
+SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE=CWWKS6101E: \u017d\u00e1dost o ov\u011b\u0159en\u00ed se nezda\u0159ila, proto\u017ee datov\u00fd typ n\u00e1roku [{0}] v informac\u00edch o ov\u011b\u0159en\u00e9m u\u017eivateli nen\u00ed platn\u00fd. Uveden\u00fd n\u00e1rok je p\u0159idru\u017een\u00fd k atributu konfigurace [{1}]. 
+SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE.explanation=Informace o ov\u011b\u0159en\u00e9m u\u017eivateli maj\u00ed neplatn\u00fd datov\u00fd typ n\u00e1roku a b\u011bhov\u00fd modul nem\u016f\u017ee pokra\u010dovat ve zpracov\u00e1n\u00ed ov\u011b\u0159en\u00ed.
+SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE.useraction=Ov\u011b\u0159te, \u017ee konfigurace klienta pro soci\u00e1ln\u00ed p\u0159ipojen\u00ed uv\u00e1d\u00ed pro atribut spr\u00e1vn\u00fd n\u00e1zev n\u00e1roku.
+
+SUBJECT_MAPPING_MISSING_ATTR=CWWKS6102E: \u017d\u00e1dost o ov\u011b\u0159en\u00ed se nezda\u0159ila, proto\u017ee informace o ov\u011b\u0159en\u00e9m u\u017eivateli neobsahuj\u00ed n\u00e1rok [{0}] ur\u010den\u00fd atributem [{1}].
+SUBJECT_MAPPING_MISSING_ATTR.explanation=Informace o ov\u011b\u0159en\u00e9m u\u017eivateli neobsahuj\u00ed uveden\u00fd n\u00e1rok k identifikaci pojmenovan\u00e9ho atributu a b\u011bhov\u00fd modul nem\u016f\u017ee pokra\u010dovat v procesu ov\u011b\u0159en\u00ed.
+SUBJECT_MAPPING_MISSING_ATTR.useraction=Prove\u010fte jednu z n\u00e1sleduj\u00edc\u00edch akc\u00ed: 1) Zkontrolujte, zda konfigurace klienta pro soci\u00e1ln\u00ed p\u0159ihl\u00e1\u0161en\u00ed m\u016f\u017ee ur\u010dit jin\u00fd n\u00e1rok jako atribut. 2) Ov\u011b\u0159te, \u017ee poskytovatel emituje informace o ov\u011b\u0159en\u00e9m u\u017eivateli s uveden\u00fdm n\u00e1rokem.
+
+ERROR_AUTHENTICATE=CWWKS6103E: P\u0159edm\u011bt zabezpe\u010den\u00ed nelze pro u\u017eivatele {0} vytvo\u0159it.
+ERROR_AUTHENTICATE.explanation=U\u017eivatele nelze ov\u011b\u0159it. 
+ERROR_AUTHENTICATE.useraction=Zkontrolujte, zda u\u017eivatel v registru existuje a zda heslo nebo jin\u00e1 pov\u011b\u0159en\u00ed jsou spr\u00e1vn\u00e9.

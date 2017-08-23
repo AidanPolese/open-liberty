@@ -1,0 +1,8 @@
+<server>
+    <jwtBuilder id="defaultJWT" 
+    />
+
+    <jwtConsumer id="defaultJwtConsumer" 
+    />
+
+</server>
