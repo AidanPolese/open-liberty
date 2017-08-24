@@ -62,7 +62,8 @@ subprojects {
     plugins.apply 'biz.aQute.bnd'
   }
   /* For Java 9 builds, set the --release compiler flag to keep bootclasspath in sync */
-  compileJava {
+  //compileJava {
+  tasks.withType(JavaCompile) {
     doFirst {
       if(JavaVersion.current().isJava9Compatible()) {
         def release = sourceCompatibility

@@ -29,12 +29,12 @@ import org.junit.Test;
 import org.junit.rules.TestName;
 import org.junit.rules.TestRule;
 
+import com.ibm.ws.kernel.boot.BootstrapConfig;
+import com.ibm.ws.kernel.boot.SharedBootstrapConfig;
+
 import test.common.SharedOutputManager;
 import test.shared.Constants;
 import test.shared.TestUtils;
-
-import com.ibm.ws.kernel.boot.BootstrapConfig;
-import com.ibm.ws.kernel.boot.SharedBootstrapConfig;
 
 /**
  *
@@ -61,7 +61,7 @@ public class BootstrapManifestTest {
 
     @After
     public void tearDown() throws Exception {
-        // reset the bootstrap jar... 
+        // reset the bootstrap jar...
         TestUtils.setKernelUtilsBootstrapJar(null); // make sure jar is clear
     }
 
@@ -171,8 +171,8 @@ public class BootstrapManifestTest {
         javaVersion = (index == -1) ? javaVersion : javaVersion.substring(0, index);
         //validate the system packages obtained match the running java.version file name
         assertTrue("The system packages being used do not match the running java.version: "
-                                   + javaVersion
-                                   + " . This is normal if you are running the test on a version of Java that we support for running the server, but do not fully support. If we are intending to fully support a new Java version then new files are required in /com.ibm.ws.kernel.boot/resources/OSGI-OPT/websphere/system-packages_*.properties for production and /com.ibm.ws.kernel.boot_test/resources/system-packages_*.properties for test.",
+                   + javaVersion
+                   + " . This is normal if you are running the test on a version of Java that we support for running the server, but do not fully support. If we are intending to fully support a new Java version then new files are required in /com.ibm.ws.kernel.boot/resources/OSGI-OPT/websphere/system-packages_*.properties for production and /com.ibm.ws.kernel.boot_test/resources/system-packages_*.properties for test.",
                    sysPkgs.contains(javaVersion));
 
         String versionsToCheck = null;
@@ -182,6 +182,8 @@ public class BootstrapManifestTest {
             versionsToCheck = "1.7.0,1.6.0";
         } else if (javaVersion.equals("1.8.0")) {
             versionsToCheck = "1.8.0,1.7.0,1.6.0";
+        } else if (javaVersion.equals("9")) {
+            versionsToCheck = "9,1.8.0,1.7.0,1.6.0";
         } else {
             fail("The running java version: " + javaVersion + " is newer than we have properties files for, system-packages udpates are required");
         }
@@ -262,22 +264,20 @@ public class BootstrapManifestTest {
                 filterExpr = "simple_3\\.0\\.jar";
                 break;
             case 4:
-                // the system packages file exists, but contains 
+                // the system packages file exists, but contains
                 // invalid properties
                 filterExpr = "simple_4\\.0\\.jar";
                 break;
             case 5:
-                // the system packages file exists, but contains 
+                // the system packages file exists, but contains
                 // invalid properties
                 filterExpr = "simple_5\\.0\\.jar";
                 break;
         }
 
-        File fileList[] = root.listFiles(new FilenameFilter()
-        {
+        File fileList[] = root.listFiles(new FilenameFilter() {
             @Override
-            public boolean accept(File dir, String name)
-            {
+            public boolean accept(File dir, String name) {
                 return name.matches(filterExpr);
             }
         });
