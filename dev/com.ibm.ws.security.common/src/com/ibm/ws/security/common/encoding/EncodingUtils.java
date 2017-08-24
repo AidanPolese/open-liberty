@@ -15,10 +15,11 @@ import java.io.ByteArrayOutputStream;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Trivial;
+import com.ibm.ws.security.common.TraceConstants;
 
 public class EncodingUtils {
 
-    public static final TraceComponent tc = Tr.register(EncodingUtils.class);
+    public static final TraceComponent tc = Tr.register(EncodingUtils.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
 
     public EncodingUtils() {
     }
