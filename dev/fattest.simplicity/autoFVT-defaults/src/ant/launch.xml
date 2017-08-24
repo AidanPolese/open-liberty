@@ -200,6 +200,9 @@
 		</propertyfile>
 
 		<property name="dir.test.current.directory" value="${basedir}" />
+		
+		<!-- Load all env vars into env.* properties -->
+		<property environment="env"/>
 
 		<echo>Running ${test.bucket.name}</echo>
 		<echo>Timeout: ${fattest.timeout}</echo>
@@ -275,7 +278,7 @@
 		<echo>jacocoagent.file: ${jacocoagent.file}</echo>
 
 		<mkdir dir="${build.tmp.dir}" />
-
+		
 		<!-- Note that users can override framework.maxheap from personal build -->
 		<property name="framework.maxheap" value="-Xmx1024m" />
 		<echo>framework.maxheap=${framework.maxheap}</echo>
@@ -302,6 +305,15 @@
 					<sysproperty key="osgiConsolePort" value="${osgi.console}" />
 					<!-- Add the server.origin property -->
 					<sysproperty key="server.origin" value="${server.origin}" />
+					<!-- Pass select env vars in as system properties  -->
+                    <syspropertyset>
+                        <propertyref prefix="env.bvt.prop." />
+                        <propertyref prefix="env.global." />
+                        <propertyref prefix="env.fat.test." />
+                        <propertyref prefix="env.fat.bucket." />
+                        <propertyref prefix="env.ldap." />
+                        <mapper type="glob" from="env.*" to="*" />
+                    </syspropertyset>
 					<syspropertyset>
 						<propertyref prefix="bvt.prop." />
 						<mapper type="glob" from="bvt.prop.*" to="*" />
