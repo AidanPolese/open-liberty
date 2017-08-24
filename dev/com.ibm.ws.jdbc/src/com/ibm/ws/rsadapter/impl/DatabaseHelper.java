@@ -46,6 +46,7 @@ import javax.resource.ResourceException;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
+import com.ibm.ws.jca.adapter.WSConnectionManager;
 import com.ibm.ws.resource.ResourceRefInfo;
 import com.ibm.ws.rsadapter.AdapterUtil;
 import com.ibm.ws.rsadapter.DSConfig;
@@ -740,7 +741,7 @@ public class DatabaseHelper {
      * @return a physical sqlj connectionContext for DB2 only or return null for other database
      * @exception a SQLException if can't get a DefaultContext
      **/
-    public Object getSQLJContext(WSRdbManagedConnectionImpl mc, Class<?> DefaultContext) throws SQLException {
+    public Object getSQLJContext(WSRdbManagedConnectionImpl mc, Class<?> DefaultContext, WSConnectionManager connMgr) throws SQLException {
         return null;
     }
 

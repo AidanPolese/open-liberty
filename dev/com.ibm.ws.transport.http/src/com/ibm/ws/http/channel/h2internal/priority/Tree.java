@@ -104,6 +104,11 @@ public class Tree {
                 // need to start the write counting over, since a new node was added at this level, and re-sort
                 parentNode.clearDependentsWriteCount();
                 parentNode.sortDependents();
+                // special debug - too verbose for big trees
+                //if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                //    Tr.debug(tc, "addNode after sorting: tree is now:" + dumpTree());
+                //}
+
             }
             return true;
         }
@@ -154,6 +159,10 @@ public class Tree {
 
                 // need to re-arrange all nodes at this level because of count change
                 parentNode.sortDependents();
+                // special debug - too verbose for big trees
+                //if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                //    Tr.debug(tc, "updateNode after sorting: tree is now:" + getTreeDump());
+                //}
 
             } else if (writeCountAction == WRITE_COUNT_ACTION.CLEAR) {
                 nodeToUpdate.setWriteCount(0);
@@ -531,6 +540,11 @@ public class Tree {
                 nodeToChange.setPriority(newPriority);
                 oldParent.clearDependentsWriteCount();
                 oldParent.sortDependents();
+                // special debug - too verbose for big trees
+                //if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                //    Tr.debug(tc, "updateNodeFrameParameters after sorting: tree is now:" + getTreeDump());
+                //}
+
             }
         }
 
@@ -541,15 +555,11 @@ public class Tree {
         return true;
     }
 
-    public synchronized StringBuffer dumpTree() {
+    public synchronized String getTreeDump() {
 
-        StringBuffer s = new StringBuffer("Dump Tree: " + this.hashCode());
+        StringBuffer s = new StringBuffer("\nDump Tree: " + this.hashCode());
         root.dumpDependents(s);
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, s.toString());
-        }
-
-        return s;
+        return s.toString();
     }
 }

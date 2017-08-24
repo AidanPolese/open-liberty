@@ -1711,7 +1711,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
                     SQLException {
         int numArgs = args == null ? 0 : args.length;
         if (numArgs == 0 && method.getName().equals("getConnectionContext")) {
-            return managedConn.getSQLJConnectionContext(method.getReturnType());
+            return managedConn.getSQLJConnectionContext(method.getReturnType(),cm);
         } else if (numArgs > 10) {
             String methodName = method.getName();
             if (methodName.equals("prepareSQLJStatement"))

@@ -100,6 +100,12 @@ public class FrameReadProcessor {
             throw new ProtocolException("Cannot initialize a stream with an ID lower than one previously created");
         }
 
+        // Even stream IDs can not originate from the client
+        if (stream == null && (streamId != 0) && (streamId % 2 == 0)) {
+            muxLink.startProcessingGoAway();
+            throw new ProtocolException("Cannot start a stream from the client with an even numbered ID");
+        }
+
         if (frameSizeError) {
             currentFrame = new FrameRstStream(streamId, Constants.FRAME_SIZE_ERROR, false);
         }

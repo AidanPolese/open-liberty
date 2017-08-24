@@ -21,13 +21,13 @@ Export-Package: \
     javax.servlet.resources;thread-context=true;version="2.6.0"
 
 Include-Resource: \
-  @lib/com.ibm.ws.javax.servlet_3.0.jar!/META-INF/LICENSE, \
-  @lib/com.ibm.ws.javax.servlet_3.0.jar!/META-INF/NOTICE, \
-  @lib/com.ibm.ws.javax.servlet_3.0.jar!/javax/servlet/resources/**
+  @${repo;org.apache.geronimo.specs.geronimo-servlet_3.0_spec;1.0}!/META-INF/LICENSE, \
+  @${repo;org.apache.geronimo.specs.geronimo-servlet_3.0_spec;1.0}!/META-INF/NOTICE, \
+  @${repo;org.apache.geronimo.specs.geronimo-servlet_3.0_spec;1.0}!/javax/servlet/resources/**
 
 instrument.disabled: true
 
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/com.ibm.ws.javax.servlet_3.0.jar;version=file
+	org.apache.geronimo.specs.geronimo-servlet_3.0_spec;version=1.0

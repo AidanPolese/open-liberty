@@ -23,4 +23,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.j2ee.jaxrs_1.1.jar;version=file
+	com.ibm.ws.javax.j2ee:jaxrs;version=1.1

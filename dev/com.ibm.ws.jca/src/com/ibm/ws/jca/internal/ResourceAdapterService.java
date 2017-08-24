@@ -128,7 +128,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
     /**
      * DS method to activate this component.
      * Best practice: this should be a protected method, not public or private
-     * 
+     *
      * @param context for this component instance
      * @throws BundleException
      */
@@ -158,7 +158,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
     /**
      * DS method to deactivate this component.
      * Best practice: this should be a protected method, not public or private
-     * 
+     *
      * @param context for this component instance
      */
     protected void deactivate(ComponentContext context) throws BundleException {
@@ -167,7 +167,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Check that resource adapter path exists
-     * 
+     *
      * @return true if path exists, false if it does not
      */
     public boolean rarFileExists() {
@@ -182,7 +182,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Returns the class loader for the resource adapter.
-     * 
+     *
      * @return class loader
      */
     public ClassLoader getClassLoader() {
@@ -208,7 +208,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Returns the class loader for the resource adapter file
-     * 
+     *
      * @returns class loader for resource adapter file
      */
     private ClassLoader createRarClassLoader() {
@@ -333,7 +333,8 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
         // Create the class loader
         GatewayConfiguration gwCfg = classloadingSvc.createGatewayConfiguration().setApiTypeVisibility(ApiType.SPEC, ApiType.API, ApiType.IBMAPI,
-                                                                                                       ApiType.THIRDPARTY).setDynamicImportPackage("*").setDelegateToSystem(true);
+                                                                                                       ApiType.THIRDPARTY,
+                                                                                                       ApiType.STABLE).setDynamicImportPackage("*").setDelegateToSystem(true);
 
         rarClassLoaderId = classloadingSvc.createIdentity(DeferredService.RESOURCE_ADAPTER_DOMAIN, id);
         if (trace && tc.isDebugEnabled()) {
@@ -353,7 +354,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Deletes the directory and its contents or the file that is specified
-     * 
+     *
      * @param path to cache directory to delete
      * @return true if path was deleted or if it did not exist
      */
@@ -431,7 +432,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Declarative Services method for setting the class loading service
-     * 
+     *
      * @param svc the service
      */
     protected void setClassLoadingService(ClassLoadingService svc) {
@@ -440,7 +441,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Sets the generated metatype that is provided by this resource adapter.
-     * 
+     *
      * @param metatype generated metatype to be provided by this resource adapter.
      */
     void setMetatype(Metatype metatype) {
@@ -449,7 +450,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Declarative Services method for unsetting the class loading service
-     * 
+     *
      * @param svc the service
      */
     protected void unsetClassLoadingService(ClassLoadingService svc) {
@@ -458,7 +459,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Declarative Services method for setting the artifact container factory service
-     * 
+     *
      * @param svc the service
      */
     protected void setArtifactContainerFactory(ArtifactContainerFactory svc) {
@@ -467,7 +468,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Declarative Services method for unsetting the artifact container factory service
-     * 
+     *
      * @param svc the service
      */
     protected void unsetArtifactContainerFactory(ArtifactContainerFactory svc) {
@@ -477,7 +478,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Declarative Services method for setting the adaptable module factory service
-     * 
+     *
      * @param svc the service
      */
     protected void setAdaptableModuleFactory(AdaptableModuleFactory svc) {
@@ -486,7 +487,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Declarative Services method for unsetting the adaptable module factory service
-     * 
+     *
      * @param svc the service
      */
     protected void unsetAdaptableModuleFactory(AdaptableModuleFactory svc) {
@@ -496,7 +497,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Declarative Services method for setting the resource adapter bundle service
-     * 
+     *
      * @param svc the service
      */
     protected void setResourceAdapterBundleService(ResourceAdapterBundleService svc) {
@@ -505,7 +506,7 @@ public class ResourceAdapterService extends DeferredService implements ClassProv
 
     /**
      * Declarative Services method for unsetting the resource adapter bundle service
-     * 
+     *
      * @param svc the service
      */
     protected void unsetResourceAdapterBundleService(ResourceAdapterBundleService svc) {
