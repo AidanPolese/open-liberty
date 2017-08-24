@@ -68,6 +68,7 @@ task runfat(type: Exec) {
     dependsOn cleanBeforeRun
     shouldRunAfter releaseNeeded
     shouldRunAfter cleanBeforeRun
+    environment System.getProperties()
     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
         executable "cmd"
         args '/c', 'ant', "-f", autoFvtDir + "/TestBuild.xml"

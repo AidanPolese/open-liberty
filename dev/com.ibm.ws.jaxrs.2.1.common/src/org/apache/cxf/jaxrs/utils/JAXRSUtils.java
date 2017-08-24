@@ -222,11 +222,37 @@ public final class JAXRSUtils {
     }
 
     public static List<MediaType> getProviderProduceTypes(MessageBodyWriter<?> provider) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.entry(tc, "getProviderProduceTypes", provider);
+        }
+        List<MediaType> produceTypes;
         String[] values = getUserMediaTypes(provider, false);
         if (values == null) {
-            return getProduceTypes(provider.getClass().getAnnotation(Produces.class));
+            Produces annotation = provider.getClass().getAnnotation(Produces.class);
+            if (annotation == null) {
+                //check interfaces - this is required by the spec for EJBs
+                for (Class<?> intf : provider.getClass().getInterfaces()) {
+                    annotation = intf.getAnnotation(Produces.class);
+                    if (annotation != null) {
+                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                            Tr.debug(tc, "getProviderProduceTypes - @Produces annotation not found on impl class, but found on interface " + intf.getName());
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            produceTypes = getProduceTypes(annotation);
+            if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+                Tr.exit(tc, "getProviderProduceTypes - return1",  produceTypes);
+            }
+            return produceTypes;
         }
-        return JAXRSUtils.getMediaTypes(values);
+        produceTypes = JAXRSUtils.getMediaTypes(values);
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.exit(tc, "getProviderProduceTypes - return2", produceTypes);
+        }
+        return produceTypes;
     }
 
     public static List<MediaType> getMediaTypes(String[] values) {
