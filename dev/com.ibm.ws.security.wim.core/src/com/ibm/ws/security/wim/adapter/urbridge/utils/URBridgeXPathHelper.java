@@ -124,9 +124,11 @@ public class URBridgeXPathHelper {
     }
 
     public String getExpression() throws Exception {
-        switch (node.getNodeType()) {
-            case XPathNode.NODE_PROPERTY:
-                return getExpression((PropertyNode) node);
+        if (node != null) {
+            switch (node.getNodeType()) {
+                case XPathNode.NODE_PROPERTY:
+                    return getExpression((PropertyNode) node);
+            }
         }
         return "";
     }

@@ -18,14 +18,12 @@ import org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException;
 import com.ibm.ws.microprofile.faulttolerance.impl.async.QueuedFuture;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
 
-
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 /**
  *
  */
 public class Timeout {
-
 
     private static final TraceComponent tc = Tr.register(Timeout.class);
 

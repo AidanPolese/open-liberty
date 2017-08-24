@@ -176,9 +176,10 @@ public class Providers {
                          loaderAPIs, libAPIs);
             return true;
         }
-        if (tc.isErrorEnabled())
-            Tr.error(tc, "cls.class.space.conflict", loaderID, loaderAPIs, sharedLibrary.id(), libAPIs);
-        return false;
+        if (tc.isWarningEnabled())
+            Tr.warning(tc, "cls.class.space.conflict", loaderID, loaderAPIs, sharedLibrary.id(), libAPIs);
+
+        return true;
     }
 
     static boolean checkAPITypesMatch(String cid, EnumSet<ApiType> consumerApiTypes, String pid, EnumSet<ApiType> providerApiTypes) {
@@ -190,9 +191,9 @@ public class Providers {
                          consumerApiTypes, providerApiTypes);
             return true;
         }
-        if (tc.isErrorEnabled())
-            Tr.error(tc, "cls.provider.class.space.conflict", cid, consumerApiTypes, pid, providerApiTypes);
-        return false;
+        if (tc.isWarningEnabled())
+            Tr.warning(tc, "cls.provider.class.space.conflict", cid, consumerApiTypes, pid, providerApiTypes);
+        return true;
     }
 
     /**

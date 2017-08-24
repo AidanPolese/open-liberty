@@ -53,6 +53,7 @@ public class FallbackTest {
 
         ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setFallbackPolicy(fallback);
+
         Execution<String> executor = builder.build();
 
         TestFunction callable = new TestFunction(-1, "testFallback");

@@ -969,6 +969,7 @@ public class HttpDispatcherLink extends InboundApplicationLink implements HttpIn
             } catch (Throwable t) {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
                     Tr.event(tc, "Unhandled exception during dispatch (bad container); " + t);
+                    Tr.event(tc, "stack trace: \n" + t.getStackTrace().toString());
                 }
                 // if the link is ready and not destroyed, try sending a response
                 if (ic.linkIsReady) {

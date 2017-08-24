@@ -65,7 +65,7 @@
         id="apiTypeVisibility"
         required="false"
         type="String"
-        default="spec\,ibm-api\,api">
+        default="spec\,ibm-api\,api\,stable">
     </AD>
 
     <!-- Revisit this in the first fixpack to give proper multi-choice support with defaults.

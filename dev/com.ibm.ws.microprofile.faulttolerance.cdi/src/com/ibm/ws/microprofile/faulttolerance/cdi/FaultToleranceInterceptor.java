@@ -27,8 +27,8 @@ import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
-import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
 
 @FaultTolerance
 @Interceptor

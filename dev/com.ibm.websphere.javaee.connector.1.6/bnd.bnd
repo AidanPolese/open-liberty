@@ -26,4 +26,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/javax.j2ee.connector_1.6.jar;version=file
+	com.ibm.ws.javax.j2ee:connector;version=1.6

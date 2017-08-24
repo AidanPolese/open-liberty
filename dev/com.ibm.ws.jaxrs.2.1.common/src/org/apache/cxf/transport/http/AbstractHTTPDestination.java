@@ -176,6 +176,10 @@ public abstract class AbstractHTTPDestination
             try {
                 byte[] authBytes = Base64Utility.decode(authEncoded);
 
+                if (authBytes == null) {
+                    throw new Base64Exception(new Throwable("Invalid Base64 data."));
+                }
+
                 String authDecoded = decodeBasicAuthWithIso8859
                     ? new String(authBytes, StandardCharsets.ISO_8859_1) : new String(authBytes);
 
@@ -283,9 +287,8 @@ public abstract class AbstractHTTPDestination
             Throwable cause = ex.getCause();
             if (cause instanceof RuntimeException) {
                 throw (RuntimeException) cause;
-            } else {
-                throw ex;
             }
+            throw ex;
         } catch (RuntimeException ex) {
             throw ex;
         } finally {
@@ -686,12 +689,11 @@ public abstract class AbstractHTTPDestination
         Integer i = (Integer) message.get(Message.RESPONSE_CODE);
         if (i != null) {
             return i.intValue();
-        } else {
-            int code = hasNoResponseContent(message) ? HttpURLConnection.HTTP_ACCEPTED : HttpURLConnection.HTTP_OK;
-            // put the code in the message so that others can get it
-            message.put(Message.RESPONSE_CODE, code);
-            return code;
         }
+        int code = hasNoResponseContent(message) ? HttpURLConnection.HTTP_ACCEPTED : HttpURLConnection.HTTP_OK;
+        // put the code in the message so that others can get it
+        message.put(Message.RESPONSE_CODE, code);
+        return code;
     }
 
     /**

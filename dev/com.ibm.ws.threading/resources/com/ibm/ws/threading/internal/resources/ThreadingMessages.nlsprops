@@ -40,5 +40,5 @@ CWWKE1202.submit.after.shutdown.explanation=Task submissions are not permitted a
 CWWKE1202.submit.after.shutdown.useraction=Only submit tasks on an executor service instance which has not been requested to shut down.
 
 CWWKE1203.config.update.after.shutdown=CWWKE1203E: Configuration update to {0} is not permitted because the executor {1} has been shut down.
-CWWKE1203.config.update.after.shutdown=It is not possible to update configuration after the executor service has been requested to shut down.
-CWWKE1203.config.update.after.shutdown=Only update configuration of an executor service instance which has not been requested to shut down.
+CWWKE1203.config.update.after.shutdown.explanation=It is not possible to update configuration after the executor service has been requested to shut down.
+CWWKE1203.config.update.after.shutdown.useraction=Only update configuration of an executor service instance which has not been requested to shut down.

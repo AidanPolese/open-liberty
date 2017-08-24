@@ -102,7 +102,7 @@ public class IndirectJndiLookupObjectFactory implements ObjectFactory {
 
     /**
      * Get an indirect object instance.
-     * 
+     *
      * @param c the context that originated this request, or null if the
      *            resource lookup is via injection rather than JNDI
      * @param envmt the JNDI environment, or null if the resource lookup is via
@@ -207,7 +207,7 @@ public class IndirectJndiLookupObjectFactory implements ObjectFactory {
     /**
      * Try to get an object instance by looking in the OSGi service registry
      * similar to how /com.ibm.ws.jndi/ implements the default namespace.
-     * 
+     *
      * @return the object instance, or null if an object could not be found
      */
     @FFDCIgnore(PrivilegedActionException.class)
@@ -300,7 +300,7 @@ public class IndirectJndiLookupObjectFactory implements ObjectFactory {
     /**
      * Try to resolve an object obtained from the OSGi service registry similar
      * to how /com.ibm.ws.jndi/ implements the default namespace.
-     * 
+     *
      * @return the object instance, or null if an object could not be found
      */
     @FFDCIgnore(NamingException.class)
@@ -327,7 +327,7 @@ public class IndirectJndiLookupObjectFactory implements ObjectFactory {
     /**
      * Try to obtain an object instance by creating a resource using a
      * ResourceFactory.
-     * 
+     *
      * @return the object instance, or null if an object could not be found
      */
     private Object createResource(String refName, String className, String bindingName, ResourceInfo resourceRefInfo) throws Exception {
@@ -394,7 +394,7 @@ public class IndirectJndiLookupObjectFactory implements ObjectFactory {
 
     /**
      * Try to obtain an object instance from a "java:" namespace.
-     * 
+     *
      * @return the object instance, or null if an object could not be found
      */
     private Object getJavaObjectInstance(Context c, Hashtable<?, ?> envmt, String className, String bindingName, ResourceInfo resourceRefInfo, IndirectReference ref) throws Exception {
@@ -443,11 +443,8 @@ public class IndirectJndiLookupObjectFactory implements ObjectFactory {
                                                     String bindingName,
                                                     ResourceInfo resourceRefInfo) throws Exception {
         String name = namespace.unprefix(bindingName);
-        // TODO remove this temporary workaround once the proper ibm:extends solution is delivered.
-        // The workaround is to ignore an extra service for the supertype that config processing code creates
-        // with the properties of the subtype. I checked with Brent Daniel and there is no way they can get rid
-        // of this extra service which is needed by their internal implementation until David Jencks delivers
-        // the proper ibm:extends solution.
+        // Use a filter that ignores an extra service for the supertype that config processing code creates
+        // with the properties of the subtype (currently the extra service is required to support ibm:extends)
         StringBuilder filter = new StringBuilder("(&")
                         .append(FilterUtils.createPropertyFilter(com.ibm.ws.resource.ResourceFactory.JAVA_COMP_DEFAULT_NAME, name))
                         .append("(!(ibm.extends.source.factoryPid=*))")
@@ -457,7 +454,7 @@ public class IndirectJndiLookupObjectFactory implements ObjectFactory {
 
     /**
      * Try to obtain an object instance from an injection binding object.
-     * 
+     *
      * @return the object instance
      */
     private Object getBindingObjectInstance(Context c, Hashtable<?, ?> envmt, String className, ResourceInfo resourceRefInfo, Reference bindingRef, InjectionBinding<?> binding) throws Exception {
