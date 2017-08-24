@@ -1287,6 +1287,16 @@ public abstract class ProviderFactory {
             }
             return result;
         }
+
+        // ExceptionMapper classes may be turned to proxy classes due to dependency
+        // injection so use the "OldProvider" if it exists.
+        public int exceptionProviderCompare(ProviderInfo<?> p1, ProviderInfo<?> p2) {
+            int result = comp.compare(p1.getOldProvider(), p2.getOldProvider());
+            if (result == 0 && defaultComp) {
+                result = compareCustomStatus(p1, p2);
+            }
+            return result;
+        }
     }
 
     public static ProviderFactory getInstance(Message m) {
