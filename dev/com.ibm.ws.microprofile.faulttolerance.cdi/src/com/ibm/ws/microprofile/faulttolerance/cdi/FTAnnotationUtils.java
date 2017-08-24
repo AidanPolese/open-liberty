@@ -311,7 +311,7 @@ public class FTAnnotationUtils {
         return policy;
     }
 
-    public static FallbackHandlerFactory getFallbackHandlerFactory(BeanManager beanManager) {
+    private static FallbackHandlerFactory getFallbackHandlerFactory(BeanManager beanManager) {
         FallbackHandlerFactory factory = new FallbackHandlerFactory() {
             @Override
             public <F extends FallbackHandler<?>> F newHandler(Class<F> fallbackClass) {
