@@ -1,4 +1,4 @@
-![](https://github.ibm.com/was-liberty/open-liberty/blob/master/logos/logo_stacked_navy.png)
+![](https://github.ibm.com/was-liberty/open-liberty/blob/master/logos/logo_horizontal_light_navy.png)
 
 # OpenLiberty
 
