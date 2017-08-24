@@ -131,8 +131,7 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
         String fallbackMethodName = fb.fallbackMethod();
         //If both fallback method and fallback class are set, it is an illegal state.
         if ((fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) && (fallbackMethodName != null && !"".equals(fallbackMethodName))) {
-            System.out.println("EJ: Invalid tests");
-            throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.conflicts.CWMFT5008E", originalMethod, fallbackClass, fallbackMethodName));
+            throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.conflicts.CWMFT5009E", originalMethod, fallbackClass, fallbackMethodName));
         } else if (fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) {
             //TODO validate the return type
             //need to load the fallback class and then find out the method return type
@@ -141,13 +140,12 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
                 Method[] ms = fallbackClass.getMethods();
                 Method handleMethod = FallbackHandler.class.getMethod(FTAnnotationUtils.FALLBACKHANDLE_METHOD_NAME, ExecutionContext.class);
                 boolean validFallbackHandler = false;
-                System.out.println("EJ: handle method " + handleMethod);
                 for (Method m : ms) {
                     if (m.getName().equals(handleMethod.getName()) && (m.getParameterCount() == 1)) {
                         Class<?>[] params = m.getParameterTypes();
                         if (ExecutionContext.class.isAssignableFrom(params[0])) {
                             //now check the return type
-                            if (!originalMethodReturnType.isAssignableFrom(m.getReturnType())) {
+                            if (originalMethodReturnType.isAssignableFrom(m.getReturnType())) {
                                 validFallbackHandler = true;
                                 break;
                             }
@@ -156,7 +154,8 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
                 }
 
                 if (!validFallbackHandler) {
-                    throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.invalid.CWMFT5008E", originalMethod, fallbackClass, originalMethodReturnType));
+                    throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.invalid.CWMFT5008E", originalMethod, fallbackClass, originalMethodReturnType,
+                                                                       originalMethod));
                 }
             } catch (NoSuchMethodException e) {
                 //should not happen
@@ -169,7 +168,8 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
         } else if (fallbackMethodName != null && !"".equals(fallbackMethodName)) {
 
             try {
-                Method fallbackMethod = originalMethod.getClass().getMethod(fallbackMethodName, originalMethodParamTypes);
+
+                Method fallbackMethod = originalMethod.getDeclaringClass().getMethod(fallbackMethodName, originalMethodParamTypes);
 
                 Class<?> fallbackReturn = fallbackMethod.getReturnType();
                 if (!originalMethodReturnType.isAssignableFrom(fallbackReturn)) {
@@ -179,8 +179,8 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
                 //validate the args matching as well
 
             } catch (NoSuchMethodException e) {
-                throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", originalMethod.getClass(), fallbackMethodName,
-                                                                   originalMethodParamTypes), e);
+                throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", fallbackMethodName,
+                                                                   originalMethod.getName(), originalMethod.getDeclaringClass()), e);
             } catch (SecurityException e) {
                 throw new FaultToleranceException((Tr.formatMessage(tc, "security.exception.acquiring.fallback.method.CWMFT5004E")), e);
             }
