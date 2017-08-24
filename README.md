@@ -30,8 +30,7 @@ Visit the [WASdev Community](https://developer.ibm.com/wasdev/) for documentatio
 
     ```./gradlew build```
 
-3. **Add an app in here that the user can execute to see something run in liberty.  Point to petstore app on website?**
-4. Go [Open issues](https://github.com/OpenLiberty/open-liberty/issues), [Review existing contributions](https://github.com/OpenLiberty/open-liberty/pulls), or [Submit fixes](https://github.com/OpenLiberty/open-liberty/blob/master/CONTRIBUTING.md).
+3. Go [Open issues](https://github.com/OpenLiberty/open-liberty/issues), [Review existing contributions](https://github.com/OpenLiberty/open-liberty/pulls), or [Submit fixes](https://github.com/OpenLiberty/open-liberty/blob/master/CONTRIBUTING.md).
 
 ## Community
 1. [Open Liberty group.io](https://groups.io/g/openliberty)
