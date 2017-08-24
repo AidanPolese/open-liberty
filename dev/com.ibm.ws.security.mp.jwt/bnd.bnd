@@ -45,16 +45,10 @@ Import-Package: \
    org.jose4j.jwx, \
    com.ibm.ws.security.authentication.utility, \
    org.eclipse.microprofile.jwt, \
-   com.ibm.ws.security.common.utils, \
-   com.ibm.ws.security.common.jwk.utils, \
-   com.ibm.ws.security.common.web, \
-   com.ibm.ws.security.common.structures, \
-   com.ibm.ws.security.common.crypto.json, \
-   com.ibm.ws.security.common.token.propagation, \
+   com.ibm.ws.security.common.*, \
    com.ibm.websphere.security, \
    com.ibm.websphere.security.jwt, \
    com.ibm.ws.security.jwt.config, \
-   com.ibm.ws.security.common.config, \
    javax.net.ssl, \
    javax.security.auth
 
