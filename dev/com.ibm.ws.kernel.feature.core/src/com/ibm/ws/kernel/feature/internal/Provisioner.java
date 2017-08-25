@@ -740,6 +740,7 @@ public class Provisioner {
         List<String> ibmApiFilters = new ArrayList<String>();
         List<String> strictSpecApiFilters = new ArrayList<String>();
         List<String> thirdPartyApiFilters = new ArrayList<String>();
+        List<String> stableApiFilters = new ArrayList<String>();
         List<String> userDefinedApiFilters = new ArrayList<String>();
         List<String> internalApiFilters = new ArrayList<String>();
         List<String> osgiAppsAPIFilters = new ArrayList<String>();
@@ -773,6 +774,9 @@ public class Provisioner {
                 if (type.isThirdPartyApi()) {
                     thirdPartyApiFilters.add(clause);
                 }
+                if (type.isStableApi()) {
+                	stableApiFilters.add(clause);
+                }
                 if (type.isUserDefinedApi()) {
                     userDefinedApiFilters.add(clause);
                 }
@@ -784,6 +788,7 @@ public class Provisioner {
         connectGatewayRegion(ApiRegion.IBM, ibmApiFilters, productRegion, null, digraph);
         connectGatewayRegion(ApiRegion.SPEC, strictSpecApiFilters, productRegion, null, digraph);
         connectGatewayRegion(ApiRegion.THIRD_PARTY, thirdPartyApiFilters, productRegion, null, digraph);
+        connectGatewayRegion(ApiRegion.STABLE, stableApiFilters, productRegion, null, digraph);
         connectGatewayRegion(ApiRegion.USER, userDefinedApiFilters, productRegion, null, digraph);
         connectGatewayRegion(ApiRegion.INTERNAL, internalApiFilters, productRegion, null, digraph);
         connectGatewayRegion(ApiRegion.THREAD_CONTEXT, Collections.singletonList(THREAD_CONTEXT_FILTER), productRegion, null, digraph);

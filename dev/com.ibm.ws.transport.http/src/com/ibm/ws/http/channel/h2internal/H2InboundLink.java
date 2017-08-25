@@ -68,7 +68,7 @@ public class H2InboundLink extends HttpInboundLink {
     Object linkStatusSync = new Object() {};
 
     private boolean processGoAway = false;
-    private int lastStreamToProcess = -1; // the last stream we should handle in the event of a GOAWAY
+    private int lastStreamToProcess = 0; // the last stream we should handle in the event of a GOAWAY
 
     // keep track of the highest IDs processed to ensure that stream IDs only increase
     private int highestClientStreamId = 0;
@@ -176,6 +176,9 @@ public class H2InboundLink extends HttpInboundLink {
             }
         } else { // client-initialized stream
             if (streamID > highestClientStreamId) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "highestClientStreamId set to: " + streamID);
+                }
                 highestClientStreamId = streamID;
             }
         }
@@ -419,6 +422,9 @@ public class H2InboundLink extends HttpInboundLink {
                     slicedBuffer = nextBuffer.position(frameReadStatus).slice();
                     nextBuffer.position(oldPosition);
                 }
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "processRead process complete frame");
+                }
                 frameReadProcessor.processCompleteFrame();
             }
         } catch (Http2Exception e) {
@@ -435,6 +441,9 @@ public class H2InboundLink extends HttpInboundLink {
 
         } finally {
             // we are done processing this read
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "processRead get ready to read for more data");
+            }
             synchronized (linkStatusSync) {
                 readWaitingForCompletion.reset();
 
@@ -443,6 +452,9 @@ public class H2InboundLink extends HttpInboundLink {
 
                     readLinkStatus = READ_LINK_STATUS.READ_OUTSTANDING;
                     // read for a new frame
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                        Tr.debug(tc, "processRead read for more data");
+                    }
                     startAsyncRead(readForNewFrame);
 
                 }
@@ -537,6 +549,9 @@ public class H2InboundLink extends HttpInboundLink {
 
         // will be queued if it didn't complete right away
         if (action == H2WriteQ.WRITE_ACTION.QUEUED) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "writeSync - call entry.waitWriteCompleteLatch");
+            }
             e.waitWriteCompleteLatch();
         }
     }
@@ -888,6 +903,10 @@ public class H2InboundLink extends HttpInboundLink {
 
     public int getHighestClientStreamId() {
         return highestClientStreamId;
+    }
+
+    public void setLastStreamToHighestClientStream() {
+        lastStreamToProcess = highestClientStreamId;
     }
 
     public void startProcessingGoAway() {

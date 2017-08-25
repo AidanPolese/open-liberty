@@ -206,9 +206,8 @@ public abstract class AbstractResourceInfo {
                 }
             }
             return (ThreadLocalProxy<?>) proxy;
-        } else {
-            return InjectionUtils.createThreadLocalProxy(f.getType());
         }
+        return InjectionUtils.createThreadLocalProxy(f.getType());
     }
 
     @FFDCIgnore(Throwable.class)
@@ -229,9 +228,8 @@ public abstract class AbstractResourceInfo {
                 }
             }
             return (ThreadLocalProxy<?>) proxy;
-        } else {
-            return InjectionUtils.createThreadLocalProxy(m.getParameterTypes()[0]);
         }
+        return InjectionUtils.createThreadLocalProxy(m.getParameterTypes()[0]);
     }
 
     @SuppressWarnings("unchecked")
@@ -268,9 +266,8 @@ public abstract class AbstractResourceInfo {
     public Map<Class<?>, ThreadLocalProxy<?>> getConstructorProxies() {
         if (constructorProxiesAvailable) {
             return getConstructorProxyMap(false).get(serviceClass);
-        } else {
-            return null;
         }
+        return null;
     }
 
     @SuppressWarnings("unchecked")

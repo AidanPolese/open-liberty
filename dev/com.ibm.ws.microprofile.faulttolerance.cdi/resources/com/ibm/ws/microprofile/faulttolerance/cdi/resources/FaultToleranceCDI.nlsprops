@@ -1,6 +1,6 @@
 #CMVCPATHNAME N/A
 #COMPONENTPREFIX CWMFT
-#COMPONENTNAMEFOR CWMFT MicroProfile FaultTolerance API 
+#COMPONENTNAMEFOR CWMFT MicroProfile FaultTolerance API
 #NLS_ENCODING=UNICODE
 #NLS_MESSAGEFORMAT_NONE
 #ISMESSAGEFILE true
@@ -9,7 +9,7 @@
 #  COMPONENT_NAME:
 #
 #  THIS PRODUCT CONTAINS RESTRICTED MATERIALS OF IBM
-#  5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 
+#  5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70
 #  (C) COPYRIGHT International Business Machines Corp. 2009, 2011
 #  The source code for this program is not published or otherwise divested
 #  of its trade secrets, irrespective of what has been deposited with the
@@ -60,7 +60,7 @@
 # translated.
 # -----------------------------------------------------------------------
 # This file follows the WebSphere Message Guidelines.
-# For more information, visit: 
+# For more information, visit:
 # http://washome.austin.ibm.com/xwiki/bin/view/MessagesTeam/
 #
 
@@ -77,9 +77,9 @@ asynchronous.method.not.returning.future.CWMFT5001E=CWMFT5001E: The asynchronous
 asynchronous.method.not.returning.future.CWMFT5001E.explanation=All methods that are annotated with org.eclipse.microprofile.faulttolerance.Asynchronous must have a return type that is assignable from java.util.concurrent.Future.
 asynchronous.method.not.returning.future.CWMFT5001E.useraction=Update the return type.
 
-#A fallback method does not match the return type of the method that falls back to it. 
+#A fallback method does not match the return type of the method that falls back to it.
 fallback.policy.return.type.not.match.CWMFT5002E=CWMFT5002E: The fallback method {0} has the wrong return type. The return type must match the return type of the method {1}.
-fallback.policy.return.type.not.match.CWMFT5002E.explanation=A fallback method must have the same return type as the method it handles. 
+fallback.policy.return.type.not.match.CWMFT5002E.explanation=A fallback method must have the same return type as the method it handles.
 fallback.policy.return.type.not.match.CWMFT5002E.useraction=Update the return type.
 
 #A fallback method that should exist cannot be found.
@@ -87,9 +87,9 @@ fallback.method.not.found.CWMFT5003E=CWMFT5003E: The fallback method {0} with pa
 fallback.method.not.found.CWMFT5003E.explanation=A fallback method was declared but it does not exist in the declaring class.
 fallback.method.not.found.CWMFT5003E.useraction=Either remove the fallback annotation or add the missing method.
 
-#A security exception was thrown while trying to create a fallback policy. 
+#A security exception was thrown while trying to create a fallback policy.
 security.exception.acquiring.fallback.method.CWMFT5004E=CWMFT5004E: A security exception occurred when the application server tried to process fallback annotations.
-security.exception.acquiring.fallback.method.CWMFT5004E.explanation=In order to create a fallback policy, the application server requires permission to acquire and examine Java methods. 
+security.exception.acquiring.fallback.method.CWMFT5004E.explanation=In order to create a fallback policy, the application server requires permission to acquire and examine Java methods.
 security.exception.acquiring.fallback.method.CWMFT5004E.useraction=Review the security policy of your application server and provide the permissions.
 
 #A problem occurred while converting a system property {0} to type {1}. The raw string value is {2}. The exception is [3}.
@@ -108,9 +108,11 @@ conversion.error.CWMFT5007E.explanation=Any configuration values provided via sy
 conversion.error.CWMFT5007E.useraction=Check that the specified value is in the correct format for the type of the property it is overriding.
 
 #The value parameter on the Fallback is not valid.
-fallback.policy.invalid.CWMFT5008E=CWMFT5008E: The Fallback policy for the method {0} is incorrect as the type parameter of the Fallback handler class {1} is not assignable to the return type {2} on the fallbackMethod {3}.
+
+fallback.policy.invalid.CWMFT5008E=CWMFT5008E: The fallback policy for the method {0} is incorrect as the type parameter of the Fallback handler class {1} is not assignable to the return type {2} on the fallbackMethod {3}.
 fallback.policy.invalid.CWMFT5008E.explanation=The type parameter of the Fallback handler class must be assignable to the return type of the original method. 
 fallback.policy.invalid.CWMFT5008E.useraction=Update the type paramether of the fallback handler class to be assignable to the return type of the original method.
+
 
 
 #The fallback policies are conflicting.
@@ -153,12 +155,13 @@ bulkhead.parameter.successThreshold.invalid.value.CWMFT5016E=CWMFT5016E: The Bul
 bulkhead.parameter.successThreshold.invalid.value.CWMFT5016E.explanation=The specified value or the configured value if configured for the Bulkhead policy parameter is incorrect.
 bulkhead.parameter.successThreshold.invalid.value.CWMFT5016E.useraction=Correct the value for the specified parameter.
 
-#Generic error for internal failures. 
+
+#Generic error for internal failures.
 internal.error.CWMFT5997E=CWMFT5997E: An internal error occurred. The exception is {0}.
 internal.error.CWMFT5997E.explanation=The application server experienced an internal error.
 internal.error.CWMFT5997E.useraction=Gather a set of traces and open a new issue against your application server.
 
-#Generic error for internal failures. 
+#Generic error for internal failures.
 internal.error.CWMFT5998E=CWMFT5998E: An internal error occurred.
 internal.error.CWMFT5998E.explanation=The application server experienced an internal error.
 internal.error.CWMFT5998E.useraction=Gather a set of traces and open a new issue against your application server.

@@ -14,7 +14,104 @@
  * Depends on bnd_* values from gradle.properties.
  */
 
-def getGitBranch() {
+/* Construct a properties file to store build-time variables. generated.properties is used to pass information from
+ * Gradle during initialization into bnd during configuration for use in cnf/build.bnd.
+ */
+def loadBuildProps() {
+  Properties props = new Properties()
+
+  // Property for git branch
+  def branchName = getVersionQualifier()
+
+  // Property for Artifactory matrix parameters
+  def matrixParams = ";GIT_BRANCH=master;GIT_FEATURE_BRANCH=${branchName}"
+
+  // Properties for automated-build relevant tasks. These assignments below are defaults for when building locally
+  def isAutomatedBuild = false
+  def isContinuousBuild = false
+  def isRelease = false
+  def reallyPublishBintray = false
+
+  def isRemotePublishing = false
+  if (System.properties['is.remote.publishing']!=null) {
+    isRemotePublishing = System.properties['is.remote.publishing'];
+  }
+
+  // Does userhome Gradle startup properties exist?
+  File usrHomeProps = file(System.properties['user.home'] + '/gradle.startup.properties')
+  if (!usrHomeProps.exists()) {
+    if (System.properties['build.properties.path']!=null) {
+      usrHomeProps = file(System.properties['build.properties.path']);
+    }
+  }
+
+  if (usrHomeProps.exists()) {    
+    usrHomeProps.withInputStream { props.load(it) }    
+    props.each {      
+      props.setProperty(it.key, it.value)      
+    }
+  }
+
+  // Retain test result properties from prior builds; used in automated build publishing
+  File genPropsFile = file('generated.properties')
+  if (genPropsFile.exists()) {
+    Properties genProps = new Properties()
+    genPropsFile.withInputStream { genProps.load(it) }
+    if (genProps['tests.total.count'] != null) {
+      props.setProperty('tests.total.count', genProps['tests.total.count'])
+    }
+
+    if (genProps['tests.total.successful'] != null) {
+      props.setProperty('tests.total.successful', genProps['tests.total.successful'])
+    }
+  }
+  
+  def fetchRepoPublic = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublic;releaseUrl=https://repo.maven.apache.org/maven2/;index=${build}/oss_dependencies.maven')
+  def fetchRepoIBM = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemoteIBM;releaseUrl=http://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/wasliberty-open-liberty/;index=${build}/oss_ibm.maven')
+  def fetchRepoIBMJava = ('error') //Not yet supported to not have this set via gradle.startup.properties
+  def pushRepoIBM = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublish')
+
+  if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {    
+      def repoURL = ('https://' + props.getProperty('artifactory.download.server') + '/artifactory/wasliberty-open-liberty')
+      fetchRepoPublic = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublic;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/oss_dependencies.maven')
+      fetchRepoIBM = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemoteIBM;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/oss_ibm.maven')
+      fetchRepoIBMJava = ('aQute.bnd.repository.maven.provider.MavenBndRepository;local=~/.ibmjava/repository;name = IBMInternalJava;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/ibm_java.maven')
+      pushRepoIBM =('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublish;releaseUrl='+ repoURL + matrixParams + ';snapshotUrl='+ repoURL + matrixParams + ';index=${build}/openliberty.maven')
+
+      isAutomatedBuild = (props.getProperty("buildResultUUID") != null)
+
+      if (props.getProperty('is.continuous.build') != null) {
+        isContinuousBuild = props.getProperty('is.continuous.build')
+      }
+
+      if (props.getProperty('is.release') != null) {
+        isRelease = props.getProperty('is.release')
+      }
+
+      if (props.getProperty('really.publish.bintray') != null) {
+        reallyPublishBintray = props.getProperty('really.publish.bintray')
+      }
+  }
+
+  props.setProperty('version.qualifier', branchName)
+  props.setProperty('artifactory.matrix.parameters', matrixParams)
+  props.setProperty('fetch.oss.repository', fetchRepoPublic)
+  props.setProperty('fetch.oss.ibm.repository', fetchRepoIBM)
+  props.setProperty('fetch.ibm.java.repository', fetchRepoIBMJava)
+  props.setProperty('push.ibm.repository', pushRepoIBM)
+  props.setProperty('is.automated.build', isAutomatedBuild.toString())
+  props.setProperty('is.continuous.build', isContinuousBuild.toString())
+  props.setProperty('is.release', isRelease.toString())
+  props.setProperty('maven.release.name', mavenLocalPath)
+  props.setProperty('is.remote.publishing', isRemotePublishing.toString())
+  props.setProperty('really.publish.bintray', reallyPublishBintray.toString())
+
+  // Store props to file
+  File propsFile = new File('generated.properties')    
+  props.store(propsFile.newWriter(), null)
+}
+
+def getVersionQualifier() {
   def branchName = System.env.BRANCH_NAME ?: gitBranch()
   if (branchName == '' || branchName == 'HEAD') {
     // Default to master if something went wrong
@@ -24,102 +121,24 @@ def getGitBranch() {
 }
 
 def gitBranch() {
-    def branch = ""
-    def proc = "git rev-parse --abbrev-ref HEAD".execute()
-    proc.in.eachLine { line -> branch = line }
-    proc.err.eachLine { line -> println line }
-    proc.waitFor()
-    branch
-}
-
- 
-def loadBuildProps() {
-
-  // Property for git branch
-  Properties props = new Properties()
-  def branchName = getGitBranch()
-  props.setProperty('bGitBranch', branchName)
-
-  // Property for Artifactory matrix parameters
-  ext.matrixParams = ";GIT_BRANCH=master;GIT_FEATURE_BRANCH=${branchName}"
-  props.setProperty('matrixParams', matrixParams)
-  
-  File usrHomeProps = file(System.properties['user.home'] + '/gradle.startup.properties') 
-  if (!usrHomeProps.exists()) {
-    if (System.properties['build.properties.path']!=null) {
-	  usrHomeProps = file(System.properties['build.properties.path']);
-	}
-  }
-  if (usrHomeProps.exists()) {    
-    usrHomeProps.withInputStream { props.load(it) }    
-    props.each {      
-      props.setProperty(it.key, it.value)      
-      }
-    }
-  
-  def fetchRepoPublic = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublic;releaseUrl=https://repo.maven.apache.org/maven2/;index=${build}/oss_dependencies.maven')
-  def fetchRepoIBM = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemoteIBM;releaseUrl=http://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/wasliberty-open-liberty/;index=${build}/oss_ibm.maven')
-  def fetchRepoIBMJava = ('error') //Not yet supported to not have this set via gradle.startup.properties
-  
-  if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {    
-	  def repoURL = ('https://' + props.getProperty('artifactory.download.server') + '/artifactory/wasliberty-open-liberty')
-	  fetchRepoPublic = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublic;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/oss_dependencies.maven')
-	  fetchRepoIBMJava = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublic;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/ibm_java.maven')
-      fetchRepoIBM = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemoteIBM;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/oss_ibm.maven')
-  } 
-  
-  props.setProperty('fetch.oss.repository', fetchRepoPublic)
-  props.setProperty('fetch.oss.ibm.repository', fetchRepoIBM)
-  props.setProperty('fetch.ibm.java.repository', fetchRepoIBMJava)
-    
-  // generated.properties is used to pass build-time variables from Gradle -> Bnd in cnf/build.bnd    
-  File propsFile = new File('generated.properties')    
-  props.store(propsFile.newWriter(), null)
+  def branch = ""
+  def proc = "git rev-parse --abbrev-ref HEAD".execute()
+  proc.in.eachLine { line -> branch = line }
+  proc.err.eachLine { line -> println line }
+  proc.waitFor()
+  branch
 }
 
 loadBuildProps()
 
-/* Clean repository so multi-branch development doesn't publish conflicting versions */
-if (repoCleanNeeded()) {
-  // Clean local maven repositories
-  cleanDir(new File("${rootDir}/cnf/release"))
-  cleanDir(new File("${rootDir}/cnf/local"))
-  file('release.mvn').delete()
-  file('local.mvn').delete()
-
-}
-
-def repoCleanNeeded() {
-
-  def props = new Properties()
-  file("generated.properties").withInputStream { props.load(it) }
-  // Current branch name
-  def branchName = getGitBranch()
-
-  // Git branch name when repoClean was last run
-  def initBranch = props.getProperty("bGitBranch")
-
-  if (branchName != initBranch) {
-    return true
-  }
-  return false
-}
-
-def cleanDir(File f) {
-  f.eachFile { file ->
-    if (file.isDirectory()) { file.deleteDir() }
-    else if (file.name != ".gitignore" && file.exists()) { file.delete() }
-  }
-}
-
 /* Add bnd gradle plugin as a script dependency */
 buildscript {
   repositories {
-    // mavenCentral()
     maven {
       url uri(bnd_repourl)
     }
   }
+
   dependencies {
     classpath bnd_plugin
   }
@@ -131,6 +150,7 @@ buildscript {
       cacheDynamicVersionsFor 30, 'minutes'
     }
   }
+
   dependencies {
     components {
       all { ComponentMetadataDetails details ->

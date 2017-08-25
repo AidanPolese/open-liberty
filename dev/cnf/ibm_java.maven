@@ -11,7 +11,7 @@ com.ibm.ws.internal.prereq.java:java.math:1.7.0
 com.ibm.ws.internal.prereq.java:java.rt:1.7.0
 com.ibm.ws.internal.prereq.java:java.vm:1.7.0
 com.ibm.ws.internal.prereq.java:java.xml:1.7.0
-com.ibm.ws.internal.prereq.java:java.xmldsigfw:1.8.0
+com.ibm.ws.internal.prereq.java:java.xmldsigfw:1.7.0
 com.ibm.ws.internal.prereq.java:java.ibmcertpathfw:1.8.0
 com.ibm.ws.internal.prereq.java:java.ibmjcefw:1.8.0
 com.ibm.ws.internal.prereq.java:java.ibmjgssfw:1.8.0

@@ -40,6 +40,7 @@ import javax.resource.ResourceException;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
+import com.ibm.ws.jca.adapter.WSConnectionManager;
 import com.ibm.ws.jdbc.internal.PropertyService;
 import com.ibm.ws.kernel.service.util.PrivHelper;
 import com.ibm.ws.resource.ResourceRefInfo;
@@ -507,7 +508,7 @@ public class DB2JCCHelper extends DB2Helper {
      * @exception a SQLException if can't get a DefaultContext
      **/
     @Override
-    public Object getSQLJContext(WSRdbManagedConnectionImpl mc, Class<?> DefaultContext) throws SQLException {
+    public Object getSQLJContext(WSRdbManagedConnectionImpl mc, Class<?> DefaultContext, WSConnectionManager connMgr) throws SQLException {
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled(); 
 
         if (isTraceOn && tc.isEntryEnabled()) 
@@ -516,7 +517,7 @@ public class DB2JCCHelper extends DB2Helper {
         try {
             if (mc.cachedConnection == null) {
                 mc.cachedConnection = mcf.jdbcRuntime.newConnection(mc, mc.sqlConn, WSRdbManagedConnectionImpl.key, mc.threadID);
-                mc.cachedConnection.initialize(mc.mcf.connMgr, WSRdbManagedConnectionImpl.key);
+                mc.cachedConnection.initialize(connMgr, WSRdbManagedConnectionImpl.key);
                 mc.cachedConnection.setCurrentAutoCommit(mc.currentAutoCommit, WSRdbManagedConnectionImpl.key);
             } else { 
                 /*

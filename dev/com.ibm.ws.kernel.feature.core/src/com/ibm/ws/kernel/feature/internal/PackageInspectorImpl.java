@@ -11,7 +11,6 @@
 package com.ibm.ws.kernel.feature.internal;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,12 +34,12 @@ import com.ibm.ws.kernel.provisioning.ExtensionConstants;
 import com.ibm.ws.kernel.provisioning.packages.PackageIndex;
 import com.ibm.ws.kernel.provisioning.packages.PackageIndex.Filter;
 import com.ibm.ws.kernel.provisioning.packages.SharedPackageInspector;
-import com.ibm.wsspi.logging.IntrospectableService;
+import com.ibm.wsspi.logging.Introspector;
 
 /**
  *
  */
-public class PackageInspectorImpl implements SharedPackageInspector, IntrospectableService {
+public class PackageInspectorImpl implements SharedPackageInspector, Introspector {
     private static final TraceComponent tc = Tr.register(PackageInspectorImpl.class);
 
     private ServiceRegistration<?> registration = null;
@@ -55,7 +54,7 @@ public class PackageInspectorImpl implements SharedPackageInspector, Introspecta
         Dictionary<String, Object> props = new Hashtable<String, Object>();
         props.put("service.vendor", "IBM");
         registration = bundleContext.registerService(new String[] { SharedPackageInspector.class.getName(),
-                                                                   IntrospectableService.class.getName() },
+                                                                   Introspector.class.getName() },
                                                      this, props);
     }
 
@@ -139,7 +138,8 @@ public class PackageInspectorImpl implements SharedPackageInspector, Introspecta
         API_Spec(true, "spec"),
         API_SpecOsgi(true, "spec:osgi"),
         API_ThirdParty(true, "third-party"),
-
+        API_Stable(true, "stable"),
+        
         SPI(false, "spi"),
         SPI_Spec(false, "spec"),
         SPI_ThirdParty(false, "third-party");
@@ -302,11 +302,12 @@ public class PackageInspectorImpl implements SharedPackageInspector, Introspecta
             return types.contains(PkgType.API_ThirdParty);
         }
 
-        /** IBM-API type="spec" or type="spec:osgi" or type="third-party" */
+        /** type="stable" only */
         @Override
-        public boolean isSpecOrThirdPartyApi() {
-            return isSpecApi() || isThirdPartyApi();
-        }
+		public boolean isStableApi() {
+			return types.contains(PkgType.API_Stable);
+		}
+               
 
         public boolean isKernelExportBlacklistedPackage() {
 
@@ -321,6 +322,8 @@ public class PackageInspectorImpl implements SharedPackageInspector, Introspecta
         public String toString() {
             return types + "|" + productRepo;
         }
+
+		
     }
 
     /**
@@ -408,18 +411,17 @@ public class PackageInspectorImpl implements SharedPackageInspector, Introspecta
     }
 
     @Override
-    public String getName() {
+    public String getIntrospectorName() {
         return "SharedPackages";
     }
 
     @Override
-    public String getDescription() {
+    public String getIntrospectorDescription() {
         return "List of declared API/SPI packages in the runtime";
     }
 
     @Override
-    public void introspect(OutputStream out) throws IOException {
-        PrintWriter ps = new PrintWriter(out);
+    public void introspect(PrintWriter ps) throws IOException {       
 
         ProductPackages index = packageIndex;
         if (index == null)

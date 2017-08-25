@@ -1,0 +1,37 @@
+<server>
+  <featureManager>
+    <feature>mdb-3.2</feature>
+    <feature>servlet-3.1</feature>
+    <feature>osgiconsole-1.0</feature>
+    <feature>componentTest-1.0</feature>
+  </featureManager>
+
+  <include location="../fatTestPorts.xml"/>
+
+  <variable name="onError" value="FAIL"/>
+
+  <connectionFactory jndiName="eis/conFactory">
+    <properties.ExampleRA tableName="TABLE1"/>
+  </connectionFactory>
+
+  <adminObject jndiName="eis/conSpec">
+    <properties.ExampleRA.ConnectionSpec/>
+  </adminObject>
+
+  <adminObject jndiName="eis/iSpec_ADD">
+    <properties.ExampleRA.InteractionSpec functionName="ADD"/>
+  </adminObject>
+
+  <adminObject jndiName="eis/iSpec_FIND">
+    <properties.ExampleRA.InteractionSpec functionName="FIND"/>
+  </adminObject>
+
+  <adminObject jndiName="eis/iSpec_REMOVE">
+    <properties.ExampleRA.InteractionSpec functionName="REMOVE"/>
+  </adminObject>
+
+  <activationSpec id="ExampleApp/ExampleWeb/ExampleMessageDrivenBean">
+    <properties.ExampleRA functionName="ADD"/>
+  </activationSpec>
+
+</server>

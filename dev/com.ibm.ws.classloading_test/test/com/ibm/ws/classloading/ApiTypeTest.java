@@ -13,6 +13,7 @@ package com.ibm.ws.classloading;
 import static com.ibm.wsspi.classloading.ApiType.API;
 import static com.ibm.wsspi.classloading.ApiType.IBMAPI;
 import static com.ibm.wsspi.classloading.ApiType.SPEC;
+import static com.ibm.wsspi.classloading.ApiType.STABLE;
 import static com.ibm.wsspi.classloading.ApiType.THIRDPARTY;
 import static junit.framework.Assert.assertEquals;
 
@@ -35,6 +36,7 @@ public class ApiTypeTest {
         assertEquals(IBMAPI, ApiType.fromString("ibm-api"));
         assertEquals(API, ApiType.fromString("api"));
         assertEquals(THIRDPARTY, ApiType.fromString("third-party"));
+        assertEquals(STABLE, ApiType.fromString("stable"));
     }
 
     @Test
@@ -45,7 +47,7 @@ public class ApiTypeTest {
         assertEquals(set(), ApiType.createApiTypeSet(null, null));
         assertEquals(set(SPEC), ApiType.createApiTypeSet("spec"));
         assertEquals(set(SPEC, IBMAPI), ApiType.createApiTypeSet("spec,ibm-api"));
-        assertEquals(set(SPEC, IBMAPI, API, THIRDPARTY), ApiType.createApiTypeSet("spec ibm-api,random,junk,api, third-party"));
+        assertEquals(set(SPEC, IBMAPI, API, THIRDPARTY, STABLE), ApiType.createApiTypeSet("spec ibm-api,random,junk,api, third-party, stable"));
         assertEquals(set(SPEC, IBMAPI, API, THIRDPARTY), ApiType.createApiTypeSet("spec ibm-api,random", "junk,api, third-party"));
     }
 

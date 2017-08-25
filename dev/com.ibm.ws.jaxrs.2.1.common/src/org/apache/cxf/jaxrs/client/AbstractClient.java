@@ -40,6 +40,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
@@ -104,6 +106,8 @@ import org.apache.cxf.transport.MessageObserver;
  *
  */
 public abstract class AbstractClient implements Client {
+    public static final String EXECUTOR_SERVICE_PROPERTY = "executorService";
+
     protected static final String REQUEST_CONTEXT = "RequestContext";
     protected static final String RESPONSE_CONTEXT = "ResponseContext";
     protected static final String KEEP_CONDUIT_ALIVE = "KeepConduitAlive";
@@ -113,11 +117,11 @@ public abstract class AbstractClient implements Client {
     private static final String HEADER_SPLIT_PROPERTY = "org.apache.cxf.http.header.split";
     private static final String SERVICE_NOT_AVAIL_PROPERTY = "org.apache.cxf.transport.service_not_available";
     private static final String COMPLETE_IF_SERVICE_NOT_AVAIL_PROPERTY =
-                    "org.apache.cxf.transport.complete_if_service_not_available";
+        "org.apache.cxf.transport.complete_if_service_not_available";
 
     private static final Logger LOG = LogUtils.getL7dLogger(AbstractClient.class);
     private static final Set<String> KNOWN_METHODS = new HashSet<>(
-                    Arrays.asList("GET", "POST", "HEAD", "OPTIONS", "PUT", "DELETE", "TRACE"));
+        Arrays.asList("GET", "POST", "HEAD", "OPTIONS", "PUT", "DELETE", "TRACE"));
 
     protected ClientConfiguration cfg = new ClientConfiguration();
     private ClientState state;
@@ -428,17 +432,17 @@ public abstract class AbstractClient implements Client {
         ResponseBuilder currentResponseBuilder = JAXRSUtils.toResponseBuilder(status);
 
         Message responseMessage = exchange.getInMessage() != null
-                        ? exchange.getInMessage() : exchange.getInFaultMessage();
+            ? exchange.getInMessage() : exchange.getInFaultMessage();
         // if there is no response message, we just send the response back directly
         if (responseMessage == null) {
             return currentResponseBuilder;
         }
 
         Map<String, List<Object>> protocolHeaders =
-                        CastUtils.cast((Map<?, ?>) responseMessage.get(Message.PROTOCOL_HEADERS));
+            CastUtils.cast((Map<?, ?>)responseMessage.get(Message.PROTOCOL_HEADERS));
 
         boolean splitHeaders =
-                        MessageUtils.isTrue(outMessage.getContextualProperty(HEADER_SPLIT_PROPERTY));
+            MessageUtils.isTrue(outMessage.getContextualProperty(HEADER_SPLIT_PROPERTY));
         for (Map.Entry<String, List<Object>> entry : protocolHeaders.entrySet()) {
             if (null == entry.getKey()) {
                 continue;
@@ -493,15 +497,19 @@ public abstract class AbstractClient implements Client {
         }
         @SuppressWarnings("unchecked")
         MultivaluedMap<String, Object> headers =
-                        (MultivaluedMap<String, Object>) outMessage.get(Message.PROTOCOL_HEADERS);
+            (MultivaluedMap<String, Object>)outMessage.get(Message.PROTOCOL_HEADERS);
 
         @SuppressWarnings("unchecked")
         Class<T> theClass = (Class<T>) cls;
 
-        MediaType contentType = JAXRSUtils.toMediaType(headers.getFirst("Content-Type").toString());
+        Object contentTypeHeader = headers.getFirst("Content-Type");
+        if (contentTypeHeader == null) {
+            contentTypeHeader = MediaType.WILDCARD;
+        }
+        MediaType contentType = JAXRSUtils.toMediaType(contentTypeHeader.toString());
 
         List<WriterInterceptor> writers = ClientProviderFactory.getInstance(outMessage)
-                        .createMessageBodyWriterInterceptor(theClass, type, anns, contentType, outMessage, null);
+            .createMessageBodyWriterInterceptor(theClass, type, anns, contentType, outMessage, null);
         if (writers != null) {
             try {
                 JAXRSUtils.writeMessageBody(writers,
@@ -529,7 +537,7 @@ public abstract class AbstractClient implements Client {
     protected WebApplicationException convertToWebApplicationException(Response r) {
         try {
             Class<?> exceptionClass = ExceptionUtils.getWebApplicationExceptionClass(r,
-                                                                                     WebApplicationException.class);
+                                       WebApplicationException.class);
             Constructor<?> ctr = exceptionClass.getConstructor(Response.class);
             return (WebApplicationException) ctr.newInstance(r);
         } catch (Throwable ex2) {
@@ -554,7 +562,7 @@ public abstract class AbstractClient implements Client {
 
     protected boolean responseStreamCanBeClosed(Message outMessage, Class<?> cls) {
         return !JAXRSUtils.isStreamingOutType(cls)
-               && MessageUtils.isTrue(outMessage.getContextualProperty("response.stream.auto.close"));
+            && MessageUtils.isTrue(outMessage.getContextualProperty("response.stream.auto.close"));
     }
 
     protected void completeExchange(Exchange exchange, boolean proxy) {
@@ -628,9 +636,8 @@ public abstract class AbstractClient implements Client {
                 if (actualEx instanceof RuntimeException
                     && useProcExProp != null && PropertyUtils.isFalse(useProcExProp)) {
                     throw (Exception)actualEx;
-                } else {
-                    throw new ProcessingException(actualEx);
                 }
+                throw new ProcessingException(actualEx);
             } else if (!exchange.isOneWay() || cfg.isResponseExpectedForOneway()) {
                 waitForResponseCode(exchange);
             }
@@ -670,7 +677,7 @@ public abstract class AbstractClient implements Client {
         URI newBaseURI = URI.create(reqContext.get(Message.ENDPOINT_ADDRESS).toString());
         URI requestURI = URI.create(reqContext.get(Message.REQUEST_URI).toString());
         return calculateNewRequestURI(newBaseURI, requestURI,
-                                      MessageUtils.isTrue(reqContext.get(PROXY_PROPERTY)));
+                MessageUtils.isTrue(reqContext.get(PROXY_PROPERTY)));
     }
 
     private URI calculateNewRequestURI(URI newBaseURI, URI requestURI, boolean proxy) {
@@ -753,7 +760,7 @@ public abstract class AbstractClient implements Client {
                 for (Object pValue : pValues) {
                     if (InjectionUtils.isSupportedCollectionOrArray(pValue.getClass())) {
                         Collection<?> c = pValue.getClass().isArray()
-                                        ? Arrays.asList((Object[]) pValue) : (Collection<?>) pValue;
+                            ? Arrays.asList((Object[]) pValue) : (Collection<?>) pValue;
                         for (Iterator<?> it = c.iterator(); it.hasNext();) {
                             convertMatrixOrQueryToBuilder(ub, paramName, it.next(), pt, anns);
                         }
@@ -767,7 +774,7 @@ public abstract class AbstractClient implements Client {
         } else {
             Object pValue = pValues[0];
             MultivaluedMap<String, Object> values =
-                            InjectionUtils.extractValuesFromBean(pValue, "");
+                InjectionUtils.extractValuesFromBean(pValue, "");
             for (Map.Entry<String, List<Object>> entry : values.entrySet()) {
                 for (Object v : entry.getValue()) {
                     convertMatrixOrQueryToBuilder(ub, entry.getKey(), v, pt, anns);
@@ -815,7 +822,7 @@ public abstract class AbstractClient implements Client {
             }
             @SuppressWarnings("unchecked")
             ParamConverter<Object> prov =
-                            (ParamConverter<Object>) pf.createParameterHandler(pClass, pClass, anns, m);
+                (ParamConverter<Object>)pf.createParameterHandler(pClass, pClass, anns, m);
             if (prov != null) {
                 try {
                     return prov.toString(pValue);
@@ -865,35 +872,35 @@ public abstract class AbstractClient implements Client {
                 sb.append(c);
                 results.add(sb.toString());
             } else {
-                switch (c) {
-                    case '\"':
-                        sb.append(c);
-                        quote = !quote;
-                        break;
-                    case '\\':
-                        if (quote) {
-                            pos++;
-                            if (pos <= lastIndex) {
-                                c = chars[pos];
-                                sb.append(c);
-                            }
-                            if (pos == lastIndex) {
-                                results.add(sb.toString());
-                            }
-                        } else {
+                switch(c) {
+                case '\"':
+                    sb.append(c);
+                    quote = !quote;
+                    break;
+                case '\\':
+                    if (quote) {
+                        pos++;
+                        if (pos <= lastIndex) {
+                            c = chars[pos];
                             sb.append(c);
                         }
-                        break;
-                    case ',':
-                        if (quote) {
-                            sb.append(c);
-                        } else {
+                        if (pos == lastIndex) {
                             results.add(sb.toString());
-                            sb = new StringBuilder();
                         }
-                        break;
-                    default:
+                    } else {
                         sb.append(c);
+                    }
+                    break;
+                case ',':
+                    if (quote) {
+                        sb.append(c);
+                    } else {
+                        results.add(sb.toString());
+                        sb = new StringBuilder();
+                    }
+                    break;
+                default:
+                    sb.append(c);
                 }
             }
         }
@@ -1094,6 +1101,33 @@ public abstract class AbstractClient implements Client {
         return exchange;
     }
 
+    protected void setAsyncMessageObserverIfNeeded(Exchange exchange) {
+        if (!exchange.isSynchronous()) {
+            ExecutorService executor = (ExecutorService)cfg.getRequestContext().get(EXECUTOR_SERVICE_PROPERTY);
+            if (executor != null) {
+                exchange.put(Executor.class, executor);
+
+                final ClientMessageObserver observer = new ClientMessageObserver(cfg);
+
+                exchange.put(MessageObserver.class, new MessageObserver() {
+                    public void onMessage(final Message message) {
+                        if (!message.getExchange()
+                            .containsKey(Executor.class.getName() + ".USING_SPECIFIED")) {
+
+                            executor.execute(new Runnable() {
+                                public void run() {
+                                    observer.onMessage(message);
+                                }
+                            });
+                        } else {
+                            observer.onMessage(message);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
     protected void setContexts(Message message, Exchange exchange,
                                Map<String, Object> context, boolean proxy) {
         Map<String, Object> reqContext = null;
@@ -1125,7 +1159,6 @@ public abstract class AbstractClient implements Client {
     protected void setPlainOperationNameProperty(Message outMessage, String name) {
         outMessage.getExchange().put("org.apache.cxf.resource.operation.name", name);
     }
-
 
     protected static Type getCallbackType(InvocationCallback<?> callback) {
         Class<?> cls = callback.getClass();
@@ -1170,6 +1203,7 @@ public abstract class AbstractClient implements Client {
         }
         return respClass;
     }
+
     protected void resetResponseStateImmediatelyIfNeeded() {
         if (state instanceof ThreadLocalClientState
             && cfg.isResetThreadLocalStateImmediately()) {
@@ -1223,7 +1257,7 @@ public abstract class AbstractClient implements Client {
     }
 
     private static class ConnectionFaultInterceptor extends AbstractPhaseInterceptor<Message> {
-        public ConnectionFaultInterceptor() {
+        ConnectionFaultInterceptor() {
             super(Phase.PRE_STREAM);
         }
 

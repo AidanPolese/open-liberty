@@ -23,4 +23,4 @@ instrument.disabled: true
 publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
-	lib/jaxws-api.jar;version=file
+	com.ibm.ws.javax.j2ee:jaxws-api;version=2.2
