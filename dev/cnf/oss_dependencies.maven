@@ -8,9 +8,6 @@ com.fasterxml.jackson.core:jackson-core:2.2.3
 com.fasterxml.jackson.core:jackson-databind:2.2.3
 com.google.guava:guava:14.0.1
 com.google.inject:guice:2.0
-com.ibm.ws.commons-collections:commons-collections:3.2.1
-com.ibm.ws.commons-fileupload:commons-fileupload:1.2.1
-com.ibm.ws.commons-io:commons-io:1.4
 com.ibm.ws.componenttest:com.ibm.componenttest.common:1.0.0
 com.ibm.ws.componenttest:com.ibm.ws.topology.helper:1.0.0
 com.ibm.ws.componenttest:fat.harness:1.0.0
@@ -88,7 +85,6 @@ org.apache.cxf:cxf-rt-rs-service-description:3.1.11
 org.apache.cxf:cxf-rt-transports-http:3.1.11
 org.apache.cxf:cxf-tools-common:3.1.11
 org.apache.cxf:cxf-tools-wadlto-jaxrs:3.1.11
-org.apache.derby:derby:10.11.1
 org.apache.derby:derbynet:10.11.1.1
 org.apache.felix:org.apache.felix.gogo.command:0.16.0
 org.apache.felix:org.apache.felix.gogo.runtime:0.16.2
@@ -96,7 +92,6 @@ org.apache.felix:org.apache.felix.gogo.shell:0.12.0
 org.apache.felix:org.apache.felix.http.api:2.2.0
 org.apache.felix:org.apache.felix.http.base:2.2.0
 org.apache.felix:org.apache.felix.scr:2.0.8
-org.apache.geronimo.specs:geronimo-ejb_3.1_spec-alt:1.0.0
 org.apache.geronimo.specs:geronimo-jaxb_2.2_spec:1.0.1
 org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1
 org.apache.geronimo.specs:geronimo-osgi-registry:1.1
@@ -117,16 +112,8 @@ org.apache.myfaces.buildtools:myfaces-builder-annotations:1.0.9
 org.apache.neethi:neethi:3.0.2
 org.apache.servicemix.bundles:org.apache.servicemix.bundles.bcel:5.2_3
 org.apache.ws.xmlschema:xmlschema-core:2.0.3
-org.apache.yoko:yoko-core:1.5
-org.apache.yoko:yoko-osgi:1.5
-org.apache.yoko:yoko-rmi-impl:1.5
-org.apache.yoko:yoko-rmi-spec:1.5
-org.apache.yoko:yoko-spec-corba:1.5
-org.apache.yoko:yoko-util:1.5
 org.eclipse.jdt.core.compiler:ecj:4.3.1
-org.eclipse.jdt.core.compiler:ecj:4.4.2
 org.eclipse.microprofile.config:microprofile-config-api:1.0
-org.eclipse:yasson:1.0.0
 org.glassfish:javax.json:1.0.4
 org.glassfish:javax.json:1.1
 org.hamcrest:hamcrest-all:1.3
