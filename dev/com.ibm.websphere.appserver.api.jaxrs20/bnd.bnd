@@ -15,7 +15,14 @@ Bundle-Name: WebSphere JAX-RS 20 Engine API
 Bundle-Description: WebSphere JAX-RS 20 Engine API, version ${bVersion}
 Bundle-SymbolicName: com.ibm.websphere.appserver.api.jaxrs20
 
-Import-Package: com.ibm.websphere.jaxrs.providers.json4j,com.ibm.websphere.jaxrs20.multipart
+Import-Package: com.ibm.websphere.jaxrs.providers.json4j, \
+		com.ibm.websphere.jaxrs20.multipart, \
+		javax.ws.rs, \
+		javax.ws.rs.client, \
+		javax.ws.rs.container, \
+		javax.ws.rs.core, \
+		javax.ws.rs.ext, \
+		javax.ws.rs.sse			
 
 Export-Package: com.ibm.websphere.jaxrs.providers.json4j,com.ibm.websphere.jaxrs20.multipart
 
