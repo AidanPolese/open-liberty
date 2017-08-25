@@ -31,23 +31,22 @@ import componenttest.topology.utils.HttpUtils;
 public class JSFContainerTest extends FATServletClient {
 
     public static final String APP_NAME = "jsfApp";
-    public static final String APP_RES = "test-applications/" + APP_NAME + "/resources";
 
     @Server("jsf.container.2.2_fat")
     public static LibertyServer server;
 
     @BeforeClass
     public static void setUp() throws Exception {
-        WebArchive app1 = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
+        WebArchive app = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
                         .addPackages(true, "jsf.container")
                         .addAsLibrary(new File("publish/files/mojarra/jsf-api-2.2.14.jar"))
                         .addAsLibrary(new File("publish/files/mojarra/jsf-impl-2.2.14.jar"))
-                        .addAsWebResource(new File(APP_RES + "/TestBean.xhtml"));
+                        .addAsWebResource(new File("test-applications/" + APP_NAME + "/resources/TestBean.xhtml"));
 
         // TODO-6677: Eventually this library will be auto-added by the jsfContainer-2.2 feature
-        app1 = app1.addAsLibrary(new File("publish/files/mojarra/com.ibm.ws.jsfContainer.2.2.jar"));
+        app = app.addAsLibrary(new File("publish/files/mojarra/com.ibm.ws.jsfContainer.2.2.jar"));
 
-        ShrinkHelper.exportAppToServer(server, app1);
+        ShrinkHelper.exportToServer(server, "dropins", app);
         server.startServer();
     }
 

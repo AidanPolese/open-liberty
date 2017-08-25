@@ -8,19 +8,25 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.jsf.container.fat;
+package jsf.cdi.flow.beans;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
-@RunWith(Suite.class)
-@SuiteClasses({
-                JSFContainerTest.class,
-                JSF22FlowsTests.class,
-                CDIFlowsTests.class,
-                JSF22StatelessViewTests.class
-})
-public class FATSuite {
+/**
+ * This Bean is used to keep track of a an integer count over the life of an application
+ */
+@Named
+@ApplicationScoped
+public class CountBean {
 
+    private int count = 0;
+
+    public int getCount() {
+        return count;
+    }
+
+    public void increment() {
+        count++;
+    }
 }
