@@ -94,17 +94,36 @@ instrument.taskInjection: false
     com.ibm.ws.componenttest:public.api\\;version=1.0.0,\
     com.ibm.ws.componenttest\\;version=latest}
 
+javac.bootclasspath.1.4: ${ibmjdklib.bootclasspath}
+javac.bootclasspath.1.6: ${ibmjdklib.bootclasspath}
+javac.bootclasspath.1.7: ${ibmjdklib.bootclasspath}
+javac.bootclasspath.1.8: ${ibmjdklib.bootclasspath}
+	
 javac.bootclasspath.java6:
 javac.bootclasspath.java7:
 javac.bootclasspath.java8:
 
-javac.bootclasspath.1.4: \
+ibmjdklib.bootclasspath: \
+    ${java.home}/jre/lib/ibmcertpathfw.jar;version=file;boot=true, \
+    ${java.home}/jre/lib/ibmjcefw.jar;version=file;boot=true, \
+    ${java.home}/jre/lib/ibmjgssfw.jar;version=file;boot=true, \
+    ${java.home}/jre/lib/ibmjgssprovider.jar;version=file;boot=true, \
+    ${java.home}/jre/lib/ibmjssefw.jar;version=file;boot=true, \
+    ${java.home}/jre/lib/ibmorbapi.jar;version=file;boot=true, \
+    ${java.home}/jre/lib/ibmpkcs.jar;version=file;boot=true, \
+    ${java.home}/jre/lib/math.jar;version=file;boot=true, \
+    ${java.home}/jre/lib/rt.jar;version=file;boot=true, \
+    ${java.home}/jre/bin/default/jclSC180/vm.jar;version=file;boot=true, \
+    ${java.home}/jre/lib/xml.jar;version=file;boot=true, \
+    ${java.home}/jre/lib/xmldsigfw.jar;version=file;boot=true
+
+internaljavac.bootclasspath.1.4: \
     com.ibm.ws.internal.prereq.java:java.rt;strategy=exact;version=1.6.0;boot=true
 
-javac.bootclasspath.1.6: \
+internaljavac.bootclasspath.1.6: \
     com.ibm.ws.internal.prereq.java:java.rt;strategy=exact;version=1.6.0;boot=true
 
-javac.bootclasspath.1.7: \
+internaljavac.bootclasspath.1.7: \
     com.ibm.ws.internal.prereq.java:java.ibmcertpathfw;strategy=exact;version=1.7.0;boot=true, \
     com.ibm.ws.internal.prereq.java:java.ibmjcefw;strategy=exact;version=1.7.0;boot=true, \
     com.ibm.ws.internal.prereq.java:java.ibmjgssfw;strategy=exact;version=1.7.0;boot=true, \
@@ -119,7 +138,7 @@ javac.bootclasspath.1.7: \
     com.ibm.ws.internal.prereq.java:java.xml;strategy=exact;version=1.7.0;boot=true, \
     com.ibm.ws.internal.prereq.java:java.xmldsigfw;strategy=exact;version=1.7.0;boot=true
 
-javac.bootclasspath.1.8: \
+internaljavac.bootclasspath.1.8: \
     com.ibm.ws.internal.prereq.java:java.ibmcertpathfw;strategy=exact;version=1.8.0;boot=true, \
     com.ibm.ws.internal.prereq.java:java.ibmjcefw;strategy=exact;version=1.8.0;boot=true, \
     com.ibm.ws.internal.prereq.java:java.ibmjgssfw;strategy=exact;version=1.8.0;boot=true, \
