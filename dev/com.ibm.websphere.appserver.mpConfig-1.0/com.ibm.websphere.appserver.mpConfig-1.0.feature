@@ -4,9 +4,9 @@ visibility=public
 singleton=true
 IBM-App-ForceRestart: install, \
  uninstall
-IBM-API-Package: org.eclipse.microprofile.config;  type="spec", \
-	org.eclipse.microprofile.config.spi;  type="spec", \
-        org.eclipse.microprofile.config.inject;  type="spec"
+IBM-API-Package: org.eclipse.microprofile.config;  type="stable", \
+	org.eclipse.microprofile.config.spi;  type="stable", \
+        org.eclipse.microprofile.config.inject;  type="stable"
 IBM-ShortName: mpConfig-1.0
 Subsystem-Name: MicroProfile Config
 -features=com.ibm.websphere.appserver.org.eclipse.microprofile.config-1.0, \
