@@ -12,6 +12,8 @@ package com.ibm.ws.jsf.container.fat;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
@@ -52,17 +54,18 @@ public class CDIFlowsTests extends FATServletClient {
     @BeforeClass
     public static void setup() throws Exception {
         WebArchive app = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
-//                      .addAsLibrary(new File("publish/files/mojarra/jsf-api-2.2.14.jar"))
-//                      .addAsLibrary(new File("publish/files/mojarra/jsf-impl-2.2.14.jar"))
+                        .addAsLibrary(new File("publish/files/mojarra/jsf-api-2.2.14.jar"))
+                        .addAsLibrary(new File("publish/files/mojarra/jsf-impl-2.2.14.jar"))
                         .addPackage("jsf.cdi.flow.beans");
         app = (WebArchive) ShrinkHelper.addDirectory(app, "test-applications/" + APP_NAME + "/resources");
 
         // TODO-6677: Eventually this library will be auto-added by the jsfContainer-2.2 feature
-//      app = app.addAsLibrary(new File("publish/files/mojarra/com.ibm.ws.jsfContainer.2.2.jar"));
+        app = app.addAsLibrary(new File("publish/files/mojarra/com.ibm.ws.jsfContainer.2.2.jar"));
 
         ShrinkHelper.exportToServer(server, "dropins", app);
-
-        server.startServer();
+        server.removeAllInstalledAppsForValidation();
+        server.addInstalledAppForValidation(APP_NAME);
+        server.startServer(CDIFlowsTests.class.getSimpleName() + ".log");
     }
 
     @AfterClass

@@ -19,11 +19,11 @@
             if yes, then a navigation to declarativeSwitch-2 is returned. -->
         <switch id="switch-id">
           <default-outcome>
-            /declarativeSwitch/declarativeSwitch.xhtml
+            declarativeSwitch
           </default-outcome>
           <case>
             <if>#{flowScope.testValue eq 'next'}</if>
-            <from-outcome>/declarativeSwitch/declarativeSwitch-2.xhtml</from-outcome>
+            <from-outcome>declarativeSwitch-2</from-outcome>
           </case>
         </switch>
     </flow-definition>

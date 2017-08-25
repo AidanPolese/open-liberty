@@ -1,8 +1,6 @@
 <server>
 	<featureManager>
-<!-- 	TODO: Switch this back to jsfContainer -->
-<!-- 		<feature>jsfContainer-2.2</feature> -->
-        <feature>jsf-2.2</feature>
+		<feature>jsfContainer-2.2</feature>
         <feature>cdi-1.2</feature>
 	    <feature>componenttest-1.0</feature>
     </featureManager>

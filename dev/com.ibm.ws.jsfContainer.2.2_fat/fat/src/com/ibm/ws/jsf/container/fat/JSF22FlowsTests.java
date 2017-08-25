@@ -12,6 +12,8 @@ package com.ibm.ws.jsf.container.fat;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -27,6 +29,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.ibm.websphere.simplicity.ShrinkHelper;
 
+import componenttest.annotation.ExpectedFFDC;
 import componenttest.custom.junit.runner.FATRunner;
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.impl.LibertyServerFactory;
@@ -60,18 +63,19 @@ public class JSF22FlowsTests extends FATServletClient {
         facesFlowJar = (JavaArchive) ShrinkHelper.addDirectory(facesFlowJar, "test-applications/JSF22FacesFlows/resources/jar");
 
         WebArchive app = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
-//                        .addAsLibrary(new File("publish/files/mojarra/jsf-api-2.2.14.jar"))
-//                        .addAsLibrary(new File("publish/files/mojarra/jsf-impl-2.2.14.jar"))
+                        .addAsLibrary(new File("publish/files/mojarra/jsf-api-2.2.14.jar"))
+                        .addAsLibrary(new File("publish/files/mojarra/jsf-impl-2.2.14.jar"))
                         .addAsLibrary(facesFlowJar)
                         .addPackage("jsf.flow.beans");
         app = (WebArchive) ShrinkHelper.addDirectory(app, "test-applications/JSF22FacesFlows/resources/war");
 
         // TODO-6677: Eventually this library will be auto-added by the jsfContainer-2.2 feature
-//        app = app.addAsLibrary(new File("publish/files/mojarra/com.ibm.ws.jsfContainer.2.2.jar"));
+        app = app.addAsLibrary(new File("publish/files/mojarra/com.ibm.ws.jsfContainer.2.2.jar"));
 
         ShrinkHelper.exportToServer(server, "dropins", app);
-
-        server.startServer();
+        server.removeAllInstalledAppsForValidation();
+        server.addInstalledAppForValidation(APP_NAME);
+        server.startServer(JSF22FlowsTests.class.getSimpleName() + ".log");
     }
 
     @AfterClass
@@ -100,6 +104,7 @@ public class JSF22FlowsTests extends FATServletClient {
      * packaged in a JAR
      */
     @Test
+    @ExpectedFFDC("java.util.NoSuchElementException") // TODO is this really expected?
     public void JSF22Flows_TestSimpleJar() throws Exception {
         testSimpleCase("simple-jar", APP_NAME);
     }
@@ -108,6 +113,7 @@ public class JSF22FlowsTests extends FATServletClient {
      * Check that arbitrary flow nodes can't be accessed
      */
     @Test
+    @ExpectedFFDC("java.util.NoSuchElementException") // TODO is this really expected?
     public void JSF22Flows_TestFailedFlowEntry() throws Exception {
         // Navigate to the failed flow entry page
         WebClient webClient = getWebClient();
@@ -118,11 +124,11 @@ public class JSF22FlowsTests extends FATServletClient {
         page = findAndClickButton(page, "button1");
         assertNotInFlow(page);
 
-        // MyFaces has slightly different err msg
-        assertTrue("The page doesn't contain the right text: " + page.asText(),
-                   page.asText().contains("No navigation case match"));
+        // MyFaces has slightly different err msg than Mojarra
 //        assertTrue("The page doesn't contain the right text: " + page.asText(),
-//                   page.asText().contains("Unable to find matching navigation case"));
+//                   page.asText().contains("No navigation case match"));
+        assertTrue("The page doesn't contain the right text: " + page.asText(),
+                   page.asText().contains("Unable to find matching navigation case"));
     }
 
     /**
