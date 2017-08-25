@@ -58,7 +58,10 @@ public class FTAnnotationUtils {
     private static final TraceComponent tc = Tr.register(FTAnnotationUtils.class);
 
     public final static Set<Class<?>> ANNOTATIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(Asynchronous.class, CircuitBreaker.class,
+
                                                                                                             Retry.class, Timeout.class, Bulkhead.class, Fallback.class)));
+
+    public final static String FALLBACKHANDLE_METHOD_NAME = "handle";
 
     static RetryPolicy processRetryAnnotation(Retry retry) {
         int maxRetries = retry.maxRetries();
@@ -154,10 +157,7 @@ public class FTAnnotationUtils {
         FallbackPolicy fallbackPolicy = null;
         Class<? extends FallbackHandler<?>> fallbackClass = fallback.value();
         String fallbackMethodName = fallback.fallbackMethod();
-        //If both fallback method and fallback class are set, it is an illegal state.
-        if ((fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) && (fallbackMethodName != null && !"".equals(fallbackMethodName))) {
-            throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.conflicts.CWMFT5008E", context.getMethod(), fallbackClass, fallbackMethodName));
-        } else if (fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) {
+        if (fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) {
             FallbackHandlerFactory fallbackHandlerFactory = getFallbackHandlerFactory(beanManager);
             fallbackPolicy = newFallbackPolicy(fallbackClass, fallbackHandlerFactory);
         } else if (fallbackMethodName != null && !"".equals(fallbackMethodName)) {
@@ -174,7 +174,8 @@ public class FTAnnotationUtils {
                     throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.return.type.not.match.CWMFT5002E", fallbackMethod, originalMethod));
                 }
             } catch (NoSuchMethodException e) {
-                throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", beanInstance.getClass(), fallbackMethodName, paramTypes), e);
+                throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", fallbackMethodName, originalMethod.getName(),
+                                                                   beanInstance.getClass()), e);
             } catch (SecurityException e) {
                 throw new FaultToleranceException((Tr.formatMessage(tc, "security.exception.acquiring.fallback.method.CWMFT5004E")), e);
             }

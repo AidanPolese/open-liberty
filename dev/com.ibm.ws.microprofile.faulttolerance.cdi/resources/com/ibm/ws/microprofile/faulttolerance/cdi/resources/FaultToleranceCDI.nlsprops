@@ -83,8 +83,8 @@ fallback.policy.return.type.not.match.CWMFT5002E.explanation=A fallback method m
 fallback.policy.return.type.not.match.CWMFT5002E.useraction=Update the return type.
 
 #A fallback method that should exist cannot be found.
-fallback.method.not.found.CWMFT5003E=CWMFT5003E: The fallback method {1} with parameters {2} was not found in class {0}.
-fallback.method.not.found.CWMFT5003E.explanation=A fallback method was declared for the method {1}. However, this method does not exist in the class {0}.
+fallback.method.not.found.CWMFT5003E=CWMFT5003E: The fallback method {0} with parameters as declared as the method {1} that falls back was not found in class {2}.
+fallback.method.not.found.CWMFT5003E.explanation=A fallback method was declared but it does not exist in the declaring class.
 fallback.method.not.found.CWMFT5003E.useraction=Either remove the fallback annotation or add the missing method.
 
 #A security exception was thrown while trying to create a fallback policy.
@@ -107,10 +107,19 @@ conversion.error.CWMFT5007E=CWMFT5007E: A problem occurred while converting a sy
 conversion.error.CWMFT5007E.explanation=Any configuration values provided via system properties must be convertable to the appropriate type. e.g. using Long.valueOf(String)
 conversion.error.CWMFT5007E.useraction=Check that the specified value is in the correct format for the type of the property it is overriding.
 
+#The value parameter on the Fallback is not valid.
+fallback.policy.invalid.CWMFT5008E=CWMFT5008E: The fallback policy for the method {0} is incorrect as the type parameter of the Fallback handler class {1} is not assignable to the return type {2} on the fallbackMethod {3}.
+fallback.policy.invalid.CWMFT5008E.explanation=The type parameter of the Fallback handler class must be assignable to the return type of the original method. 
+fallback.policy.invalid.CWMFT5008E.useraction=Update the type paramether of the fallback handler class to be assignable to the return type of the original method.
+
+
+
 #The fallback policies are conflicting.
-fallback.policy.conflicts.CWMFT5008E=CWMFT5008E: The fallback policy for the method {0} is incorrect as both Fallback handler class {1} and fallbackMethod {2} were specified. Only one of them should be specified.
-fallback.policy.conflicts.CWMFT5008E.explanation=Either fallbackMethod or value should be set, not both.
-fallback.policy.conflicts.CWMFT5008E.useraction=Either remove the fallbackMethod or the value from the Fallback annotation.
+fallback.policy.conflicts.CWMFT5009E=CWMFT5009E: The fallback policy for the method {0} is incorrect as both Fallback handler class {1} and fallbackMethod {2} were specified. Only one of them should be specified.
+fallback.policy.conflicts.CWMFT5009E.explanation=Either fallbackMethod or value should be set, not both. 
+fallback.policy.conflicts.CWMFT5009E.useraction=Either remove the fallbackMethod or the value from the Fallback annotation.
+
+
 
 #Generic error for internal failures.
 internal.error.CWMFT5997E=CWMFT5997E: An internal error occurred. The exception is {0}.
