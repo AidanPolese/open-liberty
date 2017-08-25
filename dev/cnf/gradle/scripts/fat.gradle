@@ -86,7 +86,7 @@ task runfat(type: Exec) {
 }
 
 task buildandrun {
-    dependsOn releaseNeeded
+    dependsOn build
     dependsOn runfat
 }
 
