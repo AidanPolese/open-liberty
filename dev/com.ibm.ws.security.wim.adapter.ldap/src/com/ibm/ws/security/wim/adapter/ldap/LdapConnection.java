@@ -292,13 +292,18 @@ public class LdapConnection {
 
     /**
      * The pool timeout. Defaults to infinite (zero).
+     * Sent in from config as milliseconds (see metatype.xml),
+     * but we will convert it to seconds when
+     * reading in the config. Min time is 1 second. All
+     * milliseconds will be rounded to the nearest second.
+     * 1499ms == 1s. 1500ms == 2 seconds.
      */
     private long iPoolTimeOut = 0;
 
     /**
      * Create pool time stamp.
      */
-    private long iPoolCreateTimestamp = 0;
+    private long iPoolCreateTimestampSeconds = 0;
 
     /**
      * Create pool time stamp milliseconds
@@ -724,6 +729,8 @@ public class LdapConnection {
         if (!reuseConn)
             iEnableContextPool = false;
 
+        long providedPoolTimeOut = iPoolTimeOut;
+
         if (iEnableContextPool) {
             if (poolConfig != null) {
                 if (poolConfig.get(CONFIG_PROP_INIT_POOL_SIZE) != null) {
@@ -750,7 +757,20 @@ public class LdapConnection {
                                                                                                                                                     Integer.valueOf(iMaxPoolSize))));
                 }
                 if (poolConfig.get(CONFIG_PROP_POOL_TIME_OUT) != null) {
-                    iPoolTimeOut = (Long) poolConfig.get((CONFIG_PROP_POOL_TIME_OUT));
+                    providedPoolTimeOut = (Long) poolConfig.get((CONFIG_PROP_POOL_TIME_OUT));
+
+                    /**
+                     * The metatype is set to long for this property and all
+                     * values will be passed as milliseconds.
+                     * A value of 0 means no timeout, leave at 0
+                     * Between 0 and 1000ms, round up to 1s
+                     * Otherwise round to nearest second
+                     */
+                    if (providedPoolTimeOut > 0 && providedPoolTimeOut <= 1000) {
+                        iPoolTimeOut = 1; // override to 1 second
+                    } else {
+                        iPoolTimeOut = roundToSeconds(providedPoolTimeOut);
+                    }
                 }
                 if (poolConfig.get(CONFIG_PROP_POOL_WAIT_TIME) != null) {
                     iPoolWaitTime = (Long) poolConfig.get((CONFIG_PROP_POOL_WAIT_TIME));
@@ -762,7 +782,7 @@ public class LdapConnection {
                 strBuf.append("\tInitPoolSize: ").append(iInitPoolSize).append("\n");
                 strBuf.append("\tMaxPoolSize: ").append(iMaxPoolSize).append("\n");
                 strBuf.append("\tPrefPoolSize: ").append(iPrefPoolSize).append("\n");
-                strBuf.append("\tPoolTimeOut: ").append(iPoolTimeOut).append("\n");
+                strBuf.append("\tPoolTimeOut: ").append(providedPoolTimeOut).append(" rounded to ").append(iPoolTimeOut).append("\n");
                 strBuf.append("\tPoolWaitTime: ").append(iPoolWaitTime);
                 Tr.debug(tc, METHODNAME + strBuf.toString());
             }
@@ -2150,7 +2170,7 @@ public class LdapConnection {
     private TimedDirContext getDirContext() throws WIMSystemException {
         final String METHODNAME = "getDirContext";
         TimedDirContext ctx = null;
-        long currentTime = System.currentTimeMillis() / 1000;
+        long currentTime = roundToSeconds(System.currentTimeMillis());
         // String sDomainName = DomainManagerUtils.getDomainName();
 
         if (iEnableContextPool) {
@@ -2188,7 +2208,8 @@ public class LdapConnection {
                     // If iPoolTimeOut = 0, the DirContext will be used forever until it is staled.
                     if (iPoolTimeOut > 0 && (currentTime - ctx.getPoolTimestamp()) > iPoolTimeOut) {
                         if (tc.isDebugEnabled()) {
-                            Tr.debug(tc, METHODNAME + " ContextPool: context is time out.");
+                            Tr.debug(tc, METHODNAME + " ContextPool: context is time out. currentTime=" + currentTime + ", createTime="
+                                         + ctx.getPoolTimestamp() + ", iPoolTimeOut=" + iPoolTimeOut);
                         }
                         oldCtx = ctx;
                         ctx = null;
@@ -2254,7 +2275,7 @@ public class LdapConnection {
                                     synchronized (lock) {
                                         if (!getActiveURL().equalsIgnoreCase(primaryURL)) {
                                             createContextPool(iLiveContexts - 1, primaryURL);
-                                            ctx.setCreateTimestamp(iPoolCreateTimestamp);
+                                            ctx.setCreateTimestamp(iPoolCreateTimestampSeconds);
                                         }
                                     }
                                 }
@@ -2279,7 +2300,8 @@ public class LdapConnection {
             } while (ctx == null);
 
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, METHODNAME + " ContextPool: total=" + iLiveContexts + ", poolSize=" + iContexts.size());
+                Tr.debug(tc, METHODNAME + " ContextPool: total=" + iLiveContexts + ", poolSize=" + iContexts.size() + ", currentTime=" + currentTime + ", createTime="
+                             + ctx.getPoolTimestamp());
             }
         } else {
             try {
@@ -2345,9 +2367,9 @@ public class LdapConnection {
 
             synchronized (lock) {
                 // Refresh context pool if another thread hasn't already done so
-                if (oldCtx.getCreateTimestamp() >= iPoolCreateTimestamp) {
+                if (oldCtx.getCreateTimestamp() >= iPoolCreateTimestampSeconds) {
                     createContextPool(iLiveContexts - 1, newURL);
-                    ctx.setCreateTimestamp(iPoolCreateTimestamp);
+                    ctx.setCreateTimestamp(iPoolCreateTimestampSeconds);
                 }
             }
 
@@ -2401,7 +2423,7 @@ public class LdapConnection {
             try {
                 TimedDirContext ctx = null;
                 try {
-                    ctx = new TimedDirContext(environment, getConnectionRequestControls());
+                    ctx = new TimedDirContext(environment, getConnectionRequestControls(), roundToSeconds(System.currentTimeMillis()));
                 } catch (NamingException e) {
                     if (!isConnectionException(e, METHODNAME)) {
                         throw e;
@@ -2416,7 +2438,7 @@ public class LdapConnection {
                     environment.put(Context.SECURITY_PRINCIPAL, principal);
                     environment.put(Context.SECURITY_CREDENTIALS, credential);
 
-                    ctx = new TimedDirContext(environment, getConnectionRequestControls());
+                    ctx = new TimedDirContext(environment, getConnectionRequestControls(), roundToSeconds(System.currentTimeMillis()));
                     String newURL = getProviderURL(ctx);
                     long creationTimeMillisec = System.currentTimeMillis();
 
@@ -2424,7 +2446,7 @@ public class LdapConnection {
                         // Refresh context pool if another thread hasnt already done so
                         if (creationTimeMillisec > iPoolCreateTimestampMillisec) {
                             createContextPool(iLiveContexts, newURL);
-                            ctx.setCreateTimestamp(iPoolCreateTimestamp);
+                            ctx.setCreateTimestamp(iPoolCreateTimestampSeconds);
                         }
                     }
                 }
@@ -2445,7 +2467,7 @@ public class LdapConnection {
      * @throws NamingException
      */
     public TimedDirContext createDirContext(Hashtable<?, ?> env) throws NamingException {
-        return createDirContext(env, System.currentTimeMillis() / 1000);
+        return createDirContext(env, roundToSeconds(System.currentTimeMillis()));
     }
 
     /**
@@ -2594,7 +2616,7 @@ public class LdapConnection {
 
         if (iEnableContextPool) {
             long currentTimeMillisec = System.currentTimeMillis();
-            long currentTime = currentTimeMillisec / 1000;
+            long currentTimeSeconds = roundToSeconds(currentTimeMillisec);
 
             // Don't purge the pool more than once per second
             // This prevents multiple threads from purging the pool
@@ -2605,7 +2627,7 @@ public class LdapConnection {
                 String currentURL = null;
                 try {
                     for (int i = 0; i < poolSize; i++) {
-                        TimedDirContext ctx = createDirContext(env, currentTime);
+                        TimedDirContext ctx = createDirContext(env, currentTimeSeconds);
                         currentURL = getProviderURL(ctx);
                         if (!providerURL.equalsIgnoreCase(currentURL)) {
                             env = getEnvironment(URLTYPE_SEQUENCE, currentURL);
@@ -2637,13 +2659,14 @@ public class LdapConnection {
 
                 List<TimedDirContext> oldCtxs = iContexts;
                 iContexts = contexts;
-                iPoolCreateTimestamp = currentTime;
+                iPoolCreateTimestampSeconds = currentTimeSeconds;
                 iPoolCreateTimestampMillisec = currentTimeMillisec;
                 closeContextPool(oldCtxs);
 
                 if (tc.isDebugEnabled()) {
                     Tr.debug(tc, METHODNAME + " Active Provider URL: " + getActiveURL());
-                    Tr.debug(tc, METHODNAME + " ContextPool: total=" + iLiveContexts + ", poolSize=" + iContexts.size());
+                    Tr.debug(tc, METHODNAME + " ContextPool: total=" + iLiveContexts + ", poolSize=" + iContexts.size(),
+                             ", iPoolCreateTimestampSeconds=" + iPoolCreateTimestampSeconds);
                 }
             } else if (tc.isDebugEnabled())
                 Tr.debug(tc, METHODNAME + " Pool has already been purged within past second... skipping purge");
@@ -2701,7 +2724,7 @@ public class LdapConnection {
                 // If the size of the pool is larger than minimum size or total dirContextes larger than max size
                 // If context URL no longer matches active URL, then discard
                 if (iContexts.size() >= iPrefPoolSize || (iMaxPoolSize != 0 && iLiveContexts > iMaxPoolSize)
-                    || ctx.getCreateTimestamp() < iPoolCreateTimestamp
+                    || ctx.getCreateTimestamp() < iPoolCreateTimestampSeconds
                     || !getProviderURL(ctx).equalsIgnoreCase(getActiveURL())) {
                     try {
                         ctx.close();
@@ -2725,7 +2748,7 @@ public class LdapConnection {
                         if (iContexts != null)
                             iContexts.add(ctx);
                         if (iPoolTimeOut > 0) {
-                            ctx.setPoolTimeStamp(System.currentTimeMillis() / 1000);
+                            ctx.setPoolTimeStamp(roundToSeconds(System.currentTimeMillis()));
                         }
 
                         if (tc.isDebugEnabled()) {
@@ -3058,7 +3081,7 @@ public class LdapConnection {
         sb.append(", Preferred Size=").append(iPrefPoolSize);
         sb.append(", Wait Time=").append(iPoolWaitTime);
         sb.append(", Timeout=").append(iPoolTimeOut);
-        sb.append(", Create Timestamp=").append(iPoolCreateTimestamp);
+        sb.append(", Create Timestamp=").append(iPoolCreateTimestampSeconds);
         sb.append(" }");
 
         /* Attributes Cache */
@@ -3079,5 +3102,13 @@ public class LdapConnection {
 
         sb.append("}");
         return sb.toString();
+    }
+
+    private long roundToSeconds(long timeInMilliseconds) {
+        long returnInSeconds = timeInMilliseconds / 1000;
+        if (timeInMilliseconds % 1000 > 499) {
+            returnInSeconds++;
+        }
+        return returnInSeconds;
     }
 }
