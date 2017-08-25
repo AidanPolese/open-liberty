@@ -645,7 +645,12 @@ public final class ServerProviderFactory extends ProviderFactory {
                     return -1;
                 }
             }
-            return super.exceptionProviderCompare(p1, p2);
+            int result = comp.compare(p1.getOldProvider(), p2.getOldProvider());
+            if (result == 0 && defaultComp) {
+                result = compareCustomStatus(p1, p2);
+            }
+            return result;
+
         }
     }
 
