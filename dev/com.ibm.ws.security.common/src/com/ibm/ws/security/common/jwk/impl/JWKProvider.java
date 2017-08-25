@@ -183,9 +183,9 @@ public class JWKProvider {
         }
 
         public String toString() {
-            StringBuilder sb = new StringBuilder("[");
+            StringBuilder sb = new StringBuilder("{\"keys\":[");
             sb.append(getKeysString());
-            sb.append("]");
+            sb.append("]}");
             return sb.toString();
         }
 
