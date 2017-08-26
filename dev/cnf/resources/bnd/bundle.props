@@ -19,7 +19,7 @@ bFullVersion=${version;==;${bVersion}}.${libertyBundleMicroVersion}
 # and uses the RTC buildLabel for the qualifier. The "generated.build.id" file
 # (included above) will predefine the Build-Identifier header.
 Build-Identifier: SNAPSHOT-${now}
-Bundle-Version: ${bFullVersion}.${version.qualifier}-SNAPSHOT
+Bundle-Version: ${bFullVersion}.${version.qualifier}${if;${is.release};;-SNAPSHOT}
 
 -donotcopy      = (CVS|.svn|.+.bak|nlsbuild|~.+|.+~|.jazzignore)
 -removeheaders  = Include-Resource, Ignore-Package, TODAY, DSTAMP, TSTAMP, Bnd-LastModified

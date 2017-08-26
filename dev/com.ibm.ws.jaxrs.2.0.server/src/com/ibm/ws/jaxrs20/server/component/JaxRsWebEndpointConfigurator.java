@@ -10,7 +10,15 @@
  *******************************************************************************/
 package com.ibm.ws.jaxrs20.server.component;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.apache.cxf.feature.Feature;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 import com.ibm.ws.jaxrs20.api.JaxRsEndpointConfigurator;
 import com.ibm.ws.jaxrs20.endpoint.JaxRsPublisherContext;
@@ -23,9 +31,11 @@ import com.ibm.ws.jaxrs20.server.JaxRsWebEndpointImpl;
 @Component(service = { JaxRsEndpointConfigurator.class }, property = { "service.vendor=IBM" })
 public class JaxRsWebEndpointConfigurator implements JaxRsEndpointConfigurator {
 
+    private final List<Feature> features = new CopyOnWriteArrayList<Feature>();
+
     @Override
     public JaxRsWebEndpointImpl createWebEndpoint(EndpointInfo endpointInfo, JaxRsPublisherContext context) {
-        return new JaxRsWebEndpointImpl(endpointInfo, context);
+        return new JaxRsWebEndpointImpl(endpointInfo, context, new ArrayList<Feature>(features));
     }
 
     @Override
@@ -36,4 +46,12 @@ public class JaxRsWebEndpointConfigurator implements JaxRsEndpointConfigurator {
         return null;
     }
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+    protected void setFeature(Feature feature) {
+        features.add(feature);
+    }
+
+    protected void unsetFeature(Feature feature) {
+        features.remove(feature);
+    }
 }

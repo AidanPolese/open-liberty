@@ -17,6 +17,9 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
                 JSFContainerTest.class,
+                JSF22FlowsTests.class,
+                CDIFlowsTests.class,
+                JSF22StatelessViewTests.class
 })
 public class FATSuite {
 

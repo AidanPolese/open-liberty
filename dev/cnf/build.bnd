@@ -36,8 +36,9 @@
 
 -plugin.6.RemotePublish = ${push.ibm.repository}
 
+# TODO: Disabled while testing whether this works correctly.
 # Remove -SNAPSHOT for releases
--snapshot: ${if;${is.release};;SNAPSHOT}
+#-snapshot: ${if;${is.release};;SNAPSHOT}
 
 # Don't upload sources or javadoc unless bundle overrides
 -maven-release: ${if;${is;${env;PUBLISH_REPO;Release};Artifactory};remote;local}, sources;path=NONE, javadoc;path=NONE
