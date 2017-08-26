@@ -25,7 +25,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
@@ -57,11 +56,11 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     private int maxConcurrency;
 
-    private final ReduceableSemaphore maxConcurrencyConstraint = new ReduceableSemaphore();
+    private final ReduceableSemaphore maxConcurrencyConstraint = new ReduceableSemaphore(0, false);
 
     private int maxQueueSize;
 
-    private final ReduceableSemaphore maxQueueSizeConstraint = new ReduceableSemaphore();
+    private final ReduceableSemaphore maxQueueSizeConstraint = new ReduceableSemaphore(0, false);
 
     private final AtomicLong maxWaitForEnqueue = new AtomicLong();
 
@@ -75,19 +74,6 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     private final ConcurrentLinkedQueue<PolicyTaskFuture<?>> queue = new ConcurrentLinkedQueue<PolicyTaskFuture<?>>();
 
     private final AtomicReference<QueueFullAction> queueFullAction = new AtomicReference<QueueFullAction>();
-
-    @SuppressWarnings("serial") // never serialized
-    static class ReduceableSemaphore extends Semaphore {
-        @Trivial
-        private ReduceableSemaphore() {
-            super(0);
-        }
-
-        @Override // to make visible
-        public void reducePermits(int reduction) {
-            super.reducePermits(reduction);
-        }
-    }
 
     /**
      * Tasks that are running on policy executor threads.
