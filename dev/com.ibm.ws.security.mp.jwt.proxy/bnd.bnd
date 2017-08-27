@@ -17,16 +17,11 @@ WS-TraceGroup: \
 Export-Package: \
   com.ibm.ws.security.mp.jwt.proxy; provide:=true
 
-Dynamic-Import: \
-  org.eclipse.microprofile.jwt;resolution:=optional
-
 Import-Package: \
+  org.eclipse.microprofile.jwt;resolution:=optional, \
   *;resolution:=optional
   
    
-Private-Package: \
- com.ibm.ws.security.mp.jwt.proxy.resources
-
 -dsannotations: \
   com.ibm.ws.security.mp.jwt.proxy.MpJwtHelper
   
