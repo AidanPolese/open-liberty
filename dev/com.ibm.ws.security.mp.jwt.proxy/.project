@@ -1,7 +1,6 @@
-   <buildSpec>
+    <buildSpec>
         <buildCommand>
-            <name>com.ibm.websphere.org.eclipse.microprofile.jwt.1.0</name>
-            <name>org.eclipse.jdt.core.javabuilder</name>
+            <name>com.ibm.ws.security.mp.jwt.proxy</name>
             <arguments>
             </arguments>
         </buildCommand>
@@ -15,5 +14,3 @@
         <nature>org.eclipse.jdt.core.javanature</nature>
         <nature>bndtools.core.bndnature</nature>
     </natures>
-    <?xml version="1.0" encoding="UTF-8"?>
-

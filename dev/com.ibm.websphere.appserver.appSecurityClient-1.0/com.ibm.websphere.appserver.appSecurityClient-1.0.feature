@@ -17,7 +17,8 @@ Subsystem-Name: Application Security for Client 1.0
  com.ibm.ws.security, \
  com.ibm.ws.security.jaas.common, \
  com.ibm.ws.security.registry, \
- com.ibm.websphere.security.impl
+ com.ibm.websphere.security.impl, \
+ com.ibm.ws.security.mp.jwt.proxy
 -jars=com.ibm.websphere.appserver.api.securityClient; location:=dev/api/ibm/
 -files=dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.securityClient_1.0-javadoc.zip
 kind=ga
