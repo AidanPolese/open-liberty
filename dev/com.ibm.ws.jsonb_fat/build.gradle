@@ -12,14 +12,24 @@ apply from: '../cnf/gradle/scripts/fat.gradle'
 	
 addRequiredLibraries {
 	doLast {
+		configurations {
+			johnzon
+			refImpls
+		}
 		dependencies {
-			libs 'org.apache.johnzon:johnzon-core:1.1.0',
-				 'org.apache.johnzon:johnzon-jsonb:1.1.0',
-				 'org.apache.johnzon:johnzon-mapper:1.1.0'
+			johnzon 'org.apache.johnzon:johnzon-core:1.1.0',
+			  'org.apache.johnzon:johnzon-jsonb:1.1.0',
+			  'org.apache.johnzon:johnzon-mapper:1.1.0'
+			refImpls 'org.eclipse:yasson:1.0',
+			  'org.glassfish:javax.json:1.1'
 		}
 		copy {
-			from configurations.libs
-			into "${buildDir}/autoFVT/publish/servers/com.ibm.ws.jsonb.container.fat/johnzon/"
+			from configurations.johnzon
+			into "${buildDir}/autoFVT/publish/shared/resources/johnzon/"
+		}
+		copy {
+			from configurations.refImpls
+			into "${buildDir}/autoFVT/publish/shared/resources/refImpls/"
 		}
 	}
 }
