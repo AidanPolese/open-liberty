@@ -43,6 +43,7 @@ import com.ibm.ws.security.wim.util.NodeHelper;
 import com.ibm.ws.security.wim.util.UniqueNameHelper;
 import com.ibm.wsspi.security.wim.SchemaConstants;
 import com.ibm.wsspi.security.wim.exception.CertificateMapperException;
+import com.ibm.wsspi.security.wim.exception.EntityTypeNotSupportedException;
 import com.ibm.wsspi.security.wim.exception.InitializationException;
 import com.ibm.wsspi.security.wim.exception.InvalidInitPropertyException;
 import com.ibm.wsspi.security.wim.exception.WIMException;
@@ -1957,8 +1958,9 @@ public class LdapConfigManager {
      * @return list of properties supported by repository for given entity type
      *         If the list propNames contain VALUE_ALL_PROPERTIES i.e '*', then return the list of properties without any modification
      *         Code will handle '*' later on
+     * @throws EntityTypeNotSupportedException
      */
-    public List<String> getSupportedProperties(String inEntityTypes, List<String> propNames) {
+    public List<String> getSupportedProperties(String inEntityTypes, List<String> propNames) throws EntityTypeNotSupportedException {
         List<String> prop = null;
         Set<String> s = null;
         if (propNames != null && propNames.size() > 0) {
@@ -1978,6 +1980,10 @@ public class LdapConfigManager {
                 prop.addAll(s);
             } else {
                 LdapEntity ldapEntity = getLdapEntity(inEntityTypes);
+                if (ldapEntity == null) {
+                    throw new EntityTypeNotSupportedException(WIMMessageKey.ENTITY_TYPE_NOT_SUPPORTED, Tr.formatMessage(tc, WIMMessageKey.ENTITY_TYPE_NOT_SUPPORTED,
+                                                                                                                        WIMMessageHelper.generateMsgParms(inEntityTypes)));
+                }
                 prop = getSupportedProperties(ldapEntity, propNames);
             }
         }
