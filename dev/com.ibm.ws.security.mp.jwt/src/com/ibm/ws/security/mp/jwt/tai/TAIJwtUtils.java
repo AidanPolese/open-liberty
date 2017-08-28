@@ -66,7 +66,7 @@ public class TAIJwtUtils {
         }
         String payload = null;
         if (compact != null) {
-            String[] parts = JsonUtils.splitTokenString(jwtToken.compact());
+            String[] parts = JsonUtils.splitTokenString(compact);
             if (parts.length > 0) {
                 payload = JsonUtils.fromBase64ToJsonString(parts[1]); // payload - claims
             }
@@ -90,7 +90,7 @@ public class TAIJwtUtils {
                 }
             }
         }
-
-        return new DefaultJsonWebTokenImpl(jwtToken.compact(), type, jwtclaims, username);
+        jwtclaims.setStringClaim(org.eclipse.microprofile.jwt.Claims.raw_token.name(), compact);
+        return new DefaultJsonWebTokenImpl(compact, type, jwtclaims, username);
     }
 }
