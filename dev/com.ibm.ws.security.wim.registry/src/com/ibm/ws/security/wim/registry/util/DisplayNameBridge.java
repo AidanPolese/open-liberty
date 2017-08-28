@@ -87,9 +87,7 @@ public class DisplayNameBridge {
             }
 
             // get input and output values
-            // New:: Change to Input/Output property
-            // String inputAttrName = this.propertyMap.getInputUserSecurityName(idAndRealm.getRealm());
-            String inputAttrName = this.propertyMap.getInputUniqueUserId(idAndRealm.getRealm());
+            String inputAttrName = this.propertyMap.getInputUserSecurityName(idAndRealm.getRealm());
             inputAttrName = this.mappingUtils.getRealInputAttrName(inputAttrName, id, true);
             String outputAttrName = this.propertyMap.getOutputUserDisplayName(idAndRealm.getRealm());
             String outputAttrNameMod = outputAttrName;

@@ -190,26 +190,16 @@ public class SecurityNameBridge {
             // the user was not found or more than one user was found
             // d125249
             if (returnList.isEmpty()) {
-                // if (tc.isErrorEnabled()) {
-                //     Tr.error(tc, WIMMessageKey.ENTITY_NOT_FOUND, WIMMessageHelper.generateMsgParms(inputUniqueUserId));
-                // }
-                throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, Tr.formatMessage(
-                                                                                                   tc,
-                                                                                                   WIMMessageKey.ENTITY_NOT_FOUND,
-                                                                                                   WIMMessageHelper.generateMsgParms(inputUniqueUserId)));
+                String msg = Tr.formatMessage(tc, WIMMessageKey.ENTITY_NOT_FOUND, WIMMessageHelper.generateMsgParms(inputUniqueUserId));
+                throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, msg);
             } else if (returnList.size() != 1) {
-                // if (tc.isErrorEnabled()) {
-                //     Tr.error(tc, WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, WIMMessageHelper.generateMsgParms(inputUniqueUserId));
-                // }
-                throw new EntityNotFoundException(WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, Tr.formatMessage(
-                                                                                                            tc,
-                                                                                                            WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND,
-                                                                                                            WIMMessageHelper.generateMsgParms(inputUniqueUserId)));
+                String msg = Tr.formatMessage(tc, WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, WIMMessageHelper.generateMsgParms(inputUniqueUserId));
+                throw new EntityNotFoundException(WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, msg);
             }
             // the user was found
             else {
                 Entity entity = returnList.get(0);
-                if (entity instanceof LoginAccount) {
+                if (entity != null) {
                     LoginAccount loginAct = (LoginAccount) entity;
 
                     // d115256
@@ -218,12 +208,6 @@ public class SecurityNameBridge {
                     } else {
                         returnValue = (String) loginAct.getIdentifier().get(outputAttrName);
                     }
-                } else if (entity != null) {
-                    if (!this.mappingUtils.isIdentifierTypeProperty(outputAttrName)) {
-                        returnValue = (String) entity.get(outputAttrName);
-                    } else {
-                        returnValue = (String) entity.getIdentifier().get(outputAttrName);
-                    }
                 }
             }
         } catch (WIMException toCatch) {
@@ -231,25 +215,13 @@ public class SecurityNameBridge {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
             }
-            // if (tc.isErrorEnabled()) {
-            //     Tr.error(tc, toCatch.getMessage());
-            // }
-            // the user was not found
-            if (toCatch instanceof EntityNotFoundException) {
+
+            if (toCatch instanceof EntityNotFoundException || toCatch instanceof EntityNotInRealmScopeException
+                || toCatch instanceof InvalidUniqueNameException || toCatch instanceof InvalidIdentifierException) {
+                // the user was not found
                 throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
-            }
-            // d117215
-            else if (toCatch instanceof EntityNotInRealmScopeException) {
-                throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
-            }
-            // the identifier is invalid
-            else if (toCatch instanceof InvalidUniqueNameException) {
-                throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
-            } else if (toCatch instanceof InvalidIdentifierException) {
-                throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
-            }
-            // other cases
-            else {
+            } else {
+                // other cases
                 throw new RegistryException(toCatch.getMessage(), toCatch);
             }
         }
@@ -346,21 +318,11 @@ public class SecurityNameBridge {
             // the group was not found or more than one group was found
             // d125249
             if (returnList.isEmpty()) {
-                // if (tc.isErrorEnabled()) {
-                //     Tr.error(tc, WIMMessageKey.ENTITY_NOT_FOUND, WIMMessageHelper.generateMsgParms(inputUniqueGroupId));
-                // }
-                throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, Tr.formatMessage(
-                                                                                                   tc,
-                                                                                                   WIMMessageKey.ENTITY_NOT_FOUND,
-                                                                                                   WIMMessageHelper.generateMsgParms(inputUniqueGroupId)));
+                String msg = Tr.formatMessage(tc, WIMMessageKey.ENTITY_NOT_FOUND, WIMMessageHelper.generateMsgParms(inputUniqueGroupId));
+                throw new EntityNotFoundException(WIMMessageKey.ENTITY_NOT_FOUND, msg);
             } else if (returnList.size() != 1) {
-                // if (tc.isErrorEnabled()) {
-                //     Tr.error(tc, WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, WIMMessageHelper.generateMsgParms(inputUniqueGroupId));
-                // }
-                throw new EntityNotFoundException(WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, Tr.formatMessage(
-                                                                                                            tc,
-                                                                                                            WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND,
-                                                                                                            WIMMessageHelper.generateMsgParms(inputUniqueGroupId)));
+                String msg = Tr.formatMessage(tc, WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, WIMMessageHelper.generateMsgParms(inputUniqueGroupId));
+                throw new EntityNotFoundException(WIMMessageKey.MULTIPLE_PRINCIPALS_FOUND, msg);
             }
             // the group was found
             else {
@@ -383,25 +345,13 @@ public class SecurityNameBridge {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, methodName + " " + toCatch.getMessage(), toCatch);
             }
-            // if (tc.isErrorEnabled()) {
-            //     Tr.error(tc, toCatch.getMessage());
-            // }
-            // the group was not found
-            if (toCatch instanceof EntityNotFoundException) {
+
+            if (toCatch instanceof EntityNotFoundException || toCatch instanceof EntityNotInRealmScopeException
+                || toCatch instanceof InvalidUniqueNameException || toCatch instanceof InvalidIdentifierException) {
+                // the group was not found
                 throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
-            }
-            // d117215
-            else if (toCatch instanceof EntityNotInRealmScopeException) {
-                throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
-            }
-            // the identifier is invalid
-            else if (toCatch instanceof InvalidUniqueNameException) {
-                throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
-            } else if (toCatch instanceof InvalidIdentifierException) {
-                throw new EntryNotFoundException(toCatch.getMessage(), toCatch);
-            }
-            // other cases
-            else {
+            } else {
+                // other cases
                 throw new RegistryException(toCatch.getMessage(), toCatch);
             }
         }

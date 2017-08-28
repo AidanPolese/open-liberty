@@ -47,7 +47,6 @@ import com.ibm.ws.security.wim.registry.util.SearchBridge;
 import com.ibm.ws.security.wim.registry.util.SecurityNameBridge;
 import com.ibm.ws.security.wim.registry.util.UniqueIdBridge;
 import com.ibm.ws.security.wim.registry.util.ValidBridge;
-import com.ibm.ws.security.wim.util.SchemaConstantsInternal;
 
 @ObjectClassDefinition(pid = "com.ibm.ws.security.wim.registry.WIMUserRegistry", name = Ext.INTERNAL, description = Ext.INTERNAL_DESC, localization = Ext.LOCALIZATION)
 @Ext.ObjectClassClass(FederationRegistry.class)
@@ -291,34 +290,30 @@ public class WIMUserRegistry implements FederationRegistry, UserRegistry {
     /** {@inheritDoc} */
     @Override
     @FFDCIgnore(Exception.class)
-    public String getUserSecurityName(final String inputUniqueUserId) throws EntryNotFoundException, RegistryException {
+    public String getUserSecurityName(String inputUniqueUserId) throws EntryNotFoundException, RegistryException {
         HashMap<String, String> result = null;
 
         // New:: Change to Input/Output property
         try {
             result = uniqueBridge.getUniqueUserId(parseUserId(inputUniqueUserId));
 
-            boolean isURBridgeResult = Boolean.parseBoolean(result.get(SchemaConstantsInternal.IS_URBRIDGE_RESULT));
-            if (!isURBridgeResult) {
-                String returnValue = result.get("RESULT");
-                if (!inputUniqueUserId.equalsIgnoreCase(returnValue))
-                    return returnValue;
+            String returnValue = result.get("RESULT");
+            if (!inputUniqueUserId.equalsIgnoreCase(returnValue)) {
+                inputUniqueUserId = returnValue;
             }
+
         } catch (Exception excp) {
-            if (excp instanceof EntryNotFoundException)
-                throw (EntryNotFoundException) excp;
-            else
-                throw new RegistryException(excp.getMessage(), excp);
+            /* Ignore and assume that inputUniqueUserId really is the uniqueUserId. */
         }
 
         try {
             // bridge the APIs
             String id = inputUniqueUserId;
-            if (id.startsWith("user:") || id.startsWith("group:"))
+            if (id.startsWith("user:") || id.startsWith("group:")) {
                 // New method added as an alternative of getUserFromUniqueId method of WSSecurityPropagationHelper
                 id = getUserFromUniqueID(id);
-            String returnValue = securityBridge.getUserSecurityName(id);
-            return returnValue;
+            }
+            return securityBridge.getUserSecurityName(id);
         } catch (Exception excp) {
             if (excp instanceof EntryNotFoundException)
                 throw (EntryNotFoundException) excp;

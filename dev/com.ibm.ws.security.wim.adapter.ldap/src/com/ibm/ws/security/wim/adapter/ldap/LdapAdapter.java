@@ -87,6 +87,7 @@ import com.ibm.ws.security.wim.adapter.ldap.change.ChangeHandlerFactory;
 import com.ibm.ws.security.wim.adapter.ldap.change.IChangeHandler;
 import com.ibm.ws.security.wim.util.ControlsHelper;
 import com.ibm.ws.security.wim.util.NodeHelper;
+import com.ibm.ws.security.wim.util.SchemaConstantsInternal;
 import com.ibm.ws.security.wim.util.UniqueIdGenerator;
 import com.ibm.ws.security.wim.util.UniqueNameHelper;
 import com.ibm.ws.security.wim.xpath.ParseException;
@@ -347,12 +348,11 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
 
             // New:: Change to Input/Output property <<START>>
             if (ldapEntry != null && propNames != null) {
-                if (propNames.contains("displayBridgePrincipalName")) {
+                if (propNames.contains(SchemaConstantsInternal.PROP_DISPLAY_BRIDGE_PRINCIPAL_NAME)) {
                     String type = ldapEntry.getType();
                     LdapEntity entity = iLdapConfigMgr.getLdapEntity(type);
                     String attrName = entity.getAttribute(SchemaConstants.PROP_PRINCIPAL_NAME);
-                    String[] attrIds = new String[1];
-                    attrIds[0] = attrName;
+                    String[] attrIds = new String[] { attrName };
                     ArrayList<String> entityTypes = new ArrayList<String>(1);
                     entityTypes.add(type);
                     Attributes attrs = iLdapConn.getAttributesByUniqueName(ldapEntry.getUniqueName(), attrIds, entityTypes);
@@ -373,12 +373,11 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
                         properties = new ArrayList<String>();
                         properties.add(SchemaConstants.PROP_PRINCIPAL_NAME);
                     }
-                } else if (propNames.contains("displayBridgeCN")) {
+                } else if (propNames.contains(SchemaConstantsInternal.PROP_DISPLAY_BRIDGE_CN)) {
                     String type = ldapEntry.getType();
                     LdapEntity entity = iLdapConfigMgr.getLdapEntity(type);
                     String attrName = entity.getAttribute("cn");
-                    String[] attrIds = new String[1];
-                    attrIds[0] = attrName;
+                    String[] attrIds = new String[] { attrName };
                     ArrayList<String> entityTypes = new ArrayList<String>(1);
                     entityTypes.add(type);
                     Attributes attrs = iLdapConn.getAttributesByUniqueName(ldapEntry.getUniqueName(), attrIds, entityTypes);
