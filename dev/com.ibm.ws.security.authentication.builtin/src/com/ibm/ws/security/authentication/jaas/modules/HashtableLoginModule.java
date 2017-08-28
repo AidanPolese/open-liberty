@@ -35,6 +35,7 @@ import com.ibm.ws.security.authentication.AuthenticationService;
 import com.ibm.ws.security.authentication.internal.jaas.modules.ServerCommonLoginModule;
 import com.ibm.ws.security.authentication.principals.WSPrincipal;
 import com.ibm.ws.security.authentication.utility.SubjectHelper;
+import com.ibm.ws.security.mp.jwt.proxy.MpJwtHelper;
 import com.ibm.ws.security.registry.EntryNotFoundException;
 import com.ibm.ws.security.registry.RegistryException;
 import com.ibm.ws.security.registry.UserRegistry;
@@ -54,11 +55,12 @@ public class HashtableLoginModule extends ServerCommonLoginModule implements Log
     private String customRealm = null;
 
     private final String[] hashtableLoginProperties = { AttributeNameConstants.WSCREDENTIAL_UNIQUEID,
-                                                       AttributeNameConstants.WSCREDENTIAL_USERID,
-                                                       AttributeNameConstants.WSCREDENTIAL_SECURITYNAME,
-                                                       AttributeNameConstants.WSCREDENTIAL_REALM,
-                                                       AttributeNameConstants.WSCREDENTIAL_CACHE_KEY,
-                                                       AuthenticationConstants.INTERNAL_ASSERTION_KEY };
+                                                        AttributeNameConstants.WSCREDENTIAL_USERID,
+                                                        AttributeNameConstants.WSCREDENTIAL_SECURITYNAME,
+                                                        AttributeNameConstants.WSCREDENTIAL_REALM,
+                                                        AttributeNameConstants.WSCREDENTIAL_CACHE_KEY,
+                                                        AuthenticationConstants.INTERNAL_ASSERTION_KEY,
+                                                        AuthenticationConstants.INTERNAL_JSON_WEB_TOKEN };
 
     private boolean uniquedIdAndSecurityNameLogin = false;
     private boolean useIdAndPasswordLogin = false;
@@ -254,6 +256,7 @@ public class HashtableLoginModule extends ServerCommonLoginModule implements Log
             }
             setPrincipalAndCredentials(temporarySubject, username, null, accessId, WSPrincipal.AUTH_METHOD_HASH_TABLE);
             addJaspicPrincipal(temporarySubject);
+            addJsonWebToken(temporarySubject);
             updateSharedState();
         } catch (Exception e) {
             throw new AuthenticationException(e.getLocalizedMessage(), e);
@@ -290,7 +293,7 @@ public class HashtableLoginModule extends ServerCommonLoginModule implements Log
     /**
      * If a JASPIC provider supplied a Principal via CallerPrincipalCallback
      * then put the Principal in the Principals set and in the WSCredential
-     * 
+     *
      * @param subject
      */
     private void addJaspicPrincipal(Subject subject) throws Exception {
@@ -306,6 +309,10 @@ public class HashtableLoginModule extends ServerCommonLoginModule implements Log
             }
             subject.getPrincipals().add(jaspiPrincipal);
         }
+    }
+
+    private void addJsonWebToken(Subject subject) throws Exception {
+        MpJwtHelper.addJsonWebToken(subject, customProperties, AuthenticationConstants.INTERNAL_JSON_WEB_TOKEN);
     }
 
     private void setUpTemporarySubject() throws Exception {
@@ -386,6 +393,7 @@ public class HashtableLoginModule extends ServerCommonLoginModule implements Log
         Set<Object> publicCredentials = subject.getPublicCredentials();
         publicCredentials.remove(props);
         props.remove(AuthenticationConstants.INTERNAL_ASSERTION_KEY);
+        props.remove(AuthenticationConstants.INTERNAL_JSON_WEB_TOKEN);
         props.remove(AttributeNameConstants.WSCREDENTIAL_USERID);
         if (!props.isEmpty()) {
             publicCredentials.add(props);

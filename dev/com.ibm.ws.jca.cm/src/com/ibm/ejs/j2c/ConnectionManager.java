@@ -11,10 +11,6 @@
 
 package com.ibm.ejs.j2c;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyVetoException;
-import java.beans.VetoableChangeListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -78,7 +74,7 @@ import com.ibm.wsspi.resource.ResourceFactory;
  *
  * See {@link com.ibm.ejs.j2c.CMConfigDataImpl#getCFDetailsKey}
  */
-public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager, com.ibm.ws.jca.adapter.WSConnectionManager, PropertyChangeListener, VetoableChangeListener, java.io.Serializable {
+public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager, com.ibm.ws.jca.adapter.WSConnectionManager, java.io.Serializable {
 
     private static final long serialVersionUID = -3078170792213348926L;
 
@@ -87,6 +83,7 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
      * and hence per ManagedConnectionFactory (MCF).
      */
     private static final TraceComponent tc = Tr.register(ConnectionManager.class, J2CConstants.traceSpec, J2CConstants.messageFile);
+    private static final TraceComponent ConnLeakLogic = Tr.register(ConnectionManager.class, "ConnLeakLogic", J2CConstants.messageFile);
 
     private final AbstractConnectionFactoryService connectionFactorySvc;
 
@@ -118,11 +115,6 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
     protected boolean containerManagedAuth = false;
     protected HashMap<Object, String> handleToThreadMap = null;
     protected HashMap<Object, ComponentMetaData> handleToCMDMap = null;
-
-    // The following are either set when the CM constructor runs, or in response
-    // to a propertyChangeEvent.  Property changes are copied to these local
-    private boolean started = true; // Dynamically Updateable
-    protected boolean connThreadInfoEnabled = false; // Dynamically Updateable
 
     protected transient PoolManager _pm = null;
     protected J2CGlobalConfigProperties gConfigProps = null;
@@ -223,9 +215,6 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
             Tr.debug(this, tc, "This brings the total no. of CM instances to " + numberOfCMinstancesEverCreated.get());
         }
 
-        gConfigProps.addPropertyChangeListener(this);
-        gConfigProps.addVetoableChangeListener(this);
-
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "<init>", this.toString());
         }
@@ -279,13 +268,6 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(this, tc, "This CM is " + this.toString());
             Tr.debug(this, tc, "Input MCF is     " + factory);
-        }
-
-        if (!started) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(this, tc, "CF is not started.  Throwing ResourceException");
-            }
-            throw new ResourceException("CF is not started.");
         }
 
         Object rVal = null;
@@ -457,35 +439,22 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
 
             }
 
-            /*
-             * The managedCachedHandle by default will be set to false which means we will not
-             * track handles for ffcd data. This will make debugging customer problems more
-             * difficult, but we perform better.
-             *
-             * We will track handles if smart handles supported is false or shareable is false
-             * regardless of the managedCachedHandle value.
-             */
-            if (_pm != null && (_pm.gConfigProps.manageCachedHandles
-                                || (!(_pm.gConfigProps.isSmartHandleSupport() && shareable)))) {
-                HandleList hl = null; // TODO: need to implement
+            if (_pm != null && (!(_pm.gConfigProps.isSmartHandleSupport() && shareable))) {
+                HandleList hl = null;
 
                 //  store the handle list in the MCWrapper
                 mcWrapper.addToHandleList(rVal, hl);
 
             }
 
-            if (_pm != null && (_pm.maxNumberOfMCsAllowableInThread > 0)) {
+            if (ConnLeakLogic.isDebugEnabled() || (_pm != null && _pm.maxNumberOfMCsAllowableInThread > 0)) {
+                Thread myThread = Thread.currentThread();
 
-                /*
-                 * Before getting the stack trace, lets check to see if we already have it. This
-                 * only applies to shared connections. If we are not sharing, we will
-                 * only go through this code once for a mcWrapper.
-                 *
-                 * Note: We may need to collect all of the stack traces for shareable
-                 * connections. But for now, lets keep one. This will
-                 * perform better for application designed long running
-                 * inuse connections.
-                 */
+                String ivThreadId = RasHelper.getThreadId();
+                mcWrapper.setThreadID(ivThreadId);
+                mcWrapper.setThreadName(myThread.getName());
+                mcWrapper.setLastAllocationTime(System.currentTimeMillis());
+
                 if (mcWrapper.getInitialRequestStackTrace() == null) {
                     /*
                      * Get the stack for this connection request.
@@ -493,17 +462,6 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
                     Throwable t = new Throwable();
                     mcWrapper.setInitialRequestStackTrace(t);
                 }
-            }
-            if (connThreadInfoEnabled || (_pm != null && _pm.maxNumberOfMCsAllowableInThread > 0)) {
-                Thread myThread = Thread.currentThread();
-
-                // Ras does not use the hex value in trace for thread id , so we are
-                // using the same thread id Ras does so we can match .
-
-                String ivThreadId = RasHelper.getThreadId();
-                mcWrapper.setThreadID(ivThreadId);
-                mcWrapper.setThreadName(myThread.getName());
-                mcWrapper.setLastAllocationTime(System.currentTimeMillis());
 
             }
 
@@ -1555,38 +1513,6 @@ public final class ConnectionManager implements com.ibm.ws.j2c.ConnectionManager
      */
     private void readObject(ObjectInputStream s) throws java.io.IOException, java.lang.ClassNotFoundException {
         throw new UnsupportedOperationException(); // not serializable
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent event) {
-
-        String propName = event.getPropertyName();
-
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.entry(this, tc, "propertyChange", propName);
-        }
-
-        if (propName.equals("start")) {
-            started = ((Boolean) event.getNewValue()).booleanValue();
-        } else if (propName.equals("connThreadInfoEnabled")) {
-            connThreadInfoEnabled = ((Boolean) event.getNewValue()).booleanValue();
-        }
-
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.exit(this, tc, "propertyChange");
-        }
-    }
-
-    @Override
-    public void vetoableChange(PropertyChangeEvent event) throws PropertyVetoException {
-
-        String propName = event.getPropertyName();
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.entry(this, tc, "vetoableChange", propName);
-        }
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.exit(this, tc, "vetoableChange");
-        }
     }
 
     // This is called by the RRA only when db2 reroute is being used

@@ -30,6 +30,7 @@ Import-Package: \
    javax.validation.*;resolution:=optional, \
    org.apache.cxf.validation;resolution:=optional;version="[3.0.2,4)", \
    org.apache.cxf.*;version="[3.0.2,4)", \
+   org.apache.cxf.jaxrs.sse;resolution:=optional, \
    !javax.xml.bind.*, \
    com.ibm.ws.jaxrs20.metadata, \
    *

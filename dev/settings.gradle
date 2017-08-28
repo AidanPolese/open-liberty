@@ -30,7 +30,7 @@ def loadBuildProps() {
   def isAutomatedBuild = false
   def isContinuousBuild = false
   def isRelease = false
-  def reallyPublishBintray = false
+  def reallyPublishPublically = false
 
   def isRemotePublishing = false
   if (System.properties['is.remote.publishing']!=null) {
@@ -88,8 +88,8 @@ def loadBuildProps() {
         isRelease = props.getProperty('is.release')
       }
 
-      if (props.getProperty('really.publish.bintray') != null) {
-        reallyPublishBintray = props.getProperty('really.publish.bintray')
+      if (props.getProperty('really.publish.publically') != null) {
+        reallyPublishPublically = props.getProperty('really.publish.publically')
       }
   }
 
@@ -104,7 +104,7 @@ def loadBuildProps() {
   props.setProperty('is.release', isRelease.toString())
   props.setProperty('maven.release.name', mavenLocalPath)
   props.setProperty('is.remote.publishing', isRemotePublishing.toString())
-  props.setProperty('really.publish.bintray', reallyPublishBintray.toString())
+  props.setProperty('really.publish.publically', reallyPublishPublically.toString())
 
   // Store props to file
   File propsFile = new File('generated.properties')    

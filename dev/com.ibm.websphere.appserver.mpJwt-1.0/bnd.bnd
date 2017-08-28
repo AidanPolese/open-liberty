@@ -1,0 +1,13 @@
+-include= ~../cnf/resources/bnd/liberty-release.props
+
+-nobundles=true
+
+publish.feature.resources: **
+
+-dependson: \
+	com.ibm.websphere.appserver.servlet-3.0;version=latest, \
+	com.ibm.websphere.appserver.jwt-1.0;version=latest, \
+	com.ibm.websphere.appserver.jsonp-1.0;version=latest, \
+        com.ibm.websphere.appserver.httpcommons-1.0;version=latest, \
+	com.ibm.ws.org.apache.commons.codec.1.4;version=latest, \
+	com.ibm.ws.org.apache.commons.logging.1.0.3;version=latest

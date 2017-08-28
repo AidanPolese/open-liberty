@@ -1,0 +1,87 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2017.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security/resources/com/ibm/ws/security/mp/jwt/resources/SocialMessages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Application Server Micro Profile JWT
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+# Message prefix block: CWWKS5500 - CWWKS5599
+ADD_ID={0} ({1})
+ADD_ID.explanation=Internal use only.
+ADD_ID.useraction=No action is required.
+
+MPJWT_CONFIG_PROCESSED=CWWKS5500I: The micro profile jwt configuration [{0}] was successfully processed.
+MPJWT_CONFIG_PROCESSED.explanation=The indicated configuration has been successfully processed.
+MPJWT_CONFIG_PROCESSED.useraction=No action is required.
+
+MPJWT_CONFIG_MODIFIED=CWWKS5501I: The micro profile jwt configuration [{0}] was successfully processed.
+MPJWT_CONFIG_MODIFIED.explanation=The indicated configuration has been successfully processed.
+MPJWT_CONFIG_MODIFIED.useraction=No action is required.
+
+MPJWT_CONFIG_DEACTIVATED=CWWKS5502I: The micro profile jwt configuration [{0}] was successfully deactivated.
+MPJWT_CONFIG_DEACTIVATED.explanation=The indicated configuration has been successfully deactivated.
+MPJWT_CONFIG_DEACTIVATED.useraction=No action is required.
+
+# 0=exception class name, 1=exception message, 2=stack trace
+MPJWT_SERVER_INTERNAL_LOG_ERROR=CWWKS5503E: An internal server error occurred while processing the request [{0}]. Cause:[{1}], StackTrace: [{2}].
+MPJWT_SERVER_INTERNAL_LOG_ERROR.explanation=While processing an authentication request, an internal server error occurred.
+MPJWT_SERVER_INTERNAL_LOG_ERROR.useraction=Check for errors in the server log files and ensure your configuration is correct. If the problem persists, see the problem determination information on the WebSphere Application Server Support web page: http://www.ibm.com/software/webservers/appserv/was/support.
+
+# 
+MPJWT_AUTHENTICATION_FAIL=CWWKS5504E: The server failed to process the authentication request.
+MPJWT_AUTHENTICATION_FAIL.explanation=The authentication process was not successful because some other error has happened prior to this message.
+MPJWT_AUTHENTICATION_FAIL.useraction=See the user action for the error that appears before this message.
+
+# Do not translate "mpjwt_login_hint"
+# 0=mpJwt configuration ID
+MPJWT_NO_SUCH_PROVIDER=CWWKS5505E: The micro profile jwt configuration [{0}] that is specified in the request is either missing or is not configured to serve this request.
+MPJWT_NO_SUCH_PROVIDER.explanation=The request includes a 'mpjwt_login_hint' parameter or header that specifies a micro profile jwt configuration ID to use for this request. However a micro profile jwt configuration that matches the ID is missing to serve this request.
+MPJWT_NO_SUCH_PROVIDER.useraction=Verify that a micro profile jwt service with the indicated ID is configured.
+
+USERNAME_NOT_FOUND=CWWKS5506E: The user name could not be extracted from the token.
+USERNAME_NOT_FOUND.explanation=The value that is configured for userNameAttribute might be incorrect.
+USERNAME_NOT_FOUND.useraction=Verify that the value of the userNameAttribute do exist in the token.
+
+# 0=mpJwt element ID, 1=Error message
+AUTH_CODE_FAILED_TO_CREATE_JWT=CWWKS5507E: The server encountered a problem while creating a JSON Web Token (JWT) Principal from the provided token for the configuration [{0}]. {1}
+AUTH_CODE_FAILED_TO_CREATE_JWT.explanation=An error might have occurred while getting user information with the provided token.
+AUTH_CODE_FAILED_TO_CREATE_JWT.useraction=See the user action for the error that is displayed in the message. Check the server logs for additional error messages.
+
+# 0=mpJwt element ID, 1=Error message
+AUTH_CODE_ERROR_CREATING_RESULT=CWWKS5508E: The server cannot create a subject for the user with the provided token using micro profile jwt configuration [{0}]. {1}
+AUTH_CODE_ERROR_CREATING_RESULT.explanation=Some of the data that is used to create the subject for the specified user might be missing or malformed.
+AUTH_CODE_ERROR_CREATING_RESULT.useraction=See the user action for the error that is displayed in the message. Check the server logs for any additional error messages.
+
+
+ACCESS_TOKEN_NOT_IN_CACHE=CWWKS5509E: The token that is provided was not found in the token cache.
+ACCESS_TOKEN_NOT_IN_CACHE.explanation=The token key that is calculated might be malformed, or this token was not used in a recent authenticated request. The token might have been removed from the cache because it was too old.
+ACCESS_TOKEN_NOT_IN_CACHE.useraction=Ensure that the token that is provided is a valid token and that it matches a token that was used in a successfully authenticated request. Verify that the token cache has not been cleared since the token was added.
+
+
+# Intended to be a child of AUTH_CODE_ERROR_SSL_CONTEXT
+# 0=mpJwt element ID, 1=Error message
+FAILED_TO_GET_SSL_CONTEXT=CWWKS5510E: The SSL context for the micro profile jwt configuration [{0}] cannot be loaded. {1}
+FAILED_TO_GET_SSL_CONTEXT.explanation=The SSL configuration that is used by the specified configuration might be missing or incorrect.
+FAILED_TO_GET_SSL_CONTEXT.useraction=See the error in the message for more information. Verify that the SSL information for the specified configuration is accurate. If the 'sslRef' configuration attribute is specified in the micro profile jwt configuration, verify that the corresponding SSL configuration is correct. Otherwise, verify that the default SSL configuration for the server is properly configured.
+
+# Do not translate "JSON", "JSON Web Token", or "JWT"
+# 0=mpJwt element ID
+SERVICE_NOT_FOUND_JWT_CONSUMER_NOT_AVAILABLE=CWWKS5511E: JSON Web Token (JWT) consumer functionality might not be available for the micro profile jwt configuration [{0}] because the service for the specified configuration cannot be found.
+SERVICE_NOT_FOUND_JWT_CONSUMER_NOT_AVAILABLE.explanation=The specified micro profile jwt configuration might not be available yet, or the service for the configuration has been stopped.
+SERVICE_NOT_FOUND_JWT_CONSUMER_NOT_AVAILABLE.useraction=Verify that the specified configuration is configured and available.
+
+
+# 0=Exception message
+ERROR_LOADING_SSL_PROPS=CWWKS5512E: SSL reference information for the micro profile jwt feature cannot be loaded because an error was encountered while loading SSL properties. {0}
+ERROR_LOADING_SSL_PROPS.explanation=The SSL configuration that is used by the micro profile jwt configuration might not be available, or an error occurred loading the properties for the SSL configuration.
+ERROR_LOADING_SSL_PROPS.useraction=Verify that the SSL configuration used by the micro profile jwt service is configured correctly and has started successfully.
+
+KEYSTORE_SERVICE_NOT_FOUND=CWWKS5513E: Public keys cannot be loaded from the keystore because the keystore service cannot be found.
+KEYSTORE_SERVICE_NOT_FOUND.explanation=The keystore service for the micro profile jwt feature might not be available.
+KEYSTORE_SERVICE_NOT_FOUND.useraction=Verify that the keystore service that is used by the micro profile jwt service is configured correctly and has started successfully.

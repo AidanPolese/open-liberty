@@ -35,7 +35,6 @@ import java.util.logging.Level;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
@@ -74,6 +73,7 @@ import org.apache.cxf.transport.Conduit;
 import org.apache.cxf.transport.http.policy.impl.ServerPolicyCalculator;
 import org.apache.cxf.transport.https.CertConstraints;
 import org.apache.cxf.transport.https.CertConstraintsInterceptor;
+import org.apache.cxf.transport.sse.SseHttpTransportFactory;
 import org.apache.cxf.transports.http.configuration.HTTPServerPolicy;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.ContextUtils;
@@ -123,7 +123,6 @@ public abstract class AbstractHTTPDestination
     protected boolean fixedParameterOrder;
     protected boolean multiplexWithAddress;
     protected CertConstraints certConstraints;
-    protected boolean isServlet3;
     protected boolean decodeBasicAuthWithIso8859;
     protected ContinuationProviderFactory cproviderFactory;
     protected boolean enableWebSocket;
@@ -150,12 +149,7 @@ public abstract class AbstractHTTPDestination
         this.bus = b;
         this.registry = registry;
         this.path = path;
-        try {
-            ServletRequest.class.getMethod("isAsyncSupported");
-            isServlet3 = true;
-        } catch (Throwable t) {
-            //servlet 2.5 or earlier, no async support
-        }
+        //Liberty change - removing refs to isServlet3
         decodeBasicAuthWithIso8859 = PropertyUtils.isTrue(bus.getProperty(DECODE_BASIC_AUTH_WITH_ISO8859));
 
         initConfig();
@@ -244,7 +238,7 @@ public abstract class AbstractHTTPDestination
         Exchange ex = message.getExchange();
         return ex == null ? false : ex.isOneWay();
     }
-
+    
     @FFDCIgnore({ SuspendedInvocationException.class, Fault.class, RuntimeException.class })
     public void invoke(final ServletConfig config,
                        final ServletContext context,
@@ -275,7 +269,10 @@ public abstract class AbstractHTTPDestination
 
         copyKnownRequestAttributes(req, inMessage);
 
+        inMessage.put(HttpServletResponse.class, resp); // Liberty change - reqd for SSE see LibertySseEventSinkImpl
+
         try {
+
             incomingObserver.onMessage(inMessage);
             invokeComplete(context, req, resp, inMessage);
         } catch (SuspendedInvocationException ex) {
@@ -295,6 +292,7 @@ public abstract class AbstractHTTPDestination
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "Finished servicing http request on thread: " + Thread.currentThread());
             }
+
         }
     }
 
@@ -428,6 +426,7 @@ public abstract class AbstractHTTPDestination
         inMessage.put(Message.IN_INTERCEPTORS,
                       Arrays.asList(new Interceptor[] { CertConstraintsInterceptor.INSTANCE }));
 
+
     }
 
     /**
@@ -479,12 +478,7 @@ public abstract class AbstractHTTPDestination
     }
 
     protected Message retrieveFromContinuation(HttpServletRequest req) {
-        if (!isServlet3) {
-            if (cproviderFactory != null) {
-                return cproviderFactory.retrieveFromContinuation(req);
-            }
-            return null;
-        }
+        //Liberty change - removing refs to isServlet3
         return retrieveFromServlet3Async(req);
     }
 
@@ -501,7 +495,7 @@ public abstract class AbstractHTTPDestination
                                      final HttpServletRequest req,
                                      final HttpServletResponse resp) {
         try {
-            if (isServlet3 && req.isAsyncSupported()) {
+            if (/* Liberty change - removing refs to isServlet3 */req.isAsyncSupported()) {
                 inMessage.put(ContinuationProvider.class.getName(),
                               new Servlet3ContinuationProvider(req, resp, inMessage));
             } else if (cproviderFactory != null) {
@@ -563,6 +557,8 @@ public abstract class AbstractHTTPDestination
     private void initConfig() {
 
         cproviderFactory = bus.getExtension(ContinuationProviderFactory.class);
+        
+        bus.setExtension(new SseHttpTransportFactory(registry), SseHttpTransportFactory.class);
     }
 
     private synchronized HTTPServerPolicy calcServerPolicyInternal(Message m) {
