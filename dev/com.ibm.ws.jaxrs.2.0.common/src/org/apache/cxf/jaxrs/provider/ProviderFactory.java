@@ -1115,7 +1115,7 @@ public abstract class ProviderFactory {
         }
     }
 
-    private static int compareCustomStatus(ProviderInfo<?> p1, ProviderInfo<?> p2) {
+    static int compareCustomStatus(ProviderInfo<?> p1, ProviderInfo<?> p2) {
         Boolean custom1 = p1.isCustom();
         Boolean custom2 = p2.isCustom();
         int result = custom1.compareTo(custom2) * -1;
@@ -1267,8 +1267,8 @@ public abstract class ProviderFactory {
     }
 
     public static class ProviderInfoClassComparator implements Comparator<ProviderInfo<?>> {
-        private final Comparator<Object> comp;
-        private boolean defaultComp;
+        final Comparator<Object> comp;
+        boolean defaultComp;
 
         public ProviderInfoClassComparator(Class<?> expectedCls) {
             this.comp = new ClassComparator(expectedCls);
@@ -1287,6 +1287,7 @@ public abstract class ProviderFactory {
             }
             return result;
         }
+
     }
 
     public static ProviderFactory getInstance(Message m) {
