@@ -2272,8 +2272,8 @@ public class PolicyExecutorServlet extends FATServlet {
         //The queue should now be full - try to add one more, it should be rejected      
         executor.maxWaitForEnqueue(200);       
         try {
-            //This task will be aborted if maxConcurrency = 1, otherwise should run
         	executor.submit(countDownTask);
+        	fail("MaxConcurrency should be 6");
         } catch (RejectedExecutionException x) {} //expected
         
         //Allow all the tasks to complete
@@ -2290,4 +2290,499 @@ public class PolicyExecutorServlet extends FATServlet {
         
         executor.shutdownNow();   
     }
+    
+    
+    //Test the basic functionality of MaxQueueSize
+    //Submits 4 task to reach MaxQueue, submit another task and confirm it is rejected. 
+    //Increase Max queue size to 4, confirm 2 more task can be queued, but a third is rejected. 
+    //Reduce MaxQueue by 1 and confirm a newly submitted task is rejected. 
+    //Finish a task, so we're at MaxQueue. Confirm a submitted task is rejected.
+    //Finish another task, so we're at 2/3 Queue. Submit 2 tasks, the second is rejected.
+    //Finish all tasks, and confirm the correct number of tasks completed.
+    @Test
+    public void testMaxQueueSize()  throws Exception {
+    	ExecutorService executor = provider.create("testMaxQueueSize").maxConcurrency(2).maxQueueSize(2).maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1)).queueFullAction(QueueFullAction.Abort);
+
+        CountDownLatch beginLatch = new CountDownLatch(2);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+        CountDownLatch continueLatch2 = new CountDownLatch(1);
+        CountDownLatch continueLatch3 = new CountDownLatch(1);
+        
+        CountDownTask task = new CountDownTask(beginLatch, continueLatch, TimeUnit.HOURS.toNanos(1));
+        CountDownTask task2 = new CountDownTask(beginLatch, continueLatch2, TimeUnit.HOURS.toNanos(1));
+        CountDownTask task3 = new CountDownTask(beginLatch, continueLatch3, TimeUnit.HOURS.toNanos(1));
+
+        Future<Boolean> future1 = executor.submit(task); // should start, decrement the beginLatch, and block on continueLatch
+        Future<Boolean> future2 = executor.submit(task2); // should start, decrement the beginLatch, and block on continueLatch
+        
+        assertTrue(beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        Future<Boolean> future3 = executor.submit(task3); // should queue
+        Future<Boolean> future4 = executor.submit(task3); // should queue
+        
+        ((PolicyExecutor) executor).maxWaitForEnqueue(200);
+        try {
+        	fail("Task should be aborted:" + executor.submit(task3)); // should abort 
+        } catch (RejectedExecutionException x) {} // pass
+        
+        ((PolicyExecutor) executor).maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1));
+        ((PolicyExecutor) executor).maxQueueSize(4);
+        
+        Future<Boolean> future5 = executor.submit(task3); // should queue
+        Future<Boolean> future6 = executor.submit(task3); // should queue
+        
+        
+        ((PolicyExecutor) executor).maxWaitForEnqueue(200);
+        try {
+        	fail("Task should be aborted:" + executor.submit(task3)); // should abort 
+        } catch (RejectedExecutionException x) {} // pass
+        
+        ((PolicyExecutor) executor).maxQueueSize(3);
+        
+        try {
+        	fail("Task should be aborted:" + executor.submit(task3)); // should abort 
+        } catch (RejectedExecutionException x) {} // pass
+        
+        continueLatch.countDown(); //finish one task, so we're back at a full queue size
+        assertTrue(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        try {
+        	fail("Task should be aborted:" + executor.submit(task3)); // should abort
+        } catch (RejectedExecutionException x) {} // pass
+        
+        continueLatch2.countDown(); //finish one task so we're at 2/3 max queue
+        assertTrue(future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        ((PolicyExecutor) executor).maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1));
+        
+        Future<Boolean> future7 = executor.submit(task3); // should queue
+        
+        ((PolicyExecutor) executor).maxWaitForEnqueue(200);
+        try {
+        	fail("Task should be aborted:" + executor.submit(task3)); // should abort
+        } catch (RejectedExecutionException x) {} // pass
+        
+        continueLatch3.countDown();
+        assertTrue(future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));       
+        assertTrue(future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future6.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future7.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        executor.shutdownNow();
+    }
+    
+    //Test that changing the maxQueueSize of one executor does not affect a different executor
+    @Test
+    public void testMaxQueueSizeMultipleExecutors() throws Exception {
+        PolicyExecutor executor1 = provider.create("testQueueSizeMultipleExecutors-1")
+                        .maxConcurrency(1)
+                        .maxQueueSize(1)
+                        .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
+                        .queueFullAction(QueueFullAction.Abort);
+        PolicyExecutor executor2 = provider.create("testQueueSizeMultipleExecutors-2")
+                        .maxConcurrency(1)
+                        .maxQueueSize(1)
+                        .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
+                        .queueFullAction(QueueFullAction.Abort);
+
+        CountDownLatch beginLatch = new CountDownLatch(100);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+        CountDownTask task = new CountDownTask(beginLatch, continueLatch, TimeUnit.HOURS.toNanos(1));
+
+        //Should run and block on continue latch
+        Future<Boolean> future1 = executor1.submit(task);
+        Future<Boolean> future2 = executor1.submit(task);
+        Future<Boolean> future3 = executor2.submit(task);
+        Future<Boolean> future4 = executor2.submit(task);
+        
+        executor1.maxQueueSize(2);
+        
+        
+        //This task should queue
+        
+        Future<Boolean> future5 = executor1.submit(task);
+
+
+        //This task should be aborted since we're at maxQueue in executor2.
+        executor2.maxWaitForEnqueue(200);
+        try {
+        	fail("Task should be aborted:" + executor2.submit(task)); // should abort
+        } catch (RejectedExecutionException x) {} // pass
+        
+        //Let Tasks Complete
+        continueLatch.countDown();
+
+        assertTrue(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));   
+        assertTrue(future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        executor1.shutdownNow();
+
+        executor2.shutdownNow();
+    }
+    
+    
+    //Concurrently submit two tasks to change the maxQueueSize.  Ensure that afterward the maxQueueSize
+    //is one of the two submitted values
+    @Test
+    public void testMaxQueueSizeConcurrentUpdate() throws Exception {
+        PolicyExecutor executor = provider.create("testConcurrentUpdateMaxQueueSize")
+                .maxConcurrency(2)
+                .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
+                .queueFullAction(QueueFullAction.Abort)
+        		.maxQueueSize(1);
+        
+        int numSubmitted = 8;
+        
+        CountDownLatch beginLatch = new CountDownLatch(numSubmitted);
+        CountDownLatch continueLatch1 = new CountDownLatch(1);
+        
+        CountDownLatch continueLatch2 = new CountDownLatch(1);
+        
+        ConfigChangeTask configTask1 = new ConfigChangeTask(executor, beginLatch, continueLatch1, TIMEOUT_NS, "maxQueueSize", "1");
+        ConfigChangeTask configTask2 = new ConfigChangeTask(executor, beginLatch, continueLatch1, TIMEOUT_NS, "maxQueueSize", "3");
+        CountDownTask countDownTask = new CountDownTask(new CountDownLatch(0), continueLatch2, TIMEOUT_NS);
+        
+        List<Future<Boolean>> futures = new ArrayList<Future<Boolean>>(); 
+
+
+        //Submit numSubmitted tasks, half with a value of 1 and half with a value of 3
+        for (int i = 0; i < numSubmitted; i++) {
+        	//alternate submitting task with a value of 1 and 3
+        	if ((i % 2) == 0)
+        		futures.add(testThreads.submit(configTask1));
+        	else
+        		futures.add(testThreads.submit(configTask2));
+        }
+        
+        //Wait for the tasks to begin running
+        assertTrue(beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        //Allow the tasks to change the maxQueueSize and complete
+        continueLatch1.countDown();
+        
+        for (int i = 0; i < numSubmitted; i++) {
+        	assertTrue(futures.get(i).get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        }
+      
+        //Now we need to check that the maxQueueSize is either 1 or 3
+        
+        //Fill Up the concurrent tasks
+        Future<Boolean> future3 = executor.submit(countDownTask);
+        Future<Boolean> future4 = executor.submit(countDownTask);
+        Future<Boolean> future5 = executor.submit(countDownTask); //First task should queue
+
+        Future<Boolean> future6 = null;
+        boolean caughtException = false;
+        //Decrease to 1s so that we aren't waiting too long if maxQueueSize is 1
+        //However this can't be too short that it is hit as tasks queue and run in the case that
+        //maxQueueSize is 3 on a slow machine
+        executor.maxWaitForEnqueue(1000);
+        
+        try {
+            //This task will be aborted if maxQueueSize = 1, otherwise should run
+            future6 = executor.submit(countDownTask);
+        } catch (RejectedExecutionException x) {
+        	caughtException = true; //expected if maxQueueSize = 1
+        }
+        
+        executor.maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1));
+        Future<Boolean> future7 = null;
+        Future<Boolean> future8 = null;
+        if(caughtException == false) {
+        	//We should be at maxQueueSize of 3 here, so this should queue
+        	future7 = executor.submit(countDownTask);
+            //Decrease to 200 ms so that we aren't waiting too long for timeout
+        	executor.maxWaitForEnqueue(200);
+            try {
+                //This task will be aborted if maxQueueSize = 3
+                future8 = executor.submit(countDownTask);
+            } catch (RejectedExecutionException x) {
+            	caughtException = true; //expected if maxQueueSize = 3
+            }
+        }
+        
+        assertTrue("maxQueueSize should be either 1 or 3",caughtException);
+
+        //Let the submitted tasks complete
+        continueLatch2.countDown();
+
+        assertTrue(future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        if(future6 != null) 
+        	assertTrue(future6.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        if(future7 != null)
+        	assertTrue(future7.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+
+        executor.shutdownNow();   
+    }
+    
+    
+    //Test that maxQueueSize cannot be called after shutdown
+    @Test
+    public void testMaxQueueSizeUpdateAfterShutdown() {
+        PolicyExecutor executor = provider.create("updateMaxQueueSizeAfterShutdown")
+                .maxConcurrency(2).maxQueueSize(2);
+        
+        executor.shutdown();
+        try {
+        	executor.maxQueueSize(5);
+        	fail("Should not be allowed to change maxQueueSize after calling shutdown");
+        } catch(IllegalStateException e) { //expected
+        }
+    }
+    
+    //Test that when a task is waiting for Enqueue is run when Queue
+    @Test
+    public void testMaxQueueSizeWaitForEnqueue() throws Exception {
+    	PolicyExecutor executor = provider.create("testMaxQueueSizeEnqueue-1")
+    			.maxConcurrency(1)
+    			.maxQueueSize(1)
+    			.maxWaitForEnqueue(TimeUnit.HOURS.toMillis(1))
+    			.queueFullAction(QueueFullAction.Abort);
+    	
+    	CountDownLatch beginLatch1 = new CountDownLatch(50);
+    	CountDownLatch continueLatch1 = new CountDownLatch(1);
+    	CountDownLatch continueLatch2 = new CountDownLatch(1);
+    	
+    	
+    	CountDownTask task1 = new CountDownTask(beginLatch1, continueLatch1, TimeUnit.HOURS.toNanos(1));
+    	CountDownTask task2 = new CountDownTask(beginLatch1, continueLatch2, TimeUnit.HOURS.toNanos(1));
+    	SubmitterTask<Boolean> task3 = new SubmitterTask<Boolean>(executor, task2);
+
+    	
+    	//Fill up the Queue
+    	Future<Boolean> future1 = executor.submit(task1);
+    	Future<Boolean> future2 = executor.submit(task1);
+    	
+    	Future<Future<Boolean>> future3 = testThreads.submit(task3); //Should wait for enqueue
+
+    	executor.maxQueueSize(2);
+    	
+    	Future<Future<Boolean>> future4 = testThreads.submit(task3); //Should wait for enqueue
+    	
+    	continueLatch1.countDown(); //finish 2 tasks, queue now at 1/2
+    	assertTrue(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    	assertTrue(future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    	
+    	Future<Boolean> future5 = executor.submit(task2); //queue full
+    	
+    	Future<Future<Boolean>> future6 =  testThreads.submit(task3); //Should wait for enqueue
+    	
+    	executor.maxQueueSize(1); //reduce queue
+    	
+    	continueLatch2.countDown();
+
+
+    	assertTrue(future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS).get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    	assertTrue(future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS).get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    	assertTrue(future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    	assertTrue(future6.get(TIMEOUT_NS, TimeUnit.NANOSECONDS).get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+    	
+    	executor.shutdownNow();
+    }
+    
+    
+    //Test changing maxQueueSize and maxConcurrency concurrently
+    @Test
+    public void testMaxQueueSizeAndMaxConcurrencyConcurrentUpdate() throws Exception {
+    	PolicyExecutor executor = provider.create("testMaxQueueSizeAndMaxConcurrencyConcurrentUpdate")
+                .maxConcurrency(2)
+                .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
+                .queueFullAction(QueueFullAction.Abort)
+        		.maxQueueSize(2);
+        
+        int numSubmitted = 16;
+        
+        CountDownLatch beginLatch = new CountDownLatch(numSubmitted);
+        CountDownLatch continueLatch1 = new CountDownLatch(1);
+        
+        CountDownLatch continueLatch2 = new CountDownLatch(1);
+        
+        ConfigChangeTask configTask1 = new ConfigChangeTask(executor, beginLatch, continueLatch1, TIMEOUT_NS, "maxQueueSize", "1");
+        ConfigChangeTask configTask2 = new ConfigChangeTask(executor, beginLatch, continueLatch1, TIMEOUT_NS, "maxQueueSize", "3");
+        ConfigChangeTask configTask3 = new ConfigChangeTask(executor, beginLatch, continueLatch1, TIMEOUT_NS, "maxConcurrency", "1");
+        ConfigChangeTask configTask4 = new ConfigChangeTask(executor, beginLatch, continueLatch1, TIMEOUT_NS, "maxConcurrency", "3");
+        CountDownTask countDownTask = new CountDownTask(new CountDownLatch(0), continueLatch2, TIMEOUT_NS);
+        
+        List<Future<Boolean>> futures = new ArrayList<Future<Boolean>>(); 
+
+
+        //Submit numSubmitted tasks, quartered between maxQueueSize=1, maxQueueSize=3, maxConcurrency=1, and maxConcurrency=3;
+        for (int i = 0; i < numSubmitted; i++) {
+        	switch(i % 4) {
+	        	case 0:	futures.add(testThreads.submit(configTask1)); break;
+	        	case 1: futures.add(testThreads.submit(configTask2)); break;
+	        	case 2: futures.add(testThreads.submit(configTask3)); break;
+	        	case 3: futures.add(testThreads.submit(configTask4)); break;
+        	}
+        }
+        
+        //Wait for the tasks to begin running
+        assertTrue(beginLatch.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        //Allow the tasks to change the maxQueueSize/maxConcurrency and complete
+        continueLatch1.countDown();
+        
+        for (int i = 0; i < numSubmitted; i++) {
+        	assertTrue(futures.get(i).get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        }
+      
+        //Now we need to check that we can submit either 2 (1+1), 4(1+3,3+1), or 6(3+3) tasks
+        
+        //Fill Up the concurrent tasks
+        Future<Boolean> future1 = executor.submit(countDownTask);
+        Future<Boolean> future2 = executor.submit(countDownTask);
+        
+        //Possible additional futures
+        Future<Boolean> future3 = null;
+        Future<Boolean> future4 = null;
+        Future<Boolean> future5 = null;
+        Future<Boolean> future6 = null;
+
+        boolean caughtException = false;
+
+        executor.maxWaitForEnqueue(1000);
+        
+        try {
+            //This task will be aborted if maxQueue = 1 and maxConcurrency = 1, otherwise should run
+            future3 = executor.submit(countDownTask);
+        } catch (RejectedExecutionException x) {
+        	caughtException = true;
+        }
+        
+        executor.maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1));
+
+        if(caughtException == false) {
+        	future4 = executor.submit(countDownTask);
+            //Decrease to 200 ms so that we aren't waiting too long for timeout
+        	executor.maxWaitForEnqueue(200);
+            try {
+                //This task will be aborted if maxQueueSize + maxConcurrency = 4
+                future5 = executor.submit(countDownTask);
+            } catch (RejectedExecutionException x) {
+            	caughtException = true; 
+            }
+        }
+        
+        executor.maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1));
+        
+        if(caughtException == false) {
+        	future6 = executor.submit(countDownTask);
+            //Decrease to 200 ms so that we aren't waiting too long for timeout
+        	executor.maxWaitForEnqueue(200);
+            try {
+            	//This task will be aborted if maxQueueSize + maxConcurrency = 6
+                executor.submit(countDownTask);
+                fail("Should not be able to submit 7 tasks");
+            } catch (RejectedExecutionException x) {
+            	caughtException = true;
+            }
+        } 
+        
+        assertTrue("maxQueueSize + maxConcurrency should be 2, 4, or 6",caughtException);
+
+        //Let the submitted tasks complete
+        continueLatch2.countDown();
+
+        assertTrue(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        if(future3 != null) 
+        	assertTrue(future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        if(future4 != null) 
+        	assertTrue(future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        if(future5 != null) 
+        	assertTrue(future5.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        if(future6 != null) 
+        	assertTrue(future6.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        executor.shutdownNow();
+    }
+    
+    
+    @Test
+    public void testConcurrentUpdateMaxQueueSizeAndSubmit() throws Exception {
+        PolicyExecutor executor = provider.create("testConcurrentUpdateMaxQueueSizeAndSubmit")
+                .maxConcurrency(6)
+                .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(1))
+                .queueFullAction(QueueFullAction.Abort)
+        		.maxQueueSize(2);
+        
+        int numSubmitted = 6;
+        
+        //Latch for configChangeTask and submitterTask
+        CountDownLatch beginLatch1 = new CountDownLatch(numSubmitted*2);
+        CountDownLatch continueLatch1 = new CountDownLatch(1);
+        ConfigChangeTask configTask = new ConfigChangeTask(executor, beginLatch1, continueLatch1, TIMEOUT_NS, "maxQueueSize", "4");
+        
+        CountDownLatch continueLatch2 = new CountDownLatch(1);
+        CountDownLatch beginLatch2 = new CountDownLatch(numSubmitted);
+        CountDownTask countDownTask = new CountDownTask(beginLatch2, continueLatch2, TIMEOUT_NS);
+        
+        SubmitterTask<Boolean> submitTask = new SubmitterTask<Boolean>(executor, countDownTask, beginLatch1, continueLatch1, TIMEOUT_NS);
+        
+        List<Future<Boolean>> configFutures = new ArrayList<Future<Boolean>>();
+        
+        //Submit numSubmitted tasks to change maxQueueSize to 6, which will block on continueLatch2
+        for (int i = 0; i < numSubmitted; i++) {
+        	configFutures.add(testThreads.submit(configTask));
+        }
+        
+        List<Future<Future<Boolean>>> submitterFutures = new ArrayList<Future<Future<Boolean>>>(); 
+        
+        //Submit numSubmitted submit tasks, which will block on continueLatch2
+        for (int i = 0; i < numSubmitted; i++) {
+        	submitterFutures.add(testThreads.submit(submitTask));
+        }
+        
+        //Ensure all the submit and config tasks are running
+        assertTrue(beginLatch1.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        //Allow the configtasks and submitertasks to complete, which will submit numSubmitted countDownTasks
+        //and concurrently change the maxQueueSize
+       
+        continueLatch1.countDown();
+        
+        //Ensure the configTasks have completed
+        for (int i = 0; i < numSubmitted; i++) {
+        	assertTrue(configFutures.get(i).get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        }
+        
+        //The maxQueueSize should now be 4, and all the submitted tasks should be running
+        assertTrue(beginLatch2.await(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        //Now check that maxQueueSize is actually 4
+        Future<Boolean> future1 = executor.submit(countDownTask);
+        Future<Boolean> future2 = executor.submit(countDownTask);
+        Future<Boolean> future3 = executor.submit(countDownTask);
+        Future<Boolean> future4 = executor.submit(countDownTask);
+        
+        
+        //The queue should now be full - try to add one more, it should be rejected      
+        executor.maxWaitForEnqueue(200);       
+        try {
+        	executor.submit(countDownTask);
+        	fail("MaxQueueSize should be 4");
+        } catch (RejectedExecutionException x) {} //expected
+        
+        //Allow all the tasks to complete
+        
+        continueLatch2.countDown();
+        
+        //Ensure the submitted countdown tasks have completed
+        for (int i = 0; i < numSubmitted; i++) {
+        	assertTrue(submitterFutures.get(i).get(TIMEOUT_NS, TimeUnit.NANOSECONDS).get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        }
+        
+        assertTrue(future1.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future2.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future3.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        assertTrue(future4.get(TIMEOUT_NS, TimeUnit.NANOSECONDS));
+        
+        executor.shutdownNow();   
+    }
+  
 }
