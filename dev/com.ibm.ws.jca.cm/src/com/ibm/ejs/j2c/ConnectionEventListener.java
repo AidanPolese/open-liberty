@@ -30,12 +30,11 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.Transaction.UOWCoordinator;
 import com.ibm.ws.ffdc.FFDCFilter;
 import com.ibm.ws.j2c.TranWrapper;
-import com.ibm.ws.runtime.metadata.ComponentMetaData;
 
 public final class ConnectionEventListener implements javax.resource.spi.ConnectionEventListener {
     private MCWrapper mcWrapper = null;
 
-    private static final TraceComponent tc = Tr.register(ConnectionEventListener.class, J2CConstants.traceSpec, J2CConstants.messageFile); 
+    private static final TraceComponent tc = Tr.register(ConnectionEventListener.class, J2CConstants.traceSpec, J2CConstants.messageFile);
 
     /**
      * Default constructor provided so that subclasses need not override (implement).
@@ -61,17 +60,17 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
     @Override
     public void connectionClosed(ConnectionEvent event) {
 
-        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled(); 
+        final boolean isTracingEnabled = TraceComponent.isAnyTracingEnabled();
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "connectionClosed");
         }
 
         if (event.getId() == ConnectionEvent.CONNECTION_CLOSED) {
-            if (!mcWrapper.isParkedWrapper()) { 
+            if (!mcWrapper.isParkedWrapper()) {
 
-                if (isTracingEnabled && tc.isDebugEnabled()) { 
-                    //Tr.debug(this, tc, "Closing handle for ManagedConnection@" + Integer.toHexString(mc.hashCode()) + " from pool " + mcWrapper.gConfigProps.pmiName + " from mcWrapper " + mcWrapper.toString() + " from mc " + mc);  
+                if (isTracingEnabled && tc.isDebugEnabled()) {
+                    //Tr.debug(this, tc, "Closing handle for ManagedConnection@" + Integer.toHexString(mc.hashCode()) + " from pool " + mcWrapper.gConfigProps.pmiName + " from mcWrapper " + mcWrapper.toString() + " from mc " + mc);
                     // Omit handle info.
                     //Tr.debug(this, tc, "***Connection Close Request*** Handle Name: " + event.getConnectionHandle().toString() + "  Connection Pool: " + mcWrapper.getPoolManager().toString() + "  Details: : " + mcWrapper.toString() );
                     //          I only removed the connection handle toString, since this is the one getting the null pointer exception.
@@ -79,35 +78,26 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
                     //          Any new debug should not use the .toString() to prevent null pointer exceptions in trace.
                     //          Changed trace string to only dump pool manager name not entire pool.
                     Tr.debug(this, tc, "***Connection Close Request*** Handle Name: " + event.getConnectionHandle() + "  Connection Pool: "
-                                       + mcWrapper.getPoolManager().getGConfigProps().getXpathId() + "  Details: : " + mcWrapper); 
+                                       + mcWrapper.getPoolManager().getGConfigProps().getXpathId() + "  Details: : " + mcWrapper);
 
                 }
 
                 ConnectionManager cm = mcWrapper.getConnectionManagerWithoutStateCheck();
 
                 if (cm != null && cm.handleToThreadMap != null) {
-                        cm.handleToThreadMap.clear();
+                    cm.handleToThreadMap.clear();
                 }
                 if (cm != null && cm.handleToCMDMap != null) {
-                        cm.handleToCMDMap.clear();
+                    cm.handleToCMDMap.clear();
                 }
 
-                /*
-                 * The managedCachedHandle by default will be set to false which means we will not
-                 * track handles for ffcd data. This will make debugging customer problems more
-                 * difficult, but we perform better.
-                 *
-                 * We will track handles if smart handles supported is false or shareable is false
-                 * regardless of the managedCachedHandle value.
-                 */
-                if (mcWrapper.gConfigProps.manageCachedHandles
-                    || (!(mcWrapper.gConfigProps.isSmartHandleSupport() && (cm != null && cm.shareable())))) { 
+                if (!(mcWrapper.gConfigProps.isSmartHandleSupport() && (cm != null && cm.shareable()))) {
 
                     Object conHandle = event.getConnectionHandle();
                     if (null == conHandle) {
                         Tr.warning(tc, "CONNECTION_CLOSED_NULL_HANDLE_J2CA0148", event);
-                    } else { 
-                        mcWrapper.removeFromHandleList(conHandle); 
+                    } else {
+                        mcWrapper.removeFromHandleList(conHandle);
                         // TODO - need to implement - Notify the CHM to stop tracking the handle because it has been closed.
                     }
                 }
@@ -131,11 +121,11 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
                      * method on the MCWrapper.
                      */
 
-                    if (mcWrapper.getTranWrapperId() == MCWrapper.NOTXWRAPPER) { 
+                    if (mcWrapper.getTranWrapperId() == MCWrapper.NOTXWRAPPER) {
                         mcWrapper.transactionComplete();
                     }
 
-                    // Deleted calling mcWrapper.transactionComplete() for RRS Local Tran  
+                    // Deleted calling mcWrapper.transactionComplete() for RRS Local Tran
 
                     /*
                      * If the ManagedConnection is not associated with a
@@ -154,16 +144,16 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
                          */
 
                         try {
-                            mcWrapper.releaseToPoolManager(); 
+                            mcWrapper.releaseToPoolManager();
                         } catch (Exception ex) {
                             // Nothing to do here. PoolManager has already logged it.
                             // Since we are in cleanup mode, we will not surface a Runtime exception to the ResourceAdapter
                             FFDCFilter.processException(ex, "com.ibm.ejs.j2c.ConnectionEventListener.connectionClosed", "197", this);
-                            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                                 Tr.debug(this, tc,
                                          "connectionClosed: Closing connection in pool " + mcWrapper.gConfigProps.getXpathId()
                                                    + " caught exception, but will continue processing: ",
-                                         ex); 
+                                         ex);
                             }
                         }
                     }
@@ -175,7 +165,7 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
             processBadEvent("connectionClosed", ConnectionEvent.CONNECTION_CLOSED, event);
         }
 
-        if (isTracingEnabled && tc.isEntryEnabled()) { 
+        if (isTracingEnabled && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "connectionClosed");
         }
 
@@ -194,9 +184,9 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
     @Override
     public void connectionErrorOccurred(ConnectionEvent event) {
 
-        int eventID = event.getId(); 
+        int eventID = event.getId();
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             StringBuilder entry = new StringBuilder(event.getClass().getSimpleName()).append('{');
             entry.append("id=").append(event.getId()).append(", ");
             entry.append("source=").append(event.getSource());
@@ -208,11 +198,11 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
                 Tr.entry(this, tc, "connectionErrorOccurred", entry.toString(), event.getException());
         }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             // (ASSERT: event is not null)
             StringBuffer tsb = new StringBuffer();
             Object connHandle = event.getConnectionHandle();
-            tsb.append("***Connection Error Request*** Handle Name: " + connHandle); 
+            tsb.append("***Connection Error Request*** Handle Name: " + connHandle);
             if (mcWrapper != null) {
                 Object poolMgr = mcWrapper.getPoolManager();
                 tsb.append(", Connection Pool: " + poolMgr + ", Details: " + mcWrapper);
@@ -222,29 +212,29 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
             Tr.debug(this, tc, tsb.toString());
         }
 
-        switch (eventID) { 
+        switch (eventID) {
 
             case ConnectionEvent.CONNECTION_ERROR_OCCURRED: {
 
-                Exception tempEx = event.getException(); 
+                Exception tempEx = event.getException();
 
                 // Initialize tempString so the msg makes sense for the case where the event has NO associated Exception
-                String tempString = ""; 
-                if (tempEx != null) { 
+                String tempString = "";
+                if (tempEx != null) {
 
                     // If there is an associated Exception, generate tempString from that
-                    tempString = J2CUtilityClass.generateExceptionString(tempEx); 
-                    Tr.audit(tc, "RA_CONNECTION_ERROR_J2CA0056", tempString, mcWrapper.gConfigProps.cfName); 
+                    tempString = J2CUtilityClass.generateExceptionString(tempEx);
+                    Tr.audit(tc, "RA_CONNECTION_ERROR_J2CA0056", tempString, mcWrapper.gConfigProps.cfName);
 
-                } 
+                }
 
-                else { 
-                    Tr.audit(tc, "NO_RA_EXCEPTION_J2CA0216", mcWrapper.gConfigProps.cfName); 
-                } 
+                else {
+                    Tr.audit(tc, "NO_RA_EXCEPTION_J2CA0216", mcWrapper.gConfigProps.cfName);
+                }
 
                 // NOTE: Moving all functional code for this to the MCWrapper as it is
                 //  closer to all the data/objects needed to perform this cleanup.
-                mcWrapper.connectionErrorOccurred(event); 
+                mcWrapper.connectionErrorOccurred(event);
 
                 break;
             }
@@ -265,29 +255,29 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
                  * Only this connection will be destroyed.
                  */
 
-                Exception tempEx = event.getException(); 
+                Exception tempEx = event.getException();
 
                 // Initialize tempString so the msg makes sense for the case where the event has NO associated Exception
-                String tempString = ""; 
-                if (tempEx != null) { 
+                String tempString = "";
+                if (tempEx != null) {
 
                     // If there is an associated Exception, generate tempString from that
-                    tempString = J2CUtilityClass.generateExceptionString(tempEx); 
-                    Tr.audit(tc, "RA_CONNECTION_ERROR_J2CA0056", tempString, mcWrapper.gConfigProps.cfName); 
-                } 
+                    tempString = J2CUtilityClass.generateExceptionString(tempEx);
+                    Tr.audit(tc, "RA_CONNECTION_ERROR_J2CA0056", tempString, mcWrapper.gConfigProps.cfName);
+                }
 
-                else { 
-                    Tr.audit(tc, "NO_RA_EXCEPTION_J2CA0216", mcWrapper.gConfigProps.cfName); 
-                } 
+                else {
+                    Tr.audit(tc, "NO_RA_EXCEPTION_J2CA0216", mcWrapper.gConfigProps.cfName);
+                }
 
                 // NOTE: Moving all functional code for this to the MCWrapper as it is
                 // closer to all the data/objects needed to perform this cleanup.
-                mcWrapper.connectionErrorOccurred(event); 
+                mcWrapper.connectionErrorOccurred(event);
 
                 break;
             }
 
-            case com.ibm.websphere.j2c.ConnectionEvent.CONNECTION_ERROR_OCCURRED_NO_EVENT: { 
+            case com.ibm.websphere.j2c.ConnectionEvent.CONNECTION_ERROR_OCCURRED_NO_EVENT: {
 
                 // NOTE: Moving all functional code for this to the MCWrapper as it is
                 //  closer to all the data/objects needed to perform this cleanup.
@@ -306,14 +296,14 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
 
         } // end switch
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "connectionErrorOccurred");
         }
 
         return;
 
     }
-    
+
     /**
      * This method is called by a resource adapter when a CCI local transation commit is called
      * by the application on a connection. If the MC is associated with a UOW,
@@ -325,7 +315,7 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
     @Override
     public void localTransactionCommitted(ConnectionEvent event) {
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "localTransactionCommitted");
         }
 
@@ -351,16 +341,16 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
                     Tr.error(tc, "DELIST_FAILED_J2CA0073", "localTransactionCommitted", e, mcWrapper.gConfigProps.cfName);
                     // Moved event.getSource() inside of catch block for performance reasons
                     ManagedConnection mc = null;
-                    try { 
+                    try {
                         mc = (ManagedConnection) event.getSource();
-                    } catch (ClassCastException cce) { 
-                        Tr.error(tc, "GET_SOURCE_CLASS_CAST_EXCP_J2CA0098", cce); 
-                        throw new IllegalStateException("ClassCastException occurred attempting to cast event.getSource to ManagedConnection"); 
+                    } catch (ClassCastException cce) {
+                        Tr.error(tc, "GET_SOURCE_CLASS_CAST_EXCP_J2CA0098", cce);
+                        throw new IllegalStateException("ClassCastException occurred attempting to cast event.getSource to ManagedConnection");
                     }
                     ConnectionEvent errorEvent = new ConnectionEvent(mc, ConnectionEvent.CONNECTION_ERROR_OCCURRED);
                     this.connectionErrorOccurred(errorEvent);
-                    RuntimeException rte = new IllegalStateException(e.getMessage()); 
-                    throw rte; 
+                    RuntimeException rte = new IllegalStateException(e.getMessage());
+                    throw rte;
                 }
             } else {
                 // if we are not involved in a transaction, then we are likely running with NO transaction
@@ -368,7 +358,7 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
                 //  servlets can spin their own threads which would not have context.
                 // Note: it is very rare that users do this.  All other occurances are
                 //  considered to be an error.
-                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
                     Tr.exit(this, tc, "localTransactionCommitted", "no transaction context, return without delisting");
                 }
                 return;
@@ -379,7 +369,7 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
             processBadEvent("localTransactionCommitted", ConnectionEvent.LOCAL_TRANSACTION_COMMITTED, event);
         }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "localTransactionCommitted");
         }
         return;
@@ -397,7 +387,7 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
     @Override
     public void localTransactionRolledback(ConnectionEvent event) {
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "localTransactionRolledback");
         }
 
@@ -421,16 +411,16 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
                     Tr.error(tc, "DELIST_FAILED_J2CA0073", "localTransactionRolledback", e, mcWrapper.gConfigProps.cfName);
                     // Moved event.getSource() inside of catch block for performance reasons
                     ManagedConnection mc = null;
-                    try { 
+                    try {
                         mc = (ManagedConnection) event.getSource();
-                    } catch (ClassCastException cce) { 
-                        Tr.error(tc, "GET_SOURCE_CLASS_CAST_EXCP_J2CA0098", cce); 
-                        throw new IllegalStateException("ClassCastException occurred attempting to cast event.getSource to ManagedConnection"); 
+                    } catch (ClassCastException cce) {
+                        Tr.error(tc, "GET_SOURCE_CLASS_CAST_EXCP_J2CA0098", cce);
+                        throw new IllegalStateException("ClassCastException occurred attempting to cast event.getSource to ManagedConnection");
                     }
                     ConnectionEvent errorEvent = new ConnectionEvent(mc, ConnectionEvent.CONNECTION_ERROR_OCCURRED);
                     this.connectionErrorOccurred(errorEvent);
-                    RuntimeException rte = new IllegalStateException(e.getMessage()); 
-                    throw rte; 
+                    RuntimeException rte = new IllegalStateException(e.getMessage());
+                    throw rte;
                 }
             } else {
                 // if we are not involved in a transaction, then we are likely running with NO transaction
@@ -438,7 +428,7 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
                 //  servlets can spin their own threads which would not have context.
                 // Note: it is very rare that users do this.  All other occurances are
                 //  considered to be an error.
-                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
                     Tr.exit(this, tc, "localTransactionRolledback", "no transaction context, return without delisting");
                 }
                 return;
@@ -449,7 +439,7 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
             processBadEvent("localTransactionRolledback", ConnectionEvent.LOCAL_TRANSACTION_ROLLEDBACK, event);
         }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "localTransactionRolledback");
         }
         return;
@@ -465,7 +455,7 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
     @Override
     public void localTransactionStarted(ConnectionEvent event) {
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(this, tc, "localTransactionStarted");
         }
 
@@ -495,11 +485,11 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
             //  already checks for a valid state setting before returning, we can just rely on that method to
             //  do the proper checking instead of calling the involvedInTransaction() method.
             //
-            UOWCoordinator uowCoordinator = mcWrapper.getUOWCoordinator(); 
+            UOWCoordinator uowCoordinator = mcWrapper.getUOWCoordinator();
 
-            if (uowCoordinator == null) { 
-                uowCoordinator = mcWrapper.updateUOWCoordinator(); 
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+            if (uowCoordinator == null) {
+                uowCoordinator = mcWrapper.updateUOWCoordinator();
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(this, tc, "uowCoord was null, updating it to current coordinator");
                 }
             }
@@ -509,8 +499,8 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
             //  servlets can spin their own threads which would not have context.
             // Note: it is very rare that users do this.  All other occurances are
             //  considered to be an error.
-            if (uowCoordinator == null) { 
-                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+            if (uowCoordinator == null) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
                     Tr.exit(this, tc, "localTransactionStarted", "no transaction context, return without enlisting");
                 }
                 return;
@@ -525,7 +515,6 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
                 Tr.debug(this, tc, "ILLEGAL_USE_OF_LOCAL_TRANSACTION_J2CA0295", ise);
             }
 
-
             /*
              * The ManagedConnection should be associated with a transaction. And, if it's not,
              * the getCurrentTranWrapper() method will detect the situation and throw an
@@ -535,20 +524,20 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
              */
 
             try {
-                mcWrapper.getCurrentTranWrapper().enlist(); 
+                mcWrapper.getCurrentTranWrapper().enlist();
             } catch (ResourceException e) {
                 /*
                  * // Can't enlist, something went wrong.
                  * // Destroy the connection(s) so it can't cause any future problems.
                  * try {
-                 * mcWrapper.markStale(); 
-                 * mcWrapper.releaseToPoolManager(); 
+                 * mcWrapper.markStale();
+                 * mcWrapper.releaseToPoolManager();
                  * }
                  * catch (Exception ex) {
                  * // Nothing to do here. PoolManager has already logged it.
                  * // Since we are in cleanup mode, we will not surface a Runtime exception to the ResourceAdapter
                  * FFDCFilter.processException(ex, "com.ibm.ejs.j2c.ConnectionEventListener.localTransactionStarted", "473", this);
-                 * if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) { 
+                 * if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                  * Tr.debug(this, tc, "localTransactionStarted: Error when trying to enlist " + mcWrapper.getPoolManager().getPmiName() +
                  * " caught exception, but will continue processing: ", ex);
                  * }
@@ -560,17 +549,17 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
                 Tr.error(tc, "ENLIST_FAILED_J2CA0074", "localTransactionStarted", e, mcWrapper.gConfigProps.cfName);
                 // Moved event.getSource() inside of catch block for performance reasons
                 ManagedConnection mc = null;
-                try { 
+                try {
                     mc = (ManagedConnection) event.getSource();
-                } catch (ClassCastException cce) { 
-                    Tr.error(tc, "GET_SOURCE_CLASS_CAST_EXCP_J2CA0098", cce); 
-                    throw new IllegalStateException("ClassCastException occurred attempting to cast event.getSource to ManagedConnection"); 
+                } catch (ClassCastException cce) {
+                    Tr.error(tc, "GET_SOURCE_CLASS_CAST_EXCP_J2CA0098", cce);
+                    throw new IllegalStateException("ClassCastException occurred attempting to cast event.getSource to ManagedConnection");
                 }
                 ConnectionEvent errorEvent = new ConnectionEvent(mc, ConnectionEvent.CONNECTION_ERROR_OCCURRED);
                 this.connectionErrorOccurred(errorEvent);
 
-                RuntimeException rte = new IllegalStateException(e.getMessage()); 
-                throw rte; 
+                RuntimeException rte = new IllegalStateException(e.getMessage());
+                throw rte;
             }
         } else {
             // Connection Event passed in doesn't match the method called.
@@ -578,7 +567,7 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
             processBadEvent("localTransactionStarted", ConnectionEvent.LOCAL_TRANSACTION_STARTED, event);
         }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) { 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(this, tc, "localTransactionStarted");
         }
         return;
@@ -614,7 +603,7 @@ public final class ConnectionEventListener implements javax.resource.spi.Connect
                                                          + " detected an unexpected ConnectionEvent of " + eventIdIn
                                                          + " for DataSource/ConnectionFactory " + xpathId);
         FFDCFilter.processException(rte, "com.ibm.ejs.j2c.ConnectionEventListener.processBadEvent", "709", this);
-        throw rte; 
+        throw rte;
     }
 
     /**
