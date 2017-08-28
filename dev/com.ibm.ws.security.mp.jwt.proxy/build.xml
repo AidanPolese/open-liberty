@@ -9,7 +9,6 @@
         IBM Corporation - initial API and implementation
  -->
 <project name="com.ibm.ws.security.mp.jwt.proxy" default="build">
-  <property name="build.with.java.level" value="1.8"/>
   <import file="../ant_build/public_imports/standard_imports.xml"/>
 </project>
 

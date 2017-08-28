@@ -1,23 +1,21 @@
-/*******************************************************************************
- * Copyright (c) 2017 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/*
  *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+ * OCO Source Materials
+ *
+ * Copyright IBM Corp. 2017
+ *
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ */
 package com.ibm.ws.security.mp.jwt.proxy;
 
 import java.security.Principal;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Set;
 
 import javax.security.auth.Subject;
 
-import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
@@ -33,89 +31,74 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.kernel.service.util.JavaInfo;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 
+/*
+ * This is a utility service for MicroProfile JsonWebToken in a subject
+ */
 @Component(service = MpJwtHelper.class, name = "MpJwtHelper", immediate = true, property = "service.vendor=IBM")
 public class MpJwtHelper {
 	private static final TraceComponent tc = Tr.register(MpJwtHelper.class);
-	static final String JSON_WEB_TOKEN_REF = "JsonWebToken";
-	protected final static AtomicServiceReference<JsonWebToken> JsonWebTokenRef = new AtomicServiceReference<JsonWebToken>(
-			JSON_WEB_TOKEN_REF);
+	static final String JSON_WEB_TOKEN_UTIL_REF = "JsonWebTokenUtil";
+	protected final static AtomicServiceReference<JsonWebTokenUtil> JsonWebTokenUtilRef = new AtomicServiceReference<JsonWebTokenUtil>(
+			JSON_WEB_TOKEN_UTIL_REF);
 
 	public static Principal getJsonWebTokenPricipal(Subject subject) {
-		if (getJsonWebTokenService() == null) {
+		JsonWebTokenUtil jsonWebTokenUtil = getJsonWebTokenUtil();
+		if (getJsonWebTokenUtil() == null) {
 			return null;
 		}
-
-		Set<JsonWebToken> jsonWebTokenPrincipal = subject.getPrincipals(JsonWebToken.class);
-
-		if (jsonWebTokenPrincipal.size() > 1) {
-			multipleJsonWebTokenPrincipalsError(jsonWebTokenPrincipal);
-		}
-
-		if (!jsonWebTokenPrincipal.isEmpty()) {
-			return jsonWebTokenPrincipal.iterator().next();
-		}
-
-		return null;
+		return jsonWebTokenUtil.getJsonWebTokenPrincipal(subject);
 	}
 
 	public static void addJsonWebToken(Subject subject, Hashtable<String, ?> customProperties, String key) {
-		if (customProperties != null && getJsonWebTokenService() != null) {
-			JsonWebToken jsonWebToken = (JsonWebToken) customProperties.get(key);
-			if (jsonWebToken != null) {
-				subject.getPrincipals().add(jsonWebToken);
+		if (customProperties != null && getJsonWebTokenUtil() != null) {
+			JsonWebTokenUtil jsonWebTokenUtil = (JsonWebTokenUtil) customProperties.get(key);
+			if (jsonWebTokenUtil != null) {
+				jsonWebTokenUtil.addJsonWebToken(subject, customProperties, key);
 			}
 		}
 	}
 
-	public static Principal cloneJsonWebTokenPrincipal(Subject subject) {
+	public static Principal cloneJsonWebToken(Subject subject) {
+		JsonWebTokenUtil jsonWebTokenUtil = getJsonWebTokenUtil();
+		if (jsonWebTokenUtil != null) {
+			return jsonWebTokenUtil.cloneJsonWebToken(subject);
+		} else
+			return null;
+	}
+
+	private static JsonWebTokenUtil getJsonWebTokenUtil() {
 		if (isJavaVersionAtLeast18()) {
-			return getJsonWebTokenService();
+			return JsonWebTokenUtilRef.getService();
 		} else {
 			return null;
 		}
+
 	}
 
-	/**
-	 * @param principals
-	 */
-
-	private static void multipleJsonWebTokenPrincipalsError(Set<JsonWebToken> principals) {
-		String principalNames = null;
-		for (JsonWebToken principal : principals) {
-			if (principalNames == null)
-				principalNames = principal.getName();
-			else
-				principalNames = principalNames + ", " + principal.getName();
-		}
-		// throw new IllegalStateException(Tr.formatMessage(tc,
-		// "SEC_TOO_MANY_PRINCIPALS", principalNames));
-	}
-
-	private static JsonWebToken getJsonWebTokenService() {
-		return JsonWebTokenRef.getService();
-	}
-
-	public static boolean isJavaVersionAtLeast18() {
+	private static boolean isJavaVersionAtLeast18() {
 		return JavaInfo.majorVersion() >= 8;
 	}
 
-	@Reference(service = JsonWebToken.class, name = JSON_WEB_TOKEN_REF, cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.STATIC)
-	protected void setJsonWebToken(ServiceReference<JsonWebToken> ref) {
+	@Reference(service = JsonWebTokenUtil.class, name = JSON_WEB_TOKEN_UTIL_REF, cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.STATIC)
+	protected void setJsonWebTokenUtil(ServiceReference<JsonWebTokenUtil> ref) {
 		if (isJavaVersionAtLeast18()) {
-			JsonWebTokenRef.setReference(ref);
+			JsonWebTokenUtilRef.setReference(ref);
 		}
 	}
 
-	protected void unsetJsonWebToken(ServiceReference<JsonWebToken> ref) {
+	protected void unsetJsonWebTokenUtil(ServiceReference<JsonWebTokenUtil> ref) {
 		if (isJavaVersionAtLeast18()) {
-			JsonWebTokenRef.unsetReference(ref);
+			JsonWebTokenUtilRef.unsetReference(ref);
 		}
 	}
 
 	@Activate
 	protected void activate(ComponentContext cc) {
 		if (isJavaVersionAtLeast18()) {
-			JsonWebTokenRef.activate(cc);
+			JsonWebTokenUtilRef.activate(cc);
+		}
+		if (tc.isDebugEnabled()) {
+			Tr.debug(tc, "MpJwtHelper service is activated");
 		}
 	}
 
@@ -126,7 +109,10 @@ public class MpJwtHelper {
 	@Deactivate
 	protected void deactivate(ComponentContext cc) {
 		if (isJavaVersionAtLeast18()) {
-			JsonWebTokenRef.deactivate(cc);
+			JsonWebTokenUtilRef.deactivate(cc);
+		}
+		if (tc.isDebugEnabled()) {
+			Tr.debug(tc, "MpJwtHelper service is activated");
 		}
 	}
 }
