@@ -1,4 +1,4 @@
-# This private impl feature corresponds to JSON-P 1.1 with the Glassfish implementation
+# This private impl feature corresponds to JSON-P 1.1 with the Johnzon implementation
 -include= ~../cnf/resources/bnd/feature.props
 symbolicName=com.ibm.websphere.appserver.jsonpImpl-1.1.1
 singleton=true
