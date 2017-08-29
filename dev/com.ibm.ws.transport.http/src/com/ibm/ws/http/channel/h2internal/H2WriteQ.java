@@ -17,7 +17,6 @@ import com.ibm.websphere.channelfw.osgi.CHFWBundle;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.exceptions.FlowControlException;
-import com.ibm.ws.http.channel.h2internal.priority.Node;
 import com.ibm.ws.http.channel.internal.HttpMessages;
 import com.ibm.wsspi.channelfw.VirtualConnection;
 import com.ibm.wsspi.tcpchannel.TCPWriteRequestContext;
@@ -283,9 +282,9 @@ public class H2WriteQ implements H2WorkQInterface {
     }
 
     @Override
-    public Node addNewNodeToQ(int streamID, int parentStreamID, int priority, boolean exclusive) {
+    public void addNewNodeToQ(int streamID, int parentStreamID, int priority, boolean exclusive) {
         // no-op for this implementation
-        return null;
+        return;
     }
 
     @Override
