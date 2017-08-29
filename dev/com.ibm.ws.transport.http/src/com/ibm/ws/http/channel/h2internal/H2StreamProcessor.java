@@ -45,6 +45,7 @@ import com.ibm.ws.http.dispatcher.internal.HttpDispatcher;
 import com.ibm.wsspi.bytebuffer.WsByteBuffer;
 import com.ibm.wsspi.bytebuffer.WsByteBufferPoolManager;
 import com.ibm.wsspi.channelfw.VirtualConnection;
+import com.ibm.wsspi.tcpchannel.TCPReadRequestContext;
 import com.ibm.wsspi.tcpchannel.TCPRequestContext;
 
 /**
@@ -560,6 +561,14 @@ public class H2StreamProcessor {
     }
 
     /**
+     * Update the promised stream state to Open
+     *
+     */
+    public void readyToSendPushPromise() {
+        this.updateStreamState(StreamState.OPEN);
+    }
+
+    /**
      * @param direction
      */
     private void processClosed(Constants.Direction direction) {
@@ -1001,16 +1010,42 @@ public class H2StreamProcessor {
      * TODO There may be a problem here, since a RST_STREAM frame can come in on the reserved PP
      * stream
      */
-    public void sendRequestToWc(String request) {
+    public void sendRequestToWc(FrameHeaders frame) {
 
-        WsByteBufferPoolManager bufManager = HttpDispatcher.getBufferManager();
-        WsByteBuffer buf = bufManager.allocate(request.length());
-        buf.put(request.getBytes());
+        if (null != frame) {
 
-        moveDataIntoReadBufferArray(buf);
+            WsByteBufferPoolManager bufManager = HttpDispatcher.getBufferManager();
+            WsByteBuffer buf = bufManager.allocate(frame.buildFrameForWrite().length);
+            byte[] ba = frame.buildFrameForWrite();
 
-        // It's ready to send to the webcontainer
-        setReadyForRead();
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "sendRequestToWc: request length is " + ba.length);
+            }
+
+            buf.put(ba);
+            buf.flip();
+            TCPReadRequestContext readi = h2HttpInboundLinkWrap.getConnectionContext().getReadInterface();
+            readi.setBuffer(buf);
+
+            // It's ready to send to the webcontainer
+            currentFrame = frame;
+            this.getHeadersFromFrame();
+            setHeadersComplete();
+            try {
+                processCompleteHeaders();
+            } catch (CompressionException e) {
+                // TODO Auto-generated catch block
+                // Do you need FFDC here? Remember FFDC instrumentation and @FFDCIgnore
+                // http://was.pok.ibm.com/xwiki/bin/view/Liberty/LoggingFFDC
+                e.printStackTrace();
+            }
+            setReadyForRead();
+        } else {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "sendRequestToWc: request is null");
+            }
+
+        }
 
     }
 
