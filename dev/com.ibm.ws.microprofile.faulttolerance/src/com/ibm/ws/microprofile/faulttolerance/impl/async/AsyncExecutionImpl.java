@@ -12,11 +12,16 @@ package com.ibm.ws.microprofile.faulttolerance.impl.async;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ScheduledExecutorService;
 
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
+import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
+
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.microprofile.faulttolerance.impl.FTConstants;
+import com.ibm.ws.microprofile.faulttolerance.impl.TaskContext;
 import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
-import com.ibm.ws.microprofile.faulttolerance.impl.ThreadUtils;
-import com.ibm.ws.microprofile.faulttolerance.impl.Timeout;
 import com.ibm.ws.microprofile.faulttolerance.impl.sync.SynchronousExecutionImpl;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
@@ -31,10 +36,9 @@ import com.ibm.wsspi.threadcontext.WSContextService;
  */
 public class AsyncExecutionImpl<R> extends SynchronousExecutionImpl<Future<R>> {
 
-    private TaskRunner<Callable<Future<R>>, Future<R>> taskRunner;
-    private final WSContextService contextService;
-    private ThreadFactory defaultThreadFactory;
-    private final PolicyExecutorProvider policyExecutorProvider;
+    private static final TraceComponent tc = Tr.register(AsyncExecutionImpl.class);
+
+    private TaskRunner<Future<R>> taskRunner;
 
     public AsyncExecutionImpl(RetryPolicy retryPolicy,
                               CircuitBreakerPolicy circuitBreakerPolicy,
@@ -42,41 +46,36 @@ public class AsyncExecutionImpl<R> extends SynchronousExecutionImpl<Future<R>> {
                               BulkheadPolicy bulkheadPolicy,
                               FallbackPolicy fallbackPolicy,
                               WSContextService contextService,
-                              PolicyExecutorProvider policyExecutorProvider) {
+                              PolicyExecutorProvider policyExecutorProvider,
+                              ScheduledExecutorService scheduledExecutorService) {
 
-        super(retryPolicy, circuitBreakerPolicy, timeoutPolicy, bulkheadPolicy, fallbackPolicy);
-        this.contextService = contextService;
-        this.policyExecutorProvider = policyExecutorProvider;
-    }
+        super(retryPolicy, circuitBreakerPolicy, timeoutPolicy, bulkheadPolicy, fallbackPolicy, scheduledExecutorService);
 
-    @Override
-    protected TaskRunner<Callable<Future<R>>, Future<R>> getTaskRunner(BulkheadPolicy bulkheadPolicy) {
-        synchronized (this) {
-            if (this.taskRunner == null) {
-                if (this.policyExecutorProvider == null) {
-                    this.taskRunner = new ThreadPoolTaskRunner<R>(bulkheadPolicy, getDefaultThreadFactory(), contextService);
-                } else {
-                    this.taskRunner = new PolicyExecutorTaskRunner<R>(bulkheadPolicy, getDefaultThreadFactory(), contextService, policyExecutorProvider);
-                }
+        if (policyExecutorProvider == null) {
+            if ("true".equalsIgnoreCase(System.getProperty(FTConstants.JSE_FLAG))) {
+                //this is really intended for unittest only, running outside of Liberty
+                this.taskRunner = new JSEThreadPoolTaskRunner<R>(bulkheadPolicy, contextService);
+            } else {
+                throw new FaultToleranceException(Tr.formatMessage(tc, "internal.error.CWMFT4999E"));
             }
-            return this.taskRunner;
+        } else {
+            this.taskRunner = new PolicyExecutorTaskRunner<R>(bulkheadPolicy, contextService, policyExecutorProvider);
         }
     }
 
     @Override
-    protected Callable<Future<R>> createTask(Callable<Future<R>> callable, TaskRunner<Callable<Future<R>>, Future<R>> runner, Timeout timeout) {
+    protected Callable<Future<R>> createTask(Callable<Future<R>> callable, ExecutionContext executionContext, TaskContext taskContext) {
+        Callable<Future<R>> wrapped = () -> {
+            taskContext.setNested();
+            SynchronousExecutionImpl<Future<R>> nestedExecution = new SynchronousExecutionImpl<Future<R>>(taskContext);
+            Future<R> future = nestedExecution.execute(callable, executionContext);
+            return future;
+        };
+
         Callable<Future<R>> task = () -> {
-            Future<R> future = runner.runTask(callable, timeout);
+            Future<R> future = this.taskRunner.runTask(wrapped, executionContext, taskContext);
             return future;
         };
         return task;
     }
-
-    protected ThreadFactory getDefaultThreadFactory() {
-        if (this.defaultThreadFactory == null) {
-            defaultThreadFactory = ThreadUtils.getThreadFactory();
-        }
-        return defaultThreadFactory;
-    }
-
 }

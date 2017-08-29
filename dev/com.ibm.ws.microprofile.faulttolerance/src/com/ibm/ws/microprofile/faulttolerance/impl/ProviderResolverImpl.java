@@ -13,13 +13,18 @@ package com.ibm.ws.microprofile.faulttolerance.impl;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
+import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.microprofile.faulttolerance.impl.policy.BulkheadPolicyImpl;
 import com.ibm.ws.microprofile.faulttolerance.impl.policy.CircuitBreakerPolicyImpl;
 import com.ibm.ws.microprofile.faulttolerance.impl.policy.FallbackPolicyImpl;
@@ -39,12 +44,16 @@ import com.ibm.wsspi.threadcontext.WSContextService;
 @Component(name = "com.ibm.ws.microprofile.faulttolerance.impl.ProviderResolverImpl", service = { FaultToleranceProviderResolver.class }, property = { "service.vendor=IBM" }, immediate = true)
 public class ProviderResolverImpl extends FaultToleranceProviderResolver {
 
+    private static final TraceComponent tc = Tr.register(ProviderResolverImpl.class);
+
     /**
      * Reference to the context service for this managed executor service.
      */
     private final AtomicServiceReference<WSContextService> contextSvcRef = new AtomicServiceReference<WSContextService>("ContextService");
 
     private final AtomicServiceReference<PolicyExecutorProvider> policyExecRef = new AtomicServiceReference<>("PolicyExecutorProvider");
+
+    private final AtomicServiceReference<ScheduledExecutorService> scheduledExecRef = new AtomicServiceReference<>("ScheduledExecutorService");
 
     /**
      * Activate a context and set the instance
@@ -54,6 +63,7 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
     public void activate(ComponentContext cc) {
         contextSvcRef.activate(cc);
         policyExecRef.activate(cc);
+        scheduledExecRef.activate(cc);
         FaultToleranceProviderResolver.setInstance(this);
     }
 
@@ -64,6 +74,7 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
      */
     public void deactivate(ComponentContext cc) throws IOException {
         FaultToleranceProviderResolver.setInstance(null);
+        scheduledExecRef.deactivate(cc);
         policyExecRef.deactivate(cc);
         contextSvcRef.deactivate(cc);
     }
@@ -106,6 +117,25 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
         policyExecRef.unsetReference(ref);
     }
 
+    /**
+     * Declarative Services method for setting the Scheduled Executor Service reference
+     *
+     * @param ref reference to the service
+     */
+    @Reference(policy = ReferencePolicy.DYNAMIC)
+    protected void setScheduledExecutorService(ServiceReference<ScheduledExecutorService> ref) {
+        scheduledExecRef.setReference(ref);
+    }
+
+    /**
+     * Declarative Services method for unsetting the Scheduled Executor Service reference
+     *
+     * @param ref reference to the service
+     */
+    protected void unsetScheduledExecutorService(ServiceReference<ScheduledExecutorService> ref) {
+        scheduledExecRef.unsetReference(ref);
+    }
+
     @Override
     public BulkheadPolicy newBulkheadPolicy() {
         BulkheadPolicyImpl bulkhead = new BulkheadPolicyImpl();
@@ -141,7 +171,8 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
     public <T, R> ExecutionBuilder<T, R> newExecutionBuilder() {
         WSContextService contextService = getContextService();
         PolicyExecutorProvider policyExecutorProvider = getPolicyExecutorProvider();
-        ExecutionBuilderImpl<T, R> ex = new ExecutionBuilderImpl<T, R>(contextService, policyExecutorProvider);
+        ScheduledExecutorService scheduledExecutorService = getScheduledExecutorService();
+        ExecutionBuilderImpl<T, R> ex = new ExecutionBuilderImpl<T, R>(contextService, policyExecutorProvider, scheduledExecutorService);
         return ex;
     }
 
@@ -163,5 +194,25 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
             }
         });
         return policyExecutorProvider;
+    }
+
+    protected ScheduledExecutorService getScheduledExecutorService() {
+        ScheduledExecutorService scheduledExecutorService = AccessController.doPrivileged(new PrivilegedAction<ScheduledExecutorService>() {
+            @Override
+            public ScheduledExecutorService run() {
+                return scheduledExecRef.getService();
+            }
+        });
+
+        if (scheduledExecutorService == null) {
+            if ("true".equalsIgnoreCase(System.getProperty(FTConstants.JSE_FLAG))) {
+                //this is really intended for unittest only, running outside of Liberty
+                scheduledExecutorService = Executors.newScheduledThreadPool(10);
+            } else {
+                throw new FaultToleranceException(Tr.formatMessage(tc, "internal.error.CWMFT4999E"));
+            }
+        }
+
+        return scheduledExecutorService;
     }
 }

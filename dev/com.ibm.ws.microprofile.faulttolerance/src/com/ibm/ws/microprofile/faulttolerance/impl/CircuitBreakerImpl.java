@@ -22,7 +22,12 @@ import net.jodah.failsafe.CircuitBreaker;
  */
 public class CircuitBreakerImpl extends CircuitBreaker {
 
-    public CircuitBreakerImpl(CircuitBreakerPolicy policy) {
+    private final boolean async;
+    private volatile boolean nested = false;
+
+    public CircuitBreakerImpl(CircuitBreakerPolicy policy, boolean async) {
+        this.async = async;
+
         Duration delay = policy.getDelay();
         Class<? extends Throwable>[] failOn = policy.getFailOn();
         double failureRatio = policy.getFailureRatio();
@@ -39,4 +44,14 @@ public class CircuitBreakerImpl extends CircuitBreaker {
         withSuccessThreshold(successThreshold);
     }
 
+    @Override
+    public void recordSuccess() {
+        if (!async || nested) {
+            super.recordSuccess();
+        }
+    }
+
+    public void setNested() {
+        this.nested = true;
+    }
 }
