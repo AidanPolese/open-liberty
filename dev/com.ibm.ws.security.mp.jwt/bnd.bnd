@@ -48,7 +48,9 @@ Import-Package: \
    com.ibm.ws.security.common.*, \
    com.ibm.websphere.security, \
    com.ibm.websphere.security.jwt, \
+   com.ibm.websphere.ssl, \
    com.ibm.ws.security.jwt.config, \
+   com.ibm.ws.ffdc, \
    javax.net.ssl, \
    javax.security.auth
 
