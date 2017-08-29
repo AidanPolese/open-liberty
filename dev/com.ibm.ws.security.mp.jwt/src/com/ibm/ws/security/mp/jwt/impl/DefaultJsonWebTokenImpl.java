@@ -48,7 +48,6 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken {
         this.type = type;
         this.claimsSet = claimsSet;
         principal = name;
-        fixJoseTypes();
     }
 
     @Override
@@ -243,7 +242,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken {
             JsonObject jsonObject = builder.build();
             claimsSet.setClaim(name, jsonObject);
         } catch (MalformedClaimException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
