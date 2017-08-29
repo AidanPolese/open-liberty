@@ -6,6 +6,6 @@ IBM-API-Package: javax.json; type="spec", \
  javax.json.spi; type="spec"
 IBM-ShortName: jsonp-1.1
 Subsystem-Name: JavaScript Object Notation Processing
--features=com.ibm.websphere.appserver.jsonpImpl-1.1.1; ibm.tolerates:="1.1.0"
+-features=com.ibm.websphere.appserver.jsonpInternal-1.1
 kind=beta
 edition=core

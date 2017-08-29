@@ -9,6 +9,6 @@ IBM-API-Package: javax.json.bind; type="spec", \
  javax.json.bind.config; type="spec", \
  javax.json.bind.serializer; type="spec", \
  javax.json.bind.spi; type="spec"
--features=com.ibm.websphere.appserver.jsonbImpl-1.0.1; ibm.tolerates:="1.0.0"
+-features=com.ibm.websphere.appserver.jsonbInternal-1.0
 kind=beta
 edition=core
