@@ -17,6 +17,7 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.security.wim.ras.WIMMessageKey;
 import com.ibm.ws.security.wim.adapter.urbridge.URBridge;
+import com.ibm.ws.security.wim.util.SchemaConstantsInternal;
 import com.ibm.wsspi.security.wim.SchemaConstants;
 import com.ibm.wsspi.security.wim.exception.WIMApplicationException;
 import com.ibm.wsspi.security.wim.exception.WIMException;
@@ -108,7 +109,7 @@ public abstract class URBridgeEntity {
                     getDisplayName(true);
                 } else if (attrName.equals(rdnProp)) {
                     entity.set(rdnProp, entity.getIdentifier().get(securityNameProp));
-                } else if (attrName.equals(SchemaConstants.PROP_PRINCIPAL_NAME) || attrName.equals("displayBridgePrincipalName")) {
+                } else if (attrName.equals(SchemaConstants.PROP_PRINCIPAL_NAME) || attrName.equals(SchemaConstantsInternal.PROP_DISPLAY_BRIDGE_PRINCIPAL_NAME)) {
                     if ((attrMap.containsKey(LOCAL_DOMAIN_REGISTRY_PROP) && (attrMap.get(LOCAL_DOMAIN_REGISTRY_PROP).toString().equalsIgnoreCase("local")
                                                                              || attrMap.get(LOCAL_DOMAIN_REGISTRY_PROP).toString().equalsIgnoreCase("domain")))
                         || attrMap.containsKey(SECURITY_NAME_RDN_PROP)) {

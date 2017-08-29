@@ -77,7 +77,11 @@ import org.apache.cxf.jaxrs.utils.ThreadLocalProxyCopyOnWriteArraySet;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageUtils;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+
 public final class ServerProviderFactory extends ProviderFactory {
+    private static final TraceComponent tc = Tr.register(ServerProviderFactory.class);
     private static final Set<Class<?>> SERVER_FILTER_INTERCEPTOR_CLASSES =
                     new HashSet<Class<?>>(Arrays.<Class<?>> asList(ContainerRequestFilter.class,
                                                                    ContainerResponseFilter.class,
@@ -204,7 +208,13 @@ public final class ServerProviderFactory extends ProviderFactory {
                                                                           Message m) {
         List<ProviderInfo<ExceptionMapper<?>>> candidates = new LinkedList<ProviderInfo<ExceptionMapper<?>>>();
         for (ProviderInfo<ExceptionMapper<?>> em : exceptionMappers) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "ExceptionMapper:  " + em.getProvider());
+            }
             if (handleMapper(em, exceptionType, m, ExceptionMapper.class, true)) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "Adding candidate mapper:  " + em.getProvider());
+                }
                 candidates.add(em);
             }
         }
@@ -227,11 +237,11 @@ public final class ServerProviderFactory extends ProviderFactory {
                 FeatureContext featureContext = createServerFeatureContext();
                 ((Feature)p).configure(featureContext);
                 Configuration cfg = featureContext.getConfiguration();
-                
+
                 for (Object featureProvider : cfg.getInstances()) {
                     Map<Class<?>, Integer> contracts = cfg.getContracts(featureProvider.getClass());
                     if (contracts != null && !contracts.isEmpty()) {
-                        allProviders.add(new FilterProviderInfo<Object>(featureProvider, 
+                        allProviders.add(new FilterProviderInfo<Object>(featureProvider,
                                                                         getBus(),
                                                                         contracts));
                     } else {
@@ -242,8 +252,8 @@ public final class ServerProviderFactory extends ProviderFactory {
                 allProviders.add(p);
             }
         }
-        
-        
+
+
         List<ProviderInfo<ContainerRequestFilter>> postMatchRequestFilters =
                         new LinkedList<ProviderInfo<ContainerRequestFilter>>();
         List<ProviderInfo<ContainerResponseFilter>> postMatchResponseFilters =
@@ -396,7 +406,7 @@ public final class ServerProviderFactory extends ProviderFactory {
     private void doApplyDynamicFeatures(ClassResourceInfo cri) {
         Set<OperationResourceInfo> oris = cri.getMethodDispatcher().getOperationResourceInfos();
         for (OperationResourceInfo ori : oris) {
-            String nameBinding = DEFAULT_FILTER_NAME_BINDING 
+            String nameBinding = DEFAULT_FILTER_NAME_BINDING
                 + ori.getClassResourceInfo().getServiceClass().getName()
                 + "."
                 + ori.getMethodToInvoke().toString();
@@ -407,7 +417,7 @@ public final class ServerProviderFactory extends ProviderFactory {
                 for (Object provider : cfg.getInstances()) {
                     Map<Class<?>, Integer> contracts = cfg.getContracts(provider.getClass());
                     if (contracts != null && !contracts.isEmpty()) {
-                        registerUserProvider(new FilterProviderInfo<Object>(provider, 
+                        registerUserProvider(new FilterProviderInfo<Object>(provider,
                             getBus(),
                             nameBinding,
                             true,
@@ -424,12 +434,12 @@ public final class ServerProviderFactory extends ProviderFactory {
             }
         }
     }
-    
+
     private FeatureContext createServerFeatureContext() {
         FeatureContextImpl featureContext = new FeatureContextImpl();
         ServerFeatureContextConfigurable configImpl = new ServerFeatureContextConfigurable(featureContext);
         featureContext.setConfigurable(configImpl);
-        
+
         if (application != null) {
             Map<String, Object> appProps = application.getProvider().getProperties();
             for (Map.Entry<String, Object> entry : appProps.entrySet()) {
@@ -442,13 +452,13 @@ public final class ServerProviderFactory extends ProviderFactory {
     protected static boolean isPrematching(Class<?> filterCls) {
         return AnnotationUtils.getClassAnnotation(filterCls, PreMatching.class) != null;
     }
-        
+
     private static class ServerFeatureContextConfigurable extends ConfigurableImpl<FeatureContext> {
         protected ServerFeatureContextConfigurable(FeatureContext mc) {
             super(mc, RuntimeType.SERVER, SERVER_FILTER_INTERCEPTOR_CLASSES.toArray(new Class<?>[]{}));
         }
     }
-    
+
     public static void clearThreadLocalProxies(Message message) {
         clearThreadLocalProxies(ServerProviderFactory.getInstance(message), message);
     }
@@ -624,16 +634,23 @@ public final class ServerProviderFactory extends ProviderFactory {
 
         @Override
         public int compare(ProviderInfo<?> p1, ProviderInfo<?> p2) {
+            // ExceptionMapper classes may be turned to proxy classes due to dependency
+            // injection so use the "OldProvider" if it exists.
             if (makeDefaultWaeLeastSpecific) {
-                if (p1.getProvider() instanceof WebApplicationExceptionMapper
+                if (p1.getOldProvider() instanceof WebApplicationExceptionMapper
                     && !p1.isCustom()) {
                     return 1;
-                } else if (p2.getProvider() instanceof WebApplicationExceptionMapper
+                } else if (p2.getOldProvider() instanceof WebApplicationExceptionMapper
                            && !p2.isCustom()) {
                     return -1;
                 }
             }
-            return super.compare(p1, p2);
+            int result = comp.compare(p1.getOldProvider(), p2.getOldProvider());
+            if (result == 0 && defaultComp) {
+                result = compareCustomStatus(p1, p2);
+            }
+            return result;
+
         }
     }
 

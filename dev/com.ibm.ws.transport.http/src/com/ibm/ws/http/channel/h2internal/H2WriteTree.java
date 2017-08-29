@@ -45,9 +45,6 @@ public class H2WriteTree implements H2WorkQInterface {
     // when told to quit, code will drain the queue, or not, depends on this flag
     boolean drainQ = false;
 
-    // temp for testing
-    int forceTestWithTreeThread = 0;
-
     // since there is one Tree per Connection, the tree will keep track of the connection window update parameters.
     private final int connectionWindowUpdateWriteInitialSize = 65535;
     private int connectionWindowUpdateWriteLimit = 65535;
@@ -116,17 +113,6 @@ public class H2WriteTree implements H2WorkQInterface {
     public WRITE_ACTION writeOrAddToQ(H2WriteQEntry entry) throws FlowControlException {
         synchronized (qSync) {
 
-            // temp
-            // see if this should be forced to use the tree
-            if (this.forceTestWithTreeThread >= 1) {
-                // first time in, so start the tree thread, and set the queue status to ACTIVE:
-                this.forceTestWithTreeThread++;
-                if (forceTestWithTreeThread == 2) {
-                    startQThread();
-                    qStatus = Q_STATUS.ACTIVE;
-                }
-            }
-
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "process write entry with qStatus: " + qStatus + " entry: " + entry.hashCode());
             }
@@ -174,7 +160,7 @@ public class H2WriteTree implements H2WorkQInterface {
         // Determined from above that we are to handle this write on the callers thread
         if (!(entry.getServicedOnQ())) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "process write on caller's thread");
+                Tr.debug(tc, "perform write on caller's thread");
             }
             return writeEntry(entry);
         }
@@ -187,18 +173,20 @@ public class H2WriteTree implements H2WorkQInterface {
     }
 
     @Override
-    public Node addNewNodeToQ(int streamID, int parentStreamID, int priority, boolean exclusive) {
+    public void addNewNodeToQ(int streamID, int parentStreamID, int priority, boolean exclusive) {
 
-        Node node = tree.findNode(streamID);
+        boolean bNode = tree.findNode(streamID);
 
-        if (node != null) {
-            // error, new node should not be in the tree
-            return null;
+        if (bNode) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "could not add a new node, was already in the tree");
+            }
+            return;
         }
 
-        node = new Node(streamID, priority);
+        Node node = new Node(streamID, priority);
         tree.addNode(node, parentStreamID, exclusive);
-        return node;
+        return;
 
     }
 
@@ -216,11 +204,11 @@ public class H2WriteTree implements H2WorkQInterface {
 
         // Find the node/streamID in the tree, if it is not in the tree then add the Node to the tree.
         int streamID = entry.getStreamID();
-        Node node = tree.findNode(streamID);
-        if (node == null) {
+        boolean bNode = tree.findNode(streamID);
+        if (!bNode) {
             // Assume no parents for nodes right now other than root.
             // Assume exclusive not being used right now.
-            node = new Node(streamID, Node.DEFAULT_NODE_PRIORITY);
+            Node node = new Node(streamID, Node.DEFAULT_NODE_PRIORITY);
             tree.addNode(node, Node.ROOT_STREAM_ID, false);
         }
 
@@ -230,6 +218,10 @@ public class H2WriteTree implements H2WorkQInterface {
     }
 
     private WRITE_ACTION writeEntry(H2WriteQEntry e) throws FlowControlException {
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "H2WriteTree entered with stream-id: " + e.getStreamID() + " entry hc:" + e.hashCode());
+        }
 
         if (e.getFrameType() == FrameTypes.DATA) {
             if (connectionWindowUpdateWriteLimit - e.getPayloadLength() < 0) {
@@ -257,13 +249,17 @@ public class H2WriteTree implements H2WorkQInterface {
             writeReqContext.setBuffers(e.getBuffers());
         }
 
-        // The write is always async at the TCP Channel so we are not hanging threads
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "tell device channel to write the data");
+            Tr.debug(tc, "update node for stream-id: " + e.getStreamID());
         }
 
         // attempt to write will count as a write action for this entry
         tree.updateNode(e.getStreamID(), NODE_STATUS.ACTION_NO_CHANGE, WRITE_COUNT_ACTION.INCREMENT, null);
+
+        // The write is always async at the TCP Channel so we are not hanging threads
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "tell device channel to write the data on stream-id: " + e.getStreamID());
+        }
 
         vc = writeReqContext.write(e.getMinToWrite(), muxCallback, e.getForceQueue(), e.getTimeout());
 
@@ -434,12 +430,6 @@ public class H2WriteTree implements H2WorkQInterface {
             try {
                 while (true) {
 
-                    // temp
-                    if ((forceTestWithTreeThread != 0) && (forceTestWithTreeThread != 2)) {
-                        // force tree thread testing is being used, delay 1/2 second for writes to happen
-                        Thread.sleep(200);
-                    }
-
                     H2WriteQEntry e = null;
 
                     synchronized (qSync) {
@@ -474,13 +464,6 @@ public class H2WriteTree implements H2WorkQInterface {
                                 Tr.debug(tc, "Write Q empty so thread is leaving");
                             }
 
-                            // temp
-                            if ((forceTestWithTreeThread != 0) && (forceTestWithTreeThread < 6)) {
-                                // force testing is being used, delay 1/2 second, only leave if queue is still empty
-                                forceTestWithTreeThread++;
-                                continue;
-                            }
-
                             qStatus = Q_STATUS.NOT_IN_USE;
                             return;
                         }
@@ -488,7 +471,7 @@ public class H2WriteTree implements H2WorkQInterface {
 
                     // we have an entry to write, want to do so outside the synchronized block
                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                        Tr.debug(tc, "Write Q processing next entry: " + e.hashCode());
+                        Tr.debug(tc, "Write Q perform write Q thread");
                     }
 
                     writeEntry(e);
@@ -508,11 +491,7 @@ public class H2WriteTree implements H2WorkQInterface {
 
     private H2WriteQEntry findNext() {
         // look in the tree for the next one give the priorities and write counts per stream
-        H2WriteQEntry e = null;
-        Node node = tree.findNextWrite();
-        if (node != null) {
-            e = node.getEntry();
-        }
+        H2WriteQEntry e = tree.findNextWriteEntry();
         return e;
     }
 

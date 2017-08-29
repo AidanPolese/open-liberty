@@ -4,8 +4,8 @@ visibility=public
 singleton=true
 IBM-App-ForceRestart: install, \
  uninstall
-IBM-API-Package: org.eclipse.microprofile.faulttolerance.exceptions;  type="spec", \
-                 org.eclipse.microprofile.faulttolerance;  type="spec"
+IBM-API-Package: org.eclipse.microprofile.faulttolerance.exceptions;  type="stable", \
+                 org.eclipse.microprofile.faulttolerance;  type="stable"
 IBM-ShortName: mpFaultTolerance-1.0
 Subsystem-Name: MicroProfile Fault Tolerance 1.0
 -features=com.ibm.websphere.appserver.org.eclipse.microprofile.faulttolerance-1.0, \

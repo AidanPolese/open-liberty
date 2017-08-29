@@ -12,6 +12,14 @@ defaultTasks 'clean', 'build'
 
 subprojects {
 
+  // Does userhome Gradle startup properties exist?
+  File usrHomeProps = file(System.properties['user.home'] + '/gradle.startup.properties')
+  if (!usrHomeProps.exists()) {
+    if (System.properties['build.properties.path']!=null) {
+      usrHomeProps = file(System.properties['build.properties.path']);
+    }
+  }
+
   plugins.apply 'java'
   plugins.apply 'maven-publish'
 
@@ -22,13 +30,20 @@ subprojects {
   project.version = bnd('Bundle-Version', '1.0' + '.' + branchName + (isRelease ? '' : '-SNAPSHOT'))
 
   repositories {
-	  maven {
-		 credentials {
-			 username props.getProperty("artifactory.download.user")
-			 password props.getProperty("artifactory.download.token")
-		 }
-		 url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
-	  }
+    if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {
+      	  maven {
+      		 credentials {
+      			 username props.getProperty("artifactory.download.user")
+      			 password props.getProperty("artifactory.download.token")
+      		 }
+      		 url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
+      	  }
+    } else {
+      mavenCentral()
+      maven {
+           url ("http://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/wasliberty-open-liberty/")
+          }
+    }
 }
 configurations {
 	binaries

@@ -43,7 +43,7 @@ ext.isAutomatedBuild = parseBoolean(props.getProperty("is.automated.build"))
 ext.isContinuousBuild = parseBoolean(props.getProperty("is.continuous.build"))
 ext.isRelease = parseBoolean(props.getProperty('is.release'))
 ext.isRemotePublishing = parseBoolean(props.getProperty('is.remote.publishing'))
-ext.reallyPublishBintray = parseBoolean(props.getProperty('really.publish.bintray'))
+ext.reallyPublishPublically = parseBoolean(props.getProperty('really.publish.publically'))
 
 // Test results for this run
 ext.testCountTotal = 0
@@ -62,7 +62,8 @@ subprojects {
     plugins.apply 'biz.aQute.bnd'
   }
   /* For Java 9 builds, set the --release compiler flag to keep bootclasspath in sync */
-  compileJava {
+  //compileJava {
+  tasks.withType(JavaCompile) {
     doFirst {
       if(JavaVersion.current().isJava9Compatible()) {
         def release = sourceCompatibility

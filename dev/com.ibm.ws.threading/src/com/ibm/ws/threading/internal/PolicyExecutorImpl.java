@@ -25,7 +25,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
@@ -57,11 +56,11 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     private int maxConcurrency;
 
-    private final ReduceableSemaphore maxConcurrencyConstraint = new ReduceableSemaphore();
+    private final ReduceableSemaphore maxConcurrencyConstraint = new ReduceableSemaphore(0, false);
 
     private int maxQueueSize;
 
-    private final ReduceableSemaphore maxQueueSizeConstraint = new ReduceableSemaphore();
+    private final ReduceableSemaphore maxQueueSizeConstraint = new ReduceableSemaphore(0, false);
 
     private final AtomicLong maxWaitForEnqueue = new AtomicLong();
 
@@ -75,19 +74,6 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     private final ConcurrentLinkedQueue<PolicyTaskFuture<?>> queue = new ConcurrentLinkedQueue<PolicyTaskFuture<?>>();
 
     private final AtomicReference<QueueFullAction> queueFullAction = new AtomicReference<QueueFullAction>();
-
-    @SuppressWarnings("serial") // never serialized
-    static class ReduceableSemaphore extends Semaphore {
-        @Trivial
-        private ReduceableSemaphore() {
-            super(0);
-        }
-
-        @Override // to make visible
-        public void reducePermits(int reduction) {
-            super.reducePermits(reduction);
-        }
-    }
 
     /**
      * Tasks that are running on policy executor threads.
@@ -185,9 +171,13 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     private class PollingTask implements Runnable {
         @Override
         public void run() {
+            boolean canRun;
             PolicyTaskFuture<?> next;
             do {
-                next = queue.poll();
+                // Check the state to reduce the possibility of removing a queued task that we will not be able to run
+                State currentState = state.get();
+                canRun = currentState == State.ACTIVE || currentState == State.ENQUEUE_STOPPING || currentState == State.ENQUEUE_STOPPED;
+                next = canRun ? queue.poll() : null;
                 if (next == null)
                     break;
                 else
@@ -197,25 +187,15 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             if (next != null)
                 runTask(next);
 
-            // Release a maxConcurrency permit and do not reschedule if there are no tasks on the queue
-            if (next == null || queue.isEmpty()) {
-                maxConcurrencyConstraint.release();
+            // Release a permit against maxConcurrency
+            maxConcurrencyConstraint.release();
 
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
-                    Tr.debug(PolicyExecutorImpl.this, tc, "maxConcurrency permits available: " + maxConcurrencyConstraint.availablePermits());
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                Tr.debug(PolicyExecutorImpl.this, tc, "maxConcurrency permits available: " + maxConcurrencyConstraint.availablePermits(), canRun);
 
-                // Check once again to ensure there are still no items left in the queue.
-                // Otherwise a race condition could leave a task unexecuted.
-                if (!queue.isEmpty() && maxConcurrencyConstraint.tryAcquire()) {
-                    enqueueGlobal(PollingTask.this);
-                }
-            } else { // There are still tasks to run, so reschedule the polling task to the global executor if there is an available permit
-                //TODO: Investigate if there is a performance optimization that can be made here
-                //so that we don't need to release and re-acquire a permit each time
-                maxConcurrencyConstraint.release();
-                if (maxConcurrencyConstraint.tryAcquire())
-                    enqueueGlobal(PollingTask.this);
-            }
+            // Avoid reschedule if there are no tasks on the queue or we are in a state that disallows starting tasks
+            if (canRun && !queue.isEmpty() && maxConcurrencyConstraint.tryAcquire())
+                enqueueGlobal(PollingTask.this);
         }
     }
 
@@ -559,7 +539,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     void runTask(PolicyTaskFuture<?> future) {
         final boolean trace = TraceComponent.isAnyTracingEnabled();
         if (trace && tc.isEntryEnabled())
-            Tr.entry(this, tc, "runTask", future, future.task);
+            Tr.entry(this, tc, "runTask", future);
 
         Throwable failure = null;
         try {

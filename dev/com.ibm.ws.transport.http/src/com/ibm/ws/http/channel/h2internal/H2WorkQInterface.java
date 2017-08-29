@@ -11,7 +11,6 @@
 package com.ibm.ws.http.channel.h2internal;
 
 import com.ibm.ws.http.channel.h2internal.exceptions.FlowControlException;
-import com.ibm.ws.http.channel.h2internal.priority.Node;
 import com.ibm.wsspi.tcpchannel.TCPWriteRequestContext;
 
 /**
@@ -47,7 +46,7 @@ public interface H2WorkQInterface {
 
     public WRITE_ACTION writeOrAddToQ(H2WriteQEntry n) throws FlowControlException;
 
-    public Node addNewNodeToQ(int streamID, int parentStreamID, int priority, boolean exclusive);
+    public void addNewNodeToQ(int streamID, int parentStreamID, int priority, boolean exclusive);
 
     public boolean removeNodeFromQ(int streamID);
 

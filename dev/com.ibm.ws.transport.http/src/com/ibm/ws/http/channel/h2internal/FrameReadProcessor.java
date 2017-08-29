@@ -90,20 +90,20 @@ public class FrameReadProcessor {
 
         if (stream != null && stream.isStreamClosed() && muxLink.significantlyPastCloseTime(streamId)) {
             if (tc.isDebugEnabled()) {
-                Tr.debug(tc, "Stream found, but it was closed and significantly past the close time");
+                Tr.debug(tc, "Stream found, but it was closed and significantly past the close time. stream-id: " + streamId);
             }
             muxLink.startProcessingGoAway();
             throw new ProtocolException("Stream significantly past close time");
         }
         if (stream == null && streamId < muxLink.getHighestClientStreamId()) {
             muxLink.startProcessingGoAway();
-            throw new ProtocolException("Cannot initialize a stream with an ID lower than one previously created");
+            throw new ProtocolException("Cannot initialize a stream with an ID lower than one previously created. stream-id: " + streamId);
         }
 
         // Even stream IDs can not originate from the client
         if (stream == null && (streamId != 0) && (streamId % 2 == 0)) {
             muxLink.startProcessingGoAway();
-            throw new ProtocolException("Cannot start a stream from the client with an even numbered ID");
+            throw new ProtocolException("Cannot start a stream from the client with an even numbered ID. stream-id: " + streamId);
         }
 
         if (frameSizeError) {

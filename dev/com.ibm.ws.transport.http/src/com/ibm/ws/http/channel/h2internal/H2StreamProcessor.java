@@ -235,9 +235,10 @@ public class H2StreamProcessor {
 
         while (addFrame != ADDITIONAL_FRAME.NO) {
 
+            // skip only first debug here, since it was done on entry
             if (doDebugWhile) {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "processNextFrame- in while: stream: " + myID + " frame type: " + frame.getFrameType().toString() + " direction: " + direction.toString());
+                    Tr.debug(tc, "processNextFrame- in while: stream-id: " + myID + " frame type: " + frame.getFrameType().toString() + " direction: " + direction.toString());
                 }
             } else {
                 doDebugWhile = true;
@@ -1392,6 +1393,10 @@ public class H2StreamProcessor {
 
             // if nothing left in this buffer, then move to the next buffer in the array
             if (!streamReadReady[streamArrayIndex].hasRemaining()) {
+
+                // done with this buffer, so release it
+                streamReadReady[streamArrayIndex].release();
+
                 streamArrayIndex++;
                 while (true) {
                     if (streamReadReady[streamArrayIndex].hasRemaining()) {
@@ -1470,10 +1475,10 @@ public class H2StreamProcessor {
 
             WsByteBufferPoolManager mgr = HttpDispatcher.getBufferManager();
             WsByteBuffer writeFrame = mgr.allocate(writeFrameBytes.length);
-            writeFrame.put(writeFrameBytes);
-            writeFrame.flip();
 
             try {
+                writeFrame.put(writeFrameBytes);
+                writeFrame.flip();
 
                 // We need to check to see if the write window is large enough to write this data.
                 // If it's not, we'll queue it up and wait for the client to update the window
@@ -1506,12 +1511,17 @@ public class H2StreamProcessor {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(tc, "writeFrameSync caught an IOException: " + e);
                 }
+            } finally {
+                // release buffer used to synchronously write the frame
+                writeFrame.release();
             }
         } else {
-            // throw some exception
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "writeFrameSync internal flow issue - exiting method ");
+            }
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "writeFrameSync exit: stream: " + myID);
+            Tr.debug(tc, "writeFrameSync exit: stream-id: " + myID);
         }
         return true;
     }

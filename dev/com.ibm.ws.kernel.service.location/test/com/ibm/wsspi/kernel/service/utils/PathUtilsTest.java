@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2014 IBM Corporation and others.
+ * Copyright (c) 2010, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -555,13 +555,7 @@ public class PathUtilsTest {
         return found;
     }
 
-    private static boolean isOSCaseSensitive() {
-        boolean b = !PathUtils.isPossiblyCaseInsensitive();
-        System.out.println("Is OSCaseSensitive? " + b);
-        return b;
-    }
-
-    private final static boolean isOSCaseSensitive = isOSCaseSensitive();//!PathUtils.isPossiblyCaseInsensitive();
+    private final static boolean isOsCaseSensitive = PathUtils.isOsCaseSensitive();
 
     private static boolean clearOutputDir() throws IOException {
 
@@ -573,87 +567,115 @@ public class PathUtilsTest {
         return Utils.OUTPUT_DATA.mkdirs();
     }
 
+    /* On file systems that are case sensitive, like Linux, the checkCase method 
+     * always returns true.  This is because it is assumed that prior to calling 
+     * checkCase() you tested to see if the file exists using the "pathToTest". 
+     * So the OS has already verified the case matches by verifying the file exists
+     * using the "pathToTest".  Therefore, it is unnecessary to call checkCase() when 
+     * the file system is case sensitive.
+     * 
+     * On a file system that is NOT case sensitive (eg. Windows & Mac), more testing 
+     * is necessary to ensure the case actually matches the file as it exists on disk, 
+     * because the artifact file system API IS case sensitive regardless of OS.
+     * 
+     * If the file does NOT exist on disk, then checkCase compares the "pathToTest"
+     * to the canonical path of the java.io.File object.
+     * 
+     * The paths should match without regard to trailing slashes.
+     */
     @Test
     public void testCheckCase() throws Exception {
         assertTrue("Unable to clear initial output dir", clearOutputDir());
-        // On case insensitive file systems like Windows and Mac, the checkCase method
-        // should pretty much always return true -- even if the passed-in string doesn't
-        // match the passed-in file.
-        // On case sensitive file systems (Linux, Unix, etc.), we would expect more
-        // thorough testing.  The string must match the file's path (obviously with
-        // case sensitivity) with or without trailing slashes.
-
-        // case where file does not contain trailing slash
-        File original = new File(Utils.OUTPUT_DATA, "WEB-INF/classes");
+        
+        // Create file.  Note the case used when creating the file.
+        String actualFileNameOnDisk = "WEB-INF/classes";
+        File original = new File(Utils.OUTPUT_DATA, actualFileNameOnDisk); // No trailing slash
         File test = original;
         assertTrue("either couldn't create or didn't already exist",
                    test.isDirectory() || test.mkdirs());
 
-        assertTrue("checkCase should have returned true", PathUtils.checkCase(test, "WEB-INF/classes"));
-        assertTrue("checkCase should have returned true", PathUtils.checkCase(test, "WEB-INF/classes/"));
+        // Correct case, without and with the trailing slash
+        assertTrue("checkCase should have returned true", PathUtils.checkCase(test, actualFileNameOnDisk));
+        assertTrue("checkCase should have returned true", PathUtils.checkCase(test, actualFileNameOnDisk + "/"));
 
-        // case where file does end with  "/"
+        // Repeat, but now java.io.file ends with  "/"
         test = new File(Utils.OUTPUT_DATA, "WEB-INF/classes/");
+        assertTrue("checkCase should have returned true", PathUtils.checkCase(test, actualFileNameOnDisk));
+        assertTrue("checkCase should have returned true", PathUtils.checkCase(test, actualFileNameOnDisk + "/"));
 
-        assertTrue("checkCase should have returned true", PathUtils.checkCase(test, "WEB-INF/classes"));
-        assertTrue("checkCase should have returned true", PathUtils.checkCase(test, "WEB-INF/classes/"));
+        // Case where passed in file doesn't match case on the disk.  
+        // The checkCase() method cares about case on the file system when the file exists.
+        String javaIoFileName = "WeB-INF/Classes";
+        test = new File(Utils.OUTPUT_DATA, javaIoFileName);
 
-        // case where passed in file doesn't match case on the OS
-        File newTest = new File(Utils.OUTPUT_DATA, "WeB-INF/Classes");
-        assertTrue("could not clear output dir", clearOutputDir());
-        test = newTest;
-
-        if (isOSCaseSensitive) {
-            // in a case sensitive OS, file won't exist
-            assertFalse("checkCase should have returned false on case sensitive system",
-                        PathUtils.checkCase(test, "WEB-INF/classes"));
-            assertFalse("checkCase should have returned false on case sensitive system",
-                        PathUtils.checkCase(test, "WEB-INF/classes/"));
-            assertTrue("checkCase should have returned true on case sensitive system",
-                       PathUtils.checkCase(test, "WeB-INF/Classes"));
-            assertTrue("checkCase should have returned true on case sensitive system",
-                       PathUtils.checkCase(test, "WeB-INF/Classes/"));
+        if (isOsCaseSensitive) { 
+            assertTrue("checkCase should ALWAYS return true on case sensitive system",
+                    PathUtils.checkCase(test, actualFileNameOnDisk));
+            assertTrue("checkCase should ALWAYS return true on case sensitive system",
+                    PathUtils.checkCase(test, actualFileNameOnDisk + "/"));
+            assertTrue("checkCase should ALWAYS return true on case sensitive system",
+                    PathUtils.checkCase(test, javaIoFileName));
+            assertTrue("checkCase should ALWAYS return true on case sensitive system",
+                    PathUtils.checkCase(test, javaIoFileName + "/"));
         } else {
             assertTrue("checkCase should have returned true on case insensitive system",
-                       PathUtils.checkCase(test, "WEB-INF/classes"));
+                    PathUtils.checkCase(test, actualFileNameOnDisk));
             assertTrue("checkCase should have returned true on case insensitive system",
-                       PathUtils.checkCase(test, "WEB-INF/classes/"));
+                    PathUtils.checkCase(test, actualFileNameOnDisk + "/"));        	
+            assertFalse("checkCase should have returned false on case insensitive system since pathToTest doesn't match actual file name on disk.",
+                    PathUtils.checkCase(test, javaIoFileName));
+            assertFalse("checkCase should have returned false on case insensitive system since pathToTest doesn't match actual file name on disk.",
+                    PathUtils.checkCase(test, javaIoFileName + "/"));
         }
 
+        // ** CLEAN UP 
         Utils.recursiveClean(original.getParentFile());
 
         // case where passed in file doesn't exist at all (matching or not in case)
-        test = new File(Utils.OUTPUT_DATA, "WeB-INF/Classes/"); // create a ref to the file, but don't actually create the file itself
+        String nonExistingJavaFileName = "WeB-INF/Classes";
+        test = new File(Utils.OUTPUT_DATA, nonExistingJavaFileName); // create a ref to the file, but don't actually create the file itself
 
-        if (isOSCaseSensitive) {
+        if ( !isOsCaseSensitive ) {
             assertFalse("checkCase should have returned false", PathUtils.checkCase(test, "WEB-INF/classes"));
             assertFalse("checkCase should have returned false", PathUtils.checkCase(test, "WEB-INF/classes/"));
             assertFalse("checkCase should have returned false", PathUtils.checkCase(test, "wEB-INF/claSses/"));
         }
+        
         // note that checkCase will return true even if the file does not exist if the file ref matches the passed-in path
-        assertTrue("checkCase should have returned true", PathUtils.checkCase(test, "WeB-INF/Classes"));
-        assertTrue("checkCase should have returned true", PathUtils.checkCase(test, "WeB-INF/Classes/"));
+        assertTrue("checkCase should have returned true", PathUtils.checkCase(test, nonExistingJavaFileName));
+        assertTrue("checkCase should have returned true", PathUtils.checkCase(test, nonExistingJavaFileName + "/"));
 
-        // case where passed-in path does not match passed-in file
+        // case where passed-in pathToTest does not match passed-in file at all
         test = new File(Utils.OUTPUT_DATA, "WEB-INF/classes");
-        if (isOSCaseSensitive) {
+        
+        if ( isOsCaseSensitive ) {
+            // On case sensitive file systems, checkCase(...) simply returns true.  It assumes that you already checked
+            // for the file's existence using the pathToTest, and therefore the file name and case must be correct.
+            assertTrue("checkCase ALWAYS returns true on case sensitive file system, even if no match", 
+                       PathUtils.checkCase(test, "someOtherPath"));
+            assertTrue("checkCase ALWAYS returns true on case sensitive file system, even if not match", 
+                       PathUtils.checkCase(test, "someOtherPath/"));
+        } else {
+            // Note: Every "assertFalse", regarding case, must be inside an "if (!isOsCaseSensitive)", because 
+            // for case sensitive systems, checkCase(...) always returns true without checking anything.
             assertFalse("checkCase should have return false - no match", PathUtils.checkCase(test, "someOtherPath"));
             assertFalse("checkCase should have return false - no match", PathUtils.checkCase(test, "someOtherPath/"));
-        } else {
-            assertTrue("checkCase should have return true - no match, case insensitive file system",
-                       PathUtils.checkCase(test, "someOtherPath"));
-
         }
     }
 
     @Test
     public void testCheckCaseSymbolic() throws Exception {
+
+        // CLEAN UP 
         assertTrue("could not clear initial output dir", clearOutputDir());
         String linkCommand = "/bin/ln";
 
         // only try this test if the unix ln command exists and can be executed
         File ln = new File(linkCommand);
         if (ln.exists() && ln.canExecute()) {
+
+            // Create the paths on the file system if they do not already exist.
+            // Note the actual case of the files created which will be used for the tests that follow.
             File canonicalFile = new File(Utils.OUTPUT_DATA, "checkCase/path/to/symlink");
             File webinfFile = new File(Utils.OUTPUT_DATA, "checkCase/WEB-INF");
             assertTrue("either couldn't create or didn't already exist: " + canonicalFile.getAbsolutePath(),
@@ -661,9 +683,9 @@ public class PathUtilsTest {
             assertTrue("either couldn't create or didn't already exist: " + canonicalFile.getAbsolutePath(),
                        webinfFile.isDirectory() || webinfFile.mkdirs());
 
-            // WEB-INF/classes -> path (logical path = WEB-INF/classes/to/symlink)
-            String hardPath = canonicalFile.getParentFile().getParentFile().getAbsolutePath();
-            String symPath = webinfFile.getAbsolutePath() + "/classes";
+            // Create symbolic link .../checkCase/WEB-INF/classes ----> .../checkCase/path
+            String hardPath = canonicalFile.getParentFile().getParentFile().getAbsolutePath(); // .../checkCase/path
+            String symPath = webinfFile.getAbsolutePath() + "/classes";                        // .../checkCase/WEB-INF/classes
             String[] execParameters = new String[] { linkCommand, "-s", hardPath, symPath };
             Process process = Runtime.getRuntime().exec(execParameters);
             process.waitFor();
@@ -674,8 +696,9 @@ public class PathUtilsTest {
 
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "/WEB-INF/classes"));
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "WEB-INF/classes"));
-            assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "WEB-INF/classes/"));
-            if (isOSCaseSensitive) {
+            assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "WEB-INF/classes/"));            
+            if ( !isOsCaseSensitive ) {
+                // The OS doesn't care if the case matches, but we do.
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WeB-INF/classes"));
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WeB-INF/clAsses/"));
             }
@@ -686,8 +709,9 @@ public class PathUtilsTest {
 
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "/WEB-INF/classes"));
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "WEB-INF/classes"));
-            assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "WEB-INF/classes/"));
-            if (isOSCaseSensitive) {
+            assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "WEB-INF/classes/"));            
+            if ( !isOsCaseSensitive ) {
+                // The OS doesn't care if the case matches, but we do.
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WeB-INF/classes"));
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WeB-INF/clAsses/"));
             }
@@ -697,8 +721,9 @@ public class PathUtilsTest {
             assertTrue("file should exist: " + symlinkFile.getAbsolutePath(), symlinkFile.exists());
 
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "WEB-INF/classes/to/symlink"));
-            assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "WEB-INF/classes/to/symlink/"));
-            if (isOSCaseSensitive) {
+            assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "WEB-INF/classes/to/symlink/"));            
+            if ( !isOsCaseSensitive ) {
+                // The OS doesn't care if the case matches, but we do.
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WeB-INF/classes/to/symlink"));
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WEB-INF/Classes/to/symlink"));
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WEB-INF/classes/tO/symlink"));
@@ -706,71 +731,85 @@ public class PathUtilsTest {
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WeB-INF/Classes/to/symlink"));
             }
 
-            // symlink in the front of pathToTest
-            symlinkFile = new File(Utils.OUTPUT_DATA, "checkCase/WEB-INF/classes/to/symlink");
-            assertTrue("file should exist: " + symlinkFile.getAbsolutePath(), symlinkFile.exists());
-
+            // symlink first directory in pathToTest
+            assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "/classes/to/symlink"));
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "classes/to/symlink"));
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "classes/to/symlink/"));
-            if (isOSCaseSensitive) {
+            if ( !isOsCaseSensitive ) {
+                // The OS doesn't care if the case matches, but we do.
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "Classes/to/symlink"));
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "classes/tO/symlink"));
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "classes/to/sYmlink"));
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "ClAsses/to/syMlink"));
             }
 
-            // symlink occurs before pathToTest
+            // symlink occurs after file path
             symlinkFile = new File(Utils.OUTPUT_DATA, "checkCase/WEB-INF");
             assertTrue("file should exist: " + symlinkFile.getAbsolutePath(), symlinkFile.exists());
 
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "checkCase/WEB-INF"));
-            if (isOSCaseSensitive)
+            assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "/WEB-INF/"));
+            if ( !isOsCaseSensitive ) {
+                // Every "assertFalse", regarding case, must be inside an "if (!isOsCaseSensitive)", because 
+                // for case sensitive systems, checkCase(...) always returns true without checking anything.
+                assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "/web-inf/"));
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "somethingelse/WEB-INF"));
+            }
 
-            // symlink occurs after pathToTest
+            // symlink occurs before pathToTest
             symlinkFile = new File(Utils.OUTPUT_DATA, "checkCase/WEB-INF/classes/to/symlink");
             assertTrue("file should exist: " + symlinkFile.getAbsolutePath(), symlinkFile.exists());
 
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "to/symlink"));
-            if (isOSCaseSensitive)
+            if ( !isOsCaseSensitive ) {
+                assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "TO/symlink"));
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "somethingelse/symlink"));
+            }
 
             // test just one directory level in pathToTest
             symlinkFile = new File(Utils.OUTPUT_DATA, "checkCase/WEB-INF/classes");
             assertTrue("file should exist: " + symlinkFile.getAbsolutePath(), symlinkFile.exists());
 
+            assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "/classes"));
+            assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "/classes/"));
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "classes/"));
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "classes"));
-            if (isOSCaseSensitive)
+            if ( !isOsCaseSensitive ) {
+                // The OS doesn't care if the case matches, but we do
                 assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "Classes"));
-
-            // pass in file that doesn't match in case to real file
-            symlinkFile = new File(Utils.OUTPUT_DATA, "checkCase/WeB-INF/Classes/to/symlink");
-            boolean isOSCaseSensitive = !canonicalFile.getCanonicalFile().equals(new File(canonicalFile.getAbsolutePath().toUpperCase()).getCanonicalFile());
-            boolean symlinkFileExists = symlinkFile.exists();
-
-            if (isOSCaseSensitive) {
-                assertFalse("file shouldn't exist: " + symlinkFile.getAbsolutePath(), symlinkFileExists);
-                assertTrue("checkCase should have returned true on case sensitive system",
-                           PathUtils.checkCase(symlinkFile, "WeB-INF/Classes/to/symlink"));
-                assertTrue("checkCase should have returned true on case sensitive system",
-                           PathUtils.checkCase(symlinkFile, "WeB-INF/Classes/to/symlink/"));
-                assertFalse("checkCase should have returned false on case sensitive system",
-                            PathUtils.checkCase(symlinkFile, "WEB-INF/classes/to/symlink"));
-            } else {
-                assertTrue("file should exist: " + symlinkFile.getAbsolutePath(), symlinkFileExists);
-                assertTrue("checkCase should have returned true on case insensitive system",
-                           PathUtils.checkCase(symlinkFile, "WEB-INF/classes/to/symlink"));
             }
+            
+            // Pass in java.io.file whose case doesn't match case of file on file system.
+            // ** An OS that is NOT case sensitive will allow you
+            //    to create a java.io.File object using the wrong case, but checkCase uses the actual
+            //    case of the file on the file system if the file exists.  It doesn't care
+            //    about the case of the java.io.File unless the file does NOT exist.  The behavior
+            //    comes from getCanonicalFile which returns the file using the actual case on disk
+            //    unless the file does not exist, in which case it uses the case of the java.io.File object.
+            //
+            //symlinkFile = new File(Utils.OUTPUT_DATA, "checkCase/WeB-INF/Classes/to/symlink");
+            //boolean symlinkFileExists = symlinkFile.getCanonicalFile().exists();
+            
+            //if (isOsCaseSensitive) {
+            //    assertFalse("file shouldn't exist: " + symlinkFile.getAbsolutePath(), symlinkFileExists);
+            //    assertTrue("checkCase should always return true on case sensitive system",
+            //               PathUtils.checkCase(symlinkFile, "WeB-INF/Classes/to/symlink"));
+            //} else {
+            //	// The OS doesn't care if the case matches, but we do
+            //    assertTrue("file should exist: " + symlinkFile.getAbsolutePath(), symlinkFileExists);
+            //    assertFalse("checkCase should have returned false even on case insensitive system",
+            //               PathUtils.checkCase(symlinkFile, "WEB-INF/classes/to/symlink"));  // case matches file system but not case of the java.io.file, this will return true!               
+            //}
 
-            // WEB-INF/classes -> path/to/symlink/wait -> really/another/place
-            // (logical path = WEB-INF/classes/to/symlink/wait/another/jump)
+            // .../checkCase/WEB-INF/classes --> .../checkCase/path,  
+            // .../checkCase/path/to/symlink/wait --> .../checkCase/really
+            // logical path example: .../checkCase/WEB-INF/classes/to/symlink/wait/another/jump
             File canonicalFile2 = new File(Utils.OUTPUT_DATA, "checkCase/really/another/jump");
             assertTrue("either couldn't create or didn't already exist: " + canonicalFile2.getAbsolutePath(),
                        canonicalFile2.isDirectory() || canonicalFile2.mkdirs());
 
-            hardPath = canonicalFile2.getParentFile().getParentFile().getAbsolutePath();
-            symPath = canonicalFile.getAbsolutePath() + "/wait";
+            hardPath = canonicalFile2.getParentFile().getParentFile().getAbsolutePath(); // .../checkCase/really
+            symPath = canonicalFile.getAbsolutePath() + "/wait";                         // .../checkCase/path/to/symlink/wait
             execParameters = new String[] { linkCommand, "-s", hardPath, symPath };
             process = Runtime.getRuntime().exec(execParameters);
             process.waitFor();
@@ -781,10 +820,12 @@ public class PathUtilsTest {
 
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "wait/another/jump"));
             assertTrue("checkCase should have returned true", PathUtils.checkCase(symlinkFile, "WEB-INF/classes/to/symlink/wait/another/jump"));
-            if (isOSCaseSensitive) {
-                assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WEB-INF/cLasses/to/symlink/wait/another/jump"));
-                assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WEB-INF/classes/to/symlink/Wait/another/jump"));
-                assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WEB-iNF/cLasses/to/symlink/wait/another/jump"));
+            if ( !isOsCaseSensitive ) {
+                // The OS doesn't care if the case matches, but we do
+                assertTrue("checkCase should have returned true",   PathUtils.checkCase(symlinkFile, "WEB-INF/classes/to/symlink/wait/another/jump"));
+                assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WEB-INF/CLASSES/to/symlink/wait/another/jump"));
+                assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "WEB-INF/classes/to/symlink/WAIT/another/jump"));
+                assertFalse("checkCase should have returned false", PathUtils.checkCase(symlinkFile, "web-inf/cLasses/to/symlink/wait/another/jump"));
             }
 
             // clean up all the files/links that were created
