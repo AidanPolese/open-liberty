@@ -156,7 +156,7 @@ Include-Resource: \
   lib/${cxf-tools-common}=${repo;org.apache.cxf.cxf-tools-common;3.2.0.SNAPSHOT;EXACT}, \
   lib/${cxf-tools-wadlto-jaxrs}=${repo;org.apache.cxf.cxf-tools-wadlto-jaxrs;3.2.0.SNAPSHOT;EXACT}, \
   lib/${cxf-rt-rs-service-description}=${repo;org.apache.cxf.cxf-rt-rs-service-description;3.2.0.SNAPSHOT;EXACT}, \
-  lib/${cxf-rt-rs-sse}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-rs-sse}, \
+  lib/${cxf-rt-rs-sse}=${repo;org.apache.cxf.cxf-rt-rs-sse;3.2.0.SNAPSHOT;EXACT}, \
   lib/jackson-core-asl-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-core-asl;1.6.2}, \
   lib/jackson-jaxrs-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-jaxrs;1.6.2}, \
   lib/jackson-mapper-asl-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-mapper-asl;1.6.2}, \
@@ -179,7 +179,7 @@ instrument.classesExcludes: com/ibm/ws/jaxrs20/internal/resources/*.class
 	org.apache.cxf.cxf-rt-transports-http;strategy=exact;version=3.2.0.SNAPSHOT, \
 	org.apache.cxf.cxf-tools-common;strategy=exact;version=3.2.0.SNAPSHOT, \
 	org.apache.cxf.cxf-tools-wadlto-jaxrs;strategy=exact;version=3.2.0.SNAPSHOT, \
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-rs-sse};version=file,\
+	org.apache.cxf.cxf-rt-rs-sse;strategy=exact;version=3.2.0.SNAPSHOT,\
 	com.ibm.ws.org.codehaus.jackson:jackson-core-asl;version=1.6.2, \
 	com.ibm.ws.org.codehaus.jackson:jackson-jaxrs;version=1.6.2, \
 	com.ibm.ws.org.codehaus.jackson:jackson-mapper-asl;version=1.6.2, \

@@ -19,6 +19,7 @@ com.ibm.ws.org.apache.cxf:cxf-rt-rs-service-description:3.2.0.20170815-120746-50
 com.ibm.ws.org.apache.cxf:cxf-rt-transports-http:3.2.0.20170815-120848-505
 com.ibm.ws.org.apache.cxf:cxf-tools-common:3.2.0.20170814-175354-499
 com.ibm.ws.org.apache.cxf:cxf-tools-wadlto-jaxrs:3.2.0.20170814-175516-496
+com.ibm.ws.org.apache.cxf:cxf-rt-rs-sse:3.2.0-20170822-090219-358
 com.ibm.ws.javax.j2ee:jcdi:1.0
 com.ibm.ws.javax.j2ee:connector:1.6
 com.ibm.ws.javax.j2ee:el:2.2
