@@ -22,7 +22,20 @@ publishing {
   }
 }
 
+task cleanFat() {
+  doLast {
+    delete autoFvtDir
+  }
+}
+
+task cleanBeforeRun() {
+  doLast {
+    delete autoFvtDir + "/output/", autoFvtDir + "/results"
+  }
+}
+
 task addRequiredLibraries {
+    shouldRunAfter cleanFat
     def props = new Properties()
     file("../generated.properties").withInputStream { props.load(it) }
     repositories {
@@ -34,71 +47,194 @@ task addRequiredLibraries {
             url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
         }
     }
-	configurations {
-		libs
-	}
+    configurations {
+        libs
+    }
+}
+
+task autoFVT {
+  dependsOn jar
+  dependsOn copyMavenLibs
+  enabled new File("${projectDir}/fat").exists()
+
+  // For now we are just forcing the autoFVT create every time, this will be fixed
+  // TODO: Be smart about when to recreate the autoFVT.zip
+  doLast {
+    // Copy the compiled classes
+    copy {
+      from "${projectDir}/bin/"
+      into "${autoFvtDir}/build/classes"
+    }
+
+    // Copy the buildtask jars
+    copy {
+      from "${rootDir}/cnf/mavenlibs"
+      into "${autoFvtDir}/build/lib"
+      include 'asm-all-5.2.jar'
+      include 'org.apache.aries.util-*.jar'
+      include 'osgi.core*.jar'
+      include 'jackson*.jar'
+    }
+
+    // Copy the ws-junit jar
+    copy {
+      from "${rootDir}/build.sharedResources/lib/ws-junit/ws-junit.jar"
+      into "${autoFvtDir}/build/lib"
+    }
+      
+    // Copy the infra jar
+    copy {
+      from "${rootDir}/cnf/mavenlibs/infra.buildtasks-core-4.0.0.jar"
+      into "${autoFvtDir}/build/lib"
+    }
+
+    // Copy the bundle jar
+    copy {
+      from "${projectDir}/generated/"
+      include '*.jar'
+      into "${autoFvtDir}/build/lib"
+    }
+
+    // Copy the DDL files
+    // TODO: Consider if this can be removed, it looks like there's only a single project for this rule
+    copy {
+      from "${projectDir}/ddl"
+      include '**/*'
+      into "${autoFvtDir}/ddl"
+    }
+
+    // Copy the autoFVT-defaults
+    copy {
+      from "${rootDir}/fattest.simplicity/autoFVT-defaults"
+      include '**/*'
+      into "${autoFvtDir}"
+    }
+
+    // Copy the component test libs
+    // TODO: It looks like the componenttest.app.jar got combined into something else, so this is now way more source in the jar than was there before. This might need changing then.
+    copy {
+      from "${rootDir}/com.ibm.ws.componenttest/generated"
+      include 'com.ibm.ws.componenttest.jar'
+      rename 'com.ibm.ws.componenttest.jar', 'componenttest.app.jar'
+      into "${autoFvtDir}/lib"
+    }
+
+    // Copy the fattest libs
+    copy {
+      from "${rootDir}/fattest.simplicity/generated/"
+      include 'fattest*.*'
+      into "${autoFvtDir}/lib"
+    }
+
+    // TODO: This is to compensate for the fact that the ant build of fattest.simplicity produced this jar but the gradle build doesn't
+    copy {
+      from "${rootDir}/com.ibm.ws.common.encoder/generated"
+      include 'com.ibm.ws.common.encoder.jar'
+      rename 'com.ibm.ws.common.encoder.jar', 'fattest.encoder.jar'
+      into "${autoFvtDir}/lib"
+    }
+
+    // Copy the published files
+    copy {
+      from "${projectDir}/publish/files", "${autoFvtDir}/publish/files"
+      include '**/*'
+      into "${autoFvtDir}/lib/LibertyFATTestFiles"
+    }
+
+    // Copy the publish directory (minus the 'files' directory)
+    copy {
+      from "${projectDir}/publish"
+      include '**/*'
+      exclude 'files'
+      into "${autoFvtDir}/publish"
+    }
+
+    // Copy the logging libraries over for use while running FATs
+    copy {
+      from "${rootDir}/com.ibm.ws.logging.core/generated"
+      include 'com.ibm.ws.logging.core.jar'
+      into "${autoFvtDir}/lib"
+    }
+      
+    // Copy all non-java app resourecs, such as *.html or *.jsp
+    copy {
+      includeEmptyDirs = false
+      from "${projectDir}"
+      into "${autoFvtDir}/"
+      include 'test-applications/**', 'test-bundles/**', 'test-resourceadapters/**'
+      exclude '**/*.java'
+    }
+  }
+}
+
+task zipAutoFVT(type: Zip) {
+  dependsOn autoFVT
+  from "${projectDir}/generated/autoFVT"
+  into 'autoFVT'
+  archiveName 'autoFVT.zip'
+}
+
+task zipProjectFVT(type: Zip) {
+  dependsOn zipAutoFVT
+  baseName project.name
+  into project.name + '/build/lib', {from 'generated/distributions/autoFVT.zip'}
+  into project.name, {from 'build-test.xml'}
 }
 
 task copyFeatureBundles {
-	shouldRunAfter assemble
-	enabled file("${projectDir}/test-bundles").exists()
-	doLast {
-		file("${buildDir}/buildfiles").eachLine { String line ->
-		    if(!line.contains(project.name + ".jar")) {
-		    	copy {
-					from line
-					into "${buildDir}/autoFVT/publish/files/bundles"
-				}
-		    }
-		}
-	}
-}
-
-task cleanFat() {
-	delete autoFvtDir
-}
-
-task cleanBeforeRun() {
-    doLast {
-       delete autoFvtDir + "/output/", autoFvtDir + "/results"
+  shouldRunAfter assemble
+  enabled file("${projectDir}/test-bundles").exists()
+  doLast {
+    file("${buildDir}/buildfiles").eachLine { String line ->
+      if(!line.contains(project.name + ".jar")) {
+        copy {
+          from line
+          into "${buildDir}/autoFVT/publish/files/bundles"
+        }
+      }
     }
+  }
 }
 
 task runfat(type: Exec) {
-    dependsOn cleanBeforeRun
-    shouldRunAfter releaseNeeded
-    shouldRunAfter cleanBeforeRun
-    environment System.getProperties()
-    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-        executable "cmd"
-        args '/c', 'ant', "-f", autoFvtDir + "/TestBuild.xml"
-    } else {
-        executable "ant"
-        args "-f", autoFvtDir + "/TestBuild.xml"
-    }
-    doLast {
-    	// We can have this here because this task only ever runs locally, and thus is OK to unconditionally fail
-    	// the build. If we ever run FATs in remote builds, we should also gate this on a property like 
-    	// 'is.running.remote.build' so we don't fail the entire build whenever a testcase fails
-        if(file(autoFvtDir + "/output/fail.log").exists())
-            throw new GradleException("The FAT bucket has test failures! See the logs and results for details.")
-    }
-}
-
-task buildandrun {
-    dependsOn build
-    dependsOn runfat
-}
-
-jar {
-	dependsOn addRequiredLibraries
+  dependsOn cleanBeforeRun
+  shouldRunAfter build
+  shouldRunAfter cleanBeforeRun
+  environment System.getProperties()
+  if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+    executable "cmd"
+    args '/c', 'ant', "-f", autoFvtDir + "/TestBuild.xml"
+  } else {
+    executable "ant"
+    args "-f", autoFvtDir + "/TestBuild.xml"
+  }
+  doLast {
+    // We can have this here because this task only ever runs locally, and thus is OK to unconditionally fail
+    // the build. If we ever run FATs in remote builds, we should also gate this on a property like 
+    // 'is.running.remote.build' so we don't fail the entire build whenever a testcase fails
+    if(file(autoFvtDir + "/output/fail.log").exists())
+      throw new GradleException("The FAT bucket has test failures! See the logs and results for details.")
+  }
 }
 
 compileJava {
-	dependsOn cleanFat
+  dependsOn cleanFat
+}
+
+jar {
+  dependsOn addRequiredLibraries
+}
+
+assemble {
+  dependsOn zipProjectFVT
 }
 
 autoFVT {
-	dependsOn addRequiredLibraries
-	dependsOn copyFeatureBundles
+  dependsOn addRequiredLibraries
+  dependsOn copyFeatureBundles
+}
+
+task buildandrun {
+  dependsOn build
+  dependsOn runfat
 }
