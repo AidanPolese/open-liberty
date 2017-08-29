@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.ibm.ws.jsonb.fat;
 
+import static com.ibm.ws.jsonb.fat.FATSuite.PROVIDER_JOHNZON_JSONP;
 import static com.ibm.ws.jsonb.fat.FATSuite.PROVIDER_YASSON;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -62,7 +63,7 @@ public class JsonUserFeatureTest extends FATServletClient {
         String found;
         server.resetLogMarks();
         assertNotNull(found = server.waitForStringInLogUsingMark("TEST3: JsonProvider obtained from declarative services"));
-        assertTrue(found, found.contains("org.apache.johnzon.core.JsonProviderImpl"));
+        assertTrue(found, found.contains(PROVIDER_JOHNZON_JSONP));
         // TODO Enable once JSONP-1.1 spec regression (referenced earlier) is fixed
         //assertNotNull(found = server.waitForStringInLogUsingMark("TEST4"));
         //assertTrue(found, found.contains("\"weight\""));
@@ -84,7 +85,7 @@ public class JsonUserFeatureTest extends FATServletClient {
         assertNotNull(found = server.waitForStringInLogUsingMark("TEST1: JsonbProvider obtained from declarative services"));
         assertTrue(found, found.contains(PROVIDER_YASSON));
         assertNotNull(found = server.waitForStringInLogUsingMark("TEST1.1: JsonProvider obtained from declarative services"));
-        assertTrue(found, found.contains("org.apache.johnzon.core.JsonProviderImpl"));
+        assertTrue(found, found.contains(PROVIDER_JOHNZON_JSONP));
         assertNotNull(found = server.waitForStringInLogUsingMark("TEST2"));
         assertTrue(found, found.contains("success"));
         assertTrue(found, found.contains("\"Rochester\""));
