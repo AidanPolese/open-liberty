@@ -10,6 +10,10 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance_fat.cdi;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.assertThat;
+
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -25,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans.AsyncBean;
 import com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans.AsyncBean2;
 import com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans.AsyncBean3;
+import com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans.AsyncCallableBean;
 import com.ibm.ws.microprofile.faulttolerance_fat.util.Connection;
 
 import componenttest.app.FATServlet;
@@ -57,6 +62,9 @@ public class AsyncServlet extends FATServlet {
 
     @Inject
     AsyncBean2 bean2;
+
+    @Inject
+    AsyncCallableBean callableBean;
 
     public void testAsync(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException, InterruptedException, ExecutionException, TimeoutException {
@@ -230,5 +238,18 @@ public class AsyncServlet extends FATServlet {
         if (!AsyncBean3.CONNECT_A_DATA.equals(data)) {
             throw new AssertionError("Bad data: " + data);
         }
+    }
+
+    public void testAsyncCallable(HttpServletRequest request, HttpServletResponse response) throws InterruptedException, ExecutionException, Exception {
+        // Async methods with a generic return type (e.g. Callable.call()) used to cause problems
+        long start = System.currentTimeMillis();
+        Future<String> future = callableBean.call();
+        long end = System.currentTimeMillis();
+        long duration = end - start;
+        assertThat("Call duration", duration, lessThan(FUTURE_THRESHOLD));
+
+        Thread.sleep(EXECUTION_THRESHOLD);
+        assertThat("Future is done after waiting", future.isDone(), is(true));
+        assertThat("Call result", future.get(), is("Done"));
     }
 }
