@@ -11,6 +11,7 @@
 package com.ibm.ws.microprofile.faulttolerance.cdi;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Future;
@@ -22,15 +23,20 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
+import javax.enterprise.inject.spi.WithAnnotations;
 
 import org.eclipse.microprofile.faulttolerance.Asynchronous;
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 import org.osgi.service.component.annotations.Component;
 
-import com.ibm.ws.cdi.extension.WebSphereCDIExtension;
-
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.cdi.extension.WebSphereCDIExtension;
 
 @Component(service = WebSphereCDIExtension.class, immediate = true)
 public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtension {
@@ -45,12 +51,20 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
         beforeBeanDiscovery.addAnnotatedType(interceptorType);
     }
 
-    public <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> processAnnotatedType, BeanManager beanManager) {
+    public <T> void processAnnotatedType(@Observes @WithAnnotations({ Asynchronous.class, Fallback.class, Timeout.class, CircuitBreaker.class, Retry.class,
+                                                                      Bulkhead.class }) ProcessAnnotatedType<T> processAnnotatedType,
+                                         BeanManager beanManager) {
+
+        //validate Asynchronous
+        //validate fallback
+
         Set<AnnotatedMethod<?>> interceptedMethods = new HashSet<AnnotatedMethod<?>>();
         boolean interceptedClass = false;
         boolean classLevelAsync = false;
 
         AnnotatedType<T> annotatedType = processAnnotatedType.getAnnotatedType();
+        //get the target class
+        Class<?> clazz = processAnnotatedType.getClass();
         //look at the class level annotations
         Set<Annotation> annotations = annotatedType.getAnnotations();
         for (Annotation annotation : annotations) {
@@ -59,16 +73,28 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
                 interceptedClass = true;
                 if (annotation.annotationType() == Asynchronous.class) {
                     classLevelAsync = true;
+                } else if (annotation.annotationType() == Retry.class) {
+                    PolicyValidationUtils.validateRetry(clazz, null, (Retry) annotation);
+                } else if (annotation.annotationType() == Timeout.class) {
+                    PolicyValidationUtils.validateTimeout(clazz, null, (Timeout) annotation);
+                } else if (annotation.annotationType() == CircuitBreaker.class) {
+                    PolicyValidationUtils.validateCircuitBreaker(clazz, null, (CircuitBreaker) annotation);
+                } else if (annotation.annotationType() == Bulkhead.class) {
+                    PolicyValidationUtils.validateBulkhead(clazz, null, (Bulkhead) annotation);
                 }
+
             }
+
         }
 
         //now loop through the methods
         Set<AnnotatedMethod<? super T>> methods = annotatedType.getMethods();
         for (AnnotatedMethod<?> method : methods) {
-            Class<?> returnType = method.getJavaMember().getReturnType();
+            Method originalMethod = method.getJavaMember();
+            Class<?> originalMethodReturnType = originalMethod.getReturnType();
+
             if (classLevelAsync) {
-                if (!(Future.class.isAssignableFrom(returnType))) {
+                if (!(Future.class.isAssignableFrom(originalMethodReturnType))) {
                     throw new FaultToleranceException(Tr.formatMessage(tc, "asynchronous.class.not.returning.future.CWMFT5000E", method));
                 }
             }
@@ -76,9 +102,20 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
             for (Annotation annotation : annotations) {
                 if (FTAnnotationUtils.ANNOTATIONS.contains(annotation.annotationType())) {
                     if (annotation.annotationType() == Asynchronous.class) {
-                        if (!(Future.class.isAssignableFrom(returnType))) {
+                        if (!(Future.class.isAssignableFrom(originalMethodReturnType))) {
                             throw new FaultToleranceException(Tr.formatMessage(tc, "asynchronous.method.not.returning.future.CWMFT5001E", method));
                         }
+                    } else if (annotation.annotationType() == Fallback.class) {
+                        PolicyValidationUtils.validateFallback(originalMethod, annotation);
+                    } else if (annotation.annotationType() == Retry.class) {
+                        PolicyValidationUtils.validateRetry(clazz, originalMethod, (Retry) annotation);
+                    } else if (annotation.annotationType() == Timeout.class) {
+                        PolicyValidationUtils.validateTimeout(clazz, originalMethod, (Timeout) annotation);
+
+                    } else if (annotation.annotationType() == CircuitBreaker.class) {
+                        PolicyValidationUtils.validateCircuitBreaker(clazz, originalMethod, (CircuitBreaker) annotation);
+                    } else if (annotation.annotationType() == Bulkhead.class) {
+                        PolicyValidationUtils.validateBulkhead(clazz, originalMethod, (Bulkhead) annotation);
                     }
                     interceptedMethods.add(method);
                 }
@@ -86,7 +123,9 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
         }
 
         //if there were any FT annotations on the class or methods then add the interceptor binding to the methods
-        if (interceptedClass || !interceptedMethods.isEmpty()) {
+        if (interceptedClass || !interceptedMethods.isEmpty())
+
+        {
             addFaultToleranceAnnotation(beanManager, processAnnotatedType, interceptedClass, interceptedMethods);
         }
     }
