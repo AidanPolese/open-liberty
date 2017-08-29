@@ -391,7 +391,7 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
             }
             String issuer = null;
             try {
-                jwtPrincipal = TAIJwtUtils.createJwtPrincipal(username, claimToPrincipalMapping.getMappedGroups(), jwtToken);
+                jwtPrincipal = taiJwtUtils.createJwtPrincipal(username, claimToPrincipalMapping.getMappedGroups(), jwtToken);
                 issuer = (String) JsonUtils.claimFromJsonObject(decodedPayload, "iss");
             } catch (JoseException e) {
                 // Tr.error(tc, "", new Object[] {});
@@ -462,10 +462,10 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
     Subject createSubjectFromProperties(MicroProfileJwtConfig clientConfig, Hashtable<String, Object> customProperties, @Sensitive JwtToken jwt, JsonWebToken jwtPrincipal) throws MpJwtProcessingException {
 
         Subject subject = new Subject();
-
-        if (jwt != null) {
-            subject.getPrivateCredentials().add(jwt);
-        }
+        //
+        //        if (jwt != null) {
+        //            subject.getPrivateCredentials().add(jwt);
+        //        }
         subject.getPrivateCredentials().add(jwtPrincipal); //?
         subject.getPrivateCredentials().add(customProperties);
 
