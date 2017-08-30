@@ -124,7 +124,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken {
      */
     //@Override
     public String toString(boolean showAll) {
-        String toString = "DefaultJsonWebTokenImpl{" +
+        String toString = "DefaultJWTCallerPrincipal{" +
                 "id='" + getTokenID() + '\'' +
                 ", name='" + getName() + '\'' +
                 ", expiration=" + getExpirationTime() +
@@ -135,7 +135,6 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken {
                 ", subject='" + getSubject() + '\'' +
                 ", type='" + type + '\'' +
                 ", issuedFor='" + getClaim("azp") + '\'' +
-                ", raw_token='" + getRawToken() + '\'' +
                 //                ", authTime=" + getClaim("auth_time") +
                 //                ", givenName='" + getClaim("given_name") + '\'' +
                 //                ", familyName='" + getClaim("family_name") + '\'' +
