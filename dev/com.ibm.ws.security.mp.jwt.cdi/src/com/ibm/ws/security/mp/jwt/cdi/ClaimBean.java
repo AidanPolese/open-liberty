@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.Instance;
@@ -48,6 +49,7 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
     private Set<Annotation> qualifiers;
     private String name;
     private String id;
+    private Class<? extends Annotation> scope;
 
     public ClaimBean(BeanManager beanManager, Class<T> beanClass, Claim claim) {
         this(beanManager, beanClass, beanClass, claim);
@@ -66,9 +68,27 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
         this.qualifiers.add(claim);
         this.name = this.getClass().getName() + "[" + claim + "," + beanType + "]";
         this.id = beanManager.hashCode() + "#" + this.name;
+        setScope(beanType);
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(tc, "<init>", this);
+        }
+    }
+
+    /**
+     * @param beanType
+     */
+    private void setScope(Type beanType) {
+        Class<?> beanTypeClass = null;
+        if (beanType instanceof ParameterizedType) {
+            beanTypeClass = (Class<?>) ((ParameterizedType) beanType).getRawType();
+        } else if (beanType instanceof Class) {
+            beanTypeClass = (Class<?>) beanType;
+        }
+        if (ClaimValue.class.isAssignableFrom(beanTypeClass)) {
+            scope = RequestScoped.class;
+        } else {
+            scope = Dependent.class;
         }
     }
 
@@ -89,7 +109,7 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
         } else if (beanType instanceof Class) {
             instance = createClaimValueForClassType();
         } else {
-            throw new IllegalArgumentException(Tr.formatMessage(tc, "unable.to.determine.injection.type.CWMCG5001E", beanType));
+            throw new IllegalArgumentException(Tr.formatMessage(tc, "MPJWT_CDI_INVALID_INJECTION_TYPE", beanType));
         }
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
@@ -206,6 +226,15 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
                     return value;
                 }
             };
+        } else {
+            // Provider path
+            JsonWebToken jsonWebToken = null;
+            Instance<JsonWebToken> jsonWebTokenInstance = CDI.current().select(JsonWebToken.class);
+
+            if (jsonWebTokenInstance != null && jsonWebTokenInstance.isAmbiguous() == false && jsonWebTokenInstance.isUnsatisfied() == false) {
+                jsonWebToken = jsonWebTokenInstance.get();
+                instance = jsonWebToken.getClaim(claimName);
+            }
         }
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
@@ -278,9 +307,9 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
         }
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.exit(tc, "getScope", RequestScoped.class);
+            Tr.exit(tc, "getScope", scope);
         }
-        return RequestScoped.class;
+        return scope; //RequestScoped.class; TODO:Switch to dependent when type is for Provider<T>
     }
 
     /** {@inheritDoc} */

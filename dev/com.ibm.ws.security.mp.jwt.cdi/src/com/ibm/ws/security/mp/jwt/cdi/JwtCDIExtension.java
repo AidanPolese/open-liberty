@@ -66,7 +66,7 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
                     configException = validateInjectionPoint(injectionPoint, type, type, classLoader, false, claim);
                 }
                 if (configException != null) {
-                    Tr.error(tc, "unable.to.resolve.injection.point.CWMCG5003E", injectionPoint, configException); // TODO: Update message key
+                    Tr.error(tc, "MPJWT_CDI_CANNOT_RESOLVE_INJECTION_POINT", injectionPoint, configException);
                 }
             }
         }
@@ -181,7 +181,7 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
             configException = e;
         }
 //        } else {
-//            configException = new ClaimTypeException(Tr.formatMessage(tc, "unable.to.determine.injection.type.CWMCG5001E", injectionType));
+//            configException = new ClaimTypeException(Tr.formatMessage(tc, "MPJWT_CDI_INVALID_INJECTION_TYPE", injectionType));
 //        }
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
@@ -204,7 +204,7 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
             ParameterizedType pType = (ParameterizedType) type;
             addClaimBean(abd, beanManager, pType, claim);
         } else {
-            throw new ClaimTypeException(Tr.formatMessage(tc, "unable.to.determine.injection.type.CWMCG5001E", type));
+            throw new ClaimTypeException(Tr.formatMessage(tc, "MPJWT_CDI_INVALID_INJECTION_TYPE", type));
         }
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
@@ -222,7 +222,7 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
             Class<?> clazz = (Class<?>) rawInjectionType;
             addClaimBean(abd, beanManager, type, clazz, claim);
         } else {
-            throw new ClaimTypeException(Tr.formatMessage(tc, "unable.to.determine.injection.type.CWMCG5001E", type));
+            throw new ClaimTypeException(Tr.formatMessage(tc, "MPJWT_CDI_INVALID_INJECTION_TYPE", type));
         }
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
