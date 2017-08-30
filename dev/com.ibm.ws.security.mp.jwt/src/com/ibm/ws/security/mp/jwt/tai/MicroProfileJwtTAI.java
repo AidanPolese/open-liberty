@@ -48,7 +48,6 @@ import com.ibm.ws.security.mp.jwt.impl.utils.Cache;
 import com.ibm.ws.security.mp.jwt.impl.utils.JwtPrincipalMapping;
 import com.ibm.ws.security.mp.jwt.impl.utils.MicroProfileJwtTaiRequest;
 import com.ibm.ws.webcontainer.security.ReferrerURLCookieHandler;
-import com.ibm.ws.webcontainer.security.UnprotectedResourceService;
 import com.ibm.ws.webcontainer.security.WebProviderAuthenticatorHelper;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
@@ -57,7 +56,7 @@ import com.ibm.wsspi.security.tai.TAIResult;
 import com.ibm.wsspi.security.tai.TrustAssociationInterceptor;
 import com.ibm.wsspi.security.token.AttributeNameConstants;
 
-public class MicroProfileJwtTAI implements TrustAssociationInterceptor, UnprotectedResourceService {
+public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
 
     public static final TraceComponent tc = Tr.register(MicroProfileJwtTAI.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
 
@@ -481,19 +480,5 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
 
     TAIResult sendToErrorPage(HttpServletResponse response, TAIResult taiResult) {
         return ErrorHandlerImpl.getInstance().handleErrorResponse(response, taiResult);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean isAuthenticationRequired(HttpServletRequest request) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean logout(HttpServletRequest request, HttpServletResponse response, String userName) {
-        // TODO Auto-generated method stub
-        return false;
     }
 }
