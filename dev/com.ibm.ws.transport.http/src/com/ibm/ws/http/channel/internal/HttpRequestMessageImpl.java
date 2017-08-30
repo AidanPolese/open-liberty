@@ -14,10 +14,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -34,6 +30,7 @@ import com.ibm.ws.genericbnf.internal.GenericUtils;
 import com.ibm.ws.http.channel.h2internal.Constants;
 import com.ibm.ws.http.channel.h2internal.H2HttpInboundLinkWrap;
 import com.ibm.ws.http.channel.h2internal.H2StreamProcessor;
+import com.ibm.ws.http.channel.h2internal.frames.FrameHeaders;
 import com.ibm.ws.http.channel.h2internal.frames.FramePushPromise;
 import com.ibm.ws.http.channel.h2internal.hpack.H2HeaderField;
 import com.ibm.ws.http.channel.h2internal.hpack.H2HeaderTable;
@@ -1892,21 +1889,13 @@ public class HttpRequestMessageImpl extends HttpBaseMessageImpl implements HttpR
     public void pushNewRequest(Http2PushBuilder pushBuilder) throws Http2PushException, com.ibm.ws.http.channel.h2internal.exceptions.ProtocolException {
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): pushNewRequest() started " + this);
+            Tr.entry(tc, "HTTPRequestMessageImpl.pushNewRequest(): pushNewRequest() started " + this);
         }
 
         // Find the existing HTTP 2 connection and stream so we can use them to send the
         // push_promise frame to the client.
         HttpInboundServiceContext isc = (HttpInboundServiceContext) getServiceContext();
         HttpInboundLink link = ((HttpInboundServiceContextImpl) isc).getLink();
-
-        /*
-         * 1. Send a push promise frame to the client
-         * - Error check to make sure this is an HTTP2 connection and we can find the muxlink
-         * - Don't send push-promise frame to the client if it has already said it doesn't want them
-         * - Create the push-promise frame with the encoded request headers
-         * - Send it
-         */
 
         if (!(link instanceof H2HttpInboundLinkWrap)) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -1918,7 +1907,7 @@ public class HttpRequestMessageImpl extends HttpBaseMessageImpl implements HttpR
         if ((((H2HttpInboundLinkWrap) link).muxLink == null) ||
             (((H2HttpInboundLinkWrap) link).muxLink.getConnectionSettings() == null)) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: muxlink is null");
+                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): The H2HttpInboundLinkWrap muxlink is null.");
             }
             throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The H2HttpInboundLinkWrap muxlink is null.");
         }
@@ -1926,12 +1915,89 @@ public class HttpRequestMessageImpl extends HttpBaseMessageImpl implements HttpR
         /*
          * TODO Change the getEnabledPush to a boolean
          */
+
         // Don't send the push-promise frame if the client doesn't want it
         if (((H2HttpInboundLinkWrap) link).muxLink.getConnectionSettings().getEnablePush() != 1) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): The client does not want to receive push-promise frames");
+                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): The client does not accept push_promise frames.");
             }
-            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The client does not accept push_promise.");
+            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The client does not accept push_promise frames.");
+        }
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Start creating the header block fragment");
+        }
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Start building the HTTP 1.1 request for WebContainer");
+        }
+
+        H2HeaderTable h2WriteTable = ((H2HttpInboundLinkWrap) link).muxLink.getWriteTable();
+
+        // Get the request headers from the pushBuilder.
+        // Create two headers blocks, one for the push-promise frame, one for the headers frame
+        ByteArrayOutputStream ppStream = new ByteArrayOutputStream();
+        ByteArrayOutputStream hdrStream = new ByteArrayOutputStream();
+
+        try {
+            if (pushBuilder.getQueryString() == null) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: query string is null ");
+                }
+                // TODO Clean up newly created SP
+                throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The query string is invalid.");
+            } else {
+                ppStream.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.METHOD, getQueryString(), LiteralIndexType.NOINDEXING));
+                hdrStream.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.METHOD, getQueryString(), LiteralIndexType.NOINDEXING));
+            }
+            if (pushBuilder.getURI() == null) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: uri is null ");
+                }
+                // TODO Clean up newly created SP
+                throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The uri is invalid.");
+            } else {
+                ppStream.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.PATH, getQueryString(), LiteralIndexType.NOINDEXING));
+                hdrStream.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.PATH, getQueryString(), LiteralIndexType.NOINDEXING));
+            }
+
+            ppStream.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.SCHEME, "http", LiteralIndexType.NOINDEXING));
+            hdrStream.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.SCHEME, "http", LiteralIndexType.NOINDEXING));
+            HttpOutboundServiceContext osc = (HttpOutboundServiceContext) getServiceContext();
+            ppStream.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.AUTHORITY, osc.getTargetAddress().getHostname(), LiteralIndexType.NOINDEXING));
+            hdrStream.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.AUTHORITY, osc.getTargetAddress().getHostname(), LiteralIndexType.NOINDEXING));
+
+            // Add headers
+            Set<HeaderField> headerSet = pushBuilder.getHeaders();
+            Iterator<HeaderField> hsit = headerSet.iterator();
+            while (hsit.hasNext()) {
+                ppStream.write(H2Headers.encodeHeader(h2WriteTable, ((HeaderField) hsit).getName(), ((HeaderField) hsit).asString(), LiteralIndexType.NOINDEXING));
+                hdrStream.write(H2Headers.encodeHeader(h2WriteTable, ((HeaderField) hsit).getName(), ((HeaderField) hsit).asString(), LiteralIndexType.NOINDEXING));
+            }
+
+            // Add cookies
+            Set<HttpCookie> cookieSet = pushBuilder.getCookies();
+            Iterator<HttpCookie> ckit = cookieSet.iterator();
+            while (ckit.hasNext()) {
+                ppStream.write(H2Headers.encodeHeader(h2WriteTable, "COOKIE: ", ((HttpCookie) ckit).getName() + "=" + ((HttpCookie) ckit).toString(),
+                                                      LiteralIndexType.NOINDEXING));
+                hdrStream.write(H2Headers.encodeHeader(h2WriteTable, "COOKIE: ", ((HttpCookie) ckit).getName() + "=" + ((HttpCookie) ckit).toString(),
+                                                       LiteralIndexType.NOINDEXING));
+            }
+
+            // Add optional session id
+            if (pushBuilder.getSessionId() != null) {
+                ppStream.write(H2Headers.encodeHeader(h2WriteTable, "COOKIE: ", "JSESSIONID=" + pushBuilder.getSessionId(), LiteralIndexType.NOINDEXING));
+                hdrStream.write(H2Headers.encodeHeader(h2WriteTable, "COOKIE: ", "JSESSIONID=" + pushBuilder.getSessionId(), LiteralIndexType.NOINDEXING));
+            }
+        }
+        // Either IOException from write, or CompressionException from encodeHeader
+        catch (Exception e) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: There was a problem creating the push-promise header block client");
+            }
+            // TODO Clean up the newly created SP
+            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  Cannot encode the HTTP2 headers.");
         }
 
         // Create the new even numbered promised stream, the state is idle to start
@@ -1948,135 +2014,16 @@ public class HttpRequestMessageImpl extends HttpBaseMessageImpl implements HttpR
         // Get the existing stream id
         int streamId = ((H2HttpInboundLinkWrap) link).getStreamId();
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Start creating the push-promise header block fragment");
-        }
-
-        // Get the request headers from the pushBuilder, encode them, add them to the headerBlockFragment
-        H2HeaderTable h2WriteTable = ((H2HttpInboundLinkWrap) link).muxLink.getWriteTable();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        Set<HeaderField> headerSet = pushBuilder.getHeaders();
-        Iterator<HeaderField> hsit = headerSet.iterator();
-        try {
-            while (hsit.hasNext()) {
-                outputStream.write(H2Headers.encodeHeader(h2WriteTable, ((HeaderField) hsit).getName(), ((HeaderField) hsit).asString(), LiteralIndexType.NOINDEXING));
-            }
-        }
-        // Either IOException from write, or CompressionException from encodeHeader
-        catch (Exception e) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: There was a problem creating the push-promise header block client");
-            }
-            // TODO Clean up the newly created SP
-            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  Cannot encode the HTTP2 headers.");
-        }
-
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Creating the push-promise frame");
-        }
         // Create the push_promise frame to send to the client
-        FramePushPromise pushPromiseFrame = new FramePushPromise(streamId, outputStream.toByteArray(), promisedStreamId, 0, true, false, false);
+        FramePushPromise pushPromiseFrame = new FramePushPromise(streamId, ppStream.toByteArray(), promisedStreamId, 0, true, false, false);
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Sending the push-promise frame to the client on streamId " + streamId);
-        }
-
-        // Wait to send the PP frame until we know that the request for WC can be created
+        // Create a headers frame to send to wc, as if it had come in from the client
+        FrameHeaders headersFrame = new FrameHeaders(streamId, hdrStream.toByteArray());
 
         /*
-         * 2. Send an HTTP 1.1 request to WebContainer
-         * - Use the new promised streamProcessor created above for the reserved PP stream
-         * - Create an HTTP 1.1 request as a string
-         * - Using the new promised streamProcessor, send it up to the WC
-         * - H2 code will intercept the response from WC and package it into frames and send it to the client
-         */
-
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Start building the HTTP 1.1 request for WebContainer");
-        }
-
-        // Create the HTTP 1.1 request
-        HttpURLConnection request = null;
-
-        // Get the URI from the pushBuilder, add it to the request
-        String uri = pushBuilder.getURI();
-        URL requestUrl = null;
-        try {
-            requestUrl = new URL(uri);
-        } catch (MalformedURLException e) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: The URI is malformed " + uri);
-            }
-            // TODO Clean up newly created SP
-            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The URI is malformed.");
-        }
-
-        try {
-            request = (HttpURLConnection) requestUrl.openConnection();
-        } catch (IOException e) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: openConnection failed " + uri);
-            }
-            // TODO Clean up newly created SP
-            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  HttpURLConnection.openConnection failed.");
-        }
-
-        if (pushBuilder.getQueryString() == null) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: query string is null " + uri);
-            }
-            // TODO Clean up newly created SP
-            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The query string is invalid.");
-        }
-
-        // Set the request method
-        try {
-            request.setRequestMethod(pushBuilder.getQueryString());
-        } catch (ProtocolException e) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Error: Invalid request method ");
-            }
-            // TODO Clean up newly created SP
-            throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  Invalid request method.");
-        }
-
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Adding the request headers to the request");
-        }
-
-        // Add request headers
-        Set<HeaderField> reqHeaderSet = pushBuilder.getHeaders();
-        Iterator<HeaderField> rhsit = reqHeaderSet.iterator();
-        while (rhsit.hasNext()) {
-            request.setRequestProperty(((HeaderField) rhsit).getName(), ((HeaderField) rhsit).asString());
-        }
-
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Adding the cookies to the request");
-        }
-
-        // Add cookies
-        Set<HttpCookie> cookieSet = pushBuilder.getCookies();
-        Iterator<HttpCookie> ckit = cookieSet.iterator();
-        while (ckit.hasNext()) {
-            request.setRequestProperty(((HttpCookie) ckit).getName(), ((HttpCookie) ckit).toString());
-        }
-
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Adding the sessionid to the request");
-        }
-
-        // Add session id
-        if (pushBuilder.getSessionId() != null) {
-            HttpCookie sessionId = new HttpCookie("JSESSIONID", pushBuilder.getSessionId());
-            request.setRequestProperty(sessionId.getName(), sessionId.getValue());
-        }
-
-        /*
-         * If we'v gotten here, we have had no errors creating the PP frame and creating a new request
-         * for WC.
-         * - send the PP frame
-         * - send the request to WC
+         * If we'v gotten here, we have had no errors creating the PP frame a headers frame
+         * - send the PP frame to the client
+         * - send the headers frame to wc
          */
 
         // Get the existing stream processor and send the push_promise frame on it
@@ -2094,11 +2041,11 @@ public class HttpRequestMessageImpl extends HttpBaseMessageImpl implements HttpR
             Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Push promise frame sent on stream " + streamId);
         }
 
-        // Change this HTTPURLRequest into a string and send it to WC
-        promisedSP.sendRequestToWc(request.toString());
+        // Send the headers frame to wc
+        promisedSP.sendRequestToWc(headersFrame);
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Sent pushed request to webcontainer " + request.toString());
+            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Sent pushed request to webcontainer");
         }
     }
 
