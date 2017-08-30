@@ -1,5 +1,6 @@
 
 import org.apache.tools.ant.filters.ReplaceTokens
+import groovy.json.*
 
 // Set the generated zip version to the buildID
 // I am not sure why the tasks.gradle file where this task is
@@ -54,11 +55,183 @@ clean.doLast {
 }
 
 publishing {
-  publications {
-    maven(MavenPublication) {
-      artifactId 'openliberty'
-      version project.version
-      artifact parent.zipOpenLiberty
+    publications {
+        maven(MavenPublication) {
+            artifactId 'openliberty'
+            version project.version
+            artifact parent.zipOpenLiberty
+        }
     }
-  }
 }
+
+task createJSONForPublicArtifacts {
+    dependsOn parent.zipOpenLiberty
+    enabled isAutomatedBuild
+
+    doLast {
+        def props = new Properties()
+        file("${rootDir}/generated.properties").withInputStream { props.load(it) }
+
+        // Create JSON descriptor
+        File json = new File("${rootDir}/info.json")
+        json.createNewFile()
+
+        String testsPassed = "0"
+        if (props.getProperty("tests.total.successful") != null) {
+            testsPassed = props.getProperty("tests.total.successful")
+        }
+        String testsTotal = "0"
+        if (props.getProperty("tests.total.count") != null) {
+            testsTotal = props.getProperty("tests.total.count")
+        }
+        String junitPath = props.getProperty("junit.report.zip")
+        String logPath = props.getProperty("bintray.gradle.log")
+        String testResultName = new File(junitPath).getName()
+        String logName = new File(logPath).getName()
+
+        json.text = JsonOutput.prettyPrint(JsonOutput.toJson([test_passed: "${testsPassed}",
+                                           total_tests: "${testsTotal}",
+                                           tests_log: "${testResultName}",
+                                           build_log: "${logName}",
+                                           driver_location: "${parent.zipOpenLiberty.archiveName}"]))
+
+        props.setProperty('zipopenliberty.archivename', parent.zipOpenLiberty.archivePath.toString())
+        props.setProperty('bintray.json', json.toString())
+
+        // Store props to file
+        File propsFile = new File('generated.properties')
+        props.store(propsFile.newWriter(), null)
+    }
+}
+
+task publishPublicArtifactsOnDhe {
+    dependsOn createJSONForPublicArtifacts
+    enabled isAutomatedBuild && reallyPublishPublically
+
+    doLast {
+        configurations {
+            sshAntTask
+        }
+
+        dependencies {
+            sshAntTask 'org.apache.ant:ant-jsch:1.7.1', 'jsch:jsch:0.1.54'
+        }
+
+        def props = new Properties()
+        file("${rootDir}/generated.properties").withInputStream { props.load(it) }
+
+        // Re-arrange buildLabel, ex: 201708101600 to 2017-08-10_1600
+        def (yr, mo, d, t) = [bnd.buildLabel.substring(0,4), bnd.buildLabel.substring(4,6), bnd.buildLabel.substring(6,8), bnd.buildLabel.substring(8)]
+        String version = "${yr}-${mo}-${d}_${t}"
+        String packageName = (isRelease ? props.getProperty("bintray.package.release") : props.getProperty("bintray.package.nightly"))
+        String userAtHost = props.getProperty("gsaid") + "@" + props.getProperty("dhe.server")
+        String dir = "/www/stage/export/pub/software/openliberty/runtime"
+        String dest = userAtHost + ":" + dir
+
+        ant.taskdef(name: 'scp', classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
+                classpath: configurations.sshAntTask.asPath)
+
+        def artifactList = [props.getProperty("bintray.json"),
+                            props.getProperty("bintray.gradle.log"),
+                            props.getProperty("junit.report.zip")]
+
+        if (isContinuousBuild) {
+            artifactList.add(props.getProperty("zipopenliberty.archivename"))
+        }
+
+        mkdir("${buildDir}/${version}")
+        artifactList.each { filePath ->
+            copy {
+                from filePath
+                into "${buildDir}/${version}"
+            }
+        }
+
+        // Upload build artifacts
+        ant.scp(todir: "${dest}/${packageName}/",
+                password: props.getProperty("gsapw"),
+                trust: "yes",
+                sftp: "true",
+                failOnError: "true",
+                verbose: "true") {
+            fileset(dir: "${buildDir}", includes: "${version}/*")
+        }
+        delete "${buildDir}/${version}"
+        delete "${buildDir}/info.json"
+
+        // Update build listing json with the newly uploaded build
+        ant.scp(file: "${dest}/${packageName}/info.json",
+                todir: "${buildDir}",
+                password: props.getProperty("gsapw"),
+                trust: "yes",
+                sftp: "true",
+                failOnError: "false",
+                verbose: "true")
+
+        ant.touch(file: "${buildDir}/info.json")
+        File json = new File("${buildDir}/info.json")
+        def object = [:]
+        if (json.getText() != null && json.getText() != "") {
+            object = new JsonSlurper().parseText(json.getText())
+        }
+
+        List versionsList = object['versions']
+        if (versionsList != null) {
+            versionsList.add("${version}")
+        } else {
+            versionsList = ["${version}"]
+        }
+        object['versions'] = versionsList
+        json.text = JsonOutput.toJson(object)
+
+        ant.scp(file: "${buildDir}/info.json",
+                todir: "${dest}/${packageName}/info.json",
+                password: props.getProperty("gsapw"),
+                trust: "yes",
+                sftp: "true",
+                failOnError: "true",
+                verbose: "true")
+    }
+}
+publish.dependsOn publishPublicArtifactsOnDhe
+
+task publishPublicArtifacts {
+    dependsOn createJSONForPublicArtifacts
+    enabled isAutomatedBuild && reallyPublishPublically
+
+    doLast {
+        def props = new Properties()
+        file("${rootDir}/generated.properties").withInputStream { props.load(it) }
+
+        String bintrayUser = props.getProperty("bintray.user")
+        String bintrayApikey = props.getProperty("bintray.apikey")
+
+        // Re-arrange buildLabel, ex: 201708101600 to 2017-08-10_1600
+        def (yr, mo, d, t) = [bnd.buildLabel.substring(0,4), bnd.buildLabel.substring(4,6), bnd.buildLabel.substring(6,8), bnd.buildLabel.substring(8)]
+        String version = "${yr}-${mo}-${d}_${t}"
+        String packageName = (isRelease ? props.getProperty("bintray.package.release") : props.getProperty("bintray.package.nightly"))
+        String bintrayREST = "https://api.bintray.com/content/" + props.getProperty("bintray.organization") + "/" + props.getProperty("bintray.repository") + "/${packageName}/${version}/"
+
+        // Upload files using REST API https://api.bintray.com/content/:subject/:repo/:package/:version/${packageName}/${version}
+        exec {
+            commandLine "curl", "-T", props.getProperty("bintray.json"), "-u${bintrayUser}:${bintrayApikey}", bintrayREST + "${packageName}/${version}/"
+        }
+        exec {
+            commandLine "curl", "-T", props.getProperty("bintray.gradle.log"), "-u${bintrayUser}:${bintrayApikey}", bintrayREST + "${packageName}/${version}/"
+        }
+        exec {
+            commandLine "curl", "-T", props.getProperty("junit.report.zip"), "-u${bintrayUser}:${bintrayApikey}", bintrayREST + "${packageName}/${version}/"
+        }
+        if (isContinuousBuild) {
+            exec {
+                commandLine "curl", "-T", props.getProperty("zipopenliberty.archivename"), "-u${bintrayUser}:${bintrayApikey}", bintrayREST + "${packageName}/${version}/"
+            }
+        }
+
+        // Publish using REST API https://api.bintray.com/content/:subject/:repo/:package/:version/publish
+        exec {
+            commandLine "curl", "-X", "POST", "-u${bintrayUser}:${bintrayApikey}", bintrayREST + "publish"
+        }
+    }
+}
+//publish.dependsOn publishPublicArtifacts

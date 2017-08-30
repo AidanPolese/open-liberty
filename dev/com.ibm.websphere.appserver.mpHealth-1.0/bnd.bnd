@@ -15,6 +15,7 @@
 publish.feature.resources: **
 
 -dependson: \
+    com.ibm.ws.require.java8;version=latest, \
     com.ibm.websphere.org.eclipse.microprofile.health.1.0;version=latest, \
-	com.ibm.ws.microprofile.health;version=latest
+    com.ibm.ws.microprofile.health;version=latest
 	

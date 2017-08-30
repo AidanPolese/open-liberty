@@ -10,8 +10,6 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.h2internal.frames;
 
-import java.util.Arrays;
-
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.FrameReadProcessor;
@@ -134,12 +132,16 @@ public class FramePing extends Frame {
         if (!super.equals(framePingToCompare))
             return false;
 
-        if (!Arrays.equals(getPayload(), framePingToCompare.getPayload())) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "Payload = opaque data. this.getPayload() = " + this.getPayload()
-                             + " framePingToCompare.getPayload() = " + framePingToCompare.getPayload());
+        byte[] baThis = this.getPayload();
+        byte[] baToCompare = framePingToCompare.getPayload();
+
+        for (int i = 0; i < baThis.length; i++) {
+            if (baThis[i] != baToCompare[i]) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "equals: payload first difference is at byte: " + i);
+                }
+                return false;
             }
-            return false;
         }
 
         return true;
@@ -151,7 +153,11 @@ public class FramePing extends Frame {
 
         frameToString.append(super.toString());
 
-        frameToString.append("OpaqueData: " + this.getPayload() + "\n");
+        if (this.getPayload() == null) {
+            frameToString.append("OpaqueData length: 0 - null \n");
+        } else {
+            frameToString.append("OpaqueData length: " + this.getPayload().length + "\n");
+        }
 
         return frameToString.toString();
 

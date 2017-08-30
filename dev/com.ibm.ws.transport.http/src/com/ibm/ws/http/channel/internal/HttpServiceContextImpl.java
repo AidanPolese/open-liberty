@@ -10,14 +10,18 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.internal;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
 import java.util.zip.DataFormatException;
 
+import com.ibm.websphere.channelfw.osgi.CHFWBundle;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
@@ -25,8 +29,17 @@ import com.ibm.ws.ffdc.FFDCSelfIntrospectable;
 import com.ibm.ws.genericbnf.internal.GenericConstants;
 import com.ibm.ws.genericbnf.internal.GenericUtils;
 import com.ibm.ws.http.channel.h2internal.H2HttpInboundLinkWrap;
+import com.ibm.ws.http.channel.h2internal.H2StreamProcessor;
 import com.ibm.ws.http.channel.h2internal.H2VirtualConnectionImpl;
+import com.ibm.ws.http.channel.h2internal.exceptions.ProtocolException;
 import com.ibm.ws.http.channel.h2internal.frames.Frame;
+import com.ibm.ws.http.channel.h2internal.frames.FrameHeaders;
+import com.ibm.ws.http.channel.h2internal.frames.FramePushPromise;
+import com.ibm.ws.http.channel.h2internal.hpack.H2HeaderTable;
+import com.ibm.ws.http.channel.h2internal.hpack.H2Headers;
+import com.ibm.ws.http.channel.h2internal.hpack.HpackConstants;
+import com.ibm.ws.http.channel.h2internal.hpack.HpackConstants.LiteralIndexType;
+import com.ibm.ws.http.channel.internal.inbound.HttpInboundLink;
 import com.ibm.ws.http.channel.internal.inbound.HttpInboundServiceContextImpl;
 import com.ibm.ws.http.dispatcher.internal.HttpDispatcher;
 import com.ibm.wsspi.bytebuffer.WsByteBuffer;
@@ -242,7 +255,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     private boolean isPushPromise = false;
     private boolean isH2Connection = false;
 
-    private final ArrayList<Frame> framesToWrite = new ArrayList<Frame>();
+    private final CopyOnWriteArrayList<Frame> framesToWrite = new CopyOnWriteArrayList<Frame>();
 
     /**
      * Constructor for this base service context class.
@@ -2299,8 +2312,48 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
                     msg.commitTransferEncoding();
                 }
             }
+
+            // H2 Push-Promise
+            // If we have a link header with rel=preload, start push-promise sequence
+            // TODO Change the getEnabledPush to a boolean
+
+            // If this is an HTTP2 connection
+            // If the client accepts HTTP2 push-promise frames
+
+            HttpInboundLink link = ((HttpInboundServiceContextImpl) this).getLink();
+
+            if ((link instanceof H2HttpInboundLinkWrap) &&
+                (((H2HttpInboundLinkWrap) link).muxLink != null) &&
+                (((H2HttpInboundLinkWrap) link).muxLink.getConnectionSettings() != null) &&
+                (((H2HttpInboundLinkWrap) link).muxLink.getConnectionSettings().getEnablePush() == 1)) {
+
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "prepareOutgoing: Checking to see if push-promise is needed");
+                }
+
+                // Loop through the headers in this msg, check for
+                // link header
+                // rel=preload
+                // and not nopush
+                List<HeaderField> headers = msg.getAllHeaders();
+                for (HeaderField header : headers) {
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                        Tr.debug(tc, "prepareOutgoing: header name is " + header.getName() + ", header as string is " + header.asString());
+                    }
+                    if (header.getName().equals("Link") &&
+                        header.asString().contains("rel=preload") &&
+                        !header.asString().contains("nopush")) {
+                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                            Tr.debug(tc, "prepareOutgoing: Push-promise will be sent");
+                        }
+                        handleH2LinkPreload(header, link);
+                    }
+                }
+
+            }
             formatHeaders(msg, complete);
         }
+
         // if it is valid to send a body, then format it and queue it up,
         // otherwise ignore the body buffers
         if (null != buffers) {
@@ -5042,4 +5095,147 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
     public void setH2Connection(boolean isH2Connection) {
         this.isH2Connection = isH2Connection;
     }
+
+    /*
+     * Try to push a request, created from the link header rel=preload to the client.
+     * If any of this fails, no need for errors, we just won't
+     * send the push promise to the client or the request upstream
+     */
+    private void handleH2LinkPreload(HeaderField header, HttpInboundLink link) {
+
+        /*
+         * This method has two main actions:
+         * 1. Create and send a push promise frame to the client on the original stream
+         * 2. Create and send a headers frame up to webcontainer as if it came in on the
+         * promised stream
+         */
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.entry(tc, "handleH2LinkPreload()");
+        }
+
+        // Get the existing stream id
+        int streamId = ((H2HttpInboundLinkWrap) link).getStreamId();
+        // Get the uri from the link header
+        String uri = header.asString().substring(header.asString().indexOf('<') + 1, header.asString().indexOf('>'));
+
+        // Encode headers for the push-promise frame, add them to the headerBlockFragment
+        H2HeaderTable h2WriteTable = ((H2HttpInboundLinkWrap) link).muxLink.getWriteTable();
+        ByteArrayOutputStream outgoingHb = new ByteArrayOutputStream();
+
+        try {
+            // Four required pseudo headers for the push-promise header block fragment
+            outgoingHb.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.METHOD, "GET", LiteralIndexType.NOINDEXING));
+            outgoingHb.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.AUTHORITY, getLocalAddr().getHostName(), LiteralIndexType.NOINDEXING));
+            outgoingHb.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.SCHEME, "http", LiteralIndexType.NOINDEXING));
+            outgoingHb.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.PATH, uri, LiteralIndexType.NOINDEXING));
+
+        } catch (Exception e) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "handleH2LinkPreload(): Error: There was a problem creating the push-promise header block client, " + e);
+            }
+            return;
+        }
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "handleH2LinkPreload(): Push-promise headers are " + outgoingHb);
+        }
+
+        // Create the new even numbered promised stream, the state is idle to start
+        int promisedStreamId = ((H2HttpInboundLinkWrap) link).muxLink.getNextPromisedStreamId();
+        // Create the push_promise frame to send to the client
+        FramePushPromise pushPromiseFrame = new FramePushPromise(streamId, outgoingHb.toByteArray(), promisedStreamId, 0, true, false, false);
+
+        // createNewInboundLink creates new:
+        // - H2VirtualConnectionImpl
+        // - H2HttpInboundLinkWrap
+        // - H2StreamProcessor
+        // It puts the new SP into the SPTable
+        H2StreamProcessor promisedSP = ((H2HttpInboundLinkWrap) link).muxLink.createNewInboundLink(promisedStreamId);
+        ((H2HttpInboundLinkWrap) link).setPushPromise(true);
+        // Update the promised stream state to Localreserved
+        promisedSP.initializePromisedStream();
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "handleH2LinkPreload(): Push-promise streamId is " + promisedStreamId);
+        }
+
+        // Send the push_promise frame on the existing stream
+        H2StreamProcessor existingSP = ((H2HttpInboundLinkWrap) link).muxLink.getStreamProcessor(streamId);
+        if (existingSP != null) {
+            existingSP.readyToSendPushPromise();
+            try {
+                existingSP.processNextFrame(pushPromiseFrame, com.ibm.ws.http.channel.h2internal.Constants.Direction.WRITING_OUT);
+            } catch (ProtocolException e) {
+                // TODO Auto-generated catch block
+                // Do you need FFDC here? Remember FFDC instrumentation and @FFDCIgnore
+                // http://was.pok.ibm.com/xwiki/bin/view/Liberty/LoggingFFDC
+                e.printStackTrace();
+            }
+        } else {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "handleH2LinkPreload(): The push-promise stream " + streamId + " has been closed.");
+            }
+            // TODO Clean up promised stream
+            return;
+        }
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "handleH2LinkPreload(): Push promise frame sent on stream " + streamId);
+        }
+
+        // Push the request to webcontainer
+        ByteArrayOutputStream incomingHb = new ByteArrayOutputStream();
+        try {
+            // Four required pseudo headers for the push-promise header block fragment
+            incomingHb.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.METHOD, "GET", LiteralIndexType.NOINDEXING));
+            incomingHb.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.AUTHORITY, getLocalAddr().getHostName(), LiteralIndexType.NOINDEXING));
+            incomingHb.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.SCHEME, "http", LiteralIndexType.NOINDEXING));
+            incomingHb.write(H2Headers.encodeHeader(h2WriteTable, HpackConstants.PATH, uri, LiteralIndexType.NOINDEXING));
+
+        } catch (Exception e) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "handleH2LinkPreload(): Error: There was a problem creating the pushed header block, " + e);
+            }
+            return;
+        }
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "handleH2LinkPreload(): Header frame headers are  " + incomingHb);
+        }
+
+        // Create a headers frame as if it had come in from the client
+        FrameHeaders headersFrame = new FrameHeaders(streamId, incomingHb.toByteArray());
+
+        ExecutorService executorService = CHFWBundle.getExecutorService();
+        Http2Push pushThread = new Http2Push(promisedSP, headersFrame);
+        executorService.execute(pushThread);
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.exit(tc, "handleH2LinkPreload()");
+        }
+
+    }
+
+    private class Http2Push implements Runnable {
+
+        private H2StreamProcessor promisedSP = null;
+        private FrameHeaders frame = null;
+
+        public Http2Push(H2StreamProcessor promisedSP, FrameHeaders frame) {
+
+            this.promisedSP = promisedSP;
+            this.frame = frame;
+
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Http2Push(): request is " + frame.toString());
+            }
+        }
+
+        @Override
+        public void run() {
+
+            promisedSP.sendRequestToWc(frame);
+
+        }
+
+    }
+
 }

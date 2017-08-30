@@ -14,7 +14,6 @@ bVersion=1.0
 Bundle-Name: JAX-RS 2.0 Engine
 Bundle-SymbolicName: com.ibm.ws.jaxrs.2.0.common
 Bundle-Description: IBM JAX-RS 2.0 engine; version=${bVersion}
-Bundle-ClassPath:  ., lib/cxf-core-3.1.11.jar, lib/cxf-rt-frontend-jaxrs-3.1.11.jar, lib/cxf-rt-rs-client-3.1.11.jar,lib/cxf-rt-transports-http-3.1.11.jar, lib/cxf-tools-common-3.1.11.jar, lib/cxf-tools-wadlto-jaxrs-3.1.11.jar, lib/cxf-rt-rs-service-description-3.1.11.jar, lib/jackson-core-asl-1.6.2.jar, lib/jackson-jaxrs-1.6.2.jar, lib/jackson-mapper-asl-1.6.2.jar, lib/jackson-xc-1.6.2.jar, \
 
 # jaxrs-2.0 is part of EE7 and therefore requires java 1.7
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
@@ -31,7 +30,6 @@ WS-TraceGroup: JAXRS
    org.apache.cxf.*;version=3.1.11, \
 
 Export-Package: \
-   META-INF.cxf, \
    com.ibm.ws.jaxrs20, \
    com.ibm.ws.jaxrs20.api;provide=true, \
    com.ibm.ws.jaxrs20.bus, \
@@ -135,18 +133,19 @@ Private-Package:\
    com.ibm.ws.jaxrs20.*, \
 
 Include-Resource: \
- OSGI-INF=resources/OSGI-INF, \
-  lib/cxf-core-3.1.11.jar=${repo;org.apache.cxf:cxf-core;3.1.11}, \
-  lib/cxf-rt-frontend-jaxrs-3.1.11.jar=${repo;org.apache.cxf:cxf-rt-frontend-jaxrs;3.1.11}, \
-  lib/cxf-rt-rs-client-3.1.11.jar=${repo;org.apache.cxf:cxf-rt-rs-client;3.1.11}, \
-  lib/cxf-rt-transports-http-3.1.11.jar=${repo;org.apache.cxf:cxf-rt-transports-http;3.1.11}, \
-  lib/cxf-tools-common-3.1.11.jar=${repo;org.apache.cxf:cxf-tools-common;3.1.11}, \
-  lib/cxf-tools-wadlto-jaxrs-3.1.11.jar=${repo;org.apache.cxf:cxf-tools-wadlto-jaxrs;3.1.11}, \
-  lib/cxf-rt-rs-service-description-3.1.11.jar=${repo;org.apache.cxf:cxf-rt-rs-service-description;3.1.11}, \
-  lib/jackson-core-asl-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-core-asl;1.6.2}, \
-  lib/jackson-jaxrs-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-jaxrs;1.6.2}, \
-  lib/jackson-mapper-asl-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-mapper-asl;1.6.2}, \
-  lib/jackson-xc-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-xc;1.6.2}, \
+  @${repo;com.ibm.ws.org.codehaus.jackson:jackson-xc;1.6.2}, \
+  @${repo;com.ibm.ws.org.codehaus.jackson:jackson-mapper-asl;1.6.2}, \
+  @${repo;com.ibm.ws.org.codehaus.jackson:jackson-jaxrs;1.6.2}, \
+  @${repo;com.ibm.ws.org.codehaus.jackson:jackson-core-asl;1.6.2}, \
+  @${repo;org.apache.cxf.cxf-rt-rs-service-description;3.1.11}, \
+  @${repo;org.apache.cxf.cxf-tools-wadlto-jaxrs;3.1.11}, \
+  @${repo;org.apache.cxf.cxf-tools-common;3.1.11}, \
+  @${repo;org.apache.cxf.cxf-rt-transports-http;3.1.11}, \
+  @${repo;org.apache.cxf.cxf-rt-rs-client;3.1.11}, \
+  @${repo;org.apache.cxf.cxf-rt-frontend-jaxrs;3.1.11}, \
+  @${repo;org.apache.cxf.cxf-core;3.1.11}!/!OSGI-INF/*, \
+  OSGI-INF=resources/OSGI-INF, \
+  META-INF=resources/META-INF, \
   org/apache/cxf=bin/org/apache/cxf, \
   org/codehaus/jackson=bin/org/codehaus/jackson
 

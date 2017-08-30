@@ -8,7 +8,6 @@
 # Contributors:
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
-# Configure Repositories
 -include ${workspace}/gradle.properties, ${workspace}/generated.properties
 
 # Maven repository credentials
@@ -16,13 +15,6 @@
 
 # Logging for repository connection when debugging
 #-connection-log: ${.}/connection-log.txt
-
-# Default to upload artifacts with master tagged, but this should be set by
-# including generated.properties above.
-bGitBranch=master
-
-# Defines what tags to attach to artifacts uploaded on Artifactory.
-# matrixParams=\;GIT_BRANCH\=master\;GIT_FEATURE_BRANCH\=${bGitBranch}
 
 -plugin.1.Local: \
     aQute.bnd.repository.maven.provider.MavenBndRepository; \
@@ -34,13 +26,19 @@ bGitBranch=master
     aQute.bnd.repository.maven.provider.MavenBndRepository; \
         name = Release; \
         noupdateOnRelease = true; \
-        local = ${env;LOCAL_REPO_PATH;${build}/release};
+        local = ${build}/${maven.release.name};
 
 -plugin.3.RemotePublic = ${fetch.oss.repository}
 
 -plugin.4.RemoteIBM = ${fetch.oss.ibm.repository}
 
 -plugin.5.RemoteIBMJava = ${fetch.ibm.java.repository}
+
+-plugin.6.RemotePublish = ${push.ibm.repository}
+
+# TODO: Disabled while testing whether this works correctly.
+# Remove -SNAPSHOT for releases
+#-snapshot: ${if;${is.release};;SNAPSHOT}
 
 # Don't upload sources or javadoc unless bundle overrides
 -maven-release: ${if;${is;${env;PUBLISH_REPO;Release};Artifactory};remote;local}, sources;path=NONE, javadoc;path=NONE
@@ -54,7 +52,7 @@ javac.encoding: UTF-8
 -pedantic: true
 -fixupmessages.missingexport: "Used bundle version * for exported package";is:=error
 
--releaserepo: ${env;PUBLISH_REPO;Release}
+-releaserepo: ${if;${is.remote.publishing};RemotePublish;Release}
 -baselinerepo: Release
 -buildrepo: Local
 -groupid: ${if;${test.project};test;dev}
@@ -85,42 +83,53 @@ instrument.taskInjection: false
 
 -buildpath.bootclasspath: ${javac.bootclasspath.${javac.source}}
 
+-buildpath.testjars: ${if;${test.project};\
+    ${workspace}/build.sharedResources/lib/junit/old/junit.jar\\;version=file,\
+    ${workspace}/build.sharedResources/lib/ws-junit/ws-junit.jar\\;version=file}
+    
+# If project contains '_fat' then add FAT infrastrucutre elements to buildpath    
+-buildpath.fattestjars: ${if;${matches;${project};.*_fat.*};\
+    org.jboss.shrinkwrap:shrinkwrap-api\\;version=1.2.3,\
+    fattest.simplicity\\;version=latest,\
+    com.ibm.ws.componenttest:public.api\\;version=1.0.0,\
+    com.ibm.ws.componenttest\\;version=latest}
+
 javac.bootclasspath.java6:
 javac.bootclasspath.java7:
 javac.bootclasspath.java8:
 
 javac.bootclasspath.1.4: \
-    com.ibm.ws.internal.prereq.java:java.rt;version=1.6.0;boot=true
+    com.ibm.ws.internal.prereq.java:java.rt;strategy=exact;version=1.6.0;boot=true
 
 javac.bootclasspath.1.6: \
-    com.ibm.ws.internal.prereq.java:java.rt;version=1.6.0;boot=true
+    com.ibm.ws.internal.prereq.java:java.rt;strategy=exact;version=1.6.0;boot=true
 
 javac.bootclasspath.1.7: \
-    com.ibm.ws.internal.prereq.java:java.ibmcertpathfw;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjcefw;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjgssfw;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjgssprovider;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjssefw;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmorbapi;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmpkcs;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.jlm;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.math;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.rt;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.vm;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.xml;version=1.7.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.xmldsigfw;version=1.7.0;boot=true
+    com.ibm.ws.internal.prereq.java:java.ibmcertpathfw;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjcefw;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjgssfw;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjgssprovider;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjssefw;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmorbapi;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmpkcs;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.jlm;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.math;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.rt;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.vm;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.xml;strategy=exact;version=1.7.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.xmldsigfw;strategy=exact;version=1.7.0;boot=true
 
 javac.bootclasspath.1.8: \
-    com.ibm.ws.internal.prereq.java:java.ibmcertpathfw;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjcefw;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjgssfw;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjgssprovider;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmjssefw;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmorbapi;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.ibmpkcs;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.jlm;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.math;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.rt;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.vm;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.xml;version=1.8.0;boot=true, \
-    com.ibm.ws.internal.prereq.java:java.xmldsigfw;version=1.8.0;boot=true
+    com.ibm.ws.internal.prereq.java:java.ibmcertpathfw;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjcefw;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjgssfw;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjgssprovider;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmjssefw;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmorbapi;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.ibmpkcs;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.jlm;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.math;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.rt;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.vm;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.xml;strategy=exact;version=1.8.0;boot=true, \
+    com.ibm.ws.internal.prereq.java:java.xmldsigfw;strategy=exact;version=1.8.0;boot=true

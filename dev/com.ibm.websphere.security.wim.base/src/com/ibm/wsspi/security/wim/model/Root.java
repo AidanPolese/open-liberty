@@ -25,9 +25,9 @@ import com.ibm.websphere.security.wim.ras.WIMTraceHelper;
 
 /**
  * <p>Java class for Root complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Root">
  * &lt;complexContent>
@@ -42,33 +42,33 @@ import com.ibm.websphere.security.wim.ras.WIMTraceHelper;
  * &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
+ *
  * <p> Root is an object and does not have any meaning other than its use as a container. It has
  * several objects: contexts, entities, and controls, each of which are represented themselves
  * by objects. The Root object can contain an unlimited number of each of these objects.
- * 
+ *
  * <ul>
  * <li><b>contexts</b>: contains 0 to n Context objects. The Context object specifies the contextual information
  * for the registry or repository call. Examples of such information include the realm or ip address to be used for
  * the call.</li>
- * 
+ *
  * <li><b>entities</b>: contains 0 to n Entity objects. Each entity object represents a VMM entity like Person
  * or Group entity. It contains the actual data associated with the entity, like unique name, "uid" and "cn" attributes.
  * Allowing for multiple entities to be specified in the Root object provides the capability of returning multiple Person
  * or Group entries on a single get() API call, for example.</li>
- * 
+ *
  * <li><b>controls</b>:: contains 0 to n Controls objects. The Control object is used for specifying the
  * request information and response information for the call. For example, the property names to be returned for a
  * get() API call can be specified in the PropertyControl object.</li>
- * 
+ *
  * </ul>
- * 
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Root", propOrder = {
-                                     "contexts",
-                                     "entities",
-                                     "controls"
+                                      "contexts",
+                                      "entities",
+                                      "controls"
 })
 public class Root {
 
@@ -90,24 +90,25 @@ public class Root {
 
     /**
      * Gets the value of the contexts property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the contexts property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
+     *
      * <pre>
      * getContexts().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list {@link com.ibm.wsspi.security.wim.model.Context }
-     * 
-     * 
+     *
+     *
      */
     public List<com.ibm.wsspi.security.wim.model.Context> getContexts() {
         if (contexts == null) {
@@ -126,24 +127,25 @@ public class Root {
 
     /**
      * Gets the value of the entities property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the entities property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
+     *
      * <pre>
      * getEntities().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list {@link com.ibm.wsspi.security.wim.model.Entity }
-     * 
-     * 
+     *
+     *
      */
     public List<com.ibm.wsspi.security.wim.model.Entity> getEntities() {
         if (entities == null) {
@@ -162,24 +164,25 @@ public class Root {
 
     /**
      * Gets the value of the controls property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the controls property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
+     *
      * <pre>
      * getControls().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list {@link com.ibm.wsspi.security.wim.model.Control }
-     * 
-     * 
+     *
+     *
      */
     public List<com.ibm.wsspi.security.wim.model.Control> getControls() {
         if (controls == null) {
@@ -198,10 +201,10 @@ public class Root {
 
     /**
      * Gets the value of the validated property.
-     * 
+     *
      * @return
      *         possible object is {@link Boolean }
-     * 
+     *
      */
     public boolean isValidated() {
         if (validated == null) {
@@ -213,10 +216,10 @@ public class Root {
 
     /**
      * Sets the value of the validated property.
-     * 
+     *
      * @param value
      *            allowed object is {@link Boolean }
-     * 
+     *
      */
     public void setValidated(boolean value) {
         this.validated = value;

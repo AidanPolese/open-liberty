@@ -165,11 +165,6 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
      */
     boolean loggingEnabled; 
 
-    /*
-     * The connection manager.
-     */
-    protected WSConnectionManager connMgr = null; 
-
     /**
      * A counter of fatal connection errors that've occurred on connections created by this
      * ManagedConnectionFactory.
@@ -354,8 +349,7 @@ public class WSManagedConnectionFactoryImpl extends WSManagedConnectionFactory i
         if (isTraceOn && tc.isEntryEnabled()) 
             Tr.entry(this, tc, "createConnectionFactory", connMgr); 
 
-        this.connMgr = (WSConnectionManager) connMgr; 
-        Object connFactory = new WSJdbcDataSource(this, this.connMgr);
+        Object connFactory = new WSJdbcDataSource(this, (WSConnectionManager)connMgr);
 
         if (isTraceOn && tc.isEntryEnabled())
             Tr.exit(this, tc, "createConnectionFactory", connFactory); 

@@ -21,8 +21,8 @@ import java.util.concurrent.TimeoutException;
 
 import org.junit.Test;
 
-import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.test.util.AsyncTestFunction;
 import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;

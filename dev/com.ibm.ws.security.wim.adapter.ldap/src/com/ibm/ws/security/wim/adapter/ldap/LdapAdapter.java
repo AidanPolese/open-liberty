@@ -87,6 +87,7 @@ import com.ibm.ws.security.wim.adapter.ldap.change.ChangeHandlerFactory;
 import com.ibm.ws.security.wim.adapter.ldap.change.IChangeHandler;
 import com.ibm.ws.security.wim.util.ControlsHelper;
 import com.ibm.ws.security.wim.util.NodeHelper;
+import com.ibm.ws.security.wim.util.SchemaConstantsInternal;
 import com.ibm.ws.security.wim.util.UniqueIdGenerator;
 import com.ibm.ws.security.wim.util.UniqueNameHelper;
 import com.ibm.ws.security.wim.xpath.ParseException;
@@ -192,6 +193,8 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
     private static final Object DATA_TYPE_LANG_TYPE = "LangType";
 
     private static final Object DATA_TYPE_BOOLEAN = "Boolean";
+
+    private static final Object DATA_TYPE_LONG = "Long";
 
     /**
      * Change Handler
@@ -345,12 +348,11 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
 
             // New:: Change to Input/Output property <<START>>
             if (ldapEntry != null && propNames != null) {
-                if (propNames.contains("displayBridgePrincipalName")) {
+                if (propNames.contains(SchemaConstantsInternal.PROP_DISPLAY_BRIDGE_PRINCIPAL_NAME)) {
                     String type = ldapEntry.getType();
                     LdapEntity entity = iLdapConfigMgr.getLdapEntity(type);
                     String attrName = entity.getAttribute(SchemaConstants.PROP_PRINCIPAL_NAME);
-                    String[] attrIds = new String[1];
-                    attrIds[0] = attrName;
+                    String[] attrIds = new String[] { attrName };
                     ArrayList<String> entityTypes = new ArrayList<String>(1);
                     entityTypes.add(type);
                     Attributes attrs = iLdapConn.getAttributesByUniqueName(ldapEntry.getUniqueName(), attrIds, entityTypes);
@@ -371,12 +373,11 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
                         properties = new ArrayList<String>();
                         properties.add(SchemaConstants.PROP_PRINCIPAL_NAME);
                     }
-                } else if (propNames.contains("displayBridgeCN")) {
+                } else if (propNames.contains(SchemaConstantsInternal.PROP_DISPLAY_BRIDGE_CN)) {
                     String type = ldapEntry.getType();
                     LdapEntity entity = iLdapConfigMgr.getLdapEntity(type);
                     String attrName = entity.getAttribute("cn");
-                    String[] attrIds = new String[1];
-                    attrIds[0] = attrName;
+                    String[] attrIds = new String[] { attrName };
                     ArrayList<String> entityTypes = new ArrayList<String>(1);
                     entityTypes.add(type);
                     Attributes attrs = iLdapConn.getAttributesByUniqueName(ldapEntry.getUniqueName(), attrIds, entityTypes);
@@ -1209,6 +1210,9 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
 
         if (ldapAttr != null) {
             syntax = ldapAttr.getSyntax();
+            if (tc.isEventEnabled()) {
+                Tr.event(tc, "ldapAttr " + ldapAttr + " syntax is " + syntax);
+            }
         }
 
         try {
@@ -1343,7 +1347,25 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
                         entity.set(propName, Boolean.parseBoolean(ldapValue.toString()));
                     }
                 }
+            } else if (DATA_TYPE_LONG.equals(dataType)) { //PI05723
+                if (isMany) {
+                    for (NamingEnumeration enu = attr.getAll(); enu.hasMoreElements();) {
+                        Object ldapValue = enu.nextElement();
+                        if (ldapValue != null) {
+                            ((List) entity.get(propName)).add(new Long(ldapValue.toString()));
+                        }
+                    }
+                } else {
+                    Object ldapValue = attr.get();
+                    if (ldapValue != null) {
+                        entity.set(propName, Long.parseLong(ldapValue.toString()));
+                    }
+                }
             } else {
+                if (tc.isEventEnabled()) {
+                    Tr.event(tc, "Datatype for " + propName + " was null, process without casting");
+                }
+
                 if (isMany) {
                     for (NamingEnumeration<?> enu = attr.getAll(); enu.hasMoreElements();) {
                         Object ldapValue = enu.nextElement();
@@ -1359,14 +1381,23 @@ public class LdapAdapter extends BaseRepository implements ConfiguredRepository 
                 }
             }
         } catch (NamingException e) {
+            if (tc.isEventEnabled()) {
+                Tr.event(tc, "Unexpected on " + propName + " with dataType " + dataType, e);
+            }
             throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION, Tr.formatMessage(
                                                                                           tc,
                                                                                           WIMMessageKey.NAMING_EXCEPTION,
                                                                                           WIMMessageHelper.generateMsgParms(e.toString(true))));
         } catch (ClassCastException ce) {
+            if (tc.isEventEnabled()) {
+                Tr.event(tc, "Failed to cast property " + propName + " to " + dataType, ce);
+            }
             if (tc.isErrorEnabled())
                 Tr.error(tc, WIMMessageKey.INVALID_PROPERTY_DATA_TYPE, WIMMessageHelper.generateMsgParms(propName));
         } catch (ArrayStoreException ae) {
+            if (tc.isEventEnabled()) {
+                Tr.event(tc, "Unexpected on " + propName + " with dataType " + dataType, ae);
+            }
             if (tc.isErrorEnabled())
                 Tr.error(tc, WIMMessageKey.INVALID_PROPERTY_DATA_TYPE, WIMMessageHelper.generateMsgParms(propName));
         }

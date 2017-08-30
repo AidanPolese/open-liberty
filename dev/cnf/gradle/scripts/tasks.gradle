@@ -12,22 +12,38 @@ defaultTasks 'clean', 'build'
 
 subprojects {
 
+  // Does userhome Gradle startup properties exist?
+  File usrHomeProps = file(System.properties['user.home'] + '/gradle.startup.properties')
+  if (!usrHomeProps.exists()) {
+    if (System.properties['build.properties.path']!=null) {
+      usrHomeProps = file(System.properties['build.properties.path']);
+    }
+  }
+
   plugins.apply 'java'
   plugins.apply 'maven-publish'
 
-  project.version = bnd('Bundle-Version', '1.0') + '.' + branchName + (true ? '-SNAPSHOT' : '')
-  
   def props = new Properties()
-  file("../generated.properties").withInputStream { props.load(it) }
+  file("${rootDir}/generated.properties").withInputStream { props.load(it) }
+
+  /* Project artifacts are versioned by bnd Bundle-Version attribute, with the qualifier being current Git branch. */
+  project.version = bnd('Bundle-Version', '1.0' + '.' + branchName + (isRelease ? '' : '-SNAPSHOT'))
 
   repositories {
-	  maven {
-		 credentials {
-			 username props.getProperty("artifactory.download.user")
-			 password props.getProperty("artifactory.download.token")
-		 }
-		 url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
-	  }
+    if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {
+      	  maven {
+      		 credentials {
+      			 username props.getProperty("artifactory.download.user")
+      			 password props.getProperty("artifactory.download.token")
+      		 }
+      		 url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
+      	  }
+    } else {
+      mavenCentral()
+      maven {
+           url ("http://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/wasliberty-open-liberty/")
+          }
+    }
 }
 configurations {
 	binaries
@@ -46,36 +62,37 @@ dependencies {
   binaries "org.eclipse.jdt.core.compiler:ecj:4.3.1"
   binaries "org.ow2.asm:asm-all:5.0.3"
   binaries "org.jsoup:jsoup:1.7.2"
+  binaries "com.ibm.ws.javax.j2ee:servlet:3.1"
 }
 
-task copyMavenLibs(type: Copy) {
-	into "${rootDir}/cnf/mavenlibs"
-	from configurations.binaries
-}
+  task copyMavenLibs(type: Copy) {
+    into "${rootDir}/cnf/mavenlibs"
+    from configurations.binaries
+  }
 
   publishing {
     repositories {
+      if (isRemotePublishing) {
 
-      if (System.env.PUBLISH_REPO == 'Artifactory') {
-        // Remote
         maven {
           if(project.version.endsWith('-SNAPSHOT')) {
-             url "${artifactorySnapshotUrl}${matrixParams}"
+              url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty${matrixParams}")
           } else {
-              url "${artifactoryReleaseUrl}${matrixParams}"
+              url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty${matrixParams}")
           }
           credentials {
-            username props.getProperty("artifactory.download.user")
-            password props.getProperty("artifactory.download.token")
+              username props.getProperty("artifactory.download.user")
+              password props.getProperty("artifactory.download.token")
           }
         }
-      } else {
-        // Local
-        maven {
-           url uri("${rootDir}/cnf/${mavenLocalPath}")
-        }
-      }
 
+      } else {
+
+        maven {
+          url uri("${rootDir}/cnf/${mavenLocalPath}")
+        }
+
+      }
     }
   }
 
@@ -574,6 +591,14 @@ task copyMavenLibs(type: Copy) {
       ant.portSelector(engineName: "${bnd.buildEngineName}", location: "${projectDir}/bin_test/unittestports.properties", jvmarg: 'jvmargPorts')
       jvmArgs ant.jvmargPorts.tokenize()
     }
+    afterSuite { desc, result ->
+      if (!desc.parent) { // will match the outermost suite
+        testCountTotal = testCountTotal + result.testCount
+        successfulTestCountTotal = successfulTestCountTotal + result.successfulTestCount
+        failedTestCountTotal = failedTestCountTotal + result.failedTestCount
+        skippedTestCountTotal = skippedTestCountTotal + result.skippedTestCount
+      }
+    }
   }
 
   publishing {
@@ -591,6 +616,21 @@ task copyMavenLibs(type: Copy) {
     }
   }
   
+}
+
+task testResults {
+  dependsOn subprojects.test
+
+  doLast {
+    def props = new Properties()
+    file("${rootDir}/generated.properties").withInputStream { props.load(it) }
+
+    props.setProperty('tests.total.count', testCountTotal.toString())
+    props.setProperty('tests.total.successful', successfulTestCountTotal.toString())
+
+    File propsFile = new File('generated.properties')
+    props.store(propsFile.newWriter(), null)
+  }
 }
 
 task zipOpenLiberty(type: Zip) {

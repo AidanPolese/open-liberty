@@ -19,16 +19,14 @@ import com.ibm.ws.util.dopriv.GetThreadContextAccessorPrivileged;
  * This interface defines constants used by j2c interfaces, implementation
  * classes, and client interfaces and implementation classes.
  * Interface name : J2CConstants
- * 
+ *
  * Packaging : interface jar and client jar
  */
 public interface J2CConstants {
 
     public static final String traceSpec = "WAS.j2c";
-    public static final String configTraceSpec = "WAS.j2c.config"; 
-    public static final String manageCachedHandlesTraceSpec = "WAS.j2c.manageCachedHandles"; 
 
-    public static final String messageFile = "com.ibm.ws.j2c.resources.J2CAMessages"; 
+    public static final String messageFile = "com.ibm.ws.j2c.resources.J2CAMessages";
 
     /**
      * NLS file for messages that are unique to the liberty profile.
@@ -37,32 +35,32 @@ public interface J2CConstants {
 
     /**
      * Constant for application managed authentication.
-     * 
+     *
      */
     public static final int AUTHENTICATION_APPLICATION = 1; // value = APPLICATION
 
     /**
      * Constant for container managed authentication.
-     * 
+     *
      */
     public static final int AUTHENTICATION_CONTAINER = 0; // value = CONTAINER
 
     /**
      * Constant for shareable connections.
-     * 
+     *
      */
     public static final int CONNECTION_SHAREABLE = 0; // value = SHAREABLE
 
     /**
      * Constant for unshareable connections.
-     * 
+     *
      */
     public static final int CONNECTION_UNSHAREABLE = 1; // value = com.ibm.websphere.csi.ResRef.UNSHAREABLE
 
     /**
      * Used when throwing ConnectionWaitTimeoutException when the
      * connection pool is full.
-     * 
+     *
      */
     public final static String DMSID_MAX_CONNECTIONS_REACHED = "Max connections reached";
 
@@ -81,29 +79,27 @@ public interface J2CConstants {
 
     public static final int INITIAL_SIZE = 500;
 
-    public enum JCASpecVersion 
-    {
+    public enum JCASpecVersion {
         JCA_VERSION_16,
         JCA_VERSION_15,
         JCA_VERSION_10
     }
 
     // New runtime utility, ThreadContextAccessor,
-    // replaces Thread API methods getContextClassLoader() 
+    // replaces Thread API methods getContextClassLoader()
     // and setConextClassLoader().
     //
-    // Method ThreadContextAccessor.getThreadContextAccessor() 
-    // checks permissions required to get and set the context 
-    // class loader.  So, use the GetThreadContextAccessorPrivileged 
-    // utility exactly once to obtain the instance.  Use the 
+    // Method ThreadContextAccessor.getThreadContextAccessor()
+    // checks permissions required to get and set the context
+    // class loader.  So, use the GetThreadContextAccessorPrivileged
+    // utility exactly once to obtain the instance.  Use the
     // ThreadContextAccessor methods getContextClassLoader() and
     // setContextClassLoader() to get and set the contextClassLoader
-    // field of the current thread w/o incurring the permission 
+    // field of the current thread w/o incurring the permission
     // checks that execute using the Thread API whenever Java2
     // security is enabled.
     @SuppressWarnings("unchecked")
-    public static final ThreadContextAccessor TCA = (ThreadContextAccessor)
-                    AccessController.doPrivileged(new GetThreadContextAccessorPrivileged());
+    public static final ThreadContextAccessor TCA = (ThreadContextAccessor) AccessController.doPrivileged(new GetThreadContextAccessorPrivileged());
 
     /**
      * The value of com.ibm.wsspi.security.token.AttributeNameConstants.WSCREDENTIAL_CACHE_KEY.
@@ -113,24 +109,23 @@ public interface J2CConstants {
     /**
      * Names of XA recovery properties in the embeddable EJB container.
      * In J2C, we include these properties in ConnectorProperties.
-     * 
+     *
      */
-    static final String
-                    XA_RECOVERY_PASSWORD = "xaRecoveryPassword",
+    static final String XA_RECOVERY_PASSWORD = "xaRecoveryPassword",
                     XA_RECOVERY_USER = "xaRecoveryUser";
-    
+
     public final static String POOL_ConnectionTimeout = "connectionTimeout";
 
     public final static String POOL_ReapTime = "reapTime";
     public final static String POOL_AgedTimeout = "agedTimeout";
 
-    public final static String POOL_PurgePolicy = "purgePolicy"; 
+    public final static String POOL_PurgePolicy = "purgePolicy";
 
-    public final static String SECURITY_OptionC_authDataAlias = "OptionC_authDataAlias"; 
+    public final static String SECURITY_OptionC_authDataAlias = "OptionC_authDataAlias";
 
-    public final static String XA_RECOVERY_AUTH_ALIAS = "XA_RECOVERY_AUTH_ALIAS"; 
+    public final static String XA_RECOVERY_AUTH_ALIAS = "XA_RECOVERY_AUTH_ALIAS";
 
-    public final static String MAPPING_MODULE_mappingConfigAlias = "mappingConfigAlias"; 
-    public final static String MAPPING_MODULE_authDataAlias = "authDataAlias"; 
+    public final static String MAPPING_MODULE_mappingConfigAlias = "mappingConfigAlias";
+    public final static String MAPPING_MODULE_authDataAlias = "authDataAlias";
 
 }

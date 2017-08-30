@@ -11,6 +11,7 @@
 package com.ibm.ws.jaxrs20.server;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletConfig;
@@ -18,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.ws.rs.core.Application;
 
 import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.feature.Feature;
 import org.apache.cxf.jaxrs.utils.InjectionUtils;
 import org.apache.cxf.jaxrs.utils.ResourceUtils;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
@@ -40,13 +42,14 @@ public class JaxRsWebEndpointImpl extends AbstractJaxRsWebEndpoint {
 
     private Server server = null;
     private final Set<JaxRsFactoryBeanCustomizer> beanCustomizers;
-    private final static TraceComponent tc = Tr
-                    .register(JaxRsWebEndpointImpl.class);
+    private final static TraceComponent tc = Tr.register(JaxRsWebEndpointImpl.class);
+    private final List<Feature> features;
 
     @SuppressWarnings("unchecked")
-    public JaxRsWebEndpointImpl(EndpointInfo endpointInfo, JaxRsPublisherContext context) {
+    public JaxRsWebEndpointImpl(EndpointInfo endpointInfo, JaxRsPublisherContext context, List<Feature> features) {
         super(endpointInfo, context.getModuleMetaData());
         beanCustomizers = (Set<JaxRsFactoryBeanCustomizer>) context.getAttribute(JaxRsServerConstants.BEAN_CUSTOMIZER);
+        this.features = features;
     }
 
     /**
@@ -57,7 +60,9 @@ public class JaxRsWebEndpointImpl extends AbstractJaxRsWebEndpoint {
         super.init(servletConfig, providerFactoryService);
 
         LibertyJaxRsServerFactoryBean jaxRsServerFactory = new LibertyJaxRsServerFactoryBean(endpointInfo, jaxRsModuleMetaData, beanCustomizers, servletConfig, providerFactoryService);
-
+        if (features != null && !features.isEmpty()) {
+            jaxRsServerFactory.setFeatures(features);
+        }
         jaxRsServerFactory.doInit();
 
         ClassLoader origClassLoader = jaxRsServerFactory.getBus().getExtension(ClassLoader.class);
@@ -81,11 +86,9 @@ public class JaxRsWebEndpointImpl extends AbstractJaxRsWebEndpoint {
          * call @PreDestroy for POJO resource & provider(default constructor)
          */
         Set<ProviderResourceInfo> singletonProviderAndPathInfos = endpointInfo.getSingletonProviderAndPathInfos();
-        for (ProviderResourceInfo o : singletonProviderAndPathInfos)
-        {
+        for (ProviderResourceInfo o : singletonProviderAndPathInfos) {
 
-            if (o.getRuntimeType() == RuntimeType.POJO)
-            {
+            if (o.getRuntimeType() == RuntimeType.POJO) {
                 Method preDestoryMethod = ResourceUtils.findPreDestroyMethod(o.getProviderResourceClass());
                 InjectionUtils.invokeLifeCycleMethod(o.getObject(), preDestoryMethod);
             }
@@ -96,11 +99,9 @@ public class JaxRsWebEndpointImpl extends AbstractJaxRsWebEndpoint {
          * call @PreDestroy for provider(param constructor)
          */
         Set<ProviderResourceInfo> perRequestProviderAndPathInfos = endpointInfo.getPerRequestProviderAndPathInfos();
-        for (ProviderResourceInfo o : perRequestProviderAndPathInfos)
-        {
+        for (ProviderResourceInfo o : perRequestProviderAndPathInfos) {
 
-            if (o.getRuntimeType() == RuntimeType.POJO && o.isJaxRsProvider() == true)
-            {
+            if (o.getRuntimeType() == RuntimeType.POJO && o.isJaxRsProvider() == true) {
                 Method preDestoryMethod = ResourceUtils.findPreDestroyMethod(o.getProviderResourceClass());
                 InjectionUtils.invokeLifeCycleMethod(o.getObject(), preDestoryMethod);
             }
@@ -108,8 +109,7 @@ public class JaxRsWebEndpointImpl extends AbstractJaxRsWebEndpoint {
         }
 
         //call preDestroy method for non-customized Applications
-        if (!endpointInfo.isCustomizedApp())
-        {
+        if (!endpointInfo.isCustomizedApp()) {
             Application app = endpointInfo.getApp();
             Method preDestoryMethod = ResourceUtils.findPreDestroyMethod(app.getClass());
             InjectionUtils.invokeLifeCycleMethod(app, preDestoryMethod);
@@ -121,11 +121,12 @@ public class JaxRsWebEndpointImpl extends AbstractJaxRsWebEndpoint {
             }
         }
 
-        if (server != null)
-        {
+        if (server != null) {
             server.destroy();
         }
-
+        if (features != null) {
+            features.clear();
+        }
     }
 
 }

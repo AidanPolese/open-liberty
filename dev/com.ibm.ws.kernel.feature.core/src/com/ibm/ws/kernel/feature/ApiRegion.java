@@ -51,6 +51,10 @@ public enum ApiRegion {
      */
     THIRD_PARTY("third-party", "liberty.third.party.api", true),
     /**
+     * Stable API, delegates to internal
+     */
+    STABLE("stable", "liberty.stable.api", true),
+    /**
      * Internal API, does not delegate to internal because it IS internal
      */
     INTERNAL("internal", "liberty.internal.api", false),

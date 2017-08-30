@@ -6,11 +6,11 @@ Bundle-SymbolicName: com.ibm.ws.com.sun.mail.javax.mail.1.5
 Bundle-Description: Private JavaMail bundle
   
 Include-Resource: \
-     @lib/javax.mail-1.5.0.jar!/META-INF/mailcap, \
-     @lib/javax.mail-1.5.0.jar!/META-INF/gfprobe-provider.xml, \
-     @lib/javax.mail-1.5.0.jar!/META-INF/javamail.charset.map, \
-     @lib/javax.mail-1.5.0.jar!/META-INF/javamail.default.address.map, \
-     @lib/javax.mail-1.5.0.jar!/META-INF/javamail.default.providers
+     @${repo;com.sun.mail.javax.mail;1.5.0}!/META-INF/mailcap, \
+     @${repo;com.sun.mail.javax.mail;1.5.0}!/META-INF/gfprobe-provider.xml, \
+     @${repo;com.sun.mail.javax.mail;1.5.0}!/META-INF/javamail.charset.map, \
+     @${repo;com.sun.mail.javax.mail;1.5.0}!/META-INF/javamail.default.address.map, \
+     @${repo;com.sun.mail.javax.mail;1.5.0}!/META-INF/javamail.default.providers
 
 Export-Package: \
 javax.mail, \

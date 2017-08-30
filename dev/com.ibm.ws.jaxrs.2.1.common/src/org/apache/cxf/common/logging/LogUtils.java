@@ -106,7 +106,7 @@ public final class LogUtils {
 //                    Class<?> fcls = cls.getMethod("getILoggerFactory").invoke(null).getClass();
 //                    String clsName = fcls.getName();
 //                    if (clsName.contains("NOPLogger")) {
-//                        //no real slf4j implementation, use j.u.l 
+//                        //no real slf4j implementation, use j.u.l
 //                        cname = null;
 //                    } else if (clsName.contains("Log4j")) {
 //                        cname = "org.apache.cxf.common.logging.Log4jLogger";
@@ -118,7 +118,7 @@ public final class LogUtils {
 //                        }
 //                    } else if (clsName.contains("JDK14")
 //                               || clsName.contains("pax.logging")) {
-//                        //both of these we can use the appropriate j.u.l API's 
+//                        //both of these we can use the appropriate j.u.l API's
 //                        //directly and have it work properly
 //                        cname = null;
 //                    } else {
@@ -157,7 +157,7 @@ public final class LogUtils {
 
     /**
      * Get a Logger with the associated default resource bundle for the class.
-     * 
+     *
      * @param cls the Class to contain the Logger
      * @return an appropriate Logger
      */
@@ -169,7 +169,7 @@ public final class LogUtils {
 
     /**
      * Get a Logger with an associated resource bundle.
-     * 
+     *
      * @param cls the Class to contain the Logger
      * @param resourcename the resource name
      * @return an appropriate Logger
@@ -182,7 +182,7 @@ public final class LogUtils {
 
     /**
      * Get a Logger with an associated resource bundle.
-     * 
+     *
      * @param cls the Class to contain the Logger (to find resources)
      * @param resourcename the resource name
      * @param loggerName the full name for the logger
@@ -196,7 +196,7 @@ public final class LogUtils {
 
     /**
      * Get a Logger with the associated default resource bundle for the class.
-     * 
+     *
      * @param cls the Class to contain the Logger
      * @return an appropriate Logger
      */
@@ -208,7 +208,7 @@ public final class LogUtils {
 
     /**
      * Get a Logger with an associated resource bundle.
-     * 
+     *
      * @param cls the Class to contain the Logger
      * @param resourcename the resource name
      * @return an appropriate Logger
@@ -221,7 +221,7 @@ public final class LogUtils {
 
     /**
      * Get a Logger with an associated resource bundle.
-     * 
+     *
      * @param cls the Class to contain the Logger (to find resources)
      * @param resourcename the resource name
      * @param loggerName the full name for the logger
@@ -250,7 +250,7 @@ public final class LogUtils {
             Logger logger = null;
             ResourceBundle b = null;
             if (bundleName == null) {
-                //grab the bundle prior to the call to Logger.getLogger(...) so the 
+                //grab the bundle prior to the call to Logger.getLogger(...) so the
                 //ResourceBundle can be loaded outside the big sync block that getLogger really is
                 bundleName = BundleUtils.getBundleName(cls);
                 try {
@@ -279,20 +279,17 @@ public final class LogUtils {
                         } catch (InvocationTargetException ite) {
                             if (ite.getTargetException() instanceof MissingResourceException) {
                                 return (Logger) cns.newInstance(loggerName, null);
-                            } else {
-                                throw ite;
                             }
+                            throw ite;
                         }
-                    } else {
-                        try {
-                            return (Logger) cns.newInstance(loggerName, bundleName);
-                        } catch (InvocationTargetException ite) {
-                            if (ite.getTargetException() instanceof MissingResourceException) {
-                                throw (MissingResourceException) ite.getTargetException();
-                            } else {
-                                throw ite;
-                            }
+                    }
+                    try {
+                        return (Logger) cns.newInstance(loggerName, bundleName);
+                    } catch (InvocationTargetException ite) {
+                        if (ite.getTargetException() instanceof MissingResourceException) {
+                            throw (MissingResourceException) ite.getTargetException();
                         }
+                        throw ite;
                     }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -357,7 +354,7 @@ public final class LogUtils {
     }
     /**
      * Allows both parameter substitution and a typed Throwable to be logged.
-     * 
+     *
      * @param logger the Logger the log to
      * @param level the severity level
      * @param message the log message
@@ -378,7 +375,7 @@ public final class LogUtils {
 
     /**
      * Allows both parameter substitution and a typed Throwable to be logged.
-     * 
+     *
      * @param logger the Logger the log to
      * @param level the severity level
      * @param message the log message
@@ -399,7 +396,7 @@ public final class LogUtils {
 
     /**
      * Checks log level and logs
-     * 
+     *
      * @param logger the Logger the log to
      * @param level the severity level
      * @param message the log message
@@ -412,7 +409,7 @@ public final class LogUtils {
 
     /**
      * Checks log level and logs
-     * 
+     *
      * @param logger the Logger the log to
      * @param level the severity level
      * @param message the log message
@@ -427,7 +424,7 @@ public final class LogUtils {
 
     /**
      * Checks log level and logs
-     * 
+     *
      * @param logger the Logger the log to
      * @param level the severity level
      * @param message the log message
@@ -442,7 +439,7 @@ public final class LogUtils {
 
     /**
      * Checks log level and logs
-     * 
+     *
      * @param logger the Logger the log to
      * @param level the severity level
      * @param message the log message
@@ -492,7 +489,7 @@ public final class LogUtils {
     /**
      * Retrieve localized message retrieved from a logger's resource
      * bundle.
-     * 
+     *
      * @param logger the Logger
      * @param message the message to be localized
      */

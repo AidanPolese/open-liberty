@@ -46,4 +46,4 @@ javax.wsdl.*
 
 Eclipse-ExtensibleAPI: true
 
--buildpath: lib/com.ibm.ws.prereq.wsdl4j.jar;version=file
+-buildpath: com.ibm.ws.prereq.wsdl4j;version=1.0

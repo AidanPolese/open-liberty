@@ -7,6 +7,7 @@ symbolicName=com.ibm.websphere.appserver.builtinAuthentication-1.0
  com.ibm.ws.security.credentials.wscred, \
  com.ibm.websphere.security, \
  com.ibm.ws.security.jaas.common, \
- com.ibm.ws.security.authentication.builtin
+ com.ibm.ws.security.authentication.builtin, \
+ com.ibm.ws.security.mp.jwt.proxy
 kind=ga
 edition=core

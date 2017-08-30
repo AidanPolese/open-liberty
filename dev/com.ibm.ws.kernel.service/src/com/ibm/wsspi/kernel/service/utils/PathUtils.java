@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2015 IBM Corporation and others.
+ * Copyright (c) 2011, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -68,9 +68,9 @@ public class PathUtils {
     /**
      * Cache of whether the active file system is case insensitive.
      *
-     * The result is computed by {@link #isPossiblyCaseInsensitive()}.
+     * The result is computed by {@link #isOsCaseSensitive()}.
      */
-    private static boolean IS_POSSIBLY_CASE_INSENSITIVE = isPossiblyCaseInsensitive();
+    private static boolean IS_OS_CASE_SENSITIVE = isOsCaseSensitive();
 
     /**
      * File name restricted characters. Used by {@link #replaceRestrictedCharactersInFileName(String)}.
@@ -82,28 +82,29 @@ public class PathUtils {
     private static String FILE_NAME_RESTRICTED_CHARS = "<>:\"/\\|?*";
 
     /**
-     * Test whether the active file system may be case <em>insensitive</em>. A true result means
-     * that the active file system <em>might</em> be case insensitive. A false result means
-     * that the active file system is <em>definitely</em> not case insensitive.
-     *
-     * Equivalently, a false result means that the active file system is <em>definitely</em> case
-     * sensitive, and a true result means the active file system <em>might be</em> case sensitive.
-     *
-     * The test accesses the bundle context of this class, and creates and removes files in the
-     * persistent data storage area of that bundle context. The test answers true if the bundle
-     * or bundle context are not available, or if the persistent data storage area cannot be
-     * accessed.
-     *
-     * The result is used when testing for file existence. See {@link #checkCase(File, String)}.
-     * When the file system is definitely case sensitive, the results of case sensitive string
-     * comparisons is used to match file names. When the file system cannot be determined to
-     * be case sensitive, additional tests using the canonical name of the file are performed.
-     *
-     * @return True or false telling if the active file system may be case insensitive. Answer
-     *         true if the bundle, bundle context, or bundle persistent data storage area are not
-     *         available or cannot be used.
+     * 
+     * @deprecated  -  Instead use !isOsCaseSensitive()
      */
     static boolean isPossiblyCaseInsensitive() {
+    	return !isOsCaseSensitive();
+    }
+    
+    /**
+     * Test whether the active file system is case <em>sensitive</em>. A true result means
+     * that the active file system is case sensitive. A false result means
+     * that the active file system is not case sensitive.  
+     *
+     * The test accesses the bundle context of this class, and creates and removes files in the
+     * persistent data storage area of that bundle context. If the bundle or bundle context are 
+     * not available, or if the persistent data storage area cannot be accessed, then we test the
+     * file system directly (using the canonical name) by writing a file to the file system and 
+     * comparing the File to a File that differs only by case.
+     *
+     * The result is used when testing for file existence. See {@link #checkCase(File, String)}. 
+     *
+     * @return True if the active file system is case sensitive, otherwise false.
+     */
+    static boolean isOsCaseSensitive() { 
         File caseSensitiveFile = null;
         Bundle bundle = FrameworkUtil.getBundle(PathUtils.class);
         if (bundle != null) {
@@ -120,9 +121,11 @@ public class PathUtils {
                             //
                             // Note that OS/400 only considers two files equal if they have both
                             // been canonicalized...
-                            return caseSensitiveFile.getCanonicalFile().equals(new File(caseSensitiveFile.getParentFile(), "CASEsENSITIVE").getCanonicalFile());
+                            return !getCanonicalFile(caseSensitiveFile).equals(getCanonicalFile(new File(caseSensitiveFile.getParentFile(), "CASEsENSITIVE"))); 
                         }
-                    } catch (IOException e) {
+                    } catch (PrivilegedActionException pae) {
+                        // auto FFDC
+                    } catch (IOException ioe) {
                         // auto FFDC
                     } finally {
                         caseSensitiveFile.delete();
@@ -132,21 +135,22 @@ public class PathUtils {
         }
 
         try {
-            // need to double check, since the above code is intended to be run in an
+            // Need to double check, since the above code is intended to be run in an
             // OSGi environment, not a Java SE / JUnit env
             caseSensitiveFile = File.createTempFile("caseSENSITIVEprefix", "TxT");
-            boolean amICaseSensitive = !caseSensitiveFile.getCanonicalFile().equals(new File(caseSensitiveFile.getAbsolutePath().toUpperCase()));
-            if (amICaseSensitive)
-                return false;
-        } catch (IOException e) {
-            // we can't tell if this OS is case sensitive or not.
-            // Assume we might be case insensitive.
-            return true;
+            boolean iAmCaseSensitive = !getCanonicalFile(caseSensitiveFile).equals(new File(caseSensitiveFile.getAbsolutePath().toUpperCase()));
+            if (iAmCaseSensitive) {
+                return true;
+            }
+        } catch (Exception e) {
+            // We can't tell if this OS is case sensitive or not.
+            // Assume we might not be case sensitive.
+            return false;
         } finally {
             //caseSensitiveFile.delete();
         }
-        // Something went wrong. Assume we might be case insensitive.
-        return true;
+        // Something went wrong. Assume we might be not be case sensitive.
+        return false;
     }
 
     /**
@@ -1200,48 +1204,52 @@ public class PathUtils {
     }
 
     /**
-     * Tell if the case of the characters of the path of a file match a path,
-     * taking into account whether the current environment is case sensitive.
-     *
-     * Currently, all environments except Windows and possibly Mac are case
-     * sensitive. If this method is called while executing in an environment
-     * that uses a file system that we've determined to be case insensitive,
-     * then this method will return true, regardless of whether the passed-in
-     * pathToTest matches the passed-in File's path.
-     *
-     * The path is matched as a trailing path of the file which is being tested.
-     *
-     * The trailing path must use forward slashes as the path separator.
-     *
-     * Unpredictable results will be obtained if the trailing path is not
-     * a trailing path of the file which is being tested. For example, true
-     * is always obtained when the current environment is not case sensitive,
-     * regardless of the relationship between the trailing path and the target
-     * file.
-     *
-     * @param file The file which is to be tested.
-     * @param pathToTest The path which is to be tested against the file.
-     *
-     * @return Always true if the file system is case insensitive.
-     *         For case sensitive file systems, true is returned if the passed-in
-     *         file's path ends with the passed-in pathToTest, taking into account
-     *         trailing slashes and symbolic links.
+     * The artifact API is case sensitive even on a file system that is not case sensitive.
+     * 
+     * This method will test that the case of the supplied <em>existing</em> file matches the case
+     * in the pathToTest. It is assumed that you already tested that the file exists using
+     * the pathToTest.  Therefore, on a case sensitive files system, the case must match and
+     * true is returned without doing any further testing.  In other words, the check for file
+     * existence is sufficient on a case sensitive file system, and there is no reason to call
+     * this checkCase method.
+     * 
+     * If the file system is not case sensitive, then a test for file existence will pass
+     * even when the case does not match.  So this method will do further testing to ensure
+     * the case matches.
+     * 
+     * It assumes that the final part of the file's path will be equal to
+     * the whole of the pathToTest. 
+     * 
+     * The path to test should be a unix style path with "/" as the separator character, 
+     * regardless of the operating system. If the file is a directory then a trailing slash
+     * or the absence thereof will not affect whether the case matches since the trailing
+     * slash on a directory is optional.
+     * 
+     * If you call checkCase(...) with a file that does NOT exist:
+     *   On case sensitive file system:  Always returns true
+     *   On case insensitive file system: It compares the pathToTest to the file path of the 
+     *      java.io.File that you passed in rather than the file on disk (since it doesn't exist).
+     *      file.getCanonicalFile() returns the path using the case of the file on disk, if it exists.
+     *      If the file doesn't exist then it returns the path using the case of the java.io.File itself.
+     * 
+     * @param file The existing file to compare against
+     * @param pathToTest The path to test if it is the same
+     * @return <code>true</code> if the case is the same in the file and the pathToTest
      */
     public static boolean checkCase(final File file, String pathToTest) {
         if (pathToTest == null || pathToTest.isEmpty()) {
             return true;
         }
 
-        if (IS_POSSIBLY_CASE_INSENSITIVE) {
-            // since it is assumed that the file exists, it's case must match if we
-            // know that the file system is case sensitive
+        if (IS_OS_CASE_SENSITIVE) {
+            // It is assumed that the file exists.  Therefore, its case must
+            //  match if we know that the file system is case sensitive.
             return true;
         }
 
         try {
-            // This will handle the case where the file system is case insensitive,
-            // but doesn't support symbolic links.  A canonical file path will handle
-            // this case.
+            // This will handle the case where the file system is not case sensitive, but 
+            // doesn't support symbolic links.  A canonical file path will handle this case.
             if (checkCaseCanonical(file, pathToTest)) {
                 return true;
             }
@@ -1359,12 +1367,12 @@ public class PathUtils {
     }
 
     /**
-     * Test if a file is a symbolic link. Test only the step from the
-     * parent of the file to the file. A symbolic link elsewhere in the path
-     * to the file is not detected.
+     * Test if a file is a symbolic link. Test only the file.
+     * A symbolic link elsewhere in the path to the file is not detected.
      *
-     * The test uses {@link File#equals(Object)}, which takes into account
-     * casing differences depending on the current platform.
+     * Gets the canonical form of the parent directory and appends the file name.
+     * Then compares that canonical form of the file to the "Absolute" file.  If 
+     * it doesn't match, then it is a symbolic link.
      *
      * @param candidateChildFile The file to test as a symbolic link.
      * @param candidateParentFile The immediate parent of the target file.
@@ -1421,8 +1429,8 @@ public class PathUtils {
     @Trivial
     private static boolean contains(String[] fileList, String fileName) {
         if (fileList != null) {
-            for (String file : fileList) {
-                if (file.equals(fileName)) {
+            for (String name : fileList) {
+                if (name.equals(fileName)) {
                     return true;
                 }
             }
@@ -1506,7 +1514,7 @@ public class PathUtils {
      * report to be generated. However, processing continues with the call to {@link File#getAbsolutePath()}.
      *
      * Use of canonical paths enables the use of java case sensitive string comparisons
-     * for file name comparisons. See {@link #IS_POSSIBLY_CASE_INSENSITIVE}.
+     * for file name comparisons. See {@link #IS_OS_CASE_SENSITIVE}.
      *
      * @param targetFile The file for which to answer the canonical path.
      *

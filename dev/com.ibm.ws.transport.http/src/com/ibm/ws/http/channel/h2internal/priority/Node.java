@@ -277,7 +277,7 @@ public class Node {
             Tr.debug(tc, "findNextWrite entry: on node " + this + "With status: " + status + "and positive ratio of: " + getPriorityRatioPositive());
         }
 
-        if ((getPriorityRatioPositive() == true) && (status == NODE_STATUS.REQUESTING_WRITE)) {
+        if (status == NODE_STATUS.REQUESTING_WRITE) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "findNextWrite exit: node to write next is: " + this.toStringDetails());
             }
@@ -287,12 +287,14 @@ public class Node {
             for (int i = 0; i < dependents.size(); i++) {
                 Node n = dependents.get(i);
 
-                if (n.findNextWrite() != null) {
+                Node nextWrite = n.findNextWrite();
+                if (nextWrite != null) {
                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                        Tr.debug(tc, "findNextWrite exit: node found");
+                        Tr.debug(tc, "findNextWrite exit: next write node found. stream-id: " + nextWrite.getStreamID() + " node hc: " + nextWrite.hashCode());
                     }
-                    return n;
+                    return nextWrite;
                 }
+
             }
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "findNextWrite exit: null");
@@ -399,8 +401,6 @@ public class Node {
     @Override
     public String toString() {
         String s = "hashcode: " + this.hashCode() + " stream id: " + this.streamID + " ";
-        //+ " pri " + this.priority + " status " + this.status
-        //+ " PRP " + this.priorityRatioPositive + " WC " + this.writeCount + " DWC " + this.dependentWriteCount;
         return s;
     }
 
@@ -414,7 +414,11 @@ public class Node {
     public StringBuffer dumpDependents(StringBuffer s) {
 
         if (s == null) {
-            s = new StringBuffer("Dump of Tree: ");
+            s = new StringBuffer("\nDump of Tree: ");
+        }
+
+        if (dependents.size() > 0) {
+            s.append("\n" + dependents.size() + " Dependents of: " + this);
         }
 
         s.append("\nDependents of: " + this);

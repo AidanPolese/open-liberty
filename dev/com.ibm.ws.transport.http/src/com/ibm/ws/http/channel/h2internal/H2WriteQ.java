@@ -17,7 +17,6 @@ import com.ibm.websphere.channelfw.osgi.CHFWBundle;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.http.channel.h2internal.exceptions.FlowControlException;
-import com.ibm.ws.http.channel.h2internal.priority.Node;
 import com.ibm.ws.http.channel.internal.HttpMessages;
 import com.ibm.wsspi.channelfw.VirtualConnection;
 import com.ibm.wsspi.tcpchannel.TCPWriteRequestContext;
@@ -219,7 +218,7 @@ public class H2WriteQ implements H2WorkQInterface {
 
                 // wait for the mux write callback to be processed, which will also update that Q status
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "sync - wait for write to complete");
+                    Tr.debug(tc, "writeEntry - WRITE_TYPE.SYNC - call entry.waitWriteCompleteLatch");
                 }
                 e.waitWriteCompleteLatch();
 
@@ -240,7 +239,7 @@ public class H2WriteQ implements H2WorkQInterface {
                     // queue service thread needs to wait for async write to complete before performing next write (can not have two writes
                     // outstanding on the TCP Channel)
                     if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                        Tr.debug(tc, "async - wait for write to complete");
+                        Tr.debug(tc, "writeEntry - WRITE_TYPE.ASYNC - call entry.waitWriteCompleteLatch");
                     }
                     e.waitWriteCompleteLatch();
                     return WRITE_ACTION.COMPLETED;
@@ -283,9 +282,9 @@ public class H2WriteQ implements H2WorkQInterface {
     }
 
     @Override
-    public Node addNewNodeToQ(int streamID, int parentStreamID, int priority, boolean exclusive) {
+    public void addNewNodeToQ(int streamID, int parentStreamID, int priority, boolean exclusive) {
         // no-op for this implementation
-        return null;
+        return;
     }
 
     @Override

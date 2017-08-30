@@ -61,7 +61,6 @@ public final class J2CGlobalConfigProperties implements PropertyChangeListener, 
     private final String XpathId; // This will contain the xpath unique identifier.
     protected final String cfName; // The jndi name if there is one, if not the base of the xpath id.
                                    // Used for jca.cm messages, not passed out externally.
-    protected final boolean manageCachedHandles;
 
     /*
      * Indicates if the configured MCF is RRSTransactional. If so,
@@ -390,7 +389,6 @@ public final class J2CGlobalConfigProperties implements PropertyChangeListener, 
     public J2CGlobalConfigProperties(
                                      String _xpathId,
                                      AbstractConnectionFactoryService cfSvc,
-                                     boolean _manageCachedHandles,
                                      boolean _logMissingTranContext,
                                      int _maxSharedBuckets,
                                      int _maxFreePoolHashSize,
@@ -427,7 +425,6 @@ public final class J2CGlobalConfigProperties implements PropertyChangeListener, 
         }
 
         dynamicEnlistmentSupported = false; // Will become true later if managed connection implements LazyEnlistableManagedConnection
-        this.manageCachedHandles = _manageCachedHandles;
         this.rrsTransactional = cfSvc.getRRSTransactional();
         this.threadSecurity = cfSvc.getThreadSecurity();
         this.threadIdentitySupport = cfSvc.getThreadIdentitySupport();
@@ -887,7 +884,6 @@ public final class J2CGlobalConfigProperties implements PropertyChangeListener, 
         buf.append(nl + "  <-- Read Only -->" + nl);
         buf.append("  jndiName                        : " + jndiName + nl);
         buf.append("  transactionResourceRegistration : " + transactionResourceRegistration + nl);
-        buf.append("  manageCachedHandles             : " + manageCachedHandles + nl);
         buf.append("  rrsTransactional                : " + rrsTransactional + nl);
         buf.append("  threadSecurity                  : " + threadSecurity + nl);
         buf.append("  threadIdentitySupport           : " + threadIdentitySupport + nl);

@@ -22,4 +22,5 @@ publish.feature.resources: *.mf
 	com.ibm.ws.security.credentials.wscred;version=latest, \
 	com.ibm.websphere.security;version=latest, \
 	com.ibm.ws.security.jaas.common;version=latest, \
-	com.ibm.ws.security.authentication.builtin;version=latest
+	com.ibm.ws.security.authentication.builtin;version=latest, \
+	com.ibm.ws.security.mp.jwt.proxy;version=latest

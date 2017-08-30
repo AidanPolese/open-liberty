@@ -48,7 +48,9 @@ public class Tree {
         root = new Node(Node.ROOT_STREAM_ID, Node.ROOT_PRIORITY);
     }
 
-    public synchronized Node findNode(int streamID) {
+    public synchronized boolean findNode(int streamID) {
+
+        // avoid returning node, since node processing should only happen in this synchronized tree
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "findNode entry: starting at root for stream ID: " + streamID);
@@ -56,7 +58,11 @@ public class Tree {
 
         Node node = root.findNode(streamID);
 
-        return node;
+        if (node != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public synchronized Node getRoot() {
@@ -104,6 +110,11 @@ public class Tree {
                 // need to start the write counting over, since a new node was added at this level, and re-sort
                 parentNode.clearDependentsWriteCount();
                 parentNode.sortDependents();
+                // special debug - too verbose for big trees
+                //if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                //    Tr.debug(tc, "addNode after sorting: tree is now:" + dumpTree());
+                //}
+
             }
             return true;
         }
@@ -154,6 +165,12 @@ public class Tree {
 
                 // need to re-arrange all nodes at this level because of count change
                 parentNode.sortDependents();
+                // special debug - too verbose for big trees
+                //if ((nodeToUpdate.writeCount % 100) == 0) {
+                //    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                //        Tr.debug(tc, "updateNode after sorting: tree is now:" + getTreeDump());
+                //    }
+                //}
 
             } else if (writeCountAction == WRITE_COUNT_ACTION.CLEAR) {
                 nodeToUpdate.setWriteCount(0);
@@ -176,16 +193,19 @@ public class Tree {
      *
      * @return node to perform the next write, or null if no nodes want to write.
      */
-    public synchronized Node findNextWrite() {
+    public synchronized H2WriteQEntry findNextWriteEntry() {
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "findNextWrite entry: from root " + root);
+            Tr.debug(tc, "findNextWriteEntry entry: from root " + root);
         }
 
         Node node = root.findNextWrite();
+        if (node != null) {
+            H2WriteQEntry e = node.getEntry();
+            return e;
+        }
 
-        return node;
-
+        return null;
     }
 
     /**
@@ -270,26 +290,30 @@ public class Tree {
         if ((depNode == null) || (exclusiveParentNode == null)) {
             return false;
         }
-
         // the dependent node that will have an exclusive parent, that dependent node will need to be the parent of the current parent's children
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "made dependent Node parent of all current Parent dependents");
+            Tr.debug(tc, "make dependent Node parent of all current Parent dependents");
         }
         ArrayList<Node> dependents = exclusiveParentNode.getDependents();
-        Iterator<Node> iter = dependents.iterator();
-        while (iter.hasNext()) {
-            iter.next().setParent(depNode);
+        for (int i = 0; i < dependents.size(); i++) {
+            Node n = dependents.get(i);
+            if (n.getStreamID() != depNode.getStreamID()) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "node stream-id: " + n.getStreamID() + " will now have a parent stream of: " + depNode.getStreamID());
+                }
+                n.setParent(depNode);
+            }
         }
+
+        // make desired node be the only dependent of this parent
+        depNode.setParent(exclusiveParentNode);
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "set up exclusive parent, clear counts and resort nodes");
         }
 
-        // make desired node be the only dependent of this parent
-        depNode.setParent(exclusiveParentNode);
-        depNode.setWriteCount(0);
-
         // clear and re-sort where needed
+        depNode.setWriteCount(0);
         depNode.clearDependentsWriteCount();
         depNode.sortDependents();
 
@@ -531,6 +555,11 @@ public class Tree {
                 nodeToChange.setPriority(newPriority);
                 oldParent.clearDependentsWriteCount();
                 oldParent.sortDependents();
+                // special debug - too verbose for big trees
+                //if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                //    Tr.debug(tc, "updateNodeFrameParameters after sorting: tree is now:" + getTreeDump());
+                //}
+
             }
         }
 
@@ -541,15 +570,11 @@ public class Tree {
         return true;
     }
 
-    public synchronized StringBuffer dumpTree() {
+    public synchronized String getTreeDump() {
 
-        StringBuffer s = new StringBuffer("Dump Tree: " + this.hashCode());
+        StringBuffer s = new StringBuffer("\nDump Tree: " + this.hashCode());
         root.dumpDependents(s);
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, s.toString());
-        }
-
-        return s;
+        return s.toString();
     }
 }

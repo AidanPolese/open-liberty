@@ -164,7 +164,17 @@ public abstract class ProviderFactory {
         if (!allowed) {
             return null;
         }
-        boolean checkAll = PropertyUtils.isTrue(theBus.getProperty(PROVIDER_CACHE_CHECK_ALL));
+        boolean checkAll = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+
+            @Override
+            public Boolean run() {
+                Object o = System.getProperty(PROVIDER_CACHE_CHECK_ALL);
+                if (o == null) {
+                    o = PropertyUtils.isTrue(theBus.getProperty(PROVIDER_CACHE_CHECK_ALL));
+                }
+                return PropertyUtils.isTrue(o);
+            }
+        });
         return new ProviderCache(checkAll);
     }
 
@@ -401,9 +411,8 @@ public abstract class ProviderFactory {
                 ParamConverter<T> converter = pi.getProvider().getConverter(paramType, genericType, anns);
                 if (converter != null) {
                     return converter;
-                } else {
-                    pi.clearThreadLocalProxies();
                 }
+                pi.clearThreadLocalProxies();
             }
         }
         return null;
@@ -469,6 +478,9 @@ public abstract class ProviderFactory {
                                        Class<?> providerClass,
                                        boolean injectContext) {
 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "handleMapper", new Object[]{em, expectedType, m, providerClass, injectContext});
+        }
         // Liberty Change for CXF Begin
         Class<?> mapperClass = ClassHelper.getRealClass(bus, em.getOldProvider());
         // Liberty Change for CXF End
@@ -501,6 +513,9 @@ public abstract class ProviderFactory {
                         if (injectContext) {
                             injectContextValues(em, m);
                         }
+                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                            Tr.debug(tc, "handleMapper return true");
+                        }
                         return true;
                     }
                     Class<?> actualClass = InjectionUtils.getRawType(arg);
@@ -514,12 +529,18 @@ public abstract class ProviderFactory {
                         if (injectContext) {
                             injectContextValues(em, m);
                         }
+                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                            Tr.debug(tc, "handleMapper return true");
+                        }
                         return true;
                     }
                 }
             } else if (t instanceof Class && providerClass.isAssignableFrom((Class<?>) t)) {
                 if (injectContext) {
                     injectContextValues(em, m);
+                }
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "handleMapper return true");
                 }
                 return true;
             }
@@ -558,9 +579,8 @@ public abstract class ProviderFactory {
             }
 
             return interceptors;
-        } else {
-            return null;
         }
+        return null;
     }
 
     public <T> List<WriterInterceptor> createMessageBodyWriterInterceptor(Class<T> bodyType,
@@ -597,9 +617,8 @@ public abstract class ProviderFactory {
             }
 
             return interceptors;
-        } else {
-            return null;
         }
+        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -656,6 +675,10 @@ public abstract class ProviderFactory {
                                                             MediaType mediaType,
                                                             Message m) {
 
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "createMessageBodyWriter ",  new Object[]{type, genericType, annotations, mediaType, m});
+        }
+        
         // Step1: check the cache.
         if (providerCache != null) {
             for (ProviderInfo<MessageBodyWriter<?>> ep : providerCache.getWriters(type, mediaType)) {
@@ -960,6 +983,9 @@ public abstract class ProviderFactory {
 
     private <T> boolean matchesWriterMediaTypes(ProviderInfo<MessageBodyWriter<?>> pi,
                                                 MediaType mediaType) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "matchesWriterMediaTypes ",  new Object[]{pi, mediaType});
+        }
         MessageBodyWriter<?> ep = pi.getProvider();
         List<MediaType> supportedMediaTypes = JAXRSUtils.getProviderProduceTypes(ep);
 
@@ -967,7 +993,11 @@ public abstract class ProviderFactory {
             JAXRSUtils.intersectMimeTypes(Collections.singletonList(mediaType),
                                                                            supportedMediaTypes, false);
 
-        return availableMimeTypes.size() != 0;
+        boolean b = availableMimeTypes.size() != 0;
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "matchesWriterMediaTypes return " + b);
+        }
+        return b;
     }
 
     private boolean isWriteable(ProviderInfo<MessageBodyWriter<?>> pi,
@@ -1071,7 +1101,7 @@ public abstract class ProviderFactory {
         }
     }
 
-    private static int compareCustomStatus(ProviderInfo<?> p1, ProviderInfo<?> p2) {
+    static int compareCustomStatus(ProviderInfo<?> p1, ProviderInfo<?> p2) {
         Boolean custom1 = p1.isCustom();
         Boolean custom2 = p2.isCustom();
         int result = custom1.compareTo(custom2) * -1;
@@ -1221,8 +1251,8 @@ public abstract class ProviderFactory {
     }
 
     public static class ProviderInfoClassComparator implements Comparator<ProviderInfo<?>> {
-        private final Comparator<Object> comp;
-        private boolean defaultComp;
+        final Comparator<Object> comp;
+        boolean defaultComp;
 
         public ProviderInfoClassComparator(Class<?> expectedCls) {
             this.comp = new ClassComparator(expectedCls);
@@ -1278,8 +1308,10 @@ public abstract class ProviderFactory {
         if (realClass1.isAssignableFrom(realClass2)) {
             // subclass should go first
             return 1;
+        } else if (realClass2.isAssignableFrom(realClass1)) {
+            return -1;
         }
-        return -1;
+        return 0;
     }
 
     //Liberty code change start

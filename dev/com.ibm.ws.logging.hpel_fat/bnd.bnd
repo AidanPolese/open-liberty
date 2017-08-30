@@ -18,7 +18,7 @@ test.project: true
 
 -buildpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
-	../build.sharedResources/lib/httpunit/1.7/lib/httpunit.jar;version=file, \
+	httpunit:httpunit;version=1.7, \
 	fattest.simplicity;version=latest, \
 	com.ibm.ws.componenttest:public.api;version=1.0.0, \
 	com.ibm.ws.componenttest:fat.harness;version=1.0.0, \
