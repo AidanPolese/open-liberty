@@ -18,10 +18,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
 import java.util.zip.DataFormatException;
 
-import com.ibm.websphere.channelfw.osgi.CHFWBundle;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.FFDCFilter;
@@ -5135,9 +5133,6 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
             }
             return;
         }
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "handleH2LinkPreload(): Push-promise headers are " + outgoingHb);
-        }
 
         // Create the new even numbered promised stream, the state is idle to start
         int promisedStreamId = ((H2HttpInboundLinkWrap) link).muxLink.getNextPromisedStreamId();
@@ -5155,7 +5150,7 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
         promisedSP.initializePromisedStream();
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "handleH2LinkPreload(): Push-promise streamId is " + promisedStreamId);
+            Tr.debug(tc, "handleH2LinkPreload(): Push-promise stream-id is " + promisedStreamId);
         }
 
         // Send the push_promise frame on the existing stream
@@ -5172,14 +5167,14 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
             }
         } else {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "handleH2LinkPreload(): The push-promise stream " + streamId + " has been closed.");
+                Tr.debug(tc, "handleH2LinkPreload(): The push-promise stream-id " + streamId + " has been closed.");
             }
             // TODO Clean up promised stream
             return;
         }
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "handleH2LinkPreload(): Push promise frame sent on stream " + streamId);
+            Tr.debug(tc, "handleH2LinkPreload(): Push promise frame sent on stream-id " + streamId);
         }
 
         // Push the request to webcontainer
@@ -5193,48 +5188,16 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
         } catch (Exception e) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "handleH2LinkPreload(): Error: There was a problem creating the pushed header block, " + e);
+                Tr.debug(tc, "handleH2LinkPreload(): Error: There was a problem creating the pushed header block on stream-id " + streamId + ", " + e);
             }
             return;
-        }
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "handleH2LinkPreload(): Header frame headers are  " + incomingHb);
         }
 
         // Create a headers frame as if it had come in from the client
         FrameHeaders headersFrame = new FrameHeaders(streamId, incomingHb.toByteArray());
 
-        ExecutorService executorService = CHFWBundle.getExecutorService();
-        Http2Push pushThread = new Http2Push(promisedSP, headersFrame);
-        executorService.execute(pushThread);
-
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.exit(tc, "handleH2LinkPreload()");
-        }
-
-    }
-
-    private class Http2Push implements Runnable {
-
-        private H2StreamProcessor promisedSP = null;
-        private FrameHeaders frame = null;
-
-        public Http2Push(H2StreamProcessor promisedSP, FrameHeaders frame) {
-
-            this.promisedSP = promisedSP;
-            this.frame = frame;
-
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "Http2Push(): request is " + frame.toString());
-            }
-        }
-
-        @Override
-        public void run() {
-
-            promisedSP.sendRequestToWc(frame);
-
-        }
+        // Kick off a new thread to handle this request
+        promisedSP.sendRequestToWc(headersFrame);
 
     }
 
