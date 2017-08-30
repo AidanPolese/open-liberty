@@ -16,6 +16,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.ibm.websphere.simplicity.ShrinkHelper;
@@ -42,8 +43,8 @@ import componenttest.topology.utils.FATServletClient;
  */
 @RunWith(FATRunner.class)
 public class SimpleTest extends FATServletClient {
-	
-	public static final String APP_NAME = "app1";
+
+    public static final String APP_NAME = "app1";
 
     @Server("FATServer")
     @TestServlet(servlet = TestServletA.class, path = APP_NAME + "/TestServletA")
@@ -66,5 +67,11 @@ public class SimpleTest extends FATServletClient {
     @AfterClass
     public static void tearDown() throws Exception {
         server1.stopServer();
+    }
+
+    @Test
+    public void verifyArtifactoryDependency() throws Exception {
+        // Confirm that the example Artifactory dependency was download and is available on the classpath
+        org.apache.derby.drda.NetworkServerControl.class.getName();
     }
 }

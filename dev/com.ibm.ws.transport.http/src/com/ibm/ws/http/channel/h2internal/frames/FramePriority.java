@@ -77,7 +77,9 @@ public class FramePriority extends Frame {
             firstPayloadByte = (byte) (firstPayloadByte & Constants.MASK_7F);
             streamDependency = frp.grabNext24BitInt(firstPayloadByte);
 
-            weight = frp.grabNextByte();
+            // convert signed byte to integer as if the byte was unsigned.
+            weight = (0x00FF & frp.grabNextByte());
+
             // weight comes over the wire as 0 - 255, but as per spec instructions should be 1 - 256 internally
             weight = weight + 1;
         } catch (FrameSizeException e) {

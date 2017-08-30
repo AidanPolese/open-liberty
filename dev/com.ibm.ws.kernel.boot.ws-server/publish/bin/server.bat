@@ -338,7 +338,7 @@ goto:eof
   call:serverEnv
   call:serverExists true
   if %RC% == 2 goto:eof
-  !WLP_INSTALL_DIR!\bin\tools\win\prunsrv.exe  //IS//%SERVER_NAME% --Startup=manual --DisplayName="%SERVER_NAME%" --Description="IBM WebSphere Liberty Profile" ++DependsOn=Tcpip --LogPath="%WLP_INSTALL_DIR%\usr\servers\%SERVER_NAME%\logs" --StdOutput=auto --StdError=auto --StartMode=exe --StartPath="%WLP_INSTALL_DIR%" --StartImage="%WLP_INSTALL_DIR%\bin\server.bat" ++StartParams=start#%SERVER_NAME% --StopMode=exe --StopPath="%WLP_INSTALL_DIR%" --StopImage="%WLP_INSTALL_DIR%\bin\server.bat" ++StopParams=stop#%SERVER_NAME%                                                                                                                             
+  "!WLP_INSTALL_DIR!\bin\tools\win\prunsrv.exe"  //IS//%SERVER_NAME% --Startup=manual --DisplayName="%SERVER_NAME%" --Description="IBM WebSphere Liberty Profile" ++DependsOn=Tcpip --LogPath="%WLP_INSTALL_DIR%\usr\servers\%SERVER_NAME%\logs" --StdOutput=auto --StdError=auto --StartMode=exe --StartPath="%WLP_INSTALL_DIR%" --StartImage="%WLP_INSTALL_DIR%\bin\server.bat" ++StartParams=start#%SERVER_NAME% --StopMode=exe --StopPath="%WLP_INSTALL_DIR%" --StopImage="%WLP_INSTALL_DIR%\bin\server.bat" ++StopParams=stop#%SERVER_NAME%                                                                                                                             
 goto:eof
 
 :startWinService
@@ -357,7 +357,7 @@ goto:eof
       call:javaCmdResult
     )
   ) else (
-     !WLP_INSTALL_DIR!\bin\tools\win\prunsrv.exe //ES//%SERVER_NAME%
+     "!WLP_INSTALL_DIR!\bin\tools\win\prunsrv.exe" //ES//%SERVER_NAME%
   )   
 goto:eof
 
@@ -366,12 +366,12 @@ goto:eof
   call:serverEnv
   call:serverExists true
   if %RC% == 2 goto:eof
-  !WLP_INSTALL_DIR!\bin\tools\win\prunsrv.exe //SS//%SERVER_NAME%
+  "!WLP_INSTALL_DIR!\bin\tools\win\prunsrv.exe" //SS//%SERVER_NAME%
 goto:eof
 
 :unregisterWinService
   if NOT "%OS%" == "Windows_NT" goto:eof
-  !WLP_INSTALL_DIR!\bin\tools\win\prunsrv.exe //DS//%SERVER_NAME%
+  "!WLP_INSTALL_DIR!\bin\tools\win\prunsrv.exe" //DS//%SERVER_NAME%
 goto:eof
 
 :pauseServer

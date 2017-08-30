@@ -27,6 +27,9 @@ public class H2MuxTCPWriteCallback implements TCPWriteCompletedCallback {
     H2WorkQInterface h2WorkQ = null;
 
     public void setCurrentQEntry(H2WriteQEntry x) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "muxCallback entry set to stream-id: " + x.getStreamID());
+        }
         qEntry = x;
     }
 

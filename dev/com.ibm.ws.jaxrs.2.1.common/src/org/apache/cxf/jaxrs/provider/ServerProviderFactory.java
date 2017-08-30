@@ -78,7 +78,11 @@ import org.apache.cxf.jaxrs.utils.ThreadLocalProxyCopyOnWriteArraySet;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageUtils;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+
 public final class ServerProviderFactory extends ProviderFactory {
+    private static final TraceComponent tc = Tr.register(ServerProviderFactory.class);
     private static final Set<Class<?>> SERVER_FILTER_INTERCEPTOR_CLASSES = new HashSet<Class<?>>(Arrays.<Class<?>> asList(ContainerRequestFilter.class,
                                                                                                                           ContainerResponseFilter.class,
                                                                                                                           ReaderInterceptor.class,
@@ -201,7 +205,13 @@ public final class ServerProviderFactory extends ProviderFactory {
                                                                           Message m) {
         List<ProviderInfo<ExceptionMapper<?>>> candidates = new LinkedList<ProviderInfo<ExceptionMapper<?>>>();
         for (ProviderInfo<ExceptionMapper<?>> em : exceptionMappers) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "ExceptionMapper:  " + em.getProvider());
+            }
             if (handleMapper(em, exceptionType, m, ExceptionMapper.class, true)) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "Adding candidate mapper:  " + em.getProvider());
+                }
                 candidates.add(em);
             }
         }
@@ -603,16 +613,23 @@ public final class ServerProviderFactory extends ProviderFactory {
 
         @Override
         public int compare(ProviderInfo<?> p1, ProviderInfo<?> p2) {
+            // ExceptionMapper classes may be turned to proxy classes due to dependency
+            // injection so use the "OldProvider" if it exists.
             if (makeDefaultWaeLeastSpecific) {
-                if (p1.getProvider() instanceof WebApplicationExceptionMapper
+                if (p1.getOldProvider() instanceof WebApplicationExceptionMapper
                     && !p1.isCustom()) {
                     return 1;
-                } else if (p2.getProvider() instanceof WebApplicationExceptionMapper
+                } else if (p2.getOldProvider() instanceof WebApplicationExceptionMapper
                            && !p2.isCustom()) {
                     return -1;
                 }
             }
-            return super.compare(p1, p2);
+            int result = comp.compare(p1.getOldProvider(), p2.getOldProvider());
+            if (result == 0 && defaultComp) {
+                result = compareCustomStatus(p1, p2);
+            }
+            return result;
+
         }
     }
 
