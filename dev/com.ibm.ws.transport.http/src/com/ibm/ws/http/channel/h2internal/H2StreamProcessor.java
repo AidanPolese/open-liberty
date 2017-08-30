@@ -45,6 +45,7 @@ import com.ibm.ws.http.dispatcher.internal.HttpDispatcher;
 import com.ibm.wsspi.bytebuffer.WsByteBuffer;
 import com.ibm.wsspi.bytebuffer.WsByteBufferPoolManager;
 import com.ibm.wsspi.channelfw.VirtualConnection;
+import com.ibm.wsspi.tcpchannel.TCPReadRequestContext;
 import com.ibm.wsspi.tcpchannel.TCPRequestContext;
 
 /**
@@ -235,9 +236,10 @@ public class H2StreamProcessor {
 
         while (addFrame != ADDITIONAL_FRAME.NO) {
 
+            // skip only first debug here, since it was done on entry
             if (doDebugWhile) {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "processNextFrame- in while: stream: " + myID + " frame type: " + frame.getFrameType().toString() + " direction: " + direction.toString());
+                    Tr.debug(tc, "processNextFrame- in while: stream-id: " + myID + " frame type: " + frame.getFrameType().toString() + " direction: " + direction.toString());
                 }
             } else {
                 doDebugWhile = true;
@@ -556,6 +558,14 @@ public class H2StreamProcessor {
      */
     public void initializePromisedStream() {
         this.updateStreamState(StreamState.RESERVED_LOCAL);
+    }
+
+    /**
+     * Update the promised stream state to Open
+     *
+     */
+    public void readyToSendPushPromise() {
+        this.updateStreamState(StreamState.OPEN);
     }
 
     /**
@@ -1000,16 +1010,42 @@ public class H2StreamProcessor {
      * TODO There may be a problem here, since a RST_STREAM frame can come in on the reserved PP
      * stream
      */
-    public void sendRequestToWc(String request) {
+    public void sendRequestToWc(FrameHeaders frame) {
 
-        WsByteBufferPoolManager bufManager = HttpDispatcher.getBufferManager();
-        WsByteBuffer buf = bufManager.allocate(request.length());
-        buf.put(request.getBytes());
+        if (null != frame) {
 
-        moveDataIntoReadBufferArray(buf);
+            WsByteBufferPoolManager bufManager = HttpDispatcher.getBufferManager();
+            WsByteBuffer buf = bufManager.allocate(frame.buildFrameForWrite().length);
+            byte[] ba = frame.buildFrameForWrite();
 
-        // It's ready to send to the webcontainer
-        setReadyForRead();
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "sendRequestToWc: request length is " + ba.length);
+            }
+
+            buf.put(ba);
+            buf.flip();
+            TCPReadRequestContext readi = h2HttpInboundLinkWrap.getConnectionContext().getReadInterface();
+            readi.setBuffer(buf);
+
+            // It's ready to send to the webcontainer
+            currentFrame = frame;
+            this.getHeadersFromFrame();
+            setHeadersComplete();
+            try {
+                processCompleteHeaders();
+            } catch (CompressionException e) {
+                // TODO Auto-generated catch block
+                // Do you need FFDC here? Remember FFDC instrumentation and @FFDCIgnore
+                // http://was.pok.ibm.com/xwiki/bin/view/Liberty/LoggingFFDC
+                e.printStackTrace();
+            }
+            setReadyForRead();
+        } else {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "sendRequestToWc: request is null");
+            }
+
+        }
 
     }
 
@@ -1392,6 +1428,10 @@ public class H2StreamProcessor {
 
             // if nothing left in this buffer, then move to the next buffer in the array
             if (!streamReadReady[streamArrayIndex].hasRemaining()) {
+
+                // done with this buffer, so release it
+                streamReadReady[streamArrayIndex].release();
+
                 streamArrayIndex++;
                 while (true) {
                     if (streamReadReady[streamArrayIndex].hasRemaining()) {
@@ -1470,10 +1510,10 @@ public class H2StreamProcessor {
 
             WsByteBufferPoolManager mgr = HttpDispatcher.getBufferManager();
             WsByteBuffer writeFrame = mgr.allocate(writeFrameBytes.length);
-            writeFrame.put(writeFrameBytes);
-            writeFrame.flip();
 
             try {
+                writeFrame.put(writeFrameBytes);
+                writeFrame.flip();
 
                 // We need to check to see if the write window is large enough to write this data.
                 // If it's not, we'll queue it up and wait for the client to update the window
@@ -1506,12 +1546,17 @@ public class H2StreamProcessor {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(tc, "writeFrameSync caught an IOException: " + e);
                 }
+            } finally {
+                // release buffer used to synchronously write the frame
+                writeFrame.release();
             }
         } else {
-            // throw some exception
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "writeFrameSync internal flow issue - exiting method ");
+            }
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "writeFrameSync exit: stream: " + myID);
+            Tr.debug(tc, "writeFrameSync exit: stream-id: " + myID);
         }
         return true;
     }

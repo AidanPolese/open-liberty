@@ -79,7 +79,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /**
      * Constructor of an output stream for a given service context.
-     * 
+     *
      * @param context
      */
     public HttpOutputStreamImpl(HttpInboundServiceContext context) {
@@ -88,7 +88,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#setIsClosing(boolean)
      */
     @Override
@@ -98,7 +98,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /**
      * Set the reference to the virtual connection.
-     * 
+     *
      * @param inVC
      */
     public void setVirtualConnection(VirtualConnection inVC) {
@@ -114,7 +114,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#getBufferSize()
      */
     @Override
@@ -124,7 +124,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#setBufferSize(int)
      */
     @Override
@@ -146,7 +146,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#clear()
      */
     @Override
@@ -167,7 +167,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#getBytesWritten()
      */
     @Override
@@ -177,7 +177,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#getBufferedCount()
      */
     @Override
@@ -187,7 +187,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#hasBufferedContent()
      */
     @Override
@@ -198,7 +198,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
     /**
      * Perform validation of the stream before processing external requests
      * to write data.
-     * 
+     *
      * @throws IOException
      */
     protected void validate() throws IOException {
@@ -206,6 +206,10 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
             throw this.error;
         }
         if (isClosed()) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "validate - is closed: hc: " + this.hashCode() + " details: " + this);
+            }
+
             throw new IOException("Stream is closed");
         }
         if (null == this.output) {
@@ -215,7 +219,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /**
      * Access the proper output buffer for the current write attempt.
-     * 
+     *
      * @return WsByteBuffer
      */
     protected WsByteBuffer getBuffer() {
@@ -247,7 +251,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
      * Write the given information to the output buffers.
      * If it went async during flush , save the remaining data and stop.
      * When callback on complete, write the remaining data.
-     * 
+     *
      * @param value
      * @param start - offset into value
      * @param len - length from that offset to write
@@ -304,7 +308,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
      * User attempted to use the optimized FileChannel writing; however, that
      * path is currently disabled. This method will read the file and do repeated
      * write calls until done. This avoids TCP channel doing it in one big block.
-     * 
+     *
      * @param fc
      * @throws IOException
      */
@@ -348,7 +352,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /**
      * Check whether we can actually write using file channels.
-     * 
+     *
      * @return boolean - true means we CANNOT write using FileChannels
      */
     private boolean cannotWriteFC() {
@@ -362,7 +366,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#writeFile(java.nio.channels.FileChannel)
      */
     @Override
@@ -407,7 +411,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#flushHeaders()
      */
     @Override
@@ -446,7 +450,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#flushBuffers()
      */
     @Override
@@ -561,7 +565,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
             return;
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "Closing stream: " + this);
+            Tr.debug(tc, "Closing stream: hc: " + this.hashCode() + " details: " + this);
         }
         this.closed = true;
         this.ignoreFlush = false;
@@ -575,7 +579,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#isClosed()
      */
     @Override
@@ -594,7 +598,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#flush(boolean)
      */
     @Override
@@ -605,7 +609,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.outbound.HttpOutputStream#setContentLength(long)
      */
     @Override
@@ -651,8 +655,7 @@ public class HttpOutputStreamImpl extends HttpOutputStreamConnectWeb {
      * notified when the stream is first written to.
      */
     @Override
-    public void setObserver(HttpOutputStreamObserver obs)
-    {
+    public void setObserver(HttpOutputStreamObserver obs) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "obs  ->" + obs);
         }

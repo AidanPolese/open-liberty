@@ -406,7 +406,7 @@ public class utils {
     }
 
     public static boolean getReservedBit(byte input) {
-        return ((input & Constants.MASK_80) == 1) ? true : false;
+        return ((input & Constants.MASK_80) == Constants.MASK_80) ? true : false;
     }
 
 }

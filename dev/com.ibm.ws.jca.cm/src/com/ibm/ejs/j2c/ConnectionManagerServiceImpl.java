@@ -580,8 +580,7 @@ public class ConnectionManagerServiceImpl extends ConnectionManagerService {
             return null;
         } else {
             // Connection pool does not exist, create j2c global configuration properties for creating pool.
-            return new J2CGlobalConfigProperties(name, svc, false, // manageCachedHandles
-                            false, // logMissingTranContext
+            return new J2CGlobalConfigProperties(name, svc, false, // logMissingTranContext
                             200, // maxSharedBuckets,
                             100, // maxFreePoolHashSize,
                             false, // diagnoseConnectionUsage,

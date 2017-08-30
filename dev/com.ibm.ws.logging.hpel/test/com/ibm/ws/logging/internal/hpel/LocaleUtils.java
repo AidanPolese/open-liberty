@@ -29,9 +29,9 @@ public class LocaleUtils {
 
     /**
      * This utility method is used to get the Max date based on the current Locale.
-     * 
+     *
      * @param string
-     * 
+     *
      * @return
      * @throws ParseException
      */
@@ -42,59 +42,63 @@ public class LocaleUtils {
         String timeZone = cal.getTimeZone().getDisplayName(false, TimeZone.SHORT);
         System.out.println(" Timezone : " + timeZone);
         String currentLocale = Locale.getDefault().toString();
+
+        // In java 9 the default locale changes to have a comma ',' separate the date and time
+        String dateSep = System.getProperty("java.specification.version").startsWith("1.") ? "" : ",";
+
         if (currentLocale.equalsIgnoreCase("en_US") && isMac(OS)) {
-            return "24/02/13 23:59:59:999 " + timeZone;
+            return "24/02/13" + dateSep + " 23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("en_US")) {
-            return "2/24/13 23:59:59:999 " + timeZone;
+            return "2/24/13" + dateSep + " 23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("cs_CZ")) {
-            return "24.2.13 23:59:59:999 " + timeZone;
+            return "24.2.13" + dateSep + " 23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("de_DE")) {
-            return "24.02.13 23:59:59:999 " + timeZone;
+            return "24.02.13" + dateSep + " 23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("es_ES")) {
-            return "24/02/13 23:59:59:999 " + timeZone;
+            return "24/02/13" + dateSep + " 23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("fr_FR")) {
-            return "24/02/13 23:59:59:999 " + timeZone;
+            return "24/02/13" + dateSep + " 23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("hu_HU")) {
-            return "2013.02.24. 23:59:59:999 " + timeZone;
+            return "2013.02.24." + dateSep + " 23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("it_IT")) {
-            return "24/02/13 23.59.59:999 " + timeZone;
+            return "24/02/13" + dateSep + " 23.59.59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("ja_JP")) {
-            return "13/02/24 23:59:59:999 " + timeZone;
+            return "13/02/24" + dateSep + " 23:59:59:999 " + timeZone;
         } else if (currentLocale.equalsIgnoreCase("ko_KR")) {
-            return "13. 2. 24   23:59:59:999 " + timeZone;
+            return "13. 2. 24" + dateSep + "   23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("pl_PL")) {
-            return "24.02.13 23:59:59:999 " + timeZone;
+            return "24.02.13" + dateSep + " 23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("pt_BR")) {
-            return "24/02/13 23:59:59:999 " + timeZone;
+            return "24/02/13" + dateSep + " 23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("ro_RO")) {
-            return "24.02.2013 23:59:59:999 " + timeZone;
+            return "24.02.2013" + dateSep + " 23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("ru_RU")) {
-            return "24.02.13 23:59:59:999 " + timeZone;
+            return "24.02.13" + dateSep + " 23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("zh")) {
-            return "13-2-24 23:59:59:999 " + timeZone;
+            return "13-2-24" + dateSep + " 23:59:59:999 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("zh_TW")) {
-            return "2013/2/24   23:59:59:999 " + timeZone;
+            return "2013/2/24" + dateSep + "   23:59:59:999 " + timeZone;
         } else {
 
             DateFormat dateTimeFormat = FormatSet.customizeDateFormat(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM));
             dateTimeFormat.setLenient(false);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy HH:mm:ss:SSS");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy" + dateSep + " HH:mm:ss:SSS");
             sdf.setLenient(false);
-            Date dt = sdf.parse("24/2/2013 23:59:59:999");
+            Date dt = sdf.parse("24/2/2013" + dateSep + " 23:59:59:999");
             return dateTimeFormat.format(dt);
 
         }
@@ -103,7 +107,7 @@ public class LocaleUtils {
 
     /**
      * This utility method is used to get the minDate based on current locale
-     * 
+     *
      * @throws ParseException
      */
     public static String getLocaleBasedMinDate() throws ParseException {
@@ -114,59 +118,62 @@ public class LocaleUtils {
         System.out.println(" Timezone : " + timeZone);
         String currentLocale = Locale.getDefault().toString();
 
+        // In java 9 the default locale changes to have a comma ',' separate the date and time
+        String dateSep = System.getProperty("java.specification.version").startsWith("1.") ? "" : ",";
+
         if (currentLocale.equalsIgnoreCase("en_US") && isMac(OS)) {
-            return "24/02/13 00:00:00:000 " + timeZone;
+            return "24/02/13" + dateSep + " 00:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("en_US")) {
-            return "2/24/13 0:00:00:000 " + timeZone;
+            return "2/24/13" + dateSep + " 0:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("cs_CZ")) {
-            return "24.2.13 0:00:00:000 " + timeZone;
+            return "24.2.13" + dateSep + " 0:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("de_DE")) {
-            return "24.02.13 00:00:00:000 " + timeZone;
+            return "24.02.13" + dateSep + " 00:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("es_ES")) {
-            return "24/02/13 0:00:00:000 " + timeZone;
+            return "24/02/13" + dateSep + " 0:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("fr_FR")) {
-            return "24/02/13 00:00:00:000 " + timeZone;
+            return "24/02/13" + dateSep + " 00:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("hu_HU")) {
-            return "2013.02.24. 0:00:00:000 " + timeZone;
+            return "2013.02.24." + dateSep + " 0:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("it_IT")) {
-            return "24/02/13 0.00.00:000 " + timeZone;
+            return "24/02/13" + dateSep + " 0.00.00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("ja_JP")) {
-            return "13/02/24 0:00:00:000 " + timeZone;
+            return "13/02/24" + dateSep + " 0:00:00:000 " + timeZone;
         } else if (currentLocale.equals("ko_KR")) {
-            return "13. 2. 24   0:00:00:000 " + timeZone;
+            return "13. 2. 24" + dateSep + "   0:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("pl_PL")) {
-            return "24.02.13 00:00:00:000 " + timeZone;
+            return "24.02.13" + dateSep + " 00:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("pt_BR")) {
-            return "24/02/13 00:00:00:000 " + timeZone;
+            return "24/02/13" + dateSep + " 00:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("ro_RO")) {
-            return "24.02.2013 00:00:00:000 " + timeZone;
+            return "24.02.2013" + dateSep + " 00:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("ru_RU")) {
-            return "24.02.13 0:00:00:000 " + timeZone;
+            return "24.02.13" + dateSep + " 0:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("zh")) {
-            return "13-2-24 0:00:00:000 " + timeZone;
+            return "13-2-24" + dateSep + " 0:00:00:000 " + timeZone;
 
         } else if (currentLocale.equalsIgnoreCase("zh_TW")) {
-            return "2013/2/24   00:00:00:000 " + timeZone;
+            return "2013/2/24" + dateSep + "   00:00:00:000 " + timeZone;
         } else {
             DateFormat dateTimeFormat = FormatSet.customizeDateFormat(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM));
             dateTimeFormat.setLenient(false);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy HH:mm:ss:SSS");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy" + dateSep + " HH:mm:ss:SSS");
             sdf.setLenient(false);
 
-            Date dt = sdf.parse("24/2/2013 00:00:00:000");
+            Date dt = sdf.parse("24/2/2013" + dateSep + " 00:00:00:000");
             return dateTimeFormat.format(dt);
 
         }
@@ -175,7 +182,7 @@ public class LocaleUtils {
 
     /**
      * This utility method is used to create a date String in proper format based on the Locale so that it can be parsed using DateFormat.
-     * 
+     *
      * @param string
      * @return
      */
@@ -235,7 +242,7 @@ public class LocaleUtils {
 
     /**
      * This utility method is used to return the time in proper format based on current Locale
-     * 
+     *
      * @param isBaseStartTime
      * @return
      */
@@ -286,17 +293,20 @@ public class LocaleUtils {
 
     public static String getTestDateTime(String dateStr, boolean isDefaultMinTime) {
 
+        // In java 9 the default locale changes to have a comma ',' separate the date and time
+        String dateSep = System.getProperty("java.specification.version").startsWith("1.") ? " " : ", ";
+
         String currentLocale = Locale.getDefault().toString();
         if (currentLocale.equalsIgnoreCase("th") || currentLocale.equalsIgnoreCase("th_th")) {
             return getTestDate(dateStr) + ", " + getTestTime(isDefaultMinTime);
         } else if (currentLocale.equalsIgnoreCase("iw") || currentLocale.equalsIgnoreCase("vi")
                    || currentLocale.equalsIgnoreCase("iw_IL") || currentLocale.equalsIgnoreCase("vi_vn")) {
-            return getTestTime(isDefaultMinTime) + " " + getTestDate(dateStr);
+            return getTestTime(isDefaultMinTime) + dateSep + getTestDate(dateStr);
 
         }
 
         else {
-            return getTestDate(dateStr) + " " + getTestTime(isDefaultMinTime);
+            return getTestDate(dateStr) + dateSep + getTestTime(isDefaultMinTime);
         }
     }
 

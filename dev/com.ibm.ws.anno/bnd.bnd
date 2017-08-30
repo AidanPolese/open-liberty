@@ -75,5 +75,9 @@ instrument.classesExcludes: com/ibm/ws/anno/resources/internal/*.class
 	org.jmock:jmock-junit4;version=2.5.1, \
 	org.jmock:jmock;version=2.5.1, \
 	com.ibm.ws.kernel.boot;version=latest, \
+	com.ibm.websphere.javaee.annotation.1.1;version=latest,\
 	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
-	com.ibm.websphere.javaee.persistence.2.0;version=latest
+	com.ibm.websphere.javaee.persistence.2.0;version=latest,\
+	com.ibm.websphere.javaee.jaxb.2.2;version=latest,\
+	com.sun.xml.bind:jaxb-core;version=2.2.10,\
+	com.sun.xml.bind:jaxb-impl;version=2.2.10

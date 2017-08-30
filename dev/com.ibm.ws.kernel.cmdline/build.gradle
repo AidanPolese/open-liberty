@@ -8,3 +8,8 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
+test {
+    if(JavaVersion.current().isJava9Compatible()) {
+    	jvmArgs '--add-modules=java.xml.ws'
+    }
+} 

@@ -100,7 +100,7 @@ public class H2InboundLink extends HttpInboundLink {
     ConcurrentHashMap<Integer, H2StreamProcessor> streamTable = new ConcurrentHashMap<Integer, H2StreamProcessor>();
 
     ConcurrentHashMap<Integer, H2StreamProcessor> closeTable = new ConcurrentHashMap<Integer, H2StreamProcessor>();
-    private static long CLOSE_TABLE_PURGE_TIME = 30 * 1000 * 1000; // 30 seconds converted to nano-seconds
+    private static long CLOSE_TABLE_PURGE_TIME = 30L * 1000000000L; // 30 seconds converted to nano-seconds
 
     HttpInboundLink initialHttpInboundLink = null;
     VirtualConnection initialVC = null;
@@ -177,7 +177,7 @@ public class H2InboundLink extends HttpInboundLink {
         } else { // client-initialized stream
             if (streamID > highestClientStreamId) {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "highestClientStreamId set to: " + streamID);
+                    Tr.debug(tc, "highestClientStreamId set to stream-id: " + streamID);
                 }
                 highestClientStreamId = streamID;
             }
@@ -841,6 +841,10 @@ public class H2InboundLink extends HttpInboundLink {
         }
 
         streamProcessor.setCloseTime(System.nanoTime());
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "triggerStreamClose : move stream into close table.  stream-id: " + streamProcessor.myID);
+        }
+
         closeTable.put(streamProcessor.myID, streamProcessor);
         streamTable.remove(streamProcessor.myID);
     }
@@ -862,10 +866,11 @@ public class H2InboundLink extends HttpInboundLink {
         if (closeTable.containsKey(streamID)) {
             H2StreamProcessor streamProcessor = closeTable.get(streamID);
             if (streamProcessor.getCloseTime() != Constants.INITIAL_CLOSE_TIME) {
-                if (streamProcessor.getCloseTime() + CLOSE_TABLE_PURGE_TIME < System.nanoTime()) {
+                long diff = System.nanoTime() - streamProcessor.getCloseTime();
+                if (diff > CLOSE_TABLE_PURGE_TIME) {
                     if (tc.isDebugEnabled()) {
-                        Tr.debug(tc, "Stream ID: " + streamID + " closed and significantly past the close time, close time: " + streamProcessor.getCloseTime()
-                                     + " now: " + System.nanoTime());
+                        Tr.debug(tc, "stream-id: " + streamID + " closed and significantly past the close time, close time: " + streamProcessor.getCloseTime()
+                                     + " now: " + System.nanoTime() + " diff: " + diff);
                     }
                     closeTable.remove(streamID);
                     return true;

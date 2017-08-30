@@ -38,6 +38,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.WriterInterceptor;
+import javax.ws.rs.sse.SseEventSink;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.stream.events.XMLEvent;
 
@@ -82,7 +83,9 @@ public class JAXRSOutInterceptor extends AbstractOutDatabindingInterceptor {
         try {
             processResponse(providerFactory, message);
         } finally {
-            ServerProviderFactory.releaseRequestState(providerFactory, message);
+            if (message.get(SseEventSink.class) == null) {
+                ServerProviderFactory.releaseRequestState(providerFactory, message);
+            }
         }
 
     }
