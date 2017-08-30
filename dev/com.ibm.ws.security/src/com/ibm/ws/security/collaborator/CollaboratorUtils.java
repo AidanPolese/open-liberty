@@ -25,7 +25,6 @@ import com.ibm.ws.security.SecurityService;
 import com.ibm.ws.security.authentication.principals.WSPrincipal;
 import com.ibm.ws.security.authentication.utility.SubjectHelper;
 import com.ibm.ws.security.context.SubjectManager;
-import com.ibm.ws.security.mp.jwt.proxy.MpJwtHelper;
 import com.ibm.ws.security.registry.RegistryException;
 import com.ibm.ws.security.registry.UserRegistryService;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
@@ -39,7 +38,7 @@ public class CollaboratorUtils {
     protected SubjectManager subjectManager;
 
     /**
-     *
+     * 
      */
     public CollaboratorUtils(SubjectManager subjectManager) {
         this.subjectManager = subjectManager;
@@ -51,7 +50,7 @@ public class CollaboratorUtils {
      * Look at the Subject on the thread only.
      * We will extract, security name from WSCredential and the set of Principals, our WSPrincipal type. If a property has been set, then
      * the realm is prepended to the security name.
-     *
+     * 
      * @param useRealm whether to prepend the security name with the realm name
      * @param realm the realm name to prefix the security name with
      * @param web call by the webRequest
@@ -79,11 +78,6 @@ public class CollaboratorUtils {
         String securityName = getSecurityNameFromWSCredential(subjectHelper, subject);
         if (securityName == null) {
             return null;
-        }
-
-        Principal jsonWebToken = MpJwtHelper.getJsonWebTokenPricipal(subject);
-        if (jsonWebToken != null) {
-            return jsonWebToken;
         }
 
         Set<WSPrincipal> principals = subject.getPrincipals(WSPrincipal.class);
@@ -165,7 +159,7 @@ public class CollaboratorUtils {
      * <p>
      * It is possible that no registry is configured. If that is the case,
      * return the default realm name.
-     *
+     * 
      * @return realm name. {@code null} is not returned.
      */
     public String getUserRegistryRealm(AtomicServiceReference<SecurityService> securityServiceRef) {
