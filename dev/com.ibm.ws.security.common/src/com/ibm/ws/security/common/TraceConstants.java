@@ -8,8 +8,13 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
+package com.ibm.ws.security.common;
+
 /**
- * @version 1.0.0
+ *
  */
-@org.osgi.annotation.versioning.Version("1.0.0")
-package com.ibm.ws.security.common.time;
+public interface TraceConstants {
+
+    public final static String TRACE_GROUP = "SecurityCommon";
+    public final static String MESSAGE_BUNDLE = "com.ibm.ws.security.common.internal.resources.SSOCommonMessages";
+}

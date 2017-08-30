@@ -16,10 +16,11 @@ import java.util.Date;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.security.common.TraceConstants;
 
 public class TimeUtils {
 
-    private static final TraceComponent tc = Tr.register(TimeUtils.class);
+    private static final TraceComponent tc = Tr.register(TimeUtils.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
 
     public static final String YearMonthDateHourMinSecZone = "yyyy-MM-dd'T'HH:mm:ssZ";
     public static final String YearMonthDateHourMinSecMillisZone = "yyyy-MM-dd'T'HH:mm:ss:SSSZ";

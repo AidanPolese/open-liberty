@@ -8,9 +8,10 @@
 # Contributors:
 #     IBM Corporation - initial API and implementation
 #*******************************************************************************
--include= jar:${fileuri;lib/gson-2.2.4.jar}!/META-INF/MANIFEST.MF,bnd.overrides
+-include= jar:${fileuri;${repo;com.google.code.gson:gson;2.2.4}}!/META-INF/MANIFEST.MF,bnd.overrides
 
 -includeresource: \
-   @lib/gson-2.2.4.jar
+   @${repo;com.google.code.gson:gson;2.2.4}!/com/google/gson/*
 
--buildpath: lib/gson-2.2.4.jar;version=file
+-buildpath: \
+    com.google.code.gson:gson;version=2.2.4
