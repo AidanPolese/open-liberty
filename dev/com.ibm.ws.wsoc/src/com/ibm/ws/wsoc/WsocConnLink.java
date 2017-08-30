@@ -89,6 +89,7 @@ public class WsocConnLink {
     private CLOSE_FRAME_STATE closeFrameState = CLOSE_FRAME_STATE.NOT_SET;
 
     private final int closeFrameReadTimeout = 30000; // 30 seconds to wait for a close frame seems reasonable
+    private final int WAIT_ON_WRITE_TO_CLOSE = 5500; // watchdog timer on waiting to write a close frame once a close has been initiated.
 
     public Object linkSync = new Object() {};
     public boolean readNotifyTriggered = false;
@@ -286,18 +287,40 @@ public class WsocConnLink {
                             Tr.debug(tc, "writeSync.wait()");
                         }
                         writeNotifyTriggered = false;
-                        while (writeNotifyTriggered == false) {
+
+                        if (calledFromClose) {
+                            // one shot wait, if we can't get control after 5 seconds, then give up and force the close down
                             if (tc.isDebugEnabled()) {
-                                Tr.debug(tc, "okToWrite WsocConnLink: " + this.hashCode() + " linkSync.wait()");
+                                Tr.debug(tc, "okToWrite WsocConnLink: " + this.hashCode() + " linkSync.wait(...)");
                             }
-                            linkSync.wait();
+                            linkSync.wait(WAIT_ON_WRITE_TO_CLOSE);
+                            if ((linkStatus == LINK_STATUS.LOCAL_CLOSING) || (linkStatus == LINK_STATUS.IO_OK)) {
+                                // write of close frame will likely fail, but ensure that we will try to close the device link
+                                return RETURN_STATUS.OK;
+                            } else {
+                                // just leave, close of connection has already occurred from the other side and this thread didn't detect it
+                                // link will have been closed as the close from the other side has already been processed.
+                                return RETURN_STATUS.IO_NOT_OK;
+                            }
+
+                        } else {
+                            while (writeNotifyTriggered == false) {
+                                if (tc.isDebugEnabled()) {
+                                    Tr.debug(tc, "okToWrite WsocConnLink: " + this.hashCode() + " linkSync.wait()");
+                                }
+                                linkSync.wait();
+                            }
                         }
                     } catch (InterruptedException e) {
                         // do NOT allow instrumented FFDC to be used here
                         if (tc.isDebugEnabled()) {
                             Tr.debug(tc, "unexpected InterruptedException");
                         }
+                        if (calledFromClose) {
+                            return RETURN_STATUS.OK;
+                        }
                     }
+
                 } else {
                     if (writeLinkStatus == WRITE_LINK_STATUS.WRITING) {
                         return RETURN_STATUS.WRITE_IN_PROGRESS;
