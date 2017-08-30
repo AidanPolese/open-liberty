@@ -10,8 +10,8 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance.cdi;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.concurrent.Future;
 
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
@@ -37,6 +37,20 @@ public class PolicyValidationUtils {
     private static final TraceComponent tc = Tr.register(PolicyValidationUtils.class);
 
     /**
+     * Validate Asynchronous annotation to make sure all methods with this annotation specified returns a Future.
+     * If placed on class-level, all declared methods in this class will need to return a Future.
+     *
+     * @param method the method to be validated
+     *
+     */
+    public static void validateAsynchronous(Method method) {
+        Class<?> originalMethodReturnType = method.getReturnType();
+        if (!(Future.class.isAssignableFrom(originalMethodReturnType))) {
+            throw new FaultToleranceException(Tr.formatMessage(tc, "asynchronous.method.not.returning.future.CWMFT5001E", method));
+        }
+    }
+
+    /**
      * Validate the Retry policy to make sure all the parameters e.g. maxRetries, delay, jitter, maxDuration must not be negative.
      *
      * @param clazz the class containing Retry annotation
@@ -56,21 +70,27 @@ public class PolicyValidationUtils {
         }
 
         //validate the parameters
-        if (retryConfig.maxRetries() < 0) {
+        if (retryConfig.maxRetries() < -1) {
 
-            throw new FaultToleranceException(Tr.formatMessage(tc, "retry.parameter.invalid.value.CWMFT5010E", "maxRetries", retryConfig.maxRetries(), target));
+            throw new FaultToleranceException(Tr.formatMessage(tc, "retry.parameter.invalid.value.CWMFT5010E", "maxRetries", retryConfig.maxRetries(), target, "-1"));
         }
         if ((retryConfig.delay() < 0)) {
 
-            throw new FaultToleranceException(Tr.formatMessage(tc, "retry.parameter.invalid.value.CWMFT5010E", "delay", retryConfig.delay(), target));
+            throw new FaultToleranceException(Tr.formatMessage(tc, "retry.parameter.invalid.value.CWMFT5010E", "delay", retryConfig.delay(), target, "0"));
         }
         if ((retryConfig.jitter() < 0)) {
 
-            throw new FaultToleranceException(Tr.formatMessage(tc, "retry.parameter.invalid.value.CWMFT5010E", "jitter", retryConfig.jitter(), target));
+            throw new FaultToleranceException(Tr.formatMessage(tc, "retry.parameter.invalid.value.CWMFT5010E", "jitter", retryConfig.jitter(), target, "0"));
         }
         if (retryConfig.maxDuration() < 0) {
 
-            throw new FaultToleranceException(Tr.formatMessage(tc, "retry.parameter.invalid.value.CWMFT5010E", "maxDuration", retryConfig.maxDuration(), target));
+            throw new FaultToleranceException(Tr.formatMessage(tc, "retry.parameter.invalid.value.CWMFT5010E", "maxDuration", retryConfig.maxDuration(), target, "0"));
+        }
+        if ((retryConfig.maxDuration() != 0) && (retryConfig.maxDuration() < retryConfig.delay())) {
+
+            throw new FaultToleranceException(Tr.formatMessage(tc, "retry.parameter.invalid.value.CWMFT5017E", "maxDuration", retryConfig.maxDuration(), target, "delay",
+                                                               retryConfig.delay()));
+
         }
     }
 
@@ -182,10 +202,10 @@ public class PolicyValidationUtils {
      * @param originalMethod
      * @param annotation
      */
-    public static void validateFallback(Method originalMethod, Annotation annotation) {
+    public static void validateFallback(Method originalMethod, Fallback annotation) {
         //validate the fallback annotation
 
-        FallbackConfig fb = new FallbackConfig(originalMethod, (Fallback) annotation);
+        FallbackConfig fb = new FallbackConfig(originalMethod, annotation);
 
         Class<?> originalMethodReturnType = originalMethod.getReturnType();
         Class<?>[] originalMethodParamTypes = originalMethod.getParameterTypes();

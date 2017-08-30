@@ -170,8 +170,6 @@ public class FTAnnotationUtils {
                 Class<?> fallbackReturn = fallbackMethod.getReturnType();
                 if (originalReturn.isAssignableFrom(fallbackReturn)) {
                     fallbackPolicy = newFallbackPolicy(beanInstance, fallbackMethod, fallbackReturn);
-                } else {
-                    throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.return.type.not.match.CWMFT5002E", fallbackMethod, originalMethod));
                 }
             } catch (NoSuchMethodException e) {
                 throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", fallbackMethodName, originalMethod.getName(),
@@ -230,15 +228,19 @@ public class FTAnnotationUtils {
                 asynchronous = new AsynchronousConfig(targetClass, asynchronous);
             } else if (annotation.annotationType().equals(Retry.class)) {
                 retry = (Retry) annotation;
+                PolicyValidationUtils.validateRetry(targetClass, null, retry);
                 retry = new RetryConfig(targetClass, retry);
             } else if (annotation.annotationType().equals(CircuitBreaker.class)) {
                 circuitBreaker = (CircuitBreaker) annotation;
+                PolicyValidationUtils.validateCircuitBreaker(targetClass, null, circuitBreaker);
                 circuitBreaker = new CircuitBreakerConfig(targetClass, circuitBreaker);
             } else if (annotation.annotationType().equals(Timeout.class)) {
                 timeout = (Timeout) annotation;
+                PolicyValidationUtils.validateTimeout(targetClass, null, timeout);
                 timeout = new TimeoutConfig(targetClass, timeout);
             } else if (annotation.annotationType().equals(Bulkhead.class)) {
                 bulkhead = (Bulkhead) annotation;
+                PolicyValidationUtils.validateBulkhead(targetClass, null, bulkhead);
                 bulkhead = new BulkheadConfig(targetClass, bulkhead);
             } else if (annotation.annotationType().equals(Fallback.class)) {
                 fallback = (Fallback) annotation;
@@ -253,21 +255,27 @@ public class FTAnnotationUtils {
         for (Annotation annotation : annotations) {
             if (annotation.annotationType().equals(Asynchronous.class)) {
                 asynchronous = (Asynchronous) annotation;
+
                 asynchronous = new AsynchronousConfig(method, asynchronous);
             } else if (annotation.annotationType().equals(Retry.class)) {
                 retry = (Retry) annotation;
+                PolicyValidationUtils.validateRetry(targetClass, method, retry);
                 retry = new RetryConfig(method, retry);
             } else if (annotation.annotationType().equals(CircuitBreaker.class)) {
                 circuitBreaker = (CircuitBreaker) annotation;
+                PolicyValidationUtils.validateCircuitBreaker(targetClass, method, circuitBreaker);
                 circuitBreaker = new CircuitBreakerConfig(method, circuitBreaker);
             } else if (annotation.annotationType().equals(Timeout.class)) {
                 timeout = (Timeout) annotation;
+                PolicyValidationUtils.validateTimeout(targetClass, method, timeout);
                 timeout = new TimeoutConfig(method, timeout);
             } else if (annotation.annotationType().equals(Bulkhead.class)) {
                 bulkhead = (Bulkhead) annotation;
+                PolicyValidationUtils.validateBulkhead(targetClass, method, bulkhead);
                 bulkhead = new BulkheadConfig(method, bulkhead);
             } else if (annotation.annotationType().equals(Fallback.class)) {
                 fallback = (Fallback) annotation;
+                PolicyValidationUtils.validateFallback(method, fallback);
                 fallback = new FallbackConfig(method, fallback);
             }
         }
