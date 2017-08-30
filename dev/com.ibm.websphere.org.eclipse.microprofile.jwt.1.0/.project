@@ -1,6 +1,6 @@
    <buildSpec>
         <buildCommand>
-            <name>com.ibm.websphere.org.eclipse.microprofile.jwt.1.0</name>
+            <name>com.ibm.websphere.org.eclipse.microprofile.jwt</name>
             <name>org.eclipse.jdt.core.javabuilder</name>
             <arguments>
             </arguments>
