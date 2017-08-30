@@ -33,7 +33,7 @@ publish.wlp.jar.disabled: true
 	com.ibm.tx.jta;version=latest,\
 	com.ibm.websphere.javaee.annotation.1.1;version=latest,\
 	com.ibm.ws.javaee.dd.common;version=latest,\
-	com.ibm.ws.org.objectweb.asm.5.0,\
+	com.ibm.ws.org.objectweb.asm;version=latest,\
 	com.ibm.websphere.javaee.interceptor.1.1;version=latest,\
 	com.ibm.tx.ltc;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest
