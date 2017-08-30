@@ -1,7 +1,7 @@
 
 releaseTypeGA=false
 libertyServiceVersion=17.0.0.3
-libertyBetaVersion=2017.7.0.0
+libertyBetaVersion=2017.9.0.0
 libertyRelease=${if;${releaseTypeGA};${libertyServiceVersion};${libertyBetaVersion}}
 
 libertyBundleMicroVersion=18
