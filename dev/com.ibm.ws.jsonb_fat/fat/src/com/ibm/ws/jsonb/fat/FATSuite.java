@@ -31,8 +31,6 @@ import componenttest.topology.impl.LibertyServerFactory;
 public class FATSuite {
     public static final String PROVIDER_YASSON = "org.eclipse.yasson.JsonBindingProvider";
     public static final String PROVIDER_JOHNZON = "org.apache.johnzon.jsonb.JohnzonProvider";
-    public static final String PROVIDER_GLASSFISH_JSONP = "org.glassfish.json.JsonProviderImpl";
-    public static final String PROVIDER_JOHNZON_JSONP = "org.apache.johnzon.core.JsonProviderImpl";
 
     private static LibertyServer server = LibertyServerFactory.getLibertyServer("com.ibm.ws.jsonb.fat");
 
@@ -45,18 +43,6 @@ public class FATSuite {
         // Install bundles for user features
         server.copyFileToLibertyInstallRoot("usr/extension/lib/", "bundles/test.jsonp.bundle.jar");
         server.copyFileToLibertyInstallRoot("usr/extension/lib/", "bundles/test.jsonb.bundle.jar");
-
-        // For some reason the JSON-P 1.1 ref impl doesn't include a META-INF/service/ so we need
-        // to manually add one here.  It would be ideal if Glassfish JSON-P could add a service file
-        // so the implementation can be discovered in a standard way.  See discussion on this issue:
-        // https://github.com/javaee/jsonp/issues/55
-//        JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "org.glassfish.jsonp-1.1.jar")
-//                        .as(ZipImporter.class)
-//                        .importFrom(new File("publish/shared/resources/refImpls/javax.json-1.1.jar"))
-//                        .as(JavaArchive.class)
-//                        .addAsServiceProvider(JsonProvider.class.getName(), "org.glassfish.json.JsonProviderImpl");
-//        ShrinkHelper.exportArtifact(jar, "lib/LibertyFATTestFiles/refImpls/");
-//        server.copyFileToLibertyInstallRoot("usr/shared/resources/refImpls/", "refImpls" + jar.getName());
     }
 
     @AfterClass
