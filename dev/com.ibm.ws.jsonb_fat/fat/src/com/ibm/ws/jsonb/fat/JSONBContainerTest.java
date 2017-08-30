@@ -63,17 +63,17 @@ public class JSONBContainerTest extends FATServletClient {
 
     @Test
     public void testApplicationClasses() throws Exception {
-        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_YASSON);
+        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_JOHNZON);
     }
 
     @Test
     public void testJsonbProviderAvailable() throws Exception {
-        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_YASSON);
+        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_JOHNZON);
     }
 
     @Test
     public void testJsonbProviderNotAvailable() throws Exception {
-        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_JOHNZON);
+        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_YASSON);
     }
 
     // Test a user feature with a service component that injects JsonbProvider (from the bell)
@@ -84,7 +84,7 @@ public class JSONBContainerTest extends FATServletClient {
         String found;
         server.resetLogMarks();
         assertNotNull(found = server.waitForStringInLogUsingMark("TEST1: JsonbProvider obtained from declarative services"));
-        assertTrue(found, found.contains(PROVIDER_YASSON));
+        assertTrue(found, found.contains(PROVIDER_JOHNZON));
         assertNotNull(found = server.waitForStringInLogUsingMark("TEST2"));
         assertTrue(found, found.contains("success"));
         assertTrue(found, found.contains("\"Rochester\""));
@@ -94,8 +94,8 @@ public class JSONBContainerTest extends FATServletClient {
     }
 
     @Test
-    // Verify that the jsonb-1.0 and jsonbContainer-1.0 features can be used together to to specify Yasson
-    public void testJsonAndYasson() throws Exception {
+    // Verify that the jsonb-1.0 and jsonbContainer-1.0 features can be used together to to specify Johnzon
+    public void testJsonAndJohnzon() throws Exception {
         // Add the jsonb-1.0 feature to server.xml
         ServerConfiguration config = server.getServerConfiguration();
         config.getFeatureManager().getFeatures().add("jsonb-1.0");
@@ -103,11 +103,11 @@ public class JSONBContainerTest extends FATServletClient {
         server.waitForConfigUpdateInLogUsingMark(Collections.singleton(appName));
 
         // Run a test to verify that jsonb is still usable
-        runTest(server, SERVLET_PATH, "testJsonbDeserializer&JsonbProvider=" + PROVIDER_YASSON);
+        runTest(server, SERVLET_PATH, "testJsonbDeserializer&JsonbProvider=" + PROVIDER_JOHNZON);
     }
 
     @Test
     public void testThreadContextClassLoader() throws Exception {
-        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_YASSON);
+        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_JOHNZON);
     }
 }

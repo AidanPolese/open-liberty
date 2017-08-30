@@ -58,26 +58,26 @@ public class JSONBTest extends FATServletClient {
 
     @Test
     public void testApplicationClasses() throws Exception {
-        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_JOHNZON);
-    }
-
-    @Test
-    public void testJsonbDeserializer() throws Exception {
-        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_JOHNZON);
-    }
-
-    @Test
-    public void testJsonbProviderAvailable() throws Exception {
-        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_JOHNZON);
-    }
-
-    @Test
-    public void testJsonbProviderNotAvailable() throws Exception {
         runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_YASSON);
     }
 
     @Test
-    public void testThreadContextClassLoader() throws Exception {
+    public void testJsonbDeserializer() throws Exception {
+        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_YASSON);
+    }
+
+    @Test
+    public void testJsonbProviderAvailable() throws Exception {
+        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_YASSON);
+    }
+
+    @Test
+    public void testJsonbProviderNotAvailable() throws Exception {
         runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_JOHNZON);
+    }
+
+    @Test
+    public void testThreadContextClassLoader() throws Exception {
+        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_YASSON);
     }
 }
