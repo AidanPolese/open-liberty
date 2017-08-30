@@ -14,7 +14,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.Future;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AnnotatedMethod;
@@ -31,7 +30,6 @@ import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.faulttolerance.Timeout;
-import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 import org.osgi.service.component.annotations.Component;
 
 import com.ibm.websphere.ras.Tr;
@@ -54,9 +52,6 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
     public <T> void processAnnotatedType(@Observes @WithAnnotations({ Asynchronous.class, Fallback.class, Timeout.class, CircuitBreaker.class, Retry.class,
                                                                       Bulkhead.class }) ProcessAnnotatedType<T> processAnnotatedType,
                                          BeanManager beanManager) {
-
-        //validate Asynchronous
-        //validate fallback
 
         Set<AnnotatedMethod<?>> interceptedMethods = new HashSet<AnnotatedMethod<?>>();
         boolean interceptedClass = false;
@@ -91,22 +86,17 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
         Set<AnnotatedMethod<? super T>> methods = annotatedType.getMethods();
         for (AnnotatedMethod<?> method : methods) {
             Method originalMethod = method.getJavaMember();
-            Class<?> originalMethodReturnType = originalMethod.getReturnType();
-
             if (classLevelAsync) {
-                if (!(Future.class.isAssignableFrom(originalMethodReturnType))) {
-                    throw new FaultToleranceException(Tr.formatMessage(tc, "asynchronous.class.not.returning.future.CWMFT5000E", method));
-                }
+                PolicyValidationUtils.validateAsynchronous(originalMethod);
             }
             annotations = method.getAnnotations();
             for (Annotation annotation : annotations) {
                 if (FTAnnotationUtils.ANNOTATIONS.contains(annotation.annotationType())) {
                     if (annotation.annotationType() == Asynchronous.class) {
-                        if (!(Future.class.isAssignableFrom(originalMethodReturnType))) {
-                            throw new FaultToleranceException(Tr.formatMessage(tc, "asynchronous.method.not.returning.future.CWMFT5001E", method));
-                        }
+                        PolicyValidationUtils.validateAsynchronous(originalMethod);
+
                     } else if (annotation.annotationType() == Fallback.class) {
-                        PolicyValidationUtils.validateFallback(originalMethod, annotation);
+                        PolicyValidationUtils.validateFallback(originalMethod, (Fallback) annotation);
                     } else if (annotation.annotationType() == Retry.class) {
                         PolicyValidationUtils.validateRetry(clazz, originalMethod, (Retry) annotation);
                     } else if (annotation.annotationType() == Timeout.class) {
