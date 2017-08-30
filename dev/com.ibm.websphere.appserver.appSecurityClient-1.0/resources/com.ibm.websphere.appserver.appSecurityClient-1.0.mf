@@ -21,8 +21,7 @@ Subsystem-Content: com.ibm.websphere.appserver.api.securityClient_1.0-javadoc.zi
  com.ibm.ws.security; version="[1.0.0,1.0.200)",
  com.ibm.ws.security.jaas.common; version="[1.0.0,1.0.200)",
  com.ibm.ws.security.registry; version="[1.0.0,1.0.200)",
- com.ibm.websphere.security.impl; version="[1.0.0,1.0.200)",
- com.ibm.ws.security.mp.jwt.proxy; version="[1.0.0,1.0.200)"
+ com.ibm.websphere.security.impl; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description
 Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
 Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.appSecurityClient-1.0
