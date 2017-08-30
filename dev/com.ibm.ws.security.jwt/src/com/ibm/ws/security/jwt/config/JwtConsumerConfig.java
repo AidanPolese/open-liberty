@@ -47,4 +47,6 @@ public interface JwtConsumerConfig {
     String getSslRef();
 
     JWKSet getJwkSet(); // one JWKSet per one config
+
+    boolean getTokenReuse();
 }
