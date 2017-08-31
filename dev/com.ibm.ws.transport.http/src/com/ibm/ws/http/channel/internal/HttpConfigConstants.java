@@ -334,6 +334,9 @@ public class HttpConfigConstants {
 
     public static final String PROPNAME_H2_CONN_READ_WINDOW_SIZE = "H2ConnReadWindowSize";
 
+    //PI81572 - Purge the remaining response body off the wire
+    public static final String PROPNAME_PURGE_REMAINING_RESPONSE = "PurgeRemainingResponseBody";
+
     /** Minimum setting on the persistent requests (-1 is unlimited) */
     public static final int MIN_PERSIST_REQ = -1;
     /** Minimum allowed size for the byte cache */
