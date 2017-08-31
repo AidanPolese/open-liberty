@@ -26,6 +26,6 @@ publish.wlp.jar.disabled: true
 
 -buildpath: \
 	com.ibm.ws.org.apache.ant;version=latest,\
-	com.ibm.ws.org.objectweb.asm.5.0;version=latest,\
+	com.ibm.ws.org.objectweb.asm;version=latest,\
 	com.ibm.ws.logging.core;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest

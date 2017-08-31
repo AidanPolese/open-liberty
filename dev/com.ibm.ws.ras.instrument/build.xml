@@ -8,6 +8,10 @@
     Contributors:
         IBM Corporation - initial API and implementation
  -->
+ 
+ <!-- This build file doesn't get used by the build process here anymore,
+ but until we get a replacement that's gradle native we still need this
+ in order to rebuild the ras.instrument jar -->
 <project name="com.ibm.ws.ras.instrument" default="build">
 	<property name="no.trace.instrumentation" value="true"/>
 	<import file="../ant_build/public_imports/standard_imports.xml"/>
@@ -26,7 +30,7 @@
 			<fileset dir="../com.ibm.ws.logging.core/build/classes" includes="**/annotation/**, **/instrument/**" />
 			<fileset dir="../com.ibm.ws.kernel.instrument.agent/build/classes" includes="**/annotation/**, **/instrument/**" />
 			<fileset dir="../com.ibm.ws.kernel.instrument.check/build/classes" includes="**/annotation/**, **/instrument/**" />
-			<zipfileset src="../com.ibm.ws.org.objectweb.asm/lib/asm-all-5.0.3.jar">
+			<zipfileset src="../com.ibm.ws.org.objectweb.asm/lib/asm-all-5.2.jar">
 				<exclude name="META-INF/**" />
 				<exclude name="org/objectweb/asm/xml/**" />
 			</zipfileset>
