@@ -13,7 +13,6 @@ package com.ibm.websphere.microprofile.faulttolerance_fat.tests;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ibm.ws.fat.util.LoggingTest;
@@ -58,7 +57,6 @@ public class CDIAsyncTest extends LoggingTest {
     }
 
     @Test
-    @Ignore
     public void testAsyncDoubleJump() throws Exception {
         WebBrowser browser = createWebBrowserForTestCase();
         getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/async?testMethod=testAsyncDoubleJump",
@@ -70,14 +68,14 @@ public class CDIAsyncTest extends LoggingTest {
     protected SharedServer getSharedServer() {
         return SHARED_SERVER;
     }
-	
-	@BeforeClass
-	public static void setUp() throws Exception {
-		if (!SHARED_SERVER.getLibertyServer().isStarted()) {
-			SHARED_SERVER.getLibertyServer().startServer();
-		}
-		
-	}
+
+    @BeforeClass
+    public static void setUp() throws Exception {
+        if (!SHARED_SERVER.getLibertyServer().isStarted()) {
+            SHARED_SERVER.getLibertyServer().startServer();
+        }
+
+    }
 
     @AfterClass
     public static void tearDown() throws Exception {

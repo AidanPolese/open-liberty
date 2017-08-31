@@ -11,6 +11,7 @@
 package com.ibm.ws.microprofile.faulttolerance.impl;
 
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
 
 import com.ibm.ws.microprofile.faulttolerance.impl.async.AsyncExecutionImpl;
 import com.ibm.ws.microprofile.faulttolerance.impl.sync.SynchronousExecutionImpl;
@@ -33,10 +34,12 @@ public class ExecutionBuilderImpl<T, R> implements ExecutionBuilder<T, R> {
     private TimeoutPolicy timeoutPolicy = null;
     private final WSContextService contextService;
     private final PolicyExecutorProvider policyExecutorProvider;
+    private final ScheduledExecutorService scheduledExecutorService;
 
-    public ExecutionBuilderImpl(WSContextService contextService, PolicyExecutorProvider policyExecutorProvider) {
+    public ExecutionBuilderImpl(WSContextService contextService, PolicyExecutorProvider policyExecutorProvider, ScheduledExecutorService scheduledExecutorService) {
         this.contextService = contextService;
         this.policyExecutorProvider = policyExecutorProvider;
+        this.scheduledExecutorService = scheduledExecutorService;
     }
 
     /** {@inheritDoc} */
@@ -77,7 +80,7 @@ public class ExecutionBuilderImpl<T, R> implements ExecutionBuilder<T, R> {
     /** {@inheritDoc} */
     @Override
     public Execution<R> build() {
-        Execution<R> executor = new SynchronousExecutionImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy);
+        Execution<R> executor = new SynchronousExecutionImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy, this.scheduledExecutorService);
 
         return executor;
     }
@@ -85,8 +88,9 @@ public class ExecutionBuilderImpl<T, R> implements ExecutionBuilder<T, R> {
     /** {@inheritDoc} */
     @Override
     public Execution<Future<R>> buildAsync() {
-        Execution<Future<R>> executor = new AsyncExecutionImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy, this.contextService, this.policyExecutorProvider);
+        Execution<Future<R>> executor = new AsyncExecutionImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy, this.contextService, this.policyExecutorProvider, this.scheduledExecutorService);
 
         return executor;
     }
+
 }

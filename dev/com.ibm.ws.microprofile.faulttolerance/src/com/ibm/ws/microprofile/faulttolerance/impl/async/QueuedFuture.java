@@ -22,13 +22,12 @@ import java.util.concurrent.TimeoutException;
 
 import org.eclipse.microprofile.faulttolerance.exceptions.BulkheadException;
 
-import com.ibm.ws.ffdc.annotation.FFDCIgnore;
-import com.ibm.ws.microprofile.faulttolerance.impl.Timeout;
-import com.ibm.wsspi.threadcontext.ThreadContext;
-import com.ibm.wsspi.threadcontext.ThreadContextDescriptor;
-
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.microprofile.faulttolerance.impl.TaskContext;
+import com.ibm.wsspi.threadcontext.ThreadContext;
+import com.ibm.wsspi.threadcontext.ThreadContextDescriptor;
 
 /**
  *
@@ -37,60 +36,49 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
 
     private static final TraceComponent tc = Tr.register(QueuedFuture.class);
 
-    private final Callable<Future<R>> callable;
-    private final Timeout timeout;
+    private final Callable<Future<R>> task;
 
     private Future<Future<R>> futureFuture;
     private final ThreadContextDescriptor threadContext;
 
-    public QueuedFuture(Callable<Future<R>> callable, Timeout timeout, ThreadContextDescriptor threadContext) {
-        this.callable = callable;
-        this.timeout = timeout;
+    private final TaskContext taskContext;
+
+    public QueuedFuture(Callable<Future<R>> task, TaskContext taskContext, ThreadContextDescriptor threadContext) {
+        this.task = task;
+        this.taskContext = taskContext;
         this.threadContext = threadContext;
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
-        synchronized (this) {
-            return getFutureFuture().cancel(mayInterruptIfRunning);
-        }
+        return getFutureFuture().cancel(mayInterruptIfRunning);
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean isCancelled() {
-        synchronized (this) {
-            return getFutureFuture().isCancelled();
-        }
+        return getFutureFuture().isCancelled();
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean isDone() {
-        synchronized (this) {
-            return getFutureFuture().isDone();
-        }
+        return getFutureFuture().isDone();
     }
 
     /** {@inheritDoc} */
     @Override
     public R get() throws InterruptedException, ExecutionException {
         R result = null;
-        synchronized (this) {
-            Future<Future<R>> future = getFutureFuture();
+        Future<Future<R>> future = getFutureFuture();
 
-            if (this.timeout != null) {
-                this.timeout.check();
-            }
+        taskContext.check();
 
-            try {
-                result = future.get().get();
-            } finally {
-                if (timeout != null) {
-                    timeout.stop(true);
-                }
-            }
+        try {
+            result = future.get().get();
+        } finally {
+            taskContext.end();
         }
         return result;
     }
@@ -100,45 +88,18 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
     @FFDCIgnore({ CancellationException.class, TimeoutException.class })
     public R get(long methodTimeout, TimeUnit methodUnit) throws InterruptedException, ExecutionException, TimeoutException {
         R result = null;
-        synchronized (this) {
-            long start = System.currentTimeMillis();
+        Future<Future<R>> future = getFutureFuture();
 
-            Future<Future<R>> future = getFutureFuture();
-            if (this.timeout != null) {
-                this.timeout.check();
-            }
+        taskContext.check();
 
-            //convert the method params to millis
-            long methodMillis = TimeUnit.MILLISECONDS.convert(methodTimeout, methodUnit);
-            //when do the method params say we should end?
-            long methodEnd = start + methodMillis;
-            //when does the FT Timeout think we should end?
-            long timeoutEnd = this.timeout == null ? Long.MAX_VALUE : this.timeout.end();
-
-            //what is the least amount of time we should wait to get the futureFuture?
-            long earliest = Math.min(methodEnd, timeoutEnd);
-
-            long now = System.currentTimeMillis();
-            long remaining = earliest - now;
-            //how long remaining according the the method params (FT Timeout will interrupt if it needs to)
-            remaining = methodEnd - now;
-
-            try {
-                result = future.get(remaining, TimeUnit.MILLISECONDS).get(remaining, TimeUnit.MILLISECONDS); //TODO do both get calls need timeout?
-            } catch (InterruptedException | CancellationException e) {
-                //if the future was interrupted or cancelled, check if it was because the FT Timeout popped
-                if (this.timeout != null) {
-                    this.timeout.check();
-                }
-                throw e;
-            } catch (TimeoutException e) {
-                throw e;
-            } finally {
-                //we've finished one way or another!
-                if (this.timeout != null) {
-                    this.timeout.stop();
-                }
-            }
+        try {
+            result = future.get(methodTimeout, methodUnit).get(methodTimeout, methodUnit); //TODO do both get calls need timeout?
+        } catch (InterruptedException | CancellationException e) {
+            //if the future was interrupted or cancelled, check if it was because the FT Timeout popped
+            taskContext.check();
+            throw e;
+        } catch (TimeoutException e) {
+            throw e;
         }
         return result;
 
@@ -157,11 +118,12 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
             contextAppliedToThread = this.threadContext.taskStarting();
         }
         try {
-            result = callable.call();
+            result = task.call();
         } finally {
             if (contextAppliedToThread != null) {
                 this.threadContext.taskStopping(contextAppliedToThread);
             }
+            taskContext.end();
         }
         return result;
     }
@@ -177,30 +139,17 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
     }
 
     /**
-     *
-     */
-    public void timeout() {
-        synchronized (this) {
-            cancel(true);
-        }
-    }
-
-    /**
      * @param executorService
      */
     @FFDCIgnore({ RejectedExecutionException.class })
     public void start(ExecutorService executorService) {
         synchronized (this) {
-            if (timeout != null) {
-                timeout.start(this);
-            }
+            taskContext.start(this);
             try {
                 Future<Future<R>> futureFuture = executorService.submit(this);
                 this.futureFuture = futureFuture;
             } catch (RejectedExecutionException e) {
-                if (timeout != null) {
-                    timeout.stop();
-                }
+                taskContext.end();
                 throw new BulkheadException(e);
             }
         }

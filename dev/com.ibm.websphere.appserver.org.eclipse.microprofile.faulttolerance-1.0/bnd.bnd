@@ -15,4 +15,4 @@
 publish.feature.resources: **
 
 -dependson: \
-	com.ibm.websphere.org.eclipse.microprofile.faulttolerance-1.0;version=latest
+	com.ibm.websphere.org.eclipse.microprofile.faulttolerance.1.0;version=latest
