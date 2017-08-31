@@ -121,12 +121,17 @@ fallback.policy.conflicts.CWMFT5009E.explanation=Either fallbackMethod or value 
 fallback.policy.conflicts.CWMFT5009E.useraction=Either remove the fallbackMethod or the value from the Fallback annotation.
 
 #Incorrect value on FT Retry parameters
-retry.parameter.invalid.value.CWMFT5010E=CWMFT5010E: The Retry policy parameter {0} value {1} for the {2} is incorrect as it must not be a negative number.
+retry.parameter.invalid.value.CWMFT5010E=CWMFT5010E: The Retry policy parameter {0} value {1} for the {2} is incorrect as it must be greater than or equal to {3}.
 retry.parameter.invalid.value.CWMFT5010E.explanation=The specified value or the configured value if configured for the Retry policy parameter is incorrect.
 retry.parameter.invalid.value.CWMFT5010E.useraction=Correct the value for the specified parameter.
 
+#Incorrect value on FT Retry parameters
+retry.parameter.invalid.value.CWMFT5017E=CWMFT5017E: The Retry policy parameter {0} value {1} for the {2} is incorrect as it must not be greater than parameter {3} value {4}.
+retry.parameter.invalid.value.CWMFT5017E.explanation=The maxDuration value must be greater than Delay.
+retry.parameter.invalid.value.CWMFT5017E.useraction=Correct the value for the specified parameter.
+
 #Incorrect value on FT Timeout parameters
-timeout.parameter.invalid.value.CWMFT5011E=CWMFT5011E: The Timeout value {0} specified on {1} is incorrect as it must be greater than or equal to -1.
+timeout.parameter.invalid.value.CWMFT5011E=CWMFT5011E: The Timeout value {0} specified on {1} is incorrect as it must be greater than or equal to 0.
 timeout.parameter.invalid.value.CWMFT5011E.explanation=The specified value or the configured value if configured for the Timeout policy 'value' parameter is incorrect.
 timeout.parameter.invalid.value.CWMFT5011E.useraction=Correct the value for the specified parameter.
 
@@ -150,13 +155,14 @@ circuitBreaker.parameter.successThreshold.invalid.value.CWMFT5015E=CWMFT5015E: T
 circuitBreaker.parameter.successThreshold.invalid.value.CWMFT5015E.explanation=The specified value or the configured value if configured for the CircuitBreaker policy parameter 'successThreshold' is incorrect.
 circuitBreaker.parameter.successThreshold.invalid.value.CWMFT5015E.useraction=Correct the value for the specified parameter.
 
+
 #Incorrect value on FT Bulkhead parameters
 bulkhead.parameter.successThreshold.invalid.value.CWMFT5016E=CWMFT5016E: The Bulkhead policy parameter {0} value {1} for the {2} is incorrect as it must be greater than or equal to 1.
 bulkhead.parameter.successThreshold.invalid.value.CWMFT5016E.explanation=The specified value or the configured value if configured for the Bulkhead policy parameter is incorrect.
 bulkhead.parameter.successThreshold.invalid.value.CWMFT5016E.useraction=Correct the value for the specified parameter.
 
 
-#Generic error for internal failures.
+#Generic error for internal failures. 
 internal.error.CWMFT5997E=CWMFT5997E: An internal error occurred. The exception is {0}.
 internal.error.CWMFT5997E.explanation=The application server experienced an internal error.
 internal.error.CWMFT5997E.useraction=Gather a set of traces and open a new issue against your application server.
