@@ -26,10 +26,12 @@ import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.enterprise.inject.spi.ProcessInjectionPoint;
 import javax.enterprise.inject.spi.ProcessInjectionTarget;
 import javax.inject.Provider;
 
 import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.osgi.service.component.annotations.Component;
 
 import com.ibm.websphere.ras.Tr;
@@ -39,12 +41,13 @@ import com.ibm.ws.cdi.extension.WebSphereCDIExtension;
 /**
  *
  */
-@Component(service = WebSphereCDIExtension.class, property = { "api.classes=org.eclipse.microprofile.jwt.Claim;org.eclipse.microprofile.jwt.Claims;org.eclipse.microprofile.jwt.ClaimValue" }, immediate = true)
+@Component(service = WebSphereCDIExtension.class, property = { "api.classes=org.eclipse.microprofile.jwt.Claim;org.eclipse.microprofile.jwt.Claims;org.eclipse.microprofile.jwt.ClaimValue;org.eclipse.microprofile.jwt.JsonWebToken" }, immediate = true)
 public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
 
     private static final TraceComponent tc = Tr.register(JwtCDIExtension.class);
 
     private final Map<Claim, Set<Type>> injectionTypes = new HashMap<Claim, Set<Type>>();
+    private boolean addJsonWebTokenBean = false;
 
     public void processInjectionTarget(@Observes ProcessInjectionTarget<?> pit) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
@@ -121,6 +124,10 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
                     abd.addDefinitionError(e);
                 }
             }
+        }
+
+        if (addJsonWebTokenBean || injectionTypes.isEmpty() == false) {
+            abd.addBean(new JsonWebTokenBean(beanManager));
         }
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
@@ -243,4 +250,15 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
         }
     }
 
+    public void processInjectionPoint(@Observes ProcessInjectionPoint<?, JsonWebToken> pip, BeanManager beanManager) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.entry(tc, "processInjectionPoint", pip, beanManager);
+        }
+
+        addJsonWebTokenBean = true;
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.exit(tc, "processInjectionPoint");
+        }
+    }
 }
