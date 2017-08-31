@@ -11,6 +11,15 @@ com.ibm.ws.org.apache.cxf:cxf-rt-management:2.6.2.ibm-s20170216-1739
 com.ibm.ws.org.apache.cxf:cxf-rt-transports-http:2.6.2.ibm-s20170216-1739
 com.ibm.ws.org.apache.cxf:cxf-rt-ws-addr:2.6.2.ibm-s20170216-1739
 com.ibm.ws.org.apache.cxf:cxf-rt-ws-policy:2.6.2.ibm-s20170216-1739
+com.ibm.ws.org.apache.cxf:cxf-core:3.2.0.20170815-181006-518
+com.ibm.ws.org.apache.cxf:cxf-rt-features-clustering:3.2.0.20170815-120200-511
+com.ibm.ws.org.apache.cxf:cxf-rt-frontend-jaxrs:3.2.0.20170815-120304-511
+com.ibm.ws.org.apache.cxf:cxf-rt-rs-client:3.2.0.20170815-120426-508
+com.ibm.ws.org.apache.cxf:cxf-rt-rs-service-description:3.2.0.20170815-120746-505
+com.ibm.ws.org.apache.cxf:cxf-rt-transports-http:3.2.0.20170815-120848-505
+com.ibm.ws.org.apache.cxf:cxf-tools-common:3.2.0.20170814-175354-499
+com.ibm.ws.org.apache.cxf:cxf-tools-wadlto-jaxrs:3.2.0.20170814-175516-496
+com.ibm.ws.org.apache.cxf:cxf-rt-rs-sse:3.2.0-20170822-090219-358
 com.ibm.ws.javax.j2ee:jcdi:1.0
 com.ibm.ws.javax.j2ee:connector:1.6
 com.ibm.ws.javax.j2ee:el:2.2

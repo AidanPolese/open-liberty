@@ -26,7 +26,7 @@
     aQute.bnd.repository.maven.provider.MavenBndRepository; \
         name = Release; \
         noupdateOnRelease = true; \
-        local = ${build}/${maven.release.name};
+        local = ${build}/${maven.release.name}
 
 -plugin.3.RemotePublic = ${fetch.oss.repository}
 
