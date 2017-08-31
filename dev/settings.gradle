@@ -71,7 +71,17 @@ def loadBuildProps() {
   def fetchRepoIBMJava = ('error') //Not yet supported to not have this set via gradle.startup.properties
   def pushRepoIBM = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublish')
 
-  if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {    
+  def javaHome = org.gradle.internal.jvm.Jvm.current().getJavaHome()
+  props.setProperty('java.home', javaHome.getAbsolutePath())
+  props.setProperty('javac.bootclasspath.1.4', '${ibmjdklib.bootclasspath}')
+  props.setProperty('javac.bootclasspath.1.6', '${ibmjdklib.bootclasspath}')
+  props.setProperty('javac.bootclasspath.1.7', '${ibmjdklib.bootclasspath}')
+  props.setProperty('javac.bootclasspath.1.8', '${ibmjdklib.bootclasspath}')
+  
+  if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {
+      //Some functionality is added if we are able to access particular internal systems.
+	  //This is to support more controlled dependency management, and multiple JDK paths for cross-compilation
+      def artifactoryExists = true;
       def repoURL = ('https://' + props.getProperty('artifactory.download.server') + '/artifactory/wasliberty-open-liberty')
       fetchRepoPublic = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublic;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/oss_dependencies.maven')
       fetchRepoIBM = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemoteIBM;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/oss_ibm.maven')
@@ -91,6 +101,11 @@ def loadBuildProps() {
       if (props.getProperty('really.publish.publically') != null) {
         reallyPublishPublically = props.getProperty('really.publish.publically')
       }
+	  
+	  props.setProperty('javac.bootclasspath.1.4', '${internaljavac.bootclasspath.1.4}')
+	  props.setProperty('javac.bootclasspath.1.6', '${internaljavac.bootclasspath.1.6}')
+	  props.setProperty('javac.bootclasspath.1.7', '${internaljavac.bootclasspath.1.7}')
+	  props.setProperty('javac.bootclasspath.1.8', '${internaljavac.bootclasspath.1.8}')
   }
 
   props.setProperty('version.qualifier', branchName)
@@ -105,7 +120,7 @@ def loadBuildProps() {
   props.setProperty('maven.release.name', mavenLocalPath)
   props.setProperty('is.remote.publishing', isRemotePublishing.toString())
   props.setProperty('really.publish.publically', reallyPublishPublically.toString())
-
+  
   // Store props to file
   File propsFile = new File('generated.properties')    
   props.store(propsFile.newWriter(), null)
