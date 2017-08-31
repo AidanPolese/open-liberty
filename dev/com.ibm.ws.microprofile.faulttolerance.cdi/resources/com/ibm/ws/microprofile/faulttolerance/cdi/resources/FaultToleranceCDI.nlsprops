@@ -131,7 +131,7 @@ retry.parameter.invalid.value.CWMFT5017E.explanation=The maxDuration value must 
 retry.parameter.invalid.value.CWMFT5017E.useraction=Correct the value for the specified parameter.
 
 #Incorrect value on FT Timeout parameters
-timeout.parameter.invalid.value.CWMFT5011E=CWMFT5011E: The Timeout value {0} specified on {1} is incorrect as it must be greater than or equal to -1.
+timeout.parameter.invalid.value.CWMFT5011E=CWMFT5011E: The Timeout value {0} specified on {1} is incorrect as it must be greater than or equal to 0.
 timeout.parameter.invalid.value.CWMFT5011E.explanation=The specified value or the configured value if configured for the Timeout policy 'value' parameter is incorrect.
 timeout.parameter.invalid.value.CWMFT5011E.useraction=Correct the value for the specified parameter.
 
