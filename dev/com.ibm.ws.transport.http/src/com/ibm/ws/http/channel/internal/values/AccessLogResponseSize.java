@@ -39,7 +39,7 @@ public class AccessLogResponseSize extends AccessLogData {
 
         }
 
-        if (responseSize != -999) {
+        if (responseSize > 0) {
             accessLogEntry.append(responseSize);
         } else {
             accessLogEntry.append("-");
