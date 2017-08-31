@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.ibm.ws.security.mp.jwt.cdi;
 
+import java.io.StringReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -27,6 +28,10 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.PassivationCapable;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
 
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.jwt.ClaimValue;
@@ -226,21 +231,31 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
                     return value;
                 }
             };
+        } else if (JsonValue.class.isAssignableFrom(ipClass)) {
+            String jsonWebTokenAsString = getCurrentJsonWebToken().toString();
+            JsonReader reader = Json.createReader(new StringReader(jsonWebTokenAsString));
+            JsonObject jsonObject = reader.readObject();
+            instance = (T) jsonObject.get(claimName);
         } else {
             // Provider path
-            JsonWebToken jsonWebToken = null;
+            JsonWebToken jsonWebToken = getCurrentJsonWebToken();
             Instance<JsonWebToken> jsonWebTokenInstance = CDI.current().select(JsonWebToken.class);
-
-            if (jsonWebTokenInstance != null && jsonWebTokenInstance.isAmbiguous() == false && jsonWebTokenInstance.isUnsatisfied() == false) {
-                jsonWebToken = jsonWebTokenInstance.get();
-                instance = jsonWebToken.getClaim(claimName);
-            }
+            instance = jsonWebToken.getClaim(claimName);
+//            if (jsonWebTokenInstance != null && jsonWebTokenInstance.isAmbiguous() == false && jsonWebTokenInstance.isUnsatisfied() == false) {
+//                jsonWebToken = jsonWebTokenInstance.get();
+//                instance = jsonWebToken.getClaim(claimName);
+//            }
         }
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(tc, "createClaimValueForClassType", instance);
         }
         return instance;
+    }
+
+    private JsonWebToken getCurrentJsonWebToken() {
+        Instance<JsonWebToken> jsonWebTokenInstance = CDI.current().select(JsonWebToken.class);
+        return jsonWebTokenInstance.get(); // Let the CDI ambiguous/unsatisfied exceptions flow
     }
 
     private String getClaimName() {
