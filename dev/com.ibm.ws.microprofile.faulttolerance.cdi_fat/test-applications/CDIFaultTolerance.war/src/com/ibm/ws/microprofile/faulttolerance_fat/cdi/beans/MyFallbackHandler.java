@@ -31,8 +31,7 @@ public class MyFallbackHandler implements FallbackHandler<Connection> {
 
             @Override
             public String getData() {
-                // TODO Auto-generated method stub
-                return "Fallback for: " + context + " - " + dataBean.getData();
+                return "Fallback for: " + context.getMethod().getName() + " - " + dataBean.getData();
             }
         };
     }

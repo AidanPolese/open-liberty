@@ -14,6 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.enterprise.context.RequestScoped;
 
+import org.eclipse.microprofile.faulttolerance.Asynchronous;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.faulttolerance.Retry;
 

@@ -48,4 +48,12 @@ public class FallbackBean {
         };
     }
 
+    public int getConnectCountA() {
+        return connectCountA;
+    }
+
+    public int getConnectCountB() {
+        return connectCountB;
+    }
+
 }

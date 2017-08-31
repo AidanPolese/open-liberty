@@ -10,8 +10,11 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance_fat.cdi;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
@@ -252,4 +255,20 @@ public class AsyncServlet extends FATServlet {
         assertThat("Future is done after waiting", future.isDone(), is(true));
         assertThat("Call result", future.get(), is("Done"));
     }
+
+    /**
+     * This test should only pass if MP_Fault_Tolerance_NonFallback_Enabled is set to false
+     */
+    public void testAsyncDisabled(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long start = System.currentTimeMillis();
+        Future<Connection> future = bean.connectA();
+        long end = System.currentTimeMillis();
+        long duration = end - start;
+
+        // Ensure that this method was executed synchronously
+        assertThat("Call duration", duration, greaterThan(WORK_TIME));
+        assertThat("Call result", future.get(), is(notNullValue()));
+        assertThat("Call result", future.get().getData(), equalTo(AsyncBean.CONNECT_A_DATA));
+    }
+
 }
