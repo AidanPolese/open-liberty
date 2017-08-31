@@ -8,7 +8,7 @@
 	<include location="../fatTestPorts.xml"/>
 
     <library id="json-p-johnzon">
-      <file name="${server.config.dir}/../com.ibm.ws.jsonb.container.fat/johnzon/johnzon-core-1.1.0.jar"/>
+      <fileset dir="${shared.resource.dir}/johnzon" includes="johnzon-core-*.jar"/>
     </library>
 
     <bell libraryRef="json-p-johnzon"/>

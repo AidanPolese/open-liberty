@@ -56,6 +56,8 @@ javax.enterprise:cdi-api:1.2
 javax.inject:javax.inject:1
 javax.interceptor:javax.interceptor-api:1.2
 javax.jms:javax.jms-api:2.0
+javax.json:javax.json-api:1.1
+javax.json.bind:javax.json.bind-api:1.0
 javax.mail:javax.mail-api:1.5.0
 javax.resource:javax.resource-api:1.7
 javax.security.auth.message:javax.security.auth.message-api:1.1
