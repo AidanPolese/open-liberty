@@ -114,7 +114,7 @@ public class PolicyValidationUtils {
         }
 
         //validate the parameters
-        if (timeoutConfig.value() < -1) {
+        if (timeoutConfig.value() < 0) {
             throw new FaultToleranceException(Tr.formatMessage(tc, "timeout.parameter.invalid.value.CWMFT5011E", timeoutConfig.value(), target));
         }
 
