@@ -1,0 +1,19 @@
+<server>
+    <featureManager>
+      <feature>componenttest-1.0</feature>
+      <feature>jsonbYasson-1.0</feature>
+      <feature>jsonpGlassfish-1.1</feature>
+      <feature>servlet-3.1</feature>
+      <feature>usr:testFeatureUsingJsonb-1.0</feature>
+    </featureManager>
+
+	<include location="../fatTestPorts.xml"/>    
+    
+    <application location="jsonbapp.war"/>
+    
+    <application name="jsonbapp2" location="jsonbapp.war">
+      <classloader apiTypeVisibility="spec,ibm-api,api,third-party"/>
+    </application>
+
+    <variable name="onError" value="FAIL"/>
+</server>
