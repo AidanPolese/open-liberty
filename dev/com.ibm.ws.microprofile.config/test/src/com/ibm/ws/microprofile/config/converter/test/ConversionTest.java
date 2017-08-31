@@ -45,7 +45,7 @@ import org.junit.Test;
 import com.ibm.ws.microprofile.config.interfaces.ConfigConstants;
 import com.ibm.ws.microprofile.config.interfaces.DefaultConverters;
 
-import src.com.ibm.ws.microprofile.config.dynamic.test.TestDynamicConfigSource;
+import com.ibm.ws.microprofile.config.dynamic.test.TestDynamicConfigSource;
 
 public class ConversionTest {
 
