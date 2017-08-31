@@ -9,7 +9,7 @@ http://www.eclipse.org/legal/epl-v10.html.
 # No ~ on the generated.build.id include.. we want the included file to replace
 # the value in this one but we do need a leading - as the file may not be there.
 # Similarly, the copyright.properties file might not exist
--include= -../generated.build.id, -liberty-release.props, ${workspace}/generated.properties
+-include= -../generated.build.id, -liberty-release.props
 
 # Default bFullVersion is major.minor.release-micro, but this can be overridden
 # in specific bnd files if required

@@ -11,7 +11,8 @@
 -include ${workspace}/gradle.properties, ${workspace}/generated.properties
 
 # Maven repository credentials
--connection-settings: ${if;${artifactory.download.token};server;-dummy};id=https://${artifactory.download.server};username=${artifactory.download.user};password=${artifactory.download.token}, -bnd
+-connection-settings: ${if;${artifactory.download.token};server;-dummy};id=https://${artifactory.download.server};username=${artifactory.download.user};password=${artifactory.download.token}, \
+    ${if;${artifactory.upload.token};server;-dummy};id=https://${artifactory.upload.server};username=${artifactory.upload.user};password=${artifactory.upload.token}, -bnd
 
 # Logging for repository connection when debugging
 #-connection-log: ${.}/connection-log.txt
@@ -41,7 +42,7 @@
 #-snapshot: ${if;${is.release};;SNAPSHOT}
 
 # Don't upload sources or javadoc unless bundle overrides
--maven-release: ${if;${is;${env;PUBLISH_REPO;Release};Artifactory};remote;local}, sources;path=NONE, javadoc;path=NONE
+-maven-release: ${if;${is.remote.publishing};remote;local}, sources;path=NONE, javadoc;path=NONE
 
 javac.source: 1.7
 javac.target: 1.7

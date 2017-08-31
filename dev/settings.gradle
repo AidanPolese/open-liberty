@@ -20,10 +20,8 @@
 def loadBuildProps() {
   Properties props = new Properties()
 
-  // Property for git branch
-  def branchName = getVersionQualifier()
-
   // Property for Artifactory matrix parameters
+  def branchName = gitBranch()
   def matrixParams = ";GIT_BRANCH=master;GIT_FEATURE_BRANCH=${branchName}"
 
   // Properties for automated-build relevant tasks. These assignments below are defaults for when building locally
@@ -83,32 +81,37 @@ def loadBuildProps() {
 	  //This is to support more controlled dependency management, and multiple JDK paths for cross-compilation
       def artifactoryExists = true;
       def repoURL = ('https://' + props.getProperty('artifactory.download.server') + '/artifactory/wasliberty-open-liberty')
+      def uploadRepoURL = ('https://' + props.getProperty('artifactory.upload.server') + '/artifactory/wasliberty-open-liberty')
       fetchRepoPublic = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublic;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/oss_dependencies.maven')
       fetchRepoIBM = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemoteIBM;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/oss_ibm.maven')
       fetchRepoIBMJava = ('aQute.bnd.repository.maven.provider.MavenBndRepository;local=~/.ibmjava/repository;name = IBMInternalJava;releaseUrl='+ repoURL +';snapshotUrl='+ repoURL +';index=${build}/ibm_java.maven')
-      pushRepoIBM =('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublish;releaseUrl='+ repoURL + matrixParams + ';snapshotUrl='+ repoURL + matrixParams + ';index=${build}/openliberty.maven')
+      pushRepoIBM = ('aQute.bnd.repository.maven.provider.MavenBndRepository;name = RemotePublish;releaseUrl='+ uploadRepoURL + matrixParams + ';snapshotUrl='+ uploadRepoURL + matrixParams + ';index=${build}/openliberty.maven')
 
       isAutomatedBuild = (props.getProperty("buildResultUUID") != null)
 
       if (props.getProperty('is.continuous.build') != null) {
-        isContinuousBuild = props.getProperty('is.continuous.build')
+        isContinuousBuild = parseBoolean(props.getProperty('is.continuous.build'))
       }
 
       if (props.getProperty('is.release') != null) {
-        isRelease = props.getProperty('is.release')
+        isRelease = parseBoolean(props.getProperty('is.release'))
       }
 
       if (props.getProperty('really.publish.publically') != null) {
-        reallyPublishPublically = props.getProperty('really.publish.publically')
+        reallyPublishPublically = parseBoolean(props.getProperty('really.publish.publically'))
       }
 	  
-	  props.setProperty('javac.bootclasspath.1.4', '${internaljavac.bootclasspath.1.4}')
-	  props.setProperty('javac.bootclasspath.1.6', '${internaljavac.bootclasspath.1.6}')
-	  props.setProperty('javac.bootclasspath.1.7', '${internaljavac.bootclasspath.1.7}')
-	  props.setProperty('javac.bootclasspath.1.8', '${internaljavac.bootclasspath.1.8}')
+      props.setProperty('javac.bootclasspath.1.4', '${internaljavac.bootclasspath.1.4}')
+      props.setProperty('javac.bootclasspath.1.6', '${internaljavac.bootclasspath.1.6}')
+      props.setProperty('javac.bootclasspath.1.7', '${internaljavac.bootclasspath.1.7}')
+      props.setProperty('javac.bootclasspath.1.8', '${internaljavac.bootclasspath.1.8}')
   }
 
-  props.setProperty('version.qualifier', branchName)
+  // Must be run after isRelease is set
+  def (qualifier, timestamp) = getVersionQualifier(isRelease)
+
+  props.setProperty('version.qualifier', qualifier)
+  props.setProperty('buildLabel', timestamp)
   props.setProperty('artifactory.matrix.parameters', matrixParams)
   props.setProperty('fetch.oss.repository', fetchRepoPublic)
   props.setProperty('fetch.oss.ibm.repository', fetchRepoIBM)
@@ -126,13 +129,18 @@ def loadBuildProps() {
   props.store(propsFile.newWriter(), null)
 }
 
-def getVersionQualifier() {
+def getVersionQualifier(boolean isRelease) {
+  //ex: 201708101600
+  def timestamp = new SimpleDateFormat("yyyyMMddHHmm").format(new java.util.Date())
+  if (isRelease) {
+    return [timestamp, timestamp]
+  }
   def branchName = System.env.BRANCH_NAME ?: gitBranch()
   if (branchName == '' || branchName == 'HEAD') {
     // Default to master if something went wrong
     branchName = 'master'
   }
-  return branchName
+  return [branchName, timestamp]
 }
 
 def gitBranch() {
@@ -142,6 +150,10 @@ def gitBranch() {
   proc.err.eachLine { line -> println line }
   proc.waitFor()
   branch
+}
+
+private boolean parseBoolean(String value) {
+  return 'on'.equalsIgnoreCase(value) || 'true'.equalsIgnoreCase(value)
 }
 
 loadBuildProps()
@@ -184,6 +196,8 @@ buildscript {
 /* Initialize the bnd workspace */
 import aQute.bnd.build.Workspace
 import aQute.bnd.osgi.Constants
+
+import java.text.SimpleDateFormat
 
 Workspace.setDriver(Constants.BNDDRIVER_GRADLE)
 Workspace.addGestalt(Constants.GESTALT_BATCH, null)
