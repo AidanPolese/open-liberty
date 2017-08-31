@@ -14,8 +14,7 @@ WS-TraceGroup: \
 Export-Package: \
   com.ibm.ws.security.mp.jwt.proxy; provide:=true
 
-Import-Package: \
-  *;resolution:=optional
+Import-Package: !*.internal.*, *
    
 -dsannotations: \
   com.ibm.ws.security.mp.jwt.proxy.MpJwtHelper
