@@ -16,7 +16,7 @@ Export-Package: \
    javax.json.stream;version=1.1
    
 Include-Resource: \
-  @${repo;javax.json:javax.json-api;1.1}!/!module-info.class
+  @${repo;com.ibm.ws.javax.j2ee:json-api;1.1}!/!module-info.class
 
 instrument.disabled: true
 
@@ -24,4 +24,4 @@ publish.wlp.jar.suffix: dev/api/spec
 
 -buildpath: \
 	${javac.bootclasspath.java6}, \
-	 javax.json:javax.json-api;version=1.1
+	com.ibm.ws.javax.j2ee:json-api;version=1.1

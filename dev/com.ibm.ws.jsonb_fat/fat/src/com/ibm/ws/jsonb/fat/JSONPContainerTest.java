@@ -59,6 +59,6 @@ public class JSONPContainerTest extends FATServletClient {
 
     @Test
     public void testJsonpProviderAvailableJohnzon() throws Exception {
-        runTest(server, SERVLET_PATH, "testJsonpProviderAvailable&JsonpProvider=" + FATSuite.PROVIDER_JOHNZON_JSONP);
+        runTest(server, SERVLET_PATH, "testJsonpProviderAvailable&JsonpProvider=org.apache.johnzon.core.JsonProviderImpl");
     }
 }
