@@ -95,10 +95,10 @@ public class PolicyValidationUtils {
     }
 
     /**
-     * Validate the Retry policy to make sure all the parameters e.g. maxRetries, delay, jitter, maxDuration must not be negative.
+     * Validate the Timeout policy to make sure all the parameters e.g. maxRetries, delay, jitter, maxDuration must not be negative.
      *
-     * @param clazz the class containing Retry annotation
-     * @param method the method that the Retry annotation specified
+     * @param clazz the class containing Timeout annotation
+     * @param method the method that the Timeout annotation specified
      * @param timeout the Timeout annotation
      */
     public static void validateTimeout(Class<?> clazz, Method method, Timeout retry) {
@@ -123,8 +123,8 @@ public class PolicyValidationUtils {
     /**
      * Validate the CircuitBreaker policy
      *
-     * @param clazz the class containing Retry annotation
-     * @param method the method that the Retry annotation specified
+     * @param clazz the class containing CircuitBreaker annotation
+     * @param method the method that the CircuitBreaker annotation specified
      * @param cb the CircuitBreaker annotation
      */
     public static void validateCircuitBreaker(Class<?> clazz, Method method, CircuitBreaker cb) {
@@ -165,8 +165,8 @@ public class PolicyValidationUtils {
     /**
      * Validate Bulkhead configure and make sure the value and waitingTaskQueue must be greater than or equal to 1.
      *
-     * @param clazz the class containing Retry annotation
-     * @param method the method that the Retry annotation specified
+     * @param clazz the class containing Bulkhead annotation
+     * @param method the method that the Bulkhead annotation specified
      * @param bulkhead the Bulkhead annotation
      */
     public static void validateBulkhead(Class<?> clazz, Method method, Bulkhead bulkhead) {
@@ -216,9 +216,7 @@ public class PolicyValidationUtils {
         if ((fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) && (fallbackMethodName != null && !"".equals(fallbackMethodName))) {
             throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.conflicts.CWMFT5009E", originalMethod, fallbackClass, fallbackMethodName));
         } else if (fallbackClass != null && fallbackClass != Fallback.DEFAULT.class) {
-            //TODO validate the return type
             //need to load the fallback class and then find out the method return type
-
             try {
                 Method[] ms = fallbackClass.getMethods();
                 Method handleMethod = FallbackHandler.class.getMethod(FTUtils.FALLBACKHANDLE_METHOD_NAME, ExecutionContext.class);
@@ -258,8 +256,6 @@ public class PolicyValidationUtils {
                 if (!originalMethodReturnType.isAssignableFrom(fallbackReturn)) {
                     throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.return.type.not.match.CWMFT5002E", fallbackMethod, originalMethod));
                 }
-
-                //validate the args matching as well
 
             } catch (NoSuchMethodException e) {
                 throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", fallbackMethodName,
