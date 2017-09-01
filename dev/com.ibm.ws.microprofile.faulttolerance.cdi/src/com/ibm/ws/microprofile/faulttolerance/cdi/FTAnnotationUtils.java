@@ -61,8 +61,6 @@ public class FTAnnotationUtils {
 
                                                                                                             Retry.class, Timeout.class, Bulkhead.class, Fallback.class)));
 
-    public final static String FALLBACKHANDLE_METHOD_NAME = "handle";
-
     static RetryPolicy processRetryAnnotation(Retry retry) {
         int maxRetries = retry.maxRetries();
 

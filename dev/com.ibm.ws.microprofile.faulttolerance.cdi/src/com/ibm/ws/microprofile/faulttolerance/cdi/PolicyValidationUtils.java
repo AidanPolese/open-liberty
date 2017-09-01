@@ -221,7 +221,7 @@ public class PolicyValidationUtils {
 
             try {
                 Method[] ms = fallbackClass.getMethods();
-                Method handleMethod = FallbackHandler.class.getMethod(FTAnnotationUtils.FALLBACKHANDLE_METHOD_NAME, ExecutionContext.class);
+                Method handleMethod = FallbackHandler.class.getMethod(FTUtils.FALLBACKHANDLE_METHOD_NAME, ExecutionContext.class);
                 boolean validFallbackHandler = false;
                 for (Method m : ms) {
                     if (m.getName().equals(handleMethod.getName()) && (m.getParameterCount() == 1)) {
