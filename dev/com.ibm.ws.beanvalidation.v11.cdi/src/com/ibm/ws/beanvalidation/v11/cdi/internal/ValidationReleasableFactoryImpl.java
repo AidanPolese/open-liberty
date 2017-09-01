@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 IBM Corporation and others.
+ * Copyright (c) 2014, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -25,9 +25,13 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.beanvalidation.service.ValidationReleasable;
 import com.ibm.ws.beanvalidation.service.ValidationReleasableFactory;
 import com.ibm.ws.cdi.CDIService;
+import com.ibm.ws.container.service.metadata.ComponentMetaDataListener;
+import com.ibm.ws.container.service.metadata.MetaDataEvent;
 import com.ibm.ws.managedobject.ManagedObject;
 import com.ibm.ws.managedobject.ManagedObjectException;
 import com.ibm.ws.managedobject.ManagedObjectFactory;
@@ -40,9 +44,11 @@ import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 /**
  * An implementation that is CDI aware.
  */
-@Component(service = ValidationReleasableFactory.class)
-public class ValidationReleasableFactoryImpl implements ValidationReleasableFactory {
+@Component(service = { ValidationReleasableFactory.class,
+                       ComponentMetaDataListener.class })
+public class ValidationReleasableFactoryImpl implements ValidationReleasableFactory, ComponentMetaDataListener {
 
+    private static final TraceComponent tc = Tr.register(ValidationReleasableFactoryImpl.class);
     private static final String REFERENCE_CDI_SERVICE = "cdiService";
     private static final String REFERENCE_MANAGED_OBJECT_SERVICE = "managedObjectService";
 
@@ -135,5 +141,28 @@ public class ValidationReleasableFactoryImpl implements ValidationReleasableFact
 
     protected void unsetManagedObjectService(ServiceReference<ManagedObjectService> ref) {
         managedObjectServiceRef.unsetReference(ref);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.ws.container.service.metadata.ComponentMetaDataListener#componentMetaDataCreated(com.ibm.ws.container.service.metadata.MetaDataEvent)
+     */
+    @Override
+    public void componentMetaDataCreated(MetaDataEvent<ComponentMetaData> event) {
+        // no-op
+
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.ibm.ws.container.service.metadata.ComponentMetaDataListener#componentMetaDataDestroyed(com.ibm.ws.container.service.metadata.MetaDataEvent)
+     */
+    @Override
+    public void componentMetaDataDestroyed(MetaDataEvent<ComponentMetaData> event) {
+        BeanManager beanManager = beanManagers.remove(event.getMetaData());
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+            Tr.debug(tc, "Removed bean manager from cache: ", beanManager);
     }
 }
