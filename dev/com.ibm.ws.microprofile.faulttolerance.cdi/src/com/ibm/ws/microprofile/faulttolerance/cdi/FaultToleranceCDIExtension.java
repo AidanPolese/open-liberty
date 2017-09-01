@@ -59,7 +59,7 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
 
         AnnotatedType<T> annotatedType = processAnnotatedType.getAnnotatedType();
         //get the target class
-        Class<?> clazz = processAnnotatedType.getClass();
+        Class<?> clazz = processAnnotatedType.getAnnotatedType().getJavaClass();
         //look at the class level annotations
         Set<Annotation> annotations = annotatedType.getAnnotations();
         for (Annotation annotation : annotations) {
@@ -77,46 +77,63 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
                 } else if (annotation.annotationType() == Bulkhead.class) {
                     PolicyValidationUtils.validateBulkhead(clazz, null, (Bulkhead) annotation);
                 }
-
             }
-
         }
 
         //now loop through the methods
         Set<AnnotatedMethod<? super T>> methods = annotatedType.getMethods();
         for (AnnotatedMethod<?> method : methods) {
-            Method originalMethod = method.getJavaMember();
-            if (classLevelAsync) {
-                PolicyValidationUtils.validateAsynchronous(originalMethod);
-            }
+            validateMethod(method, clazz, classLevelAsync);
+
             annotations = method.getAnnotations();
             for (Annotation annotation : annotations) {
                 if (FTAnnotationUtils.ANNOTATIONS.contains(annotation.annotationType())) {
-                    if (annotation.annotationType() == Asynchronous.class) {
-                        PolicyValidationUtils.validateAsynchronous(originalMethod);
-
-                    } else if (annotation.annotationType() == Fallback.class) {
-                        PolicyValidationUtils.validateFallback(originalMethod, (Fallback) annotation);
-                    } else if (annotation.annotationType() == Retry.class) {
-                        PolicyValidationUtils.validateRetry(clazz, originalMethod, (Retry) annotation);
-                    } else if (annotation.annotationType() == Timeout.class) {
-                        PolicyValidationUtils.validateTimeout(clazz, originalMethod, (Timeout) annotation);
-
-                    } else if (annotation.annotationType() == CircuitBreaker.class) {
-                        PolicyValidationUtils.validateCircuitBreaker(clazz, originalMethod, (CircuitBreaker) annotation);
-                    } else if (annotation.annotationType() == Bulkhead.class) {
-                        PolicyValidationUtils.validateBulkhead(clazz, originalMethod, (Bulkhead) annotation);
-                    }
                     interceptedMethods.add(method);
                 }
             }
         }
 
         //if there were any FT annotations on the class or methods then add the interceptor binding to the methods
-        if (interceptedClass || !interceptedMethods.isEmpty())
-
-        {
+        if (interceptedClass || !interceptedMethods.isEmpty()) {
             addFaultToleranceAnnotation(beanManager, processAnnotatedType, interceptedClass, interceptedMethods);
+        }
+    }
+
+    private <T> void validateMethod(AnnotatedMethod<T> method, Class<?> clazz, boolean classLevelAsync) {
+        Method javaMethod = method.getJavaMember();
+
+        if (javaMethod.isBridge()) {
+            // Skip all validation for bridge methods
+            // Bridge methods are created when a class overrides a method but provides more specific return or parameter types
+            // (usually when implementing a generic interface)
+
+            // In these cases, the bridge method matches the signature of the overridden method after type erasure and delegates directly to the overriding method
+            // In some cases, the signature of the overriding method is valid for some microprofile annotation, but the signature of the bridge method is not
+            // However, the user's code is valid, and weld seems to make sure that any interceptors get called with the real method in the InvocationContext.
+            return;
+        }
+
+        if (classLevelAsync) {
+            PolicyValidationUtils.validateAsynchronous(javaMethod);
+        }
+
+        Set<Annotation> annotations = method.getAnnotations();
+        for (Annotation annotation : annotations) {
+            if (FTAnnotationUtils.ANNOTATIONS.contains(annotation.annotationType())) {
+                if (annotation.annotationType() == Asynchronous.class) {
+                    PolicyValidationUtils.validateAsynchronous(javaMethod);
+                } else if (annotation.annotationType() == Fallback.class) {
+                    PolicyValidationUtils.validateFallback(javaMethod, (Fallback) annotation);
+                } else if (annotation.annotationType() == Retry.class) {
+                    PolicyValidationUtils.validateRetry(clazz, javaMethod, (Retry) annotation);
+                } else if (annotation.annotationType() == Timeout.class) {
+                    PolicyValidationUtils.validateTimeout(clazz, javaMethod, (Timeout) annotation);
+                } else if (annotation.annotationType() == CircuitBreaker.class) {
+                    PolicyValidationUtils.validateCircuitBreaker(clazz, javaMethod, (CircuitBreaker) annotation);
+                } else if (annotation.annotationType() == Bulkhead.class) {
+                    PolicyValidationUtils.validateBulkhead(clazz, javaMethod, (Bulkhead) annotation);
+                }
+            }
         }
     }
 

@@ -24,7 +24,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class ShutdownTask implements Callable<List<Runnable>> {
     private final long awaitContinueNanos;
-    private final CountDownLatch beginLatch; 
+    private final CountDownLatch beginLatch;
     private final CountDownLatch continueLatch;
     final LinkedBlockingQueue<Thread> executionThreads = new LinkedBlockingQueue<Thread>();
     private final ExecutorService executor;
@@ -52,7 +52,7 @@ public class ShutdownTask implements Callable<List<Runnable>> {
                 System.out.println("interrupted " + x);
                 // Let shutdown/shutdownNow handle the interrupt
                 Thread.currentThread().interrupt();
-            } 
+            }
             if (shutdownNow)
                 canceledQueuedTasks = executor.shutdownNow();
             else

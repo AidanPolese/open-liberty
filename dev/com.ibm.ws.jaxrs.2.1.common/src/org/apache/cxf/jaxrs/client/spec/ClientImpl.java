@@ -264,8 +264,7 @@ public class ClientImpl implements Client {
 
             //rtc211775, apply config properties that were supplied in server.xml.
             try {
-                String uri = uriBuilder.build().toString();
-                Map<String, String> propertiesFromServerXml = JAXRSClientConfigHolder.getURIProps(uri);
+                Map<String, String> propertiesFromServerXml = JAXRSClientConfigHolder.getURIProps(uriBuilder);
                 applyProperties(propertiesFromServerXml, configImpl);
 
             } catch (IllegalArgumentException iaex) {

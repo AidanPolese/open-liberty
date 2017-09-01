@@ -63,6 +63,13 @@ public class CDIAsyncTest extends LoggingTest {
                                          "SUCCESS");
     }
 
+    @Test
+    public void testAsyncCallable() throws Exception {
+        WebBrowser browser = createWebBrowserForTestCase();
+        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/async?testMethod=testAsyncCallable",
+                                         "SUCCESS");
+    }
+
     /** {@inheritDoc} */
     @Override
     protected SharedServer getSharedServer() {

@@ -23,7 +23,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class CancellationTask implements Callable<Boolean> {
     private final long awaitContinueNanos;
-    private final CountDownLatch beginLatch; 
+    private final CountDownLatch beginLatch;
     private final CountDownLatch continueLatch;
     private final Future<?> future;
     private final boolean interruptIfRunning;

@@ -18,10 +18,11 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Sensitive;
 import com.ibm.ws.common.internal.encoder.Base64Coder;
+import com.ibm.ws.security.common.TraceConstants;
 
 public class HashUtils {
 
-    private static final TraceComponent tc = Tr.register(HashUtils.class);
+    private static final TraceComponent tc = Tr.register(HashUtils.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
     private static String DEFAULT_ALGORITHM = "SHA-256";
     private static String DEFAULT_CHARSET = "UTF-8";
 

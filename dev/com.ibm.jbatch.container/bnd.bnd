@@ -123,7 +123,7 @@ instrument.classesExcludes: com/ibm/jbatch/container/internal/resources/*.class
 	../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar;version=file, \
 	com.ibm.ws.org.objenesis:objenesis;version=1.0, \
 	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \
-	../build.sharedResources/lib/powermock/1.5/mockito-all-1.9.5.jar;version=file, \
+	org.mockito:mockito-all;version=1.9.5, \
 	com.ibm.ws.kernel.boot;version=latest, \
 	com.ibm.ws.logging;version=latest,\
 	javax.activation:activation;version=1.1,\

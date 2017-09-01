@@ -44,11 +44,12 @@ import com.ibm.ws.security.authentication.AuthenticationConstants;
 import com.ibm.ws.security.authentication.AuthenticationException;
 import com.ibm.ws.security.authentication.AuthenticationService;
 import com.ibm.ws.security.authentication.utility.JaasLoginConfigConstants;
+import com.ibm.ws.security.common.TraceConstants;
 
 @Component(configurationPid = "com.ibm.ws.security.common.token.propagation.tokenpropagationhelper", configurationPolicy = ConfigurationPolicy.OPTIONAL, name = "TokenPropagationHelper", service = TokenPropagationHelper.class, immediate = true, property = { "service.vendor=IBM" })
 public class TokenPropagationHelper {
     private static volatile SecurityService securityService;
-    public static final TraceComponent tc = Tr.register(TokenPropagationHelper.class);
+    public static final TraceComponent tc = Tr.register(TokenPropagationHelper.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
     private static final String KEY_SECURITY_SERVICE = "securityService";
 
     public static final String JWT_TOKEN = "jwt"; // jwt token issued by the provider

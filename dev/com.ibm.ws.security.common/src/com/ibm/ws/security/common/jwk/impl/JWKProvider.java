@@ -22,6 +22,7 @@ import java.util.TimerTask;
 import com.ibm.json.java.JSONObject;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.security.common.TraceConstants;
 import com.ibm.ws.security.common.jwk.interfaces.JSONWebKey;
 import com.ibm.ws.security.common.jwk.interfaces.JWK;
 
@@ -29,7 +30,7 @@ import com.ibm.ws.security.common.jwk.interfaces.JWK;
  * TODO: This should replace com.ibm.ws.security.openidconnect.server.internal.JWKProvider
  */
 public class JWKProvider {
-    private static final TraceComponent tc = Tr.register(JWKProvider.class);
+    private static final TraceComponent tc = Tr.register(JWKProvider.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
 
     protected List<JWK> jwks = Collections.synchronizedList(new ArrayList<JWK>());
 
