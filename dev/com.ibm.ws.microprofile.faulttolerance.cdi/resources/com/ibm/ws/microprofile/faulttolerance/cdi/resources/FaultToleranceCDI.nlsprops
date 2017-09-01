@@ -83,7 +83,7 @@ fallback.policy.return.type.not.match.CWMFT5002E.explanation=A fallback method m
 fallback.policy.return.type.not.match.CWMFT5002E.useraction=Update the return type.
 
 #A fallback method that should exist cannot be found.
-fallback.method.not.found.CWMFT5003E=CWMFT5003E: The fallback method {0} with parameters as declared as the method {1} that falls back was not found in class {2}.
+fallback.method.not.found.CWMFT5003E=CWMFT5003E: The fallback method {0} with parameter types matching method {1} was not found in class {2}.
 fallback.method.not.found.CWMFT5003E.explanation=A fallback method was declared but it does not exist in the declaring class.
 fallback.method.not.found.CWMFT5003E.useraction=Either remove the fallback annotation or add the missing method.
 
@@ -121,7 +121,7 @@ fallback.policy.conflicts.CWMFT5009E.explanation=Either fallbackMethod or value 
 fallback.policy.conflicts.CWMFT5009E.useraction=Remove either the fallbackMethod or the value from the Fallback annotation.
 
 #Incorrect value on FT Retry parameters
-retry.parameter.invalid.value.CWMFT5010E=CWMFT5010E: The Retry policy parameter {0} value {1} for the {2} is not valid as it must be greater than or equal to {3}.
+retry.parameter.invalid.value.CWMFT5010E=CWMFT5010E: The Retry policy parameter {0} value {1} for {2} is not valid as it must be greater than or equal to {3}.
 retry.parameter.invalid.value.CWMFT5010E.explanation=The specified value or the configured value if configured for the Retry policy parameter is not valid.
 retry.parameter.invalid.value.CWMFT5010E.useraction=Correct the value for the specified parameter.
 

@@ -59,7 +59,7 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
 
         AnnotatedType<T> annotatedType = processAnnotatedType.getAnnotatedType();
         //get the target class
-        Class<?> clazz = processAnnotatedType.getClass();
+        Class<?> clazz = processAnnotatedType.getAnnotatedType().getJavaClass();
         //look at the class level annotations
         Set<Annotation> annotations = annotatedType.getAnnotations();
         for (Annotation annotation : annotations) {

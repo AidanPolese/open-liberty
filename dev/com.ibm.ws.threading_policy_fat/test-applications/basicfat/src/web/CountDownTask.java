@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class CountDownTask implements Callable<Boolean> {
     private final long awaitContinueNanos;
-    private final CountDownLatch beginLatch; 
+    private final CountDownLatch beginLatch;
     private final CountDownLatch continueLatch;
     final LinkedBlockingQueue<Thread> executionThreads = new LinkedBlockingQueue<Thread>();
 
