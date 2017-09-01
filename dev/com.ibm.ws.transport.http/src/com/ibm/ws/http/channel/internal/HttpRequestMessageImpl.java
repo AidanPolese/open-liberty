@@ -1928,10 +1928,6 @@ public class HttpRequestMessageImpl extends HttpBaseMessageImpl implements HttpR
             Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Start creating the header block fragment");
         }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "HTTPRequestMessageImpl.pushNewRequest(): Start building the HTTP 1.1 request for WebContainer");
-        }
-
         H2HeaderTable h2WriteTable = ((H2HttpInboundLinkWrap) link).muxLink.getWriteTable();
 
         // Get the request headers from the pushBuilder.

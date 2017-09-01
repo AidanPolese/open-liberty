@@ -37,13 +37,20 @@ ext.cnf = rootProject.project(bnd_cnf)
 Properties props = new Properties()
 file("${rootDir}/generated.properties").withInputStream { props.load(it) }
 
-ext.branchName = props.getProperty("version.qualifier")
+ext.qualifier = props.getProperty("version.qualifier")
 ext.matrixParams = props.getProperty("artifactory.matrix.parameters")
 ext.isAutomatedBuild = parseBoolean(props.getProperty("is.automated.build"))
 ext.isContinuousBuild = parseBoolean(props.getProperty("is.continuous.build"))
 ext.isRelease = parseBoolean(props.getProperty('is.release'))
 ext.isRemotePublishing = parseBoolean(props.getProperty('is.remote.publishing'))
 ext.reallyPublishPublically = parseBoolean(props.getProperty('really.publish.publically'))
+// Does userhome Gradle startup properties exist?
+ext.usrHomeProps = file(System.properties['user.home'] + '/gradle.startup.properties')
+if (!usrHomeProps.exists()) {
+  if (System.properties['build.properties.path']!=null) {
+    usrHomeProps = file(System.properties['build.properties.path']);
+  }
+}
 
 // Test results for this run
 ext.testCountTotal = 0
@@ -69,7 +76,7 @@ subprojects {
         def release = sourceCompatibility
         if(sourceCompatibility < '9')
           release = sourceCompatibility.substring(2);
-		println "Compiling with --release=" + release
+        println "Compiling with --release=" + release
         options.compilerArgs.addAll([ '--release', release])
       }
     }
