@@ -32,9 +32,10 @@ import org.jose4j.lang.JoseException;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.security.common.TraceConstants;
 
 public class JsonUtils {
-    private static final TraceComponent tc = Tr.register(JsonUtils.class);
+    private static final TraceComponent tc = Tr.register(JsonUtils.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
     public static final String CFG_KEY_ID = "id";
     public static final String CFG_KEY_ISSUER = "issuer";
     public static final String CFG_KEY_JWK_ENABLED = "jwkEnabled";

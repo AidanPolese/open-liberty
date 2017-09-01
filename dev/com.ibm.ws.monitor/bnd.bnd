@@ -69,7 +69,7 @@ instrument.classesExcludes: \
 	com.ibm.ws.logging.core,\
 	com.ibm.websphere.org.osgi.core,\
 	com.ibm.websphere.org.osgi.service.component,\
-	com.ibm.ws.org.objectweb.asm.5.0,\
+	com.ibm.ws.org.objectweb.asm;version=latest,\
 	com.ibm.ws.kernel.service,\
 	com.ibm.ws.container.service;version=latest, \
 	com.ibm.ws.org.osgi.annotation.versioning;version=latest

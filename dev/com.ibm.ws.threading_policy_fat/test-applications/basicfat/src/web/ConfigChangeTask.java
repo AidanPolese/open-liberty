@@ -14,13 +14,13 @@ import com.ibm.ws.threading.PolicyExecutor;
 public class ConfigChangeTask implements Callable<Boolean> {
     private final ExecutorService executor;
     private final long awaitContinueNanos;
-    private final CountDownLatch beginLatch; 
+    private final CountDownLatch beginLatch;
     private final CountDownLatch continueLatch;
     private final String methodName;
     private final String value;
 
     public ConfigChangeTask(ExecutorService executor, CountDownLatch beginLatch, CountDownLatch continueLatch, long awaitContinueNanos, String methodName, String value) {
-    	this.awaitContinueNanos = awaitContinueNanos;
+        this.awaitContinueNanos = awaitContinueNanos;
         this.beginLatch = beginLatch;
         this.continueLatch = continueLatch;
         this.methodName = methodName;
@@ -35,14 +35,12 @@ public class ConfigChangeTask implements Callable<Boolean> {
         try {
             boolean awaited = continueLatch.await(awaitContinueNanos, TimeUnit.NANOSECONDS);
             System.out.println("< call " + toString() + " " + awaited + " to call " + methodName + " with value " + value);
-            if(methodName.equals("maxConcurrency")) {
-            	((PolicyExecutor) executor).maxConcurrency(Integer.parseInt(value));
-            }
-            else if(methodName.equals("maxQueueSize")) {
-            	((PolicyExecutor) executor).maxQueueSize(Integer.parseInt(value));
-            }
-            else if(methodName.equals("maxWaitForEnqueue")) {
-            	((PolicyExecutor) executor).maxWaitForEnqueue(Long.parseLong(value));
+            if (methodName.equals("maxConcurrency")) {
+                ((PolicyExecutor) executor).maxConcurrency(Integer.parseInt(value));
+            } else if (methodName.equals("maxQueueSize")) {
+                ((PolicyExecutor) executor).maxQueueSize(Integer.parseInt(value));
+            } else if (methodName.equals("maxWaitForEnqueue")) {
+                ((PolicyExecutor) executor).maxWaitForEnqueue(Long.parseLong(value));
             }
             return awaited;
         } catch (InterruptedException x) {

@@ -17,7 +17,8 @@ import java.util.concurrent.Phaser;
 
 /**
  * Task that submits another task to a completion service.
- * A phaser can optionally be used to encourage multiple submits to occur at the same time. 
+ * A phaser can optionally be used to encourage multiple submits to occur at the same time.
+ * 
  * @param <T>
  */
 public class CompletionServiceTask<T> implements Callable<Future<T>> {

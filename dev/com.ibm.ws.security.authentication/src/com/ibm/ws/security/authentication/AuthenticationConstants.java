@@ -38,11 +38,4 @@ public interface AuthenticationConstants {
      */
     String INTERNAL_ASSERTION_KEY = "com.ibm.ws.authentication.internal.assertion";
 
-    /**
-     * This key maps to a JWT Web Token object in a Subject's private credentials
-     * hashtable. When the property is set, the JWT Web token will be added in the subject
-     */
-
-    String INTERNAL_JSON_WEB_TOKEN = "com.ibm.ws.authentication.internal.json.web.token";
-
 }

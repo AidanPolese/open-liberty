@@ -30,6 +30,7 @@ import org.jose4j.lang.JoseException;
 import com.ibm.json.java.JSONObject;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.security.common.TraceConstants;
 import com.ibm.ws.security.common.jwk.interfaces.JWK;
 import com.ibm.ws.security.common.jwk.internal.JwkConstants;
 import com.ibm.ws.security.common.random.RandomUtils;
@@ -41,7 +42,7 @@ import com.ibm.ws.security.common.random.RandomUtils;
 public class Jose4jRsaJWK extends RsaJsonWebKey implements JWK {
     private static final long serialVersionUID = 1L;
 
-    private static final TraceComponent tc = Tr.register(Jose4jRsaJWK.class);
+    private static final TraceComponent tc = Tr.register(Jose4jRsaJWK.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
 
     private static final int KID_LENGTH = 20;
 

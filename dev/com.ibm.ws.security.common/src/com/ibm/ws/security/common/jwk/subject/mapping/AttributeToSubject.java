@@ -19,13 +19,14 @@ import org.jose4j.lang.JoseException;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.security.common.TraceConstants;
 import com.ibm.ws.security.common.jwk.utils.JsonUtils;
 
 /**
  *
  */
 public class AttributeToSubject {
-    public static final TraceComponent tc = Tr.register(AttributeToSubject.class);
+    public static final TraceComponent tc = Tr.register(AttributeToSubject.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
     String realm = null;
     String uniqueSecurityName = null;
     String userName = null;

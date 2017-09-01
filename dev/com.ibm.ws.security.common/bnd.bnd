@@ -18,6 +18,7 @@ Bundle-Description: Common code for security bundles; version=${bVersion}
 WS-TraceGroup: SecurityCommon
 
 Export-Package: \
+    com.ibm.ws.security.common, \
     com.ibm.ws.security.common.config, \
     com.ibm.ws.security.common.crypto, \
     com.ibm.ws.security.common.encoding, \
@@ -39,9 +40,12 @@ Import-Package: \
  
 Private-Package: \
     com.ibm.ws.common.internal.encoder.*, \
+    com.ibm.ws.security.common.internal.*, \
     com.ibm.ws.security.common.jwk.internal.*
 
 -dsannotations-inherit = true
+
+instrument.classesExcludes: com/ibm/ws/security/common/internal/resources/*.class
 
 -buildpath: \
     com.ibm.ws.logging;version=latest, \

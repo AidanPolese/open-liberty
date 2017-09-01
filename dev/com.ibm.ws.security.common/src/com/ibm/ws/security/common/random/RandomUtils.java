@@ -19,10 +19,11 @@ import java.util.UUID;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.security.common.TraceConstants;
 
 public class RandomUtils {
 
-    private static final TraceComponent tc = Tr.register(RandomUtils.class);
+    private static final TraceComponent tc = Tr.register(RandomUtils.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
 
     private static final char[] alphaNumChars = new char[] {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',

@@ -23,7 +23,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class TerminationAwaitTask implements Callable<Boolean> {
     private long awaitContinueNanos;
-    private CountDownLatch beginLatch; 
+    private CountDownLatch beginLatch;
     private CountDownLatch continueLatch;
     BlockingQueue<Throwable> errorOnAwait = new LinkedBlockingQueue<Throwable>();
     private final ExecutorService executor;

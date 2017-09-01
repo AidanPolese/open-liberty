@@ -12,9 +12,10 @@ package com.ibm.ws.security.common.config;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.security.common.TraceConstants;
 
 public class CommonConfigUtils {
-    public static final TraceComponent tc = Tr.register(CommonConfigUtils.class);
+    public static final TraceComponent tc = Tr.register(CommonConfigUtils.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
 
     public static String[] trim(final String[] originals) {
         if (originals == null || originals.length == 0) {
