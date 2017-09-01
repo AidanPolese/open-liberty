@@ -24,10 +24,11 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.security.common.TraceConstants;
 import com.ibm.ws.webcontainer.internalRuntimeExport.srt.IPrivateRequestAttributes;
 
 public class WebUtils {
-    private static final TraceComponent tc = Tr.register(WebUtils.class);
+    private static final TraceComponent tc = Tr.register(WebUtils.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
 
     /**
      * Encodes the given string using {@link java.net.URLEncoder} and UTF-8 encoding.
@@ -281,11 +282,11 @@ public class WebUtils {
         }
         return true;
     }
-    
-    /* a little bit of magic from webcontainer for use with proxies */     
+
+    /* a little bit of magic from webcontainer for use with proxies */
     /* beware, returns the https port, even if protocol isn't https */
     public Integer getRedirectPortFromRequest(HttpServletRequest req) {
-       
+
         HttpServletRequest sr = getWrappedServletRequestObject(req);
         if (sr instanceof IPrivateRequestAttributes) {
             return (Integer) ((IPrivateRequestAttributes) sr).getPrivateAttribute("SecurityRedirectPort");
@@ -304,7 +305,7 @@ public class WebUtils {
      * @param sr
      * @return
      */
-    private  HttpServletRequest getWrappedServletRequestObject(HttpServletRequest sr) {
+    private HttpServletRequest getWrappedServletRequestObject(HttpServletRequest sr) {
         if (sr instanceof HttpServletRequestWrapper) {
             HttpServletRequestWrapper w = (HttpServletRequestWrapper) sr;
             // make sure we drill all the way down to an

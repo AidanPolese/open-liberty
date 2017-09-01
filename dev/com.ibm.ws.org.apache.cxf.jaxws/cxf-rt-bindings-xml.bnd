@@ -31,13 +31,13 @@ Import-Package: \
  *
  
 Include-Resource:\
- @${repo;com.ibm.ws.org.apache.cxf:cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739}!/META-INF/cxf/**, \
- @${repo;com.ibm.ws.org.apache.cxf:cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739}!/META-INF/DEPENDENCIES, \
- @${repo;com.ibm.ws.org.apache.cxf:cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739}!/META-INF/LICENSE, \
- @${repo;com.ibm.ws.org.apache.cxf:cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739}!/META-INF/NOTICE, \
- @${repo;com.ibm.ws.org.apache.cxf:cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739}!/META-INF/tools.service.validator.xml, \
- @${repo;com.ibm.ws.org.apache.cxf:cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739}!/META-INF/wsdl.plugin.xml, \
- @${repo;com.ibm.ws.org.apache.cxf:cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739}!/schemas/**, \
- @${repo;com.ibm.ws.org.apache.cxf:cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739}!/org/apache/cxf/**
+ @${repo;org.apache.cxf.cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739;EXACT}!/META-INF/cxf/**, \
+ @${repo;org.apache.cxf.cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739;EXACT}!/META-INF/DEPENDENCIES, \
+ @${repo;org.apache.cxf.cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739;EXACT}!/META-INF/LICENSE, \
+ @${repo;org.apache.cxf.cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739;EXACT}!/META-INF/NOTICE, \
+ @${repo;org.apache.cxf.cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739;EXACT}!/META-INF/tools.service.validator.xml, \
+ @${repo;org.apache.cxf.cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739;EXACT}!/META-INF/wsdl.plugin.xml, \
+ @${repo;org.apache.cxf.cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739;EXACT}!/schemas/**, \
+ @${repo;org.apache.cxf.cxf-rt-bindings-xml;2.6.2.ibm-s20170216-1739;EXACT}!/org/apache/cxf/**
  
  

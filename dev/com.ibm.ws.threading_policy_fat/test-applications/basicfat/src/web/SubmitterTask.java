@@ -22,11 +22,12 @@ import java.util.concurrent.TimeoutException;
  * This is useful when we are expecting the task submission to be blocked for a period of time,
  * such as when the queue is full and a maxWaitForEnqueue is configured or the queue full action is
  * one of the caller runs options.
+ * 
  * @param <T>
  */
 public class SubmitterTask<T> implements Callable<Future<T>> {
     private long awaitContinueNanos;
-    private CountDownLatch beginLatch; 
+    private CountDownLatch beginLatch;
     private CountDownLatch continueLatch;
     private final ExecutorService executor;
     private final Callable<?> callable;

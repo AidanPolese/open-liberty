@@ -18,4 +18,3 @@ publish.feature.resources: **
 	com.ibm.websphere.appserver.ldapRegistry-3.0;version=latest,\
 	com.ibm.websphere.appserver.appSecurity-2.0;version=latest,\
 	com.ibm.websphere.appserver.servlet-3.1;version=latest
-	

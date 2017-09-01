@@ -21,6 +21,5 @@
 			<accessrule ignoreifbetter="true" kind="discouraged" pattern="**"/>
 		</accessrules>
 	</classpathentry>
-	<classpathentry kind="src" path="/com.ibm.ws.security.mp.jwt.proxy"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
