@@ -16,11 +16,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import com.ibm.ws.microprofile.health.fat.CDIRetryTest;
+import com.ibm.ws.microprofile.health.fat.HealthTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-                CDIRetryTest.class
+                HealthTest.class
 })
 
 public class FATSuite {}

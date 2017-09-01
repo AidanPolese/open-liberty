@@ -19,32 +19,18 @@
  * SPDX-License-Identifier: Apache-2.0
  *
  */
-
 package org.eclipse.microprofile.health;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import javax.inject.Qualifier;
+
 /**
- * A builder to construct a health procedure response.
- *
- * <p>
- * The HealthCheckResponseBuilder class is reserved for an extension by implementation providers.
- * </p>
+ * Created by hbraun on 24.08.17.
  */
-public abstract class HealthCheckResponseBuilder {
-
-    public abstract HealthCheckResponseBuilder name(String name);
-
-    public abstract HealthCheckResponseBuilder withData(String key, String value);
-
-    public abstract HealthCheckResponseBuilder withData(String key, long value);
-
-    public abstract HealthCheckResponseBuilder withData(String key, boolean value);
-
-    public abstract HealthCheckResponseBuilder up();
-
-    public abstract HealthCheckResponseBuilder down();
-
-    public abstract HealthCheckResponseBuilder state(boolean up);
-
-    public abstract HealthCheckResponse build();
-
-}
+@Qualifier
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Health {}
