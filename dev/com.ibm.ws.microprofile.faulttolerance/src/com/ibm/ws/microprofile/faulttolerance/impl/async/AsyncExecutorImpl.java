@@ -14,15 +14,14 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 
-import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.microprofile.faulttolerance.impl.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.impl.FTConstants;
-import com.ibm.ws.microprofile.faulttolerance.impl.TaskContext;
 import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
-import com.ibm.ws.microprofile.faulttolerance.impl.sync.SynchronousExecutionImpl;
+import com.ibm.ws.microprofile.faulttolerance.impl.sync.SynchronousExecutorImpl;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
@@ -34,20 +33,22 @@ import com.ibm.wsspi.threadcontext.WSContextService;
 /**
  *
  */
-public class AsyncExecutionImpl<R> extends SynchronousExecutionImpl<Future<R>> {
+public class AsyncExecutorImpl<R> extends SynchronousExecutorImpl<Future<R>> {
 
-    private static final TraceComponent tc = Tr.register(AsyncExecutionImpl.class);
+    private static final TraceComponent tc = Tr.register(AsyncExecutorImpl.class);
 
     private TaskRunner<Future<R>> taskRunner;
 
-    public AsyncExecutionImpl(RetryPolicy retryPolicy,
-                              CircuitBreakerPolicy circuitBreakerPolicy,
-                              TimeoutPolicy timeoutPolicy,
-                              BulkheadPolicy bulkheadPolicy,
-                              FallbackPolicy fallbackPolicy,
-                              WSContextService contextService,
-                              PolicyExecutorProvider policyExecutorProvider,
-                              ScheduledExecutorService scheduledExecutorService) {
+    private final NestedExecutorImpl<Future<R>> nestedExecutor;
+
+    public AsyncExecutorImpl(RetryPolicy retryPolicy,
+                             CircuitBreakerPolicy circuitBreakerPolicy,
+                             TimeoutPolicy timeoutPolicy,
+                             BulkheadPolicy bulkheadPolicy,
+                             FallbackPolicy fallbackPolicy,
+                             WSContextService contextService,
+                             PolicyExecutorProvider policyExecutorProvider,
+                             ScheduledExecutorService scheduledExecutorService) {
 
         super(retryPolicy, circuitBreakerPolicy, timeoutPolicy, bulkheadPolicy, fallbackPolicy, scheduledExecutorService);
 
@@ -61,19 +62,23 @@ public class AsyncExecutionImpl<R> extends SynchronousExecutionImpl<Future<R>> {
         } else {
             this.taskRunner = new PolicyExecutorTaskRunner<R>(bulkheadPolicy, contextService, policyExecutorProvider);
         }
+        this.nestedExecutor = new NestedExecutorImpl<>();
     }
 
     @Override
-    protected Callable<Future<R>> createTask(Callable<Future<R>> callable, ExecutionContext executionContext, TaskContext taskContext) {
+    protected TaskRunner<Future<R>> getTaskRunner() {
+        return this.taskRunner;
+    }
+
+    @Override
+    protected Callable<Future<R>> createTask(Callable<Future<R>> callable, ExecutionContextImpl executionContext) {
         Callable<Future<R>> wrapped = () -> {
-            taskContext.setNested();
-            SynchronousExecutionImpl<Future<R>> nestedExecution = new SynchronousExecutionImpl<Future<R>>(taskContext);
-            Future<R> future = nestedExecution.execute(callable, executionContext);
+            Future<R> future = this.nestedExecutor.execute(callable, executionContext);
             return future;
         };
 
         Callable<Future<R>> task = () -> {
-            Future<R> future = this.taskRunner.runTask(wrapped, executionContext, taskContext);
+            Future<R> future = getTaskRunner().runTask(wrapped, executionContext);
             return future;
         };
         return task;

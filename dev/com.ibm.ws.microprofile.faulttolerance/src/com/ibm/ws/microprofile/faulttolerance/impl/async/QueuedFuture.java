@@ -25,7 +25,7 @@ import org.eclipse.microprofile.faulttolerance.exceptions.BulkheadException;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
-import com.ibm.ws.microprofile.faulttolerance.impl.TaskContext;
+import com.ibm.ws.microprofile.faulttolerance.impl.ExecutionContextImpl;
 import com.ibm.wsspi.threadcontext.ThreadContext;
 import com.ibm.wsspi.threadcontext.ThreadContextDescriptor;
 
@@ -41,11 +41,11 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
     private Future<Future<R>> futureFuture;
     private final ThreadContextDescriptor threadContext;
 
-    private final TaskContext taskContext;
+    private final ExecutionContextImpl executionContext;
 
-    public QueuedFuture(Callable<Future<R>> task, TaskContext taskContext, ThreadContextDescriptor threadContext) {
+    public QueuedFuture(Callable<Future<R>> task, ExecutionContextImpl executionContext, ThreadContextDescriptor threadContext) {
         this.task = task;
-        this.taskContext = taskContext;
+        this.executionContext = executionContext;
         this.threadContext = threadContext;
     }
 
@@ -73,12 +73,12 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
         R result = null;
         Future<Future<R>> future = getFutureFuture();
 
-        taskContext.check();
+        executionContext.check();
 
         try {
             result = future.get().get();
         } finally {
-            taskContext.end();
+            executionContext.end();
         }
         return result;
     }
@@ -90,13 +90,13 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
         R result = null;
         Future<Future<R>> future = getFutureFuture();
 
-        taskContext.check();
+        executionContext.check();
 
         try {
             result = future.get(methodTimeout, methodUnit).get(methodTimeout, methodUnit); //TODO do both get calls need timeout?
         } catch (InterruptedException | CancellationException e) {
             //if the future was interrupted or cancelled, check if it was because the FT Timeout popped
-            taskContext.check();
+            executionContext.check();
             throw e;
         } catch (TimeoutException e) {
             throw e;
@@ -123,7 +123,7 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
             if (contextAppliedToThread != null) {
                 this.threadContext.taskStopping(contextAppliedToThread);
             }
-            taskContext.end();
+            executionContext.end();
         }
         return result;
     }
@@ -144,13 +144,13 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
     @FFDCIgnore({ RejectedExecutionException.class })
     public void start(ExecutorService executorService) {
         synchronized (this) {
-            taskContext.start(this);
+            executionContext.start(this);
             try {
                 Future<Future<R>> futureFuture = executorService.submit(this);
                 this.futureFuture = futureFuture;
             } catch (RejectedExecutionException e) {
-                taskContext.end();
-                throw new BulkheadException(e);
+                executionContext.end();
+                throw new BulkheadException(Tr.formatMessage(tc, "bulkhead.no.threads.CWMFT0001E", executionContext.getMethod()), e);
             }
         }
     }

@@ -8,23 +8,22 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.microprofile.faulttolerance.spi;
+package com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
-public interface ExecutionBuilder<T, R> {
+import javax.enterprise.context.RequestScoped;
 
-    public ExecutionBuilder<T, R> setRetryPolicy(RetryPolicy retry);
+import org.eclipse.microprofile.faulttolerance.Asynchronous;
 
-    public ExecutionBuilder<T, R> setCircuitBreakerPolicy(CircuitBreakerPolicy circuitBreaker);
+@RequestScoped
+@Asynchronous
+public class AsyncRunnerBean {
 
-    public ExecutionBuilder<T, R> setBulkheadPolicy(BulkheadPolicy bulkhead);
-
-    public ExecutionBuilder<T, R> setFallbackPolicy(FallbackPolicy fallback);
-
-    public ExecutionBuilder<T, R> setTimeoutPolicy(TimeoutPolicy timeout);
-
-    public Execution<R> build();
-
-    public Execution<Future<R>> buildAsync();
+    @Asynchronous
+    public <R> Future<R> call(Callable<R> task) throws Exception {
+        return CompletableFuture.completedFuture(task.call());
+    }
 }

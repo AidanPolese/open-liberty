@@ -13,19 +13,19 @@ package com.ibm.ws.microprofile.faulttolerance.impl;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 
-import com.ibm.ws.microprofile.faulttolerance.impl.async.AsyncExecutionImpl;
-import com.ibm.ws.microprofile.faulttolerance.impl.sync.SynchronousExecutionImpl;
+import com.ibm.ws.microprofile.faulttolerance.impl.async.AsyncExecutorImpl;
+import com.ibm.ws.microprofile.faulttolerance.impl.sync.SynchronousExecutorImpl;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
-import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
-import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
+import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
 import com.ibm.ws.threading.PolicyExecutorProvider;
 import com.ibm.wsspi.threadcontext.WSContextService;
 
-public class ExecutionBuilderImpl<T, R> implements ExecutionBuilder<T, R> {
+public class ExecutorBuilderImpl<T, R> implements ExecutorBuilder<T, R> {
 
     private CircuitBreakerPolicy circuitBreakerPolicy = null;
     private RetryPolicy retryPolicy = null;
@@ -36,7 +36,7 @@ public class ExecutionBuilderImpl<T, R> implements ExecutionBuilder<T, R> {
     private final PolicyExecutorProvider policyExecutorProvider;
     private final ScheduledExecutorService scheduledExecutorService;
 
-    public ExecutionBuilderImpl(WSContextService contextService, PolicyExecutorProvider policyExecutorProvider, ScheduledExecutorService scheduledExecutorService) {
+    public ExecutorBuilderImpl(WSContextService contextService, PolicyExecutorProvider policyExecutorProvider, ScheduledExecutorService scheduledExecutorService) {
         this.contextService = contextService;
         this.policyExecutorProvider = policyExecutorProvider;
         this.scheduledExecutorService = scheduledExecutorService;
@@ -44,51 +44,51 @@ public class ExecutionBuilderImpl<T, R> implements ExecutionBuilder<T, R> {
 
     /** {@inheritDoc} */
     @Override
-    public ExecutionBuilder<T, R> setRetryPolicy(RetryPolicy retry) {
+    public ExecutorBuilder<T, R> setRetryPolicy(RetryPolicy retry) {
         this.retryPolicy = retry;
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public ExecutionBuilder<T, R> setCircuitBreakerPolicy(CircuitBreakerPolicy circuitBreaker) {
+    public ExecutorBuilder<T, R> setCircuitBreakerPolicy(CircuitBreakerPolicy circuitBreaker) {
         this.circuitBreakerPolicy = circuitBreaker;
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public ExecutionBuilder<T, R> setBulkheadPolicy(BulkheadPolicy bulkhead) {
+    public ExecutorBuilder<T, R> setBulkheadPolicy(BulkheadPolicy bulkhead) {
         this.bulkheadPolicy = bulkhead;
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public ExecutionBuilder<T, R> setFallbackPolicy(FallbackPolicy fallback) {
+    public ExecutorBuilder<T, R> setFallbackPolicy(FallbackPolicy fallback) {
         this.fallbackPolicy = fallback;
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public ExecutionBuilder<T, R> setTimeoutPolicy(TimeoutPolicy timeout) {
+    public ExecutorBuilder<T, R> setTimeoutPolicy(TimeoutPolicy timeout) {
         this.timeoutPolicy = timeout;
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public Execution<R> build() {
-        Execution<R> executor = new SynchronousExecutionImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy, this.scheduledExecutorService);
+    public Executor<R> build() {
+        Executor<R> executor = new SynchronousExecutorImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy, this.scheduledExecutorService);
 
         return executor;
     }
 
     /** {@inheritDoc} */
     @Override
-    public Execution<Future<R>> buildAsync() {
-        Execution<Future<R>> executor = new AsyncExecutionImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy, this.contextService, this.policyExecutorProvider, this.scheduledExecutorService);
+    public Executor<Future<R>> buildAsync() {
+        Executor<Future<R>> executor = new AsyncExecutorImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy, this.contextService, this.policyExecutorProvider, this.scheduledExecutorService);
 
         return executor;
     }

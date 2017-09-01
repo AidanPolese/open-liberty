@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance.impl.sync;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -17,17 +18,15 @@ import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException;
 import org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException;
 
-import com.ibm.websphere.ras.Tr;
-import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.microprofile.faulttolerance.impl.CircuitBreakerImpl;
+import com.ibm.ws.microprofile.faulttolerance.impl.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.impl.RetryImpl;
-import com.ibm.ws.microprofile.faulttolerance.impl.TaskContext;
 import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
 import com.ibm.ws.microprofile.faulttolerance.impl.TimeoutImpl;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
-import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
+import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
@@ -38,50 +37,65 @@ import net.jodah.failsafe.SyncFailsafe;
 /**
  *
  */
-public class SynchronousExecutionImpl<R> implements Execution<R> {
+public class SynchronousExecutorImpl<R> implements Executor<R> {
 
-    private static final TraceComponent tc = Tr.register(SynchronousExecutionImpl.class);
+    private TaskRunner<R> taskRunner;
 
-    private final TaskRunner<R> taskRunner;
-    private final TaskContext taskContext;
+    private TimeoutPolicy timeoutPolicy;
+    private ScheduledExecutorService scheduledExecutorService;
+    private CircuitBreakerImpl circuitBreaker;
+    private FallbackPolicy fallbackPolicy;
+    private RetryPolicy retryPolicy;
 
     //Standard constructor for a synchronous execution
-    public SynchronousExecutionImpl(RetryPolicy retryPolicy,
-                                    CircuitBreakerPolicy circuitBreakerPolicy,
-                                    TimeoutPolicy timeoutPolicy,
-                                    BulkheadPolicy bulkheadPolicy,
-                                    FallbackPolicy fallbackPolicy,
-                                    ScheduledExecutorService scheduledExecutorService) {
+    public SynchronousExecutorImpl(RetryPolicy retryPolicy,
+                                   CircuitBreakerPolicy circuitBreakerPolicy,
+                                   TimeoutPolicy timeoutPolicy,
+                                   BulkheadPolicy bulkheadPolicy,
+                                   FallbackPolicy fallbackPolicy,
+                                   ScheduledExecutorService scheduledExecutorService) {
 
-        TimeoutImpl timeout = null;
-        if (timeoutPolicy != null) {
-            timeout = new TimeoutImpl(timeoutPolicy, scheduledExecutorService);
-        }
+        this.timeoutPolicy = timeoutPolicy;
+        this.scheduledExecutorService = scheduledExecutorService;
 
-        CircuitBreakerImpl circuitBreaker = null;
         if (circuitBreakerPolicy != null) {
-            circuitBreaker = new CircuitBreakerImpl(circuitBreakerPolicy, false);
+            this.circuitBreaker = new CircuitBreakerImpl(circuitBreakerPolicy, false);
         }
+
+        this.fallbackPolicy = fallbackPolicy;
+        this.retryPolicy = retryPolicy;
 
         this.taskRunner = new SemaphoreTaskRunner<R>(bulkheadPolicy);
 
-        RetryImpl retry = new RetryImpl(retryPolicy);
-        this.taskContext = new TaskContext(timeout, circuitBreaker, fallbackPolicy, retry);
     }
 
     //internal constructor for the nested synchronous part of an asynchronous execution
-    public SynchronousExecutionImpl(TaskContext taskContext) {
-        this.taskContext = taskContext;
-        this.taskRunner = new NestedSynchronousTaskRunner<>();
+    protected SynchronousExecutorImpl() {}
+
+    @Override
+    public ExecutionContext newExecutionContext(Method method, Object[] params) {
+        TimeoutImpl timeout = null;
+        if (this.timeoutPolicy != null) {
+            timeout = new TimeoutImpl(this.timeoutPolicy, this.scheduledExecutorService);
+        }
+
+        RetryImpl retry = new RetryImpl(this.retryPolicy);
+
+        ExecutionContext executionContext = new ExecutionContextImpl(method, params, timeout, this.circuitBreaker, this.fallbackPolicy, retry);
+        return executionContext;
     }
 
-    protected Callable<R> createTask(Callable<R> callable, ExecutionContext executionContext, TaskContext taskContext) {
+    protected TaskRunner<R> getTaskRunner() {
+        return this.taskRunner;
+    }
+
+    protected Callable<R> createTask(Callable<R> callable, ExecutionContextImpl executionContext) {
         Callable<R> task = () -> {
             R result = null;
             try {
-                result = this.taskRunner.runTask(callable, executionContext, taskContext);
+                result = getTaskRunner().runTask(callable, executionContext);
             } finally {
-                taskContext.end();
+                executionContext.end();
             }
             return result;
         };
@@ -93,26 +107,29 @@ public class SynchronousExecutionImpl<R> implements Execution<R> {
     @FFDCIgnore({ net.jodah.failsafe.CircuitBreakerOpenException.class, net.jodah.failsafe.FailsafeException.class })
     public R execute(Callable<R> callable, ExecutionContext executionContext) {
 
-        SyncFailsafe<R> failsafe = Failsafe.with(this.taskContext.getRetry());
+        ExecutionContextImpl executionContextImpl = (ExecutionContextImpl) executionContext;
 
-        TimeoutImpl timeout = taskContext.getTimeout();
+        SyncFailsafe<R> failsafe = Failsafe.with(executionContextImpl.getRetry());
+
+        TimeoutImpl timeout = executionContextImpl.getTimeout();
         if (timeout != null) {
             failsafe.onRetry((t) -> {
-                taskContext.onRetry();
+                executionContextImpl.onRetry();
             });
         }
 
-        if (this.taskContext.getCircuitBreaker() != null) {
-            failsafe = failsafe.with(this.taskContext.getCircuitBreaker());
+        if (executionContextImpl.getCircuitBreaker() != null) {
+            failsafe = failsafe.with(executionContextImpl.getCircuitBreaker());
         }
 
-        if (this.taskContext.getFallbackPolicy() != null) {
+        if (executionContextImpl.getFallbackPolicy() != null) {
+            @SuppressWarnings("unchecked")
             Callable<R> fallback = () -> {
-                return (R) this.taskContext.getFallbackPolicy().getFallbackFunction().execute(executionContext);
+                return (R) executionContextImpl.getFallbackPolicy().getFallbackFunction().execute(executionContext);
             };
             failsafe = failsafe.withFallback(fallback);
         }
-        Callable<R> task = createTask(callable, executionContext, this.taskContext);
+        Callable<R> task = createTask(callable, executionContextImpl);
 
         R result = null;
         try {

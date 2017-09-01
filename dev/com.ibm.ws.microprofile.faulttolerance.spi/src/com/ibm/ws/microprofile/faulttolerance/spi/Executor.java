@@ -10,13 +10,15 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance.spi;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 
-@FunctionalInterface
-public interface Execution<R> {
+public interface Executor<R> {
 
     public R execute(Callable<R> callable, ExecutionContext context);
+
+    public ExecutionContext newExecutionContext(Method method, Object... parameters);
 
 }

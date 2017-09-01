@@ -45,7 +45,7 @@ import com.ibm.ws.microprofile.faulttolerance.cdi.config.RetryConfig;
 import com.ibm.ws.microprofile.faulttolerance.cdi.config.TimeoutConfig;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
-import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackHandlerFactory;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceFunction;
@@ -352,13 +352,13 @@ public class FTAnnotationUtils {
      * @param policies
      * @return
      */
-    public static ExecutionBuilder<ExecutionContext, ?> newBuilder(AggregatedFTPolicy policies) {
-        ExecutionBuilder<ExecutionContext, ?> builder = FaultToleranceProvider.newExecutionBuilder();
+    public static ExecutorBuilder<ExecutionContext, ?> newBuilder(AggregatedFTPolicy policies) {
+        ExecutorBuilder<ExecutionContext, ?> builder = FaultToleranceProvider.newExecutionBuilder();
         builder = updateBuilder(builder, policies);
         return builder;
     }
 
-    public static <R> ExecutionBuilder<ExecutionContext, R> updateBuilder(ExecutionBuilder<ExecutionContext, R> builder, AggregatedFTPolicy policies) {
+    public static <R> ExecutorBuilder<ExecutionContext, R> updateBuilder(ExecutorBuilder<ExecutionContext, R> builder, AggregatedFTPolicy policies) {
         TimeoutPolicy timeoutPolicy = policies.getTimeoutPolicy();
         CircuitBreakerPolicy circuitBreakerPolicy = policies.getCircuitBreakerPolicy();
         RetryPolicy retryPolicy = policies.getRetryPolicy();

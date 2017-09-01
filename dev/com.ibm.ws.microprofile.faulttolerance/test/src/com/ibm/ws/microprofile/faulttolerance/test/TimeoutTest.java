@@ -13,16 +13,17 @@ package com.ibm.ws.microprofile.faulttolerance.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
 
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException;
 import org.junit.Test;
 
-import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
-import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
+import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
-import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestFunction;
 
 /**
@@ -35,16 +36,17 @@ public class TimeoutTest {
         TimeoutPolicy timeout = FaultToleranceProvider.newTimeoutPolicy();
         timeout.setTimeout(Duration.ofMillis(500));
 
-        ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
+        ExecutorBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setTimeoutPolicy(timeout);
 
-        Execution<String> executor = builder.build();
+        Executor<String> executor = builder.build();
 
         TestFunction callable = new TestFunction(Duration.ofMillis(1000), "testTimeout");
 
         String executions = "NOT_RUN";
         try {
-            executions = executor.execute(callable, new ExecutionContextImpl("testTimeout"));
+            ExecutionContext context = executor.newExecutionContext((Method) null, "testTimeout");
+            executions = executor.execute(callable, context);
             fail("Exception not thrown");
         } catch (TimeoutException t) {
             //expected
