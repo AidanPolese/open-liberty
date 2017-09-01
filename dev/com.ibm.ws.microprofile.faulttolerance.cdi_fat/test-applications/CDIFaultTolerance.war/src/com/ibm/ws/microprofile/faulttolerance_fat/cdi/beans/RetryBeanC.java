@@ -27,4 +27,10 @@ public class RetryBeanC {
         throw new ConnectException("RetryBeanC Connect: " + (++connectCount));
     }
 
+    // AbortOn is overridden in config to [IllegalArgumentException, ConnectionException] so this should always abort
+    @Retry(maxRetries = 3)
+    public void connectC2() throws ConnectException {
+        throw new ConnectException("RetryBeanC Connect: " + (++connectCount));
+    }
+
 }

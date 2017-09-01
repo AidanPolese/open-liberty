@@ -48,6 +48,12 @@ public class CDIRetryTest extends LoggingTest {
         getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/retry?testMethod=testRetryAbortOn", "SUCCESS");
     }
 
+    @Test
+    public void testAbortOnConfig() throws Exception {
+        WebBrowser browser = createWebBrowserForTestCase();
+        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/retry?testMethod=testRetryAbortOnConfig", "SUCCESS");
+    }
+
     /** {@inheritDoc} */
     @Override
     protected SharedServer getSharedServer() {

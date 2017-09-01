@@ -18,7 +18,9 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.AnnotatedType;
@@ -27,6 +29,8 @@ import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.inject.spi.InjectionTargetFactory;
 import javax.interceptor.InvocationContext;
 
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.faulttolerance.Asynchronous;
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
@@ -59,27 +63,43 @@ public class FTAnnotationUtils {
 
     private static final TraceComponent tc = Tr.register(FTAnnotationUtils.class);
 
-    public final static Set<Class<?>> ANNOTATIONS;
+    private final static Map<ClassLoader, Set<Class<?>>> activeAnnotationsCache = new WeakHashMap<>();
 
-    static {
-        String allAnnotationsEnabledString = AccessController.doPrivileged((PrivilegedAction<String>) () -> System.getenv(FTUtils.ENV_NONFALLBACK_ENABLED));
+    public final static Set<Class<?>> ONLY_FALLBACK = Collections.singleton(Fallback.class);
+    public final static Set<Class<?>> ALL_ANNOTATIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(Asynchronous.class, CircuitBreaker.class,
+                                                                                                                Retry.class, Timeout.class, Bulkhead.class, Fallback.class)));
+    private final static String CONFIG_NONFALLBACK_ENABLED = "MP_Fault_Tolerance_NonFallback_Enabled";
 
-        boolean allAnnotationsEnabled;
-        if (allAnnotationsEnabledString != null && allAnnotationsEnabledString.equalsIgnoreCase("false")) {
-            allAnnotationsEnabled = false;
-        } else {
-            allAnnotationsEnabled = true;
-        }
+    public final static String FALLBACKHANDLE_METHOD_NAME = "handle";
 
-        if (allAnnotationsEnabled) {
-            ANNOTATIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(Asynchronous.class, CircuitBreaker.class,
-                                                                                  Retry.class, Timeout.class, Bulkhead.class, Fallback.class)));
-        } else {
-            if (tc.isDebugEnabled()) {
-                Tr.debug(tc, "All annotations except Fallback are disabled");
+    public static Set<Class<?>> getActiveAnnotations(Class<?> clazz) {
+        ClassLoader cl = getClassLoader(clazz);
+        Set<Class<?>> activeAnnotations = activeAnnotationsCache.get(cl);
+        if (activeAnnotations == null) {
+            Config mpConfig = ConfigProvider.getConfig(cl);
+            boolean allAnnotationsEnabled = mpConfig.getOptionalValue(CONFIG_NONFALLBACK_ENABLED, boolean.class).orElse(true);
+
+            if (allAnnotationsEnabled) {
+                activeAnnotations = ALL_ANNOTATIONS;
+            } else {
+                if (tc.isDebugEnabled()) {
+                    Tr.debug(tc, "All annotations except Fallback are disabled");
+                }
+                activeAnnotations = ONLY_FALLBACK;
             }
-            ANNOTATIONS = Collections.singleton(Fallback.class);
+
+            activeAnnotationsCache.put(cl, activeAnnotations);
         }
+        return activeAnnotations;
+    }
+
+    private static ClassLoader getClassLoader(Class<?> clazz) {
+        return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+            @Override
+            public ClassLoader run() {
+                return clazz.getClassLoader();
+            }
+        });
     }
 
     static RetryPolicy processRetryAnnotation(Retry retry) {
@@ -243,7 +263,7 @@ public class FTAnnotationUtils {
         Annotation[] annotations = targetClass.getAnnotations();
         for (Annotation annotation : annotations) {
             // Don't process any annotations which aren't enabled
-            if (!ANNOTATIONS.contains(annotation.annotationType())) {
+            if (!getActiveAnnotations(targetClass).contains(annotation.annotationType())) {
                 continue;
             }
 
@@ -278,34 +298,34 @@ public class FTAnnotationUtils {
         annotations = method.getAnnotations();
         for (Annotation annotation : annotations) {
             // Don't process any annotations which aren't enabled
-            if (!ANNOTATIONS.contains(annotation.annotationType())) {
+            if (!getActiveAnnotations(targetClass).contains(annotation.annotationType())) {
                 continue;
             }
 
             if (annotation.annotationType().equals(Asynchronous.class)) {
                 asynchronous = (Asynchronous) annotation;
 
-                asynchronous = new AsynchronousConfig(method, asynchronous);
+                asynchronous = new AsynchronousConfig(method, targetClass, asynchronous);
             } else if (annotation.annotationType().equals(Retry.class)) {
                 retry = (Retry) annotation;
                 PolicyValidationUtils.validateRetry(targetClass, method, retry);
-                retry = new RetryConfig(method, retry);
+                retry = new RetryConfig(method, targetClass, retry);
             } else if (annotation.annotationType().equals(CircuitBreaker.class)) {
                 circuitBreaker = (CircuitBreaker) annotation;
                 PolicyValidationUtils.validateCircuitBreaker(targetClass, method, circuitBreaker);
-                circuitBreaker = new CircuitBreakerConfig(method, circuitBreaker);
+                circuitBreaker = new CircuitBreakerConfig(method, targetClass, circuitBreaker);
             } else if (annotation.annotationType().equals(Timeout.class)) {
                 timeout = (Timeout) annotation;
                 PolicyValidationUtils.validateTimeout(targetClass, method, timeout);
-                timeout = new TimeoutConfig(method, timeout);
+                timeout = new TimeoutConfig(method, targetClass, timeout);
             } else if (annotation.annotationType().equals(Bulkhead.class)) {
                 bulkhead = (Bulkhead) annotation;
                 PolicyValidationUtils.validateBulkhead(targetClass, method, bulkhead);
-                bulkhead = new BulkheadConfig(method, bulkhead);
+                bulkhead = new BulkheadConfig(method, targetClass, bulkhead);
             } else if (annotation.annotationType().equals(Fallback.class)) {
                 fallback = (Fallback) annotation;
-                PolicyValidationUtils.validateFallback(method, fallback);
-                fallback = new FallbackConfig(method, fallback);
+                PolicyValidationUtils.validateFallback(targetClass, method, fallback);
+                fallback = new FallbackConfig(method, targetClass, fallback);
             }
         }
 

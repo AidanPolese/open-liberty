@@ -17,23 +17,26 @@ import org.eclipse.microprofile.faulttolerance.Timeout;
 
 public class TimeoutConfig extends AbstractAnnotationConfig<Timeout> implements Timeout {
 
+    private final AnnotationParameterConfig<Long> valueConfig = getParameterConfig("value", Long.class);
+    private final AnnotationParameterConfig<ChronoUnit> unitConfig = getParameterConfig("unit", ChronoUnit.class);
+
     public TimeoutConfig(Class<?> annotatedClass, Timeout annotation) {
         super(annotatedClass, annotation, Timeout.class);
     }
 
-    public TimeoutConfig(Method annotatedMethod, Timeout annotation) {
-        super(annotatedMethod, annotation, Timeout.class);
+    public TimeoutConfig(Method annotatedMethod, Class<?> annotatedClass, Timeout annotation) {
+        super(annotatedMethod, annotatedClass, annotation, Timeout.class);
     }
 
     /** {@inheritDoc} */
     @Override
     public long value() {
-        return super.getValue("value", long.class);
+        return valueConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public ChronoUnit unit() {
-        return super.getValue("unit", ChronoUnit.class);
+        return unitConfig.getValue();
     }
 }

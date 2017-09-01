@@ -17,65 +17,75 @@ import org.eclipse.microprofile.faulttolerance.Retry;
 
 public class RetryConfig extends AbstractAnnotationConfig<Retry> implements Retry {
 
+    private final AnnotationParameterConfig<Integer> maxRetriesConfig = getParameterConfig("maxRetries", Integer.class);
+    private final AnnotationParameterConfig<Long> delayConfig = getParameterConfig("delay", Long.class);
+    private final AnnotationParameterConfig<ChronoUnit> delayUnitConfig = getParameterConfig("delayUnit", ChronoUnit.class);
+    private final AnnotationParameterConfig<Long> maxDurationConfig = getParameterConfig("maxDuration", Long.class);
+    private final AnnotationParameterConfig<ChronoUnit> durationUnitConfig = getParameterConfig("durationUnit", ChronoUnit.class);
+    private final AnnotationParameterConfig<Long> jitterConfig = getParameterConfig("jitter", Long.class);
+    private final AnnotationParameterConfig<ChronoUnit> jitterDelayUnitConfig = getParameterConfig("jitterDelayUnit", ChronoUnit.class);
+    private final AnnotationParameterConfig<Class<? extends Throwable>[]> retryOnConfig = getParameterConfigClassArray("retryOn", Throwable.class);
+    private final AnnotationParameterConfig<Class<? extends Throwable>[]> abortOnConfig = getParameterConfigClassArray("abortOn", Throwable.class);
+
     public RetryConfig(Class<?> annotatedClass, Retry annotation) {
         super(annotatedClass, annotation, Retry.class);
     }
 
-    public RetryConfig(Method annotatedMethod, Retry annotation) {
-        super(annotatedMethod, annotation, Retry.class);
+    public RetryConfig(Method annotatedMethod, Class<?> annotatedClass, Retry annotation) {
+        super(annotatedMethod, annotatedClass, annotation, Retry.class);
     }
 
     /** {@inheritDoc} */
     @Override
     public int maxRetries() {
-        return super.getValue("maxRetries", int.class);
+        return maxRetriesConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public long delay() {
-        return super.getValue("delay", long.class);
+        return delayConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public ChronoUnit delayUnit() {
-        return super.getValue("delayUnit", ChronoUnit.class);
+        return delayUnitConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public long maxDuration() {
-        return super.getValue("maxDuration", long.class);
+        return maxDurationConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public ChronoUnit durationUnit() {
-        return super.getValue("durationUnit", ChronoUnit.class);
+        return durationUnitConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public long jitter() {
-        return super.getValue("jitter", long.class);
+        return jitterConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public ChronoUnit jitterDelayUnit() {
-        return super.getValue("jitterDelayUnit", ChronoUnit.class);
+        return jitterDelayUnitConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public Class<? extends Throwable>[] retryOn() {
-        return super.getValue("retryOn", Class[].class);
+        return retryOnConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public Class<? extends Throwable>[] abortOn() {
-        return super.getValue("abortOn", Class[].class);
+        return abortOnConfig.getValue();
     }
 }

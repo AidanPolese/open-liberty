@@ -17,48 +17,54 @@ import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 
 public class CircuitBreakerConfig extends AbstractAnnotationConfig<CircuitBreaker> implements CircuitBreaker {
 
+    private final AnnotationParameterConfig<Class<? extends Throwable>[]> failOnConfig = getParameterConfigClassArray("failOn", Throwable.class);
+    private final AnnotationParameterConfig<Long> delayConfig = getParameterConfig("delay", Long.class);
+    private final AnnotationParameterConfig<ChronoUnit> delayUnitConfig = getParameterConfig("delayUnit", ChronoUnit.class);
+    private final AnnotationParameterConfig<Integer> requestVolumeThresholdConfig = getParameterConfig("requestVolumeThreshold", Integer.class);
+    private final AnnotationParameterConfig<Double> failureRatioConfig = getParameterConfig("failureRatio", Double.class);
+    private final AnnotationParameterConfig<Integer> successThresholdConfig = getParameterConfig("successThreshold", Integer.class);
+
     public CircuitBreakerConfig(Class<?> annotatedClass, CircuitBreaker annotation) {
         super(annotatedClass, annotation, CircuitBreaker.class);
     }
 
-    public CircuitBreakerConfig(Method annotatedMethod, CircuitBreaker annotation) {
-        super(annotatedMethod, annotation, CircuitBreaker.class);
+    public CircuitBreakerConfig(Method annotatedMethod, Class<?> annotatedClass, CircuitBreaker annotation) {
+        super(annotatedMethod, annotatedClass, annotation, CircuitBreaker.class);
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     @Override
     public Class<? extends Throwable>[] failOn() {
-        return super.getValue("failOn", Class[].class);
+        return failOnConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public long delay() {
-        return super.getValue("delay", long.class);
+        return delayConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public ChronoUnit delayUnit() {
-        return super.getValue("delayUnit", ChronoUnit.class);
+        return delayUnitConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public int requestVolumeThreshold() {
-        return super.getValue("requestVolumeThreshold", int.class);
+        return requestVolumeThresholdConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public double failureRatio() {
-        return super.getValue("failureRatio", double.class);
+        return failureRatioConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public int successThreshold() {
-        return super.getValue("successThreshold", int.class);
+        return successThresholdConfig.getValue();
     }
 }

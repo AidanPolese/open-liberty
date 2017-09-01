@@ -18,6 +18,7 @@
 package com.ibm.ws.microprofile.config.impl;
 
 import java.lang.reflect.AnnotatedType;
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
@@ -82,17 +83,18 @@ public class ConversionManager {
             if (!converterFound && type instanceof Class) {
                 Class<?> requestedClazz = (Class<?>) type;
 
-                //TODO array conversion works just fine but isn't in this version of the spec
-//                if (requestedClazz.isArray()) {
-//                    Class<?> arrayType = requestedClazz.getComponentType();
-//                    converted = convertArray(rawString, arrayType);
-//                }
+                if (requestedClazz.isArray()) {
+                    Class<?> arrayType = requestedClazz.getComponentType();
+                    converted = convertArray(rawString, arrayType);
+                    converterFound = true; // convertArray will throw ConverterNotFoundException if it can't find a converter
+                } else {
+                    ConversionStatus<?> cs = convertCompatible(rawString, requestedClazz);
+                    converterFound = cs.isConverterFound();
+                    converted = cs.getConverted();
+                }
 
 //                if (converted == null) {
 //                }
-                ConversionStatus<?> cs = convertCompatible(rawString, requestedClazz);
-                converterFound = cs.isConverterFound();
-                converted = cs.getConverted();
 
                 //TODO string constructors (and valueOf methods) work just fine but isn't in this version of the spec
 //                if (converted == null) {
@@ -140,13 +142,12 @@ public class ConversionManager {
                 }
             }
         }
-        
+
         ConversionStatus<T> csToReturn = new ConversionStatus<T>(converterFound, converted);
         return csToReturn;
 
     }
 
-    
     /**
      * A holder to hold whether a converter is found and the converted value.
      *
@@ -194,7 +195,7 @@ public class ConversionManager {
                 }
             }
         }
-        
+
         ConversionStatus<T> cs = new ConversionStatus<T>(converterFound, converted);
         return cs;
     }
@@ -220,23 +221,23 @@ public class ConversionManager {
 //        return converted;
 //    }
 //
-//    /**
-//     * Apply convert across an array
-//     *
-//     * @param rawString
-//     * @param arrayType
-//     * @return an array of converted T objects.
-//     */
-//    @SuppressWarnings("unchecked")
-//    private <T> T[] convertArray(String rawString, Class<T> arrayType) {
-//        String[] elements = rawString.split(",");
-//        Object rawArray = Array.newInstance(arrayType, elements.length);
-//        T[] array = (T[]) rawArray;
-//        for (int i = 0; i < elements.length; i++) {
-//            array[i] = (T) convert(elements[i], arrayType);
-//        }
-//        return array;
-//    }
+    /**
+     * Apply convert across an array
+     *
+     * @param rawString
+     * @param arrayType
+     * @return an array of converted T objects.
+     */
+    @SuppressWarnings("unchecked")
+    private <T> T[] convertArray(String rawString, Class<T> arrayType) {
+        String[] elements = rawString.split(",");
+        Object rawArray = Array.newInstance(arrayType, elements.length);
+        T[] array = (T[]) rawArray;
+        for (int i = 0; i < elements.length; i++) {
+            array[i] = (T) convert(elements[i], arrayType);
+        }
+        return array;
+    }
 //
 //    /**
 //     * Wrapper over a reflection located 'valueOf( String s)' method.

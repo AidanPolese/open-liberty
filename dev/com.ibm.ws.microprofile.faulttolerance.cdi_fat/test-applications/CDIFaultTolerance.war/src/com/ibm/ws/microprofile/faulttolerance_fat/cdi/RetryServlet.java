@@ -94,6 +94,20 @@ public class RetryServlet extends FATServlet {
     }
 
     /**
+     * Test that we can configure the abortOn parameter using config
+     * <p>
+     * Worth testing specifically because it takes an array of Classes
+     */
+    public void testRetryAbortOnConfig(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            beanC.connectC2();
+        } catch (ConnectException e) {
+            // Connect count should be 1 because abortOn is set to include ConnectException
+            assertThat("Exception message", e.getMessage(), is("ConnectException: RetryBeanC Connect: 1"));
+        }
+    }
+
+    /**
      * This test should only pass if MP_Fault_Tolerance_NonFallback_Enabled is set to false
      */
     public void testRetryDisabled(HttpServletRequest request, HttpServletResponse response) {
