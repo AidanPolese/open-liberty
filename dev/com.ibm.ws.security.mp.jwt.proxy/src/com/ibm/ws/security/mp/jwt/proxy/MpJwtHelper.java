@@ -43,18 +43,16 @@ public class MpJwtHelper {
 
 	public static Principal getJsonWebTokenPricipal(Subject subject) {
 		JsonWebTokenUtil jsonWebTokenUtil = getJsonWebTokenUtil();
-		if (getJsonWebTokenUtil() == null) {
+		if (jsonWebTokenUtil == null) {
 			return null;
 		}
 		return jsonWebTokenUtil.getJsonWebTokenPrincipal(subject);
 	}
 
 	public static void addJsonWebToken(Subject subject, Hashtable<String, ?> customProperties, String key) {
-		if (customProperties != null && getJsonWebTokenUtil() != null) {
-			JsonWebTokenUtil jsonWebTokenUtil = (JsonWebTokenUtil) customProperties.get(key);
-			if (jsonWebTokenUtil != null) {
-				jsonWebTokenUtil.addJsonWebToken(subject, customProperties, key);
-			}
+		JsonWebTokenUtil jsonWebTokenUtil = getJsonWebTokenUtil();
+		if (jsonWebTokenUtil != null && customProperties != null) {
+			jsonWebTokenUtil.addJsonWebToken(subject, customProperties, key);
 		}
 	}
 
