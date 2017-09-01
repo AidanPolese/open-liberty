@@ -13,7 +13,7 @@ Subsystem-Name: MicroProfile Health 1.0
  com.ibm.wsspi.appserver.webBundle-1.0, \
  com.ibm.websphere.appserver.servlet-3.1
 -bundles=com.ibm.ws.require.java8, \
- com.ibm.websphere.org.eclipse.microprofile.health.1.0, \
+ com.ibm.websphere.org.eclipse.microprofile.health.1.0; apiJar=false; location:="dev/api/spec/,lib/", \
  com.ibm.ws.microprofile.health; apiJar=false; location:="lib/", \
  com.ibm.ws.org.joda.time.1.6.2, \
  com.ibm.websphere.jsonsupport 
