@@ -8,7 +8,10 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.jsf.mojarra.cdi;
+package com.ibm.ws.jsf.container.cdi;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.el.ELResolver;
 import javax.enterprise.inject.spi.BeanManager;
@@ -18,29 +21,33 @@ import javax.naming.NamingException;
 
 import org.jboss.weld.el.WeldELContextListener;
 
-public class CDIJSFInitializerImpl {
+public class CDIJSFInitializer {
 
-    public static void initializeJSF(Application application) {
+    private static final Logger log = Logger.getLogger("com.ibm.ws.jsf.container.cdi");
 
-        //CDIService cdiService = cdiServiceRef.getService();
-        //BeanManager beanManager = cdiService.getCurrentBeanManager();
+    public static void initialize(Application application) {
         try {
+            String appname = InitialContext.doLookup("java:app/AppName");
             BeanManager beanManager = InitialContext.doLookup("java:comp/BeanManager");
             if (beanManager != null) {
+                if (log.isLoggable(Level.FINEST))
+                    log.logp(Level.FINEST, CDIJSFInitializer.class.getName(), "initializeJSF",
+                             "Initializing application with CDI", appname);
+
                 application.addELContextListener(new WeldELContextListener());
 
-                //CDIRuntime cdiRuntime = (CDIRuntime) cdiService;
-                // TODO: Need to verify lookup of 'java:app/Appname' is equivalent to:
-                //       cdiRuntime.getCurrentApplicationContextID();
-                String appname = InitialContext.doLookup("java:app/AppName");
-                //application.setViewHandler(new IBMViewHandler(application.getViewHandler(), contextID));
                 application.setViewHandler(new IBMViewHandlerProxy(application.getViewHandler(), appname));
 
                 ELResolver elResolver = beanManager.getELResolver();
                 application.addELResolver(elResolver);
+            } else {
+                if (log.isLoggable(Level.FINEST))
+                    log.logp(Level.FINEST, CDIJSFInitializer.class.getName(), "initializeJSF",
+                             "No BeanManager found for application", appname);
             }
         } catch (NamingException e) {
-            e.printStackTrace();
+            if (log.isLoggable(Level.FINEST))
+                log.log(Level.FINEST, e.getMessage(), e);
         }
     }
 }

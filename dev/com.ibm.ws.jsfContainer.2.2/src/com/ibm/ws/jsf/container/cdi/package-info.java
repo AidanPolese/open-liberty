@@ -8,20 +8,5 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.jsf.container.fat;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
-
-@RunWith(Suite.class)
-@SuiteClasses({
-                JSFContainerTest.class,
-                JSF22FlowsTests.class,
-                CDIFlowsTests.class,
-                JSF22StatelessViewTests.class,
-                JSF22BeanValidationTests.class
-})
-public class FATSuite {
-
-}
+@org.osgi.annotation.versioning.Version("1.0.0")
+package com.ibm.ws.jsf.container.cdi;

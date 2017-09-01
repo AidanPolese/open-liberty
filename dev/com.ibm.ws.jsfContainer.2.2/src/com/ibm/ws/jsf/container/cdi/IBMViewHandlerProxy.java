@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.jsf.mojarra.cdi;
+package com.ibm.ws.jsf.container.cdi;
 
 import java.util.List;
 import java.util.Map;

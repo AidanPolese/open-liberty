@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 IBM Corporation and others.
+ * Copyright (c) 2014 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,20 +8,12 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.jsf.container.fat;
+/**
+ * @version 2.1.0
+ */
+@org.osgi.annotation.versioning.Version("2.1.0")
+@TraceOptions(traceGroup = "BeanValidation", messageBundle = BVNLSConstants.BV_RESOURCE_BUNDLE)
+package com.ibm.ws.beanvalidation.accessor;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
-
-@RunWith(Suite.class)
-@SuiteClasses({
-                JSFContainerTest.class,
-                JSF22FlowsTests.class,
-                CDIFlowsTests.class,
-                JSF22StatelessViewTests.class,
-                JSF22BeanValidationTests.class
-})
-public class FATSuite {
-
-}
+import com.ibm.websphere.ras.annotation.TraceOptions;
+import com.ibm.ws.beanvalidation.BVNLSConstants;
