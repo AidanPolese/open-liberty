@@ -48,7 +48,6 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken {
         this.type = type;
         this.claimsSet = claimsSet;
         principal = name;
-        fixJoseTypes();
     }
 
     @Override
@@ -124,7 +123,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken {
      */
     //@Override
     public String toString(boolean showAll) {
-        String toString = "DefaultJWTCallerPrincipal{" +
+        String toString = "DefaultJsonWebTokenImpl{" +
                 "id='" + getTokenID() + '\'' +
                 ", name='" + getName() + '\'' +
                 ", expiration=" + getExpirationTime() +
@@ -135,6 +134,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken {
                 ", subject='" + getSubject() + '\'' +
                 ", type='" + type + '\'' +
                 ", issuedFor='" + getClaim("azp") + '\'' +
+                ", raw_token='" + getRawToken() + '\'' +
                 //                ", authTime=" + getClaim("auth_time") +
                 //                ", givenName='" + getClaim("given_name") + '\'' +
                 //                ", familyName='" + getClaim("family_name") + '\'' +
@@ -242,7 +242,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken {
             JsonObject jsonObject = builder.build();
             claimsSet.setClaim(name, jsonObject);
         } catch (MalformedClaimException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 

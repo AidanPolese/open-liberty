@@ -47,11 +47,9 @@ import com.ibm.ws.security.mp.jwt.error.MpJwtProcessingException;
 import com.ibm.ws.security.mp.jwt.impl.utils.Cache;
 import com.ibm.ws.security.mp.jwt.impl.utils.JwtPrincipalMapping;
 import com.ibm.ws.security.mp.jwt.impl.utils.MicroProfileJwtTaiRequest;
-import com.ibm.ws.webcontainer.security.PostParameterHelper;
 import com.ibm.ws.webcontainer.security.ReferrerURLCookieHandler;
 import com.ibm.ws.webcontainer.security.UnprotectedResourceService;
 import com.ibm.ws.webcontainer.security.WebProviderAuthenticatorHelper;
-import com.ibm.ws.webcontainer.srt.SRTServletRequest;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.kernel.service.utils.ConcurrentServiceReferenceMap;
@@ -245,7 +243,6 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
     public boolean isTargetInterceptor(HttpServletRequest request) throws WebTrustAssociationException {
 
         MicroProfileJwtTaiRequest mpJwtTaiRequest = taiRequestHelper.createSocialTaiRequestAndSetRequestAttribute(request);
-        savePostParameters(request);
         return taiRequestHelper.requestShouldBeHandledByTAI(request, mpJwtTaiRequest);
 
     }
@@ -256,7 +253,6 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
 
         MicroProfileJwtTaiRequest mpJwtTaiRequest = (MicroProfileJwtTaiRequest) request.getAttribute(ATTRIBUTE_TAI_REQUEST);
         taiResult = getAssociatedConfigAndHandleRequest(request, response, mpJwtTaiRequest, taiResult);
-        restorePostParameters(request);
 
         return taiResult;
     }
@@ -311,39 +307,6 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
     public void cleanup() {
         // Auto-generated method stub
 
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean isAuthenticationRequired(HttpServletRequest request) {
-        String ctxPath = request.getContextPath();
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-            Tr.debug(tc, "Context path:" + ctxPath);
-        }
-        // return !(KnownSocialLoginUrl.SOCIAL_LOGIN_CONTEXT_PATH.equals(ctxPath));
-        return false;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean logout(HttpServletRequest request, HttpServletResponse response, String userName) {
-        boolean bSetSubject = false;
-        if (tc.isDebugEnabled()) {
-            Tr.debug(tc, "logout() userName:" + userName);
-        }
-
-        // Search all service and
-        // 1) setSubject if subject match
-        // 2) remove the cookie and its cached subject
-        synchronized (this.mpJwtConfigRef) {
-            Iterator<MicroProfileJwtConfig> services = this.mpJwtConfigRef.getServices();
-            MicroProfileJwtConfig mpJwtConfig = null;
-            while (services.hasNext()) {
-                mpJwtConfig = services.next();
-                // TODO remove all the cookies of the subject
-            }
-        }
-        return bSetSubject;
     }
 
     TAIResult handleMicroProfileJwt(HttpServletRequest request, HttpServletResponse response, MicroProfileJwtConfig mpJwtConfig) throws WebTrustAssociationFailedException {
@@ -428,7 +391,7 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
             }
             String issuer = null;
             try {
-                jwtPrincipal = TAIJwtUtils.createJwtPrincipal(username, claimToPrincipalMapping.getMappedGroups(), jwtToken);
+                jwtPrincipal = taiJwtUtils.createJwtPrincipal(username, claimToPrincipalMapping.getMappedGroups(), jwtToken);
                 issuer = (String) JsonUtils.claimFromJsonObject(decodedPayload, "iss");
             } catch (JoseException e) {
                 // Tr.error(tc, "", new Object[] {});
@@ -499,10 +462,10 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
     Subject createSubjectFromProperties(MicroProfileJwtConfig clientConfig, Hashtable<String, Object> customProperties, @Sensitive JwtToken jwt, JsonWebToken jwtPrincipal) throws MpJwtProcessingException {
 
         Subject subject = new Subject();
-
-        if (jwt != null) {
-            subject.getPrivateCredentials().add(jwt);
-        }
+        //
+        //        if (jwt != null) {
+        //            subject.getPrivateCredentials().add(jwt);
+        //        }
         subject.getPrivateCredentials().add(jwtPrincipal); //?
         subject.getPrivateCredentials().add(customProperties);
 
@@ -520,12 +483,17 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
         return ErrorHandlerImpl.getInstance().handleErrorResponse(response, taiResult);
     }
 
-    void savePostParameters(HttpServletRequest request) {
-        PostParameterHelper.savePostParams((SRTServletRequest) request);
+    /** {@inheritDoc} */
+    @Override
+    public boolean isAuthenticationRequired(HttpServletRequest request) {
+        // TODO Auto-generated method stub
+        return false;
     }
 
-    void restorePostParameters(HttpServletRequest request) {
-        PostParameterHelper.restorePostParams((SRTServletRequest) request);
+    /** {@inheritDoc} */
+    @Override
+    public boolean logout(HttpServletRequest request, HttpServletResponse response, String userName) {
+        // TODO Auto-generated method stub
+        return false;
     }
-
 }

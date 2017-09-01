@@ -47,6 +47,7 @@ com.ibm.wsspi.kernel.service.location;version="[1.2,2)", \
 com.ibm.wsspi.kernel.service.utils;version="[1.2,2)", \
 com.ibm.wsspi.ssl;version="[1.0,2)", \
 com.ibm.ws.ssl.optional;version="[1.0,2)", \
+com.ibm.ws.security.mp.jwt.proxy; version="[1.0.0,2.0.0)", \
 javax.net,javax.net.ssl, \
 javax.security.auth, \
 javax.security.auth.x500, \
@@ -99,7 +100,8 @@ instrument.classesExcludes: com/ibm/ws/security/csiv2/internal/resources/*.class
 	com.ibm.ws.security;version=latest,\
 	com.ibm.ws.ssl;version=latest,\
 	com.ibm.ws.transport.iiop;version=latest,\
-	com.ibm.wsspi.org.osgi.service.component.annotations;version=latest
+	com.ibm.wsspi.org.osgi.service.component.annotations;version=latest,\
+	com.ibm.ws.security.mp.jwt.proxy;version=latest
 
 -testpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
