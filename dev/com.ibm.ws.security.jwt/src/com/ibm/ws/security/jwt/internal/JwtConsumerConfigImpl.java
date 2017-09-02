@@ -191,4 +191,11 @@ public class JwtConsumerConfigImpl implements JwtConsumerConfig {
         }
         return jwkSet;
     }
+
+    @Override
+    public boolean getTokenReuse() {
+        // The common JWT code is not allowed to reuse JWTs. This could be revisited later as a potential config option.
+        return false;
+    }
+
 }

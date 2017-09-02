@@ -161,6 +161,7 @@ public class JwKRetriever {
         String jwkUrl = jwkEndpointUrl;
 
         try {
+            // TODO - validate url
             SSLSocketFactory sslSocketFactory = getSSLSocketFactory(jwkUrl, sslConfigurationName, sslSupport);
             HttpClient client = createHTTPClient(sslSocketFactory, jwkUrl, hostNameVerificationEnabled);
             jsonString = getHTTPRequestAsString(client, jwkUrl);
