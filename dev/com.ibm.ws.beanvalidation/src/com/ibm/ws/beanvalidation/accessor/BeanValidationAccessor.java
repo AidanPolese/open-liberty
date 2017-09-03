@@ -32,7 +32,7 @@ public class BeanValidationAccessor {
         if (bv != null) {
             ComponentMetaData cmd = ComponentMetaDataAccessorImpl.getComponentMetaDataAccessor().getComponentMetaData();
             if (cmd != null) {
-                return bv.getValidatorFactory(cmd);
+                return bv.getValidatorFactoryOrDefault(cmd);
             } else {
                 if (tc.isDebugEnabled())
                     Tr.debug(tc, "Unable to get ValidatorFactory because ComponentMetaData was null");
