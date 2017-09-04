@@ -11,6 +11,7 @@
 apply from: '../cnf/gradle/scripts/fat.gradle'
 	
 addRequiredLibraries {
+	dependsOn compileJava
 	doLast {
 		configurations {
 			mojarra
