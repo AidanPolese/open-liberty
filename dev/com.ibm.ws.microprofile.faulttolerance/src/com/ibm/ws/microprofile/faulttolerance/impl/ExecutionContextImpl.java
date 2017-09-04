@@ -137,7 +137,6 @@ public class ExecutionContextImpl implements ExecutionContext {
         }
 
         int retriesRemaining = this.retry.getMaxRetries() - this.retries;
-        this.retry.withMaxRetries(retriesRemaining);
         if (this.retry.getMaxDuration() != null) {
             long maxDuration = this.retry.getMaxDuration().toNanos();
             long now = System.nanoTime();
@@ -145,12 +144,14 @@ public class ExecutionContextImpl implements ExecutionContext {
 
             long delay = this.retry.getDelay().toNanos();
             maxDuration = maxDuration - elapsed;
-            //TODO rather than setting maxDuration to delay, better to just not execute at all ... but then have to work out the right exception to throw
-            if (maxDuration < delay) {
-                maxDuration = delay;
+
+            if (maxDuration <= delay) {
+                maxDuration = delay + 1;
+                retriesRemaining = 0;
             }
             this.retry.withMaxDuration(maxDuration, TimeUnit.NANOSECONDS);
         }
+        this.retry.withMaxRetries(retriesRemaining);
     }
 
     /**
