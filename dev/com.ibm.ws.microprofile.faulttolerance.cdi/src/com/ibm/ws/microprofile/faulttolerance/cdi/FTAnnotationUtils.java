@@ -12,6 +12,8 @@ package com.ibm.ws.microprofile.faulttolerance.cdi;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
@@ -57,9 +59,28 @@ public class FTAnnotationUtils {
 
     private static final TraceComponent tc = Tr.register(FTAnnotationUtils.class);
 
-    public final static Set<Class<?>> ANNOTATIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(Asynchronous.class, CircuitBreaker.class,
+    public final static Set<Class<?>> ANNOTATIONS;
 
-                                                                                                            Retry.class, Timeout.class, Bulkhead.class, Fallback.class)));
+    static {
+        String allAnnotationsEnabledString = AccessController.doPrivileged((PrivilegedAction<String>) () -> System.getenv(FTUtils.ENV_NONFALLBACK_ENABLED));
+
+        boolean allAnnotationsEnabled;
+        if (allAnnotationsEnabledString != null && allAnnotationsEnabledString.equalsIgnoreCase("false")) {
+            allAnnotationsEnabled = false;
+        } else {
+            allAnnotationsEnabled = true;
+        }
+
+        if (allAnnotationsEnabled) {
+            ANNOTATIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(Asynchronous.class, CircuitBreaker.class,
+                                                                                  Retry.class, Timeout.class, Bulkhead.class, Fallback.class)));
+        } else {
+            if (tc.isDebugEnabled()) {
+                Tr.debug(tc, "All annotations except Fallback are disabled");
+            }
+            ANNOTATIONS = Collections.singleton(Fallback.class);
+        }
+    }
 
     static RetryPolicy processRetryAnnotation(Retry retry) {
         int maxRetries = retry.maxRetries();
@@ -221,6 +242,11 @@ public class FTAnnotationUtils {
         Class<?> targetClass = context.getTarget().getClass();
         Annotation[] annotations = targetClass.getAnnotations();
         for (Annotation annotation : annotations) {
+            // Don't process any annotations which aren't enabled
+            if (!ANNOTATIONS.contains(annotation.annotationType())) {
+                continue;
+            }
+
             if (annotation.annotationType().equals(Asynchronous.class)) {
                 asynchronous = (Asynchronous) annotation;
                 asynchronous = new AsynchronousConfig(targetClass, asynchronous);
@@ -251,6 +277,11 @@ public class FTAnnotationUtils {
         Method method = context.getMethod();
         annotations = method.getAnnotations();
         for (Annotation annotation : annotations) {
+            // Don't process any annotations which aren't enabled
+            if (!ANNOTATIONS.contains(annotation.annotationType())) {
+                continue;
+            }
+
             if (annotation.annotationType().equals(Asynchronous.class)) {
                 asynchronous = (Asynchronous) annotation;
 

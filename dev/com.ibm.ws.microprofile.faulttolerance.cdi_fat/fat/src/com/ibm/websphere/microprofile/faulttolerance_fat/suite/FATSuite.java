@@ -12,28 +12,22 @@ package com.ibm.websphere.microprofile.faulttolerance_fat.suite;
 
 import java.io.File;
 
- 
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-
-import com.ibm.websphere.simplicity.ShrinkHelper;
-
+import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDIAnnotationsDisabledTest;
 import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDIAsyncTest;
 import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDIBulkheadTest;
 import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDICircuitBreakerTest;
 import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDIFallbackTest;
 import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDIRetryTest;
 import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDITimeoutTest;
-
-
-
+import com.ibm.websphere.simplicity.ShrinkHelper;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -42,22 +36,24 @@ import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDITimeoutTest;
                 CDICircuitBreakerTest.class,
                 CDIFallbackTest.class,
                 CDIRetryTest.class,
-                CDITimeoutTest.class
+                CDITimeoutTest.class,
+                CDIAnnotationsDisabledTest.class
 })
 public class FATSuite {
-	
-	@BeforeClass
-	public static void setUp() throws Exception {
-	String APP_NAME = "CDIFaultTolerance";
-	
-	JavaArchive faulttolerance_jar = ShrinkWrap.create(JavaArchive.class, "faulttolerance.jar").addPackages(true,"com.ibm.ws.microprofile.faulttolerance_fat.util");
-	WebArchive CDIFaultTolerance_war = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
-					.addPackages(true, "com.ibm.ws.microprofile.faulttolerance_fat.cdi")
-					.addAsLibraries(faulttolerance_jar)
-					.addAsManifestResource(new File("test-applications/" + APP_NAME + ".war/resources/META-INF/permissions.xml"), "persistence.xml");
-					
-	ShrinkHelper.exportArtifact(CDIFaultTolerance_war, "publish/servers/CDIFaultTolerance/dropins/");				
-}
-	
-	
+
+    @BeforeClass
+    public static void setUp() throws Exception {
+        String APP_NAME = "CDIFaultTolerance";
+
+        JavaArchive faulttolerance_jar = ShrinkWrap.create(JavaArchive.class, "faulttolerance.jar")
+                        .addPackages(true, "com.ibm.ws.microprofile.faulttolerance_fat.util");
+
+        WebArchive CDIFaultTolerance_war = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
+                        .addPackages(true, "com.ibm.ws.microprofile.faulttolerance_fat.cdi")
+                        .addAsLibraries(faulttolerance_jar)
+                        .addAsManifestResource(new File("test-applications/" + APP_NAME + ".war/resources/META-INF/permissions.xml"), "persistence.xml");
+
+        ShrinkHelper.exportArtifact(CDIFaultTolerance_war, "publish/servers/CDIFaultTolerance/dropins/");
+    }
+
 }

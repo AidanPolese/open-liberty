@@ -105,4 +105,26 @@ public class CircuitBreakerServlet extends FATServlet {
             throw new AssertionError("Bad Result: " + res);
         }
     }
+
+    /**
+     * This test should only pass if MP_Fault_Tolerance_NonFallback_Enabled is set to false
+     */
+    public void testCBDisabled(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // FaultTolerance object with circuit breaker, should fail 3 times
+        for (int i = 0; i < 3; i++) {
+            try {
+                bean.serviceB();
+                throw new AssertionError("ConnectException not caught");
+            } catch (ConnectException e) {
+                if (!e.getMessage().equals("ConnectException: serviceB exception: " + (i + 1))) {
+                    throw new AssertionError("ConnectException bad message: " + e.getMessage());
+                }
+            }
+        }
+
+        // If circuit breaker is enabled, the next method should throw a CircuitBreakerOpenException
+        // If circuit breaker is disabled, it should succeed.
+        bean.serviceB();
+    }
+
 }
