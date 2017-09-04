@@ -224,6 +224,8 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
     private final AtomicServiceReference<ManagedObjectService> managedObjectServiceRef = new AtomicServiceReference<ManagedObjectService>(REFERENCE_MANAGED_OBJECT_SERVICE);
 
     private volatile CountDownLatch remoteFeatureLatch = null;
+    private volatile boolean ejbRuntimeActive = false;
+    private volatile boolean serverStopping = false;
 
     private WSEJBHandlerResolver webServicesHandlerResolver;
     private EJBPMICollaboratorFactory ejbPMICollaboratorFactory;
@@ -235,7 +237,7 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
 
     @Override
     public void serverStopping() {
-
+        serverStopping = true;
         TimerNpRunnable.serverStopping();
 
         EJBPersistentTimerRuntime ejbPersistentTimerRuntime = ejbPersistentTimerRuntimeServiceRef.getService();
@@ -351,6 +353,7 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
                 container.setPMICollaboratorFactory(ejbPMICollaboratorFactory);
             }
         }
+        ejbRuntimeActive = true;
     }
 
     private void updateEJSContainerFromRuntimeVersion() {
@@ -379,6 +382,7 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
 
     @Deactivate
     protected void deactivate(ComponentContext cc) {
+        ejbRuntimeActive = false;
         stop();
 
         injectionEngineSRRef.deactivate(cc);
@@ -476,7 +480,7 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
 
     @Override
     public boolean isStopping() {
-        return false;
+        return serverStopping;
     }
 
     @Override
@@ -803,15 +807,30 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
     }
 
     @Override
+    @FFDCIgnore(IllegalStateException.class)
     protected void deregisterMBeans(EJBModuleMetaDataImpl mmd) {
         OSGiEJBModuleMetaDataImpl mmdImpl = getOSGiEJBModuleMetaDataImpl(mmd);
         if (mmdImpl.mbeanServiceReg != null) {
-            mmdImpl.mbeanServiceReg.unregister();
+            try {
+                mmdImpl.mbeanServiceReg.unregister();
+            } catch (IllegalStateException isex) {
+                // The MBean has already been unregistered (server shutdown)
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                    Tr.debug(tc, mmd.getJ2EEName() + " MBean already unregistered: " + isex);
+            }
+            mmdImpl.mbeanServiceReg = null;
         }
 
         for (OSGiBeanMetaData bmd : mmdImpl.getOSGiBeanMetaDatas()) {
             if (bmd.mbeanServiceReg != null) {
-                bmd.mbeanServiceReg.unregister();
+                try {
+                    bmd.mbeanServiceReg.unregister();
+                } catch (IllegalStateException isex) {
+                    // The MBean has already been unregistered (server shutdown)
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                        Tr.debug(tc, bmd.getJ2EEName() + " MBean already unregistered: " + isex);
+                }
+                bmd.mbeanServiceReg = null;
             }
         }
     }
@@ -1015,7 +1034,9 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
 
     @Override
     protected void stopBean(BeanMetaData bmd) throws CSIException {
-        if (getOSGiBeanMetaData(bmd).beanRuntime != null) {
+        // Only need to stop the bean if it started (bean runtime exists) and
+        // EJB Container is still active (internal state cleared on deactivate)
+        if (getOSGiBeanMetaData(bmd).beanRuntime != null && ejbRuntimeActive) {
             super.stopBean(bmd);
         }
     }
@@ -1635,7 +1656,7 @@ public class EJBRuntimeImpl extends AbstractEJBRuntime implements ApplicationSta
     void destroyContextClassLoader(EJBModuleMetaDataImpl mmd) {
         if (mmd instanceof OSGiEJBModuleMetaDataImpl) {
             ClassLoader loader = ((OSGiEJBModuleMetaDataImpl) mmd).ivContextClassLoader;
-            if (loader != null) {
+            if (loader != null && ejbRuntimeActive) {
                 classLoadingService.destroyThreadContextClassLoader(loader);
             }
         }

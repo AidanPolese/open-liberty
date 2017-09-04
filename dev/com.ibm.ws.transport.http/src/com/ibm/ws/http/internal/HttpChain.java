@@ -195,7 +195,8 @@ public class HttpChain implements ChainEventListener {
     }
 
     /**
-     * Stop this chain
+     * Stop this chain. The chain will have to be recreated when port is updated
+     * notification/follow-on of stop operation is in the chainStopped listener method.
      */
     public synchronized void stop() {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled()) {
@@ -217,6 +218,9 @@ public class HttpChain implements ChainEventListener {
             ChainData cd = cfw.getChain(chainName);
             if (cd != null) {
                 cfw.stopChain(cd, cfw.getDefaultChainQuiesceTimeout());
+                stopWait.waitForStop(cfw.getDefaultChainQuiesceTimeout(), this); // BLOCK
+                cfw.destroyChain(cd);
+                cfw.removeChain(cd);
             }
         } catch (ChannelException e) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -262,25 +266,7 @@ public class HttpChain implements ChainEventListener {
             // save the new/changed configuration before we start setting up the new chain
             currentConfig = newConfig;
 
-            // Stop the chain-- will have to be recreated when port is updated
-            // notification/follow-on of stop operation is in the chainStopped listener method
-            try {
-                ChainData cd = cfw.getChain(chainName);
-                if (cd != null) {
-                    cfw.stopChain(cd, cfw.getDefaultChainQuiesceTimeout());
-                    stopWait.waitForStop(cfw.getDefaultChainQuiesceTimeout(), this); // BLOCK
-                    cfw.destroyChain(cd);
-                    cfw.removeChain(cd);
-                }
-            } catch (ChannelException e) {
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(this, tc, "Error stopping chain " + chainName, oldConfig, e);
-                }
-            } catch (ChainException e) {
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(this, tc, "Error stopping chain " + chainName, oldConfig, e);
-                }
-            }
+            stop();
         } else {
             Map<Object, Object> chanProps;
 
