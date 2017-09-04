@@ -13,6 +13,7 @@ package com.ibm.websphere.microprofile.faulttolerance_fat.tests;
 import org.junit.AfterClass;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import com.ibm.ws.fat.util.LoggingTest;
 import com.ibm.ws.fat.util.SharedServer;
@@ -28,23 +29,31 @@ public class CDIBulkheadTest extends LoggingTest {
     public static SharedServer SHARED_SERVER = new SharedServer("CDIFaultTolerance");
 
     @Test
-    public void testBulkheadSmall() throws Exception {
+    public void testAsyncBulkheadSmall() throws Exception {
         WebBrowser browser = createWebBrowserForTestCase();
-        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/bulkhead?testMethod=testBulkheadSmall",
+        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/asyncbulkhead?testMethod=testAsyncBulkheadSmall",
                                          "SUCCESS");
     }
 
     @Test
-    public void testBulkheadQueueFull() throws Exception {
+    public void testAsyncBulkheadQueueFull() throws Exception {
         WebBrowser browser = createWebBrowserForTestCase();
-        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/bulkhead?testMethod=testBulkheadQueueFull",
+        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/asyncbulkhead?testMethod=testAsyncBulkheadQueueFull",
                                          "SUCCESS");
     }
 
     @Test
-    public void testBulkheadTimeout() throws Exception {
+    public void testAsyncBulkheadTimeout() throws Exception {
         WebBrowser browser = createWebBrowserForTestCase();
-        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/bulkhead?testMethod=testBulkheadTimeout",
+        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/asyncbulkhead?testMethod=testAsyncBulkheadTimeout",
+                                         "SUCCESS");
+    }
+
+    @Test
+    @Ignore
+    public void testSyncBulkheadSmall() throws Exception {
+        WebBrowser browser = createWebBrowserForTestCase();
+        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/bulkhead?testMethod=testSyncBulkheadSmall",
                                          "SUCCESS");
     }
 

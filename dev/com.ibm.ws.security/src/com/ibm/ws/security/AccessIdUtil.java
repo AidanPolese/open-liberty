@@ -37,6 +37,12 @@ import com.ibm.ws.security.internal.SecurityServiceImpl;
 public final class AccessIdUtil {
     static final TraceComponent tc = Tr.register(AccessIdUtil.class);
     static final Pattern p = Pattern.compile("([^:]+):([^/]+)/(.+)");
+    // this pattern considers protocol and hostname as a realm name.
+    // for example, group:https://test.com/group1, then this splits the input as
+    // "group", "https://test.com", "group1".
+    // The original pattern p splits the same string as
+    // "group", "https:", "/test.com/group1".
+    static final Pattern ph = Pattern.compile("([^:]+):([^:]+://[^/]+)/(.+)");
 
     public static final String TYPE_SERVER = "server";
     public static final String TYPE_USER = "user";
@@ -112,7 +118,12 @@ public final class AccessIdUtil {
             }
 
         }
-        Matcher m = p.matcher(accessId);
+        Matcher m = ph.matcher(accessId);
+        if (m.matches()) {
+            return m;
+        }
+
+        m = p.matcher(accessId);
         if (m.matches()) {
             return m;
         }

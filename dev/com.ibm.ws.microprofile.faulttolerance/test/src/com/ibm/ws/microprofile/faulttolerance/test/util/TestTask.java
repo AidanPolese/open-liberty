@@ -10,47 +10,35 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance.test.util;
 
-import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.concurrent.Callable;
 
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 
-import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
+import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 
 /**
  *
  */
 public class TestTask implements Callable<String> {
 
-    private final Execution<String> executor;
+    private final Executor<String> executor;
     private final TestFunction testFunction;
-    private final ExecutionContext context;
+    private final String contextData;
 
     /**
      * @param executor
      */
-    public TestTask(Execution<String> executor, Duration callLength, String contextData) {
+    public TestTask(Executor<String> executor, Duration callLength, String contextData) {
         this.executor = executor;
         this.testFunction = new TestFunction(callLength, contextData);
-        this.context = new ExecutionContext() {
-
-            @Override
-            public Object[] getParameters() {
-                return new String[] { contextData };
-            }
-
-            @Override
-            public Method getMethod() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-        };
+        this.contextData = contextData;
     }
 
     /** {@inheritDoc} */
     @Override
     public String call() {
+        ExecutionContext context = this.executor.newExecutionContext(null, this.contextData);
         String execution = this.executor.execute(testFunction, context);
         return execution;
     }

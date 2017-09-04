@@ -13,19 +13,20 @@ package com.ibm.ws.microprofile.faulttolerance.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.junit.Test;
 
-import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
-import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
+import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.test.util.AsyncTestFunction;
-import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
 
 /**
  *
@@ -39,13 +40,14 @@ public class AsyncTest {
 
     @Test
     public void testAsync() throws InterruptedException, ExecutionException, TimeoutException {
-        ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
-        Execution<Future<String>> executor = builder.buildAsync();
+        ExecutorBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
+        Executor<Future<String>> executor = builder.buildAsync();
 
         Future<String>[] futures = new Future[TASKS];
         for (int i = 0; i < TASKS; i++) {
             AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(TASK_DURATION), "testAsync" + i);
-            Future<String> future = executor.execute(callable, new ExecutionContextImpl(null, "testAsync"));
+            ExecutionContext context = executor.newExecutionContext((Method) null, "testAsync");
+            Future<String> future = executor.execute(callable, context);
             assertFalse(future.isDone());
             futures[i] = future;
         }

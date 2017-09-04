@@ -37,10 +37,9 @@ import com.ibm.wsspi.tcpchannel.TCPRequestContext;
 public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPReadRequestContext {
 
     /** Trace component for WAS */
-    protected static final TraceComponent tc =
-                    Tr.register(SSLReadServiceContext.class,
-                                SSLChannelConstants.SSL_TRACE_NAME,
-                                SSLChannelConstants.SSL_BUNDLE);
+    protected static final TraceComponent tc = Tr.register(SSLReadServiceContext.class,
+                                                           SSLChannelConstants.SSL_TRACE_NAME,
+                                                           SSLChannelConstants.SSL_BUNDLE);
 
     /** Callback from app channel used to notify when a the read request is complete. */
     protected TCPReadCompletedCallback callback = null;
@@ -79,22 +78,21 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
 
     /**
      * Constructor.
-     * 
+     *
      * @param connLink
      */
     public SSLReadServiceContext(SSLConnectionLink connLink) {
         super(connLink);
         this.queuedWork = new QueuedWork();
         this.readCallback = new SSLReadCompletedCallback(this);
-        this.readNeededInternalException =
-                        new ReadNeededInternalException("All available data read, but more needed, read again");
+        this.readNeededInternalException = new ReadNeededInternalException("All available data read, but more needed, read again");
         this.sessionClosedException = new SessionClosedException("SSL engine is closed");
     }
 
     /**
      * Save the starting positions of the output buffers so that we can properly
      * calculate the amount of data being returned by the read.
-     * 
+     *
      */
     private void saveDecryptedPositions() {
         for (int i = 0; i < decryptedNetPosInfo.length; i++) {
@@ -347,12 +345,12 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
      * Note, a separate thread is not spawned to handle the decryption. The asynchronous
      * behavior of this call will take place when the device side channel makes a
      * nonblocking IO call and the request is potentially moved to a separate thread.
-     * 
+     *
      * The buffers potentially set from the calling application will be used to store the
      * output of the decrypted message. No read buffers are set in the device channel. It
      * will have the responsibility of allocating while we will have the responsibility of
      * releasing.
-     * 
+     *
      * @see com.ibm.wsspi.tcpchannel.TCPReadRequestContext#read(long, TCPReadCompletedCallback, boolean, int)
      */
     @Override
@@ -363,7 +361,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
 
     /**
      * See method above. Extra parameter tells if the request was from a formerly queued request.
-     * 
+     *
      * @param numBytes
      * @param userCallback
      * @param forceQueue
@@ -386,7 +384,13 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "Requested to timeout former request.  Calling device side.");
             }
-            readCallback.setCallBack(userCallback);
+
+            if (userCallback != null) {
+                //If this is called to timeout a previous request to read the original callback should be used
+                //The original callback would have been set on the first call to the read
+                readCallback.setCallBack(userCallback);
+            }
+
             deviceReadContext.read(numBytes, readCallback, forceQueue, timeout);
             if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
                 Tr.exit(tc, "readAsynch: " + getVC());
@@ -562,7 +566,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
      * read. Appropriate action is taken based on the setting of the forceQueue parameter.
      * If it is true, the complete callback is called on a separate thread. Otherwise it is
      * called right here.
-     * 
+     *
      * @param forceQueue
      * @param inCallback
      */
@@ -596,7 +600,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
      * This method handles errors when they occur during the code path of an async read. It takes
      * appropriate action based on the setting of the forceQueue parameter. If it is true, the
      * error callback is called on a separate thread. Otherwise it is called right here.
-     * 
+     *
      * @param forceQueue
      * @param exception
      * @param inCallback
@@ -632,7 +636,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
      * Check the status of the buffers set by the caller taking into account
      * the JITAllocation size if the buffers are null or verifying there is
      * space available in the the buffers based on the size of data requested.
-     * 
+     *
      * @param numBytes
      * @param async
      * @return IOException if an inconsistency/error is found in the request,
@@ -686,7 +690,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
      * This method is called when a read is requested. It checks to see if any
      * data is left over from the previous read, but there wasn't space in the
      * buffers to store the result.
-     * 
+     *
      * @return number of bytes copied from the left over buffer
      */
     public long readUnconsumedDecData() {
@@ -743,7 +747,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
      * are determined by either the allocation size specified by the application
      * channel or, if that wasn't set, the max packet buffer size specified in
      * the SSL engine.
-     * 
+     *
      * @param requestedSize minimum amount of space that must be available in the buffers.
      */
     protected void getNetworkBuffer(long requestedSize) {
@@ -963,7 +967,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
      * position and up to either the limit or the end of the caller buffers.
      * If any data is left over in the decryptedNetworkBuffer it will be stored
      * in the unconsumedDecData for a future read.
-     * 
+     *
      * @return The number of bytes copied
      */
     private int copyDataToCallerBuffers() {
@@ -1139,7 +1143,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
 
     /**
      * Return the size of the buffers that should be created for this request.
-     * 
+     *
      * @return size of allocated buffers.
      */
     public int getJITAllocateSize() {
@@ -1150,7 +1154,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
      * Handle common activity of read and readAsynch involving the decryption of the
      * current buffers. The caller will have the responsibility of informing the app
      * side channels once complete.
-     * 
+     *
      * @param async if called from an async read (true) or sync read (false)
      * @return null if the decryption was successful, the resulting exception otherwise
      */
@@ -1364,7 +1368,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
 
         /**
          * Internal callback used for handshake exchanges.
-         * 
+         *
          * @param _readContext
          * @param _readCallback
          * @param _netBuffer
@@ -1455,7 +1459,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
     /**
      * When data is read, there is always the change the a renegotiation will take place. If so,
      * this method will be called. Note, it is used by both the sync and async writes.
-     * 
+     *
      * @param async
      * @return result of the handshake
      * @throws IOException
@@ -1476,9 +1480,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
         // Callback to be used if the request is async.
         MyHandshakeCompletedCallback handshakeCallback = null;
         if (async) {
-            handshakeCallback = new MyHandshakeCompletedCallback(
-                            this, callback, localNetBuffer, decryptedNetBuffer,
-                            encryptedAppBuffer);
+            handshakeCallback = new MyHandshakeCompletedCallback(this, callback, localNetBuffer, decryptedNetBuffer, encryptedAppBuffer);
         }
 
         try {
@@ -1700,7 +1702,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
 
         /**
          * Constructor.
-         * 
+         *
          * @param _readContext
          */
         public SSLReadCompletedCallback(SSLReadServiceContext _readContext) {
@@ -1709,7 +1711,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
 
         /**
          * Set the callback to be used when the read is complete or hits an error.
-         * 
+         *
          * @param _myCallback
          */
         public void setCallBack(TCPReadCompletedCallback _myCallback) {
@@ -1865,7 +1867,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
 
         /**
          * Set the parameters to be used for the next piece of read work.
-         * 
+         *
          * @param _numBytes
          * @param _userCallback
          * @param _timeout
@@ -1879,7 +1881,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
 
         /**
          * Set the parameters to be used for the next piece of error work.
-         * 
+         *
          * @param _vc
          * @param _tcpReadRequestContext
          * @param _userCallback
@@ -1895,7 +1897,7 @@ public class SSLReadServiceContext extends SSLBaseServiceContext implements TCPR
 
         /**
          * Set the parameters to be used for the next piece of complete work.
-         * 
+         *
          * @param _vc
          * @param _tcpReadRequestContext
          * @param _userCallback

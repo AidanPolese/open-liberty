@@ -12,9 +12,7 @@ package com.ibm.ws.microprofile.faulttolerance.impl;
 
 import java.util.concurrent.Callable;
 
-import org.eclipse.microprofile.faulttolerance.ExecutionContext;
-
 @FunctionalInterface
 public interface TaskRunner<R> {
-    public R runTask(Callable<R> task, ExecutionContext executionContext, TaskContext taskContext) throws Exception;
+    public R runTask(Callable<R> task, ExecutionContextImpl executionContext) throws Exception;
 }

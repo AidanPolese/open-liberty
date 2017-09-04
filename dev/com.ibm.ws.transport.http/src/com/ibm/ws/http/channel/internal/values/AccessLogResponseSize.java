@@ -11,7 +11,6 @@
 package com.ibm.ws.http.channel.internal.values;
 
 import com.ibm.ws.http.channel.internal.HttpResponseMessageImpl;
-import com.ibm.wsspi.genericbnf.HeaderStorage;
 import com.ibm.wsspi.http.channel.HttpRequestMessage;
 import com.ibm.wsspi.http.channel.HttpResponseMessage;
 
@@ -32,18 +31,15 @@ public class AccessLogResponseSize extends AccessLogData {
         HttpResponseMessageImpl responseMessageImpl = null;
         if (response != null) {
             responseMessageImpl = (HttpResponseMessageImpl) response;
-            if (HeaderStorage.NOTSET != response.getContentLength()) {
-                responseSize = response.getContentLength();
-            }
         }
 
         if (responseMessageImpl != null) {
-            if (responseSize == -1) {
-                responseSize = responseMessageImpl.getServiceContext().getNumBytesWritten();
-            }
+
+            responseSize = responseMessageImpl.getServiceContext().getNumBytesWritten();
+
         }
 
-        if (responseSize != -999) {
+        if (responseSize > 0) {
             accessLogEntry.append(responseSize);
         } else {
             accessLogEntry.append("-");

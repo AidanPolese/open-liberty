@@ -10,63 +10,98 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.enterprise.context.RequestScoped;
 
-import org.eclipse.microprofile.faulttolerance.Asynchronous;
-import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.Retry;
 
-import com.ibm.ws.microprofile.faulttolerance_fat.cdi.BulkheadServlet;
+import com.ibm.ws.microprofile.faulttolerance_fat.cdi.TestConstants;
 
 @RequestScoped
-@Asynchronous
 public class BulkheadBean {
 
     private final AtomicInteger connectBCounter = new AtomicInteger(0);
     private final AtomicInteger connectATokens = new AtomicInteger(0);
     private final AtomicInteger connectBTokens = new AtomicInteger(0);
 
+    private final AtomicInteger connectDCounter = new AtomicInteger(0);
+    private final AtomicInteger connectCTokens = new AtomicInteger(0);
+    private final AtomicInteger connectDTokens = new AtomicInteger(0);
+
     @Bulkhead(value = 2, waitingTaskQueue = 2)
-    public Future<Boolean> connectA(String data) throws InterruptedException {
+    public Boolean connectA(String data) throws InterruptedException {
         System.out.println("connectA starting " + data);
         int token = connectATokens.incrementAndGet();
         try {
             if (token > 2) {
                 throw new RuntimeException("Too many threads in connectA[" + data + "]: " + token);
             }
-            Thread.sleep(5000);
-            return CompletableFuture.completedFuture(Boolean.TRUE);
+            Thread.sleep(TestConstants.WORK_TIME);
+            return Boolean.TRUE;
         } finally {
             connectATokens.decrementAndGet();
             System.out.println("connectA complete " + data);
         }
     }
 
-    @Timeout(BulkheadServlet.TIMEOUT)
     @Bulkhead(value = 2, waitingTaskQueue = 2)
-    public Future<Boolean> connectB(String data) throws InterruptedException {
+    @Retry(maxRetries = 2)
+    public Boolean connectB(String data) throws InterruptedException {
         System.out.println("connectB starting " + data);
+        int counter = connectBCounter.incrementAndGet();
         int token = connectBTokens.incrementAndGet();
         try {
             if (token > 2) {
                 throw new RuntimeException("Too many threads in connectB[" + data + "]: " + token);
             }
-            int counter = connectBCounter.incrementAndGet();
-            System.out.println("connectB counter " + counter);
-            if (counter <= 2) {
-                System.out.println("connectB sleeping " + data);
-                Thread.sleep(BulkheadServlet.WORK_TIME);
-                return CompletableFuture.completedFuture(Boolean.FALSE);
-            } else {
-                return CompletableFuture.completedFuture(Boolean.TRUE);
+            if (counter < 2) {
+                throw new RuntimeException("Intentional exception");
             }
+            Thread.sleep(TestConstants.WORK_TIME);
+            return Boolean.TRUE;
         } finally {
             connectBTokens.decrementAndGet();
             System.out.println("connectB complete " + data);
+        }
+    }
+
+    @Bulkhead(value = 2, waitingTaskQueue = 2)
+    @Retry(maxRetries = 0)
+    public Boolean connectC(String data) throws InterruptedException {
+        System.out.println("connectC starting " + data);
+        int token = connectCTokens.incrementAndGet();
+        try {
+            if (token > 2) {
+                throw new RuntimeException("Too many threads in connectC[" + data + "]: " + token);
+            }
+            Thread.sleep(TestConstants.WORK_TIME);
+            return Boolean.TRUE;
+        } finally {
+            connectCTokens.decrementAndGet();
+            System.out.println("connectC complete " + data);
+        }
+    }
+
+    @Bulkhead(value = 2, waitingTaskQueue = 2)
+    @Retry(maxRetries = 0)
+    public Boolean connectD(String data) throws InterruptedException {
+        System.out.println("connectD starting " + data);
+        int counter = connectDCounter.incrementAndGet();
+        int token = connectDTokens.incrementAndGet();
+        try {
+            if (token > 2) {
+                throw new RuntimeException("Too many threads in connectD[" + data + "]: " + token);
+            }
+            if (counter < 2) {
+                throw new RuntimeException("Intentional exception");
+            }
+            Thread.sleep(TestConstants.WORK_TIME);
+            return Boolean.TRUE;
+        } finally {
+            connectDTokens.decrementAndGet();
+            System.out.println("connectD complete " + data);
         }
     }
 }
