@@ -157,13 +157,12 @@ public class MicroProfileJwtTaiRequest {
                 } else {
                     // error handling -- multiple mpJwtConfig qualified and we do not know how to select
                     String configIds = getConfigIds(genericConfigs);
-                    throw new MpJwtProcessingException("SOCIAL_LOGIN_MANY_PROVIDERS", null, new Object[] { configIds });
+                    String msg = Tr.formatMessage(tc, "SOCIAL_LOGIN_MANY_PROVIDERS", new Object[] { configIds });
+                    Tr.error(tc, msg);
+                    throw new MpJwtProcessingException(msg);
                 }
             }
         }
-        // mpJwtConfig should not be null, since we checked hasServices() before we are here
-        // It either get one qualified SocialLoginConfig.
-        // Or threw an exception due to multiple qualified configs.
         return this.microProfileJwtConfig;
     }
 

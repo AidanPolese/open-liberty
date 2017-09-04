@@ -101,10 +101,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
             }
             this.claimsSet = claimsUtils.getJwtClaims(jwt);
         } catch (JoseException e) {
-            // TODO Auto-generated catch block
-            // Do you need FFDC here? Remember FFDC instrumentation and @FFDCIgnore
-            // https://websphere.pok.ibm.com/~liberty/secure/docs/dev/API/com.ibm.ws.ras/com/ibm/ws/ffdc/annotation/FFDCIgnore.html
-            // e.printStackTrace();
+            // TODO:
         }
     }
 

@@ -42,7 +42,6 @@ import com.ibm.ws.security.mp.jwt.MicroProfileJwtService;
 import com.ibm.ws.security.mp.jwt.SslRefInfo;
 import com.ibm.ws.security.mp.jwt.TraceConstants;
 import com.ibm.ws.security.mp.jwt.error.MpJwtProcessingException;
-import com.ibm.ws.security.mp.jwt.impl.utils.Cache;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.ssl.SSLSupport;
 
@@ -58,33 +57,21 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
 
     protected static final String KEY_UNIQUE_ID = "id";
     protected String uniqueId = null;
-    protected Cache cache = null;
-
-    public static final String KEY_authFilterRef = "authFilterRef";
-    //protected String authFilterRef;
-    protected String authFilterId;
-    //protected AuthenticationFilter authFilter = null;
 
     protected SSLContext sslContext = null;
     protected SSLSocketFactory sslSocketFactory = null;
     public static final String KEY_sslRef = "sslRef";
     protected String sslRef;
-
-    //    public static final String KEY_keyAliasName = "keyAliasName";
-    //    protected String keyAliasName;
-
     protected SslRefInfo sslRefInfo = null;
 
     public static final String KEY_jwksUri = "jwksUri";
     protected String jwksUri = null;
 
     static final String KEY_MP_JWT_SERVICE = "microProfileJwtService";
-
     final AtomicServiceReference<MicroProfileJwtService> mpJwtServiceRef = new AtomicServiceReference<MicroProfileJwtService>(KEY_MP_JWT_SERVICE);
 
     ConsumerUtils consumerUtils = null; // lazy init
-
-    JWKSet jwkSet = null; // lazy init. This makes sure one jwkSet per a jwtConsumerConfiguration
+    JWKSet jwkSet = null;
 
     public static final String KEY_ISSUER = "issuer";
     String issuer = null;
@@ -94,9 +81,6 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
 
     //    public static final String KEY_SIGNATURE_ALGORITHM = "signatureAlgorithm";
     String signatureAlgorithm = "RS256";
-
-    //    public static final String KEY_CLOCKSKEW = "clockSkew";
-    //    int clockSkewMsec = 0;
 
     public static final String CFG_KEY_HOST_NAME_VERIFICATION_ENABLED = "hostNameVerificationEnabled";
     protected boolean hostNameVerificationEnabled = false;
@@ -112,6 +96,9 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
 
     public static final String CFG_KEY_TOKEN_REUSE = "tokenReuse";
     protected boolean tokenReuse = true;
+
+    public static final String CFG_KEY_CLOCK_SKEW = "clockSkew";
+    private long clockSkewMilliSeconds;
 
     @Reference(service = MicroProfileJwtService.class, name = KEY_MP_JWT_SERVICE, cardinality = ReferenceCardinality.MANDATORY)
     protected void setMicroProfileJwtService(ServiceReference<MicroProfileJwtService> ref) {
@@ -151,6 +138,8 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
 
         this.userNameAttribute = getConfigAttribute(props, KEY_userNameAttribute);
         this.groupNameAttribute = getConfigAttribute(props, KEY_groupNameAttribute);
+
+        this.clockSkewMilliSeconds = (Long) props.get(CFG_KEY_CLOCK_SKEW);
 
         this.sslRef = getConfigAttribute(props, KEY_sslRef);
         this.sslRefInfo = null; // lazy init
@@ -223,7 +212,7 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
     /** {@inheritDoc} */
     @Override
     public boolean isHostNameVerificationEnabled() {
-        return false; //TODO
+        return this.hostNameVerificationEnabled;
     }
 
     /** {@inheritDoc} */
@@ -235,7 +224,6 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
     /** {@inheritDoc} */
     @Override
     public String getIssuer() {
-
         return issuer;
     }
 
@@ -273,7 +261,7 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
             MicroProfileJwtService service = mpJwtServiceRef.getService();
             if (service == null) {
                 if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, "Social login service is not available");
+                    Tr.debug(tc, "mpjwt service is not available");
                 }
                 return null;
             }
@@ -282,8 +270,7 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
         try {
             return sslRefInfo.getTrustStoreName();
         } catch (MpJwtProcessingException e) {
-            // TODO - NLS message?
-            e.logErrorMessage();
+            // We already logged the error
         }
         return null;
     }
@@ -293,12 +280,6 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
     public String getTrustedAlias() {
         return trustAliasName;
     }
-
-    /** {@inheritDoc} */
-    //    @Override
-    //    public long getClockSkew() {
-    //        return this.clockSkewMsec;
-    //    }
 
     /** {@inheritDoc} */
     @Override
@@ -390,7 +371,8 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
                     }
                 }
             } catch (Exception e) {
-                throw new MpJwtProcessingException("FAILED_TO_GET_SSL_CONTEXT", e, new Object[] { uniqueId, e.getLocalizedMessage() });
+                String msg = Tr.formatMessage(tc, "FAILED_TO_GET_SSL_CONTEXT", new Object[] { uniqueId, e.getLocalizedMessage() });
+                throw new MpJwtProcessingException(msg, e);
             }
         }
 
@@ -421,7 +403,8 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
                     Tr.debug(tc, "sslSocketFactory (" + sslRef + ") get: " + sslSocketFactory);
                 }
             } catch (Exception e) {
-                throw new MpJwtProcessingException("FAILED_TO_GET_SSL_CONTEXT", e, new Object[] { uniqueId, e.getLocalizedMessage() });
+                String msg = Tr.formatMessage(tc, "FAILED_TO_GET_SSL_CONTEXT", new Object[] { uniqueId, e.getLocalizedMessage() });
+                throw new MpJwtProcessingException(msg, e);
             }
         }
 
@@ -496,14 +479,10 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
     /** {@inheritDoc} */
     @Override
     public long getClockSkew() {
-        // TODO Auto-generated method stub
-        return 0;
+        return clockSkewMilliSeconds;
     }
 
-    /** {@inheritDoc} */
-    @Override
     public boolean getTokenReuse() {
-        // TODO Auto-generated method stub
         return this.tokenReuse;
     }
 

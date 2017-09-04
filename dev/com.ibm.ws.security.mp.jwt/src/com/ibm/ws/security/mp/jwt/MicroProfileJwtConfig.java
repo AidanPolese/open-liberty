@@ -62,6 +62,5 @@ public interface MicroProfileJwtConfig {
      * @return
      */
     //String[] getAudience();
-    boolean getTokenReuse();
 
 }

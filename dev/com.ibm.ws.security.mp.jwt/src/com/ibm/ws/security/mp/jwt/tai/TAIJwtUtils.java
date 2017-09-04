@@ -47,7 +47,9 @@ public class TAIJwtUtils {
         try {
             return JwtConsumer.create(jwtConfigId).createJwt(idToken);
         } catch (Exception e) {
-            throw new MpJwtProcessingException("FAILED_TO_CREATE_JWT_FROM_ID_TOKEN", e, new Object[] { jwtConfigId, e.getMessage() });
+            String msg = Tr.formatMessage(tc, "AUTH_CODE_FAILED_TO_CREATE_JWT", new Object[] { jwtConfigId, e.getMessage() });
+            Tr.error(tc, msg);
+            throw new MpJwtProcessingException(msg, e);
         }
     }
 
@@ -58,7 +60,8 @@ public class TAIJwtUtils {
      * @return
      * @throws JoseException
      */
-    public JsonWebToken createJwtPrincipal(String username, ArrayList<String> groups, JwtToken jwtToken) throws JoseException {
+    @Sensitive
+    public JsonWebToken createJwtPrincipal(String username, ArrayList<String> groups, @Sensitive JwtToken jwtToken) throws JoseException {
         // TODO Auto-generated method stub
 
         String compact = null;
