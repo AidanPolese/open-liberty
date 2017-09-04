@@ -40,4 +40,11 @@ public class AsyncTestFunction implements Callable<Future<String>> {
         return CompletableFuture.completedFuture(function.call());
     }
 
+    /**
+     * @return
+     */
+    public int getExecutions() {
+        return function.getExecutions();
+    }
+
 }
