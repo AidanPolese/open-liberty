@@ -2,7 +2,6 @@ package com.ibm.websphere.simplicity.config.dsprops.testrules;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -28,24 +27,27 @@ import com.ibm.websphere.simplicity.log.Log;
  * <p>
  * For example this code would specify that the test should not be run with "DB2 with JCC" or
  * "Derby embedded".
- * <pre><code>
+ *
+ * <pre>
+ * <code>
  * import static com.ibm.websphere.simplicity.config.DataSourceProperties.*;
  * ...
  * private static DataSourcePropertiesSkipRule skipRule = new DataSourcePropertiesSkipRule();
- * 
+ *
  * {@literal @Rule} public TestRule dataSourcePropertiesSkipRule = skipRule;
- * 
+ *
  * {@literal @BeforeClass} public static void setUp() throws Exception {
  * // Get DataSource from server.xml. This DataSource must have
  * // a nested DataSourceProperties
  * skipRule.setDataSource(testDataSource);
  * }
- * 
+ *
  * {@literal @SkipIfDataSourceProperties}({DB2_JCC, DERBY_EMBEDDED}) {@literal @Test} public void skipTestIf_DB2JCC_DerbyEmbedded() throws InterruptedException {
  * // test code
  * }
- * </code></pre>
- * 
+ * </code>
+ * </pre>
+ *
  */
 public class DataSourcePropertiesSkipRule implements TestRule {
 
@@ -67,25 +69,24 @@ public class DataSourcePropertiesSkipRule implements TestRule {
         }
 
         List<String> allowedDataSets = Arrays.asList(annotation.value());
-        Set<DataSourceProperties> dsp = null;
-        try {
-            dsp = dataSource.getDataSourceProperties();
-        } catch (NullPointerException e) {
-            NullPointerException eMessage =
-                            new NullPointerException("Must set the DataSourcePropertiesSkipRule DataSource, using .setDataSource()");
-            eMessage.setStackTrace(e.getStackTrace());
-            throw eMessage;
+        boolean skipTest = false;
+        if (dataSource == null) {
+            if (allowedDataSets.contains(DataSourcePropertiesOnlyRule.getConfigNameFromSysProp()))
+                skipTest = true;
+        } else {
+            for (DataSourceProperties p : dataSource.getDataSourceProperties())
+                if (allowedDataSets.contains(p.getElementName()))
+                    skipTest = true;
         }
-        for (DataSourceProperties p : dsp) {
-            if (allowedDataSets.contains(p.getElementName())) {
-                return new Statement() {
-                    @Override
-                    public void evaluate() throws Throwable {
-                        Log.info(description.getTestClass(), description.getMethodName(), "Test method is skipped due to DataSourcePropertiesSkipRule");
-                    }
-                };
-            }
-        }
-        return statement;
+
+        if (skipTest)
+            return new Statement() {
+                @Override
+                public void evaluate() throws Throwable {
+                    Log.info(description.getTestClass(), description.getMethodName(), "Test method is skipped due to DataSourcePropertiesSkipRule");
+                }
+            };
+        else
+            return statement;
     }
 }
