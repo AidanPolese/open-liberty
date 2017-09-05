@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.ibm.ws.http.channel.internal;
 
+import java.security.AccessController;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -128,6 +129,8 @@ public class HttpChannelConfig {
     /** The amount of time the connection will be left open when HTTP/2 goes into an idle state */
     private long h2ConnectionCloseTimeout = 30;
     private int h2ConnectionReadWindowSize = Constants.SPEC_INITIAL_WINDOW_SIZE; // init the connection read window to the spec max
+    /** PI81572 Purge the remaining response body off the wire when clear is called */
+    private boolean purgeRemainingResponseBody = true;
 
     /**
      * Constructor for an HTTP channel config object.
@@ -339,6 +342,10 @@ public class HttpChannelConfig {
                 props.put(HttpConfigConstants.PROPNAME_H2_CONN_READ_WINDOW_SIZE, value);
                 continue;
             }
+            if (key.equalsIgnoreCase(HttpConfigConstants.PROPNAME_PURGE_REMAINING_RESPONSE)) {
+                props.put(HttpConfigConstants.PROPNAME_PURGE_REMAINING_RESPONSE, value);
+                continue;
+            }
 
             props.put(key, value);
         }
@@ -379,6 +386,7 @@ public class HttpChannelConfig {
         parseSkipCookiePathQuotes(props); //738893
         parseH2ConnCloseTimeout(props);
         parseH2ConnReadWindowSize(props);
+        parsePurgeRemainingResponseBody(props); //PI81572
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(tc, "parseConfig");
@@ -1206,6 +1214,31 @@ public class HttpChannelConfig {
     }
 
     /**
+     * Check the configuration if we should purge the remaining response data
+     * This is a JVM custom property as it's intended for outbound scenarios
+     *
+     * PI81572
+     *
+     * @ param props
+     */
+    private void parsePurgeRemainingResponseBody(Map<?, ?> props) {
+
+        String purgeRemainingResponseProperty = AccessController.doPrivileged(new java.security.PrivilegedAction<String>() {
+            @Override
+            public String run() {
+                return (System.getProperty(HttpConfigConstants.PROPNAME_PURGE_REMAINING_RESPONSE));
+            }
+        });
+
+        if (purgeRemainingResponseProperty != null) {
+            this.purgeRemainingResponseBody = convertBoolean(purgeRemainingResponseProperty);
+            if ((TraceComponent.isAnyTracingEnabled()) && (tc.isEventEnabled())) {
+                Tr.event(tc, "Config: PurgeRemainingResponseBody is " + shouldPurgeRemainingResponseBody());
+            }
+        }
+    }
+
+    /**
      * Convert a String to a boolean value. If the string does not
      * match "true", then it defaults to false.
      *
@@ -1682,5 +1715,15 @@ public class HttpChannelConfig {
 
     public int getH2ConnReadWindowSize() {
         return h2ConnectionReadWindowSize;
+    }
+
+    /**
+     * Query whether or not the HTTP Channel should purge remaining response data
+     * 
+     * @return boolean
+     */
+    public boolean shouldPurgeRemainingResponseBody() {
+        // PI81572
+        return this.purgeRemainingResponseBody;
     }
 }
