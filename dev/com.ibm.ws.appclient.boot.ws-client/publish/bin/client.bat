@@ -285,12 +285,20 @@ goto:eof
   @REM Avoid HeadlessException.
   set JVM_OPTIONS=-Djava.awt.headless=true !JVM_OPTIONS!
 
-
   set RC=0
   if exist "%CLIENT_CONFIG_DIR%\client.jvm.options" (
-    call:readJVMOptions "%CLIENT_CONFIG_DIR%\client.jvm.options"
-  ) else if exist "%WLP_INSTALL_DIR%\etc\client.jvm.options" (
-    call:readJVMOptions "%WLP_INSTALL_DIR%\etc\client.jvm.options"
+    call:mergeJVMOptions "%CLIENT_CONFIG_DIR%\client.jvm.options"
+  )
+    
+  @REM If the client file is not found, check for options in the etc folder.
+  if not defined USE_ETC_OPTIONS (
+    set JVM_TEMP_OPTIONS=
+    call:mergeJVMOptions "%WLP_INSTALL_DIR%\etc\client.jvm.options"
+  )
+  
+  @REM If we are running on Java 9, apply Liberty's built-in java 9 options
+  if exist "%JAVA_HOME%\lib\modules" (
+    call:mergeJVMOptions "%WLP_INSTALL_DIR%\lib\java9\java9.options"
   )
 goto:eof
 
@@ -305,6 +313,17 @@ goto:eof
 goto:eof
 
 @REM
+@REM Merging one jvm option into the options string
+@REM
+:mergeJVMOptions
+  set jvmoptionfile=%1
+  if exist %jvmoptionfile% (
+    set USE_ETC_OPTIONS=defined
+    call:readJVMOptions %jvmoptionfile%
+  )
+goto:eof
+
+@REM
 @REM Read the contents of the quoted file %1 and append the contents to
 @REM %JVM_OPTIONS%.  Empty lines and lines beginning with the hash character
 @REM ('#') are ignored.  All other lines are concatenated.
@@ -316,16 +335,7 @@ goto:eof
   for /f "usebackq eol=# tokens=*" %%i in (%1) do (
     set JVM_OPTION="%%i"
     set JVM_OPTION=!JVM_OPTION:"=!
-    if "!JVM_OPTION:~0,1!" == "-" (
-      set JVM_OPTIONS=!JVM_OPTIONS! "%%i"
-    ) else (
-      !JAVA_CMD_QUOTED! !JAVA_PARAMS_QUOTED! --message:error.jvm.option %1 "%%i"
-      if !RC! == 0 (
-        set RC=32
-      ) else (
-        call:javaCmdResult
-      )
-    )
+    set JVM_TEMP_OPTIONS=!JVM_TEMP_OPTIONS! "%%i"
   )
 goto:eof
 
