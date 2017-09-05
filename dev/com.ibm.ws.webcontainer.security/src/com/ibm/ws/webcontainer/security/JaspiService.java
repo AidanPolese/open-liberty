@@ -11,7 +11,7 @@
 /**
  * 04/26/10 F743-25523     leou      Initial version
  * 05/10/10 F743-25523.1   leou      Move Jaspi hooks to WebAuthenticator
- * 05/27/10 654357         leou      CTS6: jaspic failure - testName:  CheckValidateReqAuthException, do not call secureResponse during postInvoke 
+ * 05/27/10 654357         leou      CTS6: jaspic failure - testName:  CheckValidateReqAuthException, do not call secureResponse during postInvoke
  * 08/11/10 665302         leou      Authorization problem with cache key using JASPI authentication
  */
 package com.ibm.ws.webcontainer.security;
@@ -46,7 +46,7 @@ public interface JaspiService {
      * Invoke the matching JASPI provider's cleanSubject method.
      * Throw an AuthenticationException if cleanSubject throws an
      * exception.
-     * 
+     *
      * @param req
      * @param res
      * @param webAppSecConfig
@@ -59,5 +59,5 @@ public interface JaspiService {
     /**
      * Returns true if any providers are registered
      */
-    boolean isAnyProviderRegistered();
+    boolean isAnyProviderRegistered(WebRequest webRequest);
 }

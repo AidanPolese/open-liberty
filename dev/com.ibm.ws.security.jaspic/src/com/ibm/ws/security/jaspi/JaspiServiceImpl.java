@@ -93,6 +93,7 @@ public class JaspiServiceImpl implements JaspiService, WebAuthenticator {
     private static final String KEY_UNAUTHENTICATED_SUBJECT_SERVICE = "unauthenticatedSubjectService";
     private UnauthenticatedSubjectService unauthenticatedSubjectService;
     private boolean providerConfigModified = false;
+    private boolean bridgeBuilderModified = false;
     private WebProviderAuthenticatorHelper authHelper = null;
     private SubjectManager subjectManager = null;
     public HashMap<String, Object> extraAuditData = new HashMap<String, Object>();
@@ -114,6 +115,8 @@ public class JaspiServiceImpl implements JaspiService, WebAuthenticator {
 
     private static final String KEY_JASPI_PROVIDER = "jaspiProvider";
     protected final AtomicServiceReference<ProviderService> jaspiProviderServiceRef = new AtomicServiceReference<ProviderService>(KEY_JASPI_PROVIDER);
+    private static final String KEY_JASPI_BRIDGE_BUILDER = "bridgeBuilder";
+    protected final AtomicServiceReference<BridgeBuilderService> bridgeBuilderServiceRef = new AtomicServiceReference<BridgeBuilderService>(KEY_JASPI_BRIDGE_BUILDER);
 
     @Reference(name = KEY_JASPI_PROVIDER,
                service = ProviderService.class,
@@ -130,6 +133,23 @@ public class JaspiServiceImpl implements JaspiService, WebAuthenticator {
         Tr.info(tc, "JASPI_PROVIDER_SERVICE_DEACTIVATED", new Object[] { jaspiProviderServiceRef.getService() != null ? jaspiProviderServiceRef.getService().getClass() : null });
         jaspiProviderServiceRef.unsetReference(reference);
         providerConfigModified = true;
+    }
+
+    @Reference(name = KEY_JASPI_BRIDGE_BUILDER,
+               service = BridgeBuilderService.class,
+               cardinality = ReferenceCardinality.OPTIONAL,
+               policy = ReferencePolicy.DYNAMIC,
+               policyOption = ReferencePolicyOption.GREEDY)
+    protected void setBridgeBuilder(ServiceReference<BridgeBuilderService> reference) {
+        bridgeBuilderServiceRef.setReference(reference);
+        bridgeBuilderModified = true;
+        // Tr.info(tc, "JASPI_PROVIDER_SERVICE_ACTIVATED", new Object[] { jaspiProviderServiceRef.getService().getClass() });
+    }
+
+    protected void unsetBridgeBuilder(ServiceReference<BridgeBuilderService> reference) {
+        // Tr.info(tc, "JASPI_PROVIDER_SERVICE_DEACTIVATED", new Object[] { jaspiProviderServiceRef.getService() != null ? jaspiProviderServiceRef.getService().getClass() : null });
+        bridgeBuilderServiceRef.unsetReference(reference);
+        bridgeBuilderModified = true;
     }
 
     public static final String KEY_SECURITY_SERVICE = "securityService";
@@ -189,6 +209,7 @@ public class JaspiServiceImpl implements JaspiService, WebAuthenticator {
     protected void activate(ComponentContext cc) {
         locationService.activate(cc);
         jaspiProviderServiceRef.activate(cc);
+        bridgeBuilderServiceRef.activate(cc);
         securityServiceRef.activate(cc);
         AuthConfigFactoryWrapper.setFactoryImplementation();
     }
@@ -197,6 +218,7 @@ public class JaspiServiceImpl implements JaspiService, WebAuthenticator {
     protected void deactivate(ComponentContext cc) {
         locationService.deactivate(cc);
         jaspiProviderServiceRef.deactivate(cc);
+        bridgeBuilderServiceRef.deactivate(cc);
         securityServiceRef.deactivate(cc);
     }
 
@@ -971,12 +993,19 @@ public class JaspiServiceImpl implements JaspiService, WebAuthenticator {
      * @see com.ibm.ws.webcontainer.security.JaspiService#isAnyProviderRegistered()
      */
     @Override
-    public boolean isAnyProviderRegistered() {
+    public boolean isAnyProviderRegistered(WebRequest webRequest) {
         // default to true for case where a custom factory is used (i.e. not our ProviderRegistry)
         // we will assume that some provider is registered so we will call jaspi to
         // process the request.
         boolean result = true;
         AuthConfigFactory providerFactory = AuthConfigFactoryWrapper.getFactory();
+        BridgeBuilderService bridgeBuilderService = bridgeBuilderServiceRef.getService();
+        if (bridgeBuilderService != null) {
+            JaspiRequest jaspiRequest = new JaspiRequest(webRequest, null); //TODO: Some paths have a WebAppConfig that should be taken into accounnt when getting the appContext
+            String appContext = jaspiRequest.getAppContext();
+            bridgeBuilderService.buildBridgeIfNeeded(appContext, providerFactory);
+        }
+
         if (providerFactory != null && providerFactory instanceof ProviderRegistry) {
             // if the user defined feature provider came or went, process that 1st
             if (providerConfigModified) {
