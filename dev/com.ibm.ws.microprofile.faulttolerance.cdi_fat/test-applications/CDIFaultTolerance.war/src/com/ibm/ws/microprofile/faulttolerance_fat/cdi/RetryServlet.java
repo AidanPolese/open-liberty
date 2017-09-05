@@ -10,6 +10,10 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance_fat.cdi;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -70,6 +74,19 @@ public class RetryServlet extends FATServlet {
             if (!expected.equals(actual)) {
                 throw new AssertionError("Expected: " + expected + ", Actual: " + actual);
             }
+        }
+    }
+
+    /**
+     * This test should only pass if MP_Fault_Tolerance_NonFallback_Enabled is set to false
+     */
+    public void testRetryDisabled(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            beanB.connectB();
+            fail("Exception not thrown");
+        } catch (ConnectException e) {
+            // If Retry is disabled, then the call should *not* be retried, so there's only one connect attempt
+            assertThat("Exception message", e.getMessage(), is("ConnectException: RetryBeanB Connect: 1"));
         }
     }
 

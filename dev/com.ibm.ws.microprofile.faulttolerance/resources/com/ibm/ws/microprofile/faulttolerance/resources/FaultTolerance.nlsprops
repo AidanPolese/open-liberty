@@ -73,6 +73,11 @@ timeout.occurred.CWMFT0000E=CWMFT0000E: A timeout occurred.
 timeout.occurred.CWMFT0000E.explanation=An operation took too long to complete for the configured Timeout.
 timeout.occurred.CWMFT0000E.useraction=Increase the maximum duration of the Timeout or ensure that the operation completes faster. 
 
+#No threads were available in the bulkhead for method {0}.
+bulkhead.no.threads.CWMFT0001E=CWMFT0001E: No threads were available in the bulkhead for method {0}.
+bulkhead.no.threads.CWMFT0001E.explanation=All of the threads available in the bulkhead were in use.
+bulkhead.no.threads.CWMFT0001E.useraction=Wait until other operations have completed and retry, or increase the number of threads available in the bulkhead.
+
 #An internal error occurred. The exception is {0}.
 internal.error.CWMFT4998E=CWMFT4998E: An internal error occurred. The exception is {0}.
 internal.error.CWMFT4998E.explanation=The application server experienced an internal error.

@@ -16,9 +16,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import org.eclipse.microprofile.faulttolerance.ExecutionContext;
-
-import com.ibm.ws.microprofile.faulttolerance.impl.TaskContext;
+import com.ibm.ws.microprofile.faulttolerance.impl.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.threading.PolicyExecutor;
@@ -72,12 +70,12 @@ public class PolicyExecutorTaskRunner<R> implements TaskRunner<Future<R>> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public QueuedFuture<R> runTask(Callable<Future<R>> task, ExecutionContext executionContext, TaskContext taskContext) {
+    public QueuedFuture<R> runTask(Callable<Future<R>> task, ExecutionContextImpl executionContext) {
         ThreadContextDescriptor threadContext = null;
         if (this.contextService != null) {
             threadContext = this.contextService.captureThreadContext(new HashMap<String, String>());
         }
-        QueuedFuture<R> queuedFuture = new QueuedFuture<>(task, taskContext, threadContext);
+        QueuedFuture<R> queuedFuture = new QueuedFuture<>(task, executionContext, threadContext);
         queuedFuture.start(getExecutorService());
 
         return queuedFuture;

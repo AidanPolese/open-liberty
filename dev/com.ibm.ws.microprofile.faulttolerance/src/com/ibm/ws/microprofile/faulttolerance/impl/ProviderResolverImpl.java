@@ -32,7 +32,7 @@ import com.ibm.ws.microprofile.faulttolerance.impl.policy.RetryPolicyImpl;
 import com.ibm.ws.microprofile.faulttolerance.impl.policy.TimeoutPolicyImpl;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
-import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProviderResolver;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
@@ -168,11 +168,11 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
     }
 
     @Override
-    public <T, R> ExecutionBuilder<T, R> newExecutionBuilder() {
+    public <T, R> ExecutorBuilder<T, R> newExecutionBuilder() {
         WSContextService contextService = getContextService();
         PolicyExecutorProvider policyExecutorProvider = getPolicyExecutorProvider();
         ScheduledExecutorService scheduledExecutorService = getScheduledExecutorService();
-        ExecutionBuilderImpl<T, R> ex = new ExecutionBuilderImpl<T, R>(contextService, policyExecutorProvider, scheduledExecutorService);
+        ExecutorBuilderImpl<T, R> ex = new ExecutorBuilderImpl<T, R>(contextService, policyExecutorProvider, scheduledExecutorService);
         return ex;
     }
 

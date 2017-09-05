@@ -16,6 +16,7 @@ package com.ibm.ws.microprofile.faulttolerance.cdi;
 public class FTUtils {
     public final static String FALLBACKHANDLE_METHOD_NAME = "handle";
     public final static String PROXY_CLASS_SIGNATURE = "$Proxy$_$$_WeldSubclass";
+    public final static String ENV_NONFALLBACK_ENABLED = "MP_Fault_Tolerance_NonFallback_Enabled";
 
     /**
      * Return whether the class is a weld proxy
@@ -31,7 +32,7 @@ public class FTUtils {
 
     /**
      * Get the real class. If it is proxy, get its superclass, which will be the real class.
-     * 
+     *
      * @param clazz
      * @return the real class.
      */

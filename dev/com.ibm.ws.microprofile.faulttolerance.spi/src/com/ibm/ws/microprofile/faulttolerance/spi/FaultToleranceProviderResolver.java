@@ -40,7 +40,7 @@ public abstract class FaultToleranceProviderResolver {
 
     public abstract TimeoutPolicy newTimeoutPolicy();
 
-    public abstract <T, R> ExecutionBuilder<T, R> newExecutionBuilder();
+    public abstract <T, R> ExecutorBuilder<T, R> newExecutionBuilder();
 
     /**
      * Creates a FaultToleranceProviderResolver object
