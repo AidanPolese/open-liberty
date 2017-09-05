@@ -2,7 +2,6 @@ package com.ibm.websphere.simplicity.config.dsprops.testrules;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -11,6 +10,7 @@ import org.junit.runners.model.Statement;
 import com.ibm.websphere.simplicity.config.DataSource;
 import com.ibm.websphere.simplicity.config.DataSourceProperties;
 import com.ibm.websphere.simplicity.log.Log;
+
 import componenttest.topology.utils.FATServletClient;
 
 /**
@@ -32,16 +32,18 @@ import componenttest.topology.utils.FATServletClient;
  * <p>
  * For example this code would specify that the test should only be run with "DB2 with JCC" and
  * "Derby embedded".
+ *
  * <pre>
  * import static com.ibm.websphere.simplicity.config.DataSourceProperties.*;
  * public class MyTestClass extends FATServletClient {
- * 
+ *
  * {@literal @Test} {@literal @OnlyIfDataSourceProperties}({ DB2_JCC, DERBY_EMBEDDED })
  * public void onlyTestIf_DB2JCC_DerbyEmbedded() throws Exception {
  * // test code
  * }
  * }
  * </pre>
+ *
  * <p>
  * A full listing of supported database types can be found in:<br> {@link com.ibm.websphere.simplicity.config.DataSourceProperties}
  */
@@ -65,18 +67,15 @@ public class DataSourcePropertiesOnlyRule implements TestRule {
         }
 
         List<String> allowedDataSets = Arrays.asList(annotation.value());
-        Set<DataSourceProperties> dsp = null;
-        try {
-            dsp = dataSource.getDataSourceProperties();
-        } catch (NullPointerException e) {
-            NullPointerException eMessage =
-                            new NullPointerException("Must set the DataSourcePropertiesOnlyRule DataSource, using .setDataSource()");
-            eMessage.setStackTrace(e.getStackTrace());
-            throw eMessage;
-        }
-        for (DataSourceProperties p : dsp) {
-            if (allowedDataSets.contains(p.getElementName())) {
+        if (dataSource == null) {
+            if (allowedDataSets.contains(getConfigNameFromSysProp())) {
                 return statement;
+            }
+        } else {
+            for (DataSourceProperties p : dataSource.getDataSourceProperties()) {
+                if (allowedDataSets.contains(p.getElementName())) {
+                    return statement;
+                }
             }
         }
 
@@ -86,5 +85,20 @@ public class DataSourcePropertiesOnlyRule implements TestRule {
                 Log.info(description.getTestClass(), description.getMethodName(), "Test method is skipped due to DataSourcePropertiesOnlyRule");
             }
         };
+    }
+
+    public static String getConfigNameFromSysProp() {
+        String sysProp = System.getProperty("fat.test.db.type", "derby").toLowerCase();
+        if ("derby".equals(sysProp)) {
+            return DataSourceProperties.DERBY_EMBEDDED;
+        } else if ("db2".equals(sysProp)) {
+            return DataSourceProperties.DB2_JCC;
+        } else if ("oracle".equals(sysProp)) {
+            return DataSourceProperties.ORACLE_JDBC;
+        } else if ("sqlserver".equals(sysProp)) {
+            return DataSourceProperties.MICROSOFT_SQLSERVER;
+        } else {
+            throw new UnsupportedOperationException("Unknown db type: " + sysProp);
+        }
     }
 }
