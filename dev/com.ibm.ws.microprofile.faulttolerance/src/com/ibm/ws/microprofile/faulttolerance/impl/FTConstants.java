@@ -45,6 +45,13 @@ public class FTConstants {
         }
     }
 
+    @Trivial
+    public static void debugTime(TraceComponent tc, String message, long time) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "{0}: {1}", message, toSeconds(time));
+        }
+    }
+
     //in seconds, how long between two a relative points (nanoTime)
     @Trivial
     public static double relativeSeconds(long relativePointA, long relativePointB) {

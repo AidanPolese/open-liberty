@@ -21,6 +21,7 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.microprofile.faulttolerance.impl.ExecutionContextImpl;
+import com.ibm.ws.microprofile.faulttolerance.impl.FTConstants;
 import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 
@@ -66,7 +67,7 @@ public class SemaphoreTaskRunner<R> implements TaskRunner<R> {
         } catch (InterruptedException e) {
             //if the interrupt was caused by a timeout then check and throw that instead
             long remaining = executionContext.check();
-            System.out.println("Task Interrupted: " + remaining);
+            FTConstants.debugTime(tc, "Task Interrupted", remaining);
             throw e;
         } catch (Exception e) {
             throw new ExecutionException(e);
