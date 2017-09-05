@@ -11,36 +11,28 @@
 -include= ~../cnf/resources/bnd/bundle.props
 bVersion=1.0
 
-Bundle-Name: JAX-RS sslSecurity
-Bundle-SymbolicName: com.ibm.ws.jaxrs.2.0.security
-Bundle-Description: IBM JAX-RS-2.0 SSL Security support; version=${bVersion}
+Bundle-Name: JAX-RS appSecurity
+Bundle-SymbolicName: com.ibm.ws.jaxrs.2.0.appSecurity
+Bundle-Description: IBM JAX-RS-2.0 AppSecurity support; version=${bVersion}
 
 WS-TraceGroup: JAXRS
 
 # jaxrs-2.0-appSecurity is part of EE7 and therefore requires java 1.7 
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))" 
 
-Import-Package: \
-  javax.ws.rs.*; version="[2.0,3)", \
-  com.ibm.websphere.security.web, \
-  com.ibm.websphere.*, \
-  javax.servlet.http, \
-  javax.net.ssl.*, \
-  com.ibm.wsspi.ssl, \
-  com.ibm.wsspi.kernel.service.utils, \
-  com.ibm.ws.jaxrs20.api, \
-  com.ibm.ws.jaxrs20.api.*, \
-  
+
 # If you need use MESSAGE, you must enable this Private-Package, or message will translate wrong
 Private-Package:\
    com.ibm.ws.jaxrs20.appsecurity.*
 
--dsannotations: com.ibm.ws.jaxrs20.appsecurity.component.*    
+-dsannotations: com.ibm.ws.jaxrs20.appsecurity.component.*
  
 -buildpath: \
+	org.apache.cxf.cxf-core;strategy=exact;version=3.1.11,\
 	com.ibm.ws.jaxrs.2.0.common;version=latest,\
+	com.ibm.websphere.javaee.annotation.1.2;version=latest,\
 	com.ibm.websphere.javaee.servlet.3.0;version=latest,\
-	com.ibm.ws.ssl;version=latest,\
+	com.ibm.ws.webcontainer;version=latest,\
 	com.ibm.ws.webcontainer.security;version=latest,\
 	com.ibm.wsspi.org.osgi.service.component.annotations,\
 	com.ibm.websphere.javaee.jaxrs.2.0;version=latest,\

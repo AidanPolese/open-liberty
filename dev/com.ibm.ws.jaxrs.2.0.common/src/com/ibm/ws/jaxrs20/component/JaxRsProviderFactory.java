@@ -12,12 +12,12 @@ import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import com.ibm.ws.jaxrs20.JaxRsConstants;
 import com.ibm.ws.jaxrs20.api.JaxRsProviderFactoryService;
 import com.ibm.ws.jaxrs20.providers.api.JaxRsProviderRegister;
-import com.ibm.ws.jaxrs20.providers.customexceptionmapper.CustomExceptionMapperRegister;
-import com.ibm.ws.jaxrs20.providers.security.SecurityAnnoProviderRegister;
 import com.ibm.ws.kernel.feature.FeatureProvisioner;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 
@@ -36,11 +36,11 @@ public class JaxRsProviderFactory implements JaxRsProviderFactoryService {
 
     private static JaxRsProviderFactory serviceInstance = null;
 
-    public static void register(JaxRsProviderRegister pr) {
-        if (serviceInstance != null && pr != null) {
-            serviceInstance.addProviderRegister(pr);
-        }
-    }
+//    public static void register(JaxRsProviderRegister pr) {
+//        if (serviceInstance != null && pr != null) {
+//            serviceInstance.addProviderRegister(pr);
+//        }
+//    }
 
     @Override
     public void bindProviders(boolean clientSide, List<Object> providers) {
@@ -57,8 +57,8 @@ public class JaxRsProviderFactory implements JaxRsProviderFactoryService {
     protected void activate(ComponentContext cc) {
         _featureProvisioner.activate(cc);
         serviceInstance = this;
-        register(new SecurityAnnoProviderRegister());
-        register(new CustomExceptionMapperRegister());
+        //register(new SecurityAnnoProviderRegister());
+        //register(new CustomExceptionMapperRegister());
     }
 
     @Deactivate
@@ -76,8 +76,14 @@ public class JaxRsProviderFactory implements JaxRsProviderFactoryService {
 
     }
 
+    @Reference(name = JaxRsConstants.JAXRS_PROVIDER_REGISTER_REFERENCE_NAME, cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC,
+               policyOption = ReferencePolicyOption.GREEDY)
     public void addProviderRegister(JaxRsProviderRegister pr) {
         providerRegisterList.add(pr);
+    }
+
+    public void removeProviderRegister(JaxRsProviderRegister pr) {
+        providerRegisterList.remove(pr);
     }
 
     public void bindDefaultProviders(boolean clientSide, List<Object> providers) {
