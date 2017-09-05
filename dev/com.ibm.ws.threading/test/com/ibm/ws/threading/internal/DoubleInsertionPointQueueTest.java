@@ -18,6 +18,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
@@ -25,7 +26,6 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -43,13 +43,20 @@ public class DoubleInsertionPointQueueTest {
     //      poll/remove from tail or reverse iteration) and various experimental implementations
     //class DoubleInsertionPointQueue<T> extends BoundedBuffer<T> {
     //class DoubleInsertionPointQueue<T> extends ORDeque<T> {
-    class DoubleInsertionPointQueue<T> extends LinkedBlockingDeque<T> {
+    //class DoubleInsertionPointQueue<T> extends LinkedBlockingDeque<T> {
+    //void priorityOffer(T t) {
+    //    push(t);
+    //}
+    //boolean priorityOfferIsPush() {
+    //    return true;
+    //}
+    class DoubleInsertionPointQueue<T> extends DoubleQueue<T> {
         void priorityOffer(T t) {
-            push(t);
+            offerExpedited(t);
         }
 
         boolean priorityOfferIsPush() {
-            return true;
+            return false;
         }
     }
 
@@ -296,16 +303,27 @@ public class DoubleInsertionPointQueueTest {
 
         assertEquals(6, q.size());
 
-        for (Iterator<String> it = q.iterator(); it.hasNext();)
-            if (it.next().equals("C"))
-                it.remove();
+        boolean supportsRemove;
+        try {
+            for (Iterator<String> it = q.iterator(); it.hasNext();)
+                if (it.next().equals("C"))
+                    it.remove();
+            supportsRemove = true;
+        } catch (UnsupportedOperationException x) {
+            // use removeAll instead
+            q.removeAll(Collections.singleton("C"));
+            supportsRemove = false;
+        }
 
         assertEquals(3, q.size());
 
         Iterator<String> it = q.iterator();
         assertEquals("A", it.next());
         assertTrue(it.hasNext());
-        it.remove(); // A
+        if (supportsRemove)
+            it.remove(); // A
+        else
+            q.remove("A");
 
         assertEquals(2, q.size());
         assertFalse(q.contains("A"));
@@ -317,16 +335,18 @@ public class DoubleInsertionPointQueueTest {
         assertEquals("B", it.next());
         assertEquals("D", it.next());
         assertTrue(q.remove("D"));
-        try {
-            it.remove();
-            //fail("should not be able to remove what was already removed"); // TODO expectation for LinkedBlockingQueue differs here
-        } catch (NoSuchElementException x) {
-        }
+        if (supportsRemove)
+            try {
+                it.remove();
+                //fail("should not be able to remove what was already removed"); // TODO expectation for LinkedBlockingQueue differs here
+            } catch (NoSuchElementException x) {
+            }
         assertTrue(it.hasNext());
         try {
             it.remove();
             fail("remove should be disallowed before next invoked");
         } catch (IllegalStateException x) {
+        } catch (UnsupportedOperationException x) {
         }
         assertEquals("E", it.next());
         assertFalse(it.hasNext());
