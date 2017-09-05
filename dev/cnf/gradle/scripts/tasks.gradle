@@ -630,7 +630,7 @@ task zipOpenLiberty(type: Zip) {
     dependsOn subprojects.assemble
     baseName 'openliberty'
     from 'build.image'
-    include 'wlp/*'
+    include 'wlp/**'
     destinationDir file('build.image/generated/distributions')
 }
 
