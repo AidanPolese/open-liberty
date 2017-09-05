@@ -18,6 +18,7 @@ import org.jose4j.lang.JoseException;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.security.common.jwk.utils.JsonUtils;
+import com.ibm.ws.security.mp.jwt.TraceConstants;
 
 /**
  *
@@ -28,7 +29,7 @@ public class JwtPrincipalMapping {
      *
      */
 
-    public static final TraceComponent tc = Tr.register(JwtPrincipalMapping.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
+    private static TraceComponent tc = Tr.register(JwtPrincipalMapping.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
     //String realm = null;
     //String uniqueSecurityName = null;
     String userName = null;

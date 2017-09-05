@@ -46,7 +46,7 @@ import com.ibm.wsspi.tcpchannel.TCPWriteRequestContext;
 /**
  * This is the interface for an outbound Http request (sendRequest and then
  * getResponse).
- * 
+ *
  */
 public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl implements HttpOutboundServiceContext {
 
@@ -80,11 +80,9 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
     /** Current state of the read-ahead read for response thread */
     private int read_state = READ_STATE_IDLE;
     /** Sync object for the synchronous reads */
-    private final Object readAheadSyncer = new Object()
-    {};
+    private final Object readAheadSyncer = new Object() {};
     /** Object used to synchronize getting/setting read-ahead states */
-    protected Object stateSyncObject = new Object()
-    {};
+    protected Object stateSyncObject = new Object() {};
     /** Save-spot for any error found during the read-ahead callback */
     private IOException readException = null;
     /** Simple flag on whether read-ahead is enabled or not */
@@ -100,7 +98,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Constructor for an HTTP outbound service context object.
-     * 
+     *
      * @param tsc
      * @param link
      * @param vc
@@ -115,7 +113,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Initialize this object.
-     * 
+     *
      * @param tsc
      * @param link
      * @param vc
@@ -158,6 +156,34 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
         if (null != getLink()) {
             getLink().clear();
         }
+
+        //PI81572
+        if (this.getHttpConfig().shouldPurgeRemainingResponseBody()) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "Attempting to purge remaining response body");
+            }
+            try {
+                WsByteBuffer remainingData = getResponseBodyBuffer();
+
+                while (remainingData != null) {
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                        Tr.debug(tc, "Found data remaining on the response: " + remainingData);
+                    }
+                    remainingData.release();
+                    remainingData = null;
+
+                    if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                        Tr.debug(tc, "Remaining response data released, reading for more");
+                    }
+                    remainingData = getResponseBodyBuffer();
+                }
+            } catch (Exception e) {
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "Encountered an exception while reading for remaining response data: " + e);
+                }
+            }
+        }
+
         super.clear();
         setReadBuffer(null);
         // in case the read buffers still sit on the TCP layer, null them out
@@ -178,7 +204,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * If an error occurs during an attempted write of an outgoing request
      * message, this method will either reconnect for another try or pass the
      * error up the channel chain.
-     * 
+     *
      * @param inVC
      * @param ioe
      */
@@ -199,7 +225,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Call the error callback of the app above.
-     * 
+     *
      * @param inVC
      * @param ioe
      */
@@ -231,7 +257,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * occurs we will attempt to reconnect/rewrite the data once only. Any
      * subsequent failure (including during this method) will cause the throw
      * of the original IOException up the stack.
-     * 
+     *
      * @param originalExcep
      * @throws IOException
      */
@@ -292,7 +318,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * Reset the position on all of the existing write buffers back so we can
      * resend them all, as we don't know what actually made it out before the
      * error occurred.
-     * 
+     *
      * @return boolean (true means success on resetting them all)
      */
     private boolean resetWriteBuffers() {
@@ -382,7 +408,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * Once we've reconnected to the target server, attempt to redo the sync
      * write of the buffers. If another error happens, simply pass that back
      * up the stack.
-     * 
+     *
      * @param originalExcep
      * @throws IOException
      */
@@ -432,7 +458,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * of the request headers.
      * <p>
      * This method will let the caller prevent the reconnect/rewrite if they choose. This affects this single connection only and not any other outbound request connection.
-     * 
+     *
      * @return boolean (true means success)
      */
     @Override
@@ -457,7 +483,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * This method will let the caller enable the reconnect/rewrites if they were previously disabled through the disallowRewrites() API. This affects this single connection only
      * and
      * will stay in effect until turned off at a later point. This will also allow the caller to override the channel configuration option for this single connection.
-     * 
+     *
      * @return boolean (true means success)
      */
     @Override
@@ -506,7 +532,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
     /**
      * Common utility method to start the response read now, regardless of the
      * request message state.
-     * 
+     *
      * @param cb
      *            - app side read callback
      * @param forceQueue
@@ -634,7 +660,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Query whether or not the early read is active.
-     * 
+     *
      * @return boolean
      */
     protected boolean isEarlyRead() {
@@ -647,7 +673,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * is being performed asynchronously, or if a response was fully parsed and
      * handed off to the application channel. The caller of this method should
      * perform no more work after this method.
-     * 
+     *
      */
     public void readAsyncResponse() {
 
@@ -679,7 +705,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * decided to keep the last response... either it was a final response or
      * a temporary one but the situation requires we keep it (reading for 100-
      * continue or reading for all temporary responses).
-     * 
+     *
      * @throws IOException
      */
     public void readSyncResponse() throws IOException {
@@ -742,7 +768,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Gets the request message associated with this service context.
-     * 
+     *
      * @return HttpRequestMessage
      */
     @Override
@@ -752,7 +778,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Get access to the request message impl for internal use.
-     * 
+     *
      * @return HttpRequestMessageImpl
      */
     final private HttpRequestMessageImpl getRequestImpl() {
@@ -764,7 +790,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Gets the response message associated with this service context.
-     * 
+     *
      * @return HttpResponseMessage
      */
     @Override
@@ -774,7 +800,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Get access to the response message imp for internal usage.
-     * 
+     *
      * @return HttpResponseMessageImpl
      */
     final private HttpResponseMessageImpl getResponseImpl() {
@@ -789,7 +815,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Set the request message in this service context.
-     * 
+     *
      * @param msg
      * @throws IllegalRequestObjectException
      */
@@ -841,7 +867,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Send the headers for the outgoing request synchronously.
-     * 
+     *
      * @throws IOException
      *             -- if a socket error occurs
      * @throws MessageSentException
@@ -876,16 +902,16 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Send the headers for the outgoing request asynchronously.
-     * 
+     *
      * If the write can be done immediately, the VirtualConnection will be
      * returned and the callback will not be used. The caller is responsible
      * for handling that situation in their code. A null return code means
      * that the async write is in progress.
-     * 
+     *
      * The boolean bForce parameter allows the caller to force the asynchronous
      * action even if it could be handled immediately. The return
      * code will always be null and the callback always used.
-     * 
+     *
      * @param callback
      * @param bForce
      * @return VirtualConnection
@@ -924,10 +950,10 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * considered a "chunk" and encoded as such. If the message is
      * Content-Length defined, then the buffers will simply be sent out with no
      * modifications.
-     * 
+     *
      * Note: if headers have not already been sent, then the first call to
      * this method will send the headers.
-     * 
+     *
      * @param body
      * @throws IOException
      *             -- if a socket error occurs
@@ -971,19 +997,19 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * considered a "chunk" and encoded as such. If the message is
      * Content-Length defined, then the buffers will simply be sent out with no
      * modifications.
-     * 
+     *
      * Note: if headers have not already been sent, then the first call to
      * this method will send the headers.
-     * 
+     *
      * If the write can be done immediately, the VirtualConnection will be
      * returned and the callback will not be used. The caller is responsible
      * for handling that situation in their code. A null return code means
      * that the async write is in progress.
-     * 
+     *
      * The boolean bForce parameter allows the caller to force the asynchronous
      * action even if it could be handled immediately. The return
      * code will always be null and the callback always used.
-     * 
+     *
      * @param body
      * @param callback
      * @param bForce
@@ -1025,7 +1051,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
     /**
      * Send an array of raw body buffers out synchronously. This method will
      * avoid any body modifications, such as compression or chunked-encoding.
-     * 
+     *
      * @param body
      * @throws IOException
      *             -- if a socket error occurs
@@ -1052,7 +1078,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * then the callback will not be used and instead a non-null VC will be returned back.
      * <p>
      * The force parameter allows the caller to force the asynchronous call and to always have the callback used, thus the return code will always be null.
-     * 
+     *
      * @param body
      * @param callback
      * @param bForce
@@ -1080,11 +1106,11 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * then the buffers will simply be sent out with no modifications. This
      * marks the end of the outgoing message. This method will return when the
      * response has been received and parsed.
-     * 
+     *
      * Note: if headers have not already been sent, then the first call to
      * this method will send the headers. If this was a chunked encoded
      * message, then the zero-length chunk is automatically appended.
-     * 
+     *
      * @param body
      *            (last set of buffers to send, null if no body data)
      * @throws IOException
@@ -1169,20 +1195,20 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * then the buffers will simply be sent out with no modifications. This
      * marks the end of the outgoing message. The callback will be called when
      * the response has been received and parsed.
-     * 
+     *
      * Note: if headers have not already been sent, then the first call to
      * this method will send the headers. If this was a chunked encoded
      * message, then the zero-length chunk is automatically appended.
-     * 
+     *
      * If the write can be done immediately, the VirtualConnection will be
      * returned and the callback will not be used. The caller is responsible
      * for handling that situation in their code. A null return code means
      * that the async write is in progress.
-     * 
+     *
      * The boolean bForce parameter allows the caller to force the asynchronous
      * action even if it could be handled immediately. The return
      * code will always be null and the callback always used.
-     * 
+     *
      * @param body
      *            (last set of body data, null if no body information)
      * @param callback
@@ -1270,7 +1296,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * been sent yet, then they will be prepended to the input data.
      * <p>
      * This method will return when the response has been received and the headers parsed.
-     * 
+     *
      * @param body
      *            -- null if there is no body data
      * @throws IOException
@@ -1301,7 +1327,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * returns null, then the callback will be used when the response is received and parsed.
      * <p>
      * The force flag allows the caller to force the asynchronous communication such that the callback is always used.
-     * 
+     *
      * @param body
      *            -- null if there is no more body data
      * @param callback
@@ -1328,7 +1354,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * verify it's correctness. If something was incorrect, then an exception
      * will be handed to the caller and that should be passed along to the
      * application channel above.
-     * 
+     *
      * @return HttpInvalidMessageException (null if it was valid)
      */
     private HttpInvalidMessageException checkRequestValidity() {
@@ -1444,7 +1470,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * this exchange. It must be only called once per request/response. This
      * contains the logic to handle request verification, read-ahead handling,
      * etc.
-     * 
+     *
      * @return VirtualConnection
      */
     protected VirtualConnection startResponseRead() {
@@ -1531,7 +1557,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * asynchronously. This will return a non-null virtual connection object
      * if the new response message is fully parsed with no async reads needed.
      * Otherwise, it will return null and a callback will be used later.
-     * 
+     *
      * @return VirtualConnection
      */
     VirtualConnection parseResponseMessageAsync() {
@@ -1574,7 +1600,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * when the message headers are completely parsed, or throw an exception
      * if an error occurs. This method does not contain any logic on what to
      * do with the response, it just wraps the reading and parsing stage.
-     * 
+     *
      * @throws IOException
      */
     private void parseResponseMessageSync() throws IOException {
@@ -1646,7 +1672,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * connection. This contains logic for verifying the correctness of the
      * request message, handling read-ahead logic, etc. It must only be called
      * once per request/response exchange.
-     * 
+     *
      * @throws IOException
      */
     private void startResponseReadSync() throws IOException {
@@ -1747,7 +1773,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
     /**
      * Utility method to check whether the upcoming read for the response body
      * is either valid at this point or even necessary.
-     * 
+     *
      * @return boolean -- false means there is no need to read for a body
      * @throws IOException
      *             -- if this not a valid time to get the body
@@ -1787,7 +1813,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * A null response means that there is no body left to read.
      * <p>
      * Once given a buffer, we keep no record of that buffer. It is the users responsibility to release it.
-     * 
+     *
      * @return WsByteBuffer[]
      * @throws IOException
      *             -- if a socket exceptions happens
@@ -1848,7 +1874,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * always used.
      * <p>
      * Once given a buffer, we keep no record of that buffer. It is the users responsibility to release it.
-     * 
+     *
      * @param callback
      * @param bForce
      * @return VirtualConnection (null if an async read is in progress,
@@ -1935,7 +1961,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * <p>
      * Once given a buffer, we keep no record of that buffer. It is the users responsibility to release it.
      * <p>
-     * 
+     *
      * @return WsByteBuffer
      * @throws IOException
      *             -- if a socket exceptions happens
@@ -1997,7 +2023,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * always used.
      * <p>
      * Once given a buffer, we keep no record of that buffer. It is the users responsibility to release it.
-     * 
+     *
      * @param callback
      * @param bForce
      * @return VirtualConnection (null if an async read is in progress,
@@ -2083,7 +2109,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * A null buffer will be returned if there is no more data to get.
      * <p>
      * The caller is responsible for releasing these buffers when complete as the HTTP Channel does not keep track of them.
-     * 
+     *
      * @return WsByteBuffer
      * @throws IOException
      *             -- if a socket exceptions happens
@@ -2111,7 +2137,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * A null buffer array will be returned if there is no more data to get.
      * <p>
      * The caller is responsible for releasing these buffers when complete as the HTTP Channel does not keep track of them.
-     * 
+     *
      * @return WsByteBuffer[]
      * @throws IOException
      *             -- if a socket exceptions happens
@@ -2141,7 +2167,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * always be used.
      * <p>
      * The caller is responsible for releasing these buffers when finished with them as the HTTP Channel keeps no reference to them.
-     * 
+     *
      * @param callback
      * @param bForce
      * @return VirtualConnection
@@ -2171,7 +2197,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * always be used.
      * <p>
      * The caller is responsible for releasing these buffers when finished with them as the HTTP Channel keeps no reference to them.
-     * 
+     *
      * @param callback
      * @param bForce
      * @return VirtualConnection
@@ -2274,16 +2300,17 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
     /**
      * Query the HTTP outbound connection link associated with this service
      * context
-     * 
+     *
      * @return HttpOutboundLink
      */
+    @Override
     final public HttpOutboundLink getLink() {
         return this.myLink;
     }
 
     /**
      * Set the conn link to the input object
-     * 
+     *
      * @param link
      */
     final private void setLink(HttpOutboundLink link) {
@@ -2455,7 +2482,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Query what the current state is of the read-ahead callback.
-     * 
+     *
      * @return int
      */
     protected int getCallbackState() {
@@ -2465,7 +2492,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
     /**
      * Set the state of the read-ahead callback to the input value, along with
      * saving the exception (if non-null) in an error situation.
-     * 
+     *
      * @param state
      * @param ioe
      */
@@ -2476,7 +2503,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Query what the current state is of the read for response thread.
-     * 
+     *
      * @return int
      */
     protected int getReadState() {
@@ -2485,7 +2512,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Set the state of the read for response thread to the input value.
-     * 
+     *
      * @param state
      */
     protected void setReadState(int state) {
@@ -2495,7 +2522,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
     /**
      * Method used by the read-ahead callback thread to notify this service
      * context that the read has completed.
-     * 
+     *
      */
     protected void wakeupReadAhead() {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -2509,7 +2536,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
     /**
      * Query the number of temporary responses received on this connection so
      * far.
-     * 
+     *
      * @return int
      */
     private int numberResponsesReceived() {
@@ -2518,7 +2545,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Query whether or not the read-ahead logic is currently enabled.
-     * 
+     *
      * @return boolean
      */
     private boolean isReadAheadEnabled() {
@@ -2527,7 +2554,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /**
      * Query whether or not the immediate read for the response is enabled.
-     * 
+     *
      * @return boolean
      */
     protected boolean isImmediateReadEnabled() {
@@ -2557,7 +2584,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
      * Once the requests headers have been written out, this utility method
      * will inform the caller whether a read for the response message should
      * start.
-     * 
+     *
      * @return boolean
      */
     protected boolean shouldReadResponseImmediately() {
@@ -2602,7 +2629,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.wsspi.http.channel.HttpServiceContext#setStartTime()
      */
     @Override
@@ -2610,7 +2637,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.HttpServiceContextImpl#getStartNanoTime()
      */
     @Override
@@ -2620,7 +2647,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.http.channel.internal.HttpServiceContextImpl#resetStartTime()
      */
     @Override
@@ -2628,7 +2655,7 @@ public class HttpOutboundServiceContextImpl extends HttpServiceContextImpl imple
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.wsspi.http.channel.outbound.HttpOutboundServiceContext#getRemainingData()
      */
     @Override

@@ -1,0 +1,16 @@
+# IBM Confidential OCO Source Material
+# (C) COPYRIGHT International Business Machines Corp. 2017.
+# The source code for this program is not published or otherwise divested
+# of its trade secrets, irrespective of what has been deposited with the
+# U.S. Copyright Office.
+# -------------------------------------------------------------------------------------------------
+#CMVCPATHNAME com.ibm.ws.security.jsr375/resources/com/ibm/ws/security/jsr375/internal/resources/Jsr375Messages.nlsprops
+#COMPONENTPREFIX CWWKS
+#COMPONENTNAMEFOR WebSphere Application Server Java JSR-375 Security 1.0
+#ISMESSAGEFILE TRUE
+#NLS_MESSAGEFORMAT_VAR
+#NLS_ENCODING=UNICODE
+# -------------------------------------------------------------------------------------------------
+
+# Message prefix block: CWWKS1X00 - CWWKS1X99
+

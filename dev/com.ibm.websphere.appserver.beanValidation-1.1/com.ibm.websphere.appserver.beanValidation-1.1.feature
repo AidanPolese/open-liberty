@@ -11,7 +11,8 @@ IBM-API-Package: javax.validation; type="spec", \
  javax.validation.executable; type="spec", \
  javax.validation.groups; type="spec", \
  javax.validation.metadata; type="spec", \
- javax.validation.spi; type="spec"
+ javax.validation.spi; type="spec",\
+ com.ibm.ws.beanvalidation.accessor; type="internal"
 IBM-ShortName: beanValidation-1.1
 Subsystem-Name: Bean Validation 1.1
 -features=com.ibm.websphere.appserver.javax.cdi-1.2, \
