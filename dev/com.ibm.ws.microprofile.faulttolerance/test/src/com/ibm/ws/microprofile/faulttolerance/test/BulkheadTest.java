@@ -113,17 +113,27 @@ public class BulkheadTest {
         Executor<Future<String>> executor = builder.buildAsync();
 
         Future<String>[] futures = new Future[10];
-        for (int i = 0; i < 10; i++) {
-            AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(2000), "testAsyncBulkhead" + i);
-            ExecutionContext context = executor.newExecutionContext((Method) null, "testAsyncBulkhead");
-            Future<String> future = executor.execute(callable, context);
-            assertFalse(future.isDone());
-            futures[i] = future;
-        }
+        try {
+            for (int i = 0; i < 10; i++) {
+                String id = "testAsyncBulkhead" + i;
+                AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(2000), id);
+                ExecutionContext context = executor.newExecutionContext(id, (Method) null, id);
+                Future<String> future = executor.execute(callable, context);
+                assertFalse(future.isDone());
+                futures[i] = future;
+            }
 
-        for (int i = 0; i < 10; i++) {
-            String data = futures[i].get(2300, TimeUnit.MILLISECONDS);
-            assertEquals("testAsyncBulkhead" + i, data);
+            for (int i = 0; i < 10; i++) {
+                String data = futures[i].get(2300, TimeUnit.MILLISECONDS);
+                assertEquals("testAsyncBulkhead" + i, data);
+            }
+        } finally {
+            for (int i = 0; i < 10; i++) {
+                Future<String> future = futures[i];
+                if (future != null && !future.isDone()) {
+                    future.cancel(true);
+                }
+            }
         }
     }
 
@@ -138,25 +148,35 @@ public class BulkheadTest {
 
         Executor<Future<String>> executor = builder.buildAsync();
 
-        for (int i = 0; i < 4; i++) {
-            String contextData = "testAsyncBulkheadQueueFull" + i;
-            ExecutionContext context = executor.newExecutionContext((Method) null, contextData);
-            AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(2000), contextData);
-            Future<String> future = executor.execute(callable, context);
-            System.out.println(System.currentTimeMillis() + " Test " + context + " - submitted");
-            assertFalse(future.isDone());
-            Thread.sleep(100);
-        }
-
-        String contextData = "testAsyncBulkheadQueueFull4";
-        ExecutionContext context = executor.newExecutionContext((Method) null, contextData);
-        AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(2000), contextData);
+        Future<String>[] futures = new Future[5];
         try {
-            executor.execute(callable, context);
-            System.out.println(System.currentTimeMillis() + " Test " + contextData + " - submitted");
-            fail("Exception not thrown");
-        } catch (BulkheadException e) {
-            //expected
+            for (int i = 0; i < 4; i++) {
+                String id = "testAsyncBulkheadQueueFull" + i;
+                ExecutionContext context = executor.newExecutionContext(id, (Method) null, id);
+                AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(2000), id);
+                futures[i] = executor.execute(callable, context);
+                System.out.println(System.currentTimeMillis() + " Test " + context + " - submitted");
+                assertFalse(futures[i].isDone());
+                Thread.sleep(100);
+            }
+
+            String id = "testAsyncBulkheadQueueFull4";
+            ExecutionContext context = executor.newExecutionContext(id, (Method) null, id);
+            AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(2000), id);
+            try {
+                futures[5] = executor.execute(callable, context);
+                System.out.println(System.currentTimeMillis() + " Test " + id + " - submitted");
+                fail("Exception not thrown");
+            } catch (BulkheadException e) {
+                //expected
+            }
+        } finally {
+            for (int i = 0; i < 5; i++) {
+                Future<String> future = futures[i];
+                if (future != null && !future.isDone()) {
+                    future.cancel(true);
+                }
+            }
         }
 
     }

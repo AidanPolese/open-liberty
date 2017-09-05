@@ -13,6 +13,8 @@ package com.ibm.ws.microprofile.faulttolerance.test;
 import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Method;
+import java.time.Duration;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -23,8 +25,10 @@ import org.junit.Test;
 
 import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
+import com.ibm.ws.microprofile.faulttolerance.spi.FTExecutionContext;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
+import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
 import com.ibm.ws.microprofile.faulttolerance.test.util.AsyncTestFunction;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestFunction;
 
@@ -43,15 +47,51 @@ public class RetryTest {
 
         Executor<String> executor = builder.build();
 
-        TestFunction callable = new TestFunction(2, "testRetry");//first two executions will throw an exception
+        String id = "testRetry";
+        TestFunction callable = new TestFunction(2, id);//first two executions will throw an exception
 
-        ExecutionContext context = executor.newExecutionContext((Method) null, "testRetry");
-        executor.execute(callable, context);
-        assertEquals(3, callable.getExecutions());
+        FTExecutionContext context = executor.newExecutionContext(id, (Method) null, id);
+        try {
+            executor.execute(callable, context);
+            assertEquals(3, callable.getExecutions());
+        } finally {
+            context.close();
+        }
+    }
+
+    @Test
+    public void testRetryTimeout() {
+        RetryPolicy retry = FaultToleranceProvider.newRetryPolicy();
+        retry.setMaxRetries(10);
+        //100ms between retries
+        retry.setDelay(Duration.ofMillis(100));
+
+        ExecutorBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
+        builder.setRetryPolicy(retry);
+
+        TimeoutPolicy timeout = FaultToleranceProvider.newTimeoutPolicy();
+        timeout.setTimeout(Duration.ofMillis(500));
+        builder.setTimeoutPolicy(timeout);
+
+        Executor<String> executor = builder.build();
+
+        String id = "testRetryTimeout";
+        TestFunction callable = new TestFunction(8, id);//first eight executions will throw an exception
+        //so will be around 900ms before the execution works
+        //but the timeout should get reset on each try
+
+        FTExecutionContext context = executor.newExecutionContext(id, (Method) null, id);
+        try {
+            executor.execute(callable, context);
+            assertEquals(9, callable.getExecutions());
+        } finally {
+            context.close();
+        }
     }
 
     @Test
     public void testAsyncRetry() throws InterruptedException, ExecutionException, TimeoutException {
+        CountDownLatch latch = new CountDownLatch(3);
         RetryPolicy retry = FaultToleranceProvider.newRetryPolicy();
         retry.setMaxRetries(3);
 
@@ -60,13 +100,25 @@ public class RetryTest {
 
         Executor<Future<String>> executor = builder.buildAsync();
 
-        AsyncTestFunction callable = new AsyncTestFunction(2, "testRetry");//first two executions will throw an exception
+        String id = "testAsyncRetry";
+        AsyncTestFunction callable = new AsyncTestFunction(2, id, latch);//first two executions will throw an exception
 
-        ExecutionContext context = executor.newExecutionContext((Method) null, "testRetry");
-        Future<String> future = executor.execute(callable, context);
-        String result = future.get(1000, TimeUnit.MILLISECONDS);
-        assertEquals("testRetry", result);
-        assertEquals(3, callable.getExecutions());
+        ExecutionContext context = executor.newExecutionContext(id, (Method) null, id);
+        Future<String> future = null;
+        try {
+            future = executor.execute(callable, context);
+
+            latch.await(5000, TimeUnit.MILLISECONDS);
+
+            String result = future.get(1000, TimeUnit.MILLISECONDS);
+
+            assertEquals(id, result);
+            assertEquals(3, callable.getExecutions());
+        } finally {
+            if (future != null && !future.isDone()) {
+                future.cancel(true);
+            }
+        }
     }
 
 }

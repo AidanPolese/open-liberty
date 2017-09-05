@@ -11,6 +11,7 @@
 package com.ibm.ws.microprofile.faulttolerance.cdi;
 
 import java.lang.reflect.Method;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
@@ -24,8 +25,6 @@ import javax.interceptor.InvocationContext;
 
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 
-import com.ibm.websphere.ras.Tr;
-import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
@@ -34,8 +33,6 @@ import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
 @Interceptor
 @Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class FaultToleranceInterceptor {
-
-    private static final TraceComponent tc = Tr.register(FaultToleranceInterceptor.class);
 
     @Inject
     BeanManager beanManager;
@@ -93,7 +90,8 @@ public class FaultToleranceInterceptor {
 
         Method method = invocationContext.getMethod();
         Object[] params = invocationContext.getParameters();
-        ExecutionContext executionContext = executor.newExecutionContext(method, params);
+        String id = method.getName() + UUID.randomUUID().toString();
+        ExecutionContext executionContext = executor.newExecutionContext(id, method, params);
 
         //if there is a FaultTolerance Executor then run it, otherwise just call proceed
         Object result = null;

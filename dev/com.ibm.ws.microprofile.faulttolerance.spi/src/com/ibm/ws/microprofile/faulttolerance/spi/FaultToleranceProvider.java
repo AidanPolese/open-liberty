@@ -44,5 +44,4 @@ public final class FaultToleranceProvider {
     public static <T, R> ExecutorBuilder<T, R> newExecutionBuilder() {
         return INSTANCE.newExecutionBuilder();
     }
-
 }

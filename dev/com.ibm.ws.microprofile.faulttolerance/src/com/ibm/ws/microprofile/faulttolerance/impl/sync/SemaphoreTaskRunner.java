@@ -61,7 +61,12 @@ public class SemaphoreTaskRunner<R> implements TaskRunner<R> {
                     this.semaphore.release();
                 }
             }
-        } catch (InterruptedException | TimeoutException e) {
+        } catch (TimeoutException e) {
+            throw e;
+        } catch (InterruptedException e) {
+            //if the interrupt was caused by a timeout then check and throw that instead
+            long remaining = executionContext.check();
+            System.out.println("Task Interrupted: " + remaining);
             throw e;
         } catch (Exception e) {
             throw new ExecutionException(e);

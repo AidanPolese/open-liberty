@@ -1,38 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="bin" path="src"/>
-	<classpathentry kind="src" output="bin_test" path="test"/>
-	<classpathentry kind="con" path="aQute.bnd.classpath.container"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="src" path="/com.ibm.ws.security.mp.jwt.proxy"/>
-	<classpathentry kind="lib" path="/com.ibm.ws.org.jose4j/lib/jose4j-0.5.1.jar">
-		<attributes>
-			<attribute name="bsn" value="lib/jose4j-0.5.1.jar"/>
-			<attribute name="type" value="EXTERNAL"/>
-			<attribute name="project" value="com.ibm.ws.org.jose4j"/>
-			<attribute name="version" value="file"/>
-		</attributes>
-		<accessrules>
-			<accessrule kind="accessible" pattern="org/jose4j/base64url/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/http/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/jca/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/json/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/jwa/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/jwe/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/jwe/kdf/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/jwk/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/jws/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/jwt/consumer/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/jwt/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/jwx/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/keys/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/keys/resolvers/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/lang/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/mac/*"/>
-			<accessrule kind="accessible" pattern="org/jose4j/zip/*"/>
-			<accessrule ignoreifbetter="true" kind="discouraged" pattern="**"/>
-		</accessrules>
-	</classpathentry>
-	<classpathentry kind="src" path="/com.ibm.ws.logging.core"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="src" path="src"/>
+        <classpathentry kind="src" path="resources"/>
+        <classpathentry kind="con" path="aQute.bnd.classpath.container"/>
+        <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+        <classpathentry kind="output" path="bin"/>
 </classpath>

@@ -14,11 +14,11 @@ import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Method;
 
-import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.junit.Test;
 
 import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
+import com.ibm.ws.microprofile.faulttolerance.spi.FTExecutionContext;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestFallback;
@@ -40,12 +40,17 @@ public class FallbackTest {
         builder.setFallbackPolicy(fallback);
         Executor<String> executor = builder.build();
 
-        TestFunction callable = new TestFunction(-1, "testFallback");
+        String id = "testFallbackFunction";
+        TestFunction callable = new TestFunction(-1, id);
 
         //callable is set to always throw an exception but the fallback should be run instead
-        ExecutionContext context = executor.newExecutionContext((Method) null, "testFallback");
-        String executions = executor.execute(callable, context);
-        assertEquals("Fallback: testFallback", executions);
+        FTExecutionContext context = executor.newExecutionContext(id, (Method) null, id);
+        try {
+            String executions = executor.execute(callable, context);
+            assertEquals("Fallback: " + id, executions);
+        } finally {
+            context.close();
+        }
     }
 
     @Test
@@ -59,12 +64,18 @@ public class FallbackTest {
 
         Executor<String> executor = builder.build();
 
-        TestFunction callable = new TestFunction(-1, "testFallback");
+        String id = "testFallbackFactory";
+        TestFunction callable = new TestFunction(-1, id);
 
         //callable is set to always throw an exception but the fallback should be run instead
-        ExecutionContext context = executor.newExecutionContext((Method) null, "testFallback");
-        String executions = executor.execute(callable, context);
-        assertEquals("Fallback: testFallback", executions);
+
+        FTExecutionContext context = executor.newExecutionContext(id, (Method) null, id);
+        try {
+            String executions = executor.execute(callable, context);
+            assertEquals("Fallback: " + id, executions);
+        } finally {
+            context.close();
+        }
     }
 
 }

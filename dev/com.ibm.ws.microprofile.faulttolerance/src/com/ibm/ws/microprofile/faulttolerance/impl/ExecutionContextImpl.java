@@ -12,16 +12,17 @@ package com.ibm.ws.microprofile.faulttolerance.impl;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 
-import org.eclipse.microprofile.faulttolerance.ExecutionContext;
-
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.websphere.ras.annotation.Trivial;
 import com.ibm.ws.microprofile.faulttolerance.impl.async.QueuedFuture;
+import com.ibm.ws.microprofile.faulttolerance.spi.FTExecutionContext;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 
-public class ExecutionContextImpl implements ExecutionContext {
+public class ExecutionContextImpl implements FTExecutionContext {
 
-    private static final AtomicLong ID_GEN = new AtomicLong(0);
+    private static final TraceComponent tc = Tr.register(ExecutionContextImpl.class);
 
     private final Method method;
     private final Object[] params;
@@ -33,9 +34,11 @@ public class ExecutionContextImpl implements ExecutionContext {
 
     private volatile int retries = 0;
     private volatile long startTime;
-    private final long id;
 
-    public ExecutionContextImpl(Method method, Object[] params, TimeoutImpl timeout, CircuitBreakerImpl circuitBreaker, FallbackPolicy fallbackPolicy, RetryImpl retry) {
+    private final String id;
+
+    public ExecutionContextImpl(String id, Method method, Object[] params, TimeoutImpl timeout, CircuitBreakerImpl circuitBreaker, FallbackPolicy fallbackPolicy, RetryImpl retry) {
+        this.id = id;
         this.method = method;
         this.params = new Object[params.length];
         //TODO is an arraycopy really required here?
@@ -45,8 +48,6 @@ public class ExecutionContextImpl implements ExecutionContext {
         this.circuitBreaker = circuitBreaker;
         this.fallbackPolicy = fallbackPolicy;
         this.retry = retry;
-
-        this.id = ID_GEN.incrementAndGet();
     }
 
     /** {@inheritDoc} */
@@ -61,17 +62,12 @@ public class ExecutionContextImpl implements ExecutionContext {
         return params;
     }
 
-    @Override
-    public String toString() {
-        return "Execution Context: " + method;
-    }
-
     /**
     *
     */
     public void start() {
         this.startTime = System.nanoTime();
-        //System.out.println("TaskContext[" + id + "] start: " + this.startTime);
+        debugRelativeTime("start");
         if (timeout != null) {
             timeout.start(Thread.currentThread());
         }
@@ -79,7 +75,7 @@ public class ExecutionContextImpl implements ExecutionContext {
 
     public void start(QueuedFuture<?> future) {
         this.startTime = System.nanoTime();
-        //System.out.println("TaskContext[" + id + "] start: " + this.startTime);
+        debugRelativeTime("start");
         if (timeout != null) {
             timeout.start(future);
         }
@@ -89,8 +85,7 @@ public class ExecutionContextImpl implements ExecutionContext {
     *
     */
     public void end() {
-        //long endTime = System.nanoTime();
-        //System.out.println("TaskContext[" + id + "] stop: " + endTime + " (" + (endTime - this.startTime) + ")");
+        debugRelativeTime("end");
         if (timeout != null) {
             timeout.stop(true);
         }
@@ -99,17 +94,17 @@ public class ExecutionContextImpl implements ExecutionContext {
     /**
     *
     */
-    public void check() {
-//        long checkTime = System.nanoTime();
-//        System.out.println("TaskContext[" + id + "] check: " + checkTime + " (" + (checkTime - this.startTime) + ")");
+    public long check() {
+        debugRelativeTime("check");
+        long remaining = -1;
         if (timeout != null) {
-            timeout.check();
+            remaining = timeout.check();
         }
+        return remaining;
     }
 
     public void onRetry() {
-//        long retryTime = System.nanoTime();
-//        System.out.println("TaskContext[" + id + "] onRetry: " + retryTime + " (" + (retryTime - this.startTime) + ")");
+        debugRelativeTime("onRetry");
         this.retries++;
         if (timeout != null) {
             timeout.restart();
@@ -159,6 +154,32 @@ public class ExecutionContextImpl implements ExecutionContext {
      */
     public TimeoutImpl getTimeout() {
         return this.timeout;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void close() {
+        if (this.timeout != null) {
+            this.timeout.stop();
+        }
+    }
+
+    @Override
+    @Trivial
+    public String toString() {
+        return getDescriptor();
+    }
+
+    @Trivial
+    public String getDescriptor() {
+        return "Execution Context[" + this.id + "]";
+    }
+
+    @Trivial
+    private void debugRelativeTime(String message) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            FTConstants.debugRelativeTime(tc, getDescriptor(), message, this.startTime);
+        }
     }
 
 }

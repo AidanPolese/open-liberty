@@ -11,6 +11,7 @@
 package com.ibm.ws.microprofile.faulttolerance.impl.sync;
 
 import java.lang.reflect.Method;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -27,6 +28,7 @@ import com.ibm.ws.microprofile.faulttolerance.impl.TimeoutImpl;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
+import com.ibm.ws.microprofile.faulttolerance.spi.FTExecutionContext;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.TimeoutPolicy;
@@ -73,15 +75,17 @@ public class SynchronousExecutorImpl<R> implements Executor<R> {
     protected SynchronousExecutorImpl() {}
 
     @Override
-    public ExecutionContext newExecutionContext(Method method, Object[] params) {
+    public FTExecutionContext newExecutionContext(String id_prefix, Method method, Object... params) {
+
+        String id = id_prefix + "_" + UUID.randomUUID();
         TimeoutImpl timeout = null;
         if (this.timeoutPolicy != null) {
-            timeout = new TimeoutImpl(this.timeoutPolicy, this.scheduledExecutorService);
+            timeout = new TimeoutImpl(id, this.timeoutPolicy, this.scheduledExecutorService);
         }
 
         RetryImpl retry = new RetryImpl(this.retryPolicy);
 
-        ExecutionContext executionContext = new ExecutionContextImpl(method, params, timeout, this.circuitBreaker, this.fallbackPolicy, retry);
+        FTExecutionContext executionContext = new ExecutionContextImpl(id, method, params, timeout, this.circuitBreaker, this.fallbackPolicy, retry);
         return executionContext;
     }
 

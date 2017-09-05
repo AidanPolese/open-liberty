@@ -83,6 +83,7 @@ public class AsyncBulkheadServlet extends FATServlet {
         //first two should be run straight away, in parallel, each around 5 seconds
         Future<Boolean> future1 = bean2.connectA("One");
         Future<Boolean> future2 = bean2.connectA("Two");
+        Thread.sleep(TestConstants.TEST_TWEAK_TIME_UNIT);
         Future<Boolean> future3 = bean2.connectA("Three");
         Future<Boolean> future4 = bean2.connectA("Four");
 

@@ -44,17 +44,27 @@ public class AsyncTest {
         Executor<Future<String>> executor = builder.buildAsync();
 
         Future<String>[] futures = new Future[TASKS];
-        for (int i = 0; i < TASKS; i++) {
-            AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(TASK_DURATION), "testAsync" + i);
-            ExecutionContext context = executor.newExecutionContext((Method) null, "testAsync");
-            Future<String> future = executor.execute(callable, context);
-            assertFalse(future.isDone());
-            futures[i] = future;
-        }
+        try {
+            for (int i = 0; i < TASKS; i++) {
+                String id = "testAsync" + i;
+                AsyncTestFunction callable = new AsyncTestFunction(Duration.ofMillis(TASK_DURATION), id);
+                ExecutionContext context = executor.newExecutionContext(id, (Method) null, id);
+                Future<String> future = executor.execute(callable, context);
+                assertFalse(future.isDone());
+                futures[i] = future;
+            }
 
-        for (int i = 0; i < TASKS; i++) {
-            String data = futures[i].get(FUTURE_TIMEOUT, TimeUnit.MILLISECONDS);
-            assertEquals("testAsync" + i, data);
+            for (int i = 0; i < TASKS; i++) {
+                String data = futures[i].get(FUTURE_TIMEOUT, TimeUnit.MILLISECONDS);
+                assertEquals("testAsync" + i, data);
+            }
+        } finally {
+            for (int i = 0; i < TASKS; i++) {
+                Future<String> future = futures[i];
+                if (future != null && !future.isDone()) {
+                    future.cancel(true);
+                }
+            }
         }
     }
 

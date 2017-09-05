@@ -55,6 +55,8 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
 
     private final AtomicServiceReference<ScheduledExecutorService> scheduledExecRef = new AtomicServiceReference<>("ScheduledExecutorService");
 
+    private ScheduledExecutorService jseScheduledExecutorService;
+
     /**
      * Activate a context and set the instance
      *
@@ -205,9 +207,12 @@ public class ProviderResolverImpl extends FaultToleranceProviderResolver {
         });
 
         if (scheduledExecutorService == null) {
+            //this is really intended for unittest only, running outside of Liberty
             if ("true".equalsIgnoreCase(System.getProperty(FTConstants.JSE_FLAG))) {
-                //this is really intended for unittest only, running outside of Liberty
-                scheduledExecutorService = Executors.newScheduledThreadPool(10);
+                if (this.jseScheduledExecutorService == null) {
+                    this.jseScheduledExecutorService = Executors.newScheduledThreadPool(10);
+                }
+                scheduledExecutorService = jseScheduledExecutorService;
             } else {
                 throw new FaultToleranceException(Tr.formatMessage(tc, "internal.error.CWMFT4999E"));
             }
