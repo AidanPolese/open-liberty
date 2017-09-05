@@ -25,6 +25,7 @@ import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
@@ -77,7 +78,7 @@ public class MpJwtHelper {
 		return JavaInfo.majorVersion() >= 8;
 	}
 
-	@Reference(service = JsonWebTokenUtil.class, name = JSON_WEB_TOKEN_UTIL_REF, cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.STATIC)
+	@Reference(service = JsonWebTokenUtil.class, name = JSON_WEB_TOKEN_UTIL_REF, cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY)
 	protected void setJsonWebTokenUtil(ServiceReference<JsonWebTokenUtil> ref) {
 		if (isJavaVersionAtLeast18()) {
 			JsonWebTokenUtilRef.setReference(ref);

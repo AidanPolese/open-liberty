@@ -25,15 +25,14 @@ Export-Package: \
   com.ibm.ws.security.collaborator;provide:=true, \
   com.ibm.ws.security.context;provide:=true
 
-Import-Package: com.ibm.ws.common.internal.encoder, !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, *
+Import-Package: com.ibm.ws.common.internal.encoder, !*.internal.*, !com.ibm.ws.kernel.boot.cmdline, com.ibm.ws.security.mp.jwt.proxy; version="[1.0.0,2)", *
 
 Private-Package: \
   com.ibm.ws.security.context.internal, \
   com.ibm.ws.security.internal.*
   
 DynamicImport-Package: \
-  com.ibm.wsspi.request.probe.*, \
-  com.ibm.ws.security.mp.jwt.proxy;resolution:=optional
+  com.ibm.wsspi.request.probe.*
 
 Include-Resource: \
   OSGI-INF=resources/OSGI-INF
