@@ -21,17 +21,6 @@ import com.ibm.wsspi.security.tai.TAIResult;
 public interface ErrorHandler {
 
     /**
-     * See an implement in ErrorHandlerImpl
-     */
-
-    /**
-     * Handles setting the response error status and displaying an error message for an end user in the browser.
-     *
-     * @param response
-     */
-    public void handleErrorResponse(HttpServletResponse response);
-
-    /**
      * Handles setting the response error status and displaying an error message for an end user in the browser.
      *
      * @param response

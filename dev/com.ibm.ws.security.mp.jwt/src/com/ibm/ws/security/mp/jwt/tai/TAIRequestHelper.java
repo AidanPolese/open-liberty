@@ -142,7 +142,7 @@ public class TAIRequestHelper {
             return setGenericAndFilteredConfigTaiRequestInfo(request, mpJwtTaiRequest);
         }
 
-        return setSpecificConfigTaiRequestInfo(request, specifiedServiceId, mpJwtTaiRequest);
+        return setSpecificConfigTaiRequestInfo(request, specifiedServiceId, mpJwtTaiRequest); //TODO:
     }
 
     MicroProfileJwtTaiRequest setGenericAndFilteredConfigTaiRequestInfo(HttpServletRequest request, MicroProfileJwtTaiRequest mpJwtTaiRequest) {
@@ -183,7 +183,9 @@ public class TAIRequestHelper {
         MicroProfileJwtConfig config = getConfigAssociatedWithRequestAndId(request, configId);
         if (config == null) {
             // error handling-- the specified service is not found
-            MpJwtProcessingException mpjwtException = new MpJwtProcessingException("MPJWT_NO_SUCH_PROVIDER", null, new Object[] { configId });
+            String msg = Tr.formatMessage(tc, "MPJWT_NO_SUCH_PROVIDER", new Object[] { configId });
+            Tr.error(tc, msg);
+            MpJwtProcessingException mpjwtException = new MpJwtProcessingException(msg);
             mpJwtTaiRequest.setTaiException(mpjwtException);
         } else {
             mpJwtTaiRequest.setSpecifiedConfig(config);
