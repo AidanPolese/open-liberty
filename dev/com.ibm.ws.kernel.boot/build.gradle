@@ -17,19 +17,6 @@ task publishEmptyTemplatesFolders {
   }
 }
 
-task publishJava9Resources {
-    dependsOn jar
-    inputs.files(fileTree( dir: "${projectDir}/publish/java9"))
-    outputs.dir "${rootDir}/build.image/wlp/lib/java9"
-    doLast {
-      copy {
-        from "${projectDir}/publish/java9"
-        into "${rootDir}/build.image/wlp/lib/java9"
-      }
-    }
-}
-
 assemble {
   dependsOn publishEmptyTemplatesFolders
-  dependsOn publishJava9Resources
 }

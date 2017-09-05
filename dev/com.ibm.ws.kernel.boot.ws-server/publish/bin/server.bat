@@ -536,7 +536,7 @@ goto:eof
   
   @REM If we are running on Java 9, apply Liberty's built-in java 9 options
   if exist "%JAVA_HOME%\lib\modules" (
-    call:mergeJVMOptions "%WLP_INSTALL_DIR%\lib\java9\java9.options"
+    call:mergeJVMOptions "%WLP_INSTALL_DIR%\lib\platform\java\java9.options"
   )
   
   set JVM_OPTIONS=!JVM_OPTIONS!%JVM_TEMP_OPTIONS%

@@ -426,7 +426,7 @@ clientEnvAndJVMOptions()
   
   # If we are running on Java 9, apply Liberty's built-in java 9 options
   if [ -f "${JAVA_HOME}/lib/modules" ]; then
-    mergeJVMOptions "${WLP_INSTALL_DIR}/lib/java9/java9.options"
+    mergeJVMOptions "${WLP_INSTALL_DIR}/lib/platform/java/java9.options"
   fi
 
   return $rc
