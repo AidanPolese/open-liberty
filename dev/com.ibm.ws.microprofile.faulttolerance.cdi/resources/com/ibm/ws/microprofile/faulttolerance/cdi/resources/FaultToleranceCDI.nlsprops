@@ -92,8 +92,8 @@ security.exception.acquiring.fallback.method.CWMFT5004E=CWMFT5004E: A security e
 security.exception.acquiring.fallback.method.CWMFT5004E.explanation=In order to create a fallback policy, the application server requires permission to acquire and examine Java methods.
 security.exception.acquiring.fallback.method.CWMFT5004E.useraction=Review the security policy of your application server and provide the permissions.
 
-#A problem occurred while converting a system property {0} to type {1}. The raw string value is {2}. The exception is [3}.
-conversion.error.CWMFT5005E=CWMFT5005E: A problem occurred while converting a system property {0} to type {1}. The raw string value is {2}. The exception is [3}.
+#A problem occurred while converting a system property {0} to type {1}. The raw string value is {2}. The exception is {3}.
+conversion.error.CWMFT5005E=CWMFT5005E: A problem occurred while converting a system property {0} to type {1}. The raw string value is {2}. The exception is {3}.
 conversion.error.CWMFT5005E.explanation=Any configuration values provided via system properties must be convertable to the appropriate type. e.g. using Long.valueOf(String)
 conversion.error.CWMFT5005E.useraction=Check that the specified value is in the correct format for the type of the property it is overriding.
 
@@ -108,9 +108,10 @@ conversion.error.CWMFT5007E.explanation=Any configuration values provided via sy
 conversion.error.CWMFT5007E.useraction=Check that the specified value is in the correct format for the type of the property it is overriding.
 
 #The value parameter on the Fallback is not valid.
-fallback.policy.invalid.CWMFT5008E=CWMFT5008E: The fallback policy for the method {0} is not valid because the Generic Type Parameter of the FallbackHandler implementation class {1} is not assignable to the return type {2} on the fallbackMethod {3}.
-fallback.policy.invalid.CWMFT5008E.explanation=The Generic Type Parameter of the FallbackHandler implementation class must be assignable to the return type of the original method. 
-fallback.policy.invalid.CWMFT5008E.useraction=Update the Generic Type Parameter of the FallbackHandler implementation class to be assignable to the return type of the original method.
+fallback.policy.invalid.CWMFT5008E=CWMFT5008E: The fallback policy for the method {0} is not valid because the type of the FallbackHandler implementation class {1} must be compatible with the return type {2} on the original method {3}.
+fallback.policy.invalid.CWMFT5008E.explanation=The type of the FallbackHandler implementation must be compatible with the return type of the original method.
+fallback.policy.invalid.CWMFT5008E.useraction=Update the type of the FallbackHandler implementation class to be compatible with the return type of the original method.
+
 
 #The fallback policies are conflicting.
 fallback.policy.conflicts.CWMFT5009E=CWMFT5009E: The Fallback policy for the method {0} is not valid as both FallbackHandler class {1} and fallbackMethod {2} were specified. Only specify one of them.
@@ -119,37 +120,37 @@ fallback.policy.conflicts.CWMFT5009E.useraction=Remove either the fallbackMethod
 
 #Incorrect value on FT Retry parameters
 retry.parameter.invalid.value.CWMFT5010E=CWMFT5010E: The Retry policy parameter {0} value {1} for {2} is not valid as it must be greater than or equal to {3}.
-retry.parameter.invalid.value.CWMFT5010E.explanation=The specified value or the configured value if configured for the Retry policy parameter is not valid.
+retry.parameter.invalid.value.CWMFT5010E.explanation=The specified value or the configured value, if configured for the Retry policy parameter, is not valid.
 retry.parameter.invalid.value.CWMFT5010E.useraction=Correct the value for the specified parameter.
 
 #Incorrect value on FT Timeout parameters
 timeout.parameter.invalid.value.CWMFT5011E=CWMFT5011E: The Timeout value {0} specified on {1} is not valid as it must be greater than or equal to 0.
-timeout.parameter.invalid.value.CWMFT5011E.explanation=The specified value or the configured value if configured for the Timeout policy 'value' parameter is not valid.
+timeout.parameter.invalid.value.CWMFT5011E.explanation=The specified value or the configured value, if configured for the Timeout policy 'value' parameter, is not valid.
 timeout.parameter.invalid.value.CWMFT5011E.useraction=Correct the value for the specified parameter.
 
 #Incorrect value on FT CircuitBreaker parameters
 circuitBreaker.parameter.delay.invalid.value.CWMFT5012E=CWMFT5012E: The CircuitBreaker policy parameter {0} value {1} for the {2} is not valid as it must not be a negative number.
-circuitBreaker.parameter.delay.invalid.value.CWMFT5012E.explanation=The specified value or the configured value if configured for the CircuitBreaker policy parameter 'delay' is not valid.
+circuitBreaker.parameter.delay.invalid.value.CWMFT5012E.explanation=The specified value or the configured value, if configured for the CircuitBreaker policy parameter 'delay', is not valid.
 circuitBreaker.parameter.delay.invalid.value.CWMFT5012E.useraction=Correct the value for the specified parameter.
 
 #Incorrect value on FT CircuitBreaker parameters
 circuitBreaker.parameter.failureRatio.invalid.value.CWMFT5013E=CWMFT5013E: The CircuitBreaker policy parameter {0} value {1} for the {2} is not valid as it must be between 0 and 1 inclusively.
-circuitBreaker.parameter.failureRatio.invalid.value.CWMFT5013E.explanation=The specified value or the configured value if configured for the CircuitBreaker policy parameter 'failureRatio' is not valid.
+circuitBreaker.parameter.failureRatio.invalid.value.CWMFT5013E.explanation=The specified value or the configured value, if configured for the CircuitBreaker policy parameter 'failureRatio', is not valid.
 circuitBreaker.parameter.failureRatio.invalid.value.CWMFT5013E.useraction=Correct the value for the specified parameter.
 
 #Incorrect value on FT CircuitBreaker parameters
 circuitBreaker.parameter.requestVolumeThreshold.invalid.value.CWMFT5014E=CWMFT5014E: The CircuitBreaker policy parameter {0} value {1} for the {2} is not valid as it must not be a negative number.
-circuitBreaker.parameter.requestVolumeThreshold.invalid.value.CWMFT5014E.explanation=The specified value or the configured value if configured for the CircuitBreaker policy parameter 'requestVolumeThreshold' is not valid.
+circuitBreaker.parameter.requestVolumeThreshold.invalid.value.CWMFT5014E.explanation=The specified value or the configured value, if configured for the CircuitBreaker policy parameter 'requestVolumeThreshold', is not valid.
 circuitBreaker.parameter.requestVolumeThreshold.invalid.value.CWMFT5014E.useraction=Correct the value for the specified parameter.
 
 #Incorrect value on FT CircuitBreaker parameters
 circuitBreaker.parameter.successThreshold.invalid.value.CWMFT5015E=CWMFT5015E: The CircuitBreaker policy parameter {0} value {1} for the {2} is not valid as it must not be a negative number.
-circuitBreaker.parameter.successThreshold.invalid.value.CWMFT5015E.explanation=The specified value or the configured value if configured for the CircuitBreaker policy parameter 'successThreshold' is not valid.
+circuitBreaker.parameter.successThreshold.invalid.value.CWMFT5015E.explanation=The specified value or the configured value, if configured for the CircuitBreaker policy parameter 'successThreshold', is not valid.
 circuitBreaker.parameter.successThreshold.invalid.value.CWMFT5015E.useraction=Correct the value for the specified parameter.
 
 #Incorrect value on FT Bulkhead parameters
 bulkhead.parameter.successThreshold.invalid.value.CWMFT5016E=CWMFT5016E: The Bulkhead policy parameter {0} value {1} for the {2} is not valid as it must be greater than or equal to 1.
-bulkhead.parameter.successThreshold.invalid.value.CWMFT5016E.explanation=The specified value or the configured value if configured for the Bulkhead policy parameter is not valid.
+bulkhead.parameter.successThreshold.invalid.value.CWMFT5016E.explanation=The specified value or the configured value, if configured for the Bulkhead policy parameter, is not valid.
 bulkhead.parameter.successThreshold.invalid.value.CWMFT5016E.useraction=Correct the value for the specified parameter.
 
 #Incorrect value on FT Retry parameters
