@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance_fat.cdi;
 
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -64,6 +66,21 @@ public class TimeoutServlet extends FATServlet {
             if (!expected.equals(actual)) {
                 throw new AssertionError("Expected: " + expected + ", Actual: " + actual);
             }
+        }
+    }
+
+    /**
+     * This test should only pass if MP_Fault_Tolerance_NonFallback_Enabled is set to false
+     */
+    public void testTimeoutDisabled(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        try {
+            bean.connectA();
+            fail("No exception thrown");
+        } catch (ConnectException e) {
+            // expected, as Timeout should be disabled
+        } catch (TimeoutException e) {
+            // Not expected! rethrow
+            throw e;
         }
     }
 }
