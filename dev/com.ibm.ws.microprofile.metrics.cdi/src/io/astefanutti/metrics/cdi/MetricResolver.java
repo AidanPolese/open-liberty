@@ -28,7 +28,6 @@ import javax.inject.Inject;
 import org.eclipse.microprofile.metrics.Metadata;
 import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.eclipse.microprofile.metrics.MetricType;
-import org.eclipse.microprofile.metrics.MetricUnit;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Gauge;
 import org.eclipse.microprofile.metrics.annotation.Metered;
@@ -204,7 +203,7 @@ import org.eclipse.microprofile.metrics.annotation.Timed;
             throw new IllegalArgumentException("Unsupported Metrics forMethod [" + annotation.getClass().getName() + "]");
     }
 
-    private MetricUnit getUnit(Annotation annotation) {
+    private String getUnit(Annotation annotation) {
         if (Counted.class.isInstance(annotation))
             return ((Counted) annotation).unit();
         else if (Gauge.class.isInstance(annotation))
