@@ -29,8 +29,9 @@ public class ExpressionGenerator extends CodeGeneratorBase {
             char[] chars = data.toCharArray();
             writeDebugStartBegin(writer);
 
-            
-            String expression= new String(GeneratorUtils.escapeQuotes(chars));
+            //PI82426: White spaces at the beginning and end are useless in java scripting language
+            //If there are white spaces at the end of processing the expression, the code will try to write()... and such method does not exist.
+            String expression= new String(GeneratorUtils.escapeQuotes(chars)).trim();
             // detect simple cases of string catenation
             if (expression.indexOf('+') != -1 && expression.indexOf('"') != -1) {
                // there may be a potential string catenation operation with a constant string               
@@ -120,6 +121,9 @@ public class ExpressionGenerator extends CodeGeneratorBase {
                                    //also, trying to avoid a StringIndexOutOfBoundsException
                                    if ((i+2) < expression.length()) {
                                        i=i+2;
+                                   } else {
+                                       //PI82426: If we are at the end, then make sure i has the last possible value so substring(termStart, i) returns the complete term.
+                                       i = expression.length();
                                    }
                                    autoIncrement = true; //PM97353
                                }
@@ -130,7 +134,7 @@ public class ExpressionGenerator extends CodeGeneratorBase {
 
                            if ((subExp.length() != 0) && !subExp.equals("++")) {  //PM97353 add check for ++
                                terms.add(expression.substring(termStart,i));
-                               //termStart = i+1; //PK70031 commented out...moved below
+                               termStart = i; //PI82426: If we added this term, then update termStart because otherwise we will add this term twice. Means that we already processed whatever was in subExp
                                if (constantString)
                                    numberConstantStrings++;
                            }
