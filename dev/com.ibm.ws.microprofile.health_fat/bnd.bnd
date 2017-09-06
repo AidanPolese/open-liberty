@@ -35,6 +35,8 @@ test.project: true
 	com.ibm.ws.org.eclipse.equinox.region;version=latest, \
 	com.ibm.ws.runtime.update;version=latest, \
 	com.ibm.ws.kernel.feature.core;version=latest, \
-	com.ibm.ws.kernel.feature;version=latest
+	com.ibm.ws.kernel.feature;version=latest, \
+	com.ibm.websphere.javaee.cdi.1.2;version=latest
+	
 	
 
