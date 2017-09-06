@@ -222,7 +222,7 @@ public class HashtableLoginModule extends ServerCommonLoginModule implements Log
                                                                                TraceConstants.MESSAGE_BUNDLE,
                                                                                "JAAS_AUTHENTICATION_FAILED_BADUSERPWD",
                                                                                new Object[] { userId },
-                                                                               "CWWKS1100I: Authentication failed for the userid {0}. A bad userid and/or password was specified."));
+                                                                               "CWWKS1100A: Authentication failed for the userid {0}. A bad userid and/or password was specified."));
             }
         } catch (AuthenticationException e) {
             // FFDC is ignored for bad user/pwd.
