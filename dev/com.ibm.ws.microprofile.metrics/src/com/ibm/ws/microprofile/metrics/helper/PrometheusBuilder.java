@@ -36,8 +36,8 @@ public class PrometheusBuilder {
             gaugeVal = gaugeValNumber.doubleValue() * conversionFactor;
             gaugeValNumber = gaugeVal;
         }
-        getPromTypeLine(builder, name, "gauge");
-        getPromHelpLine(builder, name, description);
+        getPromTypeLine(builder, name, "gauge", appendUnit);
+        getPromHelpLine(builder, name, description, appendUnit);
         getPromValueLine(builder, name, gaugeValNumber, tags, appendUnit);
     }
 
@@ -123,16 +123,16 @@ public class PrometheusBuilder {
         }
 
         String lineName = name + "_mean";
-        getPromTypeLine(builder, lineName, "gauge");
+        getPromTypeLine(builder, lineName, "gauge", appendUnit);
         getPromValueLine(builder, lineName, meanVal, tags, appendUnit);
         lineName = name + "_max";
-        getPromTypeLine(builder, lineName, "gauge");
+        getPromTypeLine(builder, lineName, "gauge", appendUnit);
         getPromValueLine(builder, lineName, maxVal, tags, appendUnit);
         lineName = name + "_min";
-        getPromTypeLine(builder, lineName, "gauge");
+        getPromTypeLine(builder, lineName, "gauge", appendUnit);
         getPromValueLine(builder, lineName, minVal, tags, appendUnit);
         lineName = name + "_stddev";
-        getPromTypeLine(builder, lineName, "gauge");
+        getPromTypeLine(builder, lineName, "gauge", appendUnit);
         getPromValueLine(builder, lineName, stdDevVal, tags, appendUnit);
 
         getPromTypeLine(builder, name, "summary");
@@ -193,8 +193,11 @@ public class PrometheusBuilder {
     }
 
     private static void getPromValueLine(StringBuilder builder, String name, Number value, List<Tag> tags, String appendUnit) {
+
         String metricName = getPrometheusMetricName(name);
+
         builder.append(metricName);
+
         if (tags != null) {
             for (Tag tag : tags) {
                 builder.append('{').append(tag.getKey()).append("=\"").append(tag.getValue()).append("\"}");
@@ -216,6 +219,7 @@ public class PrometheusBuilder {
         String metricName = getPrometheusMetricName(name);
         if (description != null) {
             builder.append("# HELP ").append(metricName);
+
             if (appendUnit != null) {
                 builder.append(appendUnit);
             }
@@ -238,11 +242,17 @@ public class PrometheusBuilder {
     }
 
     /*
-     * Create the Prometheus metric name by sanitizing some characters and then
-     * attaching the unit if it is not 'none'
+     * Create the Prometheus metric name by sanitizing some characters
      */
     private static String getPrometheusMetricName(String name) {
-        String out = name.replace('-', '_').replace('.', '_');
+
+        String out = name.replace('-', '_').replace('.', '_').replace(' ', '_');
+
+        // convert camelCase to snake_case
+        out = out.replaceAll("(.)(\\p{Upper})", "$1_$2").toLowerCase();
+
+        out = out.replace("__", "_");
+        out = out.replace(":_", ":");
 
         return out;
     }

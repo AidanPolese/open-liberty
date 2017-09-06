@@ -70,6 +70,7 @@ public class MetricsHandler implements RESTHandler {
         Locale locale = null;
         try {
             locale = request.getLocale();
+            setInitialContentType(request, response);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Tr.formatMessage(tc, locale, "internal.error.CWMMC0007E", e));
         }
@@ -97,7 +98,8 @@ public class MetricsHandler implements RESTHandler {
                 outputWriter.write();
             }
         } catch (EmptyRegistryException e) {
-            response.sendError(HttpServletResponse.SC_NO_CONTENT, Tr.formatMessage(tc, locale, "emptyRegistry.error.CWMMC0005E", e));
+            Tr.event(tc, "emptyRegistry.error.CWMMC0005E");
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         } catch (NoSuchRegistryException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, Tr.formatMessage(tc, locale, "registryNotFound.error.CWMMC0004E", e));
         } catch (NoSuchMetricException e) {
@@ -141,6 +143,22 @@ public class MetricsHandler implements RESTHandler {
             }
         } else {
             throw new HTTPMethodNotAllowedException();
+        }
+    }
+
+    private void setInitialContentType(RESTRequest request, RESTResponse response) {
+
+        String accept = request.getHeader(Constants.ACCEPT_HEADER);
+        if (accept == null) {
+            accept = Constants.ACCEPT_HEADER_TEXT;
+        }
+        Pattern p = Pattern.compile(accept.replace("*", ".*"));
+        if (p.matcher(Constants.ACCEPT_HEADER_TEXT).matches()) {
+            response.setContentType(Constants.TEXTCONTENTTYPE);
+        } else if (p.matcher(Constants.ACCEPT_HEADER_JSON).matches()) {
+            response.setContentType(Constants.JSONCONTENTTYPE);
+        } else {
+            response.setContentType(Constants.TEXTCONTENTTYPE);
         }
     }
 
