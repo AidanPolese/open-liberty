@@ -66,6 +66,8 @@
 
 #-----------------------------------------------------------------------------------------------------------------------------
 # Messages used by Health Impl -  range is 0000-4999, plus 9999 for the emergency message
+# The range 0000-0049 has been reserved for messages issued above the HealthCheckExecutor within the call stack
+# The range 0050-0099 has been reserved for messages issued at or below the HealthCheckExecutor within the call stack
 #-----------------------------------------------------------------------------------------------------------------------------
 
 
@@ -77,3 +79,8 @@
 temporary.CWMH9999E=CWMH9999E: The following Health API error has occurred: {0}
 temporary.CWMH9999E.explanation=A Health API error has occurred that prevents normal operation.
 temporary.CWMH9999E.useraction=Review the FFDC logs and exception text to identify the problem.
+
+# The HealthCheck bean call method had an exception
+healthcheck.bean.call.exception.CWMH0050E=CWMH0050E: HealthCheck {0} in application {1} in module {2} threw exception {3} with message {4}.
+healthcheck.bean.call.exception.CWMH0050E.explanation=The call method used has produced an exception.
+healthcheck.bean.call.exception.CWMH0050E.useraction=Review your call method within the HealthCheck bean to identify the exception thrown.
