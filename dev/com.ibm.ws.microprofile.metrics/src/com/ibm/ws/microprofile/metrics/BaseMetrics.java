@@ -81,9 +81,9 @@ public class BaseMetrics {
                                                                             + "if the amount of used memory does not exceed this maximum size.", MetricType.GAUGE, MetricUnit.BYTES));
 
         //JVM METRICS
-        registry.register("jvm.uptime", new BMCounter(BaseMetricConstants.RUNTIME_OBJECT_TYPE, "Uptime"),
+        registry.register("jvm.uptime", new BMGauge<Number>(BaseMetricConstants.RUNTIME_OBJECT_TYPE, "Uptime"),
                           new Metadata("jvm.uptime", "JVM Uptime", "Displays the start time of the Java virtual machine in milliseconds. "
-                                                                   + "This attribute displays the approximate time when the Java virtual machine started.", MetricType.COUNTER, MetricUnit.MILLISECONDS));
+                                                                   + "This attribute displays the approximate time when the Java virtual machine started.", MetricType.GAUGE, MetricUnit.MILLISECONDS));
 
         //THREAD JVM -
         registry.register("thread.count", new BMCounter(BaseMetricConstants.THREAD_OBJECT_TYPE, "ThreadCount"),
@@ -141,12 +141,12 @@ public class BaseMetrics {
 
             //gc.%s.time
             nameToRegister = "gc." + gcNameNoSpace + ".time";
-            registry.register(nameToRegister, new BMCounter(BaseMetricConstants.GC_OBJECT_TYPE_NAME + gcName, "CollectionTime"),
+            registry.register(nameToRegister, new BMGauge<Number>(BaseMetricConstants.GC_OBJECT_TYPE_NAME + gcName, "CollectionTime"),
                               new Metadata(nameToRegister, "Garbage Collection Time", "Displays the approximate accumulated collection elapsed "
                                                                                       + "time in milliseconds. This attribute displays -1 if the collection elapsed time is undefined "
                                                                                       + "for this collector. The Java virtual machine implementation may use a high resolution timer "
                                                                                       + "to measure the elapsed time. This attribute may display the same value even if the collection "
-                                                                                      + "count has been incremented if the collection elapsed time is very short.", MetricType.COUNTER, MetricUnit.MILLISECONDS));
+                                                                                      + "count has been incremented if the collection elapsed time is very short.", MetricType.GAUGE, MetricUnit.MILLISECONDS));
         }
 
     }
