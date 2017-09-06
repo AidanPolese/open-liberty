@@ -1,9 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.microprofile.faulttolerance_fat.tests;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ibm.ws.fat.util.LoggingTest;
@@ -48,10 +57,16 @@ public class CDIAsyncTest extends LoggingTest {
     }
 
     @Test
-    @Ignore
     public void testAsyncDoubleJump() throws Exception {
         WebBrowser browser = createWebBrowserForTestCase();
         getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/async?testMethod=testAsyncDoubleJump",
+                                         "SUCCESS");
+    }
+
+    @Test
+    public void testAsyncCallable() throws Exception {
+        WebBrowser browser = createWebBrowserForTestCase();
+        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/async?testMethod=testAsyncCallable",
                                          "SUCCESS");
     }
 
@@ -60,14 +75,14 @@ public class CDIAsyncTest extends LoggingTest {
     protected SharedServer getSharedServer() {
         return SHARED_SERVER;
     }
-	
-	@BeforeClass
-	public static void setUp() throws Exception {
-		if (!SHARED_SERVER.getLibertyServer().isStarted()) {
-			SHARED_SERVER.getLibertyServer().startServer();
-		}
-		
-	}
+
+    @BeforeClass
+    public static void setUp() throws Exception {
+        if (!SHARED_SERVER.getLibertyServer().isStarted()) {
+            SHARED_SERVER.getLibertyServer().startServer();
+        }
+
+    }
 
     @AfterClass
     public static void tearDown() throws Exception {

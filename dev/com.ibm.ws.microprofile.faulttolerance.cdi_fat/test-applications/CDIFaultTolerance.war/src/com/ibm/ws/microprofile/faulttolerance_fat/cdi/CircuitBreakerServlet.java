@@ -1,16 +1,15 @@
 package com.ibm.ws.microprofile.faulttolerance_fat.cdi;
 
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2014
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 import java.io.IOException;
 
@@ -106,4 +105,26 @@ public class CircuitBreakerServlet extends FATServlet {
             throw new AssertionError("Bad Result: " + res);
         }
     }
+
+    /**
+     * This test should only pass if MP_Fault_Tolerance_NonFallback_Enabled is set to false
+     */
+    public void testCBDisabled(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // FaultTolerance object with circuit breaker, should fail 3 times
+        for (int i = 0; i < 3; i++) {
+            try {
+                bean.serviceB();
+                throw new AssertionError("ConnectException not caught");
+            } catch (ConnectException e) {
+                if (!e.getMessage().equals("ConnectException: serviceB exception: " + (i + 1))) {
+                    throw new AssertionError("ConnectException bad message: " + e.getMessage());
+                }
+            }
+        }
+
+        // If circuit breaker is enabled, the next method should throw a CircuitBreakerOpenException
+        // If circuit breaker is disabled, it should succeed.
+        bean.serviceB();
+    }
+
 }

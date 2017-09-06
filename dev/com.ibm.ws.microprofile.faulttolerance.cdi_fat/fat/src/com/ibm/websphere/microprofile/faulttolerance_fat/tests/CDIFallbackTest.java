@@ -1,14 +1,23 @@
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.websphere.microprofile.faulttolerance_fat.tests;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.ibm.ws.fat.util.LoggingTest;
 import com.ibm.ws.fat.util.SharedServer;
 import com.ibm.ws.fat.util.browser.WebBrowser;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 
 import componenttest.custom.junit.runner.Mode;
 import componenttest.custom.junit.runner.Mode.TestMode;
@@ -22,8 +31,13 @@ public class CDIFallbackTest extends LoggingTest {
     @Test
     public void testFallback() throws Exception {
         WebBrowser browser = createWebBrowserForTestCase();
-        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/fallback?testMethod=testFallback",
-                                         "SUCCESS");
+        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/fallback?testMethod=testFallback", "SUCCESS");
+    }
+
+    @Test
+    public void testFallbackWithoutRetry() throws Exception {
+        WebBrowser browser = createWebBrowserForTestCase();
+        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/fallback?testMethod=testFallbackWithoutRetry", "SUCCESS");
     }
 
     /** {@inheritDoc} */
@@ -31,14 +45,14 @@ public class CDIFallbackTest extends LoggingTest {
     protected SharedServer getSharedServer() {
         return SHARED_SERVER;
     }
-	
-			@BeforeClass
-	public static void setUp() throws Exception {
-		if (!SHARED_SERVER.getLibertyServer().isStarted()) {
-			SHARED_SERVER.getLibertyServer().startServer();
-		}
-		
-	}
+
+    @BeforeClass
+    public static void setUp() throws Exception {
+        if (!SHARED_SERVER.getLibertyServer().isStarted()) {
+            SHARED_SERVER.getLibertyServer().startServer();
+        }
+
+    }
 
     @AfterClass
     public static void tearDown() throws Exception {

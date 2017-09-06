@@ -13,6 +13,7 @@ package com.ibm.ws.microprofile.faulttolerance.test.util;
 import java.time.Duration;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 
 /**
@@ -21,13 +22,15 @@ import java.util.concurrent.Future;
 public class AsyncTestFunction implements Callable<Future<String>> {
 
     private final TestFunction function;
+    private CountDownLatch latch;
 
     public AsyncTestFunction(Duration callLength, int exception, String context) {
         this.function = new TestFunction(callLength, exception, context);
     }
 
-    public AsyncTestFunction(int exception, String context) {
+    public AsyncTestFunction(int exception, String context, CountDownLatch latch) {
         this.function = new TestFunction(exception, context);
+        this.latch = latch;
     }
 
     public AsyncTestFunction(Duration callLength, String context) {
@@ -37,7 +40,17 @@ public class AsyncTestFunction implements Callable<Future<String>> {
     /** {@inheritDoc} */
     @Override
     public Future<String> call() throws Exception {
+        if (latch != null) {
+            latch.countDown();
+        }
         return CompletableFuture.completedFuture(function.call());
+    }
+
+    /**
+     * @return
+     */
+    public int getExecutions() {
+        return function.getExecutions();
     }
 
 }

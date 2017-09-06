@@ -1,15 +1,21 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * WLP Copyright IBM Corp. 2014
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance_fat.cdi;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -26,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans.AsyncBean;
 import com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans.AsyncBean2;
 import com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans.AsyncBean3;
+import com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans.AsyncCallableBean;
 import com.ibm.ws.microprofile.faulttolerance_fat.util.Connection;
 
 import componenttest.app.FATServlet;
@@ -58,6 +65,9 @@ public class AsyncServlet extends FATServlet {
 
     @Inject
     AsyncBean2 bean2;
+
+    @Inject
+    AsyncCallableBean callableBean;
 
     public void testAsync(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException, InterruptedException, ExecutionException, TimeoutException {
@@ -232,4 +242,33 @@ public class AsyncServlet extends FATServlet {
             throw new AssertionError("Bad data: " + data);
         }
     }
+
+    public void testAsyncCallable(HttpServletRequest request, HttpServletResponse response) throws InterruptedException, ExecutionException, Exception {
+        // Async methods with a generic return type (e.g. Callable.call()) used to cause problems
+        long start = System.currentTimeMillis();
+        Future<String> future = callableBean.call();
+        long end = System.currentTimeMillis();
+        long duration = end - start;
+        assertThat("Call duration", duration, lessThan(FUTURE_THRESHOLD));
+
+        Thread.sleep(EXECUTION_THRESHOLD);
+        assertThat("Future is done after waiting", future.isDone(), is(true));
+        assertThat("Call result", future.get(), is("Done"));
+    }
+
+    /**
+     * This test should only pass if MP_Fault_Tolerance_NonFallback_Enabled is set to false
+     */
+    public void testAsyncDisabled(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long start = System.currentTimeMillis();
+        Future<Connection> future = bean.connectA();
+        long end = System.currentTimeMillis();
+        long duration = end - start;
+
+        // Ensure that this method was executed synchronously
+        assertThat("Call duration", duration, greaterThan(WORK_TIME));
+        assertThat("Call result", future.get(), is(notNullValue()));
+        assertThat("Call result", future.get().getData(), equalTo(AsyncBean.CONNECT_A_DATA));
+    }
+
 }
