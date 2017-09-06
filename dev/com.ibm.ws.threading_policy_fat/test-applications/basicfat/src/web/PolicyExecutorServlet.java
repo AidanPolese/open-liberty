@@ -306,7 +306,7 @@ public class PolicyExecutorServlet extends FATServlet {
     // Verify that it reports successful termination after (but not before) shutdownNow is requested
     // and that the running task is canceled and interrupted, the queued task is canceled, and the task awaiting a queue positions is rejected.
     // Verify that the list of queued tasks that were cancelled by shutdownNow includes the single queued task,
-    // and verify that the caller can choose to run it after the executor has shut down and teriminated.
+    // and verify that the caller can choose to run it after the executor has shut down and terminated.
     @Test
     public void testAwaitTerminationWhileActiveThenShutdownThenShutdownNow() throws Exception {
         ExecutorService executor = provider.create("testAwaitTerminationWhileActiveThenShutdownThenShutdownNow")
@@ -669,7 +669,7 @@ public class PolicyExecutorServlet extends FATServlet {
     }
 
     // Cancel the same queued tasks from multiple threads at the same time. Each task should only successfully cancel once,
-    // exactly one task waiting for enqueue should be allowed to enqueue for each successful cancel.
+    // and exactly one task waiting for enqueue should be allowed to enqueue for each successful cancel.
     @Test
     public void testConcurrentCancelQueuedTasks() throws Exception {
         ExecutorService executor = provider.create("testConcurrentCancelQueuedTasks")
