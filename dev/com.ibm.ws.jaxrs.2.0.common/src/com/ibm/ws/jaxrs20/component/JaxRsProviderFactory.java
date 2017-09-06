@@ -36,12 +36,6 @@ public class JaxRsProviderFactory implements JaxRsProviderFactoryService {
 
     private static JaxRsProviderFactory serviceInstance = null;
 
-//    public static void register(JaxRsProviderRegister pr) {
-//        if (serviceInstance != null && pr != null) {
-//            serviceInstance.addProviderRegister(pr);
-//        }
-//    }
-
     @Override
     public void bindProviders(boolean clientSide, List<Object> providers) {
         if (serviceInstance != null && providers != null) {
@@ -57,8 +51,6 @@ public class JaxRsProviderFactory implements JaxRsProviderFactoryService {
     protected void activate(ComponentContext cc) {
         _featureProvisioner.activate(cc);
         serviceInstance = this;
-        //register(new SecurityAnnoProviderRegister());
-        //register(new CustomExceptionMapperRegister());
     }
 
     @Deactivate

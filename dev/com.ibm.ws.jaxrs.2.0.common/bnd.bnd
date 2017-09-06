@@ -152,7 +152,9 @@ Include-Resource: \
   org/codehaus/jackson=bin/org/codehaus/jackson
 
 -dsannotations: com.ibm.ws.jaxrs20.component.*, \
- 	com.ibm.ws.jaxrs20.clientconfig.JAXRSClientConfigImpl
+ 	com.ibm.ws.jaxrs20.clientconfig.JAXRSClientConfigImpl, \
+ 	com.ibm.ws.jaxrs20.providers.customexceptionmapper.CustomExceptionMapperRegister, \
+ 	com.ibm.ws.jaxrs20.providers.security.SecurityAnnoProviderRegister
 
 -dependson: com.ibm.ws.org.codehaus.jackson
 

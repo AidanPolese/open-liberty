@@ -20,6 +20,7 @@ public class JaxRsConstants {
     public static final String PROVIDERfACTORY_REFERENCE_NAME = "jaxRsProviderFactoryService";
     public static final String EXECUTOR_REFERENCE_NAME = "executorService";
     public static final String SCHEDULED_EXECUTOR_REFERENCE_NAME = "scheduledExecutorService";
+    public static final String JAXRS_PROVIDER_REGISTER_REFERENCE_NAME = "jaxrsProviderRegister";
 
 //     */
     public static final String WEB_ENDPOINT_PUBLISHER_TYPE = "WEB";
