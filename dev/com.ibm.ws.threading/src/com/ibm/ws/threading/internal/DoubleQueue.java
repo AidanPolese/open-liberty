@@ -182,21 +182,15 @@ public class DoubleQueue<T> extends AbstractQueue<T> implements BlockingQueue<T>
         boolean modified = false;
         // Using remove instead of iterator.remove might seem inefficient, but we cannot reliably use iterator.remove
         // because it does not indicate whether or not it actually removed anything.
-        for (Iterator<T> it = q1.iterator(); it.hasNext();) {
-            T t = it.next();
-            if (items.contains(t))
-                while (q1.remove(t)) {
-                    size.reducePermits(1);
-                    modified |= true;
-                }
-        }
-        for (Iterator<T> it = q2.iterator(); it.hasNext();) {
-            T t = it.next();
-            if (items.contains(t))
-                while (q2.remove(t)) {
-                    size.reducePermits(1);
-                    modified |= true;
-                }
+        for (Object item : items) {
+            while (q1.remove(item)) {
+                size.reducePermits(1);
+                modified = true;
+            }
+            while (q2.remove(item)) {
+                size.reducePermits(1);
+                modified = true;
+            }
         }
         return modified;
     }
@@ -211,7 +205,7 @@ public class DoubleQueue<T> extends AbstractQueue<T> implements BlockingQueue<T>
             if (!items.contains(t))
                 while (q1.remove(t)) {
                     size.reducePermits(1);
-                    modified |= true;
+                    modified = true;
                 }
         }
         for (Iterator<T> it = q2.iterator(); it.hasNext();) {
@@ -219,7 +213,7 @@ public class DoubleQueue<T> extends AbstractQueue<T> implements BlockingQueue<T>
             if (!items.contains(t))
                 while (q2.remove(t)) {
                     size.reducePermits(1);
-                    modified |= true;
+                    modified = true;
                 }
         }
         return modified;
