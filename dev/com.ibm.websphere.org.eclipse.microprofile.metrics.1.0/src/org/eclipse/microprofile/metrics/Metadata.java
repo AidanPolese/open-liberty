@@ -1,19 +1,25 @@
-/*
- * Copyright 2017 Red Hat, Inc. and/or its affiliates
- * and other contributors as indicated by the @author tags.
+/**********************************************************************
+ * Copyright (c) 2017 Contributors to the Eclipse Foundation
+ *               2017 Red Hat, Inc. and/or its affiliates
+ *               and other contributors as indicated by the @author tags.
+ *
+ * See the NOTICES file(s) distributed with this work for additional
+ * information regarding copyright ownership.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ **********************************************************************/
 package org.eclipse.microprofile.metrics;
 
 import java.util.HashMap;
@@ -65,7 +71,7 @@ public class Metadata {
      * An optional field which holds the Unit of the metric object.
      * </p>
      */
-    private MetricUnit unit = MetricUnit.NONE;
+    private String unit = MetricUnit.NONE;
     
     /**
      * Tags of the metric. Augmented by global tags.
@@ -105,8 +111,10 @@ public class Metadata {
         // Assign default units
         switch (type) {
         case TIMER:
+            this.unit = MetricUnit.NANOSECONDS;
+            break;
         case METERED:
-            this.unit = MetricUnit.NANOSECOND;
+            this.unit = MetricUnit.PER_SECOND;
             break;
         case HISTOGRAM:
         case GAUGE:
@@ -124,7 +132,7 @@ public class Metadata {
      * @param type The type of the metric
      * @param unit The units of the metric
      */
-    public Metadata(String name, MetricType type, MetricUnit unit) {
+    public Metadata(String name, MetricType type, String unit) {
         this();
         this.name = name;
         this.type = type;
@@ -140,7 +148,7 @@ public class Metadata {
      * @param type The type of the metric
      * @param unit The units of the metric
      */
-    public Metadata(String name, String displayName, String description, MetricType type, MetricUnit unit) {
+    public Metadata(String name, String displayName, String description, MetricType type, String unit) {
         this();
         this.name = name;
         this.displayName = displayName;
@@ -159,7 +167,7 @@ public class Metadata {
      * @param unit The units of the metric
      * @param tags The tags of the metric
      */
-    public Metadata(String name, String displayName, String description, MetricType type, MetricUnit unit, String tags) {
+    public Metadata(String name, String displayName, String description, MetricType type, String unit, String tags) {
         this();
         this.name = name;
         this.displayName = displayName;
@@ -229,18 +237,10 @@ public class Metadata {
     }
 
     public String getUnit() {
-        return unit.toString();
-    }
-
-    public MetricUnit getUnitRaw() {
         return unit;
     }
 
     public void setUnit(String unit) {
-        this.unit = MetricUnit.from(unit);
-    }
-
-    public void setUnit(MetricUnit unit) {
         this.unit = unit;
     }
 
