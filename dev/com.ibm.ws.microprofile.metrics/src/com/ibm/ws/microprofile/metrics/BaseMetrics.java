@@ -86,11 +86,11 @@ public class BaseMetrics {
                                                                    + "This attribute displays the approximate time when the Java virtual machine started.", MetricType.COUNTER, MetricUnit.MILLISECONDS));
 
         //THREAD JVM -
-        registry.register("thread.count", new BMGauge<Number>(BaseMetricConstants.THREAD_OBJECT_TYPE, "ThreadCount"),
+        registry.register("thread.count", new BMCounter(BaseMetricConstants.THREAD_OBJECT_TYPE, "ThreadCount"),
                           new Metadata("thread.count", "Thread Count", "Displays the current number of live threads including both daemon "
                                                                        + "and non-daemon threads", MetricType.COUNTER, MetricUnit.NONE));
 
-        registry.register("thread.daemon.count", new BMGauge<Number>(BaseMetricConstants.THREAD_OBJECT_TYPE, "DaemonThreadCount"),
+        registry.register("thread.daemon.count", new BMCounter(BaseMetricConstants.THREAD_OBJECT_TYPE, "DaemonThreadCount"),
                           new Metadata("thread.daemon.count", "Daemon Thread Count", "Displays the current number of live daemon threads.", MetricType.COUNTER, MetricUnit.NONE));
 
         registry.register("thread.max.count", new BMCounter(BaseMetricConstants.THREAD_OBJECT_TYPE, "PeakThreadCount"),
@@ -98,7 +98,7 @@ public class BaseMetrics {
                                                                                 + " machine started or peak was reset. This includes daemon and non-daemon threads.", MetricType.COUNTER, MetricUnit.NONE));
 
         //CLASSLOADING METRICS
-        registry.register("classloader.currentLoadedClass.count", new BMGauge<Number>(BaseMetricConstants.CLASSLOADING_OBJECT_TYPE, "LoadedClassCount"),
+        registry.register("classloader.currentLoadedClass.count", new BMCounter(BaseMetricConstants.CLASSLOADING_OBJECT_TYPE, "LoadedClassCount"),
                           new Metadata("classloader.currentLoadedClass.count", "Current Loaded Class Count", "Displays the number of classes that are currently loaded"
                                                                                                              + " in the Java virtual machine.", MetricType.COUNTER, MetricUnit.NONE));
 
