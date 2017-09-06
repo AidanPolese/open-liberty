@@ -9,4 +9,4 @@
  * IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.microprofile.jwt;
+package org.eclipse.microprofile.auth;
