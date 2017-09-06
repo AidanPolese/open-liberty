@@ -52,9 +52,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 import com.ibm.ejs.j2c.J2CConstants;
+import com.ibm.websphere.management.j2ee.ResourceAdapterModuleMBean;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.websphere.management.j2ee.ResourceAdapterModuleMBean;
 import com.ibm.ws.ffdc.FFDCFilter;
 
 //TWAS Source: /runtime.fw/src/com/ibm/ws/runtime/component/collaborator/J2EEResourceMBean.java
@@ -62,7 +62,7 @@ import com.ibm.ws.ffdc.FFDCFilter;
  * An MBean for a JCA ResourceAdapterModule (JSR-77 ResourceAdapterModule)
  * ResourceAdapterModuleMBeanImpl is an MBean for Resource Adapter Module. It implements the ResourceAdapterModuleMBean
  * interface. This Mbean provide getters of information only. No information setter is provided.
- * 
+ *
  */
 public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements ResourceAdapterModuleMBean {
 
@@ -88,7 +88,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
     /**
      * ResourceAdapterModuleMBeanImpl is the construct responsible of populating the variables used by the getters
      * with information on the ResourceAdapterModule which is given by {@code JCAMBeanRuntime}.
-     * 
+     *
      * @param idValue String representing the value of the id of the DataSource assigned by the user.
      * @param nameValue String representing the value of the XPath which as the same as config.displayId.
      * @param serverValue String representing the parent MBean J2EEServer's value of its "name" key.
@@ -104,7 +104,10 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
             Tr.entry(tc, methodName, this);
 
         try {
-            this.raDDAddressFull = fullPathToRAR.toURI();
+            if (fullPathToRAR != null)
+                this.raDDAddressFull = fullPathToRAR.toURI();
+            else if (trace && tc.isDebugEnabled())
+                Tr.debug(tc, "Unable to get the URI from the URL: " + fullPathToRAR);
         } catch (URISyntaxException e) {
             if (trace && tc.isDebugEnabled())
                 Tr.debug(tc, "Unable to get the URI from the URL: " + fullPathToRAR, e);
@@ -133,7 +136,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
         //          id=xxx,
         //          name=Xpathid,
         //          J2EEServer=xxx,
-        //          J2EEApplication=xxx 
+        //          J2EEApplication=xxx
 
         //Building {@code ObjectName} with the String we concatenated.
         try {
@@ -193,7 +196,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
     /////////////////////////////////// Getters Methods ///////////////////////////////////
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.websphere.management.j2ee.J2EEManagedObjectMBean#getobjectName()
      */
     @Override
@@ -203,7 +206,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.websphere.management.j2ee.J2EEManagedObjectMBean#isstateManageable()
      */
     @Override
@@ -213,7 +216,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.websphere.management.j2ee.J2EEManagedObjectMBean#isstatisticsProvider()
      */
     @Override
@@ -223,7 +226,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.websphere.management.j2ee.J2EEManagedObjectMBean#iseventProvider()
      */
     @Override
@@ -233,7 +236,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.websphere.jca.mbean.ResourceAdapterModuleMBean#getdeploymentDescriptor()
      */
     @Override
@@ -265,7 +268,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.websphere.jca.mbean.ResourceAdapterModuleMBean#getserver()
      */
     @Override
@@ -275,7 +278,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.websphere.jca.mbean.ResourceAdapterModuleMBean#getjavaVMs()
      */
     @Override
@@ -320,7 +323,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.websphere.jca.mbean.ResourceAdapterModuleMBean#getresourceAdapters()
      */
     @Override
@@ -346,7 +349,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
     ///////////////////////////// Protected Getters  & Setters Methods ////////////////////////////
     /**
      * getName() obtain the value of the name key in the {@code ObjectName}
-     * 
+     *
      * @return The String value of the name in this MBean's {@code ObjectName}
      */
     protected String getName() {
@@ -355,7 +358,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
 
     /**
      * setResourceAdapterChild add a child of type ResourceAdapterMBeanImpl to this MBean.
-     * 
+     *
      * @param key the String value which will be used as the key for the ResourceAdapterMBeanImpl item
      * @param ra the ResourceAdapterMBeanImpl value to be associated with the specified key
      * @return The previous value associated with key, or null if there was no mapping for key.
@@ -367,7 +370,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
 
     /**
      * getResourceAdapterChild get the child associated with the specified key if it exist.
-     * 
+     *
      * @param key the String value which is used as the key for the ResourceAdapterMBeanImpl item
      * @return The value to which the specified key is mapped, or null if this map contains no mapping for the key.
      */
@@ -378,7 +381,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
     /**
      * removeResourceAdapterChild get the child associated with the specified key if it exist, and then removes it from
      * the children list.
-     * 
+     *
      * @param key the String value which is used as the key for the ResourceAdapterMBeanImpl item
      * @return the previous value associated with key, or null if there was no mapping for key.
      *         (A null return can also indicate that the map previously associated null with key.)
@@ -389,7 +392,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
 
     /**
      * getResourceAdapterChildrenCount() get the number of children of type ResourceAdapterMBeanImpl for this MBean.
-     * 
+     *
      * @return The number of key-value mappings in this map.
      */
     protected int getResourceAdapterChildrenCount() {
@@ -401,7 +404,7 @@ public class ResourceAdapterModuleMBeanImpl extends StandardMBean implements Res
      * parseDDfile will try to read the ra.xml and parse it into a String. If it fails, it will return null
      * or whatever it managed to read from the ra.xml. If the reading succeed partially, the returned value
      * will be tailed with a warning massage explaining what happened.
-     * 
+     *
      * @param raDDAddress String representing the full path to the directory of the RAR file.
      * @return The content of the ra.xml file as a String
      */
