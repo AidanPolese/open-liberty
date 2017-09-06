@@ -8,4 +8,11 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
- 
+/**
+ * @version 1.0
+ */
+@org.osgi.annotation.versioning.Version("1.0")
+@TraceOptions(traceGroup = "HEALTH", messageBundle = "com.ibm.ws.microprofile.health.resources.Health")
+package com.ibm.ws.microprofile.health.spi.impl;
+
+import com.ibm.websphere.ras.annotation.TraceOptions;
