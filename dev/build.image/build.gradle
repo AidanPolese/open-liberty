@@ -200,12 +200,8 @@ task publishPublicArtifactsOnDhe {
                     get from: "${dir}/${packageName}/info.json", into: "${buildDir}"
                 }
             }
-        } catch (org.hidetake.groovy.ssh.operation.SftpException e) {
-            if (!e.toString().contains("SSH_FX_NO_SUCH_FILE")) {
-                // It is okay if the file doesn't exist because we will create a new file,
-                // but fail for any other type of exception.
-                throw e
-            }
+        } catch (org.hidetake.groovy.ssh.session.BadExitStatusException e) {
+            // It is okay if the file doesn't exist because we will create a new file.
         }
 
         ant.touch(file: "${buildDir}/info.json")
