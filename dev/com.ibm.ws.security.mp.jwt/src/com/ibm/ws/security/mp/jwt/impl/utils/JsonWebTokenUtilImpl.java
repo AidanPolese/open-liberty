@@ -71,16 +71,16 @@ public class JsonWebTokenUtilImpl implements JsonWebTokenUtil {
         return null;
     }
 
-    private static void multipleJsonWebTokenPrincipalsError(Set<JsonWebToken> principals) {
+    private void multipleJsonWebTokenPrincipalsError(Set<JsonWebToken> principals) {
         String principalNames = null;
         for (JsonWebToken principal : principals) {
-            if (principalNames == null)
+            if (principalNames == null) {
                 principalNames = principal.getName();
-            else
+            } else {
                 principalNames = principalNames + ", " + principal.getName();
+            }
         }
-        // throw new IllegalStateException(Tr.formatMessage(tc,
-        // "SEC_TOO_MANY_PRINCIPALS", principalNames));
+        Tr.warning(tc, "TOO_MANY_JWT_PRINCIPALS", new Object[] { principalNames });
     }
 
     @Activate

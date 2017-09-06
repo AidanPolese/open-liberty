@@ -134,40 +134,50 @@ public class MicroProfileJwtTaiRequest {
     /**
      * @return
      */
-    public MicroProfileJwtConfig getTheOnlyConfig() throws MpJwtProcessingException {
+    public MicroProfileJwtConfig getOnlyMatchingConfig() throws MpJwtProcessingException {
+        throwExceptionIfPresent();
+        if (microProfileJwtConfig == null) {
+            microProfileJwtConfig = findAppropriateGenericConfig();
+        }
+        return microProfileJwtConfig;
+    }
+
+    void throwExceptionIfPresent() throws MpJwtProcessingException {
         if (taiException != null) {
             MpJwtProcessingException exception = this.taiException;
             this.taiException = null;
             throw exception;
         }
-        if (this.microProfileJwtConfig == null) {
-            //            if (this.filteredConfigs != null) {
-            //                if (this.filteredConfigs.size() == 1) {
-            //                    this.microProfileJwtConfig = this.filteredConfigs.get(0);
-            //                } else {
-            //                    // error handling -- multiple mpJwtConfig qualified and we do not know how to select
-            //                    String configIds = getConfigIds(filteredConfigs);
-            //                    throw new MpJwtProcessingException("SOCIAL_LOGIN_MANY_PROVIDERS", null, new Object[] { configIds });
-            //                }
-            //            } else
-            if (this.genericConfigs != null) {
-                if (this.genericConfigs.size() == 1) {
-                    this.microProfileJwtConfig = this.genericConfigs.get(0);
-                } else {
-                    // error handling -- multiple mpJwtConfig qualified and we do not know how to select
-                    String configIds = getConfigIds(genericConfigs);
-                    String msg = Tr.formatMessage(tc, "SOCIAL_LOGIN_MANY_PROVIDERS", new Object[] { configIds });
-                    Tr.error(tc, msg);
-                    throw new MpJwtProcessingException(msg);
-                }
+    }
+
+    MicroProfileJwtConfig findAppropriateGenericConfig() throws MpJwtProcessingException {
+        //            if (this.filteredConfigs != null) {
+        //                if (this.filteredConfigs.size() == 1) {
+        //                    this.microProfileJwtConfig = this.filteredConfigs.get(0);
+        //                } else {
+        //                    // error handling -- multiple mpJwtConfig qualified and we do not know how to select
+        //                    String configIds = getConfigIds(filteredConfigs);
+        //                    throw new MpJwtProcessingException("SOCIAL_LOGIN_MANY_PROVIDERS", null, new Object[] { configIds });
+        //                }
+        //            } else
+        if (this.genericConfigs != null) {
+            if (this.genericConfigs.size() == 1) {
+                this.microProfileJwtConfig = this.genericConfigs.get(0);
+            } else {
+                handleTooManyConfigurations();
             }
         }
         return this.microProfileJwtConfig;
     }
 
-    /**
-     * @return
-     */
+    void handleTooManyConfigurations() throws MpJwtProcessingException {
+        // error handling -- multiple mpJwtConfig qualified and we do not know how to select
+        String configIds = getConfigIds(genericConfigs);
+        String msg = Tr.formatMessage(tc, "TOO_MANY_MP_JWT_PROVIDERS", new Object[] { configIds });
+        Tr.error(tc, msg);
+        throw new MpJwtProcessingException(msg);
+    }
+
     String getConfigIds(List<MicroProfileJwtConfig> multiConfigs) {
         String result = "";
         if (multiConfigs == null) {
@@ -196,8 +206,7 @@ public class MicroProfileJwtTaiRequest {
      * @return
      */
     public boolean hasServices() {
-        return this.genericConfigs != null ||
-                this.microProfileJwtConfig != null;
+        return (this.genericConfigs != null || this.microProfileJwtConfig != null);
     }
 
     public void setTaiException(MpJwtProcessingException taiException) {

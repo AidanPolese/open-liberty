@@ -10,8 +10,6 @@
  *******************************************************************************/
 package com.ibm.ws.security.mp.jwt.tai;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -20,8 +18,6 @@ import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.jose4j.lang.JoseException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
@@ -42,21 +38,17 @@ import com.ibm.websphere.security.WebTrustAssociationFailedException;
 import com.ibm.websphere.security.jwt.JwtToken;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.security.SecurityService;
-import com.ibm.ws.security.common.crypto.HashUtils;
 import com.ibm.ws.security.common.jwk.utils.JsonUtils;
 import com.ibm.ws.security.mp.jwt.MicroProfileJwtConfig;
 import com.ibm.ws.security.mp.jwt.TraceConstants;
 import com.ibm.ws.security.mp.jwt.error.ErrorHandlerImpl;
 import com.ibm.ws.security.mp.jwt.error.MpJwtProcessingException;
-import com.ibm.ws.security.mp.jwt.impl.utils.Cache;
-import com.ibm.ws.security.mp.jwt.impl.utils.JwtPrincipalMapping;
 import com.ibm.ws.security.mp.jwt.impl.utils.MicroProfileJwtTaiRequest;
 import com.ibm.ws.webcontainer.security.ReferrerURLCookieHandler;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.kernel.service.utils.ConcurrentServiceReferenceMap;
 import com.ibm.wsspi.security.tai.TAIResult;
 import com.ibm.wsspi.security.tai.TrustAssociationInterceptor;
-import com.ibm.wsspi.security.token.AttributeNameConstants;
 
 @Component(service = { TrustAssociationInterceptor.class }, immediate = true, configurationPolicy = ConfigurationPolicy.IGNORE, property = { "service.vendor=IBM", "type=microProfileJwtTAI", "id=MPJwtTAI", "TAIName=MPJwtTAI", "invokeBeforeSSO:Boolean=true" })
 public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
@@ -80,13 +72,11 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
     static final ConcurrentServiceReferenceMap<String, MicroProfileJwtConfig> mpJwtConfigRef = new ConcurrentServiceReferenceMap<String, MicroProfileJwtConfig>(KEY_MP_JWT_CONFIG);
 
     TAIJwtUtils taiJwtUtils = new TAIJwtUtils();
-    private static Cache tokenCache;
 
     ReferrerURLCookieHandler referrerURLCookieHandler = null;
     TAIRequestHelper taiRequestHelper = new TAIRequestHelper();
 
     public MicroProfileJwtTAI() {
-        tokenCache = new Cache(50000, 600000L); // TODO: Determine if cache settings should be configurable.
     }
 
     @Reference(service = SecurityService.class, name = KEY_SECURITY_SERVICE, policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY)
@@ -181,30 +171,23 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
 
     @Override
     public boolean isTargetInterceptor(HttpServletRequest request) throws WebTrustAssociationException {
-
-        MicroProfileJwtTaiRequest mpJwtTaiRequest = taiRequestHelper.createSocialTaiRequestAndSetRequestAttribute(request);
+        MicroProfileJwtTaiRequest mpJwtTaiRequest = taiRequestHelper.createMicroProfileJwtTaiRequestAndSetRequestAttribute(request);
         return taiRequestHelper.requestShouldBeHandledByTAI(request, mpJwtTaiRequest);
-
     }
 
     @Override
     public TAIResult negotiateValidateandEstablishTrust(HttpServletRequest request, HttpServletResponse response) throws WebTrustAssociationFailedException {
-        if (tc.isDebugEnabled()) {
-            Tr.debug(tc, "negotiateValidateandEstablishTrust");
-        }
         TAIResult taiResult = TAIResult.create(HttpServletResponse.SC_FORBIDDEN);
 
         MicroProfileJwtTaiRequest mpJwtTaiRequest = (MicroProfileJwtTaiRequest) request.getAttribute(ATTRIBUTE_TAI_REQUEST);
-        taiResult = getAssociatedConfigAndHandleRequest(request, response, mpJwtTaiRequest, taiResult);
-
-        return taiResult;
+        return getAssociatedConfigAndHandleRequest(request, response, mpJwtTaiRequest, taiResult);
     }
 
     @FFDCIgnore({ MpJwtProcessingException.class })
     TAIResult getAssociatedConfigAndHandleRequest(HttpServletRequest request, HttpServletResponse response, MicroProfileJwtTaiRequest mpJwtTaiRequest, TAIResult defaultTaiResult) throws WebTrustAssociationFailedException {
         MicroProfileJwtConfig clientConfig = null;
         try {
-            clientConfig = mpJwtTaiRequest.getTheOnlyConfig();
+            clientConfig = mpJwtTaiRequest.getOnlyMatchingConfig();
         } catch (MpJwtProcessingException e) {
             // did not find unique mpJwt config to serve this request
             if (tc.isDebugEnabled()) {
@@ -222,7 +205,7 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
             }
             return sendToErrorPage(response, defaultTaiResult);
         }
-        return handleMicroProfileJwt(request, response, config);
+        return getAndValidateMicroProfileJwt(request, response, config);
     }
 
     /** {@inheritDoc} */
@@ -253,14 +236,14 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
 
     }
 
-    TAIResult handleMicroProfileJwt(HttpServletRequest request, HttpServletResponse response, MicroProfileJwtConfig mpJwtConfig) throws WebTrustAssociationFailedException {
+    TAIResult getAndValidateMicroProfileJwt(HttpServletRequest request, HttpServletResponse response, MicroProfileJwtConfig mpJwtConfig) throws WebTrustAssociationFailedException {
 
         String token = taiRequestHelper.getBearerToken(request, mpJwtConfig);
-        if (token != null) {
-            return this.handleMicroProfileJwtValidation(request, response, mpJwtConfig, token);
+        if (token == null) {
+            Tr.error(tc, "JWT_NOT_FOUND_IN_REQUEST");
+            return sendToErrorPage(response, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
         }
-        return sendToErrorPage(response, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
-
+        return handleMicroProfileJwtValidation(request, response, mpJwtConfig, token);
     }
 
     @FFDCIgnore({ MpJwtProcessingException.class })
@@ -272,10 +255,9 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
         if (token != null) {
             // Create JWT from access token / id token
             try {
-                jwtToken = taiJwtUtils.validateMpJwtToken(token, clientConfig.getUniqueId());
-
+                jwtToken = taiJwtUtils.createJwt(token, clientConfig.getUniqueId());
             } catch (MpJwtProcessingException e) {
-                //Tr.error(tc, "AUTH_CODE_FAILED_TO_CREATE_JWT", new Object[] { clientConfig.getUniqueId(), e.getLocalizedMessage() });
+                Tr.error(tc, "ERROR_CREATING_JWT_USING_TOKEN_IN_REQ", new Object[] { e.getLocalizedMessage() });
                 return sendToErrorPage(res, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
             }
             String payload = JsonUtils.getPayload(token);
@@ -283,108 +265,21 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
         }
 
         TAIResult authnResult = null;
-
         try {
             authnResult = createResult(res, clientConfig, jwtToken, decodedPayload);
         } catch (Exception e) {
-            Tr.error(tc, "AUTH_CODE_ERROR_CREATING_RESULT", new Object[] { clientConfig.getUniqueId(), e.getLocalizedMessage() });
+            Tr.error(tc, "ERROR_CREATING_RESULT", new Object[] { clientConfig.getUniqueId(), e.getLocalizedMessage() });
             return sendToErrorPage(res, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
         }
         return authnResult;
     }
 
     TAIResult createResult(HttpServletResponse res, MicroProfileJwtConfig clientConfig, @Sensitive JwtToken jwtToken, @Sensitive String decodedPayload) throws WebTrustAssociationFailedException, MpJwtProcessingException {
+        TAIMappingHelper mappingHelper = new TAIMappingHelper(decodedPayload, clientConfig);
+        mappingHelper.createJwtPrincipalAndPopulateCustomProperties(jwtToken);
 
-        String username = null;
-        JsonWebToken jwtPrincipal = null;
-        Hashtable<String, Object> customProperties = new Hashtable<String, Object>();
-
-        if (decodedPayload != null) {
-            JwtPrincipalMapping claimToPrincipalMapping = new JwtPrincipalMapping(decodedPayload, clientConfig.getUserNameAttribute(), clientConfig.getGroupNameAttribute(), false);
-            username = claimToPrincipalMapping.getMappedUser();
-            if (username == null) {
-                Tr.error(tc, "USERNAME_NOT_FOUND", new Object[0]);
-                return sendToErrorPage(res, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
-            }
-            String issuer = null;
-            try {
-                jwtPrincipal = taiJwtUtils.createJwtPrincipal(username, claimToPrincipalMapping.getMappedGroups(), jwtToken); //TODO
-                issuer = (String) JsonUtils.claimFromJsonObject(decodedPayload, "iss");
-            } catch (JoseException e) {
-                // TODO: we need a better message here
-                String msg = Tr.formatMessage(tc, "AUTH_CODE_FAILED_TO_CREATE_JWT", new Object[] { clientConfig.getUniqueId(), e.getMessage() });
-                Tr.error(tc, msg);
-                return sendToErrorPage(res, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
-            }
-
-            TAIResult result = populatePropertiesFromMapping(res, clientConfig, claimToPrincipalMapping, customProperties, issuer);
-            if (result != null) {
-                // Error message (if any) has already been logged
-                return result;
-            }
-
-        }
-
-        customProperties.put(AttributeNameConstants.WSCREDENTIAL_SECURITYNAME, username);
-        customProperties.put("com.ibm.ws.authentication.internal.json.web.token", jwtPrincipal); //TODO use AuthenticationConstants.INTERNAL_JSON_WEB_TOKEN
-
-        Subject subject = createSubjectFromProperties(clientConfig, customProperties, jwtToken, jwtPrincipal);
-        TAIResult authnResult = TAIResult.create(HttpServletResponse.SC_OK, username, subject);
-
-        return authnResult;
-    }
-
-    TAIResult populatePropertiesFromMapping(HttpServletResponse res, MicroProfileJwtConfig clientConfig, JwtPrincipalMapping claimToPrincipalMapping, Hashtable<String, Object> customProperties, String issuer) throws WebTrustAssociationFailedException {
-
-        String realm = issuer;
-        //        if (realm == null) {
-        //            // runtime default
-        //            realm = defaultRealm(clientConfig);
-        //        }
-        //        if (realm == null) {
-        //            Tr.error(tc, "REALM_NOT_FOUND", new Object[] {});
-        //            return sendToErrorPage(res, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
-        //        }
-        String uniqueUser = claimToPrincipalMapping.getMappedUser();
-        ;
-        ArrayList<String> groups = claimToPrincipalMapping.getMappedGroups();
-        ArrayList<String> groupswithrealm = new ArrayList<String>();
-        if (groups != null && !groups.isEmpty()) {
-            Iterator<String> it = groups.iterator();
-            while (it.hasNext()) {
-                String group = new StringBuffer("group:").append(realm).append("/").append(it.next()).toString();
-                groupswithrealm.add(group);
-            }
-        }
-        String uniqueID = new StringBuffer("user:").append(realm).append("/").append(uniqueUser).toString();
-        customProperties.put(AttributeNameConstants.WSCREDENTIAL_UNIQUEID, uniqueID);
-        if (realm != null && !realm.isEmpty()) {
-            customProperties.put(AttributeNameConstants.WSCREDENTIAL_REALM, realm);
-        }
-        if (!groupswithrealm.isEmpty()) {
-            customProperties.put(AttributeNameConstants.WSCREDENTIAL_GROUPS, groupswithrealm);
-        }
-        return null;
-    }
-
-    Subject createSubjectFromProperties(MicroProfileJwtConfig clientConfig, Hashtable<String, Object> customProperties, @Sensitive JwtToken jwt, JsonWebToken jwtPrincipal) throws MpJwtProcessingException {
-
-        Subject subject = new Subject();
-        //
-        //        if (jwt != null) {
-        //            subject.getPrivateCredentials().add(jwt);
-        //        }
-        subject.getPrivateCredentials().add(jwtPrincipal); //?
-        subject.getPrivateCredentials().add(customProperties);
-
-        return subject;
-    }
-
-    @Sensitive
-    private static String getKey(@Sensitive String mpJwt) {
-
-        String key = HashUtils.digest(mpJwt);
-        return key;
+        Subject subject = mappingHelper.createSubjectFromCustomProperties(jwtToken);
+        return TAIResult.create(HttpServletResponse.SC_OK, mappingHelper.getUsername(), subject);
     }
 
     TAIResult sendToErrorPage(HttpServletResponse response, TAIResult taiResult) {

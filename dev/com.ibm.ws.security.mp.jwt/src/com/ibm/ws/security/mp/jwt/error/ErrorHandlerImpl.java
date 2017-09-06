@@ -38,26 +38,20 @@ public class ErrorHandlerImpl implements ErrorHandler {
 
     @Override
     public TAIResult handleErrorResponse(HttpServletResponse response, TAIResult result) {
-
         handleErrorResponse(response, result.getStatus());
         return result;
     }
 
     @Override
     public void handleErrorResponse(HttpServletResponse response, int httpErrorCode) {
-
         if (!response.isCommitted()) {
             response.setStatus(httpErrorCode);
         }
-
-        String errorMessage = getErrorMessage();//Tr.formatMessage(tc, "SOCIAL_LOGIN_FRONT_END_ERROR"); // CWWKS5489E
+        String errorMessage = getErrorMessage();
         response.setHeader(AUTH_HEADER, errorMessage);
-
-        //writeErrorHtml(response, errorHeader, errorMessage);
     }
 
     String getErrorMessage() {
-
         String message = getRealmMessage();
 
         message += ERROR_CODE;
