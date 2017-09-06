@@ -108,7 +108,11 @@ public class DoubleQueue<T> extends AbstractQueue<T> implements BlockingQueue<T>
 
     @Override
     public boolean offer(T item) {
-        q2.offer(item);
+        if (item instanceof QueueItem && ((QueueItem) item).isExpedited())
+            q1.offer(item);
+        else
+            q2.offer(item);
+
         size.release();
         return true;
     }
@@ -116,11 +120,6 @@ public class DoubleQueue<T> extends AbstractQueue<T> implements BlockingQueue<T>
     @Override
     public boolean offer(T item, long time, TimeUnit timeout) throws InterruptedException {
         return offer(item); // size is unlimited so all adds are non-blocking
-    }
-
-    public void offerExpedited(T item) {
-        q1.offer(item);
-        size.release();
     }
 
     @Override
