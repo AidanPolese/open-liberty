@@ -694,6 +694,11 @@ serverEnvAndJVMOptions()
     mergeJVMOptions "${WLP_INSTALL_DIR}/etc/jvm.options"
   fi
   
+  # If we are running on Java 9, apply Liberty's built-in java 9 options
+  if [ -f "${JAVA_HOME}/lib/modules" ]; then
+    mergeJVMOptions "${WLP_INSTALL_DIR}/lib/platform/java/java9.options"
+  fi
+  
   return $rc
 }
 

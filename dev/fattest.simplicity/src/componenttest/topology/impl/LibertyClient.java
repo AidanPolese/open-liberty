@@ -72,7 +72,6 @@ import componenttest.common.apiservices.LocalMachine;
 import componenttest.exception.TopologyException;
 import componenttest.topology.impl.JavaInfo.Vendor;
 import componenttest.topology.impl.LibertyFileManager.LogSearchResult;
-import componenttest.topology.utils.Java9Helper;
 import componenttest.topology.utils.LibertyServerUtils;
 
 public class LibertyClient {
@@ -787,11 +786,6 @@ public class LibertyClient {
             }
 
             JVM_ARGS += " -Dcom.ibm.ws.logging.trace.specification=" + configuredTrace;
-        }
-
-        if (JavaInfo.JAVA_VERSION >= 9) {
-            Log.info(c, "startClientWithArgs", "Adding java 9 args: " + Java9Helper.JAVA_9_ARGS);
-            JVM_ARGS += Java9Helper.JAVA_9_ARGS;
         }
 
         envVars.setProperty("JVM_ARGS", JVM_ARGS);
@@ -3178,11 +3172,11 @@ public class LibertyClient {
                     } else
                         // Remove the corresponding regexp from the watchFor list
                         for (Iterator<String> it = watchFor.iterator(); it.hasNext();) {
-                            String regexp = it.next();
-                            if (Pattern.compile(regexp).matcher(line).find()) {
-                                it.remove();
-                                break;
-                            }
+                        String regexp = it.next();
+                        if (Pattern.compile(regexp).matcher(line).find()) {
+                        it.remove();
+                        break;
+                        }
                         }
                 }
             }

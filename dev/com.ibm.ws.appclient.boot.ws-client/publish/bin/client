@@ -201,6 +201,7 @@ fi
 ##
 escapeForEval "${WLP_INSTALL_DIR}"
 WLP_INSTALL_DIR_QUOTED=${escapeForEvalResult}
+READ_ETC=1
 
 ##
 ## Consume script parameters: 
@@ -411,36 +412,48 @@ clientEnvAndJVMOptions()
   # Allow Headless mode for running AWT application.
   JVM_OPTIONS_QUOTED=-Djava.awt.headless=true
 
-  # Try to read ${CLIENT_CONFIG_DIR}/client.jvm.options.  If it does not exist, then
-  # try to read ${WLP_INSTALL_DIR}/etc/client.jvm.options.
   rc=0
-  for jvmOptions in "${CLIENT_CONFIG_DIR}/client.jvm.options" "${WLP_INSTALL_DIR}/etc/client.jvm.options"; do
+  mergeJVMOptions "${CLIENT_CONFIG_DIR}/client.jvm.options"
+  if [ $rc -ne 0 ]; then
+    return $rc
+  fi
+  
+  # If ${CLIENT_CONFIG_DIR}/client.jvm.options did not exist, then
+  # try to read ${WLP_INSTALL_DIR}/etc/client.jvm.options.
+  if [ $READ_ETC -eq 1 ]; then
+    mergeJVMOptions "${WLP_INSTALL_DIR}/etc/client.jvm.options"
+  fi
+  
+  # If we are running on Java 9, apply Liberty's built-in java 9 options
+  if [ -f "${JAVA_HOME}/lib/modules" ]; then
+    mergeJVMOptions "${WLP_INSTALL_DIR}/lib/platform/java/java9.options"
+  fi
+
+  return $rc
+}
+
+mergeJVMOptions()
+{
+    jvmOptions=$1
+     
     if [ -f "$jvmOptions" ]; then
+      READ_ETC=0
       saveIFS=$IFS
       IFS=$newline
+      
       for option in `readNativeFile "$jvmOptions" '[#-]' | tr -d '\r'`; do
         if [ -n "$option" ]; then
           case $option in
           \#*);;
-          -*)
+          *)
             escapeForEval "${option}"
             JVM_OPTIONS_QUOTED="${JVM_OPTIONS_QUOTED} ${escapeForEvalResult}"
-            ;;
-          *)
-            javaCmd --message:error.jvm.option "$jvmOptions" "$option"
-            rc=32
             ;;
           esac
         fi
       done
       IFS=$saveIFS
-
-      # If client.jvm.options exists in client config, then ignore the one in wlp/etc/
-      break
     fi
-  done
-
-  return $rc
 }
 
 ##
