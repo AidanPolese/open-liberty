@@ -179,3 +179,5 @@ org.w3c.css:org.w3c.css.sac:1.3.1.v200903091627
 xml-apis:xml-apis:1.4.01
 xml-resolver:xml-resolver:1.2
 org.mockito:mockito-all:1.9.5
+org.jmock:jmock:2.6.0
+org.jmock:jmock-junit4:2.6.0
