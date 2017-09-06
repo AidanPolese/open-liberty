@@ -67,23 +67,23 @@ public class BaseMetrics {
 
         //MEMORY METRICS
         registry.register("memory.usedHeap", new BMGauge<Number>(BaseMetricConstants.MEMORY_OBJECT_TYPE, "HeapMemoryUsage", "used"),
-                          new Metadata("memory.usedHeap", "Used Heap Memory", "Displays the amount of used heap memory in bytes.", MetricType.GAUGE, MetricUnit.BYTE));
+                          new Metadata("memory.usedHeap", "Used Heap Memory", "Displays the amount of used heap memory in bytes.", MetricType.GAUGE, MetricUnit.BYTES));
 
         registry.register("memory.committedHeap", new BMGauge<Number>(BaseMetricConstants.MEMORY_OBJECT_TYPE, "HeapMemoryUsage", "committed"),
                           new Metadata("memory.committedHeap", "Committed Heap Memory", "Displays the amount of memory in bytes that is committed for the Java virtual machine "
-                                                                                        + "to use. This amount of memory is guaranteed for the Java virtual machine to use.", MetricType.GAUGE, MetricUnit.BYTE));
+                                                                                        + "to use. This amount of memory is guaranteed for the Java virtual machine to use.", MetricType.GAUGE, MetricUnit.BYTES));
 
         registry.register("memory.maxHeap", new BMGauge<Number>(BaseMetricConstants.MEMORY_OBJECT_TYPE, "HeapMemoryUsage", "max"),
                           new Metadata("memory.maxHeap", "Max Heap Memory", "Displays the maximum amount of heap memory in bytes that can be "
                                                                             + "used for memory management. This attribute displays -1 if the maximum heap memory size is undefined. "
                                                                             + "This amount of memory is not guaranteed to be available for memory management if it is greater "
                                                                             + "than the amount of committed memory. The Java virtual machine may fail to allocate memory even "
-                                                                            + "if the amount of used memory does not exceed this maximum size.", MetricType.GAUGE, MetricUnit.BYTE));
+                                                                            + "if the amount of used memory does not exceed this maximum size.", MetricType.GAUGE, MetricUnit.BYTES));
 
         //JVM METRICS
         registry.register("jvm.uptime", new BMCounter(BaseMetricConstants.RUNTIME_OBJECT_TYPE, "Uptime"),
                           new Metadata("jvm.uptime", "JVM Uptime", "Displays the start time of the Java virtual machine in milliseconds. "
-                                                                   + "This attribute displays the approximate time when the Java virtual machine started.", MetricType.COUNTER, MetricUnit.MILLISECOND));
+                                                                   + "This attribute displays the approximate time when the Java virtual machine started.", MetricType.COUNTER, MetricUnit.MILLISECONDS));
 
         //THREAD JVM -
         registry.register("thread.count", new BMGauge<Number>(BaseMetricConstants.THREAD_OBJECT_TYPE, "ThreadCount"),
@@ -146,7 +146,7 @@ public class BaseMetrics {
                                                                                       + "time in milliseconds. This attribute displays -1 if the collection elapsed time is undefined "
                                                                                       + "for this collector. The Java virtual machine implementation may use a high resolution timer "
                                                                                       + "to measure the elapsed time. This attribute may display the same value even if the collection "
-                                                                                      + "count has been incremented if the collection elapsed time is very short.", MetricType.COUNTER, MetricUnit.MILLISECOND));
+                                                                                      + "count has been incremented if the collection elapsed time is very short.", MetricType.COUNTER, MetricUnit.MILLISECONDS));
         }
 
     }

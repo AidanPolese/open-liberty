@@ -114,96 +114,99 @@ public class PrometheusMetricWriter implements OutputWriter {
             double conversionFactor = 0;
             String appendUnit = null;
 
-            if (unit.equals(MetricUnit.NANOSECOND.toString())) {
+            if (unit.equals(MetricUnit.NANOSECONDS)) {
 
                 conversionFactor = Constants.NANOSECONDCONVERSION;
                 appendUnit = Constants.APPENDEDSECONDS;
 
-            } else if (unit.equals(MetricUnit.MICROSECOND.toString())) {
+            } else if (unit.equals(MetricUnit.MICROSECONDS)) {
 
                 conversionFactor = Constants.MICROSECONDCONVERSION;
                 appendUnit = Constants.APPENDEDSECONDS;
 
-            } else if (unit.equals(MetricUnit.SECOND.toString())) {
+            } else if (unit.equals(MetricUnit.SECONDS)) {
 
                 conversionFactor = Constants.SECONDCONVERSION;
                 appendUnit = Constants.APPENDEDSECONDS;
 
-            } else if (unit.equals(MetricUnit.MINUTE.toString())) {
+            } else if (unit.equals(MetricUnit.MINUTES)) {
 
                 conversionFactor = Constants.MINUTECONVERSION;
                 appendUnit = Constants.APPENDEDSECONDS;
 
-            } else if (unit.equals(MetricUnit.HOUR.toString())) {
+            } else if (unit.equals(MetricUnit.HOURS)) {
 
                 conversionFactor = Constants.HOURCONVERSION;
                 appendUnit = Constants.APPENDEDSECONDS;
 
-            } else if (unit.equals(MetricUnit.DAY.toString())) {
+            } else if (unit.equals(MetricUnit.DAYS)) {
 
                 conversionFactor = Constants.DAYCONVERSION;
                 appendUnit = Constants.APPENDEDSECONDS;
 
-            } else if (unit.equals(MetricUnit.PERCENT.toString())) {
+            } else if (unit.equals(MetricUnit.PERCENT)) {
 
                 conversionFactor = Double.NaN;
                 appendUnit = Constants.APPENDEDPERCENT;
 
-            } else if (unit.equals(MetricUnit.BYTE.toString())) {
+            } else if (unit.equals(MetricUnit.BYTES)) {
 
                 conversionFactor = Constants.BYTECONVERSION;
                 appendUnit = Constants.APPENDEDBYTES;
 
-            } else if (unit.equals(MetricUnit.KILOBYTE.toString())) {
+            } else if (unit.equals(MetricUnit.KILOBYTES)) {
 
                 conversionFactor = Constants.KILOBYTECONVERSION;
                 appendUnit = Constants.APPENDEDBYTES;
 
-            } else if (unit.equals(MetricUnit.MEGABYTE.toString())) {
+            } else if (unit.equals(MetricUnit.MEGABYTES)) {
 
                 conversionFactor = Constants.MEGABYTECONVERSION;
                 appendUnit = Constants.APPENDEDBYTES;
 
-            } else if (unit.equals(MetricUnit.GIGABYTE.toString())) {
+            } else if (unit.equals(MetricUnit.GIGABYTES)) {
 
                 conversionFactor = Constants.GIGABYTECONVERSION;
                 appendUnit = Constants.APPENDEDBYTES;
 
-            } else if (unit.equals(MetricUnit.KILOBIT.toString())) {
+            } else if (unit.equals(MetricUnit.KILOBITS)) {
 
                 conversionFactor = Constants.KILOBITCONVERSION;
                 appendUnit = Constants.APPENDEDBYTES;
 
-            } else if (unit.equals(MetricUnit.MEGABIT.toString())) {
+            } else if (unit.equals(MetricUnit.MEGABITS)) {
 
                 conversionFactor = Constants.MEGABITCONVERSION;
                 appendUnit = Constants.APPENDEDBYTES;
 
-            } else if (unit.equals(MetricUnit.GIGABIT.toString())) {
+            } else if (unit.equals(MetricUnit.GIGABITS)) {
 
                 conversionFactor = Constants.GIGABITCONVERSION;
                 appendUnit = Constants.APPENDEDBYTES;
 
-            } else if (unit.equals(MetricUnit.KIBIBIT.toString())) {
+            } else if (unit.equals(MetricUnit.KIBIBITS)) {
 
                 conversionFactor = Constants.KIBIBITCONVERSION;
                 appendUnit = Constants.APPENDEDBYTES;
 
-            } else if (unit.equals(MetricUnit.MEBIBIT.toString())) {
+            } else if (unit.equals(MetricUnit.MEBIBITS)) {
 
                 conversionFactor = Constants.MEBIBITCONVERSION;
                 appendUnit = Constants.APPENDEDBYTES;
 
-            } else if (unit.equals(MetricUnit.GIBIBIT.toString())) {
+            } else if (unit.equals(MetricUnit.GIBIBITS)) {
 
                 conversionFactor = Constants.GIBIBITCONVERSION;
                 appendUnit = Constants.APPENDEDBYTES;
 
-            } else if (unit.equals(MetricUnit.NONE.toString())) {
+            } else if (unit.equals(MetricUnit.NONE)) {
 
                 conversionFactor = Double.NaN;
                 appendUnit = null;
 
+            } else {
+
+                throw new RuntimeException("Unsupported Unit Type");
             }
 
             if (Counter.class.isInstance(metric)) {
