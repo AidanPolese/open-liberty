@@ -70,10 +70,6 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
 
     private ClaimsUtils claimsUtils = new ClaimsUtils();
 
-    public DefaultJsonWebTokenImpl(String name) {
-        principal = name;
-    }
-
     public DefaultJsonWebTokenImpl(String jwt, String type, String name) {
         this.jwt = jwt;
         this.type = type;
@@ -82,8 +78,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
         handleClaims(jwt);
     }
 
-    @Override
-    public final Object clone() {
+    public final JsonWebToken clone() {
 
         return new DefaultJsonWebTokenImpl(this.jwt, this.type, this.principal);
 

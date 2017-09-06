@@ -26,6 +26,7 @@ import org.osgi.service.component.annotations.Modified;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.security.mp.jwt.impl.DefaultJsonWebTokenImpl;
 import com.ibm.ws.security.mp.jwt.proxy.JsonWebTokenUtil;
 
 /**
@@ -65,6 +66,9 @@ public class JsonWebTokenUtilImpl implements JsonWebTokenUtil {
 
     @Override
     public Principal cloneJsonWebToken(Subject subject) {
+        if (getJsonWebTokenPrincipal(subject) != null) {
+            return ((DefaultJsonWebTokenImpl) getJsonWebTokenPrincipal(subject)).clone();
+        }
         return null;
     }
 
