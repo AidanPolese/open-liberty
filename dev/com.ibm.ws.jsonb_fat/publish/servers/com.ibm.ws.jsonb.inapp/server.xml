@@ -1,0 +1,20 @@
+<server>
+    <featureManager>
+      <feature>componenttest-1.0</feature>
+      <feature>servlet-3.1</feature>
+      <feature>jsonbContainer-1.0</feature>
+      <feature>jsonpContainer-1.1</feature>
+    </featureManager>
+
+	<include location="../fatTestPorts.xml"/>
+	
+	<application location="jsonbapp.war">
+	  <classloader commonLibraryRef="json"/>
+	</application>
+
+    <library id="json">
+      <!-- Use Yasson for JSON-B and Johnzon for JSON-P -->
+      <fileset dir="${shared.resource.dir}/refImpls" includes="yasson-*.jar"/>
+      <fileset dir="${shared.resource.dir}/johnzon" includes="johnzon-core-*.jar"/>
+    </library>
+</server>

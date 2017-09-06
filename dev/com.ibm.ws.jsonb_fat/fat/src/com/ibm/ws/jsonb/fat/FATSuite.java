@@ -24,6 +24,7 @@ import componenttest.topology.impl.LibertyServerFactory;
 @SuiteClasses({
                 AlwaysPassesTest.class, // so we report at least 1 test on java 7 builds
                 JSONBTest.class,
+                JSONBInAppTest.class,
                 JSONBContainerTest.class,
                 JSONPContainerTest.class,
                 JsonUserFeatureTest.class
