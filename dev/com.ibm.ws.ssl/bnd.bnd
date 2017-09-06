@@ -80,7 +80,7 @@ instrument.disabled: true
 	org.jmock:jmock;strategy=exact;version=2.5.1, \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
 	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
-	../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar;version=file, \
+	org.jmock:jmock-legacy;version=2.5.0, \
 	com.ibm.ws.org.objenesis:objenesis;version=1.0, \
 	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \
 	com.ibm.ws.kernel.boot;version=latest
