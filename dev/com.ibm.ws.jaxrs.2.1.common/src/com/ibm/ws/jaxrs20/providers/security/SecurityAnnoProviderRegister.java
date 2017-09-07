@@ -15,10 +15,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.cxf.jaxrs.security.SimpleAuthorizingFilter;
+import org.osgi.service.component.annotations.Component;
 
 import com.ibm.ws.jaxrs20.providers.api.JaxRsProviderRegister;
 import com.ibm.ws.jaxrs20.security.LibertySimpleAuthorizingInterceptor;
 
+@Component(immediate=true)
 public class SecurityAnnoProviderRegister implements JaxRsProviderRegister {
 
     @Override

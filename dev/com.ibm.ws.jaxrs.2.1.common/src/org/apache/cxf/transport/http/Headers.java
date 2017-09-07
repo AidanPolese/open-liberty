@@ -133,7 +133,7 @@ public class Headers {
         filteredHeaders.putAll(headers);
         if (!logSensitiveHeaders) {
             for (String filteredKey : SENSITIVE_HEADERS) {
-                filteredHeaders.put(filteredKey, SENSITIVE_HEADER_MARKER);
+                filteredHeaders.replace(filteredKey, SENSITIVE_HEADER_MARKER);
             }
         }
         return filteredHeaders.toString();

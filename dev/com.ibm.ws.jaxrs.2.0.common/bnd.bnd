@@ -30,20 +30,22 @@ WS-TraceGroup: JAXRS
    org.apache.cxf.*;version=3.1.11, \
 
 Export-Package: \
-   com.ibm.ws.jaxrs20, \
-   com.ibm.ws.jaxrs20.api;provide=true, \
-   com.ibm.ws.jaxrs20.bus, \
-   com.ibm.ws.jaxrs20.metadata, \
-   com.ibm.ws.jaxrs20.metadata.builder, \
-   com.ibm.ws.jaxrs20.support, \
-   com.ibm.ws.jaxrs20.utils, \
-   com.ibm.ws.jaxrs20.endpoint, \
-   com.ibm.ws.jaxrs20.injection, \
-   com.ibm.ws.jaxrs20.injection.*, \
-   com.ibm.ws.jaxrs20.threading, \
-   com.ibm.websphere.jaxrs.providers.json4j;version="1.1.0", \
-   com.ibm.websphere.jaxrs20.multipart;version="1.1.0", \
-   com.ibm.ws.jaxrs20.clientconfig
+	com.ibm.ws.jaxrs20,\
+	com.ibm.ws.jaxrs20.api;provide=true,\
+	com.ibm.ws.jaxrs20.bus,\
+	com.ibm.ws.jaxrs20.metadata,\
+	com.ibm.ws.jaxrs20.metadata.builder,\
+	com.ibm.ws.jaxrs20.support,\
+	com.ibm.ws.jaxrs20.utils,\
+	com.ibm.ws.jaxrs20.endpoint,\
+	com.ibm.ws.jaxrs20.injection,\
+	com.ibm.ws.jaxrs20.injection.*,\
+	com.ibm.ws.jaxrs20.threading,\
+	com.ibm.ws.jaxrs20.providers.api,\
+	com.ibm.websphere.jaxrs.providers.json4j;version=1.1.0,\
+	com.ibm.websphere.jaxrs20.multipart;version=1.1.0,\
+	com.ibm.ws.jaxrs20.clientconfig,\
+	org.apache.cxf.feature
 
 Import-Package: \
  !com.wordnik.swagger.jaxrs.config, \
@@ -150,7 +152,9 @@ Include-Resource: \
   org/codehaus/jackson=bin/org/codehaus/jackson
 
 -dsannotations: com.ibm.ws.jaxrs20.component.*, \
- 	com.ibm.ws.jaxrs20.clientconfig.JAXRSClientConfigImpl
+ 	com.ibm.ws.jaxrs20.clientconfig.JAXRSClientConfigImpl, \
+ 	com.ibm.ws.jaxrs20.providers.customexceptionmapper.CustomExceptionMapperRegister, \
+ 	com.ibm.ws.jaxrs20.providers.security.SecurityAnnoProviderRegister
 
 -dependson: com.ibm.ws.org.codehaus.jackson
 
