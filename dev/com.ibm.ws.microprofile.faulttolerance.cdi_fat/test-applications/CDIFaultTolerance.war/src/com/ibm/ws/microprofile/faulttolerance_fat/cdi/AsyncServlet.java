@@ -12,6 +12,7 @@ package com.ibm.ws.microprofile.faulttolerance_fat.cdi;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
@@ -171,8 +172,9 @@ public class AsyncServlet extends FATServlet {
             //FaultTolerance should have already timedout the future so we're expecting the FT TimeoutException
             Connection conn = future.get(TEST_TIME_UNIT, TimeUnit.MILLISECONDS);
             throw new AssertionError("Future did not timeout properly");
-        } catch (org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException t) {
+        } catch (ExecutionException t) {
             //expected
+            assertThat(t.getCause(), instanceOf(org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException.class));
         }
     }
 
