@@ -561,14 +561,6 @@ public class H2StreamProcessor {
     }
 
     /**
-     * Update the promised stream state to Open
-     *
-     */
-    public void readyToSendPushPromise() {
-        this.updateStreamState(StreamState.OPEN);
-    }
-
-    /**
      * @param direction
      */
     private void processClosed(Constants.Direction direction) {
