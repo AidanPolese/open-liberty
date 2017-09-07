@@ -29,7 +29,7 @@ Our [CONTRIBUTING](https://github.com/OpenLiberty/open-liberty/blob/master/CONTR
 
 1. Clone the repository to your system.
 
-    ```git clone git@github.ibm.com:OpenLiberty/open-liberty.git```
+    ```git clone git@github.com:OpenLiberty/open-liberty.git```
 
 2. Run a gradle build.
 
