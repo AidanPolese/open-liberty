@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans.RetryBeanB;
+import com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans.RetryBeanC;
 import com.ibm.ws.microprofile.faulttolerance_fat.util.ConnectException;
 import com.ibm.ws.microprofile.faulttolerance_fat.util.DisconnectException;
 
@@ -37,6 +38,9 @@ public class RetryServlet extends FATServlet {
 
     @Inject
     RetryBeanB beanB;
+
+    @Inject
+    RetryBeanC beanC;
 
     public void testRetry(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //should be retried 3 times as per default
@@ -74,6 +78,18 @@ public class RetryServlet extends FATServlet {
             if (!expected.equals(actual)) {
                 throw new AssertionError("Expected: " + expected + ", Actual: " + actual);
             }
+        }
+    }
+
+    /**
+     * Test that the abortOn parameter is handled correctly
+     */
+    public void testRetryAbortOn(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            beanC.connectC();
+        } catch (ConnectException e) {
+            // Connect count should be 1 because abortOn is set to include ConnectException
+            assertThat("Exception message", e.getMessage(), is("ConnectException: RetryBeanC Connect: 1"));
         }
     }
 

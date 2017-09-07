@@ -42,19 +42,25 @@ public class CDIRetryTest extends LoggingTest {
                                          "SUCCESS");
     }
 
+    @Test
+    public void testAbortOn() throws Exception {
+        WebBrowser browser = createWebBrowserForTestCase();
+        getSharedServer().verifyResponse(browser, "/CDIFaultTolerance/retry?testMethod=testRetryAbortOn", "SUCCESS");
+    }
+
     /** {@inheritDoc} */
     @Override
     protected SharedServer getSharedServer() {
         return SHARED_SERVER;
     }
-	
-		@BeforeClass
-	public static void setUp() throws Exception {
-		if (!SHARED_SERVER.getLibertyServer().isStarted()) {
-			SHARED_SERVER.getLibertyServer().startServer();
-		}
-		
-	}
+
+    @BeforeClass
+    public static void setUp() throws Exception {
+        if (!SHARED_SERVER.getLibertyServer().isStarted()) {
+            SHARED_SERVER.getLibertyServer().startServer();
+        }
+
+    }
 
     @AfterClass
     public static void tearDown() throws Exception {
