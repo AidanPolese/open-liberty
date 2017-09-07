@@ -55,6 +55,7 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
     private String name;
     private String id;
     private Class<? extends Annotation> scope;
+    private final String claimName;
 
     public ClaimBean(BeanManager beanManager, Class<T> beanClass, Claim claim) {
         this(beanManager, beanClass, beanClass, claim);
@@ -74,6 +75,7 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
         this.name = this.getClass().getName() + "[" + claim + "," + beanType + "]";
         this.id = beanManager.hashCode() + "#" + this.name;
         setScope(beanType);
+        this.claimName = getClaimName();
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(tc, "<init>", this);
@@ -97,6 +99,22 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
         }
     }
 
+    private String getClaimName() {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.entry(tc, "getClaimName");
+        }
+
+        String claimName = claim.value();
+        if (claimName == null || claimName.trim().isEmpty()) {
+            claimName = claim.standard().name();
+        }
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.exit(tc, "getClaimName", claimName);
+        }
+        return claimName;
+    }
+
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     @Override
@@ -110,7 +128,7 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
         BeanManager beanManager = cdi.getBeanManager();
 
         if (beanType instanceof ParameterizedType) {
-            instance = createClaimValueForParameterizedType(creationalContext, beanManager);
+            instance = createInstanceForParameterizedType(creationalContext, beanManager);
         } else if (beanType instanceof Class) {
             instance = createClaimValueForClassType();
         } else {
@@ -128,24 +146,75 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
      * @param beanManager
      * @return
      */
-    private T createClaimValueForParameterizedType(CreationalContext<T> creationalContext, BeanManager beanManager) {
+    private T createInstanceForParameterizedType(CreationalContext<T> creationalContext, BeanManager beanManager) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.entry(tc, "createClaimValueForParameterizedType", creationalContext, beanManager);
+            Tr.entry(tc, "createInstanceForParameterizedType", creationalContext, beanManager);
         }
 
         T instance = null;
+        boolean isOptional = false;
         ParameterizedType parameterizedType = (ParameterizedType) beanType;
-        Type actualReturnType = parameterizedType.getActualTypeArguments()[0];
-        if (actualReturnType instanceof ParameterizedType) {
-            actualReturnType = ((ParameterizedType) actualReturnType).getRawType();
+
+        Tr.debug(tc, "parameterizedType", parameterizedType);
+
+        Class<?> returnClass = (Class<?>) parameterizedType.getRawType();
+
+        if (ClaimValue.class.isAssignableFrom(returnClass)) {
+            returnClass = getTypeClass(parameterizedType.getActualTypeArguments()[0]);
+            isOptional = Optional.class.isAssignableFrom(returnClass);
+            if (isOptional) {
+                Class<?> wrappedClass = getTypeClass(((ParameterizedType) parameterizedType.getActualTypeArguments()[0]).getActualTypeArguments()[0]);
+                instance = createClaimValueWithOptional(returnClass, wrappedClass);
+            } else {
+                instance = createClaimValue(returnClass);
+            }
+        } else if (Optional.class.isAssignableFrom(returnClass)) {
+            returnClass = getTypeClass(parameterizedType.getActualTypeArguments()[0]);
+            instance = (T) Optional.ofNullable(getPlainValue(returnClass, getCurrentJsonWebToken()));
+        } else {
+            instance = (T) getPlainValue(returnClass, getCurrentJsonWebToken());
         }
 
-        boolean isOptional = Optional.class.isAssignableFrom((Class<?>) actualReturnType);
-        Class<?> returnClass = (Class<?>) actualReturnType;
-        instance = getClaimValue(returnClass, isOptional);
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.exit(tc, "createInstanceForParameterizedType", instance);
+        }
+        return instance;
+    }
+
+    private Class<?> getTypeClass(Type type) {
+        if (type instanceof ParameterizedType) {
+            type = ((ParameterizedType) type).getRawType();
+        }
+        return (Class<?>) type;
+    }
+
+    private <U> T createClaimValueWithOptional(Class<U> returnClass, Class<?> wrappedClass) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
+            Tr.entry(tc, "createClaimValueWithOptional", returnClass, wrappedClass);
+        }
+
+        T instance = null;
+        instance = (T) new ClaimValue() {
+
+            @Override
+            public String getName() {
+                return claimName;
+            }
+
+            @Override
+            public U getValue() {
+                U value = null;
+                Instance<JsonWebToken> jsonWebTokenInstance = CDI.current().select(JsonWebToken.class);
+
+                if (jsonWebTokenInstance != null && jsonWebTokenInstance.isAmbiguous() == false && jsonWebTokenInstance.isUnsatisfied() == false) {
+                    value = (U) Optional.ofNullable(getPlainValue(wrappedClass, jsonWebTokenInstance.get()));
+                }
+                return value;
+            }
+        };
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.exit(tc, "createClaimValueForParameterizedType", instance);
+            Tr.exit(tc, "createClaimValueWithOptional", instance);
         }
         return instance;
     }
@@ -157,13 +226,12 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
      * @param aType
      * @return
      */
-    private <U> T getClaimValue(Class<U> returnClass, boolean isOptional) {
+    private <U> T createClaimValue(Class<U> returnClass) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.entry(tc, "getClaimValue", returnClass, isOptional);
+            Tr.entry(tc, "createClaimValue", returnClass);
         }
 
         T instance = null;
-        final String claimName = getClaimName();
         instance = (T) new ClaimValue() {
 
             @Override
@@ -174,27 +242,37 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
             @Override
             public U getValue() {
                 U value = null;
-                JsonWebToken jsonWebToken = null;
                 Instance<JsonWebToken> jsonWebTokenInstance = CDI.current().select(JsonWebToken.class);
 
                 if (jsonWebTokenInstance != null && jsonWebTokenInstance.isAmbiguous() == false && jsonWebTokenInstance.isUnsatisfied() == false) {
-                    jsonWebToken = jsonWebTokenInstance.get();
-
-                    if (isOptional) {
-                        value = (U) jsonWebToken.claim(claimName);
-                    } else {
-                        value = (U) jsonWebToken.getClaim(claimName);
-                    }
+                    value = getPlainValue(returnClass, jsonWebTokenInstance.get());
                 }
-
                 return value;
             }
         };
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.exit(tc, "getClaimValue", instance);
+            Tr.exit(tc, "createClaimValue", instance);
         }
         return instance;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <U> U getPlainValue(Class<U> returnClass, JsonWebToken jsonWebToken) {
+        U value = null;
+        if (JsonValue.class.isAssignableFrom(returnClass)) {
+            value = (U) getJsonValue(jsonWebToken);
+        } else {
+            value = (U) jsonWebToken.getClaim(claimName);
+        }
+        return value;
+    }
+
+    private JsonValue getJsonValue(JsonWebToken jsonWebToken) {
+        String jsonWebTokenAsString = jsonWebToken.toString();
+        JsonReader reader = Json.createReader(new StringReader(jsonWebTokenAsString));
+        JsonObject jsonObject = reader.readObject();
+        return jsonObject.get(claimName);
     }
 
     /**
@@ -208,7 +286,6 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
 
         T instance = null;
         Class<T> ipClass = (Class<T>) beanType;
-        String claimName = getClaimName();
         if (ClaimValue.class.equals(ipClass)) {
             instance = (T) new ClaimValue() {
 
@@ -220,31 +297,17 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
                 @Override
                 public Object getValue() {
                     Object value = null;
-                    JsonWebToken jsonWebToken = null;
                     Instance<JsonWebToken> jsonWebTokenInstance = CDI.current().select(JsonWebToken.class);
 
                     if (jsonWebTokenInstance != null && jsonWebTokenInstance.isAmbiguous() == false && jsonWebTokenInstance.isUnsatisfied() == false) {
-                        jsonWebToken = jsonWebTokenInstance.get();
-                        value = jsonWebToken.getClaim(claimName);
+                        value = jsonWebTokenInstance.get().getClaim(claimName);
                     }
 
                     return value;
                 }
             };
-        } else if (JsonValue.class.isAssignableFrom(ipClass)) {
-            String jsonWebTokenAsString = getCurrentJsonWebToken().toString();
-            JsonReader reader = Json.createReader(new StringReader(jsonWebTokenAsString));
-            JsonObject jsonObject = reader.readObject();
-            instance = (T) jsonObject.get(claimName);
         } else {
-            // Provider path
-            JsonWebToken jsonWebToken = getCurrentJsonWebToken();
-            Instance<JsonWebToken> jsonWebTokenInstance = CDI.current().select(JsonWebToken.class);
-            instance = jsonWebToken.getClaim(claimName);
-//            if (jsonWebTokenInstance != null && jsonWebTokenInstance.isAmbiguous() == false && jsonWebTokenInstance.isUnsatisfied() == false) {
-//                jsonWebToken = jsonWebTokenInstance.get();
-//                instance = jsonWebToken.getClaim(claimName);
-//            }
+            instance = getPlainValue(ipClass, getCurrentJsonWebToken());
         }
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
@@ -256,22 +319,6 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
     private JsonWebToken getCurrentJsonWebToken() {
         Instance<JsonWebToken> jsonWebTokenInstance = CDI.current().select(JsonWebToken.class);
         return jsonWebTokenInstance.get(); // Let the CDI ambiguous/unsatisfied exceptions flow
-    }
-
-    private String getClaimName() {
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.entry(tc, "getClaimName");
-        }
-
-        String claimName = claim.value();
-        if (claimName == null || claimName.trim().isEmpty()) {
-            claimName = claim.standard().name();
-        }
-
-        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.exit(tc, "getClaimName", claimName);
-        }
-        return claimName;
     }
 
     /** {@inheritDoc} */
@@ -324,7 +371,7 @@ public class ClaimBean<T> implements Bean<T>, PassivationCapable {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(tc, "getScope", scope);
         }
-        return scope; //RequestScoped.class; TODO:Switch to dependent when type is for Provider<T>
+        return scope;
     }
 
     /** {@inheritDoc} */
