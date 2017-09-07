@@ -386,7 +386,7 @@ public class WSJdbcConnection extends WSJdbcObject implements Connection {
                         // We may assume the ConnectionManager supports lazy enlistment here
                         // because we are attempting to do work in a global transaction and are
                         // not enlisted yet. 
-                        managedConn.lazyEnlist(
+                        managedConn.lazyEnlistInGlobalTran(
                                         lazyEnlistableCM == null ? lazyEnlistableCM =
                                                         (LazyEnlistableConnectionManager) cm : lazyEnlistableCM);
                     } catch (ClassCastException castX) 

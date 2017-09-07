@@ -293,7 +293,7 @@ public class WSRdbSpiLocalTransactionImpl implements LocalTransaction, FFDCSelfI
         }
 
         // Reset so we can deferred enlist in a future global transaction. 
-        ivMC.wasLazilyEnlisted = false; 
+        ivMC.wasLazilyEnlistedInGlobalTran = false; 
 
         if (tc.isEventEnabled())
             Tr.event(
@@ -438,7 +438,7 @@ public class WSRdbSpiLocalTransactionImpl implements LocalTransaction, FFDCSelfI
         }
 
         // Reset so we can deferred enlist in a future global transaction. 
-        ivMC.wasLazilyEnlisted = false; 
+        ivMC.wasLazilyEnlistedInGlobalTran = false; 
 
         if (tc.isEventEnabled())
             Tr.event(
