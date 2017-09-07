@@ -22,13 +22,15 @@ Require-Capability: osgi.ee; filter:="(&(osgi.ee=JavaSE)(version=1.8))"
 
 WS-TraceGroup: security
 
-publish.wlp.jar.suffix: dev/api/spec
+publish.wlp.jar.suffix: dev/api/stable
 
 Import-Package: \
 	javax.inject;resolution:=optional,\
-	javax.json;resolution:=optional
+	javax.json;resolution:=optional,\
+	javax.enterprise.util;resolution:=optional
 
-Export-Package: org.eclipse.microprofile.jwt;version=1.0
+Export-Package: org.eclipse.microprofile.jwt;version=1.0,\
+                org.eclipse.microprofile.auth;version=1.0
 	
 -buildpath: \
     com.ibm.ws.require.java8;version=latest, \
