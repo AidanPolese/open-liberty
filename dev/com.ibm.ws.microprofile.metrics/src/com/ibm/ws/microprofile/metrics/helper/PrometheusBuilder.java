@@ -10,9 +10,6 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.metrics.helper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.microprofile.metrics.Counter;
 import org.eclipse.microprofile.metrics.Counting;
 import org.eclipse.microprofile.metrics.Gauge;
@@ -29,7 +26,7 @@ import org.eclipse.microprofile.metrics.Timer;
 public class PrometheusBuilder {
     private static final String QUANTILE = "quantile";
 
-    public static void buildGauge(StringBuilder builder, String name, Gauge<?> gauge, String description, Double conversionFactor, ArrayList<Tag> tags, String appendUnit) {
+    public static void buildGauge(StringBuilder builder, String name, Gauge<?> gauge, String description, Double conversionFactor, String tags, String appendUnit) {
         double gaugeVal = 0;
         Number gaugeValNumber = (Number) gauge.getValue();
         if (!(Double.isNaN(conversionFactor))) {
@@ -41,26 +38,26 @@ public class PrometheusBuilder {
         getPromValueLine(builder, name, gaugeValNumber, tags, appendUnit);
     }
 
-    public static void buildCounter(StringBuilder builder, String name, Counter counter, String description, ArrayList<Tag> tags) {
+    public static void buildCounter(StringBuilder builder, String name, Counter counter, String description, String tags) {
         getPromTypeLine(builder, name, "counter");
         getPromHelpLine(builder, name, description);
         getPromValueLine(builder, name, counter.getCount(), tags);
     }
 
-    public static void buildTimer(StringBuilder builder, String name, Timer timer, String description, ArrayList<Tag> tags) {
+    public static void buildTimer(StringBuilder builder, String name, Timer timer, String description, String tags) {
         buildMetered(builder, name, timer, description, tags);
         // Build Histogram
         buildSampling(builder, name, timer, description, tags);
     }
 
-    public static void buildHistogram(StringBuilder builder, String name, Histogram histogram, String description, Double conversionFactor, ArrayList<Tag> tags,
+    public static void buildHistogram(StringBuilder builder, String name, Histogram histogram, String description, Double conversionFactor, String tags,
                                       String appendUnit) {
         buildCounting(builder, name, histogram, description, tags);
         // Build Histogram
         buildSampling(builder, name, histogram, description, conversionFactor, tags, appendUnit);
     }
 
-    public static void buildMeter(StringBuilder builder, String name, Meter meter, String description, ArrayList<Tag> tags) {
+    public static void buildMeter(StringBuilder builder, String name, Meter meter, String description, String tags) {
         buildMetered(builder, name, meter, description, tags);
     }
 
@@ -71,7 +68,7 @@ public class PrometheusBuilder {
      * @param name
      * @param sampling
      */
-    private static void buildSampling(StringBuilder builder, String name, Sampling sampling, String description, ArrayList<Tag> tags) {
+    private static void buildSampling(StringBuilder builder, String name, Sampling sampling, String description, String tags) {
         String lineName = name + "_mean";
         getPromTypeLine(builder, lineName, "gauge");
         getPromValueLine(builder, lineName, sampling.getSnapshot().getMean());
@@ -95,7 +92,7 @@ public class PrometheusBuilder {
         getPromValueLine(builder, name, sampling.getSnapshot().get999thPercentile(), tags, new Tag(QUANTILE, "0.999"), null);
     }
 
-    private static void buildSampling(StringBuilder builder, String name, Sampling sampling, String description, Double conversionFactor, ArrayList<Tag> tags,
+    private static void buildSampling(StringBuilder builder, String name, Sampling sampling, String description, Double conversionFactor, String tags,
                                       String appendUnit) {
 
         double meanVal = sampling.getSnapshot().getMean();
@@ -145,7 +142,7 @@ public class PrometheusBuilder {
         getPromValueLine(builder, name, percentile999th, tags, new Tag(QUANTILE, "0.999"), appendUnit);
     }
 
-    private static void buildCounting(StringBuilder builder, String name, Counting counting, String description, ArrayList<Tag> tags) {
+    private static void buildCounting(StringBuilder builder, String name, Counting counting, String description, String tags) {
         String lineName = name + "_count";
         getPromTypeLine(builder, lineName, "counter");
         getPromHelpLine(builder, name, description);
@@ -159,7 +156,7 @@ public class PrometheusBuilder {
      * @param name
      * @param metered
      */
-    private static void buildMetered(StringBuilder builder, String name, Metered metered, String description, ArrayList<Tag> tags) {
+    private static void buildMetered(StringBuilder builder, String name, Metered metered, String description, String tags) {
         buildCounting(builder, name, metered, description, tags);
 
         String lineName = name + "_rate_" + MetricUnit.PER_SECOND.toString();
@@ -183,29 +180,32 @@ public class PrometheusBuilder {
         getPromValueLine(builder, name, value, null, null);
     }
 
-    private static void getPromValueLine(StringBuilder builder, String name, Number value, List<Tag> tags) {
+    private static void getPromValueLine(StringBuilder builder, String name, Number value, String tags) {
         getPromValueLine(builder, name, value, tags, null);
     }
 
-    private static void getPromValueLine(StringBuilder builder, String name, Number value, List<Tag> tags, Tag quantile, String appendUnit) {
-        tags.add(quantile);
+    private static void getPromValueLine(StringBuilder builder, String name, Number value, String tags, Tag quantile, String appendUnit) {
+        //tags.add(quantile);
+        if (tags == null) {
+            tags = quantile.getKey() + "=\"" + quantile.getValue() + "\"";
+        } else {
+            tags = tags + "," + quantile.getKey() + "=\"" + quantile.getValue() + "\"";
+        }
         getPromValueLine(builder, name, value, tags, appendUnit);
     }
 
-    private static void getPromValueLine(StringBuilder builder, String name, Number value, List<Tag> tags, String appendUnit) {
+    private static void getPromValueLine(StringBuilder builder, String name, Number value, String tags, String appendUnit) {
 
         String metricName = getPrometheusMetricName(name);
 
         builder.append(metricName);
 
-        if (tags != null) {
-            for (Tag tag : tags) {
-                builder.append('{').append(tag.getKey()).append("=\"").append(tag.getValue()).append("\"}");
-            }
-        }
-
         if (appendUnit != null) {
             builder.append(appendUnit);
+        }
+
+        if (tags != null && tags.length() > 0) {
+            builder.append("{").append(tags).append("}");
         }
 
         builder.append(" ").append(value).append('\n');

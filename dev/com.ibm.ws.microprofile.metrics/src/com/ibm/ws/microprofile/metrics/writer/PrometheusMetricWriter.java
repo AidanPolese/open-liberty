@@ -12,8 +12,6 @@ package com.ibm.ws.microprofile.metrics.writer;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -31,7 +29,6 @@ import com.ibm.ws.microprofile.metrics.exceptions.EmptyRegistryException;
 import com.ibm.ws.microprofile.metrics.exceptions.NoSuchMetricException;
 import com.ibm.ws.microprofile.metrics.exceptions.NoSuchRegistryException;
 import com.ibm.ws.microprofile.metrics.helper.PrometheusBuilder;
-import com.ibm.ws.microprofile.metrics.helper.Tag;
 import com.ibm.ws.microprofile.metrics.helper.Util;
 
 /**
@@ -98,13 +95,7 @@ public class PrometheusMetricWriter implements OutputWriter {
             Metadata metricMetaData = metricMetadataMap.get(entryName);
             String description = metricMetaData.getDescription();
 
-            HashMap<String, String> extractedTags = metricMetaData.getTags();
-            ArrayList<Tag> tags = new ArrayList<Tag>();
-
-            for (HashMap.Entry<String, String> e : extractedTags.entrySet()) {
-                Tag t = new Tag(e.getKey(), e.getValue());
-                tags.add(t);
-            }
+            String tags = metricMetaData.getTagsAsString();
 
             //appending unit to the metric name
             String unit = metricMetaData.getUnit();

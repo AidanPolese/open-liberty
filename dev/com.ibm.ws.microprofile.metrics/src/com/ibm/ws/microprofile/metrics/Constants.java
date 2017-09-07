@@ -68,7 +68,7 @@ public class Constants {
 
     public final static String APPENDEDSECONDS = "_seconds";
     public final static String APPENDEDBYTES = "_bytes";
-    public final static String APPENDEDPERCENT = "_%";
+    public final static String APPENDEDPERCENT = "_percent";
 
     //Conversion factors
     public final static double NANOSECONDCONVERSION = 0.000000001;
