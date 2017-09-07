@@ -12,10 +12,6 @@ package com.ibm.ws.microprofile.faulttolerance.impl.async;
 
 import java.util.concurrent.Callable;
 
-import org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException;
-import org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException;
-
-import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.microprofile.faulttolerance.impl.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
 
@@ -25,15 +21,10 @@ import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
 public class NestedSynchronousTaskRunner<R> implements TaskRunner<R> {
 
     @Override
-    @FFDCIgnore({ TimeoutException.class, Exception.class })
-    public R runTask(Callable<R> task, ExecutionContextImpl executionContext) throws InterruptedException {
+    public R runTask(Callable<R> task, ExecutionContextImpl executionContext) throws Exception {
         R result = null;
         try {
             result = task.call();
-        } catch (InterruptedException | TimeoutException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new ExecutionException(e);
         } finally {
             executionContext.end();
         }

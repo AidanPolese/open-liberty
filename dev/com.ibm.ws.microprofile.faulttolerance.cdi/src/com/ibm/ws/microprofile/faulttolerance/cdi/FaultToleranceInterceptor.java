@@ -25,6 +25,7 @@ import javax.interceptor.InvocationContext;
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionException;
 import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
 
@@ -67,7 +68,7 @@ public class FaultToleranceInterceptor {
         return policy;
     }
 
-    @FFDCIgnore({ org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException.class })
+    @FFDCIgnore({ ExecutionException.class })
     private Object execute(InvocationContext invocationContext, AggregatedFTPolicy policies) throws Throwable {
 
         Executor<?> executor = execCache.get(policies);
@@ -112,7 +113,7 @@ public class FaultToleranceInterceptor {
                 Executor<Object> sync = (Executor<Object>) executor;
                 try {
                     result = sync.execute(callable, executionContext);
-                } catch (org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException e) {
+                } catch (ExecutionException e) {
                     throw e.getCause();
                 }
             }

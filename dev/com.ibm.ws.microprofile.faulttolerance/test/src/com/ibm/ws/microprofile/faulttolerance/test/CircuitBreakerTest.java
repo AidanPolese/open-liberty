@@ -17,10 +17,10 @@ import static org.junit.Assert.fail;
 import java.lang.reflect.Method;
 
 import org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException;
-import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 import org.junit.Test;
 
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionException;
 import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.FTExecutionContext;
@@ -52,7 +52,7 @@ public class CircuitBreakerTest {
         try {
             executions = executor.execute(callable, context);
             fail("Exception not thrown");
-        } catch (FaultToleranceException t) {
+        } catch (ExecutionException t) {
             //expected
             assertTrue(t.getCause() instanceof TestException);
         } finally {
@@ -63,7 +63,7 @@ public class CircuitBreakerTest {
         try {
             executions = executor.execute(callable, context);
             fail("Exception not thrown");
-        } catch (FaultToleranceException t) {
+        } catch (ExecutionException t) {
             //expected
             assertTrue(t.getCause() instanceof TestException);
         } finally {

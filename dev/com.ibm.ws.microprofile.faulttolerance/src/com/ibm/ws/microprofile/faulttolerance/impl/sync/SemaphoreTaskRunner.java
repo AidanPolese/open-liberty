@@ -14,8 +14,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
 
 import org.eclipse.microprofile.faulttolerance.exceptions.BulkheadException;
-import org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException;
-import org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
@@ -43,8 +41,8 @@ public class SemaphoreTaskRunner<R> implements TaskRunner<R> {
     }
 
     @Override
-    @FFDCIgnore({ TimeoutException.class, Exception.class })
-    public R runTask(Callable<R> callable, ExecutionContextImpl executionContext) throws InterruptedException {
+    @FFDCIgnore({ InterruptedException.class })
+    public R runTask(Callable<R> callable, ExecutionContextImpl executionContext) throws Exception {
         R result = null;
         executionContext.start();
         try {
@@ -62,15 +60,11 @@ public class SemaphoreTaskRunner<R> implements TaskRunner<R> {
                     this.semaphore.release();
                 }
             }
-        } catch (TimeoutException e) {
-            throw e;
         } catch (InterruptedException e) {
             //if the interrupt was caused by a timeout then check and throw that instead
             long remaining = executionContext.check();
             FTConstants.debugTime(tc, "Task Interrupted", remaining);
             throw e;
-        } catch (Exception e) {
-            throw new ExecutionException(e);
         } finally {
             executionContext.end();
         }

@@ -13,7 +13,7 @@ package com.ibm.ws.microprofile.faulttolerance.test.util;
 /**
  *
  */
-public class TestException extends RuntimeException {
+public class TestException extends Exception {
 
     /**  */
     private static final long serialVersionUID = 3156279395854067465L;

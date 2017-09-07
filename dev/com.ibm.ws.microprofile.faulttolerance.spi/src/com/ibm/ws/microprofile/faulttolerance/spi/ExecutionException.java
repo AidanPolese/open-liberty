@@ -16,7 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.microprofile.faulttolerance.exceptions;
+package com.ibm.ws.microprofile.faulttolerance.spi;
+
+import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
 /**
  * The exception should be thrown when the method being executed throws a exception.
