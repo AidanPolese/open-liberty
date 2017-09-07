@@ -32,8 +32,7 @@ Private-Package: \
   com.ibm.ws.security.internal.*
   
 DynamicImport-Package: \
-  com.ibm.wsspi.request.probe.*, \
-  com.ibm.ws.security.mp.jwt.proxy;resolution:=optional
+  com.ibm.wsspi.request.probe.*
 
 Include-Resource: \
   OSGI-INF=resources/OSGI-INF
