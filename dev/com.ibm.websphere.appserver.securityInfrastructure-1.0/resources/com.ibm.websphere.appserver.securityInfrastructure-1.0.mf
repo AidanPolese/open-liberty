@@ -14,7 +14,7 @@ Subsystem-Content: com.ibm.websphere.appserver.classloading-1.0; type="osgi.subs
  com.ibm.ws.security.registry; start-phase:=CONTAINER_EARLY; version="[1.0.0,1.0.200)",
  com.ibm.ws.management.security; version="[1.0.0,1.0.200)",
  com.ibm.ws.security.ready.service; version="[1.0.0,1.0.200)",
- com.ibm.ws.security.mp.jwt.proxy;version="[1.0.0,1.0.200)"
+ com.ibm.ws.security.mp.jwt.proxy; version="[1.0.0,1.0.200)"
 Subsystem-Description: %description
 Subsystem-License: http://www.ibm.com/licenses/wlp-featureterms-v1
 Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.securityInfrastructure-1.0

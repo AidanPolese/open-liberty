@@ -47,7 +47,7 @@ com.ibm.wsspi.kernel.service.location;version="[1.2,2)", \
 com.ibm.wsspi.kernel.service.utils;version="[1.2,2)", \
 com.ibm.wsspi.ssl;version="[1.0,2)", \
 com.ibm.ws.ssl.optional;version="[1.0,2)", \
-com.ibm.ws.security.mp.jwt.proxy; version="[1.0.0,2)", \
+com.ibm.ws.security.mp.jwt.proxy;version="[1.0,2)", \
 javax.net,javax.net.ssl, \
 javax.security.auth, \
 javax.security.auth.x500, \
