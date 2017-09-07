@@ -487,12 +487,20 @@ public class IFixCompareCommandTask extends BaseCommandTask {
             throw new VersionParsingException(getMessage("compare.unable.to.find.offering", iFixInfo.getId()));
         }
 
-        // All offerings should have the same version range so just grab the first one
-        String tolerance = offerings.get(0).getTolerance();
-        VersionRange toleranceRange = VersionRange.parseVersionRange(tolerance);
+        // All offerings do not have the same version range so we need to iterate to see if we match
+        // an of the applicable ranges
+        boolean matches = false;
+        for (Offering offering : offerings) {
+            String tolerance = offering.getTolerance();
+            VersionRange toleranceRange = VersionRange.parseVersionRange(tolerance);
 
-        // Make sure the product version is in the range of the tolerance
-        return toleranceRange.matches(productVersion);
+            // Make sure the product version is in the range of the tolerance
+            if (toleranceRange.matches(productVersion)) {
+                matches = true;
+                break;
+            }
+        }
+        return matches;
     }
 
     /**
