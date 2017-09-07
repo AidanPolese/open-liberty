@@ -68,6 +68,6 @@ instrument.classesExcludes: com/ibm/ws/rest/handler/internal/resources/*.class
 	../build.sharedResources/lib/ws-junit/ws-junit.jar;version=file, \
 	com.ibm.ws.org.objenesis:objenesis;version=1.0, \
 	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \
-	../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar;version=file, \
+	org.jmock:jmock-legacy;version=2.5.0, \
 	com.ibm.ws.kernel.boot;version=latest, \
 	com.ibm.json4j;version=latest

@@ -22,7 +22,7 @@ test.project: true
 	org.jmock:jmock;strategy=exact;version=2.5.1, \
 	com.ibm.ws.org.objenesis:objenesis;version=1.0, \
 	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \
-	../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar;version=file, \
+	org.jmock:jmock-legacy;version=2.5.0, \
 	com.ibm.websphere.security;version=latest,\
 	com.ibm.ws.security.authentication;version=latest,\
 	com.ibm.ws.security.authentication.builtin;version=latest,\

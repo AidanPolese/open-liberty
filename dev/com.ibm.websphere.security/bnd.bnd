@@ -90,5 +90,5 @@ Service-Component: \
     org.apache.httpcomponents:httpcore;version=4.1.2, \
     commons-logging:commons-logging;version=1.1.1, \
     commons-codec:commons-codec;version=1.4, \
-	../build.sharedResources/lib/jmock/legacy/jmock-legacy.jar;version=file, \
+	org.jmock:jmock-legacy;version=2.5.0, \
 	../build.sharedResources/lib/jmock/legacy/cglib-nodep.jar;version=file, \

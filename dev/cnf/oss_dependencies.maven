@@ -181,3 +181,5 @@ xml-resolver:xml-resolver:1.2
 org.mockito:mockito-all:1.9.5
 org.jmock:jmock:2.6.0
 org.jmock:jmock-junit4:2.6.0
+org.jmock:jmock-legacy:2.5.0
+org.jmockit:jmockit:1.25

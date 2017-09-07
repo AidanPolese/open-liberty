@@ -11,6 +11,6 @@
 
 test {
     doFirst {
-		jvmArgs "-javaagent:../build.sharedResources/lib/jmockit/1.25/jmockit.jar"
+		jvmArgs "-javaagent:${rootDir}/cnf/mavenlibs/jmockit-1.25.jar"
 	}
 }

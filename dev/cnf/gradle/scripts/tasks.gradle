@@ -57,6 +57,7 @@ subprojects {
     binaries "org.ow2.asm:asm-all:5.2"
     binaries "org.jsoup:jsoup:1.7.2"
     binaries "com.ibm.ws.javax.j2ee:servlet:3.1"
+    binaries "org.jmockit:jmockit:1.25"
   }
 
   task copyMavenLibs(type: Copy) {
