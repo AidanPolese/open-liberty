@@ -42,6 +42,7 @@
 	                <equals arg1="${fat.test.mode}" arg2="lite" casesensitive="false" trim="true" />
 	            </or>
 	        </condition>
+	        
 	        <!-- Works out what tests to run for the autoFVT.zip-->
 	        <scanJars entry="entry.point" filesToFind="${filesToFind}">
 	            <fileset dir="${basedir}/build/lib" includes="**.jar" />
@@ -55,7 +56,7 @@
 	</target>
 
 	<!-- Properties used: configuration.properties, local.properties, bootstrapping.properties, topology.properties, acute.properties, dir.log, dir.log.tmp -->
-	<target name="translateProperties" description="Uses bootstrapping properties to generate property files needed by the test bucket" depends="initProperties">
+	<target name="translateProperties" depends="initProperties">
 		<!-- ACUTE caches information in its topology properties file, so if the state of your server changed since your last invocation, ACUTE won't know about it unless you refresh the file -->
 		<echo>Deleting existing properties files</echo>
 		<delete file="${local.properties}" quiet="true" />
@@ -78,10 +79,27 @@
 			<entry key="jiiwsInactivityTimeout" value="${simplicity.jiiwsInactivityTimeout}" />
 			<entry key="preferJIIWSWsAdmin" value="${simplicity.preferJIIWSWsAdmin}" />
 		</propertyfile>
+		
+		<!-- Work out the actual entry point based on the current java level -->
+		<echo message="Checking min java level for project based on bootstrapping.properties file..." />
+		            
+        <!-- If this test is compiled with a java level higher than the one we're currently running, -->
+        <!-- bypass the tests by invoking the always passes test instead of real FAT tests -->
+        <property file="${basedir}/fat.bnd.properties" />
+		<script language="javascript"> <![CDATA[
+			var testBucketClassForLowJava = "componenttest.custom.junit.runner.AlwaysPassesTest";
+			var minTestJava = project.getProperty("runtime.minimum.java.level");
+			var javaVersion = project.getProperty("java.specification.version");
+			if(minTestJava != null && javaVersion < minTestJava)
+			  project.setProperty("test.bucket.class", testBucketClassForLowJava);
+        ]]></script>
+        <echo message="runtime.minimum.java.level=${runtime.minimum.java.level}"/>
+        <echo message="java.specification.version=${java.specification.version}"/>
+        <echo message="FAT entry point will be: ${test.bucket.class}"/>
 	</target>
 
 	<!-- Properties used: test.bucket.name, dir.log, dir.log.xml, dir.log.tmp, local.properties, logging.properties, acute.properties, test.bucket.path, test.bucket.class -->
-	<target name="runTests" description="Runs the specified suite, setup, test, or phase in a test bucket.  Runs full regression test suite by default.  Generates XML report." depends="initProperties">
+	<target name="runTests" depends="initProperties">
 		<condition property="do.debug">
 			<isset property="FAT_DEBUGGING" />
 		</condition>
