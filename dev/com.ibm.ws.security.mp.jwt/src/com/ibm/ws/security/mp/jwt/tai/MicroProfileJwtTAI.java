@@ -52,15 +52,14 @@ import com.ibm.ws.security.mp.jwt.impl.utils.Cache;
 import com.ibm.ws.security.mp.jwt.impl.utils.JwtPrincipalMapping;
 import com.ibm.ws.security.mp.jwt.impl.utils.MicroProfileJwtTaiRequest;
 import com.ibm.ws.webcontainer.security.ReferrerURLCookieHandler;
-import com.ibm.ws.webcontainer.security.UnprotectedResourceService;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.kernel.service.utils.ConcurrentServiceReferenceMap;
 import com.ibm.wsspi.security.tai.TAIResult;
 import com.ibm.wsspi.security.tai.TrustAssociationInterceptor;
 import com.ibm.wsspi.security.token.AttributeNameConstants;
 
-@Component(service = { TrustAssociationInterceptor.class, UnprotectedResourceService.class }, immediate = true, configurationPolicy = ConfigurationPolicy.IGNORE, property = { "service.vendor=IBM", "type=microProfileJwtTAI", "id=MPJwtTAI", "TAIName=MPJwtTAI,invokeAfterSSO:Boolean=true" })
-public class MicroProfileJwtTAI implements TrustAssociationInterceptor, UnprotectedResourceService {
+@Component(service = { TrustAssociationInterceptor.class }, immediate = true, configurationPolicy = ConfigurationPolicy.IGNORE, property = { "service.vendor=IBM", "type=microProfileJwtTAI", "id=MPJwtTAI", "TAIName=MPJwtTAI", "invokeBeforeSSO:Boolean=true" })
+public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
 
     private static TraceComponent tc = Tr.register(MicroProfileJwtTAI.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
 
@@ -207,7 +206,7 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
         try {
             clientConfig = mpJwtTaiRequest.getTheOnlyConfig();
         } catch (MpJwtProcessingException e) {
-            // Couldn't find a unique mpJwt config to serve this request
+            // did not find unique mpJwt config to serve this request
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, "A unique mpJwt config wasn't found for this request. Exception was " + e.getMessage());
             }
@@ -263,14 +262,6 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
         return sendToErrorPage(response, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
 
     }
-
-    //    @Sensitive
-    //    public static String getAndClearCookie(HttpServletRequest request, HttpServletResponse response, String cookieName) {
-    //        Cookie[] cookies = request.getCookies();
-    //        String value = CookieHelper.getCookieValue(cookies, cookieName);
-    //        CookieHelper.clearCookie(request, response, cookieName, cookies);
-    //        return value;
-    //    }
 
     @FFDCIgnore({ MpJwtProcessingException.class })
     TAIResult handleMicroProfileJwtValidation(HttpServletRequest req, HttpServletResponse res, MicroProfileJwtConfig clientConfig, String token) throws WebTrustAssociationFailedException {
@@ -400,17 +391,4 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor, Unprotec
         return ErrorHandlerImpl.getInstance().handleErrorResponse(response, taiResult);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public boolean isAuthenticationRequired(HttpServletRequest request) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean logout(HttpServletRequest request, HttpServletResponse response, String userName) {
-        // TODO Auto-generated method stub
-        return false;
-    }
 }
