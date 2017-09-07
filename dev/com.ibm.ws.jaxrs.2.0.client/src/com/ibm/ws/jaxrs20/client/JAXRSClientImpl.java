@@ -11,7 +11,11 @@
 package com.ibm.ws.jaxrs20.client;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,8 +32,14 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.client.spec.ClientImpl;
 import org.apache.cxf.jaxrs.client.spec.TLSConfiguration;
 import org.apache.cxf.phase.Phase;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 import com.ibm.websphere.ras.ProtectedString;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Sensitive;
 import com.ibm.ws.jaxrs20.bus.LibertyApplicationBus;
 import com.ibm.ws.jaxrs20.client.bus.LibertyJAXRSClientBusFactory;
@@ -40,11 +50,13 @@ import com.ibm.ws.jaxrs20.client.security.ltpa.LibertyJaxRsClientLtpaInterceptor
 import com.ibm.ws.jaxrs20.client.security.oauth.LibertyJaxRsClientOAuthInterceptor;
 import com.ibm.ws.jaxrs20.client.security.saml.PropagationHandler;
 import com.ibm.ws.jaxrs20.client.util.JaxRSClientUtil;
+import com.ibm.ws.jaxrs20.providers.api.JaxRsProviderRegister;
 
 /**
  *
  */
 public class JAXRSClientImpl extends ClientImpl {
+    private static final TraceComponent tc = Tr.register(JAXRSClientImpl.class);
 
     protected boolean closed;
     protected Set<WebClient> baseClients = new HashSet<WebClient>();
@@ -70,6 +82,42 @@ public class JAXRSClientImpl extends ClientImpl {
             ||
             ((ttClientParams.getTrustManagers() != null && ttClientParams.getTrustManagers().length > 0) && (ttClientParams.getKeyManagers() != null && ttClientParams.getKeyManagers().length > 0))) {
             hasSSLConfigInfo = true;
+        }
+
+        try {
+            Bundle b = FrameworkUtil.getBundle(JAXRSClientImpl.class);
+            BundleContext bc = b == null ? null : b.getBundleContext();
+            if (bc != null) {
+                final List<Object> providers = new ArrayList<>();
+                // we don't send feature list for client APIs
+                final Set<String> features = Collections.emptySet();
+
+                Collection<ServiceReference<JaxRsProviderRegister>> refs = bc.getServiceReferences(JaxRsProviderRegister.class, null);
+
+                for (ServiceReference<JaxRsProviderRegister> ref : refs) {
+                    JaxRsProviderRegister providerRegister = bc.getService(ref);
+                    try {
+                        providerRegister.installProvider(true, providers, features);
+                    } catch (Throwable t) {
+                        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                            String providerRegisterBundleLoc = ref.getBundle() == null ? "unknown" : ref.getBundle().getSymbolicName() + " " + ref.getBundle().getVersion();
+                            Tr.debug(tc, "<init> failed to install providers from " + providerRegister.getClass().getName() +
+                                         " loaded from " + providerRegisterBundleLoc,
+                                     t);
+                        }
+                    }
+                }
+                // now that we have a list of providers, register them
+                for (Object provider : providers) {
+                    if (provider != null) {
+                        register(provider);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "<init> failed to find and install declared providers ", ex);
+            }
         }
     }
 
