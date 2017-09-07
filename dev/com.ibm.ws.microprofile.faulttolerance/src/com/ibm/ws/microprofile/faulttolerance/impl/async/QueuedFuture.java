@@ -36,15 +36,15 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
 
     private static final TraceComponent tc = Tr.register(QueuedFuture.class);
 
-    private final Callable<Future<R>> task;
+    private final Callable<Future<R>> innerTask;
 
     private Future<Future<R>> futureFuture;
     private final ThreadContextDescriptor threadContext;
 
     private final ExecutionContextImpl executionContext;
 
-    public QueuedFuture(Callable<Future<R>> task, ExecutionContextImpl executionContext, ThreadContextDescriptor threadContext) {
-        this.task = task;
+    public QueuedFuture(Callable<Future<R>> innerTask, ExecutionContextImpl executionContext, ThreadContextDescriptor threadContext) {
+        this.innerTask = innerTask;
         this.executionContext = executionContext;
         this.threadContext = threadContext;
     }
@@ -73,32 +73,50 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
         R result = null;
         Future<Future<R>> future = getFutureFuture();
 
-        executionContext.check();
+        try {
+            executionContext.check();
+        } catch (org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException te) {
+            throw new ExecutionException(te);
+        }
 
         try {
             result = future.get().get();
-        } finally {
-            executionContext.end();
+        } catch (InterruptedException | CancellationException e) {
+            //if the future was interrupted or cancelled, check if it was because the FT Timeout popped
+            try {
+                executionContext.check();
+            } catch (org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException te) {
+                throw new ExecutionException(te);
+            }
+
+            throw e;
         }
         return result;
     }
 
     /** {@inheritDoc} */
     @Override
-    @FFDCIgnore({ CancellationException.class, TimeoutException.class })
+    @FFDCIgnore({ CancellationException.class, org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException.class })
     public R get(long methodTimeout, TimeUnit methodUnit) throws InterruptedException, ExecutionException, TimeoutException {
         R result = null;
         Future<Future<R>> future = getFutureFuture();
 
-        executionContext.check();
+        try {
+            executionContext.check();
+        } catch (org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException te) {
+            throw new ExecutionException(te);
+        }
 
         try {
             result = future.get(methodTimeout, methodUnit).get(methodTimeout, methodUnit); //TODO do both get calls need timeout?
         } catch (InterruptedException | CancellationException e) {
             //if the future was interrupted or cancelled, check if it was because the FT Timeout popped
-            executionContext.check();
-            throw e;
-        } catch (TimeoutException e) {
+            try {
+                executionContext.check();
+            } catch (org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException te) {
+                throw new ExecutionException(te);
+            }
+
             throw e;
         }
         return result;
@@ -115,15 +133,16 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
 
         ArrayList<ThreadContext> contextAppliedToThread = null;
         if (this.threadContext != null) {
+            //apply the JEE contexts to the thread before calling the inner task
             contextAppliedToThread = this.threadContext.taskStarting();
         }
         try {
-            result = task.call();
+            result = innerTask.call();
         } finally {
             if (contextAppliedToThread != null) {
+                //remove the JEE contexts again since the thread will be re-used
                 this.threadContext.taskStopping(contextAppliedToThread);
             }
-            executionContext.end();
         }
         return result;
     }

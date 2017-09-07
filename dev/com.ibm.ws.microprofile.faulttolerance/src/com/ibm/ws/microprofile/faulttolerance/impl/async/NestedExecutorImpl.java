@@ -16,6 +16,7 @@ import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 
 import com.ibm.ws.microprofile.faulttolerance.impl.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
+import com.ibm.ws.microprofile.faulttolerance.impl.sync.SimpleTaskRunner;
 import com.ibm.ws.microprofile.faulttolerance.impl.sync.SynchronousExecutorImpl;
 import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 
@@ -28,7 +29,7 @@ public class NestedExecutorImpl<R> extends SynchronousExecutorImpl<R> implements
 
     //internal constructor for the nested synchronous part of an asynchronous execution
     public NestedExecutorImpl() {
-        this.taskRunner = new NestedSynchronousTaskRunner<>();
+        this.taskRunner = new SimpleTaskRunner<>();
     }
 
     @Override

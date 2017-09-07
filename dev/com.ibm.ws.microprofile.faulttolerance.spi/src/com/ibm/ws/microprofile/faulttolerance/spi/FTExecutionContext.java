@@ -17,6 +17,9 @@ import org.eclipse.microprofile.faulttolerance.ExecutionContext;
  */
 public interface FTExecutionContext extends ExecutionContext {
 
+    /**
+     * Close the ExecutionContext and release all resources used by the execution.
+     */
     public void close();
 
 }
