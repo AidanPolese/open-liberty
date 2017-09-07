@@ -35,21 +35,30 @@ task cleanBeforeRun() {
 }
 
 task addRequiredLibraries {
-    shouldRunAfter cleanFat
-    def props = new Properties()
-    file("../generated.properties").withInputStream { props.load(it) }
-    repositories {
-        maven {
-            credentials {
-                username props.getProperty("artifactory.download.user")
-                password props.getProperty("artifactory.download.token")
-            }
-            url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
+  shouldRunAfter cleanFat
+  def props = new Properties()
+  file("${rootDir}/generated.properties").withInputStream { props.load(it) }
+  repositories {
+    if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {
+      // If Artifactory is available, use it
+      maven {
+        credentials {
+          username props.getProperty("artifactory.download.user")
+          password props.getProperty("artifactory.download.token")
         }
+        url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
+      }
+    } else {
+      // Otherwise, use public maven
+      mavenCentral()
+      maven {
+        url ("http://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/wasliberty-open-liberty/")
+      }
     }
-    configurations {
-        libs
-    }
+  }
+  configurations {
+    libs
+  }
 }
 
 task autoFVT {
