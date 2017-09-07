@@ -588,6 +588,7 @@ public class PolicyExecutorServlet extends FATServlet {
         final int totalAwaitEnqueue = 4;
         final int numToQueue = 2;
         ExecutorService executor = provider.create("testConcurrentAwaitTerminationAfterShutdownNow")
+                        .coreConcurrency(0)
                         .maxConcurrency(1)
                         .maxQueueSize(numToQueue)
                         .maxWaitForEnqueue(100);
@@ -1240,6 +1241,7 @@ public class PolicyExecutorServlet extends FATServlet {
     @Test
     public void testIdentifiers() throws Exception {
         ExecutorService executor1 = provider.create("testIdentifiers")
+                        .coreConcurrency(4)
                         .maxConcurrency(20)
                         .maxQueueSize(50)
                         .maxWaitForEnqueue(TimeUnit.SECONDS.toMillis(30));
@@ -1671,9 +1673,9 @@ public class PolicyExecutorServlet extends FATServlet {
     // which in turn break themselves down and submit multiple tasks to the policy executor, and so forth.
     @Test
     public void testMultipleLayersOfSubmits() throws Exception {
-        // TODO add min/coreConcurrency when we have it
         ExecutorService executor = provider.create("testMultipleLayersOfSubmits")
-                        .maxConcurrency(8) // just enough to ensure we can cover a 16 element array
+                        .coreConcurrency(8) // just enough to ensure we can cover a 16 element array
+                        .maxConcurrency(8)
                         .maxQueueSize(8) // also just enough to ensure we can cover a 16 element array
                         .queueFullAction(QueueFullAction.Abort); // TODO in the future, this sort of test is a good candidate for CallerRuns
 
@@ -1699,7 +1701,8 @@ public class PolicyExecutorServlet extends FATServlet {
     @Test
     public void testRecursiveTasks() throws Exception {
         PolicyExecutor executor = provider.create("testRecursiveTasks")
-                        .maxConcurrency(8) // TODO switch to coreConcurrency:8, maxConcurrency:10
+                        .coreConcurrency(8)
+                        .maxConcurrency(10)
                         .maxQueueSize(10) // just enough to cover factorials of 6, 4, and 3 without getting stuck
                         .maxWaitForEnqueue(TimeUnit.NANOSECONDS.toMillis(TIMEOUT_NS * 2));
         Future<Long> f6 = executor.submit(new FactorialTask(6, executor));
@@ -1711,7 +1714,7 @@ public class PolicyExecutorServlet extends FATServlet {
         assertEquals(Long.valueOf(6), f3.get(TIMEOUT_NS * 3, TimeUnit.NANOSECONDS));
 
         // Decrease concurrency and submit a recursive task that will hang
-        executor.maxConcurrency(3);
+        executor.coreConcurrency(3).maxConcurrency(3);
         Future<Long> f5 = executor.submit(new FactorialTask(5, executor));
         try {
             fail("Should not be able to complete recursive task with insufficient concurrency: " + f5.get(200, TimeUnit.MILLISECONDS));

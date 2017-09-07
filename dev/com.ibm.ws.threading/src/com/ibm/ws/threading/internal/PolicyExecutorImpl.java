@@ -21,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RejectedExecutionException;
@@ -55,7 +54,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     private final AtomicInteger coreConcurrencyAvailable = new AtomicInteger();
 
-    private ExecutorService globalExecutor;
+    private ExecutorServiceImpl globalExecutor;
 
     private String identifier;
 
@@ -124,13 +123,13 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         private final FutureTask<T> futureTask;
         private final Object task;
 
-        public PolicyTaskFuture(Callable<T> task) {
-            this.futureTask = new FutureTask<T>(task);
+        private PolicyTaskFuture(Callable<T> task) {
+            this.futureTask = new FutureTask<T>(globalExecutor.wrap(task));
             this.task = task;
         }
 
-        public PolicyTaskFuture(Runnable task, T result) {
-            this.futureTask = new FutureTask<T>(task, result);
+        private PolicyTaskFuture(Runnable task, T result) {
+            this.futureTask = new FutureTask<T>(globalExecutor.wrap(task), result);
             this.task = task;
         }
 
@@ -173,9 +172,14 @@ public class PolicyExecutorImpl implements PolicyExecutor {
      * Polling tasks run on the global thread pool.
      * Their role is to run tasks that are queued up on the policy executor.
      */
-    private class PollingTask implements Runnable {
+    private class PollingTask implements QueueItem, Runnable {
         // Indicates whether or not this task should be expedited vs enqueued.
         private boolean expedite;
+
+        @Override
+        public boolean isExpedited() {
+            return expedite;
+        }
 
         @Override
         public void run() {
@@ -257,7 +261,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
      * @throws IllegalStateException if an instance with the specified unique identifier already exists and has not been shut down.
      * @throws NullPointerException if the specified identifier is null
      */
-    public PolicyExecutorImpl(ExecutorService globalExecutor, String identifier, ConcurrentHashMap<String, PolicyExecutorImpl> providerCreatedInstances) {
+    public PolicyExecutorImpl(ExecutorServiceImpl globalExecutor, String identifier, ConcurrentHashMap<String, PolicyExecutorImpl> providerCreatedInstances) {
         this.globalExecutor = globalExecutor;
         this.identifier = "PolicyExecutorProvider-" + identifier;
         this.providerCreated = providerCreatedInstances;
@@ -352,6 +356,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         if (core < 0)
             throw new IllegalArgumentException(Integer.toString(core));
 
+        int cca;
         synchronized (configLock) {
             if (core > maxConcurrency)
                 throw new IllegalArgumentException(Integer.toString(core));
@@ -359,12 +364,25 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             if (state.get() != State.ACTIVE)
                 throw new IllegalStateException(Tr.formatMessage(tc, "CWWKE1203.config.update.after.shutdown", "coreConcurrency", identifier));
 
-            int increase = core - coreConcurrency;
-            coreConcurrencyAvailable.addAndGet(increase);
+            cca = coreConcurrencyAvailable.addAndGet(core - coreConcurrency);
             coreConcurrency = core;
         }
 
-        // TODO consider if we should expedite additional PollingTasks to more immediately meet increased core concurrency
+        // Expedite as many of the remaining tasks as the available maxConcurrency permits and increased coreConcurrency
+        // will allow. We are choosing not to revoke PollingTasks that have already been enqueued as non-expedited,
+        // which means we do not guarantee an increased coreConcurrency to fully go into effect immediately.
+        // Any reduction to coreConcurrency is handled gradually, as expedited PollingTasks complete.
+        if (cca > 0) {
+            int numToExpedite = queue.size();
+            numToExpedite = cca < numToExpedite ? cca : numToExpedite;
+            while (numToExpedite-- > 0 && maxConcurrencyConstraint.tryAcquire())
+                if (acquireCoreConcurrency() > 0)
+                    expediteGlobal(new PollingTask());
+                else {
+                    maxConcurrencyConstraint.release();
+                    break;
+                }
+        }
 
         return this;
     }
@@ -430,11 +448,12 @@ public class PolicyExecutorImpl implements PolicyExecutor {
      */
     void enqueueGlobal(PollingTask pollingTask) {
         pollingTask.expedite = false;
-        Future<?> future = null;
+        boolean submitted = false;
         try {
-            future = globalExecutor.submit(pollingTask);
+            globalExecutor.executeWithoutInterceptors(pollingTask);
+            submitted = true;
         } finally {
-            if (future == null) {
+            if (!submitted) {
                 maxConcurrencyConstraint.release();
 
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
@@ -459,11 +478,12 @@ public class PolicyExecutorImpl implements PolicyExecutor {
      */
     void expediteGlobal(PollingTask pollingTask) {
         pollingTask.expedite = true;
-        Future<?> future = null;
+        boolean submitted = false;
         try {
-            future = globalExecutor.submit(pollingTask); // TODO submit as expedited
+            globalExecutor.executeWithoutInterceptors(pollingTask);
+            submitted = true;
         } finally {
-            if (future == null) {
+            if (!submitted) {
                 int cca = coreConcurrencyAvailable.incrementAndGet();
                 maxConcurrencyConstraint.release();
 
@@ -537,6 +557,9 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             throw new IllegalArgumentException(Integer.toString(max));
 
         synchronized (configLock) {
+            if (max < coreConcurrency)
+                throw new IllegalArgumentException(Integer.toString(max));
+
             if (state.get() != State.ACTIVE)
                 throw new IllegalStateException(Tr.formatMessage(tc, "CWWKE1203.config.update.after.shutdown", "maxConcurrency", identifier));
 
@@ -611,7 +634,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     /**
      * Invoked by the policy executor thread to run a task.
      *
-     * @param task the task.
+     * @param future the future for the task.
      */
     @Trivial // do the tracing ourselves to ensure exception is included
     void runTask(PolicyTaskFuture<?> future) {

@@ -17,6 +17,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 
+import com.ibm.ws.threading.internal.ExecutorServiceImpl;
 import com.ibm.ws.threading.internal.PolicyExecutorImpl;
 
 /**
@@ -60,6 +61,6 @@ public class PolicyExecutorProvider {
      * @throws NullPointerException if the specified identifier is null
      */
     public PolicyExecutor create(String identifier) {
-        return new PolicyExecutorImpl(globalExecutor, identifier, policyExecutors);
+        return new PolicyExecutorImpl((ExecutorServiceImpl) globalExecutor, identifier, policyExecutors);
     }
 }
