@@ -10,8 +10,11 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance_fat.cdi.beans;
 
+import java.util.concurrent.Future;
+
 import javax.enterprise.context.RequestScoped;
 
+import org.eclipse.microprofile.faulttolerance.Asynchronous;
 import org.eclipse.microprofile.faulttolerance.Retry;
 
 import com.ibm.ws.microprofile.faulttolerance_fat.util.ConnectException;
@@ -30,6 +33,12 @@ public class RetryBeanC {
     // AbortOn is overridden in config to [IllegalArgumentException, ConnectionException] so this should always abort
     @Retry(maxRetries = 3)
     public void connectC2() throws ConnectException {
+        throw new ConnectException("RetryBeanC Connect: " + (++connectCount));
+    }
+
+    @Asynchronous
+    @Retry(maxRetries = 3, abortOn = ConnectException.class)
+    public Future<Void> connectCAsync() throws ConnectException {
         throw new ConnectException("RetryBeanC Connect: " + (++connectCount));
     }
 

@@ -10,11 +10,13 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance_fat.cdi;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -90,6 +92,18 @@ public class RetryServlet extends FATServlet {
         } catch (ConnectException e) {
             // Connect count should be 1 because abortOn is set to include ConnectException
             assertThat("Exception message", e.getMessage(), is("ConnectException: RetryBeanC Connect: 1"));
+        }
+    }
+
+    /**
+     * Test that the abortOn parameter is handled correctly on an asynchronous call
+     */
+    public void testRetryAbortOnAsync(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        try {
+            beanC.connectCAsync().get();
+        } catch (ExecutionException e) {
+            // Connect count should be 1 because abortOn is set to include ConnectException
+            assertThat("Exception message", e.getCause().getMessage(), containsString("ConnectException: RetryBeanC Connect: 1"));
         }
     }
 
