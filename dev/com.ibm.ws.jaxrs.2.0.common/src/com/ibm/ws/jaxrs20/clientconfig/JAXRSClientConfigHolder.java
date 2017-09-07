@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.ws.rs.core.UriBuilder;
+
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 
@@ -92,7 +94,7 @@ public class JAXRSClientConfigHolder {
      * @param uri - the uri to retrieve the props for, probably of form http(s)://something...(*)
      * @return - map of merged applicable properties, or null if no applicable props found
      */
-    public static Map<String, String> getURIProps(String uri) {
+    public static Map<String, String> getURIProps(UriBuilder uriBuilder) {
         boolean debug = tc.isDebugEnabled() && TraceComponent.isAnyTracingEnabled();
         if (configInfo.isEmpty()) {
             if (debug) {
@@ -100,6 +102,8 @@ public class JAXRSClientConfigHolder {
             }
             return null;
         }
+
+        String uri = uriBuilder.build().toString();
 
         // look in the cache in case we've resolved this before
         synchronized (resolvedConfigInfo) {

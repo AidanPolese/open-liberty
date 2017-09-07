@@ -68,4 +68,5 @@ instrument.classesExcludes: com/ibm/ws/security/internal/resources/*.class
 	com.ibm.ws.bnd.annotations;version=latest,\
 	com.ibm.ws.common.encoder;version=latest,\
 	com.ibm.ws.logging.core;version=latest, \
-	com.ibm.ws.org.osgi.annotation.versioning;version=latest
+	com.ibm.ws.org.osgi.annotation.versioning;version=latest,\
+	com.ibm.ws.security.mp.jwt.proxy;version=latest

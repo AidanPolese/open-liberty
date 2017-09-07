@@ -313,6 +313,19 @@ public final class ExecutorServiceImpl implements WSExecutorService {
         threadPool.execute(interceptorsActive ? wrap(command) : command);
     }
 
+    /**
+     * For internal use only. Invoker is responsible for ensuring that the interceptors are applied
+     * to the underlying task that the proxy eventually delegates to. This allows the proxy Runnable
+     * to be offered directly to the BlockingQueue, which can then identify information about it,
+     * such as whether it ought to be expedited instead of inserted at the tail of the queue. 
+     * 
+     * @param proxy
+     */
+    void executeWithoutInterceptors(Runnable proxy) {
+        threadPoolController.resumeIfPaused();
+        threadPool.execute(proxy);
+    }
+
     @Trivial
     public int getPoolSize() {
         return threadPool.getPoolSize();
@@ -426,7 +439,7 @@ public final class ExecutorServiceImpl implements WSExecutorService {
         }
     }
     
-    private Runnable wrap(Runnable r) {
+    Runnable wrap(Runnable r) {
         Iterator<ExecutorServiceTaskInterceptor> i = interceptors.iterator();
         while (i.hasNext()) {
             r = i.next().wrap(r);
@@ -434,7 +447,7 @@ public final class ExecutorServiceImpl implements WSExecutorService {
         return r;
     }
 
-    private <T> Callable<T> wrap(Callable<T> c) {
+    <T> Callable<T> wrap(Callable<T> c) {
         Iterator<ExecutorServiceTaskInterceptor> i = interceptors.iterator();
         while (i.hasNext()) {
             c = i.next().wrap(c);

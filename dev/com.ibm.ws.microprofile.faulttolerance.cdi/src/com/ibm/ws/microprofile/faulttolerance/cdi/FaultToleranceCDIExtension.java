@@ -11,9 +11,9 @@
 package com.ibm.ws.microprofile.faulttolerance.cdi;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.Future;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AnnotatedMethod;
@@ -22,15 +22,19 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
+import javax.enterprise.inject.spi.WithAnnotations;
 
 import org.eclipse.microprofile.faulttolerance.Asynchronous;
-import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.osgi.service.component.annotations.Component;
-
-import com.ibm.ws.cdi.extension.WebSphereCDIExtension;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.cdi.extension.WebSphereCDIExtension;
 
 @Component(service = WebSphereCDIExtension.class, immediate = true)
 public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtension {
@@ -45,12 +49,17 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
         beforeBeanDiscovery.addAnnotatedType(interceptorType);
     }
 
-    public <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> processAnnotatedType, BeanManager beanManager) {
+    public <T> void processAnnotatedType(@Observes @WithAnnotations({ Asynchronous.class, Fallback.class, Timeout.class, CircuitBreaker.class, Retry.class,
+                                                                      Bulkhead.class }) ProcessAnnotatedType<T> processAnnotatedType,
+                                         BeanManager beanManager) {
+
         Set<AnnotatedMethod<?>> interceptedMethods = new HashSet<AnnotatedMethod<?>>();
         boolean interceptedClass = false;
         boolean classLevelAsync = false;
 
         AnnotatedType<T> annotatedType = processAnnotatedType.getAnnotatedType();
+        //get the target class
+        Class<?> clazz = processAnnotatedType.getAnnotatedType().getJavaClass();
         //look at the class level annotations
         Set<Annotation> annotations = annotatedType.getAnnotations();
         for (Annotation annotation : annotations) {
@@ -59,6 +68,14 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
                 interceptedClass = true;
                 if (annotation.annotationType() == Asynchronous.class) {
                     classLevelAsync = true;
+                } else if (annotation.annotationType() == Retry.class) {
+                    PolicyValidationUtils.validateRetry(clazz, null, (Retry) annotation);
+                } else if (annotation.annotationType() == Timeout.class) {
+                    PolicyValidationUtils.validateTimeout(clazz, null, (Timeout) annotation);
+                } else if (annotation.annotationType() == CircuitBreaker.class) {
+                    PolicyValidationUtils.validateCircuitBreaker(clazz, null, (CircuitBreaker) annotation);
+                } else if (annotation.annotationType() == Bulkhead.class) {
+                    PolicyValidationUtils.validateBulkhead(clazz, null, (Bulkhead) annotation);
                 }
             }
         }
@@ -66,20 +83,11 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
         //now loop through the methods
         Set<AnnotatedMethod<? super T>> methods = annotatedType.getMethods();
         for (AnnotatedMethod<?> method : methods) {
-            Class<?> returnType = method.getJavaMember().getReturnType();
-            if (classLevelAsync) {
-                if (!(Future.class.isAssignableFrom(returnType))) {
-                    throw new FaultToleranceException(Tr.formatMessage(tc, "asynchronous.class.not.returning.future.CWMFT5000E", method));
-                }
-            }
+            validateMethod(method, clazz, classLevelAsync);
+
             annotations = method.getAnnotations();
             for (Annotation annotation : annotations) {
                 if (FTAnnotationUtils.ANNOTATIONS.contains(annotation.annotationType())) {
-                    if (annotation.annotationType() == Asynchronous.class) {
-                        if (!(Future.class.isAssignableFrom(returnType))) {
-                            throw new FaultToleranceException(Tr.formatMessage(tc, "asynchronous.method.not.returning.future.CWMFT5001E", method));
-                        }
-                    }
                     interceptedMethods.add(method);
                 }
             }
@@ -88,6 +96,44 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
         //if there were any FT annotations on the class or methods then add the interceptor binding to the methods
         if (interceptedClass || !interceptedMethods.isEmpty()) {
             addFaultToleranceAnnotation(beanManager, processAnnotatedType, interceptedClass, interceptedMethods);
+        }
+    }
+
+    private <T> void validateMethod(AnnotatedMethod<T> method, Class<?> clazz, boolean classLevelAsync) {
+        Method javaMethod = method.getJavaMember();
+
+        if (javaMethod.isBridge()) {
+            // Skip all validation for bridge methods
+            // Bridge methods are created when a class overrides a method but provides more specific return or parameter types
+            // (usually when implementing a generic interface)
+
+            // In these cases, the bridge method matches the signature of the overridden method after type erasure and delegates directly to the overriding method
+            // In some cases, the signature of the overriding method is valid for some microprofile annotation, but the signature of the bridge method is not
+            // However, the user's code is valid, and weld seems to make sure that any interceptors get called with the real method in the InvocationContext.
+            return;
+        }
+
+        if (classLevelAsync) {
+            PolicyValidationUtils.validateAsynchronous(javaMethod);
+        }
+
+        Set<Annotation> annotations = method.getAnnotations();
+        for (Annotation annotation : annotations) {
+            if (FTAnnotationUtils.ANNOTATIONS.contains(annotation.annotationType())) {
+                if (annotation.annotationType() == Asynchronous.class) {
+                    PolicyValidationUtils.validateAsynchronous(javaMethod);
+                } else if (annotation.annotationType() == Fallback.class) {
+                    PolicyValidationUtils.validateFallback(javaMethod, (Fallback) annotation);
+                } else if (annotation.annotationType() == Retry.class) {
+                    PolicyValidationUtils.validateRetry(clazz, javaMethod, (Retry) annotation);
+                } else if (annotation.annotationType() == Timeout.class) {
+                    PolicyValidationUtils.validateTimeout(clazz, javaMethod, (Timeout) annotation);
+                } else if (annotation.annotationType() == CircuitBreaker.class) {
+                    PolicyValidationUtils.validateCircuitBreaker(clazz, javaMethod, (CircuitBreaker) annotation);
+                } else if (annotation.annotationType() == Bulkhead.class) {
+                    PolicyValidationUtils.validateBulkhead(clazz, javaMethod, (Bulkhead) annotation);
+                }
+            }
         }
     }
 

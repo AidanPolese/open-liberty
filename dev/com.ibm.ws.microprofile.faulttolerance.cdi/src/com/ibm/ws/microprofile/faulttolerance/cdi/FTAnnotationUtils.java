@@ -12,6 +12,8 @@ package com.ibm.ws.microprofile.faulttolerance.cdi;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,7 +47,7 @@ import com.ibm.ws.microprofile.faulttolerance.cdi.config.RetryConfig;
 import com.ibm.ws.microprofile.faulttolerance.cdi.config.TimeoutConfig;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
-import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackHandlerFactory;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceFunction;
@@ -57,8 +59,28 @@ public class FTAnnotationUtils {
 
     private static final TraceComponent tc = Tr.register(FTAnnotationUtils.class);
 
-    public final static Set<Class<?>> ANNOTATIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(Asynchronous.class, CircuitBreaker.class,
-                                                                                                            Retry.class, Timeout.class, Bulkhead.class, Fallback.class)));
+    public final static Set<Class<?>> ANNOTATIONS;
+
+    static {
+        String allAnnotationsEnabledString = AccessController.doPrivileged((PrivilegedAction<String>) () -> System.getenv(FTUtils.ENV_NONFALLBACK_ENABLED));
+
+        boolean allAnnotationsEnabled;
+        if (allAnnotationsEnabledString != null && allAnnotationsEnabledString.equalsIgnoreCase("false")) {
+            allAnnotationsEnabled = false;
+        } else {
+            allAnnotationsEnabled = true;
+        }
+
+        if (allAnnotationsEnabled) {
+            ANNOTATIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(Asynchronous.class, CircuitBreaker.class,
+                                                                                  Retry.class, Timeout.class, Bulkhead.class, Fallback.class)));
+        } else {
+            if (tc.isDebugEnabled()) {
+                Tr.debug(tc, "All annotations except Fallback are disabled");
+            }
+            ANNOTATIONS = Collections.singleton(Fallback.class);
+        }
+    }
 
     static RetryPolicy processRetryAnnotation(Retry retry) {
         int maxRetries = retry.maxRetries();
@@ -167,11 +189,10 @@ public class FTAnnotationUtils {
                 Class<?> fallbackReturn = fallbackMethod.getReturnType();
                 if (originalReturn.isAssignableFrom(fallbackReturn)) {
                     fallbackPolicy = newFallbackPolicy(beanInstance, fallbackMethod, fallbackReturn);
-                } else {
-                    throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.policy.return.type.not.match.CWMFT5002E", fallbackMethod, originalMethod));
                 }
             } catch (NoSuchMethodException e) {
-                throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", beanInstance.getClass(), fallbackMethodName, paramTypes), e);
+                throw new FaultToleranceException(Tr.formatMessage(tc, "fallback.method.not.found.CWMFT5003E", fallbackMethodName, originalMethod.getName(),
+                                                                   beanInstance.getClass()), e);
             } catch (SecurityException e) {
                 throw new FaultToleranceException((Tr.formatMessage(tc, "security.exception.acquiring.fallback.method.CWMFT5004E")), e);
             }
@@ -221,20 +242,29 @@ public class FTAnnotationUtils {
         Class<?> targetClass = context.getTarget().getClass();
         Annotation[] annotations = targetClass.getAnnotations();
         for (Annotation annotation : annotations) {
+            // Don't process any annotations which aren't enabled
+            if (!ANNOTATIONS.contains(annotation.annotationType())) {
+                continue;
+            }
+
             if (annotation.annotationType().equals(Asynchronous.class)) {
                 asynchronous = (Asynchronous) annotation;
                 asynchronous = new AsynchronousConfig(targetClass, asynchronous);
             } else if (annotation.annotationType().equals(Retry.class)) {
                 retry = (Retry) annotation;
+                PolicyValidationUtils.validateRetry(targetClass, null, retry);
                 retry = new RetryConfig(targetClass, retry);
             } else if (annotation.annotationType().equals(CircuitBreaker.class)) {
                 circuitBreaker = (CircuitBreaker) annotation;
+                PolicyValidationUtils.validateCircuitBreaker(targetClass, null, circuitBreaker);
                 circuitBreaker = new CircuitBreakerConfig(targetClass, circuitBreaker);
             } else if (annotation.annotationType().equals(Timeout.class)) {
                 timeout = (Timeout) annotation;
+                PolicyValidationUtils.validateTimeout(targetClass, null, timeout);
                 timeout = new TimeoutConfig(targetClass, timeout);
             } else if (annotation.annotationType().equals(Bulkhead.class)) {
                 bulkhead = (Bulkhead) annotation;
+                PolicyValidationUtils.validateBulkhead(targetClass, null, bulkhead);
                 bulkhead = new BulkheadConfig(targetClass, bulkhead);
             } else if (annotation.annotationType().equals(Fallback.class)) {
                 fallback = (Fallback) annotation;
@@ -247,23 +277,34 @@ public class FTAnnotationUtils {
         Method method = context.getMethod();
         annotations = method.getAnnotations();
         for (Annotation annotation : annotations) {
+            // Don't process any annotations which aren't enabled
+            if (!ANNOTATIONS.contains(annotation.annotationType())) {
+                continue;
+            }
+
             if (annotation.annotationType().equals(Asynchronous.class)) {
                 asynchronous = (Asynchronous) annotation;
+
                 asynchronous = new AsynchronousConfig(method, asynchronous);
             } else if (annotation.annotationType().equals(Retry.class)) {
                 retry = (Retry) annotation;
+                PolicyValidationUtils.validateRetry(targetClass, method, retry);
                 retry = new RetryConfig(method, retry);
             } else if (annotation.annotationType().equals(CircuitBreaker.class)) {
                 circuitBreaker = (CircuitBreaker) annotation;
+                PolicyValidationUtils.validateCircuitBreaker(targetClass, method, circuitBreaker);
                 circuitBreaker = new CircuitBreakerConfig(method, circuitBreaker);
             } else if (annotation.annotationType().equals(Timeout.class)) {
                 timeout = (Timeout) annotation;
+                PolicyValidationUtils.validateTimeout(targetClass, method, timeout);
                 timeout = new TimeoutConfig(method, timeout);
             } else if (annotation.annotationType().equals(Bulkhead.class)) {
                 bulkhead = (Bulkhead) annotation;
+                PolicyValidationUtils.validateBulkhead(targetClass, method, bulkhead);
                 bulkhead = new BulkheadConfig(method, bulkhead);
             } else if (annotation.annotationType().equals(Fallback.class)) {
                 fallback = (Fallback) annotation;
+                PolicyValidationUtils.validateFallback(method, fallback);
                 fallback = new FallbackConfig(method, fallback);
             }
         }
@@ -340,13 +381,13 @@ public class FTAnnotationUtils {
      * @param policies
      * @return
      */
-    public static ExecutionBuilder<ExecutionContext, ?> newBuilder(AggregatedFTPolicy policies) {
-        ExecutionBuilder<ExecutionContext, ?> builder = FaultToleranceProvider.newExecutionBuilder();
+    public static ExecutorBuilder<ExecutionContext, ?> newBuilder(AggregatedFTPolicy policies) {
+        ExecutorBuilder<ExecutionContext, ?> builder = FaultToleranceProvider.newExecutionBuilder();
         builder = updateBuilder(builder, policies);
         return builder;
     }
 
-    public static <R> ExecutionBuilder<ExecutionContext, R> updateBuilder(ExecutionBuilder<ExecutionContext, R> builder, AggregatedFTPolicy policies) {
+    public static <R> ExecutorBuilder<ExecutionContext, R> updateBuilder(ExecutorBuilder<ExecutionContext, R> builder, AggregatedFTPolicy policies) {
         TimeoutPolicy timeoutPolicy = policies.getTimeoutPolicy();
         CircuitBreakerPolicy circuitBreakerPolicy = policies.getCircuitBreakerPolicy();
         RetryPolicy retryPolicy = policies.getRetryPolicy();

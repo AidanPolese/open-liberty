@@ -14,15 +14,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.lang.reflect.Method;
+
 import org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 import org.junit.Test;
 
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
-import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
-import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
+import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
+import com.ibm.ws.microprofile.faulttolerance.spi.FTExecutionContext;
 import com.ibm.ws.microprofile.faulttolerance.spi.FaultToleranceProvider;
-import com.ibm.ws.microprofile.faulttolerance.test.util.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestException;
 import com.ibm.ws.microprofile.faulttolerance.test.util.TestFunction;
 
@@ -37,34 +39,48 @@ public class CircuitBreakerTest {
         circuitBreaker.setFailureRatio(1.0);
         circuitBreaker.setRequestVolumeThreshold(2);
 
-        ExecutionBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
+        ExecutorBuilder<String, String> builder = FaultToleranceProvider.newExecutionBuilder();
         builder.setCircuitBreakerPolicy(circuitBreaker);
 
-        Execution<String> executor = builder.build();
+        Executor<String> executor = builder.build();
 
         TestFunction callable = new TestFunction(-1, "testCircuitBreaker");
 
+        String id = "testCircuitBreaker1";
         String executions = "NOT_RUN";
+        FTExecutionContext context = executor.newExecutionContext(id, (Method) null, id);
         try {
-            executions = executor.execute(callable, new ExecutionContextImpl("testCircuitBreaker1"));
+            executions = executor.execute(callable, context);
             fail("Exception not thrown");
         } catch (FaultToleranceException t) {
             //expected
             assertTrue(t.getCause() instanceof TestException);
+        } finally {
+            context.close();
         }
+        id = "testCircuitBreaker2";
+        context = executor.newExecutionContext(id, (Method) null, id);
         try {
-            executions = executor.execute(callable, new ExecutionContextImpl("testCircuitBreaker2"));
+            executions = executor.execute(callable, context);
             fail("Exception not thrown");
         } catch (FaultToleranceException t) {
             //expected
             assertTrue(t.getCause() instanceof TestException);
+        } finally {
+            context.close();
         }
+
+        id = "testCircuitBreaker3";
+        context = executor.newExecutionContext(id, (Method) null, id);
         try {
-            executions = executor.execute(callable, new ExecutionContextImpl("testCircuitBreaker3"));
+            executions = executor.execute(callable, context);
             fail("Exception not thrown");
         } catch (CircuitBreakerOpenException t) {
             //expected
+        } finally {
+            context.close();
         }
+
         assertEquals("NOT_RUN", executions);
     }
 

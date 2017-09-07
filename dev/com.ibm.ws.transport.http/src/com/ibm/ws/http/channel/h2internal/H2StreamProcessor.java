@@ -1006,45 +1006,50 @@ public class H2StreamProcessor {
     }
 
     /*
-     * Send an artificially created HTTP request from a push-promise up to the WebContainer
+     * Send an artificially created H2 request from a push_promise up to the WebContainer
      * TODO There may be a problem here, since a RST_STREAM frame can come in on the reserved PP
      * stream
      */
     public void sendRequestToWc(FrameHeaders frame) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.entry(tc, "sendRequestToWc");
+        }
 
-        if (null != frame) {
-
+        if (null == frame) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "sendRequestToWc: frame is null");
+            }
+        } else {
+            // Make the frame look like it just came in
             WsByteBufferPoolManager bufManager = HttpDispatcher.getBufferManager();
             WsByteBuffer buf = bufManager.allocate(frame.buildFrameForWrite().length);
             byte[] ba = frame.buildFrameForWrite();
-
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "sendRequestToWc: request length is " + ba.length);
-            }
-
             buf.put(ba);
             buf.flip();
             TCPReadRequestContext readi = h2HttpInboundLinkWrap.getConnectionContext().getReadInterface();
             readi.setBuffer(buf);
-
-            // It's ready to send to the webcontainer
             currentFrame = frame;
             this.getHeadersFromFrame();
             setHeadersComplete();
             try {
                 processCompleteHeaders();
             } catch (CompressionException e) {
-                // TODO Auto-generated catch block
-                // Do you need FFDC here? Remember FFDC instrumentation and @FFDCIgnore
-                // http://was.pok.ibm.com/xwiki/bin/view/Liberty/LoggingFFDC
-                e.printStackTrace();
-            }
-            setReadyForRead();
-        } else {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "sendRequestToWc: request is null");
+                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                    Tr.debug(tc, "sendRequestToWc: compression exception when creating the pushed reqeust on stream-id " + myID);
+                }
+                // Free the buffer and exit
+                buf.release();
+                // TODO This SP is left hanging
+                currentFrame = null;
+                return;
             }
 
+            // Start a new thread to pass along this frame to wc
+            setReadyForRead();
+        }
+
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.exit(tc, "sendRequestToWc");
         }
 
     }

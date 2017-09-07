@@ -34,24 +34,25 @@ WS-TraceGroup: JAXRS
    org.apache.cxf.*;version=3.2.0-SNAPSHOT, \
    
 Export-Package: \
-   META-INF.cxf, \
-   com.ibm.ws.jaxrs20, \
-   com.ibm.ws.jaxrs20.api;provide=true, \
-   com.ibm.ws.jaxrs20.bus, \
-   com.ibm.ws.jaxrs20.metadata, \
-   com.ibm.ws.jaxrs20.metadata.builder, \
-   com.ibm.ws.jaxrs20.support, \
-   com.ibm.ws.jaxrs20.utils, \
-   com.ibm.ws.jaxrs20.endpoint, \
-   com.ibm.ws.jaxrs20.injection, \
-   com.ibm.ws.jaxrs20.injection.*, \
-   com.ibm.ws.jaxrs20.threading, \
-   com.ibm.ws.jaxrs21.sse, \
-   com.ibm.websphere.jaxrs.providers.json4j;version="1.1.0", \
-   com.ibm.websphere.jaxrs20.multipart;version="1.1.0", \
-   com.ibm.ws.jaxrs20.clientconfig, \
-   org.apache.cxf.jaxrs.sse;version=3.2.0, \
-   org.apache.cxf.jaxrs.sse.client;version=3.2.0;thread-context=true
+	META-INF.cxf,\
+	com.ibm.ws.jaxrs20,\
+	com.ibm.ws.jaxrs20.api;provide=true,\
+	com.ibm.ws.jaxrs20.bus,\
+	com.ibm.ws.jaxrs20.metadata,\
+	com.ibm.ws.jaxrs20.metadata.builder,\
+	com.ibm.ws.jaxrs20.support,\
+	com.ibm.ws.jaxrs20.utils,\
+	com.ibm.ws.jaxrs20.endpoint,\
+	com.ibm.ws.jaxrs20.injection,\
+	com.ibm.ws.jaxrs20.injection.*,\
+	com.ibm.ws.jaxrs20.threading,\
+	com.ibm.ws.jaxrs21.sse,\
+	com.ibm.websphere.jaxrs.providers.json4j;version=1.1.0,\
+	com.ibm.websphere.jaxrs20.multipart;version=1.1.0,\
+	com.ibm.ws.jaxrs20.clientconfig,\
+	org.apache.cxf.jaxrs.sse;version=3.2.0,\
+	org.apache.cxf.jaxrs.sse.client;version=3.2.0;thread-context=true,\
+	com.ibm.ws.jaxrs20.providers.api
 
 Import-Package: \
  !com.wordnik.swagger.jaxrs.config, \
@@ -149,14 +150,14 @@ Private-Package:\
    com.ibm.ws.jaxrs20.*, \
 
 Include-Resource: \
-  lib/${cxf-core}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-core}, \
-  lib/${cxf-rt-frontend-jaxrs}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-frontend-jaxrs}, \
-  lib/${cxf-rt-rs-client}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-rs-client}, \
-  lib/${cxf-rt-rs-sse}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-rs-sse}, \
-  lib/${cxf-rt-transports-http}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-transports-http}, \
-  lib/${cxf-tools-common}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-tools-common}, \
-  lib/${cxf-tools-wadlto-jaxrs}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-tools-wadlto-jaxrs}, \
-  lib/${cxf-rt-rs-service-description}=../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-rs-service-description}, \
+  lib/${cxf-core}=${repo;org.apache.cxf.cxf-core;3.2.0.SNAPSHOT;EXACT}, \
+  lib/${cxf-rt-frontend-jaxrs}=${repo;org.apache.cxf.cxf-rt-frontend-jaxrs;3.2.0.SNAPSHOT;EXACT}, \
+  lib/${cxf-rt-rs-client}=${repo;org.apache.cxf.cxf-rt-rs-client;3.2.0.SNAPSHOT;EXACT}, \
+  lib/${cxf-rt-transports-http}=${repo;org.apache.cxf.cxf-rt-transports-http;3.2.0.SNAPSHOT;EXACT}, \
+  lib/${cxf-tools-common}=${repo;org.apache.cxf.cxf-tools-common;3.2.0.SNAPSHOT;EXACT}, \
+  lib/${cxf-tools-wadlto-jaxrs}=${repo;org.apache.cxf.cxf-tools-wadlto-jaxrs;3.2.0.SNAPSHOT;EXACT}, \
+  lib/${cxf-rt-rs-service-description}=${repo;org.apache.cxf.cxf-rt-rs-service-description;3.2.0.SNAPSHOT;EXACT}, \
+  lib/${cxf-rt-rs-sse}=${repo;org.apache.cxf.cxf-rt-rs-sse;3.2.0.SNAPSHOT;EXACT}, \
   lib/jackson-core-asl-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-core-asl;1.6.2}, \
   lib/jackson-jaxrs-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-jaxrs;1.6.2}, \
   lib/jackson-mapper-asl-1.6.2.jar=${repo;com.ibm.ws.org.codehaus.jackson:jackson-mapper-asl;1.6.2}, \
@@ -165,21 +166,23 @@ Include-Resource: \
   org/codehaus/jackson=bin/org/codehaus/jackson
 
 -dsannotations: com.ibm.ws.jaxrs20.component.*, \
- com.ibm.ws.jaxrs20.clientconfig.JAXRSClientConfigImpl
+ com.ibm.ws.jaxrs20.clientconfig.JAXRSClientConfigImpl, \
+ 	com.ibm.ws.jaxrs20.providers.customexceptionmapper.CustomExceptionMapperRegister, \
+ 	com.ibm.ws.jaxrs20.providers.security.SecurityAnnoProviderRegister
 
 -dependson: com.ibm.ws.org.codehaus.jackson
 
 instrument.classesExcludes: com/ibm/ws/jaxrs20/internal/resources/*.class
 
 -buildpath: \
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-core};version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-frontend-jaxrs};version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-rs-client};version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-rs-sse};version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-transports-http};version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-tools-common};version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-tools-wadlto-jaxrs};version=file,\
-	../com.ibm.ws.org.apache.cxf.3.2.jaxrs/lib/${cxf-rt-rs-service-description};version=file,\
+	org.apache.cxf.cxf-core;strategy=exact;version=3.2.0.SNAPSHOT, \
+	org.apache.cxf.cxf-rt-frontend-jaxrs;strategy=exact;version=3.2.0.SNAPSHOT, \
+	org.apache.cxf.cxf-rt-rs-client;strategy=exact;version=3.2.0.SNAPSHOT, \
+	org.apache.cxf.cxf-rt-rs-service-description;strategy=exact;version=3.2.0.SNAPSHOT, \
+	org.apache.cxf.cxf-rt-transports-http;strategy=exact;version=3.2.0.SNAPSHOT, \
+	org.apache.cxf.cxf-tools-common;strategy=exact;version=3.2.0.SNAPSHOT, \
+	org.apache.cxf.cxf-tools-wadlto-jaxrs;strategy=exact;version=3.2.0.SNAPSHOT, \
+	org.apache.cxf.cxf-rt-rs-sse;strategy=exact;version=3.2.0.SNAPSHOT,\
 	com.ibm.ws.org.codehaus.jackson:jackson-core-asl;version=1.6.2, \
 	com.ibm.ws.org.codehaus.jackson:jackson-jaxrs;version=1.6.2, \
 	com.ibm.ws.org.codehaus.jackson:jackson-mapper-asl;version=1.6.2, \

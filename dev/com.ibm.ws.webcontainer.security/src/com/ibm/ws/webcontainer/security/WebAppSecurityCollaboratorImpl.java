@@ -322,7 +322,8 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
         SSOCookieHelper ssoCookieHelper = webAppSecConfig.createSSOCookieHelper();
         authenticateApi = authenticatorFactory.createAuthenticateApi(ssoCookieHelper, securityServiceRef, collabUtils, webAuthenticatorRef, unprotectedResourceServiceRef);
         postParameterHelper = new PostParameterHelper(webAppSecConfig);
-        providerAuthenticatorProxy = authenticatorFactory.createWebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig, webAuthenticatorRef);
+        providerAuthenticatorProxy = authenticatorFactory.createWebProviderAuthenticatorProxy(securityServiceRef, taiServiceRef, interceptorServiceRef, webAppSecConfig,
+                                                                                              webAuthenticatorRef);
         authenticatorProxy = authenticatorFactory.createWebAuthenticatorProxy(webAppSecConfig, postParameterHelper, securityServiceRef, providerAuthenticatorProxy);
     }
 
@@ -567,7 +568,11 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
          * normal processing.
          */
         if (isJaspiEnabled &&
-            ((JaspiService) webAuthenticatorRef.getService("com.ibm.ws.security.jaspi")).isAnyProviderRegistered()) {
+            ((JaspiService) webAuthenticatorRef.getService("com.ibm.ws.security.jaspi")).isAnyProviderRegistered(webRequest)) {
+//            FilterThreadContext filterThreadContext = new FilterThreadContext(this, receivedSubject, uriName, webRequest, webSecurityContext);
+//            filterThreadLocal.set(filterThreadContext);
+//            webReply = PERMIT_REPLY; // TODO: Create new FILTER_REPLY type.
+
             webReply = handleJaspi(receivedSubject, uriName, webRequest, webSecurityContext);
 //            performPrecludedAccessTests(webRequest, webSecurityContext, uriName);
 //            webReply = unprotectedSpecialURI(webRequest, uriName, webRequest.getHttpServletRequest().getMethod());
@@ -956,7 +961,7 @@ public class WebAppSecurityCollaboratorImpl implements IWebAppSecurityCollaborat
         //WebRequest webRequest = new WebRequestImpl(req, resp, getApplicationName(), webSecurityContext, securityMetadata, matchResponse, webAppSecConfig);
         AuthenticationResult authResult = null;
         if (isJaspiEnabled &&
-            ((JaspiService) webAuthenticatorRef.getService("com.ibm.ws.security.jaspi")).isAnyProviderRegistered()) {
+            ((JaspiService) webAuthenticatorRef.getService("com.ibm.ws.security.jaspi")).isAnyProviderRegistered(webRequest)) {
             authResult = providerAuthenticatorProxy.handleJaspi(webRequest, null);
         }
         if (authResult == null || authResult.getStatus() == AuthResult.CONTINUE) {

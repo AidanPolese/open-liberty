@@ -19,11 +19,11 @@ import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceExceptio
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.ws.microprofile.faulttolerance.cdi.FTAnnotationUtils;
+import com.ibm.ws.microprofile.faulttolerance.cdi.FTUtils;
 
 public class AbstractAnnotationConfig<T extends Annotation> implements Annotation {
 
-    private static final TraceComponent tc = Tr.register(FTAnnotationUtils.class);
+    private static final TraceComponent tc = Tr.register(AbstractAnnotationConfig.class);
 
     private final Class<T> annotationType;
     private final HashMap<String, Object> config = new HashMap<>();
@@ -103,12 +103,15 @@ public class AbstractAnnotationConfig<T extends Annotation> implements Annotatio
     private static String getPropertyKeyPrefix(Method method) {
         // <classname>/methodname/......
         Class<?> clazz = method.getDeclaringClass();
+        clazz = FTUtils.getRealClass(clazz);
         String key = clazz.getName() + "/" + method.getName() + "/";
         return key;
     }
 
     private static String getPropertyKeyPrefix(Class<?> clazz) {
         // <classname>/.......
+        //need to make sure this is not a proxy class. If it is, get its superclass
+        clazz = FTUtils.getRealClass(clazz);
         String key = clazz.getName() + "/";
         return key;
     }

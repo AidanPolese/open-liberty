@@ -19,7 +19,8 @@ import org.junit.runners.Suite.SuiteClasses;
                 JSFContainerTest.class,
                 JSF22FlowsTests.class,
                 CDIFlowsTests.class,
-                JSF22StatelessViewTests.class
+                JSF22StatelessViewTests.class,
+                JSF22BeanValidationTests.class
 })
 public class FATSuite {
 

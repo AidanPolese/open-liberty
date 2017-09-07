@@ -14,13 +14,22 @@ Open Liberty is a highly composable, fast to start, dynamic application server r
 * [Contribute to open liberty](https://github.com/OpenLiberty/open-liberty#contribute-to-open-liberty)
 * [Community](https://github.com/OpenLiberty/open-liberty#community)
 
-## Getting Started
-Visit the [WASdev Community](https://developer.ibm.com/wasdev/) for documentation, tutorials, and API reference documentation.
+## Quick start
+    git clone https://github.com/openliberty/petstore
+    cd petstore
+    mvn install
+    mvn liberty:start-server 
+    
+## Open Liberty Guides
+Visit the [OpenLiberty website](http://openlibertyio.mybluemix.net/guides/) for a number of step by step tutorials and documentation.
+
 
 ## Contribute to Open Liberty
+Our [CONTRIBUTING](https://github.com/OpenLiberty/open-liberty/blob/master/CONTRIBUTING.md) document contains details for submitting pull requests.
+
 1. Clone the repository to your system.
 
-    ```git clone git@github.ibm.com:OpenLiberty/open-liberty.git```
+    ```git clone git@github.com:OpenLiberty/open-liberty.git```
 
 2. Run a gradle build.
 

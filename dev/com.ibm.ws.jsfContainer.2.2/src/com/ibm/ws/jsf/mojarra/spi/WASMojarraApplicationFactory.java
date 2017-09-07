@@ -12,7 +12,7 @@ package com.ibm.ws.jsf.mojarra.spi;
 
 import javax.faces.application.Application;
 
-import com.ibm.ws.jsf.mojarra.cdi.CDIJSFInitializerImpl;
+import com.ibm.ws.jsf.container.JSFContainer;
 import com.sun.faces.application.ApplicationFactoryImpl;
 
 public class WASMojarraApplicationFactory extends ApplicationFactoryImpl {
@@ -25,9 +25,10 @@ public class WASMojarraApplicationFactory extends ApplicationFactoryImpl {
         if (!initialized) {
             synchronized (this) {
                 if (!initialized) {
-                    System.out.println("initializing app w/ CDI");
-                    //JSFExtensionFactory.initializeCDI(a);
-                    CDIJSFInitializerImpl.initializeJSF(a);
+                    if (JSFContainer.isCDIEnabled())
+                        JSFContainer.initializeCDI(a);
+                    if (JSFContainer.isBeanValidationEnabled())
+                        JSFContainer.initializeBeanValidation();
                     initialized = true;
                 }
             }

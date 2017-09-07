@@ -86,7 +86,9 @@ public class SslRefInfoImpl implements SslRefInfo {
                         // SSL
                     }
                 } catch (SSLException e) {
-                    throw new MpJwtProcessingException("ERROR_LOADING_SSL_PROPS", e, new Object[] { e.getLocalizedMessage() });
+                    String msg = Tr.formatMessage(tc, "ERROR_LOADING_SSL_PROPS", new Object[] { e.getLocalizedMessage() });
+                    Tr.error(tc, msg);
+                    throw new MpJwtProcessingException(msg, e);
                 }
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(tc, "sslConfig (" + sslRef + ") get: " + sslProps);
@@ -118,13 +120,17 @@ public class SslRefInfoImpl implements SslRefInfo {
         if (this.sslTrustStoreName != null) {
             KeyStoreService keyStoreService = keyStoreServiceRef.getService();
             if (keyStoreService == null) {
-                throw new MpJwtProcessingException("KEYSTORE_SERVICE_NOT_FOUND", null, new Object[0]);
+                String msg = Tr.formatMessage(tc, "KEYSTORE_SERVICE_NOT_FOUND");
+                Tr.error(tc, msg);
+                throw new MpJwtProcessingException(msg);
             }
             Collection<String> names = null;
             try {
                 names = keyStoreService.getTrustedCertEntriesInKeyStore(sslTrustStoreName);
             } catch (KeyStoreException e) {
-                throw new MpJwtProcessingException("ERROR_LOADING_KEYSTORE_CERTIFICATES", e, new Object[] { sslTrustStoreName, e.getLocalizedMessage() });
+                String msg = Tr.formatMessage(tc, "ERROR_LOADING_KEYSTORE_CERTIFICATES", new Object[] { sslTrustStoreName, e.getLocalizedMessage() }); //TODO:
+                Tr.error(tc, msg);
+                throw new MpJwtProcessingException(msg, e);
             }
             Iterator<String> aliasNames = names.iterator();
             while (aliasNames.hasNext()) {
@@ -133,7 +139,9 @@ public class SslRefInfoImpl implements SslRefInfo {
                 try {
                     publicKey = keyStoreService.getCertificateFromKeyStore(sslTrustStoreName, aliasName).getPublicKey();
                 } catch (GeneralSecurityException e) {
-                    throw new MpJwtProcessingException("ERROR_LOADING_CERTIFICATE", e, new Object[] { aliasName, sslTrustStoreName, e.getLocalizedMessage() });
+                    String msg = Tr.formatMessage(tc, "ERROR_LOADING_CERTIFICATE", new Object[] { sslTrustStoreName, e.getLocalizedMessage() }); //TODO:
+                    Tr.error(tc, msg);
+                    throw new MpJwtProcessingException(msg, e);
                 }
                 publicKeys.put(aliasName, publicKey);
             }
@@ -153,13 +161,17 @@ public class SslRefInfoImpl implements SslRefInfo {
             if (keyAliasName != null && keyAliasName.trim().isEmpty() == false) {
                 KeyStoreService keyStoreService = keyStoreServiceRef.getService();
                 if (keyStoreService == null) {
-                    throw new MpJwtProcessingException("KEYSTORE_SERVICE_NOT_FOUND", null, new Object[0]);
+                    String msg = Tr.formatMessage(tc, "KEYSTORE_SERVICE_NOT_FOUND");
+                    Tr.error(tc, msg);
+                    throw new MpJwtProcessingException(msg);
                 }
                 // TODO: Determine if the first public key should be used if a public key is not found for the key alias.
                 try {
                     return keyStoreService.getCertificateFromKeyStore(sslKeyStoreName, keyAliasName).getPublicKey();
                 } catch (GeneralSecurityException e) {
-                    throw new MpJwtProcessingException("ERROR_LOADING_CERTIFICATE", e, new Object[] { keyAliasName, sslTrustStoreName, e.getLocalizedMessage() });
+                    String msg = Tr.formatMessage(tc, "ERROR_LOADING_CERTIFICATE", new Object[] { sslTrustStoreName, e.getLocalizedMessage() }); //TODO:
+                    Tr.error(tc, msg);
+                    throw new MpJwtProcessingException(msg, e);
                 }
             } else {
                 Iterator<Entry<String, PublicKey>> publicKeysIterator = null;
@@ -167,7 +179,9 @@ public class SslRefInfoImpl implements SslRefInfo {
                     // Get first public key
                     publicKeysIterator = getPublicKeys().entrySet().iterator();
                 } catch (MpJwtProcessingException e) {
-                    throw new MpJwtProcessingException("ERROR_LOADING_GETTING_PUBLIC_KEYS", e, new Object[] { keyAliasName, sslTrustStoreName, e.getLocalizedMessage() });
+                    String msg = Tr.formatMessage(tc, "ERROR_LOADING_GETTING_PUBLIC_KEYS", new Object[] { keyAliasName, sslTrustStoreName, e.getLocalizedMessage() });
+                    Tr.error(tc, msg);
+                    throw e;
                 }
                 if (publicKeysIterator.hasNext()) {
                     return publicKeysIterator.next().getValue();
@@ -180,52 +194,58 @@ public class SslRefInfoImpl implements SslRefInfo {
     /** {@inheritDoc} */
     @Override
     public PrivateKey getPrivateKey() throws MpJwtProcessingException {
-        if (this.jsseHelper == null) {
-            init();
-        }
-        if (sslKeyStoreName != null) {
-            KeyStoreService keyStoreService = keyStoreServiceRef.getService();
-            if (keyStoreService == null) {
-                throw new MpJwtProcessingException("KEYSTORE_SERVICE_NOT_FOUND", null, new Object[0]);
-            }
-            if (keyAliasName != null && keyAliasName.trim().isEmpty() == false) {
-                // TODO: Determine if the first private key should be used if a private key is not found for the key alias.
-                try {
-                    return keyStoreService.getPrivateKeyFromKeyStore(sslKeyStoreName, keyAliasName, null);
-                } catch (GeneralSecurityException e) {
-                    throw new MpJwtProcessingException("ERROR_LOADING_SPECIFIC_PRIVATE_KEY", e, new Object[] { keyAliasName, sslKeyStoreName, e.getLocalizedMessage() });
-                }
-            } else {
-                // Get first public key
-                try {
-                    return keyStoreService.getPrivateKeyFromKeyStore(sslKeyStoreName);
-                } catch (GeneralSecurityException e) {
-                    throw new MpJwtProcessingException("ERROR_LOADING_PRIVATE_KEY", e, new Object[] { sslKeyStoreName, e.getLocalizedMessage() });
-                }
-            }
-        }
+        //        if (this.jsseHelper == null) {
+        //            init();
+        //        }
+        //        if (sslKeyStoreName != null) {
+        //            KeyStoreService keyStoreService = keyStoreServiceRef.getService();
+        //            if (keyStoreService == null) {
+        //                String msg = Tr.formatMessage(tc, "KEYSTORE_SERVICE_NOT_FOUND");
+        //                Tr.error(tc, msg);
+        //                throw new MpJwtProcessingException(msg);
+        //            }
+        //            if (keyAliasName != null && keyAliasName.trim().isEmpty() == false) {
+        //                // TODO: Determine if the first private key should be used if a private key is not found for the key alias.
+        //                try {
+        //                    return keyStoreService.getPrivateKeyFromKeyStore(sslKeyStoreName, keyAliasName, null);
+        //                } catch (GeneralSecurityException e) {
+        //                    String msg = Tr.formatMessage(tc, "ERROR_LOADING_SPECIFIC_PRIVATE_KEY", new Object[] { keyAliasName, sslKeyStoreName, e.getLocalizedMessage() });
+        //                    Tr.error(tc,  msg);
+        //                    throw new MpJwtProcessingException(msg, e);
+        //                }
+        //            } else {
+        //                // Get first public key
+        //                try {
+        //                    return keyStoreService.getPrivateKeyFromKeyStore(sslKeyStoreName);
+        //                } catch (GeneralSecurityException e) {
+        //                    String msg = Tr.formatMessage(tc, "ERROR_LOADING_PRIVATE_KEY", new Object[] { sslKeyStoreName, e.getLocalizedMessage() });
+        //                    Tr.error(tc,  msg);
+        //                    throw new MpJwtProcessingException(msg, e);
+        //                }
+        //            }
+        //        }
         return null;
     }
 
     /** {@inheritDoc} */
     @Override
     public SecretKey getSecretKey() throws MpJwtProcessingException {
-        if (this.jsseHelper == null) {
-            init();
-        }
-        if (sslKeyStoreName != null) {
-            if (keyAliasName != null && keyAliasName.trim().isEmpty() == false) {
-                KeyStoreService keyStoreService = keyStoreServiceRef.getService();
-                if (keyStoreService == null) {
-                    throw new MpJwtProcessingException("KEYSTORE_SERVICE_NOT_FOUND", null, new Object[0]);
-                }
-                try {
-                    return keyStoreService.getSecretKeyFromKeyStore(sslKeyStoreName, keyAliasName, null);
-                } catch (GeneralSecurityException e) {
-                    throw new MpJwtProcessingException("ERROR_LOADING_SECRET_KEY", e, new Object[] { keyAliasName, sslKeyStoreName, e.getLocalizedMessage() });
-                }
-            }
-        }
+        //        if (this.jsseHelper == null) {
+        //            init();
+        //        }
+        //        if (sslKeyStoreName != null) {
+        //            if (keyAliasName != null && keyAliasName.trim().isEmpty() == false) {
+        //                KeyStoreService keyStoreService = keyStoreServiceRef.getService();
+        //                if (keyStoreService == null) {
+        //                    throw new MpJwtProcessingException("KEYSTORE_SERVICE_NOT_FOUND", null, new Object[0]);
+        //                }
+        //                try {
+        //                    return keyStoreService.getSecretKeyFromKeyStore(sslKeyStoreName, keyAliasName, null);
+        //                } catch (GeneralSecurityException e) {
+        //                    throw new MpJwtProcessingException("ERROR_LOADING_SECRET_KEY", e, new Object[] { keyAliasName, sslKeyStoreName, e.getLocalizedMessage() });
+        //                }
+        //            }
+        //        }
         return null;
     }
 

@@ -15,10 +15,9 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
 
+import com.ibm.ws.microprofile.faulttolerance.impl.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
-import com.ibm.ws.microprofile.faulttolerance.impl.Timeout;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.threading.PolicyExecutor;
 import com.ibm.ws.threading.PolicyExecutor.QueueFullAction;
@@ -29,32 +28,55 @@ import com.ibm.wsspi.threadcontext.WSContextService;
 /**
  *
  */
-public class PolicyExecutorTaskRunner<R> implements TaskRunner<Callable<Future<R>>, Future<R>> {
+public class PolicyExecutorTaskRunner<R> implements TaskRunner<Future<R>> {
 
-    private final ExecutorService executorService;
+    private ExecutorService executorService;
     private final WSContextService contextService;
+    private PolicyExecutor policyExecutor;
+    private final int maxThreads;
+    private final int queueSize;
 
-    public PolicyExecutorTaskRunner(BulkheadPolicy bulkheadPolicy, ThreadFactory threadFactory, WSContextService contextService, PolicyExecutorProvider policyExecutorProvider) {
-        int maxThreads = Integer.MAX_VALUE;
-        int queueSize = 1000;
+    protected PolicyExecutorTaskRunner(BulkheadPolicy bulkheadPolicy, WSContextService contextService) {
         if (bulkheadPolicy != null) {
-            maxThreads = bulkheadPolicy.getMaxThreads();
-            queueSize = bulkheadPolicy.getQueueSize();
+            this.maxThreads = bulkheadPolicy.getMaxThreads();
+            this.queueSize = bulkheadPolicy.getQueueSize();
+        } else {
+            this.maxThreads = Integer.MAX_VALUE;
+            this.queueSize = 1000;
         }
-        PolicyExecutor policyExecutor = policyExecutorProvider.create("FaultTolerancePolicyExecutor_" + UUID.randomUUID().toString());
-        this.executorService = policyExecutor.maxConcurrency(maxThreads).maxQueueSize(queueSize).queueFullAction(QueueFullAction.Abort);
         this.contextService = contextService;
+    }
+
+    public PolicyExecutorTaskRunner(BulkheadPolicy bulkheadPolicy, WSContextService contextService, PolicyExecutorProvider policyExecutorProvider) {
+        this(bulkheadPolicy, contextService);
+        //TODO make the ID more human readable
+        this.policyExecutor = policyExecutorProvider.create("FaultTolerance_" + UUID.randomUUID().toString());
+    }
+
+    protected ExecutorService getExecutorService() {
+        if (this.executorService == null) {
+            this.executorService = this.policyExecutor.maxConcurrency(getMaxThreads()).maxQueueSize(getQueueSize()).queueFullAction(QueueFullAction.Abort);
+        }
+        return this.executorService;
+    }
+
+    protected int getQueueSize() {
+        return queueSize;
+    }
+
+    protected int getMaxThreads() {
+        return maxThreads;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public QueuedFuture<R> runTask(Callable<Future<R>> callable, Timeout timeout) {
+    public QueuedFuture<R> runTask(Callable<Future<R>> task, ExecutionContextImpl executionContext) {
         ThreadContextDescriptor threadContext = null;
         if (this.contextService != null) {
             threadContext = this.contextService.captureThreadContext(new HashMap<String, String>());
         }
-        QueuedFuture<R> queuedFuture = new QueuedFuture<>(callable, timeout, threadContext);
-        queuedFuture.start(this.executorService);
+        QueuedFuture<R> queuedFuture = new QueuedFuture<>(task, executionContext, threadContext);
+        queuedFuture.start(getExecutorService());
 
         return queuedFuture;
     }

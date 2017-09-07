@@ -6,11 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     IBM Corporation - initial API and implementation
+ * IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-/**
- * <p>Support for Microprofile JWT
- *
- */
 package org.eclipse.microprofile.jwt;

@@ -2,10 +2,10 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 import groovy.json.*
 
-// Set the generated zip version to the buildID
-// I am not sure why the tasks.gradle file where this task is
-// defined can't see the bnd property, but it can't and this
-// at least works (even if it feels hacky)
+// Set the generated zip version to the buildID.
+// tasks.gradle file where this task is defined
+// can't see the bnd property because it isn't
+// a bundle.
 parent.zipOpenLiberty.setProperty("version", bnd.buildID)
 
 task copyPropertiesToBuildImage (type:Copy) {
@@ -73,7 +73,8 @@ task createJSONForPublicArtifacts {
         file("${rootDir}/generated.properties").withInputStream { props.load(it) }
 
         // Create JSON descriptor
-        File json = new File("${rootDir}/info.json")
+        delete "${buildDir}/info.json"
+        File json = new File("${buildDir}/info.json")
         json.createNewFile()
 
         String testsPassed = "0"
@@ -84,8 +85,11 @@ task createJSONForPublicArtifacts {
         if (props.getProperty("tests.total.count") != null) {
             testsTotal = props.getProperty("tests.total.count")
         }
+
         String junitPath = props.getProperty("junit.report.zip")
         String logPath = props.getProperty("bintray.gradle.log")
+        assert junitPath != null
+        assert logPath != null
         String testResultName = new File(junitPath).getName()
         String logName = new File(logPath).getName()
 
@@ -104,19 +108,54 @@ task createJSONForPublicArtifacts {
     }
 }
 
+buildscript {
+    repositories {
+        def props = new Properties()
+        file("${rootDir}/generated.properties").withInputStream { props.load(it) }
+        if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {
+            maven {
+                credentials {
+                    username props.getProperty("artifactory.download.user")
+                    password props.getProperty("artifactory.download.token")
+                }
+                url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
+            }
+        } else {
+            jcenter()
+        }
+    }
+
+    dependencies {
+        classpath 'org.hidetake:gradle-ssh-plugin:2.9.0'
+        classpath 'org.hidetake:groovy-ssh:2.9.0'
+        classpath 'com.jcraft:jsch:0.1.54'
+    }
+}
+
+apply plugin: 'org.hidetake.ssh'
+
+remotes {
+    dhe {
+        def props = new Properties()
+        file("${rootDir}/generated.properties").withInputStream { props.load(it) }
+
+        host = props.getProperty("dhe.server")
+        user = props.getProperty("dhe.id")
+        password = props.getProperty("dhe.pw")
+        knownHosts = allowAnyHosts
+    }
+}
+
+ssh.settings {
+    jschLog = true
+    fileTransfer = "scp"
+}
+
 task publishPublicArtifactsOnDhe {
     dependsOn createJSONForPublicArtifacts
     enabled isAutomatedBuild && reallyPublishPublically
 
     doLast {
-        configurations {
-            sshAntTask
-        }
-
-        dependencies {
-            sshAntTask 'org.apache.ant:ant-jsch:1.7.1', 'jsch:jsch:0.1.54'
-        }
-
         def props = new Properties()
         file("${rootDir}/generated.properties").withInputStream { props.load(it) }
 
@@ -124,18 +163,15 @@ task publishPublicArtifactsOnDhe {
         def (yr, mo, d, t) = [bnd.buildLabel.substring(0,4), bnd.buildLabel.substring(4,6), bnd.buildLabel.substring(6,8), bnd.buildLabel.substring(8)]
         String version = "${yr}-${mo}-${d}_${t}"
         String packageName = (isRelease ? props.getProperty("bintray.package.release") : props.getProperty("bintray.package.nightly"))
-        String userAtHost = props.getProperty("gsaid") + "@" + props.getProperty("dhe.server")
+        String userAtHost = props.getProperty("dhe.id") + "@" + props.getProperty("dhe.server")
         String dir = "/www/stage/export/pub/software/openliberty/runtime"
         String dest = userAtHost + ":" + dir
-
-        ant.taskdef(name: 'scp', classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
-                classpath: configurations.sshAntTask.asPath)
 
         def artifactList = [props.getProperty("bintray.json"),
                             props.getProperty("bintray.gradle.log"),
                             props.getProperty("junit.report.zip")]
 
-        if (isContinuousBuild) {
+        if (isContinuousBuild || isRelease) {
             artifactList.add(props.getProperty("zipopenliberty.archivename"))
         }
 
@@ -148,25 +184,25 @@ task publishPublicArtifactsOnDhe {
         }
 
         // Upload build artifacts
-        ant.scp(todir: "${dest}/${packageName}/",
-                password: props.getProperty("gsapw"),
-                trust: "yes",
-                sftp: "true",
-                failOnError: "true",
-                verbose: "true") {
-            fileset(dir: "${buildDir}", includes: "${version}/*")
+        ssh.run {
+            session(remotes.dhe) {
+                put from: "${buildDir}/${version}", into: "${dir}/${packageName}/"
+            }
         }
+
         delete "${buildDir}/${version}"
         delete "${buildDir}/info.json"
 
         // Update build listing json with the newly uploaded build
-        ant.scp(file: "${dest}/${packageName}/info.json",
-                todir: "${buildDir}",
-                password: props.getProperty("gsapw"),
-                trust: "yes",
-                sftp: "true",
-                failOnError: "false",
-                verbose: "true")
+        try {
+            ssh.run {
+                session(remotes.dhe) {
+                    get from: "${dir}/${packageName}/info.json", into: "${buildDir}"
+                }
+            }
+        } catch (org.hidetake.groovy.ssh.session.BadExitStatusException e) {
+            // It is okay if the file doesn't exist because we will create a new file.
+        }
 
         ant.touch(file: "${buildDir}/info.json")
         File json = new File("${buildDir}/info.json")
@@ -184,13 +220,11 @@ task publishPublicArtifactsOnDhe {
         object['versions'] = versionsList
         json.text = JsonOutput.toJson(object)
 
-        ant.scp(file: "${buildDir}/info.json",
-                todir: "${dest}/${packageName}/info.json",
-                password: props.getProperty("gsapw"),
-                trust: "yes",
-                sftp: "true",
-                failOnError: "true",
-                verbose: "true")
+        ssh.run {
+            session(remotes.dhe) {
+                put from: "${buildDir}/info.json", into: "${dir}/${packageName}/"
+            }
+        }
     }
 }
 publish.dependsOn publishPublicArtifactsOnDhe

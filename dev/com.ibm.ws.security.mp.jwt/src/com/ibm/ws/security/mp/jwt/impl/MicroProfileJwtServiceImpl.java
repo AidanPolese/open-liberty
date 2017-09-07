@@ -13,11 +13,16 @@ package com.ibm.ws.security.mp.jwt.impl;
 import java.util.Map;
 
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
@@ -28,17 +33,18 @@ import com.ibm.ws.ssl.KeyStoreService;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 import com.ibm.wsspi.ssl.SSLSupport;
 
+@Component(service = MicroProfileJwtService.class, immediate = true, configurationPolicy = ConfigurationPolicy.IGNORE, property = "service.vendor=IBM", name = "microProfileJwtService")
 public class MicroProfileJwtServiceImpl implements MicroProfileJwtService {
+
     public static final TraceComponent tc = Tr.register(MicroProfileJwtServiceImpl.class,
             TraceConstants.TRACE_GROUP,
             TraceConstants.MESSAGE_BUNDLE);
 
-    static final String CONFIGURATION_ADMIN = "configurationAdmin";
     static final String KEY_UNIQUE_ID = "id";
 
-    private final String uniqueId = "SocialLoginService";
+    private final String uniqueId = "MicroProfileJwtService";
 
-    private ConfigurationAdmin configAdmin = null;
+    //private ConfigurationAdmin configAdmin = null;
 
     public static final String KEY_SSL_SUPPORT = "sslSupport";
     protected AtomicServiceReference<SSLSupport> sslSupportRef = new AtomicServiceReference<SSLSupport>(KEY_SSL_SUPPORT);
@@ -47,18 +53,19 @@ public class MicroProfileJwtServiceImpl implements MicroProfileJwtService {
 
     SSLSupport sslSupport = null;
 
-    protected void setConfigurationAdmin(ConfigurationAdmin configAdmin) {
-        this.configAdmin = configAdmin;
-    }
+    //    protected void setConfigurationAdmin(ConfigurationAdmin configAdmin) {
+    //        this.configAdmin = configAdmin;
+    //    }
+    //
+    //    protected void updateConfigurationAdmin(ConfigurationAdmin configAdmin) {
+    //        this.configAdmin = configAdmin;
+    //    }
+    //
+    //    protected void unsetConfigurationAdmin(ServiceReference<ConfigurationAdmin> ref) {
+    //        this.configAdmin = null;
+    //    }
 
-    protected void updateConfigurationAdmin(ConfigurationAdmin configAdmin) {
-        this.configAdmin = configAdmin;
-    }
-
-    protected void unsetConfigurationAdmin(ServiceReference<ConfigurationAdmin> ref) {
-        this.configAdmin = null;
-    }
-
+    @Reference(service = SSLSupport.class, name = KEY_SSL_SUPPORT, policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.OPTIONAL, policyOption = ReferencePolicyOption.GREEDY)
     protected void setSslSupport(ServiceReference<SSLSupport> ref) {
         sslSupportRef.setReference(ref);
         if (tc.isDebugEnabled()) {
@@ -80,6 +87,7 @@ public class MicroProfileJwtServiceImpl implements MicroProfileJwtService {
         }
     }
 
+    @Reference(service = KeyStoreService.class, name = KEY_KEYSTORE_SERVICE, policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.OPTIONAL, policyOption = ReferencePolicyOption.GREEDY)
     protected void setKeyStoreService(ServiceReference<KeyStoreService> ref) {
         keyStoreServiceRef.setReference(ref);
     }
@@ -110,9 +118,9 @@ public class MicroProfileJwtServiceImpl implements MicroProfileJwtService {
     }
 
     // This method is for unittesting.
-    ConfigurationAdmin getConfigurationAdmin() {
-        return configAdmin;
-    }
+    //    ConfigurationAdmin getConfigurationAdmin() {
+    //        return configAdmin;
+    //    }
 
     /**
      * @return the sslSupportRef
@@ -125,10 +133,10 @@ public class MicroProfileJwtServiceImpl implements MicroProfileJwtService {
     /**
      * @return the configAdmin
      */
-    @Override
-    public ConfigurationAdmin getConfigAdmin() {
-        return configAdmin;
-    }
+    //    @Override
+    //    public ConfigurationAdmin getConfigAdmin() {
+    //        return configAdmin;
+    //    }
 
     /**
      * @return the sslSupport

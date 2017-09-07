@@ -46,6 +46,22 @@ public interface PolicyExecutor extends ExecutorService {
     }
 
     /**
+     * Specifies a core number of tasks that the policy executor should aim to run concurrently
+     * by expediting requests to the global thread pool. This is different than a minimum in that
+     * no guarantee is made that this many tasks will be running concurrently.
+     * The default coreConcurrency is 0.
+     * If core concurrency is updated while the policy executor is in use, the update goes into
+     * effect gradually as previous expedited and non-expedited requests complete.
+     *
+     * @param core core concurrency.
+     * @return the executor.
+     * @throws IllegalArgumentException if value is negative or greater than maximum concurrency.
+     * @throws IllegalStateException if the executor has been shut down.
+     * @throws UnsupportedOperationException if invoked on a policyExecutor instance created from server configuration.
+     */
+    PolicyExecutor coreConcurrency(int core);
+
+    /**
      * Specifies the maximum number of tasks from this policy executor that can be running
      * at any given point in time. The default maxConcurrency is Integer.MAX_VALUE.
      * Maximum concurrency can be updated while tasks are in progress. If the maximum concurrency
@@ -54,7 +70,7 @@ public interface PolicyExecutor extends ExecutorService {
      *
      * @param max maximum concurrency.
      * @return the executor.
-     * @throws IllegalArgumentException if value is not positive or -1 (which means Integer.MAX_VALUE).
+     * @throws IllegalArgumentException if value is not positive or -1 (which means Integer.MAX_VALUE) or less than core concurrency.
      * @throws IllegalStateException if the executor has been shut down.
      * @throws UnsupportedOperationException if invoked on a policyExecutor instance created from server configuration.
      */

@@ -12,36 +12,31 @@ import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import com.ibm.ws.jaxrs20.JaxRsConstants;
 import com.ibm.ws.jaxrs20.api.JaxRsProviderFactoryService;
 import com.ibm.ws.jaxrs20.providers.api.JaxRsProviderRegister;
-import com.ibm.ws.jaxrs20.providers.customexceptionmapper.CustomExceptionMapperRegister;
-import com.ibm.ws.jaxrs20.providers.security.SecurityAnnoProviderRegister;
 import com.ibm.ws.kernel.feature.FeatureProvisioner;
 import com.ibm.wsspi.kernel.service.utils.AtomicServiceReference;
 
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 @Component(immediate = true, property = { "service.vendor=IBM" }, configurationPolicy = ConfigurationPolicy.IGNORE)
 public class JaxRsProviderFactory implements JaxRsProviderFactoryService {
 
     private static JaxRsProviderFactory serviceInstance = null;
 
-    public static void register(JaxRsProviderRegister pr) {
-        if (serviceInstance != null && pr != null) {
-            serviceInstance.addProviderRegister(pr);
-        }
-    }
+
 
     @Override
     public void bindProviders(boolean clientSide, List<Object> providers) {
@@ -58,8 +53,6 @@ public class JaxRsProviderFactory implements JaxRsProviderFactoryService {
     protected void activate(ComponentContext cc) {
         _featureProvisioner.activate(cc);
         serviceInstance = this;
-        register(new SecurityAnnoProviderRegister());
-        register(new CustomExceptionMapperRegister());
     }
 
     @Deactivate
@@ -77,8 +70,14 @@ public class JaxRsProviderFactory implements JaxRsProviderFactoryService {
 
     }
 
+    @Reference(name = JaxRsConstants.JAXRS_PROVIDER_REGISTER_REFERENCE_NAME, cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC,
+               policyOption = ReferencePolicyOption.GREEDY)
     public void addProviderRegister(JaxRsProviderRegister pr) {
         providerRegisterList.add(pr);
+    }
+
+    public void removeProviderRegister(JaxRsProviderRegister pr) {
+        providerRegisterList.remove(pr);
     }
 
     public void bindDefaultProviders(boolean clientSide, List<Object> providers) {

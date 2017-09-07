@@ -24,24 +24,20 @@ import javax.interceptor.InvocationContext;
 
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 
-import com.ibm.websphere.ras.Tr;
-import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
-import com.ibm.ws.microprofile.faulttolerance.spi.Execution;
-import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionBuilder;
+import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutorBuilder;
 
 @FaultTolerance
 @Interceptor
 @Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class FaultToleranceInterceptor {
 
-    private static final TraceComponent tc = Tr.register(FaultToleranceInterceptor.class);
-
     @Inject
     BeanManager beanManager;
 
     private final ConcurrentHashMap<Method, AggregatedFTPolicy> policyCache = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<AggregatedFTPolicy, Execution<?>> execCache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<AggregatedFTPolicy, Executor<?>> execCache = new ConcurrentHashMap<>();
 
     @AroundInvoke
     public Object executeFT(InvocationContext context) throws Throwable {
@@ -74,10 +70,10 @@ public class FaultToleranceInterceptor {
     @FFDCIgnore({ org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException.class })
     private Object execute(InvocationContext invocationContext, AggregatedFTPolicy policies) throws Throwable {
 
-        Execution<?> executor = execCache.get(policies);
+        Executor<?> executor = execCache.get(policies);
         if (executor == null) {
 
-            ExecutionBuilder<ExecutionContext, ?> builder = FTAnnotationUtils.newBuilder(policies);
+            ExecutorBuilder<ExecutionContext, ?> builder = FTAnnotationUtils.newBuilder(policies);
 
             if (policies.isAsynchronous()) {
                 executor = builder.buildAsync();
@@ -85,13 +81,16 @@ public class FaultToleranceInterceptor {
                 executor = builder.build();
             }
 
-            Execution<?> previous = execCache.putIfAbsent(policies, executor);
+            Executor<?> previous = execCache.putIfAbsent(policies, executor);
             if (previous != null) {
                 executor = previous;
             }
         }
 
-        ExecutionContextImpl executionContext = new ExecutionContextImpl(invocationContext);
+        Method method = invocationContext.getMethod();
+        Object[] params = invocationContext.getParameters();
+        String id = method.getName(); //TODO does this id need to be better? it's only for debug
+        ExecutionContext executionContext = executor.newExecutionContext(id, method, params);
 
         //if there is a FaultTolerance Executor then run it, otherwise just call proceed
         Object result = null;
@@ -102,7 +101,7 @@ public class FaultToleranceInterceptor {
                     return (Future<Object>) invocationContext.proceed();
                 };
 
-                Execution<Future<Object>> async = (Execution<Future<Object>>) executor;
+                Executor<Future<Object>> async = (Executor<Future<Object>>) executor;
                 result = async.execute(callable, executionContext);
             } else {
 
@@ -110,7 +109,7 @@ public class FaultToleranceInterceptor {
                     return invocationContext.proceed();
                 };
 
-                Execution<Object> sync = (Execution<Object>) executor;
+                Executor<Object> sync = (Executor<Object>) executor;
                 try {
                     result = sync.execute(callable, executionContext);
                 } catch (org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException e) {

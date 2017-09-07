@@ -57,7 +57,7 @@ public class TimedDirContext {
     private final InitialLdapContext context;
 
     /** The context creation time stamp. */
-    private long iCreateTimestamp;
+    private long iCreateTimestampSeconds;
 
     /** The context pool time stamp. */
     private long iPoolTimestamp;
@@ -74,20 +74,6 @@ public class TimedDirContext {
      *
      * @param environment The environment.
      * @param connCtls Connection controls.
-     * @throws NamingException If a {@link NamingException} was encountered.
-     *
-     * @see InitialLdapContext#InitialLdapContext(Hashtable, Control[])
-     */
-    @Sensitive
-    public TimedDirContext(@Sensitive Hashtable<?, ?> environment, Control[] connCtls) throws NamingException {
-        this(environment, connCtls, System.currentTimeMillis() / 1000);
-    }
-
-    /**
-     * Construct a new {@link TimedDirContext} instance.
-     *
-     * @param environment The environment.
-     * @param connCtls Connection controls.
      * @param createTimestamp The creation time stamp to use (in seconds).
      * @throws NamingException If a {@link NamingException} was encountered.
      *
@@ -96,7 +82,7 @@ public class TimedDirContext {
     @Sensitive
     public TimedDirContext(@Sensitive Hashtable<?, ?> environment, Control[] connCtls, long createTimestamp) throws NamingException {
         context = new InitialLdapContext(environment, connCtls);
-        iCreateTimestamp = createTimestamp;
+        iCreateTimestampSeconds = createTimestamp;
         iPoolTimestamp = createTimestamp;
     }
 
@@ -220,7 +206,7 @@ public class TimedDirContext {
      * @return The time stamp in seconds.
      */
     public long getCreateTimestamp() {
-        return iCreateTimestamp;
+        return iCreateTimestampSeconds;
     }
 
     /** @see InitialLdapContext#getEnvironment() */
@@ -479,7 +465,7 @@ public class TimedDirContext {
      * @param createTimestamp The time stamp in seconds.
      */
     public void setCreateTimestamp(long createTimestamp) {
-        iCreateTimestamp = createTimestamp;
+        iCreateTimestampSeconds = createTimestamp;
     }
 
     /**

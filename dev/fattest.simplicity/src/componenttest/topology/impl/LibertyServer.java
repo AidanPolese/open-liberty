@@ -93,7 +93,6 @@ import componenttest.exception.TopologyException;
 import componenttest.topology.impl.JavaInfo.Vendor;
 import componenttest.topology.impl.LibertyFileManager.LogSearchResult;
 import componenttest.topology.utils.FileUtils;
-import componenttest.topology.utils.Java9Helper;
 import componenttest.topology.utils.LibertyServerUtils;
 
 public class LibertyServer implements LogMonitorClient {
@@ -1081,11 +1080,6 @@ public class LibertyServer implements LogMonitorClient {
         }
 
         JavaInfo info = JavaInfo.forServer(this);
-        if (info.majorVersion() >= 9) {
-            Log.info(c, "startServerWithArgs", "Adding java 9 args: " + Java9Helper.JAVA_9_ARGS);
-            JVM_ARGS += Java9Helper.JAVA_9_ARGS;
-        }
-
         // Debug for a highly intermittent problem on IBM JVMs.
         // Unfortunately, this problem does not seem to happen when we enable this dump trace. We also can't proceed without getting
         // a system dump, so our only option is to enable this and hope the timing eventually works out.

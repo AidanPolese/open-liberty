@@ -4,7 +4,7 @@
 # of its trade secrets, irrespective of what has been deposited with the
 # U.S. Copyright Office.
 # -------------------------------------------------------------------------------------------------
-#CMVCPATHNAME com.ibm.ws.security/resources/com/ibm/ws/security/mp/jwt/resources/SocialMessages.nlsprops
+#CMVCPATHNAME com.ibm.ws.security/resources/com/ibm/ws/security/mp/jwt/resources/MicroProfileJwtMessages.nlsprops
 #COMPONENTPREFIX CWWKS
 #COMPONENTNAMEFOR WebSphere Application Server Micro Profile JWT
 #ISMESSAGEFILE TRUE

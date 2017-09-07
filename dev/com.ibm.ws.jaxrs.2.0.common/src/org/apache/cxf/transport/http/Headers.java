@@ -89,7 +89,7 @@ public class Headers {
         HTTP_HEADERS_SINGLE_VALUE_ONLY.add(HTTP_HEADERS_SETCOOKIE);
         HTTP_HEADERS_SINGLE_VALUE_ONLY.add(HTTP_HEADERS_LINK);
         USER_AGENT = initUserAgent();
-        // Liberty Change for CXF Begin        
+        // Liberty Change for CXF Begin
         dateFormat.setTimeZone(TIME_ZONE_GMT);
         // Liberty Change for CXF End
     }
@@ -124,7 +124,9 @@ public class Headers {
         filteredHeaders.putAll(headers);
         if (!logSensitiveHeaders) {
             for (String filteredKey : SENSITIVE_HEADERS) {
-                filteredHeaders.put(filteredKey, SENSITIVE_HEADER_MARKER);
+                if (filteredHeaders.containsKey(filteredKey)) {
+                    filteredHeaders.put(filteredKey, SENSITIVE_HEADER_MARKER);
+                }
             }
         }
         return filteredHeaders.toString();
@@ -136,7 +138,7 @@ public class Headers {
 
     /**
      * Write cookie header from given session cookies
-     * 
+     *
      * @param sessionCookies
      */
     public void writeSessionCookies(Map<String, Cookie> sessionCookies) {
@@ -161,7 +163,7 @@ public class Headers {
     /**
      * This call places HTTP Header strings into the headers that are relevant
      * to the ClientPolicy that is set on this conduit by configuration.
-     * 
+     *
      * REVISIT: A cookie is set statically from configuration?
      */
     void setFromClientPolicy(HTTPClientPolicy policy) {
@@ -266,7 +268,7 @@ public class Headers {
      * this call ensures that the Message.PROTOCOL_HEADERS property is
      * set on the Message. If it is not set, an empty map is placed there, and
      * then returned.
-     * 
+     *
      * @param message The outbound message
      * @return The PROTOCOL_HEADERS map
      */
@@ -276,7 +278,7 @@ public class Headers {
         if (null == headers) {
             headers = new TreeMap<String, List<String>>(String.CASE_INSENSITIVE_ORDER);
         } else if (headers instanceof HashMap) {
-            Map<String, List<String>> headers2 
+            Map<String, List<String>> headers2
                 = new TreeMap<String, List<String>>(String.CASE_INSENSITIVE_ORDER);
             headers2.putAll(headers);
             headers = headers2;
@@ -303,11 +305,11 @@ public class Headers {
     /**
      * This procedure logs the PROTOCOL_HEADERS from the
      * Message at the specified logging level.
-     * 
+     *
      * @param level The Logging Level.
      * @param headers The Message protocol headers.
      */
-    static void logProtocolHeaders(Level level, 
+    static void logProtocolHeaders(Level level,
                                    Map<String, List<String>> headersMap,
                                    boolean logSensitiveHeaders) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -328,13 +330,13 @@ public class Headers {
      * connection.
      * Note, this does not mean they immediately get written to the output
      * stream or the wire. They just just get set on the HTTP request.
-     * 
+     *
      * @param connection
      * @throws IOException
      */
     public void setProtocolHeadersInConnection(HttpURLConnection connection) throws IOException {
         // If no Content-Type is set for empty requests then HttpUrlConnection:
-        // - sets a form Content-Type for empty POST 
+        // - sets a form Content-Type for empty POST
         // - replaces custom Accept value with */* if HTTP proxy is used
         boolean contentTypeSet = headers.containsKey(Message.CONTENT_TYPE);
         if (!contentTypeSet) {
@@ -429,13 +431,13 @@ public class Headers {
 
     /**
      * Copy the request headers into the message.
-     * 
+     *
      * @param message the current message
      * @param headers the current set of headers
      */
     protected void copyFromRequest(HttpServletRequest req) {
 
-        //TODO how to deal with the fields        
+        //TODO how to deal with the fields
         for (Enumeration<String> e = req.getHeaderNames(); e.hasMoreElements();) {
             String fname = e.nextElement();
             String mappedName = HttpHeaderHelper.getHeaderKey(fname);
@@ -495,7 +497,7 @@ public class Headers {
 
     /**
      * Copy the response headers into the response.
-     * 
+     *
      * @param message the current message
      * @param headers the current set of headers
      */
@@ -540,12 +542,12 @@ public class Headers {
 
     private String headerObjectToString(Object headerObject) {
         if (headerObject.getClass() == String.class) {
-            // Most likely 
+            // Most likely
             return headerObject.toString();
         } else {
-            // We may consider introducing CXF HeaderDelegate interface 
-            // so that the below code may be pushed back to the JAX-RS 
-            // front-end where non String header objects are more likely 
+            // We may consider introducing CXF HeaderDelegate interface
+            // so that the below code may be pushed back to the JAX-RS
+            // front-end where non String header objects are more likely
             // to be set. Though the below code may be generally useful
 
             String headerString;

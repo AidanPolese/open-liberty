@@ -1,0 +1,28 @@
+<server>
+  <featureManager>
+    <!-- <feature>osgiConsole-1.0</feature> -->
+    <feature>persistentExecutor-1.0</feature>
+    <feature>servlet-3.1</feature>
+  </featureManager>
+
+  <include location="../fatTestPorts.xml"/>
+
+  <persistentExecutor jndiName="concurrent/myPersistentExecutor" taskStoreRef="DBTaskStore" pollInterval="100ms" retryLimit="0"/>
+  <databaseStore id="DBTaskStore" dataSourceRef="LockTestDB"/>
+
+  <!-- database for scheduled tasks -->
+  <dataSource id="LockTestDB">
+    <jdbcDriver libraryRef="DerbyLib"/>
+    <properties.derby.embedded createDatabase="create" databaseName="${shared.resource.dir}/data/lockdb"/>
+  </dataSource>
+  <library id="DerbyLib">
+    <fileset dir="${server.config.dir}/derby" includes="*.jar"/>
+  </library>
+  
+  <javaPermission codebase="${server.config.dir}/derby/derby.jar" className="java.security.AllPermission"/>
+
+  <variable name="onError" value="FAIL"/>
+
+  <application location="pxlocktest.war" />
+
+</server>

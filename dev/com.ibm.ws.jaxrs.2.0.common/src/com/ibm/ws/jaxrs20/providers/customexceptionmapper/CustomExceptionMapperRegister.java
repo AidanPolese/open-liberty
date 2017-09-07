@@ -19,16 +19,19 @@ import java.util.Set;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.ext.ExceptionMapper;
 
+import org.osgi.service.component.annotations.Component;
+
 import com.ibm.ws.jaxrs20.providers.api.JaxRsProviderRegister;
 
 /**
  *
  */
+@Component(immediate = true)
 public class CustomExceptionMapperRegister implements JaxRsProviderRegister {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.ibm.ws.jaxrs20.providers.JaxRsProviderRegister#installProvider(java.util.List, java.util.Set)
      */
     @Override

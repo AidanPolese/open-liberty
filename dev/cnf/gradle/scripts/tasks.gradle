@@ -12,14 +12,6 @@ defaultTasks 'clean', 'build'
 
 subprojects {
 
-  // Does userhome Gradle startup properties exist?
-  File usrHomeProps = file(System.properties['user.home'] + '/gradle.startup.properties')
-  if (!usrHomeProps.exists()) {
-    if (System.properties['build.properties.path']!=null) {
-      usrHomeProps = file(System.properties['build.properties.path']);
-    }
-  }
-
   plugins.apply 'java'
   plugins.apply 'maven-publish'
 
@@ -27,43 +19,46 @@ subprojects {
   file("${rootDir}/generated.properties").withInputStream { props.load(it) }
 
   /* Project artifacts are versioned by bnd Bundle-Version attribute, with the qualifier being current Git branch. */
-  project.version = bnd('Bundle-Version', '1.0' + '.' + branchName + (isRelease ? '' : '-SNAPSHOT'))
+  project.version = bnd('Bundle-Version', '1.0.' + qualifier + (isRelease ? '' : '-SNAPSHOT'))
 
   repositories {
     if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {
-      	  maven {
-      		 credentials {
-      			 username props.getProperty("artifactory.download.user")
-      			 password props.getProperty("artifactory.download.token")
-      		 }
-      		 url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
-      	  }
+      maven {
+        credentials {
+          username props.getProperty("artifactory.download.user")
+          password props.getProperty("artifactory.download.token")
+        }
+        url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty")
+      }
     } else {
       mavenCentral()
       maven {
-           url ("http://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/wasliberty-open-liberty/")
-          }
+        url ("http://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/wasliberty-open-liberty/")
+      }
     }
-}
-configurations {
-	binaries
-}
-dependencies {
-	binaries "com.ibm.ws.componenttest:mantis-collections:2.5.0"
-	binaries "com.ibm.ws.componenttest:mantis-nls-standalone:2.5.0"
-	binaries "com.ibm.ws.componenttest:infra.buildtasks-core:4.0.0"
-  binaries "com.fasterxml.jackson.core:jackson-annotations:2.2.3"
-  binaries "com.fasterxml.jackson.core:jackson-core:2.2.3"
-  binaries "com.fasterxml.jackson.core:jackson-databind:2.2.3"
-  binaries "org.osgi:osgi.core:5.0.0"
-  binaries "org.apache.aries:org.apache.aries.util:1.1.3"
-  binaries "commons-lang:commons-lang:2.4"
-  binaries "org.apache.commons:commons-math:2.2"
-  binaries "org.eclipse.jdt.core.compiler:ecj:4.3.1"
-  binaries "org.ow2.asm:asm-all:5.0.3"
-  binaries "org.jsoup:jsoup:1.7.2"
-  binaries "com.ibm.ws.javax.j2ee:servlet:3.1"
-}
+  }
+
+  configurations {
+    binaries
+  }
+
+  dependencies {
+    binaries "com.ibm.ws.componenttest:mantis-collections:2.5.0"
+    binaries "com.ibm.ws.componenttest:mantis-nls-standalone:2.5.0"
+    binaries "com.ibm.ws.componenttest:infra.buildtasks-core:4.0.0"
+    binaries "com.fasterxml.jackson.core:jackson-annotations:2.2.3"
+    binaries "com.fasterxml.jackson.core:jackson-core:2.2.3"
+    binaries "com.fasterxml.jackson.core:jackson-databind:2.2.3"
+    binaries "org.osgi:osgi.core:5.0.0"
+    binaries "org.apache.aries:org.apache.aries.util:1.1.3"
+    binaries "commons-lang:commons-lang:2.4"
+    binaries "org.apache.commons:commons-math:2.2"
+    binaries "org.eclipse.jdt.core.compiler:ecj:4.3.1"
+    binaries "org.ow2.asm:asm-all:5.2"
+    binaries "org.jsoup:jsoup:1.7.2"
+    binaries "com.ibm.ws.javax.j2ee:servlet:3.1"
+    binaries "org.jmockit:jmockit:1.25"
+  }
 
   task copyMavenLibs(type: Copy) {
     into "${rootDir}/cnf/mavenlibs"
@@ -76,13 +71,13 @@ dependencies {
 
         maven {
           if(project.version.endsWith('-SNAPSHOT')) {
-              url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty${matrixParams}")
+            url ("https://" + props.getProperty("artifactory.upload.server") + "/artifactory/wasliberty-open-liberty${matrixParams}")
           } else {
-              url ("https://" + props.getProperty("artifactory.download.server") + "/artifactory/wasliberty-open-liberty${matrixParams}")
+            url ("https://" + props.getProperty("artifactory.upload.server") + "/artifactory/wasliberty-open-liberty${matrixParams}")
           }
           credentials {
-              username props.getProperty("artifactory.download.user")
-              password props.getProperty("artifactory.download.token")
+            username props.getProperty("artifactory.upload.user")
+            password props.getProperty("artifactory.upload.token")
           }
         }
 
@@ -186,7 +181,7 @@ dependencies {
 
   task publishFeatureResources {
     dependsOn jar
-	dependsOn copyMavenLibs
+    dependsOn copyMavenLibs
     inputs.files(fileTree(dir: "${projectDir}", include: '*.feature')).skipWhenEmpty()
     outputs.dir "${rootDir}/build.image/wlp/lib/features"
     outputs.dir "${buildDir}/repo"
@@ -197,9 +192,9 @@ dependencies {
             include(name: "wlp-*.jar")
             include(name: "biz.aQute.bnd-3.3.0.jar")
           }
-		      fileset(dir: "${rootDir}/cnf/mavenlibs") {
+          fileset(dir: "${rootDir}/cnf/mavenlibs") {
             include(name: "infra.buildtasks*.jar")
-            include(name: "asm-all-5.0.3.jar")
+            include(name: "asm-all-5.2.jar")
             include(name: "org.apache.aries.util-*.jar")
             include(name: "osgi.core*.jar")
             include(name: "jackson*.jar")
@@ -318,139 +313,6 @@ dependencies {
     }
   }
 
-  task autoFVT {
-    dependsOn jar
-	dependsOn copyMavenLibs
-    enabled new File("${projectDir}/fat").exists()
-
-    // For now we are just forcing the autoFVT create every time, this will be fixed
-    // TODO: Be smart about when to recreate the autoFVT.zip
-    doLast {
-      def autoFvtDir = "${buildDir}/autoFVT"
-    	  
-      // Copy the compiled classes
-      copy {
-        from "${projectDir}/bin/"
-        into "${autoFvtDir}/build/classes"
-      }
-
-      // Copy the buildtask jars
-      copy {
-        from "${rootDir}/cnf/mavenlibs"
-        into "${autoFvtDir}/build/lib"
-        include 'asm-all-5.0.3.jar'
-        include 'org.apache.aries.util-*.jar'
-        include 'osgi.core*.jar'
-        include 'jackson*.jar'
-      }
-
-      // Copy the ws-junit jar
-      copy {
-        from "${rootDir}/build.sharedResources/lib/ws-junit/ws-junit.jar"
-        into "${autoFvtDir}/build/lib"
-      }
-	  
-	  // Copy the infra jar
-	  copy {
-		from "${rootDir}/cnf/mavenlibs/infra.buildtasks-core-4.0.0.jar"
-		into "${autoFvtDir}/build/lib"
-	  }
-	  
-
-      // Copy the bundle jar
-      copy {
-        from "${projectDir}/generated/"
-        include '*.jar'
-        into "${autoFvtDir}/build/lib"
-      }
-
-      // Copy the DDL files
-      // TODO: Consider if this can be removed, it looks like there's only a single project for this rule
-      copy {
-        from "${projectDir}/ddl"
-        include '**/*'
-        into "${autoFvtDir}/ddl"
-      }
-
-      // Copy the autoFVT-defaults
-      copy {
-        from "${rootDir}/fattest.simplicity/autoFVT-defaults"
-        include '**/*'
-        into "${autoFvtDir}"
-      }
-
-      // Copy the component test libs
-      // TODO: It looks like the componenttest.app.jar got combined into something else, so this is now way more source in the jar than was there before. This might need changing then.
-      copy {
-        from "${rootDir}/com.ibm.ws.componenttest/generated"
-        include 'com.ibm.ws.componenttest.jar'
-        rename 'com.ibm.ws.componenttest.jar', 'componenttest.app.jar'
-        into "${autoFvtDir}/lib"
-      }
-
-      // Copy the fattest libs
-      copy {
-        from "${rootDir}/fattest.simplicity/generated/"
-        include 'fattest*.*'
-        into "${autoFvtDir}/lib"
-      }
-
-      // TODO: This is to compensate for the fact that the ant build of fattest.simplicity produced this jar but the gradle build doesn't
-      copy {
-        from "${rootDir}/com.ibm.ws.common.encoder/generated"
-        include 'com.ibm.ws.common.encoder.jar'
-        rename 'com.ibm.ws.common.encoder.jar', 'fattest.encoder.jar'
-        into "${autoFvtDir}/lib"
-      }
-
-      // Copy the published files
-      copy {
-        from "${projectDir}/publish/files", "${autoFvtDir}/publish/files"
-        include '**/*'
-        into "${autoFvtDir}/lib/LibertyFATTestFiles"
-      }
-
-      // Copy the publish directory (minus the 'files' directory)
-      copy {
-        from "${projectDir}/publish"
-        include '**/*'
-        exclude 'files'
-        into "${autoFvtDir}/publish"
-      }
-
-	  // Copy the logging libraries over for use while running FATs
-      copy {
-        from "${rootDir}/com.ibm.ws.logging.core/generated"
-        include 'com.ibm.ws.logging.core.jar'
-        into "${autoFvtDir}/lib"
-      }
-      
-      // Copy all non-java app resourecs, such as *.html or *.jsp
-	  copy {
-		  includeEmptyDirs = false
-		  from "${projectDir}"
-		  into "${autoFvtDir}/"
-		  include 'test-applications/**', 'test-bundles/**', 'test-resourceadapters/**'
-		  exclude '**/*.java'
-	  }
-    }
-  }
-
-  task zipAutoFVT(type: Zip) {
-    dependsOn autoFVT
-    from "${projectDir}/generated/autoFVT"
-    into 'autoFVT'
-    archiveName 'autoFVT.zip'
-  }
-
-  task zipProjectFVT(type: Zip) {
-    dependsOn zipAutoFVT
-    baseName project.name
-    into project.name + '/build/lib', {from 'generated/distributions/autoFVT.zip'}
-
-    into project.name, {from 'build-test.xml'}
-  }
-
   assemble {
     dependsOn copyMavenLibs
     dependsOn publishWLPJars
@@ -464,7 +326,6 @@ dependencies {
     dependsOn publishBinScripts
     dependsOn publishClientScripts
     dependsOn publishLibNative
-    dependsOn zipProjectFVT
   }
 
   compileJava {
@@ -578,7 +439,7 @@ dependencies {
   }
 
   test {
-	dependsOn copyMavenLibs
+    dependsOn copyMavenLibs
     def testports = fileTree(dir: "${projectDir}/bin_test", include: 'unittestports.properties')
     doFirst {
       if (testports.isEmpty())

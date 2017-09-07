@@ -18,6 +18,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
@@ -25,7 +26,6 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -43,13 +43,54 @@ public class DoubleInsertionPointQueueTest {
     //      poll/remove from tail or reverse iteration) and various experimental implementations
     //class DoubleInsertionPointQueue<T> extends BoundedBuffer<T> {
     //class DoubleInsertionPointQueue<T> extends ORDeque<T> {
-    class DoubleInsertionPointQueue<T> extends LinkedBlockingDeque<T> {
-        void priorityOffer(T t) {
-            push(t);
+    //class DoubleInsertionPointQueue<T> extends LinkedBlockingDeque<T> {
+    //boolean expeditedOfferIsPush() {
+    //    return true;
+    //}
+    class DoubleInsertionPointQueue<T> extends DoubleQueue<T> {
+        boolean expeditedOfferIsPush() {
+            return false;
+        }
+    }
+
+    private static class IntQueueItem extends Number implements QueueItem {
+        private static final long serialVersionUID = 1L;
+        private final boolean expedite;
+        private final int value;
+
+        public IntQueueItem(int value, boolean expedite) {
+            this.value = value;
+            this.expedite = expedite;
         }
 
-        boolean priorityOfferIsPush() {
-            return true;
+        @Override
+        public boolean isExpedited() {
+            return expedite;
+        }
+
+        @Override
+        public double doubleValue() {
+            return value;
+        }
+
+        @Override
+        public float floatValue() {
+            return value;
+        }
+
+        @Override
+        public int intValue() {
+            return value;
+        }
+
+        @Override
+        public long longValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return Integer.toString(value);
         }
     }
 
@@ -69,23 +110,17 @@ public class DoubleInsertionPointQueueTest {
     }
 
     private static class OfferTask<T> implements Callable<Boolean> {
-        private final boolean expedite;
         private final DoubleInsertionPointQueue<T> q;
         private final T value;
 
-        private OfferTask(DoubleInsertionPointQueue<T> q, T value, boolean expedite) {
-            this.expedite = expedite;
+        private OfferTask(DoubleInsertionPointQueue<T> q, T value) {
             this.q = q;
             this.value = value;
         }
 
         @Override
         public Boolean call() throws Exception {
-            if (expedite) {
-                q.priorityOffer(value);
-                return null;
-            } else
-                return q.offer(value);
+            return q.offer(value);
         }
     }
 
@@ -126,11 +161,11 @@ public class DoubleInsertionPointQueueTest {
 
     private static class RepeatingOfferTask implements Callable<Void> {
         private final AtomicBoolean done;
-        private final DoubleInsertionPointQueue<Integer> q;
+        private final DoubleInsertionPointQueue<Number> q;
         private final AtomicInteger size;
         private final boolean expedite;
 
-        private RepeatingOfferTask(DoubleInsertionPointQueue<Integer> q, AtomicBoolean done, AtomicInteger size, boolean expedite) {
+        private RepeatingOfferTask(DoubleInsertionPointQueue<Number> q, AtomicBoolean done, AtomicInteger size, boolean expedite) {
             this.done = done;
             this.q = q;
             this.size = size;
@@ -140,11 +175,9 @@ public class DoubleInsertionPointQueueTest {
         @Override
         public Void call() throws Exception {
             while (!done.get()) {
-                int t = (int) (Math.random() * 5.0);
-                if (expedite) {
-                    q.priorityOffer(t);
-                    size.incrementAndGet();
-                } else if (q.offer(t))
+                int r = (int) (Math.random() * 5.0);
+                Number item = expedite ? new IntQueueItem(r, true) : r;
+                if (q.offer(item))
                     size.incrementAndGet();
             }
             return null;
@@ -153,11 +186,11 @@ public class DoubleInsertionPointQueueTest {
 
     private static class RepeatingPollTask implements Callable<Void> {
         private final AtomicBoolean done;
-        private final DoubleInsertionPointQueue<Integer> q;
+        private final DoubleInsertionPointQueue<Number> q;
         private final AtomicInteger size;
         private final long timeoutMS;
 
-        private RepeatingPollTask(DoubleInsertionPointQueue<Integer> q, AtomicBoolean done, AtomicInteger size, long timeoutMS) {
+        private RepeatingPollTask(DoubleInsertionPointQueue<Number> q, AtomicBoolean done, AtomicInteger size, long timeoutMS) {
             this.done = done;
             this.q = q;
             this.size = size;
@@ -184,10 +217,10 @@ public class DoubleInsertionPointQueueTest {
 
     private static class RepeatingRemoveTask implements Callable<Void> {
         private final AtomicBoolean done;
-        private final DoubleInsertionPointQueue<Integer> q;
+        private final DoubleInsertionPointQueue<Number> q;
         private final AtomicInteger size;
 
-        private RepeatingRemoveTask(DoubleInsertionPointQueue<Integer> q, AtomicBoolean done, AtomicInteger size) {
+        private RepeatingRemoveTask(DoubleInsertionPointQueue<Number> q, AtomicBoolean done, AtomicInteger size) {
             this.done = done;
             this.q = q;
             this.size = size;
@@ -210,7 +243,7 @@ public class DoubleInsertionPointQueueTest {
         final long durationOfTestNS = TimeUnit.SECONDS.toNanos(1);
 
         DoubleInsertionPointQueue<String> q = new DoubleInsertionPointQueue<String>();
-        Callable<Boolean> offerBTask = new OfferTask<String>(q, "B", false);
+        Callable<Boolean> offerBTask = new OfferTask<String>(q, "B");
         for (long start = System.nanoTime(); System.nanoTime() - start < durationOfTestNS;) {
             assertTrue(q.offer("A"));
             Future<?> future = testThreads.submit(offerBTask);
@@ -296,16 +329,27 @@ public class DoubleInsertionPointQueueTest {
 
         assertEquals(6, q.size());
 
-        for (Iterator<String> it = q.iterator(); it.hasNext();)
-            if (it.next().equals("C"))
-                it.remove();
+        boolean supportsRemove;
+        try {
+            for (Iterator<String> it = q.iterator(); it.hasNext();)
+                if (it.next().equals("C"))
+                    it.remove();
+            supportsRemove = true;
+        } catch (UnsupportedOperationException x) {
+            // use removeAll instead
+            q.removeAll(Collections.singleton("C"));
+            supportsRemove = false;
+        }
 
         assertEquals(3, q.size());
 
         Iterator<String> it = q.iterator();
         assertEquals("A", it.next());
         assertTrue(it.hasNext());
-        it.remove(); // A
+        if (supportsRemove)
+            it.remove(); // A
+        else
+            q.remove("A");
 
         assertEquals(2, q.size());
         assertFalse(q.contains("A"));
@@ -317,16 +361,18 @@ public class DoubleInsertionPointQueueTest {
         assertEquals("B", it.next());
         assertEquals("D", it.next());
         assertTrue(q.remove("D"));
-        try {
-            it.remove();
-            //fail("should not be able to remove what was already removed"); // TODO expectation for LinkedBlockingQueue differs here
-        } catch (NoSuchElementException x) {
-        }
+        if (supportsRemove)
+            try {
+                it.remove();
+                //fail("should not be able to remove what was already removed"); // TODO expectation for LinkedBlockingQueue differs here
+            } catch (NoSuchElementException x) {
+            }
         assertTrue(it.hasNext());
         try {
             it.remove();
             fail("remove should be disallowed before next invoked");
         } catch (IllegalStateException x) {
+        } catch (UnsupportedOperationException x) {
         }
         assertEquals("E", it.next());
         assertFalse(it.hasNext());
@@ -339,7 +385,7 @@ public class DoubleInsertionPointQueueTest {
         final long durationOfTestNS = TimeUnit.SECONDS.toNanos(2);
 
         final AtomicBoolean done = new AtomicBoolean();
-        final DoubleInsertionPointQueue<Integer> q = new DoubleInsertionPointQueue<Integer>();
+        final DoubleInsertionPointQueue<Number> q = new DoubleInsertionPointQueue<Number>();
         final AtomicInteger size = new AtomicInteger();
 
         Future<?>[] f = new Future<?>[10];
@@ -368,7 +414,7 @@ public class DoubleInsertionPointQueueTest {
         assertEquals(q.toString(), size.get(), q.size());
 
         int count = 0;
-        for (Iterator<Integer> it = q.iterator(); it.hasNext();) {
+        for (Iterator<Number> it = q.iterator(); it.hasNext();) {
             assertTrue(it.hasNext());
             assertNotNull(it.next());
             count++;
@@ -386,7 +432,7 @@ public class DoubleInsertionPointQueueTest {
         final long durationOfTestNS = TimeUnit.SECONDS.toNanos(2);
 
         final AtomicBoolean done = new AtomicBoolean();
-        final DoubleInsertionPointQueue<Integer> q = new DoubleInsertionPointQueue<Integer>();
+        final DoubleInsertionPointQueue<Number> q = new DoubleInsertionPointQueue<Number>();
         final AtomicInteger size = new AtomicInteger();
 
         Future<?>[] f = new Future<?>[10];
@@ -408,7 +454,7 @@ public class DoubleInsertionPointQueueTest {
         assertEquals(size.get(), q.size());
 
         int count = 0;
-        for (Iterator<Integer> it = q.iterator(); it.hasNext();) {
+        for (Iterator<Number> it = q.iterator(); it.hasNext();) {
             assertTrue(it.hasNext());
             assertNotNull(it.next());
             count++;
@@ -447,32 +493,32 @@ public class DoubleInsertionPointQueueTest {
     // Sequential test of: expedited offer, poll, offer, poll.
     @Test
     public void testExpeditedOfferPollOfferPoll() {
-        DoubleInsertionPointQueue<Integer> q = new DoubleInsertionPointQueue<Integer>();
-        if (q.priorityOfferIsPush()) {
-            q.priorityOffer(20);
-            q.priorityOffer(15);
-            q.priorityOffer(10);
-            q.priorityOffer(5);
+        DoubleInsertionPointQueue<Number> q = new DoubleInsertionPointQueue<Number>();
+        if (q.expeditedOfferIsPush()) {
+            q.offer(new IntQueueItem(20, true));
+            q.offer(new IntQueueItem(15, true));
+            q.offer(new IntQueueItem(10, true));
+            q.offer(new IntQueueItem(5, true));
         } else {
-            q.priorityOffer(5);
-            q.priorityOffer(10);
-            q.priorityOffer(15);
-            q.priorityOffer(20);
+            q.offer(new IntQueueItem(5, true));
+            q.offer(new IntQueueItem(10, true));
+            q.offer(new IntQueueItem(15, true));
+            q.offer(new IntQueueItem(20, true));
         }
         assertEquals(4, q.size());
-        assertEquals(Integer.valueOf(5), q.peek());
-        assertEquals(Integer.valueOf(5), q.poll());
-        assertEquals(Integer.valueOf(10), q.peek());
-        assertEquals(Integer.valueOf(10), q.poll());
+        assertEquals(5, q.peek().intValue());
+        assertEquals(5, q.poll().intValue());
+        assertEquals(10, q.peek().intValue());
+        assertEquals(10, q.poll().intValue());
         assertEquals(2, q.size());
         assertTrue(q.offer(25));
-        assertEquals(Integer.valueOf(15), q.peek());
-        assertEquals(Integer.valueOf(15), q.poll());
-        assertEquals(Integer.valueOf(20), q.peek());
-        assertEquals(Integer.valueOf(20), q.poll());
+        assertEquals(15, q.peek().intValue());
+        assertEquals(15, q.poll().intValue());
+        assertEquals(20, q.peek().intValue());
+        assertEquals(20, q.poll().intValue());
         assertEquals(1, q.size());
-        assertEquals(Integer.valueOf(25), q.peek());
-        assertEquals(Integer.valueOf(25), q.poll());
+        assertEquals(25, q.peek().intValue());
+        assertEquals(25, q.poll().intValue());
         assertEquals(0, q.size());
         assertNull(q.poll());
         assertEquals(0, q.size());

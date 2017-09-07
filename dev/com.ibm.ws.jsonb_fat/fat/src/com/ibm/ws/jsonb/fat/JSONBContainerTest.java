@@ -10,7 +10,6 @@
  *******************************************************************************/
 package com.ibm.ws.jsonb.fat;
 
-import static com.ibm.ws.jsonb.fat.FATSuite.PROVIDER_JOHNZON;
 import static com.ibm.ws.jsonb.fat.FATSuite.PROVIDER_YASSON;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -30,21 +29,25 @@ import com.ibm.websphere.simplicity.config.ServerConfiguration;
 import componenttest.annotation.MinimumJavaLevel;
 import componenttest.annotation.Server;
 import componenttest.annotation.TestServlet;
+import componenttest.annotation.TestServlets;
 import componenttest.custom.junit.runner.FATRunner;
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.utils.FATServletClient;
 import web.jsonbtest.JSONBTestServlet;
+import web.jsonbtest.YassonTestServlet;
 
 @RunWith(FATRunner.class)
 @MinimumJavaLevel(javaLevel = 1.8)
 public class JSONBContainerTest extends FATServletClient {
+    private static final String appName = "jsonbapp";
     private static final String SERVLET_PATH = "jsonbapp/JSONBTestServlet";
 
     @Server("com.ibm.ws.jsonb.container.fat")
-    @TestServlet(servlet = JSONBTestServlet.class, path = SERVLET_PATH)
+    @TestServlets({
+                    @TestServlet(servlet = JSONBTestServlet.class, path = appName + "/JSONBTestServlet"),
+                    @TestServlet(servlet = YassonTestServlet.class, path = appName + "/YassonTestServlet")
+    })
     public static LibertyServer server;
-
-    private static final String appName = "jsonbapp";
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -59,21 +62,6 @@ public class JSONBContainerTest extends FATServletClient {
     @AfterClass
     public static void tearDown() throws Exception {
         server.stopServer();
-    }
-
-    @Test
-    public void testApplicationClasses() throws Exception {
-        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_YASSON);
-    }
-
-    @Test
-    public void testJsonbProviderAvailable() throws Exception {
-        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_YASSON);
-    }
-
-    @Test
-    public void testJsonbProviderNotAvailable() throws Exception {
-        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_JOHNZON);
     }
 
     // Test a user feature with a service component that injects JsonbProvider (from the bell)
@@ -104,10 +92,5 @@ public class JSONBContainerTest extends FATServletClient {
 
         // Run a test to verify that jsonb is still usable
         runTest(server, SERVLET_PATH, "testJsonbDeserializer&JsonbProvider=" + PROVIDER_YASSON);
-    }
-
-    @Test
-    public void testThreadContextClassLoader() throws Exception {
-        runTest(server, SERVLET_PATH, testName.getMethodName() + "&JsonbProvider=" + PROVIDER_YASSON);
     }
 }
