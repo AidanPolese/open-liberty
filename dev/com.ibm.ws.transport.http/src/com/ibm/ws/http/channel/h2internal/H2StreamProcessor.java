@@ -1006,7 +1006,7 @@ public class H2StreamProcessor {
     }
 
     /*
-     * Send an artificially created H2 request from a push-promise up to the WebContainer
+     * Send an artificially created H2 request from a push_promise up to the WebContainer
      * TODO There may be a problem here, since a RST_STREAM frame can come in on the reserved PP
      * stream
      */
@@ -1015,16 +1015,15 @@ public class H2StreamProcessor {
             Tr.entry(tc, "sendRequestToWc");
         }
 
-        if (null != frame) {
-
+        if (null == frame) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "sendRequestToWc: frame is null");
+            }
+        } else {
             // Make the frame look like it just came in
             WsByteBufferPoolManager bufManager = HttpDispatcher.getBufferManager();
             WsByteBuffer buf = bufManager.allocate(frame.buildFrameForWrite().length);
             byte[] ba = frame.buildFrameForWrite();
-
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "sendRequestToWc: request length is " + ba.length);
-            }
             buf.put(ba);
             buf.flip();
             TCPReadRequestContext readi = h2HttpInboundLinkWrap.getConnectionContext().getReadInterface();
@@ -1038,8 +1037,8 @@ public class H2StreamProcessor {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(tc, "sendRequestToWc: compression exception when creating the pushed reqeust on stream-id " + myID);
                 }
-
-                // TODO Free the buffer allocated above
+                // Free the buffer and exit
+                buf.release();
                 // TODO This SP is left hanging
                 currentFrame = null;
                 return;
@@ -1047,12 +1046,6 @@ public class H2StreamProcessor {
 
             // Start a new thread to pass along this frame to wc
             setReadyForRead();
-
-        } else {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "sendRequestToWc: request is null");
-            }
-
         }
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
