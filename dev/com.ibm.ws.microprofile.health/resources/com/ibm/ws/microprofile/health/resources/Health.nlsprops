@@ -81,6 +81,6 @@ temporary.CWMH9999E.explanation=A Health API error has occurred that prevents no
 temporary.CWMH9999E.useraction=Review the FFDC logs and exception text to identify the problem.
 
 # The HealthCheck bean call method had an exception
-healthcheck.bean.call.exception.CWMH0050E=CWMH0050E: HealthCheck {0} in application {1} in module {2} threw exception {3} with message {4}.
-healthcheck.bean.call.exception.CWMH0050E.explanation=The call method used has produced an exception.
-healthcheck.bean.call.exception.CWMH0050E.useraction=Review your call method within the HealthCheck bean to identify the exception thrown.
+healthcheck.bean.call.exception.CWMH0050E=CWMH0050E: The {0} HealthCheck in the {1} application from the {2} module threw exception {3} with the following message: {4}
+healthcheck.bean.call.exception.CWMH0050E.explanation=The specified call method has produced an exception.
+healthcheck.bean.call.exception.CWMH0050E.useraction=Review your call method within the HealthCheck bean to identify the exception that occurred.
