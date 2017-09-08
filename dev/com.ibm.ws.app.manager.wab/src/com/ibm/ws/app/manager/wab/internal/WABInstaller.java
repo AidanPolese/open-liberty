@@ -63,6 +63,7 @@ import com.ibm.ws.app.manager.module.internal.ModuleClassLoaderFactory;
 import com.ibm.ws.app.manager.module.internal.ModuleHandler;
 import com.ibm.ws.app.manager.module.internal.ModuleInfoUtils;
 import com.ibm.ws.app.manager.module.internal.SimpleDeployedAppInfoBase;
+import com.ibm.ws.app.manager.wab.helper.WABClassInfoHelper;
 import com.ibm.ws.container.service.app.deploy.ApplicationInfo;
 import com.ibm.ws.container.service.app.deploy.ContainerInfo;
 import com.ibm.ws.container.service.app.deploy.ModuleInfo;
@@ -213,6 +214,9 @@ public class WABInstaller implements EventHandler, ExtensionFactory {
 
     private final Map<String, WABPathSpecificItemHolder> knownPaths = new HashMap<String, WABPathSpecificItemHolder>();
     private final Hashtable<String, WABPathSpecificItemHolder> wabsEligibleForCollisionResolution = new Hashtable<String, WABPathSpecificItemHolder>();
+
+    @Reference
+    private volatile List<WABClassInfoHelper> classInfoHelpers;
 
     /* Package protected method to allow WAB's to obtain bundle trackers too */
     <T> WABTracker<T> getTracker(BundleTrackerCustomizer<T> wabTrackerCustomizer) {
@@ -1214,7 +1218,10 @@ public class WABInstaller implements EventHandler, ExtensionFactory {
     }
 
     private WebModuleClassesInfo getClassesInfo(WAB wab, Container wabContainer, Bundle bundle, String contextRoot, BundleWiring wiring) throws UnableToAdaptException {
-        final List<ContainerInfo> containerInfos = getContainerInfos(wab, wabContainer, bundle, contextRoot, wiring);
+        List<ContainerInfo> containerInfos = getContainerInfos(wab, wabContainer, bundle, contextRoot, wiring);
+        for (WABClassInfoHelper helper : classInfoHelpers) {
+            containerInfos.addAll(helper.getContainerInfos(wabContainer, bundle));
+        }
         WebModuleClassesInfo classesInfo = new WABClassesInfo(containerInfos);
         return classesInfo;
     }

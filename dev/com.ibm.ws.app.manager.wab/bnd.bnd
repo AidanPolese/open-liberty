@@ -23,7 +23,8 @@ Private-Package: com.ibm.ws.app.manager.wab*
   com.ibm.ws.app.manager.wab.internal.WABExtensionFactory
   
 
-Export-Package: com.ibm.wsspi.wab.configure
+Export-Package: com.ibm.wsspi.wab.configure, \
+    com.ibm.ws.app.manager.wab.helper
 Import-Package: \
     com.ibm.ws.app.manager.module.internal, \
     *
