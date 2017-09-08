@@ -41,11 +41,6 @@ public class MpJwtHelper {
 	protected final static AtomicServiceReference<JsonWebTokenUtil> JsonWebTokenUtilRef = new AtomicServiceReference<JsonWebTokenUtil>(
 			JSON_WEB_TOKEN_UTIL_REF);
 
-	static private boolean isJdk18Up = (JavaInfo.majorVersion() >= 8);
-	public MpJwtHelper(boolean isJdk18Up) {
-		this.isJdk18Up = isJdk18Up;
-	}
-
 	public static Principal getJsonWebTokenPricipal(Subject subject) {
 		JsonWebTokenUtil jsonWebTokenUtil = getJsonWebTokenUtil();
 		if (jsonWebTokenUtil == null) {
@@ -79,9 +74,7 @@ public class MpJwtHelper {
 	}
 
 	private static boolean isJavaVersionAtLeast18() {
-		System.out.println("isJavaVersionAtLeast18 : " + isJdk18Up);
-		
-		return isJdk18Up;
+		return JavaInfo.majorVersion() >= 8;
 	}
 
 	@Reference(service = JsonWebTokenUtil.class, name = JSON_WEB_TOKEN_UTIL_REF, cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.STATIC)
