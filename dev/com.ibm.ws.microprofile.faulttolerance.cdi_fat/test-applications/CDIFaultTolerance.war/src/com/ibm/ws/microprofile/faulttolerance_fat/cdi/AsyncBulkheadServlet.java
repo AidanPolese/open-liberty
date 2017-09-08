@@ -10,6 +10,9 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance_fat.cdi;
 
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertThat;
+
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -113,15 +116,17 @@ public class AsyncBulkheadServlet extends FATServlet {
         try {
             future1.get(TestConstants.FUTURE_THRESHOLD, TimeUnit.MILLISECONDS);
             throw new AssertionError("Future1 did not timeout properly");
-        } catch (org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException e) {
+        } catch (ExecutionException e) {
             //expected
+            assertThat(e.getCause(), instanceOf(org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException.class));
         }
 
         try {
             future2.get(TestConstants.FUTURE_THRESHOLD, TimeUnit.MILLISECONDS);
             throw new AssertionError("Future2 did not timeout properly");
-        } catch (org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException e) {
+        } catch (ExecutionException e) {
             //expected
+            assertThat(e.getCause(), instanceOf(org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException.class));
         }
 
         if (!future3.get(TestConstants.FUTURE_THRESHOLD, TimeUnit.MILLISECONDS)) {

@@ -14,65 +14,37 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
 
 import org.eclipse.microprofile.faulttolerance.exceptions.BulkheadException;
-import org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException;
-import org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
-import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.microprofile.faulttolerance.impl.ExecutionContextImpl;
-import com.ibm.ws.microprofile.faulttolerance.impl.FTConstants;
-import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 
 /**
- *
+ * SemaphoreTaskRunner will try to acquire a semaphore token before running. If it can not then an exception is thrown.
  */
-public class SemaphoreTaskRunner<R> implements TaskRunner<R> {
+public class SemaphoreTaskRunner<R> extends SimpleTaskRunner<R> {
 
     private static final TraceComponent tc = Tr.register(SemaphoreTaskRunner.class);
 
     private final Semaphore semaphore;
 
     public SemaphoreTaskRunner(BulkheadPolicy bulkheadPolicy) {
-        if (bulkheadPolicy == null) {
-            this.semaphore = null;
-        } else {
-            this.semaphore = new Semaphore(bulkheadPolicy.getMaxThreads());
-        }
+        this.semaphore = new Semaphore(bulkheadPolicy.getMaxThreads());
     }
 
     @Override
-    @FFDCIgnore({ TimeoutException.class, Exception.class })
-    public R runTask(Callable<R> callable, ExecutionContextImpl executionContext) throws InterruptedException {
+    public R runTask(Callable<R> callable, ExecutionContextImpl executionContext) throws Exception {
         R result = null;
-        executionContext.start();
+
+        boolean acquired = this.semaphore.tryAcquire();
+        if (!acquired) {
+            throw new BulkheadException(Tr.formatMessage(tc, "bulkhead.no.threads.CWMFT0001E", executionContext.getMethod()));
+        }
         try {
-            if (this.semaphore != null) {
-                boolean acquired = this.semaphore.tryAcquire();
-                if (!acquired) {
-                    throw new BulkheadException(Tr.formatMessage(tc, "bulkhead.no.threads.CWMFT0001E", executionContext.getMethod()));
-                }
-            }
-            try {
-                executionContext.check();
-                result = callable.call();
-            } finally {
-                if (this.semaphore != null) {
-                    this.semaphore.release();
-                }
-            }
-        } catch (TimeoutException e) {
-            throw e;
-        } catch (InterruptedException e) {
-            //if the interrupt was caused by a timeout then check and throw that instead
-            long remaining = executionContext.check();
-            FTConstants.debugTime(tc, "Task Interrupted", remaining);
-            throw e;
-        } catch (Exception e) {
-            throw new ExecutionException(e);
+            result = super.runTask(callable, executionContext);
         } finally {
-            executionContext.end();
+            this.semaphore.release();
         }
 
         return result;

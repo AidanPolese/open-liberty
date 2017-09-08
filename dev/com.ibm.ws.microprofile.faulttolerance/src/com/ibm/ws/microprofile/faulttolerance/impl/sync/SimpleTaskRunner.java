@@ -8,32 +8,33 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.microprofile.faulttolerance.impl.async;
+package com.ibm.ws.microprofile.faulttolerance.impl.sync;
 
 import java.util.concurrent.Callable;
 
-import org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException;
-import org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException;
-
-import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.microprofile.faulttolerance.impl.ExecutionContextImpl;
+import com.ibm.ws.microprofile.faulttolerance.impl.FTConstants;
 import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
 
 /**
- *
+ * SimpleTaskRunner will call the task and end the execution afterwards
  */
-public class NestedSynchronousTaskRunner<R> implements TaskRunner<R> {
+public class SimpleTaskRunner<R> implements TaskRunner<R> {
+
+    private static final TraceComponent tc = Tr.register(SimpleTaskRunner.class);
 
     @Override
-    @FFDCIgnore({ TimeoutException.class, Exception.class })
-    public R runTask(Callable<R> task, ExecutionContextImpl executionContext) throws InterruptedException {
+    public R runTask(Callable<R> task, ExecutionContextImpl executionContext) throws Exception {
         R result = null;
         try {
             result = task.call();
-        } catch (InterruptedException | TimeoutException e) {
+        } catch (InterruptedException e) {
+            //if the interrupt was caused by a timeout then check and throw that instead (which is what check does)
+            long remaining = executionContext.check();
+            FTConstants.debugTime(tc, "Task Interrupted", remaining);
             throw e;
-        } catch (Exception e) {
-            throw new ExecutionException(e);
         } finally {
             executionContext.end();
         }

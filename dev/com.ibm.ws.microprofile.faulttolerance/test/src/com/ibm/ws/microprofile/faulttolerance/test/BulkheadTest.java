@@ -78,8 +78,6 @@ public class BulkheadTest {
             fail("Task3 should have failed");
         } catch (ExecutionException e) {
             Throwable cause = e.getCause();
-            assertTrue(cause + " was not a ExecutionException", cause instanceof org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException);
-            cause = cause.getCause();
             assertTrue(cause + " was not a BulkheadException", cause instanceof BulkheadException);
         }
         try {
@@ -87,8 +85,6 @@ public class BulkheadTest {
             fail("Task4 should have failed");
         } catch (ExecutionException e) {
             Throwable cause = e.getCause();
-            assertTrue(cause + " was not a ExecutionException", cause instanceof org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException);
-            cause = cause.getCause();
             assertTrue(cause + " was not a BulkheadException", cause instanceof BulkheadException);
         }
 

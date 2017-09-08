@@ -124,8 +124,8 @@ public class ExecutionContextImpl implements FTExecutionContext {
     }
 
     /**
-    *
-    */
+     * As an asynchronous execution moves from the outer part to the nested inner part, update the context's policies
+     */
     public void setNested() {
         if (this.circuitBreaker != null) {
             this.circuitBreaker.setNested();
@@ -159,6 +159,7 @@ public class ExecutionContextImpl implements FTExecutionContext {
     /** {@inheritDoc} */
     @Override
     public void close() {
+        //TODO might need to do more here
         if (this.timeout != null) {
             this.timeout.stop();
         }

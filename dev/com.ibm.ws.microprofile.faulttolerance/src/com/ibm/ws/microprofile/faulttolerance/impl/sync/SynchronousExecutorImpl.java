@@ -17,7 +17,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException;
-import org.eclipse.microprofile.faulttolerance.exceptions.ExecutionException;
+import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.microprofile.faulttolerance.impl.CircuitBreakerImpl;
@@ -27,6 +27,7 @@ import com.ibm.ws.microprofile.faulttolerance.impl.TaskRunner;
 import com.ibm.ws.microprofile.faulttolerance.impl.TimeoutImpl;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
+import com.ibm.ws.microprofile.faulttolerance.spi.ExecutionException;
 import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 import com.ibm.ws.microprofile.faulttolerance.spi.FTExecutionContext;
 import com.ibm.ws.microprofile.faulttolerance.spi.FallbackPolicy;
@@ -67,7 +68,11 @@ public class SynchronousExecutorImpl<R> implements Executor<R> {
         this.fallbackPolicy = fallbackPolicy;
         this.retryPolicy = retryPolicy;
 
-        this.taskRunner = new SemaphoreTaskRunner<R>(bulkheadPolicy);
+        if (bulkheadPolicy == null) {
+            this.taskRunner = new SimpleTaskRunner<R>();
+        } else {
+            this.taskRunner = new SemaphoreTaskRunner<R>(bulkheadPolicy);
+        }
 
     }
 
@@ -95,12 +100,8 @@ public class SynchronousExecutorImpl<R> implements Executor<R> {
 
     protected Callable<R> createTask(Callable<R> callable, ExecutionContextImpl executionContext) {
         Callable<R> task = () -> {
-            R result = null;
-            try {
-                result = getTaskRunner().runTask(callable, executionContext);
-            } finally {
-                executionContext.end();
-            }
+            executionContext.start();
+            R result = getTaskRunner().runTask(callable, executionContext);
             return result;
         };
         return task;
@@ -141,7 +142,12 @@ public class SynchronousExecutorImpl<R> implements Executor<R> {
         } catch (net.jodah.failsafe.CircuitBreakerOpenException e) {
             throw new CircuitBreakerOpenException(e);
         } catch (net.jodah.failsafe.FailsafeException e) {
-            throw new ExecutionException(e.getCause());
+            Throwable cause = e.getCause();
+            if (cause instanceof FaultToleranceException) {
+                throw (FaultToleranceException) cause;
+            } else {
+                throw new ExecutionException(cause);
+            }
         }
 
         return result;
