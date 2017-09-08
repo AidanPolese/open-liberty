@@ -13,17 +13,18 @@ package com.ibm.ws.security.mp.jwt.cdi;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
+import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.BeforeBeanDiscovery;
+import javax.enterprise.inject.spi.DeploymentException;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.ProcessInjectionPoint;
@@ -31,6 +32,7 @@ import javax.enterprise.inject.spi.ProcessInjectionTarget;
 import javax.inject.Provider;
 
 import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.osgi.service.component.annotations.Component;
 
@@ -49,6 +51,11 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
     private final Map<Claim, Set<Type>> injectionTypes = new HashMap<Claim, Set<Type>>();
     private boolean addJsonWebTokenBean = false;
 
+    public void beforeBeanDiscovery(@Observes BeforeBeanDiscovery bbd, BeanManager bm) {
+        AnnotatedType<ClaimProducer> producer = bm.createAnnotatedType(ClaimProducer.class);
+        bbd.addAnnotatedType(producer);
+    }
+
     public void processInjectionTarget(@Observes ProcessInjectionTarget<?> pit) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(tc, "processInjectionTarget", pit);
@@ -60,6 +67,13 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
         for (InjectionPoint injectionPoint : pit.getInjectionTarget().getInjectionPoints()) {
             Claim claim = getClaimAnnotation(injectionPoint);
             if (claim != null) {
+
+                if ((Claims.UNKNOWN.equals(claim.standard()) == false && claim.value().trim().isEmpty() == false) && (claim.value() != claim.standard().name())) {
+                    String translatedMsg = Tr.formatMessage(tc, "MPJWT_CDI_CONFLICTING_CLAIM_NAMES", injectionPoint, claim.value(), claim.standard());
+                    pit.addDefinitionError(new DeploymentException(translatedMsg));
+                    continue;
+                }
+
                 Type type = injectionPoint.getType();
                 Throwable configException = null;
                 if (type instanceof ParameterizedType) {
@@ -87,7 +101,6 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
 
         Set<Annotation> qualifiers = injectionPoint.getQualifiers();
         if (qualifiers != null) {
-            //find the qualifier
             for (Annotation qualifier : qualifiers) {
                 if (qualifier.annotationType().equals(Claim.class)) {
                     claim = (Claim) qualifier;
@@ -107,24 +120,25 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
             Tr.entry(tc, "afterBeanDiscovery", abd, beanManager);
         }
 
-        for (Entry<Claim, Set<Type>> entrySet : injectionTypes.entrySet()) {
-            Claim claim = entrySet.getKey();
-            for (Type type : entrySet.getValue()) {
-                try {
-                    if (type instanceof TypeVariable) {
-                        TypeVariable<?> typeVar = (TypeVariable<?>) type;
-                        Type[] bounds = typeVar.getBounds();
-                        for (Type bound : bounds) {
-                            addClaimBean(abd, beanManager, bound, claim);
-                        }
-                    } else {
-                        addClaimBean(abd, beanManager, type, claim);
-                    }
-                } catch (ClaimTypeException e) {
-                    abd.addDefinitionError(e);
-                }
-            }
-        }
+        // TODO: Uncomment if Claim's name and standard are ever changed to binding to register beans per type.
+//        for (Entry<Claim, Set<Type>> entrySet : injectionTypes.entrySet()) {
+//            Claim claim = entrySet.getKey();
+//            for (Type type : entrySet.getValue()) {
+//                try {
+//                    if (type instanceof TypeVariable) {
+//                        TypeVariable<?> typeVar = (TypeVariable<?>) type;
+//                        Type[] bounds = typeVar.getBounds();
+//                        for (Type bound : bounds) {
+//                            addClaimBean(abd, beanManager, bound, claim);
+//                        }
+//                    } else {
+//                        addClaimBean(abd, beanManager, type, claim);
+//                    }
+//                } catch (ClaimTypeException e) {
+//                    abd.addDefinitionError(e);
+//                }
+//            }
+//        }
 
         if (addJsonWebTokenBean || injectionTypes.isEmpty() == false) {
             abd.addBean(new JsonWebTokenBean(beanManager));
@@ -165,7 +179,7 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
 
     private Throwable validateInjectionPoint(InjectionPoint injectionPoint, Type conversionType, Type injectionType, ClassLoader classLoader, boolean optional, Claim claim) {
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
-            Tr.entry(tc, "validateInjectionPoint", conversionType, injectionType, classLoader, optional, claim);
+            Tr.entry(tc, "validateInjectionPoint", injectionPoint, conversionType, injectionType, classLoader, optional, claim);
         }
 
         Throwable configException = null;
@@ -175,8 +189,6 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
             rawInjectionType = ((ParameterizedType) injectionType).getRawType();
         }
 
-        // TODO: Validate type
-//        if (ClaimValue.class.isAssignableFrom((Class<?>) rawInjectionType) || Provider.class.isAssignableFrom((Class<?>) rawInjectionType)) {
         try {
             Set<Type> injectionTypesForQualifier = injectionTypes.get(claim);
             if (injectionTypesForQualifier == null) {
@@ -187,9 +199,6 @@ public class JwtCDIExtension implements Extension, WebSphereCDIExtension {
         } catch (Throwable e) {
             configException = e;
         }
-//        } else {
-//            configException = new ClaimTypeException(Tr.formatMessage(tc, "MPJWT_CDI_INVALID_INJECTION_TYPE", injectionType));
-//        }
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(tc, "validateInjectionPoint", configException);

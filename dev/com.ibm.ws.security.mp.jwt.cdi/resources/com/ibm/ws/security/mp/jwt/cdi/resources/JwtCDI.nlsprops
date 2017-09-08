@@ -13,11 +13,16 @@
 # -------------------------------------------------------------------------------------------------
 # Message prefix block: CWWKS5600 - CWWKS5649
 
-# Do not translate "Claim"
-MPJWT_CDI_INVALID_INJECTION_TYPE=CWWKS5600E: Unable to determine the type of the claim to be injected. The type of the injection point was {0}.
-MPJWT_CDI_INVALID_INJECTION_TYPE.explanation=The injection point annotated with the Claim qualifier did not have a valid type.
-MPJWT_CDI_INVALID_INJECTION_TYPE.useraction=Ensure that the injection point has a valid type for the claim you wish to inject.
+# Do not translate "Claim".
+MPJWT_CDI_INVALID_INJECTION_TYPE=CWWKS5600E: It is not possible to determine the type of claim to be injected. The type of the injection point is {0}.
+MPJWT_CDI_INVALID_INJECTION_TYPE.explanation=The injection point that is annotated with the Claim qualifier does not have a valid type.
+MPJWT_CDI_INVALID_INJECTION_TYPE.useraction=Ensure that the injection point has a valid type for the claim you want to inject.
 
-MPJWT_CDI_CANNOT_RESOLVE_INJECTION_POINT=CWWKS5601E: The {0} InjectionPoint dependency was not resolved. Error: {1}
+MPJWT_CDI_CANNOT_RESOLVE_INJECTION_POINT=CWWKS5601E: The {0} injection point dependency is not resolved result in error: {1}
 MPJWT_CDI_CANNOT_RESOLVE_INJECTION_POINT.explanation=An injected Claim Value did not resolve.
-MPJWT_CDI_CANNOT_RESOLVE_INJECTION_POINT.useraction=Check the server message and ffdc logs to determine the cause.
+MPJWT_CDI_CANNOT_RESOLVE_INJECTION_POINT.useraction=Check the server message and first-failure data capture (FFDC) logs to determine the cause.
+
+# Do not translate "Claim", "value", or "standard". Note: The "value" and "standard" are members of the "Claim" annotation.
+MPJWT_CDI_CONFLICTING_CLAIM_NAMES=CWWKS5602E: The Claim qualifier for injection point {0} has inconsistent values for both the value and standard elements. The value element has {1} while the standard element has {2}.
+MPJWT_CDI_CONFLICTING_CLAIM_NAMES.explanation=The injection point annotated with the Claim qualifier has conflicting elements.
+MPJWT_CDI_CONFLICTING_CLAIM_NAMES.useraction=Ensure that the injection point has a valid Claim qualifier for the claim you want to inject.
