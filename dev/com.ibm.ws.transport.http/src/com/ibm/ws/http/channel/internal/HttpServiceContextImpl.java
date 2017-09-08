@@ -2311,8 +2311,6 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
 
             // H2 push_promise
             // If we have a link header with rel=preload, start push_promise sequence
-            // TODO Change the getEnabledPush to a boolean
-
             // If this is an HTTP2 connection
             // If the client accepts HTTP2 push_promise frames
 
