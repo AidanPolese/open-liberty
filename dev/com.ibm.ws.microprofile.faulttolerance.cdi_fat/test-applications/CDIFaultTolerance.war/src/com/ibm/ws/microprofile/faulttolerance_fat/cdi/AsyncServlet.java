@@ -83,7 +83,16 @@ public class AsyncServlet extends FATServlet {
             throw new AssertionError("Method did not return quickly enough: " + duration);
         }
         if (future.isDone()) {
-            throw new AssertionError("Future completed too fast");
+            if (future.isCancelled()) {
+                try {
+                    Connection conn = future.get();
+                    throw new AssertionError("Future was cancelled. Reason unknown.");
+                } catch (ExecutionException e) {
+                    throw new AssertionError("Future was cancelled. Exception was " + e.getCause());
+                }
+            } else {
+                throw new AssertionError("Future completed too fast");
+            }
         }
 
         Thread.sleep(EXECUTION_THRESHOLD); //long enough for the call to complete

@@ -13,7 +13,7 @@ package com.ibm.ws.microprofile.faulttolerance.impl;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 
-import com.ibm.ws.microprofile.faulttolerance.impl.async.AsyncExecutorImpl;
+import com.ibm.ws.microprofile.faulttolerance.impl.async.AsyncOuterExecutorImpl;
 import com.ibm.ws.microprofile.faulttolerance.impl.sync.SynchronousExecutorImpl;
 import com.ibm.ws.microprofile.faulttolerance.spi.BulkheadPolicy;
 import com.ibm.ws.microprofile.faulttolerance.spi.CircuitBreakerPolicy;
@@ -88,7 +88,7 @@ public class ExecutorBuilderImpl<T, R> implements ExecutorBuilder<T, R> {
     /** {@inheritDoc} */
     @Override
     public Executor<Future<R>> buildAsync() {
-        Executor<Future<R>> executor = new AsyncExecutorImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy, this.contextService, this.policyExecutorProvider, this.scheduledExecutorService);
+        Executor<Future<R>> executor = new AsyncOuterExecutorImpl<R>(this.retryPolicy, this.circuitBreakerPolicy, this.timeoutPolicy, this.bulkheadPolicy, this.fallbackPolicy, this.contextService, this.policyExecutorProvider, this.scheduledExecutorService);
 
         return executor;
     }
