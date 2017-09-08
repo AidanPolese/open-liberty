@@ -79,8 +79,6 @@ public class MpJwtHelper {
 	}
 
 	private static boolean isJavaVersionAtLeast18() {
-		System.out.println("isJavaVersionAtLeast18 : " + isJdk18Up);
-		
 		return isJdk18Up;
 	}
 
