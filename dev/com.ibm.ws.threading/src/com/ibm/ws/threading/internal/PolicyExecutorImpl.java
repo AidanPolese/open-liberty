@@ -355,7 +355,9 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         if (providerCreated == null)
             throw new UnsupportedOperationException();
 
-        if (core < 0)
+        if (core == -1)
+            core = Integer.MAX_VALUE;
+        else if (core < 0)
             throw new IllegalArgumentException(Integer.toString(core));
 
         int cca;
