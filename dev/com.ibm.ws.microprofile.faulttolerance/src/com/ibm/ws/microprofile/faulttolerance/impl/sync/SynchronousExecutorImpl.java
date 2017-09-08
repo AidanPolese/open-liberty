@@ -148,4 +148,9 @@ public class SynchronousExecutorImpl<R> implements Executor<R> {
 
         return result;
     }
+
+    @Override
+    public void close() {
+        // nothing to do
+    }
 }

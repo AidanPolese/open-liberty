@@ -53,7 +53,7 @@ public class AsyncOuterExecutorImpl<R> extends SynchronousExecutorImpl<Future<R>
     private final AsyncInnerExecutorImpl<Future<R>> nestedExecutor;
     private final BulkheadPolicy bulkheadPolicy;
     private final WSContextService contextService;
-    private ExecutorService executorService;
+    private final ExecutorService executorService;
 
     public AsyncOuterExecutorImpl(RetryPolicy retryPolicy,
                                   CircuitBreakerPolicy circuitBreakerPolicy,
@@ -146,5 +146,12 @@ public class AsyncOuterExecutorImpl<R> extends SynchronousExecutorImpl<Future<R>
             }
         };
         return outerTask;
+    }
+
+    @Override
+    public void close() {
+        executorService.shutdown();
+        super.close();
+        nestedExecutor.close();
     }
 }
