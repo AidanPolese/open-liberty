@@ -18,8 +18,8 @@ MPJWT_CDI_INVALID_INJECTION_TYPE=CWWKS5600E: It is not possible to determine the
 MPJWT_CDI_INVALID_INJECTION_TYPE.explanation=The injection point that is annotated with the Claim qualifier does not have a valid type.
 MPJWT_CDI_INVALID_INJECTION_TYPE.useraction=Ensure that the injection point has a valid type for the claim you want to inject.
 
-MPJWT_CDI_CANNOT_RESOLVE_INJECTION_POINT=CWWKS5601E: The {0} injection point dependency is not resolved result in error: {1}
-MPJWT_CDI_CANNOT_RESOLVE_INJECTION_POINT.explanation=An injected Claim Value did not resolve.
+MPJWT_CDI_CANNOT_RESOLVE_INJECTION_POINT=CWWKS5601E: The {0} injection point dependency is not resolved, which results in error {1}.
+MPJWT_CDI_CANNOT_RESOLVE_INJECTION_POINT.explanation=An injected claim did not resolve.
 MPJWT_CDI_CANNOT_RESOLVE_INJECTION_POINT.useraction=Check the server message and first-failure data capture (FFDC) logs to determine the cause.
 
 # Do not translate "Claim", "value", or "standard". Note: The "value" and "standard" are members of the "Claim" annotation.
