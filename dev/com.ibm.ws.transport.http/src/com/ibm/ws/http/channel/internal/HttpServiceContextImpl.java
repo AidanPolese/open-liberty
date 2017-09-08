@@ -5157,8 +5157,6 @@ public abstract class HttpServiceContextImpl implements HttpServiceContext, FFDC
         // Send the push_promise frame on the existing stream
         H2StreamProcessor existingSP = ((H2HttpInboundLinkWrap) link).muxLink.getStreamProcessor(streamId);
         if (existingSP != null) {
-            //TODO the existing SP should already be in OPEN state, need to remove the next line
-            existingSP.readyToSendPushPromise();
             try {
                 existingSP.processNextFrame(pushPromiseFrame, com.ibm.ws.http.channel.h2internal.Constants.Direction.WRITING_OUT);
             } catch (ProtocolException e) {
