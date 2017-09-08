@@ -6,7 +6,7 @@
     license-type="EPLv1"
     contact="sutter@us.ibm.com"
     encryption="no">
-    <download location="@DOWNLOAD_LOCATION@">
+    <download location="ftp://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/wasliberty-open-liberty/com/ibm/ws/org/eclipse/persistence/">
         <file basename="@ANTLR_JAR@" checksum="@ANTLR_CHECKSUM@"/>
         <file basename="@ASM_JAR@" checksum="@ASM_CHECKSUM@"/>
         <file basename="@CORE_JAR@" checksum="@CORE_CHECKSUM@"/>
