@@ -46,23 +46,41 @@ public class TAIMappingHelper {
     TAIJwtUtils taiJwtUtils = new TAIJwtUtils();
 
     public TAIMappingHelper(@Sensitive String decodedPayload, MicroProfileJwtConfig clientConfig) throws MpJwtProcessingException {
+        String methodName = "<init>";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, decodedPayload, clientConfig);
+        }
         decodedTokenPayload = decodedPayload;
         config = clientConfig;
         if (decodedTokenPayload != null) {
             claimToPrincipalMapping = new JwtPrincipalMapping(decodedTokenPayload, config.getUserNameAttribute(), config.getGroupNameAttribute(), false);
             setUsername();
         }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
     public void createJwtPrincipalAndPopulateCustomProperties(@Sensitive JwtToken jwtToken) throws MpJwtProcessingException {
+        String methodName = "createJwtPrincipalAndPopulateCustomProperties";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, jwtToken);
+        }
         jwtPrincipal = createJwtPrincipal(jwtToken);
         String issuer = getIssuer(jwtToken);
         if (issuer != null) {
             customProperties = populateCustomProperties(issuer);
         }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
     public Subject createSubjectFromCustomProperties(@Sensitive JwtToken jwt) {
+        String methodName = "createSubjectFromCustomProperties";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, jwt);
+        }
         Subject subject = new Subject();
         //        if (jwt != null) {
         //            subject.getPrivateCredentials().add(jwt);
@@ -72,6 +90,9 @@ public class TAIMappingHelper {
 
         subject.getPrivateCredentials().add(jwtPrincipal);
         subject.getPrivateCredentials().add(customProperties);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, subject);
+        }
         return subject;
     }
 
@@ -99,24 +120,46 @@ public class TAIMappingHelper {
     }
 
     JsonWebToken createJwtPrincipal(@Sensitive JwtToken jwtToken) {
+        String methodName = "createJwtPrincipal";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, jwtToken);
+        }
         if (claimToPrincipalMapping == null) {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, "Claim to principal mapping object not initialized");
             }
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, null);
+            }
             return null;
         }
-        return taiJwtUtils.createJwtPrincipal(username, claimToPrincipalMapping.getMappedGroups(), jwtToken);
+        JsonWebToken token = taiJwtUtils.createJwtPrincipal(username, claimToPrincipalMapping.getMappedGroups(), jwtToken);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, token);
+        }
+        return token;
     }
 
     String getIssuer(@Sensitive JwtToken jwtToken) throws MpJwtProcessingException {
+        String methodName = "getIssuer";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, jwtToken);
+        }
         if (decodedTokenPayload == null) {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, "Token payload is null");
             }
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, null);
+            }
             return null;
         }
         try {
-            return (String) JsonUtils.claimFromJsonObject(decodedTokenPayload, Claims.ISSUER);
+            String claim = (String) JsonUtils.claimFromJsonObject(decodedTokenPayload, Claims.ISSUER);
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, claim);
+            }
+            return claim;
         } catch (Exception e) {
             String msg = Tr.formatMessage(tc, "CANNOT_GET_CLAIM_FROM_JSON", new Object[] { Claims.ISSUER, e.getLocalizedMessage() });
             Tr.error(tc, msg);
@@ -125,6 +168,10 @@ public class TAIMappingHelper {
     }
 
     Hashtable<String, Object> populateCustomProperties(String issuer) {
+        String methodName = "populateCustomProperties";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, issuer);
+        }
         Hashtable<String, Object> customProperties = new Hashtable<String, Object>();
 
         String realm = getRealm(issuer);
@@ -138,10 +185,17 @@ public class TAIMappingHelper {
         if (!groupswithrealm.isEmpty()) {
             customProperties.put(AttributeNameConstants.WSCREDENTIAL_GROUPS, groupswithrealm);
         }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, customProperties);
+        }
         return customProperties;
     }
 
     String getRealm(String issuer) {
+        String methodName = "getRealm";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, issuer);
+        }
         // Default realm to the issuer
         String realm = issuer;
 
@@ -153,18 +207,33 @@ public class TAIMappingHelper {
         //            Tr.error(tc, "REALM_NOT_FOUND", new Object[] {});
         //            return sendToErrorPage(res, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
         //        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, realm);
+        }
         return realm;
     }
 
     String getUniqueId(String realm) {
+        String methodName = "getUniqueId";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, realm);
+        }
         String uniqueUser = null;
         if (claimToPrincipalMapping != null) {
             uniqueUser = claimToPrincipalMapping.getMappedUser();
         }
-        return new StringBuffer("user:").append(realm).append("/").append(uniqueUser).toString();
+        String uniqueId = new StringBuffer("user:").append(realm).append("/").append(uniqueUser).toString();
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, uniqueId);
+        }
+        return uniqueId;
     }
 
     List<String> getGroupsWithRealm(String realm) {
+        String methodName = "getGroupsWithRealm";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, realm);
+        }
         List<String> groups = null;
         if (claimToPrincipalMapping != null) {
             groups = claimToPrincipalMapping.getMappedGroups();
@@ -175,6 +244,9 @@ public class TAIMappingHelper {
                 String group = new StringBuffer("group:").append(realm).append("/").append(groupEntry).toString();
                 groupsWithRealm.add(group);
             }
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, groupsWithRealm);
         }
         return groupsWithRealm;
     }

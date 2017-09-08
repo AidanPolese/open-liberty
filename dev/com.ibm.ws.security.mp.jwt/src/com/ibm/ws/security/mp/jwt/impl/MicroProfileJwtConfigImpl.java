@@ -132,6 +132,10 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
     }
 
     public void initProps(ComponentContext cc, Map<String, Object> props) throws MpJwtProcessingException {
+        String methodName = "initProps";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, cc, props);
+        }
 
         this.issuer = configUtils.getRequiredConfigAttribute(props, KEY_ISSUER);
 
@@ -157,6 +161,9 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
         consumerUtils = null; // the parameters in consumerUtils may have been changed during dynamic changing
 
         debug();
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
     protected void debug() {
@@ -295,26 +302,44 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
 
     //@Override
     public HashMap<String, PublicKey> getPublicKeys() throws MpJwtProcessingException {
+        String methodName = "getPublicKeys";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         if (this.sslRefInfo == null) {
             MicroProfileJwtService service = mpJwtServiceRef.getService();
             if (service == null) {
                 if (tc.isDebugEnabled()) {
                     Tr.debug(tc, "MP JWT service is not available");
                 }
+                if (tc.isDebugEnabled()) {
+                    Tr.exit(tc, methodName, null);
+                }
                 return null;
             }
             sslRefInfo = new SslRefInfoImpl(service.getSslSupport(), service.getKeyStoreServiceRef(), sslRef, trustAliasName);
         }
-        return sslRefInfo.getPublicKeys();
+        HashMap<String, PublicKey> keys = sslRefInfo.getPublicKeys();
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, keys);
+        }
+        return keys;
     }
 
     //@Override
     public SSLContext getSSLContext() throws MpJwtProcessingException {
+        String methodName = "getSSLContext";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         if (this.sslContext == null) {
             MicroProfileJwtService service = mpJwtServiceRef.getService();
             if (service == null) {
                 if (tc.isDebugEnabled()) {
                     Tr.debug(tc, "MP JWT service is not available");
+                }
+                if (tc.isDebugEnabled()) {
+                    Tr.exit(tc, methodName, null);
                 }
                 return null;
             }
@@ -322,6 +347,9 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
             if (sslSupport == null) {
                 if (tc.isDebugEnabled()) {
                     Tr.debug(tc, "SSL support could not be found for microprofile jwt service");
+                }
+                if (tc.isDebugEnabled()) {
+                    Tr.exit(tc, methodName, null);
                 }
                 return null;
             }
@@ -341,16 +369,26 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
             }
         }
 
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, this.sslContext);
+        }
         return this.sslContext;
     }
 
     //@Override
     public SSLSocketFactory getSSLSocketFactory() throws MpJwtProcessingException {
+        String methodName = "getSSLSocketFactory";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         if (this.sslContext == null) {
             MicroProfileJwtService service = mpJwtServiceRef.getService();
             if (service == null) {
                 if (tc.isDebugEnabled()) {
                     Tr.debug(tc, "Social login service is not available");
+                }
+                if (tc.isDebugEnabled()) {
+                    Tr.exit(tc, methodName, null);
                 }
                 return null;
             }
@@ -358,6 +396,9 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
             if (sslSupport == null) {
                 if (tc.isDebugEnabled()) {
                     Tr.debug(tc, "SSL support could not be found for microprofile jwt service");
+                }
+                if (tc.isDebugEnabled()) {
+                    Tr.exit(tc, methodName, null);
                 }
                 return null;
             }
@@ -373,6 +414,9 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
             }
         }
 
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, this.sslSocketFactory);
+        }
         return this.sslSocketFactory;
     }
 

@@ -44,15 +44,26 @@ public class ClaimsUtils {
      * Parses the provided JWT and returns the claims found within its payload.
      */
     public JwtClaims getJwtClaims(String jwt) throws JoseException {
+        String methodName = "getJwtClaims";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, jwt);
+        }
         JwtClaims jwtclaims = new JwtClaims();
         String payload = getJwtPayload(jwt);
         if (payload != null) {
             jwtclaims = getClaimsFromJwtPayload(jwt, payload);
         }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, jwtclaims);
+        }
         return jwtclaims;
     }
 
     String getJwtPayload(String jwt) {
+        String methodName = "getJwtPayload";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, jwt);
+        }
         String payload = null;
         if (jwt != null) {
             String[] parts = JsonUtils.splitTokenString(jwt);
@@ -60,25 +71,42 @@ public class ClaimsUtils {
                 payload = JsonUtils.fromBase64ToJsonString(parts[1]); // payload - claims
             }
         }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, payload);
+        }
         return payload;
     }
 
     JwtClaims getClaimsFromJwtPayload(String jwt, String payload) throws JoseException {
+        String methodName = "getClaimsFromJwtPayload";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, jwt, payload);
+        }
         JwtClaims jwtclaims = parsePayloadAndCreateClaims(payload);
         jwtclaims.setStringClaim(org.eclipse.microprofile.jwt.Claims.raw_token.name(), jwt);
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "Key : " + "raw_token" + ", Value: " + "raw_token");
         }
         convertJoseTypes(jwtclaims);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, jwtclaims);
+        }
         return jwtclaims;
     }
 
     JwtClaims parsePayloadAndCreateClaims(String payload) throws JoseException {
+        String methodName = "parsePayloadAndCreateClaims";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, payload);
+        }
         JwtClaims jwtClaims = new JwtClaims();
         Map<String, Object> payloadClaims = JsonUtil.parseJson(payload);
         Set<Entry<String, Object>> entries = payloadClaims.entrySet();
         for (Entry<String, Object> entry : entries) {
             addEntryToClaims(entry, jwtClaims);
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, jwtClaims);
         }
         return jwtClaims;
     }

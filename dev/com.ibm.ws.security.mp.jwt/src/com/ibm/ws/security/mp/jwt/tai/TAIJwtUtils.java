@@ -34,8 +34,16 @@ public class TAIJwtUtils {
     }
 
     public JwtToken createJwt(@Sensitive String idToken, String jwtConfigId) throws MpJwtProcessingException {
+        String methodName = "createJwt";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, idToken, jwtConfigId);
+        }
         try {
-            return JwtConsumer.create(jwtConfigId).createJwt(idToken);
+            JwtToken token = JwtConsumer.create(jwtConfigId).createJwt(idToken);
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, token);
+            }
+            return token;
         } catch (Exception e) {
             String msg = Tr.formatMessage(tc, "ERROR_CREATING_JWT", new Object[] { jwtConfigId, e.getLocalizedMessage() });
             Tr.error(tc, msg);
@@ -52,6 +60,10 @@ public class TAIJwtUtils {
      */
     @Sensitive
     public JsonWebToken createJwtPrincipal(String username, ArrayList<String> groups, @Sensitive JwtToken jwtToken) {
+        String methodName = "createJwtPrincipal";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, username, groups, jwtToken);
+        }
         // TODO Auto-generated method stub
 
         String compact = null;
@@ -88,7 +100,11 @@ public class TAIJwtUtils {
         //        }
         //        jwtclaims.setStringClaim(org.eclipse.microprofile.jwt.Claims.raw_token.name(), compact);
         //        fixJoseTypes(jwtclaims);
-        return new DefaultJsonWebTokenImpl(compact, type, username);
+        DefaultJsonWebTokenImpl token = new DefaultJsonWebTokenImpl(compact, type, username);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, token);
+        }
+        return token;
     }
 
 }
