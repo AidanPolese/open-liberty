@@ -11,7 +11,6 @@
         <feature>mpHealth-1.0</feature>
     </featureManager>
 	
-	<logging traceSpecification="HEALTH=all=enabled:logservice=all=enabled:*=info=enabled:com.ibm.websphere.org.eclipse.microprofile.health.*=all=enabled:com.ibm.ws.microprofile.health.*=all=enabled:wq
-	"/>
+	<logging traceSpecification="HEALTH=all=enabled:logservice=all=enabled:*=info=enabled:com.ibm.websphere.microprofile.health.*=all=enabled"/>
 
 </server>
